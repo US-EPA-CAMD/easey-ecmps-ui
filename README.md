@@ -1,1 +1,2 @@
-# PI-1
+### `starter-kit`
+The purpose of this project is to provide a starter kit for the US EPA CAMD project and demonstrate the use of `Docker Desktop` and how it can increase software developer productivity, quickly and easily containerize applications, and include DevOps as a standard practice from the beginning of a project..
