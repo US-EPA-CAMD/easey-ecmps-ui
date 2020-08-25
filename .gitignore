@@ -13,6 +13,7 @@
 /starter-kit/app/build
 /starter-kit/posts-api/build
 /starter-kit/tasks-api/dist
+/starter-kit/tasks-api/coverage
 
 # misc
 .DS_Store
