@@ -1,10 +1,13 @@
+console.log(process.env.REACT_APP_POSTS_API);
+console.log(process.env.REACT_APP_TASKS_API);
+
 const config = {
   services: {
     posts: {
-      uri: "http://localhost:4000/api/posts",
+      uri: process.env.REACT_APP_POSTS_API,
     },
     tasks: {
-      uri: "http://localhost:5000/api/tasks",
+      uri: process.env.REACT_APP_TASKS_API,
     },
   },
 }

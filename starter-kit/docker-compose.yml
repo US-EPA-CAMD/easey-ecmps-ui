@@ -28,8 +28,8 @@ services:
       - PG_HOST=database
       - PG_PORT=5432
       - PG_USER=postgres
-      - PG_PASSWORD=password
-      - PG_DATABASE=postgres
+      - PG_PWD=password
+      - PG_DB=postgres
     ports:
       - '4000:4000'
   tasks-api:
@@ -45,8 +45,8 @@ services:
       - PG_HOST=database
       - PG_PORT=5432
       - PG_USER=postgres
-      - PG_PASSWORD=password
-      - PG_DATABASE=postgres
+      - PG_PWD=password
+      - PG_DB=postgres
     ports:
       - '5000:5000'
   webapp:
@@ -60,6 +60,9 @@ services:
     volumes:
       - /app/node_modules
       - ./app:/app
+    environment:
+      - POSTS_API=http://localhost:4000/api/posts
+      - TASKS_API=http://localhost:5000/api/tasks
     ports:
       - '3000:3000'
 volumes:

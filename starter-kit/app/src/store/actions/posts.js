@@ -19,7 +19,10 @@ const loadPosts = () => {
   return dispatch => {
     axios.get(config.services.posts.uri)
       .then( res => {
-        dispatch(_loadPosts(res.data))
+        dispatch(_loadPosts(res.data));
+      })
+      .catch( err => {
+        console.log(err);
       })
   }
 }
@@ -35,7 +38,10 @@ const addPost = (post) => {
   return dispatch => {
     axios.post(config.services.posts.uri, post)
       .then(res => {
-        dispatch(_addPost(res.data))
+        dispatch(_addPost(res.data));
+      })
+      .catch( err => {
+        console.log(err);
       })
   }
 }
@@ -51,7 +57,10 @@ const deletePost = (id) => {
   return dispatch => {
     axios.delete(`${config.services.posts.uri}/${id}`)
       .then(res => {
-        dispatch(_deletePost(id))
+        dispatch(_deletePost(id));
+      })
+      .catch( err => {
+        console.log(err);
       })
   }
 }

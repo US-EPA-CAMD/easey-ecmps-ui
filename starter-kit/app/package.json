@@ -20,7 +20,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "NOTE": "Add env-cmd as a project dependency (npm install env-cmd --save-dev)",
+    "start:staging": "env-cmd .env.staging npm start",
+    "build:staging": "env-cmd .env.staging npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"

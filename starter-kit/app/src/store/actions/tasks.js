@@ -20,7 +20,10 @@ const loadTasks = () => {
   return dispatch => {
     axios.get(config.services.tasks.uri)
       .then( res => {
-        dispatch(_loadTasks(res.data))
+        dispatch(_loadTasks(res.data));
+      })
+      .catch( err => {
+        console.log(err);
       })
   }
 }
@@ -36,8 +39,11 @@ const addTask = (task) => {
   return dispatch => {
     axios.post(config.services.tasks.uri, task)
       .then(res => {
-        dispatch(_addTask(res.data))
+        dispatch(_addTask(res.data));
       })
+      .catch( err => {
+        console.log(err);
+      })      
   }
 }
 
@@ -52,8 +58,11 @@ const deleteTask = (id) => {
   return dispatch => {
     axios.delete(`${config.services.tasks.uri}/${id}`)
       .then(res => {
-        dispatch(_deleteTask(id))
+        dispatch(_deleteTask(id));
       })
+      .catch( err => {
+        console.log(err);
+      })      
   }
 }
 
@@ -69,8 +78,11 @@ const updateTaskStatus = (id, status) => {
   return dispatch => {
     axios.patch(`${config.services.tasks.uri}/${id}/status`, status)
       .then(res => {
-        dispatch(_updateTaskStatus(id, status))
+        dispatch(_updateTaskStatus(id, status));
       })
+      .catch( err => {
+        console.log(err);
+      })      
   }
 }
 

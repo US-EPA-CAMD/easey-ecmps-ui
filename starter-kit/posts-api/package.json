@@ -2,7 +2,8 @@
   "name": "us-epa-camd-expressjs-starter-api",
   "version": "1.0.0",
   "scripts": {
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "start": "node app.js"
   },
   "dependencies": {
     "bluebird": "^3.7.2",
