@@ -29,4 +29,5 @@ jobs:
         cf api  https://api.fr.cloud.gov
         cf auth ${{secrets.CF_SERVICE_ACCOUNT_ID}} ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}}
         cf target -o "epa-prototyping" -s "dev-easey-in"
-        cf push -f ./starter-kit/manifest.yml
+        cd starter-kit
+        cf push
