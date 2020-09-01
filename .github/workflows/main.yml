@@ -20,6 +20,13 @@ jobs:
         echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
         sudo apt-get update
         sudo apt-get install cf-cli
+
+    - name: Build tasks-api
+      run: |
+        cd starter-kit/tasks-api
+        npm install
+        npm run build
+        cd ..
   
     # How to create a service account for automated deployments
     # https://cloud.gov/docs/services/cloud-gov-service-account/
