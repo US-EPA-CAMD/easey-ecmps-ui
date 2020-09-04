@@ -1,0 +1,25 @@
+name: Develop Branch Pipeline
+
+on:
+
+  push:
+    branches: [ develop ]
+    tags:
+      - RC_TEST*
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install CF cli
+      run: |
+        starter-kit/scripts/install-pre-reqs.sh
+
+    - name: Build tasks-api
+      run: |
+        starter-kit/scripts/build.sh
+
+    - name: Deploy
+      run: |
+        starter-kit/scripts/deploy.sh ${{secrets.CF_SERVICE_ACCOUNT_ID}} ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}}
