@@ -18,6 +18,6 @@ jobs:
       run: |
         starter-kit/scripts/build.sh
 
-    - name: Deploy
+    - name: Unit Test
       run: |
-        starter-kit/scripts/deploy.sh ${{secrets.CF_SERVICE_ACCOUNT_ID}} ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}}
+        starter-kit/scripts/unitTests.sh
