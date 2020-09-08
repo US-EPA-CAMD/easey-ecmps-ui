@@ -1,4 +1,4 @@
-import { IsOptional, IsNotEmpty } from 'class-validator';
+import { IsOptional, IsNotEmpty, IsIn } from 'class-validator';
 
 import { TaskStatus } from '../task-status.enum';
 import { ApiPropertyOptional } from '@nestjs/swagger';
