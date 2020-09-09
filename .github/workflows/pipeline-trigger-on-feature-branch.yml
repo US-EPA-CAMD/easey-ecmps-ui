@@ -23,6 +23,8 @@ jobs:
     - name: Unit Test
       run: |
         starter-kit/scripts/unitTests.sh
+        echo "::set-env name=HEAD_TAG::$(git tag --points-at HEAD)"
+      if: env.HEAD_TAG != ''
 
   Codescan:
     runs-on: ubuntu-latest
