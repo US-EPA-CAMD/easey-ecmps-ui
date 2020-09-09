@@ -17,11 +17,7 @@ jobs:
     - name: Install CF cli
       run: |
         starter-kit/scripts/install-pre-reqs.sh
-
-    - name: Build tasks-api
-      run: |
-        starter-kit/scripts/build.sh
-
+    
     - name: Get Tag name if exists
       run: |
         echo "::set-env name=HEAD_TAG::$(git tag --points-at HEAD)"
@@ -29,10 +25,17 @@ jobs:
         echo ${{ env.HEAD_TAG }}
         echo "---------------"
 
+    - name: Build tasks-api
+      run: |
+        starter-kit/scripts/build.sh
+        echo "---------------"
+        echo ${{ env.HEAD_TAG }}
+        echo "---------------"
+      if: env.HEAD_TAG != ''
+
     - name: Unit Test
       run: |
         starter-kit/scripts/unitTests.sh
-      if: env.HEAD_TAG != ''
 
   Codescan:
     runs-on: ubuntu-latest
