@@ -23,7 +23,9 @@ jobs:
         starter-kit/scripts/build.sh
 
     - name: Get Tag name if exists
-      run: echo "::set-env name=HEAD_TAG::$(git tag --points-at HEAD)"
+      run: |
+        echo "::set-env name=HEAD_TAG::$(git tag --points-at HEAD)"
+        echo {{env.HEAD_TAG}}
 
     - name: Unit Test
       run: |
