@@ -6,8 +6,8 @@ on:
     branches: [ develop ]
   push:
     branches: [ feature/* ]
-  tags:
-    - v[0-9]+.[0-9]+_rc[0-9]+
+    tags:
+      - v[0-9]+.[0-9]+_rc[0-9]+
 
 jobs:
   build:
