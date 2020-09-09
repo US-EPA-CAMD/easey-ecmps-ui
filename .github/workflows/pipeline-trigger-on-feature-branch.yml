@@ -26,7 +26,7 @@ jobs:
       run: |
         echo "::set-env name=HEAD_TAG::$(git tag --points-at HEAD)"
         echo "---------------"
-        echo {{env.HEAD_TAG}}
+        echo ${{env.HEAD_TAG}}
         echo "---------------"
 
     - name: Unit Test
