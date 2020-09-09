@@ -15,7 +15,7 @@ jobs:
     - name: Install CF cli
       run: |
         starter-kit/scripts/install-pre-reqs.sh
-
+    
     - name: Build tasks-api
       run: |
         starter-kit/scripts/build.sh

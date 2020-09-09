@@ -7,7 +7,7 @@ on:
   push:
     branches: [ develop ]
     tags:
-      - RC_TEST*
+      - v[0-9]+.[0-9]+_rc[0-9]+
 
 jobs:
   Build-deploy:
@@ -26,9 +26,14 @@ jobs:
       run: |
         starter-kit/scripts/unitTests.sh
 
+    - name: Get Tag name if exists
+      run: |
+        echo "::set-env name=HEAD_TAG::$(git tag --points-at HEAD)"
+
     - name: Deploy
       run: |
         starter-kit/scripts/deploy.sh ${{secrets.CF_SERVICE_ACCOUNT_ID}} ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}}
+      if: env.HEAD_TAG != ''
 
   Codescan:
     runs-on: ubuntu-latest
