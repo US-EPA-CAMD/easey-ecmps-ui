@@ -2,6 +2,8 @@ name: Feature Branch Pipeline
 
 on:
 
+  pull_request:
+    branches: [ develop ]
   push:
     branches: [ feature/* ]
 

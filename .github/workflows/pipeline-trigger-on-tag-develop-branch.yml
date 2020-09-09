@@ -2,6 +2,8 @@ name: Develop Branch Pipeline
 
 on:
 
+  pull_request:
+    branches: [ master ]
   push:
     branches: [ develop ]
     tags:
