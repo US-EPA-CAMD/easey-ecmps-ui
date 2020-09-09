@@ -2,11 +2,13 @@ name: Feature Branch Pipeline
 
 on:
 
+  pull_request:
+    branches: [ develop ]
   push:
     branches: [ feature/* ]
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2

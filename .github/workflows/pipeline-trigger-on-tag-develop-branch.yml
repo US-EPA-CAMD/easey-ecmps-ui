@@ -2,13 +2,15 @@ name: Develop Branch Pipeline
 
 on:
 
+  pull_request:
+    branches: [ master ]
   push:
     branches: [ develop ]
     tags:
       - RC_TEST*
 
 jobs:
-  deploy:
+  Build-deploy:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
