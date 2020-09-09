@@ -10,7 +10,7 @@ on:
       - RC_TEST*
 
 jobs:
-  deploy:
+  Build-deploy:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
