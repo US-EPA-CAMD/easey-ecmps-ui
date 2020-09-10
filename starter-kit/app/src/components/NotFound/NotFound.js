@@ -3,6 +3,7 @@ import './NotFound.css';
 import { Link } from 'react-router-dom'
 const NotFound = () => {
     return (
+        
         <div className = 'containerCenter'>
             <div className = 'center'>
                 <h1>Sorry, but this web page does not exist.</h1>
@@ -10,6 +11,7 @@ const NotFound = () => {
                 <h3>Try locating this information from the <Link to='/'> EPA home page.</Link></h3>
              </div>
         </div>
+
     )
 }
 
