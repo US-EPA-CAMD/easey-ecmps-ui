@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 configure ( { adapter: new Adapter() });
 
 describe('<NotFound/>', () => {
-    
+
     let wrapper ;
     beforeEach(() => {
        wrapper = shallow(<NotFound/>);
