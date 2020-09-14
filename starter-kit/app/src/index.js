@@ -6,7 +6,7 @@ import { createStore, applyMiddleware, combineReducers } from "redux";
 import thunk from "redux-thunk";
 
 //import './index.css';
-import "./uswds_assets/css/styles.css";
+//import "./uswds_assets/css/styles.css";
 import "./utils/remoteLogging";
 import App from "./App";
 import postsReducer from "./store/reducers/posts";
