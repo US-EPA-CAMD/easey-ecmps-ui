@@ -7,6 +7,8 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
+    "axios-retry": "^3.1.8",
+    "axios-mock-adapter": "^1.18.2",
     "bootstrap": "^4.4.1",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.0",
@@ -27,7 +29,8 @@
   },
   "scripts": {
     "start": "concurrently \"react-scripts start\" \"gulp watch\"",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -46,12 +49,15 @@
   },
   "devDependencies": {
     "autoprefixer": "^9.8.6",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.4",
     "gulp": "^4.0.2",
     "gulp-postcss": "^8.0.0",
     "gulp-replace": "^1.0.0",
     "gulp-sass": "^4.1.0",
     "gulp-sourcemaps": "^2.6.5",
     "postcss-csso": "^4.0.0",
+    "react-test-renderer": "^16.13.1",
     "sass": "^1.26.10",
     "uswds": "^2.8.0",
     "uswds-gulp": "github:uswds/uswds-gulp"
