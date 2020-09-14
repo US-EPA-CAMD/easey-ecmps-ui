@@ -1,46 +1,81 @@
-import React from "react";
-import { Alert, Search } from "@trussworks/react-uswds";
+import React, { useEffect, useState } from "react";
+import { getAllFacilities } from "../../utils/api/facilityApi";
+import * as fs from "../../utils/selectors/facilities";
+import log from "loglevel";
 
-const mockSubmit = () => {};
+function Home() {
+  let element = null;
+  const [facilities, setFacilities] = useState([]);
+  const [facility, setFacility] = useState({});
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await getAllFacilities();
+        if (result) {
+          setFacilities(result.data.data);
+          setFacility(fs.getSelectedFacility(26, result.data.data));
+        }
+      } catch (e) {
+        log.error(e);
+      }
+    };
+    fetchData();
+  }, []);
 
-function App() {
-  return (
-    <div class="container">
-      <h2>USWDS</h2>
-      <div class="usa-alert usa-alert--success">
-        <div class="usa-alert__body">
-          <h3 class="usa-alert__heading">Success status</h3>
-          <p class="usa-alert__text">
-            Demonstrating the use of usdws as a styling and UI library
-          </p>
-        </div>
+  if (facilities.length > 0 && Object.keys(facility).length > 0)
+    element = (
+      <div className="container">
+        <h4>Selected facility data</h4>
+        <pre>
+          <code>{JSON.stringify(facility)}</code>
+        </pre>
+        <h4>Selected facilities Table Records</h4>
+        <pre>
+          <code>{JSON.stringify(fs.getTableRecords(facilities))}</code>
+        </pre>
+        <h4>Selected facility location</h4>
+        <pre>
+          <code>{JSON.stringify(fs.getLocation(facility))}</code>
+        </pre>
+        <h4>Facility locations by State</h4>
+        <pre>
+          <code>
+            {JSON.stringify(fs.getLocationByState("Alabama", facilities))}
+          </code>
+        </pre>
+        <h4>Selected facility contacts</h4>
+        <pre>
+          <code>{JSON.stringify(fs.getContacts(facility))}</code>
+        </pre>
+        <h4>Selected facility contact Units for Owner</h4>
+        <pre>
+          <code>
+            {JSON.stringify(fs.getContactsRoleUnits("Owner", facility))}
+          </code>
+        </pre>
+        <h4>Selected facility contact Units for Operator</h4>
+        <pre>
+          <code>
+            {JSON.stringify(fs.getContactsRoleUnits("Operator", facility))}
+          </code>
+        </pre>
+        <h4>Selected facility Units table records</h4>
+        <pre>
+          <code>{JSON.stringify(fs.getUnitsTableRecords(facility))}</code>
+        </pre>
+        <h4>Selected unitId detail</h4>
+        <pre>
+          <code>{JSON.stringify(fs.getSelectedUnitDetail("4", facility))}</code>
+        </pre>
+        <h4>Selected facility Monitoring Plans table records</h4>
+        <pre>
+          <code>
+            {JSON.stringify(fs.getMonitoringPlansTableRecords(facility))}
+          </code>
+        </pre>
       </div>
-      <h2>REACT-USWDS</h2>
-      <Alert type="success" heading="Success status" className="react-alert">
-        Demonstrating the use of usdws as a styling and UI library
-      </Alert>
-      <br />
-      <h2>USWDS</h2>
-      <section aria-label="Default search component">
-        <form class="usa-search" role="search">
-          <label class="usa-sr-only" for="search-field">
-            Search
-          </label>
-          <input
-            class="usa-input"
-            id="search-field"
-            type="search"
-            name="search"
-          />
-          <button class="usa-button" type="submit">
-            <span class="usa-search__submit-text">Search</span>
-          </button>
-        </form>
-      </section>
-      <h2>REACT-USWDS</h2>
-      <Search onSubmit={mockSubmit} />
-    </div>
-  );
+    );
+  return element;
 }
 
-export default App;
+export default Home;
