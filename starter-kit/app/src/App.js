@@ -6,7 +6,6 @@ import Posts from './components/Posts/Posts';
 import Tasks from './components/Tasks/Tasks';
 import NotFound from './components/NotFound/NotFound';
 import Footer from './components/Footer/Footer';
-import './template/css/core/style.css';
 
 function App() {
   return (
