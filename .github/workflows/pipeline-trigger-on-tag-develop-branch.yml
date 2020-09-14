@@ -6,8 +6,8 @@ on:
     branches: [ master ]
   push:
     branches: [ develop ]
-    tags:
-      - v[0-9]+.[0-9]+_rc[0-9]+
+#    tags:
+#      - v[0-9]+.[0-9]+_rc[0-9]+
 
 jobs:
   Build-deploy:
@@ -33,7 +33,7 @@ jobs:
     - name: Deploy
       run: |
         starter-kit/scripts/deploy.sh ${{secrets.CF_SERVICE_ACCOUNT_ID}} ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}}
-      if: env.HEAD_TAG != ''
+#      if: env.HEAD_TAG != ''
 
   Codescan:
     runs-on: ubuntu-latest
