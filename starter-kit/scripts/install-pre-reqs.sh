@@ -1,7 +1,8 @@
 #!/bin/bash
 
-wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
-echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
-sudo apt-get update
-sudo apt-get install cf-cli
-
+curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&source=github&version=v6" | tar -zx
+sudo mv cf /usr/local/bin
+sudo curl -o /usr/share/bash-completion/completions/cf https://raw.githubusercontent.com/cloudfoundry/cli-ci/master/ci/installers/completion/cf
+echo $PATH
+ls -l /usr/local/bin
+cf version
