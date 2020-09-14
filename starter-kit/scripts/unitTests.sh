@@ -6,4 +6,5 @@ npm install jest
 npm run test
 
 cd ../app
+npm install react-scripts
 CI=true npm test
