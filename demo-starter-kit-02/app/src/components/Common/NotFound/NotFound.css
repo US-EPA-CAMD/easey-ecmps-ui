@@ -1,0 +1,13 @@
+.containerCenter {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 70%;
+    
+    margin: 10px auto;
+    position: relative;
+    
+}
+.center {
+    text-align:center;
+}
