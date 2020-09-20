@@ -46,4 +46,4 @@ This will pull down the base images either from `Docker Hub` or use the local ca
 The `--build` option is the same as `docker-compose up`, however, it will force the containers to be rebuilt in order to capture changes within the docker files.
 
 ### `docker-compose down`
-This will stop, tear down, & destroy all containers
+This will stop, tear down, & destroy all containers.
