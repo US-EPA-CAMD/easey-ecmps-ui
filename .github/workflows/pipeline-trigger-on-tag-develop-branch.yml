@@ -5,6 +5,7 @@ on:
   pull_request:
     branches: [ master ]
   push:
+    paths: [ "starter-kit/**" ]
     branches: [ develop ]
 #    tags:
 #      - v[0-9]+.[0-9]+_rc[0-9]+
