@@ -23,7 +23,7 @@ jobs:
 
     - name: Package App
       run: |
-        starter-kit/scripts/package.sh ${{ GITHUB_RUN_NUMBER }} ${{ GITHUB_WORKSPACE }} ${{ GITHUB_REPOSITORY }}
+        starter-kit/scripts/package.sh ${{ env.GITHUB_RUN_NUMBER }} ${{ env.GITHUB_WORKSPACE }} ${{ env.GITHUB_REPOSITORY }}
 
     - name: Unit Test
       run: |
