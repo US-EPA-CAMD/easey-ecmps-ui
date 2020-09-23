@@ -8,5 +8,6 @@ echo "App Version: $VERSION"
 echo "App Name: $APP"
 echo "Build Artifact: $APP.$VERSION.$GITHUB_RUN_NUMBER"
 cd ../
-zip -x \*.git* -r $APP.$VERSION.$GITHUB_RUN_NUMBER.zip `basename $GITHUB_WORKSPACE`
+zip -q -x \*.git* -r $APP.$VERSION.$GITHUB_RUN_NUMBER.zip `basename $GITHUB_WORKSPACE`
 ls -lh $APP.$VERSION.$GITHUB_RUN_NUMBER.zip
+echo "Region: $AWS_DEFAULT_REGION"
