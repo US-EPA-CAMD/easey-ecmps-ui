@@ -21,9 +21,9 @@ jobs:
       run: |
         starter-kit/scripts/build.sh
 
-    - name: Unit Test
-      run: |
-        starter-kit/scripts/unitTests.sh
+#    - name: Unit Test
+#      run: |
+#        starter-kit/scripts/unitTests.sh
 
     - name: Deploy
       run: |
