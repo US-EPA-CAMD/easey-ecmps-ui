@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [ develop ]
   push:
-    paths: [ "starter-kit/**" ]
+#    paths: [ "starter-kit/**" ]
     branches: [ feature/*, features/* ]
 
 jobs:
