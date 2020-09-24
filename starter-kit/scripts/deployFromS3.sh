@@ -18,6 +18,7 @@ mkdir deployments
 aws s3 cp  s3://cg-2f1f8ec0-a961-4d0b-af39-2ed9f109078e/$3.$4.$5.zip deployments/
 cd deployments
 unzip -q $3.$4.$5.zip
-cd $1/starter-kit
+ls -l 
+cd $3/starter-kit
 cf push
 
