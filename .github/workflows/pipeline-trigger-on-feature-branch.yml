@@ -25,10 +25,6 @@ jobs:
 #      run: |
 #        starter-kit/scripts/unitTests.sh
 
-    - name: Deploy
-      run: |
-        starter-kit/scripts/deploy.sh ${{secrets.CF_SERVICE_ACCOUNT_ID}} ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}}
-
     - name: Package App
       run: |
         starter-kit/scripts/package.sh 
