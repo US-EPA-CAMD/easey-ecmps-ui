@@ -23,4 +23,5 @@ export AWS_SECRET_ACCESS_KEY=`echo "${S3_CREDENTIALS}" | jq -r .secret_access_ke
 export BUCKET_NAME=`echo "${S3_CREDENTIALS}" | jq -r .bucket`
 export AWS_DEFAULT_REGION=`echo "${S3_CREDENTIALS}" | jq -r '.region'`
 
+aws s3 cp $APP.$VERSION.$GITHUB_RUN_NUMBER.zip s3://cg-2f1f8ec0-a961-4d0b-af39-2ed9f109078e/
 aws s3 ls s3://cg-2f1f8ec0-a961-4d0b-af39-2ed9f109078e/
