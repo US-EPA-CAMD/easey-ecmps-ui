@@ -27,7 +27,7 @@ jobs:
 
     - name: Package App
       run: |
-        starter-kit/scripts/package.sh 
+        starter-kit/scripts/package.sh $1 $2
 
   Codescan:
     runs-on: ubuntu-latest
