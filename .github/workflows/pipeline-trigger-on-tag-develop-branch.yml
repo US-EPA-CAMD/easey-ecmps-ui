@@ -5,6 +5,7 @@ on:
   pull_request:
     branches: [ master ]
   push:
+#    paths: [ "starter-kit/**" ]
     branches: [ develop ]
 #    tags:
 #      - v[0-9]+.[0-9]+_rc[0-9]+
@@ -29,6 +30,10 @@ jobs:
     - name: Get Tag name if exists
       run: |
         echo "::set-env name=HEAD_TAG::$(git tag --points-at HEAD)"
+
+    - name: Package App
+      run: |
+        starter-kit/scripts/package.sh ${{secrets.CF_SERVICE_ACCOUNT_ID}} ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}}
 
     - name: Deploy
       run: |
