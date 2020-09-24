@@ -27,7 +27,7 @@ jobs:
 
     - name: Package App
       run: |
-        starter-kit/scripts/package.sh $1 $2
+        starter-kit/scripts/package.sh ${{secrets.CF_SERVICE_ACCOUNT_ID}} ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}}
 
   Codescan:
     runs-on: ubuntu-latest
