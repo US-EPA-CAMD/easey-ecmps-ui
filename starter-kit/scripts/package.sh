@@ -22,5 +22,5 @@ export AWS_ACCESS_KEY_ID=`echo "${S3_CREDENTIALS}" | jq -r .access_key_id`
 export AWS_SECRET_ACCESS_KEY=`echo "${S3_CREDENTIALS}" | jq -r .secret_access_key`
 export BUCKET_NAME=`echo "${S3_CREDENTIALS}" | jq -r .bucket`
 export AWS_DEFAULT_REGION=`echo "${S3_CREDENTIALS}" | jq -r '.region'`
-echo "Region: $AWS_DEFAULT_REGION"
-echo "done..."
+
+aws s3 ls s3://cg-2f1f8ec0-a961-4d0b-af39-2ed9f109078e/
