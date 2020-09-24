@@ -14,6 +14,8 @@ ls -lh $APP.$VERSION.$GITHUB_RUN_NUMBER.zip
 echo "Retrieving keys ..."
 cf api  https://api.fr.cloud.gov
 cf auth $1 $2
+cf target -o "epa-prototyping" -s "dev-easey-in"
+
 # S3_CREDENTIALS=`cf service-key "${SERVICE_INSTANCE_NAME}" "${KEY_NAME}" | tail -n +2`
 S3_CREDENTIALS=`cf service-key "deployment-artifacts" "deployment-artifacts-svc-key" | tail -n +2`
 export AWS_ACCESS_KEY_ID=`echo "${S3_CREDENTIALS}" | jq -r .access_key_id`
