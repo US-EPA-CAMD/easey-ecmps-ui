@@ -21,13 +21,9 @@ jobs:
       run: |
         starter-kit/scripts/build.sh
 
-#    - name: Unit Test
-#      run: |
-#        starter-kit/scripts/unitTests.sh
-
-    - name: Package App
+    - name: Unit Test
       run: |
-        starter-kit/scripts/package.sh ${{secrets.CF_SERVICE_ACCOUNT_ID}} ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}}
+        starter-kit/scripts/unitTests.sh
 
   Codescan:
     runs-on: ubuntu-latest

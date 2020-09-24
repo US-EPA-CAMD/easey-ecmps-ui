@@ -31,6 +31,10 @@ jobs:
       run: |
         echo "::set-env name=HEAD_TAG::$(git tag --points-at HEAD)"
 
+    - name: Package App
+      run: |
+        starter-kit/scripts/package.sh ${{secrets.CF_SERVICE_ACCOUNT_ID}} ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}}
+
     - name: Deploy
       run: |
         starter-kit/scripts/deploy.sh ${{secrets.CF_SERVICE_ACCOUNT_ID}} ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}}
