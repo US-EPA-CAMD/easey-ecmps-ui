@@ -21,9 +21,17 @@ jobs:
       run: |
         starter-kit/scripts/build.sh
 
-    - name: Unit Test
+#    - name: Unit Test
+#      run: |
+#        starter-kit/scripts/unitTests.sh
+
+    - name: Package App
       run: |
-        starter-kit/scripts/unitTests.sh
+        starter-kit/scripts/package.sh ${{secrets.CF_SERVICE_ACCOUNT_ID}} ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}}
+
+    - name: Deploy App from S3
+      run: |
+        starter-kit/scripts/deployFromS3.sh ${{secrets.CF_SERVICE_ACCOUNT_ID}} ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}} PI-1 v0.0 99
 
   Codescan:
     runs-on: ubuntu-latest
