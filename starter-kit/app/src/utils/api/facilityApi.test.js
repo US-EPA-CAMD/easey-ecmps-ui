@@ -13,4 +13,4 @@ test("Should fetch all facilities from FACT API", async () => {
   const result = await getAllFacilities();
 
   expect(result.data.data.length).toEqual(respLength);
-});
+},30000);
