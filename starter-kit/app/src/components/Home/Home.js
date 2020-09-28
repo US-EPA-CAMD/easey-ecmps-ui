@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import { connect } from "react-redux";
-import { actions } from "../../store/actions/facilities";
+import { loadFacilities } from "../../store/actions/facilities";
 import * as fs from "../../utils/selectors/facilities";
 import HomeView from "./HomeView";
 
@@ -20,17 +20,22 @@ const Home = ({ facilities, loadFacilities, loading }) => {
 
   function useHookWithRefCallback() {
     const ref = useRef(null);
-    const setRef = useCallback((node) => {
-      if (node) {
-        const row = node.children[0].children; // Get the children of one <tr>
-        const headerWidths = [];
-        for (let i = 0; i < row.length; i += 1) {
-          headerWidths.push(row[i].getBoundingClientRect().width); // Get the rendered width of the element.
+    const setRef = useCallback(
+      (node) => {
+        if (node) {
+          const row = node.children[0].children; // Get the children of one <tr>
+          const headerWidths = [];
+          for (let i = 0; i < row.length; i += 1) {
+            i === 0
+              ? headerWidths.push(row[i].getBoundingClientRect().width)
+              : headerWidths.push(row[i].getBoundingClientRect().width + 10); // Get the rendered width of the element.
+          }
+          setHeaderWidth(headerWidths);
         }
-        setHeaderWidth(headerWidths);
-      }
-      ref.current = node;
-    }, []);
+        ref.current = node; // eslint-disable-next-line react-hooks/exhaustive-deps
+      },
+      [loading]
+    );
 
     return [setRef];
   }
@@ -39,20 +44,20 @@ const Home = ({ facilities, loadFacilities, loading }) => {
       {
         Header: "Oris Code",
         accessor: "col1",
-        //width: headerWidth ? headerWidth[0] + "px" : "61px",
-        width: "61px",
+        width: headerWidth ? headerWidth[0] + "px" : "10px",
+        //width: "90px",
       },
       {
         Header: "Facility Name",
         accessor: "col2",
-        //width: headerWidth ? headerWidth[1] + "px" : "316px",
-        width: "316px",
+        width: headerWidth ? headerWidth[1] + "px" : "20px",
+        //width: "316px",
       },
       {
         Header: "State",
         accessor: "col3",
-        //width: headerWidth ? headerWidth[2] + "px" : "146px",
-        width: "146px",
+        width: headerWidth ? headerWidth[2] + "px" : "10px",
+        //width: "146px",
       },
     ],
     [headerWidth]
@@ -61,15 +66,15 @@ const Home = ({ facilities, loadFacilities, loading }) => {
   const data = useMemo(() => {
     if (facilities.length > 0) {
       let records = fs.getTableRecords(facilities);
-      return records ? records.slice(0, 100) : records;
+      return records; //? records.slice(0, 100) : records;
     } else {
-      return [{ col1: "Loading list of facilities..." }];
+      return [{ col2: "Loading list of facilities..." }];
     }
   }, [facilities]);
 
-  //const [ref] = useHookWithRefCallback();
+  const [ref] = useHookWithRefCallback();
 
-  return <HomeView bodyRef={null} columns={columns} data={data} />;
+  return <HomeView bodyRef={ref} columns={columns} data={data} />;
 };
 
 const mapStateToProps = (state) => {
@@ -81,7 +86,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadFacilities: () => dispatch(actions.loadFacilities()),
+    loadFacilities: () => dispatch(loadFacilities()),
   };
 };
 
