@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import UswdsTable from "./UswdsTable";
-import { render } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 
 describe("testing generic uswds table component", () => {
@@ -12,17 +12,17 @@ describe("testing generic uswds table component", () => {
     data = useMemo(
       () => [
         {
-          col1: "Hello",
+          col1: "4",
           col2: "World",
           col3: "Again",
         },
         {
-          col1: "react",
+          col1: "1",
           col2: "table",
           col3: "rocks",
         },
         {
-          col1: "whatever",
+          col1: "8",
           col2: "you want",
           col3: "in here",
         },
@@ -88,4 +88,18 @@ describe("testing generic uswds table component", () => {
     const tableRecords = container.querySelectorAll("tbody tr");
     expect(tableRecords.length).toEqual(data.length);
   });
+
+  test("table is sorted by id in asc by default ", () => {
+    const { container } = render(<UswdsTableTest grouping={false} />);
+    const tableRecords = container.querySelectorAll("tbody td");
+    expect(tableRecords[0].innerHTML).toEqual(data[1].col1);  
+  })
+
+  test("first table column header is clicked and sorts by dsc ", () => {
+    const { container } = render(<UswdsTableTest grouping={false} />);
+    const headerColumns = container.querySelectorAll("thead tr th");
+    fireEvent.click(headerColumns[0]);
+    const tableRecords = container.querySelectorAll("tbody td");
+    expect(tableRecords[0].innerHTML).toEqual(data[2].col1);
+   });
 });
