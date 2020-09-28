@@ -1,5 +1,5 @@
 import React from "react";
-import { useTable } from "react-table";
+import { useTable, useSortBy } from "react-table";
 import TableHeader from "./TableHeader";
 import TableBody from "./TableBody";
 
@@ -14,7 +14,16 @@ const UswdsTable = ({ columns, data, bordered = false, caption, bodyRef }) => {
   } = useTable({
     columns,
     data,
-  });
+    disableSortRemove:true,
+    initialState: {
+      sortBy: [
+          {
+              id: 'col1',
+              desc: false
+          }
+      ]
+  }
+  }, useSortBy);
 
   const variant = bordered ? "usa-table" : "usa-table usa-table--borderless";
 
@@ -25,6 +34,7 @@ const UswdsTable = ({ columns, data, bordered = false, caption, bodyRef }) => {
       <TableBody
         bodyRef={bodyRef}
         getTableBodyProps={getTableBodyProps}
+        headerGroups={headerGroups}
         rows={rows}
         prepareRow={prepareRow}
       />
