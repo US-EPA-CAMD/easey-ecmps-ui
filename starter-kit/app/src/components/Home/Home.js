@@ -5,45 +5,37 @@ import React, {
   useRef,
   useCallback,
 } from "react";
-import { getAllFacilities } from "../../utils/api/facilityApi";
+import { connect } from "react-redux";
+import { loadFacilities } from "../../store/actions/facilities";
 import * as fs from "../../utils/selectors/facilities";
-import log from "loglevel";
-import UswdsTable from "../Common/Table/UswdsTable";
-import "./Home.css";
+import HomeView from "./HomeView";
 
-function Home() {
-  let element = null;
-  const [facilities, setFacilities] = useState([]);
+const Home = ({ facilities, loadFacilities, loading }) => {
   const [headerWidth, setHeaderWidth] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await getAllFacilities();
-        if (result) {
-          setFacilities(result.data.data);
-        }
-      } catch (e) {
-        log.error(e);
-      }
-    };
-    fetchData();
+    if (facilities.length === 0) loadFacilities();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function useHookWithRefCallback() {
     const ref = useRef(null);
-    const setRef = useCallback((node) => {
-      if (node) {
-        console.log(node);
-        const row = node.children[0].children; // Get the children of one <tr>
-        const headerWidths = [];
-        for (let i = 0; i < row.length; i += 1) {
-          headerWidths.push(row[i].getBoundingClientRect().width); // Get the rendered width of the element.
+    const setRef = useCallback(
+      (node) => {
+        if (node) {
+          const row = node.children[0].children; // Get the children of one <tr>
+          const headerWidths = [];
+          for (let i = 0; i < row.length; i += 1) {
+            i === 0
+              ? headerWidths.push(row[i].getBoundingClientRect().width)
+              : headerWidths.push(row[i].getBoundingClientRect().width + 10); // Get the rendered width of the element.
+          }
+          setHeaderWidth(headerWidths);
         }
-        setHeaderWidth(headerWidths);
-      }
-      ref.current = node;
-    }, []);
+        ref.current = node; // eslint-disable-next-line react-hooks/exhaustive-deps
+      },
+      [loading]
+    );
 
     return [setRef];
   }
@@ -52,42 +44,50 @@ function Home() {
       {
         Header: "Oris Code",
         accessor: "col1",
-        width: headerWidth ? headerWidth[0] + "px" : "20%",
+        width: headerWidth ? headerWidth[0] + "px" : "10px",
+        //width: "90px",
       },
       {
         Header: "Facility Name",
         accessor: "col2",
-        width: headerWidth ? headerWidth[1] + "px" : "60%",
+        width: headerWidth ? headerWidth[1] + "px" : "20px",
+        //width: "316px",
       },
       {
         Header: "State",
         accessor: "col3",
-        width: headerWidth ? headerWidth[2] + "px" : "20%",
+        width: headerWidth ? headerWidth[2] + "px" : "10px",
+        //width: "146px",
       },
     ],
     [headerWidth]
   );
 
   const data = useMemo(() => {
-    let records = fs.getTableRecords(facilities);
-    return records ? records.slice(0, 100) : records;
+    if (facilities.length > 0) {
+      let records = fs.getTableRecords(facilities);
+      return records; //? records.slice(0, 100) : records;
+    } else {
+      return [{ col2: "Loading list of facilities..." }];
+    }
   }, [facilities]);
 
   const [ref] = useHookWithRefCallback();
 
-  if (facilities.length > 0)
-    element = (
-      <div className="container">
-        <UswdsTable
-          bodyRef={ref}
-          columns={columns}
-          data={data}
-          bordered={false}
-          caption="MP Facilities Data Table"
-        />
-      </div>
-    );
-  return element;
-}
+  return <HomeView bodyRef={ref} columns={columns} data={data} />;
+};
 
-export default Home;
+const mapStateToProps = (state) => {
+  return {
+    facilities: state.facilities,
+    loading: state.apiCallsInProgress.facilities,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadFacilities: () => dispatch(loadFacilities()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

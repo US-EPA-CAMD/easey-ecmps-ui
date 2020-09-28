@@ -38,7 +38,7 @@ const Header = () => {
           <ul className="menu" role="menu">
             <li className="menu-item" role="presentation">
               <a
-                class="menu-link"
+                className="menu-link"
                 href="https://www.epa.gov/environmental-topics"
                 role="menuitem"
                 title="Learn about Environmental Topics that EPA covers."

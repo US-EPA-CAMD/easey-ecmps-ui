@@ -2,23 +2,17 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
-import { createStore, applyMiddleware, combineReducers } from "redux";
-import thunk from "redux-thunk";
+//import { createStore, applyMiddleware, combineReducers } from "redux";
+//import thunk from "redux-thunk";
+import configureStore from "./store/configureStore.dev";
 
 //import './index.css';
 import "./uswds_assets/css/styles.css";
 //import "./utils/remoteLogging";
 import App from "./App";
-import postsReducer from "./store/reducers/posts";
-import tasksReducer from "./store/reducers/tasks";
 import * as serviceWorker from "./serviceWorker";
 
-const reducers = combineReducers({
-  posts: postsReducer,
-  tasks: tasksReducer,
-});
-
-const store = createStore(reducers, applyMiddleware(thunk));
+const store = configureStore();
 
 ReactDOM.render(
   <React.StrictMode>
