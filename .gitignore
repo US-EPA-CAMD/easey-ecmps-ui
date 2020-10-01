@@ -2,6 +2,7 @@
 /starter-kit/app/node_modules
 /starter-kit/posts-api/node_modules
 /starter-kit/tasks-api/node_modules
+/starter-kit/facilities-api/node_modules
 /.pnp
 .pnp.js
 
@@ -14,7 +15,8 @@
 /starter-kit/posts-api/build
 /starter-kit/tasks-api/dist
 /starter-kit/tasks-api/coverage
-
+/starter-kit/facilities-api/dist
+/starter-kit/facilities-api/coverage
 # misc
 .DS_Store
 #.env.local

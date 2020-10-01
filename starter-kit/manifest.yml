@@ -17,6 +17,11 @@ applications:
     <<: *defaults
     services:
       - us-epa-camd-starter-kit-pg-db
+  - name: facilities-api
+    path: ./facilities-api
+    <<: *defaults
+    services:
+      - us-epa-camd-starter-kit-pg-db
   - name: react-app
     path: ./app
     <<: *defaults
