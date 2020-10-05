@@ -7,6 +7,8 @@ on:
   push:
 #    paths: [ "starter-kit/**" ]
     branches: [ feature/*, features/* ]
+    paths-ignore:
+    - 'deployment.properties'
 
 jobs:
   build:
