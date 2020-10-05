@@ -17,6 +17,11 @@ export AWS_DEFAULT_REGION=`echo "${S3_CREDENTIALS}" | jq -r '.region'`
 export appname=$(grep ^$3.appname deployment.properties|cut -d'=' -f2)
 export version=$(grep ^$3.version deployment.properties|cut -d'=' -f2)
 export build=$(grep ^$3.build deployment.properties|cut -d'=' -f2)
+
+echo "DEBUG appname: $appname"
+echo "DEBUG version: $version"
+echo "DEBUG build: $build"
+
 mkdir deployments
 aws s3 cp  s3://cg-2f1f8ec0-a961-4d0b-af39-2ed9f109078e/$appname.$version.$build.zip deployments/
 cd deployments
