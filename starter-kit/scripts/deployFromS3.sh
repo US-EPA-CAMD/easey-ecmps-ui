@@ -22,6 +22,6 @@ aws s3 cp  s3://cg-2f1f8ec0-a961-4d0b-af39-2ed9f109078e/$appname.$version.$build
 cd deployments
 unzip -q $appname.$version.$build.zip
 ls -l 
-cd $3/starter-kit
+cd $appname/starter-kit
 cf push
 
