@@ -14,10 +14,13 @@ export AWS_SECRET_ACCESS_KEY=`echo "${S3_CREDENTIALS}" | jq -r .secret_access_ke
 export BUCKET_NAME=`echo "${S3_CREDENTIALS}" | jq -r .bucket`
 export AWS_DEFAULT_REGION=`echo "${S3_CREDENTIALS}" | jq -r '.region'`
 
+export appname=$(grep appname deployment.properties|cut -d'=' -f2)
+export version=$(grep version deployment.properties|cut -d'=' -f2)
+export build=$(grep build deployment.properties|cut -d'=' -f2)
 mkdir deployments
-aws s3 cp  s3://cg-2f1f8ec0-a961-4d0b-af39-2ed9f109078e/$3.$4.$5.zip deployments/
+aws s3 cp  s3://cg-2f1f8ec0-a961-4d0b-af39-2ed9f109078e/$appname.$version.$build.zip deployments/
 cd deployments
-unzip -q $3.$4.$5.zip
+unzip -q $appname.$version.$build.zip
 ls -l 
 cd $3/starter-kit
 cf push
