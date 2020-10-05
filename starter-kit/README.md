@@ -34,6 +34,11 @@ The `docker-compose.yml` file configures the containers volumes, port mappings, 
 * Health Check - [http://localhost:5000/api/ping](http://localhost:5000/api/ping)
 * Tasks Route - [http://localhost:5000/api/tasks](http://localhost:5000/api/tasks)
 * Swagger UI - [http://localhost:5000/api/swagger](http://localhost:5000/api/swagger)
+
+##### Facilities API...
+* localhost port 7000 maps to container port 7000
+* Hello World - [http://localhost:7000](http://localhost:7000)
+
   
 ## `Available Scripts`
 
