@@ -8,8 +8,8 @@ echo "Environment: $environment"
 
 if [[ -z $environment ]]; then
     echo "Unable to read the environment from the TAG"
-    echo "Exiting deployment"
-    exit
+    echo "Will deploy the latest version specified in deployments.properties"
+    export environment="latest"
 fi
 
 
