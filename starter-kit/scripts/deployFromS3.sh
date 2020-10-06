@@ -6,6 +6,13 @@ echo "DEBUG TAG value -> $3"
 environment=$(echo $3|cut -d'.' -f1)
 echo "Environment: $environment"
 
+if [[ -z $environment ]]; then
+    echo "Unable to read the environment from the TAG"
+    echo "Exiting deployment"
+    exit
+fi
+
+
 echo "Retrieving keys ..."
 cf api  https://api.fr.cloud.gov
 cf auth $1 $2
