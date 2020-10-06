@@ -9,72 +9,72 @@ services:
       - ./db:/docker-entrypoint-initdb.d
     ports:
       - '5432:5432'
-  # posts-api:
-  #   depends_on:
-  #     - database
-  #   build:
-  #     dockerfile: Dockerfile.dev
-  #     context: ./posts-api
-  #   volumes:
-  #     - /app/node_modules
-  #     - ./posts-api:/app
-  #   environment:
-  #     - PG_HOST=database
-  #     - PG_PORT=5432
-  #     - PG_USER=postgres
-  #     - PG_PWD=password
-  #     - PG_DB=postgres
-  #   ports:
-  #     - '4000:4000'
-  # tasks-api:
-  #   depends_on:
-  #     - database
-  #   build:
-  #     dockerfile: Dockerfile.dev
-  #     context: ./tasks-api
-  #   volumes:
-  #     - /app/node_modules
-  #     - ./tasks-api:/app
-  #   environment:
-  #     - PG_HOST=database
-  #     - PG_PORT=5432
-  #     - PG_USER=postgres
-  #     - PG_PWD=password
-  #     - PG_DB=postgres
-  #   ports:
-  #     - '5000:5000'
-  # facilities-api:
-  #   depends_on:
-  #     - database
-  #   build:
-  #     dockerfile: Dockerfile.dev
-  #     context: ./facilities-api
-  #   volumes:
-  #     - /app/node_modules
-  #     - ./facilities-api:/app
-  #   environment:
-  #     - PG_HOST=database
-  #     - PG_PORT=5432
-  #     - PG_USER=postgres
-  #     - PG_PWD=password
-  #     - PG_DB=postgres
-  #   ports:
-  #     - '7000:7000'
-  # webapp:
-  #   depends_on:
-  #     - posts-api
-  #     - tasks-api     
-  #   stdin_open: true
-  #   build:
-  #     dockerfile: Dockerfile.dev
-  #     context: ./app
-  #   volumes:
-  #     - /app/node_modules
-  #     - ./app:/app
-  #   environment:
-  #     - POSTS_API=http://localhost:4000/api/posts
-  #     - TASKS_API=http://localhost:5000/api/tasks
-  #   ports:
-  #     - '3000:3000'
+  posts-api:
+    depends_on:
+      - database
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./posts-api
+    volumes:
+      - /app/node_modules
+      - ./posts-api:/app
+    environment:
+      - PG_HOST=database
+      - PG_PORT=5432
+      - PG_USER=postgres
+      - PG_PWD=password
+      - PG_DB=postgres
+    ports:
+      - '4000:4000'
+  tasks-api:
+    depends_on:
+      - database
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./tasks-api
+    volumes:
+      - /app/node_modules
+      - ./tasks-api:/app
+    environment:
+      - PG_HOST=database
+      - PG_PORT=5432
+      - PG_USER=postgres
+      - PG_PWD=password
+      - PG_DB=postgres
+    ports:
+      - '5000:5000'
+  facilities-api:
+    depends_on:
+      - database
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./facilities-api
+    volumes:
+      - /app/node_modules
+      - ./facilities-api:/app
+    environment:
+      - PG_HOST=database
+      - PG_PORT=5432
+      - PG_USER=postgres
+      - PG_PWD=password
+      - PG_DB=postgres
+    ports:
+      - '7000:7000'
+  webapp:
+    depends_on:
+      - posts-api
+      - tasks-api     
+    stdin_open: true
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./app
+    volumes:
+      - /app/node_modules
+      - ./app:/app
+    environment:
+      - POSTS_API=http://localhost:4000/api/posts
+      - TASKS_API=http://localhost:5000/api/tasks
+    ports:
+      - '3000:3000'
 volumes:
   pgdata:
