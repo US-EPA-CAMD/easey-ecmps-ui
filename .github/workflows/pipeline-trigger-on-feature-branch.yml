@@ -39,7 +39,7 @@ jobs:
 
     - name: Deploy App from S3
       run: |
-        starter-kit/scripts/deployFromS3.sh ${{secrets.CF_SERVICE_ACCOUNT_ID}} ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}} 'dev' env.HEAD_TAG
+        starter-kit/scripts/deployFromS3.sh ${{secrets.CF_SERVICE_ACCOUNT_ID}} ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}} 'dev' ${{env.HEAD_TAG}}
 
   Codescan:
     runs-on: ubuntu-latest
