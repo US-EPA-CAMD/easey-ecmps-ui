@@ -1,7 +1,9 @@
 import React from "react";
-import { useTable, useSortBy } from "react-table";
+import { useTable, useSortBy, usePagination } from "react-table";
 import TableHeader from "./TableHeader";
 import TableBody from "./TableBody";
+import TablePagination from "./TablePagination/TablePagination";
+import TablePaginationFilter from "./TablePaginationFilter/TablePaginationFilter";
 
 const UswdsTable = ({ columns, data, bordered = false, caption, bodyRef }) => {
   // Use the state and functions returned from useTable to build UI
@@ -11,34 +13,75 @@ const UswdsTable = ({ columns, data, bordered = false, caption, bodyRef }) => {
     headerGroups,
     rows,
     prepareRow,
-  } = useTable({
-    columns,
-    data,
-    disableSortRemove:true,
-    initialState: {
-      sortBy: [
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize },
+  } = useTable(
+    {
+      columns,
+      data,
+
+      disableSortRemove: true,
+      initialState: {
+        sortBy: [
           {
-              id: 'col1',
-              desc: false
-          }
-      ]
-  }
-  }, useSortBy);
+            id: "col1",
+            desc: false,
+          },
+        ],
+        pageIndex: 0,
+        pageSize: 100,
+      },
+    },
+
+    useSortBy,
+    usePagination
+  );
 
   const variant = bordered ? "usa-table" : "usa-table usa-table--borderless";
 
   return (
-    <table className={variant} {...getTableProps()}>
-      <caption>{caption}</caption>
-      <TableHeader headerGroups={headerGroups} />
-      <TableBody
-        bodyRef={bodyRef}
-        getTableBodyProps={getTableBodyProps}
-        headerGroups={headerGroups}
-        rows={rows}
-        prepareRow={prepareRow}
+    <div>
+
+      <table className={variant} {...getTableProps()}>
+        
+
+        <TableHeader headerGroups={headerGroups} />
+        <TableBody
+          bodyRef={bodyRef}
+          getTableBodyProps={getTableBodyProps}
+          headerGroups={headerGroups}
+          rows={rows}
+          page={page}
+          prepareRow={prepareRow}
+        />
+      </table>
+      <TablePaginationFilter
+        setPageSize={setPageSize}
+        pageSize={pageSize}
+        paginationFiltering={[100, 250, 500, rows.length]}
       />
-    </table>
+      <TablePagination
+        canPreviousPage={canPreviousPage}
+        canNextPage={canNextPage}
+        pageOptions={pageOptions}
+        pageCount={pageCount}
+        gotoPage={gotoPage}
+        nextPage={nextPage}
+        previousPage={previousPage}
+        setPageSize={setPageSize}
+        pageIndex={pageIndex}
+        pageSize={pageSize}
+        paginationFiltering={[100, 250, 500, rows.length]}
+      />
+    </div>
   );
 };
 

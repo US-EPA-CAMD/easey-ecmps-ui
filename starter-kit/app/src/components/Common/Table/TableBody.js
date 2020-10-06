@@ -1,18 +1,20 @@
 import React from "react";
 
-const TableBody = ({ getTableBodyProps, rows, prepareRow, bodyRef }) => (
-  <tbody ref={bodyRef} {...getTableBodyProps()}>
-    {rows.map((row, i) => {
-      prepareRow(row);
-      return (
+const TableBody = ({ getTableBodyProps, rows, page, prepareRow, bodyRef }) => (
+
+
+<tbody {...getTableBodyProps()}>
+{page.map((row, i) => {
+    prepareRow(row)
+    return (
         <tr {...row.getRowProps()}>
-          {row.cells.map((cell) => {
-            return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
-          })}
+            {row.cells.map(cell => {
+                return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+            })}
         </tr>
-      );
-    })}
-  </tbody>
+    )
+})}
+</tbody>
 );
 
 export default TableBody;
