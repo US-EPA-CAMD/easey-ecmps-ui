@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo "temporarily disabling"
-exit
 echo "Run Unit tests here ... "
 cd starter-kit/tasks-api
 npm install jest
