@@ -2,8 +2,9 @@
 
 cd $GITHUB_WORKSPACE
 
-echo "DEBUG -> $4"
-exit
+echo "DEBUG TAG value -> $3"
+environment=$(echo $3|cut -d'.' -f1)
+echo "Environment: $environment"
 
 echo "Retrieving keys ..."
 cf api  https://api.fr.cloud.gov
@@ -17,9 +18,9 @@ export AWS_SECRET_ACCESS_KEY=`echo "${S3_CREDENTIALS}" | jq -r .secret_access_ke
 export BUCKET_NAME=`echo "${S3_CREDENTIALS}" | jq -r .bucket`
 export AWS_DEFAULT_REGION=`echo "${S3_CREDENTIALS}" | jq -r '.region'`
 
-export appname=$(grep ^$3.appname deployment.properties|cut -d'=' -f2)
-export version=$(grep ^$3.version deployment.properties|cut -d'=' -f2)
-export build=$(grep ^$3.build deployment.properties|cut -d'=' -f2)
+export appname=$(grep ^$environment.appname deployment.properties|cut -d'=' -f2)
+export version=$(grep ^$environment.version deployment.properties|cut -d'=' -f2)
+export build=$(grep ^$environment.build deployment.properties|cut -d'=' -f2)
 
 if [ -z $appname ]; then
 	echo "Appname is NULL"
