@@ -22,9 +22,10 @@ export appname=$(grep ^$environment.appname deployment.properties|cut -d'=' -f2)
 export version=$(grep ^$environment.version deployment.properties|cut -d'=' -f2)
 export build=$(grep ^$environment.build deployment.properties|cut -d'=' -f2)
 
-if [ -z $appname ]; then
-	echo "Appname is NULL"
-	exit 0
+if [[ -z $appname || -z $version || -z $build ]]; then
+    echo "Please assign values to $environment.appname, $environment.version, $environment.build in deployment.properties"
+    echo "Exiting deployment"
+    exit 0
 fi
 
 mkdir deployments
