@@ -2,6 +2,9 @@
 
 cd $GITHUB_WORKSPACE
 
+echo "DEBUG -> $4"
+exit
+
 echo "Retrieving keys ..."
 cf api  https://api.fr.cloud.gov
 cf auth $1 $2
