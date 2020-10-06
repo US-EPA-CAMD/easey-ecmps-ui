@@ -37,7 +37,7 @@ The `docker-compose.yml` file configures the containers volumes, port mappings, 
 
 ##### Facilities API...
 * localhost port 7000 maps to container port 7000
-* Hello World - [http://localhost:7000](http://localhost:7000)
+* Swagger UI - [http://localhost:7000/api/swagger](http://localhost:7000/api/swagger)
 
   
 ## `Available Scripts`

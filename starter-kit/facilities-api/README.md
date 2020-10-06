@@ -7,7 +7,7 @@ From within the `facilities-api` project directory, you can run:
 ### `npm run start:dev`
 
 Runs the api in the development mode.<br />
-* Open [http://localhost:7000](http://localhost:7000) to view basic hello world service
+* Open [http://localhost:7000/api/swagger](http://localhost:7000/api/swagger) to view swagger documentation.
 
 
 The page will reload if you make edits via the use of nodemon.<br />
