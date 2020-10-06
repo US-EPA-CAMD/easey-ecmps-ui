@@ -18,13 +18,6 @@ export appname=$(grep ^$3.appname deployment.properties|cut -d'=' -f2)
 export version=$(grep ^$3.version deployment.properties|cut -d'=' -f2)
 export build=$(grep ^$3.build deployment.properties|cut -d'=' -f2)
 
-echo "DEBUG 3rd arg = $3"
-echo $3
-echo "DEBUG grep ^$3.appname deployment.properties|cut -d'=' -f2"
-echo "DEBUG appname: $appname"
-echo "DEBUG version: $version"
-echo "DEBUG build: $build"
-
 if [ -z $appname ]; then
 	echo "Appname is NULL"
 	exit 0
