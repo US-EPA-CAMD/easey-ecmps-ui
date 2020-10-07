@@ -50,18 +50,7 @@ const UswdsTable = ({
         // make search funcationality dynamic in component initialization 
         filters: [
           // make search object
-          {
-            id: "col1",
-            value: 12,
-          },
-          {
-            id: "col2",
-            value: 12,
-          },
-          {
-            id: "col3",
-            value: 12,
-          },
+
         ],
         pageIndex: 0,
         pageSize: showEntries[0],

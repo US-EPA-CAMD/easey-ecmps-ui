@@ -605,7 +605,7 @@ describe("testing generic uswds table component with pagination", () => {
       []
     );
     return (
-      <UswdsTable columns={grouping ? columnsGrouping : columns} data={data} paginate />
+      <UswdsTable columns={grouping ? columnsGrouping : columns} data={data} paginate showEntries={[100,250,500]} />
     );
   };
 
@@ -632,7 +632,7 @@ describe("testing generic uswds table component with pagination", () => {
 
   test("selects 250 option and tests total rows => 109  ", () => {
     const { container, getByTestId } = render(
-      <UswdsTableTest grouping={true} />
+      <UswdsTableTest grouping={true}  />
     );
     userEvent.selectOptions(getByTestId("select-option"), ["250"]);
     const tableRecords = container.querySelectorAll("tbody tr");
@@ -650,4 +650,3 @@ describe("testing generic uswds table component with pagination", () => {
     expect(tableRecords.length).toEqual(data.length - 100);
   });
 });
-

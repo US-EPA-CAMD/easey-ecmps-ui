@@ -73,6 +73,7 @@ describe("testing generic uswds table component", () => {
         columns={grouping ? columnsGrouping : columns}
         data={data}
         paginate={paginate}
+        showEntries={[100,250,300]}
       />
     );
   };
