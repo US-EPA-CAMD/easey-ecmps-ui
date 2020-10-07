@@ -11,6 +11,8 @@ const HomeView = ({ bodyRef, columns, data }) => {
         data={data}
         bordered={false}
         caption="MP Facilities Data Table"
+        paginate
+        showEntries={[100,250,500]}
       />
     </div>
   );

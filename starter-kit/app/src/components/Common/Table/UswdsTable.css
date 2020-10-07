@@ -1,0 +1,20 @@
+.filterAndSearch {
+  position: relative;
+}
+.filter {
+  width: auto;
+  height: 100%;
+  display: inline-block;
+
+  top: 0;
+}
+.search {
+  background-color: #ccc;
+  display: inline-block;
+  position: absolute;
+  right: 0;
+}
+.container {
+  position: relative;
+  left: 0;
+}

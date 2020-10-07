@@ -59,6 +59,7 @@
     "gulp-sass": "^4.1.0",
     "gulp-sourcemaps": "^2.6.5",
     "postcss-csso": "^4.0.0",
+    "react-paginate": "^6.5.0",
     "react-test-renderer": "^16.13.1",
     "sass": "^1.26.10",
     "uswds": "^2.8.0",

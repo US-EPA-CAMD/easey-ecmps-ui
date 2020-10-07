@@ -8,7 +8,7 @@ describe("testing generic uswds table component", () => {
     columnsGrouping = [],
     data = [];
 
-  const UswdsTableTest = ({ grouping }) => {
+  const UswdsTableTest = ({ grouping, paginate }) => {
     data = useMemo(
       () => [
         {
@@ -69,7 +69,12 @@ describe("testing generic uswds table component", () => {
       []
     );
     return (
-      <UswdsTable columns={grouping ? columnsGrouping : columns} data={data} />
+      <UswdsTable
+        columns={grouping ? columnsGrouping : columns}
+        data={data}
+        paginate={paginate}
+        showEntries={[100,250,300]}
+      />
     );
   };
 
@@ -92,8 +97,8 @@ describe("testing generic uswds table component", () => {
   test("table is sorted by id in asc by default ", () => {
     const { container } = render(<UswdsTableTest grouping={false} />);
     const tableRecords = container.querySelectorAll("tbody td");
-    expect(tableRecords[0].innerHTML).toEqual(data[1].col1);  
-  })
+    expect(tableRecords[0].innerHTML).toEqual(data[1].col1);
+  });
 
   test("first table column header is clicked and sorts by dsc ", () => {
     const { container } = render(<UswdsTableTest grouping={false} />);
@@ -101,5 +106,25 @@ describe("testing generic uswds table component", () => {
     fireEvent.click(headerColumns[0]);
     const tableRecords = container.querySelectorAll("tbody td");
     expect(tableRecords[0].innerHTML).toEqual(data[2].col1);
-   });
+  });
+  test("paginate filter is enabled", () => {
+    const { container } = render(<UswdsTableTest grouping={false} paginate />);
+    const filter = container.querySelectorAll("span select");
+
+    expect(filter.length).toEqual(1);
+  });
+  test("paginate tabs are enabled", () => {
+    const { container } = render(<UswdsTableTest grouping={false} paginate />);
+    const tab = container.querySelectorAll(".paginationTabs");
+
+    expect(tab.length).toEqual(1);
+  });
+  test("pagination is disabled ", () => {
+    const { container } = render(
+      <UswdsTableTest grouping={false} paginate={false} />
+    );
+
+    const tab = container.querySelectorAll(".paginationTabs");
+    expect(tab.length).toEqual(0);
+  });
 });
