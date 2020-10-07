@@ -24,21 +24,22 @@ const TablePaginationFilter = ({
     );
   }
   return (
-    <div className="top">
-      {"Show"}
-      <select
-        data-testid="select-option"
-        className="form-control box"
-        value={pageSize}
-        onChange={(e) => {
-          setPageSize(Number(e.target.value));
-        }}
-        style={{ width: "75px", height: "35px" }}
-      >
-        {paginationFiltering.map((pageSize) => pageAmounts(pageSize))}
-      </select>
-      {"Entries"}
-    </div>
+    <div className='filterWrap'>
+      
+        {"Show"}
+        <select
+          data-testid="select-option"
+        
+          value={pageSize}
+          onChange={(e) => {
+            setPageSize(Number(e.target.value));
+          }}
+          style={{ width: "55px", height: "25px"}}
+        >
+          {paginationFiltering.map((pageSize) => pageAmounts(pageSize))}
+        </select>
+        {"Entries"}
+      </div>
   );
 };
 

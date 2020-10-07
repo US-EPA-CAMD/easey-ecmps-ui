@@ -1,0 +1,14 @@
+.filterAndSearch{
+position: relative;
+}
+.filter{
+    width: auto;
+    background-color: #ccc;
+    height:100%;
+    display: inline-block;
+    top:0;
+}
+.container{
+    position: relative;
+}
+

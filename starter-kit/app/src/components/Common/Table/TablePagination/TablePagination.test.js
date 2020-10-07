@@ -605,7 +605,7 @@ describe("testing generic uswds table component with pagination", () => {
       []
     );
     return (
-      <UswdsTable columns={grouping ? columnsGrouping : columns} data={data} />
+      <UswdsTable columns={grouping ? columnsGrouping : columns} data={data} paginate />
     );
   };
 

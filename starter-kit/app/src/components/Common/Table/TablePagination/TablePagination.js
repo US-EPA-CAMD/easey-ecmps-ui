@@ -157,19 +157,20 @@ const TablePagination = ({
         )}{" "}
         of {paginationFiltering[paginationFiltering.length - 1]} entries
       </div>
+      <div className="paginationTabs">
+        <ul className="pagination">
+          <li
+            className="page-item"
+            onClick={() => previousPage()}
+            disabled={!canPreviousPage}
+          >
+            <button className="page-link">{"Previous"}</button>
+          </li>
 
-      <ul className="pagination">
-        <li
-          className="page-item"
-          onClick={() => previousPage()}
-          disabled={!canPreviousPage}
-        >
-          <button className="page-link">{"Previous"}</button>
-        </li>
-
-        {tabs()}
-        {nextTab()}
-      </ul>
+          {tabs()}
+          {nextTab()}
+        </ul>
+      </div>
     </div>
   );
 };

@@ -4,8 +4,15 @@ import TableHeader from "./TableHeader";
 import TableBody from "./TableBody";
 import TablePagination from "./TablePagination/TablePagination";
 import TablePaginationFilter from "./TablePaginationFilter/TablePaginationFilter";
-
-const UswdsTable = ({ columns, data, bordered = false, caption, bodyRef }) => {
+import "./UswdsTable.css";
+const UswdsTable = ({
+  columns,
+  data,
+  bordered = false,
+  caption,
+  bodyRef,
+  paginate,
+}) => {
   // Use the state and functions returned from useTable to build UI
   const {
     getTableProps,
@@ -48,11 +55,23 @@ const UswdsTable = ({ columns, data, bordered = false, caption, bodyRef }) => {
   const variant = bordered ? "usa-table" : "usa-table usa-table--borderless";
 
   return (
-    <div>
+    <div className="container">
+      {paginate ? (
+        <div className="filterAndSearch">
+          {" "}
+          <span className="filter">
+            <TablePaginationFilter
+              setPageSize={setPageSize}
+              pageSize={pageSize}
+              paginationFiltering={[100, 250, 500, rows.length]}
+            />{" "}
+          </span>
+        </div>
+      ) : (
+        ""
+      )}
 
       <table className={variant} {...getTableProps()}>
-        
-
         <TableHeader headerGroups={headerGroups} />
         <TableBody
           bodyRef={bodyRef}
@@ -63,24 +82,24 @@ const UswdsTable = ({ columns, data, bordered = false, caption, bodyRef }) => {
           prepareRow={prepareRow}
         />
       </table>
-      <TablePaginationFilter
-        setPageSize={setPageSize}
-        pageSize={pageSize}
-        paginationFiltering={[100, 250, 500, rows.length]}
-      />
-      <TablePagination
-        canPreviousPage={canPreviousPage}
-        canNextPage={canNextPage}
-        pageOptions={pageOptions}
-        pageCount={pageCount}
-        gotoPage={gotoPage}
-        nextPage={nextPage}
-        previousPage={previousPage}
-        setPageSize={setPageSize}
-        pageIndex={pageIndex}
-        pageSize={pageSize}
-        paginationFiltering={[100, 250, 500, rows.length]}
-      />
+      <div className="paginateBar">
+      {paginate ? (
+        <TablePagination className="testID"
+          canPreviousPage={canPreviousPage}
+          canNextPage={canNextPage}
+          pageOptions={pageOptions}
+          pageCount={pageCount}
+          gotoPage={gotoPage}
+          nextPage={nextPage}
+          previousPage={previousPage}
+          setPageSize={setPageSize}
+          pageIndex={pageIndex}
+          pageSize={pageSize}
+          paginationFiltering={[100, 250, 500, rows.length]}
+        />
+      ) : (
+        ""
+      )}</div>
     </div>
   );
 };
