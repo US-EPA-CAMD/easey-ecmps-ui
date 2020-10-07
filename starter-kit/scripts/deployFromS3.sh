@@ -6,6 +6,13 @@ echo "DEBUG TAG value -> $3"
 environment=$(echo $3|cut -d'.' -f1)
 echo "Environment: $environment"
 
+validEnvironments=("dev" "test" "stage" "latest" "rollback-stage" "rollback-test" "rollback-dev")
+
+if [[ !  " ${validEnvironments[@]} " =~ " ${environment} " ]]; then
+    echo "${environment} - Not a valid environment value"
+    exit
+fi
+
 if [[ -z $environment ]]; then
     echo "Unable to read the environment from the TAG"
     echo "Will deploy the latest version specified in deployments.properties"
