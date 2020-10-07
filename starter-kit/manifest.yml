@@ -2,7 +2,7 @@
 defaults: &defaults
   command: npm run start
   random-route: true
-  memory: 128M
+  memory: 512M
   env:
     OPTIMIZE_MEMORY: true
 
@@ -25,7 +25,6 @@ applications:
   - name: react-app
     path: ./app
     <<: *defaults
-    memory: 500M
     env:
       REACT_APP_POSTS_API: https://posts-api-wacky-civet-gl.app.cloud.gov/api/posts
       REACT_APP_TASKS_API: https://task-api-chipper-mandrill-lt.app.cloud.gov/api/tasks
