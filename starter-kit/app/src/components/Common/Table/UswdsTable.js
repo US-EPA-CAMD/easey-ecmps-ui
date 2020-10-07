@@ -1,10 +1,12 @@
 import React from "react";
-import { useTable, useSortBy, usePagination } from "react-table";
+import { useTable, useSortBy, usePagination, useFilters } from "react-table";
 import TableHeader from "./TableHeader";
 import TableBody from "./TableBody";
 import TablePagination from "./TablePagination/TablePagination";
 import TablePaginationFilter from "./TablePaginationFilter/TablePaginationFilter";
+import TableSearch from "./TableSearch/TableSearch";
 import "./UswdsTable.css";
+//import Search from "@trussworks/react-uswds/lib/components/Search/Search";
 const UswdsTable = ({
   columns,
   data,
@@ -12,6 +14,7 @@ const UswdsTable = ({
   caption,
   bodyRef,
   paginate,
+  showEntries
 }) => {
   // Use the state and functions returned from useTable to build UI
   const {
@@ -30,6 +33,7 @@ const UswdsTable = ({
     previousPage,
     setPageSize,
     state: { pageIndex, pageSize },
+    // try to reduce consts in uswds component and put them in respective component via useTable();
   } = useTable(
     {
       columns,
@@ -43,11 +47,27 @@ const UswdsTable = ({
             desc: false,
           },
         ],
+        // make search funcationality dynamic in component initialization 
+        filters: [
+          // make search object
+          {
+            id: "col1",
+            value: 12,
+          },
+          {
+            id: "col2",
+            value: 12,
+          },
+          {
+            id: "col3",
+            value: 12,
+          },
+        ],
         pageIndex: 0,
-        pageSize: 100,
+        pageSize: showEntries[0],
       },
     },
-
+    useFilters,
     useSortBy,
     usePagination
   );
@@ -58,14 +78,16 @@ const UswdsTable = ({
     <div className="container">
       {paginate ? (
         <div className="filterAndSearch">
-          {" "}
           <span className="filter">
             <TablePaginationFilter
               setPageSize={setPageSize}
               pageSize={pageSize}
-              paginationFiltering={[100, 250, 500, rows.length]}
-            />{" "}
+              paginationFiltering={[...showEntries, rows.length]}
+            />
           </span>
+          <div className="search">
+            <TableSearch/>
+          </div>
         </div>
       ) : (
         ""
@@ -83,23 +105,24 @@ const UswdsTable = ({
         />
       </table>
       <div className="paginateBar">
-      {paginate ? (
-        <TablePagination className="testID"
-          canPreviousPage={canPreviousPage}
-          canNextPage={canNextPage}
-          pageOptions={pageOptions}
-          pageCount={pageCount}
-          gotoPage={gotoPage}
-          nextPage={nextPage}
-          previousPage={previousPage}
-          setPageSize={setPageSize}
-          pageIndex={pageIndex}
-          pageSize={pageSize}
-          paginationFiltering={[100, 250, 500, rows.length]}
-        />
-      ) : (
-        ""
-      )}</div>
+        {paginate ? (
+          <TablePagination
+            canPreviousPage={canPreviousPage}
+            canNextPage={canNextPage}
+            pageOptions={pageOptions}
+            pageCount={pageCount}
+            gotoPage={gotoPage}
+            nextPage={nextPage}
+            previousPage={previousPage}
+            setPageSize={setPageSize}
+            pageIndex={pageIndex}
+            pageSize={pageSize}
+            paginationFiltering={[...showEntries, rows.length]}
+          />
+        ) : (
+          ""
+        )}
+      </div>
     </div>
   );
 };

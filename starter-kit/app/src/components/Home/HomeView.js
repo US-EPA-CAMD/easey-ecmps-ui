@@ -4,7 +4,7 @@ import "./Home.css";
 
 const HomeView = ({ bodyRef, columns, data }) => {
   return (
-    <div className="container"  style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)"}} >
+    <div className="container">
       <UswdsTable
         bodyRef={bodyRef}
         columns={columns}
@@ -12,6 +12,7 @@ const HomeView = ({ bodyRef, columns, data }) => {
         bordered={false}
         caption="MP Facilities Data Table"
         paginate
+        showEntries={[100,250,500]}
       />
     </div>
   );
