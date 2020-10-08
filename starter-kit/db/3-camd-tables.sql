@@ -93,13 +93,13 @@ CREATE TABLE "CAMD"."PERSON" (
 	"ZIP_CODE" VARCHAR(10),
 	"COUNTRY_CD" VARCHAR(7),
 	"PROVINCE" VARCHAR(25),
-	"PHONE_NUMERIC" VARCHAR(18),
+	"PHONE_NUMBER" VARCHAR(18),
 	"EXTENSION" VARCHAR(5),
-	"FAX_NUMERIC" VARCHAR(18),
-	"CELL_PHONE_NUMERIC" VARCHAR(18),
+	"FAX_NUMBER" VARCHAR(18),
+	"CELL_PHONE_NUMBER" VARCHAR(18),
 	"EMAIL_ADDRESS" VARCHAR(70),
-	"login" VARCHAR(8),
-	"password" VARCHAR(300),
+	"LOGIN" VARCHAR(8),
+	"PASSWORD" VARCHAR(300),
 	"PASSWORD_CHANGE_DATE" DATE,
 	"INITIAL_PASSWORD_IND" NUMERIC(1,0) DEFAULT 0 NOT NULL, 
 	"PASSWORD_LOCKED_IND" NUMERIC(1,0) DEFAULT 0 NOT NULL, 
@@ -121,7 +121,7 @@ CREATE TABLE "CAMD"."PERSON" (
 	"CROMERR_FAILED_CNT" NUMERIC(1,0) DEFAULT 0 NOT NULL, 
 	"CROMERR_LOCKED_IND" NUMERIC(1,0) DEFAULT 0 NOT NULL, 
 	CONSTRAINT "PK_PERSON" PRIMARY KEY ("PPL_ID"), 
-	CONSTRAINT "UQ_PERSON_LOGIN" UNIQUE ("login")
+	CONSTRAINT "UQ_PERSON_LOGIN" UNIQUE ("LOGIN")
 );
 COMMENT ON COLUMN "CAMD"."PERSON"."PPL_ID" IS 'PERSON identity key.';
 COMMENT ON COLUMN "CAMD"."PERSON"."PERSON_TYPE_CD" IS 'Identifies the type of user in system.';
@@ -139,13 +139,13 @@ COMMENT ON COLUMN "CAMD"."PERSON"."STATE_CD" IS 'State abbreviation for state in
 COMMENT ON COLUMN "CAMD"."PERSON"."ZIP_CODE" IS 'The US Postal Service zip code.';
 COMMENT ON COLUMN "CAMD"."PERSON"."COUNTRY_CD" IS 'Country name.';
 COMMENT ON COLUMN "CAMD"."PERSON"."PROVINCE" IS 'Name of province or state for international addresses.';
-COMMENT ON COLUMN "CAMD"."PERSON"."PHONE_NUMERIC" IS 'Phone" NUMERIC for CONTACT or STAFF, AGENCY, and ACCOUNT REQUEST. ';
+COMMENT ON COLUMN "CAMD"."PERSON"."PHONE_NUMBER" IS 'Phone" NUMERIC for CONTACT or STAFF, AGENCY, and ACCOUNT REQUEST. ';
 COMMENT ON COLUMN "CAMD"."PERSON"."EXTENSION" IS 'Extension of person''s phone" NUMERIC.';
-COMMENT ON COLUMN "CAMD"."PERSON"."FAX_NUMERIC" IS 'The facsimile" NUMERIC for an individual.';
-COMMENT ON COLUMN "CAMD"."PERSON"."CELL_PHONE_NUMERIC" IS 'Cell phone" NUMERIC for CONTACT or STAFF, AGENCY and ACCOUNT REQUEST. ';
+COMMENT ON COLUMN "CAMD"."PERSON"."FAX_NUMBER" IS 'The facsimile" NUMERIC for an individual.';
+COMMENT ON COLUMN "CAMD"."PERSON"."CELL_PHONE_NUMBER" IS 'Cell phone" NUMERIC for CONTACT or STAFF, AGENCY and ACCOUNT REQUEST. ';
 COMMENT ON COLUMN "CAMD"."PERSON"."EMAIL_ADDRESS" IS 'The email address for an individual. ';
-COMMENT ON COLUMN "CAMD"."PERSON"."login" IS 'The User logon name or ID for CAMD databases assigned by CAMD to CONTACT and STAFF.';
-COMMENT ON COLUMN "CAMD"."PERSON"."password" IS 'The encrypted User Password assigned by CAMD and maintained by the CONTACT or STAFF to authenticate access to CAMD databases.';
+COMMENT ON COLUMN "CAMD"."PERSON"."LOGIN" IS 'The User logon name or ID for CAMD databases assigned by CAMD to CONTACT and STAFF.';
+COMMENT ON COLUMN "CAMD"."PERSON"."PASSWORD" IS 'The encrypted User Password assigned by CAMD and maintained by the CONTACT or STAFF to authenticate access to CAMD databases.';
 COMMENT ON COLUMN "CAMD"."PERSON"."PASSWORD_CHANGE_DATE" IS 'Date user changed password.';
 COMMENT ON COLUMN "CAMD"."PERSON"."INITIAL_PASSWORD_IND" IS 'Indicates whether the user needs to change their password on next login.';
 COMMENT ON COLUMN "CAMD"."PERSON"."PASSWORD_LOCKED_IND" IS 'Identifies whether the user" IS locked out of the application for wrong password attempts.';
@@ -197,7 +197,7 @@ CREATE TABLE "CAMD"."PLANT" (
 	CONSTRAINT "UQ_PLANT_ORIS_CODE" UNIQUE ("ORIS_CODE")
 );
 COMMENT ON COLUMN "CAMD"."PLANT"."FAC_ID" IS 'FACILITY ID identity key.';
-COMMENT ON COLUMN "CAMD"."PLANT"."ORIS_CODE" IS 'EIA-assigned identifier or FACILITY ID assigned by CAMD (if EIA" NUMERIC" IS not applicable).';
+COMMENT ON COLUMN "CAMD"."PLANT"."ORIS_CODE" IS 'EIA-assigned identifier or FACILITY ID assigned by CAMD (if EIA" NUMBER" IS not applicable).';
 COMMENT ON COLUMN "CAMD"."PLANT"."FACILITY_NAME" IS 'Name of FACILITY, as reported by representative on Certification of Representation forms or equivalent.';
 COMMENT ON COLUMN "CAMD"."PLANT"."DESCRIPTION" IS 'Text description of FACILITY or FACILITY configuration.';
 COMMENT ON COLUMN "CAMD"."PLANT"."STATE" IS 'State abbreviation for state in which FACILITY, CONTACT, AGENCY, ACCOUNT REQUEST, PROGRAM, or STAFF" IS located. ';
@@ -255,7 +255,7 @@ CREATE TABLE "CAMD"."UNIT" (
 	"UNIT_DESCRIPTION" VARCHAR(4000),
 	"INDIAN_COUNTRY_IND" NUMERIC(1,0) DEFAULT 0 NOT NULL, 
 	"STATEID" VARCHAR(6),
-	"BOILER_SEQUENCE_NUMERIC" NUMERIC(38,0),
+	"BOILER_SEQUENCE_NUMBER" NUMERIC(38,0),
 	"COMM_OP_DATE" DATE,
 	"COMM_OP_DATE_CD" VARCHAR(1),
 	"COMR_OP_DATE" DATE,
@@ -278,7 +278,7 @@ COMMENT ON COLUMN "CAMD"."UNIT"."UNITID" IS 'Public identifier used for UNIT for
 COMMENT ON COLUMN "CAMD"."UNIT"."UNIT_DESCRIPTION" IS 'Text description of UNIT or UNIT configuration.';
 COMMENT ON COLUMN "CAMD"."UNIT"."INDIAN_COUNTRY_IND" IS 'Indicates whether of not a unit" IS located in Indian Country.';
 COMMENT ON COLUMN "CAMD"."UNIT"."STATEID" IS 'The state identification" NUMERIC for a FACILITY or UNIT.';
-COMMENT ON COLUMN "CAMD"."UNIT"."BOILER_SEQUENCE_NUMERIC" IS 'A CAMD assigned unique identifier for each boiler or unit.';
+COMMENT ON COLUMN "CAMD"."UNIT"."BOILER_SEQUENCE_NUMBER" IS 'A CAMD assigned unique identifier for each boiler or unit.';
 COMMENT ON COLUMN "CAMD"."UNIT"."COMM_OP_DATE" IS 'First day of operation that a UNIT generated electricity for sale, including the sale of test generation.';
 COMMENT ON COLUMN "CAMD"."UNIT"."COMM_OP_DATE_CD" IS 'Code indicating whether the UNIT initial operation" DATE" IS projected or actual.';
 COMMENT ON COLUMN "CAMD"."UNIT"."COMR_OP_DATE" IS 'First day of commercial operation for a UNIT.';
@@ -293,6 +293,28 @@ COMMENT ON COLUMN "CAMD"."UNIT"."USERID" IS 'The user name of the person or proc
 COMMENT ON COLUMN "CAMD"."UNIT"."ADD_DATE" IS 'Date the record was created.';
 COMMENT ON COLUMN "CAMD"."UNIT"."UPDATE_DATE" IS 'Date of the last record update.';
 COMMENT ON TABLE "CAMD"."UNIT" IS 'Identifies industrial boilers or electric generating units.';
+
+CREATE TABLE "CAMD"."UNIT_BOILER_TYPE" (
+	"UNIT_BOILER_TYPE_ID" NUMERIC(38,0) NOT NULL,
+	"UNIT_ID" NUMERIC(38,0) NOT NULL,
+	"UNIT_TYPE_CD" VARCHAR(7) NOT NULL,
+	"BEGIN_DATE" DATE NOT NULL,
+	"END_DATE" DATE,
+	"USERID" VARCHAR(8) NOT NULL,
+	"ADD_DATE" DATE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"UPDATE_DATE" DATE,
+	CONSTRAINT "PK_UNIT_BOILER_TYPE" PRIMARY KEY ("UNIT_BOILER_TYPE_ID"),
+	CONSTRAINT "UQ_UNIT_BOILER_TYPE" UNIQUE ("UNIT_ID", "UNIT_TYPE_CD", "BEGIN_DATE")
+);
+COMMENT ON COLUMN "CAMD"."UNIT_BOILER_TYPE"."UNIT_BOILER_TYPE_ID" IS 'Identity key for UNIT_BT_TYPE table.';
+COMMENT ON COLUMN "CAMD"."UNIT_BOILER_TYPE"."UNIT_ID" IS 'Identity key for UNIT table.';
+COMMENT ON COLUMN "CAMD"."UNIT_BOILER_TYPE"."UNIT_TYPE_CD" IS 'The type of UNIT or boiler.';
+COMMENT ON COLUMN "CAMD"."UNIT_BOILER_TYPE"."BEGIN_DATE" IS 'Date on which a relationship or an activity began. ';
+COMMENT ON COLUMN "CAMD"."UNIT_BOILER_TYPE"."END_DATE" IS 'Date on which a relationship or an activity ended.';
+COMMENT ON COLUMN "CAMD"."UNIT_BOILER_TYPE"."USERID" IS 'The user name of the person or process that created the record if the Update Date is empty.  Otherwise this is the user name of the person or process that made the last update.';
+COMMENT ON COLUMN "CAMD"."UNIT_BOILER_TYPE"."ADD_DATE" IS 'Date the record was created.';
+COMMENT ON COLUMN "CAMD"."UNIT_BOILER_TYPE"."UPDATE_DATE" IS 'Date of the last record update.';
+COMMENT ON TABLE "CAMD"."UNIT_BOILER_TYPE"  IS 'Identifies historical unit type for a unit id.';
 
 CREATE TABLE "CAMD"."UNIT_GENERATOR" (
   "UNIT_GEN_ID" NUMERIC(38,0) NOT NULL, 
