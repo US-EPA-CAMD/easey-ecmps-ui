@@ -14,7 +14,7 @@ import TableSearch from "./TableSearch/TableSearch";
 import "./UswdsTable.css";
 
 // if showEntries is not supplied, by default will have show entries of only [100 and all data]
-// each page will default to 10 per page if paginate is enabled
+// first page will default to all data if BOTH pagination and showentries are not supplied
 const UswdsTable = ({
   columns,
   data,
@@ -23,8 +23,18 @@ const UswdsTable = ({
   bodyRef,
   paginate,
   showEntries,
+  disabledColumnFilters,
 }) => {
+
+  if (disabledColumnFilters) {
+    if (disabledColumnFilters.length >= 1) {
+      disabledColumnFilters.map((column) => {
+        columns[column] = { ...columns[column], disableGlobalFilter: true };
+      });
+    }
+  }
   const [searchState, setSearchState] = useState("");
+
   // Use the state and functions returned from useTable to build UI
   const {
     getTableProps,
@@ -57,7 +67,7 @@ const UswdsTable = ({
           },
         ],
         pageIndex: 0,
-        pageSize: showEntries ? showEntries[0] : 10,
+        pageSize: paginate && showEntries ? showEntries[0] : -1,
       },
     },
     useFilters,
@@ -67,9 +77,6 @@ const UswdsTable = ({
   );
 
   const variant = bordered ? "usa-table" : "usa-table usa-table--borderless";
-  const handleSearch = (value) => {
-    setSearchState(value);
-  };
 
   return (
     <div className="container">
@@ -86,8 +93,6 @@ const UswdsTable = ({
           </span>
           <div className="search">
             <TableSearch
-              handleSearch={handleSearch}
-              searchState={searchState}
               setGlobalFilter={setGlobalFilter}
             />
           </div>

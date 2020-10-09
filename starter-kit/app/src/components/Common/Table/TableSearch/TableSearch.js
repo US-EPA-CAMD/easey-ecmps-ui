@@ -1,26 +1,23 @@
 import React, { useState } from "react";
 import {
-  useTable,
-  useSortBy,
-  usePagination,
   useFilters,
   useGlobalFilter,
   useAsyncDebounce,
 } from "react-table";
 const TableSearch = ({
-  globalFilter,
   setGlobalFilter,
-  handleSearch,
 }) => {
   const [searchState, setSearchState] = useState("");
+  // handles the UI search bar
   const searchHandler = (val) => {
-    setSearchState(val.target.value);
-    handleSearch(searchState);
+    setSearchState(val);
+    setGlobalFilter(val || undefined);
   };
+  // handles the data search functionality 
+  // const onChange = useAsyncDebounce((globalFilter) => {
+  //   setGlobalFilter(globalFilter || undefined);
+  // }, 200);
 
-  const onChange = useAsyncDebounce((globalFilter) => {
-    setGlobalFilter(globalFilter || undefined);
-  }, 200);
   return (
     <div>
       <form>
@@ -29,8 +26,9 @@ const TableSearch = ({
           value={searchState}
           placeholder="Search"
           onChange={(e) => {
-            searchHandler(e);
-            onChange(e.target.value);
+            searchHandler(e.target.value);
+            //onChange(e.target.value);
+            searchHandler(e.target.value);
           }}
         />
       </form>
