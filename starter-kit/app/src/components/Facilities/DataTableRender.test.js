@@ -1,12 +1,12 @@
 import React, { useMemo } from "react";
 import { render, waitForDomChange } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import HomeView from "./HomeView";
+import DataTableRender from "./DataTableRender";
 
 let columns = [],
   data = [];
 
-const HomeViewTest = () => {
+const DataTableRenderTest = () => {
   data = useMemo(
     () => [
       {
@@ -44,11 +44,11 @@ const HomeViewTest = () => {
     ],
     []
   );
-  return <HomeView bodyRef={null} columns={columns} data={data} />;
+  return <DataTableRender bodyRef={null} columns={columns} data={data} />;
 };
 
 test("demo table renders without crashing", () => {
-  const { container } = render(<HomeViewTest />);
+  const { container } = render(<DataTableRenderTest />);
   waitForDomChange({ container })
     .then(() => {
       const table = container.querySelector("table");

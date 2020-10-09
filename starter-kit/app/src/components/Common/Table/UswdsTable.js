@@ -12,9 +12,8 @@ const UswdsTable = ({
   data,
   bordered = false,
   caption,
-  bodyRef,
   paginate,
-  showEntries
+  showEntries,
 }) => {
   // Use the state and functions returned from useTable to build UI
   const {
@@ -47,10 +46,9 @@ const UswdsTable = ({
             desc: false,
           },
         ],
-        // make search funcationality dynamic in component initialization 
+        // make search funcationality dynamic in component initialization
         filters: [
           // make search object
-
         ],
         pageIndex: 0,
         pageSize: showEntries[0],
@@ -64,7 +62,7 @@ const UswdsTable = ({
   const variant = bordered ? "usa-table" : "usa-table usa-table--borderless";
 
   return (
-    <div className="container">
+    <div>
       {paginate ? (
         <div className="filterAndSearch">
           <span className="filter">
@@ -75,7 +73,7 @@ const UswdsTable = ({
             />
           </span>
           <div className="search">
-            <TableSearch/>
+            <TableSearch />
           </div>
         </div>
       ) : (
@@ -85,7 +83,6 @@ const UswdsTable = ({
       <table className={variant} {...getTableProps()}>
         <TableHeader headerGroups={headerGroups} />
         <TableBody
-          bodyRef={bodyRef}
           getTableBodyProps={getTableBodyProps}
           headerGroups={headerGroups}
           rows={rows}
