@@ -1,93 +1,52 @@
-import React, {
-  useEffect,
-  useState,
-  useMemo,
-  useRef,
-  useCallback,
-} from "react";
-import { connect } from "react-redux";
-import { loadFacilities } from "../../store/actions/facilities";
-import * as fs from "../../utils/selectors/facilities";
-import HomeView from "./HomeView";
+import React, { useState } from "react";
+import HomeTitle from "./HomeTitle";
+import HomeOverview from "./HomeOverview";
+import DataTable from "../Facilities/DataTable";
+import DetailTabs from "../Facilities/DetailTabs";
+import "./Home.css";
 
-const Home = ({ facilities, loadFacilities, loading }) => {
-  const [headerWidth, setHeaderWidth] = useState([]);
-
-  useEffect(() => {
-    if (facilities.length === 0) loadFacilities();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  function useHookWithRefCallback() {
-    const ref = useRef(null);
-    const setRef = useCallback(
-      (node) => {
-        if (node) {
-          const row = node.children[0].children; // Get the children of one <tr>
-          const headerWidths = [];
-          for (let i = 0; i < row.length; i += 1) {
-            i === 0
-              ? headerWidths.push(row[i].getBoundingClientRect().width)
-              : headerWidths.push(row[i].getBoundingClientRect().width + 10); // Get the rendered width of the element.
-          }
-          setHeaderWidth(headerWidths);
-        }
-        ref.current = node; // eslint-disable-next-line react-hooks/exhaustive-deps
-      },
-      [loading]
-    );
-
-    return [setRef];
-  }
-  const columns = useMemo(
-    () => [
-      {
-        Header: "Oris Code",
-        accessor: "col1",
-        width: headerWidth ? headerWidth[0] + "px" : "10px",
-        //width: "90px",
-      },
-      {
-        Header: "Facility Name",
-        accessor: "col2",
-        width: headerWidth ? headerWidth[1] + "px" : "20px",
-        //width: "316px",
-      },
-      {
-        Header: "State",
-        accessor: "col3",
-        width: headerWidth ? headerWidth[2] + "px" : "10px",
-        //width: "146px",
-      },
-    ],
-    [headerWidth]
+const Home = () => {
+  const handleClick = (e) => {
+    setShowOverview(<HomeOverview />);
+  };
+  const [showOverview, setShowOverview] = useState(
+    <div>
+      <div className="overviewButton">
+        <button onClick={handleClick} className="usa-button" id="showOverview">
+          ⓘ Display Overview
+        </button>
+      </div>
+      <DetailTabs />
+    </div>
   );
-
-  const data = useMemo(() => {
-    if (facilities.length > 0) {
-      let records = fs.getTableRecords(facilities);
-      return records; //? records.slice(0, 100) : records;
-    } else {
-      return [{ col2: "Loading list of facilities..." }];
-    }
-  }, [facilities]);
-
-  const [ref] = useHookWithRefCallback();
-
-  return <HomeView bodyRef={ref} columns={columns} data={data} />;
+  return (
+    <div className="home-container">
+      <HomeTitle />
+      <div className="grid-row">
+        <div className="grid-col">
+          <h1 className="page-title">Monitoring Plans for Part 75 Sources</h1>
+        </div>
+      </div>
+      <div className="grid-row">
+        <div className="grid-col-5">
+          <DataTable />
+        </div>
+        <div className="grid-col rightSection">{showOverview}</div>
+      </div>
+      <div className="grid-row">
+        <div className="grid-col">
+          <p className="web-area-footer">
+            <a
+              href="/airmarkets/forms/contact-us-about-clean-air-markets"
+              className="contact-us"
+            >
+              Contact Us
+            </a>{" "}
+            to ask a question, provide feedback, or report a problem.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 };
-
-const mapStateToProps = (state) => {
-  return {
-    facilities: state.facilities,
-    loading: state.apiCallsInProgress.facilities,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loadFacilities: () => dispatch(loadFacilities()),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default Home;

@@ -1,10 +1,18 @@
-thead,
-tbody {
+.home-container {
+  margin: 0 auto;
+  padding: 0 20px;
   display: block;
+  position: relative;
+  background-color: #fff;
+  color: #212121;
+}
+.overviewButton {
+  text-align: center;
+}
+#showOverview {
+  border-radius: 3px;
 }
 
-tbody {
-  height: 600px; /* Just for the demo          */
-  overflow-y: auto; /* Trigger vertical scroll    */
-  overflow-x: hidden; /* Hide the horizontal scroll */
+.rightSection {
+  padding-left: 20px;
 }

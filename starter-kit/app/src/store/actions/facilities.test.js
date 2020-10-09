@@ -1,6 +1,5 @@
 import { loadFacilities, loadFacilitiesSuccess } from "./facilities";
 import * as types from "./actionTypes";
-//import axios from "../../utils/api/axiosSetup";
 import axios from "axios";
 import thunk from "redux-thunk";
 import MockAdapter from "axios-mock-adapter";
@@ -30,7 +29,6 @@ describe("Async Actions", () => {
       mock.onGet(FACT_API_URL).reply(200, {
         data: facilities,
       });
-      //axios.get.mockImplementationOnce(() => Promise.resolve(facilities));
       const expectedActions = [
         { type: types.BEGIN_FACILITIES_API_CALL },
         { type: types.LOAD_FACILITIES_SUCCESS, facilities },

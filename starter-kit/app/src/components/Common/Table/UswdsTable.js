@@ -20,7 +20,6 @@ const UswdsTable = ({
   data,
   bordered = false,
   caption,
-  bodyRef,
   paginate,
   search,
   showEntries,
@@ -105,13 +104,13 @@ const UswdsTable = ({
       <table className={variant} {...getTableProps()}>
         <TableHeader headerGroups={headerGroups} />
         <TableBody
-          bodyRef={bodyRef}
           getTableBodyProps={getTableBodyProps}
           headerGroups={headerGroups}
           rows={rows}
           page={page}
           prepareRow={prepareRow}
         />
+        <span> {caption} </span>
       </table>
       <div className="paginateBar">
         {paginate ? (
