@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import UswdsTable from "./UswdsTable";
+import UswdsTable from "../UswdsTable";
 import { render, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 
@@ -8,7 +8,7 @@ describe("testing generic uswds table component", () => {
     columnsGrouping = [],
     data = [];
 
-  const UswdsTableTest = ({ grouping, paginate }) => {
+  const UswdsTableTest = ({ grouping, search}) => {
     data = useMemo(
       () => [
         {
@@ -72,40 +72,22 @@ describe("testing generic uswds table component", () => {
       <UswdsTable
         columns={grouping ? columnsGrouping : columns}
         data={data}
-        paginate={paginate}
-        //showEntries={[100,250,500]}
+        search={search}
       />
     );
   };
 
-  test("table header renders all columns", () => {
-    const { container } = render(<UswdsTableTest grouping={false} />);
-    const headerColumns = container.querySelectorAll("thead tr th");
-    expect(headerColumns.length).toEqual(columns.length);
-  });
-  test("table header supports column groupings", () => {
-    const { container } = render(<UswdsTableTest grouping={true} />);
-    const headerGroupings = container.querySelectorAll("thead tr");
-    expect(headerGroupings.length).toEqual(columnsGrouping.length);
-  });
-  test("table body renders all rows", () => {
-    const { container } = render(<UswdsTableTest grouping={false} />);
-    const tableRecords = container.querySelectorAll("tbody tr");
-    expect(tableRecords.length).toEqual(data.length);
+  test("table renders search function", () => {
+    const { container } = render(<UswdsTableTest grouping={false} search/>);
+    const searchBox = container.querySelectorAll("form .searchBox");
+    expect(searchBox.length).toEqual(1);
   });
 
-  test("table is sorted by id in asc by default ", () => {
+  test("table doesnt renders search function", () => {
     const { container } = render(<UswdsTableTest grouping={false} />);
-    const tableRecords = container.querySelectorAll("tbody td");
-    expect(tableRecords[0].innerHTML).toEqual(data[1].col1);
+    const searchBox = container.querySelectorAll("form .searchBox");
+    expect(searchBox.length).toEqual(0);
   });
-
-  test("first table column header is clicked and sorts by dsc ", () => {
-    const { container } = render(<UswdsTableTest grouping={false} />);
-    const headerColumns = container.querySelectorAll("thead tr th");
-    fireEvent.click(headerColumns[0]);
-    const tableRecords = container.querySelectorAll("tbody td");
-    expect(tableRecords[0].innerHTML).toEqual(data[2].col1);
-  });
-
 });
+
+

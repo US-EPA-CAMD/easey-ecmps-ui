@@ -14,7 +14,7 @@ describe("testing generic uswds table component with pagination", () => {
     columnsGrouping = [],
     data = [];
 
-  const UswdsTableTest = ({ grouping }) => {
+  const UswdsTableTest = ({ grouping, paginate }) => {
     data = useMemo(
       () => [
         {
@@ -605,34 +605,54 @@ describe("testing generic uswds table component with pagination", () => {
       []
     );
     return (
-      <UswdsTable columns={grouping ? columnsGrouping : columns} data={data} paginate showEntries={[100,250,500]} />
+      <UswdsTable
+        columns={grouping ? columnsGrouping : columns}
+        data={data}
+        paginate={paginate}
+        showEntries={[100, 250, 500]}
+      />
     );
   };
 
+  test("paginate tabs are enabled", () => {
+    const { container } = render(<UswdsTableTest grouping={false} paginate />);
+    const tab = container.querySelectorAll(".paginationTabs");
+    expect(tab.length).toEqual(1);
+  });
+  test("pagination is disabled ", () => {
+    const { container } = render(
+      <UswdsTableTest grouping={false} paginate={false} />
+    );
+
+    const tab = container.querySelectorAll(".paginationTabs");
+    expect(tab.length).toEqual(0);
+  });
+
   test("PAgination bar with previous, 1, 2, next tab", () => {
-    const { container } = render(<UswdsTableTest grouping={false} />);
+    const { container } = render(<UswdsTableTest grouping={false} paginate />);
     const paginationBar = container.querySelectorAll("ul li");
     expect(paginationBar.length).toEqual(4);
   });
 
   test("selects 250 option and tests total pages, total tabs should be previous, 1, next  ", () => {
     const { container, getByTestId } = render(
-      <UswdsTableTest grouping={false} />
+      <UswdsTableTest grouping={false} paginate />
     );
     userEvent.selectOptions(getByTestId("select-option"), ["250"]);
     const paginationBar = container.querySelectorAll("ul li");
-    expect(paginationBar.length).toEqual(3);
+    const paginationExpection = 3;
+    expect(paginationBar.length).toEqual(paginationExpection);
   });
-  
+
   test("test total rows by default is 100 ", () => {
-    const { container } = render(<UswdsTableTest grouping={true} />);
+    const { container } = render(<UswdsTableTest grouping={true} paginate />);
     const tableRecords = container.querySelectorAll("tbody tr");
     expect(tableRecords.length).toEqual(100);
   });
 
   test("selects 250 option and tests total rows => 109  ", () => {
     const { container, getByTestId } = render(
-      <UswdsTableTest grouping={true}  />
+      <UswdsTableTest grouping={true} paginate />
     );
     userEvent.selectOptions(getByTestId("select-option"), ["250"]);
     const tableRecords = container.querySelectorAll("tbody tr");
@@ -641,10 +661,9 @@ describe("testing generic uswds table component with pagination", () => {
 
   test("selects 2nd page and tests total rows that should show  ", () => {
     const { container, getByTestId } = render(
-      <UswdsTableTest grouping={true} />
+      <UswdsTableTest grouping={true} paginate />
     );
     const secondPage = container.querySelectorAll("li button");
-
     fireEvent.click(secondPage[2]);
     const tableRecords = container.querySelectorAll("tbody tr");
     expect(tableRecords.length).toEqual(data.length - 100);
