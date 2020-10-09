@@ -1,12 +1,20 @@
-import React from "react";
-import { useTable, useSortBy, usePagination, useFilters } from "react-table";
+import React, { useState } from "react";
+import {
+  useTable,
+  useSortBy,
+  usePagination,
+  useFilters,
+  useGlobalFilter,
+} from "react-table";
 import TableHeader from "./TableHeader";
 import TableBody from "./TableBody";
 import TablePagination from "./TablePagination/TablePagination";
 import TablePaginationFilter from "./TablePaginationFilter/TablePaginationFilter";
 import TableSearch from "./TableSearch/TableSearch";
 import "./UswdsTable.css";
-//import Search from "@trussworks/react-uswds/lib/components/Search/Search";
+
+// if showEntries is not supplied, by default will have show entries of only [100 and all data]
+// each page will default to 10 per page if paginate is enabled
 const UswdsTable = ({
   columns,
   data,
@@ -14,8 +22,9 @@ const UswdsTable = ({
   caption,
   bodyRef,
   paginate,
-  showEntries
+  showEntries,
 }) => {
+  const [searchState, setSearchState] = useState("");
   // Use the state and functions returned from useTable to build UI
   const {
     getTableProps,
@@ -32,13 +41,13 @@ const UswdsTable = ({
     nextPage,
     previousPage,
     setPageSize,
+    setGlobalFilter,
     state: { pageIndex, pageSize },
     // try to reduce consts in uswds component and put them in respective component via useTable();
   } = useTable(
     {
       columns,
       data,
-
       disableSortRemove: true,
       initialState: {
         sortBy: [
@@ -47,21 +56,20 @@ const UswdsTable = ({
             desc: false,
           },
         ],
-        // make search funcationality dynamic in component initialization 
-        filters: [
-          // make search object
-
-        ],
         pageIndex: 0,
-        pageSize: showEntries[0],
+        pageSize: showEntries ? showEntries[0] : 10,
       },
     },
     useFilters,
+    useGlobalFilter,
     useSortBy,
     usePagination
   );
 
   const variant = bordered ? "usa-table" : "usa-table usa-table--borderless";
+  const handleSearch = (value) => {
+    setSearchState(value);
+  };
 
   return (
     <div className="container">
@@ -71,11 +79,17 @@ const UswdsTable = ({
             <TablePaginationFilter
               setPageSize={setPageSize}
               pageSize={pageSize}
-              paginationFiltering={[...showEntries, rows.length]}
+              paginationFiltering={
+                showEntries ? [...showEntries, rows.length] : [100, rows.length]
+              }
             />
           </span>
           <div className="search">
-            <TableSearch/>
+            <TableSearch
+              handleSearch={handleSearch}
+              searchState={searchState}
+              setGlobalFilter={setGlobalFilter}
+            />
           </div>
         </div>
       ) : (
@@ -106,7 +120,9 @@ const UswdsTable = ({
             setPageSize={setPageSize}
             pageIndex={pageIndex}
             pageSize={pageSize}
-            paginationFiltering={[...showEntries, rows.length]}
+            paginationFiltering={
+              showEntries ? [...showEntries, rows.length] : [100, rows.length]
+            }
           />
         ) : (
           ""
