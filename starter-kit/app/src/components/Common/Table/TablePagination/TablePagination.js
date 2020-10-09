@@ -148,15 +148,14 @@ const TablePagination = ({
     );
   }
   return (
-    <div>
-      <div>
+    <div>   
         Showing {pageIndex * pageSize + 1} to{" "}
         {Math.min(
           (pageIndex + 1) * pageSize,
           paginationFiltering[paginationFiltering.length - 1]
         )}{" "}
         of {paginationFiltering[paginationFiltering.length - 1]} entries
-      </div>
+      
       <div className="paginationTabs">
         <ul className="pagination">
           <li
