@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   useTable,
   useSortBy,
@@ -22,10 +22,10 @@ const UswdsTable = ({
   caption,
   bodyRef,
   paginate,
+  search,
   showEntries,
   disabledColumnFilters,
 }) => {
-
   if (disabledColumnFilters) {
     if (disabledColumnFilters.length >= 1) {
       disabledColumnFilters.map((column) => {
@@ -33,7 +33,6 @@ const UswdsTable = ({
       });
     }
   }
-  const [searchState, setSearchState] = useState("");
 
   // Use the state and functions returned from useTable to build UI
   const {
@@ -67,7 +66,8 @@ const UswdsTable = ({
           },
         ],
         pageIndex: 0,
-        pageSize: paginate && showEntries ? showEntries[0] : -1,
+        //9999 is bad practice, -1 works to show all data, but removes 1 data row for some reason
+        pageSize: paginate && showEntries ? showEntries[0] : 9999,
       },
     },
     useFilters,
@@ -80,8 +80,8 @@ const UswdsTable = ({
 
   return (
     <div className="container">
-      {paginate ? (
-        <div className="filterAndSearch">
+      <div className="filterAndSearch">
+        {paginate ? (
           <span className="filter">
             <TablePaginationFilter
               setPageSize={setPageSize}
@@ -91,16 +91,17 @@ const UswdsTable = ({
               }
             />
           </span>
+        ) : (
+          ""
+        )}
+        {search ? (
           <div className="search">
-            <TableSearch
-              setGlobalFilter={setGlobalFilter}
-            />
+            <TableSearch setGlobalFilter={setGlobalFilter} />
           </div>
-        </div>
-      ) : (
-        ""
-      )}
-
+        ) : (
+          ""
+        )}
+      </div>
       <table className={variant} {...getTableProps()}>
         <TableHeader headerGroups={headerGroups} />
         <TableBody

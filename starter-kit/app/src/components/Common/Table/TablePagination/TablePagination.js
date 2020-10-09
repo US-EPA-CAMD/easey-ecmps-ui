@@ -148,7 +148,7 @@ const TablePagination = ({
     );
   }
   return (
-    <div className="Test">   
+    <div>   
         Showing {pageIndex * pageSize + 1} to{" "}
         {Math.min(
           (pageIndex + 1) * pageSize,

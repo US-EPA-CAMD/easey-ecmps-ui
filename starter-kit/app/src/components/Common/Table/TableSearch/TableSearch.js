@@ -1,27 +1,17 @@
 import React, { useState } from "react";
-import {
-  useFilters,
-  useGlobalFilter,
-  useAsyncDebounce,
-} from "react-table";
-const TableSearch = ({
-  setGlobalFilter,
-}) => {
+
+const TableSearch = ({ setGlobalFilter }) => {
   const [searchState, setSearchState] = useState("");
-  // handles the UI search bar
+
   const searchHandler = (val) => {
     setSearchState(val);
     setGlobalFilter(val || undefined);
   };
-  // handles the data search functionality 
-  // const onChange = useAsyncDebounce((globalFilter) => {
-  //   setGlobalFilter(globalFilter || undefined);
-  // }, 200);
 
   return (
     <div>
       <form>
-        <input
+        <input className="searchBox"
           type="text"
           value={searchState}
           placeholder="Search"

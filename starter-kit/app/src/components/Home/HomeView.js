@@ -12,8 +12,10 @@ const HomeView = ({ bodyRef, columns, data }) => {
         bordered={false}
         caption="MP Facilities Data Table"
         paginate
+        search
         showEntries={[100,250,500]}
-        disabledColumnFilters={[0]}
+        //disabledColumnFilters={[0]}
+        
       />
     </div>
   );
