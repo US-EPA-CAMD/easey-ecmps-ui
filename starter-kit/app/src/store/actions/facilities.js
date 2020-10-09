@@ -23,8 +23,3 @@ export function loadFacilities() {
       });
   };
 }
-
-// export const actions = {
-//   loadFacilities,
-//   loadFacilitiesSuccess,
-// };

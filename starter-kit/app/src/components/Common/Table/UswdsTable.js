@@ -21,13 +21,9 @@ const UswdsTable = ({
   bordered = false,
   caption,
   paginate,
-<<<<<<< HEAD
-  showEntries,
-=======
   search,
   showEntries,
   disabledColumnFilters,
->>>>>>> 0241e8a000ba427e80629a63d9752d07d65c4868
 }) => {
   if (disabledColumnFilters) {
     if (disabledColumnFilters.length >= 1) {
@@ -68,13 +64,6 @@ const UswdsTable = ({
             desc: false,
           },
         ],
-<<<<<<< HEAD
-        // make search funcationality dynamic in component initialization
-        filters: [
-          // make search object
-        ],
-=======
->>>>>>> 0241e8a000ba427e80629a63d9752d07d65c4868
         pageIndex: 0,
         //9999 is bad practice, -1 works to show all data, but removes 1 data row for some reason
         pageSize: paginate && showEntries ? showEntries[0] : 9999,
@@ -89,15 +78,9 @@ const UswdsTable = ({
   const variant = bordered ? "usa-table" : "usa-table usa-table--borderless";
 
   return (
-<<<<<<< HEAD
-    <div>
-      {paginate ? (
-        <div className="filterAndSearch">
-=======
     <div className="container">
       <div className="filterAndSearch">
         {paginate ? (
->>>>>>> 0241e8a000ba427e80629a63d9752d07d65c4868
           <span className="filter">
             <TablePaginationFilter
               setPageSize={setPageSize}
@@ -112,11 +95,7 @@ const UswdsTable = ({
         )}
         {search ? (
           <div className="search">
-<<<<<<< HEAD
-            <TableSearch />
-=======
             <TableSearch setGlobalFilter={setGlobalFilter} />
->>>>>>> 0241e8a000ba427e80629a63d9752d07d65c4868
           </div>
         ) : (
           ""
@@ -131,6 +110,7 @@ const UswdsTable = ({
           page={page}
           prepareRow={prepareRow}
         />
+        <span> {caption} </span>
       </table>
       <div className="paginateBar">
         {paginate ? (

@@ -34,12 +34,12 @@ export const DataTable = ({ facilities, loadFacilitiesData, loading }) => {
   );
 
   const data = useMemo(() => {
-    if (facilities.length > 0) {
+    if (facilities.length > 0 || loading !== false) {
       return fs.getTableRecords(facilities);
     } else {
       return [{ col2: "Loading list of facilities..." }];
     }
-  }, [loading]);
+  }, [loading, facilities]);
 
   return <DataTableRender columns={columns} data={data} />;
 };
