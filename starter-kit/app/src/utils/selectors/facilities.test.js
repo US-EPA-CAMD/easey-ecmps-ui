@@ -755,10 +755,6 @@ describe("testing fetch wrapper facilities data selectors", () => {
     ];
   });
 
-  //   test("selected facility with orisCode 26 should be", () => {
-  //     expect(fs.getSelectedFacility(26, facilities)).toBe(selectedFacility);
-  //   });
-
   test("selected facility location should be", () => {
     expect(fs.getLocation(selectedFacility)).toEqual(selectedFacilityLocation);
   });

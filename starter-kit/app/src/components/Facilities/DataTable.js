@@ -4,7 +4,12 @@ import { loadFacilities } from "../../store/actions/facilities";
 import * as fs from "../../utils/selectors/facilities";
 import DataTableRender from "./DataTableRender";
 
-export const DataTable = ({ facilities, loadFacilitiesData, loading }) => {
+export const DataTable = ({
+  facilities,
+  loadFacilitiesData,
+  loading,
+  selectedRowHandler,
+}) => {
   useEffect(() => {
     if (facilities.length === 0) {
       loadFacilitiesData();
@@ -34,14 +39,20 @@ export const DataTable = ({ facilities, loadFacilitiesData, loading }) => {
   );
 
   const data = useMemo(() => {
-    if (facilities.length > 0 || loading !== false) {
+    if (facilities.length > 0 || loading === false) {
       return fs.getTableRecords(facilities);
     } else {
       return [{ col2: "Loading list of facilities..." }];
     }
   }, [loading, facilities]);
 
-  return <DataTableRender columns={columns} data={data} />;
+  return (
+    <DataTableRender
+      columns={columns}
+      data={data}
+      selectedRowHandler={selectedRowHandler}
+    />
+  );
 };
 
 const mapStateToProps = (state) => {

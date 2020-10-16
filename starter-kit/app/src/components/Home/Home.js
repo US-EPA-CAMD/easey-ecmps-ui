@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import HomeTitle from "./HomeTitle";
 import HomeOverview from "./HomeOverview";
 import DataTable from "../Facilities/DataTable";
@@ -6,19 +6,31 @@ import DetailTabs from "../Facilities/DetailTabs";
 import "./Home.css";
 
 const Home = () => {
+  const [orisCode, setOrisCode] = useState(null);
+  const [showOverview, setShowOverview] = useState(<HomeOverview />);
   const handleClick = (e) => {
     setShowOverview(<HomeOverview />);
+    setOrisCode(null);
   };
-  const [showOverview, setShowOverview] = useState(
-    <div>
-      <div className="overviewButton">
-        <button onClick={handleClick} className="usa-button" id="showOverview">
-          ⓘ Display Overview
-        </button>
-      </div>
-      <DetailTabs />
-    </div>
-  );
+  useEffect(() => {
+    if (orisCode !== null) {
+      setShowOverview(
+        <div>
+          <div className="overviewButton">
+            <button
+              onClick={handleClick}
+              className="usa-button"
+              id="showOverview"
+            >
+              ⓘ Display Overview
+            </button>
+          </div>
+          <DetailTabs orisCode={orisCode} />
+        </div>
+      );
+    }
+  }, [orisCode]);
+
   return (
     <div className="home-container">
       <HomeTitle />
@@ -29,7 +41,11 @@ const Home = () => {
       </div>
       <div className="grid-row">
         <div className="grid-col-5">
-          <DataTable />
+          <DataTable
+            selectedRowHandler={(facilityId) => {
+              setOrisCode(facilityId);
+            }}
+          />
         </div>
         <div className="grid-col rightSection">{showOverview}</div>
       </div>
