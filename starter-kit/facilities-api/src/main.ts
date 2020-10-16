@@ -10,8 +10,8 @@ async function bootstrap() {
   app.enableCors();  
 
   const options = new DocumentBuilder()
-    .setTitle('Sample NestJs OpenAPI')
-    .setDescription('Sample NestJs OpenAPI specification')
+    .setTitle('Facilities OpenAPI')
+    .setDescription('Facilities OpenAPI specification')
     .setVersion('1.0')
     .build();
 
