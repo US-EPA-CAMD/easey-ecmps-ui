@@ -24,6 +24,7 @@ const UswdsTable = ({
   search,
   showEntries,
   disabledColumnFilters,
+  selectedRowHandler,
 }) => {
   if (disabledColumnFilters) {
     if (disabledColumnFilters.length >= 1) {
@@ -104,14 +105,15 @@ const UswdsTable = ({
       <table className={variant} {...getTableProps()}>
         <TableHeader headerGroups={headerGroups} />
         <TableBody
+          selectedRowHandler={selectedRowHandler}
           getTableBodyProps={getTableBodyProps}
           headerGroups={headerGroups}
           rows={rows}
           page={page}
           prepareRow={prepareRow}
         />
-        <span> {caption} </span>
       </table>
+      <span> {caption} </span>
       <div className="paginateBar">
         {paginate ? (
           <TablePagination

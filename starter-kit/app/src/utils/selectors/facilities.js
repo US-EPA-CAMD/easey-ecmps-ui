@@ -3,7 +3,7 @@ export function getSelectedFacility(orisCode, facilities) {
 }
 
 export function getTableRecords(facilities) {
-  let records = [];
+  const records = [];
   facilities.forEach((el) => {
     records.push({
       col1: el.orisCode,
@@ -65,7 +65,7 @@ export function getContactsRoleUnits(role, facility) {
 }
 
 export function getUnitsTableRecords(facility) {
-  let records = [];
+  const records = [];
   facility.units.forEach((el) => {
     records.push({
       col1: el.unitId,
@@ -97,7 +97,7 @@ export function getMonitoringPlansTableRecords(facility, filterActive) {
   const data = filterActive
     ? facility.monitoringPlans.filter((el) => el.status === "Active")
     : facility.monitoringPlans;
-  let records = [];
+  const records = [];
   data.forEach((el) => {
     const beginStr = el.beginYearQuarter.toString();
     const endStr = el.beginYearQuarter.toString();

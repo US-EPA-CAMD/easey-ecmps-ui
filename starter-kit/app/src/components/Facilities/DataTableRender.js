@@ -2,7 +2,7 @@ import React from "react";
 import UswdsTable from "../Common/Table/UswdsTable";
 import "./DataTableRender.css";
 
-const DataTableRender = ({ columns, data }) => {
+const DataTableRender = ({ columns, data, selectedRowHandler }) => {
   return (
     <div className="tableContainer">
       <p>
@@ -17,6 +17,7 @@ const DataTableRender = ({ columns, data }) => {
         showEntries={[100, 250, 500]}
         search
         //disabledColumnFilters={[0]}
+        selectedRowHandler={selectedRowHandler}
       />
     </div>
   );
