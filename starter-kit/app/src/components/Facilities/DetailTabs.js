@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import Tabs from "../Common/Tabs/Tabs";
 import TabPane from "../Common/Tabs/TabPane";
 import UnitsDataTable from "./Units/UnitsDataTable";
+import MonitoringPlanDataTable from "./MonitoringPlan/MonitoringPlanDataTable";
 import * as fs from "../../utils/selectors/facilities";
 
 const DetailTabs = ({ facilities, orisCode }) => {
@@ -23,7 +24,9 @@ const DetailTabs = ({ facilities, orisCode }) => {
         <TabPane title="Units">
           <UnitsDataTable facility={facility} />
         </TabPane>
-        <TabPane title="Monitoring Plans">Monitoring Plans Content</TabPane>
+        <TabPane title="Monitoring Plans">
+          <MonitoringPlanDataTable facility = {facility}/>
+        </TabPane>
       </Tabs>
     </div>
   );
