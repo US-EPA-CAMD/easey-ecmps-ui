@@ -1,7 +1,7 @@
-tbody tr:hover {
+tbody tr:hover td.hovered{
   cursor: pointer;
-  background-color: #E1F4F8;
+  background-color: #e1f4f8;
 }
-td.selected {
-    background-color: #E1F4F8;
+td.selected  {
+  background-color: #e1f4f8;
 }
