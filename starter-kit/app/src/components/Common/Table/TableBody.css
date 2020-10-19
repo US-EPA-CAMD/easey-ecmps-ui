@@ -1,0 +1,7 @@
+tbody tr:hover {
+  cursor: pointer;
+  background-color: #E1F4F8;
+}
+td.selected {
+    background-color: #E1F4F8;
+}

@@ -5,6 +5,7 @@ import {
   usePagination,
   useFilters,
   useGlobalFilter,
+  useRowSelect,
 } from "react-table";
 import TableHeader from "./TableHeader";
 import TableBody from "./TableBody";
@@ -25,6 +26,7 @@ const UswdsTable = ({
   showEntries,
   disabledColumnFilters,
   selectedRowHandler,
+  dataSelector
 }) => {
   if (disabledColumnFilters) {
     if (disabledColumnFilters.length >= 1) {
@@ -52,6 +54,8 @@ const UswdsTable = ({
     setPageSize,
     setGlobalFilter,
     state: { pageIndex, pageSize },
+    toggleRowSelected,
+    toggleAllRowsSelected
     // try to reduce consts in uswds component and put them in respective component via useTable();
   } = useTable(
     {
@@ -73,7 +77,8 @@ const UswdsTable = ({
     useFilters,
     useGlobalFilter,
     useSortBy,
-    usePagination
+    usePagination,
+    useRowSelect,
   );
 
   const variant = bordered ? "usa-table" : "usa-table usa-table--borderless";
@@ -106,12 +111,17 @@ const UswdsTable = ({
         <TableHeader headerGroups={headerGroups} />
         <TableBody
           selectedRowHandler={selectedRowHandler}
+          dataSelector={dataSelector}
           getTableBodyProps={getTableBodyProps}
           headerGroups={headerGroups}
           rows={rows}
           page={page}
           prepareRow={prepareRow}
+          toggleRowSelected={toggleRowSelected}
+          toggleAllRowsSelected={toggleAllRowsSelected}
         />
+
+
       </table>
       <span> {caption} </span>
       <div className="paginateBar">

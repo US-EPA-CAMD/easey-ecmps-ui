@@ -6,12 +6,15 @@ import DetailTabs from "../Facilities/DetailTabs";
 import "./Home.css";
 
 const Home = () => {
+  const dataSelector = "Oris Code"
   const [orisCode, setOrisCode] = useState(null);
   const [showOverview, setShowOverview] = useState(<HomeOverview />);
   const handleClick = (e) => {
     setShowOverview(<HomeOverview />);
     setOrisCode(null);
   };
+
+
   useEffect(() => {
     if (orisCode !== null) {
       setShowOverview(
@@ -45,6 +48,8 @@ const Home = () => {
             selectedRowHandler={(facilityId) => {
               setOrisCode(facilityId);
             }}
+            dataSelector={dataSelector}
+          
           />
         </div>
         <div className="grid-col rightSection">{showOverview}</div>

@@ -9,6 +9,7 @@ export const DataTable = ({
   loadFacilitiesData,
   loading,
   selectedRowHandler,
+  dataSelector,
 }) => {
   useEffect(() => {
     if (facilities.length === 0) {
@@ -51,6 +52,7 @@ export const DataTable = ({
       columns={columns}
       data={data}
       selectedRowHandler={selectedRowHandler}
+      dataSelector={dataSelector}
     />
   );
 };
