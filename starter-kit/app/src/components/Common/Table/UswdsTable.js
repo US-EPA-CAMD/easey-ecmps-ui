@@ -26,7 +26,8 @@ const UswdsTable = ({
   showEntries,
   disabledColumnFilters,
   selectedRowHandler,
-  dataSelector
+  dataSelector,
+  defaultSelect,
 }) => {
   if (disabledColumnFilters) {
     if (disabledColumnFilters.length >= 1) {
@@ -55,7 +56,7 @@ const UswdsTable = ({
     setGlobalFilter,
     state: { pageIndex, pageSize },
     toggleRowSelected,
-    toggleAllRowsSelected
+    toggleAllRowsSelected,
     // try to reduce consts in uswds component and put them in respective component via useTable();
   } = useTable(
     {
@@ -78,7 +79,7 @@ const UswdsTable = ({
     useGlobalFilter,
     useSortBy,
     usePagination,
-    useRowSelect,
+    useRowSelect
   );
 
   const variant = bordered ? "usa-table" : "usa-table usa-table--borderless";
@@ -112,6 +113,7 @@ const UswdsTable = ({
         <TableBody
           selectedRowHandler={selectedRowHandler}
           dataSelector={dataSelector}
+          defaultSelect={defaultSelect}
           getTableBodyProps={getTableBodyProps}
           headerGroups={headerGroups}
           rows={rows}
@@ -120,8 +122,6 @@ const UswdsTable = ({
           toggleRowSelected={toggleRowSelected}
           toggleAllRowsSelected={toggleAllRowsSelected}
         />
-
-
       </table>
       <span> {caption} </span>
       <div className="paginateBar">

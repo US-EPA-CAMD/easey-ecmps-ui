@@ -1,11 +1,16 @@
 import React, { useMemo, useState } from "react";
 import * as fs from "../../../utils/selectors/facilities";
+import UnitDetailView from "./UnitDetailView";
 import UnitsTableRender from "./UnitsTableRender";
 
 export const UnitsDataTable = ({ facility }) => {
   const [operatingOnly, setOperatingOnly] = useState(true);
+  const [unitDetail, setUnitDetail] = useState(null);
   const operatingOnlyHandler = (evt) => {
     operatingOnly ? setOperatingOnly(false) : setOperatingOnly(true);
+  };
+  const selectedRowHandler = (unitId) => {
+    setUnitDetail(fs.getSelectedUnitDetail(unitId, facility));
   };
   const columns = useMemo(
     () => [
@@ -40,6 +45,7 @@ export const UnitsDataTable = ({ facility }) => {
   };
 
   const data = useMemo(() => {
+    setUnitDetail(null);
     if (facility) {
       const records = fs.getUnitsTableRecords(facility);
       if (operatingOnly) {
@@ -53,11 +59,19 @@ export const UnitsDataTable = ({ facility }) => {
   }, [operatingOnly, facility]);
 
   return (
-    <UnitsTableRender
-      columns={columns}
-      data={data}
-      checkBoxHandler={operatingOnlyHandler}
-    />
+    <div className="grid-row">
+      <div className="grid-col">
+        <UnitsTableRender
+          columns={columns}
+          data={data}
+          checkBoxHandler={operatingOnlyHandler}
+          selectedRowHandler={selectedRowHandler}
+        />
+      </div>
+      <div className="grid-col">
+        <UnitDetailView className="grid-col" unitDetail={unitDetail} />
+      </div>
+    </div>
   );
 };
 
