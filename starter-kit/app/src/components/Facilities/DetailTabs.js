@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import Tabs from "../Common/Tabs/Tabs";
 import TabPane from "../Common/Tabs/TabPane";
-import UnitsDataTable from "./Units/UnitsDataTable";
+import Units from "./Units/Units";
 import MonitoringPlanDataTable from "./MonitoringPlan/MonitoringPlanDataTable";
 import * as fs from "../../utils/selectors/facilities";
 
 const DetailTabs = ({ facilities, orisCode }) => {
-  const [facility, setFacility] = useState();
+  const [facility, setFacility] = useState(
+    fs.getSelectedFacility(orisCode, facilities)
+  );
   useEffect(() => {
     setFacility(fs.getSelectedFacility(orisCode, facilities));
   }, [facilities, orisCode]);
@@ -22,10 +24,10 @@ const DetailTabs = ({ facilities, orisCode }) => {
         <TabPane title="Location">Location Content</TabPane>
         <TabPane title="Contacts">Contacts Content</TabPane>
         <TabPane title="Units">
-          <UnitsDataTable facility={facility} />
+          <Units facility={facility} />
         </TabPane>
         <TabPane title="Monitoring Plans">
-          <MonitoringPlanDataTable facility = {facility}/>
+          <MonitoringPlanDataTable facility={facility} />
         </TabPane>
       </Tabs>
     </div>

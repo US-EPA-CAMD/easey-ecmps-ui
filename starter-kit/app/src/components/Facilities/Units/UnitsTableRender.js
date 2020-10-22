@@ -3,7 +3,12 @@ import UswdsTable from "../../Common/Table/UswdsTable";
 import "./UnitsTableRender.css";
 import { Checkbox } from "@trussworks/react-uswds";
 
-const UnitsTableRender = ({ columns, data, checkBoxHandler }) => {
+const UnitsTableRender = ({
+  columns,
+  data,
+  checkBoxHandler,
+  selectedRowHandler,
+}) => {
   return (
     <div className="tableContainer">
       <p>
@@ -17,7 +22,13 @@ const UnitsTableRender = ({ columns, data, checkBoxHandler }) => {
         defaultChecked
         onChange={checkBoxHandler}
       />
-      <UswdsTable columns={columns} data={data} bordered={false} />
+      <UswdsTable
+        columns={columns}
+        data={data}
+        bordered={false}
+        selectedRowHandler={selectedRowHandler}
+        defaultSelect={true}
+      />
     </div>
   );
 };

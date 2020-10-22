@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./TableBody.css";
 const TableBody = ({
   getTableBodyProps,
@@ -7,11 +7,25 @@ const TableBody = ({
   prepareRow,
   selectedRowHandler,
   dataSelector,
-  toggleRowSelected,
+  defaultSelect,
 }) => {
   // just turns on react-table row selected to handle future css
+  const defaultSelector = () => {
+    const selected = page.find((r) => r.isSelected);
+    if (!selected && defaultSelect && page.length > 0) {
+      page[0].isSelected = true;
+      selectedRowHandler(page[0].original.col1);
+    }
+  };
+  useEffect(() => {
+    defaultSelector();
+  }, []);
   const rowSelection = (row) => {
-    toggleRowSelected(row.id, true);
+    const selected = page.find((r) => r.isSelected);
+    if (selected) {
+      selected.isSelected = false;
+    }
+    row.isSelected = true;
   };
   const handleDataSelector = (data) => {
     if (!selectedRowHandler) return;
