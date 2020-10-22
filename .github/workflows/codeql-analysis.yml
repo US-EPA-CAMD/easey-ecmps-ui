@@ -6,11 +6,11 @@
 name: "CodeQL"
 
 on:
-  push:
-    branches: [feature/*, features/*]
-  pull_request:
+#  push:
+#    branches: [feature/*, features/*]
+#  pull_request:
     # The branches below must be a subset of the branches above
-    branches: [develop]
+#    branches: [develop]
   schedule:
     - cron: '0 3 * * 1'
 
