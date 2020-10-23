@@ -87,6 +87,8 @@ export function getUnitsTableRecords(facility) {
 export function getSelectedUnitDetail(unitId, facility) {
   const unit = facility.units.find((el) => el.unitId === unitId);
   return {
+    unitId: unitId,
+    status: unit.status,
     hi: unit.hi,
     fuel: unit.fuels.map((el) => {
       return { indicator: el.indicatorDescription, fuel: el.fuelDesc };
