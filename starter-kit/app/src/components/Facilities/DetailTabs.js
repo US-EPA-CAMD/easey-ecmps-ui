@@ -4,6 +4,7 @@ import Tabs from "../Common/Tabs/Tabs";
 import TabPane from "../Common/Tabs/TabPane";
 import UnitsDataTable from "./Units/UnitsDataTable";
 import MonitoringPlanDataTable from "./MonitoringPlan/MonitoringPlanDataTable";
+import ContactsData from "./Contacts/ContactsData";
 import * as fs from "../../utils/selectors/facilities";
 
 const DetailTabs = ({ facilities, orisCode }) => {
@@ -20,7 +21,9 @@ const DetailTabs = ({ facilities, orisCode }) => {
       </div>
       <Tabs initTab="Location">
         <TabPane title="Location">Location Content</TabPane>
-        <TabPane title="Contacts">Contacts Content</TabPane>
+        <TabPane title="Contacts">
+        <ContactsData facility={facility} />
+        </TabPane>
         <TabPane title="Units">
           <UnitsDataTable facility={facility} />
         </TabPane>
