@@ -26,8 +26,6 @@ const DetailTabs = ({ facilities, orisCode }) => {
         <TabPane title="Location">
           <Location facility={facility} />
         </TabPane>
-        <TabPane title="Contacts">Contacts Content</TabPane>
-        <TabPane title="Location">Location Content</TabPane>
         <TabPane title="Contacts">
           <ContactsData facility={facility} />
         </TabPane>
