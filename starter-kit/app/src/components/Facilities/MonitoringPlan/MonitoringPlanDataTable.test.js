@@ -27,9 +27,9 @@ const mockFacilityData = {
   ],
 };
 
-describe("testing Units data table component", () => {
+describe("testing monitoring plan data table component", () => {
   const headerRow = 1;
-  test("by default renders filtered records based on status as operating only", () => {
+  test("by default renders filtered records based on status as active only", () => {
     const { getAllByRole } = render(
       <MonitoringPlanDataTable facility={mockFacilityData} />
     );

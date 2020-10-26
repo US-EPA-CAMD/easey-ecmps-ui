@@ -21,5 +21,5 @@ Then
 (User journeys, design mockups, architectural diagrams, business rules, data element definitions)
 
 ## Testing
-Test case:
+Test Case:
 Tester:

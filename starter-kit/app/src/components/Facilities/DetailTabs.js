@@ -5,6 +5,7 @@ import TabPane from "../Common/Tabs/TabPane";
 import Units from "./Units/Units";
 import MonitoringPlanDataTable from "./MonitoringPlan/MonitoringPlanDataTable";
 import Location from "./Location/Location";
+import ContactsData from "./Contacts/ContactsData";
 import * as fs from "../../utils/selectors/facilities";
 
 const DetailTabs = ({ facilities, orisCode }) => {
@@ -26,6 +27,10 @@ const DetailTabs = ({ facilities, orisCode }) => {
           <Location facility={facility} />
         </TabPane>
         <TabPane title="Contacts">Contacts Content</TabPane>
+        <TabPane title="Location">Location Content</TabPane>
+        <TabPane title="Contacts">
+          <ContactsData facility={facility} />
+        </TabPane>
         <TabPane title="Units">
           <Units facility={facility} />
         </TabPane>
