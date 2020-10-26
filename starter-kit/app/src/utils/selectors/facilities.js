@@ -36,6 +36,14 @@ export function getLocationByState(state, facilites) {
 }
 
 export function getContacts(facility) {
+  function formatPhoneNumber(phoneNumberString) {
+    var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
+    var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
+    if (match) {
+      return '(' + match[1] + ') ' + match[2] + '-' + match[3]
+    }
+    return null
+  }
   return facility.contacts.map((el) => {
     return {
       name: `${el.firstName} ${el.lastName}`,
@@ -43,8 +51,8 @@ export function getContacts(facility) {
       company: el.companyName,
       email: el.emailAddress,
       responsibilities: el.responsibilities.map((d) => d.roleDesc),
-      phone: el.phoneNumber,
-      address: `${el.address1},${el.address2},${el.city},${el.stateAbbrev} ${el.zipCode}`,
+      phone: formatPhoneNumber(el.phoneNumber),
+      address: [`${el.address1}, ${el.address2}`, `${el.city}, ${el.stateAbbrev} ${el.zipCode}`],
     };
   });
 }
