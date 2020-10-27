@@ -4,6 +4,7 @@ import Tabs from "../Common/Tabs/Tabs";
 import TabPane from "../Common/Tabs/TabPane";
 import Units from "./Units/Units";
 import MonitoringPlanDataTable from "./MonitoringPlan/MonitoringPlanDataTable";
+import Location from "./Location/Location";
 import ContactsData from "./Contacts/ContactsData";
 import * as fs from "../../utils/selectors/facilities";
 
@@ -22,9 +23,11 @@ const DetailTabs = ({ facilities, orisCode }) => {
         <h4>ORIS Code: {orisCode}</h4>
       </div>
       <Tabs initTab="Location">
-        <TabPane title="Location">Location Content</TabPane>
+        <TabPane title="Location">
+          <Location facility={facility} />
+        </TabPane>
         <TabPane title="Contacts">
-        <ContactsData facility={facility} />
+          <ContactsData facility={facility} />
         </TabPane>
         <TabPane title="Units">
           <Units facility={facility} />

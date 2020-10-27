@@ -5,3 +5,7 @@ tbody tr:hover td.hovered{
 td.selected  {
   background-color: #e1f4f8;
 }
+tbody .centerBox{
+  display:flex;
+  justify-content: center;
+}

@@ -40,7 +40,7 @@ const TableBody = ({
   };
   return (
     <tbody {...getTableBodyProps()}>
-      {page.map((row, i) => {
+      { ( page.length > 0 && page.map((row, i) => {
         prepareRow(row);
         return (
           <tr
@@ -66,7 +66,7 @@ const TableBody = ({
             })}
           </tr>
         );
-      })}
+      }) ) || <div className="centerBox">No data found</div>  }
     </tbody>
   );
 };

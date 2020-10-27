@@ -6,8 +6,6 @@ import DetailTabs from "../Facilities/DetailTabs";
 import "./Home.css";
 
 const Home = () => {
-  const dataSelector = "Oris Code";
-
   const [showOverview, setShowOverview] = useState(<HomeOverview />);
   const handleClick = (e) => {
     setShowOverview(<HomeOverview />);
