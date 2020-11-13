@@ -18,7 +18,7 @@ describe('<Header/>', () => {
     it('nav bar should have 3 components/tabs' , () => {
         expect(wrapper.find('li')).toHaveLength(3);
     });
-    
+
     it('government banner at top ' , () => {
         expect(wrapper.find('header')).toHaveLength(1);
     });

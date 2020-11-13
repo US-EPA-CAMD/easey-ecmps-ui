@@ -14,7 +14,7 @@ function App() {
     <Layout>
     <Switch>
       <Route path="/posts" component={Posts} />
-      <Route path="/tasks" component={Tasks} />      
+      <Route path="/tasks" component={Tasks} />
       <Route path="/" exact component={Home} />
       <Route path="/home">
         <Redirect to='/' component={Home}/>
