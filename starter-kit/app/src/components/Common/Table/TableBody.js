@@ -59,14 +59,15 @@ const TableBody = ({
                   className={`${
                     row.isSelected ? "selected hovered" : "hovered"
                   }`}
+                  
                 >
-                  {cell.render("Cell")}
+                {cell.render("Cell")}
                 </td>
               );
             })}
           </tr>
         );
-      }) ) || <div className="centerBox">No data found</div>  }
+      }) ) || <tr className="centerBox"><td>No data found</td></tr>  }
     </tbody>
   );
 };

@@ -19,6 +19,7 @@ const DataTableRender = ({ columns, data, selectedRowHandler, dataSelector }) =>
         //disabledColumnFilters={[0]}
         selectedRowHandler={selectedRowHandler}
         dataSelector={dataSelector}
+        editable
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   useTable,
   useSortBy,
@@ -12,6 +12,7 @@ import TableBody from "./TableBody";
 import TablePagination from "./TablePagination/TablePagination";
 import TablePaginationFilter from "./TablePaginationFilter/TablePaginationFilter";
 import TableSearch from "./TableSearch/TableSearch";
+import { EditableCell, setEditable } from './TableCell';
 import "./UswdsTable.css";
 
 // if showEntries is not supplied, by default will have show entries of only [100 and all data]
@@ -28,6 +29,7 @@ const UswdsTable = ({
   selectedRowHandler,
   dataSelector,
   defaultSelect,
+  editable,
 }) => {
   if (disabledColumnFilters) {
     if (disabledColumnFilters.length >= 1) {
@@ -36,6 +38,33 @@ const UswdsTable = ({
       });
     }
   }
+  setEditable(editable);
+  const [editableData, setEditableData] = useState(data);
+
+  useEffect(() => {
+    setEditableData(data);
+  }, [data]);
+
+  const updateData = (rowIndex, columnId, value) => {
+    setEditableData((old) =>
+      old.map((row, index) => {
+        if (index === rowIndex) {
+          return {
+            ...old[rowIndex],
+            [columnId]: value,
+          };
+        }
+        return row;
+      })
+    );
+    // use below to retreive/manipulate updated data 
+    data = editableData;
+
+  };
+
+  const defaultColumn = {
+    Cell: EditableCell,
+  };
 
   // Use the state and functions returned from useTable to build UI
   const {
@@ -57,7 +86,6 @@ const UswdsTable = ({
     state: { pageIndex, pageSize },
     toggleRowSelected,
     toggleAllRowsSelected,
-    // try to reduce consts in uswds component and put them in respective component via useTable();
   } = useTable(
     {
       columns,
@@ -74,6 +102,8 @@ const UswdsTable = ({
         //9999 is bad practice, -1 works to show all data, but removes 1 data row for some reason
         pageSize: paginate && showEntries ? showEntries[0] : 9999,
       },
+      defaultColumn,
+      updateData,
     },
     useFilters,
     useGlobalFilter,
