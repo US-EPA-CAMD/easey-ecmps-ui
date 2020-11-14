@@ -7,6 +7,11 @@ on:
   push:
 #    paths: [ "starter-kit/**" ]
     branches: [ feature/*, features/* ]
+#    tags:
+#      - '*.v[0-9]+.[0-9]+_rc[0-9]+'
+
+    paths-ignore:
+      - 'deployment.properties'
 
 jobs:
   build:
@@ -25,13 +30,17 @@ jobs:
       run: |
         starter-kit/scripts/unitTests.sh
 
+    - name: Get Tag name if exists
+      run: |
+        echo "::set-env name=HEAD_TAG::$(git tag --points-at HEAD)"
+          
 #    - name: Package App
 #      run: |
 #        starter-kit/scripts/package.sh ${{secrets.CF_SERVICE_ACCOUNT_ID}} ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}}
 #
 #    - name: Deploy App from S3
 #      run: |
-#        starter-kit/scripts/deployFromS3.sh ${{secrets.CF_SERVICE_ACCOUNT_ID}} ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}} PI-1 v0.0 105
+#        starter-kit/scripts/deployFromS3.sh ${{secrets.CF_SERVICE_ACCOUNT_ID}} ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}} ${{env.HEAD_TAG}}
 
   Codescan:
     runs-on: ubuntu-latest
