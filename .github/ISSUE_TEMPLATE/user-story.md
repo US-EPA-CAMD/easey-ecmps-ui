@@ -2,7 +2,7 @@
 name: User story
 about: Issue template for user stories
 title: ''
-labels: enhancement
+labels: ''
 assignees: ''
 
 ---
@@ -23,3 +23,6 @@ Then
 ## Testing
 Test Case:
 Tester:
+
+### Issue Requester:
+Requester: 
