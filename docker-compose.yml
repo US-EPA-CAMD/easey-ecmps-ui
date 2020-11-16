@@ -1,0 +1,45 @@
+version: '3'
+services:
+  database:
+    image: 'postgres:latest'
+    environment:
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ../devops/db:/docker-entrypoint-initdb.d
+    ports:
+      - '5432:5432'
+  facilities-api:
+    depends_on:
+      - database
+    build:
+      dockerfile: Dockerfile.dev
+      context: ../easey-facilities-api
+    volumes:
+      - /app/node_modules
+      - ../easey-facilities-api:/app
+    environment:
+      - PG_HOST=database
+      - PG_PORT=5432
+      - PG_USER=postgres
+      - PG_PWD=password
+      - PG_DB=postgres
+    ports:
+      - '7000:7000'
+  webapp:
+    depends_on:
+      - facilities-api
+    stdin_open: true
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./
+    volumes:
+      - /app/node_modules
+      - ./:/app
+    # environment:
+    #   - POSTS_API=http://localhost:4000/api/posts
+    #   - TASKS_API=http://localhost:5000/api/tasks
+    ports:
+      - '3000:3000'
+volumes:
+  pgdata:

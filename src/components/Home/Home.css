@@ -1,0 +1,18 @@
+.home-container {
+  margin: 0 auto;
+  padding: 0 20px;
+  display: block;
+  position: relative;
+  background-color: #fff;
+  color: #212121;
+}
+.overviewButton {
+  text-align: center;
+}
+#showOverview {
+  border-radius: 3px;
+}
+
+.rightSection {
+  padding-left: 20px;
+}

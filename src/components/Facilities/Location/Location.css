@@ -1,0 +1,13 @@
+.leaflet-container {
+  width: 100%;
+  height: 50vh;
+}
+
+.tooltipData {
+  list-style-type: none;
+}
+
+#mapOptions {
+  display: block;
+  margin-top: 20px;
+}

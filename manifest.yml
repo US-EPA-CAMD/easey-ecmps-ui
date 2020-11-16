@@ -1,0 +1,9 @@
+applications:
+  - name: ui-portal
+    path: ./
+    command: npm run start
+    random-route: true
+    memory: 512M
+    env:
+      OPTIMIZE_MEMORY: true
+      REACT_APP_FACILITIES_API: https://some-random-url.app.cloud.gov/api/facilities
