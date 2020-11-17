@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import UswdsTable from "../UswdsTable";
-import { render, fireEvent } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 
 describe("testing generic uswds table component", () => {
@@ -78,7 +78,7 @@ describe("testing generic uswds table component", () => {
     );
   };
   test("paginate filter is enabled", () => {
-    const { container } = render(<UswdsTableTest grouping={false} paginate showEntries={[1,2,3]} />);
+    const { container } = render(<UswdsTableTest grouping={false} paginate showEntries={[1,2]} />);
     const filter = container.querySelectorAll("span select");
 
     expect(filter.length).toEqual(1);

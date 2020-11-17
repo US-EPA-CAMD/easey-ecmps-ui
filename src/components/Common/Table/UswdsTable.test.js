@@ -96,16 +96,16 @@ describe("testing generic uswds table component", () => {
 
   test("table is sorted by id in asc by default ", () => {
     const { container } = render(<UswdsTableTest grouping={false} />);
-    const tableRecords = container.querySelectorAll("tbody td");
-    expect(tableRecords[0].innerHTML).toEqual(data[1].col1);
+    const tableRecords = container.querySelectorAll("tbody td div");
+
+    expect(tableRecords[0].innerHTML.split(" ")[0]).toEqual(data[1].col1);
   });
 
   test("first table column header is clicked and sorts by dsc ", () => {
     const { container } = render(<UswdsTableTest grouping={false} />);
     const headerColumns = container.querySelectorAll("thead tr th");
     fireEvent.click(headerColumns[0]);
-    const tableRecords = container.querySelectorAll("tbody td");
-    expect(tableRecords[0].innerHTML).toEqual(data[2].col1);
+    const tableRecords = container.querySelectorAll("tbody td div");
+    expect(tableRecords[0].innerHTML.split(" ")[0]).toEqual(data[2].col1);
   });
-
 });
