@@ -6,10 +6,5 @@ applications:
     env:
       OPTIMIZE_MEMORY: true
       REACT_APP_FACILITIES_API: https://easey-tst.app.cloud.gov/api/facilities
-    # services:
-    #   - camd-pg-db
-    # instances: 2
-    # health-check-type: http
-    # health-check-http-endpoint: /
     routes:
-      - route: easey-tst.app.cloud.gov/portal
+      - route: easey-tst.app.cloud.gov
