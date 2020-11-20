@@ -1,18 +1,13 @@
-# The following are valid TAG formats (tst-1.0.101, stg-1.0.101, rbk-1.0.101)
 name: Release Branch Workflow
 
 on:
   push:
     branches: [ release/v* ]
-    tags:
-      - tst-[0-9]+.[0-9]+.[0-9]+
   pull_request:
     branches: [ release/v* ]
-    tags:
-      - tst-[0-9]+.[0-9]+.[0-9]+
 
 jobs:
-  Build-Test-Deploy:
+  Build-Test-Package:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -22,33 +17,19 @@ jobs:
         with:
           repository: US-EPA-CAMD/devops
           path: devops
-      - name: Configure Env Vars
-        run: devops/scripts/environment-variables.sh
-        env:
-          ENV: tst
-      - name: Install cf cli
-        run: devops/scripts/install-cf-cli.sh
-      - name: Login to cloud.gov
-        run: devops/scripts/cf-login.sh
-        env:
-          CF_USERNAME: ${{ secrets.CF_TST_DEPLOYMENT_SVC }}
-          CF_PASSWORD: ${{ secrets.CF_TST_DEPLOYMENT_SVC_PWD }}
       - name: Build
         run: devops/scripts/build.sh
       - name: Run Unit Tests
         run: devops/scripts/unit-tests.sh
         env:
           REACT_APP: true
-      - name: Get Tag
-        # may move to bash script!!!
-        run: echo "HEAD_TAG=$(git tag --points-at HEAD)" >> $GITHUB_ENV
-        # this has been depricated --> echo "::set-env name=HEAD_TAG::$(git tag --points-at HEAD)"
+      - name: Configure Env Vars
+        run: devops/scripts/environment-variables.sh
       - name: Package App
         run: devops/scripts/package.sh
-      - name: Deploy
-        run: devops/scripts/deploy.sh
         env:
-          DEPLOY_FROM_ARTIFACT: true
+          AWS_ACCESS_KEY_ID: ${{ secrets.ARTIFACTS_STORAGE_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.ARTIFACTS_STORAGE_SECRET_ACCESS_KEY }}
 
   SonarCloud:
     runs-on: ubuntu-latest

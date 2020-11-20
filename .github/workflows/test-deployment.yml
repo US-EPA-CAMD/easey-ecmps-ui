@@ -1,12 +1,12 @@
-name: Staging Deployment Workflow
+name: Test Deployment Workflow
 
 on:
   push:
     tags:
-      - stg-v[0-9]+.[0-9]+.[0-9]+
+      - tst-v[0-9]+.[0-9]+.[0-9]+
   pull_request:
     tags:
-      - stg-v[0-9]+.[0-9]+.[0-9]+
+      - tst-v[0-9]+.[0-9]+.[0-9]+
 
 jobs:
   Deploy:
@@ -28,8 +28,8 @@ jobs:
       - name: Login to cloud.gov
         run: devops/scripts/cf-login.sh
         env:
-          CF_USERNAME: ${{ secrets.CF_STG_DEPLOYMENT_SVC }}
-          CF_PASSWORD: ${{ secrets.CF_STG_DEPLOYMENT_SVC_PWD }}
+          CF_USERNAME: ${{ secrets.CF_TST_DEPLOYMENT_SVC }}
+          CF_PASSWORD: ${{ secrets.CF_TST_DEPLOYMENT_SVC_PWD }}
       - name: Deploy
         run: devops/scripts/deploy.sh
         env:

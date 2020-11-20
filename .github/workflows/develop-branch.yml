@@ -17,23 +17,23 @@ jobs:
         with:
           repository: US-EPA-CAMD/devops
           path: devops
-      - name: Configure Env Vars
-        run: devops/scripts/environment-variables.sh
+      - name: Build
+        run: devops/scripts/build.sh
+      - name: Run Unit Tests
+        run: devops/scripts/unit-tests.sh
         env:
-          ENV: dev
+          REACT_APP: true
       - name: Install cf cli
         run: devops/scripts/install-cf-cli.sh
+      - name: Configure Env Vars
+        run: devops/scripts/environment-variables.sh
+      - name: Check Tag
+        run: devops/scripts/check-tag.sh
       - name: Login to cloud.gov
         run: devops/scripts/cf-login.sh
         env:
           CF_USERNAME: ${{ secrets.CF_DEV_DEPLOYMENT_SVC }}
           CF_PASSWORD: ${{ secrets.CF_DEV_DEPLOYMENT_SVC_PWD }}
-      - name: Build
-        run: devops/scripts/build.sh
-      # - name: Run Unit Tests
-      #   run: devops/scripts/unit-tests.sh
-      #   env:
-      #     REACT_APP: true
       - name: Deploy
         run: devops/scripts/deploy.sh
 
