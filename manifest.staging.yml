@@ -12,4 +12,4 @@ applications:
     # health-check-type: http
     # health-check-http-endpoint: /
     routes:
-      - route: easey-stg.app.cloud.gov/portal
+      - route: easey-stg.app.cloud.gov
