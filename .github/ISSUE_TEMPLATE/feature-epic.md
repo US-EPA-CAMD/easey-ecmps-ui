@@ -1,6 +1,6 @@
 ---
-name: Epic
-about: Issue template for epics
+name: Feature Epic
+about: Issue template for feature epics
 title: ''
 labels: ''
 assignees: ''
