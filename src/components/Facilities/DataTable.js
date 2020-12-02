@@ -35,6 +35,7 @@ export const DataTable = ({
         accessor: "col3",
         width: "210px",
       },
+
     ],
     []
   );

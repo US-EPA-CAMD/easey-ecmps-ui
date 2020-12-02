@@ -1,6 +1,6 @@
 import React from "react";
 
-const TableHeader = ({ headerGroups }) => (
+const TableHeader = ({ headerGroups, viewDataColumn }) => (
   <thead>
     {headerGroups.map((headerGroup) => (
       <tr {...headerGroup.getHeaderGroupProps()}>
@@ -24,6 +24,7 @@ const TableHeader = ({ headerGroups }) => (
             </span>
           </th>
         ))}
+        {viewDataColumn?(<th>View</th>) : ""}
       </tr>
     ))}
   </thead>

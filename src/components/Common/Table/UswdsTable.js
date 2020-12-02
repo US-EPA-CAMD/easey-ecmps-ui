@@ -30,6 +30,7 @@ const UswdsTable = ({
   dataSelector,
   defaultSelect,
   editable,
+  viewDataColumn
 }) => {
   if (disabledColumnFilters) {
     if (disabledColumnFilters.length >= 1) {
@@ -38,6 +39,10 @@ const UswdsTable = ({
       });
     }
   }
+  const viewDataHandler = (info) =>{
+    console.log(info);
+  }
+  
   setEditable(editable);
   const [editableData, setEditableData] = useState(data);
 
@@ -139,7 +144,8 @@ const UswdsTable = ({
         )}
       </div>
       <table className={variant} {...getTableProps()}>
-        <TableHeader headerGroups={headerGroups} />
+        
+        <TableHeader headerGroups={headerGroups} viewDataColumn={viewDataColumn} />
         <TableBody
           selectedRowHandler={selectedRowHandler}
           dataSelector={dataSelector}
@@ -151,6 +157,8 @@ const UswdsTable = ({
           prepareRow={prepareRow}
           toggleRowSelected={toggleRowSelected}
           toggleAllRowsSelected={toggleAllRowsSelected}
+          viewDataColumn={viewDataColumn}
+          viewDataHandler={viewDataHandler}
         />
       </table>
       <span> {caption} </span>
