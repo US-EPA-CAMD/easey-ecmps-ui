@@ -26,7 +26,6 @@ export function loadFacilities() {
     return facilitiesApi
       .getAllFacilities()
       .then((res) => {
-        debugger;
         //dispatch(loadFacilitiesSuccess(res.data.data));
         dispatch(loadFacilitiesSuccess(mockFacilitiesResponse.data));
       })
