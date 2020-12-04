@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 
-const Tabs = ({ children, initTab }) => {
-  const findTabIndex = (title) => {
-    return children.findIndex((e) => e.props.title === title);
+const Tabs = ({ children, dynamic = false, removeTabs }) => {
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
+
+  const closeHandler = (event, index) => {
+    event.stopPropagation();
+    removeTabs(index);
+    if (activeTabIndex === children.length - 1) {
+      setActiveTabIndex(index - 1);
+    }
   };
-  const [activeTabIndex, setActiveTabIndex] = useState(findTabIndex(initTab));
 
   return (
     <div>
@@ -17,8 +22,18 @@ const Tabs = ({ children, initTab }) => {
                   ? "usa-button"
                   : "usa-button usa-button--outline"
               }
-              onClick={() => setActiveTabIndex(findTabIndex(el.props.title))}
+              onClick={() => setActiveTabIndex(i)}
             >
+              {dynamic ? (
+                <i
+                  className={
+                    i === 0
+                      ? "fa fa-times close-icon hidden"
+                      : "fa fa-times close-icon"
+                  }
+                  onClick={(e) => closeHandler(e, i)}
+                ></i>
+              ) : null}
               {el.props.title}
             </button>
           </li>
