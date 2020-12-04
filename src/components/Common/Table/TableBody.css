@@ -15,3 +15,14 @@ input {
   margin: 0;
   border: 0;
 }
+.tableButton{
+  background-color: Transparent;
+  border: solid;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+}
+img {
+  width:20px;
+  height:auto;
+}

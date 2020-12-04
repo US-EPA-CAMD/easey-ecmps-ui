@@ -1,0 +1,48 @@
+.home-container {
+  display:flex;
+  align-items: center;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: block;
+  position: relative;
+  background-color: #fff;
+  color: #212121;
+  width: 70%;
+
+  padding-top:50px;
+  padding-bottom: 60px;
+}
+.title {
+  display: inline-block;
+  
+}
+.header{
+  color:gray;
+  
+}
+.tabContainer{
+  color:gray;
+  border:solid 1px;
+  padding-top: 10px;
+  /* width: 100%; */
+  justify-content: center;
+}
+.ovalBTN {
+  margin-right: 0;
+  background-color: white;
+  border: solid;
+  color: grey;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 16px;
+  display: inline-block;
+  float:right;
+  outline:none;
+  height: 10px;
+  display :flex;
+  align-items: center;
+}

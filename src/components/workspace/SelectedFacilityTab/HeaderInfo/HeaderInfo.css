@@ -1,0 +1,31 @@
+.accessories{
+float:right;
+display: inline-block;
+
+
+}
+.title{
+    display: inline-block;
+  
+}
+a{
+    
+    padding:5px;
+}
+.ovalAddBTN{
+
+}
+.mpSelect{
+    align-items: center;
+}
+.selects{
+    display :flex;
+    position: relative;
+    width:100%;
+}
+.statuses{
+    padding-right: 50px;
+    position:absolute; 
+    right:0;
+     display: inline-block;
+}

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import "./TableBody.css";
+
 const TableBody = ({
   getTableBodyProps,
   rows,
@@ -77,13 +78,13 @@ const TableBody = ({
               })}
               {/* additional cell for viewing ( not related to incoming data) */}
               {viewDataColumn ? (
-                <td
+                <td width={row.cells[0].column.width}
                   className={`${
                     row.isSelected ? "selected hovered" : "hovered"
                   }`}
                 >
                   {" "}
-                  <button onClick={() => viewDataHandler(row)}>ⓘ</button>
+                  <button className="tableButton" onClick={() => viewDataHandler(row)}> <img src={require("./images/openTab.jpg")}/> Open Tab </button>
                 </td>
               ) : (
                 ""

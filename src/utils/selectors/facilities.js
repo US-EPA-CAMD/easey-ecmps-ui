@@ -1,17 +1,14 @@
-
 export function getSelectedFacility(orisCode, facilities) {
   return facilities.find((el) => el.orisCode === orisCode);
 }
 
 export function getTableRecords(facilities) {
   const records = [];
-  //const view = <a style="text-decoration: none; font-size: 1.5em;" href="#">ⓘ</a>;
   facilities.forEach((el) => {
     records.push({
       col1: el.orisCode,
       col2: el.name,
       col3: el.state.name,
-      
     });
   });
   return records;
@@ -107,6 +104,7 @@ export function getSelectedUnitDetail(unitId, facility) {
 }
 
 export function getMonitoringPlansTableRecords(facility, filterActive) {
+  
   const data = filterActive
     ? facility.monitoringPlans.filter((el) => el.status === "Active")
     : facility.monitoringPlans;
