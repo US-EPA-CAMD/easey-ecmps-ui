@@ -11,9 +11,59 @@ const mockStore = configureMockStore(middleware);
 
 // Mocked facilities returned data
 const facilities = [
-  { orisCode: 3, name: "Barry" },
-  { orisCode: 8, name: "Gorgas" },
-  { orisCode: 9, name: "Copper Station" },
+  [
+    {
+      orisCode: "3",
+      name: "Barry",
+      state: "Alabama",
+      epaRegion: "4",
+      county: "Mobile County",
+      links: [
+        {
+          rel: "self",
+          href: "/facilities/3",
+        },
+        {
+          rel: "monitor-plans",
+          href: "facilities/3/monitor-plans",
+        },
+      ],
+    },
+    {
+      orisCode: "5",
+      name: "Chickasaw",
+      state: "Alabama",
+      epaRegion: "4",
+      county: "Mobile County",
+      links: [
+        {
+          rel: "self",
+          href: "/facilities/5",
+        },
+        {
+          rel: "monitor-plans",
+          href: "facilities/5/monitor-plans",
+        },
+      ],
+    },
+    {
+      orisCode: "9",
+      name: "Copper Station",
+      state: "Texas",
+      epaRegion: "6",
+      county: "El Paso County",
+      links: [
+        {
+          rel: "self",
+          href: "/facilities/9",
+        },
+        {
+          rel: "monitor-plans",
+          href: "facilities/9/monitor-plans",
+        },
+      ],
+    },
+  ],
 ];
 const FACT_API_URL =
   "https://api.epa.gov/FACT/1.0/facilities?api_key=05h6CAooxu0vZpfPnAgGzsbB4nCRqdWKCkfo95rG";
