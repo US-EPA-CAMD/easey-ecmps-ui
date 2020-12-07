@@ -1,8 +1,9 @@
 import React from "react";
 import "./MonitoringPlanHome.css";
+import DynamicTabs from "../Common/Tabs/DynamicTabs";
+import DataTable from "./DynamicTabBar/SelectFacilitiesTab/DataTable";
 
-import DynamicTabBar from "./DynamicTabBar/DynamicTabBar";
-const MonitoringPlanHome = ({ facilities, loadFacilitiesData }) => {
+const MonitoringPlanHome = () => {
   return (
     <div className="home-container">
       <div className="header">
@@ -11,7 +12,14 @@ const MonitoringPlanHome = ({ facilities, loadFacilitiesData }) => {
       </div>
 
       <div className="tabsBar">
-        <DynamicTabBar />
+        <DynamicTabs
+          tabsProps={[
+            {
+              title: "Select Facility",
+              component: <DataTable />,
+            },
+          ]}
+        />
       </div>
     </div>
   );

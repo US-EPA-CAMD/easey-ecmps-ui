@@ -4,6 +4,7 @@ import axios from "axios";
 import thunk from "redux-thunk";
 import MockAdapter from "axios-mock-adapter";
 import configureMockStore from "redux-mock-store";
+import config from "../../config";
 
 // Test an async action
 const middleware = [thunk];
@@ -65,8 +66,6 @@ const facilities = [
     },
   ],
 ];
-const FACT_API_URL =
-  "https://api.epa.gov/FACT/1.0/facilities?api_key=05h6CAooxu0vZpfPnAgGzsbB4nCRqdWKCkfo95rG";
 
 describe("Async Actions", () => {
   const mock = new MockAdapter(axios);
@@ -76,9 +75,7 @@ describe("Async Actions", () => {
 
   describe("Load Facilities Thunk", () => {
     it("should create BEGIN_FACILITIES_API_CALL and LOAD_FACILITIES_SUCCESS when loading facilities", () => {
-      mock.onGet(FACT_API_URL).reply(200, {
-        data: facilities,
-      });
+      mock.onGet(config.services.facilities.uri).reply(200, facilities);
       const expectedActions = [
         { type: types.BEGIN_FACILITIES_API_CALL },
         { type: types.LOAD_FACILITIES_SUCCESS, facilities },

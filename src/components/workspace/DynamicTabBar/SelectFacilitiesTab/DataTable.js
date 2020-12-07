@@ -3,16 +3,15 @@ import { connect } from "react-redux";
 import { loadFacilities } from "../../../../store/actions/facilities";
 import * as fs from "../../../../utils/selectors/facilities";
 import DataTableRender from "./DataTableRender";
+import SelectedFacilityTab from "../SelectedFacilityTab/SelectedFacilityTab";
 
 export const DataTable = ({
   facilities,
   loadFacilitiesData,
   loading,
-  selectedRowHandler,
   dataSelector,
-  viewDataHandler
+  addTabs,
 }) => {
-
   useEffect(() => {
     if (facilities.length === 0) {
       loadFacilitiesData();
@@ -37,7 +36,6 @@ export const DataTable = ({
         accessor: "col3",
         width: "210px",
       },
-
     ],
     []
   );
@@ -50,14 +48,28 @@ export const DataTable = ({
     }
   }, [loading, facilities]);
 
+  const viewDataHandler = (info) => {
+    addTabs([
+      {
+        title: info[1].value,
+        component: (
+          <div className="selectedTabsBox">
+            <SelectedFacilityTab orisCode={info[0].value} />
+          </div>
+        ),
+      },
+    ]);
+  };
+
   return (
-    <DataTableRender
-      columns={columns}
-      data={data}
-      dataSelector={dataSelector}
-      viewDataHandler={viewDataHandler}
-      selectedRowHandler={selectedRowHandler}
-    />
+    <div className="tabsBox">
+      <DataTableRender
+        columns={columns}
+        data={data}
+        dataSelector={dataSelector}
+        viewDataHandler={viewDataHandler}
+      />
+    </div>
   );
 };
 

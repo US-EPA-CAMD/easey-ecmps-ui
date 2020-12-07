@@ -6,9 +6,9 @@ import { DataTable } from "./DataTable";
 function componentRenderer(args) {
   const defualtProps = {
     facilities: [
-      { orisCode: 3, name: "Barry", state: { name: "Alabama" } },
-      { orisCode: 8, name: "Gorgas", state: { name: "Alabama" } },
-      { orisCode: 9, name: "Copper Station", state: { name: "Washington" } },
+      { orisCode: 3, name: "Barry", state: "Alabama" },
+      { orisCode: 8, name: "Gorgas", state: "Alabama" },
+      { orisCode: 9, name: "Copper Station", state: "Washington" },
     ],
     loadFacilitiesData: jest.fn(),
     loading: false,
@@ -18,8 +18,8 @@ function componentRenderer(args) {
   return render(<DataTable {...props} />);
 }
 
-test("testing redux connected data-table component renders all columns", () => {
+test("testing redux connected data-table component renders all records", () => {
   const { container } = componentRenderer();
-  const headerColumns = container.querySelectorAll("thead tr th");
+  const headerColumns = container.querySelectorAll("tbody tr");
   expect(headerColumns.length).toEqual(3);
 });

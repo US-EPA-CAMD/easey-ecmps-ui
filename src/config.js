@@ -7,6 +7,6 @@ const config = {
       uri: process.env.REACT_APP_MONITOR_PLAN_API,
     },
   },
-}
+};
 
-module.exports = config;
+export default config;
