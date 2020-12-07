@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Tabs from "./Tabs";
 import TabPane from "./TabPane";
 import "./DynamicTabs.css";
 
 const DynamicTabs = ({ tabsProps }) => {
   const [tabs, setTabs] = useState(tabsProps);
+
+  useEffect(() => {
+    setTabs(tabsProps);
+  }, [tabsProps]);
+  useEffect(() => {
+    setTabs(tabs);
+  }, [tabs]);
 
   const addTabsHandler = (newTabs) => {
     newTabs.forEach((t) => {

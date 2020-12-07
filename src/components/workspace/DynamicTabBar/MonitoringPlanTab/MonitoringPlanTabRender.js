@@ -1,5 +1,5 @@
 import React from "react";
-import UswdsTable from "../../Common/Table/UswdsTable";
+import UswdsTable from "../../../Common/Table/UswdsTable";
 import "./MonitoringPlanTabRender.css";
 import { Checkbox } from "@trussworks/react-uswds";
 

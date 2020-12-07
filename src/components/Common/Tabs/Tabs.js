@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import './Tabs.css';
 const Tabs = ({ children, dynamic = false, removeTabs }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
@@ -13,14 +13,15 @@ const Tabs = ({ children, dynamic = false, removeTabs }) => {
 
   return (
     <div>
-      <ul className="usa-button-group usa-button-group--segmented">
+      <div className="tabBar">
+      <ul className="usa-button-group usa-button-group--segmented" > 
         {children.map((el, i) => (
-          <li key={i} className="usa-button-group__item">
+          <li key={i} className="usa-button-group__item" style={{position:'relative'}}> 
             <button
               className={
                 activeTabIndex === i
-                  ? "usa-button"
-                  : "usa-button usa-button--outline"
+                  ? "active-button button-group"
+                  : "notActive-button button-group"
               }
               onClick={() => setActiveTabIndex(i)}
             >
@@ -39,7 +40,9 @@ const Tabs = ({ children, dynamic = false, removeTabs }) => {
           </li>
         ))}
       </ul>
+      </div>
       <div>{children[activeTabIndex]}</div>
+      
     </div>
   );
 };

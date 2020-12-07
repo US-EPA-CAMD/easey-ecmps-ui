@@ -1,20 +1,44 @@
-import React from "react";
-import DataTable from "../SelectFacilitiesTab/DataTable";
-import HeaderInfo from "./HeaderInfo/HeaderInfo";
-import MethodSub from "./MethodSub/MethodSub";
-import "./SelectedFacilityTab.css";
-const SelectedFacilityTab = ({ title }) => {
+import React,{ useState, useEffect } from "react";
+import * as fs from "../../../utils/selectors/facilities";
+import { loadFacilities } from "../../../store/actions/facilities";
+import { connect } from "react-redux";
+import SelectedFacilityTabRender from "./SelectedFacilityTabRender";
+
+const SelectedFacilityTab = ({
+  orisCode,
+  facilities,
+  loadFacilitiesData,
+  loading,
+}) => {
+    const [facility] = useState(
+        fs.getSelectedFacility(orisCode, facilities)
+      );
+    
+      useEffect(() => {
+        if (facilities.length === 0) {
+          loadFacilitiesData();
+        }
+      }, []);
+    
   return (
     <div>
-
-    <HeaderInfo title="test"/>
-      <hr width="100%" align="center" />
-      <MethodSub title="Method" />
-      <hr width="100%" align="center" />
-      <MethodSub title="Supplemental Method" />
-      <hr width="100%" align="center" />
+      <SelectedFacilityTabRender facility={facility}/>
     </div>
   );
 };
+const mapStateToProps = (state) => {
+  return {
+    facilities: state.facilities,
+    loading: state.apiCallsInProgress.facilities,
+  };
+};
 
-export default SelectedFacilityTab;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadFacilitiesData: () => dispatch(loadFacilities()),
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SelectedFacilityTab);

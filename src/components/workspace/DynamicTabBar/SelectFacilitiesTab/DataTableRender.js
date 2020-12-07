@@ -1,5 +1,5 @@
 import React from "react";
-import UswdsTable from "../../Common/Table/UswdsTable";
+import UswdsTable from "../../../Common/Table/UswdsTable";
 import "./DataTableRender.css";
 
 const DataTableRender = ({
@@ -7,15 +7,18 @@ const DataTableRender = ({
   data,
   selectedRowHandler,
   dataSelector,
+  viewDataHandler
+
 }) => {
+
   return (
     <div className="tableContainerWS">
       <UswdsTable
         columns={columns}
         data={data}
         bordered={false}
-        //paginate
-        //showEntries={[100, 250, 500]}
+        paginate
+        showEntries={[100, 250, 500]}
         search
         //disabledColumnFilters={[0]}
         selectedRowHandler={selectedRowHandler}
@@ -23,6 +26,7 @@ const DataTableRender = ({
         //editable
         viewDataColumn
         title="Facilities"
+        viewDataHandler={viewDataHandler}
       />
     </div>
   );

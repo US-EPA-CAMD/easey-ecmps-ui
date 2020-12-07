@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import * as fs from "../../../utils/selectors/facilities";
+import * as fs from "../../../../utils/selectors/facilities";
 import MonitoringPlanTabRender from "./MonitoringPlanTabRender";
 
 export const MonitoringPlanDataTable = ({ facility }) => {

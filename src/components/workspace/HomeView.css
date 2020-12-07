@@ -2,7 +2,7 @@
   display:flex;
   align-items: center;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0;
   display: block;
   position: relative;
   background-color: #fff;
@@ -18,14 +18,17 @@
 }
 .header{
   color:gray;
-  
 }
-.tabContainer{
+.tabsBox{
   color:gray;
   border:solid 1px;
-  padding-top: 10px;
-  /* width: 100%; */
+  width: 100%;
   justify-content: center;
+  bottom: 0;
+}
+
+.tabsBar{
+padding-bottom: 0;
 }
 .ovalBTN {
   margin-right: 0;
@@ -35,11 +38,9 @@
   padding: 10px 20px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 16px;
-  display: inline-block;
   float:right;
   outline:none;
   height: 10px;

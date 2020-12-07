@@ -34,13 +34,16 @@ const TableBody = ({
   const handleDataSelector = (data) => {
     if (!selectedRowHandler) return;
     if (!dataSelector) {
+      viewDataHandler(data);
       return selectedRowHandler(data[0].value);
     }
     data.forEach((element) => {
       if (element.column.Header == dataSelector) {
+        viewDataHandler(data);
         return selectedRowHandler(element.value);
       }
     });
+    
   };
   const onKeyDownHandler = (e) => {
     if (e.keyCode === 13) {
@@ -59,7 +62,7 @@ const TableBody = ({
               {...row.getRowProps()}
               onClick={() => {
                 rowSelection(row);
-                handleDataSelector(row.cells);
+                //handleDataSelector(row.cells);
               }}
               onKeyDown={onKeyDownHandler}
             >
@@ -84,7 +87,7 @@ const TableBody = ({
                   }`}
                 >
                   {" "}
-                  <button className="tableButton" onClick={() => viewDataHandler(row)}> <img src={require("./images/openTab.jpg")}/> Open Tab </button>
+                  <button className="tableButton" onClick={() => handleDataSelector(row.cells)}> <img src={require("./images/openTab.jpg")}/> Open Tab </button>
                 </td>
               ) : (
                 ""

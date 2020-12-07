@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import { connect } from "react-redux";
-import { loadFacilities } from "../../../store/actions/facilities";
-import * as fs from "../../../utils/selectors/facilities";
+import { loadFacilities } from "../../../../store/actions/facilities";
+import * as fs from "../../../../utils/selectors/facilities";
 import DataTableRender from "./DataTableRender";
 
 export const DataTable = ({
@@ -10,7 +10,10 @@ export const DataTable = ({
   loading,
   selectedRowHandler,
   dataSelector,
+  viewDataHandler
 }) => {
+
+  
   useEffect(() => {
     if (facilities.length === 0) {
       loadFacilitiesData();
@@ -53,6 +56,8 @@ export const DataTable = ({
       columns={columns}
       data={data}
       dataSelector={dataSelector}
+      viewDataHandler={viewDataHandler}
+      selectedRowHandler={selectedRowHandler}
     />
   );
 };

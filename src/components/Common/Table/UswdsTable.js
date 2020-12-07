@@ -31,7 +31,8 @@ const UswdsTable = ({
   dataSelector,
   defaultSelect,
   editable,
-  viewDataColumn
+  viewDataColumn,
+  viewDataHandler
 }) => {
   if (disabledColumnFilters) {
     if (disabledColumnFilters.length >= 1) {
@@ -39,9 +40,6 @@ const UswdsTable = ({
         columns[column] = { ...columns[column], disableGlobalFilter: true };
       });
     }
-  }
-  const viewDataHandler = (info) =>{
-    console.log(info);
   }
   
   setEditable(editable);
