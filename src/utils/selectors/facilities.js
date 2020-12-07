@@ -8,7 +8,7 @@ export function getTableRecords(facilities) {
     records.push({
       col1: el.orisCode,
       col2: el.name,
-      col3: el.state.name,
+      col3: el.state,
     });
   });
   return records;
@@ -37,12 +37,12 @@ export function getLocationByState(state, facilites) {
 
 export function getContacts(facility) {
   function formatPhoneNumber(phoneNumberString) {
-    var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
-    var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
+    var cleaned = ("" + phoneNumberString).replace(/\D/g, "");
+    var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
     if (match) {
-      return '(' + match[1] + ') ' + match[2] + '-' + match[3]
+      return "(" + match[1] + ") " + match[2] + "-" + match[3];
     }
-    return null
+    return null;
   }
   return facility.contacts.map((el) => {
     return {
@@ -52,7 +52,10 @@ export function getContacts(facility) {
       email: el.emailAddress,
       responsibilities: el.responsibilities.map((d) => d.roleDesc),
       phone: formatPhoneNumber(el.phoneNumber),
-      address: [`${el.address1}, ${el.address2}`, `${el.city}, ${el.stateAbbrev} ${el.zipCode}`],
+      address: [
+        `${el.address1}, ${el.address2}`,
+        `${el.city}, ${el.stateAbbrev} ${el.zipCode}`,
+      ],
     };
   });
 }
