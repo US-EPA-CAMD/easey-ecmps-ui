@@ -14,16 +14,24 @@ a {
 .mpSelect {
   align-items: center;
   padding: 10px;
+  
 }
-.selects {
+.usa-accordion__button{
+  float:left;
+}
+.selects.column {
+  column-count: 4;
   display: flex;
   position: relative;
-  width: 100%;
+  width: 70%;
+  
 }
-.statuses {
+.statuses.column {
   padding-right: 50px;
   position: absolute;
   right: 0;
+  width: 30%;
+  
   
 }
 .eval,.submission {
