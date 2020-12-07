@@ -1,12 +1,12 @@
 const config = {
   services: {
-    posts: {
-      uri: process.env.REACT_APP_POSTS_API,
+    facilities: {
+      uri: process.env.REACT_APP_FACILITY_API,
     },
-    tasks: {
-      uri: process.env.REACT_APP_TASKS_API,
+    monitorPlans: {
+      uri: process.env.REACT_APP_MONITOR_PLAN_API,
     },
   },
-}
+};
 
-module.exports = config;
+export default config;

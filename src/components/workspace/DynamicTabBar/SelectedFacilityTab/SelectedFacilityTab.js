@@ -1,6 +1,7 @@
-import React,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import * as fs from "../../../../utils/selectors/facilities";
-import { loadFacilities,loadMonitoringPlans } from "../../../../store/actions/facilities";
+import { loadFacilities } from "../../../../store/actions/facilities";
+import { loadMonitoringPlans } from "../../../../store/actions/monitoringPlans";
 import { connect } from "react-redux";
 import SelectedFacilityTabRender from "./SelectedFacilityTabRender";
 
@@ -12,24 +13,22 @@ const SelectedFacilityTab = ({
   monitoringPlans,
   loading,
 }) => {
-
-    const [facility] = useState(
-        fs.getSelectedFacility(orisCode, facilities)
-      );
-      useEffect(() => {
-        if (facilities.length === 0) {
-          loadFacilitiesData();
-        }
-      }, []);
-      useEffect(() => {
-        if (monitoringPlans.length === 0) {
-            loadMonitoringPlansData();
-        }
-      }, []);
+  const [facility] = useState(fs.getSelectedFacility(orisCode, facilities));
+  useEffect(() => {
+    if (facilities.length === 0) {
+      loadFacilitiesData();
+    }
+  }, []);
+  useEffect(() => {
+    loadMonitoringPlansData(orisCode);
+  }, [orisCode]);
 
   return (
     <div>
-      <SelectedFacilityTabRender facility={facility} monitoringPlans={monitoringPlans}/>
+      <SelectedFacilityTabRender
+        facility={facility}
+        monitoringPlans={monitoringPlans}
+      />
     </div>
   );
 };
@@ -37,13 +36,14 @@ const mapStateToProps = (state) => {
   return {
     facilities: state.facilities,
     loading: state.apiCallsInProgress.facilities,
-    monitoringPlans:state.monitoringPlans
+    monitoringPlans: state.monitoringPlans,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return { 
-    loadMonitoringPlansData: () => dispatch(loadMonitoringPlans()),
+  return {
+    loadMonitoringPlansData: (orisCode) =>
+      dispatch(loadMonitoringPlans(orisCode)),
     loadFacilitiesData: () => dispatch(loadFacilities()),
   };
 };

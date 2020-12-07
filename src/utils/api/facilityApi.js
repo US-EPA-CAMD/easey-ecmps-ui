@@ -1,15 +1,11 @@
 //import axios from "./axiosSetup";
 import axios from "axios";
 import { handleResponse, handleError } from "./apiUtils";
+import config from "../../config";
 
 export async function getAllFacilities() {
-  const FACT_API_URL =
-    "https://api.epa.gov/FACT/1.0/facilities?api_key=05h6CAooxu0vZpfPnAgGzsbB4nCRqdWKCkfo95rG";
-  return axios.get(FACT_API_URL).then(handleResponse).catch(handleError);
-}
-
-export async function getMonitoringPlans() {
-  const FACT_API_URL =
-    "https://api.epa.gov/FACT/1.0/facilities?api_key=05h6CAooxu0vZpfPnAgGzsbB4nCRqdWKCkfo95rG";
-  return axios.get(FACT_API_URL).then(handleResponse).catch(handleError);
+  return axios
+    .get(config.services.facilities.uri)
+    .then(handleResponse)
+    .catch(handleError);
 }
