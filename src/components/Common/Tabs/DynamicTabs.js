@@ -1,21 +1,29 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Tabs from "./Tabs";
 import TabPane from "./TabPane";
 import "./DynamicTabs.css";
 
 const DynamicTabs = ({ tabsProps }) => {
+
   const [tabs, setTabs] = useState(tabsProps);
+
+  useEffect(() => {
+    setTabs(tabsProps);
+  }, [tabsProps]);
 
   const addTabsHandler = (newTabs) => {
     newTabs.forEach((t) => {
-      tabs.push(t);
+      tabsProps.push(t);
     });
     setTabs([...tabs]);
   };
 
   const removeTabsHandler = (index) => {
-    tabs.splice(index, 1);
-    setTabs([...tabs]);
+
+    //tabs.splice(index, 1);
+    tabsProps.splice(index, 1);
+    setTabs([...tabsProps]);
+
   };
 
   return (

@@ -1,26 +1,32 @@
 import React from "react";
-import UswdsTable from "../Common/Table/UswdsTable";
+import UswdsTable from "../../../Common/Table/UswdsTable";
 import "./DataTableRender.css";
 
-const DataTableRender = ({ columns, data, selectedRowHandler, dataSelector }) => {
+const DataTableRender = ({
+  columns,
+  data,
+  selectedRowHandler,
+  dataSelector,
+  viewDataHandler
+
+}) => {
+
   return (
-    <div className="tableContainer">
-      <p>
-        <strong>Instructions:</strong> click on a facility name in the table to
-        display detailed information.
-      </p>
+    <div className="tableContainerWS">
       <UswdsTable
         columns={columns}
         data={data}
         bordered={false}
-        paginate
-        showEntries={[100, 250, 500]}
+        //paginate
+        //showEntries={[100, 250, 500]}
         search
         //disabledColumnFilters={[0]}
         selectedRowHandler={selectedRowHandler}
         dataSelector={dataSelector}
         //editable
         viewDataColumn
+        title="Facilities"
+        viewDataHandler={viewDataHandler}
       />
     </div>
   );

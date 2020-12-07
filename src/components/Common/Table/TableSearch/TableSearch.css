@@ -1,0 +1,11 @@
+.searchBox{
+    border: solid 1px;
+    display: inline-block;
+}
+.searchBar{
+    padding-right: 5px;
+    display: inline-block;
+}
+form {
+    display:inline-block;
+}

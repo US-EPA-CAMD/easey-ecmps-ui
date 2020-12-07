@@ -1,0 +1,21 @@
+thead,
+tbody {
+  display: block;
+}
+/* .tableContainerWS{
+  color:gray;
+  border:solid 1px;
+  padding-top: 10px;
+  width: 100%;
+} */
+tbody {
+  height: auto; /* Just for the demo          */
+  overflow-y: auto; /* Trigger vertical scroll    */
+  overflow-x: hidden; /* Hide the horizontal scroll */
+  width: 100%;
+}
+/* .tableContainer {
+  float: left;
+  width: 100%;
+  padding-right: 20px;
+} */

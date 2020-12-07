@@ -1,5 +1,6 @@
 .filterAndSearch {
   position: relative;
+  padding-top:20px;
 }
 .filter {
   width: auto;
@@ -9,8 +10,7 @@
   top: 0;
 }
 .search {
-  background-color: #ccc;
   display: inline-block;
-  position: absolute;
-  right: 0;
+ 
+  float:right;
 }

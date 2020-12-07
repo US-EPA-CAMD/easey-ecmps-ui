@@ -107,6 +107,7 @@ export function getSelectedUnitDetail(unitId, facility) {
 }
 
 export function getMonitoringPlansTableRecords(facility, filterActive) {
+
   const data = filterActive
     ? facility.monitoringPlans.filter((el) => el.status === "Active")
     : facility.monitoringPlans;

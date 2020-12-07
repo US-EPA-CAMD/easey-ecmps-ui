@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import { connect } from "react-redux";
-import { loadFacilities } from "../../store/actions/facilities";
-import * as fs from "../../utils/selectors/facilities";
+import { loadFacilities } from "../../../../store/actions/facilities";
+import * as fs from "../../../../utils/selectors/facilities";
 import DataTableRender from "./DataTableRender";
 
 export const DataTable = ({
@@ -10,7 +10,9 @@ export const DataTable = ({
   loading,
   selectedRowHandler,
   dataSelector,
+  viewDataHandler
 }) => {
+
   useEffect(() => {
     if (facilities.length === 0) {
       loadFacilitiesData();
@@ -23,12 +25,12 @@ export const DataTable = ({
       {
         Header: "Oris Code",
         accessor: "col1",
-        width: "140px",
+        width: "240px",
       },
       {
         Header: "Facility Name",
         accessor: "col2",
-        width: "410px",
+        width: "610px",
       },
       {
         Header: "State",
@@ -52,8 +54,9 @@ export const DataTable = ({
     <DataTableRender
       columns={columns}
       data={data}
-      selectedRowHandler={selectedRowHandler}
       dataSelector={dataSelector}
+      viewDataHandler={viewDataHandler}
+      selectedRowHandler={selectedRowHandler}
     />
   );
 };

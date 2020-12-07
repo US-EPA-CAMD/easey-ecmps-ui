@@ -1,0 +1,27 @@
+.active-button {
+    background-color: white;
+    border-bottom: 0px;
+}
+.notActive-button {
+    background-color: #f1f1f1;
+}
+.button-group{
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    font-family: "Merriweather", "Georgia", "Cambria", "Times New Roman", "Times", serif;
+    font-weight: bold;
+    color:gray;
+    border-width: thin;
+    border-right-color: gray;
+    font-size: 15px;
+    padding-left: 17px;
+    padding-right: 15px;
+    padding-top:5px;
+}
+.usa-button-group,.usa-button-group--segmented,.usa-button-group__item{
+   
+    margin-bottom: -14px !important;
+    position: relative !important;
+    bottom: 0 !important;
+
+}

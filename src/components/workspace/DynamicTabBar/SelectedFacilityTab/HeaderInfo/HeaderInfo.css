@@ -1,0 +1,37 @@
+.accessories {
+  float: right;
+
+}
+.title {
+  display: inline-block;
+}
+a {
+  padding: 5px;
+  font-weight:bold;
+  color: gray;
+}
+
+.mpSelect {
+  align-items: center;
+  padding: 10px;
+}
+.selects {
+  display: flex;
+  position: relative;
+  width: 100%;
+}
+.statuses {
+  padding-right: 50px;
+  position: absolute;
+  right: 0;
+  
+}
+.eval,.submission {
+  font-weight:bold;
+  display: inline-block;
+}
+.answer{
+  padding:10px;
+  font-size: 15px;
+  display: inline-block;
+}

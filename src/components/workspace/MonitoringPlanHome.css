@@ -1,0 +1,51 @@
+.home-container {
+  display:flex;
+  align-items: center;
+  margin: 0 auto;
+  padding: 0;
+  display: block;
+  position: relative;
+  background-color: #fff;
+  color: #212121;
+  width: 70%;
+
+  padding-top:50px;
+  padding-bottom: 60px;
+}
+.title {
+  display: inline-block;
+  
+}
+.header{
+  color:gray;
+}
+.tabsBox,.selectedTabsBox{
+  color:gray;
+  border:solid 1px;
+  width: 100%;
+  justify-content: center;
+  bottom: 0;
+  margin-bottom: -5px;
+}
+
+.tabsBar{
+padding-bottom: -5px;
+}
+.ovalBTN {
+  margin-right: 0;
+  background-color: white;
+  border: solid;
+  color: grey;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 16px;
+  float:right;
+  outline:none;
+  height: 10px;
+  display :flex;
+  align-items: center;
+  font-weight: bold;
+}

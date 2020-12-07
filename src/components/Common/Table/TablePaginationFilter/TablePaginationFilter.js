@@ -5,6 +5,7 @@ const TablePaginationFilter = ({
   setPageSize,
   paginationFiltering,
   pageSize,
+  title
 }) => {
   function pageAmounts(pageValue) {
     if (
@@ -25,7 +26,8 @@ const TablePaginationFilter = ({
   }
   return (
     <div className="filterWrap">
-      {"Show"}
+      {title ? (<h2> <b>{title} </b></h2>) :( < div>
+      Show
       <select
         data-testid="select-option"
         key={pageSize}
@@ -37,7 +39,7 @@ const TablePaginationFilter = ({
       >
         {paginationFiltering.map((pageSize) => pageAmounts(pageSize))}
       </select>
-      {"Entries"}
+      {"Entries"} </ div>)}
     </div>
   );
 };

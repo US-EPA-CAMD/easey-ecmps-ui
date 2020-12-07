@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-
-const TableSearch = ({ setGlobalFilter }) => {
+import './TableSearch.css';
+const TableSearch = ({ setGlobalFilter,title }) => {
   const [searchState, setSearchState] = useState("");
 
   const searchHandler = (val) => {
     setSearchState(val);
     setGlobalFilter(val || undefined);
   };
-
   return (
-    <div>
+    <div >
+     {title ?
+         <div className="searchBar">Search {title.toLowerCase()} :</div> : ''}
       <form>
         <input className="searchBox"
           type="text"
           value={searchState}
-          placeholder="Search"
+          placeholder={title ? "": "Search"}
           onChange={(e) => {
             searchHandler(e.target.value);
             //onChange(e.target.value);
