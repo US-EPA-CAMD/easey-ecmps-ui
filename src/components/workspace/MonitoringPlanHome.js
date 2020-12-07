@@ -1,8 +1,8 @@
 import React from "react";
-import "./HomeView.css";
+import "./MonitoringPlanHome.css";
 
 import DynamicTabBar from "./DynamicTabBar/DynamicTabBar";
-const HomeView = ({ facilities, loadFacilitiesData }) => {
+const MonitoringPlanHome = ({ facilities, loadFacilitiesData }) => {
   return (
     <div className="home-container">
       <div className="header">
@@ -17,4 +17,4 @@ const HomeView = ({ facilities, loadFacilitiesData }) => {
   );
 };
 
-export default HomeView;
+export default MonitoringPlanHome;

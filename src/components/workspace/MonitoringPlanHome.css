@@ -19,16 +19,17 @@
 .header{
   color:gray;
 }
-.tabsBox{
+.tabsBox,.selectedTabsBox{
   color:gray;
   border:solid 1px;
   width: 100%;
   justify-content: center;
   bottom: 0;
+  margin-bottom: -5px;
 }
 
 .tabsBar{
-padding-bottom: 0;
+padding-bottom: -5px;
 }
 .ovalBTN {
   margin-right: 0;
@@ -46,4 +47,5 @@ padding-bottom: 0;
   height: 10px;
   display :flex;
   align-items: center;
+  font-weight: bold;
 }

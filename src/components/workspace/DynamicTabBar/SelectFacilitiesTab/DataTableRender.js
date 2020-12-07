@@ -17,8 +17,8 @@ const DataTableRender = ({
         columns={columns}
         data={data}
         bordered={false}
-        paginate
-        showEntries={[100, 250, 500]}
+        //paginate
+        //showEntries={[100, 250, 500]}
         search
         //disabledColumnFilters={[0]}
         selectedRowHandler={selectedRowHandler}

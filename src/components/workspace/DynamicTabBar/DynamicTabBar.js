@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import DataTable from "./SelectFacilitiesTab/DataTable";
 
-import SelectedFacilityTab from "../SelectedFacilityTab/SelectedFacilityTab";
+import SelectedFacilityTab from "./SelectedFacilityTab/SelectedFacilityTab";
 import DynamicTabBarRender from "./DynamicTabBarRender";
 
 const DynamicTabBar = () => {
@@ -13,7 +13,11 @@ const DynamicTabBar = () => {
   const viewDataHandler = (info) => {
     const newFacility = {
       title: info[1].value,
-      component: <SelectedFacilityTab orisCode={info[0].value} />,
+      component: (
+        <div className="selectedTabsBox">
+          <SelectedFacilityTab orisCode={info[0].value} />
+        </div>
+      ),
     };
     setNewTab(newFacility);
   };
@@ -27,7 +31,8 @@ const DynamicTabBar = () => {
       initialRender.current = false;
     } else {
       setTotalTabs([...totalTabs, newTab]);
-    }
+      }
+    
   }, [newTab]);
 
   //
@@ -44,6 +49,7 @@ const DynamicTabBar = () => {
           />
         </div>
       ),
+
     },
   ]);
 
@@ -54,5 +60,4 @@ const DynamicTabBar = () => {
   );
 };
 
-
-export default (DynamicTabBar);
+export default DynamicTabBar;

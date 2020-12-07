@@ -18,7 +18,10 @@
     padding-right: 15px;
     padding-top:5px;
 }
-.usa-button-group,.usa-button-group--segmented{
-    padding-bottom: 0px;
-    margin: 0px;
+.usa-button-group,.usa-button-group--segmented,.usa-button-group__item{
+   
+    margin-bottom: -14px !important;
+    position: relative !important;
+    bottom: 0 !important;
+
 }

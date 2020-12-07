@@ -1,6 +1,4 @@
-.methodHeader{
 
-}
 .methodTitle{
     display: inline-block;
 }
@@ -21,5 +19,6 @@
     display :flex;
     align-items: center;
     float:right;
+    font-weight:bold;
   }
   
