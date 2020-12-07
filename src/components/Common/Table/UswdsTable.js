@@ -41,7 +41,6 @@ const UswdsTable = ({
       });
     }
   }
-  
   setEditable(editable);
   const [editableData, setEditableData] = useState(data);
 
@@ -155,7 +154,6 @@ const UswdsTable = ({
         )}
       </div>
       <table className={variant} {...getTableProps()}>
-        
         <TableHeader headerGroups={headerGroups} viewDataColumn={viewDataColumn} />
         <TableBody
           selectedRowHandler={selectedRowHandler}

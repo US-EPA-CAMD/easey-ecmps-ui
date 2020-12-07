@@ -1,10 +1,9 @@
 import React from "react";
 import "../style.css";
 import { Link } from "react-router-dom";
-import './Header.css';
+import "./Header.css";
 const Header = () => {
   return (
-    
     <div>
       <div
         id="block-pane-official-website-header"
@@ -31,7 +30,13 @@ const Header = () => {
             United States Environmental Protection Agency
           </div>
         </div>
-        <div id="topbanner"><p>EPA Sandbox Environment: The content on this page is not production data and this site is being used for <strong>testing</strong> purposes only.</p></div>
+        <div id="topbanner">
+          <p>
+            EPA Sandbox Environment: The content on this page is not production
+            data and this site is being used for <strong>testing</strong>{" "}
+            purposes only.
+          </p>
+        </div>
       </header>
 
       <nav className="nav main-nav clearfix" role="navigation">

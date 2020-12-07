@@ -32,10 +32,8 @@ const DynamicTabBar = () => {
     } else {
       setTotalTabs([...totalTabs, newTab]);
       }
-    
   }, [newTab]);
 
-  //
   const [totalTabs, setTotalTabs] = useState([
     {
       title: "Select Facility",

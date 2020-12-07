@@ -13,7 +13,6 @@ export const DataTable = ({
   viewDataHandler
 }) => {
 
-  
   useEffect(() => {
     if (facilities.length === 0) {
       loadFacilitiesData();

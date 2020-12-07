@@ -9,10 +9,9 @@ const TableSearch = ({ setGlobalFilter,title }) => {
   };
   return (
     <div >
-     {title ? 
+     {title ?
          <div className="searchBar">Search {title.toLowerCase()} :</div> : ''}
       <form>
-         
         <input className="searchBox"
           type="text"
           value={searchState}

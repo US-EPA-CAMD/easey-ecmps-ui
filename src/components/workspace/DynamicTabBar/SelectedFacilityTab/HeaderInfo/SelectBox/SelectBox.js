@@ -9,7 +9,7 @@ const SelectBox = ({ caption, options, selectKey,mpHandler }) => {
         {": "} <br />
         <select onChange={ (e) => mpHandler(e.target.value)}>
           {options.map((info) => {
-                    return ( 
+                    return (
                     <option key={info[selectKey]} value={info[selectKey]} >{info[selectKey]} </option>
                     )
                 })}

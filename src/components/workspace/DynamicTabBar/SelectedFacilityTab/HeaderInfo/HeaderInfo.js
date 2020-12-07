@@ -15,8 +15,8 @@ const HeaderInfo = ({ facility, monitoringPlans }) => {
   const mplHandler = (index) => {
     setMonitoringPlanLocationSelect(index);
   };
-  useEffect(() => {
-  }, [monitoringPlanSelect]);
+  // useEffect(() => {
+  // }, [monitoringPlanSelect]);
 
   return (
     <div className="header">
@@ -28,7 +28,7 @@ const HeaderInfo = ({ facility, monitoringPlans }) => {
         <a href="#/">Reports</a>|<button className="ovalBTN">Evaluate</button>
         <button className="ovalBTN">Submit</button>
       </div>
-      {monitoringPlans.length != 0 ? (
+      {monitoringPlans.length !== 0 ? (
         <div className="selects">
           <SelectBox
             caption="Monitoring Plan"
@@ -48,7 +48,6 @@ const HeaderInfo = ({ facility, monitoringPlans }) => {
 
               <div className="eval">Evaluation Status: </div>  <div className='answer'>{" Passed with no errors "} </div>
               <br/>
-         
             <div className="submission"> Submission Status: </div><div className='answer'>{" Resubmission required "} </div>
           </div>
         </div>

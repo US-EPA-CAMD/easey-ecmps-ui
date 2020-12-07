@@ -12,12 +12,10 @@ const SelectedFacilityTab = ({
   monitoringPlans,
   loading,
 }) => {
-   
 
     const [facility] = useState(
         fs.getSelectedFacility(orisCode, facilities)
       );
-    
       useEffect(() => {
         if (facilities.length === 0) {
           loadFacilitiesData();
@@ -39,17 +37,14 @@ const mapStateToProps = (state) => {
   return {
     facilities: state.facilities,
     loading: state.apiCallsInProgress.facilities,
-    
     monitoringPlans:state.monitoringPlans
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return { 
-    
     loadMonitoringPlansData: () => dispatch(loadMonitoringPlans()),
     loadFacilitiesData: () => dispatch(loadFacilities()),
-   
   };
 };
 export default connect(

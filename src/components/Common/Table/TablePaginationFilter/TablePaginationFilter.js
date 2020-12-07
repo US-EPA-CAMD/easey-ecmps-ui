@@ -26,7 +26,7 @@ const TablePaginationFilter = ({
   }
   return (
     <div className="filterWrap">
-      {title ? (<h2> <b>{title} </b></h2>) :( < div>  
+      {title ? (<h2> <b>{title} </b></h2>) :( < div>
       Show
       <select
         data-testid="select-option"

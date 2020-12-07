@@ -14,9 +14,9 @@ const Tabs = ({ children, dynamic = false, removeTabs }) => {
   return (
     <div>
       <div className="tabBar">
-      <ul className="usa-button-group usa-button-group--segmented" > 
+      <ul className="usa-button-group usa-button-group--segmented" >
         {children.map((el, i) => (
-          <li key={i} className="usa-button-group__item" style={{position:'relative'}}> 
+          <li key={i} className="usa-button-group__item" style={{position:'relative'}}>
             <button
               className={
                 activeTabIndex === i
@@ -42,7 +42,6 @@ const Tabs = ({ children, dynamic = false, removeTabs }) => {
       </ul>
       </div>
       <div>{children[activeTabIndex]}</div>
-      
     </div>
   );
 };
