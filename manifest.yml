@@ -1,0 +1,11 @@
+applications:
+  - name: ui-portal
+    path: .
+    command: npm run start
+    memory: 1024M
+    env:
+      OPTIMIZE_MEMORY: true
+      REACT_APP_FACILITIES_API: https://((host))/api/facility-mgmt
+      REACT_APP_MONITOR_PLAN_API: https://((host))/api/monitor-plan-mgmt
+    routes:
+      - route: ((host))
