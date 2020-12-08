@@ -46,7 +46,6 @@ const HeaderInfo = ({ facility, monitoringPlans }) => {
     return x.name == monitoringPlanSelect;
   });
   configIndex = configIndex < 0 ? 0 : configIndex;
-  console.log(`configIndex=${configIndex}`);
 
   return (
     <div className="header">
