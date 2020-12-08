@@ -41,6 +41,13 @@ const HeaderInfo = ({ facility, monitoringPlans }) => {
       selectKey="name"
     />
   );
+
+  let configIndex = monitoringPlans.findIndex( (x) =>  {
+    return x.name == monitoringPlanSelect;
+  });
+  configIndex = configIndex < 0 ? 0 : configIndex;
+  console.log(`configIndex=${configIndex}`);
+
   return (
     <div className="header">
       {/* <Accordion
@@ -60,19 +67,20 @@ const HeaderInfo = ({ facility, monitoringPlans }) => {
         <div className="row">
           <div className="selects column">
             <SelectBox
-              caption="Monitoring Plans"
+              caption="Configurations"
               options={monitoringPlans}
               mpHandler={mpHandler}
               selectKey="name"
             />
             <SelectBox
-              caption="Monitoring Locations"
-              options={monitoringPlans[monitoringPlanSelect].locations}
+              caption="Locations"
+              //options={monitoringPlans[monitoringPlanSelect].locations}
+              options={monitoringPlans[configIndex].locations}              
               mpHandler={mplHandler}
               selectKey="name"
             />
             <SelectBox
-              caption="Monitoring Plan Sections"
+              caption="Sections"
               options={monitoringPlanSections}
               mpHandler={mpsHandler}
               selectKey="name"

@@ -5,7 +5,7 @@ import config from "../../config";
 
 export async function getAllFacilities() {
   return axios
-    .get(config.services.facilities.uri)
+    .get(`${config.services.facilities.uri}/facilities`)
     .then(handleResponse)
     .catch(handleError);
 }
