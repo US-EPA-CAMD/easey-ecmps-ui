@@ -1,6 +1,6 @@
 ---
-name: User research
-about: Issue template for user research studies
+name: User research (long-form)
+about: Issue template for long-form user research studies
 title: ''
 labels: 'UX Research'
 assignees: ''
