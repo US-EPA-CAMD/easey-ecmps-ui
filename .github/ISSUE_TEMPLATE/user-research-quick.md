@@ -2,7 +2,7 @@
 name: User research (quick-turn)
 about: Issue template for quick-turn user research studies
 title: ''
-labels: 'UX Research'
+labels: UX Research
 assignees: ''
 
 ---

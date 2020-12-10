@@ -3,7 +3,7 @@ name: Automated Testing
 about: Issue template for test automation
 title: ''
 labels: Tech Team, Testing
-assignees: 'yefimabramson'
+assignees: YefimAbramsonCVP
 
 ---
 
@@ -14,4 +14,4 @@ Automated test case for
 
 ## TestQuality:
 Test Suite 
-Test Cases 
+Test Cases

@@ -1,7 +1,7 @@
 ---
 name: Bug
 about: Issue template for bugs
-title: 'Bug/##'
+title: 'Bug: ##'
 labels: bug
 assignees: ''
 
@@ -19,5 +19,9 @@ Action:
 Expected Result:
 Status:
 
-## Actual Results
+### Actual Results
 
+## Requirements
+### User Story
+
+### Acceptance Criteria
