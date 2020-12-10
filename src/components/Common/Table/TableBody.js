@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import "./TableBody.css";
-
 const TableBody = ({
   getTableBodyProps,
   rows,
@@ -69,7 +68,7 @@ const TableBody = ({
               {...row.getRowProps()}
               onClick={() => {
                 rowSelection(row);
-                //handleDataSelector(row.cells);
+                handleDataSelector(row.cells);
               }}
               onKeyDown={onKeyDownHandler}
             >
@@ -110,7 +109,7 @@ const TableBody = ({
           );
         })) || (
         <tr className="centerBox">
-          <td>No data found</td>
+          <td>No results match that search criteria. Please change the criteria and try again.</td>
         </tr>
       )}
     </tbody>
