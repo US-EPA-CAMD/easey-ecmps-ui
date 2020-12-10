@@ -3,7 +3,7 @@ name: Automated Testing
 about: Issue template for test automation
 title: ''
 labels: Tech Team, Testing
-assignees: ''
+assignees: 'yefimabramson'
 
 ---
 
