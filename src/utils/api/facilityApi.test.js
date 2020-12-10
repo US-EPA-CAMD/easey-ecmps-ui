@@ -12,10 +12,10 @@ const facilities = [
 test("Should fetch list of facilities from FACT API", async () => {
   const mock = new MockAdapter(axios);
 
-  mock.onGet(config.services.facilities.uri).reply(200, {
+  mock.onGet(`${config.services.facilities.uri}/facilities`).reply(200, {
     facilities: facilities,
   });
 
   const result = await getAllFacilities();
-  expect(result.data.facilities).toEqual(facilities);
+  expect(result['data'].facilities).toEqual(facilities);
 });
