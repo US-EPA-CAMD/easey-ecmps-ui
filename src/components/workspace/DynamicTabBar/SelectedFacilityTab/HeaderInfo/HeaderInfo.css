@@ -16,9 +16,7 @@ a {
   padding: 10px;
   
 }
-.usa-accordion__button{
-  float:left;
-}
+
 .selects.column {
   column-count: 4;
   display: flex;
@@ -28,10 +26,10 @@ a {
 }
 .statuses.column {
   padding-right: 50px;
-  position: absolute;
+  position: relative;
   right: 0;
   width: 30%;
-  
+  height:auto;
   
 }
 .eval,.submission {
@@ -42,4 +40,5 @@ a {
   padding:10px;
   font-size: 15px;
   display: inline-block;
+
 }

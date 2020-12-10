@@ -22,17 +22,17 @@ const UswdsTable = ({
   columns,
   data,
   bordered = false,
-  caption,
-  paginate,
-  search,
-  showEntries,
-  disabledColumnFilters,
-  selectedRowHandler,
-  dataSelector,
-  defaultSelect,
-  editable,
-  viewDataColumn,
-  viewDataHandler
+  caption,      
+  paginate,     // enables pagination bar under data table
+  search,       // enables search bar   
+  showEntries,  // shows entries drop down per page
+  disabledColumnFilters,  // disable specific columns via using array [1,2] -> disables columns 2 and 3 
+  selectedRowHandler,   // makes a row clickable without the need of a visable button 
+  dataSelector,   // a specific filter header value that we want to return via selectedRowHandler/viewDataHandler. by default it is the first column header
+  defaultSelect,  // 
+  editable,       // makes data table editable
+  viewDataColumn, // creates a view /open all tabs column
+  viewDataHandler // handles the view/ open all tabs column 
 }) => {
   if (disabledColumnFilters) {
     if (disabledColumnFilters.length >= 1) {

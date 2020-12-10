@@ -24,7 +24,11 @@ const TableHeader = ({ headerGroups, viewDataColumn }) => (
             </span>
           </th>
         ))}
-        {viewDataColumn?(<th width={headerGroups[0].headers[0].width}>Open All Tabs</th>) : ""}
+        {viewDataColumn ? (
+          <th width={headerGroups[0].headers[0].width}>Open All Tabs</th>
+        ) : (
+          ""
+        )}
       </tr>
     ))}
   </thead>

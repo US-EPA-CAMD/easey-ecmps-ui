@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./HeaderInfo.css";
 import SelectBox from "./SelectBox/SelectBox";
-// import { AccordionItem, Accordion } from "@trussworks/react-uswds";
 const HeaderInfo = ({ facility, monitoringPlans }) => {
   const [monitoringPlanSelect, setMonitoringPlanSelect] = useState(0);
   const [monitoringSectionSelect, setMonitoringSectionSelect] = useState(0);
@@ -31,29 +30,14 @@ const HeaderInfo = ({ facility, monitoringPlans }) => {
   const mpsHandler = (index) => {
     setMonitoringSectionSelect(index);
   };
-  // useEffect(() => {
-  // }, [monitoringPlanSelect]);
-  var test = (
-    <SelectBox
-      caption="Monitoring Plan"
-      options={monitoringPlans}
-      mpHandler={mpHandler}
-      selectKey="name"
-    />
-  );
 
-  let configIndex = monitoringPlans.findIndex( (x) =>  {
+  let configIndex = monitoringPlans.findIndex((x) => {
     return x.name == monitoringPlanSelect;
   });
   configIndex = configIndex < 0 ? 0 : configIndex;
 
   return (
     <div className="header">
-      {/* <Accordion
-        items={[<AccordionItem title="test" content={test} expanded id="2" />]}
-      >
-        {" "}
-      </Accordion> */}
       <div className="title">
         <h2>{facility.name}</h2>
       </div>
@@ -74,7 +58,7 @@ const HeaderInfo = ({ facility, monitoringPlans }) => {
             <SelectBox
               caption="Locations"
               //options={monitoringPlans[monitoringPlanSelect].locations}
-              options={monitoringPlans[configIndex].locations}              
+              options={monitoringPlans[configIndex].locations}
               mpHandler={mplHandler}
               selectKey="name"
             />
