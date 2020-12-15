@@ -75,7 +75,7 @@ describe("Async Actions", () => {
 
   describe("Load Facilities Thunk", () => {
     it("should create BEGIN_FACILITIES_API_CALL and LOAD_FACILITIES_SUCCESS when loading facilities", () => {
-      mock.onGet(config.services.facilities.uri).reply(200, facilities);
+      mock.onGet(`${config.services.facilities.uri}/facilities`).reply(200, facilities);
       const expectedActions = [
         { type: types.BEGIN_FACILITIES_API_CALL },
         { type: types.LOAD_FACILITIES_SUCCESS, facilities },

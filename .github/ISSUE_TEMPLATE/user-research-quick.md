@@ -1,6 +1,6 @@
 ---
-name: User research (long-form)
-about: Issue template for long-form user research studies
+name: User research (quick-turn)
+about: Issue template for quick-turn user research studies
 title: ''
 labels: UX Research
 assignees: ''
@@ -18,4 +18,3 @@ Recruit participants
 Conduct interviews
 Analyze research findings
 Prepare high level executive summary
-Prepare final user research report
