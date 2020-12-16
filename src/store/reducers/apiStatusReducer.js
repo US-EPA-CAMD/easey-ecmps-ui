@@ -11,6 +11,10 @@ const reducer = (state = initialState.apiCallsInProgress, action) => {
       return Object.assign({}, state, { monitoringPlans: true });
     case types.LOAD_MONITORING_PLANS_SUCCESS:
       return Object.assign({}, state, { monitoringPlans: false });
+    case types.BEGIN_MONITORING_METHODS_API_CALL:
+      return Object.assign({}, state, { monitoringMethods: true });
+    case types.LOAD_MONITORING_METHODS_SUCCESS:
+      return Object.assign({}, state, { monitoringMethods: false });
     default:
       return state;
   }
