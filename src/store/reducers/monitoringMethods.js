@@ -4,14 +4,11 @@ import * as types from "../actions/actionTypes";
 import initialState from "./initialState";
 
 const reducer = (state = initialState.monitoringMethods, action) => {
-  switch (action.type) {
-    case types.LOAD_MONITORING_METHODS_SUCCESS:
+  if (action.type === types.LOAD_MONITORING_METHODS_SUCCESS) {
       return Object.assign({}, state, { methods: action.monitoringMethods});
-    case types.LOAD_MONITORING_MATSMETHODS_SUCCESS:
-      return Object.assign({}, state, { matsMethods: action.monitoringMatsMethods});
-    default:
+  }else{
       return state;
-  }
+    }
 };
 
 export default reducer;

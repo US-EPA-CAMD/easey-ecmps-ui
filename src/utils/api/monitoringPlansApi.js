@@ -12,16 +12,7 @@ export async function getMonitoringPlans(orisCode) {
 
 export async function getMonitoringMethods(locationId) {
   return axios
-    .get(`${config.services.monitorPlans.uri}/monitor-plans?orisCode=${locationId}`)
-    // .get(`${config.services.monitorPlans.uri}/monitor-locations/${locationId}/methods`)
-    .then(handleResponse)
-    .catch(handleError);
-}
-
-export async function getMonitoringMatsMethods(locationId) {
-  return axios
-    .get(`${config.services.monitorPlans.uri}/monitor-plans?orisCode=${locationId}`)
-    // .get(`${config.services.monitorPlans.uri}/monitor-locations/${locationId}/matsMethod`)
+    .get(`${config.services.monitorPlans.uri}/monitoring-locations/${locationId}/methods`)
     .then(handleResponse)
     .catch(handleError);
 }

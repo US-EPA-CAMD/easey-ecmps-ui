@@ -11,7 +11,6 @@ export function loadFacilitiesSuccess(facilities) {
 }
 
 export function loadFacilities() {
-  console.log(process.env.REACT_APP_FACILITY_API);
   return (dispatch) => {
     dispatch(beginFacilitiesApiCall());
     return facilitiesApi

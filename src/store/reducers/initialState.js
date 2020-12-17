@@ -1,7 +1,10 @@
 export default {
   facilities: [],
   monitoringPlans: [],
-  monitoringMethods:[],
+  monitoringMethods:{
+    matsMethods:[],
+    methods:[]
+  },
   apiCallsInProgress: {
     facilities: false,
     monitoringPlans: false,
