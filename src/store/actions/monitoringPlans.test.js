@@ -38,30 +38,30 @@ const monitoringPlans = [
   },
 ];
 
-// describe("Async Actions", () => {
-//   const mock = new MockAdapter(axios);
-//   afterEach(() => {
-//     mock.restore();
-//   });
-//   const orisCode = "3";
+describe("Async Actions", () => {
+  const mock = new MockAdapter(axios);
+  afterEach(() => {
+    mock.restore();
+  });
+  const orisCode = "3";
 
-//   describe("Load monitoring-plans Thunk", () => {
-//     it("should create BEGIN_MONITORING_PLANS_API_CALL and LOAD_MONITORING_PLANS_SUCCESS when loading monitoring plans", () => {
-//       mock
-//         .onGet(config.services.monitorPlans.uri + "?orisCode=" + orisCode)
-//         .reply(200, monitoringPlans);
-//       const expectedActions = [
-//         { type: types.BEGIN_MONITORING_PLANS_API_CALL },
-//         { type: types.LOAD_MONITORING_PLANS_SUCCESS, monitoringPlans },
-//       ];
+  describe("Load monitoring-plans Thunk", () => {
+    it("should create BEGIN_MONITORING_PLANS_API_CALL and LOAD_MONITORING_PLANS_SUCCESS when loading monitoring plans", () => {
+      mock
+        .onGet(`${config.services.monitorPlans.uri}/monitor-plans?orisCode=${orisCode}`)
+        .reply(200, monitoringPlans);
+      const expectedActions = [
+        { type: types.BEGIN_MONITORING_PLANS_API_CALL },
+        { type: types.LOAD_MONITORING_PLANS_SUCCESS, monitoringPlans },
+      ];
 
-//       const store = mockStore({ monitoringPlans: [] });
-//       return store.dispatch(loadMonitoringPlans(orisCode)).then(() => {
-//         expect(store.getActions()).toEqual(expectedActions);
-//       });
-//     });
-//   });
-// });
+      const store = mockStore({ monitoringPlans: [] });
+      return store.dispatch(loadMonitoringPlans(orisCode)).then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    });
+  });
+});
 
 describe("load monitoring plans success", () => {
   it("should create a LOAD_MONITORING_PLANS_SUCCESS action", () => {
