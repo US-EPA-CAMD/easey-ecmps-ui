@@ -1,5 +1,4 @@
 .home-container {
-  display:flex;
   align-items: center;
   margin: 0 auto;
   padding: 0;
@@ -32,7 +31,6 @@
 padding-bottom: -5px;
 }
 .ovalBTN {
-  margin-right: 0;
   background-color: white;
   border: solid;
   color: grey;
@@ -49,4 +47,3 @@ padding-bottom: -5px;
   align-items: center;
   font-weight: bold;
 }
-.usa-accordion__button{}

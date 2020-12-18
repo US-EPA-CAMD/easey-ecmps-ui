@@ -53,7 +53,7 @@ import {
     describe("Load monitoring-methods Thunk", () => {
       it("should create BEGIN_MONITORING_METHODS_API_CALL and LOAD_MONITORING_METHODS_SUCCESS when loading monitoring methods", () => {
         mock
-          .onGet(`${config.services.monitorPlans.uri}/monitoring-locations/${locationId}/methods`)
+          .onGet(`${config.services.monitorPlans.uri}/monitor-locations/${locationId}/methods`)
           .reply(200, monitoringMethods);
         const expectedActions = [
           { type: types.BEGIN_MONITORING_METHODS_API_CALL },

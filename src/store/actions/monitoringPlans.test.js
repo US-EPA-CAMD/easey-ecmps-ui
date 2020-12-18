@@ -48,7 +48,9 @@ describe("Async Actions", () => {
   describe("Load monitoring-plans Thunk", () => {
     it("should create BEGIN_MONITORING_PLANS_API_CALL and LOAD_MONITORING_PLANS_SUCCESS when loading monitoring plans", () => {
       mock
-        .onGet(`${config.services.monitorPlans.uri}/monitor-plans?orisCode=${orisCode}`)
+        .onGet(
+          `${config.services.monitorPlans.uri}/monitor-plans/${orisCode}/configurations`
+        )
         .reply(200, monitoringPlans);
       const expectedActions = [
         { type: types.BEGIN_MONITORING_PLANS_API_CALL },

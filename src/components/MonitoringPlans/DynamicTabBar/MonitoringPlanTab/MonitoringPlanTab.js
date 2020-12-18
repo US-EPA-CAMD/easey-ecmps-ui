@@ -3,9 +3,9 @@ import * as fs from "../../../../utils/selectors/facilities";
 import { loadFacilities } from "../../../../store/actions/facilities";
 import { loadMonitoringPlans } from "../../../../store/actions/monitoringPlans";
 import { connect } from "react-redux";
-import SelectedFacilityTabRender from "./SelectedFacilityTabRender";
+import MonitoringPlanTabRender from "./MonitoringPlanTabRender";
 
-const SelectedFacilityTab = ({
+const MonitoringPlanTab = ({
   orisCode,
   facilities,
   loadFacilitiesData,
@@ -25,7 +25,7 @@ const SelectedFacilityTab = ({
 
   return (
     <div>
-      <SelectedFacilityTabRender
+      <MonitoringPlanTabRender
         facility={facility}
         monitoringPlans={monitoringPlans}
       />
@@ -50,4 +50,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SelectedFacilityTab);
+)(MonitoringPlanTab);

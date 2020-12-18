@@ -39,8 +39,8 @@ const Home = () => {
       <div className="grid-row">
         <div className="grid-col-5">
           <DataTable
-            selectedRowHandler={(facilityId) => {
-              showSetOverview(facilityId);
+            selectedRowHandler={(facilityInfo) => {
+              showSetOverview(facilityInfo[0].value);
             }}
           />
         </div>

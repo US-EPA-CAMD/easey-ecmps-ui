@@ -1,40 +1,37 @@
 import React, { useState } from "react";
 import "./HeaderInfo.css";
 import SelectBox from "./SelectBox/SelectBox";
-const HeaderInfo = ({ facility, monitoringPlans }) => {
-  const [monitoringPlanSelect, setMonitoringPlanSelect] = useState(0);
-  const [monitoringSectionSelect, setMonitoringSectionSelect] = useState(0);
-  const [
-    monitoringPlanLocationSelect,
-    setMonitoringPlanLocationSelect,
-  ] = useState(0);
-  const monitoringPlanSections = [
-    { name: "Monitoring Methods" },
-    { name: "Location Attributes" },
-    { name: "Reporting Frequency" },
-    { name: "Unit Information" },
-    { name: "Stack/Pipe Information" },
-    { name: "Monitoring Systems" },
-    { name: "Monitoring Defaults" },
-    { name: "Span, Range, and Formulas" },
-    { name: "Rectangular Duct WAFs" },
-    { name: "Loads" },
-    { name: "Qualifications" },
-  ];
+const HeaderInfo = ({
+  facility,
+  sections,
+  monitoringPlans,
+  methodLocationHandler,
+}) => {
+
+  const [configSelect, setConfigSelect] = useState(0);
+  const [sectionSelect, setSectionSelect] = useState(0);
+
+  const [locationSelect, setLocationSelect] = useState(0);
+
   const mpHandler = (index) => {
-    setMonitoringPlanSelect(index);
+    setConfigSelect(index);
+    setLocationSelect(0);
+    // setLocationOptions(monitoringPlans[monitoringPlanSelect].locations);
   };
   const mplHandler = (index) => {
-    setMonitoringPlanLocationSelect(index);
+    methodLocationHandler(
+      monitoringPlans[configSelect].locations[index]["name"]
+    );
+    setLocationSelect(index);
   };
   const mpsHandler = (index) => {
-    setMonitoringSectionSelect(index);
+    setSectionSelect(index);
   };
 
-  let configIndex = monitoringPlans.findIndex((x) => {
-    return x.name == monitoringPlanSelect;
-  });
-  configIndex = configIndex < 0 ? 0 : configIndex;
+  // let configIndex = monitoringPlans.findIndex((x) => {
+  //   return x.name == monitoringPlanSelect;
+  // });
+  // configIndex = configIndex < 0 ? 0 : configIndex;
 
   return (
     <div className="header">
@@ -52,20 +49,21 @@ const HeaderInfo = ({ facility, monitoringPlans }) => {
             <SelectBox
               caption="Configurations"
               options={monitoringPlans}
-              mpHandler={mpHandler}
+              selectionHandler={mpHandler}
               selectKey="name"
             />
             <SelectBox
               caption="Locations"
-              //options={monitoringPlans[monitoringPlanSelect].locations}
-              options={monitoringPlans[configIndex].locations}
-              mpHandler={mplHandler}
+              options={monitoringPlans[configSelect].locations}
+              // options={monitoringPlans[configIndex].locations}
+              //options={monitoringLocationTest}
+              selectionHandler={mplHandler}
               selectKey="name"
             />
             <SelectBox
               caption="Sections"
-              options={monitoringPlanSections}
-              mpHandler={mpsHandler}
+              options={sections}
+              selectionHandler={mpsHandler}
               selectKey="name"
             />
           </div>

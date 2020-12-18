@@ -5,7 +5,7 @@ import Home from './components/Home/Home';
 import NotFound from './components/Common/NotFound/NotFound';
 
 import Layout from './components/Common/Layout';
-import MonitoringPlanHome from './components/workspace/MonitoringPlanHome';
+import MonitoringPlanHome from './components/MonitoringPlans/MonitoringPlanHome';
 
 function App() {
   return (
