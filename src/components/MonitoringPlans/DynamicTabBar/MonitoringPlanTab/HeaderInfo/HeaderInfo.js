@@ -20,7 +20,7 @@ const HeaderInfo = ({
   };
   const mplHandler = (index) => {
     methodLocationHandler(
-      monitoringPlans[configSelect].locations[index]["name"]
+      monitoringPlans[configSelect].locations[index]["id"]
     );
     setLocationSelect(index);
   };

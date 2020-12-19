@@ -30,7 +30,7 @@ export const DataTableMethod = ({
         width: "210px",
       },
       {
-        Header: "Substitude Data Approach",
+        Header: "Substitute Data Approach",
         accessor: "col3",
         width: "610px",
       },
