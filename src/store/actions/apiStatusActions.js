@@ -9,3 +9,6 @@ export function beginMonitoringPlansApiCall() {
 export function beginMonitoringMethodsApiCall() {
   return { type: types.BEGIN_MONITORING_METHODS_API_CALL };
 }
+export function beginMonitoringMatsMethodsApiCall() {
+  return { type: types.BEGIN_MONITORING_MATSMETHODS_API_CALL };
+}
