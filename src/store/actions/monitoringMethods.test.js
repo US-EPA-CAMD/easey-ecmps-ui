@@ -1,6 +1,6 @@
 import {
     loadMonitoringMethods,
-    loadMonitoringMethodsSuccess,
+    loadMonitoringMatsMethods,
   } from "./monitoringMethods";
   import * as types from "./actionTypes";
   import axios from "axios";
@@ -42,16 +42,33 @@ import {
     endTime: "1995-01-01 00",
     }
 ];
+const monitoringMatsMethods = [
+  {
+	  "id": "CAMD-F4C326C9D8044324B83603C2FC0154B2",
+    "parameter": "co2",
+    "methodology": "ad",
+    "beginDate": "1995-01-01 00",
+    "endTime": "1995-01-01 00",
+  }
+	,
+	{
+	  "id": "TWCORNEL5-409EB09291144C14B2327FC63B413AAA",
+    "parameter": "co2",
+    "methodology": "ad",
+    "beginDate": "1995-01-01 00",
+    "endTime": "1995-01-01 00",
+  }
+];
 
   describe("Async Actions", () => {
     const mock = new MockAdapter(axios);
     afterEach(() => {
       mock.restore();
     });
-    const locationId = "5887";
+    const locationId = "8";
 
     describe("Load monitoring-methods Thunk", () => {
-      it("should create BEGIN_MONITORING_METHODS_API_CALL and LOAD_MONITORING_METHODS_SUCCESS when loading monitoring methods", () => {
+      test("should create BEGIN_MONITORING_METHODS_API_CALL and LOAD_MONITORING_METHODS_SUCCESS when loading monitoring methods", () => {
         mock
           .onGet(`${config.services.monitorPlans.uri}/monitor-locations/${locationId}/methods`)
           .reply(200, monitoringMethods);
@@ -65,6 +82,20 @@ import {
           expect(store.getActions()).toEqual(expectedActions);
         });
       });
+      // test("should create BEGIN_MONITORING_MATSMETHODS_API_CALL and LOAD_MONITORING_MATSMETHODS_SUCCESS when loading monitoring supplemental mats methods", () => {
+      //   mock
+      //     .onGet(`${config.services.monitorPlans.uri}/monitor-locations/${locationId}/matsMethods`)
+      //     .reply(200, monitoringMatsMethods);
+      //   const expectedActions = [
+      //     { type: types.BEGIN_MONITORING_MATSMETHODS_API_CALL },
+      //     { type: types.LOAD_MONITORING_MATSMETHODS_SUCCESS, monitoringMatsMethods },
+      //   ];
+
+      //   const store = mockStore({ monitoringMatsMethods: [] });
+      //   return store.dispatch(loadMonitoringMatsMethods(locationId)).then(() => {
+      //     expect(store.getActions()).toEqual(expectedActions);
+      //   });
+      // });
     });
   });
 

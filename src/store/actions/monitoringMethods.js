@@ -1,5 +1,5 @@
 import * as mpApi from "../../utils/api/monitoringPlansApi";
-import { beginMonitoringMethodsApiCall } from "./apiStatusActions";
+import { beginMonitoringMethodsApiCall, beginMonitoringMatsMethodsApiCall } from "./apiStatusActions";
 import * as types from "./actionTypes";
 import log from "loglevel";
 
@@ -17,6 +17,27 @@ export function loadMonitoringMethods(locationId) {
       .getMonitoringMethods(locationId)
       .then((res) => {
         dispatch(loadMonitoringMethodsSuccess(res.data));
+      })
+      .catch((err) => {
+        log(err);
+      });
+  };
+}
+
+export function loadMonitoringMatsMethodsSuccess(monitoringMatsMethods) {
+  return {
+    type: types.LOAD_MONITORING_MATSMETHODS_SUCCESS,
+    monitoringMatsMethods,
+  };
+}
+
+export function loadMonitoringMatsMethods(locationId) {
+  return (dispatch) => {
+    dispatch(beginMonitoringMatsMethodsApiCall());
+    return mpApi
+      .getMonitoringMatsMethods(locationId)
+      .then((res) => {
+        dispatch(loadMonitoringMatsMethodsSuccess(res.data));
       })
       .catch((err) => {
         log(err);
