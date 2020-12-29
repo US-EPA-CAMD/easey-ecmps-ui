@@ -10,7 +10,7 @@ const DataTableRender = ({ columns, data, selectedRowHandler }) => {
         data={data}
         bordered={false}
         paginate
-        showEntries={[10, 250, 500]}
+        showEntries={[100, 250, 500]}
         search
         //editable
         viewDataColumn

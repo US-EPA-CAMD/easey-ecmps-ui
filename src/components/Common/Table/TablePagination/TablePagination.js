@@ -151,12 +151,12 @@ const TablePagination = ({
   return (
     <div className="row">
       <div className="totalDisplay col">
-        Showing {pageIndex * pageSize + 1} to{" "}
+        
         {Math.min(
-          (pageIndex + 1) * pageSize,
-          paginationFiltering[paginationFiltering.length - 1]
-        )}{" "}
-        of {paginationFiltering[paginationFiltering.length - 1]} rows
+          pageSize,
+          (paginationFiltering[paginationFiltering.length - 1] - pageIndex * pageSize)
+        )}{" out of "}
+         {paginationFiltering[paginationFiltering.length - 1]}{" rows displayed"}
       </div>
 
       <div  className="paginationTabs col">
