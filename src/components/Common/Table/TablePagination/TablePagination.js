@@ -1,5 +1,6 @@
 import React from "react";
 import "./TablePagination.css";
+import { Label } from "@trussworks/react-uswds";
 const TablePagination = ({
   canPreviousPage,
   canNextPage,
@@ -93,7 +94,7 @@ const TablePagination = ({
         {pages.map((page, index) => {
           if (page === LEFT_PAGE)
             return (
-              <li key={index} className="page-item">
+              <li key={index} className="page-item-previous">
                 <div className="page-link" href="#" aria-label="Previous">
                   <span aria-hidden="true">{"..."}</span>
                   <span className="sr-only">...</span>
@@ -103,7 +104,7 @@ const TablePagination = ({
 
           if (page === RIGHT_PAGE)
             return (
-              <li key={index} className="page-item">
+              <li key={index} className="page-item-next">
                 <div className="page-link" aria-label="Next">
                   <span aria-hidden="true">{"..."}</span>
                   <span className="sr-only">...</span>
@@ -133,7 +134,7 @@ const TablePagination = ({
     if (pageIndex !== pageCount - 1) {
       return (
         <li
-          className="page-item"
+          className="page-item-next"
           onClick={() => nextPage()}
           disabled={!canNextPage}
         >
@@ -142,28 +143,34 @@ const TablePagination = ({
       );
     }
     return (
-      <li className="page-item" disabled={true}>
+      <li className="page-item-next" disabled={true}>
         <button className="page-link">{"Next"}</button>
       </li>
     );
   }
   return (
-    <div>   
+    <div className="row">
+      <div className="totalDisplay col">
         Showing {pageIndex * pageSize + 1} to{" "}
         {Math.min(
           (pageIndex + 1) * pageSize,
           paginationFiltering[paginationFiltering.length - 1]
         )}{" "}
-        of {paginationFiltering[paginationFiltering.length - 1]} entries
-      
-      <div className="paginationTabs">
-        <ul className="pagination">
+        of {paginationFiltering[paginationFiltering.length - 1]} rows
+      </div>
+
+      <div  className="paginationTabs col">
+      <Label className="filterLabel hidden" htmlFor="pagination">
+         Pagination Bar
+      </Label>
+        <ul className="pagination" id="pagination">
           <li
-            className="page-item"
+            className="page-item-previous"
             onClick={() => previousPage()}
             disabled={!canPreviousPage}
+              
           >
-            <button className="page-link">{"Previous"}</button>
+            <button  className="page-link">{"Previous"}</button>
           </li>
 
           {tabs()}

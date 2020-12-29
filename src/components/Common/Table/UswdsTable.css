@@ -1,16 +1,23 @@
 .filterAndSearch {
   position: relative;
-  padding-top:20px;
+  padding-top: 20px;
+  overflow: hidden;
+  text-align: right;
 }
 .filter {
   width: auto;
   height: 100%;
   display: inline-block;
-
   top: 0;
+  left: 0;
 }
 .search {
   display: inline-block;
- 
-  float:right;
+}
+
+.tableTitle {
+  float: left;
+  padding: 0px;
+  position: absolute;
+  bottom: 0;
 }

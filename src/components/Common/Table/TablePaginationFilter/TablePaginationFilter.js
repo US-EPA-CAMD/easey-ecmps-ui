@@ -1,12 +1,19 @@
-import React from "react";
-
+import React, { useState } from "react";
+import { Button, Dropdown, Label } from "@trussworks/react-uswds";
 import "./TablePaginationFilter.css";
 const TablePaginationFilter = ({
   setPageSize,
   paginationFiltering,
   pageSize,
-  title
 }) => {
+  const [rowFilterAmount, setRowFilterAmount] = useState(
+    paginationFiltering[0]
+  );
+
+  const rowChangeHandler = (amount) => {
+    setRowFilterAmount(amount);
+    console.log(amount);
+  };
   function pageAmounts(pageValue) {
     if (
       paginationFiltering.indexOf(pageValue) !==
@@ -24,22 +31,38 @@ const TablePaginationFilter = ({
       </option>
     );
   }
+
   return (
-    <div className="filterWrap">
-      {title ? (<h2> <b>{title} </b></h2>) :( < div>
-      Show
-      <select
-        data-testid="select-option"
-        key={pageSize}
-        value={pageSize}
-        onChange={(e) => {
-          setPageSize(Number(e.target.value));
-        }}
-        style={{ width: "55px", height: "25px" }}
-      >
-        {paginationFiltering.map((pageSize) => pageAmounts(pageSize))}
-      </select>
-      {"Entries"} </ div>)}
+    <div className="filter">
+      <div>
+        <Label className="filterLabel" htmlFor="input-dropdown">
+          Rows for table:
+        </Label>
+        
+        <div className="filterSelect">
+          <Dropdown
+            data-testid="select-option"
+            key={rowFilterAmount}
+            value={rowFilterAmount}
+            onChange={(e) => {
+              // setPageSize(Number(e.target.value));
+              rowChangeHandler(Number(e.target.value));
+            }}
+            id="input-dropdown"
+            name="input-dropdown"
+          >
+            {paginationFiltering.map((size) => pageAmounts(size))}
+          </Dropdown>
+
+          <Button
+            className="updateBTN"
+            onClick={() => setPageSize(rowFilterAmount)}
+            id="input-button"
+          >
+            Update
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };

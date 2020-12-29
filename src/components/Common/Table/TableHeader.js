@@ -12,21 +12,21 @@ const TableHeader = ({ headerGroups, viewDataColumn }) => (
             {column.render("Header")}
             {/* Add a sort direction indicator */}
             <span>
-              {column.isSorted ? (
-                column.isSortedDesc ? (
+              {column.isSorted?(
+                column.isSortedDesc?(
                   <img src="https://www.epa.gov/sites/all/libraries/js/datatables/media/images/sort_asc.png" />
-                ) : (
+                ):(
                   <img src="https://www.epa.gov/sites/all/libraries/js/datatables/media/images/sort_desc.png" />
                 )
-              ) : (
+              ):(
                 <img src="https://www.epa.gov/sites/all/libraries/js/datatables/media/images/sort_both.png" />
               )}
             </span>
           </th>
         ))}
-        {viewDataColumn ? (
+        {viewDataColumn?(
           <th width={headerGroups[0].headers[0].width}>Open All Tabs</th>
-        ) : (
+        ):(
           ""
         )}
       </tr>

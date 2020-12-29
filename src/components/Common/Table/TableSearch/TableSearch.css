@@ -1,6 +1,6 @@
 .searchBox{
     border: solid 1px;
-    display: inline-block;
+    /* display: inline-block; */
 }
 .searchBar{
     padding-right: 5px;

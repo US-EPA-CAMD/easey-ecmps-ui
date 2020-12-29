@@ -18,8 +18,6 @@ const TableSearch = ({ setGlobalFilter,title }) => {
           placeholder={title ? "": "Search"}
           onChange={(e) => {
             searchHandler(e.target.value);
-            //onChange(e.target.value);
-            searchHandler(e.target.value);
           }}
         />
       </form>

@@ -120,7 +120,8 @@ const UswdsTable = ({
   return (
     <div className="container">
       <div className="filterAndSearch">
-        {(paginate && !(title)) ? (
+        <h2 className='tableTitle'> {title}</h2>
+        {(paginate) ? (
           <span className="filter">
             <TablePaginationFilter
               setPageSize={setPageSize}
@@ -128,13 +129,12 @@ const UswdsTable = ({
               paginationFiltering={
                 showEntries ? [...showEntries, rows.length] : [100, rows.length]
               }
-              title={title}
             />
           </span>
         ) : (
           ""
         )}
-        {(title && !(paginate)) ? (
+        {/* {(title && !(paginate)) ? (
           <span className="filter">
             <TablePaginationFilter
               title={title}
@@ -142,7 +142,7 @@ const UswdsTable = ({
           </span>
         ) : (
           ""
-        )}
+        )} */}
 
 
         {search ? (

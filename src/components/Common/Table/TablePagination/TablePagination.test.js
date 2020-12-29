@@ -3,8 +3,7 @@ import UswdsTable from "../UswdsTable";
 import {
   render,
   fireEvent,
-  waitForElement,
-  screen,
+
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom/extend-expect";
@@ -640,7 +639,7 @@ describe("testing generic uswds table component with pagination", () => {
     );
     userEvent.selectOptions(getByTestId("select-option"), ["250"]);
     const paginationBar = container.querySelectorAll("ul li");
-    const paginationExpection = 3;
+    const paginationExpection = 4;
     expect(paginationBar.length).toEqual(paginationExpection);
   });
 
@@ -650,17 +649,8 @@ describe("testing generic uswds table component with pagination", () => {
     expect(tableRecords.length).toEqual(100);
   });
 
-  test("selects 250 option and tests total rows => 109  ", () => {
-    const { container, getByTestId } = render(
-      <UswdsTableTest grouping={true} paginate />
-    );
-    userEvent.selectOptions(getByTestId("select-option"), ["250"]);
-    const tableRecords = container.querySelectorAll("tbody tr");
-    expect(tableRecords.length).toEqual(data.length);
-  });
-
   test("selects 2nd page and tests total rows that should show  ", () => {
-    const { container, getByTestId } = render(
+    const { container } = render(
       <UswdsTableTest grouping={true} paginate />
     );
     const secondPage = container.querySelectorAll("li button");

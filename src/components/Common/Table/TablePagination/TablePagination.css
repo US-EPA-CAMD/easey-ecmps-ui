@@ -1,4 +1,28 @@
-.paginationTabs {
+
+.pagination{
+  float:right;
+}
+.totalDisplay{
   display: inline-block;
-  float: right;
+  font-style: italic;
+}
+.page-link{
+  border:0;
+  color:gray;
+}
+li.paginate_button > button.page-link{
+  border: 0px;
+  color:gray; 
+  border-radius: 50%;
+  outline:none;
+  margin: 2px;
+}
+
+.paginate_button.active button.page-link{
+background-color: gray;
+color:white;
+
+}
+.page-item-next:hover,.page-item-previous:hover{
+  text-decoration: underline;
 }
