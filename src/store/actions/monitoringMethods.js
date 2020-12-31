@@ -31,9 +31,10 @@ export function loadMonitoringMatsMethodsSuccess(monitoringMatsMethods) {
   };
 }
 
+
 export function loadMonitoringMatsMethods(locationId) {
   return (dispatch) => {
-    dispatch(beginMonitoringMatsMethodsApiCall());
+    beginMonitoringMatsMethodsApiCall();
     return mpApi
       .getMonitoringMatsMethods(locationId)
       .then((res) => {

@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import HeaderInfo from "./HeaderInfo/HeaderInfo";
 import AccordionItemTitle from "./AccordionItemTitle/AccordionItemTitle";
 import "./MonitoringPlanTab.css";
 import { Accordion } from "@trussworks/react-uswds";
 import DataTableMethod from "./Sections/Methods/DataTableMethod";
+import DataTableMats from "./Sections/MATS/DataTableMats";
 const MonitoringPlanTabRender = ({ facility, monitoringPlans }) => {
   const [locationSelect, setLocationSelect] = useState(0);
-
+  const [matsTableFlag, setMatsTableFlag] = useState(false);
   const sections = [
     { name: "Monitoring Methods" },
     { name: "Location Attributes" },
@@ -24,26 +25,36 @@ const MonitoringPlanTabRender = ({ facility, monitoringPlans }) => {
     setLocationSelect(location);
   };
 
+  const matsTableHandler = (flag) => {
+    setMatsTableFlag(flag);
+
+  };
+
+  let supItems = [];
+
   const methodItems = [
     {
       // title in the comp name should change when selectbox handler is changed as well
       title: <AccordionItemTitle title="Methods" />,
-      expanded: true,
+      expanded: !matsTableFlag,
       id: "5",
-      content: <DataTableMethod locationSelect={locationSelect} />,
-      handleToggle: true,
+      content: (
+        <DataTableMethod
+          matsTableHandler={matsTableHandler}
+          locationSelect={locationSelect}
+        />
+      ),
     },
   ];
 
-  const supItems = [
-    {
-      // title in the comp name should change when selectbox handler is changed as well
+  if (matsTableFlag) {
+    supItems.push({
       title: <AccordionItemTitle title="Supplemental Methods" />,
-      expanded: false,
+      expanded: true,
       id: "7",
-      // content: ,
-    },
-  ];
+      content: <DataTableMats locationSelect={locationSelect} />,
+    });
+  }
 
   return (
     <div className="selectedMPTab">
@@ -57,8 +68,7 @@ const MonitoringPlanTabRender = ({ facility, monitoringPlans }) => {
       <hr width="100%" align="center" />
       <Accordion bordered={false} items={methodItems} className="accordions" />
       <hr width="100%" align="center" />
-      {/* <AccordionItemTitle title="Supplemental Method" /> */}
-      <Accordion bordered={true} items={supItems} className="accordions" />
+      {matsTableFlag ? <Accordion bordered={true} items={supItems} className="accordions" /> :'' }
       <hr width="100%" align="center" />
     </div>
   );

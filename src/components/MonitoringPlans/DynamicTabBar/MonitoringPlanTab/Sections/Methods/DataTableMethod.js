@@ -1,19 +1,25 @@
 import React, { useEffect, useMemo } from "react";
 import { connect } from "react-redux";
-import { loadMonitoringMethods } from "../../../../../../store/actions/monitoringMethods";
+import {
+  loadMonitoringMethods,
+  loadMonitoringMatsMethods,
+} from "../../../../../../store/actions/monitoringMethods";
 import * as fs from "../../../../../../utils/selectors/monitoringPlanMethods";
 import DataTableMethodRender from "./DataTableMethodRender";
 
 export const DataTableMethod = ({
   monitoringMethods,
+  monitoringMatsMethods,
   loadMonitoringMethodsData,
   loading,
-  locationSelect
-
+  locationSelect,
+  loadMonitoringMatsMethodsData,
+  matsTableHandler,
 }) => {
   useEffect(() => {
     if (monitoringMethods.length === 0 || loading === false) {
       loadMonitoringMethodsData(locationSelect);
+      loadMonitoringMatsMethodsData(locationSelect);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect]);
@@ -57,10 +63,20 @@ export const DataTableMethod = ({
     if (monitoringMethods.length > 0 || loading === false) {
       return fs.getMonitoringPlansMethodsTableRecords(monitoringMethods);
     } else {
-      return [{ col2: "Loading list of facilities..." }];
+      return [{ col2: "Loading list of Methods" }];
     }
   }, [loading, monitoringMethods]);
 
+  useMemo(() => {
+    if (matsTableHandler) {
+      if (monitoringMatsMethods.length < 1) {
+        matsTableHandler(false);
+      } else {
+        matsTableHandler(true);
+      }
+    }
+
+  }, [monitoringMatsMethods]);
 
   return (
     <div className="methodTable">
@@ -77,12 +93,16 @@ const mapStateToProps = (state) => {
   return {
     monitoringMethods: state.monitoringMethods.methods,
     loading: state.apiCallsInProgress.monitoringMethods,
+    monitoringMatsMethods: state.monitoringMethods.matsMethods,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadMonitoringMethodsData: (monitoringPlanLocationSelect) => dispatch(loadMonitoringMethods(monitoringPlanLocationSelect)),
+    loadMonitoringMethodsData: (monitoringPlanLocationSelect) =>
+      dispatch(loadMonitoringMethods(monitoringPlanLocationSelect)),
+    loadMonitoringMatsMethodsData: (monitoringPlanLocationSelect) =>
+      dispatch(loadMonitoringMatsMethods(monitoringPlanLocationSelect)),
   };
 };
 

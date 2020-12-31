@@ -27,3 +27,26 @@ function formateStringToDate(date) {
   var output = parts[1] + "/" + parts[2] + "/" + parts[0];
   return output;
 }
+
+export function getMonitoringPlansMatsMethodsTableRecords(data) {
+
+const records = [];
+data.forEach((el) => {
+  const beginDate = el.beginDate
+    ? formateStringToDate(el.beginDate.toString())
+    : "";
+  const beginHour = el.beginHour ? el.beginHour.toString() : "";
+  const endDate = el.endDate
+    ? formateStringToDate(el.endDate.toString())
+    : "";
+  const endHour = el.endHour ? el.endHour.toString() : "";
+  records.push({
+    col1: el.matsMethodParameterCode,
+    col2: el.matsMethodCode,
+    col3: `${beginDate} ${beginHour}`,
+    col4: `${endDate} ${endHour}`,
+  });
+});
+return records;
+}
+

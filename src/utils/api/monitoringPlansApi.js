@@ -19,7 +19,8 @@ export async function getMonitoringMethods(locationId) {
 
 export async function getMonitoringMatsMethods(locationId) {
   return axios
-    .get(`${config.services.monitorPlans.uri}/monitor-locations/${locationId}/matsMethods`)
+    // .get(`${config.services.monitorPlans.uri}/monitor-locations/${locationId}/matsMethods`)
+    .get(`${config.services.monitorPlans.uri}/monitor-locations/${locationId}/Supplementalmethods`)
     .then(handleResponse)
     .catch(handleError);
 }
