@@ -41,8 +41,8 @@ data.forEach((el) => {
     : "";
   const endHour = el.endHour ? el.endHour.toString() : "";
   records.push({
-    col1: el.matsMethodCode,
-    col2: el.matsMethodParameterCode,
+    col1: el.matsMethodParameterCode,
+    col2: el.matsMethodCode,
     col3: `${beginDate} ${beginHour}`,
     col4: `${endDate} ${endHour}`,
   });
