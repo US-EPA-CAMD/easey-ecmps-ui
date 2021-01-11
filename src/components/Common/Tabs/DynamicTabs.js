@@ -3,18 +3,28 @@ import Tabs from "./Tabs";
 import TabPane from "./TabPane";
 import "./DynamicTabs.css";
 
-const DynamicTabs = ({ tabsProps }) => {
+const DynamicTabs = ({
+  tabsProps,
+  // addDynamicTabHandler,
+  // removeDynamicTabHandler,
+  // dynamicFacilityTabs,
+}) => {
   const [tabs, setTabs] = useState(tabsProps);
 
   const addTabsHandler = (newTabs) => {
     newTabs.forEach((t) => {
-      tabs.push(t);
+      // if (!dynamicFacilityTabs.includes(t.title)) {
+        if(!tabs.some(facility => facility.title === t.title)){
+        // addDynamicTabHandler(t.title);
+        tabs.push(t);
+      }
     });
     setTabs([...tabs]);
   };
 
   const removeTabsHandler = (index) => {
     tabs.splice(index, 1);
+    // removeDynamicTabHandler(index);
     setTabs([...tabs]);
   };
 
