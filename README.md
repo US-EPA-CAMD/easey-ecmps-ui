@@ -69,3 +69,7 @@ For example, running the start:staging command from above would load environment
 * .env
 
 Reference - https://www.robertcooper.me/front-end-javascript-environment-variables
+
+## License & Contributing
+​
+This project is licensed under the MIT License. We encourage you to read this project’s [License](LICENSE), [Contributing Guidelines](CONTRIBUTING.md), and [Code of Conduct](CODE_OF_CONDUCT.md).
