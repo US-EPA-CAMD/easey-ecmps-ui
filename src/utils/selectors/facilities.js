@@ -113,7 +113,6 @@ export function getMonitoringPlansTableRecords(facility, filterActive) {
     : facility.monitoringPlans;
   const records = [];
   data.forEach((el) => {
-    console.log(el,'this is data')
     const beginStr = el.beginYearQuarter.toString();
     const endStr = el.beginYearQuarter.toString();
     records.push({

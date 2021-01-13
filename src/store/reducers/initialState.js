@@ -10,5 +10,5 @@ export default {
     monitoringPlans: false,
     monitoringMethods: false
   },
-  dynamicFacilityTabs: [],
+  openedFacilityTabs: [],
 };

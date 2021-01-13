@@ -10,6 +10,7 @@ export const DataTable = ({
   loadFacilitiesData,
   loading,
   addTabs,
+  openedFacilityTabs
 }) => {
   useEffect(() => {
     if (facilities.length === 0) {
@@ -66,6 +67,7 @@ export const DataTable = ({
         columns={columns}
         data={data}
         selectedRowHandler={selectedRowHandler}
+        openedFacilityTabs={openedFacilityTabs}
       />
     </div>
   );
@@ -75,6 +77,7 @@ const mapStateToProps = (state) => {
   return {
     facilities: state.facilities,
     loading: state.apiCallsInProgress.facilities,
+    openedFacilityTabs: state.openedFacilityTabs,
   };
 };
 
