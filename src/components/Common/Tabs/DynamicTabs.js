@@ -1,22 +1,22 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import Tabs from "./Tabs";
 import TabPane from "./TabPane";
 import "./DynamicTabs.css";
+import {addFacilityTab, removeFacilityTab} from "../../../store/actions/dynamicFacilityTab";
 
-const DynamicTabs = ({
+export const DynamicTabs = ({
   tabsProps,
-  // addDynamicTabHandler,
-  // removeDynamicTabHandler,
-  // dynamicFacilityTabs,
+  removeFacility,
+  addFacility
 }) => {
   const [tabs, setTabs] = useState(tabsProps);
 
   const addTabsHandler = (newTabs) => {
     newTabs.forEach((t) => {
-      // if (!dynamicFacilityTabs.includes(t.title)) {
         if(!tabs.some(facility => facility.title === t.title)){
-        // addDynamicTabHandler(t.title);
-        tabs.push(t);
+          tabs.push(t);
+          addFacility(t.title);
       }
     });
     setTabs([...tabs]);
@@ -24,7 +24,7 @@ const DynamicTabs = ({
 
   const removeTabsHandler = (index) => {
     tabs.splice(index, 1);
-    // removeDynamicTabHandler(index);
+    removeFacility(index);
     setTabs([...tabs]);
   };
 
@@ -44,4 +44,11 @@ const DynamicTabs = ({
   );
 };
 
-export default DynamicTabs;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    removeFacility: (facility) => dispatch(removeFacilityTab(facility)),
+    addFacility: (facility) => dispatch(addFacilityTab(facility)),
+  };
+};
+
+export default  connect(null, mapDispatchToProps)(DynamicTabs);

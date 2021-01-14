@@ -1,17 +1,15 @@
 
 import * as types from "./actionTypes";
 
-export function addDynamicTabs(facility) {
+export function addFacilityTab(facility) {
   return {
-    type: types.ADD_DYNAMIC_TAB,
+    type: types.ADD_FACILITY_TAB,
     facility,
   };
 }
-export function removeDynamicTabs(facility) {
+export function removeFacilityTab(facility) {
   return {
-    type: types.REMOVE_DYNAMIC_TAB,
+    type: types.REMOVE_FACILITY_TAB,
     facility,
   };
-}
-
 }

@@ -2,28 +2,8 @@ import React from "react";
 import "./MonitoringPlanHome.css";
 import DynamicTabs from "../Common/Tabs/DynamicTabs";
 import DataTable from "./DynamicTabBar/SelectFacilitiesTab/DataTable";
-// import { connect } from "react-redux";
 
-// import {
-//   // addDynamicTabs,
-//   // removeDynamicTabs,
-//   // checkDynamicTabs,
-// } from "../../store/actions/dynamicFacilityTab";
-
-const MonitoringPlanHome = ({
-  dynamicFacilityTabs,
-  addDynamicTab,
-  removeDynamicTab,
-  checkDynamicTab,
-}) => {
-
-  // const addDynamicTabHandler = (code) => {
-  //   addDynamicTab(code);
-  // };
-
-  // const removeDynamicTabHandler = (code) => {
-  //   removeDynamicTab(code);
-  // };
+const MonitoringPlanHome = () => {
 
   return (
     <div className="home-container">
@@ -40,27 +20,10 @@ const MonitoringPlanHome = ({
               component: <DataTable />,
             },
           ]}
-          // addDynamicTabHandler={addDynamicTabHandler}
-          // removeDynamicTabHandler={removeDynamicTabHandler}
-          // dynamicFacilityTabs={dynamicFacilityTabs}
         />
       </div>
     </div>
   );
 };
 
-// const mapStateToProps = (state) => {
-//   return {
-//     dynamicFacilityTabs: state.dynamicFacilityTabs,
-//   };
-// };
-
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     removeDynamicTab: (facility) =>
-//       dispatch(removeDynamicTabs(facility)),
-//     addDynamicTab: (facility) => dispatch(addDynamicTabs(facility)),
-//   };
-// };
-// export default connect(mapStateToProps, mapDispatchToProps)(MonitoringPlanHome);
 export default MonitoringPlanHome;

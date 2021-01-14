@@ -79,16 +79,16 @@ const TableBody = ({
                   }`}
                 >
                   {" "}
-                  <button
+                  <button disabled={viewDataColumn.includes(row.cells[1].value)?true:false}
                     className="tableButton"
                     // onClick={() => handleDataSelector(row.cells)}
                   >
                     {" "}
-                    <img src={require("./images/openTab.jpg")} />Open Tab
+                    <img src={require("./images/openTab.jpg")} className={viewDataColumn.includes(row.cells[1].value)?"hide":"show"} />Open Tab
                   </button>
                 </td>
               ) : (
-                ""
+                null
               )}
             </tr>
           );

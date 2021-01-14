@@ -1,6 +1,7 @@
 import React from "react";
-import DynamicTabs from "./DynamicTabs";
+import {DynamicTabs} from "./DynamicTabs";
 import { render, fireEvent, screen } from "@testing-library/react";
+import {addFacilityTab, removeFacilityTab} from "../../../store/actions/dynamicFacilityTab";
 
 class Welcome extends React.Component {
   clickHandler = () => {
@@ -31,6 +32,8 @@ describe("testing a reusable Dynamic Tabs component", () => {
   beforeEach(() => {
     render(
       <DynamicTabs
+        addFacility={addFacilityTab}
+        removeFacility={removeFacilityTab}
         tabsProps={[
           {
             title: "Welcome",
