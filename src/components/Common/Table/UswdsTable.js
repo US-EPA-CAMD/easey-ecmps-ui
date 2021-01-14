@@ -12,7 +12,7 @@ import TableBody from "./TableBody";
 import TablePagination from "./TablePagination/TablePagination";
 import TablePaginationFilter from "./TablePaginationFilter/TablePaginationFilter";
 import TableSearch from "./TableSearch/TableSearch";
-import { EditableCell, setEditable } from './TableCell';
+import { EditableCell, setEditable } from "./TableCell";
 import "./UswdsTable.css";
 
 // if showEntries is not supplied, by default will have show entries of only [100 and all data]
@@ -22,17 +22,17 @@ const UswdsTable = ({
   columns,
   data,
   bordered = false,
-  caption,      
-  paginate,     // enables pagination bar under data table
-  search,       // enables search bar   
-  showEntries,  // shows entries drop down per page
-  disabledColumnFilters,  // disable specific columns via using array [1,2] -> disables columns 2 and 3 
-  selectedRowHandler,   // makes a row clickable without the need of a visable button 
-  dataSelector,   // a specific filter header value that we want to return via selectedRowHandler/viewDataHandler. by default it is the first column header
-  defaultSelect,  // 
-  editable,       // makes data table editable
+  caption,
+  paginate, // enables pagination bar under data table
+  search, // enables search bar
+  showEntries, // shows entries drop down per page
+  disabledColumnFilters, // disable specific columns via using array [1,2] -> disables columns 2 and 3
+  selectedRowHandler, // makes a row clickable without the need of a visable button
+  dataSelector, // a specific filter header value that we want to return via selectedRowHandler/viewDataHandler. by default it is the first column header
+  defaultSelect, //
+  editable, // makes data table editable
   viewDataColumn, // creates a view /open all tabs column
-  viewDataHandler // handles the view/ open all tabs column 
+  viewDataHandler, // handles the view/ open all tabs column
 }) => {
   if (disabledColumnFilters) {
     if (disabledColumnFilters.length >= 1) {
@@ -60,9 +60,8 @@ const UswdsTable = ({
         return row;
       })
     );
-    // use below to retreive/manipulate updated data 
+    // use below to retreive/manipulate updated data
     data = editableData;
-
   };
 
   const defaultColumn = {
@@ -119,42 +118,39 @@ const UswdsTable = ({
 
   return (
     <div className="container">
-      <div className="filterAndSearch">
-        <h2 className='tableTitle'> {title}</h2>
-        {(paginate) ? (
-          <span className="filter">
-            <TablePaginationFilter
-              setPageSize={setPageSize}
-              pageSize={pageSize}
-              paginationFiltering={
-                showEntries ? [...showEntries, rows.length] : [100, rows.length]
-              }
-            />
-          </span>
-        ) : (
-          ""
-        )}
-        {/* {(title && !(paginate)) ? (
-          <span className="filter">
-            <TablePaginationFilter
-              title={title}
-            />
-          </span>
-        ) : (
-          ""
-        )} */}
+      <div className="tableHead">
+        <h2 className="tableTitle"> {title}</h2>
+        <div className="filterAndSearch">
+          {paginate ? (
+            <span className="filter">
+              <TablePaginationFilter
+                setPageSize={setPageSize}
+                pageSize={pageSize}
+                paginationFiltering={
+                  showEntries
+                    ? [...showEntries, rows.length]
+                    : [100, rows.length]
+                }
+              />
+            </span>
+          ) : (
+            ""
+          )}
 
-
-        {search ? (
-          <div className="search">
-            <TableSearch title={title} setGlobalFilter={setGlobalFilter} />
-          </div>
-        ) : (
-          ""
-        )}
+          {search ? (
+            <div className="search">
+              <TableSearch title={title} setGlobalFilter={setGlobalFilter} />
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
       <table className={variant} {...getTableProps()}>
-        <TableHeader headerGroups={headerGroups} viewDataColumn={viewDataColumn} />
+        <TableHeader
+          headerGroups={headerGroups}
+          viewDataColumn={viewDataColumn}
+        />
         <TableBody
           selectedRowHandler={selectedRowHandler}
           dataSelector={dataSelector}

@@ -22,12 +22,12 @@ export const DataTable = ({
   const columns = useMemo(
     () => [
       {
-        Header: "Oris Code",
+        Header: "ORIS",
         accessor: "col1",
         width: "240px",
       },
       {
-        Header: "Facility Name",
+        Header: "Facility",
         accessor: "col2",
         width: "610px",
       },

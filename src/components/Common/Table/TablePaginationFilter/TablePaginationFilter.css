@@ -2,14 +2,16 @@
   color: #ffffff;
   background-color: gray;
   text-align: center;
-  width: 70px;
+  width: 60px;
   border: 0px;
-  height: auto;
+  height: 40px;
   padding-left: 0px !important;
   padding-right: 0px !important;
   min-width: 50px;
   font-size: 15px;
   margin: 0px;
+  overflow: auto;
+  border-radius: 0%;
 }
 .filterSelect {
   display: flex;
@@ -30,10 +32,5 @@
   min-width: 50px ;
   width: 75px ;
   margin: 0px;
-}
-#input-button {
-  min-width: 50px ;
-  padding: 15px;
-  margin: 0px;
-  border-radius: 0%;
+height: 40px;
 }

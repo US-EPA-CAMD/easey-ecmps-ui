@@ -25,7 +25,7 @@ const TableHeader = ({ headerGroups, viewDataColumn }) => (
           </th>
         ))}
         {viewDataColumn?(
-          <th width={headerGroups[0].headers[0].width}>Open All Tabs</th>
+          <th width={headerGroups[0].headers[0].width}>Actions</th>
         ):(
           null
         )}

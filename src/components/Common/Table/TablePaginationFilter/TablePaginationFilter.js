@@ -33,7 +33,7 @@ const TablePaginationFilter = ({
   }
 
   return (
-    <div className="filter">
+    <div >
       <div>
         <Label className="filterLabel" htmlFor="input-dropdown">
           Rows for table:

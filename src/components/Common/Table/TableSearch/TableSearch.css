@@ -1,11 +1,37 @@
 .searchBox{
     border: solid 1px;
-    /* display: inline-block; */
+    overflow: auto;
+    margin:0;
+    padding:0;
+
 }
-.searchBar{
-    padding-right: 5px;
-    display: inline-block;
-}
+
 form {
     display:inline-block;
 }
+::-webkit-input-placeholder {
+    font-style: italic;
+ }
+ :-moz-placeholder {
+    font-style: italic;  
+ }
+ ::-moz-placeholder {
+    font-style: italic;  
+ }
+ :-ms-input-placeholder {  
+    font-style: italic; 
+ }
+ .filterBTN {
+    overflow: auto;
+    color: #ffffff;
+    background-color: gray;
+    text-align: center;
+    width: 60px;
+    height: max-content;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    min-width: 50px;
+    font-size: 15px;
+    
+    border-radius: 0%;
+  }

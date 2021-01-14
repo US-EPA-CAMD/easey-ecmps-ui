@@ -84,7 +84,7 @@ const TableBody = ({
                     // onClick={() => handleDataSelector(row.cells)}
                   >
                     {" "}
-                    <img src={require("./images/openTab.jpg")} className={viewDataColumn.includes(row.cells[1].value)?"hide":"show"} />Open Tab
+                    <img src={require("./images/openTab.jpg")} className={viewDataColumn.includes(row.cells[1].value)?"hide":"show"} />Open
                   </button>
                 </td>
               ) : (
