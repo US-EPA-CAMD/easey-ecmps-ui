@@ -24,9 +24,7 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
 
------------------------------------------------------------------------------------------
-
-# Environment Variables
+## Environment Variables
 Environment variables need to be prefixed by REACT_APP_ in order for the variables to be accessible on the process.env object in JavaScript.
 
 ### Specifying Environments
@@ -68,7 +66,7 @@ For example, running the start:staging command from above would load environment
 * .env.local
 * .env
 
-Reference - https://www.robertcooper.me/front-end-javascript-environment-variables
+[JavaScript environment variables reference](https://www.robertcooper.me/front-end-javascript-environment-variables)
 
 ## License & Contributing
 ​
