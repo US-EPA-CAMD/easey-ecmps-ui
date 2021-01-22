@@ -32,7 +32,8 @@
   "scripts": {
     "start": "concurrently \"react-scripts start\" \"gulp watch\"",
     "build": "react-scripts build",
-    "test": "react-scripts test"
+    "test": "react-scripts test",
+    "test:co": "react-scripts test --coverage"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -64,5 +65,23 @@
     "sass": "^1.26.10",
     "uswds": "^2.8.0",
     "uswds-gulp": "github:uswds/uswds-gulp"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!node_modules/",
+      "!src/App.js",
+      "!src/config.js",
+      "!src/serviceWorker.js",
+      "!src/index.js",
+      "!src/store/configureStore.dev.js",
+      "!src/store/actions/actionTypes.js",
+      "!src/store/reducers/index.js",
+      "!src/store/reducers/initialState.js",
+      "!src/utils/api/axiosSetup.js",
+      "!src/utils/api/setupTests.js",
+      "!src/utils/api/apiUtils.js",
+      "!src/utils/remoteLogging.js"
+    ]
   }
 }
