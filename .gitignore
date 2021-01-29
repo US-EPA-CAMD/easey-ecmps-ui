@@ -6,9 +6,6 @@
 /.pnp
 .pnp.js
 
-# testing
-/coverage
-
 # production
 /build
 /starter-kit/app/build
@@ -40,6 +37,7 @@ lerna-debug.log*
 # Tests
 /coverage
 /.nyc_output
+test-report.xml
 
 # IDEs and editors
 /.idea
