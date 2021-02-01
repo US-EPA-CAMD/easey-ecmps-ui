@@ -48,6 +48,7 @@ const TableBody = ({
           prepareRow(row);
           return (
             <tr
+              data-testid={"tableRow"+i}
               tabIndex={1}
               key={row.id}
               {...row.getRowProps()}

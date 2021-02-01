@@ -8,7 +8,8 @@ export default {
   apiCallsInProgress: {
     facilities: false,
     monitoringPlans: false,
-    monitoringMethods: false
+    monitoringMethods: false,
+    monitoringMatsMethods: false
   },
   openedFacilityTabs: [],
 };

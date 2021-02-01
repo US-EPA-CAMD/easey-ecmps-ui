@@ -6,9 +6,13 @@ import "@testing-library/jest-dom/extend-expect";
 describe("testing generic uswds table component", () => {
   let columns = [],
     columnsGrouping = [],
-    data = [];
+    data = [],
+    defaultRowSelected = false;
+  const selectedRowHandler = () =>{
+    defaultRowSelected = true;
+  };
 
-  const UswdsTableTest = ({ grouping, paginate }) => {
+  const UswdsTableTest = ({ grouping, paginate, editable=false }) => {
     data = useMemo(
       () => [
         {
@@ -73,7 +77,12 @@ describe("testing generic uswds table component", () => {
         columns={grouping ? columnsGrouping : columns}
         data={data}
         paginate={paginate}
-        //showEntries={[100,250,500]}
+        showEntries={[3,1]}
+        search
+        viewDataColumn = {[]}
+        selectedRowHandler={selectedRowHandler}
+        defaultSelect={true}
+        editable={editable}
       />
     );
   };
@@ -81,7 +90,7 @@ describe("testing generic uswds table component", () => {
   test("table header renders all columns", () => {
     const { container } = render(<UswdsTableTest grouping={false} />);
     const headerColumns = container.querySelectorAll("thead tr th");
-    expect(headerColumns.length).toEqual(columns.length);
+    expect(headerColumns.length).toEqual(columns.length + 1);
   });
   test("table header supports column groupings", () => {
     const { container } = render(<UswdsTableTest grouping={true} />);
@@ -89,9 +98,12 @@ describe("testing generic uswds table component", () => {
     expect(headerGroupings.length).toEqual(columnsGrouping.length);
   });
   test("table body renders all rows", () => {
-    const { container } = render(<UswdsTableTest grouping={false} />);
+    const { container, getByTestId } = render(<UswdsTableTest grouping={false} />);
     const tableRecords = container.querySelectorAll("tbody tr");
     expect(tableRecords.length).toEqual(data.length);
+    const secondRow = getByTestId("tableRow2");
+    fireEvent.click(secondRow);
+    expect(defaultRowSelected).toBe(true);
   });
 
   test("table is sorted by id in asc by default ", () => {
@@ -107,5 +119,13 @@ describe("testing generic uswds table component", () => {
     fireEvent.click(headerColumns[0]);
     const tableRecords = container.querySelectorAll("tbody td div");
     expect(tableRecords[0].innerHTML.split(" ")[0]).toEqual(data[2].col1);
+  });
+
+  test("table should be editable ", () => {
+    const { container } = render(<UswdsTableTest grouping={false} editable={true}/>);
+    const firstRowCells = container.querySelectorAll("tbody td .editableCell");
+    expect(firstRowCells.length).not.toBeNull();
+    // fireEvent.change(firstRowCells[0], { target: { value: 'BERRY' } });
+    // expect(firstRowCells[0].value).toBe("BERRY");
   });
 });

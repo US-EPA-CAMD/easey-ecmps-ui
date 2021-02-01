@@ -27,6 +27,7 @@ const EditableCell = ({
   // returns a cell as input if the table is editable
   return editableCell ? (
     <input
+      className="editableCell"
       value={value || ""}
       style={id == "col1" ? { width: "30px" } : { width: "90px" }}
       onChange={onChange}

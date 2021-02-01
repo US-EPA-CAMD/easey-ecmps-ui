@@ -8,7 +8,7 @@ import Location from "./Location/Location";
 import ContactsData from "./Contacts/ContactsData";
 import * as fs from "../../utils/selectors/facilities";
 
-const DetailTabs = ({ facilities, orisCode }) => {
+export const DetailTabs = ({ facilities, orisCode, showTabs=true }) => {
   const [facility, setFacility] = useState(
     fs.getSelectedFacility(orisCode, facilities)
   );
@@ -22,6 +22,7 @@ const DetailTabs = ({ facilities, orisCode }) => {
         <h3>Selected Facility: {facility ? facility.name : ""}</h3>
         <h4>ORIS Code: {orisCode}</h4>
       </div>
+      {showTabs?
       <Tabs initTab="Location">
         <TabPane title="Location">
           <Location facility={facility} />
@@ -35,7 +36,7 @@ const DetailTabs = ({ facilities, orisCode }) => {
         <TabPane title="Monitoring Plans">
           <MonitoringPlanDataTable facility={facility} />
         </TabPane>
-      </Tabs>
+      </Tabs>:null}
     </div>
   );
 };

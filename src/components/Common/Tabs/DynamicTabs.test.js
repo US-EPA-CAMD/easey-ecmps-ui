@@ -29,29 +29,33 @@ class GoodBye extends React.Component {
 }
 
 describe("testing a reusable Dynamic Tabs component", () => {
-  beforeEach(() => {
-    render(
-      <DynamicTabs
-        addFacility={addFacilityTab}
-        removeFacility={removeFacilityTab}
-        tabsProps={[
-          {
-            title: "Welcome",
-            component: <Welcome name="Addis" />,
-          },
-        ]}
-      />
-    );
-  });
+  const dynamicTabs = 
+  <DynamicTabs
+    addFacility={addFacilityTab}
+    removeFacility={removeFacilityTab}
+    tabsProps={[
+      {
+        title: "Welcome",
+        component: <Welcome name="Addis" />,
+      },
+    ]}
+  />
+
   test("renders the inital tab and its content", () => {
+    render(dynamicTabs);
     const tabs = screen.getAllByRole("button");
     const initTabContent = screen.getByText("Hello, Addis");
     expect(tabs).toHaveLength(1);
     expect(initTabContent).not.toBeUndefined();
   });
-  test("renders other tabs on a click event of Add Tab from with-in first tab component", () => {
+  test("renders other tabs on a click event of Add Tab and removes the opened tab", () => {
+    const {container} = render(dynamicTabs);
     fireEvent.click(screen.getByText("Add Tab"));
-    const tabs = screen.getAllByRole("button");
+    let tabs = screen.getAllByRole("button");
     expect(tabs).toHaveLength(2);
+    const closeTabIcon = container.querySelector(".close-icon");
+    fireEvent.click(closeTabIcon);
+    tabs = screen.getAllByRole("button");
+    expect(tabs).toHaveLength(1);
   });
 });

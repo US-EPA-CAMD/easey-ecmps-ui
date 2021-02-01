@@ -653,9 +653,15 @@ describe("testing generic uswds table component with pagination", () => {
     const { container } = render(
       <UswdsTableTest grouping={true} paginate />
     );
-    const secondPage = container.querySelectorAll("li button");
-    fireEvent.click(secondPage[2]);
+    const nodeList = container.querySelectorAll("li button");
+    fireEvent.click(nodeList[2]);
     const tableRecords = container.querySelectorAll("tbody tr");
     expect(tableRecords.length).toEqual(data.length - 100);
+    fireEvent.click(nodeList[0]);
+    const updatedRecords = container.querySelectorAll("tbody tr");
+    expect(updatedRecords.length).toEqual(100);
+    fireEvent.click(nodeList[nodeList.length-1]);
+    const updatedRecords2 = container.querySelectorAll("tbody tr");
+    expect(updatedRecords2.length).toEqual(data.length - 100);
   });
 });
