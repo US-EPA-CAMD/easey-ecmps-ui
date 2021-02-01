@@ -33,7 +33,11 @@
     "start": "concurrently \"react-scripts start\" \"gulp watch\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
+<<<<<<< HEAD
     "test:co": "react-scripts test --coverage"
+=======
+    "test:cov": "react-scripts test --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter"
+>>>>>>> 065046f3d9d899b5a7ef8639da906e93ea502a09
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -59,6 +63,7 @@
     "gulp-replace": "^1.0.0",
     "gulp-sass": "^4.1.0",
     "gulp-sourcemaps": "^2.6.5",
+    "jest-sonar-reporter": "^2.0.0",
     "postcss-csso": "^4.0.0",
     "react-paginate": "^6.5.0",
     "react-test-renderer": "^16.13.1",
