@@ -3,7 +3,7 @@ import UswdsTable from "../UswdsTable";
 import { render, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 
-describe("testing generic uswds table component", () => {
+describe("testing search/filter feature of generic uswds table component", () => {
   let columns = [],
     columnsGrouping = [],
     data = [];
@@ -83,10 +83,13 @@ describe("testing generic uswds table component", () => {
     expect(searchBox.length).toEqual(1);
   });
 
-  test("table doesnt renders search function", () => {
-    const { container } = render(<UswdsTableTest grouping={false} />);
-    const searchBox = container.querySelectorAll("form .searchBox");
-    expect(searchBox.length).toEqual(0);
+  test("should filter data table based on search input text", () => {
+    const { container, getByLabelText, getByText } = render(<UswdsTableTest grouping={false} search/>);
+    const searchBox = getByLabelText(/Filter by keyword:/i);
+    fireEvent.change(searchBox, { target: { value: 'World' } });
+    fireEvent.click(getByText('Filter'));
+    const tableRecords = container.querySelectorAll("tbody tr");
+    expect(tableRecords.length).toEqual(1);
   });
 });
 

@@ -2064,5 +2064,8 @@ describe("testing Location component", () => {
     expect(allFacilitiesRadioBtn.checked).toBe(true);
     const mapMarkers = screen.getAllByRole("location-map-marker");
     expect(mapMarkers).toHaveLength(2);
+    const thisFacility = getByLabelText("This Facility");
+    fireEvent.click(thisFacility);
+    expect(thisFacility.checked).toBe(true);
   });
 });

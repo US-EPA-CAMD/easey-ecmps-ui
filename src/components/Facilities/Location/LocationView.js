@@ -1,5 +1,6 @@
 import React from "react";
-import { Map, Marker, Popup, TileLayer } from "react-leaflet";
+//import { Map, Marker, Popup, TileLayer } from "react-leaflet";
+import * as leaflet from "react-leaflet";
 import "./Location.css";
 import { Radio } from "@trussworks/react-uswds";
 
@@ -30,17 +31,18 @@ const LocationView = ({
           <p>{location.region}</p>
         </div>
       </div>
-      <Map
+      <leaflet.Map
         center={[location.latitude, location.longitude]}
         zoom={zoomTo === "thisFacility" ? 12 : 5}
       >
-        <TileLayer
+        <leaflet.TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
         {zoomTo === "thisFacility" && (
           <div role="location-map-marker">
-            <Marker
+            <leaflet.Marker
+              data-testid="selected-facility-marker"
               position={[location.latitude, location.longitude]}
               onClick={() => {
                 setActiveFacility(location);
@@ -51,7 +53,7 @@ const LocationView = ({
 
         {allLocations.map((loc, i) => (
           <div role="location-map-marker" key={i}>
-            <Marker
+            <leaflet.Marker
               data-testid="location-map-marker"
               key={i}
               position={[loc.latitude, loc.longitude]}
@@ -63,7 +65,8 @@ const LocationView = ({
         ))}
 
         {activeFacility && (
-          <Popup
+          <leaflet.Popup
+            className="tooltip-popup"
             position={[activeFacility.latitude, activeFacility.longitude]}
             onClose={() => {
               setActiveFacility(null);
@@ -91,7 +94,7 @@ const LocationView = ({
                 >
                   Show
                 </button>
-                <ul style={{ display: showMPDetail ? "block" : "none" }}>
+                <ul className="mp-detail-list" style={{ display: showMPDetail ? "block" : "none" }}>
                   {activeFacility.activeMonitoringPlans.map((d, i) => (
                     <li key={i}>
                       <a href="#"> {d}</a>
@@ -100,9 +103,9 @@ const LocationView = ({
                 </ul>
               </li>
             </ul>
-          </Popup>
+          </leaflet.Popup>
         )}
-      </Map>
+      </leaflet.Map>
       <div id="mapOptions">
         <h4>Map Options</h4>
         <span>Zoom to:</span>

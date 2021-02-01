@@ -62,9 +62,9 @@ const monitoringMatsMethods = [
 
   describe("Async Actions", () => {
     const mock = new MockAdapter(axios);
-    afterEach(() => {
-      mock.restore();
-    });
+    // beforeEach(() => {
+    //   mock.restore();
+    // });
     const locationId = "8";
 
     describe("Load monitoring-methods Thunk", () => {
@@ -82,20 +82,20 @@ const monitoringMatsMethods = [
           expect(store.getActions()).toEqual(expectedActions);
         });
       });
-      // test("should create BEGIN_MONITORING_MATSMETHODS_API_CALL and LOAD_MONITORING_MATSMETHODS_SUCCESS when loading monitoring supplemental mats methods", () => {
-      //   mock
-      //     .onGet(`${config.services.monitorPlans.uri}/monitor-locations/${locationId}/matsMethods`)
-      //     .reply(200, monitoringMatsMethods);
-      //   const expectedActions = [
-      //     { type: types.BEGIN_MONITORING_MATSMETHODS_API_CALL },
-      //     { type: types.LOAD_MONITORING_MATSMETHODS_SUCCESS, monitoringMatsMethods },
-      //   ];
+      test("should create BEGIN_MONITORING_MATSMETHODS_API_CALL and LOAD_MONITORING_MATSMETHODS_SUCCESS when loading monitoring supplemental mats methods", () => {
+        mock
+          .onGet(`${config.services.monitorPlans.uri}/monitor-locations/${locationId}/Supplemental-methods`)
+          .reply(200, monitoringMatsMethods);
+        const expectedActions = [
+          { type: types.BEGIN_MONITORING_MATSMETHODS_API_CALL },
+          { type: types.LOAD_MONITORING_MATSMETHODS_SUCCESS, monitoringMatsMethods },
+        ];
 
-      //   const store = mockStore({ monitoringMatsMethods: [] });
-      //   return store.dispatch(loadMonitoringMatsMethods(locationId)).then(() => {
-      //     expect(store.getActions()).toEqual(expectedActions);
-      //   });
-      // });
+        const store = mockStore({ monitoringMatsMethods: [] });
+        return store.dispatch(loadMonitoringMatsMethods(locationId)).then(() => {
+          expect(store.getActions()).toEqual(expectedActions);
+        });
+      });
     });
   });
 

@@ -1,11 +1,13 @@
 import * as fs from "./monitoringPlanMethods";
 
-describe("testing fetch wrapper monitoring plan data selectors", () => {
-  let selectedMonitoringPlan;
-  let viewMonitoringPlan;
+describe("testing monitoring plan data selectors", () => {
+  let selectedMonitoringMethod;
+  let monitoringMethdsTableRecods;
+  let selectedMonitoringMatsMethod;
+  let monitoringMatsMethdsTableRecods;
 
   beforeAll(() => {
-    selectedMonitoringPlan = [
+    selectedMonitoringMethod = [
       {
         beginDate: "2019-07-01",
         beginHour: "0",
@@ -19,7 +21,7 @@ describe("testing fetch wrapper monitoring plan data selectors", () => {
       },
     ];
 
-    viewMonitoringPlan = [
+    monitoringMethdsTableRecods = [
       {
         col1: "HI",
         col2: "AD",
@@ -29,10 +31,38 @@ describe("testing fetch wrapper monitoring plan data selectors", () => {
         col6: " ",
       },
     ];
+
+    selectedMonitoringMatsMethod = [
+      {
+        "id": "TAG182357-8F800321D1384A86BA068C39281AF76F",
+        "matsMethodParameterCode": "HCL",
+        "matsMethodCode": "QST",
+        "beginDate": "2016-04-16",
+        "beginHour": "0",
+        "endDate": null,
+        "endHour": null
+      }
+    ];
+
+    monitoringMatsMethdsTableRecods =  [
+      {
+        col1: "HCL",
+        col2: "QST",
+        col3: "04/16/2016 0",
+        col4: " "
+      },
+    ];
+
   });
-  test("selected monitoring plan data table ", () => {
+  test("should generate data table records for monitoring methods", () => {
     expect(
-      fs.getMonitoringPlansMethodsTableRecords(selectedMonitoringPlan)
-    ).toEqual(viewMonitoringPlan);
+      fs.getMonitoringPlansMethodsTableRecords(selectedMonitoringMethod)
+    ).toEqual(monitoringMethdsTableRecods);
+  });
+
+  test("should generate data table records for monitoring mats methods ", () => {
+    expect(
+      fs.getMonitoringPlansMatsMethodsTableRecords(selectedMonitoringMatsMethod)
+    ).toEqual(monitoringMatsMethdsTableRecods);
   });
 });
