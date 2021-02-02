@@ -23,6 +23,7 @@ const SelectBox = ({ caption, options, selectKey, selectionHandler }) => {
         {caption}
         {": "} <br />
         <select
+        data-testid="select"
           onChange={(e) => handleChange(e)}
           value={(options[selectionState] !== undefined) ?options[selectionState][selectKey]:options[0][selectKey]}
         >

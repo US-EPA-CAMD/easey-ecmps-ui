@@ -5,7 +5,7 @@ import { loadMonitoringPlans } from "../../../../store/actions/monitoringPlans";
 import { connect } from "react-redux";
 import MonitoringPlanTabRender from "./MonitoringPlanTabRender";
 
-const MonitoringPlanTab = ({
+export const MonitoringPlanTab = ({
   orisCode,
   facilities,
   loadFacilitiesData,
