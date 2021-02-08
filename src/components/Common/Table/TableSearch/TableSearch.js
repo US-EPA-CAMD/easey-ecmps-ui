@@ -16,7 +16,7 @@ const TableSearch = ({ setGlobalFilter, title }) => {
       <Label className="filterLabel" htmlFor="input-search">
         Filter by keyword:
       </Label>
-      <div>
+      <div className="filterSearch">
         <Form
           children={
             <input

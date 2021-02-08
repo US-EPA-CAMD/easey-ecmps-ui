@@ -669,7 +669,6 @@
 		border-radius: 0 3px 3px 0;
 		box-sizing: border-box;
 		color: #4aa564;
-		font: 0/0 a;
 		height: 28px;
 		right: 0px;
 		position: absolute;
@@ -754,7 +753,6 @@
 		background: url(https://www.epa.gov/sites/all/themes/epa/img/svg/epa-logo.svg) no-repeat;
 		color: transparent;
 		display: block;
-		font: 0/0 a;
 		height: 31px;
 		text-shadow: none
 	}
@@ -1370,7 +1368,6 @@
 	footer .region-footer .social-menu>li>a {
 		background-size: 26px 26px;
 		color: transparent;
-		font: 0/0 a;
 		height: 26px;
 		text-decoration: none;
 		text-shadow: none;
