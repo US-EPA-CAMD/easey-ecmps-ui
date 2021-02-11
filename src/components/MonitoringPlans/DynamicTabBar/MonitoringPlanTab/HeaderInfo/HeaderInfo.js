@@ -1,37 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./HeaderInfo.css";
 import SelectBox from "./SelectBox/SelectBox";
+import {getActiveConfigurations} from "../../../../../utils/selectors/monitoringConfigurations";
+
 const HeaderInfo = ({
   facility,
   sections,
   monitoringPlans,
   methodLocationHandler,
 }) => {
+  const [configurations, setConfigurations] = useState({list: getActiveConfigurations(monitoringPlans), showInactive:false});
 
   const [configSelect, setConfigSelect] = useState(0);
-  const [sectionSelect, setSectionSelect] = useState(0);
-
-  const [locationSelect, setLocationSelect] = useState(0);
 
   const mpHandler = (index) => {
     setConfigSelect(index);
-    setLocationSelect(0);
-    // setLocationOptions(monitoringPlans[monitoringPlanSelect].locations);
   };
   const mplHandler = (index) => {
     methodLocationHandler(
-      monitoringPlans[configSelect].locations[index]["id"]
+      configurations.list[configSelect].locations[index]["id"]
     );
-    setLocationSelect(index);
   };
   const mpsHandler = (index) => {
-    setSectionSelect(index);
+    console.log(index);
   };
 
-  // let configIndex = monitoringPlans.findIndex((x) => {
-  //   return x.name == monitoringPlanSelect;
-  // });
-  // configIndex = configIndex < 0 ? 0 : configIndex;
+  const checkBoxHandler = (evt) =>{
+    if(evt.target.checked){
+      setConfigurations({...configurations, list:monitoringPlans, showInactive:true});
+      setConfigSelect(0);
+    }
+    else{
+      setConfigurations({...configurations, list: getActiveConfigurations(monitoringPlans), showInactive:false});
+      setConfigSelect(0);
+    }
+  }
+  useEffect(()=>{
+    setConfigurations({list: getActiveConfigurations(monitoringPlans), showInactive:false});
+  },[monitoringPlans]);
 
   return (
     <div className="header">
@@ -43,20 +49,25 @@ const HeaderInfo = ({
         <a href="#/">Reports</a>|<button className="ovalBTN">Evaluate</button>
         <button className="ovalBTN">Submit</button>
       </div>
-      {monitoringPlans.length !== 0 ? (
+      {configurations.list.length !== 0 ? (
         <div className="row">
           <div className="selects column">
-            <SelectBox
-              caption="Configurations"
-              options={monitoringPlans}
-              selectionHandler={mpHandler}
-              selectKey="name"
-            />
+            <div className="configurations-container">
+              <SelectBox
+                caption="Configurations"
+                options={configurations.list}
+                selectionHandler={mpHandler}
+                selectKey="name"
+                optionsGrouping={configurations.showInactive}
+              />
+              <div className="mpSelect showInactive">
+                <input type="checkbox" id="showInactive" name="showInactive" onChange={checkBoxHandler}/>
+                <label htmlFor="showInactive"> Show Inactive</label>
+              </div>
+            </div>
             <SelectBox
               caption="Locations"
-              options={monitoringPlans[configSelect].locations}
-              // options={monitoringPlans[configIndex].locations}
-              //options={monitoringLocationTest}
+              options={configurations.list[configSelect].locations}
               selectionHandler={mplHandler}
               selectKey="name"
             />
