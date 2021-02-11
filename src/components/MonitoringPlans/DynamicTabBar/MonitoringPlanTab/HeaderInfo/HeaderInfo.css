@@ -1,20 +1,18 @@
 .accessories {
   float: right;
-
 }
 .title {
   display: inline-block;
 }
 a {
   padding: 5px;
-  font-weight:bold;
+  font-weight: bold;
   color: gray;
 }
 
 .mpSelect {
   align-items: center;
   padding: 10px;
-  
 }
 
 .selects.column {
@@ -22,23 +20,28 @@ a {
   display: flex;
   position: relative;
   width: 70%;
-  
 }
 .statuses.column {
   padding-right: 50px;
   position: relative;
   right: 0;
   width: 30%;
-  height:auto;
-  
+  height: auto;
 }
-.eval,.submission {
-  font-weight:bold;
+.eval,
+.submission {
+  font-weight: bold;
   display: inline-block;
 }
-.answer{
-  padding:10px;
+.answer {
+  padding: 10px;
   font-size: 15px;
   display: inline-block;
-
+}
+.configurations-container {
+  display: flex;
+  flex-direction: column;
+}
+.showInactive {
+  padding-top: 0px;
 }

@@ -1,6 +1,8 @@
 import React, { useState,useEffect } from "react";
 import "./SelectBox.css";
-const SelectBox = ({ caption, options, selectKey, selectionHandler }) => {
+import {getActiveConfigurations, getInActiveConfigurations} from "../../../../../../utils/selectors/monitoringConfigurations";
+
+const SelectBox = ({ caption, options, selectKey, selectionHandler, optionsGrouping=false }) => {
 
   function getIndex(name) {
     return options.findIndex(obj => obj[selectKey] === name);
@@ -11,6 +13,16 @@ const SelectBox = ({ caption, options, selectKey, selectionHandler }) => {
     selectionHandler(getIndex(val.target.value));
     setSelectionState(getIndex(val.target.value));
   };
+
+  const populateOptions = (optionsList) =>{
+    return optionsList.map((info,index) => {
+      return (
+        <option key={index} value={info[selectKey]} role="selectOption">
+            {info[selectKey]}{" "}
+        </option>
+      );
+    })
+  }
 
   useEffect(() => {
     selectionHandler(0);
@@ -23,17 +35,24 @@ const SelectBox = ({ caption, options, selectKey, selectionHandler }) => {
         {caption}
         {": "} <br />
         <select
+        role="select"
         data-testid="select"
           onChange={(e) => handleChange(e)}
           value={(options[selectionState] !== undefined) ?options[selectionState][selectKey]:options[0][selectKey]}
         >
-          {options.map((info,index) => {
-            return (
-              <option key={index} value={info[selectKey]}>
-                {info[selectKey]}{" "}
-              </option>
-            );
-          })}
+          {optionsGrouping && (
+              <optgroup label="Active" role="optGroup">
+                {populateOptions(getActiveConfigurations(options))}
+              </optgroup>
+          )}
+          {optionsGrouping && (
+              <optgroup label="Inactive" role="optGroup">
+                {populateOptions(getInActiveConfigurations(options))}
+              </optgroup>
+          )}
+          {optionsGrouping===false &&
+              populateOptions(options)
+          }
         </select>
       </div>
     </div>
