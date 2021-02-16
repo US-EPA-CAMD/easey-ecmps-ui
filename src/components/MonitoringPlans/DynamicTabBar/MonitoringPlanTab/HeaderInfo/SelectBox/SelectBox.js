@@ -2,7 +2,7 @@ import React, { useState,useEffect } from "react";
 import "./SelectBox.css";
 import {getActiveConfigurations, getInActiveConfigurations} from "../../../../../../utils/selectors/monitoringConfigurations";
 
-const SelectBox = ({ caption, options, selectKey, selectionHandler, optionsGrouping=false }) => {
+const SelectBox = ({ caption, options, selectKey, selectionHandler, showInactive=false }) => {
 
   function getIndex(name) {
     return options.findIndex(obj => obj[selectKey] === name);
@@ -40,17 +40,26 @@ const SelectBox = ({ caption, options, selectKey, selectionHandler, optionsGroup
           onChange={(e) => handleChange(e)}
           value={(options[selectionState] !== undefined) ?options[selectionState][selectKey]:options[0][selectKey]}
         >
-          {optionsGrouping && (
+          {showInactive && caption==="Configurations" && (
               <optgroup label="Active" role="optGroup">
                 {populateOptions(getActiveConfigurations(options))}
               </optgroup>
           )}
-          {optionsGrouping && (
+          {showInactive && caption==="Configurations" && (
               <optgroup label="Inactive" role="optGroup">
                 {populateOptions(getInActiveConfigurations(options))}
               </optgroup>
           )}
-          {optionsGrouping===false &&
+          {/* {showInactive && caption==="Locations" &&
+              populateOptions(options)
+          }
+          {showInactive===false && caption==="Locations" &&
+              populateOptions(getActiveLocations(options))
+          }
+          {showInactive===false && caption!=="Locations" &&
+              populateOptions(options)
+          } */}
+          {showInactive===false &&
               populateOptions(options)
           }
         </select>

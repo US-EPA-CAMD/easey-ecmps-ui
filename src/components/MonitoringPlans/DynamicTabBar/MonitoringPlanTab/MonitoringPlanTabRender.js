@@ -8,6 +8,8 @@ import DataTableMats from "./Sections/MATS/DataTableMats";
 const MonitoringPlanTabRender = ({ facility, monitoringPlans }) => {
   const [locationSelect, setLocationSelect] = useState(0);
   const [matsTableFlag, setMatsTableFlag] = useState(false);
+  const [showActiveMethods, setShowActiveMethods] = useState(true);
+
   const sections = [
     { name: "Monitoring Methods" },
     { name: "Location Attributes" },
@@ -42,6 +44,7 @@ const MonitoringPlanTabRender = ({ facility, monitoringPlans }) => {
         <DataTableMethod
           matsTableHandler={matsTableHandler}
           locationSelect={locationSelect}
+          showActiveOnly={showActiveMethods}
         />
       ),
     },
@@ -55,6 +58,9 @@ const MonitoringPlanTabRender = ({ facility, monitoringPlans }) => {
       content: <DataTableMats locationSelect={locationSelect} />,
     });
   }
+  const activeMethodsHandler = (value) =>{
+    setShowActiveMethods(value);
+  }
 
   return (
     <div className="selectedMPTab">
@@ -64,6 +70,7 @@ const MonitoringPlanTabRender = ({ facility, monitoringPlans }) => {
         monitoringPlans={monitoringPlans}
         sections={sections}
         methodLocationHandler={methodLocationHandler}
+        activeMethodsHandler= {activeMethodsHandler}
       />
       <hr width="100%" align="center" />
       <Accordion bordered={false} items={methodItems} className="accordions" />
