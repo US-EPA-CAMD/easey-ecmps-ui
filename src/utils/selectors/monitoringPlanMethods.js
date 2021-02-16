@@ -49,4 +49,6 @@ data.forEach((el) => {
 });
 return records;
 }
-
+export function getActiveMethods (methods){
+  return methods.filter(m => m.active===true);
+}

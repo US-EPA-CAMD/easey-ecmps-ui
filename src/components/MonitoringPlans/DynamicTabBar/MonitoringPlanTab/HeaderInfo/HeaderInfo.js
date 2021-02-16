@@ -8,6 +8,7 @@ const HeaderInfo = ({
   sections,
   monitoringPlans,
   methodLocationHandler,
+  activeMethodsHandler
 }) => {
   const [configurations, setConfigurations] = useState({list: getActiveConfigurations(monitoringPlans), showInactive:false});
 
@@ -28,12 +29,13 @@ const HeaderInfo = ({
   const checkBoxHandler = (evt) =>{
     if(evt.target.checked){
       setConfigurations({...configurations, list:monitoringPlans, showInactive:true});
-      setConfigSelect(0);
+      activeMethodsHandler(false);
     }
     else{
       setConfigurations({...configurations, list: getActiveConfigurations(monitoringPlans), showInactive:false});
-      setConfigSelect(0);
+      activeMethodsHandler(true);
     }
+    setConfigSelect(0);
   }
   useEffect(()=>{
     setConfigurations({list: getActiveConfigurations(monitoringPlans), showInactive:false});
@@ -58,7 +60,7 @@ const HeaderInfo = ({
                 options={configurations.list}
                 selectionHandler={mpHandler}
                 selectKey="name"
-                optionsGrouping={configurations.showInactive}
+                showInactive={configurations.showInactive}
               />
               <div className="mpSelect showInactive">
                 <input type="checkbox" id="showInactive" name="showInactive" onChange={checkBoxHandler}/>
@@ -67,9 +69,11 @@ const HeaderInfo = ({
             </div>
             <SelectBox
               caption="Locations"
+              //options={configurations.showInactive? configurations.list[configSelect].locations : getActiveLocations(configurations.list[configSelect].locations)}
               options={configurations.list[configSelect].locations}
               selectionHandler={mplHandler}
               selectKey="name"
+              //showInactive={configurations.showInactive}
             />
             <SelectBox
               caption="Sections"
