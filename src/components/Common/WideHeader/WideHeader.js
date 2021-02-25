@@ -7,6 +7,7 @@ import {
   Search,
   NavDropDownButton,
   PrimaryNav,
+  Link
 } from "@trussworks/react-uswds";
 import "./WideHeader.css";
 
@@ -14,86 +15,162 @@ const WideHeader = () => {
   const [expanded, setExpanded] = useState(false);
   const onClick = (): void => setExpanded((prvExpanded) => !prvExpanded);
 
-  const testItemsMegaOne = [
+  const environmentalTopicsMenu = [
     [
-      <a href="#linkOne" key="one">
-        Simple link one
-      </a>,
+      <Link href={"https://www.epa.gov/environmental-topics/air-topics"} target="_blank" key="one">
+        Air
+      </Link>,
       <a href="#linkTwo" key="two">
-        Simple link two
+        Chemicals and Toxics
       </a>,
-    ],
-    [
       <a href="#linkThree" key="three">
-        Simple link three
+        Greener Living
       </a>,
       <a href="#linkFour" key="four">
-        Simple link four
+        Land, Waste, and Cleanup
+      </a>,
+      <a href="#linkOne" key="one">
+        Mold
+      </a>,
+      <a href="#linkTwo" key="two">
+        Radon
+      </a>,
+      <a href="#linkThree" key="three">
+        Water
+      </a>,
+      <a href="#linkFour" key="four">
+        Bed Bugs
+      </a>,
+      <a href="#linkOne" key="one">
+        Environmental Information by Location
+      </a>,
+      <a href="#linkTwo" key="two">
+        Health
+      </a>,
+      <a href="#linkThree" key="three">
+        Lead
+      </a>,
+      <a href="#linkFour" key="four">
+        Pesticides
+      </a>,
+      <a href="#linkOne" key="one">
+        Science
+      </a>,
+      <a href="#linkTwo" key="two">
+        A-Z Topic Index
       </a>,
     ],
   ];
 
-  const testItemsMegaTwo = [
+  const lawsAndRegulationsTopicsMenu = [
     [
       <a href="#linkFive" key="one">
-        Simple link five
+        By Business Sector
       </a>,
       <a href="#linkSix" key="two">
-        Simple link six
+        By Topics
       </a>,
-    ],
-    [
       <a href="#linkSeven" key="three">
-        Simple link seven
+        Compliance
       </a>,
       <a href="#linkEight" key="four">
-        Simple link eight
+        Enforcement
+      </a>,
+      <a href="#linkSix" key="two">
+        Laws and Executive Orders
+      </a>,
+      <a href="#linkSeven" key="three">
+        Guidance
+      </a>,
+      <a href="#linkEight" key="four">
+        Regulations
       </a>,
     ],
   ];
+
+  const aboutEPATopicsMenu = [
+    [
+      <a href="#linkFive" key="one">
+        Organization Chart
+      </a>,
+      <a href="#linkSix" key="two">
+        Staff Directory
+      </a>,
+      <a href="#linkSeven" key="three">
+        Planning, Budget, and Results
+      </a>,
+      <a href="#linkEight" key="four">
+        Jobs and Internships
+      </a>,
+      <a href="#linkSix" key="two">
+        Headquarters Offices
+      </a>,
+      <a href="#linkSeven" key="three">
+        Regional Offices
+      </a>,
+      <a href="#linkEight" key="four">
+        Labs and Research Centers
+      </a>,
+    ],
+  ];
+
 
   const [isOpen, setIsOpen] = useState([false, false]);
 
-  const testItemsMegaMenu = [
+  const [open,setOpen] = useState(false)
+  const megaSideMenu = [
     <>
       <NavDropDownButton
-        // onToggle={(): void => {
-        //   onToggle(0, setIsOpen)
-        // }}
-        menuId="testDropDownOne"
-        isOpen={isOpen[0]}
-        label="Nav Label"
-        isCurrent={true}
+        onToggle={(): void => {
+            setOpen((prevState) => !prevState);
+          //   onToggle(0, setIsOpen)
+        }}
+        menuId="environmentalMenuDropDown"
+        isOpen={open}
+        label="Enviromental Topics"
+        isCurrent={open}
       />
       <MegaMenu
         key="one"
-        items={testItemsMegaOne}
-        isOpen={isOpen[0]}
-        id="testDropDownOne"
+        items={environmentalTopicsMenu}
+        isOpen={open}
+        id="environmentalMenuDropDown"
       />
     </>,
     <>
       <NavDropDownButton
-        // onToggle={(): void => {
-        //   onToggle(1, setIsOpen)
-        // }}
-        menuId="testDropDownTwo"
-        isOpen={isOpen[1]}
-        label="Nav Label"
+          onToggle={(): void => {
+            setOpen((prevState) => !prevState);
+          //   onToggle(0, setIsOpen)
+        }}
+        menuId="lawsAndRegulationsMenuDropDown"
+        isOpen={open}
+        label="Laws and Regulations"
       />
       <MegaMenu
         key="one"
-        items={testItemsMegaTwo}
-        isOpen={isOpen[1]}
-        id="testDropDownTwo"
+        items={lawsAndRegulationsTopicsMenu}
+        isOpen={open}
+        id="lawsAndRegulationsMenuDropDown"
       />
     </>,
-    <a href="#two" key="two" className="usa-nav__link">
-      <span>Parent link</span>
-    </a>,
-    <a href="#three" key="three" className="usa-nav__link">
-      <span>Parent link</span>
-    </a>,
+    <>
+      <NavDropDownButton
+          onToggle={(): void => {
+            setOpen((prevState) => !prevState);
+          //   onToggle(0, setIsOpen)
+        }}
+        menuId="aboutEPAMenuDropDown"
+        isOpen={open}
+        label="About EPA"
+      />
+      <MegaMenu
+        key="one"
+        items={aboutEPATopicsMenu}
+        isOpen={open}
+        id="aboutEPAMenuDropDown"
+      />
+    </>,
   ];
   return (
     <div>
@@ -108,12 +185,12 @@ const WideHeader = () => {
         </div>
       </div>
       <div id="topbanner">
-          <p>
-            EPA Sandbox Environment: The content on this page is not production
-            data and this site is being used for <strong>testing</strong>{" "}
-            purposes only.
-          </p>
-        </div>
+        <p>
+          EPA Sandbox Environment: The content on this page is not production
+          data and this site is being used for <strong>testing</strong> purposes
+          only.
+        </p>
+      </div>
       <Header basic={true}>
         <div className="usa-nav-container">
           <div className="usa-navbar">
@@ -127,15 +204,13 @@ const WideHeader = () => {
           </div>
           <div className="test">
             <PrimaryNav
-            //   items={testItemsMegaMenu}
-            items ={[]}
+              items={megaSideMenu}
               mobileExpanded={expanded}
               onToggleMobileNav={onClick}
             >
               <Search size="small" onSubmit={""} />
             </PrimaryNav>
           </div>
-          {/* <div>test</div> */}
         </div>
       </Header>
     </div>

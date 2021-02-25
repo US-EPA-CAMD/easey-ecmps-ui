@@ -6546,6 +6546,7 @@ button.usa-combo-box__toggle-list:focus {
   color: #005ea2;
   text-decoration: underline;
 }
+/* comment */
 @media all and (max-width: 363.99em) {
   .usa-nav__submenu {
     list-style-type: none;
@@ -6597,12 +6598,13 @@ button.usa-combo-box__toggle-list:focus {
 .usa-nav__submenu[aria-hidden="true"] {
   display: none;
 }
-@media all and (min-width: 64em) {
+@media all and (min-width: 364em) {
   .usa-nav__submenu .usa-nav__submenu-item + * {
     margin-top: 0.75rem;
   }
   .usa-nav__submenu .usa-nav__submenu-item a {
-    color: #fff;
+    /* color: #fff; */
+    color:black;
     padding: 0;
     line-height: 1.3;
   }
