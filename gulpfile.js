@@ -47,37 +47,37 @@ gulp.task("copy-uswds-js", () => {
   return gulp.src(`${uswds}/js/**/**`).pipe(gulp.dest(`${JS_DEST}`));
 });
 
-gulp.task("build-sass", function (done) {
-  var plugins = [
-    // Autoprefix
-    autoprefixer({
-      cascade: false,
-      grid: true,
-    }),
-    // Minify
-    csso({ forceMediaMerge: false }),
-  ];
-  return (
-    gulp
-      .src([`${PROJECT_SASS_SRC}/*.scss`])
-      .pipe(sourcemaps.init({ largeFile: true }))
-      .pipe(
-        sass.sync({
-          includePaths: [
-            `${PROJECT_SASS_SRC}`,
-            `${uswds}/scss`,
-            `${uswds}/scss/packages`,
-          ],
-        })
-      )
-      .pipe(replace(/\buswds @version\b/g, "based on uswds v" + pkg.version))
-      .pipe(postcss(plugins))
-      .pipe(sourcemaps.write("."))
-      // uncomment the next line if necessary for Jekyll to build properly
-      //.pipe(gulp.dest(`${SITE_CSS_DEST}`))
-      .pipe(gulp.dest(`${CSS_DEST}`))
-  );
-});
+// gulp.task("build-sass", function (done) {
+//   var plugins = [
+//     // Autoprefix
+//     autoprefixer({
+//       cascade: false,
+//       grid: true,
+//     }),
+//     // Minify
+//     csso({ forceMediaMerge: false }),
+//   ];
+//   return (
+//     gulp
+//       .src([`${PROJECT_SASS_SRC}/*.scss`])
+//       .pipe(sourcemaps.init({ largeFile: true }))
+//       .pipe(
+//         sass.sync({
+//           includePaths: [
+//             `${PROJECT_SASS_SRC}`,
+//             `${uswds}/scss`,
+//             `${uswds}/scss/packages`,
+//           ],
+//         })
+//       )
+//       .pipe(replace(/\buswds @version\b/g, "based on uswds v" + pkg.version))
+//       .pipe(postcss(plugins))
+//       .pipe(sourcemaps.write("."))
+//       // uncomment the next line if necessary for Jekyll to build properly
+//       //.pipe(gulp.dest(`${SITE_CSS_DEST}`))
+//       .pipe(gulp.dest(`${CSS_DEST}`))
+//   );
+// });
 
 // use init to initally copy all assets and build sass. This is done only once.
 gulp.task(
