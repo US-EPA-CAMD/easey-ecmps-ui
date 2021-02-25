@@ -1,0 +1,21 @@
+.photo {
+  height: 45px;
+  width: 100px;
+  padding-bottom: 15px;
+  margin-left: 30px;
+}
+.menuBTN {
+  overflow: auto;
+  background-color: white;
+  text-align: center;
+  width:81px;
+  height: 42px;
+  margin-top: 22px;
+  margin-right: 40px;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  min-width: 50px;
+  font-size: 15px;
+  color: #0071bc;
+  border-radius: 5px;
+}
