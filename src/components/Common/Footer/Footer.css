@@ -27,12 +27,8 @@
   left: 130px;
   width: 420px;
   height: 25px;
-  /* font: var(--unnamed-font-style-normal) normal bold 20px/30px
-    var(--unnamed-font-family-source-sans-pro); */
   letter-spacing: var(--unnamed-character-spacing-0);
   color: #212121;
   text-align: left;
   font: normal bold 20px/30px Source Sans Pro, sans-serif;
-  /* letter-spacing: 0px;
-  color: var(--base); */
 }
