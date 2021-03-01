@@ -1,34 +1,11 @@
 export const environmentalTopics = [
-  { title: "Environmental Topics" },
+  {
+    link: "https://www.epa.gov/environmental-topics",
+    name: "Environmental Topics",
+  },
   {
     link: "https://www.epa.gov/environmental-topics/air-topics",
     name: "Air",
-  },
-  {
-    link:
-      "https://www.epa.gov/environmental-topics/chemicals-and-toxics-topics",
-    name: "Chemicals and Toxics",
-  },
-  {
-    link: "https://www.epa.gov/environmental-topics/greener-living",
-    name: "Greener Living",
-  },
-  {
-    link:
-      "https://www.epa.gov/environmental-topics/land-waste-and-cleanup-topics",
-    name: "Land, Waste, and Cleanup",
-  },
-  {
-    link: "https://www.epa.gov/mold",
-    name: "Mold",
-  },
-  {
-    link: "https://www.epa.gov/radon",
-    name: "Radon",
-  },
-  {
-    link: "https://www.epa.gov/environmental-topics/water-topics",
-    name: "Water",
   },
   {
     link: "https://www.epa.gov/bedbugs",
@@ -36,24 +13,50 @@ export const environmentalTopics = [
   },
   {
     link:
+      "https://www.epa.gov/environmental-topics/chemicals-and-toxics-topics",
+    name: "Chemicals and Toxics",
+  },
+  {
+    link:
       "https://www.epa.gov/environmental-topics/location-specific-environmental-information",
     name: "Environmental Information by Location",
+  },
+  {
+    link: "https://www.epa.gov/environmental-topics/greener-living",
+    name: "Greener Living",
   },
   {
     link: "https://www.epa.gov/environmental-topics/health-topics",
     name: "Health",
   },
   {
+    link:
+      "https://www.epa.gov/environmental-topics/land-waste-and-cleanup-topics",
+    name: "Land, Waste, and Cleanup",
+  },
+  {
     link: "https://www.epa.gov/lead",
     name: "Lead",
+  },
+  {
+    link: "https://www.epa.gov/mold",
+    name: "Mold",
   },
   {
     link: "https://www.epa.gov/pesticides",
     name: "Pesticides",
   },
   {
+    link: "https://www.epa.gov/radon",
+    name: "Radon",
+  },
+  {
     link: "https://www.epa.gov/environmental-topics/science-topics",
     name: "Science",
+  },
+  {
+    link: "https://www.epa.gov/environmental-topics/water-topics",
+    name: "Water",
   },
   {
     link: "https://www.epa.gov/topics-epa-web",
@@ -62,7 +65,10 @@ export const environmentalTopics = [
 ];
 
 export const lawsAndRegulationsTopics = [
-  { title: "Laws and Regulations" },
+  {
+    link: "https://www.epa.gov/laws-regulations",
+    name: "Laws and Regulations",
+  },
   {
     link: "https://www.epa.gov/regulatory-information-sector",
     name: "By Business Sector",
@@ -94,7 +100,10 @@ export const lawsAndRegulationsTopics = [
 ];
 
 export const aboutEPATopics = [
-  { title: "About EPA" },
+  {
+    link: "https://www.epa.gov/aboutepa",
+    name: "About EPA",
+  },
   {
     link: "https://www.epa.gov/aboutepa/epa-organization-chart",
     name: "Organization Chart",

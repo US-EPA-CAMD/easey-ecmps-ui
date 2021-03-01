@@ -1,9 +1,9 @@
 import React from "react";
 import { MegaMenu, NavDropDownButton, Link } from "@trussworks/react-uswds";
-
+import "./Menu.css";
 const Menu = (props) => {
   const subMenuCreation = (arrayTopics) => {
-    const title = arrayTopics[0].title;
+    const title = arrayTopics[0].name;
     return arrayTopics
       .filter((val, ind) => ind !== 0)
       .map((value, index) => {
@@ -14,7 +14,9 @@ const Menu = (props) => {
         );
       });
   };
-
+  const titleClick = (e) => {
+    e.stopPropagation();
+  };
   const menuCreation = () => {
     return props.map((val, index) => {
       return subMenuCreation(val);
@@ -29,7 +31,9 @@ const Menu = (props) => {
   );
 
   const menuToggle = (index, value) => {
-    const newOpenMenu = [...open];
+    const newOpenMenu = props.map(() => {
+      return false;
+    });
     newOpenMenu[index] = !value;
     setOpen(newOpenMenu);
   };
@@ -43,7 +47,18 @@ const Menu = (props) => {
           }}
           menuId={subMenu[index].props.title + "MenuDropDown"}
           isOpen={open[index]}
-          label={subMenu[index].props.title}
+          label={
+            <Link
+              className="menuTitleBTN"
+              href={props[index][0].link}
+              onClick={(e) => titleClick(e)}
+              target="_blank"
+              key={index}
+            >
+              {" "}
+              {subMenu[index].props.title}
+            </Link>
+          }
           isCurrent={open[index]}
         />
         <MegaMenu
