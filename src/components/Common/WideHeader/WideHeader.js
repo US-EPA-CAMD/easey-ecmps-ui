@@ -3,7 +3,6 @@ import {
   Button,
   Header,
   Title,
-  Search,
   PrimaryNav,
 } from "@trussworks/react-uswds";
 import "./WideHeader.css";
@@ -13,6 +12,7 @@ import {
   lawsAndRegulationsTopics,
   aboutEPATopics,
 } from "./Menu/menuTopics";
+import MenuSearch from "./MenuSearch/MenuSearch";
 const WideHeader = () => {
   const [expanded, setExpanded] = useState(false);
   const onClick = (): void => setExpanded((prvExpanded) => !prvExpanded);
@@ -59,7 +59,7 @@ const WideHeader = () => {
               mobileExpanded={expanded}
               onToggleMobileNav={onClick}
             >
-              <Search size="small" onSubmit={""} />
+              <MenuSearch/>
             </PrimaryNav>
           </div>
         </div>

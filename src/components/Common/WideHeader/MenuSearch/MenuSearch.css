@@ -1,0 +1,22 @@
+
+.menuSearchBTN {
+    background-color: #6495ED;
+}
+
+.usa-form{
+    width:100%;
+    font-style: normal !important;
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    font-style: normal !important;
+  }
+  ::-moz-placeholder { /* Firefox 19+ */
+    font-style: normal !important;
+  }
+  :-ms-input-placeholder { /* IE 10+ */
+    font-style: normal !important;
+  }
+  :-moz-placeholder { /* Firefox 18- */
+    font-style: normal !important;
+  }
