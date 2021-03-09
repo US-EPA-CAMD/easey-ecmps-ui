@@ -4,6 +4,7 @@ import Tabs from "./Tabs";
 import TabPane from "./TabPane";
 import "./DynamicTabs.css";
 import {addFacilityTab, removeFacilityTab} from "../../../store/actions/dynamicFacilityTab";
+import ResizeObserver from 'resize-observer-polyfill';
 
 export const DynamicTabs = ({
   tabsProps,
@@ -11,15 +12,33 @@ export const DynamicTabs = ({
   addFacility
 }) => {
   const [tabs, setTabs] = useState(tabsProps);
+  const [containerWidth, setContainerWidth] = useState(null);
+  const firstTabWidth = 142;
+  const tabWidth = 102;
+
+  const initResizeObs = (containerBox) =>{
+    setContainerWidth(containerBox.getBoundingClientRect().width);
+    const resizeObserver = new ResizeObserver(entries=>{
+      if(entries && entries[0].contentBoxSize){
+        setContainerWidth(entries[0].contentBoxSize[0].inlineSize);
+      }
+    })
+    resizeObserver.observe(containerBox);
+  }
 
   const addTabsHandler = (newTabs) => {
-    newTabs.forEach((t) => {
+    const availableWidth = containerWidth-firstTabWidth;
+    if((tabs.length)*tabWidth <= availableWidth){
+      newTabs.forEach((t) => {
         if(!tabs.some(facility => facility.title === t.title)){
           tabs.push(t);
           addFacility(t.title);
-      }
-    });
-    setTabs([...tabs]);
+        }
+      });
+      setTabs([...tabs]);
+    }else{
+      alert("Please close one of the open Facility tabs, in order to open a new tab.");
+    }
   };
 
   const removeTabsHandler = (index) => {
@@ -30,7 +49,7 @@ export const DynamicTabs = ({
 
   return (
     <div>
-      <Tabs dynamic={true} removeTabs={removeTabsHandler}>
+      <Tabs dynamic={true} removeTabs={removeTabsHandler} setResizeObserver={initResizeObs}>
         {tabs &&
           tabs.map((tab, i) => (
             <TabPane key={i} title={tab.title}>

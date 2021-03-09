@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import './Tabs.css';
-const Tabs = ({ children, dynamic = false, removeTabs }) => {
+const Tabs = ({ children, dynamic = false, removeTabs, setResizeObserver}) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
-
+  let contentBox=null;
   const closeHandler = (event, index) => {
     event.stopPropagation();
     removeTabs(index);
@@ -11,12 +11,18 @@ const Tabs = ({ children, dynamic = false, removeTabs }) => {
     }
   };
 
+  useEffect(()=>{
+    if(contentBox){
+      setResizeObserver(contentBox);
+    }
+  },[contentBox]);
+
   return (
     <div>
       <div className="tabBar">
       <ul className="usa-button-group usa-button-group--segmented" >
         {children.map((el, i) => (
-          <li key={i} className="usa-button-group__item" style={{position:'relative'}}>
+          <li key={i} className="usa-button-group__item usa-tooltip" style={{position:'relative'}} data-position="bottom" title={el.props.title}>
             <button
               className={
                 activeTabIndex === i
@@ -35,13 +41,20 @@ const Tabs = ({ children, dynamic = false, removeTabs }) => {
                   onClick={(e) => closeHandler(e, i)}
                 ></i>
               ) : null}
-              {el.props.title}
+              <span  className={i!==0?"tabTitle":"firstTabTitle"}>{el.props.title}</span>
             </button>
           </li>
         ))}
       </ul>
       </div>
-      <div>{children[activeTabIndex]}</div>
+      <div
+        className="tabContent"
+        ref={el => {
+          if (!el) {
+            return
+          }
+          contentBox=el
+        }}>{children[activeTabIndex]}</div>
     </div>
   );
 };

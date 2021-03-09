@@ -8,27 +8,27 @@
   color: #212121;
   width: 70%;
 
-  padding-top:50px;
+  padding-top: 50px;
   padding-bottom: 60px;
 }
 .title {
   display: inline-block;
-  
 }
-.header{
-  color:gray;
+.header {
+  color: gray;
 }
-.tabsBox,.selectedTabsBox{
-  color:gray;
-  border:solid 1px;
+.tabsBox,
+.tabContent .selectedTabsBox {
+  color: gray;
+  border: solid 1px;
   width: 100%;
   justify-content: center;
   bottom: 0;
   margin-bottom: -5px;
 }
 
-.tabsBar{
-padding-bottom: -5px;
+.tabsBar {
+  padding-bottom: -5px;
 }
 .ovalBTN {
   background-color: white;
@@ -40,10 +40,10 @@ padding-bottom: -5px;
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 16px;
-  float:right;
-  outline:none;
+  float: right;
+  outline: none;
   height: 10px;
-  display :flex;
+  display: flex;
   align-items: center;
   font-weight: bold;
 }

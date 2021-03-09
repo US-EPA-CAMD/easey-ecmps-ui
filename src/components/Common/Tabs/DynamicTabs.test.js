@@ -29,7 +29,7 @@ class GoodBye extends React.Component {
 }
 
 describe("testing a reusable Dynamic Tabs component", () => {
-  const dynamicTabs = 
+  const dynamicTabs =
   <DynamicTabs
     addFacility={addFacilityTab}
     removeFacility={removeFacilityTab}
@@ -48,11 +48,21 @@ describe("testing a reusable Dynamic Tabs component", () => {
     expect(tabs).toHaveLength(1);
     expect(initTabContent).not.toBeUndefined();
   });
-  test("renders other tabs on a click event of Add Tab and removes the opened tab", () => {
+  test("renders other tabs on a click event of Add Tab until there's enough space in container width. Also removes the opened tab when close icon is clicked", () => {
+    window.HTMLElement.prototype.getBoundingClientRect = function () {
+      return {width: 300}
+    }
+    window.alert = jest.fn(() => ({}));
     const {container} = render(dynamicTabs);
+    //add faciliites tab
     fireEvent.click(screen.getByText("Add Tab"));
     let tabs = screen.getAllByRole("button");
     expect(tabs).toHaveLength(2);
+    //second click to add tabs won't work since there's no space and the number of tabs should remain two
+    fireEvent.click(screen.getByText("Add Tab"));
+    tabs = screen.getAllByRole("button");
+    expect(tabs).toHaveLength(2);
+    //close the opened facilities tab
     const closeTabIcon = container.querySelector(".close-icon");
     fireEvent.click(closeTabIcon);
     tabs = screen.getAllByRole("button");
