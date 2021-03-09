@@ -4,7 +4,7 @@ import TabPane from "./TabPane";
 import { render, fireEvent, screen } from "@testing-library/react";
 
 const TabsUsage = () => (
-  <Tabs initTab="Tab1">
+  <Tabs initTab="Tab1" setResizeObserver={jest.fn(() => ({}))}>
     <TabPane title="Tab1">Tab1 Content</TabPane>
     <TabPane title="Tab2">Tab2 Content</TabPane>
     <TabPane title="Tab3">

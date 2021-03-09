@@ -1,7 +1,7 @@
 import React from "react";
 
 const TabPane = ({ children }) => {
-  return <div className="tabContent">{children}</div>;
+  return <>{children}</>;
 };
 
 export default TabPane;
