@@ -1,0 +1,3 @@
+host: easey.app.cloud.gov
+environment: production
+memory: 2048M
