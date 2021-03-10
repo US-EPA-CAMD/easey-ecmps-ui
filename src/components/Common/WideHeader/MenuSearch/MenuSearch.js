@@ -17,12 +17,12 @@ const MenuSearch = () => {
   };
 
   return (
-    <div>
+    <div className="menuSearch">
       <div className="usa-search" role="search">
         <Form
           children={
             <div>
-              <label data-testid="label" class="usa-sr-only" for="search-field">
+              <label data-testid="label" className="usa-sr-only" htmlFor="search-field">
                 Search
               </label>
               <input
@@ -47,7 +47,7 @@ const MenuSearch = () => {
           onClick={onSearch}
           data-testid="input-button-search"
         >
-          <span class="usa-sr-only">Search</span>
+          <span className="usa-sr-only">Search</span>
         </Button>
       </div>
     </div>

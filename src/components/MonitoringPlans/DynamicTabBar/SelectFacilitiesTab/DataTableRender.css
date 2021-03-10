@@ -1,11 +1,12 @@
 thead,
 tbody {
   display: block;
+    width: auto;
 }
 
 tbody {
-  height: auto; /* Just for the demo          */
-  overflow-y: auto; /* Trigger vertical scroll    */
-  overflow-x: hidden; /* Hide the horizontal scroll */
-  width: 100%;
+  height: auto;
+  overflow-y: auto; 
+  overflow-x: hidden;
+
 }

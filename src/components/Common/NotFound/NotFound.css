@@ -1,11 +1,11 @@
 .containerCenter {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    width: 70%;
-    
+    /* display: flex;
+    justify-content: center; */
+    /* flex-wrap: wrap; */
+    /* width: 70%;
+    height:100%;
     margin: 10px auto;
-    position: relative;
+    position: relative; */
     
 }
 .center {

@@ -6263,7 +6263,7 @@ button.usa-combo-box__toggle-list:focus {
 @media all and (max-width: 363.99em) {
   .usa-navbar {
     align-items: center;
-    border-bottom: 1px solid #dfe1e2;
+    border-bottom: 0px solid #dfe1e2;
     display: flex;
   }
 }

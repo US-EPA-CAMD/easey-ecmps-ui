@@ -19,14 +19,16 @@ a {
   column-count: 4;
   display: flex;
   position: relative;
-  width: 70%;
+  width: fit-content;
+  float:left
 }
 .statuses.column {
   padding-right: 50px;
   position: relative;
-  right: 0;
-  width: 30%;
+  right:0;
+  width: fit-content;
   height: auto;
+  padding-left:500px;
 }
 .eval,
 .submission {

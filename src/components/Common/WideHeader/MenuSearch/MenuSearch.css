@@ -3,8 +3,8 @@
     background-color: #6495ED;
 }
 
-.usa-form{
-    width:100%;
+.menuSearch>.usa-search>.usa-form{
+    width:100%; 
     font-style: normal !important;
 }
 

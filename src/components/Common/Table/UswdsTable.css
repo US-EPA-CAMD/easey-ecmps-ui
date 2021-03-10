@@ -1,22 +1,21 @@
 .tableHead {
   position: relative;
   padding-top: 20px;
-  overflow: hidden;
+  overflow: auto;
   text-align: right;
-  left:0;
+  left: 0;
 }
-.filterAndSearch{
+.filterAndSearch {
   display: flex;
-  float:right;
+  float: right;
 }
 .filter {
   display: inline-block;
-  padding-right:10px;
-  
+  padding-right: 10px;
 }
 .search {
   display: inline-block;
-
+  margin-left: 0;
 }
 
 .tableTitle {
@@ -24,4 +23,9 @@
   padding: 0px;
   position: absolute;
   bottom: 0;
+}
+.container {
+  max-width: 100%;
+  min-width: 90%;
+  width: 100%;
 }

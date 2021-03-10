@@ -149,8 +149,8 @@ const TablePagination = ({
     );
   }
   return (
-    <div className="row">
-      <div className="totalDisplay col">
+    <div className="">
+      <div className="totalDisplay">
         
         {Math.min(
           pageSize,
@@ -159,7 +159,7 @@ const TablePagination = ({
          {paginationFiltering[paginationFiltering.length - 1]}{" rows displayed"}
       </div>
 
-      <div  className="paginationTabs col">
+      <div  className="paginationTabs">
       <Label className="filterLabel hidden" htmlFor="pagination">
          Pagination Bar
       </Label>

@@ -1,0 +1,37 @@
+.workspaceMenu > .usa-accordion__button {
+  background-color: gray !important;
+  align-items: left !important;
+  padding-left: 5px;
+  color: white;
+}
+.workspaceMenu > .usa-accordion__button[aria-expanded="true"] {
+  background-image: url(../../../../../node_modules/uswds/dist/img/angle-arrow-up-white.svg),
+    linear-gradient(transparent, transparent) !important;
+}
+
+.workspaceMenu > .usa-accordion__button[aria-expanded="false"] {
+  background-image: url(../../../../../node_modules/uswds/dist/img/angle-arrow-down-white.svg),
+    linear-gradient(transparent, transparent) !important;
+}
+.workspaceDropp {
+  display: flex;
+}
+.iconLine {
+  float: left;
+}
+.iconDiv {
+  height: 54px;
+  display: flex;
+  align-items: center;
+}
+
+.workspaceDropDown a {
+  padding-left: 0;
+}
+
+.workspaceLabel {
+  text-decoration: underline;
+}
+li.usa-nav__submenu-item a {
+  color: white;
+}

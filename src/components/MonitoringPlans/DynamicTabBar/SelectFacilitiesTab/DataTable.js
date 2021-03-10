@@ -24,17 +24,17 @@ export const DataTable = ({
       {
         Header: "ORIS",
         accessor: "col1",
-        width: "240px",
+        width: "200px",
       },
       {
         Header: "Facility",
         accessor: "col2",
-        width: "610px",
+        width: "810px",
       },
       {
         Header: "State",
         accessor: "col3",
-        width: "210px",
+        width: "410px",
       },
     ],
     []

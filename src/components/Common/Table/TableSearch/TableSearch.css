@@ -13,17 +13,17 @@ form {
    display: flex;
    align-items: center !important;
 }
-::-webkit-input-placeholder {
-  font-style: italic;
+.filterSearch>.usa-form>input.searchBox::-webkit-input-placeholder {
+  font-style: italic !important;
 }
-:-moz-placeholder {
-  font-style: italic;
+.filterSearch>.usa-form>input.searchBox:-moz-placeholder {
+  font-style: italic !important;
 }
-::-moz-placeholder {
-  font-style: italic;
+.filterSearch>.usa-form>input.searchBox::-moz-placeholder {
+  font-style: italic !important;
 }
-:-ms-input-placeholder {
-  font-style: italic;
+.filterSearch>.usa-form>input.searchBox:-ms-input-placeholder {
+  font-style: italic !important;
 }
 .filterBTN {
   overflow: auto;
