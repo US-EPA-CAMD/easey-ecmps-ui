@@ -1,6 +1,7 @@
 import React from "react";
 import "./MonitoringPlanHome.css";
 import DynamicTabs from "../Common/Tabs/DynamicTabs";
+import { Button } from "@trussworks/react-uswds";
 import DataTable from "./DynamicTabBar/SelectFacilitiesTab/DataTable";
 
 const MonitoringPlanHome = () => {
@@ -9,7 +10,13 @@ const MonitoringPlanHome = () => {
     <div className="home-container">
       <div className="header">
         <h1 className="title">Monitoring Plans</h1>
-        <button className="ovalBTN">Import</button>
+        <Button
+          className="ovalBTN"
+          id="input-button-search"
+          // onClick={updateSearchHandler}
+        >
+          Import a Monitoring Plan
+        </Button>
       </div>
 
       <div className="tabsBar">

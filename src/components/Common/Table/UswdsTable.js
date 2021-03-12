@@ -119,7 +119,7 @@ const UswdsTable = ({
   return (
     <div className="container">
       <div className="tableHead">
-        <h2 className="tableTitle"> {title}</h2>
+        <h3 className="tableTitle"> {title}</h3>
         <div className="filterAndSearch">
           {paginate ? (
             <span className="filter">
