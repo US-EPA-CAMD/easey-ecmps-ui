@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./HeaderInfo.css";
 import SelectBox from "./SelectBox/SelectBox";
-import {getActiveConfigurations} from "../../../../../utils/selectors/monitoringConfigurations";
+import {getActiveConfigurations, getInActiveConfigurations} from "../../../../../utils/selectors/monitoringConfigurations";
 
 const HeaderInfo = ({
   facility,
@@ -10,7 +10,11 @@ const HeaderInfo = ({
   methodLocationHandler,
   activeMethodsHandler
 }) => {
-  const [configurations, setConfigurations] = useState({list: getActiveConfigurations(monitoringPlans), showInactive:false});
+
+  const hasActiveConfigs = getActiveConfigurations(monitoringPlans).length>0?true:false;
+
+  const [configurations, setConfigurations] = useState({list: hasActiveConfigs? getActiveConfigurations(monitoringPlans):
+    getInActiveConfigurations(monitoringPlans), showInactive: !hasActiveConfigs});
 
   const [configSelect, setConfigSelect] = useState(0);
 
@@ -38,7 +42,9 @@ const HeaderInfo = ({
     setConfigSelect(0);
   }
   useEffect(()=>{
-    setConfigurations({list: getActiveConfigurations(monitoringPlans), showInactive:false});
+    //setConfigurations({list: getActiveConfigurations(monitoringPlans), showInactive:false});
+    setConfigurations({list: hasActiveConfigs? getActiveConfigurations(monitoringPlans):
+      getInActiveConfigurations(monitoringPlans), showInactive: !hasActiveConfigs});
   },[monitoringPlans]);
 
   return (
@@ -63,7 +69,8 @@ const HeaderInfo = ({
                 showInactive={configurations.showInactive}
               />
               <div className="mpSelect showInactive">
-                <input type="checkbox" id="showInactive" name="showInactive" onChange={checkBoxHandler}/>
+                <input type="checkbox" id="showInactive" name="showInactive" checked={configurations.showInactive} 
+                  disabled={!hasActiveConfigs} onChange={checkBoxHandler}/>
                 <label htmlFor="showInactive"> Show Inactive</label>
               </div>
             </div>

@@ -40,25 +40,16 @@ const SelectBox = ({ caption, options, selectKey, selectionHandler, showInactive
           onChange={(e) => handleChange(e)}
           value={(options[selectionState] !== undefined) ?options[selectionState][selectKey]:options[0][selectKey]}
         >
-          {showInactive && caption==="Configurations" && (
+          {showInactive && caption==="Configurations" &&  getActiveConfigurations(options).length > 0 && (
               <optgroup label="Active" role="optGroup">
                 {populateOptions(getActiveConfigurations(options))}
               </optgroup>
           )}
-          {showInactive && caption==="Configurations" && (
+          {showInactive && caption==="Configurations" && getInActiveConfigurations(options).length > 0 && (
               <optgroup label="Inactive" role="optGroup">
                 {populateOptions(getInActiveConfigurations(options))}
               </optgroup>
           )}
-          {/* {showInactive && caption==="Locations" &&
-              populateOptions(options)
-          }
-          {showInactive===false && caption==="Locations" &&
-              populateOptions(getActiveLocations(options))
-          }
-          {showInactive===false && caption!=="Locations" &&
-              populateOptions(options)
-          } */}
           {showInactive===false &&
               populateOptions(options)
           }
