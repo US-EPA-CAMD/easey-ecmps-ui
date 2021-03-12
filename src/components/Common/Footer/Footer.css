@@ -31,3 +31,10 @@
   text-align: left;
   font: normal bold 20px/30px Source Sans Pro, sans-serif;
 }
+
+.version {
+  position: absolute;
+  top: 65px;
+  left: 130px;
+  font: normal 15px/30px Source Sans Pro, sans-serif;
+}

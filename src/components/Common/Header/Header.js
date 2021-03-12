@@ -2,6 +2,8 @@ import React from "react";
 import "../style.css";
 import { Link } from "react-router-dom";
 import "./Header.css";
+import config from '../../../config'
+
 const Header = () => {
   return (
     <div>
@@ -32,8 +34,8 @@ const Header = () => {
         </div>
         <div id="topbanner">
           <p>
-            EPA Sandbox Environment: The content on this page is not production
-            data and this site is being used for <strong>testing</strong>{" "}
+            EPA {config.app.env} Environment: The content on this page is not production
+            data and this site is being used for <strong>development</strong> and/or <strong>testing</strong>
             purposes only.
           </p>
         </div>

@@ -1,11 +1,15 @@
 applications:
-  - name: ui-portal
+  - name: ((name))
     path: .
     command: npm run start
-    memory: 1024M
+    memory: ((memory))
     env:
       OPTIMIZE_MEMORY: true
-      REACT_APP_FACILITIES_API: https://((host))/api/facility-mgmt
-      REACT_APP_MONITOR_PLAN_API: https://((host))/api/monitor-plan-mgmt
+      REACT_APP_EASEY_UI_PORTAL_ENV: ((environment))
+      REACT_APP_EASEY_UI_PORTAL_HOST: ((host))
+      REACT_APP_EASEY_MDM_API: https://((host))/api/master-data-mgmt
+      REACT_APP_EASEY_FACILITIES_API: https://((host))/api/facility-mgmt
+      REACT_APP_EASEY_EMISSIONS_API: https://((host))/api/emissions-mgmt
+      REACT_APP_EASEY_MONITOR_PLAN_API: https://((host))/api/monitor-plan-mgmt
     routes:
       - route: ((host))
