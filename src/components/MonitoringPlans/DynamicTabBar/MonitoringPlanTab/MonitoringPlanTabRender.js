@@ -1,14 +1,17 @@
-import React, { useState} from "react";
+import React, { useState, useEffect} from "react";
 import HeaderInfo from "./HeaderInfo/HeaderInfo";
 import AccordionItemTitle from "./AccordionItemTitle/AccordionItemTitle";
 import "./MonitoringPlanTab.css";
 import { Accordion } from "@trussworks/react-uswds";
 import DataTableMethod from "./Sections/Methods/DataTableMethod";
 import DataTableMats from "./Sections/MATS/DataTableMats";
-const MonitoringPlanTabRender = ({ facility, monitoringPlans }) => {
+export const MonitoringPlanTabRender = ({ facility, monitoringPlans, hasActiveConfigs }) => {
   const [locationSelect, setLocationSelect] = useState(0);
   const [matsTableFlag, setMatsTableFlag] = useState(false);
-  const [showActiveMethods, setShowActiveMethods] = useState(true);
+  const [showInactive, setShowInactive] = useState(!hasActiveConfigs);
+  useEffect(() => {
+    setShowInactive(!hasActiveConfigs); //Calling setter here to update
+  }, [hasActiveConfigs]);
 
   const sections = [
     { name: "Monitoring Methods" },
@@ -44,7 +47,7 @@ const MonitoringPlanTabRender = ({ facility, monitoringPlans }) => {
         <DataTableMethod
           matsTableHandler={matsTableHandler}
           locationSelect={locationSelect}
-          showActiveOnly={showActiveMethods}
+          showActiveOnly={!showInactive}
         />
       ),
     },
@@ -58,10 +61,9 @@ const MonitoringPlanTabRender = ({ facility, monitoringPlans }) => {
       content: <DataTableMats locationSelect={locationSelect} />,
     });
   }
-  const activeMethodsHandler = (value) =>{
-    setShowActiveMethods(value);
+  const showInactiveHandler = (value) =>{
+    setShowInactive(value)
   }
-
   return (
     <div className="selectedMPTab">
       {/* on change of select box, it should modify the accordion items */}
@@ -70,7 +72,9 @@ const MonitoringPlanTabRender = ({ facility, monitoringPlans }) => {
         monitoringPlans={monitoringPlans}
         sections={sections}
         methodLocationHandler={methodLocationHandler}
-        activeMethodsHandler= {activeMethodsHandler}
+        showInactiveHandler= {showInactiveHandler}
+        showInactive={showInactive}
+        hasActiveConfigs={hasActiveConfigs}
       />
       <hr width="100%" align="center" />
       <Accordion bordered={false} items={methodItems} className="accordions" />

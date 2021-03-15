@@ -1,33 +1,34 @@
 import React, { useState, useEffect } from "react";
 import * as fs from "../../../../utils/selectors/facilities";
-import { loadFacilities } from "../../../../store/actions/facilities";
 import { loadMonitoringPlans } from "../../../../store/actions/monitoringPlans";
 import { connect } from "react-redux";
 import MonitoringPlanTabRender from "./MonitoringPlanTabRender";
+import {getActiveConfigurations} from "../../../../utils/selectors/monitoringConfigurations";
 
 export const MonitoringPlanTab = ({
   orisCode,
   facilities,
-  loadFacilitiesData,
   loadMonitoringPlansData,
   monitoringPlans,
   loading,
 }) => {
   const [facility] = useState(fs.getSelectedFacility(orisCode, facilities));
-  useEffect(() => {
-    if (facilities.length === 0) {
-      loadFacilitiesData();
-    }
-  }, []);
+  const [hasActiveConfigs, setHasActiveConfigs] = useState(true);
   useEffect(() => {
     loadMonitoringPlansData(orisCode);
-  }, [orisCode]);
+  }, []);
+  useEffect(()=>{
+    if(monitoringPlans.length>0){
+      setHasActiveConfigs(getActiveConfigurations(monitoringPlans).length>0?true:false);
+    }
+  },[monitoringPlans]);
 
   return (
     <div>
       <MonitoringPlanTabRender
         facility={facility}
         monitoringPlans={monitoringPlans}
+        hasActiveConfigs={hasActiveConfigs}
       />
     </div>
   );
@@ -44,7 +45,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     loadMonitoringPlansData: (orisCode) =>
       dispatch(loadMonitoringPlans(orisCode)),
-    loadFacilitiesData: () => dispatch(loadFacilities()),
   };
 };
 export default connect(

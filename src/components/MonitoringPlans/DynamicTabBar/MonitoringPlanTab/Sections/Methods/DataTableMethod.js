@@ -18,10 +18,8 @@ export const DataTableMethod = ({
   showActiveOnly
 }) => {
   useEffect(() => {
-    if (monitoringMethods.length === 0 || loading === false) {
-      loadMonitoringMethodsData(locationSelect);
-      loadMonitoringMatsMethodsData(locationSelect);
-    }
+    loadMonitoringMethodsData(locationSelect);
+    loadMonitoringMatsMethodsData(locationSelect);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect, showActiveOnly]);
   const columns = useMemo(
@@ -84,7 +82,6 @@ export const DataTableMethod = ({
       <DataTableMethodRender
         columns={columns}
         data={data}
-        // selectedRowHandler={selectedRowHandler}
       />
     </div>
   );
