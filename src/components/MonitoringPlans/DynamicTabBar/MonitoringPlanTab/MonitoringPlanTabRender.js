@@ -32,7 +32,7 @@ const MonitoringPlanTabRender = ({ facility, monitoringPlans }) => {
 
   };
 
-  let supItems = [];
+  const supItems = [];
 
   const methodItems = [
     {

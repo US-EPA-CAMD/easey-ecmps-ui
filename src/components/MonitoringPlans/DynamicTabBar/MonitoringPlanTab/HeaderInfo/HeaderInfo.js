@@ -1,20 +1,27 @@
 import React, { useEffect, useState } from "react";
 import "./HeaderInfo.css";
 import SelectBox from "./SelectBox/SelectBox";
-import {getActiveConfigurations, getInActiveConfigurations} from "../../../../../utils/selectors/monitoringConfigurations";
+import {
+  getActiveConfigurations,
+  getInActiveConfigurations,
+} from "../../../../../utils/selectors/monitoringConfigurations";
 
 const HeaderInfo = ({
   facility,
   sections,
   monitoringPlans,
   methodLocationHandler,
-  activeMethodsHandler
+  activeMethodsHandler,
 }) => {
+  const hasActiveConfigs =
+    getActiveConfigurations(monitoringPlans).length > 0 ? true : false;
 
-  const hasActiveConfigs = getActiveConfigurations(monitoringPlans).length>0?true:false;
-
-  const [configurations, setConfigurations] = useState({list: hasActiveConfigs? getActiveConfigurations(monitoringPlans):
-    getInActiveConfigurations(monitoringPlans), showInactive: !hasActiveConfigs});
+  const [configurations, setConfigurations] = useState({
+    list: hasActiveConfigs
+      ? getActiveConfigurations(monitoringPlans)
+      : getInActiveConfigurations(monitoringPlans),
+    showInactive: !hasActiveConfigs,
+  });
 
   const [configSelect, setConfigSelect] = useState(0);
 
@@ -30,22 +37,33 @@ const HeaderInfo = ({
     console.log(index);
   };
 
-  const checkBoxHandler = (evt) =>{
-    if(evt.target.checked){
-      setConfigurations({...configurations, list:monitoringPlans, showInactive:true});
+  const checkBoxHandler = (evt) => {
+    if (evt.target.checked) {
+      setConfigurations({
+        ...configurations,
+        list: monitoringPlans,
+        showInactive: true,
+      });
       activeMethodsHandler(false);
-    }
-    else{
-      setConfigurations({...configurations, list: getActiveConfigurations(monitoringPlans), showInactive:false});
+    } else {
+      setConfigurations({
+        ...configurations,
+        list: getActiveConfigurations(monitoringPlans),
+        showInactive: false,
+      });
       activeMethodsHandler(true);
     }
     setConfigSelect(0);
-  }
-  useEffect(()=>{
+  };
+  useEffect(() => {
     //setConfigurations({list: getActiveConfigurations(monitoringPlans), showInactive:false});
-    setConfigurations({list: hasActiveConfigs? getActiveConfigurations(monitoringPlans):
-      getInActiveConfigurations(monitoringPlans), showInactive: !hasActiveConfigs});
-  },[monitoringPlans]);
+    setConfigurations({
+      list: hasActiveConfigs
+        ? getActiveConfigurations(monitoringPlans)
+        : getInActiveConfigurations(monitoringPlans),
+      showInactive: !hasActiveConfigs,
+    });
+  }, [monitoringPlans]);
 
   return (
     <div className="header">
@@ -69,8 +87,14 @@ const HeaderInfo = ({
                 showInactive={configurations.showInactive}
               />
               <div className="mpSelect showInactive">
-                <input type="checkbox" id="showInactive" name="showInactive" checked={configurations.showInactive} 
-                  disabled={!hasActiveConfigs} onChange={checkBoxHandler}/>
+                <input
+                  type="checkbox"
+                  id="showInactive"
+                  name="showInactive"
+                  checked={configurations.showInactive}
+                  disabled={!hasActiveConfigs}
+                  onChange={checkBoxHandler}
+                />
                 <label htmlFor="showInactive"> Show Inactive</label>
               </div>
             </div>

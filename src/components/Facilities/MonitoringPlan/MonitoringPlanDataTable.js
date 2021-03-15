@@ -29,14 +29,13 @@ export const MonitoringPlanDataTable = ({ facility }) => {
         accessor: "col4",
         width: "120px",
       },
-      
     ],
     []
   );
 
   const formatRecords = (records) => {
     records.forEach((e) => {
-    e.col1 = e.col1.join(", ");
+      e.col1 = e.col1.join(", ");
     });
     return records;
   };

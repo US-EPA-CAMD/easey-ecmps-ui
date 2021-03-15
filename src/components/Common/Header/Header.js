@@ -2,7 +2,7 @@ import React from "react";
 import "../style.css";
 import { Link } from "react-router-dom";
 import "./Header.css";
-import config from '../../../config'
+import config from "../../../config";
 
 const Header = () => {
   return (
@@ -34,8 +34,9 @@ const Header = () => {
         </div>
         <div id="topbanner">
           <p>
-            EPA {config.app.env} Environment: The content on this page is not production
-            data and this site is being used for <strong>development</strong> and/or <strong>testing</strong>
+            EPA {config.app.env} Environment: The content on this page is not
+            production data and this site is being used for{" "}
+            <strong>development</strong> and/or <strong>testing</strong>
             purposes only.
           </p>
         </div>
@@ -60,7 +61,8 @@ const Header = () => {
                 className="menu-link"
                 href="https://www.epa.gov/laws-regulations"
                 role="menuitem"
-                title="Laws written by Congress provide the authority for EPA to write regulations. Regulations explain the technical, operational, and legal details necessary to implement laws."
+                title="Laws written by Congress provide the authority for EPA to write regulations. 
+                Regulations explain the technical, operational, and legal details necessary to implement laws."
               >
                 Laws &amp; Regulations
               </a>

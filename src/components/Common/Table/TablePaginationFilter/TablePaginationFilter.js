@@ -33,19 +33,18 @@ const TablePaginationFilter = ({
   }
 
   return (
-    <div >
+    <div>
       <div>
         <Label className="filterLabel" htmlFor="input-dropdown">
           Rows for table:
         </Label>
-        
+
         <div className="filterSelect">
           <Dropdown
             data-testid="select-option"
             key={rowFilterAmount}
             value={rowFilterAmount}
             onChange={(e) => {
-              // setPageSize(Number(e.target.value));
               rowChangeHandler(Number(e.target.value));
             }}
             id="input-dropdown"

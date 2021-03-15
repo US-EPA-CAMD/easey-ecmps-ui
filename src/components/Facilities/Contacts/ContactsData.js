@@ -6,8 +6,7 @@ const ContactsData = ({ facility }) => {
   const rolesSearch = ["Owner", "Operator"];
   const contacts = useMemo(() => {
     if (facility) {
-      const records = fs.getContacts(facility);
-      return records;
+      return fs.getContacts(facility);
     }
   }, [facility]);
 

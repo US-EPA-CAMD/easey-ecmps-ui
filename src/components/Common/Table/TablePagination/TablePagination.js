@@ -89,10 +89,10 @@ const TablePagination = ({
   function tabs() {
     var pages = fetchPageNumbers();
     pages.unshift(0);
-    const tab = (
+    return (
       <ul className="pagination">
         {pages.map((page, index) => {
-          if (page === LEFT_PAGE)
+          if (page === LEFT_PAGE) {
             return (
               <li key={index} className="page-item-previous">
                 <div className="page-link" href="#" aria-label="Previous">
@@ -101,8 +101,8 @@ const TablePagination = ({
                 </div>
               </li>
             );
-
-          if (page === RIGHT_PAGE)
+          }
+          if (page === RIGHT_PAGE) {
             return (
               <li key={index} className="page-item-next">
                 <div className="page-link" aria-label="Next">
@@ -111,7 +111,7 @@ const TablePagination = ({
                 </div>
               </li>
             );
-
+          }
           return (
             <li
               key={index}
@@ -127,7 +127,6 @@ const TablePagination = ({
         })}
       </ul>
     );
-    return tab;
   }
 
   function nextTab() {
@@ -151,26 +150,27 @@ const TablePagination = ({
   return (
     <div className="">
       <div className="totalDisplay">
-        
         {Math.min(
           pageSize,
-          (paginationFiltering[paginationFiltering.length - 1] - pageIndex * pageSize)
-        )}{" out of "}
-         {paginationFiltering[paginationFiltering.length - 1]}{" rows displayed"}
+          paginationFiltering[paginationFiltering.length - 1] -
+            pageIndex * pageSize
+        )}
+        {" out of "}
+        {paginationFiltering[paginationFiltering.length - 1]}
+        {" rows displayed"}
       </div>
 
-      <div  className="paginationTabs">
-      <Label className="filterLabel hidden" htmlFor="pagination">
-         Pagination Bar
-      </Label>
+      <div className="paginationTabs">
+        <Label className="filterLabel hidden" htmlFor="pagination">
+          Pagination Bar
+        </Label>
         <ul className="pagination" id="pagination">
           <li
             className="page-item-previous"
             onClick={() => previousPage()}
             disabled={!canPreviousPage}
-              
           >
-            <button  className="page-link">{"Previous"}</button>
+            <button className="page-link">{"Previous"}</button>
           </li>
 
           {tabs()}

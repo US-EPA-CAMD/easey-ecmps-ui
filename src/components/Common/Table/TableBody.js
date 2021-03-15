@@ -8,7 +8,6 @@ const TableBody = ({
   selectedRowHandler,
   defaultSelect,
   viewDataColumn,
-
 }) => {
   // just turns on react-table row selected to handle future css
   const defaultSelector = () => {
@@ -30,11 +29,11 @@ const TableBody = ({
     row.isSelected = true;
   };
   const handleDataSelector = (data) => {
-
-    if (!selectedRowHandler) return;
+    if (!selectedRowHandler) {
+      return false;
+    }
 
     return selectedRowHandler(data);
-
   };
   const onKeyDownHandler = (e) => {
     if (e.keyCode === 13) {
@@ -48,7 +47,7 @@ const TableBody = ({
           prepareRow(row);
           return (
             <tr
-              data-testid={"tableRow"+i}
+              data-testid={"tableRow" + i}
               tabIndex={1}
               key={row.id}
               {...row.getRowProps()}
@@ -80,22 +79,34 @@ const TableBody = ({
                   }`}
                 >
                   {" "}
-                  <button disabled={viewDataColumn.includes(row.cells[1].value)?true:false}
+                  <button
+                    disabled={
+                      viewDataColumn.includes(row.cells[1].value) ? true : false
+                    }
                     className="tableButton"
                     // onClick={() => handleDataSelector(row.cells)}
                   >
                     {" "}
-                    <img src={require("./images/openTab.jpg")} className={viewDataColumn.includes(row.cells[1].value)?"hide":"show"} />Open
+                    <img
+                      src={require("./images/openTab.jpg")}
+                      className={
+                        viewDataColumn.includes(row.cells[1].value)
+                          ? "hide"
+                          : "show"
+                      }
+                    />
+                    Open
                   </button>
                 </td>
-              ) : (
-                null
-              )}
+              ) : null}
             </tr>
           );
         })) || (
         <tr className="centerBox">
-          <td>No results match that search criteria. Please change the criteria and try again.</td>
+          <td>
+            No results match that search criteria. Please change the criteria
+            and try again.
+          </td>
         </tr>
       )}
     </tbody>
