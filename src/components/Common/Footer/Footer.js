@@ -10,7 +10,7 @@ const Footer = () => {
       <footer className="footerBar">
           <Logo className="footerLogo"/>
           <span className="content">United States Environmental Protection Agency</span>
-          <span className="version">{config.app.version} published {config.app.published}</span>
+          <span className="version">{config.app.version} published: {config.app.published}</span>
           <Menu/>
       </footer>
     </div>
