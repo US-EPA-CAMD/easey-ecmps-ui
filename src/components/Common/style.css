@@ -475,9 +475,7 @@
     z-index: 9999;
   }
   header {
-		display: block
-	}
-	header {
+		display: block;
 		background: #fff
 	}
 	header button, header select {
@@ -515,7 +513,8 @@
 		}
 	}
 	header a {
-		color: #0071bc
+		color: #0071bc;
+		outline-offset: 2px
 	}
 	header::selection {
 		background: #5b616b;
@@ -728,9 +727,7 @@
 			width: 21.8em;
 		}
 	}
-	header a {
-		outline-offset: 2px
-	}
+
 	@media screen {
 		header h1 a, header h2 a, header h3 a, header h4 a, header h5 a, header h6 a {
 			text-decoration: none;
@@ -759,11 +756,10 @@
 
 /** EPA Global Navigation *************************************************/
 	nav {
-		display: block
-	}
-	nav {
+		display: block;
 		background: #fff
 	}
+
 	@media screen {
 		nav h2 {
 			font-size: 176.47%;
@@ -782,11 +778,10 @@
 		}
 	}
 	nav a {
-		outline-offset: 2px
-	}
-	nav a {
+		outline-offset: 2px;
 		color: #0071bc
 	}
+
 	nav::selection {
 		background: #5b616b;
 		color: #fff;
@@ -903,18 +898,15 @@
 	}
 	nav.main-nav>.nav__inner>.menu .menu {
 		position: absolute;
-		z-index: 4
-	}
-	nav.main-nav>.nav__inner>.menu .menu {
-		background: #d6d7d9;
+		z-index: 4;
+				background: #d6d7d9;
 		padding: 0.5882em 0
 	}
+
 	nav.main-nav>.nav__inner>.menu .menu .menu-link {
 		clip: rect(1px, 1px, 1px, 1px);
 		opacity: 0;
-		position: absolute !important
-	}
-	nav.main-nav>.nav__inner>.menu .menu .menu-link {
+		position: absolute !important;
 		background: #d6d7d9;
 		border: solid #d6d7d9;
 		border-width: 0 5px;
@@ -927,6 +919,7 @@
 		text-decoration: none;
 		width: 12em
 	}
+
 	nav.main-nav>.nav__inner>.menu .menu a.active, nav.main-nav>.nav__inner>.menu .menu a.menu-link:focus, nav.main-nav>.nav__inner>.menu .menu a.menu-link:hover, nav.main-nav>.nav__inner>.menu .menu a.menu-link:active {
 		background: #aeb0b5;
 		border-color: #205493;
@@ -938,9 +931,7 @@
 
 /** EPA Global Section *************************************************/
 	section {
-		display: block
-	}
-	section {
+		display: block;
 		background: #fff
 	}
 	@media screen {
@@ -956,10 +947,8 @@
 		}
 	}
 	section a {
+		color: #0071bc;
 		outline-offset: 2px
-	}
-	section a {
-		color: #0071bc
 	}
 	@media screen {
 		section, section button, section input, section select, section textarea {
@@ -1050,11 +1039,10 @@
 	}
 	section #block-pane-epa-web-area-connect {
 		display: inline-block;
-		padding-bottom: 0.66em
-	}
-	section #block-pane-epa-web-area-connect {
+		padding-bottom: 0.66em;
 		margin-left: 2em
 	}
+
 	@media screen and (min-width:30em) {
 		section #block-pane-epa-web-area-connect {
 			padding-top: 0.66em;

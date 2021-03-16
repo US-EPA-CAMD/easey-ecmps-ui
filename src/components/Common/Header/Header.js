@@ -61,7 +61,7 @@ const Header = () => {
                 className="menu-link"
                 href="https://www.epa.gov/laws-regulations"
                 role="menuitem"
-                title="Laws written by Congress provide the authority for EPA to write regulations. 
+                title="Laws written by Congress provide the authority for EPA to write regulations.
                 Regulations explain the technical, operational, and legal details necessary to implement laws."
               >
                 Laws &amp; Regulations
