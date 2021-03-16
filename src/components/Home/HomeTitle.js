@@ -34,7 +34,9 @@ const HomeTitle = () => {
               <li className="share-links__item facebook">
                 <a
                   className="share-links__link"
-                  href="https://www.facebook.com/sharer.php?u=https://www.epa.gov/airmarkets/monitoring-plans-part-75-sources&amp;t=Monitoring%20Plans%20for%20Part%2075%20Sources"
+                  href="https://www.facebook.com/
+                  sharer.php?u=https://www.epa.gov/airmarkets/
+                  monitoring-plans-part-75-sources&amp;t=Monitoring%20Plans%20for%20Part%2075%20Sources"
                   aria-label="Share this page on Facebook"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -59,7 +61,9 @@ const HomeTitle = () => {
               <li className="share-links__item twitter">
                 <a
                   className="share-links__link"
-                  href="https://twitter.com/intent/tweet?original_referer=https://www.epa.gov/airmarkets/monitoring-plans-part-75-sources&amp;text=Monitoring%20Plans%20for%20Part%2075%20Sources&amp;url=https://www.epa.gov/airmarkets/monitoring-plans-part-75-sources&amp;via=EPA&amp;count=none&amp;lang=en"
+                  href="https://twitter.com/intent/
+                  tweet?original_referer=https://www.epa.gov/airmarkets/monitoring-plans-part-75-sources&amp;text=Monitoring%20Plans%20for%20Part%2075%20Sources&amp;
+                  url=https://www.epa.gov/airmarkets/monitoring-plans-part-75-sources&amp;via=EPA&amp;count=none&amp;lang=en"
                   aria-label="Tweet this page on Twitter"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -88,7 +92,8 @@ const HomeTitle = () => {
               <li className="share-links__item email">
                 <a
                   className="share-links__link"
-                  href="mailto:%20?subject=Shared%20from%20the%20US%20EPA:%20Monitoring%20Plans%20for%20Part%2075%20Sources&amp;body=Monitoring%20Plans%20for%20Part%2075%20Sources%20-%20https://www.epa.gov/airmarkets/monitoring-plans-part-75-sources"
+                  href="mailto:%20?subject=Shared%20from%20the%20US%20EPA:%20Monitoring%20Plans%20for%20Part%2075%20Sources&amp;body=Monitoring%20Plans%
+                  20for%20Part%2075%20Sources%20-%20https://www.epa.gov/airmarkets/monitoring-plans-part-75-sources"
                   aria-label="Email this page"
                   title="Email this page"
                 >
