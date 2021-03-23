@@ -1,42 +1,54 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import HeaderInfo from "./HeaderInfo/HeaderInfo";
 import AccordionItemTitle from "./AccordionItemTitle/AccordionItemTitle";
 import "./MonitoringPlanTab.css";
-import { Accordion } from "@trussworks/react-uswds";
 import DataTableMethod from "./Sections/Methods/DataTableMethod";
 import DataTableMats from "./Sections/MATS/DataTableMats";
-export const MonitoringPlanTabRender = ({ facility, monitoringPlans, hasActiveConfigs }) => {
+import Tables from "./Sections/Tables/Tables";
+import DataTableSystems from "./Sections/Systems/DataTableSystems";
+export const MonitoringPlanTabRender = ({
+  facility,
+  monitoringPlans,
+  hasActiveConfigs,
+}) => {
+  // ENTIRE PAGE IS GETTING RERENDERED ON SECTIONS STATE UPDATE
+
   const [locationSelect, setLocationSelect] = useState(0);
+  const [sectionSelect, setSectionsSelect] = useState("Monitoring Methods");
   const [matsTableFlag, setMatsTableFlag] = useState(false);
   const [showInactive, setShowInactive] = useState(!hasActiveConfigs);
   useEffect(() => {
     setShowInactive(!hasActiveConfigs); //Calling setter here to update
   }, [hasActiveConfigs]);
 
-  const sections = [
-    { name: "Monitoring Methods" },
-    { name: "Location Attributes" },
-    { name: "Reporting Frequency" },
-    { name: "Unit Information" },
-    { name: "Stack/Pipe Information" },
-    { name: "Monitoring Systems" },
-    { name: "Monitoring Defaults" },
-    { name: "Span, Range, and Formulas" },
-    { name: "Rectangular Duct WAFs" },
-    { name: "Loads" },
-    { name: "Qualifications" },
-  ];
-  const methodLocationHandler = (location) => {
+  useEffect(() => {
+    setShowInactive(!hasActiveConfigs);
+    setSectionsSelect("Monitoring Methods");
+    console.log('this is selected', sectionSelect)
+  }, [facility]);
+
+  const locationHandler = (location) => {
     setLocationSelect(location);
   };
 
-  const matsTableHandler = (flag) => {
-    setMatsTableFlag(flag);
+  const sectionHandler = (section) => {
+    // console.log(section, "this is section selected");
+    setSectionsSelect(section);
+  };
+  const showInactiveHandler = (value) => {
+    setShowInactive(value);
+  };
 
+  // MONITORING METHODS
+
+  const matsTableHandler = (flag) => {
+    // setMatsTableFlag(flag);
+    setTimeout(() => {
+      setMatsTableFlag(flag);
+    });
   };
 
   const supItems = [];
-
   const methodItems = [
     {
       // title in the comp name should change when selectbox handler is changed as well
@@ -52,7 +64,6 @@ export const MonitoringPlanTabRender = ({ facility, monitoringPlans, hasActiveCo
       ),
     },
   ];
-
   if (matsTableFlag) {
     supItems.push({
       title: <AccordionItemTitle title="Supplemental Methods" />,
@@ -61,25 +72,59 @@ export const MonitoringPlanTabRender = ({ facility, monitoringPlans, hasActiveCo
       content: <DataTableMats locationSelect={locationSelect} />,
     });
   }
-  const showInactiveHandler = (value) =>{
-    setShowInactive(value)
-  }
+  //---------------
+  // MONITORING SYSTEMS
+
+  const systemsItems = [
+    {
+      // title in the comp name should change when selectbox handler is changed as well
+      title: <AccordionItemTitle title="Systems" />,
+      expanded: true,
+      id: "2",
+      content: <DataTableSystems locationSelect={locationSelect} />,
+    },
+  ];
+  const [tableHandler, setTableHandler] = useState(
+    <Tables
+      sectionSelect={sectionSelect}
+      methodItems={methodItems}
+      systemsItems={systemsItems}
+      supItems={supItems}
+      matsTableFlag={matsTableFlag}
+    />
+  );
+
+  useEffect(() => {
+    setTableHandler(
+      <Tables
+        sectionSelect={sectionSelect}
+        methodItems={methodItems}
+        systemsItems={systemsItems}
+        supItems={supItems}
+        matsTableFlag={matsTableFlag}
+      />
+    );
+  }, [sectionSelect, locationSelect]);
+
   return (
     <div className="selectedMPTab">
       {/* on change of select box, it should modify the accordion items */}
       <HeaderInfo
         facility={facility}
         monitoringPlans={monitoringPlans}
-        sections={sections}
-        methodLocationHandler={methodLocationHandler}
-        showInactiveHandler= {showInactiveHandler}
+        locationHandler={locationHandler}
+        sectionHandler={sectionHandler}
+        showInactiveHandler={showInactiveHandler}
         showInactive={showInactive}
         hasActiveConfigs={hasActiveConfigs}
       />
-      <hr width="100%" align="center" />
-      <Accordion bordered={false} items={methodItems} className="accordions" />
-      <hr width="100%" align="center" />
-      {matsTableFlag ? <Accordion bordered={true} items={supItems} className="accordions" /> :'' }
+      <Tables
+        sectionSelect={sectionSelect}
+        methodItems={methodItems}
+        systemsItems={systemsItems}
+        supItems={supItems}
+        matsTableFlag={matsTableFlag}
+      />
       <hr width="100%" align="center" />
     </div>
   );

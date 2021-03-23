@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import "./TableBody.css";
+import { GoPencil } from "react-icons/go";
 const TableBody = ({
   getTableBodyProps,
   rows,
@@ -8,6 +9,7 @@ const TableBody = ({
   selectedRowHandler,
   defaultSelect,
   viewDataColumn,
+  openTabColumn,
 }) => {
   // just turns on react-table row selected to handle future css
   const defaultSelector = () => {
@@ -71,7 +73,7 @@ const TableBody = ({
                 );
               })}
               {/* additional cell for viewing ( not related to incoming data) */}
-              {viewDataColumn ? (
+              {openTabColumn && !viewDataColumn ? (
                 <td
                   width={row.cells[0].column.width}
                   className={`${
@@ -81,21 +83,38 @@ const TableBody = ({
                   {" "}
                   <button
                     disabled={
-                      viewDataColumn.includes(row.cells[1].value) ? true : false
+                      openTabColumn.includes(row.cells[1].value) ? true : false
                     }
                     className="tableButton"
                     // onClick={() => handleDataSelector(row.cells)}
                   >
-                    {" "}
                     <img
                       src={require("./images/openTab.jpg")}
                       className={
-                        viewDataColumn.includes(row.cells[1].value)
+                        openTabColumn.includes(row.cells[1].value)
                           ? "hide"
                           : "show"
                       }
                     />
                     Open
+                  </button>
+                </td>
+              ) : null}
+              {viewDataColumn ? (
+                <td
+                  width={row.cells[0].column.width}
+                  className={`${
+                    row.isSelected ? "selected hovered" : "hovered"
+                  }`}
+                >
+                  {" "}
+                  <button
+                    className="tableButton"
+                    // onClick={() => handleDataSelector(row.cells)}
+                  >
+                    {" "}
+                    <GoPencil />
+                    View
                   </button>
                 </td>
               ) : null}

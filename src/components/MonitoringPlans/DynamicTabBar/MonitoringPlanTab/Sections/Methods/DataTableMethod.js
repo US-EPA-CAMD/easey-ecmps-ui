@@ -37,7 +37,7 @@ export const DataTableMethod = ({
       {
         Header: "Substitute Data Approach",
         accessor: "col3",
-        width: "610px",
+        width: "410px",
       },
       {
         Header: "Bypass Approach",

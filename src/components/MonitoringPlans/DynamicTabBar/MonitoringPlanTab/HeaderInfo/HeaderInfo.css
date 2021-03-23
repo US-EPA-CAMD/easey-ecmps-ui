@@ -15,20 +15,20 @@ a {
   padding: 10px;
 }
 
-.selects.column {
+.selects {
   column-count: 4;
   display: flex;
   position: relative;
   width: fit-content;
-  float: left;
+
 }
-.statuses.column {
+.statuses {
   padding-right: 50px;
   position: relative;
-  right: 0;
+  margin-left: auto;
   width: fit-content;
   height: auto;
-  padding-left: 270px;
+
 }
 .eval,
 .submission {

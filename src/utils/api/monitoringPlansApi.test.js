@@ -1,6 +1,6 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { getMonitoringPlans, getMonitoringMethods, getMonitoringMatsMethods } from "./monitoringPlansApi";
+import { getMonitoringPlans, getMonitoringMethods, getMonitoringMatsMethods,getMonitoringSystems } from "./monitoringPlansApi";
 import config from "../../config";
 
 const selectedFacilityOrisCode = "3";
@@ -271,6 +271,32 @@ const mockMatsMethods = [
     }
   ];
 
+  const mockSystems = [
+    {
+      "id": "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D",
+      "monLocId": "6",
+      "systemType": "GAS",
+      "systemDesignationCode": "P",
+      "systemIdentifier": "AF1",
+      "fuelCode": "PNG",
+      "beginDate": "2019-07-01",
+      "endDate": null,
+      "beginHour": "0",
+      "endHour": null
+    },
+    {
+      "id": "TWCORNEL5-10B54DDC6DBF4DF3B309251288E83E12",
+      "monLocId": "6",
+      "systemType": "GAS",
+      "systemDesignationCode": "P",
+      "systemIdentifier": "AF2",
+      "fuelCode": "PNG",
+      "beginDate": "2019-07-01",
+      "endDate": null,
+      "beginHour": "0",
+      "endHour": null
+    }
+  ];
 describe("testing montiring plans data fetching APIs", () => {
 
     test("Should fetch list of monitoring configurations for a selected facility", async () => {
@@ -301,5 +327,12 @@ describe("testing montiring plans data fetching APIs", () => {
         const result = await getMonitoringMatsMethods(monitoringLocationId);
         expect(result['data'].matsMethods).toEqual(mockMatsMethods);
     });
-
+    test("Should fetch list of monitoring systems for a selected monitoring location", async () => {
+      const mock = new MockAdapter(axios);
+      mock.onGet(`${config.services.monitorPlans.uri}/monitor-locations/${monitoringLocationId}/systems`).reply(200, {
+          monitoringSystems: mockSystems,
+      });
+      const result = await getMonitoringSystems(monitoringLocationId);
+      expect(result['data'].monitoringSystems).toEqual(mockSystems);
+  });
 });

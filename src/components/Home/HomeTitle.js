@@ -44,7 +44,7 @@ const HomeTitle = () => {
                 >
                   <svg
                     className="icon icon--social-link"
-                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns="https://www.w3.org/2000/svg"
                     width="16.473"
                     height="30.757"
                     viewBox="0 0 16.473 30.757"
@@ -71,7 +71,7 @@ const HomeTitle = () => {
                 >
                   <svg
                     className="icon icon--social-link"
-                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns="https://www.w3.org/2000/svg"
                     width="29.971"
                     height="24.342"
                     viewBox="0 0 29.971 24.342"
@@ -99,7 +99,7 @@ const HomeTitle = () => {
                 >
                   <svg
                     className="icon icon--social-link"
-                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns="https://www.w3.org/2000/svg"
                     width="39"
                     height="28.001"
                     viewBox="0 0 39 28.001"

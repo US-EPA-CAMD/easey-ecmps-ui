@@ -32,6 +32,7 @@ const UswdsTable = ({
   defaultSelect, //
   editable, // makes data table editable
   viewDataColumn, // creates a view /open all tabs column
+  openTabColumn, 
   viewDataHandler, // handles the view/ open all tabs column
 }) => {
   if (disabledColumnFilters) {
@@ -150,6 +151,7 @@ const UswdsTable = ({
         <TableHeader
           headerGroups={headerGroups}
           viewDataColumn={viewDataColumn}
+          openTabColumn={openTabColumn}
         />
         <TableBody
           selectedRowHandler={selectedRowHandler}
@@ -164,6 +166,7 @@ const UswdsTable = ({
           toggleAllRowsSelected={toggleAllRowsSelected}
           viewDataColumn={viewDataColumn}
           viewDataHandler={viewDataHandler}
+          openTabColumn={openTabColumn}
         />
       </table>
       <span> {caption} </span>

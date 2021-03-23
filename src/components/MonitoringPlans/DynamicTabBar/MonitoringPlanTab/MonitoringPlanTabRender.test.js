@@ -994,6 +994,6 @@ describe("Shallow render to avoid issues with redux store", () => {
 
     const props = { ...defualtProps };
     const wrapper = shallow(<MonitoringPlanTabRender {...props} />);
-    expect(wrapper.find("hr")).toHaveLength(3);
+    expect(wrapper.find("hr")).toHaveLength(1);
   });
 });

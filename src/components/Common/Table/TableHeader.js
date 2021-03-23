@@ -1,6 +1,6 @@
 import React from "react";
 
-const TableHeader = ({ headerGroups, viewDataColumn }) => (
+const TableHeader = ({ headerGroups, viewDataColumn, openTabColumn }) => (
   <thead>
     {headerGroups.map((headerGroup) => (
       <tr {...headerGroup.getHeaderGroupProps()}>
@@ -12,23 +12,24 @@ const TableHeader = ({ headerGroups, viewDataColumn }) => (
             {column.render("Header")}
             {/* Add a sort direction indicator */}
             <span>
-              {column.isSorted?(
-                column.isSortedDesc?(
+              {column.isSorted ? (
+                column.isSortedDesc ? (
                   <img src="https://www.epa.gov/sites/all/libraries/js/datatables/media/images/sort_asc.png" />
-                ):(
+                ) : (
                   <img src="https://www.epa.gov/sites/all/libraries/js/datatables/media/images/sort_desc.png" />
                 )
-              ):(
+              ) : (
                 <img src="https://www.epa.gov/sites/all/libraries/js/datatables/media/images/sort_both.png" />
               )}
             </span>
           </th>
-        ))}
-        {viewDataColumn?(
+        ))}{" "}
+        {openTabColumn ? (
           <th width={headerGroups[0].headers[0].width}>Actions</th>
-        ):(
-          null
-        )}
+        ) : null}
+        {viewDataColumn ? (
+          <th width={headerGroups[0].headers[0].width}>Actions</th>
+        ) : null}
       </tr>
     ))}
   </thead>

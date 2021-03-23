@@ -20,11 +20,11 @@ div.row.column1 {
   margin-right: 0px;
   padding-right: 20px;
 }
-.row {
+/* .row {
   overflow: auto;
   min-width: 1400px;
   max-width: 2000px;
-}
+} */
 .contentrow{
   display: flex;
   flex-direction: row;

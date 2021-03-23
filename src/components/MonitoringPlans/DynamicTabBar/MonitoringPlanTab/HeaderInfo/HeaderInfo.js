@@ -1,49 +1,65 @@
 import React, { useEffect, useState } from "react";
 import "./HeaderInfo.css";
 import SelectBox from "./SelectBox/SelectBox";
-import {getActiveConfigurations} from "../../../../../utils/selectors/monitoringConfigurations";
+import { getActiveConfigurations } from "../../../../../utils/selectors/monitoringConfigurations";
 
 const HeaderInfo = ({
   facility,
-  sections,
+  sectionHandler,
   monitoringPlans,
-  methodLocationHandler,
+  locationHandler,
   showInactiveHandler,
   showInactive,
-  hasActiveConfigs
+  hasActiveConfigs,
 }) => {
-  const [configurations, setConfigurations] = useState(showInactive? monitoringPlans:
-    getActiveConfigurations(monitoringPlans));
+  const [configurations, setConfigurations] = useState(
+    showInactive ? monitoringPlans : getActiveConfigurations(monitoringPlans)
+  );
 
+  const sections = [
+    { name: "Loads" },
+    { name: "Location Attributes" },
+    { name: "Monitoring Defaults" },
+    { name: "Monitoring Methods" },
+    { name: "Monitoring Systems" },
+    { name: "Qualifications" },
+    { name: "Rectangular Duct WAFs" },
+    { name: "Reporting Frequency" },
+    { name: "Span, Range, and Formulas" },
+    { name: "Unit Information" },
+    { name: "Stack/Pipe Information" },
+  ];
   const [configSelect, setConfigSelect] = useState(0);
 
   const mpHandler = (index) => {
     setConfigSelect(index);
+    locationHandler(configurations[configSelect].locations[0]["id"]);
   };
   const mplHandler = (index) => {
-    methodLocationHandler(
-      configurations[configSelect].locations[index]["id"]
-    );
+    locationHandler(configurations[configSelect].locations[index]["id"]);
   };
   const mpsHandler = (index) => {
-    console.log(index);
+    sectionHandler(sections[index].name);
   };
 
-  const checkBoxHandler = (evt) =>{
-    if(evt.target.checked){
+  const checkBoxHandler = (evt) => {
+    if (evt.target.checked) {
       setConfigurations(monitoringPlans);
       showInactiveHandler(true);
-    }
-    else{
+    } else {
       setConfigurations(getActiveConfigurations(monitoringPlans));
       showInactiveHandler(false);
     }
     setConfigSelect(0);
-  }
-  useEffect(()=>{
-    setConfigurations(showInactive? monitoringPlans:
-      getActiveConfigurations(monitoringPlans));
-  },[monitoringPlans,showInactive]);
+  };
+  useEffect(() => {
+    mpsHandler(3);
+  }, []);
+  useEffect(() => {
+    setConfigurations(
+      showInactive ? monitoringPlans : getActiveConfigurations(monitoringPlans)
+    );
+  }, [monitoringPlans, showInactive]);
 
   return (
     <div className="header">
@@ -67,8 +83,14 @@ const HeaderInfo = ({
                 showInactive={showInactive}
               />
               <div className="mpSelect showInactive">
-                <input type="checkbox" id="showInactive" name="showInactive" checked={showInactive}
-                  disabled={!hasActiveConfigs} onChange={checkBoxHandler}/>
+                <input
+                  type="checkbox"
+                  id="showInactive"
+                  name="showInactive"
+                  checked={showInactive}
+                  disabled={!hasActiveConfigs}
+                  onChange={checkBoxHandler}
+                />
                 <label htmlFor="showInactive"> Show Inactive</label>
               </div>
             </div>
@@ -83,6 +105,7 @@ const HeaderInfo = ({
               options={sections}
               selectionHandler={mpsHandler}
               selectKey="name"
+              initialSelection = {3}
             />
           </div>
           <div className="statuses column">

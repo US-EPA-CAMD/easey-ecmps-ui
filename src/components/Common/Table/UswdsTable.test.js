@@ -8,11 +8,16 @@ describe("testing generic uswds table component", () => {
     columnsGrouping = [],
     data = [],
     defaultRowSelected = false;
-  const selectedRowHandler = () =>{
+  const selectedRowHandler = () => {
     defaultRowSelected = true;
   };
 
-  const UswdsTableTest = ({ grouping, paginate, editable=false }) => {
+  const UswdsTableTest = ({
+    grouping,
+    paginate,
+    editable = false,
+    openTabColumn,
+  }) => {
     data = useMemo(
       () => [
         {
@@ -72,23 +77,47 @@ describe("testing generic uswds table component", () => {
       ],
       []
     );
-    return (
-      <UswdsTable
-        columns={grouping ? columnsGrouping : columns}
-        data={data}
-        paginate={paginate}
-        showEntries={[3,1]}
-        search
-        viewDataColumn = {[]}
-        selectedRowHandler={selectedRowHandler}
-        defaultSelect={true}
-        editable={editable}
-      />
-    );
+    if (openTabColumn) {
+      return (
+        <UswdsTable
+          columns={grouping ? columnsGrouping : columns}
+          data={data}
+          paginate={paginate}
+          showEntries={[3, 1]}
+          search
+          //viewDataColumn = {[]}
+          selectedRowHandler={selectedRowHandler}
+          defaultSelect={true}
+          editable={editable}
+          openTabColumn={[]}
+        />
+      );
+    } else {
+      return (
+        <UswdsTable
+          columns={grouping ? columnsGrouping : columns}
+          data={data}
+          paginate={paginate}
+          showEntries={[3, 1]}
+          search
+          viewDataColumn
+          selectedRowHandler={selectedRowHandler}
+          defaultSelect={true}
+          editable={editable}
+        />
+      );
+    }
   };
 
-  test("table header renders all columns", () => {
+  test("table header renders all columnswith viewDataColumn", () => {
     const { container } = render(<UswdsTableTest grouping={false} />);
+    const headerColumns = container.querySelectorAll("thead tr th");
+    expect(headerColumns.length).toEqual(columns.length + 1);
+  });
+  test("table header renders all columns with openTabColumn", () => {
+    const { container } = render(
+      <UswdsTableTest grouping={false} openTabColumn />
+    );
     const headerColumns = container.querySelectorAll("thead tr th");
     expect(headerColumns.length).toEqual(columns.length + 1);
   });
@@ -98,7 +127,9 @@ describe("testing generic uswds table component", () => {
     expect(headerGroupings.length).toEqual(columnsGrouping.length);
   });
   test("table body renders all rows", () => {
-    const { container, getByTestId } = render(<UswdsTableTest grouping={false} />);
+    const { container, getByTestId } = render(
+      <UswdsTableTest grouping={false} />
+    );
     const tableRecords = container.querySelectorAll("tbody tr");
     expect(tableRecords.length).toEqual(data.length);
     const secondRow = getByTestId("tableRow2");
@@ -122,7 +153,9 @@ describe("testing generic uswds table component", () => {
   });
 
   test("table should be editable ", () => {
-    const { container } = render(<UswdsTableTest grouping={false} editable={true}/>);
+    const { container } = render(
+      <UswdsTableTest grouping={false} editable={true} />
+    );
     const firstRowCells = container.querySelectorAll("tbody td .editableCell");
     expect(firstRowCells.length).not.toBeNull();
     // fireEvent.change(firstRowCells[0], { target: { value: 'BERRY' } });

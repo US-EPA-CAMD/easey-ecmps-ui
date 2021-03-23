@@ -21,7 +21,7 @@ export const MonitoringPlanTab = ({
     if(monitoringPlans.length>0){
       setHasActiveConfigs(getActiveConfigurations(monitoringPlans).length>0?true:false);
     }
-  },[monitoringPlans]);
+  },[]);
 
   return (
     <div>

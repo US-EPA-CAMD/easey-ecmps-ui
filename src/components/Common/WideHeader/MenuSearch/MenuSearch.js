@@ -10,7 +10,7 @@ const MenuSearch = () => {
 
   const onSearch = () => {
     window.open(
-      "http://search.epa.gov/epasearch/?querytext=" + searchState,
+      "https://search.epa.gov/epasearch/?querytext=" + searchState,
       "_blank"
     );
     return false;

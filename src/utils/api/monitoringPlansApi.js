@@ -32,3 +32,11 @@ export async function getMonitoringMatsMethods(locationId) {
       .catch(handleError)
   );
 }
+export async function getMonitoringSystems(locationId) {
+  return axios
+    .get(
+      `${config.services.monitorPlans.uri}/monitor-locations/${locationId}/systems`
+    )
+    .then(handleResponse)
+    .catch(handleError);
+}

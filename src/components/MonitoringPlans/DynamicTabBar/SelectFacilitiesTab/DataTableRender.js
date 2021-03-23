@@ -23,7 +23,7 @@ const DataTableRender = ({
           showEntries={[100, 250, 500]}
           search
           //editable
-          viewDataColumn={openedFacilityTabs}
+          openTabColumn={openedFacilityTabs}
           title="Facilities"
           selectedRowHandler={selectedRowHandler}
         />

@@ -19,6 +19,10 @@ const reducer = (state = initialState.apiCallsInProgress, action) => {
       return Object.assign({}, state, { monitoringMatsMethods: true });
     case types.LOAD_MONITORING_MATSMETHODS_SUCCESS:
       return Object.assign({}, state, { monitoringMatsMethods: false });
+    case types.BEGIN_MONITORING_SYSTEMS_API_CALL:
+      return Object.assign({}, state, { monitoringMethods: true });
+    case types.LOAD_MONITORING_SYSTEMS_SUCCESS:
+      return Object.assign({}, state, { monitoringMethods: false });
     default:
       return state;
   }
