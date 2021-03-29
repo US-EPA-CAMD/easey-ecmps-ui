@@ -17,7 +17,7 @@ input {
 }
 .tableButton {
   background-color: Transparent;
-  border: solid;
+  border: none;
   cursor: pointer;
   overflow: hidden;
   outline: none;

@@ -10,6 +10,7 @@ const TableBody = ({
   defaultSelect,
   viewDataColumn,
   openTabColumn,
+  openModal,
 }) => {
   // just turns on react-table row selected to handle future css
   const defaultSelector = () => {
@@ -42,6 +43,7 @@ const TableBody = ({
       console.log("enter was pressed");
     }
   };
+
   return (
     <tbody {...getTableBodyProps()}>
       {(page.length > 0 &&
@@ -80,7 +82,7 @@ const TableBody = ({
                     row.isSelected ? "selected hovered" : "hovered"
                   }`}
                 >
-                  {" "}
+                 
                   <button
                     disabled={
                       openTabColumn.includes(row.cells[1].value) ? true : false
@@ -107,14 +109,11 @@ const TableBody = ({
                     row.isSelected ? "selected hovered" : "hovered"
                   }`}
                 >
-                  {" "}
                   <button
-                    className="tableButton"
-                    // onClick={() => handleDataSelector(row.cells)}
+                    onClick={() => openModal(true)}
+                    className=" tableButton"
                   >
-                    {" "}
-                    <GoPencil />
-                    View
+                    <GoPencil /> View
                   </button>
                 </td>
               ) : null}

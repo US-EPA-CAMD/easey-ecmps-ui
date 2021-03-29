@@ -34,6 +34,7 @@ const UswdsTable = ({
   viewDataColumn, // creates a view /open all tabs column
   openTabColumn, 
   viewDataHandler, // handles the view/ open all tabs column
+  openModal, // handles opening the modal for a section
 }) => {
   if (disabledColumnFilters) {
     if (disabledColumnFilters.length >= 1) {
@@ -167,6 +168,7 @@ const UswdsTable = ({
           viewDataColumn={viewDataColumn}
           viewDataHandler={viewDataHandler}
           openTabColumn={openTabColumn}
+          openModal={openModal}
         />
       </table>
       <span> {caption} </span>

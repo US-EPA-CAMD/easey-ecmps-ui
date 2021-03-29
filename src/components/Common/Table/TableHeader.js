@@ -23,7 +23,7 @@ const TableHeader = ({ headerGroups, viewDataColumn, openTabColumn }) => (
               )}
             </span>
           </th>
-        ))}{" "}
+        ))}
         {openTabColumn ? (
           <th width={headerGroups[0].headers[0].width}>Actions</th>
         ) : null}
