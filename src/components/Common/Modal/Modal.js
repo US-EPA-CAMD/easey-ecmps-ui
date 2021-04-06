@@ -78,11 +78,11 @@ const Modal = ({ show, close, children }) => {
                 aria-haspopup="true"
                 aria-labelledby={"close"}
               >
-                <i className="fa fa-times fa-sm" alt="close"></i>
+                <i className="fa fa-times fa-sm"></i>
               </span>
             </div>
             <div className="modal-content modal-color">
-              <div className="modal-body modal-color"></div>
+              <div className="modal-body modal-color">{children}</div>
 
               <div className="modal-footer modal-color">
                 <button onClick={close} className="cancelBTN modal-color">

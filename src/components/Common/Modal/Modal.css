@@ -40,11 +40,12 @@ span.close-modal-btn {
 
 .modal-content {
   padding: 1.5rem 1rem;
-
-  height: 500px;
+  height:auto;
+  /* height: 500px; */
   border: 0 none;
   padding-top: 0;
   padding-bottom: 15px;
+  
 }
 
 .modal-body {
@@ -52,6 +53,7 @@ span.close-modal-btn {
   margin-top: 0;
   font-size: 1rem;
   color: #333;
+  
 }
 
 .modal-body h4 {

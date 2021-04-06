@@ -35,7 +35,7 @@ const TableBody = ({
     if (!selectedRowHandler) {
       return false;
     }
-
+    console.log('test')
     return selectedRowHandler(data);
   };
   const onKeyDownHandler = (e) => {
@@ -110,7 +110,9 @@ const TableBody = ({
                   }`}
                 >
                   <button
-                    onClick={() => openModal(true)}
+                    onClick={() => {
+                      openModal(true,row.cells);
+                      handleDataSelector(row.cells)}}
                     className=" tableButton"
                   >
                     <GoPencil /> View

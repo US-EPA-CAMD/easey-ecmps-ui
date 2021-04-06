@@ -15,6 +15,7 @@ export const DataTableSystems = ({
       loadMonitoringSystemsData(locationSelect);
     }
   }, [locationSelect]);
+
   const columns = useMemo(
     () => [
       {
@@ -66,11 +67,7 @@ export const DataTableSystems = ({
 
   return (
     <div className="methodTable">
-      <DataTableSystemsRender
-        columns={columns}
-        data={data}
-        // selectedRowHandler={selectedRowHandler}
-      />
+      <DataTableSystemsRender columns={columns} data={data} />
     </div>
   );
 };

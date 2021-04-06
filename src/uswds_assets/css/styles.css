@@ -1763,6 +1763,7 @@ button.usa-combo-box__toggle-list:focus {
   background-position: center;
   background-size: auto 1.25rem;
   height: 1.5rem;
+  
   padding: 20px 10px;
 }
 .usa-date-picker__calendar__previous-year:not([disabled]) {

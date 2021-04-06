@@ -18,7 +18,7 @@
   align-items: center !important;
   /* float:right; */
 }
-.usa-select {
+.filterSelect>.usa-select {
   background-image: url("../images/dropdown_arrow.webp"),linear-gradient(transparent,transparent) !important;
 }
 .filterLabel {
