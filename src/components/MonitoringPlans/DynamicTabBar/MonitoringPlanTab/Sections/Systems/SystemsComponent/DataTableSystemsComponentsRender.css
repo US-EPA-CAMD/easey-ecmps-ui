@@ -35,10 +35,7 @@ tbody {
 }
 .systemsCompTable{
   border-style: solid ;
-  border-width: thin;
+  border-width: thin; background-color: white;
   box-shadow: 0px -2px 22px -6px rgba(60, 55, 61, 0.37),
   -5px 5px 11px -6px rgba(60, 55, 61, 0.37);
-}
-.systemsCompTable{
-  background-color: white;
 }
