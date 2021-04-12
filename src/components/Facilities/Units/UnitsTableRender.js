@@ -28,6 +28,7 @@ const UnitsTableRender = ({
         bordered={false}
         selectedRowHandler={selectedRowHandler}
         defaultSelect={true}
+        header
       />
     </div>
   );

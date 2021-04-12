@@ -25,6 +25,7 @@
 .modalDetails {
   width: 100%;
   height: 100%;
+  color:Gray;
 }
 
 @media (min-width: 768px) and (max-width: 3991px) {
@@ -60,4 +61,8 @@
   height: fit-content; /* Should be removed. Only for demonstration */
   margin-top: 0;
   /* display: inline-block */
+}
+.modalDetails > form {
+
+  height: max-content;
 }

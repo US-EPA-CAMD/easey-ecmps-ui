@@ -3,8 +3,9 @@ import UswdsTable from "../../../../../Common/Table/UswdsTable";
 import "./DataTableSystemsRender.css";
 import Modal from "../../../../../Common/Modal/Modal";
 import Details from "../Systems/Details/Details";
-const DataTableSystemsRender = ({ columns, data, testShow }) => {
-  const [show, setShow] = useState(testShow ? testShow : false);
+import DataTableSystemsComponents from "./SystemsComponent/DataTableSystemsComponents";
+const DataTableSystemsRender = ({ columns, data }) => {
+  const [show, setShow] = useState(false);
 
   const closeModalHandler = () => setShow(false);
 
@@ -43,6 +44,7 @@ const DataTableSystemsRender = ({ columns, data, testShow }) => {
         columns={columns}
         data={data}
         bordered={false}
+        header
         // /paginate
         // showEntries={[10, 250, 500]}
         // search
@@ -55,7 +57,15 @@ const DataTableSystemsRender = ({ columns, data, testShow }) => {
         <Modal
           show={show}
           close={closeModalHandler}
-          children={<Details viewOnly={true} modalData={modalData} />}
+          children={
+            <div>
+              <Details viewOnly={true} modalData={modalData} />
+
+              <DataTableSystemsComponents
+                systemID={modalData.length > 1 ? modalData[0].value : 0}
+              />
+            </div>
+          }
         />
       ) : (
         ""

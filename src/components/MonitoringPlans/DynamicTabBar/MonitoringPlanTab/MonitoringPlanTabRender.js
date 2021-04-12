@@ -24,7 +24,6 @@ export const MonitoringPlanTabRender = ({
   useEffect(() => {
     setShowInactive(!hasActiveConfigs);
     setSectionsSelect("Monitoring Methods");
-    console.log('this is selected', sectionSelect)
   }, [facility]);
 
   const locationHandler = (location) => {
@@ -32,7 +31,6 @@ export const MonitoringPlanTabRender = ({
   };
 
   const sectionHandler = (section) => {
-    // console.log(section, "this is section selected");
     setSectionsSelect(section);
   };
   const showInactiveHandler = (value) => {

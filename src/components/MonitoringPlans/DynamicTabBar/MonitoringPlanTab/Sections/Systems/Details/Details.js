@@ -19,8 +19,6 @@ const Details = ({ modalData, viewOnly }) => {
   const [endHour, setEndHour] = React.useState(null);
   const [modalState, setModalSet] = useState([]);
 
-
-  // console.log(modalData, 'data')
   const timeOptions = [
     { time: null },
     { time: 0 },

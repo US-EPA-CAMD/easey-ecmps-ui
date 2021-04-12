@@ -53,7 +53,7 @@ span.close-modal-btn {
   margin-top: 0;
   font-size: 1rem;
   color: #333;
-  
+  padding-top: 0;
 }
 
 .modal-body h4 {

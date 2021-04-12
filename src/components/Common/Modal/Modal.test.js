@@ -23,7 +23,6 @@ describe("testing the creation of a modal", () => {
       .spyOn(document, "removeEventListener")
       .mockImplementation((event, handle) => {
         events[event] = undefined;
-        console.log("unmount");
       });
       const stateSetter = jest.fn()
       jest

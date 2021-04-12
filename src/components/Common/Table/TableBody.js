@@ -11,6 +11,7 @@ const TableBody = ({
   viewDataColumn,
   openTabColumn,
   openModal,
+
 }) => {
   // just turns on react-table row selected to handle future css
   const defaultSelector = () => {
@@ -35,14 +36,13 @@ const TableBody = ({
     if (!selectedRowHandler) {
       return false;
     }
-    console.log('test')
     return selectedRowHandler(data);
   };
-  const onKeyDownHandler = (e) => {
-    if (e.keyCode === 13) {
-      console.log("enter was pressed");
-    }
-  };
+  // const onKeyDownHandler = (e) => {
+  //   if (e.keyCode === 13) {
+  //     console.log("enter was pressed");
+  //   }
+  // };
 
   return (
     <tbody {...getTableBodyProps()}>
@@ -57,9 +57,9 @@ const TableBody = ({
               {...row.getRowProps()}
               onClick={() => {
                 rowSelection(row);
-                handleDataSelector(row.cells);
+                // handleDataSelector(row.cells);
               }}
-              onKeyDown={onKeyDownHandler}
+              // onKeyDown={onKeyDownHandler}
             >
               {row.cells.map((cell) => {
                 return (
@@ -68,8 +68,10 @@ const TableBody = ({
                     {...cell.getCellProps()}
                     className={`${
                       row.isSelected ? "selected hovered" : "hovered"
-                    }`}
+                    }`
+                     }
                   >
+                    
                     {cell.render("Cell")}
                   </td>
                 );
@@ -88,7 +90,7 @@ const TableBody = ({
                       openTabColumn.includes(row.cells[1].value) ? true : false
                     }
                     className="tableButton"
-                    // onClick={() => handleDataSelector(row.cells)}
+                    onClick={() => handleDataSelector(row.cells)}
                   >
                     <img
                       src={require("./images/openTab.jpg")}

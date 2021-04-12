@@ -7,6 +7,7 @@ const DataTableMethodRender = ({ columns, data, selectedRowHandler }) => {
     <div className="tableContainerWS">
       <UswdsTable
         columns={columns}
+        header
         data={data}
         bordered={false}
         // /paginate
