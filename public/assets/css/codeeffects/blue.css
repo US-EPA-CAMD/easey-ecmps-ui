@@ -1,0 +1,21 @@
+/* Code Effects Software © 2020 | https://CodeEffects.com | Version: 5.0.8.8 | August 03, 2020 */
+
+span.ceFlow, div.ceToolBar, span.ceClause, span.ceOperator, span.ceParenthesis, span.ceNewLine, span.ceBrace, span.ceSaveButton, span:hover.ceDeleteButton { color: #000 }
+span.ceAction,span.ceMethod, span.ceField, input[type="text"].ceValue { color: #01357A }
+span.ceEmpty,div.ceHelp { color: #436CA3 }
+span:hover.ceSaveButton, span.ceDeleteButton, span:hover.ceRulesButton { color: #6285B5 }
+td.ceDays { color: #BCCFE8 }
+table.ceHeader, td.ceRollover, td.ceSelected, td.ceToday, span.ceWarn { color: #000 }
+span.ceValue,span.ceFieldInput { color: #BA002B }
+div.ceError, input.ceError, div.ceValueWarn { color: #C00 }
+table.ceCal, table.ceTime, div.ceMenu, table.ceHeader { background-color: #FFF }
+span.ceCurrent { background-color: #7D9FC9 }
+span.ceSelected { background-color: #B3EB9D }
+span.ceHighlight { background-color: #FFF34D }
+span.ceWarn { background-color: #F00 }
+td.ceToday { background-color: #ffb7d2 }
+td.ceSelected { background-color: #B3EB9D }
+div.ceRule, div.ceToolBar, td.ceRollover { background-color: #B0CFF5 }
+div.ceHelp { background-color: #CFE3FC }
+table.ceCal, table.ceTime, div.ceMenu { border: solid 1px #CDCDCD }
+table.ceCal, table.ceTime, div.ceMenu { box-shadow: 2px 2px 4px #ADADAD }

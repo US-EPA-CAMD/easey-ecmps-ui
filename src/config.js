@@ -10,6 +10,11 @@ const config = {
         process.env.REACT_APP_EASEY_MDM_API ||
         "https://easey-dev.app.cloud.gov/api/master-data-mgmt",
     },
+    rules: {
+      uri:
+        process.env.REACT_APP_EASEY_RULES_API ||
+        "https://easey-dev.app.cloud.gov/api/rules-mgmt",
+    },    
     facilities: {
       uri:
         process.env.REACT_APP_EASEY_FACILITIES_API ||

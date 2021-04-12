@@ -6,6 +6,7 @@ import NotFound from "./components/Common/NotFound/NotFound";
 
 import Layout from "./components/Common/Layout";
 import MonitoringPlanHome from "./components/MonitoringPlans/MonitoringPlanHome";
+import RuleEditor from "./components/RuleEditor/RuleEditor";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             exact
             component={MonitoringPlanHome}
           />
+          <Route path="/admin/rules" exact component={RuleEditor} />
           <Route path="*" component={NotFound} />
         </Switch>
       </Layout>

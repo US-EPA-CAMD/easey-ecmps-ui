@@ -1,0 +1,41 @@
+/* Code Effects Software © 2020 | https://CodeEffects.com | Version: 5.0.8.8 | August 03, 2020 */
+
+span.ceFlow,span.ceClause,span.ceOperator,span.ceParenthesis,span.ceNewLine,span.ceBrace,span.ceAction,span.ceMethod,span.ceField,span.ceEmpty,span.ceValue,span.ceFieldInput,span.ceTab,span.ceWarn,span.ceCurrent,
+input[type="text"].ceValue,table.ceTime input,table.ceTime select,span.ceSaveButton,span.ceDeleteButton,span.ceRulesButton,table.ceCal table td,table.ceHeader table td,div.ceMenu div{font-family:Tahoma,Arial,sans-serif;font-size:13px}
+table.ceHeader,td.ceDays,div.ceHelp{font-family:Tahoma,Geneva,sans-serif}
+div.ceHelp{font-size:11px;padding:3px 8px;margin-bottom:6px;white-space:nowrap}
+td.ceDays{font-size:9px}
+span.ceFlow,span.ceAction,span.ceMethod,span.ceField,span.ceValue,span.ceFieldInput,table.ceHeader,span.ceSaveButton,span.ceDeleteButton,span.ceRulesButton,span.ceBrace{font-weight:bolder}
+span.ceFlow,span.ceClause,span.ceOperator,span.ceParenthesis,span.ceNewLine,span.ceBrace,span.ceAction,span.ceMethod,span.ceField,span.ceEmpty,span.ceValue,span.ceFieldInput,span.ceTab,span.ceNewLine,span.ceWarn,span.ceCurrent{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+div.ceRule{padding:10px}
+table.ceCal{padding:1px}
+td.ceDay,td.ceToday,td.ceRollover,td.ceDays,td.ceSelected{padding:2px 4px}
+span.ceFlow,span.ceClause,span.ceOperator,span.ceParenthesis,span.ceNewLine,span.ceBrace,span.ceAction,span.ceMethod,span.ceField,span.ceEmpty,span.ceValue,span.ceFieldInput,span.ceTab,span.ceNewLine,span.ceWarn,span.ceCurrent,input[type="text"].ceValue{margin-bottom:1px;margin-right:1px}
+div.ceToolBar{margin-bottom:6px;padding:8px 10px;white-space:nowrap}
+input.ceDescriptionBox,input.ceDescriptionBoxDefault{width:100%;margin-left:4px}
+dev.ceMenu div,div.ceRule span,table.ceCal table,table.ceCal table td,table.ceTime table,table.ceTime table td{border:0}
+span.ceFlow,span.ceField,span.ceAction,span.ceMethod,span.ceValue,span.ceFieldInput,span.ceClause,span.ceOperator,span.ceParenthesis,span.ceTab,span.ceNewLine,span.ceBrace,span.ceCurrent,table.ceHeader,td.ceToday,td.ceRollover,td.ceSelected{border-radius:3px}
+div.ceRule,div.ceToolBar,table.ceCal,table.ceTime,div.ceMenu,div.ceHelp{border-radius:5px}
+td.ceDay,td.ceToday,td.ceRollover,td.ceDays,td.ceSelected,div.ceHelp{text-align:center}
+table.ceCal table td,table.ceTime table td{vertical-align:middle}
+input.ceNameBox,input.ceNameBoxDefault{width:98%}
+span:hover.ceSaveButton,span:hover.ceDeleteButton,span.ceRulesButton{cursor:pointer}
+td.ceDay,td.ceToday,td.ceRollover,td.ceDays,td.ceSelected,div.ceToolBar,span.ceFlow,span.ceField,span.ceAction,span.ceMethod,span.ceClause,span.ceOperator,span.ceParenthesis,span.ceTab,span.ceNewLine,span.ceValue,,span.ceFieldInput,div.ceHelp,span.ceBrace{cursor:default}
+input[type="text"].ceValue{margin-top:0;margin-bottom:0;padding:0;border:0;outline:0;background:transparent}
+input[type="text"].ceValue::-ms-clear{display:none}
+div.ceMenu div{padding:3px 8px;cursor:default;white-space:nowrap;max-width:500px;overflow:hidden;text-overflow:ellipsis}
+div.ceMenu div.ceMenuItemSymbol,div.ceMenu div.ceMenuItemName{float:left;padding-left:3px;padding-right:3px}
+div.ceMenu div.ceMenuItemSymbol{font-weight:bold}
+div.ceMenu div.ceMenuItemClear{clear:both}
+input.ceDescriptionBox,input.ceDescriptionBoxDefault,input.ceNameBox,input.ceNameBoxDefault{text-align:center}
+div.ceToolBar div.ceContainer{display:flex;justify-content:space-between;align-items:center}
+div.ceToolBar div.ceContainer div.ceRulesMenu{flex:0 0 auto;margin-right:30px}
+div.ceToolBar div.ceContainer div.ceControls{flex:1 1 auto;display:flex;justify-content:flex-end}
+div.ceToolBar div.ceContainer div.ceControls div.ceInputName,div.ceToolBar div.ceContainer div.ceControls div.ceInputDesc{margin-left:5px;flex:1 1 auto;width:1px}
+div.ceToolBar div.ceContainer div.ceControls div.ceSave{margin-left:14px}
+div.ceToolBar div.ceContainer div.ceControls div.ceDelete{margin-left:6px}
+input.ceDescriptionBox::placeholder,input.ceDescriptionBoxDefault::placeholder,input.ceNameBox::placeholder,input.ceNameBoxDefault::placeholder{color:#aaa;opacity:0.6}
+input.ceDescriptionBox::-moz-placeholder,input.ceDescriptionBoxDefault::-moz-placeholder,input.ceNameBox::-moz-placeholder,input.ceNameBoxDefault::-moz-placeholder{color:#aaa;opacity:0.6}
+input.ceDescriptionBox:-ms-input-placeholder,input.ceDescriptionBoxDefault:-ms-input-placeholder,input.ceNameBox:-ms-input-placeholder,input.ceNameBoxDefault:-ms-input-placeholder{color:#aaa;opacity:0.6}
+input.ceDescriptionBox::-ms-input-placeholder,input.ceDescriptionBoxDefault::-ms-input-placeholder,input.ceNameBox::-ms-input-placeholder,input.ceNameBoxDefault::-ms-input-placeholder{color:#aaa;opacity: 0.6}
+div.ceRule{-webkit-user-select: none;-webkit-touch-callout: none;}
