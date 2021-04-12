@@ -7,7 +7,7 @@ const HomeOverview = () => {
 
       <div>
         <p>
-          This tool provides access to information for sources affected by{" "}
+          This tool provides access to information for sources affected by
           <a href="https://www.ecfr.gov/cgi-bin/text-idx?tpl=/ecfrbrowse/Title40/40cfr75_main_02.tpl">
             40 CFR Part 75
           </a>
@@ -52,7 +52,7 @@ const HomeOverview = () => {
 
             <p>
               For technical support with the monitoring plans, please contact
-              your{" "}
+              your
               <a href="https://www.epa.gov/airmarkets/business-center-and-emissions-monitoring-contacts">
                 regional analyst
               </a>

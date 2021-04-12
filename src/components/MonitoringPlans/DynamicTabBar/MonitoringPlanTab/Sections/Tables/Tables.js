@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Accordion } from "@trussworks/react-uswds";
 const Tables = ({
   sectionSelect,
@@ -7,10 +7,10 @@ const Tables = ({
   matsTableFlag,
   systemsItems,
 }) => {
-  const [expanded, setExpanded] = useState(false);
-  useEffect(() => {
-    setExpanded(true);
-  }, [sectionSelect]);
+  // const [expanded, setExpanded] = useState(false);
+  // useEffect(() => {
+  //   setExpanded(true);
+  // }, [sectionSelect]);
   const sections = {
     "Monitoring Methods": (
       <div>

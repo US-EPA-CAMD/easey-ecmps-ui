@@ -8,7 +8,7 @@ const ContactsRoleCard = ({ info }) => {
       </div>
       <strong>Role: </strong> {info.role}
       <br />
-      <strong>Unit(s): </strong>{" "}
+      <strong>Unit(s): </strong>
       {info.units.map((unit, index) => {
         return (index ? ", " : "") + unit;
       })}

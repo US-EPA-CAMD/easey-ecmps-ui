@@ -35,4 +35,5 @@ img.hide {
 }
 .bold{
   font-weight:bold !important;
+  width: fit-content !important;
 }

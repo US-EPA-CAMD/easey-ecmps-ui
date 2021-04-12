@@ -28,7 +28,7 @@ const DataTableRender = ({
           title="Facilities"
           selectedRowHandler={selectedRowHandler}
         />
-      </div>{" "}
+      </div>
     </div>
   );
 };

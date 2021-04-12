@@ -21,7 +21,7 @@ const Layout = (props) => {
         <div className="mainContent">{childrenWithProps}</div>
       </div>
       <div className="bottomFooter">
-        <Footer />{" "}
+        <Footer />
       </div>
     </div>
   );

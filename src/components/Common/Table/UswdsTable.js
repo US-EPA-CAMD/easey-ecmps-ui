@@ -202,10 +202,9 @@ const UswdsTable = ({
         )}
         {addBTN ? (
           <div className="filterAdd">
-            {" "}
             <Button className="addCompBTN align-right">
               Add Component
-            </Button>{" "}
+            </Button>
           </div>
         ) : (
           ""

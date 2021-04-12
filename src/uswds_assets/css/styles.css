@@ -4043,7 +4043,7 @@ button.usa-combo-box__toggle-list:focus {
   position: absolute;
   bottom: 0;
   top: 0;
-  vertical-align: baseline;
+  /* vertical-align: baseline; */
   color: #005ea2;
   display: block;
   font-size: 0.8rem;

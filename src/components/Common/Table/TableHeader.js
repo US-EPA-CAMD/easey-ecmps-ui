@@ -14,12 +14,12 @@ const TableHeader = ({ headerGroups, viewDataColumn, openTabColumn }) => (
             <span>
               {column.isSorted ? (
                 column.isSortedDesc ? (
-                  <img src="https://www.epa.gov/sites/all/libraries/js/datatables/media/images/sort_asc.png" />
+                  <img src="https://www.epa.gov/sites/all/libraries/js/datatables/media/images/sort_asc.png" alt ="ascend"/>
                 ) : (
-                  <img src="https://www.epa.gov/sites/all/libraries/js/datatables/media/images/sort_desc.png" />
+                  <img src="https://www.epa.gov/sites/all/libraries/js/datatables/media/images/sort_desc.png"alt ="descend" />
                 )
               ) : (
-                <img src="https://www.epa.gov/sites/all/libraries/js/datatables/media/images/sort_both.png" />
+                <img src="https://www.epa.gov/sites/all/libraries/js/datatables/media/images/sort_both.png" alt ="sort"/>
               )}
             </span>
           </th>

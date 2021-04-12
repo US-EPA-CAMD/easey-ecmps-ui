@@ -19,11 +19,13 @@ export const MonitoringPlanTabRender = ({
   const [showInactive, setShowInactive] = useState(!hasActiveConfigs);
   useEffect(() => {
     setShowInactive(!hasActiveConfigs); //Calling setter here to update
+    // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, [hasActiveConfigs]);
 
   useEffect(() => {
     setShowInactive(!hasActiveConfigs);
     setSectionsSelect("Monitoring Methods");
+    // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, [facility]);
 
   const locationHandler = (location) => {

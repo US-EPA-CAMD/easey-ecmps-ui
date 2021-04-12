@@ -11,7 +11,6 @@ const Accessories = () => {
   return (
     <div className="accessoriesLinks">
       <div className="accessoryLink">
-        {" "}
         <BsFillGrid3X3GapFill style={{ fill: "white" }} />
         <Link to="./apps" rel=" CAMD Apps" title="Go to the  CAMD Apps page">
           CAMD Apps
