@@ -1,30 +1,29 @@
 import React, { useMemo } from "react";
 import { render, waitForDomChange } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import DataTableSystemsRender from "./DataTableSystemsRender";
+import DataTableSystemsComponentsRender from "./DataTableSystemsComponentsRender";
 
 let columns = [],
   data = [];
 
-const DataTableSystemsRenderTest = () => {
+const DataTableSystemsComponentsRenderTest = () => {
   data = useMemo(
     () => [
       {
         col1: "Hello",
         col2: "World",
         col3: "Again",
-        col4: "05/19/2002 2",
-        col5: "05/19/2002 2",
-        col6: "05/19/2002 2",
       },
       {
         col1: "react",
         col2: "table",
         col3: "rocks",
-        col4: "05/19/2002 4",
-        col5: "05/19/2002 3",
-        col6: "05/19/2002 2",
-      }
+      },
+      {
+        col1: "whatever",
+        col2: "you want",
+        col3: "in here",
+      },
     ],
     []
   );
@@ -42,26 +41,14 @@ const DataTableSystemsRenderTest = () => {
         Header: "Column 3",
         accessor: "col3",
       },
-      {
-        Header: "Column 4",
-        accessor: "col4",
-      },
-      {
-        Header: "Column 5",
-        accessor: "col5",
-      },
-      {
-        Header: "Column 6",
-        accessor: "col6",
-      },
     ],
     []
   );
-  return <DataTableSystemsRender bodyRef={null} columns={columns} data={data} testShow={true}/>;
+  return <DataTableSystemsComponentsRender bodyRef={null} columns={columns} data={data} />;
 };
 
 test("demo table renders without crashing", () => {
-  const { container } = render(<DataTableSystemsRenderTest />);
+  const { container } = render(<DataTableSystemsComponentsRenderTest />);
   waitForDomChange({ container })
     .then(() => {
       const table = container.querySelector("table");

@@ -40,3 +40,11 @@ export async function getMonitoringSystems(locationId) {
     .then(handleResponse)
     .catch(handleError);
 }
+export async function getMonitoringSystemsComponents(systemId,componentId) {
+  return axios
+    .get(
+      `${config.services.monitorPlans.uri}/monitor-locations/${systemId}/systems/${componentId}/components`
+    )
+    .then(handleResponse)
+    .catch(handleError);
+}

@@ -33,3 +33,7 @@ img.show {
 img.hide {
   opacity: 0.25;
 }
+.bold{
+  font-weight:bold !important;
+  width: fit-content !important;
+}

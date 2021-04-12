@@ -15,6 +15,7 @@ const Tabs = ({ children, dynamic = false, removeTabs, setResizeObserver}) => {
     if(contentBox){
       setResizeObserver(contentBox);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[contentBox]);
 
   return (

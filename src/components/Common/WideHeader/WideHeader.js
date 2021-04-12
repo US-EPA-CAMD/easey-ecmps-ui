@@ -1,6 +1,7 @@
 import React, { createContext,useRef , useState, useEffect, createRef } from "react";
 import { Button, Header, Title, PrimaryNav } from "@trussworks/react-uswds";
 import "./WideHeader.css";
+
 import { Link } from "react-router-dom";
 import Menu from "./Menu/Menu";
 import {
@@ -73,7 +74,6 @@ const WideHeader = () => {
         className="block block-pane  block-pane-official-website-header sitewide-alert sitewide-alert--official"
       >
         <div className="sitewide-alert__content">
-          {" "}
           An official website of the United States government.
         </div>
       </div>
@@ -88,7 +88,6 @@ const WideHeader = () => {
         <div className="usa-nav-container" >
           <div className="usa-navbar">
             <Title>
-              {" "}
               <Link to="./" rel="home" title="Go to the home page">
                 <img src={require("./title.png")} className="photo" />
               </Link>

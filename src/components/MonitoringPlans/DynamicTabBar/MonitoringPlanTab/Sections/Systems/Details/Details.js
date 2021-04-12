@@ -19,8 +19,6 @@ const Details = ({ modalData, viewOnly }) => {
   const [endHour, setEndHour] = React.useState(null);
   const [modalState, setModalSet] = useState([]);
 
-
-  // console.log(modalData, 'data')
   const timeOptions = [
     { time: null },
     { time: 0 },
@@ -76,7 +74,7 @@ const Details = ({ modalData, viewOnly }) => {
       {
         <div className="modalDetails">
           <h2>
-            Monitoring Systems: {modalData.length >= 1 ? modalState[0] : ""}{" "}
+            Monitoring Systems: {modalData.length >= 1 ? modalState[0] : ""}
           </h2>
           <Form>
             {" "}
@@ -87,7 +85,7 @@ const Details = ({ modalData, viewOnly }) => {
                     htmlFor="otherInput"
                     hint={<span className="requiredItalics"> (Required)</span>}
                   >
-                    System ID{" "}
+                    System ID
                   </Label>
                   <TextInput
                     className="modalInput"

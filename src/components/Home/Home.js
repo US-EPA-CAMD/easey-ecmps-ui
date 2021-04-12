@@ -54,7 +54,7 @@ const Home = () => {
               className="contact-us"
             >
               Contact Us
-            </a>{" "}
+            </a>
             to ask a question, provide feedback, or report a problem.
           </p>
         </div>

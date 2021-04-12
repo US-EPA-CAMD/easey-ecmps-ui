@@ -2,10 +2,11 @@ import monitoringSystemsReducer from "./monitoringSystems";
 import * as actions from "../actions/monitoringSystems";
 
 describe("Monitoring Methods Reducer State Update", () => {
-  it("should update state with list of monitoring methods when passed LOAD_MONITORING_SYSTEMS_SUCCESS", () => {
+  it("should update state with list of monitoring systems when passed LOAD_MONITORING_SYSTEMS_SUCCESS", () => {
     const initialState = {
       monitoringSystems: {
         systems: [],
+        components: [],
       },
     };
     const monitoringSystems = [
@@ -52,5 +53,55 @@ describe("Monitoring Methods Reducer State Update", () => {
       action
     );
     expect(newState.systems.length).toEqual(3);
+  });
+  it("should update state with list of monitoring systems  components when passed LOAD_MONITORING_SYSTEMS_SUCCESS", () => {
+    const initialState = {
+      monitoringSystems: {
+        systems: [],
+        components: [],
+      },
+    };
+    const monitoringSystemsComponents = [
+      {
+        id: "TWCORNEL5-1346D0289EF44F7A87B4ABF92CE501DC",
+        monLocId: "6",
+        componentTypeCode: "TEMP",
+        basisCode: null,
+        modelVersion: "RTT1SS-T1SA1-EN",
+        manufacturer: "SCHNEIDER",
+        serialNumber: "17301602",
+        hgConverterInd: null,
+        acquisitionMethodCode: "ORF",
+        componentIdentifier: "AFF",
+        beginDate: "2019-07-01",
+        beginHour: "0",
+        endDate: null,
+        endHour: null,
+        Active: true,
+      },
+      {
+        id: "TWCORNEL5-15BBE0B7C475434887739E964E45EDD3",
+        monLocId: "6",
+        componentTypeCode: "TEMP",
+        basisCode: null,
+        modelVersion: "RTT1SS-T1SA1-EN",
+        manufacturer: "SCHNEIDER",
+        serialNumber: "17301603",
+        hgConverterInd: null,
+        acquisitionMethodCode: "ORF",
+        componentIdentifier: "AFG",
+        beginDate: "2019-07-01",
+        beginHour: "0",
+        endDate: null,
+        endHour: null,
+        Active: true,
+      }
+    ];
+    const action = actions.loadMonitoringSystemsComponentsSuccess(monitoringSystemsComponents);
+    const newState = monitoringSystemsReducer(
+      initialState.monitoringSystemsComponents,
+      action
+    );
+    expect(newState.components.length).toEqual(2);
   });
 });

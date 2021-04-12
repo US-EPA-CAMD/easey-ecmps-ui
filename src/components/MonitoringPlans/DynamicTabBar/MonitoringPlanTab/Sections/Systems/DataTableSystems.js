@@ -14,6 +14,7 @@ export const DataTableSystems = ({
     if (monitoringSystems.length === 0 || loading === false) {
       loadMonitoringSystemsData(locationSelect);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect]);
 
   const columns = useMemo(
@@ -63,6 +64,7 @@ export const DataTableSystems = ({
     } else {
       return [{ col2: "Loading list of Systems" }];
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, monitoringSystems]);
 
   return (

@@ -6,6 +6,7 @@ const DataTableMatsRender = ({ columns, data, selectedRowHandler }) => {
   return (
     <div className="tableContainerWS">
       <UswdsTable
+      header
         columns={columns}
         data={data}
         bordered={false}

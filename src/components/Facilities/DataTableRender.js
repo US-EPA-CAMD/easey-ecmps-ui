@@ -22,6 +22,7 @@ const DataTableRender = ({ columns, data, selectedRowHandler, dataSelector }) =>
         //editable
         //viewDataColumn
         viewDataColumn={[]}
+        header
       />
     </div>
   );

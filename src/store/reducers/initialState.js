@@ -6,14 +6,16 @@ export default {
     methods:[]
   },
   monitoringSystems:{
-    systems:[]
+    systems:[],
+    components:[]
   },
   apiCallsInProgress: {
     facilities: false,
     monitoringPlans: false,
     monitoringMethods: false,
     monitoringSystems: false,
-    monitoringMatsMethods: false
+    monitoringMatsMethods: false,
+    monitoringSystemsComponents :false,
   },
   openedFacilityTabs: [],
 };

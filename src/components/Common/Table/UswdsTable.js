@@ -7,6 +7,8 @@ import {
   useGlobalFilter,
   useRowSelect,
 } from "react-table";
+import { Button } from "@trussworks/react-uswds";
+
 import TableHeader from "./TableHeader";
 import TableBody from "./TableBody";
 import TablePagination from "./TablePagination/TablePagination";
@@ -32,9 +34,11 @@ const UswdsTable = ({
   defaultSelect, //
   editable, // makes data table editable
   viewDataColumn, // creates a view /open all tabs column
-  openTabColumn, 
+  openTabColumn,
   viewDataHandler, // handles the view/ open all tabs column
   openModal, // handles opening the modal for a section
+  header, // handles header section ( just for the systems data right now )
+  addBTN,
 }) => {
   if (disabledColumnFilters) {
     if (disabledColumnFilters.length >= 1) {
@@ -149,11 +153,15 @@ const UswdsTable = ({
         </div>
       </div>
       <table className={variant} {...getTableProps()}>
-        <TableHeader
-          headerGroups={headerGroups}
-          viewDataColumn={viewDataColumn}
-          openTabColumn={openTabColumn}
-        />
+        {header ? (
+          <TableHeader
+            headerGroups={headerGroups}
+            viewDataColumn={viewDataColumn}
+            openTabColumn={openTabColumn}
+          />
+        ) : (
+          ""
+        )}
         <TableBody
           selectedRowHandler={selectedRowHandler}
           dataSelector={dataSelector}
@@ -189,6 +197,15 @@ const UswdsTable = ({
               showEntries ? [...showEntries, rows.length] : [100, rows.length]
             }
           />
+        ) : (
+          ""
+        )}
+        {addBTN ? (
+          <div className="filterAdd">
+            <Button className="addCompBTN align-right">
+              Add Component
+            </Button>
+          </div>
         ) : (
           ""
         )}

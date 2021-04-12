@@ -90,6 +90,7 @@ describe("testing generic uswds table component", () => {
           defaultSelect={true}
           editable={editable}
           openTabColumn={[]}
+          header
         />
       );
     } else {
@@ -104,6 +105,7 @@ describe("testing generic uswds table component", () => {
           selectedRowHandler={selectedRowHandler}
           defaultSelect={true}
           editable={editable}
+          header
         />
       );
     }

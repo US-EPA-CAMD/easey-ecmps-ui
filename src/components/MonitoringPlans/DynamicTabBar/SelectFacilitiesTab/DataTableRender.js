@@ -18,6 +18,7 @@ const DataTableRender = ({
         <UswdsTable
           columns={columns}
           data={data}
+          header
           bordered={false}
           paginate
           showEntries={[100, 250, 500]}
@@ -27,7 +28,7 @@ const DataTableRender = ({
           title="Facilities"
           selectedRowHandler={selectedRowHandler}
         />
-      </div>{" "}
+      </div>
     </div>
   );
 };

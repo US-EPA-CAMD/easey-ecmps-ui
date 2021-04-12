@@ -19,12 +19,13 @@ export const MonitoringPlanTabRender = ({
   const [showInactive, setShowInactive] = useState(!hasActiveConfigs);
   useEffect(() => {
     setShowInactive(!hasActiveConfigs); //Calling setter here to update
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasActiveConfigs]);
 
   useEffect(() => {
     setShowInactive(!hasActiveConfigs);
     setSectionsSelect("Monitoring Methods");
-    console.log('this is selected', sectionSelect)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [facility]);
 
   const locationHandler = (location) => {
@@ -32,7 +33,6 @@ export const MonitoringPlanTabRender = ({
   };
 
   const sectionHandler = (section) => {
-    // console.log(section, "this is section selected");
     setSectionsSelect(section);
   };
   const showInactiveHandler = (value) => {

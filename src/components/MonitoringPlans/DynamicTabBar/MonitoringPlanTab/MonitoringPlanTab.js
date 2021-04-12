@@ -16,11 +16,13 @@ export const MonitoringPlanTab = ({
   const [hasActiveConfigs, setHasActiveConfigs] = useState(true);
   useEffect(() => {
     loadMonitoringPlansData(orisCode);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(()=>{
     if(monitoringPlans.length>0){
       setHasActiveConfigs(getActiveConfigurations(monitoringPlans).length>0?true:false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
 
   return (

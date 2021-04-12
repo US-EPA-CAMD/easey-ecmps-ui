@@ -15,3 +15,6 @@ export function beginMonitoringMatsMethodsApiCall() {
 export function beginMonitoringSystemsApiCall() {
   return { type: types.BEGIN_MONITORING_SYSTEMS_API_CALL };
 }
+export function beginMonitoringSystemsComponentsApiCall() {
+  return { type: types.BEGIN_MONITORING_SYSTEMS_COMPONENTS_API_CALL };
+}

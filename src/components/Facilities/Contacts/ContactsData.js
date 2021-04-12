@@ -14,6 +14,7 @@ const ContactsData = ({ facility }) => {
     if (facility) {
       return rolesSearch.map((role) => fs.getContactsRoleUnits(role, facility));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [facility]);
   return <ContactsRender contactsRoles={contactsRoles} contacts={contacts} />;
 };

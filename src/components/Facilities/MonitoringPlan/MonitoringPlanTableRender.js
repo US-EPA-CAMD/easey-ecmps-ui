@@ -16,7 +16,7 @@ const MonitoringPlanTableRender = ({ columns, data, checkBoxHandler }) => {
         defaultChecked
         onChange={checkBoxHandler}
       />
-      <UswdsTable columns={columns} data={data} bordered={false} />
+      <UswdsTable columns={columns} data={data} bordered={false} header/>
     </div>
   );
 };

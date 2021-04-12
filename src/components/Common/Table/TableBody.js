@@ -22,6 +22,7 @@ const TableBody = ({
   };
   useEffect(() => {
     defaultSelector();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const rowSelection = (row) => {
@@ -37,11 +38,6 @@ const TableBody = ({
     }
     console.log('test')
     return selectedRowHandler(data);
-  };
-  const onKeyDownHandler = (e) => {
-    if (e.keyCode === 13) {
-      console.log("enter was pressed");
-    }
   };
 
   return (
@@ -59,7 +55,7 @@ const TableBody = ({
                 rowSelection(row);
                 handleDataSelector(row.cells);
               }}
-              onKeyDown={onKeyDownHandler}
+              // onKeyDown={onKeyDownHandler}
             >
               {row.cells.map((cell) => {
                 return (
@@ -70,7 +66,9 @@ const TableBody = ({
                       row.isSelected ? "selected hovered" : "hovered"
                     }`}
                   >
-                    {cell.render("Cell")}
+                    <span className={`${
+                       cell.column.Header ==="Component id"? "bold" :""
+                    }`}>{cell.render("Cell")} </span>
                   </td>
                 );
               })}
