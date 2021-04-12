@@ -15,9 +15,9 @@ export const DataTableSystemsComponents = ({
 }) => {
   useEffect(() => {
     let selected = 1;
-    for (let i = 0; i < monitoringSystems.length; i++) {
-      if (monitoringSystems[i].systemIdentifier === systemID) {
-        selected = monitoringSystems[i];
+    for (let value of monitoringSystems) {
+      if (value.systemIdentifier === systemID) {
+        selected = value;
       }
     }
     loadMonitoringSystemsComponentsData(selected.monLocId, selected.id);

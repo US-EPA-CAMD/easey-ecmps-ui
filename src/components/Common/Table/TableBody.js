@@ -22,7 +22,7 @@ const TableBody = ({
   };
   useEffect(() => {
     defaultSelector();
-    // eslint-disable-next-line react-hooks/exhaustive-deps 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const rowSelection = (row) => {
@@ -39,11 +39,6 @@ const TableBody = ({
     console.log('test')
     return selectedRowHandler(data);
   };
-  // const onKeyDownHandler = (e) => {
-  //   if (e.keyCode === 13) {
-  //     console.log("enter was pressed");
-  //   }
-  // };
 
   return (
     <tbody {...getTableBodyProps()}>

@@ -37,7 +37,8 @@ const DataTableSystemsRender = ({ columns, data }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);
 
-  // const root = document.getElementById("portal");
+  // for testing
+  const root = document.getElementById("portal");
   return (
     <div className="tableContainerWS">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`}></div>
