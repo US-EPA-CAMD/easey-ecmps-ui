@@ -36,10 +36,12 @@
     border-top-color: rgb(223, 225, 226) !important;
     padding: 0.3em 0 0.3em 0 !important;
 
-    button {
-      font-size: 1.5em !important;
-      font-weight: 500 !important;
-    }
+
+      button {
+        font-size: 1.06em !important;
+        font-weight: 500 !important;
+      }
+
   }
 
   .usa-nav.is-visible {
@@ -78,10 +80,10 @@
   .usa-nav .usa-accordion {
     list-style-type: none !important;
     @extend .text-base-darkest;
-    margin: 0 !important;
+    margin-top: 2em !important;
     padding: 0 !important;
     width: 100% !important;
-    font-size: 1.06rem !important;
+    font-size: 1.25rem !important;
     line-height: 1.5 !important;
     position: relative !important;
     top: -4em !important;
@@ -112,8 +114,7 @@
   .usa-nav__primary button[aria-expanded="false"] {
     background-image: url("/images/icons/plus.svg"),
       linear-gradient(transparent, transparent) !important;
-    background-size: 0.6em !important;
-    position: relative;
+   position: relative;
     left: 0.5em !important;
   }
 
@@ -180,54 +181,28 @@
   }
 }
 
-.subheaderWrapper {
-  .usa-nav__primary button {
-    font-family: "Source Sans Pro Web", serif !important;
-    font-weight: bold !important;
-  }
 
-  .usa-nav__primary button[aria-expanded="false"]::after {
-    display: inline-block;
-    margin-left: 0.255em;
-    vertical-align: 0.255em;
-    content: "";
-    border-top: 0.3em solid;
-    border-right: 0.3em solid transparent;
-    border-bottom: 0;
-    border-left: 0.3em solid transparent;
-  }
-
-  .usa-nav__primary button[aria-expanded="true"] {
-    ::after {
-      display: inline-block;
-      margin-left: 1.5em;
-      vertical-align: 0.255em;
-      content: "";
-      border-top: 0.3em solid;
-      border-right: 0.3em solid transparent;
-      border-bottom: 0;
-      border-left: 0.3em solid transparent;
-    }
-    ::before {
-    }
-
-    background-image: none !important;
-    @extend .bg-base-darkest;
-  }
+.workspaceDropDown {
 
   .usa-nav__submenu {
-    @extend .bg-base-darkest;
-    top: 3.5em;
+    background-color: transparent;
   }
 
-  .usa-nav-container {
-    max-width: 100% !important;
+  .usa-megamenu.usa-nav__submenu::after {
+    background-color: transparent;
   }
 
-  .usa-logo {
-    font-size: 23px !important;
+  .usa-megamenu.usa-nav__submenu::before {
+    background-color: transparent;
   }
+
+  .usa-nav__submenu-item {
+    border-top: 1px solid #dfe1e2;
+    font-size: 0.93rem;
+  }
+
 }
+
 
 .usa-date-picker__calendar {
   margin-top: 1em !important;
@@ -236,3 +211,4 @@
 .usa-date-picker__button {
   margin-left: 1em !important;
 }
+

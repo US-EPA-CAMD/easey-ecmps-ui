@@ -13,11 +13,14 @@ const Layout = (props) => {
       <div className="topHeader">
         <WideHeader />
       </div>
-      <div className="mainContent">
-        <div className="sideNav">
+      <div className="grid-row">
+        {/*<div className="sideNav">
+          <LeftNavigation />
+        </div>*/}
+        <div className="grid-col-2">
           <LeftNavigation />
         </div>
-        {childrenWithProps}
+        <div className="grid-col">{childrenWithProps}</div>
       </div>
       <div className="bottomFooter">
         <Footer />

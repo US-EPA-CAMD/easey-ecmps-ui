@@ -31,12 +31,13 @@ const Workspace = () => {
     <>
       <div className="workspaceMenu">
         <NavDropDownButton
+          className="bg-base text-white"
           onToggle={() => {
             testing(open);
           }}
           menuId="MenuDropDown"
           isOpen={open}
-          label={<div className="workspaceLabel"> Workspace</div>}
+          label={<div className="text-underline"> Workspace</div>}
           isCurrent={open}
         />
         <MegaMenu
@@ -44,6 +45,7 @@ const Workspace = () => {
           items={[subMenu]}
           isOpen={open}
           id={"MenuDropDown"}
+          className="position-relative top-neg-2"
         />
       </div>
     </>

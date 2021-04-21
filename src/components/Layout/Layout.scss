@@ -31,6 +31,6 @@ div.row.column1 {
   flex-wrap: nowrap;
 }
 .sideNav{
-  display:flex;
-  flex-direction: column;
+  display:flex !important;
+  flex-direction: column !important;
 }
