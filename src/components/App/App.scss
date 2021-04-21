@@ -1,0 +1,13 @@
+/***** MAIN SOURCE stylesheet *****/
+@import "~uswds/dist/css/uswds";
+
+/***** GLOBAL VARIABLES (scss values used througout the app) *****/
+@import "../../additional-scss/variables";
+
+/***** APP SCOPE main source overrides *****/
+@import "../../additional-scss/uswds-global-overrides";
+
+@import "../../additional-scss/global-overrides";
+
+/***** ANIMATIONS *****/
+@import "../../animations/transitions";
