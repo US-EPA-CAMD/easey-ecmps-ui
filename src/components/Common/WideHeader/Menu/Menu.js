@@ -61,7 +61,6 @@ const Menu = (props) => {
               target="_blank"
               key={"btn" + index}
             >
-              {" "}
               {subMenu[index].props.title}
             </Link>
           }

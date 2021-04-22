@@ -109,7 +109,7 @@ const HeaderInfo = ({
             />
           </div>
           <div className="statuses column">
-            <div className="eval">Evaluation Status: </div>{" "}
+            <div className="eval">Evaluation Status: </div>
             <div className="answer">{" Passed with no errors "} </div>
             <br />
             <div className="submission"> Submission Status: </div>

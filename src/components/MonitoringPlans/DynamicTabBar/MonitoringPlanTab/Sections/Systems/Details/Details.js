@@ -77,7 +77,6 @@ const Details = ({ modalData, viewOnly }) => {
             Monitoring Systems: {modalData.length >= 1 ? modalState[0] : ""}
           </h2>
           <Form>
-            {" "}
             <div className="modalRow">
               <div className="modalColumn">
                 <FormGroup className="dateLabels">

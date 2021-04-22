@@ -56,7 +56,7 @@ const HomeOverview = () => {
               <a href="https://www.epa.gov/airmarkets/business-center-and-emissions-monitoring-contacts">
                 regional analyst
               </a>
-              . For any issues you encounter with this application, please email{" "}
+              . For any issues you encounter with this application, please email
               <a href="mailto:monitoringplans@epa.gov">
                 monitoringplans@epa.gov
               </a>

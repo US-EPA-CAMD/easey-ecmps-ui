@@ -53,22 +53,25 @@ const UswdsTable = ({
   useEffect(() => {
     setEditableData(data);
   }, [data]);
-
-  const updateData = (rowIndex, columnId, value) => {
-    setEditableData((old) =>
-      old.map((row, index) => {
-        if (index === rowIndex) {
-          return {
-            ...old[rowIndex],
-            [columnId]: value,
-          };
-        }
-        return row;
-      })
-    );
-    // use below to retreive/manipulate updated data
-    data = editableData;
+  const [tabFocus, setTabFocus] = useState(false);
+  const resetTabFocusHandler = (event) => {
+    setTabFocus(event);
   };
+  // const updateData = (rowIndex, columnId, value) => {
+  //   setEditableData((old) =>
+  //     old.map((row, index) => {
+  //       if (index === rowIndex) {
+  //         return {
+  //           ...old[rowIndex],
+  //           [columnId]: value,
+  //         };
+  //       }
+  //       return row;
+  //     })
+  //   );
+  //   // use below to retreive/manipulate updated data
+  //   data = editableData;
+  // };
 
   const defaultColumn = {
     Cell: EditableCell,
@@ -111,7 +114,7 @@ const UswdsTable = ({
         pageSize: paginate && showEntries ? showEntries[0] : 9999,
       },
       defaultColumn,
-      updateData,
+      // updateData,
     },
     useFilters,
     useGlobalFilter,
@@ -177,6 +180,8 @@ const UswdsTable = ({
           viewDataHandler={viewDataHandler}
           openTabColumn={openTabColumn}
           openModal={openModal}
+          tabFocus={tabFocus}
+          resetTabFocusHandler={resetTabFocusHandler}
         />
       </table>
       <span> {caption} </span>
@@ -193,6 +198,7 @@ const UswdsTable = ({
             setPageSize={setPageSize}
             pageIndex={pageIndex}
             pageSize={pageSize}
+            resetTabFocusHandler={resetTabFocusHandler}
             paginationFiltering={
               showEntries ? [...showEntries, rows.length] : [100, rows.length]
             }
@@ -202,9 +208,7 @@ const UswdsTable = ({
         )}
         {addBTN ? (
           <div className="filterAdd">
-            <Button className="addCompBTN align-right">
-              Add Component
-            </Button>
+            <Button className="addCompBTN align-right">Add Component</Button>
           </div>
         ) : (
           ""
