@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import "./TablePagination.scss";
-import "./TablePagination.css";
 import { Label } from "@trussworks/react-uswds";
 const TablePagination = ({
   canPreviousPage,
