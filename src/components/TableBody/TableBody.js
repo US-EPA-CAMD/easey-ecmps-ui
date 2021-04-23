@@ -11,7 +11,10 @@ const TableBody = ({
   viewDataColumn,
   openTabColumn,
   openModal,
+  tabFocus,
+  resetTabFocusHandler,
 }) => {
+
   // just turns on react-table row selected to handle future css
   const defaultSelector = () => {
     const selected = page.find((r) => r.isSelected);
@@ -32,23 +35,47 @@ const TableBody = ({
     }
     row.isSelected = true;
   };
-  const handleDataSelector = (data) => {
-    if (!selectedRowHandler) {
-      return false;
+  const resetScrollInsideTable = (indexTable) => {
+    const tableBody = document.getElementsByClassName("tableData")[indexTable];
+    tableBody.scrollTop = 0;
+  };
+  const resetBTNInsideTable = () => {
+    const tableBody = document.getElementsByClassName("tableButton");
+    if (tableBody) {
+      console.log('testing tablebody ', tableBody.length)
+      for (const el of tableBody) {
+        if (el.disabled) {
+          continue;
+        } else {
+          el.focus();
+          break;
+        }
+      }
     }
-    console.log('test')
+  };
+  useEffect(() => {
+    resetScrollInsideTable(0);
+    if (tabFocus) {
+      resetBTNInsideTable();
+      resetTabFocusHandler(false);
+    }
+  }, [rows, tabFocus]);
+  const handleDataSelector = (data) => {
+    // if (!selectedRowHandler) {
+    //   return false;
+    // }
     return selectedRowHandler(data);
   };
-
+  // console.log(page,'this is page')
   return (
-    <tbody {...getTableBodyProps()}>
+    <tbody {...getTableBodyProps()} className="tableData">
       {(page.length > 0 &&
         page.map((row, i) => {
           prepareRow(row);
           return (
             <tr
               data-testid={"tableRow" + i}
-              tabIndex={1}
+              tabIndex={-1}
               key={row.id}
               {...row.getRowProps()}
               onClick={() => {
@@ -66,9 +93,13 @@ const TableBody = ({
                       row.isSelected ? "selected hovered" : "hovered"
                     }`}
                   >
-                    <span className={`${
-                       cell.column.Header ==="Component id"? "bold" :""
-                    }`}>{cell.render("Cell")} </span>
+                    <span
+                      className={`${
+                        cell.column.Header === "Component id" ? "bold" : ""
+                      }`}
+                    >
+                      {cell.render("Cell")}
+                    </span>
                   </td>
                 );
               })}
@@ -80,13 +111,13 @@ const TableBody = ({
                     row.isSelected ? "selected hovered" : "hovered"
                   }`}
                 >
-                 
                   <button
                     disabled={
                       openTabColumn.includes(row.cells[1].value) ? true : false
                     }
                     className="tableButton"
-                    // onClick={() => handleDataSelector(row.cells)}
+                    onClick={() => handleDataSelector(row.cells)}
+                    aria-label={`Open ${row.cells[1].value} facility`}
                   >
                     <img
                       src={require("../UswdsTable/images/openTab.jpg")}
@@ -95,6 +126,7 @@ const TableBody = ({
                           ? "hide"
                           : "show"
                       }
+                      alt={`Open ${row.cells[1].value} facility`}
                     />
                     Open
                   </button>
@@ -108,12 +140,15 @@ const TableBody = ({
                   }`}
                 >
                   <button
+                    aria-label={`View ${row.cells[1].value} facility`}
                     onClick={() => {
-                      openModal(true,row.cells);
-                      handleDataSelector(row.cells)}}
+                      openModal(true, row.cells);
+                      handleDataSelector(row.cells);
+                    }}
                     className=" tableButton"
                   >
-                    <GoPencil /> View
+                    <GoPencil alt={`View ${row.cells[1].value} facility`} />
+                    View
                   </button>
                 </td>
               ) : null}

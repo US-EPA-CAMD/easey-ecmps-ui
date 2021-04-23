@@ -11,7 +11,6 @@ const HomeTitle = () => {
       </div>
       <div className="grid-col">
         <div className="region-preface clearfix">
-          {" "}
           <div
             id="block-pane-epa-web-area-connect"
             className="block block-pane  block-pane-epa-web-area-connect"

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./TablePagination.scss";
+import "./TablePagination.css";
 import { Label } from "@trussworks/react-uswds";
 const TablePagination = ({
   canPreviousPage,
@@ -13,6 +14,7 @@ const TablePagination = ({
   pageIndex,
   pageSize,
   paginationFiltering,
+  resetTabFocusHandler,
 }) => {
   const LEFT_PAGE = "LEFT";
   const RIGHT_PAGE = "RIGHT";
@@ -32,6 +34,33 @@ const TablePagination = ({
 
     return range;
   };
+  let stateTest = false;
+  const previousBTN = React.useRef(null);
+  const changingPagination = (event) => {
+    if (event.keyCode === 13) {
+      stateTest = true;
+    }
+  };
+
+  const shiftPreviousTabFocus = (event) => {
+    if (document.activeElement === previousBTN.current && stateTest === true) {
+      if (event.keyCode === 9) {
+        if (event.shiftKey) {
+          resetTabFocusHandler(true);
+          stateTest = false;
+        }
+      }
+    }
+  };
+  useEffect(() => {
+    window.addEventListener("keydown", shiftPreviousTabFocus);
+    window.addEventListener("keydown", changingPagination);
+    return () => {
+      window.removeEventListener("keydown", shiftPreviousTabFocus);
+      window.removeEventListener("keydown", changingPagination);
+    };
+  }, []);
+
   const fetchPageNumbers = () => {
     const totalPages = pageCount - 1;
     const currentPage = pageIndex;
@@ -95,7 +124,7 @@ const TablePagination = ({
           if (page === LEFT_PAGE) {
             return (
               <li key={index} className="page-item-previous">
-                <div className="page-link" href="#" aria-label="Previous">
+                <div className="page-link" href="#" aria-label="Go to previous page">
                   <span aria-hidden="true">{"..."}</span>
                   <span className="sr-only">...</span>
                 </div>
@@ -105,7 +134,7 @@ const TablePagination = ({
           if (page === RIGHT_PAGE) {
             return (
               <li key={index} className="page-item-next">
-                <div className="page-link" aria-label="Next">
+                <div className="page-link" aria-label="Go to next page">
                   <span aria-hidden="true">{"..."}</span>
                   <span className="sr-only">...</span>
                 </div>
@@ -119,7 +148,7 @@ const TablePagination = ({
                 pageIndex === page ? " active" : ""
               }`}
             >
-              <button className="page-link" onClick={() => gotoPage(page)}>
+              <button aria-label={`Go to page ${page}`} className="page-link" onClick={() => gotoPage(page)}>
                 {page + 1}
               </button>
             </li>
@@ -137,13 +166,13 @@ const TablePagination = ({
           onClick={() => nextPage()}
           disabled={!canNextPage}
         >
-          <button className="page-link">{"Next"}</button>
+          <button aria-label="Go to next page" className="page-link">{"Next"}</button>
         </li>
       );
     }
     return (
       <li className="page-item-next" disabled={true}>
-        <button className="page-link">{"Next"}</button>
+        <button  aria-label="Go to next page" className="page-link">{"Next"}</button>
       </li>
     );
   }
@@ -170,7 +199,9 @@ const TablePagination = ({
             onClick={() => previousPage()}
             disabled={!canPreviousPage}
           >
-            <button className="page-link">{"Previous"}</button>
+            <button aria-label="Go to previous page" className="page-link" ref={previousBTN}>
+              {"Previous"}
+            </button>
           </li>
 
           {tabs()}

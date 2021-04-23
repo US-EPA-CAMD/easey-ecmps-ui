@@ -1,8 +1,8 @@
 applications:
   - name: ((name))
-    path: .
-    command: npm run start
     memory: ((memory))
+    buildpacks:
+      - nodejs_buildpack
     env:
       OPTIMIZE_MEMORY: true
       REACT_APP_EASEY_UI_PORTAL_ENV: ((environment))

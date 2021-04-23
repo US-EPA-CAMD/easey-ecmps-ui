@@ -73,12 +73,12 @@ describe("testing monitoring plan data selectors", () => {
       {
         col1: "AFF",
         col2: "TEMP",
-        col3: "07/01/2019: 0 → Present",
+        col3: "07/01/2019: 0 ➜ Present",
       },
       {
         col1: "AFG",
         col2: "TEMP",
-        col3: "07/01/2019: 0 → 07/02/2019: 0",
+        col3: "07/01/2019: 0 ➜ 07/02/2019: 0",
       },
     ];
     monitoringSystemsTableRecods = [

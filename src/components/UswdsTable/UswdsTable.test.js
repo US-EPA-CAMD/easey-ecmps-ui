@@ -17,6 +17,7 @@ describe("testing generic uswds table component", () => {
     paginate,
     editable = false,
     openTabColumn,
+    disabledColumnFiltersTest
   }) => {
     data = useMemo(
       () => [
@@ -84,6 +85,7 @@ describe("testing generic uswds table component", () => {
           data={data}
           paginate={paginate}
           showEntries={[3, 1]}
+          disabledColumnFilters={disabledColumnFiltersTest?disabledColumnFiltersTest:[]}
           search
           //viewDataColumn = {[]}
           selectedRowHandler={selectedRowHandler}
@@ -91,6 +93,7 @@ describe("testing generic uswds table component", () => {
           editable={editable}
           openTabColumn={[]}
           header
+          openModal = {jest.fn()}
         />
       );
     } else {
@@ -100,19 +103,29 @@ describe("testing generic uswds table component", () => {
           data={data}
           paginate={paginate}
           showEntries={[3, 1]}
+          disabledColumnFilters={disabledColumnFiltersTest?disabledColumnFiltersTest:[]}
           search
           viewDataColumn
           selectedRowHandler={selectedRowHandler}
           defaultSelect={true}
           editable={editable}
           header
+          viewDataColumn={[]}
+          openModal = {jest.fn()}
         />
       );
     }
   };
 
-  test("table header renders all columnswith viewDataColumn", () => {
+
+  test("table header renders all columns", () => {
     const { container } = render(<UswdsTableTest grouping={false} />);
+    const headerColumns = container.querySelectorAll("thead tr th");
+    expect(headerColumns.length).toEqual(columns.length + 1);
+  });
+
+  test("table header renders all columns with a disabled column", () => {
+    const { container } = render(<UswdsTableTest grouping={false} disabledColumnFiltersTest ={[1]} />);
     const headerColumns = container.querySelectorAll("thead tr th");
     expect(headerColumns.length).toEqual(columns.length + 1);
   });
@@ -154,6 +167,14 @@ describe("testing generic uswds table component", () => {
     expect(tableRecords[0].innerHTML.split(" ")[0]).toEqual(data[2].col1);
   });
 
+  test("testing header with enter btn press  ", () => {
+    const { container } = render(<UswdsTableTest grouping={false} />);
+    const sortIMGS = container.querySelectorAll("thead tr th span");
+    fireEvent.keyPress(sortIMGS[1], { key: "Enter", code: 13, charCode: 13 });
+    fireEvent.keyPress(sortIMGS[1], { key: "Tab", code: 9, charCode: 9 });
+    expect(sortIMGS).not.toBeUndefined();
+  });
+
   test("table should be editable ", () => {
     const { container } = render(
       <UswdsTableTest grouping={false} editable={true} />
@@ -162,5 +183,18 @@ describe("testing generic uswds table component", () => {
     expect(firstRowCells.length).not.toBeNull();
     // fireEvent.change(firstRowCells[0], { target: { value: 'BERRY' } });
     // expect(firstRowCells[0].value).toBe("BERRY");
+  });
+
+  test("tests open btns ", () => {
+    const { container } = render(<UswdsTableTest grouping={false} openTabColumn />);
+    const openBTNS = container.querySelectorAll("tr td button");
+    fireEvent.click(openBTNS[0]);
+    expect(openBTNS).not.toBeUndefined();
+  });
+  test("tests view btns ", () => {
+    const { container } = render(<UswdsTableTest grouping={false} />);
+    const openBTNS = container.querySelectorAll("tr td button");
+    fireEvent.click(openBTNS[0]);
+    expect(openBTNS).not.toBeUndefined();
   });
 });

@@ -41,8 +41,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "test:cov": "react-scripts test --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter"
+    "test": "react-scripts test --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter",
+    "dev": "concurrently \"react-scripts start\" \"gulp watch\""
   },
   "eslintConfig": {
     "extends": "react-app"
