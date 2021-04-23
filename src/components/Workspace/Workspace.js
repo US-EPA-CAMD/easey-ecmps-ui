@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import "./Workspace.scss";
 import { HiDesktopComputer } from "react-icons/hi";
 const Workspace = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const subMenu = [
     <Link
       to="./monitoring-plans"

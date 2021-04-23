@@ -3,9 +3,7 @@
   position: relative;
   width: 36px;
   height: 36px;
-  top: 35px;
-  bottom: 34px;
-  right: 40px;
+  left: 40px;
   border-radius: 60px;
   box-shadow: 0px 0px 2px #888;
   text-align: center;
@@ -16,8 +14,8 @@
 #menuContent {
   float: right;
   position: absolute;
-  bottom: 52px;
-  right: 58px;
+  bottom: -5px;
+  right: 1rem;
   width: 200px;
   height: 120px;
   box-shadow: 0px -2px 22px -6px rgba(60, 55, 61, 0.37),
@@ -40,6 +38,7 @@
   display: block;
   border-bottom: 1px solid lightgrey;
   font: normal bold 13px Source Sans Pro, sans-serif;
+  color: #727070 !important;
 }
 
 .menuItem a:link,

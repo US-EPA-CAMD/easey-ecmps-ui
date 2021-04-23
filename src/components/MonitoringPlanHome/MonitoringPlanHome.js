@@ -10,7 +10,7 @@ const MonitoringPlanHome = () => {
       <div className="header">
         <h1 className="title">Monitoring Plans</h1>
         <Button
-          className="ovalBTN"
+          className="float-right clearfix radius-pill"
           id="input-button-search"
           // onClick={updateSearchHandler}
         >

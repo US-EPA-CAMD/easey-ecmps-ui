@@ -8,17 +8,23 @@
 
   .usa-nav__submenu-list {
     margin-left: 30%;
-    width: 100%
+    width: 97%
   }
 }
 .workspaceMenu > .usa-accordion__button[aria-expanded="true"] {
   background-image: url(../../../node_modules/uswds/dist/img/angle-arrow-up-white.svg),
     linear-gradient(transparent, transparent) !important;
+  background-size: .9em;
+  margin-left: .25em;
+  max-width: 90%;
 }
 
 .workspaceMenu > .usa-accordion__button[aria-expanded="false"] {
   background-image: url(../../../node_modules/uswds/dist/img/angle-arrow-down-white.svg),
     linear-gradient(transparent, transparent) !important;
+  background-size: .9em;
+  margin-left: .25em;
+  max-width: 90%;
 }
 .workspaceDropp {
   display: flex;
