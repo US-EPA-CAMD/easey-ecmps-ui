@@ -123,7 +123,11 @@ const TablePagination = ({
           if (page === LEFT_PAGE) {
             return (
               <li key={index} className="page-item-previous">
-                <div className="page-link" href="#" aria-label="Go to previous page">
+                <div
+                  className="page-link"
+                  href="#"
+                  aria-label="Go to previous page"
+                >
                   <span aria-hidden="true">{"..."}</span>
                   <span className="sr-only">...</span>
                 </div>
@@ -147,7 +151,11 @@ const TablePagination = ({
                 pageIndex === page ? " active" : ""
               }`}
             >
-              <button aria-label={`Go to page ${page}`} className="page-link" onClick={() => gotoPage(page)}>
+              <button
+                aria-label={`Go to page ${page}`}
+                className="page-link"
+                onClick={() => gotoPage(page)}
+              >
                 {page + 1}
               </button>
             </li>
@@ -165,13 +173,17 @@ const TablePagination = ({
           onClick={() => nextPage()}
           disabled={!canNextPage}
         >
-          <button aria-label="Go to next page" className="page-link">{"Next"}</button>
+          <button aria-label="Go to next page" className="page-link">
+            {"Next"}
+          </button>
         </li>
       );
     }
     return (
       <li className="page-item-next" disabled={true}>
-        <button  aria-label="Go to next page" className="page-link">{"Next"}</button>
+        <button aria-label="Go to next page" className="page-link">
+          {"Next"}
+        </button>
       </li>
     );
   }
@@ -198,7 +210,11 @@ const TablePagination = ({
             onClick={() => previousPage()}
             disabled={!canPreviousPage}
           >
-            <button aria-label="Go to previous page" className="page-link" ref={previousBTN}>
+            <button
+              aria-label="Go to previous page"
+              className="page-link"
+              ref={previousBTN}
+            >
               {"Previous"}
             </button>
           </li>
