@@ -6,10 +6,8 @@ import { Provider } from "react-redux";
 //import thunk from "redux-thunk";
 import configureStore from "./store/configureStore.dev";
 
-//import './index.css';
-import "./uswds_assets/css/styles.css";
 //import "./utils/remoteLogging";
-import App from "./App";
+import App from "./components/App/App";
 import * as serviceWorker from "./serviceWorker";
 
 const store = configureStore();

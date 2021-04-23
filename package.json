@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.32",
+    "@fortawesome/free-solid-svg-icons": "^5.15.1",
+    "@fortawesome/react-fontawesome": "^0.1.14",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -14,6 +17,8 @@
     "concurrently": "^5.3.0",
     "leaflet": "^1.7.1",
     "loglevel": "^1.7.0",
+    "node-sass": "^4.14.1",
+    "prettier": "^2.2.1",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.0",
     "react-datepicker": "^3.7.0",
@@ -30,7 +35,8 @@
     "redux-immutable-state-invariant": "2.1.0",
     "redux-mock-store": "~1.5.4",
     "redux-thunk": "^2.3.0",
-    "resize-observer-polyfill": "^1.5.1"
+    "resize-observer-polyfill": "^1.5.1",
+    "uswds": "^2.11.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -57,18 +63,9 @@
     "autoprefixer": "^9.8.6",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.4",
-    "gulp": "^4.0.2",
-    "gulp-postcss": "^8.0.0",
-    "gulp-replace": "^1.0.0",
-    "gulp-sass": "^4.1.0",
-    "gulp-sourcemaps": "^2.6.5",
     "jest-sonar-reporter": "^2.0.0",
-    "postcss-csso": "^4.0.0",
     "react-paginate": "^6.5.0",
-    "react-test-renderer": "^16.13.1",
-    "sass": "^1.26.10",
-    "uswds": "^2.11.1",
-    "uswds-gulp": "github:uswds/uswds-gulp"
+    "react-test-renderer": "^16.13.1"
   },
   "jest": {
     "collectCoverageFrom": [

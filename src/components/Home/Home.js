@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import HomeTitle from "./HomeTitle";
-import HomeOverview from "./HomeOverview";
-import DataTable from "../Facilities/DataTable";
-import DetailTabs from "../Facilities/DetailTabs";
-import "./Home.css";
+import HomeTitle from "../HomeTitle/HomeTitle";
+import HomeOverview from "../HomeOverview/HomeOverview";
+import DataTable from "../DataTable/DataTable";
+import DetailTabs from "../DetailTabs/DetailTabs";
+import "./Home.scss";
 
 const Home = () => {
   const [showOverview, setShowOverview] = useState(<HomeOverview />);

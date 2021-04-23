@@ -15,7 +15,7 @@ import {
 
 import config from '../../config';
 
-import './RuleEditor.css';
+import './RuleEditor.scss';
 
 const RuleEditor = () => {
   const NONE = 'NONE';
