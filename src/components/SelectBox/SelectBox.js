@@ -49,9 +49,8 @@ const SelectBox = ({
     <div>
       <div className="">
         <FormGroup className="formLabeling">
-          <Label>{caption}</Label>
+          <Label htmlFor={caption + initialSelection}>{caption}</Label>
           <Dropdown
-            aria-label={caption + " dropdown"}
             name={caption}
             // weird bug without this
             defaultValue={

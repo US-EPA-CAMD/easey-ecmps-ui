@@ -31,7 +31,7 @@ const DetailsSelectBox = ({
     <div>
       <div className="">
         <FormGroup className="formLabeling">
-          <Label
+          <Label htmlFor={caption + initialSelection}
             hint={
               required ? (
                 <span className="requiredItalics"> (Required)</span>
@@ -43,7 +43,6 @@ const DetailsSelectBox = ({
             {caption}
           </Label>
           <Dropdown
-            aria-label={caption + " dropdown"}
             className="modalDrop"
             name={caption}
             // weird bug without this
@@ -60,4 +59,4 @@ const DetailsSelectBox = ({
     </div>
   );
 };
-export default React.memo(DetailsSelectBox);
+export default DetailsSelectBox;
