@@ -14,7 +14,6 @@ const TableBody = ({
   tabFocus,
   resetTabFocusHandler,
 }) => {
-
   // just turns on react-table row selected to handle future css
   const defaultSelector = () => {
     const selected = page.find((r) => r.isSelected);
@@ -42,7 +41,6 @@ const TableBody = ({
   const resetBTNInsideTable = () => {
     const tableBody = document.getElementsByClassName("tableButton");
     if (tableBody) {
-      console.log('testing tablebody ', tableBody.length)
       for (const el of tableBody) {
         if (el.disabled) {
           continue;
@@ -61,12 +59,8 @@ const TableBody = ({
     }
   }, [rows, tabFocus]);
   const handleDataSelector = (data) => {
-    // if (!selectedRowHandler) {
-    //   return false;
-    // }
     return selectedRowHandler(data);
   };
-  // console.log(page,'this is page')
   return (
     <tbody {...getTableBodyProps()} className="tableData">
       {(page.length > 0 &&
@@ -80,9 +74,8 @@ const TableBody = ({
               {...row.getRowProps()}
               onClick={() => {
                 rowSelection(row);
-                handleDataSelector(row.cells);
+                // handleDataSelector(row.cells);
               }}
-              // onKeyDown={onKeyDownHandler}
             >
               {row.cells.map((cell) => {
                 return (

@@ -33,8 +33,12 @@ const HeaderInfo = ({
 
   const mpHandler = (index) => {
     setConfigSelect(index);
-    locationHandler(configurations[configSelect].locations[0]["id"]);
   };
+  useEffect(() => {
+    if (configurations.length > 1) {
+      locationHandler(configurations[configSelect].locations[0]["id"]);
+    }
+  }, [configSelect]);
   const mplHandler = (index) => {
     locationHandler(configurations[configSelect].locations[index]["id"]);
   };
@@ -52,9 +56,6 @@ const HeaderInfo = ({
     }
     setConfigSelect(0);
   };
-  useEffect(() => {
-    mpsHandler(3);
-  }, []);
   useEffect(() => {
     setConfigurations(
       showInactive ? monitoringPlans : getActiveConfigurations(monitoringPlans)
@@ -105,7 +106,7 @@ const HeaderInfo = ({
               options={sections}
               selectionHandler={mpsHandler}
               selectKey="name"
-              initialSelection = {3}
+              initialSelection={3}
             />
           </div>
           <div className="statuses column">
@@ -123,4 +124,4 @@ const HeaderInfo = ({
   );
 };
 
-export default HeaderInfo;
+export default React.memo(HeaderInfo);

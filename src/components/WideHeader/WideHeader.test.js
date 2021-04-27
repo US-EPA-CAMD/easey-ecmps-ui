@@ -14,7 +14,7 @@ describe("testing search/filter feature of generic uswds table component", () =>
   );
 
   test("navbar renders a menu button", () => {
-    const menuBTN = container.getElementsByClassName("menuBTN");
+    const menuBTN = container.getElementsByClassName("usa-navbar");
     expect(menuBTN.length).toEqual(1);
   });
 });

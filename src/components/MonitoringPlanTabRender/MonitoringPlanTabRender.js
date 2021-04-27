@@ -97,17 +97,17 @@ export const MonitoringPlanTabRender = ({
     />
   );
 
-  useEffect(() => {
-    setTableHandler(
-      <Tables
-        sectionSelect={sectionSelect}
-        methodItems={methodItems}
-        systemsItems={systemsItems}
-        supItems={supItems}
-        matsTableFlag={matsTableFlag}
-      />
-    );
-  }, [sectionSelect, locationSelect]);
+  // useEffect(() => {
+  //   setTableHandler(
+  //     <Tables
+  //       sectionSelect={sectionSelect}
+  //       methodItems={methodItems}
+  //       systemsItems={systemsItems}
+  //       supItems={supItems}
+  //       matsTableFlag={matsTableFlag}
+  //     />
+  //   );
+  // }, [sectionSelect, locationSelect]);
 
   return (
     <div className="selectedMPTab">
@@ -128,6 +128,7 @@ export const MonitoringPlanTabRender = ({
         supItems={supItems}
         matsTableFlag={matsTableFlag}
       />
+      {/* {tableHandler} */}
       <hr width="100%" align="center" />
     </div>
   );
