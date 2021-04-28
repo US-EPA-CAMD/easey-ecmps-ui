@@ -48,7 +48,6 @@ const DetailsSelectBox = ({
             // weird bug without this
             value={selectionState !== null ? selectionState : initialSelection}
             disabled={viewOnly}
-            role="select"
             id={caption + initialSelection}
             onChange={(e) => handleChange(e)}
           >
