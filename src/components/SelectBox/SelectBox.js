@@ -29,7 +29,7 @@ const SelectBox = ({
   const populateOptions = (optionsList) => {
     return optionsList.map((info, index) => {
       return (
-        <option key={index} value={info[selectKey]} role="selectOption">
+        <option key={index} value={info[selectKey]}>
           {info[selectKey]}
         </option>
       );
