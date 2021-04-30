@@ -26,17 +26,17 @@ export const DataTableSystemsComponents = ({
   const columns = useMemo(
     () => [
       {
-        Header: "Component id",
+        Header: "Component ID",
         accessor: "col1",
         width: "100px",
       },
       {
-        Header: "type code",
+        Header: "Type Code",
         accessor: "col2",
         width: "120px",
       },
       {
-        Header: "begin",
+        Header: "Begin to End Date",
         accessor: "col3",
         width: "410px",
       },

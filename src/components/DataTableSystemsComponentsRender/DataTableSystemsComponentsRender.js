@@ -15,7 +15,7 @@ const DataTableSystemsComponentsRender = ({
         columns={columns}
         data={data}
         bordered={false}
-        header={false}
+        header={true}
         // /paginate
         // showEntries={[10, 250, 500]}
         // search
