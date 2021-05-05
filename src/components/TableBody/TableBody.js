@@ -62,7 +62,9 @@ const TableBody = ({
     return selectedRowHandler(data);
   };
   return (
-    <tbody {...getTableBodyProps()} className="tableData">
+    <tbody 
+    // {...getTableBodyProps()} 
+    className="tableData">
       {(page.length > 0 &&
         page.map((row, i) => {
           prepareRow(row);
@@ -71,7 +73,7 @@ const TableBody = ({
               data-testid={"tableRow" + i}
               tabIndex={-1}
               key={row.id}
-              {...row.getRowProps()}
+              // {...row.getRowProps()}
               onClick={() => {
                 rowSelection(row);
                 // handleDataSelector(row.cells);
@@ -81,7 +83,7 @@ const TableBody = ({
                 return (
                   <td
                     width={cell.column.width}
-                    {...cell.getCellProps()}
+                    // {...cell.getCellProps()}
                     className={`${
                       row.isSelected ? "selected hovered" : "hovered"
                     }`}

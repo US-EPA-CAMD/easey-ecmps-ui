@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 
 import "./TableCell.scss";
 
-
 let editableCell = false;
 const setEditable = (value) => {
   editableCell = value;

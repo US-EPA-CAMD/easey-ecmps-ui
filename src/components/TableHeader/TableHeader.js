@@ -5,11 +5,14 @@ import "./TableHeader.scss";
 const TableHeader = ({ headerGroups, viewDataColumn, openTabColumn }) => (
   <thead>
     {headerGroups.map((headerGroup) => (
-      <tr {...headerGroup.getHeaderGroupProps()}>
+      <tr
+      // {...headerGroup.getHeaderGroupProps()}
+      >
         {headerGroup.headers.map((column) => (
           <th
             width={column.width}
-            {...column.getHeaderProps(column.getSortByToggleProps())}
+            // {...column.getHeaderProps(column.getSortByToggleProps())}
+            {...column.getSortByToggleProps()}
             onKeyPress={(event) => {
               if (column.sortable !== false && event.key === "Enter") {
                 column.toggleSortBy();
