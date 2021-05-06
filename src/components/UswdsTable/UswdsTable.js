@@ -79,7 +79,7 @@ const UswdsTable = ({
 
   // Use the state and functions returned from useTable to build UI
   const {
-    getTableProps,
+    // getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
@@ -155,7 +155,9 @@ const UswdsTable = ({
           )}
         </div>
       </div>
-      <table className={variant} {...getTableProps()}>
+      <table className={variant}
+      // {...getTableProps()}
+      >
         {header ? (
           <TableHeader
             headerGroups={headerGroups}
