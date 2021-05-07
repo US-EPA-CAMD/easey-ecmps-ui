@@ -11,5 +11,6 @@ applications:
       REACT_APP_EASEY_FACILITIES_API: https://((host))/api/facility-mgmt
       REACT_APP_EASEY_EMISSIONS_API: https://((host))/api/emissions-mgmt
       REACT_APP_EASEY_MONITOR_PLAN_API: https://((host))/api/monitor-plan-mgmt
+      REACT_APP_EASEY_AUTH_API: https://((host))/api/auth-mgmt
     routes:
       - route: ((host))

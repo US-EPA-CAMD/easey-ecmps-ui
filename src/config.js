@@ -30,6 +30,11 @@ const config = {
         process.env.REACT_APP_EASEY_MONITOR_PLAN_API ||
         "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt",
     },
+    authApi: {
+      uri:
+          process.env.REACT_APP_EASEY_AUTH_API ||
+          "https://easey-dev.app.cloud.gov/api/auth-mgmt",
+    },
   },
 };
 

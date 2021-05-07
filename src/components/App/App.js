@@ -7,6 +7,7 @@ import NotFound from "../NotFound/NotFound";
 import Layout from "../Layout/Layout";
 import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
 import RuleEditor from "../RuleEditor/RuleEditor";
+import Login from "../Login/Login";
 
 import "./App.scss";
 
@@ -17,6 +18,7 @@ function App() {
         <Switch>
           <Redirect from="/home" to="/" />
           <Route path="/" exact component={Home} />
+          <Route path="/login" exact component={Login} />
           <Route
             path="/monitoring-plans"
             exact
