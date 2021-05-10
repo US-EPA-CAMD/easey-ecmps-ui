@@ -1,11 +1,36 @@
-import React from 'react'
-import { render } from '@testing-library/react';
-import Login from './Login'
+import React from 'react';
 
-test('renders login page title', () => {
-    const { getByText } = render(<Login />);
-    const linkElement = getByText(/Log In/i);
+import { shallow } from 'enzyme';
 
-    expect(linkElement).toBeInTheDocument();
-    throw new Error('Fail this test!');
+import { findByTestAttr } from '../../test/testUtils';
+import Login from './Login';
+
+const defaultProps = { loading: false };
+
+/**
+ * Factory function to create a ShallowWrapper for the Login component.
+ * function setup
+ * @param {object} props - Component props specific to this setup.
+ * @returns {ShallowWrapper}
+ */
+const setup = (props={}) => {
+    const setupProps = { ...defaultProps, ...props };
+    return shallow(<Login {...setupProps} />);
+};
+
+describe('tests for login form component', () => {
+    test('renders component without crashing', () => {
+
+    });
+    test('renders login page title block', () => {
+        // const wrapper = setup();
+        // const componentTitle = findByTestAttr(wrapper, 'component-title');
+        // expect(componentTitle.text()).toBe('Log In');
+    });
+    test('it will ensure that a username is given', () => {
+
+    });
+    test('it will ensure a password is given', () => {
+
+    });
 });

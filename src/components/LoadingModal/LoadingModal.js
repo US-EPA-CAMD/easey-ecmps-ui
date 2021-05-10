@@ -67,10 +67,16 @@ const LoadingModal = props => {
 
     return (
         <>
-            {loading && <div className="loading-modal" style={styles.loadingWrapper}>
+            {loading && <div
+                data-test="component-loading"
+                className="loading-modal"
+                style={styles.loadingWrapper}>
                 <div style={styles.innerWrapper}>
                     <div style={styles.loader}>-</div>
-                    <Button type="button" onClick={() => reloadPage()}>
+                    <Button
+                        data-test="component-loading-cancel-button"
+                        type="button"
+                        onClick={() => reloadPage()}>
                         cancel
                     </Button>
                 </div>
