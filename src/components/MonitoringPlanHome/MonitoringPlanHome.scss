@@ -4,7 +4,7 @@
   padding: 0;
   background-color: #fff;
   color: #212121;
-margin-left:20px;
+  margin-left:20px;
   padding-top: 50px;
   padding-bottom: 60px;
   max-width: 100%;
@@ -12,12 +12,7 @@ margin-left:20px;
   margin-right: 0;
   overflow: auto;
 }
-.title {
-  display: inline-block;
-}
-.header {
-  color: gray;
-}
+
 .tabsBox,
 .tabContent .selectedTabsBox {
   color: gray;
@@ -28,6 +23,3 @@ margin-left:20px;
   margin-bottom: -5px;
 }
 
-.tabsBar {
-  padding-bottom: -5px;
-}

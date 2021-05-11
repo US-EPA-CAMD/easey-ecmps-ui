@@ -2,13 +2,13 @@ import React from "react";
 import "./MonitoringPlanHome.scss";
 import DynamicTabs from "../DynamicTabs/DynamicTabs";
 import { Button } from "@trussworks/react-uswds";
-import DataTable from "../SelectFacilitiesDataTable/SelectFacilitiesDataTable";
+import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
 
 const MonitoringPlanHome = () => {
   return (
     <div className="home-container">
-      <div className="header">
-        <h1 className="title">Monitoring Plans</h1>
+      <div className="text-gray-50">
+        <h1 className="display-inline-block">Monitoring Plans</h1>
         <Button
           className="float-right clearfix radius-pill"
           id="input-button-search"
@@ -18,7 +18,7 @@ const MonitoringPlanHome = () => {
         </Button>
       </div>
 
-      <div className="tabsBar">
+      <div>
         <DynamicTabs
           tabsProps={[
             {

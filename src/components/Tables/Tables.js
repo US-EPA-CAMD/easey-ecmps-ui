@@ -1,8 +1,6 @@
 import React from "react";
 import { Accordion } from "@trussworks/react-uswds";
 
-import "./Tables.scss";
-
 const Tables = ({
   sectionSelect,
   methodItems,

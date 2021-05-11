@@ -9,12 +9,12 @@ import {
 } from "react-table";
 import { Button } from "@trussworks/react-uswds";
 
-import TableHeader from "../TableHeader/TableHeader";
-import TableBody from "../TableBody/TableBody";
-import TablePagination from "../TablePagination/TablePagination";
-import TablePaginationFilter from "../TablePaginationFilter/TablePaginationFilter";
+import TableHeader from "../tableContainer/TableHeader/TableHeader";
+import TableBody from "../tableContainer/TableBody/TableBody";
+import TablePagination from "../tableContainer/TablePagination/TablePagination";
+import TablePaginationFilter from "../tableContainer/TablePaginationFilter/TablePaginationFilter";
 import TableSearch from "../TableSearch/TableSearch";
-import { EditableCell, setEditable } from "../TableCell/TableCell";
+import { EditableCell, setEditable } from "../tableContainer/TableCell/TableCell";
 import "./UswdsTable.scss";
 
 // if showEntries is not supplied, by default will have show entries of only [100 and all data]

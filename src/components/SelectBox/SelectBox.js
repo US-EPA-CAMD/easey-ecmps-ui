@@ -4,7 +4,6 @@ import {
   getInActiveConfigurations,
 } from "../../utils/selectors/monitoringConfigurations";
 import { Label, Dropdown, FormGroup } from "@trussworks/react-uswds";
-import "./SelectBox.scss";
 
 const SelectBox = ({
   caption,
@@ -47,8 +46,8 @@ const SelectBox = ({
 
   return (
     <div>
-      <div className="">
-        <FormGroup className="formLabeling">
+      <div>
+        <FormGroup className="margin-right-2 margin-bottom-1">
           <Label htmlFor={caption + initialSelection}>{caption}</Label>
           <Dropdown
             name={caption}

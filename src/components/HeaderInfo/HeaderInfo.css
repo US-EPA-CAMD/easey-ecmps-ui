@@ -1,9 +1,4 @@
-.accessories {
-  float: right;
-}
-.title {
-  display: inline-block;
-}
+
 a {
   padding: 5px;
   font-weight: bold;
@@ -35,11 +30,7 @@ a {
   font-weight: bold;
   display: inline-block;
 }
-.answer {
-  padding: 10px;
-  font-size: 15px;
-  display: inline-block;
-}
+
 .configurations-container {
   display: flex;
   flex-direction: column;

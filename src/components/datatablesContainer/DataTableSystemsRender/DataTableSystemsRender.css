@@ -1,0 +1,19 @@
+thead,
+tbody {
+  display: block;
+}
+.methodTable {
+  color: gray;
+  width: 100%;
+  justify-content: center;
+  bottom: 0;
+  margin-bottom: -5px;
+  margin-top:0px;
+}
+tbody {
+  height: auto; /* Just for the demo          */
+  max-height: 400px;
+  overflow-y: auto; /* Trigger vertical scroll    */
+  overflow-x: hidden; /* Hide the horizontal scroll */
+  width: 100%;
+}

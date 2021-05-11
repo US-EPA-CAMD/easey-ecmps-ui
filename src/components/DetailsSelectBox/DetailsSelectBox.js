@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Label, Dropdown, FormGroup } from "@trussworks/react-uswds";
 
-import "./DetailsSelectBox.css";
 const DetailsSelectBox = ({
   caption,
   options,
@@ -21,7 +20,7 @@ const DetailsSelectBox = ({
   const populateOptions = (optionsList) => {
     return optionsList.map((info, index) => {
       return (
-        <option key={index} value={info[selectKey]} role="selectOption">
+        <option key={index} value={info[selectKey]}>
           {info[selectKey]}
         </option>
       );
@@ -29,8 +28,8 @@ const DetailsSelectBox = ({
   };
   return (
     <div>
-      <div className="">
-        <FormGroup className="formLabeling">
+      <div >
+        <FormGroup className="margin-top-0">
           <Label htmlFor={caption + initialSelection}
             hint={
               required ? (
@@ -43,7 +42,6 @@ const DetailsSelectBox = ({
             {caption}
           </Label>
           <Dropdown
-            className="modalDrop"
             name={caption}
             // weird bug without this
             value={selectionState !== null ? selectionState : initialSelection}

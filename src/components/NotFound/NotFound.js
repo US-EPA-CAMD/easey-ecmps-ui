@@ -1,10 +1,9 @@
 import React from "react";
-import "./NotFound.scss";
 import { Link } from "react-router-dom";
 const NotFound = () => {
   return (
-    <div className="containerCenter">
-      <div className="center">
+    <div >
+      <div className="text-center">
         <h1>Sorry, but this web page does not exist.</h1>
         <h3>We want to help you find what you are looking for.</h3>
         <h3>

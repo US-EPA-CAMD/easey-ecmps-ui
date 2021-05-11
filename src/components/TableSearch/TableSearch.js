@@ -16,18 +16,23 @@ const TableSearch = ({ setGlobalFilter, title }) => {
       <Label className="filterLabel" htmlFor="input-search">
         Filter by keyword:
       </Label>
-      <div className="filterSearch">
+      <div className="display-flex">
         <Form
           children={
             <input
               id="input-search"
               name="input-search"
-              className="searchBox"
+              className="border-1px margin-0 padding-left-1 height-full overflow-auto"
               type="text"
               value={searchState}
               placeholder={"Keyword"}
               onChange={(e) => {
                 searchHandler(e.target.value);
+              }}
+              onKeyPress={(event) => {
+                if (event.key === "Enter") {
+                  updateSearchHandler();
+                }
               }}
             />
           }

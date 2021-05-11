@@ -1,11 +1,10 @@
 import React from "react";
-import './Title.scss';
 import { RiDashboardFill } from "react-icons/ri";
 const Title = () => {
   return (
-    <div className="navTitle">
+    <div className=" display-flex flex-align-center text-base-lightest">
       <RiDashboardFill size={32} style={{ fill: "white" }} />
-      <h5> EASEY-In Dashboard</h5>
+      <h5 className="padding-0 padding-left-5px"> EASEY-In Dashboard</h5>
     </div>
   );
 };

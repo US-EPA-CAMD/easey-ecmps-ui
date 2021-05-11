@@ -6,7 +6,7 @@ const AccordionItemTitle = ({ title }) => {
   };
   return (
     <div className="methodHeader">
-      <div className="methodTitle">
+      <div className="display-inline-block flex-justify-center">
         <h3>{title}</h3>
       </div>
       <button className="rectBTN" onClick={addButtonClick}>⊕ Add {title}</button>

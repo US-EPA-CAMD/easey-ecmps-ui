@@ -77,12 +77,13 @@ const Details = ({ modalData, viewOnly }) => {
             Monitoring Systems: {modalData.length >= 1 ? modalState[0] : ""}
           </h2>
           <Form>
-            <div className="modalRow">
-              <div className="modalColumn">
-                <FormGroup className="dateLabels">
+            <div className="grid-row">
+              <div className="grid-col padding-bottom-2 padding-right-3">
+                <FormGroup className="margin-top-0">
                   <Label
+                    className="margin-0"
                     htmlFor="otherInput"
-                    hint={<span className="requiredItalics"> (Required)</span>}
+                    hint={<span className="text-italic"> (Required)</span>}
                   >
                     System ID
                   </Label>
@@ -96,7 +97,7 @@ const Details = ({ modalData, viewOnly }) => {
                   />
                 </FormGroup>
               </div>
-              <div className="modalColumnRight">
+              <div className="grid-col">
                 <SelectBox
                   caption="System Designation"
                   options={designations}
@@ -107,8 +108,8 @@ const Details = ({ modalData, viewOnly }) => {
                 />
               </div>
             </div>
-            <div className="modalRow">
-              <div className="modalColumn">
+            <div className="grid-row">
+              <div className="grid-col padding-bottom-2 padding-right-3">
                 <SelectBox
                   caption="System Type"
                   options={types}
@@ -118,7 +119,7 @@ const Details = ({ modalData, viewOnly }) => {
                   required
                 />
               </div>
-              <div className="modalColumnRight">
+              <div className="grid-col">
                 <SelectBox
                   caption="Fuel Type"
                   options={fuels}
@@ -129,12 +130,13 @@ const Details = ({ modalData, viewOnly }) => {
                 />
               </div>
             </div>
-            <div className="modalRow">
-              <div className="modalColumn">
-                <div className="dateLabels">
-                  <Label id="dateStart">Start Date and Time (Required)</Label>
-
-                  <div className="modalColumnDate dateLabels">
+            <div className="grid-row">
+              <div className="grid-col padding-bottom-2 padding-right-3">
+                <Label className="margin-0" id="dateStart">
+                  Start Date and Time (Required)
+                </Label>
+                <div className="grid-row">
+                  <div className="grid-col">
                     <div className="usa-hint" id="dateStart">
                       mm/dd/yyyy
                     </div>
@@ -149,10 +151,10 @@ const Details = ({ modalData, viewOnly }) => {
                       ""
                     )}
                   </div>
-                  <div className="modalColumnDateRight">
+                  <div className="grid-col">
                     {startHour !== null ? (
                       <SelectBox
-                        caption="hh"
+                      caption="hh"
                         options={timeOptions}
                         initialSelection={startHour}
                         selectKey="time"
@@ -165,11 +167,10 @@ const Details = ({ modalData, viewOnly }) => {
                   </div>
                 </div>
               </div>
-              <div className="modalColumnRight">
-                <div className="dateLabels">
-                  <Label id="dateEnd">End Date and Time</Label>
-
-                  <div className="modalColumnDate dateLabels">
+              <div className="grid-col">
+                <Label className="margin-0" id="dateEnd">End Date and Time</Label>
+                <div className="grid-row">
+                  <div className="grid-col ">
                     <div className="usa-hint" id="dateEnd">
                       mm/dd/yyyy
                     </div>
@@ -184,9 +185,10 @@ const Details = ({ modalData, viewOnly }) => {
                       ""
                     )}
                   </div>
-                  <div className="modalColumnDateRight">
+                  <div className="grid-col">
                     {endHour !== null ? (
                       <SelectBox
+                      className="margin-0"
                         caption="hh"
                         options={timeOptions}
                         initialSelection={endHour}

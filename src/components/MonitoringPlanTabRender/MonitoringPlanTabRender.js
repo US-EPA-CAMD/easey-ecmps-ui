@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import HeaderInfo from "../HeaderInfo/HeaderInfo";
 import AccordionItemTitle from "../AccordionItemTitle/AccordionItemTitle";
 import "../MonitoringPlanTab/MonitoringPlanTab.scss";
-import DataTableMethod from "../DataTableMethod/DataTableMethod";
-import DataTableMats from "../DataTableMats/DataTableMats";
+import DataTableMethod from "../datatablesContainer/DataTableMethod/DataTableMethod";
+import DataTableMats from "../datatablesContainer/DataTableMats/DataTableMats";
 import Tables from "../Tables/Tables";
-import DataTableSystems from "../DataTableSystems/DataTableSystems";
+import DataTableSystems from "../datatablesContainer/DataTableSystems/DataTableSystems";
 
 import "./MonitoringPlanTabRender.scss";
 
@@ -110,7 +110,7 @@ export const MonitoringPlanTabRender = ({
   // }, [sectionSelect, locationSelect]);
 
   return (
-    <div className="selectedMPTab">
+    <div className="selectedMPTab padding-top-4 ">
       {/* on change of select box, it should modify the accordion items */}
       <HeaderInfo
         facility={facility}

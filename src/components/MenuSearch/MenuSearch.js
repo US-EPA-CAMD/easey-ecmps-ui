@@ -41,7 +41,7 @@ const MenuSearch = () => {
           }
         />
         <Button
-          className="usa-search--big menuSearchBTN"
+          className="usa-search--big bg-primary-vivid"
           type="submit"
           id="input-button-search"
           onClick={onSearch}

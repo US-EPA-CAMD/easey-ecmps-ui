@@ -1,0 +1,36 @@
+.updateBTN {
+  color: #ffffff;
+  background-color: gray;
+  text-align: center;
+  width: 60px;
+  border: 0px;
+  height: 40px;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  min-width: 50px;
+  font-size: 13px !important;
+  margin: 0px;
+  overflow: auto;
+  border-radius: 0%;
+}
+.filterSelect {
+  display: flex;
+  align-items: center !important;
+  /* float:right; */
+}
+.filterSelect>.usa-select {
+  background-image: url("../../UswdsTable/images/dropdown_arrow.webp"),linear-gradient(transparent,transparent) !important;
+}
+.filterLabel {
+  padding: 0px ;
+  margin: 0px ;
+  font-size: 15px;
+  text-align:left !important;
+  font-weight:bold !important;
+}
+#input-dropdown {
+  min-width: 50px ;
+  width: 75px ;
+  margin: 0px;
+height: 40px;
+}

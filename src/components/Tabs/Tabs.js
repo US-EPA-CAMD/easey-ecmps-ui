@@ -20,7 +20,7 @@ const Tabs = ({ children, dynamic = false, removeTabs, setResizeObserver}) => {
 
   return (
     <div>
-      <div className="tabBar">
+      <div className="">
       <ul className="usa-button-group usa-button-group--segmented" >
         {children.map((el, i) => (
           <li key={i} className="usa-button-group__item usa-tooltip" style={{position:'relative'}} data-position="bottom" title={el.props.title}>

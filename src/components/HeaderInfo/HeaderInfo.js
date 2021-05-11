@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./HeaderInfo.css";
 import SelectBox from "../SelectBox/SelectBox";
 import { getActiveConfigurations } from "../../utils/selectors/monitoringConfigurations";
-
+import { Button } from "@trussworks/react-uswds";
 const HeaderInfo = ({
   facility,
   sectionHandler,
@@ -64,13 +64,13 @@ const HeaderInfo = ({
 
   return (
     <div className="header">
-      <div className="title">
+      <div className="display-inline-block">
         <h2>{facility.name}</h2>
       </div>
-      <div className="accessories">
+      <div className="float-right">
         <a href="#/">Comments</a>
-        <a href="#/">Reports</a>|<button className="ovalBTN">Evaluate</button>
-        <button className="ovalBTN">Submit</button>
+        <a href="#/">Reports</a>|<Button className="ovalBTN">Evaluate</Button>
+        <Button className="ovalBTN">Submit</Button>
       </div>
       {configurations.length !== 0 ? (
         <div className="row">
@@ -111,10 +111,14 @@ const HeaderInfo = ({
           </div>
           <div className="statuses column">
             <div className="eval">Evaluation Status: </div>
-            <div className="answer">{" Passed with no errors "} </div>
+            <div className="font-body-2xs display-inline-block padding-105">
+              {" Passed with no errors "}{" "}
+            </div>
             <br />
             <div className="submission"> Submission Status: </div>
-            <div className="answer">{" Resubmission required "} </div>
+            <div className="font-body-2xs display-inline-block padding-105">
+              {" Resubmission required "}{" "}
+            </div>
           </div>
         </div>
       ) : (

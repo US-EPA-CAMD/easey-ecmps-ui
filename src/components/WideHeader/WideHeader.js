@@ -70,19 +70,21 @@ const WideHeader = () => {
         >
           <img
             src={epaLogo}
-            className="margin-3 photo"
+            className="margin-3 padding-bottom-2 height-705 width-15"
             alt="Official EPA Logo"
           />
         </a>
-        <div className="usa-nav-container">
+        <div className="usa-nav-container ">
           <div className="usa-navbar">
             <NavMenuButton
               onClick={() => onClick()}
               label="Menu"
-              className="display-block usa-button btnMenu"
+              className="display-block usa-button radius-md bg-white text-primary
+              "
             />
           </div>
           <PrimaryNav
+          className=""
             items={mainMenu}
             mobileExpanded={expanded}
             onToggleMobileNav={() => onClick()}
