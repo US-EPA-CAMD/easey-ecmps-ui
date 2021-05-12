@@ -10,7 +10,7 @@ const defaultProps = { loading: false };
 /**
  * Factory function to create a ShallowWrapper for the LoadingModal component.
  * function setup
- * @param {object} props - Component props specific to this setup.
+ * @param {object} props - Component props specific to this setup of the component.
  * @returns {ShallowWrapper}
  */
 const setup = (props={}) => {

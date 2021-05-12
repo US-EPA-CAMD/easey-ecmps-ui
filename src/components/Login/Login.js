@@ -18,10 +18,8 @@ const Login = () => {
     const standardFormErrorMessage = 'Please enter your username and password';
     const [formErrorMessage, setFormErrorMessage] = useState('');
     const [username, setUsername] = useState('');
-    // const [usernameError, setUsernameError] = useState(false);
     const [password, setPassword] = useState('');
-    // const [passwordError, setPasswordError] = useState(false);
-    const [showPassword, setShowPassword] = useState(false)
+    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const checkLoggedIn = () => {
@@ -30,19 +28,13 @@ const Login = () => {
         }
     };
 
-    // const renderLoginErrors = () => {
-    //     const errorsArray = ['Username not found.', 'Password not found.'];
-    //
-    //     // return (
-    //     //
-    //     // );
-    //     return errorsArray.map(item => {
-    //         <div key={item}>
-    //             <span>{item}</span>
-    //             <br/>
-    //         </div>
-    //     })
-    // };
+    const showPasswordHandler = () => {
+        if (showPassword) {
+            setShowPassword(false);
+        } else {
+            setShowPassword(true);
+        }
+    };
 
     const submitForm = async e => {
         e.preventDefault();
@@ -83,8 +75,7 @@ const Login = () => {
     }, []);
 
     return (
-        <div className="margin-10">
-            {/*<h1 data-test="component-title">Log In</h1>*/}
+        <div className="margin-10" data-test="component-login">
             <div style={{ marginLeft: '4rem' }}>
                 <Form onSubmit={submitForm} large>
                     <Fieldset legend="Log In" legendStyle="large">
@@ -102,6 +93,7 @@ const Login = () => {
 
                         <Label htmlFor="username">Username</Label>
                         <TextInput
+                            data-test="component-login-username"
                             id="username"
                             name="username"
                             type={username ? 'text' : 'password'}
@@ -111,6 +103,7 @@ const Login = () => {
 
                         <Label htmlFor="password">Password</Label>
                         <TextInput
+                            data-test="component-login-password"
                             id="password"
                             name="password"
                             type={showPassword ? 'text' : 'password'}
@@ -120,21 +113,20 @@ const Login = () => {
                         <p className="usa-form__note">
                             <a
                                 title="Show password"
-                                href="javascript:void(0);"
+                                href=""
                                 className="usa-show-password"
                                 aria-controls="password-sign-in"
-                                onClick={(): void =>
-                                    setShowPassword((showPasswordValue) => !showPassword)
-                                }>
+                                onClick={() => showPasswordHandler()}>
                                 {showPassword ? 'Hide password' : 'Show password'}
                             </a>
                         </p>
 
                         <Button
                             data-test="component-login-submit-button"
+                            className="margin-bottom-2"
                             type="submit"
-                        >Login In</Button>
-                        
+                        >Log In</Button>
+
                         <p>
                             <a
                                 href="https://dev.epacdx.net/AccountRecovery/ForgotUserId"
