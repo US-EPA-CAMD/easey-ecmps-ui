@@ -1,6 +1,6 @@
 import React from "react";
 import UswdsTable from "../../UswdsTable/UswdsTable";
-import "../DataTableSystemsComponents/DataTableSystemsComponentsRender.css";
+import "../DataTableSystemsComponents/DataTableSystemsComponentsRender.scss";
 
 const DataTableSystemsComponentsRender = ({
   openModal,

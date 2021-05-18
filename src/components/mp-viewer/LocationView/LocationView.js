@@ -41,7 +41,7 @@ const LocationView = ({
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
         {zoomTo === "thisFacility" && (
-          <div role="location-map-marker">
+          <div role="contentinfo">
             <leaflet.Marker
               data-testid="selected-facility-marker"
               position={[location.latitude, location.longitude]}
@@ -53,7 +53,7 @@ const LocationView = ({
         )}
 
         {allLocations.map((loc, i) => (
-          <div role="location-map-marker" key={i}>
+          <div role="contentinfo" key={i}>
             <leaflet.Marker
               data-testid="location-map-marker"
               key={i}
@@ -101,7 +101,7 @@ const LocationView = ({
                 >
                   {activeFacility.activeMonitoringPlans.map((d, i) => (
                     <li key={i}>
-                      <a href="#"> {d}</a>
+                      <span> {d}</span>
                     </li>
                   ))}
                 </ul>

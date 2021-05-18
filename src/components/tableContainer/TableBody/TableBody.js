@@ -57,14 +57,15 @@ const TableBody = ({
       resetBTNInsideTable();
       resetTabFocusHandler(false);
     }
-  }, [rows, tabFocus]);
+  }, [rows, tabFocus, resetTabFocusHandler]);
   const handleDataSelector = (data) => {
     return selectedRowHandler(data);
   };
   return (
-    <tbody 
-    // {...getTableBodyProps()} 
-    className="tableData">
+    <tbody
+      // {...getTableBodyProps()}
+      className="tableData"
+    >
       {(page.length > 0 &&
         page.map((row, i) => {
           prepareRow(row);

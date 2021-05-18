@@ -1,6 +1,6 @@
 import React from "react";
 import UswdsTable from "../../UswdsTable/UswdsTable";
-import "./DataTableMethodRender.css";
+import "./DataTableMethodRender.scss";
 
 const DataTableMethodRender = ({ columns, data, selectedRowHandler }) => {
   return (

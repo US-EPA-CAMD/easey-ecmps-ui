@@ -38,7 +38,7 @@ export function getMonitoringPlansSystemsComponentsTableRecords(data) {
       : "";
     const endHour = el.endHour ? el.endHour.toString() : "";
     let present = false;
-    if (endDate === "" || endDate === null) {
+    if (endDate === "" || endDate === undefined) {
       present = "Present";
     } else {
       present = endDate + ": " + endHour;
@@ -46,7 +46,7 @@ export function getMonitoringPlansSystemsComponentsTableRecords(data) {
     records.push({
       col1: el.componentIdentifier,
       col2: el.componentTypeCode,
-      col3: `${beginDate}: ${beginHour}` + " ➜ " + `${present}`,
+      col3: `${beginDate}: ${beginHour} ➜ ${present}`,
     });
   });
   return records;

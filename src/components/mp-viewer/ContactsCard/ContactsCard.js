@@ -3,7 +3,7 @@ import "./ContactsCard.scss";
 const ContactsCard = ({ info, resp }) => {
   return (
     <div className="row cols-2">
-      <p className="column colInfo">
+      <p className="column colInfo padding-2">
         <strong>Name: </strong>
         {info.name}
         <br />
@@ -36,6 +36,7 @@ const ContactsCard = ({ info, resp }) => {
       </div>
     </div>
   );
+
 };
 
 export default ContactsCard;
