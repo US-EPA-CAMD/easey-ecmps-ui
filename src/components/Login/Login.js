@@ -72,6 +72,8 @@ const Login = () => {
         setFormErrorMessage(err.message);
       }
     }
+
+    return true;
   };
 
   useEffect(() => {
