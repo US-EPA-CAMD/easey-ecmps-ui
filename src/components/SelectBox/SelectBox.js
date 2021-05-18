@@ -64,14 +64,14 @@ const SelectBox = ({
             {showInactive &&
               caption === "Configurations" &&
               getActiveConfigurations(options).length > 0 && (
-                <optgroup label="Active" role="optGroup">
+                <optgroup label="Active" role="listbox">
                   {populateOptions(getActiveConfigurations(options))}
                 </optgroup>
               )}
             {showInactive &&
               caption === "Configurations" &&
               getInActiveConfigurations(options).length > 0 && (
-                <optgroup label="Inactive" role="optGroup">
+                <optgroup label="Inactive" role="listbox">
                   {populateOptions(getInActiveConfigurations(options))}
                 </optgroup>
               )}

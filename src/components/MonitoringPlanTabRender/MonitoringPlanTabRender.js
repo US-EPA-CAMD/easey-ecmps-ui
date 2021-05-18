@@ -87,7 +87,7 @@ export const MonitoringPlanTabRender = ({
       content: <DataTableSystems locationSelect={locationSelect} />,
     },
   ];
-  const [tableHandler, setTableHandler] = useState(
+  /*const [tableHandler, setTableHandler] = useState(
     <Tables
       sectionSelect={sectionSelect}
       methodItems={methodItems}
@@ -95,7 +95,7 @@ export const MonitoringPlanTabRender = ({
       supItems={supItems}
       matsTableFlag={matsTableFlag}
     />
-  );
+  );*/
 
   // useEffect(() => {
   //   setTableHandler(

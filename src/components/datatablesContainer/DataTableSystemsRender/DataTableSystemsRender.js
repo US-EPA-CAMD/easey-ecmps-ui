@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import UswdsTable from "../../UswdsTable/UswdsTable";
-import "./DataTableSystemsRender.css";
+import "./DataTableSystemsRender.scss";
 import Modal from "../../Modal/Modal";
 import Details from "../../Details/Details";
 import DataTableSystemsComponents from "../DataTableSystemsComponents/DataTableSystemsComponents";
@@ -38,7 +38,7 @@ const DataTableSystemsRender = ({ columns, data }) => {
   }, [show]);
 
   // for testing
-  const root = document.getElementById("portal");
+  // const root = document.getElementById("portal");
   return (
     <div>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`}></div>

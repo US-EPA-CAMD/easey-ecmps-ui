@@ -15,7 +15,7 @@ export const DataTableMethod = ({
   locationSelect,
   loadMonitoringMatsMethodsData,
   matsTableHandler,
-  showActiveOnly
+  showActiveOnly,
 }) => {
   useEffect(() => {
     loadMonitoringMethodsData(locationSelect);
@@ -60,11 +60,15 @@ export const DataTableMethod = ({
 
   const data = useMemo(() => {
     if (monitoringMethods.length > 0 || loading === false) {
-      return fs.getMonitoringPlansMethodsTableRecords(showActiveOnly? fs.getActiveMethods(monitoringMethods):monitoringMethods);
+      return fs.getMonitoringPlansMethodsTableRecords(
+        showActiveOnly
+          ? fs.getActiveMethods(monitoringMethods)
+          : monitoringMethods
+      );
     } else {
       return [{ col2: "Loading list of Methods" }];
     }
-  }, [loading, monitoringMethods]);
+  }, [loading, monitoringMethods, showActiveOnly]);
 
   useMemo(() => {
     if (matsTableHandler) {
@@ -74,15 +78,11 @@ export const DataTableMethod = ({
         matsTableHandler(true);
       }
     }
-
-  }, [monitoringMatsMethods]);
+  }, [matsTableHandler, monitoringMatsMethods.length]);
 
   return (
     <div className="methodTable">
-      <DataTableMethodRender
-        columns={columns}
-        data={data}
-      />
+      <DataTableMethodRender columns={columns} data={data} />
     </div>
   );
 };

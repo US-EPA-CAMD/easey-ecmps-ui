@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./HeaderInfo.css";
+import "./HeaderInfo.scss";
 import SelectBox from "../SelectBox/SelectBox";
 import { getActiveConfigurations } from "../../utils/selectors/monitoringConfigurations";
 import { Button } from "@trussworks/react-uswds";
@@ -38,7 +38,7 @@ const HeaderInfo = ({
     if (configurations.length > 1) {
       locationHandler(configurations[configSelect].locations[0]["id"]);
     }
-  }, [configSelect]);
+  }, [configSelect, configurations, locationHandler]);
   const mplHandler = (index) => {
     locationHandler(configurations[configSelect].locations[index]["id"]);
   };

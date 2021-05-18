@@ -6,10 +6,10 @@
     color: white;*/
   }
 
-  .usa-nav__submenu-list {
+ /* .usa-nav__submenu-list {
     margin-left: 30%;
     width: 97%
-  }
+  }*/
 }
 .workspaceMenu > .usa-accordion__button[aria-expanded="true"] {
   background-image: url(../../../node_modules/uswds/dist/img/angle-arrow-up-white.svg),
@@ -22,7 +22,7 @@
 .workspaceMenu > .usa-accordion__button[aria-expanded="false"] {
   background-image: url(../../../node_modules/uswds/dist/img/angle-arrow-down-white.svg),
     linear-gradient(transparent, transparent) !important;
-  background-size: .9em;
+  background-size: .5em;
   margin-left: .25em;
   max-width: 90%;
 }
@@ -44,4 +44,10 @@
 
 li.usa-nav__submenu-item a {
   color: white;
+}
+
+ul#MenuDropDown.usa-nav__submenu-list {
+  position: relative !important;
+  left: 7em !important;
+  margin-right: 6em !important;
 }

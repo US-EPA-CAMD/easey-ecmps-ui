@@ -1,6 +1,6 @@
 import React from "react";
 import UswdsTable from "../../UswdsTable/UswdsTable";
-import "./DataTableMatsRender.css";
+import "./DataTableMatsRender.scss";
 
 const DataTableMatsRender = ({ columns, data, selectedRowHandler }) => {
   return (

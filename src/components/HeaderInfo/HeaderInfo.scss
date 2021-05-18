@@ -1,0 +1,40 @@
+
+a {
+  padding: 5px;
+  font-weight: bold;
+  color: gray;
+}
+
+.mpSelect {
+  align-items: center;
+  padding: 10px;
+}
+
+.selects {
+  column-count: 4;
+  display: flex;
+  position: relative;
+  width: fit-content;
+
+}
+.statuses {
+  padding-right: 50px;
+  position: relative;
+  margin-left: auto;
+  width: fit-content;
+  height: auto;
+
+}
+.eval,
+.submission {
+  font-weight: bold;
+  display: inline-block;
+}
+
+.configurations-container {
+  display: flex;
+  flex-direction: column;
+}
+.showInactive {
+  padding-top: 0px;
+}

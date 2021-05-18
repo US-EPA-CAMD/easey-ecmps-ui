@@ -14,7 +14,7 @@ const Home = () => {
   const showSetOverview = (orisCode) => {
     setShowOverview(
       <div>
-        <div className="overviewButton">
+        <div className="text-center overviewButton">
           <button
             onClick={handleClick}
             className="usa-button"
@@ -33,7 +33,7 @@ const Home = () => {
       <HomeTitle />
       <div className="grid-row">
         <div className="grid-col">
-          <h1 className="page-title">Monitoring Plans for Part 75 Sources</h1>
+          <h1>Monitoring Plans for Part 75 Sources</h1>
         </div>
       </div>
       <div className="grid-row">
@@ -48,15 +48,13 @@ const Home = () => {
       </div>
       <div className="grid-row">
         <div className="grid-col">
-          <p className="web-area-footer">
-            <a
-              href="/airmarkets/forms/contact-us-about-clean-air-markets"
-              className="contact-us"
-            >
-              Contact Us
-            </a>
-            to ask a question, provide feedback, or report a problem.
-          </p>
+          <a
+            href="/airmarkets/forms/contact-us-about-clean-air-markets"
+            className="contact-us"
+          >
+            Contact Us
+          </a>
+          to ask a question, provide feedback, or report a problem.
         </div>
       </div>
     </div>

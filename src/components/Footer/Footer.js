@@ -1,9 +1,9 @@
 import React from "react";
 import { Logo, Footer as TWFooter, SocialLinks } from "@trussworks/react-uswds";
 
-import "./Footer.scss";
 import Menu from "../Menu/Menu";
 import config from "../../config";
+import "./Footer.scss";
 
 const Footer = () => {
   return (

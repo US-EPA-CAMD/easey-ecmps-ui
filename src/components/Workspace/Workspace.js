@@ -1,8 +1,11 @@
 import { NavDropDownButton, MegaMenu } from "@trussworks/react-uswds";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDesktop } from "@fortawesome/free-solid-svg-icons";
+
 import "./Workspace.scss";
-import { HiDesktopComputer } from "react-icons/hi";
+
 const Workspace = () => {
   const [open, setOpen] = useState(true);
   const subMenu = [
@@ -31,13 +34,13 @@ const Workspace = () => {
     <>
       <div className="workspaceMenu">
         <NavDropDownButton
-          className="bg-base text-white"
+          className="bg-base text-white width-auto"
           onToggle={() => {
             testing(open);
           }}
           menuId="MenuDropDown"
           isOpen={open}
-          label={<div className="text-underline"> Workspace</div>}
+          label={<div className="text-underline">Workspace</div>}
           isCurrent={open}
         />
         <MegaMenu
@@ -45,16 +48,16 @@ const Workspace = () => {
           items={[subMenu]}
           isOpen={open}
           id={"MenuDropDown"}
-          className="position-relative top-neg-2"
+          className="position-relative top-neg-2 left-5"
         />
       </div>
     </>
   );
 
   return (
-    <div className="workspaceDropp">
+    <div className="flex-auto">
       <div className="iconLine iconDiv">
-        <HiDesktopComputer size={32} style={{ fill: "white" }} />
+        <FontAwesomeIcon icon={faDesktop} className="text-white font-body-md" />
       </div>
       <div className="workspaceDropDown">{workSpace}</div>
     </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   useTable,
   useSortBy,
@@ -44,15 +44,17 @@ const UswdsTable = ({
     if (disabledColumnFilters.length >= 1) {
       disabledColumnFilters.map((column) => {
         columns[column] = { ...columns[column], disableGlobalFilter: true };
+        return true;
       });
     }
   }
   setEditable(editable);
-  const [editableData, setEditableData] = useState(data);
+  /*const [editableData, setEditableData] = useState(data);
 
   useEffect(() => {
     setEditableData(data);
-  }, [data]);
+  }, [data]);*/
+
   const [tabFocus, setTabFocus] = useState(false);
   const resetTabFocusHandler = (event) => {
     setTabFocus(event);
@@ -128,7 +130,7 @@ const UswdsTable = ({
   return (
     <div className="container">
       <div className="tableHead">
-        <h3 className="tableTitle"> {title}</h3>
+        <h3 className="float-left"> {title}</h3>
         <div className="filterAndSearch">
           {paginate ? (
             <span className="filter">
@@ -155,8 +157,9 @@ const UswdsTable = ({
           )}
         </div>
       </div>
-      <table className={variant}
-      // {...getTableProps()}
+      <table
+        className={variant}
+        // {...getTableProps()}
       >
         {header ? (
           <TableHeader
