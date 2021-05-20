@@ -40,7 +40,6 @@ const HeaderInfo = ({
   useEffect(() => {
     if (!hasActiveConfigs) {
       setConfigurations(getInActiveConfigurations(monitoringPlans));
-      // showInactiveHandler(false);
     }
   }, [hasActiveConfigs, monitoringPlans, orisCode]);
 

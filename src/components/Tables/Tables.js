@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { Accordion } from "@trussworks/react-uswds";
 
 const Tables = ({
@@ -13,13 +13,28 @@ const Tables = ({
   // useEffect(() => {
   //   setExpanded(true);
   // }, [sectionSelect]);
+
+  const ref = useRef();
+
+  useEffect(() => {
+    if (
+      document
+        .querySelectorAll(".usa-accordion__content")[0]
+        .hasAttribute("hidden")
+    ) {
+      ref.current.children[1]
+        .querySelectorAll(".usa-accordion__button")[0]
+        .click();
+    }
+  }, [ref.current, sectionSelect]);
+
   const sections = {
     0: <div></div>,
     1: <div></div>,
     "Monitoring Defaults": <div></div>,
 
     3: (
-      <div>
+      <div ref={ref}>
         <hr width="100%" align="center" />
         <Accordion
           bordered={false}
@@ -44,7 +59,7 @@ const Tables = ({
       </div>
     ),
     4: (
-      <div>
+      <div ref={ref}>
         <hr width="100%" align="center" />
         <Accordion
           bordered={false}

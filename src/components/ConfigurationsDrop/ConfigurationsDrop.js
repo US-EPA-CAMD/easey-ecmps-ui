@@ -102,7 +102,7 @@ const ConfigurationsDrop = ({
       }
     };
     // on a new tab rendering
-    if (tabs[activeTab[0]].location[1] == 0) {
+    if (tabs[activeTab[0]].location[1] === 0) {
       if (hasActiveConfigs) {
         for (const x of tabs[activeTab[0]].monitoringPlans) {
           if (x.active) {
