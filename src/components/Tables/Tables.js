@@ -15,18 +15,17 @@ const Tables = ({
   // }, [sectionSelect]);
 
   const ref = useRef();
-
   useEffect(() => {
     if (
-      document
+      ref.current
         .querySelectorAll(".usa-accordion__content")[0]
         .hasAttribute("hidden")
     ) {
-      ref.current.children[1]
+      ref.current.children[0]
         .querySelectorAll(".usa-accordion__button")[0]
         .click();
     }
-  }, [ref.current, sectionSelect]);
+  }, [ref2.current, sectionSelect]);
 
   const sections = {
     0: <div></div>,
@@ -34,7 +33,7 @@ const Tables = ({
     "Monitoring Defaults": <div></div>,
 
     3: (
-      <div ref={ref}>
+      <div>
         <hr width="100%" align="center" />
         <Accordion
           bordered={false}
@@ -59,7 +58,7 @@ const Tables = ({
       </div>
     ),
     4: (
-      <div ref={ref}>
+      <div >
         <hr width="100%" align="center" />
         <Accordion
           bordered={false}
@@ -79,7 +78,7 @@ const Tables = ({
     "Unit Information": <div></div>,
     "Stack/Pipe Information": <div></div>,
   };
-  return <div>{sections[sectionSelect]}</div>;
+  return <div ref= {ref}>{sections[sectionSelect]}</div>;
 };
 
 export default Tables;
