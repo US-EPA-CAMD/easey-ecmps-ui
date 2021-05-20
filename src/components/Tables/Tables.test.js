@@ -18,23 +18,23 @@ describe("testing the sections area of monitoring plan that handles the accordio
 
   test("testing monitoring methods selection", () => {
     const { container } = render(
-      <TablesTest sectionSelect={"Monitoring Methods"} matsTableFlag={false} />
+      <TablesTest sectionSelect={3} matsTableFlag={false} />
     );
-    const accordion = container.querySelectorAll(".accordions");
+    const accordion = container.querySelectorAll("button");
     expect(accordion.length).toEqual(1);
   });
   test("testing monitoring methods selection with mats", () => {
     const { container } = render(
-      <TablesTest sectionSelect={"Monitoring Methods"} matsTableFlag={true} />
+      <TablesTest sectionSelect={3} matsTableFlag={true} />
     );
-    const accordion = container.querySelectorAll(".accordions");
+    const accordion = container.querySelectorAll("button");
     expect(accordion.length).toEqual(2);
   });
   test("testing monitoring systems selection", () => {
     const { container } = render(
-      <TablesTest sectionSelect={"Monitoring Systems"} matsTableFlag={true} />
+      <TablesTest sectionSelect={4} matsTableFlag={true} />
     );
-    const accordion = container.querySelectorAll(".accordions");
+    const accordion = container.querySelectorAll("button");
     expect(accordion.length).toEqual(1);
   });
 });

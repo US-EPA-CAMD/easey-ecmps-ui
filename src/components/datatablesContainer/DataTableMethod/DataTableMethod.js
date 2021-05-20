@@ -12,16 +12,16 @@ export const DataTableMethod = ({
   monitoringMatsMethods,
   loadMonitoringMethodsData,
   loading,
-  locationSelect,
+  locationSelectValue,
   loadMonitoringMatsMethodsData,
   matsTableHandler,
   showActiveOnly,
 }) => {
   useEffect(() => {
-    loadMonitoringMethodsData(locationSelect);
-    loadMonitoringMatsMethodsData(locationSelect);
+    loadMonitoringMethodsData(locationSelectValue);
+    loadMonitoringMatsMethodsData(locationSelectValue);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelect, showActiveOnly]);
+  }, [locationSelectValue, showActiveOnly]);
   const columns = useMemo(
     () => [
       {

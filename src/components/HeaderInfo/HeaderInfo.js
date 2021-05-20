@@ -1,66 +1,78 @@
 import React, { useEffect, useState } from "react";
-import "./HeaderInfo.scss";
-import SelectBox from "../SelectBox/SelectBox";
-import { getActiveConfigurations } from "../../utils/selectors/monitoringConfigurations";
+import "./HeaderInfo.css";
+import SectionDrop from "../SectionDrop/SectionDrop";
+import {
+  getActiveConfigurations,
+  getInActiveConfigurations,
+} from "../../utils/selectors/monitoringConfigurations";
+import { connect } from "react-redux";
+import {
+  setSectionSelectionState,
+  setInactiveToggle,
+} from "../../store/actions/dynamicFacilityTab";
+import { setActiveTab } from "../../store/actions/activeTab";
 import { Button } from "@trussworks/react-uswds";
+import ConfigurationsDrop from "../ConfigurationsDrop/ConfigurationsDrop";
+import LocationDrop from "../LocationsDrop/LocationsDrop";
+
 const HeaderInfo = ({
   facility,
-  sectionHandler,
   monitoringPlans,
-  locationHandler,
-  showInactiveHandler,
-  showInactive,
+  orisCode,
+  monitoringPlansState,
   hasActiveConfigs,
+
+  tabs,
+  activeTab,
+  setSection,
+  setConfiguration,
+  setInactive,
 }) => {
+  // // possiblely adding showinactive to redux state will fix this issue
   const [configurations, setConfigurations] = useState(
-    showInactive ? monitoringPlans : getActiveConfigurations(monitoringPlans)
+    hasActiveConfigs
+      ? monitoringPlans
+      : getInActiveConfigurations(monitoringPlans)
   );
 
-  const sections = [
-    { name: "Loads" },
-    { name: "Location Attributes" },
-    { name: "Monitoring Defaults" },
-    { name: "Monitoring Methods" },
-    { name: "Monitoring Systems" },
-    { name: "Qualifications" },
-    { name: "Rectangular Duct WAFs" },
-    { name: "Reporting Frequency" },
-    { name: "Span, Range, and Formulas" },
-    { name: "Unit Information" },
-    { name: "Stack/Pipe Information" },
-  ];
-  const [configSelect, setConfigSelect] = useState(0);
-
-  const mpHandler = (index) => {
-    setConfigSelect(index);
-  };
+  // by default is there are no active configs, show inactive (need to disable and check the
+  //show inactive checkbox )
   useEffect(() => {
-    if (configurations.length > 1) {
-      locationHandler(configurations[configSelect].locations[0]["id"]);
+    if (!hasActiveConfigs) {
+      setConfigurations(getInActiveConfigurations(monitoringPlans));
+      // showInactiveHandler(false);
     }
-  }, [configSelect, configurations, locationHandler]);
-  const mplHandler = (index) => {
-    locationHandler(configurations[configSelect].locations[index]["id"]);
-  };
-  const mpsHandler = (index) => {
-    sectionHandler(sections[index].name);
-  };
+  }, [hasActiveConfigs, monitoringPlans, orisCode]);
 
-  const checkBoxHandler = (evt) => {
-    if (evt.target.checked) {
-      setConfigurations(monitoringPlans);
-      showInactiveHandler(true);
-    } else {
-      setConfigurations(getActiveConfigurations(monitoringPlans));
-      showInactiveHandler(false);
-    }
-    setConfigSelect(0);
-  };
+  const [inactiveCheck, setInactiveCheck] = useState(
+    tabs[activeTab[0]].inactive
+  );
+  // by default only show active configs first
   useEffect(() => {
     setConfigurations(
-      showInactive ? monitoringPlans : getActiveConfigurations(monitoringPlans)
+      inactiveCheck ? monitoringPlans : getActiveConfigurations(monitoringPlans)
     );
-  }, [monitoringPlans, showInactive]);
+  }, [monitoringPlans, inactiveCheck, orisCode]);
+
+  useEffect(() => {
+    setConfigurations(
+      tabs[activeTab].inactive
+        ? monitoringPlans
+        : getActiveConfigurations(monitoringPlans)
+    );
+  }, [monitoringPlans, tabs[activeTab].inactive]);
+
+  const [sectionSelect, setSectionSelect] = useState(
+    tabs[activeTab[0]].section
+  );
+
+  useEffect(() => {
+    setSectionSelect(tabs[activeTab[0]].section);
+  }, [tabs[activeTab[0]].section]);
+
+  useEffect(() => {
+    setInactiveCheck(tabs[activeTab[0]].inactive);
+  }, [tabs[activeTab[0]].inactive, hasActiveConfigs]);
 
   return (
     <div className="header">
@@ -72,41 +84,36 @@ const HeaderInfo = ({
         <a href="#/">Reports</a>|<Button className="ovalBTN">Evaluate</Button>
         <Button className="ovalBTN">Submit</Button>
       </div>
-      {configurations.length !== 0 ? (
+      {monitoringPlansState.length !== 0 ? (
         <div className="row">
           <div className="selects column">
             <div className="configurations-container">
-              <SelectBox
+              <ConfigurationsDrop
                 caption="Configurations"
                 options={configurations}
-                selectionHandler={mpHandler}
                 selectKey="name"
-                showInactive={showInactive}
+                initialSelection={0}
+                inactiveCheck={inactiveCheck}
+                showInactiveHandler={setInactive}
+                showInactive={inactiveCheck}
+                hasActiveConfigs={hasActiveConfigs}
+                orisCode={orisCode}
               />
-              <div className="mpSelect showInactive">
-                <input
-                  type="checkbox"
-                  id="showInactive"
-                  name="showInactive"
-                  checked={showInactive}
-                  disabled={!hasActiveConfigs}
-                  onChange={checkBoxHandler}
-                />
-                <label htmlFor="showInactive"> Show Inactive</label>
-              </div>
             </div>
-            <SelectBox
+            <LocationDrop
               caption="Locations"
-              options={configurations[configSelect].locations}
-              selectionHandler={mplHandler}
+              orisCode={orisCode}
+              options={tabs[activeTab[0]].locations}
               selectKey="name"
+              initialSelection={tabs[activeTab[0]].location[0]}
             />
-            <SelectBox
+            <SectionDrop
               caption="Sections"
-              options={sections}
-              selectionHandler={mpsHandler}
+              selectionHandler={setSection}
               selectKey="name"
-              initialSelection={3}
+              initialSelection={sectionSelect}
+              orisCode={orisCode}
+              activeTab={activeTab}
             />
           </div>
           <div className="statuses column">
@@ -128,4 +135,21 @@ const HeaderInfo = ({
   );
 };
 
-export default React.memo(HeaderInfo);
+const mapStateToProps = (state) => {
+  return {
+    tabs: state.openedFacilityTabs,
+    monitoringPlansState:state.monitoringPlans,
+    activeTab: state.activeTab,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setSection: (section, orisCode) =>
+      dispatch(setSectionSelectionState(section, orisCode)),
+    setInactive: (orisCode, value) =>
+      dispatch(setInactiveToggle(orisCode, value)),
+    setActiveTab: (orisCode, value) => dispatch(setActiveTab(orisCode, value)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderInfo);
