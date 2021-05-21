@@ -78,7 +78,7 @@ export const DataTableMethod = ({
         matsTableHandler(true);
       }
     }
-  }, [matsTableHandler, monitoringMatsMethods.length]);
+  }, [locationSelectValue, monitoringMatsMethods.length]);
 
   return (
     <div className="methodTable">

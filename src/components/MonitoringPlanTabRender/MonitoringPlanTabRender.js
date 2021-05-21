@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import HeaderInfo from "../HeaderInfo/HeaderInfo";
 import AccordionItemTitle from "../AccordionItemTitle/AccordionItemTitle";
 import "../MonitoringPlanTab/MonitoringPlanTab.scss";
@@ -23,12 +23,18 @@ export const MonitoringPlanTabRender = ({
   // // MONITORING METHODS
 
   const matsTableHandler = (flag) => {
-    // setMatsTableFlag(flag);
-    // setTimeout(() => {
-    //   setMatsTableFlag(flag);
-    // });
+    setMatsTableFlag(flag);
   };
-
+useEffect(() => {
+  if (matsTableFlag) {
+    supItems[0] = {
+      title: <AccordionItemTitle title="Supplemental Methods" />,
+      expanded: true,
+      id: "7",
+      content: <DataTableMats locationSelect={locationSelect} />,
+    };
+  }
+}, [])
   const supItems = [];
   const methodItems = [
     {
@@ -48,7 +54,7 @@ export const MonitoringPlanTabRender = ({
   if (matsTableFlag) {
     supItems.push({
       title: <AccordionItemTitle title="Supplemental Methods" />,
-      expanded: true,
+      expanded: false,
       id: "7",
       content: <DataTableMats locationSelect={locationSelect} />,
     });
@@ -85,7 +91,7 @@ export const MonitoringPlanTabRender = ({
         supItems={supItems}
         matsTableFlag={matsTableFlag}
       />
-      {/* {tableHandler} */}
+
       <hr width="100%" align="center" />
     </div>
   );

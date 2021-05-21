@@ -8,11 +8,6 @@ const Tables = ({
   matsTableFlag,
   systemsItems,
 }) => {
-  // console.log('this is section in tables',methodItems)
-  // const [expanded, setExpanded] = useState(false);
-  // useEffect(() => {
-  //   setExpanded(true);
-  // }, [sectionSelect]);
 
   const ref = useRef();
   useEffect(() => {
@@ -27,6 +22,35 @@ const Tables = ({
     }
   }, [ref.current, sectionSelect]);
 
+  useEffect(() => {
+    if (matsTableFlag) {
+      sections[3] = (
+        <div>
+          <hr width="100%" align="center" />
+          <Accordion
+            bordered={false}
+            aria-expanded={true}
+            items={methodItems}
+            className="accordions"
+          />
+
+          {matsTableFlag ? (
+            <>
+              <hr width="100%" align="center" />
+              <Accordion
+                bordered={false}
+                items={supItems}
+                className="accordions"
+              />
+            </>
+          ) : (
+            ""
+          )}
+          {/* <hr width="100%" align="center" /> */}
+        </div>
+      );
+    }
+  }, [matsTableFlag]);
   const sections = {
     0: <div></div>,
     1: <div></div>,
@@ -58,7 +82,7 @@ const Tables = ({
       </div>
     ),
     4: (
-      <div >
+      <div>
         <hr width="100%" align="center" />
         <Accordion
           bordered={false}
@@ -78,7 +102,7 @@ const Tables = ({
     "Unit Information": <div></div>,
     "Stack/Pipe Information": <div></div>,
   };
-  return <div ref= {ref}>{sections[sectionSelect]}</div>;
+  return <div ref={ref}>{sections[sectionSelect]}</div>;
 };
 
 export default Tables;
