@@ -5,7 +5,7 @@ import { loadFacilities } from "../../../store/actions/facilities";
 import * as fs from "../../../utils/selectors/facilities";
 import SelectFacilitiesDataTableRender from "../SelectFacilitiesDataTableRender/SelectFacilitiesDataTableRender";
 import SelectedFacilityTab from "../../MonitoringPlanTab/MonitoringPlanTab";
-
+import {emptyMonitoringPlans } from "../../../store/actions/monitoringPlans";
 import "./SelectFacilitiesDataTable.scss";
 
 export const SelectFacilitiesDataTable = ({
@@ -14,11 +14,13 @@ export const SelectFacilitiesDataTable = ({
   loading,
   addTabs,
   openedFacilityTabs,
+  emptyPlan
 }) => {
   useEffect(() => {
     if (facilities.length === 0) {
       loadFacilitiesData();
     }
+    emptyPlan();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -108,6 +110,7 @@ export const SelectFacilitiesDataTable = ({
             <SelectedFacilityTab orisCode={info[0].value} />
           </div>
         ),
+        orisCode:info[0].value,
       },
     ]);
   };
@@ -135,6 +138,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     loadFacilitiesData: () => dispatch(loadFacilities()),
+    emptyPlan: () =>dispatch(emptyMonitoringPlans()),
   };
 };
 
