@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import { connect } from "react-redux";
+import { Button } from "@trussworks/react-uswds";
 import { loadFacilities } from "../../../store/actions/facilities";
 import * as fs from "../../../utils/selectors/facilities";
 import SelectFacilitiesDataTableRender from "../SelectFacilitiesDataTableRender/SelectFacilitiesDataTableRender";
@@ -23,7 +24,7 @@ export const SelectFacilitiesDataTable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const columns = useMemo(
+  /*const columns = useMemo(
     () => [
       {
         Header: "ORIS",
@@ -42,7 +43,55 @@ export const SelectFacilitiesDataTable = ({
       },
     ],
     []
-  );
+  );*/
+
+  const columns = [
+    {
+      name: "ORIS",
+      selector: "col1",
+      sortable: true,
+    },
+    {
+      name: "Facility",
+      selector: "col2",
+      sortable: true,
+    },
+    {
+      name: "State",
+      selector: "col3",
+      sortable: true,
+    },
+    {
+      name: "Actions",
+      button: true,
+      width: "25%",
+      cell: (row) => {
+        // *** normalize row to be in expected format for tabs
+        row.cells = [];
+
+        for (let i in row) {
+          if (row.hasOwnProperty(i)) {
+            const cellObject = {
+              value: row[i],
+            };
+            row.cells.push(cellObject);
+          }
+        }
+
+        return (
+        <div className="cursor-pointer" onClick={() => selectedRowHandler(row.cells)}>
+          <img
+            height="32px"
+            width="32px"
+            alt="Open Tab"
+            src={`${process.env.PUBLIC_URL}/images/openTab.jpg`}
+            className="margin-right-1"
+          />
+          Open
+        </div>
+      )},
+    },
+  ];
 
   const data = useMemo(() => {
     if (facilities.length > 0 || loading === false) {
