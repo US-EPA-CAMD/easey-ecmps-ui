@@ -93,8 +93,8 @@ const ConfigurationsDrop = ({
             );
             setLocation(
               [
-                0,
-                tabs[activeTab[0]].monitoringPlans[mpLocationsId].locations[0].id,
+                tabs[activeTab[0]].location[0],
+                tabs[activeTab[0]].monitoringPlans[mpLocationsId].locations[tabs[activeTab[0]].location[0]].id,
               ],
               orisCode
             );}
