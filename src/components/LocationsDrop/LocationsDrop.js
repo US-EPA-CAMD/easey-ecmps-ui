@@ -56,7 +56,7 @@ const LocationDrop = ({
     } else {
       setSelectionState(0);
     }
-  }, []);
+  }, [activeTab[0]]);
 
   return (
     <div>

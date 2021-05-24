@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
 import './Tabs.scss';
-const Tabs = ({ children, dynamic = false, removeTabs, setResizeObserver}) => {
+const Tabs = ({ children, dynamic = false, removeTabs, setResizeObserver, setActive}) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const settingActiveTab =(index) =>{
+    setActiveTabIndex(index);
+    setActive(false,index-1);
+
+  }
   let contentBox=null;
   const closeHandler = (event, index) => {
     event.stopPropagation();
     removeTabs(index);
     if (activeTabIndex === children.length - 1) {
       setActiveTabIndex(index - 1);
+      setActive(false,index-2);
     }
   };
 
@@ -30,7 +36,7 @@ const Tabs = ({ children, dynamic = false, removeTabs, setResizeObserver}) => {
                   ? "active-button button-group"
                   : "notActive-button button-group"
               }
-              onClick={() => setActiveTabIndex(i)}
+              onClick={() => settingActiveTab(i)}
             >
               {dynamic ? (
                 <i
