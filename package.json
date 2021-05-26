@@ -70,7 +70,7 @@
     "enzyme-adapter-react-16": "^1.15.4",
     "jest-enzyme": "^7.1.2",
     "jest-sonar-reporter": "^2.0.0",
-    "prop-types": "^15.6.0",
+    "prop-types": "^15.7.2",
     "react-paginate": "^6.5.0",
     "react-test-renderer": "^16.13.1"
   },
