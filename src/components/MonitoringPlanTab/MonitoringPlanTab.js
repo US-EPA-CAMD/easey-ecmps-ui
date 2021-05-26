@@ -78,7 +78,7 @@ export const MonitoringPlanTab = ({
 
   return (
     <div>
-      {monitoringPlans.length > 1 ? (
+      {monitoringPlans.length >= 1 ? (
         <div>
           <MonitoringPlanTabRender
             facility={facility}

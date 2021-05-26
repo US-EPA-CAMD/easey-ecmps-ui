@@ -50,6 +50,7 @@ export const SelectFacilitiesDataTable = ({
       name: "ORIS",
       selector: "col1",
       sortable: true,
+      sortFunction: (a, b) => parseFloat(a) - parseFloat(b)
     },
     {
       name: "Facility",

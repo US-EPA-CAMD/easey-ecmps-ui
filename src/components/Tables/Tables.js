@@ -102,7 +102,7 @@ const Tables = ({
     "Unit Information": <div></div>,
     "Stack/Pipe Information": <div></div>,
   };
-  return <div ref={ref}>{sections[sectionSelect]}</div>;
+  return <div aria-live="polite" ref={ref}>{sections[sectionSelect]}</div>;
 };
 
 export default Tables;

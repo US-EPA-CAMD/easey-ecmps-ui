@@ -5,11 +5,13 @@ import TabPane from "../TabPane/TabPane";
 import "./DynamicTabs.scss";
 import {addFacilityTab, removeFacilityTab} from "../../store/actions/dynamicFacilityTab";
 import ResizeObserver from 'resize-observer-polyfill';
+import { setActiveTab } from "../../store/actions/activeTab";
 
 export const DynamicTabs = ({
   tabsProps,
   removeFacility,
-  addFacility
+  addFacility,
+  setActive
 }) => {
   const [tabs, setTabs] = useState(tabsProps);
   const [containerWidth, setContainerWidth] = useState(null);
@@ -49,7 +51,7 @@ export const DynamicTabs = ({
 
   return (
     <div>
-      <Tabs dynamic={true} removeTabs={removeTabsHandler} setResizeObserver={initResizeObs}>
+      <Tabs dynamic={true} removeTabs={removeTabsHandler} setResizeObserver={initResizeObs} setActive={setActive}>
         {tabs &&
           tabs.map((tab, i) => (
             <TabPane key={i} title={tab.title}>
@@ -67,6 +69,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     removeFacility: (facility) => dispatch(removeFacilityTab(facility)),
     addFacility: (facility) => dispatch(addFacilityTab(facility)),
+    setActive: (orisCode,value) => dispatch(setActiveTab(orisCode,value))
   };
 };
 

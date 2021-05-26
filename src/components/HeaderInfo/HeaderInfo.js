@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import {
   setSectionSelectionState,
   setInactiveToggle,
+  setLocationSelectionState
 } from "../../store/actions/dynamicFacilityTab";
 import { setActiveTab } from "../../store/actions/activeTab";
 import { Button } from "@trussworks/react-uswds";
@@ -27,6 +28,7 @@ const HeaderInfo = ({
                       setSection,
                       setConfiguration,
                       setInactive,
+                      setLocation
                     }) => {
   // // possiblely adding showinactive to redux state will fix this issue
   const [configurations, setConfigurations] = useState(
@@ -55,7 +57,7 @@ const HeaderInfo = ({
 
   useEffect(() => {
     setConfigurations(
-        tabs[activeTab].inactive
+        tabs[activeTab[0]].inactive
             ? monitoringPlans
             : getActiveConfigurations(monitoringPlans)
     );
@@ -68,6 +70,10 @@ const HeaderInfo = ({
   useEffect(() => {
     setSectionSelect(tabs[activeTab[0]].section);
   }, [tabs[activeTab[0]].section]);
+  useEffect(() => {
+    setLocation([tabs[activeTab[0]].location[0],tabs[activeTab[0]].location[1]],orisCode);
+  }, []);
+
 
   useEffect(() => {
     setInactiveCheck(tabs[activeTab[0]].inactive);
@@ -148,6 +154,7 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(setSectionSelectionState(section, orisCode)),
     setInactive: (orisCode, value) =>
         dispatch(setInactiveToggle(orisCode, value)),
+    setLocation: (location,orisCode) => dispatch(setLocationSelectionState(location,orisCode)),
     setActiveTab: (orisCode, value) => dispatch(setActiveTab(orisCode, value)),
   };
 };
