@@ -20,7 +20,7 @@ const Tables = ({
         .querySelectorAll(".usa-accordion__button")[0]
         .click();
     }
-  }, [ref2.current, sectionSelect]);
+  }, [ref.current, sectionSelect]);
 
   useEffect(() => {
     if (matsTableFlag) {
