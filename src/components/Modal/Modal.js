@@ -4,7 +4,7 @@ import "./Modal.scss";
 
 const modalContext = createContext();
 
-const Modal = ({ show, close, children,showCancel, showSave }) => {
+const Modal = ({ show, close, children, showCancel, showSave }) => {
   useEffect(() => {
     function keyListener(e) {
       if (e != null) {
@@ -85,13 +85,20 @@ const Modal = ({ show, close, children,showCancel, showSave }) => {
               <div className="modal-body modal-color">{children}</div>
 
               <div className="modal-footer modal-color">
-                {showCancel? <button onClick={close} className="cancelBTN modal-color">
-                  Cancel
-                </button>: ''}
-                {showSave ? 
-                <button onClick={close} className="saveCloseBTN">
-                  Save and Close
-                </button>: ''}
+                {showCancel ? (
+                  <button onClick={close} className="cancelBTN modal-color">
+                    Cancel
+                  </button>
+                ) : (
+                  ""
+                )}
+                {showSave ? (
+                  <button onClick={close} className="saveCloseBTN">
+                    Save and Close
+                  </button>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>
