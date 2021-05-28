@@ -42,6 +42,7 @@ const Login = () => {
     e.preventDefault();
     const formReady = !(username !== "" || password !== "");
 
+    // issue here 
     if (!formReady) {
       setFormErrorMessage(standardFormErrorMessage);
     }
@@ -52,13 +53,14 @@ const Login = () => {
       try {
         return await authenticate({ userId: username, password })
           .then((response) => {
-            setLoading(false);
+            setLoading(true);
 
             if (response.status === "Valid") {
               setUsername("");
               setPassword("");
               setFormErrorMessage("");
-            } else if (response.error) {
+            } 
+            else if (response.error) {
               throw response.error;
             }
           })
@@ -69,6 +71,7 @@ const Login = () => {
           });
       } catch (err) {
         setLoading(false);
+        console.log('error',err)
         setFormErrorMessage(err.message);
       }
     }
@@ -121,6 +124,15 @@ const Login = () => {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
             />
+
+
+            <Button
+              data-test="component-login-submit-button"
+              className="margin-bottom-2"
+              type="submit"
+            >
+              Log In
+            </Button>
             <p className="usa-form__note">
               <Button
                 unstyled="true"
@@ -133,15 +145,6 @@ const Login = () => {
                 {showPassword ? "Hide password" : "Show password"}
               </Button>
             </p>
-
-            <Button
-              data-test="component-login-submit-button"
-              className="margin-bottom-2"
-              type="submit"
-            >
-              Log In
-            </Button>
-
             <p>
               <a
                 href="https://dev.epacdx.net/AccountRecovery/ForgotUserId"

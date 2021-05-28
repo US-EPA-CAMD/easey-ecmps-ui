@@ -5,19 +5,19 @@ import Title from "../Title/Title";
 import { Button } from "@trussworks/react-uswds";
 import Modal from "../Modal/Modal";
 import Login from "../Login/Login";
-
-const cdx_user = sessionStorage.getItem("cdx_user")
+import { matchPath } from "react-router";
+import { NavLink } from "react-router-dom";
+import './LeftNavigation.css'
+const cdxUser = sessionStorage.getItem("cdx_user")
   ? JSON.parse(sessionStorage.getItem("cdx_user"))
   : false;
-const firstName = cdx_user && cdx_user.firstName ? cdx_user.firstName : false;
+const firstName = cdxUser && cdxUser.firstName ? cdxUser.firstName : false;
 
 const LeftNavigation = () => {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
-  const [profileTitle, setProfileTitle] = useState("Profile");
 
   const checkLoggedIn = () => {
-    if (cdx_user && firstName) {
-      setProfileTitle(`Hello "${firstName}"`);
+    if (cdxUser && firstName) {
       setUserLoggedIn(true);
     }
   };
@@ -37,13 +37,65 @@ const LeftNavigation = () => {
   const openModal = (value) => {
     setShow(value);
   };
+
   return (
     <div className="bg-base width-full height-full font-body-sm padding-3">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`}></div>
-      <Title />
-      <Workspace />
+      {/* <Title /> */}
+      <div className="">
+        <div className="grid-row">
+          <NavLink
+            className="text-no-underline text-white"
+            activeClassName=" activeLink"
+            to="/"
+            exact={true}
+            rel="Home"
+            title="Go to the home page">
+           Home
+          </NavLink>
+        </div>
+        <div className="grid-row">
+          <NavLink
+          className="text-no-underline text-white"
+            to="/monitoring-plans"
+            strict
+            rel="Monitoring Plans"
+            activeClassName=" activeLink"
+            title="Go to the Monitoring Plans page"
+          >
+            Monitoring Plans
+          </NavLink>
+        </div>
+        <div className="grid-row">
+          <NavLink
+            className="text-no-underline text-white"
+            to="/qa_certifications"
+            strict
+            activeClassName=" activeLink"
+            rel={"QA & Certifications"}
+            title={"Go to the QA & Certifications page"}
+          >
+            { " QA & Certifications"}
+          </NavLink>
+        </div>
+
+        <div className="grid-row">
+          <NavLink
+            className="text-no-underline text-white"
+            activeClassName=" activeLink"
+            strict
+            to="/emissions"
+            rel="Emissions"
+            
+            title="Go to the Emissions page"
+          >
+          Emissions
+          </NavLink>
+        </div>
+      </div>
+      {userLoggedIn ? <Workspace /> : ""}
       <div className="padding-bottom-4 position-absolute bottom-0">
-        {!cdx_user ? (
+        {!cdxUser ? (
           <Button onClick={() => openModal(true)}> Log In</Button>
         ) : (
           ""

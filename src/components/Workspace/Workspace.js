@@ -1,31 +1,52 @@
 import { NavDropDownButton, MegaMenu } from "@trussworks/react-uswds";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink,useLocation  } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDesktop } from "@fortawesome/free-solid-svg-icons";
 
 import "./Workspace.scss";
 
 const Workspace = () => {
+  const cdxUser = sessionStorage.getItem("cdx_user")
+  ? JSON.parse(sessionStorage.getItem("cdx_user"))
+  : false;
+const firstName = cdxUser && cdxUser.firstName ? cdxUser.firstName : false;
+
+const location = useLocation().pathname;
+console.log('location',location)
   const [open, setOpen] = useState(true);
   const subMenu = [
-    <Link
-      to="./monitoring-plans"
+    <NavLink
+    className="text-no-underline text-white"
+      to={`/monitoring-plans/${firstName}`}
       rel="Monitoring Plans"
+      activeClassName=" activeLink"
+      isActive={()=> location === `/monitoring-plans/${firstName}` }
       title="Go to the Monitoring Plans page"
     >
-      - Monitoring Plans
-    </Link>,
-    <Link
-      to="./qa_certifications"
+      Monitoring Plans
+    </NavLink>
+,
+    <NavLink
+      className="text-no-underline text-white"
+      to="/qa_certifications"
+      activeClassName=" activeLink"
       rel={"QA & Certifications"}
       title={"Go to the QA & Certifications page"}
     >
-      {"- QA & Certifications"}
-    </Link>,
-    <Link to="./emissions" rel="Emissions" title="Go to the Emissions page">
-      - Emissions
-    </Link>,
+      { " QA & Certifications"}
+    </NavLink>
+ ,
+    <NavLink
+      className="text-no-underline text-white"
+      activeClassName=" activeLink"
+      to="/emissions"
+      rel="Emissions"
+      
+      title="Go to the Emissions page"
+    >
+    Emissions
+    </NavLink>
   ];
   const testing = (news) => {
     setOpen(!news);
@@ -34,7 +55,7 @@ const Workspace = () => {
     <>
       <div className="workspaceMenu">
         <NavDropDownButton
-          className="bg-base text-white width-auto"
+          className="bg-base text-white width-auto padding-left-0"
           onToggle={() => {
             testing(open);
           }}
@@ -56,9 +77,9 @@ const Workspace = () => {
 
   return (
     <div className="flex-auto">
-      <div className="iconLine iconDiv">
+      {/* <div className="iconLine iconDiv">
         <FontAwesomeIcon icon={faDesktop} className="text-white font-body-md" />
-      </div>
+      </div> */}
       <div className="workspaceDropDown">{workSpace}</div>
     </div>
   );
