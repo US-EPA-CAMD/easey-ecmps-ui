@@ -7,6 +7,7 @@ import {
   faUser,
   faCog,
   faQuestionCircle,
+  faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
 const cdx_user = sessionStorage.getItem("cdx_user")
@@ -16,11 +17,9 @@ const firstName = cdx_user && cdx_user.firstName ? cdx_user.firstName : false;
 
 const Accessories = () => {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
-  const [profileTitle, setProfileTitle] = useState("Profile");
 
   const checkLoggedIn = () => {
     if (cdx_user && firstName) {
-      setProfileTitle(`Hello "${firstName}"`);
       setUserLoggedIn(true);
     }
   };
@@ -36,6 +35,52 @@ const Accessories = () => {
 
   return (
     <div className="accessoriesLinks">
+      {userLoggedIn ? (
+        <div>
+          <div className="text-white">
+            <FontAwesomeIcon
+              icon={faUserCircle}
+              className="text-white font-body-lg"
+            />
+            {" Welcome "}
+            {firstName}
+          </div>
+          {userLoggedIn && (
+            <div className="accessoryLink">
+              <Button type="button" onClick={() => logOut()}>
+                Log Out
+              </Button>
+            </div>
+          )}
+          <div className="accessoryLink">
+            <FontAwesomeIcon
+              icon={faUser}
+              className="text-white font-body-sm"
+            />
+            <Link
+              to="./profile"
+              rel="Profile"
+              title="Go to the Profile page"
+              className="text-white"
+            >
+              Profile
+            </Link>
+          </div>
+          <div className="text-white">
+            <FontAwesomeIcon icon={faCog} className="text-white font-body-sm" />
+            <Link
+              className="text-white"
+              to="./account_manage"
+              rel=" Account Management"
+              title="Go to the Account Management page"
+            >
+              Account Management
+            </Link>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
       <div className="accessoryLink">
         <FontAwesomeIcon icon={faTh} className="text-white font-body-sm" />
         <Link
@@ -45,28 +90,6 @@ const Accessories = () => {
           className="text-white"
         >
           CAMD Apps
-        </Link>
-      </div>
-      <div className="accessoryLink">
-        <FontAwesomeIcon icon={faUser} className="text-white font-body-sm" />
-        <Link
-          to="./profile"
-          rel="Profile"
-          title="Go to the Profile page"
-          className="text-white"
-        >
-          {profileTitle}
-        </Link>
-      </div>
-      <div className="text-white">
-        <FontAwesomeIcon icon={faCog} className="text-white font-body-sm" />
-        <Link
-          className="text-white"
-          to="./account_manage"
-          rel=" Account Management"
-          title="Go to the Account Management page"
-        >
-          Account Management
         </Link>
       </div>
       <div className="accessoryLink">
@@ -83,13 +106,6 @@ const Accessories = () => {
           {"Help & Contact"}
         </Link>
       </div>
-      {userLoggedIn && (
-        <div className="accessoryLink">
-          <Button type="button" onClick={() => logOut()}>
-            Log Out
-          </Button>
-        </div>
-      )}
     </div>
   );
 };
