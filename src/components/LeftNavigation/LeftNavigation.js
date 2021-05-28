@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Accessories from "../Accessories/Accessories";
 import Workspace from "../Workspace/Workspace";
-import Title from "../Title/Title";
 import { Button } from "@trussworks/react-uswds";
 import Modal from "../Modal/Modal";
 import Login from "../Login/Login";
-import { matchPath } from "react-router";
 import { NavLink } from "react-router-dom";
-import './LeftNavigation.css'
+import "./LeftNavigation.css";
 const cdxUser = sessionStorage.getItem("cdx_user")
   ? JSON.parse(sessionStorage.getItem("cdx_user"))
   : false;
@@ -50,13 +48,14 @@ const LeftNavigation = () => {
             to="/"
             exact={true}
             rel="Home"
-            title="Go to the home page">
-           Home
+            title="Go to the home page"
+          >
+            Home
           </NavLink>
         </div>
         <div className="grid-row">
           <NavLink
-          className="text-no-underline text-white"
+            className="text-no-underline text-white"
             to="/monitoring-plans"
             strict
             rel="Monitoring Plans"
@@ -75,7 +74,7 @@ const LeftNavigation = () => {
             rel={"QA & Certifications"}
             title={"Go to the QA & Certifications page"}
           >
-            { " QA & Certifications"}
+            {" QA & Certifications"}
           </NavLink>
         </div>
 
@@ -86,10 +85,9 @@ const LeftNavigation = () => {
             strict
             to="/emissions"
             rel="Emissions"
-            
             title="Go to the Emissions page"
           >
-          Emissions
+            Emissions
           </NavLink>
         </div>
       </div>

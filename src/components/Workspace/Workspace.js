@@ -1,9 +1,6 @@
 import { NavDropDownButton, MegaMenu } from "@trussworks/react-uswds";
 import React, { useState } from "react";
-import { NavLink,useLocation  } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDesktop } from "@fortawesome/free-solid-svg-icons";
-
+import { NavLink } from "react-router-dom";
 import "./Workspace.scss";
 
 const Workspace = () => {
@@ -12,21 +9,17 @@ const Workspace = () => {
   : false;
 const firstName = cdxUser && cdxUser.firstName ? cdxUser.firstName : false;
 
-const location = useLocation().pathname;
-console.log('location',location)
   const [open, setOpen] = useState(true);
   const subMenu = [
     <NavLink
-    className="text-no-underline text-white"
-      to={`/monitoring-plans/${firstName}`}
+      className="text-no-underline text-white"
+      to="/monitoring-plans/"
       rel="Monitoring Plans"
       activeClassName=" activeLink"
-      isActive={()=> location === `/monitoring-plans/${firstName}` }
       title="Go to the Monitoring Plans page"
     >
       Monitoring Plans
-    </NavLink>
-,
+    </NavLink>,
     <NavLink
       className="text-no-underline text-white"
       to="/qa_certifications"
@@ -34,19 +27,17 @@ console.log('location',location)
       rel={"QA & Certifications"}
       title={"Go to the QA & Certifications page"}
     >
-      { " QA & Certifications"}
-    </NavLink>
- ,
+      {" QA & Certifications"}
+    </NavLink>,
     <NavLink
       className="text-no-underline text-white"
       activeClassName=" activeLink"
       to="/emissions"
       rel="Emissions"
-      
       title="Go to the Emissions page"
     >
-    Emissions
-    </NavLink>
+      Emissions
+    </NavLink>,
   ];
   const testing = (news) => {
     setOpen(!news);
@@ -77,9 +68,6 @@ console.log('location',location)
 
   return (
     <div className="flex-auto">
-      {/* <div className="iconLine iconDiv">
-        <FontAwesomeIcon icon={faDesktop} className="text-white font-body-md" />
-      </div> */}
       <div className="workspaceDropDown">{workSpace}</div>
     </div>
   );

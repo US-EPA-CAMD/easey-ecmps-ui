@@ -17,11 +17,9 @@ const firstName = cdx_user && cdx_user.firstName ? cdx_user.firstName : false;
 
 const Accessories = () => {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
-  const [profileTitle, setProfileTitle] = useState("Profile");
 
   const checkLoggedIn = () => {
     if (cdx_user && firstName) {
-      setProfileTitle(`Hello "${firstName}"`);
       setUserLoggedIn(true);
     }
   };
@@ -39,11 +37,14 @@ const Accessories = () => {
     <div className="accessoriesLinks">
       {userLoggedIn ? (
         <div>
-          <FontAwesomeIcon
-            icon={faUserCircle}
-            className="text-white font-body-sm"
-          />
-          Welcome {firstName}{" "}
+          <div className="text-white">
+            <FontAwesomeIcon
+              icon={faUserCircle}
+              className="text-white font-body-lg"
+            />
+            {" Welcome, "}
+            {firstName}
+          </div>
           {userLoggedIn && (
             <div className="accessoryLink">
               <Button type="button" onClick={() => logOut()}>

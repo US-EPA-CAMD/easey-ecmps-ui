@@ -42,7 +42,7 @@ const Login = () => {
     e.preventDefault();
     const formReady = !(username !== "" || password !== "");
 
-    // issue here 
+    // issue here
     if (!formReady) {
       setFormErrorMessage(standardFormErrorMessage);
     }
@@ -53,8 +53,7 @@ const Login = () => {
       try {
         return await authenticate({ userId: username, password })
           .then((response) => {
-            setLoading(true);
-
+            setLoading(false);
             if (response.status === "Valid") {
               setUsername("");
               setPassword("");
@@ -71,7 +70,6 @@ const Login = () => {
           });
       } catch (err) {
         setLoading(false);
-        console.log('error',err)
         setFormErrorMessage(err.message);
       }
     }
@@ -124,7 +122,6 @@ const Login = () => {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
             />
-
 
             <Button
               data-test="component-login-submit-button"
