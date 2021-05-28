@@ -4,7 +4,7 @@ import "./Modal.scss";
 
 const modalContext = createContext();
 
-const Modal = ({ show, close, children }) => {
+const Modal = ({ show, close, children, showCancel, showSave }) => {
   useEffect(() => {
     function keyListener(e) {
       if (e != null) {
@@ -20,7 +20,7 @@ const Modal = ({ show, close, children }) => {
   const [tabs, setTabs] = React.useState(0);
   const handleTabKey = (e) => {
     const focusableModalElements = modalRef.current.querySelectorAll(
-      'a[href],span,button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select'
+      'a[href],span,button, textarea,input[type="password"], input[type="text"], input[type="radio"], input[type="checkbox"], select'
     );
     let currentElement;
     if (!e.shiftKey && document.activeElement !== currentElement) {
@@ -85,12 +85,20 @@ const Modal = ({ show, close, children }) => {
               <div className="modal-body modal-color">{children}</div>
 
               <div className="modal-footer modal-color">
-                <button onClick={close} className="cancelBTN modal-color">
-                  Cancel
-                </button>
-                <button onClick={close} className="saveCloseBTN">
-                  Save and Close
-                </button>
+                {showCancel ? (
+                  <button onClick={close} className="cancelBTN modal-color">
+                    Cancel
+                  </button>
+                ) : (
+                  ""
+                )}
+                {showSave ? (
+                  <button onClick={close} className="saveCloseBTN">
+                    Save and Close
+                  </button>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>
