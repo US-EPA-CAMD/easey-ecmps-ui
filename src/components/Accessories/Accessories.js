@@ -42,7 +42,7 @@ const Accessories = () => {
               icon={faUserCircle}
               className="text-white font-body-lg"
             />
-            {" Welcome "}
+            {" Welcome, "}
             {firstName}
           </div>
           {userLoggedIn && (

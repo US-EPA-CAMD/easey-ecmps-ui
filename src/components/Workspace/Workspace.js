@@ -4,6 +4,11 @@ import { NavLink } from "react-router-dom";
 import "./Workspace.scss";
 
 const Workspace = () => {
+  const cdxUser = sessionStorage.getItem("cdx_user")
+  ? JSON.parse(sessionStorage.getItem("cdx_user"))
+  : false;
+const firstName = cdxUser && cdxUser.firstName ? cdxUser.firstName : false;
+
   const [open, setOpen] = useState(true);
   const subMenu = [
     <NavLink

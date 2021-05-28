@@ -59,6 +59,8 @@ const DataTableSystemsRender = ({ columns, data }) => {
         <Modal
           show={show}
           close={closeModalHandler}
+          showCancel
+          showSave
           children={
             <div>
               <Details viewOnly={true} modalData={modalData} />
