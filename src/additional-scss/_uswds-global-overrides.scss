@@ -36,12 +36,10 @@
     border-top-color: rgb(223, 225, 226) !important;
     padding: 0.3em 0 0.3em 0 !important;
 
-
-      button {
-        font-size: 1.06em !important;
-        font-weight: 500 !important;
-      }
-
+    button {
+      font-size: 1.06em !important;
+      font-weight: 500 !important;
+    }
   }
 
   .usa-nav.is-visible {
@@ -114,7 +112,7 @@
   .usa-nav__primary button[aria-expanded="false"] {
     background-image: url("/images/icons/plus.svg"),
       linear-gradient(transparent, transparent) !important;
-   position: relative;
+    position: relative;
     left: 0.5em !important;
   }
 
@@ -181,9 +179,7 @@
   }
 }
 
-
 .workspaceDropDown {
-
   .usa-nav__submenu {
     background-color: transparent;
   }
@@ -200,9 +196,13 @@
     border-top: 1px solid #dfe1e2;
     font-size: 0.93rem;
   }
-
 }
 
+/*.usa-banner__button::after {
+  background-color: inherit !important;
+  background: url(/static/media/expand_more.95a46151.svg) no-repeat center/1rem
+    1rem !important;
+}*/
 
 .usa-date-picker__calendar {
   margin-top: 1em !important;
@@ -211,4 +211,3 @@
 .usa-date-picker__button {
   margin-left: 1em !important;
 }
-
