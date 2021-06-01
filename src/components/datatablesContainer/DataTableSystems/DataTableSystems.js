@@ -135,9 +135,7 @@ export const DataTableSystems = ({
             </div>
           }
         />
-      ) : (
-        ""
-      )}
+      ) : null}
     </>
   );
 };
