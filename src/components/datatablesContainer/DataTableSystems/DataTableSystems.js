@@ -42,6 +42,11 @@ export const DataTableSystems = ({
     setShow(value);
   };
 
+  // *** row handler onclick event listener
+  const selectedRowHandler = (selection) => {
+    openModal(true, selection);
+  };
+
   useEffect(() => {
     setModalData(
       selected.map((info) => {
@@ -54,6 +59,8 @@ export const DataTableSystems = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);
 
+  // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
+  // *** in the format expected by the modal / tabs plugins)
   const columnNames = [];
   columnNames.push("System ID");
   columnNames.push("System Type");
@@ -62,6 +69,7 @@ export const DataTableSystems = ({
   columnNames.push("End Date and Time");
   columnNames.push("System ID");
 
+  // *** generate columns array of object based on columnNames array above
   let columns = [];
 
   columnNames.forEach((name, index) => {
@@ -72,7 +80,7 @@ export const DataTableSystems = ({
     });
   });
 
-  // *** add column with button
+  // *** add column with action button
   columns.push({
     name: "Actions",
     button: true,
@@ -93,13 +101,10 @@ export const DataTableSystems = ({
     },
   });
 
-  // *** memoize (rerender only as needed
-  columns = useMemo(() => columns, []);
+  // *** memoize (rerender only as needed)
+  columns = useMemo(() => columns, [columns]);
 
-  const selectedRowHandler = (selection) => {
-    openModal(true, selection);
-  };
-
+  // *** memoize data
   const data = useMemo(() => {
     if (monitoringSystems.length > 0 || loading === false) {
       return fs.getMonitoringPlansSystemsTableRecords(monitoringSystems);
