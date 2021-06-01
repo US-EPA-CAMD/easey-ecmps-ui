@@ -1,80 +1,82 @@
-import React, { useState, useEffect } from "react";
-import UswdsTable from "../../UswdsTable/UswdsTable";
+/*** global dependencies ***/
+import React, { useState, useMemo } from "react";
+
+/*** 3rd party packages ***/
+import DataTable from "react-data-table-component";
+
+/*** additional components to 3rd party packages ***/
+import { FilterComponent } from "../../ReactDataTablesFilter/ReactDataTablesFilter";
+
+/*** icons ***/
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+
+/*** scss ***/
 import "./DataTableSystemsRender.scss";
-import Modal from "../../Modal/Modal";
-import Details from "../../Details/Details";
-import DataTableSystemsComponents from "../DataTableSystemsComponents/DataTableSystemsComponents";
+
 const DataTableSystemsRender = ({ columns, data }) => {
-  const [show, setShow] = useState(false);
+  // *** needed for search dataset functionality
+  const [searchText, setSearchText] = useState("");
 
-  const closeModalHandler = () => setShow(false);
+  // *** contains dataset with current filter applied (default is blank)
+  const filteredItems = data.filter(
+    (item) =>
+      // *** filter column 1
+      (item.col1 &&
+        item.col1.toLowerCase().includes(searchText.toLowerCase())) ||
+      // *** filter column 2
+      (item.col2 &&
+        item.col2.toLowerCase().includes(searchText.toLowerCase())) ||
+      // *** filter column 3
+      (item.col3 &&
+        item.col3.toLowerCase().includes(searchText.toLowerCase())) ||
+      // *** filter column 4
+      (item.col4 &&
+        item.col4.toLowerCase().includes(searchText.toLowerCase())) ||
+      // *** filter column 5
+      (item.col5 &&
+        item.col5.toLowerCase().includes(searchText.toLowerCase())) ||
+      // *** filter column 2
+      (item.col6 && item.col6.toLowerCase().includes(searchText.toLowerCase()))
+  );
 
-  const [modalData, setModalData] = useState([
-    { value: 1 },
-    { value: 1 },
-    { value: 1 },
-    { value: 1 },
-    { value: "05/04/2009 0" },
-    { value: "05/04/2009 0" },
-  ]);
-  const [selected, setSelected] = useState([]);
-  const selectedRowHandler = (selection) => {};
+  // *** subheader component (title and search)
+  const subHeaderComponentMemo = useMemo(() => {
+    // *** NOTE: driving off of the value in DOM makes the code a lot less complex, in this case
+    // *** since the component is re-rendered on every state operation.  we're not MANIPULATING DOM,
+    // *** just using what is presently there to avoid multiple state functions / values / logic cases
+    const handleSearch = () => {
+      setSearchText(document.querySelector("#txtSearchData").value);
+    };
 
-  const openModal = (value, selection) => {
-    setSelected(selection);
-    setShow(value);
-  };
+    // *** output filter component (title is optional)
+    return <FilterComponent onSearch={handleSearch} title="" />;
+  }, []);
 
-  useEffect(() => {
-    setModalData(
-      selected.map((info) => {
-        return {
-          header: info.column.Header,
-          value: info.value,
-        };
-      })
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [show]);
-
-  // for testing
-  // const root = document.getElementById("portal");
   return (
-    <div>
-      <div className={`usa-overlay ${show ? "is-visible" : ""}`}></div>
-      <UswdsTable
-        columns={columns}
-        data={data}
-        bordered={false}
-        header
-        // /paginate
-        // showEntries={[10, 250, 500]}
-        // search
-        viewDataColumn
-        // openTabColumn={[]}
-        selectedRowHandler={selectedRowHandler}
-        openModal={openModal}
-      />
-      {show ? (
-        <Modal
-          show={show}
-          close={closeModalHandler}
-          showCancel
-          showSave
-          children={
-            <div>
-              <Details viewOnly={true} modalData={modalData} />
-
-              <DataTableSystemsComponents
-                systemID={modalData.length > 1 ? modalData[0].value : 0}
-              />
-            </div>
-          }
+    <DataTable
+      defaultSortField="col1"
+      fixedHeader={true}
+      sortIcon={
+        <FontAwesomeIcon
+          icon={faCaretDown}
+          className="margin-left-2 text-indigo"
         />
-      ) : (
-        ""
-      )}
-    </div>
+      }
+      highlightOnHover={true}
+      selectableRows={false}
+      responsive={true}
+      striped={true}
+      pagination={true}
+      columns={columns}
+      data={filteredItems}
+      subHeader={true}
+      subHeaderComponent={subHeaderComponentMemo}
+      paginationPerPage={100}
+      paginationRowsPerPageOptions={[100, 200, 500]}
+      paginationComponentOptions={{ rangeSeparatorText: "out of" }}
+      className="data-display-table"
+    />
   );
 };
 
