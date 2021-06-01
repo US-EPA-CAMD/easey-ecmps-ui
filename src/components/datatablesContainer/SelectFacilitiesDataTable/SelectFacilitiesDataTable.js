@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo } from "react";
 import { connect } from "react-redux";
-import { Button } from "@trussworks/react-uswds";
 import { loadFacilities } from "../../../store/actions/facilities";
 import * as fs from "../../../utils/selectors/facilities";
 import SelectFacilitiesDataTableRender from "../SelectFacilitiesDataTableRender/SelectFacilitiesDataTableRender";
 import SelectedFacilityTab from "../../MonitoringPlanTab/MonitoringPlanTab";
-import {emptyMonitoringPlans } from "../../../store/actions/monitoringPlans";
+import { emptyMonitoringPlans } from "../../../store/actions/monitoringPlans";
+import { normalizeRowObjectFormat } from "../../../additional-functions/react-data-table-component";
+
 import "./SelectFacilitiesDataTable.scss";
 
 export const SelectFacilitiesDataTable = ({
@@ -14,7 +15,7 @@ export const SelectFacilitiesDataTable = ({
   loading,
   addTabs,
   openedFacilityTabs,
-  emptyPlan
+  emptyPlan,
 }) => {
   useEffect(() => {
     if (facilities.length === 0) {
@@ -24,63 +25,50 @@ export const SelectFacilitiesDataTable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /*const columns = useMemo(
-    () => [
-      {
-        Header: "ORIS",
-        accessor: "col1",
-        width: "200px",
-      },
-      {
-        Header: "Facility",
-        accessor: "col2",
-        width: "810px",
-      },
-      {
-        Header: "State",
-        accessor: "col3",
-        width: "410px",
-      },
-    ],
-    []
-  );*/
+  // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
+  // *** in the format expected by the modal / tabs plugins)
+  const columnNames = [];
+  columnNames.push("ORIS");
+  columnNames.push("Facility");
+  columnNames.push("State");
 
-  const columns = [
-    {
-      name: "ORIS",
-      selector: "col1",
-      sortable: true,
-      sortFunction: (a, b) => parseFloat(a) - parseFloat(b)
-    },
-    {
-      name: "Facility",
-      selector: "col2",
-      sortable: true,
-    },
-    {
-      name: "State",
-      selector: "col3",
-      sortable: true,
-    },
-    {
-      name: "Actions",
-      button: true,
-      width: "25%",
-      cell: (row) => {
-        // *** normalize row to be in expected format for tabs
-        row.cells = [];
+  // *** generate columns array of object based on columnNames array above
+  let columns = [];
 
-        for (let i in row) {
-          if (row.hasOwnProperty(i)) {
-            const cellObject = {
-              value: row[i],
-            };
-            row.cells.push(cellObject);
-          }
-        }
+  columnNames.forEach((name, index) => {
+    switch (name) {
+      case "ORIS":
+        columns.push({
+          name,
+          selector: `col${index + 1}`,
+          sortable: true,
+          sortFunction: (a, b) =>
+            parseFloat(a[`col${index + 1}`]) - parseFloat(b[`col${index + 1}`]),
+        });
+        break;
+      default:
+        columns.push({
+          name,
+          selector: `col${index + 1}`,
+          sortable: true,
+        });
+        break;
+    }
+  });
 
-        return (
-        <div className="cursor-pointer" onClick={() => selectedRowHandler(row.cells)}>
+  columns.push({
+    name: "Actions",
+    button: true,
+    width: "25%",
+    cell: (row) => {
+      // *** normalize the row object to be in the format expected by DynamicTabs
+      const normalizedRow = normalizeRowObjectFormat(row, columnNames);
+
+      return (
+        <div
+          className="cursor-pointer"
+          onClick={() => selectedRowHandler(normalizedRow.cells)}
+        >
           <img
             height="32px"
             width="32px"
@@ -90,17 +78,9 @@ export const SelectFacilitiesDataTable = ({
           />
           Open
         </div>
-      )},
+      );
     },
-  ];
-
-  const data = useMemo(() => {
-    if (facilities.length > 0 || loading === false) {
-      return fs.getTableRecords(facilities);
-    } else {
-      return [{ col2: "Loading list of facilities..." }];
-    }
-  }, [loading, facilities]);
+  });
 
   const selectedRowHandler = (info) => {
     addTabs([
@@ -111,10 +91,18 @@ export const SelectFacilitiesDataTable = ({
             <SelectedFacilityTab orisCode={info[0].value} />
           </div>
         ),
-        orisCode:info[0].value,
+        orisCode: info[0].value,
       },
     ]);
   };
+
+  const data = useMemo(() => {
+    if (facilities.length > 0 || loading === false) {
+      return fs.getTableRecords(facilities);
+    } else {
+      return [{ col2: "Loading list of facilities..." }];
+    }
+  }, [loading, facilities]);
 
   return (
     <div className="tabsBox">
@@ -139,7 +127,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     loadFacilitiesData: () => dispatch(loadFacilities()),
-    emptyPlan: () =>dispatch(emptyMonitoringPlans()),
+    emptyPlan: () => dispatch(emptyMonitoringPlans()),
   };
 };
 
