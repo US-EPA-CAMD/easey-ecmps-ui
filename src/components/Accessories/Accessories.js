@@ -37,11 +37,8 @@ const Accessories = () => {
     <div className="accessoriesLinks">
       {userLoggedIn ? (
         <div>
-          <div className="text-white">
-            <FontAwesomeIcon
-              icon={faUserCircle}
-              className="text-white font-body-lg"
-            />
+          <div className="">
+            <FontAwesomeIcon icon={faUserCircle} className=" font-body-lg" />
             {" Welcome, "}
             {firstName}
           </div>
@@ -53,23 +50,20 @@ const Accessories = () => {
             </div>
           )}
           <div className="accessoryLink">
-            <FontAwesomeIcon
-              icon={faUser}
-              className="text-white font-body-sm"
-            />
+            <FontAwesomeIcon icon={faUser} className="font-body-sm" />
             <Link
               to="./profile"
               rel="Profile"
               title="Go to the Profile page"
-              className="text-white"
+              className=""
             >
               Profile
             </Link>
           </div>
-          <div className="text-white">
-            <FontAwesomeIcon icon={faCog} className="text-white font-body-sm" />
+          <div className="">
+            <FontAwesomeIcon icon={faCog} className="font-body-sm" />
             <Link
-              className="text-white"
+              className=""
               to="./account_manage"
               rel=" Account Management"
               title="Go to the Account Management page"
@@ -82,27 +76,19 @@ const Accessories = () => {
         ""
       )}
       <div className="accessoryLink">
-        <FontAwesomeIcon icon={faTh} className="text-white font-body-sm" />
+        <FontAwesomeIcon icon={faTh} className=" font-body-sm" />
         <Link
           to="./apps"
           rel=" CAMD Apps"
           title="Go to the  CAMD Apps page"
-          className="text-white"
+          className=""
         >
           CAMD Apps
         </Link>
       </div>
       <div className="accessoryLink">
-        <FontAwesomeIcon
-          icon={faQuestionCircle}
-          className="text-white font-body-sm"
-        />
-        <Link
-          to="./help"
-          rel="help"
-          title="Go to the help page"
-          className="text-white"
-        >
+        <FontAwesomeIcon icon={faQuestionCircle} className="font-body-sm" />
+        <Link to="./help" rel="help" title="Go to the help page" className="">
           {"Help & Contact"}
         </Link>
       </div>

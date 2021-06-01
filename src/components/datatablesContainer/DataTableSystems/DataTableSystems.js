@@ -122,6 +122,8 @@ export const DataTableSystems = ({
         <Modal
           show={show}
           close={closeModalHandler}
+          showCancel
+          showSave
           children={
             <div>
               <Details viewOnly={true} modalData={modalData} />

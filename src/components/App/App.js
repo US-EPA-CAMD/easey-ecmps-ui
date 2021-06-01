@@ -25,7 +25,7 @@ function App() {
             component={MonitoringPlanHome}
           />
            <Route
-            path="/monitoring-plans/*"
+            path="/workspace/monitoring-plans/"
             exact
             component={MonitoringPlanHome}
           />
