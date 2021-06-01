@@ -65,9 +65,9 @@ export const DataTableSystems = ({
   columnNames.push("System ID");
   columnNames.push("System Type");
   columnNames.push("System Designation");
+  columnNames.push("Fuel Type");
   columnNames.push("Begin Date and Time");
   columnNames.push("End Date and Time");
-  columnNames.push("System ID");
 
   // *** generate columns array of object based on columnNames array above
   const columns = [];
@@ -84,7 +84,7 @@ export const DataTableSystems = ({
   columns.push({
     name: "Actions",
     button: true,
-    width: "25%",
+    width: "15%",
     cell: (row) => {
       // *** normalize the row object to be in the format expected by DynamicTabs
       const normalizedRow = normalizeRowObjectFormat(row, columnNames);
