@@ -70,12 +70,12 @@ export const DataTableSystems = ({
   columnNames.push("System ID");
 
   // *** generate columns array of object based on columnNames array above
-  let columns = [];
+  const columns = [];
 
   columnNames.forEach((name, index) => {
     columns.push({
       name,
-      selector: `col${index}`,
+      selector: `col${index + 1}`,
       sortable: true,
     });
   });
@@ -100,9 +100,6 @@ export const DataTableSystems = ({
       );
     },
   });
-
-  // *** memoize (rerender only as needed)
-  columns = useMemo(() => columns, [columns]);
 
   // *** memoize data
   const data = useMemo(() => {

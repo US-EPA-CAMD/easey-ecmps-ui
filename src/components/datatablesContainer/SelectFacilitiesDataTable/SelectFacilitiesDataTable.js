@@ -25,49 +25,62 @@ export const SelectFacilitiesDataTable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const columns = [
-    {
-      name: "ORIS",
-      selector: "col1",
-      sortable: true,
-      sortFunction: (a, b) => parseFloat(a.col1) - parseFloat(b.col1),
-    },
-    {
-      name: "Facility",
-      selector: "col2",
-      sortable: true,
-    },
-    {
-      name: "State",
-      selector: "col3",
-      sortable: true,
-    },
-    {
-      name: "Actions",
-      button: true,
-      width: "25%",
-      cell: (row) => {
-        // *** normalize the row object to be in the format expected by DynamicTabs
-        const normalizedRow = normalizeRowObjectFormat(row);
+  // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
+  // *** in the format expected by the modal / tabs plugins)
+  const columnNames = [];
+  columnNames.push("ORIS");
+  columnNames.push("Facility");
+  columnNames.push("State");
 
-        return (
-          <div
-            className="cursor-pointer"
-            onClick={() => selectedRowHandler(normalizedRow.cells)}
-          >
-            <img
-              height="32px"
-              width="32px"
-              alt="Open Tab"
-              src={`${process.env.PUBLIC_URL}/images/openTab.jpg`}
-              className="margin-right-1"
-            />
-            Open
-          </div>
-        );
-      },
+  // *** generate columns array of object based on columnNames array above
+  let columns = [];
+
+  columnNames.forEach((name, index) => {
+    switch (name) {
+      case "ORIS":
+        columns.push({
+          name,
+          selector: `col${index + 1}`,
+          sortable: true,
+          sortFunction: (a, b) =>
+            parseFloat(a[`col${index + 1}`]) - parseFloat(b[`col${index + 1}`]),
+        });
+        break;
+      default:
+        columns.push({
+          name,
+          selector: `col${index + 1}`,
+          sortable: true,
+        });
+        break;
+    }
+  });
+
+  columns.push({
+    name: "Actions",
+    button: true,
+    width: "25%",
+    cell: (row) => {
+      // *** normalize the row object to be in the format expected by DynamicTabs
+      const normalizedRow = normalizeRowObjectFormat(row, columnNames);
+
+      return (
+        <div
+          className="cursor-pointer"
+          onClick={() => selectedRowHandler(normalizedRow.cells)}
+        >
+          <img
+            height="32px"
+            width="32px"
+            alt="Open Tab"
+            src={`${process.env.PUBLIC_URL}/images/openTab.jpg`}
+            className="margin-right-1"
+          />
+          Open
+        </div>
+      );
     },
-  ];
+  });
 
   const selectedRowHandler = (info) => {
     addTabs([

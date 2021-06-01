@@ -12,7 +12,7 @@ export const normalizeRowObjectFormat = (row, columns) => {
     if (row.hasOwnProperty(i)) {
       const cellObject = {
         value: row[i],
-        column: counter++,
+        column: columns[counter++],
       };
       row.cells.push(cellObject);
     }

@@ -5,12 +5,7 @@ import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import DataTable from "react-data-table-component";
 import { FilterComponent } from "../../ReactDataTablesFilter/ReactDataTablesFilter";
 
-const SelectFacilitiesDataTableRender = ({
-  columns,
-  data,
-  selectedRowHandler,
-  openedFacilityTabs,
-}) => {
+const SelectFacilitiesDataTableRender = ({ columns, data }) => {
   const [searchText, setSearchText] = useState("");
 
   const filteredItems = data.filter(
@@ -67,20 +62,6 @@ const SelectFacilitiesDataTableRender = ({
         ) : (
           `Loading... Please wait...`
         )}
-
-        {/*<UswdsTable
-          columns={columns}
-          data={data}
-          header
-          bordered={false}
-          paginate
-          showEntries={[100, 250, 500]}
-          search
-          //editable
-          openTabColumn={openedFacilityTabs}
-          title="Facilities"
-          selectedRowHandler={selectedRowHandler}
-        />*/}
       </div>
     </div>
   );
