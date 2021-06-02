@@ -1,5 +1,5 @@
 /*** global dependencies ***/
-import React, { useMemo, useState } from "react";
+import React from "react";
 /*** 3rd party packages ***/
 import DataTable from "react-data-table-component";
 

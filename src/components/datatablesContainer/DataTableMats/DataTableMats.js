@@ -6,7 +6,6 @@ import DataTableMatsRender from "../DataTableMatsRender/DataTableMatsRender";
 
 export const DataTableMats = ({
   monitoringMatsMethods,
-  loadMonitoringMatsMethodsData,
   loading,
   locationSelect,
 }) => {
@@ -48,11 +47,7 @@ export const DataTableMats = ({
 
   return (
     <div className="methodTable">
-      <DataTableMatsRender
-        columns={columns}
-        data={data}
-        // selectedRowHandler={selectedRowHandler}
-      />
+      <DataTableMatsRender columns={columns} data={data} />
     </div>
   );
 };

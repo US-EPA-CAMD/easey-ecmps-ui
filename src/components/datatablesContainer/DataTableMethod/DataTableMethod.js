@@ -6,9 +6,6 @@ import {
 } from "../../../store/actions/monitoringMethods";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import DataTableMethodRender from "../DataTableMethodRender/DataTableMethodRender";
-import { normalizeRowObjectFormat } from "../../../additional-functions/react-data-table-component";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 
 export const DataTableMethod = ({
   monitoringMethods,
@@ -67,7 +64,7 @@ export const DataTableMethod = ({
         matsTableHandler(true);
       }
     }
-  }, [locationSelectValue, monitoringMatsMethods.length]);
+  }, [monitoringMatsMethods.length, matsTableHandler]);
 
   return (
     <div className="methodTable">
