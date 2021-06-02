@@ -36,7 +36,7 @@ const DataTableSystemsRender = ({ columns, data }) => {
       // *** filter column 5
       (item.col5 &&
         item.col5.toLowerCase().includes(searchText.toLowerCase())) ||
-      // *** filter column 2
+      // *** filter column 6
       (item.col6 && item.col6.toLowerCase().includes(searchText.toLowerCase()))
   );
 

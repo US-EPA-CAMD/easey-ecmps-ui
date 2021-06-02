@@ -16,31 +16,25 @@ export const DataTableMats = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect]);
-  const columns = useMemo(
-    () => [
-      {
-        Header: "Parameter",
-        accessor: "col1",
-        width: Math.round(window.innerWidth * 0.2),
-      },
-      {
-        Header: "Methodology",
-        accessor: "col2",
-        width: Math.round(window.innerWidth * 0.2),
-      },
-      {
-        Header: "Begin Date and Time",
-        accessor: "col3",
-        width: Math.round(window.innerWidth * 0.2),
-      },
-      {
-        Header: "End Date and Time",
-        accessor: "col4",
-        width: Math.round(window.innerWidth * 0.2),
-      },
-    ],
-    []
-  );
+
+  // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
+  // *** in the format expected by the modal / tabs plugins)
+  const columnNames = [];
+  columnNames.push("Parameter");
+  columnNames.push("Methodology");
+  columnNames.push("Begin Date and Time");
+  columnNames.push("End Date and Time");
+
+  // *** generate columns array of object based on columnNames array above
+  const columns = [];
+
+  columnNames.forEach((name, index) => {
+    columns.push({
+      name,
+      selector: `col${index + 1}`,
+      sortable: true,
+    });
+  });
 
   const data = useMemo(() => {
     if (monitoringMatsMethods.length > 0 || loading === false) {

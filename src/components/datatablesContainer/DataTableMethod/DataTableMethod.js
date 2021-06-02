@@ -6,6 +6,9 @@ import {
 } from "../../../store/actions/monitoringMethods";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import DataTableMethodRender from "../DataTableMethodRender/DataTableMethodRender";
+import { normalizeRowObjectFormat } from "../../../additional-functions/react-data-table-component";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 
 export const DataTableMethod = ({
   monitoringMethods,
@@ -22,48 +25,34 @@ export const DataTableMethod = ({
     loadMonitoringMatsMethodsData(locationSelectValue);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, showActiveOnly]);
-  const columns = useMemo(
-    () => [
-      {
-        Header: "Parameter",
-        accessor: "col1",
-        width: "240px",
-      },
-      {
-        Header: "Methodology",
-        accessor: "col2",
-        width: "210px",
-      },
-      {
-        Header: "Substitute Data Approach",
-        accessor: "col3",
-        width: "410px",
-      },
-      {
-        Header: "Bypass Approach",
-        accessor: "col4",
-        width: "210px",
-      },
-      {
-        Header: "Begin Date and Time",
-        accessor: "col5",
-        width: "210px",
-      },
-      {
-        Header: "End Date and Time",
-        accessor: "col6",
-        width: "210px",
-      },
-    ],
-    []
-  );
+
+  // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
+  // *** in the format expected by the modal / tabs plugins)
+  const columnNames = [];
+  columnNames.push("Parameter");
+  columnNames.push("Methodology");
+  columnNames.push("Substitute Data Approach");
+  columnNames.push("Bypass Approach");
+  columnNames.push("Begin Date and Time");
+  columnNames.push("End Date and Time");
+
+  // *** generate columns array of object based on columnNames array above
+  const columns = [];
+
+  columnNames.forEach((name, index) => {
+    columns.push({
+      name,
+      selector: `col${index + 1}`,
+      sortable: true,
+    });
+  });
 
   const data = useMemo(() => {
     if (monitoringMethods.length > 0 || loading === false) {
       return fs.getMonitoringPlansMethodsTableRecords(
-          showActiveOnly
-              ? fs.getActiveMethods(monitoringMethods)
-              : monitoringMethods
+        showActiveOnly
+          ? fs.getActiveMethods(monitoringMethods)
+          : monitoringMethods
       );
     } else {
       return [{ col2: "Loading list of Methods" }];
@@ -81,9 +70,9 @@ export const DataTableMethod = ({
   }, [locationSelectValue, monitoringMatsMethods.length]);
 
   return (
-      <div className="methodTable">
-        <DataTableMethodRender columns={columns} data={data} />
-      </div>
+    <div className="methodTable">
+      <DataTableMethodRender columns={columns} data={data} />
+    </div>
   );
 };
 
