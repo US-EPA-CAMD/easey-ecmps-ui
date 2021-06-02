@@ -1,22 +1,36 @@
+/*** global dependencies ***/
 import React from "react";
-import UswdsTable from "../../UswdsTable/UswdsTable";
+/*** 3rd party packages ***/
+import DataTable from "react-data-table-component";
+
+/*** icons ***/
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+
+/*** scss ***/
 import "./DataTableMethodRender.scss";
 
-const DataTableMethodRender = ({ columns, data, selectedRowHandler }) => {
+const DataTableMethodRender = ({ columns, data }) => {
   return (
-    <div>
-      <UswdsTable
-        columns={columns}
-        header
-        data={data}
-        bordered={false}
-        // /paginate
-        // showEntries={[10, 250, 500]}
-        // search
-        // viewDataColumn
-        selectedRowHandler={selectedRowHandler}
-      />
-    </div>
+    <DataTable
+      defaultSortField="col1"
+      fixedHeader={true}
+      sortIcon={
+        <FontAwesomeIcon
+          icon={faCaretDown}
+          className="margin-left-2 text-indigo"
+        />
+      }
+      highlightOnHover={true}
+      selectableRows={false}
+      responsive={true}
+      striped={true}
+      pagination={false}
+      columns={columns}
+      data={data}
+      subHeader={false}
+      className="data-display-table"
+    />
   );
 };
 
