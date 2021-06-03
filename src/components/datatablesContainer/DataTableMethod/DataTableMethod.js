@@ -6,6 +6,7 @@ import {
 } from "../../../store/actions/monitoringMethods";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import DataTableMethodRender from "../DataTableMethodRender/DataTableMethodRender";
+import { Preloader } from "../../Preloader/Preloader";
 
 export const DataTableMethod = ({
   monitoringMethods,
@@ -52,7 +53,7 @@ export const DataTableMethod = ({
           : monitoringMethods
       );
     } else {
-      return [{ col2: "Loading list of Methods" }];
+      return [{ col3: <Preloader /> }];
     }
   }, [loading, monitoringMethods, showActiveOnly]);
 

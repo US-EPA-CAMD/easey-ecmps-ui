@@ -1,33 +1,40 @@
+/*** global dependencies ***/
 import React from "react";
 
-import UswdsTable from "../../UswdsTable/UswdsTable";
+/*** 3rd party packages ***/
+import DataTable from "react-data-table-component";
+
+/*** icons ***/
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+
 import "../DataTableSystemsComponents/DataTableSystemsComponentsRender.scss";
 
-const DataTableSystemsComponentsRender = ({
-  openModal,
-  columns,
-  data,
-  selectedRowHandler,
-}) => {
+const DataTableSystemsComponentsRender = ({ columns, data }) => {
   return (
     <div className="systemsCompTable">
-      <UswdsTable
-        title="System Components"
+      <DataTable
+        defaultSortField="col1"
+        fixedHeader={true}
+        sortIcon={
+          <FontAwesomeIcon
+            icon={faCaretDown}
+            className="margin-left-2 text-indigo"
+          />
+        }
+        highlightOnHover={true}
+        selectableRows={false}
+        responsive={true}
+        striped={true}
+        pagination={false}
         columns={columns}
         data={data}
-        bordered={false}
-        header={true}
-        // /paginate
-        // showEntries={[10, 250, 500]}
-        // search
-        // viewDataColumn
-        viewDataColumn
-        // openTabColumn={[]}
-        selectedRowHandler={selectedRowHandler}
-        // openModal={openModal}
-        addBTN={true}
+        subHeader={false}
+        paginationPerPage={100}
+        paginationRowsPerPageOptions={[100, 200, 500]}
+        paginationComponentOptions={{ rangeSeparatorText: "out of" }}
+        className="data-display-table"
       />
-
     </div>
   );
 };

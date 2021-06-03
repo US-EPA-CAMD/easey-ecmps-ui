@@ -8,13 +8,14 @@ export const normalizeRowObjectFormat = (row, columns) => {
   row.cells = [];
   let counter = 0;
 
-  for (let i in row) {
+  for (const i in row) {
     if (row.hasOwnProperty(i)) {
       const cellObject = {
         value: row[i],
-        column: columns[counter++],
+        column: columns[counter],
       };
       row.cells.push(cellObject);
+      counter++;
     }
   }
   return row;

@@ -22,10 +22,11 @@ input {
   overflow: hidden;
   outline: none;
 }
-img {
+
+/*img {
   width: 20px;
   height: auto;
-}
+}*/
 
 img.show {
   opacity: 1;
@@ -33,7 +34,7 @@ img.show {
 img.hide {
   opacity: 0.25;
 }
-.bold{
-  font-weight:bold !important;
+.bold {
+  font-weight: bold !important;
   width: fit-content !important;
 }

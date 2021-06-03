@@ -54,10 +54,10 @@ const WideHeader = () => {
   /****** COMPONENT JSX *****/
   return (
     <div className="header-container usa-header">
-      <GovBanner className="padding-y-2px react-transition swipe-right bg-base-lighter" />
+      <GovBanner className="padding-y-2px bg-base-lighter" />
       <div className={`usa-overlay ${expanded ? "is-visible" : ""}`} />
       <Header basic={true}>
-        <div className="bg-secondary-darker text-center text-gold padding-top-2px padding-bottom-3 react-transition swipe-down">
+        <div className="bg-secondary-darker text-center text-gold padding-top-2px padding-bottom-3">
           EPA {config.app.env} Environment: The content on this page is not
           production data and this site is being used for <b>development</b>{" "}
           and/or <b>testing</b> purposes only.
@@ -84,7 +84,7 @@ const WideHeader = () => {
             />
           </div>
           <PrimaryNav
-          className=""
+            className=""
             items={mainMenu}
             mobileExpanded={expanded}
             onToggleMobileNav={() => onClick()}

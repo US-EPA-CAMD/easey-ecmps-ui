@@ -4,6 +4,7 @@ import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 
 import DataTable from "react-data-table-component";
 import { FilterComponent } from "../../ReactDataTablesFilter/ReactDataTablesFilter";
+import { Preloader } from "../../Preloader/Preloader";
 
 const SelectFacilitiesDataTableRender = ({ columns, data }) => {
   const [searchText, setSearchText] = useState("");
@@ -57,10 +58,12 @@ const SelectFacilitiesDataTableRender = ({ columns, data }) => {
             paginationPerPage={100}
             paginationRowsPerPageOptions={[100, 200, 500]}
             paginationComponentOptions={{ rangeSeparatorText: "out of" }}
-            className="data-display-table"
+            className="data-display-table react-transition fade-in"
           />
         ) : (
-          `Loading... Please wait...`
+          <div className="margin-y-9 padding-y-9 react-transition fade-in">
+            <Preloader />
+          </div>
         )}
       </div>
     </div>
