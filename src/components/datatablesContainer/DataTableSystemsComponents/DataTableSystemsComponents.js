@@ -1,9 +1,17 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { connect } from "react-redux";
+
 import { loadMonitoringSystemsComponents } from "../../../store/actions/monitoringSystems";
 import * as fs from "../../../utils/selectors/monitoringPlanSystems";
+
 import DataTableSystemsComponentsRender from "../DataTableSystemsComponentsRender/DataTableSystemsComponentsRender";
 import SystemComponentsModal from "../../SystemComponentsModal/SystemComponentsModal";
+
+import { normalizeRowObjectFormat } from "../../../additional-functions/react-data-table-component";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+
 export const DataTableSystemsComponents = ({
   monitoringSystems,
   monitoringSystemsComponents,
@@ -13,7 +21,7 @@ export const DataTableSystemsComponents = ({
   showActiveOnly,
   viewOnly,
   setSecondLevel,
-  secondLevel
+  secondLevel,
 }) => {
   useEffect(() => {
     let selected = 1;
@@ -25,33 +33,52 @@ export const DataTableSystemsComponents = ({
     loadMonitoringSystemsComponentsData(selected.monLocId, selected.id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showActiveOnly, monitoringSystemsComponents]);
-  const columns = useMemo(
-    () => [
-      {
-        Header: "Component ID",
-        accessor: "col1",
-        width: "100px",
-      },
-      {
-        Header: "Type Code",
-        accessor: "col2",
-        width: "120px",
-      },
-      {
-        Header: "Begin to End Date",
-        accessor: "col3",
-        width: "410px",
-      },
-    ],
-    []
-  );
+
+  // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
+  // *** in the format expected by the modal / tabs plugins)
+  const columnNames = [];
+  columnNames.push("Component ID");
+  columnNames.push("Type Code");
+  columnNames.push("Begin to End Date");
+
+  // *** generate columns array of object based on columnNames array above
+  const columns = [];
+
+  columnNames.forEach((name, index) => {
+    columns.push({
+      name,
+      selector: `col${index + 1}`,
+      sortable: true,
+    });
+  });
+
+  // *** add column with action button
+  columns.push({
+    name: "Actions",
+    button: true,
+    width: "15%",
+    cell: (row) => {
+      // *** normalize the row object to be in the format expected by DynamicTabs
+      const normalizedRow = normalizeRowObjectFormat(row, columnNames);
+
+      return (
+        <div
+          className="cursor-pointer"
+          onClick={() => selectedRowHandler(normalizedRow.cells)}
+        >
+          <FontAwesomeIcon icon={faPencilAlt} className="margin-right-1" />
+          View
+        </div>
+      );
+    },
+  });
 
   const [selectedComponent, setSelectedComponent] = useState("");
   const selectedRowHandler = (val) => {
     for (const x of monitoringSystemsComponents) {
       if (x.componentIdentifier === val[0].value) {
         setSelectedComponent(x);
-        setSecondLevel(true)
+        setSecondLevel(true);
       }
     }
   };
