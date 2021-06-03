@@ -9,7 +9,7 @@ const Layout = (props) => {
     React.cloneElement(child)
   );
   return (
-    <div className="react-transition fade-in">
+    <div>
       <div className="topHeader">
         <WideHeader />
       </div>

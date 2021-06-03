@@ -12,6 +12,7 @@
     border-bottom: solid 1px #808080 !important;
   }
   .rdt_TableHead {
+    /* this comment is here to avoid a code smell for empty content */
   }
 
   .rdt_TableHeadRow {
@@ -38,8 +39,10 @@
     height: 500px;
   }
   .rdt_ExpanderRow {
+    /* this comment is here to avoid a code smell for empty content */
   }
   .rdt_TableFooter {
+    /* this comment is here to avoid a code smell for empty content */
   }
   .rdt_TableCell {
     @extend .font-body-md;
@@ -47,10 +50,6 @@
   .__rdt_custom_sort_icon__ {
     @extend .text-indigo;
   }
-}
-
-.rdt_TableHeader {
-  display: none !important;
 }
 
 .rdt_Pagination {
