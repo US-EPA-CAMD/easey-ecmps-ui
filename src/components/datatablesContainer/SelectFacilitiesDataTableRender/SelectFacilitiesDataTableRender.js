@@ -34,7 +34,7 @@ const SelectFacilitiesDataTableRender = ({ columns, data }) => {
         <h2 className="padding-0">Select Facilities</h2>
         <hr width="100%" align="center" className="height-1px bg-base-light" />
       </div>
-      <div>
+      <div aria-live="polite">
         {data.length > 1 ? (
           <DataTable
             defaultSortField="col1"
