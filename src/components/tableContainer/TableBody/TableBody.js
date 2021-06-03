@@ -59,6 +59,7 @@ const TableBody = ({
     }
   }, [rows, tabFocus, resetTabFocusHandler]);
   const handleDataSelector = (data) => {
+    console.log('this is data',data)
     return selectedRowHandler(data);
   };
   return (
@@ -138,7 +139,7 @@ const TableBody = ({
                   <button
                     aria-label={`View ${row.cells[1].value} facility`}
                     onClick={() => {
-                      openModal(true, row.cells);
+                      // openModal(true, row.cells);
                       handleDataSelector(row.cells);
                     }}
                     className=" tableButton"

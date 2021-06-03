@@ -4,7 +4,7 @@
   margin: 4rem auto;
   transition: all 0.5s ease;
   background: #f1f1f1;
-  position: fixed;
+  position: absolute;
   z-index: 500;
   left: 27%;
   top: 5%;
@@ -47,6 +47,7 @@ span.close-modal-btn {
   padding-bottom: 15px;
   
 }
+
 
 .modal-body {
   margin-bottom: 1rem;
