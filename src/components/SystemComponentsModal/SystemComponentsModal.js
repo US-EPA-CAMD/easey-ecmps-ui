@@ -5,20 +5,34 @@ import {
   Form,
   TextInput,
   DatePicker,
+  Radio,
+  Fieldset,
+  Button,
 } from "@trussworks/react-uswds";
-
-import "./Details.scss";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  componentTypes,
+  acqMethodCode,
+  basisCode,
+  viewOnly,
+  setSecondLevel
+} from "./SystemComponentsData";
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
-import { types, fuels, designations } from "./SystemDescriptions";
 
-const SystemComponentsModal = ({ modalData, viewOnly }) => {
+const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
   const [startDate, setStartDate] = React.useState(null);
   const [endDate, setEndDate] = React.useState(null);
   const [startHour, setStartHour] = React.useState(null);
   const [endHour, setEndHour] = React.useState(null);
-  const [modalState, setModalSet] = useState([]);
 
+  const findValue = (options, val) => {
+    for (let x of options) {
+      if (x.code === val) {
+        return x.name;
+      }
+    }
+  };
   const timeOptions = [
     { time: null },
     { time: 0 },
@@ -47,103 +61,282 @@ const SystemComponentsModal = ({ modalData, viewOnly }) => {
     { time: 23 },
   ];
   useEffect(() => {
-    if (modalData.length > 1) {
-      setModalSet([
-        modalData[0].value,
-        modalData[1].value,
-        modalData[2].value,
-        modalData[3].value,
-        modalData[4].value,
-        modalData[5].value,
-      ]);
-      const startDateString = modalData[4].value.split(/[ ,]+/);
-      const [day, month, year] = startDateString[0].split("/");
-      setStartDate(`${year}-${day}-${month}`);
-      setStartHour(startDateString[1]);
+    const [year, month, day] = modalData.beginDate.split("-");
+    !viewOnly
+      ? setStartDate(`${year}-${day}-${month}`)
+      : setStartDate(`${day}-${month}-${year}`);
+    setStartHour(modalData.beginHour);
 
-      if (modalData[5] !== "") {
-        const endDateString = modalData[5].value.split(/[ ,]+/);
-        const [eday, emonth, eyear] = endDateString[0].split("/");
-        setEndDate(`${eyear}-${eday}-${emonth}`);
-        setEndHour(endDateString[1]);
-      }
+    if (modalData.endDate !== null) {
+      const [eyear, emonth, eday] = modalData.endDate.split("-");
+      setEndDate(`${eyear}-${eday}-${emonth}`);
+      setEndHour(modalData.endHour);
     }
   }, [modalData]);
   return (
-    <div>
-      {
-        <div className="modalDetails">
-          <h2>
-            Monitoring Systems: {modalData.length >= 1 ? modalState[0] : ""}
-          </h2>
-          <Form>
-            <div className="grid-row">
-              <div className="grid-col padding-bottom-2 padding-right-3">
-                <FormGroup className="margin-top-0">
-                  <Label
-                    className="margin-0"
-                    htmlFor="otherInput"
-                    hint={<span className="text-italic"> (Required)</span>}
-                  >
-                    System ID
-                  </Label>
-                  <TextInput
-                    className="modalInput"
-                    id="otherInput"
-                    name="otherInput"
-                    type="text"
-                    disabled={viewOnly}
-                    defaultValue={modalData.length >= 1 ? modalState[0] : ""}
-                  />
-                </FormGroup>
-              </div>
-              <div className="grid-col">
-                <SelectBox
-                  caption="System Designation"
-                  options={designations}
-                  selectKey="code"
-                  required
-                  viewOnly={viewOnly}
-                  initialSelection={modalData.length >= 1 ? modalState[2] : ""}
-                />
-              </div>
-            </div>
-            <div className="grid-row">
-              <div className="grid-col padding-bottom-2 padding-right-3">
-                <SelectBox
-                  caption="System Type"
-                  options={types}
-                  initialSelection={modalData.length >= 1 ? modalState[1] : ""}
-                  selectKey="code"
-                  viewOnly={viewOnly}
-                  required
-                />
-              </div>
-              <div className="grid-col">
-                <SelectBox
-                  caption="Fuel Type"
-                  options={fuels}
-                  initialSelection={modalData.length >= 1 ? modalState[3] : ""}
-                  selectKey="code"
-                  viewOnly={viewOnly}
-                  required
-                />
-              </div>
-            </div>
-            <div className="grid-row">
-              <div className="grid-col padding-bottom-2 padding-right-3">
-                <Label className="margin-0" id="dateStart">
-                  Start Date and Time (Required)
+    <div className="systemsCompTable">
+      <div className="grid-container margin-bottom-2">
+        <div className="display-inline-flex padding-top-3 padding-bottomm-3">
+          <Button aria-label="go back to systems details" onClick={() => backBTN(false)}>
+            <FontAwesomeIcon icon={faArrowLeft} className=" font-body-sm" />
+          </Button>
+
+          <h3>Component: {modalData.componentIdentifier}</h3>
+        </div>
+
+        <div className="grid-row">
+          <div className="tablet:grid-col">
+            <FormGroup className="margin-top-0">
+              <Label
+                className="margin-0"
+                htmlFor="componentID"
+                hint={
+                  !viewOnly ? (
+                    <span className="text-italic"> (Required)</span>
+                  ) : (
+                    ""
+                  )
+                }
+              >
+                Component ID
+              </Label>
+              <TextInput
+                className="modalInput"
+                id="componentID"
+                name="componentID"
+                type="text"
+                disabled={viewOnly}
+                defaultValue={
+                  modalData.componentIdentifier
+                    ? modalData.componentIdentifier
+                    : ""
+                }
+              />
+            </FormGroup>
+          </div>
+          <div className="tablet:grid-col padding-left-2">
+            {" "}
+            {viewOnly ? (
+              <FormGroup className="margin-top-0">
+                <Label className="margin-0" htmlFor="Acquisition">
+                  Sample Acquisition Method
                 </Label>
-                <div className="grid-row">
-                  <div className="grid-col">
-                    <div className="usa-hint" id="dateStart">
+                <TextInput
+                  className="modalInput"
+                  id="Acquisition"
+                  name="Acquisition"
+                  type="text"
+                  disabled={viewOnly}
+                  defaultValue={
+                    modalData.acquisitionMethodCode
+                      ? findValue(
+                          acqMethodCode,
+                          modalData.acquisitionMethodCode
+                        )
+                      : ""
+                  }
+                />
+              </FormGroup>
+            ) : (
+              <SelectBox
+                caption="Sample Acquisition Method"
+                options={acqMethodCode}
+                initialSelection={modalData.acquisitionMethodCode}
+                selectKey="code"
+                viewOnly={viewOnly}
+                required
+                secondOption="name"
+              />
+            )}
+          </div>
+        </div>
+        <div className="grid-row padding-top-2">
+          <div className="tablet:grid-col">
+            {viewOnly ? (
+              <FormGroup className="margin-top-0">
+                <Label className="margin-0" htmlFor="Component">
+                  Component Type
+                </Label>
+                <TextInput
+                  className="modalInput"
+                  id="Component"
+                  name="Component"
+                  type="text"
+                  disabled={viewOnly}
+                  defaultValue={
+                    modalData.componentTypeCode
+                      ? findValue(componentTypes, modalData.componentTypeCode)
+                      : ""
+                  }
+                />
+              </FormGroup>
+            ) : (
+              <SelectBox
+                caption="Component Type"
+                options={componentTypes}
+                initialSelection={modalData.componentTypeCode}
+                selectKey="code"
+                viewOnly={viewOnly}
+                required
+                secondOption="name"
+              />
+            )}
+          </div>
+          <div className="tablet:grid-col padding-left-2">
+            {viewOnly ? (
+              <FormGroup className="margin-top-0">
+                <Label className="margin-0" htmlFor="Basis">
+                  Basis Description
+                </Label>
+                <TextInput
+                  className="modalInput"
+                  id="Basis"
+                  name="Basis"
+                  type="text"
+                  disabled={viewOnly}
+                  defaultValue={
+                    modalData.basisCode
+                      ? findValue(basisCode, modalData.basisCode)
+                      : ""
+                  }
+                />
+              </FormGroup>
+            ) : (
+              <SelectBox
+                caption="Basis Description"
+                options={basisCode}
+                initialSelection={modalData.basisCode}
+                selectKey="code"
+                viewOnly={viewOnly}
+                required
+                secondOption="name"
+              />
+            )}
+          </div>
+        </div>
+        <div className="grid-row padding-top-2">
+          <div className="tablet:grid-col">
+            <FormGroup className="margin-top-0">
+              <Label
+                className="margin-0"
+                htmlFor="manufacturer"
+                hint={viewOnly? '' : <span className="text-italic"> (Required)</span>}
+              >
+                Manufacturer
+              </Label>
+              <TextInput
+                className="modalInput"
+                id="manufacturer"
+                name="manufacturer"
+                type="text"
+                disabled={viewOnly}
+                defaultValue={
+                  modalData.manufacturer ? modalData.manufacturer : ""
+                }
+              />
+            </FormGroup>
+          </div>
+          <div className="tablet:grid-col padding-left-2">
+            <FormGroup className="margin-top-0">
+              <Label
+                className="margin-0"
+                htmlFor="modelVersion"
+                hint={viewOnly ? '' :<span className="text-italic"> (Required)</span>}
+              >
+                Modal or Version
+              </Label>
+              <TextInput
+                className="modalInput"
+                id="modelVersion"
+                name="modelVersion"
+                type="text"
+                disabled={viewOnly}
+                defaultValue={
+                  modalData.modelVersion ? modalData.modelVersion : ""
+                }
+              />
+            </FormGroup>
+          </div>
+        </div>
+        <div className="grid-row padding-top-2">
+          <div className="tablet:grid-col">
+            <FormGroup className="margin-top-0">
+              <Label
+                className="margin-0"
+                htmlFor="serialNumber"
+                hint={viewOnly? '' : <span className="text-italic"> (Required)</span>}
+              >
+                {"Serial Number"}
+              </Label>
+              <TextInput
+                className="modalInput"
+                id="serialNumber"
+                name="serialNumber"
+                type="text"
+                disabled={viewOnly}
+                defaultValue={
+                  modalData.serialNumber ? modalData.serialNumber : ""
+                }
+              />
+            </FormGroup>
+          </div>
+          <div className="tablet:grid-col padding-left-2">
+            <Fieldset
+              legend="hg Converter Indicator"
+              className=" display-inline-flex"
+            >
+              <Radio
+                id="yes"
+                name="hg-Converter-Indicator"
+                label="Yes"
+                value="Yes"
+                className="padding-right-1"
+                defaultChecked={modalData.hgConverterInd ? true : null}
+                disabled={viewOnly && !modalData.hgConverterInd}
+              />
+              <Radio
+                id="no"
+                name="hg-Converter-Indicator"
+                label="No"
+                value="No"
+                className="padding-left-1"
+                defaultChecked={!modalData.hgConverterInd ? true : null}
+                disabled={viewOnly && modalData.hgConverterInd}
+              />
+            </Fieldset>
+          </div>
+        </div>
+        <div className="grid-row padding-top-2">
+          <div className="tablet:grid-col">
+            <Label className="margin-0" id="startTime">
+              Start Date and Time
+            </Label>
+            <div className="grid-row">
+              <div className="grid-col ">
+                {viewOnly ? (
+                  <FormGroup className="margin-top-0">
+                    <Label className="margin-0" htmlFor="startTime">
+                      mm/dd/yyyy
+                    </Label>
+                    <TextInput
+                      className="modalInput"
+                      id="startTime"
+                      name="startTime"
+                      type="text"
+                      disabled={viewOnly}
+                      defaultValue={startDate ? startDate : ""}
+                    />
+                  </FormGroup>
+                ) : (
+                  <div>
+                    <div className="usa-hint" id="startHour">
                       mm/dd/yyyy
                     </div>
                     {startDate !== null ? (
                       <DatePicker
-                        id="dateStart"
-                        name="dateStart"
+                        className="margin-0"
+                        id="startHour"
+                        name="startHour"
                         disabled={viewOnly}
                         defaultValue={startDate}
                       />
@@ -151,63 +344,107 @@ const SystemComponentsModal = ({ modalData, viewOnly }) => {
                       ""
                     )}
                   </div>
-                  <div className="grid-col">
-                    {startHour !== null ? (
-                      <SelectBox
-                        caption="hh"
-                        options={timeOptions}
-                        initialSelection={startHour}
-                        selectKey="time"
-                        viewOnly={viewOnly}
-                        // required={required}
-                      />
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                </div>
+                )}
               </div>
               <div className="grid-col">
-                <Label className="margin-0" id="dateEnd">
-                  End Date and Time
-                </Label>
-                <div className="grid-row">
-                  <div className="grid-col ">
-                    <div className="usa-hint" id="dateEnd">
-                      mm/dd/yyyy
-                    </div>
-                    {endDate !== null ? (
-                      <DatePicker
-                        id="dateEnd"
-                        name="dateEnd"
-                        disabled={viewOnly}
-                        defaultValue={endDate}
-                      />
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <div className="grid-col">
-                    {endHour !== null ? (
-                      <SelectBox
-                        className="margin-0"
-                        caption="hh"
-                        options={timeOptions}
-                        initialSelection={endHour}
-                        selectKey="time"
-                        viewOnly={viewOnly}
-                        // required={required}
-                      />
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                </div>
+                {viewOnly ? (
+                  <FormGroup className="margin-top-0">
+                    <Label className="margin-0" htmlFor="startHour">
+                      hh
+                    </Label>
+                    <TextInput
+                      className="modalInput"
+                      id="startHour"
+                      name="startHour"
+                      type="text"
+                      disabled={viewOnly}
+                      defaultValue={startHour}
+                    />
+                  </FormGroup>
+                ) : startHour !== null ? (
+                  <SelectBox
+                    className="margin-0"
+                    caption="hh"
+                    options={timeOptions}
+                    initialSelection={startHour}
+                    selectKey="time"
+                    viewOnly={viewOnly}
+                    // required={required}
+                  />
+                ) : (
+                  ""
+                )}
               </div>
             </div>
-          </Form>
+          </div>
+          <div className="tablet:grid-col padding-left-2">
+            <Label className="margin-0" id="endDate">
+              End Date and Time
+            </Label>
+            <div className="grid-row">
+              <div className="grid-col ">
+                {viewOnly ? (
+                  <FormGroup className="margin-top-0">
+                    <Label className="margin-0" htmlFor="endDate">
+                      mm/dd/yyyy
+                    </Label>
+                    <TextInput
+                      className="modalInput"
+                      id="endDate"
+                      name="endDate"
+                      type="text"
+                      disabled={viewOnly}
+                      defaultValue={endDate ? endDate : ""}
+                    />
+                  </FormGroup>
+                ) : (
+                  <div>
+                    <div className="usa-hint" id="endDate">
+                      mm/dd/yyyy
+                    </div>
+                    <DatePicker
+                      className="margin-0"
+                      id="endDate"
+                      name="endDate"
+                      disabled={viewOnly}
+                      defaultValue={endDate}
+                    />
+                    
+                  </div>
+                )}
+              </div>
+              <div className="grid-col">
+                {viewOnly ? (
+                  <FormGroup className="margin-top-0">
+                    <Label className="margin-0" htmlFor="endHour">
+                      hh
+                    </Label>
+                    <TextInput
+                      className="modalInput"
+                      id="endHour"
+                      name="endHour"
+                      type="text"
+                      disabled={viewOnly}
+                      defaultValue={endHour}
+                    />
+                  </FormGroup>
+                ) : startHour !== null ? (
+                  <SelectBox
+                    className="margin-0"
+                    caption="hh"
+                    options={timeOptions}
+                    initialSelection={endHour}
+                    selectKey="time"
+                    viewOnly={viewOnly}
+                  />
+                ) : (
+                  ""
+                )}
+              </div>
+            </div>
+          </div>
         </div>
-      }
+      </div>
     </div>
   );
 };

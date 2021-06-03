@@ -1,4 +1,5 @@
 import React from "react";
+
 import UswdsTable from "../../UswdsTable/UswdsTable";
 import "../DataTableSystemsComponents/DataTableSystemsComponentsRender.scss";
 
@@ -23,9 +24,10 @@ const DataTableSystemsComponentsRender = ({
         viewDataColumn
         // openTabColumn={[]}
         selectedRowHandler={selectedRowHandler}
-        openModal={openModal}
+        // openModal={openModal}
         addBTN={true}
       />
+
     </div>
   );
 };

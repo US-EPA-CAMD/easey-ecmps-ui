@@ -8,6 +8,7 @@ const DetailsSelectBox = ({
   initialSelection,
   viewOnly,
   required,
+  secondOption
 }) => {
   const [selectionState, setSelectionState] = useState(
     initialSelection ? initialSelection : null
@@ -21,7 +22,7 @@ const DetailsSelectBox = ({
     return optionsList.map((info, index) => {
       return (
         <option key={index} value={info[selectKey]}>
-          {info[selectKey]}
+          {info[secondOption? secondOption : selectKey]}
         </option>
       );
     });

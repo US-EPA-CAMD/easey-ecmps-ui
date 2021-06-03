@@ -9,6 +9,7 @@ tbody {
   bottom: 0;
   margin-bottom: -5px;
   margin-top: 0px;
+  z-index:999;
 }
 tbody {
   overflow-y: auto; /* Trigger vertical scroll    */
