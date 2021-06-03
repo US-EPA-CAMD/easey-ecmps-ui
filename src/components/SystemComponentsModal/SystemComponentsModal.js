@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Label,
   FormGroup,
@@ -16,7 +16,6 @@ import {
   acqMethodCode,
   basisCode,
   viewOnly,
-  setSecondLevel
 } from "./SystemComponentsData";
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 
@@ -27,11 +26,12 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
   const [endHour, setEndHour] = React.useState(null);
 
   const findValue = (options, val) => {
-    for (let x of options) {
+    for (const x of options) {
       if (x.code === val) {
         return x.name;
       }
     }
+    return options[0].name;
   };
   const timeOptions = [
     { time: null },
@@ -77,7 +77,10 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
     <div className="systemsCompTable">
       <div className="grid-container margin-bottom-2">
         <div className="display-inline-flex padding-top-3 padding-bottomm-3">
-          <Button aria-label="go back to systems details" onClick={() => backBTN(false)}>
+          <Button
+            aria-label="go back to systems details"
+            onClick={() => backBTN(false)}
+          >
             <FontAwesomeIcon icon={faArrowLeft} className=" font-body-sm" />
           </Button>
 
@@ -89,7 +92,7 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
             <FormGroup className="margin-top-0">
               <Label
                 className="margin-0"
-                htmlFor="componentID"
+                htmlFor="ComponentID"
                 hint={
                   !viewOnly ? (
                     <span className="text-italic"> (Required)</span>
@@ -102,8 +105,8 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
               </Label>
               <TextInput
                 className="modalInput"
-                id="componentID"
-                name="componentID"
+                id="ComponentID"
+                name="ComponentID"
                 type="text"
                 disabled={viewOnly}
                 defaultValue={
@@ -118,13 +121,13 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
             {" "}
             {viewOnly ? (
               <FormGroup className="margin-top-0">
-                <Label className="margin-0" htmlFor="Acquisition">
+                <Label className="margin-0" htmlFor="SampleAcquisitionMethod">
                   Sample Acquisition Method
                 </Label>
                 <TextInput
                   className="modalInput"
-                  id="Acquisition"
-                  name="Acquisition"
+                  id="SampleAcquisitionMethod"
+                  name="SampleAcquisitionMethod"
                   type="text"
                   disabled={viewOnly}
                   defaultValue={
@@ -140,6 +143,7 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
             ) : (
               <SelectBox
                 caption="Sample Acquisition Method"
+                id = "SampleAcquisitionMethod"
                 options={acqMethodCode}
                 initialSelection={modalData.acquisitionMethodCode}
                 selectKey="code"
@@ -154,13 +158,13 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
           <div className="tablet:grid-col">
             {viewOnly ? (
               <FormGroup className="margin-top-0">
-                <Label className="margin-0" htmlFor="Component">
+                <Label className="margin-0" htmlFor="ComponentType">
                   Component Type
                 </Label>
                 <TextInput
                   className="modalInput"
-                  id="Component"
-                  name="Component"
+                  id="ComponentType"
+                  name="ComponentType"
                   type="text"
                   disabled={viewOnly}
                   defaultValue={
@@ -176,6 +180,7 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
                 options={componentTypes}
                 initialSelection={modalData.componentTypeCode}
                 selectKey="code"
+                id ={"ComponentType"}
                 viewOnly={viewOnly}
                 required
                 secondOption="name"
@@ -185,13 +190,13 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
           <div className="tablet:grid-col padding-left-2">
             {viewOnly ? (
               <FormGroup className="margin-top-0">
-                <Label className="margin-0" htmlFor="Basis">
+                <Label className="margin-0" htmlFor="BasisDescription">
                   Basis Description
                 </Label>
                 <TextInput
                   className="modalInput"
-                  id="Basis"
-                  name="Basis"
+                  id="BasisDescription"
+                  name="BasisDescription"
                   type="text"
                   disabled={viewOnly}
                   defaultValue={
@@ -209,6 +214,7 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
                 selectKey="code"
                 viewOnly={viewOnly}
                 required
+                id={"BasisDescription"}
                 secondOption="name"
               />
             )}
@@ -219,15 +225,21 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
             <FormGroup className="margin-top-0">
               <Label
                 className="margin-0"
-                htmlFor="manufacturer"
-                hint={viewOnly? '' : <span className="text-italic"> (Required)</span>}
+                htmlFor="Manufacturer"
+                hint={
+                  viewOnly ? (
+                    ""
+                  ) : (
+                    <span className="text-italic"> (Required)</span>
+                  )
+                }
               >
                 Manufacturer
               </Label>
               <TextInput
                 className="modalInput"
-                id="manufacturer"
-                name="manufacturer"
+                id="Manufacturer"
+                name="Manufacturer"
                 type="text"
                 disabled={viewOnly}
                 defaultValue={
@@ -240,15 +252,21 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
             <FormGroup className="margin-top-0">
               <Label
                 className="margin-0"
-                htmlFor="modelVersion"
-                hint={viewOnly ? '' :<span className="text-italic"> (Required)</span>}
+                htmlFor="ModelOrVersion"
+                hint={
+                  viewOnly ? (
+                    ""
+                  ) : (
+                    <span className="text-italic"> (Required)</span>
+                  )
+                }
               >
                 Modal or Version
               </Label>
               <TextInput
                 className="modalInput"
-                id="modelVersion"
-                name="modelVersion"
+                id="ModelOrVersion"
+                name="ModelOrVersion"
                 type="text"
                 disabled={viewOnly}
                 defaultValue={
@@ -263,15 +281,21 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
             <FormGroup className="margin-top-0">
               <Label
                 className="margin-0"
-                htmlFor="serialNumber"
-                hint={viewOnly? '' : <span className="text-italic"> (Required)</span>}
+                htmlFor="SerialNumber"
+                hint={
+                  viewOnly ? (
+                    ""
+                  ) : (
+                    <span className="text-italic"> (Required)</span>
+                  )
+                }
               >
                 {"Serial Number"}
               </Label>
               <TextInput
                 className="modalInput"
-                id="serialNumber"
-                name="serialNumber"
+                id="SerialNumber"
+                name="SerialNumber"
                 type="text"
                 disabled={viewOnly}
                 defaultValue={
@@ -284,6 +308,7 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
             <Fieldset
               legend="hg Converter Indicator"
               className=" display-inline-flex"
+              id="HgConverterIndicator"
             >
               <Radio
                 id="yes"
@@ -308,7 +333,7 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
         </div>
         <div className="grid-row padding-top-2">
           <div className="tablet:grid-col">
-            <Label className="margin-0" id="startTime">
+            <Label className="margin-0" id="StartDateAndTime">
               Start Date and Time
             </Label>
             <div className="grid-row">
@@ -378,7 +403,7 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
             </div>
           </div>
           <div className="tablet:grid-col padding-left-2">
-            <Label className="margin-0" id="endDate">
+            <Label className="margin-0" id="EndDateAndTime">
               End Date and Time
             </Label>
             <div className="grid-row">
@@ -409,7 +434,6 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
                       disabled={viewOnly}
                       defaultValue={endDate}
                     />
-                    
                   </div>
                 )}
               </div>

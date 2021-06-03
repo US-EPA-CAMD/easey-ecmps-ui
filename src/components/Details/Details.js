@@ -67,8 +67,8 @@ const Details = ({ modalData, viewOnly }) => {
         const endDateString = modalData[5].value.split(/[ ,]+/);
         const [eday, emonth, eyear] = endDateString[0].split("/");
         viewOnly
-          ? setStartHour(`${eday}-${emonth}-${eyear}`)
-          : setStartHour(`${eyear}-${eday}-${emonth}`);
+          ? setEndHour(`${eday}-${emonth}-${eyear}`)
+          : setEndHour(`${eyear}-${eday}-${emonth}`);
         setEndHour(endDateString[1]);
       }
     }

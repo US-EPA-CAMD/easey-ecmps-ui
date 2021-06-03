@@ -4,7 +4,14 @@ import "./Modal.scss";
 
 const modalContext = createContext();
 
-const Modal = ({ show, close, children, showCancel, showSave, secondLevel }) => {
+const Modal = ({
+  show,
+  close,
+  children,
+  showCancel,
+  showSave,
+  secondLevel,
+}) => {
   useEffect(() => {
     function keyListener(e) {
       if (e != null) {
@@ -58,9 +65,8 @@ const Modal = ({ show, close, children, showCancel, showSave, secondLevel }) => 
   }
 
   return ReactDom.createPortal(
-    <div className='' role="dialog" aria-modal="true">
+    <div className="" role="dialog" aria-modal="true">
       <div className="" ref={modalRef}>
-      
         <modalContext.Provider value={{ close }}>
           <div
             className="modal-wrapper modal-color"

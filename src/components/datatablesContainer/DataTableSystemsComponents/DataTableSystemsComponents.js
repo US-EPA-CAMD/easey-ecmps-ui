@@ -47,10 +47,9 @@ export const DataTableSystemsComponents = ({
   );
 
   const [selectedComponent, setSelectedComponent] = useState("");
-  const selectedRowHandler = (data) => {
-    for (let x of monitoringSystemsComponents) {
-      if (x.componentIdentifier === data[0].value) {
-        // console.log(x);
+  const selectedRowHandler = (val) => {
+    for (const x of monitoringSystemsComponents) {
+      if (x.componentIdentifier === val[0].value) {
         setSelectedComponent(x);
         setSecondLevel(true)
       }

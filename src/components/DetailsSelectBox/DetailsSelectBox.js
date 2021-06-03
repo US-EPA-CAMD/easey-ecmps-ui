@@ -31,7 +31,7 @@ const DetailsSelectBox = ({
     <div>
       <div >
         <FormGroup className="margin-top-0">
-          <Label htmlFor={caption + initialSelection}
+          <Label htmlFor={caption}
             hint={
               required ? (
                 <span className="requiredItalics"> (Required)</span>
@@ -47,7 +47,7 @@ const DetailsSelectBox = ({
             // weird bug without this
             value={selectionState !== null ? selectionState : initialSelection}
             disabled={viewOnly}
-            id={caption + initialSelection}
+            id={caption}
             onChange={(e) => handleChange(e)}
           >
             {populateOptions(options)}
