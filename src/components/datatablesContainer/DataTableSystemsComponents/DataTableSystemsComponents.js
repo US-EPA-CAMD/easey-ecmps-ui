@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { connect } from "react-redux";
 import { loadMonitoringSystemsComponents } from "../../../store/actions/monitoringSystems";
 import * as fs from "../../../utils/selectors/monitoringPlanSystems";
 import DataTableSystemsComponentsRender from "../DataTableSystemsComponentsRender/DataTableSystemsComponentsRender";
-
+import SystemComponentsModal from "../../SystemComponentsModal/SystemComponentsModal";
 export const DataTableSystemsComponents = ({
   monitoringSystems,
   monitoringSystemsComponents,
@@ -11,6 +11,9 @@ export const DataTableSystemsComponents = ({
   systemID,
   loadMonitoringSystemsComponentsData,
   showActiveOnly,
+  viewOnly,
+  setSecondLevel,
+  secondLevel
 }) => {
   useEffect(() => {
     let selected = 1;
@@ -43,6 +46,15 @@ export const DataTableSystemsComponents = ({
     []
   );
 
+  const [selectedComponent, setSelectedComponent] = useState("");
+  const selectedRowHandler = (val) => {
+    for (const x of monitoringSystemsComponents) {
+      if (x.componentIdentifier === val[0].value) {
+        setSelectedComponent(x);
+        setSecondLevel(true)
+      }
+    }
+  };
   const data = useMemo(() => {
     if (monitoringSystemsComponents.length > 0 || loading === false) {
       // return fs.getMonitoringSystemsComponentsTableRecords(showActiveOnly? fs.getActiveMethods(monitoringSystems):monitoringSystems);
@@ -53,9 +65,22 @@ export const DataTableSystemsComponents = ({
       return [{ col3: "Loading list of System Components" }];
     }
   }, [loading, monitoringSystemsComponents]);
+
   return (
     <div className="methodTable">
-      <DataTableSystemsComponentsRender columns={columns} data={data} />
+      {!secondLevel ? (
+        <DataTableSystemsComponentsRender
+          columns={columns}
+          data={data}
+          selectedRowHandler={selectedRowHandler}
+        />
+      ) : (
+        <SystemComponentsModal
+          backBTN={setSecondLevel}
+          viewOnly={viewOnly}
+          modalData={selectedComponent}
+        />
+      )}
     </div>
   );
 };

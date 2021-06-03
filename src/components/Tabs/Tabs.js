@@ -31,6 +31,7 @@ const Tabs = ({ children, dynamic = false, removeTabs, setResizeObserver, setAct
         {children.map((el, i) => (
           <li key={i} className="usa-button-group__item usa-tooltip" style={{position:'relative'}} data-position="bottom" title={el.props.title}>
             <button
+            tabIndex={0}
               className={
                 activeTabIndex === i
                   ? "active-button button-group"
@@ -40,6 +41,8 @@ const Tabs = ({ children, dynamic = false, removeTabs, setResizeObserver, setAct
             >
               {dynamic ? (
                 <i
+                aria-label={`close ${el.props.title} tab`}
+                tabIndex={0}
                   className={
                     i === 0
                       ? "fa fa-times close-icon hidden"
@@ -48,7 +51,7 @@ const Tabs = ({ children, dynamic = false, removeTabs, setResizeObserver, setAct
                   onClick={(e) => closeHandler(e, i)}
                 />
               ) : null}
-              <span  className={i!==0?"tabTitle":"firstTabTitle"}>{el.props.title}</span>
+              <span className={i!==0?"tabTitle":"firstTabTitle"}>{el.props.title}</span>
             </button>
           </li>
         ))}

@@ -9,7 +9,6 @@ import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../../Modal/Modal";
 import Details from "../../Details/Details";
 import DataTableSystemsComponents from "../DataTableSystemsComponents/DataTableSystemsComponents";
-
 export const DataTableSystems = ({
   monitoringSystems,
   loadMonitoringSystemsData,
@@ -17,7 +16,7 @@ export const DataTableSystems = ({
   locationSelect,
 }) => {
   const [show, setShow] = useState(false);
-
+  const [secondLevel,setSecondLevel] = useState(false);
   useEffect(() => {
     if (monitoringSystems.length === 0 || loading === false) {
       loadMonitoringSystemsData(locationSelect);
@@ -110,7 +109,7 @@ export const DataTableSystems = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, monitoringSystems]);
-
+const viewOnly= true;
   return (
     <>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -120,15 +119,15 @@ export const DataTableSystems = ({
       </div>
       {show ? (
         <Modal
+          secondLevel={true}
           show={show}
           close={closeModalHandler}
           showCancel
           showSave
           children={
             <div>
-              <Details viewOnly={true} modalData={modalData} />
-
-              <DataTableSystemsComponents
+              {secondLevel ? '' : <Details viewOnly={viewOnly} modalData={modalData} />}
+              <DataTableSystemsComponents secondLevel = {secondLevel} setSecondLevel = {setSecondLevel} viewOnly={viewOnly}
                 systemID={modalData.length > 1 ? modalData[0].value : 0}
               />
             </div>

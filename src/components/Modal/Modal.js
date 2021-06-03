@@ -4,7 +4,14 @@ import "./Modal.scss";
 
 const modalContext = createContext();
 
-const Modal = ({ show, close, children, showCancel, showSave }) => {
+const Modal = ({
+  show,
+  close,
+  children,
+  showCancel,
+  showSave,
+  secondLevel,
+}) => {
   useEffect(() => {
     function keyListener(e) {
       if (e != null) {

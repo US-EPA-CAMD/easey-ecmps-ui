@@ -34,7 +34,12 @@ export const SelectFacilitiesDataTable = ({
 
   // *** generate columns array of object based on columnNames array above
   let columns = [];
-
+  const handleEnterPress = () => {
+    setTimeout(function () {
+      const tableBody = document.getElementsByClassName("button-group");
+      tableBody[tableBody.length - 1].focus();
+    }, 700);
+  };
   columnNames.forEach((name, index) => {
     switch (name) {
       case "ORIS":
@@ -68,6 +73,14 @@ export const SelectFacilitiesDataTable = ({
         <div
           className="cursor-pointer"
           onClick={() => selectedRowHandler(normalizedRow.cells)}
+          tabIndex={0}
+          aria-label={`open ${row.name} facility`}
+          onKeyPress={(event) => {
+            if (event.key === "Enter") {
+              selectedRowHandler(normalizedRow.cells);
+              handleEnterPress();
+            }
+          }}
         >
           <img
             height="32px"
