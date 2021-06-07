@@ -51,6 +51,12 @@ const Tabs = ({
                       : "fa fa-times close-icon"
                   }
                   onClick={(e) => closeHandler(e, i)}
+
+                  onKeyPress={(event) => {
+                    if (event.key === "Enter") {
+                      closeHandler(event, i)
+                    }
+                  }}
                 />
               ) : null}
               <button
