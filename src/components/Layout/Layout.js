@@ -18,7 +18,7 @@ const Layout = (props) => {
           <LeftNavigation />
         </div>
         <div className="grid-col minh-tablet-lg margin-x-2">
-          {childrenWithProps}
+          <main>{childrenWithProps} </main>
         </div>
       </div>
       <div className="bottomFooter">

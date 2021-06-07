@@ -67,7 +67,7 @@ export const DataTableSystemsComponents = ({
           onClick={() => selectedRowHandler(normalizedRow.cells)}
         >
           <FontAwesomeIcon icon={faPencilAlt} className="margin-right-1" />
-          View
+          {viewOnly? 'View': 'View/Edit'}
         </div>
       );
     },

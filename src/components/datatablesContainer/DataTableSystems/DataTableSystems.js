@@ -109,7 +109,8 @@ export const DataTableSystems = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, monitoringSystems]);
-const viewOnly= true;
+  //demo
+const viewOnly= false;
   return (
     <>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
