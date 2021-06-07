@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { connect } from "react-redux";
-import { loadMonitoringSystems } from "../../../store/actions/monitoringSystems";
+import {
+  loadMonitoringSystems,
+  loadMonitoringSystemsFuelFlows,
+} from "../../../store/actions/monitoringSystems";
 import * as fs from "../../../utils/selectors/monitoringPlanSystems";
 import DataTableSystemsRender from "../DataTableSystemsRender/DataTableSystemsRender";
 import { normalizeRowObjectFormat } from "../../../additional-functions/react-data-table-component";
@@ -9,6 +12,7 @@ import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../../Modal/Modal";
 import Details from "../../Details/Details";
 import DataTableSystemsComponents from "../DataTableSystemsComponents/DataTableSystemsComponents";
+
 export const DataTableSystems = ({
   monitoringSystems,
   loadMonitoringSystemsData,
@@ -16,11 +20,12 @@ export const DataTableSystems = ({
   locationSelect,
 }) => {
   const [show, setShow] = useState(false);
-  const [secondLevel,setSecondLevel] = useState(false);
+  const [secondLevel, setSecondLevel] = useState(false);
   useEffect(() => {
     if (monitoringSystems.length === 0 || loading === false) {
       loadMonitoringSystemsData(locationSelect);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect]);
 
@@ -109,8 +114,7 @@ export const DataTableSystems = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, monitoringSystems]);
-  //demo
-const viewOnly= false;
+  const viewOnly = true;
   return (
     <>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -127,8 +131,15 @@ const viewOnly= false;
           showSave
           children={
             <div>
-              {secondLevel ? '' : <Details viewOnly={viewOnly} modalData={modalData} />}
-              <DataTableSystemsComponents secondLevel = {secondLevel} setSecondLevel = {setSecondLevel} viewOnly={viewOnly}
+              {secondLevel ? (
+                ""
+              ) : (
+                <Details viewOnly={viewOnly} modalData={modalData} />
+              )}
+              <DataTableSystemsComponents
+                secondLevel={secondLevel}
+                setSecondLevel={setSecondLevel}
+                viewOnly={viewOnly}
                 systemID={modalData.length > 1 ? modalData[0].value : 0}
               />
             </div>
@@ -150,6 +161,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     loadMonitoringSystemsData: (monitoringPlanLocationSelect) =>
       dispatch(loadMonitoringSystems(monitoringPlanLocationSelect)),
+    loadMonitoringSystemsFuelFlowsData: (monitoringPlanLocationSelect) =>
+      dispatch(loadMonitoringSystemsFuelFlows(monitoringPlanLocationSelect)),
   };
 };
 

@@ -22,7 +22,7 @@ export function getMonitoringPlansSystemsTableRecords(data) {
 }
 // year - month - day to  month / day/ year
 function formateStringToDate(date) {
-  var parts = date.split("-");
+  const parts = date.split("-");
   return parts[1] + "/" + parts[2] + "/" + parts[0];
 }
 
@@ -37,7 +37,7 @@ export function getMonitoringPlansSystemsComponentsTableRecords(data) {
       ? formateStringToDate(el.endDate.toString())
       : "";
     const endHour = el.endHour ? el.endHour.toString() : "";
-    let present = false;
+    let present;
     if (endDate === "" || endDate === undefined) {
       present = "Present";
     } else {
@@ -46,6 +46,32 @@ export function getMonitoringPlansSystemsComponentsTableRecords(data) {
     records.push({
       col1: el.componentIdentifier,
       col2: el.componentTypeCode,
+      col3: `${beginDate}: ${beginHour} ➜ ${present}`,
+    });
+  });
+  return records;
+}
+
+export function getMonitoringPlansSystemsFuelFlowsComponentsTableRecords(data) {
+  const records = [];
+  data.forEach((el) => {
+    const beginDate = el.beginDate
+      ? formateStringToDate(el.beginDate.toString())
+      : "";
+    const beginHour = el.beginHour ? el.beginHour.toString() : "";
+    const endDate = el.endDate
+      ? formateStringToDate(el.endDate.toString())
+      : "";
+    const endHour = el.endHour ? el.endHour.toString() : "";
+    let present;
+    if (endDate === "" || endDate === undefined) {
+      present = "Present";
+    } else {
+      present = endDate + ": " + endHour;
+    }
+    records.push({
+      col1: el.sysFuelUomCode,
+      col2: el.maxRateSourceCode,
       col3: `${beginDate}: ${beginHour} ➜ ${present}`,
     });
   });

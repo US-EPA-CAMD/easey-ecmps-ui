@@ -13,6 +13,15 @@ export function loadMonitoringSystemsSuccess(monitoringSystems) {
   };
 }
 
+export function loadMonitoringSystemsFuelFlowsSuccess(
+  monitoringSystemsFuelFlows
+) {
+  return {
+    type: types.LOAD_MONITORING_SYSTEMS_FUEL_FLOWS_SUCCESS,
+    monitoringSystemsFuelFlows,
+  };
+}
+
 export function loadMonitoringSystems(locationId) {
   return (dispatch) => {
     dispatch(beginMonitoringSystemsApiCall());
@@ -20,6 +29,19 @@ export function loadMonitoringSystems(locationId) {
       .getMonitoringSystems(locationId)
       .then((res) => {
         dispatch(loadMonitoringSystemsSuccess(res.data));
+      })
+      .catch((err) => {
+        log(err);
+      });
+  };
+}
+export function loadMonitoringSystemsFuelFlows(locationId, systemId) {
+  return (dispatch) => {
+    dispatch(beginMonitoringSystemsApiCall());
+    return mpApi
+      .getMonitoringSystemsFuelFlows(locationId, systemId)
+      .then((res) => {
+        dispatch(loadMonitoringSystemsFuelFlowsSuccess(res.data));
       })
       .catch((err) => {
         log(err);
@@ -36,11 +58,11 @@ export function loadMonitoringSystemsComponentsSuccess(
   };
 }
 
-export function loadMonitoringSystemsComponents(systemId,componentId) {
+export function loadMonitoringSystemsComponents(systemId, componentId) {
   return (dispatch) => {
     dispatch(beginMonitoringSystemsComponentsApiCall());
     return mpApi
-      .getMonitoringSystemsComponents(systemId,componentId)
+      .getMonitoringSystemsComponents(systemId, componentId)
       .then((res) => {
         dispatch(loadMonitoringSystemsComponentsSuccess(res.data));
       })
