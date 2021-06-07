@@ -40,7 +40,15 @@ export async function getMonitoringSystems(locationId) {
     .then(handleResponse)
     .catch(handleError);
 }
-export async function getMonitoringSystemsComponents(systemId,componentId) {
+export async function getMonitoringSystemsFuelFlows(locationId, systemId) {
+  return axios
+    .get(
+      `${config.services.monitorPlans.uri}/monitor-locations/${locationId}/systems/${systemId}/system-fuel-flows`
+    )
+    .then(handleResponse)
+    .catch(handleError);
+}
+export async function getMonitoringSystemsComponents(systemId, componentId) {
   return axios
     .get(
       `${config.services.monitorPlans.uri}/monitor-locations/${systemId}/systems/${componentId}/components`
