@@ -15,7 +15,6 @@ import { normalizeRowObjectFormat } from "../../../additional-functions/react-da
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
-// import { getMonitoringPlansSystemsFuelFlowsComponentsTableRecords } from "../../../utils/selectors/monitoringPlanSystems";
 
 export const DataTableSystemsComponents = ({
   monitoringSystems,

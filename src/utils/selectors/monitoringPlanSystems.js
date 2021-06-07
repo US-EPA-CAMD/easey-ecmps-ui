@@ -22,7 +22,7 @@ export function getMonitoringPlansSystemsTableRecords(data) {
 }
 // year - month - day to  month / day/ year
 function formateStringToDate(date) {
-  var parts = date.split("-");
+  const parts = date.split("-");
   return parts[1] + "/" + parts[2] + "/" + parts[0];
 }
 

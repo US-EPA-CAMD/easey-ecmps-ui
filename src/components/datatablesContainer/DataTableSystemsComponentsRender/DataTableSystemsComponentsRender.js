@@ -20,6 +20,7 @@ const DataTableSystemsComponentsRender = ({ columns, data, title }) => {
           {title.toLowerCase() === "fuel flows" ? (
             <Button
               type="button"
+              test-id="btnAddFuelFlow"
               className="float-right clearfix margin-right-3"
               outline="true"
             >

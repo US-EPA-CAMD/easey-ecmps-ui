@@ -169,6 +169,37 @@ const SystemFuelFlowsModal = ({ modalData, viewOnly, backBTN }) => {
               />
             </FormGroup>
           </div>
+          <div className="tablet:grid-col padding-left-2">
+            {" "}
+            {viewOnly ? (
+              <FormGroup className="margin-top-0">
+                <Label className="margin-0" htmlFor="UnitOfMeasureCode">
+                  Unit of Measure Code
+                </Label>
+                <TextInput
+                  className="modalInput"
+                  id="UnitOfMeasureCode"
+                  name="UnitOfMeasureCode"
+                  type="text"
+                  disabled={viewOnly}
+                  defaultValue={
+                    modalData.sysFuelUomCode ? modalData.sysFuelUomCode : ""
+                  }
+                />
+              </FormGroup>
+            ) : (
+              <SelectBox
+                caption="Unit of Measure Code"
+                id="UnitOfMeasureCode"
+                options={acqMethodCode}
+                initialSelection={modalData.acquisitionMethodCode}
+                selectKey="code"
+                viewOnly={viewOnly}
+                required
+                secondOption="name"
+              />
+            )}
+          </div>
         </div>
         <div className="grid-row padding-top-2">
           <div className="tablet:grid-col">
