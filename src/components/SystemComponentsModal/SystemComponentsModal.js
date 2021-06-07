@@ -64,12 +64,14 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
     const [year, month, day] = modalData.beginDate.split("-");
     !viewOnly
       ? setStartDate(`${year}-${day}-${month}`)
-      : setStartDate(`${day}-${month}-${year}`);
+      : setStartDate(`${month}-${day}-${year}`);
     setStartHour(modalData.beginHour);
 
     if (modalData.endDate !== null) {
       const [eyear, emonth, eday] = modalData.endDate.split("-");
-      setEndDate(`${eyear}-${eday}-${emonth}`);
+      !viewOnly
+      ? setEndDate(`${year}-${day}-${month}`)
+      : setEndDate(`${emonth}-${eday}-${eyear}`);
       setEndHour(modalData.endHour);
     }
   }, [modalData]);
@@ -261,7 +263,7 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
                   )
                 }
               >
-                Modal or Version
+                Model or Version
               </Label>
               <TextInput
                 className="modalInput"

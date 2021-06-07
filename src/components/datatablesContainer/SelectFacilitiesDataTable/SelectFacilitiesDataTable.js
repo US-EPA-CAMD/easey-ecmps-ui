@@ -34,7 +34,7 @@ export const SelectFacilitiesDataTable = ({
 
   // *** generate columns array of object based on columnNames array above
   let columns = [];
-  const handleEnterPress = () => {
+  const handleEnterPress = (normalizedRow) => {
     setTimeout(function () {
       const tableBody = document.getElementsByClassName("button-group");
       tableBody[tableBody.length - 1].focus();
@@ -71,14 +71,15 @@ export const SelectFacilitiesDataTable = ({
 
       return (
         <div
+        role="button"
           className="cursor-pointer"
           onClick={() => selectedRowHandler(normalizedRow.cells)}
           tabIndex={0}
-          aria-label={`open ${row.name} facility`}
+          aria-label={`open ${normalizedRow.col2} facility`}
           onKeyPress={(event) => {
             if (event.key === "Enter") {
               selectedRowHandler(normalizedRow.cells);
-              handleEnterPress();
+              handleEnterPress(normalizedRow);
             }
           }}
         >
