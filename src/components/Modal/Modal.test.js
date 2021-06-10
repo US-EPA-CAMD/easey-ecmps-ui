@@ -28,7 +28,7 @@ describe("testing the creation of a modal", () => {
       jest
       .spyOn(React, 'useState')
       .mockImplementation(stateValue => [stateValue=0, stateSetter])
-    const { getByText } = render(<Modal close={close} show={show} />);
+    const { getByText } = render(<Modal close={close} show={show} showCancel={true} showSave={true}/>);
     const cancelBTN = getByText(/Cancel/i);
     const closeBTN = getByText(/save and close/i);
 

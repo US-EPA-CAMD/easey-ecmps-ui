@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { SelectFacilitiesDataTable } from "./DataTable";
+import { SelectFacilitiesDataTable } from  "/../mp-viewer/DataTableRender";
 
 //testing redux connected component to mimic props passed as argument
 function componentRenderer(args) {

@@ -34,6 +34,12 @@ describe("Shallow render to avoid issues with redux store ", () => {
       monitoringPlans: [],
       loadFacilitiesData: jest.fn(),
       loadMonitoringPlansData: jest.fn(()=>{defaultProps.monitoringPlans=monitoringPlans}),
+      setInactive:jest.fn(),
+      tabs: [{orisCode:1, name: 'test',configuration:0,location:[0,0],section:1,locations:[],monitoringPlans:[],inactive:false}],
+      setActiveTab:jest.fn(),
+      activeTab:[0],
+      setMonitoringPlan:jest.fn(),
+      emptyPlans:jest.fn(),
     };
     const props = { ...defaultProps };
     const wrapper = shallow(<MonitoringPlanTab {...props} />);

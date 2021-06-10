@@ -308,13 +308,13 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
           </div>
           <div className="tablet:grid-col padding-left-2">
             <Fieldset
-              legend="hg Converter Indicator"
+              legend="Hg Converter Indicator"
               className=" display-inline-flex"
               id="HgConverterIndicator"
             >
               <Radio
                 id="yes"
-                name="hg-Converter-Indicator"
+                name="Hg-Converter-Indicator"
                 label="Yes"
                 value="Yes"
                 className="padding-right-1"
@@ -323,7 +323,7 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
               />
               <Radio
                 id="no"
-                name="hg-Converter-Indicator"
+                name="Hg-Converter-Indicator"
                 label="No"
                 value="No"
                 className="padding-left-1"

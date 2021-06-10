@@ -10,11 +10,11 @@ describe("dynamicFacilityTab Reducer State Update", () => {
         openedFacilityTabs:["test"]
     };
 
-    const action = actions.addFacilityTab(selectedFacility);
+    let action = actions.addFacilityTab(selectedFacility);
     const newState = dynamicFacilityTabReducer(initialState, action);
     expect(newState.length).toBe(2);
 
-    const action = actions.removeFacilityTab(selectedFacilityTabIndex);
+    action = actions.removeFacilityTab(selectedFacilityTabIndex);
     const updatedState = dynamicFacilityTabReducer(newState, action);
     expect(updatedState.length).toBe(1);
   });
@@ -29,7 +29,6 @@ describe("dynamicFacilityTab Reducer State Adding with data", () => {
 
     const setConfigurationSelectionState = actions.setConfigurationSelectionState(1,7);
     const newCong = dynamicFacilityTabReducer(initialState, setConfigurationSelectionState);
-    console.log('THIS IS NEW CONG',newCong)
     expect(newCong[0].configuration).toBe(1);
 
     const setLocationSelectionState = actions.setLocationSelectionState([2,1],7);

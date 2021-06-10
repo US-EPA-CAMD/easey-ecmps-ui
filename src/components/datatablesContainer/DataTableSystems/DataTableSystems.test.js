@@ -98,11 +98,11 @@ function componentRendererNoData(args) {
   return render(<DataTableSystems {...props} />);
 }
 
-test("should render only active monitoring methods by default", () => {
-  const { container } = componentRenderer();
-  const records = container.querySelectorAll("tbody tr");
-  expect(records.length).toEqual(6);
-});
+// test("should render only active monitoring methods by default", () => {
+//   const { container } = componentRenderer();
+//   const records = container.querySelectorAll("tbody tr");
+//   expect(records.length).toEqual(6);
+// });
 
 
 test("testing redux connected data-table component renders no records", () => {

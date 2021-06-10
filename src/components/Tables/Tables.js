@@ -8,17 +8,18 @@ const Tables = ({
   matsTableFlag,
   systemsItems,
 }) => {
-
   const ref = useRef();
   useEffect(() => {
-    if (
-      ref.current
-        .querySelectorAll(".usa-accordion__content")[0]
-        .hasAttribute("hidden")
-    ) {
-      ref.current.children[0]
-        .querySelectorAll(".usa-accordion__button")[0]
-        .click();
+    if (ref.current != undefined) {
+      if (
+        ref.current
+          .querySelectorAll(".usa-accordion__content")[0]
+          .hasAttribute("hidden")
+      ) {
+        ref.current.children[0]
+          .querySelectorAll(".usa-accordion__button")[0]
+          .click();
+      }
     }
   }, [ref.current, sectionSelect]);
 
@@ -102,7 +103,11 @@ const Tables = ({
     "Unit Information": <div></div>,
     "Stack/Pipe Information": <div></div>,
   };
-  return <div aria-live="polite" ref={ref}>{sections[sectionSelect]}</div>;
+  return (
+    <div aria-live="polite" ref={ref}>
+      {sections[sectionSelect]}
+    </div>
+  );
 };
 
 export default Tables;

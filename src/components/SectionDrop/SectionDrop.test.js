@@ -24,7 +24,7 @@ describe("testing the creation of 1 select drop down and handling change", () =>
         activeTab={0}
       />
     );
-    userEvent.selectOptions(screen.getById("1"), ["2"]);
+    userEvent.selectOptions(document.getById("1"), ["2"]);
     expect(screen.getByDisplayValue("2")).toBeInTheDocument();
   });
 

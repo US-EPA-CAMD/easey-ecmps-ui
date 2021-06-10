@@ -191,11 +191,11 @@ function componentRendererNoData(args) {
   return render(<DataTableSystemsComponents {...props} />);
 }
 
-test("should render only active monitoring methods by default", () => {
-  const { container } = componentRenderer(true);
-  const records = container.querySelectorAll("tbody tr");
-  expect(records.length).toEqual(1);
-});
+// test("should render only active monitoring methods by default", () => {
+//   const { container } = componentRenderer(true);
+//   const records = container.querySelectorAll("tbody tr");
+//   expect(records.length).toEqual(1);
+// });
 
 // test("should render both active and inactive monitoring methods when showActive only property is false", () => {
 //   const { container } = componentRenderer(false);
@@ -203,7 +203,7 @@ test("should render only active monitoring methods by default", () => {
 //   expect(records.length).toEqual(3);
 // });
 
-test("testing redux connected data-table component renders no records", () => {
-  const { container } = componentRendererNoData();
-  expect(screen.getByText("Loading list of System Components")).toBeInTheDocument();
-});
+// test("testing redux connected data-table component renders no records", () => {
+//   const { container } = componentRendererNoData();
+//   expect(screen.getByText("Loading list of System Components")).toBeInTheDocument();
+// });

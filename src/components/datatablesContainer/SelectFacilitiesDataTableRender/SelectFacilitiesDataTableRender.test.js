@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { render, waitForDomChange } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import SelectFacilitiesDataTableRender from "./DataTableRender";
+import SelectFacilitiesDataTableRender from "/../mp-viewer/DataTableRender";
 
 let columns = [],
   data = [];
