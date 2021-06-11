@@ -18,6 +18,7 @@ const cdx_user = sessionStorage.getItem("cdx_user")
 
 const Login = () => {
   const standardFormErrorMessage = "Please enter your username and password";
+  const [showError, setShowError] = useState(false);
   const [formErrorMessage, setFormErrorMessage] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -40,6 +41,7 @@ const Login = () => {
 
   const submitForm = async (e) => {
     e.preventDefault();
+    setFormErrorMessage('');
     const formReady = !(username !== "" || password !== "");
 
     // issue here
@@ -49,17 +51,14 @@ const Login = () => {
 
     if (username !== "" && password !== "") {
       setLoading(true);
+      setShowError(false);
 
       try {
         return await authenticate({ userId: username, password })
           .then((response) => {
             setLoading(false);
-            if (response.status === "Valid") {
-              setUsername("");
-              setPassword("");
-              setFormErrorMessage("");
-            } 
-            else if (response.error) {
+
+            if (response && response.error) {
               throw response.error;
             }
           })
@@ -70,6 +69,7 @@ const Login = () => {
           });
       } catch (err) {
         setLoading(false);
+        setShowError(true);
         setFormErrorMessage(err.message);
       }
     }
@@ -97,7 +97,7 @@ const Login = () => {
               </a>
             </span>
 
-            {formErrorMessage && (
+            {showError && (
               <Alert type="error" heading="Log In Errors">
                 {formErrorMessage}
               </Alert>

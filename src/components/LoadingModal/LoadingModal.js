@@ -1,15 +1,9 @@
 import React from 'react';
 
-import { Button } from '@trussworks/react-uswds';
-
 import './LoadingModal.scss';
 
 const LoadingModal = props => {
     const { loading } = props;
-
-    const reloadPage = () => {
-        window.location.reload();
-    };
 
     const styles = {
         loadingWrapper: {
@@ -73,12 +67,6 @@ const LoadingModal = props => {
                 style={styles.loadingWrapper}>
                 <div style={styles.innerWrapper}>
                     <div style={styles.loader}>-</div>
-                    <Button
-                        data-test="component-loading-cancel-button"
-                        type="button"
-                        onClick={() => reloadPage()}>
-                        cancel
-                    </Button>
                 </div>
                 <div style={styles.modalTintScreen}>-</div>
             </div>}
