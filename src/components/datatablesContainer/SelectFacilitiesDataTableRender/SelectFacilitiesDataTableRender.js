@@ -5,6 +5,7 @@ import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import DataTable from "react-data-table-component";
 import { FilterComponent } from "../../ReactDataTablesFilter/ReactDataTablesFilter";
 import { Preloader } from "../../Preloader/Preloader";
+import InactivityTracker from "../../InactivityTracker/InactivityTracker";
 
 const SelectFacilitiesDataTableRender = ({ columns, data }) => {
   const [searchText, setSearchText] = useState("");
@@ -34,6 +35,8 @@ const SelectFacilitiesDataTableRender = ({ columns, data }) => {
       <div className="padding-top-4 padding-left-2">
         <h2 className="padding-0">Select Facilities</h2>
         <hr width="100%" align="center" className="height-1px bg-base-light" />
+
+        <InactivityTracker />
       </div>
       <div aria-live="polite">
         {data.length > 1 ? (

@@ -1,8 +1,11 @@
-$transitionDuration: 200ms;
+$transitionDuration: 0ms;
 
 .timer-wrapper {
-  display: flex;
   justify-content: center;
+}
+
+.timer-container {
+  margin: 5% 0 0 35%;
 }
 
 .time-wrapper {
@@ -11,11 +14,10 @@ $transitionDuration: 200ms;
 
 .time-wrapper .time {
   position: absolute;
-  left: 0;
-  top: 0;
+  left: 38%;
+  top: 20%;
   width: 100%;
   height: 100%;
-  display: flex;
   justify-content: center;
   align-items: center;
   transform: translateY(0);

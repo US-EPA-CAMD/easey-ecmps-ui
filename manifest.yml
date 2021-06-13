@@ -12,5 +12,8 @@ applications:
       REACT_APP_EASEY_EMISSIONS_API: https://((host))/api/emissions-mgmt
       REACT_APP_EASEY_MONITOR_PLAN_API: https://((host))/api/monitor-plan-mgmt
       REACT_APP_EASEY_AUTH_API: https://((host))/api/auth-mgmt
+      REACT_APP_EASEY_UI_ACTIVITY_POLLING_FREQUENCY: ((activityPollingFrequency))
+      REACT_APP_EASEY_UI_ACTIVITY_COUNTDOWN_DURATION: ((activityCountdownDuration))
+      REACT_APP_EASEY_UI_INACTIVITY_DURATION: ((inactivityDuration))
     routes:
       - route: ((host))

@@ -17,7 +17,7 @@ const CountdownTimerRender = ({ remainingTime }) => {
     isNewTimeFirstTick.current = false;
   }
 
-  // force one last re-render when the time is over to tirgger the last animation
+  // *** force final re-render when time is elapsed and trigger the last animation
   if (remainingTime === 0) {
     setTimeout(() => {
       setOneLastRerender((val) => val + 1);
@@ -29,7 +29,10 @@ const CountdownTimerRender = ({ remainingTime }) => {
   return (
     <div className="time-wrapper">
       <div key={remainingTime} className={`time ${isTimeUp ? "up" : ""}`}>
-        {remainingTime}
+        <div>{remainingTime}</div>
+        <div className="font-alt-md position-relative left-neg-4">
+          seconds left
+        </div>
       </div>
       {prevTime.current !== null && (
         <div
@@ -43,13 +46,16 @@ const CountdownTimerRender = ({ remainingTime }) => {
   );
 };
 
-export const CountdownTimer = () => {
+export const CountdownTimer = ({ duration }) => {
   return (
     <div className="countdown-timer-wrapper">
-      <div>
+      It looks like you have been inactive for a while. Save your changes to
+      continue or lose unsaved work in {duration} seconds. Click OK.
+      <div className="timer-container" aria-hidden="true">
         <CountdownCircleTimer
           isPlaying
-          duration={10}
+          duration={duration}
+          size={230}
           colors={[["#004777", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
         >
           {CountdownTimerRender}

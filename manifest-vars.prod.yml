@@ -1,3 +1,6 @@
 host: easey.app.cloud.gov
 environment: production
 memory: 2048M
+activityPollingFrequency: 1000
+activityCountdownDuration: 30
+inactivityDuration: 870000

@@ -74,26 +74,22 @@ const LeftNavigation = () => {
   ];
   return (
     <div className="bg-base-lightest width-full height-full font-body-sm padding-3">
-      <div className={`usa-overlay ${show ? "is-visible" : ""}`}></div>
+      <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       <SideNav items={makeHeader(head)} />
 
       {userLoggedIn ? <SideNav items={wsItems} /> : ""}
       <div className="padding-bottom-4 position-absolute bottom-0">
         {!cdxUser ? (
-          <Button onClick={() => openModal(true)}> Log In</Button>
-        ) : (
-          ""
-        )}
+          <Button type="button" onClick={() => openModal(true)}>
+            Log In
+          </Button>
+        ) : null}
 
         <Accessories />
       </div>
       {show ? (
-        <div className="">
-          <Modal show={show} close={closeModalHandler} children={<Login />} />
-        </div>
-      ) : (
-        ""
-      )}
+        <Modal show={show} close={closeModalHandler} children={<Login />} />
+      ) : null}
     </div>
   );
 };

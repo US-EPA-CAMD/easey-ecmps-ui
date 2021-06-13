@@ -1,3 +1,6 @@
 host: easey-tst.app.cloud.gov
 environment: testing
 memory: 1024M
+activityPollingFrequency: 1000
+activityCountdownDuration: 30
+inactivityDuration: 870000

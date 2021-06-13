@@ -11,7 +11,7 @@ import Login from "../Login/Login";
 
 import "./App.scss";
 
-function App() {
+const App = () => {
   return (
     <div>
       <Layout>
@@ -24,18 +24,17 @@ function App() {
             exact
             component={MonitoringPlanHome}
           />
-           <Route
+          <Route
             path="/workspace/monitoring-plans/"
             exact
             component={MonitoringPlanHome}
           />
           <Route path="/admin/rules" exact component={RuleEditor} />
           <Route path="*" component={NotFound} />
-          
         </Switch>
       </Layout>
     </div>
   );
-}
+};
 
 export default App;

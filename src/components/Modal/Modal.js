@@ -9,6 +9,8 @@ const Modal = ({
   close,
   children,
   showCancel,
+  cancelButtonText = "Cancel",
+  saveButtonText = "Save and Close",
   showSave,
   secondLevel,
 }) => {
@@ -94,18 +96,14 @@ const Modal = ({
               <div className="modal-footer modal-color">
                 {showCancel ? (
                   <button onClick={close} className="cancelBTN modal-color">
-                    Cancel
+                    {cancelButtonText}
                   </button>
-                ) : (
-                  ""
-                )}
+                ) : null}
                 {showSave ? (
                   <button onClick={close} className="saveCloseBTN">
-                    Save and Close
+                    {saveButtonText}
                   </button>
-                ) : (
-                  ""
-                )}
+                ) : null}
               </div>
             </div>
           </div>

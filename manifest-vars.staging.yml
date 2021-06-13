@@ -1,3 +1,6 @@
 host: easey-stg.app.cloud.gov
 environment: staging
 memory: 2048M
+activityPollingFrequency: 1000
+activityCountdownDuration: 30
+inactivityDuration: 870000

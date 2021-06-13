@@ -3,3 +3,6 @@ name: ui-portal
 host: easey-dev.app.cloud.gov
 environment: development
 memory: 1024M
+activityPollingFrequency: 1000
+activityCountdownDuration: 30
+inactivityDuration: 60000
