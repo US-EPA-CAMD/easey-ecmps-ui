@@ -17,14 +17,6 @@ const SystemFuelFlowsModal = ({ modalData, viewOnly, backBTN }) => {
   const [startHour, setStartHour] = React.useState(null);
   const [endHour, setEndHour] = React.useState(null);
 
-  const findValue = (options, val) => {
-    for (const x of options) {
-      if (x.code === val) {
-        return x.name;
-      }
-    }
-    return options[0].name;
-  };
   const timeOptions = [
     { time: null },
     { time: 0 },

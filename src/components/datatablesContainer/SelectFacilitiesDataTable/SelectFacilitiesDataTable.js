@@ -5,7 +5,7 @@ import * as fs from "../../../utils/selectors/facilities";
 import SelectFacilitiesDataTableRender from "../SelectFacilitiesDataTableRender/SelectFacilitiesDataTableRender";
 import SelectedFacilityTab from "../../MonitoringPlanTab/MonitoringPlanTab";
 import { emptyMonitoringPlans } from "../../../store/actions/monitoringPlans";
-import { normalizeRowObjectFormat } from "../../../additional-functions/react-data-table-component";
+// import { normalizeRowObjectFormat } from "../../../additional-functions/react-data-table-component";
 
 import "./SelectFacilitiesDataTable.scss";
 
@@ -16,12 +16,13 @@ export const SelectFacilitiesDataTable = ({
   addTabs,
   openedFacilityTabs,
   emptyPlan,
+  monitoringPlans,
 }) => {
   useEffect(() => {
     if (facilities.length === 0) {
       loadFacilitiesData();
     }
-    emptyPlan();
+    // emptyPlan();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -34,12 +35,12 @@ export const SelectFacilitiesDataTable = ({
 
   // *** generate columns array of object based on columnNames array above
   let columns = [];
-  const handleEnterPress = (normalizedRow) => {
-    setTimeout(function () {
-      const tableBody = document.getElementsByClassName("button-group");
-      tableBody[tableBody.length - 1].focus();
-    }, 700);
-  };
+  // const handleEnterPress = (normalizedRow) => {
+  //   setTimeout(function () {
+  //     const tableBody = document.getElementsByClassName("button-group");
+  //     tableBody[tableBody.length - 1].focus();
+  //   }, 700);
+  // };
   columnNames.forEach((name, index) => {
     switch (name) {
       case "ORIS":
@@ -61,41 +62,6 @@ export const SelectFacilitiesDataTable = ({
     }
   });
 
-  columns.push({
-    name: "Actions",
-    button: true,
-    width: "25%",
-    cell: (row) => {
-      // *** normalize the row object to be in the format expected by DynamicTabs
-      const normalizedRow = normalizeRowObjectFormat(row, columnNames);
-
-      return (
-        <div
-        role="button"
-          className="cursor-pointer"
-          onClick={() => selectedRowHandler(normalizedRow.cells)}
-          tabIndex={0}
-          aria-label={`open ${normalizedRow.col2} facility`}
-          onKeyPress={(event) => {
-            if (event.key === "Enter") {
-              selectedRowHandler(normalizedRow.cells);
-              handleEnterPress(normalizedRow);
-            }
-          }}
-        >
-          <img
-            height="32px"
-            width="32px"
-            alt="Open Tab"
-            src={`${process.env.PUBLIC_URL}/images/openTab.jpg`}
-            className="margin-right-1"
-          />
-          Open
-        </div>
-      );
-    },
-  });
-
   const selectedRowHandler = (info) => {
     addTabs([
       {
@@ -111,12 +77,23 @@ export const SelectFacilitiesDataTable = ({
   };
 
   const data = useMemo(() => {
-    if (facilities.length > 0 || loading === false) {
-      return fs.getTableRecords(facilities);
+    if (facilities.length > 0) {
+      return fs.getTableRecords(facilities).map((item) => {
+        const disabled = false;
+        const expanded = false;
+        // modify this for keeping expanded state between tabs
+        // for(const x of monitoringPlans){
+        //   if(x[0] === item.col1){
+        //     expanded =true;
+        //     break;
+        //   }
+        // }
+        return { ...item, disabled, expanded };
+      });
     } else {
       return [{ col2: "Loading list of facilities..." }];
     }
-  }, [loading, facilities]);
+  }, [facilities]);
 
   return (
     <div className="tabsBox">
@@ -135,6 +112,7 @@ const mapStateToProps = (state) => {
     facilities: state.facilities,
     loading: state.apiCallsInProgress.facilities,
     openedFacilityTabs: state.openedFacilityTabs,
+    monitoringPlans: state.monitoringPlans,
   };
 };
 

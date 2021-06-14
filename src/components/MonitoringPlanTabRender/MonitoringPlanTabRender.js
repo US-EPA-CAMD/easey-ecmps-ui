@@ -34,6 +34,7 @@ useEffect(() => {
       content: <DataTableMats locationSelect={locationSelect} />,
     };
   }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [])
   const supItems = [];
   const methodItems = [

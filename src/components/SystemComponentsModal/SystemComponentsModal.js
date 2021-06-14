@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import {
   Label,
   FormGroup,
-  Form,
   TextInput,
   DatePicker,
   Radio,
@@ -14,8 +13,7 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import {
   componentTypes,
   acqMethodCode,
-  basisCode,
-  viewOnly,
+  basisCode
 } from "./SystemComponentsData";
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 
@@ -74,6 +72,7 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
       : setEndDate(`${emonth}-${eday}-${eyear}`);
       setEndHour(modalData.endHour);
     }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalData]);
   return (
     <div className="systemsCompTable">

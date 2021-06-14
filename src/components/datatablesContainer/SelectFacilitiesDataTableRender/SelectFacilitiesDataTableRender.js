@@ -5,6 +5,7 @@ import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import DataTable from "react-data-table-component";
 import { FilterComponent } from "../../ReactDataTablesFilter/ReactDataTablesFilter";
 import { Preloader } from "../../Preloader/Preloader";
+import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigurations";
 import InactivityTracker from "../../InactivityTracker/InactivityTracker";
 
 const SelectFacilitiesDataTableRender = ({ columns, data }) => {
@@ -29,6 +30,40 @@ const SelectFacilitiesDataTableRender = ({ columns, data }) => {
 
     return <FilterComponent onSearch={handleSearch} title="Facilities" />;
   }, []);
+  // columns.push({
+  //   name: "Actions",
+  //   button: true,
+  //   width: "25%",
+  //   cell: (row) => {
+  //     // *** normalize the row object to be in the format expected by DynamicTabs
+  //     const normalizedRow = normalizeRowObjectFormat(row, columnNames);
+
+  //     return (
+  //       <div
+  //         role="button"
+  //         className="cursor-pointer"
+  //         onClick={() => selectedRowHandler(normalizedRow.cells)}
+  //         tabIndex={0}
+  //         aria-label={`open ${normalizedRow.col2} facility`}
+  //         onKeyPress={(event) => {
+  //           if (event.key === "Enter") {
+  //             selectedRowHandler(normalizedRow.cells);
+  //             handleEnterPress(normalizedRow);
+  //           }
+  //         }}
+  //       >
+  //         <img
+  //           height="32px"
+  //           width="32px"
+  //           alt="Open Tab"
+  //           src={`${process.env.PUBLIC_URL}/images/openTab.jpg`}
+  //           className="margin-right-1"
+  //         />
+  //         Open
+  //       </div>
+  //     );
+  //   },
+  // });
 
   return (
     <div>
@@ -56,12 +91,16 @@ const SelectFacilitiesDataTableRender = ({ columns, data }) => {
             pagination={true}
             columns={columns}
             data={filteredItems}
+            expandableRowExpanded={row=>row.expanded}
             subHeader={true}
             subHeaderComponent={subHeaderComponentMemo}
             paginationPerPage={100}
             paginationRowsPerPageOptions={[100, 200, 500]}
             paginationComponentOptions={{ rangeSeparatorText: "out of" }}
             className="data-display-table react-transition fade-in"
+            expandableRows
+            expandableRowDisabled={row => row.disabled}
+            expandableRowsComponent={<DataTableConfigurations />}
           />
         ) : (
           <div className="margin-y-9 padding-y-9 react-transition fade-in">

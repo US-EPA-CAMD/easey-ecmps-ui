@@ -14,7 +14,7 @@ import { types, fuels, designations } from "./SystemDescriptions";
 
 const Details = ({ modalData, viewOnly }) => {
   const [startDate, setStartDate] = React.useState(null);
-  const [endDate, setEndDate] = React.useState(null);
+  const [endDate] = React.useState(null);
   const [startHour, setStartHour] = React.useState(null);
   const [endHour, setEndHour] = React.useState(null);
   const [modalState, setModalSet] = useState([]);
@@ -72,6 +72,7 @@ const Details = ({ modalData, viewOnly }) => {
         setEndHour(endDateString[1]);
       }
     }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalData]);
   return (
     <div>

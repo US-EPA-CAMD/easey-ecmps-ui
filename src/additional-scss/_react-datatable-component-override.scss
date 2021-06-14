@@ -14,7 +14,9 @@
   .rdt_TableHead {
     /* this comment is here to avoid a code smell for empty content */
   }
-
+.rdt_TableHeader{
+  display:none;
+}
   .rdt_TableHeadRow {
     border-bottom: solid 2px #808080 !important;
     .rdt_TableCol {
@@ -35,8 +37,10 @@
       }
     }
   }
+
+  //change
   .rdt_TableBody {
-    height: 500px;
+    // height: 500px;
   }
   .rdt_ExpanderRow {
     /* this comment is here to avoid a code smell for empty content */

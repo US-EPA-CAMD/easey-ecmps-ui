@@ -56,6 +56,7 @@ const LocationDrop = ({
     } else {
       setSelectionState(0);
     }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab[0]]);
 
   return (

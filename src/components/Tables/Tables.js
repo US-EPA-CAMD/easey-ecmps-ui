@@ -10,7 +10,7 @@ const Tables = ({
 }) => {
   const ref = useRef();
   useEffect(() => {
-    if (ref.current != undefined) {
+    if (ref.current !== undefined) {
       if (
         ref.current
           .querySelectorAll(".usa-accordion__content")[0]
@@ -21,6 +21,8 @@ const Tables = ({
           .click();
       }
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref.current, sectionSelect]);
 
   useEffect(() => {
@@ -51,6 +53,7 @@ const Tables = ({
         </div>
       );
     }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matsTableFlag]);
   const sections = {
     0: <div></div>,

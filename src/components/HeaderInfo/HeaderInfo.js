@@ -43,6 +43,7 @@ const HeaderInfo = ({
     if (!hasActiveConfigs) {
       setConfigurations(getInActiveConfigurations(monitoringPlans));
     }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasActiveConfigs, monitoringPlans, orisCode]);
 
   const [inactiveCheck, setInactiveCheck] = useState(
@@ -53,6 +54,7 @@ const HeaderInfo = ({
     setConfigurations(
         inactiveCheck ? monitoringPlans : getActiveConfigurations(monitoringPlans)
     );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringPlans, inactiveCheck, orisCode]);
 
   useEffect(() => {
@@ -61,6 +63,7 @@ const HeaderInfo = ({
             ? monitoringPlans
             : getActiveConfigurations(monitoringPlans)
     );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringPlans, tabs[activeTab].inactive]);
 
   const [sectionSelect, setSectionSelect] = useState(
@@ -69,14 +72,17 @@ const HeaderInfo = ({
 
   useEffect(() => {
     setSectionSelect(tabs[activeTab[0]].section);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabs[activeTab[0]].section]);
   useEffect(() => {
     setLocation([tabs[activeTab[0]].location[0],tabs[activeTab[0]].location[1]],orisCode);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 
   useEffect(() => {
     setInactiveCheck(tabs[activeTab[0]].inactive);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabs[activeTab[0]].inactive, hasActiveConfigs]);
 
   return (

@@ -100,6 +100,8 @@ const ConfigurationsDrop = ({
             );}
       }
     }}
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [options]);
 
   useEffect(() => {
@@ -117,6 +119,8 @@ const ConfigurationsDrop = ({
         orisCode
       );
     }
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectionState]);
   const handleChange = (val) => {
     setSelectionState(val.target.value);

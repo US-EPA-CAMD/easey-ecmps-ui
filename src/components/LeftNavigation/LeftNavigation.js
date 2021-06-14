@@ -46,11 +46,6 @@ const LeftNavigation = () => {
     }
   };
 
-  const logOut = () => {
-    sessionStorage.removeItem("cdx_user");
-    window.location = "/login";
-  };
-
   useEffect(() => {
     checkLoggedIn();
   }, []);

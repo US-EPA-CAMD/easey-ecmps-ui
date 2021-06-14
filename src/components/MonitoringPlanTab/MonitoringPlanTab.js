@@ -23,9 +23,9 @@ export const MonitoringPlanTab = ({
   monitoringPlans,
   loading,
   tabs,
-  setActiveTab,
+  // setActiveTab,
   activeTab,
-  setMonitoringPlan,
+  // setMonitoringPlan,
   emptyPlans,
 }) => {
   const [facility] = useState(fs.getSelectedFacility(orisCode, facilities));
@@ -34,6 +34,7 @@ export const MonitoringPlanTab = ({
 
   useEffect(() => {
     setSectionSelect(tabs[activeTab].section);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabs[activeTab].section]);
 
   const [locationSelect, setLocationSelect] = useState(
@@ -42,12 +43,14 @@ export const MonitoringPlanTab = ({
 
   useEffect(() => {
     setLocationSelect(tabs[activeTab].location[1]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabs[activeTab].location]);
 
   const [hasActiveConfigs, setHasActiveConfigs] = useState(true);
 
   useEffect(() => {
     emptyPlans();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     if (monitoringPlans.length < 1) {
@@ -61,6 +64,7 @@ export const MonitoringPlanTab = ({
         break;
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringPlans]);
 
   useEffect(() => {
