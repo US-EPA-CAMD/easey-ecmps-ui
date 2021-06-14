@@ -8,7 +8,7 @@ import { Preloader } from "../../Preloader/Preloader";
 import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigurations";
 import InactivityTracker from "../../InactivityTracker/InactivityTracker";
 
-const SelectFacilitiesDataTableRender = ({ columns, data }) => {
+const SelectFacilitiesDataTableRender = ({ columns, data, user }) => {
   const [searchText, setSearchText] = useState("");
 
   const filteredItems = data.filter(
@@ -91,7 +91,7 @@ const SelectFacilitiesDataTableRender = ({ columns, data }) => {
             pagination={true}
             columns={columns}
             data={filteredItems}
-            expandableRowExpanded={row=>row.expanded}
+            expandableRowExpanded={(row) => row.expanded}
             subHeader={true}
             subHeaderComponent={subHeaderComponentMemo}
             paginationPerPage={100}
@@ -99,8 +99,8 @@ const SelectFacilitiesDataTableRender = ({ columns, data }) => {
             paginationComponentOptions={{ rangeSeparatorText: "out of" }}
             className="data-display-table react-transition fade-in"
             expandableRows
-            expandableRowDisabled={row => row.disabled}
-            expandableRowsComponent={<DataTableConfigurations />}
+            expandableRowDisabled={(row) => row.disabled}
+            expandableRowsComponent={<DataTableConfigurations user={user} />}
           />
         ) : (
           <div className="margin-y-9 padding-y-9 react-transition fade-in">

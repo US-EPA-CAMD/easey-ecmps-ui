@@ -10,21 +10,8 @@ export const DataTableConfigurations = ({
   loadMonitoringPlansData,
   monitoringPlans,
   data,
+  user
 }) => {
-  const cdxUser = sessionStorage.getItem("cdx_user")
-    ? JSON.parse(sessionStorage.getItem("cdx_user"))
-    : false;
-  const [userLoggedIn, setUserLoggedIn] = useState(false);
-  const checkLoggedIn = () => {
-    if (cdxUser && firstName) {
-      setUserLoggedIn(true);
-    }
-  };
-  const firstName = cdxUser && cdxUser.firstName ? cdxUser.firstName : false;
-
-  useEffect(() => {
-    checkLoggedIn();
-  }, []);
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -69,6 +56,7 @@ export const DataTableConfigurations = ({
           <Button
             data-testid="btnOpenConfiguration"
             className="cursor-pointer"
+            id="btnOpenConfiguration"
             //   onClick={() => selectedRowHandler(normalizedRow.cells)}
             aria-label={`open configuration ${normalizedRow.col1} `}
             //   onKeyPress={(event) => {
@@ -80,7 +68,7 @@ export const DataTableConfigurations = ({
           >
             Open
           </Button>
-          {userLoggedIn ? (
+          {user ? (
             <Button
               data-testid="btnOpenCheckOut"
               className="cursor-pointer"
