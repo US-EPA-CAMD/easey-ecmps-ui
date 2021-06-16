@@ -13,7 +13,7 @@ export const SelectFacilitiesDataTable = ({
   facilities,
   loadFacilitiesData,
   loading,
-  addTabs,
+  addtabs,
   openedFacilityTabs,
   emptyPlan,
   monitoringPlans,
@@ -77,15 +77,17 @@ export const SelectFacilitiesDataTable = ({
   });
 
   const selectedRowHandler = (info) => {
-    addTabs([
+    addtabs([
       {
-        title: info[1].value,
+        title: `${info[0]} (${info[2]})`,
         component: (
           <div className="selectedTabsBox">
-            <SelectedFacilityTab orisCode={info[0].value} />
+            <SelectedFacilityTab orisCode={info[1]} locations ={info[3].locations} selectedConfig={info[2]} title={`${info[0]} (${info[2]})`}/>
           </div>
         ),
-        orisCode: info[0].value,
+        orisCode: info[1],
+        selectedConfig: info[2],
+        locations: info[3].locations
       },
     ]);
   };
@@ -94,14 +96,14 @@ export const SelectFacilitiesDataTable = ({
     if (facilities.length > 0) {
       return fs.getTableRecords(facilities).map((item) => {
         const disabled = false;
-        const expanded = false;
+        let expanded = false;
         // modify this for keeping expanded state between tabs
-        // for(const x of monitoringPlans){
-        //   if(x[0] === item.col1){
-        //     expanded =true;
-        //     break;
-        //   }
-        // }
+        for(const x of monitoringPlans){
+          if(x[0] === item.col1){
+            expanded =true;
+            break;
+          }
+        }
         return { ...item, disabled, expanded };
       });
     } else {

@@ -22,7 +22,7 @@ const reducer = (state = initialState.openedFacilityTabs, action) => {
   } else if (action.type === types.SET_LOCATION_SELECTION_STATE) {
     if (state && state.length > 0) {
       return state.map((x, i) =>
-        x.orisCode === action.orisCode
+        x.name === action.title
           ? {
               ...x,
               location: action.location,
@@ -44,7 +44,7 @@ const reducer = (state = initialState.openedFacilityTabs, action) => {
   } else if (action.type === types.SET_SECTION_SELECTION_STATE) {
     if (state && state.length > 0) {
       return state.map((x, i) =>
-        x.orisCode === action.orisCode
+        x.name === action.title
           ? {
               ...x,
               section: action.section,

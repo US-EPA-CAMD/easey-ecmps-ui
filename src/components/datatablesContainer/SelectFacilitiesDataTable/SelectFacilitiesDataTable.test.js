@@ -10,7 +10,7 @@ function componentRenderer(args) {
       { orisCode: 8, name: "Gorgas", state: "Alabama" },
       { orisCode: 9, name: "Copper Station", state: "Washington" },
     ],
-    addTabs: jest.fn(),
+    addtabs: jest.fn(),
     loadFacilitiesData: jest.fn(),
     loading: false,
   };

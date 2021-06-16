@@ -5,7 +5,7 @@ import {addFacilityTab, removeFacilityTab} from "../../store/actions/dynamicFaci
 
 class Welcome extends React.Component {
   clickHandler = () => {
-    this.props.addTabs([
+    this.props.addtabs([
       {
         title: "Good Bye",
         component: <GoodBye name="John" />,

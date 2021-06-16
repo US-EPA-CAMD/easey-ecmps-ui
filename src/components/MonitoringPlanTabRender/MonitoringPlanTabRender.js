@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import HeaderInfo from "../HeaderInfo/HeaderInfo";
 import AccordionItemTitle from "../AccordionItemTitle/AccordionItemTitle";
 import "../MonitoringPlanTab/MonitoringPlanTab.scss";
@@ -10,32 +10,32 @@ import DataTableSystems from "../datatablesContainer/DataTableSystems/DataTableS
 import "./MonitoringPlanTabRender.scss";
 
 export const MonitoringPlanTabRender = ({
-  facility,
-  monitoringPlans,
-  hasActiveConfigs,
+  title,
+  locations,
+  selectedConfig,
+  setSectionSelect,
+  setLocationSelect,
   sectionSelect,
   locationSelect,
-  orisCode
+  orisCode,
 }) => {
-
   const [matsTableFlag, setMatsTableFlag] = useState(false);
-
   // // MONITORING METHODS
 
   const matsTableHandler = (flag) => {
     setMatsTableFlag(flag);
   };
-useEffect(() => {
-  if (matsTableFlag) {
-    supItems[0] = {
-      title: <AccordionItemTitle title="Supplemental Methods" />,
-      expanded: true,
-      id: "7",
-      content: <DataTableMats locationSelect={locationSelect} />,
-    };
-  }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [])
+  useEffect(() => {
+    if (matsTableFlag) {
+      supItems[0] = {
+        title: <AccordionItemTitle title="Supplemental Methods" />,
+        expanded: true,
+        id: "7",
+        content: <DataTableMats locationSelect={locationSelect[1]} />,
+      };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const supItems = [];
   const methodItems = [
     {
@@ -46,7 +46,7 @@ useEffect(() => {
       content: (
         <DataTableMethod
           matsTableHandler={matsTableHandler}
-          locationSelectValue={parseInt(locationSelect)}
+          locationSelectValue={parseInt(locationSelect[1])}
           // showActiveOnly={!showInactive}
         />
       ),
@@ -57,7 +57,7 @@ useEffect(() => {
       title: <AccordionItemTitle title="Supplemental Methods" />,
       expanded: false,
       id: "7",
-      content: <DataTableMats locationSelect={locationSelect} />,
+      content: <DataTableMats locationSelect={locationSelect[1]} />,
     });
   }
   // //---------------
@@ -69,7 +69,7 @@ useEffect(() => {
       title: <AccordionItemTitle title="Systems" />,
       expanded: true,
       id: "2",
-      content: <DataTableSystems locationSelect={locationSelect} />,
+      content: <DataTableSystems locationSelect={locationSelect[1]} />,
     },
   ];
 
@@ -79,11 +79,14 @@ useEffect(() => {
       {/* pass back the values to send to the datatable, current is sending back index  */}
 
       <HeaderInfo
-        facility={facility}
-        monitoringPlans={monitoringPlans}
-
-        hasActiveConfigs={hasActiveConfigs}
+        facility={title}
+        selectedConfig={selectedConfig}
         orisCode={orisCode}
+        sectionSelect={sectionSelect}
+        setSectionSelect={setSectionSelect}
+        setLocationSelect={setLocationSelect}
+        locationSelect={locationSelect}
+        locations={locations}
       />
       <Tables
         sectionSelect={sectionSelect}
