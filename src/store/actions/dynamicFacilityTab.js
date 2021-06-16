@@ -20,18 +20,18 @@ export function setConfigurationSelectionState(configuration,orisCode) {
     orisCode
   };
 }
-export function setLocationSelectionState(location,orisCode) {
+export function setLocationSelectionState(location,title) {
   return {
     type: types.SET_LOCATION_SELECTION_STATE,
     location,
-    orisCode
+    title
   };
 }
-export function setSectionSelectionState(section,orisCode) {
+export function setSectionSelectionState(section,title) {
   return {
     type: types.SET_SECTION_SELECTION_STATE,
     section,
-    orisCode
+    title
   };
 }
 export function setInactiveToggle(orisCode,value) {

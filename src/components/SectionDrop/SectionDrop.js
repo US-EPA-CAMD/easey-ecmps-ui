@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Label, Dropdown, FormGroup } from "@trussworks/react-uswds";
 
 const SectionDrop = ({
@@ -7,9 +7,6 @@ const SectionDrop = ({
   selectKey,
   selectionHandler,
   initialSelection,
-  required,
-  monitoringPlans,
-  activeTab,
 }) => {
   const getIndex = (val) => {
     return sections.findIndex((obj) => obj.name === val);
@@ -29,14 +26,8 @@ const SectionDrop = ({
     { name: "Stack/Pipe Information" },
   ];
 
-  const [selectionState, setSelectionState] = useState(
-    initialSelection ? initialSelection : 0
-  );
-
   const handleChange = (val) => {
-    setSelectionState(getIndex(val.target.value));
-
-    selectionHandler(getIndex(val.target.value), orisCode);
+    selectionHandler(getIndex(val.target.value));
   };
 
   const populateOptions = (optionsList) => {
@@ -49,11 +40,6 @@ const SectionDrop = ({
     });
   };
 
-  // usef
-  useEffect(() => {
-    setSelectionState(initialSelection);
-  }, [initialSelection]);
-
   return (
     <div>
       <div>
@@ -62,7 +48,7 @@ const SectionDrop = ({
           <Dropdown
             id={orisCode}
             name={"optionList " + orisCode}
-            value={sections[selectionState][selectKey]}
+            value={sections[initialSelection][selectKey]}
             onChange={(e) => handleChange(e)}
           >
             {populateOptions(sections)}
