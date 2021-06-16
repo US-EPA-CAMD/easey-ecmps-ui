@@ -34,7 +34,7 @@ export const DynamicTabs = ({
       newTabs.forEach((t) => {
         if(!tabs.some(facility => facility.title === t.title)){
           tabs.push(t);
-          addFacility({orisCode:t.orisCode, name: t.title,configuration:0,location:[0,0],section:3,locations:[],monitoringPlans:[],inactive:false});
+          addFacility({orisCode:t.orisCode, name: t.title,location:[0,t.locations[0].id],section:3,locations:t.locations});
         }
       });
       setTabs([...tabs]);
@@ -56,7 +56,7 @@ export const DynamicTabs = ({
           tabs.map((tab, i) => (
             <TabPane key={i} title={tab.title}>
               {React.cloneElement(tab.component, {
-                addTabs: addTabsHandler,
+                addtabs: addTabsHandler,
               })}
             </TabPane>
           ))}

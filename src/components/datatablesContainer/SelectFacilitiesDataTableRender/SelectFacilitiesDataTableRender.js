@@ -8,7 +8,7 @@ import { Preloader } from "../../Preloader/Preloader";
 import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigurations";
 import InactivityTracker from "../../InactivityTracker/InactivityTracker";
 
-const SelectFacilitiesDataTableRender = ({ columns, data, user }) => {
+const SelectFacilitiesDataTableRender = ({ columns, data, user,selectedRowHandler }) => {
   const [searchText, setSearchText] = useState("");
 
   const filteredItems = data.filter(
@@ -84,6 +84,8 @@ const SelectFacilitiesDataTableRender = ({ columns, data, user }) => {
                 className="margin-left-2 text-indigo"
               />
             }
+            persistTableHead={false}
+            noHeader={true}
             highlightOnHover={true}
             selectableRows={false}
             responsive={true}
@@ -100,7 +102,7 @@ const SelectFacilitiesDataTableRender = ({ columns, data, user }) => {
             className="data-display-table react-transition fade-in"
             expandableRows
             expandableRowDisabled={(row) => row.disabled}
-            expandableRowsComponent={<DataTableConfigurations user={user} />}
+            expandableRowsComponent={<DataTableConfigurations selectedRowHandler={selectedRowHandler} user={user} />}
           />
         ) : (
           <div className="margin-y-9 padding-y-9 react-transition fade-in">
