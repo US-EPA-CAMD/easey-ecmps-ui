@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import * as fs from "../../../utils/selectors/monitoringConfigurations";
 import DataTableConfigurationsRender from "../DataTableConfigurationsRender/DataTableConfigurationsRender";
@@ -10,9 +10,8 @@ export const DataTableConfigurations = ({
   loadMonitoringPlansData,
   monitoringPlans,
   data,
-  user
+  user,
 }) => {
-
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = [];
@@ -54,6 +53,7 @@ export const DataTableConfigurations = ({
       return (
         <div>
           <Button
+            type="button"
             data-testid="btnOpenConfiguration"
             className="cursor-pointer"
             id="btnOpenConfiguration"
@@ -70,6 +70,7 @@ export const DataTableConfigurations = ({
           </Button>
           {user ? (
             <Button
+              type="button"
               data-testid="btnOpenCheckOut"
               className="cursor-pointer"
               //   onClick={() => selectedRowHandler(normalizedRow.cells)}

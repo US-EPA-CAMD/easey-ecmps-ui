@@ -32,7 +32,7 @@ const ConfigurationsDrop = ({
   monitoringPlans,
 }) => {
   const populateOptions = (optionsList) => {
-    return optionsList.map((info, index) => {
+    return optionsList.map((info) => {
       return (
         <option key={info.id} value={info.id}>
           {info[selectKey]}
@@ -53,36 +53,34 @@ const ConfigurationsDrop = ({
       setConfiguration(options[0].id, orisCode);
       // when the tab exists
     } else {
-
-        if(options.length > 0){
-      // on new tab render
-      const optionsConID = options.findIndex(
-        (obj) => obj.id === tabs[activeTab[0]].configuration
-      );
-      // depending on previous options of inactive/active, the first rendering values will be invalid
-      // so reset back to valid vlaues
-      if (optionsConID === -1) {
-
-        setConfiguration(options[0].id, orisCode);
-        const mpLocationsId = tabs[activeTab[0]].monitoringPlans.findIndex(
-          (obj) => obj.id === options[0].id
+      if (options.length > 0) {
+        // on new tab render
+        const optionsConID = options.findIndex(
+          (obj) => obj.id === tabs[activeTab[0]].configuration
         );
-        if (mpLocationsId !== -1) {
-
-          setLocations(
-            tabs[activeTab[0]].monitoringPlans[mpLocationsId].locations,
-            orisCode
+        // depending on previous options of inactive/active, the first rendering values will be invalid
+        // so reset back to valid vlaues
+        if (optionsConID === -1) {
+          setConfiguration(options[0].id, orisCode);
+          const mpLocationsId = tabs[activeTab[0]].monitoringPlans.findIndex(
+            (obj) => obj.id === options[0].id
           );
-          setLocation(
-            [
-              0,
-              tabs[activeTab[0]].monitoringPlans[mpLocationsId].locations[0].id,
-            ],
-            orisCode
-          );
-        }
-      }else{
-        const mpLocationsId = tabs[activeTab[0]].monitoringPlans.findIndex(
+          if (mpLocationsId !== -1) {
+            setLocations(
+              tabs[activeTab[0]].monitoringPlans[mpLocationsId].locations,
+              orisCode
+            );
+            setLocation(
+              [
+                0,
+                tabs[activeTab[0]].monitoringPlans[mpLocationsId].locations[0]
+                  .id,
+              ],
+              orisCode
+            );
+          }
+        } else {
+          const mpLocationsId = tabs[activeTab[0]].monitoringPlans.findIndex(
             (obj) => obj.id === options[optionsConID].id
           );
 
@@ -94,13 +92,17 @@ const ConfigurationsDrop = ({
             setLocation(
               [
                 tabs[activeTab[0]].location[0],
-                tabs[activeTab[0]].monitoringPlans[mpLocationsId].locations[tabs[activeTab[0]].location[0]].id,
+                tabs[activeTab[0]].monitoringPlans[mpLocationsId].locations[
+                  tabs[activeTab[0]].location[0]
+                ].id,
               ],
               orisCode
-            );}
+            );
+          }
+        }
       }
-    }}
-    
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [options]);
 
@@ -119,7 +121,7 @@ const ConfigurationsDrop = ({
         orisCode
       );
     }
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectionState]);
   const handleChange = (val) => {
@@ -145,12 +147,12 @@ const ConfigurationsDrop = ({
             onChange={(e) => handleChange(e)}
           >
             {getActiveConfigurations(options).length > 0 && (
-              <optgroup label="Active" role="optGroup">
+              <optgroup label="Active" role="group">
                 {populateOptions(getActiveConfigurations(options))}
               </optgroup>
             )}
             {showInactive && getInActiveConfigurations(options).length > 0 && (
-              <optgroup label="Inactive" role="optGroup">
+              <optgroup label="Inactive" role="group">
                 {populateOptions(getInActiveConfigurations(options))}
               </optgroup>
             )}
