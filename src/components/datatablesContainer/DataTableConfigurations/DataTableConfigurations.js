@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import { connect } from "react-redux";
 import * as fs from "../../../utils/selectors/monitoringConfigurations";
 import DataTableConfigurationsRender from "../DataTableConfigurationsRender/DataTableConfigurationsRender";
@@ -21,9 +21,10 @@ export const DataTableConfigurations = ({
 
   // *** generate columns array of object based on columnNames array above
   const columns = [];
-  let flag = false;
+
   const [selectedMP, setSelectedMp] = useState([]);
   const [selectedConfig, setSelectedConfig] = useState([]);
+  
   const findSelectedConfig = (config) => {
     let val = 0;
     if (selectedMP.length > 0) {
@@ -39,7 +40,6 @@ export const DataTableConfigurations = ({
 
   const openConfig = (config) => {
     const val = findSelectedConfig(config.col1);
-    console.log('this is val',config.col1,val)
     setSelectedConfig([data.col2, data.col1, config.col1, val]);
   };
 
@@ -50,18 +50,20 @@ export const DataTableConfigurations = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedConfig]);
 
+  const flag = useRef(false);
   useEffect(() => {
+    let flagValue = flag.current;
     if (monitoringPlans.length < 1) {
       loadMonitoringPlansData(data.col1);
     } else {
       for (const x of monitoringPlans) {
         if (x[0] === data.col1) {
           setSelectedMp(x);
-          flag = true;
+          flagValue = true;
           break;
         }
       }
-      if (flag === false) {
+      if (flagValue === false) {
         loadMonitoringPlansData(data.col1);
       }
     }
@@ -69,7 +71,9 @@ export const DataTableConfigurations = ({
   }, []);
 
   useEffect(() => {
-    if (flag === false) {
+    
+    const flagValue = flag.current;
+    if (flagValue === false) {
       setSelectedMp(monitoringPlans[monitoringPlans.length - 1]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -92,7 +96,7 @@ export const DataTableConfigurations = ({
       return (
         <div>
           <Button
-          unstyled="true"
+            unstyled="true"
             data-testid="btnOpenConfiguration"
             className="cursor-pointer"
             id="btnOpenConfiguration"
@@ -109,7 +113,7 @@ export const DataTableConfigurations = ({
           </Button>
           {user ? (
             <Button
-            unstyled="true"
+              unstyled="true"
               data-testid="btnOpenCheckOut"
               className="cursor-pointer"
               //   onClick={() => selectedRowHandler(normalizedRow.cells)}

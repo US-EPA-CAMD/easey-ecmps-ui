@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo,useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { connect } from "react-redux";
 import { loadFacilities } from "../../../store/actions/facilities";
 import * as fs from "../../../utils/selectors/facilities";
@@ -22,7 +22,6 @@ export const SelectFacilitiesDataTable = ({
     if (facilities.length === 0) {
       loadFacilitiesData();
     }
-    // emptyPlan();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const cdxUser = sessionStorage.getItem("cdx_user")
@@ -38,6 +37,8 @@ export const SelectFacilitiesDataTable = ({
 
   useEffect(() => {
     checkLoggedIn();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
@@ -82,12 +83,17 @@ export const SelectFacilitiesDataTable = ({
         title: `${info[0]} (${info[2]})`,
         component: (
           <div className="selectedTabsBox">
-            <SelectedFacilityTab orisCode={info[1]} locations ={info[3].locations} selectedConfig={info[2]} title={`${info[0]} (${info[2]})`}/>
+            <SelectedFacilityTab
+              orisCode={info[1]}
+              locations={info[3].locations}
+              selectedConfig={info[2]}
+              title={`${info[0]} (${info[2]})`}
+            />
           </div>
         ),
         orisCode: info[1],
         selectedConfig: info[2],
-        locations: info[3].locations
+        locations: info[3].locations,
       },
     ]);
   };
@@ -98,17 +104,19 @@ export const SelectFacilitiesDataTable = ({
         const disabled = false;
         let expanded = false;
         // modify this for keeping expanded state between tabs
-        for(const x of monitoringPlans){
-          if(x[0] === item.col1){
-            expanded =true;
-            break;
-          }
-        }
+        // for(const x of monitoringPlans){
+        //   if(x[0] === item.col1){
+        //     expanded =true;
+        //     break;
+        //   }
+        // }
         return { ...item, disabled, expanded };
       });
     } else {
       return [{ col2: "Loading list of facilities..." }];
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [facilities]);
 
   return (
@@ -118,7 +126,7 @@ export const SelectFacilitiesDataTable = ({
         data={data}
         selectedRowHandler={selectedRowHandler}
         openedFacilityTabs={openedFacilityTabs}
-        user ={userLoggedIn}
+        user={userLoggedIn}
       />
     </div>
   );

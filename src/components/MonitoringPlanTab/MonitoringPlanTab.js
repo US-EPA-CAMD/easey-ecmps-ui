@@ -32,7 +32,7 @@ export const MonitoringPlanTab = ({
 
   useEffect(() => {
     setLocationSelect(locationSelect);
-    setLocation(locationSelect, orisCode);
+    setLocation(locationSelect, title);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect]);
 
@@ -63,9 +63,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setLocation: (location, title) =>
-      dispatch(
-        setLocationSelectionState(location, title)
-      ),
+      dispatch(setLocationSelectionState(location, title)),
     setSection: (section, title) =>
       dispatch(setSectionSelectionState(section, title)),
     setActiveTab: (orisCode, value) => dispatch(setActiveTab(orisCode, value)),

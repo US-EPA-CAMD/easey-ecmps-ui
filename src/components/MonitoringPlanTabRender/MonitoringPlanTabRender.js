@@ -57,7 +57,7 @@ export const MonitoringPlanTabRender = ({
       title: <AccordionItemTitle title="Supplemental Methods" />,
       expanded: false,
       id: "7",
-      content: <DataTableMats locationSelect={locationSelect[1]} />,
+      content: <DataTableMats locationSelect={locationSelect} />,
     });
   }
   // //---------------
@@ -69,7 +69,7 @@ export const MonitoringPlanTabRender = ({
       title: <AccordionItemTitle title="Systems" />,
       expanded: true,
       id: "2",
-      content: <DataTableSystems locationSelect={locationSelect[1]} />,
+      content: <DataTableSystems locationSelect={locationSelect} />,
     },
   ];
 
@@ -95,7 +95,6 @@ export const MonitoringPlanTabRender = ({
         supItems={supItems}
         matsTableFlag={matsTableFlag}
       />
-
       <hr width="100%" align="center" />
     </div>
   );

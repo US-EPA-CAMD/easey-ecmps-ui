@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import SectionDrop from "./SectionDrop";
+import DropdownSelection from "./DropdownSelection";
 
 let options = [];
 beforeAll(() => {
@@ -14,14 +14,13 @@ beforeAll(() => {
 describe("testing the creation of 1 select drop down and handling change", () => {
   test("renders 1 drop down with an initial value and required text ", () => {
     const { container } = render(
-      <SectionDrop
+      <DropdownSelection
         caption={"test caption"}
         initialSelection={1}
-        selectKey={"name"}
+        selectKey={"id"}
+        options={options}
         selectionHandler={jest.fn()}
-        orisCode={1}
-        monitoringPlans={[]}
-        activeTab={0}
+        viewKey ="name"
       />
     );
     userEvent.selectOptions(document.getById("1"), ["2"]);
