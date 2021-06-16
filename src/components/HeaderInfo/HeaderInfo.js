@@ -1,17 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./HeaderInfo.css";
 import SectionDrop from "../SectionDrop/SectionDrop";
-// import {
-//   getActiveConfigurations,
-//   getInActiveConfigurations,
-// } from "../../utils/selectors/monitoringConfigurations";
-import { connect } from "react-redux";
-// import {
-//   setSectionSelectionState,
-//   setInactiveToggle,
-//   setLocationSelectionState,
-// } from "../../store/actions/dynamicFacilityTab";
-import { setActiveTab } from "../../store/actions/activeTab";
+
 import { Button } from "@trussworks/react-uswds";
 import LocationDrop from "../LocationsDrop/LocationsDrop";
 
@@ -25,25 +15,7 @@ const HeaderInfo = ({
   locationSelect,
   locations,
 
-  tabs,
-  activeTab,
 }) => {
-console.log('selectedConfig,',selectedConfig)
-  // const [sectionSelect, setSectionSelect] = useState(
-  //   tabs[activeTab[0]].section
-  // );
-
-  // useEffect(() => {
-  //   setSectionSelect(tabs[activeTab[0]].section);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [tabs[activeTab[0]].section]);
-  // useEffect(() => {
-  //   setLocationSelect(
-  //     tabs[activeTab[0]].location
-  //   );
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
 
   return (
     <div className="header">
@@ -90,22 +62,4 @@ console.log('selectedConfig,',selectedConfig)
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    tabs: state.openedFacilityTabs,
-    activeTab: state.activeTab,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    // setSection: (section, orisCode) =>
-    //   dispatch(setSectionSelectionState(section, orisCode)),
-    // setInactive: (orisCode, value) =>
-    //   dispatch(setInactiveToggle(orisCode, value)),
-    // setLocation: (location, orisCode) =>
-    //   dispatch(setLocationSelectionState(location, orisCode)),
-    setActiveTab: (orisCode, value) => dispatch(setActiveTab(orisCode, value)),
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(HeaderInfo);
+export default (HeaderInfo);

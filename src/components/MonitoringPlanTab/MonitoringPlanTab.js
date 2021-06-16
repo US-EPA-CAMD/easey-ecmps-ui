@@ -6,7 +6,6 @@ import MonitoringPlanTabRender from "../MonitoringPlanTabRender/MonitoringPlanTa
 import { setActiveTab } from "../../store/actions/activeTab";
 import {
   setSectionSelectionState,
-  setInactiveToggle,
   setLocationSelectionState,
 } from "../../store/actions/dynamicFacilityTab";
 export const MonitoringPlanTab = ({
@@ -21,10 +20,8 @@ export const MonitoringPlanTab = ({
   setLocation,
 }) => {
   const [sectionSelect, setSectionSelect] = useState(tabs[activeTab].section);
-  console.log("this is ocations", locations);
   useEffect(() => {
     setSectionSelect(sectionSelect);
-    console.log("sectionSelect got called at hoem", sectionSelect);
     setSection(sectionSelect, title);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionSelect]);
