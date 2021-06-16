@@ -30,9 +30,10 @@ const DropdownSelection = ({
     <div>
       <div>
         <FormGroup className="margin-right-2 margin-bottom-1">
-          <Label htmlFor={caption}>{caption}</Label>
+          <Label test-id={caption} htmlFor={caption}>{caption}</Label>
           <Dropdown
             id={caption}
+            test-id={caption}
             value={options[initialSelection] ? options[initialSelection][selectKey]: options[0][selectKey]}
             onChange={(e) => handleChange(e)}
           >

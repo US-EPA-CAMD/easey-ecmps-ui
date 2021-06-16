@@ -32,8 +32,8 @@ const HeaderInfo = ({
   };
   return (
     <div className="header">
-      <div className="display-inline-block">
-        <h2>{facility.name}</h2>
+      <div >
+        <h3>{facility}</h3>
       </div>
       <div className="float-right">
         <a href="#/">Comments</a>
