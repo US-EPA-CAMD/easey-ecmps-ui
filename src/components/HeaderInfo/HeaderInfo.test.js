@@ -1010,8 +1010,7 @@ describe("testing select dropdowns for configutations, locations, and sections o
   const activeMethodsHandler = jest.fn();
   const sectionHandler = jest.fn();
   let queries = null;
-  const hasActiveConfigs =
-    getActiveConfigurations(monitoringPlans).length > 0 ? true : false;
+
   beforeEach(() => {
     queries = render(
       <HeaderInfo
@@ -1020,49 +1019,9 @@ describe("testing select dropdowns for configutations, locations, and sections o
 
         monitoringPlans={monitoringPlans}
         locationHandler={locationHandler}
-        showInactiveHandler={activeMethodsHandler}
-        hasActiveConfigs={hasActiveConfigs}
-        showInactive={!hasActiveConfigs}
       />
     );
   });
-  test("renders all three select dropdowns options and by default should render only active configurations and locations", () => {
-    //screen.debug();
-    const { getByRole, getAllByRole } = queries;
-    const checkbox = getByRole("checkbox");
-    expect(checkbox.checked).toEqual(false);
-    const [configSelect, locationSelect, sectionSelect] = getAllByRole(
-      "select"
-    );
-    expect(within(configSelect).getAllByRole("selectOption").length).toBe(
-      getActiveConfigurations(monitoringPlans).length
-    );
-    //expect(within(locationSelect).getAllByRole('selectOption').length).toBe(getActiveLocations(getActiveConfigurations(monitoringPlans)[0].locations).length);
-    expect(within(locationSelect).getAllByRole("selectOption").length).toBe(
-      getActiveConfigurations(monitoringPlans)[0].locations.length
-    );
-    expect(within(sectionSelect).getAllByRole("selectOption").length).toBe(
-      sections.length
-    );
-  });
-
-  test("should render both active and inactive configurations and locations when showInactive checkbox is ticked", () => {
-    const { getAllByRole, getByLabelText } = queries;
-    const checkbox = getByLabelText("Show Inactive");
-    fireEvent.click(checkbox);
-    //expect(checkbox.checked).toEqual(true);
-    const [configSelect, locationSelect, sectionSelect] = getAllByRole(
-      "select"
-    );
-    expect(within(configSelect).getAllByRole("selectOption").length).toBe(
-      monitoringPlans.length
-    );
-    expect(within(locationSelect).getAllByRole("selectOption").length).toBe(
-      monitoringPlans[0].locations.length
-    );
-    // const [activeOptGroup, inActiveOptGroup] = getAllByRole('optGroup');
-    // expect(within(activeOptGroup).getAllByRole('selectOption').length).toBe(getActiveConfigurations(monitoringPlans).length);
-    // expect(within(inActiveOptGroup).getAllByRole('selectOption').length).toBe(getInActiveConfigurations(monitoringPlans).length);
-    //screen.debug();
+ 
   });
 });

@@ -22,24 +22,23 @@ export const SelectFacilitiesDataTable = ({
     if (facilities.length === 0) {
       loadFacilitiesData();
     }
-    // emptyPlan();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const cdxUser = sessionStorage.getItem("cdx_user")
+    ? JSON.parse(sessionStorage.getItem("cdx_user"))
+    : false;
   const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const checkLoggedIn = () => {
+    if (cdxUser && firstName) {
+      setUserLoggedIn(true);
+    }
+  };
+  const firstName = cdxUser && cdxUser.firstName ? cdxUser.firstName : false;
 
   useEffect(() => {
-    const cdxUser = sessionStorage.getItem("cdx_user")
-      ? JSON.parse(sessionStorage.getItem("cdx_user"))
-      : false;
-
-    const firstName = cdxUser && cdxUser.firstName ? cdxUser.firstName : false;
-
-    const checkLoggedIn = () => {
-      if (cdxUser && firstName) {
-        setUserLoggedIn(true);
-      }
-    };
     checkLoggedIn();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
@@ -105,18 +104,20 @@ export const SelectFacilitiesDataTable = ({
         const disabled = false;
         let expanded = false;
         // modify this for keeping expanded state between tabs
-        for (const x of monitoringPlans) {
-          if (x[0] === item.col1) {
-            expanded = true;
-            break;
-          }
-        }
+        // for(const x of monitoringPlans){
+        //   if(x[0] === item.col1){
+        //     expanded =true;
+        //     break;
+        //   }
+        // }
         return { ...item, disabled, expanded };
       });
     } else {
       return [{ col2: "Loading list of facilities..." }];
     }
-  }, [facilities, monitoringPlans]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [facilities]);
 
   return (
     <div className="tabsBox">

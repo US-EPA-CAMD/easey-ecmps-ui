@@ -13,13 +13,7 @@ export function removeFacilityTab(facility) {
     facility,
   };
 }
-export function setConfigurationSelectionState(configuration,orisCode) {
-  return {
-    type: types.SET_CONFIGURATION_SELECTION_STATE,
-    configuration,
-    orisCode
-  };
-}
+
 export function setLocationSelectionState(location,title) {
   return {
     type: types.SET_LOCATION_SELECTION_STATE,
@@ -34,13 +28,6 @@ export function setSectionSelectionState(section,title) {
     title
   };
 }
-export function setInactiveToggle(orisCode,value) {
-  return {
-    type: types.SET_INACTIVE_TOGGLE,
-    orisCode,
-    value
-  };
-}
 
 export function setLocationsState(locations,orisCode) {
   return {
@@ -50,11 +37,5 @@ export function setLocationsState(locations,orisCode) {
   };
 }
 
-export function setMonitoringPlan(mp,orisCode) {
-  return {
-    type: types.SET_MONITORING_PLAN,
-    orisCode,
-    mp
-  };
-}
+
 

@@ -73,7 +73,7 @@ const SelectFacilitiesDataTableRender = ({
   return (
     <div>
       <div className="padding-top-4 padding-left-2">
-        <h2 className="padding-0">Select Facilities</h2>
+        <h2 className="padding-0">Select Configurations</h2>
         <hr width="100%" align="center" className="height-1px bg-base-light" />
 
         <InactivityTracker />

@@ -22,7 +22,7 @@ const MonitoringPlanHome = () => {
         <DynamicTabs
           tabsProps={[
             {
-              title: "Select Facility",
+              title: "Select Configurations",
               component: <DataTable />,
             },
           ]}
