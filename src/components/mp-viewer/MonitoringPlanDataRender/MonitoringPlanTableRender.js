@@ -1,5 +1,5 @@
 import React from "react";
-import UswdsTable from "../UswdsTable/UswdsTable";
+import UswdsTable from "../../UswdsTable/UswdsTable";
 import { Checkbox } from "@trussworks/react-uswds";
 
 const MonitoringPlanTableRender = ({ columns, data, checkBoxHandler }) => {

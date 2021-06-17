@@ -15,6 +15,7 @@ export const DataTableConfigurations = ({
 }) => {
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
+  console.log('tuser in congfig',user.user)
   const columnNames = [];
   columnNames.push("Configurations");
   columnNames.push("Status");
@@ -113,7 +114,7 @@ export const DataTableConfigurations = ({
             <Button
               unstyled="true"
               epa-testid="btnOpenCheckOut"
-              className="cursor-pointer"
+              className="cursor-pointer margin-left-2"
               onClick={() => openConfig(row)}
               aria-label={`open configuration and check out ${row.col1} `}
               onKeyPress={(event) => {
@@ -122,7 +123,7 @@ export const DataTableConfigurations = ({
                 }
               }}
             >
-              {"Open & Check Out"}
+              {" Open & Check Out"}
             </Button>
           ) : (
             ""

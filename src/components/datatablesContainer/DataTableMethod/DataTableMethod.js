@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { connect } from "react-redux";
 import {
   loadMonitoringMethods,
@@ -7,7 +7,8 @@ import {
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import DataTableMethodRender from "../DataTableMethodRender/DataTableMethodRender";
 import { Preloader } from "../../Preloader/Preloader";
-
+import { Button } from "@trussworks/react-uswds";
+import Modal from "../../Modal/Modal";
 export const DataTableMethod = ({
   monitoringMethods,
   monitoringMatsMethods,
@@ -17,6 +18,7 @@ export const DataTableMethod = ({
   loadMonitoringMatsMethodsData,
   matsTableHandler,
   showActiveOnly,
+  user,
 }) => {
   useEffect(() => {
     loadMonitoringMethodsData(locationSelectValue);
@@ -44,7 +46,53 @@ export const DataTableMethod = ({
       sortable: true,
     });
   });
-
+  columns.push({
+    name: "Actions",
+    button: true,
+    width: "25%",
+    cell: (row) => {
+      // *** normalize the row object to be in the format expected by DynamicTabs
+      // const normalizedRow = normalizeRowObjectFormat(row, columnNames);
+      return (
+        <div>
+          <Button
+            unstyled="true"
+            epa-testid="btnOpenMethod"
+            className="cursor-pointer"
+            id="btnOpenMethod"
+            // onClick={() => openConfig(row)}
+            onClick={() => openModal(true)}
+            aria-label={`open method ${row.col1} `}
+            onKeyPress={(event) => {
+              if (event.key === "Enter") {
+                // openConfig(row);
+              }
+            }}
+          >
+            Open
+          </Button>
+          {user ? (
+            <Button
+              unstyled="true"
+              epa-testid="btnEditMethod"
+              className="cursor-pointer margin-left-2"
+              // onClick={() => openConfig(row)}
+              aria-label={`edit method ${row.col1} `}
+              onKeyPress={(event) => {
+                if (event.key === "Enter") {
+                  // openConfig(row);
+                }
+              }}
+            >
+              {" Edit"}
+            </Button>
+          ) : (
+            ""
+          )}
+        </div>
+      );
+    },
+  });
   const data = useMemo(() => {
     if (monitoringMethods.length > 0 || loading === false) {
       return fs.getMonitoringPlansMethodsTableRecords(
@@ -66,10 +114,30 @@ export const DataTableMethod = ({
       }
     }
   }, [monitoringMatsMethods.length, matsTableHandler]);
+  const [show, setShow] = useState(false);
+  const closeModalHandler = () => setShow(false);
+  const openModal = (value, selection) => {
+    setShow(value);
+  };
 
+  // *** row handler onclick event listener
+  const selectedRowHandler = (selection) => {
+    openModal(true, selection);
+  };
   return (
     <div className="methodTable">
+      <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
+
       <DataTableMethodRender columns={columns} data={data} />
+      {show ? (
+        <Modal
+          show={show}
+          // close={closeModalHandler}
+          showCancel
+          showSave
+          children={<div></div>}
+        />
+      ) : null}
     </div>
   );
 };

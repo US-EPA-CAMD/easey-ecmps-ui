@@ -20,6 +20,7 @@ export const DataTableSystems = ({
   locationSelect,
 }) => {
   const [show, setShow] = useState(false);
+  
   const [secondLevel, setSecondLevel] = useState(false);
   useEffect(() => {
     if (monitoringSystems.length === 0 || loading === false) {

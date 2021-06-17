@@ -11,6 +11,7 @@ import "./MonitoringPlanTabRender.scss";
 
 export const MonitoringPlanTabRender = ({
   title,
+  user,
   locations,
   selectedConfig,
   setSectionSelect,
@@ -57,7 +58,7 @@ export const MonitoringPlanTabRender = ({
       title: <AccordionItemTitle title="Supplemental Methods" />,
       expanded: false,
       id: "7",
-      content: <DataTableMats locationSelect={locationSelect} />,
+      content: <DataTableMats locationSelect={locationSelect[1]} />,
     });
   }
   // //---------------
@@ -69,7 +70,7 @@ export const MonitoringPlanTabRender = ({
       title: <AccordionItemTitle title="Systems" />,
       expanded: true,
       id: "2",
-      content: <DataTableSystems locationSelect={locationSelect} />,
+      content: <DataTableSystems locationSelect={locationSelect[1]} />,
     },
   ];
 

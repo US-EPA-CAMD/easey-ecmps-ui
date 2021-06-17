@@ -4,7 +4,7 @@ import DynamicTabs from "../DynamicTabs/DynamicTabs";
 import { Button } from "@trussworks/react-uswds";
 import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
 
-const MonitoringPlanHome = () => {
+const MonitoringPlanHome = (user) => {
   return (
     <div className="home-container">
       <div className="text-gray-50">
@@ -23,7 +23,7 @@ const MonitoringPlanHome = () => {
           tabsProps={[
             {
               title: "Select Configurations",
-              component: <DataTable />,
+              component: <DataTable user={user} />,
             },
           ]}
         />
