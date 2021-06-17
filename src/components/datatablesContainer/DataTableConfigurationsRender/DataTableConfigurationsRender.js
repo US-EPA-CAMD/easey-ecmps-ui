@@ -20,6 +20,7 @@ const DataTableConfigurationsRender = ({ columns, data }) => {
                 className="margin-left-2 text-indigo"
               />
             }
+            defaultSortField={'col2'}
             highlightOnHover={true}
             selectableRows={false}
             responsive={true}

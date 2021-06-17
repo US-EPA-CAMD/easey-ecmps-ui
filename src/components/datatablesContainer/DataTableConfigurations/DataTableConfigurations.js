@@ -24,7 +24,7 @@ export const DataTableConfigurations = ({
 
   const [selectedMP, setSelectedMp] = useState([]);
   const [selectedConfig, setSelectedConfig] = useState([]);
-  
+
   const findSelectedConfig = (config) => {
     let val = 0;
     if (selectedMP.length > 0) {
@@ -71,7 +71,6 @@ export const DataTableConfigurations = ({
   }, []);
 
   useEffect(() => {
-    
     const flagValue = flag.current;
     if (flagValue === false) {
       setSelectedMp(monitoringPlans[monitoringPlans.length - 1]);
@@ -97,15 +96,14 @@ export const DataTableConfigurations = ({
         <div>
           <Button
             unstyled="true"
-            data-testid="btnOpenConfiguration"
+            epa-testid="btnOpenConfiguration"
             className="cursor-pointer"
             id="btnOpenConfiguration"
             onClick={() => openConfig(row)}
             aria-label={`open configuration ${row.col1} `}
             onKeyPress={(event) => {
               if (event.key === "Enter") {
-                // selectedRowHandler(normalizedRow.cells);
-                // handleEnterPress(normalizedRow);
+                openConfig(row);
               }
             }}
           >
@@ -114,16 +112,15 @@ export const DataTableConfigurations = ({
           {user ? (
             <Button
               unstyled="true"
-              data-testid="btnOpenCheckOut"
+              epa-testid="btnOpenCheckOut"
               className="cursor-pointer"
-              //   onClick={() => selectedRowHandler(normalizedRow.cells)}
-              // aria-label={`open configuration and check out ${normalizedRow.col1} `}
-              //   onKeyPress={(event) => {
-              //     if (event.key === "Enter") {
-              //       selectedRowHandler(normalizedRow.cells);
-              //       handleEnterPress(normalizedRow);
-              //     }
-              //   }}
+              onClick={() => openConfig(row)}
+              aria-label={`open configuration and check out ${row.col1} `}
+              onKeyPress={(event) => {
+                if (event.key === "Enter") {
+                  openConfig(row);
+                }
+              }}
             >
               {"Open & Check Out"}
             </Button>
