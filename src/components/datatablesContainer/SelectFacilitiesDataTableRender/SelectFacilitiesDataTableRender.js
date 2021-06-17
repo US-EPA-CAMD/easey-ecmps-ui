@@ -1,10 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCaretDown,
-  faChevronDown,
-  faChevronUp,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 
 import DataTable from "react-data-table-component";
 import { FilterComponent } from "../../ReactDataTablesFilter/ReactDataTablesFilter";
@@ -12,7 +8,12 @@ import { Preloader } from "../../Preloader/Preloader";
 import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigurations";
 import InactivityTracker from "../../InactivityTracker/InactivityTracker";
 
-const SelectFacilitiesDataTableRender = ({ columns, data, user,selectedRowHandler }) => {
+const SelectFacilitiesDataTableRender = ({
+  columns,
+  data,
+  user,
+  selectedRowHandler,
+}) => {
   const [searchText, setSearchText] = useState("");
 
   const filteredItems = data.filter(
@@ -106,7 +107,12 @@ const SelectFacilitiesDataTableRender = ({ columns, data, user,selectedRowHandle
             className="data-display-table react-transition fade-in"
             expandableRows
             expandableRowDisabled={(row) => row.disabled}
-            expandableRowsComponent={<DataTableConfigurations selectedRowHandler={selectedRowHandler} user={user} />}
+            expandableRowsComponent={
+              <DataTableConfigurations
+                selectedRowHandler={selectedRowHandler}
+                user={user}
+              />
+            }
           />
         ) : (
           <div className="margin-y-9 padding-y-9 react-transition fade-in">

@@ -84,12 +84,17 @@ export const SelectFacilitiesDataTable = ({
         title: `${info[0]} (${info[2]})`,
         component: (
           <div className="selectedTabsBox">
-            <SelectedFacilityTab orisCode={info[1]} locations ={info[3].locations} selectedConfig={info[2]} title={`${info[0]} (${info[2]})`}/>
+            <SelectedFacilityTab
+              orisCode={info[1]}
+              locations={info[3].locations}
+              selectedConfig={info[2]}
+              title={`${info[0]} (${info[2]})`}
+            />
           </div>
         ),
         orisCode: info[1],
         selectedConfig: info[2],
-        locations: info[3].locations
+        locations: info[3].locations,
       },
     ]);
   };
@@ -100,9 +105,9 @@ export const SelectFacilitiesDataTable = ({
         const disabled = false;
         let expanded = false;
         // modify this for keeping expanded state between tabs
-        for(const x of monitoringPlans){
-          if(x[0] === item.col1){
-            expanded =true;
+        for (const x of monitoringPlans) {
+          if (x[0] === item.col1) {
+            expanded = true;
             break;
           }
         }
@@ -111,7 +116,7 @@ export const SelectFacilitiesDataTable = ({
     } else {
       return [{ col2: "Loading list of facilities..." }];
     }
-  }, [facilities]);
+  }, [facilities, monitoringPlans]);
 
   return (
     <div className="tabsBox">
