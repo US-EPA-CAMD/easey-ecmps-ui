@@ -69,7 +69,7 @@ const SystemFuelFlowsModal = ({ modalData, viewOnly, backBTN }) => {
             <FontAwesomeIcon icon={faArrowLeft} className=" font-body-sm" />
           </Button>
 
-          <h3>Fuel Code: {modalData.sysFuelUomCode}</h3>
+          <h3>System Type Code: {modalData.systemTypeCode}</h3>
         </div>
 
         <div className="grid-row">
@@ -94,9 +94,7 @@ const SystemFuelFlowsModal = ({ modalData, viewOnly, backBTN }) => {
                 name="FuelCode"
                 type="text"
                 disabled={viewOnly}
-                defaultValue={
-                  modalData.sysFuelUomCode ? modalData.sysFuelUomCode : ""
-                }
+                defaultValue={modalData.fuelCode ? modalData.fuelCode : ""}
               />
             </FormGroup>
           </div>
