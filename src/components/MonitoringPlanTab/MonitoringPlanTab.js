@@ -13,7 +13,7 @@ export const MonitoringPlanTab = ({
   selectedConfig,
   title,
   locations,
-
+user,
   tabs,
   activeTab,
   setSection,
@@ -48,6 +48,7 @@ export const MonitoringPlanTab = ({
           locationSelect={locationSelect}
           setLocationSelect={setLocationSelect}
           locations={locations}
+          user={user}
         />
       </div>
     </div>

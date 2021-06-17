@@ -10,6 +10,7 @@ import { emptyMonitoringPlans } from "../../../store/actions/monitoringPlans";
 import "./SelectFacilitiesDataTable.scss";
 
 export const SelectFacilitiesDataTable = ({
+  user,
   facilities,
   loadFacilitiesData,
   loading,
@@ -24,22 +25,22 @@ export const SelectFacilitiesDataTable = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const cdxUser = sessionStorage.getItem("cdx_user")
-    ? JSON.parse(sessionStorage.getItem("cdx_user"))
-    : false;
-  const [userLoggedIn, setUserLoggedIn] = useState(false);
-  const checkLoggedIn = () => {
-    if (cdxUser && firstName) {
-      setUserLoggedIn(true);
-    }
-  };
-  const firstName = cdxUser && cdxUser.firstName ? cdxUser.firstName : false;
+  // const cdxUser = sessionStorage.getItem("cdx_user")
+  //   ? JSON.parse(sessionStorage.getItem("cdx_user"))
+  //   : false;
+  // const [userLoggedIn, setUserLoggedIn] = useState(false);
+  // const checkLoggedIn = () => {
+  //   if (cdxUser && firstName) {
+  //     setUserLoggedIn(true);
+  //   }
+  // };
+  // const firstName = cdxUser && cdxUser.firstName ? cdxUser.firstName : false;
 
-  useEffect(() => {
-    checkLoggedIn();
+  // useEffect(() => {
+  //   checkLoggedIn();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -48,6 +49,7 @@ export const SelectFacilitiesDataTable = ({
   columnNames.push("Facility");
   columnNames.push("State");
 
+  console.log('user in select',user)
   // *** generate columns array of object based on columnNames array above
   let columns = [];
   // const handleEnterPress = (normalizedRow) => {
@@ -126,7 +128,7 @@ export const SelectFacilitiesDataTable = ({
         data={data}
         selectedRowHandler={selectedRowHandler}
         openedFacilityTabs={openedFacilityTabs}
-        user={userLoggedIn}
+        user={user.user}
       />
     </div>
   );

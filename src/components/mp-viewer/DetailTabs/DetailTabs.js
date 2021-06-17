@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import Tabs from "../../Tabs/Tabs";
 import TabPane from "../../TabPane/TabPane";
 import Units from "../Units/Units";
-import MonitoringPlanDataTable from "../../MonitoringPlanDataTable/MonitoringPlanDataTable";
+import MonitoringPlanDataTable from "../MonitoringPlanDataTable/MonitoringPlanDataTable";
 import Location from "../Location/Location";
 import ContactsData from "../ContactsData/ContactsData";
 import * as fs from "../../../utils/selectors/facilities";

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import * as fs from "../../../utils/selectors/facilities";
-import MonitoringPlanTableRender from "../../MonitoringPlanDataRender/MonitoringPlanTableRender";
+import MonitoringPlanTableRender from "../MonitoringPlanDataRender/MonitoringPlanTableRender";
 
 export const MonitoringPlanDataTable = ({ facility }) => {
   const [activeOnly, setActiveOnly] = useState(true);
