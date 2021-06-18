@@ -69,36 +69,14 @@ const SystemFuelFlowsModal = ({ modalData, viewOnly, backBTN }) => {
             <FontAwesomeIcon icon={faArrowLeft} className=" font-body-sm" />
           </Button>
 
-          <h3>System Type Code: {modalData.systemTypeCode}</h3>
+          <h3>
+            Fuel Code: {modalData.fuelCode}, System Type Code:{" "}
+            {modalData.systemTypeCode}
+          </h3>
         </div>
 
         <div className="grid-row">
           <div className="tablet:grid-col">
-            <FormGroup className="margin-top-0">
-              <Label
-                className="margin-0"
-                htmlFor="FuelCode"
-                hint={
-                  !viewOnly ? (
-                    <span className="text-italic"> (Required)</span>
-                  ) : (
-                    ""
-                  )
-                }
-              >
-                Fuel Code
-              </Label>
-              <TextInput
-                className="modalInput"
-                id="FuelCode"
-                name="FuelCode"
-                type="text"
-                disabled={viewOnly}
-                defaultValue={modalData.fuelCode ? modalData.fuelCode : ""}
-              />
-            </FormGroup>
-          </div>
-          <div className="tablet:grid-col padding-left-2">
             {" "}
             {viewOnly ? (
               <FormGroup className="margin-top-0">
@@ -131,6 +109,7 @@ const SystemFuelFlowsModal = ({ modalData, viewOnly, backBTN }) => {
               />
             )}
           </div>
+          <div className="tablet:grid-col" />
         </div>
 
         <div className="grid-row padding-top-2">

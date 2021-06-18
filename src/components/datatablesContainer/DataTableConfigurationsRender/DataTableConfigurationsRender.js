@@ -12,7 +12,6 @@ const DataTableConfigurationsRender = ({ columns, data }) => {
       <div aria-live="polite" className="padding-left-4 padding-bottom-3">
         {data.length > 0 ? (
           <DataTable
-            defaultSortField="col1"
             fixedHeader={true}
             sortIcon={
               <FontAwesomeIcon
@@ -20,7 +19,7 @@ const DataTableConfigurationsRender = ({ columns, data }) => {
                 className="margin-left-2 text-indigo"
               />
             }
-            defaultSortField={'col2'}
+            defaultSortField="col2"
             highlightOnHover={true}
             selectableRows={false}
             responsive={true}
@@ -31,7 +30,10 @@ const DataTableConfigurationsRender = ({ columns, data }) => {
             className="data-display-table react-transition fade-in"
           />
         ) : (
-          <div id = "preloader" className="margin-y-9 padding-y-9 react-transition fade-in">
+          <div
+            id="preloader"
+            className="margin-y-9 padding-y-9 react-transition fade-in"
+          >
             <Preloader />
           </div>
         )}
