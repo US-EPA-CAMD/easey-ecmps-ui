@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import { loadFacilities } from "../../../store/actions/facilities";
 import * as fs from "../../../utils/selectors/facilities";
@@ -49,7 +49,7 @@ export const SelectFacilitiesDataTable = ({
   columnNames.push("Facility");
   columnNames.push("State");
 
-  console.log('user in select',user)
+  console.log("user in select", user);
   // *** generate columns array of object based on columnNames array above
   let columns = [];
   // const handleEnterPress = (normalizedRow) => {

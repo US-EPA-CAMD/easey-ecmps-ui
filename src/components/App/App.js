@@ -13,18 +13,18 @@ import Login from "../Login/Login";
 import "./App.scss";
 
 const App = () => {
-  const cdxUser = sessionStorage.getItem("cdx_user")
-    ? JSON.parse(sessionStorage.getItem("cdx_user"))
-    : false;
-  const firstName = cdxUser && cdxUser.firstName ? cdxUser.firstName : false;
   const [userLoggedIn, setUserLoggedIn] = useState(false);
-  const checkLoggedIn = () => {
-    if (cdxUser && firstName) {
-      setUserLoggedIn(true);
-    }
-  };
 
   useEffect(() => {
+    const cdxUser = sessionStorage.getItem("cdx_user")
+      ? JSON.parse(sessionStorage.getItem("cdx_user"))
+      : false;
+    const firstName = cdxUser && cdxUser.firstName ? cdxUser.firstName : false;
+    const checkLoggedIn = () => {
+      if (cdxUser && firstName) {
+        setUserLoggedIn(true);
+      }
+    };
     checkLoggedIn();
   }, []);
 
@@ -38,12 +38,12 @@ const App = () => {
           <Route
             path="/monitoring-plans"
             exact
-            component={()=> <MonitoringPlanHome user={false}/>}
+            component={() => <MonitoringPlanHome user={false} />}
           />
           <Route
             path="/workspace/monitoring-plans/"
             exact
-            component={()=> <MonitoringPlanHome user={userLoggedIn}/>}
+            component={() => <MonitoringPlanHome user={userLoggedIn} />}
           />
           <Route path="/admin/rules" exact component={RuleEditor} />
           <Route path="*" component={NotFound} />
