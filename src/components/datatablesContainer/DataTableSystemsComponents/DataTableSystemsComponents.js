@@ -133,7 +133,7 @@ export const DataTableSystemsComponents = ({
     }
 
     for (const x of monitoringSystemsFuelFlows) {
-      if (x.sysFuelUomCode === val[0].value) {
+      if (x.fuelCode === val[0].value) {
         setSelectedComponent(x);
         setSecondLevel(true);
       }

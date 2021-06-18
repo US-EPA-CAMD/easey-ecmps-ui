@@ -1,4 +1,4 @@
-import "../../additional-functions/wdyr";
+//import "../../additional-functions/wdyr";
 import React, { useState, useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 
