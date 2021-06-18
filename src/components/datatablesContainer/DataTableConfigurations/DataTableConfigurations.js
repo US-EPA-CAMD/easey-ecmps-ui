@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import * as fs from "../../../utils/selectors/monitoringConfigurations";
 import DataTableConfigurationsRender from "../DataTableConfigurationsRender/DataTableConfigurationsRender";
 import { loadMonitoringPlansArray } from "../../../store/actions/monitoringPlans";
-
+import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import { Button } from "@trussworks/react-uswds";
 export const DataTableConfigurations = ({
   loading,
@@ -15,7 +15,6 @@ export const DataTableConfigurations = ({
 }) => {
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
-  console.log('tuser in congfig',user.user)
   const columnNames = [];
   columnNames.push("Configurations");
   columnNames.push("Status");
@@ -39,9 +38,9 @@ export const DataTableConfigurations = ({
     return val;
   };
 
-  const openConfig = (config) => {
+  const openConfig = (config, checkout) => {
     const val = findSelectedConfig(config.col1);
-    setSelectedConfig([data.col2, data.col1, config.col1, val]);
+    setSelectedConfig([data, config, val, checkout]);
   };
 
   useEffect(() => {
@@ -79,6 +78,14 @@ export const DataTableConfigurations = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringPlans.length]);
 
+  const checkOut = (config) => {
+    const res = mpApi.postCheckoutMonitoringPlanConfiguration(
+      config.col3,
+      user.firstName
+    );
+    console.log("res", res);
+    openConfig(config, true);
+  };
   columnNames.forEach((name, index) => {
     columns.push({
       name,
@@ -98,7 +105,7 @@ export const DataTableConfigurations = ({
           <Button
             unstyled="true"
             epa-testid="btnOpenConfiguration"
-            className="cursor-pointer"
+            className="cursor-pointer margin-right-1"
             id="btnOpenConfiguration"
             onClick={() => openConfig(row)}
             aria-label={`open configuration ${row.col1} `}
@@ -110,20 +117,22 @@ export const DataTableConfigurations = ({
           >
             Open
           </Button>
+          {user ? "|" : ""}
           {user ? (
             <Button
               unstyled="true"
               epa-testid="btnOpenCheckOut"
-              className="cursor-pointer margin-left-2"
-              onClick={() => openConfig(row)}
+              className="cursor-pointer margin-left-1"
+              onClick={() => checkOut(row)}
               aria-label={`open configuration and check out ${row.col1} `}
               onKeyPress={(event) => {
                 if (event.key === "Enter") {
-                  openConfig(row);
+                  checkOut(row);
                 }
               }}
             >
-              {" Open & Check Out"}
+              {" "}
+              {"Open & Check Out"}
             </Button>
           ) : (
             ""

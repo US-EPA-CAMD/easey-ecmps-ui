@@ -33,6 +33,7 @@ const LeftNavigation = () => {
           exact={true}
           rel={item.name}
           title={`Go to ${item.name} page`}
+          key={item.name}
         >
           {item.name}
         </NavLink>
@@ -65,7 +66,7 @@ const LeftNavigation = () => {
     >
       Workspace
     </NavLink>,
-    [<SideNav items={makeHeader(workSpace, true)} isSubnav />],
+    [<SideNav key="sideNav" items={makeHeader(workSpace, true)} isSubnav />],
   ];
   return (
     <div className="bg-base-lightest width-full height-full font-body-sm padding-3">

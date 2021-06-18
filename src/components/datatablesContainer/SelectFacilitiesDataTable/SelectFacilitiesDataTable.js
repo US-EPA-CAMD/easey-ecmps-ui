@@ -25,22 +25,6 @@ export const SelectFacilitiesDataTable = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // const cdxUser = sessionStorage.getItem("cdx_user")
-  //   ? JSON.parse(sessionStorage.getItem("cdx_user"))
-  //   : false;
-  // const [userLoggedIn, setUserLoggedIn] = useState(false);
-  // const checkLoggedIn = () => {
-  //   if (cdxUser && firstName) {
-  //     setUserLoggedIn(true);
-  //   }
-  // };
-  // const firstName = cdxUser && cdxUser.firstName ? cdxUser.firstName : false;
-
-  // useEffect(() => {
-  //   checkLoggedIn();
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -49,7 +33,6 @@ export const SelectFacilitiesDataTable = ({
   columnNames.push("Facility");
   columnNames.push("State");
 
-  console.log("user in select", user);
   // *** generate columns array of object based on columnNames array above
   let columns = [];
   // const handleEnterPress = (normalizedRow) => {
@@ -78,24 +61,36 @@ export const SelectFacilitiesDataTable = ({
         break;
     }
   });
-
+  // {col1: "3", col2: "Barry", col3: "AL", disabled: false, expanded: false}
+  // {col1: "1, 2, CS0AAN", col2: "Active", col3: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A"}
+  // "config"
+  // {id: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A", name: "1, 2, CS0AAN", locations: Array(3), active: true, links: Array(1)}
   const selectedRowHandler = (info) => {
     addtabs([
       {
-        title: `${info[0]} (${info[2]})`,
+        title: `${info[0].col2} (${info[1].col1}) ${
+          info[1].col2 === "Inactive" ? "Inactive" : ""
+        }`,
         component: (
           <div className="selectedTabsBox">
             <SelectedFacilityTab
-              orisCode={info[1]}
-              locations={info[3].locations}
+              orisCode={info[0].col1}
+              locations={info[2].locations}
               selectedConfig={info[2]}
-              title={`${info[0]} (${info[2]})`}
+              title={`${info[0].col2} (${info[1].col1}) ${
+                info[1].col2 === "Inactive" ? "Inactive" : ""
+              }`}
+              configID={info[2].id}
+              user={user}
+              checkout={info[3]}
             />
           </div>
         ),
-        orisCode: info[1],
+        orisCode: info[0].col1,
         selectedConfig: info[2],
-        locations: info[3].locations,
+        locations: info[2].locations,
+        configID: info[2].id,
+        checkout: info[3],
       },
     ]);
   };
@@ -128,7 +123,7 @@ export const SelectFacilitiesDataTable = ({
         data={data}
         selectedRowHandler={selectedRowHandler}
         openedFacilityTabs={openedFacilityTabs}
-        user={user.user}
+        user={user}
       />
     </div>
   );

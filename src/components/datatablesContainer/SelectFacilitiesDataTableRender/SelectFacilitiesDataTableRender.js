@@ -6,7 +6,6 @@ import DataTable from "react-data-table-component";
 import { FilterComponent } from "../../ReactDataTablesFilter/ReactDataTablesFilter";
 import { Preloader } from "../../Preloader/Preloader";
 import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigurations";
-import InactivityTracker from "../../InactivityTracker/InactivityTracker";
 
 const SelectFacilitiesDataTableRender = ({
   columns,
@@ -76,7 +75,6 @@ const SelectFacilitiesDataTableRender = ({
         <h2 className="padding-0">Select Configurations</h2>
         <hr width="100%" align="center" className="height-1px bg-base-light" />
 
-        <InactivityTracker />
       </div>
       <div aria-live="polite">
         {data.length > 1 ? (

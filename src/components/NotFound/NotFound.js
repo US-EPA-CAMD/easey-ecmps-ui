@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-const NotFound = ({test,data}) => {
-  console.log('row',data)
+const NotFound = () => {
   return (
     <div >
       <div className="text-center">
