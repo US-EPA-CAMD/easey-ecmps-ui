@@ -48,11 +48,14 @@ const SystemFuelFlowsModal = ({ modalData, viewOnly, backBTN }) => {
     const [year, month, day] = modalData.beginDate.split("-");
     !viewOnly
       ? setStartDate(`${year}-${day}-${month}`)
-      : setStartDate(`${day}-${month}-${year}`);
+      : setStartDate(`${month}-${day}-${year}`);
     setStartHour(modalData.beginHour);
 
     if (modalData.endDate !== null) {
       const [eyear, emonth, eday] = modalData.endDate.split("-");
+      !viewOnly
+        ? setEndDate(`${eyear}-${eday}-${emonth}`)
+        : setEndDate(`${emonth}-${eday}-${eyear}`);
       setEndDate(`${eyear}-${eday}-${emonth}`);
       setEndHour(modalData.endHour);
     }
