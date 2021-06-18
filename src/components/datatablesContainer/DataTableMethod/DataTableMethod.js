@@ -56,6 +56,7 @@ export const DataTableMethod = ({
       return (
         <div>
           <Button
+            type="button"
             unstyled="true"
             epa-testid="btnOpenMethod"
             className="cursor-pointer"
@@ -73,6 +74,7 @@ export const DataTableMethod = ({
           </Button>
           {user ? (
             <Button
+              type="button"
               unstyled="true"
               epa-testid="btnEditMethod"
               className="cursor-pointer margin-left-2"
@@ -121,9 +123,9 @@ export const DataTableMethod = ({
   };
 
   // *** row handler onclick event listener
-  const selectedRowHandler = (selection) => {
+  /*const selectedRowHandler = (selection) => {
     openModal(true, selection);
-  };
+  };*/
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -132,10 +134,10 @@ export const DataTableMethod = ({
       {show ? (
         <Modal
           show={show}
-          // close={closeModalHandler}
+          close={closeModalHandler}
           showCancel
           showSave
-          children={<div></div>}
+          children={<div />}
         />
       ) : null}
     </div>

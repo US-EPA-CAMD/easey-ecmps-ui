@@ -71,10 +71,12 @@ export const DataTableSystemsComponents = ({
       return (
         <div
           className="cursor-pointer"
+          tabIndex="0"
+          aria-label={viewOnly ? "Click to View" : "Click to View or Edit"}
           onClick={() => selectedRowHandler(normalizedRow.cells)}
         >
           <FontAwesomeIcon icon={faPencilAlt} className="margin-right-1" />
-          {viewOnly? 'View': 'View/Edit'}
+          {viewOnly ? "View" : "View/Edit"}
         </div>
       );
     },
@@ -110,6 +112,8 @@ export const DataTableSystemsComponents = ({
       return (
         <div
           className="cursor-pointer"
+          tabIndex="0"
+          aria-label="Click to view fuel flow details"
           onClick={() => selectedRowHandler(normalizedRow.cells)}
         >
           <FontAwesomeIcon icon={faPencilAlt} className="margin-right-1" />

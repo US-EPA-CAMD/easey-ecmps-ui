@@ -98,6 +98,8 @@ export const DataTableSystems = ({
         <div
           className="cursor-pointer"
           onClick={() => selectedRowHandler(normalizedRow.cells)}
+          tabIndex="0"
+          aria-label="Click to view system details"
         >
           <FontAwesomeIcon icon={faPencilAlt} className="margin-right-1" />
           View
