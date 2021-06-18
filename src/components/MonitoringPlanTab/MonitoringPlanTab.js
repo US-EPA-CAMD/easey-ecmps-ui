@@ -14,6 +14,7 @@ export const MonitoringPlanTab = ({
   title,
   locations,
 user,
+checkout,
   tabs,
   activeTab,
   setSection,
@@ -49,6 +50,8 @@ user,
           setLocationSelect={setLocationSelect}
           locations={locations}
           user={user}
+          configID={tabs[activeTab[0]].configID}
+          checkout={checkout}
         />
       </div>
     </div>

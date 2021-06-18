@@ -33,7 +33,6 @@ const DataTableSystemsComponentsRender = ({ columns, data, title }) => {
       </div>
       <div aria-live="polite">
         <DataTable
-          defaultSortField="col1"
           fixedHeader={true}
           sortIcon={
             <FontAwesomeIcon

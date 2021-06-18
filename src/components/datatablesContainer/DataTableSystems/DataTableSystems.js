@@ -116,7 +116,7 @@ export const DataTableSystems = ({
       return [{ col2: "Loading list of Systems" }];
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, monitoringSystems]);
+  }, [ monitoringSystems]);
   const viewOnly = true;
   return (
     <>
