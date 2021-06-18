@@ -70,8 +70,8 @@ export function getMonitoringPlansSystemsFuelFlowsComponentsTableRecords(data) {
       present = endDate + ": " + endHour;
     }
     records.push({
-      col1: el.sysFuelUomCode,
-      col2: el.maxRateSourceCode,
+      col1: el.fuelCode,
+      col2: el.systemTypeCode,
       col3: `${beginDate}: ${beginHour} ➜ ${present}`,
     });
   });
