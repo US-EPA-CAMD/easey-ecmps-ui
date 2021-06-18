@@ -41,8 +41,8 @@ export const DataTableSystemsComponents = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showActiveOnly, monitoringSystemsComponents]);
 
-  // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
-  // *** in the format expected by the modal / tabs plugins)
+  // *** column names for dataset will be passed to normalizeRowObjectFormat later to generate the row object
+  // *** in the format expected by the modal / tabs plugins
   const columnNames = [];
   columnNames.push("Component ID");
   columnNames.push("Type Code");
