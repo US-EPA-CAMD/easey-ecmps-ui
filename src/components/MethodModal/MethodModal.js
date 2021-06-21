@@ -256,6 +256,8 @@ const MethodModal = ({ modalData, viewOnly }) => {
                   </div>
                 )}
               </div>
+            </div>
+            <div className="grid-row">
               <div className="grid-col">
                 {viewOnly ? (
                   <FormGroup className="margin-top-0">
