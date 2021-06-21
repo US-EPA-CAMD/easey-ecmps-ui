@@ -61,16 +61,16 @@ export async function postCheckoutMonitoringPlanConfiguration(id, user) {
   const userName = { username: user };
   return axios
     .post(
-      `${config.services.monitorPlans.uri}/monitor-plans/${id}/check-out`,
+      `${config.services.monitorPlans.uri}/workspace/plans/${id}/check-out`,
       userName
     )
-    .then(handleResponse)
+    .then(response=> response.data)
     .catch(handleError);
 }
 
 export async function putLockTimerUpdateConfiguration(id) {
   return axios
-    .put(`${config.services.monitorPlans.uri}/monitor-plans/${id}/check-out`)
+    .put(`${config.services.monitorPlans.uri}/workspace/plans/${id}/check-out`)
     .then(handleResponse)
     .catch(handleError);
 }
