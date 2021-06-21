@@ -9,6 +9,7 @@ import DataTableMethodRender from "../DataTableMethodRender/DataTableMethodRende
 import { Preloader } from "../../Preloader/Preloader";
 import { Button } from "@trussworks/react-uswds";
 import Modal from "../../Modal/Modal";
+import MethodModal from "../../MethodModal/MethodModal";
 export const DataTableMethod = ({
   monitoringMethods,
   monitoringMatsMethods,
@@ -62,7 +63,7 @@ export const DataTableMethod = ({
             className="cursor-pointer"
             id="btnOpenMethod"
             // onClick={() => openConfig(row)}
-            onClick={() => openModal(true)}
+            onClick={() => openMonitoringMethodsModal(row.col1, row.col2)}
             aria-label={`open method ${row.col1} `}
             onKeyPress={(event) => {
               if (event.key === "Enter") {
@@ -95,6 +96,21 @@ export const DataTableMethod = ({
       );
     },
   });
+
+  const openMonitoringMethodsModal = (parameterCode, methodCode) => {
+    if (monitoringMethods.length > 0 || loading === false) {
+      setSelectedMonitoringMethod(
+        monitoringMethods.filter(
+          (element) =>
+            element.parameterCode === parameterCode &&
+            element.methodCode === methodCode
+        )[0]
+      );
+
+      openModal(true);
+    }
+  };
+
   const data = useMemo(() => {
     if (monitoringMethods.length > 0 || loading === false) {
       return fs.getMonitoringPlansMethodsTableRecords(
@@ -116,16 +132,18 @@ export const DataTableMethod = ({
       }
     }
   }, [monitoringMatsMethods.length, matsTableHandler]);
+
   const [show, setShow] = useState(false);
+  const [selectedMonitoringMethod, setSelectedMonitoringMethod] = useState(
+    null
+  );
+
   const closeModalHandler = () => setShow(false);
-  const openModal = (value, selection) => {
+
+  const openModal = (value) => {
     setShow(value);
   };
 
-  // *** row handler onclick event listener
-  /*const selectedRowHandler = (selection) => {
-    openModal(true, selection);
-  };*/
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -137,7 +155,11 @@ export const DataTableMethod = ({
           close={closeModalHandler}
           showCancel
           showSave
-          children={<div />}
+          children={
+            <div>
+              <MethodModal modalData={selectedMonitoringMethod} />
+            </div>
+          }
         />
       ) : null}
     </div>
