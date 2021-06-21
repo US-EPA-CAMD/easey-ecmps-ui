@@ -9,6 +9,7 @@ export const InactivityTracker = ({ apiCall }) => {
   const [timeInactive, setTimeInactive] = useState(0);
   const [showInactiveModal, setShowInactiveModal] = useState(false);
   const [trackInactivity, setTrackInactivity] = useState(false);
+  let timer;
 
   const resetUserInactivityTimer = () => {
     setTimeInactive(0);
@@ -16,8 +17,16 @@ export const InactivityTracker = ({ apiCall }) => {
     window.countdownInitiated = false;
   };
 
+  function startInterval(_interval) {
+    // Store the id of the interval so we can clear it later
+    timer = setTimeout(function () {
+      apiCall();
+    }, _interval);
+  }
   const extendUserInactivityTimer = useCallback(() => {
     if (window.countdownInitiated !== true) {
+      clearTimeout(timer);
+      startInterval(10000);
       resetUserInactivityTimer();
       //call api here
       apiCall();
