@@ -99,6 +99,8 @@ const MethodModal = ({ modalData, viewOnly }) => {
               </FormGroup>
             ) : (
               <SelectBox
+                className="modalUserInput"
+                epaDataname="parameterCode"
                 caption="Parameter"
                 options={parameterCodes}
                 initialSelection={modalData.parameterCode}
@@ -134,6 +136,8 @@ const MethodModal = ({ modalData, viewOnly }) => {
               </FormGroup>
             ) : (
               <SelectBox
+                className="modalUserInput"
+                epaDataname="methodCode"
                 caption="Methodology"
                 options={methodCodes}
                 initialSelection={modalData.methodCode}
@@ -178,6 +182,8 @@ const MethodModal = ({ modalData, viewOnly }) => {
                 options={substituteDataApproachCodes}
                 initialSelection={modalData.subDataCode}
                 selectKey="code"
+                className="modalUserInput"
+                epaDataname="subDataCode"
                 id="SubstituteDataApproach"
                 epa-testid="SubstituteDataApproach"
                 name="SubstituteDataApproach"
@@ -212,11 +218,13 @@ const MethodModal = ({ modalData, viewOnly }) => {
               </FormGroup>
             ) : (
               <SelectBox
+                className="modalUserInput"
                 caption="Bypass Approach"
                 options={bypassApproachCodes}
                 initialSelection={modalData.bypassApproachCode}
                 selectKey="code"
                 id="BypassApproach"
+                epaDataname="bypassApproachCode"
                 epa-testid="BypassApproach"
                 name="BypassApproach"
                 viewOnly={viewOnly}
@@ -259,10 +267,11 @@ const MethodModal = ({ modalData, viewOnly }) => {
                     </div>
                     {startDate !== null ? (
                       <DatePicker
-                        className="margin-0"
+                        className="margin-0 modalUserInput"
                         id="startDate"
                         name="startDate"
-                        epa-testid="startData"
+                        epaDataname="beginDate"
+                        epa-testid="startDate"
                         disabled={viewOnly}
                         defaultValue={startDate}
                       />
@@ -292,10 +301,11 @@ const MethodModal = ({ modalData, viewOnly }) => {
                   </FormGroup>
                 ) : startHour !== null ? (
                   <SelectBox
-                    className="margin-0 width-9"
+                    className="margin-0 width-9 modalUserInput"
                     caption="hh"
                     id="startHour"
                     name="startHour"
+                    epaDataname="beginHour"
                     epa-testid="startHour"
                     options={timeOptions}
                     initialSelection={startHour}
@@ -337,9 +347,10 @@ const MethodModal = ({ modalData, viewOnly }) => {
                     </div>
                     {endDate !== null ? (
                       <DatePicker
-                        className="margin-0"
+                        className="margin-0 modalUserInput"
                         id="endDate"
                         name="endDate"
+                        epaDataname="endDate"
                         epa-testid="endDate"
                         disabled={viewOnly}
                         defaultValue={endDate}
@@ -370,10 +381,11 @@ const MethodModal = ({ modalData, viewOnly }) => {
                   </FormGroup>
                 ) : startHour !== null ? (
                   <SelectBox
-                    className="margin-0 width-9"
+                    className="margin-0 width-9 modalUserInput"
                     caption="hh"
                     id="endHour"
                     name="endHour"
+                    epaDataname="endHour"
                     epa-testid="endHour"
                     options={timeOptions}
                     initialSelection={endHour}

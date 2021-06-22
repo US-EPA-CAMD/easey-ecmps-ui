@@ -64,7 +64,7 @@ export async function postCheckoutMonitoringPlanConfiguration(id, user) {
       `${config.services.monitorPlans.uri}/workspace/plans/${id}/check-out`,
       userName
     )
-    .then(response=> response.data)
+    .then((response) => response.data)
     .catch(handleError);
 }
 
@@ -74,3 +74,13 @@ export async function putLockTimerUpdateConfiguration(id) {
     .then(handleResponse)
     .catch(handleError);
 }
+
+export const saveMonitoringMethods = async (locationId, payload) => {
+  return axios
+    .put(
+      `${config.services.monitorPlans.uri}/workspace/locations/${locationId}`,
+      payload
+    )
+    .then(handleResponse)
+    .catch(handleError);
+};

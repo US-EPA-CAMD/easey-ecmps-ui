@@ -10,6 +10,8 @@ const DetailsSelectBox = ({
   required,
   secondOption,
   className,
+  epaDataname,
+  id,
 }) => {
   const [selectionState, setSelectionState] = useState(
     initialSelection ? initialSelection : null
@@ -49,8 +51,9 @@ const DetailsSelectBox = ({
             // weird bug without this
             value={selectionState !== null ? selectionState : initialSelection}
             disabled={viewOnly}
-            id={caption}
+            id={id === null ? caption : id}
             className={className}
+            epaDataname={epaDataname}
             onChange={(e) => handleChange(e)}
           >
             {populateOptions(options)}
