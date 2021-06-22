@@ -9,6 +9,7 @@ import DataTableMethodRender from "../DataTableMethodRender/DataTableMethodRende
 import { Preloader } from "../../Preloader/Preloader";
 import { Button } from "@trussworks/react-uswds";
 import Modal from "../../Modal/Modal";
+import MethodModal from "../../MethodModal/MethodModal";
 export const DataTableMethod = ({
   monitoringMethods,
   monitoringMatsMethods,
@@ -19,6 +20,7 @@ export const DataTableMethod = ({
   matsTableHandler,
   showActiveOnly,
   user,
+  checkout,
 }) => {
   useEffect(() => {
     loadMonitoringMethodsData(locationSelectValue);
@@ -55,24 +57,25 @@ export const DataTableMethod = ({
       // const normalizedRow = normalizeRowObjectFormat(row, columnNames);
       return (
         <div>
-          <Button
-            type="button"
-            unstyled="true"
-            epa-testid="btnOpenMethod"
-            className="cursor-pointer"
-            id="btnOpenMethod"
-            // onClick={() => openConfig(row)}
-            onClick={() => openModal(true)}
-            aria-label={`open method ${row.col1} `}
-            onKeyPress={(event) => {
-              if (event.key === "Enter") {
-                // openConfig(row);
-              }
-            }}
-          >
-            Open
-          </Button>
-          {user ? (
+          {!(user && checkout) ? (
+            <Button
+              type="button"
+              unstyled="true"
+              epa-testid="btnOpenMethod"
+              className="cursor-pointer"
+              id="btnOpenMethod"
+              // onClick={() => openConfig(row)}
+              onClick={() => openMonitoringMethodsModal(row.col1, row.col2)}
+              aria-label={`open method ${row.col1} `}
+              onKeyPress={(event) => {
+                if (event.key === "Enter") {
+                  // openConfig(row);
+                }
+              }}
+            >
+              Open
+            </Button>
+          ) : (
             <Button
               type="button"
               unstyled="true"
@@ -86,15 +89,28 @@ export const DataTableMethod = ({
                 }
               }}
             >
-              {" Edit"}
+              {"Open & Edit"}
             </Button>
-          ) : (
-            ""
           )}
         </div>
       );
     },
   });
+
+  const openMonitoringMethodsModal = (parameterCode, methodCode) => {
+    if (monitoringMethods.length > 0 || loading === false) {
+      setSelectedMonitoringMethod(
+        monitoringMethods.filter(
+          (element) =>
+            element.parameterCode === parameterCode &&
+            element.methodCode === methodCode
+        )[0]
+      );
+
+      openModal(true);
+    }
+  };
+
   const data = useMemo(() => {
     if (monitoringMethods.length > 0 || loading === false) {
       return fs.getMonitoringPlansMethodsTableRecords(
@@ -116,16 +132,18 @@ export const DataTableMethod = ({
       }
     }
   }, [monitoringMatsMethods.length, matsTableHandler]);
+
   const [show, setShow] = useState(false);
+  const [selectedMonitoringMethod, setSelectedMonitoringMethod] = useState(
+    null
+  );
+
   const closeModalHandler = () => setShow(false);
-  const openModal = (value, selection) => {
+
+  const openModal = (value) => {
     setShow(value);
   };
 
-  // *** row handler onclick event listener
-  /*const selectedRowHandler = (selection) => {
-    openModal(true, selection);
-  };*/
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -137,7 +155,14 @@ export const DataTableMethod = ({
           close={closeModalHandler}
           showCancel
           showSave
-          children={<div />}
+          children={
+            <div>
+              <MethodModal
+                modalData={selectedMonitoringMethod}
+                viewOnly={!(user && checkout)}
+              />
+            </div>
+          }
         />
       ) : null}
     </div>

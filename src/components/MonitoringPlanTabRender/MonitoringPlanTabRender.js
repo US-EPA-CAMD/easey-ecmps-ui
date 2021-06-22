@@ -50,6 +50,8 @@ export const MonitoringPlanTabRender = ({
         <DataTableMethod
           matsTableHandler={matsTableHandler}
           locationSelectValue={parseInt(locationSelect[1])}
+          checkout = {checkout}
+          user={user}
           // showActiveOnly={!showInactive}
         />
       ),

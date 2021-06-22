@@ -1,7 +1,7 @@
-thead,
-tbody {
-  display: block;
-}
+// thead,
+// tbody {
+//   display: block;
+// }
 .methodTable {
   color: gray;
   width: 100%;
@@ -9,13 +9,13 @@ tbody {
   bottom: 0;
   margin-bottom: -5px;
   margin-top: 0px;
-  z-index:999;
+  z-index: 999;
 }
-tbody {
-  overflow-y: auto; /* Trigger vertical scroll    */
-  overflow-x: hidden; /* Hide the horizontal scroll */
-  width: 100%;
-}
+// tbody {
+//   overflow-y: auto; /* Trigger vertical scroll    */
+//   overflow-x: hidden; /* Hide the horizontal scroll */
+//   width: 100%;
+// }
 
 .systemsCompTable > .container {
   max-width: 100%;

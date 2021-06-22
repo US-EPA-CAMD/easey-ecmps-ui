@@ -4,10 +4,7 @@ import {
   FormGroup,
   TextInput,
   DatePicker,
-  Button,
 } from "@trussworks/react-uswds";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 // import {
 //   componentTypes,
 //   acqMethodCode,
@@ -15,20 +12,20 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 // } from "./SystemComponentsData";
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 
-const MethodModal = ({ modalData, viewOnly, backBTN }) => {
+const MethodModal = ({ modalData, viewOnly }) => {
   const [startDate, setStartDate] = React.useState(null);
   const [endDate, setEndDate] = React.useState(null);
   const [startHour, setStartHour] = React.useState(null);
   const [endHour, setEndHour] = React.useState(null);
 
-  const findValue = (options, val) => {
+  /*const findValue = (options, val) => {
     for (const x of options) {
       if (x.code === val) {
         return x.name;
       }
     }
     return options[0].name;
-  };
+  };*/
   const timeOptions = [
     { time: null },
     { time: 0 },
@@ -59,34 +56,27 @@ const MethodModal = ({ modalData, viewOnly, backBTN }) => {
   useEffect(() => {
     const [year, month, day] = modalData.beginDate.split("-");
     !viewOnly
-      ? setStartDate(`${year}-${day}-${month}`)
+      ? setStartDate(`${year}-${month}-${day}`)
       : setStartDate(`${month}-${day}-${year}`);
     setStartHour(modalData.beginHour);
 
     if (modalData.endDate !== null) {
       const [eyear, emonth, eday] = modalData.endDate.split("-");
       !viewOnly
-      ? setEndDate(`${year}-${day}-${month}`)
-      : setEndDate(`${emonth}-${eday}-${eyear}`);
+        ? setEndDate(`${eyear}-${emonth}-${eday}`)
+        : setEndDate(`${emonth}-${eday}-${eyear}`);
       setEndHour(modalData.endHour);
     }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalData]);
   return (
     <div className="systemsCompTable">
       <div className="grid-container margin-bottom-2">
         <div className="display-inline-flex padding-top-3 padding-bottomm-3">
-          <Button
-            aria-label="go back to systems details"
-            onClick={() => backBTN(false)}
-          >
-            <FontAwesomeIcon icon={faArrowLeft} className=" font-body-sm" />
-          </Button>
-
-          <h3>Component: {modalData.componentIdentifier}</h3>
+          <h3>Component: Monitoring Methods</h3>
         </div>
 
-        <div className="grid-row padding-top-2">
+        <div className="grid-row padding-top-2 tablet:grid-col-1">
           <div className="tablet:grid-col">
             {viewOnly ? (
               <FormGroup className="margin-top-0">
@@ -100,7 +90,8 @@ const MethodModal = ({ modalData, viewOnly, backBTN }) => {
                   name="Parameter"
                   type="text"
                   disabled={viewOnly}
-                  defaultValue={''
+                  defaultValue={
+                    ""
                     // modalData.componentTypeCode
                     //   ? findValue(componentTypes, modalData.componentTypeCode)
                     //   : ""
@@ -110,10 +101,10 @@ const MethodModal = ({ modalData, viewOnly, backBTN }) => {
             ) : (
               <SelectBox
                 caption="Parameter"
-                options={[]]}
+                options={[]}
                 initialSelection={1}
                 selectKey="code"
-                id ={"Parameter"}
+                id={"Parameter"}
                 viewOnly={viewOnly}
                 required
                 secondOption="name"
@@ -121,7 +112,7 @@ const MethodModal = ({ modalData, viewOnly, backBTN }) => {
             )}
           </div>
           <div className="tablet:grid-col padding-left-2">
-          {viewOnly ? (
+            {viewOnly ? (
               <FormGroup className="margin-top-0">
                 <Label className="margin-0" htmlFor="Methodology">
                   Methodology
@@ -133,7 +124,8 @@ const MethodModal = ({ modalData, viewOnly, backBTN }) => {
                   name="Methodology"
                   type="text"
                   disabled={viewOnly}
-                  defaultValue={''
+                  defaultValue={
+                    ""
                     // modalData.componentTypeCode
                     //   ? findValue(componentTypes, modalData.componentTypeCode)
                     //   : ""
@@ -143,10 +135,10 @@ const MethodModal = ({ modalData, viewOnly, backBTN }) => {
             ) : (
               <SelectBox
                 caption="Methodology"
-                options={[]]}
+                options={[]}
                 initialSelection={1}
                 selectKey="code"
-                id ={"Methodology"}
+                id={"Methodology"}
                 viewOnly={viewOnly}
                 required
                 secondOption="name"
@@ -159,7 +151,7 @@ const MethodModal = ({ modalData, viewOnly, backBTN }) => {
             {viewOnly ? (
               <FormGroup className="margin-top-0">
                 <Label className="margin-0" htmlFor="SubstituteDataApproach">
-                    {"Substitute Data Approach"}
+                  {"Substitute Data Approach"}
                 </Label>
                 <TextInput
                   className="modalInput"
@@ -168,7 +160,8 @@ const MethodModal = ({ modalData, viewOnly, backBTN }) => {
                   name="SubstituteDataApproach"
                   type="text"
                   disabled={viewOnly}
-                  defaultValue={''
+                  defaultValue={
+                    ""
                     // modalData.componentTypeCode
                     //   ? findValue(componentTypes, modalData.componentTypeCode)
                     //   : ""
@@ -178,10 +171,10 @@ const MethodModal = ({ modalData, viewOnly, backBTN }) => {
             ) : (
               <SelectBox
                 caption="Substitute Data Approach"
-                options={[]]}
+                options={[]}
                 initialSelection={1}
                 selectKey="code"
-                id ={"SubstituteDataApproach"}
+                id={"SubstituteDataApproach"}
                 viewOnly={viewOnly}
                 required
                 secondOption="name"
@@ -189,7 +182,7 @@ const MethodModal = ({ modalData, viewOnly, backBTN }) => {
             )}
           </div>
           <div className="tablet:grid-col padding-left-2">
-          {viewOnly ? (
+            {viewOnly ? (
               <FormGroup className="margin-top-0">
                 <Label className="margin-0" htmlFor="BypassApproach">
                   Parameter
@@ -201,7 +194,8 @@ const MethodModal = ({ modalData, viewOnly, backBTN }) => {
                   name="BypassApproach"
                   type="text"
                   disabled={viewOnly}
-                  defaultValue={''
+                  defaultValue={
+                    ""
                     // modalData.componentTypeCode
                     //   ? findValue(componentTypes, modalData.componentTypeCode)
                     //   : ""
@@ -211,10 +205,10 @@ const MethodModal = ({ modalData, viewOnly, backBTN }) => {
             ) : (
               <SelectBox
                 caption="Bypass Approach"
-                options={[]]}
+                options={[]}
                 initialSelection={1}
                 selectKey="code"
-                id ={"BypassApproach"}
+                id={"BypassApproach"}
                 viewOnly={viewOnly}
                 required
                 secondOption="name"
@@ -231,13 +225,13 @@ const MethodModal = ({ modalData, viewOnly, backBTN }) => {
               <div className="grid-col ">
                 {viewOnly ? (
                   <FormGroup className="margin-top-0">
-                    <Label className="margin-0" htmlFor="startTime">
+                    <Label className="margin-0" htmlFor="startDate">
                       mm/dd/yyyy
                     </Label>
                     <TextInput
                       className="modalInput"
-                      id="startTime"
-                      name="startTime"
+                      id="startDate"
+                      name="startDate"
                       type="text"
                       disabled={viewOnly}
                       defaultValue={startDate ? startDate : ""}
@@ -245,14 +239,14 @@ const MethodModal = ({ modalData, viewOnly, backBTN }) => {
                   </FormGroup>
                 ) : (
                   <div>
-                    <div className="usa-hint" id="startHour">
+                    <div className="usa-hint" id="startDate">
                       mm/dd/yyyy
                     </div>
                     {startDate !== null ? (
                       <DatePicker
                         className="margin-0"
-                        id="startHour"
-                        name="startHour"
+                        id="startDate"
+                        name="startDate"
                         disabled={viewOnly}
                         defaultValue={startDate}
                       />
@@ -262,6 +256,8 @@ const MethodModal = ({ modalData, viewOnly, backBTN }) => {
                   </div>
                 )}
               </div>
+            </div>
+            <div className="grid-row">
               <div className="grid-col">
                 {viewOnly ? (
                   <FormGroup className="margin-top-0">
@@ -279,8 +275,10 @@ const MethodModal = ({ modalData, viewOnly, backBTN }) => {
                   </FormGroup>
                 ) : startHour !== null ? (
                   <SelectBox
-                    className="margin-0"
+                    className="margin-0 position-relative top-neg-2"
                     caption="hh"
+                    id="startHour"
+                    name="startHour"
                     options={timeOptions}
                     initialSelection={startHour}
                     selectKey="time"
@@ -318,13 +316,17 @@ const MethodModal = ({ modalData, viewOnly, backBTN }) => {
                     <div className="usa-hint" id="endDate">
                       mm/dd/yyyy
                     </div>
-                    <DatePicker
-                      className="margin-0"
-                      id="endDate"
-                      name="endDate"
-                      disabled={viewOnly}
-                      defaultValue={endDate}
-                    />
+                    {endDate !== null ? (
+                      <DatePicker
+                        className="margin-0"
+                        id="endDate"
+                        name="endDate"
+                        disabled={viewOnly}
+                        defaultValue={endDate}
+                      />
+                    ) : (
+                      ""
+                    )}
                   </div>
                 )}
               </div>
@@ -347,6 +349,8 @@ const MethodModal = ({ modalData, viewOnly, backBTN }) => {
                   <SelectBox
                     className="margin-0"
                     caption="hh"
+                    id="endHour"
+                    name="endHour"
                     options={timeOptions}
                     initialSelection={endHour}
                     selectKey="time"
