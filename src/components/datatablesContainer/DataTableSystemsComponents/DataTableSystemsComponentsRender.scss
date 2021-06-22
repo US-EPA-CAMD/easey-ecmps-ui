@@ -1,3 +1,4 @@
+/*
 thead,
 tbody {
   display: block;
@@ -11,11 +12,11 @@ tbody {
   margin-top: 0px;
   z-index: 999;
 }
-/*tbody {
+!*tbody {
   overflow-y: auto; !* Trigger vertical scroll    *!
   overflow-x: hidden; !* Hide the horizontal scroll *!
   width: 100%;
-}*/
+}*!
 
 .systemsCompTable > .container {
   max-width: 100%;
@@ -39,3 +40,4 @@ tbody {
   border-bottom: lightgray 1px solid;
   border-top: lightgray 1px solid;
 }
+*/
