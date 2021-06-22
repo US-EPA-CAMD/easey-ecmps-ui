@@ -57,7 +57,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
   useEffect(() => {
     const [year, month, day] = modalData.beginDate.split("-");
     !viewOnly
-      ? setStartDate(`${year}-${day}-${month}`)
+      ? setStartDate(`${year}-${month}-${day}`)
       : setStartDate(`${month}-${day}-${year}`);
     setStartHour(modalData.beginHour);
 
@@ -77,8 +77,6 @@ const MethodModal = ({ modalData, viewOnly }) => {
           <h3>Component: Monitoring Methods</h3>
         </div>
         <div className="grid-row padding-top-2">
-
-        <div className="grid-row padding-top-2 tablet:grid-col-1">
           <div className="tablet:grid-col">
             {viewOnly ? (
               <FormGroup className="margin-top-0">
@@ -249,7 +247,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
               <div className="grid-col ">
                 {viewOnly ? (
                   <FormGroup className="margin-top-0">
-                    <Label className="margin-0" htmlFor="startTime">
+                    <Label className="margin-0" htmlFor="startDate">
                       mm/dd/yyyy
                     </Label>
                     <TextInput
@@ -283,6 +281,8 @@ const MethodModal = ({ modalData, viewOnly }) => {
                   </div>
                 )}
               </div>
+            </div>
+            <div className="grid-row">
               <div className="grid-col">
                 {viewOnly ? (
                   <FormGroup className="margin-top-0">
