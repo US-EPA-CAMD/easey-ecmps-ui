@@ -1,5 +1,8 @@
+$theme-font-path: "~uswds/dist/fonts";
+$theme-image-path: "~uswds/dist/img";
+
 /***** MAIN SOURCE stylesheet *****/
-@import "~uswds/dist/css/uswds";
+@import "~uswds/dist/scss/uswds";
 
 /***** GLOBAL VARIABLES (scss values used througout the app) *****/
 @import "../../additional-scss/variables";

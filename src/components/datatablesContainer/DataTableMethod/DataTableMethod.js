@@ -85,8 +85,7 @@ export const DataTableMethod = ({
               type="button"
               unstyled="true"
               epa-testid="btnEditMethod"
-              className="cursor-pointer margin-left-2"
-              // onClick={() => openConfig(row)}
+              className="cursor-pointer margin-left-2 "
               aria-label={`edit method ${row.col1} `}
               onKeyPress={(event) => {
                 if (event.key === "Enter") {
@@ -161,22 +160,23 @@ export const DataTableMethod = ({
         return;
       }
       let item = { name: "", value: "" };
-      item.name = document.getElementById(
-        input.id
-      ).attributes.epaDataname.value;
+      item.name = document.getElementById(input.id).attributes[
+        "epaDataname"
+      ].value;
       item.value = document.getElementById(input.id).value;
       payloadArray.push(item);
     });
 
     datepickerPayloads.forEach((input) => {
       let item = { name: "", value: "" };
-      item.name = input.attributes.epaDataname.value;
+      item.name = input.attributes["epaDataname"].value;
       item.value = input.value;
       payloadArray.push(item);
     });
 
     let payload = {
       monLocId: locationSelectValue,
+      id: "",
       parameterCode: "",
       subDataCode: "",
       bypassApproachCode: "",
@@ -196,7 +196,7 @@ export const DataTableMethod = ({
     });
 
     mpApi
-      .saveMonitoringMethods(locationSelectValue, payload)
+      .saveMonitoringMethods(payload)
       .then((result) => {
         console.log(result);
         openModal(false);

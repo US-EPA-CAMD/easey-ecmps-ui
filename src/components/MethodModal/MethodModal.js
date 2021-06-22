@@ -75,6 +75,14 @@ const MethodModal = ({ modalData, viewOnly }) => {
       <div className="grid-container margin-bottom-2">
         <div className="display-inline-flex padding-top-3 padding-bottom-3">
           <h3>Component: Monitoring Methods</h3>
+          <input
+            type="hidden"
+            epaDataname="id"
+            id="id"
+            name="id"
+            className="modalUserInput"
+            value={modalData.id}
+          />
         </div>
         <div className="grid-row padding-top-2">
           <div className="tablet:grid-col">
