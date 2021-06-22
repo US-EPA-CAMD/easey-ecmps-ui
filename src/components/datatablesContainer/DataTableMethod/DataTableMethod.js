@@ -65,7 +65,7 @@ export const DataTableMethod = ({
               className="cursor-pointer"
               id="btnOpenMethod"
               // onClick={() => openConfig(row)}
-              onClick={() => openMonitoringMethodsModal(row.col1, row.col2)}
+              onClick={() => openMonitoringMethodsModal(row.col1, row.col2,row.col7)}
               aria-label={`open method ${row.col1} `}
               onKeyPress={(event) => {
                 if (event.key === "Enter") {
@@ -73,7 +73,7 @@ export const DataTableMethod = ({
                 }
               }}
             >
-              Open
+              View
             </Button>
           ) : (
             <Button
@@ -81,7 +81,9 @@ export const DataTableMethod = ({
               unstyled="true"
               epa-testid="btnEditMethod"
               className="cursor-pointer margin-left-2"
-              // onClick={() => openConfig(row)}
+              onClick={() =>
+                openMonitoringMethodsModal(row.col1, row.col2, row.col7)
+              }
               aria-label={`edit method ${row.col1} `}
               onKeyPress={(event) => {
                 if (event.key === "Enter") {
@@ -89,7 +91,7 @@ export const DataTableMethod = ({
                 }
               }}
             >
-              {"Open & Edit"}
+              {"View/Edit"}
             </Button>
           )}
         </div>
@@ -97,13 +99,14 @@ export const DataTableMethod = ({
     },
   });
 
-  const openMonitoringMethodsModal = (parameterCode, methodCode) => {
+  const openMonitoringMethodsModal = (parameterCode, methodCode, methodId) => {
     if (monitoringMethods.length > 0 || loading === false) {
       setSelectedMonitoringMethod(
         monitoringMethods.filter(
           (element) =>
             element.parameterCode === parameterCode &&
-            element.methodCode === methodCode
+            element.methodCode === methodCode &&
+            element.id === methodId
         )[0]
       );
 
