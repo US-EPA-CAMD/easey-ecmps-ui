@@ -61,10 +61,7 @@ export const SelectFacilitiesDataTable = ({
         break;
     }
   });
-  // {col1: "3", col2: "Barry", col3: "AL", disabled: false, expanded: false}
-  // {col1: "1, 2, CS0AAN", col2: "Active", col3: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A"}
-  // "config"
-  // {id: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A", name: "1, 2, CS0AAN", locations: Array(3), active: true, links: Array(1)}
+
   const selectedRowHandler = (info) => {
     addtabs([
       {

@@ -50,6 +50,7 @@ export const MonitoringPlanTabRender = ({
         <DataTableMethod
           matsTableHandler={matsTableHandler}
           locationSelectValue={parseInt(locationSelect[1])}
+          checkout = {checkout}
           user={user}
           // showActiveOnly={!showInactive}
         />
@@ -82,11 +83,7 @@ export const MonitoringPlanTabRender = ({
 
   return (
     <div className="selectedMPTab padding-top-4 ">
-      {user && checkout ? (
-        <InactivityTracker apiCall={resetInactivityTimerApiCall} />
-      ) : (
-        ""
-      )}
+      {user && checkout ? <InactivityTracker apiCall={resetInactivityTimerApiCall} /> : ""}
 
       {/* on change of select box, it should modify the accordion items */}
       {/* pass back the values to send to the datatable, current is sending back index  */}

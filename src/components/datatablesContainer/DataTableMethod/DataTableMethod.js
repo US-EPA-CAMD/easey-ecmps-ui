@@ -22,6 +22,7 @@ export const DataTableMethod = ({
   matsTableHandler,
   showActiveOnly,
   user,
+  checkout,
 }) => {
   const [show, setShow] = useState(false);
   const [selectedMonitoringMethod, setSelectedMonitoringMethod] = useState(
@@ -81,6 +82,25 @@ export const DataTableMethod = ({
             Open
           </Button>
           {user ? (
+          {!(user && checkout) ? (
+            <Button
+              type="button"
+              unstyled="true"
+              epa-testid="btnOpenMethod"
+              className="cursor-pointer"
+              id="btnOpenMethod"
+              // onClick={() => openConfig(row)}
+              onClick={() => openMonitoringMethodsModal(row.col1, row.col2,row.col7)}
+              aria-label={`open method ${row.col1} `}
+              onKeyPress={(event) => {
+                if (event.key === "Enter") {
+                  // openConfig(row);
+                }
+              }}
+            >
+              View
+            </Button>
+          ) : (
             <Button
               type="button"
               unstyled="true"
@@ -94,25 +114,24 @@ export const DataTableMethod = ({
                 }
               }}
             >
-              {" Edit"}
+              {"View/Edit"}
             </Button>
-          ) : (
-            ""
           )}
         </div>
       );
     },
   });
 
-  const openMonitoringMethodsModal = (parameterCode, methodCode) => {
+  const openMonitoringMethodsModal = (parameterCode, methodCode, methodId) => {
     if (monitoringMethods.length > 0 || loading === false) {
-      const monMethod = monitoringMethods.filter(
-        (element) =>
-          element.parameterCode === parameterCode &&
-          element.methodCode === methodCode
-      )[0];
-
-      setSelectedMonitoringMethod(monMethod);
+      setSelectedMonitoringMethod(
+        monitoringMethods.filter(
+          (element) =>
+            element.parameterCode === parameterCode &&
+            element.methodCode === methodCode &&
+            element.id === methodId
+        )[0]
+      );
 
       openModal(true);
     }
@@ -221,7 +240,10 @@ export const DataTableMethod = ({
           showSave
           children={
             <div>
-              <MethodModal modalData={selectedMonitoringMethod} />
+              <MethodModal
+                modalData={selectedMonitoringMethod}
+                viewOnly={!(user && checkout)}
+              />
             </div>
           }
         />

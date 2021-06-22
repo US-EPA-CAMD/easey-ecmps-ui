@@ -17,6 +17,7 @@ export function getMonitoringPlansMethodsTableRecords(totalData) {
       col4: el.bypassApproachCode,
       col5: `${beginDate} ${beginHour}`,
       col6: `${endDate} ${endHour}`,
+      col7: el.id,
     });
   });
   return records;
