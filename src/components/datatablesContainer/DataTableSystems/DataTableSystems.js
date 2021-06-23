@@ -5,13 +5,13 @@ import {
   loadMonitoringSystemsFuelFlows,
 } from "../../../store/actions/monitoringSystems";
 import * as fs from "../../../utils/selectors/monitoringPlanSystems";
-import DataTableSystemsRender from "../DataTableSystemsRender/DataTableSystemsRender";
 import { normalizeRowObjectFormat } from "../../../additional-functions/react-data-table-component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../../Modal/Modal";
 import Details from "../../Details/Details";
 import DataTableSystemsComponents from "../DataTableSystemsComponents/DataTableSystemsComponents";
+import DataTableRender from "../../DataTableRender/DataTableRender";
 
 export const DataTableSystems = ({
   monitoringSystems,
@@ -20,7 +20,7 @@ export const DataTableSystems = ({
   locationSelect,
 }) => {
   const [show, setShow] = useState(false);
-  
+
   const [secondLevel, setSecondLevel] = useState(false);
   useEffect(() => {
     if (monitoringSystems.length === 0 || loading === false) {
@@ -116,14 +116,13 @@ export const DataTableSystems = ({
       return [{ col2: "Loading list of Systems" }];
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ monitoringSystems]);
+  }, [monitoringSystems]);
   const viewOnly = true;
   return (
     <>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
-
       <div className="methodTable">
-        <DataTableSystemsRender columns={columns} data={data} />
+        <DataTableRender pagination filter columns={columns} data={data} />
       </div>
       {show ? (
         <Modal
@@ -143,6 +142,7 @@ export const DataTableSystems = ({
                 secondLevel={secondLevel}
                 setSecondLevel={setSecondLevel}
                 viewOnly={viewOnly}
+                locationSelect={locationSelect}
                 systemID={modalData.length > 1 ? modalData[0].value : 0}
               />
             </div>

@@ -5,11 +5,11 @@ import {
   loadMonitoringMatsMethods,
 } from "../../../store/actions/monitoringMethods";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
-import DataTableMethodRender from "../DataTableMethodRender/DataTableMethodRender";
 import { Preloader } from "../../Preloader/Preloader";
 import { Button } from "@trussworks/react-uswds";
 import Modal from "../../Modal/Modal";
 import MethodModal from "../../MethodModal/MethodModal";
+import DataTableRender from "../../DataTableRender/DataTableRender";
 export const DataTableMethod = ({
   monitoringMethods,
   monitoringMatsMethods,
@@ -151,7 +151,7 @@ export const DataTableMethod = ({
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
 
-      <DataTableMethodRender columns={columns} data={data} />
+      <DataTableRender columns={columns} data={data} />
       {show ? (
         <Modal
           show={show}

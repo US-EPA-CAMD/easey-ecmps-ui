@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
 import { connect } from "react-redux";
 import * as fs from "../../../utils/selectors/monitoringConfigurations";
-import DataTableConfigurationsRender from "../DataTableConfigurationsRender/DataTableConfigurationsRender";
+// import DataTableConfigurationsRender from "../DataTableConfigurationsRender/DataTableConfigurationsRender";
 import { loadMonitoringPlansArray } from "../../../store/actions/monitoringPlans";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import { Button } from "@trussworks/react-uswds";
+import DataTableRender from "../../DataTableRender/DataTableRender";
 export const DataTableConfigurations = ({
   loading,
   loadMonitoringPlansData,
@@ -154,9 +155,9 @@ export const DataTableConfigurations = ({
           return fs.getConfigurationNames(index);
         }
       }
-      return [{ col1: "Loading list of configurations..." }];
+      return [];
     } else {
-      return [{ col1: "Loading list of configurations..." }];
+      return [];
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -164,10 +165,12 @@ export const DataTableConfigurations = ({
 
   return (
     <div className="tabsBox">
-      <DataTableConfigurationsRender
+      <DataTableRender
         columns={columns}
         data={records}
         // selectedRowHandler={selectedRowHandler}
+        tableStyling={"padding-left-4 padding-bottom-3"}
+        defaultSort={"col2"}
       />
     </div>
   );

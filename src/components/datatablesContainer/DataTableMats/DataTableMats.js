@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import { loadMonitoringMatsMethods } from "../../../store/actions/monitoringMethods";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
-import DataTableMatsRender from "../DataTableMatsRender/DataTableMatsRender";
+import DataTableRender from "../../DataTableRender/DataTableRender";
 
 export const DataTableMats = ({
   monitoringMatsMethods,
@@ -47,7 +47,7 @@ export const DataTableMats = ({
 
   return (
     <div className="methodTable">
-      <DataTableMatsRender columns={columns} data={data} />
+      <DataTableRender columns={columns} data={data} />
     </div>
   );
 };
