@@ -11,13 +11,20 @@ export const config = {
   app: {
     activityEvents,
     inactivityDuration:
-      process.env.REACT_APP_EASEY_UI_INACTIVITY_DURATION_MINUTES * oneMinute || oneMinute,
+      process.env.REACT_APP_EASEY_UI_INACTIVITY_DURATION_MINUTES * oneMinute ||
+      oneMinute,
     activityPollingFrequency:
-      process.env.REACT_APP_EASEY_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS * oneSecond || oneSecond,
+      process.env.REACT_APP_EASEY_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS *
+        oneSecond || oneSecond,
     countdownDuration:
-      process.env.REACT_APP_EASEY_UI_ACTIVITY_COUNTDOWN_DURATION_SECONDS * oneSecond || 30 * oneSecond,
+      process.env.REACT_APP_EASEY_UI_ACTIVITY_COUNTDOWN_DURATION_SECONDS *
+        oneSecond || 30 * oneSecond,
+    paginationPerPage:
+      process.env.REACT_APP_EASEY_UI_PAGINATION_PER_PAGE || 100,
+    paginationPerPageOptions: [100, 200, 500],
+    paginationRangeSeparatorText: "out of",
     env: process.env.REACT_APP_EASEY_UI_PORTAL_ENV || "local-dev",
-      published: process.env.REACT_APP_EASEY_UI_PORTAL_PUBLISHED || "local",
+    published: process.env.REACT_APP_EASEY_UI_PORTAL_PUBLISHED || "local",
     version: process.env.REACT_APP_EASEY_UI_PORTAL_VERSION || "v0.0.0",
     title,
   },

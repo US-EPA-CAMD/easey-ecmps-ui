@@ -205,7 +205,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
             {viewOnly ? (
               <FormGroup className="margin-top-0">
                 <Label className="margin-0" htmlFor="BypassApproach">
-                  Parameter
+                  Bypass Approach
                 </Label>
                 <TextInput
                   className="modalInput"

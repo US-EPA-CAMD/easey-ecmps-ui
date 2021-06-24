@@ -1,13 +1,11 @@
 import React from "react";
 
-//import { CountdownTimer } from "../CountdownTimer/CountdownTimer";
-
 import "./Preloader.scss";
 
 export const Preloader = () => {
   return (
     <div className="text-center">
-      {/*<p>
+      <p>
         <img
           alt="Content loading"
           title="Content loading"
@@ -20,9 +18,7 @@ export const Preloader = () => {
           title="Please wait"
           src={`${process.env.PUBLIC_URL}/images/preloaders/loading-text.gif`}
         />
-      </p>*/}
-      Loading... Please wait...
+      </p>
     </div>
   );
-  /*return <CountdownTimer />;*/
 };

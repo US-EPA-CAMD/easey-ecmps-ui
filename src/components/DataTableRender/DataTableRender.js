@@ -6,6 +6,7 @@ import { Button } from "@trussworks/react-uswds";
 import DataTable from "react-data-table-component";
 import { FilterComponent } from "../ReactDataTablesFilter/ReactDataTablesFilter";
 import { Preloader } from "../Preloader/Preloader";
+import config from "../../config";
 
 /*** scss ***/
 
@@ -28,16 +29,16 @@ const DataTableRender = ({
 }) => {
   const [searchText, setSearchText] = useState("");
 
-  const colsFilter = (currentElement, index, array) => {
-    for (var prop in currentElement) {
+  const colsFilter = (currentElement) => {
+    for (const prop in currentElement) {
       // filters out any boolean properties in the data since it does
       // not work with toLowercase and includes
-      if (typeof currentElement[prop] === "string") {
-        if (
-          currentElement[prop].toLowerCase().includes(searchText.toLowerCase())
-        ) {
-          return currentElement;
-        }
+      if (
+        currentElement.hasOwnProperty(prop) &&
+        typeof currentElement[prop] === "string" &&
+        currentElement[prop].toLowerCase().includes(searchText.toLowerCase())
+      ) {
+        return currentElement;
       }
     }
   };
@@ -60,37 +61,17 @@ const DataTableRender = ({
     <div className={`${componentStyling}`}>
       <div className={`${headerStyling}`}>
         <h2 className="padding-0">
-          {sectionTitle ? (
-            <div>
-              {sectionTitle}
-
-              {/* <hr
-                width="100%"
-                align="center"
-                className="height-1px bg-base-light"
-              /> */}
-            </div>
-          ) : (
-            ""
-          )}
+          {sectionTitle ? <div>{sectionTitle}</div> : ""}
           {button ? (
             <div>
-              {
-                <Button
-                  type="button"
-                  test-id={`btnAdd${tableTitle.split(" ").join("")}`}
-                  className="float-right clearfix margin-right-3"
-                  outline="true"
-                >
-                  Add {tableTitle}
-                </Button>
-              }
-
-              {/* <hr
-                width="100%"
-                align="center"
-                className="height-1px bg-base-light"
-              /> */}
+              <Button
+                type="button"
+                test-id={`btnAdd${tableTitle.split(" ").join("")}`}
+                className="float-right clearfix margin-right-3"
+                outline="true"
+              >
+                Add {tableTitle}
+              </Button>
             </div>
           ) : (
             ""
@@ -98,7 +79,7 @@ const DataTableRender = ({
         </h2>
       </div>
       <div aria-live="polite" className={`${tableStyling}`}>
-        {data.length >= 1 ? (
+        {data.length ? (
           <DataTable
             className="data-display-table react-transition fade-in"
             sortIcon={
@@ -125,9 +106,11 @@ const DataTableRender = ({
             // based on props
             expandableRowExpanded={(row) => row.expanded}
             subHeaderComponent={subHeaderComponentMemo}
-            paginationPerPage={100}
-            paginationRowsPerPageOptions={[100, 200, 500]}
-            paginationComponentOptions={{ rangeSeparatorText: "out of" }}
+            paginationPerPage={config.app.paginationPerPage}
+            paginationRowsPerPageOptions={config.app.paginationPerPageOptions}
+            paginationComponentOptions={{
+              rangeSeparatorText: config.app.paginationRangeSeparatorText,
+            }}
             expandableRowDisabled={(row) => row.disabled}
             expandableRowsComponent={expandableRowComp}
           />

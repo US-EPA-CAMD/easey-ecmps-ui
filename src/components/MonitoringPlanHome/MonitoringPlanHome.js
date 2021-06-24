@@ -10,7 +10,8 @@ const MonitoringPlanHome = ({ user }) => {
       <div className="text-gray-50">
         <h1 className="display-inline-block">Monitoring Plans</h1>
         <Button
-          className="float-right clearfix radius-pill"
+          className="float-right clearfix radius-2"
+          outline={true}
           id="input-button-search"
         >
           Import a Monitoring Plan
