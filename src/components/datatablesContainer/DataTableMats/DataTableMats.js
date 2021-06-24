@@ -60,4 +60,4 @@ export const DataTableMats = ({
 };
 
 
-export default (DataTableMats);
+export default DataTableMats;

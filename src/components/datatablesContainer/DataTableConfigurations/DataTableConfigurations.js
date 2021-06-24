@@ -154,10 +154,8 @@ export const DataTableConfigurations = ({
           return fs.getConfigurationNames(index);
         }
       }
-      return [];
-    } else {
-      return [];
     }
+    return [];
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringPlans]);
