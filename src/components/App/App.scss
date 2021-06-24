@@ -1,6 +1,4 @@
-$theme-font-path: "~uswds/dist/fonts";
-$theme-image-path: "~uswds/dist/img";
-
+@import "../../additional-scss/settings";
 /***** MAIN SOURCE stylesheet *****/
 @import "~uswds/dist/scss/uswds";
 

@@ -1,15 +1,19 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-
-import Modal from "../Modal/Modal";
-import { CountdownTimer } from "../CountdownTimer/CountdownTimer";
-import { Button } from "@trussworks/react-uswds";
 import { config } from "../../config";
+import { useInterval } from "../../additional-functions/use-interval";
+
+import { Button } from "@trussworks/react-uswds";
+import { Modal } from "../Modal/Modal";
+import { CountdownTimer } from "../CountdownTimer/CountdownTimer";
 
 export const InactivityTracker = ({ apiCall }) => {
   const [timeInactive, setTimeInactive] = useState(0);
   const [showInactiveModal, setShowInactiveModal] = useState(false);
   const [trackInactivity, setTrackInactivity] = useState(false);
-  let timer;
+
+  const [activityOccurred, setActivityOccurred] = useState(false);
+
+  const refreshInterval = 30000;
 
   const resetUserInactivityTimer = () => {
     setTimeInactive(0);
@@ -17,16 +21,10 @@ export const InactivityTracker = ({ apiCall }) => {
     window.countdownInitiated = false;
   };
 
-  function startInterval(_interval) {
-    // Store the id of the interval so we can clear it later
-    timer = setTimeout(function () {
-      apiCall();
-    }, _interval);
-  }
   const extendUserInactivityTimer = useCallback(() => {
+    // *** if activity occurred and a countdown is not yet active
     if (window.countdownInitiated !== true) {
-      clearTimeout(timer);
-      startInterval(10000);
+      setActivityOccurred(true);
       resetUserInactivityTimer();
     }
 
@@ -36,25 +34,16 @@ export const InactivityTracker = ({ apiCall }) => {
   useEffect(() => {
     setTrackInactivity(true);
   }, []);
-  const useInterval = (callback, delay) => {
-    const savedCallback = useRef();
 
-    // *** remember the latest function.
-    useEffect(() => {
-      savedCallback.current = callback;
-    }, [callback]);
-
-    // Set up the interval.
-    useEffect(() => {
-      const tick = () => {
-        savedCallback.current();
-      };
-      if (delay !== null) {
-        let id = setInterval(tick, delay);
-        return () => clearInterval(id);
-      }
-    }, [delay]);
-  };
+  // *** set up a recurring API call to update
+  useInterval(() => {
+    // *** only fire the actual API call if activity has taken place
+    if (activityOccurred === true) {
+      // *** make an api call
+      apiCall();
+    }
+    setActivityOccurred(false);
+  }, refreshInterval);
 
   useInterval(() => {
     if (trackInactivity === false) {

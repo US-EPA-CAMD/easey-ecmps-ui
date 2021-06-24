@@ -4,7 +4,7 @@ import "./Modal.scss";
 
 const modalContext = createContext();
 
-const Modal = ({
+export const Modal = ({
   show,
   close,
   save,

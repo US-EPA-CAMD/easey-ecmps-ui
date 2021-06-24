@@ -4,7 +4,7 @@ import DynamicTabs from "../DynamicTabs/DynamicTabs";
 import { Button } from "@trussworks/react-uswds";
 import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
 
-const MonitoringPlanHome = ({user}) => {
+const MonitoringPlanHome = ({ user }) => {
   return (
     <div className="home-container">
       <div className="text-gray-50">
@@ -12,7 +12,6 @@ const MonitoringPlanHome = ({user}) => {
         <Button
           className="float-right clearfix radius-pill"
           id="input-button-search"
-          // onClick={updateSearchHandler}
         >
           Import a Monitoring Plan
         </Button>
