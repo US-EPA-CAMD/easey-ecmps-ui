@@ -13,8 +13,6 @@ export const InactivityTracker = ({ apiCall }) => {
 
   const [activityOccurred, setActivityOccurred] = useState(false);
 
-  const refreshInterval = 30000;
-
   const resetUserInactivityTimer = () => {
     setTimeInactive(0);
     setShowInactiveModal(false);
@@ -43,7 +41,7 @@ export const InactivityTracker = ({ apiCall }) => {
       apiCall();
     }
     setActivityOccurred(false);
-  }, refreshInterval);
+  }, config.app.activityRefreshApiCallInterval);
 
   useInterval(() => {
     if (trackInactivity === false) {
