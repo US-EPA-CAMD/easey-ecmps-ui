@@ -1,46 +1,68 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { connect } from "react-redux";
-
-import {
-  loadMonitoringSystemsComponents,
-  loadMonitoringSystemsFuelFlows,
-} from "../../../store/actions/monitoringSystems";
 import * as fs from "../../../utils/selectors/monitoringPlanSystems";
 
-import DataTableSystemsComponentsRender from "../DataTableSystemsComponentsRender/DataTableSystemsComponentsRender";
 import SystemComponentsModal from "../../SystemComponentsModal/SystemComponentsModal";
 import SystemFuelFlowsModal from "../../SystemFuelFlowsModal/SystemFuelFlowsModal";
 
 import { normalizeRowObjectFormat } from "../../../additional-functions/react-data-table-component";
-
+import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
-
+import DataTableRender from "../../DataTableRender/DataTableRender";
+import log from "loglevel";
+import "./DataTableSystemsComponentsRender.scss";
 export const DataTableSystemsComponents = ({
-  monitoringSystems,
-  monitoringSystemsComponents,
-  monitoringSystemsFuelFlows,
-  loading,
   systemID,
-  loadMonitoringSystemsComponentsData,
-  loadMonitoringSystemsFuelFlowsData,
   showActiveOnly,
   viewOnly,
   setSecondLevel,
   secondLevel,
+  locationSelect,
 }) => {
+  const [monitoringSystemsFuelFlows, setMonitoringSystemsFuelFlows] = useState(
+    ""
+  );
+  const [selected, setSelected] = useState(1);
+  const [
+    monitoringSystemsComponents,
+    setMonitoringSystemsComponents,
+  ] = useState("");
   useEffect(() => {
-    let selected = 1;
-    for (let value of monitoringSystems) {
-      if (value.systemIdentifier === systemID) {
-        selected = value;
-      }
-    }
-    loadMonitoringSystemsComponentsData(selected.monLocId, selected.id);
-    loadMonitoringSystemsFuelFlowsData(selected.monLocId, selected.id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showActiveOnly, monitoringSystemsComponents]);
+    mpApi
+      .getMonitoringSystems(locationSelect)
+      .then((res) => {
+        for (let value of res.data) {
+          if (value.systemIdentifier === systemID) {
+            setSelected(value);
+          }
+        }
+      })
+      .catch((err) => {
+        log(err);
+      });
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [systemID]);
+
+  useEffect(() => {
+    mpApi
+      .getMonitoringSystemsComponents(selected.monLocId, selected.id)
+      .then((res) => {
+        setMonitoringSystemsComponents(res.data);
+      })
+      .catch((err) => {
+        log(err);
+      });
+
+    mpApi
+      .getMonitoringSystemsFuelFlows(selected.monLocId, selected.id)
+      .then((res) => {
+        setMonitoringSystemsFuelFlows(res.data);
+      })
+      .catch((err) => {
+        log(err);
+      });
+  }, [selected]);
   // *** column names for dataset will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins
   const columnNames = [];
@@ -140,24 +162,22 @@ export const DataTableSystemsComponents = ({
     }
   };
   const data = useMemo(() => {
-    if (monitoringSystemsComponents.length > 0 || loading === false) {
-      // return fs.getMonitoringSystemsComponentsTableRecords(showActiveOnly? fs.getActiveMethods(monitoringSystems):monitoringSystems);
+    if (monitoringSystemsComponents.length > 0) {
       return fs.getMonitoringPlansSystemsComponentsTableRecords(
         monitoringSystemsComponents
       );
     } else {
-      return [{ col2: "Loading list of System Components" }];
+      return [];
     }
-  }, [loading, monitoringSystemsComponents]);
+  }, [monitoringSystemsComponents]);
 
   const fuelFlowsData = useMemo(() => {
-    if (monitoringSystemsFuelFlows !== undefined) {
-      // return fs.getMonitoringSystemsComponentsTableRecords(showActiveOnly? fs.getActiveMethods(monitoringSystems):monitoringSystems);
+    if (monitoringSystemsFuelFlows.length > 0) {
       return fs.getMonitoringPlansSystemsFuelFlowsComponentsTableRecords(
         monitoringSystemsFuelFlows
       );
     } else {
-      return [{ col2: "Loading list of Fuel Flows" }];
+      return [];
     }
   }, [monitoringSystemsFuelFlows]);
 
@@ -167,17 +187,20 @@ export const DataTableSystemsComponents = ({
         if (!secondLevel) {
           return (
             <div>
-              <DataTableSystemsComponentsRender
+              <DataTableRender
                 columns={columns}
                 data={data}
                 selectedRowHandler={selectedRowHandler}
-                title="System Components"
+                tableTitle="System Components"
+                componentStyling="systemsCompTable"
               />
-              <DataTableSystemsComponentsRender
+              <DataTableRender
                 columns={fuelFlowsColumns}
                 data={fuelFlowsData}
                 selectedRowHandler={selectedRowHandler}
-                title="Fuel Flows"
+                tableTitle="Fuel Flows"
+                button
+                componentStyling="systemsCompTable"
               />
             </div>
           );
@@ -205,25 +228,4 @@ export const DataTableSystemsComponents = ({
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    monitoringSystems: state.monitoringSystems.systems,
-    monitoringSystemsFuelFlows: state.monitoringSystems.fuelFlows,
-    monitoringSystemsComponents: state.monitoringSystems.components,
-    loading: state.apiCallsInProgress.monitoringSystemsComponents,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loadMonitoringSystemsComponentsData: (systemID, location) =>
-      dispatch(loadMonitoringSystemsComponents(systemID, location)),
-    loadMonitoringSystemsFuelFlowsData: (systemId, location) =>
-      dispatch(loadMonitoringSystemsFuelFlows(systemId, location)),
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DataTableSystemsComponents);
+export default DataTableSystemsComponents;

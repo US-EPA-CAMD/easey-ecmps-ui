@@ -5,11 +5,12 @@ import {
   TextInput,
   DatePicker,
 } from "@trussworks/react-uswds";
-// import {
-//   componentTypes,
-//   acqMethodCode,
-//   basisCode
-// } from "./SystemComponentsData";
+import {
+  bypassApproachCodes,
+  substituteDataApproachCodes,
+  parameterCodes,
+  methodCodes,
+} from "./MethodModalData";
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 
 const MethodModal = ({ modalData, viewOnly }) => {
@@ -17,14 +18,15 @@ const MethodModal = ({ modalData, viewOnly }) => {
   const [endDate, setEndDate] = React.useState(null);
   const [startHour, setStartHour] = React.useState(null);
   const [endHour, setEndHour] = React.useState(null);
-  /*const findValue = (options, val) => {
+
+  const findValue = (options, val) => {
     for (const x of options) {
       if (x.code === val) {
         return x.name;
       }
     }
     return options[0].name;
-  };*/
+  };
   const timeOptions = [
     { time: null },
     { time: 0 },
@@ -71,11 +73,18 @@ const MethodModal = ({ modalData, viewOnly }) => {
   return (
     <div className="systemsCompTable">
       <div className="grid-container margin-bottom-2">
-        <div className="display-inline-flex padding-top-3 padding-bottomm-3">
+        <div className="display-inline-flex padding-top-3 padding-bottom-3">
           <h3>Component: Monitoring Methods</h3>
+          <input
+            type="hidden"
+            epaDataname="id"
+            id="id"
+            name="id"
+            className="modalUserInput"
+            value={modalData.id}
+          />
         </div>
-
-        <div className="grid-row padding-top-2 tablet:grid-col-1">
+        <div className="grid-row padding-top-2">
           <div className="tablet:grid-col">
             {viewOnly ? (
               <FormGroup className="margin-top-0">
@@ -90,20 +99,23 @@ const MethodModal = ({ modalData, viewOnly }) => {
                   type="text"
                   disabled={viewOnly}
                   defaultValue={
-                    ""
-                    // modalData.componentTypeCode
-                    //   ? findValue(componentTypes, modalData.componentTypeCode)
-                    //   : ""
+                    modalData.parameterCode
+                      ? findValue(parameterCodes, modalData.parameterCode)
+                      : ""
                   }
                 />
               </FormGroup>
             ) : (
               <SelectBox
+                className="modalUserInput"
+                epaDataname="parameterCode"
                 caption="Parameter"
-                options={[]}
-                initialSelection={1}
+                options={parameterCodes}
+                initialSelection={modalData.parameterCode}
                 selectKey="code"
-                id={"Parameter"}
+                id="Parameter"
+                epa-testid="Parameter"
+                name="Parameter"
                 viewOnly={viewOnly}
                 required
                 secondOption="name"
@@ -124,20 +136,23 @@ const MethodModal = ({ modalData, viewOnly }) => {
                   type="text"
                   disabled={viewOnly}
                   defaultValue={
-                    ""
-                    // modalData.componentTypeCode
-                    //   ? findValue(componentTypes, modalData.componentTypeCode)
-                    //   : ""
+                    modalData.methodCode
+                      ? findValue(methodCodes, modalData.methodCode)
+                      : ""
                   }
                 />
               </FormGroup>
             ) : (
               <SelectBox
+                className="modalUserInput"
+                epaDataname="methodCode"
                 caption="Methodology"
-                options={[]}
-                initialSelection={1}
+                options={methodCodes}
+                initialSelection={modalData.methodCode}
                 selectKey="code"
-                id={"Methodology"}
+                id="Methodology"
+                epa-testid="Methodology"
+                name="Methodology"
                 viewOnly={viewOnly}
                 required
                 secondOption="name"
@@ -160,20 +175,26 @@ const MethodModal = ({ modalData, viewOnly }) => {
                   type="text"
                   disabled={viewOnly}
                   defaultValue={
-                    ""
-                    // modalData.componentTypeCode
-                    //   ? findValue(componentTypes, modalData.componentTypeCode)
-                    //   : ""
+                    modalData.subDataCode
+                      ? findValue(
+                          substituteDataApproachCodes,
+                          modalData.subDataCode
+                        )
+                      : ""
                   }
                 />
               </FormGroup>
             ) : (
               <SelectBox
                 caption="Substitute Data Approach"
-                options={[]}
-                initialSelection={1}
+                options={substituteDataApproachCodes}
+                initialSelection={modalData.subDataCode}
                 selectKey="code"
-                id={"SubstituteDataApproach"}
+                className="modalUserInput"
+                epaDataname="subDataCode"
+                id="SubstituteDataApproach"
+                epa-testid="SubstituteDataApproach"
+                name="SubstituteDataApproach"
                 viewOnly={viewOnly}
                 required
                 secondOption="name"
@@ -184,7 +205,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
             {viewOnly ? (
               <FormGroup className="margin-top-0">
                 <Label className="margin-0" htmlFor="BypassApproach">
-                  Parameter
+                  Bypass Approach
                 </Label>
                 <TextInput
                   className="modalInput"
@@ -194,20 +215,26 @@ const MethodModal = ({ modalData, viewOnly }) => {
                   type="text"
                   disabled={viewOnly}
                   defaultValue={
-                    ""
-                    // modalData.componentTypeCode
-                    //   ? findValue(componentTypes, modalData.componentTypeCode)
-                    //   : ""
+                    modalData.bypassApproachCode
+                      ? findValue(
+                          bypassApproachCodes,
+                          modalData.bypassApproachCode
+                        )
+                      : ""
                   }
                 />
               </FormGroup>
             ) : (
               <SelectBox
+                className="modalUserInput"
                 caption="Bypass Approach"
-                options={[]}
-                initialSelection={1}
+                options={bypassApproachCodes}
+                initialSelection={modalData.bypassApproachCode}
                 selectKey="code"
-                id={"BypassApproach"}
+                id="BypassApproach"
+                epaDataname="bypassApproachCode"
+                epa-testid="BypassApproach"
+                name="BypassApproach"
                 viewOnly={viewOnly}
                 required
                 secondOption="name"
@@ -217,7 +244,11 @@ const MethodModal = ({ modalData, viewOnly }) => {
         </div>
         <div className="grid-row padding-top-2">
           <div className="tablet:grid-col">
-            <Label className="margin-0" id="StartDateAndTime">
+            <Label
+              className="margin-0"
+              id="StartDateAndTime"
+              htmlFor="startDate"
+            >
               Start Date and Time
             </Label>
             <div className="grid-row">
@@ -231,6 +262,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
                       className="modalInput"
                       id="startDate"
                       name="startDate"
+                      epa-testid="startData"
                       type="text"
                       disabled={viewOnly}
                       defaultValue={startDate ? startDate : ""}
@@ -243,9 +275,11 @@ const MethodModal = ({ modalData, viewOnly }) => {
                     </div>
                     {startDate !== null ? (
                       <DatePicker
-                        className="margin-0"
+                        className="margin-0 modalUserInput"
                         id="startDate"
                         name="startDate"
+                        epaDataname="beginDate"
+                        epa-testid="startDate"
                         disabled={viewOnly}
                         defaultValue={startDate}
                       />
@@ -260,13 +294,14 @@ const MethodModal = ({ modalData, viewOnly }) => {
               <div className="grid-col">
                 {viewOnly ? (
                   <FormGroup className="margin-top-0">
-                    <Label className="margin-0" htmlFor="startHour">
+                    <Label className="margin-0 width-9" htmlFor="startHour">
                       hh
                     </Label>
                     <TextInput
                       className="modalInput"
                       id="startHour"
                       name="startHour"
+                      epa-testid="startHour"
                       type="text"
                       disabled={viewOnly}
                       defaultValue={startHour}
@@ -274,10 +309,12 @@ const MethodModal = ({ modalData, viewOnly }) => {
                   </FormGroup>
                 ) : startHour !== null ? (
                   <SelectBox
-                    className="margin-0 position-relative top-neg-2"
+                    className="margin-0 width-9 modalUserInput"
                     caption="hh"
                     id="startHour"
                     name="startHour"
+                    epaDataname="beginHour"
+                    epa-testid="startHour"
                     options={timeOptions}
                     initialSelection={startHour}
                     selectKey="time"
@@ -291,7 +328,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
             </div>
           </div>
           <div className="tablet:grid-col padding-left-2">
-            <Label className="margin-0" id="EndDateAndTime">
+            <Label className="margin-0" id="EndDateAndTime" htmlFor="endDate">
               End Date and Time
             </Label>
             <div className="grid-row">
@@ -305,6 +342,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
                       className="modalInput"
                       id="endDate"
                       name="endDate"
+                      epa-testid="endDate"
                       type="text"
                       disabled={viewOnly}
                       defaultValue={endDate ? endDate : ""}
@@ -317,9 +355,11 @@ const MethodModal = ({ modalData, viewOnly }) => {
                     </div>
                     {endDate !== null ? (
                       <DatePicker
-                        className="margin-0"
+                        className="margin-0 modalUserInput"
                         id="endDate"
                         name="endDate"
+                        epaDataname="endDate"
+                        epa-testid="endDate"
                         disabled={viewOnly}
                         defaultValue={endDate}
                       />
@@ -329,6 +369,8 @@ const MethodModal = ({ modalData, viewOnly }) => {
                   </div>
                 )}
               </div>
+            </div>
+            <div className="grid-row">
               <div className="grid-col">
                 {viewOnly ? (
                   <FormGroup className="margin-top-0">
@@ -336,9 +378,10 @@ const MethodModal = ({ modalData, viewOnly }) => {
                       hh
                     </Label>
                     <TextInput
-                      className="modalInput"
+                      className="width-9"
                       id="endHour"
                       name="endHour"
+                      epa-testid="endHour"
                       type="text"
                       disabled={viewOnly}
                       defaultValue={endHour}
@@ -346,10 +389,12 @@ const MethodModal = ({ modalData, viewOnly }) => {
                   </FormGroup>
                 ) : startHour !== null ? (
                   <SelectBox
-                    className="margin-0"
+                    className="margin-0 width-9 modalUserInput"
                     caption="hh"
                     id="endHour"
                     name="endHour"
+                    epaDataname="endHour"
+                    epa-testid="endHour"
                     options={timeOptions}
                     initialSelection={endHour}
                     selectKey="time"

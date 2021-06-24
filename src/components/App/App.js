@@ -1,4 +1,4 @@
-//import "../../additional-functions/wdyr";
+// import "../../additional-functions/wdyr";
 import React, { useState, useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 
@@ -13,19 +13,13 @@ import Login from "../Login/Login";
 import "./App.scss";
 
 const App = () => {
-  // const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [user, setUser] = useState(false);
   useEffect(() => {
     const cdxUser = sessionStorage.getItem("cdx_user")
       ? JSON.parse(sessionStorage.getItem("cdx_user"))
       : false;
-      setUser(cdxUser && cdxUser.firstName ? cdxUser : false);
-    // const checkLoggedIn = () => {
-    //   if (cdxUser && userFirstName) {
-    //     setUserLoggedIn(true);
-    //   }
-    // };
-    // checkLoggedIn();
+
+    setUser(cdxUser && cdxUser.firstName ? cdxUser : false);
   }, []);
 
   return (

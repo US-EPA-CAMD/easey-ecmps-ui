@@ -73,3 +73,13 @@ export async function putLockTimerUpdateConfiguration(id) {
     .then(handleResponse)
     .catch(handleError);
 }
+
+export const saveMonitoringMethods = async (payload) => {
+  return axios
+    .put(
+      `${config.services.monitorPlans.uri}/workspace/locations/${payload["monLocId"]}/methods/${payload["id"]}`,
+      payload
+    )
+    .then(handleResponse)
+    .catch(handleError);
+};

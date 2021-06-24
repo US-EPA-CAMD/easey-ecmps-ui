@@ -4,15 +4,15 @@ import DynamicTabs from "../DynamicTabs/DynamicTabs";
 import { Button } from "@trussworks/react-uswds";
 import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
 
-const MonitoringPlanHome = ({user}) => {
+const MonitoringPlanHome = ({ user }) => {
   return (
     <div className="home-container">
       <div className="text-gray-50">
         <h1 className="display-inline-block">Monitoring Plans</h1>
         <Button
-          className="float-right clearfix radius-pill"
+          className="float-right clearfix radius-2"
+          outline={true}
           id="input-button-search"
-          // onClick={updateSearchHandler}
         >
           Import a Monitoring Plan
         </Button>

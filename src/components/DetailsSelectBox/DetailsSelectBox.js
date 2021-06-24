@@ -8,7 +8,10 @@ const DetailsSelectBox = ({
   initialSelection,
   viewOnly,
   required,
-  secondOption
+  secondOption,
+  className,
+  epaDataname,
+  id,
 }) => {
   const [selectionState, setSelectionState] = useState(
     initialSelection ? initialSelection : null
@@ -22,16 +25,17 @@ const DetailsSelectBox = ({
     return optionsList.map((info, index) => {
       return (
         <option key={index} value={info[selectKey]}>
-          {info[secondOption? secondOption : selectKey]}
+          {info[secondOption ? secondOption : selectKey]}
         </option>
       );
     });
   };
   return (
     <div>
-      <div >
+      <div>
         <FormGroup className="margin-top-0">
-          <Label htmlFor={caption}
+          <Label
+            htmlFor={caption}
             hint={
               required ? (
                 <span className="requiredItalics"> (Required)</span>
@@ -47,7 +51,9 @@ const DetailsSelectBox = ({
             // weird bug without this
             value={selectionState !== null ? selectionState : initialSelection}
             disabled={viewOnly}
-            id={caption}
+            id={id === null ? caption : id}
+            className={className}
+            epaDataname={epaDataname}
             onChange={(e) => handleChange(e)}
           >
             {populateOptions(options)}

@@ -4,14 +4,15 @@ import "./Modal.scss";
 
 const modalContext = createContext();
 
-const Modal = ({
+export const Modal = ({
   show,
   close,
+  save,
   children,
   showCancel,
+  showSave,
   cancelButtonText = "Cancel",
   saveButtonText = "Save and Close",
-  showSave,
   secondLevel,
 }) => {
   useEffect(() => {
@@ -87,7 +88,7 @@ const Modal = ({
                 aria-haspopup="true"
                 aria-labelledby={"close"}
               >
-                <i className="fa fa-times fa-sm"></i>
+                <i className="fa fa-times fa-sm" />
               </span>
             </div>
             <div className="modal-content modal-color">
@@ -100,7 +101,10 @@ const Modal = ({
                   </button>
                 ) : null}
                 {showSave ? (
-                  <button onClick={close} className="saveCloseBTN">
+                  <button
+                    onClick={save ? save : close}
+                    className="saveCloseBTN"
+                  >
                     {saveButtonText}
                   </button>
                 ) : null}

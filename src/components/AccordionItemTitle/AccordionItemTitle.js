@@ -9,9 +9,9 @@ const AccordionItemTitle = ({ title }) => {
       <div className="display-inline-block flex-justify-center">
         <h3>{title}</h3>
       </div>
-      <button className="rectBTN" onClick={addButtonClick}>
+      <div className="rectBTN" onClick={addButtonClick}>
         ⊕ Add {title}
-      </button>
+      </div>
     </div>
   );
 };

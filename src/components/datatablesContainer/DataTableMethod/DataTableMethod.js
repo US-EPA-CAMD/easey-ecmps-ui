@@ -1,30 +1,48 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { connect } from "react-redux";
-import {
-  loadMonitoringMethods,
-  loadMonitoringMatsMethods,
-} from "../../../store/actions/monitoringMethods";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
-import DataTableMethodRender from "../DataTableMethodRender/DataTableMethodRender";
 import { Preloader } from "../../Preloader/Preloader";
 import { Button } from "@trussworks/react-uswds";
 import Modal from "../../Modal/Modal";
 import MethodModal from "../../MethodModal/MethodModal";
+import DataTableRender from "../../DataTableRender/DataTableRender";
+import * as mpApi from "../../../utils/api/monitoringPlansApi";
+import log from "loglevel";
 export const DataTableMethod = ({
   monitoringMethods,
   monitoringMatsMethods,
-  loadMonitoringMethodsData,
-  loading,
+
   locationSelectValue,
-  loadMonitoringMatsMethodsData,
+
   matsTableHandler,
   showActiveOnly,
   user,
   checkout,
 }) => {
+  const [methods, setMethods] = useState([]);
+
+  const [matsMethods, setMatsMethods] = useState([]);
+  const [show, setShow] = useState(false);
+  const [selectedMonitoringMethod, setSelectedMonitoringMethod] = useState(
+    null
+  );
+
   useEffect(() => {
-    loadMonitoringMethodsData(locationSelectValue);
-    loadMonitoringMatsMethodsData(locationSelectValue);
+    mpApi
+      .getMonitoringMethods(locationSelectValue)
+      .then((res) => {
+        setMethods(res.data);
+      })
+      .catch((err) => {
+        log(err);
+      });
+    mpApi
+      .getMonitoringMatsMethods(locationSelectValue)
+      .then((res) => {
+        setMatsMethods(res.data);
+      })
+      .catch((err) => {
+        log(err);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, showActiveOnly]);
 
@@ -65,7 +83,7 @@ export const DataTableMethod = ({
               className="cursor-pointer"
               id="btnOpenMethod"
               // onClick={() => openConfig(row)}
-              onClick={() => openMonitoringMethodsModal(row.col1, row.col2,row.col7)}
+              onClick={() => openMonitoringMethodsModal(row.col1, row.col2)}
               aria-label={`open method ${row.col1} `}
               onKeyPress={(event) => {
                 if (event.key === "Enter") {
@@ -82,7 +100,7 @@ export const DataTableMethod = ({
               epa-testid="btnEditMethod"
               className="cursor-pointer margin-left-2"
               onClick={() =>
-                openMonitoringMethodsModal(row.col1, row.col2, row.col7)
+                openMonitoringMethodsModal(row.col1, row.col2)
               }
               aria-label={`edit method ${row.col1} `}
               onKeyPress={(event) => {
@@ -99,47 +117,39 @@ export const DataTableMethod = ({
     },
   });
 
-  const openMonitoringMethodsModal = (parameterCode, methodCode, methodId) => {
-    if (monitoringMethods.length > 0 || loading === false) {
-      setSelectedMonitoringMethod(
-        monitoringMethods.filter(
-          (element) =>
-            element.parameterCode === parameterCode &&
-            element.methodCode === methodCode &&
-            element.id === methodId
-        )[0]
-      );
+  const openMonitoringMethodsModal = (parameterCode, methodCode) => {
+    if (methods.length > 0) {
+      const monMethod = methods.filter(
+        (element) =>
+          element.parameterCode === parameterCode &&
+          element.methodCode === methodCode
+      )[0];
+
+      setSelectedMonitoringMethod(monMethod);
 
       openModal(true);
     }
   };
 
   const data = useMemo(() => {
-    if (monitoringMethods.length > 0 || loading === false) {
+    if (methods.length > 0) {
       return fs.getMonitoringPlansMethodsTableRecords(
-        showActiveOnly
-          ? fs.getActiveMethods(monitoringMethods)
-          : monitoringMethods
+        showActiveOnly ? fs.getActiveMethods(methods) : methods
       );
     } else {
       return [{ col3: <Preloader /> }];
     }
-  }, [loading, monitoringMethods, showActiveOnly]);
+  }, [methods, showActiveOnly]);
 
   useMemo(() => {
     if (matsTableHandler) {
-      if (monitoringMatsMethods.length < 1) {
+      if (matsMethods.length < 1) {
         matsTableHandler(false);
       } else {
         matsTableHandler(true);
       }
     }
-  }, [monitoringMatsMethods.length, matsTableHandler]);
-
-  const [show, setShow] = useState(false);
-  const [selectedMonitoringMethod, setSelectedMonitoringMethod] = useState(
-    null
-  );
+  }, [matsMethods.length, matsTableHandler]);
 
   const closeModalHandler = () => setShow(false);
 
@@ -147,15 +157,78 @@ export const DataTableMethod = ({
     setShow(value);
   };
 
+  const saveMethods = () => {
+    // *** construct payload
+    const payloadInputs = document.querySelectorAll(".modalUserInput");
+    const datepickerPayloads = document.querySelectorAll(
+      ".usa-date-picker__internal-input"
+    );
+
+    const payloadArray = [];
+
+    payloadInputs.forEach((input) => {
+      console.log(input);
+      if (input.id === undefined || input.id === null || input.id === "") {
+        return;
+      }
+      const item = { name: "", value: "" };
+      item.name = document.getElementById(input.id).attributes[
+        "epaDataname"
+      ].value;
+      item.value = document.getElementById(input.id).value;
+      payloadArray.push(item);
+    });
+
+    datepickerPayloads.forEach((input) => {
+      const item = { name: "", value: "" };
+      item.name = input.attributes["epaDataname"].value;
+      item.value = input.value;
+      payloadArray.push(item);
+    });
+
+    const payload = {
+      monLocId: locationSelectValue,
+      id: "",
+      parameterCode: "",
+      subDataCode: "",
+      bypassApproachCode: "",
+      methodCode: "",
+      beginDate: "",
+      beginHour: 0,
+      endDate: "",
+      endHour: 0,
+      userId: user.id,
+      addDate: "",
+      updateDate: "",
+      active: true,
+    };
+
+    payloadArray.forEach((item) => {
+      payload[item.name] = item.value;
+    });
+
+    mpApi
+      .saveMonitoringMethods(payload)
+      .then((result) => {
+        console.log(result);
+        openModal(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        openModal(false);
+      });
+  };
+
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
 
-      <DataTableMethodRender columns={columns} data={data} />
+      <DataTableRender columns={columns} data={data} />
       {show ? (
         <Modal
           show={show}
           close={closeModalHandler}
+          save={saveMethods}
           showCancel
           showSave
           children={
@@ -172,21 +245,4 @@ export const DataTableMethod = ({
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    monitoringMethods: state.monitoringMethods.methods,
-    loading: state.apiCallsInProgress.monitoringMethods,
-    monitoringMatsMethods: state.monitoringMethods.matsMethods,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loadMonitoringMethodsData: (monitoringPlanLocationSelect) =>
-      dispatch(loadMonitoringMethods(monitoringPlanLocationSelect)),
-    loadMonitoringMatsMethodsData: (monitoringPlanLocationSelect) =>
-      dispatch(loadMonitoringMatsMethods(monitoringPlanLocationSelect)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(DataTableMethod);
+export default DataTableMethod;
