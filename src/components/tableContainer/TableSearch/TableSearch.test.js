@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import UswdsTable from "../UswdsTable/UswdsTable";
+import UswdsTable from "../../UswdsTable/UswdsTable";
 import { render, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 
