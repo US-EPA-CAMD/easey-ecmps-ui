@@ -1,27 +1,29 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { connect } from "react-redux";
-import { loadFacilities } from "../../../store/actions/facilities";
 import * as fs from "../../../utils/selectors/facilities";
 import SelectedFacilityTab from "../../MonitoringPlanTab/MonitoringPlanTab";
-import { emptyMonitoringPlans } from "../../../store/actions/monitoringPlans";
-// import { normalizeRowObjectFormat } from "../../../additional-functions/react-data-table-component";
-import DataTableRender from '../../DataTableRender/DataTableRender'
+import DataTableRender from "../../DataTableRender/DataTableRender";
 import "./SelectFacilitiesDataTable.scss";
 import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigurations";
-
+import * as facilitiesApi from "../../../utils/api/facilityApi";
 export const SelectFacilitiesDataTable = ({
   user,
-  facilities,
   loadFacilitiesData,
   loading,
   addtabs,
   openedFacilityTabs,
-  emptyPlan,
-  monitoringPlans,
 }) => {
+  const [facilities, setFacilities] = useState("");
   useEffect(() => {
     if (facilities.length === 0) {
-      loadFacilitiesData();
+      facilitiesApi
+        .getAllFacilities()
+        .then((res) => {
+          setFacilities(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -124,13 +126,12 @@ export const SelectFacilitiesDataTable = ({
         pagination={true}
         filter={true}
         sectionTitle="Select Configurations"
-        
         expandableRows={true}
         expandableRowComp={
           <DataTableConfigurations
-          selectedRowHandler={selectedRowHandler}
-          user={user}
-        />
+            selectedRowHandler={selectedRowHandler}
+            user={user}
+          />
         }
         headerStyling="padding-top-4 padding-left-2"
       />
@@ -140,21 +141,8 @@ export const SelectFacilitiesDataTable = ({
 
 const mapStateToProps = (state) => {
   return {
-    facilities: state.facilities,
-    loading: state.apiCallsInProgress.facilities,
     openedFacilityTabs: state.openedFacilityTabs,
-    monitoringPlans: state.monitoringPlans,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loadFacilitiesData: () => dispatch(loadFacilities()),
-    emptyPlan: () => dispatch(emptyMonitoringPlans()),
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SelectFacilitiesDataTable);
+export default connect(mapStateToProps, null)(SelectFacilitiesDataTable);

@@ -1,17 +1,24 @@
-import React, { useEffect, useMemo } from "react";
-import { connect } from "react-redux";
-import { loadMonitoringMatsMethods } from "../../../store/actions/monitoringMethods";
+import React, { useEffect, useMemo,useState } from "react";
+
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import DataTableRender from "../../DataTableRender/DataTableRender";
+import * as mpApi from "../../../utils/api/monitoringPlansApi";
+import log from "loglevel";
 
 export const DataTableMats = ({
-  monitoringMatsMethods,
-  loading,
   locationSelect,
 }) => {
+  const [matsMethods,setMatsMethods] = useState([])
   useEffect(() => {
-    if (monitoringMatsMethods.length === 0 || loading === false) {
-      loadMonitoringMatsMethods(locationSelect);
+    if (matsMethods.length === 0) {
+      mpApi
+      .getMonitoringMatsMethods(locationSelect)
+      .then((res) => {
+        setMatsMethods(res.data);
+      })
+      .catch((err) => {
+        log(err);
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect]);
@@ -36,14 +43,14 @@ export const DataTableMats = ({
   });
 
   const data = useMemo(() => {
-    if (monitoringMatsMethods.length > 0 || loading === false) {
+    if (matsMethods.length > 0 ) {
       return fs.getMonitoringPlansMatsMethodsTableRecords(
-        monitoringMatsMethods
+        matsMethods
       );
     } else {
       return [{ col2: "Loading list of Supplemental Methods" }];
     }
-  }, [loading, monitoringMatsMethods]);
+  }, [ matsMethods]);
 
   return (
     <div className="methodTable">
@@ -52,18 +59,5 @@ export const DataTableMats = ({
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    monitoringMatsMethods: state.monitoringMethods.matsMethods,
-    loading: state.apiCallsInProgress.monitoringMethods,
-  };
-};
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loadMonitoringMatsMethodsData: (monitoringPlanLocationSelect) =>
-      dispatch(loadMonitoringMatsMethods(monitoringPlanLocationSelect)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(DataTableMats);
+export default DataTableMats;

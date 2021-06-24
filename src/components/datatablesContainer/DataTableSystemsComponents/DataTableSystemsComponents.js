@@ -9,8 +9,10 @@ import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import DataTableRender from "../../DataTableRender/DataTableRender";
+import log from "loglevel";
+import "./DataTableSystemsComponentsRender.scss";
 
-import './DataTableSystemsComponentsRender.scss'
+
 export const DataTableSystemsComponents = ({
   systemID,
   showActiveOnly,
@@ -38,7 +40,7 @@ export const DataTableSystemsComponents = ({
         }
       })
       .catch((err) => {
-        console.log(err);
+        log(err);
       });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -51,7 +53,7 @@ export const DataTableSystemsComponents = ({
         setMonitoringSystemsComponents(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        log(err);
       });
 
     mpApi
@@ -60,7 +62,7 @@ export const DataTableSystemsComponents = ({
         setMonitoringSystemsFuelFlows(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        log(err);
       });
   }, [selected]);
   // *** column names for dataset will be passed to normalizeRowObjectFormat later to generate the row object
