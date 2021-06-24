@@ -2,12 +2,12 @@ import React, { useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import { loadFacilities } from "../../../store/actions/facilities";
 import * as fs from "../../../utils/selectors/facilities";
-import SelectFacilitiesDataTableRender from "../SelectFacilitiesDataTableRender/SelectFacilitiesDataTableRender";
 import SelectedFacilityTab from "../../MonitoringPlanTab/MonitoringPlanTab";
 import { emptyMonitoringPlans } from "../../../store/actions/monitoringPlans";
 // import { normalizeRowObjectFormat } from "../../../additional-functions/react-data-table-component";
-
+import DataTableRender from '../../DataTableRender/DataTableRender'
 import "./SelectFacilitiesDataTable.scss";
+import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigurations";
 
 export const SelectFacilitiesDataTable = ({
   user,
@@ -115,12 +115,24 @@ export const SelectFacilitiesDataTable = ({
 
   return (
     <div className="tabsBox">
-      <SelectFacilitiesDataTableRender
+      <DataTableRender
         columns={columns}
         data={data}
         selectedRowHandler={selectedRowHandler}
         openedFacilityTabs={openedFacilityTabs}
         user={user}
+        pagination={true}
+        filter={true}
+        sectionTitle="Select Configurations"
+        
+        expandableRows={true}
+        expandableRowComp={
+          <DataTableConfigurations
+          selectedRowHandler={selectedRowHandler}
+          user={user}
+        />
+        }
+        headerStyling="padding-top-4 padding-left-2"
       />
     </div>
   );

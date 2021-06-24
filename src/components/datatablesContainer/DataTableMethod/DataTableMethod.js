@@ -5,11 +5,11 @@ import {
   loadMonitoringMatsMethods,
 } from "../../../store/actions/monitoringMethods";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
-import DataTableMethodRender from "../DataTableMethodRender/DataTableMethodRender";
 import { Preloader } from "../../Preloader/Preloader";
 import { Button } from "@trussworks/react-uswds";
 import Modal from "../../Modal/Modal";
 import MethodModal from "../../MethodModal/MethodModal";
+import DataTableRender from "../../DataTableRender/DataTableRender";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 export const DataTableMethod = ({
@@ -22,6 +22,7 @@ export const DataTableMethod = ({
   matsTableHandler,
   showActiveOnly,
   user,
+  checkout,
 }) => {
   const [show, setShow] = useState(false);
   const [selectedMonitoringMethod, setSelectedMonitoringMethod] = useState(
@@ -63,29 +64,33 @@ export const DataTableMethod = ({
       // const normalizedRow = normalizeRowObjectFormat(row, columnNames);
       return (
         <div>
-          <Button
-            type="button"
-            unstyled="true"
-            epa-testid="btnOpenMethod"
-            className="cursor-pointer"
-            id="btnOpenMethod"
-            // onClick={() => openConfig(row)}
-            onClick={() => openMonitoringMethodsModal(row.col1, row.col2)}
-            aria-label={`open method ${row.col1} `}
-            onKeyPress={(event) => {
-              if (event.key === "Enter") {
-                // openConfig(row);
-              }
-            }}
-          >
-            Open
-          </Button>
-          {user ? (
+          {!(user && checkout) ? (
+            <Button
+              type="button"
+              unstyled="true"
+              epa-testid="btnOpenMethod"
+              className="cursor-pointer"
+              id="btnOpenMethod"
+              // onClick={() => openConfig(row)}
+              onClick={() => openMonitoringMethodsModal(row.col1, row.col2)}
+              aria-label={`open method ${row.col1} `}
+              onKeyPress={(event) => {
+                if (event.key === "Enter") {
+                  // openConfig(row);
+                }
+              }}
+            >
+              View
+            </Button>
+          ) : (
             <Button
               type="button"
               unstyled="true"
               epa-testid="btnEditMethod"
-              className="cursor-pointer margin-left-2 "
+              className="cursor-pointer margin-left-2"
+              onClick={() =>
+                openMonitoringMethodsModal(row.col1, row.col2, row)
+              }
               aria-label={`edit method ${row.col1} `}
               onKeyPress={(event) => {
                 if (event.key === "Enter") {
@@ -93,10 +98,8 @@ export const DataTableMethod = ({
                 }
               }}
             >
-              {" Edit"}
+              {"View/Edit"}
             </Button>
-          ) : (
-            ""
           )}
         </div>
       );
@@ -211,7 +214,7 @@ export const DataTableMethod = ({
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
 
-      <DataTableMethodRender columns={columns} data={data} />
+      <DataTableRender columns={columns} data={data} />
       {show ? (
         <Modal
           show={show}
@@ -221,7 +224,10 @@ export const DataTableMethod = ({
           showSave
           children={
             <div>
-              <MethodModal modalData={selectedMonitoringMethod} />
+              <MethodModal
+                modalData={selectedMonitoringMethod}
+                viewOnly={!(user && checkout)}
+              />
             </div>
           }
         />
