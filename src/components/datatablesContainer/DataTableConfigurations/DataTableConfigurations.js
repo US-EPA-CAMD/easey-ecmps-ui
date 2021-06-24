@@ -39,8 +39,9 @@ export const DataTableConfigurations = ({
   };
 
   const openConfig = (config, checkout) => {
-    const val = findSelectedConfig(config.col1);
-    setSelectedConfig([data, config, val, checkout]);
+    const selectedConfigData = findSelectedConfig(config.col1);
+    console.log("data", [data, selectedConfigData, checkout]);
+    setSelectedConfig([data, selectedConfigData, checkout]);
   };
 
   useEffect(() => {
