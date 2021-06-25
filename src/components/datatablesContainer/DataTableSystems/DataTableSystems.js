@@ -11,20 +11,15 @@ import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 export const DataTableSystems = ({
   loadMonitoringSystemsData,
-  loading,
   locationSelect,
 }) => {
   const [show, setShow] = useState(false);
   const [monitoringSystems, setMonitoringSystems] = useState([]);
   const [secondLevel, setSecondLevel] = useState(false);
   useEffect(() => {
-    if (monitoringSystems.length === 0 || loading === false) {
-      mpApi
-        .getMonitoringSystems(locationSelect)
-        .then((res) => {
-          setMonitoringSystems(res.data);
-        })
-    }
+    mpApi.getMonitoringSystems(locationSelect).then((res) => {
+      setMonitoringSystems(res.data);
+    });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect]);
@@ -109,7 +104,7 @@ export const DataTableSystems = ({
 
   // *** memoize data
   const data = useMemo(() => {
-    if (monitoringSystems.length > 0 || loading === false) {
+    if (monitoringSystems.length > 0) {
       return fs.getMonitoringPlansSystemsTableRecords(monitoringSystems);
     } else {
       return [{ col2: "Loading list of Systems" }];

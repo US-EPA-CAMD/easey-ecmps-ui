@@ -124,7 +124,7 @@ export const DataTableMethod = ({
     return [];
   }, [methods, showActiveOnly]);
 
-  useMemo(() => {
+  useEffect(() => {
     if (matsTableHandler) {
       if (matsMethods.length < 1) {
         matsTableHandler(false);
