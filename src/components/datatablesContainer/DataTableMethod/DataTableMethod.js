@@ -24,12 +24,12 @@ export const DataTableMethod = ({
 
   useEffect(() => {
     mpApi
-      .getMonitoringMethods(0)
+      .getMonitoringMethods(locationSelectValue)
       .then((res) => {
         setMethods(res.data);
       })
     mpApi
-      .getMonitoringMatsMethods(0)
+      .getMonitoringMatsMethods(locationSelectValue)
       .then((res) => {
         setMatsMethods(res.data);
       })
