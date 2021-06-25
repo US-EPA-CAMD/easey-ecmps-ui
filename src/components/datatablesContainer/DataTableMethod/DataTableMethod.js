@@ -23,16 +23,12 @@ export const DataTableMethod = ({
   );
 
   useEffect(() => {
-    mpApi
-      .getMonitoringMethods(locationSelectValue)
-      .then((res) => {
-        setMethods(res.data);
-      })
-    mpApi
-      .getMonitoringMatsMethods(locationSelectValue)
-      .then((res) => {
-        setMatsMethods(res.data);
-      })
+    mpApi.getMonitoringMethods(locationSelectValue).then((res) => {
+      setMethods(res.data);
+    });
+    mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
+      setMatsMethods(res.data);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, showActiveOnly]);
 
@@ -89,9 +85,7 @@ export const DataTableMethod = ({
               unstyled="true"
               epa-testid="btnEditMethod"
               className="cursor-pointer margin-left-2"
-              onClick={() =>
-                openMonitoringMethodsModal(row.col1, row.col2)
-              }
+              onClick={() => openMonitoringMethodsModal(row.col1, row.col2)}
               aria-label={`edit method ${row.col1} `}
               onKeyPress={(event) => {
                 if (event.key === "Enter") {
@@ -126,7 +120,7 @@ export const DataTableMethod = ({
       return fs.getMonitoringPlansMethodsTableRecords(
         showActiveOnly ? fs.getActiveMethods(methods) : methods
       );
-    } 
+    }
     return [];
   }, [methods, showActiveOnly]);
 

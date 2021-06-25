@@ -41,7 +41,7 @@ const reducer = (state = initialState.openedFacilityTabs, action) => {
           : x
       );
     }
-  }  else {
+  } else {
     return state;
   }
 };

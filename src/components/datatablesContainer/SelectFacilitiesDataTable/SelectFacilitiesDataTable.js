@@ -16,11 +16,9 @@ export const SelectFacilitiesDataTable = ({
   const [facilities, setFacilities] = useState("");
   useEffect(() => {
     if (facilities.length === 0) {
-      facilitiesApi
-        .getAllFacilities()
-        .then((res) => {
-          setFacilities(res.data);
-        })
+      facilitiesApi.getAllFacilities().then((res) => {
+        setFacilities(res.data);
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -62,10 +60,11 @@ export const SelectFacilitiesDataTable = ({
   });
 
   const selectedRowHandler = (info) => {
+    console.log("select", info);
     addtabs([
       {
         title: `${info[0].col2} (${info[1].name}) ${
-          info[1].active === "Inactive" ? "Inactive" : ""
+          info[1].active ? "" : "Inactive"
         }`,
         component: (
           <div className="selectedTabsBox">

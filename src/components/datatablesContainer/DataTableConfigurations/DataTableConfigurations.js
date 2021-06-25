@@ -25,11 +25,11 @@ export const DataTableConfigurations = ({
   const [selectedMP, setSelectedMp] = useState([]);
   const [selectedConfig, setSelectedConfig] = useState([]);
 
-  const findSelectedConfig = (config) => {
+  const findSelectedConfig = (configID) => {
     let val = 0;
     if (selectedMP.length > 0) {
       for (const x of selectedMP[1]) {
-        if (x.name === config) {
+        if (x.id === configID) {
           val = x;
           break;
         }
@@ -39,7 +39,7 @@ export const DataTableConfigurations = ({
   };
 
   const openConfig = (config, checkout) => {
-    const selectedConfigData = findSelectedConfig(config.col1);
+    const selectedConfigData = findSelectedConfig(config.col3);
     setSelectedConfig([data, selectedConfigData, checkout]);
   };
 
@@ -83,7 +83,7 @@ export const DataTableConfigurations = ({
       .postCheckoutMonitoringPlanConfiguration(config.col3, user.firstName)
       .then((res) => {
         console.log(res, "data");
-      })
+      });
     openConfig(config, true);
   };
   columnNames.forEach((name, index) => {
