@@ -1,0 +1,23 @@
+// *** import google fonts
+@import url("https://fonts.googleapis.com/css2?family=Public+Sans");
+@import url("https://fonts.googleapis.com/css2?family=Roboto");
+
+@import "variables";
+
+body {
+  font-family: $epa-generic-font-family;
+}
+
+.hour-input {
+  width: 2em !important;
+}
+
+.page-header {
+  font-size: 2.5em;
+  font-weight: bold;
+}
+
+.page-subheader {
+  font-size: 1.375em;
+  font-weight: bold;
+}

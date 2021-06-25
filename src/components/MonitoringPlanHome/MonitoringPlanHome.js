@@ -7,10 +7,11 @@ import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFa
 const MonitoringPlanHome = ({ user }) => {
   return (
     <div className="home-container">
-      <div className="text-gray-50">
-        <h1 className="display-inline-block">Monitoring Plans</h1>
+      <div className="text-black margin-top-1">
+        <h1 className="display-inline-block page-header">Monitoring Plans</h1>
         <Button
-          className="float-right clearfix radius-2"
+          type="button"
+          className="float-right clearfix radius-2 position-relative top-2"
           outline={true}
           id="input-button-search"
         >
