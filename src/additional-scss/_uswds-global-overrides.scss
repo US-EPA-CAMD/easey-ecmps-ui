@@ -1,3 +1,5 @@
+@import "variables";
+
 .header-container {
   .usa-nav {
     right: 0 !important;
@@ -218,4 +220,16 @@
 
 .left-neg-4 {
   left: -2rem;
+}
+
+.usa-button {
+  font-family: $epa-generic-font-family !important;
+}
+
+.usa-current {
+  color: $epa-blue-base !important;
+}
+
+.usa-sidenav a:not(.usa-button) {
+  color: $epa-black;
 }

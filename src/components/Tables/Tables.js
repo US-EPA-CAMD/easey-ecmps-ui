@@ -29,7 +29,6 @@ const Tables = ({
     if (matsTableFlag) {
       sections[3] = (
         <div>
-          <hr width="100%" align="center" />
           <Accordion
             bordered={false}
             aria-expanded={true}
@@ -39,7 +38,6 @@ const Tables = ({
 
           {matsTableFlag ? (
             <>
-              <hr width="100%" align="center" />
               <Accordion
                 bordered={false}
                 items={supItems}
@@ -53,16 +51,15 @@ const Tables = ({
         </div>
       );
     }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matsTableFlag]);
   const sections = {
-    0: <div></div>,
-    1: <div></div>,
-    "Monitoring Defaults": <div></div>,
+    0: <div />,
+    1: <div />,
+    "Monitoring Defaults": <div />,
 
     3: (
       <div>
-        <hr width="100%" align="center" />
         <Accordion
           bordered={false}
           aria-expanded={true}
@@ -72,7 +69,6 @@ const Tables = ({
 
         {matsTableFlag ? (
           <>
-            <hr width="100%" align="center" />
             <Accordion
               bordered={true}
               items={supItems}
@@ -82,29 +78,24 @@ const Tables = ({
         ) : (
           ""
         )}
-        {/* <hr width="100%" align="center" /> */}
       </div>
     ),
     4: (
       <div>
-        <hr width="100%" align="center" />
         <Accordion
           bordered={false}
           aria-expanded={true}
           items={systemsItems}
           className="accordions"
         />
-        {/* <hr width="100%" align="center" /> */}
-
-        {/* <hr width="100%" align="center" /> */}
       </div>
     ),
-    Qualifications: <div></div>,
-    "Rectangular Duct WAFs": <div></div>,
-    "Reporting Frequency": <div></div>,
-    "Span, Range, and Formulas": <div></div>,
-    "Unit Information": <div></div>,
-    "Stack/Pipe Information": <div></div>,
+    Qualifications: <div />,
+    "Rectangular Duct WAFs": <div />,
+    "Reporting Frequency": <div />,
+    "Span, Range, and Formulas": <div />,
+    "Unit Information": <div />,
+    "Stack/Pipe Information": <div />,
   };
   return (
     <div aria-live="polite" ref={ref}>
