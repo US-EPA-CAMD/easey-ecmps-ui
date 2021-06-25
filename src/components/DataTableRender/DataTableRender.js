@@ -1,11 +1,16 @@
 import React, { useState, useMemo } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "@trussworks/react-uswds";
 
 import DataTable from "react-data-table-component";
 import { FilterComponent } from "../ReactDataTablesFilter/ReactDataTablesFilter";
 import { Preloader } from "../Preloader/Preloader";
+
+import {
+  ArrowDownwardSharp,
+  KeyboardArrowDownSharp,
+  KeyboardArrowUpSharp,
+} from "@material-ui/icons";
+
 import config from "../../config";
 
 /*** scss ***/
@@ -22,6 +27,7 @@ const DataTableRender = ({
   filter,
   expandableRowComp,
   defaultSort,
+
   expandableRows,
   headerStyling,
   tableStyling,
@@ -48,20 +54,20 @@ const DataTableRender = ({
       setSearchText(document.querySelector("#txtSearchData").value);
     };
 
-    return (
-      <FilterComponent
-        onSearch={handleSearch}
-        tableTitle={tableTitle ? tableTitle : ""}
-      />
-    );
+    let title = tableTitle ? tableTitle : "";
+
+    if (title === "") {
+      title = sectionTitle ? sectionTitle : null;
+    }
+
+    return <FilterComponent onSearch={handleSearch} title={title} />;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className={`${componentStyling}`}>
       <div className={`${headerStyling}`}>
-        <h2 className="padding-0">
-          {sectionTitle ? <div>{sectionTitle}</div> : ""}
+        <h2 className="padding-0 page-subheader">
           {button ? (
             <div>
               <Button
@@ -83,10 +89,7 @@ const DataTableRender = ({
           <DataTable
             className="data-display-table react-transition fade-in"
             sortIcon={
-              <FontAwesomeIcon
-                icon={faCaretDown}
-                className="margin-left-2 text-indigo"
-              />
+              <ArrowDownwardSharp className="margin-left-2 text-primary" />
             }
             // props
             defaultSortField={defaultSort ? defaultSort : "col1"}
@@ -113,9 +116,13 @@ const DataTableRender = ({
             }}
             expandableRowDisabled={(row) => row.disabled}
             expandableRowsComponent={expandableRowComp}
+            expandableIcon={{
+              collapsed: <KeyboardArrowDownSharp />,
+              expanded: <KeyboardArrowUpSharp />,
+            }}
           />
         ) : (
-          <div className="margin-y-9 padding-y-9 react-transition fade-in">
+          <div className="margin-y-9 padding-y-9 react-transition fade-in font-body-sm">
             <Preloader />
           </div>
         )}

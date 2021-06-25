@@ -225,3 +225,11 @@
 .usa-button {
   font-family: $epa-generic-font-family !important;
 }
+
+.usa-current {
+  color: $epa-blue-base !important;
+}
+
+.usa-sidenav a:not(.usa-button) {
+  color: $epa-black;
+}
