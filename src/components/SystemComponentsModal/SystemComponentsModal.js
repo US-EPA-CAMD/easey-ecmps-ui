@@ -8,12 +8,11 @@ import {
   Fieldset,
   Button,
 } from "@trussworks/react-uswds";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { ArrowBackSharp } from "@material-ui/icons";
 import {
   componentTypes,
   acqMethodCode,
-  basisCode
+  basisCode,
 } from "./SystemComponentsData";
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 
@@ -68,11 +67,11 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
     if (modalData.endDate !== null) {
       const [eyear, emonth, eday] = modalData.endDate.split("-");
       !viewOnly
-      ? setEndDate(`${year}-${day}-${month}`)
-      : setEndDate(`${emonth}-${eday}-${eyear}`);
+        ? setEndDate(`${year}-${day}-${month}`)
+        : setEndDate(`${emonth}-${eday}-${eyear}`);
       setEndHour(modalData.endHour);
     }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalData]);
   return (
     <div className="systemsCompTable">
@@ -82,7 +81,7 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
             aria-label="go back to systems details"
             onClick={() => backBTN(false)}
           >
-            <FontAwesomeIcon icon={faArrowLeft} className=" font-body-sm" />
+            <ArrowBackSharp className=" font-body-sm" />
           </Button>
 
           <h3>Component: {modalData.componentIdentifier}</h3>
@@ -144,7 +143,7 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
             ) : (
               <SelectBox
                 caption="Sample Acquisition Method"
-                id = "SampleAcquisitionMethod"
+                id="SampleAcquisitionMethod"
                 options={acqMethodCode}
                 initialSelection={modalData.acquisitionMethodCode}
                 selectKey="code"
@@ -181,7 +180,7 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
                 options={componentTypes}
                 initialSelection={modalData.componentTypeCode}
                 selectKey="code"
-                id ={"ComponentType"}
+                id={"ComponentType"}
                 viewOnly={viewOnly}
                 required
                 secondOption="name"

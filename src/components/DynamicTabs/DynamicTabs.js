@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import Tabs from "../Tabs/Tabs";
 import TabPane from "../TabPane/TabPane";
-import "./DynamicTabs.scss";
 import {
   addFacilityTab,
   removeFacilityTab,
 } from "../../store/actions/dynamicFacilityTab";
 import ResizeObserver from "resize-observer-polyfill";
 import { setActiveTab } from "../../store/actions/activeTab";
+
+import "./DynamicTabs.scss";
 
 export const DynamicTabs = ({
   tabsProps,
