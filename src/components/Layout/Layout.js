@@ -14,7 +14,7 @@ const Layout = (props) => {
         <WideHeader />
       </div>
       <div className="grid-row">
-        <div className="grid-col-2">
+        <div className="grid-col-2 bg-base-lightest">
           <LeftNavigation />
         </div>
         <div className="grid-col margin-x-2">

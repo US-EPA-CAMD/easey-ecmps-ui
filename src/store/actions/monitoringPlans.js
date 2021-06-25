@@ -1,7 +1,7 @@
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import { beginMonitoringPlansApiCall } from "./apiStatusActions";
 import * as types from "./actionTypes";
-import log from "loglevel";
+import { log } from "loglevel";
 
 export function loadMonitoringPlansSuccess(monitoringPlans) {
   return {

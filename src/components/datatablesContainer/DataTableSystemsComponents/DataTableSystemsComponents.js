@@ -6,12 +6,11 @@ import SystemFuelFlowsModal from "../../SystemFuelFlowsModal/SystemFuelFlowsModa
 
 import { normalizeRowObjectFormat } from "../../../additional-functions/react-data-table-component";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+
 import DataTableRender from "../../DataTableRender/DataTableRender";
 import log from "loglevel";
 import "./DataTableSystemsComponentsRender.scss";
-
+import { CreateSharp } from "@material-ui/icons";
 
 export const DataTableSystemsComponents = ({
   systemID,
@@ -99,7 +98,7 @@ export const DataTableSystemsComponents = ({
           aria-label={viewOnly ? "Click to View" : "Click to View or Edit"}
           onClick={() => selectedRowHandler(normalizedRow.cells)}
         >
-          <FontAwesomeIcon icon={faPencilAlt} className="margin-right-1" />
+          <CreateSharp className="margin-right-1" />
           {viewOnly ? "View" : "View/Edit"}
         </div>
       );
@@ -140,7 +139,7 @@ export const DataTableSystemsComponents = ({
           aria-label="Click to view fuel flow details"
           onClick={() => selectedRowHandler(normalizedRow.cells)}
         >
-          <FontAwesomeIcon icon={faPencilAlt} className="margin-right-1" />
+          <CreateSharp className="margin-right-1" />
           View
         </div>
       );

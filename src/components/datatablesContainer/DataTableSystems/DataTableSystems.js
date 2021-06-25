@@ -2,15 +2,13 @@ import React, { useEffect, useMemo, useState } from "react";
 
 import * as fs from "../../../utils/selectors/monitoringPlanSystems";
 import { normalizeRowObjectFormat } from "../../../additional-functions/react-data-table-component";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { CreateSharp } from "@material-ui/icons";
 import Modal from "../../Modal/Modal";
 import Details from "../../Details/Details";
 import DataTableSystemsComponents from "../DataTableSystemsComponents/DataTableSystemsComponents";
 import DataTableRender from "../../DataTableRender/DataTableRender";
 import log from "loglevel";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-
 
 export const DataTableSystems = ({
   loadMonitoringSystemsData,
@@ -106,7 +104,7 @@ export const DataTableSystems = ({
           tabIndex="0"
           aria-label="Click to view system details"
         >
-          <FontAwesomeIcon icon={faPencilAlt} className="margin-right-1" />
+          <CreateSharp className="margin-right-1" />
           View
         </div>
       );

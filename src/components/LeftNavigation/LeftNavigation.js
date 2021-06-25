@@ -87,7 +87,7 @@ export const LeftNavigation = () => {
     ],
   ];
   return (
-    <div className="bg-base-lightest minh-tablet font-body-sm padding-3">
+    <div className="minh-tablet font-body-sm padding-3">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       <SideNav items={makeHeader(head)} />
 

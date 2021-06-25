@@ -6,8 +6,8 @@ import {
   DatePicker,
   Button,
 } from "@trussworks/react-uswds";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+
+import { ArrowBackSharp } from "@material-ui/icons";
 import { acqMethodCode } from "./SystemFuelFlowsData";
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 
@@ -69,7 +69,7 @@ const SystemFuelFlowsModal = ({ modalData, viewOnly, backBTN }) => {
             aria-label="go back to systems details"
             onClick={() => backBTN(false)}
           >
-            <FontAwesomeIcon icon={faArrowLeft} className=" font-body-sm" />
+            <ArrowBackSharp className=" font-body-sm" />
           </Button>
 
           <h3>
