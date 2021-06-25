@@ -21,3 +21,18 @@ body {
   font-size: 1.375em;
   font-weight: bold;
 }
+
+[data-initials]:before {
+  content: attr(data-initials);
+  display: inline-block;
+  font-size: 1em;
+  width: 2.5em;
+  height: 2.5em;
+  line-height: 2.5em;
+  text-align: center;
+  border-radius: 50%;
+  background: $epa-blue-base;
+  vertical-align: middle;
+  margin-right: 0.5em;
+  color: white;
+}
