@@ -5,7 +5,6 @@ import { Button } from "@trussworks/react-uswds";
 import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
 import { connect } from "react-redux";
 import SelectedFacilityTab from "../MonitoringPlanTab/MonitoringPlanTab";
-// import {SelectedFacilityTab} from '../../'
 const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
   const handleTabState = () => {
     const tabArr = [

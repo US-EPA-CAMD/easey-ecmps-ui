@@ -60,7 +60,6 @@ export const SelectFacilitiesDataTable = ({
   });
 
   const selectedRowHandler = (info) => {
-    console.log("select", info);
     addtabs([
       {
         title: `${info[0].col2} (${info[1].name}) ${
