@@ -64,6 +64,11 @@ const Tabs = ({
                   tabIndex="0"
                   aria-label={`open ${el.props.title} tab`}
                   onClick={() => settingActiveTab(i)}
+                  onKeyPress={(event) => {
+                    if (event.key === "Enter") {
+                      settingActiveTab(i);
+                    }
+                  }}
                 >
                   <div>
                     <div className="text-center">
