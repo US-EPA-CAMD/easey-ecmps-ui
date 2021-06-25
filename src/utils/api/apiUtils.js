@@ -2,7 +2,10 @@ import log from "loglevel";
 
 export async function handleResponse(response) {
   if (response.status === 200) {
-    return response;}
+    return response;
+  } else {
+    throw new Error("failed");
+  }
 }
 
 export function handleError(error) {

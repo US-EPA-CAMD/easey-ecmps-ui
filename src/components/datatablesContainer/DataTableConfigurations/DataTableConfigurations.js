@@ -40,7 +40,6 @@ export const DataTableConfigurations = ({
 
   const openConfig = (config, checkout) => {
     const selectedConfigData = findSelectedConfig(config.col1);
-    console.log("data", [data, selectedConfigData, checkout]);
     setSelectedConfig([data, selectedConfigData, checkout]);
   };
 
@@ -85,9 +84,6 @@ export const DataTableConfigurations = ({
       .then((res) => {
         console.log(res, "data");
       })
-      .catch((err) => {
-        console.log(err);
-      });
     openConfig(config, true);
   };
   columnNames.forEach((name, index) => {

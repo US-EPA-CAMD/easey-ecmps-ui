@@ -1,16 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
-import { Preloader } from "../../Preloader/Preloader";
 import { Button } from "@trussworks/react-uswds";
 import Modal from "../../Modal/Modal";
 import MethodModal from "../../MethodModal/MethodModal";
 import DataTableRender from "../../DataTableRender/DataTableRender";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import log from "loglevel";
-export const DataTableMethod = ({
-  monitoringMethods,
-  monitoringMatsMethods,
 
+export const DataTableMethod = ({
   locationSelectValue,
 
   matsTableHandler,
@@ -28,21 +24,15 @@ export const DataTableMethod = ({
 
   useEffect(() => {
     mpApi
-      .getMonitoringMethods(locationSelectValue)
+      .getMonitoringMethods(0)
       .then((res) => {
         setMethods(res.data);
       })
-      .catch((err) => {
-        log(err);
-      });
     mpApi
-      .getMonitoringMatsMethods(locationSelectValue)
+      .getMonitoringMatsMethods(0)
       .then((res) => {
         setMatsMethods(res.data);
       })
-      .catch((err) => {
-        log(err);
-      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, showActiveOnly]);
 
@@ -136,9 +126,8 @@ export const DataTableMethod = ({
       return fs.getMonitoringPlansMethodsTableRecords(
         showActiveOnly ? fs.getActiveMethods(methods) : methods
       );
-    } else {
-      return [{ col3: <Preloader /> }];
-    }
+    } 
+    return [];
   }, [methods, showActiveOnly]);
 
   useMemo(() => {

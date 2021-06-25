@@ -8,7 +8,6 @@ import Modal from "../../Modal/Modal";
 import Details from "../../Details/Details";
 import DataTableSystemsComponents from "../DataTableSystemsComponents/DataTableSystemsComponents";
 import DataTableRender from "../../DataTableRender/DataTableRender";
-import log from "loglevel";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 
@@ -27,9 +26,6 @@ export const DataTableSystems = ({
         .then((res) => {
           setMonitoringSystems(res.data);
         })
-        .catch((err) => {
-          log(err);
-        });
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -3,7 +3,7 @@ import React, { useEffect, useMemo,useState } from "react";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import DataTableRender from "../../DataTableRender/DataTableRender";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import log from "loglevel";
+
 
 export const DataTableMats = ({
   locationSelect,
@@ -16,9 +16,6 @@ export const DataTableMats = ({
       .then((res) => {
         setMatsMethods(res.data);
       })
-      .catch((err) => {
-        log(err);
-      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect]);
