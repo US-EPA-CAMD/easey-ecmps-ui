@@ -7,7 +7,6 @@ import Login from "../Login/Login";
 import { Link } from "react-router-dom";
 import { Link as USWDSLink } from "@trussworks/react-uswds";
 
-import "./LeftNavigation.css";
 const cdxUser = sessionStorage.getItem("cdx_user")
   ? JSON.parse(sessionStorage.getItem("cdx_user"))
   : false;
