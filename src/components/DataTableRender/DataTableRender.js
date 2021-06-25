@@ -68,8 +68,8 @@ const DataTableRender = ({
     <div className={`${componentStyling}`}>
       <div className={`${headerStyling}`}>
         <h2 className="padding-0 page-subheader">
-          {button ? (
-            <div>
+          {button && data.length ? (
+            <div className="padding-y-1">
               <Button
                 type="button"
                 test-id={`btnAdd${tableTitle.split(" ").join("")}`}
@@ -122,7 +122,7 @@ const DataTableRender = ({
             }}
           />
         ) : (
-          <div className="margin-y-9 padding-y-9 react-transition fade-in font-body-sm">
+          <div className="margin-y-3 padding-y-3 react-transition fade-in font-body-sm">
             <Preloader />
           </div>
         )}
