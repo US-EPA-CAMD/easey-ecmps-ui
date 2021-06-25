@@ -87,14 +87,14 @@ export const LeftNavigation = () => {
     ],
   ];
   return (
-    <div className="bg-base-lightest width-full height-full font-body-sm padding-3">
+    <div className="bg-base-lightest minh-tablet font-body-sm padding-3">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       <SideNav items={makeHeader(head)} />
 
       {userLoggedIn ? <SideNav items={wsItems} /> : ""}
-      <div className="padding-bottom-4 position-absolute bottom-0">
+      <div className="padding-bottom-4 position-absolute bottom-3">
         {!cdxUser ? (
-          <Button type="button" onClick={() => openModal(true)}>
+          <Button type="button" outline={true} onClick={() => openModal(true)}>
             Log In
           </Button>
         ) : null}

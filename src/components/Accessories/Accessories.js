@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@trussworks/react-uswds";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTh,
-  faUser,
-  faCog,
-  faQuestionCircle,
-  faUserCircle,
-} from "@fortawesome/free-solid-svg-icons";
 
 const cdx_user = sessionStorage.getItem("cdx_user")
   ? JSON.parse(sessionStorage.getItem("cdx_user"))
   : false;
-const firstName = cdx_user && cdx_user.firstName ? cdx_user.firstName : false;
+const firstName = cdx_user && cdx_user.firstName ? cdx_user.firstName : "X";
+const lastName = cdx_user && cdx_user.lastName ? cdx_user.lastName : "X";
+
+const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`;
 
 const Accessories = () => {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
@@ -37,61 +32,58 @@ const Accessories = () => {
     <div className="accessoriesLinks">
       {userLoggedIn ? (
         <div>
-          <div className="">
-            <FontAwesomeIcon icon={faUserCircle} className=" font-body-lg" />
-            {" Welcome, "}
-            {firstName}
+          <div className="accessoryLink">
+            <p data-initials={initials} className="usa-current text-bold">
+              {" "}
+              Welcome, {firstName}
+            </p>
           </div>
           {userLoggedIn && (
             <div className="accessoryLink">
-              <Button type="button" onClick={() => logOut()}>
+              <Button type="button" outline={true} onClick={() => logOut()}>
                 Log Out
               </Button>
             </div>
           )}
-          <div className="accessoryLink">
-            <FontAwesomeIcon icon={faUser} className="font-body-sm" />
+          <p className="margin-top-2 text-primary-vivid">
             <Link
               to="./profile"
               rel="Profile"
               title="Go to the Profile page"
-              className=""
+              className="accessoryLink"
             >
               Profile
             </Link>
-          </div>
-          <div className="">
-            <FontAwesomeIcon icon={faCog} className="font-body-sm" />
+          </p>
+          <p className="text-primary-vivid">
             <Link
-              className=""
+              className="accessoryLink"
               to="./account_manage"
               rel=" Account Management"
               title="Go to the Account Management page"
             >
               Account Management
             </Link>
-          </div>
+          </p>
         </div>
       ) : (
         ""
       )}
-      <div className="accessoryLink">
-        <FontAwesomeIcon icon={faTh} className=" font-body-sm" />
+      <p>
         <Link
           to="./apps"
           rel=" CAMD Apps"
-          title="Go to the  CAMD Apps page"
-          className=""
+          title="Go to the CAMPD Apps page"
+          className="accessoryLink"
         >
           CAMD Apps
         </Link>
-      </div>
-      <div className="accessoryLink">
-        <FontAwesomeIcon icon={faQuestionCircle} className="font-body-sm" />
+      </p>
+      <p>
         <Link to="./help" rel="help" title="Go to the help page" className="">
           {"Help & Contact"}
         </Link>
-      </div>
+      </p>
     </div>
   );
 };
