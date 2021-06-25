@@ -70,21 +70,19 @@ function componentRenderer(showActiveOnly) {
         active: false
       },
     ],
-    loadMonitoringMethodsData: jest.fn(),
-    loadMonitoringMatsMethodsData: jest.fn(),
-    loading: false,
+
     showActiveOnly: showActiveOnly
   };
   return render(<DataTableMethod {...props} />);
 }
 function componentRendererNoData(args) {
   const defualtProps = {
-    monitoringMethods: [],
-    monitoringMatsMethods:[],
-    loadMonitoringMethodsData: jest.fn(),
-    loadMonitoringMatsMethodsData: jest.fn(),
-    loading: true,
-    showActiveOnly: true
+    locationSelectValue = "0"
+
+    matsTableHandler:jest.fn()
+    showActiveOnly:true
+    user:{username:'test'}
+    checkout:true
   };
 
   const props = { ...defualtProps, ...args };
@@ -103,7 +101,7 @@ function componentRendererNoData(args) {
 //   expect(records.length).toEqual(3);
 // });
 
-// test("testing redux connected data-table component renders no records", () => {
-//   const { container } = componentRendererNoData();
-//   expect(screen.getByText("Loading list of Methods")).toBeInTheDocument();
-// });
+test("testing redux connected data-table component renders no records", () => {
+  const { container } = componentRendererNoData();
+  expect(screen.getByAltText("Content loading")).toBeInTheDocument();
+});

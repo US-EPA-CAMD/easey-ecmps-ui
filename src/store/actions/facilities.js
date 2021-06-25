@@ -1,7 +1,6 @@
 import * as facilitiesApi from "../../utils/api/facilityApi";
 import { beginFacilitiesApiCall } from "./apiStatusActions";
 import * as types from "./actionTypes";
-import log from "loglevel";
 
 export function loadFacilitiesSuccess(facilities) {
   return {
@@ -9,6 +8,7 @@ export function loadFacilitiesSuccess(facilities) {
     facilities,
   };
 }
+
 
 export function loadFacilities() {
   return (dispatch) => {
@@ -18,9 +18,6 @@ export function loadFacilities() {
       .then((res) => {
         dispatch(loadFacilitiesSuccess(res.data));
       })
-      .catch((err) => {
-        log(err);
-      });
   };
 }
 

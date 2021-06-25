@@ -16,14 +16,9 @@ export const SelectFacilitiesDataTable = ({
   const [facilities, setFacilities] = useState("");
   useEffect(() => {
     if (facilities.length === 0) {
-      facilitiesApi
-        .getAllFacilities()
-        .then((res) => {
-          setFacilities(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      facilitiesApi.getAllFacilities().then((res) => {
+        setFacilities(res.data);
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -67,29 +62,25 @@ export const SelectFacilitiesDataTable = ({
   const selectedRowHandler = (info) => {
     addtabs([
       {
-        title: `${info[0].col2} (${info[1].col1}) ${
-          info[1].col2 === "Inactive" ? "Inactive" : ""
+        title: `${info[0].col2} (${info[1].name}) ${
+          info[1].active ? "" : "Inactive"
         }`,
         component: (
           <div className="selectedTabsBox">
             <SelectedFacilityTab
               orisCode={info[0].col1}
-              locations={info[2].locations}
-              selectedConfig={info[2]}
-              title={`${info[0].col2} (${info[1].col1}) ${
-                info[1].col2 === "Inactive" ? "Inactive" : ""
+              selectedConfig={info[1]}
+              title={`${info[0].col2} (${info[1].name}) ${
+                info[1].active ? "" : "Inactive"
               }`}
-              configID={info[2].id}
               user={user}
-              checkout={info[3]}
+              checkout={info[2]}
             />
           </div>
         ),
         orisCode: info[0].col1,
-        selectedConfig: info[2],
-        locations: info[2].locations,
-        configID: info[2].id,
-        checkout: info[3],
+        selectedConfig: info[1],
+        checkout: info[2],
       },
     ]);
   };
@@ -120,7 +111,6 @@ export const SelectFacilitiesDataTable = ({
       <DataTableRender
         columns={columns}
         data={data}
-        selectedRowHandler={selectedRowHandler}
         openedFacilityTabs={openedFacilityTabs}
         user={user}
         pagination={true}

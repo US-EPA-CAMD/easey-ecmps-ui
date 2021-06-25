@@ -13,7 +13,7 @@ import TableHeader from "../tableContainer/TableHeader/TableHeader";
 import TableBody from "../tableContainer/TableBody/TableBody";
 import TablePagination from "../tableContainer/TablePagination/TablePagination";
 import TablePaginationFilter from "../tableContainer/TablePaginationFilter/TablePaginationFilter";
-import TableSearch from "../TableSearch/TableSearch";
+import TableSearch from "../tableContainer/TableSearch/TableSearch";
 import { EditableCell, setEditable } from "../tableContainer/TableCell/TableCell";
 import "./UswdsTable.scss";
 

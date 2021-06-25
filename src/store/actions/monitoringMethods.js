@@ -40,8 +40,5 @@ export function loadMonitoringMatsMethods(locationId) {
       .then((res) => {
         dispatch(loadMonitoringMatsMethodsSuccess(res.data));
       })
-      .catch((err) => {
-        log(err);
-      });
   };
 }

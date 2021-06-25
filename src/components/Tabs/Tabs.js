@@ -56,6 +56,7 @@ const Tabs = ({
                 </Button>
               ) : (
                 <div
+                role = 'button'
                   className={
                     activeTabIndex === i
                       ? "tab-button active-tab-button"

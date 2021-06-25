@@ -8,7 +8,6 @@ import { normalizeRowObjectFormat } from "../../../additional-functions/react-da
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 import DataTableRender from "../../DataTableRender/DataTableRender";
-import log from "loglevel";
 import "./DataTableSystemsComponentsRender.scss";
 import { CreateSharp } from "@material-ui/icons";
 
@@ -38,9 +37,6 @@ export const DataTableSystemsComponents = ({
           }
         }
       })
-      .catch((err) => {
-        log(err);
-      });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [systemID]);
@@ -51,18 +47,12 @@ export const DataTableSystemsComponents = ({
       .then((res) => {
         setMonitoringSystemsComponents(res.data);
       })
-      .catch((err) => {
-        log(err);
-      });
 
     mpApi
       .getMonitoringSystemsFuelFlows(selected.monLocId, selected.id)
       .then((res) => {
         setMonitoringSystemsFuelFlows(res.data);
       })
-      .catch((err) => {
-        log(err);
-      });
   }, [selected]);
   // *** column names for dataset will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins
