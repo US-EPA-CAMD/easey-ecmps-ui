@@ -3,14 +3,16 @@ import Accessories from "../Accessories/Accessories";
 import { Button, SideNav } from "@trussworks/react-uswds";
 import Modal from "../Modal/Modal";
 import Login from "../Login/Login";
-import { NavLink } from "react-router-dom";
-import "./LeftNavigation.css";
+
+import { Link } from "react-router-dom";
+import { Link as USWDSLink } from "@trussworks/react-uswds";
+
 const cdxUser = sessionStorage.getItem("cdx_user")
   ? JSON.parse(sessionStorage.getItem("cdx_user"))
   : false;
 const firstName = cdxUser && cdxUser.firstName ? cdxUser.firstName : false;
 
-const LeftNavigation = () => {
+export const LeftNavigation = () => {
   const head = [
     { name: "Home", url: "/" },
     { name: "Monitoring Plans", url: "/monitoring-plans" },
@@ -26,9 +28,16 @@ const LeftNavigation = () => {
   const makeHeader = (arr, subFlag) => {
     return arr.map((item) => {
       return (
-        <NavLink
-          className={subFlag ? "text-normal" : ""}
-          activeClassName=" usa-current text-primary-dark"
+        <USWDSLink
+          className={
+            window.location.href.indexOf(item.url) > -1 &&
+            item.url !== "/" &&
+            subFlag === true
+              ? "usa-current"
+              : ""
+          }
+          variant="unstyled"
+          asCustom={Link}
           to={item.url}
           exact={true}
           rel={item.name}
@@ -36,7 +45,7 @@ const LeftNavigation = () => {
           key={item.name}
         >
           {item.name}
-        </NavLink>
+        </USWDSLink>
       );
     });
   };
@@ -58,25 +67,33 @@ const LeftNavigation = () => {
     setShow(value);
   };
   const wsItems = [
-    <NavLink
-      activeClassName=" usa-current text-primary-dark"
+    <USWDSLink
       to="/workspace"
       rel="workspace"
       title="Go to the workspace page"
+      className={
+        window.location.href.indexOf("/workspace") > -1 ? "usa-current" : ""
+      }
     >
       Workspace
-    </NavLink>,
-    [<SideNav key="sideNav" items={makeHeader(workSpace, true)} isSubnav />],
+    </USWDSLink>,
+    [
+      <SideNav
+        key="sideNav"
+        items={makeHeader(workSpace, true)}
+        isSubnav={true}
+      />,
+    ],
   ];
   return (
-    <div className="bg-base-lightest width-full height-full font-body-sm padding-3">
+    <div className="minh-tablet font-body-sm padding-3">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       <SideNav items={makeHeader(head)} />
 
       {userLoggedIn ? <SideNav items={wsItems} /> : ""}
-      <div className="padding-bottom-4 position-absolute bottom-0">
+      <div className="padding-bottom-4 position-absolute bottom-3">
         {!cdxUser ? (
-          <Button type="button" onClick={() => openModal(true)}>
+          <Button type="button" outline={true} onClick={() => openModal(true)}>
             Log In
           </Button>
         ) : null}

@@ -4,7 +4,6 @@ import {
   beginMonitoringSystemsComponentsApiCall,
 } from "./apiStatusActions";
 import * as types from "./actionTypes";
-import log from "loglevel";
 
 export function loadMonitoringSystemsSuccess(monitoringSystems) {
   return {
@@ -30,9 +29,6 @@ export function loadMonitoringSystems(locationId) {
       .then((res) => {
         dispatch(loadMonitoringSystemsSuccess(res.data));
       })
-      .catch((err) => {
-        log(err);
-      });
   };
 }
 export function loadMonitoringSystemsFuelFlows(locationId, systemId) {
@@ -43,9 +39,6 @@ export function loadMonitoringSystemsFuelFlows(locationId, systemId) {
       .then((res) => {
         dispatch(loadMonitoringSystemsFuelFlowsSuccess(res.data));
       })
-      .catch((err) => {
-        log(err);
-      });
   };
 }
 
@@ -66,8 +59,5 @@ export function loadMonitoringSystemsComponents(systemId, componentId) {
       .then((res) => {
         dispatch(loadMonitoringSystemsComponentsSuccess(res.data));
       })
-      .catch((err) => {
-        log(err);
-      });
   };
 }

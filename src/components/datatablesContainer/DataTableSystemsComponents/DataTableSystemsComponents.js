@@ -6,11 +6,11 @@ import SystemFuelFlowsModal from "../../SystemFuelFlowsModal/SystemFuelFlowsModa
 
 import { normalizeRowObjectFormat } from "../../../additional-functions/react-data-table-component";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+
 import DataTableRender from "../../DataTableRender/DataTableRender";
-import log from "loglevel";
 import "./DataTableSystemsComponentsRender.scss";
+import { CreateSharp } from "@material-ui/icons";
+
 export const DataTableSystemsComponents = ({
   systemID,
   showActiveOnly,
@@ -37,9 +37,6 @@ export const DataTableSystemsComponents = ({
           }
         }
       })
-      .catch((err) => {
-        log(err);
-      });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [systemID]);
@@ -50,18 +47,12 @@ export const DataTableSystemsComponents = ({
       .then((res) => {
         setMonitoringSystemsComponents(res.data);
       })
-      .catch((err) => {
-        log(err);
-      });
 
     mpApi
       .getMonitoringSystemsFuelFlows(selected.monLocId, selected.id)
       .then((res) => {
         setMonitoringSystemsFuelFlows(res.data);
       })
-      .catch((err) => {
-        log(err);
-      });
   }, [selected]);
   // *** column names for dataset will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins
@@ -97,7 +88,7 @@ export const DataTableSystemsComponents = ({
           aria-label={viewOnly ? "Click to View" : "Click to View or Edit"}
           onClick={() => selectedRowHandler(normalizedRow.cells)}
         >
-          <FontAwesomeIcon icon={faPencilAlt} className="margin-right-1" />
+          <CreateSharp className="margin-right-1" />
           {viewOnly ? "View" : "View/Edit"}
         </div>
       );
@@ -138,7 +129,7 @@ export const DataTableSystemsComponents = ({
           aria-label="Click to view fuel flow details"
           onClick={() => selectedRowHandler(normalizedRow.cells)}
         >
-          <FontAwesomeIcon icon={faPencilAlt} className="margin-right-1" />
+          <CreateSharp className="margin-right-1" />
           View
         </div>
       );

@@ -4,7 +4,6 @@ div.row.column1 {
   /* width:5px; */
   /* max-width: 1px; */
   position: relative;
-  min-height: 100vh;
 
   height: auto;
 }
@@ -25,12 +24,12 @@ div.row.column1 {
   min-width: 1400px;
   max-width: 2000px;
 } */
-.contentrow{
+.contentrow {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
 }
-.sideNav{
-  display:flex !important;
+.sideNav {
+  display: flex !important;
   flex-direction: column !important;
 }

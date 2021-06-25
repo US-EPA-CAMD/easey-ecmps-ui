@@ -10,6 +10,7 @@ export const DataTable = ({
   loading,
   selectedRowHandler,
   dataSelector,
+  className,
 }) => {
   useEffect(() => {
     if (facilities.length === 0) {
@@ -35,7 +36,6 @@ export const DataTable = ({
         accessor: "col3",
         width: "210px",
       },
-
     ],
     []
   );
@@ -54,6 +54,7 @@ export const DataTable = ({
       data={data}
       selectedRowHandler={selectedRowHandler}
       dataSelector={dataSelector}
+      className={className}
     />
   );
 };
