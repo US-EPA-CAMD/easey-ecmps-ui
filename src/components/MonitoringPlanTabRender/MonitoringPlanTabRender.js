@@ -28,7 +28,7 @@ export const MonitoringPlanTabRender = ({
     setMatsTableFlag(flag);
   };
 
-  // checks mats table 
+  // checks mats table
   useEffect(() => {
     if (matsTableFlag) {
       setTableState(
@@ -47,34 +47,39 @@ export const MonitoringPlanTabRender = ({
         )
       );
     }
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matsTableFlag]);
 
   // updates all tables whenever a location is changed
   useEffect(() => {
-      setTableState(
-        [
-          [],
-          [],
-          [],
-          [
-            <DataTableMethod
-              matsTableHandler={matsTableHandler}
-              locationSelectValue={parseInt(locationSelect[1])}
-              checkout={checkout}
-              user={user}
-              // showActiveOnly={!showInactive}
-            />
-          ],
-      
-          [<DataTableSystems locationSelect={parseInt(locationSelect[1])} />],
-          [],
-          [],
-        ]
-      );
-      
-    }, [locationSelect]);
+    setTableState([
+      [],
+      [],
+      [],
+      [
+        <DataTableMethod
+          matsTableHandler={matsTableHandler}
+          locationSelectValue={parseInt(locationSelect[1])}
+          checkout={checkout}
+          user={user}
+          // showActiveOnly={!showInactive}
+        />,
+      ],
+      [],
+      [],
+      [],
+      [],    
+      [],
+      [<DataTableSystems locationSelect={parseInt(locationSelect[1])} />],
+      [],
+  
+    ]);
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locationSelect]);
 
-    // sets initial state 
+  // sets initial state
   const [tableState, setTableState] = useState([
     [],
     [],
@@ -86,14 +91,16 @@ export const MonitoringPlanTabRender = ({
         checkout={checkout}
         user={user}
         // showActiveOnly={!showInactive}
-      />
+      />,
     ],
-
+    [],
+    [],
+    [],
+    [],    
+    [],
     [<DataTableSystems locationSelect={locationSelect[1]} />],
     [],
-    [],
   ]);
-
 
   const resetInactivityTimerApiCall = () => {
     console.log(mpApi.putLockTimerUpdateConfiguration(configID), "api called");
@@ -122,7 +129,10 @@ export const MonitoringPlanTabRender = ({
         />
       </div>
       <div className="grid-row">
-        <CustomAccordion title="test" table={tableState[sectionSelect]} />
+        <CustomAccordion
+          title={sectionSelect[1]}
+          table={tableState[sectionSelect[0]]}
+        />
       </div>
     </div>
   );

@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import "./HeaderInfo.scss";
 import DropdownSelection from "../DropdownSelection/DropdownSelection";
 import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import LockIcon from "@material-ui/icons/Lock";
 import { Button } from "@trussworks/react-uswds";
-import CustomAccordion from "../CustomAccordion/CustomAccordion";
 
 const HeaderInfo = ({
   facility,
@@ -20,30 +18,26 @@ const HeaderInfo = ({
   // user,
 }) => {
   const sections = [
+    { name: "Defaults" },
     { name: "Loads" },
     { name: "Location Attributes" },
-    { name: "Monitoring Defaults" },
-    { name: "Monitoring Methods" },
-    { name: "Monitoring Systems" },
+    { name: "Methods" },
     { name: "Qualifications" },
     { name: "Rectangular Duct WAFs" },
     { name: "Reporting Frequency" },
     { name: "Span, Range, and Formulas" },
-    { name: "Unit Information" },
     { name: "Stack/Pipe Information" },
+    { name: "Systems" },
+    { name: "Unit Information" },
   ];
-
-  const sectionHandler = (selectedArray) => {
-    setSectionSelect(selectedArray[0]);
-  };
 
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
   const [checkout, setCheckout] = useState(false);
   return (
-    <div className="header">
-      <div className="grid-row maxw-full">
+    <div className="">
+      <div className="grid-row ">
         <div className="grid-col">
           <div>
             <h3 className=" display-inline-block">
@@ -101,11 +95,11 @@ const HeaderInfo = ({
                 />
                 <DropdownSelection
                   caption="Sections"
-                  selectionHandler={sectionHandler}
+                  selectionHandler={setSectionSelect}
                   options={sections}
                   viewKey="name"
                   selectKey="name"
-                  initialSelection={sectionSelect}
+                  initialSelection={sectionSelect[0]}
                   orisCode={orisCode}
                 />
               </div>

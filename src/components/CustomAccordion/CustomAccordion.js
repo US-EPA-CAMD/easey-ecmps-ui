@@ -2,13 +2,18 @@ import React, { useState, useEffect } from "react";
 
 import { Button } from "@trussworks/react-uswds";
 import {
-    ArrowDownwardSharp,
     KeyboardArrowDownSharp,
     KeyboardArrowUpSharp,
   } from "@material-ui/icons";
 const CustomAccordion = ({ title, table }) => {
   const [open, setOpen] = useState(table.map((item, index) => true));
 
+
+  useEffect(() =>{
+    setOpen(table.map((item, index) => true));
+
+
+  },[table])
   // updates all tables whenever a location is changed
   const tableState = (index, val) => {
     setOpen(table.map((item, ind) => (ind === index ? val : open[ind])));
@@ -16,26 +21,26 @@ const CustomAccordion = ({ title, table }) => {
   return (
     <div className="">
       {table.map((item, index) => (
-        <div>
+        <div key={index}>
           {open[index] ? (
-            <div>
+             <div className="text-bold font-body-xl display-block height-auto">
               <Button
                 aria-label="Collapse Row"
-                className="sc-iCoGMd inrgiU"
+                className="bg-base-lighter"
                 onClick={() => tableState(index, false)}
               >
                 <KeyboardArrowUpSharp/>
-              </Button>
+              </Button>{title}
             </div>
           ) : (
-            <div>
+            <div className="text-bold font-body-xl display-block height-auto">
               <Button
                 aria-label="Expand Row"
-                className="sc-iCoGMd inrgiU"
+                className="bg-base-lighter"
                 onClick={() => tableState(index, true)}
               >
               <KeyboardArrowDownSharp/>
-              </Button>
+              </Button>{title}
             </div>
           )}
           {open[index] ? item : ""}
