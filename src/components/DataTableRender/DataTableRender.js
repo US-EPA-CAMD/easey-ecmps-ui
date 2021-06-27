@@ -27,11 +27,11 @@ const DataTableRender = ({
   filter,
   expandableRowComp,
   defaultSort,
-
   expandableRows,
   headerStyling,
   tableStyling,
   componentStyling,
+  className,
 }) => {
   const [searchText, setSearchText] = useState("");
 
@@ -87,7 +87,7 @@ const DataTableRender = ({
       <div aria-live="polite" className={`${tableStyling}`}>
         {data.length ? (
           <DataTable
-            className="data-display-table react-transition fade-in"
+            className={`data-display-table react-transition fade-in ${className}`}
             sortIcon={
               <ArrowDownwardSharp className="margin-left-2 text-primary" />
             }

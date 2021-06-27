@@ -32,12 +32,7 @@ export const SelectFacilitiesDataTable = ({
 
   // *** generate columns array of object based on columnNames array above
   let columns = [];
-  // const handleEnterPress = (normalizedRow) => {
-  //   setTimeout(function () {
-  //     const tableBody = document.getElementsByClassName("button-group");
-  //     tableBody[tableBody.length - 1].focus();
-  //   }, 700);
-  // };
+
   columnNames.forEach((name, index) => {
     switch (name) {
       case "ORIS":
@@ -121,6 +116,7 @@ export const SelectFacilitiesDataTable = ({
           <DataTableConfigurations
             selectedRowHandler={selectedRowHandler}
             user={user}
+            className="expandRowTable"
           />
         }
         headerStyling="padding-top-4 padding-left-2"

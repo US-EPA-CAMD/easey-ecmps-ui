@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen ,getByRole} from "@testing-library/react";
+import { render, screen, getByRole } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import DataTableRender from "./DataTableRender";
 
@@ -21,7 +21,7 @@ beforeAll(() => {
 });
 describe("renders datatable with all values ", () => {
   test("makes sure 3 rows of data are passed in + 1 for header +2 for rest of table", () => {
-    const { container,queryByPlaceholderText  } = render(
+    const { container, queryByPlaceholderText } = render(
       <DataTableRender
         sectionTitle="sectionTitle"
         tableTitle="tableTitle"
@@ -42,7 +42,5 @@ describe("renders datatable with all values ", () => {
     );
     const rows = screen.getAllByRole("row");
     expect(rows.length).toEqual(6);
-
   });
-
 });

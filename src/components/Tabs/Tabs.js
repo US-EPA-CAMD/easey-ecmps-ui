@@ -49,14 +49,18 @@ const Tabs = ({
                   outline={activeTabIndex !== i}
                   tabIndex="0"
                   aria-label={`open ${el.props.title} tab`}
-                  className="initial-tab-button"
+                  className={
+                    activeTabIndex === i
+                      ? "initial-tab-button active-tab-button"
+                      : "initial-tab-button"
+                  }
                   onClick={() => settingActiveTab(i)}
                 >
                   {el.props.title}
                 </Button>
               ) : (
                 <div
-                role = 'button'
+                  role="button"
                   className={
                     activeTabIndex === i
                       ? "tab-button active-tab-button"

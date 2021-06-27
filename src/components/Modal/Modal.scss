@@ -1,106 +1,14 @@
 .modal-wrapper {
-  width: 100%;
-  max-width: 800px;
-  margin: 4rem auto;
+  margin: 4em auto;
   transition: all 0.5s ease;
-  background: #f1f1f1;
   position: absolute;
   z-index: 500;
-  left: 27%;
-  top: 5%;
+  top: 15%;
   box-shadow: 0px -2px 22px -6px rgba(60, 55, 61, 0.37),
     -10px 10px 22px -6px rgba(60, 55, 61, 0.37);
-}
-.modal-color{
-    background: #f1f1f1;
-    background: #E4E2E0;
-}
-.modal-header {
-  
-  color: gray;
-  padding: 1rem;
-
-  float: right;
-  border-bottom: 0 none;
-}
-span.close-modal-btn {
-  padding: 0 !important;
-}
-.modal-header span {
-  position: relative;
-  /* right: 0; */
-  top: 0;
-  padding-right: 10px;
-  padding-top: 5px;
-  font-size: 1.5rem;
-  cursor: pointer;
-  display: flex;
-  align-items: right;
+  border-radius: 1% !important;
 }
 
-.modal-content {
-  padding: 1.5rem 1rem;
-  height:auto;
-  /* height: 500px; */
-  border: 0 none;
-  padding-top: 0;
-  padding-bottom: 15px;
-  
-}
-
-
-.modal-body {
-  margin-bottom: 1rem;
-  margin-top: 0;
-  font-size: 1rem;
-  color: #333;
-  padding-top: 0;
-}
-
-.modal-body h4 {
-  font-size: 1.8rem;
-}
-
-.modal-footer button {
-  margin-left: auto;
-  border: none;
-  outline: none;
-  cursor: pointer;
-}
-.modal-footer {
-  border-top: 0 none;
-  padding-bottom: 0 !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-
-.cancelBTN {
-  color: gray;
-  background-color: Transparent;
-  width: fit-content;
-  height: 30px;
-  padding-left: 30px !important;
-  padding-right: 30px !important;
-  min-width: 50px;
-  font-size: 15px;
-  margin: 0px;
-  border-radius: 5px;
-  float: left;
-  font-weight: 800;
-  margin-left: 0 !important;
-  border: 2px solid gray !important;
-}
-.saveCloseBTN {
-  color: #f1f1f1;
-  background-color: gray;
-  width: fit-content;
-  border: 0px;
-  height: 30px;
-  padding-left: 10px !important;
-  padding-right: 10px !important;
-  min-width: 50px;
-  font-size: 15px;
-  margin: 0px;
-  border-radius: 5px;
-  /* outline: none !important; */
+.modal-color {
+  border-radius: 1% !important;
 }

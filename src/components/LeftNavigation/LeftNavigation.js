@@ -39,7 +39,7 @@ export const LeftNavigation = () => {
           variant="unstyled"
           asCustom={Link}
           to={item.url}
-          exact={true}
+          exact="true"
           rel={item.name}
           title={`Go to ${item.name} page`}
           key={item.name}

@@ -36,3 +36,10 @@ body {
   margin-right: 0.5em;
   color: white;
 }
+
+.epa-active-element {
+  :is:not(textarea, input, select) {
+    border: none !important;
+  }
+  outline: none !important;
+}
