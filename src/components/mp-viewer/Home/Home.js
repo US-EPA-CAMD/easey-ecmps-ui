@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import HomeTitle from "../HomeTitle/HomeTitle";
+import { HomeTitle } from "../HomeTitle/HomeTitle";
 import HomeOverview from "../HomeOverview/HomeOverview";
-import DataTable from "../DataTable/DataTable";
-import DetailTabs from "../DetailTabs/DetailTabs";
+import { DataTable } from "../DataTable/DataTable";
+import { DetailTabs } from "../DetailTabs/DetailTabs";
+
 import "./Home.scss";
 
-const Home = () => {
+export const Home = () => {
   const [showOverview, setShowOverview] = useState(<HomeOverview />);
   const handleClick = (e) => {
     setShowOverview(<HomeOverview />);

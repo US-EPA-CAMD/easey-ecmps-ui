@@ -276,6 +276,28 @@ $animationDuration: 500ms;
   animation-duration: $animationDuration;
 }
 
+@keyframes flipOutXReverse {
+  from {
+    transform: rotateX(0deg);
+  }
+
+  70% {
+    transform: rotateX(10deg);
+  }
+
+  to {
+    transform: rotateX(-90deg);
+    opacity: 0;
+  }
+}
+
+.flip-out-x-reverse {
+  animation-timing-function: linear;
+  animation-name: flipOutXReverse;
+  transform-style: preserve-3d;
+  animation-duration: $animationDuration;
+}
+
 @keyframes flipInY {
   from {
     transform: rotateY(90deg);

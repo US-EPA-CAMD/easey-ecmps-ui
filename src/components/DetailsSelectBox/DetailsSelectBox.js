@@ -10,7 +10,7 @@ const DetailsSelectBox = ({
   required,
   secondOption,
   className,
-  epaDataname,
+  epadataname,
   id,
 }) => {
   const [selectionState, setSelectionState] = useState(
@@ -53,7 +53,7 @@ const DetailsSelectBox = ({
             disabled={viewOnly}
             id={id === null ? caption : id}
             className={className}
-            epaDataname={epaDataname}
+            epadataname={epadataname}
             onChange={(e) => handleChange(e)}
           >
             {populateOptions(options)}

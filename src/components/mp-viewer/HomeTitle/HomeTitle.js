@@ -1,7 +1,7 @@
 import React from "react";
 import "./HomeTitle.scss";
 
-const HomeTitle = () => {
+export const HomeTitle = () => {
   return (
     <div className="grid-row">
       <div className="grid-col">

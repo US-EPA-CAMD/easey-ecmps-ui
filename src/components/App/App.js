@@ -11,6 +11,7 @@ import RuleEditor from "../RuleEditor/RuleEditor";
 import Login from "../Login/Login";
 
 import "./App.scss";
+import { remove } from "leaflet/src/dom/DomUtil";
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -20,6 +21,68 @@ const App = () => {
       : false;
 
     setUser(cdxUser && cdxUser.firstName ? cdxUser : false);
+  }, []);
+
+  // *** assign / un-assign activity event listeners
+  useEffect(() => {
+    // *** the purpose of this function is to add epa-active-element class to currently active element
+    const addActiveClass = (event) => {
+      // *** remove any existing elements first
+      removeActiveClass(event);
+      setTimeout(() => {
+        event.target.classList.add("epa-active-element");
+
+        event.target.parentElement && event.target.parentElement.classList
+          ? event.target.parentElement.classList.add("epa-active-element")
+          : void 0;
+      });
+    };
+    const removeActiveClass = (event) => {
+      event.target.classList.remove("epa-active-element");
+    };
+
+    document.querySelectorAll("*").forEach((element) => {
+      element.addEventListener(
+        "keydown",
+        (event) => {
+          // *** disregard anything except "Enter" presses
+          event.key === "Enter" ? addActiveClass(event) : void 0;
+        },
+        true
+      );
+
+      element.addEventListener("click", (event) => {
+        addActiveClass(event);
+      });
+
+      element.addEventListener(
+        "blur",
+        (event) => {
+          removeActiveClass(event);
+        },
+        true
+      );
+    });
+
+    // * clean up
+    return () => {
+      document.querySelectorAll("*").forEach((element) => {
+        element.addEventListener(
+          "keydown",
+          (event) => {
+            // *** disregard anything except "Enter" presses
+            event.key === "Enter" ? addActiveClass(event) : void 0;
+          },
+          true
+        );
+        element.removeEventListener("click", (event) => addActiveClass(event));
+        element.removeEventListener(
+          "blur",
+          (event) => removeActiveClass(event),
+          true
+        );
+      });
+    };
   }, []);
 
   return (
