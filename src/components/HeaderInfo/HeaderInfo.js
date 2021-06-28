@@ -20,6 +20,7 @@ const HeaderInfo = ({
   setCheckoutAPI,
   setCheckout
 }) => {
+  console.log('this is facility',facility)
   const sections = [
     { name: "Defaults" },
     { name: "Loads" },
@@ -42,7 +43,7 @@ const HeaderInfo = ({
   const checkoutAPI = (direction) => {
     setCheckoutState(direction)
     // setCheckoutAPI(direction);
-    setCheckout(direction,orisCode);
+    setCheckout(direction,facility);
 
   }
   return (

@@ -1006,54 +1006,77 @@ describe("testing select dropdowns for configutations, locations, and sections o
     { name: "Loads" },
     { name: "Qualifications" },
   ];
-  const locationHandler = jest.fn();
-  const activeMethodsHandler = jest.fn();
-  const sectionHandler = jest.fn();
-  let queries = null;
 
-  beforeEach(() => {
-    queries = render(
-      <HeaderInfo
-        facility={{ name: "Test Facility" }}
-
-        selectedConfig={[]}
-        orisCode={3}
-        setSectionSelect={jest.fn()}
-        sectionSelect={[4,'Methods']}
-        setLocationSelect={jest.fn()}
-        locationSelect={[0,'test']}
-        locations={[]}
-        checkout={false}
-        user={{firstName:"test"}}
-        setCheckoutAPI={jest.fn()}
-        setCheckout={jest.fn()}
-
-      />
-    );
+  describe("renders header with not checked out ", () => {
+    test("cliks check out, then check back in , 3 buttons because of the rest of header", () => {
+      const { getByText } = render(
+        <HeaderInfo
+          facility={"Barry (1, 2, CS0AAN)"}
+          selectedConfig={[]}
+          orisCode={3}
+          setSectionSelect={jest.fn()}
+          sectionSelect={[4, "Methods"]}
+          setLocationSelect={jest.fn()}
+          locationSelect={[0, "test"]}
+          locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
+          checkout={false}
+          user={{ firstName: "test" }}
+          setCheckoutAPI={jest.fn()}
+          setCheckout={jest.fn()}
+        />
+      );
+      fireEvent.click(screen.getByText("Check Out"));
+      fireEvent.click(screen.getByText("Check Back In"));
+      const btns = screen.getAllByRole("button");
+      expect(btns).toHaveLength(3);
+    });
   });
 
-  describe('testing updated go-wide template footer', () => {
-    test("should render logo text description", () => {
-        const {getByText} = render(
-          <HeaderInfo
-            facility={{ name: "Test Facility" }}
-    
-            selectedConfig={[]}
-            orisCode={3}
-            setSectionSelect={jest.fn()}
-            sectionSelect={[4,'Methods']}
-            setLocationSelect={jest.fn()}
-            locationSelect={[0,'test']}
-            locations={[]}
-            checkout={false}
-            user={{firstName:"test"}}
-            setCheckoutAPI={jest.fn()}
-            setCheckout={jest.fn()}
-    
-          />);
-        const logoDescription = getByText("Methods");
-        expect(logoDescription).toBeTruthy();
-      });
-});
+  describe("renders header with checked out ", () => {
+    test("cliks check  back in, then check out , 3 buttons because of the rest of header", () => {
+      const { getByText } = render(
+        <HeaderInfo
+          facility={"Barry (1, 2, CS0AAN)"}
+          selectedConfig={[]}
+          orisCode={3}
+          setSectionSelect={jest.fn()}
+          sectionSelect={[4, "Methods"]}
+          setLocationSelect={jest.fn()}
+          locationSelect={[0, "test"]}
+          locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
+          checkout={true}
+          user={{ firstName: "test" }}
+          setCheckoutAPI={jest.fn()}
+          setCheckout={jest.fn()}
+        />
+      );
+      fireEvent.click(screen.getByText("Check Back In"));
 
+      fireEvent.click(screen.getByText("Check Out"));
+
+      const btns = screen.getAllByRole("button");
+      expect(btns).toHaveLength(3);
+    });
+  });
+
+  describe("renders header with no user logged in ", () => {
+    test("verifies everythign is rendered only 2 buttons, no checkout/check in", () => {
+      const { getByText } = render(
+        <HeaderInfo
+          facility={"Barry (1, 2, CS0AAN)"}
+          selectedConfig={[]}
+          orisCode={3}
+          setSectionSelect={jest.fn()}
+          sectionSelect={[4, "Methods"]}
+          setLocationSelect={jest.fn()}
+          locationSelect={[0, "test"]}
+          locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
+          setCheckoutAPI={jest.fn()}
+          setCheckout={jest.fn()}
+        />
+      );
+      const btns = screen.getAllByRole("button");
+      expect(btns).toHaveLength(2);
+    });
+  });
 });
