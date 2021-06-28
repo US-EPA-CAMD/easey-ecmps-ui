@@ -27,11 +27,11 @@ const DataTableRender = ({
   filter,
   expandableRowComp,
   defaultSort,
-
   expandableRows,
   headerStyling,
   tableStyling,
   componentStyling,
+  className,
 }) => {
   const [searchText, setSearchText] = useState("");
 
@@ -68,8 +68,8 @@ const DataTableRender = ({
     <div className={`${componentStyling}`}>
       <div className={`${headerStyling}`}>
         <h2 className="padding-0 page-subheader">
-          {button ? (
-            <div>
+          {button && data.length ? (
+            <div className="padding-y-1">
               <Button
                 type="button"
                 test-id={`btnAdd${tableTitle.split(" ").join("")}`}
@@ -87,7 +87,7 @@ const DataTableRender = ({
       <div aria-live="polite" className={`${tableStyling}`}>
         {data.length ? (
           <DataTable
-            className="data-display-table react-transition fade-in"
+            className={`data-display-table react-transition fade-in ${className}`}
             sortIcon={
               <ArrowDownwardSharp className="margin-left-2 text-primary" />
             }
@@ -122,7 +122,7 @@ const DataTableRender = ({
             }}
           />
         ) : (
-          <div className="margin-y-9 padding-y-9 react-transition fade-in font-body-sm">
+          <div className="margin-y-3 padding-y-3 react-transition fade-in font-body-sm">
             <Preloader />
           </div>
         )}

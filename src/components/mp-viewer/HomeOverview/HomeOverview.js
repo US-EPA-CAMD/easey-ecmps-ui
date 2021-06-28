@@ -1,6 +1,7 @@
 import React from "react";
 import "./HomeOverview.scss";
-const HomeOverview = () => {
+
+export const HomeOverview = () => {
   return (
     <div id="overviewHome">
       <h3>Overview</h3>

@@ -77,7 +77,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
           <h3>Component: Monitoring Methods</h3>
           <input
             type="hidden"
-            epaDataname="id"
+            epadataname="id"
             id="id"
             name="id"
             className="modalUserInput"
@@ -108,7 +108,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
             ) : (
               <SelectBox
                 className="modalUserInput"
-                epaDataname="parameterCode"
+                epadataname="parameterCode"
                 caption="Parameter"
                 options={parameterCodes}
                 initialSelection={modalData.parameterCode}
@@ -145,7 +145,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
             ) : (
               <SelectBox
                 className="modalUserInput"
-                epaDataname="methodCode"
+                epadataname="methodCode"
                 caption="Methodology"
                 options={methodCodes}
                 initialSelection={modalData.methodCode}
@@ -191,7 +191,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
                 initialSelection={modalData.subDataCode}
                 selectKey="code"
                 className="modalUserInput"
-                epaDataname="subDataCode"
+                epadataname="subDataCode"
                 id="SubstituteDataApproach"
                 epa-testid="SubstituteDataApproach"
                 name="SubstituteDataApproach"
@@ -232,7 +232,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
                 initialSelection={modalData.bypassApproachCode}
                 selectKey="code"
                 id="BypassApproach"
-                epaDataname="bypassApproachCode"
+                epadataname="bypassApproachCode"
                 epa-testid="BypassApproach"
                 name="BypassApproach"
                 viewOnly={viewOnly}
@@ -278,7 +278,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
                         className="margin-0 modalUserInput"
                         id="startDate"
                         name="startDate"
-                        epaDataname="beginDate"
+                        epadataname="beginDate"
                         epa-testid="startDate"
                         disabled={viewOnly}
                         defaultValue={startDate}
@@ -313,7 +313,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
                     caption="hh"
                     id="startHour"
                     name="startHour"
-                    epaDataname="beginHour"
+                    epadataname="beginHour"
                     epa-testid="startHour"
                     options={timeOptions}
                     initialSelection={startHour}
@@ -358,7 +358,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
                         className="margin-0 modalUserInput"
                         id="endDate"
                         name="endDate"
-                        epaDataname="endDate"
+                        epadataname="endDate"
                         epa-testid="endDate"
                         disabled={viewOnly}
                         defaultValue={endDate}
@@ -393,7 +393,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
                     caption="hh"
                     id="endHour"
                     name="endHour"
-                    epaDataname="endHour"
+                    epadataname="endHour"
                     epa-testid="endHour"
                     options={timeOptions}
                     initialSelection={endHour}

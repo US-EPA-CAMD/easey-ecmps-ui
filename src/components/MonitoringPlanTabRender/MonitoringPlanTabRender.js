@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import HeaderInfo from "../HeaderInfo/HeaderInfo";
-import AccordionItemTitle from "../AccordionItemTitle/AccordionItemTitle";
 import "../MonitoringPlanTab/MonitoringPlanTab.scss";
 import DataTableMethod from "../datatablesContainer/DataTableMethod/DataTableMethod";
 import DataTableMats from "../datatablesContainer/DataTableMats/DataTableMats";
-import Tables from "../Tables/Tables";
 import DataTableSystems from "../datatablesContainer/DataTableSystems/DataTableSystems";
 import InactivityTracker from "../InactivityTracker/InactivityTracker";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import "./MonitoringPlanTabRender.scss";
+import CustomAccordion from "../CustomAccordion/CustomAccordion";
 
 export const MonitoringPlanTabRender = ({
   title,
@@ -22,92 +21,129 @@ export const MonitoringPlanTabRender = ({
   orisCode,
   configID,
   checkout,
+  setCheckout
 }) => {
   const [matsTableFlag, setMatsTableFlag] = useState(false);
   // // MONITORING METHODS
   const matsTableHandler = (flag) => {
     setMatsTableFlag(flag);
   };
+
+  // checks mats table
   useEffect(() => {
     if (matsTableFlag) {
-      supItems[0] = {
-        title: <AccordionItemTitle title="Supplemental Methods" />,
-        expanded: true,
-        id: "7",
-        content: <DataTableMats locationSelect={locationSelect[1]} />,
-      };
+      setTableState(
+        tableState.map((element, index) =>
+          index === 3
+            ? [
+                [<DataTableMethod
+                  matsTableHandler={matsTableHandler}
+                  locationSelectValue={parseInt(locationSelect[1])}
+                  checkout={checkout}
+                  user={user}
+                />,'Methods'],
+                [<DataTableMats locationSelect={locationSelect[1]} />,'Supplemental Methods']
+              ]
+            : element
+        )
+      );
     }
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  const supItems = [];
-  const methodItems = [
-    {
-      // title in the comp name should change when selectbox handler is changed as well
-      title: <AccordionItemTitle title="Methods" />,
-      expanded: true,
-      id: "5",
-      content: (
+  }, [matsTableFlag]);
+
+  // updates all tables whenever a location is changed
+  useEffect(() => {
+    setTableState([
+      [],
+      [],
+      [],
+      [[
         <DataTableMethod
           matsTableHandler={matsTableHandler}
           locationSelectValue={parseInt(locationSelect[1])}
           checkout={checkout}
           user={user}
           // showActiveOnly={!showInactive}
-        />
-      ),
-    },
-  ];
-  if (matsTableFlag) {
-    supItems.push({
-      title: <AccordionItemTitle title="Supplemental Methods" />,
-      expanded: false,
-      id: "7",
-      content: <DataTableMats locationSelect={locationSelect[1]} />,
-    });
-  }
-  // //---------------
-  // // MONITORING SYSTEMS
+        />,'Methods']
+      ],
+      [],
+      [],
+      [],
+      [],    
+      [],
+      [[<DataTableSystems locationSelect={parseInt(locationSelect[1])} />,'Systems']],
+      [],
+  
+    ]);
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locationSelect]);
+
+  // sets initial state
+  const [tableState, setTableState] = useState([
+    [],
+    [],
+    [],
+    [[
+      <DataTableMethod
+        matsTableHandler={matsTableHandler}
+        locationSelectValue={parseInt(locationSelect[1])}
+        checkout={checkout}
+        user={user}
+        // showActiveOnly={!showInactive}
+      />,'Methods']
+    ],
+    [],
+    [],
+    [],
+    [],    
+    [],
+    [[<DataTableSystems locationSelect={locationSelect[1]} />,'Systems']],
+    [],
+  ]);
 
   const resetInactivityTimerApiCall = () => {
     console.log(mpApi.putLockTimerUpdateConfiguration(configID), "api called");
   };
-  const systemsItems = [
-    {
-      // title in the comp name should change when selectbox handler is changed as well
-      title: <AccordionItemTitle title="Systems" />,
-      expanded: true,
-      id: "2",
-      content: <DataTableSystems locationSelect={locationSelect[1]} />,
-    },
-  ];
 
+  const checkoutAPI = (direction) =>{
+    
+  }
   return (
-    <div className="selectedMPTab padding-top-4 ">
+    <div className=" padding-top-4">
       {user && checkout ? (
         <InactivityTracker apiCall={resetInactivityTimerApiCall} />
       ) : (
         ""
       )}
-
+<hr />
       {/* on change of select box, it should modify the accordion items */}
       {/* pass back the values to send to the datatable, current is sending back index  */}
-      <HeaderInfo
-        facility={title}
-        selectedConfig={selectedConfig}
-        orisCode={orisCode}
-        sectionSelect={sectionSelect}
-        setSectionSelect={setSectionSelect}
-        setLocationSelect={setLocationSelect}
-        locationSelect={locationSelect}
-        locations={locations}
-      />
-      <Tables
-        sectionSelect={sectionSelect}
-        methodItems={methodItems}
-        systemsItems={systemsItems}
-        supItems={supItems}
-        matsTableFlag={matsTableFlag}
-      />
+      <div className="grid-row">
+        <HeaderInfo
+          facility={title}
+          selectedConfig={selectedConfig}
+          orisCode={orisCode}
+          sectionSelect={sectionSelect}
+          setSectionSelect={setSectionSelect}
+          setLocationSelect={setLocationSelect}
+          locationSelect={locationSelect}
+          locations={locations}
+          checkout={checkout}
+          user={user}
+          checkoutAPI={checkoutAPI}
+          setCheckout ={setCheckout}
+        />
+         
+      </div>
+      <hr />
+      <div className="grid-row">
+        <CustomAccordion
+          title={sectionSelect[1]}
+          table={tableState[sectionSelect[0]]}
+        />
+      </div>
     </div>
   );
 };

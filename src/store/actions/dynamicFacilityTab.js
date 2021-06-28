@@ -37,5 +37,13 @@ export function setLocationsState(locations,orisCode) {
   };
 }
 
+export function setCheckoutState(checkout,orisCode) {
+  return {
+    type: types.SET_CHECKOUT_STATE,
+    orisCode,
+    checkout
+  };
+}
+
 
 

@@ -65,6 +65,7 @@ const Accessories = () => {
               Account Management
             </Link>
           </p>
+          <hr />
         </div>
       ) : (
         ""
@@ -74,7 +75,8 @@ const Accessories = () => {
           to="./apps"
           rel=" CAMD Apps"
           title="Go to the CAMPD Apps page"
-          className="accessoryLink"
+          className="accessoryLink "
+          
         >
           CAMD Apps
         </Link>

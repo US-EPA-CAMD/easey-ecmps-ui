@@ -12,6 +12,7 @@ export const DataTableConfigurations = ({
   data,
   user,
   selectedRowHandler,
+  className,
 }) => {
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -107,11 +108,11 @@ export const DataTableConfigurations = ({
             epa-testid="btnOpenConfiguration"
             className="cursor-pointer margin-right-1"
             id="btnOpenConfiguration"
-            onClick={() => openConfig(row)}
+            onClick={() => openConfig(row,false)}
             aria-label={`open configuration ${row.col1} `}
             onKeyPress={(event) => {
               if (event.key === "Enter") {
-                openConfig(row);
+                openConfig(row,false);
               }
             }}
           >
@@ -165,6 +166,7 @@ export const DataTableConfigurations = ({
         // selectedRowHandler={selectedRowHandler}
         tableStyling={"padding-left-4 padding-bottom-3"}
         defaultSort={"col2"}
+        className={className}
       />
     </div>
   );

@@ -124,7 +124,7 @@ export const DataTableMethod = ({
     return [];
   }, [methods, showActiveOnly]);
 
-  useMemo(() => {
+  useEffect(() => {
     if (matsTableHandler) {
       if (matsMethods.length < 1) {
         matsTableHandler(false);
@@ -156,7 +156,7 @@ export const DataTableMethod = ({
       }
       const item = { name: "", value: "" };
       item.name = document.getElementById(input.id).attributes[
-        "epaDataname"
+        "epadataname"
       ].value;
       item.value = document.getElementById(input.id).value;
       payloadArray.push(item);
@@ -164,7 +164,7 @@ export const DataTableMethod = ({
 
     datepickerPayloads.forEach((input) => {
       const item = { name: "", value: "" };
-      item.name = input.attributes["epaDataname"].value;
+      item.name = input.attributes["epadataname"].value;
       item.value = input.value;
       payloadArray.push(item);
     });

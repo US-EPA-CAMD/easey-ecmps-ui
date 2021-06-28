@@ -1,22 +1,15 @@
-import React, { useEffect, useMemo,useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import DataTableRender from "../../DataTableRender/DataTableRender";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
-
-export const DataTableMats = ({
-  locationSelect,
-}) => {
-  const [matsMethods,setMatsMethods] = useState([])
+export const DataTableMats = ({ locationSelect }) => {
+  const [matsMethods, setMatsMethods] = useState([]);
   useEffect(() => {
-    if (matsMethods.length === 0) {
-      mpApi
-      .getMonitoringMatsMethods(locationSelect)
-      .then((res) => {
-        setMatsMethods(res.data);
-      })
-    }
+    mpApi.getMonitoringMatsMethods(locationSelect).then((res) => {
+      setMatsMethods(res.data);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect]);
 
@@ -40,14 +33,12 @@ export const DataTableMats = ({
   });
 
   const data = useMemo(() => {
-    if (matsMethods.length > 0 ) {
-      return fs.getMonitoringPlansMatsMethodsTableRecords(
-        matsMethods
-      );
+    if (matsMethods.length > 0) {
+      return fs.getMonitoringPlansMatsMethodsTableRecords(matsMethods);
     } else {
       return [{ col2: "Loading list of Supplemental Methods" }];
     }
-  }, [ matsMethods]);
+  }, [matsMethods]);
 
   return (
     <div className="methodTable">
@@ -55,6 +46,5 @@ export const DataTableMats = ({
     </div>
   );
 };
-
 
 export default DataTableMats;

@@ -7,6 +7,7 @@ import { setActiveTab } from "../../store/actions/activeTab";
 import {
   setSectionSelectionState,
   setLocationSelectionState,
+  setCheckoutState
 } from "../../store/actions/dynamicFacilityTab";
 export const MonitoringPlanTab = ({
   orisCode,
@@ -19,6 +20,7 @@ export const MonitoringPlanTab = ({
   activeTab,
   setSection,
   setLocation,
+  setCheckout
 }) => {
   const [sectionSelect, setSectionSelect] = useState(tabs[activeTab].section);
   useEffect(() => {
@@ -51,7 +53,8 @@ export const MonitoringPlanTab = ({
           locations={selectedConfig.locations}
           user={user}
           configID={tabs[activeTab[0]].selectedConfig.id}
-          checkout={checkout}
+          checkout={tabs[activeTab[0]].checkout}
+          setCheckout={setCheckout}
         />
       </div>
     </div>
@@ -71,6 +74,8 @@ const mapDispatchToProps = (dispatch) => {
     setSection: (section, title) =>
       dispatch(setSectionSelectionState(section, title)),
     setActiveTab: (orisCode, value) => dispatch(setActiveTab(orisCode, value)),
+    
+    setCheckout: (value, orisCode) => dispatch(setCheckoutState(value,orisCode)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(MonitoringPlanTab);

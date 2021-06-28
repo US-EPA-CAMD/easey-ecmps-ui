@@ -1,8 +1,15 @@
 import React, { createContext, useEffect, createRef } from "react";
 import ReactDom from "react-dom";
+
+import { Button } from "@trussworks/react-uswds";
+
+import { ClearSharp } from "@material-ui/icons";
+
 import "./Modal.scss";
 
-const modalContext = createContext();
+import { focusTrap } from "../../additional-functions/focus-trap";
+
+const modalContext = createContext(null, null);
 
 export const Modal = ({
   show,
@@ -11,55 +18,28 @@ export const Modal = ({
   children,
   showCancel,
   showSave,
+  width = "50%",
+  left = "25%",
   cancelButtonText = "Cancel",
   saveButtonText = "Save and Close",
   secondLevel,
 }) => {
-  useEffect(() => {
-    function keyListener(e) {
-      if (e != null) {
-        const listener = keyListenersMap.get(e.keyCode);
-        return listener && listener(e);
-      }
-    }
-    document.addEventListener("keydown", keyListener);
-    return () => document.removeEventListener("keydown", keyListener);
-  });
-
   const modalRef = createRef();
-  const [tabs, setTabs] = React.useState(0);
-  const handleTabKey = (e) => {
-    const focusableModalElements = modalRef.current.querySelectorAll(
-      'a[href],span,button, textarea,input[type="password"], input[type="text"], input[type="radio"], input[type="checkbox"], select'
-    );
-    let currentElement;
-    if (!e.shiftKey && document.activeElement !== currentElement) {
-      if (tabs < focusableModalElements.length - 1) {
-        setTabs(tabs + 1);
-      } else {
-        setTabs(0);
-      }
-      currentElement = focusableModalElements[tabs];
-      currentElement.focus();
-      return e.preventDefault();
-    }
 
-    if (e.shiftKey && document.activeElement !== currentElement) {
-      if (tabs > 0) {
-        setTabs(tabs - 1);
-      } else {
-        setTabs(focusableModalElements.length - 1);
-      }
-      currentElement = focusableModalElements[tabs];
-      currentElement.focus();
-      return e.preventDefault();
-    }
-  };
+  useEffect(() => {
+    const { handleKeyPress } = focusTrap(".modal-content", close);
 
-  const keyListenersMap = new Map([
-    [27, close],
-    [9, handleTabKey],
-  ]);
+    // *** FOCUS TRAP
+    document.addEventListener("keydown", (event) => {
+      handleKeyPress(event);
+    });
+
+    // * clean up
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [close]);
+
   let modalRoot = document.getElementById("portal");
   if (!modalRoot) {
     modalRoot = document.createElement("div");
@@ -67,46 +47,60 @@ export const Modal = ({
     document.body.appendChild(modalRoot);
   }
 
+  const modalClassName = "modal-wrapper bg-base-lightest radius-md";
+
   return ReactDom.createPortal(
-    <div className="" role="dialog" aria-modal="true">
-      <div className="" ref={modalRef}>
+    <div role="dialog" aria-modal="true">
+      <div ref={modalRef}>
         <modalContext.Provider value={{ close }}>
           <div
-            className="modal-wrapper modal-color"
+            className={
+              show
+                ? `${modalClassName} react-transition flip-in-x`
+                : `${modalClassName}`
+            }
             style={{
-              transform: show ? "translateY(0vh)" : "translateY(-100vh)",
-              opacity: show ? "1" : "0",
+              width: width,
+              left: left,
             }}
           >
-            <div className="modal-header modal-color">
-              <span
-                tabIndex="0"
+            <div className="modal-content modal-color padding-y-3">
+              <ClearSharp
+                className="position-absolute right-1 top-1 cursor-pointer"
                 onClick={close}
-                id={"close"}
-                title={"close"}
-                className="close-modal-btn"
-                aria-haspopup="true"
-                aria-labelledby={"close"}
-              >
-                <i className="fa fa-times fa-sm" />
-              </span>
-            </div>
-            <div className="modal-content modal-color">
+                onKeyPress={(event) => {
+                  if (event.key === "Enter") {
+                    close();
+                  }
+                }}
+                title="Click to save"
+                epa-testid="closeXBtn"
+                role="button"
+                tabIndex="0"
+              />
               <div className="modal-body modal-color">{children}</div>
 
-              <div className="modal-footer modal-color">
+              <div className="modal-footer">
                 {showCancel ? (
-                  <button onClick={close} className="cancelBTN modal-color">
+                  <Button
+                    type="button"
+                    onClick={close}
+                    title="Click to save"
+                    epa-testid="cancelBtn"
+                    outline={true}
+                  >
                     {cancelButtonText}
-                  </button>
+                  </Button>
                 ) : null}
                 {showSave ? (
-                  <button
+                  <Button
+                    type="button"
                     onClick={save ? save : close}
-                    className="saveCloseBTN"
+                    title="Click to save"
+                    epa-testid="saveBtn"
                   >
                     {saveButtonText}
-                  </button>
+                  </Button>
                 ) : null}
               </div>
             </div>
