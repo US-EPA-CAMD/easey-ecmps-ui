@@ -93,9 +93,11 @@ export const LeftNavigation = () => {
       {userLoggedIn ? <SideNav items={wsItems} /> : ""}
       <div className="padding-bottom-4 position-absolute bottom-3">
         {!cdxUser ? (
+          <div className="padding-bottom-2" > 
           <Button type="button" outline={true} onClick={() => openModal(true)}>
             Log In
           </Button>
+          </div>
         ) : null}
 
         <Accessories />

@@ -108,11 +108,11 @@ export const DataTableConfigurations = ({
             epa-testid="btnOpenConfiguration"
             className="cursor-pointer margin-right-1"
             id="btnOpenConfiguration"
-            onClick={() => openConfig(row)}
+            onClick={() => openConfig(row,false)}
             aria-label={`open configuration ${row.col1} `}
             onKeyPress={(event) => {
               if (event.key === "Enter") {
-                openConfig(row);
+                openConfig(row,false);
               }
             }}
           >

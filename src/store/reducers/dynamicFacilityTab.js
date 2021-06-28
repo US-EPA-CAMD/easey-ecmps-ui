@@ -41,6 +41,19 @@ const reducer = (state = initialState.openedFacilityTabs, action) => {
           : x
       );
     }
+  } 
+  else if (action.type === types.SET_CHECKOUT_STATE) {
+    if (state && state.length > 0) {
+      console.log('test')
+      return state.map((x, i) =>
+        x.orisCode === action.orisCode
+          ? {
+              ...x,
+              checkout: action.checkout,
+            }
+          : x
+      );
+    }
   } else {
     return state;
   }
