@@ -11,7 +11,6 @@ import RuleEditor from "../RuleEditor/RuleEditor";
 import Login from "../Login/Login";
 
 import "./App.scss";
-import { remove } from "leaflet/src/dom/DomUtil";
 
 const App = () => {
   const [user, setUser] = useState(false);

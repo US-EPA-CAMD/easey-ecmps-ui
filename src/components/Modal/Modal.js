@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState, createRef } from "react";
+import React, { createContext, useEffect, createRef } from "react";
 import ReactDom from "react-dom";
 
 import { Button } from "@trussworks/react-uswds";
@@ -6,6 +6,8 @@ import { Button } from "@trussworks/react-uswds";
 import { ClearSharp } from "@material-ui/icons";
 
 import "./Modal.scss";
+
+import { focusTrap } from "../../additional-functions/focus-trap";
 
 const modalContext = createContext(null, null);
 
@@ -23,70 +25,20 @@ export const Modal = ({
   secondLevel,
 }) => {
   const modalRef = createRef();
-  const [tabs, setTabs] = useState(0);
 
   useEffect(() => {
-    // *** identify focusable modal elements
-    const modalFocusableElements =
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-
-    // *** isolate modal and its focusable content
-    const modal = document.querySelector(".modal-content");
-    const focusableModalContent = modal.querySelectorAll(
-      modalFocusableElements
-    );
-
-    // *** isolate first element to be focused inside modal
-    const firstModalFocusableElement = modal.querySelectorAll(
-      modalFocusableElements
-    )[0];
-    // *** isolate last element to be focused inside modal
-    const lastModalFocusableElement =
-      focusableModalContent[focusableModalContent.length - 1];
-
-    // *** this function will be used to deal with key presses while the modal is open
-    const handleKeyPress = (event) => {
-      if (event.key === "Escape") {
-        close();
-      }
-
-      // *** disregard anything other than tab (which leads to change of focus)
-      if (event.key === "Tab") {
-        // *** handle shift + tab
-        if (event.shiftKey) {
-          // *** if focused on first focusable element, cycle back to last on next tab press
-          if (document.activeElement === firstModalFocusableElement) {
-            lastModalFocusableElement.focus();
-            event.preventDefault();
-          }
-        }
-        // *** handle tab
-        else {
-          // *** if focused on last focusable element, cycle back to first on next tab press
-          if (document.activeElement === lastModalFocusableElement) {
-            firstModalFocusableElement.focus();
-            event.preventDefault();
-          }
-        }
-      }
-    };
+    const { handleKeyPress } = focusTrap(".modal-content", close);
 
     // *** FOCUS TRAP
     document.addEventListener("keydown", (event) => {
       handleKeyPress(event);
     });
 
-    // *** focus on the first element as soon as modal pops open and the first focusable
-    // *** element is in scope
-    setTimeout(() => {
-      firstModalFocusableElement.focus();
-    });
-
     // * clean up
     return () => {
       document.removeEventListener("keydown", handleKeyPress);
     };
-  }, []);
+  }, [close]);
 
   let modalRoot = document.getElementById("portal");
   if (!modalRoot) {
@@ -131,6 +83,7 @@ export const Modal = ({
               <div className="modal-footer">
                 {showCancel ? (
                   <Button
+                    type="button"
                     onClick={close}
                     title="Click to save"
                     epa-testid="cancelBtn"
@@ -141,6 +94,7 @@ export const Modal = ({
                 ) : null}
                 {showSave ? (
                   <Button
+                    type="button"
                     onClick={save ? save : close}
                     title="Click to save"
                     epa-testid="saveBtn"

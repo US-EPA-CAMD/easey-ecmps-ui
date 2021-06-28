@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@trussworks/react-uswds";
 
 import "./Tabs.scss";
+import { ClearSharp } from "@material-ui/icons";
 const Tabs = ({
   children,
   dynamic = false,
@@ -29,8 +30,7 @@ const Tabs = ({
     if (contentBox) {
       setResizeObserver(contentBox);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contentBox]);
+  }, [contentBox, setResizeObserver]);
 
   return (
     <div>
@@ -46,6 +46,7 @@ const Tabs = ({
               {" "}
               {el.props.title.toLowerCase() === "select configurations" ? (
                 <Button
+                  type="button"
                   outline={activeTabIndex !== i}
                   tabIndex="0"
                   aria-label={`open ${el.props.title} tab`}
@@ -63,8 +64,8 @@ const Tabs = ({
                   role="button"
                   className={
                     activeTabIndex === i
-                      ? "tab-button active-tab-button"
-                      : "tab-button"
+                      ? "tab-button react-transition flip-in-y  active-tab-button"
+                      : "tab-button react-transition flip-in-y"
                   }
                   tabIndex="0"
                   aria-label={`open ${el.props.title} tab`}
@@ -85,23 +86,21 @@ const Tabs = ({
                   </div>
 
                   {dynamic ? (
-                    <span className="margin-left-2 float-right position-relative left-neg-1 top-neg-3 margin-top-neg-2 cursor-pointer">
-                      <i
-                        aria-label={`close ${el.props.title} tab`}
-                        tabIndex={0}
-                        className={
-                          i === 0
-                            ? "fa fa-times close-icon invisible"
-                            : "fa fa-times close-icon"
+                    <ClearSharp
+                      className="margin-left-2 float-right position-relative left-neg-1 top-neg-3 margin-top-neg-2 cursor-pointer"
+                      onClick={(e) => closeHandler(e, i)}
+                      onKeyPress={(event) => {
+                        if (event.key === "Enter") {
+                          closeHandler(event, i);
                         }
-                        onClick={(e) => closeHandler(e, i)}
-                        onKeyPress={(event) => {
-                          if (event.key === "Enter") {
-                            closeHandler(event, i);
-                          }
-                        }}
-                      />
-                    </span>
+                      }}
+                      title="Click to close tab"
+                      name="closeXBtnTab"
+                      id="closeXBtnTab"
+                      epa-testid="closeXBtnTab"
+                      role="button"
+                      tabIndex="0"
+                    />
                   ) : null}
                 </div>
               )}

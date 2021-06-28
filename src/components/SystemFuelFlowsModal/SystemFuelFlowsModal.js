@@ -63,54 +63,55 @@ const SystemFuelFlowsModal = ({ modalData, viewOnly, backBTN }) => {
   return (
     <div className="systemsCompTable">
       <div className="grid-container margin-bottom-2">
-        <div className="display-inline-flex padding-top-3 padding-bottomm-3">
+        <div className="display-inline-flex padding-top-3 padding-bottom-3">
           <Button
             type="button"
-            aria-label="go back to systems details"
+            name="btnModalGoBack"
+            id="btnModalGoBack"
+            epa-testid="btnModalGoBack"
+            title="Go back to Systems Details"
             onClick={() => backBTN(false)}
           >
             <ArrowBackSharp className=" font-body-sm" />
           </Button>
 
           <h3>
-            Fuel Code: {modalData.fuelCode}, System Type Code:{" "}
-            {modalData.systemTypeCode}
+            Fuel Code: {modalData["fuelCode"]}, System Type Code:{" "}
+            {modalData["systemTypeCode"]}
           </h3>
         </div>
 
-        <div className="grid-row">
+        <div className="grid-row margin-top-3">
           <div className="tablet:grid-col">
-            {" "}
-            {viewOnly ? (
-              <FormGroup className="margin-top-0">
-                <Label className="margin-0" htmlFor="RateSourceCode">
-                  Rate Source Code
-                </Label>
-                <TextInput
-                  className="modalInput"
+            <FormGroup className="margin-top-0">
+              <Label
+                className="text-bold"
+                htmlFor="RateSourceCode"
+                tabIndex="0"
+              >
+                Rate Source Code
+              </Label>
+              {viewOnly ? (
+                <div id="RateSourceCode" tabIndex="0">
+                  {modalData["maxRateSourceCode"]
+                    ? modalData["maxRateSourceCode"]
+                    : ""}
+                </div>
+              ) : (
+                <SelectBox
+                  caption="Rate Source Code"
                   id="RateSourceCode"
                   name="RateSourceCode"
-                  type="text"
-                  disabled={viewOnly}
-                  defaultValue={
-                    modalData.maxRateSourceCode
-                      ? modalData.maxRateSourceCode
-                      : ""
-                  }
+                  epa-testid="RateSourceCode"
+                  selectKey="code"
+                  options={acqMethodCode}
+                  initialSelection={modalData.acquisitionMethodCode}
+                  viewOnly={viewOnly}
+                  required
+                  secondOption="name"
                 />
-              </FormGroup>
-            ) : (
-              <SelectBox
-                caption="Rate Source Code"
-                id="RateSourceCode"
-                options={acqMethodCode}
-                initialSelection={modalData.acquisitionMethodCode}
-                selectKey="code"
-                viewOnly={viewOnly}
-                required
-                secondOption="name"
-              />
-            )}
+              )}
+            </FormGroup>
           </div>
           <div className="tablet:grid-col" />
         </div>
@@ -119,7 +120,7 @@ const SystemFuelFlowsModal = ({ modalData, viewOnly, backBTN }) => {
           <div className="tablet:grid-col">
             <FormGroup className="margin-top-0">
               <Label
-                className="margin-0"
+                className="text-bold"
                 htmlFor="MaxRate"
                 hint={
                   viewOnly ? (
@@ -131,185 +132,166 @@ const SystemFuelFlowsModal = ({ modalData, viewOnly, backBTN }) => {
               >
                 {"MaxRate"}
               </Label>
-              <TextInput
-                className="modalInput"
-                id="MaxRate"
-                name="MaxRate"
-                type="text"
-                disabled={viewOnly}
-                defaultValue={modalData.maxRate ? modalData.maxRate : ""}
-              />
+
+              {viewOnly ? (
+                <div id="MaxRate" tabIndex="0">
+                  {modalData["maxRate"] ? modalData["maxRate"] : ""}
+                </div>
+              ) : (
+                <TextInput
+                  className="modalInput"
+                  id="MaxRate"
+                  name="MaxRate"
+                  epa-testid="MaxRate"
+                  title="Enter Max Rate"
+                  type="text"
+                  defaultValue={
+                    modalData["maxRate"] ? modalData["maxRate"] : ""
+                  }
+                />
+              )}
             </FormGroup>
           </div>
           <div className="tablet:grid-col padding-left-2">
-            {" "}
-            {viewOnly ? (
-              <FormGroup className="margin-top-0">
-                <Label className="margin-0" htmlFor="UnitOfMeasureCode">
-                  Unit of Measure Code
-                </Label>
-                <TextInput
-                  className="modalInput"
+            <FormGroup className="margin-top-0">
+              <Label className="text-bold" htmlFor="UnitOfMeasureCode">
+                Unit of Measure Code
+              </Label>
+              {viewOnly ? (
+                <div id="UnitsOfMeasureCode" tabIndex="0">
+                  {modalData["sysFuelUomCode"]
+                    ? modalData["sysFuelUomCode"]
+                    : ""}
+                </div>
+              ) : (
+                <SelectBox
+                  caption="Unit of Measure Code"
                   id="UnitOfMeasureCode"
                   name="UnitOfMeasureCode"
-                  type="text"
-                  disabled={viewOnly}
-                  defaultValue={
-                    modalData.sysFuelUomCode ? modalData.sysFuelUomCode : ""
-                  }
+                  epa-testid="UnitOfMeasureCode"
+                  title="Select Units of Measure Code"
+                  selectKey="code"
+                  options={acqMethodCode}
+                  initialSelection={modalData["acquisitionMethodCode"]}
+                  required
+                  secondOption="name"
                 />
-              </FormGroup>
-            ) : (
-              <SelectBox
-                caption="Unit of Measure Code"
-                id="UnitOfMeasureCode"
-                options={acqMethodCode}
-                initialSelection={modalData.acquisitionMethodCode}
-                selectKey="code"
-                viewOnly={viewOnly}
-                required
-                secondOption="name"
-              />
-            )}
+              )}
+            </FormGroup>
           </div>
         </div>
         <div className="grid-row padding-top-2">
           <div className="tablet:grid-col">
-            <Label
-              className="margin-0"
-              id="StartDateAndTime"
-              htmlFor="startTime"
-            >
-              Start Date and Time
-            </Label>
             <div className="grid-row">
               <div className="grid-col ">
-                {viewOnly ? (
-                  <FormGroup className="margin-top-0">
-                    <Label className="margin-0" htmlFor="startTime">
-                      mm/dd/yyyy
-                    </Label>
-                    <TextInput
-                      className="modalInput"
-                      id="startTime"
-                      name="startTime"
-                      type="text"
-                      disabled={viewOnly}
-                      defaultValue={startDate ? startDate : ""}
-                    />
-                  </FormGroup>
-                ) : (
-                  <div>
-                    <div className="usa-hint" id="startHour">
-                      mm/dd/yyyy
+                <FormGroup className="margin-top-0">
+                  <Label className="text-bold" htmlFor="startDate">
+                    <div>Start Date and Time</div>
+                    <div>mm/dd/yyyy</div>
+                  </Label>
+                  {viewOnly ? (
+                    <div id="startDate" tabIndex="0">
+                      {startDate ? startDate : ""}
                     </div>
-                    {startDate !== null ? (
-                      <DatePicker
-                        className="margin-0"
-                        id="startHour"
-                        name="startHour"
-                        disabled={viewOnly}
-                        defaultValue={startDate}
-                      />
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                )}
+                  ) : (
+                    <div>
+                      <div className="usa-hint" id="startDateHint">
+                        mm/dd/yyyy
+                      </div>
+                      {startDate !== null ? (
+                        <DatePicker
+                          className="margin-0"
+                          id="startDate"
+                          name="startDate"
+                          epa-testid="startDate"
+                          title="Enter Start Date"
+                          disabled={viewOnly}
+                          defaultValue={startDate}
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  )}
+                </FormGroup>
               </div>
               <div className="grid-col">
-                {viewOnly ? (
-                  <FormGroup className="margin-top-0">
-                    <Label className="margin-0" htmlFor="startHour">
-                      hh
-                    </Label>
-                    <TextInput
-                      className="modalInput"
-                      id="startHour"
+                <FormGroup className="margin-top-0">
+                  <Label className="text-bold" htmlFor="startHour">
+                    hh
+                  </Label>
+                  {viewOnly ? (
+                    <div tabIndex="0" id="startHour">
+                      {startHour ? startHour : ""}
+                    </div>
+                  ) : (
+                    <SelectBox
                       name="startHour"
-                      type="text"
-                      disabled={viewOnly}
-                      defaultValue={startHour}
+                      id="startHour"
+                      epa-testid="startHour"
+                      title="Enter start hour"
+                      selectKey="startHour"
+                      className="margin-0"
+                      caption="hh"
+                      options={timeOptions}
+                      initialSelection={startHour}
                     />
-                  </FormGroup>
-                ) : startHour !== null ? (
-                  <SelectBox
-                    className="margin-0"
-                    caption="hh"
-                    options={timeOptions}
-                    initialSelection={startHour}
-                    selectKey="time"
-                    viewOnly={viewOnly}
-                    // required={required}
-                  />
-                ) : (
-                  ""
-                )}
+                  )}
+                </FormGroup>
               </div>
             </div>
           </div>
           <div className="tablet:grid-col padding-left-2">
-            <Label className="margin-0" id="EndDateAndTime" htmlFor="endDate">
-              End Date and Time
-            </Label>
             <div className="grid-row">
               <div className="grid-col ">
-                {viewOnly ? (
-                  <FormGroup className="margin-top-0">
-                    <Label className="margin-0" htmlFor="endDate">
-                      mm/dd/yyyy
-                    </Label>
-                    <TextInput
-                      className="modalInput"
-                      id="endDate"
-                      name="endDate"
-                      type="text"
-                      disabled={viewOnly}
-                      defaultValue={endDate ? endDate : ""}
-                    />
-                  </FormGroup>
-                ) : (
-                  <div>
-                    <div className="usa-hint" id="endDate">
-                      mm/dd/yyyy
+                <FormGroup className="margin-top-0">
+                  <Label className="text-bold" htmlFor="endDate">
+                    <div>End Date and Time</div>
+                    <div>mm/dd/yyyy</div>
+                  </Label>
+                  {viewOnly ? (
+                    <div tabIndex="0" id="endDate">
+                      {endDate ? endDate : ""}
                     </div>
-                    <DatePicker
-                      className="margin-0"
-                      id="endDate"
-                      name="endDate"
-                      disabled={viewOnly}
-                      defaultValue={endDate}
-                    />
-                  </div>
-                )}
+                  ) : (
+                    <div>
+                      <div className="usa-hint" id="endDate">
+                        mm/dd/yyyy
+                      </div>
+                      <DatePicker
+                        className="margin-0"
+                        id="endDate"
+                        name="endDate"
+                        epa-testid="endDate"
+                        title="Enter End Date"
+                        defaultValue={endDate}
+                      />
+                    </div>
+                  )}
+                </FormGroup>
               </div>
               <div className="grid-col">
-                {viewOnly ? (
-                  <FormGroup className="margin-top-0">
-                    <Label className="margin-0" htmlFor="endHour">
-                      hh
-                    </Label>
-                    <TextInput
-                      className="modalInput"
+                <FormGroup className="margin-top-0">
+                  <Label className="text-bold" htmlFor="endHour">
+                    hh
+                  </Label>
+                  {viewOnly ? (
+                    <div tabIndex="0" id="endHour">
+                      {endHour ? endHour : ""}
+                    </div>
+                  ) : (
+                    <SelectBox
+                      className="margin-0"
                       id="endHour"
                       name="endHour"
-                      type="text"
-                      disabled={viewOnly}
-                      defaultValue={endHour}
+                      epa-testid="endHour"
+                      title="Enter Hour"
+                      caption="hh"
+                      options={timeOptions}
+                      initialSelection={endHour}
                     />
-                  </FormGroup>
-                ) : startHour !== null ? (
-                  <SelectBox
-                    className="margin-0"
-                    caption="hh"
-                    options={timeOptions}
-                    initialSelection={endHour}
-                    selectKey="time"
-                    viewOnly={viewOnly}
-                  />
-                ) : (
-                  ""
-                )}
+                  )}
+                </FormGroup>
               </div>
             </div>
           </div>
