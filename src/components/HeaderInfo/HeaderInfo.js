@@ -20,6 +20,7 @@ const HeaderInfo = ({
   setCheckoutAPI,
   setCheckout
 }) => {
+  console.log('this is facility',locations)
   const sections = [
     { name: "Defaults" },
     { name: "Loads" },
