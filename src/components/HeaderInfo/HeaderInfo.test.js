@@ -1014,14 +1014,46 @@ describe("testing select dropdowns for configutations, locations, and sections o
   beforeEach(() => {
     queries = render(
       <HeaderInfo
-        sectionHandler={sectionHandler}
         facility={{ name: "Test Facility" }}
 
-        monitoringPlans={monitoringPlans}
-        locationHandler={locationHandler}
+        selectedConfig={[]}
+        orisCode={3}
+        setSectionSelect={jest.fn()}
+        sectionSelect={[4,'Methods']}
+        setLocationSelect={jest.fn()}
+        locationSelect={[0,'test']}
+        locations={[]}
+        checkout={false}
+        user={{firstName:"test"}}
+        setCheckoutAPI={jest.fn()}
+        setCheckout={jest.fn()}
+
       />
     );
   });
- 
-  });
+
+  describe('testing updated go-wide template footer', () => {
+    test("should render logo text description", () => {
+        const {getByText} = render(
+          <HeaderInfo
+            facility={{ name: "Test Facility" }}
+    
+            selectedConfig={[]}
+            orisCode={3}
+            setSectionSelect={jest.fn()}
+            sectionSelect={[4,'Methods']}
+            setLocationSelect={jest.fn()}
+            locationSelect={[0,'test']}
+            locations={[]}
+            checkout={false}
+            user={{firstName:"test"}}
+            setCheckoutAPI={jest.fn()}
+            setCheckout={jest.fn()}
+    
+          />);
+        const logoDescription = getByText("Methods");
+        expect(logoDescription).toBeTruthy();
+      });
+});
+
 });
