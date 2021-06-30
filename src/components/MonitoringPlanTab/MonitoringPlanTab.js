@@ -75,7 +75,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(setSectionSelectionState(section, title)),
     setActiveTab: (orisCode, value) => dispatch(setActiveTab(orisCode, value)),
     
-    setCheckout: (value, orisCode) => dispatch(setCheckoutState(value,orisCode)),
+    setCheckout: (value, title) => dispatch(setCheckoutState(value,title)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(MonitoringPlanTab);

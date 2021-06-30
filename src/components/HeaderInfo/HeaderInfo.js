@@ -42,8 +42,9 @@ const HeaderInfo = ({
   const checkoutAPI = (direction) => {
     setCheckoutState(direction);
     // setCheckoutAPI(direction);
-    setCheckout(direction, orisCode);
-  };
+    setCheckout(direction,facility);
+
+  }
   return (
     <div className="header">
       <div className="grid-row clearfix position-relative">
@@ -64,36 +65,33 @@ const HeaderInfo = ({
                   ""
                 )}{" "}
                 {facilityAdditionalName}
-                {user ? (
-                  <div className="text-bold font-body-2xs display-inline-block ">
-                    {checkoutState ? (
-                      <Button
-                        outline={false}
-                        tabIndex="0"
-                        aria-label={`Check back in the configuration `}
-                        className="initial-tab-button"
-                        onClick={() => checkoutAPI(false)}
-                      >
-                        <LockOpenIcon /> {"Check Back In"}
-                      </Button>
-                    ) : (
-                      <Button
-                        outline={true}
-                        tabIndex="0"
-                        aria-label={`Check out the configuration`}
-                        className="float-top"
-                        onClick={() => checkoutAPI(true)}
-                      >
-                        <CreateOutlinedIcon color="primary" /> {"Check Out"}
-                      </Button>
-                    )}
-                    {checkoutState
-                      ? `Currently checked out by:${user.firstName}`
-                      : `Last checked out by:${user.firstName}`}
-                  </div>
-                ) : (
-                  ""
-                )}
+                {user?
+                <div className="text-bold font-body-2xs display-inline-block ">
+                  {checkoutState ? (
+                    <Button
+                      outline={false}
+                      tabIndex="0"
+                      aria-label={`Check back in the configuration `}
+                      className="initial-tab-button"
+                      onClick={() => checkoutAPI(false)}
+                    >
+                      <LockOpenIcon /> {"Check Back In"}
+                    </Button>
+                  ) : (
+                    <Button
+                      outline={true}
+                      tabIndex="0"
+                      aria-label={`Check out the configuration`}
+                      className="float-top"
+                      onClick={() => checkoutAPI(true)}
+                    >
+                      <CreateOutlinedIcon color="primary" /> {"Check Out"}
+                    </Button>
+                  )}
+                  {checkoutState
+                    ? `Currently checked out by:${user.firstName}`
+                    : `Last checked out by:${user.firstName}`}
+                </div>:''}
               </div>
 
               <div className="row padding-left-2">
