@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 const NotFound = () => {
   return (
-    <div >
+    <div className="minh-tablet-lg">
       <div className="text-center">
         <h1>Sorry, but this web page does not exist.</h1>
         <h3>We want to help you find what you are looking for.</h3>

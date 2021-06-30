@@ -208,10 +208,15 @@
 
 .usa-date-picker__calendar {
   margin-top: 1em !important;
+  width: 20em !important;
 }
 
 .usa-date-picker__button {
-  margin-left: 1em !important;
+  /* comments to avoid code smell error */
+}
+
+.usa-date-picker__external-input {
+  width: 10em !important;
 }
 
 .text-primary-dark {

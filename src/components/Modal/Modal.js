@@ -78,7 +78,9 @@ export const Modal = ({
                 role="button"
                 tabIndex="0"
               />
-              <div className="modal-body modal-color">{children}</div>
+              <div className="modal-body modal-color maxh-tablet overflow-y-scroll margin-top-2">
+                {children}
+              </div>
 
               <div className="modal-footer">
                 {showCancel ? (

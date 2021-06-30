@@ -33,6 +33,12 @@ export const DynamicTabs = ({
       }
     });
     setTabs([...tabs]);
+
+    setTimeout(() => {
+      document
+        .querySelectorAll(".tab-button")
+        [document.querySelectorAll(".tab-button").length - 1].focus();
+    });
   };
 
   const removeTabsHandler = (index) => {

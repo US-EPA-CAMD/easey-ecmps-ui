@@ -8,7 +8,6 @@ import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 export const DataTableMethod = ({
   locationSelectValue,
-
   matsTableHandler,
   showActiveOnly,
   user,
@@ -208,7 +207,7 @@ export const DataTableMethod = ({
           close={closeModalHandler}
           save={saveMethods}
           showCancel
-          showSave
+          showSave={!(user || checkout)}
           children={
             <div>
               <MethodModal

@@ -71,7 +71,6 @@ export const MonitoringPlanTabRender = ({
             locationSelectValue={parseInt(locationSelect[1])}
             checkout={checkout}
             user={user}
-            // showActiveOnly={!showInactive}
           />,
           "Methods",
         ],
@@ -105,7 +104,6 @@ export const MonitoringPlanTabRender = ({
           locationSelectValue={parseInt(locationSelect[1])}
           checkout={checkout}
           user={user}
-          // showActiveOnly={!showInactive}
         />,
         "Methods",
       ],
@@ -128,9 +126,7 @@ export const MonitoringPlanTabRender = ({
     <div className=" padding-top-0">
       {user && checkout ? (
         <InactivityTracker apiCall={resetInactivityTimerApiCall} />
-      ) : (
-        ""
-      )}
+      ) : null}
       {/* on change of select box, it should modify the accordion items */}
       {/* pass back the values to send to the datatable, current is sending back index  */}
       <div className="grid-row">
