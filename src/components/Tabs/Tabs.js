@@ -65,13 +65,11 @@ const Tabs = ({ children, dynamic = false, removeTabs, setActive }) => {
                     }
                   }}
                 >
-                  <div>
-                    <div className="text-center">
-                      {el.props.title.split("(")[0]}
-                    </div>
-                    <div className="text-center">
-                      {el.props.title.split("(")[1].replace(")", "")}
-                    </div>
+                  <div className="text-center">
+                    {el.props.title.split("(")[0]}
+                  </div>
+                  <div className="text-center">
+                    {el.props.title.split("(")[1].replace(")", "")}
                   </div>
 
                   {dynamic ? (

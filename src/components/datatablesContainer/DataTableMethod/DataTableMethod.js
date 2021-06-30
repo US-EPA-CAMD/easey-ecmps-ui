@@ -12,7 +12,6 @@ import {
 } from "../../../additional-functions/filter-data";
 export const DataTableMethod = ({
   locationSelectValue,
-
   matsTableHandler,
   showActiveOnly,
   user,
@@ -236,7 +235,7 @@ export const DataTableMethod = ({
           close={closeModalHandler}
           save={saveMethods}
           showCancel
-          showSave
+          showSave={user && checkout}
           children={
             <div>
               <MethodModal

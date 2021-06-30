@@ -200,6 +200,11 @@
   }
 }
 
+.usa-label,
+.usa-legend {
+  margin-top: 0 !important;
+}
+
 /*.usa-banner__button::after {
   background-color: inherit !important;
   background: url(/static/media/expand_more.95a46151.svg) no-repeat center/1rem
@@ -211,7 +216,10 @@
 }
 
 .usa-date-picker__button {
-  margin-left: 1em !important;
+  /* comments to avoid code smell error */
+}
+
+.usa-date-picker__external-input {
 }
 
 .text-primary-dark {

@@ -34,6 +34,11 @@ export const Modal = ({
       handleKeyPress(event);
     });
 
+    // *** 508 remediation; scroll to top on modal open
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    });
+
     // * clean up
     return () => {
       document.removeEventListener("keydown", handleKeyPress);
@@ -78,7 +83,9 @@ export const Modal = ({
                 role="button"
                 tabIndex="0"
               />
-              <div className="modal-body modal-color">{children}</div>
+              <div className="modal-body modal-color maxh-tablet overflow-y-scroll margin-top-2">
+                {children}
+              </div>
 
               <div className="modal-footer">
                 {showCancel ? (
