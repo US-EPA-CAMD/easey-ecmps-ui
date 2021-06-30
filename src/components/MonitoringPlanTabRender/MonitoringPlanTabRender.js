@@ -22,13 +22,17 @@ export const MonitoringPlanTabRender = ({
   configID,
   checkout,
   setCheckout,
+  setInactive,
+  inactive,
 }) => {
   const [matsTableFlag, setMatsTableFlag] = useState(false);
   // // MONITORING METHODS
   const matsTableHandler = (flag) => {
     setMatsTableFlag(flag);
   };
-
+  const settingInactiveCheckBox = (check, disable) => {
+    setInactive([check, disable], title);
+  };
   // checks mats table
   useEffect(() => {
     if (matsTableFlag) {
@@ -42,11 +46,17 @@ export const MonitoringPlanTabRender = ({
                     locationSelectValue={parseInt(locationSelect[1])}
                     checkout={checkout}
                     user={user}
+                    inactive={inactive}
+                    settingInactiveCheckBox={settingInactiveCheckBox}
                   />,
                   "Methods",
                 ],
                 [
-                  <DataTableMats locationSelect={locationSelect[1]} />,
+                  <DataTableMats
+                    locationSelect={locationSelect[1]}
+                    inactive={inactive}
+                    settingInactiveCheckBox={settingInactiveCheckBox}
+                  />,
                   "Supplemental Methods",
                 ],
               ]
@@ -56,7 +66,7 @@ export const MonitoringPlanTabRender = ({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [matsTableFlag]);
+  }, [matsTableFlag, inactive[0]]);
 
   // updates all tables whenever a location is changed
   useEffect(() => {
@@ -71,6 +81,8 @@ export const MonitoringPlanTabRender = ({
             locationSelectValue={parseInt(locationSelect[1])}
             checkout={checkout}
             user={user}
+            inactive={inactive}
+            settingInactiveCheckBox={settingInactiveCheckBox}
           />,
           "Methods",
         ],
@@ -82,7 +94,11 @@ export const MonitoringPlanTabRender = ({
       [],
       [
         [
-          <DataTableSystems locationSelect={parseInt(locationSelect[1])} />,
+          <DataTableSystems
+            locationSelect={parseInt(locationSelect[1])}
+            inactive={inactive}
+            settingInactiveCheckBox={settingInactiveCheckBox}
+          />,
           "Systems",
         ],
       ],
@@ -90,7 +106,7 @@ export const MonitoringPlanTabRender = ({
     ]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelect]);
+  }, [locationSelect, inactive[0]]);
 
   // sets initial state
   const [tableState, setTableState] = useState([
@@ -104,6 +120,8 @@ export const MonitoringPlanTabRender = ({
           locationSelectValue={parseInt(locationSelect[1])}
           checkout={checkout}
           user={user}
+          inactive={inactive}
+          settingInactiveCheckBox={settingInactiveCheckBox}
         />,
         "Methods",
       ],
@@ -113,7 +131,16 @@ export const MonitoringPlanTabRender = ({
     [],
     [],
     [],
-    [[<DataTableSystems locationSelect={locationSelect[1]} />, "Systems"]],
+    [
+      [
+        <DataTableSystems
+          locationSelect={locationSelect[1]}
+          inactive={inactive}
+          settingInactiveCheckBox={settingInactiveCheckBox}
+        />,
+        "Systems",
+      ],
+    ],
     [],
   ]);
 
@@ -143,6 +170,8 @@ export const MonitoringPlanTabRender = ({
           user={user}
           checkoutAPI={checkoutAPI}
           setCheckout={setCheckout}
+          setInactive={setInactive}
+          inactive={inactive}
         />
       </div>
       <hr />

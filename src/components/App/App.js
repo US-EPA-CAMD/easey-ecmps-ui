@@ -24,6 +24,11 @@ const App = () => {
     setUser(cdxUser && cdxUser.firstName ? cdxUser : false);
   }, []);
 
+  const logOut = () => {
+    sessionStorage.removeItem("cdx_user");
+    window.location = "/login";
+  };
+
   // *** assign / un-assign activity event listeners
   useEffect(() => {
     handleActiveElementFocus();
@@ -36,7 +41,7 @@ const App = () => {
 
   return (
     <div>
-      <Layout>
+      <Layout user={user} logOut={logOut}>
         <Switch>
           <Redirect from="/home" to="/" />
           <Route path="/" exact component={Home} />

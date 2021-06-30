@@ -28,18 +28,18 @@ export function setSectionSelectionState(section, title) {
   };
 }
 
-export function setLocationsState(locations, orisCode) {
-  return {
-    type: types.SET_LOCATIONS_STATE,
-    orisCode,
-    locations,
-  };
-}
-
 export function setCheckoutState(checkout, title) {
   return {
     type: types.SET_CHECKOUT_STATE,
     title,
     checkout,
+  };
+}
+
+export function setInactiveState(inactive, title) {
+  return {
+    type: types.SET_INACTIVE_STATE,
+    title,
+    inactive,
   };
 }

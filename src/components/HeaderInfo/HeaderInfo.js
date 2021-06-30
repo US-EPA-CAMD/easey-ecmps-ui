@@ -4,21 +4,26 @@ import DropdownSelection from "../DropdownSelection/DropdownSelection";
 import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import LockIcon from "@material-ui/icons/Lock";
-import { Button } from "@trussworks/react-uswds";
+import { Button, Checkbox } from "@trussworks/react-uswds";
 
 const HeaderInfo = ({
   facility,
   selectedConfig,
   orisCode,
-  setSectionSelect,
-  sectionSelect,
+
+  user,
+  //redux sets
+  setCheckoutAPI,
+  setCheckout,
+  setInactive,
   setLocationSelect,
+  setSectionSelect,
+  // reduxx store
+  sectionSelect,
   locationSelect,
   locations,
   checkout = false,
-  user,
-  setCheckoutAPI,
-  setCheckout,
+  inactive,
 }) => {
   const sections = [
     { name: "Defaults" },
@@ -42,9 +47,9 @@ const HeaderInfo = ({
   const checkoutAPI = (direction) => {
     setCheckoutState(direction);
     // setCheckoutAPI(direction);
-    setCheckout(direction,facility);
+    setCheckout(direction, facility);
+  };
 
-  }
   return (
     <div className="header">
       <div className="grid-row clearfix position-relative">
@@ -65,36 +70,39 @@ const HeaderInfo = ({
                   ""
                 )}{" "}
                 {facilityAdditionalName}
-                {user?
-                <div className="text-bold font-body-2xs display-inline-block ">
-                  {checkoutState ? (
-                    <Button
-                      outline={false}
-                      tabIndex="0"
-                      aria-label={`Check back in the configuration `}
-                      className="initial-tab-button"
-                      onClick={() => checkoutAPI(false)}
-                    >
-                      <LockOpenIcon /> {"Check Back In"}
-                    </Button>
-                  ) : (
-                    <Button
-                      outline={true}
-                      tabIndex="0"
-                      aria-label={`Check out the configuration`}
-                      className="float-top"
-                      onClick={() => checkoutAPI(true)}
-                    >
-                      <CreateOutlinedIcon color="primary" /> {"Check Out"}
-                    </Button>
-                  )}
-                  {checkoutState
-                    ? `Currently checked out by:${user.firstName}`
-                    : `Last checked out by:${user.firstName}`}
-                </div>:''}
+                {user ? (
+                  <div className="text-bold font-body-2xs display-inline-block ">
+                    {checkoutState ? (
+                      <Button
+                        outline={false}
+                        tabIndex="0"
+                        aria-label={`Check back in the configuration `}
+                        className=" padding-1 padding-right-3 padding-left-3 margin-2"
+                        onClick={() => checkoutAPI(false)}
+                      >
+                        <LockOpenIcon /> {"Check Back In"}
+                      </Button>
+                    ) : (
+                      <Button
+                        outline={true}
+                        tabIndex="0"
+                        aria-label={`Check out the configuration`}
+                        className="float-top padding-1 padding-right-3 padding-left-3 margin-2"
+                        onClick={() => checkoutAPI(true)}
+                      >
+                        <CreateOutlinedIcon color="primary" /> {"Check Out"}
+                      </Button>
+                    )}
+                    {checkoutState
+                      ? `Currently checked out by:${user.firstName}`
+                      : `Last checked out by:${user.firstName}`}
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
 
-              <div className="row padding-left-2">
+              <div className="grid-row padding-left-2 ">
                 <DropdownSelection
                   caption="Locations"
                   orisCode={orisCode}
@@ -113,6 +121,21 @@ const HeaderInfo = ({
                   initialSelection={sectionSelect[0]}
                   orisCode={orisCode}
                 />
+                <div className="">
+                  <div className="bottom-0 position-absolute padding-bottom-05">
+                    <Checkbox
+                      epa-testid="inactiveCheckBox"
+                      id="checkbox"
+                      name="checkbox"
+                      label="Show Inactive"
+                      checked={inactive[0]}
+                      disabled={inactive[1]}
+                      onChange={(e) =>
+                        setInactive([!inactive[0], inactive[1]], facility)
+                      }
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

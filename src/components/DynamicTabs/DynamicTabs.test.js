@@ -86,7 +86,7 @@ describe("testing a reusable Dynamic Tabs component", () => {
     tabs = screen.getAllByRole("button");
     expect(tabs).toHaveLength(2);    
     //close the opened facilities tab
-    const closeTabIcon = container.querySelector(".close-icon");
+    const closeTabIcon = container.querySelector("#closeXBtnTab");
     fireEvent.click(closeTabIcon);
     tabs = screen.getAllByRole("button");
     expect(tabs).toHaveLength(1);

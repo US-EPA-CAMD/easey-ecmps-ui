@@ -20,7 +20,7 @@ const DropdownSelection = ({
   const populateOptions = (optionsList) => {
     return optionsList.map((info, index) => {
       return (
-        <option key={info[selectKey]} value={info[selectKey]}>
+        <option data-testid={info[selectKey]} key={info[selectKey]} value={info[selectKey]}>
           {info[viewKey]}
         </option>
       );
@@ -35,7 +35,8 @@ const DropdownSelection = ({
           </Label>
           <Dropdown
             id={caption}
-            test-id={caption}
+            epa-testid={caption}
+            data-testid={caption}
             value={
               options[initialSelection]
                 ? options[initialSelection][selectKey]

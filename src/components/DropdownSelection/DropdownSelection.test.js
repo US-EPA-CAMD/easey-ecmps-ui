@@ -15,7 +15,7 @@ describe("testing the creation of 1 select drop down and handling change", () =>
   test("renders 1 drop down with an initial value and required text ", () => {
     const { containe } = render(
       <DropdownSelection
-        caption={"test caption"}
+        caption={"testcaption"}
         initialSelection={0}
         selectKey={"id"}
         options={options}
@@ -23,7 +23,23 @@ describe("testing the creation of 1 select drop down and handling change", () =>
         viewKey="name"
       />
     );
-    userEvent.selectOptions(screen.getByTestId("dropdown"), ["3"]);
-    expect(screen.getByDisplayValue("3")).toBeInTheDocument();
+    userEvent.selectOptions(screen.getByTestId("testcaption"), ["6"]);
+    expect(screen.getByTestId("6").selected).toBe(true);
+  });
+});
+
+describe("testing the creation of 1 select drop down and handling change", () => {
+  test("renders 1 drop down with no initial selection ", () => {
+    const { containe } = render(
+      <DropdownSelection
+        caption={"testcaption"}
+        selectKey={"id"}
+        options={options}
+        selectionHandler={jest.fn()}
+        viewKey="name"
+      />
+    );
+    userEvent.selectOptions(screen.getByTestId("testcaption"), ["6"]);
+    expect(screen.getByTestId("6").selected).toBe(true);
   });
 });

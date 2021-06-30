@@ -1,9 +1,9 @@
 import React from "react";
-import Accessories from "./Accessories";
 import "@testing-library/jest-dom/extend-expect";
 import Layout from "../Layout/Layout";
 import { render, fireEvent } from "@testing-library/react";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
+import LeftNavigation from "./LeftNavigation";
 // cannot use link outside router
 const { container } = render(
   <BrowserRouter>
@@ -13,9 +13,8 @@ const { container } = render(
           path="/"
           exact
           component={() => (
-            <Accessories
+            <LeftNavigation
               user={{ firstName: "test", lastName: "testlast" }}
-              logOut={jest.fn()}
             />
           )}
         />
@@ -24,9 +23,9 @@ const { container } = render(
   </BrowserRouter>
 );
 test("renders accesory links ", () => {
-  const accessoriesLinks = container.querySelectorAll("#logoutBTN");
-  for (var x of accessoriesLinks) {
+  const openmodal = container.querySelectorAll("#openModalBTN");
+  for (var x of openmodal) {
     fireEvent.click(x);
   }
-  expect(accessoriesLinks).not.toBeUndefined();
+  expect(openmodal).not.toBeUndefined();
 });
