@@ -21,7 +21,7 @@ export const MonitoringPlanTabRender = ({
   orisCode,
   configID,
   checkout,
-  setCheckout
+  setCheckout,
 }) => {
   const [matsTableFlag, setMatsTableFlag] = useState(false);
   // // MONITORING METHODS
@@ -36,19 +36,25 @@ export const MonitoringPlanTabRender = ({
         tableState.map((element, index) =>
           index === 3
             ? [
-                [<DataTableMethod
-                  matsTableHandler={matsTableHandler}
-                  locationSelectValue={parseInt(locationSelect[1])}
-                  checkout={checkout}
-                  user={user}
-                />,'Methods'],
-                [<DataTableMats locationSelect={locationSelect[1]} />,'Supplemental Methods']
+                [
+                  <DataTableMethod
+                    matsTableHandler={matsTableHandler}
+                    locationSelectValue={parseInt(locationSelect[1])}
+                    checkout={checkout}
+                    user={user}
+                  />,
+                  "Methods",
+                ],
+                [
+                  <DataTableMats locationSelect={locationSelect[1]} />,
+                  "Supplemental Methods",
+                ],
               ]
             : element
         )
       );
     }
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matsTableFlag]);
 
@@ -58,25 +64,32 @@ export const MonitoringPlanTabRender = ({
       [],
       [],
       [],
-      [[
-        <DataTableMethod
-          matsTableHandler={matsTableHandler}
-          locationSelectValue={parseInt(locationSelect[1])}
-          checkout={checkout}
-          user={user}
-          // showActiveOnly={!showInactive}
-        />,'Methods']
+      [
+        [
+          <DataTableMethod
+            matsTableHandler={matsTableHandler}
+            locationSelectValue={parseInt(locationSelect[1])}
+            checkout={checkout}
+            user={user}
+            // showActiveOnly={!showInactive}
+          />,
+          "Methods",
+        ],
       ],
       [],
       [],
       [],
-      [],    
       [],
-      [[<DataTableSystems locationSelect={parseInt(locationSelect[1])} />,'Systems']],
       [],
-  
+      [
+        [
+          <DataTableSystems locationSelect={parseInt(locationSelect[1])} />,
+          "Systems",
+        ],
+      ],
+      [],
     ]);
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect]);
 
@@ -85,21 +98,24 @@ export const MonitoringPlanTabRender = ({
     [],
     [],
     [],
-    [[
-      <DataTableMethod
-        matsTableHandler={matsTableHandler}
-        locationSelectValue={parseInt(locationSelect[1])}
-        checkout={checkout}
-        user={user}
-        // showActiveOnly={!showInactive}
-      />,'Methods']
+    [
+      [
+        <DataTableMethod
+          matsTableHandler={matsTableHandler}
+          locationSelectValue={parseInt(locationSelect[1])}
+          checkout={checkout}
+          user={user}
+          // showActiveOnly={!showInactive}
+        />,
+        "Methods",
+      ],
     ],
     [],
     [],
     [],
-    [],    
     [],
-    [[<DataTableSystems locationSelect={locationSelect[1]} />,'Systems']],
+    [],
+    [[<DataTableSystems locationSelect={locationSelect[1]} />, "Systems"]],
     [],
   ]);
 
@@ -107,17 +123,14 @@ export const MonitoringPlanTabRender = ({
     console.log(mpApi.putLockTimerUpdateConfiguration(configID), "api called");
   };
 
-  const checkoutAPI = (direction) =>{
-    
-  }
+  const checkoutAPI = (/*direction*/) => {};
   return (
-    <div className=" padding-top-4">
+    <div className=" padding-top-0">
       {user && checkout ? (
         <InactivityTracker apiCall={resetInactivityTimerApiCall} />
       ) : (
         ""
       )}
-<hr />
       {/* on change of select box, it should modify the accordion items */}
       {/* pass back the values to send to the datatable, current is sending back index  */}
       <div className="grid-row">
@@ -133,9 +146,8 @@ export const MonitoringPlanTabRender = ({
           checkout={checkout}
           user={user}
           checkoutAPI={checkoutAPI}
-          setCheckout ={setCheckout}
+          setCheckout={setCheckout}
         />
-         
       </div>
       <hr />
       <div className="grid-row">

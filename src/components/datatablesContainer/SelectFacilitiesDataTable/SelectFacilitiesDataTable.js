@@ -8,8 +8,8 @@ import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigu
 import * as facilitiesApi from "../../../utils/api/facilityApi";
 export const SelectFacilitiesDataTable = ({
   user,
-  loadFacilitiesData,
-  loading,
+  /*loadFacilitiesData,
+  loading,*/
   addtabs,
   openedFacilityTabs,
 }) => {
@@ -119,7 +119,7 @@ export const SelectFacilitiesDataTable = ({
             className="expand-row-data-table"
           />
         }
-        headerStyling="padding-top-4 padding-left-2"
+        headerStyling="padding-top-0 padding-left-2"
       />
     </div>
   );

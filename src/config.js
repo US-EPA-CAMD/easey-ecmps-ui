@@ -2,8 +2,8 @@ const oneSecond = 1000;
 const oneMinute = 60 * oneSecond;
 
 const activityEvents = [];
-activityEvents.push("click"); /*
-activityEvents.push("keydown");*/
+activityEvents.push("click");
+activityEvents.push("keydown");
 
 const title = "EPA Easey";
 

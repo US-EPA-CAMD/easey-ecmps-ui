@@ -32,20 +32,22 @@ const Tabs = ({ children, dynamic = false, removeTabs, setActive }) => {
             >
               {" "}
               {el.props.title.toLowerCase() === "select configurations" ? (
-                <Button
-                  type="button"
-                  outline={activeTabIndex !== i}
-                  tabIndex="0"
-                  aria-label={`open ${el.props.title} tab`}
-                  className={
-                    activeTabIndex === i
-                      ? "initial-tab-button active-tab-button"
-                      : "initial-tab-button"
-                  }
-                  onClick={() => settingActiveTab(i)}
-                >
-                  {el.props.title}
-                </Button>
+                <>
+                  <Button
+                    type="button"
+                    outline={activeTabIndex !== i}
+                    tabIndex="0"
+                    aria-label={`open ${el.props.title} tab`}
+                    className={
+                      activeTabIndex === i
+                        ? "initial-tab-button active-tab-button"
+                        : "initial-tab-button"
+                    }
+                    onClick={() => settingActiveTab(i)}
+                  >
+                    {el.props.title}
+                  </Button>
+                </>
               ) : (
                 <div
                   role="button"
@@ -95,6 +97,7 @@ const Tabs = ({ children, dynamic = false, removeTabs, setActive }) => {
           ))}
         </ul>
       </div>
+      <hr className="height-3" />
       <div className="tabContent">{children[activeTabIndex]}</div>
     </div>
   );
