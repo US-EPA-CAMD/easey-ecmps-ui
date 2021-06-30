@@ -26,7 +26,7 @@ const App = () => {
 
   const logOut = () => {
     sessionStorage.removeItem("cdx_user");
-    window.location = "/login";
+    window.location = "/";
   };
 
   // *** assign / un-assign activity event listeners

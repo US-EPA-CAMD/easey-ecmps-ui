@@ -235,7 +235,7 @@ export const DataTableMethod = ({
           close={closeModalHandler}
           save={saveMethods}
           showCancel
-          showSave={!(user || checkout)}
+          showSave={user && checkout}
           children={
             <div>
               <MethodModal

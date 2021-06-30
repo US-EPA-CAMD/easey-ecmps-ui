@@ -1,10 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  Label,
-  FormGroup,
-  TextInput,
-  DatePicker,
-} from "@trussworks/react-uswds";
+import { Label, FormGroup, DatePicker } from "@trussworks/react-uswds";
 import {
   bypassApproachCodes,
   substituteDataApproachCodes,
@@ -212,9 +207,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
               <div className="grid-col ">
                 <FormGroup className="margin-top-0">
                   <Label className="text-bold" htmlFor="startDate">
-                    Start Date and Time
-                    <br />
-                    mm/dd/yyyy
+                    Start Date
                   </Label>
                   {!viewOnly ? (
                     <div>
@@ -243,16 +236,18 @@ const MethodModal = ({ modalData, viewOnly }) => {
                 </FormGroup>
               </div>
             </div>
+          </div>
+          <div className="tablet:grid-col padding-left-2">
             <div className="grid-row">
-              <div className="grid-col">
+              <div className="grid-col ">
                 <FormGroup className="margin-top-0">
-                  <Label className="text-bold width-9" htmlFor="startHour">
-                    hh
+                  <Label className="text-bold" htmlFor="startHour">
+                    Start Time
                   </Label>
                   {!viewOnly ? (
                     startHour !== null ? (
                       <SelectBox
-                        className="margin-0 width-9 modalUserInput"
+                        className="margin-0 width-15 modalUserInput"
                         caption="hh"
                         id="startHour"
                         name="startHour"
@@ -272,14 +267,15 @@ const MethodModal = ({ modalData, viewOnly }) => {
               </div>
             </div>
           </div>
-          <div className="tablet:grid-col padding-left-2">
+        </div>
+
+        <div className="grid-row padding-top-2">
+          <div className="tablet:grid-col">
             <div className="grid-row">
-              <div className="grid-col ">
+              <div className="grid-col">
                 <FormGroup className="margin-top-0">
                   <Label className="text-bold" htmlFor="endDate">
-                    End Date and Time
-                    <br />
-                    mm/dd/yyyy
+                    End Date
                   </Label>
                   {!viewOnly ? (
                     <div>
@@ -309,16 +305,18 @@ const MethodModal = ({ modalData, viewOnly }) => {
                 </FormGroup>
               </div>
             </div>
+          </div>
+          <div className="tablet:grid-col padding-left-2">
             <div className="grid-row">
               <div className="grid-col">
                 <FormGroup className="margin-top-0">
                   <Label className="text-bold" htmlFor="endHour">
-                    hh
+                    End Time
                   </Label>
                   {!viewOnly ? (
                     startHour !== null ? (
                       <SelectBox
-                        className="margin-0 width-9 modalUserInput"
+                        className="margin-0 width-15 modalUserInput"
                         caption="hh"
                         id="endHour"
                         name="endHour"

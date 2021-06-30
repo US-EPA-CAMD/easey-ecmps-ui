@@ -34,6 +34,11 @@ export const Modal = ({
       handleKeyPress(event);
     });
 
+    // *** 508 remediation; scroll to top on modal open
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    });
+
     // * clean up
     return () => {
       document.removeEventListener("keydown", handleKeyPress);

@@ -200,6 +200,11 @@
   }
 }
 
+.usa-label,
+.usa-legend {
+  margin-top: 0 !important;
+}
+
 /*.usa-banner__button::after {
   background-color: inherit !important;
   background: url(/static/media/expand_more.95a46151.svg) no-repeat center/1rem
@@ -208,7 +213,6 @@
 
 .usa-date-picker__calendar {
   margin-top: 1em !important;
-  width: 20em !important;
 }
 
 .usa-date-picker__button {
@@ -216,7 +220,6 @@
 }
 
 .usa-date-picker__external-input {
-  width: 10em !important;
 }
 
 .text-primary-dark {
