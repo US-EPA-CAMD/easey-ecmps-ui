@@ -10,7 +10,7 @@ const lastName = cdx_user && cdx_user.lastName ? cdx_user.lastName : "X";
 
 const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`;
 
-const Accessories = () => {
+export const Accessories = () => {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
 
   const checkLoggedIn = () => {
@@ -21,7 +21,7 @@ const Accessories = () => {
 
   const logOut = () => {
     sessionStorage.removeItem("cdx_user");
-    window.location = "/login";
+    window.location = "/";
   };
 
   useEffect(() => {
@@ -76,7 +76,6 @@ const Accessories = () => {
           rel=" CAMD Apps"
           title="Go to the CAMPD Apps page"
           className="accessoryLink "
-          
         >
           CAMD Apps
         </Link>

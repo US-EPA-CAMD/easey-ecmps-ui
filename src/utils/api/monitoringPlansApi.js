@@ -2,34 +2,45 @@ import axios from "axios";
 import { handleResponse, handleError } from "./apiUtils";
 import config from "../../config";
 
+// *** obtain monitoring plans
 export async function getMonitoringPlans(orisCode) {
-  return axios
-    .get(
-      `${config.services.monitorPlans.uri}/monitor-plans/${orisCode}/configurations`
-    )
-    .then(handleResponse)
-    .catch(handleError);
+  let url = `${config.services.monitorPlans.uri}`;
+
+  // *** workspace section url (authenticated)
+  if (url.indexOf("workspace") > -1) {
+    url = `${url}/workspace/plans/${orisCode}/configurations`;
+  }
+  // *** non-authenticated section
+  else {
+    url = `${url}/monitor-plans/${orisCode}/configurations`;
+  }
+
+  return axios.get(url).then(handleResponse).catch(handleError);
 }
 
+// *** obtain monitoring methods
 export async function getMonitoringMethods(locationId) {
-  return axios
-    .get(
-      `${config.services.monitorPlans.uri}/monitor-locations/${locationId}/methods`
-    )
-    .then(handleResponse)
-    .catch(handleError);
+  let url = `${config.services.monitorPlans.uri}`;
+
+  // *** workspace section url (authenticated)
+  if (url.indexOf("workspace") > -1) {
+    url = `${url}/workspace/locations/${locationId}/methods`;
+  }
+  // *** non-authenticated section
+  else {
+    url = `${url}/monitor-locations/${locationId}/methods`;
+  }
+
+  return axios.get(url).then(handleResponse).catch(handleError);
 }
 
 export async function getMonitoringMatsMethods(locationId) {
-  return (
-    axios
-      // .get(`${config.services.monitorPlans.uri}/monitor-locations/${locationId}/matsMethods`)
-      .get(
-        `${config.services.monitorPlans.uri}/monitor-locations/${locationId}/supplemental-methods`
-      )
-      .then(handleResponse)
-      .catch(handleError)
-  );
+  return axios
+    .get(
+      `${config.services.monitorPlans.uri}/monitor-locations/${locationId}/supplemental-methods`
+    )
+    .then(handleResponse)
+    .catch(handleError);
 }
 export async function getMonitoringSystems(locationId) {
   return axios
@@ -75,11 +86,10 @@ export async function putLockTimerUpdateConfiguration(id) {
 }
 
 export const saveMonitoringMethods = async (payload) => {
-  return axios
-    .put(
-      `${config.services.monitorPlans.uri}/workspace/locations/${payload["monLocId"]}/methods/${payload["id"]}`,
-      payload
-    )
-    .then(handleResponse)
-    .catch(handleError);
+  let url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["monLocId"]}/methods/${payload["id"]}`;
+
+  delete payload["monLocId"];
+  delete payload["id"];
+
+  return axios.put(url, payload).then(handleResponse).catch(handleError);
 };

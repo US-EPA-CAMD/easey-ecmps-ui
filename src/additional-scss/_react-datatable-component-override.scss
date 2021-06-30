@@ -1,3 +1,5 @@
+@import "/variables";
+
 .data-display-table {
   .rdt_Table {
     width: 99%;
@@ -8,13 +10,13 @@
     }
   }
   .rdt_TableCol_Sortable {
-    color: #000 !important;
+    color: $epa-black !important;
     /*white-space: nowrap !important;*/
     margin-right: 1em !important;
   }
   .rdt_TableRow {
-    border-top: solid 1px #808080 !important;
-    border-bottom: solid 1px #808080 !important;
+    border-top: solid 1px $epa-navy !important;
+    border-bottom: solid 1px $epa-navy !important;
   }
   .rdt_TableHead {
     /* this comment is here to avoid a code smell for empty content */
@@ -23,28 +25,29 @@
     display: none;
   }
   .rdt_TableHeadRow {
-    border-bottom: solid 2px #808080 !important;
+    border-bottom: solid 2px $epa-navy !important;
     .rdt_TableCol {
       @extend .bg-base-lightest;
       @extend .font-heading-md;
 
-      color: #000 !important;
+      color: $epa-black !important;
       font-weight: bold;
-      border: solid 1px #fff;
+      border: solid 1px $epa-white;
       text-align: center;
       :focus {
         outline: none;
         border: solid 4px #2672de;
-        color: #000 !important;
+        color: $epa-black !important;
       }
       :hover:not(:focus) {
-        color: #000 !important;
+        color: $epa-black !important;
       }
     }
   }
 
   .rdt_TableBody {
-  //   height: 500px;
+    height: 400px;
+    min-height: 400px;
   }
   .rdt_ExpanderRow {
     /* this comment is here to avoid a code smell for empty content */
@@ -61,7 +64,7 @@
   }
 }
 
-.expandRowTable {
+.expand-row-data-table {
   .rdt_TableBody {
     height: auto;
     padding-bottom: 2em;
@@ -74,7 +77,7 @@
   select {
     padding: 5px;
     width: 100px !important;
-    border: solid 1px #000;
+    border: solid 1px $epa-black;
   }
   span {
     margin-left: 5em;
@@ -90,27 +93,28 @@
 
 .rdt_TableHeader {
   font-size: 25px !important;
-  color: #808080 !important;
-  font-family: "Arial Black", sans-serif !important;
+  color: $epa-navy !important;
 }
 
 .data-table-extensions > .data-table-extensions-filter {
   float: right;
   input.filter-text {
     width: 300px;
-    border: solid 1px #808080;
+    border: solid 1px $epa-navy;
     background: #f6fbfc;
     margin-right: 50px;
     padding: 10px 5px 10px 5px !important;
   }
   ::placeholder {
-    color: #808080 !important;
+    color: $epa-navy !important;
   }
 }
 
-.modal-content {
+.modal-content,
+.expand-row-data-table {
   .rdt_TableBody {
     height: auto !important;
+    min-height: auto !important;
     padding-bottom: 3em !important;
   }
 

@@ -282,6 +282,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
                         epa-testid="startDate"
                         disabled={viewOnly}
                         defaultValue={startDate}
+                        onChange={() => void 0}
                       />
                     ) : (
                       ""

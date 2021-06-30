@@ -18,9 +18,8 @@ const HeaderInfo = ({
   checkout = false,
   user,
   setCheckoutAPI,
-  setCheckout
+  setCheckout,
 }) => {
-  console.log('this is facility',facility)
   const sections = [
     { name: "Defaults" },
     { name: "Loads" },
@@ -41,7 +40,7 @@ const HeaderInfo = ({
   const [checkoutState, setCheckoutState] = useState(checkout);
 
   const checkoutAPI = (direction) => {
-    setCheckoutState(direction)
+    setCheckoutState(direction);
     // setCheckoutAPI(direction);
     setCheckout(direction,facility);
 
@@ -137,21 +136,19 @@ const HeaderInfo = ({
               Submit
             </Button>
           </div>
-          <div className=" grid-row padding-1">
-            <div className="text-align-right">
-              <span className="text-bold grid-col">Evaluation Status: </span>
-              <span className="font-body-2xs grid-col">
-                {" Passed with no errors "}{" "}
-              </span>
-            </div>
-          </div>
-          <div className=" grid-row padding-1 ">
-            <div className="text-align-right">
-              <span className="text-bold grid-col"> Submission Status: </span>
-              <span className="font-body-2xs grid-col">
-                {" Resubmission required "}{" "}
-              </span>
-            </div>
+          <div className="grid-row padding-1 float-right text-right margin-right-3">
+            <table role="presentation">
+              <tbody>
+                <tr>
+                  <th className="padding-1">Evaluation Status:</th>
+                  <td className="padding-1">Passed with no errors</td>
+                </tr>
+                <tr>
+                  <th className="padding-1">Submission Status:</th>
+                  <td className="padding-1">Resubmission required</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

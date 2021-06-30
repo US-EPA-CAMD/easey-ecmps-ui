@@ -41,7 +41,7 @@ const Login = () => {
 
   const submitForm = async (e) => {
     e.preventDefault();
-    setFormErrorMessage('');
+    setFormErrorMessage("");
     const formReady = !(username !== "" || password !== "");
 
     // issue here
@@ -132,6 +132,7 @@ const Login = () => {
             </Button>
             <p className="usa-form__note">
               <Button
+                type="button"
                 unstyled="true"
                 title="Show password"
                 href=""
