@@ -86,6 +86,7 @@ const Tabs = ({ children, dynamic = false, removeTabs, setActive }) => {
                       title="Click to close tab"
                       name="closeXBtnTab"
                       id="closeXBtnTab"
+                      data-test-id="closeXBtnTab"
                       epa-testid="closeXBtnTab"
                       role="button"
                       tabIndex="0"

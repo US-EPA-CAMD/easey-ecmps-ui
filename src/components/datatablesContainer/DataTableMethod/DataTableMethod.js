@@ -6,6 +6,10 @@ import MethodModal from "../../MethodModal/MethodModal";
 import DataTableRender from "../../DataTableRender/DataTableRender";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
+import {
+  getActiveData,
+  getInactiveData,
+} from "../../../additional-functions/filter-data";
 export const DataTableMethod = ({
   locationSelectValue,
 
@@ -13,6 +17,8 @@ export const DataTableMethod = ({
   showActiveOnly,
   user,
   checkout,
+  inactive,
+  settingInactiveCheckBox,
 }) => {
   const [methods, setMethods] = useState([]);
 
@@ -30,7 +36,7 @@ export const DataTableMethod = ({
       setMatsMethods(res.data);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, showActiveOnly]);
+  }, [locationSelectValue]);
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -117,12 +123,34 @@ export const DataTableMethod = ({
 
   const data = useMemo(() => {
     if (methods.length > 0) {
+      const activeOnly = getActiveData(methods);
+      const inactiveOnly = getInactiveData(methods);
+
+      // only active data >  disable checkbox and unchecks it
+      if (activeOnly.length === methods.length) {
+        // uncheck it and disable checkbox
+        //function parameters ( check flag, disable flag )
+        settingInactiveCheckBox(false, true);
+        return fs.getMonitoringPlansMethodsTableRecords(methods);
+      }
+
+      // only inactive data > disables checkbox and checks it
+      if (inactiveOnly.length === methods.length) {
+        //check it and disable checkbox
+        settingInactiveCheckBox(true, true);
+        return fs.getMonitoringPlansMethodsTableRecords(methods);
+      }
+
+      // resets checkbox
+      settingInactiveCheckBox(inactive[0], false);
       return fs.getMonitoringPlansMethodsTableRecords(
-        showActiveOnly ? fs.getActiveMethods(methods) : methods
+        !inactive[0] ? getActiveData(methods) : methods
       );
     }
     return [];
-  }, [methods, showActiveOnly]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [methods, inactive]);
 
   useEffect(() => {
     if (matsTableHandler) {

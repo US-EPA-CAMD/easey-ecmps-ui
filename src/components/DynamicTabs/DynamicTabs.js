@@ -29,6 +29,7 @@ export const DynamicTabs = ({
           location: [0, t.selectedConfig.locations[0].id],
           section: [3, "Methods"],
           selectedConfig: t.selectedConfig,
+          inactive:[false,false]
         });
       }
     });
