@@ -116,7 +116,7 @@ export const SelectFacilitiesDataTable = ({
           <DataTableConfigurations
             selectedRowHandler={selectedRowHandler}
             user={user}
-            className="expandRowTable"
+            className="expand-row-data-table"
           />
         }
         headerStyling="padding-top-4 padding-left-2"

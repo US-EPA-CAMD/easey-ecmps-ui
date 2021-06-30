@@ -66,7 +66,7 @@ export const Modal = ({
           >
             <div className="modal-content modal-color padding-y-3">
               <ClearSharp
-                className="position-absolute right-1 top-1 cursor-pointer"
+                className="position-absolute right-1 top-1 cursor-pointer text-bold"
                 onClick={close}
                 onKeyPress={(event) => {
                   if (event.key === "Enter") {

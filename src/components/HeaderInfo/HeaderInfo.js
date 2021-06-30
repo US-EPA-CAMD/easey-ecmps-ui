@@ -18,7 +18,7 @@ const HeaderInfo = ({
   checkout = false,
   user,
   setCheckoutAPI,
-  setCheckout
+  setCheckout,
 }) => {
   const sections = [
     { name: "Defaults" },
@@ -40,11 +40,10 @@ const HeaderInfo = ({
   const [checkoutState, setCheckoutState] = useState(checkout);
 
   const checkoutAPI = (direction) => {
-    setCheckoutState(direction)
+    setCheckoutState(direction);
     // setCheckoutAPI(direction);
-    setCheckout(direction,orisCode);
-
-  }
+    setCheckout(direction, orisCode);
+  };
   return (
     <div className="header">
       <div className="grid-row clearfix position-relative">
@@ -65,33 +64,36 @@ const HeaderInfo = ({
                   ""
                 )}{" "}
                 {facilityAdditionalName}
-                {user?
-                <div className="text-bold font-body-2xs display-inline-block ">
-                  {checkoutState ? (
-                    <Button
-                      outline={false}
-                      tabIndex="0"
-                      aria-label={`Check back in the configuration `}
-                      className="initial-tab-button"
-                      onClick={() => checkoutAPI(false)}
-                    >
-                      <LockOpenIcon /> {"Check Back In"}
-                    </Button>
-                  ) : (
-                    <Button
-                      outline={true}
-                      tabIndex="0"
-                      aria-label={`Check out the configuration`}
-                      className="float-top"
-                      onClick={() => checkoutAPI(true)}
-                    >
-                      <CreateOutlinedIcon color="primary" /> {"Check Out"}
-                    </Button>
-                  )}
-                  {checkoutState
-                    ? `Currently checked out by:${user.firstName}`
-                    : `Last checked out by:${user.firstName}`}
-                </div>:''}
+                {user ? (
+                  <div className="text-bold font-body-2xs display-inline-block ">
+                    {checkoutState ? (
+                      <Button
+                        outline={false}
+                        tabIndex="0"
+                        aria-label={`Check back in the configuration `}
+                        className="initial-tab-button"
+                        onClick={() => checkoutAPI(false)}
+                      >
+                        <LockOpenIcon /> {"Check Back In"}
+                      </Button>
+                    ) : (
+                      <Button
+                        outline={true}
+                        tabIndex="0"
+                        aria-label={`Check out the configuration`}
+                        className="float-top"
+                        onClick={() => checkoutAPI(true)}
+                      >
+                        <CreateOutlinedIcon color="primary" /> {"Check Out"}
+                      </Button>
+                    )}
+                    {checkoutState
+                      ? `Currently checked out by:${user.firstName}`
+                      : `Last checked out by:${user.firstName}`}
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
 
               <div className="row padding-left-2">
@@ -136,21 +138,19 @@ const HeaderInfo = ({
               Submit
             </Button>
           </div>
-          <div className=" grid-row padding-1">
-            <div className="text-align-right">
-              <span className="text-bold grid-col">Evaluation Status: </span>
-              <span className="font-body-2xs grid-col">
-                {" Passed with no errors "}{" "}
-              </span>
-            </div>
-          </div>
-          <div className=" grid-row padding-1 ">
-            <div className="text-align-right">
-              <span className="text-bold grid-col"> Submission Status: </span>
-              <span className="font-body-2xs grid-col">
-                {" Resubmission required "}{" "}
-              </span>
-            </div>
+          <div className="grid-row padding-1 float-right text-right margin-right-3">
+            <table role="presentation">
+              <tbody>
+                <tr>
+                  <th className="padding-1">Evaluation Status:</th>
+                  <td className="padding-1">Passed with no errors</td>
+                </tr>
+                <tr>
+                  <th className="padding-1">Submission Status:</th>
+                  <td className="padding-1">Resubmission required</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

@@ -1,22 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { Button } from "@trussworks/react-uswds";
 
 import "./Tabs.scss";
 import { ClearSharp } from "@material-ui/icons";
-const Tabs = ({
-  children,
-  dynamic = false,
-  removeTabs,
-  setResizeObserver,
-  setActive,
-}) => {
+const Tabs = ({ children, dynamic = false, removeTabs, setActive }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const settingActiveTab = (index) => {
     setActiveTabIndex(index);
     setActive(false, index - 1);
   };
-  let contentBox = null;
   const closeHandler = (event, index) => {
     event.stopPropagation();
     removeTabs(index);
@@ -25,12 +18,6 @@ const Tabs = ({
       setActive(false, index - 2);
     }
   };
-
-  useEffect(() => {
-    if (contentBox) {
-      setResizeObserver(contentBox);
-    }
-  }, [contentBox, setResizeObserver]);
 
   return (
     <div>
@@ -87,7 +74,7 @@ const Tabs = ({
 
                   {dynamic ? (
                     <ClearSharp
-                      className="margin-left-2 float-right position-relative left-neg-1 top-neg-3 margin-top-neg-2 cursor-pointer"
+                      className="text-bold margin-left-2 float-right position-relative left-neg-1 top-neg-3 margin-top-neg-2 cursor-pointer"
                       onClick={(e) => closeHandler(e, i)}
                       onKeyPress={(event) => {
                         if (event.key === "Enter") {
@@ -108,17 +95,7 @@ const Tabs = ({
           ))}
         </ul>
       </div>
-      <div
-        className="tabContent"
-        ref={(el) => {
-          if (!el) {
-            return;
-          }
-          contentBox = el;
-        }}
-      >
-        {children[activeTabIndex]}
-      </div>
+      <div className="tabContent">{children[activeTabIndex]}</div>
     </div>
   );
 };

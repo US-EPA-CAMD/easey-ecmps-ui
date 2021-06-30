@@ -14,7 +14,7 @@ function componentRenderer(showActiveOnly) {
         byPassApproach: "null",
         beginDate: "1995-01-01 00",
         endTime: "1995-01-01 00",
-        active: false
+        active: false,
       },
       {
         id: "CAMD-F4C326C9D8044324B83603C2FC0154B2",
@@ -24,7 +24,7 @@ function componentRenderer(showActiveOnly) {
         byPassApproach: "null",
         beginDate: "1995-01-01 00",
         endTime: "",
-        active: true
+        active: true,
       },
       {
         id: "CAMD-F4C326C9D8044324B83603C2FC0154B2",
@@ -34,7 +34,7 @@ function componentRenderer(showActiveOnly) {
         byPassApproach: "null",
         beginDate: "1995-01-01 00",
         endTime: "1995-01-01 00",
-        active: false
+        active: false,
       },
     ],
 
@@ -47,7 +47,7 @@ function componentRenderer(showActiveOnly) {
         byPassApproach: "null",
         beginDate: "1995-01-01 00",
         endTime: "1995-01-01 00",
-        active: false
+        active: false,
       },
       {
         id: "CAMD-F4C326C9D8044324B83603C2FC0154B2",
@@ -57,7 +57,7 @@ function componentRenderer(showActiveOnly) {
         byPassApproach: "null",
         beginDate: "1995-01-01 00",
         endTime: "",
-        active: true
+        active: true,
       },
       {
         id: "CAMD-F4C326C9D8044324B83603C2FC0154B2",
@@ -67,22 +67,21 @@ function componentRenderer(showActiveOnly) {
         byPassApproach: "null",
         beginDate: "1995-01-01 00",
         endTime: "1995-01-01 00",
-        active: false
+        active: false,
       },
     ],
 
-    showActiveOnly: showActiveOnly
+    showActiveOnly: showActiveOnly,
   };
   return render(<DataTableMethod {...props} />);
 }
 function componentRendererNoData(args) {
   const defualtProps = {
-    locationSelectValue = "0"
-
-    matsTableHandler:jest.fn()
-    showActiveOnly:true
-    user:{username:'test'}
-    checkout:true
+    locationSelectValue: "0",
+    matsTableHandler: jest.fn(),
+    showActiveOnly: true,
+    user: { username: "test" },
+    checkout: true,
   };
 
   const props = { ...defualtProps, ...args };

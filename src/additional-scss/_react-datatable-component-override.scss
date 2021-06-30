@@ -44,7 +44,8 @@
   }
 
   .rdt_TableBody {
-  //   height: 500px;
+    height: 500px;
+    min-height: 500px;
   }
   .rdt_ExpanderRow {
     /* this comment is here to avoid a code smell for empty content */
@@ -61,7 +62,7 @@
   }
 }
 
-.expandRowTable {
+.expand-row-data-table {
   .rdt_TableBody {
     height: auto;
     padding-bottom: 2em;
@@ -91,7 +92,6 @@
 .rdt_TableHeader {
   font-size: 25px !important;
   color: #808080 !important;
-  font-family: "Arial Black", sans-serif !important;
 }
 
 .data-table-extensions > .data-table-extensions-filter {
@@ -108,9 +108,11 @@
   }
 }
 
-.modal-content {
+.modal-content,
+.expand-row-data-table {
   .rdt_TableBody {
     height: auto !important;
+    min-height: auto !important;
     padding-bottom: 3em !important;
   }
 
