@@ -22,6 +22,8 @@ const DataTableRender = ({
   columns,
   data,
   user,
+  dataLoaded,
+
   selectedRowHandler,
   pagination,
   filter,
@@ -85,7 +87,7 @@ const DataTableRender = ({
         </h2>
       </div>
       <div aria-live="polite" className={`${tableStyling}`}>
-        {data.length > 0 ? (
+        {dataLoaded && data.length>= 0 ? (
           <DataTable
             className={`data-display-table react-transition fade-in ${className}`}
             sortIcon={

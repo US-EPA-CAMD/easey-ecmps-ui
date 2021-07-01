@@ -27,9 +27,12 @@ export const DataTableMethod = ({
     null
   );
 
+  const [dataLoaded, setDataLoaded] = useState(false);
+
   useEffect(() => {
     mpApi.getMonitoringMethods(locationSelectValue).then((res) => {
       setMethods(res.data);
+      setDataLoaded(true);
     });
     mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
       setMatsMethods(res.data);
@@ -228,7 +231,7 @@ export const DataTableMethod = ({
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
 
-      <DataTableRender columns={columns} data={data} />
+      <DataTableRender columns={columns} data={data} dataLoaded={dataLoaded} />
       {show ? (
         <Modal
           show={show}

@@ -6,7 +6,7 @@ import { Button } from "@trussworks/react-uswds";
 import { Modal } from "../Modal/Modal";
 import { CountdownTimer } from "../CountdownTimer/CountdownTimer";
 
-export const InactivityTracker = ({ apiCall }) => {
+export const InactivityTracker = ({ apiCall, countdownAPI }) => {
   const [timeInactive, setTimeInactive] = useState(0);
   const [showInactiveModal, setShowInactiveModal] = useState(false);
   const [trackInactivity, setTrackInactivity] = useState(false);
@@ -105,7 +105,7 @@ export const InactivityTracker = ({ apiCall }) => {
           showCancel={true}
           cancelButtonText="OK"
           children={
-            <CountdownTimer duration={config.app.countdownDuration / 1000} />
+            <CountdownTimer countdownAPI={countdownAPI} duration={config.app.countdownDuration / 3000} />
           }
         />
       ) : null}

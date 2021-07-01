@@ -90,3 +90,12 @@ export const saveMonitoringMethods = async (payload) => {
 
   return axios.put(url, payload).then(handleResponse).catch(handleError);
 };
+
+export async function deleteCheckInMonitoringPlanConfiguration(id) {
+  return axios
+    .delete(
+      `${config.services.monitorPlans.uri}/workspace/plans/${id}/check-in`
+    )
+    .then((response) => response.data)
+    .catch(handleError);
+}

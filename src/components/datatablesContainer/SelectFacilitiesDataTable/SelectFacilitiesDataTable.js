@@ -14,9 +14,12 @@ export const SelectFacilitiesDataTable = ({
   openedFacilityTabs,
 }) => {
   const [facilities, setFacilities] = useState("");
+
+  const [dataLoaded, setDataLoaded] = useState(false);
   useEffect(() => {
     if (facilities.length === 0) {
       facilitiesApi.getAllFacilities().then((res) => {
+        setDataLoaded(true);
         setFacilities(res.data);
       });
     }
@@ -105,6 +108,7 @@ export const SelectFacilitiesDataTable = ({
     <div className="tabsBox">
       <DataTableRender
         columns={columns}
+        dataLoaded={dataLoaded}
         data={data}
         openedFacilityTabs={openedFacilityTabs}
         user={user}

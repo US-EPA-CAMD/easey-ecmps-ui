@@ -22,8 +22,10 @@ export const DataTableSystems = ({
   const [show, setShow] = useState(false);
   const [monitoringSystems, setMonitoringSystems] = useState([]);
   const [secondLevel, setSecondLevel] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
   useEffect(() => {
     mpApi.getMonitoringSystems(locationSelect).then((res) => {
+      setDataLoaded(true);
       setMonitoringSystems(res.data);
     });
 
@@ -143,7 +145,13 @@ export const DataTableSystems = ({
     <>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       <div className="methodTable">
-        <DataTableRender pagination filter columns={columns} data={data} />
+        <DataTableRender
+          dataLoaded={dataLoaded}
+          pagination
+          filter
+          columns={columns}
+          data={data}
+        />
       </div>
       {show ? (
         <Modal

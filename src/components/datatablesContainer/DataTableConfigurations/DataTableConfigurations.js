@@ -26,6 +26,7 @@ export const DataTableConfigurations = ({
   const [selectedMP, setSelectedMp] = useState([]);
   const [selectedConfig, setSelectedConfig] = useState([]);
 
+  const [dataLoaded, setDataLoaded] = useState(false);
   const findSelectedConfig = (configID) => {
     let val = 0;
     if (selectedMP.length > 0) {
@@ -56,16 +57,19 @@ export const DataTableConfigurations = ({
     let flagValue = flag.current;
     if (monitoringPlans.length < 1) {
       loadMonitoringPlansData(data.col1);
+      setDataLoaded(true);
     } else {
       for (const x of monitoringPlans) {
         if (x[0] === data.col1) {
           setSelectedMp(x);
           flagValue = true;
+          setDataLoaded(true);
           break;
         }
       }
       if (flagValue === false) {
         loadMonitoringPlansData(data.col1);
+        setDataLoaded(true);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -108,11 +112,11 @@ export const DataTableConfigurations = ({
             epa-testid="btnOpenConfiguration"
             className="cursor-pointer margin-right-1"
             id="btnOpenConfiguration"
-            onClick={() => openConfig(row,false)}
+            onClick={() => openConfig(row, false)}
             aria-label={`open configuration ${row.col1} `}
             onKeyPress={(event) => {
               if (event.key === "Enter") {
-                openConfig(row,false);
+                openConfig(row, false);
               }
             }}
           >
@@ -163,6 +167,7 @@ export const DataTableConfigurations = ({
       <DataTableRender
         columns={columns}
         data={records}
+        dataLoaded={dataLoaded}
         // selectedRowHandler={selectedRowHandler}
         tableStyling={"padding-left-4 padding-bottom-3"}
         defaultSort={"col2"}

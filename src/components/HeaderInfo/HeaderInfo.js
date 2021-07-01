@@ -10,10 +10,8 @@ const HeaderInfo = ({
   facility,
   selectedConfig,
   orisCode,
-
   user,
   //redux sets
-  setCheckoutAPI,
   setCheckout,
   setInactive,
   setLocationSelect,
@@ -24,6 +22,8 @@ const HeaderInfo = ({
   locations,
   checkout = false,
   inactive,
+  ///
+  checkoutAPI,
 }) => {
   const sections = [
     { name: "Defaults" },
@@ -44,10 +44,11 @@ const HeaderInfo = ({
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
   const [checkoutState, setCheckoutState] = useState(checkout);
 
-  const checkoutAPI = (direction) => {
+  // direction -> false = check back in
+  // true = check out
+  const checkoutStateHandler = (direction) => {
     setCheckoutState(direction);
-    // setCheckoutAPI(direction);
-    setCheckout(direction, facility);
+    checkoutAPI(direction);
   };
 
   return (
@@ -78,7 +79,7 @@ const HeaderInfo = ({
                         tabIndex="0"
                         aria-label={`Check back in the configuration `}
                         className=" padding-1 padding-right-3 padding-left-3 margin-2"
-                        onClick={() => checkoutAPI(false)}
+                        onClick={() => checkoutStateHandler(false)}
                       >
                         <LockOpenIcon /> {"Check Back In"}
                       </Button>
@@ -88,7 +89,7 @@ const HeaderInfo = ({
                         tabIndex="0"
                         aria-label={`Check out the configuration`}
                         className="float-top padding-1 padding-right-3 padding-left-3 margin-2"
-                        onClick={() => checkoutAPI(true)}
+                        onClick={() => checkoutStateHandler(true)}
                       >
                         <CreateOutlinedIcon color="primary" /> {"Check Out"}
                       </Button>
@@ -102,7 +103,7 @@ const HeaderInfo = ({
                 )}
               </div>
 
-              <div className="grid-row padding-left-2 ">
+              <div className="grid-row">
                 <DropdownSelection
                   caption="Locations"
                   orisCode={orisCode}

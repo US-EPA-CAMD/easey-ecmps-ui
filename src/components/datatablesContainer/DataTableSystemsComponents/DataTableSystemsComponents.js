@@ -22,6 +22,9 @@ export const DataTableSystemsComponents = ({
   const [monitoringSystemsFuelFlows, setMonitoringSystemsFuelFlows] = useState(
     ""
   );
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const [dataFuelLoaded, setFuelDataLoaded] = useState(false);
+
   const [selected, setSelected] = useState(1);
   const [
     monitoringSystemsComponents,
@@ -46,12 +49,14 @@ export const DataTableSystemsComponents = ({
       .getMonitoringSystemsComponents(selected.monLocId, selected.id)
       .then((res) => {
         setMonitoringSystemsComponents(res.data);
+        setDataLoaded(true);
       })
 
     mpApi
       .getMonitoringSystemsFuelFlows(selected.monLocId, selected.id)
       .then((res) => {
         setMonitoringSystemsFuelFlows(res.data);
+        setFuelDataLoaded(true);
       })
   }, [selected]);
   // *** column names for dataset will be passed to normalizeRowObjectFormat later to generate the row object
@@ -184,6 +189,7 @@ export const DataTableSystemsComponents = ({
                 selectedRowHandler={selectedRowHandler}
                 tableTitle="System Components"
                 componentStyling="systemsCompTable"
+                dataLoaded={dataLoaded}
               />
               <DataTableRender
                 columns={fuelFlowsColumns}
@@ -192,6 +198,7 @@ export const DataTableSystemsComponents = ({
                 tableTitle="Fuel Flows"
                 button
                 componentStyling="systemsCompTable"
+                dataLoaded={dataFuelLoaded}
               />
             </div>
           );
