@@ -85,7 +85,7 @@ const DataTableRender = ({
         </h2>
       </div>
       <div aria-live="polite" className={`${tableStyling}`}>
-        {data.length ? (
+        {data.length > 0 ? (
           <DataTable
             className={`data-display-table react-transition fade-in ${className}`}
             sortIcon={
@@ -122,7 +122,7 @@ const DataTableRender = ({
             }}
           />
         ) : (
-          <div className="margin-y-3 padding-y-3 react-transition fade-in font-body-sm">
+          <div className="margin-y-3 padding-y-3 react-transition fade-in font-body-sm width-full">
             <Preloader />
           </div>
         )}

@@ -33,6 +33,11 @@ const App = () => {
   useEffect(() => {
     handleActiveElementFocus();
 
+    document
+      .querySelector(".usa-banner__content")
+      .classList.add("react-transition");
+    document.querySelector(".usa-banner__content").classList.add("fade-in");
+
     // * clean up
     return () => {
       handleActiveElementFocus();

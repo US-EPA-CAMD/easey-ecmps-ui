@@ -205,8 +205,8 @@ const SystemFuelFlowsModal = ({ modalData, viewOnly, backBTN }) => {
                           name="startDate"
                           epa-testid="startDate"
                           title="Enter Start Date"
-                          disabled={viewOnly}
                           defaultValue={startDate}
+                          onChange={() => void 0}
                         />
                       ) : (
                         ""
@@ -265,6 +265,7 @@ const SystemFuelFlowsModal = ({ modalData, viewOnly, backBTN }) => {
                         epa-testid="endDate"
                         title="Enter End Date"
                         defaultValue={endDate}
+                        onChange={() => void 0}
                       />
                     </div>
                   )}

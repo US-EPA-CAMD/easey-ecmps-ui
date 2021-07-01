@@ -331,7 +331,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
                     )
                   ) : (
                     <div tabIndex="0" id="endHour">
-                      {endHour ? endHour : endHour}
+                      {endHour ? endHour : ""}
                     </div>
                   )}
                 </FormGroup>
