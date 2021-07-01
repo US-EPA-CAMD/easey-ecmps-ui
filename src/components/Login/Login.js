@@ -56,8 +56,9 @@ const Login = () => {
       try {
         return await authenticate({ userId: username, password })
           .then((response) => {
-            setLoading(false);
-
+            // *** commenting out the line below makes it so that the login modal doesn't come back into view
+            // *** after the loading graphic has been displayed
+            // setLoading(false);
             if (response && response.error) {
               throw response.error;
             }

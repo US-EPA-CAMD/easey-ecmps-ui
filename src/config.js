@@ -15,7 +15,7 @@ export const config = {
       30 * oneSecond,
     inactivityDuration:
       process.env.REACT_APP_EASEY_UI_INACTIVITY_DURATION_MINUTES * oneMinute ||
-      15 * oneMinute,
+      oneMinute,
     activityPollingFrequency:
       process.env.REACT_APP_EASEY_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS *
         oneSecond || oneSecond,

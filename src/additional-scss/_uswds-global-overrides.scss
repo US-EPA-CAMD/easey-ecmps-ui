@@ -213,6 +213,16 @@
 
 .usa-date-picker__calendar {
   margin-top: 1em !important;
+  border: groove 2px;
+
+  th {
+    border: solid 1px;
+    font-weight: bold;
+  }
+  td {
+    border-right: dotted 1px;
+    border-bottom: dotted 1px;
+  }
 }
 
 .usa-date-picker__button {
@@ -220,6 +230,12 @@
 }
 
 .usa-date-picker__external-input {
+  /* comments to avoid code smell error */
+}
+
+.usa-date-picker__calendar__month-selection,
+.usa-date-picker__calendar__year-selection {
+  font-weight: bold !important;
 }
 
 .text-primary-dark {

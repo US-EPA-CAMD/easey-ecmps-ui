@@ -35,7 +35,7 @@ const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
   };
 
   return (
-    <div className="home-container">
+    <div className="home-container react-transition fade-in">
       <div className="text-black margin-top-1">
         <h1 className="display-inline-block page-header">Monitoring Plans</h1>
         <Button

@@ -95,7 +95,7 @@ export const SelectFacilitiesDataTable = ({
         return { ...item, disabled, expanded };
       });
     } else {
-      return [{ col2: "Loading list of facilities..." }];
+      return [];
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

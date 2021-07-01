@@ -3,7 +3,7 @@ import "./Home.scss";
 
 export const Home = () => {
   return (
-    <div className="home-container">
+    <div className="home-container react-transition fade-in">
       <div className="text-center text-bold text-primary-dark minh-tablet-lg font-heading-xl padding-top-9">
         Home Screen is currently undergoing development
         <div className="padding-9">
