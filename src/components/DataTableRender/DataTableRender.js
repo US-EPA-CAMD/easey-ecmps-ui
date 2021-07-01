@@ -74,7 +74,7 @@ const DataTableRender = ({
             <div className="padding-y-1">
               <Button
                 type="button"
-                test-id={`btnAdd${tableTitle.split(" ").join("")}`}
+                // test-id={tableTitle? `btnAdd${tableTitle.split(" ").join("")}`: `${sectionTitle.split(" ").join("")}`}
                 className="float-right clearfix margin-right-3"
                 outline="true"
               >
