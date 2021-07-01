@@ -4,7 +4,13 @@ import CustomAccordion from "./CustomAccordion";
 
 describe("testing a reusable accordion component", () => {
   const accordion = (
-    <CustomAccordion title={"test Title"} table={[["test", "component"],["test2", "component2"]]} />
+    <CustomAccordion
+      title={"test Title"}
+      table={[
+        ["test", "component"],
+        ["test2", "component2"],
+      ]}
+    />
   );
   test("renders an accordion dropdown button and clicks it twice ", () => {
     const { container } = render(accordion);
@@ -13,6 +19,5 @@ describe("testing a reusable accordion component", () => {
     fireEvent.click(container.querySelector("#expandBTN"));
     let accordions = screen.getAllByRole("button");
     expect(accordions).toHaveLength(2);
-
   });
 });
