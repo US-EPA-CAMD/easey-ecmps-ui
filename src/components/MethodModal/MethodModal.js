@@ -83,20 +83,20 @@ const MethodModal = ({ modalData, viewOnly }) => {
           <div className="tablet:grid-col">
             <FormGroup className="margin-top-0">
               <Label className="text-bold" htmlFor="Parameter">
-                Parameter
+                Parameter {!viewOnly ? "(Required)" : null}
               </Label>
               {!viewOnly ? (
                 <SelectBox
                   className="modalUserInput"
                   epadataname="parameterCode"
-                  caption="Parameter"
+                  /*caption="Parameter"*/
                   options={parameterCodes}
                   initialSelection={modalData["parameterCode"]}
                   selectKey="code"
                   id="Parameter"
                   epa-testid="Parameter"
                   name="Parameter"
-                  required
+                  /*required*/
                   secondOption="name"
                 />
               ) : (
@@ -111,20 +111,20 @@ const MethodModal = ({ modalData, viewOnly }) => {
           <div className="tablet:grid-col padding-left-2">
             <FormGroup className="margin-top-0">
               <Label className="text-bold" htmlFor="Methodology">
-                Methodology
+                Methodology {!viewOnly ? "(Required)" : null}
               </Label>
               {!viewOnly ? (
                 <SelectBox
                   className="modalUserInput"
                   epadataname="methodCode"
-                  caption="Methodology"
+                  /*caption="Methodology"*/
                   options={methodCodes}
                   initialSelection={modalData["methodCode"]}
                   selectKey="code"
                   id="Methodology"
                   epa-testid="Methodology"
                   name="Methodology"
-                  required
+                  /*required*/
                   secondOption="name"
                 />
               ) : (
@@ -141,11 +141,11 @@ const MethodModal = ({ modalData, viewOnly }) => {
           <div className="tablet:grid-col">
             <FormGroup className="margin-top-0">
               <Label className="text-bold" htmlFor="SubstituteDataApproach">
-                Substitute Data Approach
+                Substitute Data Approach {!viewOnly ? "(Required)" : null}
               </Label>
               {!viewOnly ? (
                 <SelectBox
-                  caption="Substitute Data Approach"
+                  /*caption="Substitute Data Approach"*/
                   options={substituteDataApproachCodes}
                   initialSelection={modalData["subDataCode"]}
                   selectKey="code"
@@ -154,7 +154,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
                   id="SubstituteDataApproach"
                   epa-testid="SubstituteDataApproach"
                   name="SubstituteDataApproach"
-                  required
+                  /*required*/
                   secondOption="name"
                 />
               ) : (
@@ -172,12 +172,12 @@ const MethodModal = ({ modalData, viewOnly }) => {
           <div className="tablet:grid-col padding-left-2">
             <FormGroup className="margin-top-0">
               <Label className="text-bold" htmlFor="BypassApproach">
-                Bypass Approach
+                Bypass Approach {!viewOnly ? "(Required)" : null}
               </Label>
               {!viewOnly ? (
                 <SelectBox
                   className="modalUserInput"
-                  caption="Bypass Approach"
+                  /*caption="Bypass Approach"*/
                   options={bypassApproachCodes}
                   initialSelection={modalData["bypassApproachCode"]}
                   selectKey="code"
@@ -185,7 +185,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
                   epadataname="bypassApproachCode"
                   epa-testid="BypassApproach"
                   name="BypassApproach"
-                  required
+                  /*required*/
                   secondOption="name"
                 />
               ) : (
@@ -207,7 +207,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
               <div className="grid-col ">
                 <FormGroup className="margin-top-0">
                   <Label className="text-bold" htmlFor="startDate">
-                    Start Date
+                    Start Date {!viewOnly ? "(Required)" : null}
                   </Label>
                   {!viewOnly ? (
                     <div>
@@ -242,7 +242,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
               <div className="grid-col ">
                 <FormGroup className="margin-top-0">
                   <Label className="text-bold" htmlFor="startHour">
-                    Start Time
+                    Start Time {!viewOnly ? "(Required)" : null}
                   </Label>
                   {!viewOnly ? (
                     startHour !== null ? (
@@ -261,7 +261,9 @@ const MethodModal = ({ modalData, viewOnly }) => {
                       ""
                     )
                   ) : (
-                    <div id="startHour">{startHour ? startHour : ""}</div>
+                    <div tabIndex="0" id="startHour">
+                      {startHour ? startHour : ""}
+                    </div>
                   )}
                 </FormGroup>
               </div>
