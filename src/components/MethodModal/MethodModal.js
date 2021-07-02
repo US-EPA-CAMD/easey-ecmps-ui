@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Label, FormGroup, DatePicker } from "@trussworks/react-uswds";
 import {
   bypassApproachCodes,
@@ -8,11 +8,21 @@ import {
 } from "./MethodModalData";
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 
+import * as dmApi from "../../utils/api/dataManagementApi";
+
 const MethodModal = ({ modalData, viewOnly }) => {
-  const [startDate, setStartDate] = React.useState(null);
-  const [endDate, setEndDate] = React.useState(null);
-  const [startHour, setStartHour] = React.useState(null);
-  const [endHour, setEndHour] = React.useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [startHour, setStartHour] = useState(null);
+  const [endHour, setEndHour] = useState(null);
+
+  const [parameterCodesOptions, setParameterCodesOptions] = useState(null);
+  const [methodCodesOptions, setMethodCodesOptions] = useState(null);
+  const [
+    substitueDataApproachOptions,
+    setSubstitueDataApproachOptions,
+  ] = useState(null);
+  const [bypassCodesOptions, setBypassCodesOptions] = useState(null);
 
   const findValue = (options, val) => {
     for (const x of options) {
@@ -49,6 +59,26 @@ const MethodModal = ({ modalData, viewOnly }) => {
     { time: 22 },
     { time: 23 },
   ];
+
+  // *** obtain data for dropdowns
+  useEffect(() => {
+    dmApi.getAllParameterCodes().then((response) => {
+      setParameterCodesOptions(response.data);
+    });
+
+    dmApi.getAllMethodCodes().then((response) => {
+      setMethodCodesOptions(response.data);
+    });
+
+    dmApi.getAllSubstituteDataCodes().then((response) => {
+      setSubstitueDataApproachOptions(response.data);
+    });
+
+    dmApi.getAllBypassApproachCodes().then((response) => {
+      setBypassCodesOptions(response.data);
+    });
+  }, []);
+
   useEffect(() => {
     const [year, month, day] = modalData["beginDate"].split("-");
     !viewOnly
@@ -90,7 +120,11 @@ const MethodModal = ({ modalData, viewOnly }) => {
                   className="modalUserInput"
                   epadataname="parameterCode"
                   /*caption="Parameter"*/
-                  options={parameterCodes}
+                  options={
+                    parameterCodesOptions !== null
+                      ? parameterCodesOptions
+                      : [{}]
+                  }
                   initialSelection={modalData["parameterCode"]}
                   selectKey="code"
                   id="Parameter"

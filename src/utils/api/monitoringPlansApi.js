@@ -7,7 +7,9 @@ export const getMonitoringPlans = async (orisCode) => {
   let url = `${config.services.monitorPlans.uri}`;
 
   // *** workspace section url (authenticated)
-  url.indexOf("workspace") > -1 ? (url = `${url}/workspace`) : void 0;
+  window.location.href.indexOf("workspace") > -1
+    ? (url = `${url}/workspace`)
+    : void 0;
 
   // *** attach the rest of the url
   url = `${url}/plans/${orisCode}/configurations`;
@@ -20,7 +22,9 @@ export const getMonitoringMethods = async (locationId) => {
   let url = `${config.services.monitorPlans.uri}`;
 
   // *** workspace section url (authenticated)
-  url.indexOf("workspace") > -1 ? (url = `${url}/workspace`) : void 0;
+  window.location.href.indexOf("workspace") > -1
+    ? (url = `${url}/workspace`)
+    : void 0;
 
   // *** attach the rest of the url
   url = `${url}/locations/${locationId}/methods`;
@@ -81,7 +85,9 @@ export const putLockTimerUpdateConfiguration = async (id) => {
 };
 
 export const saveMonitoringMethods = async (payload) => {
-  let url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["monLocId"]}/methods/${payload["id"]}`;
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["monLocId"]}/methods/${payload["id"]}`;
+
+  // *** remove attributes not needed by the API
   delete payload["monLocId"];
   delete payload["id"];
 
