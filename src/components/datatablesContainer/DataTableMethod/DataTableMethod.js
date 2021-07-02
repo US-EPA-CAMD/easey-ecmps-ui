@@ -201,18 +201,18 @@ export const DataTableMethod = ({
     const payload = {
       monLocId: locationSelectValue,
       id: "",
-      parameterCode: "",
-      subDataCode: "",
-      bypassApproachCode: "",
-      methodCode: "",
-      beginDate: "",
+      parameterCode: null,
+      subDataCode: null,
+      bypassApproachCode: null,
+      methodCode: null,
+      beginDate: null,
       beginHour: 0,
-      endDate: "",
+      endDate: null,
       endHour: 0,
     };
 
     payloadArray.forEach((item) => {
-      payload[item.name] = item.value;
+      payload[item.name] = item.value.trim() === "" ? null : item.value.trim();
     });
 
     mpApi
