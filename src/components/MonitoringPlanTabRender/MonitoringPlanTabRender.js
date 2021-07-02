@@ -147,12 +147,48 @@ export const MonitoringPlanTabRender = ({
   const resetInactivityTimerApiCall = () => {
     console.log(mpApi.putLockTimerUpdateConfiguration(configID), "api called");
   };
-
-  const checkoutAPI = (/*direction*/) => {};
+  const countdownAPI = () => {
+    console.log("times up");
+    // calls check in api
+    // checkoutAPI(false);
+    // sets the state of checked in config  in redux
+    // setCheckout(false, title);
+  };
+  //false => check back in
+  // true => check out
+  const checkoutAPI = (direction) => {
+    if (!direction) {
+      mpApi
+        .deleteCheckInMonitoringPlanConfiguration(selectedConfig.id)
+        .then((res) => {
+          console.log(res, "checked back in ");
+          setCheckout(false, title);
+          if (res === undefined) {
+            console.log("error");
+          }
+        });
+    } else {
+      mpApi
+        .postCheckoutMonitoringPlanConfiguration(
+          selectedConfig.id,
+          user.firstName
+        )
+        .then((res) => {
+          console.log(res, "data");
+          setCheckout(true, title);
+          if (res === undefined) {
+            console.log("this configuration is already checked out ");
+          }
+        });
+    }
+  };
   return (
     <div className=" padding-top-0">
       {user && checkout ? (
-        <InactivityTracker apiCall={resetInactivityTimerApiCall} />
+        <InactivityTracker
+          apiCall={resetInactivityTimerApiCall}
+          countdownAPI={countdownAPI}
+        />
       ) : null}
       {/* on change of select box, it should modify the accordion items */}
       {/* pass back the values to send to the datatable, current is sending back index  */}

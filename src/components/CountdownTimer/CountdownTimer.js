@@ -46,7 +46,7 @@ const CountdownTimerRender = ({ remainingTime }) => {
   );
 };
 
-export const CountdownTimer = ({ duration }) => {
+export const CountdownTimer = ({ duration,countdownAPI }) => {
   return (
     <div className="countdown-timer-wrapper">
       It looks like you have been inactive for a while. Save your changes to
