@@ -151,7 +151,6 @@ const MethodModal = ({ modalData, viewOnly }) => {
                 <SelectBox
                   className="modalUserInput"
                   epadataname="parameterCode"
-                  /*caption="Parameter"*/
                   options={
                     parameterCodesOptions !== null
                       ? parameterCodesOptions
@@ -162,7 +161,6 @@ const MethodModal = ({ modalData, viewOnly }) => {
                   id="Parameter"
                   epa-testid="Parameter"
                   name="Parameter"
-                  /*required*/
                   secondOption="name"
                 />
               ) : (
@@ -183,7 +181,6 @@ const MethodModal = ({ modalData, viewOnly }) => {
                 <SelectBox
                   className="modalUserInput"
                   epadataname="methodCode"
-                  /*caption="Methodology"*/
                   options={
                     methodCodesOptions !== null ? methodCodesOptions : [{}]
                   }
@@ -192,7 +189,6 @@ const MethodModal = ({ modalData, viewOnly }) => {
                   id="Methodology"
                   epa-testid="Methodology"
                   name="Methodology"
-                  /*required*/
                   secondOption="name"
                 />
               ) : (
@@ -213,7 +209,6 @@ const MethodModal = ({ modalData, viewOnly }) => {
               </Label>
               {!viewOnly ? (
                 <SelectBox
-                  /*caption="Substitute Data Approach"*/
                   options={
                     substituteDataApproachOptions !== null
                       ? substituteDataApproachOptions
@@ -226,7 +221,6 @@ const MethodModal = ({ modalData, viewOnly }) => {
                   id="SubstituteDataApproach"
                   epa-testid="SubstituteDataApproach"
                   name="SubstituteDataApproach"
-                  /*required*/
                   secondOption="name"
                 />
               ) : (

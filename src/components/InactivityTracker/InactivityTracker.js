@@ -104,7 +104,11 @@ export const InactivityTracker = ({ apiCall, countdownAPI }) => {
           showCancel={true}
           cancelButtonText="OK"
           children={
-            <CountdownTimer countdownAPI={countdownAPI} duration={config.app.countdownDuration / 3000} />
+            <CountdownTimer
+              countdownAPI={countdownAPI}
+              duration={config.app.countdownDuration / 3000}
+              apiCall={apiCall}
+            />
           }
         />
       ) : null}

@@ -7,9 +7,9 @@ export const getMonitoringPlans = async (orisCode) => {
   let url = `${config.services.monitorPlans.uri}`;
 
   // *** workspace section url (authenticated)
-  window.location.href.indexOf("workspace") > -1
-    ? (url = `${url}/workspace`)
-    : void 0;
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
 
   // *** attach the rest of the url
   url = `${url}/plans/${orisCode}/configurations`;
@@ -22,9 +22,9 @@ export const getMonitoringMethods = async (locationId) => {
   let url = `${config.services.monitorPlans.uri}`;
 
   // *** workspace section url (authenticated)
-  window.location.href.indexOf("workspace") > -1
-    ? (url = `${url}/workspace`)
-    : void 0;
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
 
   // *** attach the rest of the url
   url = `${url}/locations/${locationId}/methods`;

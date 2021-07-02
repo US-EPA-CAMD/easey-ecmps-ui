@@ -1,27 +1,24 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 
 import "./CountdownTimer.scss";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
-const CountdownTimerRender = ({ remainingTime }) => {
+const CountdownTimerRender = ({ remainingTime, apiCall }) => {
   const currentTime = useRef(remainingTime);
   const prevTime = useRef(null);
   const isNewTimeFirstTick = useRef(false);
-  const [, setOneLastRerender] = useState(0);
 
   if (currentTime.current !== remainingTime) {
     isNewTimeFirstTick.current = true;
     prevTime.current = currentTime.current;
     currentTime.current = remainingTime;
+
+    // *** do this when the countdown is done
+    if (remainingTime === 0) {
+      apiCall();
+    }
   } else {
     isNewTimeFirstTick.current = false;
-  }
-
-  // *** force final re-render when time is elapsed and trigger the last animation
-  if (remainingTime === 0) {
-    setTimeout(() => {
-      setOneLastRerender((val) => val + 1);
-    }, 20);
   }
 
   const isTimeUp = isNewTimeFirstTick.current;
@@ -46,7 +43,7 @@ const CountdownTimerRender = ({ remainingTime }) => {
   );
 };
 
-export const CountdownTimer = ({ duration,countdownAPI }) => {
+export const CountdownTimer = ({ duration, apiCall }) => {
   return (
     <div className="countdown-timer-wrapper">
       It looks like you have been inactive for a while. Save your changes to
@@ -58,7 +55,7 @@ export const CountdownTimer = ({ duration,countdownAPI }) => {
           size={230}
           colors={[["#004777", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
         >
-          {CountdownTimerRender}
+          <CountdownTimerRender apiCall={apiCall} />
         </CountdownCircleTimer>
       </div>
     </div>
