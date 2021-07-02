@@ -19,8 +19,8 @@ const MethodModal = ({ modalData, viewOnly }) => {
   const [parameterCodesOptions, setParameterCodesOptions] = useState(null);
   const [methodCodesOptions, setMethodCodesOptions] = useState(null);
   const [
-    substitueDataApproachOptions,
-    setSubstitueDataApproachOptions,
+    substituteDataApproachOptions,
+    setsubstituteDataApproachOptions,
   ] = useState(null);
   const [bypassCodesOptions, setBypassCodesOptions] = useState(null);
 
@@ -63,19 +63,51 @@ const MethodModal = ({ modalData, viewOnly }) => {
   // *** obtain data for dropdowns
   useEffect(() => {
     dmApi.getAllParameterCodes().then((response) => {
-      setParameterCodesOptions(response.data);
+      const options = response.data.map((option) => {
+        return {
+          code: option["parameterCode"],
+          name: option["parameterCodeDescription"],
+        };
+      });
+
+      options.unshift({ code: "", name: "" });
+      setParameterCodesOptions(options);
     });
 
     dmApi.getAllMethodCodes().then((response) => {
-      setMethodCodesOptions(response.data);
+      const options = response.data.map((option) => {
+        return {
+          code: option["methodCode"],
+          name: option["methodCodeDescription"],
+        };
+      });
+
+      options.unshift({ code: "", name: "" });
+      setMethodCodesOptions(options);
     });
 
     dmApi.getAllSubstituteDataCodes().then((response) => {
-      setSubstitueDataApproachOptions(response.data);
+      const options = response.data.map((option) => {
+        return {
+          code: option["subDataCode"],
+          name: option["subDataCodeDescription"],
+        };
+      });
+
+      options.unshift({ code: "", name: "" });
+      setsubstituteDataApproachOptions(options);
     });
 
     dmApi.getAllBypassApproachCodes().then((response) => {
-      setBypassCodesOptions(response.data);
+      const options = response.data.map((option) => {
+        return {
+          code: option["bypassApproachCode"],
+          name: option["bypassApproachCodeDescription"],
+        };
+      });
+
+      options.unshift({ code: "", name: "" });
+      setBypassCodesOptions(options);
     });
   }, []);
 
@@ -152,7 +184,9 @@ const MethodModal = ({ modalData, viewOnly }) => {
                   className="modalUserInput"
                   epadataname="methodCode"
                   /*caption="Methodology"*/
-                  options={methodCodes}
+                  options={
+                    methodCodesOptions !== null ? methodCodesOptions : [{}]
+                  }
                   initialSelection={modalData["methodCode"]}
                   selectKey="code"
                   id="Methodology"
@@ -180,7 +214,11 @@ const MethodModal = ({ modalData, viewOnly }) => {
               {!viewOnly ? (
                 <SelectBox
                   /*caption="Substitute Data Approach"*/
-                  options={substituteDataApproachCodes}
+                  options={
+                    substituteDataApproachOptions !== null
+                      ? substituteDataApproachOptions
+                      : [{}]
+                  }
                   initialSelection={modalData["subDataCode"]}
                   selectKey="code"
                   className="modalUserInput"
@@ -212,7 +250,9 @@ const MethodModal = ({ modalData, viewOnly }) => {
                 <SelectBox
                   className="modalUserInput"
                   /*caption="Bypass Approach"*/
-                  options={bypassApproachCodes}
+                  options={
+                    bypassCodesOptions !== null ? bypassCodesOptions : [{}]
+                  }
                   initialSelection={modalData["bypassApproachCode"]}
                   selectKey="code"
                   id="BypassApproach"
