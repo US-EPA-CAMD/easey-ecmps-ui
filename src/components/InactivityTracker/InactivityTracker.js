@@ -106,7 +106,7 @@ export const InactivityTracker = ({ apiCall, countdownAPI }) => {
           children={
             <CountdownTimer
               countdownAPI={countdownAPI}
-              duration={config.app.countdownDuration / 3000}
+              duration={config.app.countdownDuration / 1000}
               apiCall={apiCall}
             />
           }
