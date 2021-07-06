@@ -41,8 +41,7 @@ const DataTableRender = ({
   useEffect(() => {
     setSearchText("");
   }, [dataLoaded]);
-  let columns = [];
-
+  const columns = [];
 
   columnNames.forEach((name, index) => {
     switch (name) {
@@ -136,7 +135,7 @@ const DataTableRender = ({
                     }
                   }}
                 >
-                  {checkout? "View / Edit" : "View"}
+                  {checkout ? "View / Edit" : "View"}
                 </Button>
               )
             ) : (

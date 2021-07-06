@@ -19,7 +19,6 @@ export const DataTableMethod = ({
   settingInactiveCheckBox,
 }) => {
   const [methods, setMethods] = useState([]);
-  console.log(locationSelectValue, "locationselectvalue");
   const [matsMethods, setMatsMethods] = useState([]);
   const [show, setShow] = useState(false);
   const [selectedMonitoringMethod, setSelectedMonitoringMethod] = useState(
@@ -49,73 +48,12 @@ export const DataTableMethod = ({
     "Begin Date and Time",
     "End Date and Time",
   ];
-  // *** generate columns array of object based on columnNames array above
-  const columns = [];
 
-  columnNames.forEach((name, index) => {
-    columns.push({
-      name,
-      selector: `col${index + 1}`,
-      sortable: true,
-    });
-  });
-  columns.push({
-    name: "Actions",
-    button: true,
-    width: "25%",
-    cell: (row) => {
-      // *** normalize the row object to be in the format expected by DynamicTabs
-      // const normalizedRow = normalizeRowObjectFormat(row, columnNames);
-      return (
-        <div>
-          {!(user && checkout) ? (
-            <Button
-              type="button"
-              unstyled="true"
-              epa-testid="btnOpenMethod"
-              className="cursor-pointer open-modal-button"
-              id="btnOpenMethod"
-              // onClick={() => openConfig(row)}
-              onClick={() => openMonitoringMethodsModal(row.col1, row.col2)}
-              aria-label={`open method ${row.col1} `}
-              onKeyPress={(event) => {
-                if (event.key === "Enter") {
-                  openMonitoringMethodsModal(row.col1, row.col2);
-                }
-              }}
-            >
-              View
-            </Button>
-          ) : (
-            <Button
-              type="button"
-              unstyled="true"
-              epa-testid="btnOpenMethod"
-              className="cursor-pointer margin-left-2 open-modal-button"
-              onClick={() => openMonitoringMethodsModal(row.col1, row.col2)}
-              aria-label={`edit method ${row.col1} `}
-              onKeyPress={(event) => {
-                if (event.key === "Enter") {
-                  openMonitoringMethodsModal(row.col1, row.col2);
-                }
-              }}
-            >
-              {"View / Edit"}
-            </Button>
-          )}
-        </div>
-      );
-    },
-  });
-
-  const openMonitoringMethodsModal = (row,bool) => {
-    console.log('openMonitoringMethodsModal',row)
+  const openMonitoringMethodsModal = (row, bool) => {
+    console.log("openMonitoringMethodsModal", row);
     if (methods.length > 0) {
-      const monMethod = methods.filter(
-        (element) =>
-          element.id === row.col7
-      )[0];
-      console.log('monMethod',monMethod)
+      const monMethod = methods.filter((element) => element.id === row.col7)[0];
+      console.log("monMethod", monMethod);
       setSelectedMonitoringMethod(monMethod);
 
       openModal(true);
@@ -229,8 +167,15 @@ export const DataTableMethod = ({
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
 
-      <DataTableRender openHandler={openMonitoringMethodsModal}
-      columnNames={columnNames} data={data} dataLoaded={dataLoaded} actionsBTN={'View'} checkout={checkout} user ={user}/>
+      <DataTableRender
+        openHandler={openMonitoringMethodsModal}
+        columnNames={columnNames}
+        data={data}
+        dataLoaded={dataLoaded}
+        actionsBTN={"View"}
+        checkout={checkout}
+        user={user}
+      />
       {show ? (
         <Modal
           show={show}
