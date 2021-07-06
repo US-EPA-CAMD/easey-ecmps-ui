@@ -13,7 +13,6 @@ export const InactivityTracker = ({ apiCall, countdownAPI }) => {
 
   const [activityOccurred, setActivityOccurred] = useState(false);
 
-
   const resetUserInactivityTimer = () => {
     setTimeInactive(0);
     setShowInactiveModal(false);
@@ -105,7 +104,11 @@ export const InactivityTracker = ({ apiCall, countdownAPI }) => {
           showCancel={true}
           cancelButtonText="OK"
           children={
-            <CountdownTimer countdownAPI={countdownAPI} duration={config.app.countdownDuration / 3000} />
+            <CountdownTimer
+              countdownAPI={countdownAPI}
+              duration={config.app.countdownDuration / 1000}
+              apiCall={apiCall}
+            />
           }
         />
       ) : null}

@@ -170,54 +170,60 @@ export const DataTableMethod = ({
   };
 
   const saveMethods = () => {
-    // // *** construct payload
-    // const payloadInputs = document.querySelectorAll(".modalUserInput");
-    // const datepickerPayloads = document.querySelectorAll(
-    //   ".usa-date-picker__internal-input"
-    // );
-    // const payloadArray = [];
-    // payloadInputs.forEach((input) => {
-    //   if (input.id === undefined || input.id === null || input.id === "") {
-    //     return;
-    //   }
-    //   const item = { name: "", value: "" };
-    //   item.name = document.getElementById(input.id).attributes[
-    //     "epadataname"
-    //   ].value;
-    //   item.value = document.getElementById(input.id).value;
-    //   payloadArray.push(item);
-    // });
-    // datepickerPayloads.forEach((input) => {
-    //   const item = { name: "", value: "" };
-    //   item.name = input.attributes["epadataname"].value;
-    //   item.value = input.value;
-    //   payloadArray.push(item);
-    // });
-    // const payload = {
-    //   monLocId: locationSelectValue,
-    //   id: "",
-    //   parameterCode: "",
-    //   subDataCode: "",
-    //   bypassApproachCode: "",
-    //   methodCode: "",
-    //   beginDate: "",
-    //   beginHour: 0,
-    //   endDate: "",
-    //   endHour: 0,
-    // };
-    // payloadArray.forEach((item) => {
-    //   payload[item.name] = item.value;
-    // });
-    // mpApi
-    //   .saveMonitoringMethods(payload)
-    //   .then((result) => {
-    //     console.log(result);
-    //     openModal(false);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     openModal(false);
-    //   });
+    // *** construct payload
+    const payloadInputs = document.querySelectorAll(".modalUserInput");
+    const datepickerPayloads = document.querySelectorAll(
+      ".usa-date-picker__internal-input"
+    );
+
+    const payloadArray = [];
+
+    payloadInputs.forEach((input) => {
+      if (input.id === undefined || input.id === null || input.id === "") {
+        return;
+      }
+      const item = { name: "", value: "" };
+      item.name = document.getElementById(input.id).attributes[
+        "epadataname"
+      ].value;
+      item.value = document.getElementById(input.id).value;
+      payloadArray.push(item);
+    });
+
+    datepickerPayloads.forEach((input) => {
+      const item = { name: "", value: "" };
+      item.name = input.attributes["epadataname"].value;
+      item.value = input.value;
+      payloadArray.push(item);
+    });
+
+    const payload = {
+      monLocId: locationSelectValue,
+      id: "",
+      parameterCode: null,
+      subDataCode: null,
+      bypassApproachCode: null,
+      methodCode: null,
+      beginDate: null,
+      beginHour: 0,
+      endDate: null,
+      endHour: 0,
+    };
+
+    payloadArray.forEach((item) => {
+      payload[item.name] = item.value.trim() === "" ? null : item.value.trim();
+    });
+
+    mpApi
+      .saveMonitoringMethods(payload)
+      .then((result) => {
+        console.log(result);
+        openModal(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        openModal(false);
+      });
   };
   return (
     <div className="methodTable">

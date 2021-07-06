@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Label, FormGroup, DatePicker } from "@trussworks/react-uswds";
 import {
   bypassApproachCodes,
@@ -8,11 +8,21 @@ import {
 } from "./MethodModalData";
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 
+import * as dmApi from "../../utils/api/dataManagementApi";
+
 const MethodModal = ({ modalData, viewOnly }) => {
-  const [startDate, setStartDate] = React.useState(null);
-  const [endDate, setEndDate] = React.useState(null);
-  const [startHour, setStartHour] = React.useState(null);
-  const [endHour, setEndHour] = React.useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [startHour, setStartHour] = useState(null);
+  const [endHour, setEndHour] = useState(null);
+
+  const [parameterCodesOptions, setParameterCodesOptions] = useState(null);
+  const [methodCodesOptions, setMethodCodesOptions] = useState(null);
+  const [
+    substituteDataApproachOptions,
+    setsubstituteDataApproachOptions,
+  ] = useState(null);
+  const [bypassCodesOptions, setBypassCodesOptions] = useState(null);
 
   const findValue = (options, val) => {
     for (const x of options) {
@@ -49,6 +59,58 @@ const MethodModal = ({ modalData, viewOnly }) => {
     { time: 22 },
     { time: 23 },
   ];
+
+  // *** obtain data for dropdowns
+  useEffect(() => {
+    dmApi.getAllParameterCodes().then((response) => {
+      const options = response.data.map((option) => {
+        return {
+          code: option["parameterCode"],
+          name: option["parameterCodeDescription"],
+        };
+      });
+
+      options.unshift({ code: "", name: "" });
+      setParameterCodesOptions(options);
+    });
+
+    dmApi.getAllMethodCodes().then((response) => {
+      const options = response.data.map((option) => {
+        return {
+          code: option["methodCode"],
+          name: option["methodCodeDescription"],
+        };
+      });
+
+      options.unshift({ code: "", name: "" });
+      setMethodCodesOptions(options);
+    });
+
+    dmApi.getAllSubstituteDataCodes().then((response) => {
+      const options = response.data.map((option) => {
+        return {
+          code: option["subDataCode"],
+          name: option["subDataCodeDescription"],
+        };
+      });
+
+      options.unshift({ code: "", name: "" });
+      setsubstituteDataApproachOptions(options);
+    });
+
+    dmApi.getAllBypassApproachCodes().then((response) => {
+      const options = response.data.map((option) => {
+        return {
+          code: option["bypassApproachCode"],
+          name: option["bypassApproachCodeDescription"],
+        };
+      });
+
+      options.unshift({ code: "", name: "" });
+      setBypassCodesOptions(options);
+    });
+  }, []);
+
   useEffect(() => {
     const [year, month, day] = modalData["beginDate"].split("-");
     !viewOnly
@@ -83,20 +145,22 @@ const MethodModal = ({ modalData, viewOnly }) => {
           <div className="tablet:grid-col">
             <FormGroup className="margin-top-0">
               <Label className="text-bold" htmlFor="Parameter">
-                Parameter
+                Parameter {!viewOnly ? "(Required)" : null}
               </Label>
               {!viewOnly ? (
                 <SelectBox
                   className="modalUserInput"
                   epadataname="parameterCode"
-                  caption="Parameter"
-                  options={parameterCodes}
+                  options={
+                    parameterCodesOptions !== null
+                      ? parameterCodesOptions
+                      : [{}]
+                  }
                   initialSelection={modalData["parameterCode"]}
                   selectKey="code"
                   id="Parameter"
                   epa-testid="Parameter"
                   name="Parameter"
-                  required
                   secondOption="name"
                 />
               ) : (
@@ -111,20 +175,20 @@ const MethodModal = ({ modalData, viewOnly }) => {
           <div className="tablet:grid-col padding-left-2">
             <FormGroup className="margin-top-0">
               <Label className="text-bold" htmlFor="Methodology">
-                Methodology
+                Methodology {!viewOnly ? "(Required)" : null}
               </Label>
               {!viewOnly ? (
                 <SelectBox
                   className="modalUserInput"
                   epadataname="methodCode"
-                  caption="Methodology"
-                  options={methodCodes}
+                  options={
+                    methodCodesOptions !== null ? methodCodesOptions : [{}]
+                  }
                   initialSelection={modalData["methodCode"]}
                   selectKey="code"
                   id="Methodology"
                   epa-testid="Methodology"
                   name="Methodology"
-                  required
                   secondOption="name"
                 />
               ) : (
@@ -141,12 +205,15 @@ const MethodModal = ({ modalData, viewOnly }) => {
           <div className="tablet:grid-col">
             <FormGroup className="margin-top-0">
               <Label className="text-bold" htmlFor="SubstituteDataApproach">
-                Substitute Data Approach
+                Substitute Data Approach {!viewOnly ? "(Required)" : null}
               </Label>
               {!viewOnly ? (
                 <SelectBox
-                  caption="Substitute Data Approach"
-                  options={substituteDataApproachCodes}
+                  options={
+                    substituteDataApproachOptions !== null
+                      ? substituteDataApproachOptions
+                      : [{}]
+                  }
                   initialSelection={modalData["subDataCode"]}
                   selectKey="code"
                   className="modalUserInput"
@@ -154,7 +221,6 @@ const MethodModal = ({ modalData, viewOnly }) => {
                   id="SubstituteDataApproach"
                   epa-testid="SubstituteDataApproach"
                   name="SubstituteDataApproach"
-                  required
                   secondOption="name"
                 />
               ) : (
@@ -172,20 +238,22 @@ const MethodModal = ({ modalData, viewOnly }) => {
           <div className="tablet:grid-col padding-left-2">
             <FormGroup className="margin-top-0">
               <Label className="text-bold" htmlFor="BypassApproach">
-                Bypass Approach
+                Bypass Approach {!viewOnly ? "(Required)" : null}
               </Label>
               {!viewOnly ? (
                 <SelectBox
                   className="modalUserInput"
-                  caption="Bypass Approach"
-                  options={bypassApproachCodes}
+                  /*caption="Bypass Approach"*/
+                  options={
+                    bypassCodesOptions !== null ? bypassCodesOptions : [{}]
+                  }
                   initialSelection={modalData["bypassApproachCode"]}
                   selectKey="code"
                   id="BypassApproach"
                   epadataname="bypassApproachCode"
                   epa-testid="BypassApproach"
                   name="BypassApproach"
-                  required
+                  /*required*/
                   secondOption="name"
                 />
               ) : (
@@ -207,7 +275,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
               <div className="grid-col ">
                 <FormGroup className="margin-top-0">
                   <Label className="text-bold" htmlFor="startDate">
-                    Start Date
+                    Start Date {!viewOnly ? "(Required)" : null}
                   </Label>
                   {!viewOnly ? (
                     <div>
@@ -242,7 +310,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
               <div className="grid-col ">
                 <FormGroup className="margin-top-0">
                   <Label className="text-bold" htmlFor="startHour">
-                    Start Time
+                    Start Time {!viewOnly ? "(Required)" : null}
                   </Label>
                   {!viewOnly ? (
                     startHour !== null ? (
@@ -261,7 +329,9 @@ const MethodModal = ({ modalData, viewOnly }) => {
                       ""
                     )
                   ) : (
-                    <div id="startHour">{startHour ? startHour : ""}</div>
+                    <div tabIndex="0" id="startHour">
+                      {startHour ? startHour : ""}
+                    </div>
                   )}
                 </FormGroup>
               </div>
