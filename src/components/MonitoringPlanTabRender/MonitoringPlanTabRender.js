@@ -66,7 +66,7 @@ export const MonitoringPlanTabRender = ({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [matsTableFlag, inactive[0]]);
+  }, [matsTableFlag, inactive[0],checkout]);
 
   // updates all tables whenever a location is changed
   useEffect(() => {
@@ -106,7 +106,7 @@ export const MonitoringPlanTabRender = ({
     ]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelect, inactive[0]]);
+  }, [locationSelect, inactive[0],checkout]);
 
   // sets initial state
   const [tableState, setTableState] = useState([
@@ -150,9 +150,9 @@ export const MonitoringPlanTabRender = ({
   const countdownAPI = () => {
     console.log("times up");
     // calls check in api
-    // checkoutAPI(false);
+    checkoutAPI(false);
     // sets the state of checked in config  in redux
-    // setCheckout(false, title);
+    setCheckout(false, title);
   };
   //false => check back in
   // true => check out

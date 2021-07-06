@@ -1021,8 +1021,10 @@ describe("testing select dropdowns for configutations, locations, and sections o
           locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
           checkout={false}
           user={{ firstName: "test" }}
-          setCheckoutAPI={jest.fn()}
+          checkoutAPI={jest.fn()}
+          setInactive={jest.fn()}
           setCheckout={jest.fn()}
+          inactive={[true, false]}
         />
       );
       fireEvent.click(screen.getByText("Check Out"));
@@ -1034,7 +1036,7 @@ describe("testing select dropdowns for configutations, locations, and sections o
 
   describe("renders header with checked out ", () => {
     test("cliks check  back in, then check out , 3 buttons because of the rest of header", () => {
-      const { getByText } = render(
+      const { container, getByText } = render(
         <HeaderInfo
           facility={"Barry (1, 2, CS0AAN)"}
           selectedConfig={[]}
@@ -1046,14 +1048,16 @@ describe("testing select dropdowns for configutations, locations, and sections o
           locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
           checkout={true}
           user={{ firstName: "test" }}
-          setCheckoutAPI={jest.fn()}
+          checkoutAPI={jest.fn()}
           setCheckout={jest.fn()}
+          setInactive={jest.fn()}
+          inactive={[true, false]}
         />
       );
-      fireEvent.click(screen.getByText("Check Back In"));
+      fireEvent.click(container.querySelector("#checkInBTN"));
+      fireEvent.click(container.querySelector("#checkOutBTN"));
 
-      fireEvent.click(screen.getByText("Check Out"));
-
+      fireEvent.click(container.querySelector("#checkbox"));
       const btns = screen.getAllByRole("button");
       expect(btns).toHaveLength(3);
     });
@@ -1071,8 +1075,10 @@ describe("testing select dropdowns for configutations, locations, and sections o
           setLocationSelect={jest.fn()}
           locationSelect={[0, "test"]}
           locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
-          setCheckoutAPI={jest.fn()}
+          checkoutAPI={jest.fn()}
           setCheckout={jest.fn()}
+          setInactive={jest.fn()}
+          inactive={[true, false]}
         />
       );
       const btns = screen.getAllByRole("button");

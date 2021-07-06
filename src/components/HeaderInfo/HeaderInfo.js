@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./HeaderInfo.scss";
 import DropdownSelection from "../DropdownSelection/DropdownSelection";
 import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined";
@@ -43,6 +43,9 @@ const HeaderInfo = ({
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
   const [checkoutState, setCheckoutState] = useState(checkout);
+  useEffect(() => {
+    setCheckoutState(checkout)
+  }, [checkout])
 
   // direction -> false = check back in
   // true = check out
@@ -80,6 +83,8 @@ const HeaderInfo = ({
                         aria-label={`Check back in the configuration `}
                         className=" padding-1 padding-right-3 padding-left-3 margin-2"
                         onClick={() => checkoutStateHandler(false)}
+                        id="checkInBTN"
+                        epa-testid="checkInBTN"
                       >
                         <LockOpenIcon /> {"Check Back In"}
                       </Button>
@@ -90,6 +95,8 @@ const HeaderInfo = ({
                         aria-label={`Check out the configuration`}
                         className="float-top padding-1 padding-right-3 padding-left-3 margin-2"
                         onClick={() => checkoutStateHandler(true)}
+                        id="checkOutBTN"
+                        epa-testid="checkOutBTN"
                       >
                         <CreateOutlinedIcon color="primary" /> {"Check Out"}
                       </Button>
