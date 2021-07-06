@@ -22,9 +22,11 @@ const CustomAccordion = ({ title, table }) => {
           {open[index] ? (
             <div className="text-bold font-body-xl display-block height-auto">
               <Button
-                aria-label="Collapse Row"
+                aria-label={`Collapse ${item[1]}`}
                 className="bg-base-lighter text-black"
                 onClick={() => tableState(index, false)}
+                epa-testid="collapseBTN"
+                id="collapseBTN"
               >
                 <KeyboardArrowUpSharp />
               </Button>
@@ -33,7 +35,9 @@ const CustomAccordion = ({ title, table }) => {
           ) : (
             <div className="text-bold font-body-xl display-block height-auto ">
               <Button
-                aria-label="Expand Row"
+                aria-label={`Expand ${item[1]}`}
+                epa-testid="expandBTN"
+                id="expandBTN"
                 className="bg-base-lighter text-black"
                 onClick={() => tableState(index, true)}
               >

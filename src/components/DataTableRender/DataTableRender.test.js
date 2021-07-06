@@ -1,5 +1,6 @@
 import React from "react";
-import { render, screen, getByRole } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
+
 import userEvent from "@testing-library/user-event";
 import DataTableRender from "./DataTableRender";
 
@@ -23,8 +24,32 @@ describe("renders datatable with all values ", () => {
   test("makes sure 3 rows of data are passed in + 1 for header +2 for rest of table", () => {
     const { container, queryByPlaceholderText } = render(
       <DataTableRender
+      dataLoaded={false}
         sectionTitle="sectionTitle"
         tableTitle="tableTitle"
+        button={true}
+        columns={columns}
+        data={[]}
+        user={{ username: "test" }}
+        selectedRowHandler={jest.fn()}
+        pagination={true}
+        filter={true}
+        // expandableRowComp={true}
+        expandableRows={true}
+        headerStyling="headerStyling"
+        tableStyling="tableStyling"
+        componentStyling="componentStyling"
+      />
+    );
+    const noData = screen.getByAltText("Please wait");
+    expect(noData).toBeDefined();
+  });
+
+  test("test no title with section title ", () => {
+    const { container, queryByPlaceholderText } = render(
+      <DataTableRender
+      dataLoaded={true}
+        sectionTitle="tableTitle"
         button={true}
         columns={columns}
         data={data}
@@ -33,14 +58,46 @@ describe("renders datatable with all values ", () => {
         pagination={true}
         filter={true}
         // expandableRowComp={true}
-        defaultSort={"col1"}
         expandableRows={true}
         headerStyling="headerStyling"
         tableStyling="tableStyling"
         componentStyling="componentStyling"
       />
     );
+    const searchInput = container.querySelector("#txtSearchData")
+    fireEvent.change(searchInput, { target: { value: 'test' } })
+    expect(searchInput.value).toBe('test')
+    
+    fireEvent.click(container.querySelector("#searchDataTableBTN"));
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(6);
+    expect(rows.length).toEqual(2);
+  });
+  test("test no title with no section title ", () => {
+    const { container, queryByPlaceholderText } = render(
+      <DataTableRender
+      dataLoaded={true}
+        button={true}
+        columns={columns}
+        data={data}
+        user={{ username: "test" }}
+        selectedRowHandler={jest.fn()}
+        pagination={true}
+        filter={true}
+        
+        defaultSort={"col2"}
+        // expandableRowComp={true}
+        expandableRows={true}
+        headerStyling="headerStyling"
+        tableStyling="tableStyling"
+        componentStyling="componentStyling"
+      />
+    );
+    const searchInput = container.querySelector("#txtSearchData")
+    fireEvent.change(searchInput, { target: { value: 'test' } })
+    expect(searchInput.value).toBe('test')
+    
+    fireEvent.click(container.querySelector("#searchDataTableBTN"));
+    const rows = screen.getAllByRole("row");
+    expect(rows.length).toEqual(2);
   });
 });

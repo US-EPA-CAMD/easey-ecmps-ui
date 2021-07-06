@@ -24,6 +24,8 @@ export const FilterComponent = ({ filterText, onSearch, title }) => (
             <Button
               type="button"
               onClick={onSearch}
+              id='searchDataTableBTN'
+              epa-testid='searchDataTableBTN'
               className="position-relative top-05 left-05"
             >
               Filter

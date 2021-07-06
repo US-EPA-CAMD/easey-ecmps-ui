@@ -16,14 +16,13 @@ import {
 export const DataTableMethod = ({
   locationSelectValue,
   matsTableHandler,
-  showActiveOnly,
   user,
   checkout,
   inactive,
   settingInactiveCheckBox,
 }) => {
   const [methods, setMethods] = useState([]);
-
+  console.log(locationSelectValue, "locationselectvalue");
   const [matsMethods, setMatsMethods] = useState([]);
   const [show, setShow] = useState(false);
   const [selectedMonitoringMethod, setSelectedMonitoringMethod] = useState(
@@ -45,14 +44,14 @@ export const DataTableMethod = ({
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
-  const columnNames = [];
-  columnNames.push("Parameter");
-  columnNames.push("Methodology");
-  columnNames.push("Substitute Data Approach");
-  columnNames.push("Bypass Approach");
-  columnNames.push("Begin Date and Time");
-  columnNames.push("End Date and Time");
-
+  const columnNames = [
+    "Parameter",
+    "Methodology",
+    "Substitute Data Approach",
+    "Bypass Approach",
+    "Begin Date and Time",
+    "End Date and Time",
+  ];
   // *** generate columns array of object based on columnNames array above
   const columns = [];
 
@@ -111,14 +110,14 @@ export const DataTableMethod = ({
     },
   });
 
-  const openMonitoringMethodsModal = (parameterCode, methodCode) => {
+  const openMonitoringMethodsModal = (row,bool) => {
+    console.log('openMonitoringMethodsModal',row)
     if (methods.length > 0) {
       const monMethod = methods.filter(
         (element) =>
-          element.parameterCode === parameterCode &&
-          element.methodCode === methodCode
+          element.id === row.col7
       )[0];
-
+      console.log('monMethod',monMethod)
       setSelectedMonitoringMethod(monMethod);
       openModal(true);
     }
@@ -198,12 +197,12 @@ export const DataTableMethod = ({
         openModal(false);
       });
   };
-
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
 
-      <DataTableRender columns={columns} data={data} dataLoaded={dataLoaded} />
+      <DataTableRender openHandler={openMonitoringMethodsModal}
+      columnNames={columnNames} data={data} dataLoaded={dataLoaded} actionsBTN={'View'} checkout={checkout} user ={user}/>
       {show ? (
         <Modal
           show={show}

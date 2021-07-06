@@ -51,7 +51,7 @@ export const DataTableSystems = ({
 
   // *** row handler onclick event listener
   const selectedRowHandler = (selection) => {
-    openModal(true, selection);
+    openModal(true, selection.cells);
   };
 
   useEffect(() => {
@@ -68,47 +68,41 @@ export const DataTableSystems = ({
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
-  const columnNames = [];
-  columnNames.push("System ID");
-  columnNames.push("System Type");
-  columnNames.push("System Designation");
-  columnNames.push("Fuel Type");
-  columnNames.push("Begin Date and Time");
-  columnNames.push("End Date and Time");
+  const columnNames = ["System ID","System Type","System Designation","Fuel Type","Begin Date and Time","End Date and Time"];
 
   // *** generate columns array of object based on columnNames array above
-  const columns = [];
+  // const columns = [];
 
-  columnNames.forEach((name, index) => {
-    columns.push({
-      name,
-      selector: `col${index + 1}`,
-      sortable: true,
-    });
-  });
+  // columnNames.forEach((name, index) => {
+  //   columns.push({
+  //     name,
+  //     selector: `col${index + 1}`,
+  //     sortable: true,
+  //   });
+  // });
 
-  // *** add column with action button
-  columns.push({
-    name: "Actions",
-    button: true,
-    width: "15%",
-    cell: (row) => {
-      // *** normalize the row object to be in the format expected by DynamicTabs
-      const normalizedRow = normalizeRowObjectFormat(row, columnNames);
+  // // *** add column with action button
+  // columns.push({
+  //   name: "Actions",
+  //   button: true,
+  //   width: "15%",
+  //   cell: (row) => {
+  //     // *** normalize the row object to be in the format expected by DynamicTabs
+  //     const normalizedRow = normalizeRowObjectFormat(row, columnNames);
 
-      return (
-        <div
-          className="cursor-pointer"
-          onClick={() => selectedRowHandler(normalizedRow.cells)}
-          tabIndex="0"
-          aria-label="Click to view system details"
-        >
-          <CreateSharp className="margin-right-1" />
-          View
-        </div>
-      );
-    },
-  });
+  //     return (
+  //       <div
+  //         className="cursor-pointer"
+  //         onClick={() => selectedRowHandler(normalizedRow.cells)}
+  //         tabIndex="0"
+  //         aria-label="Click to view system details"
+  //       >
+  //         <CreateSharp className="margin-right-1" />
+  //         View
+  //       </div>
+  //     );
+  //   },
+  // });
 
   // *** memoize data
   const data = useMemo(() => {
@@ -149,8 +143,10 @@ export const DataTableSystems = ({
           dataLoaded={dataLoaded}
           pagination
           filter
-          columns={columns}
           data={data}
+          columnNames={columnNames}
+          openHandler={selectedRowHandler}
+          actionsBTN="View"
         />
       </div>
       {show ? (
@@ -159,6 +155,7 @@ export const DataTableSystems = ({
           show={show}
           close={closeModalHandler}
           showCancel
+          
           showSave
           children={
             <div>

@@ -39,6 +39,24 @@ describe("testing the creation of 1 select drop down and handling change", () =>
         required={false}
         selectKey={"name"}
         options={options}
+        id={null}
+      />
+    );
+    userEvent.selectOptions(screen.getByTestId("dropdown"), ["2"]);
+    expect(screen.getByDisplayValue("2")).toBeInTheDocument();
+  });
+  test("renders 1 drop down with no initial value and no required text, custom id and second option select key  ", () => {
+
+    const { container } = render(
+      <DetailsSelectBox
+        caption={"test caption"}
+        initialSelection={null}
+        required={false}
+        selectKey={"name"}
+        options={options}
+        secondOption={'name'}
+        id={"testId"}
+        
       />
     );
     userEvent.selectOptions(screen.getByTestId("dropdown"), ["2"]);
