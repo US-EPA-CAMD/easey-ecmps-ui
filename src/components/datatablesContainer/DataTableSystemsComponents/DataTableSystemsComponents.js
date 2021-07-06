@@ -61,85 +61,79 @@ export const DataTableSystemsComponents = ({
   }, [selected]);
   // *** column names for dataset will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins
-  const columnNames = [];
-  columnNames.push("Component ID");
-  columnNames.push("Type Code");
-  columnNames.push("Begin to End Date");
+  const columnNames = ["Component ID","Type Code","Begin to End Date"];
 
-  // *** generate columns array of object based on columnNames array above
-  const columns = [];
+  // // *** generate columns array of object based on columnNames array above
+  // const columns = [];
 
-  columnNames.forEach((name, index) => {
-    columns.push({
-      name,
-      selector: `col${index + 1}`,
-      sortable: true,
-    });
-  });
+  // columnNames.forEach((name, index) => {
+  //   columns.push({
+  //     name,
+  //     selector: `col${index + 1}`,
+  //     sortable: true,
+  //   });
+  // });
 
-  // *** add column with action button
-  columns.push({
-    name: "Actions",
-    button: true,
-    width: "15%",
-    cell: (row) => {
-      // *** normalize the row object to be in the format expected by DynamicTabs
-      const normalizedRow = normalizeRowObjectFormat(row, columnNames);
+  // // *** add column with action button
+  // columns.push({
+  //   name: "Actions",
+  //   button: true,
+  //   width: "15%",
+  //   cell: (row) => {
+  //     // *** normalize the row object to be in the format expected by DynamicTabs
+  //     const normalizedRow = normalizeRowObjectFormat(row, columnNames);
 
-      return (
-        <div
-          className="cursor-pointer"
-          tabIndex="0"
-          aria-label={viewOnly ? "Click to View" : "Click to View or Edit"}
-          onClick={() => selectedRowHandler(normalizedRow.cells)}
-        >
-          <CreateSharp className="margin-right-1" />
-          {viewOnly ? "View" : "View/Edit"}
-        </div>
-      );
-    },
-  });
+  //     return (
+  //       <div
+  //         className="cursor-pointer"
+  //         tabIndex="0"
+  //         aria-label={viewOnly ? "Click to View" : "Click to View or Edit"}
+  //         onClick={() => selectedRowHandler(normalizedRow.cells)}
+  //       >
+  //         <CreateSharp className="margin-right-1" />
+  //         {viewOnly ? "View" : "View/Edit"}
+  //       </div>
+  //     );
+  //   },
+  // });
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
-  const fuelFlowsColumnNames = [];
-  fuelFlowsColumnNames.push("Fuel Code");
-  fuelFlowsColumnNames.push("Type Code");
-  fuelFlowsColumnNames.push("Begin to End Date");
+  const fuelFlowsColumnNames = ["Fuel Code","Type Code","Begin to End Date"];
 
-  // *** generate columns array of object based on columnNames array above
-  const fuelFlowsColumns = [];
+  // // *** generate columns array of object based on columnNames array above
+  // const fuelFlowsColumns = [];
 
-  fuelFlowsColumnNames.forEach((name, index) => {
-    fuelFlowsColumns.push({
-      name,
-      selector: `col${index + 1}`,
-      sortable: true,
-    });
-  });
+  // fuelFlowsColumnNames.forEach((name, index) => {
+  //   fuelFlowsColumns.push({
+  //     name,
+  //     selector: `col${index + 1}`,
+  //     sortable: true,
+  //   });
+  // });
 
-  // *** add column with action button
-  fuelFlowsColumns.push({
-    name: "Actions",
-    button: true,
-    width: "15%",
-    cell: (row) => {
-      // *** normalize the row object to be in the format expected by DynamicTabs
-      const normalizedRow = normalizeRowObjectFormat(row, fuelFlowsColumnNames);
+  // // *** add column with action button
+  // fuelFlowsColumns.push({
+  //   name: "Actions",
+  //   button: true,
+  //   width: "15%",
+  //   cell: (row) => {
+  //     // *** normalize the row object to be in the format expected by DynamicTabs
+  //     const normalizedRow = normalizeRowObjectFormat(row, fuelFlowsColumnNames);
 
-      return (
-        <div
-          className="cursor-pointer"
-          tabIndex="0"
-          aria-label="Click to view fuel flow details"
-          onClick={() => selectedRowHandler(normalizedRow.cells)}
-        >
-          <CreateSharp className="margin-right-1" />
-          View
-        </div>
-      );
-    },
-  });
+  //     return (
+  //       <div
+  //         className="cursor-pointer"
+  //         tabIndex="0"
+  //         aria-label="Click to view fuel flow details"
+  //         onClick={() => selectedRowHandler(normalizedRow.cells)}
+  //       >
+  //         <CreateSharp className="margin-right-1" />
+  //         View
+  //       </div>
+  //     );
+  //   },
+  // });
 
   const [selectedComponent, setSelectedComponent] = useState("");
   const selectedRowHandler = (val) => {
@@ -184,7 +178,7 @@ export const DataTableSystemsComponents = ({
           return (
             <div>
               <DataTableRender
-                columns={columns}
+                columnNames={columnNames}
                 data={data}
                 selectedRowHandler={selectedRowHandler}
                 tableTitle="System Components"
@@ -192,7 +186,7 @@ export const DataTableSystemsComponents = ({
                 dataLoaded={dataLoaded}
               />
               <DataTableRender
-                columns={fuelFlowsColumns}
+                columnNames={fuelFlowsColumnNames}
                 data={fuelFlowsData}
                 selectedRowHandler={selectedRowHandler}
                 tableTitle="Fuel Flows"

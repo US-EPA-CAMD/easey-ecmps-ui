@@ -80,6 +80,8 @@ const HeaderInfo = ({
                         aria-label={`Check back in the configuration `}
                         className=" padding-1 padding-right-3 padding-left-3 margin-2"
                         onClick={() => checkoutStateHandler(false)}
+                        id="checkInBTN"
+                        epa-testid="checkInBTN"
                       >
                         <LockOpenIcon /> {"Check Back In"}
                       </Button>
@@ -90,6 +92,8 @@ const HeaderInfo = ({
                         aria-label={`Check out the configuration`}
                         className="float-top padding-1 padding-right-3 padding-left-3 margin-2"
                         onClick={() => checkoutStateHandler(true)}
+                        id="checkOutBTN"
+                        epa-testid="checkOutBTN"
                       >
                         <CreateOutlinedIcon color="primary" /> {"Check Out"}
                       </Button>

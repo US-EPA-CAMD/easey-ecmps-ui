@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Button } from "@trussworks/react-uswds";
-
+import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
 import DataTable from "react-data-table-component";
 import { FilterComponent } from "../ReactDataTablesFilter/ReactDataTablesFilter";
 import { Preloader } from "../Preloader/Preloader";
@@ -12,19 +12,21 @@ import {
 } from "@material-ui/icons";
 
 import config from "../../config";
-
 /*** scss ***/
 
 const DataTableRender = ({
   sectionTitle,
   tableTitle,
   button,
-  columns,
+  columnNames,
   data,
   user,
   dataLoaded,
-
+  openHandler,
   selectedRowHandler,
+  checkout,
+  actionsBTN,
+  // for data table
   pagination,
   filter,
   expandableRowComp,
@@ -36,7 +38,130 @@ const DataTableRender = ({
   className,
 }) => {
   const [searchText, setSearchText] = useState("");
+  useEffect(() => {
+    setSearchText("");
+  }, [dataLoaded]);
+  let columns = [];
 
+
+  columnNames.forEach((name, index) => {
+    switch (name) {
+      case "ORIS":
+        columns.push({
+          name,
+          selector: `col${index + 1}`,
+          sortable: true,
+          sortFunction: (a, b) =>
+            parseFloat(a[`col${index + 1}`]) - parseFloat(b[`col${index + 1}`]),
+        });
+        break;
+      default:
+        columns.push({
+          name,
+          selector: `col${index + 1}`,
+          sortable: true,
+        });
+        break;
+    }
+  });
+  if (actionsBTN) {
+    columns.push({
+      name: "Actions",
+      button: true,
+      width: "25%",
+      cell: (row) => {
+        // *** normalize the row object to be in the format expected by DynamicTabs
+        const normalizedRow = normalizeRowObjectFormat(row, columnNames);
+        return (
+          <div>
+            {/* user is logged in  */}
+            {user ? (
+              // user is at the configuration table
+              // needs 2 buttons, open and open and checkout
+              // user is at a section table, it only says view/edit if checked out
+              // or just view if not checked out
+              actionsBTN === "Open" ? (
+                <div>
+                  <Button
+                    type="button"
+                    unstyled="true"
+                    epa-testid="btnOpenMethod"
+                    className="cursor-pointer open-modal-button"
+                    id="btnOpenMethod"
+                    // onClick={() => openConfig(row)}
+                    onClick={() => openHandler(row, false)}
+                    // aria-label={`open method ${row.col1} `}
+                    onKeyPress={(event) => {
+                      if (event.key === "Enter") {
+                        openHandler(row, false);
+                      }
+                    }}
+                  >
+                    {"Open"}
+                  </Button>
+                  {/* checks out when a user is logged in  */}
+                  {" | "}
+                  <Button
+                    type="button"
+                    unstyled="true"
+                    epa-testid="btnOpenMethod"
+                    className="cursor-pointer open-modal-button"
+                    id="btnOpenMethod"
+                    // onClick={() => openConfig(row)}
+                    onClick={() => openHandler(normalizedRow, true)}
+                    aria-label={`open method ${row.col1} `}
+                    onKeyPress={(event) => {
+                      if (event.key === "Enter") {
+                        openHandler(normalizedRow, true);
+                      }
+                    }}
+                  >
+                    {"Open & Checkout"}
+                  </Button>
+                </div>
+              ) : (
+                // actionbtn = "view"
+                <Button
+                  type="button"
+                  unstyled="true"
+                  epa-testid="btnOpenMethod"
+                  className="cursor-pointer open-modal-button"
+                  id="btnOpenMethod"
+                  // onClick={() => openConfig(row)}
+                  onClick={() => openHandler(normalizedRow, false)}
+                  aria-label={`open method ${row.col1} `}
+                  onKeyPress={(event) => {
+                    if (event.key === "Enter") {
+                      openHandler(normalizedRow, false);
+                    }
+                  }}
+                >
+                  {checkout? "View / Edit" : "View"}
+                </Button>
+              )
+            ) : (
+              // user is not logged in (in public record)
+              <Button
+                type="button"
+                unstyled="true"
+                epa-testid="btnOpenMethod"
+                className="cursor-pointer margin-left-2 open-modal-button"
+                onClick={() => openHandler(normalizedRow, false)}
+                aria-label={`edit method ${row.col1} `}
+                onKeyPress={(event) => {
+                  if (event.key === "Enter") {
+                    openHandler(row.col1, row.col2);
+                  }
+                }}
+              >
+                {actionsBTN === "Open" ? "Open" : "View"}
+              </Button>
+            )}
+          </div>
+        );
+      },
+    });
+  }
   const colsFilter = (currentElement) => {
     for (const prop in currentElement) {
       // filters out any boolean properties in the data since it does
@@ -87,7 +212,7 @@ const DataTableRender = ({
         </h2>
       </div>
       <div aria-live="polite" className={`${tableStyling}`}>
-        {dataLoaded && data.length>= 0 ? (
+        {dataLoaded && data.length >= 0 ? (
           <DataTable
             className={`data-display-table react-transition fade-in ${className}`}
             sortIcon={

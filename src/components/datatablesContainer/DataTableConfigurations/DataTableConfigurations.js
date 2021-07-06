@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import * as fs from "../../../utils/selectors/monitoringConfigurations";
 import { loadMonitoringPlansArray } from "../../../store/actions/monitoringPlans";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import { Button } from "@trussworks/react-uswds";
 import DataTableRender from "../../DataTableRender/DataTableRender";
 export const DataTableConfigurations = ({
   loading,
@@ -16,12 +15,10 @@ export const DataTableConfigurations = ({
 }) => {
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
-  const columnNames = [];
-  columnNames.push("Configurations");
-  columnNames.push("Status");
+  const columnNames = ["Configurations","Status"];
+
 
   // *** generate columns array of object based on columnNames array above
-  const columns = [];
 
   const [selectedMP, setSelectedMp] = useState([]);
   const [selectedConfig, setSelectedConfig] = useState([]);
@@ -42,6 +39,13 @@ export const DataTableConfigurations = ({
 
   const openConfig = (config, checkout) => {
     const selectedConfigData = findSelectedConfig(config.col3);
+    if(checkout){
+      mpApi
+      .postCheckoutMonitoringPlanConfiguration(config.col3, user.firstName)
+      .then((res) => {
+        console.log(res, "data");
+      });
+    }
     setSelectedConfig([data, selectedConfigData, checkout]);
   };
 
@@ -83,69 +87,14 @@ export const DataTableConfigurations = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringPlans.length]);
 
-  const checkOut = (config) => {
-    mpApi
-      .postCheckoutMonitoringPlanConfiguration(config.col3, user.firstName)
-      .then((res) => {
-        console.log(res, "data");
-      });
-    openConfig(config, true);
-  };
-  columnNames.forEach((name, index) => {
-    columns.push({
-      name,
-      selector: `col${index + 1}`,
-      sortable: true,
-    });
-  });
-  columns.push({
-    name: "Actions",
-    button: true,
-    width: "25%",
-    cell: (row) => {
-      // *** normalize the row object to be in the format expected by DynamicTabs
-      // const normalizedRow = normalizeRowObjectFormat(row, columnNames);
-      return (
-        <div>
-          <Button
-            unstyled="true"
-            epa-testid="btnOpenConfiguration"
-            className="cursor-pointer margin-right-1"
-            id="btnOpenConfiguration"
-            onClick={() => openConfig(row, false)}
-            aria-label={`open configuration ${row.col1} `}
-            onKeyPress={(event) => {
-              if (event.key === "Enter") {
-                openConfig(row, false);
-              }
-            }}
-          >
-            Open
-          </Button>
-          {user ? "|" : ""}
-          {user ? (
-            <Button
-              unstyled="true"
-              epa-testid="btnOpenCheckOut"
-              className="cursor-pointer margin-left-1"
-              onClick={() => checkOut(row)}
-              aria-label={`open configuration and check out ${row.col1} `}
-              onKeyPress={(event) => {
-                if (event.key === "Enter") {
-                  checkOut(row);
-                }
-              }}
-            >
-              {" "}
-              {"Open & Check Out"}
-            </Button>
-          ) : (
-            ""
-          )}
-        </div>
-      );
-    },
-  });
+  // const checkOut = (config) => {
+  //   mpApi
+  //     .postCheckoutMonitoringPlanConfiguration(config.col3, user.firstName)
+  //     .then((res) => {
+  //       console.log(res, "data");
+  //     });
+  //   openConfig(config, true);
+  // };
 
   const records = useMemo(() => {
     if (monitoringPlans.length >= 1) {
@@ -165,13 +114,16 @@ export const DataTableConfigurations = ({
   return (
     <div className="tabsBox">
       <DataTableRender
-        columns={columns}
+        columnNames={columnNames}
         data={records}
         dataLoaded={dataLoaded}
         // selectedRowHandler={selectedRowHandler}
         tableStyling={"padding-left-4 padding-bottom-3"}
         defaultSort={"col2"}
         className={className}
+        openHandler={openConfig}
+        actionsBTN = 'Open'
+        user={user}
       />
     </div>
   );

@@ -28,34 +28,8 @@ export const SelectFacilitiesDataTable = ({
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
-  const columnNames = [];
-  columnNames.push("ORIS");
-  columnNames.push("Facility");
-  columnNames.push("State");
+  const columnNames = ["ORIS","Facility","State"];
 
-  // *** generate columns array of object based on columnNames array above
-  let columns = [];
-
-  columnNames.forEach((name, index) => {
-    switch (name) {
-      case "ORIS":
-        columns.push({
-          name,
-          selector: `col${index + 1}`,
-          sortable: true,
-          sortFunction: (a, b) =>
-            parseFloat(a[`col${index + 1}`]) - parseFloat(b[`col${index + 1}`]),
-        });
-        break;
-      default:
-        columns.push({
-          name,
-          selector: `col${index + 1}`,
-          sortable: true,
-        });
-        break;
-    }
-  });
 
   const selectedRowHandler = (info) => {
     addtabs([
@@ -107,7 +81,7 @@ export const SelectFacilitiesDataTable = ({
   return (
     <div className="tabsBox">
       <DataTableRender
-        columns={columns}
+        columnNames={columnNames}
         dataLoaded={dataLoaded}
         data={data}
         openedFacilityTabs={openedFacilityTabs}
@@ -123,6 +97,7 @@ export const SelectFacilitiesDataTable = ({
             className="expand-row-data-table"
           />
         }
+        
         headerStyling="padding-top-0 padding-left-2"
       />
     </div>
