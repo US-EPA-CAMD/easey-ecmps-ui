@@ -49,14 +49,12 @@ export const DataTableMethod = ({
     "End Date and Time",
   ];
 
+  // cant unit test properly
   const openMonitoringMethodsModal = (row, bool) => {
-    console.log("openMonitoringMethodsModal", row);
     if (methods.length > 0) {
       const monMethod = methods.filter((element) => element.id === row.col7)[0];
-      console.log("monMethod", monMethod);
       setSelectedMonitoringMethod(monMethod);
-
-      openModal(true);
+      setShow(true);
     }
   };
 
@@ -79,7 +77,6 @@ export const DataTableMethod = ({
         settingInactiveCheckBox(true, true);
         return fs.getMonitoringPlansMethodsTableRecords(methods);
       }
-
       // resets checkbox
       settingInactiveCheckBox(inactive[0], false);
       return fs.getMonitoringPlansMethodsTableRecords(
@@ -87,7 +84,6 @@ export const DataTableMethod = ({
       );
     }
     return [];
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [methods, inactive]);
 
@@ -103,65 +99,61 @@ export const DataTableMethod = ({
 
   const closeModalHandler = () => setShow(false);
 
-  const openModal = (value) => {
-    setShow(value);
-  };
+  // const openModal = (value) => {
+  //   setShow(value);
+  // };
 
   const saveMethods = () => {
-    // *** construct payload
-    const payloadInputs = document.querySelectorAll(".modalUserInput");
-    const datepickerPayloads = document.querySelectorAll(
-      ".usa-date-picker__internal-input"
-    );
-
-    const payloadArray = [];
-
-    payloadInputs.forEach((input) => {
-      if (input.id === undefined || input.id === null || input.id === "") {
-        return;
-      }
-      const item = { name: "", value: "" };
-      item.name = document.getElementById(input.id).attributes[
-        "epadataname"
-      ].value;
-      item.value = document.getElementById(input.id).value;
-      payloadArray.push(item);
-    });
-
-    datepickerPayloads.forEach((input) => {
-      const item = { name: "", value: "" };
-      item.name = input.attributes["epadataname"].value;
-      item.value = input.value;
-      payloadArray.push(item);
-    });
-
-    const payload = {
-      monLocId: locationSelectValue,
-      id: "",
-      parameterCode: null,
-      subDataCode: null,
-      bypassApproachCode: null,
-      methodCode: null,
-      beginDate: null,
-      beginHour: 0,
-      endDate: null,
-      endHour: 0,
-    };
-
-    payloadArray.forEach((item) => {
-      payload[item.name] = item.value.trim() === "" ? null : item.value.trim();
-    });
-
-    mpApi
-      .saveMonitoringMethods(payload)
-      .then((result) => {
-        console.log(result);
-        openModal(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        openModal(false);
-      });
+    // // *** construct payload
+    // const payloadInputs = document.querySelectorAll(".modalUserInput");
+    // const datepickerPayloads = document.querySelectorAll(
+    //   ".usa-date-picker__internal-input"
+    // );
+    // const payloadArray = [];
+    // payloadInputs.forEach((input) => {
+    //   if (input.id === undefined || input.id === null || input.id === "") {
+    //     return;
+    //   }
+    //   const item = { name: "", value: "" };
+    //   item.name = document.getElementById(input.id).attributes[
+    //     "epadataname"
+    //   ].value;
+    //   item.value = document.getElementById(input.id).value;
+    //   payloadArray.push(item);
+    // });
+    // datepickerPayloads.forEach((input) => {
+    //   const item = { name: "", value: "" };
+    //   item.name = input.attributes["epadataname"].value;
+    //   item.value = input.value;
+    //   payloadArray.push(item);
+    // });
+    // const payload = {
+    //   monLocId: locationSelectValue,
+    //   id: "",
+    //   parameterCode: null,
+    //   subDataCode: null,
+    //   bypassApproachCode: null,
+    //   methodCode: null,
+    //   beginDate: null,
+    //   beginHour: 0,
+    //   endDate: null,
+    //   endHour: 0,
+    // };
+    // payloadArray.forEach((item) => {
+    //   payload[item.name] = item.value.trim() === "" ? null : item.value.trim();
+    // });
+    // mpApi
+    //   .saveMonitoringMethods(payload)
+    //   .then((result) => {
+    //     console.log(result);
+    //     openModal(false);
+    // setShow(false);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     openModal(false);
+    // setShow(false);
+    //   });
   };
   return (
     <div className="methodTable">

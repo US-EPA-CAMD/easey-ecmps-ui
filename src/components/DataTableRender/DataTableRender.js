@@ -84,17 +84,11 @@ const DataTableRender = ({
                   <Button
                     type="button"
                     unstyled="true"
-                    epa-testid="btnOpenMethod"
+                    epa-testid="btnOpen"
                     className="cursor-pointer open-modal-button"
-                    id="btnOpenMethod"
-                    // onClick={() => openConfig(row)}
+                    id="btnOpen"
                     onClick={() => openHandler(row, false)}
                     // aria-label={`open method ${row.col1} `}
-                    onKeyPress={(event) => {
-                      if (event.key === "Enter") {
-                        openHandler(row, false);
-                      }
-                    }}
                   >
                     {"Open"}
                   </Button>
@@ -103,17 +97,11 @@ const DataTableRender = ({
                   <Button
                     type="button"
                     unstyled="true"
-                    epa-testid="btnOpenMethod"
+                    epa-testid="btnOpenAndCheckout"
                     className="cursor-pointer open-modal-button"
-                    id="btnOpenMethod"
-                    // onClick={() => openConfig(row)}
+                    id="btnOpenAndCheckout"
                     onClick={() => openHandler(normalizedRow, true)}
                     aria-label={`open method ${row.col1} `}
-                    onKeyPress={(event) => {
-                      if (event.key === "Enter") {
-                        openHandler(normalizedRow, true);
-                      }
-                    }}
                   >
                     {"Open & Checkout"}
                   </Button>
@@ -123,17 +111,11 @@ const DataTableRender = ({
                 <Button
                   type="button"
                   unstyled="true"
-                  epa-testid="btnOpenMethod"
+                  epa-testid="btnOpen"
                   className="cursor-pointer open-modal-button"
-                  id="btnOpenMethod"
-                  // onClick={() => openConfig(row)}
+                  id="btnOpen"
                   onClick={() => openHandler(normalizedRow, false)}
                   aria-label={`open method ${row.col1} `}
-                  onKeyPress={(event) => {
-                    if (event.key === "Enter") {
-                      openHandler(normalizedRow, false);
-                    }
-                  }}
                 >
                   {checkout ? "View / Edit" : "View"}
                 </Button>
@@ -143,15 +125,11 @@ const DataTableRender = ({
               <Button
                 type="button"
                 unstyled="true"
-                epa-testid="btnOpenMethod"
+                epa-testid="btnOpen"
+                id="btnOpen"
                 className="cursor-pointer margin-left-2 open-modal-button"
                 onClick={() => openHandler(normalizedRow, false)}
                 aria-label={`edit method ${row.col1} `}
-                onKeyPress={(event) => {
-                  if (event.key === "Enter") {
-                    openHandler(row.col1, row.col2);
-                  }
-                }}
               >
                 {actionsBTN === "Open" ? "Open" : "View"}
               </Button>
@@ -176,6 +154,7 @@ const DataTableRender = ({
   };
   const filteredItems = data.filter(colsFilter);
   const subHeaderComponentMemo = useMemo(() => {
+    //cannot unit test properly
     const handleSearch = () => {
       setSearchText(document.querySelector("#txtSearchData").value);
     };
