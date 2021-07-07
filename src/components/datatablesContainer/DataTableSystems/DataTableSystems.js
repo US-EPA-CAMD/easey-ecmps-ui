@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 
 import * as fs from "../../../utils/selectors/monitoringPlanSystems";
-import { normalizeRowObjectFormat } from "../../../additional-functions/react-data-table-component";
-import { CreateSharp } from "@material-ui/icons";
 import Modal from "../../Modal/Modal";
 import Details from "../../Details/Details";
 import DataTableSystemsComponents from "../DataTableSystemsComponents/DataTableSystemsComponents";
@@ -68,7 +66,14 @@ export const DataTableSystems = ({
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
-  const columnNames = ["System ID","System Type","System Designation","Fuel Type","Begin Date and Time","End Date and Time"];
+  const columnNames = [
+    "System ID",
+    "System Type",
+    "System Designation",
+    "Fuel Type",
+    "Begin Date and Time",
+    "End Date and Time",
+  ];
 
   // *** generate columns array of object based on columnNames array above
   // const columns = [];
@@ -155,7 +160,6 @@ export const DataTableSystems = ({
           show={show}
           close={closeModalHandler}
           showCancel
-          
           showSave
           children={
             <div>
