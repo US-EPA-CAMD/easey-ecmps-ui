@@ -1,7 +1,7 @@
 import React from "react";
-import { render, screen,waitForElement  } from "@testing-library/react";
+import { render,waitForElement  } from "@testing-library/react";
 import { DataTableMethod } from "./DataTableMethod";
-// import axios from "axios";
+
 
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 const axios = require("axios");
