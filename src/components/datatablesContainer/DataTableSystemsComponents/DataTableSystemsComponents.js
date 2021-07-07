@@ -4,12 +4,10 @@ import * as fs from "../../../utils/selectors/monitoringPlanSystems";
 import SystemComponentsModal from "../../SystemComponentsModal/SystemComponentsModal";
 import SystemFuelFlowsModal from "../../SystemFuelFlowsModal/SystemFuelFlowsModal";
 
-import { normalizeRowObjectFormat } from "../../../additional-functions/react-data-table-component";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 import DataTableRender from "../../DataTableRender/DataTableRender";
 import "./DataTableSystemsComponentsRender.scss";
-import { CreateSharp } from "@material-ui/icons";
 
 export const DataTableSystemsComponents = ({
   systemID,
@@ -31,15 +29,13 @@ export const DataTableSystemsComponents = ({
     setMonitoringSystemsComponents,
   ] = useState("");
   useEffect(() => {
-    mpApi
-      .getMonitoringSystems(locationSelect)
-      .then((res) => {
-        for (let value of res.data) {
-          if (value.systemIdentifier === systemID) {
-            setSelected(value);
-          }
+    mpApi.getMonitoringSystems(locationSelect).then((res) => {
+      for (let value of res.data) {
+        if (value.systemIdentifier === systemID) {
+          setSelected(value);
         }
-      })
+      }
+    });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [systemID]);
@@ -50,18 +46,18 @@ export const DataTableSystemsComponents = ({
       .then((res) => {
         setMonitoringSystemsComponents(res.data);
         setDataLoaded(true);
-      })
+      });
 
     mpApi
       .getMonitoringSystemsFuelFlows(selected.monLocId, selected.id)
       .then((res) => {
         setMonitoringSystemsFuelFlows(res.data);
         setFuelDataLoaded(true);
-      })
+      });
   }, [selected]);
   // *** column names for dataset will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins
-  const columnNames = ["Component ID","Type Code","Begin to End Date"];
+  const columnNames = ["Component ID", "Type Code", "Begin to End Date"];
 
   // // *** generate columns array of object based on columnNames array above
   // const columns = [];
@@ -99,7 +95,7 @@ export const DataTableSystemsComponents = ({
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
-  const fuelFlowsColumnNames = ["Fuel Code","Type Code","Begin to End Date"];
+  const fuelFlowsColumnNames = ["Fuel Code", "Type Code", "Begin to End Date"];
 
   // // *** generate columns array of object based on columnNames array above
   // const fuelFlowsColumns = [];

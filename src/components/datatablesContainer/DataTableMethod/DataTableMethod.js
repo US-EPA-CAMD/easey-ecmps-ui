@@ -4,6 +4,9 @@ import { Button } from "@trussworks/react-uswds";
 import Modal from "../../Modal/Modal";
 import MethodModal from "../../MethodModal/MethodModal";
 import DataTableRender from "../../DataTableRender/DataTableRender";
+
+import { extractUserInput } from "../../../additional-functions/extract-user-input";
+
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 import {
@@ -75,7 +78,6 @@ export const DataTableMethod = ({
               epa-testid="btnOpenMethod"
               className="cursor-pointer open-modal-button"
               id="btnOpenMethod"
-              // onClick={() => openConfig(row)}
               onClick={() => openMonitoringMethodsModal(row.col1, row.col2)}
               aria-label={`open method ${row.col1} `}
               onKeyPress={(event) => {
@@ -117,7 +119,6 @@ export const DataTableMethod = ({
       )[0];
       console.log('monMethod',monMethod)
       setSelectedMonitoringMethod(monMethod);
-
       openModal(true);
     }
   };
@@ -170,36 +171,9 @@ export const DataTableMethod = ({
   };
 
   const saveMethods = () => {
-    // *** construct payload
-    const payloadInputs = document.querySelectorAll(".modalUserInput");
-    const datepickerPayloads = document.querySelectorAll(
-      ".usa-date-picker__internal-input"
-    );
-
-    const payloadArray = [];
-
-    payloadInputs.forEach((input) => {
-      if (input.id === undefined || input.id === null || input.id === "") {
-        return;
-      }
-      const item = { name: "", value: "" };
-      item.name = document.getElementById(input.id).attributes[
-        "epadataname"
-      ].value;
-      item.value = document.getElementById(input.id).value;
-      payloadArray.push(item);
-    });
-
-    datepickerPayloads.forEach((input) => {
-      const item = { name: "", value: "" };
-      item.name = input.attributes["epadataname"].value;
-      item.value = input.value;
-      payloadArray.push(item);
-    });
-
     const payload = {
       monLocId: locationSelectValue,
-      id: "",
+      id: null,
       parameterCode: null,
       subDataCode: null,
       bypassApproachCode: null,
@@ -210,12 +184,10 @@ export const DataTableMethod = ({
       endHour: 0,
     };
 
-    payloadArray.forEach((item) => {
-      payload[item.name] = item.value.trim() === "" ? null : item.value.trim();
-    });
+    const userInput = extractUserInput(payload, ".modalUserInput");
 
     mpApi
-      .saveMonitoringMethods(payload)
+      .saveMonitoringMethods(userInput)
       .then((result) => {
         console.log(result);
         openModal(false);
