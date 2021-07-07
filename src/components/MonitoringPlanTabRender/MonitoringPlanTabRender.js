@@ -53,7 +53,9 @@ export const MonitoringPlanTabRender = ({
                 ],
                 [
                   <DataTableMats
-                    locationSelect={locationSelect[1]}
+                    locationSelectValue={locationSelect[1]}
+                    checkout={checkout}
+                    user={user}
                     inactive={inactive}
                     settingInactiveCheckBox={settingInactiveCheckBox}
                   />,
@@ -66,7 +68,7 @@ export const MonitoringPlanTabRender = ({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [matsTableFlag, inactive[0],checkout]);
+  }, [matsTableFlag, inactive[0], checkout]);
 
   // updates all tables whenever a location is changed
   useEffect(() => {
@@ -95,7 +97,7 @@ export const MonitoringPlanTabRender = ({
       [
         [
           <DataTableSystems
-            locationSelect={parseInt(locationSelect[1])}
+          locationSelectValue={parseInt(locationSelect[1])}
             inactive={inactive}
             settingInactiveCheckBox={settingInactiveCheckBox}
           />,
@@ -106,7 +108,7 @@ export const MonitoringPlanTabRender = ({
     ]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelect, inactive[0],checkout]);
+  }, [locationSelect, inactive[0], checkout]);
 
   // sets initial state
   const [tableState, setTableState] = useState([
@@ -134,7 +136,7 @@ export const MonitoringPlanTabRender = ({
     [
       [
         <DataTableSystems
-          locationSelect={locationSelect[1]}
+        locationSelectValue={locationSelect[1]}
           inactive={inactive}
           settingInactiveCheckBox={settingInactiveCheckBox}
         />,

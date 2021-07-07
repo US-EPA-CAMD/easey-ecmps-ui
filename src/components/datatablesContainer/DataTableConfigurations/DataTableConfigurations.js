@@ -5,7 +5,6 @@ import { loadMonitoringPlansArray } from "../../../store/actions/monitoringPlans
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import DataTableRender from "../../DataTableRender/DataTableRender";
 export const DataTableConfigurations = ({
-  loading,
   loadMonitoringPlansData,
   monitoringPlans,
   data,
@@ -15,8 +14,7 @@ export const DataTableConfigurations = ({
 }) => {
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
-  const columnNames = ["Configurations","Status"];
-
+  const columnNames = ["Configurations", "Status"];
 
   // *** generate columns array of object based on columnNames array above
 
@@ -39,12 +37,12 @@ export const DataTableConfigurations = ({
 
   const openConfig = (config, checkout) => {
     const selectedConfigData = findSelectedConfig(config.col3);
-    if(checkout){
+    if (checkout) {
       mpApi
-      .postCheckoutMonitoringPlanConfiguration(config.col3, user.firstName)
-      .then((res) => {
-        console.log(res, "data");
-      });
+        .postCheckoutMonitoringPlanConfiguration(config.col3, user.firstName)
+        .then((res) => {
+          console.log(res, "data");
+        });
     }
     setSelectedConfig([data, selectedConfigData, checkout]);
   };
@@ -117,12 +115,11 @@ export const DataTableConfigurations = ({
         columnNames={columnNames}
         data={records}
         dataLoaded={dataLoaded}
-        // selectedRowHandler={selectedRowHandler}
         tableStyling={"padding-left-4 padding-bottom-3"}
         defaultSort={"col2"}
         className={className}
         openHandler={openConfig}
-        actionsBTN = 'Open'
+        actionsBtn="Open"
         user={user}
       />
     </div>
@@ -131,7 +128,6 @@ export const DataTableConfigurations = ({
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.apiCallsInProgress.monitoringPlans,
     monitoringPlans: state.monitoringPlans,
   };
 };
@@ -146,3 +142,5 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(DataTableConfigurations);
+export { mapDispatchToProps };
+export { mapStateToProps };

@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
-import { Button } from "@trussworks/react-uswds";
 import Modal from "../../Modal/Modal";
 import MethodModal from "../../MethodModal/MethodModal";
 import DataTableRender from "../../DataTableRender/DataTableRender";
@@ -22,7 +21,6 @@ export const DataTableMethod = ({
   settingInactiveCheckBox,
 }) => {
   const [methods, setMethods] = useState([]);
-  console.log(locationSelectValue, "locationselectvalue");
   const [matsMethods, setMatsMethods] = useState([]);
   const [show, setShow] = useState(false);
   const [selectedMonitoringMethod, setSelectedMonitoringMethod] = useState(
@@ -52,74 +50,13 @@ export const DataTableMethod = ({
     "Begin Date and Time",
     "End Date and Time",
   ];
-  // *** generate columns array of object based on columnNames array above
-  const columns = [];
 
-  columnNames.forEach((name, index) => {
-    columns.push({
-      name,
-      selector: `col${index + 1}`,
-      sortable: true,
-    });
-  });
-  columns.push({
-    name: "Actions",
-    button: true,
-    width: "25%",
-    cell: (row) => {
-      // *** normalize the row object to be in the format expected by DynamicTabs
-      // const normalizedRow = normalizeRowObjectFormat(row, columnNames);
-      return (
-        <div>
-          {!(user && checkout) ? (
-            <Button
-              type="button"
-              unstyled="true"
-              epa-testid="btnOpenMethod"
-              className="cursor-pointer open-modal-button"
-              id="btnOpenMethod"
-              onClick={() => openMonitoringMethodsModal(row.col1, row.col2)}
-              aria-label={`open method ${row.col1} `}
-              onKeyPress={(event) => {
-                if (event.key === "Enter") {
-                  openMonitoringMethodsModal(row.col1, row.col2);
-                }
-              }}
-            >
-              View
-            </Button>
-          ) : (
-            <Button
-              type="button"
-              unstyled="true"
-              epa-testid="btnOpenMethod"
-              className="cursor-pointer margin-left-2 open-modal-button"
-              onClick={() => openMonitoringMethodsModal(row.col1, row.col2)}
-              aria-label={`edit method ${row.col1} `}
-              onKeyPress={(event) => {
-                if (event.key === "Enter") {
-                  openMonitoringMethodsModal(row.col1, row.col2);
-                }
-              }}
-            >
-              {"View / Edit"}
-            </Button>
-          )}
-        </div>
-      );
-    },
-  });
-
-  const openMonitoringMethodsModal = (row,bool) => {
-    console.log('openMonitoringMethodsModal',row)
+  // cant unit test properly
+  const openMonitoringMethodsModal = (row, bool) => {
     if (methods.length > 0) {
-      const monMethod = methods.filter(
-        (element) =>
-          element.id === row.col7
-      )[0];
-      console.log('monMethod',monMethod)
+      const monMethod = methods.filter((element) => element.id === row.col7)[0];
       setSelectedMonitoringMethod(monMethod);
-      openModal(true);
+      setShow(true);
     }
   };
 
@@ -142,7 +79,6 @@ export const DataTableMethod = ({
         settingInactiveCheckBox(true, true);
         return fs.getMonitoringPlansMethodsTableRecords(methods);
       }
-
       // resets checkbox
       settingInactiveCheckBox(inactive[0], false);
       return fs.getMonitoringPlansMethodsTableRecords(
@@ -150,7 +86,6 @@ export const DataTableMethod = ({
       );
     }
     return [];
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [methods, inactive]);
 
@@ -165,10 +100,6 @@ export const DataTableMethod = ({
   }, [matsMethods.length, matsTableHandler]);
 
   const closeModalHandler = () => setShow(false);
-
-  const openModal = (value) => {
-    setShow(value);
-  };
 
   const saveMethods = () => {
     const payload = {
@@ -190,19 +121,28 @@ export const DataTableMethod = ({
       .saveMonitoringMethods(userInput)
       .then((result) => {
         console.log(result);
-        openModal(false);
+        // openModal(false);
+        setShow(false);
       })
       .catch((error) => {
         console.log(error);
-        openModal(false);
+        // openModal(false);
+        setShow(false);
       });
   };
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
 
-      <DataTableRender openHandler={openMonitoringMethodsModal}
-      columnNames={columnNames} data={data} dataLoaded={dataLoaded} actionsBTN={'View'} checkout={checkout} user ={user}/>
+      <DataTableRender
+        openHandler={openMonitoringMethodsModal}
+        columnNames={columnNames}
+        data={data}
+        dataLoaded={dataLoaded}
+        actionsBtn={"View"}
+        checkout={checkout}
+        user={user}
+      />
       {show ? (
         <Modal
           show={show}

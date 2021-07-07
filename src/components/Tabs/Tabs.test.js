@@ -60,7 +60,8 @@ describe("testing a reusable Tabs component", () => {
     expect(tab3Content).not.toBeUndefined();
 
     const nodeList = container.querySelector("#closeXBtnTab");
-    fireEvent.keyDown(nodeList, {
+    nodeList.focus();
+    fireEvent.keyPress(nodeList, {
       key: "Enter",
       code: "Enter",
       keyCode: 13,
@@ -71,6 +72,7 @@ describe("testing a reusable Tabs component", () => {
     const firstTab = container.querySelector(".initial-tab-button");
     fireEvent.click(firstTab);
     // goes to last tab
+    firstTab.focus();
     fireEvent.keyPress(btns[3], {
       key: "Enter",
       code: "Enter",
@@ -81,6 +83,7 @@ describe("testing a reusable Tabs component", () => {
     const fothtab = container.querySelector("#closeXBtnTab");
     // clicks on the x button in last tab,
     fireEvent.click(fothtab);
+    fothtab.focus();
     fireEvent.keyPress(fothtab, {
       key: "Enter",
       code: "Enter",
