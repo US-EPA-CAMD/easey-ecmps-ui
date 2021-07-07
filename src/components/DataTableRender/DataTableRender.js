@@ -42,7 +42,6 @@ const DataTableRender = ({
     setSearchText("");
   }, [dataLoaded]);
   const columns = [];
-  console.log('data',data)
   columnNames.forEach((name, index) => {
     switch (name) {
       case "ORIS":

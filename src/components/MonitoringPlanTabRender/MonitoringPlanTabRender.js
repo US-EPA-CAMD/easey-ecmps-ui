@@ -97,7 +97,7 @@ export const MonitoringPlanTabRender = ({
       [
         [
           <DataTableSystems
-            locationSelect={parseInt(locationSelect[1])}
+          locationSelectValue={parseInt(locationSelect[1])}
             inactive={inactive}
             settingInactiveCheckBox={settingInactiveCheckBox}
           />,
@@ -136,7 +136,7 @@ export const MonitoringPlanTabRender = ({
     [
       [
         <DataTableSystems
-          locationSelect={locationSelect[1]}
+        locationSelectValue={locationSelect[1]}
           inactive={inactive}
           settingInactiveCheckBox={settingInactiveCheckBox}
         />,

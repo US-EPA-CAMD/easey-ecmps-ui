@@ -5,7 +5,6 @@ import { loadMonitoringPlansArray } from "../../../store/actions/monitoringPlans
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import DataTableRender from "../../DataTableRender/DataTableRender";
 export const DataTableConfigurations = ({
-  loading,
   loadMonitoringPlansData,
   monitoringPlans,
   data,
@@ -13,6 +12,8 @@ export const DataTableConfigurations = ({
   selectedRowHandler,
   className,
 }) => {
+
+  console.log('this is configuration',data)
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = ["Configurations","Status"];
@@ -61,6 +62,7 @@ export const DataTableConfigurations = ({
     let flagValue = flag.current;
     if (monitoringPlans.length < 1) {
       loadMonitoringPlansData(data.col1);
+      console.log('loaded',monitoringPlans)
       setDataLoaded(true);
     } else {
       for (const x of monitoringPlans) {
@@ -74,6 +76,7 @@ export const DataTableConfigurations = ({
       if (flagValue === false) {
         loadMonitoringPlansData(data.col1);
         setDataLoaded(true);
+        console.log('loaded',monitoringPlans)
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -98,6 +101,7 @@ export const DataTableConfigurations = ({
 
   const records = useMemo(() => {
     if (monitoringPlans.length >= 1) {
+      console.log('monitoringPlans',monitoringPlans)
       let index = 0;
       for (const x of monitoringPlans) {
         if (x[0] === data.col1) {
@@ -131,7 +135,6 @@ export const DataTableConfigurations = ({
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.apiCallsInProgress.monitoringPlans,
     monitoringPlans: state.monitoringPlans,
   };
 };
