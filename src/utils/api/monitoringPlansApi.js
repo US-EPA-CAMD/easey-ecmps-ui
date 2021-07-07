@@ -51,7 +51,7 @@ export const getMonitoringSystems = async (locationId) => {
 export const getMonitoringSystemsFuelFlows = async (locationId, systemId) => {
   return axios
     .get(
-      `${config.services.monitorPlans.uri}/locations/${locationId}/systems/${systemId}/system-fuel-flows`
+      `${config.services.monitorPlans.uri}/locations/${locationId}/systems/${systemId}/fuel-flows`
     )
     .then(handleResponse)
     .catch(handleError);
