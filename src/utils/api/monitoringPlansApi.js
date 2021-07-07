@@ -35,7 +35,7 @@ export const getMonitoringMethods = async (locationId) => {
 export const getMonitoringMatsMethods = async (locationId) => {
   return axios
     .get(
-      `${config.services.monitorPlans.uri}/locations/${locationId}/supplemental-methods`
+      `${config.services.monitorPlans.uri}/locations/${locationId}/mats-methods`
     )
     .then(handleResponse)
     .catch(handleError);
@@ -51,7 +51,7 @@ export const getMonitoringSystems = async (locationId) => {
 export const getMonitoringSystemsFuelFlows = async (locationId, systemId) => {
   return axios
     .get(
-      `${config.services.monitorPlans.uri}/locations/${locationId}/systems/${systemId}/system-fuel-flows`
+      `${config.services.monitorPlans.uri}/locations/${locationId}/systems/${systemId}/fuel-flows`
     )
     .then(handleResponse)
     .catch(handleError);
@@ -70,7 +70,7 @@ export const postCheckoutMonitoringPlanConfiguration = async (id, user) => {
   const userName = { username: user };
   return axios
     .post(
-      `${config.services.monitorPlans.uri}/workspace/plans/${id}/check-out`,
+      `${config.services.monitorPlans.uri}/workspace/plans/${id}/check-outs`,
       userName
     )
     .then((response) => response.data)
@@ -79,7 +79,7 @@ export const postCheckoutMonitoringPlanConfiguration = async (id, user) => {
 
 export const putLockTimerUpdateConfiguration = async (id) => {
   return axios
-    .put(`${config.services.monitorPlans.uri}/workspace/plans/${id}/check-out`)
+    .put(`${config.services.monitorPlans.uri}/workspace/plans/${id}/check-outs`)
     .then(handleResponse)
     .catch(handleError);
 };
@@ -97,7 +97,7 @@ export const saveMonitoringMethods = async (payload) => {
 export async function deleteCheckInMonitoringPlanConfiguration(id) {
   return axios
     .delete(
-      `${config.services.monitorPlans.uri}/workspace/plans/${id}/check-in`
+      `${config.services.monitorPlans.uri}/workspace/plans/${id}/check-outs`
     )
     .then((response) => response.data)
     .catch(handleError);
