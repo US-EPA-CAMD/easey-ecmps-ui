@@ -72,7 +72,7 @@ export const DataTableMats = ({
         columnNames={columnNames}
         data={data}
         dataLoaded={dataLoaded}
-        // actionsBTN={"View"}
+        // actionsBtn={"View"}
         checkout={checkout}
         user={user}
       />

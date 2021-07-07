@@ -1,62 +1,70 @@
 import React from "react";
-import { render } from "@testing-library/react";
-import { DataTableConfigurations } from "./DataTableConfigurations";
+import { render, waitForElement } from "@testing-library/react";
+import {
+  DataTableConfigurations,
+  mapDispatchToProps,
+  mapStateToProps,
+} from "./DataTableConfigurations";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 const axios = require("axios");
 jest.mock("axios");
 //testing redux connected component to mimic props passed as argument
 const data = [
-  {
-    id: "MDC-7C15B3D1B20542C3B54DD57F03A516E5",
-    name: "110",
-    locations: [
-      {
-        id: "65",
-        name: "110",
-        type: "Unit",
-        active: false,
-        retireDate: null,
-        links: [
-          {
-            rel: "self",
-            href:
-              "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/65",
-          },
-          {
-            rel: "methods",
-            href:
-              "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/65/methods",
-          },
-          {
-            rel: "systems",
-            href:
-              "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/65/systems",
-          },
-          {
-            rel: "spans",
-            href:
-              "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/65/spans",
-          },
-        ],
-      },
-    ],
-    endReportPeriodId: "24",
-    active: false,
-    links: [
-      {
-        rel: "self",
-        href:
-          "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-plans/MDC-7C15B3D1B20542C3B54DD57F03A516E5",
-      },
-    ],
-  },
+  "5",
+  [
+    {
+      id: "MDC-7C15B3D1B20542C3B54DD57F03A516E5",
+      name: "110",
+      locations: [
+        {
+          id: "65",
+          name: "110",
+          type: "Unit",
+          active: false,
+          retireDate: null,
+          links: [
+            {
+              rel: "self",
+              href:
+                "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/65",
+            },
+            {
+              rel: "methods",
+              href:
+                "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/65/methods",
+            },
+            {
+              rel: "systems",
+              href:
+                "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/65/systems",
+            },
+            {
+              rel: "spans",
+              href:
+                "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/65/spans",
+            },
+          ],
+        },
+      ],
+      endReportPeriodId: "24",
+      active: false,
+      links: [
+        {
+          rel: "self",
+          href:
+            "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-plans/MDC-7C15B3D1B20542C3B54DD57F03A516E5",
+        },
+      ],
+    },
+  ],
 ];
-
 const dataProp = {
-  col1: "110",
-  col2: "Inactive",
-  col3: "MDC-7C15B3D1B20542C3B54DD57F03A516E5",
-};
+  "col1": "5",
+  "col2": "Chickasaw",
+  "col3": "AL",
+  "disabled": false,
+  "expanded": false
+}
 function componentRenderer() {
   const props = {
     user: { firstName: "test" },
@@ -64,6 +72,7 @@ function componentRenderer() {
     data: dataProp,
     selectedRowHandler: jest.fn(),
     className: "test",
+    loadMonitoringPlansData: jest.fn(),
   };
   return render(<DataTableConfigurations {...props} />);
 }
@@ -91,4 +100,19 @@ test("tests a configuration with only active systems", async () => {
   expect(title.data).toEqual(data);
   let { container } = await waitForElement(() => componentRenderer());
   expect(container).toBeDefined();
+});
+
+test("mapDispatchToProps calls the appropriate action", async () => {
+  // mock the 'dispatch' object
+  const dispatch = jest.fn();
+  const actionProps = mapDispatchToProps(dispatch);
+  const state = jest.fn();
+  const stateProps = mapStateToProps(state);
+
+  const formData = [];
+  // verify the appropriate action was called
+  actionProps.loadMonitoringPlansData();
+  expect(actions.loadMonitoringPlansData).toHaveBeenCalled();
+
+  expect(state.monitoringPlans).toBeDefined();
 });

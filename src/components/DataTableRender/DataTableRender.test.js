@@ -64,7 +64,7 @@ describe("renders datatable with all values ", () => {
         headerStyling="headerStyling"
         tableStyling="tableStyling"
         componentStyling="componentStyling"
-        actionsBTN={"Open"}
+        actionsBtn={"Open"}
         openHandler={jest.fn()}
       />
     );
@@ -112,7 +112,7 @@ describe("renders datatable with all values ", () => {
         headerStyling="headerStyling"
         tableStyling="tableStyling"
         componentStyling="componentStyling"
-        actionsBTN={"View"}
+        actionsBtn={"View"}
         openHandler={jest.fn()}
       />
     );
@@ -140,7 +140,7 @@ describe("renders datatable with all values ", () => {
         headerStyling="headerStyling"
         tableStyling="tableStyling"
         componentStyling="componentStyling"
-        actionsBTN={"View"}
+        actionsBtn={"View"}
         openHandler={jest.fn()}
       />
     );
@@ -167,7 +167,7 @@ describe("renders datatable with all values ", () => {
         headerStyling="headerStyling"
         tableStyling="tableStyling"
         componentStyling="componentStyling"
-        actionsBTN={"Open"}
+        actionsBtn={"Open"}
         openHandler={jest.fn()}
       />
     );
@@ -198,7 +198,7 @@ describe("renders datatable with all values ", () => {
         headerStyling="headerStyling"
         tableStyling="tableStyling"
         componentStyling="componentStyling"
-        actionsBTN={"View"}
+        actionsBtn={"View"}
         openHandler={jest.fn()}
       />
     );

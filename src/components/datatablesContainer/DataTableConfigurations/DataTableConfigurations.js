@@ -12,12 +12,9 @@ export const DataTableConfigurations = ({
   selectedRowHandler,
   className,
 }) => {
-
-  console.log('this is configuration',data)
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
-  const columnNames = ["Configurations","Status"];
-
+  const columnNames = ["Configurations", "Status"];
 
   // *** generate columns array of object based on columnNames array above
 
@@ -40,12 +37,12 @@ export const DataTableConfigurations = ({
 
   const openConfig = (config, checkout) => {
     const selectedConfigData = findSelectedConfig(config.col3);
-    if(checkout){
+    if (checkout) {
       mpApi
-      .postCheckoutMonitoringPlanConfiguration(config.col3, user.firstName)
-      .then((res) => {
-        console.log(res, "data");
-      });
+        .postCheckoutMonitoringPlanConfiguration(config.col3, user.firstName)
+        .then((res) => {
+          console.log(res, "data");
+        });
     }
     setSelectedConfig([data, selectedConfigData, checkout]);
   };
@@ -62,7 +59,6 @@ export const DataTableConfigurations = ({
     let flagValue = flag.current;
     if (monitoringPlans.length < 1) {
       loadMonitoringPlansData(data.col1);
-      console.log('loaded',monitoringPlans)
       setDataLoaded(true);
     } else {
       for (const x of monitoringPlans) {
@@ -76,7 +72,6 @@ export const DataTableConfigurations = ({
       if (flagValue === false) {
         loadMonitoringPlansData(data.col1);
         setDataLoaded(true);
-        console.log('loaded',monitoringPlans)
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -101,7 +96,6 @@ export const DataTableConfigurations = ({
 
   const records = useMemo(() => {
     if (monitoringPlans.length >= 1) {
-      console.log('monitoringPlans',monitoringPlans)
       let index = 0;
       for (const x of monitoringPlans) {
         if (x[0] === data.col1) {
@@ -121,12 +115,11 @@ export const DataTableConfigurations = ({
         columnNames={columnNames}
         data={records}
         dataLoaded={dataLoaded}
-        // selectedRowHandler={selectedRowHandler}
         tableStyling={"padding-left-4 padding-bottom-3"}
         defaultSort={"col2"}
         className={className}
         openHandler={openConfig}
-        actionsBTN = 'Open'
+        actionsBtn="Open"
         user={user}
       />
     </div>
@@ -149,3 +142,5 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(DataTableConfigurations);
+export { mapDispatchToProps };
+export { mapStateToProps };

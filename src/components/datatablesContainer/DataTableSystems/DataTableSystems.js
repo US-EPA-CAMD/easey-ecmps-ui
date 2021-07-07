@@ -123,7 +123,7 @@ export const DataTableSystems = ({
           data={data}
           columnNames={columnNames}
           openHandler={selectedRowHandler}
-          actionsBTN="View"
+          actionsBtn="View"
         />
       </div>
       {show ? (

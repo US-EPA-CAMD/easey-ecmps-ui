@@ -17,15 +17,14 @@ import config from "../../config";
 const DataTableRender = ({
   sectionTitle,
   tableTitle,
-  button,
+  addBtn,
   columnNames,
   data,
   user,
   dataLoaded,
   openHandler,
-  selectedRowHandler,
   checkout,
-  actionsBTN,
+  actionsBtn,
   // for data table
   pagination,
   filter,
@@ -62,7 +61,7 @@ const DataTableRender = ({
         break;
     }
   });
-  if (actionsBTN) {
+  if (actionsBtn) {
     columns.push({
       name: "Actions",
       button: true,
@@ -78,7 +77,7 @@ const DataTableRender = ({
               // needs 2 buttons, open and open and checkout
               // user is at a section table, it only says view/edit if checked out
               // or just view if not checked out
-              actionsBTN === "Open" ? (
+              actionsBtn === "Open" ? (
                 <div>
                   <Button
                     type="button"
@@ -130,7 +129,7 @@ const DataTableRender = ({
                 onClick={() => openHandler(normalizedRow, false)}
                 aria-label={`edit method ${row.col1} `}
               >
-                {actionsBTN === "Open" ? "Open" : "View"}
+                {actionsBtn === "Open" ? "Open" : "View"}
               </Button>
             )}
           </div>
@@ -172,7 +171,7 @@ const DataTableRender = ({
     <div className={`${componentStyling}`}>
       <div className={`${headerStyling}`}>
         <h2 className="padding-0 page-subheader">
-          {button && data.length ? (
+          {addBtn && data.length ? (
             <div className="padding-y-1">
               <Button
                 type="button"
