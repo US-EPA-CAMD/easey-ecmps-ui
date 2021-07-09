@@ -6,12 +6,17 @@ import Details from "../../Details/Details";
 import DataTableSystemsComponents from "../DataTableSystemsComponents/DataTableSystemsComponents";
 import DataTableRender from "../../DataTableRender/DataTableRender";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-
+import ModalDetails from "../../ModalDetails/ModalDetails";
 import {
   getActiveData,
   getInactiveData,
 } from "../../../additional-functions/filter-data";
 
+import { types, fuels, designations } from "../../Details/SystemDescriptions";
+import {
+  findValue,
+  adjustDate,
+} from "../../../additional-functions/find-values-in-array";
 
 export const DataTableSystems = ({
   locationSelectValue,
@@ -28,7 +33,7 @@ export const DataTableSystems = ({
     mpApi.getMonitoringSystems(locationSelectValue).then((res) => {
       setDataLoaded(true);
       setMonitoringSystems(res.data);
-      console.log('systems',res.data)
+      console.log("systems", res.data);
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -45,16 +50,65 @@ export const DataTableSystems = ({
     { value: "05/04/2009 0" },
   ]);
   const [selected, setSelected] = useState([]);
+  const [selectedModalData, setSelectedModalData] = useState(null);
 
-  // const openModal = (value, selection) => {
-  //   setSelected(selection);
-  //   setShow(value);
-  // };
+  // object property,Label Name, value
+  const modalViewData = (selected, label, time) => {
+    const arr = [];
+    const codeList = {
+      systemTypeCode: types,
+      fuelCode: fuels,
+      systemDesignationCode: designations,
+    };
+    for (let x in selected) {
+      for (let y in label) {
+        if (y === x && label[y][1] === "dropdown") {
+          const labels = findValue(codeList[x], selected[x], "description");
+          arr.push([y, label[y][0], labels, "dropdown"]);
+        } else if (y === x && label[y][1] === "input") {
+          arr.push([y, label[y][0], selected[x], "input"]);
+        }
+      }
+    }
+    for (let x in selected) {
+      for (let y in time) {
+        if (y === x) {
+          if (y === "endDate" || y === "beginDate") {
+            const formmattedDate = adjustDate("mm/dd/yyyy", selected[y]);
+            arr.push([y, time[y][0], formmattedDate, "date"]);
+          }
+          if (y === "endHour" || y === "beginHour") {
+            arr.push([y, time[y][0], selected[y], "dropdown"]);
+          }
+        }
+      }
+    }
+    return arr;
+  };
 
   // *** row handler onclick event listener
-  const selectedRowHandler = (selection) => {
-  //   openModal(true, selection.cells);
-    setSelected(selection.cells);
+  const selectedRowHandler = (row, bool) => {
+    const selectSystem = monitoringSystems.filter(
+      (element) => element.id === row.col7
+    )[0];
+    setSelected(row.cells);
+    setSelectedModalData(
+      modalViewData(
+        selectSystem,
+        {
+          systemIdentifier: ["System ID", "input"],
+          systemTypeCode: ["System Type", "dropdown"],
+          fuelCode: ["System Fuel", "dropdown"],
+          systemDesignationCode: ["System Designation", "dropdown"],
+        },
+        {
+          beginDate: ["Start Date", "date"],
+          beginHour: ["Start Time", "dropdown"],
+          endDate: ["End Date", "date"],
+          endHour: ["End Time", "dropdown"],
+        }
+      )
+    );
     setShow(true);
   };
 
@@ -137,6 +191,14 @@ export const DataTableSystems = ({
             <div>
               {secondLevel ? (
                 ""
+              ) : !(user && checkout) ? (
+                <ModalDetails
+                  modalData={modalData}
+                  data={selectedModalData}
+                  cols={2}
+                  title={"Component: Monitoring Methods"}
+                  // viewOnly={!(user && checkout)}
+                />
               ) : (
                 <Details viewOnly={viewOnly} modalData={modalData} />
               )}

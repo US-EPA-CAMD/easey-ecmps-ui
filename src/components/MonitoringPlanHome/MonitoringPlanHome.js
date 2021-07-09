@@ -5,7 +5,8 @@ import { Button } from "@trussworks/react-uswds";
 import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
 import { connect } from "react-redux";
 import SelectedFacilityTab from "../MonitoringPlanTab/MonitoringPlanTab";
-const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
+
+export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
   const handleTabState = () => {
     const tabArr = [
       {
@@ -49,7 +50,7 @@ const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
       </div>
 
       <div>
-        <DynamicTabs tabsProps={handleTabState} />
+        <DynamicTabs tabsProps={() => handleTabState()} />
       </div>
     </div>
   );
@@ -61,3 +62,4 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, null)(MonitoringPlanHome);
+export { mapStateToProps };
