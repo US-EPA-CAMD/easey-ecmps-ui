@@ -30,9 +30,7 @@ export const Modal = ({
     const { handleKeyPress } = focusTrap(".modal-content", close);
 
     // *** FOCUS TRAP
-    document.addEventListener("keydown", (event) => {
-      handleKeyPress(event);
-    });
+    document.addEventListener("keydown", handleKeyPress);
 
     // *** 508 remediation; scroll to top on modal open
     setTimeout(() => {
