@@ -10,19 +10,17 @@
  *              none
  *****************************************************/
 export const ensure508 = () => {
-  setTimeout(() => {
-    // *** add aria label to all data tables
-    addAriaLabelToDatatable();
+  // *** add aria label to all data tables
+  addAriaLabelToDatatable();
 
-    // *** add aria sorted-by to data tables
-    addInitialAriaSort();
+  // *** add aria sorted-by to data tables
+  addInitialAriaSort();
 
-    // *** change auto-generated attribute value
-    changeGridCellAttributeValue();
+  // *** change auto-generated attribute value
+  changeGridCellAttributeValue();
 
-    // *** assign aria sort handlers
-    assignAriaSortHandlersToDatatable();
-  });
+  // *** assign aria sort handlers
+  assignAriaSortHandlersToDatatable();
 };
 
 /*****************************************************
@@ -72,7 +70,11 @@ export const changeGridCellAttributeValue = () => {
  *****************************************************/
 export const addAriaLabelToDatatable = () => {
   document.querySelectorAll(`.rdt_Table`).forEach((element) => {
-    element.setAttribute("aria-label", "Data Table");
+    const defaultLabel = document.querySelector(".data-table-title")
+      ? document.querySelector(".data-table-title").textContent
+      : "Data Table";
+
+    element.setAttribute("aria-label", defaultLabel);
   });
 };
 

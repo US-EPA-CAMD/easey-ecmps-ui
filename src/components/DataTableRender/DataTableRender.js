@@ -44,8 +44,6 @@ const DataTableRender = ({
   const columns = [];
 
   useEffect(() => {
-    setSearchText("");
-
     if (dataLoaded) {
       ensure508();
     }
@@ -233,6 +231,7 @@ const DataTableRender = ({
       <div aria-live="polite" className={`${tableStyling}`}>
         {dataLoaded && data.length >= 0 ? (
           <DataTable
+            title="mi bomboclot"
             keyField="col1"
             className={`data-display-table react-transition fade-in ${className}`}
             sortIcon={
