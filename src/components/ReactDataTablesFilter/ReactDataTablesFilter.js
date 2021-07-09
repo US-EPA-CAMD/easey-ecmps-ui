@@ -3,7 +3,9 @@ import React from "react";
 
 export const FilterComponent = ({ filterText, onSearch, title }) => (
   <div className="width-full">
-    <div className="float-left clearfix font-heading-xl text-bold">{title}</div>
+    <div className="float-left clearfix font-heading-xl text-bold data-table-title">
+      {title}
+    </div>
     <table className="float-right clearfix" role="presentation">
       <tbody>
         <tr>
@@ -11,21 +13,26 @@ export const FilterComponent = ({ filterText, onSearch, title }) => (
         </tr>
         <tr>
           <td>
-            {" "}
             <TextInput
               id="txtSearchData"
+              name="txtSearchData"
               type="text"
               placeholder="Keyword"
               aria-label="Search Input"
               value={filterText}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  onSearch();
+                }
+              }}
             />
           </td>
           <td>
             <Button
               type="button"
               onClick={onSearch}
-              id='searchDataTableBTN'
-              epa-testid='searchDataTableBTN'
+              id="searchDataTableBTN"
+              epa-testid="searchDataTableBTN"
               className="position-relative top-05 left-05"
             >
               Filter
