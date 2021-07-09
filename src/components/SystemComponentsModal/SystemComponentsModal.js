@@ -74,7 +74,7 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalData]);
   return (
-    <div className="systemsCompTable">
+    <div className="systemsCompTable react-transition fade-in">
       <div className="grid-container margin-bottom-2">
         <div className="display-inline-flex padding-y-3">
           <Button
@@ -348,8 +348,7 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
               <div className="grid-col ">
                 <FormGroup className="margin-top-0">
                   <Label className="text-bold" htmlFor="startDate">
-                    <div>Start Date and Time</div>
-                    <div>mm/dd/yyyy</div>
+                    Start Date
                   </Label>
                   {viewOnly ? (
                     <div tabIndex="0" id="StartDateAndTime">
@@ -370,8 +369,7 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
               <div className="grid-col">
                 <FormGroup className="margin-top-0">
                   <Label className="text-bold" htmlFor="startHour">
-                    <div />
-                    <div>hh</div>
+                    Start Time
                   </Label>
                   {viewOnly ? (
                     <div tabIndex="0" id="startHour">
@@ -395,8 +393,7 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
               <div className="grid-col ">
                 <FormGroup className="margin-top-0">
                   <Label className="text-bold" htmlFor="endDate">
-                    <div>End Date and Time</div>
-                    <div>mm/dd/yyyy</div>
+                    End Date
                   </Label>
                   {viewOnly ? (
                     <div tabIndex="0" id="EndDateAndTime">
@@ -417,8 +414,7 @@ const SystemComponentsModal = ({ modalData, viewOnly, backBTN }) => {
               <div className="grid-col">
                 <FormGroup className="margin-top-0">
                   <Label className="text-bold" htmlFor="endHour">
-                    <div />
-                    <div>hh</div>
+                    End Time
                   </Label>
                   {viewOnly ? (
                     <div tabIndex="0" id="endHour">
