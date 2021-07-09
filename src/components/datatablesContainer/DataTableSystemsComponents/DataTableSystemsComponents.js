@@ -122,7 +122,7 @@ export const DataTableSystemsComponents = ({
   }, [monitoringSystemsFuelFlows]);
 
   return (
-    <div className="methodTable">
+    <div className="methodTable react-transition fade-in">
       {(() => {
         if (!secondLevel) {
           return (
@@ -134,7 +134,7 @@ export const DataTableSystemsComponents = ({
                 tableTitle="System Components"
                 componentStyling="systemsCompTable"
                 dataLoaded={dataLoaded}
-                actionsBtn= {"View"}
+                actionsBtn={"View"}
               />
               <DataTableRender
                 columnNames={fuelFlowsColumnNames}
@@ -144,13 +144,12 @@ export const DataTableSystemsComponents = ({
                 button
                 componentStyling="systemsCompTable"
                 dataLoaded={dataFuelLoaded}
-                
-                actionsBtn= {"View"}
+                actionsBtn={"View"}
               />
             </div>
           );
         } else {
-          if (selectedComponent.sysFuelUomCode !== undefined) {
+          if (selectedComponent["sysFuelUomCode"] !== undefined) {
             return (
               <SystemFuelFlowsModal
                 backBTN={setSecondLevel}

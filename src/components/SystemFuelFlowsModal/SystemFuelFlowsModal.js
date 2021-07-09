@@ -60,8 +60,9 @@ const SystemFuelFlowsModal = ({ modalData, viewOnly, backBTN }) => {
       setEndHour(modalData.endHour);
     }
   }, [modalData, viewOnly]);
+
   return (
-    <div className="systemsCompTable">
+    <div className="systemsCompTable react-transition fade-in">
       <div className="grid-container margin-bottom-2">
         <div className="display-inline-flex padding-top-3 padding-bottom-3">
           <Button
@@ -245,7 +246,7 @@ const SystemFuelFlowsModal = ({ modalData, viewOnly, backBTN }) => {
               <div className="grid-col ">
                 <FormGroup className="margin-top-0">
                   <Label className="text-bold" htmlFor="endDate">
-                    End Date and Time
+                    End Date
                   </Label>
                   {viewOnly ? (
                     <div tabIndex="0" id="endDate">
