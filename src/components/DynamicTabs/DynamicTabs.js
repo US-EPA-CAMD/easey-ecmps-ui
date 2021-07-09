@@ -12,6 +12,7 @@ import "./DynamicTabs.scss";
 
 export const DynamicTabs = ({
   tabsProps,
+  user,
   removeFacility,
   addFacility,
   setActive,

@@ -52,11 +52,10 @@ describe("renders datatable with all values ", () => {
       <DataTableRender
         dataLoaded={true}
         sectionTitle="tableTitle"
-        button={true}
+        addBtn={true}
         columnNames={columnNames}
         data={data}
         user={{ username: "test" }}
-        selectedRowHandler={jest.fn()}
         pagination={true}
         filter={true}
         expandableRowComp={<button>{"click me"}</button>}
@@ -99,11 +98,9 @@ describe("renders datatable with all values ", () => {
     const { container, queryByPlaceholderText } = render(
       <DataTableRender
         dataLoaded={true}
-        button={true}
         columnNames={columnNames}
         data={data}
         user={{ username: "test" }}
-        selectedRowHandler={jest.fn()}
         pagination={true}
         filter={true}
         defaultSort={"col2"}
@@ -128,7 +125,6 @@ describe("renders datatable with all values ", () => {
     const { container, queryByPlaceholderText } = render(
       <DataTableRender
         dataLoaded={true}
-        button={true}
         columnNames={columnNames}
         data={data}
         selectedRowHandler={jest.fn()}
@@ -155,7 +151,7 @@ describe("renders datatable with all values ", () => {
     const { container, queryByPlaceholderText } = render(
       <DataTableRender
         dataLoaded={true}
-        button={true}
+        addBtn={true}
         columnNames={columnNames}
         data={data}
         selectedRowHandler={jest.fn()}
@@ -184,7 +180,7 @@ describe("renders datatable with all values ", () => {
     const { container, queryByPlaceholderText } = render(
       <DataTableRender
         dataLoaded={true}
-        button={true}
+        addBtn={true}
         columnNames={columnNames}
         data={data}
         selectedRowHandler={jest.fn()}

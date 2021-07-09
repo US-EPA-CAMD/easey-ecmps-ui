@@ -16,6 +16,7 @@ export function getMonitoringPlansSystemsTableRecords(data) {
       col4: el.fuelCode,
       col5: `${beginDate} ${beginHour}`,
       col6: `${endDate} ${endHour}`,
+      col7: el.id,
     });
   });
   return records;
