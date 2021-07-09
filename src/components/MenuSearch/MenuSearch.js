@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./MenuSearch.scss";
-import { Button, Form } from "@trussworks/react-uswds";
+import { Button, Form, TextInput } from "@trussworks/react-uswds";
 const MenuSearch = () => {
   const [searchState, setSearchState] = useState("");
 
@@ -20,12 +20,19 @@ const MenuSearch = () => {
     <div className="menuSearch">
       <div className="usa-search" role="search">
         <Form
+          onSubmit={() => {
+            void 0;
+          }}
           children={
             <div>
-              <label data-testid="label" className="usa-sr-only" htmlFor="search-field">
+              <label
+                data-testid="label"
+                className="usa-sr-only"
+                htmlFor="search-field"
+              >
                 Search
               </label>
-              <input
+              <TextInput
                 id="search-field"
                 name="input-search"
                 data-testid="input-search"
