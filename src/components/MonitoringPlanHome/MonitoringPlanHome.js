@@ -11,7 +11,7 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
     const tabArr = [
       {
         title: "Select Configurations",
-        component: <DataTable user={user} />,
+        component: <DataTable user={user} keyField="col1" />,
       },
     ];
 
