@@ -1,7 +1,9 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Button } from "@trussworks/react-uswds";
-import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
 import DataTable from "react-data-table-component";
+import config from "../../config";
+import { cleanUp508, ensure508 } from "../../additional-functions/ensure-508";
+import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
 import { FilterComponent } from "../ReactDataTablesFilter/ReactDataTablesFilter";
 import { Preloader } from "../Preloader/Preloader";
 
@@ -11,7 +13,6 @@ import {
   KeyboardArrowUpSharp,
 } from "@material-ui/icons";
 
-import config from "../../config";
 /*** scss ***/
 
 const DataTableRender = ({
@@ -23,7 +24,6 @@ const DataTableRender = ({
   user,
   dataLoaded,
   openHandler,
-  selectedRowHandler,
   checkout,
   actionsBTN,
   // for data table
@@ -38,11 +38,22 @@ const DataTableRender = ({
   className,
 }) => {
   const [searchText, setSearchText] = useState("");
+
   useEffect(() => {
     setSearchText("");
-  }, [dataLoaded]);
-  let columns = [];
 
+    if (dataLoaded) {
+      ensure508();
+    }
+  }, [dataLoaded]);
+
+  useEffect(() => {
+    return () => {
+      cleanUp508();
+    };
+  });
+
+  let columns = [];
 
   columnNames.forEach((name, index) => {
     switch (name) {
@@ -88,9 +99,8 @@ const DataTableRender = ({
                     epa-testid="btnOpenMethod"
                     className="cursor-pointer open-modal-button"
                     id="btnOpenMethod"
-                    // onClick={() => openConfig(row)}
                     onClick={() => openHandler(row, false)}
-                    // aria-label={`open method ${row.col1} `}
+                    aria-label={`open ${row.col1} `}
                     onKeyPress={(event) => {
                       if (event.key === "Enter") {
                         openHandler(row, false);
@@ -109,7 +119,7 @@ const DataTableRender = ({
                     id="btnOpenMethod"
                     // onClick={() => openConfig(row)}
                     onClick={() => openHandler(normalizedRow, true)}
-                    aria-label={`open method ${row.col1} `}
+                    aria-label={`open and checkout ${row.col1} `}
                     onKeyPress={(event) => {
                       if (event.key === "Enter") {
                         openHandler(normalizedRow, true);
@@ -120,23 +130,25 @@ const DataTableRender = ({
                   </Button>
                 </div>
               ) : (
-                // actionbtn = "view"
                 <Button
                   type="button"
                   unstyled="true"
                   epa-testid="btnOpenMethod"
                   className="cursor-pointer open-modal-button"
                   id="btnOpenMethod"
-                  // onClick={() => openConfig(row)}
                   onClick={() => openHandler(normalizedRow, false)}
-                  aria-label={`open method ${row.col1} `}
+                  aria-label={
+                    checkout
+                      ? `view and/or edit ${row.col1}`
+                      : `view ${row.col1}`
+                  }
                   onKeyPress={(event) => {
                     if (event.key === "Enter") {
                       openHandler(normalizedRow, false);
                     }
                   }}
                 >
-                  {checkout? "View / Edit" : "View"}
+                  {checkout ? "View / Edit" : "View"}
                 </Button>
               )
             ) : (
@@ -147,7 +159,11 @@ const DataTableRender = ({
                 epa-testid="btnOpenMethod"
                 className="cursor-pointer margin-left-2 open-modal-button"
                 onClick={() => openHandler(normalizedRow, false)}
-                aria-label={`edit method ${row.col1} `}
+                aria-label={
+                  actionsBTN === `Open`
+                    ? `Open ${row.col1}`
+                    : `View ${row.col1}`
+                }
                 onKeyPress={(event) => {
                   if (event.key === "Enter") {
                     openHandler(row.col1, row.col2);
@@ -214,6 +230,7 @@ const DataTableRender = ({
       <div aria-live="polite" className={`${tableStyling}`}>
         {dataLoaded && data.length >= 0 ? (
           <DataTable
+            keyField="col1"
             className={`data-display-table react-transition fade-in ${className}`}
             sortIcon={
               <ArrowDownwardSharp className="margin-left-2 text-primary" />
