@@ -186,8 +186,7 @@ const SystemFuelFlowsModal = ({ modalData, viewOnly, backBTN }) => {
               <div className="grid-col ">
                 <FormGroup className="margin-top-0">
                   <Label className="text-bold" htmlFor="startDate">
-                    <div>Start Date and Time</div>
-                    <div>mm/dd/yyyy</div>
+                    Start Date
                   </Label>
                   {viewOnly ? (
                     <div id="startDate" tabIndex="0">
@@ -218,7 +217,7 @@ const SystemFuelFlowsModal = ({ modalData, viewOnly, backBTN }) => {
               <div className="grid-col">
                 <FormGroup className="margin-top-0">
                   <Label className="text-bold" htmlFor="startHour">
-                    hh
+                    Start Time
                   </Label>
                   {viewOnly ? (
                     <div tabIndex="0" id="startHour">
@@ -246,8 +245,7 @@ const SystemFuelFlowsModal = ({ modalData, viewOnly, backBTN }) => {
               <div className="grid-col ">
                 <FormGroup className="margin-top-0">
                   <Label className="text-bold" htmlFor="endDate">
-                    <div>End Date and Time</div>
-                    <div>mm/dd/yyyy</div>
+                    End Date and Time
                   </Label>
                   {viewOnly ? (
                     <div tabIndex="0" id="endDate">
@@ -274,7 +272,7 @@ const SystemFuelFlowsModal = ({ modalData, viewOnly, backBTN }) => {
               <div className="grid-col">
                 <FormGroup className="margin-top-0">
                   <Label className="text-bold" htmlFor="endHour">
-                    hh
+                    End Time
                   </Label>
                   {viewOnly ? (
                     <div tabIndex="0" id="endHour">
