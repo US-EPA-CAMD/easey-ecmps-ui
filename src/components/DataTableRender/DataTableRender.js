@@ -1,11 +1,14 @@
+import config from "../../config";
+
 import React, { useState, useMemo, useEffect } from "react";
 import { Button } from "@trussworks/react-uswds";
 import DataTable from "react-data-table-component";
-import config from "../../config";
-import { cleanUp508, ensure508 } from "../../additional-functions/ensure-508";
-import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
+
 import { FilterComponent } from "../ReactDataTablesFilter/ReactDataTablesFilter";
 import { Preloader } from "../Preloader/Preloader";
+
+import { cleanUp508, ensure508 } from "../../additional-functions/ensure-508";
+import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
 
 import {
   ArrowDownwardSharp,
@@ -42,15 +45,17 @@ const DataTableRender = ({
 
   useEffect(() => {
     setSearchText("");
-  }, [dataLoaded]);
 
+    if (dataLoaded) {
+      ensure508();
+    }
+  }, [dataLoaded]);
 
   useEffect(() => {
     return () => {
       cleanUp508();
     };
   });
-
 
   columnNames.forEach((name, index) => {
     switch (name) {
@@ -115,7 +120,6 @@ const DataTableRender = ({
                     className="cursor-pointer open-modal-button"
                     id="btnOpenAndCheckout"
                     onClick={() => openHandler(normalizedRow, true)}
-                    aria-label={`open method ${row.col1} `}
                     aria-label={`open and checkout ${row.col1} `}
                     onKeyPress={(event) => {
                       if (event.key === "Enter") {
