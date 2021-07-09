@@ -15,7 +15,7 @@ export const DataTableSystemsComponents = ({
   viewOnly,
   setSecondLevel,
   secondLevel,
-  locationSelect,
+  locationSelectValue,
 }) => {
   const [monitoringSystemsFuelFlows, setMonitoringSystemsFuelFlows] = useState(
     ""
@@ -29,7 +29,7 @@ export const DataTableSystemsComponents = ({
     setMonitoringSystemsComponents,
   ] = useState("");
   useEffect(() => {
-    mpApi.getMonitoringSystems(locationSelect).then((res) => {
+    mpApi.getMonitoringSystems(locationSelectValue).then((res) => {
       for (let value of res.data) {
         if (value.systemIdentifier === systemID) {
           setSelected(value);
@@ -55,20 +55,8 @@ export const DataTableSystemsComponents = ({
         setFuelDataLoaded(true);
       });
   }, [selected]);
-  // *** column names for dataset will be passed to normalizeRowObjectFormat later to generate the row object
-  // *** in the format expected by the modal / tabs plugins
+
   const columnNames = ["Component ID", "Type Code", "Begin to End Date"];
-
-  // // *** generate columns array of object based on columnNames array above
-  // const columns = [];
-
-  // columnNames.forEach((name, index) => {
-  //   columns.push({
-  //     name,
-  //     selector: `col${index + 1}`,
-  //     sortable: true,
-  //   });
-  // });
 
   // // *** add column with action button
   // columns.push({
@@ -97,51 +85,17 @@ export const DataTableSystemsComponents = ({
   // *** in the format expected by the modal / tabs plugins)
   const fuelFlowsColumnNames = ["Fuel Code", "Type Code", "Begin to End Date"];
 
-  // // *** generate columns array of object based on columnNames array above
-  // const fuelFlowsColumns = [];
-
-  // fuelFlowsColumnNames.forEach((name, index) => {
-  //   fuelFlowsColumns.push({
-  //     name,
-  //     selector: `col${index + 1}`,
-  //     sortable: true,
-  //   });
-  // });
-
-  // // *** add column with action button
-  // fuelFlowsColumns.push({
-  //   name: "Actions",
-  //   button: true,
-  //   width: "15%",
-  //   cell: (row) => {
-  //     // *** normalize the row object to be in the format expected by DynamicTabs
-  //     const normalizedRow = normalizeRowObjectFormat(row, fuelFlowsColumnNames);
-
-  //     return (
-  //       <div
-  //         className="cursor-pointer"
-  //         tabIndex="0"
-  //         aria-label="Click to view fuel flow details"
-  //         onClick={() => selectedRowHandler(normalizedRow.cells)}
-  //       >
-  //         <CreateSharp className="margin-right-1" />
-  //         View
-  //       </div>
-  //     );
-  //   },
-  // });
-
   const [selectedComponent, setSelectedComponent] = useState("");
   const selectedRowHandler = (val) => {
     for (const x of monitoringSystemsComponents) {
-      if (x.componentIdentifier === val[0].value) {
+      if (x.componentIdentifier === val.col1) {
         setSelectedComponent(x);
         setSecondLevel(true);
       }
     }
 
     for (const x of monitoringSystemsFuelFlows) {
-      if (x.fuelCode === val[0].value) {
+      if (x.fuelCode === val.col1) {
         setSelectedComponent(x);
         setSecondLevel(true);
       }
@@ -176,19 +130,22 @@ export const DataTableSystemsComponents = ({
               <DataTableRender
                 columnNames={columnNames}
                 data={data}
-                selectedRowHandler={selectedRowHandler}
+                openHandler={selectedRowHandler}
                 tableTitle="System Components"
                 componentStyling="systemsCompTable"
                 dataLoaded={dataLoaded}
+                actionsBtn= {"View"}
               />
               <DataTableRender
                 columnNames={fuelFlowsColumnNames}
                 data={fuelFlowsData}
-                selectedRowHandler={selectedRowHandler}
+                openHandler={selectedRowHandler}
                 tableTitle="Fuel Flows"
                 button
                 componentStyling="systemsCompTable"
                 dataLoaded={dataFuelLoaded}
+                
+                actionsBtn= {"View"}
               />
             </div>
           );

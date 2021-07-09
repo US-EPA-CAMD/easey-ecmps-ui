@@ -18,14 +18,14 @@ import {
 const DataTableRender = ({
   sectionTitle,
   tableTitle,
-  button,
+  addBtn,
   columnNames,
   data,
   user,
   dataLoaded,
   openHandler,
   checkout,
-  actionsBTN,
+  actionsBtn,
   // for data table
   pagination,
   filter,
@@ -38,14 +38,12 @@ const DataTableRender = ({
   className,
 }) => {
   const [searchText, setSearchText] = useState("");
+  const columns = [];
 
   useEffect(() => {
     setSearchText("");
-
-    if (dataLoaded) {
-      ensure508();
-    }
   }, [dataLoaded]);
+
 
   useEffect(() => {
     return () => {
@@ -53,7 +51,6 @@ const DataTableRender = ({
     };
   });
 
-  let columns = [];
 
   columnNames.forEach((name, index) => {
     switch (name) {
@@ -75,7 +72,7 @@ const DataTableRender = ({
         break;
     }
   });
-  if (actionsBTN) {
+  if (actionsBtn) {
     columns.push({
       name: "Actions",
       button: true,
@@ -91,14 +88,14 @@ const DataTableRender = ({
               // needs 2 buttons, open and open and checkout
               // user is at a section table, it only says view/edit if checked out
               // or just view if not checked out
-              actionsBTN === "Open" ? (
+              actionsBtn === "Open" ? (
                 <div>
                   <Button
                     type="button"
                     unstyled="true"
-                    epa-testid="btnOpenMethod"
+                    epa-testid="btnOpen"
                     className="cursor-pointer open-modal-button"
-                    id="btnOpenMethod"
+                    id="btnOpen"
                     onClick={() => openHandler(row, false)}
                     aria-label={`open ${row.col1} `}
                     onKeyPress={(event) => {
@@ -114,11 +111,11 @@ const DataTableRender = ({
                   <Button
                     type="button"
                     unstyled="true"
-                    epa-testid="btnOpenMethod"
+                    epa-testid="btnOpenAndCheckout"
                     className="cursor-pointer open-modal-button"
-                    id="btnOpenMethod"
-                    // onClick={() => openConfig(row)}
+                    id="btnOpenAndCheckout"
                     onClick={() => openHandler(normalizedRow, true)}
+                    aria-label={`open method ${row.col1} `}
                     aria-label={`open and checkout ${row.col1} `}
                     onKeyPress={(event) => {
                       if (event.key === "Enter") {
@@ -133,9 +130,9 @@ const DataTableRender = ({
                 <Button
                   type="button"
                   unstyled="true"
-                  epa-testid="btnOpenMethod"
+                  epa-testid="btnOpen"
                   className="cursor-pointer open-modal-button"
-                  id="btnOpenMethod"
+                  id="btnOpen"
                   onClick={() => openHandler(normalizedRow, false)}
                   aria-label={
                     checkout
@@ -156,11 +153,12 @@ const DataTableRender = ({
               <Button
                 type="button"
                 unstyled="true"
-                epa-testid="btnOpenMethod"
+                epa-testid="btnOpen"
+                id="btnOpen"
                 className="cursor-pointer margin-left-2 open-modal-button"
                 onClick={() => openHandler(normalizedRow, false)}
                 aria-label={
-                  actionsBTN === `Open`
+                  actionsBtn === `Open`
                     ? `Open ${row.col1}`
                     : `View ${row.col1}`
                 }
@@ -170,7 +168,7 @@ const DataTableRender = ({
                   }
                 }}
               >
-                {actionsBTN === "Open" ? "Open" : "View"}
+                {actionsBtn === "Open" ? "Open" : "View"}
               </Button>
             )}
           </div>
@@ -193,6 +191,7 @@ const DataTableRender = ({
   };
   const filteredItems = data.filter(colsFilter);
   const subHeaderComponentMemo = useMemo(() => {
+    //cannot unit test properly
     const handleSearch = () => {
       setSearchText(document.querySelector("#txtSearchData").value);
     };
@@ -211,7 +210,7 @@ const DataTableRender = ({
     <div className={`${componentStyling}`}>
       <div className={`${headerStyling}`}>
         <h2 className="padding-0 page-subheader">
-          {button && data.length ? (
+          {addBtn && data.length ? (
             <div className="padding-y-1">
               <Button
                 type="button"

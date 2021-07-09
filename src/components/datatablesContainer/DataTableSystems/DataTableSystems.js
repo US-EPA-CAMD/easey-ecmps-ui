@@ -11,10 +11,13 @@ import {
   getActiveData,
   getInactiveData,
 } from "../../../additional-functions/filter-data";
+
+
 export const DataTableSystems = ({
-  loadMonitoringSystemsData,
-  locationSelect,
+  locationSelectValue,
   inactive,
+  user,
+  checkout,
   settingInactiveCheckBox,
 }) => {
   const [show, setShow] = useState(false);
@@ -22,13 +25,14 @@ export const DataTableSystems = ({
   const [secondLevel, setSecondLevel] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   useEffect(() => {
-    mpApi.getMonitoringSystems(locationSelect).then((res) => {
+    mpApi.getMonitoringSystems(locationSelectValue).then((res) => {
       setDataLoaded(true);
       setMonitoringSystems(res.data);
+      console.log('systems',res.data)
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelect]);
+  }, [locationSelectValue]);
 
   const closeModalHandler = () => setShow(false);
 
@@ -42,14 +46,16 @@ export const DataTableSystems = ({
   ]);
   const [selected, setSelected] = useState([]);
 
-  const openModal = (value, selection) => {
-    setSelected(selection);
-    setShow(value);
-  };
+  // const openModal = (value, selection) => {
+  //   setSelected(selection);
+  //   setShow(value);
+  // };
 
   // *** row handler onclick event listener
   const selectedRowHandler = (selection) => {
-    openModal(true, selection.cells);
+  //   openModal(true, selection.cells);
+    setSelected(selection.cells);
+    setShow(true);
   };
 
   useEffect(() => {
@@ -74,40 +80,6 @@ export const DataTableSystems = ({
     "Begin Date and Time",
     "End Date and Time",
   ];
-
-  // *** generate columns array of object based on columnNames array above
-  // const columns = [];
-
-  // columnNames.forEach((name, index) => {
-  //   columns.push({
-  //     name,
-  //     selector: `col${index + 1}`,
-  //     sortable: true,
-  //   });
-  // });
-
-  // // *** add column with action button
-  // columns.push({
-  //   name: "Actions",
-  //   button: true,
-  //   width: "15%",
-  //   cell: (row) => {
-  //     // *** normalize the row object to be in the format expected by DynamicTabs
-  //     const normalizedRow = normalizeRowObjectFormat(row, columnNames);
-
-  //     return (
-  //       <div
-  //         className="cursor-pointer"
-  //         onClick={() => selectedRowHandler(normalizedRow.cells)}
-  //         tabIndex="0"
-  //         aria-label="Click to view system details"
-  //       >
-  //         <CreateSharp className="margin-right-1" />
-  //         View
-  //       </div>
-  //     );
-  //   },
-  // });
 
   // *** memoize data
   const data = useMemo(() => {
@@ -151,7 +123,7 @@ export const DataTableSystems = ({
           data={data}
           columnNames={columnNames}
           openHandler={selectedRowHandler}
-          actionsBTN="View"
+          actionsBtn="View"
         />
       </div>
       {show ? (
@@ -172,7 +144,7 @@ export const DataTableSystems = ({
                 secondLevel={secondLevel}
                 setSecondLevel={setSecondLevel}
                 viewOnly={viewOnly}
-                locationSelect={locationSelect}
+                locationSelectValue={locationSelectValue}
                 systemID={modalData.length > 1 ? modalData[0].value : 0}
               />
             </div>

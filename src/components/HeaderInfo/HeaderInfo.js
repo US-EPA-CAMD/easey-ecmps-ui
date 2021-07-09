@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./HeaderInfo.scss";
 import DropdownSelection from "../DropdownSelection/DropdownSelection";
 import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined";
@@ -44,8 +44,8 @@ const HeaderInfo = ({
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
   const [checkoutState, setCheckoutState] = useState(checkout);
   useEffect(() => {
-    setCheckoutState(checkout)
-  }, [checkout])
+    setCheckoutState(checkout);
+  }, [checkout]);
 
   // direction -> false = check back in
   // true = check out
