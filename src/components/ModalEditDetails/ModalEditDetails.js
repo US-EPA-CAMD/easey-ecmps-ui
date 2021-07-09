@@ -10,7 +10,7 @@ import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 
 import * as dmApi from "../../utils/api/dataManagementApi";
 
-const MethodModal = ({ modalData, viewOnly }) => {
+const ModalEditDetails = ({ modalData, viewOnly }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [startHour, setStartHour] = useState(null);
@@ -414,4 +414,4 @@ const MethodModal = ({ modalData, viewOnly }) => {
   );
 };
 
-export default MethodModal;
+export default ModalEditDetails;

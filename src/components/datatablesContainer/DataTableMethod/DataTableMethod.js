@@ -1,17 +1,28 @@
 import React, { useEffect, useMemo, useState } from "react";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import Modal from "../../Modal/Modal";
+import ModalDetails from "../../ModalDetails/ModalDetails";
+
 import MethodModal from "../../MethodModal/MethodModal";
 import DataTableRender from "../../DataTableRender/DataTableRender";
 
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-
+import {
+  findValue,
+  adjustDate,
+} from "../../../additional-functions/find-values-in-array";
 import {
   getActiveData,
   getInactiveData,
 } from "../../../additional-functions/filter-data";
+import {
+  bypassApproachCodes,
+  substituteDataApproachCodes,
+  parameterCodes,
+  methodCodes,
+} from "./MethodModalData";
 export const DataTableMethod = ({
   locationSelectValue,
   matsTableHandler,
@@ -26,7 +37,7 @@ export const DataTableMethod = ({
   const [selectedMonitoringMethod, setSelectedMonitoringMethod] = useState(
     null
   );
-
+  const [selectedModalData, setSelectedModalData] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
@@ -51,12 +62,63 @@ export const DataTableMethod = ({
     "End Date and Time",
   ];
 
+  // object property,Label Name, value
+  const modalViewData = (selected, label, time) => {
+    // const keyNames = Object.keys(selectedMonitoringMethod);
+    const arr = [];
+    const codeList = {
+      bypassApproachCode: bypassApproachCodes,
+      subDataCode: substituteDataApproachCodes,
+      parameterCode: parameterCodes,
+      methodCode: methodCodes,
+    };
+    for (let x in selected) {
+      for (let y in label) {
+        if (y === x) {
+          const labels = findValue(codeList[x], selected[x], "name");
+          arr.push([y, label[y], labels, "dropdown"]);
+        }
+      }
+    }
+    for (let x in selected) {
+      for (let y in time) {
+        if (y === x) {
+          if (y === "endDate" || y === "beginDate") {
+            const formmattedDate = adjustDate("mm/dd/yyyy", selected[y]);
+            arr.push([y, time[y], formmattedDate, "date"]);
+          }
+          if (y === "endHour" || y === "beginHour") {
+            arr.push([y, time[y], selected[y], "dropdown"]);
+          }
+        }
+      }
+    }
+    return arr;
+  };
+
   // cant unit test properly
   const openMonitoringMethodsModal = (row, bool) => {
     if (methods.length > 0) {
       const monMethod = methods.filter((element) => element.id === row.col7)[0];
       setSelectedMonitoringMethod(monMethod);
       setShow(true);
+      setSelectedModalData(
+        modalViewData(
+          monMethod,
+          {
+            parameterCode: "Parameter",
+            methodCode: "Methodology",
+            subDataCode: "Substitute Data Approach",
+            bypassApproachCode: "Bypass Approach",
+          },
+          {
+            beginDate: "Start Date",
+            beginHour: "Start Time",
+            endDate: "End Date",
+            endHour: "End Time",
+          }
+        )
+      );
     }
   };
 
@@ -152,10 +214,20 @@ export const DataTableMethod = ({
           showSave={user && checkout}
           children={
             <div>
-              <MethodModal
-                modalData={selectedMonitoringMethod}
-                viewOnly={!(user && checkout)}
-              />
+              {!(user && checkout) ? (
+                <ModalDetails
+                  modalData={selectedMonitoringMethod}
+                  data={selectedModalData}
+                  cols={2}
+                  title={"Component: Monitoring Methods"}
+                  // viewOnly={!(user && checkout)}
+                />
+              ) : (
+                <MethodModal
+                  modalData={selectedMonitoringMethod}
+                  viewOnly={!(user && checkout)}
+                />
+              )}
             </div>
           }
         />
