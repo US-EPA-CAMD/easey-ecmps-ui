@@ -1,9 +1,14 @@
+import config from "../../config";
+
 import React, { useState, useMemo, useEffect } from "react";
 import { Button } from "@trussworks/react-uswds";
-import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
 import DataTable from "react-data-table-component";
+
 import { FilterComponent } from "../ReactDataTablesFilter/ReactDataTablesFilter";
 import { Preloader } from "../Preloader/Preloader";
+
+import { cleanUp508, ensure508 } from "../../additional-functions/ensure-508";
+import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
 
 import {
   ArrowDownwardSharp,
@@ -11,7 +16,6 @@ import {
   KeyboardArrowUpSharp,
 } from "@material-ui/icons";
 
-import config from "../../config";
 /*** scss ***/
 
 const DataTableRender = ({
@@ -37,10 +41,22 @@ const DataTableRender = ({
   className,
 }) => {
   const [searchText, setSearchText] = useState("");
+  const columns = [];
+
   useEffect(() => {
     setSearchText("");
+
+    if (dataLoaded) {
+      ensure508();
+    }
   }, [dataLoaded]);
-  const columns = [];
+
+  useEffect(() => {
+    return () => {
+      cleanUp508();
+    };
+  });
+
   columnNames.forEach((name, index) => {
     switch (name) {
       case "ORIS":
@@ -86,7 +102,12 @@ const DataTableRender = ({
                     className="cursor-pointer open-modal-button"
                     id="btnOpen"
                     onClick={() => openHandler(row, false)}
-                    // aria-label={`open method ${row.col1} `}
+                    aria-label={`open ${row.col1} `}
+                    onKeyPress={(event) => {
+                      if (event.key === "Enter") {
+                        openHandler(row, false);
+                      }
+                    }}
                   >
                     {"Open"}
                   </Button>
@@ -99,13 +120,17 @@ const DataTableRender = ({
                     className="cursor-pointer open-modal-button"
                     id="btnOpenAndCheckout"
                     onClick={() => openHandler(normalizedRow, true)}
-                    aria-label={`open method ${row.col1} `}
+                    aria-label={`open and checkout ${row.col1} `}
+                    onKeyPress={(event) => {
+                      if (event.key === "Enter") {
+                        openHandler(normalizedRow, true);
+                      }
+                    }}
                   >
                     {"Open & Checkout"}
                   </Button>
                 </div>
               ) : (
-                // actionbtn = "view"
                 <Button
                   type="button"
                   unstyled="true"
@@ -113,7 +138,16 @@ const DataTableRender = ({
                   className="cursor-pointer open-modal-button"
                   id="btnOpen"
                   onClick={() => openHandler(normalizedRow, false)}
-                  aria-label={`open method ${row.col1} `}
+                  aria-label={
+                    checkout
+                      ? `view and/or edit ${row.col1}`
+                      : `view ${row.col1}`
+                  }
+                  onKeyPress={(event) => {
+                    if (event.key === "Enter") {
+                      openHandler(normalizedRow, false);
+                    }
+                  }}
                 >
                   {checkout ? "View / Edit" : "View"}
                 </Button>
@@ -127,7 +161,16 @@ const DataTableRender = ({
                 id="btnOpen"
                 className="cursor-pointer margin-left-2 open-modal-button"
                 onClick={() => openHandler(normalizedRow, false)}
-                aria-label={`edit method ${row.col1} `}
+                aria-label={
+                  actionsBtn === `Open`
+                    ? `Open ${row.col1}`
+                    : `View ${row.col1}`
+                }
+                onKeyPress={(event) => {
+                  if (event.key === "Enter") {
+                    openHandler(row.col1, row.col2);
+                  }
+                }}
               >
                 {actionsBtn === "Open" ? "Open" : "View"}
               </Button>
@@ -190,6 +233,7 @@ const DataTableRender = ({
       <div aria-live="polite" className={`${tableStyling}`}>
         {dataLoaded && data.length >= 0 ? (
           <DataTable
+            keyField="col1"
             className={`data-display-table react-transition fade-in ${className}`}
             sortIcon={
               <ArrowDownwardSharp className="margin-left-2 text-primary" />
