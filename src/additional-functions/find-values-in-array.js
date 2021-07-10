@@ -1,7 +1,6 @@
 import * as dmApi from "../utils/api/dataManagementApi";
 
-export const findValue = (options, val,parameter) => {
-    console.log('this is options in find-values,',options,val)
+export const findValue = (options, val, parameter) => {
   if (val === null) {
     return "";
   }
@@ -15,7 +14,7 @@ export const findValue = (options, val,parameter) => {
 };
 
 export const findDropDownOptions = (codeName) => {
-  const options = [];
+  let options = [];
   switch (codeName) {
     case "parameterCode":
       dmApi.getAllParameterCodes().then((response) => {
@@ -67,7 +66,6 @@ export const findDropDownOptions = (codeName) => {
     default:
       return options;
   }
-  console.log('tions',options)
   return options;
 };
 // date from api is always in yyyy-mm-dd

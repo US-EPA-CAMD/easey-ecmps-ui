@@ -97,7 +97,7 @@ const DataTableRender = ({
                     epa-testid="btnOpen"
                     className="cursor-pointer open-modal-button"
                     id="btnOpen"
-                    onClick={() => openHandler(row, false)}
+                    onClick={() => openHandler(normalizedRow, false)}
                     aria-label={`open ${row.col1} `}
                     onKeyPress={(event) => {
                       if (event.key === "Enter") {
