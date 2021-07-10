@@ -88,6 +88,7 @@ const Tabs = ({ children, dynamic = false, removeTabs, setActive }) => {
                       epa-testid="closeXBtnTab"
                       role="button"
                       tabIndex="0"
+                      aria-hidden="false"
                     />
                   ) : null}
                 </div>

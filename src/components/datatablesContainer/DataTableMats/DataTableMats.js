@@ -3,10 +3,10 @@ import React, { useEffect, useMemo, useState } from "react";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import DataTableRender from "../../DataTableRender/DataTableRender";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import {
+/*import {
   getActiveData,
   getInactiveData,
-} from "../../../additional-functions/filter-data";
+} from "../../../additional-functions/filter-data";*/
 export const DataTableMats = ({
   locationSelectValue,
   user,
@@ -36,8 +36,8 @@ export const DataTableMats = ({
 
   const data = useMemo(() => {
     if (matsMethods.length > 0) {
-      const activeOnly = getActiveData(matsMethods);
-      const inactiveOnly = getInactiveData(matsMethods);
+      /*const activeOnly = getActiveData(matsMethods);
+      const inactiveOnly = getInactiveData(matsMethods);*/
 
       // // only active data >  disable checkbox and unchecks it
       // if (activeOnly.length === matsMethods.length) {

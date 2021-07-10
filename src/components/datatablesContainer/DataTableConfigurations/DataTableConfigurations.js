@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useRef } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { connect } from "react-redux";
 import * as fs from "../../../utils/selectors/monitoringConfigurations";
 import { loadMonitoringPlansArray } from "../../../store/actions/monitoringPlans";
@@ -54,13 +54,14 @@ export const DataTableConfigurations = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedConfig]);
 
-  const flag = useRef(false);
+  /*  const flag = useRef(false);*/
+
   useEffect(() => {
-    let flagValue = flag.current;
-    if (monitoringPlans.length < 1) {
-      loadMonitoringPlansData(data.col1);
-      setDataLoaded(true);
-    } else {
+    /*let flagValue = flag.current;
+    if (monitoringPlans.length < 1) {*/
+    loadMonitoringPlansData(data.col1);
+    setDataLoaded(true);
+    /*} else {
       for (const x of monitoringPlans) {
         if (x[0] === data.col1) {
           setSelectedMp(x);
@@ -73,26 +74,17 @@ export const DataTableConfigurations = ({
         loadMonitoringPlansData(data.col1);
         setDataLoaded(true);
       }
-    }
+    }*/
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    const flagValue = flag.current;
-    if (flagValue === false) {
-      setSelectedMp(monitoringPlans[monitoringPlans.length - 1]);
-    }
+    /*const flagValue = flag.current;
+    if (flagValue === false) {*/
+    setSelectedMp(monitoringPlans[monitoringPlans.length - 1]);
+    //}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringPlans.length]);
-
-  // const checkOut = (config) => {
-  //   mpApi
-  //     .postCheckoutMonitoringPlanConfiguration(config.col3, user.firstName)
-  //     .then((res) => {
-  //       console.log(res, "data");
-  //     });
-  //   openConfig(config, true);
-  // };
 
   const records = useMemo(() => {
     if (monitoringPlans.length >= 1) {

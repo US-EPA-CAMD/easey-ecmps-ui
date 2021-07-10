@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Label, FormGroup, DatePicker } from "@trussworks/react-uswds";
-
-import DataTableMethod from "../datatablesContainer/DataTableMethod/DataTableMethod";
+import React from "react";
+import { Label, FormGroup } from "@trussworks/react-uswds";
 
 const ModalDetails = ({ modalData, data, cols, title }) => {
   const items = [];
-  console.log('modal systems',modalData,data,cols,title)
   let row = [];
   for (const value of data) {
     if (row.length < cols) {
