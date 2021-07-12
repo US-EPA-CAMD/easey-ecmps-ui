@@ -2,6 +2,7 @@ import React from "react";
 import Footer from "../Footer/Footer";
 import WideHeader from "../WideHeader/WideHeader";
 import "./Layout.scss";
+import { Link } from "@trussworks/react-uswds";
 import LeftNavigation from "../LeftNavigation/LeftNavigation";
 
 const Layout = (props) => {
@@ -10,6 +11,9 @@ const Layout = (props) => {
   );
   return (
     <div>
+      <Link className="skip-to-content-link" href="#main">
+        Skip to content
+      </Link    >
       <div className="topHeader">
         <WideHeader />
       </div>
@@ -17,7 +21,7 @@ const Layout = (props) => {
         <div className="grid-col-2 bg-base-lightest">
           <LeftNavigation user={props.user} logOut={props.logOut} />
         </div>
-        <div className="grid-col margin-x-2 minh-tablet-lg">
+        <div className="grid-col margin-x-2 minh-tablet-lg" id="main">
           <main>{childrenWithProps} </main>
         </div>
       </div>

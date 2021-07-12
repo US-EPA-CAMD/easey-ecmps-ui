@@ -60,27 +60,23 @@ export const DataTableSystems = ({
       fuelCode: fuels,
       systemDesignationCode: designations,
     };
-    for (let x in selected) {
-      for (let y in label) {
-        if (y === x && label[y][1] === "dropdown") {
-          const labels = findValue(codeList[x], selected[x], "description");
-          arr.push([y, label[y][0], labels, "dropdown"]);
-        } else if (y === x && label[y][1] === "input") {
-          arr.push([y, label[y][0], selected[x], "input"]);
-        }
+
+    for (let y in label) {
+      if (label[y][1] === "dropdown") {
+        const labels = findValue(codeList[y], selected[y], "description");
+        arr.push([y, label[y][0], labels, "dropdown"]);
+      } else if (label[y][1] === "input") {
+        arr.push([y, label[y][0], selected[y], "input"]);
       }
     }
-    for (let x in selected) {
-      for (let y in time) {
-        if (y === x) {
-          if (y === "endDate" || y === "beginDate") {
-            const formmattedDate = adjustDate("mm/dd/yyyy", selected[y]);
-            arr.push([y, time[y][0], formmattedDate, "date"]);
-          }
-          if (y === "endHour" || y === "beginHour") {
-            arr.push([y, time[y][0], selected[y], "dropdown"]);
-          }
-        }
+
+    for (let y in time) {
+      if (y === "endDate" || y === "beginDate") {
+        const formattedDate = adjustDate("mm/dd/yyyy", selected[y]);
+        arr.push([y, time[y][0], formattedDate, "date"]);
+      }
+      if (y === "endHour" || y === "beginHour") {
+        arr.push([y, time[y][0], selected[y], "dropdown"]);
       }
     }
     return arr;
@@ -196,7 +192,7 @@ export const DataTableSystems = ({
                   modalData={modalData}
                   data={selectedModalData}
                   cols={2}
-                  title={"Component: Monitoring Methods"}
+                  title={"Component: Monitoring Systems"}
                   // viewOnly={!(user && checkout)}
                 />
               ) : (

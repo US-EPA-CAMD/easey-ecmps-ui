@@ -24,6 +24,9 @@ import {
 
 import { epaLogo } from "../WideHeaderMenu/svgs";
 
+/*** additional es to add / override global es scope classes for this component only ***/
+import { focusTrap } from "../../additional-functions/focus-trap";
+
 /*** additional scss to add / override global scss scope classes for this component only ***/
 import "./WideHeader.scss";
 
@@ -32,7 +35,20 @@ const WideHeader = () => {
   const [expanded, setExpanded] = useState(false);
 
   /***** EVENT HANDLERS *****/
-  const onClick = () => setExpanded((prvExpanded) => !prvExpanded);
+  const onClick = () => {
+    const { handleKeyPress } = focusTrap("#navRightSide", () =>
+      setExpanded(false)
+    );
+
+    // *** FOCUS TRAP
+    if (!expanded) {
+      document.addEventListener("keydown", handleKeyPress);
+    } else if (expanded) {
+      document.removeEventListener("keydown", handleKeyPress);
+    }
+
+    setExpanded((prvExpanded) => !prvExpanded);
+  };
 
   const onSearch = (event) => {
     // *** URI encode the component after trimming to get rid of leading/trailing spaces
@@ -89,6 +105,7 @@ const WideHeader = () => {
             mobileExpanded={expanded}
             onToggleMobileNav={() => onClick()}
             key="primaryNav"
+            id="navRightSide"
           >
             <Search
               className="search-field"

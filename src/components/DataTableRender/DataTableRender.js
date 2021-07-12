@@ -1,4 +1,4 @@
-import config from "../../config";
+import { config, oneSecond } from "../../config";
 
 import React, { useState, useMemo, useEffect } from "react";
 import { Button } from "@trussworks/react-uswds";
@@ -44,16 +44,14 @@ const DataTableRender = ({
   const columns = [];
 
   useEffect(() => {
-    if (dataLoaded) {
+    setTimeout(() => {
       ensure508();
-    }
-  }, [dataLoaded]);
+    }, oneSecond);
 
-  useEffect(() => {
     return () => {
       cleanUp508();
     };
-  });
+  }, []);
 
   columnNames.forEach((name, index) => {
     switch (name) {
@@ -99,7 +97,7 @@ const DataTableRender = ({
                     epa-testid="btnOpen"
                     className="cursor-pointer open-modal-button"
                     id="btnOpen"
-                    onClick={() => openHandler(row, false)}
+                    onClick={() => openHandler(normalizedRow, false)}
                     aria-label={`open ${row.col1} `}
                     onKeyPress={(event) => {
                       if (event.key === "Enter") {
@@ -231,7 +229,6 @@ const DataTableRender = ({
       <div aria-live="polite" className={`${tableStyling}`}>
         {dataLoaded && data.length >= 0 ? (
           <DataTable
-            title="mi bomboclot"
             keyField="col1"
             className={`data-display-table react-transition fade-in ${className}`}
             sortIcon={

@@ -72,12 +72,12 @@ const Details = ({ modalData, viewOnly }) => {
         setEndHour(endDateString[1]);
       }
     }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalData]);
   return (
     <div>
       {
-        <div className="modalDetails ">
+        <div className="modalDetails react-transition fade-in">
           <h2>
             Monitoring Systems: {modalData.length >= 1 ? modalState[0] : ""}
           </h2>
@@ -197,7 +197,7 @@ const Details = ({ modalData, viewOnly }) => {
             </div>
             <div className="grid-row">
               <div className="grid-col padding-bottom-2 padding-right-3">
-                <Label className="margin-0" id="dateStart">
+                <Label className="margin-0" htmlFor="startDate">
                   Start Date and Time {viewOnly ? "" : "(Required)"}
                 </Label>
                 <div className="grid-row">
@@ -246,7 +246,9 @@ const Details = ({ modalData, viewOnly }) => {
                           name="startHour"
                           type="text"
                           disabled={viewOnly}
-                          defaultValue={startHour!== "-undefined-undefined"? startHour:0}
+                          defaultValue={
+                            startHour !== "-undefined-undefined" ? startHour : 0
+                          }
                         />
                       </FormGroup>
                     ) : startHour !== null ? (
@@ -264,7 +266,7 @@ const Details = ({ modalData, viewOnly }) => {
                 </div>
               </div>
               <div className="grid-col">
-                <Label className="margin-0" id="dateEnd">
+                <Label className="margin-0" htmlFor="endDate">
                   End Date and Time
                 </Label>
                 <div className="grid-row">
@@ -290,14 +292,13 @@ const Details = ({ modalData, viewOnly }) => {
                         <div className="usa-hint" id="dateEnd">
                           mm/dd/yyyy
                         </div>
-                        
-                          <DatePicker
-                            id="dateEnd"
-                            name="dateEnd"
-                            disabled={viewOnly}
-                            defaultValue={endDate!==null?endDate:null}
-                          />
-                        
+
+                        <DatePicker
+                          id="dateEnd"
+                          name="dateEnd"
+                          disabled={viewOnly}
+                          defaultValue={endDate !== null ? endDate : null}
+                        />
                       </>
                     )}
                   </div>
