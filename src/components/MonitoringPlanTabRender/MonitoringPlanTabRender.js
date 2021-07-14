@@ -100,6 +100,8 @@ export const MonitoringPlanTabRender = ({
           locationSelectValue={parseInt(locationSelect[1])}
             inactive={inactive}
             settingInactiveCheckBox={settingInactiveCheckBox}
+            checkout={checkout}
+            user={user}
           />,
           "Systems",
         ],
@@ -139,6 +141,8 @@ export const MonitoringPlanTabRender = ({
         locationSelectValue={locationSelect[1]}
           inactive={inactive}
           settingInactiveCheckBox={settingInactiveCheckBox}
+          checkout={checkout}
+          user={user}
         />,
         "Systems",
       ],
