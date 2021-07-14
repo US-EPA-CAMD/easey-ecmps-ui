@@ -27,40 +27,14 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
       </div>
     );
   };
-  const timeOptions = [
-    { time: null },
-    { time: 0 },
-    { time: 1 },
-    { time: 2 },
-    { time: 3 },
-    { time: 4 },
-    { time: 5 },
-    { time: 6 },
-    { time: 7 },
-    { time: 8 },
-    { time: 9 },
-    { time: 10 },
-    { time: 11 },
-    { time: 12 },
-    { time: 13 },
-    { time: 14 },
-    { time: 15 },
-    { time: 16 },
-    { time: 17 },
-    { time: 18 },
-    { time: 19 },
-    { time: 20 },
-    { time: 21 },
-    { time: 22 },
-    { time: 23 },
-  ];
+
   const makeEditComp = (value) => {
     let comp = null;
     switch (value[3]) {
       case "dropdown":
         comp = (
           <SelectBox
-            className="modalUserInput"
+            className="modalUserInput width-mobile"
             epadataname={value[0]}
             options={value[5] !== null ? value[5] : [{}]}
             initialSelection={value[4]}
@@ -82,7 +56,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
         comp = (
           <div>
             <DatePicker
-              className="margin-0 modalUserInput"
+              className="margin-0 modalUserInput width-mobile"
               id={value[0]}
               name={value[1]}
               epadataname={value[0]}
@@ -95,23 +69,23 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
         break;
       case "time":
         comp = (
-          <SelectBox
-            className="modalUserInput"
-            epadataname={value[0]}
-            options={timeOptions}
-            initialSelection={value[2] ? value[2] : ""}
-            selectKey="time"
-            id={value[0]}
-            epa-testid={value[0]}
-            name={value[1]}
-          />
+          <TextInput
+          className="modalUserInput width-7"
+          id="modalUserInput"
+
+          epa-testid={value[0]}
+          epadataname={value[0]}
+          name="modalUserInput"
+          type="text"
+          defaultValue={value[2] ? value[2] : ""}
+        />
         );
         break;
 
       case "input":
         comp = (
           <TextInput
-            className="modalUserInput"
+            className="modalUserInput width-mobile"
             id="modalUserInput"
             name="modalUserInput"
             type="text"
@@ -211,7 +185,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
         <div>
           {items.map((item, index) => {
             return (
-              <div key={index} className="grid-row padding-top-2">
+              <div key={`${modalData["id"]}${index}`} className="grid-row padding-top-2 margin-right-2">
                 {item}
               </div>
             );

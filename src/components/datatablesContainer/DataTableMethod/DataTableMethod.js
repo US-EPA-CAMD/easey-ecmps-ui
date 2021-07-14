@@ -80,8 +80,8 @@ export const DataTableMethod = ({
 
     for (let y in time) {
       if (y === "endDate" || y === "beginDate") {
-        const formattedDate = adjustDate("mm/dd/yyyy", selected[y]);
-        arr.push([y, time[y], formattedDate, "date", selected[y]]);
+        const formmattedDate = adjustDate("mm/dd/yyyy", selected[y]);
+        arr.push([y, time[y], formmattedDate, "date", selected[y]]);
       }
       if (y === "endHour" || y === "beginHour") {
         arr.push([y, time[y], selected[y], "time", selected[y]]);
@@ -205,7 +205,7 @@ export const DataTableMethod = ({
           show={show}
           close={closeModalHandler}
           save={saveMethods}
-          showCancel
+          showCancel={!(user && checkout)}
           showSave={user && checkout}
           children={
             <div>

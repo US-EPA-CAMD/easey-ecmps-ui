@@ -185,18 +185,18 @@ export const DataTableSystems = ({
           secondLevel={true}
           show={show}
           close={closeModalHandler}
-          showCancel
+          showCancel={!(user && checkout)}
           showSave={user && checkout}
           children={
             <div>
               {secondLevel ? (
                 ""
-              ) : 
+              ) :
                 <ModalDetails
                   modalData={modalData}
                   data={selectedModalData}
                   cols={2}
-                  title={"Systems"}
+                  title={`System: ${selected[0]['value']}`}
                   viewOnly={!(user && checkout)}
                 />
               }
