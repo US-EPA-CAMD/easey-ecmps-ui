@@ -1,2 +1,23 @@
 $theme-font-path: "~uswds/dist/fonts";
 $theme-image-path: "~uswds/dist/img";
+
+$theme-utility-breakpoints: (
+  // 160px:
+  "card": false,
+  // 240px:
+  "card-lg": false,
+  // 320px:
+  "mobile": false,
+  // 480px:
+  "mobile-lg": true,
+  // 640px:
+  "tablet": true,
+  // 800px:
+  "tablet-lg": false,
+  // 1024px:
+  "desktop": true,
+  // 1200px:
+  "desktop-lg": true,
+  // 1400px:
+  "widescreen": true
+);
