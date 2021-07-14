@@ -39,8 +39,10 @@ export const DataTableSystems = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue]);
 
-  const closeModalHandler = () => setShow(false);
-
+  const closeModalHandler = () => {
+    setSecondLevel(false);
+    setShow(false);
+  }
   const [modalData, setModalData] = useState([
     { value: 1 },
     { value: 1 },
@@ -63,8 +65,8 @@ export const DataTableSystems = ({
 
     for (let y in label) {
       if (label[y][1] === "dropdown") {
-        const labels = findValue(codeList[y], selected[y], "description");
-        arr.push([y, label[y][0], labels, "dropdown"]);
+        const labels = findValue(codeList[y], selected[y], "name");
+        arr.push([y, label[y][0], labels, "dropdown", selected[y], codeList[y]]);
       } else if (label[y][1] === "input") {
         arr.push([y, label[y][0], selected[y], "input"]);
       }
@@ -73,10 +75,10 @@ export const DataTableSystems = ({
     for (let y in time) {
       if (y === "endDate" || y === "beginDate") {
         const formattedDate = adjustDate("mm/dd/yyyy", selected[y]);
-        arr.push([y, time[y][0], formattedDate, "date"]);
+        arr.push([y, time[y][0], formattedDate, "date",selected[y]]);
       }
       if (y === "endHour" || y === "beginHour") {
-        arr.push([y, time[y][0], selected[y], "dropdown"]);
+        arr.push([y, time[y][0], selected[y], "time",selected[y]]);
       }
     }
     return arr;
@@ -99,9 +101,9 @@ export const DataTableSystems = ({
         },
         {
           beginDate: ["Start Date", "date"],
-          beginHour: ["Start Time", "dropdown"],
+          beginHour: ["Start Time", "time"],
           endDate: ["End Date", "date"],
-          endHour: ["End Time", "dropdown"],
+          endHour: ["End Time", "time"],
         }
       )
     );
@@ -174,6 +176,8 @@ export const DataTableSystems = ({
           columnNames={columnNames}
           openHandler={selectedRowHandler}
           actionsBtn="View"
+          checkout={checkout}
+          user={user}
         />
       </div>
       {show ? (
@@ -182,26 +186,26 @@ export const DataTableSystems = ({
           show={show}
           close={closeModalHandler}
           showCancel
-          showSave
+          showSave={user && checkout}
           children={
             <div>
               {secondLevel ? (
                 ""
-              ) : !(user && checkout) ? (
+              ) : 
                 <ModalDetails
                   modalData={modalData}
                   data={selectedModalData}
                   cols={2}
-                  title={"Component: Monitoring Systems"}
-                  // viewOnly={!(user && checkout)}
+                  title={"Systems"}
+                  viewOnly={!(user && checkout)}
                 />
-              ) : (
-                <Details viewOnly={viewOnly} modalData={modalData} />
-              )}
+              }
               <DataTableSystemsComponents
                 secondLevel={secondLevel}
                 setSecondLevel={setSecondLevel}
-                viewOnly={viewOnly}
+                viewOnly={false}
+                user={user}
+                checkout={checkout}
                 locationSelectValue={locationSelectValue}
                 systemID={modalData.length > 1 ? modalData[0].value : 0}
               />
