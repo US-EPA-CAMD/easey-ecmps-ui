@@ -1,6 +1,7 @@
 import * as dmApi from "../utils/api/dataManagementApi";
 
-export const findValue = (options, val, parameter) => {
+export const findValue = (options, val,parameter) => {
+    console.log('this is options in find-values,',options,val)
   if (val === null) {
     return "";
   }

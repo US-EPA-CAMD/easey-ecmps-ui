@@ -1,9 +1,12 @@
 export const bypassApproachCodes = [
+  
+  { code: "", name: "" },
   { code: "BYMAX", name: "Standard Part 75 for Unmonitored Bypass Stack" },
   { code: "BYMAXFS", name: "Fuel-Specific for Unmonitored Bypass Stack" },
 ];
 
 export const substituteDataApproachCodes = [
+  { code: "", name: "" },
   { code: "FSP75", name: "Fuel-Specific Missing Data" },
   {
     code: "FSP75C",
@@ -22,6 +25,7 @@ export const substituteDataApproachCodes = [
 ];
 
 export const parameterCodes = [
+  { code: "", name: "" },
   { code: "AKSF", name: "Appendix K Sample to Stack Flow Scaling Factor" },
   { code: "BCO2", name: "Biogenic CO2 Mass (ton)" },
   { code: "BWA", name: "Moisture Fraction in Ambient Air" },
@@ -31,6 +35,7 @@ export const parameterCodes = [
 ];
 
 export const methodCodes = [
+  { code: "", name: "" },
   { code: "AD", name: "Appendix D" },
   { code: "ADCALC", name: "Appendix D Measured and Apportioned" },
   { code: "AE", name: "Appendix E" },

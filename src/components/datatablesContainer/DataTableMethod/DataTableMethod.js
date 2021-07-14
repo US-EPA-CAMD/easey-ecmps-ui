@@ -3,7 +3,7 @@ import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 
-import MethodModal from "../../MethodModal/MethodModal";
+// import MethodModal from "../../MethodModal/MethodModal";
 import DataTableRender from "../../DataTableRender/DataTableRender";
 
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
@@ -72,27 +72,22 @@ export const DataTableMethod = ({
       parameterCode: parameterCodes,
       methodCode: methodCodes,
     };
-    for (let x in selected) {
-      for (let y in label) {
-        if (y === x) {
-          const labels = findValue(codeList[x], selected[x], "name");
-          arr.push([y, label[y], labels, "dropdown"]);
-        }
+
+    for (let y in label) {
+      const labels = findValue(codeList[y], selected[y], "name");
+      arr.push([y, label[y], labels, "dropdown", selected[y], codeList[y]]);
+    }
+
+    for (let y in time) {
+      if (y === "endDate" || y === "beginDate") {
+        const formmattedDate = adjustDate("mm/dd/yyyy", selected[y]);
+        arr.push([y, time[y], formmattedDate, "date", selected[y]]);
+      }
+      if (y === "endHour" || y === "beginHour") {
+        arr.push([y, time[y], selected[y], "time", selected[y]]);
       }
     }
-    for (let x in selected) {
-      for (let y in time) {
-        if (y === x) {
-          if (y === "endDate" || y === "beginDate") {
-            const formmattedDate = adjustDate("mm/dd/yyyy", selected[y]);
-            arr.push([y, time[y], formmattedDate, "date"]);
-          }
-          if (y === "endHour" || y === "beginHour") {
-            arr.push([y, time[y], selected[y], "dropdown"]);
-          }
-        }
-      }
-    }
+
     return arr;
   };
 
@@ -210,24 +205,17 @@ export const DataTableMethod = ({
           show={show}
           close={closeModalHandler}
           save={saveMethods}
-          showCancel
+          showCancel={!(user && checkout)}
           showSave={user && checkout}
           children={
             <div>
-              {!(user && checkout) ? (
-                <ModalDetails
-                  modalData={selectedMonitoringMethod}
-                  data={selectedModalData}
-                  cols={2}
-                  title={"Component: Monitoring Methods"}
-                  // viewOnly={!(user && checkout)}
-                />
-              ) : (
-                <MethodModal
-                  modalData={selectedMonitoringMethod}
-                  viewOnly={!(user && checkout)}
-                />
-              )}
+              <ModalDetails
+                modalData={selectedMonitoringMethod}
+                data={selectedModalData}
+                cols={2}
+                title={"Component: Monitoring Methods"}
+                viewOnly={!(user && checkout)}
+              />
             </div>
           }
         />
