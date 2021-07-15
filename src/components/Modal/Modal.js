@@ -26,9 +26,10 @@ export const Modal = ({
   title,
   backBtn,
   createNew,
+  breadCrumbBar,
 }) => {
   const modalRef = createRef();
-
+  console.log("breadCrumbBar", breadCrumbBar);
   useEffect(() => {
     const { handleKeyPress } = focusTrap(".modal-content", close);
 
@@ -84,8 +85,11 @@ export const Modal = ({
                   epa-testid="closeXBtn"
                   role="button"
                   tabIndex="0"
-                />
+                /><div className="left-0 bottom-0 padding-2">
                 <h3 className="text-bold">{title}</h3>
+                
+                  {breadCrumbBar ? breadCrumbBar : ""}
+                </div>
               </div>
 
               <div className="modal-body padding-top-0 modal-color maxh-tablet overflow-y-auto margin-top-2">
@@ -102,10 +106,8 @@ export const Modal = ({
                       epa-testid="saveBtn"
                       className="margin-right-2"
                     >
-                      {secondLevel
-                        ? "Save and Go Back"
-                        : createNew}
-                        {/* // ? createNew
+                      {secondLevel ? "Save and Go Back" : createNew}
+                      {/* // ? createNew
                         // : saveButtonText} */}
                     </Button>
                     <Button

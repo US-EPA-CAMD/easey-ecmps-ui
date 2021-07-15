@@ -198,33 +198,35 @@ export const DataTableSystems = ({
     "End Date and Time",
   ];
 
-  const [currentBread, setCurrentBread] = useState([
-    <Breadcrumb>
-      <BreadcrumbLink>
-        <span>Systems</span>
-      </BreadcrumbLink>
-    </Breadcrumb>,
-  ]);
-  const breadCrumbs = (extraBread) => {
-
+  const [currentBar, setCurrentBar] = useState("");
+  const breadCrumbs = (lastBread) => {
     const breadBar = (
-      <BreadcrumbBar>
-        {currentBread.forEach((bread) => {
-          return bread;
-        })}
+      <BreadcrumbBar className="padding-0">
+        <Breadcrumb onClick={() => setSecondLevel(false)}>
+          <BreadcrumbLink>
+            <span>System</span>
+          </BreadcrumbLink>
+        </Breadcrumb>
+
         <Breadcrumb current>
-          <span>{extraBread}</span>
+          <span>{lastBread}</span>
         </Breadcrumb>
       </BreadcrumbBar>
     );
-    const updateBread = (
-      <Breadcrumb>
-        <BreadcrumbLink>
-          <span>{extraBread}</span>
-        </BreadcrumbLink>
-      </Breadcrumb>
-    );
-    setCurrentBread([...currentBread, extraBread]);
+    setCurrentBar(breadBar);
+    if (secondLevel) {
+      setCurrentBar("");
+    }
+  };
+  useEffect(() => {
+    if (!secondLevel) {
+      setCurrentBar("");
+    }
+  }, [secondLevel]);
+
+  const setBread = (val, currentBread) => {
+    setSecondLevel(val);
+    breadCrumbs(currentBread);
   };
   // *** memoize data
   const data = useMemo(() => {
@@ -282,6 +284,7 @@ export const DataTableSystems = ({
             close={closeModalHandler}
             showCancel={!(user && checkout)}
             showSave={user && checkout}
+            breadCrumbBar={currentBar}
             title={
               createNewSystem
                 ? "Create System"
@@ -305,6 +308,7 @@ export const DataTableSystems = ({
             close={closeModalHandler}
             showCancel={!(user && checkout)}
             showSave={user && checkout}
+            breadCrumbBar={currentBar}
             title={
               createNewSystem
                 ? "Create System"
@@ -326,7 +330,7 @@ export const DataTableSystems = ({
                 )}
                 <DataTableSystemsComponents
                   secondLevel={secondLevel}
-                  setSecondLevel={setSecondLevel}
+                  setSecondLevel={setBread}
                   viewOnly={false}
                   user={user}
                   checkout={checkout}

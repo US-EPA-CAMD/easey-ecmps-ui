@@ -156,7 +156,7 @@ export const DataTableSystemsComponents = ({
         }
       )
     );
-    setSecondLevel(true);
+    setSecondLevel(true,'Component');
   };
   const selectedRowHandlerFuelFlows = (val) => {
     const selectFuelFlows = monitoringSystemsFuelFlows.filter(
@@ -185,7 +185,7 @@ export const DataTableSystemsComponents = ({
         }
       )
     );
-    setSecondLevel(true);
+    setSecondLevel(true,'Fuel Flow');
   };
 
   const data = useMemo(() => {
