@@ -1,4 +1,5 @@
 export const types = [
+  { code: "select", name: "Select a Type.. " },
   {
     code: "CO2",
     name: "CO2 Concentration System"
@@ -92,6 +93,7 @@ export const types = [
 ];
 
 export const designations = [
+  { code: "select", name: "Select a Designation... " },
   {
     code: "P",
     name: "Primary"
@@ -134,6 +136,7 @@ export const designations = [
 ];
 
 export const fuels = [
+  { code: "select", name: "Select a Fuel... " },
   {
     code: "BFG",
     name: "Blast Furnace Gas"

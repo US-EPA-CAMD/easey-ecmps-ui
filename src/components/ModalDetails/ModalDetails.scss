@@ -1,0 +1,21 @@
+
+.break-line{
+ 
+    display:block;
+    width:100%; /*or whatever width you want the effect of <hr>*/
+    border-top: 1px solid #ccc
+}
+
+// {backBtn ? (
+//     <Button
+//       type="button"
+//       aria-label="go back to systems details"
+//       onClick={() => backBtn(false)}
+//     >
+//       <ArrowBackSharp className=" font-body-sm" />
+//     </Button>
+//   ) : (
+//     ""
+//   )}
+//   <h3 className="text-bold">{title}</h3>
+  

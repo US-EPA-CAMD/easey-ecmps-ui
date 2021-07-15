@@ -3,7 +3,7 @@ import { config, oneSecond } from "../../config";
 import React, { useState, useMemo, useEffect } from "react";
 import { Button } from "@trussworks/react-uswds";
 import DataTable from "react-data-table-component";
-
+import './DataTableRender.scss'
 import { FilterComponent } from "../ReactDataTablesFilter/ReactDataTablesFilter";
 import { Preloader } from "../Preloader/Preloader";
 
@@ -39,6 +39,7 @@ const DataTableRender = ({
   tableStyling,
   componentStyling,
   className,
+  addBtnName
 }) => {
   const [searchText, setSearchText] = useState("");
   const columns = [];
@@ -208,66 +209,74 @@ const DataTableRender = ({
 
   return (
     <div className={`${componentStyling}`}>
-      <div className={`${headerStyling}`}>
-        <h2 className="padding-0 page-subheader">
-          {addBtn && data.length ? (
-            <div className="padding-y-1">
-              <Button
-                type="button"
-                // test-id={tableTitle? `btnAdd${tableTitle.split(" ").join("")}`: `${sectionTitle.split(" ").join("")}`}
-                className="float-right clearfix margin-right-3"
-                outline="true"
-              >
-                Add {tableTitle}
-              </Button>
-            </div>
-          ) : (
-            ""
-          )}
-        </h2>
-      </div>
       <div aria-live="polite" className={`${tableStyling}`}>
-        {dataLoaded && data.length >= 0 ? (
-          <DataTable
-            keyField="col1"
-            className={`data-display-table react-transition fade-in ${className}`}
-            sortIcon={
-              <ArrowDownwardSharp className="margin-left-2 text-primary" />
-            }
-            // props
-            defaultSortField={defaultSort ? defaultSort : "col1"}
-            expandableRows={expandableRows}
-            pagination={pagination}
-            columns={columns}
-            data={filteredItems}
-            subHeader={filter}
-            ////
-            fixedHeader={true}
-            noHeader={true}
-            highlightOnHover={true}
-            selectableRows={false}
-            responsive={true}
-            striped={true}
-            persistTableHead={false}
-            // based on props
-            expandableRowExpanded={(row) => row.expanded}
-            subHeaderComponent={subHeaderComponentMemo}
-            paginationPerPage={config.app.paginationPerPage}
-            paginationRowsPerPageOptions={config.app.paginationPerPageOptions}
-            paginationComponentOptions={{
-              rangeSeparatorText: config.app.paginationRangeSeparatorText,
-            }}
-            expandableRowDisabled={(row) => row.disabled}
-            expandableRowsComponent={expandableRowComp}
-            expandableIcon={{
-              collapsed: <KeyboardArrowDownSharp />,
-              expanded: <KeyboardArrowUpSharp />,
-            }}
-          />
-        ) : (
+        
+
+        {dataLoaded && data.length > 0 ? (
+          
+          <div>
+            <h3 className="margin-top-5">{tableTitle}</h3>
+            <DataTable
+              keyField="col1"
+              className={`data-display-table react-transition fade-in ${className}`}
+              sortIcon={
+                <ArrowDownwardSharp className="margin-left-2 text-primary" />
+              }
+              // props
+              defaultSortField={defaultSort ? defaultSort : "col1"}
+              expandableRows={expandableRows}
+              pagination={pagination}
+              columns={columns}
+              data={filteredItems}
+              subHeader={filter}
+              ////
+              fixedHeader={true}
+              noHeader={true}
+              highlightOnHover={true}
+              selectableRows={false}
+              responsive={true}
+              striped={true}
+              persistTableHead={false}
+              // based on props
+              expandableRowExpanded={(row) => row.expanded}
+              subHeaderComponent={subHeaderComponentMemo}
+              paginationPerPage={config.app.paginationPerPage}
+              paginationRowsPerPageOptions={config.app.paginationPerPageOptions}
+              paginationComponentOptions={{
+                rangeSeparatorText: config.app.paginationRangeSeparatorText,
+              }}
+              expandableRowDisabled={(row) => row.disabled}
+              expandableRowsComponent={expandableRowComp}
+              expandableIcon={{
+                collapsed: <KeyboardArrowDownSharp />,
+                expanded: <KeyboardArrowUpSharp />,
+              }}
+            />{" "}
+            <div className={`${headerStyling}`}>
+              <h2 className="padding-0 page-subheader">
+                {addBtn && checkout && user ? (
+                  <div className="padding-y-1">
+                    <Button
+                      type="button"
+                      // test-id={tableTitle? `btnAdd${tableTitle.split(" ").join("")}`: `${sectionTitle.split(" ").join("")}`}
+                      className="float-left clearfix margin-right-3"
+                      outline="true"
+                      color="black"
+                      onClick={addBtn}
+                    >
+                      {addBtnName}
+                    </Button>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </h2>
+            </div>
+          </div>
+        ) : ((dataLoaded && data.length == 0 )? '':(
           <div className="margin-y-3 padding-y-3 react-transition fade-in font-body-sm width-full">
             <Preloader />
-          </div>
+          </div>)
         )}
       </div>
     </div>

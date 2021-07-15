@@ -63,7 +63,7 @@ export const DataTableMethod = ({
   ];
 
   // object property,Label Name, value
-  const modalViewData = (selected, label, time) => {
+  const modalViewData = (selected, label, time, createNew) => {
     // const keyNames = Object.keys(selectedMonitoringMethod);
     const arr = [];
     const codeList = {
@@ -74,17 +74,46 @@ export const DataTableMethod = ({
     };
 
     for (let y in label) {
-      const labels = findValue(codeList[y], selected[y], "name");
-      arr.push([y, label[y], labels, "dropdown", selected[y], codeList[y]]);
+      let labels = "";
+      if (!createNew) {
+        labels = findValue(codeList[y], selected[y], "name");
+      }
+
+      arr.push([
+        y,
+        label[y],
+        labels,
+        "required",
+        "dropdown",
+        createNew ? "select" : selected[y],
+        codeList[y],
+      ]);
     }
 
     for (let y in time) {
       if (y === "endDate" || y === "beginDate") {
-        const formmattedDate = adjustDate("mm/dd/yyyy", selected[y]);
-        arr.push([y, time[y], formmattedDate, "date", selected[y]]);
+        let formattedDate = "";
+        if (!createNew) {
+          formattedDate = adjustDate("mm/dd/yyyy", selected[y]);
+        }
+        arr.push([
+          y,
+          time[y],
+          formattedDate,
+          y === "endDate" ? " " : "required",
+          "date",
+          createNew ? "" : selected[y],
+        ]);
       }
       if (y === "endHour" || y === "beginHour") {
-        arr.push([y, time[y], selected[y], "time", selected[y]]);
+        arr.push([
+          y,
+          time[y],
+          createNew ? "" : selected[y],
+          y === "endHour" ? " " : "required",
+          "time",
+          createNew ? "" : selected[y],
+        ]);
       }
     }
 
@@ -93,6 +122,7 @@ export const DataTableMethod = ({
 
   // cant unit test properly
   const openMonitoringMethodsModal = (row, bool) => {
+    setCreateNewMethod(false);
     if (methods.length > 0) {
       const monMethod = methods.filter((element) => element.id === row.col7)[0];
       setSelectedMonitoringMethod(monMethod);
@@ -117,6 +147,29 @@ export const DataTableMethod = ({
     }
   };
 
+  const [createNewMethod, setCreateNewMethod] = useState(false);
+  const openCreateMethod = () => {
+    setShow(true);
+    setCreateNewMethod(true);
+    setSelectedModalData(
+      modalViewData(
+        null,
+        {
+          parameterCode: "Parameter",
+          methodCode: "Methodology",
+          subDataCode: "Substitute Data Approach",
+          bypassApproachCode: "Bypass Approach",
+        },
+        {
+          beginDate: "Start Date",
+          beginHour: "Start Time",
+          endDate: "End Date",
+          endHour: "End Time",
+        },
+        true
+      )
+    );
+  };
   const data = useMemo(() => {
     if (methods.length > 0) {
       const activeOnly = getActiveData(methods);
@@ -199,6 +252,8 @@ export const DataTableMethod = ({
         actionsBtn={"View"}
         checkout={checkout}
         user={user}
+        addBtn={openCreateMethod}
+        addBtnName={"Create Method"}
       />
       {show ? (
         <Modal
@@ -207,6 +262,12 @@ export const DataTableMethod = ({
           save={saveMethods}
           showCancel={!(user && checkout)}
           showSave={user && checkout}
+          title={
+            createNewMethod ? "Create Method" : "Component: Monitoring Methods"
+          }
+          createNew={ createNewMethod
+            ? "Create Method"
+            : `Save and Close`}
           children={
             <div>
               <ModalDetails

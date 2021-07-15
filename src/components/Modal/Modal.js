@@ -23,6 +23,9 @@ export const Modal = ({
   cancelButtonText = "Cancel",
   saveButtonText = "Save and Close",
   secondLevel,
+  title,
+  backBtn,
+  createNew,
 }) => {
   const modalRef = createRef();
 
@@ -68,23 +71,27 @@ export const Modal = ({
             }}
           >
             <div className="modal-content modal-color padding-y-3">
-              <ClearSharp
-                className="position-absolute right-1 top-1 cursor-pointer text-bold"
-                onClick={close}
-                onKeyPress={(event) => {
-                  if (event.key === "Enter") {
-                    close();
-                  }
-                }}
-                title="Click to save"
-                epa-testid="closeXBtn"
-                role="button"
-                tabIndex="0"
-              />
-              <div className="modal-body modal-color maxh-tablet overflow-y-scroll margin-top-2">
-                {children}
+              <div className="modal-header modal-color  ">
+                <ClearSharp
+                  className="position-absolute right-1 top-1 cursor-pointer text-bold"
+                  onClick={close}
+                  onKeyPress={(event) => {
+                    if (event.key === "Enter") {
+                      close();
+                    }
+                  }}
+                  title="Click to save"
+                  epa-testid="closeXBtn"
+                  role="button"
+                  tabIndex="0"
+                />
+                <h3 className="text-bold">{title}</h3>
               </div>
 
+              <div className="modal-body padding-top-0 modal-color maxh-tablet overflow-y-auto margin-top-2">
+                {children}
+              </div>
+              <span className="break-line" />
               <div className="modal-footer  ">
                 {showSave ? (
                   <div>
@@ -93,9 +100,13 @@ export const Modal = ({
                       onClick={save ? save : close}
                       title="Click to save"
                       epa-testid="saveBtn"
-                      className='margin-right-2'
+                      className="margin-right-2"
                     >
-                      {saveButtonText}
+                      {secondLevel
+                        ? "Save and Go Back"
+                        : createNew}
+                        {/* // ? createNew
+                        // : saveButtonText} */}
                     </Button>
                     <Button
                       type="button"

@@ -9,15 +9,19 @@ import {
   Button,
 } from "@trussworks/react-uswds";
 
+import "./ModalDetails.scss";
+
 import { ArrowBackSharp } from "@material-ui/icons";
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 // value in data => [0] api label, [1] our UI label, [2] value, [3] control form type
 const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
+
+  console.log('data',data,'modalData',modalData)
   const makeViewOnlyComp = (value) => {
     return (
       <div key={`${value[1]}`} className="grid-col">
         <FormGroup className="margin-top-0">
-          <Label className="text-bold" htmlFor={`${value[1]}`}>
+          <Label className="text-bold margin-bottom-0" htmlFor={`${value[1]}`}>
             {value[1]}
           </Label>
           <div tabIndex="0" id={`${value[1]}`}>
@@ -56,14 +60,14 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
   ];
   const makeEditComp = (value) => {
     let comp = null;
-    switch (value[3]) {
+    switch (value[4]) {
       case "dropdown":
         comp = (
           <SelectBox
             className="modalUserInput width-mobile"
             epadataname={value[0]}
-            options={value[5] !== null ? value[5] : [{}]}
-            initialSelection={value[4]}
+            options={value[6] !== null ? value[6] : [{}]}
+            initialSelection={value[5]}
             selectKey="code"
             id={value[0]}
             epa-testid={value[0]}
@@ -74,13 +78,20 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
         break;
       case "date":
         let [year, month, day] = [];
-        if (value[4] || value[4] !== null) {
-          [year, month, day] = value[4].split("-");
+        if (value[5] || value[5] !== null) {
+          [year, month, day] = value[5].split("-");
         }
 
         const datePickerValue = `${year}-${month}-${day}`;
         comp = (
           <div>
+            {viewOnly ? (
+              ""
+            ) : (
+              <div className="usa-hint" id="appointment-date-hint">
+                mm/dd/yyyy
+              </div>
+            )}
             <DatePicker
               className="margin-0 modalUserInput width-mobile"
               id={value[0]}
@@ -95,16 +106,24 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
         break;
       case "time":
         comp = (
+          <div>
+            {viewOnly ? (
+              ""
+            ) : (
+              <div className="usa-hint" id="appointment-date-hint">
+                hh
+              </div>
+            )}
           <TextInput
-          className="modalUserInput width-7"
-          id="modalUserInput"
-          
-          epa-testid={value[0]}
-          epadataname={value[0]}
-          name="modalUserInput"
-          type="text"
-          defaultValue={value[2] ? value[2] : ""}
-        />
+            className="modalUserInput width-7"
+            id="modalUserInput"
+            epa-testid={value[0]}
+            epadataname={value[0]}
+            name="modalUserInput"
+            type="text"
+            defaultValue={value[2] ? value[2] : ""}
+          />
+          </div>
         );
         break;
 
@@ -153,8 +172,8 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
     return (
       <div className="grid-col">
         <FormGroup className="margin-top-0">
-          <Label className="text-bold" htmlFor={`${value[1]}`}>
-            {value[1]}
+          <Label className=" margin-bottom-0" htmlFor={`${value[1]}`}>
+            {value[3] === "required" ? `${value[1]} (Required)` : value[1]}
           </Label>
           <div tabIndex="0" id={`${value[1]}`}>
             {comp}
@@ -184,34 +203,47 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
   }
   items.push(row);
   return (
-    <div className="systemsCompTable">
+    <div className=" padding-top-0 systemsCompTable">
       <div className="grid-container margin-bottom-2">
         <div className="display-inline-flex padding-top-1 padding-bottom-3">
           {backBtn ? (
-            <Button
-              type="button"
-              aria-label="go back to systems details"
-              onClick={() => backBtn(false)}
-            >
-              <ArrowBackSharp className=" font-body-sm" />
-            </Button>
+            <div className="display-block">
+              <Button
+                onClick={() => backBtn(false)}
+                className="float-left margin-right-1"
+                unstyled="true"
+              >
+                {" "}
+                <ArrowBackSharp
+                  aria-label="go back to systems details"
+                  className=" font-body-sm"
+                />
+              </Button>
+
+              <h3 className="text-bold" className="float-left">
+                {title}
+              </h3>
+            </div>
           ) : (
             ""
           )}
-          <h3 className="text-bold">{title}</h3>
-          <input
+
+          {/* <input
             type="hidden"
             epadataname="id"
             id="id"
             name="id"
             className="modalUserInput"
             value={modalData["id"]}
-          />
+          /> */}
         </div>
         <div>
           {items.map((item, index) => {
             return (
-              <div key={`${modalData["id"]}${index}`} className="grid-row padding-top-2 margin-right-2">
+              <div
+                key={`${index}`}
+                className="grid-row padding-top-2 margin-right-2"
+              >
                 {item}
               </div>
             );

@@ -38,7 +38,7 @@ const DetailsSelectBox = ({
             htmlFor={caption}
             hint={
               required ? (
-                <span className="requiredItalics"> (Required)</span>
+                <span > (Required)</span>
               ) : (
                 ""
               )

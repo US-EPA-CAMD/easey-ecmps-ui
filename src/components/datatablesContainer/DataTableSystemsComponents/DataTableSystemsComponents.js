@@ -209,6 +209,8 @@ export const DataTableSystemsComponents = ({
                 actionsBtn={"View"}
                 user={user}
                 checkout={checkout}
+                addBtn
+                addBtnName={'Add Component'}
               />
               <DataTableRender
                 columnNames={fuelFlowsColumnNames}
@@ -220,6 +222,8 @@ export const DataTableSystemsComponents = ({
                 componentStyling="systemsCompTable"
                 dataLoaded={dataFuelLoaded}
                 actionsBtn={"View"}
+                addBtn
+                addBtnName={'Create New Fuel Flow'}
               />
             </div>
           );
