@@ -70,7 +70,6 @@ export const DataTableSystems = ({
         if (!createNew) {
           labels = findValue(codeList[y], selected[y], "name");
         }
-        // arr.push([y, label[y][0], labels, "dropdown", createNew ? "" : selected[y], selected[y], codeList[y]]);
         arr.push([
           y,
           label[y][0],
@@ -81,7 +80,13 @@ export const DataTableSystems = ({
           codeList[y],
         ]);
       } else if (label[y][1] === "input") {
-        arr.push([y, label[y][0],  createNew ? "" : selected[y],"required", "input"]);
+        arr.push([
+          y,
+          label[y][0],
+          createNew ? "" : selected[y],
+          "required",
+          "input",
+        ]);
       }
     }
 
@@ -122,7 +127,7 @@ export const DataTableSystems = ({
       (element) => element.id === row.col7
     )[0];
     setSelected(row.cells);
-    console.log(row.cells)
+    console.log(row.cells);
     setSelectedModalData(
       modalViewData(
         selectSystem,
@@ -238,54 +243,68 @@ export const DataTableSystems = ({
         />
       </div>
       {show ? (
-        <Modal
-          secondLevel={secondLevel}
-          show={show}
-          close={closeModalHandler}
-          showCancel={!(user && checkout)}
-          showSave={user && checkout}
-          title={
-            createNewSystem
-              ? "Create System"
-              : `System: ${selected[0]["value"]}`
-          }
-          createNew={ createNewSystem
-            ? "Create System"
-            : `Save and Close`}
-          children={
-            <div>
-              {
-            createNewSystem ?   
-            <ModalDetails
-            modalData={modalData}
-            data={selectedModalData}
-            cols={2}
-            title={`Create System`}
-            viewOnly={!(user && checkout)}
-          /> : (
-              secondLevel ? (
-                ""
-              ) : (
-                <ModalDetails
-                  modalData={modalData}
-                  data={selectedModalData}
-                  cols={2}
-                  title={`System: ${selected[0]["value"]}`}
-                  viewOnly={!(user && checkout)}
-                />
-              ))}
-              <DataTableSystemsComponents
-                secondLevel={secondLevel}
-                setSecondLevel={setSecondLevel}
-                viewOnly={false}
-                user={user}
-                checkout={checkout}
-                locationSelectValue={locationSelectValue}
-                systemID={modalData.length > 1 ? modalData[0].value : 0}
+        createNewSystem ? (
+          <Modal
+            secondLevel={secondLevel}
+            show={show}
+            close={closeModalHandler}
+            showCancel={!(user && checkout)}
+            showSave={user && checkout}
+            title={
+              createNewSystem
+                ? "Create System"
+                : `System: ${selected[0]["value"]}`
+            }
+            createNew={createNewSystem ? "Create System" : `Save and Close`}
+            children={
+              <ModalDetails
+                modalData={modalData}
+                data={selectedModalData}
+                cols={2}
+                title={`Create System`}
+                viewOnly={!(user && checkout)}
               />
-            </div>
-          }
-        />
+            }
+          />
+        ) : (
+          <Modal
+            secondLevel={secondLevel}
+            show={show}
+            close={closeModalHandler}
+            showCancel={!(user && checkout)}
+            showSave={user && checkout}
+            title={
+              createNewSystem
+                ? "Create System"
+                : `System: ${selected[0]["value"]}`
+            }
+            createNew={createNewSystem ? "Create System" : `Save and Close`}
+            children={
+              <div>
+                {secondLevel ? (
+                  ""
+                ) : (
+                  <ModalDetails
+                    modalData={modalData}
+                    data={selectedModalData}
+                    cols={2}
+                    title={`System: ${selected[0]["value"]}`}
+                    viewOnly={!(user && checkout)}
+                  />
+                )}
+                <DataTableSystemsComponents
+                  secondLevel={secondLevel}
+                  setSecondLevel={setSecondLevel}
+                  viewOnly={false}
+                  user={user}
+                  checkout={checkout}
+                  locationSelectValue={locationSelectValue}
+                  systemID={modalData.length > 1 ? modalData[0].value : 0}
+                />
+              </div>
+            }
+          />
+        )
       ) : null}
     </>
   );

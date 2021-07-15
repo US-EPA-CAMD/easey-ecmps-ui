@@ -86,26 +86,41 @@ export const DataTableSystemsComponents = ({
           y,
           label[y][0],
           labels,
+          "required",
           "dropdown",
           selected[y],
           codeList[y],
         ]);
       } else if (label[y][1] === "input") {
-        arr.push([y, label[y][0], selected[y], "input"]);
+        arr.push([y, label[y][0], selected[y], "required", "input"]);
       } else if (label[y][1] === "radio") {
-        arr.push([y, label[y][0], selected[y], "radio"]);
+        arr.push([y, label[y][0], "required", selected[y], "radio"]);
       } else if (y === "skip") {
-        arr.push([[], [], [], "skip"]);
+        arr.push([[], [], [], "", "skip"]);
       }
     }
 
     for (let y in time) {
       if (y === "endDate" || y === "beginDate") {
         const formattedDate = adjustDate("mm/dd/yyyy", selected[y]);
-        arr.push([y, time[y][0], formattedDate, "date", selected[y]]);
+        arr.push([
+          y,
+          time[y][0],
+          formattedDate,
+          y === "endDate" ? " " : "required",
+          "date",
+          selected[y],
+        ]);
       }
       if (y === "endHour" || y === "beginHour") {
-        arr.push([y, time[y][0], selected[y], "time", selected[y]]);
+        arr.push([
+          y,
+          time[y][0],
+          selected[y],
+          y === "endHour" ? " " : "required",
+          "time",
+          selected[y],
+        ]);
       }
     }
     return arr;
@@ -210,7 +225,7 @@ export const DataTableSystemsComponents = ({
                 user={user}
                 checkout={checkout}
                 addBtn
-                addBtnName={'Add Component'}
+                addBtnName={"Add Component"}
               />
               <DataTableRender
                 columnNames={fuelFlowsColumnNames}
@@ -223,7 +238,7 @@ export const DataTableSystemsComponents = ({
                 dataLoaded={dataFuelLoaded}
                 actionsBtn={"View"}
                 addBtn
-                addBtnName={'Create New Fuel Flow'}
+                addBtnName={"Create New Fuel Flow"}
               />
             </div>
           );
