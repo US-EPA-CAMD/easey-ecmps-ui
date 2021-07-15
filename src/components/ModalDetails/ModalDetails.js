@@ -20,6 +20,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
   const makeViewOnlyComp = (value) => {
     return (
       <div key={`${value[1]}`} className="grid-col">
+         {(value[4]==='time' || value[4] ==='date') && (value[5]===null )? '':
         <FormGroup className="margin-top-0">
           <Label className="text-bold margin-bottom-0" htmlFor={`${value[1]}`}>
             {value[1]}
@@ -27,7 +28,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
           <div tabIndex="0" id={`${value[1]}`}>
             {value[2] ? value[2] : ""}
           </div>
-        </FormGroup>
+        </FormGroup>}
       </div>
     );
   };

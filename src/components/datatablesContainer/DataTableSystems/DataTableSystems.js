@@ -8,6 +8,11 @@ import DataTableRender from "../../DataTableRender/DataTableRender";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import {
+  Breadcrumb,
+  BreadcrumbBar,
+  BreadcrumbLink,
+} from "@trussworks/react-uswds";
+import {
   getActiveData,
   getInactiveData,
 } from "../../../additional-functions/filter-data";
@@ -127,15 +132,14 @@ export const DataTableSystems = ({
       (element) => element.id === row.col7
     )[0];
     setSelected(row.cells);
-    console.log(row.cells);
     setSelectedModalData(
       modalViewData(
         selectSystem,
         {
           systemIdentifier: ["System ID", "input"],
-          systemTypeCode: ["System Type", "dropdown"],
-          fuelCode: ["System Fuel", "dropdown"],
           systemDesignationCode: ["System Designation", "dropdown"],
+          systemTypeCode: ["System Type", "dropdown"],
+          fuelCode: ["Fuel Type", "dropdown"],
         },
         {
           beginDate: ["Start Date", "date"],
@@ -156,9 +160,9 @@ export const DataTableSystems = ({
         null,
         {
           systemIdentifier: ["System ID", "input"],
-          systemTypeCode: ["System Type", "dropdown"],
-          fuelCode: ["System Fuel", "dropdown"],
           systemDesignationCode: ["System Designation", "dropdown"],
+          systemTypeCode: ["System Type", "dropdown"],
+          fuelCode: ["Fuel Type", "dropdown"],
         },
         {
           beginDate: ["Start Date", "date"],
@@ -194,6 +198,34 @@ export const DataTableSystems = ({
     "End Date and Time",
   ];
 
+  const [currentBread, setCurrentBread] = useState([
+    <Breadcrumb>
+      <BreadcrumbLink>
+        <span>Systems</span>
+      </BreadcrumbLink>
+    </Breadcrumb>,
+  ]);
+  const breadCrumbs = (extraBread) => {
+
+    const breadBar = (
+      <BreadcrumbBar>
+        {currentBread.forEach((bread) => {
+          return bread;
+        })}
+        <Breadcrumb current>
+          <span>{extraBread}</span>
+        </Breadcrumb>
+      </BreadcrumbBar>
+    );
+    const updateBread = (
+      <Breadcrumb>
+        <BreadcrumbLink>
+          <span>{extraBread}</span>
+        </BreadcrumbLink>
+      </Breadcrumb>
+    );
+    setCurrentBread([...currentBread, extraBread]);
+  };
   // *** memoize data
   const data = useMemo(() => {
     if (monitoringSystems.length > 0) {
