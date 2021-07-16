@@ -5,15 +5,17 @@ applications:
       - nodejs_buildpack
     env:
       OPTIMIZE_MEMORY: true
-      REACT_APP_EASEY_UI_PORTAL_ENV: ((environment))
-      REACT_APP_EASEY_UI_PORTAL_HOST: ((host))
+      PUBLIC_URL: https://((host))/((path))      
+      REACT_APP_EASEY_ECMPS_UI_ENV: ((environment))
+      REACT_APP_EASEY_ECMPS_UI_HOST: ((host))
+      REACT_APP_EASEY_ECMPS_UI_PATH: /((path))      
       REACT_APP_EASEY_MDM_API: https://((host))/api/master-data-mgmt
       REACT_APP_EASEY_FACILITIES_API: https://((host))/api/facility-mgmt
       REACT_APP_EASEY_EMISSIONS_API: https://((host))/api/emissions-mgmt
       REACT_APP_EASEY_MONITOR_PLAN_API: https://((host))/api/monitor-plan-mgmt
       REACT_APP_EASEY_AUTH_API: https://((host))/api/auth-mgmt
-      REACT_APP_EASEY_UI_INACTIVITY_DURATION_MINUTES: ((inactivityDurationMinutes))
-      REACT_APP_EASEY_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS: ((activityPollingFrequencySeconds))
-      REACT_APP_EASEY_UI_ACTIVITY_COUNTDOWN_DURATION_SECONDS: ((activityCountdownDurationSeconds))
+      REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_MINUTES: ((inactivityDurationMinutes))
+      REACT_APP_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS: ((activityPollingFrequencySeconds))
+      REACT_APP_EASEY_ECMPS_UI_ACTIVITY_COUNTDOWN_DURATION_SECONDS: ((activityCountdownDurationSeconds))
     routes:
       - route: ((host))

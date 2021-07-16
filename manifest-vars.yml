@@ -1,5 +1,6 @@
 #THIS FILE SHOULD CONTAIN DEV SETTINGS AND CI/CD WORKFLOW WILL CHANGE SETTINGS BASED ON ENV
-name: ui-portal
+name: ecmps-ui
+path: ecmps
 host: easey-dev.app.cloud.gov
 environment: development
 memory: 1024M

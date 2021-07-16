@@ -5,31 +5,30 @@ const activityEvents = [];
 activityEvents.push("click");
 activityEvents.push("keydown");
 
-const title = "EPA Easey";
-
 export const config = {
   app: {
     activityEvents,
     activityRefreshApiCallInterval:
-      process.env.REACT_APP_EASEY_UI_ACTIVITY_REFRESH_API_CALL_INTERVAL ||
+      process.env.REACT_APP_EASEY_ECMPS_UI_ACTIVITY_REFRESH_API_CALL_INTERVAL ||
       30 * oneSecond,
     inactivityDuration:
-      process.env.REACT_APP_EASEY_UI_INACTIVITY_DURATION_MINUTES * oneMinute ||
+      process.env.REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_MINUTES * oneMinute ||
       oneMinute,
     activityPollingFrequency:
-      process.env.REACT_APP_EASEY_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS *
+      process.env.REACT_APP_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS *
         oneSecond || oneSecond,
     countdownDuration:
-      process.env.REACT_APP_EASEY_UI_ACTIVITY_COUNTDOWN_DURATION_SECONDS *
+      process.env.REACT_APP_EASEY_ECMPS_UI_ACTIVITY_COUNTDOWN_DURATION_SECONDS *
         oneSecond || 30 * oneSecond,
     paginationPerPage:
-      process.env.REACT_APP_EASEY_UI_PAGINATION_PER_PAGE || 100,
+      process.env.REACT_APP_EASEY_ECMPS_UI_PAGINATION_PER_PAGE || 100,
     paginationPerPageOptions: [100, 200, 500],
     paginationRangeSeparatorText: "out of",
-    env: process.env.REACT_APP_EASEY_UI_PORTAL_ENV || "local-dev",
-    published: process.env.REACT_APP_EASEY_UI_PORTAL_PUBLISHED || "local",
-    version: process.env.REACT_APP_EASEY_UI_PORTAL_VERSION || "v0.0.0",
-    title,
+    path: process.env.REACT_APP_EASEY_ECMPS_UI_PATH || "/",
+    env: process.env.REACT_APP_EASEY_ECMPS_UI_ENV || "local-dev",
+    published: process.env.REACT_APP_EASEY_ECMPS_UI_PUBLISHED || "local",
+    version: process.env.REACT_APP_EASEY_ECMPS_UI_VERSION || "v0.0.0",
+    title: process.env.REACT_APP_EASEY_ECMPS_UI_TITLE || "ECMPS",
   },
   services: {
     mdm: {

@@ -16,7 +16,7 @@ const store = configureStore();
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
+      <BrowserRouter basename={config.app.path}>
         <App />
       </BrowserRouter>
     </Provider>
