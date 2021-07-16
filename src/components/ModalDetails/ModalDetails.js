@@ -25,39 +25,13 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
             {value[1]}
           </Label>
           <div tabIndex="0" id={`${value[1]}`}>
-            {value[2] ? value[2] : ""}
+            {value[2] ? value[2] : (value[3] ==="radio")? "No":''}
           </div>
         </FormGroup>}
       </div>
     );
   };
-  const timeOptions = [
-    { time: null },
-    { time: 0 },
-    { time: 1 },
-    { time: 2 },
-    { time: 3 },
-    { time: 4 },
-    { time: 5 },
-    { time: 6 },
-    { time: 7 },
-    { time: 8 },
-    { time: 9 },
-    { time: 10 },
-    { time: 11 },
-    { time: 12 },
-    { time: 13 },
-    { time: 14 },
-    { time: 15 },
-    { time: 16 },
-    { time: 17 },
-    { time: 18 },
-    { time: 19 },
-    { time: 20 },
-    { time: 21 },
-    { time: 22 },
-    { time: 23 },
-  ];
+
   const makeEditComp = (value) => {
     let comp = null;
     switch (value[4]) {
@@ -220,7 +194,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
                 />
               </Button>
 
-              <h4 className="text-bold" className="float-left">
+              <h4 className="text-bold float-left">
                 {title}
               </h4>
             </div>

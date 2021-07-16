@@ -29,7 +29,6 @@ export const Modal = ({
   breadCrumbBar,
 }) => {
   const modalRef = createRef();
-  console.log("breadCrumbBar", breadCrumbBar);
   useEffect(() => {
     const { handleKeyPress } = focusTrap(".modal-content", close);
 
@@ -81,6 +80,7 @@ export const Modal = ({
                       close();
                     }
                   }}
+                  id="closeModalBtn"
                   title="Click to save"
                   epa-testid="closeXBtn"
                   role="button"

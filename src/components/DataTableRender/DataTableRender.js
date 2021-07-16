@@ -98,7 +98,7 @@ const DataTableRender = ({
                     epa-testid="btnOpen"
                     className="cursor-pointer open-modal-button"
                     id="btnOpen"
-                    onClick={() => openHandler(normalizedRow, false)}
+                    onClick={() => openHandler(normalizedRow, false,false,)}
                     aria-label={`open ${row.col1} `}
                     onKeyPress={(event) => {
                       if (event.key === "Enter") {
@@ -215,7 +215,7 @@ const DataTableRender = ({
         {dataLoaded && data.length > 0 ? (
           
           <div>
-            <h3 className="margin-top-5">{tableTitle}</h3>
+            <h4 className="margin-top-5 text-bold">{tableTitle}</h4>
             <DataTable
               keyField="col1"
               className={`data-display-table react-transition fade-in ${className}`}
@@ -262,7 +262,7 @@ const DataTableRender = ({
                       className="float-left clearfix margin-right-3"
                       outline="true"
                       color="black"
-                      onClick={addBtn}
+                      onClick={()=> addBtn(false,false,true)}
                     >
                       {addBtnName}
                     </Button>
@@ -273,7 +273,7 @@ const DataTableRender = ({
               </h2>
             </div>
           </div>
-        ) : ((dataLoaded && data.length == 0 )? '':(
+        ) : ((dataLoaded && data.length === 0 )? '':(
           <div className="margin-y-3 padding-y-3 react-transition fade-in font-body-sm width-full">
             <Preloader />
           </div>)

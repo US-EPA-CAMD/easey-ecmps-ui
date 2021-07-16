@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 
-import Home from "../mp-viewer/Home/Home";
+import Home from "../Home/Home";
 import NotFound from "../NotFound/NotFound";
 
 import Layout from "../Layout/Layout";
