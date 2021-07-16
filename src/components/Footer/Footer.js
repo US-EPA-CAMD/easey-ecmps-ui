@@ -5,7 +5,7 @@ import Menu from "../Menu/Menu";
 import config from "../../config";
 import "./Footer.scss";
 
-const Footer = () => {
+export const Footer = () => {
   return (
     <div className="main-footer">
       <TWFooter

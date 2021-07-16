@@ -196,9 +196,9 @@ export const DataTableSystems = ({
             breadCrumbBar={currentBar}
             title={
                 "Create System"
-              
+
             }
-            createNew="Create System" 
+            createNew="Create System"
             children={
               <ModalDetails
                 modalData={modalData}
