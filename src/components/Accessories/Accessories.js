@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@trussworks/react-uswds";
 
-const Accessories = ({ user, logOut }) => {
+export const Accessories = ({ user, logOut }) => {
   let initials = "xx";
   if (user) {
     initials = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
@@ -19,8 +19,14 @@ const Accessories = ({ user, logOut }) => {
             </p>
           </div>
 
-          <div >
-            <Button type="button" id = "logoutBTN" epa-testid="logoutBTN" outline={true} onClick={() => logOut()}>
+          <div>
+            <Button
+              type="button"
+              id="logoutBtn"
+              epa-testid="logoutBtn"
+              outline={true}
+              onClick={() => logOut()}
+            >
               Log Out
             </Button>
           </div>

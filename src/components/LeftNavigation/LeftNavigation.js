@@ -88,8 +88,6 @@ export const LeftNavigation = (props) => {
             </Button>
           </div>
         ) : null}
-
-        <Accessories user={props.user} logOut={props.logOut} />
       </div>
       {show ? (
         <Modal show={show} close={closeModalHandler} children={<Login />} />

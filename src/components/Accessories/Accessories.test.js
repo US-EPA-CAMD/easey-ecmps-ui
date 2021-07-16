@@ -24,7 +24,7 @@ const { container } = render(
   </BrowserRouter>
 );
 test("renders accesory links ", () => {
-  const accessoriesLinks = container.querySelectorAll("#logoutBTN");
+  const accessoriesLinks = container.querySelectorAll("#logoutBtn");
   for (var x of accessoriesLinks) {
     fireEvent.click(x);
   }

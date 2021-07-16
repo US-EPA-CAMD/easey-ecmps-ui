@@ -22,15 +22,13 @@ import {
   aboutEPATopics,
 } from "../WideHeaderMenu/menuTopics";
 
-import { epaLogo } from "../WideHeaderMenu/svgs";
-
 /*** additional es to add / override global es scope classes for this component only ***/
 import { focusTrap } from "../../additional-functions/focus-trap";
 
 /*** additional scss to add / override global scss scope classes for this component only ***/
 import "./WideHeader.scss";
 
-const WideHeader = () => {
+export const WideHeader = () => {
   /***** HOOKS *****/
   const [expanded, setExpanded] = useState(false);
 
@@ -85,7 +83,7 @@ const WideHeader = () => {
           title="Go to the EPA home page"
         >
           <img
-            src={epaLogo}
+            src={`${process.env.PUBLIC_URL}/images/epa-logo-blue.svg`}
             className="margin-3 padding-bottom-2 height-705 width-15"
             alt="Official EPA Logo"
           />
@@ -95,7 +93,7 @@ const WideHeader = () => {
             <NavMenuButton
               onClick={() => onClick()}
               label="Menu"
-              className="display-block usa-button radius-md bg-white text-primary
+              className="display-block usa-button radius-md bg-epa-blue-base text-white
               "
             />
           </div>
