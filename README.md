@@ -1,8 +1,8 @@
-# `EPA CAMD EASEY UI Portal`
-[![GitHub](https://img.shields.io/github/license/US-EPA-CAMD/easey-ui)](https://github.com/US-EPA-CAMD/easey-ui/blob/develop/LICENSE)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=US-EPA-CAMD_easey-ui&metric=alert_status)](https://sonarcloud.io/dashboard?id=US-EPA-CAMD_easey-ui)
-[![Develop Branch Pipeline](https://github.com/US-EPA-CAMD/easey-ui/workflows/Develop%20Branch%20Workflow/badge.svg)](https://github.com/US-EPA-CAMD/easey-ui/actions)<br>
-Frontend UI portal for the EPA CAMD Business Systems EASEY Application
+# `EPA CAMD EASEY ECMPS UI`
+[![GitHub](https://img.shields.io/github/license/US-EPA-CAMD/easey-ecmps-ui)](https://github.com/US-EPA-CAMD/easey-ecmps-ui/blob/develop/LICENSE)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=US-EPA-CAMD_easey-ecmps-ui&metric=alert_status)](https://sonarcloud.io/dashboard?id=US-EPA-CAMD_easey-ecmps-ui)
+[![Develop Branch Pipeline](https://github.com/US-EPA-CAMD/easey-ecmps-ui/workflows/Develop%20Branch%20Workflow/badge.svg)](https://github.com/US-EPA-CAMD/easey-ecmps-ui/actions)<br>
+EPA Clean Air Markets Division (CAMD) Emissions Collection & Monitor Plan System (ECMPS) website application
 
 ## `Available Scripts`
 
@@ -26,6 +26,24 @@ Your app is ready to be deployed!
 
 ## Environment Variables
 Environment variables need to be prefixed by REACT_APP_ in order for the variables to be accessible on the process.env object in JavaScript.
+
+To run application on a specific route path other than root...
+* PUBLIC_URL: https://((host))/((path))      
+* REACT_APP_EASEY_ECMPS_UI_PATH: /((path))
+
+REST API URL's required by the application...
+* REACT_APP_EASEY_AUTH_API: https://((host))/api/auth-mgmt
+* REACT_APP_EASEY_MDM_API: https://((host))/api/master-data-mgmt
+* REACT_APP_EASEY_FACILITIES_API: https://((host))/api/facility-mgmt
+* REACT_APP_EASEY_EMISSIONS_API: https://((host))/api/emissions-mgmt
+* REACT_APP_EASEY_MONITOR_PLAN_API: https://((host))/api/monitor-plan-mgmt
+
+Other application environment variables:
+* REACT_APP_EASEY_ECMPS_UI_HOST: ((host))
+* REACT_APP_EASEY_ECMPS_UI_ENV: ((environment))
+* REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_MINUTES: ((inactivityDurationMinutes))
+* REACT_APP_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS: ((activityPollingFrequencySeconds))
+* REACT_APP_EASEY_ECMPS_UI_ACTIVITY_COUNTDOWN_DURATION_SECONDS: ((activityCountdownDurationSeconds))
 
 ### Specifying Environments
 Create React App does not allow to change the value of the NODE_ENV environment variable. The npm start command will set the NODE_ENV to development, the npm test command will set the NODE_ENV to test, and the npm run build command sets the NODE_ENV to production.
