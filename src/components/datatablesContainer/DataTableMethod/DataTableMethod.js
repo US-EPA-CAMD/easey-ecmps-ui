@@ -3,26 +3,17 @@ import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 
-// import MethodModal from "../../MethodModal/MethodModal";
 import DataTableRender from "../../DataTableRender/DataTableRender";
 
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
-
+import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import {
-  findValue,
-  adjustDate,
-} from "../../../additional-functions/find-values-in-array";
+
 import {
   getActiveData,
   getInactiveData,
 } from "../../../additional-functions/filter-data";
-import {
-  bypassApproachCodes,
-  substituteDataApproachCodes,
-  parameterCodes,
-  methodCodes,
-} from "./MethodModalData";
+
 export const DataTableMethod = ({
   locationSelectValue,
   matsTableHandler,
@@ -62,59 +53,34 @@ export const DataTableMethod = ({
     "End Date and Time",
   ];
 
-  // object property,Label Name, value
-  const modalViewData = (selected, label, time) => {
-    // const keyNames = Object.keys(selectedMonitoringMethod);
-    const arr = [];
-    const codeList = {
-      bypassApproachCode: bypassApproachCodes,
-      subDataCode: substituteDataApproachCodes,
-      parameterCode: parameterCodes,
-      methodCode: methodCodes,
-    };
-
-    for (let y in label) {
-      const labels = findValue(codeList[y], selected[y], "name");
-      arr.push([y, label[y], labels, "dropdown", selected[y], codeList[y]]);
-    }
-
-    for (let y in time) {
-      if (y === "endDate" || y === "beginDate") {
-        const formmattedDate = adjustDate("mm/dd/yyyy", selected[y]);
-        arr.push([y, time[y], formmattedDate, "date", selected[y]]);
-      }
-      if (y === "endHour" || y === "beginHour") {
-        arr.push([y, time[y], selected[y], "time", selected[y]]);
-      }
-    }
-
-    return arr;
-  };
-
   // cant unit test properly
-  const openMonitoringMethodsModal = (row, bool) => {
-    if (methods.length > 0) {
-      const monMethod = methods.filter((element) => element.id === row.col7)[0];
+  const [createNewMethod, setCreateNewMethod] = useState(false);
+  const openMethodModal = (row, bool, create) => {
+    let monMethod = null;
+    setCreateNewMethod(create);
+    if (methods.length > 0 && !create) {
+      monMethod = methods.filter((element) => element.id === row.col7)[0];
       setSelectedMonitoringMethod(monMethod);
-      setShow(true);
-      setSelectedModalData(
-        modalViewData(
-          monMethod,
-          {
-            parameterCode: "Parameter",
-            methodCode: "Methodology",
-            subDataCode: "Substitute Data Approach",
-            bypassApproachCode: "Bypass Approach",
-          },
-          {
-            beginDate: "Start Date",
-            beginHour: "Start Time",
-            endDate: "End Date",
-            endHour: "End Time",
-          }
-        )
-      );
     }
+    setSelectedModalData(
+      modalViewData(
+        monMethod,
+        {
+          parameterCode: ["Parameter", "dropdown"],
+          methodCode: ["Methodology", "dropdown"],
+          subDataCode: ["Substitute Data Approach", "dropdown"],
+          bypassApproachCode: ["Bypass Approach", "dropdown"],
+        },
+        {
+          beginDate: ["Start Date", "date"],
+          beginHour: ["Start Time", "time"],
+          endDate: ["End Date", "date"],
+          endHour: ["End Time", "time"],
+        },
+        create
+      )
+    );
+    setShow(true);
   };
 
   const data = useMemo(() => {
@@ -192,13 +158,15 @@ export const DataTableMethod = ({
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
 
       <DataTableRender
-        openHandler={openMonitoringMethodsModal}
+        openHandler={openMethodModal}
         columnNames={columnNames}
         data={data}
         dataLoaded={dataLoaded}
         actionsBtn={"View"}
         checkout={checkout}
         user={user}
+        addBtn={openMethodModal}
+        addBtnName={"Create Method"}
       />
       {show ? (
         <Modal
@@ -207,6 +175,10 @@ export const DataTableMethod = ({
           save={saveMethods}
           showCancel={!(user && checkout)}
           showSave={user && checkout}
+          title={
+            createNewMethod ? "Create Method" : "Component: Monitoring Methods"
+          }
+          createNew={createNewMethod ? "Create Method" : `Save and Close`}
           children={
             <div>
               <ModalDetails

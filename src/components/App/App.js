@@ -2,13 +2,14 @@
 import React, { useState, useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 
-import Home from "../mp-viewer/Home/Home";
+import Home from "../Home/Home";
 import NotFound from "../NotFound/NotFound";
 
 import Layout from "../Layout/Layout";
 import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
 import RuleEditor from "../RuleEditor/RuleEditor";
 import Login from "../Login/Login";
+import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
 
 import { handleActiveElementFocus } from "../../additional-functions/add-active-class";
 
@@ -61,6 +62,7 @@ const App = () => {
             exact
             component={() => <MonitoringPlanHome user={user} />}
           />
+          <Route path="/reporting-instructions" exact component={ReportingInstructions} />
           <Route path="/admin/rules" exact component={RuleEditor} />
           <Route path="*" component={NotFound} />
         </Switch>

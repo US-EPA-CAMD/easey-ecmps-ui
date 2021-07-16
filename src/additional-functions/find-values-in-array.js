@@ -1,10 +1,9 @@
 import * as dmApi from "../utils/api/dataManagementApi";
 
-export const findValue = (options, val, parameter) => {
+export const findValue = (options, val,parameter) => {
   if (val === null) {
     return "";
   }
-
   for (const x of options) {
     if (x.code === val) {
       return x[parameter];

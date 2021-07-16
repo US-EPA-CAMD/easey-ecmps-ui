@@ -129,7 +129,7 @@ const MethodModal = ({ modalData, viewOnly }) => {
   }, [modalData]);
   return (
     <div className="systemsCompTable">
-      <div className="grid-container margin-bottom-2">
+      <div className="grid-container padding-0 margin-bottom-2">
         <div className="display-inline-flex padding-top-1 padding-bottom-3">
           <h3 className="text-bold">Component: Monitoring Methods</h3>
           <input

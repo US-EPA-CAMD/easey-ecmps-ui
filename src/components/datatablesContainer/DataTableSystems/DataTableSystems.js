@@ -1,22 +1,20 @@
 import React, { useEffect, useMemo, useState } from "react";
-
+import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as fs from "../../../utils/selectors/monitoringPlanSystems";
 import Modal from "../../Modal/Modal";
-import Details from "../../Details/Details";
 import DataTableSystemsComponents from "../DataTableSystemsComponents/DataTableSystemsComponents";
 import DataTableRender from "../../DataTableRender/DataTableRender";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import {
+  Breadcrumb,
+  BreadcrumbBar,
+  BreadcrumbLink,
+} from "@trussworks/react-uswds";
+import {
   getActiveData,
   getInactiveData,
 } from "../../../additional-functions/filter-data";
-
-import { types, fuels, designations } from "../../Details/SystemDescriptions";
-import {
-  findValue,
-  adjustDate,
-} from "../../../additional-functions/find-values-in-array";
 
 export const DataTableSystems = ({
   locationSelectValue,
@@ -28,12 +26,12 @@ export const DataTableSystems = ({
   const [show, setShow] = useState(false);
   const [monitoringSystems, setMonitoringSystems] = useState([]);
   const [secondLevel, setSecondLevel] = useState(false);
+  // const [firstLevel, setFirstLevel] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   useEffect(() => {
     mpApi.getMonitoringSystems(locationSelectValue).then((res) => {
       setDataLoaded(true);
       setMonitoringSystems(res.data);
-      console.log("systems", res.data);
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -42,7 +40,7 @@ export const DataTableSystems = ({
   const closeModalHandler = () => {
     setSecondLevel(false);
     setShow(false);
-  }
+  };
   const [modalData, setModalData] = useState([
     { value: 1 },
     { value: 1 },
@@ -54,62 +52,40 @@ export const DataTableSystems = ({
   const [selected, setSelected] = useState([]);
   const [selectedModalData, setSelectedModalData] = useState(null);
 
-  // object property,Label Name, value
-  const modalViewData = (selected, label, time) => {
-    const arr = [];
-    const codeList = {
-      systemTypeCode: types,
-      fuelCode: fuels,
-      systemDesignationCode: designations,
-    };
-
-    for (let y in label) {
-      if (label[y][1] === "dropdown") {
-        const labels = findValue(codeList[y], selected[y], "name");
-        arr.push([y, label[y][0], labels, "dropdown", selected[y], codeList[y]]);
-      } else if (label[y][1] === "input") {
-        arr.push([y, label[y][0], selected[y], "input"]);
-      }
-    }
-
-    for (let y in time) {
-      if (y === "endDate" || y === "beginDate") {
-        const formattedDate = adjustDate("mm/dd/yyyy", selected[y]);
-        arr.push([y, time[y][0], formattedDate, "date",selected[y]]);
-      }
-      if (y === "endHour" || y === "beginHour") {
-        arr.push([y, time[y][0], selected[y], "time",selected[y]]);
-      }
-    }
-    return arr;
-  };
-
   // *** row handler onclick event listener
-  const selectedRowHandler = (row, bool) => {
-    const selectSystem = monitoringSystems.filter(
-      (element) => element.id === row.col7
-    )[0];
-    setSelected(row.cells);
+  const openSystem = (row, bool, create) => {
+    let selectSystem = null;
+    setCreateNewSystem(create);
+    if (monitoringSystems.length > 0 && !create) {
+      selectSystem = monitoringSystems.filter(
+        (element) => element.id === row.col7
+      )[0];
+      setSelected(row.cells);
+    }
     setSelectedModalData(
       modalViewData(
         selectSystem,
         {
           systemIdentifier: ["System ID", "input"],
-          systemTypeCode: ["System Type", "dropdown"],
-          fuelCode: ["System Fuel", "dropdown"],
           systemDesignationCode: ["System Designation", "dropdown"],
+          systemTypeCode: ["System Type", "dropdown"],
+          fuelCode: ["Fuel Type", "dropdown"],
         },
         {
           beginDate: ["Start Date", "date"],
           beginHour: ["Start Time", "time"],
           endDate: ["End Date", "date"],
           endHour: ["End Time", "time"],
-        }
+        },
+        create
       )
     );
+    if (create) {
+      setSecondLevel(create);
+    }
     setShow(true);
   };
-
+  const [createNewSystem, setCreateNewSystem] = useState(false);
   useEffect(() => {
     setModalData(
       selected.map((info) => {
@@ -133,6 +109,36 @@ export const DataTableSystems = ({
     "End Date and Time",
   ];
 
+  const [currentBar, setCurrentBar] = useState("");
+  const breadCrumbs = (lastBread) => {
+    const breadBar = (
+      <BreadcrumbBar className="padding-0">
+        <Breadcrumb onClick={() => setSecondLevel(false)}>
+          <BreadcrumbLink>
+            <span>System</span>
+          </BreadcrumbLink>
+        </Breadcrumb>
+
+        <Breadcrumb current>
+          <span>{lastBread}</span>
+        </Breadcrumb>
+      </BreadcrumbBar>
+    );
+    setCurrentBar(breadBar);
+    if (secondLevel) {
+      setCurrentBar("");
+    }
+  };
+  useEffect(() => {
+    if (!secondLevel) {
+      setCurrentBar("");
+    }
+  }, [secondLevel]);
+
+  const setBread = (val, currentBread) => {
+    setSecondLevel(val);
+    breadCrumbs(currentBread);
+  };
   // *** memoize data
   const data = useMemo(() => {
     if (monitoringSystems.length > 0) {
@@ -163,55 +169,84 @@ export const DataTableSystems = ({
     return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringSystems, inactive]);
-  const viewOnly = true;
+
   return (
     <>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
-      <div className="methodTable">
+      <div className="methodTable ">
         <DataTableRender
           dataLoaded={dataLoaded}
-          pagination
-          filter
           data={data}
           columnNames={columnNames}
-          openHandler={selectedRowHandler}
+          openHandler={openSystem}
           actionsBtn="View"
           checkout={checkout}
           user={user}
+          addBtn={openSystem}
+          addBtnName={"Create System"}
         />
       </div>
       {show ? (
-        <Modal
-          secondLevel={true}
-          show={show}
-          close={closeModalHandler}
-          showCancel={!(user && checkout)}
-          showSave={user && checkout}
-          children={
-            <div>
-              {secondLevel ? (
-                ""
-              ) :
-                <ModalDetails
-                  modalData={modalData}
-                  data={selectedModalData}
-                  cols={2}
-                  title={`System: ${selected[0]['value']}`}
-                  viewOnly={!(user && checkout)}
-                />
-              }
-              <DataTableSystemsComponents
-                secondLevel={secondLevel}
-                setSecondLevel={setSecondLevel}
-                viewOnly={false}
-                user={user}
-                checkout={checkout}
-                locationSelectValue={locationSelectValue}
-                systemID={modalData.length > 1 ? modalData[0].value : 0}
+        createNewSystem ? (
+          <Modal
+            show={show}
+            close={closeModalHandler}
+            showCancel={!(user && checkout)}
+            showSave={user && checkout}
+            breadCrumbBar={currentBar}
+            title={
+                "Create System"
+
+            }
+            createNew="Create System"
+            children={
+              <ModalDetails
+                modalData={modalData}
+                data={selectedModalData}
+                cols={2}
+                title={`Create System`}
+                viewOnly={!(user && checkout)}
               />
-            </div>
-          }
-        />
+            }
+          />
+        ) : (
+          <Modal
+            secondLevel={secondLevel}
+            show={show}
+            close={closeModalHandler}
+            showCancel={!(user && checkout)}
+            showSave={user && checkout}
+            breadCrumbBar={currentBar}
+            title={
+                 `System: ${selected[0]["value"]}`
+            }
+            createNew= "Save and Close"
+            children={
+              <div>
+                {secondLevel ? (
+                  ""
+                ) : (
+                  <ModalDetails
+                    modalData={modalData}
+                    data={selectedModalData}
+                    cols={2}
+                    title={`System: ${selected[0]["value"]}`}
+                    viewOnly={!(user && checkout)}
+                  />
+                )}
+                <DataTableSystemsComponents
+                  secondLevel={secondLevel}
+                  setSecondLevel={setBread}
+                  viewOnly={false}
+                  user={user}
+                  checkout={checkout}
+                  locationSelectValue={locationSelectValue}
+                  systemID={modalData.length > 1 ? modalData[0].value : 0}
+                />
+              </div>
+            }
+          />
+        )
       ) : null}
     </>
   );

@@ -10,3 +10,10 @@
 .modal-color {
   border-radius: 1% !important;
 }
+
+.break-line{
+ 
+    display:block;
+    width:100%; /*or whatever width you want the effect of <hr>*/
+    border-top: 1px solid #ccc
+}
