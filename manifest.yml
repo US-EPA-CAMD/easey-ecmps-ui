@@ -18,4 +18,4 @@ applications:
       REACT_APP_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS: ((activityPollingFrequencySeconds))
       REACT_APP_EASEY_ECMPS_UI_ACTIVITY_COUNTDOWN_DURATION_SECONDS: ((activityCountdownDurationSeconds))
     routes:
-      - route: ((host))
+      - route: ((host))/((path))
