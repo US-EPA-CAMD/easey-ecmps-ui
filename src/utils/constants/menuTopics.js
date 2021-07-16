@@ -1,6 +1,8 @@
 import React from "react";
 import { Button } from "@trussworks/react-uswds";
 
+import { logOut } from "../../additional-functions/admin-app-functions";
+
 export const environmentalTopics = [
   {
     link: "https://www.epa.gov/environmental-topics",
@@ -179,7 +181,8 @@ export const subHeaderMenuList = [
         id="logoutBtn"
         epa-testid="logoutBtn"
         outline={true}
-        onClick={() => void 0}
+        onClick={() => logOut()}
+        title="Click this button to logout"
         className="text-white border-white position-relative top-neg-2 text-no-wrap"
       >
         Log Out

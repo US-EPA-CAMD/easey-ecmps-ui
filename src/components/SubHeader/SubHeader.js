@@ -49,8 +49,6 @@ export const SubHeader = () => {
     setCategorySelected([false, false, false, false, false]);
   };
 
-  const logOut = () => {};
-
   return (
     <div className="subheader-wrapper bg-primary-dark">
       <Header className="padding-y-2 mobile-lg:padding-x-2 desktop:padding-x-4">
@@ -68,9 +66,9 @@ export const SubHeader = () => {
           </Title>
           <Button className="desktop:display-none float-right bg-transparent margin-0 position-relative top-1">
             <img
-              src={`${process.env.PUBLIC_URL}/images/icons/mobile-menu-expand.svg`}
+              src={`"${process.env.PUBLIC_URL}/images/icons/mobile-menu-expand.svg"`}
               alt="Expandable Menu"
-              className={"position-absolute bottom-1px"}
+              className="position-absolute bottom-1px"
             />
           </Button>
           <PrimaryNav

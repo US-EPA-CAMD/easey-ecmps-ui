@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Accessories from "../Accessories/Accessories";
 import { Button, SideNav } from "@trussworks/react-uswds";
 import Modal from "../Modal/Modal";
 import Login from "../Login/Login";
