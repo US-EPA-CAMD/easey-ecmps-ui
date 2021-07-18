@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { config } from "../../config";
-import { subHeaderMenuList } from "../../utils/constants/menuTopics";
 import {
   Menu,
   Header,
@@ -12,8 +11,78 @@ import {
 } from "@trussworks/react-uswds";
 
 import "./SubHeader.scss";
+import { logOut } from "../../additional-functions/admin-app-functions";
 
-export const SubHeader = () => {
+export const SubHeader = ({ user }) => {
+  let initials = "xx";
+  if (user) {
+    initials = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
+  }
+
+  const [userProfileExpanded, setUserProfileExpanded] = useState(false);
+
+  const [userProfileIcon, setUserProfileIcon] = useState(
+    `${process.env.PUBLIC_URL}/images/icons/menu-item-expand.svg`
+  );
+
+  const subHeaderMenuList = [
+    {
+      label: (
+        <Button
+          type="button"
+          id="logoutBtn"
+          epa-testid="logoutBtn"
+          outline={true}
+          onClick={() => logOut()}
+          title="Click this button to logout"
+          className="text-white border-white position-relative top-neg-2 text-no-wrap"
+        >
+          Log Out
+        </Button>
+      ),
+      items: [],
+    },
+
+    {
+      label: <span className="margin-right-1 text-no-wrap">Resources</span>,
+      items: [
+        { menu: "sdfa", link: "" },
+        { menu: "sdfa", link: "" },
+      ],
+    },
+    {
+      label: (
+        <span className="margin-right- text-no-wrap1">
+          <span
+            className="margin-right-20 menu-item-separator"
+            style={{ color: "#365b8f" }}
+          >
+            |
+          </span>
+          Help/Support
+        </span>
+      ),
+      items: [{ menu: "", link: "" }],
+    },
+    {
+      label: (
+        <span className="margin-right-1 text-no-wrap">
+          <span className="margin-right-20 menu-item-separator">|</span>
+          Regulatory Partners
+        </span>
+      ),
+      items: [{ menu: "", link: "" }],
+    },
+    {
+      label: (
+        <span className="margin-right-1 text-no-wrap">
+          <span className="margin-right-20 menu-item-separator">|</span>Site Map
+        </span>
+      ),
+      items: [],
+    },
+  ];
+
   useEffect(() => {
     setCategorySelected([false, false, false, false, false]);
   }, []);
@@ -49,6 +118,21 @@ export const SubHeader = () => {
     setCategorySelected([false, false, false, false, false]);
   };
 
+  const toggleUserProfileDropdown = () => {
+    console.log(userProfileExpanded);
+    if (userProfileExpanded === true) {
+      setUserProfileIcon(
+        `${process.env.PUBLIC_URL}/images/icons/menu-item-expand.svg`
+      );
+    } else {
+      setUserProfileIcon(
+        `${process.env.PUBLIC_URL}/images/icons/menu-item-collapse.svg`
+      );
+    }
+
+    setUserProfileExpanded(!userProfileExpanded);
+  };
+
   return (
     <div className="subheader-wrapper bg-primary-dark">
       <Header className="padding-y-2 mobile-lg:padding-x-2 desktop:padding-x-4">
@@ -64,9 +148,10 @@ export const SubHeader = () => {
               Emissions Collection and Monitoring Plan System
             </span>
           </Title>
+
           <Button className="desktop:display-none float-right bg-transparent margin-0 position-relative top-1">
             <img
-              src={`"${process.env.PUBLIC_URL}/images/icons/mobile-menu-expand.svg"`}
+              src={`${process.env.PUBLIC_URL}/images/icons/mobile-menu-expand.svg`}
               alt="Expandable Menu"
               className="position-absolute bottom-1px"
             />
@@ -129,6 +214,24 @@ export const SubHeader = () => {
               }
             })}
           />
+          <span className="text-bold text-white text-no-wrap float-right clearfix position-relative top-2 margin-x-2">
+            Welcome, {user.firstName}!
+          </span>
+          <span
+            data-initials={initials}
+            className="text-bold float-right clearfix cursor-pointer"
+            tabIndex="0"
+            id="loggedInUserInitials"
+            aria-expanded="false"
+            onClick={() => toggleUserProfileDropdown()}
+            onKeyPress={(event) => {
+              if (event.key === "Enter") {
+                toggleUserProfileDropdown();
+              }
+            }}
+          >
+            <img src={userProfileIcon} aria-hidden={false} tabIndex="-1" />
+          </span>
         </div>
       </Header>
     </div>

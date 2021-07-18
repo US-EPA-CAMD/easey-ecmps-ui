@@ -6,23 +6,12 @@ import Login from "../Login/Login";
 import { Link } from "react-router-dom";
 import { Link as USWDSLink } from "@trussworks/react-uswds";
 
+import { head, workSpace } from "../../utils/constants/menuTopics";
+
 export const LeftNavigation = (props) => {
   const [currentRoute, setCurrentRoute] = useState(
     window.location.href.replace(`${window.location.origin}`, "")
   );
-
-  const head = [
-    { name: "Home", url: "/" },
-    { name: "Monitoring Plans", url: "/monitoring-plans" },
-    { name: "QA & Certifications", url: "/qa_certifications" },
-    { name: "Emissions", url: "/emission" },
-  ];
-
-  const workSpace = [
-    { name: "Monitoring Plans", url: "/workspace/monitoring-plans" },
-    { name: "QA & Certifications", url: "/workspace/qa_certifications" },
-    { name: "Emissions", url: "/workspace/emission" },
-  ];
 
   const handleRouteChange = (event, url) => {
     setCurrentRoute(url);
@@ -68,11 +57,15 @@ export const LeftNavigation = (props) => {
     [<SideNav key="sideNav" items={makeHeader(workSpace)} isSubnav={true} />],
   ];
   return (
-    <div className="minh-tablet font-body-sm padding-3">
+    <div className="minh-tablet font-body-sm padding-3 mobile-lg:display-none desktop-lg:display-block ">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       <SideNav items={makeHeader(head)} />
 
-      {props.user ? <SideNav items={wsItems} /> : ""}
+      {props.user ? (
+        <div className="margin-top-7">
+          <SideNav items={wsItems} />
+        </div>
+      ) : null}
       <div className="padding-bottom-4 position-absolute bottom-3">
         {!props.user ? (
           <div className="padding-bottom-2">

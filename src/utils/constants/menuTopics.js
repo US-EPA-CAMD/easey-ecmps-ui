@@ -155,75 +155,42 @@ export const collapsableFooterTopics = [
   },
 ];
 
-export const subHeaderMenuList = [
-  {
-    label: (
-      <span
-        data-initials={"TD"}
-        className="text-bold position-relative top-neg-2"
-        id="loggedInUserInitials"
-      >
-        {" "}
-      </span>
-    ),
-    items: [{}],
-  },
-  {
-    label: (
-      <span className="text-bold text-white text-no-wrap">Welcome, Tony!</span>
-    ),
-    items: [],
-  },
-  {
-    label: (
-      <Button
-        type="button"
-        id="logoutBtn"
-        epa-testid="logoutBtn"
-        outline={true}
-        onClick={() => logOut()}
-        title="Click this button to logout"
-        className="text-white border-white position-relative top-neg-2 text-no-wrap"
-      >
-        Log Out
-      </Button>
-    ),
-    items: [],
-  },
+export const head = [
+  { name: "Home", url: "/" },
+  { name: "Monitoring Plans", url: "/monitoring-plans" },
+  { name: "QA & Certifications", url: "/qa_certifications" },
+  { name: "Emissions", url: "/emission" },
+];
 
+export const workSpace = [
+  { name: "Monitoring Plans", url: "/workspace/monitoring-plans" },
+  { name: "QA & Certifications", url: "/workspace/qa_certifications" },
+  { name: "Emissions", url: "/workspace/emission" },
+];
+
+export const appNavItems = [
   {
-    label: <span className="margin-right-1 text-no-wrap">Resources</span>,
-    items: [{ menu: "", link: "" }],
-  },
-  {
-    label: (
-      <span className="margin-right- text-no-wrap1">
-        <span
-          className="margin-right-20 menu-item-separator"
-          style={{ color: "#365b8f" }}
-        >
-          |
-        </span>
-        Help/Support
-      </span>
-    ),
-    items: [{ menu: "", link: "" }],
-  },
-  {
-    label: (
-      <span className="margin-right-1 text-no-wrap">
-        <span className="margin-right-20 menu-item-separator">|</span>Regulatory
-        Partners
-      </span>
-    ),
-    items: [{ menu: "", link: "" }],
-  },
-  {
-    label: (
-      <span className="margin-right-1 text-no-wrap">
-        <span className="margin-right-20 menu-item-separator">|</span>Site Map
-      </span>
-    ),
+    label: "Home",
     items: [],
+  },
+  {
+    label: "Monitoring Plans",
+    items: [],
+  },
+  {
+    label: "QA & Certifications",
+    items: [],
+  },
+  {
+    label: "Emissions",
+    items: [],
+  },
+  {
+    label: "Workspace",
+    items: [
+      { menu: "DATA Overview", link: "/data" },
+      { menu: "Custom Data Download", link: "/select-data-type" },
+      { menu: "Bulk Data Files", link: "" },
+    ],
   },
 ];

@@ -1,10 +1,12 @@
 import React from "react";
-import { Footer } from "../Footer/Footer";
-import { WideHeader } from "../WideHeader/WideHeader";
-import "./Layout.scss";
 import { Link } from "@trussworks/react-uswds";
-import { LeftNavigation } from "../LeftNavigation/LeftNavigation";
+import { WideHeader } from "../WideHeader/WideHeader";
 import { SubHeader } from "../SubHeader/SubHeader";
+import { LeftNavigation } from "../LeftNavigation/LeftNavigation";
+import { LeftNavToSubHeader } from "../SubHeader/LeftNavToSubHeader";
+import { Footer } from "../Footer/Footer";
+
+import "./Layout.scss";
 
 const Layout = (props) => {
   const childrenWithProps = React.Children.map(props.children, (child) =>
@@ -17,8 +19,9 @@ const Layout = (props) => {
       </Link>
       <div className="topHeader">
         <WideHeader />
-        <SubHeader />
+        <SubHeader user={props.user} />
       </div>
+      <LeftNavToSubHeader />
       <div className="grid-row">
         <div className="grid-col-2 bg-base-lightest">
           <LeftNavigation user={props.user} logOut={props.logOut} />

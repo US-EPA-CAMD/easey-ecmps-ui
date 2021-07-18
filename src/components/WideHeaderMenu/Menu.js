@@ -1,7 +1,8 @@
 import React from "react";
 import { MegaMenu, NavDropDownButton, Link } from "@trussworks/react-uswds";
 import "./Menu.scss";
-const Menu = (props) => {
+
+export const Menu = (props) => {
   const subMenuCreation = (arrayTopics) => {
     const title = arrayTopics[0].name;
     return arrayTopics
