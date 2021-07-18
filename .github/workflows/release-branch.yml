@@ -26,7 +26,7 @@ jobs:
       - name: Configure Env Vars
         run: devops/scripts/environment-variables-noTag.sh
         env:
-          ENV_VAR_PREFIX: EASEY
+          ENV_VAR_PREFIX: REACT_APP_EASEY
       - name: Build
         run: devops/scripts/build.sh
         env:
@@ -62,7 +62,7 @@ jobs:
       - name: Configure Env Vars
         run: devops/scripts/environment-variables-noTag.sh TEST
         env:
-          ENV_VAR_PREFIX: EASEY
+          ENV_VAR_PREFIX: REACT_APP_EASEY
       - name: Install cf cli
         run: devops/scripts/install-cf-cli.sh
       - name: Login to cloud.gov
@@ -97,7 +97,7 @@ jobs:
       - name: Configure Env Vars
         run: devops/scripts/environment-variables-noTag.sh STAGE
         env:
-          ENV_VAR_PREFIX: EASEY
+          ENV_VAR_PREFIX: REACT_APP_EASEY
       - name: Install cf cli
         run: devops/scripts/install-cf-cli.sh
       - name: Login to cloud.gov
