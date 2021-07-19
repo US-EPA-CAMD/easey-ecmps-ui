@@ -174,25 +174,6 @@
   }
 }
 
-.workspaceDropDown {
-  .usa-nav__submenu {
-    background-color: transparent;
-  }
-
-  .usa-megamenu.usa-nav__submenu::after {
-    background-color: transparent;
-  }
-
-  .usa-megamenu.usa-nav__submenu::before {
-    background-color: transparent;
-  }
-
-  .usa-nav__submenu-item {
-    border-top: 1px solid #dfe1e2;
-    font-size: 0.93rem;
-  }
-}
-
 .subheader-wrapper {
   .usa-nav__primary button {
     font-family: "Source Sans Pro Web", serif !important;
@@ -201,7 +182,7 @@
   }
 
   .usa-nav__primary button[aria-expanded="false"] {
-    background-image: url("/images/icons/menu-item-expand.svg"),
+    background-image: url("/ecmps/images/icons/menu-item-expand.svg"),
       linear-gradient(transparent, transparent);
     background-repeat: no-repeat;
     background-size: 3rem;
@@ -209,7 +190,7 @@
   }
 
   .usa-nav__primary button[aria-expanded="true"] {
-    background-image: url("/images/icons/menu-item-collapse.svg"),
+    background-image: url("/ecmps/images/icons/menu-item-collapse.svg"),
       linear-gradient(transparent, transparent);
     background-repeat: no-repeat;
     background-size: 3rem;
@@ -244,6 +225,52 @@
   .usa-logo__text > h1 {
     line-height: 1.1;
   }
+}
+
+.left-sidenav-to-header-wrapper {
+  .usa-nav__primary {
+    button {
+      font-family: "Source Sans Pro Web", serif !important;
+      color: $epa-black;
+      font-weight: normal;
+    }
+  }
+
+  .usa-accordion__button[aria-expanded="false"] {
+    background-image: url("/ecmps/images/icons/menu-item-expand-black.svg"),
+      linear-gradient(transparent, transparent);
+    background-repeat: no-repeat;
+    background-size: 3rem;
+  }
+
+  .usa-accordion__button[aria-expanded="true"] {
+    background-image: url("/ecmps/images/icons/menu-item-collapse-black.svg"),
+      linear-gradient(transparent, transparent);
+    background-repeat: no-repeat;
+    background-size: 3rem;
+  }
+
+  .usa-accordion__button.no-subitems {
+    background-image: none !important;
+  }
+
+  .usa-nav__primary .usa-accordion__button span::after {
+    color: $epa-black;
+  }
+
+  .usa-nav__primary > .usa-nav__primary-item > a {
+    color: $epa-black;
+  }
+
+  .usa-nav-container {
+    max-width: 100% !important;
+  }
+}
+
+.current-app-subitem {
+  font-weight: bold;
+  border-bottom: solid 0.3em $epa-blue-base;
+  color: $epa-blue-base;
 }
 
 .usa-label,

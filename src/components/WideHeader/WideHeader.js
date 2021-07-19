@@ -33,7 +33,7 @@ export const WideHeader = () => {
   const [expanded, setExpanded] = useState(false);
 
   /***** EVENT HANDLERS *****/
-  const onClick = () => {
+  const toggleRightSideNav = () => {
     const { handleKeyPress } = focusTrap("#navRightSide", () =>
       setExpanded(false)
     );
@@ -91,7 +91,7 @@ export const WideHeader = () => {
         <div className="usa-nav-container ">
           <div className="usa-navbar">
             <NavMenuButton
-              onClick={() => onClick()}
+              onClick={() => toggleRightSideNav()}
               label="Menu"
               className="display-block usa-button radius-md bg-epa-blue-base text-white
               "
@@ -101,7 +101,7 @@ export const WideHeader = () => {
             className=""
             items={mainMenu}
             mobileExpanded={expanded}
-            onToggleMobileNav={() => onClick()}
+            onToggleMobileNav={() => toggleRightSideNav()}
             key="primaryNav"
             id="navRightSide"
           >

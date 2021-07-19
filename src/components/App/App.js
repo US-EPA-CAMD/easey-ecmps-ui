@@ -25,11 +25,6 @@ const App = () => {
     setUser(cdxUser && cdxUser.firstName ? cdxUser : false);
   }, []);
 
-  const logOut = () => {
-    sessionStorage.removeItem("cdx_user");
-    window.location = "/";
-  };
-
   // *** assign / un-assign activity event listeners
   useEffect(() => {
     handleActiveElementFocus();
@@ -47,7 +42,7 @@ const App = () => {
 
   return (
     <div>
-      <Layout user={user} logOut={logOut}>
+      <Layout user={user}>
         <Switch>
           <Redirect from="/home" to="/" />
           <Route path="/" exact component={Home} />
@@ -62,7 +57,11 @@ const App = () => {
             exact
             component={() => <MonitoringPlanHome user={user} />}
           />
-          <Route path="/reporting-instructions" exact component={ReportingInstructions} />
+          <Route
+            path="/reporting-instructions"
+            exact
+            component={ReportingInstructions}
+          />
           <Route path="/admin/rules" exact component={RuleEditor} />
           <Route path="*" component={NotFound} />
         </Switch>

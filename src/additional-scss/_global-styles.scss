@@ -26,9 +26,9 @@ body {
   content: attr(data-initials);
   display: inline-block;
   font-size: 1em;
-  width: 4em;
-  height: 4em;
-  line-height: 4em;
+  width: 3.5em;
+  height: 3.5em;
+  line-height: 3.5em;
   text-align: center;
   border-radius: 50%;
   background: $epa-info-base;
@@ -41,6 +41,10 @@ body {
     border: none !important;
   }
   outline: none !important;
+}
+
+#loggedInUserInitials img {
+  height: 3em;
 }
 
 .menu-item-separator {
