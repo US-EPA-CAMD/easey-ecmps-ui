@@ -20,6 +20,7 @@ import { findValue, adjustDate } from "./find-values-in-array";
 
 // object property,Label Name, value
 
+//arr = [property name, ui label, value, required or not labeling for edit, control input type ... ]
 export const modalViewData = (selected, label, time, createNew) => {
   const arr = [];
   const codeList = {
@@ -49,7 +50,7 @@ export const modalViewData = (selected, label, time, createNew) => {
           y,
           label[y][0],
           labels,
-          "required",
+          label[y][2]==="required"? "required":false,
           "dropdown",
           createNew ? "select" : selected[y],
           codeList[y],
@@ -60,7 +61,7 @@ export const modalViewData = (selected, label, time, createNew) => {
           y,
           label[y][0],
           createNew ? "" : selected[y],
-          "required",
+          label[y][2]==="required"? "required":false,
           "input",
         ]);
         break;
@@ -70,7 +71,13 @@ export const modalViewData = (selected, label, time, createNew) => {
 
         break;
       case "radio":
-        arr.push([y, label[y][0], selected[y], "radio"]);
+        if (selected) {
+          arr.push([y, label[y][0], selected[y],label[y][2]==="required"? "required":false, "radio"]);
+        }
+        else{
+          arr.push([y, label[y][0], false,label[y][2]==="required"? "required":false, "radio"]);
+        }
+        console.log('selected',selected,y)
         break;
       default:
         break;
@@ -88,7 +95,7 @@ export const modalViewData = (selected, label, time, createNew) => {
         y,
         time[y][0],
         formattedDate,
-        y === "endDate" ? " " : "required",
+        time[y][2]==="required"? "required":false,
         "date",
         createNew ? "" : selected[y],
       ]);
@@ -98,7 +105,7 @@ export const modalViewData = (selected, label, time, createNew) => {
         y,
         time[y][0],
         createNew ? "" : selected[y],
-        y === "endHour" ? " " : "required",
+        time[y][2]==="required"? "required":false,
         "time",
         createNew ? "" : selected[y],
       ]);
