@@ -35,7 +35,8 @@ export const SubHeader = ({ user }) => {
           outline={true}
           onClick={() => logOut()}
           title="Click this button to logout"
-          className="text-white border-white position-relative top-neg-2 text-no-wrap"
+          className={`text-white border-white position-relative top-neg-2 text-no-wrap 
+                      ${!user ? " display-none " : ""}`}
         >
           Log Out
         </Button>
@@ -149,7 +150,10 @@ export const SubHeader = ({ user }) => {
             </span>
           </Title>
 
-          <Button className="desktop:display-none float-right bg-transparent margin-0 position-relative top-1">
+          <Button
+            type="button"
+            className="desktop:display-none float-right bg-transparent margin-0 position-relative top-1"
+          >
             <img
               src={`${process.env.PUBLIC_URL}/images/icons/mobile-menu-expand.svg`}
               alt="Expandable Menu"
@@ -214,24 +218,33 @@ export const SubHeader = ({ user }) => {
               }
             })}
           />
-          <span className="text-bold text-white text-no-wrap float-right clearfix position-relative top-2 margin-x-2">
-            Welcome, {user.firstName}!
-          </span>
-          <span
-            data-initials={initials}
-            className="text-bold float-right clearfix cursor-pointer"
-            tabIndex="0"
-            id="loggedInUserInitials"
-            aria-expanded="false"
-            onClick={() => toggleUserProfileDropdown()}
-            onKeyPress={(event) => {
-              if (event.key === "Enter") {
-                toggleUserProfileDropdown();
-              }
-            }}
-          >
-            <img src={userProfileIcon} aria-hidden={false} tabIndex="-1" />
-          </span>
+          {user ? (
+            <>
+              <span className="text-bold text-white text-no-wrap float-right clearfix position-relative top-2 margin-x-2">
+                Welcome, {user.firstName}!
+              </span>
+              <span
+                data-initials={initials}
+                className="text-bold float-right clearfix cursor-pointer"
+                tabIndex="0"
+                id="loggedInUserInitials"
+                aria-expanded="false"
+                onClick={() => toggleUserProfileDropdown()}
+                onKeyPress={(event) => {
+                  if (event.key === "Enter") {
+                    toggleUserProfileDropdown();
+                  }
+                }}
+              >
+                <img
+                  src={userProfileIcon}
+                  aria-hidden={true}
+                  tabIndex="-1"
+                  alt="Expand menu"
+                />
+              </span>
+            </>
+          ) : null}
         </div>
       </Header>
     </div>
