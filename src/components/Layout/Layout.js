@@ -25,7 +25,7 @@ const Layout = (props) => {
       <LeftNavToSubHeader />
 
       <div className="grid-row">
-        <div className="grid-col-2 bg-base-lightest mobile:display-none desktop:display-block">
+        <div className="grid-col-2 bg-base-lightest mobile-lg:display-none desktop:display-none desktop-lg:display-block">
           <LeftNavigation user={props.user} logOut={props.logOut} />
         </div>
         <div className="grid-col margin-x-2 minh-tablet-lg" id="main">

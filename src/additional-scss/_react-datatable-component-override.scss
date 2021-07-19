@@ -27,7 +27,7 @@
   .rdt_TableHeadRow {
     border-bottom: solid 2px $epa-navy !important;
     .rdt_TableCol {
-      @extend .bg-base-lightest;
+      background: $epa-white;
       @extend .font-heading-md;
 
       color: $epa-black !important;
