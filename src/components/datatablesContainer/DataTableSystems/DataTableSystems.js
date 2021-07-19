@@ -66,16 +66,16 @@ export const DataTableSystems = ({
       modalViewData(
         selectSystem,
         {
-          systemIdentifier: ["System ID", "input"],
-          systemDesignationCode: ["System Designation", "dropdown"],
-          systemTypeCode: ["System Type", "dropdown"],
-          fuelCode: ["Fuel Type", "dropdown"],
+          systemIdentifier: ["System ID", "input",'required'],
+          systemDesignationCode: ["System Designation", "dropdown",'required'],
+          systemTypeCode: ["System Type", "dropdown",'required'],
+          fuelCode: ["Fuel Type", "dropdown",'required'],
         },
         {
-          beginDate: ["Start Date", "date"],
-          beginHour: ["Start Time", "time"],
-          endDate: ["End Date", "date"],
-          endHour: ["End Time", "time"],
+          beginDate: ["Start Date", "date",'required'],
+          beginHour: ["Start Time", "time",'required'],
+          endDate: ["End Date", "date",""],
+          endHour: ["End Time", "time",""],
         },
         create
       )

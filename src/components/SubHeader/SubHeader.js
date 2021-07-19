@@ -138,13 +138,13 @@ export const SubHeader = ({ user }) => {
     <div className="subheader-wrapper bg-primary-dark">
       <Header className="padding-y-2 mobile-lg:padding-x-2 desktop:padding-x-4">
         <div className="usa-nav-container clearfix padding-x-0">
-          <Title className="float-left margin-1">
-            <h1 className="display-inline-block text-white text-bold desktop-lg:font-sans-3xl desktop:font-sans-2xl mobile-lg:font-sans-xl margin-0">
+          <Title className="float-left margin-1 margin-top-0">
+            <h1 className="display-inline-block text-white text-bold desktop-lg:font-sans-2xl desktop:font-sans-2xl mobile-lg:font-sans-xl margin-0">
               ECMPS
             </h1>
             <span
-              className="display-none desktop:display-block
-              desktop-lg:display-inline-block desktop-lg:margin-left-1 text-white text-normal font-sans-md width-card-lg text-wrap"
+              className="display-none
+              desktop-lg:display-inline-block desktop-lg:margin-left-1 text-white text-normal font-sans-sm width-card-lg text-wrap"
             >
               Emissions Collection and Monitoring Plan System
             </span>
@@ -152,7 +152,7 @@ export const SubHeader = ({ user }) => {
 
           <Button
             type="button"
-            className="bg-transparent margin-0 float-right clearfix desktop:display-block"
+            className="bg-transparent margin-0 float-right clearfix desktop:display-none"
           >
             <img
               src={`${process.env.PUBLIC_URL}/images/icons/mobile-menu-expand.svg`}
@@ -219,12 +219,12 @@ export const SubHeader = ({ user }) => {
           />
           {user ? (
             <>
-              <span className="text-bold text-white text-no-wrap float-right clearfix position-relative top-2 margin-x-2">
+              <span className="text-bold text-white text-no-wrap float-right clearfix position-relative top-1 margin-x-2 display-none widescreen:display-block">
                 Welcome, {user.firstName}!
               </span>
               <span
                 data-initials={initials}
-                className="text-bold float-right clearfix cursor-pointer"
+                className="text-bold float-right clearfix cursor-pointer desktop:margin-top-3"
                 tabIndex="0"
                 id="loggedInUserInitials"
                 aria-expanded="false"
