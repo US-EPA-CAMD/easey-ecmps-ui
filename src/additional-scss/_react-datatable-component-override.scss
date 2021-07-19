@@ -25,11 +25,11 @@
     display: none;
   }
   .rdt_TableHeadRow {
-    border-bottom: solid 2px $epa-navy !important;
+    // border-bottom: solid 2px $epa-navy !important;
     .rdt_TableCol {
-      @extend .bg-base-lightest;
+      // @extend .bg-base-lightest;
       @extend .font-heading-md;
-
+      background: $epa-white;
       color: $epa-black !important;
       font-weight: bold;
       border: solid 1px $epa-white;
@@ -43,6 +43,7 @@
         color: $epa-black !important;
       }
     }
+    border:none !important;
   }
 
   .rdt_TableBody {

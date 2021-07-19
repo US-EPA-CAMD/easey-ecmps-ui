@@ -66,16 +66,16 @@ export const DataTableMethod = ({
       modalViewData(
         monMethod,
         {
-          parameterCode: ["Parameter", "dropdown"],
-          methodCode: ["Methodology", "dropdown"],
-          subDataCode: ["Substitute Data Approach", "dropdown"],
-          bypassApproachCode: ["Bypass Approach", "dropdown"],
+          parameterCode: ["Parameter", "dropdown",'required'],
+          methodCode: ["Methodology", "dropdown",'required'],
+          subDataCode: ["Substitute Data Approach", "dropdown",'required'],
+          bypassApproachCode: ["Bypass Approach", "dropdown",'required'],
         },
         {
-          beginDate: ["Start Date", "date"],
-          beginHour: ["Start Time", "time"],
-          endDate: ["End Date", "date"],
-          endHour: ["End Time", "time"],
+          beginDate: ["Start Date", "date",'required'],
+          beginHour: ["Start Time", "time",'required'],
+          endDate: ["End Date", "date",""],
+          endHour: ["End Time", "time",""],
         },
         create
       )

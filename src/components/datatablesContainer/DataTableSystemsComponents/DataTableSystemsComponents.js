@@ -67,9 +67,11 @@ export const DataTableSystemsComponents = ({
   // object property,Label Name, value, control type,  = arr
 
   // *** row handler onclick event listener
+  const [createNewComponent, setCreateNewComponent] = useState(false);
   const openComponent = (row, bool, create) => {
     let selectComponents = null;
-    // setCreateNewSystem(create);
+    setCreateNewComponent(create);
+    
     if (monitoringSystemsComponents.length > 0 && !create) {
       selectComponents = monitoringSystemsComponents.filter(
         (element) => element.componentIdentifier === row.col1
@@ -80,20 +82,20 @@ export const DataTableSystemsComponents = ({
       modalViewData(
         selectComponents,
         {
-          componentIdentifier: ["Component ID", "input"],
-          acquisitionMethodCode: ["Sample Acquistion Method", "dropdown"],
-          componentTypeCode: ["Component Type", "dropdown"],
-          basisCode: ["Basis Description", "dropdown"],
-          manufacturer: ["Manufacturer", "input"],
-          modelVersion: ["Modal or Version", "input"],
-          serialNumber: ["Serial Number", "input"],
-          hgConverterInd: ["Hg Converter Indicator", "radio"],
+          componentIdentifier: ["Component ID", "input", "required"],
+          acquisitionMethodCode: ["Sample Acquistion Method", "dropdown", ""],
+          componentTypeCode: ["Component Type", "dropdown", "required"],
+          basisCode: ["Basis Description", "dropdown", ""],
+          manufacturer: ["Manufacturer", "input", ""],
+          modelVersion: ["Modal or Version", "input", ""],
+          serialNumber: ["Serial Number", "input", ""],
+          hgConverterInd: ["Hg Converter Indicator", "radio", ""],
         },
         {
-          beginDate: ["Start Date", "date"],
-          beginHour: ["Start Time", "time"],
-          endDate: ["End Date", "date"],
-          endHour: ["End Time", "time"],
+          beginDate: ["Start Date", "date", "required"],
+          beginHour: ["Start Time", "time", "required"],
+          endDate: ["End Date", "date", ""],
+          endHour: ["End Time", "time", ""],
         },
         create
       )
@@ -105,10 +107,12 @@ export const DataTableSystemsComponents = ({
     // }
   };
 
+  const [createNewFuelFlow, setCreateNewFuelFlow] = useState(false);
   // *** row handler onclick event listener
   const openFuelFlows = (row, bool, create) => {
     let selectFuelFlows = null;
     // setCreateNewSystem(create);
+    setCreateNewFuelFlow(create);
     if (monitoringSystemsFuelFlows.length > 0 && !create) {
       selectFuelFlows = monitoringSystemsFuelFlows.filter(
         (element) => element.fuelCode === row.col1
@@ -119,16 +123,21 @@ export const DataTableSystemsComponents = ({
       modalViewData(
         selectFuelFlows,
         {
-          maxRateSourceCode: ["Rate Source Code", "dropdown"],
-          skip: ["", "skip"],
-          maxRate: ["Max Rate ", "input"],
-          sysFuelUomCode: ["Unit of Measure Code", "dropdown"],
+          maxRate: ["Max Fuel Flow Rate", "input", "required"],
+          maxRateSourceCode: [
+            "Max Fuel Flow Rate Source",
+            "dropdown",
+            "required",
+          ],
+
+          sysFuelUomCode: ["Units of Measure Code", "dropdown", "required"],
+          skip: ["", "skip", ""],
         },
         {
-          beginDate: ["Start Date", "date"],
-          beginHour: ["Start Time", "time"],
-          endDate: ["End Date", "date"],
-          endHour: ["End Time", "time"],
+          beginDate: ["Start Date", "date", "required"],
+          beginHour: ["Start Time", "time", "required"],
+          endDate: ["End Date", "date", ""],
+          endHour: ["End Time", "time", ""],
         },
         create
       )
@@ -176,7 +185,7 @@ export const DataTableSystemsComponents = ({
                 actionsBtn={"View"}
                 user={user}
                 checkout={checkout}
-                addBtn
+                addBtn={openComponent}
                 addBtnName={"Add Component"}
               />
               <DataTableRender
@@ -203,7 +212,7 @@ export const DataTableSystemsComponents = ({
                 backBtn={setSecondLevel}
                 data={selectedModalData}
                 cols={2}
-                title={`Fuel Code: ${selectedComponent["fuelCode"]}, System Type Code: ${selectedComponent["systemTypeCode"]}`}
+                title={createNewFuelFlow?"Create Fuel Flow":`Fuel Code: ${selectedComponent["fuelCode"]}, System Type Code: ${selectedComponent["systemTypeCode"]}`}
                 viewOnly={!(user && checkout)}
               />
             );
@@ -215,7 +224,7 @@ export const DataTableSystemsComponents = ({
                 backBtn={setSecondLevel}
                 data={selectedModalData}
                 cols={2}
-                title={`Component: ${selectedComponent["componentIdentifier"]}`}
+                title={createNewComponent? "Create Component":`Component: ${selectedComponent["componentIdentifier"]}`}
                 viewOnly={!(user && checkout)}
               />
             );
