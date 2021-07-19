@@ -57,7 +57,7 @@ export const LeftNavigation = (props) => {
     [<SideNav key="sideNav" items={makeHeader(workSpace)} isSubnav={true} />],
   ];
   return (
-    <div className="minh-tablet font-body-sm padding-3 mobile-lg:display-none desktop-lg:display-block ">
+    <div className="minh-tablet font-body-sm padding-3">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       <SideNav items={makeHeader(head)} />
 

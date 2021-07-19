@@ -138,7 +138,7 @@ export const SubHeader = ({ user }) => {
     <div className="subheader-wrapper bg-primary-dark">
       <Header className="padding-y-2 mobile-lg:padding-x-2 desktop:padding-x-4">
         <div className="usa-nav-container clearfix padding-x-0">
-          <Title className="float-left margin-0">
+          <Title className="float-left margin-1">
             <h1 className="display-inline-block text-white text-bold desktop-lg:font-sans-3xl desktop:font-sans-2xl mobile-lg:font-sans-xl margin-0">
               ECMPS
             </h1>
@@ -152,12 +152,11 @@ export const SubHeader = ({ user }) => {
 
           <Button
             type="button"
-            className="desktop:display-none float-right bg-transparent margin-0 position-relative top-1"
+            className="bg-transparent margin-0 float-right clearfix desktop:display-block"
           >
             <img
               src={`${process.env.PUBLIC_URL}/images/icons/mobile-menu-expand.svg`}
               alt="Expandable Menu"
-              className="position-absolute bottom-1px"
             />
           </Button>
           <PrimaryNav

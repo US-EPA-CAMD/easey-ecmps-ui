@@ -14,20 +14,22 @@ const Layout = (props) => {
   );
   return (
     <div>
-      <Link className="skip-to-content-link" href="#main">
+      <Link className="skip-to-content-link" href={"#main"}>
         Skip to content
       </Link>
       <div className="topHeader">
         <WideHeader />
         <SubHeader user={props.user} />
       </div>
+
       <LeftNavToSubHeader />
+
       <div className="grid-row">
-        <div className="grid-col-2 bg-base-lightest">
+        <div className="grid-col-2 bg-base-lightest mobile:display-none desktop:display-block">
           <LeftNavigation user={props.user} logOut={props.logOut} />
         </div>
         <div className="grid-col margin-x-2 minh-tablet-lg" id="main">
-          <main>{childrenWithProps} </main>
+          <main id="main">{childrenWithProps} </main>
         </div>
       </div>
       <div className="bottomFooter">
