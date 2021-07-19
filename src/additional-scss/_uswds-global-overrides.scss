@@ -176,9 +176,21 @@
 
 .subheader-wrapper {
   .usa-nav__primary button {
-    font-family: "Source Sans Pro Web", serif !important;
-    font-weight: bold !important;
-    color: #fff;
+    font-family: "Source Sans Pro Web", serif;
+    font-weight: normal;
+    color: $epa-white;
+
+    @media (max-width: 128em) {
+      font-size: 0.69rem;
+    }
+  }
+
+  .usa-nav__primary > .usa-nav__primary-item > a {
+    font-weight: normal;
+
+    @media (max-width: 128em) {
+      font-size: 0.69rem;
+    }
   }
 
   .usa-nav__primary button[aria-expanded="false"] {
