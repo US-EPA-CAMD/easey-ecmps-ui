@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import {
-  Menu,
-  Header,
-  NavDropDownButton,
-  Button,
-} from "@trussworks/react-uswds";
+import { Menu, Header, NavDropDownButton } from "@trussworks/react-uswds";
 
 import "./SubHeader.scss";
 import { appNavItems } from "../../utils/constants/menuTopics";
@@ -50,7 +45,7 @@ export const LeftNavToSubHeader = () => {
 
   return (
     <div className="left-sidenav-to-header-wrapper">
-      <div className="margin-left-2 padding-y-2 text-bold font-body-lg mobile:display-block tablet:display-none">
+      <div className="margin-left-2 padding-y-2 text-bold font-body-lg mobile-lg:display-block tablet:display-none">
         <MenuSharp className="margin-right-1" />
         ECMPS Menu
       </div>

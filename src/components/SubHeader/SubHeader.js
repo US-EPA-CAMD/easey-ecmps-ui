@@ -35,7 +35,8 @@ export const SubHeader = ({ user }) => {
           outline={true}
           onClick={() => logOut()}
           title="Click this button to logout"
-          className="text-white border-white position-relative top-neg-2 text-no-wrap"
+          className={`text-white border-white position-relative top-neg-2 text-no-wrap 
+                      ${!user ? " display-none " : ""}`}
         >
           Log Out
         </Button>
@@ -137,7 +138,7 @@ export const SubHeader = ({ user }) => {
     <div className="subheader-wrapper bg-primary-dark">
       <Header className="padding-y-2 mobile-lg:padding-x-2 desktop:padding-x-4">
         <div className="usa-nav-container clearfix padding-x-0">
-          <Title className="float-left margin-0">
+          <Title className="float-left margin-1">
             <h1 className="display-inline-block text-white text-bold desktop-lg:font-sans-3xl desktop:font-sans-2xl mobile-lg:font-sans-xl margin-0">
               ECMPS
             </h1>
@@ -149,11 +150,13 @@ export const SubHeader = ({ user }) => {
             </span>
           </Title>
 
-          <Button className="desktop:display-none float-right bg-transparent margin-0 position-relative top-1">
+          <Button
+            type="button"
+            className="bg-transparent margin-0 float-right clearfix desktop:display-block"
+          >
             <img
               src={`${process.env.PUBLIC_URL}/images/icons/mobile-menu-expand.svg`}
               alt="Expandable Menu"
-              className="position-absolute bottom-1px"
             />
           </Button>
           <PrimaryNav
@@ -214,24 +217,33 @@ export const SubHeader = ({ user }) => {
               }
             })}
           />
-          <span className="text-bold text-white text-no-wrap float-right clearfix position-relative top-2 margin-x-2">
-            Welcome, {user.firstName}!
-          </span>
-          <span
-            data-initials={initials}
-            className="text-bold float-right clearfix cursor-pointer"
-            tabIndex="0"
-            id="loggedInUserInitials"
-            aria-expanded="false"
-            onClick={() => toggleUserProfileDropdown()}
-            onKeyPress={(event) => {
-              if (event.key === "Enter") {
-                toggleUserProfileDropdown();
-              }
-            }}
-          >
-            <img src={userProfileIcon} aria-hidden={false} tabIndex="-1" />
-          </span>
+          {user ? (
+            <>
+              <span className="text-bold text-white text-no-wrap float-right clearfix position-relative top-2 margin-x-2">
+                Welcome, {user.firstName}!
+              </span>
+              <span
+                data-initials={initials}
+                className="text-bold float-right clearfix cursor-pointer"
+                tabIndex="0"
+                id="loggedInUserInitials"
+                aria-expanded="false"
+                onClick={() => toggleUserProfileDropdown()}
+                onKeyPress={(event) => {
+                  if (event.key === "Enter") {
+                    toggleUserProfileDropdown();
+                  }
+                }}
+              >
+                <img
+                  src={userProfileIcon}
+                  aria-hidden={true}
+                  tabIndex="-1"
+                  alt="Expand menu"
+                />
+              </span>
+            </>
+          ) : null}
         </div>
       </Header>
     </div>

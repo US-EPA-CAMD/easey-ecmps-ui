@@ -1,8 +1,3 @@
-import React from "react";
-import { Button } from "@trussworks/react-uswds";
-
-import { logOut } from "../../additional-functions/admin-app-functions";
-
 export const environmentalTopics = [
   {
     link: "https://www.epa.gov/environmental-topics",
