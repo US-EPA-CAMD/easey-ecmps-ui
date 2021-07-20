@@ -253,6 +253,8 @@ export const DataTableSystemsComponents = ({
                 title={
                   createNewComponent
                     ? "Create Component"
+                    : user && checkout
+                    ? `Edit Component: ${selectedComponent["componentIdentifier"]}`
                     : `Component: ${selectedComponent["componentIdentifier"]}`
                 }
                 viewOnly={!(user && checkout)}
