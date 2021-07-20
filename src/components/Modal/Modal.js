@@ -27,6 +27,7 @@ export const Modal = ({
   backBtn,
   createNew,
   breadCrumbBar,
+  setSecondLevel,
 }) => {
   const modalRef = createRef();
   useEffect(() => {
@@ -85,9 +86,10 @@ export const Modal = ({
                   epa-testid="closeXBtn"
                   role="button"
                   tabIndex="0"
-                /><div className="left-0 bottom-0 padding-2">
-                <h3 className="text-bold">{title}</h3>
-                
+                />
+                <div className="left-0 bottom-0 padding-2">
+                  <h3 className="text-bold">{title}</h3>
+
                   {breadCrumbBar ? breadCrumbBar : ""}
                 </div>
               </div>
@@ -101,12 +103,16 @@ export const Modal = ({
                   <div>
                     <Button
                       type="button"
-                      onClick={save ? save : close}
+                      onClick={secondLevel ? close : save}
                       title="Click to save"
                       epa-testid="saveBtn"
                       className="margin-right-2"
                     >
-                      {secondLevel ? "Save and Go Back" : createNew}
+                      {secondLevel
+                        ? createNew
+                          ? createNew
+                          : "Save and Go Back"
+                        : createNew}
                       {/* // ? createNew
                         // : saveButtonText} */}
                     </Button>

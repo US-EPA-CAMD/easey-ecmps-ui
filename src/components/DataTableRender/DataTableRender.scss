@@ -1,6 +1,13 @@
-.break-line{
- 
-    display:block;
-    width:100%; /*or whatever width you want the effect of <hr>*/
-    border-top: 1px solid #ccc
+.break-line {
+  display: block;
+  width: 100%; /*or whatever width you want the effect of <hr>*/
+  border-top: 1px solid #ccc;
 }
+
+.rdt_TableRow:nth-child(odd) {
+  background-color: #f0f0f0 !important;
+}
+.rdt_TableRow:nth-child(even) {
+    background-color: #FFFFFF !important;
+  }
+  

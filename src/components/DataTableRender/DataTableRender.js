@@ -43,7 +43,7 @@ const DataTableRender = ({
 }) => {
   const [searchText, setSearchText] = useState("");
   const columns = [];
-
+  console.log("dt", data);
   useEffect(() => {
     setTimeout(() => {
       ensure508();

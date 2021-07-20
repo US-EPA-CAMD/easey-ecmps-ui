@@ -339,8 +339,12 @@
 .bg-epa-blue-base {
   background: $epa-blue-base !important;
 }
-
-.usa-current {
+.usa-sidenav__item{
+  .usa-current {
+  color: $epa-blue-base !important;
+}
+}
+.usa-breadcrumb__link {
   color: $epa-blue-base !important;
 }
 

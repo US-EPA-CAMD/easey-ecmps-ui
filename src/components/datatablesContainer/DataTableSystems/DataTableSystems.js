@@ -66,16 +66,16 @@ export const DataTableSystems = ({
       modalViewData(
         selectSystem,
         {
-          systemIdentifier: ["System ID", "input",'required'],
-          systemDesignationCode: ["System Designation", "dropdown",'required'],
-          systemTypeCode: ["System Type", "dropdown",'required'],
-          fuelCode: ["Fuel Type", "dropdown",'required'],
+          systemIdentifier: ["System ID", "input", "required"],
+          systemDesignationCode: ["System Designation", "dropdown", "required"],
+          systemTypeCode: ["System Type", "dropdown", "required"],
+          fuelCode: ["Fuel Type", "dropdown", "required"],
         },
         {
-          beginDate: ["Start Date", "date",'required'],
-          beginHour: ["Start Time", "time",'required'],
-          endDate: ["End Date", "date",""],
-          endHour: ["End Time", "time",""],
+          beginDate: ["Start Date", "date", "required"],
+          beginHour: ["Start Time", "time", "required"],
+          endDate: ["End Date", "date", ""],
+          endHour: ["End Time", "time", ""],
         },
         create
       )
@@ -139,6 +139,11 @@ export const DataTableSystems = ({
     setSecondLevel(val);
     breadCrumbs(currentBread);
   };
+
+  const [createBTN, setCreateBTN] = useState("Create");
+  const createBtn = (val) => {
+    setCreateBTN(`${val}`);
+  };
   // *** memoize data
   const data = useMemo(() => {
     if (monitoringSystems.length > 0) {
@@ -194,10 +199,7 @@ export const DataTableSystems = ({
             showCancel={!(user && checkout)}
             showSave={user && checkout}
             breadCrumbBar={currentBar}
-            title={
-                "Create System"
-
-            }
+            title={"Create System"}
             createNew="Create System"
             children={
               <ModalDetails
@@ -217,10 +219,8 @@ export const DataTableSystems = ({
             showCancel={!(user && checkout)}
             showSave={user && checkout}
             breadCrumbBar={currentBar}
-            title={
-                 `System: ${selected[0]["value"]}`
-            }
-            createNew= "Save and Close"
+            title={`System: ${selected[0]["value"]}`}
+            createNew={createBTN}
             children={
               <div>
                 {secondLevel ? (
@@ -240,6 +240,7 @@ export const DataTableSystems = ({
                   viewOnly={false}
                   user={user}
                   checkout={checkout}
+                  setCreateBtn={createBtn}
                   locationSelectValue={locationSelectValue}
                   systemID={modalData.length > 1 ? modalData[0].value : 0}
                 />
