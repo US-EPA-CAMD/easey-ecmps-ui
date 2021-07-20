@@ -61,7 +61,7 @@ export const DataTableSystemsComponents = ({
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
-  const fuelFlowsColumnNames = ["Fuel Code", "Type Code", "Begin to End Date"];
+  const fuelFlowsColumnNames = ["Fuel Code", "Type Code", "Date and Time"];
 
   const [selectedComponent, setSelectedComponent] = useState("");
 
