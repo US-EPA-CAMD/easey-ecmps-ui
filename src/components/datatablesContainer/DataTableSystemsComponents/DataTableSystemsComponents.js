@@ -16,7 +16,7 @@ export const DataTableSystemsComponents = ({
   locationSelectValue,
   user,
   checkout,
-  setCreateBtn
+  setCreateBtn,
 }) => {
   const [monitoringSystemsFuelFlows, setMonitoringSystemsFuelFlows] = useState(
     ""
@@ -70,24 +70,23 @@ export const DataTableSystemsComponents = ({
   // *** row handler onclick event listener
   const [createNewComponent, setCreateNewComponent] = useState(false);
 
-  
   const [openComponentView, setComponentView] = useState(false);
   const openComponent = (row, bool, create) => {
     let selectComponents = null;
     setCreateNewComponent(create);
     setOpenFuelFlowsView(false);
     setComponentView(true);
-    if(create){
-      setCreateBtn('Create Component')
+    if (create) {
+      setCreateBtn("Create Component");
     }
     if (monitoringSystemsComponents.length > 0 && !create) {
       selectComponents = monitoringSystemsComponents.filter(
         (element) => element.componentIdentifier === row.col1
       )[0];
       setSelectedComponent(selectComponents);
-      setCreateBtn('Go Back')
-      if(user && checkout){
-        setCreateBtn('Save and Go Back')
+      setCreateBtn("Go Back");
+      if (user && checkout) {
+        setCreateBtn("Save and Go Back");
       }
     }
     setSelectedModalData(
@@ -128,17 +127,17 @@ export const DataTableSystemsComponents = ({
     setCreateNewFuelFlow(create);
     setComponentView(false);
     setOpenFuelFlowsView(true);
-    if(create){
-      setCreateBtn('Create Fuel Flow')
+    if (create) {
+      setCreateBtn("Create Fuel Flow");
     }
     if (monitoringSystemsFuelFlows.length > 0 && !create) {
       selectFuelFlows = monitoringSystemsFuelFlows.filter(
         (element) => element.fuelCode === row.col1
       )[0];
       setSelectedComponent(selectFuelFlows);
-      setCreateBtn('Go Back')
-      if(user && checkout){
-        setCreateBtn('Save and Go Back')
+      setCreateBtn("Go Back");
+      if (user && checkout) {
+        setCreateBtn("Save and Go Back");
       }
     }
     setSelectedModalData(
@@ -227,7 +226,7 @@ export const DataTableSystemsComponents = ({
           );
         } else {
           // if (selectedComponent["sysFuelUomCode"] !== undefined) {
-            if(openFuelFlowsView){
+          if (openFuelFlowsView) {
             // fuel flow
             return (
               <ModalDetails
@@ -235,11 +234,15 @@ export const DataTableSystemsComponents = ({
                 backBtn={setSecondLevel}
                 data={selectedModalData}
                 cols={2}
-                title={createNewFuelFlow?"Create Fuel Flow":`Fuel Code: ${selectedComponent["fuelCode"]}, System Type Code: ${selectedComponent["systemTypeCode"]}`}
+                title={
+                  createNewFuelFlow
+                    ? "Create Fuel Flow"
+                    : `Fuel Code: ${selectedComponent["fuelCode"]}, System Type Code: ${selectedComponent["systemTypeCode"]}`
+                }
                 viewOnly={!(user && checkout)}
               />
             );
-          } else if(openComponentView) {
+          } else if (openComponentView) {
             // components
             return (
               <ModalDetails
@@ -247,7 +250,11 @@ export const DataTableSystemsComponents = ({
                 backBtn={setSecondLevel}
                 data={selectedModalData}
                 cols={2}
-                title={createNewComponent? "Create Component":`Component: ${selectedComponent["componentIdentifier"]}`}
+                title={
+                  createNewComponent
+                    ? "Create Component"
+                    : `Component: ${selectedComponent["componentIdentifier"]}`
+                }
                 viewOnly={!(user && checkout)}
               />
             );

@@ -27,7 +27,7 @@ export const Modal = ({
   backBtn,
   createNew,
   breadCrumbBar,
-  setSecondLevel
+  setSecondLevel,
 }) => {
   const modalRef = createRef();
   useEffect(() => {

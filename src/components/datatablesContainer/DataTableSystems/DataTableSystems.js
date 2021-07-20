@@ -66,16 +66,16 @@ export const DataTableSystems = ({
       modalViewData(
         selectSystem,
         {
-          systemIdentifier: ["System ID", "input",'required'],
-          systemDesignationCode: ["System Designation", "dropdown",'required'],
-          systemTypeCode: ["System Type", "dropdown",'required'],
-          fuelCode: ["Fuel Type", "dropdown",'required'],
+          systemIdentifier: ["System ID", "input", "required"],
+          systemDesignationCode: ["System Designation", "dropdown", "required"],
+          systemTypeCode: ["System Type", "dropdown", "required"],
+          fuelCode: ["Fuel Type", "dropdown", "required"],
         },
         {
-          beginDate: ["Start Date", "date",'required'],
-          beginHour: ["Start Time", "time",'required'],
-          endDate: ["End Date", "date",""],
-          endHour: ["End Time", "time",""],
+          beginDate: ["Start Date", "date", "required"],
+          beginHour: ["Start Time", "time", "required"],
+          endDate: ["End Date", "date", ""],
+          endHour: ["End Time", "time", ""],
         },
         create
       )
@@ -139,12 +139,11 @@ export const DataTableSystems = ({
     setSecondLevel(val);
     breadCrumbs(currentBread);
   };
-  
-  const [createBTN, setCreateBTN] = useState("Create");
-  const createBtn = (val) =>{
 
+  const [createBTN, setCreateBTN] = useState("Create");
+  const createBtn = (val) => {
     setCreateBTN(`${val}`);
-  }
+  };
   // *** memoize data
   const data = useMemo(() => {
     if (monitoringSystems.length > 0) {
@@ -200,10 +199,7 @@ export const DataTableSystems = ({
             showCancel={!(user && checkout)}
             showSave={user && checkout}
             breadCrumbBar={currentBar}
-            title={
-                "Create System"
-
-            }
+            title={"Create System"}
             createNew="Create System"
             children={
               <ModalDetails
@@ -218,16 +214,13 @@ export const DataTableSystems = ({
         ) : (
           <Modal
             secondLevel={secondLevel}
-            
             show={show}
             close={closeModalHandler}
             showCancel={!(user && checkout)}
             showSave={user && checkout}
             breadCrumbBar={currentBar}
-            title={
-                 `System: ${selected[0]["value"]}`
-            }
-            createNew= {createBTN}
+            title={`System: ${selected[0]["value"]}`}
+            createNew={createBTN}
             children={
               <div>
                 {secondLevel ? (
