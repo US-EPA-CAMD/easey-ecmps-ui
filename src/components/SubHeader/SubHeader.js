@@ -224,7 +224,7 @@ export const SubHeader = ({ user }) => {
               </span>
               <span
                 data-initials={initials}
-                className="text-bold float-right clearfix cursor-pointer desktop:margin-top-3"
+                className="text-bold float-right clearfix cursor-pointer tablet-lg:margin-top-0 desktop:margin-top-3"
                 tabIndex="0"
                 id="loggedInUserInitials"
                 aria-expanded="false"
@@ -240,6 +240,7 @@ export const SubHeader = ({ user }) => {
                   aria-hidden={true}
                   tabIndex="-1"
                   alt="Expand menu"
+                  className="margin-top-neg-1"
                 />
               </span>
             </>
