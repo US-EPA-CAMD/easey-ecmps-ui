@@ -26,14 +26,15 @@ body {
   content: attr(data-initials);
   display: inline-block;
   font-size: 1em;
-  width: 3.5em;
-  height: 3.5em;
-  line-height: 3.5em;
+  width: 2.5em;
+  height: 2.5em;
+  line-height: 2.5em;
   text-align: center;
   border-radius: 50%;
   background: $epa-info-base;
   vertical-align: top;
   color: white;
+  margin: -0.25em;
 }
 
 .epa-active-element {
