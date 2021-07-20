@@ -65,10 +65,8 @@ export const modalViewData = (selected, label, time, createNew) => {
           "input",
         ]);
         break;
-
       case "skip":
         arr.push([[], [], [], "", "skip"]);
-
         break;
       case "radio":
         if (selected) {

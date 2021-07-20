@@ -139,6 +139,12 @@ export const DataTableSystems = ({
     setSecondLevel(val);
     breadCrumbs(currentBread);
   };
+  
+  const [createBTN, setCreateBTN] = useState("Create");
+  const createBtn = (val) =>{
+
+    setCreateBTN(`${val}`);
+  }
   // *** memoize data
   const data = useMemo(() => {
     if (monitoringSystems.length > 0) {
@@ -212,6 +218,7 @@ export const DataTableSystems = ({
         ) : (
           <Modal
             secondLevel={secondLevel}
+            
             show={show}
             close={closeModalHandler}
             showCancel={!(user && checkout)}
@@ -220,7 +227,7 @@ export const DataTableSystems = ({
             title={
                  `System: ${selected[0]["value"]}`
             }
-            createNew= "Save and Close"
+            createNew= {createBTN}
             children={
               <div>
                 {secondLevel ? (
@@ -240,6 +247,7 @@ export const DataTableSystems = ({
                   viewOnly={false}
                   user={user}
                   checkout={checkout}
+                  setCreateBtn={createBtn}
                   locationSelectValue={locationSelectValue}
                   systemID={modalData.length > 1 ? modalData[0].value : 0}
                 />

@@ -16,6 +16,7 @@ export const DataTableSystemsComponents = ({
   locationSelectValue,
   user,
   checkout,
+  setCreateBtn
 }) => {
   const [monitoringSystemsFuelFlows, setMonitoringSystemsFuelFlows] = useState(
     ""
@@ -68,15 +69,26 @@ export const DataTableSystemsComponents = ({
 
   // *** row handler onclick event listener
   const [createNewComponent, setCreateNewComponent] = useState(false);
+
+  
+  const [openComponentView, setComponentView] = useState(false);
   const openComponent = (row, bool, create) => {
     let selectComponents = null;
     setCreateNewComponent(create);
-    
+    setOpenFuelFlowsView(false);
+    setComponentView(true);
+    if(create){
+      setCreateBtn('Create Component')
+    }
     if (monitoringSystemsComponents.length > 0 && !create) {
       selectComponents = monitoringSystemsComponents.filter(
         (element) => element.componentIdentifier === row.col1
       )[0];
       setSelectedComponent(selectComponents);
+      setCreateBtn('Go Back')
+      if(user && checkout){
+        setCreateBtn('Save and Go Back')
+      }
     }
     setSelectedModalData(
       modalViewData(
@@ -108,16 +120,26 @@ export const DataTableSystemsComponents = ({
   };
 
   const [createNewFuelFlow, setCreateNewFuelFlow] = useState(false);
+  const [openFuelFlowsView, setOpenFuelFlowsView] = useState(false);
   // *** row handler onclick event listener
   const openFuelFlows = (row, bool, create) => {
     let selectFuelFlows = null;
     // setCreateNewSystem(create);
     setCreateNewFuelFlow(create);
+    setComponentView(false);
+    setOpenFuelFlowsView(true);
+    if(create){
+      setCreateBtn('Create Fuel Flow')
+    }
     if (monitoringSystemsFuelFlows.length > 0 && !create) {
       selectFuelFlows = monitoringSystemsFuelFlows.filter(
         (element) => element.fuelCode === row.col1
       )[0];
       setSelectedComponent(selectFuelFlows);
+      setCreateBtn('Go Back')
+      if(user && checkout){
+        setCreateBtn('Save and Go Back')
+      }
     }
     setSelectedModalData(
       modalViewData(
@@ -204,7 +226,8 @@ export const DataTableSystemsComponents = ({
             </div>
           );
         } else {
-          if (selectedComponent["sysFuelUomCode"] !== undefined) {
+          // if (selectedComponent["sysFuelUomCode"] !== undefined) {
+            if(openFuelFlowsView){
             // fuel flow
             return (
               <ModalDetails
@@ -216,7 +239,7 @@ export const DataTableSystemsComponents = ({
                 viewOnly={!(user && checkout)}
               />
             );
-          } else {
+          } else if(openComponentView) {
             // components
             return (
               <ModalDetails
