@@ -14,7 +14,7 @@ import {
   componentTypes,
   acqMethodCode,
   basisCode,
-} from "../components/SystemComponentsModal/SystemComponentsData";
+} from "../components/ModalDetails/SystemComponentsData";
 
 import { findValue, adjustDate } from "./find-values-in-array";
 
@@ -65,10 +65,8 @@ export const modalViewData = (selected, label, time, createNew) => {
           "input",
         ]);
         break;
-
       case "skip":
         arr.push([[], [], [], "", "skip"]);
-
         break;
       case "radio":
         if (selected) {
