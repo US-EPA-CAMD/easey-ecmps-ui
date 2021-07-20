@@ -51,3 +51,11 @@ body {
 .menu-item-separator {
   color: $epa-darkslate-blue;
 }
+
+.filter-title {
+  float: left;
+  @media (min-width: 128em) {
+    float: none !important;
+    text-align: center;
+  }
+}
