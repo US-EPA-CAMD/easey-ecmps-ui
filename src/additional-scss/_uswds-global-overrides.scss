@@ -187,6 +187,7 @@
 
   .usa-nav__primary > .usa-nav__primary-item > a {
     font-weight: normal;
+    color: #fff;
 
     @media (max-width: 128em) {
       font-size: 0.69rem;
@@ -210,10 +211,6 @@
   }
 
   .usa-nav__primary .usa-accordion__button span::after {
-    color: #fff;
-  }
-
-  .usa-nav__primary > .usa-nav__primary-item > a {
     color: #fff;
   }
 
