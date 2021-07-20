@@ -212,7 +212,9 @@ const DataTableRender = ({
       <div aria-live="polite" className={`${tableStyling}`}>
         {dataLoaded && data.length > 0 ? (
           <div>
-            <h4 className="margin-top-5 text-bold">{tableTitle}</h4>
+            <h4 className="margin-top-5 text-bold mobile:font-body-xl mobile:text-bold">
+              {tableTitle}
+            </h4>
             <DataTable
               keyField="col1"
               className={`data-display-table react-transition fade-in ${className}`}

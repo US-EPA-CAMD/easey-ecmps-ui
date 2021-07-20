@@ -21,14 +21,18 @@ export const LeftNavigation = (props) => {
     return arr.map((item) => {
       return (
         <USWDSLink
-          className={currentRoute === item.url ? "usa-current" : ""}
+          className={
+            currentRoute === item.url || currentRoute === `/ecmps${item.url}`
+              ? "usa-current"
+              : ""
+          }
           variant="unstyled"
           asCustom={Link}
           to={item.url}
           exact="true"
           rel={item.name}
           title={`Go to ${item.name} page`}
-          key={item.name}
+          key={item.url}
           onClick={(event) => handleRouteChange(event, item.url)}
         >
           {item.name}
@@ -48,6 +52,7 @@ export const LeftNavigation = (props) => {
       to="/workspace"
       rel="workspace"
       title="Go to the workspace page"
+      key="wsKey"
       className={
         window.location.href.indexOf("/workspace") > -1 ? "usa-current" : ""
       }

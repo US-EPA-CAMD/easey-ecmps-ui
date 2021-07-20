@@ -37,8 +37,13 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
 
   return (
     <div className="home-container react-transition fade-in">
-      <div className="text-black margin-top-1">
-        <h1 className="display-inline-block page-header" epa-testid ="monPlansTitle">Monitoring Plans</h1>
+      <div className="text-black margin-top-1 display-none tablet:display-block">
+        <h1
+          className="display-inline-block page-header"
+          epa-testid="monPlansTitle"
+        >
+          Monitoring Plans
+        </h1>
         <Button
           type="button"
           className="float-right clearfix radius-2 position-relative top-2"
@@ -46,6 +51,23 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
           id="input-button-search"
         >
           Import a Monitoring Plan
+        </Button>
+      </div>
+
+      <div className="display-none mobile:display-block tablet:display-none">
+        <h1
+          className="display-inline-block font-body-xl text-bold"
+          epa-testid="monPlansTitle"
+        >
+          Monitoring Plans
+        </h1>
+        <Button
+          type="button"
+          className="radius-2 position-relative top-2 width-10 font-heading-sm float-right clearfix mobile-lg:margin-right-4 mobile:margin-right-1 margin-top-1"
+          outline={true}
+          id="input-button-search"
+        >
+          Import
         </Button>
       </div>
 

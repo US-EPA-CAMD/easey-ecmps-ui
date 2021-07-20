@@ -76,7 +76,7 @@
     margin-top: 2em !important;
     padding: 0 !important;
     width: 100% !important;
-    font-size: 1.25rem !important;
+    font-size: 1.25rem;
     line-height: 1.5 !important;
     position: relative !important;
     top: -4em !important;
@@ -187,6 +187,7 @@
 
   .usa-nav__primary > .usa-nav__primary-item > a {
     font-weight: normal;
+    color: #fff;
 
     @media (max-width: 128em) {
       font-size: 0.69rem;
@@ -210,10 +211,6 @@
   }
 
   .usa-nav__primary .usa-accordion__button span::after {
-    color: #fff;
-  }
-
-  .usa-nav__primary > .usa-nav__primary-item > a {
     color: #fff;
   }
 
@@ -357,4 +354,10 @@
 
 #logoutBtn {
   border-radius: 0.25em !important;
+}
+
+.usa-button-group__item {
+  @media (max-width: 128em) {
+    text-align: center;
+  }
 }

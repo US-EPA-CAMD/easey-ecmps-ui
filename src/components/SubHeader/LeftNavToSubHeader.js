@@ -45,12 +45,12 @@ export const LeftNavToSubHeader = () => {
 
   return (
     <div className="left-sidenav-to-header-wrapper">
-      <div className="margin-left-2 padding-y-2 text-bold font-body-lg mobile-lg:display-block tablet:display-none">
+      <div className="margin-left-2 padding-y-2 text-bold font-body-lg mobile:display-block tablet:display-none">
         <MenuSharp className="margin-right-1" />
         ECMPS Menu
       </div>
       <Header
-        className="mobile-lg:display-none tablet:display-block desktop-lg:display-none
+        className="display-none tablet:display-block desktop-lg:display-none
       padding-y-2 mobile-lg:padding-x-2 desktop:padding-x-4"
       >
         <div className="usa-nav-container clearfix padding-x-0">

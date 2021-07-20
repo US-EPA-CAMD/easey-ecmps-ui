@@ -3,13 +3,13 @@ import React from "react";
 
 export const FilterComponent = ({ filterText, onSearch, title }) => (
   <div className="width-full">
-    <div className="float-left clearfix font-heading-xl text-bold data-table-title">
+    <div className="filter-title clearfix font-heading-xl text-bold data-table-title tablet:font-heading-xl mobile:font-body-lg mobile:text-bold mobile:padding-bottom-4 mobile:padding-left-6 tablet:padding-left-0">
       {title}
     </div>
     <table className="float-right clearfix" role="presentation">
       <tbody>
         <tr>
-          <td className="text-bold">Filter by keyword:</td>
+          <td className="text-bold text-center">Filter by keyword:</td>
         </tr>
         <tr>
           <td>
