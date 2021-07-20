@@ -14,7 +14,7 @@ import {
   componentTypes,
   acqMethodCode,
   basisCode,
-} from "../components/SystemComponentsModal/SystemComponentsData";
+} from "../components/ModalDetails/SystemComponentsData";
 
 import { findValue, adjustDate } from "./find-values-in-array";
 
