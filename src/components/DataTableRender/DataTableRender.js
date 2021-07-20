@@ -3,7 +3,7 @@ import { config, oneSecond } from "../../config";
 import React, { useState, useMemo, useEffect } from "react";
 import { Button } from "@trussworks/react-uswds";
 import DataTable from "react-data-table-component";
-import './DataTableRender.scss'
+import "./DataTableRender.scss";
 import { FilterComponent } from "../ReactDataTablesFilter/ReactDataTablesFilter";
 import { Preloader } from "../Preloader/Preloader";
 
@@ -39,7 +39,7 @@ const DataTableRender = ({
   tableStyling,
   componentStyling,
   className,
-  addBtnName
+  addBtnName,
 }) => {
   const [searchText, setSearchText] = useState("");
   const columns = [];
@@ -98,7 +98,7 @@ const DataTableRender = ({
                     epa-testid="btnOpen"
                     className="cursor-pointer open-modal-button"
                     id="btnOpen"
-                    onClick={() => openHandler(normalizedRow, false,false,)}
+                    onClick={() => openHandler(normalizedRow, false, false)}
                     aria-label={`open ${row.col1} `}
                     onKeyPress={(event) => {
                       if (event.key === "Enter") {
@@ -210,12 +210,11 @@ const DataTableRender = ({
   return (
     <div className={`${componentStyling}`}>
       <div aria-live="polite" className={`${tableStyling}`}>
-        
-
         {dataLoaded && data.length > 0 ? (
-          
           <div>
-            <h4 className="margin-top-5 text-bold">{tableTitle}</h4>
+            <h4 className="margin-top-5 text-bold mobile:font-body-xl mobile:text-bold">
+              {tableTitle}
+            </h4>
             <DataTable
               keyField="col1"
               className={`data-display-table react-transition fade-in ${className}`}
@@ -262,7 +261,7 @@ const DataTableRender = ({
                       className="float-left clearfix margin-right-3"
                       outline="true"
                       color="black"
-                      onClick={()=> addBtn(false,false,true)}
+                      onClick={() => addBtn(false, false, true)}
                     >
                       {addBtnName}
                     </Button>
@@ -273,10 +272,12 @@ const DataTableRender = ({
               </h2>
             </div>
           </div>
-        ) : ((dataLoaded && data.length === 0 )? '':(
+        ) : dataLoaded && data.length === 0 ? (
+          ""
+        ) : (
           <div className="margin-y-3 padding-y-3 react-transition fade-in font-body-sm width-full">
             <Preloader />
-          </div>)
+          </div>
         )}
       </div>
     </div>

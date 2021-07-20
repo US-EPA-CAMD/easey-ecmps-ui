@@ -136,7 +136,7 @@ export const SubHeader = ({ user }) => {
 
   return (
     <div className="subheader-wrapper bg-primary-dark">
-      <Header className="padding-y-2 mobile-lg:padding-x-2 desktop:padding-x-4">
+      <Header className="padding-y-2 mobile-lg:padding-x-1 desktop:padding-x-4">
         <div className="usa-nav-container clearfix padding-x-0">
           <Title className="float-left margin-1 margin-top-0">
             <h1 className="display-inline-block text-white text-bold desktop-lg:font-sans-2xl desktop:font-sans-2xl mobile-lg:font-sans-xl margin-0">
@@ -152,7 +152,7 @@ export const SubHeader = ({ user }) => {
 
           <Button
             type="button"
-            className="bg-transparent margin-0 float-right clearfix desktop:display-none"
+            className="bg-transparent margin-0 float-right clearfix desktop:display-none padding-0 width-auto margin-top-1"
           >
             <img
               src={`${process.env.PUBLIC_URL}/images/icons/mobile-menu-expand.svg`}
