@@ -135,10 +135,10 @@ export const SubHeader = ({ user }) => {
   };
 
   return (
-    <div className="subheader-wrapper bg-primary-dark">
+    <div className="subheader-wrapper bg-primary-dark ">
       <Header className="padding-y-2 mobile-lg:padding-x-1 desktop:padding-x-4">
-        <div className="usa-nav-container clearfix padding-x-0">
-          <Title className="float-left margin-1 margin-top-0">
+        <div className="usa-nav-container clearfix padding-x-0 desktop-lg:margin-top-3">
+          <Title className="float-left margin-1 margin-top-0 desktop:margin-top-3 desktop-lg:margin-top-0 ">
             <h1 className="display-inline-block text-white text-bold desktop-lg:font-sans-2xl desktop:font-sans-2xl mobile-lg:font-sans-xl margin-0">
               ECMPS
             </h1>
@@ -218,13 +218,13 @@ export const SubHeader = ({ user }) => {
             })}
           />
           {user ? (
-            <>
+            <div >
               <span className="text-bold text-white text-no-wrap float-right clearfix position-relative top-1 margin-x-2 display-none widescreen:display-block">
                 Welcome, {user.firstName}!
               </span>
-              <span
+              <span 
                 data-initials={initials}
-                className="text-bold float-right clearfix cursor-pointer desktop:margin-top-3"
+                className="text-bold float-right clearfix cursor-pointer mobile:margin-top-1 desktop:margin-top-1 desktop:margin-top-3 desktop-lg:margin-top-0"
                 tabIndex="0"
                 id="loggedInUserInitials"
                 aria-expanded="false"
@@ -237,12 +237,13 @@ export const SubHeader = ({ user }) => {
               >
                 <img
                   src={userProfileIcon}
+                  className="margin-top-neg-1"
                   aria-hidden={true}
                   tabIndex="-1"
                   alt="Expand menu"
                 />
               </span>
-            </>
+            </div>
           ) : null}
         </div>
       </Header>
