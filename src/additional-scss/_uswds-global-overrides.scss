@@ -181,7 +181,7 @@
     color: $epa-white;
 
     @media (max-width: 128em) {
-      font-size: 0.69rem;
+      font-size: 0.72rem;
     }
   }
 
@@ -190,7 +190,7 @@
     color: #fff;
 
     @media (max-width: 128em) {
-      font-size: 0.69rem;
+      font-size: 0.72rem;
     }
   }
 
@@ -199,7 +199,6 @@
       linear-gradient(transparent, transparent);
     background-repeat: no-repeat;
     background-size: 3rem;
-    background-position: right top;
   }
 
   .usa-nav__primary button[aria-expanded="true"] {
@@ -207,7 +206,6 @@
       linear-gradient(transparent, transparent);
     background-repeat: no-repeat;
     background-size: 3rem;
-    background-position: right top;
   }
 
   .usa-nav__primary .usa-accordion__button span::after {
@@ -339,10 +337,10 @@
 .bg-epa-blue-base {
   background: $epa-blue-base !important;
 }
-.usa-sidenav__item{
+.usa-sidenav__item {
   .usa-current {
-  color: $epa-blue-base !important;
-}
+    color: $epa-blue-base !important;
+  }
 }
 .usa-breadcrumb__link {
   color: $epa-blue-base !important;
