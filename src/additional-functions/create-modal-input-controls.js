@@ -75,7 +75,6 @@ export const modalViewData = (selected, label, time, createNew) => {
         else{
           arr.push([y, label[y][0], false,label[y][2]==="required"? "required":false, "radio"]);
         }
-        console.log('selected',selected,y)
         break;
       default:
         break;

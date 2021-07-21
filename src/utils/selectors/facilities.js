@@ -9,6 +9,7 @@ export function getTableRecords(facilities) {
       col1: el.orisCode,
       col2: el.name,
       col3: el.state,
+      col4:el.orisCode,
     });
   });
   return records;
