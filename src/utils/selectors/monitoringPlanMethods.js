@@ -44,10 +44,11 @@ export function getMonitoringPlansMatsMethodsTableRecords(data) {
       col2: el.matsMethodCode,
       col3: `${beginDate} ${beginHour}`,
       col4: `${endDate} ${endHour}`,
+      col5: el.id,
     });
   });
   return records;
 }
-export function getActiveMethods(methods) {
-  return methods.filter((m) => m.active === true);
-}
+// export function getActiveMethods(methods) {
+//   return methods.filter((m) => m.active === true);
+// }

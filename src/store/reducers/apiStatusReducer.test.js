@@ -25,38 +25,18 @@ describe("apiStatus Reducer State Update", () => {
     const newState = apiStatusReducer(initialState.apiCallsInProgress, action);
     expect(newState.monitoringPlans).toBe(true);
   });
-  it("should update state related to apiStatus when passed beginMonitoringMethodsApiCall", () => {
-    const action = actions.beginMonitoringMethodsApiCall();
-    const newState = apiStatusReducer(initialState.apiCallsInProgress, action);
-    expect(newState.monitoringMethods).toBe(true);
-  });
-  it("should update state related to apiStatus when passed beginMonitoringMatsMethodsApiCall", () => {
-    const action = actions.beginMonitoringMatsMethodsApiCall();
-    const newState = apiStatusReducer(initialState.apiCallsInProgress, action);
-    expect(newState.monitoringMatsMethods).toBe(true);
-  });
-  it("should update state related to apiStatus when passed beginMonitoringSystemsApiCall", () => {
-    const action = actions.beginMonitoringSystemsApiCall();
-    const newState = apiStatusReducer(initialState.apiCallsInProgress, action);
-    expect(newState.monitoringSystems).toBe(true);
-  });
-  it("should update state related to apiStatus when passed beginMonitoringSystemsComponentsApiCall", () => {
-    const action = actions.beginMonitoringSystemsComponentsApiCall();
-    const newState = apiStatusReducer(initialState.apiCallsInProgress, action);
-    expect(newState.monitoringSystemsComponents).toBe(true);
-  });
+
   ///load
   it("should update state related to apiStatus when passed loadFacilitiesSuccess", () => {
     const action = loadFacilitiesSuccess([]);
     const newState = apiStatusReducer(initialState.apiCallsInProgress, action);
     expect(newState.facilities).toBe(false);
-  });t
+  });
   it("should update state related to apiStatus when passed loadMonitoringPlansSuccess", () => {
     const action = loadMonitoringPlansSuccess([]);
     const newState = apiStatusReducer(initialState.apiCallsInProgress, action);
     expect(newState.monitoringPlans).toBe(false);
   });
-  
 
   it("passing in no action.type for default case", () => {
     const newState = apiStatusReducer(initialState.apiCallsInProgress, {
