@@ -122,15 +122,13 @@ describe("dynamicFacilityTab Reducer State Update", () => {
     const selectedFacility = "Berry";
     const selectedFacilityTabIndex = 1;
 
+
     let action = actions.addFacilityTab(selectedFacility);
-    const newState = dynamicFacilityTabReducer(
-      action,
-      initialState.openedFacilityTabs
-    );
+    const newState = dynamicFacilityTabReducer(initialState.openedFacilityTabs, action);
     expect(newState.length).toBe(2);
 
     action = actions.removeFacilityTab(selectedFacilityTabIndex);
-    const updatedState = dynamicFacilityTabReducer(action, newState);
+    const updatedState = dynamicFacilityTabReducer(newState, action);
     expect(updatedState.length).toBe(1);
   });
 });
@@ -150,8 +148,8 @@ describe("dynamicFacilityTab Reducer State Adding with data", () => {
       "Barry (1, 2, CS0AAN) "
     );
     const newLoc = dynamicFacilityTabReducer(
-      setLocationSelectionState,
-      initialState.openedFacilityTabs
+      initialState.openedFacilityTabs,
+      setLocationSelectionState
     );
     expect(newLoc[0].location).toBeDefined();
 
@@ -159,32 +157,34 @@ describe("dynamicFacilityTab Reducer State Adding with data", () => {
       3,
       "Barry (1, 2, CS0AAN) "
     );
-    const newSec = dynamicFacilityTabReducer(setSectionSelectionState, newLoc);
+    const newSec = dynamicFacilityTabReducer(newLoc, setSectionSelectionState);
     expect(newSec[0].section).toBeDefined();
 
     const emptyLocs = dynamicFacilityTabReducer(
-      { type: "empty" },
-      initialState.openedFacilityTabs
+      initialState.openedFacilityTabs,
+      { type: "empty" }
     );
     expect(emptyLocs).toBe(initialState.openedFacilityTabs);
 
-    const setInactiveState = actions.setInactiveState(
-      [false, false],
-      "Barry (1, 2, CS0AAN) "
-    );
-    const newInactive = dynamicFacilityTabReducer(setInactiveState, emptyLocs);
-    expect(newInactive[0].inactive).toBeDefined();
+     const setInactiveState = actions.setInactiveState(
+    [false,false],
+    "Barry (1, 2, CS0AAN) "
+  );
+  const newInactive = dynamicFacilityTabReducer(emptyLocs, setInactiveState);
+  expect(newInactive[0].inactive).toBeDefined();
 
-    const setCheckoutState = actions.setCheckoutState(
-      true,
-      "Barry (1, 2, CS0AAN) "
-    );
-    const newcheckout = dynamicFacilityTabReducer(
-      setCheckoutState,
-      newInactive
-    );
-    expect(newcheckout[0].checkout).toBeDefined();
+  const setCheckoutState = actions.setCheckoutState(
+    true,
+    "Barry (1, 2, CS0AAN) "
+  );
+  const newcheckout = dynamicFacilityTabReducer(newInactive, setCheckoutState);
+  expect(newcheckout[0].checkout).toBeDefined();
+
+
+
   });
+ 
+
 });
 
 describe("dynamicFacilityTab Reducer State checking false conditional", () => {
@@ -202,8 +202,8 @@ describe("dynamicFacilityTab Reducer State checking false conditional", () => {
       "Barry (1, 2, CS0A) "
     );
     const newLoc = dynamicFacilityTabReducer(
-      setLocationSelectionState,
-      initialState.openedFacilityTabs
+      initialState.openedFacilityTabs,
+      setLocationSelectionState
     );
     expect(newLoc[0].location).toBeDefined();
 
@@ -211,45 +211,50 @@ describe("dynamicFacilityTab Reducer State checking false conditional", () => {
       3,
       "Barry (1, 2, CS0N) "
     );
-    const newSec = dynamicFacilityTabReducer(setSectionSelectionState, newLoc);
+    const newSec = dynamicFacilityTabReducer(newLoc, setSectionSelectionState);
     expect(newSec[0].section).toBeDefined();
 
     const emptyLocs = dynamicFacilityTabReducer(
-      { type: "empty" },
-      initialState.openedFacilityTabs
+      initialState.openedFacilityTabs,
+      { type: "empty" }
     );
     expect(emptyLocs).toBe(initialState.openedFacilityTabs);
 
-    const setInactiveState = actions.setInactiveState(
-      [false, false],
-      "Barry (1, 2, CSAN) "
-    );
-    const newInactive = dynamicFacilityTabReducer(setInactiveState, emptyLocs);
-    expect(newInactive[0].inactive).toBeDefined();
+     const setInactiveState = actions.setInactiveState(
+    [false,false],
+    "Barry (1, 2, CSAN) "
+  );
+  const newInactive = dynamicFacilityTabReducer(emptyLocs, setInactiveState);
+  expect(newInactive[0].inactive).toBeDefined();
 
-    const setCheckoutState = actions.setCheckoutState(
-      true,
-      "Barry (1, 2, CS0N) "
-    );
-    const newcheckout = dynamicFacilityTabReducer(
-      setCheckoutState,
-      newInactive
-    );
-    expect(newcheckout[0].checkout).toBeDefined();
+  const setCheckoutState = actions.setCheckoutState(
+    true,
+    "Barry (1, 2, CS0N) "
+  );
+  const newcheckout = dynamicFacilityTabReducer(newInactive, setCheckoutState);
+  expect(newcheckout[0].checkout).toBeDefined();
+
+
+
   });
   it("empty state", () => {
     const setInactiveState = actions.setInactiveState(
-      [false, false],
+      [false,false],
       "Barry (1, 2, CSAN) "
     );
-    const newInactive = dynamicFacilityTabReducer(setInactiveState, {});
+    const newInactive = dynamicFacilityTabReducer({}, setInactiveState);
     expect(newInactive).not.toBeDefined();
-
+  
     const setCheckoutState = actions.setCheckoutState(
       true,
       "Barry (1, 2, CS0N) "
     );
-    const newcheckout = dynamicFacilityTabReducer(setCheckoutState);
+    const newcheckout = dynamicFacilityTabReducer({}, setCheckoutState);
     expect(newcheckout).not.toBeDefined();
+  
+    const emptyState = dynamicFacilityTabReducer(null, setCheckoutState);
+    expect(emptyState).not.toBeDefined();
+  
   });
+
 });
