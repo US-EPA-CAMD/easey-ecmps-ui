@@ -1,3 +1,5 @@
+import { oneSecond } from "../config";
+
 /*****************************************************
  * ensure508:
  *
@@ -53,22 +55,11 @@ export const changeGridCellAttributeValue = () => {
   setTimeout(() => {
     // *** change auto-generated attribute role from "gridcell" to "cell"
     document.querySelectorAll(`[role="gridcell"]`).forEach((element) => {
-      // console.log('element',element)
       element.setAttribute("role", "cell");
-      // element.setAttribute("id", `${element.id}${element.className}`);
     });
-  });
+  }, oneSecond * 0.5);
 };
-// export const changeit = () => {
-//   setTimeout(() => {
-//     // *** change auto-generated attribute role from "gridcell" to "cell"
-//     document.querySelectorAll(`[role="row"]`).forEach((element) => {
-//       console.log('element',element)
-//       element.setAttribute("role", "cell");
-//       // element.setAttribute("id", `${element.id}${element.className}`);
-//     });
-//   });
-// };
+
 /*****************************************************
  * addAriaLabelToDatatable:
  *
