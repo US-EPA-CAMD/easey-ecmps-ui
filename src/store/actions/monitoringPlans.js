@@ -37,9 +37,4 @@ export function loadMonitoringPlansArray(orisCode) {
       })
   };
 }
-export function emptyMonitoringPlans() {
-  return {
-    type: types.EMPTY_MONITORING_PLANS,
-    value: [],
-  };
-}
+

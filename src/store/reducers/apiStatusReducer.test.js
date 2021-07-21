@@ -2,14 +2,7 @@ import apiStatusReducer from "./apiStatusReducer";
 import * as actions from "../actions/apiStatusActions";
 import { loadFacilitiesSuccess } from "../actions/facilities";
 import { loadMonitoringPlansSuccess } from "../actions/monitoringPlans";
-import {
-  loadMonitoringMethodsSuccess,
-  loadMonitoringMatsMethodsSuccess,
-} from "../actions/monitoringMethods";
-import {
-  loadMonitoringSystemsSuccess,
-  loadMonitoringSystemsComponentsSuccess,
-} from "../actions/monitoringSystems";
+
 describe("apiStatus Reducer State Update", () => {
   let initialState;
   beforeAll(() => {
@@ -17,9 +10,6 @@ describe("apiStatus Reducer State Update", () => {
       apiCallsInProgress: {
         facilities: false,
         monitoringPlans: false,
-        monitoringMethods: false,
-        monitoringMatsMethods: false,
-        monitoringSystems: false,
         monitoringSystemsComponents: false,
       },
     };
@@ -60,32 +50,13 @@ describe("apiStatus Reducer State Update", () => {
     const action = loadFacilitiesSuccess([]);
     const newState = apiStatusReducer(initialState.apiCallsInProgress, action);
     expect(newState.facilities).toBe(false);
-  });
+  });t
   it("should update state related to apiStatus when passed loadMonitoringPlansSuccess", () => {
     const action = loadMonitoringPlansSuccess([]);
     const newState = apiStatusReducer(initialState.apiCallsInProgress, action);
     expect(newState.monitoringPlans).toBe(false);
   });
-  it("should update state related to apiStatus when passed loadMonitoringMethodsSuccess", () => {
-    const action = loadMonitoringMethodsSuccess([]);
-    const newState = apiStatusReducer(initialState.apiCallsInProgress, action);
-    expect(newState.monitoringMethods).toBe(false);
-  });
-  it("should update state related to apiStatus when passed loadMonitoringMatsMethodsSuccess", () => {
-    const action = loadMonitoringMatsMethodsSuccess([]);
-    const newState = apiStatusReducer(initialState.apiCallsInProgress, action);
-    expect(newState.monitoringMatsMethods).toBe(false);
-  });
-  it("should update state related to apiStatus when passed loadMonitoringSystemsSuccess", () => {
-    const action = loadMonitoringSystemsSuccess([]);
-    const newState = apiStatusReducer(initialState.apiCallsInProgress, action);
-    expect(newState.monitoringSystems).toBe(false);
-  });
-  it("should update state related to apiStatus when passed loadMonitoringSystemsComponentsSuccess", () => {
-    const action = loadMonitoringSystemsComponentsSuccess([]);
-    const newState = apiStatusReducer(initialState.apiCallsInProgress, action);
-    expect(newState.monitoringSystemsComponents).toBe(false);
-  });
+  
 
   it("passing in no action.type for default case", () => {
     const newState = apiStatusReducer(initialState.apiCallsInProgress, {
