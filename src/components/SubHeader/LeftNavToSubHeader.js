@@ -51,10 +51,10 @@ export const LeftNavToSubHeader = () => {
       </div>
       <Header
         className="display-none tablet:display-block desktop-lg:display-none
-      padding-y-2 mobile-lg:padding-x-2 desktop:padding-x-4"
+      padding-y-0 mobile-lg:padding-x-2 desktop:padding-x-4"
       >
         <div className="usa-nav-container clearfix padding-x-0">
-          <div className="float-right desktop:margin-top-3 desktop-lg:margin-top-0 display-inline-flex">
+          <div className="text-center desktop:margin-top-3 desktop-lg:margin-top-0 display-inline-flex">
             {appNavItems.map((el, i) => {
               return (
                 <>
@@ -66,14 +66,14 @@ export const LeftNavToSubHeader = () => {
                     onToggle={() => {
                       handleToggleNavDropdown(i);
                     }}
-                    className={`text-black text-normal text-no-wrap ${
+                    className={`text-black text-normal font-sans-md mobile-lg:font-sans-sm text-no-wrap ${
                       el.items.length === 0
                         ? ` no-subitems `
                         : ` current-app-subitem `
                     }`}
                   />
                   <Menu
-                    className="font-body-md"
+                    className="font-sans-md mobile-lg:font-sans-sm"
                     items={el.items.map((item, index) => (
                       <Link
                         key={index}

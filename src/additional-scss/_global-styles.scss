@@ -59,3 +59,11 @@ body {
     text-align: center;
   }
 }
+
+.left-sidenav-to-header-wrapper {
+  .usa-accordion__button {
+    background-position: right -1.25rem center;
+    padding-right: 1.25em;
+    padding-left: 0.5em;
+  }
+}

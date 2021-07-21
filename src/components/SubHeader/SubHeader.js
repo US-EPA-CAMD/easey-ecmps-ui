@@ -197,7 +197,7 @@ export const SubHeader = ({ user }) => {
                           ? `extended-nav-section-last`
                           : null
                       }
-                      className="font-body-xs"
+                      className="font-body-sm"
                       items={el.items.map((item, index) => (
                         <Link
                           key={index}
@@ -218,11 +218,11 @@ export const SubHeader = ({ user }) => {
             })}
           />
           {user ? (
-            <div >
+            <div>
               <span className="text-bold text-white text-no-wrap float-right clearfix position-relative top-1 margin-x-2 display-none widescreen:display-block">
                 Welcome, {user.firstName}!
               </span>
-              <span 
+              <span
                 data-initials={initials}
                 className="text-bold float-right clearfix cursor-pointer mobile:margin-top-1 desktop:margin-top-1 desktop:margin-top-3 desktop-lg:margin-top-0"
                 tabIndex="0"
