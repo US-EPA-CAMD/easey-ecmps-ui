@@ -23,8 +23,8 @@ export const LeftNavigation = (props) => {
         <USWDSLink
           className={
             currentRoute === item.url || currentRoute === `/ecmps${item.url}`
-              ? "usa-current"
-              : ""
+              ? "usa-current text-no-wrap"
+              : "text-no-wrap"
           }
           variant="unstyled"
           asCustom={Link}

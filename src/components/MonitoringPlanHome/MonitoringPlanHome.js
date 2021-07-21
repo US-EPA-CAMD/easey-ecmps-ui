@@ -56,14 +56,14 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
 
       <div className="display-none mobile:display-block tablet:display-none">
         <h1
-          className="display-inline-block font-body-xl text-bold"
+          className="display-inline-block font-body-xl text-bold margin-left-neg-2"
           epa-testid="monPlansTitle"
         >
           Monitoring Plans
         </h1>
         <Button
           type="button"
-          className="radius-2 position-relative top-2 width-10 font-heading-sm float-right clearfix mobile-lg:margin-right-4 mobile:margin-right-1 margin-top-1"
+          className="radius-2 position-relative top-2 width-10 font-heading-sm float-right clearfix margin-right-neg-3 margin-top-1"
           outline={true}
           id="input-button-search"
         >
