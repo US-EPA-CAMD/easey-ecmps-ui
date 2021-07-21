@@ -85,9 +85,6 @@ export const LeftNavToSubHeader = () => {
                     ))}
                     isOpen={navDropdownOpen[i]}
                   />
-                  {el.items.length > 0 ? (
-                    <div className="menu-underline" />
-                  ) : null}
                 </div>
               );
             })}

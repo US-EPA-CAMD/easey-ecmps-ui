@@ -359,3 +359,9 @@
     text-align: center;
   }
 }
+
+.left-sidenav-to-header-wrapper {
+  .usa-accordion__button:hover {
+    background-color: $epa-white !important;
+  }
+}
