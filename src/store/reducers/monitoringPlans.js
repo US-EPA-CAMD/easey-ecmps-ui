@@ -2,7 +2,7 @@ import * as types from "../actions/actionTypes";
 import initialState from "./initialState";
 
 const reducer = (state, action) => {
-  let currentState = state ? state : initialState.monitoringPlans;
+  const currentState = state ? state : initialState.monitoringPlans;
   if (action.type === types.LOAD_MONITORING_PLANS_SUCCESS) {
     return action.monitoringPlans;
   } else if (action.type === types.LOAD_MONITORING_PLANS_ARRAY_SUCCESS) {

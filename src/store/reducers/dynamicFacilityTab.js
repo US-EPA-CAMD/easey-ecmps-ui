@@ -2,7 +2,7 @@ import * as types from "../actions/actionTypes";
 import initialState from "./initialState";
 
 const reducer = (state, action) => {
-  let currentState = state ? state : initialState.openedFacilityTabs;
+  const currentState = state ? state : initialState.openedFacilityTabs;
   let returnObject;
 
   switch (action.type) {

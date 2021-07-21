@@ -755,33 +755,45 @@ describe("testing fetch wrapper facilities data selectors", () => {
     ];
   });
 
-  test("selected facility location should be", () => {
-    expect(fs.getLocation(selectedFacility)).toEqual(selectedFacilityLocation);
-  });
+  // test("selected facility location should be", () => {
+  //   expect(fs.getLocation(selectedFacility)).toEqual(selectedFacilityLocation);
+  // });
 
-  test("selected facility contacts length should have the value", () => {
-    expect(fs.getContacts(selectedFacility).length).toEqual(contactsLength);
-  });
+  // test("selected facility contacts length should have the value", () => {
+  //   expect(fs.getContacts(selectedFacility).length).toEqual(contactsLength);
+  // });
 
-  test("selected facility contacts owner units should equal", () => {
-    expect(fs.getContactsRoleUnits("Owner", selectedFacility)).toEqual(
-      contactsOwnerUnits
-    );
-  });
+  // test("selected facility contacts owner units should equal", () => {
+  //   expect(fs.getContactsRoleUnits("Owner", selectedFacility)).toEqual(
+  //     contactsOwnerUnits
+  //   );
+  // });
 
-  test("selected facility units table records should be", () => {
-    expect(fs.getUnitsTableRecords(selectedFacility)).toEqual(
-      unitsTableRecords
-    );
-  });
-  test("selected units fuel data should equal", () => {
-    expect(fs.getSelectedUnitDetail("4", selectedFacility).fuel).toEqual(
-      selectedUnitFuelData
-    );
-  });
+  // test("selected facility units table records should be", () => {
+  //   expect(fs.getUnitsTableRecords(selectedFacility)).toEqual(
+  //     unitsTableRecords
+  //   );
+  // });
+  // test("selected units fuel data should equal", () => {
+  //   expect(fs.getSelectedUnitDetail("4", selectedFacility).fuel).toEqual(
+  //     selectedUnitFuelData
+  //   );
+  // });
+  // test("selected facility monitoring plans table recods should be", () => {
+  //   expect(fs.getMonitoringPlansTableRecords(selectedFacility)).toEqual(
+  //     monitoringPlansTableRecords
+  //   );
+  // });
+
   test("selected facility monitoring plans table recods should be", () => {
-    expect(fs.getMonitoringPlansTableRecords(selectedFacility)).toEqual(
-      monitoringPlansTableRecords
-    );
+    const fac = [
+      {
+        col1: 26,
+        col2: "E C Gaston",
+        col3: { abbrev: "AL", name: "Alabama" },
+        col4: 26,
+      },
+    ];
+    expect(fs.getTableRecords([selectedFacility])).toEqual(fac);
   });
 });

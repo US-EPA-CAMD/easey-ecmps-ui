@@ -48,6 +48,7 @@ export function getMonitoringPlansSystemsComponentsTableRecords(data) {
       col1: el.componentIdentifier,
       col2: el.componentTypeCode,
       col3: `${beginDate}: ${beginHour} ➜ ${present}`,
+      col4: el.id
     });
   });
   return records;
@@ -74,6 +75,7 @@ export function getMonitoringPlansSystemsFuelFlowsComponentsTableRecords(data) {
       col1: el.fuelCode,
       col2: el.systemTypeCode,
       col3: `${beginDate}: ${beginHour} ➜ ${present}`,
+      col4: el.id
     });
   });
   return records;

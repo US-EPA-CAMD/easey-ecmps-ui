@@ -5,6 +5,8 @@ describe("testing monitoring plan data selectors", () => {
   let monitoringSystemsTableRecods;
   let selectedMonitoringSystemsComponents;
   let monitoringSystemsComponentsTableRecods;
+  let monitoringSystemsFuelFlowsTableRecods;
+  let selectedMonitoringSystemsFuelFlow;
   beforeAll(() => {
     selectedMonitoringSystems = [
       {
@@ -45,8 +47,8 @@ describe("testing monitoring plan data selectors", () => {
         hgConverterInd: null,
         acquisitionMethodCode: "ORF",
         componentIdentifier: "AFF",
-        beginDate: "2019-07-01",
-        beginHour: "0",
+        beginDate: null,
+        beginHour: null,
         endDate: null,
         endHour: null,
         Active: true,
@@ -67,18 +69,58 @@ describe("testing monitoring plan data selectors", () => {
         endDate: "2019-07-02",
         endHour: "0",
         Active: true,
-      }
+      },
+    ];
+
+    selectedMonitoringSystemsFuelFlow = [
+      {
+        id: "TWCORNEL5-1346D0289EF44F7A87B4ABF92CE501DC",
+        fuelCode: "ORF",
+        systemTypeCode: "AFF",
+        beginDate: null,
+        beginHour: null,
+        endDate: null,
+        endHour: null,
+        Active: true,
+      },
+      {
+        id: "TWCORNEL5-15BBE0B7C475434887739E964E45EDD3",
+        fuelCode: "ORF",
+        systemTypeCode: "AFG",
+        beginDate: "2019-07-01",
+        beginHour: "0",
+        endDate: "2019-07-02",
+        endHour: "0",
+        Active: true,
+      },
+    ];
+    monitoringSystemsFuelFlowsTableRecods = [
+      {
+        col1: "ORF",
+        col2: "AFF",
+        col3: ":  ➜ Present",
+        col4: "TWCORNEL5-1346D0289EF44F7A87B4ABF92CE501DC",
+      },
+      {
+        col1: "ORF",
+        col2: "AFG",
+        col3: "07/01/2019: 0 ➜ 07/02/2019: 0",
+        col4: "TWCORNEL5-15BBE0B7C475434887739E964E45EDD3",
+      },
     ];
     monitoringSystemsComponentsTableRecods = [
       {
         col1: "AFF",
         col2: "TEMP",
-        col3: "07/01/2019: 0 ➜ Present",
+        col3: ":  ➜ Present",
+        col4: "TWCORNEL5-1346D0289EF44F7A87B4ABF92CE501DC",
       },
       {
         col1: "AFG",
         col2: "TEMP",
         col3: "07/01/2019: 0 ➜ 07/02/2019: 0",
+
+        col4: "TWCORNEL5-15BBE0B7C475434887739E964E45EDD3",
       },
     ];
     monitoringSystemsTableRecods = [
@@ -89,6 +131,7 @@ describe("testing monitoring plan data selectors", () => {
         col4: "NFS",
         col5: "10/01/1993 0",
         col6: "10/01/1993 0",
+        col7: "CAMD-9FC097418E8D4A7D8841478FDFA6C46A",
       },
       {
         col1: "ABF",
@@ -97,6 +140,7 @@ describe("testing monitoring plan data selectors", () => {
         col4: "NFS",
         col5: " ",
         col6: " ",
+        col7: "CAMD-9FC097418E8D4A7D8841478FDFA6C46A",
       },
     ];
   });
@@ -108,7 +152,17 @@ describe("testing monitoring plan data selectors", () => {
 
   test("should generate data table records for monitoring systems components", () => {
     expect(
-      fs.getMonitoringPlansSystemsComponentsTableRecords(selectedMonitoringSystemsComponents)
+      fs.getMonitoringPlansSystemsComponentsTableRecords(
+        selectedMonitoringSystemsComponents
+      )
     ).toEqual(monitoringSystemsComponentsTableRecods);
+  });
+
+  test("should generate data table records for monitoring systems fuel flow", () => {
+    expect(
+      fs.getMonitoringPlansSystemsFuelFlowsComponentsTableRecords(
+        selectedMonitoringSystemsFuelFlow
+      )
+    ).toEqual(monitoringSystemsFuelFlowsTableRecods);
   });
 });
