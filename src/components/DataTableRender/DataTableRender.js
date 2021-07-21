@@ -215,7 +215,7 @@ const DataTableRender = ({
               {tableTitle}
             </h4>
             <DataTable
-              keyField="col1"
+              keyField={`col${columnNames.length+1}` ? `col${columnNames.length+1}`:'col1'}
               className={`data-display-table react-transition fade-in ${className}`}
               sortIcon={
                 <ArrowDownwardSharp className="margin-left-2 text-primary" />

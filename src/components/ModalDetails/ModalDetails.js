@@ -13,20 +13,26 @@ import "./ModalDetails.scss";
 
 import { ArrowBackSharp } from "@material-ui/icons";
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
-// value in data => [0] api label, [1] our UI label, [2] value, [3] control form type
+// value in data => [0] api label, [1] our UI label, [2] value,[3], required or not for editing, [4] control form type
 const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
   const makeViewOnlyComp = (value) => {
     return (
       <div key={`${value[1]}`} className="grid-col">
-         {(value[4]==='time' || value[4] ==='date') && (value[5]===null )? '':
-        <FormGroup className="margin-top-0">
-          <Label className="text-bold margin-bottom-0" htmlFor={`${value[1]}`}>
-            {value[1]}
-          </Label>
-          <div tabIndex="0" id={`${value[1]}`}>
-            {value[2] ? value[2] : (value[3] ==="radio")? "No":''}
-          </div>
-        </FormGroup>}
+        {(value[4] === "time" || value[4] === "date") && value[5] === null ? (
+          ""
+        ) : (
+          <FormGroup className="margin-top-0">
+            <Label
+              className="text-bold margin-bottom-0"
+              htmlFor={`${value[1]}`}
+            >
+              {value[1]}
+            </Label>
+            <div tabIndex="0" id={`${value[1]}`}>
+              {value[2] ? value[2] : value[4] === "radio" ? "No" : ""}
+            </div>
+          </FormGroup>
+        )}
       </div>
     );
   };
@@ -58,13 +64,13 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
         const datePickerValue = `${year}-${month}-${day}`;
         comp = (
           <div>
-            {viewOnly ? (
+            {/* {viewOnly ? (
               ""
-            ) : (
-              <div className="usa-hint" id="appointment-date-hint">
-                mm/dd/yyyy
-              </div>
-            )}
+            ) : ( */}
+            <div className="usa-hint" id="appointment-date-hint">
+              mm/dd/yyyy
+            </div>
+            {/* )} */}
             <DatePicker
               className="margin-0 modalUserInput width-mobile"
               id={value[0]}
@@ -80,22 +86,22 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
       case "time":
         comp = (
           <div>
-            {viewOnly ? (
+            {/* {viewOnly ? (
               ""
-            ) : (
-              <div className="usa-hint" id="appointment-date-hint">
-                hh
-              </div>
-            )}
-          <TextInput
-            className="modalUserInput width-7"
-            id="modalUserInput"
-            epa-testid={value[0]}
-            epadataname={value[0]}
-            name="modalUserInput"
-            type="text"
-            defaultValue={value[2] ? value[2] : ""}
-          />
+            ) : ( */}
+            <div className="usa-hint" id="appointment-date-hint">
+              hh
+            </div>
+            {/* )} */}
+            <TextInput
+              className="modalUserInput width-7"
+              id="modalUserInput"
+              epa-testid={value[0]}
+              epadataname={value[0]}
+              name="modalUserInput"
+              type="text"
+              defaultValue={value[2] ? value[2] : ""}
+            />
           </div>
         );
         break;
@@ -185,6 +191,8 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
                 onClick={() => backBtn(false)}
                 className="float-left margin-right-1"
                 unstyled="true"
+                epa-testid="backBtn"
+                id="backBtn"
               >
                 {" "}
                 <ArrowBackSharp
@@ -193,9 +201,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
                 />
               </Button>
 
-              <h4 className="text-bold float-left">
-                {title}
-              </h4>
+              <h4 className="text-bold float-left">{title}</h4>
             </div>
           ) : (
             ""
