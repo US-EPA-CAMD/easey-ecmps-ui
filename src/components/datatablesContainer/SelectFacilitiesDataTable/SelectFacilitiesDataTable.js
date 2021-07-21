@@ -17,12 +17,17 @@ export const SelectFacilitiesDataTable = ({
 
   const [dataLoaded, setDataLoaded] = useState(false);
   useEffect(() => {
+    let isMounted = true; 
     if (facilities.length === 0) {
       facilitiesApi.getAllFacilities().then((res) => {
+        if(isMounted){
+
+        
         setDataLoaded(true);
-        setFacilities(res.data);
+        setFacilities(res.data);}
       });
     }
+    return () => { isMounted = false };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -57,7 +57,7 @@ export const LeftNavToSubHeader = () => {
           <div className="float-right desktop:margin-top-3 desktop-lg:margin-top-0 display-inline-flex">
             {appNavItems.map((el, i) => {
               return (
-                <>
+                <div key={`${i}_${i}`}>
                   <NavDropDownButton
                     key={i}
                     label={el.label}
@@ -88,7 +88,7 @@ export const LeftNavToSubHeader = () => {
                   {el.items.length > 0 ? (
                     <div className="menu-underline" />
                   ) : null}
-                </>
+                </div>
               );
             })}
           </div>
