@@ -14,20 +14,21 @@ export const SelectFacilitiesDataTable = ({
   openedFacilityTabs,
 }) => {
   const [facilities, setFacilities] = useState("");
-
+console.log('openedFacilityTabs',openedFacilityTabs)
   const [dataLoaded, setDataLoaded] = useState(false);
   useEffect(() => {
-    let isMounted = true; 
+    let isMounted = true;
     if (facilities.length === 0) {
       facilitiesApi.getAllFacilities().then((res) => {
-        if(isMounted){
-
-        
-        setDataLoaded(true);
-        setFacilities(res.data);}
+        if (isMounted) {
+          setDataLoaded(true);
+          setFacilities(res.data);
+        }
       });
     }
-    return () => { isMounted = false };
+    return () => {
+      isMounted = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

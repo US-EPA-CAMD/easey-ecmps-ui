@@ -1,7 +1,7 @@
 import * as types from "../actions/actionTypes";
 import initialState from "./initialState";
 
-const reducer = (state = initialState.openedFacilityTabs, action) => {
+const reducer = ( action , state = initialState.openedFacilityTabs) => {
   let returnObject;
 
   switch (action.type) {
@@ -22,19 +22,6 @@ const reducer = (state = initialState.openedFacilityTabs, action) => {
             }
           : x
       );
-
-      break;
-    case types.SET_LOCATIONS_STATE:
-      if (state && state.length > 0) {
-        returnObject = state.map((x, i) =>
-          x.orisCode === action.orisCode
-            ? {
-                ...x,
-                locations: action.locations,
-              }
-            : x
-        );
-      }
       break;
     case types.SET_SECTION_SELECTION_STATE:
       returnObject = state.map((x, i) =>
