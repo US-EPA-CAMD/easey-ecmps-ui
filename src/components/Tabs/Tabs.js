@@ -51,6 +51,7 @@ const Tabs = ({ children, dynamic = false, removeTabs, setActive }) => {
               ) : (
                 <div
                   role="button"
+                  id="tabBtn"
                   className={
                     activeTabIndex === i
                       ? "tab-button react-transition flip-in-y  active-tab-button"
@@ -64,6 +65,7 @@ const Tabs = ({ children, dynamic = false, removeTabs, setActive }) => {
                       settingActiveTab(i);
                     }
                   }}
+                  
                 >
                   <div className="text-center">
                     {el.props.title.split("(")[0]}

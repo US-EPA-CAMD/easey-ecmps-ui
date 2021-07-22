@@ -58,7 +58,6 @@ export const focusTrap = (selector, callback = () => {}) => {
   setTimeout(() => {
     firstComponentFocusableElement.focus();
   });
-
   return {
     component,
     focusableComponentContent,

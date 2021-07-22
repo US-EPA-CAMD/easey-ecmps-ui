@@ -40,6 +40,7 @@ const DataTableRender = ({
   componentStyling,
   className,
   addBtnName,
+  uniqueKey,
 }) => {
   const [searchText, setSearchText] = useState("");
   const columns = [];
@@ -99,11 +100,6 @@ const DataTableRender = ({
                     id="btnOpen"
                     onClick={() => openHandler(normalizedRow, false, false)}
                     aria-label={`open ${row.col1} `}
-                    onKeyPress={(event) => {
-                      if (event.key === "Enter") {
-                        openHandler(row, false);
-                      }
-                    }}
                   >
                     {"Open"}
                   </Button>
@@ -117,11 +113,6 @@ const DataTableRender = ({
                     id="btnOpenAndCheckout"
                     onClick={() => openHandler(normalizedRow, true)}
                     aria-label={`open and checkout ${row.col1} `}
-                    onKeyPress={(event) => {
-                      if (event.key === "Enter") {
-                        openHandler(normalizedRow, true);
-                      }
-                    }}
                   >
                     {"Open & Checkout"}
                   </Button>
@@ -139,11 +130,6 @@ const DataTableRender = ({
                       ? `view and/or edit ${row.col1}`
                       : `view ${row.col1}`
                   }
-                  onKeyPress={(event) => {
-                    if (event.key === "Enter") {
-                      openHandler(normalizedRow, false);
-                    }
-                  }}
                 >
                   {checkout ? "View / Edit" : "View"}
                 </Button>
@@ -162,11 +148,6 @@ const DataTableRender = ({
                     ? `Open ${row.col1}`
                     : `View ${row.col1}`
                 }
-                onKeyPress={(event) => {
-                  if (event.key === "Enter") {
-                    openHandler(row.col1, row.col2);
-                  }
-                }}
               >
                 {actionsBtn === "Open" ? "Open" : "View"}
               </Button>
@@ -215,7 +196,7 @@ const DataTableRender = ({
               {tableTitle}
             </h4>
             <DataTable
-              keyField={`col${columnNames.length+1}` ? `col${columnNames.length+1}`:'col1'}
+              keyField={!uniqueKey ? `col${columnNames.length + 1}` : "col1"}
               className={`data-display-table react-transition fade-in ${className}`}
               sortIcon={
                 <ArrowDownwardSharp className="margin-left-2 text-primary" />
@@ -261,6 +242,7 @@ const DataTableRender = ({
                       outline="true"
                       color="black"
                       onClick={() => addBtn(false, false, true)}
+                      id="addBtn"
                     >
                       {addBtnName}
                     </Button>

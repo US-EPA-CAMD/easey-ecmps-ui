@@ -103,7 +103,17 @@ describe("testing the creation of a modal", () => {
         charCode: 13,
       });
   
-      fireEvent.click(cancelBTN);
-      cancelBTN.focus();
+      // fireEvent.click(cancelBTN);
+      // cancelBTN.focus();
+
+      const newCLose = container.querySelector("#closeModalBtn");
+      newCLose.focus();
+      fireEvent.keyPress(newCLose, {
+        key: "Enter",
+        code: "Enter",
+        keyCode: 13,
+        charCode: 13,
+      });
+      fireEvent.keyDown(newCLose, {key: 'Enter', code: 'Enter'})
 });
 });

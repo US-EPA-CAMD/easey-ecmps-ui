@@ -1,5 +1,7 @@
 import { oneSecond } from "../config";
 
+const customSortIcon = ".__rdt_custom_sort_icon__"
+const tableCol = ".rdt_TableCol"
 /*****************************************************
  * ensure508:
  *
@@ -94,7 +96,7 @@ export const addInitialAriaSort = () => {
   setTimeout(() => {
     document.querySelectorAll(`.rdt_TableCol`).forEach((column) => {
       // *** traverse all sort icons
-      if (column.querySelectorAll(".__rdt_custom_sort_icon__").length > 0) {
+      if (column.querySelectorAll(customSortIcon).length > 0) {
         // *** isolate the svg element of the icon
         const sortIcon = column.querySelector(".MuiSvgIcon-root");
 
@@ -102,7 +104,7 @@ export const addInitialAriaSort = () => {
         if (window.getComputedStyle(sortIcon).opacity === "1") {
           if (
             column
-              .querySelector(".__rdt_custom_sort_icon__")
+              .querySelector(customSortIcon)
               .classList.contains("asc")
           ) {
             column
@@ -110,7 +112,7 @@ export const addInitialAriaSort = () => {
               .setAttribute("aria-sort", "ascending");
           } else if (
             column
-              .querySelector(".__rdt_custom_sort_icon__")
+              .querySelector(customSortIcon)
               .classList.contains("desc")
           ) {
             column
@@ -140,25 +142,25 @@ export const setAriaSort = (event) => {
     event.type === "click"
   ) {
     // *** make sure aria-sort attribute is set
-    switch (event.target.closest(".rdt_TableCol").getAttribute("aria-sort")) {
+    switch (event.target.closest(tableCol).getAttribute("aria-sort")) {
       // * flip any column currently marked as "sorted" to the opposite of currently chosen direction
       case "ascending":
         event.target
-          .closest(".rdt_TableCol")
+          .closest(tableCol)
           .setAttribute("aria-sort", "descending");
         break;
 
       // * flip any column currently marked as "sorted" to the opposite of currently chosen direction
       case "descending":
         event.target
-          .closest(".rdt_TableCol")
+          .closest(tableCol)
           .setAttribute("aria-sort", "ascending");
         break;
 
       // * default direction is descending
       default:
         event.target
-          .closest(".rdt_TableCol")
+          .closest(tableCol)
           .setAttribute("aria-sort", "descending");
         break;
     }
@@ -179,7 +181,7 @@ export const setAriaSort = (event) => {
 export const assignAriaSortHandlersToDatatable = () => {
   setTimeout(() => {
     // *** only event being taken into account are the ones that result in sorting of the datatable
-    document.querySelectorAll(".rdt_TableCol").forEach((element) => {
+    document.querySelectorAll(tableCol).forEach((element) => {
       element.addEventListener("click", setAriaSort, true);
       element.addEventListener("keydown", setAriaSort, true);
     });
@@ -193,7 +195,7 @@ export const assignAriaSortHandlersToDatatable = () => {
  *   508 compliance
  *****************************************************/
 export const removeAriaSortHandlersFromDatatable = () => {
-  document.querySelectorAll(".rdt_TableCol").forEach((element) => {
+  document.querySelectorAll(tableCol).forEach((element) => {
     element.removeEventListener("click", setAriaSort);
     element.removeEventListener("keydown", setAriaSort);
   });

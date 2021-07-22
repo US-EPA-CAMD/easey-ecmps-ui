@@ -24,7 +24,7 @@ export function getMonitoringPlansSystemsTableRecords(data) {
 // year - month - day to  month / day/ year
 function formateStringToDate(date) {
   const parts = date.split("-");
-  return parts[1] + "/" + parts[2] + "/" + parts[0];
+  return `${parts[1]}/${parts[2]}/${parts[0]}}`;
 }
 
 export function getMonitoringPlansSystemsComponentsTableRecords(data) {
@@ -42,13 +42,13 @@ export function getMonitoringPlansSystemsComponentsTableRecords(data) {
     if (endDate === "" || endDate === undefined) {
       present = "Present";
     } else {
-      present = endDate + ": " + endHour;
+      present = `${endDate}: ${endHour}`;
     }
     records.push({
       col1: el.componentIdentifier,
       col2: el.componentTypeCode,
       col3: `${beginDate}: ${beginHour} ➜ ${present}`,
-      col4: el.id
+      col4: el.id,
     });
   });
   return records;
@@ -69,13 +69,13 @@ export function getMonitoringPlansSystemsFuelFlowsComponentsTableRecords(data) {
     if (endDate === "" || endDate === undefined) {
       present = "Present";
     } else {
-      present = endDate + ": " + endHour;
+      present = `${endDate}: ${endHour}`;
     }
     records.push({
       col1: el.fuelCode,
       col2: el.systemTypeCode,
       col3: `${beginDate}: ${beginHour} ➜ ${present}`,
-      col4: el.id
+      col4: el.id,
     });
   });
   return records;
