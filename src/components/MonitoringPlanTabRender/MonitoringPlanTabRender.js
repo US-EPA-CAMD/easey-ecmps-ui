@@ -149,6 +149,7 @@ export const MonitoringPlanTabRender = ({
     [],
   ]);
 
+  // not tested ***
   const resetInactivityTimerApiCall = () => {
     console.log(mpApi.putLockTimerUpdateConfiguration(configID), "api called");
   };
@@ -159,6 +160,7 @@ export const MonitoringPlanTabRender = ({
     // sets the state of checked in config  in redux
     setCheckout(false, title);
   };
+  // *** 
   //false => check back in
   // true => check out
   const checkoutAPI = (direction) => {
