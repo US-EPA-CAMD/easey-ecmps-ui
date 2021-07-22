@@ -277,7 +277,7 @@ describe("67440874", () => {
       jest.runOnlyPendingTimers();
       wrapper.update();
     });
-    
+
     // let checkOutBTN = wrapper.find("#checkOutBTN");
     expect(checkOutBTN).toBeDefined();
     // expect(addBtn).toBeDefined();
