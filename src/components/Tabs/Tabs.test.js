@@ -3,7 +3,7 @@ import Tabs from "./Tabs";
 import TabPane from "../TabPane/TabPane";
 import { render, fireEvent, screen } from "@testing-library/react";
 
-import { mount, ReactWrapper } from 'enzyme';
+import { mount, ReactWrapper } from "enzyme";
 const TabsUsage = (bool) => (
   <Tabs
     dynamic={bool}
@@ -87,14 +87,13 @@ describe("testing a reusable Tabs component", () => {
 
     const newCLose = container.querySelector("#closeXBtnTab");
 
-
     newCLose.focus();
     fireEvent.keyPress(newCLose, {
       key: "Escape",
       code: "Escape",
       keyCode: 27,
       charCode: 27,
-    });    
+    });
     newCLose.focus();
     fireEvent.keyPress(newCLose, {
       key: "Enter",
@@ -103,48 +102,16 @@ describe("testing a reusable Tabs component", () => {
       charCode: 13,
     });
 
-    fireEvent.keyDown(newCLose, {key: 'Enter', code: 'Enter'})
+    fireEvent.keyDown(newCLose, { key: "Enter", code: "Enter" });
   });
   test("renders the user selected tab", () => {
     const wrapper = mount(
-      <Tabs setActive={jest.fn()}  removeTabs={jest.fn()}>
+      <Tabs setActive={jest.fn()} removeTabs={jest.fn()}>
         <TabPane title="Select configurations">Tab2 Content</TabPane>
         <TabPane title="( Tab3 )">
           <p>Tab3 Content</p>
         </TabPane>
       </Tabs>
     );
-  });
-
-
-  test("renders the user selected tab", () => {
-    const { container } = render(
-      <Tabs dynamic={true} setActive={jest.fn()} removeTabs={jest.fn()}>
-        <TabPane title="( Tab1 )">Tab1 Content</TabPane>
-        <TabPane title="Select configurations">Tab2 Content</TabPane>
-        <TabPane title="( Tab3 )">
-          <p>Tab3 Content</p>
-        </TabPane>
-        <TabPane title="( Tab4 )">
-          <p>Tab4 Content 1</p>
-          <p>Tab4 Content 2</p>
-        </TabPane>
-      </Tabs>
-    );
-
-
-    const nodeList = container.querySelectorAll("#closeXBtnTab");
-    // /
-expect(nodeList.length).toBe(3);
- nodeList[2].focus();
-    // fireEvent.keyPress(nodeList[2], {
-    //   key: "Escape",
-    //   keyCode: 27,
-    // });  
-    // nodeList[2].focus();  
-    fireEvent.keyPress(nodeList[2], {
-      key: "Enter",
-      // keyCode: 13,
-    });
   });
 });
