@@ -8,13 +8,10 @@ import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigu
 import * as facilitiesApi from "../../../utils/api/facilityApi";
 export const SelectFacilitiesDataTable = ({
   user,
-  /*loadFacilitiesData,
-  loading,*/
   addtabs,
   openedFacilityTabs,
 }) => {
   const [facilities, setFacilities] = useState("");
-console.log('openedFacilityTabs',openedFacilityTabs)
   const [dataLoaded, setDataLoaded] = useState(false);
   useEffect(() => {
     let isMounted = true;

@@ -1,5 +1,6 @@
 // *** the purpose of this function is to add epa-active-element class to currently active element
 export const addActiveClass = (event) => {
+
   // *** remove any existing elements first
   removeActiveClass(event);
   setTimeout(() => {
