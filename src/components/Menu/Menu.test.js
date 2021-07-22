@@ -12,6 +12,8 @@ describe('testing updated go-wide template footer menu', () => {
         const {getByRole, getAllByRole} = render(<Menu/>);
         const burgerMenu = getByRole("button");
         fireEvent.click(burgerMenu);
+        fireEvent.click(burgerMenu);
+        fireEvent.click(burgerMenu);
         const menuLinks = getAllByRole("link");
         expect(menuLinks.length).toBe(3);
     });
