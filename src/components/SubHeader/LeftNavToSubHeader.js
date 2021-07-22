@@ -20,14 +20,14 @@ export const LeftNavToSubHeader = () => {
     false,
     false,
   ]);
-  // const [categorySelected, setCategorySelected] = useState([
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  // ]);
+  const [categorySelected, setCategorySelected] = useState([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
 
   const handleToggleNavDropdown = (column) => {
     setNavDropdownOpen((prevNavDropdownOpen) => {
