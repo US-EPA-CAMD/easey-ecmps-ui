@@ -6,7 +6,6 @@ import DataTableMats from "../datatablesContainer/DataTableMats/DataTableMats";
 import DataTableSystems from "../datatablesContainer/DataTableSystems/DataTableSystems";
 import InactivityTracker from "../InactivityTracker/InactivityTracker";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
-import "./MonitoringPlanTabRender.scss";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 
 export const MonitoringPlanTabRender = ({

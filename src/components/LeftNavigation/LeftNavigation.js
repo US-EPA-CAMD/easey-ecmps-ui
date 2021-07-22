@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Button, SideNav } from "@trussworks/react-uswds";
+import { Button, SideNav,Link as USWDSLink  } from "@trussworks/react-uswds";
 import Modal from "../Modal/Modal";
 import Login from "../Login/Login";
 
 import { Link } from "react-router-dom";
-import { Link as USWDSLink } from "@trussworks/react-uswds";
 
 import { head, workSpace } from "../../utils/constants/menuTopics";
 

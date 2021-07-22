@@ -22,7 +22,6 @@ import { findValue, adjustDate } from "./find-values-in-array";
 
 //arr = [property name, ui label, value, required or not labeling for edit, control input type ... ]
 export const modalViewData = (selected, label, time, createNew) => {
-
   const arr = [];
   const codeList = {
     systemTypeCode: types,
@@ -40,7 +39,7 @@ export const modalViewData = (selected, label, time, createNew) => {
     sysFuelUomCode: basisCode,
   };
 
-  for (let y in label) {
+  for (const y in label) {
     let labels = "";
     switch (label[y][1]) {
       case "dropdown":
@@ -93,7 +92,7 @@ export const modalViewData = (selected, label, time, createNew) => {
     }
   }
 
-  for (let y in time) {
+  for (const y in time) {
     if (y === "endDate" || y === "beginDate") {
       let formattedDate = "";
       if (!createNew) {

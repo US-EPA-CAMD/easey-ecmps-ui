@@ -242,6 +242,9 @@
       font-weight: normal;
     }
   }
+  .usa-accordion__button:hover {
+    background-color: $epa-white !important;
+  }
 
   .usa-accordion__button[aria-expanded="false"] {
     background-image: url("/ecmps/images/icons/menu-item-expand-black.svg"),
@@ -357,11 +360,5 @@
 .usa-button-group__item {
   @media (max-width: 128em) {
     text-align: center;
-  }
-}
-
-.left-sidenav-to-header-wrapper {
-  .usa-accordion__button:hover {
-    background-color: $epa-white !important;
   }
 }
