@@ -20,9 +20,9 @@ const MenuSearch = () => {
     <div className="menuSearch">
       <div className="usa-search" role="search">
         <Form
-          onSubmit={() => {
-            void 0;
-          }}
+          // onSubmit={() => {
+          //   void 0;
+          // }}
           children={
             <div>
               <label
