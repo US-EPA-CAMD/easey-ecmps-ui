@@ -1,12 +1,12 @@
-import React, { useRef } from "react";
+import React from "react";
 
 import "./CountdownTimer.scss";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
-const CountdownTimerRender = ({ remainingTime, countdownAPI }) => {
-  const currentTime = useRef(remainingTime);
-  const prevTime = useRef(null);
-  const isNewTimeFirstTick = useRef(false);
+export const CountdownTimerRender = ({ remainingTime, countdownAPI }) => {
+  const currentTime = React.useRef(remainingTime);
+  const prevTime = React.useRef(null);
+  const isNewTimeFirstTick = React.useRef(false);
 
   if (currentTime.current !== remainingTime) {
     isNewTimeFirstTick.current = true;
@@ -31,13 +31,15 @@ const CountdownTimerRender = ({ remainingTime, countdownAPI }) => {
           seconds left
         </div>
       </div>
-      {prevTime.current !== null && (
+      {prevTime.current !== null ? (
         <div
           key={prevTime.current}
-          className={`time ${!isTimeUp ? "down" : ""}`}
+          className={`time ${isTimeUp ? "" : "down"}`}
         >
           {prevTime.current}
         </div>
+      ) : (
+        ""
       )}
     </div>
   );

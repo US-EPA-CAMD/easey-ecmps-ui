@@ -9,7 +9,6 @@ import "./DataTableSystemsComponentsRender.scss";
 
 export const DataTableSystemsComponents = ({
   systemID,
-  showActiveOnly,
   viewOnly,
   setSecondLevel,
   secondLevel,
@@ -18,11 +17,12 @@ export const DataTableSystemsComponents = ({
   checkout,
   setCreateBtn,
 }) => {
+
   const [monitoringSystemsFuelFlows, setMonitoringSystemsFuelFlows] = useState(
     ""
   );
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [dataFuelLoaded, setFuelDataLoaded] = useState(false);
+  const [dataFuelLoaded, setFuelDataLoaded] =useState(false);
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [selected, setSelected] = useState(1);
   const [
@@ -70,7 +70,7 @@ export const DataTableSystemsComponents = ({
   // *** row handler onclick event listener
   const [createNewComponent, setCreateNewComponent] = useState(false);
 
-  const [openComponentView, setComponentView] = useState(false);
+  const [openComponentView, setComponentView] =  React.useState(false);
   const openComponent = (row, bool, create) => {
     let selectComponents = null;
     setCreateNewComponent(create);
@@ -119,7 +119,7 @@ export const DataTableSystemsComponents = ({
   };
 
   const [createNewFuelFlow, setCreateNewFuelFlow] = useState(false);
-  const [openFuelFlowsView, setOpenFuelFlowsView] = useState(false);
+  const [openFuelFlowsView, setOpenFuelFlowsView] =  React.useState(false);
   // *** row handler onclick event listener
   const openFuelFlows = (row, bool, create) => {
     let selectFuelFlows = null;

@@ -97,7 +97,11 @@ const DataTableRender = ({
                     unstyled="true"
                     epa-testid="btnOpen"
                     className="cursor-pointer open-modal-button"
-                    id="btnOpen"
+                    id={
+                      tableTitle
+                        ? `btnOpen${tableTitle.split(" ").join("")}`
+                        : `btnOpen`
+                    }
                     onClick={() => openHandler(normalizedRow, false, false)}
                     aria-label={`open ${row.col1} `}
                   >
@@ -110,7 +114,11 @@ const DataTableRender = ({
                     unstyled="true"
                     epa-testid="btnOpenAndCheckout"
                     className="cursor-pointer open-modal-button"
-                    id="btnOpenAndCheckout"
+                    id={
+                      tableTitle
+                        ? `btnOpenAndCheckout${tableTitle.split(" ").join("")}`
+                        : `btnOpenAndCheckout`
+                    }
                     onClick={() => openHandler(normalizedRow, true)}
                     aria-label={`open and checkout ${row.col1} `}
                   >
@@ -123,7 +131,11 @@ const DataTableRender = ({
                   unstyled="true"
                   epa-testid="btnOpen"
                   className="cursor-pointer open-modal-button"
-                  id="btnOpen"
+                  id={
+                    tableTitle
+                      ? `btnOpen${tableTitle.split(" ").join("")}`
+                      : `btnOpen`
+                  }
                   onClick={() => openHandler(normalizedRow, false)}
                   aria-label={
                     checkout
@@ -140,7 +152,11 @@ const DataTableRender = ({
                 type="button"
                 unstyled="true"
                 epa-testid="btnOpen"
-                id="btnOpen"
+                id={
+                  tableTitle
+                    ? `btnOpen${tableTitle.split(" ").join("")}`
+                    : `btnOpen`
+                }
                 className="cursor-pointer margin-left-2 open-modal-button"
                 onClick={() => openHandler(normalizedRow, false)}
                 aria-label={
