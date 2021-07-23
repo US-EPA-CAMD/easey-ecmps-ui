@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, SideNav,Link as USWDSLink  } from "@trussworks/react-uswds";
+import { Button, SideNav, Link as USWDSLink } from "@trussworks/react-uswds";
 import Modal from "../Modal/Modal";
 import Login from "../Login/Login";
 
@@ -17,6 +17,7 @@ export const LeftNavigation = (props) => {
   };
 
   const makeHeader = (arr) => {
+    console.log("arr", arr);
     return arr.map((item) => {
       return (
         <USWDSLink
@@ -32,6 +33,7 @@ export const LeftNavigation = (props) => {
           rel={item.name}
           title={`Go to ${item.name} page`}
           key={item.url}
+          id={`${item.name.split(" ").join("")}`}
           onClick={(event) => handleRouteChange(event, item.url)}
         >
           {item.name}

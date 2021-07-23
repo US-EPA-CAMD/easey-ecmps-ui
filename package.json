@@ -86,7 +86,7 @@
       "!src/utils/api/axiosSetup.js",
       "!src/utils/api/setupTests.js",
       "!src/utils/api/apiUtils.js",
-      "!src/utils/remoteLogging.js"
+      "!src/utils/api/apiUtils.js"
     ]
   }
 }

@@ -1,7 +1,7 @@
 import { Button, TextInput } from "@trussworks/react-uswds";
 import React from "react";
 
-export const FilterComponent = ({ filterText, onSearch, title }) => (
+export const FilterComponent = ({ filterText, onSearch, title }) => (z
   <div className="width-full">
     <div className="filter-title clearfix font-heading-xl text-bold data-table-title tablet:font-heading-xl mobile:font-body-lg mobile:text-bold mobile:padding-bottom-4 mobile:padding-left-6 tablet:padding-left-0">
       {title}
