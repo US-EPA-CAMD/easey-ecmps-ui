@@ -6,10 +6,10 @@ export function getTableRecords(facilities) {
   const records = [];
   facilities.forEach((el) => {
     records.push({
-      col1: el.orisCode,
-      col2: el.name,
+      col1: el.name,
+      col2: el.orisCode,
       col3: el.state,
-      col4:el.orisCode,
+      col4: el.orisCode,
     });
   });
   return records;
@@ -108,7 +108,6 @@ export function getSelectedUnitDetail(unitId, facility) {
 }
 
 export function getMonitoringPlansTableRecords(facility, filterActive) {
-
   const data = filterActive
     ? facility.monitoringPlans.filter((el) => el.status === "Active")
     : facility.monitoringPlans;

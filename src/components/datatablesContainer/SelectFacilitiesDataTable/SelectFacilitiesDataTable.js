@@ -17,23 +17,24 @@ export const SelectFacilitiesDataTable = ({
 
   const [dataLoaded, setDataLoaded] = useState(false);
   useEffect(() => {
-    let isMounted = true; 
+    let isMounted = true;
     if (facilities.length === 0) {
       facilitiesApi.getAllFacilities().then((res) => {
-        if(isMounted){
-
-        
-        setDataLoaded(true);
-        setFacilities(res.data);}
+        if (isMounted) {
+          setDataLoaded(true);
+          setFacilities(res.data);
+        }
       });
     }
-    return () => { isMounted = false };
+    return () => {
+      isMounted = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
-  const columnNames = ["ORIS", "Facility", "State"];
+  const columnNames = ["Facility", "ORIS", "State"];
 
   const selectedRowHandler = (info) => {
     addtabs([
