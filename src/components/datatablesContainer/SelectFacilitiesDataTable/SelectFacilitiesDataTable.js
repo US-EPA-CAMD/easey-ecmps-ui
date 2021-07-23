@@ -31,7 +31,7 @@ export const SelectFacilitiesDataTable = ({
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
-  const columnNames = ["ORIS", "Facility", "State"];
+  const columnNames = ["Facility", "ORIS", "State"];
 
   const selectedRowHandler = (info) => {
     addtabs([

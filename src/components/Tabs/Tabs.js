@@ -4,7 +4,8 @@ import { Button } from "@trussworks/react-uswds";
 
 import "./Tabs.scss";
 import { ClearSharp } from "@material-ui/icons";
-const Tabs = ({ children, dynamic = false, removeTabs, setActive }) => {
+
+export const Tabs = ({ children, dynamic = false, removeTabs, setActive }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const settingActiveTab = (index) => {
     setActiveTabIndex(index);
@@ -54,7 +55,7 @@ const Tabs = ({ children, dynamic = false, removeTabs, setActive }) => {
                   id="tabBtn"
                   className={
                     activeTabIndex === i
-                      ? "tab-button react-transition flip-in-y  active-tab-button"
+                      ? "tab-button react-transition flip-in-y active-tab-button"
                       : "tab-button react-transition flip-in-y"
                   }
                   tabIndex="0"
