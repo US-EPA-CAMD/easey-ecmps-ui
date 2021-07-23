@@ -1,17 +1,20 @@
 // *** the purpose of this function is to add epa-active-element class to currently active element
+
+const epaActiveElemnt = "epa-active-element";
 export const addActiveClass = (event) => {
+
   // *** remove any existing elements first
   removeActiveClass(event);
   setTimeout(() => {
-    event.target.classList.add("epa-active-element");
+    event.target.classList.add(epaActiveElemnt);
 
     event.target.parentElement && event.target.parentElement.classList
-      ? event.target.parentElement.classList.add("epa-active-element")
+      ? event.target.parentElement.classList.add(epaActiveElemnt)
       : void 0;
   });
 };
 export const removeActiveClass = (event) => {
-  event.target.classList.remove("epa-active-element");
+  event.target.classList.remove(epaActiveElemnt);
 };
 
 export const handleActiveElementFocus = () => {

@@ -25,7 +25,7 @@ export function getMonitoringPlansMethodsTableRecords(totalData) {
 // year - month - day to  month / day/ year
 function formateStringToDate(date) {
   var parts = date.split("-");
-  return parts[1] + "/" + parts[2] + "/" + parts[0];
+  return `${parts[1]}/${parts[2]}/${parts[0]}}`;
 }
 
 export function getMonitoringPlansMatsMethodsTableRecords(data) {
@@ -44,10 +44,8 @@ export function getMonitoringPlansMatsMethodsTableRecords(data) {
       col2: el.matsMethodCode,
       col3: `${beginDate} ${beginHour}`,
       col4: `${endDate} ${endHour}`,
+      col5: el.id,
     });
   });
   return records;
-}
-export function getActiveMethods(methods) {
-  return methods.filter((m) => m.active === true);
 }

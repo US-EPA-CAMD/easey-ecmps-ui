@@ -1,20 +1,21 @@
 import * as types from "../actions/actionTypes";
 import initialState from "./initialState";
 
-const reducer = (state = initialState.openedFacilityTabs, action) => {
+const reducer = (state, action) => {
+  const currentState = state ? state : initialState.openedFacilityTabs;
   let returnObject;
 
   switch (action.type) {
     case types.ADD_FACILITY_TAB:
-      returnObject = [...state, action.facility];
+      returnObject = [...currentState, action.facility];
       break;
     case types.REMOVE_FACILITY_TAB:
-      returnObject = state.filter(
-        (facility) => state.indexOf(facility) !== action.facility - 1
+      returnObject = currentState.filter(
+        (facility) => currentState.indexOf(facility) !== action.facility - 1
       );
       break;
     case types.SET_LOCATION_SELECTION_STATE:
-      returnObject = state.map((x, i) =>
+      returnObject = currentState.map((x, i) =>
         x.name === action.title
           ? {
               ...x,
@@ -22,22 +23,9 @@ const reducer = (state = initialState.openedFacilityTabs, action) => {
             }
           : x
       );
-
-      break;
-    case types.SET_LOCATIONS_STATE:
-      if (state && state.length > 0) {
-        returnObject = state.map((x, i) =>
-          x.orisCode === action.orisCode
-            ? {
-                ...x,
-                locations: action.locations,
-              }
-            : x
-        );
-      }
       break;
     case types.SET_SECTION_SELECTION_STATE:
-      returnObject = state.map((x, i) =>
+      returnObject = currentState.map((x, i) =>
         x.name === action.title
           ? {
               ...x,
@@ -48,8 +36,8 @@ const reducer = (state = initialState.openedFacilityTabs, action) => {
 
       break;
     case types.SET_CHECKOUT_STATE:
-      if (state && state.length > 0) {
-        returnObject = state.map((x, i) =>
+      if (currentState && currentState.length > 0) {
+        returnObject = currentState.map((x, i) =>
           x.name === action.title
             ? {
                 ...x,
@@ -60,8 +48,8 @@ const reducer = (state = initialState.openedFacilityTabs, action) => {
       }
       break;
     case types.SET_INACTIVE_STATE:
-      if (state && state.length > 0) {
-        returnObject = state.map((x, i) =>
+      if (currentState && currentState.length > 0) {
+        returnObject = currentState.map((x, i) =>
           x.name === action.title
             ? {
                 ...x,
@@ -73,7 +61,7 @@ const reducer = (state = initialState.openedFacilityTabs, action) => {
       break;
 
     default:
-      returnObject = state;
+      returnObject = currentState;
       break;
   }
   return returnObject;

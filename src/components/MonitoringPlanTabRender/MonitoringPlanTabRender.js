@@ -6,7 +6,6 @@ import DataTableMats from "../datatablesContainer/DataTableMats/DataTableMats";
 import DataTableSystems from "../datatablesContainer/DataTableSystems/DataTableSystems";
 import InactivityTracker from "../InactivityTracker/InactivityTracker";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
-import "./MonitoringPlanTabRender.scss";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 
 export const MonitoringPlanTabRender = ({
@@ -97,7 +96,7 @@ export const MonitoringPlanTabRender = ({
       [
         [
           <DataTableSystems
-          locationSelectValue={parseInt(locationSelect[1])}
+            locationSelectValue={parseInt(locationSelect[1])}
             inactive={inactive}
             settingInactiveCheckBox={settingInactiveCheckBox}
             checkout={checkout}
@@ -138,7 +137,7 @@ export const MonitoringPlanTabRender = ({
     [
       [
         <DataTableSystems
-        locationSelectValue={locationSelect[1]}
+          locationSelectValue={locationSelect[1]}
           inactive={inactive}
           settingInactiveCheckBox={settingInactiveCheckBox}
           checkout={checkout}
@@ -150,6 +149,7 @@ export const MonitoringPlanTabRender = ({
     [],
   ]);
 
+  // not tested ***
   const resetInactivityTimerApiCall = () => {
     console.log(mpApi.putLockTimerUpdateConfiguration(configID), "api called");
   };
@@ -160,6 +160,7 @@ export const MonitoringPlanTabRender = ({
     // sets the state of checked in config  in redux
     setCheckout(false, title);
   };
+  // ***
   //false => check back in
   // true => check out
   const checkoutAPI = (direction) => {

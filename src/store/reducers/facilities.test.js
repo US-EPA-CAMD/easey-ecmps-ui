@@ -21,3 +21,20 @@ it("should update state with list of facilities when passed LOAD_FACILITIES_SUCC
   expect(newState.length).toEqual(3);
   expect(newState[0].name).toEqual("Barry");
 });
+
+it("passing in no action.type for default case", () => {
+  const initialState = {
+    facilities: [],
+  };
+  const newState = facilitiesReducer(initialState.apiCallsInProgress, {
+    type: "",
+  });
+  expect(newState.length).toBe(0);
+});
+
+it("passing in no state", () => {
+  const newState = facilitiesReducer(null, {
+    type: "",
+  });
+  expect(newState.length).toBe(0);
+});

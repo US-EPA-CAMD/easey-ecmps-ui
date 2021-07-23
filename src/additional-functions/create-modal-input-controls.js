@@ -2,7 +2,7 @@ import {
   types,
   fuels,
   designations,
-} from "../components/Details/SystemDescriptions";
+} from "../components/ModalDetails/SystemDescriptions";
 
 import {
   bypassApproachCodes,
@@ -39,7 +39,7 @@ export const modalViewData = (selected, label, time, createNew) => {
     sysFuelUomCode: basisCode,
   };
 
-  for (let y in label) {
+  for (const y in label) {
     let labels = "";
     switch (label[y][1]) {
       case "dropdown":
@@ -50,7 +50,7 @@ export const modalViewData = (selected, label, time, createNew) => {
           y,
           label[y][0],
           labels,
-          label[y][2]==="required"? "required":false,
+          label[y][2] === "required" ? "required" : false,
           "dropdown",
           createNew ? "select" : selected[y],
           codeList[y],
@@ -61,7 +61,7 @@ export const modalViewData = (selected, label, time, createNew) => {
           y,
           label[y][0],
           createNew ? "" : selected[y],
-          label[y][2]==="required"? "required":false,
+          label[y][2] === "required" ? "required" : false,
           "input",
         ]);
         break;
@@ -70,10 +70,21 @@ export const modalViewData = (selected, label, time, createNew) => {
         break;
       case "radio":
         if (selected) {
-          arr.push([y, label[y][0], selected[y],label[y][2]==="required"? "required":false, "radio"]);
-        }
-        else{
-          arr.push([y, label[y][0], false,label[y][2]==="required"? "required":false, "radio"]);
+          arr.push([
+            y,
+            label[y][0],
+            selected[y],
+            label[y][2] === "required" ? "required" : false,
+            "radio",
+          ]);
+        } else {
+          arr.push([
+            y,
+            label[y][0],
+            false,
+            label[y][2] === "required" ? "required" : false,
+            "radio",
+          ]);
         }
         break;
       default:
@@ -81,7 +92,7 @@ export const modalViewData = (selected, label, time, createNew) => {
     }
   }
 
-  for (let y in time) {
+  for (const y in time) {
     if (y === "endDate" || y === "beginDate") {
       let formattedDate = "";
       if (!createNew) {
@@ -92,7 +103,7 @@ export const modalViewData = (selected, label, time, createNew) => {
         y,
         time[y][0],
         formattedDate,
-        time[y][2]==="required"? "required":false,
+        time[y][2] === "required" ? "required" : false,
         "date",
         createNew ? "" : selected[y],
       ]);
@@ -102,7 +113,7 @@ export const modalViewData = (selected, label, time, createNew) => {
         y,
         time[y][0],
         createNew ? "" : selected[y],
-        time[y][2]==="required"? "required":false,
+        time[y][2] === "required" ? "required" : false,
         "time",
         createNew ? "" : selected[y],
       ]);
