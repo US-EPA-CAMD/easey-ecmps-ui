@@ -1,7 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
-
+import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
+import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import DataTableRender from "../../DataTableRender/DataTableRender";
+
+import Modal from "../../Modal/Modal";
+import ModalDetails from "../../ModalDetails/ModalDetails";
+import {useRetrieveDropdownApi} from "../../../additional-functions/retrieve-dropdown-api";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 /*import {
   getActiveData,
@@ -16,6 +21,8 @@ export const DataTableMats = ({
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [matsMethods, setMatsMethods] = useState([]);
+  useRetrieveDropdownApi(['dropdown','dropdown','test','dropdown']);
+  const [show, setShow] = useState(false);
   useEffect(() => {
     mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
       console.log("res", res.data);
@@ -24,7 +31,9 @@ export const DataTableMats = ({
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue]);
-
+  const [selectedMatsMethods, setSelectedMatsMethods] = useState(
+    null
+  );
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = [
@@ -65,9 +74,70 @@ export const DataTableMats = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matsMethods]);
+  const saveMethods = () => {
+    const payload = {
+      monLocId: locationSelectValue,
+      id: null,
+      parameterCode: null,
+      subDataCode: null,
+      bypassApproachCode: null,
+      methodCode: null,
+      beginDate: null,
+      beginHour: 0,
+      endDate: null,
+      endHour: 0,
+    };
+
+    const userInput = extractUserInput(payload, ".modalUserInput");
+
+    mpApi
+      .saveMonitoringMethods(userInput)
+      .then((result) => {
+        console.log(result);
+        // openModal(false);
+        setShow(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        // openModal(false);
+        setShow(false);
+      });
+  };
+  const [createNewMats, setCreateNewMats] = useState(false);
+  const closeModalHandler = () => setShow(false);
+  const [selectedModalData, setSelectedModalData] = useState(null);
+  const openMatsModal = (row, bool, create) => {
+    let mats = null;
+    setCreateNewMats(create);
+    if (matsMethods.length > 0 && !create) {
+      
+      mats = matsMethods.filter((element) => element.id === row.col5)[0];
+      setSelectedMatsMethods(mats);
+      console.log('mats',row)
+    }
+    setSelectedModalData(
+      modalViewData(
+        mats,
+        {
+          parameterCode: ["Parameter", "dropdown",'required'],
+          methodCode: ["Methodology", "dropdown",'required'],
+        },
+        {
+          beginDate: ["Start Date", "date",'required'],
+          beginHour: ["Start Time", "time",'required'],
+          endDate: ["End Date", "date",""],
+          endHour: ["End Time", "time",""],
+        },
+        create
+      )
+    );
+    setShow(true);
+  };
 
   return (
     <div className="methodTable">
+            <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
+
       <DataTableRender
         columnNames={columnNames}
         data={data}
@@ -75,8 +145,38 @@ export const DataTableMats = ({
         // actionsBtn={"View"}
         checkout={checkout}
         user={user}
+        openHandler={openMatsModal}
+        actionsBtn={"View"}
+        addBtn={openMatsModal}
+        addBtnName={"Create Mats"}
       />
+
+{show ? (
+        <Modal
+          show={show}
+          close={closeModalHandler}
+          save={saveMethods}
+          showCancel={!(user && checkout)}
+          showSave={user && checkout}
+          title={
+            createNewMats ? "Create Mats" : "Component: Monitoring Mats Methods"
+          }
+          createNew={createNewMats ? "Create Mats" : `Save and Close`}
+          children={
+            <div>
+              <ModalDetails
+                modalData={selectedMatsMethods}
+                data={selectedModalData}
+                cols={2}
+                title={"Component: Monitoring Mats Methods"}
+                viewOnly={!(user && checkout)}
+              />
+            </div>
+          }
+        />
+      ) : null}
     </div>
+    
   );
 };
 

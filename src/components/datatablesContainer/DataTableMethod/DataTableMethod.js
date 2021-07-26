@@ -8,7 +8,7 @@ import DataTableRender from "../../DataTableRender/DataTableRender";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-
+import {useRetrieveDropdownApi} from "../../../additional-functions/retrieve-dropdown-api";
 import {
   getActiveData,
   getInactiveData,
@@ -31,6 +31,7 @@ export const DataTableMethod = ({
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
 
+  console.log(useRetrieveDropdownApi(['parameterCode','methodMemethodCodethods','subDataCode','bypassApproachCode']));
   useEffect(() => {
     mpApi.getMonitoringMethods(locationSelectValue).then((res) => {
       setMethods(res.data);
