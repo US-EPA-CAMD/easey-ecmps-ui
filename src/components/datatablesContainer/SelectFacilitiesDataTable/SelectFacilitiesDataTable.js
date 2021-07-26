@@ -6,6 +6,7 @@ import DataTableRender from "../../DataTableRender/DataTableRender";
 import "./SelectFacilitiesDataTable.scss";
 import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigurations";
 import * as facilitiesApi from "../../../utils/api/facilityApi";
+
 export const SelectFacilitiesDataTable = ({
   user,
   addtabs,
@@ -36,15 +37,15 @@ export const SelectFacilitiesDataTable = ({
   const selectedRowHandler = (info) => {
     addtabs([
       {
-        title: `${info[0].col2} (${info[1].name}) ${
+        title: `${info[0].col1} (${info[1].name}) ${
           info[1].active ? "" : "Inactive"
         }`,
         component: (
           <div className="selectedTabsBox">
             <SelectedFacilityTab
-              orisCode={info[0].col1}
+              orisCode={info[0].col2}
               selectedConfig={info[1]}
-              title={`${info[0].col2} (${info[1].name}) ${
+              title={`${info[0].col1} (${info[1].name}) ${
                 info[1].active ? "" : "Inactive"
               }`}
               user={user}
@@ -52,7 +53,7 @@ export const SelectFacilitiesDataTable = ({
             />
           </div>
         ),
-        orisCode: info[0].col1,
+        orisCode: info[0].col2,
         selectedConfig: info[1],
         checkout: info[2],
       },
@@ -100,6 +101,7 @@ export const SelectFacilitiesDataTable = ({
           />
         }
         headerStyling="padding-top-0 padding-left-2"
+        setShowInactive={() => {}}
       />
     </div>
   );

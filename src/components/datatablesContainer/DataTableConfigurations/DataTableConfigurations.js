@@ -4,6 +4,7 @@ import * as fs from "../../../utils/selectors/monitoringConfigurations";
 import { loadMonitoringPlansArray } from "../../../store/actions/monitoringPlans";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import DataTableRender from "../../DataTableRender/DataTableRender";
+
 export const DataTableConfigurations = ({
   loadMonitoringPlansData,
   monitoringPlans,
@@ -51,30 +52,11 @@ export const DataTableConfigurations = ({
     if (selectedConfig.length > 0) {
       selectedRowHandler(selectedConfig);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedConfig]);
 
-  /*  const flag = useRef(false);*/
-
   useEffect(() => {
-    /*let flagValue = flag.current;
-    if (monitoringPlans.length < 1) {*/
-    loadMonitoringPlansData(data.col1);
+    loadMonitoringPlansData(data.col2);
     setDataLoaded(true);
-    /*} else {
-      for (const x of monitoringPlans) {
-        if (x[0] === data.col1) {
-          setSelectedMp(x);
-          flagValue = true;
-          setDataLoaded(true);
-          break;
-        }
-      }
-      if (flagValue === false) {
-        loadMonitoringPlansData(data.col1);
-        setDataLoaded(true);
-      }
-    }*/
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -90,15 +72,13 @@ export const DataTableConfigurations = ({
     if (monitoringPlans.length >= 1) {
       let index = 0;
       for (const x of monitoringPlans) {
-        if (x[0] === data.col1) {
+        if (x[0] === data.col2) {
           index = x[1];
           return fs.getConfigurationNames(index);
         }
       }
     }
     return [];
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringPlans]);
 
   return (

@@ -232,7 +232,7 @@ test("tests api calls with undefined condiitonal", async () => {
 });
 
 describe("67440874", () => {
-  let wrapper: ReactWrapper;
+  let wrapper;
 
   beforeAll(() => {
     jest.useFakeTimers();

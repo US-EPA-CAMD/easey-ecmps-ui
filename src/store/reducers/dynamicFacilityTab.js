@@ -15,7 +15,7 @@ const reducer = (state, action) => {
       );
       break;
     case types.SET_LOCATION_SELECTION_STATE:
-      returnObject = currentState.map((x, i) =>
+      returnObject = currentState.map((x) =>
         x.name === action.title
           ? {
               ...x,
@@ -25,7 +25,7 @@ const reducer = (state, action) => {
       );
       break;
     case types.SET_SECTION_SELECTION_STATE:
-      returnObject = currentState.map((x, i) =>
+      returnObject = currentState.map((x) =>
         x.name === action.title
           ? {
               ...x,
@@ -37,7 +37,7 @@ const reducer = (state, action) => {
       break;
     case types.SET_CHECKOUT_STATE:
       if (currentState && currentState.length > 0) {
-        returnObject = currentState.map((x, i) =>
+        returnObject = currentState.map((x) =>
           x.name === action.title
             ? {
                 ...x,
@@ -49,7 +49,7 @@ const reducer = (state, action) => {
       break;
     case types.SET_INACTIVE_STATE:
       if (currentState && currentState.length > 0) {
-        returnObject = currentState.map((x, i) =>
+        returnObject = currentState.map((x) =>
           x.name === action.title
             ? {
                 ...x,

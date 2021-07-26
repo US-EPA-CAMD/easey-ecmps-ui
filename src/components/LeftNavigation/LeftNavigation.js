@@ -17,7 +17,6 @@ export const LeftNavigation = (props) => {
   };
 
   const makeHeader = (arr) => {
-    console.log("arr", arr);
     return arr.map((item) => {
       return (
         <USWDSLink

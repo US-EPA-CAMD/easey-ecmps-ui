@@ -7,18 +7,8 @@ export function getConfigurationNames(data) {
       records.push({
         col1: el.name,
         col2: el.active ? "Active" : "Inactive",
-        col3:el.id
+        col3: el.id,
       });
     });
-  // if (records.length === 0) {
-  //   data
-  //     .filter((c) => c.active === false)
-  //     .forEach((el) => {
-  //       records.push({
-  //         col1: el.name,
-  //         col2: el.active ? "Active" : "Inactive",
-  //       });
-  //     });
-  // }
   return records;
 }

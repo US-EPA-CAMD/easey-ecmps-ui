@@ -1,17 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./MonitoringPlanHome.scss";
 import DynamicTabs from "../DynamicTabs/DynamicTabs";
 import { Button } from "@trussworks/react-uswds";
 import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
 import { connect } from "react-redux";
 import SelectedFacilityTab from "../MonitoringPlanTab/MonitoringPlanTab";
+import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
+import { useInterval } from "../../additional-functions/use-interval";
+import { oneSecond } from "../../config";
 
 export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
+  const [checkedOutLocations, setCheckedOutLocations] = useState([]);
+
+  useEffect(() => {
+    obtainCheckedOutLocations().then();
+  }, []);
+
+  /*useInterval(() => {
+    obtainCheckedOutLocations().then();
+  }, 10 * oneSecond);*/
+
+  const obtainCheckedOutLocations = async () => {
+    const checkedOutLocationResult = await getCheckedOutLocations();
+
+    let checkedOutLocationList = [];
+
+    if (checkedOutLocationResult.data) {
+      checkedOutLocationList = checkedOutLocationResult.data.map(
+        (location) => location["monPlanId"]
+      );
+    }
+
+    setCheckedOutLocations(checkedOutLocationList);
+  };
+
   const handleTabState = () => {
     const tabArr = [
       {
         title: "Select Configurations",
-        component: <DataTable user={user} keyField="col1" />,
+        component: <DataTable user={user} keyField="col2" />,
       },
     ];
 
@@ -72,7 +99,10 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
       </div>
 
       <div>
-        <DynamicTabs tabsProps={() => handleTabState()} />
+        <DynamicTabs
+          tabsProps={() => handleTabState()}
+          checkedOutLocations={checkedOutLocations}
+        />
       </div>
     </div>
   );

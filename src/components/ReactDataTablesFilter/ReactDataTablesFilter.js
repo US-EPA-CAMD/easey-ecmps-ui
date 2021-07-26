@@ -1,11 +1,30 @@
-import { Button, TextInput } from "@trussworks/react-uswds";
+import { Button, Checkbox, TextInput } from "@trussworks/react-uswds";
 import React from "react";
 
-export const FilterComponent = ({ filterText, onSearch, title }) => (
+export const FilterComponent = ({
+  filterText,
+  onSearch,
+  title,
+  setShowInactive,
+}) => (
   <div className="width-full">
     <div className="filter-title clearfix font-heading-xl text-bold data-table-title tablet:font-heading-xl mobile:font-body-lg mobile:text-bold mobile:padding-bottom-4 mobile:padding-left-6 tablet:padding-left-0">
-      {title}
+      {title}{" "}
+      {title === "Select Configurations" ? (
+        <Checkbox
+          id="chkShowInactive"
+          name="chkShowInactive"
+          className="display-inline"
+          title="Select this checkbox to display inactive facilities"
+          label={
+            <strong className="font-body-md text-normal line-height-2 position-relative top-neg-2px">
+              Show Inactive
+            </strong>
+          }
+        />
+      ) : null}
     </div>
+
     <table className="float-right clearfix" role="presentation">
       <tbody>
         <tr>

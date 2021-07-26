@@ -94,11 +94,19 @@ export const saveMonitoringMethods = async (payload) => {
   return axios.put(url, payload).then(handleResponse).catch(handleError);
 };
 
-export async function deleteCheckInMonitoringPlanConfiguration(id) {
+export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
   return axios
     .delete(
       `${config.services.monitorPlans.uri}/workspace/plans/${id}/check-outs`
     )
     .then((response) => response.data)
     .catch(handleError);
-}
+};
+
+// *** obtain a list of all checked out locations (by all users)
+export const getCheckedOutLocations = async () => {
+  return axios
+    .get(`${config.services.monitorPlans.uri}/workspace/plans/check-outs`)
+    .then(handleResponse)
+    .catch(handleError);
+};

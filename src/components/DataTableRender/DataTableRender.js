@@ -41,6 +41,7 @@ const DataTableRender = ({
   className,
   addBtnName,
   uniqueKey,
+  setShowInactive,
 }) => {
   const [searchText, setSearchText] = useState("");
   const columns = [];
@@ -199,7 +200,13 @@ const DataTableRender = ({
       title = sectionTitle ? sectionTitle : null;
     }
 
-    return <FilterComponent onSearch={handleSearch} title={title} />;
+    return (
+      <FilterComponent
+        onSearch={handleSearch}
+        title={title}
+        setShowInactive={setShowInactive}
+      />
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

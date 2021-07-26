@@ -1,12 +1,19 @@
 import React, { useState } from "react";
 
 import { Button } from "@trussworks/react-uswds";
+import { ClearSharp, LockSharp } from "@material-ui/icons";
 
 import "./Tabs.scss";
-import { ClearSharp } from "@material-ui/icons";
 
-export const Tabs = ({ children, dynamic = false, removeTabs, setActive }) => {
+export const Tabs = ({
+  children,
+  dynamic = false,
+  removeTabs,
+  setActive,
+  checkedOutLocations,
+}) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+
   const settingActiveTab = (index) => {
     setActiveTabIndex(index);
     setActive(false, index - 1);
@@ -66,9 +73,12 @@ export const Tabs = ({ children, dynamic = false, removeTabs, setActive }) => {
                       settingActiveTab(i);
                     }
                   }}
-                  
                 >
                   <div className="text-center">
+                    {el.props.locationId &&
+                    checkedOutLocations.indexOf(el.props.locationId) > -1 ? (
+                      <LockSharp className="text-bold lock-icon margin-right-2" />
+                    ) : null}
                     {el.props.title.split("(")[0]}
                   </div>
                   <div className="text-center">
