@@ -52,6 +52,7 @@ export const DataTableConfigurations = ({
     if (selectedConfig.length > 0) {
       selectedRowHandler(selectedConfig);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedConfig]);
 
   useEffect(() => {
@@ -79,6 +80,8 @@ export const DataTableConfigurations = ({
       }
     }
     return [];
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringPlans]);
 
   return (
