@@ -59,7 +59,7 @@ export const DataTableConfigurations = ({
   useEffect(() => {
     /*let flagValue = flag.current;
     if (monitoringPlans.length < 1) {*/
-    loadMonitoringPlansData(data.col1);
+    loadMonitoringPlansData(data.col2);
     setDataLoaded(true);
     /*} else {
       for (const x of monitoringPlans) {
@@ -90,7 +90,7 @@ export const DataTableConfigurations = ({
     if (monitoringPlans.length >= 1) {
       let index = 0;
       for (const x of monitoringPlans) {
-        if (x[0] === data.col1) {
+        if (x[0] === data.col2) {
           index = x[1];
           return fs.getConfigurationNames(index);
         }
@@ -108,11 +108,13 @@ export const DataTableConfigurations = ({
         data={records}
         dataLoaded={dataLoaded}
         tableStyling={"padding-left-4 padding-bottom-3"}
-        defaultSort={"col2"}
+        defaultSort={"col1"}
         className={className}
         openHandler={openConfig}
         actionsBtn="Open"
         user={user}
+
+        
       />
     </div>
   );
