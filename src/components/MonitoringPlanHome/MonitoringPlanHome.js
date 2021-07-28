@@ -4,7 +4,7 @@ import DynamicTabs from "../DynamicTabs/DynamicTabs";
 import { Button } from "@trussworks/react-uswds";
 import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
 import { connect } from "react-redux";
-import SelectedFacilityTab from "../MonitoringPlanTab/MonitoringPlanTab";
+import { MonitoringPlanTab as SelectedFacilityTab } from "../MonitoringPlanTab/MonitoringPlanTab";
 import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import { useInterval } from "../../additional-functions/use-interval";
 import { oneSecond } from "../../config";
@@ -26,9 +26,7 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
     let checkedOutLocationList = [];
 
     if (checkedOutLocationResult.data) {
-      checkedOutLocationList = checkedOutLocationResult.data.map(
-        (location) => location["monPlanId"]
-      );
+      checkedOutLocationList = checkedOutLocationResult.data;
     }
 
     setCheckedOutLocations(checkedOutLocationList);
@@ -52,6 +50,7 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
             title={row.name}
             user={user}
             checkout={row.checkout}
+            checkedOutLocations={checkedOutLocations}
           />
         ),
         orisCode: row.orisCode,

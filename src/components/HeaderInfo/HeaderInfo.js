@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import "./HeaderInfo.scss";
-import DropdownSelection from "../DropdownSelection/DropdownSelection";
-import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined";
-import LockOpenIcon from "@material-ui/icons/LockOpen";
-import LockIcon from "@material-ui/icons/Lock";
 import { Button, Checkbox } from "@trussworks/react-uswds";
+import { CreateOutlined, LockOpenSharp, LockSharp } from "@material-ui/icons";
 
-const HeaderInfo = ({
+import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
+import "./HeaderInfo.scss";
+
+export const HeaderInfo = ({
   facility,
   selectedConfig,
   orisCode,
@@ -24,6 +23,7 @@ const HeaderInfo = ({
   inactive,
   ///
   checkoutAPI,
+  checkedOutLocations,
 }) => {
   const sections = [
     { name: "Defaults" },
@@ -59,17 +59,24 @@ const HeaderInfo = ({
       <div className="grid-row clearfix position-relative">
         <div className="grid-col float-left">
           <div>
-            <h3 className=" display-inline-block">
+            <h3 className="display-inline-block">
               {" "}
-              {checkoutState ? <LockIcon fontSize="default" /> : ""}
-              {facilityMainName}
+              {checkoutState ||
+              checkedOutLocations
+                .map((location) => location["monPlanId"])
+                .indexOf(selectedConfig.id) > -1 ? (
+                <LockSharp className="lock-icon margin-right-1" />
+              ) : (
+                ""
+              )}
+              <span className="font-body-lg">{facilityMainName}</span>
             </h3>
           </div>
           <div className="">
             <div className="display-inline-block ">
               <div className="text-bold font-body-xl display-block height-auto">
                 {checkoutState ? (
-                  <CreateOutlinedIcon color="primary" fontSize="large" />
+                  <CreateOutlined color="primary" fontSize="large" />
                 ) : (
                   ""
                 )}{" "}
@@ -86,7 +93,7 @@ const HeaderInfo = ({
                         id="checkInBTN"
                         epa-testid="checkInBTN"
                       >
-                        <LockOpenIcon /> {"Check Back In"}
+                        <LockOpenSharp /> {"Check Back In"}
                       </Button>
                     ) : (
                       <Button
@@ -98,7 +105,7 @@ const HeaderInfo = ({
                         id="checkOutBTN"
                         epa-testid="checkOutBTN"
                       >
-                        <CreateOutlinedIcon color="primary" /> {"Check Out"}
+                        <CreateOutlined color="primary" /> {"Check Out"}
                       </Button>
                     )}
                     {checkoutState

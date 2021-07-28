@@ -6,6 +6,7 @@ import DataTableRender from "../../DataTableRender/DataTableRender";
 import "./SelectFacilitiesDataTable.scss";
 import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigurations";
 import * as facilitiesApi from "../../../utils/api/facilityApi";
+import { getCheckedOutLocations } from "../../../utils/api/monitoringPlansApi";
 
 export const SelectFacilitiesDataTable = ({
   user,
@@ -14,6 +15,9 @@ export const SelectFacilitiesDataTable = ({
 }) => {
   const [facilities, setFacilities] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
+
+  const [checkedOutLocations, setCheckedOutLocations] = useState([]);
+
   useEffect(() => {
     let isMounted = true;
     if (facilities.length === 0) {
@@ -29,6 +33,26 @@ export const SelectFacilitiesDataTable = ({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    obtainCheckedOutLocations().then();
+  }, []);
+
+  /*useInterval(() => {
+    obtainCheckedOutLocations().then();
+  }, 10 * oneSecond);*/
+
+  const obtainCheckedOutLocations = async () => {
+    const checkedOutLocationResult = await getCheckedOutLocations();
+
+    let checkedOutLocationsList = [];
+
+    if (checkedOutLocationResult.data) {
+      checkedOutLocationsList = checkedOutLocationResult.data;
+    }
+
+    setCheckedOutLocations(checkedOutLocationsList);
+  };
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -50,6 +74,7 @@ export const SelectFacilitiesDataTable = ({
               }`}
               user={user}
               checkout={info[2]}
+              checkedOutLocations={checkedOutLocations}
             />
           </div>
         ),
@@ -92,6 +117,7 @@ export const SelectFacilitiesDataTable = ({
         pagination={true}
         filter={true}
         sectionTitle="Select Configurations"
+        checkedOutLocations={checkedOutLocations}
         expandableRows={true}
         expandableRowComp={
           <DataTableConfigurations

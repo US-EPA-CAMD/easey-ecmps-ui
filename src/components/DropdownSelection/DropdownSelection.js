@@ -1,7 +1,7 @@
 import React from "react";
 import { Label, Dropdown, FormGroup } from "@trussworks/react-uswds";
 
-const DropdownSelection = ({
+export const DropdownSelection = ({
   caption,
   selectKey,
   viewKey,
@@ -20,7 +20,11 @@ const DropdownSelection = ({
   const populateOptions = (optionsList) => {
     return optionsList.map((info, index) => {
       return (
-        <option data-testid={info[selectKey]} key={info[selectKey]} value={info[selectKey]}>
+        <option
+          data-testid={info[selectKey]}
+          key={info[selectKey]}
+          value={info[selectKey]}
+        >
           {info[viewKey]}
         </option>
       );
@@ -35,6 +39,7 @@ const DropdownSelection = ({
           </Label>
           <Dropdown
             id={caption}
+            name={caption}
             epa-testid={caption}
             data-testid={caption}
             value={

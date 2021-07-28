@@ -24,6 +24,7 @@ export const MonitoringPlanTab = ({
   setLocation,
   setCheckout,
   setInactive,
+  checkedOutLocations,
 }) => {
   const [sectionSelect, setSectionSelect] = useState(tabs[activeTab].section);
   useEffect(() => {
@@ -57,6 +58,7 @@ export const MonitoringPlanTab = ({
           setCheckout={setCheckout}
           setInactive={setInactive}
           inactive={tabs[activeTab[0]].inactive}
+          checkedOutLocations={checkedOutLocations}
         />
       </div>
     </div>

@@ -76,7 +76,9 @@ export const Tabs = ({
                 >
                   <div className="text-center">
                     {el.props.locationId &&
-                    checkedOutLocations.indexOf(el.props.locationId) > -1 ? (
+                    checkedOutLocations
+                      .map((location) => location["monPlanId"])
+                      .indexOf(el.props.locationId) > -1 ? (
                       <LockSharp className="text-bold lock-icon margin-right-2" />
                     ) : null}
                     {el.props.title.split("(")[0]}

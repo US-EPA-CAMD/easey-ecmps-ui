@@ -1,4 +1,4 @@
-import { Button, Checkbox, TextInput } from "@trussworks/react-uswds";
+import { Button, TextInput } from "@trussworks/react-uswds";
 import React from "react";
 
 export const FilterComponent = ({
@@ -10,7 +10,7 @@ export const FilterComponent = ({
   <div className="width-full">
     <div className="filter-title clearfix font-heading-xl text-bold data-table-title tablet:font-heading-xl mobile:font-body-lg mobile:text-bold mobile:padding-bottom-4 mobile:padding-left-6 tablet:padding-left-0">
       {title}{" "}
-      {title === "Select Configurations" ? (
+      {/*{title === "Select Configurations" ? (
         <Checkbox
           id="chkShowInactive"
           name="chkShowInactive"
@@ -22,15 +22,15 @@ export const FilterComponent = ({
             </strong>
           }
         />
-      ) : null}
+      ) : null}*/}
     </div>
 
     <table className="float-right clearfix" role="presentation">
       <tbody>
         <tr>
-          <td className="text-bold text-center">Filter by keyword:</td>
-        </tr>
-        <tr>
+          <td className="text-bold text-center padding-right-1">
+            Filter by keyword:
+          </td>
           <td>
             <TextInput
               id="txtSearchData"
@@ -52,7 +52,7 @@ export const FilterComponent = ({
               onClick={onSearch}
               id="searchDataTableBTN"
               epa-testid="searchDataTableBTN"
-              className="position-relative top-05 left-05"
+              className="position-relative top-05 left-neg-1px"
             >
               Filter
             </Button>
