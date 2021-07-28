@@ -117,6 +117,7 @@ export const SelectFacilitiesDataTable = ({
         pagination={true}
         filter={true}
         sectionTitle="Select Configurations"
+        defaultSort="col2"
         checkedOutLocations={checkedOutLocations}
         expandableRows={true}
         expandableRowComp={
