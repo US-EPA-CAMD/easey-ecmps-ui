@@ -14,7 +14,7 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
 
   useEffect(() => {
     obtainCheckedOutLocations().then();
-  }, []);
+  }, [openedFacilityTabs]);
 
   /*useInterval(() => {
     obtainCheckedOutLocations().then();
@@ -36,7 +36,13 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
     const tabArr = [
       {
         title: "Select Configurations",
-        component: <DataTable user={user} keyField="col2" />,
+        component: (
+          <DataTable
+            user={user}
+            keyField="col2"
+            openedFacilityTabs={openedFacilityTabs}
+          />
+        ),
       },
     ];
 

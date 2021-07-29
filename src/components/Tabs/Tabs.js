@@ -11,6 +11,7 @@ export const Tabs = ({
   removeTabs,
   setActive,
   checkedOutLocations,
+  user,
 }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
@@ -27,9 +28,21 @@ export const Tabs = ({
     }
   };
 
+  const isCheckedOutByUser = (locationId) => {
+    return (
+      checkedOutLocations
+        .map((location) => location["monPlanId"])
+        .indexOf(locationId) > -1 &&
+      checkedOutLocations[
+        checkedOutLocations
+          .map((location) => location["monPlanId"])
+          .indexOf(locationId)
+      ]["checkedOutBy"] === user["firstName"]
+    );
+  };
   return (
     <div>
-      <div className="">
+      <div className="tab-buttons">
         <ul className="usa-button-group">
           {children.map((el, i) => (
             <li
@@ -74,7 +87,7 @@ export const Tabs = ({
                     }
                   }}
                 >
-                  <div className="text-center">
+                  <div className="text-center tab-button-text-container">
                     {el.props.locationId &&
                     checkedOutLocations
                       .map((location) => location["monPlanId"])

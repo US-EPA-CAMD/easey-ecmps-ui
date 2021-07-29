@@ -58,6 +58,7 @@ export const DynamicTabs = ({
         setActive={setActive}
         tabProps={tabs}
         checkedOutLocations={checkedOutLocations}
+        user={user}
       >
         {tabs &&
           tabs.map((tab, i) => (

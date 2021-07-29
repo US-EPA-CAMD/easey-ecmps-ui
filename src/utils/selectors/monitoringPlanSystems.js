@@ -2,12 +2,10 @@ export function getMonitoringPlansSystemsTableRecords(data) {
   const records = [];
   data.forEach((el) => {
     const beginDate = el.beginDate
-      ? formateStringToDate(el.beginDate.toString())
+      ? formatStringToDate(el.beginDate.toString())
       : "";
     const beginHour = el.beginHour ? el.beginHour.toString() : "";
-    const endDate = el.endDate
-      ? formateStringToDate(el.endDate.toString())
-      : "";
+    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
     const endHour = el.endHour ? el.endHour.toString() : "";
     records.push({
       col1: el.systemIdentifier,
@@ -22,7 +20,7 @@ export function getMonitoringPlansSystemsTableRecords(data) {
   return records;
 }
 // year - month - day to  month / day/ year
-function formateStringToDate(date) {
+function formatStringToDate(date) {
   const parts = date.split("-");
   return `${parts[1]}/${parts[2]}/${parts[0]}}`;
 }
@@ -31,12 +29,10 @@ export function getMonitoringPlansSystemsComponentsTableRecords(data) {
   const records = [];
   data.forEach((el) => {
     const beginDate = el.beginDate
-      ? formateStringToDate(el.beginDate.toString())
+      ? formatStringToDate(el.beginDate.toString())
       : "";
     const beginHour = el.beginHour ? el.beginHour.toString() : "";
-    const endDate = el.endDate
-      ? formateStringToDate(el.endDate.toString())
-      : "";
+    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
     const endHour = el.endHour ? el.endHour.toString() : "";
     let present;
     if (endDate === "" || endDate === undefined) {
@@ -58,12 +54,10 @@ export function getMonitoringPlansSystemsFuelFlowsComponentsTableRecords(data) {
   const records = [];
   data.forEach((el) => {
     const beginDate = el.beginDate
-      ? formateStringToDate(el.beginDate.toString())
+      ? formatStringToDate(el.beginDate.toString())
       : "";
     const beginHour = el.beginHour ? el.beginHour.toString() : "";
-    const endDate = el.endDate
-      ? formateStringToDate(el.endDate.toString())
-      : "";
+    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
     const endHour = el.endHour ? el.endHour.toString() : "";
     let present;
     if (endDate === "" || endDate === undefined) {

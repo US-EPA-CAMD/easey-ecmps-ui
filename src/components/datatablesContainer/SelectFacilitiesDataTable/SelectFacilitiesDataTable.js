@@ -32,7 +32,7 @@ export const SelectFacilitiesDataTable = ({
       isMounted = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [openedFacilityTabs]);
 
   useEffect(() => {
     obtainCheckedOutLocations().then();

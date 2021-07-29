@@ -43,9 +43,11 @@ export const DataTableConfigurations = ({
         .postCheckoutMonitoringPlanConfiguration(config.col3, user.firstName)
         .then((res) => {
           console.log(res, "data");
+          setSelectedConfig([data, selectedConfigData, checkout]);
         });
+    } else {
+      setSelectedConfig([data, selectedConfigData, checkout]);
     }
-    setSelectedConfig([data, selectedConfigData, checkout]);
   };
 
   useEffect(() => {

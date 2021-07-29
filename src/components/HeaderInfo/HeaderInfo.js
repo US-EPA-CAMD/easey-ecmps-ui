@@ -43,6 +43,41 @@ export const HeaderInfo = ({
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
   const [checkoutState, setCheckoutState] = useState(checkout);
+
+  const isCheckedOutByUser = () => {
+    return (
+      checkedOutLocations
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id) > -1 &&
+      checkedOutLocations[
+        checkedOutLocations
+          .map((location) => location["monPlanId"])
+          .indexOf(selectedConfig.id)
+      ]["checkedOutBy"] === user["firstName"]
+    );
+  };
+
+  const isCheckedOut = () => {
+    return (
+      checkedOutLocations
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id) > -1
+    );
+  };
+
+  const findCurrentlyCheckedOutByInfo = () => {
+    return checkedOutLocations[
+      checkedOutLocations
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id)
+    ];
+  };
+
+  const [checkedOutByUser, setCheckedOutByUser] = useState(
+    isCheckedOutByUser()
+  );
+  const [displayLock, setDisplayLock] = useState(isCheckedOut());
+
   useEffect(() => {
     setCheckoutState(checkout);
   }, [checkout]);
@@ -51,6 +86,8 @@ export const HeaderInfo = ({
   // true = check out
   const checkoutStateHandler = (direction) => {
     setCheckoutState(direction);
+    setCheckedOutByUser(direction);
+    setDisplayLock(direction);
     checkoutAPI(direction);
   };
 
@@ -61,10 +98,7 @@ export const HeaderInfo = ({
           <div>
             <h3 className="display-inline-block">
               {" "}
-              {checkoutState ||
-              checkedOutLocations
-                .map((location) => location["monPlanId"])
-                .indexOf(selectedConfig.id) > -1 ? (
+              {checkoutState || displayLock ? (
                 <LockSharp className="lock-icon margin-right-1" />
               ) : (
                 ""
@@ -75,7 +109,7 @@ export const HeaderInfo = ({
           <div className="">
             <div className="display-inline-block ">
               <div className="text-bold font-body-xl display-block height-auto">
-                {checkoutState ? (
+                {checkoutState || checkedOutByUser ? (
                   <CreateOutlined color="primary" fontSize="large" />
                 ) : (
                   ""
@@ -83,7 +117,7 @@ export const HeaderInfo = ({
                 {facilityAdditionalName}
                 {user ? (
                   <div className="text-bold font-body-2xs display-inline-block ">
-                    {checkoutState ? (
+                    {checkoutState || checkedOutByUser === true ? (
                       <Button
                         outline={false}
                         tabIndex="0"
@@ -95,7 +129,9 @@ export const HeaderInfo = ({
                       >
                         <LockOpenSharp /> {"Check Back In"}
                       </Button>
-                    ) : (
+                    ) : checkedOutLocations
+                        .map((location) => location["monPlanId"])
+                        .indexOf(selectedConfig.id) === -1 ? (
                       <Button
                         outline={true}
                         tabIndex="0"
@@ -107,10 +143,14 @@ export const HeaderInfo = ({
                       >
                         <CreateOutlined color="primary" /> {"Check Out"}
                       </Button>
-                    )}
+                    ) : null}
                     {checkoutState
                       ? `Currently checked out by:${user.firstName}`
-                      : `Last checked out by:${user.firstName}`}
+                      : displayLock
+                      ? `Last checked out by: ${
+                          findCurrentlyCheckedOutByInfo()["checkedOutBy"]
+                        }`
+                      : `Last checked out by: ${user.firstName}`}
                   </div>
                 ) : (
                   ""
