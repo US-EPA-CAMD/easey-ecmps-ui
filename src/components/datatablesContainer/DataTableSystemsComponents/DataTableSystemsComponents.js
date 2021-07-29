@@ -56,6 +56,24 @@ export const DataTableSystemsComponents = ({
       });
   }, [selected]);
 
+  const [openAnalyzer, setOpenAnalyzer] = useState(false);
+  useEffect(() => {
+    if(openAnalyzer){
+          mpApi
+    .getMonitoringAnalyzerRanges(openAnalyzer.monLocId, openAnalyzer.componentId)
+    .then((res) => {
+      console.log('res',res)
+      // setRanges(res.data);
+      // setRangesLoaded(true);
+    });
+    }
+
+
+  
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openAnalyzer]);
+
   const columnNames = ["ID", "Type", "Date and Time"];
   const rangesColumnNames = ["Range","Date and Time"];
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
@@ -104,15 +122,7 @@ export const DataTableSystemsComponents = ({
         setCreateBtn("Save and Go Back");
       }
 console.log(selectComponents,'selectComponents')
-      mpApi
-      .getMonitoringAnalyzerRanges(selectComponents.monLocId, selectComponents.componentId)
-      .then((res) => {
-        console.log('res',res)
-        // setRanges(res.data);
-        // setRangesLoaded(true);
-      });
-
-    
+setOpenAnalyzer(selectComponents);
 
     }
 
