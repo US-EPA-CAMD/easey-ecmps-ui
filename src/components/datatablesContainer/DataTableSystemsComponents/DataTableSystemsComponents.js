@@ -6,6 +6,7 @@ import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 import DataTableRender from "../../DataTableRender/DataTableRender";
 import "./DataTableSystemsComponentsRender.scss";
+import DataTableAnalyzerRanges from "../DataTableAnalyzerRanges/DataTableAnalyzerRanges";
 
 export const DataTableSystemsComponents = ({
   systemID,
@@ -56,6 +57,9 @@ export const DataTableSystemsComponents = ({
       });
   }, [selected]);
 
+  const [openAnalyzer, setOpenAnalyzer] = useState(false);
+
+
   const columnNames = ["ID", "Type", "Date and Time"];
   const rangesColumnNames = ["Range","Date and Time"];
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
@@ -104,15 +108,7 @@ export const DataTableSystemsComponents = ({
         setCreateBtn("Save and Go Back");
       }
 console.log(selectComponents,'selectComponents')
-      mpApi
-      .getMonitoringAnalyzerRanges(selectComponents.monLocId, selectComponents.componentId)
-      .then((res) => {
-        console.log('res',res)
-        // setRanges(res.data);
-        // setRangesLoaded(true);
-      });
-
-    
+setOpenAnalyzer(selectComponents);
 
     }
 
@@ -282,19 +278,7 @@ console.log(selectComponents,'selectComponents')
                 }
                 viewOnly={!(user && checkout)}
               />
-                <DataTableRender
-                columnNames={rangesColumnNames}
-                data={rangeData}
-                openHandler={openComponent}
-                tableTitle="Analyzer Ranges"
-                componentStyling="systemsCompTable"
-                dataLoaded={rangesLoaded}
-                actionsBtn={"View"}
-                user={user}
-                checkout={checkout}
-                addBtn={openComponent}
-                addBtnName={"Add Component"}
-              />
+            <DataTableAnalyzerRanges selectedRange={openAnalyzer} />
               </div>
             );
           }

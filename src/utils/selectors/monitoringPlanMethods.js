@@ -9,7 +9,7 @@ export function getMonitoringPlansMethodsTableRecords(totalData) {
     const endDate = el.endDate
       ? formateStringToDate(el.endDate.toString())
       : "";
-    const endHour = el.endHour ? el.endHour.toString() : "";
+    const endHour = el.endHour ? (el.endDate? el.endHour.toString():"") : "";
     records.push({
       col1: el.parameterCode,
       col2: el.methodCode,
@@ -38,7 +38,7 @@ export function getMonitoringPlansMatsMethodsTableRecords(data) {
     const endDate = el.endDate
       ? formateStringToDate(el.endDate.toString())
       : "";
-    const endHour = el.endHour ? el.endHour.toString() : "";
+    const endHour = el.endHour ? (el.endDate? el.endHour.toString():"") : "";
     records.push({
       col1: el.matsMethodParameterCode,
       col2: el.matsMethodCode,

@@ -99,9 +99,9 @@ export function getMonitoringPlansSystemsAnalyzerRangesTableRecords(data) {
       present = `${endDate}: ${endHour}`;
     }
     records.push({
-      col1: el.id,
+      col1: el.analyzerRangeCode,
       col2: `${beginDate}: ${beginHour} ➜ ${present}`,
-      col4: el.id,
+      col3: el.id,
     });
   });
   return records;
