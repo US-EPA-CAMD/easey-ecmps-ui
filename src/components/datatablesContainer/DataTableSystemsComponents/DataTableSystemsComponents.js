@@ -6,6 +6,7 @@ import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 import DataTableRender from "../../DataTableRender/DataTableRender";
 import "./DataTableSystemsComponentsRender.scss";
+import DataTableAnalyzerRanges from "../DataTableAnalyzerRanges/DataTableAnalyzerRanges";
 
 export const DataTableSystemsComponents = ({
   systemID,
@@ -57,22 +58,7 @@ export const DataTableSystemsComponents = ({
   }, [selected]);
 
   const [openAnalyzer, setOpenAnalyzer] = useState(false);
-  useEffect(() => {
-    if(openAnalyzer){
-          mpApi
-    .getMonitoringAnalyzerRanges(openAnalyzer.monLocId, openAnalyzer.componentId)
-    .then((res) => {
-      console.log('res',res)
-      // setRanges(res.data);
-      // setRangesLoaded(true);
-    });
-    }
 
-
-  
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openAnalyzer]);
 
   const columnNames = ["ID", "Type", "Date and Time"];
   const rangesColumnNames = ["Range","Date and Time"];
@@ -292,19 +278,7 @@ setOpenAnalyzer(selectComponents);
                 }
                 viewOnly={!(user && checkout)}
               />
-                <DataTableRender
-                columnNames={rangesColumnNames}
-                data={rangeData}
-                openHandler={openComponent}
-                tableTitle="Analyzer Ranges"
-                componentStyling="systemsCompTable"
-                dataLoaded={rangesLoaded}
-                actionsBtn={"View"}
-                user={user}
-                checkout={checkout}
-                addBtn={openComponent}
-                addBtnName={"Add Component"}
-              />
+            <DataTableAnalyzerRanges selectedRange={openAnalyzer} />
               </div>
             );
           }

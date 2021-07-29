@@ -34,17 +34,18 @@ export const SelectFacilitiesDataTable = ({
   const columnNames = ["Facility", "ORIS", "State"];
 
   const selectedRowHandler = (info) => {
+    console.log('INFO',info)
     addtabs([
       {
-        title: `${info[0].col2} (${info[1].name}) ${
+        title: `${info[0].col1} (${info[1].name}) ${
           info[1].active ? "" : "Inactive"
         }`,
         component: (
           <div className="selectedTabsBox">
             <SelectedFacilityTab
-              orisCode={info[0].col1}
+              orisCode={info[0].col2}
               selectedConfig={info[1]}
-              title={`${info[0].col2} (${info[1].name}) ${
+              title={`${info[0].col1} (${info[1].name}) ${
                 info[1].active ? "" : "Inactive"
               }`}
               user={user}
@@ -52,7 +53,7 @@ export const SelectFacilitiesDataTable = ({
             />
           </div>
         ),
-        orisCode: info[0].col1,
+        orisCode: info[0].col2,
         selectedConfig: info[1],
         checkout: info[2],
       },
@@ -86,6 +87,7 @@ export const SelectFacilitiesDataTable = ({
         columnNames={columnNames}
         dataLoaded={dataLoaded}
         data={data}
+        defaultSort="col2"
         openedFacilityTabs={openedFacilityTabs}
         user={user}
         pagination={true}
