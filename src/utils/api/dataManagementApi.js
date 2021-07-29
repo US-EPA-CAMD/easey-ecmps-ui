@@ -71,3 +71,17 @@ export const getAllMethodCodes = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+export const getAllMatsParameterCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/mats-method-parameter-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getAllMatsMethodCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/mats-method-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};

@@ -6,7 +6,7 @@ import DataTableRender from "../../DataTableRender/DataTableRender";
 
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
-import {useRetrieveDropdownApi} from "../../../additional-functions/retrieve-dropdown-api";
+import  {useRetrieveDropdownApi}  from "../../../additional-functions/retrieve-dropdown-api";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 /*import {
   getActiveData,
@@ -21,19 +21,25 @@ export const DataTableMats = ({
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [matsMethods, setMatsMethods] = useState([]);
-  useRetrieveDropdownApi(['dropdown','dropdown','test','dropdown']);
+  const totalOptions = useRetrieveDropdownApi(
+    ["parameterCode", "methodCode"],
+    true
+  );
   const [show, setShow] = useState(false);
+  const [updateTable,setUpdateTable] = useState(false)
   useEffect(() => {
+
+    if(updateTable || matsMethods.length <= 0 || locationSelectValue){
+
     mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
-      console.log("res", res.data);
       setMatsMethods(res.data);
       setDataLoaded(true);
     });
+    setUpdateTable(false);
+  }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue]);
-  const [selectedMatsMethods, setSelectedMatsMethods] = useState(
-    null
-  );
+  }, [locationSelectValue,updateTable]);
+  const [selectedMatsMethods, setSelectedMatsMethods] = useState(null);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = [
@@ -74,14 +80,22 @@ export const DataTableMats = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matsMethods]);
+  const testing = () => {
+    openMatsModal(false,false,true);
+    saveMethods();
+  
+   }
+  
+   const testing2= () =>{
+    openMatsModal({col5:"CAMD-BAC9D84563F24FE08057AF5643C8602C"},false,false);
+  
+   }
   const saveMethods = () => {
     const payload = {
       monLocId: locationSelectValue,
       id: null,
-      parameterCode: null,
-      subDataCode: null,
-      bypassApproachCode: null,
-      methodCode: null,
+      matsMethodCode: null,
+      matsMethodParameterCode: null,
       beginDate: null,
       beginHour: 0,
       endDate: null,
@@ -89,19 +103,22 @@ export const DataTableMats = ({
     };
 
     const userInput = extractUserInput(payload, ".modalUserInput");
-
+    console.log(userInput, "user");
     mpApi
-      .saveMonitoringMethods(userInput)
+      .saveMonitoringMats(userInput)
       .then((result) => {
         console.log(result);
-        // openModal(false);
         setShow(false);
       })
       .catch((error) => {
         console.log(error);
-        // openModal(false);
         setShow(false);
       });
+      mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
+        console.log('testing save',res.data);
+       
+      });
+      setUpdateTable(true);
   };
   const [createNewMats, setCreateNewMats] = useState(false);
   const closeModalHandler = () => setShow(false);
@@ -110,25 +127,24 @@ export const DataTableMats = ({
     let mats = null;
     setCreateNewMats(create);
     if (matsMethods.length > 0 && !create) {
-      
       mats = matsMethods.filter((element) => element.id === row.col5)[0];
       setSelectedMatsMethods(mats);
-      console.log('mats',row)
     }
     setSelectedModalData(
       modalViewData(
         mats,
         {
-          parameterCode: ["Parameter", "dropdown",'required'],
-          methodCode: ["Methodology", "dropdown",'required'],
+          matsMethodParameterCode: ["Parameter", "dropdown", "required"],
+          matsMethodCode: ["Methodology", "dropdown", "required"],
         },
         {
-          beginDate: ["Start Date", "date",'required'],
-          beginHour: ["Start Time", "time",'required'],
-          endDate: ["End Date", "date",""],
-          endHour: ["End Time", "time",""],
+          beginDate: ["Start Date", "date", "required"],
+          beginHour: ["Start Time", "time", "required"],
+          endDate: ["End Date", "date", ""],
+          endHour: ["End Time", "time", ""],
         },
-        create
+        create,
+        totalOptions
       )
     );
     setShow(true);
@@ -136,8 +152,10 @@ export const DataTableMats = ({
 
   return (
     <div className="methodTable">
-            <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
+      <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
 
+      <input role="button" type="hidden" id="testingBtn" onClick ={()=> testing()}/>
+      <input role="button" type="hidden" id="testingBtn2" onClick ={()=> testing2()}/>
       <DataTableRender
         columnNames={columnNames}
         data={data}
@@ -151,7 +169,7 @@ export const DataTableMats = ({
         addBtnName={"Create Mats"}
       />
 
-{show ? (
+      {show ? (
         <Modal
           show={show}
           close={closeModalHandler}
@@ -176,7 +194,6 @@ export const DataTableMats = ({
         />
       ) : null}
     </div>
-    
   );
 };
 
