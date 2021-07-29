@@ -25,7 +25,7 @@ export function getMonitoringPlansMethodsTableRecords(totalData) {
 // year - month - day to  month / day/ year
 function formateStringToDate(date) {
   var parts = date.split("-");
-  return `${parts[1]}/${parts[2]}/${parts[0]}}`;
+  return `${parts[1]}/${parts[2]}/${parts[0]}`;
 }
 
 export function getMonitoringPlansMatsMethodsTableRecords(data) {

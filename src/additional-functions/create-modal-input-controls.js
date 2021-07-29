@@ -5,12 +5,6 @@ import {
 } from "../components/ModalDetails/SystemDescriptions";
 
 import {
-  bypassApproachCodes,
-  substituteDataApproachCodes,
-  parameterCodes,
-  methodCodes,
-} from "../components/datatablesContainer/DataTableMethod/MethodModalData";
-import {
   componentTypes,
   acqMethodCode,
   basisCode,
@@ -21,16 +15,25 @@ import { findValue, adjustDate } from "./find-values-in-array";
 // object property,Label Name, value
 
 //arr = [property name, ui label, value, required or not labeling for edit, control input type ... ]
-export const modalViewData = (selected, label, time, createNew,totalOptions) => {
+export const modalViewData = (
+  selected,
+  label,
+  time,
+  createNew,
+  totalOptions,
+  mats = false
+) => {
+  console.log("totalOptions", totalOptions);
+
   const arr = [];
   const codeList = {
     systemTypeCode: types,
     fuelCode: fuels,
     systemDesignationCode: designations,
-    bypassApproachCode: bypassApproachCodes,
-    subDataCode: substituteDataApproachCodes,
-    parameterCode: parameterCodes,
-    methodCode: methodCodes,
+    // bypassApproachCode: bypassApproachCodes,
+    // subDataCode: substituteDataApproachCodes,
+    // parameterCode: parameterCodes,
+    // methodCode: methodCodes,
     componentTypeCode: componentTypes,
     acquisitionMethodCode: acqMethodCode,
     basisCode: basisCode,
@@ -44,7 +47,12 @@ export const modalViewData = (selected, label, time, createNew,totalOptions) => 
     switch (label[y][1]) {
       case "dropdown":
         if (!createNew) {
-          labels = findValue(codeList[y], selected[y], "name");
+          if (totalOptions) {
+            console.log('y',totalOptions,y)
+            labels = findValue(totalOptions[y], selected[y], "name");
+          } else {
+            labels = findValue(codeList[y], selected[y], "name");
+          }
         }
         arr.push([
           y,
@@ -53,7 +61,7 @@ export const modalViewData = (selected, label, time, createNew,totalOptions) => 
           label[y][2] === "required" ? "required" : false,
           "dropdown",
           createNew ? "select" : selected[y],
-          codeList[y],
+          totalOptions[y],
         ]);
         break;
       case "input":

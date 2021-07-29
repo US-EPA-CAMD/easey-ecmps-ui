@@ -106,6 +106,7 @@ export const Modal = ({
                       onClick={secondLevel ? close : save}
                       title="Click to save"
                       epa-testid="saveBtn"
+                      id = "saveBtn"
                       className="margin-right-2"
                     >
                       {secondLevel

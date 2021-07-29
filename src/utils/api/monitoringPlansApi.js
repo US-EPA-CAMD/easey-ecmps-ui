@@ -33,14 +33,16 @@ export const getMonitoringMethods = async (locationId) => {
 };
 
 export const getMonitoringMatsMethods = async (locationId) => {
-  return axios
-    .get(
-      `${config.services.monitorPlans.uri}/locations/${locationId}/mats-methods`
-    )
-    .then(handleResponse)
-    .catch(handleError);
-};
+  let url = `${config.services.monitorPlans.uri}`;
 
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+  url = `${url}/locations/${locationId}/mats-methods`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
 export const getMonitoringSystems = async (locationId) => {
   return axios
     .get(`${config.services.monitorPlans.uri}/locations/${locationId}/systems`)
@@ -65,6 +67,20 @@ export const getMonitoringSystemsComponents = async (systemId, componentId) => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+export const getMonitoringAnalyzerRanges = async (locId, componentId) => {
+
+  console.log('locid',locId, componentId)
+  let url = `${config.services.monitorPlans.uri}`;
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+  url = `${url}/locations/${locId}​/components​/${componentId}​/analyzer-ranges`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
 
 export const postCheckoutMonitoringPlanConfiguration = async (id, user) => {
   const userName = { username: user };
@@ -94,6 +110,15 @@ export const saveMonitoringMethods = async (payload) => {
   return axios.put(url, payload).then(handleResponse).catch(handleError);
 };
 
+export const saveMonitoringMats = async (payload) => {
+  console.log("payload", payload);
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["monLocId"]}/mats-methods/${payload["id"]}`;
+  // *** remove attributes not needed by the API
+  delete payload["monLocId"];
+  delete payload["id"];
+
+  return axios.put(url, payload).then(handleResponse).catch(handleError);
+};
 export async function deleteCheckInMonitoringPlanConfiguration(id) {
   return axios
     .delete(
