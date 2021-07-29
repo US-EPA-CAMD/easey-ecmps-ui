@@ -17,12 +17,11 @@ export const DataTableSystemsComponents = ({
   checkout,
   setCreateBtn,
 }) => {
-
   const [monitoringSystemsFuelFlows, setMonitoringSystemsFuelFlows] = useState(
     ""
   );
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [dataFuelLoaded, setFuelDataLoaded] =useState(false);
+  const [dataFuelLoaded, setFuelDataLoaded] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [selected, setSelected] = useState(1);
   const [
@@ -58,7 +57,7 @@ export const DataTableSystemsComponents = ({
   }, [selected]);
 
   const columnNames = ["ID", "Type", "Date and Time"];
-
+  const rangesColumnNames = ["Range","Date and Time"];
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const fuelFlowsColumnNames = ["Fuel Code", "Type Code", "Date and Time"];
@@ -70,7 +69,23 @@ export const DataTableSystemsComponents = ({
   // *** row handler onclick event listener
   const [createNewComponent, setCreateNewComponent] = useState(false);
 
-  const [openComponentView, setComponentView] =  React.useState(false);
+  const [openComponentView, setComponentView] = React.useState(false);
+  const [
+    ranges,
+    setRanges,
+  ] = useState("");
+  const [rangesLoaded, setRangesLoaded] = useState(false);
+  const rangeData = useMemo(() => {
+    if (ranges.length > 0) {
+      return fs.getMonitoringPlansSystemsAnalyzerRangesTableRecords(
+        ranges
+      );
+    } else {
+      return [];
+    }
+  }, [ranges]);
+
+
   const openComponent = (row, bool, create) => {
     let selectComponents = null;
     setCreateNewComponent(create);
@@ -88,7 +103,19 @@ export const DataTableSystemsComponents = ({
       if (user && checkout) {
         setCreateBtn("Save and Go Back");
       }
+console.log(selectComponents,'selectComponents')
+      mpApi
+      .getMonitoringAnalyzerRanges(selectComponents.monLocId, selectComponents.componentId)
+      .then((res) => {
+        console.log('res',res)
+        // setRanges(res.data);
+        // setRangesLoaded(true);
+      });
+
+    
+
     }
+
     setSelectedModalData(
       modalViewData(
         selectComponents,
@@ -108,18 +135,15 @@ export const DataTableSystemsComponents = ({
           endDate: ["End Date", "date", ""],
           endHour: ["End Time", "time", ""],
         },
-        create
+        create,
+        false
       )
     );
-    // if (create) {
-    //   // setSecondLevel(create);
-
     setSecondLevel(true, "Component");
-    // }
   };
 
   const [createNewFuelFlow, setCreateNewFuelFlow] = useState(false);
-  const [openFuelFlowsView, setOpenFuelFlowsView] =  React.useState(false);
+  const [openFuelFlowsView, setOpenFuelFlowsView] = React.useState(false);
   // *** row handler onclick event listener
   const openFuelFlows = (row, bool, create) => {
     let selectFuelFlows = null;
@@ -160,14 +184,12 @@ export const DataTableSystemsComponents = ({
           endDate: ["End Date", "date", ""],
           endHour: ["End Time", "time", ""],
         },
-        create
+        create,
+        false
       )
     );
-    // if (create) {
-    //   // setSecondLevel(create);
 
     setSecondLevel(true, "Fuel Flow");
-    // }
   };
 
   const data = useMemo(() => {
@@ -245,6 +267,7 @@ export const DataTableSystemsComponents = ({
           } else if (openComponentView) {
             // components
             return (
+              <div>
               <ModalDetails
                 modalData={selectedComponent}
                 backBtn={setSecondLevel}
@@ -259,6 +282,20 @@ export const DataTableSystemsComponents = ({
                 }
                 viewOnly={!(user && checkout)}
               />
+                <DataTableRender
+                columnNames={rangesColumnNames}
+                data={rangeData}
+                openHandler={openComponent}
+                tableTitle="Analyzer Ranges"
+                componentStyling="systemsCompTable"
+                dataLoaded={rangesLoaded}
+                actionsBtn={"View"}
+                user={user}
+                checkout={checkout}
+                addBtn={openComponent}
+                addBtnName={"Add Component"}
+              />
+              </div>
             );
           }
         }

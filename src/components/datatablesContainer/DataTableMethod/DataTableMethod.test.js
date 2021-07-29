@@ -1,7 +1,6 @@
 import React from "react";
-import { render,waitForElement  } from "@testing-library/react";
+import { fireEvent, render, waitForElement } from "@testing-library/react";
 import { DataTableMethod } from "./DataTableMethod";
-
 
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 const axios = require("axios");
@@ -173,7 +172,7 @@ const methodsActiveOnly = [
   },
 ];
 //testing redux connected component to mimic props passed as argument
-const componentRenderer = (location) => {
+const componentRenderer = (location, showModal) => {
   const props = {
     matsTableHandler: jest.fn(),
     user: { firstName: "test" },
@@ -181,6 +180,7 @@ const componentRenderer = (location) => {
     inactive: true,
     settingInactiveCheckBox: jest.fn(),
     locationSelectValue: location,
+    showModal: showModal,
   };
   return render(<DataTableMethod {...props} />);
 };
@@ -198,12 +198,18 @@ function componentRendererNoData(args) {
 }
 
 test("tests a configuration with only inactive methods", async () => {
+  // React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+
+  // React.useState = jest
+  //   .fn()
+  // .mockReturnValueOnce([true, {}])
+
   axios.get.mockImplementation(() =>
     Promise.resolve({ status: 200, data: methodsInactiveOnly })
   );
   const title = await mpApi.getMonitoringMethods(69);
   expect(title.data).toEqual(methodsInactiveOnly);
-  let { container } = await waitForElement (() => componentRenderer(69));
+  let { container } = await waitForElement(() => componentRenderer(69, false));
   // componentRenderer(6);
   expect(container).toBeDefined();
 });
@@ -213,7 +219,7 @@ test("tests a configuration with both inactive and active methods and mats", asy
   );
   const title = await mpApi.getMonitoringMethods(6);
   expect(title.data).toEqual(methodsWithMats);
-  let { container } = await  waitForElement (() => componentRenderer(6));
+  let { container } = await waitForElement(() => componentRenderer(6));
   expect(container).toBeDefined();
 });
 
@@ -223,6 +229,41 @@ test("tests a configuration with only active methods", async () => {
   );
   const title = await mpApi.getMonitoringMethods(5894);
   expect(title.data).toEqual(methodsActiveOnly);
-  let { container } = await  waitForElement (() => componentRenderer(5894));
+  let { container } = await waitForElement(() => componentRenderer(5894));
+  expect(container).toBeDefined();
+});
+test("tests a configuration with only inactive methods", async () => {
+  // React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+
+  // React.useState = jest
+  //   .fn()
+  // .mockReturnValueOnce([true, {}])
+
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: methodsInactiveOnly })
+  );
+
+  axios.put.mockImplementation((url) => {
+    switch (url) {
+      case `https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/workspace/locations/3844/methods/WPC07008-24F0C0E2B4DD4AFC927FC2DEDC67B859`:
+        return Promise.resolve({ data: [{ name: "Bob", items: [] }] });
+      case "/items.json":
+        return Promise.resolve({ data: [{ id: 1 }, { id: 2 }] });
+      default:
+        return Promise.reject(new Error("not found"));
+    }
+  });
+  axios.put.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: data })
+  );
+
+  
+  const title = await mpApi.getMonitoringMethods(69);
+  expect(title.data).toEqual(methodsInactiveOnly);
+  let { container } = await waitForElement(() => componentRenderer(69));
+
+  fireEvent.click(container.querySelector("#testingBtn"));
+  fireEvent.click(container.querySelector("#testingBtn2"));
+  // componentRenderer(6);
   expect(container).toBeDefined();
 });
