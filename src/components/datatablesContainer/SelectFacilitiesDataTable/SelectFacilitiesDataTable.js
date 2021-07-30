@@ -36,7 +36,7 @@ export const SelectFacilitiesDataTable = ({
 
   useEffect(() => {
     obtainCheckedOutLocations().then();
-  }, []);
+  }, [openedFacilityTabs]);
 
   /*useInterval(() => {
     obtainCheckedOutLocations().then();
