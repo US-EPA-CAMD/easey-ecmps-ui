@@ -7,10 +7,9 @@
 
 /***** APP SCOPE main source overrides *****/
 @import "../../additional-scss/uswds-global-overrides";
-
-@import "../../additional-scss/global-styles";
-
 @import "../../additional-scss/react-datatable-component-override";
+@import "../../additional-scss/global-styles";
+@import "../../additional-scss/icons";
 
 /***** ANIMATIONS *****/
 @import "../../animations/transitions";

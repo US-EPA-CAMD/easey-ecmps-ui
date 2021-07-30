@@ -1,28 +1,39 @@
-import { config, oneSecond } from "../../config";
-
+/*********** FUNCTIONS / HOOKS / PLUGINS ***********/
+// *** 3rd party
 import React, { useState, useMemo, useEffect } from "react";
-import { Button } from "@trussworks/react-uswds";
-import DataTable from "react-data-table-component";
-import "./DataTableRender.scss";
-import { FilterComponent } from "../ReactDataTablesFilter/ReactDataTablesFilter";
-import { Preloader } from "../Preloader/Preloader";
 
+// *** local
+import { config, oneSecond } from "../../config";
 import { cleanUp508, ensure508 } from "../../additional-functions/ensure-508";
 import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
 
+/*********** COMPONENTS ***********/
+// *** 3rd party
+import { Button } from "@trussworks/react-uswds";
+import DataTable from "react-data-table-component";
+
+// *** local
+import { FilterComponent } from "../ReactDataTablesFilter/ReactDataTablesFilter";
+import { Preloader } from "../Preloader/Preloader";
+
+/*********** LOOKS AND DECORATION (ICONS, SCSS, ETC.) ***********/
+// *** icons
 import {
   ArrowDownwardSharp,
   KeyboardArrowDownSharp,
   KeyboardArrowUpSharp,
+  LockSharp,
 } from "@material-ui/icons";
 
-/*** scss ***/
+// *** scss
+import "./DataTableRender.scss";
 
-const DataTableRender = ({
+export const DataTableRender = ({
   sectionTitle,
   tableTitle,
   addBtn,
   columnNames,
+  checkedOutLocations,
   data,
   user,
   dataLoaded,
@@ -41,6 +52,7 @@ const DataTableRender = ({
   className,
   addBtnName,
   uniqueKey,
+  setShowInactive,
 }) => {
   const [searchText, setSearchText] = useState("");
   const columns = [];
@@ -54,8 +66,35 @@ const DataTableRender = ({
     };
   }, []);
 
+  const AddLock = (dataRowObject) => {
+    if (checkedOutLocations && checkedOutLocations.length > 0) {
+      if (
+        checkedOutLocations
+          .map((location) => location["facId"])
+          .indexOf(parseInt(dataRowObject.row["facId"])) > -1
+      ) {
+        return (
+          <>
+            <LockSharp className="row-lock margin-right-1" />{" "}
+            {dataRowObject.row["col1"]}
+          </>
+        );
+      }
+    }
+    return <>{dataRowObject.row["col1"]}</>;
+  };
+
   columnNames.forEach((name, index) => {
     switch (name) {
+      case "Facility":
+        columns.push({
+          name,
+          selector: `col${index + 1}`,
+          sortable: true,
+          cell: (row) => <AddLock row={row} />,
+        });
+        break;
+
       case "ORIS":
         columns.push({
           name,
@@ -199,7 +238,13 @@ const DataTableRender = ({
       title = sectionTitle ? sectionTitle : null;
     }
 
-    return <FilterComponent onSearch={handleSearch} title={title} />;
+    return (
+      <FilterComponent
+        onSearch={handleSearch}
+        title={title}
+        setShowInactive={setShowInactive}
+      />
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

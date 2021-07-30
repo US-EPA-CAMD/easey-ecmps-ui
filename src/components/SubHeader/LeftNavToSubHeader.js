@@ -51,7 +51,7 @@ export const LeftNavToSubHeader = () => {
       </div>
       <Header
         className="display-none tablet:display-block desktop-lg:display-none
-      padding-y-0 mobile-lg:padding-x-2 desktop:padding-x-4"
+      padding-y-0 mobile-lg:padding-x-2 desktop:padding-x-4 bg-base-lightest"
       >
         <div className="usa-nav-container clearfix padding-x-0">
           <div className="text-center desktop:margin-top-3 desktop-lg:margin-top-0 display-inline-flex">

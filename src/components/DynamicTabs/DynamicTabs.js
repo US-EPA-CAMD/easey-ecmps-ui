@@ -12,6 +12,7 @@ import "./DynamicTabs.scss";
 
 export const DynamicTabs = ({
   tabsProps,
+  checkedOutLocations,
   user,
   removeFacility,
   addFacility,
@@ -30,7 +31,7 @@ export const DynamicTabs = ({
           location: [0, t.selectedConfig.locations[0].id],
           section: [3, "Methods"],
           selectedConfig: t.selectedConfig,
-          inactive:[false,false]
+          inactive: [false, false],
         });
       }
     });
@@ -51,10 +52,23 @@ export const DynamicTabs = ({
 
   return (
     <div>
-      <Tabs dynamic={true} removeTabs={removeTabsHandler} setActive={setActive}>
+      <Tabs
+        dynamic={true}
+        removeTabs={removeTabsHandler}
+        setActive={setActive}
+        tabProps={tabs}
+        checkedOutLocations={checkedOutLocations}
+        user={user}
+      >
         {tabs &&
           tabs.map((tab, i) => (
-            <TabPane key={i} title={tab.title}>
+            <TabPane
+              key={i}
+              title={tab.title}
+              locationId={
+                tab.selectedConfig ? tab.selectedConfig.id : "initial"
+              }
+            >
               {cloneElement(tab.component, {
                 addtabs: addTabsHandler,
               })}

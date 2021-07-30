@@ -12,8 +12,8 @@ export const config = {
       process.env.REACT_APP_EASEY_ECMPS_UI_ACTIVITY_REFRESH_API_CALL_INTERVAL ||
       30 * oneSecond,
     inactivityDuration:
-      process.env.REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_MINUTES * oneMinute ||
-      oneMinute,
+      process.env.REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_MINUTES *
+        oneMinute || oneMinute,
     activityPollingFrequency:
       process.env.REACT_APP_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS *
         oneSecond || oneSecond,
@@ -24,7 +24,7 @@ export const config = {
       process.env.REACT_APP_EASEY_ECMPS_UI_PAGINATION_PER_PAGE || 100,
     paginationPerPageOptions: [100, 200, 500],
     paginationRangeSeparatorText: "out of",
-    path: process.env.REACT_APP_EASEY_ECMPS_UI_PATH || "/",
+    path: process.env.REACT_APP_EASEY_ECMPS_UI_PATH || "/ecmps/",
     env: process.env.REACT_APP_EASEY_ECMPS_UI_ENV || "local-dev",
     published: process.env.REACT_APP_EASEY_ECMPS_UI_PUBLISHED || "local",
     version: process.env.REACT_APP_EASEY_ECMPS_UI_VERSION || "v0.0.0",

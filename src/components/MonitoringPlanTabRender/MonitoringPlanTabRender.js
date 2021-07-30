@@ -23,6 +23,7 @@ export const MonitoringPlanTabRender = ({
   setCheckout,
   setInactive,
   inactive,
+  checkedOutLocations,
 }) => {
   const [matsTableFlag, setMatsTableFlag] = useState(false);
   // // MONITORING METHODS
@@ -215,6 +216,7 @@ export const MonitoringPlanTabRender = ({
           setCheckout={setCheckout}
           setInactive={setInactive}
           inactive={inactive}
+          checkedOutLocations={checkedOutLocations}
         />
       </div>
       <hr />

@@ -1,12 +1,20 @@
 import React, { useState } from "react";
 
 import { Button } from "@trussworks/react-uswds";
+import { ClearSharp, CreateSharp, LockSharp } from "@material-ui/icons";
 
 import "./Tabs.scss";
-import { ClearSharp } from "@material-ui/icons";
 
-export const Tabs = ({ children, dynamic = false, removeTabs, setActive }) => {
+export const Tabs = ({
+  children,
+  dynamic = false,
+  removeTabs,
+  setActive,
+  checkedOutLocations,
+  user,
+}) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+
   const settingActiveTab = (index) => {
     setActiveTabIndex(index);
     setActive(false, index - 1);
@@ -20,9 +28,29 @@ export const Tabs = ({ children, dynamic = false, removeTabs, setActive }) => {
     }
   };
 
+  const isCheckedOut = (locationId) => {
+    return (
+      checkedOutLocations
+        .map((location) => location["monPlanId"])
+        .indexOf(locationId) > -1
+    );
+  };
+
+  const isCheckedOutByUser = (locationId) => {
+    return (
+      checkedOutLocations
+        .map((location) => location["monPlanId"])
+        .indexOf(locationId) > -1 &&
+      checkedOutLocations[
+        checkedOutLocations
+          .map((location) => location["monPlanId"])
+          .indexOf(locationId)
+      ]["checkedOutBy"] === user["firstName"]
+    );
+  };
   return (
     <div>
-      <div className="">
+      <div className="tab-buttons">
         <ul className="usa-button-group">
           {children.map((el, i) => (
             <li
@@ -66,12 +94,19 @@ export const Tabs = ({ children, dynamic = false, removeTabs, setActive }) => {
                       settingActiveTab(i);
                     }
                   }}
-                  
                 >
-                  <div className="text-center">
+                  <div className="text-center tab-button-text-container">
+                    {el.props.locationId &&
+                    isCheckedOut(el.props.locationId) ? (
+                      <LockSharp className="text-bold tab-icon margin-right-2" />
+                    ) : null}
                     {el.props.title.split("(")[0]}
                   </div>
                   <div className="text-center">
+                    {el.props.locationId &&
+                    isCheckedOutByUser(el.props.locationId) ? (
+                      <CreateSharp className="text-bold tab-icon margin-right-2" />
+                    ) : null}
                     {el.props.title.split("(")[1].replace(")", "")}
                   </div>
 

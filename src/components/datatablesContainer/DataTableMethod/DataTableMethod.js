@@ -8,7 +8,7 @@ import DataTableRender from "../../DataTableRender/DataTableRender";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import {useRetrieveDropdownApi} from "../../../additional-functions/retrieve-dropdown-api";
+import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import {
   getActiveData,
   getInactiveData,
@@ -38,7 +38,7 @@ export const DataTableMethod = ({
 
     if(updateTable || methods.length <= 0 || locationSelectValue){
 
-   
+
     mpApi.getMonitoringMethods(locationSelectValue).then((res) => {
       setMethods(res.data);
       setDataLoaded(true);
@@ -46,7 +46,7 @@ export const DataTableMethod = ({
     mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
       setMatsMethods(res.data);
     });
-    setUpdateTable(false) 
+    setUpdateTable(false)
   }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue,updateTable]);
@@ -86,16 +86,16 @@ export const DataTableMethod = ({
       modalViewData(
         monMethod,
         {
-          parameterCode: ["Parameter", "dropdown",'required'],
-          methodCode: ["Methodology", "dropdown",'required'],
-          subDataCode: ["Substitute Data Approach", "dropdown",'required'],
-          bypassApproachCode: ["Bypass Approach", "dropdown",'required'],
+          parameterCode: ["Parameter", "dropdown", "required"],
+          methodCode: ["Methodology", "dropdown", "required"],
+          subDataCode: ["Substitute Data Approach", "dropdown", "required"],
+          bypassApproachCode: ["Bypass Approach", "dropdown", "required"],
         },
         {
-          beginDate: ["Start Date", "date",'required'],
-          beginHour: ["Start Time", "time",'required'],
-          endDate: ["End Date", "date",""],
-          endHour: ["End Time", "time",""],
+          beginDate: ["Start Date", "date", "required"],
+          beginHour: ["Start Time", "time", "required"],
+          endDate: ["End Date", "date", ""],
+          endHour: ["End Time", "time", ""],
         },
         create,
         totalOptions
@@ -161,7 +161,6 @@ export const DataTableMethod = ({
 
     const userInput = extractUserInput(payload, ".modalUserInput");
 
-    console.log(userInput,'user')
     mpApi
       .saveMonitoringMethods(userInput)
       .then((result) => {

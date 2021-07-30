@@ -4,6 +4,7 @@ import * as fs from "../../../utils/selectors/monitoringConfigurations";
 import { loadMonitoringPlansArray } from "../../../store/actions/monitoringPlans";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import DataTableRender from "../../DataTableRender/DataTableRender";
+
 export const DataTableConfigurations = ({
   loadMonitoringPlansData,
   monitoringPlans,
@@ -42,9 +43,11 @@ export const DataTableConfigurations = ({
         .postCheckoutMonitoringPlanConfiguration(config.col3, user.firstName)
         .then((res) => {
           console.log(res, "data");
+          setSelectedConfig([data, selectedConfigData, checkout]);
         });
+    } else {
+      setSelectedConfig([data, selectedConfigData, checkout]);
     }
-    setSelectedConfig([data, selectedConfigData, checkout]);
   };
 
   useEffect(() => {
@@ -54,27 +57,9 @@ export const DataTableConfigurations = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedConfig]);
 
-  /*  const flag = useRef(false);*/
-
   useEffect(() => {
-    /*let flagValue = flag.current;
-    if (monitoringPlans.length < 1) {*/
     loadMonitoringPlansData(data.col2);
     setDataLoaded(true);
-    /*} else {
-      for (const x of monitoringPlans) {
-        if (x[0] === data.col1) {
-          setSelectedMp(x);
-          flagValue = true;
-          setDataLoaded(true);
-          break;
-        }
-      }
-      if (flagValue === false) {
-        loadMonitoringPlansData(data.col1);
-        setDataLoaded(true);
-      }
-    }*/
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -113,8 +98,6 @@ export const DataTableConfigurations = ({
         openHandler={openConfig}
         actionsBtn="Open"
         user={user}
-
-        
       />
     </div>
   );

@@ -3,8 +3,8 @@ import { render, screen, fireEvent } from "@testing-library/react";
 
 import userEvent from "@testing-library/user-event";
 import DataTableRender from "./DataTableRender";
-import { mount, ReactWrapper } from 'enzyme';
-import { act } from 'react-dom/test-utils';
+import { mount, ReactWrapper } from "enzyme";
+import { act } from "react-dom/test-utils";
 let options = [];
 let data = [];
 let columns = [];
@@ -137,11 +137,10 @@ describe("renders datatable with all values ", () => {
         openHandler={jest.fn()}
       />
     );
-   
+
     const btn = container.querySelector("#btnOpen");
     fireEvent.click(btn);
     btn.focus();
-
 
     const rows = screen.getAllByRole("row");
     expect(rows.length).toEqual(6);
@@ -253,8 +252,8 @@ describe("renders datatable with all values ", () => {
     expect(rows.length).toEqual(12);
   });
 });
-describe('67440874', () => {
-  let wrapper: ReactWrapper;
+describe("67440874", () => {
+  let wrapper;
 
   beforeAll(() => {
     jest.useFakeTimers();
@@ -269,28 +268,30 @@ describe('67440874', () => {
       { col1: "OP", col2: "EXP", col3: null, disabled: true, expanded: true },
       { col1: "HI", col2: "AD", col3: "SPTS", disabled: true, expanded: false },
     ];
-    wrapper = mount( <DataTableRender
-      dataLoaded={true}
-      addBtn={jest.fn()}
-      columnNames={columnNames}
-      data={data}
-      selectedRowHandler={jest.fn()}
-      pagination={true}
-      filter={true}
-      user={{ username: "test" }}
-      defaultSort={"col2"}
-      checkout={true}
-      // expandableRowComp={true}
-      expandableRows={true}
-      headerStyling="headerStyling"
-      tableStyling="tableStyling"
-      componentStyling="componentStyling"
-      actionsBtn={"View"}
-      openHandler={jest.fn()}
-    />);
+    wrapper = mount(
+      <DataTableRender
+        dataLoaded={true}
+        addBtn={jest.fn()}
+        columnNames={columnNames}
+        data={data}
+        selectedRowHandler={jest.fn()}
+        pagination={true}
+        filter={true}
+        user={{ username: "test" }}
+        defaultSort={"col2"}
+        checkout={true}
+        // expandableRowComp={true}
+        expandableRows={true}
+        headerStyling="headerStyling"
+        tableStyling="tableStyling"
+        componentStyling="componentStyling"
+        actionsBtn={"View"}
+        openHandler={jest.fn()}
+      />
+    );
   });
-  it('should pass', () => {
-    let addBtn = wrapper.find('#addBtn');
+  it("should pass", () => {
+    let addBtn = wrapper.find("#addBtn");
     expect(addBtn).toBeDefined();
     act(() => {
       jest.runOnlyPendingTimers();
