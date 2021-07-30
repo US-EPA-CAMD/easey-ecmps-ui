@@ -59,7 +59,7 @@ export const SelectFacilitiesDataTable = ({
   const columnNames = ["Facility", "ORIS", "State"];
 
   const selectedRowHandler = (info) => {
-    console.log('INFO',info)
+    console.log("INFO", info);
     addtabs([
       {
         title: `${info[0].col1} (${info[1].name}) ${
@@ -119,7 +119,6 @@ export const SelectFacilitiesDataTable = ({
         pagination={true}
         filter={true}
         sectionTitle="Select Configurations"
-        defaultSort="col2"
         checkedOutLocations={checkedOutLocations}
         expandableRows={true}
         expandableRowComp={
