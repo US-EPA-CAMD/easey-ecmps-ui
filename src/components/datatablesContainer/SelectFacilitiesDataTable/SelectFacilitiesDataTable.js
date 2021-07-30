@@ -59,6 +59,7 @@ export const SelectFacilitiesDataTable = ({
   const columnNames = ["Facility", "ORIS", "State"];
 
   const selectedRowHandler = (info) => {
+    console.log('INFO',info)
     addtabs([
       {
         title: `${info[0].col1} (${info[1].name}) ${
@@ -112,6 +113,7 @@ export const SelectFacilitiesDataTable = ({
         columnNames={columnNames}
         dataLoaded={dataLoaded}
         data={data}
+        defaultSort="col2"
         openedFacilityTabs={openedFacilityTabs}
         user={user}
         pagination={true}

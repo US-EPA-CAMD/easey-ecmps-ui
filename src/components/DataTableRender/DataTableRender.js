@@ -253,7 +253,11 @@ export const DataTableRender = ({
       <div aria-live="polite" className={`${tableStyling}`}>
         {dataLoaded && data.length > 0 ? (
           <div>
-            <h4 className="margin-top-5 text-bold mobile:font-body-xl mobile:text-bold">
+            <h4
+              className={`margin-top-5 text-bold ${
+                tableStyling ? "" : "mobile:font-body-xl mobile:text-bold"
+              }`}
+            >
               {tableTitle}
             </h4>
             <DataTable
@@ -315,7 +319,13 @@ export const DataTableRender = ({
             </div>
           </div>
         ) : dataLoaded && data.length === 0 ? (
-          ""
+          <h4
+          className={`margin-top-5 text-bold ${
+            tableStyling ? "" : "mobile:font-body-xl mobile:text-bold"
+          }`}
+        >
+          {tableTitle}
+        </h4>
         ) : (
           <div className="margin-y-3 padding-y-3 react-transition fade-in font-body-sm width-full">
             <Preloader />

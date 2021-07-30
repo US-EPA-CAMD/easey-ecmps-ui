@@ -10,7 +10,6 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           if (mats) {
             dmApi.getAllMatsParameterCodes().then((response) => {
               options = response.data.map((option) => {
-                console.log('options',option)
                 return {
                   code: option["matsMethodParamCode"],
                   name: option["matsMethodParamCodeDescription"],
@@ -20,7 +19,6 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
               options.unshift({ code: "", name: "" });
               const newData = totalOptions;
               newData["matsMethodParameterCode"] = options;
-              console.log('mats',options)
               setTotalOptions(newData);
             });
           } else {
@@ -45,7 +43,6 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           if (mats) {
             dmApi.getAllMatsMethodCodes().then((response) => {
               options = response.data.map((option) => {
-                console.log('options',option)
                 return {
                   code: option["matsMethodCode"],
                   name: option["matsMethodCodeDescription"],
@@ -55,7 +52,6 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
               options.unshift({ code: "", name: "" });
               const newData = totalOptions;
               newData["matsMethodCode"] = options;
-              console.log('mats',options)
               setTotalOptions(newData);
             });
           } else {
