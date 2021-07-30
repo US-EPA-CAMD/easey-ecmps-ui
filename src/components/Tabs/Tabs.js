@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { Button } from "@trussworks/react-uswds";
-import { ClearSharp, LockSharp } from "@material-ui/icons";
+import { ClearSharp, CreateSharp, LockSharp } from "@material-ui/icons";
 
 import "./Tabs.scss";
 
@@ -26,6 +26,14 @@ export const Tabs = ({
       setActiveTabIndex(index - 1);
       setActive(false, index - 2);
     }
+  };
+
+  const isCheckedOut = (locationId) => {
+    return (
+      checkedOutLocations
+        .map((location) => location["monPlanId"])
+        .indexOf(locationId) > -1
+    );
   };
 
   const isCheckedOutByUser = (locationId) => {
@@ -89,14 +97,16 @@ export const Tabs = ({
                 >
                   <div className="text-center tab-button-text-container">
                     {el.props.locationId &&
-                    checkedOutLocations
-                      .map((location) => location["monPlanId"])
-                      .indexOf(el.props.locationId) > -1 ? (
-                      <LockSharp className="text-bold lock-icon margin-right-2" />
+                    isCheckedOut(el.props.locationId) ? (
+                      <LockSharp className="text-bold tab-icon margin-right-2" />
                     ) : null}
                     {el.props.title.split("(")[0]}
                   </div>
                   <div className="text-center">
+                    {el.props.locationId &&
+                    isCheckedOutByUser(el.props.locationId) ? (
+                      <CreateSharp className="text-bold tab-icon margin-right-2" />
+                    ) : null}
                     {el.props.title.split("(")[1].replace(")", "")}
                   </div>
 

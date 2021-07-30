@@ -68,7 +68,7 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
   };
 
   return (
-    <div className="home-container react-transition fade-in">
+    <div className="react-transition fade-in padding-x-3">
       <div className="text-black margin-top-1 display-none tablet:display-block">
         <h1
           className="display-inline-block page-header"
@@ -107,6 +107,7 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
         <DynamicTabs
           tabsProps={() => handleTabState()}
           checkedOutLocations={checkedOutLocations}
+          user={user}
         />
       </div>
     </div>
