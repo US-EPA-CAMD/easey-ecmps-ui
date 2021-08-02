@@ -12,6 +12,13 @@
   width: 15em !important;
 }
 
+.ellipsis-text {
+  width: 13em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 .active-tab-button {
   border-bottom: 0.25em solid $epa-blue-base;
   color: $epa-blue-base;

@@ -20,6 +20,7 @@ import { Preloader } from "../Preloader/Preloader";
 // *** icons
 import {
   ArrowDownwardSharp,
+  CreateSharp,
   KeyboardArrowDownSharp,
   KeyboardArrowUpSharp,
   LockSharp,
@@ -126,6 +127,20 @@ export const DataTableRender = ({
     return <>{dataRowObject.row["col1"]}</>;
   };
 
+  const AddPencil = (dataRowObject) => {
+    if (checkedOutLocations && checkedOutLocations.length > 0) {
+      if (isCurrentlyCheckedOutByUser(dataRowObject.row["monPlanId"])) {
+        return (
+          <>
+            <CreateSharp className="row-lock margin-right-1" />{" "}
+            {dataRowObject.row["col1"]}
+          </>
+        );
+      }
+    }
+    return <>{dataRowObject.row["col1"]}</>;
+  };
+
   columnNames.forEach((name, index) => {
     switch (name) {
       case "Facility":
@@ -134,6 +149,15 @@ export const DataTableRender = ({
           selector: `col${index + 1}`,
           sortable: true,
           cell: (row) => <AddLock row={row} />,
+        });
+        break;
+
+      case "Configurations":
+        columns.push({
+          name,
+          selector: `col${index + 1}`,
+          sortable: true,
+          cell: (row) => <AddPencil row={row} />,
         });
         break;
 

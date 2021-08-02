@@ -50,7 +50,13 @@ export const DataTableConfigurations = ({
         setMostRecentlyCheckedInMonitorPlanIdForTab(
           `${monitoringPlanId}${Math.floor(Math.random() * 1000)}`
         );
-        setCheckout(false, monitoringPlanId);
+
+        try {
+          setCheckout(false, monitoringPlanId);
+        } catch (error) {
+          // *** do nothing.  this is just in case someone tries to check in a facility
+          // *** that does not have an open tab
+        }
       });
   };
 
@@ -75,7 +81,6 @@ export const DataTableConfigurations = ({
       // title for redux state check in
       // oris code for redux state check in
       checkBackIn(selectedConfigData.id, title, data.col2);
-
     }
   };
 
