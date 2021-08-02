@@ -25,6 +25,8 @@ export const MonitoringPlanTab = ({
   setCheckout,
   setInactive,
   checkedOutLocations,
+  setMostRecentlyCheckedInMonitorPlanId,
+  setMostRecentlyCheckedInMonitorPlanIdForTab,
 }) => {
   const [sectionSelect, setSectionSelect] = useState(tabs[activeTab].section);
   useEffect(() => {
@@ -59,6 +61,12 @@ export const MonitoringPlanTab = ({
           setInactive={setInactive}
           inactive={tabs[activeTab[0]].inactive}
           checkedOutLocations={checkedOutLocations}
+          setMostRecentlyCheckedInMonitorPlanId={
+            setMostRecentlyCheckedInMonitorPlanId
+          }
+          setMostRecentlyCheckedInMonitorPlanIdForTab={
+            setMostRecentlyCheckedInMonitorPlanIdForTab
+          }
         />
       </div>
     </div>

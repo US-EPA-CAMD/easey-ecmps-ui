@@ -11,14 +11,18 @@ import { oneSecond } from "../../config";
 
 export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
   const [checkedOutLocations, setCheckedOutLocations] = useState([]);
+  const [
+    mostRecentlyCheckedInMonitorPlanIdForTab,
+    setMostRecentlyCheckedInMonitorPlanIdForTab,
+  ] = useState("");
 
   useEffect(() => {
     obtainCheckedOutLocations().then();
-  }, [openedFacilityTabs]);
+  }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanIdForTab]);
 
-  /*useInterval(() => {
+  useInterval(() => {
     obtainCheckedOutLocations().then();
-  }, 10 * oneSecond);*/
+  }, 3 * oneSecond);
 
   const obtainCheckedOutLocations = async () => {
     const checkedOutLocationResult = await getCheckedOutLocations();
@@ -41,6 +45,12 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
             user={user}
             keyField="col2"
             openedFacilityTabs={openedFacilityTabs}
+            mostRecentlyCheckedInMonitorPlanIdForTab={
+              mostRecentlyCheckedInMonitorPlanIdForTab
+            }
+            setMostRecentlyCheckedInMonitorPlanIdForTab={
+              setMostRecentlyCheckedInMonitorPlanIdForTab
+            }
           />
         ),
       },

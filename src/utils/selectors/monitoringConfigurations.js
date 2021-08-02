@@ -8,6 +8,8 @@ export function getConfigurationNames(data) {
         col1: el.name,
         col2: el.active ? "Active" : "Inactive",
         col3: el.id,
+        monPlanId: el.id,
+        facId: el.facId,
       });
     });
   return records;

@@ -17,6 +17,8 @@ export const DynamicTabs = ({
   removeFacility,
   addFacility,
   setActive,
+  setMostRecentlyCheckedInMonitorPlanId,
+  mostRecentlyCheckedInMonitorPlanId,
 }) => {
   const [tabs, setTabs] = useState(tabsProps);
 
@@ -59,6 +61,9 @@ export const DynamicTabs = ({
         tabProps={tabs}
         checkedOutLocations={checkedOutLocations}
         user={user}
+        setMostRecentlyCheckedInMonitorPlanId={
+          setMostRecentlyCheckedInMonitorPlanId
+        }
       >
         {tabs &&
           tabs.map((tab, i) => (

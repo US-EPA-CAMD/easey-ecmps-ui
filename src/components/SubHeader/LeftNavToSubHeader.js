@@ -8,10 +8,6 @@ import { appNavItems } from "../../utils/constants/menuTopics";
 import { MenuSharp } from "@material-ui/icons";
 
 export const LeftNavToSubHeader = () => {
-  useEffect(() => {
-    setCategorySelected([false, false, false, false, false]);
-  }, []);
-
   const [navDropdownOpen, setNavDropdownOpen] = useState([
     false,
     false,
@@ -28,6 +24,10 @@ export const LeftNavToSubHeader = () => {
     false,
     false,
   ]);
+
+  useEffect(() => {
+    setCategorySelected([false, false, false, false, false]);
+  }, []);
 
   const handleToggleNavDropdown = (column) => {
     setNavDropdownOpen((prevNavDropdownOpen) => {

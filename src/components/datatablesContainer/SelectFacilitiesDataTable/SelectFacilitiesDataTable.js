@@ -7,16 +7,24 @@ import "./SelectFacilitiesDataTable.scss";
 import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigurations";
 import * as facilitiesApi from "../../../utils/api/facilityApi";
 import { getCheckedOutLocations } from "../../../utils/api/monitoringPlansApi";
+import { useInterval } from "../../../additional-functions/use-interval";
+import { oneSecond } from "../../../config";
 
 export const SelectFacilitiesDataTable = ({
   user,
   addtabs,
   openedFacilityTabs,
+  mostRecentlyCheckedInMonitorPlanIdForTab,
+  setMostRecentlyCheckedInMonitorPlanIdForTab,
 }) => {
   const [facilities, setFacilities] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const [checkedOutLocations, setCheckedOutLocations] = useState([]);
+  const [
+    mostRecentlyCheckedInMonitorPlanId,
+    setMostRecentlyCheckedInMonitorPlanId,
+  ] = useState("");
 
   useEffect(() => {
     let isMounted = true;
@@ -32,15 +40,15 @@ export const SelectFacilitiesDataTable = ({
       isMounted = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openedFacilityTabs]);
+  }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanId]);
 
   useEffect(() => {
     obtainCheckedOutLocations().then();
-  }, []);
+  }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanId]);
 
-  /*useInterval(() => {
+  useInterval(() => {
     obtainCheckedOutLocations().then();
-  }, 10 * oneSecond);*/
+  }, 3 * oneSecond);
 
   const obtainCheckedOutLocations = async () => {
     const checkedOutLocationResult = await getCheckedOutLocations();
@@ -76,6 +84,12 @@ export const SelectFacilitiesDataTable = ({
               user={user}
               checkout={info[2]}
               checkedOutLocations={checkedOutLocations}
+              setMostRecentlyCheckedInMonitorPlanId={
+                setMostRecentlyCheckedInMonitorPlanId
+              }
+              setMostRecentlyCheckedInMonitorPlanIdForTab={
+                setMostRecentlyCheckedInMonitorPlanIdForTab
+              }
             />
           </div>
         ),
@@ -126,10 +140,24 @@ export const SelectFacilitiesDataTable = ({
             selectedRowHandler={selectedRowHandler}
             user={user}
             className="expand-row-data-table"
+            checkedOutLocations={checkedOutLocations}
+            actionsBtn={"Open"}
+            setMostRecentlyCheckedInMonitorPlanId={
+              setMostRecentlyCheckedInMonitorPlanId
+            }
+            setMostRecentlyCheckedInMonitorPlanIdForTab={
+              setMostRecentlyCheckedInMonitorPlanIdForTab
+            }
           />
         }
         headerStyling="padding-top-0 padding-left-2"
         setShowInactive={() => {}}
+        setMostRecentlyCheckedInMonitorPlanId={
+          setMostRecentlyCheckedInMonitorPlanId
+        }
+        setMostRecentlyCheckedInMonitorPlanIdForTab={
+          setMostRecentlyCheckedInMonitorPlanIdForTab
+        }
       />
     </div>
   );
