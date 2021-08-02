@@ -75,10 +75,7 @@ export const DataTableConfigurations = ({
       // title for redux state check in
       // oris code for redux state check in
       checkBackIn(selectedConfigData.id, title, data.col2);
-      //       0: {col1: "Barry", col2: "3", col3: "AL", col4: "3", facId: "1", …}
-      // 1: {id: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A", facId: "1", name: "1, 2, CS0AAN", locations: Array(3), endReportPeriodId: null, …}
 
-      // console.log("check", [data, selectedConfigData, checkout]);
     }
   };
 
