@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
-import {Button} from "@trussworks/react-uswds"
+import { Button } from "@trussworks/react-uswds";
 import DataTableRender from "../../DataTableRender/DataTableRender";
 
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
@@ -21,7 +21,9 @@ export const DataTableMethod = ({
   checkout,
   inactive,
   settingInactiveCheckBox,
-  showModal = false
+  revertedState,
+  setRevertedState,
+  showModal = false,
 }) => {
   const [methods, setMethods] = useState([]);
   const [matsMethods, setMatsMethods] = useState([]);
@@ -32,24 +34,32 @@ export const DataTableMethod = ({
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
 
-  const totalOptions = useRetrieveDropdownApi(['parameterCode','methodCode','subDataCode','bypassApproachCode']);
-  const [updateTable,setUpdateTable] = useState(false)
+  const totalOptions = useRetrieveDropdownApi([
+    "parameterCode",
+    "methodCode",
+    "subDataCode",
+    "bypassApproachCode",
+  ]);
+  const [updateTable, setUpdateTable] = useState(false);
   useEffect(() => {
-
-    if(updateTable || methods.length <= 0 || locationSelectValue){
-
-
-    mpApi.getMonitoringMethods(locationSelectValue).then((res) => {
-      setMethods(res.data);
-      setDataLoaded(true);
-    });
-    mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
-      setMatsMethods(res.data);
-    });
-    setUpdateTable(false)
-  }
+    if (
+      updateTable ||
+      methods.length <= 0 ||
+      locationSelectValue ||
+      revertedState
+    ) {
+      mpApi.getMonitoringMethods(locationSelectValue).then((res) => {
+        setMethods(res.data);
+        setDataLoaded(true);
+      });
+      mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
+        setMatsMethods(res.data);
+      });
+      setUpdateTable(false);
+      setRevertedState(false);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue,updateTable]);
+  }, [locationSelectValue, updateTable, revertedState]);
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -65,16 +75,18 @@ export const DataTableMethod = ({
   // cant unit test properly
   const [createNewMethod, setCreateNewMethod] = useState(false);
 
- const testing = () => {
-  openMethodModal(false,false,true);
-  saveMethods();
+  const testing = () => {
+    openMethodModal(false, false, true);
+    saveMethods();
+  };
 
- }
-
- const testing2= () =>{
-  openMethodModal({col7:"CAMD-BAC9D84563F24FE08057AF5643C8602C"},false,false);
-
- }
+  const testing2 = () => {
+    openMethodModal(
+      { col7: "CAMD-BAC9D84563F24FE08057AF5643C8602C" },
+      false,
+      false
+    );
+  };
   const openMethodModal = (row, bool, create) => {
     let monMethod = null;
     setCreateNewMethod(create);
@@ -169,17 +181,27 @@ export const DataTableMethod = ({
         setShow(false);
       })
       .catch((error) => {
-        console.log('error is' ,error);
+        console.log("error is", error);
         // openModal(false);
         setShow(false);
       });
-      setUpdateTable(true);
+    setUpdateTable(true);
   };
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
-      <input role="button" type="hidden" id="testingBtn" onClick ={()=> testing()}/>
-      <input role="button" type="hidden" id="testingBtn2" onClick ={()=> testing2()}/>
+      <input
+        role="button"
+        type="hidden"
+        id="testingBtn"
+        onClick={() => testing()}
+      />
+      <input
+        role="button"
+        type="hidden"
+        id="testingBtn2"
+        onClick={() => testing2()}
+      />
       <DataTableRender
         openHandler={openMethodModal}
         columnNames={columnNames}
@@ -198,9 +220,7 @@ export const DataTableMethod = ({
           save={saveMethods}
           showCancel={!(user && checkout)}
           showSave={user && checkout}
-          title={
-            createNewMethod ? "Create Method" : "Method"
-          }
+          title={createNewMethod ? "Create Method" : "Method"}
           createNew={createNewMethod ? "Create Method" : `Save and Close`}
           children={
             <div>

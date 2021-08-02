@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Button, Checkbox } from "@trussworks/react-uswds";
 import { CreateOutlined, LockOpenSharp, LockSharp } from "@material-ui/icons";
 
+import * as mpApi from "../../utils/api/monitoringPlansApi";
+import Modal from "../Modal/Modal";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 import "./HeaderInfo.scss";
 
@@ -10,6 +12,7 @@ export const HeaderInfo = ({
   selectedConfig,
   orisCode,
   user,
+  setRevertedState,
   //redux sets
   setCheckout,
   setInactive,
@@ -44,6 +47,11 @@ export const HeaderInfo = ({
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
   const [checkoutState, setCheckoutState] = useState(checkout);
 
+
+  useEffect(()=>{
+
+    setCheckoutState(checkout)
+  },[checkout])
   const isCheckedOutByUser = () => {
     return (
       checkedOutLocations
@@ -90,9 +98,37 @@ export const HeaderInfo = ({
     setDisplayLock(direction);
     checkoutAPI(direction);
   };
+  const [revertState, setRevertState] = useState(false);
+  const closeModalHandler = () => setShow(false);
 
+  const [show, setShow] = useState(false);
+  const revert = () => {
+    mpApi.revertOfficialRecord(selectedConfig.id).then((res) => {
+      console.log(res, "data");
+      setRevertedState(true);
+      setShow(false);
+    });
+  };
   return (
     <div className="header">
+      {/* <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
+      {show ? (
+        <Modal
+          show={show}
+          close={closeModalHandler}
+          // showCancel={true}
+          showSave={true}
+          createNew={"Yes"}
+          save={revert}
+          // title={
+          //   "test title"
+          // }
+          // createNew={createNewMethod ? "Create Method" : `Save and Close`}
+          children={
+            <div>{"Do you want to revert back to the official record?"}</div>
+          }
+        />
+      ) : null} */}
       <div className="grid-row clearfix position-relative">
         <div className="grid-col float-left">
           <div>
@@ -207,12 +243,25 @@ export const HeaderInfo = ({
                 Reports
               </a>
             </span>
-            <Button type="button" className="margin-left-4" outline={true}>
-              Evaluate
-            </Button>
-            <Button type="button" className="" outline={true}>
-              Submit
-            </Button>
+            {!checkout ? (
+              <div>
+                <Button type="button" className="margin-left-4" outline={true}>
+                  Evaluate
+                </Button>
+                <Button type="button" className="" outline={true}>
+                  Submit
+                </Button>
+              </div>
+            ) : (
+              <Button
+                type="button"
+                className="margin-left-4"
+                onClick={() => setShow(true)}
+                outline={true}
+              >
+                {"Revert to Official Record"}
+              </Button>
+            )}
           </div>
           <div className="grid-row padding-1 float-right text-right margin-right-3">
             <table role="presentation">
