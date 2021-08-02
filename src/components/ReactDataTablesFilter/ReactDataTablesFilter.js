@@ -8,7 +8,7 @@ export const FilterComponent = ({
   setShowInactive,
 }) => (
   <div className="width-full">
-    <div className="filter-title clearfix font-heading-xl text-bold data-table-title tablet:font-heading-xl mobile:font-body-lg mobile:text-bold mobile:padding-bottom-4 mobile:padding-left-6 tablet:padding-left-0">
+    <div className="filter-title clearfix font-heading-xl text-bold data-table-title tablet:font-heading-xl mobile:font-body-lg mobile:text-bold mobile:padding-bottom-2 mobile:padding-left-6 tablet:padding-left-0">
       {title}{" "}
       {/*{title === "Select Configurations" ? (
         <Checkbox

@@ -12,11 +12,17 @@ export const SelectFacilitiesDataTable = ({
   user,
   addtabs,
   openedFacilityTabs,
+  mostRecentlyCheckedInMonitorPlanIdForTab,
+  setMostRecentlyCheckedInMonitorPlanIdForTab,
 }) => {
   const [facilities, setFacilities] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const [checkedOutLocations, setCheckedOutLocations] = useState([]);
+  const [
+    mostRecentlyCheckedInMonitorPlanId,
+    setMostRecentlyCheckedInMonitorPlanId,
+  ] = useState("");
 
   useEffect(() => {
     let isMounted = true;
@@ -32,11 +38,11 @@ export const SelectFacilitiesDataTable = ({
       isMounted = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openedFacilityTabs]);
+  }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanId]);
 
   useEffect(() => {
     obtainCheckedOutLocations().then();
-  }, [openedFacilityTabs]);
+  }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanId]);
 
   /*useInterval(() => {
     obtainCheckedOutLocations().then();
@@ -76,6 +82,12 @@ export const SelectFacilitiesDataTable = ({
               user={user}
               checkout={info[2]}
               checkedOutLocations={checkedOutLocations}
+              setMostRecentlyCheckedInMonitorPlanId={
+                setMostRecentlyCheckedInMonitorPlanId
+              }
+              setMostRecentlyCheckedInMonitorPlanIdForTab={
+                setMostRecentlyCheckedInMonitorPlanIdForTab
+              }
             />
           </div>
         ),
@@ -126,10 +138,24 @@ export const SelectFacilitiesDataTable = ({
             selectedRowHandler={selectedRowHandler}
             user={user}
             className="expand-row-data-table"
+            checkedOutLocations={checkedOutLocations}
+            actionsBtn={"Open"}
+            setMostRecentlyCheckedInMonitorPlanId={
+              setMostRecentlyCheckedInMonitorPlanId
+            }
+            setMostRecentlyCheckedInMonitorPlanIdForTab={
+              setMostRecentlyCheckedInMonitorPlanIdForTab
+            }
           />
         }
         headerStyling="padding-top-0 padding-left-2"
         setShowInactive={() => {}}
+        setMostRecentlyCheckedInMonitorPlanId={
+          setMostRecentlyCheckedInMonitorPlanId
+        }
+        setMostRecentlyCheckedInMonitorPlanIdForTab={
+          setMostRecentlyCheckedInMonitorPlanIdForTab
+        }
       />
     </div>
   );

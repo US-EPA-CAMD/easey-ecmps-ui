@@ -48,6 +48,7 @@ export const Tabs = ({
       ]["checkedOutBy"] === user["firstName"]
     );
   };
+
   return (
     <div>
       <div className="tab-buttons">

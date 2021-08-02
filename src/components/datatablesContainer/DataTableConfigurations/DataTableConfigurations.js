@@ -12,6 +12,9 @@ export const DataTableConfigurations = ({
   user,
   selectedRowHandler,
   className,
+  checkedOutLocations,
+  setMostRecentlyCheckedInMonitorPlanId,
+  setMostRecentlyCheckedInMonitorPlanIdForTab,
 }) => {
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -64,10 +67,8 @@ export const DataTableConfigurations = ({
   }, []);
 
   useEffect(() => {
-    /*const flagValue = flag.current;
-    if (flagValue === false) {*/
     setSelectedMp(monitoringPlans[monitoringPlans.length - 1]);
-    //}
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringPlans.length]);
 
@@ -98,6 +99,13 @@ export const DataTableConfigurations = ({
         openHandler={openConfig}
         actionsBtn="Open"
         user={user}
+        checkedOutLocations={checkedOutLocations}
+        setMostRecentlyCheckedInMonitorPlanId={
+          setMostRecentlyCheckedInMonitorPlanId
+        }
+        setMostRecentlyCheckedInMonitorPlanIdForTab={
+          setMostRecentlyCheckedInMonitorPlanIdForTab
+        }
       />
     </div>
   );
