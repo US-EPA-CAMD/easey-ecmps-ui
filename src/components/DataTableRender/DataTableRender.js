@@ -27,6 +27,16 @@ import {
 
 // *** scss
 import "./DataTableRender.scss";
+import * as mpApi from "../../utils/api/monitoringPlansApi";
+import {
+  setCheckoutState,
+  setInactiveState,
+  setLocationSelectionState,
+  setSectionSelectionState,
+} from "../../store/actions/dynamicFacilityTab";
+import { setActiveTab } from "../../store/actions/activeTab";
+import { connect } from "react-redux";
+import { MonitoringPlanTab } from "../MonitoringPlanTab/MonitoringPlanTab";
 
 export const DataTableRender = ({
   sectionTitle,
@@ -53,6 +63,9 @@ export const DataTableRender = ({
   addBtnName,
   uniqueKey,
   setShowInactive,
+  openedFacilityTabs,
+  setMostRecentlyCheckedInMonitorPlanId,
+  setMostRecentlyCheckedInMonitorPlanIdForTab,
 }) => {
   const [searchText, setSearchText] = useState("");
   const columns = [];
@@ -66,13 +79,61 @@ export const DataTableRender = ({
     };
   }, []);
 
+  const isLocationCheckedOut = (facilityId) => {
+    return (
+      checkedOutLocations
+        .map((location) => location["facId"])
+        .indexOf(parseInt(facilityId)) > -1
+    );
+  };
+
+  const isAnyLocationCheckedOutByUser = () => {
+    let result = false;
+
+    if (checkedOutLocations.length > 0) {
+      result =
+        checkedOutLocations
+          .map((location) => location["checkedOutBy"])
+          .indexOf(user.firstName) > -1;
+    }
+    return result;
+  };
+
+  const isCurrentlyCheckedOutByUser = (monitoringPlanId) => {
+    let result = false;
+
+    if (
+      checkedOutLocations
+        .map((location) => location["monPlanId"])
+        .indexOf(monitoringPlanId) > -1 &&
+      checkedOutLocations[
+        checkedOutLocations
+          .map((location) => location["monPlanId"])
+          .indexOf(monitoringPlanId)
+      ]["checkedOutBy"] === user["firstName"]
+    ) {
+      result = true;
+    }
+
+    return result;
+  };
+
+  const checkBackIn = (monitoringPlanId, title) => {
+    mpApi
+      .deleteCheckInMonitoringPlanConfiguration(monitoringPlanId)
+      .then((res) => {
+        setMostRecentlyCheckedInMonitorPlanId(
+          `${monitoringPlanId}${Math.floor(Math.random() * 1000)}`
+        );
+        setMostRecentlyCheckedInMonitorPlanIdForTab(
+          `${monitoringPlanId}${Math.floor(Math.random() * 1000)}`
+        );
+      });
+  };
+
   const AddLock = (dataRowObject) => {
     if (checkedOutLocations && checkedOutLocations.length > 0) {
-      if (
-        checkedOutLocations
-          .map((location) => location["facId"])
-          .indexOf(parseInt(dataRowObject.row["facId"])) > -1
-      ) {
+      if (isLocationCheckedOut(dataRowObject.row["facId"])) {
         return (
           <>
             <LockSharp className="row-lock margin-right-1" />{" "}
@@ -142,27 +203,55 @@ export const DataTableRender = ({
                         : `btnOpen`
                     }
                     onClick={() => openHandler(normalizedRow, false, false)}
-                    aria-label={`open ${row.col1} `}
+                    aria-label={`open ${row["col1"]} `}
                   >
                     {"Open"}
                   </Button>
-                  {/* checks out when a user is logged in  */}
-                  {" | "}
-                  <Button
-                    type="button"
-                    unstyled="true"
-                    epa-testid="btnOpenAndCheckout"
-                    className="cursor-pointer open-modal-button"
-                    id={
-                      tableTitle
-                        ? `btnOpenAndCheckout${tableTitle.split(" ").join("")}`
-                        : `btnOpenAndCheckout`
-                    }
-                    onClick={() => openHandler(normalizedRow, true)}
-                    aria-label={`open and checkout ${row.col1} `}
-                  >
-                    {"Open & Checkout"}
-                  </Button>
+
+                  {/* display a checkout option only if no other locations are currently checked out by user */}
+                  {isAnyLocationCheckedOutByUser() === false &&
+                  isLocationCheckedOut(row["facId"]) === false ? (
+                    <>
+                      <span className="margin-x-1">|</span>
+                      <Button
+                        type="button"
+                        unstyled="true"
+                        epa-testid="btnOpenAndCheckout"
+                        className="cursor-pointer open-modal-button"
+                        id={
+                          tableTitle
+                            ? `btnOpenAndCheckout${tableTitle
+                                .split(" ")
+                                .join("")}`
+                            : `btnOpenAndCheckout`
+                        }
+                        onClick={() => openHandler(normalizedRow, true)}
+                        aria-label={`open and checkout ${row.col1} `}
+                      >
+                        {"Open & Checkout"}
+                      </Button>
+                    </>
+                  ) : /* display check in option only if THIS location is currently checked out by user */
+                  isCurrentlyCheckedOutByUser(row.col3) === true ? (
+                    <>
+                      <span className="margin-x-1">|</span>
+                      <Button
+                        type="button"
+                        unstyled="true"
+                        epa-testid="btnCheckBackIn"
+                        className="cursor-pointer open-modal-button"
+                        id={
+                          tableTitle
+                            ? `btnCheckBackIn${tableTitle.split(" ").join("")}`
+                            : `btnCheckBackIn`
+                        }
+                        onClick={() => checkBackIn(row.col3, row.col1)}
+                        aria-label={`check back in ${row.col1} `}
+                      >
+                        {"Check Back In"}
+                      </Button>
+                    </>
+                  ) : null}
                 </div>
               ) : (
                 <Button
@@ -212,6 +301,7 @@ export const DataTableRender = ({
       },
     });
   }
+
   const colsFilter = (currentElement) => {
     for (const prop in currentElement) {
       // filters out any boolean properties in the data since it does
@@ -320,12 +410,12 @@ export const DataTableRender = ({
           </div>
         ) : dataLoaded && data.length === 0 ? (
           <h4
-          className={`margin-top-5 text-bold ${
-            tableStyling ? "" : "mobile:font-body-xl mobile:text-bold"
-          }`}
-        >
-          {tableTitle}
-        </h4>
+            className={`margin-top-5 text-bold ${
+              tableStyling ? "" : "mobile:font-body-xl mobile:text-bold"
+            }`}
+          >
+            {tableTitle}
+          </h4>
         ) : (
           <div className="margin-y-3 padding-y-3 react-transition fade-in font-body-sm width-full">
             <Preloader />
@@ -336,4 +426,17 @@ export const DataTableRender = ({
   );
 };
 
-export default DataTableRender;
+const mapStateToProps = (state) => {
+  return {
+    openedFacilityTabs: state.openedFacilityTabs,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCheckout: (value, title) => dispatch(setCheckoutState(value, title)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(DataTableRender);
+export { mapStateToProps };
+export { mapDispatchToProps };
