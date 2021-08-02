@@ -7,6 +7,8 @@ import "./SelectFacilitiesDataTable.scss";
 import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigurations";
 import * as facilitiesApi from "../../../utils/api/facilityApi";
 import { getCheckedOutLocations } from "../../../utils/api/monitoringPlansApi";
+import { useInterval } from "../../../additional-functions/use-interval";
+import { oneSecond } from "../../../config";
 
 export const SelectFacilitiesDataTable = ({
   user,
@@ -44,9 +46,9 @@ export const SelectFacilitiesDataTable = ({
     obtainCheckedOutLocations().then();
   }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanId]);
 
-  /*useInterval(() => {
+  useInterval(() => {
     obtainCheckedOutLocations().then();
-  }, 10 * oneSecond);*/
+  }, 3 * oneSecond);
 
   const obtainCheckedOutLocations = async () => {
     const checkedOutLocationResult = await getCheckedOutLocations();

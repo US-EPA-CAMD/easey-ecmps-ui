@@ -20,9 +20,9 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
     obtainCheckedOutLocations().then();
   }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanIdForTab]);
 
-  /*useInterval(() => {
+  useInterval(() => {
     obtainCheckedOutLocations().then();
-  }, 10 * oneSecond);*/
+  }, 3 * oneSecond);
 
   const obtainCheckedOutLocations = async () => {
     const checkedOutLocationResult = await getCheckedOutLocations();
