@@ -51,7 +51,7 @@ export const MonitoringPlanTabRender = ({
                     inactive={inactive}
                     settingInactiveCheckBox={settingInactiveCheckBox}
                     revertedState={revertedState}
-                    setRevertedState={setRevertedState}
+                    // setRevertedState={setRevertedState}
                   />,
                   "Methods",
                 ],
@@ -63,7 +63,7 @@ export const MonitoringPlanTabRender = ({
                     inactive={inactive}
                     settingInactiveCheckBox={settingInactiveCheckBox}
                     revertedState={revertedState}
-                    setRevertedState={setRevertedState}
+                    // setRevertedState={setRevertedState}
                   />,
                   "Supplemental Methods",
                 ],
@@ -74,7 +74,7 @@ export const MonitoringPlanTabRender = ({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [matsTableFlag, inactive[0], checkout]);
+  }, [matsTableFlag, inactive[0], checkout, revertedState]);
 
   // updates all tables whenever a location is changed
   useEffect(() => {
@@ -92,7 +92,7 @@ export const MonitoringPlanTabRender = ({
             inactive={inactive}
             settingInactiveCheckBox={settingInactiveCheckBox}
             revertedState={revertedState}
-            setRevertedState={setRevertedState}
+            // setRevertedState={setRevertedState}
           />,
           "Methods",
         ],
@@ -111,7 +111,7 @@ export const MonitoringPlanTabRender = ({
             checkout={checkout}
             user={user}
             revertedState={revertedState}
-            setRevertedState={setRevertedState}
+            // setRevertedState={setRevertedState}
           />,
           "Systems",
         ],
@@ -120,7 +120,7 @@ export const MonitoringPlanTabRender = ({
     ]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelect, inactive[0], checkout]);
+  }, [locationSelect, inactive[0], checkout, revertedState]);
 
   // sets initial state
   const [tableState, setTableState] = useState([
@@ -137,7 +137,7 @@ export const MonitoringPlanTabRender = ({
           inactive={inactive}
           settingInactiveCheckBox={settingInactiveCheckBox}
           revertedState={revertedState}
-          setRevertedState={setRevertedState}
+          // setRevertedState={setRevertedState}
         />,
         "Methods",
       ],
@@ -154,7 +154,7 @@ export const MonitoringPlanTabRender = ({
           inactive={inactive}
           settingInactiveCheckBox={settingInactiveCheckBox}
           revertedState={revertedState}
-          setRevertedState={setRevertedState}
+          // setRevertedState={setRevertedState}
           checkout={checkout}
           user={user}
         />,

@@ -50,7 +50,7 @@ export const HeaderInfo = ({
   useEffect(() => {
     setCheckoutState(checkout);
   }, [checkout]);
-  
+
   const isCheckedOutByUser = () => {
     return (
       checkedOutLocations
@@ -191,7 +191,7 @@ export const HeaderInfo = ({
                         epa-testid="checkOutBTN"
                       >
                         <CreateOutlined color="primary" /> {"Check Out"}
-                      </Button> 
+                      </Button>
                     ) : null}
                     {checkoutState
                       ? `Currently checked out by: ${
@@ -255,7 +255,9 @@ export const HeaderInfo = ({
                 Comments
               </a>
             </span>
-            <span className={`${checkout? "border-right-1px border-gray-90" : ''}`}>
+            <span
+              className={`${checkout ? "border-right-1px border-gray-90" : ""}`}
+            >
               <a href="#/" className="margin-right-4 text-bold">
                 Reports
               </a>
