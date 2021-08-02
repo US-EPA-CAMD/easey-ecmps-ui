@@ -4,7 +4,7 @@ import * as fs from "../../../utils/selectors/monitoringConfigurations";
 import { loadMonitoringPlansArray } from "../../../store/actions/monitoringPlans";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import DataTableRender from "../../DataTableRender/DataTableRender";
-
+import { setCheckoutState } from "../../../store/actions/dynamicFacilityTab";
 export const DataTableConfigurations = ({
   loadMonitoringPlansData,
   monitoringPlans,
@@ -15,6 +15,7 @@ export const DataTableConfigurations = ({
   checkedOutLocations,
   setMostRecentlyCheckedInMonitorPlanId,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
+  setCheckout,
 }) => {
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -39,17 +40,45 @@ export const DataTableConfigurations = ({
     return val;
   };
 
-  const openConfig = (config, checkout) => {
+  const checkBackIn = (monitoringPlanId, title, orisCode) => {
+    mpApi
+      .deleteCheckInMonitoringPlanConfiguration(monitoringPlanId)
+      .then((res) => {
+        setMostRecentlyCheckedInMonitorPlanId(
+          `${monitoringPlanId}${Math.floor(Math.random() * 1000)}`
+        );
+        setMostRecentlyCheckedInMonitorPlanIdForTab(
+          `${monitoringPlanId}${Math.floor(Math.random() * 1000)}`
+        );
+        setCheckout(false, monitoringPlanId);
+      });
+  };
+
+  const openConfig = (config, checkout, checkIn) => {
     const selectedConfigData = findSelectedConfig(config.col3);
-    if (checkout) {
-      mpApi
-        .postCheckoutMonitoringPlanConfiguration(config.col3, user.firstName)
-        .then((res) => {
-          console.log(res, "data");
-          setSelectedConfig([data, selectedConfigData, checkout]);
-        });
+    if (!checkIn) {
+      if (checkout) {
+        mpApi
+          .postCheckoutMonitoringPlanConfiguration(config.col3, user.firstName)
+          .then((res) => {
+            console.log(res, "data");
+            setSelectedConfig([data, selectedConfigData, checkout]);
+          });
+      } else {
+        setSelectedConfig([data, selectedConfigData, checkout]);
+      }
     } else {
-      setSelectedConfig([data, selectedConfigData, checkout]);
+      const title = `${data.col1} (${selectedConfigData.name}) ${
+        selectedConfigData.active ? "" : "Inactive"
+      }`;
+      // monitoring plan id for api check in
+      // title for redux state check in
+      // oris code for redux state check in
+      checkBackIn(selectedConfigData.id, title, data.col2);
+      //       0: {col1: "Barry", col2: "3", col3: "AL", col4: "3", facId: "1", …}
+      // 1: {id: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A", facId: "1", name: "1, 2, CS0AAN", locations: Array(3), endReportPeriodId: null, …}
+
+      // console.log("check", [data, selectedConfigData, checkout]);
     }
   };
 
@@ -106,6 +135,7 @@ export const DataTableConfigurations = ({
         setMostRecentlyCheckedInMonitorPlanIdForTab={
           setMostRecentlyCheckedInMonitorPlanIdForTab
         }
+        setCheckBackInState={setCheckout}
       />
     </div>
   );
@@ -121,6 +151,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     loadMonitoringPlansData: (orisCode) =>
       dispatch(loadMonitoringPlansArray(orisCode)),
+    setCheckout: (value, configID) =>
+      dispatch(setCheckoutState(value, configID)),
   };
 };
 export default connect(

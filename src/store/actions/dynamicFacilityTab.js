@@ -28,10 +28,10 @@ export const setSectionSelectionState = (section, title) => {
   };
 };
 
-export const setCheckoutState = (checkout, title) => {
+export const setCheckoutState = (checkout, configID) => {
   return {
     type: types.SET_CHECKOUT_STATE,
-    title,
+    configID,
     checkout,
   };
 };

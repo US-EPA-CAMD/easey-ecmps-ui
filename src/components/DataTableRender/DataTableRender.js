@@ -50,6 +50,7 @@ export const DataTableRender = ({
   openHandler,
   checkout,
   actionsBtn,
+  
   // for data table
   pagination,
   filter,
@@ -66,6 +67,7 @@ export const DataTableRender = ({
   openedFacilityTabs,
   setMostRecentlyCheckedInMonitorPlanId,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
+  // setCheckBackInState
 }) => {
   const [searchText, setSearchText] = useState("");
   const columns = [];
@@ -118,7 +120,7 @@ export const DataTableRender = ({
     return result;
   };
 
-  const checkBackIn = (monitoringPlanId, title) => {
+  const checkBackIn = (monitoringPlanId, title,row) => {
     mpApi
       .deleteCheckInMonitoringPlanConfiguration(monitoringPlanId)
       .then((res) => {
@@ -128,7 +130,9 @@ export const DataTableRender = ({
         setMostRecentlyCheckedInMonitorPlanIdForTab(
           `${monitoringPlanId}${Math.floor(Math.random() * 1000)}`
         );
+        // setCheckBackInState
       });
+      console.log('row',row)
   };
 
   const AddLock = (dataRowObject) => {
@@ -245,7 +249,8 @@ export const DataTableRender = ({
                             ? `btnCheckBackIn${tableTitle.split(" ").join("")}`
                             : `btnCheckBackIn`
                         }
-                        onClick={() => checkBackIn(row.col3, row.col1)}
+                        onClick={() => openHandler(normalizedRow,false,true)}
+                          // checkBackIn(row.col3, row.col1,row)}
                         aria-label={`check back in ${row.col1} `}
                       >
                         {"Check Back In"}
@@ -434,7 +439,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setCheckout: (value, title) => dispatch(setCheckoutState(value, title)),
+    setCheckout: (value, configID) => dispatch(setCheckoutState(value, configID)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(DataTableRender);

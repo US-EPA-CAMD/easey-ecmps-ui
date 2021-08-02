@@ -159,7 +159,7 @@ export const MonitoringPlanTabRender = ({
     // calls check in api
     checkoutAPI(false);
     // sets the state of checked in config  in redux
-    setCheckout(false, title);
+    setCheckout(false, configID);
   };
   // ***
   //false => check back in
@@ -170,7 +170,7 @@ export const MonitoringPlanTabRender = ({
         .deleteCheckInMonitoringPlanConfiguration(selectedConfig.id)
         .then((res) => {
           console.log(res, "checked back in ");
-          setCheckout(false, title);
+          setCheckout(false, configID);
           if (res === undefined) {
             console.log("error");
           }
@@ -183,7 +183,7 @@ export const MonitoringPlanTabRender = ({
         )
         .then((res) => {
           console.log(res, "data");
-          setCheckout(true, title);
+          setCheckout(true, configID);
           if (res === undefined) {
             console.log("this configuration is already checked out ");
           }
