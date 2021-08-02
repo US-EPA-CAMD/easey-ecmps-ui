@@ -95,7 +95,7 @@ export const SelectFacilitiesDataTable = ({
         ),
         orisCode: info[0].col2,
         selectedConfig: info[1],
-        checkout: info[2],
+        checkout: info[2]
       },
     ]);
   };
