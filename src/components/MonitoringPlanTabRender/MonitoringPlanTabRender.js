@@ -33,6 +33,8 @@ export const MonitoringPlanTabRender = ({
   const settingInactiveCheckBox = (check, disable) => {
     setInactive([check, disable], title);
   };
+
+  const [revertedState, setRevertedState] = useState(false);
   // checks mats table
   useEffect(() => {
     if (matsTableFlag) {
@@ -48,6 +50,8 @@ export const MonitoringPlanTabRender = ({
                     user={user}
                     inactive={inactive}
                     settingInactiveCheckBox={settingInactiveCheckBox}
+                    revertedState={revertedState}
+                    setRevertedState={setRevertedState}
                   />,
                   "Methods",
                 ],
@@ -58,6 +62,8 @@ export const MonitoringPlanTabRender = ({
                     user={user}
                     inactive={inactive}
                     settingInactiveCheckBox={settingInactiveCheckBox}
+                    revertedState={revertedState}
+                    setRevertedState={setRevertedState}
                   />,
                   "Supplemental Methods",
                 ],
@@ -68,7 +74,7 @@ export const MonitoringPlanTabRender = ({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [matsTableFlag, inactive[0], checkout]);
+  }, [matsTableFlag, inactive[0], checkout, revertedState]);
 
   // updates all tables whenever a location is changed
   useEffect(() => {
@@ -85,6 +91,8 @@ export const MonitoringPlanTabRender = ({
             user={user}
             inactive={inactive}
             settingInactiveCheckBox={settingInactiveCheckBox}
+            revertedState={revertedState}
+            setRevertedState={setRevertedState}
           />,
           "Methods",
         ],
@@ -102,6 +110,8 @@ export const MonitoringPlanTabRender = ({
             settingInactiveCheckBox={settingInactiveCheckBox}
             checkout={checkout}
             user={user}
+            revertedState={revertedState}
+            setRevertedState={setRevertedState}
           />,
           "Systems",
         ],
@@ -110,7 +120,7 @@ export const MonitoringPlanTabRender = ({
     ]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelect, inactive[0], checkout]);
+  }, [locationSelect, inactive[0], checkout, revertedState]);
 
   // sets initial state
   const [tableState, setTableState] = useState([
@@ -126,6 +136,8 @@ export const MonitoringPlanTabRender = ({
           user={user}
           inactive={inactive}
           settingInactiveCheckBox={settingInactiveCheckBox}
+          revertedState={revertedState}
+          setRevertedState={setRevertedState}
         />,
         "Methods",
       ],
@@ -141,6 +153,8 @@ export const MonitoringPlanTabRender = ({
           locationSelectValue={locationSelect[1]}
           inactive={inactive}
           settingInactiveCheckBox={settingInactiveCheckBox}
+          revertedState={revertedState}
+          // setRevertedState={setRevertedState}
           checkout={checkout}
           user={user}
         />,
@@ -217,6 +231,7 @@ export const MonitoringPlanTabRender = ({
           setInactive={setInactive}
           inactive={inactive}
           checkedOutLocations={checkedOutLocations}
+          setRevertedState={setRevertedState}
         />
       </div>
       <hr />

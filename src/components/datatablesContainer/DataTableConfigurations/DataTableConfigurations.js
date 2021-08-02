@@ -40,7 +40,7 @@ export const DataTableConfigurations = ({
     return val;
   };
 
-  const checkBackIn = (monitoringPlanId, title, orisCode) => {
+  const checkBackIn = (monitoringPlanId) => {
     mpApi
       .deleteCheckInMonitoringPlanConfiguration(monitoringPlanId)
       .then((res) => {
@@ -74,13 +74,11 @@ export const DataTableConfigurations = ({
         setSelectedConfig([data, selectedConfigData, checkout]);
       }
     } else {
-      const title = `${data.col1} (${selectedConfigData.name}) ${
-        selectedConfigData.active ? "" : "Inactive"
-      }`;
+
       // monitoring plan id for api check in
-      // title for redux state check in
       // oris code for redux state check in
-      checkBackIn(selectedConfigData.id, title, data.col2);
+      checkBackIn(selectedConfigData.id);
+
     }
   };
 

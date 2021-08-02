@@ -36,7 +36,6 @@ const reducer = (state, action) => {
 
       break;
     case types.SET_CHECKOUT_STATE:
-      console.log('action.configID',action.configID,action.orisCode)
       if (currentState && currentState.length > 0) {
         returnObject = currentState.map((x) =>
           x.selectedConfig.id === action.configID
@@ -46,6 +45,8 @@ const reducer = (state, action) => {
               }
             : x
         );
+      }else{
+        returnObject = currentState
       }
       break;
     case types.SET_INACTIVE_STATE:
