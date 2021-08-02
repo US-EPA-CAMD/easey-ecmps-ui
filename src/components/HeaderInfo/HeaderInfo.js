@@ -79,6 +79,20 @@ export const HeaderInfo = ({
     ];
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const formattedDate =
+      (date.getMonth() > 8
+        ? date.getMonth() + 1
+        : "0" + (date.getMonth() + 1)) +
+      "/" +
+      (date.getDate() > 9 ? date.getDate() : "0" + date.getDate()) +
+      "/" +
+      date.getFullYear();
+
+    return formattedDate;
+  };
+
   const [checkedOutByUser, setCheckedOutByUser] = useState(
     isCheckedOutByUser()
   );
@@ -166,7 +180,7 @@ export const HeaderInfo = ({
                     ) : checkedOutLocations
                         .map((location) => location["monPlanId"])
                         .indexOf(selectedConfig.id) === -1 ? (
-                      <Button
+                      /*<Button
                         outline={true}
                         tabIndex="0"
                         aria-label={`Check out the configuration`}
@@ -176,15 +190,21 @@ export const HeaderInfo = ({
                         epa-testid="checkOutBTN"
                       >
                         <CreateOutlined color="primary" /> {"Check Out"}
-                      </Button>
+                      </Button>*/ <>
+
+                      </>
                     ) : null}
                     {checkoutState
-                      ? `Currently checked out by:${user.firstName}`
+                      ? `Currently checked out by: ${
+                          user.firstName
+                        } ${formatDate(new Date())}`
                       : displayLock
                       ? `Last checked out by: ${
                           findCurrentlyCheckedOutByInfo()["checkedOutBy"]
-                        }`
-                      : `Last checked out by: ${user.firstName}`}
+                        } ${formatDate(
+                          findCurrentlyCheckedOutByInfo()["checkedOutOn"]
+                        )}`
+                      : null}
                   </div>
                 ) : (
                   ""

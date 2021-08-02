@@ -96,7 +96,7 @@ export const Tabs = ({
                     }
                   }}
                 >
-                  <div className="text-center tab-button-text-container">
+                  <div className="text-center tab-button-text-container ellipsis-text padding-left-2px">
                     {el.props.locationId &&
                     isCheckedOut(el.props.locationId) ? (
                       <LockSharp className="text-bold tab-icon margin-right-2" />
