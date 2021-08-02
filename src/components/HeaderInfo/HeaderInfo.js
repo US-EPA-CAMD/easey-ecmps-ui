@@ -50,6 +50,7 @@ export const HeaderInfo = ({
   useEffect(() => {
     setCheckoutState(checkout);
   }, [checkout]);
+  
   const isCheckedOutByUser = () => {
     return (
       checkedOutLocations
@@ -180,7 +181,7 @@ export const HeaderInfo = ({
                     ) : checkedOutLocations
                         .map((location) => location["monPlanId"])
                         .indexOf(selectedConfig.id) === -1 ? (
-                      /*<Button
+                      <Button
                         outline={true}
                         tabIndex="0"
                         aria-label={`Check out the configuration`}
@@ -190,9 +191,7 @@ export const HeaderInfo = ({
                         epa-testid="checkOutBTN"
                       >
                         <CreateOutlined color="primary" /> {"Check Out"}
-                      </Button>*/ <>
-
-                      </>
+                      </Button> 
                     ) : null}
                     {checkoutState
                       ? `Currently checked out by: ${
