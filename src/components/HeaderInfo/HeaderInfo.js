@@ -123,7 +123,7 @@ export const HeaderInfo = ({
   };
   return (
     <div className="header">
-      {/* <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
+      <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       {show ? (
         <Modal
           show={show}
@@ -140,7 +140,7 @@ export const HeaderInfo = ({
             <div>{"Do you want to revert back to the official record?"}</div>
           }
         />
-      ) : null} */}
+      ) : null}
       <div className="grid-row clearfix position-relative">
         <div className="grid-col float-left">
           <div>
