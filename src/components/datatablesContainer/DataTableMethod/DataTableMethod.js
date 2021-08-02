@@ -22,7 +22,7 @@ export const DataTableMethod = ({
   inactive,
   settingInactiveCheckBox,
   revertedState,
-  // setRevertedState,
+  setRevertedState,
   showModal = false,
 }) => {
   const [methods, setMethods] = useState([]);
@@ -48,6 +48,7 @@ export const DataTableMethod = ({
       locationSelectValue ||
       revertedState
     ) {
+      console.log('test',revertedState)
       mpApi.getMonitoringMethods(locationSelectValue).then((res) => {
         setMethods(res.data);
         setDataLoaded(true);
@@ -56,10 +57,10 @@ export const DataTableMethod = ({
         setMatsMethods(res.data);
       });
       setUpdateTable(false);
-      // setRevertedState(false);
+      setRevertedState(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, updateTable]);
+  }, [locationSelectValue, updateTable,revertedState]);
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)

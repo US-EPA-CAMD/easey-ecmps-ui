@@ -51,7 +51,7 @@ export const MonitoringPlanTabRender = ({
                     inactive={inactive}
                     settingInactiveCheckBox={settingInactiveCheckBox}
                     revertedState={revertedState}
-                    // setRevertedState={setRevertedState}
+                    setRevertedState={setRevertedState}
                   />,
                   "Methods",
                 ],
@@ -63,7 +63,7 @@ export const MonitoringPlanTabRender = ({
                     inactive={inactive}
                     settingInactiveCheckBox={settingInactiveCheckBox}
                     revertedState={revertedState}
-                    // setRevertedState={setRevertedState}
+                    setRevertedState={setRevertedState}
                   />,
                   "Supplemental Methods",
                 ],
@@ -92,7 +92,7 @@ export const MonitoringPlanTabRender = ({
             inactive={inactive}
             settingInactiveCheckBox={settingInactiveCheckBox}
             revertedState={revertedState}
-            // setRevertedState={setRevertedState}
+            setRevertedState={setRevertedState}
           />,
           "Methods",
         ],
@@ -111,7 +111,7 @@ export const MonitoringPlanTabRender = ({
             checkout={checkout}
             user={user}
             revertedState={revertedState}
-            // setRevertedState={setRevertedState}
+            setRevertedState={setRevertedState}
           />,
           "Systems",
         ],
@@ -137,7 +137,7 @@ export const MonitoringPlanTabRender = ({
           inactive={inactive}
           settingInactiveCheckBox={settingInactiveCheckBox}
           revertedState={revertedState}
-          // setRevertedState={setRevertedState}
+          setRevertedState={setRevertedState}
         />,
         "Methods",
       ],
