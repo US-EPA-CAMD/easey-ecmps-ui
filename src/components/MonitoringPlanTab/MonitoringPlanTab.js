@@ -27,6 +27,7 @@ export const MonitoringPlanTab = ({
   checkedOutLocations,
   setMostRecentlyCheckedInMonitorPlanId,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
+  mostRecentlyCheckedInMonitorPlanIdForTab,
 }) => {
   const [sectionSelect, setSectionSelect] = useState(tabs[activeTab].section);
   useEffect(() => {

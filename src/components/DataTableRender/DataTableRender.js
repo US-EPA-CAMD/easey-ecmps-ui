@@ -66,6 +66,7 @@ export const DataTableRender = ({
   openedFacilityTabs,
   setMostRecentlyCheckedInMonitorPlanId,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
+  setCheckout,
 }) => {
   const [searchText, setSearchText] = useState("");
   const columns = [];
@@ -122,6 +123,7 @@ export const DataTableRender = ({
     mpApi
       .deleteCheckInMonitoringPlanConfiguration(monitoringPlanId)
       .then((res) => {
+        setCheckout(false, title);
         setMostRecentlyCheckedInMonitorPlanId(
           `${monitoringPlanId}${Math.floor(Math.random() * 1000)}`
         );
