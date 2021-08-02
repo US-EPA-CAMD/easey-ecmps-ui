@@ -87,16 +87,6 @@ export const InactivityTracker = ({ apiCall, countdownAPI }) => {
     <div>
       <div className={`usa-overlay ${showInactiveModal ? "is-visible" : ""}`} />
 
-      <div>
-        <Button type="button" onClick={toggleInactivityTracking}>
-          {trackInactivity === false
-            ? "Start Tracking Inactivity"
-            : "Stop Tracking Inactivity"}
-        </Button>
-        <span className="margin-left-3">
-          time inactive: {timeInactive / 1000} seconds
-        </span>
-      </div>
       {showInactiveModal ? (
         <Modal
           show={showInactiveModal}

@@ -20,9 +20,9 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
     obtainCheckedOutLocations().then();
   }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanIdForTab]);
 
-  useInterval(() => {
+  /*useInterval(() => {
     obtainCheckedOutLocations().then();
-  }, 3 * oneSecond);
+  }, 3 * oneSecond);*/
 
   const obtainCheckedOutLocations = async () => {
     const checkedOutLocationResult = await getCheckedOutLocations();
@@ -67,6 +67,12 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
             user={user}
             checkout={row.checkout}
             checkedOutLocations={checkedOutLocations}
+            mostRecentlyCheckedInMonitorPlanIdForTab={
+              mostRecentlyCheckedInMonitorPlanIdForTab
+            }
+            setMostRecentlyCheckedInMonitorPlanIdForTab={
+              setMostRecentlyCheckedInMonitorPlanIdForTab
+            }
           />
         ),
         orisCode: row.orisCode,
