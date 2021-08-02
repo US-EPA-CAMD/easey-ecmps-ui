@@ -47,11 +47,9 @@ export const HeaderInfo = ({
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
   const [checkoutState, setCheckoutState] = useState(checkout);
 
-
-  useEffect(()=>{
-
-    setCheckoutState(checkout)
-  },[checkout])
+  useEffect(() => {
+    setCheckoutState(checkout);
+  }, [checkout]);
   const isCheckedOutByUser = () => {
     return (
       checkedOutLocations
@@ -238,12 +236,12 @@ export const HeaderInfo = ({
                 Comments
               </a>
             </span>
-            <span className="border-right-1px border-gray-90">
+            <span className={`${checkout? "border-right-1px border-gray-90" : ''}`}>
               <a href="#/" className="margin-right-4 text-bold">
                 Reports
               </a>
             </span>
-            {!checkout ? (
+            {checkout ? (
               <div>
                 <Button type="button" className="margin-left-4" outline={true}>
                   Evaluate
@@ -251,16 +249,17 @@ export const HeaderInfo = ({
                 <Button type="button" className="" outline={true}>
                   Submit
                 </Button>
+                <Button
+                  type="button"
+                  className="margin-left-4"
+                  onClick={() => setShow(true)}
+                  outline={true}
+                >
+                  {"Revert to Official Record"}
+                </Button>
               </div>
             ) : (
-              <Button
-                type="button"
-                className="margin-left-4"
-                onClick={() => setShow(true)}
-                outline={true}
-              >
-                {"Revert to Official Record"}
-              </Button>
+              ""
             )}
           </div>
           <div className="grid-row padding-1 float-right text-right margin-right-3">
