@@ -46,9 +46,9 @@ export const SelectFacilitiesDataTable = ({
     obtainCheckedOutLocations().then();
   }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanId]);
 
-  useInterval(() => {
+  /*useInterval(() => {
     obtainCheckedOutLocations().then();
-  }, 3 * oneSecond);
+  }, 3 * oneSecond);*/
 
   const obtainCheckedOutLocations = async () => {
     const checkedOutLocationResult = await getCheckedOutLocations();
@@ -95,7 +95,7 @@ export const SelectFacilitiesDataTable = ({
         ),
         orisCode: info[0].col2,
         selectedConfig: info[1],
-        checkout: info[2],
+        checkout: info[2]
       },
     ]);
   };

@@ -27,6 +27,7 @@ export const MonitoringPlanTab = ({
   checkedOutLocations,
   setMostRecentlyCheckedInMonitorPlanId,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
+  mostRecentlyCheckedInMonitorPlanIdForTab,
 }) => {
   const [sectionSelect, setSectionSelect] = useState(tabs[activeTab].section);
   useEffect(() => {
@@ -87,7 +88,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(setSectionSelectionState(section, title)),
     setActiveTab: (orisCode, value) => dispatch(setActiveTab(orisCode, value)),
     setInactive: (value, title) => dispatch(setInactiveState(value, title)),
-    setCheckout: (value, title) => dispatch(setCheckoutState(value, title)),
+    setCheckout: (value, configID) => dispatch(setCheckoutState(value, configID)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(MonitoringPlanTab);

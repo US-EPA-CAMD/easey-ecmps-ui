@@ -27,16 +27,8 @@ import {
 
 // *** scss
 import "./DataTableRender.scss";
-import * as mpApi from "../../utils/api/monitoringPlansApi";
-import {
-  setCheckoutState,
-  setInactiveState,
-  setLocationSelectionState,
-  setSectionSelectionState,
-} from "../../store/actions/dynamicFacilityTab";
-import { setActiveTab } from "../../store/actions/activeTab";
+import { setCheckoutState } from "../../store/actions/dynamicFacilityTab";
 import { connect } from "react-redux";
-import { MonitoringPlanTab } from "../MonitoringPlanTab/MonitoringPlanTab";
 
 export const DataTableRender = ({
   sectionTitle,
@@ -50,6 +42,7 @@ export const DataTableRender = ({
   openHandler,
   checkout,
   actionsBtn,
+
   // for data table
   pagination,
   filter,
@@ -66,6 +59,7 @@ export const DataTableRender = ({
   openedFacilityTabs,
   setMostRecentlyCheckedInMonitorPlanId,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
+  setCheckout,
 }) => {
   const [searchText, setSearchText] = useState("");
   const columns = [];
@@ -116,19 +110,6 @@ export const DataTableRender = ({
     }
 
     return result;
-  };
-
-  const checkBackIn = (monitoringPlanId, title) => {
-    mpApi
-      .deleteCheckInMonitoringPlanConfiguration(monitoringPlanId)
-      .then((res) => {
-        setMostRecentlyCheckedInMonitorPlanId(
-          `${monitoringPlanId}${Math.floor(Math.random() * 1000)}`
-        );
-        setMostRecentlyCheckedInMonitorPlanIdForTab(
-          `${monitoringPlanId}${Math.floor(Math.random() * 1000)}`
-        );
-      });
   };
 
   const AddLock = (dataRowObject) => {
@@ -245,7 +226,7 @@ export const DataTableRender = ({
                             ? `btnCheckBackIn${tableTitle.split(" ").join("")}`
                             : `btnCheckBackIn`
                         }
-                        onClick={() => checkBackIn(row.col3, row.col1)}
+                        onClick={() => openHandler(normalizedRow, false, true)}
                         aria-label={`check back in ${row.col1} `}
                       >
                         {"Check Back In"}
@@ -434,7 +415,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setCheckout: (value, title) => dispatch(setCheckoutState(value, title)),
+    setCheckout: (value, configID) =>
+      dispatch(setCheckoutState(value, configID)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(DataTableRender);

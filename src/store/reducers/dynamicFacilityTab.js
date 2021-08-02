@@ -36,9 +36,10 @@ const reducer = (state, action) => {
 
       break;
     case types.SET_CHECKOUT_STATE:
+      console.log('action.configID',action.configID,action.orisCode)
       if (currentState && currentState.length > 0) {
         returnObject = currentState.map((x) =>
-          x.name === action.title
+          x.selectedConfig.id === action.configID
             ? {
                 ...x,
                 checkout: action.checkout,
