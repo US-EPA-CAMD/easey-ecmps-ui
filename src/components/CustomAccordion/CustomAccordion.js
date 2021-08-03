@@ -8,6 +8,7 @@ import {
 const CustomAccordion = ({ title, table }) => {
   const [open, setOpen] = useState(table.map((item, index) => true));
 
+  console.log('TABLE',table)
   useEffect(() => {
     setOpen(table.map((item, index) => true));
   }, [table]);
@@ -18,9 +19,9 @@ const CustomAccordion = ({ title, table }) => {
   return (
     <div className="">
       {table.map((item, index) => (
-        <div key={index} className="grid-row ">
+        <span key={index} className="grid-row ">
           {open[index] ? (
-            <div className="text-bold font-body-xl display-block height-auto">
+            <span  className="text-bold ">
               <Button
                 aria-label={`Collapse ${item[1]}`}
                 className="bg-base-lighter text-black"
@@ -31,9 +32,9 @@ const CustomAccordion = ({ title, table }) => {
                 <KeyboardArrowUpSharp />
               </Button>
               {item[1]}
-            </div>
+            </span >
           ) : (
-            <div className="text-bold font-body-xl display-block height-auto ">
+            <span  className="text-bold">
               <Button
                 aria-label={`Expand ${item[1]}`}
                 epa-testid="expandBTN"
@@ -44,16 +45,16 @@ const CustomAccordion = ({ title, table }) => {
                 <KeyboardArrowDownSharp />
               </Button>
               {item[1]}
-            </div>
+            </span >
           )}
           {open[index] ? (
-            <div className="float-left ">
+            <span className=" ">
               {item[0]} {" "}
-            </div>
+            </span>
           ) : (
             ""
           )}
-        </div>
+        </span>
       ))}
     </div>
   );

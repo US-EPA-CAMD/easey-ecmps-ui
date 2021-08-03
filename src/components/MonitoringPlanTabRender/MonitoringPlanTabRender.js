@@ -120,7 +120,7 @@ export const MonitoringPlanTabRender = ({
     ]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelect, inactive[0], checkout, revertedState]);
+  }, [locationSelect, inactive[0], checkout, revertedState,]);
 
   // sets initial state
   const [tableState, setTableState] = useState([
