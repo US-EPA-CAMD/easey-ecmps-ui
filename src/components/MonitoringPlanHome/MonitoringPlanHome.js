@@ -86,12 +86,12 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
   return (
     <div className="react-transition fade-in padding-x-3">
       <div className="text-black margin-top-1 display-none tablet:display-block">
-        <h1
+        <h2
           className="display-inline-block page-header"
           epa-testid="monPlansTitle"
         >
           Monitoring Plans
-        </h1>
+        </h2>
         <Button
           type="button"
           className="float-right clearfix radius-2 position-relative top-2"

@@ -18,7 +18,7 @@ const CustomAccordion = ({ title, table }) => {
   return (
     <div className="">
       {table.map((item, index) => (
-        <div key={index} className="grid-row ">
+        <div key={index} className=" ">
           {open[index] ? (
             <div className="text-bold font-body-xl display-block height-auto">
               <Button
@@ -47,12 +47,13 @@ const CustomAccordion = ({ title, table }) => {
             </div>
           )}
           {open[index] ? (
-            <div className="float-left ">
+            <div className=" ">
               {item[0]} {" "}
             </div>
           ) : (
             ""
           )}
+          <br/>
         </div>
       ))}
     </div>

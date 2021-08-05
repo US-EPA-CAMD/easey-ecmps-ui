@@ -16,6 +16,8 @@ export const DataTableMats = ({
   locationSelectValue,
   user,
   checkout,
+  revertedState,
+  setRevertedState,
   // inactive,
   // settingInactiveCheckBox,
 }) => {
@@ -29,7 +31,7 @@ export const DataTableMats = ({
   const [updateTable,setUpdateTable] = useState(false)
   useEffect(() => {
 
-    if(updateTable || matsMethods.length <= 0 || locationSelectValue){
+    if(updateTable || matsMethods.length <= 0 || locationSelectValue || revertedState){
 
     mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
       setMatsMethods(res.data);
@@ -38,7 +40,7 @@ export const DataTableMats = ({
     setUpdateTable(false);
   }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue,updateTable]);
+  }, [locationSelectValue,updateTable,revertedState]);
   const [selectedMatsMethods, setSelectedMatsMethods] = useState(null);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)

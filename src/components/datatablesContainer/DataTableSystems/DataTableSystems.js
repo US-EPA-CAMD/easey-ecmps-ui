@@ -22,20 +22,31 @@ export const DataTableSystems = ({
   user,
   checkout,
   settingInactiveCheckBox,
+  revertedState,
+  setRevertedState,
 }) => {
   const [show, setShow] = useState(false);
   const [monitoringSystems, setMonitoringSystems] = useState([]);
   const [secondLevel, setSecondLevel] = useState(false);
   // const [firstLevel, setFirstLevel] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [updateTable, setUpdateTable] = useState(false);
   useEffect(() => {
-    mpApi.getMonitoringSystems(locationSelectValue).then((res) => {
-      setDataLoaded(true);
-      setMonitoringSystems(res.data);
-    });
-
+    if (
+      updateTable ||
+      monitoringSystems.length <= 0 ||
+      locationSelectValue ||
+      revertedState
+    ) {
+      mpApi.getMonitoringSystems(locationSelectValue).then((res) => {
+        
+        setMonitoringSystems(res.data);setDataLoaded(true);
+      });
+      setUpdateTable(false);
+      setRevertedState(false);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue]);
+  }, [locationSelectValue, updateTable, revertedState]);
 
   const closeModalHandler = () => {
     setSecondLevel(false);
@@ -77,7 +88,8 @@ export const DataTableSystems = ({
           endDate: ["End Date", "date", ""],
           endHour: ["End Time", "time", ""],
         },
-        create,false
+        create,
+        false
       )
     );
     if (create) {

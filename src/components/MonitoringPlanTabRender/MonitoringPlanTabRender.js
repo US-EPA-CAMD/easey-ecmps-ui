@@ -36,49 +36,49 @@ export const MonitoringPlanTabRender = ({
 
   const [revertedState, setRevertedState] = useState(false);
   // checks mats table
-  useEffect(() => {
-    if (matsTableFlag) {
-      setTableState(
-        tableState.map((element, index) =>
-          index === 3
-            ? [
-                [
-                  <DataTableMethod
-                    matsTableHandler={matsTableHandler}
-                    locationSelectValue={parseInt(locationSelect[1])}
-                    checkout={checkout}
-                    user={user}
-                    inactive={inactive}
-                    settingInactiveCheckBox={settingInactiveCheckBox}
-                    revertedState={revertedState}
-                    setRevertedState={setRevertedState}
-                  />,
-                  "Methods",
-                ],
-                [
-                  <DataTableMats
-                    locationSelectValue={locationSelect[1]}
-                    checkout={checkout}
-                    user={user}
-                    inactive={inactive}
-                    settingInactiveCheckBox={settingInactiveCheckBox}
-                    revertedState={revertedState}
-                    setRevertedState={setRevertedState}
-                  />,
-                  "Supplemental Methods",
-                ],
-              ]
-            : element
-        )
-      );
-    }
+  // useEffect(() => {
+  //   if (matsTableFlag) {
+  //     setTableState(
+  //       tableState.map((element, index) =>
+  //         index === 3
+  //           ? [
+  //               [
+  //                 <DataTableMethod
+  //                   matsTableHandler={matsTableHandler}
+  //                   locationSelectValue={parseInt(locationSelect[1])}
+  //                   checkout={checkout}
+  //                   user={user}
+  //                   inactive={inactive}
+  //                   settingInactiveCheckBox={settingInactiveCheckBox}
+  //                   revertedState={revertedState}
+  //                   setRevertedState={setRevertedState}
+  //                 />,
+  //                 "Methods",
+  //               ],
+  //               [
+  //                 <DataTableMats
+  //                   locationSelectValue={locationSelect[1]}
+  //                   checkout={checkout}
+  //                   user={user}
+  //                   inactive={inactive}
+  //                   settingInactiveCheckBox={settingInactiveCheckBox}
+  //                   revertedState={revertedState}
+  //                   setRevertedState={setRevertedState}
+  //                 />,
+  //                 "Supplemental Methods",
+  //               ],
+  //             ]
+  //           : element
+  //       )
+  //     );
+  //   }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [matsTableFlag, inactive[0], checkout, revertedState]);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [matsTableFlag, inactive[0], checkout, revertedState]);
 
   // updates all tables whenever a location is changed
   useEffect(() => {
-    setTableState([
+    let tableArr = [
       [],
       [],
       [],
@@ -117,10 +117,44 @@ export const MonitoringPlanTabRender = ({
         ],
       ],
       [],
-    ]);
+    ];
 
+    if (matsTableFlag) {
+      tableArr = tableState.map((element, index) =>
+        index === 3
+          ? [
+              [
+                <DataTableMethod
+                  matsTableHandler={matsTableHandler}
+                  locationSelectValue={parseInt(locationSelect[1])}
+                  checkout={checkout}
+                  user={user}
+                  inactive={inactive}
+                  settingInactiveCheckBox={settingInactiveCheckBox}
+                  revertedState={revertedState}
+                  setRevertedState={setRevertedState}
+                />,
+                "Methods",
+              ],
+              [
+                <DataTableMats
+                  locationSelectValue={locationSelect[1]}
+                  checkout={checkout}
+                  user={user}
+                  inactive={inactive}
+                  settingInactiveCheckBox={settingInactiveCheckBox}
+                  revertedState={revertedState}
+                  setRevertedState={setRevertedState}
+                />,
+                "Supplemental Methods",
+              ],
+            ]
+          : element
+      );
+    }
+    setTableState(tableArr);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelect, inactive[0], checkout, revertedState]);
+  }, [locationSelect, inactive[0], checkout, matsTableFlag, revertedState]);
 
   // sets initial state
   const [tableState, setTableState] = useState([
