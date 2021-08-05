@@ -20,7 +20,10 @@ export function loadMonitoringPlans(orisCode) {
   return (dispatch) => {
     dispatch(beginMonitoringPlansApiCall());
     return mpApi.getMonitoringPlans(orisCode).then((res) => {
-      dispatch(loadMonitoringPlansSuccess(res.data));
+      if( res){
+        dispatch(loadMonitoringPlansSuccess(res.data));
+      }
+      
     });
   };
 }
@@ -29,7 +32,10 @@ export function loadMonitoringPlansArray(orisCode) {
   return (dispatch) => {
     dispatch(beginMonitoringPlansApiCall());
     return mpApi.getMonitoringPlans(orisCode).then((res) => {
-      dispatch(loadMonitoringPlansArraySuccess(res.data, orisCode));
+
+      if( res){
+        dispatch(loadMonitoringPlansArraySuccess(res.data, orisCode));
+      }
     });
   };
 }
