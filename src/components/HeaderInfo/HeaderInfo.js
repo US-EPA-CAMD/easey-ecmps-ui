@@ -138,7 +138,7 @@ export const HeaderInfo = ({
           // }
           // createNew={createNewMethod ? "Create Method" : `Save and Close`}
           children={
-            <div>{"Do you want to revert back to the official record?"}</div>
+            <div>{"Reverting to Official Record will undo all saved and unsaved changes. This is not recoverable. Do you want to continue?"}</div>
           }
         />
       ) : null}

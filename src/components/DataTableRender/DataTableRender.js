@@ -423,7 +423,7 @@ export const DataTableRender = ({
               {tableTitle}
             </h4>
             <div className="text-center">
-              <p>{"There is no data"}</p>
+              <p>{"No data currently present"}</p>
             </div>
           </div>
         ) : (
