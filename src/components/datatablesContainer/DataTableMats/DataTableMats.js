@@ -168,7 +168,7 @@ export const DataTableMats = ({
         openHandler={openMatsModal}
         actionsBtn={"View"}
         addBtn={openMatsModal}
-        addBtnName={"Create Mats"}
+        addBtnName={"Create MATS"}
       />
 
       {show ? (
@@ -179,16 +179,16 @@ export const DataTableMats = ({
           showCancel={!(user && checkout)}
           showSave={user && checkout}
           title={
-            createNewMats ? "Create Mats" : "Component: Monitoring Mats Methods"
+            createNewMats ? "Create MATS" : "Component: Monitoring MATS Methods"
           }
-          createNew={createNewMats ? "Create Mats" : `Save and Close`}
+          createNew={createNewMats ? "Create MATS" : `Save and Close`}
           children={
             <div>
               <ModalDetails
                 modalData={selectedMatsMethods}
                 data={selectedModalData}
                 cols={2}
-                title={"Component: Monitoring Mats Methods"}
+                title={"Component: Monitoring MATS Methods"}
                 viewOnly={!(user && checkout)}
               />
             </div>
