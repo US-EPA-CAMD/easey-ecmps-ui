@@ -1,7 +1,9 @@
 import { oneSecond } from "../config";
 
-const customSortIcon = ".__rdt_custom_sort_icon__"
-const tableCol = ".rdt_TableCol"
+const customSortIcon = ".__rdt_custom_sort_icon__";
+const tableCol = ".rdt_TableCol";
+const table = ".rdt_Table";
+
 /*****************************************************
  * ensure508:
  *
@@ -73,7 +75,7 @@ export const changeGridCellAttributeValue = () => {
  *              none
  *****************************************************/
 export const addAriaLabelToDatatable = () => {
-  document.querySelectorAll(`.rdt_Table`).forEach((element) => {
+  document.querySelectorAll(table).forEach((element) => {
     const defaultLabel = document.querySelector(".data-table-title")
       ? document.querySelector(".data-table-title").textContent
       : "Data Table";
@@ -94,7 +96,7 @@ export const addAriaLabelToDatatable = () => {
  *****************************************************/
 export const addInitialAriaSort = () => {
   setTimeout(() => {
-    document.querySelectorAll(`.rdt_TableCol`).forEach((column) => {
+    document.querySelectorAll(tableCol).forEach((column) => {
       // *** traverse all sort icons
       if (column.querySelectorAll(customSortIcon).length > 0) {
         // *** isolate the svg element of the icon
@@ -102,22 +104,26 @@ export const addInitialAriaSort = () => {
 
         // *** if svg element is displayed, set
         if (window.getComputedStyle(sortIcon).opacity === "1") {
-          if (
+          const sortedBy = column
+            .closest(tableCol)
+            .querySelector("div:nth-child(1)").textContent;
+
+          if (column.querySelector(customSortIcon).classList.contains("asc")) {
             column
-              .querySelector(customSortIcon)
-              .classList.contains("asc")
-          ) {
-            column
-              .closest(`.rdt_TableCol`)
-              .setAttribute("aria-sort", "ascending");
+              .closest(tableCol)
+              .setAttribute(
+                "aria-label",
+                `Sorted by ${sortedBy} in ascending order`
+              );
           } else if (
-            column
-              .querySelector(customSortIcon)
-              .classList.contains("desc")
+            column.querySelector(customSortIcon).classList.contains("desc")
           ) {
             column
-              .closest(`.rdt_TableCol`)
-              .setAttribute("aria-sort", "descending");
+              .closest(tableCol)
+              .setAttribute(
+                "aria-label",
+                `Sorted by ${sortedBy} in descending order`
+              );
           }
         }
       }
@@ -145,23 +151,17 @@ export const setAriaSort = (event) => {
     switch (event.target.closest(tableCol).getAttribute("aria-sort")) {
       // * flip any column currently marked as "sorted" to the opposite of currently chosen direction
       case "ascending":
-        event.target
-          .closest(tableCol)
-          .setAttribute("aria-sort", "descending");
+        event.target.closest(tableCol).setAttribute("aria-sort", "descending");
         break;
 
       // * flip any column currently marked as "sorted" to the opposite of currently chosen direction
       case "descending":
-        event.target
-          .closest(tableCol)
-          .setAttribute("aria-sort", "ascending");
+        event.target.closest(tableCol).setAttribute("aria-sort", "ascending");
         break;
 
       // * default direction is descending
       default:
-        event.target
-          .closest(tableCol)
-          .setAttribute("aria-sort", "descending");
+        event.target.closest(tableCol).setAttribute("aria-sort", "descending");
         break;
     }
   }
