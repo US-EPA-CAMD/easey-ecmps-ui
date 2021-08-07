@@ -8,6 +8,7 @@ import { MonitoringPlanTab as SelectedFacilityTab } from "../MonitoringPlanTab/M
 import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import { useInterval } from "../../additional-functions/use-interval";
 import { oneSecond } from "../../config";
+import * as mpApi from "../../utils/api/monitoringPlansApi";
 
 export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
   const [checkedOutLocations, setCheckedOutLocations] = useState([]);
@@ -35,6 +36,26 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
 
     setCheckedOutLocations(checkedOutLocationList);
   };
+
+  const checkInAll = () => {
+    const currentlyCheckedOutMonPlanId = checkedOutLocations.filter(
+      (element) => element["checkedOutBy"] === user.firstName
+    )[0]["monPlanId"];
+
+    if (currentlyCheckedOutMonPlanId) {
+      mpApi
+        .deleteCheckInMonitoringPlanConfiguration(currentlyCheckedOutMonPlanId)
+        .then((res) => {});
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", checkInAll);
+
+    return () => {
+      window.removeEventListener("beforeunload", checkInAll);
+    };
+  }, []);
 
   const handleTabState = () => {
     const tabArr = [

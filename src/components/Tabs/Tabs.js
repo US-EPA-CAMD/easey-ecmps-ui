@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Button } from "@trussworks/react-uswds";
 import { ClearSharp, CreateSharp, LockSharp } from "@material-ui/icons";
 
 import "./Tabs.scss";
+import { setCheckoutState } from "../../store/actions/dynamicFacilityTab";
+import { connect } from "react-redux";
+import * as mpApi from "../../utils/api/monitoringPlansApi";
 
 export const Tabs = ({
   children,
@@ -12,6 +15,7 @@ export const Tabs = ({
   setActive,
   checkedOutLocations,
   user,
+  setCheckout,
 }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
@@ -19,9 +23,14 @@ export const Tabs = ({
     setActiveTabIndex(index);
     setActive(false, index - 1);
   };
-  const closeHandler = (event, index) => {
+  const closeHandler = (event, index, configId) => {
     event.stopPropagation();
     removeTabs(index);
+
+    mpApi.deleteCheckInMonitoringPlanConfiguration(configId).then((res) => {
+      setCheckout(false, configId);
+    });
+
     if (activeTabIndex === children.length - 1) {
       setActiveTabIndex(index - 1);
       setActive(false, index - 2);
@@ -114,7 +123,7 @@ export const Tabs = ({
                   {dynamic ? (
                     <ClearSharp
                       className="text-bold margin-left-2 float-right position-relative left-neg-1 top-neg-3 margin-top-neg-2 cursor-pointer"
-                      onClick={(e) => closeHandler(e, i)}
+                      onClick={(e) => closeHandler(e, i, el.props.locationId)}
                       onKeyPress={(event) => {
                         if (event.key === "Enter") {
                           closeHandler(event, i);
@@ -142,4 +151,19 @@ export const Tabs = ({
   );
 };
 
-export default Tabs;
+const mapStateToProps = (state) => {
+  return {
+    openedFacilityTabs: state.openedFacilityTabs,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCheckout: (value, configID) =>
+      dispatch(setCheckoutState(value, configID)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Tabs);
+export { mapStateToProps };
+export { mapDispatchToProps };
