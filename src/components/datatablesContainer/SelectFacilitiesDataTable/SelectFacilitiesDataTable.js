@@ -9,6 +9,7 @@ import * as facilitiesApi from "../../../utils/api/facilityApi";
 import { getCheckedOutLocations } from "../../../utils/api/monitoringPlansApi";
 import { useInterval } from "../../../additional-functions/use-interval";
 import { oneSecond } from "../../../config";
+import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 export const SelectFacilitiesDataTable = ({
   user,
@@ -27,18 +28,11 @@ export const SelectFacilitiesDataTable = ({
   ] = useState("");
 
   useEffect(() => {
-    let isMounted = true;
-    if (facilities.length === 0) {
-      facilitiesApi.getAllFacilities().then((res) => {
-        if (isMounted) {
-          setDataLoaded(true);
-          setFacilities(res.data);
-        }
-      });
-    }
-    return () => {
-      isMounted = false;
-    };
+    facilitiesApi.getAllFacilities().then((res) => {
+      setDataLoaded(true);
+      setFacilities(res.data);
+    });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanId]);
 
@@ -67,7 +61,6 @@ export const SelectFacilitiesDataTable = ({
   const columnNames = ["Facility", "ORIS", "State"];
 
   const selectedRowHandler = (info) => {
-    console.log("INFO", info);
     addtabs([
       {
         title: `${info[0].col1} (${info[1].name}) ${
@@ -95,7 +88,7 @@ export const SelectFacilitiesDataTable = ({
         ),
         orisCode: info[0].col2,
         selectedConfig: info[1],
-        checkout: info[2]
+        checkout: info[2],
       },
     ]);
   };
@@ -105,13 +98,7 @@ export const SelectFacilitiesDataTable = ({
       return fs.getTableRecords(facilities).map((item) => {
         const disabled = false;
         let expanded = false;
-        // modify this for keeping expanded state between tabs
-        // for(const x of monitoringPlans){
-        //   if(x[0] === item.col1){
-        //     expanded =true;
-        //     break;
-        //   }
-        // }
+
         return { ...item, disabled, expanded };
       });
     } else {
