@@ -52,7 +52,7 @@ export const FilterComponent = ({
               onClick={onSearch}
               id="searchDataTableBTN"
               epa-testid="searchDataTableBTN"
-              className="position-relative top-05 left-neg-1px"
+              className="position-relative top-05 left-neg-2px radius-left-0 "
             >
               Filter
             </Button>
