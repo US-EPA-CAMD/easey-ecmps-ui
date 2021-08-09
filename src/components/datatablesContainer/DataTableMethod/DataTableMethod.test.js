@@ -180,6 +180,7 @@ const componentRenderer = (location, showModal) => {
     inactive: true,
     settingInactiveCheckBox: jest.fn(),
     locationSelectValue: location,
+    setRevertedState:jest.fn(),
     showModal: showModal,
   };
   return render(<DataTableMethod {...props} />);
@@ -191,6 +192,7 @@ function componentRendererNoData(args) {
     showActiveOnly: true,
     user: { username: "test" },
     checkout: true,
+    setRevertedState:jest.fn(),
   };
 
   const props = { ...defualtProps, ...args };
@@ -264,6 +266,7 @@ test("tests a configuration with only inactive methods", async () => {
 
   fireEvent.click(container.querySelector("#testingBtn"));
   fireEvent.click(container.querySelector("#testingBtn2"));
+  fireEvent.click(container.querySelector("#testingBtn3"));
   // componentRenderer(6);
   expect(container).toBeDefined();
 });

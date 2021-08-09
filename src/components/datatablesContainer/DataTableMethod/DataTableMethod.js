@@ -3,7 +3,7 @@ import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { Button } from "@trussworks/react-uswds";
-import DataTableRender from "../../DataTableRender/DataTableRender";
+import { DataTableRender } from "../../DataTableRender/DataTableRender";
 
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
@@ -48,7 +48,6 @@ export const DataTableMethod = ({
       locationSelectValue ||
       revertedState
     ) {
-      console.log('test',revertedState)
       mpApi.getMonitoringMethods(locationSelectValue).then((res) => {
         setMethods(res.data);
         setDataLoaded(true);
@@ -60,7 +59,7 @@ export const DataTableMethod = ({
       setRevertedState(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, updateTable,revertedState]);
+  }, [locationSelectValue, updateTable, revertedState]);
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -72,7 +71,18 @@ export const DataTableMethod = ({
     "Begin Date and Time",
     "End Date and Time",
   ];
-
+  const payload = {
+    monLocId: locationSelectValue,
+    id: null,
+    parameterCode: null,
+    subDataCode: null,
+    bypassApproachCode: null,
+    methodCode: null,
+    beginDate: null,
+    beginHour: 0,
+    endDate: null,
+    endHour: 0,
+  };
   // cant unit test properly
   const [createNewMethod, setCreateNewMethod] = useState(false);
 
@@ -88,6 +98,12 @@ export const DataTableMethod = ({
       false
     );
   };
+
+  const testing3 = () => {
+    openMethodModal(false, false, true);
+    createMethods();
+  };
+
   const openMethodModal = (row, bool, create) => {
     let monMethod = null;
     setCreateNewMethod(create);
@@ -159,25 +175,12 @@ export const DataTableMethod = ({
   const closeModalHandler = () => setShow(false);
 
   const saveMethods = () => {
-    const payload = {
-      monLocId: locationSelectValue,
-      id: null,
-      parameterCode: null,
-      subDataCode: null,
-      bypassApproachCode: null,
-      methodCode: null,
-      beginDate: null,
-      beginHour: 0,
-      endDate: null,
-      endHour: 0,
-    };
-
     const userInput = extractUserInput(payload, ".modalUserInput");
 
     mpApi
       .saveMonitoringMethods(userInput)
       .then((result) => {
-        console.log(result);
+        console.log(result, " was saved");
         // openModal(false);
         setShow(false);
       })
@@ -190,25 +193,12 @@ export const DataTableMethod = ({
   };
 
   const createMethods = () => {
-    const payload = {
-      monLocId: locationSelectValue,
-      id: null,
-      parameterCode: null,
-      subDataCode: null,
-      bypassApproachCode: null,
-      methodCode: null,
-      beginDate: null,
-      beginHour: 0,
-      endDate: null,
-      endHour: 0,
-    };
-
     const userInput = extractUserInput(payload, ".modalUserInput");
 
     mpApi
       .createMethods(userInput)
       .then((result) => {
-        console.log(result);
+        console.log(result, " was created");
         // openModal(false);
         setShow(false);
       })
@@ -234,6 +224,12 @@ export const DataTableMethod = ({
         id="testingBtn2"
         onClick={() => testing2()}
       />
+      <input
+        role="button"
+        type="hidden"
+        id="testingBtn3"
+        onClick={() => testing3()}
+      />
       <DataTableRender
         openHandler={openMethodModal}
         columnNames={columnNames}
@@ -249,7 +245,7 @@ export const DataTableMethod = ({
         <Modal
           show={show}
           close={closeModalHandler}
-          save={createNewMethod? createMethods: saveMethods}
+          save={createNewMethod ? createMethods : saveMethods}
           showCancel={!(user && checkout)}
           showSave={user && checkout}
           title={createNewMethod ? "Create Method" : "Method"}
