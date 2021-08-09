@@ -188,6 +188,37 @@ export const DataTableMethod = ({
       });
     setUpdateTable(true);
   };
+
+  const createMethods = () => {
+    const payload = {
+      monLocId: locationSelectValue,
+      id: null,
+      parameterCode: null,
+      subDataCode: null,
+      bypassApproachCode: null,
+      methodCode: null,
+      beginDate: null,
+      beginHour: 0,
+      endDate: null,
+      endHour: 0,
+    };
+
+    const userInput = extractUserInput(payload, ".modalUserInput");
+
+    mpApi
+      .createMethods(userInput)
+      .then((result) => {
+        console.log(result);
+        // openModal(false);
+        setShow(false);
+      })
+      .catch((error) => {
+        console.log("error is", error);
+        // openModal(false);
+        setShow(false);
+      });
+    setUpdateTable(true);
+  };
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -218,7 +249,7 @@ export const DataTableMethod = ({
         <Modal
           show={show}
           close={closeModalHandler}
-          save={saveMethods}
+          save={createNewMethod? createMethods: saveMethods}
           showCancel={!(user && checkout)}
           showSave={user && checkout}
           title={createNewMethod ? "Create Method" : "Method"}
