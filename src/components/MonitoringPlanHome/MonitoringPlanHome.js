@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import "./MonitoringPlanHome.scss";
-import DynamicTabs from "../DynamicTabs/DynamicTabs";
 import { Button } from "@trussworks/react-uswds";
 import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
 import { connect } from "react-redux";
 import { MonitoringPlanTab as SelectedFacilityTab } from "../MonitoringPlanTab/MonitoringPlanTab";
+import DynamicTabs from "../DynamicTabs/DynamicTabs";
 import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import { useInterval } from "../../additional-functions/use-interval";
 import { oneSecond } from "../../config";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
+import "./MonitoringPlanHome.scss";
 
 export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
   const [checkedOutLocations, setCheckedOutLocations] = useState([]);
@@ -34,17 +34,28 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
       checkedOutLocationList = checkedOutLocationResult.data;
     }
 
+    // *** find locations currently checked out by the user
+    const currentlyCheckedOutMonPlanId = checkedOutLocationList.filter(
+      (element) => element["checkedOutBy"] === user.firstName
+    )[0]
+      ? checkedOutLocationList.filter(
+          (element) => element["checkedOutBy"] === user.firstName
+        )[0]["monPlanId"]
+      : null;
+
+    if (currentlyCheckedOutMonPlanId) {
+      window.currentlyCheckedOutMonPlanId = currentlyCheckedOutMonPlanId;
+    }
+
     setCheckedOutLocations(checkedOutLocationList);
   };
 
   const checkInAll = () => {
-    const currentlyCheckedOutMonPlanId = checkedOutLocations.filter(
-      (element) => element["checkedOutBy"] === user.firstName
-    )[0]["monPlanId"];
-
-    if (currentlyCheckedOutMonPlanId) {
+    if (window.currentlyCheckedOutMonPlanId) {
       mpApi
-        .deleteCheckInMonitoringPlanConfiguration(currentlyCheckedOutMonPlanId)
+        .deleteCheckInMonitoringPlanConfiguration(
+          window.currentlyCheckedOutMonPlanId
+        )
         .then((res) => {});
     }
   };
