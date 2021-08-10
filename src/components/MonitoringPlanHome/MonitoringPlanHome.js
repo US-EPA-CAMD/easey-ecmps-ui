@@ -126,7 +126,7 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
         </h2>
         <Button
           type="button"
-          className="float-right clearfix radius-2 position-relative top-2"
+          className="float-right clearfix radius-2 position-relative tablet-lg:margin-top-2 tablet:margin-top-1"
           outline={true}
           id="input-button-search"
         >

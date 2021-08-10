@@ -26,7 +26,7 @@ export const FilterComponent = ({
     </div>
 
     <table
-      className="float-right clearfix mobile-lg:display-none"
+      className="float-right clearfix display-none tablet:display-block"
       role="presentation"
     >
       <tbody>
@@ -70,7 +70,7 @@ export const FilterComponent = ({
     >
       <tbody>
         <tr>
-          <td className="text-bold text-center padding-left-5">
+          <td className="text-bold mobile-lg:padding-left-7 tablet:padding-left-0">
             Filter by keyword:
           </td>
         </tr>

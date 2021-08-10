@@ -60,7 +60,7 @@ export const Tabs = ({
 
   return (
     <div>
-      <div className="tab-buttons">
+      <div className="tab-buttons mobile-lg:margin-left-7 mobile-lg:padding-left-5 tablet:margin-left-0 tablet:padding-left-0">
         <ul className="usa-button-group">
           {children.map((el, i) => (
             <li
