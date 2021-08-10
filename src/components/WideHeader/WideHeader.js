@@ -84,7 +84,7 @@ export const WideHeader = () => {
         >
           <img
             src={`${process.env.PUBLIC_URL}/images/epa-logo-blue.svg`}
-            className="margin-3 padding-bottom-2 height-705 width-15"
+            className="margin-top-2 margin-left-5 padding-bottom-2 height-705 width-15"
             alt="Official EPA Logo"
           />
         </a>
@@ -93,7 +93,7 @@ export const WideHeader = () => {
             <NavMenuButton
               onClick={() => toggleRightSideNav()}
               label="Menu"
-              className="display-block usa-button radius-md bg-epa-blue-base text-white
+              className="display-block usa-button radius-md bg-epa-blue-base text-white mobile:margin-top-1 desktop:margin-top-0
               "
             />
           </div>

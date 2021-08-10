@@ -45,8 +45,8 @@ export const LeftNavToSubHeader = () => {
 
   return (
     <div className="left-sidenav-to-header-wrapper">
-      <div className="margin-left-2 padding-y-2 text-bold font-body-lg mobile:display-block tablet:display-none">
-        <MenuSharp className="margin-right-1" />
+      <div className="padding-y-1 text-bold font-body-lg mobile:display-block tablet:display-none">
+        <MenuSharp className="margin-left-2 margin-right-1" />
         ECMPS Menu
       </div>
       <Header

@@ -25,12 +25,56 @@ export const FilterComponent = ({
       ) : null}*/}
     </div>
 
-    <table className="float-right clearfix" role="presentation">
+    <table
+      className="float-right clearfix mobile-lg:display-none"
+      role="presentation"
+    >
       <tbody>
         <tr>
           <td className="text-bold text-center padding-right-1">
             Filter by keyword:
           </td>
+          <td>
+            <TextInput
+              id="txtSearchData"
+              name="txtSearchData"
+              type="text"
+              placeholder="Keyword"
+              aria-label="Search Input"
+              value={filterText}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  onSearch();
+                }
+              }}
+            />
+          </td>
+          <td>
+            <Button
+              type="button"
+              onClick={onSearch}
+              id="searchDataTableBTN"
+              epa-testid="searchDataTableBTN"
+              className="position-relative top-05 left-neg-1px"
+            >
+              Filter
+            </Button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table
+      className="float-right clearfix mobile-lg:display-block tablet:display-none"
+      role="presentation"
+    >
+      <tbody>
+        <tr>
+          <td className="text-bold text-center padding-left-5">
+            Filter by keyword:
+          </td>
+        </tr>
+        <tr>
           <td>
             <TextInput
               id="txtSearchData"
