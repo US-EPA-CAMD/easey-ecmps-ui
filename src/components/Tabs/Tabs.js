@@ -61,7 +61,7 @@ export const Tabs = ({
   return (
     <div>
       <div className="tab-buttons mobile-lg:margin-left-7 mobile-lg:padding-left-5 tablet:margin-left-0 tablet:padding-left-0">
-        <ul className="usa-button-group">
+        <ul className="usa-button-group margin-top-2">
           {children.map((el, i) => (
             <li
               key={i}
@@ -145,7 +145,7 @@ export const Tabs = ({
           ))}
         </ul>
       </div>
-      <hr className="height-3" />
+      <hr className="height-3 position-relative top-3" />
       <div className="tabContent">{children[activeTabIndex]}</div>
     </div>
   );

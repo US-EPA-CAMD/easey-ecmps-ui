@@ -119,7 +119,7 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
     <div className="react-transition fade-in padding-x-3">
       <div className="text-black margin-top-1 display-none tablet:display-block">
         <h2
-          className="display-inline-block page-header"
+          className="display-inline-block page-header margin-top-2"
           epa-testid="monPlansTitle"
         >
           Monitoring Plans
