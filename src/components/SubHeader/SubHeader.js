@@ -237,7 +237,7 @@ export const SubHeader = ({ user }) => {
               >
                 <img
                   src={userProfileIcon}
-                  className="margin-top-neg-1"
+                  className="margin-top-neg-1 position-relative left-neg-1"
                   aria-hidden={true}
                   tabIndex="-1"
                   alt="Expand menu"
