@@ -53,8 +53,8 @@ export const LeftNavToSubHeader = () => {
         className="display-none tablet:display-block desktop-lg:display-none
       padding-y-0 mobile-lg:padding-x-2 desktop:padding-x-4 bg-base-lightest"
       >
-        <div className="usa-nav-container clearfix padding-x-0">
-          <div className="text-center desktop:margin-top-3 desktop-lg:margin-top-0 display-inline-flex">
+        <div className="usa-nav-container clearfix padding-x-0 padding-bottom-2">
+          <div className="text-center desktop:margin-top-1 desktop-lg:margin-top-0 display-inline-flex padding-left-5">
             {appNavItems.map((el, i) => {
               return (
                 <div key={`${i}_${i}`}>
