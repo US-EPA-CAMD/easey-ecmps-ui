@@ -84,7 +84,7 @@ export const WideHeader = () => {
         >
           <img
             src={`${process.env.PUBLIC_URL}/images/epa-logo-blue.svg`}
-            className="margin-top-2 margin-left-5 padding-bottom-2 height-705 width-15"
+            className="margin-top-2 margin-left-5 mobile-lg:margin-left-2 padding-bottom-2 height-705 width-15"
             alt="Official EPA Logo"
           />
         </a>
