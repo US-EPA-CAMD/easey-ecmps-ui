@@ -267,6 +267,5 @@ test("tests a configuration with only inactive methods", async () => {
   fireEvent.click(container.querySelector("#testingBtn"));
   fireEvent.click(container.querySelector("#testingBtn2"));
   fireEvent.click(container.querySelector("#testingBtn3"));
-  // componentRenderer(6);
   expect(container).toBeDefined();
 });

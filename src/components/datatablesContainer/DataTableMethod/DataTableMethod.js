@@ -213,18 +213,24 @@ export const DataTableMethod = ({
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       <input
+        tabIndex={-1}
+        aria-hidden={true}
         role="button"
         type="hidden"
         id="testingBtn"
         onClick={() => testing()}
       />
       <input
+        tabIndex={-1}
+        aria-hidden={true}
         role="button"
         type="hidden"
         id="testingBtn2"
         onClick={() => testing2()}
       />
       <input
+        tabIndex={-1}
+        aria-hidden={true}
         role="button"
         type="hidden"
         id="testingBtn3"
