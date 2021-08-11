@@ -51,6 +51,16 @@ export const DataTableMats = ({
     "End Date and Time",
   ];
 
+  const payload = {
+    monLocId: locationSelectValue,
+    id: null,
+    matsMethodCode: null,
+    matsMethodParameterCode: null,
+    beginDate: null,
+    beginHour: 0,
+    endDate: null,
+    endHour: 0,
+  };
   const data = useMemo(() => {
     if (matsMethods.length > 0) {
       /*const activeOnly = getActiveData(matsMethods);
@@ -84,7 +94,7 @@ export const DataTableMats = ({
   }, [matsMethods]);
   const testing = () => {
     openMatsModal(false,false,true);
-    saveMethods();
+    saveMats();
   
    }
   
@@ -92,20 +102,8 @@ export const DataTableMats = ({
     openMatsModal({col5:"CAMD-BAC9D84563F24FE08057AF5643C8602C"},false,false);
   
    }
-  const saveMethods = () => {
-    const payload = {
-      monLocId: locationSelectValue,
-      id: null,
-      matsMethodCode: null,
-      matsMethodParameterCode: null,
-      beginDate: null,
-      beginHour: 0,
-      endDate: null,
-      endHour: 0,
-    };
-
+  const saveMats = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-    console.log(userInput, "user");
     mpApi
       .saveMonitoringMats(userInput)
       .then((result) => {
@@ -122,6 +120,26 @@ export const DataTableMats = ({
       });
       setUpdateTable(true);
   };
+  const createMAts = () => {
+ 
+
+    const userInput = extractUserInput(payload, ".modalUserInput");
+    mpApi
+      .saveMonitoringMats(userInput)
+      .then((result) => {
+        console.log(result);
+        setShow(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setShow(false);
+      });
+      mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
+        console.log('testing save',res.data);
+      });
+      setUpdateTable(true);
+  };
+
   const [createNewMats, setCreateNewMats] = useState(false);
   const closeModalHandler = () => setShow(false);
   const [selectedModalData, setSelectedModalData] = useState(null);
@@ -175,7 +193,7 @@ export const DataTableMats = ({
         <Modal
           show={show}
           close={closeModalHandler}
-          save={saveMethods}
+          save={createNewMats ? createMats : saveMats}
           showCancel={!(user && checkout)}
           showSave={user && checkout}
           title={

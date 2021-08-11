@@ -71,7 +71,6 @@ export const getMonitoringSystemsComponents = async (systemId, componentId) => {
 };
 
 export const getMonitoringAnalyzerRanges = async (locId, componentId) => {
-  console.log("locid", locId, componentId);
   let url = `${config.services.monitorPlans.uri}`;
   // *** workspace section url (authenticated)
   if (window.location.href.indexOf("workspace") > -1) {
@@ -80,9 +79,6 @@ export const getMonitoringAnalyzerRanges = async (locId, componentId) => {
   url = `${url}/locations/${locId}​/components/${componentId}/analyzer-ranges`;
 
   return axios.get(url).then(handleResponse).catch(handleError);
-  // const url =
-  //   "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/3844/components/WPCX10098-F39F14603FA64A45BF02B1E56284574A/analyzer-ranges";
-  // return axios.get(url).then(handleResponse).catch(handleError);
 };
 
 export const postCheckoutMonitoringPlanConfiguration = async (id, user) => {
