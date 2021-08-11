@@ -129,8 +129,6 @@ export const DataTableMats = ({
   };
   const createMats = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-
-    console.log("USER INPUT", userInput);
     mpApi
       .createMats(userInput)
       .then((result) => {
@@ -148,7 +146,6 @@ export const DataTableMats = ({
   const closeModalHandler = () => setShow(false);
   const [selectedModalData, setSelectedModalData] = useState(null);
   const openMatsModal = (row, bool, create) => {
-    console.log('ROW',row)
     let mats = null;
     setCreateNewMats(create);
     if (matsMethods.length > 0 && !create) {

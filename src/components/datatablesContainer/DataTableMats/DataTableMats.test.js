@@ -1,12 +1,12 @@
 import React from "react";
-import { render, waitForElement,fireEvent } from "@testing-library/react";
+import { render, waitForElement, fireEvent } from "@testing-library/react";
 import { DataTableMats } from "./DataTableMats";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 const axios = require("axios");
 
 jest.mock("axios");
 
-const monitoringMatsMethods= [
+const monitoringMatsMethods = [
   {
     id: "MELISSARHO-FD768B60E4D343158F7AD52EFD704D0E",
     matsMethodParameterCode: "TNHGM",
@@ -33,7 +33,7 @@ const componentRenderer = (location) => {
   const props = {
     user: { firstName: "test" },
     checkout: true,
-    setRevertedState:jest.fn(),
+    setRevertedState: jest.fn(),
     locationSelectValue: location,
   };
   return render(<DataTableMats {...props} />);
@@ -63,7 +63,6 @@ test("tests a configuration with only inactive methods", async () => {
 });
 
 test("tests a create/save methods", async () => {
-
   // axios.get.mockImplementation(() =>
   //   Promise.resolve({ status: 200, data: methodsInactiveOnly })
   // );
@@ -82,26 +81,25 @@ test("tests a create/save methods", async () => {
   //   Promise.resolve({ status: 200, data: data })
   // );
 
-  
   // const title = await mpApi.getMonitoringMethods(69);
   // expect(title.data).toEqual(methodsInactiveOnly);
   axios.get.mockImplementation(() =>
-  Promise.resolve({ status: 200, data: monitoringMatsMethods })
-);
+    Promise.resolve({ status: 200, data: monitoringMatsMethods })
+  );
 
-axios.put.mockImplementation((url) => {
-  switch (url) {
-    case `https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/workspace/locations/5770/mats-methods/MELISSARHO-CDF765BC7BF849EE9C23608B95540200`:
-      return Promise.resolve({ data: [{ name: "Bob", items: [] }] });
-    case "/items.json":
-      return Promise.resolve({ data: [{ id: 1 }, { id: 2 }] });
-    default:
-      return Promise.reject(new Error("not found"));
-  }
-});
-axios.put.mockImplementation(() =>
-  Promise.resolve({ status: 200, data: data })
-);
+  axios.put.mockImplementation((url) => {
+    switch (url) {
+      case `https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/workspace/locations/5770/mats-methods/MELISSARHO-CDF765BC7BF849EE9C23608B95540200`:
+        return Promise.resolve({ data: [{ name: "Bob", items: [] }] });
+      case "/items.json":
+        return Promise.resolve({ data: [{ id: 1 }, { id: 2 }] });
+      default:
+        return Promise.reject(new Error("not found"));
+    }
+  });
+  axios.put.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: data })
+  );
 
   let { container } = await waitForElement(() => componentRenderer(5770));
 
