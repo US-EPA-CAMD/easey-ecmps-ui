@@ -45,7 +45,7 @@ export const LeftNavToSubHeader = () => {
 
   return (
     <div className="left-sidenav-to-header-wrapper">
-      <div className="padding-y-1 text-bold font-body-lg mobile:display-block tablet:display-none">
+      <div className="padding-y-1 text-bold font-body-lg mobile:display-block tablet:display-none bg-base-lightest">
         <MenuSharp className="margin-left-2 margin-right-1" />
         ECMPS Menu
       </div>
@@ -54,7 +54,7 @@ export const LeftNavToSubHeader = () => {
       padding-y-0 mobile-lg:padding-x-2 desktop:padding-x-4 bg-base-lightest"
       >
         <div className="usa-nav-container clearfix padding-x-0 padding-bottom-2">
-          <div className="text-center desktop:margin-top-1 desktop-lg:margin-top-0 display-inline-flex padding-left-5">
+          <div className="text-center desktop:margin-top-1 desktop-lg:margin-top-0 display-inline-flex padding-left-2">
             {appNavItems.map((el, i) => {
               return (
                 <div key={`${i}_${i}`}>

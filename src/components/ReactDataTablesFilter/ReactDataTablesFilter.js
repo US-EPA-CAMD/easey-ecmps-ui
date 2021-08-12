@@ -8,7 +8,7 @@ export const FilterComponent = ({
   setShowInactive,
 }) => (
   <div className="width-full">
-    <div className="filter-title clearfix font-heading-xl text-bold data-table-title tablet:font-heading-xl mobile:font-body-lg mobile:text-bold mobile:padding-bottom-2 mobile:padding-left-6 tablet:padding-left-0">
+    <div className="filter-title clearfix font-heading-xl text-bold data-table-title tablet:font-heading-xl mobile:margin-left-3 mobile:font-body-lg mobile:text-bold mobile:padding-bottom-2 mobile:padding-left-6 tablet:padding-left-0">
       {title}{" "}
       {/*{title === "Select Configurations" ? (
         <Checkbox
@@ -65,12 +65,12 @@ export const FilterComponent = ({
     </table>
 
     <table
-      className="float-right clearfix mobile-lg:display-block tablet:display-none"
+      className="margin-left-7 mobile-lg:display-block tablet:display-none"
       role="presentation"
     >
       <tbody>
         <tr>
-          <td className="text-bold mobile-lg:padding-left-7 tablet:padding-left-0">
+          <td className="text-bold mobile-lg:padding-left-10 tablet:padding-left-0 mobile-lg:font-body-sm">
             Filter by keyword:
           </td>
         </tr>
