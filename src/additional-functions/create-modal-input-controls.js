@@ -23,7 +23,6 @@ export const modalViewData = (
   totalOptions,
   mats = false
 ) => {
-  console.log("totalOptions", totalOptions);
 
   const arr = [];
   const codeList = {
@@ -48,10 +47,8 @@ export const modalViewData = (
       case "dropdown":
         if (!createNew) {
           if (totalOptions) {
-            console.log('y',totalOptions,y)
             labels = findValue(totalOptions[y], selected[y], "name");
           } else {
-            console.log('test test test')
             labels = findValue(codeList[y], selected[y], "name");
           }
         }

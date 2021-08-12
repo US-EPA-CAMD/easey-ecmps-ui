@@ -44,7 +44,6 @@ export const getMonitoringMatsMethods = async (locationId) => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-
 export const getMonitoringSystems = async (locationId) => {
   return axios
     .get(`${config.services.monitorPlans.uri}/locations/${locationId}/systems`)
@@ -71,7 +70,6 @@ export const getMonitoringSystemsComponents = async (systemId, componentId) => {
 };
 
 export const getMonitoringAnalyzerRanges = async (locId, componentId) => {
-  console.log("locid", locId, componentId);
   let url = `${config.services.monitorPlans.uri}`;
   // *** workspace section url (authenticated)
   if (window.location.href.indexOf("workspace") > -1) {
@@ -80,9 +78,6 @@ export const getMonitoringAnalyzerRanges = async (locId, componentId) => {
   url = `${url}/locations/${locId}​/components/${componentId}/analyzer-ranges`;
 
   return axios.get(url).then(handleResponse).catch(handleError);
-  // const url =
-  //   "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/3844/components/WPCX10098-F39F14603FA64A45BF02B1E56284574A/analyzer-ranges";
-  // return axios.get(url).then(handleResponse).catch(handleError);
 };
 
 export const postCheckoutMonitoringPlanConfiguration = async (id, user) => {
@@ -98,23 +93,28 @@ export const postCheckoutMonitoringPlanConfiguration = async (id, user) => {
 
 export const revertOfficialRecord = async (id) => {
   return axios
-    .delete(
-      `${config.services.monitorPlans.uri}/workspace/plans/${id}/revert`
-    )
+    .delete(`${config.services.monitorPlans.uri}/workspace/plans/${id}/revert`)
     .then((response) => response.data)
     .catch(handleError);
 };
 
 export const createMethods = async (payload) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["monLocId"]}/methods`;
 
+  // *** remove attributes not needed by the API
+  delete payload["monLocId"];
+  delete payload["id"];
 
-    const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["monLocId"]}/methods`;
+  return axios.post(url, payload).then(handleResponse).catch(handleError);
+};
+export const createMats = async (payload) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["monLocId"]}/mats-methods`;
 
-    // *** remove attributes not needed by the API
-    delete payload["monLocId"];
-    delete payload["id"];
-  
-    return axios.post(url, payload).then(handleResponse).catch(handleError);
+  // *** remove attributes not needed by the API
+  delete payload["monLocId"];
+  delete payload["id"];
+
+  return axios.post(url, payload).then(handleResponse).catch(handleError);
 };
 
 export const putLockTimerUpdateConfiguration = async (id) => {
@@ -136,6 +136,7 @@ export const saveMonitoringMethods = async (payload) => {
 
 export const saveMonitoringMats = async (payload) => {
   console.log("payload", payload);
+  
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["monLocId"]}/mats-methods/${payload["id"]}`;
   // *** remove attributes not needed by the API
   delete payload["monLocId"];
