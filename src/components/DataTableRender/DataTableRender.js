@@ -348,13 +348,17 @@ export const DataTableRender = ({
       <div aria-live="polite" className={`${tableStyling}`}>
         {dataLoaded && data.length > 0 ? (
           <div>
-            <h4
-              className={`margin-top-5 text-bold ${
-                tableStyling ? "" : "mobile:font-body-xl mobile:text-bold"
-              }`}
-            >
-              {tableTitle}
-            </h4>
+            {tableTitle ? (
+              <h4
+                className={`margin-top-5 text-bold ${
+                  tableStyling ? "" : "mobile:font-body-xl mobile:text-bold"
+                }`}
+              >
+                {tableTitle}
+              </h4>
+            ) : (
+              ""
+            )}
             <DataTable
               keyField={!uniqueKey ? `col${columnNames.length + 1}` : "col1"}
               className={`data-display-table react-transition fade-in ${className}`}
@@ -392,8 +396,8 @@ export const DataTableRender = ({
               }}
             />{" "}
             <div className={`${headerStyling}`}>
-              <h2 className="padding-0 page-subheader">
-                {addBtn && checkout && user ? (
+              {addBtn && checkout && user ? (
+                <h2 className="padding-0 page-subheader">
                   <div className="padding-y-1">
                     <Button
                       type="button"
@@ -406,11 +410,11 @@ export const DataTableRender = ({
                     >
                       {addBtnName}
                     </Button>
-                  </div>
-                ) : (
-                  ""
-                )}
-              </h2>
+                  </div>{" "}
+                </h2>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         ) : dataLoaded && data.length === 0 ? (
