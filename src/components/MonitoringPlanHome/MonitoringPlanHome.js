@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+
 import { Button } from "@trussworks/react-uswds";
 import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
-import { connect } from "react-redux";
 import { MonitoringPlanTab as SelectedFacilityTab } from "../MonitoringPlanTab/MonitoringPlanTab";
 import DynamicTabs from "../DynamicTabs/DynamicTabs";
+
 import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import { useInterval } from "../../additional-functions/use-interval";
 import { oneSecond } from "../../config";
+
 import * as mpApi from "../../utils/api/monitoringPlansApi";
+
 import "./MonitoringPlanHome.scss";
 
 export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
@@ -126,7 +130,7 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
         </h2>
         <Button
           type="button"
-          className="float-right clearfix radius-2 position-relative tablet-lg:margin-top-2 tablet:margin-top-1"
+          className="float-right clearfix radius-2 position-relative tablet-lg:margin-top-2 tablet:margin-top-2 tablet:margin-right-neg-3 desktop:margin-right-0"
           outline={true}
           id="input-button-search"
         >

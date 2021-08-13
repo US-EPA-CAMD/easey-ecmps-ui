@@ -152,7 +152,7 @@ export const SubHeader = ({ user }) => {
 
           <Button
             type="button"
-            className="bg-transparent margin-0 float-right clearfix desktop:display-none padding-0 width-auto margin-top-1"
+            className="bg-transparent margin-0 float-right clearfix desktop:display-none padding-0 width-auto margin-top-1 margin-right-2"
           >
             <img
               src={`${process.env.PUBLIC_URL}/images/icons/mobile-menu-expand.svg`}

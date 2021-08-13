@@ -58,14 +58,18 @@ body {
 
 .filter-title {
   float: left;
+
   @media (max-width: 32em) {
     float: none !important;
-    text-align: center;
+    font-size: 1rem !important;
+    margin-left: 3.25em !important;
   }
 
   @media (max-width: 64em) {
-    font-size: 1.25rem !important;
+    font-size: 1.5rem !important;
     text-align: left !important;
+    position: relative;
+    top: 1.25em;
   }
 }
 
