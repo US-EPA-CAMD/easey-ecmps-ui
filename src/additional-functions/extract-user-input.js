@@ -4,7 +4,7 @@ export const extractUserInput = (payload, inputSelector) => {
   const datepickerPayloads = document.querySelectorAll(
     ".usa-date-picker__internal-input"
   );
-
+  console.log('THIS IS before',payload)
   const payloadArray = [];
 
   payloadInputs.forEach((input) => {
@@ -30,5 +30,6 @@ export const extractUserInput = (payload, inputSelector) => {
     payload[item.name] = item.value.trim() === "" ? null : item.value.trim();
   });
 
+  console.log('THIS IS PAAYLOADafter',payload)
   return payload;
 };

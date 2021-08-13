@@ -9,7 +9,7 @@ import Layout from "../Layout/Layout";
 import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
 import RuleEditor from "../RuleEditor/RuleEditor";
 import Login from "../Login/Login";
-import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
+// import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
 
 import { handleActiveElementFocus } from "../../additional-functions/add-active-class";
 
@@ -57,11 +57,11 @@ const App = () => {
             exact
             component={() => <MonitoringPlanHome user={user} />}
           />
-          <Route
+          {/* <Route
             path="/reporting-instructions"
             exact
             component={ReportingInstructions}
-          />
+          /> */}
           <Route path="/admin/rules" exact component={RuleEditor} />
           <Route path="*" component={NotFound} />
         </Switch>
