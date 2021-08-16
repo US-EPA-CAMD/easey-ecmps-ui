@@ -111,6 +111,23 @@ export const DataTableMethod = ({
       monMethod = methods.filter((element) => element.id === row.col7)[0];
       setSelectedMonitoringMethod(monMethod);
     }
+    console.log('checking methods',      modalViewData(
+      monMethod,
+      {
+        parameterCode: ["Parameter", "dropdown", "required"],
+        methodCode: ["Methodology", "dropdown", "required"],
+        subDataCode: ["Substitute Data Approach", "dropdown", "required"],
+        bypassApproachCode: ["Bypass Approach", "dropdown", "required"],
+      },
+      {
+        beginDate: ["Start Date", "date", "required"],
+        beginHour: ["Start Time", "time", "required"],
+        endDate: ["End Date", "date", ""],
+        endHour: ["End Time", "time", ""],
+      },
+      create,
+      totalOptions
+    ))
     setSelectedModalData(
       modalViewData(
         monMethod,
