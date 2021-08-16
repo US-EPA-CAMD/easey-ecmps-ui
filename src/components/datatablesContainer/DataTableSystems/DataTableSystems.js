@@ -40,8 +40,8 @@ export const DataTableSystems = ({
       revertedState
     ) {
       mpApi.getMonitoringSystems(locationSelectValue).then((res) => {
-        
-        setMonitoringSystems(res.data);setDataLoaded(true);
+        setMonitoringSystems(res.data);
+        setDataLoaded(true);
       });
       setUpdateTable(false);
       setRevertedState(false);
@@ -53,14 +53,14 @@ export const DataTableSystems = ({
     setSecondLevel(false);
     setShow(false);
   };
-  const [modalData, setModalData] = useState([
-    { value: 1 },
-    { value: 1 },
-    { value: 1 },
-    { value: 1 },
-    { value: "05/04/2009 0" },
-    { value: "05/04/2009 0" },
-  ]);
+  // const [modalData, setModalData] = useState([
+  //   { value: 1 },
+  //   { value: 1 },
+  //   { value: 1 },
+  //   { value: 1 },
+  //   { value: "05/04/2009 0" },
+  //   { value: "05/04/2009 0" },
+  // ]);
   const [selected, setSelected] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
 
@@ -74,24 +74,6 @@ export const DataTableSystems = ({
       )[0];
       setSelected(row.cells);
     }
-    console.log('CHECKING SYSTEMS,',      modalViewData(
-      selectSystem,
-      {
-        systemIdentifier: ["System ID", "input", "required"],
-        systemDesignationCode: ["System Designation", "dropdown", "required"],
-        systemTypeCode: ["System Type", "dropdown", "required"],
-        fuelCode: ["Fuel Type", "dropdown", "required"],
-      },
-      {
-        beginDate: ["Start Date", "date", "required"],
-        beginHour: ["Start Time", "time", "required"],
-        endDate: ["End Date", "date", ""],
-        endHour: ["End Time", "time", ""],
-      },
-      create,
-      false
-    ))
-    console.log('ROw in systems',row,bool,create)
     setSelectedModalData(
       modalViewData(
         selectSystem,
@@ -205,7 +187,6 @@ export const DataTableSystems = ({
     return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringSystems, inactive]);
-  console.log('SECOND LEVEL',secondLevel)
   return (
     <>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />

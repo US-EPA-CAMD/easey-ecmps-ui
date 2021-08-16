@@ -54,7 +54,6 @@ export const modalViewData = (
             labels = findValue(totalOptions[y], selected[y], "name");
           } else {
             labels = findValue(codeList[y], selected[y], "name");
-            console.log('THIS IS LABELS',labels)
           }
         }
         arr.push([
