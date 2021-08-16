@@ -143,7 +143,9 @@ export const DataTableMats = ({
   };
 
   const [createNewMats, setCreateNewMats] = useState(false);
-  const closeModalHandler = () => setShow(false);
+  const closeModalHandler = () => {
+    setShow(false);
+  };
   const [selectedModalData, setSelectedModalData] = useState(null);
   const openMatsModal = (row, bool, create) => {
     let mats = null;

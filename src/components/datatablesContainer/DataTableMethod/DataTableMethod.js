@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
-import { Button } from "@trussworks/react-uswds";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
@@ -13,6 +12,11 @@ import {
   getActiveData,
   getInactiveData,
 } from "../../../additional-functions/filter-data";
+
+import {
+  attachChangeEventListeners,
+  removeChangeEventListeners,
+} from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
 export const DataTableMethod = ({
   locationSelectValue,
@@ -41,6 +45,7 @@ export const DataTableMethod = ({
     "bypassApproachCode",
   ]);
   const [updateTable, setUpdateTable] = useState(false);
+
   useEffect(() => {
     if (
       updateTable ||
@@ -131,6 +136,10 @@ export const DataTableMethod = ({
       )
     );
     setShow(true);
+
+    setTimeout(() => {
+      attachChangeEventListeners(".modalUserInput");
+    });
   };
 
   const data = useMemo(() => {
@@ -172,7 +181,20 @@ export const DataTableMethod = ({
     }
   }, [matsMethods.length, matsTableHandler]);
 
-  const closeModalHandler = () => setShow(false);
+  const closeModalHandler = () => {
+    if (window.isDataChanged === true) {
+      if (
+        window.confirm(`Closing this modal prior to saving will result in loss of data.
+                        Are you sure you want to continue?`) === true
+      ) {
+        setShow(false);
+        removeChangeEventListeners(".modalUserInput");
+      }
+    } else {
+      setShow(false);
+      removeChangeEventListeners(".modalUserInput");
+    }
+  };
 
   const saveMethods = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
