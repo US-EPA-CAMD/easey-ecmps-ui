@@ -129,10 +129,11 @@ export const DataTableMats = ({
   };
   const createMats = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
+    console.log("checking results before api call", payload);
     mpApi
       .createMats(userInput)
       .then((result) => {
-        console.log("checking results", result);
+        console.log("checking results", result, payload);
         setShow(false);
       })
       .catch((error) => {
