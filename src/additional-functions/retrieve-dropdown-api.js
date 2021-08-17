@@ -1,5 +1,7 @@
-import React,{useState, useEffect} from "react";
+import { useState, useEffect } from "react";
+
 import * as dmApi from "../utils/api/dataManagementApi";
+
 export const useRetrieveDropdownApi = (arr, mats = false) => {
   const [totalOptions, setTotalOptions] = useState({});
   useEffect(() => {
@@ -16,7 +18,6 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
                 };
               });
 
-              
               options.unshift({ code: "", name: "" });
               const newData = totalOptions;
               newData["matsMethodParameterCode"] = options;
@@ -25,7 +26,6 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           } else {
             dmApi.getAllParameterCodes().then((response) => {
               options = response.data.map((option) => {
-                 
                 return {
                   code: option["parameterCode"],
                   name: option["parameterCodeDescription"],

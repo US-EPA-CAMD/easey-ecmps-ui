@@ -111,7 +111,9 @@ export const HeaderInfo = ({
     setDisplayLock(direction);
     checkoutAPI(direction);
   };
-  const [revertState, setRevertState] = useState(false);
+
+  // const [revertState, setRevertState] = useState(false);
+
   const closeModalHandler = () => setShow(false);
 
   const [show, setShow] = useState(false);
@@ -138,7 +140,11 @@ export const HeaderInfo = ({
           // }
           // createNew={createNewMethod ? "Create Method" : `Save and Close`}
           children={
-            <div>{"Reverting to Official Record will undo all saved and unsaved changes. This is not recoverable. Do you want to continue?"}</div>
+            <div>
+              {
+                "Reverting to Official Record will undo all saved and unsaved changes. This is not recoverable. Do you want to continue?"
+              }
+            </div>
           }
         />
       ) : null}
