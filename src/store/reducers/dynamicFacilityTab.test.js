@@ -175,7 +175,7 @@ describe("dynamicFacilityTab Reducer State Adding with data", () => {
 
   const setCheckoutState = actions.setCheckoutState(
     true,
-    "Barry (1, 2, CS0AAN) "
+    "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A"
   );
   const newcheckout = dynamicFacilityTabReducer(newInactive, setCheckoutState);
   expect(newcheckout[0].checkout).toBeDefined();
@@ -250,10 +250,10 @@ describe("dynamicFacilityTab Reducer State checking false conditional", () => {
       "Barry (1, 2, CS0N) "
     );
     const newcheckout = dynamicFacilityTabReducer({}, setCheckoutState);
-    expect(newcheckout).not.toBeDefined();
+    expect(newcheckout).toBeDefined();
   
     const emptyState = dynamicFacilityTabReducer(null, setCheckoutState);
-    expect(emptyState).not.toBeDefined();
+    expect(emptyState).toBeDefined();
   
   });
 
