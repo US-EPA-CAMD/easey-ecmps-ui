@@ -45,8 +45,8 @@ const reducer = (state, action) => {
               }
             : x
         );
-      }else{
-        returnObject = currentState
+      } else {
+        returnObject = currentState;
       }
       break;
     case types.SET_INACTIVE_STATE:
