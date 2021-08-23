@@ -27,7 +27,7 @@ const Login = () => {
 
   const checkLoggedIn = () => {
     if (cdx_user) {
-      window.location = "/monitoring-plans";
+      window.location = "/ecmps/monitoring-plans";
     }
   };
 
