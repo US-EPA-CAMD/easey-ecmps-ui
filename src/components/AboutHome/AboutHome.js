@@ -32,17 +32,17 @@ const AboutHome = ({ user, setCurrentLink }) => {
   };
 
   return (
-    <div className="grid-row padding-top-5 padding-2">
+    <div className="grid-row padding-top-7 padding-2">
       <div className="grid-col-9 fit-content">
         <div>
-          <h2 className="text-bold">About ECMPS</h2>
-          <h4 className="text-bold">
+          <span className="text-bold font-heading-2xl">About ECMPS</span>
+          <h3 className="text-bold font-heading-md">
             Examine she brother prudent add day ham. Far stairs now coming bed
             oppose hunted become his. You zealously departure had procuring
             suspicion. Books whose front would purse if be do decay. Quitting
             you way formerly disposed perceive ladyship are. Common turned boy
             direct and yet.
-          </h4>
+          </h3>
           <p>
             {" "}
             Examine she brother prudent add day ham. Far stairs now coming bed
@@ -54,7 +54,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
           return (
             <div className=" padding-top-2 padding-bottom-2">
               {" "}
-              <h3 className="text-bold">{topic.name} </h3>
+              <h2 className="text-bold font-heading-xl">{topic.name} </h2>
               <div>{topic.descriptions}</div>
               <USWDSLink
                 className="usa-button viewAboutBTN bg-cyan margin-1"
