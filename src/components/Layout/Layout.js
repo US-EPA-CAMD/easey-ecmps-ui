@@ -26,7 +26,7 @@ const Layout = (props) => {
       </div>
       <div className="grid-row">
         <div className="grid-col-2 bg-base-lightest display-none desktop-lg:display-block widescreen:display-block">
-          <LeftNavigation user={props.user} logOut={props.logOut} />
+          <LeftNavigation user={props.user} logOut={props.logOut} currentLink={props.currentLink} setCurrentLink={props.setCurrentLink}/>
         </div>
         <div className="grid-col margin-x-2 minh-tablet-lg" id="main">
           <main id="main">{childrenWithProps} </main>
