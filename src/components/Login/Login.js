@@ -84,7 +84,7 @@ const Login = () => {
 
   return (
     <div className="" data-test="component-login">
-      <div style={{ marginLeft: "4rem" }}>
+      <div style={{ padding: "1rem" }}>
         <Form onSubmit={submitForm} large>
           <Fieldset legend="Log In" legendStyle="large">
             <span>
