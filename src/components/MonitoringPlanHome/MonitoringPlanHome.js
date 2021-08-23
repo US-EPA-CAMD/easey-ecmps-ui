@@ -56,6 +56,8 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
 
   const checkInAll = () => {
     if (window.currentlyCheckedOutMonPlanId) {
+      console.log("checking in ", window.currentlyCheckedOutMonPlanId);
+
       mpApi
         .deleteCheckInMonitoringPlanConfiguration(
           window.currentlyCheckedOutMonPlanId
