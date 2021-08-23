@@ -8,12 +8,10 @@ import { Link } from "react-router-dom";
 import { head, workSpace } from "../../utils/constants/menuTopics";
 
 export const LeftNavigation = (props) => {
-  const [currentRoute, setCurrentRoute] = useState(
-    window.location.href.replace(`${window.location.origin}`, "")
-  );
 
   const handleRouteChange = (event, url) => {
-    setCurrentRoute(url);
+    props.setCurrentLink(url);
+
   };
 
   const makeHeader = (arr) => {
@@ -21,7 +19,8 @@ export const LeftNavigation = (props) => {
       return (
         <USWDSLink
           className={
-            currentRoute === item.url || currentRoute === `/ecmps${item.url}`
+            // currentRoute === item.url || 
+            props.currentLink === `/ecmps${item.url}` ||  props.currentLink ===  item.url
               ? "usa-current text-no-wrap"
               : "text-no-wrap"
           }

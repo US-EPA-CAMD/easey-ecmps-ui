@@ -24,8 +24,9 @@ export const DataTableSystems = ({
   settingInactiveCheckBox,
   revertedState,
   setRevertedState,
+  showModal = false,
 }) => {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(showModal);
   const [monitoringSystems, setMonitoringSystems] = useState([]);
   const [secondLevel, setSecondLevel] = useState(false);
   // const [firstLevel, setFirstLevel] = useState(false);
@@ -39,8 +40,8 @@ export const DataTableSystems = ({
       revertedState
     ) {
       mpApi.getMonitoringSystems(locationSelectValue).then((res) => {
-        
-        setMonitoringSystems(res.data);setDataLoaded(true);
+        setMonitoringSystems(res.data);
+        setDataLoaded(true);
       });
       setUpdateTable(false);
       setRevertedState(false);
@@ -52,15 +53,15 @@ export const DataTableSystems = ({
     setSecondLevel(false);
     setShow(false);
   };
-  const [modalData, setModalData] = useState([
-    { value: 1 },
-    { value: 1 },
-    { value: 1 },
-    { value: 1 },
-    { value: "05/04/2009 0" },
-    { value: "05/04/2009 0" },
-  ]);
-  const [selected, setSelected] = useState([]);
+  // const [modalData, setModalData] = useState([
+  //   { value: 1 },
+  //   { value: 1 },
+  //   { value: 1 },
+  //   { value: 1 },
+  //   { value: "05/04/2009 0" },
+  //   { value: "05/04/2009 0" },
+  // ]);
+  const [selected, setSelected] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
 
   // *** row handler onclick event listener
@@ -98,17 +99,17 @@ export const DataTableSystems = ({
     setShow(true);
   };
   const [createNewSystem, setCreateNewSystem] = useState(false);
-  useEffect(() => {
-    setModalData(
-      selected.map((info) => {
-        return {
-          header: info.column,
-          value: info.value,
-        };
-      })
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [show]);
+  // useEffect(() => {
+  //   setModalData(
+  //     selected.map((info) => {
+  //       return {
+  //         header: info.column,
+  //         value: info.value,
+  //       };
+  //     })
+  //   );
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [show]);
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -186,7 +187,6 @@ export const DataTableSystems = ({
     return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringSystems, inactive]);
-
   return (
     <>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -215,7 +215,7 @@ export const DataTableSystems = ({
             createNew="Create System"
             children={
               <ModalDetails
-                modalData={modalData}
+                modalData={selected}
                 data={selectedModalData}
                 cols={2}
                 title={`Create System`}
@@ -239,7 +239,7 @@ export const DataTableSystems = ({
                   ""
                 ) : (
                   <ModalDetails
-                    modalData={modalData}
+                    modalData={selected}
                     data={selectedModalData}
                     cols={2}
                     title={`System: ${selected[0]["value"]}`}
@@ -254,7 +254,7 @@ export const DataTableSystems = ({
                   checkout={checkout}
                   setCreateBtn={createBtn}
                   locationSelectValue={locationSelectValue}
-                  systemID={modalData.length > 1 ? modalData[0].value : 0}
+                  systemID={selected.length > 1 ? selected[0].value : 0}
                 />
               </div>
             }

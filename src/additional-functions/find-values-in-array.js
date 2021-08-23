@@ -1,4 +1,6 @@
 export const findValue = (options, val, parameter) => {
+ 
+ console.log( "options, val, parameter",options, val, parameter)
   if (val === null) {
     return "";
   }
@@ -8,6 +10,7 @@ export const findValue = (options, val, parameter) => {
     }
   }
 
+  console.log('options[0][parameter]',options[0][parameter])
   return options[0][parameter];
 };
 

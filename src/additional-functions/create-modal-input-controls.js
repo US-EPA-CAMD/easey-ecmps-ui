@@ -24,6 +24,9 @@ export const modalViewData = (
   mats = false
 ) => {
 
+//   (7) ["systemDesignationCode", "System Designation", "Primary", "required", "dropdown", "P", undefined]
+// 2: (7) ["systemTypeCode", "System Type", "Gas Fuel Flow System", "required", "dropdown", "GAS", undefined]
+// 3: (7) ["fuelCode", "Fuel Type", "Pipeline Natural Gas", "required", "dropdown", "PNG", undefined]
   const arr = [];
   const codeList = {
     systemTypeCode: types,
@@ -44,6 +47,7 @@ export const modalViewData = (
   for (const y in label) {
     let labels = "";
     switch (label[y][1]) {
+  
       case "dropdown":
         if (!createNew) {
           if (totalOptions) {
@@ -59,8 +63,9 @@ export const modalViewData = (
           label[y][2] === "required" ? "required" : false,
           "dropdown",
           createNew ? "select" : selected[y],
-          totalOptions[y],
+          totalOptions? totalOptions[y]:codeList[y],
         ]);
+        console.log(label[y][1],y,"    console.log(label[y][1])");
         break;
       case "input":
         arr.push([

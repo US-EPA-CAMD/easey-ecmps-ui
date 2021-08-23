@@ -1,8 +1,13 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 
+import * as actions from "../../store/actions/dynamicFacilityTab";
 import userEvent from "@testing-library/user-event";
-import DataTableRender from "./DataTableRender";
+import {
+  DataTableRender,
+  mapDispatchToProps,
+  mapStateToProps,
+} from "./DataTableRender";
 import { mount, ReactWrapper } from "enzyme";
 import { act } from "react-dom/test-utils";
 let options = [];
@@ -14,12 +19,48 @@ beforeAll(() => {
     { name: "ORIS", selector: "col1", sortable: true },
     { name: "Methodology", selector: "col2", sortable: true },
     { name: "Substitute Data Approach", selector: "col3", sortable: true },
+    { name: "Configurations", selector: "col4", sortable: true },
+    { name: "Facility", selector: "col5", sortable: true },
   ];
-  columnNames = ["ORIS", "Methodology", "Substitute Data Approach"];
+  columnNames = [
+    "ORIS",
+    "Methodology",
+    "Substitute Data Approach",
+    "Configurations",
+    "Facility",
+  ];
   data = [
-    { col1: "HI", col2: "CALC", col3: null, disabled: false, expanded: true },
-    { col1: "OP", col2: "EXP", col3: null, disabled: true, expanded: true },
-    { col1: "HI", col2: "AD", col3: "SPTS", disabled: true, expanded: false },
+    {
+      col1: "HI",
+      col2: "CALC",
+      col3: 1,
+      col4: null,
+      col5: null,
+      disabled: false,
+      expanded: true,
+      facId: 1,
+    },
+    {
+      col1: "OP",
+      col2: "EXP",
+      col3: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
+      col4: null,
+      col5: null,
+      disabled: true,
+      expanded: true,
+      facId: "83",
+    },
+    {
+      col1: "HI",
+      col2: "AD",
+      col3: "SPTS",
+      col4: null,
+      col5: null,
+      disabled: true,
+      expanded: false,
+      facId: "83",
+      monPlanId: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
+    },
   ];
 });
 describe("renders datatable with all values ", () => {
@@ -32,7 +73,7 @@ describe("renders datatable with all values ", () => {
         button={true}
         columnNames={columnNames}
         data={[]}
-        user={{ username: "test" }}
+        user={{ firstName: "test" }}
         selectedRowHandler={jest.fn()}
         pagination={true}
         filter={true}
@@ -42,6 +83,17 @@ describe("renders datatable with all values ", () => {
         tableStyling="tableStyling"
         componentStyling="componentStyling"
         openHandler={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+        setCheckout={jest.fn()}
+        setShowInactive={jest.fn()}
+        checkedOutLocations={[
+          {
+            facId: 1,
+            monPlanId: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
+            checkedOutBy: "test",
+          },
+        ]}
       />
     );
     const noData = screen.getByAltText("Please wait");
@@ -66,6 +118,37 @@ describe("renders datatable with all values ", () => {
         tableStyling="tableStyling"
         componentStyling="componentStyling"
         openHandler={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+        setCheckout={jest.fn()}
+        setShowInactive={jest.fn()}
+      />
+    );
+    expect(container).toBeDefined();
+  });
+
+  test("data is loaded but no preloader or dt coniditonal no tableStyling ", () => {
+    const { container, queryByPlaceholderText } = render(
+      <DataTableRender
+        dataLoaded={true}
+        sectionTitle="sectionTitle"
+        tableTitle="tableTitle"
+        button={true}
+        columnNames={columnNames}
+        data={[]}
+        user={{ username: "test" }}
+        selectedRowHandler={jest.fn()}
+        pagination={true}
+        filter={true}
+        expandableRowComp={<button>{"click me"}</button>}
+        expandableRows={true}
+        headerStyling="headerStyling"
+        componentStyling="componentStyling"
+        openHandler={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+        setCheckout={jest.fn()}
+        setShowInactive={jest.fn()}
       />
     );
     expect(container).toBeDefined();
@@ -84,11 +167,15 @@ describe("renders datatable with all values ", () => {
         expandableRowComp={<button>{"click me"}</button>}
         expandableRows={true}
         headerStyling="headerStyling"
-        tableStyling="tableStyling"
         componentStyling="componentStyling"
         actionsBtn={"Open"}
         openHandler={jest.fn()}
         uniqueKey={true}
+        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+        setCheckout={jest.fn()}
+        setShowInactive={jest.fn()}
+        checkedOutLocations={[]}
       />
     );
     const btn = container.querySelector("#btnOpen");
@@ -116,7 +203,7 @@ describe("renders datatable with all values ", () => {
 
     fireEvent.click(container.querySelector("#searchDataTableBTN"));
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(2);
+    expect(rows.length).toEqual(5);
   });
   test("test no title with no section title- user is logged in and at a sections data table", () => {
     const { container, queryByPlaceholderText } = render(
@@ -135,6 +222,10 @@ describe("renders datatable with all values ", () => {
         componentStyling="componentStyling"
         actionsBtn={"View"}
         openHandler={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+        setCheckout={jest.fn()}
+        setShowInactive={jest.fn()}
       />
     );
 
@@ -143,7 +234,7 @@ describe("renders datatable with all values ", () => {
     btn.focus();
 
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(6);
+    expect(rows.length).toEqual(9);
   });
   test("user is not logged in and at a sections data table", () => {
     const { container, queryByPlaceholderText } = render(
@@ -159,9 +250,14 @@ describe("renders datatable with all values ", () => {
         expandableRows={true}
         headerStyling="headerStyling"
         tableStyling="tableStyling"
+        
         componentStyling="componentStyling"
         actionsBtn={"View"}
         openHandler={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+        setCheckout={jest.fn()}
+        setShowInactive={jest.fn()}
       />
     );
     const btn = container.querySelector("#btnOpen");
@@ -169,8 +265,190 @@ describe("renders datatable with all values ", () => {
     btn.focus();
 
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(6);
+    expect(rows.length).toEqual(9);
   });
+  test("user is not logged in and at a sections data table WITH tabletitle", () => {
+    const { container, queryByPlaceholderText } = render(
+      <DataTableRender
+        dataLoaded={true}
+        columnNames={columnNames}
+        data={data}
+        selectedRowHandler={jest.fn()}
+        pagination={true}
+        filter={true}
+        defaultSort={"col2"}
+        // expandableRowComp={true}
+        expandableRows={true}
+        headerStyling="headerStyling"
+        tableStyling="tableStyling"
+        tableTitle="tableTitle"
+        componentStyling="componentStyling"
+        actionsBtn={"View"}
+        openHandler={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+        setCheckout={jest.fn()}
+        setShowInactive={jest.fn()}
+      />
+    );
+
+
+    const rows = screen.getAllByRole("row");
+    expect(rows.length).toEqual(9);
+  });
+
+
+  test("user is  logged in and at a sections data table", () => {
+    const { container, queryByPlaceholderText } = render(
+      <DataTableRender
+        dataLoaded={true}
+        columnNames={columnNames}
+        data={data}
+        user={{ firstName: "test" }}
+        selectedRowHandler={jest.fn()}
+        pagination={true}
+        filter={true}
+        defaultSort={"col2"}
+        // expandableRowComp={true}
+        expandableRows={true}
+        headerStyling="headerStyling"
+        tableTitle="tableStyling"
+        componentStyling="componentStyling"
+        actionsBtn={"View"}
+        openHandler={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+        setCheckout={jest.fn()}
+        setShowInactive={jest.fn()}
+      />
+    );
+
+    const rows = screen.getAllByRole("row");
+    expect(rows.length).toEqual(9);
+  });
+
+  test("user is  logged in and at a sections data table with      tableTitle=tableTitle tableStyling=tableStyling", () => {
+    const { container, queryByPlaceholderText } = render(
+      <DataTableRender
+        dataLoaded={true}
+        columnNames={columnNames}
+        data={data}
+        user={{ firstName: "test" }}
+        selectedRowHandler={jest.fn()}
+        pagination={true}
+        filter={true}
+        defaultSort={"col2"}
+        // expandableRowComp={true}
+        expandableRows={true}
+        headerStyling="headerStyling"
+        tableTitle="tableTitle"
+        tableStyling="tableStyling"
+        componentStyling="componentStyling"
+        actionsBtn={"View"}
+        openHandler={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+        setCheckout={jest.fn()}
+        setShowInactive={jest.fn()}
+      />
+    );
+
+    const rows = screen.getAllByRole("row");
+    expect(rows.length).toEqual(9);
+  });
+
+
+  test("user is  logged in and at a config data table with  nothing checked out  no tableTitle nothing checked out ", () => {
+    const { container, queryByPlaceholderText } = render(
+      <DataTableRender
+        dataLoaded={true}
+        columnNames={columnNames}
+        data={data}
+        user={{ firstName: "test" }}
+        selectedRowHandler={jest.fn()}
+        pagination={true}
+        filter={true}
+        defaultSort={"col2"}
+        // expandableRowComp={true}
+        expandableRows={true}
+        headerStyling="headerStyling"
+        tableStyling="tableStyling"
+        checkedOutLocations={[]}
+        componentStyling="componentStyling"
+        actionsBtn={"Open"}
+        openHandler={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+        setCheckout={jest.fn()}
+        setShowInactive={jest.fn()}
+      />
+    );
+
+    const rows = screen.getAllByRole("row");
+    expect(rows.length).toEqual(9);
+  });
+
+  test("user is  logged in and at a config data table with  nothing checked out  no tableTitle nothing checked out ", () => {
+    const { container, queryByPlaceholderText } = render(
+      <DataTableRender
+        dataLoaded={true}
+        columnNames={columnNames}
+        data={data}
+        user={{ firstName: "test" }}
+        selectedRowHandler={jest.fn()}
+        pagination={true}
+        filter={true}
+        defaultSort={"col2"}
+        // expandableRowComp={true}
+        expandableRows={true}
+        headerStyling="headerStyling"
+        tableStyling="tableStyling"
+        checkedOutLocations={[]}
+        componentStyling="componentStyling"
+        actionsBtn={"Open"}
+        openHandler={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+        setCheckout={jest.fn()}
+        setShowInactive={jest.fn()}
+      />
+    );
+
+    const rows = screen.getAllByRole("row");
+    expect(rows.length).toEqual(9);
+  });
+
+  test("user is  logged in and at a config data table with  nothing checked out WITH  tableTitle nothing checked out ", () => {
+    const { container, queryByPlaceholderText } = render(
+      <DataTableRender
+        dataLoaded={true}
+        columnNames={columnNames}
+        data={data}
+        user={{ firstName: "test" }}
+        selectedRowHandler={jest.fn()}
+        pagination={true}
+        filter={true}
+        defaultSort={"col2"}
+        // expandableRowComp={true}
+        expandableRows={true}
+        headerStyling="headerStyling"
+        tableTitle="tableTitle"
+        tableStyling="tableStyling"
+        checkedOutLocations={[]}
+        componentStyling="componentStyling"
+        actionsBtn={"Open"}
+        openHandler={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+        setCheckout={jest.fn()}
+        setShowInactive={jest.fn()}
+      />
+    );
+
+    const rows = screen.getAllByRole("row");
+    expect(rows.length).toEqual(9);
+  });
+
   test("user is not logged in and at a configuration data table", () => {
     const { container, queryByPlaceholderText } = render(
       <DataTableRender
@@ -189,6 +467,10 @@ describe("renders datatable with all values ", () => {
         componentStyling="componentStyling"
         actionsBtn={"Open"}
         openHandler={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+        setCheckout={jest.fn()}
+        setShowInactive={jest.fn()}
       />
     );
 
@@ -197,7 +479,48 @@ describe("renders datatable with all values ", () => {
     btn.focus();
 
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(6);
+    expect(rows.length).toEqual(9);
+  });
+
+  test("user is logged in and at a configuration data table with a checked out fac ", () => {
+    const { container, queryByPlaceholderText } = render(
+      <DataTableRender
+        dataLoaded={true}
+        addBtn={true}
+        columnNames={columnNames}
+        data={data}
+        user={{ firstName: "test" }}
+        selectedRowHandler={jest.fn()}
+        pagination={true}
+        filter={true}
+        defaultSort={"col2"}
+        // expandableRowComp={true}
+        expandableRows={true}
+        headerStyling="headerStyling"
+        tableStyling="tableStyling"
+        componentStyling="componentStyling"
+        actionsBtn={"Open"}
+        openHandler={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+        setCheckout={jest.fn()}
+        setShowInactive={jest.fn()}
+        checkedOutLocations={[
+          {
+            facId: 1,
+            monPlanId: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
+            checkedOutBy: "test",
+          },
+        ]}
+      />
+    );
+
+    const btn = container.querySelector("#btnCheckBackIn");
+    fireEvent.click(btn);
+    btn.focus();
+
+    const rows = screen.getAllByRole("row");
+    expect(rows.length).toEqual(9);
   });
 
   test("user is logged in and at a sections data table and checked out ('view/Edit')", () => {
@@ -220,6 +543,10 @@ describe("renders datatable with all values ", () => {
         componentStyling="componentStyling"
         actionsBtn={"View"}
         openHandler={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+        setCheckout={jest.fn()}
+        setShowInactive={jest.fn()}
       />
     );
     render(
@@ -241,6 +568,10 @@ describe("renders datatable with all values ", () => {
         componentStyling="componentStyling"
         actionsBtn={"View"}
         openHandler={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+        setCheckout={jest.fn()}
+        setShowInactive={jest.fn()}
       />
     );
     const btn = container.querySelector("#btnOpen");
@@ -249,7 +580,21 @@ describe("renders datatable with all values ", () => {
     const addBtn = container.querySelector("#addBtn");
     fireEvent.click(addBtn);
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(12);
+    expect(rows.length).toEqual(18);
+  });
+
+  test("mapDispatchToProps calls the appropriate action", async () => {
+    // mock the 'dispatch' object
+    const dispatch = jest.fn();
+    const actionProps = mapDispatchToProps(dispatch);
+    const state = jest.fn();
+    const stateProps = mapStateToProps(state);
+
+    const formData = [];
+    // verify the appropriate action was called
+    actionProps.setCheckout();
+
+    expect(state).toBeDefined();
   });
 });
 describe("67440874", () => {
@@ -287,6 +632,10 @@ describe("67440874", () => {
         componentStyling="componentStyling"
         actionsBtn={"View"}
         openHandler={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+        setCheckout={jest.fn()}
+        setShowInactive={jest.fn()}
       />
     );
   });

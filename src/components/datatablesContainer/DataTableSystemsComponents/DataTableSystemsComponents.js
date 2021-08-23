@@ -59,9 +59,8 @@ export const DataTableSystemsComponents = ({
 
   const [openAnalyzer, setOpenAnalyzer] = useState(false);
 
-
   const columnNames = ["ID", "Type", "Date and Time"];
-  const rangesColumnNames = ["Range","Date and Time"];
+  const rangesColumnNames = ["Range", "Date and Time"];
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const fuelFlowsColumnNames = ["Fuel Code", "Type Code", "Date and Time"];
@@ -74,21 +73,15 @@ export const DataTableSystemsComponents = ({
   const [createNewComponent, setCreateNewComponent] = useState(false);
 
   const [openComponentView, setComponentView] = React.useState(false);
-  const [
-    ranges,
-    setRanges,
-  ] = useState("");
+  const [ranges, setRanges] = useState("");
   const [rangesLoaded, setRangesLoaded] = useState(false);
   const rangeData = useMemo(() => {
     if (ranges.length > 0) {
-      return fs.getMonitoringPlansSystemsAnalyzerRangesTableRecords(
-        ranges
-      );
+      return fs.getMonitoringPlansSystemsAnalyzerRangesTableRecords(ranges);
     } else {
       return [];
     }
   }, [ranges]);
-
 
   const openComponent = (row, bool, create) => {
     let selectComponents = null;
@@ -107,9 +100,8 @@ export const DataTableSystemsComponents = ({
       if (user && checkout) {
         setCreateBtn("Save and Go Back");
       }
-console.log(selectComponents,'selectComponents')
-setOpenAnalyzer(selectComponents);
-
+      console.log(selectComponents, "selectComponents");
+      setOpenAnalyzer(selectComponents);
     }
 
     setSelectedModalData(
@@ -264,21 +256,21 @@ setOpenAnalyzer(selectComponents);
             // components
             return (
               <div>
-              <ModalDetails
-                modalData={selectedComponent}
-                backBtn={setSecondLevel}
-                data={selectedModalData}
-                cols={2}
-                title={
-                  createNewComponent
-                    ? "Create Component"
-                    : user && checkout
-                    ? `Edit Component: ${selectedComponent["componentIdentifier"]}`
-                    : `Component: ${selectedComponent["componentIdentifier"]}`
-                }
-                viewOnly={!(user && checkout)}
-              />
-            <DataTableAnalyzerRanges selectedRange={openAnalyzer} />
+                <ModalDetails
+                  modalData={selectedComponent}
+                  backBtn={setSecondLevel}
+                  data={selectedModalData}
+                  cols={2}
+                  title={
+                    createNewComponent
+                      ? "Create Component"
+                      : user && checkout
+                      ? `Edit Component: ${selectedComponent["componentIdentifier"]}`
+                      : `Component: ${selectedComponent["componentIdentifier"]}`
+                  }
+                  viewOnly={!(user && checkout)}
+                />
+                <DataTableAnalyzerRanges selectedRange={openAnalyzer} />
               </div>
             );
           }

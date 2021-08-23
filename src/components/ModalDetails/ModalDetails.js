@@ -15,8 +15,7 @@ import { ArrowBackSharp } from "@material-ui/icons";
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 // value in data => [0] api label, [1] our UI label, [2] value,[3], required or not for editing, [4] control form type
 const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
-
-  console.log('data',data,'modal',modalData)
+  console.log("data", data, "modal", modalData);
   const makeViewOnlyComp = (value) => {
     return (
       <div key={`${value[1]}`} className="grid-col">
@@ -47,7 +46,9 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
           <SelectBox
             className="modalUserInput width-mobile"
             epadataname={value[0]}
-            options={(value[6] !== null || value[6] !== undefined)? value[6] : [{}]}
+            options={
+              (value[6] !== null) ? value[6] : [{ code: "", name: "" }]
+            }
             initialSelection={value[5]}
             selectKey="code"
             id={value[0]}
@@ -215,7 +216,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
             id="id"
             name="id"
             className="modalUserInput"
-            value={modalData?modalData["id"]:''}
+            value={modalData ? modalData["id"] : ""}
           />
         </div>
         <div>

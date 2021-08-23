@@ -4,12 +4,12 @@ import { Route, Switch, Redirect } from "react-router-dom";
 
 import Home from "../Home/Home";
 import NotFound from "../NotFound/NotFound";
-
+import AboutHome from "../AboutHome/AboutHome";
 import Layout from "../Layout/Layout";
 import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
 import RuleEditor from "../RuleEditor/RuleEditor";
 import Login from "../Login/Login";
-// import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
+import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
 
 import { handleActiveElementFocus } from "../../additional-functions/add-active-class";
 
@@ -40,12 +40,18 @@ const App = () => {
     };
   }, []);
 
+  const [currentLink,setCurrentLink] = useState(window.location.href.replace(`${window.location.origin}`, ""));
   return (
     <div>
-      <Layout user={user}>
+      <Layout user={user} currentLink={currentLink} setCurrentLink={setCurrentLink}>
         <Switch>
           <Redirect from="/home" to="/" />
-          <Route path="/" exact component={Home} />
+
+          <Route
+            path="/"
+            exact
+            component={() => <AboutHome user={user}  setCurrentLink = {setCurrentLink}/>}
+          />
           <Route path="/login" exact component={Login} />
           <Route
             path="/monitoring-plans"
@@ -57,11 +63,11 @@ const App = () => {
             exact
             component={() => <MonitoringPlanHome user={user} />}
           />
-          {/* <Route
+          <Route
             path="/reporting-instructions"
             exact
             component={ReportingInstructions}
-          /> */}
+          />
           <Route path="/admin/rules" exact component={RuleEditor} />
           <Route path="*" component={NotFound} />
         </Switch>

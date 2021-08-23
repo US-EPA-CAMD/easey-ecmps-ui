@@ -258,7 +258,7 @@ describe("rendering a modal pop up detail ", () => {
         "ORF",
         [{ code: "", name: "" }],
       ],
-      ["basisCode", "Basis Description", "", false, "dropdown", null, null],
+      // ["basisCode", "Basis Description", "", false, "dropdown", null, null],
       ["manufacturer", "Manufacturer", "FLUIDID TECHNOLOGIES", false, "input"],
       ["serialNumber", "Serial Number", false, false, "input"],
       ["hgConverterInd", "Hg Converter Indicator1", true, false, "radio"],
@@ -292,6 +292,52 @@ describe("rendering a modal pop up detail ", () => {
     btn.focus();
     fireEvent.click(btn);
     expect(btn).toBeDefined();
+    expect(labels.length).toEqual(19);
+  });
+
+  test("renders 1 drop down with no modal values and no required text  ", () => {
+    const editData = [
+      ["componentIdentifier", "Component ID", "AFA", "required", "input"],
+      [
+        "acquisitionMethodCode",
+        "Sample Acquistion Method",
+        " Orifice",
+        false,
+        "dropdown",
+        "ORF",
+        [{ code: "", name: "" }],
+      ],
+      ["basisCode", "Basis Description", "", false, "dropdown", null, null],
+      ["manufacturer", "Manufacturer", "FLUIDID TECHNOLOGIES", false, "input"],
+      ["serialNumber", "Serial Number", false, false, "input"],
+      ["hgConverterInd", "Hg Converter Indicator1", true, false, "radio"],
+      ["hgConverterInd", "Hg Converter Indicator2", false, false, "radio"],
+      ["hgConverterInd", "Hg Converter Indicator3", null, false, "radio"],
+      ["hgConverterInd", "Hg Converter Indicator4", null, false, ""],
+      [
+        "beginDate",
+        "Start Date",
+        "07/01/2019",
+        "required",
+        "date",
+        "2019-07-01",
+      ],
+      ["beginHour", "Start Time", "0", "required", "time", "0"],
+      ["endDate", "End Date", "", false, "date", null],
+      ["endHour", "End Time", null, false, "time", null],
+    ];
+    const { container } = render(
+      <ModalDetails
+        modalData={null}
+        data={editData}
+        cols={cols}
+        title={title}
+        viewOnly={false}
+        backBtn={jest.fn()}
+      />
+    );
+    const labels = container.querySelectorAll("label");
+
     expect(labels.length).toEqual(21);
   });
 });

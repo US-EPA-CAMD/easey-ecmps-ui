@@ -111,6 +111,7 @@ export const DataTableMethod = ({
       monMethod = methods.filter((element) => element.id === row.col7)[0];
       setSelectedMonitoringMethod(monMethod);
     }
+
     setSelectedModalData(
       modalViewData(
         monMethod,
