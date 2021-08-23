@@ -61,6 +61,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
                 variant="unstyled"
                 asCustom={Link}
                 to={topic.url}
+                role="link"
                 exact="true"
                 rel={topic.name}
                 title={`Go to ${topic.name} page`}
@@ -86,7 +87,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
             </div>
           </div>
         </div>{" "}
-        <div className="bg-base-lighter">{!user ? <Login /> : ""}</div>
+        <div className="bg-base-lighter" data-testid="homeLogIn">{!user ? <Login /> : ""}</div>
       </div>
     </div>
   );
