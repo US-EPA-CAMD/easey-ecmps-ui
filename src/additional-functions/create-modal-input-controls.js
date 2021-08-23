@@ -23,22 +23,21 @@ export const modalViewData = (
   totalOptions,
   mats = false
 ) => {
-
   const arr = [];
   const codeList = {
     systemTypeCode: types,
     fuelCode: fuels,
     systemDesignationCode: designations,
     // bypassApproachCode: bypassApproachCodes,
-    // subDataCode: substituteDataApproachCodes,
+    // substituteDataCode: substituteDataApproachCodes,
     // parameterCode: parameterCodes,
-    // methodCode: methodCodes,
+    // monitoringMethodCode: monitoringMethodCodes,
     componentTypeCode: componentTypes,
-    acquisitionMethodCode: acqMethodCode,
+    sampleAcquisitionMethodCode: acqMethodCode,
     basisCode: basisCode,
-    maxRateSourceCode: componentTypes,
-    maxRate: acqMethodCode,
-    sysFuelUomCode: basisCode,
+    maximumFuelFlowRateSourceCode: componentTypes,
+    maximumFuelFlowRate: acqMethodCode,
+    SystemFuelFlowUOMCode: basisCode,
   };
 
   for (const y in label) {

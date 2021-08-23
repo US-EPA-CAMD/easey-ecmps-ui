@@ -36,7 +36,7 @@ export const parameterCodes = [
   { code: "SO2", name: "SO2 Hourly Mass Rate (ton/hr)" },
 ];
 
-export const methodCodes = [
+export const monitoringMethodCodes = [
   { code: "select", name: "Select a Method.. " },
   { code: "", name: "" },
   { code: "AD", name: "Appendix D" },

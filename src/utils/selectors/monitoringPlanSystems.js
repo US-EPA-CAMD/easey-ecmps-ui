@@ -8,7 +8,7 @@ export const getMonitoringPlansSystemsTableRecords = (data) => {
     const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
     const endHour = el.endHour ? el.endHour.toString() : "";
     records.push({
-      col1: el.systemIdentifier,
+      col1: el.monitoringSystemID,
       col2: el.systemType,
       col3: el.systemDesignationCode,
       col4: el.fuelCode,
@@ -41,7 +41,7 @@ export const getMonitoringPlansSystemsComponentsTableRecords = (data) => {
       present = `${endDate}: ${endHour}`;
     }
     records.push({
-      col1: el.componentIdentifier,
+      col1: el.componentId,
       col2: el.componentTypeCode,
       col3: `${beginDate}: ${beginHour} ➜ ${present}`,
       col4: el.id,

@@ -24,7 +24,7 @@ export const DataTableMats = ({
   const [dataLoaded, setDataLoaded] = useState(false);
   const [matsMethods, setMatsMethods] = useState([]);
   const totalOptions = useRetrieveDropdownApi(
-    ["parameterCode", "methodCode"],
+    ["parameterCode", "monitoringMethodCode"],
     true
   );
   const [show, setShow] = useState(false);
@@ -57,8 +57,8 @@ export const DataTableMats = ({
   const payload = {
     monLocId: locationSelectValue,
     id: null,
-    matsMethodCode: null,
-    matsMethodParameterCode: null,
+    supplementalMATSMonitoringMethodCode: null,
+    supplementalMATSParameterCode: null,
     beginDate: null,
     beginHour: 0,
     endDate: null,
@@ -159,8 +159,12 @@ export const DataTableMats = ({
       modalViewData(
         mats,
         {
-          matsMethodParameterCode: ["Parameter", "dropdown", "required"],
-          matsMethodCode: ["Methodology", "dropdown", "required"],
+          supplementalMATSParameterCode: ["Parameter", "dropdown", "required"],
+          supplementalMATSMonitoringMethodCode: [
+            "Methodology",
+            "dropdown",
+            "required",
+          ],
         },
         {
           beginDate: ["Start Date", "date", "required"],

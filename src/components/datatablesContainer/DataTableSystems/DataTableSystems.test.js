@@ -1,6 +1,6 @@
 import React from "react";
 import { render, waitForElement } from "@testing-library/react";
-import { DataTableSystems} from "./DataTableSystems";
+import { DataTableSystems } from "./DataTableSystems";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 const axios = require("axios");
 const DataTableSystemsfunction = require("./DataTableSystems");
@@ -11,7 +11,7 @@ const systemsDataActiveOnly = [
     monLocId: "6",
     systemTypeCode: "GAS",
     systemDesignationCode: "P",
-    systemIdentifier: "AF1",
+    monitoringSystemID: "AF1",
     fuelCode: "PNG",
     beginDate: "2019-07-01",
     endDate: null,
@@ -24,7 +24,7 @@ const systemsDataActiveOnly = [
     monLocId: "6",
     systemTypeCode: "GAS",
     systemDesignationCode: "P",
-    systemIdentifier: "AF2",
+    monitoringSystemID: "AF2",
     fuelCode: "PNG",
     beginDate: "2019-07-01",
     endDate: null,
@@ -40,7 +40,7 @@ const systemData = [
     monLocId: "5",
     systemTypeCode: "OP",
     systemDesignationCode: "P",
-    systemIdentifier: "AA5",
+    monitoringSystemID: "AA5",
     fuelCode: "NFS",
     beginDate: "1993-10-01",
     endDate: "2018-10-02",
@@ -53,7 +53,7 @@ const systemData = [
     monLocId: "5",
     systemTypeCode: "SO2",
     systemDesignationCode: "P",
-    systemIdentifier: "AA1",
+    monitoringSystemID: "AA1",
     fuelCode: "NFS",
     beginDate: "1993-10-01",
     endDate: "2019-06-30",
@@ -66,7 +66,7 @@ const systemData = [
     monLocId: "5",
     systemTypeCode: "NOX",
     systemDesignationCode: "P",
-    systemIdentifier: "AA2",
+    monitoringSystemID: "AA2",
     fuelCode: "NFS",
     beginDate: "1993-10-01",
     endDate: null,
@@ -79,7 +79,7 @@ const systemData = [
     monLocId: "5",
     systemTypeCode: "CO2",
     systemDesignationCode: "P",
-    systemIdentifier: "AA3",
+    monitoringSystemID: "AA3",
     fuelCode: "NFS",
     beginDate: "1993-10-01",
     endDate: "2019-06-30",
@@ -92,7 +92,7 @@ const systemData = [
     monLocId: "5",
     systemTypeCode: "FLOW",
     systemDesignationCode: "P",
-    systemIdentifier: "AA4",
+    monitoringSystemID: "AA4",
     fuelCode: "NFS",
     beginDate: "1993-10-01",
     endDate: "2019-06-30",
@@ -108,7 +108,7 @@ const systemsInactiveOnly = [
     monLocId: "76",
     systemTypeCode: "OP",
     systemDesignationCode: "P",
-    systemIdentifier: "DB5",
+    monitoringSystemID: "DB5",
     fuelCode: "NFS",
     beginDate: "1994-11-01",
     endDate: "2007-09-30",

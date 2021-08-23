@@ -39,8 +39,8 @@ export const DataTableSystems = ({
       revertedState
     ) {
       mpApi.getMonitoringSystems(locationSelectValue).then((res) => {
-        
-        setMonitoringSystems(res.data);setDataLoaded(true);
+        setMonitoringSystems(res.data);
+        setDataLoaded(true);
       });
       setUpdateTable(false);
       setRevertedState(false);
@@ -77,7 +77,7 @@ export const DataTableSystems = ({
       modalViewData(
         selectSystem,
         {
-          systemIdentifier: ["System ID", "input", "required"],
+          monitoringSystemID: ["System ID", "input", "required"],
           systemDesignationCode: ["System Designation", "dropdown", "required"],
           systemTypeCode: ["System Type", "dropdown", "required"],
           fuelCode: ["Fuel Type", "dropdown", "required"],

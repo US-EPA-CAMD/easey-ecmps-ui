@@ -22,13 +22,15 @@ const DetailsSelectBox = ({
   };
 
   const populateOptions = (optionsList) => {
-    return optionsList.map((info, index) => {
-      return (
-        <option key={index} value={info[selectKey]}>
-          {info[secondOption ? secondOption : selectKey]}
-        </option>
-      );
-    });
+    if (optionsList) {
+      return optionsList.map((info, index) => {
+        return (
+          <option key={index} value={info[selectKey]}>
+            {info[secondOption ? secondOption : selectKey]}
+          </option>
+        );
+      });
+    }
   };
   return (
     <div>
@@ -36,13 +38,7 @@ const DetailsSelectBox = ({
         <FormGroup className="margin-top-0">
           <Label
             htmlFor={caption}
-            hint={
-              required ? (
-                <span > (Required)</span>
-              ) : (
-                ""
-              )
-            }
+            hint={required ? <span> (Required)</span> : ""}
           >
             {caption}
           </Label>

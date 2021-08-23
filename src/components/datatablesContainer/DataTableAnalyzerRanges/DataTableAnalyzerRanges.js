@@ -24,7 +24,7 @@ export const DataTableAnalyzerRanges = ({
   const [updateTable, setUpdateTable] = useState(false);
   const rangesColumnNames = ["Range", "Date and Time"];
   const totalOptions = useRetrieveDropdownApi(
-    ["parameterCode", "methodCode"],
+    ["parameterCode", "monitoringMethodCode"],
     true
   );
 
@@ -90,37 +90,37 @@ export const DataTableAnalyzerRanges = ({
   //       false
   //     );
   //   };
-//   const saveMethods = () => {
-//     const payload = {
-//       monLocId: locationSelectValue,
-//       id: null,
-//       matsMethodCode: null,
-//       matsMethodParameterCode: null,
-//       beginDate: null,
-//       beginHour: 0,
-//       endDate: null,
-//       endHour: 0,
-//     };
+  //   const saveMethods = () => {
+  //     const payload = {
+  //       monLocId: locationSelectValue,
+  //       id: null,
+  //       supplementalMATSMonitoringMethodCode: null,
+  //       supplementalMATSParameterCode: null,
+  //       beginDate: null,
+  //       beginHour: 0,
+  //       endDate: null,
+  //       endHour: 0,
+  //     };
 
-//     const userInput = extractUserInput(payload, ".modalUserInput");
-//     console.log(userInput, "user");
-//     mpApi
-//       .saveMonitoringMats(userInput)
-//       .then((result) => {
-//         console.log(result);
-//         setShow(false);
-//       })
-//       .catch((error) => {
-//         console.log(error);
-//         setShow(false);
-//       });
-//     mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
-//       console.log("testing save", res.data);
-//     });
-//     setUpdateTable(true);
-//   };
+  //     const userInput = extractUserInput(payload, ".modalUserInput");
+  //     console.log(userInput, "user");
+  //     mpApi
+  //       .saveMonitoringMats(userInput)
+  //       .then((result) => {
+  //         console.log(result);
+  //         setShow(false);
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //         setShow(false);
+  //       });
+  //     mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
+  //       console.log("testing save", res.data);
+  //     });
+  //     setUpdateTable(true);
+  //   };
 
-//   const [selectedModalData, setSelectedModalData] = useState(null);
+  //   const [selectedModalData, setSelectedModalData] = useState(null);
   //   const openMatsModal = (row, bool, create) => {
   //     let mats = null;
   //     setCreateNewMats(create);
@@ -132,8 +132,8 @@ export const DataTableAnalyzerRanges = ({
   //       modalViewData(
   //         mats,
   //         {
-  //           matsMethodParameterCode: ["Parameter", "dropdown", "required"],
-  //           matsMethodCode: ["Methodology", "dropdown", "required"],
+  //           supplementalMATSParameterCode: ["Parameter", "dropdown", "required"],
+  //           supplementalMATSMonitoringMethodCode: ["Methodology", "dropdown", "required"],
   //         },
   //         {
   //           beginDate: ["Start Date", "date", "required"],
@@ -167,7 +167,7 @@ export const DataTableAnalyzerRanges = ({
       <DataTableRender
         columnNames={rangesColumnNames}
         data={rangeData}
-        openHandler={()=>console.log('open')}
+        openHandler={() => console.log("open")}
         tableTitle="Analyzer Ranges"
         componentStyling="systemsCompTable"
         tableStyling="grid-container"

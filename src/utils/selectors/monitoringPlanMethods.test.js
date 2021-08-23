@@ -15,20 +15,20 @@ describe("testing monitoring plan data selectors", () => {
         endDate: null,
         endHour: null,
         id: "TWCORNEL5-E87023808E5C43F18BD84AC8A9DCF332",
-        methodCode: "AD",
+        monitoringMethodCode: "AD",
         parameterCode: "HI",
-        subDataCode: "SPTS",
+        substituteDataCode: "SPTS",
       },
       {
         beginDate: null,
         beginHour: null,
         bypassApproachCode: null,
-        endDate:  "2019-07-01",
+        endDate: "2019-07-01",
         endHour: "0",
         id: "TWCORNEL5-E87023808E5C43F18BD84AC8A9DCF332",
-        methodCode: "AD",
+        monitoringMethodCode: "AD",
         parameterCode: "HI",
-        subDataCode: "SPTS",
+        substituteDataCode: "SPTS",
       },
     ];
 
@@ -56,8 +56,8 @@ describe("testing monitoring plan data selectors", () => {
     selectedMonitoringMatsMethod = [
       {
         id: "TAG182357-8F800321D1384A86BA068C39281AF76F",
-        matsMethodParameterCode: "HCL",
-        matsMethodCode: "QST",
+        supplementalMATSParameterCode: "HCL",
+        supplementalMATSMonitoringMethodCode: "QST",
         beginDate: "2016-04-16",
         beginHour: "0",
         endDate: null,
@@ -65,8 +65,8 @@ describe("testing monitoring plan data selectors", () => {
       },
       {
         id: "TAG182357-8F800321D1384A86BA068C39281AF76F",
-        matsMethodParameterCode: "HCL",
-        matsMethodCode: "QST",
+        supplementalMATSParameterCode: "HCL",
+        supplementalMATSMonitoringMethodCode: "QST",
         beginDate: null,
         beginHour: null,
         endDate: "2016-04-16",

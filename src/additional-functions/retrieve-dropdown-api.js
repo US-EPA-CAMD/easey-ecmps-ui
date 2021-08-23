@@ -20,7 +20,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
 
               options.unshift({ code: "", name: "" });
               const newData = totalOptions;
-              newData["matsMethodParameterCode"] = options;
+              newData["supplementalMATSParameterCode"] = options;
               setTotalOptions(newData);
             });
           } else {
@@ -40,27 +40,28 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             });
           }
           break;
-        case "methodCode":
+        case "monitoringMethodCode":
           if (mats) {
             dmApi.getAllMatsMethodCodes().then((response) => {
               options = response.data.map((option) => {
                 return {
-                  code: option["matsMethodCode"],
-                  name: option["matsMethodCodeDescription"],
+                  code: option["supplementalMATSMonitoringMethodCode"],
+                  name:
+                    option["supplementalMATSMonitoringMethodCodeDescription"],
                 };
               });
 
               options.unshift({ code: "", name: "" });
               const newData = totalOptions;
-              newData["matsMethodCode"] = options;
+              newData["supplementalMATSMonitoringMethodCode"] = options;
               setTotalOptions(newData);
             });
           } else {
             dmApi.getAllMethodCodes().then((response) => {
               options = response.data.map((option) => {
                 return {
-                  code: option["methodCode"],
-                  name: option["methodCodeDescription"],
+                  code: option["monitoringMethodCode"],
+                  name: option["monitoringMethodCodeDescription"],
                 };
               });
 
@@ -72,12 +73,12 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             });
           }
           break;
-        case "subDataCode":
+        case "substituteDataCode":
           dmApi.getAllSubstituteDataCodes().then((response) => {
             options = response.data.map((option) => {
               return {
-                code: option["subDataCode"],
-                name: option["subDataCodeDescription"],
+                code: option["substituteDataCode"],
+                name: option["substituteDataCodeDescription"],
               };
             });
 

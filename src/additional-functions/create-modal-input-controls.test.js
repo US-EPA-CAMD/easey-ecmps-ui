@@ -2,17 +2,17 @@ import { modalViewData } from "./create-modal-input-controls";
 
 describe("modalViewData function", () => {
   let selected = {
-    acquisitionMethodCode: "ORF",
+    sampleAcquisitionMethodCode: "ORF",
     active: true,
     basisCode: null,
     beginDate: "2019-07-01",
     beginHour: "0",
     componentId: "TWCORNEL5-4EA39F9E01AB411EB84E313A212084C1",
-    componentIdentifier: "AFA",
+    componentId: "AFA",
     componentTypeCode: "GFFM",
     endDate: null,
     endHour: null,
-    hgConverterInd: null,
+    hgConverterIndicator: null,
     id: "TWCORNEL5-902F83FCDE244546ABB2E2F46EC873E3",
     manufacturer: "FLUIDID TECHNOLOGIES",
     modelVersion: "FAB-3161-2A",
@@ -22,12 +22,12 @@ describe("modalViewData function", () => {
   };
 
   const label = {
-    acquisitionMethodCode: ["Sample Acquistion Method", "dropdown", ""],
+    sampleAcquisitionMethodCode: ["Sample Acquistion Method", "dropdown", ""],
     basisCode: ["Basis Description", "dropdown", ""],
-    componentIdentifier: ["Component ID", "input", "required"],
+    componentId: ["Component ID", "input", "required"],
     componentTypeCode: ["Component Type", "dropdown", "required"],
-    hgConverterInd: ["Hg Converter Indicator", "radio", ""],
-    hgConverterInd2: ["Hg Converter Indicator", "radio", "required"],
+    hgConverterIndicator: ["Hg Converter Indicator", "radio", ""],
+    hgConverterIndicator2: ["Hg Converter Indicator", "radio", "required"],
     manufacturer: ["Manufacturer", "input", ""],
     modelVersion: ["Modal or Version", "input", ""],
     serialNumber: ["Serial Number", "input", ""],
@@ -35,12 +35,12 @@ describe("modalViewData function", () => {
     skip: ["Serial Number", "skip", ""],
   };
   const labelWithConditional = {
-    acquisitionMethodCode: ["Sample Acquistion Method", "dropdown", ""],
+    sampleAcquisitionMethodCode: ["Sample Acquistion Method", "dropdown", ""],
     basisCode: ["Basis Description", "dropdown", ""],
-    componentIdentifier: ["Component ID", "input", "required"],
+    componentId: ["Component ID", "input", "required"],
     componentTypeCode: ["Component Type", "dropdown", "required"],
-    hgConverterInd: ["Hg Converter Indicator", "radio", "required"],
-    hgConverterInd2: ["Hg Converter Indicator", "radio", ""],
+    hgConverterIndicator: ["Hg Converter Indicator", "radio", "required"],
+    hgConverterIndicator2: ["Hg Converter Indicator", "radio", ""],
     manufacturer: ["Manufacturer", "input", ""],
     modelVersion: ["Modal or Version", "input", ""],
     serialNumber: ["Serial Number", "input", ""],

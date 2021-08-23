@@ -32,7 +32,7 @@ export const DataTableSystemsComponents = ({
   useEffect(() => {
     mpApi.getMonitoringSystems(locationSelectValue).then((res) => {
       for (let value of res.data) {
-        if (value.systemIdentifier === systemID) {
+        if (value.monitoringSystemID === systemID) {
           setSelected(value);
         }
       }
@@ -59,9 +59,8 @@ export const DataTableSystemsComponents = ({
 
   const [openAnalyzer, setOpenAnalyzer] = useState(false);
 
-
   const columnNames = ["ID", "Type", "Date and Time"];
-  const rangesColumnNames = ["Range","Date and Time"];
+  const rangesColumnNames = ["Range", "Date and Time"];
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const fuelFlowsColumnNames = ["Fuel Code", "Type Code", "Date and Time"];
@@ -74,21 +73,15 @@ export const DataTableSystemsComponents = ({
   const [createNewComponent, setCreateNewComponent] = useState(false);
 
   const [openComponentView, setComponentView] = React.useState(false);
-  const [
-    ranges,
-    setRanges,
-  ] = useState("");
+  const [ranges, setRanges] = useState("");
   const [rangesLoaded, setRangesLoaded] = useState(false);
   const rangeData = useMemo(() => {
     if (ranges.length > 0) {
-      return fs.getMonitoringPlansSystemsAnalyzerRangesTableRecords(
-        ranges
-      );
+      return fs.getMonitoringPlansSystemsAnalyzerRangesTableRecords(ranges);
     } else {
       return [];
     }
   }, [ranges]);
-
 
   const openComponent = (row, bool, create) => {
     let selectComponents = null;
@@ -100,30 +93,33 @@ export const DataTableSystemsComponents = ({
     }
     if (monitoringSystemsComponents.length > 0 && !create) {
       selectComponents = monitoringSystemsComponents.filter(
-        (element) => element.componentIdentifier === row.col1
+        (element) => element.componentId === row.col1
       )[0];
       setSelectedComponent(selectComponents);
       setCreateBtn("Go Back");
       if (user && checkout) {
         setCreateBtn("Save and Go Back");
       }
-console.log(selectComponents,'selectComponents')
-setOpenAnalyzer(selectComponents);
-
+      console.log(selectComponents, "selectComponents");
+      setOpenAnalyzer(selectComponents);
     }
 
     setSelectedModalData(
       modalViewData(
         selectComponents,
         {
-          componentIdentifier: ["Component ID", "input", "required"],
-          acquisitionMethodCode: ["Sample Acquistion Method", "dropdown", ""],
+          componentId: ["Component ID", "input", "required"],
+          sampleAcquisitionMethodCode: [
+            "Sample Acquistion Method",
+            "dropdown",
+            "",
+          ],
           componentTypeCode: ["Component Type", "dropdown", "required"],
           basisCode: ["Basis Description", "dropdown", ""],
           manufacturer: ["Manufacturer", "input", ""],
           modelVersion: ["Modal or Version", "input", ""],
           serialNumber: ["Serial Number", "input", ""],
-          hgConverterInd: ["Hg Converter Indicator", "radio", ""],
+          hgConverterIndicator: ["Hg Converter Indicator", "radio", ""],
         },
         {
           beginDate: ["Start Date", "date", "required"],
@@ -164,14 +160,18 @@ setOpenAnalyzer(selectComponents);
       modalViewData(
         selectFuelFlows,
         {
-          maxRate: ["Max Fuel Flow Rate", "input", "required"],
-          maxRateSourceCode: [
+          maximumFuelFlowRate: ["Max Fuel Flow Rate", "input", "required"],
+          maximumFuelFlowRateSourceCode: [
             "Max Fuel Flow Rate Source",
             "dropdown",
             "required",
           ],
 
-          sysFuelUomCode: ["Units of Measure Code", "dropdown", "required"],
+          SystemFuelFlowUOMCode: [
+            "Units of Measure Code",
+            "dropdown",
+            "required",
+          ],
           skip: ["", "skip", ""],
         },
         {
@@ -243,7 +243,7 @@ setOpenAnalyzer(selectComponents);
             </div>
           );
         } else {
-          // if (selectedComponent["sysFuelUomCode"] !== undefined) {
+          // if (selectedComponent["SystemFuelFlowUOMCode"] !== undefined) {
           if (openFuelFlowsView) {
             // fuel flow
             return (
@@ -264,21 +264,21 @@ setOpenAnalyzer(selectComponents);
             // components
             return (
               <div>
-              <ModalDetails
-                modalData={selectedComponent}
-                backBtn={setSecondLevel}
-                data={selectedModalData}
-                cols={2}
-                title={
-                  createNewComponent
-                    ? "Create Component"
-                    : user && checkout
-                    ? `Edit Component: ${selectedComponent["componentIdentifier"]}`
-                    : `Component: ${selectedComponent["componentIdentifier"]}`
-                }
-                viewOnly={!(user && checkout)}
-              />
-            <DataTableAnalyzerRanges selectedRange={openAnalyzer} />
+                <ModalDetails
+                  modalData={selectedComponent}
+                  backBtn={setSecondLevel}
+                  data={selectedModalData}
+                  cols={2}
+                  title={
+                    createNewComponent
+                      ? "Create Component"
+                      : user && checkout
+                      ? `Edit Component: ${selectedComponent["componentId"]}`
+                      : `Component: ${selectedComponent["componentId"]}`
+                  }
+                  viewOnly={!(user && checkout)}
+                />
+                <DataTableAnalyzerRanges selectedRange={openAnalyzer} />
               </div>
             );
           }
