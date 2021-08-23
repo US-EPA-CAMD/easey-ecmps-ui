@@ -23,3 +23,5 @@ export const markDataAsChanged = () => {
 export const resetIsDataChanged = () => {
   window.isDataChanged = false;
 };
+
+export const unsavedDataMessage = `Closing this window will discard any unsaved changes.`;

@@ -32,7 +32,7 @@ export const DataTableSystemsComponents = ({
   useEffect(() => {
     mpApi.getMonitoringSystems(locationSelectValue).then((res) => {
       for (let value of res.data) {
-        if (value.monitoringSystemID === systemID) {
+        if (value.monitoringSystemRecordId === systemID) {
           setSelected(value);
         }
       }
@@ -93,7 +93,7 @@ export const DataTableSystemsComponents = ({
     }
     if (monitoringSystemsComponents.length > 0 && !create) {
       selectComponents = monitoringSystemsComponents.filter(
-        (element) => element.componentId === row.col1
+        (element) => element.componentRecordId === row.col1
       )[0];
       setSelectedComponent(selectComponents);
       setCreateBtn("Go Back");
@@ -108,7 +108,7 @@ export const DataTableSystemsComponents = ({
       modalViewData(
         selectComponents,
         {
-          componentId: ["Component ID", "input", "required"],
+          componentRecordId: ["Component ID", "input", "required"],
           sampleAcquisitionMethodCode: [
             "Sample Acquistion Method",
             "dropdown",
@@ -273,8 +273,8 @@ export const DataTableSystemsComponents = ({
                     createNewComponent
                       ? "Create Component"
                       : user && checkout
-                      ? `Edit Component: ${selectedComponent["componentId"]}`
-                      : `Component: ${selectedComponent["componentId"]}`
+                      ? `Edit Component: ${selectedComponent["componentRecordId"]}`
+                      : `Component: ${selectedComponent["componentRecordId"]}`
                   }
                   viewOnly={!(user && checkout)}
                 />

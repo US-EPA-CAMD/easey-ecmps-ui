@@ -24,7 +24,7 @@ const selectedSystem = [
     id: "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D",
     monLocId: "6",
     systemDesignationCode: "P",
-    monitoringSystemID: "AF1",
+    monitoringSystemRecordId: "AF1",
     systemTypeCode: "GAS",
   },
   {
@@ -37,7 +37,7 @@ const selectedSystem = [
     id: "TWCORNEL5-10B54DDC6DBF4DF3B309251288E83E12",
     monLocId: "6",
     systemDesignationCode: "P",
-    monitoringSystemID: "AF2",
+    monitoringSystemRecordId: "AF2",
     systemTypeCode: "GAS",
   },
 ];
@@ -60,10 +60,10 @@ const apiFuel = [
 const apiComp = [
   {
     id: "TWCORNEL5-902F83FCDE244546ABB2E2F46EC873E3",
-    componentId: "TWCORNEL5-4EA39F9E01AB411EB84E313A212084C1",
+    componentRecordId: "TWCORNEL5-4EA39F9E01AB411EB84E313A212084C1",
     monSysId: "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D",
     monLocId: "6",
-    /* componentId: "AFA",*/
+    componentRecordIdentifier: "AFA",
     componentTypeCode: "GFFM",
     basisCode: null,
     modelVersion: "FAB-3161-2A",
@@ -79,10 +79,10 @@ const apiComp = [
   },
   {
     id: "TWCORNEL5-1E5992F39F084C53AC505D3AA7E6910F",
-    componentId: "TWCORNEL5-BEEEEEF364094199A572406CCAD339B0",
+    componentRecordId: "TWCORNEL5-BEEEEEF364094199A572406CCAD339B0",
     monSysId: "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D",
     monLocId: "6",
-    /*componentId: "AFB",*/
+    componentRecordIdentifier: "AFB",
     componentTypeCode: "PRES",
     basisCode: null,
     modelVersion: "IGP10S-T52E1FD",
@@ -98,10 +98,10 @@ const apiComp = [
   },
   {
     id: "TWCORNEL5-2C0D6A3BD0134EB08D517C13F4F29B2B",
-    componentId: "TWCORNEL5-62ADD2B9EBE14827A7A4DDFE317D00BE",
+    componentRecordId: "TWCORNEL5-62ADD2B9EBE14827A7A4DDFE317D00BE",
     monSysId: "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D",
     monLocId: "6",
-    // componentId: "AFC",
+    componentRecordIdentifier: "AFC",
     componentTypeCode: "PRES",
     basisCode: null,
     modelVersion: "IGP10S-T52E1FD",
@@ -117,10 +117,10 @@ const apiComp = [
   },
   {
     id: "TWCORNEL5-CEA2BF80166F4CB1890571BA9ED4ECB4",
-    componentId: "TWCORNEL5-83652BC8FACA47B08F904836032CA7A6",
+    componentRecordId: "TWCORNEL5-83652BC8FACA47B08F904836032CA7A6",
     monSysId: "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D",
     monLocId: "6",
-    /*componentId: "AFD",*/
+    componentRecordIdentifier: "AFD",
     componentTypeCode: "DP",
     basisCode: null,
     modelVersion: "IDP10S-T22C21FD",
@@ -136,10 +136,10 @@ const apiComp = [
   },
   {
     id: "TWCORNEL5-FE67CFECB6E946BFB5F80536B5D8359D",
-    componentId: "TWCORNEL5-AC759DF85E834751A04991EBBD8071A3",
+    componentRecordId: "TWCORNEL5-AC759DF85E834751A04991EBBD8071A3",
     monSysId: "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D",
     monLocId: "6",
-    //componentId: "AFE",
+    componentRecordIdentifier: "AFE",
     componentTypeCode: "DP",
     basisCode: null,
     modelVersion: "IDP10S-T22C21FD",
@@ -155,10 +155,10 @@ const apiComp = [
   },
   {
     id: "TWCORNEL5-DDDA16031A6B44A3BF38FCFF52B82668",
-    componentId: "TWCORNEL5-1346D0289EF44F7A87B4ABF92CE501DC",
+    componentRecordId: "TWCORNEL5-1346D0289EF44F7A87B4ABF92CE501DC",
     monSysId: "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D",
     monLocId: "6",
-    // componentId: "AFF",
+    componentRecordIdentifier: "AFF",
     componentTypeCode: "TEMP",
     basisCode: null,
     modelVersion: "RTT1SS-T1SA1-EN",
@@ -174,10 +174,10 @@ const apiComp = [
   },
   {
     id: "TWCORNEL5-2DBF3CEFE78142C0996F32BB078C2F5A",
-    componentId: "TWCORNEL5-15BBE0B7C475434887739E964E45EDD3",
+    componentRecordId: "TWCORNEL5-15BBE0B7C475434887739E964E45EDD3",
     monSysId: "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D",
     monLocId: "6",
-    //componentId: "AFG",
+    componentRecordIdentifier: "AFG",
     componentTypeCode: "TEMP",
     basisCode: null,
     modelVersion: "RTT1SS-T1SA1-EN",
@@ -193,10 +193,10 @@ const apiComp = [
   },
   {
     id: "TWCORNEL5-E3FA52B8BDD74A73B8F639158D38F147",
-    // componentId: "TWCORNEL5-FADC4E3E593A4AB3B006F6F1B7C9F7DA",
+    componentRecordIdentifier: "TWCORNEL5-FADC4E3E593A4AB3B006F6F1B7C9F7DA",
     monSysId: "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D",
     monLocId: "6",
-    componentId: "XX4",
+    componentRecordId: "XX4",
     componentTypeCode: "DAHS",
     basisCode: null,
     modelVersion: "CEMS",

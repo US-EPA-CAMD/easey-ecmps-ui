@@ -303,7 +303,7 @@ describe("rendering a modal pop up detail ", () => {
 
   test("renders 1 drop down with no modal values and no required text  ", () => {
     const editData = [
-      ["componentIdentifier", "Component ID", "AFA", "required", "input"],
+      ["componentId", "Component ID", "AFA", "required", "input"],
       [
         "acquisitionMethodCode",
         "Sample Acquistion Method",

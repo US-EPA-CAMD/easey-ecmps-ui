@@ -8,7 +8,7 @@ export const getMonitoringPlansSystemsTableRecords = (data) => {
     const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
     const endHour = el.endHour ? el.endHour.toString() : "";
     records.push({
-      col1: el.monitoringSystemID,
+      col1: el.monitoringSystemRecordId,
       col2: el.systemType,
       col3: el.systemDesignationCode,
       col4: el.fuelCode,

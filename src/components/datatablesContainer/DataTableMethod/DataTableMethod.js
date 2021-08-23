@@ -16,6 +16,7 @@ import {
 import {
   attachChangeEventListeners,
   removeChangeEventListeners,
+  unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
 export const DataTableMethod = ({
@@ -188,10 +189,7 @@ export const DataTableMethod = ({
 
   const closeModalHandler = () => {
     if (window.isDataChanged === true) {
-      if (
-        window.confirm(`Closing this modal prior to saving will result in loss of data.
-                        Are you sure you want to continue?`) === true
-      ) {
+      if (window.confirm(unsavedDataMessage) === true) {
         setShow(false);
         removeChangeEventListeners(".modalUserInput");
       }
