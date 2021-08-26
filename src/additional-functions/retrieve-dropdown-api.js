@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import * as dmApi from "../utils/api/dataManagementApi";
 export const useRetrieveDropdownApi = (arr, mats = false) => {
   const [totalOptions, setTotalOptions] = useState({});
@@ -16,16 +16,14 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
                 };
               });
 
-              
               options.unshift({ code: "", name: "" });
               const newData = totalOptions;
-              newData["matsMethodParameterCode"] = options;
+              newData["supplementalMATSParameterCode"] = options;
               setTotalOptions(newData);
             });
           } else {
             dmApi.getAllParameterCodes().then((response) => {
               options = response.data.map((option) => {
-                 
                 return {
                   code: option["parameterCode"],
                   name: option["parameterCodeDescription"],
@@ -40,26 +38,26 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             });
           }
           break;
-        case "methodCode":
+        case "monitoringMethodCode":
           if (mats) {
             dmApi.getAllMatsMethodCodes().then((response) => {
               options = response.data.map((option) => {
                 return {
-                  code: option["matsMethodCode"],
+                  code: option["supplementalMATSMonitoringMethodCode"],
                   name: option["matsMethodCodeDescription"],
                 };
               });
 
               options.unshift({ code: "", name: "" });
               const newData = totalOptions;
-              newData["matsMethodCode"] = options;
+              newData["supplementalMATSMonitoringMethodCode"] = options;
               setTotalOptions(newData);
             });
           } else {
             dmApi.getAllMethodCodes().then((response) => {
               options = response.data.map((option) => {
                 return {
-                  code: option["methodCode"],
+                  code: option["monitoringMethodCode"],
                   name: option["methodCodeDescription"],
                 };
               });
@@ -72,11 +70,11 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             });
           }
           break;
-        case "subDataCode":
+        case "substituteDataCode":
           dmApi.getAllSubstituteDataCodes().then((response) => {
             options = response.data.map((option) => {
               return {
-                code: option["subDataCode"],
+                code: option["substituteDataCode"],
                 name: option["subDataCodeDescription"],
               };
             });

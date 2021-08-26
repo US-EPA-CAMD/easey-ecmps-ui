@@ -9,8 +9,8 @@ jest.mock("axios");
 const monitoringMatsMethods = [
   {
     id: "MELISSARHO-FD768B60E4D343158F7AD52EFD704D0E",
-    matsMethodParameterCode: "TNHGM",
-    matsMethodCode: "QST",
+    supplementalMATSParameterCode: "TNHGM",
+    supplementalMATSMonitoringMethodCode: "QST",
     beginDate: "2016-04-16",
     beginHour: "0",
     endDate: null,
@@ -19,8 +19,8 @@ const monitoringMatsMethods = [
   },
   {
     id: "MELISSARHO-CDF765BC7BF849EE9C23608B95540200",
-    matsMethodParameterCode: "HG",
-    matsMethodCode: "LEE",
+    supplementalMATSParameterCode: "HG",
+    supplementalMATSMonitoringMethodCode: "LEE",
     beginDate: "2016-04-16",
     beginHour: "0",
     endDate: null,

@@ -55,10 +55,10 @@ export const DataTableMats = ({
   ];
 
   const payload = {
-    monLocId: locationSelectValue,
+    locationId: locationSelectValue,
     id: null,
-    matsMethodCode: null,
-    matsMethodParameterCode: null,
+    supplementalMATSMonitoringMethodCode: null,
+    supplementalMATSParameterCode: null,
     beginDate: null,
     beginHour: 0,
     endDate: null,
@@ -157,8 +157,12 @@ export const DataTableMats = ({
       modalViewData(
         mats,
         {
-          matsMethodParameterCode: ["Parameter", "dropdown", "required"],
-          matsMethodCode: ["Methodology", "dropdown", "required"],
+          supplementalMATSParameterCode: ["Parameter", "dropdown", "required"],
+          supplementalMATSMonitoringMethodCode: [
+            "Methodology",
+            "dropdown",
+            "required",
+          ],
         },
         {
           beginDate: ["Start Date", "date", "required"],

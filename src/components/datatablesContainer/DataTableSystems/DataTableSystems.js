@@ -67,22 +67,27 @@ export const DataTableSystems = ({
   // *** row handler onclick event listener
   const openSystem = (row, bool, create) => {
     let selectSystem = null;
-    
+
     setCreateNewSystem(create);
     if (monitoringSystems.length > 0 && !create) {
       selectSystem = monitoringSystems.filter(
         (element) => element.id === row.col7
       )[0];
       setSelected(row.cells);
-      console.log('row inside',row,selected)
-    }console.log('row',row,selected)
+      console.log("row inside", row, selected);
+    }
+    console.log("row", row, selected);
     setSelectedModalData(
       modalViewData(
         selectSystem,
         {
-          systemIdentifier: ["System ID", "input", "required"],
+          monitoringSystemId: ["System ID", "input", "required"],
           systemDesignationCode: ["System Designation", "dropdown", "required"],
-          systemTypeCode: ["System Type", "dropdown", "required"],
+          maximumFuelFlowRateSourceCode: [
+            "System Type",
+            "dropdown",
+            "required",
+          ],
           fuelCode: ["Fuel Type", "dropdown", "required"],
         },
         {

@@ -1,6 +1,6 @@
 import React from "react";
 import { render, waitForElement } from "@testing-library/react";
-import { DataTableSystems} from "./DataTableSystems";
+import { DataTableSystems } from "./DataTableSystems";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 const axios = require("axios");
 const DataTableSystemsfunction = require("./DataTableSystems");
@@ -8,11 +8,11 @@ jest.mock("axios");
 const systemsDataActiveOnly = [
   {
     id: "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D",
-    monLocId: "6",
-    systemTypeCode: "GAS",
+    locationId: "6",
+    maximumFuelFlowRateSourceCode: "GAS",
     systemDesignationCode: "P",
-    systemIdentifier: "AF1",
-    fuelCode: "PNG",
+    monitoringSystemId: "AF1",
+    systemFuelFlowUOMCode: "PNG",
     beginDate: "2019-07-01",
     endDate: null,
     beginHour: "0",
@@ -21,11 +21,11 @@ const systemsDataActiveOnly = [
   },
   {
     id: "TWCORNEL5-10B54DDC6DBF4DF3B309251288E83E12",
-    monLocId: "6",
-    systemTypeCode: "GAS",
+    locationId: "6",
+    maximumFuelFlowRateSourceCode: "GAS",
     systemDesignationCode: "P",
-    systemIdentifier: "AF2",
-    fuelCode: "PNG",
+    monitoringSystemId: "AF2",
+    systemFuelFlowUOMCode: "PNG",
     beginDate: "2019-07-01",
     endDate: null,
     beginHour: "0",
@@ -37,11 +37,11 @@ const systemsDataActiveOnly = [
 const systemData = [
   {
     id: "CAMD-DDD452F9F99344048EFB96C42432C0ED",
-    monLocId: "5",
-    systemTypeCode: "OP",
+    locationId: "5",
+    maximumFuelFlowRateSourceCode: "OP",
     systemDesignationCode: "P",
-    systemIdentifier: "AA5",
-    fuelCode: "NFS",
+    monitoringSystemId: "AA5",
+    systemFuelFlowUOMCode: "NFS",
     beginDate: "1993-10-01",
     endDate: "2018-10-02",
     beginHour: "0",
@@ -50,11 +50,11 @@ const systemData = [
   },
   {
     id: "CAMD-7903CC3112AF47F797D1F0E58EDB486E",
-    monLocId: "5",
-    systemTypeCode: "SO2",
+    locationId: "5",
+    maximumFuelFlowRateSourceCode: "SO2",
     systemDesignationCode: "P",
-    systemIdentifier: "AA1",
-    fuelCode: "NFS",
+    monitoringSystemId: "AA1",
+    systemFuelFlowUOMCode: "NFS",
     beginDate: "1993-10-01",
     endDate: "2019-06-30",
     beginHour: "0",
@@ -63,11 +63,11 @@ const systemData = [
   },
   {
     id: "CAMD-F0470799B81840DB81B5BBD810F9EE15",
-    monLocId: "5",
-    systemTypeCode: "NOX",
+    locationId: "5",
+    maximumFuelFlowRateSourceCode: "NOX",
     systemDesignationCode: "P",
-    systemIdentifier: "AA2",
-    fuelCode: "NFS",
+    monitoringSystemId: "AA2",
+    systemFuelFlowUOMCode: "NFS",
     beginDate: "1993-10-01",
     endDate: null,
     beginHour: "0",
@@ -76,11 +76,11 @@ const systemData = [
   },
   {
     id: "CAMD-F5E1F18322AB4688982A8E4633001B12",
-    monLocId: "5",
-    systemTypeCode: "CO2",
+    locationId: "5",
+    maximumFuelFlowRateSourceCode: "CO2",
     systemDesignationCode: "P",
-    systemIdentifier: "AA3",
-    fuelCode: "NFS",
+    monitoringSystemId: "AA3",
+    systemFuelFlowUOMCode: "NFS",
     beginDate: "1993-10-01",
     endDate: "2019-06-30",
     beginHour: "0",
@@ -89,11 +89,11 @@ const systemData = [
   },
   {
     id: "CAMD-51F3958C85DE4A0BB7DA47F2D1EDE131",
-    monLocId: "5",
-    systemTypeCode: "FLOW",
+    locationId: "5",
+    maximumFuelFlowRateSourceCode: "FLOW",
     systemDesignationCode: "P",
-    systemIdentifier: "AA4",
-    fuelCode: "NFS",
+    monitoringSystemId: "AA4",
+    systemFuelFlowUOMCode: "NFS",
     beginDate: "1993-10-01",
     endDate: "2019-06-30",
     beginHour: "0",
@@ -105,11 +105,11 @@ const systemData = [
 const systemsInactiveOnly = [
   {
     id: "CAMD-0BEB1B660CA54089B7C1CC2CC3297C85",
-    monLocId: "76",
-    systemTypeCode: "OP",
+    locationId: "76",
+    maximumFuelFlowRateSourceCode: "OP",
     systemDesignationCode: "P",
-    systemIdentifier: "DB5",
-    fuelCode: "NFS",
+    monitoringSystemId: "DB5",
+    systemFuelFlowUOMCode: "NFS",
     beginDate: "1994-11-01",
     endDate: "2007-09-30",
     beginHour: "0",
