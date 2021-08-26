@@ -3,7 +3,7 @@ import * as fs from "../../../utils/selectors/monitoringPlanSystems";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-
+import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import DataTableRender from "../../DataTableRender/DataTableRender";
 import "./DataTableSystemsComponentsRender.scss";
 import DataTableAnalyzerRanges from "../DataTableAnalyzerRanges/DataTableAnalyzerRanges";
@@ -17,6 +17,7 @@ export const DataTableSystemsComponents = ({
   user,
   checkout,
   setCreateBtn,
+  setCreateBtnAPI
 }) => {
   const [monitoringSystemsFuelFlows, setMonitoringSystemsFuelFlows] = useState(
     ""
@@ -90,6 +91,7 @@ export const DataTableSystemsComponents = ({
     setComponentView(true);
     if (create) {
       setCreateBtn("Create Component");
+      setCreateBtnAPI(createComponents);
     }
     if (monitoringSystemsComponents.length > 0 && !create) {
       selectComponents = monitoringSystemsComponents.filter(
@@ -99,9 +101,10 @@ export const DataTableSystemsComponents = ({
       setCreateBtn("Go Back");
       if (user && checkout) {
         setCreateBtn("Save and Go Back");
+        setCreateBtnAPI(saveComponents);
       }
-      console.log(selectComponents, "selectComponents");
-      setOpenAnalyzer(selectComponents);
+      // console.log(selectComponents, "selectComponents");
+      // setOpenAnalyzer(selectComponents);
     }
 
     setSelectedModalData(
@@ -130,9 +133,60 @@ export const DataTableSystemsComponents = ({
     setSecondLevel(true, "Component");
   };
 
+  const payloadComponents = {
+    monLocId: locationSelectValue,
+    id: null,
+    matsMethodCode: null,
+    matsMethodParameterCode: null,
+    beginDate: null,
+    beginHour: 0,
+    endDate: null,
+    endHour: 0,
+  };
+  const saveComponents = () => {
+    const userInput = extractUserInput(payloadComponents, ".modalUserInput");
+    mpApi
+      .saveMonitoringMats(userInput)
+      .then((result) => {
+        console.log(result);
+        // setShow(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        // setShow(false);
+      });
+
+    // setUpdateTable(true);
+  };
+  const createComponents = () => {
+    const userInput = extractUserInput(payloadComponents, ".modalUserInput");
+    console.log("checking results before api call", payloadComponents);
+    mpApi
+      .createMats(userInput)
+      .then((result) => {
+        console.log("checking results", result, payloadComponents);
+        // setShow(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        // setShow(false);
+      });
+    // setUpdateTable(true);
+  };
   const [createNewFuelFlow, setCreateNewFuelFlow] = useState(false);
   const [openFuelFlowsView, setOpenFuelFlowsView] = React.useState(false);
   // *** row handler onclick event listener
+
+  const payloadFuelFlows = {
+    monLocId: locationSelectValue,
+    id: null,
+    matsMethodCode: null,
+    matsMethodParameterCode: null,
+    beginDate: null,
+    beginHour: 0,
+    endDate: null,
+    endHour: 0,
+  };
   const openFuelFlows = (row, bool, create) => {
     let selectFuelFlows = null;
     // setCreateNewSystem(create);
@@ -141,6 +195,7 @@ export const DataTableSystemsComponents = ({
     setOpenFuelFlowsView(true);
     if (create) {
       setCreateBtn("Create Fuel Flow");
+      setCreateBtnAPI(createFuelFlows)
     }
     if (monitoringSystemsFuelFlows.length > 0 && !create) {
       selectFuelFlows = monitoringSystemsFuelFlows.filter(
@@ -150,6 +205,7 @@ export const DataTableSystemsComponents = ({
       setCreateBtn("Go Back");
       if (user && checkout) {
         setCreateBtn("Save and Go Back");
+        setCreateBtnAPI(saveFuelFlows)
       }
     }
     setSelectedModalData(
@@ -180,6 +236,36 @@ export const DataTableSystemsComponents = ({
     setSecondLevel(true, "Fuel Flow");
   };
 
+  const saveFuelFlows = () => {
+    const userInput = extractUserInput(payloadFuelFlows, ".modalUserInput");
+    mpApi
+      .saveMonitoringMats(userInput)
+      .then((result) => {
+        console.log(result);
+        // setShow(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        // setShow(false);
+      });
+
+    // setUpdateTable(true);
+  };
+  const createFuelFlows = () => {
+    const userInput = extractUserInput(payloadFuelFlows, ".modalUserInput");
+    console.log("checking results before api call", payloadFuelFlows);
+    mpApi
+      .createMats(userInput)
+      .then((result) => {
+        console.log("checking results", result, payloadFuelFlows);
+        // setShow(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        // setShow(false);
+      });
+    // setUpdateTable(true);
+  };
   const data = useMemo(() => {
     if (monitoringSystemsComponents.length > 0) {
       return fs.getMonitoringPlansSystemsComponentsTableRecords(

@@ -85,3 +85,30 @@ export const getAllMatsMethodCodes = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+// System Fuel Flows
+export const getAllMeasureCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/mats-method-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+
+export const getAllFuelFlowRateCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/mats-method-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+//
+
+// System Analyzer Ranges
+export const getAllRangeCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/mats-method-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+//
