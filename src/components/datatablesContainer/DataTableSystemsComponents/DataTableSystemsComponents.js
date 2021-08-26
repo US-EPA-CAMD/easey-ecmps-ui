@@ -108,7 +108,7 @@ export const DataTableSystemsComponents = ({
       modalViewData(
         selectComponents,
         {
-          componentRecordId: ["Component ID", "input", "required"],
+          componentRecordIdentifier: ["Component ID", "input", "required"],
           sampleAcquisitionMethodCode: [
             "Sample Acquistion Method",
             "dropdown",
