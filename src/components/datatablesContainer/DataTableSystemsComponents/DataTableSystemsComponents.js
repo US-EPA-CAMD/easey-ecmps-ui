@@ -104,7 +104,7 @@ export const DataTableSystemsComponents = ({
         setCreateBtnAPI(saveComponents);
       }
       // console.log(selectComponents, "selectComponents");
-      // setOpenAnalyzer(selectComponents);
+      setOpenAnalyzer(selectComponents);
     }
 
     setSelectedModalData(
