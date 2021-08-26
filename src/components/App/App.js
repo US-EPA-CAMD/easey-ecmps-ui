@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 
-import Home from "../Home/Home";
 import NotFound from "../NotFound/NotFound";
 import AboutHome from "../AboutHome/AboutHome";
 import Layout from "../Layout/Layout";
@@ -14,6 +13,7 @@ import ReportingInstructions from "../ReportingInstructions/ReportingInstruction
 import { handleActiveElementFocus } from "../../additional-functions/add-active-class";
 
 import "./App.scss";
+import FAQ from "../FAQ/FAQ";
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -40,17 +40,33 @@ const App = () => {
     };
   }, []);
 
-  const [currentLink,setCurrentLink] = useState(window.location.href.replace(`${window.location.origin}`, ""));
+  const [currentLink, setCurrentLink] = useState(
+    window.location.href.replace(`${window.location.origin}`, "")
+  );
   return (
     <div>
-      <Layout user={user} currentLink={currentLink} setCurrentLink={setCurrentLink}>
+      <Layout
+        user={user}
+        currentLink={currentLink}
+        setCurrentLink={setCurrentLink}
+      >
         <Switch>
           <Redirect from="/home" to="/" />
 
           <Route
             path="/"
             exact
-            component={() => <AboutHome user={user}  setCurrentLink = {setCurrentLink}/>}
+            component={() => (
+              <AboutHome user={user} setCurrentLink={setCurrentLink} />
+            )}
+          />
+
+          <Route
+            path="/faqs"
+            exact
+            component={() => (
+              <FAQ />
+            )}
           />
           <Route path="/login" exact component={Login} />
           <Route

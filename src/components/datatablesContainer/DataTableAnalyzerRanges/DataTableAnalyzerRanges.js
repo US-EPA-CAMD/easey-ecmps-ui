@@ -90,35 +90,35 @@ export const DataTableAnalyzerRanges = ({
   //       false
   //     );
   //   };
-  //   const saveMethods = () => {
-  //     const payload = {
-  //       locationId: locationSelectValue,
-  //       id: null,
-  //       supplementalMATSMonitoringMethodCode: null,
-  //       supplementalMATSParameterCode: null,
-  //       beginDate: null,
-  //       beginHour: 0,
-  //       endDate: null,
-  //       endHour: 0,
-  //     };
+  const saveAnalyzerRanges = () => {
+    const payload = {
+      monLocId: locationSelectValue,
+      id: null,
+      analyzerRangeCode: "string",
+      dualRangeIndicator: 0,
+      beginDate: null,
+      beginHour: 0,
+      endDate: null,
+      endHour: 0,
+    };
 
-  //     const userInput = extractUserInput(payload, ".modalUserInput");
-  //     console.log(userInput, "user");
-  //     mpApi
-  //       .saveMonitoringMats(userInput)
-  //       .then((result) => {
-  //         console.log(result);
-  //         setShow(false);
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //         setShow(false);
-  //       });
-  //     mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
-  //       console.log("testing save", res.data);
-  //     });
-  //     setUpdateTable(true);
-  //   };
+    const userInput = extractUserInput(payload, ".modalUserInput");
+    console.log(userInput, "user");
+    mpApi
+      .saveMonitoringMats(userInput)
+      .then((result) => {
+        console.log(result);
+        setShow(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setShow(false);
+      });
+    mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
+      console.log("testing save", res.data);
+    });
+    setUpdateTable(true);
+  };
 
   //   const [selectedModalData, setSelectedModalData] = useState(null);
   //   const openMatsModal = (row, bool, create) => {

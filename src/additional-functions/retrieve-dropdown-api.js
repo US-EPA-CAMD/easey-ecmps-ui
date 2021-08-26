@@ -57,7 +57,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             dmApi.getAllMethodCodes().then((response) => {
               options = response.data.map((option) => {
                 return {
-                  code: option["monitoringMethodCode"],
+                  code: option["methodCode"],
                   name: option["methodCodeDescription"],
                 };
               });
@@ -74,7 +74,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           dmApi.getAllSubstituteDataCodes().then((response) => {
             options = response.data.map((option) => {
               return {
-                code: option["substituteDataCode"],
+                code: option["subDataCode"],
                 name: option["subDataCodeDescription"],
               };
             });
@@ -95,6 +95,56 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
               return {
                 code: option["bypassApproachCode"],
                 name: option["bypassApproachCodeDescription"],
+              };
+            });
+
+            options.unshift({ code: "", name: "" });
+            const newData = totalOptions;
+            newData[x] = options;
+
+            setTotalOptions(newData);
+          });
+          break;
+        //Analyzer Range
+        case "rangeCode":
+          dmApi.getAllRangeCodes().then((response) => {
+            options = response.data.map((option) => {
+              return {
+                code: option["rangeCode"],
+                name: option["rangeCodeDescription"],
+              };
+            });
+
+            options.unshift({ code: "", name: "" });
+            const newData = totalOptions;
+            newData[x] = options;
+
+            setTotalOptions(newData);
+          });
+          break;
+        // System Fuel Flows
+        case "bypassApproachCode":
+          dmApi.getAllMeasureCodes().then((response) => {
+            options = response.data.map((option) => {
+              return {
+                code: option["bypassApproachCode"],
+                name: option["bypassApproachCodeDescription"],
+              };
+            });
+
+            options.unshift({ code: "", name: "" });
+            const newData = totalOptions;
+            newData[x] = options;
+
+            setTotalOptions(newData);
+          });
+          break;
+        case "fuelFlowRateCode":
+          dmApi.getAllFuelFlowRateCodes().then((response) => {
+            options = response.data.map((option) => {
+              return {
+                code: option["fuelFlowRateCode"],
+                name: option["fuelFlowRateCodeDescription"],
               };
             });
 

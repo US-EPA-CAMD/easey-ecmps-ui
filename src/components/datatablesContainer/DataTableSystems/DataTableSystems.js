@@ -53,14 +53,7 @@ export const DataTableSystems = ({
     setSecondLevel(false);
     setShow(false);
   };
-  // const [modalData, setModalData] = useState([
-  //   { value: 1 },
-  //   { value: 1 },
-  //   { value: 1 },
-  //   { value: 1 },
-  //   { value: "05/04/2009 0" },
-  //   { value: "05/04/2009 0" },
-  // ]);
+
   const [selected, setSelected] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
 
@@ -161,9 +154,8 @@ export const DataTableSystems = ({
   };
 
   const [createBTN, setCreateBTN] = useState("Create");
-  const createBtn = (val) => {
-    setCreateBTN(`${val}`);
-  };
+  const [createBtnAPI, setCreateBtnAPI] = useState(null);
+ 
   // *** memoize data
   const data = useMemo(() => {
     if (monitoringSystems.length > 0) {
@@ -240,6 +232,7 @@ export const DataTableSystems = ({
             breadCrumbBar={currentBar}
             title={`System: ${selected[0]["value"]}`}
             createNew={createBTN}
+            createBtnAPI={createBtnAPI}
             children={
               <div>
                 {secondLevel ? (
@@ -259,7 +252,8 @@ export const DataTableSystems = ({
                   viewOnly={false}
                   user={user}
                   checkout={checkout}
-                  setCreateBtn={createBtn}
+                  setCreateBtn={setCreateBTN}
+                  setCreateBtnAPI={setCreateBtnAPI}
                   locationSelectValue={locationSelectValue}
                   systemID={selected.length > 1 ? selected[0].value : 0}
                 />
