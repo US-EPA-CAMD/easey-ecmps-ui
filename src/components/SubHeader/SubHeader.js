@@ -47,7 +47,7 @@ export const SubHeader = ({ user }) => {
     {
       label: <span className="margin-right-1 text-no-wrap">Resources</span>,
       items: [
-        { menu: "sdfa", link: "" },
+        { menu: "FAQs", link: "/faqs" },
         { menu: "sdfa", link: "" },
       ],
     },

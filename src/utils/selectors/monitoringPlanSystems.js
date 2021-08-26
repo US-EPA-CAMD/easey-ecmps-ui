@@ -8,8 +8,8 @@ export const getMonitoringPlansSystemsTableRecords = (data) => {
     const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
     const endHour = el.endHour ? el.endHour.toString() : "";
     records.push({
-      col1: el.systemIdentifier,
-      col2: el.systemType,
+      col1: el.monitoringSystemId,
+      col2: el.systemTypeCode,
       col3: el.systemDesignationCode,
       col4: el.fuelCode,
       col5: `${beginDate} ${beginHour}`,
@@ -41,7 +41,7 @@ export const getMonitoringPlansSystemsComponentsTableRecords = (data) => {
       present = `${endDate}: ${endHour}`;
     }
     records.push({
-      col1: el.componentIdentifier,
+      col1: el.componentId,
       col2: el.componentTypeCode,
       col3: `${beginDate}: ${beginHour} ➜ ${present}`,
       col4: el.id,
@@ -69,7 +69,7 @@ export const getMonitoringPlansSystemsFuelFlowsComponentsTableRecords = (
     }
     records.push({
       col1: el.fuelCode,
-      col2: el.systemTypeCode,
+      col2: el.maximumFuelFlowRateSourceCode,
       col3: `${beginDate}: ${beginHour} ➜ ${present}`,
       col4: el.id,
     });

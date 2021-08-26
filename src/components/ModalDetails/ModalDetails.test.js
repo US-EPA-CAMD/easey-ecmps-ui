@@ -21,13 +21,13 @@ beforeAll(() => {
     endDate: null,
     endHour: null,
     id: "TWCORNEL5-F5C722306BC647C0A89728805EC65491",
-    methodCode: "AD",
-    monLocId: "6",
+    monitoringMethodCode: "AD",
+    locationId: "6",
     parameterCode: "CO2",
-    subDataCode: "FSP75",
+    substituteDataCode: "FSP75",
     updateDate: "2021-07-14",
     userId: "testuser",
-    hgConverterInd: null,
+    hgConverterIndicator: null,
   };
   data = [
     [
@@ -73,7 +73,7 @@ beforeAll(() => {
       ],
     ],
     [
-      "methodCode",
+      "monitoringMethodCode",
       "Methodology",
       "Appendix D",
       "required",
@@ -111,7 +111,7 @@ beforeAll(() => {
       ],
     ],
     [
-      "subDataCode",
+      "substituteDataCode",
       "Substitute Data Approach",
       "Fuel-Specific Missing Data",
       "required",
@@ -200,8 +200,8 @@ beforeAll(() => {
     ["beginHour", "Start Time", "6", "required", "time", "6"],
     ["endDate", "End Date", "", false, "date", null],
 
-    ["hgConverterInd", "Hg Converter Indicator", true, false, "radio"],
-    ["hgConverterInd", "Hg Converter Indicator", false, false, "radio"],
+    ["hgConverterIndicator", "Hg Converter Indicator", true, false, "radio"],
+    ["hgConverterIndicator", "Hg Converter Indicator", false, false, "radio"],
     ["endHour", "End Time", null, false, "time", null],
   ];
   cols = 2;
@@ -228,29 +228,29 @@ describe("rendering a modal pop up detail ", () => {
 
   test("renders 1 drop down with no initial value and no required text  ", () => {
     const editModal = {
-      acquisitionMethodCode: "ORF",
+      sampleAcquisitionMethodCode: "ORF",
       active: true,
       basisCode: null,
       beginDate: "2019-07-01",
       beginHour: "0",
-      componentId: "TWCORNEL5-4EA39F9E01AB411EB84E313A212084C1",
-      componentIdentifier: "AFA",
+      componentRecordId: "TWCORNEL5-4EA39F9E01AB411EB84E313A212084C1",
+      // componentRecordId: "AFA",
       componentTypeCode: "GFFM",
       endDate: null,
       endHour: null,
-      hgConverterInd: null,
+      hgConverterIndicator: null,
       id: "TWCORNEL5-902F83FCDE244546ABB2E2F46EC873E3",
       manufacturer: "FLUIDID TECHNOLOGIES",
       modelVersion: "FAB-3161-2A",
-      monLocId: "6",
-      monSysId: "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D",
+      //   locationId: "6",
+      locationId: "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D",
       serialNumber: "001-NG-FE-1000",
     };
 
     const editData = [
-      ["componentIdentifier", "Component ID", "AFA", "required", "input"],
+      ["componentRecordId", "Component ID", "AFA", "required", "input"],
       [
-        "acquisitionMethodCode",
+        "sampleAcquisitionMethodCode",
         "Sample Acquistion Method",
         " Orifice",
         false,
@@ -261,10 +261,16 @@ describe("rendering a modal pop up detail ", () => {
       // ["basisCode", "Basis Description", "", false, "dropdown", null, null],
       ["manufacturer", "Manufacturer", "FLUIDID TECHNOLOGIES", false, "input"],
       ["serialNumber", "Serial Number", false, false, "input"],
-      ["hgConverterInd", "Hg Converter Indicator1", true, false, "radio"],
-      ["hgConverterInd", "Hg Converter Indicator2", false, false, "radio"],
-      ["hgConverterInd", "Hg Converter Indicator3", null, false, "radio"],
-      ["hgConverterInd", "Hg Converter Indicator4", null, false, ""],
+      ["hgConverterIndicator", "Hg Converter Indicator1", true, false, "radio"],
+      [
+        "hgConverterIndicator",
+        "Hg Converter Indicator2",
+        false,
+        false,
+        "radio",
+      ],
+      ["hgConverterIndicator", "Hg Converter Indicator3", null, false, "radio"],
+      ["hgConverterIndicator", "Hg Converter Indicator4", null, false, ""],
       [
         "beginDate",
         "Start Date",
@@ -297,9 +303,9 @@ describe("rendering a modal pop up detail ", () => {
 
   test("renders 1 drop down with no modal values and no required text  ", () => {
     const editData = [
-      ["componentIdentifier", "Component ID", "AFA", "required", "input"],
+      ["componentRecordId", "Component ID", "AFA", "required", "input"],
       [
-        "acquisitionMethodCode",
+        "sampleAcquisitionMethodCode",
         "Sample Acquistion Method",
         " Orifice",
         false,
@@ -310,10 +316,16 @@ describe("rendering a modal pop up detail ", () => {
       ["basisCode", "Basis Description", "", false, "dropdown", null, null],
       ["manufacturer", "Manufacturer", "FLUIDID TECHNOLOGIES", false, "input"],
       ["serialNumber", "Serial Number", false, false, "input"],
-      ["hgConverterInd", "Hg Converter Indicator1", true, false, "radio"],
-      ["hgConverterInd", "Hg Converter Indicator2", false, false, "radio"],
-      ["hgConverterInd", "Hg Converter Indicator3", null, false, "radio"],
-      ["hgConverterInd", "Hg Converter Indicator4", null, false, ""],
+      ["hgConverterIndicator", "Hg Converter Indicator1", true, false, "radio"],
+      [
+        "hgConverterIndicator",
+        "Hg Converter Indicator2",
+        false,
+        false,
+        "radio",
+      ],
+      ["hgConverterIndicator", "Hg Converter Indicator3", null, false, "radio"],
+      ["hgConverterIndicator", "Hg Converter Indicator4", null, false, ""],
       [
         "beginDate",
         "Start Date",

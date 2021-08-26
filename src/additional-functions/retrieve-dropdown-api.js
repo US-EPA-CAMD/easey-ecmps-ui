@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import * as dmApi from "../utils/api/dataManagementApi";
 export const useRetrieveDropdownApi = (arr, mats = false) => {
   const [totalOptions, setTotalOptions] = useState({});
@@ -16,16 +16,14 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
                 };
               });
 
-              
               options.unshift({ code: "", name: "" });
               const newData = totalOptions;
-              newData["matsMethodParameterCode"] = options;
+              newData["supplementalMATSParameterCode"] = options;
               setTotalOptions(newData);
             });
           } else {
             dmApi.getAllParameterCodes().then((response) => {
               options = response.data.map((option) => {
-                 
                 return {
                   code: option["parameterCode"],
                   name: option["parameterCodeDescription"],
@@ -40,19 +38,19 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             });
           }
           break;
-        case "methodCode":
+        case "monitoringMethodCode":
           if (mats) {
             dmApi.getAllMatsMethodCodes().then((response) => {
               options = response.data.map((option) => {
                 return {
-                  code: option["matsMethodCode"],
+                  code: option["supplementalMATSMonitoringMethodCode"],
                   name: option["matsMethodCodeDescription"],
                 };
               });
 
               options.unshift({ code: "", name: "" });
               const newData = totalOptions;
-              newData["matsMethodCode"] = options;
+              newData["supplementalMATSMonitoringMethodCode"] = options;
               setTotalOptions(newData);
             });
           } else {
@@ -72,7 +70,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             });
           }
           break;
-        case "subDataCode":
+        case "substituteDataCode":
           dmApi.getAllSubstituteDataCodes().then((response) => {
             options = response.data.map((option) => {
               return {
@@ -97,6 +95,56 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
               return {
                 code: option["bypassApproachCode"],
                 name: option["bypassApproachCodeDescription"],
+              };
+            });
+
+            options.unshift({ code: "", name: "" });
+            const newData = totalOptions;
+            newData[x] = options;
+
+            setTotalOptions(newData);
+          });
+          break;
+        //Analyzer Range
+        case "rangeCode":
+          dmApi.getAllRangeCodes().then((response) => {
+            options = response.data.map((option) => {
+              return {
+                code: option["rangeCode"],
+                name: option["rangeCodeDescription"],
+              };
+            });
+
+            options.unshift({ code: "", name: "" });
+            const newData = totalOptions;
+            newData[x] = options;
+
+            setTotalOptions(newData);
+          });
+          break;
+        // System Fuel Flows
+        case "bypassApproachCode":
+          dmApi.getAllMeasureCodes().then((response) => {
+            options = response.data.map((option) => {
+              return {
+                code: option["bypassApproachCode"],
+                name: option["bypassApproachCodeDescription"],
+              };
+            });
+
+            options.unshift({ code: "", name: "" });
+            const newData = totalOptions;
+            newData[x] = options;
+
+            setTotalOptions(newData);
+          });
+          break;
+        case "fuelFlowRateCode":
+          dmApi.getAllFuelFlowRateCodes().then((response) => {
+            options = response.data.map((option) => {
+              return {
+                code: option["fuelFlowRateCode"],
+                name: option["fuelFlowRateCodeDescription"],
               };
             });
 

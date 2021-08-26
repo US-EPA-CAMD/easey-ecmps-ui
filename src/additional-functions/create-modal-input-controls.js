@@ -23,37 +23,45 @@ export const modalViewData = (
   totalOptions,
   mats = false
 ) => {
-
-//   (7) ["systemDesignationCode", "System Designation", "Primary", "required", "dropdown", "P", undefined]
-// 2: (7) ["systemTypeCode", "System Type", "Gas Fuel Flow System", "required", "dropdown", "GAS", undefined]
-// 3: (7) ["fuelCode", "Fuel Type", "Pipeline Natural Gas", "required", "dropdown", "PNG", undefined]
+  //   (7) ["systemDesignationCode", "System Designation", "Primary", "required", "dropdown", "P", undefined]
+  // 2: (7) ["maximumFuelFlowRateSourceCode", "System Type", "Gas Fuel Flow System", "required", "dropdown", "GAS", undefined]
+  // 3: (7) ["systemFuelFlowUOMCode", "Fuel Type", "Pipeline Natural Gas", "required", "dropdown", "PNG", undefined]
   const arr = [];
   const codeList = {
-    systemTypeCode: types,
+    systemTypeCodes: types,
     fuelCode: fuels,
     systemDesignationCode: designations,
     // bypassApproachCode: bypassApproachCodes,
-    // subDataCode: substituteDataApproachCodes,
+    // substituteDataCode: substituteDataApproachCodes,
     // parameterCode: parameterCodes,
     // methodCode: methodCodes,
     componentTypeCode: componentTypes,
-    acquisitionMethodCode: acqMethodCode,
+    sampleAcquisitionMethodCode: acqMethodCode,
     basisCode: basisCode,
-    maxRateSourceCode: componentTypes,
-    maxRate: acqMethodCode,
-    sysFuelUomCode: basisCode,
+    maximumFuelFlowRateSourceCode: componentTypes,
+    maximumFuelFlowRate: acqMethodCode,
+
+    systemFuelFlowUOMCode: basisCode,
   };
 
   for (const y in label) {
     let labels = "";
     switch (label[y][1]) {
-  
       case "dropdown":
         if (!createNew) {
           if (totalOptions) {
             labels = findValue(totalOptions[y], selected[y], "name");
+            // console.log("check totalOptions[y]");
           } else {
             labels = findValue(codeList[y], selected[y], "name");
+            console.log(
+              "check codeList[y][y]",
+              codeList[y],
+              selected[y],
+              selected,
+              label,
+              time
+            );
           }
         }
         arr.push([
@@ -63,9 +71,9 @@ export const modalViewData = (
           label[y][2] === "required" ? "required" : false,
           "dropdown",
           createNew ? "select" : selected[y],
-          totalOptions? totalOptions[y]:codeList[y],
+          totalOptions ? totalOptions[y] : codeList[y],
         ]);
-        console.log(label[y][1],y,"    console.log(label[y][1])");
+        // console.log(label[y][1], y, "    console.log(label[y][1])");
         break;
       case "input":
         arr.push([

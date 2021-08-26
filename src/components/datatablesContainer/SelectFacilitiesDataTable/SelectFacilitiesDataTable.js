@@ -61,7 +61,6 @@ export const SelectFacilitiesDataTable = ({
   const columnNames = ["Facility", "ORIS", "State"];
 
   const selectedRowHandler = (info) => {
-    console.log('checkedOutLocations',checkedOutLocations,info[1])
     addtabs([
       {
         title: `${info[0].col1} (${info[1].name}) ${
