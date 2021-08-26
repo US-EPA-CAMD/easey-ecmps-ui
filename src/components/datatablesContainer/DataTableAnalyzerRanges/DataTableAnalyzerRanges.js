@@ -72,7 +72,7 @@ export const DataTableAnalyzerRanges = ({
     };
 
     const userInput = extractUserInput(payload, ".modalUserInput");
-    console.log(userInput, "user");
+    // console.log(userInput, "user");
     mpApi
       .saveMonitoringMats(userInput)
       .then((result) => {

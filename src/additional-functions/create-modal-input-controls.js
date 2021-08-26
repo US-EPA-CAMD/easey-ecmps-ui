@@ -40,6 +40,7 @@ export const modalViewData = (
     basisCode: basisCode,
     maximumFuelFlowRateSourceCode: componentTypes,
     maximumFuelFlowRate: acqMethodCode,
+
     systemFuelFlowUOMCode: basisCode,
   };
 
@@ -50,12 +51,17 @@ export const modalViewData = (
         if (!createNew) {
           if (totalOptions) {
             labels = findValue(totalOptions[y], selected[y], "name");
-            console.log('check totalOptions[y]')
+            // console.log("check totalOptions[y]");
           } else {
             labels = findValue(codeList[y], selected[y], "name");
-            console.log('check codeList[y][y]',codeList[y], selected[y], selected,
-            label,
-            time,)
+            console.log(
+              "check codeList[y][y]",
+              codeList[y],
+              selected[y],
+              selected,
+              label,
+              time
+            );
           }
         }
         arr.push([
@@ -67,7 +73,7 @@ export const modalViewData = (
           createNew ? "select" : selected[y],
           totalOptions ? totalOptions[y] : codeList[y],
         ]);
-        console.log(label[y][1], y, "    console.log(label[y][1])");
+        // console.log(label[y][1], y, "    console.log(label[y][1])");
         break;
       case "input":
         arr.push([

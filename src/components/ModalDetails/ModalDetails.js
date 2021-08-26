@@ -46,7 +46,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
           <SelectBox
             className="modalUserInput width-mobile"
             epadataname={value[0]}
-            options={value[6] !== null ? value[6] : [{ code: "", name: "" }]}
+            options={(value[6] !== null || value[6] !== undefined) ? value[6] : [{ code: "", name: "" }]}
             initialSelection={value[5]}
             selectKey="code"
             id={value[0]}

@@ -67,9 +67,7 @@ export const DataTableSystems = ({
         (element) => element.id === row.col7
       )[0];
       setSelected(row.cells);
-      console.log("row inside", row, selected);
     }
-    console.log("row", row, selected);
     setSelectedModalData(
       modalViewData(
         selectSystem,

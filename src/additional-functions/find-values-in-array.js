@@ -1,7 +1,7 @@
 export const findValue = (options, val, parameter,) => {
  
  console.log( "options, val, parameter",options, val, parameter)
-  if (val === null) {
+  if (val === null || val === undefined) {
     return "";
   }
   for (const x of options) {
@@ -9,8 +9,6 @@ export const findValue = (options, val, parameter,) => {
       return x[parameter];
     }
   }
-
-  console.log('options[0][parameter]',options[0][parameter])
   return options[0][parameter];
 };
 

@@ -202,7 +202,7 @@ export const DataTableSystemsComponents = ({
     setOpenFuelFlowsView(true);
     if (create) {
       setCreateBtn("Create Fuel Flow");
-      setCreateBtnAPI(createFuelFlows);
+      // setCreateBtnAPI(createFuelFlows);
     }
     if (monitoringSystemsFuelFlows.length > 0 && !create) {
       selectFuelFlows = monitoringSystemsFuelFlows.filter(
@@ -212,7 +212,7 @@ export const DataTableSystemsComponents = ({
       setCreateBtn("Go Back");
       if (user && checkout) {
         setCreateBtn("Save and Go Back");
-        setCreateBtnAPI(saveFuelFlows);
+        // setCreateBtnAPI(saveFuelFlows);
       }
     }
     setSelectedModalData(
@@ -226,7 +226,7 @@ export const DataTableSystemsComponents = ({
             "required",
           ],
 
-          SystemFuelFlowUOMCode: [
+          systemFuelFlowUOMCode: [
             "Units of Measure Code",
             "dropdown",
             "required",
@@ -341,7 +341,6 @@ export const DataTableSystemsComponents = ({
       )
     );
     setSecondLevel(true, "Component");
-   console.log('row, bool, create',row, bool, create)
   };
 
 

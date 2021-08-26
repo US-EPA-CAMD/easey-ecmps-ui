@@ -138,8 +138,6 @@ export const saveMonitoringMethods = async (payload) => {
 };
 
 export const saveMonitoringMats = async (payload) => {
-  console.log("payload", payload);
-
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/mats-methods/${payload["id"]}`;
   // *** remove attributes not needed by the API
   delete payload["locationId"];
