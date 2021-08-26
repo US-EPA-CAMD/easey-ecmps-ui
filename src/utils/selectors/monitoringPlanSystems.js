@@ -68,7 +68,7 @@ export const getMonitoringPlansSystemsFuelFlowsComponentsTableRecords = (
       present = `${endDate}: ${endHour}`;
     }
     records.push({
-      col1: el.systemFuelFlowUOMCode,
+      col1: el.fuelCode,
       col2: el.maximumFuelFlowRateSourceCode,
       col3: `${beginDate}: ${beginHour} ➜ ${present}`,
       col4: el.id,

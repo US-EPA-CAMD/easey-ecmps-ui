@@ -46,9 +46,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
           <SelectBox
             className="modalUserInput width-mobile"
             epadataname={value[0]}
-            options={
-              (value[6] !== null) ? value[6] : [{ code: "", name: "" }]
-            }
+            options={value[6] !== null ? value[6] : [{ code: "", name: "" }]}
             initialSelection={value[5]}
             selectKey="code"
             id={value[0]}
@@ -98,10 +96,10 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
             {/* )} */}
             <TextInput
               className="modalUserInput width-7"
-              id="modalUserInput"
+              id={value[0]}
               epa-testid={value[0]}
               epadataname={value[0]}
-              name="modalUserInput"
+              name={value[0]}
               type="text"
               defaultValue={value[2] ? value[2] : ""}
             />
@@ -113,8 +111,10 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
         comp = (
           <TextInput
             className="modalUserInput width-mobile"
-            id="modalUserInput"
-            name="modalUserInput"
+            id={value[0]}
+            epa-testid={value[0]}
+            epadataname={value[0]}
+            name={value[0]}
             type="text"
             defaultValue={value[2] ? value[2] : ""}
           />
@@ -132,7 +132,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
               name={`${value[1].split(" ").join("-")}`}
               label="Yes"
               value="Yes"
-              className="padding-right-1"
+              className="padding-right-1 modalUserInput"
               defaultChecked={value[2] ? true : null}
             />
             <Radio
@@ -140,7 +140,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
               name={`${value[1].split(" ").join("-")}`}
               label="No"
               value="No"
-              className="padding-left-1"
+              className="padding-left-1 modalUserInput"
               defaultChecked={!value[2] ? true : null}
             />
           </Fieldset>
