@@ -36,8 +36,8 @@ export const DataTableMethod = ({
 
   const totalOptions = useRetrieveDropdownApi([
     "parameterCode",
-    "methodCode",
-    "subDataCode",
+    "monitoringMethodCode",
+    "substituteDataCode",
     "bypassApproachCode",
   ]);
   const [updateTable, setUpdateTable] = useState(false);
@@ -72,12 +72,12 @@ export const DataTableMethod = ({
     "End Date and Time",
   ];
   const payload = {
-    monLocId: locationSelectValue,
+    locationId: locationSelectValue,
     id: null,
     parameterCode: null,
-    subDataCode: null,
+    substituteDataCode: null,
     bypassApproachCode: null,
-    methodCode: null,
+    monitoringMethodCode: null,
     beginDate: null,
     beginHour: 0,
     endDate: null,
@@ -117,8 +117,12 @@ export const DataTableMethod = ({
         monMethod,
         {
           parameterCode: ["Parameter", "dropdown", "required"],
-          methodCode: ["Methodology", "dropdown", "required"],
-          subDataCode: ["Substitute Data Approach", "dropdown", "required"],
+          monitoringMethodCode: ["Methodology", "dropdown", "required"],
+          substituteDataCode: [
+            "Substitute Data Approach",
+            "dropdown",
+            "required",
+          ],
           bypassApproachCode: ["Bypass Approach", "dropdown", "required"],
         },
         {

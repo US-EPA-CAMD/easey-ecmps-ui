@@ -11,8 +11,8 @@ export const getMonitoringPlansMethodsTableRecords = (totalData) => {
     const endHour = el.endHour ? el.endHour.toString() : "";
     records.push({
       col1: el.parameterCode,
-      col2: el.methodCode,
-      col3: el.subDataCode,
+      col2: el.monitoringMethodCode,
+      col3: el.substituteDataCode,
       col4: el.bypassApproachCode,
       col5: `${beginDate} ${beginHour}`,
       col6: `${endDate} ${endHour}`,
@@ -40,8 +40,8 @@ export const getMonitoringPlansMatsMethodsTableRecords = (data) => {
     const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
     const endHour = el.endHour ? el.endHour.toString() : "";
     records.push({
-      col1: el.matsMethodParameterCode,
-      col2: el.matsMethodCode,
+      col1: el.supplementalMATSParameterCode,
+      col2: el.supplementalMATSMonitoringMethodCode,
       col3: `${beginDate} ${beginHour}`,
       col4: `${endDate} ${endHour}`,
       col5: el.id,

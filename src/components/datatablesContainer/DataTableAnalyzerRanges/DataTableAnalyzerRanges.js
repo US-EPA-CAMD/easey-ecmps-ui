@@ -24,7 +24,7 @@ export const DataTableAnalyzerRanges = ({
   const [updateTable, setUpdateTable] = useState(false);
   const rangesColumnNames = ["Range", "Date and Time"];
   const totalOptions = useRetrieveDropdownApi(
-    ["parameterCode", "methodCode"],
+    ["parameterCode", "monitoringMethodCode"],
     true
   );
 
@@ -32,8 +32,8 @@ export const DataTableAnalyzerRanges = ({
     if (updateTable || ranges.length <= 0 || locationSelectValue) {
       mpApi
         .getMonitoringAnalyzerRanges(
-          selectedRange.monLocId,
-          selectedRange.componentId
+          selectedRange.locationId,
+          selectedRange.componentRecordId
         )
         .then((res) => {
           setRanges(res.data);
@@ -120,7 +120,7 @@ export const DataTableAnalyzerRanges = ({
     setUpdateTable(true);
   };
 
-//   const [selectedModalData, setSelectedModalData] = useState(null);
+  //   const [selectedModalData, setSelectedModalData] = useState(null);
   //   const openMatsModal = (row, bool, create) => {
   //     let mats = null;
   //     setCreateNewMats(create);
@@ -132,8 +132,8 @@ export const DataTableAnalyzerRanges = ({
   //       modalViewData(
   //         mats,
   //         {
-  //           matsMethodParameterCode: ["Parameter", "dropdown", "required"],
-  //           matsMethodCode: ["Methodology", "dropdown", "required"],
+  //           supplementalMATSParameterCode: ["Parameter", "dropdown", "required"],
+  //           supplementalMATSMonitoringMethodCode: ["Methodology", "dropdown", "required"],
   //         },
   //         {
   //           beginDate: ["Start Date", "date", "required"],
@@ -167,7 +167,7 @@ export const DataTableAnalyzerRanges = ({
       <DataTableRender
         columnNames={rangesColumnNames}
         data={rangeData}
-        openHandler={()=>console.log('open')}
+        openHandler={() => console.log("open")}
         tableTitle="Analyzer Ranges"
         componentStyling="systemsCompTable"
         tableStyling="grid-container"

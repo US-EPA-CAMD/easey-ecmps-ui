@@ -60,22 +60,25 @@ export const getMonitoringSystemsFuelFlows = async (locationId, systemId) => {
     .catch(handleError);
 };
 
-export const getMonitoringSystemsComponents = async (systemId, componentId) => {
+export const getMonitoringSystemsComponents = async (
+  systemId,
+  componentRecordId
+) => {
   return axios
     .get(
-      `${config.services.monitorPlans.uri}/locations/${systemId}/systems/${componentId}/components`
+      `${config.services.monitorPlans.uri}/locations/${systemId}/systems/${componentRecordId}/components`
     )
     .then(handleResponse)
     .catch(handleError);
 };
 
-export const getMonitoringAnalyzerRanges = async (locId, componentId) => {
+export const getMonitoringAnalyzerRanges = async (locId, componentRecordId) => {
   let url = `${config.services.monitorPlans.uri}`;
   // *** workspace section url (authenticated)
   if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;
   }
-  url = `${url}/locations/${locId}​/components/${componentId}/analyzer-ranges`;
+  url = `${url}/locations/${locId}​/components/${componentRecordId}/analyzer-ranges`;
 
   return axios.get(url).then(handleResponse).catch(handleError);
 };
@@ -99,19 +102,19 @@ export const revertOfficialRecord = async (id) => {
 };
 
 export const createMethods = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["monLocId"]}/methods`;
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/methods`;
 
   // *** remove attributes not needed by the API
-  delete payload["monLocId"];
+  delete payload["locationId"];
   delete payload["id"];
 
   return axios.post(url, payload).then(handleResponse).catch(handleError);
 };
 export const createMats = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["monLocId"]}/mats-methods`;
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/mats-methods`;
 
   // *** remove attributes not needed by the API
-  delete payload["monLocId"];
+  delete payload["locationId"];
   delete payload["id"];
 
   return axios.post(url, payload).then(handleResponse).catch(handleError);
@@ -125,10 +128,10 @@ export const putLockTimerUpdateConfiguration = async (id) => {
 };
 
 export const saveMonitoringMethods = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["monLocId"]}/methods/${payload["id"]}`;
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/methods/${payload["id"]}`;
 
   // *** remove attributes not needed by the API
-  delete payload["monLocId"];
+  delete payload["locationId"];
   delete payload["id"];
 
   return axios.put(url, payload).then(handleResponse).catch(handleError);
@@ -136,10 +139,10 @@ export const saveMonitoringMethods = async (payload) => {
 
 export const saveMonitoringMats = async (payload) => {
   console.log("payload", payload);
-  
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["monLocId"]}/mats-methods/${payload["id"]}`;
+
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/mats-methods/${payload["id"]}`;
   // *** remove attributes not needed by the API
-  delete payload["monLocId"];
+  delete payload["locationId"];
   delete payload["id"];
 
   return axios.put(url, payload).then(handleResponse).catch(handleError);

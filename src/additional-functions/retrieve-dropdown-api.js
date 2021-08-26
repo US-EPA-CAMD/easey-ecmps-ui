@@ -18,7 +18,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
 
               options.unshift({ code: "", name: "" });
               const newData = totalOptions;
-              newData["matsMethodParameterCode"] = options;
+              newData["supplementalMATSParameterCode"] = options;
               setTotalOptions(newData);
             });
           } else {
@@ -38,19 +38,19 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             });
           }
           break;
-        case "methodCode":
+        case "monitoringMethodCode":
           if (mats) {
             dmApi.getAllMatsMethodCodes().then((response) => {
               options = response.data.map((option) => {
                 return {
-                  code: option["matsMethodCode"],
+                  code: option["supplementalMATSMonitoringMethodCode"],
                   name: option["matsMethodCodeDescription"],
                 };
               });
 
               options.unshift({ code: "", name: "" });
               const newData = totalOptions;
-              newData["matsMethodCode"] = options;
+              newData["supplementalMATSMonitoringMethodCode"] = options;
               setTotalOptions(newData);
             });
           } else {
@@ -70,7 +70,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             });
           }
           break;
-        case "subDataCode":
+        case "substituteDataCode":
           dmApi.getAllSubstituteDataCodes().then((response) => {
             options = response.data.map((option) => {
               return {

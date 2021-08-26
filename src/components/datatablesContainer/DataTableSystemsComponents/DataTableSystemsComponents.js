@@ -33,7 +33,7 @@ export const DataTableSystemsComponents = ({
   useEffect(() => {
     mpApi.getMonitoringSystems(locationSelectValue).then((res) => {
       for (let value of res.data) {
-        if (value.systemIdentifier === systemID) {
+        if (value.monitoringSystemId === systemID) {
           setSelected(value);
         }
       }
@@ -44,14 +44,14 @@ export const DataTableSystemsComponents = ({
 
   useEffect(() => {
     mpApi
-      .getMonitoringSystemsComponents(selected.monLocId, selected.id)
+      .getMonitoringSystemsComponents(selected.locationId, selected.id)
       .then((res) => {
         setMonitoringSystemsComponents(res.data);
         setDataLoaded(true);
       });
 
     mpApi
-      .getMonitoringSystemsFuelFlows(selected.monLocId, selected.id)
+      .getMonitoringSystemsFuelFlows(selected.locationId, selected.id)
       .then((res) => {
         setMonitoringSystemsFuelFlows(res.data);
         setFuelDataLoaded(true);
@@ -95,7 +95,7 @@ export const DataTableSystemsComponents = ({
     }
     if (monitoringSystemsComponents.length > 0 && !create) {
       selectComponents = monitoringSystemsComponents.filter(
-        (element) => element.componentIdentifier === row.col1
+        (element) => element.locationId === row.col1
       )[0];
       setSelectedComponent(selectComponents);
       setCreateBtn("Go Back");
@@ -111,14 +111,18 @@ export const DataTableSystemsComponents = ({
       modalViewData(
         selectComponents,
         {
-          componentIdentifier: ["Component ID", "input", "required"],
-          acquisitionMethodCode: ["Sample Acquistion Method", "dropdown", ""],
+          componentRecordId: ["Component ID", "input", "required"],
+          sampleAcquisitionMethodCode: [
+            "Sample Acquistion Method",
+            "dropdown",
+            "",
+          ],
           componentTypeCode: ["Component Type", "dropdown", "required"],
           basisCode: ["Basis Description", "dropdown", ""],
           manufacturer: ["Manufacturer", "input", ""],
           modelVersion: ["Modal or Version", "input", ""],
           serialNumber: ["Serial Number", "input", ""],
-          hgConverterInd: ["Hg Converter Indicator", "radio", ""],
+          hgConverterIndicator: ["Hg Converter Indicator", "radio", ""],
         },
         {
           beginDate: ["Start Date", "date", "required"],
@@ -199,7 +203,7 @@ export const DataTableSystemsComponents = ({
     }
     if (monitoringSystemsFuelFlows.length > 0 && !create) {
       selectFuelFlows = monitoringSystemsFuelFlows.filter(
-        (element) => element.fuelCode === row.col1
+        (element) => element.systemFuelFlowUOMCode === row.col1
       )[0];
       setSelectedComponent(selectFuelFlows);
       setCreateBtn("Go Back");
@@ -212,14 +216,18 @@ export const DataTableSystemsComponents = ({
       modalViewData(
         selectFuelFlows,
         {
-          maxRate: ["Max Fuel Flow Rate", "input", "required"],
-          maxRateSourceCode: [
+          maximumFuelFlowRate: ["Max Fuel Flow Rate", "input", "required"],
+          maximumFuelFlowRateSourceCode: [
             "Max Fuel Flow Rate Source",
             "dropdown",
             "required",
           ],
 
-          sysFuelUomCode: ["Units of Measure Code", "dropdown", "required"],
+          SystemFuelFlowUOMCode: [
+            "Units of Measure Code",
+            "dropdown",
+            "required",
+          ],
           skip: ["", "skip", ""],
         },
         {
@@ -321,7 +329,7 @@ export const DataTableSystemsComponents = ({
             </div>
           );
         } else {
-          // if (selectedComponent["sysFuelUomCode"] !== undefined) {
+          // if (selectedComponent["SystemFuelFlowUOMCode"] !== undefined) {
           if (openFuelFlowsView) {
             // fuel flow
             return (
@@ -333,7 +341,7 @@ export const DataTableSystemsComponents = ({
                 title={
                   createNewFuelFlow
                     ? "Create Fuel Flow"
-                    : `Fuel Code: ${selectedComponent["fuelCode"]}, System Type Code: ${selectedComponent["systemTypeCode"]}`
+                    : `Fuel Code: ${selectedComponent["systemFuelFlowUOMCode"]}, System Type Code: ${selectedComponent["maximumFuelFlowRateSourceCode"]}`
                 }
                 viewOnly={!(user && checkout)}
               />
@@ -351,8 +359,8 @@ export const DataTableSystemsComponents = ({
                     createNewComponent
                       ? "Create Component"
                       : user && checkout
-                      ? `Edit Component: ${selectedComponent["componentIdentifier"]}`
-                      : `Component: ${selectedComponent["componentIdentifier"]}`
+                      ? `Edit Component: ${selectedComponent["componentRecordId"]}`
+                      : `Component: ${selectedComponent["componentRecordId"]}`
                   }
                   viewOnly={!(user && checkout)}
                 />
