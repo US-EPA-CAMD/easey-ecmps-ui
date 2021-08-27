@@ -6,15 +6,17 @@ import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import DataTableRender from "../../DataTableRender/DataTableRender";
 import "./DataTableSystemsComponentsRender.scss";
+
+import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import DataTableAnalyzerRanges from "../DataTableAnalyzerRanges/DataTableAnalyzerRanges";
 export const DataTableSystemsComponents = ({
   systemID,
   viewOnly,
   setSecondLevel,
   secondLevel,
-thirdLevel,
-setThirdLevel,
-setBread,
+  thirdLevel,
+  setThirdLevel,
+  setBread,
   locationSelectValue,
   user,
   checkout,
@@ -23,8 +25,7 @@ setBread,
   setSaveAnalyzerRange,
   setSelectedRangeInFirst,
   backBTN,
-  updateAnalyzerRangeTable
-
+  updateAnalyzerRangeTable,
 }) => {
   const [monitoringSystemsFuelFlows, setMonitoringSystemsFuelFlows] = useState(
     ""
@@ -32,9 +33,16 @@ setBread,
   const [dataLoaded, setDataLoaded] = useState(false);
   const [dataFuelLoaded, setFuelDataLoaded] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState(null);
-  const [selectedComponentsModalData, setSelectedComponentsModalData] = useState(null);
-  const [selectedFuelFlowsModalData, setSelectedFuelFlowsModalData] = useState(null);
+  const [
+    selectedComponentsModalData,
+    setSelectedComponentsModalData,
+  ] = useState(null);
+  const [selectedFuelFlowsModalData, setSelectedFuelFlowsModalData] = useState(
+    null
+  );
   const [selected, setSelected] = useState(1);
+
+
   const [
     monitoringSystemsComponents,
     setMonitoringSystemsComponents,
@@ -51,7 +59,6 @@ setBread,
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [systemID]);
 
-  
   useEffect(() => {
     mpApi
       .getMonitoringSystemsComponents(selected.locationId, selected.id)
@@ -77,8 +84,6 @@ setBread,
 
   // object property,Label Name, value, control type,  = arr
 
-
- 
   // *** row handler onclick event listener
   const [createNewComponent, setCreateNewComponent] = useState(false);
 
@@ -109,7 +114,7 @@ setBread,
       }
       // console.log(selectComponents, "selectComponents");
       setOpenAnalyzer(selectComponents);
-      setSelectedRangeInFirst(selectComponents) // for saving 
+      setSelectedRangeInFirst(selectComponents); // for saving
     }
 
     setSelectedComponentsModalData(
@@ -198,6 +203,11 @@ setBread,
   //   endDate: null,
   //   endHour: 0,
   // };
+
+  const totalFuelFlowssOptions = useRetrieveDropdownApi([
+    "maximumFuelFlowRateSourceCode",
+    "systemFuelFlowUOMCode",
+  ]);
   const openFuelFlows = (row, bool, create) => {
     let selectFuelFlows = null;
     // setCreateNewSystem(create);
@@ -244,7 +254,7 @@ setBread,
           endHour: ["End Time", "time", ""],
         },
         create,
-        false
+        totalFuelFlowssOptions
       )
     );
 
@@ -392,7 +402,7 @@ setBread,
                   //EDIT ANALYZER RANGES
                   <ModalDetails
                     modalData={selectedRange}
-                    backBtn={backBTN}
+                    backBtn={setThirdLevel}
                     data={selectedModalData}
                     cols={2}
                     title={

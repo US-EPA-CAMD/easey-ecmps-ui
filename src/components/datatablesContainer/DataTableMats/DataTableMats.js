@@ -27,7 +27,7 @@ export const DataTableMats = ({
   const [dataLoaded, setDataLoaded] = useState(false);
   const [matsMethods, setMatsMethods] = useState([]);
   const totalOptions = useRetrieveDropdownApi(
-    ["parameterCode", "methodCode"],
+    ["parameterCode", "monitoringMethodCode"],
     true
   );
   const [show, setShow] = useState(false);

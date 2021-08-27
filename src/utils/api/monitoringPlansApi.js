@@ -75,6 +75,8 @@ export const getMonitoringSystemsComponents = async (
 };
 
 export const getMonitoringAnalyzerRanges = async (locId, componentRecordId) => {
+
+  console.log('locid in api',locId, componentRecordId)
   let url = `${config.services.monitorPlans.uri}`;
   // *** workspace section url (authenticated)
   if (window.location.href.indexOf("workspace") > -1) {
@@ -167,6 +169,16 @@ export const getCheckedOutLocations = async () => {
 
 export const saveAnalyzerRanges = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locId"]}/components/${payload["compId"]}/analyzer-ranges/${payload["id"]}`;
+  // *** remove attributes not needed by the API
+  delete payload["locId"];
+  delete payload["id"];
+  delete payload["compId"];
+
+  return axios.put(url, payload).then(handleResponse).catch(handleError);
+};
+
+export const saveSystemsFuelFlows = async (payload) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locId"]}/systems/${payload["compId"]}/fuel-flows/${payload["id"]}`;
   // *** remove attributes not needed by the API
   delete payload["locId"];
   delete payload["id"];
