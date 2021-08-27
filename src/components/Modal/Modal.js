@@ -25,7 +25,7 @@ export const Modal = ({
   secondLevel,
   title,
   backBtn,
-  createNew,
+  exitBTN,
   breadCrumbBar,
   setSecondLevel,
 }) => {
@@ -103,17 +103,14 @@ export const Modal = ({
                   <div>
                     <Button
                       type="button"
-                      onClick={secondLevel ? close : save}
+                      onClick={save}
                       title="Click to save"
                       epa-testid="saveBtn"
-                      id = "saveBtn"
+                      id="saveBtn"
                       className="margin-right-2"
                     >
-                      {secondLevel
-                        ? createNew
-                          ? createNew
-                          : "Save and Go Back"
-                        : createNew}
+                      {exitBTN ? exitBTN : "Save and Go Back"}
+
                       {/* // ? createNew
                         // : saveButtonText} */}
                     </Button>

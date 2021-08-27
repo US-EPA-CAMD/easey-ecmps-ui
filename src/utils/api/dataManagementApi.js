@@ -106,7 +106,7 @@ export const getAllFuelFlowRateCodes = async () => {
 // System Analyzer Ranges
 export const getAllRangeCodes = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/mats-method-codes`)
+    .get(`${config.services.mdm.uri}/analyzer-range-codes`)
     .then(handleResponse)
     .catch(handleError);
 };

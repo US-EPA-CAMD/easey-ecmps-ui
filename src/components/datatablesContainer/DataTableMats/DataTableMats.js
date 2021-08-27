@@ -229,7 +229,7 @@ export const DataTableMats = ({
           title={
             createNewMats ? "Create MATS" : "Component: Monitoring MATS Methods"
           }
-          createNew={createNewMats ? "Create MATS" : `Save and Close`}
+          exitBTN={createNewMats ? "Create MATS" : `Save and Close`}
           children={
             <div>
               <ModalDetails

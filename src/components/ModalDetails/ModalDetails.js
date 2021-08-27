@@ -15,7 +15,7 @@ import { ArrowBackSharp } from "@material-ui/icons";
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 // value in data => [0] api label, [1] our UI label, [2] value,[3], required or not for editing, [4] control form type
 const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
-  console.log("data", data, "modal", modalData);
+  console.log(modalData,'modalData' ,data)
   const makeViewOnlyComp = (value) => {
     return (
       <div key={`${value[1]}`} className="grid-col">
@@ -29,8 +29,16 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
             >
               {value[1]}
             </Label>
-            <div tabIndex="0" id={`${value[1]}`}>
-              {value[2] ? value[2] : value[4] === "radio" ? "No" : ""}
+            <div id={`${value[1]}`}>
+              {value[2]
+                ? value[4] === "radio"
+                  ? value[2] === "0"
+                    ? "No"
+                    : "Yes"
+                  : value[2]
+                : value[4] === "radio"
+                ? "No"
+                : ""}
             </div>
           </FormGroup>
         )}
@@ -46,7 +54,11 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
           <SelectBox
             className="modalUserInput width-mobile"
             epadataname={value[0]}
-            options={(value[6] !== null || value[6] !== undefined) ? value[6] : [{ code: "", name: "" }]}
+            options={
+              value[6] !== null || value[6] !== undefined
+                ? value[6]
+                : [{ code: "", name: "" }]
+            }
             initialSelection={value[5]}
             selectKey="code"
             id={value[0]}
@@ -65,9 +77,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
         const datePickerValue = `${year}-${month}-${day}`;
         comp = (
           <div>
-            {/* {viewOnly ? (
-              ""
-            ) : ( */}
+            {/* use aria-describe by  */}
             <div className="usa-hint" id="appointment-date-hint">
               mm/dd/yyyy
             </div>
@@ -87,13 +97,9 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
       case "time":
         comp = (
           <div>
-            {/* {viewOnly ? (
-              ""
-            ) : ( */}
             <div className="usa-hint" id="appointment-date-hint">
               hh
             </div>
-            {/* )} */}
             <TextInput
               className="modalUserInput width-7"
               id={value[0]}
@@ -122,26 +128,33 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
         break;
 
       case "radio":
+        console.log('val',value[1])
         comp = (
+          
           <Fieldset
-            className=" display-inline-flex"
-            id={`${value[1].split(" ").join("")}`}
+            className=" display-inline-flex modalUserInput"
+            id={value[0]}
+            epadataname={value[0]}
+            epa-testid={value[0]}
+            name={value[0]}
           >
             <Radio
               id={`${value[1].split(" ").join("")}-1`}
               name={`${value[1].split(" ").join("-")}`}
               label="Yes"
               value="Yes"
-              className="padding-right-1 modalUserInput"
-              defaultChecked={value[2] ? true : null}
+              className="padding-right-1  "
+              defaultChecked={value[2] && value[2] === "1" ? true : false}
             />
             <Radio
               id={`${value[1].split(" ").join("")}-2`}
               name={`${value[1].split(" ").join("-")}`}
               label="No"
               value="No"
-              className="padding-left-1 modalUserInput"
-              defaultChecked={!value[2] ? true : null}
+              className="padding-left-1"
+              defaultChecked={
+                value[2] === null || value[2] === "0" ? true : false
+              }
             />
           </Fieldset>
         );
@@ -157,7 +170,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
           <Label className=" margin-bottom-0" htmlFor={`${value[1]}`}>
             {value[3] === "required" ? `${value[1]} (Required)` : value[1]}
           </Label>
-          <div tabIndex="0" id={`${value[1]}`}>
+          <div id={`${value[1]}`}>
             {comp}
           </div>
         </FormGroup>

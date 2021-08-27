@@ -24,11 +24,19 @@ describe("testing the creation of a modal", () => {
       .mockImplementation((event, handle) => {
         events[event] = undefined;
       });
-      const stateSetter = jest.fn()
-      jest
-      .spyOn(React, 'useState')
-      .mockImplementation(stateValue => [stateValue=0, stateSetter])
-    const { getByText,getAllByText } = render(<Modal createNew={'save and close'} close={close} show={show} showCancel={true} showSave={true}/>);
+    const stateSetter = jest.fn();
+    jest
+      .spyOn(React, "useState")
+      .mockImplementation((stateValue) => [(stateValue = 0), stateSetter]);
+    const { getByText, getAllByText } = render(
+      <Modal
+        createNew={"save and close"}
+        close={close}
+        show={show}
+        showCancel={true}
+        showSave={true}
+      />
+    );
     const cancelBTN = getByText(/Cancel/i);
     let closeBTN = getAllByText(/close/i);
 
@@ -42,7 +50,7 @@ describe("testing the creation of a modal", () => {
 
     const e = {
       keyCode: 9,
-      preventDefault:jest.fn(),
+      preventDefault: jest.fn(),
     };
     events["keydown"](e);
     events["keydown"](e);
@@ -53,8 +61,8 @@ describe("testing the creation of a modal", () => {
     events["keydown"](e);
     const shift = {
       keyCode: 9,
-      shiftKey:true,
-      preventDefault:jest.fn(),
+      shiftKey: true,
+      preventDefault: jest.fn(),
     };
     events["keydown"](shift);
     events["keydown"](shift);
@@ -62,58 +70,63 @@ describe("testing the creation of a modal", () => {
     events["keydown"](shift);
     events["keydown"](shift);
     events["keydown"](shift);
-    
+
     expect(document.addEventListener).toBeCalledWith(
       "keydown",
       expect.any(Function)
     );
+  });
 
+  test("testing clicking and tabbing between btns ", () => {
+    const show = true;
+    const close = jest.fn();
+    const events = {};
+    jest
+      .spyOn(document, "addEventListener")
+      .mockImplementation((event, handle) => {
+        events[event] = handle;
+      });
+    jest
+      .spyOn(document, "removeEventListener")
+      .mockImplementation((event, handle) => {
+        events[event] = undefined;
+      });
+    const stateSetter = jest.fn();
+    jest
+      .spyOn(React, "useState")
+      .mockImplementation((stateValue) => [(stateValue = 0), stateSetter]);
+    const { container, getByText, getAllByRole } = render(
+      <Modal
+        createNew={"save and close"}
+        close={close}
+        show={show}
+        showCancel={true}
+        showSave={true}
+      />
+    );
+    const cancelBTN = getByText(/Cancel/i);
+    let closeBTN = getByText(/save and close/i);
+
+    const nodeList = getAllByRole("button");
+    nodeList[0].focus();
+    fireEvent.keyPress(nodeList[0], {
+      key: "Enter",
+      code: "Enter",
+      keyCode: 13,
+      charCode: 13,
     });
 
-    test("testing clicking and tabbing between btns ", () => {
-      const show = true;
-      const close = jest.fn();
-      const events = {};
-      jest
-        .spyOn(document, "addEventListener")
-        .mockImplementation((event, handle) => {
-          events[event] = handle;
-        });
-      jest
-        .spyOn(document, "removeEventListener")
-        .mockImplementation((event, handle) => {
-          events[event] = undefined;
-        });
-        const stateSetter = jest.fn()
-        jest
-        .spyOn(React, 'useState')
-        .mockImplementation(stateValue => [stateValue=0, stateSetter])
-      const { container,getByText,getAllByRole } = render(<Modal createNew={'save and close'} close={close} show={show} showCancel={true} showSave={true}/>);
-      const cancelBTN = getByText(/Cancel/i);
-      let closeBTN = getByText(/save and close/i);
-  
+    // fireEvent.click(cancelBTN);
+    // cancelBTN.focus();
 
-      const nodeList = getAllByRole('button');
-      console.log(nodeList)
-      nodeList[0].focus();
-      fireEvent.keyPress(nodeList[0], {
-        key: "Enter",
-        code: "Enter",
-        keyCode: 13,
-        charCode: 13,
-      });
-  
-      // fireEvent.click(cancelBTN);
-      // cancelBTN.focus();
-
-      const newCLose = container.querySelector("#closeModalBtn");
-      newCLose.focus();
-      fireEvent.keyPress(newCLose, {
-        key: "Enter",
-        code: "Enter",
-        keyCode: 13,
-        charCode: 13,
-      });
-      fireEvent.keyDown(newCLose, {key: 'Enter', code: 'Enter'})
-});
+    const newCLose = container.querySelector("#closeModalBtn");
+    newCLose.focus();
+    fireEvent.keyPress(newCLose, {
+      key: "Enter",
+      code: "Enter",
+      keyCode: 13,
+      charCode: 13,
+    });
+    fireEvent.keyDown(newCLose, { key: "Enter", code: "Enter" });
+  });
 });

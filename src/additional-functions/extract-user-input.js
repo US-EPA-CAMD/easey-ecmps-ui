@@ -1,13 +1,15 @@
-export const extractUserInput = (payload, inputSelector) => {
+export const extractUserInput = (payload, inputSelector, radio) => {
   // *** construct payload
   const payloadInputs = document.querySelectorAll(inputSelector);
   const datepickerPayloads = document.querySelectorAll(
     ".usa-date-picker__internal-input"
   );
- 
+  let radioPayload = null;
   const payloadArray = [];
 
+  // play load is not recognizing the correct ID, probably taking in previous modaldataID
   payloadInputs.forEach((input) => {
+    console.log('INPUT',input)
     if (input.id === undefined || input.id === null || input.id === "") {
       return;
     }
@@ -26,9 +28,24 @@ export const extractUserInput = (payload, inputSelector) => {
     payloadArray.push(item);
   });
 
-  payloadArray.forEach((item) => {
+ 
+  if (radio) {
+    radioPayload = document.querySelectorAll(".usa-radio");
+
+    const item = { name: "", value: "" };
+    item.name = radio;
+    if (radioPayload[0].firstElementChild.checked) {
+      item.value = "1";
+    }
+    if (radioPayload[1].firstElementChild.checked) {
+      item.value = "0";
+    }
+    payloadArray.push(item);
+  }
+ payloadArray.forEach((item) => {
     payload[item.name] = item.value.trim() === "" ? null : item.value.trim();
   });
+
 
   return payload;
 };
