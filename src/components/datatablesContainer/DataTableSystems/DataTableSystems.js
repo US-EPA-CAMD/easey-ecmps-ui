@@ -13,10 +13,17 @@ import {
   BreadcrumbBar,
   BreadcrumbLink,
 } from "@trussworks/react-uswds";
+
 import {
   getActiveData,
   getInactiveData,
 } from "../../../additional-functions/filter-data";
+
+import {
+  attachChangeEventListeners,
+  removeChangeEventListeners,
+  unsavedDataMessage,
+} from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
 export const DataTableSystems = ({
   locationSelectValue,
@@ -55,11 +62,6 @@ export const DataTableSystems = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
 
-  const closeModalHandler = () => {
-    setSecondLevel(false);
-    setShow(false);
-  };
-
   const [selected, setSelected] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
 
@@ -80,11 +82,7 @@ export const DataTableSystems = ({
         {
           monitoringSystemId: ["System ID", "input", "required"],
           systemDesignationCode: ["System Designation", "dropdown", "required"],
-          maximumFuelFlowRateSourceCode: [
-            "System Type",
-            "dropdown",
-            "required",
-          ],
+          systemTypeCode: ["System Type", "dropdown", "required"],
           fuelCode: ["Fuel Type", "dropdown", "required"],
         },
         {
@@ -101,7 +99,26 @@ export const DataTableSystems = ({
       setSecondLevel(create);
     }
     setShow(true);
+
+    setTimeout(() => {
+      attachChangeEventListeners(".modalUserInput");
+    });
   };
+
+  const closeModalHandler = () => {
+    if (window.isDataChanged === true) {
+      if (window.confirm(unsavedDataMessage) === true) {
+        setSecondLevel(false);
+        setShow(false);
+        removeChangeEventListeners(".modalUserInput");
+      }
+    } else {
+      setSecondLevel(false);
+      setShow(false);
+      removeChangeEventListeners(".modalUserInput");
+    }
+  };
+
   const [createNewSystem, setCreateNewSystem] = useState(false);
 
 

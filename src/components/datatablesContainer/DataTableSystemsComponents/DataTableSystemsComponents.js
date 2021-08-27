@@ -116,7 +116,7 @@ setBread,
       modalViewData(
         selectComponents,
         {
-          componentRecordId: ["Component ID", "input", "required"],
+          componentId: ["Component ID", "input", "required"],
           sampleAcquisitionMethodCode: [
             "Sample Acquistion Method",
             "dropdown",
@@ -348,7 +348,7 @@ setBread,
                 title={
                   createNewFuelFlow
                     ? "Create Fuel Flow"
-                    : `Fuel Code: ${selectedComponent["systemFuelFlowUOMCode"]}, System Type Code: ${selectedComponent["maximumFuelFlowRateSourceCode"]}`
+                    : `Fuel Code: ${selectedComponent["fuelCode"]}, System Type Code: ${selectedComponent["systemTypeCode"]}`
                 }
                 viewOnly={!(user && checkout)}
               />
@@ -368,8 +368,8 @@ setBread,
                         createNewComponent
                           ? "Create Component"
                           : user && checkout
-                          ? `Edit Component: ${selectedComponent["componentRecordId"]}`
-                          : `Component: ${selectedComponent["componentRecordId"]}`
+                          ? `Edit Component: ${selectedComponent["componentId"]}`
+                          : `Component: ${selectedComponent["componentId"]}`
                       }
                       viewOnly={!(user && checkout)}
                     />

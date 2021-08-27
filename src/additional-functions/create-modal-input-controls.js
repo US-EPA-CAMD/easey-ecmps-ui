@@ -30,7 +30,7 @@ export const modalViewData = (
   // 3: (7) ["systemFuelFlowUOMCode", "Fuel Type", "Pipeline Natural Gas", "required", "dropdown", "PNG", undefined]
   const arr = [];
   const codeList = {
-    systemTypeCodes: types,
+    systemTypeCode: types,
     fuelCode: fuels,
     systemDesignationCode: designations,
     // bypassApproachCode: bypassApproachCodes,

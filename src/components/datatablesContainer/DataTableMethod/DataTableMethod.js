@@ -13,6 +13,12 @@ import {
   getInactiveData,
 } from "../../../additional-functions/filter-data";
 
+import {
+  attachChangeEventListeners,
+  removeChangeEventListeners,
+  unsavedDataMessage,
+} from "../../../additional-functions/prompt-to-save-unsaved-changes";
+
 export const DataTableMethod = ({
   locationSelectValue,
   matsTableHandler,
@@ -135,6 +141,22 @@ export const DataTableMethod = ({
       )
     );
     setShow(true);
+
+    setTimeout(() => {
+      attachChangeEventListeners(".modalUserInput");
+    });
+  };
+
+  const closeModalHandler = () => {
+    if (window.isDataChanged === true) {
+      if (window.confirm(unsavedDataMessage) === true) {
+        setShow(false);
+        removeChangeEventListeners(".modalUserInput");
+      }
+    } else {
+      setShow(false);
+      removeChangeEventListeners(".modalUserInput");
+    }
   };
 
   const data = useMemo(() => {
@@ -175,8 +197,6 @@ export const DataTableMethod = ({
       }
     }
   }, [matsMethods.length, matsTableHandler]);
-
-  const closeModalHandler = () => setShow(false);
 
   const saveMethods = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
