@@ -8,10 +8,13 @@ import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-/*import {
-  getActiveData,
-  getInactiveData,
-} from "../../../additional-functions/filter-data";*/
+
+import {
+  attachChangeEventListeners,
+  removeChangeEventListeners,
+  unsavedDataMessage,
+} from "../../../additional-functions/prompt-to-save-unsaved-changes";
+
 export const DataTableMats = ({
   locationSelectValue,
   user,
@@ -66,30 +69,7 @@ export const DataTableMats = ({
   };
   const data = useMemo(() => {
     if (matsMethods.length > 0) {
-      /*const activeOnly = getActiveData(matsMethods);
-      const inactiveOnly = getInactiveData(matsMethods);*/
-
-      // // only active data >  disable checkbox and unchecks it
-      // if (activeOnly.length === matsMethods.length) {
-      //   // uncheck it and disable checkbox
-      //   //function parameters ( check flag, disable flag )
-      //   settingInactiveCheckBox(false, true);
-      //   return fs.getMonitoringPlansMatsMethodsTableRecords(matsMethods);
-      // }
-
-      // // only inactive data > disables checkbox and checks it
-      // if (inactiveOnly.length === matsMethods.length) {
-      //   //check it and disable checkbox
-      //   settingInactiveCheckBox(true, true);
-      //   return fs.getMonitoringPlansMatsMethodsTableRecords(matsMethods);
-      // }
-      // resets checkbox
-      // settingInactiveCheckBox(inactive[0], false);
-      return fs.getMonitoringPlansMatsMethodsTableRecords(
-        // !inactive[0] ?
-        //  getActiveData(matsMethods) :
-        matsMethods
-      );
+      return fs.getMonitoringPlansMatsMethodsTableRecords(matsMethods);
     }
     return [];
 
@@ -144,8 +124,8 @@ export const DataTableMats = ({
   };
 
   const [createNewMats, setCreateNewMats] = useState(false);
-  const closeModalHandler = () => setShow(false);
   const [selectedModalData, setSelectedModalData] = useState(null);
+
   const openMatsModal = (row, bool, create) => {
     let mats = null;
     setCreateNewMats(create);
@@ -175,6 +155,22 @@ export const DataTableMats = ({
       )
     );
     setShow(true);
+
+    setTimeout(() => {
+      attachChangeEventListeners(".modalUserInput");
+    });
+  };
+
+  const closeModalHandler = () => {
+    if (window.isDataChanged === true) {
+      if (window.confirm(unsavedDataMessage) === true) {
+        setShow(false);
+        removeChangeEventListeners(".modalUserInput");
+      }
+    } else {
+      setShow(false);
+      removeChangeEventListeners(".modalUserInput");
+    }
   };
 
   return (
