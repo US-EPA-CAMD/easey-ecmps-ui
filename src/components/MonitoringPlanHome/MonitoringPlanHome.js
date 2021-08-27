@@ -7,8 +7,6 @@ import { MonitoringPlanTab as SelectedFacilityTab } from "../MonitoringPlanTab/M
 import DynamicTabs from "../DynamicTabs/DynamicTabs";
 
 import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
-import { useInterval } from "../../additional-functions/use-interval";
-import { oneSecond } from "../../config";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 
@@ -23,6 +21,7 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
 
   useEffect(() => {
     obtainCheckedOutLocations().then();
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanIdForTab]);
 
   /*useInterval(() => {

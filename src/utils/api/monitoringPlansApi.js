@@ -45,6 +45,7 @@ export const getMonitoringMatsMethods = async (locationId) => {
 };
 
 export const getMonitoringSystems = async (locationId) => {
+  console.log('locationidsystems',locationId)
   return axios
     .get(`${config.services.monitorPlans.uri}/locations/${locationId}/systems`)
     .then(handleResponse)
@@ -64,6 +65,7 @@ export const getMonitoringSystemsComponents = async (
   systemId,
   componentRecordId
 ) => {
+  console.log("  systemId,componentRecordId", systemId, componentRecordId);
   return axios
     .get(
       `${config.services.monitorPlans.uri}/locations/${systemId}/systems/${componentRecordId}/components`
@@ -161,4 +163,14 @@ export const getCheckedOutLocations = async () => {
     .get(`${config.services.monitorPlans.uri}/workspace/plans/check-outs`)
     .then(handleResponse)
     .catch(handleError);
+};
+
+export const saveAnalyzerRanges = async (payload) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locId"]}/components/${payload["compId"]}/analyzer-ranges/${payload["id"]}`;
+  // *** remove attributes not needed by the API
+  delete payload["locId"];
+  delete payload["id"];
+  delete payload["compId"];
+
+  return axios.put(url, payload).then(handleResponse).catch(handleError);
 };

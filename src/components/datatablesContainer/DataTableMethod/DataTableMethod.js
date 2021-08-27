@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
-import { Button } from "@trussworks/react-uswds";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
@@ -280,7 +279,7 @@ export const DataTableMethod = ({
           showCancel={!(user && checkout)}
           showSave={user && checkout}
           title={createNewMethod ? "Create Method" : "Method"}
-          createNew={createNewMethod ? "Create Method" : `Save and Close`}
+          exitBTN={createNewMethod ? "Create Method" : `Save and Close`}
           children={
             <div>
               <ModalDetails

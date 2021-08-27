@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback } from "react";
 import { config } from "../../config";
 import { useInterval } from "../../additional-functions/use-interval";
 
-import { Button } from "@trussworks/react-uswds";
 import { Modal } from "../Modal/Modal";
 import { CountdownTimer } from "../CountdownTimer/CountdownTimer";
 
@@ -78,10 +77,11 @@ export const InactivityTracker = ({ apiCall, countdownAPI }) => {
     };
   }, [extendUserInactivityTimer]);
 
-  const toggleInactivityTracking = () => {
-    setTrackInactivity(!trackInactivity);
-    resetUserInactivityTimer();
-  };
+  // for demoing 
+  // const toggleInactivityTracking = () => {
+  //   setTrackInactivity(!trackInactivity);
+  //   resetUserInactivityTimer();
+  // };
 
   return (
     <div>

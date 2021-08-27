@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import * as dmApi from "../utils/api/dataManagementApi";
 export const useRetrieveDropdownApi = (arr, mats = false) => {
   const [totalOptions, setTotalOptions] = useState({});
@@ -106,12 +106,12 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
           break;
         //Analyzer Range
-        case "rangeCode":
+        case "analyzerRangeCode":
           dmApi.getAllRangeCodes().then((response) => {
             options = response.data.map((option) => {
               return {
-                code: option["rangeCode"],
-                name: option["rangeCodeDescription"],
+                code: option["analyzerRangeCode"],
+                name: option["analyzerRangeCodeDescription"],
               };
             });
 
@@ -123,7 +123,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
           break;
         // System Fuel Flows
-        case "bypassApproachCode":
+        case "bypassApproachCodef":
           dmApi.getAllMeasureCodes().then((response) => {
             options = response.data.map((option) => {
               return {
