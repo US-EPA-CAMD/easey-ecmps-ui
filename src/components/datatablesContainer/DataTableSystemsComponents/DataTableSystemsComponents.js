@@ -388,7 +388,7 @@ export const DataTableSystemsComponents = ({
                 title={
                   createNewFuelFlow
                     ? "Create Fuel Flow"
-                    : `Fuel Code: ${selectedComponent["systemFuelFlowUOMCode"]}, System Type Code: ${selectedComponent["maximumFuelFlowRateSourceCode"]}`
+                    : `Fuel Code: ${selectedComponent["fuelCode"]}, System Type Code: ${selectedComponent["systemTypeCode"]}`
                 }
                 viewOnly={!(user && checkout)}
               />
