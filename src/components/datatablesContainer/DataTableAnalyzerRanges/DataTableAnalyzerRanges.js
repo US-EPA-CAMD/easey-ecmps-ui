@@ -6,7 +6,6 @@ import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-d
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 export const DataTableAnalyzerRanges = ({
-  locationSelectValue,
   user,
   checkout,
   selectedRanges,
@@ -28,10 +27,10 @@ export const DataTableAnalyzerRanges = ({
   const rangesColumnNames = ["Range", "Date and Time"];
   const totalRangesOptions = useRetrieveDropdownApi(
     ["analyzerRangeCode"],
-    true
   );
   useEffect(() => {
-    if (updateTable || ranges.length <= 0 || locationSelectValue) {
+    console.log('selectedRanges',selectedRanges)
+    if (updateTable || ranges.length <= 0) {
       mpApi
         .getMonitoringAnalyzerRanges(
           selectedRanges.locationId,
@@ -55,7 +54,9 @@ export const DataTableAnalyzerRanges = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ranges]);
-
+ const testing = () => {
+   openAnalyzerRanges(false,false,true);
+ }
   // row is just the data in the datatable row, need to compare it to the entire API dataset to get correct data
   const openAnalyzerRanges = (row, bool, create) => {
     let selectRange = null;
@@ -82,8 +83,8 @@ export const DataTableAnalyzerRanges = ({
       modalViewData(
         selectRange,
         {
-          analyzerRangeCode: ["Range Code", "dropdown", "required"],
-          dualRangeIndicator: ["Dual Range", "radio", ""],
+          analyzerRangeCode: ["Range", "dropdown", "required"],
+          dualRangeIndicator: ["Dual Range Indicator", "radio", ""],
         },
         {
           beginDate: ["Start Date", "date", "required"],
@@ -99,6 +100,14 @@ export const DataTableAnalyzerRanges = ({
   };
   return (
     <div className="methodTable">
+           <input
+        tabIndex={-1}
+        aria-hidden={true}
+        role="button"
+        type="hidden"
+        id="testingBtn"
+        onClick={() => testing()}
+      />
       <DataTableRender
         columnNames={rangesColumnNames}
         data={rangeData}
