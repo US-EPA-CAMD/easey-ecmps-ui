@@ -76,11 +76,7 @@ export const DataTableSystems = ({
         {
           monitoringSystemId: ["System ID", "input", "required"],
           systemDesignationCode: ["System Designation", "dropdown", "required"],
-          maximumFuelFlowRateSourceCode: [
-            "System Type",
-            "dropdown",
-            "required",
-          ],
+          systemTypeCode: ["System Type", "dropdown", "required"],
           fuelCode: ["Fuel Type", "dropdown", "required"],
         },
         {

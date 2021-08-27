@@ -69,7 +69,7 @@ export const getMonitoringPlansSystemsFuelFlowsComponentsTableRecords = (
     }
     records.push({
       col1: el.fuelCode,
-      col2: el.maximumFuelFlowRateSourceCode,
+      col2: el.systemTypeCode,
       col3: `${beginDate}: ${beginHour} ➜ ${present}`,
       col4: el.id,
     });
