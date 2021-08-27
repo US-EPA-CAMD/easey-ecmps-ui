@@ -112,7 +112,7 @@ export const DataTableSystemsComponents = ({
       modalViewData(
         selectComponents,
         {
-          componentRecordId: ["Component ID", "input", "required"],
+          componentId: ["Component ID", "input", "required"],
           sampleAcquisitionMethodCode: [
             "Sample Acquistion Method",
             "dropdown",
@@ -297,8 +297,6 @@ export const DataTableSystemsComponents = ({
     }
   }, [monitoringSystemsFuelFlows]);
 
-
-
   const [createAnalyzerRange, setCreateAnalyzerRange] = useState(false);
   const openAnalyzerRanges = (row, bool, create) => {
     let selectComponents = null;
@@ -342,7 +340,6 @@ export const DataTableSystemsComponents = ({
     );
     setSecondLevel(true, "Component");
   };
-
 
   return (
     <div className="methodTable react-transition fade-in">
@@ -411,8 +408,8 @@ export const DataTableSystemsComponents = ({
                         createNewComponent
                           ? "Create Component"
                           : user && checkout
-                          ? `Edit Component: ${selectedComponent["componentRecordId"]}`
-                          : `Component: ${selectedComponent["componentRecordId"]}`
+                          ? `Edit Component: ${selectedComponent["componentId"]}`
+                          : `Component: ${selectedComponent["componentId"]}`
                       }
                       viewOnly={!(user && checkout)}
                     />
@@ -422,25 +419,25 @@ export const DataTableSystemsComponents = ({
                       setThirdLevel={setThirdLevel}
                       openHandler={openAnalyzerRanges}
                       user={user}
-                checkout={checkout}
+                      checkout={checkout}
                     />{" "}
                   </div>
                 ) : (
                   //EDIT ANALYZER RANGES
                   <ModalDetails
-                      modalData={selectedComponent}
-                      backBtn={setThirdLevel}
-                      data={selectedModalData}
-                      cols={2}
-                      title={
-                        true
-                          ? "Create Analyzer Range"
-                          : user && checkout
-                          ? `Edit  Analyzer Range: `
-                          : ` Analyzer Range: `
-                      }
-                      viewOnly={!(user && checkout)}
-                    />
+                    modalData={selectedComponent}
+                    backBtn={setThirdLevel}
+                    data={selectedModalData}
+                    cols={2}
+                    title={
+                      true
+                        ? "Create Analyzer Range"
+                        : user && checkout
+                        ? `Edit  Analyzer Range: `
+                        : ` Analyzer Range: `
+                    }
+                    viewOnly={!(user && checkout)}
+                  />
                 )}
               </div>
             );
