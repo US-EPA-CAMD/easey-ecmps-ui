@@ -32,7 +32,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
   };
 
   return (
-    <div className="grid-row padding-top-7 padding-2">
+    <div className="grid-row padding-top-7 padding-2 react-transition fade-in">
       <div className="grid-col-9 fit-content">
         <div>
           <span className="text-bold font-heading-2xl">About ECMPS</span>
@@ -87,7 +87,9 @@ const AboutHome = ({ user, setCurrentLink }) => {
             </div>
           </div>
         </div>{" "}
-        <div className="bg-base-lighter" data-testid="homeLogIn">{!user ? <Login /> : ""}</div>
+        <div className="bg-base-lighter" data-testid="homeLogIn">
+          {!user ? <Login /> : ""}
+        </div>
       </div>
     </div>
   );
