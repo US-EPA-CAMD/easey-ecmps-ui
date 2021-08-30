@@ -61,14 +61,13 @@ export const getMonitoringSystemsFuelFlows = async (locationId, systemId) => {
     .catch(handleError);
 };
 
-export const getMonitoringSystemsComponents = async (
-  systemId,
-  componentRecordId
+export const getMonitoringSystemsComponents = async (locId,
+  systemId
 ) => {
-  console.log("  systemId,componentRecordId", systemId, componentRecordId);
+  console.log("  systemId,componentRecordId", locId, systemId);
   return axios
     .get(
-      `${config.services.monitorPlans.uri}/locations/${systemId}/systems/${componentRecordId}/components`
+      `${config.services.monitorPlans.uri}/locations/${locId}/systems/${systemId}/components`
     )
     .then(handleResponse)
     .catch(handleError);
@@ -177,12 +176,12 @@ export const saveAnalyzerRanges = async (payload) => {
   return axios.put(url, payload).then(handleResponse).catch(handleError);
 };
 
-export const saveSystemsFuelFlows = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locId"]}/systems/${payload["compId"]}/fuel-flows/${payload["id"]}`;
+export const saveSystemsFuelFlows = async (payload,locId,sysId) => {
+
+  console.log('testing api ;,',payload,locId,sysId )
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${locId}/systems/${sysId}/fuel-flows/${payload["id"]}`;
   // *** remove attributes not needed by the API
-  delete payload["locId"];
   delete payload["id"];
-  delete payload["compId"];
 
   return axios.put(url, payload).then(handleResponse).catch(handleError);
 };

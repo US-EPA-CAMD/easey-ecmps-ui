@@ -1,14 +1,7 @@
 import React from "react";
-import {
-  render,
-  waitForElement,
-  screen,
-  fireEvent,
-} from "@testing-library/react";
+import { render, waitForElement, fireEvent } from "@testing-library/react";
 import { DataTableSystemsComponents } from "./DataTableSystemsComponents";
-import { mount, ReactWrapper, shallow } from "enzyme";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import { TramRounded } from "@material-ui/icons";
 const axios = require("axios");
 
 jest.mock("axios");
@@ -212,7 +205,7 @@ const apiComp = [
   },
 ];
 //testing redux connected component to mimic props passed as argument
-const componentRenderer = (checkout, secondLevel) => {
+const componentRenderer = (checkout, secondLevel, openFuelFlow) => {
   const props = {
     systemID: "AF1",
     viewOnly: false,
@@ -222,6 +215,15 @@ const componentRenderer = (checkout, secondLevel) => {
     user: { firstName: "test" },
     checkout: checkout,
     setCreateBtn: jest.fn(),
+    setCreateBtnAPI: jest.fn(),
+    setSaveAnalyzerRange: jest.fn(),
+    setSelectedFuelFlows: jest.fn(),
+    selectedFuelFlows: [],
+    setSelectedFuelFlowInFirst: jest.fn(),
+    setSelectedRangeInFirst: jest.fn(),
+    backBTN: jest.fn(),
+    updateAnalyzerRangeTable: false,
+    openFuelFlowsViewTest: openFuelFlow,
   };
   return render(<DataTableSystemsComponents {...props} />);
 };
@@ -233,7 +235,7 @@ test("tests getMonitoringSystems", async () => {
   const title = await mpApi.getMonitoringSystems(6);
   expect(title.data).toEqual(selectedSystem);
   let { container } = await waitForElement(() =>
-    componentRenderer(false, false)
+    componentRenderer(false, false, false)
   );
   // componentRenderer(6);
   expect(container).toBeDefined();
@@ -269,32 +271,11 @@ test("tests a getMonitoringSystemsComponents", async () => {
   // .mockReturnValueOnce([false, {}]);
 
   let { container, debug } = await waitForElement(() =>
-    componentRenderer(false, false)
+    componentRenderer(false, false, false)
   );
-  // debug();
   const fuelBtn = container.querySelector("#btnOpenSystemComponents");
   fireEvent.click(fuelBtn);
   expect(container.querySelector("#backBtn")).toBeDefined();
-  // const First = false;
-  // const second = "My Second Initial State";
-
-  // const wrapper = mount(
-  //   <DataTableSystemsComponents
-  //     systemID={"AF1"}
-  //     viewOnly={false}
-  //     setSecondLevel={jest.fn()}
-  //     secondLevel={true}
-  //     locationSelectValue={6}
-  //     user={{ firstName: "test" }}
-  //     checkout={false}
-  //     setCreateBtn={jest.fn()}
-  //   />
-  // );
-  // await wrapper.instance();
-  // const btn = wrapper.find("#btnOpenSystemComponents");
-
-  // expect(btn).toBeDefined();
-  // jest.restoreAllMocks();
 });
 
 test("tests a getMonitoringSystemsFuelFlows", async () => {
@@ -307,34 +288,14 @@ test("tests a getMonitoringSystemsFuelFlows", async () => {
   );
   expect(title.data).toEqual(apiFuel);
   const test = "";
-  // React.useState = jest
-  //   .fn()
-  // .mockReturnValueOnce([apiFuel, {}])
-  // .mockReturnValueOnce([true, {}])
-  // .mockReturnValueOnce([false, {}])
-  // .mockReturnValueOnce([false, {}])
-  // .mockReturnValueOnce([
-  //   { locationId: 6, id: "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D" },
-  //   {},
-  // ])
-  // .mockReturnValueOnce(["", {}])
-
-  // .mockReturnValueOnce([false, {}])
-  // .mockReturnValueOnce([false, {}])
-  // .mockReturnValueOnce([false, {}])
-
-  // .mockReturnValueOnce([false, {}])
-  // .mockReturnValueOnce([true, {}]);
 
   let { container } = await waitForElement(() =>
-    componentRenderer(false, false)
+    componentRenderer(false, false, true)
   );
 
   const fuelBtn = container.querySelectorAll("#btnOpenFuelFlows");
-
   for (const x of fuelBtn) {
     fireEvent.click(x);
   }
-
   expect(container.querySelector("#backBtn")).toBeDefined();
 });

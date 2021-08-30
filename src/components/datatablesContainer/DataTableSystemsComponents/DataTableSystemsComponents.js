@@ -4,7 +4,7 @@ import ModalDetails from "../../ModalDetails/ModalDetails";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
-import DataTableRender from "../../DataTableRender/DataTableRender";
+import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import "./DataTableSystemsComponentsRender.scss";
 
 import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
@@ -23,6 +23,9 @@ export const DataTableSystemsComponents = ({
   setCreateBtn,
   setCreateBtnAPI,
   setSaveAnalyzerRange,
+  setSelectedFuelFlows,
+  selectedFuelFlows,
+  setSelectedFuelFlowInFirst,
   setSelectedRangeInFirst,
   backBTN,
   updateAnalyzerRangeTable,
@@ -41,7 +44,6 @@ export const DataTableSystemsComponents = ({
     null
   );
   const [selected, setSelected] = useState(1);
-
 
   const [
     monitoringSystemsComponents,
@@ -79,7 +81,7 @@ export const DataTableSystemsComponents = ({
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const fuelFlowsColumnNames = ["Fuel Code", "Type Code", "Date and Time"];
-  const [selectedFuelFlows, setSelectedFuelFlows] = useState("");
+
   const [selectedComponent, setSelectedComponent] = useState("");
 
   // object property,Label Name, value, control type,  = arr
@@ -165,11 +167,9 @@ export const DataTableSystemsComponents = ({
       .createMats(userInput)
       .then((result) => {
         console.log("checking results", result, payloadComponents);
-        // setShow(false);
       })
       .catch((error) => {
         console.log(error);
-        // setShow(false);
       });
     // setUpdateTable(true);
   };
@@ -190,19 +190,9 @@ export const DataTableSystemsComponents = ({
     // setUpdateTable(true);
   };
   const [createNewFuelFlow, setCreateNewFuelFlow] = useState(false);
-  const [openFuelFlowsView, setOpenFuelFlowsView] = React.useState(false);
+  const [openFuelFlowsView, setOpenFuelFlowsView] = React.useState(false
+  );
   // *** row handler onclick event listener
-
-  // const payloadFuelFlows = {
-  //   locationId: locationSelectValue,
-  //   id: null,
-  //   matsMethodCode: null,
-  //   matsMethodParameterCode: null,
-  //   beginDate: null,
-  //   beginHour: 0,
-  //   endDate: null,
-  //   endHour: 0,
-  // };
 
   const totalFuelFlowssOptions = useRetrieveDropdownApi([
     "maximumFuelFlowRateSourceCode",
@@ -222,6 +212,7 @@ export const DataTableSystemsComponents = ({
       selectFuelFlows = monitoringSystemsFuelFlows.filter(
         (element) => element.fuelCode === row.col1
       )[0];
+      console.log("checking fuel flows", selectFuelFlows);
       setSelectedFuelFlows(selectFuelFlows);
       setCreateBtn("Go Back");
       if (user && checkout) {
@@ -261,21 +252,6 @@ export const DataTableSystemsComponents = ({
     setSecondLevel(true, "Fuel Flow");
   };
 
-  // const saveFuelFlows = () => {
-  //   const userInput = extractUserInput(payloadFuelFlows, ".modalUserInput");
-  //   mpApi
-  //     .saveMonitoringMats(userInput)
-  //     .then((result) => {
-  //       console.log(result);
-  //       // setShow(false);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       // setShow(false);
-  //     });
-
-  //   // setUpdateTable(true);
-  // };
   // const createFuelFlows = () => {
   //   const userInput = extractUserInput(payloadFuelFlows, ".modalUserInput");
   //   console.log("checking results before api call", payloadFuelFlows);
@@ -358,7 +334,7 @@ export const DataTableSystemsComponents = ({
                 title={
                   createNewFuelFlow
                     ? "Create Fuel Flow"
-                    : `Fuel Code: ${selectedComponent["fuelCode"]}, System Type Code: ${selectedComponent["systemTypeCode"]}`
+                    : `Fuel Code: ${selectedFuelFlows["fuelCode"]}, System Type Code: ${selectedFuelFlows["systemTypeCode"]}`
                 }
                 viewOnly={!(user && checkout)}
               />

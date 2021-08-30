@@ -1,6 +1,6 @@
 import React, { useState, cloneElement } from "react";
 import { connect } from "react-redux";
-import Tabs from "../Tabs/Tabs";
+import {Tabs} from "../Tabs/Tabs";
 import TabPane from "../TabPane/TabPane";
 import {
   addFacilityTab,

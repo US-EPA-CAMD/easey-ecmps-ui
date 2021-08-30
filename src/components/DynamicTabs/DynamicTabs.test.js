@@ -1,5 +1,5 @@
 import React from "react";
-import { DynamicTabs,mapDispatchToProps  } from "./DynamicTabs";
+import { DynamicTabs, mapDispatchToProps } from "./DynamicTabs";
 import { render, fireEvent, screen } from "@testing-library/react";
 // import {
 //   addFacilityTab,
@@ -7,8 +7,8 @@ import { render, fireEvent, screen } from "@testing-library/react";
 // } from "../../store/actions/dynamicFacilityTab";
 // import { setActiveTab } from "../../store/actions/activeTab";
 
-jest.mock('../../store/actions/dynamicFacilityTab');
-import * as actions from '../../store/actions/dynamicFacilityTab';
+jest.mock("../../store/actions/dynamicFacilityTab");
+import * as actions from "../../store/actions/dynamicFacilityTab";
 class Welcome extends React.Component {
   clickHandler = () => {
     const selectedConfig = {
@@ -24,7 +24,6 @@ class Welcome extends React.Component {
         selectedConfig: selectedConfig,
       },
     ]);
-    
   };
   render() {
     return (
@@ -54,12 +53,38 @@ describe("testing a reusable Dynamic Tabs component", () => {
       addFacility={jest.fn()}
       removeFacility={jest.fn()}
       setActive={jest.fn()}
+      checkedOutLocations={[]}
+      user={{firstName:'test'}}
+      setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+      mostRecentlyCheckedInMonitorPlanId={''}
       tabsProps={[
         {
           title: "Welcome ( test )",
           component: <Welcome name="Addis" />,
           selectedConfig: selectedConfig,
+        },   {
+          title: "Welcome ( test )",
+          component: <Welcome name="Addis" />,
+          
         },
+      ]}
+    />
+  );
+
+  const dynamicTab = (
+    <DynamicTabs
+      addFacility={jest.fn()}
+      removeFacility={jest.fn()}
+      setActive={jest.fn()}
+      checkedOutLocations={[]}
+      user={{firstName:'test'}}
+      setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+      mostRecentlyCheckedInMonitorPlanId={''}
+      tabsProps={[
+        {
+          title: "Welcome ( test )",
+          component: <Welcome name="Addis" />,
+          selectedConfig: selectedConfig}
       ]}
     />
   );
@@ -68,43 +93,39 @@ describe("testing a reusable Dynamic Tabs component", () => {
     render(dynamicTabs);
     const tabs = screen.getAllByRole("button");
     const initTabContent = screen.getByText("Hello, Addis");
-    expect(tabs).toHaveLength(2);
+    expect(tabs).toHaveLength(4);
     expect(initTabContent).not.toBeUndefined();
   });
   test("renders other tabs on a click event of Add Tab until there's enough space in container width. Also removes the opened tab when close icon is clicked", () => {
-
     const { container } = render(dynamicTabs);
     //add faciliites tab
     fireEvent.click(screen.getByText("Add Tab"));
     let tabs = screen.getAllByRole("button");
-    expect(tabs).toHaveLength(4);
+    expect(tabs).toHaveLength(6);
     //second click to add tabs won't work since there's no space and the number of tabs should remain two
     fireEvent.click(screen.getByText("Add Tab"));
     tabs = screen.getAllByRole("button");
-    expect(tabs).toHaveLength(4);    
+    expect(tabs).toHaveLength(6);
     //close the opened facilities tab
     const closeTabIcon = container.querySelectorAll("#closeXBtnTab");
-    expect(closeTabIcon).toHaveLength(2);
+    expect(closeTabIcon).toHaveLength(3);
     fireEvent.click(closeTabIcon[1]);
     tabs = screen.getAllByRole("button");
-    expect(closeTabIcon).toHaveLength(2);
-
+    expect(closeTabIcon).toHaveLength(3);
   });
 
-  test('mapDispatchToProps calls the appropriate action', async () => {
+  test("mapDispatchToProps calls the appropriate action", async () => {
     // mock the 'dispatch' object
     const dispatch = jest.fn();
     const actionProps = mapDispatchToProps(dispatch);
     const formData = [];
-    // verify the appropriate action was called 
+    // verify the appropriate action was called
     actionProps.addFacility();
-    expect(actions.addFacilityTab).toHaveBeenCalled(); 
+    expect(actions.addFacilityTab).toHaveBeenCalled();
 
     actionProps.removeFacility();
-    expect(actions.removeFacilityTab).toHaveBeenCalled(); 
+    expect(actions.removeFacilityTab).toHaveBeenCalled();
 
     actionProps.setActive();
-    
-    
   });
 });

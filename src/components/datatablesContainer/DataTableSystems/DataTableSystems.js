@@ -41,9 +41,10 @@ export const DataTableSystems = ({
   // for components/ fuel flow view
   const [secondLevel, setSecondLevel] = useState(false);
   const [secondLevelName, setSecondLevelName] = useState("");
+
   // for analyzer range view
   const [thirdLevel, setThirdLevel] = useState(false);
-  // const [firstLevel, setFirstLevel] = useState(false);
+
   const [dataLoaded, setDataLoaded] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
   useEffect(() => {
@@ -64,6 +65,7 @@ export const DataTableSystems = ({
   }, [locationSelectValue, updateTable, revertedState]);
 
   const [selected, setSelected] = useState(null);
+  const [selectedSystem, setSelectedSystem] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
 
   // *** row handler onclick event listener
@@ -76,6 +78,7 @@ export const DataTableSystems = ({
         (element) => element.id === row.col7
       )[0];
       setSelected(row.cells);
+      setSelectedSystem(selectSystem);
     }
     setSelectedModalData(
       modalViewData(
@@ -165,7 +168,7 @@ export const DataTableSystems = ({
 
   const setBread = (val, currentBread) => {
     setSecondLevel(val);
-    console.log('VAL bread',val,currentBread)
+    console.log("VAL bread", val, currentBread);
     setSecondLevelName(currentBread);
     breadCrumbs(currentBread);
   };
@@ -206,7 +209,7 @@ export const DataTableSystems = ({
     // setSecondLevel(false);
     breadThirdCrumbs(currentBread);
   };
-//////////
+  //////////
   const [createBTN, setCreateBTN] = useState("Save and Close");
   const [createBtnAPI, setCreateBtnAPI] = useState(null);
 
@@ -238,24 +241,18 @@ export const DataTableSystems = ({
       .saveAnalyzerRanges(userInput)
       .then((result) => {
         console.log(result);
-        // setShow(false);
       })
       .catch((error) => {
         console.log(error);
-        // setShow(false);
       });
-    // mpApi.getMonitoringAnalyzerRanges(
-    //   selectedRanges.locationId,
-    //   selectedRanges.componentRecordId
-    // );
     setUpdateAnalyzerRangeTable(true);
   };
+  const [selectedFuelFlows, setSelectedFuelFlows] = useState("");
 
   const saveFuelFlows = () => {
     const payload = {
-      locId: selectedRangeInFirst.locationId,
       maximumFuelFlowRate: 0,
-      id: null,
+      id: null, // fuel flow id
       systemFuelFlowUOMCode: "string",
       maximumFuelFlowRateSourceCode: "string",
       beginDate: null,
@@ -264,26 +261,22 @@ export const DataTableSystems = ({
       endHour: 0,
     };
     const payloadInputs = document.querySelectorAll(".modalUserInput");
-    console.log("payload", payloadInputs);
     const userInput = extractUserInput(payload, ".modalUserInput");
     console.log(userInput, "user");
     mpApi
-      .saveSystemsFuelFlows(userInput)
+      .saveSystemsFuelFlows(
+        userInput,
+        selectedSystem.locationId,
+        selectedSystem.id
+      )
       .then((result) => {
         console.log(result);
-        // setShow(false);
       })
       .catch((error) => {
         console.log(error);
-        // setShow(false);
       });
-    // mpApi.getMonitoringAnalyzerRanges(
-    //   selectedRanges.locationId,
-    //   selectedRanges.componentRecordId
-    // );
     setUpdateAnalyzerRangeTable(true);
   };
-  // *** memoize data
 
   const backToSecondLevelBTN = (mainLevel) => {
     setThirdLevel(mainLevel);
@@ -291,7 +284,7 @@ export const DataTableSystems = ({
   };
 
   const backToFirstLevelLevelBTN = (mainLevel) => {
-    console.log('testing')
+    console.log("testing");
     setSecondLevel(mainLevel);
     setBread(false, "");
   };
@@ -368,12 +361,12 @@ export const DataTableSystems = ({
               !secondLevel && !thirdLevel // first level at systems
                 ? closeModalHandler
                 : secondLevel && !thirdLevel // second level at components or fuel flows
-                ? secondLevelName === "Fuel Flows"
+                ? secondLevelName === "Fuel Flow"
                   ? () => {
                       saveFuelFlows();
                       backToFirstLevelLevelBTN(false);
                     }
-                  : () => console.log('DDINT WORK')
+                  : () => console.log("DDINT WORK")
                 : () => {
                     saveAnalyzerRanges();
                     backToSecondLevelBTN(false);
@@ -414,6 +407,8 @@ export const DataTableSystems = ({
                   locationSelectValue={locationSelectValue}
                   systemID={selected.length > 1 ? selected[0].value : 0}
                   setSelectedRangeInFirst={setSelectedRangeInFirst}
+                  setSelectedFuelFlows={setSelectedFuelFlows}
+                  selectedFuelFlows={selectedFuelFlows}
                 />
               </div>
             }
