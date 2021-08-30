@@ -362,3 +362,9 @@
 ul.usa-nav__primary.usa-accordion {
   height: 2.5em !important;
 }
+
+.usa-accordion__content,
+.usa-nav__submenu {
+  @extend .react-transition;
+  @extend .fade-in;
+}

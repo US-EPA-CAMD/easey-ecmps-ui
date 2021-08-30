@@ -74,7 +74,10 @@ const FAQ = () => {
   };
 
   return (
-    <div className="grid-row padding-top-7 padding-2 " id="faqPage">
+    <div
+      className="grid-row padding-top-7 padding-2 react-transition fade-in"
+      id="faqPage"
+    >
       <div className="grid-col-9 fit-content">
         <div>
           <span className="text-bold font-heading-2xl">FAQs</span>

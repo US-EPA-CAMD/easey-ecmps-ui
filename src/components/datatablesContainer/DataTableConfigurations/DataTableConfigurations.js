@@ -41,14 +41,18 @@ export const DataTableConfigurations = ({
   };
 
   const checkBackIn = (monitoringPlanId) => {
+    const crypto = window.crypto || window.msCrypto;
+    const array = new Uint32Array(1);
+    const randomNumber = crypto.getRandomValues(array);
+
     mpApi
       .deleteCheckInMonitoringPlanConfiguration(monitoringPlanId)
       .then((res) => {
         setMostRecentlyCheckedInMonitorPlanId(
-          `${monitoringPlanId}${Math.floor(Math.random() * 1000)}`
+          `${monitoringPlanId}${randomNumber}`
         );
         setMostRecentlyCheckedInMonitorPlanIdForTab(
-          `${monitoringPlanId}${Math.floor(Math.random() * 1000)}`
+          `${monitoringPlanId}${randomNumber}`
         );
 
         try {
@@ -74,11 +78,9 @@ export const DataTableConfigurations = ({
         setSelectedConfig([data, selectedConfigData, checkout]);
       }
     } else {
-
       // monitoring plan id for api check in
       // oris code for redux state check in
       checkBackIn(selectedConfigData.id);
-
     }
   };
 
