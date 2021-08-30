@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { connect } from "react-redux";
 import * as fs from "../../../utils/selectors/facilities";
 import SelectedFacilityTab from "../../MonitoringPlanTab/MonitoringPlanTab";
-import DataTableRender from "../../DataTableRender/DataTableRender";
+import {DataTableRender} from "../../DataTableRender/DataTableRender";
 import "./SelectFacilitiesDataTable.scss";
 import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigurations";
 import * as facilitiesApi from "../../../utils/api/facilityApi";

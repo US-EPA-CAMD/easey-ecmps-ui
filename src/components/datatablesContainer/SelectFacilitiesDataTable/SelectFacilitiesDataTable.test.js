@@ -1,18 +1,15 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { SelectFacilitiesDataTable } from "/../mp-viewer/DataTableRender";
+import { SelectFacilitiesDataTable } from "./SelectFacilitiesDataTable";
 
 //testing redux connected component to mimic props passed as argument
 function componentRenderer(args) {
   const defualtProps = {
-    facilities: [
-      { orisCode: 3, name: "Barry", state: "Alabama" },
-      { orisCode: 8, name: "Gorgas", state: "Alabama" },
-      { orisCode: 9, name: "Copper Station", state: "Washington" },
-    ],
-    addtabs: jest.fn(),
-    loadFacilitiesData: jest.fn(),
-    loading: false,
+    user:{firstName:'test'},
+    addtabs:jest.fn(),
+    openedFacilityTabs:[] ,
+    mostRecentlyCheckedInMonitorPlanIdForTab:[],
+    setMostRecentlyCheckedInMonitorPlanIdForTab:jest.fn(),
   };
 
   const props = { ...defualtProps, ...args };
@@ -33,7 +30,6 @@ function componentRendererNoData(args) {
 test("testing redux connected data-table component renders all records", () => {
   const { container } = componentRenderer();
   const headerColumns = container.querySelectorAll("tbody tr");
-  fireEvent.click(screen.getByText("Barry"));
   expect(headerColumns.length).toEqual(3);
 });
 /*test("testing redux connected data-table component renders no records", () => {

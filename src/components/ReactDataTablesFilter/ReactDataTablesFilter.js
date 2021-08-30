@@ -149,3 +149,4 @@ export const FilterComponent = ({
     </table>
   </div>
 );
+export default FilterComponent;

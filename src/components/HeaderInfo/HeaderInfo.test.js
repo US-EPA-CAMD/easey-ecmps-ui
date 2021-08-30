@@ -1,8 +1,17 @@
 import React from "react";
-import { render, screen, within, fireEvent } from "@testing-library/react";
+import {
+  render,
+  screen,
+  within,
+  fireEvent,
+  waitForElement,
+} from "@testing-library/react";
 import HeaderInfo from "./HeaderInfo";
-import { getActiveConfigurations } from "../../utils/selectors/monitoringConfigurations";
+// import { getActiveConfigurations } from "../../utils/selectors/monitoringConfigurations";
+import * as mpApi from "../../utils/api/monitoringPlansApi";
+const axios = require("axios");
 
+jest.mock("axios");
 describe("testing select dropdowns for configutations, locations, and sections of the monitoring plans header", () => {
   const monitoringPlans = [
     {
@@ -1008,29 +1017,49 @@ describe("testing select dropdowns for configutations, locations, and sections o
   ];
 
   describe("renders header with not checked out ", () => {
-    test("cliks check out, then check back in , 3 buttons because of the rest of header", () => {
-      const { getByText } = render(
-        <HeaderInfo
-          facility={"Barry (1, 2, CS0AAN)"}
-          selectedConfig={[]}
-          orisCode={3}
-          setSectionSelect={jest.fn()}
-          sectionSelect={[4, "Methods"]}
-          setLocationSelect={jest.fn()}
-          locationSelect={[0, "test"]}
-          locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
-          checkout={false}
-          user={{ firstName: "test" }}
-          checkoutAPI={jest.fn()}
-          setInactive={jest.fn()}
-          setCheckout={jest.fn()}
-          inactive={[true, false]}
-        />
+    test("cliks check out, then check back in , 3 buttons because of the rest of header", async () => {
+      axios.delete.mockImplementation((url) => {
+        switch (url) {
+          case "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/workspace/plans/5770/revert":
+            return Promise.resolve({ data: [{ name: "Bob", items: [] }] });
+          case "/items.json":
+            return Promise.resolve({ data: [{ id: 1 }, { id: 2 }] });
+          default:
+            return Promise.reject(new Error(url));
+        }
+      });
+      axios.delete.mockImplementation(() =>
+        Promise.resolve({ status: 200, data: [] })
+      );
+      const title = await mpApi.revertOfficialRecord(5770);
+      const { getByText } = await waitForElement(() =>
+        render(
+          <HeaderInfo
+            facility={"Barry (1, 2, CS0AAN)"}
+            selectedConfig={[]}
+            orisCode={3}
+            setSectionSelect={jest.fn()}
+            sectionSelect={[4, "Methods"]}
+            setLocationSelect={jest.fn()}
+            locationSelect={[0, "test"]}
+            locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
+            checkout={false}
+            user={{ firstName: "test" }}
+            checkoutAPI={jest.fn()}
+            setInactive={jest.fn()}
+            setCheckout={jest.fn()}
+            inactive={[true, false]}
+            checkoutAPI={jest.fn()}
+            checkedOutLocations={[{ monPlanId: [1, 2, 3] }]}
+            setRevertedState={jest.fn()}
+          />
+        )
       );
       fireEvent.click(screen.getByText("Check Out"));
       fireEvent.click(screen.getByText("Check Back In"));
+
       const btns = screen.getAllByRole("button");
-      expect(btns).toHaveLength(3);
+      expect(btns).toHaveLength(1);
     });
   });
 
@@ -1052,6 +1081,9 @@ describe("testing select dropdowns for configutations, locations, and sections o
           setCheckout={jest.fn()}
           setInactive={jest.fn()}
           inactive={[true, false]}
+          checkoutAPI={jest.fn()}
+          checkedOutLocations={[{ monPlanId: [1, 2, 3] }]}
+          setRevertedState={jest.fn()}
         />
       );
       fireEvent.click(container.querySelector("#checkInBTN"));
@@ -1059,13 +1091,16 @@ describe("testing select dropdowns for configutations, locations, and sections o
 
       fireEvent.click(container.querySelector("#checkbox"));
       const btns = screen.getAllByRole("button");
-      expect(btns).toHaveLength(3);
+
+      fireEvent.click(container.querySelector("#showRevertModal"));
+      fireEvent.click(screen.getByTestId("saveBtn"));
+      expect(btns).toHaveLength(4);
     });
   });
 
   describe("renders header with no user logged in ", () => {
     test("verifies everythign is rendered only 2 buttons, no checkout/check in", () => {
-      const { getByText } = render(
+      const { container, getByText } = render(
         <HeaderInfo
           facility={"Barry (1, 2, CS0AAN)"}
           selectedConfig={[]}
@@ -1079,10 +1114,38 @@ describe("testing select dropdowns for configutations, locations, and sections o
           setCheckout={jest.fn()}
           setInactive={jest.fn()}
           inactive={[true, false]}
+          checkoutAPI={jest.fn()}
+          checkedOutLocations={[{monPlanId:[1,2,3]}]}
         />
       );
-      const btns = screen.getAllByRole("button");
-      expect(btns).toHaveLength(2);
+
+      expect(container).toBeDefined();
+    });
+  });
+  // checkedOutLocations[checkedOutLocations.map((location) => location["monPlanId"]).indexOf(selectedConfig.id)]      ["checkedOutBy"] === user["firstName"]
+  describe("renders header with no user logged in ", () => {
+    test("verifies everythign is rendered only 2 buttons, no checkout/check in", () => {
+      const { container, getByText } = render(
+        <HeaderInfo
+          facility={"Barry (1, 2, CS0AAN)"}
+          selectedConfig={{id:5770}}
+          user={{firstName:"test"}}
+          orisCode={3}
+          setSectionSelect={jest.fn()}
+          sectionSelect={[4, "Methods"]}
+          setLocationSelect={jest.fn()}
+          locationSelect={[0, "test"]}
+          locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
+          checkoutAPI={jest.fn()}
+          setCheckout={jest.fn()}
+          setInactive={jest.fn()}
+          inactive={[true, false]}
+          checkoutAPI={jest.fn()}
+          checkedOutLocations={[{monPlanId:[5770], checkedOutBy:"test"}]}
+        />
+      );
+
+      expect(container).toBeDefined();
     });
   });
 });
