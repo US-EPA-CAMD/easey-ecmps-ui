@@ -27,7 +27,7 @@ export const DataTableMats = ({
   const [dataLoaded, setDataLoaded] = useState(false);
   const [matsMethods, setMatsMethods] = useState([]);
   const totalOptions = useRetrieveDropdownApi(
-    ["parameterCode", "methodCode"],
+    ["parameterCode", "monitoringMethodCode"],
     true
   );
   const [show, setShow] = useState(false);
@@ -225,7 +225,7 @@ export const DataTableMats = ({
           title={
             createNewMats ? "Create MATS" : "Component: Monitoring MATS Methods"
           }
-          createNew={createNewMats ? "Create MATS" : `Save and Close`}
+          exitBTN={createNewMats ? "Create MATS" : `Save and Close`}
           children={
             <div>
               <ModalDetails

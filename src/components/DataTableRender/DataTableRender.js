@@ -75,7 +75,6 @@ export const DataTableRender = ({
   }, []);
 
   const isLocationCheckedOut = (facilityId) => {
-    // console.log('checkedOutLocations',checkedOutLocations)
     return (
       checkedOutLocations
         .map((location) => location["facId"])
@@ -115,7 +114,6 @@ export const DataTableRender = ({
   };
 
   const AddLock = (dataRowObject) => {
-    // console.log('dataRowObject',dataRowObject)
     if (checkedOutLocations && checkedOutLocations.length > 0) {
       if (isLocationCheckedOut(dataRowObject.row["facId"])) {
         return (

@@ -23,6 +23,8 @@ export const modalViewData = (
   totalOptions,
   mats = false
 ) => {
+
+  console.log('selected',selected)
   //   (7) ["systemDesignationCode", "System Designation", "Primary", "required", "dropdown", "P", undefined]
   // 2: (7) ["maximumFuelFlowRateSourceCode", "System Type", "Gas Fuel Flow System", "required", "dropdown", "GAS", undefined]
   // 3: (7) ["systemFuelFlowUOMCode", "Fuel Type", "Pipeline Natural Gas", "required", "dropdown", "PNG", undefined]
@@ -50,18 +52,11 @@ export const modalViewData = (
       case "dropdown":
         if (!createNew) {
           if (totalOptions) {
+            console.log('totalOptions[y], selected[y], "name"',totalOptions , y, selected, "name")
             labels = findValue(totalOptions[y], selected[y], "name");
-            // console.log("check totalOptions[y]");
           } else {
             labels = findValue(codeList[y], selected[y], "name");
-            console.log(
-              "check codeList[y][y]",
-              codeList[y],
-              selected[y],
-              selected,
-              label,
-              time
-            );
+
           }
         }
         arr.push([
@@ -73,7 +68,6 @@ export const modalViewData = (
           createNew ? "select" : selected[y],
           totalOptions ? totalOptions[y] : codeList[y],
         ]);
-        // console.log(label[y][1], y, "    console.log(label[y][1])");
         break;
       case "input":
         arr.push([
@@ -106,6 +100,15 @@ export const modalViewData = (
           ]);
         }
         break;
+        case "hidden":
+          arr.push([
+            y,
+            label[y][0],
+            selected[y],
+            false,
+            "input",
+          ]);
+          break;
       default:
         break;
     }

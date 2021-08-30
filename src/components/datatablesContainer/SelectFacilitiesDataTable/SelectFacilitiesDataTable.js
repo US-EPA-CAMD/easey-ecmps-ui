@@ -7,9 +7,6 @@ import "./SelectFacilitiesDataTable.scss";
 import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigurations";
 import * as facilitiesApi from "../../../utils/api/facilityApi";
 import { getCheckedOutLocations } from "../../../utils/api/monitoringPlansApi";
-import { useInterval } from "../../../additional-functions/use-interval";
-import { oneSecond } from "../../../config";
-import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 export const SelectFacilitiesDataTable = ({
   user,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import * as dmApi from "../utils/api/dataManagementApi";
 export const useRetrieveDropdownApi = (arr, mats = false) => {
   const [totalOptions, setTotalOptions] = useState({});
@@ -9,6 +9,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
         case "parameterCode":
           if (mats) {
             dmApi.getAllMatsParameterCodes().then((response) => {
+              console.log('MATS getAllMatsParameterCodes,',response)
               options = response.data.map((option) => {
                 return {
                   code: option["matsMethodParamCode"],
@@ -19,6 +20,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
               options.unshift({ code: "", name: "" });
               const newData = totalOptions;
               newData["supplementalMATSParameterCode"] = options;
+              console.log('MATS OPTIONS',options)
               setTotalOptions(newData);
             });
           } else {
@@ -41,9 +43,10 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
         case "monitoringMethodCode":
           if (mats) {
             dmApi.getAllMatsMethodCodes().then((response) => {
+              console.log('MATS monitoringMethodCode,',response)
               options = response.data.map((option) => {
                 return {
-                  code: option["supplementalMATSMonitoringMethodCode"],
+                  code: option["matsMethodCode"],
                   name: option["matsMethodCodeDescription"],
                 };
               });
@@ -106,12 +109,12 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
           break;
         //Analyzer Range
-        case "rangeCode":
+        case "analyzerRangeCode":
           dmApi.getAllRangeCodes().then((response) => {
             options = response.data.map((option) => {
               return {
-                code: option["rangeCode"],
-                name: option["rangeCodeDescription"],
+                code: option["analyzerRangeCode"],
+                name: option["analyzerRangeCodeDescription"],
               };
             });
 
@@ -123,12 +126,12 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
           break;
         // System Fuel Flows
-        case "bypassApproachCode":
-          dmApi.getAllMeasureCodes().then((response) => {
+        case "maximumFuelFlowRateSourceCode":
+          dmApi.getAllMaxRateSourceCodes().then((response) => {
             options = response.data.map((option) => {
               return {
-                code: option["bypassApproachCode"],
-                name: option["bypassApproachCodeDescription"],
+                code: option["maxRateSourceCode"],
+                name: option["maxRateSourceCodeDescription"],
               };
             });
 
@@ -139,12 +142,12 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             setTotalOptions(newData);
           });
           break;
-        case "fuelFlowRateCode":
-          dmApi.getAllFuelFlowRateCodes().then((response) => {
+        case "systemFuelFlowUOMCode":
+          dmApi.getAllUnitsOfMeasureCodes().then((response) => {
             options = response.data.map((option) => {
               return {
-                code: option["fuelFlowRateCode"],
-                name: option["fuelFlowRateCodeDescription"],
+                code: option["unitsOfMeasureCode"],
+                name: option["unitsOfMeasureCodeDescription"],
               };
             });
 

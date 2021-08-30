@@ -1,9 +1,8 @@
-export const findValue = (options, val, parameter,) => {
- 
- console.log( "options, val, parameter",options, val, parameter)
+export const findValue = (options, val, parameter) => {
   if (val === null || val === undefined) {
     return "";
   }
+  console.log('options, val, parameter',options, val, parameter)
   for (const x of options) {
     if (x.code === val) {
       return x[parameter];

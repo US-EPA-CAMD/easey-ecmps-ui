@@ -111,7 +111,7 @@ export const HeaderInfo = ({
     setDisplayLock(direction);
     checkoutAPI(direction);
   };
-  const [revertState, setRevertState] = useState(false);
+  // const [revertState, setRevertState] = useState(false);
   const closeModalHandler = () => setShow(false);
 
   const [show, setShow] = useState(false);
@@ -131,7 +131,7 @@ export const HeaderInfo = ({
           close={closeModalHandler}
           // showCancel={true}
           showSave={true}
-          createNew={"Yes"}
+          exitBTN={"Yes"}
           save={revert}
           // title={
           //   "test title"

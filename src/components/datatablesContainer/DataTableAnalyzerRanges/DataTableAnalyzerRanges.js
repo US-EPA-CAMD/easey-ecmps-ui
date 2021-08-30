@@ -1,55 +1,51 @@
 import React, { useEffect, useMemo, useState } from "react";
-// import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-import { extractUserInput } from "../../../additional-functions/extract-user-input";
-
+import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as fs from "../../../utils/selectors/monitoringPlanSystems";
 import DataTableRender from "../../DataTableRender/DataTableRender";
-
-// import Modal from "../../Modal/Modal";
-// import ModalDetails from "../../ModalDetails/ModalDetails";
 import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 export const DataTableAnalyzerRanges = ({
-  locationSelectValue,
   user,
   checkout,
-  selectedRange,
+  selectedRanges,
   setThirdLevel,
   thirdLevel,
-  openHandler,
+  setOpenFuelFlowsView,
+  setComponentView,
+  setSelectedModalData,
+  setCreateNewAnalyzerRange,
+  setSaveAnalyzerRange,
+  setSelectedRange,
+  updateAnalyzerRangeTable,
   // inactive,
   // settingInactiveCheckBox,
 }) => {
   const [rangesLoaded, setRangesLoaded] = useState(false);
   const [ranges, setRanges] = useState([]);
-  const [show, setShow] = useState(false);
-  const [updateTable, setUpdateTable] = useState(false);
+  const [updateTable, setUpdateTable] = useState(updateAnalyzerRangeTable);
   const rangesColumnNames = ["Range", "Date and Time"];
-  const totalOptions = useRetrieveDropdownApi(
-    ["parameterCode", "monitoringMethodCode"],
-    true
+  const totalRangesOptions = useRetrieveDropdownApi(
+    ["analyzerRangeCode"],
   );
-
   useEffect(() => {
-    if (updateTable || ranges.length <= 0 || locationSelectValue) {
+    console.log('selectedRanges',selectedRanges)
+    if (updateTable || ranges.length <= 0) {
       mpApi
         .getMonitoringAnalyzerRanges(
-          selectedRange.locationId,
-          selectedRange.componentRecordId
+          selectedRanges.locationId,
+          selectedRanges.componentRecordId
         )
         .then((res) => {
           setRanges(res.data);
+          console.log("res.data", res.data);
           setRangesLoaded(true);
         });
       setUpdateTable(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedRange, updateTable]);
-  const [selectedMatsMethods, setSelectedMatsMethods] = useState(null);
-  // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
-  // *** in the format expected by the modal / tabs plugins)
-
+  }, [selectedRanges, updateTable]);
+  
   const rangeData = useMemo(() => {
     if (ranges.length > 0) {
       return fs.getMonitoringPlansSystemsAnalyzerRangesTableRecords(ranges);
@@ -58,45 +54,64 @@ export const DataTableAnalyzerRanges = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ranges]);
- 
-  const saveAnalyzerRanges = () => {
-    const payload = {
-      monLocId: locationSelectValue,
-      id: null,
-      analyzerRangeCode: "string",
-      dualRangeIndicator: 0,
-      beginDate: null,
-      beginHour: 0,
-      endDate: null,
-      endHour: 0,
-    };
+ const testing = () => {
+   openAnalyzerRanges(false,false,true);
+ }
+  // row is just the data in the datatable row, need to compare it to the entire API dataset to get correct data
+  const openAnalyzerRanges = (row, bool, create) => {
+    let selectRange = null;
+    setCreateNewAnalyzerRange(create);
+    setOpenFuelFlowsView(false);
+    setComponentView(true);
+    // if (create) {
+    //   setCreateBtn("Create Analyzer Range");
+    //   setCreateBtnAPI(createAnalyzerRange);
+    // }
+    if (ranges.length > 0 && !create) {
+      selectRange = ranges.filter((element) => element.id === row.col3)[0];
+      setSelectedRange(selectRange);
+      // setCreateBtn("Go Back");
+      // if (user && checkout) {
+      //   setCreateBtn("Save and Go Back");
+      //   setCreateBtnAPI(saveComponents);
+      // }
+      // console.log(selectComponents, "selectComponents");
+      // setOpenAnalyzer(selectRange);
+    }
 
-    const userInput = extractUserInput(payload, ".modalUserInput");
-    // console.log(userInput, "user");
-    mpApi
-      .saveMonitoringMats(userInput)
-      .then((result) => {
-        console.log(result);
-        setShow(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setShow(false);
-      });
-    mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
-      console.log("testing save", res.data);
-    });
-    setUpdateTable(true);
+    setSelectedModalData(
+      modalViewData(
+        selectRange,
+        {
+          analyzerRangeCode: ["Range", "dropdown", "required"],
+          dualRangeIndicator: ["Dual Range Indicator", "radio", ""],
+        },
+        {
+          beginDate: ["Start Date", "date", "required"],
+          beginHour: ["Start Time", "time", "required"],
+          endDate: ["End Date", "date", ""],
+          endHour: ["End Time", "time", ""],
+        },
+        create,
+        totalRangesOptions
+      )
+    );
+    setThirdLevel(true, "Analyzer Ranges");
   };
-
-
   return (
     <div className="methodTable">
-
+           <input
+        tabIndex={-1}
+        aria-hidden={true}
+        role="button"
+        type="hidden"
+        id="testingBtn"
+        onClick={() => testing()}
+      />
       <DataTableRender
         columnNames={rangesColumnNames}
         data={rangeData}
-        openHandler={openHandler}
+        openHandler={openAnalyzerRanges}
         tableTitle="Analyzer Ranges"
         componentStyling="systemsCompTable"
         tableStyling="grid-container"
@@ -104,8 +119,8 @@ export const DataTableAnalyzerRanges = ({
         actionsBtn={"View"}
         user={user}
         checkout={checkout}
-        // addBtn={openComponent}
-        addBtnName={"Add Component"}
+        addBtn={openAnalyzerRanges}
+        addBtnName={"Create New Analyzer Range"}
       />
     </div>
   );

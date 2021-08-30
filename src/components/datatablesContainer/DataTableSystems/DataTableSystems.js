@@ -6,6 +6,8 @@ import DataTableSystemsComponents from "../DataTableSystemsComponents/DataTableS
 import DataTableRender from "../../DataTableRender/DataTableRender";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import ModalDetails from "../../ModalDetails/ModalDetails";
+import { extractUserInput } from "../../../additional-functions/extract-user-input";
+
 import {
   Breadcrumb,
   BreadcrumbBar,
@@ -35,7 +37,12 @@ export const DataTableSystems = ({
 }) => {
   const [show, setShow] = useState(showModal);
   const [monitoringSystems, setMonitoringSystems] = useState([]);
+
+  // for components/ fuel flow view
   const [secondLevel, setSecondLevel] = useState(false);
+  const [secondLevelName, setSecondLevelName] = useState("");
+  // for analyzer range view
+  const [thirdLevel, setThirdLevel] = useState(false);
   // const [firstLevel, setFirstLevel] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
@@ -103,28 +110,19 @@ export const DataTableSystems = ({
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
         setSecondLevel(false);
+        setThirdLevel(false);
         setShow(false);
         removeChangeEventListeners(".modalUserInput");
       }
     } else {
       setSecondLevel(false);
+      setThirdLevel(false);
       setShow(false);
       removeChangeEventListeners(".modalUserInput");
     }
   };
 
   const [createNewSystem, setCreateNewSystem] = useState(false);
-  // useEffect(() => {
-  //   setModalData(
-  //     selected.map((info) => {
-  //       return {
-  //         header: info.column,
-  //         value: info.value,
-  //       };
-  //     })
-  //   );
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [show]);
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -137,7 +135,9 @@ export const DataTableSystems = ({
     "End Date and Time",
   ];
 
+  /// handles blue stepper for system
   const [currentBar, setCurrentBar] = useState("");
+
   const breadCrumbs = (lastBread) => {
     const breadBar = (
       <BreadcrumbBar className="padding-0">
@@ -153,9 +153,9 @@ export const DataTableSystems = ({
       </BreadcrumbBar>
     );
     setCurrentBar(breadBar);
-    if (secondLevel) {
-      setCurrentBar("");
-    }
+    // if (secondLevel) {
+    //   setCurrentBar("");
+    // }
   };
   useEffect(() => {
     if (!secondLevel) {
@@ -165,13 +165,136 @@ export const DataTableSystems = ({
 
   const setBread = (val, currentBread) => {
     setSecondLevel(val);
+    console.log('VAL bread',val,currentBread)
+    setSecondLevelName(currentBread);
     breadCrumbs(currentBread);
   };
+  /// for analyzer ranges
+  const breadThirdCrumbs = (lastBread) => {
+    const breadBar = (
+      <BreadcrumbBar className="padding-0">
+        <Breadcrumb onClick={() => setSecondLevel(false)}>
+          <BreadcrumbLink>
+            <span>System</span>
+          </BreadcrumbLink>
+        </Breadcrumb>
 
-  const [createBTN, setCreateBTN] = useState("Create");
+        <Breadcrumb
+          onClick={() => {
+            setThirdLevel(false);
+            setBread(true, "Components");
+          }}
+        >
+          <BreadcrumbLink>
+            <span>Components</span>
+          </BreadcrumbLink>
+        </Breadcrumb>
+
+        <Breadcrumb current>
+          <span>{lastBread}</span>
+        </Breadcrumb>
+      </BreadcrumbBar>
+    );
+    setCurrentBar(breadBar);
+    if (thirdLevel) {
+      setCurrentBar("");
+    }
+  };
+
+  const setThirdBread = (val, currentBread) => {
+    setThirdLevel(val);
+    // setSecondLevel(false);
+    breadThirdCrumbs(currentBread);
+  };
+//////////
+  const [createBTN, setCreateBTN] = useState("Save and Close");
   const [createBtnAPI, setCreateBtnAPI] = useState(null);
 
+  const [selectedRangeInFirst, setSelectedRangeInFirst] = useState(null);
+  const [updateAnalyzerRangeTable, setUpdateAnalyzerRangeTable] = useState(
+    false
+  );
+  const saveAnalyzerRanges = () => {
+    const payload = {
+      locId: selectedRangeInFirst.locationId,
+      compId: selectedRangeInFirst.componentRecordId,
+      id: null,
+      analyzerRangeCode: "string",
+      dualRangeIndicator: "string",
+      beginDate: null,
+      beginHour: 0,
+      endDate: null,
+      endHour: 0,
+    };
+    const payloadInputs = document.querySelectorAll(".modalUserInput");
+    console.log("payload", payloadInputs);
+    const userInput = extractUserInput(
+      payload,
+      ".modalUserInput",
+      "dualRangeIndicator"
+    );
+    console.log(userInput, "user");
+    mpApi
+      .saveAnalyzerRanges(userInput)
+      .then((result) => {
+        console.log(result);
+        // setShow(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        // setShow(false);
+      });
+    // mpApi.getMonitoringAnalyzerRanges(
+    //   selectedRanges.locationId,
+    //   selectedRanges.componentRecordId
+    // );
+    setUpdateAnalyzerRangeTable(true);
+  };
+
+  const saveFuelFlows = () => {
+    const payload = {
+      locId: selectedRangeInFirst.locationId,
+      maximumFuelFlowRate: 0,
+      id: null,
+      systemFuelFlowUOMCode: "string",
+      maximumFuelFlowRateSourceCode: "string",
+      beginDate: null,
+      beginHour: 0,
+      endDate: null,
+      endHour: 0,
+    };
+    const payloadInputs = document.querySelectorAll(".modalUserInput");
+    console.log("payload", payloadInputs);
+    const userInput = extractUserInput(payload, ".modalUserInput");
+    console.log(userInput, "user");
+    mpApi
+      .saveSystemsFuelFlows(userInput)
+      .then((result) => {
+        console.log(result);
+        // setShow(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        // setShow(false);
+      });
+    // mpApi.getMonitoringAnalyzerRanges(
+    //   selectedRanges.locationId,
+    //   selectedRanges.componentRecordId
+    // );
+    setUpdateAnalyzerRangeTable(true);
+  };
   // *** memoize data
+
+  const backToSecondLevelBTN = (mainLevel) => {
+    setThirdLevel(mainLevel);
+    setBread(true, "Components");
+  };
+
+  const backToFirstLevelLevelBTN = (mainLevel) => {
+    console.log('testing')
+    setSecondLevel(mainLevel);
+    setBread(false, "");
+  };
   const data = useMemo(() => {
     if (monitoringSystems.length > 0) {
       const activeOnly = getActiveData(monitoringSystems);
@@ -226,7 +349,7 @@ export const DataTableSystems = ({
             showSave={user && checkout}
             breadCrumbBar={currentBar}
             title={"Create System"}
-            createNew="Create System"
+            exitBTN="Create System"
             children={
               <ModalDetails
                 modalData={selected}
@@ -241,12 +364,27 @@ export const DataTableSystems = ({
           <Modal
             secondLevel={secondLevel}
             show={show}
+            save={
+              !secondLevel && !thirdLevel // first level at systems
+                ? closeModalHandler
+                : secondLevel && !thirdLevel // second level at components or fuel flows
+                ? secondLevelName === "Fuel Flows"
+                  ? () => {
+                      saveFuelFlows();
+                      backToFirstLevelLevelBTN(false);
+                    }
+                  : () => console.log('DDINT WORK')
+                : () => {
+                    saveAnalyzerRanges();
+                    backToSecondLevelBTN(false);
+                  }
+            }
             close={closeModalHandler}
             showCancel={!(user && checkout)}
             showSave={user && checkout}
             breadCrumbBar={currentBar}
             title={`System: ${selected[0]["value"]}`}
-            createNew={createBTN}
+            // exitBTN={createBTN}
             createBtnAPI={createBtnAPI}
             children={
               <div>
@@ -265,12 +403,17 @@ export const DataTableSystems = ({
                   secondLevel={secondLevel}
                   setSecondLevel={setBread}
                   viewOnly={false}
+                  setThirdLevel={setThirdBread}
+                  thirdLevel={thirdLevel}
+                  setBread={setBread}
                   user={user}
                   checkout={checkout}
                   setCreateBtn={setCreateBTN}
                   setCreateBtnAPI={setCreateBtnAPI}
+                  updateAnalyzerRangeTable={updateAnalyzerRangeTable}
                   locationSelectValue={locationSelectValue}
                   systemID={selected.length > 1 ? selected[0].value : 0}
+                  setSelectedRangeInFirst={setSelectedRangeInFirst}
                 />
               </div>
             }
