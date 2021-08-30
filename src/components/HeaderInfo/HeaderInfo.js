@@ -138,7 +138,11 @@ export const HeaderInfo = ({
           // }
           // createNew={createNewMethod ? "Create Method" : `Save and Close`}
           children={
-            <div>{"Reverting to Official Record will undo all saved and unsaved changes. This is not recoverable. Do you want to continue?"}</div>
+            <div>
+              {
+                "Reverting to Official Record will undo all saved and unsaved changes. This is not recoverable. Do you want to continue?"
+              }
+            </div>
           }
         />
       ) : null}
@@ -272,6 +276,7 @@ export const HeaderInfo = ({
                 </Button>
                 <Button
                   type="button"
+                  id="showRevertModal"
                   className="margin-left-4"
                   onClick={() => setShow(true)}
                   outline={true}

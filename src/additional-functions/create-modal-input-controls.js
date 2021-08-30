@@ -52,7 +52,6 @@ export const modalViewData = (
       case "dropdown":
         if (!createNew) {
           if (totalOptions) {
-            console.log('totalOptions[y], selected[y], "name"',totalOptions , y, selected, "name")
             labels = findValue(totalOptions[y], selected[y], "name");
           } else {
             labels = findValue(codeList[y], selected[y], "name");

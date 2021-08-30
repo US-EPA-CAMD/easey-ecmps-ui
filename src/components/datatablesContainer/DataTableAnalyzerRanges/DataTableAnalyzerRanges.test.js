@@ -1,6 +1,6 @@
 import React from "react";
 import { render, waitForElement, fireEvent } from "@testing-library/react";
-import {DataTableAnalyzerRanges} from "./DataTableAnalyzerRanges";
+import { DataTableAnalyzerRanges } from "./DataTableAnalyzerRanges";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 const axios = require("axios");
 
@@ -8,27 +8,30 @@ jest.mock("axios");
 
 const ranges = [
   {
-    id: "CAMD-9554A75F4BF14DEAAAD2A5C0B5AC2F65",
-    componentRecordId: "CAMD-601D8BE4030348A9A4F207630B9F599D",
+    active: false,
+    addDate: "2009-02-20",
     analyzerRangeCode: "H",
-    dualRangeIndicator: "0",
-    beginDate: "2009-01-01",
-    endDate: null,
+    beginDate: "1993-10-01",
     beginHour: "0",
-    endHour: null,
-    active: true,
+    componentRecordId: "CAMD-60A6D62FDAB14840BFCF67E049B4B4C5",
+    dualRangeIndicator: "0",
+    endDate: "2019-11-06",
+    endHour: "14",
+    id: "CAMD-A39804B8C17A4478970F7B2CCBF429B6",
+    updateDate: "2020-01-23",
+    userId: "bvick",
   },
 ];
 
 //testing redux connected component to mimic props passed as argument
-const componentRenderer = () => {
+const componentRenderer = (update) => {
   const props = {
     user: { firstName: "test" },
     checkout: true,
 
     selectedRanges: ranges[0],
     thirdLevel: false,
-    updateAnalyzerRangeTable: false,
+    updateAnalyzerRangeTable: update,
     setThirdLevel: jest.fn(),
 
     setOpenFuelFlowsView: jest.fn(),
@@ -46,42 +49,14 @@ test("tests a configuration with only inactive methods", async () => {
     Promise.resolve({ status: 200, data: ranges })
   );
   const title = await mpApi.getMonitoringAnalyzerRanges(
-    "6417",
-    "CAMD-601D8BE4030348A9A4F207630B9F599D"
+    "5",
+    "CAMD-60A6D62FDAB14840BFCF67E049B4B4C5"
   );
   expect(title.data).toEqual(ranges);
-  let { container } = await waitForElement(() => componentRenderer());
-  
+  let { container } = await waitForElement(() => componentRenderer(false));
+  componentRenderer(true)
   fireEvent.click(container.querySelector("#testingBtn"));
-  // componentRenderer(6);
+
+  fireEvent.click(container.querySelector("#testingBtn1"));
   expect(container).toBeDefined();
 });
-
-// test("tests a create/save methods", async () => {
-
-//   axios.get.mockImplementation(() =>
-//     Promise.resolve({ status: 200, data: monitoringMatsMethods })
-//   );
-
-//   axios.put.mockImplementation((url) => {
-//     switch (url) {
-//       case `https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/workspace/locations/5770/mats-methods/MELISSARHO-CDF765BC7BF849EE9C23608B95540200`:
-//         return Promise.resolve({ data: [{ name: "Bob", items: [] }] });
-//       case "/items.json":
-//         return Promise.resolve({ data: [{ id: 1 }, { id: 2 }] });
-//       default:
-//         return Promise.reject(new Error("not found"));
-//     }
-//   });
-//   axios.put.mockImplementation(() =>
-//     Promise.resolve({ status: 200, data: data })
-//   );
-
-//   let { container } = await waitForElement(() => componentRenderer(5770));
-
-//   fireEvent.click(container.querySelector("#testingBtn"));
-//   fireEvent.click(container.querySelector("#testingBtn2"));
-//   fireEvent.click(container.querySelector("#testingBtn3"));
-//   // componentRenderer(6);
-//   expect(container).toBeDefined();
-// });

@@ -107,6 +107,7 @@ export const Modal = ({
                       title="Click to save"
                       epa-testid="saveBtn"
                       id="saveBtn"
+                      data-testid ="saveBtn"
                       className="margin-right-2"
                     >
                       {exitBTN ? exitBTN : "Save and Go Back"}

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as fs from "../../../utils/selectors/monitoringPlanSystems";
-import DataTableRender from "../../DataTableRender/DataTableRender";
+import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
@@ -25,11 +25,9 @@ export const DataTableAnalyzerRanges = ({
   const [ranges, setRanges] = useState([]);
   const [updateTable, setUpdateTable] = useState(updateAnalyzerRangeTable);
   const rangesColumnNames = ["Range", "Date and Time"];
-  const totalRangesOptions = useRetrieveDropdownApi(
-    ["analyzerRangeCode"],
-  );
+  const totalRangesOptions = useRetrieveDropdownApi(["analyzerRangeCode"]);
   useEffect(() => {
-    console.log('selectedRanges',selectedRanges)
+    console.log("selectedRanges", selectedRanges);
     if (updateTable || ranges.length <= 0) {
       mpApi
         .getMonitoringAnalyzerRanges(
@@ -45,7 +43,7 @@ export const DataTableAnalyzerRanges = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedRanges, updateTable]);
-  
+
   const rangeData = useMemo(() => {
     if (ranges.length > 0) {
       return fs.getMonitoringPlansSystemsAnalyzerRangesTableRecords(ranges);
@@ -54,9 +52,31 @@ export const DataTableAnalyzerRanges = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ranges]);
- const testing = () => {
-   openAnalyzerRanges(false,false,true);
- }
+  const testing = () => {
+    openAnalyzerRanges(false, false, true);
+  };
+  const testing1 = () => {
+    // need a valid row id for first paramter
+    const range = {
+      active: false,
+      addDate: "2009-02-20",
+      analyzerRangeCode: "H",
+      beginDate: "1993-10-01",
+      beginHour: "0",
+      componentRecordId: "CAMD-60A6D62FDAB14840BFCF67E049B4B4C5",
+      dualRangeIndicator: "0",
+      endDate: "2019-11-06",
+      endHour: "14",
+      id: "CAMD-A39804B8C17A4478970F7B2CCBF429B6",
+      updateDate: "2020-01-23",
+      userId: "bvick",
+    };
+    openAnalyzerRanges(
+      { col3: "CAMD-A39804B8C17A4478970F7B2CCBF429B6" },
+      false,
+      false
+    );
+  };
   // row is just the data in the datatable row, need to compare it to the entire API dataset to get correct data
   const openAnalyzerRanges = (row, bool, create) => {
     let selectRange = null;
@@ -68,6 +88,7 @@ export const DataTableAnalyzerRanges = ({
     //   setCreateBtnAPI(createAnalyzerRange);
     // }
     if (ranges.length > 0 && !create) {
+      console.log(row, "row");
       selectRange = ranges.filter((element) => element.id === row.col3)[0];
       setSelectedRange(selectRange);
       // setCreateBtn("Go Back");
@@ -100,13 +121,21 @@ export const DataTableAnalyzerRanges = ({
   };
   return (
     <div className="methodTable">
-           <input
+      <input
         tabIndex={-1}
         aria-hidden={true}
         role="button"
         type="hidden"
         id="testingBtn"
         onClick={() => testing()}
+      />
+      <input
+        tabIndex={-1}
+        aria-hidden={true}
+        role="button"
+        type="hidden"
+        id="testingBtn1"
+        onClick={() => testing1()}
       />
       <DataTableRender
         columnNames={rangesColumnNames}
