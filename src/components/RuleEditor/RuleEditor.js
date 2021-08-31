@@ -1,244 +1,245 @@
-import axios from "axios";
-import React, { useState, useEffect } from "react";
+// import axios from "axios";
+import React from "react";
+// , { useState, useEffect } 
 
-import {
-  Label,
-  Radio,
-  Button,
-  Checkbox,
-  Dropdown,
-  Fieldset,
-  Textarea,
-  TextInput,
-  FormGroup,
-} from "@trussworks/react-uswds";
+// import {
+//   Label,
+//   Radio,
+//   Button,
+//   Checkbox,
+//   Dropdown,
+//   Fieldset,
+//   Textarea,
+//   TextInput,
+//   FormGroup,
+// } from "@trussworks/react-uswds";
 
-import config from "../../config";
+// import config from "../../config";
 
 import "./RuleEditor.scss";
 
 const RuleEditor = () => {
-  const NONE = "NONE";
-  const EXECUTION = "Execution";
-  const ruleEditorId = "divRuleEditor";
+  // const NONE = "NONE";
+  // const EXECUTION = "Execution";
+  // const ruleEditorId = "divRuleEditor";
 
-  const emptyRule = {
-    id: NONE,
-    code: "",
-    name: "",
-    description: "",
-    typeCode: EXECUTION,
-    categoryCode: "",
-    priority: 1,
-    json: "",
-    isNew: false,
-    isActive: false,
-    isErrorSupressable: false,
-    editorId: ruleEditorId,
-  };
+  // const emptyRule = {
+  //   id: NONE,
+  //   code: "",
+  //   name: "",
+  //   description: "",
+  //   typeCode: EXECUTION,
+  //   categoryCode: "",
+  //   priority: 1,
+  //   json: "",
+  //   isNew: false,
+  //   isActive: false,
+  //   isErrorSupressable: false,
+  //   editorId: ruleEditorId,
+  // };
 
-  const [ruleList, setRuleList] = useState([]);
-  const [typesList, setTypesList] = useState([]);
-  const [processList, setProcessList] = useState([]);
-  const [catgeoryList, setCategoryList] = useState([]);
+  // const [ruleList, setRuleList] = useState([]);
+  // const [typesList, setTypesList] = useState([]);
+  // const [processList, setProcessList] = useState([]);
+  // const [catgeoryList, setCategoryList] = useState([]);
 
-  const [selectedRule, setSelectedRule] = useState({ ...emptyRule });
-  const [selectedProcess, setSelectedProcess] = useState(NONE);
-  const [selectedCatgeory, setSelectedCategory] = useState(NONE);
+  // const [selectedRule, setSelectedRule] = useState({ ...emptyRule });
+  // const [selectedProcess, setSelectedProcess] = useState(NONE);
+  // const [selectedCatgeory, setSelectedCategory] = useState(NONE);
 
-  useEffect(() => {
-    axios.get(`${config.services.rules.uri}/processes`).then((response) => {
-      setProcessList(response.data);
-    });
-  }, []);
+  // useEffect(() => {
+  //   axios.get(`${config.services.rules.uri}/processes`).then((response) => {
+  //     setProcessList(response.data);
+  //   });
+  // }, []);
 
-  useEffect(() => {
-    axios.get(`${config.services.rules.uri}/editor-modes`).then((response) => {
-      setTypesList(response.data);
-    });
-  }, []);
+  // useEffect(() => {
+  //   axios.get(`${config.services.rules.uri}/editor-modes`).then((response) => {
+  //     setTypesList(response.data);
+  //   });
+  // }, []);
 
-  useEffect(() => {
-    axios
-      .get(
-        `${config.services.rules.uri}/categories?processCode=${selectedProcess}`
-      )
-      .then((response) => {
-        setCategoryList(response.data);
-      });
-  }, [selectedProcess]);
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       `${config.services.rules.uri}/categories?processCode=${selectedProcess}`
+  //     )
+  //     .then((response) => {
+  //       setCategoryList(response.data);
+  //     });
+  // }, [selectedProcess]);
 
-  useEffect(() => {
-    axios
-      .get(
-        `${config.services.rules.uri}/rules?categoryCode=${selectedCatgeory}`
-      )
-      .then((response) => {
-        setRuleList(response.data);
-      });
-  }, [selectedCatgeory]);
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       `${config.services.rules.uri}/rules?categoryCode=${selectedCatgeory}`
+  //     )
+  //     .then((response) => {
+  //       setRuleList(response.data);
+  //     });
+  // }, [selectedCatgeory]);
 
-  useEffect(() => {
-    if (selectedRule.isNew || selectedRule.id !== NONE) {
-      axios
-        .get(
-          `${config.services.rules.uri}/editors/${ruleEditorId}?typeCode=${selectedRule.typeCode}&categoryCode=${selectedRule.categoryCode}`
-        )
-        .then((settings) => {
-          let ruleEditor = window.$rule.Context.getControl(ruleEditorId);
+  // useEffect(() => {
+  //   if (selectedRule.isNew || selectedRule.id !== NONE) {
+  //     axios
+  //       .get(
+  //         `${config.services.rules.uri}/editors/${ruleEditorId}?typeCode=${selectedRule.typeCode}&categoryCode=${selectedRule.categoryCode}`
+  //       )
+  //       .then((settings) => {
+  //         let ruleEditor = window.$rule.Context.getControl(ruleEditorId);
 
-          if (ruleEditor != null) {
-            ruleEditor.dispose();
-          }
+  //         if (ruleEditor != null) {
+  //           ruleEditor.dispose();
+  //         }
 
-          window.$rule.Context.clear();
+  //         window.$rule.Context.clear();
 
-          //Initialize the Rule Editor with the editor data (localized strings) from the API settings action.
-          ruleEditor = window.$rule.init(settings.data.editorData);
-          ruleEditor.clear();
+  //         //Initialize the Rule Editor with the editor data (localized strings) from the API settings action.
+  //         ruleEditor = window.$rule.init(settings.data.editorData);
+  //         ruleEditor.clear();
 
-          //Load source data describing available elements
-          ruleEditor.loadSettings(settings.data.sourceData);
+  //         //Load source data describing available elements
+  //         ruleEditor.loadSettings(settings.data.sourceData);
 
-          if (selectedRule.json.length > 0) {
-            ruleEditor.loadRule(selectedRule.json);
-          }
-        });
-    }
-  }, [selectedRule]);
+  //         if (selectedRule.json.length > 0) {
+  //           ruleEditor.loadRule(selectedRule.json);
+  //         }
+  //       });
+  //   }
+  // }, [selectedRule]);
 
-  const onProcessChangedHandler = (event) => {
-    setRuleList([]);
-    setSelectedProcess(event.target.value);
-  };
+  // const onProcessChangedHandler = (event) => {
+  //   setRuleList([]);
+  //   setSelectedProcess(event.target.value);
+  // };
 
-  const onCategoryChangeHandler = (event) => {
-    setSelectedRule({ ...emptyRule });
-    setSelectedCategory(event.target.value);
-  };
+  // const onCategoryChangeHandler = (event) => {
+  //   setSelectedRule({ ...emptyRule });
+  //   setSelectedCategory(event.target.value);
+  // };
 
-  const onRuleChangeHandler = (event) => {
-    const rule = ruleList.find((item) => item.id === event.target.value);
+  // const onRuleChangeHandler = (event) => {
+  //   const rule = ruleList.find((item) => item.id === event.target.value);
 
-    if (rule !== undefined) {
-      setSelectedRule({ ...rule });
-    } else {
-      setSelectedRule({ ...emptyRule });
-    }
-  };
+  //   if (rule !== undefined) {
+  //     setSelectedRule({ ...rule });
+  //   } else {
+  //     setSelectedRule({ ...emptyRule });
+  //   }
+  // };
 
-  const onNewRuleHandler = () => {
-    setSelectedRule({
-      ...emptyRule,
-      isNew: true,
-      categoryCode: selectedCatgeory,
-    });
-  };
+  // const onNewRuleHandler = () => {
+  //   setSelectedRule({
+  //     ...emptyRule,
+  //     isNew: true,
+  //     categoryCode: selectedCatgeory,
+  //   });
+  // };
 
-  const onCheckRuleTypeChange = (event) => {
-    setSelectedRule({
-      ...selectedRule,
-      typeCode: event.target.value,
-    });
-  };
+  // const onCheckRuleTypeChange = (event) => {
+  //   setSelectedRule({
+  //     ...selectedRule,
+  //     typeCode: event.target.value,
+  //   });
+  // };
 
-  const onDeleteRuleHandler = () => {
-    axios
-      .delete(`${config.services.rules.uri}/rules/${selectedRule.id}`)
-      .then(() => {
-        const ruleEditor = window.$rule.Context.getControl(ruleEditorId);
-        ruleEditor.deleted(selectedRule.id);
-        ruleEditor.clear();
+  // const onDeleteRuleHandler = () => {
+  //   axios
+  //     .delete(`${config.services.rules.uri}/rules/${selectedRule.id}`)
+  //     .then(() => {
+  //       const ruleEditor = window.$rule.Context.getControl(ruleEditorId);
+  //       ruleEditor.deleted(selectedRule.id);
+  //       ruleEditor.clear();
 
-        const newList = [...ruleList];
-        const index = newList.findIndex((item) => item.id === selectedRule.id);
-        newList.splice(index, 1);
+  //       const newList = [...ruleList];
+  //       const index = newList.findIndex((item) => item.id === selectedRule.id);
+  //       newList.splice(index, 1);
 
-        setRuleList([...newList]);
-        setSelectedRule({ ...emptyRule });
-      });
-  };
+  //       setRuleList([...newList]);
+  //       setSelectedRule({ ...emptyRule });
+  //     });
+  // };
 
-  const onSaveRuleHandler = () => {
-    let method = "POST";
-    let url = `${config.services.rules.uri}/rules`;
-    const ruleEditor = window.$rule.Context.getControl(ruleEditorId);
+  // const onSaveRuleHandler = () => {
+  //   let method = "POST";
+  //   let url = `${config.services.rules.uri}/rules`;
+  //   const ruleEditor = window.$rule.Context.getControl(ruleEditorId);
 
-    if (!selectedRule.isNew) {
-      method = "PUT";
-      url = `${url}/${selectedRule.id}`;
-    }
+  //   if (!selectedRule.isNew) {
+  //     method = "PUT";
+  //     url = `${url}/${selectedRule.id}`;
+  //   }
 
-    axios({
-      method,
-      url,
-      data: {
-        ...selectedRule,
-        json: JSON.stringify(ruleEditor.extract()),
-      },
-    }).then((response) => {
-      // if (result.isRuleEmpty)
-      // else if (!result.isRuleValid)
-      // this.ruleEditor.loadInvalids(result.clientInvalidData);
-      // else
-      ruleEditor.saved(response.data.id);
+  //   axios({
+  //     method,
+  //     url,
+  //     data: {
+  //       ...selectedRule,
+  //       json: JSON.stringify(ruleEditor.extract()),
+  //     },
+  //   }).then((response) => {
+  //     // if (result.isRuleEmpty)
+  //     // else if (!result.isRuleValid)
+  //     // this.ruleEditor.loadInvalids(result.clientInvalidData);
+  //     // else
+  //     ruleEditor.saved(response.data.id);
 
-      if (selectedRule.isNew) {
-        setRuleList([
-          ...ruleList,
-          {
-            ...selectedRule,
-            id: response.data.id,
-            json: response.data.json,
-          },
-        ]);
-      } else {
-        const newList = [...ruleList];
-        const index = newList.findIndex((item) => item.id === response.data.id);
-        newList.splice(index, 1, [{ ...selectedRule }]);
-        setRuleList([...newList]);
-      }
-    });
-  };
+  //     if (selectedRule.isNew) {
+  //       setRuleList([
+  //         ...ruleList,
+  //         {
+  //           ...selectedRule,
+  //           id: response.data.id,
+  //           json: response.data.json,
+  //         },
+  //       ]);
+  //     } else {
+  //       const newList = [...ruleList];
+  //       const index = newList.findIndex((item) => item.id === response.data.id);
+  //       newList.splice(index, 1, [{ ...selectedRule }]);
+  //       setRuleList([...newList]);
+  //     }
+  //   });
+  // };
 
-  const onCheckRuleUpdateHandler = (event, field) => {
-    switch (field) {
-      case "code":
-        setSelectedRule({ ...selectedRule, code: event.target.value });
-        break;
-      case "name":
-        setSelectedRule({ ...selectedRule, name: event.target.value });
-        break;
-      case "priority":
-        setSelectedRule({ ...selectedRule, priority: event.target.value });
-        break;
-      case "description":
-        setSelectedRule({ ...selectedRule, description: event.target.value });
-        break;
-      case "active":
-        setSelectedRule({ ...selectedRule, isActive: event.target.checked });
-        break;
-      case "supressable":
-        setSelectedRule({
-          ...selectedRule,
-          isErrorSupressable: event.target.checked,
-        });
-        break;
-      default:
-    }
-  };
+  // const onCheckRuleUpdateHandler = (event, field) => {
+  //   switch (field) {
+  //     case "code":
+  //       setSelectedRule({ ...selectedRule, code: event.target.value });
+  //       break;
+  //     case "name":
+  //       setSelectedRule({ ...selectedRule, name: event.target.value });
+  //       break;
+  //     case "priority":
+  //       setSelectedRule({ ...selectedRule, priority: event.target.value });
+  //       break;
+  //     case "description":
+  //       setSelectedRule({ ...selectedRule, description: event.target.value });
+  //       break;
+  //     case "active":
+  //       setSelectedRule({ ...selectedRule, isActive: event.target.checked });
+  //       break;
+  //     case "supressable":
+  //       setSelectedRule({
+  //         ...selectedRule,
+  //         isErrorSupressable: event.target.checked,
+  //       });
+  //       break;
+  //     default:
+  //   }
+  // };
 
-  const hasRequiredValues =
-    selectedRule.code.length > 0 && selectedRule.name.length > 0;
-  const canSave =
-    hasRequiredValues &&
-    selectedRule.code.length > 0 &&
-    selectedRule.name.length > 0;
-  const canDelete = !selectedRule.isNew && selectedRule.id !== NONE;
+  // const hasRequiredValues =
+  //   selectedRule.code.length > 0 && selectedRule.name.length > 0;
+  // const canSave =
+  //   hasRequiredValues &&
+  //   selectedRule.code.length > 0 &&
+  //   selectedRule.name.length > 0;
+  // const canDelete = !selectedRule.isNew && selectedRule.id !== NONE;
 
   return (
     <div className="container">
-      <div className="row">
+      {/* <div className="row">
         <div className="col">
           <FormGroup>
             <Label htmlFor="ddlProcess" hint={<> (required)</>}>
@@ -457,7 +458,7 @@ const RuleEditor = () => {
             </div>
           </div>
         </React.Fragment>
-      ) : null}
+      ) : null} */}
     </div>
   );
 };

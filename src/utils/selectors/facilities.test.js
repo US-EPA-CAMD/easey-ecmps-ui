@@ -788,8 +788,8 @@ describe("testing fetch wrapper facilities data selectors", () => {
   test("selected facility monitoring plans table recods should be", () => {
     const fac = [
       {
-        col1: 26,
-        col2: "E C Gaston",
+        col1: "E C Gaston",
+        col2: 26,
         col3: { abbrev: "AL", name: "Alabama" },
         col4: 26,
       },

@@ -22,7 +22,7 @@ const selectedConfig = {
   ],
 };
 
-function componentRenderer() {
+function componentRenderer(checkout) {
   const props = {
     title: " ( test ) ",
     user: { firstName: "test" },
@@ -33,13 +33,20 @@ function componentRenderer() {
     sectionSelect: [3, "Methods"],
     locationSelect: [0, "65"],
     orisCode: "5",
-    checkout: true,
+    checkout: checkout,
     inactive: [false, true],
 
     configID: selectedConfig.id,
 
     setCheckout: jest.fn(),
     setInactive: jest.fn(),
+    checkedOutLocations: [
+      {
+        facId: 655,
+        monPlanId: "MDC-7C15B3D1B20542C3B54DD57F03A516E5",
+        checkedOutBy: "test",
+      },
+    ],
   };
   return render(<MonitoringPlanTabRender {...props} />);
 }
@@ -167,9 +174,9 @@ test("tests api call post/get/delete", async () => {
   const postId = await mpApi.postCheckoutMonitoringPlanConfiguration(5, {
     firstName: "test1",
   });
-  let { container } = await waitForElement(() => componentRenderer());
+  let { container } = await waitForElement(() => componentRenderer(true));
   fireEvent.click(container.querySelector("#checkInBTN"));
-  fireEvent.click(container.querySelector("#checkOutBTN"));
+  // fireEvent.click(container.querySelector("#checkOutBTN"));
   expect(container).toBeDefined();
 });
 test("tests api calls with undefined condiitonal", async () => {
@@ -221,15 +228,52 @@ test("tests api calls with undefined condiitonal", async () => {
   const postId = await mpApi.postCheckoutMonitoringPlanConfiguration(5, {
     firstName: "test1",
   });
-  // expect(title.data).toEqual(data);
-  let { container } = await waitForElement(() => componentRenderer());
-  // container.querySelector("#checkOutBTN")
+
+  let { container } = await waitForElement(() => componentRenderer(true));
   fireEvent.click(container.querySelector("#checkInBTN"));
-  fireEvent.click(container.querySelector("#checkOutBTN"));
-  // let accordions = screen.getAllByRole("button");
-  // expect(accordions).toHaveLength(2);
   expect(container).toBeDefined();
 });
+
+test("tests inactivity timer api calls ", async () => {
+
+  axios.put.mockImplementation((url) => {
+    switch (url) {
+      case "/users.json":
+        return Promise.resolve({ data: undefined });
+      case "/items.json":
+        return Promise.resolve({ data: [{ id: 1 }, { id: 2 }] });
+      default:
+        return Promise.reject(new Error("not found"));
+    }
+  });
+  axios.post.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: undefined })
+  );
+  axios.post.mockImplementation((url) => {
+    switch (url) {
+      case "/users.json":
+        return Promise.resolve({ data: undefined });
+      case "/items.json":
+        return Promise.resolve({ data: [{ id: 1 }, { id: 2 }] });
+      default:
+        return Promise.reject(new Error("not found"));
+    }
+  });
+  axios.post.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: undefined })
+  );
+  const postId = await mpApi.postCheckoutMonitoringPlanConfiguration(6, {
+    firstName: "test1",
+  });
+  const title = await mpApi.putLockTimerUpdateConfiguration(6);
+
+
+  let { container } = await waitForElement(() => componentRenderer(false));
+  fireEvent.click(container.querySelector("#testingBtn"));
+
+  expect(container).toBeDefined();
+});
+
 
 describe("67440874", () => {
   let wrapper;
@@ -261,7 +305,12 @@ describe("67440874", () => {
       orisCode: "5",
       checkout: true,
       inactive: [false, true],
-
+      checkedOutLocations: [
+        {
+          facId: 655,
+          monPlanId: "MDC-7C15B3D1B20542C3B54DD57F03A516E5",
+          checkedOutBy: "test",
+        },],
       configID: selectedConfig.id,
 
       setCheckout: jest.fn(),

@@ -1,15 +1,15 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import * as dmApi from "../utils/api/dataManagementApi";
 export const useRetrieveDropdownApi = (arr, mats = false) => {
   const [totalOptions, setTotalOptions] = useState({});
-  useEffect(() => {
+  // useEffect(() => {
     for (const x of arr) {
       let options = [];
       switch (x) {
         case "parameterCode":
           if (mats) {
             dmApi.getAllMatsParameterCodes().then((response) => {
-              console.log('MATS getAllMatsParameterCodes,',response)
+              console.log("MATS getAllMatsParameterCodes,", response);
               options = response.data.map((option) => {
                 return {
                   code: option["matsMethodParamCode"],
@@ -20,7 +20,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
               options.unshift({ code: "", name: "" });
               const newData = totalOptions;
               newData["supplementalMATSParameterCode"] = options;
-              console.log('MATS OPTIONS',options)
+              console.log("MATS OPTIONS", options);
               setTotalOptions(newData);
             });
           } else {
@@ -43,7 +43,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
         case "monitoringMethodCode":
           if (mats) {
             dmApi.getAllMatsMethodCodes().then((response) => {
-              console.log('MATS monitoringMethodCode,',response)
+              console.log("MATS monitoringMethodCode,", response);
               options = response.data.map((option) => {
                 return {
                   code: option["matsMethodCode"],
@@ -163,6 +163,6 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // }, []);
   return totalOptions;
 };
