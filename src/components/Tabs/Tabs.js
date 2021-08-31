@@ -28,7 +28,10 @@ export const Tabs = ({
     removeTabs(index);
 
     mpApi.deleteCheckInMonitoringPlanConfiguration(configId).then((res) => {
-      setCheckout(false, configId);
+      if(setCheckout){
+        setCheckout(false, configId);
+      }
+      
     });
 
     if (activeTabIndex === children.length - 1) {
