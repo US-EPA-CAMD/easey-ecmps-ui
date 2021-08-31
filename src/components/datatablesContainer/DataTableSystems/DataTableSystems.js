@@ -217,6 +217,9 @@ export const DataTableSystems = ({
   const [updateAnalyzerRangeTable, setUpdateAnalyzerRangeTable] = useState(
     false
   );
+  const [updateFuelFlowTable, setUpdateFuelFlowTable] = useState(
+    false
+  );
   const saveAnalyzerRanges = () => {
     const payload = {
       locId: selectedRangeInFirst.locationId,
@@ -275,7 +278,7 @@ export const DataTableSystems = ({
       .catch((error) => {
         console.log(error);
       });
-    setUpdateAnalyzerRangeTable(true);
+      setUpdateFuelFlowTable(true);
   };
 
   const backToSecondLevelBTN = (mainLevel) => {
@@ -404,6 +407,8 @@ export const DataTableSystems = ({
                   setCreateBtn={setCreateBTN}
                   setCreateBtnAPI={setCreateBtnAPI}
                   updateAnalyzerRangeTable={updateAnalyzerRangeTable}
+                  updateFuelFlowTable={updateFuelFlowTable}
+                  setUpdateFuelFlowTable={setUpdateFuelFlowTable}
                   locationSelectValue={locationSelectValue}
                   systemID={selected.length > 1 ? selected[0].value : 0}
                   setSelectedRangeInFirst={setSelectedRangeInFirst}

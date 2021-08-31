@@ -29,6 +29,8 @@ export const DataTableSystemsComponents = ({
   setSelectedRangeInFirst,
   backBTN,
   updateAnalyzerRangeTable,
+  setUpdateFuelFlowTable,
+  updateFuelFlowTable,
 }) => {
   const [monitoringSystemsFuelFlows, setMonitoringSystemsFuelFlows] = useState(
     ""
@@ -74,8 +76,9 @@ export const DataTableSystemsComponents = ({
       .then((res) => {
         setMonitoringSystemsFuelFlows(res.data);
         setFuelDataLoaded(true);
+        setUpdateFuelFlowTable(false);
       });
-  }, [selected]);
+  }, [selected,updateFuelFlowTable]);
 
   const columnNames = ["ID", "Type", "Date and Time"];
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object

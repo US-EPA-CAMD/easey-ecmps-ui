@@ -223,6 +223,7 @@ const componentRenderer = (checkout, secondLevel, openFuelFlow) => {
     setSelectedRangeInFirst: jest.fn(),
     backBTN: jest.fn(),
     updateAnalyzerRangeTable: false,
+    setUpdateFuelFlowTable:jest.fn(),
     openFuelFlowsViewTest: openFuelFlow,
   };
   return render(<DataTableSystemsComponents {...props} />);
