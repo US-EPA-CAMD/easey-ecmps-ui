@@ -223,7 +223,7 @@ export const DataTableSystemsComponents = ({
     setSelectedFuelFlowsModalData(
       modalViewData(
         selectFuelFlows,
-        {
+        {maximumFuelFlowRate: ["Max Fuel Flow Rate", "input", "required"],
           systemFuelFlowUOMCode: [
             "Units of Measure Code",
             "dropdown",
@@ -234,7 +234,7 @@ export const DataTableSystemsComponents = ({
             "dropdown",
             "required",
           ],
-          maximumFuelFlowRate: ["Max Fuel Flow Rate", "input", "required"],
+          
 
           skip: ["", "skip", ""],
         },
