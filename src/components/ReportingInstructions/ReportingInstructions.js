@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
+// import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 
 import samplePDF from "./ECMPS Monitoring Plan Reporting Instructions 2021 Q2.pdf";
@@ -10,37 +10,37 @@ const options = {
 };
 
 export const ReportingInstructions = () => {
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
+  // const [numPages, setNumPages] = useState(null);
+  // const [pageNumber, setPageNumber] = useState(1);
 
-  function onDocumentLoadSuccess({ numPagess }) {
-    setNumPages(numPagess);
-    setPageNumber(1);
-  }
+  // function onDocumentLoadSuccess({ numPagess }) {
+  //   setNumPages(numPagess);
+  //   setPageNumber(1);
+  // }
 
-  function changePage(offset) {
-    setPageNumber((prevPageNumber) => prevPageNumber + offset);
-  }
+  // function changePage(offset) {
+  //   setPageNumber((prevPageNumber) => prevPageNumber + offset);
+  // }
 
-  function previousPage() {
-    changePage(-1);
-  }
+  // function previousPage() {
+  //   changePage(-1);
+  // }
 
-  function nextPage() {
-    changePage(1);
-  }
+  // function nextPage() {
+  //   changePage(1);
+  // }
 
   return (
     <>
-      <Document
+      {/* <Document
         file={samplePDF}
         onLoadSuccess={onDocumentLoadSuccess}
         options={options}
       >
         <Page pageNumber={pageNumber} />
-      </Document>
+      </Document> */}
       <div>
-        <p>
+        {/* <p>
           Page {pageNumber || (numPages ? 1 : "--")} of {numPages || "--"}
         </p>
         <button type="button" disabled={pageNumber <= 1} onClick={previousPage}>
@@ -52,7 +52,7 @@ export const ReportingInstructions = () => {
           onClick={nextPage}
         >
           Next
-        </button>
+        </button> */}
       </div>
     </>
   );

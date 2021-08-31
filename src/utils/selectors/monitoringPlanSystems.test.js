@@ -126,18 +126,18 @@ describe("testing monitoring plan data selectors", () => {
     monitoringSystemsTableRecods = [
       {
         col1: "ABF",
-        col2: "SO2",
+        col2: undefined,
         col3: "P",
-        col4: "NFS",
+        col4: undefined,
         col5: "10/01/1993 0",
         col6: "10/01/1993 0",
         col7: "CAMD-9FC097418E8D4A7D8841478FDFA6C46A",
       },
       {
         col1: "ABF",
-        col2: "SO2",
+        col2: undefined,
         col3: "P",
-        col4: "NFS",
+        col4: undefined,
         col5: " ",
         col6: " ",
         col7: "CAMD-9FC097418E8D4A7D8841478FDFA6C46A",

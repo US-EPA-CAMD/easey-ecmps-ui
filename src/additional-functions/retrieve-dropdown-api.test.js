@@ -1,4 +1,4 @@
-import {useRetrieveDropdownApi} from "./retrieve-dropdown-api";
+import { useRetrieveDropdownApi } from "./retrieve-dropdown-api";
 import React from "react";
 import * as dmApi from "../utils/api/dataManagementApi";
 const axios = require("axios");
@@ -8,8 +8,8 @@ afterAll(() => {
   jest.restoreAllMocks();
 });
 
-const data = [1];
-test("tests a configuration with only active systems", async () => {
+const data = {};
+test("tests parameterCode", async () => {
   axios.get.mockImplementation(() =>
     Promise.resolve({ status: 200, data: data })
   );
@@ -19,21 +19,86 @@ test("tests a configuration with only active systems", async () => {
   expect(dataReturned.data).toEqual(data);
 
   let func = useRetrieveDropdownApi(["parameterCode"]);
-
   expect(func).toEqual(data);
-  //   let { container } = await waitForElement(() => componentRenderer());
-  //   expect(container).toBeDefined();
 });
 
-// describe("useRetrieveDropdownApi functions", () => {
-//   const row = {
-//     col1: "Inactive",
-//     cells: [{ value: "Inactive", column: "Status" }],
-//   };
+test("tests systemFuelFlowUOMCode", async () => {
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: data })
+  );
+  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
 
-//   const columns = ["Status"];
+  const dataReturned = await dmApi.getAllUnitsOfMeasureCodes();
+  expect(dataReturned.data).toEqual(data);
+  let func = useRetrieveDropdownApi(["systemFuelFlowUOMCode"]);
+  expect(func).toEqual(data);
+});
 
-//   it("finds value in an array with null paraeter", () => {
-//     expect(normalizeRowObjectFormat(row, columns).col1).toBe("Inactive");
-//   });
-// });
+test("tests maximumFuelFlowRateSourceCode", async () => {
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: data })
+  );
+  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+  const dataReturned = await dmApi.getAllMaxRateSourceCodes();
+  expect(dataReturned.data).toEqual(data);
+  let func = useRetrieveDropdownApi(["maximumFuelFlowRateSourceCode"]);
+  expect(func).toEqual(data);
+});
+test("tests analyzerRangeCode", async () => {
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: data })
+  );
+  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+  const dataReturned = await dmApi.getAllRangeCodes();
+  expect(dataReturned.data).toEqual(data);
+  let func = useRetrieveDropdownApi(["analyzerRangeCode"]);
+  expect(func).toEqual(data);
+});
+test("tests substituteDataCode", async () => {
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: data })
+  );
+  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+  const dataReturned = await dmApi.getAllSubstituteDataCodes();
+  expect(dataReturned.data).toEqual(data);
+  let func = useRetrieveDropdownApi(["substituteDataCode"]);
+
+  expect(func).toEqual(data);
+});
+test("tests bypassApproachCode", async () => {
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: data })
+  );
+  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+  const dataReturned = await dmApi.getAllBypassApproachCodes();
+  expect(dataReturned.data).toEqual(data);
+  let func = useRetrieveDropdownApi(["bypassApproachCode"]);
+  expect(func).toEqual(data);
+});
+
+test("tests mats getAllMatsParameterCodes", async () => {
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: data })
+  );
+  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+  const dataReturned = await dmApi.getAllMatsParameterCodes();
+  expect(dataReturned.data).toEqual(data);
+  let func = useRetrieveDropdownApi(["parameterCode"], true);
+  expect(func).toEqual(data);
+});
+test("tests mats getAllMatsMethodCodes", async () => {
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: data })
+  );
+  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+  const dataReturned = await dmApi.getAllMatsMethodCodes();
+  expect(dataReturned.data).toEqual(data);
+  let func = useRetrieveDropdownApi(["monitoringMethodCode"], true);
+  expect(func).toEqual(data);
+});
+
+test("tests  empty ", () => {
+  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+  let func = useRetrieveDropdownApi([""]);
+  expect(func).toEqual(data);
+});

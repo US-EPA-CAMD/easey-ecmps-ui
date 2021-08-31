@@ -99,15 +99,15 @@ export const modalViewData = (
           ]);
         }
         break;
-        case "hidden":
-          arr.push([
-            y,
-            label[y][0],
-            selected[y],
-            false,
-            "input",
-          ]);
-          break;
+        // case "hidden":
+        //   arr.push([
+        //     y,
+        //     label[y][0],
+        //     selected[y],
+        //     false,
+        //     "input",
+        //   ]);
+        //   break;
       default:
         break;
     }

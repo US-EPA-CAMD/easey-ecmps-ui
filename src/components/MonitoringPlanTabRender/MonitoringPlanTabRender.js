@@ -230,7 +230,6 @@ export const MonitoringPlanTabRender = ({
           user.firstName
         )
         .then((res) => {
-          console.log(res, "data");
           setCheckout(true, configID);
           if (res === undefined) {
             console.log("this configuration is already checked out ");
@@ -240,6 +239,19 @@ export const MonitoringPlanTabRender = ({
   };
   return (
     <div className=" padding-top-0">
+      <input
+        tabIndex={-1}
+        aria-hidden={true}
+        role="button"
+        type="hidden"
+        id="testingBtn"
+        onClick={() => {
+          countdownAPI();
+          resetInactivityTimerApiCall();
+          checkoutAPI(true);
+        }}
+      />
+
       {user && checkout ? (
         <InactivityTracker
           apiCall={resetInactivityTimerApiCall}

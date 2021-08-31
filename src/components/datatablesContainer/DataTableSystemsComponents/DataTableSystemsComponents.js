@@ -180,18 +180,15 @@ export const DataTableSystemsComponents = ({
       .saveMonitoringMats(userInput)
       .then((result) => {
         console.log(result);
-        // setShow(false);
       })
       .catch((error) => {
         console.log(error);
-        // setShow(false);
       });
 
     // setUpdateTable(true);
   };
   const [createNewFuelFlow, setCreateNewFuelFlow] = useState(false);
-  const [openFuelFlowsView, setOpenFuelFlowsView] = React.useState(false
-  );
+  const [openFuelFlowsView, setOpenFuelFlowsView] = React.useState(false);
   // *** row handler onclick event listener
 
   const totalFuelFlowssOptions = useRetrieveDropdownApi([
@@ -224,18 +221,18 @@ export const DataTableSystemsComponents = ({
       modalViewData(
         selectFuelFlows,
         {
-          maximumFuelFlowRate: ["Max Fuel Flow Rate", "input", "required"],
-          maximumFuelFlowRateSourceCode: [
-            "Max Fuel Flow Rate Source",
-            "dropdown",
-            "required",
-          ],
-
           systemFuelFlowUOMCode: [
             "Units of Measure Code",
             "dropdown",
             "required",
           ],
+          maximumFuelFlowRateSourceCode: [
+            "Max Fuel Flow Rate Source",
+            "dropdown",
+            "required",
+          ],
+          maximumFuelFlowRate: ["Max Fuel Flow Rate", "input", "required"],
+
           skip: ["", "skip", ""],
         },
         {
@@ -334,7 +331,7 @@ export const DataTableSystemsComponents = ({
                 title={
                   createNewFuelFlow
                     ? "Create Fuel Flow"
-                    : `Fuel Code: ${selectedFuelFlows["fuelCode"]}, System Type Code: ${selectedFuelFlows["systemTypeCode"]}`
+                    : (user && checkout) ? "Edit Fuel Flow": `Fuel Code: ${selectedFuelFlows["fuelCode"]}, System Type Code: ${selectedFuelFlows["systemTypeCode"]}`
                 }
                 viewOnly={!(user && checkout)}
               />
