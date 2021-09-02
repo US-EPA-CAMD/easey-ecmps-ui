@@ -19,7 +19,7 @@ const Layout = (props) => {
       </Link>
       <div className="topHeader">
         <WideHeader />
-        <SubHeader user={props.user} />
+        <SubHeader user={props.user} setCurrentLink={props.setCurrentLink} />
       </div>
       <div>
         <LeftNavToSubHeader />
