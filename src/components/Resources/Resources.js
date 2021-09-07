@@ -95,27 +95,27 @@ const Resources = () => {
           </p>
         </div>
 
-        {/* <ul> */}
-        {additionalResources.map((ele) => {
-          return (
-            <li key={`li_${ele.name.replace(/ /g, "")}`}>
-              <Button
-                type="button"
-                unstyled={true}
-                className="text-primary text-underline"
-                href={ele.url}
-                role="link"
-                rel={ele.name}
-                title={`Go to ${ele.name} page`}
-                key={ele.url}
-                id={`${ele.name.split(" ").join("")}`}
-              >
-                {ele.name} <OpenInNewIcon />
-              </Button>
-            </li>
-          );
-        })}
-        {/* </ul> */}
+        <ul className="margin-0 padding-0 margin-left-3">
+          {additionalResources.map((ele) => {
+            return (
+              <li key={`li_${ele.name.replace(/ /g, "")}`}>
+                <Button
+                  type="button"
+                  unstyled={true}
+                  className="text-primary text-underline"
+                  href={ele.url}
+                  role="link"
+                  rel={ele.name}
+                  title={`Go to ${ele.name} page`}
+                  key={ele.url}
+                  id={`${ele.name.split(" ").join("")}`}
+                >
+                  {ele.name} <OpenInNewIcon />
+                </Button>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </div>
   );
