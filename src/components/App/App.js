@@ -14,6 +14,7 @@ import { handleActiveElementFocus } from "../../additional-functions/add-active-
 
 import "./App.scss";
 import FAQ from "../FAQ/FAQ";
+import Resources from "../Resources/Resources";
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -61,11 +62,13 @@ const App = () => {
             )}
           />
 
+          <Route path="/faqs" exact component={() => <FAQ />} />
+
           <Route
-            path="/faqs"
+            path="/resources"
             exact
             component={() => (
-              <FAQ />
+              <Resources user={user} setCurrentLink={setCurrentLink} />
             )}
           />
           <Route path="/login" exact component={Login} />

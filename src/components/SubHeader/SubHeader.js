@@ -13,7 +13,7 @@ import {
 import "./SubHeader.scss";
 import { logOut } from "../../additional-functions/admin-app-functions";
 
-export const SubHeader = ({ user }) => {
+export const SubHeader = ({ user,setCurrentLink }) => {
   let initials = "xx";
   if (user) {
     initials = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
@@ -46,7 +46,7 @@ export const SubHeader = ({ user }) => {
 
     {
       label: <span className="margin-right-1 text-no-wrap">Resources</span>,
-      items: [{ menu: "FAQs", link: "/faqs" }],
+      items: [{ menu: "FAQs", link: "/faqs" },{ menu: "Resources", link: "/resources" }],
     },
     {
       label: (
@@ -111,6 +111,7 @@ export const SubHeader = ({ user }) => {
   };
 
   const handleSubMenuClick = (column) => {
+    setCurrentLink(false);
     handleToggleNavDropdown(column);
 
     setCategorySelected([false, false, false, false, false]);
