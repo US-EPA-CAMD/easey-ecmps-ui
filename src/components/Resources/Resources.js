@@ -53,7 +53,7 @@ const Resources = () => {
           {topics.map((topic) => {
             return (
               <div
-                className=" padding-top-2 padding-bottom-2 grid-col-4 padding-right-1"
+                className=" padding-top-2 padding-bottom-2 grid-col-4 padding-right-3"
                 key={`container-${topic.name.replace(/ /g, "-")}`}
               >
                 {" "}
@@ -83,7 +83,7 @@ const Resources = () => {
             );
           })}
         </div>
-        <div>
+        <div className="margin-top-2">
           <span className="text-bold font-heading-2xl">
             Additional Resources
           </span>
