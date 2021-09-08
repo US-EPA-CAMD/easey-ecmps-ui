@@ -11,7 +11,7 @@ import {
 } from "@trussworks/react-uswds";
 
 import "./SubHeader.scss";
-import { logOut } from "../../additional-functions/admin-app-functions";
+import { logOut } from "../../utils/api/easeyAuthApi";
 
 export const SubHeader = ({ user }) => {
   let initials = "xx";
@@ -33,7 +33,7 @@ export const SubHeader = ({ user }) => {
           id="logoutBtn"
           epa-testid="logoutBtn"
           outline={true}
-          onClick={() => logOut()}
+          onClick={(event) => logOut(event)}
           title="Click this button to logout"
           className={`text-white border-white position-relative top-neg-2 text-no-wrap 
                       ${!user ? " display-none " : ""}`}

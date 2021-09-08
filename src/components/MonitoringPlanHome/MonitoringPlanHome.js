@@ -12,7 +12,14 @@ import * as mpApi from "../../utils/api/monitoringPlansApi";
 
 import "./MonitoringPlanHome.scss";
 
-export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
+export const MonitoringPlanHome = ({
+  user,
+  resetTimer,
+  setExpired,
+  resetTimerFlag,
+  callApiFlag,
+  openedFacilityTabs,
+}) => {
   const [checkedOutLocations, setCheckedOutLocations] = useState([]);
   const [
     mostRecentlyCheckedInMonitorPlanIdForTab,
@@ -21,7 +28,7 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
 
   useEffect(() => {
     obtainCheckedOutLocations().then();
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanIdForTab]);
 
   /*useInterval(() => {
@@ -36,7 +43,7 @@ export const MonitoringPlanHome = ({ user, openedFacilityTabs }) => {
     if (checkedOutLocationResult.data) {
       checkedOutLocationList = checkedOutLocationResult.data;
     }
-console.log(checkedOutLocationResult,'LIST')
+    console.log(checkedOutLocationResult, "LIST");
     // *** find locations currently checked out by the user
     const currentlyCheckedOutMonPlanId = checkedOutLocationList.filter(
       (element) => element["checkedOutBy"] === user.firstName
@@ -96,6 +103,10 @@ console.log(checkedOutLocationResult,'LIST')
         title: row.name,
         component: (
           <SelectedFacilityTab
+            resetTimer={resetTimer}
+            setExpired={setExpired}
+            resetTimerFlag={resetTimerFlag}
+            callApiFlag={callApiFlag}
             orisCode={row.orisCode}
             selectedConfig={row.selectedConfig}
             title={row.name}
@@ -164,6 +175,7 @@ console.log(checkedOutLocationResult,'LIST')
     </div>
   );
 };
+
 const mapStateToProps = (state) => {
   return {
     openedFacilityTabs: state.openedFacilityTabs,

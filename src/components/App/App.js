@@ -14,9 +14,14 @@ import { handleActiveElementFocus } from "../../additional-functions/add-active-
 
 import "./App.scss";
 import FAQ from "../FAQ/FAQ";
+import { InactivityTracker } from "../InactivityTracker/InactivityTracker";
+import { TokenRefresher } from "../TokenRefresher/TokenRefresher";
 
 const App = () => {
   const [user, setUser] = useState(false);
+  const [expired, setExpired] = useState(false);
+  const [resetTimer, setResetTimer] = useState(false);
+
   useEffect(() => {
     const cdxUser = sessionStorage.getItem("cdx_user")
       ? JSON.parse(sessionStorage.getItem("cdx_user"))
@@ -45,6 +50,15 @@ const App = () => {
   );
   return (
     <div>
+      {user ? (
+        <InactivityTracker
+          apiCall={setResetTimer}
+          countdownExpired={setExpired}
+        />
+      ) : (
+        ""
+      )}
+      {user ? <TokenRefresher /> : ""}
       <Layout
         user={user}
         currentLink={currentLink}
@@ -61,13 +75,7 @@ const App = () => {
             )}
           />
 
-          <Route
-            path="/faqs"
-            exact
-            component={() => (
-              <FAQ />
-            )}
-          />
+          <Route path="/faqs" exact component={() => <FAQ />} />
           <Route path="/login" exact component={Login} />
           <Route
             path="/monitoring-plans"
@@ -77,7 +85,15 @@ const App = () => {
           <Route
             path="/workspace/monitoring-plans/"
             exact
-            component={() => <MonitoringPlanHome user={user} />}
+            component={() => (
+              <MonitoringPlanHome
+                resetTimer={setResetTimer}
+                setExpired={setExpired}
+                resetTimerFlag={resetTimer}
+                callApiFlag={expired}
+                user={user}
+              />
+            )}
           />
           <Route
             path="/reporting-instructions"

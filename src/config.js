@@ -11,6 +11,8 @@ export const config = {
     activityRefreshApiCallInterval:
       process.env.REACT_APP_EASEY_ECMPS_UI_ACTIVITY_REFRESH_API_CALL_INTERVAL ||
       30 * oneSecond,
+    refreshTokenRate:
+      process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_TOKEN_RATE || 30 * oneSecond,
     inactivityDuration:
       process.env.REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_MINUTES *
         oneMinute || oneMinute,

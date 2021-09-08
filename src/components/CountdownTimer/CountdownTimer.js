@@ -3,7 +3,7 @@ import React from "react";
 import "./CountdownTimer.scss";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
-export const CountdownTimerRender = ({ remainingTime, countdownAPI }) => {
+export const CountdownTimerRender = ({ remainingTime, countdownExpired }) => {
   const currentTime = React.useRef(remainingTime);
   const prevTime = React.useRef(null);
   const isNewTimeFirstTick = React.useRef(false);
@@ -15,7 +15,7 @@ export const CountdownTimerRender = ({ remainingTime, countdownAPI }) => {
 
     // *** do this when the countdown is done
     if (remainingTime === 0) {
-      countdownAPI();
+      countdownExpired(true);
     }
   } else {
     isNewTimeFirstTick.current = false;
@@ -45,7 +45,7 @@ export const CountdownTimerRender = ({ remainingTime, countdownAPI }) => {
   );
 };
 
-export const CountdownTimer = ({ duration, countdownAPI }) => {
+export const CountdownTimer = ({ duration, countdownExpired }) => {
   return (
     <div className="countdown-timer-wrapper">
       It looks like you have been inactive for a while. Save your changes to
@@ -57,7 +57,7 @@ export const CountdownTimer = ({ duration, countdownAPI }) => {
           size={230}
           colors={[["#004777", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
         >
-          <CountdownTimerRender countdownAPI={countdownAPI} />
+          <CountdownTimerRender countdownExpired={countdownExpired} />
         </CountdownCircleTimer>
       </div>
     </div>
