@@ -368,3 +368,11 @@ ul.usa-nav__primary.usa-accordion {
   @extend .react-transition;
   @extend .fade-in;
 }
+
+.usa-character-count__message {
+  color: $epa-black !important;
+}
+
+.usa-alert__heading {
+  font-weight: bold;
+}

@@ -11,10 +11,12 @@ import Login from "../Login/Login";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
 
 import { handleActiveElementFocus } from "../../additional-functions/add-active-class";
-
-import "./App.scss";
 import FAQ from "../FAQ/FAQ";
 import Resources from "../Resources/Resources";
+
+import HelpSupport from "../HelpSupport/HelpSupport";
+
+import "./App.scss";
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -63,6 +65,8 @@ const App = () => {
           />
 
           <Route path="/faqs" exact component={() => <FAQ />} />
+
+          <Route path="/help-support" exact component={() => <HelpSupport />} />
 
           <Route
             path="/resources"
