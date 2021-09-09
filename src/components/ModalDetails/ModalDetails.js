@@ -15,7 +15,7 @@ import { ArrowBackSharp } from "@material-ui/icons";
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 // value in data => [0] api label, [1] our UI label, [2] value,[3], required or not for editing, [4] control form type
 const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
-  console.log(modalData,'modalData' ,data)
+  console.log(modalData, "modalData", data);
   const makeViewOnlyComp = (value) => {
     return (
       <div key={`${value[1]}`} className="grid-col">
@@ -128,9 +128,8 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
         break;
 
       case "radio":
-        console.log('val',value[1])
+        console.log("val", value[1]);
         comp = (
-          
           <Fieldset
             className=" display-inline-flex modalUserInput"
             id={value[0]}
@@ -170,9 +169,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
           <Label className=" margin-bottom-0" htmlFor={`${value[1]}`}>
             {value[3] === "required" ? `${value[1]} (Required)` : value[1]}
           </Label>
-          <div id={`${value[1]}`}>
-            {comp}
-          </div>
+          <div id={`${value[1]}`}>{comp}</div>
         </FormGroup>
       </div>
     );
@@ -213,7 +210,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
                 {" "}
                 <ArrowBackSharp
                   aria-label="go back to systems details"
-                  className=" font-body-sm"
+                  className=" font-body-sm position-relative top-neg-2px"
                 />
               </Button>
 
