@@ -1,4 +1,6 @@
 export const attachChangeEventListeners = (inputSelector) => {
+  removeChangeEventListeners();
+
   document.querySelectorAll(inputSelector).forEach((element) => {
     element.addEventListener("change", markDataAsChanged);
   });
