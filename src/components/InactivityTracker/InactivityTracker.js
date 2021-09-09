@@ -54,7 +54,8 @@ export const InactivityTracker = ({
 
     // *** open modal
 
-    /*
+    console.log("Tabs " + openedFacilityTabs);
+
     if (
       openedFacilityTabs &&
       openedFacilityTabs.length > 0 &&
@@ -71,9 +72,7 @@ export const InactivityTracker = ({
           setShowInactiveModal(true);
         }
       }
-
     }
-      */
 
     setTimeInactive(timeInactive + config.app.activityPollingFrequency);
   }, config.app.activityPollingFrequency);

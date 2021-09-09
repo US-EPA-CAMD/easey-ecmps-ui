@@ -81,7 +81,6 @@ export const MonitoringPlanTabRender = ({
   // }, [matsTableFlag, inactive[0], checkout, revertedState]);
 
   useEffect(() => {
-    console.log("I Ran!");
     if (resetTimerFlag) {
       resetInactivityTimerApiCall();
       resetTimer(false);
