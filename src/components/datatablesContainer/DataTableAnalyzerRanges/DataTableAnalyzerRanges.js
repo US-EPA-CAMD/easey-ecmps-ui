@@ -5,6 +5,8 @@ import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
+import { attachChangeEventListeners } from "../../../additional-functions/prompt-to-save-unsaved-changes";
+
 export const DataTableAnalyzerRanges = ({
   user,
   checkout,
@@ -83,27 +85,14 @@ export const DataTableAnalyzerRanges = ({
   // row is just the data in the datatable row, need to compare it to the entire API dataset to get correct data
   const openAnalyzerRanges = (row, bool, create) => {
     let selectRange = null;
-    // setCreateNewAnalyzerRange(create);
     setOpenFuelFlowsView(false);
     setComponentView(true);
 
     setCreateAnalyzerRangesFlag(create);
 
-    // if (create) {
-    //   setCreateBtn("Create Analyzer Range");
-    //   // setCreateBtnAPI(createAnalyzerRange);
-    // }
     if (ranges.length > 0 && !create) {
-      console.log(row, "row");
       selectRange = ranges.filter((element) => element.id === row.col3)[0];
       setSelectedRange(selectRange);
-      // setCreateBtn("Go Back");
-      // if (user && checkout) {
-      //   setCreateBtn("Save and Go Back");
-      //   // setCreateBtnAPI(saveComponents);
-      // }
-      // console.log(selectComponents, "selectComponents");
-      // setOpenAnalyzer(selectRange);
     }
 
     setSelectedModalData(
@@ -124,6 +113,10 @@ export const DataTableAnalyzerRanges = ({
       )
     );
     setThirdLevel(true, "Analyzer Ranges");
+
+    setTimeout(() => {
+      attachChangeEventListeners(".modalUserInput");
+    });
   };
   return (
     <div className="methodTable">
