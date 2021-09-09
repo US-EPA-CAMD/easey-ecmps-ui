@@ -5,6 +5,7 @@ import { useInterval } from "../../additional-functions/use-interval";
 import { Modal } from "../Modal/Modal";
 import { CountdownTimer } from "../CountdownTimer/CountdownTimer";
 import { connect } from "react-redux";
+import { debug } from "loglevel";
 
 export const InactivityTracker = ({
   apiCall,
@@ -54,12 +55,12 @@ export const InactivityTracker = ({
 
     // *** open modal
 
-    console.log("Tabs " + openedFacilityTabs);
+    console.log(openedFacilityTabs);
 
     if (
       openedFacilityTabs &&
       openedFacilityTabs.length > 0 &&
-      openedFacilityTabs[0].checkout == true
+      openedFacilityTabs[0].checkout === true
     ) {
       console.log("Have Checked Out A Record");
       if (

@@ -17,7 +17,6 @@ import Resources from "../Resources/Resources";
 import HelpSupport from "../HelpSupport/HelpSupport";
 
 import "./App.scss";
-import FAQ from "../FAQ/FAQ";
 import { InactivityTracker } from "../InactivityTracker/InactivityTracker";
 import { TokenRefresher } from "../TokenRefresher/TokenRefresher";
 
