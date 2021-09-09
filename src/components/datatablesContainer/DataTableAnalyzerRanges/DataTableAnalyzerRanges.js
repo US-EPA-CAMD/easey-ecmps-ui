@@ -14,10 +14,13 @@ export const DataTableAnalyzerRanges = ({
   setOpenFuelFlowsView,
   setComponentView,
   setSelectedModalData,
-  setCreateNewAnalyzerRange,
-  setSaveAnalyzerRange,
+  // setCreateNewAnalyzerRange,
+  // setSaveAnalyzerRange,
   setSelectedRange,
   updateAnalyzerRangeTable,
+  setCreateAnalyzerRangesFlag,
+  // setCreateBtn,
+  // setCreateBtnAPI,
   // inactive,
   // settingInactiveCheckBox,
 }) => {
@@ -80,12 +83,15 @@ export const DataTableAnalyzerRanges = ({
   // row is just the data in the datatable row, need to compare it to the entire API dataset to get correct data
   const openAnalyzerRanges = (row, bool, create) => {
     let selectRange = null;
-    setCreateNewAnalyzerRange(create);
+    // setCreateNewAnalyzerRange(create);
     setOpenFuelFlowsView(false);
     setComponentView(true);
+
+    setCreateAnalyzerRangesFlag(create);
+
     // if (create) {
     //   setCreateBtn("Create Analyzer Range");
-    //   setCreateBtnAPI(createAnalyzerRange);
+    //   // setCreateBtnAPI(createAnalyzerRange);
     // }
     if (ranges.length > 0 && !create) {
       console.log(row, "row");
@@ -94,7 +100,7 @@ export const DataTableAnalyzerRanges = ({
       // setCreateBtn("Go Back");
       // if (user && checkout) {
       //   setCreateBtn("Save and Go Back");
-      //   setCreateBtnAPI(saveComponents);
+      //   // setCreateBtnAPI(saveComponents);
       // }
       // console.log(selectComponents, "selectComponents");
       // setOpenAnalyzer(selectRange);

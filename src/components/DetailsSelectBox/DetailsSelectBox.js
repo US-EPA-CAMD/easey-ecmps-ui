@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Label, Dropdown, FormGroup } from "@trussworks/react-uswds";
 
-const DetailsSelectBox = ({
+export const DetailsSelectBox = ({
   caption,
   options,
   selectKey,
@@ -36,13 +36,7 @@ const DetailsSelectBox = ({
         <FormGroup className="margin-top-0">
           <Label
             htmlFor={caption}
-            hint={
-              required ? (
-                <span > (Required)</span>
-              ) : (
-                ""
-              )
-            }
+            hint={required ? <span> (Required)</span> : ""}
           >
             {caption}
           </Label>
