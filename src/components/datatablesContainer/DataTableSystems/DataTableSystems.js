@@ -422,6 +422,7 @@ export const DataTableSystems = ({
                         backToFirstLevelLevelBTN(false);
                       }
                   : // at system components
+                  // need to hide analyzer range table on create 
                     () => console.log("DDINT WORK")
                 : // at analyzer ranges in components at third level
                 createAnalyzerRangesFlag

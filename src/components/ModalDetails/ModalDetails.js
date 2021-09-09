@@ -213,7 +213,8 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
                 {" "}
                 <ArrowBackSharp
                   aria-label="go back to systems details"
-                  className=" font-body-sm"
+                  className="backBTNColor"
+                  style={{ color: "#00000" }}
                 />
               </Button>
 

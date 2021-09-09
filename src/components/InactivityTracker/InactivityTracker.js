@@ -35,7 +35,8 @@ export const InactivityTracker = ({
 
   useEffect(() => {
     setTrackInactivity(true);
-  }, []);
+  }, [openedFacilityTabs]);
+
 
   // *** set up a recurring API call to update
   useInterval(() => {
