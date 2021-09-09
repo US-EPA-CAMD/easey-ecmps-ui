@@ -177,9 +177,28 @@ export const saveAnalyzerRanges = async (payload) => {
   delete payload["compId"];
   return axios.put(url, payload).then(handleResponse).catch(handleError);
 };
+export const createAnalyzerRanges = async (payload) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locId"]}/components/${payload["compId"]}/analyzer-ranges/`;
+
+  console.log('payload',payload)
+  // *** remove attributes not needed by the API
+  delete payload["locId"];
+  delete payload["compId"];
+
+  return axios.post(url, payload).then(handleResponse).catch(handleError);
+};
+
 
 export const saveSystemsFuelFlows = async (payload,locId,sysId) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${locId}/systems/${sysId}/fuel-flows/${payload["id"]}`;
+  // *** remove attributes not needed by the API
+  delete payload["id"];
+
+  return axios.put(url, payload).then(handleResponse).catch(handleError);
+};
+
+export const createSystemsFuelFlows = async (payload,locId,sysId) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${locId}/systems/${sysId}/fuel-flows/`;
   // *** remove attributes not needed by the API
   delete payload["id"];
 

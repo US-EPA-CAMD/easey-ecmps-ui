@@ -429,6 +429,27 @@ export const DataTableRender = ({
             <div className="text-center">
               <p>{"No data currently present"}</p>
             </div>
+            <div className={`${headerStyling}`}>
+              {addBtn && checkout && user ? (
+                <h2 className="padding-0 page-subheader">
+                  <div className="padding-y-1">
+                    <Button
+                      type="button"
+                      // test-id={tableTitle? `btnAdd${tableTitle.split(" ").join("")}`: `${sectionTitle.split(" ").join("")}`}
+                      className="float-left clearfix margin-right-3"
+                      outline="true"
+                      color="black"
+                      onClick={() => addBtn(false, false, true)}
+                      id="addBtn"
+                    >
+                      {addBtnName}
+                    </Button>
+                  </div>{" "}
+                </h2>
+              ) : (
+                ""
+              )}
+            </div>
           </div>
         ) : (
           <div className="margin-y-3 padding-y-3 react-transition fade-in font-body-sm width-full">
