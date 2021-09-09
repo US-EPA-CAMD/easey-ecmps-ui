@@ -37,9 +37,9 @@ const componentRenderer = (update) => {
     setOpenFuelFlowsView: jest.fn(),
     setComponentView: jest.fn(),
     setSelectedModalData: jest.fn(),
-    setCreateNewAnalyzerRange: jest.fn(),
     setSaveAnalyzerRange: jest.fn(),
     setSelectedRange: jest.fn(),
+    setCreateAnalyzerRangesFlag:jest.fn(),
   };
   return render(<DataTableAnalyzerRanges {...props} />);
 };
