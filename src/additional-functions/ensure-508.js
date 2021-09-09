@@ -1,9 +1,3 @@
-import { oneSecond } from "../config";
-
-const customSortIcon = ".__rdt_custom_sort_icon__";
-const tableCol = ".rdt_TableCol";
-const table = ".rdt_Table";
-
 /*****************************************************
  * ensure508:
  *
@@ -59,9 +53,11 @@ export const changeGridCellAttributeValue = () => {
   setTimeout(() => {
     // *** change auto-generated attribute role from "gridcell" to "cell"
     document.querySelectorAll(`[role="gridcell"]`).forEach((element) => {
+      // console.log('element',element)
       element.setAttribute("role", "cell");
+      // element.setAttribute("id", `${element.id}${element.className}`);
     });
-  }, oneSecond * 0.5);
+  });
 };
 
 /*****************************************************
@@ -75,7 +71,7 @@ export const changeGridCellAttributeValue = () => {
  *              none
  *****************************************************/
 export const addAriaLabelToDatatable = () => {
-  document.querySelectorAll(table).forEach((element) => {
+  document.querySelectorAll(`.rdt_Table`).forEach((element) => {
     const defaultLabel = document.querySelector(".data-table-title")
       ? document.querySelector(".data-table-title").textContent
       : "Data Table";
@@ -96,35 +92,35 @@ export const addAriaLabelToDatatable = () => {
  *****************************************************/
 export const addInitialAriaSort = () => {
   setTimeout(() => {
-    document.querySelectorAll(tableCol).forEach((column) => {
+    document.querySelectorAll(`.rdt_TableCol_Sortable`).forEach((column) => {
       // *** traverse all sort icons
-      if (column.querySelectorAll(customSortIcon).length > 0) {
+      if (column.querySelectorAll(".__rdt_custom_sort_icon__").length > 0) {
         // *** isolate the svg element of the icon
         const sortIcon = column.querySelector(".MuiSvgIcon-root");
 
         // *** if svg element is displayed, set
         if (window.getComputedStyle(sortIcon).opacity === "1") {
-          const sortedBy = column
-            .closest(tableCol)
-            .querySelector("div:nth-child(1)").textContent;
-
-          if (column.querySelector(customSortIcon).classList.contains("asc")) {
+          if (
             column
-              .closest(tableCol)
-              .setAttribute(
-                "aria-label",
-                `Sorted by ${sortedBy} in ascending order`
-              );
-          } else if (
-            column.querySelector(customSortIcon).classList.contains("desc")
+              .querySelector(".__rdt_custom_sort_icon__")
+              .classList.contains("asc")
           ) {
             column
-              .closest(tableCol)
-              .setAttribute(
-                "aria-label",
-                `Sorted by ${sortedBy} in descending order`
-              );
+              .closest(`.rdt_TableCol_Sortable`)
+              .setAttribute("aria-sort", "ascending");
+          } else if (
+            column
+              .querySelector(".__rdt_custom_sort_icon__")
+              .classList.contains("desc")
+          ) {
+            column
+              .closest(`.rdt_TableCol_Sortable`)
+              .setAttribute("aria-sort", "descending");
           }
+        } else {
+          column
+            .closest(`.rdt_TableCol_Sortable`)
+            .setAttribute("aria-sort", "none");
         }
       }
     });
@@ -142,28 +138,34 @@ export const addInitialAriaSort = () => {
  *              none
  *****************************************************/
 export const setAriaSort = (event) => {
+  const currentColumn = event.target.closest(".rdt_TableCol_Sortable");
+  const sortIcon = currentColumn.querySelector(".__rdt_custom_sort_icon__");
+
   // *** disregard any events that don't result in sorting
   if (
     (event.type === "keydown" && event.key !== "Enter") ||
     event.type === "click"
   ) {
     // *** make sure aria-sort attribute is set
-    switch (event.target.closest(tableCol).getAttribute("aria-sort")) {
-      // * flip any column currently marked as "sorted" to the opposite of currently chosen direction
-      case "ascending":
-        event.target.closest(tableCol).setAttribute("aria-sort", "descending");
-        break;
-
-      // * flip any column currently marked as "sorted" to the opposite of currently chosen direction
-      case "descending":
-        event.target.closest(tableCol).setAttribute("aria-sort", "ascending");
-        break;
-
-      // * default direction is descending
-      default:
-        event.target.closest(tableCol).setAttribute("aria-sort", "descending");
-        break;
-    }
+    document.querySelectorAll(`.rdt_TableCol_Sortable`).forEach((column) => {
+      if (column === currentColumn) {
+        if (currentColumn.ariaSort === "none") {
+          if (sortIcon.classList.contains("asc")) {
+            currentColumn.ariaSort = "ascending";
+          } else if (sortIcon.classList.contains("desc")) {
+            currentColumn.ariaSort = "descending";
+          }
+        } else {
+          if (currentColumn.ariaSort === "ascending") {
+            currentColumn.ariaSort = "descending";
+          } else {
+            currentColumn.ariaSort = "ascending";
+          }
+        }
+      } else {
+        column.ariaSort = "none";
+      }
+    });
   }
 };
 
@@ -181,7 +183,7 @@ export const setAriaSort = (event) => {
 export const assignAriaSortHandlersToDatatable = () => {
   setTimeout(() => {
     // *** only event being taken into account are the ones that result in sorting of the datatable
-    document.querySelectorAll(tableCol).forEach((element) => {
+    document.querySelectorAll(".rdt_TableCol_Sortable").forEach((element) => {
       element.addEventListener("click", setAriaSort, true);
       element.addEventListener("keydown", setAriaSort, true);
     });
@@ -195,7 +197,7 @@ export const assignAriaSortHandlersToDatatable = () => {
  *   508 compliance
  *****************************************************/
 export const removeAriaSortHandlersFromDatatable = () => {
-  document.querySelectorAll(tableCol).forEach((element) => {
+  document.querySelectorAll(".rdt_TableCol_Sortable").forEach((element) => {
     element.removeEventListener("click", setAriaSort);
     element.removeEventListener("keydown", setAriaSort);
   });
