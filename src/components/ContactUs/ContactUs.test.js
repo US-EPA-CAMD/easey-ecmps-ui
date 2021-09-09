@@ -1,10 +1,10 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router-dom";
 
 import configureStore from "../../store/configureStore.dev";
-import HelpSupport from "./HelpSupport";
+import ContactUs from "./ContactUs";
 
 const store = configureStore();
 
@@ -16,21 +16,6 @@ jest.mock("react-router-dom", () => ({
 }));
 
 const topics = [
-  {
-    name: "Help/Support",
-    descriptions:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt molestie. Vestibulum faucibus enim sit amet pretium laoreet.",
-  },
-  {
-    name: "FAQs",
-    descriptions:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt molestie. Vestibulum faucibus enim sit amet pretium laoreet.",
-  },
-  {
-    name: "Tutorials",
-    descriptions:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt molestie. Vestibulum faucibus enim sit amet pretium laoreet.",
-  },
   {
     name: "Contact Us",
     descriptions:
@@ -61,14 +46,14 @@ const commentTypes = [
   },
 ];
 
-describe("HelpSources: ", () => {
+describe("ContactUs: ", () => {
   let query;
 
   beforeEach(() => {
     query = render(
       <Provider store={store}>
         <MemoryRouter>
-          <HelpSupport />
+          <ContactUs />
         </MemoryRouter>
       </Provider>
     );
@@ -84,14 +69,6 @@ describe("HelpSources: ", () => {
     topics.forEach((element) => {
       expect(getByText(element.name)).toBeTruthy();
     });
-  });
-
-  test("Visit FAQ link renders", () => {
-    expect(screen.getByTestId("linkFAQ")).toBeTruthy();
-  });
-
-  test("CDX Help Topics renders ", () => {
-    expect(screen.getByTestId("linkCDXHelp")).toBeTruthy();
   });
 
   test("Comment options are populated properly", () => {
