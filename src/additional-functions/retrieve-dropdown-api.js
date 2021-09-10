@@ -18,6 +18,8 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
               });
 
               options.unshift({ code: "", name: "" });
+              
+              options.unshift({ code: "select", name: "Select a parameter..." });
               const newData = totalOptions;
               newData["supplementalMATSParameterCode"] = options;
               console.log("MATS OPTIONS", options);
@@ -33,6 +35,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
               });
 
               options.unshift({ code: "", name: "" });
+              options.unshift({ code: "select", name: "Select a parameter..." });
               const newData = totalOptions;
               newData[x] = options;
 
@@ -52,6 +55,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
               });
 
               options.unshift({ code: "", name: "" });
+              options.unshift({ code: "select", name: "Select a method..." });
               const newData = totalOptions;
               newData["supplementalMATSMonitoringMethodCode"] = options;
               setTotalOptions(newData);
@@ -66,6 +70,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
               });
 
               options.unshift({ code: "", name: "" });
+              options.unshift({ code: "select", name: "Select a method..." });
               const newData = totalOptions;
               newData[x] = options;
 
@@ -83,6 +88,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             });
 
             options.unshift({ code: "", name: "" });
+            options.unshift({ code: "select", name: "Select a substitute data..." });
             const data = {};
             data[x] = options;
             const newData = totalOptions;
@@ -102,6 +108,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             });
 
             options.unshift({ code: "", name: "" });
+            options.unshift({ code: "select", name: "Select a bypass approach..." });
             const newData = totalOptions;
             newData[x] = options;
 
@@ -117,8 +124,8 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
                 name: option["analyzerRangeCodeDescription"],
               };
             });
-
             options.unshift({ code: "", name: "" });
+            options.unshift({ code: "select", name: "Select a range..." });
             const newData = totalOptions;
             newData[x] = options;
 
@@ -136,6 +143,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             });
 
             options.unshift({ code: "", name: "" });
+            options.unshift({ code: "", name: "Select a fuel flow rate" });
             const newData = totalOptions;
             newData[x] = options;
 
@@ -152,6 +160,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             });
 
             options.unshift({ code: "", name: "" });
+            options.unshift({ code: "", name: "Select a unit of measure" });
             const newData = totalOptions;
             newData[x] = options;
 

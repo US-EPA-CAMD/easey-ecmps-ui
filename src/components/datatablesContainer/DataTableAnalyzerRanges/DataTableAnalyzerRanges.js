@@ -123,7 +123,7 @@ export const DataTableAnalyzerRanges = ({
         totalRangesOptions
       )
     );
-    setThirdLevel(true, "Analyzer Ranges");
+    setThirdLevel(true, "Analyzer Ranges", create? true:false);
   };
   return (
     <div className="methodTable">

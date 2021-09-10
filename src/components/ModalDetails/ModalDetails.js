@@ -128,7 +128,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
         break;
 
       case "radio":
-        console.log('val',value[1])
+        console.log('val',value[1], value[2])
         comp = (
           
           <Fieldset
@@ -153,7 +153,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
               value="No"
               className="padding-left-1"
               defaultChecked={
-                value[2] === null || value[2] === "0" ? true : false
+                value[2] === null ||value[2] === false|| value[2] === "0" ? true : false
               }
             />
           </Fieldset>
@@ -214,7 +214,6 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
                 <ArrowBackSharp
                   aria-label="go back to systems details"
                   className="backBTNColor"
-                  style={{ color: "#00000" }}
                 />
               </Button>
 

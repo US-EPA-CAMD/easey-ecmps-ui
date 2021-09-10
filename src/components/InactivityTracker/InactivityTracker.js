@@ -4,13 +4,8 @@ import { useInterval } from "../../additional-functions/use-interval";
 
 import { Modal } from "../Modal/Modal";
 import { CountdownTimer } from "../CountdownTimer/CountdownTimer";
-import { connect } from "react-redux";
 
-export const InactivityTracker = ({
-  apiCall,
-  countdownExpired,
-  openedFacilityTabs,
-}) => {
+export const InactivityTracker = ({ apiCall, countdownAPI }) => {
   const [timeInactive, setTimeInactive] = useState(0);
   const [showInactiveModal, setShowInactiveModal] = useState(false);
   const [trackInactivity, setTrackInactivity] = useState(false);
@@ -35,15 +30,14 @@ export const InactivityTracker = ({
 
   useEffect(() => {
     setTrackInactivity(true);
-  }, [openedFacilityTabs]);
-
+  }, []);
 
   // *** set up a recurring API call to update
   useInterval(() => {
     // *** only fire the actual API call if activity has taken place
     if (activityOccurred === true) {
       // *** make an api call
-      apiCall(true);
+      apiCall();
     }
     setActivityOccurred(false);
   }, config.app.activityRefreshApiCallInterval);
@@ -54,24 +48,14 @@ export const InactivityTracker = ({
     }
 
     // *** open modal
-
-    console.log("Tabs " + openedFacilityTabs);
-
     if (
-      openedFacilityTabs &&
-      openedFacilityTabs.length > 0 &&
-      openedFacilityTabs[0].checkout == true
+      config.app.inactivityDuration - timeInactive <=
+      config.app.countdownDuration
     ) {
-      console.log("Have Checked Out A Record");
-      if (
-        config.app.inactivityDuration - timeInactive <=
-        config.app.countdownDuration
-      ) {
-        // *** make sure countdown has started
-        if (window.countdownInitiated === false) {
-          window.countdownInitiated = true;
-          setShowInactiveModal(true);
-        }
+      // *** make sure countdown has started
+      if (window.countdownInitiated === false) {
+        window.countdownInitiated = true;
+        setShowInactiveModal(true);
       }
     }
 
@@ -93,7 +77,7 @@ export const InactivityTracker = ({
     };
   }, [extendUserInactivityTimer]);
 
-  // for demoing
+  // for demoing 
   // const toggleInactivityTracking = () => {
   //   setTrackInactivity(!trackInactivity);
   //   resetUserInactivityTimer();
@@ -111,7 +95,7 @@ export const InactivityTracker = ({
           cancelButtonText="OK"
           children={
             <CountdownTimer
-              countdownExpired={countdownExpired}
+              countdownAPI={countdownAPI}
               duration={config.app.countdownDuration / 1000}
               apiCall={apiCall}
             />
@@ -122,11 +106,4 @@ export const InactivityTracker = ({
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    openedFacilityTabs: state.openedFacilityTabs,
-  };
-};
-
-export default connect(mapStateToProps, null)(InactivityTracker);
-export { mapStateToProps };
+export default InactivityTracker;
