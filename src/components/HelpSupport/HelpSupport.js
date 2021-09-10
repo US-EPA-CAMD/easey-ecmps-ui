@@ -33,7 +33,7 @@ export const HelpSupport = () => {
           type="button"
           variant="unstyled"
           asCustom={Link}
-          to={""}
+          to="/faqs"
           role="link"
           exact="true"
           rel="faq"
