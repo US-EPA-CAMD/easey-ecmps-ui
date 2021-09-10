@@ -24,7 +24,6 @@ export const modalViewData = (
   mats = false
 ) => {
 
-  console.log('selected',selected)
   //   (7) ["systemDesignationCode", "System Designation", "Primary", "required", "dropdown", "P", undefined]
   // 2: (7) ["maximumFuelFlowRateSourceCode", "System Type", "Gas Fuel Flow System", "required", "dropdown", "GAS", undefined]
   // 3: (7) ["systemFuelFlowUOMCode", "Fuel Type", "Pipeline Natural Gas", "required", "dropdown", "PNG", undefined]

@@ -37,6 +37,8 @@ export const DataTableSystemsComponents = ({
   createFuelFlowFlag,
   setCreateNewComponentFlag,
   createNewComponentFlag,
+  updateComponentTable,
+  setupdateComponentTable
 }) => {
   const [monitoringSystemsFuelFlows, setMonitoringSystemsFuelFlows] = useState(
     ""
@@ -75,6 +77,7 @@ export const DataTableSystemsComponents = ({
       .then((res) => {
         setMonitoringSystemsComponents(res.data);
         setDataLoaded(true);
+        setupdateComponentTable(false)
       });
 
     mpApi
@@ -84,7 +87,7 @@ export const DataTableSystemsComponents = ({
         setFuelDataLoaded(true);
         setUpdateFuelFlowTable(false);
       });
-  }, [selected, updateFuelFlowTable]);
+  }, [selected, updateFuelFlowTable,updateComponentTable]);
 
   const columnNames = ["ID", "Type", "Date and Time"];
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
@@ -101,7 +104,11 @@ export const DataTableSystemsComponents = ({
 
   //for analyzer ranges
   const [openAnalyzer, setOpenAnalyzer] = useState(false);
-
+  const totalComponentsOptions = useRetrieveDropdownApi([
+    "sampleAcquisitionMethodCode",
+    "componentTypeCode",
+    "basisCode",
+  ]);
   const openComponent = (row, bool, create) => {
     let selectComponents = null;
     setCreateNewComponentFlag(create);
@@ -150,7 +157,7 @@ export const DataTableSystemsComponents = ({
           endHour: ["End Time", "time", ""],
         },
         create,
-        false
+        totalComponentsOptions
       )
     );
     setSecondLevel(true, "Component");
@@ -364,6 +371,7 @@ export const DataTableSystemsComponents = ({
                       }
                       viewOnly={!(user && checkout)}
                     />
+                    {createNewComponentFlag? '' : 
                     <DataTableAnalyzerRanges
                       selectedRanges={openAnalyzer}
                       thirdLevel={thirdLevel}
@@ -379,7 +387,7 @@ export const DataTableSystemsComponents = ({
                       setCreateAnalyzerRangesFlag={setCreateAnalyzerRangesFlag}
                       // setCreateBtn={setCreateBTN}
                       // setCreateBtnAPI={setCreateBtnAPI}
-                    />{" "}
+                    />}{" "}
                   </div>
                 ) : (
                   //EDIT ANALYZER RANGES
