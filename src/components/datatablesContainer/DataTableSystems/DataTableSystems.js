@@ -166,9 +166,10 @@ export const DataTableSystems = ({
     }
   }, [secondLevel]);
 
-  const setBread = (val, currentBread) => {
+  const setBread = (val, currentBread,create) => {
     setSecondLevel(val);
     setSecondLevelName(currentBread);
+    setCreateFuelFlowFlag(create);
     breadCrumbs(currentBread);
   };
   /// for analyzer ranges
@@ -203,10 +204,12 @@ export const DataTableSystems = ({
     }
   };
 
-  const setThirdBread = (val, currentBread) => {
+  const setThirdBread = (val, currentBread,create) => {
+    console.log('valVAL',val,currentBread)
     setThirdLevel(val);
     // setSecondLevel(false);
     breadThirdCrumbs(currentBread);
+    setCreateAnalyzerRangesFlag(create);
   };
   //////////
   const [createBTN, setCreateBTN] = useState("Save and Close");
@@ -258,7 +261,7 @@ export const DataTableSystems = ({
       compId: selectedRangeInFirst.componentRecordId,
       id: null,
       analyzerRangeCode: "string",
-      dualRangeIndicator: "string",
+      dualRangeIndicator: 0,
       beginDate: null,
       beginHour: 0,
       endDate: null,
@@ -318,16 +321,14 @@ export const DataTableSystems = ({
       .createSystemsFuelFlows(userInput)
       .then((result) => {
         console.log(result, " was created");
-        setShow(false);
       })
       .catch((error) => {
         console.log("error is", error);
-        // openModal(false);
-        setShow(false);
       });
     setUpdateFuelFlowTable(true);
   };
 
+  // from analyzer ranges view to components view 
   const backToSecondLevelBTN = (mainLevel) => {
     setThirdLevel(mainLevel);
     setBread(true, "Components");
@@ -416,12 +417,14 @@ export const DataTableSystems = ({
                     ? () => {
                         createFuelFlows();
                         backToFirstLevelLevelBTN(false);
+                      
                       }
                     : () => {
-                        saveAnalyzerRanges();
+                      saveFuelFlows();
                         backToFirstLevelLevelBTN(false);
                       }
                   : // at system components
+                  // need to hide analyzer range table on create 
                     () => console.log("DDINT WORK")
                 : // at analyzer ranges in components at third level
                 createAnalyzerRangesFlag
@@ -429,6 +432,7 @@ export const DataTableSystems = ({
                   () => {
                     createAnalyzerRange();
                     backToSecondLevelBTN(false);
+                    setCreateAnalyzerRangesFlag(false)
                   }
                 : // in just editing a range
                   () => {
@@ -439,6 +443,7 @@ export const DataTableSystems = ({
             close={closeModalHandler}
             showCancel={!(user && checkout)}
             showSave={user && checkout}
+            exitBTN={createAnalyzerRangesFlag? 'Create Analyzer Range' : createFuelFlowFlag? "Create Fuel Flow" : null}
             breadCrumbBar={currentBar}
             title={`System: ${selected[0]["value"]}`}
             // exitBTN={createBTN}

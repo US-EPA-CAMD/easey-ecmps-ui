@@ -4,11 +4,15 @@ import "../MonitoringPlanTab/MonitoringPlanTab.scss";
 import DataTableMethod from "../datatablesContainer/DataTableMethod/DataTableMethod";
 import DataTableMats from "../datatablesContainer/DataTableMats/DataTableMats";
 import DataTableSystems from "../datatablesContainer/DataTableSystems/DataTableSystems";
-import InactivityTracker from "../InactivityTracker/InactivityTracker";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 
 export const MonitoringPlanTabRender = ({
+  resetTimer,
+  setExpired,
+  resetTimerFlag,
+  callApiFlag,
+
   title,
   user,
   locations,
@@ -75,6 +79,17 @@ export const MonitoringPlanTabRender = ({
 
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [matsTableFlag, inactive[0], checkout, revertedState]);
+
+  useEffect(() => {
+    if (resetTimerFlag) {
+      resetInactivityTimerApiCall();
+      resetTimer(false);
+    }
+    if (callApiFlag) {
+      countdownExpired();
+      setExpired(false);
+    }
+  }, [resetTimerFlag, callApiFlag]);
 
   // updates all tables whenever a location is changed
   useEffect(() => {
@@ -202,7 +217,7 @@ export const MonitoringPlanTabRender = ({
   const resetInactivityTimerApiCall = () => {
     console.log(mpApi.putLockTimerUpdateConfiguration(configID), "api called");
   };
-  const countdownAPI = () => {
+  const countdownExpired = () => {
     console.log("times up");
     // calls check in api
     checkoutAPI(false);
@@ -237,6 +252,7 @@ export const MonitoringPlanTabRender = ({
         });
     }
   };
+
   return (
     <div className=" padding-top-0">
       <input
@@ -246,18 +262,19 @@ export const MonitoringPlanTabRender = ({
         type="hidden"
         id="testingBtn"
         onClick={() => {
-          countdownAPI();
+          countdownExpired();
           resetInactivityTimerApiCall();
           checkoutAPI(true);
         }}
       />
 
-      {user && checkout ? (
+      {/*user && checkout ? (
         <InactivityTracker
           apiCall={resetInactivityTimerApiCall}
-          countdownAPI={countdownAPI}
+          countdownExpired={countdownExpired}
         />
-      ) : null}
+      ) : null*/}
+
       {/* on change of select box, it should modify the accordion items */}
       {/* pass back the values to send to the datatable, current is sending back index  */}
       <div className="grid-row">

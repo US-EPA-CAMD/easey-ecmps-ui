@@ -252,7 +252,7 @@ export const DataTableSystemsComponents = ({
       )
     );
 
-    setSecondLevel(true, "Fuel Flow");
+    setSecondLevel(true, "Fuel Flow",create?true:false);
   };
 
   // const createFuelFlows = () => {

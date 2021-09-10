@@ -77,6 +77,19 @@ export const getMonitoringSystemsComponents = async (locId,
     .catch(handleError);
 };
 
+export const getMonitoringComponents = async (locId) => {
+
+  let url = `${config.services.monitorPlans.uri}`;
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+  url = `${url}/locations/${locId}​/components/`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+
+}
+ 
 export const getMonitoringAnalyzerRanges = async (locId, componentRecordId) => {
 
   let url = `${config.services.monitorPlans.uri}`;

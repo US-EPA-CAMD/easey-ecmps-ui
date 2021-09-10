@@ -62,6 +62,7 @@ export const DataTableRender = ({
   setMostRecentlyCheckedInMonitorPlanIdForTab,
   setCheckout,
 }) => {
+  console.log('openedFacilityTabs',openedFacilityTabs)
   const [searchText, setSearchText] = useState("");
   const columns = [];
   useEffect(() => {

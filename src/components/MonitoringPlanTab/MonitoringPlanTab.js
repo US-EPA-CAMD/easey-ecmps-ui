@@ -11,6 +11,11 @@ import {
   setInactiveState,
 } from "../../store/actions/dynamicFacilityTab";
 export const MonitoringPlanTab = ({
+  resetTimer,
+  setExpired,
+  resetTimerFlag,
+  callApiFlag,
+
   orisCode,
   selectedConfig,
   title,
@@ -47,6 +52,10 @@ export const MonitoringPlanTab = ({
     <div>
       <div>
         <MonitoringPlanTabRender
+          resetTimer={resetTimer}
+          setExpired={setExpired}
+          resetTimerFlag={resetTimerFlag}
+          callApiFlag={callApiFlag}
           title={title}
           orisCode={orisCode}
           selectedConfig={selectedConfig}
@@ -88,7 +97,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(setSectionSelectionState(section, title)),
     setActiveTab: (orisCode, value) => dispatch(setActiveTab(orisCode, value)),
     setInactive: (value, title) => dispatch(setInactiveState(value, title)),
-    setCheckout: (value, configID) => dispatch(setCheckoutState(value, configID)),
+    setCheckout: (value, configID) =>
+      dispatch(setCheckoutState(value, configID)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(MonitoringPlanTab);

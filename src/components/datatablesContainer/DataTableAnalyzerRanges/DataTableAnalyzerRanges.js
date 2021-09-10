@@ -112,7 +112,7 @@ export const DataTableAnalyzerRanges = ({
         totalRangesOptions
       )
     );
-    setThirdLevel(true, "Analyzer Ranges");
+    setThirdLevel(true, "Analyzer Ranges", create? true:false);
 
     setTimeout(() => {
       attachChangeEventListeners(".modalUserInput");
