@@ -13,7 +13,8 @@ export const HelpSupport = () => {
   return (
     <div className="padding-top-7 padding-2 react-transition fade-in">
       <div className="grid-row">
-        <span className="text-bold font-heading-2xl">Help/Support</span>
+        <div className="text-bold font-heading-2xl">Help/Support</div>
+        <div className="flex-force-break" />
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla
           massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt
@@ -21,12 +22,14 @@ export const HelpSupport = () => {
         </p>
       </div>
       <div className="grid-row margin-top-5">
-        <span className="text-bold font-heading-2xl">FAQs</span>
+        <div className="text-bold font-heading-2xl">FAQs</div>
+        <div className="flex-force-break" />
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla
           massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt
           molestie. Vestibulum faucibus enim sit amet pretium laoreet.
         </p>
+        <div className="flex-force-break" />
         <USWDSLink
           className="usa-button usa-button--outline margin-0 margin-left-05"
           outline="true"
@@ -46,12 +49,14 @@ export const HelpSupport = () => {
         </USWDSLink>
       </div>
       <div className="grid-row margin-top-5">
-        <span className="text-bold font-heading-2xl">Tutorials</span>
+        <div className="text-bold font-heading-2xl">Tutorials</div>
+        <div className="flex-force-break" />
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla
           massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt
           molestie. Vestibulum faucibus enim sit amet pretium laoreet.
         </p>
+        <div className="flex-force-break" />
         <ul className="margin-0 padding-0 margin-left-3">
           <li key="liCDXHelp">
             <Button
