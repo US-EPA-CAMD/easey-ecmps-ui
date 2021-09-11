@@ -145,9 +145,7 @@ export const getAllComponentTypeCodes = async () => {
 
 export const getAllBasisCodes = async () => {
   return axios
-    // .get(`${config.services.mdm.uri}/basis-codes`)
-    
-    .get(`${config.services.mdm.uri}/component-type-codes`)
+    .get(`${config.services.mdm.uri}/basis-codes`)
     .then(handleResponse)
     .catch(handleError);
 };

@@ -132,7 +132,7 @@ export const DataTableSystemsComponents = ({
       setOpenAnalyzer(selectComponents);
       setSelectedRangeInFirst(selectComponents); // for saving
     }
-
+console.log('selectComponents',selectComponents)
     setSelectedComponentsModalData(
       modalViewData(
         selectComponents,

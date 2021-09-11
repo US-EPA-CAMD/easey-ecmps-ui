@@ -29,20 +29,20 @@ export const modalViewData = (
   // 3: (7) ["systemFuelFlowUOMCode", "Fuel Type", "Pipeline Natural Gas", "required", "dropdown", "PNG", undefined]
   const arr = [];
   const codeList = {
-    systemTypeCode: types,
-    fuelCode: fuels,
-    systemDesignationCode: designations,
+    // systemTypeCode: types,
+    // fuelCode: fuels,
+    // systemDesignationCode: designations,
     // bypassApproachCode: bypassApproachCodes,
     // substituteDataCode: substituteDataApproachCodes,
     // parameterCode: parameterCodes,
-    // methodCode: methodCodes,
-    componentTypeCode: componentTypes,
-    sampleAcquisitionMethodCode: acqMethodCode,
-    basisCode: basisCode,
-    maximumFuelFlowRateSourceCode: componentTypes,
-    maximumFuelFlowRate: acqMethodCode,
+    // // methodCode: methodCodes,
+    // componentTypeCode: componentTypes,
+    // sampleAcquisitionMethodCode: acqMethodCode,
+    // basisCode: basisCode,
+    // maximumFuelFlowRateSourceCode: componentTypes,
+    // maximumFuelFlowRate: acqMethodCode,
 
-    systemFuelFlowUOMCode: basisCode,
+    // systemFuelFlowUOMCode: basisCode,
   };
 
   for (const y in label) {

@@ -217,7 +217,7 @@ export const createSystemsFuelFlows = async (payload,locId,sysId) => {
   // *** remove attributes not needed by the API
   delete payload["id"];
 
-  return axios.put(url, payload).then(handleResponse).catch(handleError);
+  return axios.post(url, payload).then(handleResponse).catch(handleError);
 };
 
 export const saveSystems = async (payload,locId,sysId) => {
@@ -235,7 +235,7 @@ export const createSystems = async (payload,locId,sysId) => {
   // *** remove attributes not needed by the API
   delete payload["id"];
 
-  return axios.put(url, payload).then(handleResponse).catch(handleError);
+  return axios.post(url, payload).then(handleResponse).catch(handleError);
 };
 
 export const saveSystemsComponents = async (payload,locId,sysId) => {
