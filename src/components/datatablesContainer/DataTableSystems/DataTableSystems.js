@@ -378,7 +378,8 @@ export const DataTableSystems = ({
     const userInput = extractUserInput(fuelFlowsPayload, ".modalUserInput");
 
     mpApi
-      .createSystemsFuelFlows(userInput)
+      .createSystemsFuelFlows(userInput, selectedSystem.locationId,
+        selectedSystem.id)
       .then((result) => {
         console.log(result, " was created");
       })
