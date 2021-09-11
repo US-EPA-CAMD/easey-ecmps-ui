@@ -96,7 +96,6 @@ export const DataTableSystems = ({
       )[0];
       setSelected(row.cells);
       setSelectedSystem(selectSystem);
-      console.log("selectSystem", selectSystem);
     }
     setSelectedModalData(
       modalViewData(
@@ -239,7 +238,6 @@ export const DataTableSystems = ({
   };
 
   const setThirdBread = (val, currentBread, create) => {
-    console.log("valVAL", val, currentBread);
     setThirdLevel(val);
     // setSecondLevel(false);
     breadThirdCrumbs(currentBread);
@@ -264,7 +262,7 @@ export const DataTableSystems = ({
   const saveSystems = () => {
     const userInput = extractUserInput(sysPayload, ".modalUserInput");
     mpApi
-      .saveSystems(userInput, selectedSystem.locationId, selectedSystem.id)
+      .saveSystems(userInput, locationSelectValue, selectedSystem.id)
       .then((result) => {
         console.log("saving results", result);
       })
@@ -275,14 +273,17 @@ export const DataTableSystems = ({
   };
   const createSystems = () => {
     const userInput = extractUserInput(sysPayload, ".modalUserInput");
-    // mpApi
-    //   .createSystems(userInput, selectedSystem.locationId,)
-    //   .then((result) => {
-    //     console.log('saving results',result);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    mpApi
+      .createSystems(userInput, locationSelectValue)
+      .then((result) => {
+        console.log('saving results',result);
+        
+
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setSecondLevel(false);
     setUpdateSystemTable(true);
   };
 
@@ -489,6 +490,7 @@ export const DataTableSystems = ({
             save={() => {
               createSystems();
               setCreateNewSystem(false);
+              setShow(false);
             }}
             children={
               <ModalDetails
