@@ -24,6 +24,7 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
+import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 
 export const DataTableSystems = ({
   locationSelectValue,
@@ -46,10 +47,16 @@ export const DataTableSystems = ({
   const [thirdLevel, setThirdLevel] = useState(false);
 
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [updateTable, setUpdateTable] = useState(false);
+
+  const [updateSystemTable, setUpdateSystemTable] = useState(false);
+  const totalSystemOptions = useRetrieveDropdownApi([
+    "systemDesignationCode",
+    "systemTypeCode",
+    "fuelCode",
+  ]);
   useEffect(() => {
     if (
-      updateTable ||
+      updateSystemTable ||
       monitoringSystems.length <= 0 ||
       locationSelectValue ||
       revertedState
@@ -58,16 +65,26 @@ export const DataTableSystems = ({
         setMonitoringSystems(res.data);
         setDataLoaded(true);
       });
-      setUpdateTable(false);
+      setUpdateSystemTable(false);
       setRevertedState(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, updateTable, revertedState]);
+  }, [locationSelectValue, revertedState, updateSystemTable]);
 
   const [selected, setSelected] = useState(null);
   const [selectedSystem, setSelectedSystem] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
 
+  const sysPayload = {
+    monitoringSystemId: "string",
+    systemTypeCode: "string",
+    systemDesignationCode: "string",
+    fuelCode: "string",
+    beginDate: "2021-09-10T20:19:58.853Z",
+    endDate: "2021-09-10T20:19:58.853Z",
+    beginHour: 0,
+    endHour: 0,
+  };
   // *** row handler onclick event listener
   const openSystem = (row, bool, create) => {
     let selectSystem = null;
@@ -79,6 +96,7 @@ export const DataTableSystems = ({
       )[0];
       setSelected(row.cells);
       setSelectedSystem(selectSystem);
+      console.log("selectSystem", selectSystem);
     }
     setSelectedModalData(
       modalViewData(
@@ -96,7 +114,7 @@ export const DataTableSystems = ({
           endHour: ["End Time", "time", ""],
         },
         create,
-        false
+        totalSystemOptions
       )
     );
     if (create) {
@@ -144,7 +162,15 @@ export const DataTableSystems = ({
   const breadCrumbs = (lastBread) => {
     const breadBar = (
       <BreadcrumbBar className="padding-0">
-        <Breadcrumb onClick={() => setSecondLevel(false)}>
+        <Breadcrumb
+          onClick={() => {
+            setSecondLevel(false);
+            setBread(false);
+            setCreateFuelFlowFlag(false);
+            setCreateAnalyzerRangesFlag(false);
+            setCreateNewComponentFlag(false);
+          }}
+        >
           <BreadcrumbLink>
             <span>System</span>
           </BreadcrumbLink>
@@ -166,17 +192,24 @@ export const DataTableSystems = ({
     }
   }, [secondLevel]);
 
-  const setBread = (val, currentBread,create) => {
+  const setBread = (val, currentBread, create) => {
     setSecondLevel(val);
     setSecondLevelName(currentBread);
     setCreateFuelFlowFlag(create);
+    setCreateNewComponentFlag(create);
     breadCrumbs(currentBread);
   };
   /// for analyzer ranges
   const breadThirdCrumbs = (lastBread) => {
     const breadBar = (
       <BreadcrumbBar className="padding-0">
-        <Breadcrumb onClick={() => setSecondLevel(false)}>
+        <Breadcrumb
+          onClick={() => {
+            setSecondLevel(false);
+            setBread(false);
+            setCreateAnalyzerRangesFlag(false);
+          }}
+        >
           <BreadcrumbLink>
             <span>System</span>
           </BreadcrumbLink>
@@ -185,7 +218,8 @@ export const DataTableSystems = ({
         <Breadcrumb
           onClick={() => {
             setThirdLevel(false);
-            setBread(true, "Components");
+            setCreateAnalyzerRangesFlag(false);
+            setBread(true, "Components", false);
           }}
         >
           <BreadcrumbLink>
@@ -204,8 +238,8 @@ export const DataTableSystems = ({
     }
   };
 
-  const setThirdBread = (val, currentBread,create) => {
-    console.log('valVAL',val,currentBread)
+  const setThirdBread = (val, currentBread, create) => {
+    console.log("valVAL", val, currentBread);
     setThirdLevel(val);
     // setSecondLevel(false);
     breadThirdCrumbs(currentBread);
@@ -220,12 +254,37 @@ export const DataTableSystems = ({
     false
   );
   const [updateFuelFlowTable, setUpdateFuelFlowTable] = useState(false);
-
+  const [updateComponentTable, setupdateComponentTable] = useState(false);
   const [createAnalyzerRangesFlag, setCreateAnalyzerRangesFlag] = useState(
     false
   );
   const [createFuelFlowFlag, setCreateFuelFlowFlag] = useState(false);
   const [createNewComponentFlag, setCreateNewComponentFlag] = useState(false);
+
+  const saveSystems = () => {
+    const userInput = extractUserInput(sysPayload, ".modalUserInput");
+    mpApi
+      .saveSystems(userInput, selectedSystem.locationId, selectedSystem.id)
+      .then((result) => {
+        console.log("saving results", result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setUpdateSystemTable(true);
+  };
+  const createSystems = () => {
+    const userInput = extractUserInput(sysPayload, ".modalUserInput");
+    // mpApi
+    //   .createSystems(userInput, selectedSystem.locationId,)
+    //   .then((result) => {
+    //     console.log('saving results',result);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+    setUpdateSystemTable(true);
+  };
 
   const saveAnalyzerRanges = () => {
     const payload = {
@@ -327,8 +386,42 @@ export const DataTableSystems = ({
       });
     setUpdateFuelFlowTable(true);
   };
+  // system components
 
-  // from analyzer ranges view to components view 
+  const createComponent = () => {
+    console.log("test createComponent");
+    // const userInput = extractUserInput(fuelFlowsPayload, ".modalUserInput");
+
+    // mpApi
+    //   .createSystemsFuelFlows(userInput)
+    //   .then((result) => {
+    //     console.log(result, " was created");
+    //   })
+    //   .catch((error) => {
+    //     console.log("error is", error);
+    //   });
+    setupdateComponentTable(true);
+  };
+
+  const saveComponent = () => {
+    // const userInput = extractUserInput(fuelFlowsPayload, ".modalUserInput");
+    // mpApi
+    //   .saveSystemsFuelFlows(
+    //     userInput,
+    //     selectedSystem.locationId,
+    //     selectedSystem.id
+    //   )
+    //   .then((result) => {
+    //     console.log(result);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+    console.log("test saveComponent");
+    setupdateComponentTable(true);
+  };
+
+  // from analyzer ranges view to components view
   const backToSecondLevelBTN = (mainLevel) => {
     setThirdLevel(mainLevel);
     setBread(true, "Components");
@@ -393,6 +486,10 @@ export const DataTableSystems = ({
             breadCrumbBar={currentBar}
             title={"Create System"}
             exitBTN="Create System"
+            save={() => {
+              createSystems();
+              setCreateNewSystem(false);
+            }}
             children={
               <ModalDetails
                 modalData={selected}
@@ -409,7 +506,10 @@ export const DataTableSystems = ({
             show={show}
             save={
               !secondLevel && !thirdLevel // first level at systems
-                ? closeModalHandler
+                ? () => {
+                    saveSystems();
+                    setShow(false);
+                  }
                 : secondLevel && !thirdLevel // second level at components or fuel flows
                 ? // at system fuel flows
                   secondLevelName === "Fuel Flow"
@@ -417,22 +517,30 @@ export const DataTableSystems = ({
                     ? () => {
                         createFuelFlows();
                         backToFirstLevelLevelBTN(false);
-                      
                       }
                     : () => {
-                      saveFuelFlows();
+                        saveFuelFlows();
                         backToFirstLevelLevelBTN(false);
                       }
                   : // at system components
-                  // need to hide analyzer range table on create 
-                    () => console.log("DDINT WORK")
+                  // need to hide analyzer range table on create
+                  createNewComponentFlag
+                  ? () => {
+                      createComponent();
+                      setCreateNewComponentFlag(false);
+                      backToFirstLevelLevelBTN(false);
+                    }
+                  : () => {
+                      saveComponent();
+                      backToFirstLevelLevelBTN(false);
+                    }
                 : // at analyzer ranges in components at third level
                 createAnalyzerRangesFlag
                 ? // in creating a range
                   () => {
                     createAnalyzerRange();
                     backToSecondLevelBTN(false);
-                    setCreateAnalyzerRangesFlag(false)
+                    setCreateAnalyzerRangesFlag(false);
                   }
                 : // in just editing a range
                   () => {
@@ -443,7 +551,15 @@ export const DataTableSystems = ({
             close={closeModalHandler}
             showCancel={!(user && checkout)}
             showSave={user && checkout}
-            exitBTN={createAnalyzerRangesFlag? 'Create Analyzer Range' : createFuelFlowFlag? "Create Fuel Flow" : null}
+            exitBTN={
+              createAnalyzerRangesFlag
+                ? "Create Analyzer Range"
+                : createFuelFlowFlag
+                ? "Create Fuel Flow"
+                : createNewComponentFlag
+                ? "Create Component"
+                : null
+            }
             breadCrumbBar={currentBar}
             title={`System: ${selected[0]["value"]}`}
             // exitBTN={createBTN}
@@ -473,6 +589,8 @@ export const DataTableSystems = ({
                   checkout={checkout}
                   // setCreateBtn={setCreateBTN}
                   // setCreateBtnAPI={setCreateBtnAPI}
+                  updateComponentTable={updateComponentTable}
+                  setupdateComponentTable={setupdateComponentTable}
                   updateAnalyzerRangeTable={updateAnalyzerRangeTable}
                   setCreateAnalyzerRangesFlag={setCreateAnalyzerRangesFlag}
                   createAnalyzerRangesFlag={createAnalyzerRangesFlag}

@@ -32,7 +32,6 @@ export const DataTableAnalyzerRanges = ({
   const rangesColumnNames = ["Range", "Date and Time"];
   const totalRangesOptions = useRetrieveDropdownApi(["analyzerRangeCode"]);
   useEffect(() => {
-    console.log("selectedRanges", selectedRanges);
     if (updateTable || ranges.length <= 0) {
       mpApi
         .getMonitoringAnalyzerRanges(
@@ -41,7 +40,6 @@ export const DataTableAnalyzerRanges = ({
         )
         .then((res) => {
           setRanges(res.data);
-          console.log("res.data", res.data);
           setRangesLoaded(true);
         });
       setUpdateTable(false);

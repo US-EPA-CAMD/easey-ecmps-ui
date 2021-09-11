@@ -43,7 +43,6 @@ export const MonitoringPlanHome = ({
     if (checkedOutLocationResult.data) {
       checkedOutLocationList = checkedOutLocationResult.data;
     }
-    console.log(checkedOutLocationResult, "LIST");
     // *** find locations currently checked out by the user
     const currentlyCheckedOutMonPlanId = checkedOutLocationList.filter(
       (element) => element["checkedOutBy"] === user.firstName

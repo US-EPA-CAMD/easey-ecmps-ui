@@ -9,7 +9,6 @@ export const extractUserInput = (payload, inputSelector, radio) => {
 
   // play load is not recognizing the correct ID, probably taking in previous modaldataID
   payloadInputs.forEach((input) => {
-    console.log('INPUT',input)
     if (input.id === undefined || input.id === null || input.id === "") {
       return;
     }

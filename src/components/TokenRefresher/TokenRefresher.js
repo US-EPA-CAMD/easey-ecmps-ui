@@ -27,7 +27,7 @@ export const TokenRefresher = () => {
       config.app.refreshTokenRate / 1000
     ) {
       sessionStorage.setItem("refreshTokenTimer", 0);
-      console.log("Refreshing Token Now");
+      // console.log("Refreshing Token Now");
       refreshToken();
     }
   }, config.app.activityPollingFrequency);
