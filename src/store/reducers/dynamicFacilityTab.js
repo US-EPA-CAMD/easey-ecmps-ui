@@ -7,7 +7,7 @@ const reducer = (state, action) => {
 
   switch (action.type) {
     case types.ADD_FACILITY_TAB:
-      returnObject = [...currentState, action.facility];
+      returnObject = [...currentState, action.facility]; //...currentState
       break;
     case types.REMOVE_FACILITY_TAB:
       returnObject = currentState.filter(
@@ -36,6 +36,8 @@ const reducer = (state, action) => {
 
       break;
     case types.SET_CHECKOUT_STATE:
+      console.log("CURRENT STATE: " + currentState);
+      console.log("CURRENT LENGTH: " + currentState.length);
       if (currentState && currentState.length > 0) {
         returnObject = currentState.map((x) =>
           x.selectedConfig.id === action.configID

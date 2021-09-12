@@ -6,6 +6,7 @@ import DataTableMats from "../datatablesContainer/DataTableMats/DataTableMats";
 import DataTableSystems from "../datatablesContainer/DataTableSystems/DataTableSystems";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
+import { checkoutAPI } from "../../additional-functions/checkout";
 
 export const MonitoringPlanTabRender = ({
   resetTimer,
@@ -80,16 +81,20 @@ export const MonitoringPlanTabRender = ({
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [matsTableFlag, inactive[0], checkout, revertedState]);
 
+  /*
   useEffect(() => {
     if (resetTimerFlag) {
+      console.log("Extending");
       resetInactivityTimerApiCall();
       resetTimer(false);
     }
     if (callApiFlag) {
+      console.log("EXPIRED");
       countdownExpired();
       setExpired(false);
     }
   }, [resetTimerFlag, callApiFlag]);
+  */
 
   // updates all tables whenever a location is changed
   useEffect(() => {
@@ -217,57 +222,13 @@ export const MonitoringPlanTabRender = ({
   const resetInactivityTimerApiCall = () => {
     console.log(mpApi.putLockTimerUpdateConfiguration(configID), "api called");
   };
-  const countdownExpired = () => {
-    console.log("times up");
-    // calls check in api
-    checkoutAPI(false);
-    // sets the state of checked in config  in redux
-    setCheckout(false, configID);
-  };
+
   // ***
   //false => check back in
   // true => check out
-  const checkoutAPI = (direction) => {
-    if (!direction) {
-      mpApi
-        .deleteCheckInMonitoringPlanConfiguration(selectedConfig.id)
-        .then((res) => {
-          console.log(res, "checked back in ");
-          setCheckout(false, configID);
-          if (res === undefined) {
-            console.log("error");
-          }
-        });
-    } else {
-      mpApi
-        .postCheckoutMonitoringPlanConfiguration(
-          selectedConfig.id,
-          user.firstName
-        )
-        .then((res) => {
-          setCheckout(true, configID);
-          if (res === undefined) {
-            console.log("this configuration is already checked out ");
-          }
-        });
-    }
-  };
 
   return (
     <div className=" padding-top-0">
-      <input
-        tabIndex={-1}
-        aria-hidden={true}
-        role="button"
-        type="hidden"
-        id="testingBtn"
-        onClick={() => {
-          countdownExpired();
-          resetInactivityTimerApiCall();
-          checkoutAPI(true);
-        }}
-      />
-
       {/*user && checkout ? (
         <InactivityTracker
           apiCall={resetInactivityTimerApiCall}
@@ -295,6 +256,7 @@ export const MonitoringPlanTabRender = ({
           inactive={inactive}
           checkedOutLocations={checkedOutLocations}
           setRevertedState={setRevertedState}
+          configID={configID}
         />
       </div>
       <hr />

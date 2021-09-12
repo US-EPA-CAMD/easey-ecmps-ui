@@ -37,7 +37,7 @@ export async function authenticate(data_payload) {
 }
 
 export async function logOut(event) {
-  event.preventDefault();
+  if (event !== undefined) event.preventDefault();
   try {
     console.log(JSON.parse(sessionStorage.getItem("cdx_user")).token);
     return await secureAxios({

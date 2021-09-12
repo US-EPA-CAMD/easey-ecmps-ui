@@ -17,8 +17,8 @@ import Resources from "../Resources/Resources";
 import HelpSupport from "../HelpSupport/HelpSupport";
 
 import "./App.scss";
-import { InactivityTracker } from "../InactivityTracker/InactivityTracker";
 import { TokenRefresher } from "../TokenRefresher/TokenRefresher";
+import InactivityTracker from "../InactivityTracker/InactivityTracker";
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -51,17 +51,11 @@ const App = () => {
   const [currentLink, setCurrentLink] = useState(
     window.location.href.replace(`${window.location.origin}`, "")
   );
+
   return (
     <div>
-      {user ? (
-        <InactivityTracker
-          apiCall={setResetTimer}
-          countdownExpired={setExpired}
-        />
-      ) : (
-        ""
-      )}
       {user ? <TokenRefresher /> : ""}
+      {user ? <InactivityTracker /> : ""}
       <Layout
         user={user}
         currentLink={currentLink}

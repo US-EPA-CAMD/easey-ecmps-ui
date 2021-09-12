@@ -1,103 +1,90 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import { config } from "../../config";
-import { useInterval } from "../../additional-functions/use-interval";
-
 import { Modal } from "../Modal/Modal";
 import { CountdownTimer } from "../CountdownTimer/CountdownTimer";
+import { useInterval } from "../../additional-functions/use-interval";
+import { checkoutAPI } from "../../additional-functions/checkout";
+import { logOut } from "../../utils/api/easeyAuthApi";
+import { setCheckoutState } from "../../store/actions/dynamicFacilityTab";
 import { connect } from "react-redux";
-import { debug } from "loglevel";
 
-export const InactivityTracker = ({
-  apiCall,
-  countdownExpired,
-  openedFacilityTabs,
-}) => {
+const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
   const [timeInactive, setTimeInactive] = useState(0);
   const [showInactiveModal, setShowInactiveModal] = useState(false);
-  const [trackInactivity, setTrackInactivity] = useState(false);
 
-  const [activityOccurred, setActivityOccurred] = useState(false);
-
-  const resetUserInactivityTimer = () => {
-    setTimeInactive(0);
-    setShowInactiveModal(false);
-    window.countdownInitiated = false;
+  const isFacilityCheckedOut = () => {
+    return (
+      openedFacilityTabs.length > 0 && openedFacilityTabs[0].checkout === true
+    );
   };
 
-  const extendUserInactivityTimer = useCallback(() => {
-    // *** if activity occurred and a countdown is not yet active
-    if (window.countdownInitiated !== true) {
-      setActivityOccurred(true);
-      resetUserInactivityTimer();
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    setTrackInactivity(true);
-  }, []);
-
-  // *** set up a recurring API call to update
-  useInterval(() => {
-    // *** only fire the actual API call if activity has taken place
-    if (activityOccurred === true) {
-      // *** make an api call
-      apiCall(true);
-    }
-    setActivityOccurred(false);
-  }, config.app.activityRefreshApiCallInterval);
-
-  useInterval(() => {
-    if (trackInactivity === false) {
-      return;
-    }
-
-    // *** open modal
-
-    console.log(openedFacilityTabs);
-
-    if (
-      openedFacilityTabs &&
-      openedFacilityTabs.length > 0 &&
-      openedFacilityTabs[0].checkout === true
-    ) {
-      console.log("Have Checked Out A Record");
-      if (
-        config.app.inactivityDuration - timeInactive <=
-        config.app.countdownDuration
-      ) {
-        // *** make sure countdown has started
-        if (window.countdownInitiated === false) {
-          window.countdownInitiated = true;
-          setShowInactiveModal(true);
-        }
+  const checkInactivity = (inactivityDuration, handler) => {
+    if (inactivityDuration - timeInactive <= config.app.countdownDuration) {
+      // Display the countdown timer
+      if (window.countdownInitiated === false) {
+        window.countdownInitiated = true;
+        setShowInactiveModal(true);
       }
     }
 
-    setTimeInactive(timeInactive + config.app.activityPollingFrequency);
-  }, config.app.activityPollingFrequency);
+    if (timeInactive >= inactivityDuration) {
+      console.log("Time is up!");
+      resetUserInactivityTimer();
 
-  // *** assign / un-assign activity event listeners
-  useEffect(() => {
+      if (handler !== undefined) handler();
+
+      logOut(undefined);
+    }
+  };
+
+  const resetUserInactivityTimer = () => {
+    console.log("Reset Inactivity Timer");
+    setTimeInactive(0);
+    setShowInactiveModal(false);
     window.countdownInitiated = false;
+
+    /*
+    console.log(
+    mpApi.putLockTimerUpdateConfiguration(configID),
+    "api called"
+    );
+    */
+  };
+
+  useEffect(() => {
+    console.log("Started Inactivity Timer");
     config.app.activityEvents.forEach((activityEvent) => {
-      window.addEventListener(activityEvent, extendUserInactivityTimer);
+      window.addEventListener(activityEvent, resetUserInactivityTimer);
     });
 
     // * clean up
     return () => {
       config.app.activityEvents.forEach((activityEvent) => {
-        window.removeEventListener(activityEvent, extendUserInactivityTimer);
+        window.removeEventListener(activityEvent, resetUserInactivityTimer);
       });
     };
-  }, [extendUserInactivityTimer]);
+  }, []);
 
-  // for demoing
-  // const toggleInactivityTracking = () => {
-  //   setTrackInactivity(!trackInactivity);
-  //   resetUserInactivityTimer();
-  // };
+  useInterval(() => {
+    // First check if a record is checked out
+    if (isFacilityCheckedOut()) {
+      checkInactivity(config.app.inactivityDuration, () => {
+        console.log("Yoooo");
+        const currentCheckedOut = openedFacilityTabs[0];
+        checkoutAPI(
+          false,
+          currentCheckedOut.selectedConfig.id,
+          currentCheckedOut.selectedConfig,
+          setCheckout
+        );
+      });
+    } else {
+      checkInactivity(config.app.inactivityLogoutDuration, undefined);
+    }
+
+    setTimeInactive(timeInactive + config.app.activityPollingFrequency);
+  }, config.app.activityPollingFrequency);
 
   return (
     <div>
@@ -110,16 +97,19 @@ export const InactivityTracker = ({
           showCancel={true}
           cancelButtonText="OK"
           children={
-            <CountdownTimer
-              countdownExpired={countdownExpired}
-              duration={config.app.countdownDuration / 1000}
-              apiCall={apiCall}
-            />
+            <CountdownTimer duration={config.app.countdownDuration / 1000} />
           }
         />
       ) : null}
     </div>
   );
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCheckout: (value, configID) =>
+      dispatch(setCheckoutState(value, configID)),
+  };
 };
 
 const mapStateToProps = (state) => {
@@ -128,5 +118,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(InactivityTracker);
-export { mapStateToProps };
+export default connect(mapStateToProps, mapDispatchToProps)(InactivityTracker);
