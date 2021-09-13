@@ -14,6 +14,7 @@ let options = [];
 let data = [];
 let columns = [];
 let columnNames = [];
+
 beforeAll(() => {
   columns = [
     { name: "ORIS", selector: "col1", sortable: true },
@@ -250,7 +251,6 @@ describe("renders datatable with all values ", () => {
         expandableRows={true}
         headerStyling="headerStyling"
         tableStyling="tableStyling"
-        
         componentStyling="componentStyling"
         actionsBtn={"View"}
         openHandler={jest.fn()}
@@ -292,11 +292,9 @@ describe("renders datatable with all values ", () => {
       />
     );
 
-
     const rows = screen.getAllByRole("row");
     expect(rows.length).toEqual(9);
   });
-
 
   test("user is  logged in and at a sections data table", () => {
     const { container, queryByPlaceholderText } = render(
@@ -356,7 +354,6 @@ describe("renders datatable with all values ", () => {
     const rows = screen.getAllByRole("row");
     expect(rows.length).toEqual(9);
   });
-
 
   test("user is  logged in and at a config data table with  nothing checked out  no tableTitle nothing checked out ", () => {
     const { container, queryByPlaceholderText } = render(

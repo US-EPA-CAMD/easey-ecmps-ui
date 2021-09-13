@@ -19,6 +19,7 @@ export async function authenticate(data_payload) {
       data: data_payload,
     })
       .then((data_response) => {
+        console.log(data_response);
         const { data } = data_response;
         sessionStorage.setItem("cdx_user", JSON.stringify(data));
         window.location.reload();
@@ -39,7 +40,6 @@ export async function authenticate(data_payload) {
 export async function logOut(event) {
   if (event !== undefined) event.preventDefault();
   try {
-    console.log(JSON.parse(sessionStorage.getItem("cdx_user")).token);
     return await secureAxios({
       method: "DELETE",
       url: `${config.services.authApi.uri}/authentication/sign-out`,
@@ -60,7 +60,6 @@ export async function logOut(event) {
 export async function refreshToken() {
   try {
     const userId = JSON.parse(sessionStorage.getItem("cdx_user")).userId;
-    console.log(JSON.parse(sessionStorage.getItem("cdx_user")).token);
     return await secureAxios({
       method: "POST",
       url: `${config.services.authApi.uri}/tokens`,
@@ -79,6 +78,7 @@ export async function refreshToken() {
   }
 }
 
+/*
 export async function validateToken() {
   try {
     const token = JSON.parse(sessionStorage.getItem("cdx_user")).token;
@@ -97,3 +97,4 @@ export async function validateToken() {
     throw e;
   }
 }
+*/

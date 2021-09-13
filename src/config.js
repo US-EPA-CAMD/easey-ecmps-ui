@@ -14,7 +14,7 @@ export const config = {
       30 * oneSecond,
 
     refreshTokenRate:
-      process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_TOKEN_RATE || 13 * oneMinute, // Change ME
+      process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_TOKEN_RATE || 3 * oneMinute, // Change ME
 
     inactivityDuration:
       process.env.REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_MINUTES *
@@ -22,7 +22,7 @@ export const config = {
 
     inactivityLogoutDuration:
       process.env.REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_LOGOUT_MINUTES *
-        oneMinute || 15 * oneMinute, //Change ME
+        oneMinute || 5 * oneMinute, //Change ME
 
     activityPollingFrequency:
       process.env.REACT_APP_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS *

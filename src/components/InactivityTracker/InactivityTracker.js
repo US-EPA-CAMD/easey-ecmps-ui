@@ -9,7 +9,7 @@ import { logOut } from "../../utils/api/easeyAuthApi";
 import { setCheckoutState } from "../../store/actions/dynamicFacilityTab";
 import { connect } from "react-redux";
 
-const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
+export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
   const [timeInactive, setTimeInactive] = useState(0);
   const [showInactiveModal, setShowInactiveModal] = useState(false);
 
@@ -22,6 +22,7 @@ const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
   const checkInactivity = (inactivityDuration, handler) => {
     if (inactivityDuration - timeInactive <= config.app.countdownDuration) {
       // Display the countdown timer
+
       if (window.countdownInitiated === false) {
         window.countdownInitiated = true;
         setShowInactiveModal(true);
@@ -52,6 +53,7 @@ const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
   };
 
   useEffect(() => {
+    window.countdownInitiated = false;
     console.log("Started Inactivity Timer");
     config.app.activityEvents.forEach((activityEvent) => {
       window.addEventListener(activityEvent, resetUserInactivityTimer);
