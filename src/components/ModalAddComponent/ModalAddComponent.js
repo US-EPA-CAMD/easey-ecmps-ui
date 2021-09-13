@@ -38,7 +38,7 @@ const ModalAddComponent = ({
       main = comps;
       if (sysComps.length >= 1) {
         sysComps.forEach((x) => {
-          main = main.filter((y) => y.id !== x.id);
+          main = main.filter((y) => y.id !== x.componentRecordId);
         });
         setFilteredComps(main);
       }
@@ -93,7 +93,8 @@ const ModalAddComponent = ({
             <SelectBox
               options={
                 unlinkedComponentsOptions !== null ||
-                unlinkedComponentsOptions !== undefined || unlinkedComponentsOptions.length < 1
+                unlinkedComponentsOptions !== undefined ||
+                unlinkedComponentsOptions.length < 1
                   ? unlinkedComponentsOptions
                   : [{ code: "", name: "" }]
               }

@@ -3,11 +3,10 @@ import { modalViewData } from "../../../additional-functions/create-modal-input-
 import * as fs from "../../../utils/selectors/monitoringPlanSystems";
 import Modal from "../../Modal/Modal";
 import DataTableSystemsComponents from "../DataTableSystemsComponents/DataTableSystemsComponents";
-import DataTableRender from "../../DataTableRender/DataTableRender";
+import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
-
 
 import {
   Breadcrumb,
@@ -35,6 +34,9 @@ export const DataTableSystems = ({
   settingInactiveCheckBox,
   revertedState,
   setRevertedState,
+  selectedRangeInFirstTest,
+  selectedSysIdTest = false,
+
   showModal = false,
 }) => {
   const [show, setShow] = useState(showModal);
@@ -73,7 +75,9 @@ export const DataTableSystems = ({
   }, [locationSelectValue, revertedState, updateSystemTable]);
 
   const [selected, setSelected] = useState(null);
-  const [selectedSystem, setSelectedSystem] = useState(null);
+  const [selectedSystem, setSelectedSystem] = useState(
+    selectedSysIdTest ? selectedSysIdTest : null
+  );
   const [selectedModalData, setSelectedModalData] = useState(null);
 
   const sysPayload = {
@@ -261,7 +265,9 @@ export const DataTableSystems = ({
   const [createBTN, setCreateBTN] = useState("Save and Close");
   const [createBtnAPI, setCreateBtnAPI] = useState(null);
 
-  const [selectedRangeInFirst, setSelectedRangeInFirst] = useState(null);
+  const [selectedRangeInFirst, setSelectedRangeInFirst] = useState(
+    selectedRangeInFirstTest ? selectedRangeInFirstTest : null
+  );
   const [updateAnalyzerRangeTable, setUpdateAnalyzerRangeTable] = useState(
     false
   );
@@ -436,7 +442,11 @@ export const DataTableSystems = ({
     );
 
     mpApi
-      .createSystemsComponents(userInput)
+      .createSystemsComponents(
+        userInput,
+        selectedSystem.locationId,
+        selectedSystem.id
+      )
       .then((result) => {
         console.log(result, " was created");
       })
@@ -511,6 +521,32 @@ export const DataTableSystems = ({
   const [openFuelFlowsView, setOpenFuelFlowsView] = React.useState(false);
   return (
     <>
+      <input
+        tabIndex={-1}
+        aria-hidden={true}
+        role="button"
+        type="hidden"
+        id="testingBtn"
+        onClick={() => {
+          closeModalHandler();
+          openSystem(false, false, true);
+          setBread(false, false, false, false);
+        }}
+      />
+      {/* tests saving functionality */}
+      <input
+        tabIndex={-1}
+        aria-hidden={true}
+        role="button"
+        type="hidden"
+        id="testingBtn2"
+        onClick={() => {
+          saveSystems();
+          saveFuelFlows();
+          saveAnalyzerRanges();
+          saveComponent();
+        }}
+      />
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       <div className="methodTable ">
         <DataTableRender
