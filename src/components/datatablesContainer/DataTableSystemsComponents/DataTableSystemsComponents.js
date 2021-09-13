@@ -50,8 +50,9 @@ export const DataTableSystemsComponents = ({
   setCurrentBar,
   openFuelFlowsView,
   setOpenFuelFlowsView,
+  openComponentViewTest=false,
+  openAddComponentTest=false,
 }) => {
-
   const [monitoringSystemsFuelFlows, setMonitoringSystemsFuelFlows] = useState(
     ""
   );
@@ -134,8 +135,8 @@ export const DataTableSystemsComponents = ({
 
   // *** row handler onclick event listener
 
-  const [openComponentView, setComponentView] = React.useState(false);
-  const [openAddComponent, setAddComponent] = React.useState(false); // for viewing the dropdown component page
+  const [openComponentView, setComponentView] = React.useState(openComponentViewTest);
+  const [openAddComponent, setAddComponent] = React.useState(openAddComponentTest); // for viewing the dropdown component page
 
   //for analyzer ranges
   const [openAnalyzer, setOpenAnalyzer] = useState(false);
@@ -203,22 +204,13 @@ export const DataTableSystemsComponents = ({
     setCreateNewComponentFlag(create);
     setOpenFuelFlowsView(false);
     setComponentView(true);
-    // if (create) {
-    //   setCreateBtn("Create Component");
-    //   setCreateBtnAPI(createComponents);
-    // }
     if (monitoringSystemsComponents.length > 0 && !create) {
       selectComponents = monitoringSystemsComponents.filter(
         (element) => element.componentId === row.col1
       )[0];
-      console.log(selectComponents,'tetinginsyscomp')
+      console.log(selectComponents, "tetinginsyscomp");
       setSelectedComponent(selectComponents);
-      // setCreateBtn("Go Back");
-      // if (user && checkout) {
-      //   setCreateBtn("Save and Go Back");
-      //   setCreateBtnAPI(saveComponents);
-      // }
-      // console.log(selectComponents, "selectComponents");
+
       setOpenAnalyzer(selectComponents);
       setSelectedRangeInFirst(selectComponents); // for saving
     }
@@ -263,35 +255,6 @@ export const DataTableSystemsComponents = ({
     endDate: null,
     endHour: 0,
   };
-
-  const createComponents = () => {
-    const userInput = extractUserInput(payloadComponents, ".modalUserInput");
-    console.log("checking results before api call", payloadComponents);
-    mpApi
-      .createMats(userInput)
-      .then((result) => {
-        console.log("checking results", result, payloadComponents);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    // setUpdateTable(true);
-  };
-
-  const saveComponents = () => {
-    const userInput = extractUserInput(payloadComponents, ".modalUserInput");
-    mpApi
-      .saveMonitoringMats(userInput)
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    // setUpdateTable(true);
-  };
-  // *** row handler onclick event listener
 
   const totalFuelFlowssOptions = useRetrieveDropdownApi([
     "maximumFuelFlowRateSourceCode",
@@ -344,21 +307,6 @@ export const DataTableSystemsComponents = ({
     setBread(true, "Fuel Flow", create ? true : false);
   };
 
-  // const createFuelFlows = () => {
-  //   const userInput = extractUserInput(payloadFuelFlows, ".modalUserInput");
-  //   console.log("checking results before api call", payloadFuelFlows);
-  //   mpApi
-  //     .createMats(userInput)
-  //     .then((result) => {
-  //       console.log("checking results", result, payloadFuelFlows);
-  //       // setShow(false);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       // setShow(false);
-  //     });
-  //   // setUpdateTable(true);
-  // };
   const data = useMemo(() => {
     if (monitoringSystemsComponents.length > 0) {
       return fs.getMonitoringPlansSystemsComponentsTableRecords(
@@ -380,8 +328,34 @@ export const DataTableSystemsComponents = ({
   }, [monitoringSystemsFuelFlows]);
   const [selectedRange, setSelectedRange] = useState("");
 
+  const testing = () => {
+    openAddComponentHandler(false, false, true);
+    // openAddComponents
+  };
+
+  const testing2 = () => {
+    openFuelFlows(false, false, true);
+    openComponent(false, false, true);
+  };
   return (
     <div className="methodTable react-transition fade-in">
+      <input
+        tabIndex={-1}
+        aria-hidden={true}
+        role="button"
+        type="hidden"
+        id="testingBtn"
+        onClick={() => testing()}
+      />
+      <input
+        tabIndex={-1}
+        aria-hidden={true}
+        role="button"
+        type="hidden"
+        id="testingBtn2"
+        onClick={() => testing2()}
+      />
+
       {(() => {
         if (!secondLevel) {
           return (

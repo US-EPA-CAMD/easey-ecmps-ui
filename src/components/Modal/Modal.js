@@ -84,6 +84,7 @@ export const Modal = ({
                     }
                   }}
                   id="closeModalBtn"
+                  data-testid ="closeModalBtn"
                   title="Click to save"
                   epa-testid="closeXBtn"
                   role="button"

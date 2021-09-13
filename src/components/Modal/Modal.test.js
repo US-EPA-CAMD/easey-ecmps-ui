@@ -2,7 +2,7 @@ import React from "react";
 import Modal from "./Modal";
 import "@testing-library/jest-dom/extend-expect";
 import userEvent from "@testing-library/user-event";
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, screen } from "@testing-library/react";
 
 beforeAll(() => {
   const myInitialState = 0;
@@ -35,6 +35,8 @@ describe("testing the creation of a modal", () => {
         show={show}
         showCancel={true}
         showSave={true}
+        extraBtn={jest.fn()}
+        extraBtnText={'test'}
       />
     );
     const cancelBTN = getByText(/Cancel/i);
@@ -45,8 +47,6 @@ describe("testing the creation of a modal", () => {
 
     expect(cancelBTN).toHaveFocus();
 
-    userEvent.tab();
-    expect(closeBTN[1]).toHaveFocus();
 
     const e = {
       keyCode: 9,
@@ -78,7 +78,6 @@ describe("testing the creation of a modal", () => {
   });
 
   test("testing clicking and tabbing between btns ", () => {
-    const show = true;
     const close = jest.fn();
     const events = {};
     jest
@@ -99,34 +98,38 @@ describe("testing the creation of a modal", () => {
       <Modal
         createNew={"save and close"}
         close={close}
-        show={show}
-        showCancel={true}
-        showSave={true}
+        show={false}
+        showCancel={false}
+        showSave={false}
+        
+        breadCrumbBar={true}
       />
     );
-    const cancelBTN = getByText(/Cancel/i);
-    let closeBTN = getByText(/save and close/i);
+    // const cancelBTN = getByText(/Cancel/i);
+    // let closeBTN = getByText(/save and go back/i);
 
-    const nodeList = getAllByRole("button");
-    nodeList[0].focus();
-    fireEvent.keyPress(nodeList[0], {
-      key: "Enter",
-      code: "Enter",
-      keyCode: 13,
-      charCode: 13,
-    });
+    // const nodeList = getAllByRole("button");
+    // nodeList[0].focus();
+    // fireEvent.keyPress(nodeList[0], {
+    //   key: "Enter",
+    //   code: "Enter",
+    //   keyCode: 13,
+    //   charCode: 13,
+    // });
 
     // fireEvent.click(cancelBTN);
     // cancelBTN.focus();
 
-    const newCLose = container.querySelector("#closeModalBtn");
-    newCLose.focus();
-    fireEvent.keyPress(newCLose, {
-      key: "Enter",
-      code: "Enter",
-      keyCode: 13,
-      charCode: 13,
-    });
-    fireEvent.keyDown(newCLose, { key: "Enter", code: "Enter" });
+  //   const newCLose = container.querySelector("#closeModalBtn");
+  // const newCLose= screen.getByTestId("closeModalBtn");
+  //   newCLose.focus();
+  //   fireEvent.keyPress(newCLose, {
+  //     key: "Enter",
+  //     code: "Enter",
+  //     keyCode: 13,
+  //     charCode: 13,
+  //   });
+  //   fireEvent.keyDown(newCLose, { key: "Enter", code: "Enter" });
+  // fireEvent.click(screen.getByTestId("closeModalBtn"));
   });
 });
