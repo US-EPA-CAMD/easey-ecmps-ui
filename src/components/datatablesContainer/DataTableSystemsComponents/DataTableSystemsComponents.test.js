@@ -205,7 +205,13 @@ const apiComp = [
   },
 ];
 //testing redux connected component to mimic props passed as argument
-const componentRenderer = (checkout, secondLevel, openFuelFlow) => {
+const componentRenderer = (
+  checkout,
+  secondLevel,
+  addComponentFlag,
+  openComponentViewTest,
+  openAddComponentTest
+) => {
   const props = {
     systemID: "AF1",
     viewOnly: false,
@@ -223,8 +229,30 @@ const componentRenderer = (checkout, secondLevel, openFuelFlow) => {
     setSelectedRangeInFirst: jest.fn(),
     backBTN: jest.fn(),
     updateAnalyzerRangeTable: false,
-    setUpdateFuelFlowTable:jest.fn(),
-    openFuelFlowsViewTest: openFuelFlow,
+    setUpdateFuelFlowTable: jest.fn(),
+
+    setCreateAnalyzerRangesFlag: jest.fn(),
+    createAnalyzerRangesFlag: false,
+    setCreateFuelFlowFlag: jest.fn(),
+    createFuelFlowFlag: false,
+    setCreateNewComponentFlag: jest.fn(),
+    createNewComponentFlag: false,
+    updateComponentTable: false,
+    setupdateComponentTable: jest.fn(),
+    addComponentFlag: addComponentFlag,
+    setAddComponentFlag: jest.fn(),
+    addCompThirdLevelTrigger: false,
+    setAddCompThirdLevelTrigger: jest.fn(),
+    addCompThirdLevelCreateTrigger: false,
+    setAddCompThirdLevelCreateTrigger: jest.fn(),
+    backToFirstLevelLevelBTN: false,
+    setCurrentBar: jest.fn(),
+    openFuelFlowsView: false,
+    setOpenFuelFlowsView: jest.fn(),
+    setBread: jest.fn(),
+    openComponentViewTest:openComponentViewTest,
+  openAddComponentTest:openAddComponentTest,
+
   };
   return render(<DataTableSystemsComponents {...props} />);
 };
@@ -236,7 +264,7 @@ test("tests getMonitoringSystems", async () => {
   const title = await mpApi.getMonitoringSystems(6);
   expect(title.data).toEqual(selectedSystem);
   let { container } = await waitForElement(() =>
-    componentRenderer(false, false, false)
+    componentRenderer(false, false, false, true, false)
   );
   // componentRenderer(6);
   expect(container).toBeDefined();
@@ -280,6 +308,8 @@ test("tests a getMonitoringSystemsComponents", async () => {
 });
 
 test("tests a getMonitoringSystemsFuelFlows", async () => {
+
+  const iState = false;
   axios.get.mockImplementation(() =>
     Promise.resolve({ status: 200, data: apiFuel })
   );
@@ -291,7 +321,7 @@ test("tests a getMonitoringSystemsFuelFlows", async () => {
   const test = "";
 
   let { container } = await waitForElement(() =>
-    componentRenderer(false, false, true)
+    componentRenderer(false, true, true, false,false)
   );
 
   const fuelBtn = container.querySelectorAll("#btnOpenFuelFlows");
@@ -299,4 +329,37 @@ test("tests a getMonitoringSystemsFuelFlows", async () => {
     fireEvent.click(x);
   }
   expect(container.querySelector("#backBtn")).toBeDefined();
+});
+
+test("tests opening the add modal page ", async () => {
+// needs to be second level with (openComponentView && addComponentFlag)
+  const iState = false;
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: apiFuel })
+  );
+  const title = await mpApi.getMonitoringSystemsFuelFlows(
+    6,
+    "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D"
+  );
+  expect(title.data).toEqual(apiFuel);
+  const test = "";
+
+  let { container } = await waitForElement(() =>
+  //checkout,
+  // secondLevel,
+  // addComponentFlag,
+  // openComponentViewTest,
+  // openAddComponentTest
+    componentRenderer(true,false, true, true, false)
+  );
+
+  const fuelBtn = container.querySelectorAll("#btnOpenFuelFlows");
+  for (const x of fuelBtn) {
+    fireEvent.click(x);
+  }
+  expect(container.querySelector("#backBtn")).toBeDefined();
+
+  
+  fireEvent.click(container.querySelector("#testingBtn"));
+  fireEvent.click(container.querySelector("#testingBtn2"));
 });

@@ -146,7 +146,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
 
           options.unshift({ code: "", name: "" });
-          options.unshift({ code: "", name: "Select a fuel flow rate" });
+          options.unshift({ code: "", name: "Select a fuel flow rate..." });
           const newData = totalOptions;
           newData[x] = options;
 
@@ -163,7 +163,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
 
           options.unshift({ code: "", name: "" });
-          options.unshift({ code: "", name: "Select a unit of measure" });
+          options.unshift({ code: "", name: "Select a unit of measure..." });
           const newData = totalOptions;
           newData[x] = options;
 
@@ -223,57 +223,57 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
         });
         break;
 
-        case "sampleAcquisitionMethodCode":
-          dmApi.getAllAcquisitionMethodCodes().then((response) => {
-            options = response.data.map((option) => {
-              return {
-                code: option["acquisitionMethodCode"],
-                name: option["acquisitionMethodCodeDescription"],
-              };
-            });
-  
-            options.unshift({ code: "", name: "" });
-            options.unshift({ code: "", name: "Select a method " });
-            const newData = totalOptions;
-            newData[x] = options;
-  
-            setTotalOptions(newData);
+      case "sampleAcquisitionMethodCode":
+        dmApi.getAllAcquisitionMethodCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["acquisitionMethodCode"],
+              name: option["acquisitionMethodCodeDescription"],
+            };
           });
-          break;
-          case "componentTypeCode":
-            dmApi.getAllComponentTypeCodes().then((response) => {
-              options = response.data.map((option) => {
-                return {
-                  code: option["componentTypeCode"],
-                  name: option["componentTypeCodeDescription"],
-                };
-              });
-    
-              options.unshift({ code: "", name: "" });
-              options.unshift({ code: "", name: "Select a component type " });
-              const newData = totalOptions;
-              newData[x] = options;
-    
-              setTotalOptions(newData);
-            });
-            break;
-            case "basisCode":
-              dmApi.getAllBasisCodes().then((response) => {
-                options = response.data.map((option) => {
-                  return {
-                    code: option["basisCode"],
-                    name: option["basisCodeDescription"],
-                  };
-                });
-      
-                options.unshift({ code: "", name: "" });
-                options.unshift({ code: "", name: "Select a basis " });
-                const newData = totalOptions;
-                newData[x] = options;
-      
-                setTotalOptions(newData);
-              });
-              break;
+
+          options.unshift({ code: "", name: "" });
+          options.unshift({ code: "", name: "Select a method... " });
+          const newData = totalOptions;
+          newData[x] = options;
+
+          setTotalOptions(newData);
+        });
+        break;
+      case "componentTypeCode":
+        dmApi.getAllComponentTypeCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["componentTypeCode"],
+              name: option["componentTypeCodeDescription"],
+            };
+          });
+
+          options.unshift({ code: "", name: "" });
+          options.unshift({ code: "", name: "Select a component type... " });
+          const newData = totalOptions;
+          newData[x] = options;
+
+          setTotalOptions(newData);
+        });
+        break;
+      case "basisCode":
+        dmApi.getAllBasisCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["basisCode"],
+              name: option["basisCodeDescription"],
+            };
+          });
+
+          options.unshift({ code: "", name: "" });
+          options.unshift({ code: "", name: "Select a basis... " });
+          const newData = totalOptions;
+          newData[x] = options;
+
+          setTotalOptions(newData);
+        });
+        break;
       default:
         break;
     }
