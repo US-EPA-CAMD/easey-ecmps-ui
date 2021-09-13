@@ -100,8 +100,3 @@ export const getMonitoringPlansSystemsAnalyzerRangesTableRecords = (data) => {
   });
   return records;
 };
-export const getUnlinkedMonitoringComponents = (components, sysComponents) => {
-  return components
-    .filter((x) => !sysComponents.includes(x))
-    .concat(sysComponents.filter((x) => !components.includes(x)));
-};

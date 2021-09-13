@@ -12,6 +12,7 @@ export const DetailsSelectBox = ({
   className,
   epadataname,
   id,
+  handler,
 }) => {
   const [selectionState, setSelectionState] = useState(
     initialSelection ? initialSelection : null
@@ -19,6 +20,9 @@ export const DetailsSelectBox = ({
 
   const handleChange = (val) => {
     setSelectionState(val.target.value);
+    if(handler) {
+      handler(val.target.value);
+    }
   };
 
   const populateOptions = (optionsList) => {

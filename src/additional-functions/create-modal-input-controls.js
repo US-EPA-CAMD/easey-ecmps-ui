@@ -116,7 +116,7 @@ export const modalViewData = (
     if (y === "endDate" || y === "beginDate") {
       let formattedDate = "";
       if (!createNew) {
-        formattedDate = adjustDate("mm/dd/yyyy", selected[y]);
+        formattedDate = adjustDate("mm/dd/yyyy", selected[y]?selected[y]:null);
       }
 
       arr.push([

@@ -9,6 +9,7 @@ import "./DataTableSystemsComponentsRender.scss";
 
 import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import DataTableAnalyzerRanges from "../DataTableAnalyzerRanges/DataTableAnalyzerRanges";
+import ModalAddComponent from "../../ModalAddComponent/ModalAddComponent";
 export const DataTableSystemsComponents = ({
   systemID,
   viewOnly,
@@ -38,10 +39,24 @@ export const DataTableSystemsComponents = ({
   setCreateNewComponentFlag,
   createNewComponentFlag,
   updateComponentTable,
-  setupdateComponentTable
+  setupdateComponentTable,
+  addComponentFlag,
+  setAddComponentFlag,
+  addCompThirdLevelTrigger,
+  setAddCompThirdLevelTrigger,
+  addCompThirdLevelCreateTrigger,
+  setAddCompThirdLevelCreateTrigger,
+  backToFirstLevelLevelBTN,
+  setCurrentBar,
+  openFuelFlowsView,
+  setOpenFuelFlowsView,
 }) => {
+
   const [monitoringSystemsFuelFlows, setMonitoringSystemsFuelFlows] = useState(
     ""
+  );
+  const [selectedUnlinkedComponent, setSelectedUnlinkedComponent] = useState(
+    {}
   );
   const [dataLoaded, setDataLoaded] = useState(false);
   const [dataFuelLoaded, setFuelDataLoaded] = useState(false);
@@ -59,6 +74,25 @@ export const DataTableSystemsComponents = ({
     monitoringSystemsComponents,
     setMonitoringSystemsComponents,
   ] = useState("");
+
+  useEffect(() => {
+    if (addCompThirdLevelTrigger) {
+      if (selectedUnlinkedComponent[0]) {
+        openAddComponentHandler(selectedUnlinkedComponent[0], false, true);
+      } else {
+        openAddComponentHandler(false, true, true);
+      }
+      setAddCompThirdLevelTrigger(false);
+    }
+  }, [addCompThirdLevelTrigger]);
+
+  useEffect(() => {
+    if (addCompThirdLevelCreateTrigger) {
+      console.log("addCompThirdLevelCreateTrigger");
+      openAddComponentHandler(false, true, true);
+      setAddCompThirdLevelCreateTrigger(false);
+    }
+  }, [addCompThirdLevelCreateTrigger]);
   useEffect(() => {
     mpApi.getMonitoringSystems(locationSelectValue).then((res) => {
       for (let value of res.data) {
@@ -77,7 +111,7 @@ export const DataTableSystemsComponents = ({
       .then((res) => {
         setMonitoringSystemsComponents(res.data);
         setDataLoaded(true);
-        setupdateComponentTable(false)
+        setupdateComponentTable(false);
       });
 
     mpApi
@@ -87,7 +121,7 @@ export const DataTableSystemsComponents = ({
         setFuelDataLoaded(true);
         setUpdateFuelFlowTable(false);
       });
-  }, [selected, updateFuelFlowTable,updateComponentTable]);
+  }, [selected, updateFuelFlowTable, updateComponentTable]);
 
   const columnNames = ["ID", "Type", "Date and Time"];
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
@@ -101,6 +135,7 @@ export const DataTableSystemsComponents = ({
   // *** row handler onclick event listener
 
   const [openComponentView, setComponentView] = React.useState(false);
+  const [openAddComponent, setAddComponent] = React.useState(false); // for viewing the dropdown component page
 
   //for analyzer ranges
   const [openAnalyzer, setOpenAnalyzer] = useState(false);
@@ -109,6 +144,60 @@ export const DataTableSystemsComponents = ({
     "componentTypeCode",
     "basisCode",
   ]);
+
+  const openAddComponents = (row, bool, create) => {
+    setAddComponent(true);
+    setAddComponentFlag(true);
+    console.log(row, bool, create, "test");
+    setBread(true, "Add Component", false, true);
+  };
+
+  const openAddComponentHandler = (selectedComp, create, page) => {
+    console.log("selectedCompo ", selectedComp);
+    let selectComponents = null;
+    setCreateNewComponentFlag(page);
+    setOpenFuelFlowsView(false);
+    setAddComponent(false);
+    setComponentView(true);
+    if (selectedComp) {
+      selectedComp["beginDate"] = null;
+      selectedComp["beginHour"] = null;
+      selectedComp["endDate"] = null;
+      selectedComp["endHour"] = null;
+      setSelectedComponent(selectedComp);
+    } else {
+      setSelectedComponent(null);
+    }
+
+    setSelectedComponentsModalData(
+      modalViewData(
+        !create ? selectedComp : null,
+        {
+          componentId: ["Component ID", "input", "required"],
+          sampleAcquisitionMethodCode: [
+            "Sample Acquistion Method",
+            "dropdown",
+            "",
+          ],
+          componentTypeCode: ["Component Type", "dropdown", "required"],
+          basisCode: ["Basis Description", "dropdown", ""],
+          manufacturer: ["Manufacturer", "input", ""],
+          modelVersion: ["Modal or Version", "input", ""],
+          serialNumber: ["Serial Number", "input", ""],
+          hgConverterIndicator: ["Hg Converter Indicator", "radio", ""],
+        },
+        {
+          beginDate: ["Start Date", "date", "required"],
+          beginHour: ["Start Time", "time", "required"],
+          endDate: ["End Date", "date", ""],
+          endHour: ["End Time", "time", ""],
+        },
+        create,
+        totalComponentsOptions
+      )
+    );
+    setBread(true, "Component");
+  };
   const openComponent = (row, bool, create) => {
     let selectComponents = null;
     setCreateNewComponentFlag(create);
@@ -122,6 +211,7 @@ export const DataTableSystemsComponents = ({
       selectComponents = monitoringSystemsComponents.filter(
         (element) => element.componentId === row.col1
       )[0];
+      console.log(selectComponents,'tetinginsyscomp')
       setSelectedComponent(selectComponents);
       // setCreateBtn("Go Back");
       // if (user && checkout) {
@@ -132,7 +222,7 @@ export const DataTableSystemsComponents = ({
       setOpenAnalyzer(selectComponents);
       setSelectedRangeInFirst(selectComponents); // for saving
     }
-console.log('selectComponents',selectComponents)
+    console.log("selectComponents", selectComponents);
     setSelectedComponentsModalData(
       modalViewData(
         selectComponents,
@@ -160,7 +250,7 @@ console.log('selectComponents',selectComponents)
         totalComponentsOptions
       )
     );
-    setSecondLevel(true, "Component");
+    setBread(true, "Component");
   };
 
   const payloadComponents = {
@@ -201,7 +291,6 @@ console.log('selectComponents',selectComponents)
 
     // setUpdateTable(true);
   };
-  const [openFuelFlowsView, setOpenFuelFlowsView] = React.useState(false);
   // *** row handler onclick event listener
 
   const totalFuelFlowssOptions = useRetrieveDropdownApi([
@@ -210,25 +299,18 @@ console.log('selectComponents',selectComponents)
   ]);
   const openFuelFlows = (row, bool, create) => {
     let selectFuelFlows = null;
-    // setCreateNewSystem(create);
     setCreateFuelFlowFlag(create);
     setComponentView(false);
     setOpenFuelFlowsView(true);
-    // if (create) {
-    //   setCreateBtn("Create Fuel Flow");
-    //   // setCreateBtnAPI(createFuelFlows);
-    // }
+
+    console.log(monitoringSystemsFuelFlows, "monitoringSystemsFuelFlows", row);
     if (monitoringSystemsFuelFlows.length > 0 && !create) {
       selectFuelFlows = monitoringSystemsFuelFlows.filter(
-        (element) => element.fuelCode === row.col1
+        (element) => element.id === row.col4
       )[0];
-      console.log("checking fuel flows", selectFuelFlows);
+
+      console.log(selectFuelFlows, "selectFuelFlows");
       setSelectedFuelFlows(selectFuelFlows);
-      // setCreateBtn("Go Back");
-      // if (user && checkout) {
-      //   setCreateBtn("Save and Go Back");
-      //   // setCreateBtnAPI(saveFuelFlows);
-      // }
     }
     setSelectedFuelFlowsModalData(
       modalViewData(
@@ -259,7 +341,7 @@ console.log('selectComponents',selectComponents)
       )
     );
 
-    setSecondLevel(true, "Fuel Flow",create?true:false);
+    setBread(true, "Fuel Flow", create ? true : false);
   };
 
   // const createFuelFlows = () => {
@@ -297,6 +379,7 @@ console.log('selectComponents',selectComponents)
     }
   }, [monitoringSystemsFuelFlows]);
   const [selectedRange, setSelectedRange] = useState("");
+
   return (
     <div className="methodTable react-transition fade-in">
       {(() => {
@@ -313,7 +396,7 @@ console.log('selectComponents',selectComponents)
                 actionsBtn={"View"}
                 user={user}
                 checkout={checkout}
-                addBtn={openComponent}
+                addBtn={openAddComponents}
                 addBtnName={"Add Component"}
               />
               <DataTableRender
@@ -332,13 +415,13 @@ console.log('selectComponents',selectComponents)
             </div>
           );
         } else {
-          //THIRD LEVEL
+          //Second LEVEL
           if (openFuelFlowsView) {
             // fuel flow
             return (
               <ModalDetails
                 modalData={selectedFuelFlows}
-                backBtn={setSecondLevel}
+                backBtn={setBread}
                 data={selectedFuelFlowsModalData}
                 cols={2}
                 title={
@@ -351,7 +434,49 @@ console.log('selectComponents',selectComponents)
                 viewOnly={!(user && checkout)}
               />
             );
-          } else if (openComponentView) {
+
+            // going to the add component modal page
+          } else if (openAddComponent && addComponentFlag) {
+            return (
+              <ModalAddComponent
+                locationId={locationSelectValue}
+                systemId={selected.id}
+                selectionHandler={setSelectedUnlinkedComponent}
+                caption={"Select Component by ID or Type"}
+                backBtn={() => {
+                  setCreateNewComponentFlag(false);
+                  setAddComponentFlag(false);
+                  backToFirstLevelLevelBTN(false);
+                }}
+                title={"Add Component"}
+              />
+            );
+          }
+          // editing / adding a new component and linking to sys page
+          else if (openComponentView && addComponentFlag) {
+            return (
+              <div>
+                <ModalDetails
+                  modalData={selectedComponent} // need to review from modaladdcomp
+                  backBtn={() => {
+                    openAddComponents();
+                    setCurrentBar("");
+                  }}
+                  data={selectedComponentsModalData}
+                  cols={2}
+                  title={
+                    selectedComponent !== null
+                      ? ` Add Component: ${selectedComponent["componentId"]}`
+                      : "Create Component"
+                  }
+                  viewOnly={!(user && checkout)}
+                />
+              </div>
+            );
+          }
+          // pressing view/edit a sys component directly
+          else if (openComponentView && !addComponentFlag) {
+            // }else if (openAddComponent){
             // components
             return (
               <div>
@@ -359,7 +484,7 @@ console.log('selectComponents',selectComponents)
                   <div>
                     <ModalDetails
                       modalData={selectedComponent}
-                      backBtn={setSecondLevel}
+                      backBtn={setBread}
                       data={selectedComponentsModalData}
                       cols={2}
                       title={
@@ -371,23 +496,26 @@ console.log('selectComponents',selectComponents)
                       }
                       viewOnly={!(user && checkout)}
                     />
-                    {createNewComponentFlag? '' : 
-                    <DataTableAnalyzerRanges
-                      selectedRanges={openAnalyzer}
-                      thirdLevel={thirdLevel}
-                      setThirdLevel={setThirdLevel}
-                      updateTable={updateAnalyzerRangeTable}
-                      user={user}
-                      checkout={checkout}
-                      setOpenFuelFlowsView={setOpenFuelFlowsView}
-                      setComponentView={setComponentView}
-                      setSelectedModalData={setSelectedModalData}
-                      // setSaveAnalyzerRange={setSaveAnalyzerRange}
-                      setSelectedRange={setSelectedRange}
-                      setCreateAnalyzerRangesFlag={setCreateAnalyzerRangesFlag}
-                      // setCreateBtn={setCreateBTN}
-                      // setCreateBtnAPI={setCreateBtnAPI}
-                    />}{" "}
+                    {createNewComponentFlag ? (
+                      ""
+                    ) : (
+                      <DataTableAnalyzerRanges
+                        selectedRanges={openAnalyzer}
+                        thirdLevel={thirdLevel}
+                        setThirdLevel={setThirdLevel}
+                        updateTable={updateAnalyzerRangeTable}
+                        user={user}
+                        checkout={checkout}
+                        setOpenFuelFlowsView={setOpenFuelFlowsView}
+                        setComponentView={setComponentView}
+                        setSelectedModalData={setSelectedModalData}
+                        // setSaveAnalyzerRange={setSaveAnalyzerRange}
+                        setSelectedRange={setSelectedRange}
+                        setCreateAnalyzerRangesFlag={
+                          setCreateAnalyzerRangesFlag
+                        }
+                      />
+                    )}{" "}
                   </div>
                 ) : (
                   //EDIT ANALYZER RANGES
