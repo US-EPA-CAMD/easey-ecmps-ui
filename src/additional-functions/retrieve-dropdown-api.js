@@ -171,23 +171,6 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
         });
         break;
 
-      // case "fuelCode":
-      //   dmApi.getAllUnitsOfMeasureCodes().then((response) => {
-      //     options = response.data.map((option) => {
-      //       return {
-      //         code: option["fuelCode"],
-      //         name: option["fuelTypeDescription"],
-      //       };
-      //     });
-
-      //     options.unshift({ code: "", name: "" });
-      //     options.unshift({ code: "", name: "Select a unit of measure" });
-      //     const newData = totalOptions;
-      //     newData[x] = options;
-
-      //     setTotalOptions(newData);
-      //   });
-      //   break;
       case "fuelCode":
         dmApi.getAllFuelTypes().then((response) => {
           options = response.data.map((option) => {
@@ -198,7 +181,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
 
           options.unshift({ code: "", name: "" });
-          options.unshift({ code: "", name: "Select a fuel " });
+          options.unshift({ code: "", name: "Select a fuel type..." });
           const newData = totalOptions;
           newData[x] = options;
 
@@ -215,7 +198,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
 
           options.unshift({ code: "", name: "" });
-          options.unshift({ code: "", name: "Select a type " });
+          options.unshift({ code: "", name: "Select a system type..." });
           const newData = totalOptions;
           newData[x] = options;
 
@@ -232,7 +215,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
 
           options.unshift({ code: "", name: "" });
-          options.unshift({ code: "", name: "Select a designation " });
+          options.unshift({ code: "", name: "Select a system designation..." });
           const newData = totalOptions;
           newData[x] = options;
 
