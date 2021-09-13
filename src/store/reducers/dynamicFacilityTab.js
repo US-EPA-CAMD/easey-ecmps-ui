@@ -36,8 +36,6 @@ const reducer = (state, action) => {
 
       break;
     case types.SET_CHECKOUT_STATE:
-      console.log("CURRENT STATE: " + currentState);
-      console.log("CURRENT LENGTH: " + currentState.length);
       if (currentState && currentState.length > 0) {
         returnObject = currentState.map((x) =>
           x.selectedConfig.id === action.configID

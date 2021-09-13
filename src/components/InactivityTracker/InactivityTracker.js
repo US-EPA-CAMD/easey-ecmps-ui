@@ -39,7 +39,6 @@ const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
   };
 
   const resetUserInactivityTimer = () => {
-    console.log("Reset Inactivity Timer");
     setTimeInactive(0);
     setShowInactiveModal(false);
     window.countdownInitiated = false;
@@ -70,7 +69,6 @@ const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
     // First check if a record is checked out
     if (isFacilityCheckedOut()) {
       checkInactivity(config.app.inactivityDuration, () => {
-        console.log("Yoooo");
         const currentCheckedOut = openedFacilityTabs[0];
         checkoutAPI(
           false,

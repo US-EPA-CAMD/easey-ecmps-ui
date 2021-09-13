@@ -343,11 +343,6 @@ export const DataTableRender = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    console.log("WHY IS IT RUNNING HERE");
-    console.log(openedFacilityTabs);
-  }, [openedFacilityTabs]);
-
   return (
     <div className={`${componentStyling}`}>
       <div aria-live="polite" className={`${tableStyling}`}>

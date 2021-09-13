@@ -1,6 +1,5 @@
 /*** global dependencies (i.e., main driver stuff we need to make things work) ***/
 import React, { useState } from "react";
-import { refreshToken } from "../../utils/api/easeyAuthApi";
 
 import config from "../../config";
 
@@ -77,8 +76,6 @@ export const WideHeader = () => {
           production data and this site is being used for <b>development</b>{" "}
           and/or <b>testing</b> purposes only.
         </div>
-
-        <button onClick={refreshToken}> Refresh Token </button>
 
         <a
           href="https://www.epa.gov/"
