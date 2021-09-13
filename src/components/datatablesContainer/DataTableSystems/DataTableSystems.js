@@ -8,6 +8,7 @@ import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 
+
 import {
   Breadcrumb,
   BreadcrumbBar,

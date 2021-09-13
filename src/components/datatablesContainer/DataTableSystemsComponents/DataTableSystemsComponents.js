@@ -6,6 +6,11 @@ import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import "./DataTableSystemsComponentsRender.scss";
+import {
+  attachChangeEventListeners,
+  removeChangeEventListeners,
+  unsavedDataMessage,
+} from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
 import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import DataTableAnalyzerRanges from "../DataTableAnalyzerRanges/DataTableAnalyzerRanges";
@@ -197,6 +202,9 @@ export const DataTableSystemsComponents = ({
         totalComponentsOptions
       )
     );
+    setTimeout(() => {
+      attachChangeEventListeners(".modalUserInput");
+    });
     setBread(true, "Component");
   };
   const openComponent = (row, bool, create) => {
@@ -242,6 +250,9 @@ export const DataTableSystemsComponents = ({
         totalComponentsOptions
       )
     );
+    setTimeout(() => {
+      attachChangeEventListeners(".modalUserInput");
+    });
     setBread(true, "Component");
   };
 
@@ -303,7 +314,9 @@ export const DataTableSystemsComponents = ({
         totalFuelFlowssOptions
       )
     );
-
+    setTimeout(() => {
+      attachChangeEventListeners(".modalUserInput");
+    });
     setBread(true, "Fuel Flow", create ? true : false);
   };
 
