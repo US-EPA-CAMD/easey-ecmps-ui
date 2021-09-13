@@ -241,6 +241,7 @@ export const saveSystemsComponents = async (payload, locId, sysId,compId) => {
 export const createSystemsComponents = async (payload, locId, sysId) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${locId}/systems/${sysId}/components/`;
   // *** remove attributes not needed by the API
+  console.log('payload, locId, sysId,',payload, locId, sysId)
   delete payload["id"];
 
   return axios.post(url, payload).then(handleResponse).catch(handleError);

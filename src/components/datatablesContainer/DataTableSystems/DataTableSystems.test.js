@@ -1,5 +1,5 @@
 import React from "react";
-import { render, waitForElement } from "@testing-library/react";
+import { render,fireEvent, waitForElement } from "@testing-library/react";
 import { DataTableSystems } from "./DataTableSystems";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 const axios = require("axios");
@@ -125,6 +125,10 @@ const componentRenderer = (location) => {
     inactive: true,
     settingInactiveCheckBox: jest.fn(),
     locationSelectValue: location,
+    revertedState:false,
+    setRevertedState:jest.fn(),
+    selectedSysIdTest:'testId',
+    selectedRangeInFirstTest:{locationId:1,componentRecordId:1}
   };
   return render(<DataTableSystems {...props} />);
 };
@@ -163,6 +167,8 @@ test("tests a configuration with inactive only", async () => {
 
   expect(title.data).toEqual(systemsInactiveOnly);
   let { container } = await waitForElement(() => componentRenderer(76));
+  fireEvent.click(container.querySelector("#testingBtn"));
+  fireEvent.click(container.querySelector("#testingBtn2"));
   expect(container).toBeDefined();
 });
 

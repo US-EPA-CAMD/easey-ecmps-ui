@@ -1,7 +1,8 @@
 export const extractUserInput = (payload, inputSelector, radio) => {
   // *** construct payload
-  
-  const payloadInputs = document.querySelectorAll(inputSelector);console.log('payloadin extract',payload,payloadInputs)
+
+  const payloadInputs = document.querySelectorAll(inputSelector);
+  // console.log('payloadin extract',payload,payloadInputs)
   const datepickerPayloads = document.querySelectorAll(
     ".usa-date-picker__internal-input"
   );
@@ -28,25 +29,27 @@ export const extractUserInput = (payload, inputSelector, radio) => {
     payloadArray.push(item);
   });
 
- 
   if (radio) {
     radioPayload = document.querySelectorAll(".usa-radio");
 
     const item = { name: "", value: "" };
     item.name = radio;
-    if (radioPayload[0].firstElementChild.checked) {
-      item.value = "1";
+    if (radioPayload[0]) {
+      if (radioPayload[0].firstElementChild.checked) {
+        item.value = "1";
+      }
     }
-    if (radioPayload[1].firstElementChild.checked) {
-      item.value = "0";
+    if (radioPayload[1]) {
+      if (radioPayload[1].firstElementChild.checked) {
+        item.value = "0";
+      }
     }
     payloadArray.push(item);
   }
- payloadArray.forEach((item) => {
-   console.log('ITEM',item)
+  payloadArray.forEach((item) => {
+    //  console.log('ITEM',item)
     payload[item.name] = item.value.trim() === "" ? null : item.value.trim();
   });
-
 
   return payload;
 };

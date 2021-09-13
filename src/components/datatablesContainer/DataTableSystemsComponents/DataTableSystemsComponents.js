@@ -94,7 +94,7 @@ export const DataTableSystemsComponents = ({
 
   useEffect(() => {
     if (addCompThirdLevelCreateTrigger) {
-      console.log("addCompThirdLevelCreateTrigger");
+      // console.log("addCompThirdLevelCreateTrigger");
       openAddComponentHandler(false, true, true);
       setAddCompThirdLevelCreateTrigger(false);
     }
@@ -154,12 +154,12 @@ export const DataTableSystemsComponents = ({
   const openAddComponents = (row, bool, create) => {
     setAddComponent(true);
     setAddComponentFlag(true);
-    console.log(row, bool, create, "test");
+    // console.log(row, bool, create, "test");
     setBread(true, "Add Component", false, true);
   };
 
   const openAddComponentHandler = (selectedComp, create, page) => {
-    console.log("selectedCompo ", selectedComp);
+    // console.log("selectedCompo ", selectedComp);
     let selectComponents = null;
     setCreateNewComponentFlag(page);
     setOpenFuelFlowsView(false);
