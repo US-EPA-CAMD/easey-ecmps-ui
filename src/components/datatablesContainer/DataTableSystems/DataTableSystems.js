@@ -168,6 +168,7 @@ export const DataTableSystems = ({
             setCreateFuelFlowFlag(false);
             setCreateAnalyzerRangesFlag(false);
             setCreateNewComponentFlag(false);
+            setAddComponentFlag(false);
           }}
         >
           <BreadcrumbLink>
@@ -191,12 +192,23 @@ export const DataTableSystems = ({
     }
   }, [secondLevel]);
 
-  const setBread = (val, currentBread, create) => {
+  const setBread = (val, currentBread, create, addComp = false) => {
     setSecondLevel(val);
     setSecondLevelName(currentBread);
-    setCreateFuelFlowFlag(create);
-    setCreateNewComponentFlag(create);
+
+    console.log("currentbread", currentBread);
+    // missing stepper if !currentBread
+    if (!addComp && !currentBread) {
+      console.log("test", val);
+      setCreateFuelFlowFlag(create);
+      setOpenFuelFlowsView(val);
+      // setCreateNewComponentFlag(create);
+    }
     breadCrumbs(currentBread);
+
+    if (addComp && currentBread === "Add Component") {
+      setCurrentBar("");
+    }
   };
   /// for analyzer ranges
   const breadThirdCrumbs = (lastBread) => {
@@ -237,6 +249,7 @@ export const DataTableSystems = ({
     }
   };
 
+  // this causes the stepper to miss in components thid level then press the back button
   const setThirdBread = (val, currentBread, create) => {
     setThirdLevel(val);
     // setSecondLevel(false);
@@ -259,6 +272,15 @@ export const DataTableSystems = ({
   const [createFuelFlowFlag, setCreateFuelFlowFlag] = useState(false);
   const [createNewComponentFlag, setCreateNewComponentFlag] = useState(false);
 
+  const [addComponentFlag, setAddComponentFlag] = React.useState(false);
+  const [
+    addCompThirdLevelTrigger,
+    setAddCompThirdLevelTrigger,
+  ] = React.useState(false);
+  const [
+    addCompThirdLevelCreateTrigger,
+    setAddCompThirdLevelCreateTrigger,
+  ] = React.useState(false);
   const saveSystems = () => {
     const userInput = extractUserInput(sysPayload, ".modalUserInput");
     mpApi
@@ -276,9 +298,7 @@ export const DataTableSystems = ({
     mpApi
       .createSystems(userInput, locationSelectValue)
       .then((result) => {
-        console.log('saving results',result);
-        
-
+        console.log("saving results", result);
       })
       .catch((error) => {
         console.log(error);
@@ -378,8 +398,11 @@ export const DataTableSystems = ({
     const userInput = extractUserInput(fuelFlowsPayload, ".modalUserInput");
 
     mpApi
-      .createSystemsFuelFlows(userInput, selectedSystem.locationId,
-        selectedSystem.id)
+      .createSystemsFuelFlows(
+        userInput,
+        selectedSystem.locationId,
+        selectedSystem.id
+      )
       .then((result) => {
         console.log(result, " was created");
       })
@@ -390,36 +413,58 @@ export const DataTableSystems = ({
   };
   // system components
 
+  const componentPayload = {
+    basisCode: "string",
+    manufacturer: "string",
+    modelVersion: "string",
+    serialNumber: "string",
+    componentTypeCode: "string",
+    hgConverterIndicator: 0,
+    beginDate: "2021-09-11T06:23:36.289Z",
+    beginHour: 0,
+    endDate: "2021-09-11T06:23:36.289Z",
+    endHour: 0,
+    componentId: "string",
+  };
   const createComponent = () => {
     console.log("test createComponent");
-    // const userInput = extractUserInput(fuelFlowsPayload, ".modalUserInput");
+    const userInput = extractUserInput(
+      componentPayload,
+      ".modalUserInput",
+      "hgConverterIndicator"
+    );
 
-    // mpApi
-    //   .createSystemsFuelFlows(userInput)
-    //   .then((result) => {
-    //     console.log(result, " was created");
-    //   })
-    //   .catch((error) => {
-    //     console.log("error is", error);
-    //   });
+    mpApi
+      .createSystemsComponents(userInput)
+      .then((result) => {
+        console.log(result, " was created");
+      })
+      .catch((error) => {
+        console.log("error is", error);
+      });
     setupdateComponentTable(true);
   };
 
   const saveComponent = () => {
-    // const userInput = extractUserInput(fuelFlowsPayload, ".modalUserInput");
-    // mpApi
-    //   .saveSystemsFuelFlows(
-    //     userInput,
-    //     selectedSystem.locationId,
-    //     selectedSystem.id
-    //   )
-    //   .then((result) => {
-    //     console.log(result);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-    console.log("test saveComponent");
+    console.log(selectedSystem, "selectedSystem");
+    const userInput = extractUserInput(
+      componentPayload,
+      ".modalUserInput",
+      "hgConverterIndicator"
+    );
+    mpApi
+      .saveSystemsComponents(
+        userInput,
+        selectedSystem.locationId,
+        selectedSystem.id,
+        selectedRangeInFirst.componentRecordId
+      )
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     setupdateComponentTable(true);
   };
 
@@ -462,6 +507,7 @@ export const DataTableSystems = ({
     return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringSystems, inactive]);
+  const [openFuelFlowsView, setOpenFuelFlowsView] = React.useState(false);
   return (
     <>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -507,6 +553,16 @@ export const DataTableSystems = ({
           <Modal
             secondLevel={secondLevel}
             show={show}
+            extraBtn={
+              secondLevel && !thirdLevel
+                ? secondLevelName == "Add Component"
+                  ? () => {
+                      setAddCompThirdLevelCreateTrigger(true);
+                    }
+                  : null
+                : null
+            }
+            extraBtnText={"Create New Component"}
             save={
               !secondLevel && !thirdLevel // first level at systems
                 ? () => {
@@ -520,22 +576,37 @@ export const DataTableSystems = ({
                     ? () => {
                         createFuelFlows();
                         backToFirstLevelLevelBTN(false);
+                        setOpenFuelFlowsView(false);
                       }
                     : () => {
                         saveFuelFlows();
                         backToFirstLevelLevelBTN(false);
+
+                        setOpenFuelFlowsView(false);
                       }
-                  : // at system components
-                  // need to hide analyzer range table on create
-                  createNewComponentFlag
-                  ? () => {
-                      createComponent();
-                      setCreateNewComponentFlag(false);
-                      backToFirstLevelLevelBTN(false);
-                    }
-                  : () => {
+                  : secondLevelName === "Component" && !createNewComponentFlag
+                  ? // at system components
+                    // need to hide analyzer range table on create
+                    () => {
                       saveComponent();
                       backToFirstLevelLevelBTN(false);
+                    }
+                  : secondLevelName === "Component" && createNewComponentFlag
+                  ? // at system components
+                    () => {
+                      setCreateNewComponentFlag(false);
+                      setAddComponentFlag(false);
+                      backToFirstLevelLevelBTN(false);
+                      createComponent();
+                      console.log("testing add/creat btn");
+                    }
+                  : // at add component level page
+                  secondLevelName === "Add Component"
+                  ? () => {
+                      setAddCompThirdLevelTrigger(true);
+                    }
+                  : () => {
+                      console.log("random button press function");
                     }
                 : // at analyzer ranges in components at third level
                 createAnalyzerRangesFlag
@@ -559,8 +630,12 @@ export const DataTableSystems = ({
                 ? "Create Analyzer Range"
                 : createFuelFlowFlag
                 ? "Create Fuel Flow"
-                : createNewComponentFlag
-                ? "Create Component"
+                : // add componentmodal page
+                addComponentFlag && !createNewComponentFlag
+                ? "Continue"
+                : // /: // create a new comp page
+                createNewComponentFlag && addComponentFlag
+                ? "Add Component"
                 : null
             }
             breadCrumbBar={currentBar}
@@ -583,7 +658,7 @@ export const DataTableSystems = ({
 
                 <DataTableSystemsComponents
                   secondLevel={secondLevel}
-                  setSecondLevel={setBread}
+                  setSecondLevel={setSecondLevel}
                   viewOnly={false}
                   setThirdLevel={setThirdBread}
                   thirdLevel={thirdLevel}
@@ -608,6 +683,20 @@ export const DataTableSystems = ({
                   setSelectedRangeInFirst={setSelectedRangeInFirst}
                   setSelectedFuelFlows={setSelectedFuelFlows}
                   selectedFuelFlows={selectedFuelFlows}
+                  addComponentFlag={addComponentFlag}
+                  setAddComponentFlag={setAddComponentFlag}
+                  addCompThirdLevelTrigger={addCompThirdLevelTrigger}
+                  setAddCompThirdLevelTrigger={setAddCompThirdLevelTrigger}
+                  addCompThirdLevelCreateTrigger={
+                    addCompThirdLevelCreateTrigger
+                  }
+                  setAddCompThirdLevelCreateTrigger={
+                    setAddCompThirdLevelCreateTrigger
+                  }
+                  backToFirstLevelLevelBTN={backToFirstLevelLevelBTN}
+                  setCurrentBar={setCurrentBar}
+                  openFuelFlowsView={openFuelFlowsView}
+                  setOpenFuelFlowsView={setOpenFuelFlowsView}
                 />
               </div>
             }
