@@ -47,7 +47,7 @@ export async function logOut(event) {
       .then(() => {
         sessionStorage.removeItem("refreshTokenTimer");
         sessionStorage.removeItem("cdx_user");
-        window.location = "/";
+        window.location = config.app.path;
       })
       .catch((e) => {
         throw e;

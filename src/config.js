@@ -9,15 +9,15 @@ export const config = {
   app: {
     activityEvents,
     refreshTokenRate:
-      process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_TOKEN_RATE_MINUTES ||
-      3 * oneMinute, // Change ME
+      process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_TOKEN_RATE_MINUTES *
+        oneMinute || 1 * oneMinute, // Change ME
     inactivityDuration:
       process.env
         .REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_CHECKOUT_MINUTES *
-        oneMinute || 5 * oneMinute, //Change ME
+        oneMinute || 2 * oneMinute, //Change ME
     inactivityLogoutDuration:
       process.env.REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_LOGOUT_MINUTES *
-        oneMinute || 5 * oneMinute, //Change ME
+        oneMinute || 2 * oneMinute, //Change ME
     activityPollingFrequency:
       process.env.REACT_APP_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS *
         oneSecond || oneSecond,
