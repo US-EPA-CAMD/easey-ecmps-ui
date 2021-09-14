@@ -104,18 +104,20 @@ export const getMonitoringAnalyzerRanges = async (locId, componentRecordId) => {
 
 export const postCheckoutMonitoringPlanConfiguration = async (id, user) => {
   const userName = { username: user };
-  return axios
-    .post(
-      `${config.services.monitorPlans.uri}/workspace/plans/${id}/check-outs`,
-      userName
-    )
+  return secureAxios({
+    method: "POST",
+    url: `${config.services.monitorPlans.uri}/workspace/plans/${id}/check-outs`,
+    data: userName,
+  })
     .then((response) => response.data)
     .catch(handleError);
 };
 
 export const revertOfficialRecord = async (id) => {
-  return axios
-    .delete(`${config.services.monitorPlans.uri}/workspace/plans/${id}/revert`)
+  return secureAxios({
+    method: "DELETE",
+    url: `${config.services.monitorPlans.uri}/workspace/plans/${id}/revert`,
+  })
     .then((response) => response.data)
     .catch(handleError);
 };
@@ -127,7 +129,9 @@ export const createMethods = async (payload) => {
   delete payload["locationId"];
   delete payload["id"];
 
-  return axios.post(url, payload).then(handleResponse).catch(handleError);
+  return secureAxios({ method: "POST", url: url, data: payload })
+    .then(handleResponse)
+    .catch(handleError);
 };
 export const createMats = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/mats-methods`;
@@ -136,12 +140,16 @@ export const createMats = async (payload) => {
   delete payload["locationId"];
   delete payload["id"];
 
-  return axios.post(url, payload).then(handleResponse).catch(handleError);
+  return secureAxios({ method: "POST", url: url, data: payload })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const putLockTimerUpdateConfiguration = async (id) => {
-  return axios
-    .put(`${config.services.monitorPlans.uri}/workspace/plans/${id}/check-outs`)
+  return secureAxios({
+    method: "PUT",
+    url: `${config.services.monitorPlans.uri}/workspace/plans/${id}/check-outs`,
+  })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -153,7 +161,13 @@ export const saveMonitoringMethods = async (payload) => {
   delete payload["locationId"];
   delete payload["id"];
 
-  return axios.put(url, payload).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "PUT",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveMonitoringMats = async (payload) => {
@@ -162,14 +176,20 @@ export const saveMonitoringMats = async (payload) => {
   delete payload["locationId"];
   delete payload["id"];
 
-  return axios.put(url, payload).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "PUT",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
-  return axios
-    .delete(
-      `${config.services.monitorPlans.uri}/workspace/plans/${id}/check-outs`
-    )
+  return secureAxios({
+    method: "DELETE",
+    url: `${config.services.monitorPlans.uri}/workspace/plans/${id}/check-outs`,
+  })
     .then((response) => response.data)
     .catch(handleError);
 };
@@ -188,7 +208,13 @@ export const saveAnalyzerRanges = async (payload) => {
   delete payload["locId"];
   delete payload["id"];
   delete payload["compId"];
-  return axios.put(url, payload).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "PUT",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 export const createAnalyzerRanges = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locId"]}/components/${payload["compId"]}/analyzer-ranges/`;
@@ -196,7 +222,13 @@ export const createAnalyzerRanges = async (payload) => {
   delete payload["locId"];
   delete payload["compId"];
 
-  return axios.post(url, payload).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "POST",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveSystemsFuelFlows = async (payload, locId, sysId) => {
@@ -204,7 +236,13 @@ export const saveSystemsFuelFlows = async (payload, locId, sysId) => {
   // *** remove attributes not needed by the API
   delete payload["id"];
 
-  return axios.put(url, payload).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "PUT",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const createSystemsFuelFlows = async (payload, locId, sysId) => {
@@ -212,7 +250,13 @@ export const createSystemsFuelFlows = async (payload, locId, sysId) => {
   // *** remove attributes not needed by the API
   delete payload["id"];
 
-  return axios.post(url, payload).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "POST",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveSystems = async (payload, locId, sysId) => {
@@ -220,7 +264,13 @@ export const saveSystems = async (payload, locId, sysId) => {
   // *** remove attributes not needed by the API
   delete payload["id"];
 
-  return axios.put(url, payload).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "PUT",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const createSystems = async (payload, locId, sysId) => {
@@ -228,14 +278,26 @@ export const createSystems = async (payload, locId, sysId) => {
   // *** remove attributes not needed by the API
   delete payload["id"];
 
-  return axios.post(url, payload).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "POST",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveSystemsComponents = async (payload, locId, sysId, compId) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${locId}/systems/${sysId}/components/${compId}`;
   // *** remove attributes not needed by the API
   delete payload["id"];
-  return axios.put(url, payload).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "PUT",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const createSystemsComponents = async (payload, locId, sysId) => {
@@ -244,5 +306,11 @@ export const createSystemsComponents = async (payload, locId, sysId) => {
   console.log("payload, locId, sysId,", payload, locId, sysId);
   delete payload["id"];
 
-  return axios.post(url, payload).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "POST",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };

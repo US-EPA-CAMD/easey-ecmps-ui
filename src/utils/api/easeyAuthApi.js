@@ -1,19 +1,19 @@
 import config from "../../config";
 import axios from "axios";
 
-export const secureAxios = async (options) => {
+export const secureAxios = (options) => {
   options.headers = {
     authorization: `Bearer ${
       JSON.parse(sessionStorage.getItem("cdx_user")).token
     }`,
   };
 
-  return await axios(options);
+  return axios(options);
 };
 
 export async function authenticate(data_payload) {
   try {
-    return await axios({
+    return axios({
       method: "POST",
       url: `${config.services.authApi.uri}/authentication/sign-in`,
       data: data_payload,
@@ -40,7 +40,7 @@ export async function authenticate(data_payload) {
 export async function logOut(event) {
   if (event !== undefined) event.preventDefault();
   try {
-    return await secureAxios({
+    return secureAxios({
       method: "DELETE",
       url: `${config.services.authApi.uri}/authentication/sign-out`,
     })
@@ -60,7 +60,7 @@ export async function logOut(event) {
 export async function refreshToken() {
   try {
     const userId = JSON.parse(sessionStorage.getItem("cdx_user")).userId;
-    return await secureAxios({
+    return secureAxios({
       method: "POST",
       url: `${config.services.authApi.uri}/tokens`,
       data: { userId },
@@ -82,7 +82,7 @@ export async function refreshToken() {
 export async function validateToken() {
   try {
     const token = JSON.parse(sessionStorage.getItem("cdx_user")).token;
-    return await secureAxios({
+    return secureAxios({
       method: "POST",
       url: `${config.services.authApi.uri}/tokens/validate`,
       data: { token },
