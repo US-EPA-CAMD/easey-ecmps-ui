@@ -36,7 +36,7 @@ const ModalAddComponent = ({
         });
     } else {
       main = comps;
-      if (sysComps.length >= 1) {
+      if (sysComps.length >= 0) {
         sysComps.forEach((x) => {
           main = main.filter((y) => y.id !== x.componentRecordId);
         });
@@ -45,7 +45,6 @@ const ModalAddComponent = ({
     }
     if (filteredComps.length >= 1 && unlinkedComponentsOptions.length < 1) {
       options = filteredComps.map((option) => {
-        console.log('OPTIONS',option)
         return {
           code: option["id"],
           name: `${option["componentId"]} / ${option["componentTypeCode"]}`,
