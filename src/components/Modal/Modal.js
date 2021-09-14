@@ -84,7 +84,7 @@ export const Modal = ({
                     }
                   }}
                   id="closeModalBtn"
-                  data-testid ="closeModalBtn"
+                  data-testid="closeModalBtn"
                   title="Click to save"
                   epa-testid="closeXBtn"
                   role="button"
@@ -127,7 +127,7 @@ export const Modal = ({
                         epa-testid="saveExtraBtn"
                         id="saveExtraBtn"
                         data-testid="saveExtraBtn"
-                        className="margin-right-2"
+                        className="margin-right-2 btn-black-text-and-outline"
                       >
                         {extraBtnText}
                       </Button>
