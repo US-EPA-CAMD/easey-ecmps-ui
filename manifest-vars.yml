@@ -4,9 +4,9 @@ path: ecmps
 host: easey-dev.app.cloud.gov
 environment: development
 memory: 1024M
-inactivityDurationCheckoutMinutes: 5
+inactivityDurationCheckoutMinutes: 2
 activityPollingFrequencySeconds: 1
 activityCountdownDurationSeconds: 30
-refreshTokenRateMinutes: 3
-inactivityDurationLogoutMinutes: 5
+refreshTokenRateMinutes: 1
+inactivityDurationLogoutMinutes: 2
 paginationPerPage: 100

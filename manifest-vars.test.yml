@@ -1,6 +1,6 @@
 host: easey-tst.app.cloud.gov
 environment: testing
 memory: 1024M
-inactivityDurationCheckoutMinutes: 20
-refreshTokenRateMinutes: 15
-inactivityDurationLogoutMinutes: 20
+inactivityDurationCheckoutMinutes: 5
+refreshTokenRateMinutes: 3
+inactivityDurationLogoutMinutes: 5
