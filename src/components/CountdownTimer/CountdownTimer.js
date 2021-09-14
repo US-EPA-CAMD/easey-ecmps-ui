@@ -3,7 +3,7 @@ import React from "react";
 import "./CountdownTimer.scss";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
-export const CountdownTimerRender = ({ remainingTime, countdownExpired }) => {
+export const CountdownTimerRender = ({ remainingTime }) => {
   const currentTime = React.useRef(remainingTime);
   const prevTime = React.useRef(null);
   const isNewTimeFirstTick = React.useRef(false);
@@ -15,7 +15,7 @@ export const CountdownTimerRender = ({ remainingTime, countdownExpired }) => {
 
     // *** do this when the countdown is done
     if (remainingTime === 0) {
-      countdownExpired(true);
+      //countdownExpired();
     }
   } else {
     isNewTimeFirstTick.current = false;
@@ -48,8 +48,8 @@ export const CountdownTimerRender = ({ remainingTime, countdownExpired }) => {
 export const CountdownTimer = ({ duration, countdownExpired }) => {
   return (
     <div className="countdown-timer-wrapper">
-      It looks like you have been inactive for a while. Save your changes to
-      continue or lose unsaved work in {duration} seconds. Click OK.
+      It looks like you have been inactive for a while. You will be logged out
+      in {duration} seconds. Click OK.
       <div className="timer-container" aria-hidden="true">
         <CountdownCircleTimer
           isPlaying

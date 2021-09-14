@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { connect } from "react-redux";
 import * as fs from "../../../utils/selectors/facilities";
 import SelectedFacilityTab from "../../MonitoringPlanTab/MonitoringPlanTab";
-import {DataTableRender} from "../../DataTableRender/DataTableRender";
+import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import "./SelectFacilitiesDataTable.scss";
 import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigurations";
 import * as facilitiesApi from "../../../utils/api/facilityApi";
@@ -72,7 +72,13 @@ export const SelectFacilitiesDataTable = ({
                 info[1].active ? "" : "Inactive"
               }`}
               user={user}
-              checkout={checkedOutLocations.length > 0 ? (checkedOutLocations[0].monPlanId === info[1].id? true: info[2]) : info[2]}
+              checkout={
+                checkedOutLocations.length > 0
+                  ? checkedOutLocations[0].monPlanId === info[1].id
+                    ? true
+                    : info[2]
+                  : info[2]
+              }
               checkedOutLocations={checkedOutLocations}
               setMostRecentlyCheckedInMonitorPlanId={
                 setMostRecentlyCheckedInMonitorPlanId
@@ -85,7 +91,12 @@ export const SelectFacilitiesDataTable = ({
         ),
         orisCode: info[0].col2,
         selectedConfig: info[1],
-        checkout:checkedOutLocations.length > 0 ? (checkedOutLocations[0].monPlanId === info[1].id? true: info[2]) : info[2]
+        checkout:
+          checkedOutLocations.length > 0
+            ? checkedOutLocations[0].monPlanId === info[1].id
+              ? true
+              : info[2]
+            : info[2],
       },
     ]);
   };

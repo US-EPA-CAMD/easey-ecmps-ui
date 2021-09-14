@@ -27,6 +27,7 @@ export const HeaderInfo = ({
   ///
   checkoutAPI,
   checkedOutLocations,
+  configID,
 }) => {
   const sections = [
     { name: "Defaults" },
@@ -109,7 +110,7 @@ export const HeaderInfo = ({
     setCheckoutState(direction);
     setCheckedOutByUser(direction);
     setDisplayLock(direction);
-    checkoutAPI(direction);
+    checkoutAPI(direction, configID, selectedConfig, setCheckout);
   };
   // const [revertState, setRevertState] = useState(false);
   const closeModalHandler = () => setShow(false);
