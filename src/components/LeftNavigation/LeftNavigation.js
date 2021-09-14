@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import { head, workSpace } from "../../utils/constants/menuTopics";
 
 export const LeftNavigation = (props) => {
-console.log('props',props)
   const handleRouteChange = (event, url) => {
     props.setCurrentLink(url);
 

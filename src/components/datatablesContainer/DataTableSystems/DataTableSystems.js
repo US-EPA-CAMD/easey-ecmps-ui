@@ -3,7 +3,7 @@ import { modalViewData } from "../../../additional-functions/create-modal-input-
 import * as fs from "../../../utils/selectors/monitoringPlanSystems";
 import Modal from "../../Modal/Modal";
 import DataTableSystemsComponents from "../DataTableSystemsComponents/DataTableSystemsComponents";
-import DataTableRender from "../../DataTableRender/DataTableRender";
+import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
@@ -24,6 +24,7 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
+import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 
 export const DataTableSystems = ({
   locationSelectValue,
@@ -33,6 +34,9 @@ export const DataTableSystems = ({
   settingInactiveCheckBox,
   revertedState,
   setRevertedState,
+  selectedRangeInFirstTest,
+  selectedSysIdTest = false,
+
   showModal = false,
 }) => {
   const [show, setShow] = useState(showModal);
@@ -46,10 +50,16 @@ export const DataTableSystems = ({
   const [thirdLevel, setThirdLevel] = useState(false);
 
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [updateTable, setUpdateTable] = useState(false);
+
+  const [updateSystemTable, setUpdateSystemTable] = useState(false);
+  const totalSystemOptions = useRetrieveDropdownApi([
+    "systemDesignationCode",
+    "systemTypeCode",
+    "fuelCode",
+  ]);
   useEffect(() => {
     if (
-      updateTable ||
+      updateSystemTable ||
       monitoringSystems.length <= 0 ||
       locationSelectValue ||
       revertedState
@@ -58,16 +68,28 @@ export const DataTableSystems = ({
         setMonitoringSystems(res.data);
         setDataLoaded(true);
       });
-      setUpdateTable(false);
+      setUpdateSystemTable(false);
       setRevertedState(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, updateTable, revertedState]);
+  }, [locationSelectValue, revertedState, updateSystemTable]);
 
   const [selected, setSelected] = useState(null);
-  const [selectedSystem, setSelectedSystem] = useState(null);
+  const [selectedSystem, setSelectedSystem] = useState(
+    selectedSysIdTest ? selectedSysIdTest : null
+  );
   const [selectedModalData, setSelectedModalData] = useState(null);
 
+  const sysPayload = {
+    monitoringSystemId: "string",
+    systemTypeCode: "string",
+    systemDesignationCode: "string",
+    fuelCode: "string",
+    beginDate: "2021-09-10T20:19:58.853Z",
+    endDate: "2021-09-10T20:19:58.853Z",
+    beginHour: 0,
+    endHour: 0,
+  };
   // *** row handler onclick event listener
   const openSystem = (row, bool, create) => {
     let selectSystem = null;
@@ -96,7 +118,7 @@ export const DataTableSystems = ({
           endHour: ["End Time", "time", ""],
         },
         create,
-        false
+        totalSystemOptions
       )
     );
     if (create) {
@@ -144,7 +166,16 @@ export const DataTableSystems = ({
   const breadCrumbs = (lastBread) => {
     const breadBar = (
       <BreadcrumbBar className="padding-0">
-        <Breadcrumb onClick={() => setSecondLevel(false)}>
+        <Breadcrumb
+          onClick={() => {
+            setSecondLevel(false);
+            setBread(false);
+            setCreateFuelFlowFlag(false);
+            setCreateAnalyzerRangesFlag(false);
+            setCreateNewComponentFlag(false);
+            setAddComponentFlag(false);
+          }}
+        >
           <BreadcrumbLink>
             <span>System</span>
           </BreadcrumbLink>
@@ -166,16 +197,35 @@ export const DataTableSystems = ({
     }
   }, [secondLevel]);
 
-  const setBread = (val, currentBread) => {
+  const setBread = (val, currentBread, create, addComp = false) => {
     setSecondLevel(val);
     setSecondLevelName(currentBread);
+
+    console.log("currentbread", currentBread);
+    // missing stepper if !currentBread
+    if (!addComp && !currentBread) {
+      console.log("test", val);
+      setCreateFuelFlowFlag(create);
+      setOpenFuelFlowsView(val);
+      // setCreateNewComponentFlag(create);
+    }
     breadCrumbs(currentBread);
+
+    if (addComp && currentBread === "Add Component") {
+      setCurrentBar("");
+    }
   };
   /// for analyzer ranges
   const breadThirdCrumbs = (lastBread) => {
     const breadBar = (
       <BreadcrumbBar className="padding-0">
-        <Breadcrumb onClick={() => setSecondLevel(false)}>
+        <Breadcrumb
+          onClick={() => {
+            setSecondLevel(false);
+            setBread(false);
+            setCreateAnalyzerRangesFlag(false);
+          }}
+        >
           <BreadcrumbLink>
             <span>System</span>
           </BreadcrumbLink>
@@ -184,7 +234,8 @@ export const DataTableSystems = ({
         <Breadcrumb
           onClick={() => {
             setThirdLevel(false);
-            setBread(true, "Components");
+            setCreateAnalyzerRangesFlag(false);
+            setBread(true, "Components", false);
           }}
         >
           <BreadcrumbLink>
@@ -203,26 +254,65 @@ export const DataTableSystems = ({
     }
   };
 
-  const setThirdBread = (val, currentBread) => {
+  // this causes the stepper to miss in components thid level then press the back button
+  const setThirdBread = (val, currentBread, create) => {
     setThirdLevel(val);
     // setSecondLevel(false);
     breadThirdCrumbs(currentBread);
+    setCreateAnalyzerRangesFlag(create);
   };
   //////////
   const [createBTN, setCreateBTN] = useState("Save and Close");
   const [createBtnAPI, setCreateBtnAPI] = useState(null);
 
-  const [selectedRangeInFirst, setSelectedRangeInFirst] = useState(null);
+  const [selectedRangeInFirst, setSelectedRangeInFirst] = useState(
+    selectedRangeInFirstTest ? selectedRangeInFirstTest : null
+  );
   const [updateAnalyzerRangeTable, setUpdateAnalyzerRangeTable] = useState(
     false
   );
   const [updateFuelFlowTable, setUpdateFuelFlowTable] = useState(false);
-
+  const [updateComponentTable, setupdateComponentTable] = useState(false);
   const [createAnalyzerRangesFlag, setCreateAnalyzerRangesFlag] = useState(
     false
   );
   const [createFuelFlowFlag, setCreateFuelFlowFlag] = useState(false);
   const [createNewComponentFlag, setCreateNewComponentFlag] = useState(false);
+
+  const [addComponentFlag, setAddComponentFlag] = React.useState(false);
+  const [
+    addCompThirdLevelTrigger,
+    setAddCompThirdLevelTrigger,
+  ] = React.useState(false);
+  const [
+    addCompThirdLevelCreateTrigger,
+    setAddCompThirdLevelCreateTrigger,
+  ] = React.useState(false);
+  const saveSystems = () => {
+    const userInput = extractUserInput(sysPayload, ".modalUserInput");
+    mpApi
+      .saveSystems(userInput, locationSelectValue, selectedSystem.id)
+      .then((result) => {
+        console.log("saving results", result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setUpdateSystemTable(true);
+  };
+  const createSystems = () => {
+    const userInput = extractUserInput(sysPayload, ".modalUserInput");
+    mpApi
+      .createSystems(userInput, locationSelectValue)
+      .then((result) => {
+        console.log("saving results", result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setSecondLevel(false);
+    setUpdateSystemTable(true);
+  };
 
   const saveAnalyzerRanges = () => {
     const payload = {
@@ -258,7 +348,7 @@ export const DataTableSystems = ({
       compId: selectedRangeInFirst.componentRecordId,
       id: null,
       analyzerRangeCode: "string",
-      dualRangeIndicator: "string",
+      dualRangeIndicator: 0,
       beginDate: null,
       beginHour: 0,
       endDate: null,
@@ -315,19 +405,81 @@ export const DataTableSystems = ({
     const userInput = extractUserInput(fuelFlowsPayload, ".modalUserInput");
 
     mpApi
-      .createSystemsFuelFlows(userInput)
+      .createSystemsFuelFlows(
+        userInput,
+        selectedSystem.locationId,
+        selectedSystem.id
+      )
       .then((result) => {
         console.log(result, " was created");
-        setShow(false);
       })
       .catch((error) => {
         console.log("error is", error);
-        // openModal(false);
-        setShow(false);
       });
     setUpdateFuelFlowTable(true);
   };
+  // system components
 
+  const componentPayload = {
+    basisCode: "string",
+    manufacturer: "string",
+    modelVersion: "string",
+    serialNumber: "string",
+    componentTypeCode: "string",
+    hgConverterIndicator: 0,
+    beginDate: "2021-09-11T06:23:36.289Z",
+    beginHour: 0,
+    endDate: "2021-09-11T06:23:36.289Z",
+    endHour: 0,
+    componentId: "string",
+  };
+  const createComponent = () => {
+    console.log("test createComponent");
+    const userInput = extractUserInput(
+      componentPayload,
+      ".modalUserInput",
+      "hgConverterIndicator"
+    );
+
+    mpApi
+      .createSystemsComponents(
+        userInput,
+        selectedSystem.locationId,
+        selectedSystem.id
+      )
+      .then((result) => {
+        console.log(result, " was created");
+      })
+      .catch((error) => {
+        console.log("error is", error);
+      });
+    setupdateComponentTable(true);
+  };
+
+  const saveComponent = () => {
+    console.log(selectedSystem, "selectedSystem");
+    const userInput = extractUserInput(
+      componentPayload,
+      ".modalUserInput",
+      "hgConverterIndicator"
+    );
+    mpApi
+      .saveSystemsComponents(
+        userInput,
+        selectedSystem.locationId,
+        selectedSystem.id,
+        selectedRangeInFirst.componentRecordId
+      )
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setupdateComponentTable(true);
+  };
+
+  // from analyzer ranges view to components view
   const backToSecondLevelBTN = (mainLevel) => {
     setThirdLevel(mainLevel);
     setBread(true, "Components");
@@ -366,8 +518,35 @@ export const DataTableSystems = ({
     return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringSystems, inactive]);
+  const [openFuelFlowsView, setOpenFuelFlowsView] = React.useState(false);
   return (
     <>
+      <input
+        tabIndex={-1}
+        aria-hidden={true}
+        role="button"
+        type="hidden"
+        id="testingBtn"
+        onClick={() => {
+          closeModalHandler();
+          openSystem(false, false, true);
+          setBread(false, false, false, false);
+        }}
+      />
+      {/* tests saving functionality */}
+      <input
+        tabIndex={-1}
+        aria-hidden={true}
+        role="button"
+        type="hidden"
+        id="testingBtn2"
+        onClick={() => {
+          saveSystems();
+          saveFuelFlows();
+          saveAnalyzerRanges();
+          saveComponent();
+        }}
+      />
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       <div className="methodTable ">
         <DataTableRender
@@ -392,6 +571,11 @@ export const DataTableSystems = ({
             breadCrumbBar={currentBar}
             title={"Create System"}
             exitBTN="Create System"
+            save={() => {
+              createSystems();
+              setCreateNewSystem(false);
+              setShow(false);
+            }}
             children={
               <ModalDetails
                 modalData={selected}
@@ -406,9 +590,22 @@ export const DataTableSystems = ({
           <Modal
             secondLevel={secondLevel}
             show={show}
+            extraBtn={
+              secondLevel && !thirdLevel
+                ? secondLevelName == "Add Component"
+                  ? () => {
+                      setAddCompThirdLevelCreateTrigger(true);
+                    }
+                  : null
+                : null
+            }
+            extraBtnText={"Create New Component"}
             save={
               !secondLevel && !thirdLevel // first level at systems
-                ? closeModalHandler
+                ? () => {
+                    saveSystems();
+                    setShow(false);
+                  }
                 : secondLevel && !thirdLevel // second level at components or fuel flows
                 ? // at system fuel flows
                   secondLevelName === "Fuel Flow"
@@ -416,19 +613,45 @@ export const DataTableSystems = ({
                     ? () => {
                         createFuelFlows();
                         backToFirstLevelLevelBTN(false);
+                        setOpenFuelFlowsView(false);
                       }
                     : () => {
-                        saveAnalyzerRanges();
+                        saveFuelFlows();
                         backToFirstLevelLevelBTN(false);
+
+                        setOpenFuelFlowsView(false);
                       }
-                  : // at system components
-                    () => console.log("DDINT WORK")
+                  : secondLevelName === "Component" && !createNewComponentFlag
+                  ? // at system components
+                    // need to hide analyzer range table on create
+                    () => {
+                      saveComponent();
+                      backToFirstLevelLevelBTN(false);
+                    }
+                  : secondLevelName === "Component" && createNewComponentFlag
+                  ? // at system components
+                    () => {
+                      setCreateNewComponentFlag(false);
+                      setAddComponentFlag(false);
+                      backToFirstLevelLevelBTN(false);
+                      createComponent();
+                      console.log("testing add/creat btn");
+                    }
+                  : // at add component level page
+                  secondLevelName === "Add Component"
+                  ? () => {
+                      setAddCompThirdLevelTrigger(true);
+                    }
+                  : () => {
+                      console.log("random button press function");
+                    }
                 : // at analyzer ranges in components at third level
                 createAnalyzerRangesFlag
                 ? // in creating a range
                   () => {
                     createAnalyzerRange();
                     backToSecondLevelBTN(false);
+                    setCreateAnalyzerRangesFlag(false);
                   }
                 : // in just editing a range
                   () => {
@@ -439,6 +662,19 @@ export const DataTableSystems = ({
             close={closeModalHandler}
             showCancel={!(user && checkout)}
             showSave={user && checkout}
+            exitBTN={
+              createAnalyzerRangesFlag
+                ? "Create Analyzer Range"
+                : createFuelFlowFlag
+                ? "Create Fuel Flow"
+                : // add componentmodal page
+                addComponentFlag && !createNewComponentFlag
+                ? "Continue"
+                : // /: // create a new comp page
+                createNewComponentFlag && addComponentFlag
+                ? "Add Component"
+                : null
+            }
             breadCrumbBar={currentBar}
             title={`System: ${selected[0]["value"]}`}
             // exitBTN={createBTN}
@@ -459,7 +695,7 @@ export const DataTableSystems = ({
 
                 <DataTableSystemsComponents
                   secondLevel={secondLevel}
-                  setSecondLevel={setBread}
+                  setSecondLevel={setSecondLevel}
                   viewOnly={false}
                   setThirdLevel={setThirdBread}
                   thirdLevel={thirdLevel}
@@ -468,6 +704,8 @@ export const DataTableSystems = ({
                   checkout={checkout}
                   // setCreateBtn={setCreateBTN}
                   // setCreateBtnAPI={setCreateBtnAPI}
+                  updateComponentTable={updateComponentTable}
+                  setupdateComponentTable={setupdateComponentTable}
                   updateAnalyzerRangeTable={updateAnalyzerRangeTable}
                   setCreateAnalyzerRangesFlag={setCreateAnalyzerRangesFlag}
                   createAnalyzerRangesFlag={createAnalyzerRangesFlag}
@@ -482,6 +720,20 @@ export const DataTableSystems = ({
                   setSelectedRangeInFirst={setSelectedRangeInFirst}
                   setSelectedFuelFlows={setSelectedFuelFlows}
                   selectedFuelFlows={selectedFuelFlows}
+                  addComponentFlag={addComponentFlag}
+                  setAddComponentFlag={setAddComponentFlag}
+                  addCompThirdLevelTrigger={addCompThirdLevelTrigger}
+                  setAddCompThirdLevelTrigger={setAddCompThirdLevelTrigger}
+                  addCompThirdLevelCreateTrigger={
+                    addCompThirdLevelCreateTrigger
+                  }
+                  setAddCompThirdLevelCreateTrigger={
+                    setAddCompThirdLevelCreateTrigger
+                  }
+                  backToFirstLevelLevelBTN={backToFirstLevelLevelBTN}
+                  setCurrentBar={setCurrentBar}
+                  openFuelFlowsView={openFuelFlowsView}
+                  setOpenFuelFlowsView={setOpenFuelFlowsView}
                 />
               </div>
             }

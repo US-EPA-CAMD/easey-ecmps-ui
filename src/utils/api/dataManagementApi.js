@@ -112,3 +112,40 @@ export const getAllRangeCodes = async () => {
 };
 
 //
+
+// System 
+export const getAllSystemTypeCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/system-type-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getAllSystemDesignationCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/system-designation-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+// system components
+export const getAllAcquisitionMethodCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/acquisiton-method-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getAllComponentTypeCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/component-type-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getAllBasisCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/basis-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};

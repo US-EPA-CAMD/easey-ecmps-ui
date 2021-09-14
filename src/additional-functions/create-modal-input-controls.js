@@ -24,26 +24,25 @@ export const modalViewData = (
   mats = false
 ) => {
 
-  console.log('selected',selected)
   //   (7) ["systemDesignationCode", "System Designation", "Primary", "required", "dropdown", "P", undefined]
   // 2: (7) ["maximumFuelFlowRateSourceCode", "System Type", "Gas Fuel Flow System", "required", "dropdown", "GAS", undefined]
   // 3: (7) ["systemFuelFlowUOMCode", "Fuel Type", "Pipeline Natural Gas", "required", "dropdown", "PNG", undefined]
   const arr = [];
   const codeList = {
-    systemTypeCode: types,
-    fuelCode: fuels,
-    systemDesignationCode: designations,
+    // systemTypeCode: types,
+    // fuelCode: fuels,
+    // systemDesignationCode: designations,
     // bypassApproachCode: bypassApproachCodes,
     // substituteDataCode: substituteDataApproachCodes,
     // parameterCode: parameterCodes,
-    // methodCode: methodCodes,
-    componentTypeCode: componentTypes,
-    sampleAcquisitionMethodCode: acqMethodCode,
-    basisCode: basisCode,
-    maximumFuelFlowRateSourceCode: componentTypes,
-    maximumFuelFlowRate: acqMethodCode,
+    // // methodCode: methodCodes,
+    // componentTypeCode: componentTypes,
+    // sampleAcquisitionMethodCode: acqMethodCode,
+    // basisCode: basisCode,
+    // maximumFuelFlowRateSourceCode: componentTypes,
+    // maximumFuelFlowRate: acqMethodCode,
 
-    systemFuelFlowUOMCode: basisCode,
+    // systemFuelFlowUOMCode: basisCode,
   };
 
   for (const y in label) {
@@ -117,7 +116,7 @@ export const modalViewData = (
     if (y === "endDate" || y === "beginDate") {
       let formattedDate = "";
       if (!createNew) {
-        formattedDate = adjustDate("mm/dd/yyyy", selected[y]);
+        formattedDate = adjustDate("mm/dd/yyyy", selected[y]?selected[y]:null);
       }
 
       arr.push([

@@ -118,7 +118,6 @@ export const HeaderInfo = ({
   const [show, setShow] = useState(false);
   const revert = () => {
     mpApi.revertOfficialRecord(selectedConfig.id).then((res) => {
-      console.log(res, "data");
       setRevertedState(true);
       setShow(false);
     });

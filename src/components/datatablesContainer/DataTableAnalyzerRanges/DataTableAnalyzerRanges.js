@@ -5,6 +5,8 @@ import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
+import { attachChangeEventListeners } from "../../../additional-functions/prompt-to-save-unsaved-changes";
+
 export const DataTableAnalyzerRanges = ({
   user,
   checkout,
@@ -30,7 +32,6 @@ export const DataTableAnalyzerRanges = ({
   const rangesColumnNames = ["Range", "Date and Time"];
   const totalRangesOptions = useRetrieveDropdownApi(["analyzerRangeCode"]);
   useEffect(() => {
-    console.log("selectedRanges", selectedRanges);
     if (updateTable || ranges.length <= 0) {
       mpApi
         .getMonitoringAnalyzerRanges(
@@ -39,7 +40,6 @@ export const DataTableAnalyzerRanges = ({
         )
         .then((res) => {
           setRanges(res.data);
-          console.log("res.data", res.data);
           setRangesLoaded(true);
         });
       setUpdateTable(false);
@@ -83,27 +83,14 @@ export const DataTableAnalyzerRanges = ({
   // row is just the data in the datatable row, need to compare it to the entire API dataset to get correct data
   const openAnalyzerRanges = (row, bool, create) => {
     let selectRange = null;
-    // setCreateNewAnalyzerRange(create);
     setOpenFuelFlowsView(false);
     setComponentView(true);
 
     setCreateAnalyzerRangesFlag(create);
 
-    // if (create) {
-    //   setCreateBtn("Create Analyzer Range");
-    //   // setCreateBtnAPI(createAnalyzerRange);
-    // }
     if (ranges.length > 0 && !create) {
-      console.log(row, "row");
       selectRange = ranges.filter((element) => element.id === row.col3)[0];
       setSelectedRange(selectRange);
-      // setCreateBtn("Go Back");
-      // if (user && checkout) {
-      //   setCreateBtn("Save and Go Back");
-      //   // setCreateBtnAPI(saveComponents);
-      // }
-      // console.log(selectComponents, "selectComponents");
-      // setOpenAnalyzer(selectRange);
     }
 
     setSelectedModalData(
@@ -123,7 +110,11 @@ export const DataTableAnalyzerRanges = ({
         totalRangesOptions
       )
     );
-    setThirdLevel(true, "Analyzer Ranges");
+    setThirdLevel(true, "Analyzer Ranges", create? true:false);
+
+    setTimeout(() => {
+      attachChangeEventListeners(".modalUserInput");
+    });
   };
   return (
     <div className="methodTable">

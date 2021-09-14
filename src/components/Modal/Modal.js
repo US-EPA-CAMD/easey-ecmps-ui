@@ -28,6 +28,8 @@ export const Modal = ({
   exitBTN,
   breadCrumbBar,
   setSecondLevel,
+  extraBtn,
+  extraBtnText,
 }) => {
   const modalRef = createRef();
   useEffect(() => {
@@ -82,6 +84,7 @@ export const Modal = ({
                     }
                   }}
                   id="closeModalBtn"
+                  data-testid ="closeModalBtn"
                   title="Click to save"
                   epa-testid="closeXBtn"
                   role="button"
@@ -107,7 +110,7 @@ export const Modal = ({
                       title="Click to save"
                       epa-testid="saveBtn"
                       id="saveBtn"
-                      data-testid ="saveBtn"
+                      data-testid="saveBtn"
                       className="margin-right-2"
                     >
                       {exitBTN ? exitBTN : "Save and Go Back"}
@@ -115,6 +118,22 @@ export const Modal = ({
                       {/* // ? createNew
                         // : saveButtonText} */}
                     </Button>
+
+                    {extraBtn ? (
+                      <Button
+                        type="button"
+                        outline={true}
+                        onClick={extraBtn}
+                        epa-testid="saveExtraBtn"
+                        id="saveExtraBtn"
+                        data-testid="saveExtraBtn"
+                        className="margin-right-2"
+                      >
+                        {extraBtnText}
+                      </Button>
+                    ) : (
+                      ""
+                    )}
                     <Button
                       type="button"
                       onClick={close}

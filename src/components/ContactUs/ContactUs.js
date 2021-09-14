@@ -38,12 +38,14 @@ export const ContactUs = () => {
   return (
     <>
       <div className="grid-row margin-top-5">
-        <span className="text-bold font-heading-2xl">Contact Us</span>
+        <div className="text-bold font-heading-2xl">Contact Us</div>
+        <div className="flex-force-break" />
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla
           massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt
           molestie. Vestibulum faucibus enim sit amet pretium laoreet.
         </p>
+        <div className="flex-force-break" />
         <p className="text-italic margin-y-2">All fields are required</p>
       </div>
       <div>
