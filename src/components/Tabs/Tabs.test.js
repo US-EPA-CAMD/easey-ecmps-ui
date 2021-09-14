@@ -1,7 +1,12 @@
 import React from "react";
 import { Tabs, mapDispatchToProps, mapStateToProps } from "./Tabs";
 import TabPane from "../TabPane/TabPane";
-import { render, fireEvent, screen,waitForElement } from "@testing-library/react";
+import {
+  render,
+  fireEvent,
+  screen,
+  waitForElement,
+} from "@testing-library/react";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 const axios = require("axios");
 
@@ -14,10 +19,12 @@ const TabsUsage = (bool) => (
     removeTabs={jest.fn()}
     initTab="Tab1"
     setResizeObserver={jest.fn(() => ({}))}
-    checkedOutLocations={[[{monPlanId:[5770], checkedOutBy:"test"}] ]}
-    user={{firstName:"test"}}
+    checkedOutLocations={[[{ monPlanId: [5770], checkedOutBy: "test" }]]}
+    user={{ firstName: "test" }}
   >
-    <TabPane title="( Tab1 )" locationId="5770" >Tab1 Content</TabPane>
+    <TabPane title="( Tab1 )" locationId="5770">
+      Tab1 Content
+    </TabPane>
     <TabPane title="Select configurations">Tab2 Content</TabPane>
     <TabPane title="( Tab3 )">
       <p>Tab3 Content</p>
@@ -31,7 +38,7 @@ const TabsUsage = (bool) => (
 
 describe("testing a reusable Tabs component", () => {
   test("renders all tabs", () => {
-    render(<TabsUsage  />);
+    render(<TabsUsage />);
     const tabs = screen.getAllByRole("button");
     expect(tabs).toHaveLength(7);
   });
@@ -41,7 +48,6 @@ describe("testing a reusable Tabs component", () => {
     expect(initTabContent).not.toBeUndefined();
   });
   test("renders the user selected tab", async () => {
-
     axios.delete.mockImplementation((url) => {
       switch (url) {
         case "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/workspace/plans/5770/check-outs":
@@ -56,27 +62,29 @@ describe("testing a reusable Tabs component", () => {
       Promise.resolve({ status: 200, data: [] })
     );
     const title = await mpApi.deleteCheckInMonitoringPlanConfiguration(5770);
-    const { container } = await waitForElement(() => render(
-      <Tabs
-        dynamic={true}
-        setActive={jest.fn()}
-        removeTabs={jest.fn()}
-        checkedOutLocations={[]}
-        user={{ firstName: "test" }}
-        setCheckout={jest.fn()}
-        checkedOutLocations={[{monPlanId:[5770], checkedOutBy:"test"}, ]}
-      >
-        <TabPane title="( Tab1 )">Tab1 Content</TabPane>
-        <TabPane title="Select configurations">Tab2 Content</TabPane>
-        <TabPane title="( Tab3 )">
-          <p>Tab3 Content</p>
-        </TabPane>
-        <TabPane title="( Tab4 )">
-          <p>Tab4 Content 1</p>
-          <p>Tab4 Content 2</p>
-        </TabPane>
-      </Tabs>
-    ));
+    const { container } = await waitForElement(() =>
+      render(
+        <Tabs
+          dynamic={true}
+          setActive={jest.fn()}
+          removeTabs={jest.fn()}
+          checkedOutLocations={[]}
+          user={{ firstName: "test" }}
+          setCheckout={jest.fn()}
+          checkedOutLocations={[{ monPlanId: [5770], checkedOutBy: "test" }]}
+        >
+          <TabPane title="( Tab1 )">Tab1 Content</TabPane>
+          <TabPane title="Select configurations">Tab2 Content</TabPane>
+          <TabPane title="( Tab3 )">
+            <p>Tab3 Content</p>
+          </TabPane>
+          <TabPane title="( Tab4 )">
+            <p>Tab4 Content 1</p>
+            <p>Tab4 Content 2</p>
+          </TabPane>
+        </Tabs>
+      )
+    );
     const btns = screen.getAllByRole("button");
     fireEvent.click(btns[2]);
     const tab3Content = screen.getByText("Tab2 Content");
