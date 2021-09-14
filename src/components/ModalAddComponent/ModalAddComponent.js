@@ -28,19 +28,23 @@ const ModalAddComponent = ({
     if (comps.length < 1) {
       mpApi.getMonitoringComponents(locationId).then((res) => {
         setComps(res.data);
+        console.log('comps',res.data)
       });
       mpApi
         .getMonitoringSystemsComponents(locationId, systemId)
         .then((ress) => {
           setSysComps(ress.data);
+          console.log('syscomps',ress.data)
         });
     } else {
       main = comps;
-      if (sysComps.length >= 1) {
+      if (sysComps.length >= 0) {
         sysComps.forEach((x) => {
           main = main.filter((y) => y.id !== x.componentRecordId);
         });
         setFilteredComps(main);
+        
+        console.log('MAIN',main)
       }
     }
     if (filteredComps.length >= 1 && unlinkedComponentsOptions.length < 1) {
