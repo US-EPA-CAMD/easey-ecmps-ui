@@ -94,7 +94,6 @@ export const getAllMaxRateSourceCodes = async () => {
     .catch(handleError);
 };
 
-
 export const getAllUnitsOfMeasureCodes = async () => {
   return axios
     .get(`${config.services.mdm.uri}/units-of-measure`)
@@ -113,7 +112,7 @@ export const getAllRangeCodes = async () => {
 
 //
 
-// System 
+// System
 export const getAllSystemTypeCodes = async () => {
   return axios
     .get(`${config.services.mdm.uri}/system-type-codes`)
