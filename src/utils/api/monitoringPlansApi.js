@@ -1,6 +1,7 @@
 import axios from "axios";
 import { handleResponse, handleError } from "./apiUtils";
 import config from "../../config";
+import { secureAxios } from "./easeyAuthApi";
 
 // *** obtain monitoring plans
 export const getMonitoringPlans = async (orisCode) => {
@@ -67,7 +68,7 @@ export const getMonitoringSystemsFuelFlows = async (locationId, systemId) => {
 };
 
 export const getMonitoringSystemsComponents = async (locId, systemId) => {
-  console.log('locId, systemId',locId, systemId)
+  console.log("locId, systemId", locId, systemId);
   let url = `${config.services.monitorPlans.uri}`;
   // *** workspace section url (authenticated)
   if (window.location.href.indexOf("workspace") > -1) {
@@ -86,7 +87,7 @@ export const getMonitoringComponents = async (locId) => {
   }
   url = `${url}/locations/${locId}/components/`;
 
-  console.log('URL',url,locId)
+  console.log("URL", url, locId);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
@@ -230,8 +231,7 @@ export const createSystems = async (payload, locId, sysId) => {
   return axios.post(url, payload).then(handleResponse).catch(handleError);
 };
 
-export const saveSystemsComponents = async (payload, locId, sysId,compId) => {
-
+export const saveSystemsComponents = async (payload, locId, sysId, compId) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${locId}/systems/${sysId}/components/${compId}`;
   // *** remove attributes not needed by the API
   delete payload["id"];
@@ -241,7 +241,7 @@ export const saveSystemsComponents = async (payload, locId, sysId,compId) => {
 export const createSystemsComponents = async (payload, locId, sysId) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${locId}/systems/${sysId}/components/`;
   // *** remove attributes not needed by the API
-  console.log('payload, locId, sysId,',payload, locId, sysId)
+  console.log("payload, locId, sysId,", payload, locId, sysId);
   delete payload["id"];
 
   return axios.post(url, payload).then(handleResponse).catch(handleError);

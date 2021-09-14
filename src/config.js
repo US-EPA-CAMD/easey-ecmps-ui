@@ -8,22 +8,16 @@ activityEvents.push("keydown");
 export const config = {
   app: {
     activityEvents,
-
-    activityRefreshApiCallInterval:
-      process.env.REACT_APP_EASEY_ECMPS_UI_ACTIVITY_REFRESH_API_CALL_INTERVAL ||
-      30 * oneSecond,
-
     refreshTokenRate:
-      process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_TOKEN_RATE || 3 * oneMinute, // Change ME
-
+      process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_TOKEN_RATE_MINUTES ||
+      3 * oneMinute, // Change ME
     inactivityDuration:
-      process.env.REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_MINUTES *
-        oneMinute || oneMinute, //Change ME
-
+      process.env
+        .REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_CHECKOUT_MINUTES *
+        oneMinute || 5 * oneMinute, //Change ME
     inactivityLogoutDuration:
       process.env.REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_LOGOUT_MINUTES *
         oneMinute || 5 * oneMinute, //Change ME
-
     activityPollingFrequency:
       process.env.REACT_APP_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS *
         oneSecond || oneSecond,
