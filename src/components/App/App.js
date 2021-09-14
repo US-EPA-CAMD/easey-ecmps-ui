@@ -15,7 +15,6 @@ import FAQ from "../FAQ/FAQ";
 import Resources from "../Resources/Resources";
 
 import HelpSupport from "../HelpSupport/HelpSupport";
-
 import "./App.scss";
 // import FAQ from "../FAQ/FAQ";
 import { InactivityTracker } from "../InactivityTracker/InactivityTracker";
@@ -104,6 +103,8 @@ const App = () => {
             exact
             component={ReportingInstructions}
           />
+          <Route path="/resources" exact component={Resources} />
+          <Route path="/help-support" exact component={HelpSupport} />
           <Route path="/admin/rules" exact component={RuleEditor} />
           <Route path="*" component={NotFound} />
         </Switch>

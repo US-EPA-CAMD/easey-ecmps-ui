@@ -233,7 +233,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
 
           options.unshift({ code: "", name: "" });
-          options.unshift({ code: "", name: "Select a method... " });
+          options.unshift({ code: "", name: "Select an acquisition method... " });
           const newData = totalOptions;
           newData[x] = options;
 
@@ -267,7 +267,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
 
           options.unshift({ code: "", name: "" });
-          options.unshift({ code: "", name: "Select a basis... " });
+          options.unshift({ code: "", name: "Select a basis description... " });
           const newData = totalOptions;
           newData[x] = options;
 

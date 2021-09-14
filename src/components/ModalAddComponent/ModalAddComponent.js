@@ -45,9 +45,10 @@ const ModalAddComponent = ({
     }
     if (filteredComps.length >= 1 && unlinkedComponentsOptions.length < 1) {
       options = filteredComps.map((option) => {
+        console.log('OPTIONS',option)
         return {
           code: option["id"],
-          name: option["id"],
+          name: `${option["componentId"]} / ${option["componentTypeCode"]}`,
         };
       });
 
