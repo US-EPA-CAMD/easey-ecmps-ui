@@ -1,5 +1,7 @@
 import config from "../../config";
 import axios from "axios";
+import { checkoutAPI } from "../../additional-functions/checkout";
+import { getCheckedOutLocations } from "./monitoringPlansApi";
 
 export const secureAxios = (options) => {
   options.headers = {
@@ -44,7 +46,22 @@ export async function logOut(event) {
       method: "DELETE",
       url: `${config.services.authApi.uri}/authentication/sign-out`,
     })
-      .then(() => {
+      .then(async () => {
+        const user = JSON.parse(sessionStorage.getItem("cdx_user"));
+        const checkedOutLocationResult = await getCheckedOutLocations();
+        for (const p in checkedOutLocationResult.data) {
+          console.log(checkedOutLocationResult.data[p]);
+          if (checkedOutLocationResult.data[p].checkedOutBy === user.userId) {
+            // Change this to userId eventually
+            await checkoutAPI(
+              false,
+              checkedOutLocationResult.data[p].facId,
+              checkedOutLocationResult.data[p].monPlanId,
+              undefined
+            );
+          }
+        }
+
         sessionStorage.removeItem("refreshTokenTimer");
         sessionStorage.removeItem("cdx_user");
         window.location = config.app.path;
