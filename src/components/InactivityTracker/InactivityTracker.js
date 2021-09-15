@@ -72,7 +72,7 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
     if (isFacilityCheckedOut()) {
       checkInactivity(config.app.inactivityDuration);
     } else {
-      checkInactivity(config.app.inactivityLogoutDuration, undefined);
+      checkInactivity(config.app.inactivityLogoutDuration);
     }
 
     setTimeInactive(timeInactive + config.app.activityPollingFrequency);
