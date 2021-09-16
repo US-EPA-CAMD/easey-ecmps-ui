@@ -13,8 +13,9 @@ export const checkoutAPI = (
     return mpApi
       .deleteCheckInMonitoringPlanConfiguration(monitorPlanId)
       .then((res) => {
-        console.log(res, "checked back in ");
-        if (setCheckout !== undefined) setCheckout(false, configID);
+        if (setCheckout !== undefined) {
+          setCheckout(false, configID);
+        }
         if (res === undefined) {
           console.log("error");
         }

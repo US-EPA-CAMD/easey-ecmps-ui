@@ -13,11 +13,7 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
   const [showInactiveModal, setShowInactiveModal] = useState(false);
 
   const isFacilityCheckedOut = () => {
-    for (let i = 0; i < openedFacilityTabs.length; i++) {
-      if (openedFacilityTabs[i].checkout == true) return true;
-    }
-
-    return false;
+    return openedFacilityTabs.find((element) => element.checkout === true);
   };
 
   const checkInactivity = (inactivityDuration) => {
@@ -31,7 +27,6 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
     }
 
     if (timeInactive >= inactivityDuration) {
-      console.log("Time is up!");
       resetUserInactivityTimer();
 
       logOut(undefined);

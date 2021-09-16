@@ -20,7 +20,6 @@ export async function authenticate(data_payload) {
     data: data_payload,
   })
     .then((data_response) => {
-      console.log(data_response);
       const { data } = data_response;
       sessionStorage.setItem("cdx_user", JSON.stringify(data));
       window.location.reload();
@@ -30,8 +29,10 @@ export async function authenticate(data_payload) {
     });
 }
 
-export async function logOut(event) {
-  if (event !== undefined) event.preventDefault();
+export const logOut = (event = "default") => {
+  if (event !== "default" && event) {
+    event.preventDefault();
+  }
   return secureAxios({
     method: "DELETE",
     url: `${config.services.authApi.uri}/authentication/sign-out`,
@@ -40,7 +41,6 @@ export async function logOut(event) {
       const user = JSON.parse(sessionStorage.getItem("cdx_user"));
       const checkedOutLocationResult = await getCheckedOutLocations();
       for (const p in checkedOutLocationResult.data) {
-        console.log(checkedOutLocationResult.data[p]);
         if (checkedOutLocationResult.data[p].checkedOutBy === user.userId) {
           // Change this to userId eventually
           await checkoutAPI(
@@ -59,9 +59,9 @@ export async function logOut(event) {
     .catch((e) => {
       throw e;
     });
-}
+};
 
-export async function refreshToken() {
+export const refreshToken = () => {
   try {
     const userId = JSON.parse(sessionStorage.getItem("cdx_user")).userId;
     return secureAxios({
@@ -80,7 +80,7 @@ export async function refreshToken() {
   } catch (e) {
     throw e;
   }
-}
+};
 
 /*
 export async function validateToken() {
