@@ -13,7 +13,7 @@ export const secureAxios = (options) => {
   return axios(options);
 };
 
-export async function authenticate(data_payload) {
+export const authenticate = async (data_payload) => {
   return axios({
     method: "POST",
     url: `${config.services.authApi.uri}/authentication/sign-in`,
@@ -27,7 +27,7 @@ export async function authenticate(data_payload) {
     .catch((e) => {
       throw e;
     });
-}
+};
 
 export const logOut = (event = "default") => {
   if (event !== "default" && event) {
