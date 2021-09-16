@@ -110,7 +110,7 @@ export const HeaderInfo = ({
     setCheckoutState(direction);
     setCheckedOutByUser(direction);
     setDisplayLock(direction);
-    checkoutAPI(direction, configID, selectedConfig, setCheckout);
+    checkoutAPI(direction, configID, selectedConfig.id, setCheckout);
   };
   // const [revertState, setRevertState] = useState(false);
   const closeModalHandler = () => setShow(false);

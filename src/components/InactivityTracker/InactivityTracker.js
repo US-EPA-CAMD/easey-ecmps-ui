@@ -4,7 +4,6 @@ import { config } from "../../config";
 import { Modal } from "../Modal/Modal";
 import { CountdownTimer } from "../CountdownTimer/CountdownTimer";
 import { useInterval } from "../../additional-functions/use-interval";
-import { checkoutAPI } from "../../additional-functions/checkout";
 import { logOut } from "../../utils/api/easeyAuthApi";
 import { setCheckoutState } from "../../store/actions/dynamicFacilityTab";
 import { connect } from "react-redux";
@@ -14,12 +13,10 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
   const [showInactiveModal, setShowInactiveModal] = useState(false);
 
   const isFacilityCheckedOut = () => {
-    return (
-      openedFacilityTabs.length > 0 && openedFacilityTabs[0].checkout === true
-    );
+    return openedFacilityTabs.find((element) => element.checkout === true);
   };
 
-  const checkInactivity = (inactivityDuration, handler) => {
+  const checkInactivity = (inactivityDuration) => {
     if (inactivityDuration - timeInactive <= config.app.countdownDuration) {
       // Display the countdown timer
 
@@ -30,10 +27,7 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
     }
 
     if (timeInactive >= inactivityDuration) {
-      console.log("Time is up!");
       resetUserInactivityTimer();
-
-      if (handler !== undefined) handler();
 
       logOut(undefined);
     }
@@ -69,18 +63,11 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
 
   useInterval(() => {
     // First check if a record is checked out
+
     if (isFacilityCheckedOut()) {
-      checkInactivity(config.app.inactivityDuration, () => {
-        const currentCheckedOut = openedFacilityTabs[0];
-        checkoutAPI(
-          false,
-          currentCheckedOut.selectedConfig.id,
-          currentCheckedOut.selectedConfig,
-          setCheckout
-        );
-      });
+      checkInactivity(config.app.inactivityDuration);
     } else {
-      checkInactivity(config.app.inactivityLogoutDuration, undefined);
+      checkInactivity(config.app.inactivityLogoutDuration);
     }
 
     setTimeInactive(timeInactive + config.app.activityPollingFrequency);
