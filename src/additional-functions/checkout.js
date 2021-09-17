@@ -4,27 +4,25 @@ import * as mpApi from "../utils/api/monitoringPlansApi";
 export const checkoutAPI = (
   direction,
   configID,
-  selectedConfig,
+  monitorPlanId,
   setCheckout
 ) => {
   const user = JSON.parse(sessionStorage.getItem("cdx_user"));
 
   if (!direction) {
-    mpApi
-      .deleteCheckInMonitoringPlanConfiguration(selectedConfig.id)
+    return mpApi
+      .deleteCheckInMonitoringPlanConfiguration(monitorPlanId)
       .then((res) => {
-        console.log(res, "checked back in ");
-        setCheckout(false, configID);
+        if (setCheckout !== undefined) {
+          setCheckout(false, configID);
+        }
         if (res === undefined) {
           console.log("error");
         }
       });
   } else {
-    mpApi
-      .postCheckoutMonitoringPlanConfiguration(
-        selectedConfig.id,
-        user.firstName
-      )
+    return mpApi
+      .postCheckoutMonitoringPlanConfiguration(monitorPlanId, user.userId)
       .then((res) => {
         setCheckout(true, configID);
         if (res === undefined) {

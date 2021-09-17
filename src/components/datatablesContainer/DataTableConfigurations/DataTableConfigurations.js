@@ -69,7 +69,7 @@ export const DataTableConfigurations = ({
     if (!checkIn) {
       if (checkout) {
         mpApi
-          .postCheckoutMonitoringPlanConfiguration(config.col3, user.firstName)
+          .postCheckoutMonitoringPlanConfiguration(config.col3, user.userId)
           .then((res) => {
             setSelectedConfig([data, selectedConfigData, checkout]);
           });
