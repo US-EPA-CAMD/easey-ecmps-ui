@@ -148,3 +148,20 @@ export const getAllBasisCodes = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+// Spans
+
+export const getAllSpanMethodCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/span-method-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getAllSpanScaleCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/span-scale-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+

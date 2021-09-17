@@ -314,3 +314,18 @@ export const createSystemsComponents = async (payload, locId, sysId) => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+export const getMonitoringSpans = async (locationId) => {
+  let url = `${config.services.monitorPlans.uri}`;
+
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+
+  // *** attach the rest of the url
+  url = `${url}/locations/${locationId}/spans`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
