@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import * as dmApi from "../utils/api/dataManagementApi";
 export const useRetrieveDropdownApi = (arr, mats = false) => {
   const [totalOptions, setTotalOptions] = useState({});
@@ -18,7 +18,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
 
             options.unshift({ code: "", name: "" });
 
-            options.unshift({ code: "select", name: "Select a parameter..." });
+            options.unshift({ code: "select", name: "-- Select a value --" });
             const newData = totalOptions;
             newData["supplementalMATSParameterCode"] = options;
             setTotalOptions(newData);
@@ -33,7 +33,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             });
 
             options.unshift({ code: "", name: "" });
-            options.unshift({ code: "select", name: "Select a parameter..." });
+            options.unshift({ code: "select", name: "-- Select a value --" });
             const newData = totalOptions;
             newData[x] = options;
 
@@ -52,7 +52,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             });
 
             options.unshift({ code: "", name: "" });
-            options.unshift({ code: "select", name: "Select a method..." });
+            options.unshift({ code: "select", name: "-- Select a value --" });
             const newData = totalOptions;
             newData["supplementalMATSMonitoringMethodCode"] = options;
             setTotalOptions(newData);
@@ -67,7 +67,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             });
 
             options.unshift({ code: "", name: "" });
-            options.unshift({ code: "select", name: "Select a method..." });
+            options.unshift({ code: "select", name: "-- Select a value --" });
             const newData = totalOptions;
             newData[x] = options;
 
@@ -87,7 +87,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           options.unshift({ code: "", name: "" });
           options.unshift({
             code: "select",
-            name: "Select a substitute data...",
+            name: "-- Select a value --",
           });
           const data = {};
           data[x] = options;
@@ -110,7 +110,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           options.unshift({ code: "", name: "" });
           options.unshift({
             code: "select",
-            name: "Select a bypass approach...",
+            name: "-- Select a value --",
           });
           const newData = totalOptions;
           newData[x] = options;
@@ -128,7 +128,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
           options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "Select a range..." });
+          options.unshift({ code: "select", name: "-- Select a value --" });
           const newData = totalOptions;
           newData[x] = options;
 
@@ -146,13 +146,14 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
 
           options.unshift({ code: "", name: "" });
-          options.unshift({ code: "", name: "Select a fuel flow rate source..." });
+          options.unshift({ code: "select", name: "-- Select a value --" });
           const newData = totalOptions;
           newData[x] = options;
 
           setTotalOptions(newData);
         });
         break;
+      case "spanUnitsOfMeasureCode":
       case "systemFuelFlowUOMCode":
         dmApi.getAllUnitsOfMeasureCodes().then((response) => {
           options = response.data.map((option) => {
@@ -163,7 +164,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
 
           options.unshift({ code: "", name: "" });
-          options.unshift({ code: "", name: "Select a unit of measure..." });
+          options.unshift({ code: "select", name: "-- Select a value --" });
           const newData = totalOptions;
           newData[x] = options;
 
@@ -181,7 +182,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
 
           options.unshift({ code: "", name: "" });
-          options.unshift({ code: "", name: "Select a fuel type..." });
+          options.unshift({ code: "select", name: "-- Select a value --" });
           const newData = totalOptions;
           newData[x] = options;
 
@@ -198,7 +199,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
 
           options.unshift({ code: "", name: "" });
-          options.unshift({ code: "", name: "Select a system type..." });
+          options.unshift({ code: "select", name: "-- Select a value --" });
           const newData = totalOptions;
           newData[x] = options;
 
@@ -215,7 +216,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
 
           options.unshift({ code: "", name: "" });
-          options.unshift({ code: "", name: "Select a system designation..." });
+          options.unshift({ code: "select", name: "-- Select a value --" });
           const newData = totalOptions;
           newData[x] = options;
 
@@ -233,7 +234,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
 
           options.unshift({ code: "", name: "" });
-          options.unshift({ code: "", name: "Select an acquisition method... " });
+          options.unshift({ code: "select", name: "-- Select a value --" });
           const newData = totalOptions;
           newData[x] = options;
 
@@ -250,7 +251,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
 
           options.unshift({ code: "", name: "" });
-          options.unshift({ code: "", name: "Select a component type... " });
+          options.unshift({ code: "select", name: "-- Select a value --" });
           const newData = totalOptions;
           newData[x] = options;
 
@@ -267,13 +268,50 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
 
           options.unshift({ code: "", name: "" });
-          options.unshift({ code: "", name: "Select a basis description... " });
+          options.unshift({ code: "select", name: "-- Select a value --" });
           const newData = totalOptions;
           newData[x] = options;
 
           setTotalOptions(newData);
         });
         break;
+      // for spans
+
+      case "spanScaleCode":
+        dmApi.getAllSpanScaleCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["spanScaleCode"],
+              name: option["spanScaleCodeDescription"],
+            };
+          });
+
+          options.unshift({ code: "", name: "" });
+          options.unshift({ code: "select", name: "-- Select a value --" });
+          const newData = totalOptions;
+          newData[x] = options;
+
+          setTotalOptions(newData);
+        });
+        break;
+      case "spanMethodCode":
+        dmApi.getAllSpanMethodCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["spanMethodCode"],
+              name: option["spanMethodCodeDescription"],
+            };
+          });
+
+          options.unshift({ code: "", name: "" });
+          options.unshift({ code: "select", name: "-- Select a value --" });
+          const newData = totalOptions;
+          newData[x] = options;
+
+          setTotalOptions(newData);
+        });
+        break;
+
       default:
         break;
     }

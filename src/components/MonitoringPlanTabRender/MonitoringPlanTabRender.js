@@ -7,6 +7,7 @@ import DataTableSystems from "../datatablesContainer/DataTableSystems/DataTableS
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import { checkoutAPI } from "../../additional-functions/checkout";
+import DataTableSpans from "../datatablesContainer/DataTableSpans/DataTableSpans";
 
 export const MonitoringPlanTabRender = ({
   resetTimer,
@@ -120,7 +121,18 @@ export const MonitoringPlanTabRender = ({
       [],
       [],
       [],
-      [],
+      [  [
+        <DataTableSpans
+          locationSelectValue={parseInt(locationSelect[1])}
+          inactive={inactive}
+          settingInactiveCheckBox={settingInactiveCheckBox}
+          checkout={checkout}
+          user={user}
+          revertedState={revertedState}
+          setRevertedState={setRevertedState}
+        />,
+        "Spans",
+      ],],
       [],
       [
         [
