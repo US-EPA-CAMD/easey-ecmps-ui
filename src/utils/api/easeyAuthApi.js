@@ -4,11 +4,16 @@ import { checkoutAPI } from "../../additional-functions/checkout";
 import { getCheckedOutLocations } from "./monitoringPlansApi";
 
 export const secureAxios = (options) => {
-  options.headers = {
-    authorization: `Bearer ${
-      JSON.parse(sessionStorage.getItem("cdx_user")).token
-    }`,
-  };
+  if (
+    sessionStorage.getItem("cdx_user") &&
+    JSON.parse(sessionStorage.getItem("cdx_user")).token
+  ) {
+    options.headers = {
+      authorization: `Bearer ${
+        JSON.parse(sessionStorage.getItem("cdx_user")).token
+      }`,
+    };
+  }
 
   return axios(options);
 };
