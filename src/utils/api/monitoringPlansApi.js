@@ -1,7 +1,6 @@
-import axios from "axios";
 import { handleResponse, handleError } from "./apiUtils";
 import config from "../../config";
-import { secureAxios } from "./easeyAuthApi";
+import { secureAxios as axios } from "./easeyAuthApi";
 
 // *** obtain monitoring plans
 export const getMonitoringPlans = async (orisCode) => {
@@ -15,7 +14,7 @@ export const getMonitoringPlans = async (orisCode) => {
   // *** attach the rest of the url
   url = `${url}/plans/${orisCode}/configurations`;
 
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return axios({ url: url }).then(handleResponse).catch(handleError);
 };
 
 // *** obtain monitoring methods
@@ -30,7 +29,7 @@ export const getMonitoringMethods = async (locationId) => {
   // *** attach the rest of the url
   url = `${url}/locations/${locationId}/methods`;
 
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return axios({ url: url }).then(handleResponse).catch(handleError);
 };
 
 export const getMonitoringMatsMethods = async (locationId) => {
@@ -42,7 +41,7 @@ export const getMonitoringMatsMethods = async (locationId) => {
   }
   url = `${url}/locations/${locationId}/mats-methods`;
 
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return axios({ url: url }).then(handleResponse).catch(handleError);
 };
 
 export const getMonitoringSystems = async (locationId) => {
@@ -53,7 +52,7 @@ export const getMonitoringSystems = async (locationId) => {
   }
   url = `${url}/locations/${locationId}/systems`;
 
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return axios({ url: url }).then(handleResponse).catch(handleError);
 };
 
 export const getMonitoringSystemsFuelFlows = async (locationId, systemId) => {
@@ -64,7 +63,7 @@ export const getMonitoringSystemsFuelFlows = async (locationId, systemId) => {
   }
   url = `${url}/locations/${locationId}/systems/${systemId}/fuel-flows`;
 
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return axios({ url: url }).then(handleResponse).catch(handleError);
 };
 
 export const getMonitoringSystemsComponents = async (locId, systemId) => {
@@ -76,7 +75,7 @@ export const getMonitoringSystemsComponents = async (locId, systemId) => {
   }
   url = `${url}/locations/${locId}/systems/${systemId}/components`;
 
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return axios({ url: url }).then(handleResponse).catch(handleError);
 };
 
 export const getMonitoringComponents = async (locId) => {
@@ -88,7 +87,7 @@ export const getMonitoringComponents = async (locId) => {
   url = `${url}/locations/${locId}/components/`;
 
   console.log("URL", url, locId);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return axios({ url: url }).then(handleResponse).catch(handleError);
 };
 
 export const getMonitoringAnalyzerRanges = async (locId, componentRecordId) => {
@@ -99,12 +98,12 @@ export const getMonitoringAnalyzerRanges = async (locId, componentRecordId) => {
   }
   url = `${url}/locations/${locId}​/components/${componentRecordId}/analyzer-ranges`;
 
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return axios({ url: url }).then(handleResponse).catch(handleError);
 };
 
 export const postCheckoutMonitoringPlanConfiguration = async (id, user) => {
   const userName = { username: user };
-  return secureAxios({
+  return axios({
     method: "POST",
     url: `${config.services.monitorPlans.uri}/workspace/plans/${id}/check-outs`,
     data: userName,
@@ -114,7 +113,7 @@ export const postCheckoutMonitoringPlanConfiguration = async (id, user) => {
 };
 
 export const revertOfficialRecord = async (id) => {
-  return secureAxios({
+  return axios({
     method: "DELETE",
     url: `${config.services.monitorPlans.uri}/workspace/plans/${id}/revert`,
   })
@@ -129,7 +128,7 @@ export const createMethods = async (payload) => {
   delete payload["locationId"];
   delete payload["id"];
 
-  return secureAxios({ method: "POST", url: url, data: payload })
+  return axios({ method: "POST", url: url, data: payload })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -140,13 +139,13 @@ export const createMats = async (payload) => {
   delete payload["locationId"];
   delete payload["id"];
 
-  return secureAxios({ method: "POST", url: url, data: payload })
+  return axios({ method: "POST", url: url, data: payload })
     .then(handleResponse)
     .catch(handleError);
 };
 
 export const putLockTimerUpdateConfiguration = async (id) => {
-  return secureAxios({
+  return axios({
     method: "PUT",
     url: `${config.services.monitorPlans.uri}/workspace/plans/${id}/check-outs`,
   })
@@ -161,7 +160,7 @@ export const saveMonitoringMethods = async (payload) => {
   delete payload["locationId"];
   delete payload["id"];
 
-  return secureAxios({
+  return axios({
     method: "PUT",
     url: url,
     data: payload,
@@ -176,7 +175,7 @@ export const saveMonitoringMats = async (payload) => {
   delete payload["locationId"];
   delete payload["id"];
 
-  return secureAxios({
+  return axios({
     method: "PUT",
     url: url,
     data: payload,
@@ -186,7 +185,7 @@ export const saveMonitoringMats = async (payload) => {
 };
 
 export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
-  return secureAxios({
+  return axios({
     method: "DELETE",
     url: `${config.services.monitorPlans.uri}/workspace/plans/${id}/check-outs`,
   })
@@ -196,10 +195,9 @@ export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
 
 // *** obtain a list of all checked out locations (by all users)
 export const getCheckedOutLocations = async () => {
-  return axios
-    .get(`${config.services.monitorPlans.uri}/workspace/plans/check-outs`)
-    .then(handleResponse)
-    .catch(handleError);
+  const url = `${config.services.monitorPlans.uri}/workspace/plans/check-outs`;
+
+  return axios({ url: url }).then(handleResponse).catch(handleError);
 };
 
 export const saveAnalyzerRanges = async (payload) => {
@@ -208,7 +206,7 @@ export const saveAnalyzerRanges = async (payload) => {
   delete payload["locId"];
   delete payload["id"];
   delete payload["compId"];
-  return secureAxios({
+  return axios({
     method: "PUT",
     url: url,
     data: payload,
@@ -222,7 +220,7 @@ export const createAnalyzerRanges = async (payload) => {
   delete payload["locId"];
   delete payload["compId"];
 
-  return secureAxios({
+  return axios({
     method: "POST",
     url: url,
     data: payload,
@@ -236,7 +234,7 @@ export const saveSystemsFuelFlows = async (payload, locId, sysId) => {
   // *** remove attributes not needed by the API
   delete payload["id"];
 
-  return secureAxios({
+  return axios({
     method: "PUT",
     url: url,
     data: payload,
@@ -250,7 +248,7 @@ export const createSystemsFuelFlows = async (payload, locId, sysId) => {
   // *** remove attributes not needed by the API
   delete payload["id"];
 
-  return secureAxios({
+  return axios({
     method: "POST",
     url: url,
     data: payload,
@@ -264,7 +262,7 @@ export const saveSystems = async (payload, locId, sysId) => {
   // *** remove attributes not needed by the API
   delete payload["id"];
 
-  return secureAxios({
+  return axios({
     method: "PUT",
     url: url,
     data: payload,
@@ -278,7 +276,7 @@ export const createSystems = async (payload, locId, sysId) => {
   // *** remove attributes not needed by the API
   delete payload["id"];
 
-  return secureAxios({
+  return axios({
     method: "POST",
     url: url,
     data: payload,
@@ -291,7 +289,7 @@ export const saveSystemsComponents = async (payload, locId, sysId, compId) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${locId}/systems/${sysId}/components/${compId}`;
   // *** remove attributes not needed by the API
   delete payload["id"];
-  return secureAxios({
+  return axios({
     method: "PUT",
     url: url,
     data: payload,
@@ -306,7 +304,7 @@ export const createSystemsComponents = async (payload, locId, sysId) => {
   console.log("payload, locId, sysId,", payload, locId, sysId);
   delete payload["id"];
 
-  return secureAxios({
+  return axios({
     method: "POST",
     url: url,
     data: payload,
@@ -326,6 +324,5 @@ export const getMonitoringSpans = async (locationId) => {
   // *** attach the rest of the url
   url = `${url}/locations/${locationId}/spans`;
 
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return axios({ url: url }).then(handleResponse).catch(handleError);
 };
-
