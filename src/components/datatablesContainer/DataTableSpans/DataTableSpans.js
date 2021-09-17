@@ -120,8 +120,10 @@ export const DataTableSpans = ({
     let span = null;
     setCreateNewSpan(create);
     if (spans.length > 0 && !create) {
-      console.log('row',row)
-      span = spans.filter((element) => element.id === row[`col${Object.keys(row).length-1}`])[0];
+      console.log("row", row);
+      span = spans.filter(
+        (element) => element.id === row[`col${Object.keys(row).length - 1}`]
+      )[0];
       setSelectedSpan(span);
     }
 
@@ -137,11 +139,7 @@ export const DataTableSpans = ({
           mpfValue: ["MPF Value", "input", ""],
           spanValue: ["Span Value", "input", ""],
           fullScaleRange: ["Full Scale Range", "input", ""],
-          spanUnitsOfMeasureCode: [
-            "Span Units of Measure",
-            "dropdown",
-            "",
-          ],
+          spanUnitsOfMeasureCode: ["Span Units of Measure", "dropdown", ""],
           scaleTransitionPoint: ["Scale Transition Point", "input", ""],
           defaultHighRange: ["Default High Range", "input", ""],
           flowSpanValue: ["Flow Span Value", "input", ""],
@@ -244,7 +242,7 @@ export const DataTableSpans = ({
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
-      {/* <input
+      <input
         tabIndex={-1}
         aria-hidden={true}
         role="button"
@@ -260,14 +258,7 @@ export const DataTableSpans = ({
         id="testingBtn2"
         onClick={() => testing2()}
       />
-      <input
-        tabIndex={-1}
-        aria-hidden={true}
-        role="button"
-        type="hidden"
-        id="testingBtn3"
-        onClick={() => testing3()}
-      /> */}
+
       <DataTableRender
         openHandler={openSpanModal}
         columnNames={columnNames}
