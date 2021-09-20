@@ -104,8 +104,8 @@ export const DataTableSpans = ({
 
   const testing = () => {
     openSpanModal(false, false, true);
-    // saveMethods();
-    // createMethods();
+    // saveSpans();
+    // createSpans();
   };
 
   const testing2 = () => {
@@ -124,6 +124,7 @@ export const DataTableSpans = ({
       span = spans.filter(
         (element) => element.id === row[`col${Object.keys(row).length - 1}`]
       )[0];
+      console.log(span, "selected span");
       setSelectedSpan(span);
     }
 
@@ -204,41 +205,41 @@ export const DataTableSpans = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [spans, inactive]);
 
-  // const saveMethods = () => {
-  //   const userInput = extractUserInput(payload, ".modalUserInput");
+  const saveSpan = () => {
+    const userInput = extractUserInput(payload, ".modalUserInput");
 
-  //   mpApi
-  //     .saveMonitoringMethods(userInput)
-  //     .then((result) => {
-  //       console.log(result, " was saved");
-  //       // openModal(false);
-  //       setShow(false);
-  //     })
-  //     .catch((error) => {
-  //       console.log("error is", error);
-  //       // openModal(false);
-  //       setShow(false);
-  //     });
-  //   setUpdateTable(true);
-  // };
+    mpApi
+      .saveMonitoringSpans(userInput)
+      .then((result) => {
+        console.log(result, " was saved");
+        // openModal(false);
+        setShow(false);
+      })
+      .catch((error) => {
+        console.log("error is", error);
+        // openModal(false);
+        setShow(false);
+      });
+    setUpdateTable(true);
+  };
 
-  // const createMethods = () => {
-  //   const userInput = extractUserInput(payload, ".modalUserInput");
+  const createSpan = () => {
+    const userInput = extractUserInput(payload, ".modalUserInput");
 
-  //   mpApi
-  //     .createMethods(userInput)
-  //     .then((result) => {
-  //       console.log(result, " was created");
-  //       // openModal(false);
-  //       setShow(false);
-  //     })
-  //     .catch((error) => {
-  //       console.log("error is", error);
-  //       // openModal(false);
-  //       setShow(false);
-  //     });
-  //   setUpdateTable(true);
-  // };
+    mpApi
+      .createMonitoringSpans(userInput)
+      .then((result) => {
+        console.log(result, " was created");
+        // openModal(false);
+        setShow(false);
+      })
+      .catch((error) => {
+        console.log("error is", error);
+        // openModal(false);
+        setShow(false);
+      });
+    setUpdateTable(true);
+  };
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -276,7 +277,7 @@ export const DataTableSpans = ({
         <Modal
           show={show}
           close={closeModalHandler}
-          // save={createNewSpan ? createNewSpans : saveSpans}
+          save={createNewSpan ? createSpan : saveSpan}
           showCancel={!(user && checkout)}
           showSave={user && checkout}
           title={createNewSpan ? "Create Span" : "Span"}

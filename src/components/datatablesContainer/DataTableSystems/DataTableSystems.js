@@ -201,10 +201,8 @@ export const DataTableSystems = ({
     setSecondLevel(val);
     setSecondLevelName(currentBread);
 
-    console.log("currentbread", currentBread);
     // missing stepper if !currentBread
     if (!addComp && !currentBread) {
-      console.log("test", val);
       setCreateFuelFlowFlag(create);
       setOpenFuelFlowsView(val);
       // setCreateNewComponentFlag(create);
