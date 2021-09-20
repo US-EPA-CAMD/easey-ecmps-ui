@@ -2,7 +2,6 @@ export const extractUserInput = (payload, inputSelector, radio) => {
   // *** construct payload
 
   const payloadInputs = document.querySelectorAll(inputSelector);
-  // console.log('payloadin extract',payload,payloadInputs)
   const datepickerPayloads = document.querySelectorAll(
     ".usa-date-picker__internal-input"
   );
@@ -47,7 +46,6 @@ export const extractUserInput = (payload, inputSelector, radio) => {
     payloadArray.push(item);
   }
   payloadArray.forEach((item) => {
-    //  console.log('ITEM',item)
     payload[item.name] = item.value.trim() === "" ? null : item.value.trim();
   });
 

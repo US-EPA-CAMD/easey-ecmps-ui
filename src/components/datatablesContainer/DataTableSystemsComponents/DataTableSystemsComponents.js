@@ -94,7 +94,6 @@ export const DataTableSystemsComponents = ({
 
   useEffect(() => {
     if (addCompThirdLevelCreateTrigger) {
-      // console.log("addCompThirdLevelCreateTrigger");
       openAddComponentHandler(false, true, true);
       setAddCompThirdLevelCreateTrigger(false);
     }
@@ -154,12 +153,10 @@ export const DataTableSystemsComponents = ({
   const openAddComponents = (row, bool, create) => {
     setAddComponent(true);
     setAddComponentFlag(true);
-    // console.log(row, bool, create, "test");
     setBread(true, "Add Component", false, true);
   };
 
   const openAddComponentHandler = (selectedComp, create, page) => {
-    // console.log("selectedCompo ", selectedComp);
     let selectComponents = null;
     setCreateNewComponentFlag(page);
     setOpenFuelFlowsView(false);
@@ -216,13 +213,11 @@ export const DataTableSystemsComponents = ({
       selectComponents = monitoringSystemsComponents.filter(
         (element) => element.componentId === row.col1
       )[0];
-      console.log(selectComponents, "tetinginsyscomp");
       setSelectedComponent(selectComponents);
 
       setOpenAnalyzer(selectComponents);
       setSelectedRangeInFirst(selectComponents); // for saving
     }
-    console.log("selectComponents", selectComponents);
     setSelectedComponentsModalData(
       modalViewData(
         selectComponents,
@@ -276,14 +271,10 @@ export const DataTableSystemsComponents = ({
     setCreateFuelFlowFlag(create);
     setComponentView(false);
     setOpenFuelFlowsView(true);
-
-    console.log(monitoringSystemsFuelFlows, "monitoringSystemsFuelFlows", row);
     if (monitoringSystemsFuelFlows.length > 0 && !create) {
       selectFuelFlows = monitoringSystemsFuelFlows.filter(
         (element) => element.id === row.col4
       )[0];
-
-      console.log(selectFuelFlows, "selectFuelFlows");
       setSelectedFuelFlows(selectFuelFlows);
     }
     setSelectedFuelFlowsModalData(

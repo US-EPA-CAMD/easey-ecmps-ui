@@ -68,7 +68,6 @@ export const getMonitoringSystemsFuelFlows = async (locationId, systemId) => {
 };
 
 export const getMonitoringSystemsComponents = async (locId, systemId) => {
-  console.log("locId, systemId", locId, systemId);
   let url = `${config.services.monitorPlans.uri}`;
   // *** workspace section url (authenticated)
   if (window.location.href.indexOf("workspace") > -1) {
@@ -87,7 +86,6 @@ export const getMonitoringComponents = async (locId) => {
   }
   url = `${url}/locations/${locId}/components/`;
 
-  console.log("URL", url, locId);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
@@ -303,7 +301,6 @@ export const saveSystemsComponents = async (payload, locId, sysId, compId) => {
 export const createSystemsComponents = async (payload, locId, sysId) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${locId}/systems/${sysId}/components/`;
   // *** remove attributes not needed by the API
-  console.log("payload, locId, sysId,", payload, locId, sysId);
   delete payload["id"];
 
   return secureAxios({
@@ -329,3 +326,30 @@ export const getMonitoringSpans = async (locationId) => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
+export const saveMonitoringSpans = async (payload) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/spans/${payload["id"]}`;
+  // *** remove attributes not needed by the API
+
+  return secureAxios({
+    method: "PUT",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const createMonitoringSpans = async (payload, locId, spanId) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${locId}/spans/${spanId}`;
+
+  // *** remove attributes not needed by the API
+  delete payload["id"];
+
+  return secureAxios({
+    method: "POST",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
