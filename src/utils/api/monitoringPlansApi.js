@@ -339,8 +339,8 @@ export const saveMonitoringSpans = async (payload) => {
     .catch(handleError);
 };
 
-export const createMonitoringSpans = async (payload, locId, spanId) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${locId}/spans/${spanId}`;
+export const createMonitoringSpans = async (payload) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/spans/`;
 
   // *** remove attributes not needed by the API
   delete payload["id"];
