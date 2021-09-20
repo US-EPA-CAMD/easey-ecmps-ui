@@ -4,11 +4,16 @@ import { checkoutAPI } from "../../additional-functions/checkout";
 import { getCheckedOutLocations } from "./monitoringPlansApi";
 
 export const secureAxios = (options) => {
-  options.headers = {
-    authorization: `Bearer ${
-      JSON.parse(sessionStorage.getItem("cdx_user")).token
-    }`,
-  };
+  if (
+    sessionStorage.getItem("cdx_user") &&
+    JSON.parse(sessionStorage.getItem("cdx_user")).token
+  ) {
+    options.headers = {
+      authorization: `Bearer ${
+        JSON.parse(sessionStorage.getItem("cdx_user")).token
+      }`,
+    };
+  }
 
   return axios(options);
 };
@@ -29,29 +34,29 @@ export const authenticate = async (data_payload) => {
     });
 };
 
-export const logOut = (event = "default") => {
+export const logOut = async (event = "default") => {
   if (event !== "default" && event) {
     event.preventDefault();
   }
+
+  const user = JSON.parse(sessionStorage.getItem("cdx_user"));
+  const checkedOutLocationResult = await getCheckedOutLocations();
+  for (const p in checkedOutLocationResult.data) {
+    if (checkedOutLocationResult.data[p].checkedOutBy === user.userId) {
+      await checkoutAPI(
+        false,
+        checkedOutLocationResult.data[p].facId,
+        checkedOutLocationResult.data[p].monPlanId,
+        undefined
+      );
+    }
+  }
+
   return secureAxios({
     method: "DELETE",
     url: `${config.services.authApi.uri}/authentication/sign-out`,
   })
     .then(async () => {
-      const user = JSON.parse(sessionStorage.getItem("cdx_user"));
-      const checkedOutLocationResult = await getCheckedOutLocations();
-      for (const p in checkedOutLocationResult.data) {
-        if (checkedOutLocationResult.data[p].checkedOutBy === user.userId) {
-          // Change this to userId eventually
-          await checkoutAPI(
-            false,
-            checkedOutLocationResult.data[p].facId,
-            checkedOutLocationResult.data[p].monPlanId,
-            undefined
-          );
-        }
-      }
-
       sessionStorage.removeItem("refreshTokenTimer");
       sessionStorage.removeItem("cdx_user");
       window.location = config.app.path;
