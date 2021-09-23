@@ -8,6 +8,7 @@ import * as mpApi from "../../utils/api/monitoringPlansApi";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import { checkoutAPI } from "../../additional-functions/checkout";
 import DataTableSpans from "../datatablesContainer/DataTableSpans/DataTableSpans";
+import DataTableLoads from "../datatablesContainer/DataTableLoads/DataTableLoads";
 import DataTableDefaults from "../datatablesContainer/DataTableDefaults/DataTableDefaults";
 
 export const MonitoringPlanTabRender = ({
@@ -101,19 +102,34 @@ export const MonitoringPlanTabRender = ({
   // updates all tables whenever a location is changed
   useEffect(() => {
     let tableArr = [
-      [ [
-        <DataTableDefaults
-          locationSelectValue={parseInt(locationSelect[1])}
-          inactive={inactive}
-          settingInactiveCheckBox={settingInactiveCheckBox}
-          checkout={checkout}
-          user={user}
-          revertedState={revertedState}
-          setRevertedState={setRevertedState}
-        />,
-        "Defaults",
-      ],],
-      [],
+      [
+        [
+          <DataTableDefaults
+            locationSelectValue={parseInt(locationSelect[1])}
+            inactive={inactive}
+            settingInactiveCheckBox={settingInactiveCheckBox}
+            checkout={checkout}
+            user={user}
+            revertedState={revertedState}
+            setRevertedState={setRevertedState}
+          />,
+          "Defaults",
+        ],
+      ],
+      [
+        [
+          <DataTableLoads
+            locationSelectValue={parseInt(locationSelect[1])}
+            inactive={inactive}
+            settingInactiveCheckBox={settingInactiveCheckBox}
+            checkout={checkout}
+            user={user}
+            revertedState={revertedState}
+            setRevertedState={setRevertedState}
+          />,
+          "Loads",
+        ],
+      ],
       [],
       [
         [
@@ -133,18 +149,20 @@ export const MonitoringPlanTabRender = ({
       [],
       [],
       [],
-      [  [
-        <DataTableSpans
-          locationSelectValue={parseInt(locationSelect[1])}
-          inactive={inactive}
-          settingInactiveCheckBox={settingInactiveCheckBox}
-          checkout={checkout}
-          user={user}
-          revertedState={revertedState}
-          setRevertedState={setRevertedState}
-        />,
-        "Spans",
-      ],],
+      [
+        [
+          <DataTableSpans
+            locationSelectValue={parseInt(locationSelect[1])}
+            inactive={inactive}
+            settingInactiveCheckBox={settingInactiveCheckBox}
+            checkout={checkout}
+            user={user}
+            revertedState={revertedState}
+            setRevertedState={setRevertedState}
+          />,
+          "Spans",
+        ],
+      ],
       [],
       [
         [
@@ -202,19 +220,34 @@ export const MonitoringPlanTabRender = ({
 
   // sets initial state
   const [tableState, setTableState] = useState([
-    [ [
-      <DataTableDefaults
-        locationSelectValue={parseInt(locationSelect[1])}
-        inactive={inactive}
-        settingInactiveCheckBox={settingInactiveCheckBox}
-        checkout={checkout}
-        user={user}
-        revertedState={revertedState}
-        setRevertedState={setRevertedState}
-      />,
-      "Defaults",
-    ],],
-    [],
+    [
+      [
+        <DataTableDefaults
+          locationSelectValue={parseInt(locationSelect[1])}
+          inactive={inactive}
+          settingInactiveCheckBox={settingInactiveCheckBox}
+          checkout={checkout}
+          user={user}
+          revertedState={revertedState}
+          setRevertedState={setRevertedState}
+        />,
+        "Defaults",
+      ],
+    ],
+    [
+      [
+        <DataTableLoads
+          locationSelectValue={parseInt(locationSelect[1])}
+          inactive={inactive}
+          settingInactiveCheckBox={settingInactiveCheckBox}
+          checkout={checkout}
+          user={user}
+          revertedState={revertedState}
+          setRevertedState={setRevertedState}
+        />,
+        "Loads",
+      ],
+    ],
     [],
     [
       [
