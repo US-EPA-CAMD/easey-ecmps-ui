@@ -104,10 +104,10 @@ export const DataTableLoads = ({
           upperOperationBoundary: ["Upper Operation Boundary", "input", ""],
           normalLevelCode: ["Normal Level", "dropdown", ""],
           secondLevelCode: ["Second Level", "dropdown", ""],
-          secondNormalIndicator: ["Second Normal Indicator", "input", ""],
-          loadAnalysisDate: ["Load Analysis Date", "input", ""],
+          secondNormalIndicator: ["Second Normal Indicator", "radio", ""],
         },
         {
+          loadAnalysisDate: ["Load Analysis Date", "date", ""],
           beginDate: ["Start Date", "date", ""],
           beginHour: ["Start Time", "time", ""],
           endDate: ["End Date", "date", ""],
