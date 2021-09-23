@@ -16,6 +16,17 @@ import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 // value in data => [0] api label, [1] our UI label, [2] value,[3], required or not for editing, [4] control form type
 const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
 
+  // fixes rare instances where there is an enddate but no end time
+  if (
+    data[data.length - 2][4] === "date" &&
+    data[data.length - 2][5] !== null &&
+    data[data.length - 1][4] === "time" &&
+    data[data.length - 1][5] === null
+  ) {
+    data[data.length - 1][2] = "0";
+    data[data.length - 1][5] = "0";
+  }
+  
   const makeViewOnlyComp = (value) => {
     return (
       <div key={`${value[1]}`} className="grid-col">
@@ -151,7 +162,9 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
               value="No"
               className="padding-left-1"
               defaultChecked={
-                value[2] === null ||value[2] === false|| value[2] === "0" ? true : false
+                value[2] === null || value[2] === false || value[2] === "0"
+                  ? true
+                  : false
               }
             />
           </Fieldset>
