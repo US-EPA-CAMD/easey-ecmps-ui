@@ -165,3 +165,36 @@ export const getAllSpanScaleCodes = async () => {
     .catch(handleError);
 };
 
+// defaults
+
+export const getAllOperatingConditionCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/operating-condition-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+
+export const getAllDefaultSourceCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/default-source-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getAllDefaultPurposeCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/default-purpose-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getAllFuelCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/fuel-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+
+
