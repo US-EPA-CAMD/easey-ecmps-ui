@@ -8,6 +8,7 @@ import * as mpApi from "../../utils/api/monitoringPlansApi";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import { checkoutAPI } from "../../additional-functions/checkout";
 import DataTableSpans from "../datatablesContainer/DataTableSpans/DataTableSpans";
+import DataTableLoads from "../datatablesContainer/DataTableLoads/DataTableLoads";
 
 export const MonitoringPlanTabRender = ({
   resetTimer,
@@ -101,7 +102,18 @@ export const MonitoringPlanTabRender = ({
   useEffect(() => {
     let tableArr = [
       [],
-      [],
+      [[
+        <DataTableLoads
+          locationSelectValue={parseInt(locationSelect[1])}
+          inactive={inactive}
+          settingInactiveCheckBox={settingInactiveCheckBox}
+          checkout={checkout}
+          user={user}
+          revertedState={revertedState}
+          setRevertedState={setRevertedState}
+        />,
+        "Loads",
+      ],],
       [],
       [
         [
@@ -191,7 +203,18 @@ export const MonitoringPlanTabRender = ({
   // sets initial state
   const [tableState, setTableState] = useState([
     [],
-    [],
+    [[
+      <DataTableLoads
+        locationSelectValue={parseInt(locationSelect[1])}
+        inactive={inactive}
+        settingInactiveCheckBox={settingInactiveCheckBox}
+        checkout={checkout}
+        user={user}
+        revertedState={revertedState}
+        setRevertedState={setRevertedState}
+      />,
+      "Loads",
+    ],],
     [],
     [
       [

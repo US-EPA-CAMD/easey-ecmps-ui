@@ -353,3 +353,17 @@ export const createMonitoringSpans = async (payload) => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+export const getMonitoringLoads = async (locationId) => {
+  let url = `${config.services.monitorPlans.uri}`;
+
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+
+  // *** attach the rest of the url
+  url = `${url}/locations/${locationId}/loads`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
