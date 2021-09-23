@@ -359,6 +359,7 @@ export const createMonitoringSpans = async (payload) => {
 export const getMonitoringDefaults = async (locationId) => {
   let url = `${config.services.monitorPlans.uri}`;
 
+  
   // *** workspace section url (authenticated)
   if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;

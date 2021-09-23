@@ -52,6 +52,7 @@ export const DataTableDefaults = ({
       revertedState
     ) {
       mpApi.getMonitoringDefaults(locationSelectValue).then((res) => {
+        console.log('res.data defaults',res.data)
         setDefaults(res.data);
         setDataLoaded(true);
       });
