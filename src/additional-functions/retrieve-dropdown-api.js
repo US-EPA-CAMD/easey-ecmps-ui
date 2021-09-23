@@ -153,6 +153,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           setTotalOptions(newData);
         });
         break;
+      case "defaultUnitsOfMeasureCode":
       case "spanUnitsOfMeasureCode":
       case "maximumLoadUnitsOfMeasureCode":
       case "systemFuelFlowUOMCode":
@@ -173,7 +174,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
         });
         break;
 
-      case "fuelCode":
+      case "fuelType":
         dmApi.getAllFuelTypes().then((response) => {
           options = response.data.map((option) => {
             return {
@@ -190,6 +191,24 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           setTotalOptions(newData);
         });
         break;
+
+        case "fuelCode":
+          dmApi.getAllFuelCodes().then((response) => {
+            options = response.data.map((option) => {
+              return {
+                code: option["fuelCode"],
+                name: option["fuelCodeDescription"],
+              };
+            });
+  
+            options.unshift({ code: "", name: "" });
+            options.unshift({ code: "select", name: "-- Select a value --" });
+            const newData = totalOptions;
+            newData[x] = options;
+  
+            setTotalOptions(newData);
+          });
+          break;
       case "systemTypeCode":
         dmApi.getAllSystemTypeCodes().then((response) => {
           options = response.data.map((option) => {
@@ -331,6 +350,59 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
         });
         break;
 
+      // for defaults
+
+      case "operatingConditionCode":
+        dmApi.getAllOperatingConditionCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["operatingConditionCode"],
+              name: option["operatingConditionCodeDescription"],
+            };
+          });
+
+          options.unshift({ code: "", name: "" });
+          options.unshift({ code: "select", name: "-- Select a value --" });
+          const newData = totalOptions;
+          newData[x] = options;
+
+          setTotalOptions(newData);
+        });
+        break;
+      case "defaultSourceCode":
+        dmApi.getAllDefaultSourceCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["defaultSourceCode"],
+              name: option["defaultSourceCodeDescription"],
+            };
+          });
+
+          options.unshift({ code: "", name: "" });
+          options.unshift({ code: "select", name: "-- Select a value --" });
+          const newData = totalOptions;
+          newData[x] = options;
+
+          setTotalOptions(newData);
+        });
+        break;
+        case "defaultPurposeCode":
+          dmApi.getAllDefaultPurposeCodes().then((response) => {
+            options = response.data.map((option) => {
+              return {
+                code: option["defaultPurposeCode"],
+                name: option["defaultPurposeCodeDescription"],
+              };
+            });
+  
+            options.unshift({ code: "", name: "" });
+            options.unshift({ code: "select", name: "-- Select a value --" });
+            const newData = totalOptions;
+            newData[x] = options;
+  
+            setTotalOptions(newData);
+          });
+          break;
       default:
         break;
     }
