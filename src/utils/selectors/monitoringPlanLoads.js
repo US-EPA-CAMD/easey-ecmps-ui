@@ -9,6 +9,12 @@ export const getMonitoringPlansLoadsTableRecords = (totalData) => {
     const beginHour = el.beginHour ? el.beginHour.toString() : "";
     const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
     const endHour = el.endHour ? el.endHour.toString() : "";
+
+    const loadAnalysisDate = el.loadAnalysisDate
+      ? formatStringToDate(el.loadAnalysisDate.toString())
+      : "";
+
+    console.log(loadAnalysisDate);
     records.push({
       col1: el.maximumLoadValue,
       col2: el.maximumLoadUnitsOfMeasureCode,
@@ -17,7 +23,7 @@ export const getMonitoringPlansLoadsTableRecords = (totalData) => {
       col5: el.normalLevelCode,
       col6: el.secondLevelCode,
       col7: el.secondNormalIndicator,
-      col8: el.loadAnalysisDate,
+      col8: `${loadAnalysisDate}`,
       col9: `${beginDate} ${beginHour}`,
       col10: `${endDate} ${endHour}`,
       col11: el.id,
