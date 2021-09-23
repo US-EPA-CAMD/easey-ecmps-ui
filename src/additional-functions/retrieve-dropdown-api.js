@@ -155,6 +155,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
         break;
       case "defaultUnitsOfMeasureCode":
       case "spanUnitsOfMeasureCode":
+      case "maximumLoadUnitsOfMeasureCode":
       case "systemFuelFlowUOMCode":
         dmApi.getAllUnitsOfMeasureCodes().then((response) => {
           options = response.data.map((option) => {
@@ -330,7 +331,28 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           setTotalOptions(newData);
         });
         break;
+      case "normalLevelCode":
+      case "secondLevelCode":
+        dmApi.getAllOperatingLevelCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["operatingLevelCode"],
+              name: option["operatingLevelCodeDescription"],
+            };
+          });
 
+<<<<<<< HEAD
+=======
+          options.unshift({ code: "", name: "" });
+          options.unshift({ code: "select", name: "-- Select a value --" });
+          const newData = totalOptions;
+          newData[x] = options;
+
+          setTotalOptions(newData);
+        });
+        break;
+
+>>>>>>> ce94ecb7a10d3bae1e43bb5aac573117db5d9947
       // for defaults
 
       case "operatingConditionCode":

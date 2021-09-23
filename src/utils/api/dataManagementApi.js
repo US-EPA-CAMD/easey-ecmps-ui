@@ -165,6 +165,12 @@ export const getAllSpanScaleCodes = async () => {
     .catch(handleError);
 };
 
+export const getAllOperatingLevelCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/operating-level-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
 // defaults
 
 export const getAllOperatingConditionCodes = async () => {
@@ -173,7 +179,6 @@ export const getAllOperatingConditionCodes = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
-
 
 export const getAllDefaultSourceCodes = async () => {
   return axios
@@ -195,6 +200,3 @@ export const getAllFuelCodes = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
-
-
-
