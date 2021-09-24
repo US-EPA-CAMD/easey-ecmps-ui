@@ -341,8 +341,6 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-<<<<<<< HEAD
-=======
           options.unshift({ code: "", name: "" });
           options.unshift({ code: "select", name: "-- Select a value --" });
           const newData = totalOptions;
@@ -352,7 +350,6 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
         });
         break;
 
->>>>>>> ce94ecb7a10d3bae1e43bb5aac573117db5d9947
       // for defaults
 
       case "operatingConditionCode":

@@ -31,18 +31,16 @@ export const HeaderInfo = ({
 }) => {
   const sections = [
     { name: "Defaults" },
+    { name: "Formulas" },
     { name: "Loads" },
     { name: "Location Attributes" },
     { name: "Methods" },
     { name: "Qualifications" },
     { name: "Rectangular Duct WAFs" },
-    { name: "Reporting Frequency" },
-    { name: "Span, Range, and Formulas" },
-    { name: "Stack/Pipe Information" },
+    { name: "Span" },
     { name: "Systems" },
     { name: "Unit Information" },
   ];
-
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
