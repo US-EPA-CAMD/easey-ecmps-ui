@@ -1,4 +1,3 @@
-
 import { findValue, adjustDate } from "./find-values-in-array";
 
 // object property,Label Name, value
@@ -26,7 +25,6 @@ export const modalViewData = (
     // basisCode: basisCode,
     // maximumFuelFlowRateSourceCode: componentTypes,
     // maximumFuelFlowRate: acqMethodCode,
-
     // systemFuelFlowUOMCode: basisCode,
   };
 
@@ -39,7 +37,6 @@ export const modalViewData = (
             labels = findValue(totalOptions[y], selected[y], "name");
           } else {
             labels = findValue(codeList[y], selected[y], "name");
-
           }
         }
         arr.push([
@@ -83,25 +80,28 @@ export const modalViewData = (
           ]);
         }
         break;
-        // case "hidden":
-        //   arr.push([
-        //     y,
-        //     label[y][0],
-        //     selected[y],
-        //     false,
-        //     "input",
-        //   ]);
-        //   break;
+      // case "hidden":
+      //   arr.push([
+      //     y,
+      //     label[y][0],
+      //     selected[y],
+      //     false,
+      //     "input",
+      //   ]);
+      //   break;
       default:
         break;
     }
   }
 
   for (const y in time) {
-    if (y === "endDate" || y === "beginDate") {
+    if (y === "endDate" || y === "beginDate" || y === "loadAnalysisDate") {
       let formattedDate = "";
       if (!createNew) {
-        formattedDate = adjustDate("mm/dd/yyyy", selected[y]?selected[y]:null);
+        formattedDate = adjustDate(
+          "mm/dd/yyyy",
+          selected[y] ? selected[y] : null
+        );
       }
 
       arr.push([
