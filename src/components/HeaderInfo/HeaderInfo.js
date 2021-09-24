@@ -33,7 +33,7 @@ export const HeaderInfo = ({
     { name: "Defaults" },
     { name: "Formulas" },
     { name: "Loads" },
-    { name: "Location Attributes" },
+    { name: "Location Attributes and Relationships" },
     { name: "Methods" },
     { name: "Qualifications" },
     { name: "Rectangular Duct WAFs" },
