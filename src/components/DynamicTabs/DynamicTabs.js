@@ -31,7 +31,7 @@ export const DynamicTabs = ({
           checkout: t.checkout,
           name: t.title,
           location: [0, t.selectedConfig.locations[0].id],
-          section: [3, "Methods"],
+          section: [4, "Methods"],
           selectedConfig: t.selectedConfig,
           inactive: [false, false],
         });

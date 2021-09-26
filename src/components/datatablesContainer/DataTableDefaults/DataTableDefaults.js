@@ -52,6 +52,7 @@ export const DataTableDefaults = ({
       revertedState
     ) {
       mpApi.getMonitoringDefaults(locationSelectValue).then((res) => {
+        console.log("res.data defaults", res.data);
         setDefaults(res.data);
         setDataLoaded(true);
       });
@@ -64,10 +65,10 @@ export const DataTableDefaults = ({
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = [
-    "Parameter",
+    "Parameter Code",
     "Units of Measure",
     "Purpose",
-    "Fuel Type",
+    "Fuel Code",
     "Operating Condition",
     "Source of Value",
     "Begin Date and Time",
@@ -120,7 +121,7 @@ export const DataTableDefaults = ({
       modalViewData(
         defaultPick,
         {
-          parameterCode: ["Parameter Code", "dropdown", ""],
+          parameterCode: ["Parameter", "dropdown", ""],
           defaultValue: ["Default Value", "input", ""],
           defaultUnitsOfMeasureCode: ["Units of Measure", "dropdown", ""],
           defaultPurposeCode: ["Purpose", "dropdown", ""],

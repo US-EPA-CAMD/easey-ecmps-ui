@@ -116,6 +116,7 @@ export const MonitoringPlanTabRender = ({
           "Defaults",
         ],
       ],
+      [], // formulats
       [
         [
           <DataTableLoads
@@ -130,7 +131,7 @@ export const MonitoringPlanTabRender = ({
           "Loads",
         ],
       ],
-      [],
+      [], // location attributes
       [
         [
           <DataTableMethod
@@ -146,9 +147,9 @@ export const MonitoringPlanTabRender = ({
           "Methods",
         ],
       ],
-      [],
-      [],
-      [],
+      [], // qualifications
+      [], // rectangular duct
+
       [
         [
           <DataTableSpans
@@ -163,7 +164,7 @@ export const MonitoringPlanTabRender = ({
           "Spans",
         ],
       ],
-      [],
+
       [
         [
           <DataTableSystems
@@ -178,7 +179,7 @@ export const MonitoringPlanTabRender = ({
           "Systems",
         ],
       ],
-      [],
+      [], // unit info
     ];
 
     if (matsTableFlag) {
@@ -234,6 +235,7 @@ export const MonitoringPlanTabRender = ({
         "Defaults",
       ],
     ],
+    [], // formulats
     [
       [
         <DataTableLoads
@@ -248,7 +250,7 @@ export const MonitoringPlanTabRender = ({
         "Loads",
       ],
     ],
-    [],
+    [], // location attributes
     [
       [
         <DataTableMethod
@@ -264,26 +266,39 @@ export const MonitoringPlanTabRender = ({
         "Methods",
       ],
     ],
-    [],
-    [],
-    [],
-    [],
-    [],
+    [], // qualifications
+    [], // rectangular duct
+
+    [
+      [
+        <DataTableSpans
+          locationSelectValue={parseInt(locationSelect[1])}
+          inactive={inactive}
+          settingInactiveCheckBox={settingInactiveCheckBox}
+          checkout={checkout}
+          user={user}
+          revertedState={revertedState}
+          setRevertedState={setRevertedState}
+        />,
+        "Spans",
+      ],
+    ],
+
     [
       [
         <DataTableSystems
-          locationSelectValue={locationSelect[1]}
+          locationSelectValue={parseInt(locationSelect[1])}
           inactive={inactive}
           settingInactiveCheckBox={settingInactiveCheckBox}
-          revertedState={revertedState}
-          // setRevertedState={setRevertedState}
           checkout={checkout}
           user={user}
+          revertedState={revertedState}
+          setRevertedState={setRevertedState}
         />,
         "Systems",
       ],
     ],
-    [],
+    [], // unit info
   ]);
 
   // not tested ***
