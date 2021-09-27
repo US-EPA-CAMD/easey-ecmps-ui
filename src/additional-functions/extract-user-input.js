@@ -1,6 +1,5 @@
 export const extractUserInput = (payload, inputSelector, radio) => {
   // *** construct payload
-
   const payloadInputs = document.querySelectorAll(inputSelector);
   const datepickerPayloads = document.querySelectorAll(
     ".usa-date-picker__internal-input"

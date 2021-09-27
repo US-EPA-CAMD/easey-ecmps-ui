@@ -74,6 +74,23 @@ export const DataTableLoads = ({
     "End Date and Time",
   ];
 
+  const payload = {
+    locationId: locationSelectValue,
+    id: null,
+    maximumLoadValue: 0,
+    maximumLoadUnitsOfMeasureCode: "string",
+    lowerOperationBoundary: 0,
+    upperOperationBoundary: 0,
+    normalLevelCode: "string",
+    secondLevelCode: "string",
+    secondNormalIndicator: 0,
+    loadAnalysisDate: "2021-09-16T20:55:48.806Z",
+    beginDate: "2021-09-16T20:55:48.806Z",
+    beginHour: 0,
+    endDate: "2021-09-16T20:55:48.806Z",
+    endHour: 0,
+  };
+
   // cant unit test properly
   const [createNewLoad, setCreateNewLoad] = useState(false);
 
@@ -165,25 +182,90 @@ export const DataTableLoads = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loads, inactive]);
 
+  const testing = () => {
+    openLoadModal(false, false, true);
+    saveLoad();
+  };
+
+  const testing2 = () => {
+    openLoadModal(
+      { col5: "MELISSARHO-CDF765BC7BF849EE9C23608B95540200" },
+      false,
+      false
+    );
+  };
+  const testing3 = () => {
+    openLoadModal(false, false, true);
+    createLoad();
+  };
+
+  const saveLoad = () => {
+    var radioName = "secondNormalIndicator";
+
+    const userInput = extractUserInput(payload, ".modalUserInput", radioName);
+
+    mpApi
+      .saveMonitoringLoads(userInput)
+      .then((result) => {
+        console.log(result, " was saved");
+        // openModal(false);
+        setShow(false);
+      })
+      .catch((error) => {
+        console.log("error is", error);
+        // openModal(false);
+        setShow(false);
+      });
+    setUpdateTable(true);
+  };
+
+  const createLoad = () => {
+    var radioName = "secondNormalIndicator";
+
+    const userInput = extractUserInput(payload, ".modalUserInput", radioName);
+
+    mpApi
+      .createMonitoringLoads(userInput)
+      .then((result) => {
+        console.log(result, " was created");
+        // openModal(false);
+        setShow(false);
+      })
+      .catch((error) => {
+        console.log("error is", error);
+        // openModal(false);
+        setShow(false);
+      });
+    setUpdateTable(true);
+  };
+
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
-      {/* <input
-          tabIndex={-1}
-          aria-hidden={true}
-          role="button"
-          type="hidden"
-          id="testingBtn"
-          onClick={() => testing()}
-        />
-        <input
-          tabIndex={-1}
-          aria-hidden={true}
-          role="button"
-          type="hidden"
-          id="testingBtn2"
-          onClick={() => testing2()}
-        /> */}
+      <input
+        tabIndex={-1}
+        aria-hidden={true}
+        role="button"
+        type="hidden"
+        id="testingBtn"
+        onClick={() => testing()}
+      />
+      <input
+        tabIndex={-1}
+        aria-hidden={true}
+        role="button"
+        type="hidden"
+        id="testingBtn2"
+        onClick={() => testing2()}
+      />
+      <input
+        tabIndex={-1}
+        aria-hidden={true}
+        role="button"
+        type="hidden"
+        id="testingBtn3"
+        onClick={() => testing3()}
+      />
 
       <DataTableRender
         openHandler={openLoadModal}
@@ -202,9 +284,11 @@ export const DataTableLoads = ({
         <Modal
           show={show}
           close={closeModalHandler}
+          save={createNewLoad ? createLoad : saveLoad}
           showCancel={!(user && checkout)}
-          title={"Load"}
-          exitBTN={`Save and Close`}
+          showSave={user && checkout}
+          title={createNewLoad ? "Create Load" : "Load"}
+          exitBTN={createNewLoad ? "Create Load" : `Save and Close`}
           children={
             <div>
               <ModalDetails

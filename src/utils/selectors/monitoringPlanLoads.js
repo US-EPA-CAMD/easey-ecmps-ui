@@ -10,24 +10,55 @@ export const getMonitoringPlansLoadsTableRecords = (totalData) => {
     const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
     const endHour = el.endHour ? el.endHour.toString() : "";
 
-    const secondNormalIndicator = el.secondNormalIndicator
-      ? el.secondNormalIndicator === "1"
-        ? "Yes"
-        : "No"
-      : "";
+    var secondNormalIndicator;
+    if (el.secondNormalIndicator) {
+      if (el.secondNormalIndicator === "1") {
+        secondNormalIndicator = "Yes";
+      } else {
+        secondNormalIndicator = "No";
+      }
+    } else {
+      secondNormalIndicator = "";
+    }
+
+    var maximumLoadUnitsOfMeasureCode;
+    switch (el.maximumLoadUnitsOfMeasureCode) {
+      case "select":
+        maximumLoadUnitsOfMeasureCode = null;
+        break;
+      default:
+        maximumLoadUnitsOfMeasureCode = el.maximumLoadUnitsOfMeasureCode;
+    }
+
+    var normalLevelCode;
+    switch (el.normalLevelCode) {
+      case "select":
+        normalLevelCode = null;
+        break;
+      default:
+        normalLevelCode = el.normalLevelCode;
+    }
+
+    var secondLevelCode;
+    switch (el.secondLevelCode) {
+      case "select":
+        secondLevelCode = null;
+        break;
+      default:
+        secondLevelCode = el.secondLevelCode;
+    }
 
     const loadAnalysisDate = el.loadAnalysisDate
       ? formatStringToDate(el.loadAnalysisDate.toString())
       : "";
 
-    console.log(loadAnalysisDate);
     records.push({
       col1: el.maximumLoadValue,
-      col2: el.maximumLoadUnitsOfMeasureCode,
+      col2: maximumLoadUnitsOfMeasureCode,
       col3: el.lowerOperationBoundary,
       col4: el.upperOperationBoundary,
-      col5: el.normalLevelCode,
-      col6: el.secondLevelCode,
+      col5: normalLevelCode,
+      col6: secondLevelCode,
       col7: secondNormalIndicator,
       col8: loadAnalysisDate,
       col9: `${beginDate} ${beginHour}`,
