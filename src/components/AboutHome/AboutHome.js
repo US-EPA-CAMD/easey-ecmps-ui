@@ -57,7 +57,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
               <h2 className="text-bold font-heading-xl">{topic.name} </h2>
               <div>{topic.descriptions}</div>
               <USWDSLink
-                className="usa-button viewAboutBTN bg-cyan margin-1"
+                className="usa-button viewAboutBTN bg-accent-cool margin-1"
                 variant="unstyled"
                 asCustom={Link}
                 to={topic.url}
