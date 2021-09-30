@@ -1,7 +1,10 @@
-import React from "react";
+import React,{useEffect} from "react";
 import "./Home.scss";
 
 export const Home = () => {
+  useEffect(() => {
+    document.title = "ECMPS Home";
+    }, [])
   return (
     <div className="home-container react-transition fade-in">
       <div className="text-center text-bold text-primary-dark minh-tablet-lg font-heading-xl padding-top-9">
