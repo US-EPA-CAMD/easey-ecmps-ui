@@ -47,6 +47,8 @@ export const DataTableSystemsComponents = ({
   setupdateComponentTable,
   addComponentFlag,
   setAddComponentFlag,
+  addExistingComponentFlag,
+  setAddExistingComponentFlag,
   addCompThirdLevelTrigger,
   setAddCompThirdLevelTrigger,
   addCompThirdLevelCreateTrigger,
@@ -55,8 +57,8 @@ export const DataTableSystemsComponents = ({
   setCurrentBar,
   openFuelFlowsView,
   setOpenFuelFlowsView,
-  openComponentViewTest=false,
-  openAddComponentTest=false,
+  openComponentViewTest = false,
+  openAddComponentTest = false,
 }) => {
   const [monitoringSystemsFuelFlows, setMonitoringSystemsFuelFlows] = useState(
     ""
@@ -139,8 +141,12 @@ export const DataTableSystemsComponents = ({
 
   // *** row handler onclick event listener
 
-  const [openComponentView, setComponentView] = React.useState(openComponentViewTest);
-  const [openAddComponent, setAddComponent] = React.useState(openAddComponentTest); // for viewing the dropdown component page
+  const [openComponentView, setComponentView] = React.useState(
+    openComponentViewTest
+  );
+  const [openAddComponent, setAddComponent] = React.useState(
+    openAddComponentTest
+  ); // for viewing the dropdown component page
 
   //for analyzer ranges
   const [openAnalyzer, setOpenAnalyzer] = useState(false);
@@ -158,6 +164,7 @@ export const DataTableSystemsComponents = ({
 
   const openAddComponentHandler = (selectedComp, create, page) => {
     let selectComponents = null;
+    setAddExistingComponentFlag(!create);
     setCreateNewComponentFlag(page);
     setOpenFuelFlowsView(false);
     setAddComponent(false);
@@ -424,6 +431,7 @@ export const DataTableSystemsComponents = ({
                 backBtn={() => {
                   setCreateNewComponentFlag(false);
                   setAddComponentFlag(false);
+                  setAddExistingComponentFlag(false);
                   backToFirstLevelLevelBTN(false);
                 }}
                 title={"Add Component"}
@@ -437,6 +445,8 @@ export const DataTableSystemsComponents = ({
                 <ModalDetails
                   modalData={selectedComponent} // need to review from modaladdcomp
                   backBtn={() => {
+                    setCreateNewComponentFlag(false);
+                    setAddComponentFlag(false);
                     openAddComponents();
                     setCurrentBar("");
                   }}
