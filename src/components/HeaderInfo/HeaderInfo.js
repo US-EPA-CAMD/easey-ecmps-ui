@@ -149,11 +149,6 @@ export const HeaderInfo = ({
           <div>
             <h3 className="display-inline-block">
               {" "}
-              {checkoutState || displayLock ? (
-                <LockSharp className="lock-icon margin-right-1" />
-              ) : (
-                ""
-              )}
               <span className="font-body-lg">{facilityMainName}</span>
             </h3>
           </div>
