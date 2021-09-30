@@ -149,7 +149,7 @@ export const HeaderInfo = ({
           <div>
             <h3 className="display-inline-block">
               {" "}
-              {checkoutState || displayLock ? (
+              {user && (checkoutState || displayLock) ? (
                 <LockSharp className="lock-icon margin-right-1" />
               ) : (
                 ""
@@ -160,7 +160,7 @@ export const HeaderInfo = ({
           <div className="">
             <div className="display-inline-block ">
               <div className="text-bold font-body-xl display-block height-auto">
-                {checkoutState || checkedOutByUser ? (
+                {user && (checkoutState || checkedOutByUser) ? (
                   <CreateOutlined color="primary" fontSize="large" />
                 ) : (
                   ""
