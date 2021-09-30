@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Button, SideNav, Link as USWDSLink } from "@trussworks/react-uswds";
-import Modal from "../Modal/Modal";
-import Login from "../Login/Login";
 
 import { Link } from "react-router-dom";
 
@@ -13,16 +11,16 @@ export const LeftNavigation = (props) => {
 
   };
 
-  const makeHeader = (arr,noActive) => {
+  const makeHeader = (arr, noActive) => {
     return arr.map((item) => {
       return (
         <USWDSLink
           className={
-            noActive? (
-            // currentRoute === item.url || 
-            props.currentLink === `/ecmps${item.url}` ||  props.currentLink ===  item.url
-              ? "usa-current text-no-wrap"
-              : "text-no-wrap") : "text-no-wrap"
+            noActive ? (
+              // currentRoute === item.url || 
+              props.currentLink === `/ecmps${item.url}` || props.currentLink === item.url
+                ? "usa-current text-no-wrap"
+                : "text-no-wrap") : "text-no-wrap"
           }
           variant="unstyled"
           asCustom={Link}
@@ -42,10 +40,6 @@ export const LeftNavigation = (props) => {
 
   const [show, setShow] = useState(false);
 
-  const closeModalHandler = () => setShow(false);
-  const openModal = (value) => {
-    setShow(value);
-  };
   const wsItems = [
     <USWDSLink
       to="/workspace"
@@ -62,31 +56,12 @@ export const LeftNavigation = (props) => {
   ];
   return (
     <div className="minh-tablet font-body-sm padding-3">
-      <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
-      {props.currentLink ? <SideNav items={makeHeader(head,true)} /> : <SideNav items={makeHeader(head,false)} />}
+      {props.currentLink ? <SideNav items={makeHeader(head, true)} /> : <SideNav items={makeHeader(head, false)} />}
 
       {props.user ? (
         <div className="margin-top-7">
           <SideNav items={wsItems} />
         </div>
-      ) : null}
-      <div className="padding-bottom-4 position-absolute bottom-3">
-        {!props.user ? (
-          <div className="padding-bottom-2">
-            <Button
-              type="button"
-              outline={true}
-              id="openModalBTN"
-              epa-testid="openModalBTN"
-              onClick={() => openModal(true)}
-            >
-              Log In
-            </Button>
-          </div>
-        ) : null}
-      </div>
-      {show ? (
-        <Modal show={show} close={closeModalHandler} children={<Login />} />
       ) : null}
     </div>
   );

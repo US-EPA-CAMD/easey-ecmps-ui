@@ -6,6 +6,22 @@ import { Route, Switch, BrowserRouter } from "react-router-dom";
 import LeftNavigation from "./LeftNavigation";
 // cannot use link outside router
 
+test("render accesory links no-login", () => {
+  render(<Layout>
+    <LeftNavigation />
+  </Layout>);
+
+  const homeLink = screen.getByText('Home');
+  const mpLink = screen.getByText('Monitoring Plans');
+  const qaLink = screen.getByText('QA & Certifications');
+  const emissionsLink = screen.getByText('Emissions');
+
+  expect(homeLink).toBeInTheDocument();
+  expect(mpLink).toBeInTheDocument();
+  expect(qaLink).toBeInTheDocument();
+  expect(emissionsLink).toBeInTheDocument();
+});
+
 describe("usePageTracking", () => {
   let location;
   let mockLocation = new URL("https://example.com/");
