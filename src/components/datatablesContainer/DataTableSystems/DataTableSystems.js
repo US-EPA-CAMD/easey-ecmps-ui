@@ -279,6 +279,10 @@ export const DataTableSystems = ({
 
   const [addComponentFlag, setAddComponentFlag] = React.useState(false);
   const [
+    addExistingComponentFlag,
+    setAddExistingComponentFlag,
+  ] = React.useState(false);
+  const [
     addCompThirdLevelTrigger,
     setAddCompThirdLevelTrigger,
   ] = React.useState(false);
@@ -668,9 +672,15 @@ export const DataTableSystems = ({
                 : // add componentmodal page
                 addComponentFlag && !createNewComponentFlag
                 ? "Continue"
+                : createNewComponentFlag &&
+                  addComponentFlag &&
+                  addExistingComponentFlag
+                ? "Add Existing Component"
                 : // /: // create a new comp page
-                createNewComponentFlag && addComponentFlag
-                ? "Add Component"
+                createNewComponentFlag &&
+                  addComponentFlag &&
+                  !addExistingComponentFlag
+                ? "Create New Component"
                 : null
             }
             breadCrumbBar={currentBar}
@@ -720,6 +730,8 @@ export const DataTableSystems = ({
                   selectedFuelFlows={selectedFuelFlows}
                   addComponentFlag={addComponentFlag}
                   setAddComponentFlag={setAddComponentFlag}
+                  addExistingComponentFlag={addExistingComponentFlag}
+                  setAddExistingComponentFlag={setAddExistingComponentFlag}
                   addCompThirdLevelTrigger={addCompThirdLevelTrigger}
                   setAddCompThirdLevelTrigger={setAddCompThirdLevelTrigger}
                   addCompThirdLevelCreateTrigger={
