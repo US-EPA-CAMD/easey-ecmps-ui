@@ -1,7 +1,10 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { Accordion } from "@trussworks/react-uswds";
 
 const FAQ = () => {
+  useEffect(() => {
+    document.title = "ECMPS FAQs";
+    }, [])
   const topics = [
     {
       name: "Monitoring Plans",

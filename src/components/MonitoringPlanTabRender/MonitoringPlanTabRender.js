@@ -42,6 +42,7 @@ export const MonitoringPlanTabRender = ({
     setInactive([check, disable], title);
   };
 
+
   const [revertedState, setRevertedState] = useState(false);
   // checks mats table
   // useEffect(() => {
@@ -184,7 +185,7 @@ export const MonitoringPlanTabRender = ({
 
     if (matsTableFlag) {
       tableArr = tableState.map((element, index) =>
-        index === 3
+        index === 4
           ? [
               [
                 <DataTableMethod
@@ -307,9 +308,10 @@ export const MonitoringPlanTabRender = ({
   };
 
   // ***
+
   //false => check back in
   // true => check out
-
+  
   return (
     <div className=" padding-top-0">
       {/*user && checkout ? (

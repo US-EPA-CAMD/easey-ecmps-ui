@@ -1,10 +1,14 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { Link as USWDSLink, Button } from "@trussworks/react-uswds";
 import { OpenInNew } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import "./Resources.scss";
 
 export const Resources = () => {
+
+  useEffect(() => {
+    document.title = "ECMPS Resources";
+    }, [])
   const topics = [
     {
       name: "Glossary",
@@ -40,7 +44,7 @@ export const Resources = () => {
   return (
     <div className="padding-top-7 padding-2 react-transition fade-in">
       <div className="grid-row">
-        <span className="text-bold font-heading-2xl">Resources</span>
+        <h2 className="text-bold font-heading-2xl">Resources</h2>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla
           massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt
@@ -55,7 +59,7 @@ export const Resources = () => {
               key={`container-${topic.name.replace(/ /g, "-")}`}
             >
               {" "}
-              <h2 className="text-bold font-heading-xl">{topic.name} </h2>
+              <h3 className="text-bold font-heading-xl">{topic.name} </h3>
               <div>{topic.descriptions}</div>
               <USWDSLink
                 className="usa-button usa-button--outline margin-top-1 margin-left-05"
@@ -82,7 +86,7 @@ export const Resources = () => {
         })}
       </div>
       <div className="margin-top-2">
-        <span className="text-bold font-heading-2xl">Additional Resources</span>
+        <h2 className="text-bold font-heading-2xl">Additional Resources</h2>
         <p>
           {" "}
           Examine she brother prudent add day ham. Far stairs now coming bed
