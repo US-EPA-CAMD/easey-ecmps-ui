@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { Link as USWDSLink } from "@trussworks/react-uswds";
 
 import { Link } from "react-router-dom";
@@ -6,6 +6,10 @@ import Login from "../Login/Login";
 
 import "./AboutHome.scss";
 const AboutHome = ({ user, setCurrentLink }) => {
+
+  useEffect(() => {
+    document.title = "ECMPS Home";
+    }, [])
   const topics = [
     {
       name: "Monitoring Plans",
