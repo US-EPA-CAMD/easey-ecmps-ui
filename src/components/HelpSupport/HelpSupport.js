@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { Link } from "react-router-dom";
 
 import { Link as USWDSLink, Button } from "@trussworks/react-uswds";
@@ -10,6 +10,9 @@ import { ContactUs } from "../ContactUs/ContactUs";
 import "./HelpSupport.scss";
 
 export const HelpSupport = () => {
+  useEffect(() => {
+    document.title = "ECMPS Help & Support";
+    }, [])
   return (
     <div className="padding-top-7 padding-2 react-transition fade-in">
       <div className="grid-row">

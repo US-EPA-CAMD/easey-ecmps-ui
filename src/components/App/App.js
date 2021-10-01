@@ -50,6 +50,7 @@ const App = () => {
   const [currentLink, setCurrentLink] = useState(
     window.location.href.replace(`${window.location.origin}`, "")
   );
+ 
 
   return (
     <div>

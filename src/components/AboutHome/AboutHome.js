@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link as USWDSLink } from "@trussworks/react-uswds";
 
 import { Link } from "react-router-dom";
@@ -6,6 +6,9 @@ import Login from "../Login/Login";
 
 import "./AboutHome.scss";
 const AboutHome = ({ user, setCurrentLink }) => {
+  useEffect(() => {
+    document.title = "ECMPS Home";
+  }, []);
   const topics = [
     {
       name: "Monitoring Plans",
@@ -35,14 +38,14 @@ const AboutHome = ({ user, setCurrentLink }) => {
     <div className="grid-row padding-top-7 padding-2 react-transition fade-in">
       <div className="grid-col-9 fit-content">
         <div>
-          <span className="text-bold font-heading-2xl">About ECMPS</span>
-          <h3 className="text-bold font-heading-md">
+          <h2 className="text-bold font-heading-2xl">About ECMPS</h2>
+          <p className="text-bold font-heading-md">
             Examine she brother prudent add day ham. Far stairs now coming bed
             oppose hunted become his. You zealously departure had procuring
             suspicion. Books whose front would purse if be do decay. Quitting
             you way formerly disposed perceive ladyship are. Common turned boy
             direct and yet.
-          </h3>
+          </p>
           <p>
             {" "}
             Examine she brother prudent add day ham. Far stairs now coming bed
@@ -54,7 +57,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
           return (
             <div className=" padding-top-2 padding-bottom-2">
               {" "}
-              <h2 className="text-bold font-heading-xl">{topic.name} </h2>
+              <h3 className="text-bold font-heading-xl">{topic.name} </h3>
               <div>{topic.descriptions}</div>
               <USWDSLink
                 className="usa-button viewAboutBTN bg-accent-cool margin-1"
@@ -66,7 +69,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
                 rel={topic.name}
                 title={`Go to ${topic.name} page`}
                 key={topic.url}
-                id={`${topic.name.split(" ").join("")}`}
+                id={`${topic.name.split(" ").join("")}_btn`}
                 onClick={(event) => handleRouteChange(event, topic.url)}
               >
                 View {topic.name}
@@ -88,7 +91,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
           </div>
         </div>{" "}
         <div className="bg-base-lighter" data-testid="homeLogIn">
-          {!user ? <Login /> : ""}
+          {!user ? <Login isModal={false} /> : ""}
         </div>
       </div>
     </div>

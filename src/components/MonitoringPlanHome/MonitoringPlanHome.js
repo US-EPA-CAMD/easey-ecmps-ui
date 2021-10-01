@@ -20,6 +20,9 @@ export const MonitoringPlanHome = ({
   callApiFlag,
   openedFacilityTabs,
 }) => {
+  useEffect(() => {
+    document.title = "ECMPS Monitoring Plans";
+    }, [])
   const [checkedOutLocations, setCheckedOutLocations] = useState([]);
   const [
     mostRecentlyCheckedInMonitorPlanIdForTab,

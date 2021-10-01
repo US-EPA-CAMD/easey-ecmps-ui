@@ -28,10 +28,9 @@ export const Tabs = ({
     removeTabs(index);
 
     mpApi.deleteCheckInMonitoringPlanConfiguration(configId).then((res) => {
-      if(setCheckout){
+      if (setCheckout) {
         setCheckout(false, configId);
       }
-      
     });
 
     if (activeTabIndex === children.length - 1) {
@@ -109,7 +108,8 @@ export const Tabs = ({
                   }}
                 >
                   <div className="text-center tab-button-text-container ellipsis-text padding-left-2px">
-                    {el.props.locationId &&
+                    {user &&
+                    el.props.locationId &&
                     isCheckedOut(el.props.locationId) ? (
                       <LockSharp className="text-bold tab-icon margin-right-2" />
                     ) : null}
