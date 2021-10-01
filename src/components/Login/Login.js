@@ -16,7 +16,7 @@ const cdx_user = sessionStorage.getItem("cdx_user")
   ? JSON.parse(sessionStorage.getItem("cdx_user"))
   : false;
 
-const Login = () => {
+const Login = ({ isModal }) => {
   const standardFormErrorMessage = "Please enter your username and password";
   const [showError, setShowError] = useState(false);
   const [formErrorMessage, setFormErrorMessage] = useState("");
@@ -107,8 +107,8 @@ const Login = () => {
             <Label htmlFor="username">Username</Label>
             <TextInput
               data-test="component-login-username"
-              id="username"
-              name="username"
+              id={isModal ? "modal-username" : "username"}
+              name={isModal ? "modal-username" : "username"}
               type={username ? "text" : "password"}
               value={username}
               onChange={(event) => setUsername(event.target.value)}
@@ -117,8 +117,8 @@ const Login = () => {
             <Label htmlFor="password">Password</Label>
             <TextInput
               data-test="component-login-password"
-              id="password"
-              name="password"
+              id={isModal ? "modal-password" : "password"}
+              name={isModal ? "modal-password" : "password"}
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(event) => setPassword(event.target.value)}
@@ -138,7 +138,7 @@ const Login = () => {
                 title="Show password"
                 href=""
                 className="usa-show-password"
-                aria-controls="password-sign-in"
+                aria-controls={isModal ? "modal-password" : "password"}
                 onClick={() => showPasswordHandler()}
               >
                 {showPassword ? "Hide password" : "Show password"}
