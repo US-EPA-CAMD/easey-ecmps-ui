@@ -25,6 +25,9 @@ const Login = ({ isModal }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const usernameText = isModal ? "modal-username" : "username";
+  const passwordText = isModal ? "modal-password" : "password";
+
   const checkLoggedIn = () => {
     if (cdx_user) {
       window.location = "/ecmps/monitoring-plans";
@@ -107,8 +110,8 @@ const Login = ({ isModal }) => {
             <Label htmlFor="username">Username</Label>
             <TextInput
               data-test="component-login-username"
-              id={isModal ? "modal-username" : "username"}
-              name={isModal ? "modal-username" : "username"}
+              id={usernameText}
+              name={usernameText}
               type={username ? "text" : "password"}
               value={username}
               onChange={(event) => setUsername(event.target.value)}
@@ -117,8 +120,8 @@ const Login = ({ isModal }) => {
             <Label htmlFor="password">Password</Label>
             <TextInput
               data-test="component-login-password"
-              id={isModal ? "modal-password" : "password"}
-              name={isModal ? "modal-password" : "password"}
+              id={passwordText}
+              name={passwordText}
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(event) => setPassword(event.target.value)}
@@ -138,7 +141,7 @@ const Login = ({ isModal }) => {
                 title="Show password"
                 href=""
                 className="usa-show-password"
-                aria-controls={isModal ? "modal-password" : "password"}
+                aria-controls={passwordText}
                 onClick={() => showPasswordHandler()}
               >
                 {showPassword ? "Hide password" : "Show password"}
