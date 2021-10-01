@@ -131,17 +131,25 @@ export const DataTableSystems = ({
     });
   };
 
+  const resetFlags = () => {
+    setSecondLevel(false);
+    setThirdLevel(false);
+    setCreateFuelFlowFlag(false);
+    setAddComponentFlag(false);
+    setAddExistingComponentFlag(false);
+    setCreateAnalyzerRangesFlag(false);
+    setCreateNewComponentFlag(false);
+  };
+
   const closeModalHandler = () => {
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
-        setSecondLevel(false);
-        setThirdLevel(false);
+        resetFlags();
         setShow(false);
         removeChangeEventListeners(".modalUserInput");
       }
     } else {
-      setSecondLevel(false);
-      setThirdLevel(false);
+      resetFlags();
       setShow(false);
       removeChangeEventListeners(".modalUserInput");
     }
@@ -168,12 +176,8 @@ export const DataTableSystems = ({
       <BreadcrumbBar className="padding-0">
         <Breadcrumb
           onClick={() => {
-            setSecondLevel(false);
+            resetFlags();
             setBread(false);
-            setCreateFuelFlowFlag(false);
-            setCreateAnalyzerRangesFlag(false);
-            setCreateNewComponentFlag(false);
-            setAddComponentFlag(false);
           }}
         >
           <BreadcrumbLink>
@@ -220,6 +224,7 @@ export const DataTableSystems = ({
         <Breadcrumb
           onClick={() => {
             setSecondLevel(false);
+            setThirdLevel(false);
             setBread(false);
             setCreateAnalyzerRangesFlag(false);
           }}
