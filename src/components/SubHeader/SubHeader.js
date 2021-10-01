@@ -162,8 +162,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                   outline={true}
                   onClick={(event) => logOut(event)}
                   title="Click this button to logout"
-                  className={`text-white border-white text-no-wrap 
-                      ${!user ? " display-none " : ""}`}
+                  className="text-white border-white text-no-wrap"
                 >
                   Log Out
                 </Button>

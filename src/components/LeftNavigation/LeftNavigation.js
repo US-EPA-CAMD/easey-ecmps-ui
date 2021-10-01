@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, SideNav, Link as USWDSLink } from "@trussworks/react-uswds";
+import { SideNav, Link as USWDSLink } from "@trussworks/react-uswds";
 
 import { Link } from "react-router-dom";
 
@@ -38,8 +38,6 @@ export const LeftNavigation = (props) => {
       );
     });
   };
-
-  const [show, setShow] = useState(false);
 
   const wsItems = [
     <USWDSLink
