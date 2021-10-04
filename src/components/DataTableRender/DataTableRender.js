@@ -89,14 +89,13 @@ export const DataTableRender = ({
       result =
         checkedOutLocations
           .map((location) => location["checkedOutBy"])
-          .indexOf(user.firstName) > -1;
+          .indexOf(user.userId) > -1;
     }
     return result;
   };
 
   const isCurrentlyCheckedOutByUser = (monitoringPlanId) => {
     let result = false;
-
     if (
       checkedOutLocations
         .map((location) => location["monPlanId"])
@@ -105,17 +104,16 @@ export const DataTableRender = ({
         checkedOutLocations
           .map((location) => location["monPlanId"])
           .indexOf(monitoringPlanId)
-      ]["checkedOutBy"] === user["firstName"]
+      ]["checkedOutBy"] === user["userId"]
     ) {
       result = true;
     }
-
     return result;
   };
 
   const AddLock = (dataRowObject) => {
     if (checkedOutLocations && checkedOutLocations.length > 0) {
-      if (isLocationCheckedOut(dataRowObject.row["facId"])) {
+      if (isLocationCheckedOut(dataRowObject.row["facId"]) && user) {
         return (
           <>
             <LockSharp className="row-lock margin-right-1" />{" "}

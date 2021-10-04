@@ -16,7 +16,7 @@ const cdx_user = sessionStorage.getItem("cdx_user")
   ? JSON.parse(sessionStorage.getItem("cdx_user"))
   : false;
 
-const Login = () => {
+const Login = ({ isModal }) => {
   const standardFormErrorMessage = "Please enter your username and password";
   const [showError, setShowError] = useState(false);
   const [formErrorMessage, setFormErrorMessage] = useState("");
@@ -24,6 +24,9 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const usernameText = isModal ? "modal-username" : "username";
+  const passwordText = isModal ? "modal-password" : "password";
 
   const checkLoggedIn = () => {
     if (cdx_user) {
@@ -104,21 +107,21 @@ const Login = () => {
               </Alert>
             )}
 
-            <Label htmlFor="username">Username</Label>
+            <Label htmlFor={usernameText}>Username</Label>
             <TextInput
               data-test="component-login-username"
-              id="username"
-              name="username"
+              id={usernameText}
+              name={usernameText}
               type={username ? "text" : "password"}
               value={username}
               onChange={(event) => setUsername(event.target.value)}
             />
 
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor={passwordText}>Password</Label>
             <TextInput
               data-test="component-login-password"
-              id="password"
-              name="password"
+              id={passwordText}
+              name={passwordText}
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(event) => setPassword(event.target.value)}
@@ -138,7 +141,7 @@ const Login = () => {
                 title="Show password"
                 href=""
                 className="usa-show-password"
-                aria-controls="password-sign-in"
+                aria-controls={passwordText}
                 onClick={() => showPasswordHandler()}
               >
                 {showPassword ? "Hide password" : "Show password"}

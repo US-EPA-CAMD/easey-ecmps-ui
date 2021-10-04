@@ -56,9 +56,9 @@ export const HeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       checkedOutLocations[
-        checkedOutLocations
-          .map((location) => location["monPlanId"])
-          .indexOf(selectedConfig.id)
+      checkedOutLocations
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["firstName"]
     );
   };
@@ -149,18 +149,29 @@ export const HeaderInfo = ({
           <div>
             <h3 className="display-inline-block">
               {" "}
-              {checkoutState || displayLock ? (
+              {user && (checkoutState || displayLock) ? (
                 <LockSharp className="lock-icon margin-right-1" />
               ) : (
                 ""
               )}
               <span className="font-body-lg">{facilityMainName}</span>
             </h3>
+            <div className="text-bold font-body-2xs">
+              {checkoutState
+                ? `Currently checked out by: ${user.firstName
+                } ${formatDate(new Date())}`
+                : displayLock
+                  ? `Last checked out by: ${findCurrentlyCheckedOutByInfo()["checkedOutBy"]
+                  } ${formatDate(
+                    findCurrentlyCheckedOutByInfo()["checkedOutOn"]
+                  )}`
+                  : null}
+            </div>
           </div>
           <div className="">
             <div className="display-inline-block ">
               <div className="text-bold font-body-xl display-block height-auto">
-                {checkoutState || checkedOutByUser ? (
+                {user && (checkoutState || checkedOutByUser) ? (
                   <CreateOutlined color="primary" fontSize="large" />
                 ) : (
                   ""
@@ -181,8 +192,8 @@ export const HeaderInfo = ({
                         <LockOpenSharp /> {"Check Back In"}
                       </Button>
                     ) : checkedOutLocations
-                        .map((location) => location["monPlanId"])
-                        .indexOf(selectedConfig.id) === -1 ? (
+                      .map((location) => location["monPlanId"])
+                      .indexOf(selectedConfig.id) === -1 ? (
                       <Button
                         outline={true}
                         tabIndex="0"
@@ -195,21 +206,16 @@ export const HeaderInfo = ({
                         <CreateOutlined color="primary" /> {"Check Out"}
                       </Button>
                     ) : null}
-                    {checkoutState
-                      ? `Currently checked out by: ${
-                          user.firstName
-                        } ${formatDate(new Date())}`
-                      : displayLock
-                      ? `Last checked out by: ${
-                          findCurrentlyCheckedOutByInfo()["checkedOutBy"]
-                        } ${formatDate(
-                          findCurrentlyCheckedOutByInfo()["checkedOutOn"]
-                        )}`
-                      : null}
                   </div>
                 ) : (
                   ""
                 )}
+                <Button type="button" className="margin-left-4" outline={true}>
+                  View Comments
+                </Button>
+                <Button type="button" className="margin-left-2" outline={true}>
+                  Reports
+                </Button>
               </div>
 
               <div className="grid-row">
@@ -250,37 +256,29 @@ export const HeaderInfo = ({
             </div>
           </div>
         </div>
-        <div className="grid-col clearfix position-absolute top-3 right-0">
-          <div className="grid-row padding-3">
-            <span>
-              <a href="#/" className="margin-right-4 text-bold">
-                Comments
-              </a>
-            </span>
-            <span
-              className={`${checkout ? "border-right-1px border-gray-90" : ""}`}
-            >
-              <a href="#/" className="margin-right-4 text-bold">
-                Reports
-              </a>
-            </span>
+        <div className="grid-col clearfix position-absolute top-1 right-0">
+          <div className="grid-row">
             {checkout ? (
               <div>
-                <Button type="button" className="margin-left-4" outline={true}>
-                  Evaluate
-                </Button>
-                <Button type="button" className="" outline={true}>
-                  Submit
-                </Button>
-                <Button
-                  type="button"
-                  id="showRevertModal"
-                  className="margin-left-4"
-                  onClick={() => setShow(true)}
-                  outline={true}
-                >
-                  {"Revert to Official Record"}
-                </Button>
+                <div className="grid-row padding-2 margin-left-10">
+                  <Button type="button" className="margin-right-1 margin-left-4" outline={false}>
+                    Evaluate
+                  </Button>
+                  <Button type="button" className="margin-left-1" outline={false}>
+                    Submit
+                  </Button>
+                </div>
+                <div className="grid-row margin-left-10">
+                  <Button
+                    type="button"
+                    id="showRevertModal"
+                    className="margin-left-4"
+                    onClick={() => setShow(true)}
+                    outline={true}
+                  >
+                    {"Revert to Official Record"}
+                  </Button>
+                </div>
               </div>
             ) : (
               ""
@@ -290,11 +288,11 @@ export const HeaderInfo = ({
             <table role="presentation">
               <tbody>
                 <tr>
-                  <th className="padding-1">Evaluation Status:</th>
+                  <th className="padding-1">Evaluation Status: </th>
                   <td className="padding-1">Passed with no errors</td>
                 </tr>
                 <tr>
-                  <th className="padding-1">Submission Status:</th>
+                  <th className="padding-1">Submission Status: </th>
                   <td className="padding-1">Resubmission required</td>
                 </tr>
               </tbody>
