@@ -131,6 +131,9 @@ export const DataTableSystems = ({
     });
   };
 
+  const [viewBtn, setViewBtn] = useState(null);
+  const [addBtn, setAddBtn] = useState(null);
+
   const closeModalHandler = () => {
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
@@ -144,6 +147,9 @@ export const DataTableSystems = ({
       setThirdLevel(false);
       setShow(false);
       removeChangeEventListeners(".modalUserInput");
+    }
+    if (addBtn) {
+      addBtn.focus();
     }
   };
 
@@ -561,6 +567,9 @@ export const DataTableSystems = ({
           user={user}
           addBtn={openSystem}
           addBtnName={"Create System"}
+          setViewBtn={setViewBtn}
+          viewBtn={viewBtn}
+          setAddBtn={setAddBtn}
         />
       </div>
       {show ? (

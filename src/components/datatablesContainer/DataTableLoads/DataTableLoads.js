@@ -141,6 +141,9 @@ export const DataTableLoads = ({
     });
   };
 
+  const [viewBtn, setViewBtn] = useState(null);
+  const [addBtn, setAddBtn] = useState(null);
+
   const closeModalHandler = () => {
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
@@ -150,6 +153,9 @@ export const DataTableLoads = ({
     } else {
       setShow(false);
       removeChangeEventListeners(".modalUserInput");
+    }
+    if (addBtn) {
+      addBtn.focus();
     }
   };
 
@@ -279,6 +285,9 @@ export const DataTableLoads = ({
         user={user}
         addBtn={openLoadModal}
         addBtnName={"Create Load"}
+        setViewBtn={setViewBtn}
+        viewBtn={viewBtn}
+        setAddBtn={setAddBtn}
       />
       {show ? (
         <Modal

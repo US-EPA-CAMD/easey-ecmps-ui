@@ -164,7 +164,8 @@ export const DataTableSpans = ({
     });
   };
 
-  const [triggerBtn, setTriggerBtn] = useState(null);
+  const [viewBtn, setViewBtn] = useState(null);
+  const [addBtn, setAddBtn] = useState(null);
 
   const closeModalHandler = () => {
     if (window.isDataChanged === true) {
@@ -175,6 +176,9 @@ export const DataTableSpans = ({
     } else {
       setShow(false);
       removeChangeEventListeners(".modalUserInput");
+    }
+    if (addBtn) {
+      addBtn.focus();
     }
   };
 
@@ -274,8 +278,9 @@ export const DataTableSpans = ({
         user={user}
         addBtn={openSpanModal}
         addBtnName={"Create Span"}
-        setTriggerBtn={setTriggerBtn}
-        triggerBtn={triggerBtn}
+        setViewBtn={setViewBtn}
+        viewBtn={viewBtn}
+        setAddBtn={setAddBtn}
       />
       {show ? (
         <Modal

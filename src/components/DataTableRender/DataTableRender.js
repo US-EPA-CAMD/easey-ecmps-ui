@@ -61,8 +61,9 @@ export const DataTableRender = ({
   setMostRecentlyCheckedInMonitorPlanId,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
   setCheckout,
-  setTriggerBtn,
-  triggerBtn,
+  setViewBtn,
+  viewBtn,
+  setAddBtn,
 }) => {
   const [searchText, setSearchText] = useState("");
   const columns = [];
@@ -269,13 +270,24 @@ export const DataTableRender = ({
                       ? `btnOpen${tableTitle.split(" ").join("")}`
                       : `btnOpen`
                   }
-                  onClick={(event) => {
+                  onClick={() => {
+                    if (setViewBtn) {
+                      setViewBtn(row[`col${Object.keys(row).length - 1}`]);
+                      console.log(row[`col${Object.keys(row).length - 1}`]);
+                    }
                     openHandler(normalizedRow, false);
                   }}
                   aria-label={
                     checkout
                       ? `view and/or edit ${row.col1}`
                       : `view ${row.col1}`
+                  }
+                  autoFocus={
+                    viewBtn
+                      ? viewBtn == row[`col${Object.keys(row).length - 1}`]
+                        ? true
+                        : false
+                      : false
                   }
                 >
                   {checkout ? "View / Edit" : "View"}
@@ -293,9 +305,9 @@ export const DataTableRender = ({
                     : `btnOpen_${row[`col${Object.keys(row).length - 1}`]}`
                 }
                 className="cursor-pointer margin-left-2 open-modal-button"
-                onClick={(event) => {
-                  if (setTriggerBtn) {
-                    setTriggerBtn(row[`col${Object.keys(row).length - 1}`]);
+                onClick={() => {
+                  if (setViewBtn) {
+                    setViewBtn(row[`col${Object.keys(row).length - 1}`]);
                   }
                   openHandler(normalizedRow, false);
                 }}
@@ -305,8 +317,8 @@ export const DataTableRender = ({
                     : `View ${row.col1}`
                 }
                 autoFocus={
-                  triggerBtn
-                    ? triggerBtn == row[`col${Object.keys(row).length - 1}`]
+                  viewBtn
+                    ? viewBtn == row[`col${Object.keys(row).length - 1}`]
                       ? true
                       : false
                     : false
@@ -419,7 +431,13 @@ export const DataTableRender = ({
                       className="float-left clearfix margin-right-3"
                       outline="true"
                       color="black"
-                      onClick={() => addBtn(false, false, true)}
+                      onClick={(event) => {
+                        if (setAddBtn) {
+                          setAddBtn(event.target);
+                          setViewBtn(null);
+                        }
+                        addBtn(false, false, true);
+                      }}
                       id="addBtn"
                     >
                       {addBtnName}
@@ -453,7 +471,13 @@ export const DataTableRender = ({
                       className="float-left clearfix margin-right-3"
                       outline="true"
                       color="black"
-                      onClick={() => addBtn(false, false, true)}
+                      onClick={(event) => {
+                        if (setAddBtn) {
+                          setAddBtn(event.target);
+                          setViewBtn(null);
+                        }
+                        addBtn(false, false, true);
+                      }}
                       id="addBtn"
                     >
                       {addBtnName}
