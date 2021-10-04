@@ -164,6 +164,8 @@ export const DataTableSpans = ({
     });
   };
 
+  const [triggerBtn, setTriggerBtn] = useState(null);
+
   const closeModalHandler = () => {
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
@@ -272,6 +274,8 @@ export const DataTableSpans = ({
         user={user}
         addBtn={openSpanModal}
         addBtnName={"Create Span"}
+        setTriggerBtn={setTriggerBtn}
+        triggerBtn={triggerBtn}
       />
       {show ? (
         <Modal

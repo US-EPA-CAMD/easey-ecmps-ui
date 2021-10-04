@@ -61,6 +61,8 @@ export const DataTableRender = ({
   setMostRecentlyCheckedInMonitorPlanId,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
   setCheckout,
+  setTriggerBtn,
+  triggerBtn,
 }) => {
   const [searchText, setSearchText] = useState("");
   const columns = [];
@@ -267,7 +269,9 @@ export const DataTableRender = ({
                       ? `btnOpen${tableTitle.split(" ").join("")}`
                       : `btnOpen`
                   }
-                  onClick={() => openHandler(normalizedRow, false)}
+                  onClick={(event) => {
+                    openHandler(normalizedRow, false);
+                  }}
                   aria-label={
                     checkout
                       ? `view and/or edit ${row.col1}`
@@ -286,14 +290,26 @@ export const DataTableRender = ({
                 id={
                   tableTitle
                     ? `btnOpen${tableTitle.split(" ").join("")}`
-                    : `btnOpen`
+                    : `btnOpen_${row[`col${Object.keys(row).length - 1}`]}`
                 }
                 className="cursor-pointer margin-left-2 open-modal-button"
-                onClick={() => openHandler(normalizedRow, false)}
+                onClick={(event) => {
+                  if (setTriggerBtn) {
+                    setTriggerBtn(row[`col${Object.keys(row).length - 1}`]);
+                  }
+                  openHandler(normalizedRow, false);
+                }}
                 aria-label={
                   actionsBtn === `Open`
                     ? `Open ${row.col1}`
                     : `View ${row.col1}`
+                }
+                autoFocus={
+                  triggerBtn
+                    ? triggerBtn == row[`col${Object.keys(row).length - 1}`]
+                      ? true
+                      : false
+                    : false
                 }
               >
                 {actionsBtn === "Open" ? "Open" : "View"}
