@@ -37,7 +37,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     },
     {
       label: (
-        <span className="margin-right- text-no-wrap1">
+        <span className="margin-right-1 text-no-wrap">
           <span
             className="margin-right-20 menu-item-separator"
             style={{ color: "#365b8f" }}
@@ -178,7 +178,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
               </span>
               <span
                 data-initials={initials}
-                className="text-bold float-right clearfix cursor-pointer mobile:margin-top-1 desktop:margin-top-1 desktop:margin-top-2 desktop-lg:margin-top-0"
+                className="text-bold float-right clearfix cursor-pointer mobile:margin-top-1 desktop:margin-top-1 desktop:margin-top-2 desktop-lg:margin-top-0 margin-left-5"
                 tabIndex="0"
                 id="loggedInUserInitials"
                 aria-expanded="false"
