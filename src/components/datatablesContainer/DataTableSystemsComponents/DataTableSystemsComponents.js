@@ -183,13 +183,13 @@ export const DataTableSystemsComponents = ({
       modalViewData(
         !create ? selectedComp : null,
         {
-          componentId: ["Component ID", "input", "required"],
+          componentId: ["Component ID", "input", ""],
           sampleAcquisitionMethodCode: [
             "Sample Acquistion Method",
             "dropdown",
             "",
           ],
-          componentTypeCode: ["Component Type", "dropdown", "required"],
+          componentTypeCode: ["Component Type", "dropdown", ""],
           basisCode: ["Basis Description", "dropdown", ""],
           manufacturer: ["Manufacturer", "input", ""],
           modelVersion: ["Model or Version", "input", ""],
@@ -197,8 +197,8 @@ export const DataTableSystemsComponents = ({
           hgConverterIndicator: ["Hg Converter Indicator", "radio", ""],
         },
         {
-          beginDate: ["Start Date", "date", "required"],
-          beginHour: ["Start Time", "time", "required"],
+          beginDate: ["Start Date", "date", ""],
+          beginHour: ["Start Time", "time", ""],
           endDate: ["End Date", "date", ""],
           endHour: ["End Time", "time", ""],
         },
@@ -229,13 +229,13 @@ export const DataTableSystemsComponents = ({
       modalViewData(
         selectComponents,
         {
-          componentId: ["Component ID", "input", "required"],
+          componentId: ["Component ID", "input", ""],
           sampleAcquisitionMethodCode: [
             "Sample Acquistion Method",
             "dropdown",
             "",
           ],
-          componentTypeCode: ["Component Type", "dropdown", "required"],
+          componentTypeCode: ["Component Type", "dropdown", ""],
           basisCode: ["Basis Description", "dropdown", ""],
           manufacturer: ["Manufacturer", "input", ""],
           modelVersion: ["Model or Version", "input", ""],
@@ -243,8 +243,8 @@ export const DataTableSystemsComponents = ({
           hgConverterIndicator: ["Hg Converter Indicator", "radio", ""],
         },
         {
-          beginDate: ["Start Date", "date", "required"],
-          beginHour: ["Start Time", "time", "required"],
+          beginDate: ["Start Date", "date", ""],
+          beginHour: ["Start Time", "time", ""],
           endDate: ["End Date", "date", ""],
           endHour: ["End Time", "time", ""],
         },
@@ -288,23 +288,23 @@ export const DataTableSystemsComponents = ({
       modalViewData(
         selectFuelFlows,
         {
-          maximumFuelFlowRate: ["Max Fuel Flow Rate", "input", "required"],
+          maximumFuelFlowRate: ["Max Fuel Flow Rate", "input", ""],
           systemFuelFlowUOMCode: [
             "Units of Measure Code",
             "dropdown",
-            "required",
+            "",
           ],
           maximumFuelFlowRateSourceCode: [
             "Max Fuel Flow Rate Source",
             "dropdown",
-            "required",
+            "",
           ],
 
           skip: ["", "skip", ""],
         },
         {
-          beginDate: ["Start Date", "date", "required"],
-          beginHour: ["Start Time", "time", "required"],
+          beginDate: ["Start Date", "date", ""],
+          beginHour: ["Start Time", "time", ""],
           endDate: ["End Date", "date", ""],
           endHour: ["End Time", "time", ""],
         },
