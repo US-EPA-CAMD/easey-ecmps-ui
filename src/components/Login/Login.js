@@ -107,7 +107,7 @@ const Login = ({ isModal }) => {
               </Alert>
             )}
 
-            <Label htmlFor="username">Username</Label>
+            <Label htmlFor={usernameText}>Username</Label>
             <TextInput
               data-test="component-login-username"
               id={usernameText}
@@ -117,7 +117,7 @@ const Login = ({ isModal }) => {
               onChange={(event) => setUsername(event.target.value)}
             />
 
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor={passwordText}>Password</Label>
             <TextInput
               data-test="component-login-password"
               id={passwordText}
