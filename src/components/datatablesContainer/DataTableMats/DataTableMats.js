@@ -137,16 +137,16 @@ export const DataTableMats = ({
       modalViewData(
         mats,
         {
-          supplementalMATSParameterCode: ["Parameter", "dropdown", "required"],
+          supplementalMATSParameterCode: ["Parameter", "dropdown", ""],
           supplementalMATSMonitoringMethodCode: [
             "Methodology",
             "dropdown",
-            "required",
+            "",
           ],
         },
         {
-          beginDate: ["Start Date", "date", "required"],
-          beginHour: ["Start Time", "time", "required"],
+          beginDate: ["Start Date", "date", ""],
+          beginHour: ["Start Time", "time", ""],
           endDate: ["End Date", "date", ""],
           endHour: ["End Time", "time", ""],
         },
