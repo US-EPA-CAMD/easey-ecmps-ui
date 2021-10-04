@@ -17,7 +17,7 @@ export const LeftNavigation = (props) => {
           className={
             noActive
               ? // currentRoute === item.url ||
-              props.currentLink === `/ecmps${item.url}` ||
+                props.currentLink === `/ecmps${item.url}` ||
                 props.currentLink === item.url
                 ? "usa-current text-no-wrap"
                 : "text-no-wrap"
