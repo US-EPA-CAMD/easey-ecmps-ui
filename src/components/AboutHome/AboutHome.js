@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import React,{useEffect} from "react";
-=======
 import React, { useEffect } from "react";
->>>>>>> 5e8c7bc81b0ab6bc28bec0f628fc8bd8993edd32
 import { Link as USWDSLink } from "@trussworks/react-uswds";
 
 import { Link } from "react-router-dom";
@@ -10,16 +6,9 @@ import Login from "../Login/Login";
 
 import "./AboutHome.scss";
 const AboutHome = ({ user, setCurrentLink }) => {
-<<<<<<< HEAD
-
-  useEffect(() => {
-    document.title = "ECMPS Home";
-    }, [])
-=======
   useEffect(() => {
     document.title = "ECMPS Home";
   }, []);
->>>>>>> 5e8c7bc81b0ab6bc28bec0f628fc8bd8993edd32
   const topics = [
     {
       name: "Monitoring Plans",
