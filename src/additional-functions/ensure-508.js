@@ -215,7 +215,7 @@ export const removeAriaSortHandlersFromDatatable = () => {
  *****************************************************/
 export const assignAriaLabelsToDatePickerButtons = () => {
   document.querySelectorAll(".usa-date-picker__button").forEach((element) => {
-    let label =
+    const label =
       "Toggle Calendar for " + element.parentNode.querySelector("input").id;
     element.ariaLabel = label;
   });

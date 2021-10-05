@@ -188,6 +188,14 @@ export const DataTableRender = ({
       cell: (row) => {
         // *** normalize the row object to be in the format expected by DynamicTabs
         const normalizedRow = normalizeRowObjectFormat(row, columnNames);
+
+        let willAutoFocus;
+        if (viewBtn && viewBtn === row[`col${Object.keys(row).length - 1}`]) {
+          willAutoFocus = true;
+        } else {
+          willAutoFocus = false;
+        }
+
         return (
           <div>
             {/* user is logged in  */}
@@ -282,13 +290,7 @@ export const DataTableRender = ({
                       ? `view and/or edit ${row.col1}`
                       : `view ${row.col1}`
                   }
-                  autoFocus={
-                    viewBtn
-                      ? viewBtn == row[`col${Object.keys(row).length - 1}`]
-                        ? true
-                        : false
-                      : false
-                  }
+                  autoFocus={willAutoFocus}
                 >
                   {checkout ? "View / Edit" : "View"}
                 </Button>
@@ -316,13 +318,7 @@ export const DataTableRender = ({
                     ? `Open ${row.col1}`
                     : `View ${row.col1}`
                 }
-                autoFocus={
-                  viewBtn
-                    ? viewBtn == row[`col${Object.keys(row).length - 1}`]
-                      ? true
-                      : false
-                    : false
-                }
+                autoFocus={willAutoFocus}
               >
                 {actionsBtn === "Open" ? "Open" : "View"}
               </Button>
@@ -368,6 +364,14 @@ export const DataTableRender = ({
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const triggerAddBtn = (event) => {
+    if (setAddBtn) {
+      setAddBtn(event.target);
+      setViewBtn(null);
+    }
+    addBtn(false, false, true);
+  };
 
   return (
     <div className={`${componentStyling}`}>
@@ -432,11 +436,7 @@ export const DataTableRender = ({
                       outline="true"
                       color="black"
                       onClick={(event) => {
-                        if (setAddBtn) {
-                          setAddBtn(event.target);
-                          setViewBtn(null);
-                        }
-                        addBtn(false, false, true);
+                        triggerAddBtn(event);
                       }}
                       id="addBtn"
                     >
@@ -472,11 +472,7 @@ export const DataTableRender = ({
                       outline="true"
                       color="black"
                       onClick={(event) => {
-                        if (setAddBtn) {
-                          setAddBtn(event.target);
-                          setViewBtn(null);
-                        }
-                        addBtn(false, false, true);
+                        triggerAddBtn(event);
                       }}
                       id="addBtn"
                     >
