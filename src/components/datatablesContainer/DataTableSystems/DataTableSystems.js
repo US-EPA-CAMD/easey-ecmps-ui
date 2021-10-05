@@ -131,6 +131,8 @@ export const DataTableSystems = ({
     });
   };
 
+  const [viewBtn, setViewBtn] = useState(null);
+  const [addBtn, setAddBtn] = useState(null);
   const resetFlags = () => {
     setSecondLevel(false);
     setThirdLevel(false);
@@ -152,6 +154,9 @@ export const DataTableSystems = ({
       resetFlags();
       setShow(false);
       removeChangeEventListeners(".modalUserInput");
+    }
+    if (addBtn) {
+      addBtn.focus();
     }
   };
 
@@ -566,6 +571,9 @@ export const DataTableSystems = ({
           user={user}
           addBtn={openSystem}
           addBtnName={"Create System"}
+          setViewBtn={setViewBtn}
+          viewBtn={viewBtn}
+          setAddBtn={setAddBtn}
         />
       </div>
       {show ? (
