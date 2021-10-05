@@ -202,3 +202,21 @@ export const removeAriaSortHandlersFromDatatable = () => {
     element.removeEventListener("keydown", setAriaSort);
   });
 };
+
+/*****************************************************
+ * assignAriaLabelsToDatePickerButtons:
+ *
+ *   This function is used to add correct aria-labels to datepicker buttons
+ *
+ *       Inputs:
+ *              none
+ *       Outputs:
+ *              none
+ *****************************************************/
+export const assignAriaLabelsToDatePickerButtons = () => {
+  document.querySelectorAll(".usa-date-picker__button").forEach((element) => {
+    let label =
+      "Toggle Calendar for " + element.parentNode.querySelector("input").id;
+    element.ariaLabel = label;
+  });
+};
