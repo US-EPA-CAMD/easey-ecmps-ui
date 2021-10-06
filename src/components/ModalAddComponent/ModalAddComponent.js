@@ -59,6 +59,11 @@ const ModalAddComponent = ({
   const selectingCompHandler = (val) => {
     selectionHandler(filteredComps.filter((x) => x.id === val));
   };
+
+  const hyphenatedCaption = caption
+    ? caption.toLowerCase().split(" ").join("-")
+    : "";
+
   return (
     <div>
       <div className=" padding-left-3">
@@ -89,9 +94,6 @@ const ModalAddComponent = ({
         </div>
         <div className=" float-left">
           <FormGroup className="margin-bottom-1">
-            <Label test-id={caption} htmlFor={caption}>
-              {caption}
-            </Label>
             <SelectBox
               options={
                 unlinkedComponentsOptions !== null ||
@@ -104,6 +106,9 @@ const ModalAddComponent = ({
               selectKey="code"
               secondOption="name"
               handler={selectingCompHandler}
+              caption={caption}
+              hyphenatedCaption={hyphenatedCaption}
+              id={hyphenatedCaption}
             />
           </FormGroup>
         </div>
