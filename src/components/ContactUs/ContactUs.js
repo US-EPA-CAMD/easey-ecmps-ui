@@ -38,7 +38,7 @@ export const ContactUs = () => {
   return (
     <>
       <div className="grid-row margin-top-5">
-        <div className="text-bold font-heading-2xl">Contact Us</div>
+        <h3 className="text-bold font-heading-2xl">Contact Us</h3>
         <div className="flex-force-break" />
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla
