@@ -27,6 +27,14 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     `${process.env.PUBLIC_URL}/images/icons/menu-item-expand.svg`
   );
 
+  const userProfileMenuLinks = {
+    label: <span className="margin-right-1 text-no-wrap">User Profile</span>,
+    items: [
+      { menu: "Manage Login", link: "https://cdx.epa.gov/" },
+      { menu: "Manage Delegations", link: "https://camd.epa.gov/CBS/login/auth" },
+    ],
+  }
+
   const subHeaderMenuList = [
     {
       label: <span className="margin-right-1 text-no-wrap">Resources</span>,
@@ -90,6 +98,8 @@ export const SubHeader = ({ user, setCurrentLink }) => {
   ]);
 
   const handleToggleNavDropdown = (column) => {
+    if (userProfileExpanded === true)
+      toggleUserProfileDropdown();
     setNavDropdownOpen((prevNavDropdownOpen) => {
       const newOpenState = Array(prevNavDropdownOpen.length).fill(false);
       newOpenState[column] = !prevNavDropdownOpen[column];
@@ -114,10 +124,14 @@ export const SubHeader = ({ user, setCurrentLink }) => {
       setUserProfileIcon(
         `${process.env.PUBLIC_URL}/images/icons/menu-item-collapse.svg`
       );
+      setNavDropdownOpen((prevNavDropdownOpen) => {
+        const newOpenState = Array(prevNavDropdownOpen.length).fill(false);
+        return newOpenState;
+      });
     }
 
     setUserProfileExpanded(!userProfileExpanded);
-  };
+  }
 
   const [show, setShow] = useState(false);
 
@@ -182,12 +196,6 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                 tabIndex="0"
                 id="loggedInUserInitials"
                 aria-expanded="false"
-                onClick={() => toggleUserProfileDropdown()}
-                onKeyPress={(event) => {
-                  if (event.key === "Enter") {
-                    toggleUserProfileDropdown();
-                  }
-                }}
               >
                 <img
                   src={userProfileIcon}
@@ -195,7 +203,29 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                   aria-hidden={true}
                   tabIndex="-1"
                   alt="Expand menu"
+                  onClick={() => toggleUserProfileDropdown()}
+                  onKeyPress={(event) => {
+                    if (event.key === "Enter") {
+                      toggleUserProfileDropdown();
+                    }
+                  }}
                 />
+                {userProfileExpanded ? (
+                  <span className="position-relative top-neg-2" >
+                    <Menu
+                      className="font-body-sm"
+                      style={{ fontWeight: "normal" }}
+                      items={userProfileMenuLinks.items.map((item) => (
+                        <a href={item.link}
+                          target="_blank"
+                        >
+                          {item.menu}
+                        </a>
+                      ))}
+                      isOpen={true}
+                    />
+                  </span>
+                ) : null}
               </span>
             </div>
           ) : (
