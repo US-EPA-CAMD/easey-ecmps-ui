@@ -109,7 +109,7 @@ export const DataTableSystems = ({
           monitoringSystemId: ["System ID", "input", ""],
           systemDesignationCode: ["System Designation", "dropdown", ""],
           systemTypeCode: ["System Type", "dropdown", ""],
-          fuelCode: ["Fuel Type", "dropdown", ""],
+          fuelCode: ["Fuel Code", "dropdown", ""],
         },
         {
           beginDate: ["Start Date", "date", ""],
@@ -168,7 +168,7 @@ export const DataTableSystems = ({
     "System ID",
     "System Type",
     "System Designation",
-    "Fuel Type",
+    "Fuel Code",
     "Begin Date and Time",
     "End Date and Time",
   ];
