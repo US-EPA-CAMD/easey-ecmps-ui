@@ -164,6 +164,9 @@ export const DataTableSpans = ({
     });
   };
 
+  const [viewBtn, setViewBtn] = useState(null);
+  const [addBtn, setAddBtn] = useState(null);
+
   const closeModalHandler = () => {
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
@@ -173,6 +176,9 @@ export const DataTableSpans = ({
     } else {
       setShow(false);
       removeChangeEventListeners(".modalUserInput");
+    }
+    if (addBtn) {
+      addBtn.focus();
     }
   };
 
@@ -265,13 +271,16 @@ export const DataTableSpans = ({
         columnNames={columnNames}
         data={data}
         dataLoaded={dataLoaded}
-        pagination={true}
-        filter={true}
+        pagination={false}
+        filter={false}
         actionsBtn={"View"}
         checkout={checkout}
         user={user}
         addBtn={openSpanModal}
         addBtnName={"Create Span"}
+        setViewBtn={setViewBtn}
+        viewBtn={viewBtn}
+        setAddBtn={setAddBtn}
       />
       {show ? (
         <Modal

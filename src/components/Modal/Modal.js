@@ -85,13 +85,14 @@ export const Modal = ({
                   }}
                   id="closeModalBtn"
                   data-testid="closeModalBtn"
-                  title="Click to save"
+                  title="Close Modal"
                   epa-testid="closeXBtn"
                   role="button"
                   tabIndex="0"
+                  aria-hidden={false}
                 />
                 <div className="left-0 bottom-0 padding-2">
-                  <h3 className="text-bold">{title}</h3>
+                  <h2 className="text-bold">{title}</h2>
 
                   {breadCrumbBar ? breadCrumbBar : ""}
                 </div>

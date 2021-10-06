@@ -12,6 +12,8 @@ import {
 
 import "./SubHeader.scss";
 import { logOut } from "../../utils/api/easeyAuthApi";
+import Modal from "../Modal/Modal";
+import Login from "../Login/Login";
 
 export const SubHeader = ({ user, setCurrentLink }) => {
   let initials = "xx";
@@ -27,24 +29,6 @@ export const SubHeader = ({ user, setCurrentLink }) => {
 
   const subHeaderMenuList = [
     {
-      label: (
-        <Button
-          type="button"
-          id="logoutBtn"
-          epa-testid="logoutBtn"
-          outline={true}
-          onClick={(event) => logOut(event)}
-          title="Click this button to logout"
-          className={`text-white border-white position-relative top-neg-2 text-no-wrap 
-                      ${!user ? " display-none " : ""}`}
-        >
-          Log Out
-        </Button>
-      ),
-      items: [],
-    },
-
-    {
       label: <span className="margin-right-1 text-no-wrap">Resources</span>,
       items: [
         { menu: "FAQs", link: "/faqs" },
@@ -53,7 +37,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     },
     {
       label: (
-        <span className="margin-right- text-no-wrap1">
+        <span className="margin-right-1 text-no-wrap">
           <span
             className="margin-right-20 menu-item-separator"
             style={{ color: "#365b8f" }}
@@ -135,8 +119,22 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     setUserProfileExpanded(!userProfileExpanded);
   };
 
+  const [show, setShow] = useState(false);
+
+  const [loginBtn, setLoginBtn] = useState(document.activeElement);
+
+  const closeModalHandler = () => {
+    setShow(false);
+    loginBtn.focus();
+  };
+
+  const openModal = (value) => {
+    setShow(value);
+  };
+
   return (
     <div className="subheader-wrapper bg-primary-dark ">
+      <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       <Header className="padding-y-2 mobile-lg:padding-x-1 desktop:padding-x-4">
         <div className="usa-nav-container clearfix padding-x-0 desktop-lg:margin-top-3">
           <Title className="float-left margin-1 margin-top-0 desktop:margin-top-1  desktop-lg:margin-top-0 ">
@@ -160,6 +158,70 @@ export const SubHeader = ({ user, setCurrentLink }) => {
               alt="Expandable Menu"
             />
           </Button>
+          {user ? (
+            <div>
+              <span className="text-bold text-white text-no-wrap float-right clearfix position-relative margin-x-2">
+                <Button
+                  type="button"
+                  id="logoutBtn"
+                  epa-testid="logoutBtn"
+                  outline={true}
+                  onClick={(event) => logOut(event)}
+                  title="Click this button to logout"
+                  className="text-white border-white text-no-wrap"
+                >
+                  Log Out
+                </Button>
+              </span>
+              <span className="text-bold text-white text-no-wrap float-right clearfix position-relative top-1 margin-x-1 display-none widescreen:display-block">
+                Welcome, {user.firstName}!
+              </span>
+              <span
+                data-initials={initials}
+                className="text-bold float-right clearfix cursor-pointer mobile:margin-top-1 desktop:margin-top-1 desktop:margin-top-2 desktop-lg:margin-top-0 margin-left-5"
+                tabIndex="0"
+                id="loggedInUserInitials"
+                aria-expanded="false"
+                onClick={() => toggleUserProfileDropdown()}
+                onKeyPress={(event) => {
+                  if (event.key === "Enter") {
+                    toggleUserProfileDropdown();
+                  }
+                }}
+              >
+                <img
+                  src={userProfileIcon}
+                  className="margin-top-neg-1 position-relative left-neg-1"
+                  aria-hidden={true}
+                  tabIndex="-1"
+                  alt="Expand menu"
+                />
+              </span>
+            </div>
+          ) : (
+            <span className="text-bold text-white text-no-wrap float-right clearfix position-relative margin-x-2">
+              <Button
+                type="button"
+                outline={true}
+                id="openModalBTN"
+                epa-testid="openModalBTN"
+                onClick={() => {
+                  setLoginBtn(document.activeElement);
+                  openModal(true);
+                }}
+                className="text-white border-white text-no-wrap"
+              >
+                Log In
+              </Button>
+              {show ? (
+                <Modal
+                  show={show}
+                  close={closeModalHandler}
+                  children={<Login isModal={true} />}
+                />
+              ) : null}
+            </span>
+          )}
           <PrimaryNav
             className="float-right desktop:margin-top-1 desktop-lg:margin-top-0"
             items={subHeaderMenuList.map((el, i) => {
@@ -218,34 +280,6 @@ export const SubHeader = ({ user, setCurrentLink }) => {
               }
             })}
           />
-          {user ? (
-            <div>
-              <span className="text-bold text-white text-no-wrap float-right clearfix position-relative top-1 margin-x-2 display-none widescreen:display-block">
-                Welcome, {user.firstName}!
-              </span>
-              <span
-                data-initials={initials}
-                className="text-bold float-right clearfix cursor-pointer mobile:margin-top-1 desktop:margin-top-1 desktop:margin-top-2 desktop-lg:margin-top-0"
-                tabIndex="0"
-                id="loggedInUserInitials"
-                aria-expanded="false"
-                onClick={() => toggleUserProfileDropdown()}
-                onKeyPress={(event) => {
-                  if (event.key === "Enter") {
-                    toggleUserProfileDropdown();
-                  }
-                }}
-              >
-                <img
-                  src={userProfileIcon}
-                  className="margin-top-neg-1 position-relative left-neg-1"
-                  aria-hidden={true}
-                  tabIndex="-1"
-                  alt="Expand menu"
-                />
-              </span>
-            </div>
-          ) : null}
         </div>
       </Header>
     </div>
