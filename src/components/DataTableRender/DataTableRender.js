@@ -281,7 +281,6 @@ export const DataTableRender = ({
                   onClick={() => {
                     if (setViewBtn) {
                       setViewBtn(row[`col${Object.keys(row).length - 1}`]);
-                      console.log(row[`col${Object.keys(row).length - 1}`]);
                     }
                     openHandler(normalizedRow, false);
                   }}
@@ -379,13 +378,15 @@ export const DataTableRender = ({
         {dataLoaded && data.length > 0 ? (
           <div>
             {tableTitle ? (
-              <h4
+              <h3
                 className={`margin-top-5 text-bold ${
-                  tableStyling ? "" : "mobile:font-body-xl mobile:text-bold"
+                  tableStyling
+                    ? "mobile:font-body-md mobile:text-bold"
+                    : "mobile:font-body-xl mobile:text-bold"
                 }`}
               >
                 {tableTitle}
-              </h4>
+              </h3>
             ) : (
               ""
             )}
@@ -427,23 +428,23 @@ export const DataTableRender = ({
             />{" "}
             <div className={`${headerStyling}`}>
               {addBtn && checkout && user ? (
-                <h2 className="padding-0 page-subheader">
-                  <div className="padding-y-1">
-                    <Button
-                      type="button"
-                      // test-id={tableTitle? `btnAdd${tableTitle.split(" ").join("")}`: `${sectionTitle.split(" ").join("")}`}
-                      className="float-left clearfix margin-right-3"
-                      outline="true"
-                      color="black"
-                      onClick={(event) => {
-                        triggerAddBtn(event);
-                      }}
-                      id="addBtn"
-                    >
-                      {addBtnName}
-                    </Button>
-                  </div>{" "}
-                </h2>
+                <div className="padding-y-1">
+                  <Button
+                    type="button"
+                    // test-id={tableTitle? `btnAdd${tableTitle.split(" ").join("")}`: `${sectionTitle.split(" ").join("")}`}
+                    className="float-left clearfix margin-right-3"
+                    outline="true"
+                    color="black"
+                    onClick={(event) => {
+                      triggerAddBtn(event);
+                    }}
+                    id={
+                      addBtnName.toLowerCase().split(" ").join("-") + "-add-btn"
+                    }
+                  >
+                    {addBtnName}
+                  </Button>
+                </div>
               ) : (
                 ""
               )}
@@ -451,13 +452,15 @@ export const DataTableRender = ({
           </div>
         ) : dataLoaded && data.length === 0 ? (
           <div>
-            <h4
+            <h3
               className={`margin-top-5 text-bold ${
-                tableStyling ? "" : "mobile:font-body-xl mobile:text-bold"
+                tableStyling
+                  ? "mobile:font-body-md mobile:text-bold"
+                  : "mobile:font-body-xl mobile:text-bold"
               }`}
             >
               {tableTitle}
-            </h4>
+            </h3>
             <div className="text-center">
               <p>{"No data currently present"}</p>
             </div>
