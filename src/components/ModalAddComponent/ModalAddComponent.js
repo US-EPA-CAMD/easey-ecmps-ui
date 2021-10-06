@@ -79,7 +79,9 @@ const ModalAddComponent = ({
                 />
               </Button>
 
-              <h4 className="text-bold float-left">{title}</h4>
+              <h3 className="text-bold float-left mobile:font-body-md mobile:text-bold">
+                {title}
+              </h3>
             </div>
           ) : (
             ""
