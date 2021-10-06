@@ -13,6 +13,7 @@ export const DetailsSelectBox = ({
   epadataname,
   id,
   handler,
+  hyphenatedCaption,
 }) => {
   const [selectionState, setSelectionState] = useState(
     initialSelection ? initialSelection : null
@@ -20,7 +21,7 @@ export const DetailsSelectBox = ({
 
   const handleChange = (val) => {
     setSelectionState(val.target.value);
-    if(handler) {
+    if (handler) {
       handler(val.target.value);
     }
   };
@@ -38,12 +39,16 @@ export const DetailsSelectBox = ({
     <div>
       <div>
         <FormGroup className="margin-top-0">
-          <Label
-            htmlFor={caption}
-            hint={required ? <span> (Required)</span> : ""}
-          >
-            {caption}
-          </Label>
+          {caption ? (
+            <Label
+              htmlFor={hyphenatedCaption}
+              hint={required ? <span> (Required)</span> : ""}
+            >
+              {caption}
+            </Label>
+          ) : (
+            ""
+          )}
           <Dropdown
             name={caption}
             // weird bug without this
