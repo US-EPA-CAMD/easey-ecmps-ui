@@ -231,12 +231,10 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
                 unstyled="true"
                 epa-testid="backBtn"
                 id="backBtn"
+                aria-label="go back to systems details"
               >
                 {" "}
-                <ArrowBackSharp
-                  aria-label="go back to systems details"
-                  className=" font-body-sm backBTNColor position-relative top-neg-2px"
-                />
+                <ArrowBackSharp className=" font-body-sm backBTNColor position-relative top-neg-2px" />
               </Button>
 
               <h3 className="text-bold float-left mobile:font-body-md mobile:text-bold">
