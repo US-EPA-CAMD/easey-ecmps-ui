@@ -98,8 +98,9 @@ export const SubHeader = ({ user, setCurrentLink }) => {
   ]);
 
   const handleToggleNavDropdown = (column) => {
-    if (userProfileExpanded === true)
+    if (userProfileExpanded === true) {
       toggleUserProfileDropdown();
+    }
     setNavDropdownOpen((prevNavDropdownOpen) => {
       const newOpenState = Array(prevNavDropdownOpen.length).fill(false);
       newOpenState[column] = !prevNavDropdownOpen[column];
@@ -125,8 +126,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
         `${process.env.PUBLIC_URL}/images/icons/menu-item-collapse.svg`
       );
       setNavDropdownOpen((prevNavDropdownOpen) => {
-        const newOpenState = Array(prevNavDropdownOpen.length).fill(false);
-        return newOpenState;
+        return Array(prevNavDropdownOpen.length).fill(false);
       });
     }
 
@@ -191,6 +191,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                 Welcome, {user.firstName}!
               </span>
               <span
+                data-testid="loggedInUserInitials"
                 data-initials={initials}
                 className="text-bold float-right clearfix cursor-pointer mobile:margin-top-1 desktop:margin-top-1 desktop:margin-top-2 desktop-lg:margin-top-0 margin-left-5"
                 tabIndex="0"
@@ -291,14 +292,12 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                           : null
                       }
                       className="font-body-sm"
-                      items={el.items.map((item, index) => (
-                        <Link
-                          key={index}
-                          to={item.link}
-                          onClick={() => handleSubMenuClick(i)}
+                      items={el.items.map((item) => (
+                        <a
+                          href={item.link}
                         >
                           {item.menu}
-                        </Link>
+                        </a>
                       ))}
                       isOpen={navDropdownOpen[i]}
                     />
