@@ -7,6 +7,7 @@ import {
   Radio,
   CharacterCount,
   Alert,
+  Fieldset,
 } from "@trussworks/react-uswds";
 
 import "./ContactUs.scss";
@@ -61,19 +62,25 @@ export const ContactUs = () => {
       </div>
 
       <div className="margin-top-2">
-        <Label htmlFor="radioCommentType">Comment Type</Label>
-
-        {commentTypes.map((comment) => {
-          return (
-            <Radio
-              id={`radioComment_${comment.id}`}
-              name="radioCommentType"
-              label={comment.comment}
-              value={comment.id}
-              key={`key_${comment.id}`}
-            />
-          );
-        })}
+        <Fieldset
+          id={`radioCommentType`}
+          epadataname={"radioCommentType"}
+          epa-testid={"radioCommentType"}
+          name={"radioCommentType"}
+          legend="Comment Type"
+        >
+          {commentTypes.map((comment) => {
+            return (
+              <Radio
+                id={`radioComment_${comment.id}`}
+                name="radioCommentType"
+                label={comment.comment}
+                value={comment.id}
+                key={`key_${comment.id}`}
+              />
+            );
+          })}
+        </Fieldset>
       </div>
       <div className="margin-top-2">
         <Label htmlFor="txtComment" id="labelComment">

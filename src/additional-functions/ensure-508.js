@@ -55,6 +55,26 @@ export const changeGridCellAttributeValue = () => {
     document.querySelectorAll(`[role="gridcell"]`).forEach((element) => {
       element.setAttribute("role", "cell");
     });
+
+    document.querySelectorAll(`[role="row"]`).forEach((element) => {
+      console.log("ELEMENT", element);
+
+      let fac = null;
+      element.querySelectorAll(`[role="cell"]`).forEach((element2, index) => {
+        if (index === 0) {
+          fac= element2.innerHTML;
+          element2.setAttribute("aria-label", `Expand ${fac}`);
+        }
+      });
+      element
+        .querySelectorAll(`[aria-label="Collapse Row"]`)
+        .forEach((element3) => {
+          console.log("ELEMENT3", element3);
+          element3.setAttribute("aria-label", `Collapse ${fac}`);
+        });
+
+      element.setAttribute("aria-label", `Expand $facility.name`);
+    });
   });
 };
 
