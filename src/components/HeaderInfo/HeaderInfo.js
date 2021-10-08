@@ -284,6 +284,7 @@ export const HeaderInfo = ({
               ""
             )}
           </div>
+          {user? 
           <div className="grid-row padding-1 float-right text-right margin-right-3">
             <table role="presentation">
               <tbody>
@@ -297,7 +298,7 @@ export const HeaderInfo = ({
                 </tr>
               </tbody>
             </table>
-          </div>
+          </div>:""}
         </div>
       </div>
     </div>
