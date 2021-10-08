@@ -1,10 +1,10 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import { Accordion } from "@trussworks/react-uswds";
 
 const FAQ = () => {
   useEffect(() => {
     document.title = "ECMPS FAQs";
-    }, [])
+  }, []);
   const topics = [
     {
       name: "Monitoring Plans",
@@ -59,17 +59,17 @@ const FAQ = () => {
     },
   ];
 
-  const createAccordionItems = (questions) => {
+  const createAccordionItems = (questions, name) => {
     // *** create items
     let items = [];
     let keyCount = 1;
 
-    questions.forEach((element) => {
+    questions.forEach((element, index) => {
       items.push({
         title: element.question,
         content: element.answer,
         expanded: false,
-        id: `question_${keyCount++}`,
+        id: `question_${keyCount++}_${name.split(" ").join("")}`,
       });
     });
 
@@ -83,7 +83,7 @@ const FAQ = () => {
     >
       <div className="grid-col-9 fit-content">
         <div>
-          <span className="text-bold font-heading-2xl">FAQs</span>
+          <h2 className="text-bold font-heading-2xl">FAQs</h2>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis
             arcu in ipsum sollicitudin viverra. Vestibulum ut tincidunt lacus.
@@ -96,8 +96,8 @@ const FAQ = () => {
           return (
             <div className=" padding-top-2 padding-bottom-2">
               {" "}
-              <h2 className="text-bold font-heading-xl">{topic.name} </h2>
-              {createAccordionItems(topic.questions)}
+              <h3 className="text-bold font-heading-xl">{topic.name} </h3>
+              {createAccordionItems(topic.questions, topic.name)}
             </div>
           );
         })}{" "}

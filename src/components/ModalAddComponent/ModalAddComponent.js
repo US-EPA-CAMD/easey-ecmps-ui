@@ -76,10 +76,11 @@ const ModalAddComponent = ({
                 unstyled="true"
                 epa-testid="backBtn"
                 id="backBtn"
+                aria-label="go back to systems details"
               >
                 {" "}
                 <ArrowBackSharp
-                  aria-label="go back to systems details"
+                 
                   className=" font-body-sm backBTNColor position-relative top-neg-2px"
                 />
               </Button>
