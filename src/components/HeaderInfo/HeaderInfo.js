@@ -128,7 +128,7 @@ export const HeaderInfo = ({
   //       document.querySelector(`[id="checkOutBTN"]`).focus();
   //     }
   //   },[1500]);
-  // };
+  };
   // const [revertState, setRevertState] = useState(false);
   const closeModalHandler = () => setShow(false);
 
