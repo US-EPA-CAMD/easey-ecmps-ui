@@ -111,7 +111,7 @@ export const Tabs = ({
                     {user &&
                     el.props.locationId &&
                     isCheckedOut(el.props.locationId) ? (
-                      <LockSharp className="text-bold tab-icon margin-right-2" />
+                      <LockSharp className="text-bold tab-icon margin-right-2" aria-hidden="false" alt="locked"/>
                     ) : null}
                     {el.props.title.split("(")[0]}
                   </div>

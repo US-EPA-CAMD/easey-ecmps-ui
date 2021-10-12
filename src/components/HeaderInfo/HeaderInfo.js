@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import { Button, Checkbox } from "@trussworks/react-uswds";
 import { CreateOutlined, LockOpenSharp, LockSharp } from "@material-ui/icons";
 
@@ -56,9 +56,9 @@ export const HeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       checkedOutLocations[
-      checkedOutLocations
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id)
+        checkedOutLocations
+          .map((location) => location["monPlanId"])
+          .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["firstName"]
     );
   };
@@ -102,6 +102,14 @@ export const HeaderInfo = ({
     setCheckoutState(checkout);
   }, [checkout]);
 
+  // 508 
+//   const activeFocusRef = useRef(null);
+//   useEffect(() => {
+//     if (activeFocusRef.current) {
+//       activeFocusRef.current.focus();
+// }}, [checkout]);
+
+
   // direction -> false = check back in
   // true = check out
   const checkoutStateHandler = (direction) => {
@@ -109,7 +117,18 @@ export const HeaderInfo = ({
     setCheckedOutByUser(direction);
     setDisplayLock(direction);
     checkoutAPI(direction, configID, selectedConfig.id, setCheckout);
-  };
+
+// 508
+    /// true means check out = > check back in 
+  //   setTimeout(() => {
+  //     if (direction) {
+  //       document.querySelector(`[id="checkInBTN"]`).focus();
+  //       console.log('  document.querySelector(`[id="checkInBTN"]`)',  document.querySelector(`[id="checkInBTN"]`))
+  //     } else {
+  //       document.querySelector(`[id="checkOutBTN"]`).focus();
+  //     }
+  //   },[1500]);
+  // };
   // const [revertState, setRevertState] = useState(false);
   const closeModalHandler = () => setShow(false);
 
@@ -158,14 +177,16 @@ export const HeaderInfo = ({
             </h3>
             <div className="text-bold font-body-2xs">
               {checkoutState
-                ? `Currently checked out by: ${user.firstName
-                } ${formatDate(new Date())}`
+                ? `Currently checked out by: ${user.firstName} ${formatDate(
+                    new Date()
+                  )}`
                 : displayLock
-                  ? `Last checked out by: ${findCurrentlyCheckedOutByInfo()["checkedOutBy"]
+                ? `Last checked out by: ${
+                    findCurrentlyCheckedOutByInfo()["checkedOutBy"]
                   } ${formatDate(
                     findCurrentlyCheckedOutByInfo()["checkedOutOn"]
                   )}`
-                  : null}
+                : null}
             </div>
           </div>
           <div className="">
@@ -181,6 +202,7 @@ export const HeaderInfo = ({
                   <div className="text-bold font-body-2xs display-inline-block ">
                     {checkoutState || checkedOutByUser === true ? (
                       <Button
+                        autoFocus
                         outline={false}
                         tabIndex="0"
                         aria-label={`Check back in the configuration `}
@@ -192,9 +214,10 @@ export const HeaderInfo = ({
                         <LockOpenSharp /> {"Check Back In"}
                       </Button>
                     ) : checkedOutLocations
-                      .map((location) => location["monPlanId"])
-                      .indexOf(selectedConfig.id) === -1 ? (
+                        .map((location) => location["monPlanId"])
+                        .indexOf(selectedConfig.id) === -1 ? (
                       <Button
+                        autoFocus
                         outline={true}
                         tabIndex="0"
                         aria-label={`Check out the configuration`}
@@ -202,6 +225,8 @@ export const HeaderInfo = ({
                         onClick={() => checkoutStateHandler(true)}
                         id="checkOutBTN"
                         epa-testid="checkOutBTN"
+                        //508
+                        // ref={checkout ? activeFocusRef : null}
                       >
                         <CreateOutlined color="primary" /> {"Check Out"}
                       </Button>
@@ -261,10 +286,18 @@ export const HeaderInfo = ({
             {checkout ? (
               <div>
                 <div className="grid-row padding-2 margin-left-10">
-                  <Button type="button" className="margin-right-1 margin-left-4" outline={false}>
+                  <Button
+                    type="button"
+                    className="margin-right-1 margin-left-4"
+                    outline={false}
+                  >
                     Evaluate
                   </Button>
-                  <Button type="button" className="margin-left-1" outline={false}>
+                  <Button
+                    type="button"
+                    className="margin-left-1"
+                    outline={false}
+                  >
                     Submit
                   </Button>
                 </div>
@@ -284,21 +317,24 @@ export const HeaderInfo = ({
               ""
             )}
           </div>
-          {user? 
-          <div className="grid-row padding-1 float-right text-right margin-right-3">
-            <table role="presentation">
-              <tbody>
-                <tr>
-                  <th className="padding-1">Evaluation Status: </th>
-                  <td className="padding-1">Passed with no errors</td>
-                </tr>
-                <tr>
-                  <th className="padding-1">Submission Status: </th>
-                  <td className="padding-1">Resubmission required</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>:""}
+          {user ? (
+            <div className="grid-row padding-1 float-right text-right margin-right-3">
+              <table role="presentation">
+                <tbody>
+                  <tr>
+                    <th className="padding-1">Evaluation Status: </th>
+                    <td className="padding-1">Passed with no errors</td>
+                  </tr>
+                  <tr>
+                    <th className="padding-1">Submission Status: </th>
+                    <td className="padding-1">Resubmission required</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>

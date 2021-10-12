@@ -40,7 +40,7 @@ export const DataTableConfigurations = ({
     return val;
   };
 
-  const checkBackIn = (monitoringPlanId) => {
+  const checkBackIn = (monitoringPlanId  ) => {
     const crypto = window.crypto || window.msCrypto;
     const array = new Uint32Array(1);
     const randomNumber = crypto.getRandomValues(array);
@@ -64,6 +64,7 @@ export const DataTableConfigurations = ({
       });
   };
 
+  const [openAndCheckoutBTNFocus, setOpenAndCheckoutBTNFocus] = useState('');
   const openConfig = (config, checkout, checkIn) => {
     const selectedConfigData = findSelectedConfig(config.col3);
     if (!checkIn) {
@@ -79,7 +80,17 @@ export const DataTableConfigurations = ({
     } else {
       // monitoring plan id for api check in
       // oris code for redux state check in
+      // checkBackIn(selectedConfigData.id);
+
+      let x = document.querySelector(`[id="btnCheckBackIn"]`);
+
+      let openBTN = x.parentNode.childNodes[0];
+
       checkBackIn(selectedConfigData.id);
+
+      const ariaLabel = openBTN.getAttribute("aria-label");
+
+      setOpenAndCheckoutBTNFocus(ariaLabel.substring(0, 4) + " and checkout" + ariaLabel.substring(4, ariaLabel.length));
     }
   };
 
@@ -137,6 +148,7 @@ export const DataTableConfigurations = ({
           setMostRecentlyCheckedInMonitorPlanIdForTab
         }
         setCheckBackInState={setCheckout}
+        openAndCheckoutBTNFocus={openAndCheckoutBTNFocus}
       />
     </div>
   );

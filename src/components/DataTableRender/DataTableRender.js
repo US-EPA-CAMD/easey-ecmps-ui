@@ -64,6 +64,9 @@ export const DataTableRender = ({
   setViewBtn,
   viewBtn,
   setAddBtn,
+
+  // for 508
+  openAndCheckoutBTNFocus,
 }) => {
   const [searchText, setSearchText] = useState("");
   const columns = [];
@@ -76,6 +79,19 @@ export const DataTableRender = ({
       cleanUp508();
     };
   }, []);
+
+  useEffect(() => {
+    if (openAndCheckoutBTNFocus) {
+      setTimeout(() => {
+        const x = document.querySelector(
+          `[aria-label="${openAndCheckoutBTNFocus}"]`
+        );
+        if (x) {
+          x.focus();
+        }
+      }, [2000]);
+    }
+  }, [openAndCheckoutBTNFocus]);
 
   const isLocationCheckedOut = (facilityId) => {
     return (
