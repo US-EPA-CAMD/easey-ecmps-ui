@@ -1,47 +1,82 @@
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { shallow } from 'enzyme';
 
-import configureStore from '../../store/configureStore.dev';
 import SubHeader from './SubHeader';
-const store = configureStore();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useHistory: () => ({
-    push: jest.fn(),
-  }),
-}));
+describe('SubHeader Component', () => {
 
-describe('SubHeader', () => {
-  test('renders without errors', () => {
-    const query = render(
-      <Provider store={store}>
-        <MemoryRouter>
-          <SubHeader />
-        </MemoryRouter>
-      </Provider>
-    );
-    const { container, getByText } = query;
+  test('Menu items render without errors', () => {
+    render(<SubHeader />);
 
-    const header = getByText('Clean Air Markets Program Data');
-    const home = getByText('HOME');
-    const data = getByText('DATA');
-    const analysis = getByText('ANALYSIS');
-    const visualization = getByText('VISUALIZATION');
+    //Resources
+    const resourcesMenuItem = screen.getAllByText('Resources');
+    expect(resourcesMenuItem.length).toBe(2);
 
-    expect(header).toBeTruthy();
-    expect(home).toBeTruthy();
-    expect(data).toBeTruthy();
-    expect(analysis).toBeTruthy();
-    expect(visualization).toBeTruthy();
+    const faqsLink = screen.getByText('FAQs');
+    expect(faqsLink).toBeInTheDocument();
 
-    fireEvent.click(data);
-    fireEvent.click(getByText('Custom Data Download'));
-    fireEvent.click(analysis);
-    fireEvent.click(visualization);
+    //Help/Support
+    const help_supportMenuItem = screen.getAllByText('Help/Support');
+    expect(help_supportMenuItem.length).toBe(2);
 
-    expect(container.querySelector('.usa-nav__submenu')).toBeInTheDocument();
+    //Regulation Patterns
+    const regpatternsMenuItem = screen.getByText('Regulatory Partners');
+    expect(regpatternsMenuItem).toBeInTheDocument();
+
+    //Site Map
+    const sitemapMenuItem = screen.getByText('Site Map');
+    expect(sitemapMenuItem).toBeInTheDocument();
+  });
+
+  test('Log In button renders without errors', () => {
+    render(<SubHeader />);
+    expect(screen.getByText('Log In')).toBeInTheDocument();
+  });
+
+  test('Log In modal renders without errors', () => {
+    render(<SubHeader />);
+    const loginButton = screen.getByText('Log In');
+    expect(loginButton).toBeInTheDocument();
+
+    fireEvent.click(loginButton);
+
+    //Modal X button
+    expect(screen.getByTestId('closeModalBtn')).toBeInTheDocument();
+    //Login form labels
+    expect(screen.getByText('Username')).toBeInTheDocument();
+    expect(screen.getByText('Password')).toBeInTheDocument();
+  });
+
+  const mockUser = { firstName: 'FNTest', lastName: 'LNTest' };
+
+  test('User Information after Login renders without errors', () => {
+    render(<SubHeader user={mockUser} />);
+
+    //Check Initials
+    expect(screen.getByTestId('loggedInUserInitials')).toBeInTheDocument();
+    const image = screen.getByAltText('Expand menu')
+    expect(image).toBeInTheDocument();
+    expect(image).toHaveAttribute('src', '/images/icons/menu-item-expand.svg');
+    //Welcome message
+    expect(screen.getByText('Welcome, FNTest!')).toBeInTheDocument();
+    //Log out button
+    expect(screen.getByText('Log Out')).toBeInTheDocument();
+  });
+
+  test('User Profile Options availability', () => {
+    render(<SubHeader user={mockUser} />);
+
+    //Click image
+    const image = screen.getByAltText('Expand menu')
+    expect(image).toBeInTheDocument();
+    expect(image).toHaveAttribute('src', '/images/icons/menu-item-expand.svg');
+
+    fireEvent.click(image);
+
+    //User Profile links
+    expect(image).toHaveAttribute('src', '/images/icons/menu-item-collapse.svg');
+    expect(screen.getByText('Manage Login')).toBeInTheDocument();
+    expect(screen.getByText('Manage Delegations')).toBeInTheDocument();
   });
 });
