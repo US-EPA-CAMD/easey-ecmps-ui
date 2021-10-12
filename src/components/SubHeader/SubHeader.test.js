@@ -79,35 +79,4 @@ describe('SubHeader Component', () => {
     expect(screen.getByText('Manage Login')).toBeInTheDocument();
     expect(screen.getByText('Manage Delegations')).toBeInTheDocument();
   });
-
-  test('Log Out button clicks successfully', async () => {
-    await act(async () => {
-      render(<SubHeader user={mockUser} />);
-      const logoutButton = screen.getByText('Log Out');
-      expect(logoutButton).toBeInTheDocument();
-
-      await fireEvent.click(logoutButton);
-
-      expect(true).toBeTruthy();
-    });
-    /* //Check Initials not on screen
-    expect(screen.queryByTestId('loggedInUserInitials')).toBeFalsy();
-    expect(screen.queryByAltText('Expand menu')).toBeFalsy();
-    //Welcome message not on screen
-    expect(screen.queryByText('Welcome, FNTest!')).toBeFalsy();
-    //Log out button not on screen
-    expect(screen.queryByText('Log Out')).toBeFalsy();
-
-    //Check log in button is visible
-    expect(screen.getByText('Log In')).toBeInTheDocument(); */
-  });
-
-  it('Log Out button clicks successfully 2', () => {
-    const component = shallow(<SubHeader user={mockUser} />);
-    component.find({ id: "logoutBtn" }).simulate('click');
-
-    //HOW TO CHANGE USER STATE
-
-    expect(component.props('user') === 'undefined').toBeTruthy();
-  });
 });
