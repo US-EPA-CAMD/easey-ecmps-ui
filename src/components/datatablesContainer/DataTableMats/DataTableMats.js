@@ -137,16 +137,12 @@ export const DataTableMats = ({
       modalViewData(
         mats,
         {
-          supplementalMATSParameterCode: ["Parameter", "dropdown", "required"],
-          supplementalMATSMonitoringMethodCode: [
-            "Methodology",
-            "dropdown",
-            "required",
-          ],
+          supplementalMATSParameterCode: ["Parameter", "dropdown", ""],
+          supplementalMATSMonitoringMethodCode: ["Methodology", "dropdown", ""],
         },
         {
-          beginDate: ["Start Date", "date", "required"],
-          beginHour: ["Start Time", "time", "required"],
+          beginDate: ["Start Date", "date", ""],
+          beginHour: ["Start Time", "time", ""],
           endDate: ["End Date", "date", ""],
           endHour: ["End Time", "time", ""],
         },
@@ -161,6 +157,9 @@ export const DataTableMats = ({
     });
   };
 
+  const [viewBtn, setViewBtn] = useState(null);
+  const [addBtn, setAddBtn] = useState(null);
+
   const closeModalHandler = () => {
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
@@ -170,6 +169,9 @@ export const DataTableMats = ({
     } else {
       setShow(false);
       removeChangeEventListeners(".modalUserInput");
+    }
+    if (addBtn) {
+      addBtn.focus();
     }
   };
 
@@ -213,6 +215,9 @@ export const DataTableMats = ({
         actionsBtn={"View"}
         addBtn={openMatsModal}
         addBtnName={"Create MATS"}
+        setViewBtn={setViewBtn}
+        viewBtn={viewBtn}
+        setAddBtn={setAddBtn}
       />
 
       {show ? (

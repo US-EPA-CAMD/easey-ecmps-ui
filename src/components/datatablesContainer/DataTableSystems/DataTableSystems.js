@@ -106,14 +106,14 @@ export const DataTableSystems = ({
       modalViewData(
         selectSystem,
         {
-          monitoringSystemId: ["System ID", "input", "required"],
-          systemDesignationCode: ["System Designation", "dropdown", "required"],
-          systemTypeCode: ["System Type", "dropdown", "required"],
-          fuelCode: ["Fuel Type", "dropdown", "required"],
+          monitoringSystemId: ["System ID", "input", ""],
+          systemDesignationCode: ["System Designation", "dropdown", ""],
+          systemTypeCode: ["System Type", "dropdown", ""],
+          fuelCode: ["Fuel Code", "dropdown", ""],
         },
         {
-          beginDate: ["Start Date", "date", "required"],
-          beginHour: ["Start Time", "time", "required"],
+          beginDate: ["Start Date", "date", ""],
+          beginHour: ["Start Time", "time", ""],
           endDate: ["End Date", "date", ""],
           endHour: ["End Time", "time", ""],
         },
@@ -131,6 +131,8 @@ export const DataTableSystems = ({
     });
   };
 
+  const [viewBtn, setViewBtn] = useState(null);
+  const [addBtn, setAddBtn] = useState(null);
   const resetFlags = () => {
     setSecondLevel(false);
     setThirdLevel(false);
@@ -153,6 +155,9 @@ export const DataTableSystems = ({
       setShow(false);
       removeChangeEventListeners(".modalUserInput");
     }
+    if (addBtn) {
+      addBtn.focus();
+    }
   };
 
   const [createNewSystem, setCreateNewSystem] = useState(false);
@@ -163,7 +168,7 @@ export const DataTableSystems = ({
     "System ID",
     "System Type",
     "System Designation",
-    "Fuel Type",
+    "Fuel Code",
     "Begin Date and Time",
     "End Date and Time",
   ];
@@ -566,6 +571,9 @@ export const DataTableSystems = ({
           user={user}
           addBtn={openSystem}
           addBtnName={"Create System"}
+          setViewBtn={setViewBtn}
+          viewBtn={viewBtn}
+          setAddBtn={setAddBtn}
         />
       </div>
       {show ? (

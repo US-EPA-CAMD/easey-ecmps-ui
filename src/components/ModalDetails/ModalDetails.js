@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Label,
   FormGroup,
@@ -10,11 +10,16 @@ import {
 } from "@trussworks/react-uswds";
 
 import "./ModalDetails.scss";
+import { assignAriaLabelsToDatePickerButtons } from "../../additional-functions/ensure-508";
 
 import { ArrowBackSharp } from "@material-ui/icons";
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
+
 // value in data => [0] api label, [1] our UI label, [2] value,[3], required or not for editing, [4] control form type
 const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
+  useEffect(() => {
+    assignAriaLabelsToDatePickerButtons();
+  }, []);
 
   // fixes rare instances where there is an enddate but no end time
   if (
@@ -26,7 +31,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
     data[data.length - 1][2] = "0";
     data[data.length - 1][5] = "0";
   }
-  
+
   const makeViewOnlyComp = (value) => {
     return (
       <div key={`${value[1]}`} className="grid-col">
@@ -34,12 +39,12 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
           ""
         ) : (
           <FormGroup className="margin-top-0">
-            <Label
-              className="text-bold margin-bottom-0"
+            <h3
+              className="text-bold margin-bottom-0 usa-label"
               htmlFor={`${value[1]}`}
             >
               {value[1]}
-            </Label>
+            </h3>
             <div id={`${value[1]}`}>
               {value[2]
                 ? value[4] === "radio"
@@ -72,7 +77,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
             }
             initialSelection={value[5]}
             selectKey="code"
-            id={value[0]}
+            id={`${value[1]}`}
             epa-testid={value[0]}
             name={value[1]}
             secondOption="name"
@@ -87,40 +92,28 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
 
         const datePickerValue = `${year}-${month}-${day}`;
         comp = (
-          <div>
-            {/* use aria-describe by  */}
-            <div className="usa-hint" id="appointment-date-hint">
-              mm/dd/yyyy
-            </div>
-            {/* )} */}
-            <DatePicker
-              className="margin-0 modalUserInput width-mobile"
-              id={value[0]}
-              name={value[1]}
-              epadataname={value[0]}
-              epa-testid={value[0]}
-              defaultValue={datePickerValue}
-              onChange={() => void 0}
-            />
-          </div>
+          <DatePicker
+            className="margin-0 modalUserInput width-mobile"
+            id={`${value[1]}`}
+            name={value[1]}
+            epadataname={value[0]}
+            epa-testid={value[0]}
+            defaultValue={datePickerValue}
+            onChange={() => void 0}
+          />
         );
         break;
       case "time":
         comp = (
-          <div>
-            <div className="usa-hint" id="appointment-date-hint">
-              hh
-            </div>
-            <TextInput
-              className="modalUserInput width-7"
-              id={value[0]}
-              epa-testid={value[0]}
-              epadataname={value[0]}
-              name={value[0]}
-              type="text"
-              defaultValue={value[2] ? value[2] : ""}
-            />
-          </div>
+          <TextInput
+            className="modalUserInput width-7"
+            id={`${value[1]}`}
+            epa-testid={value[0]}
+            epadataname={value[0]}
+            name={value[0]}
+            type="text"
+            defaultValue={value[2] ? value[2] : ""}
+          />
         );
         break;
 
@@ -128,7 +121,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
         comp = (
           <TextInput
             className="modalUserInput width-mobile"
-            id={value[0]}
+            id={`${value[1]}`}
             epa-testid={value[0]}
             epadataname={value[0]}
             name={value[0]}
@@ -142,11 +135,12 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
         comp = (
           <Fieldset
             className=" display-inline-flex modalUserInput"
-            id={value[0]}
+            id={`${value[1].split(" ").join("-")}`}
             epadataname={value[0]}
             epa-testid={value[0]}
             name={value[0]}
           >
+            <legend className=" margin-bottom-0 usa-label">{value[1]}</legend>
             <Radio
               id={`${value[1].split(" ").join("")}-1`}
               name={`${value[1].split(" ").join("-")}`}
@@ -178,10 +172,29 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
     return (
       <div className="grid-col">
         <FormGroup className="margin-top-0">
-          <Label className=" margin-bottom-0" htmlFor={`${value[1]}`}>
-            {value[3] === "required" ? `${value[1]} (Required)` : value[1]}
-          </Label>
-          <div id={`${value[1]}`}>{comp}</div>
+          {value[4] === "radio" ? (
+            ""
+          ) : (
+            // For all inputs except for radio buttons:
+            <Label className=" margin-bottom-0" htmlFor={`${value[1]}`}>
+              {value[3] === "required" ? `${value[1]} (Required)` : value[1]}
+              {value[4] === "date" ? (
+                <span className="usa-hint d-block" id="appointment-date-hint">
+                  <span className="sr-only"> - </span>mm/dd/yyyy
+                </span>
+              ) : (
+                ""
+              )}
+              {value[4] === "time" ? (
+                <span className="usa-hint d-block" id="appointment-date-hint">
+                  <span className="sr-only"> - </span>hh
+                </span>
+              ) : (
+                ""
+              )}
+            </Label>
+          )}
+          {comp}
         </FormGroup>
       </div>
     );
@@ -218,15 +231,15 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
                 unstyled="true"
                 epa-testid="backBtn"
                 id="backBtn"
+                aria-label="go back to systems details"
               >
                 {" "}
-                <ArrowBackSharp
-                  aria-label="go back to systems details"
-                  className=" font-body-sm backBTNColor position-relative top-neg-2px"
-                />
+                <ArrowBackSharp className=" font-body-sm backBTNColor position-relative top-neg-2px" />
               </Button>
 
-              <h4 className="text-bold float-left">{title}</h4>
+              <h3 className="text-bold float-left mobile:font-body-md mobile:text-bold">
+                {title}
+              </h3>
             </div>
           ) : (
             ""

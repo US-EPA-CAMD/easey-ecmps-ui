@@ -16,7 +16,7 @@ export const HelpSupport = () => {
   return (
     <div className="padding-top-7 padding-2 react-transition fade-in">
       <div className="grid-row">
-        <div className="text-bold font-heading-2xl">Help/Support</div>
+        <h2 className="text-bold font-heading-2xl">Help/Support</h2>
         <div className="flex-force-break" />
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla
@@ -25,7 +25,7 @@ export const HelpSupport = () => {
         </p>
       </div>
       <div className="grid-row margin-top-5">
-        <div className="text-bold font-heading-2xl">FAQs</div>
+        <h3 className="text-bold font-heading-2xl">FAQs</h3>
         <div className="flex-force-break" />
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla
@@ -52,7 +52,7 @@ export const HelpSupport = () => {
         </USWDSLink>
       </div>
       <div className="grid-row margin-top-5">
-        <div className="text-bold font-heading-2xl">Tutorials</div>
+        <h3 className="text-bold font-heading-2xl">Tutorials</h3>
         <div className="flex-force-break" />
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla

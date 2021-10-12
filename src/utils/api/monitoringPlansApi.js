@@ -112,6 +112,7 @@ export const postCheckoutMonitoringPlanConfiguration = async (id, user) => {
 };
 
 export const revertOfficialRecord = async (id) => {
+  console.log('id',id)
   return secureAxios({
     method: "DELETE",
     url: `${config.services.monitorPlans.uri}/workspace/plans/${id}/revert`,

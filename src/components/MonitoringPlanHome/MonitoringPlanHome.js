@@ -22,7 +22,7 @@ export const MonitoringPlanHome = ({
 }) => {
   useEffect(() => {
     document.title = "ECMPS Monitoring Plans";
-    }, [])
+  }, []);
   const [checkedOutLocations, setCheckedOutLocations] = useState([]);
   const [
     mostRecentlyCheckedInMonitorPlanIdForTab,
@@ -140,14 +140,18 @@ export const MonitoringPlanHome = ({
         >
           Monitoring Plans
         </h2>
-        <Button
-          type="button"
-          className="float-right clearfix radius-2 position-relative tablet-lg:margin-top-2 tablet:margin-top-2 tablet:margin-right-neg-3 desktop:margin-right-0"
-          outline={true}
-          id="input-button-search"
-        >
-          Import a Monitoring Plan
-        </Button>
+        {user ? (
+          <Button
+            type="button"
+            className="float-right clearfix radius-2 position-relative tablet-lg:margin-top-2 tablet:margin-top-2 tablet:margin-right-neg-3 desktop:margin-right-0"
+            outline={true}
+            id="input-button-search"
+          >
+            Import a Monitoring Plan
+          </Button>
+        ) : (
+          ""
+        )}
       </div>
 
       <div className="display-none mobile:display-block tablet:display-none">

@@ -59,6 +59,11 @@ const ModalAddComponent = ({
   const selectingCompHandler = (val) => {
     selectionHandler(filteredComps.filter((x) => x.id === val));
   };
+
+  const hyphenatedCaption = caption
+    ? caption.toLowerCase().split(" ").join("-")
+    : "";
+
   return (
     <div>
       <div className=" padding-left-3">
@@ -71,15 +76,15 @@ const ModalAddComponent = ({
                 unstyled="true"
                 epa-testid="backBtn"
                 id="backBtn"
+                aria-label="go back to systems details"
               >
                 {" "}
-                <ArrowBackSharp
-                  aria-label="go back to systems details"
-                  className=" font-body-sm backBTNColor position-relative top-neg-2px"
-                />
+                <ArrowBackSharp className=" font-body-sm backBTNColor position-relative top-neg-2px" />
               </Button>
 
-              <h4 className="text-bold float-left">{title}</h4>
+              <h3 className="text-bold float-left mobile:font-body-md mobile:text-bold">
+                {title}
+              </h3>
             </div>
           ) : (
             ""
@@ -87,9 +92,6 @@ const ModalAddComponent = ({
         </div>
         <div className=" float-left">
           <FormGroup className="margin-bottom-1">
-            <Label test-id={caption} htmlFor={caption}>
-              {caption}
-            </Label>
             <SelectBox
               options={
                 unlinkedComponentsOptions !== null ||
@@ -102,6 +104,9 @@ const ModalAddComponent = ({
               selectKey="code"
               secondOption="name"
               handler={selectingCompHandler}
+              caption={caption}
+              hyphenatedCaption={hyphenatedCaption}
+              id={hyphenatedCaption}
             />
           </FormGroup>
         </div>

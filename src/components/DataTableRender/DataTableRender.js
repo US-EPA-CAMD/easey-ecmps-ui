@@ -61,6 +61,9 @@ export const DataTableRender = ({
   setMostRecentlyCheckedInMonitorPlanId,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
   setCheckout,
+  setViewBtn,
+  viewBtn,
+  setAddBtn,
 }) => {
   const [searchText, setSearchText] = useState("");
   const columns = [];
@@ -185,6 +188,14 @@ export const DataTableRender = ({
       cell: (row) => {
         // *** normalize the row object to be in the format expected by DynamicTabs
         const normalizedRow = normalizeRowObjectFormat(row, columnNames);
+
+        let willAutoFocus;
+        if (viewBtn && viewBtn === row[`col${Object.keys(row).length - 1}`]) {
+          willAutoFocus = true;
+        } else {
+          willAutoFocus = false;
+        }
+
         return (
           <div>
             {/* user is logged in  */}
@@ -267,12 +278,18 @@ export const DataTableRender = ({
                       ? `btnOpen${tableTitle.split(" ").join("")}`
                       : `btnOpen`
                   }
-                  onClick={() => openHandler(normalizedRow, false)}
+                  onClick={() => {
+                    if (setViewBtn) {
+                      setViewBtn(row[`col${Object.keys(row).length - 1}`]);
+                    }
+                    openHandler(normalizedRow, false);
+                  }}
                   aria-label={
                     checkout
                       ? `view and/or edit ${row.col1}`
                       : `view ${row.col1}`
                   }
+                  autoFocus={willAutoFocus}
                 >
                   {checkout ? "View / Edit" : "View"}
                 </Button>
@@ -286,15 +303,21 @@ export const DataTableRender = ({
                 id={
                   tableTitle
                     ? `btnOpen${tableTitle.split(" ").join("")}`
-                    : `btnOpen`
+                    : `btnOpen_${row[`col${Object.keys(row).length - 1}`]}`
                 }
                 className="cursor-pointer margin-left-2 open-modal-button"
-                onClick={() => openHandler(normalizedRow, false)}
+                onClick={() => {
+                  if (setViewBtn) {
+                    setViewBtn(row[`col${Object.keys(row).length - 1}`]);
+                  }
+                  openHandler(normalizedRow, false);
+                }}
                 aria-label={
                   actionsBtn === `Open`
                     ? `Open ${row.col1}`
                     : `View ${row.col1}`
                 }
+                autoFocus={willAutoFocus}
               >
                 {actionsBtn === "Open" ? "Open" : "View"}
               </Button>
@@ -341,19 +364,29 @@ export const DataTableRender = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const triggerAddBtn = (event) => {
+    if (setAddBtn) {
+      setAddBtn(event.target);
+      setViewBtn(null);
+    }
+    addBtn(false, false, true);
+  };
+
   return (
     <div className={`${componentStyling}`}>
       <div aria-live="polite" className={`${tableStyling}`}>
         {dataLoaded && data.length > 0 ? (
           <div>
             {tableTitle ? (
-              <h4
+              <h3
                 className={`margin-top-5 text-bold ${
-                  tableStyling ? "" : "mobile:font-body-xl mobile:text-bold"
+                  tableStyling
+                    ? "mobile:font-body-md mobile:text-bold"
+                    : "mobile:font-body-xl mobile:text-bold"
                 }`}
               >
                 {tableTitle}
-              </h4>
+              </h3>
             ) : (
               ""
             )}
@@ -395,21 +428,23 @@ export const DataTableRender = ({
             />{" "}
             <div className={`${headerStyling}`}>
               {addBtn && checkout && user ? (
-                <h2 className="padding-0 page-subheader">
-                  <div className="padding-y-1">
-                    <Button
-                      type="button"
-                      // test-id={tableTitle? `btnAdd${tableTitle.split(" ").join("")}`: `${sectionTitle.split(" ").join("")}`}
-                      className="float-left clearfix margin-right-3"
-                      outline="true"
-                      color="black"
-                      onClick={() => addBtn(false, false, true)}
-                      id="addBtn"
-                    >
-                      {addBtnName}
-                    </Button>
-                  </div>{" "}
-                </h2>
+                <div className="padding-y-1">
+                  <Button
+                    type="button"
+                    // test-id={tableTitle? `btnAdd${tableTitle.split(" ").join("")}`: `${sectionTitle.split(" ").join("")}`}
+                    className="float-left clearfix margin-right-3"
+                    outline="true"
+                    color="black"
+                    onClick={(event) => {
+                      triggerAddBtn(event);
+                    }}
+                    id={
+                      addBtnName.toLowerCase().split(" ").join("-") + "-add-btn"
+                    }
+                  >
+                    {addBtnName}
+                  </Button>
+                </div>
               ) : (
                 ""
               )}
@@ -417,13 +452,15 @@ export const DataTableRender = ({
           </div>
         ) : dataLoaded && data.length === 0 ? (
           <div>
-            <h4
+            <h3
               className={`margin-top-5 text-bold ${
-                tableStyling ? "" : "mobile:font-body-xl mobile:text-bold"
+                tableStyling
+                  ? "mobile:font-body-md mobile:text-bold"
+                  : "mobile:font-body-xl mobile:text-bold"
               }`}
             >
               {tableTitle}
-            </h4>
+            </h3>
             <div className="text-center">
               <p>{"No data currently present"}</p>
             </div>
@@ -437,7 +474,9 @@ export const DataTableRender = ({
                       className="float-left clearfix margin-right-3"
                       outline="true"
                       color="black"
-                      onClick={() => addBtn(false, false, true)}
+                      onClick={(event) => {
+                        triggerAddBtn(event);
+                      }}
                       id="addBtn"
                     >
                       {addBtnName}

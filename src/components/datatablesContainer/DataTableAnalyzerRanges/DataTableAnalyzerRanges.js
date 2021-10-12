@@ -97,12 +97,12 @@ export const DataTableAnalyzerRanges = ({
       modalViewData(
         selectRange,
         {
-          analyzerRangeCode: ["Range", "dropdown", "required"],
+          analyzerRangeCode: ["Range", "dropdown", ""],
           dualRangeIndicator: ["Dual Range Indicator", "radio", ""],
         },
         {
-          beginDate: ["Start Date", "date", "required"],
-          beginHour: ["Start Time", "time", "required"],
+          beginDate: ["Start Date", "date", ""],
+          beginHour: ["Start Time", "time", ""],
           endDate: ["End Date", "date", ""],
           endHour: ["End Time", "time", ""],
         },
