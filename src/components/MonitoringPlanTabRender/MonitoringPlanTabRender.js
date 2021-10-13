@@ -16,7 +16,6 @@ export const MonitoringPlanTabRender = ({
   setExpired,
   resetTimerFlag,
   callApiFlag,
-
   title,
   user,
   locations,
@@ -41,7 +40,6 @@ export const MonitoringPlanTabRender = ({
   const settingInactiveCheckBox = (check, disable) => {
     setInactive([check, disable], title);
   };
-
 
   const [revertedState, setRevertedState] = useState(false);
   // checks mats table
@@ -311,7 +309,7 @@ export const MonitoringPlanTabRender = ({
 
   //false => check back in
   // true => check out
-  
+
   return (
     <div className=" padding-top-0">
       {/*user && checkout ? (
