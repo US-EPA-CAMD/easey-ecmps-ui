@@ -62,7 +62,7 @@ export const changeGridCellAttributeValue = () => {
       let fac = null;
       element.querySelectorAll(`[role="cell"]`).forEach((element2, index) => {
         if (index === 0) {
-          fac= element2.innerHTML;
+          fac = element2.innerHTML;
           element2.setAttribute("aria-label", `Expand ${fac}`);
         }
       });
@@ -168,9 +168,17 @@ export const setAriaSort = (event) => {
     document.querySelectorAll(`.rdt_TableCol_Sortable`).forEach((column) => {
       if (column === currentColumn) {
         if (currentColumn.ariaSort === "none") {
-          if (sortIcon.classList.contains("asc")) {
+          if (
+            sortIcon &&
+            sortIcon.classList &&
+            sortIcon.classList.contains("asc")
+          ) {
             currentColumn.ariaSort = "ascending";
-          } else if (sortIcon.classList.contains("desc")) {
+          } else if (
+            sortIcon &&
+            sortIcon.classList &&
+            sortIcon.classList.contains("desc")
+          ) {
             currentColumn.ariaSort = "descending";
           }
         } else {
