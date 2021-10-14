@@ -102,3 +102,16 @@ test("tests  empty ", () => {
   let func = useRetrieveDropdownApi([""]);
   expect(func).toEqual(data);
 });
+
+test("tests formulaCode", async () => {
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: data })
+  );
+  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+
+  const dataReturned = await dmApi.getAllFormulaCodes();
+  expect(dataReturned.data).toEqual(data);
+
+  let func = useRetrieveDropdownApi(["formulaCode"]);
+  expect(func).toEqual(data);
+});
