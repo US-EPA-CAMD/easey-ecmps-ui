@@ -39,6 +39,11 @@ const mockConfigurations = [
             href:
               "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/6/spans",
           },
+          {
+            rel: "formulas",
+            href:
+              "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/6/formulas",
+          },
         ],
       },
       {
@@ -65,6 +70,11 @@ const mockConfigurations = [
             rel: "spans",
             href:
               "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-locations/7/spans",
+          },
+          {
+            rel: "formulas",
+            href:
+              "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-locations/7/formulas",
           },
         ],
       },
@@ -93,6 +103,11 @@ const mockConfigurations = [
             href:
               "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-locations/8/spans",
           },
+          {
+            rel: "formulas",
+            href:
+              "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-locations/8/formulas",
+          },
         ],
       },
       {
@@ -119,6 +134,11 @@ const mockConfigurations = [
             rel: "spans",
             href:
               "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-locations/5/spans",
+          },
+          {
+            rel: "formulas",
+            href:
+              "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-locations/5/formulas",
           },
         ],
       },
@@ -160,6 +180,11 @@ const mockConfigurations = [
             href:
               "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-locations/6/spans",
           },
+          {
+            rel: "formulas",
+            href:
+              "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-locations/6/formulas",
+          },
         ],
       },
       {
@@ -187,6 +212,11 @@ const mockConfigurations = [
             href:
               "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-locations/7/spans",
           },
+          {
+            rel: "formulas",
+            href:
+              "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-locations/7/formulas",
+          },
         ],
       },
       {
@@ -213,6 +243,11 @@ const mockConfigurations = [
             rel: "spans",
             href:
               "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-locations/5/spans",
+          },
+          {
+            rel: "formulas",
+            href:
+              "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-locations/5/formulas",
           },
         ],
       },
@@ -332,7 +367,7 @@ const mockSystems = [
     endHour: null,
   },
 ];
-describe("testing montiring plans data fetching APIs", () => {
+describe("testing monitoring plans data fetching APIs", () => {
   test("Should fetch list of monitoring configurations for a selected facility", async () => {
     const mock = new MockAdapter(axios);
 
@@ -383,6 +418,19 @@ describe("testing montiring plans data fetching APIs", () => {
         monitoringSystems: mockSystems,
       });
     const result = await getMonitoringSystems(monitoringLocationId);
+    expect(result["data"].monitoringSystems).toEqual(mockSystems);
+  });
+
+  test("Should fetch list of monitoring formulas for a selected monitoring location", async () => {
+    const mock = new MockAdapter(axios);
+    mock
+      .onGet(
+        `${config.services.monitorPlans.uri}/monitor-locations/${monitoringLocationId}/formulas`
+      )
+      .reply(200, {
+        monitoringSystems: mockSystems,
+      });
+    const result = await getMonitoringFormulas(monitoringLocationId);
     expect(result["data"].monitoringSystems).toEqual(mockSystems);
   });
 });
