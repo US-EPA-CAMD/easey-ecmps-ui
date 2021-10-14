@@ -403,6 +403,23 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           setTotalOptions(newData);
         });
         break;
+      case "formulaCode":
+        dmApi.getAllFormulaCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["equationCode"],
+              name: option["equationCodeDescription"],
+            };
+          });
+
+          options.unshift({ code: "", name: "" });
+          options.unshift({ code: "select", name: "-- Select a value --" });
+          const newData = totalOptions;
+          newData[x] = options;
+
+          setTotalOptions(newData);
+        });
+        break;
       default:
         break;
     }
