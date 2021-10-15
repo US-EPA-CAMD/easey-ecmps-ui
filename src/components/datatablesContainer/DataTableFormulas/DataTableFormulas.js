@@ -159,11 +159,11 @@ export const DataTableFormulas = ({
     };
 
     //Used for creating/updating formula data
-    const payload = {};
+    // const payload = {};
 
-    const saveFormula = () => { };
+    // const saveFormula = () => { };
 
-    const createFormula = () => { };
+    // const createFormula = () => { };
 
     return (
         <div className="formulaTable">
