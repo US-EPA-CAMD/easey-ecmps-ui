@@ -311,5 +311,3 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     </div>
   );
 };
-
-export default SubHeader;

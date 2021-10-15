@@ -21,6 +21,7 @@ export const ensure508 = () => {
 
   // *** assign aria sort handlers
   assignAriaSortHandlersToDatatable();
+  addScreenReaderLabel();
 };
 
 /*****************************************************
@@ -55,29 +56,30 @@ export const changeGridCellAttributeValue = () => {
     document.querySelectorAll(`[role="gridcell"]`).forEach((element) => {
       element.setAttribute("role", "cell");
     });
-
-    document.querySelectorAll(`[role="row"]`).forEach((element) => {
-      console.log("ELEMENT", element);
-
-      let fac = null;
-      element.querySelectorAll(`[role="cell"]`).forEach((element2, index) => {
-        if (index === 0) {
-          fac = element2.innerHTML;
-          element2.setAttribute("aria-label", `Expand ${fac}`);
-        }
-      });
-      element
-        .querySelectorAll(`[aria-label="Collapse Row"]`)
-        .forEach((element3) => {
-          console.log("ELEMENT3", element3);
-          element3.setAttribute("aria-label", `Collapse ${fac}`);
-        });
-
-      element.setAttribute("aria-label", `Expand $facility.name`);
-    });
   });
 };
 
+export const addScreenReaderLabel = () => {
+  setTimeout(() => {
+    document
+      .querySelectorAll(`[aria-label="Expand Row"]`)
+      .forEach((element) => {
+        let fac = null;
+        fac = element.parentNode.parentNode.childNodes[1].outerText;
+        element.setAttribute("aria-label", `Expand ${fac}`);
+      });
+  });
+
+  setTimeout(() => {
+    document
+      .querySelectorAll(`[aria-label="Collapse Row"]`)
+      .forEach((element) => {
+        let fac = null;
+        fac = element.parentNode.parentNode.childNodes[1].outerText;
+        element.setAttribute("aria-label", `Collapse ${fac}`);
+      });
+  });
+};
 /*****************************************************
  * addAriaLabelToDatatable:
  *
@@ -168,17 +170,9 @@ export const setAriaSort = (event) => {
     document.querySelectorAll(`.rdt_TableCol_Sortable`).forEach((column) => {
       if (column === currentColumn) {
         if (currentColumn.ariaSort === "none") {
-          if (
-            sortIcon &&
-            sortIcon.classList &&
-            sortIcon.classList.contains("asc")
-          ) {
+          if (sortIcon.classList.contains("asc")) {
             currentColumn.ariaSort = "ascending";
-          } else if (
-            sortIcon &&
-            sortIcon.classList &&
-            sortIcon.classList.contains("desc")
-          ) {
+          } else if (sortIcon.classList.contains("desc")) {
             currentColumn.ariaSort = "descending";
           }
         } else {
