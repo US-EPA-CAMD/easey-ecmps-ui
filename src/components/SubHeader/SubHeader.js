@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { config } from "../../config";
 import {
   Menu,
@@ -30,9 +31,12 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     label: <span className="margin-right-1 text-no-wrap">User Profile</span>,
     items: [
       { menu: "Manage Login", link: "https://cdx.epa.gov/" },
-      { menu: "Manage Delegations", link: "https://camd.epa.gov/CBS/login/auth" },
+      {
+        menu: "Manage Delegations",
+        link: "https://camd.epa.gov/CBS/login/auth",
+      },
     ],
-  }
+  };
 
   const subHeaderMenuList = [
     {
@@ -130,7 +134,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     }
 
     setUserProfileExpanded(!userProfileExpanded);
-  }
+  };
 
   const [show, setShow] = useState(false);
 
@@ -211,14 +215,12 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                   }}
                 />
                 {userProfileExpanded ? (
-                  <span className="position-relative top-neg-2" >
+                  <span className="position-relative top-neg-2">
                     <Menu
                       className="font-body-sm"
                       style={{ fontWeight: "normal" }}
                       items={userProfileMenuLinks.items.map((item) => (
-                        <a href={item.link}
-                          target="_blank"
-                        >
+                        <a href={item.link} target="_blank">
                           {item.menu}
                         </a>
                       ))}
@@ -292,11 +294,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                       }
                       className="font-body-sm"
                       items={el.items.map((item) => (
-                        <a
-                          href={item.link}
-                        >
-                          {item.menu}
-                        </a>
+                        <Link to={item.link}>{item.menu}</Link>
                       ))}
                       isOpen={navDropdownOpen[i]}
                     />

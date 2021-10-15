@@ -40,13 +40,13 @@ body {
   color: $epa-blue-base;
   margin: -0.25em;
 }
-
+/*
 .epa-active-element {
   :is:not(textarea, input, select) {
     border: none !important;
   }
   outline: none !important;
-}
+}*/
 
 #loggedInUserInitials img {
   height: 3em;
