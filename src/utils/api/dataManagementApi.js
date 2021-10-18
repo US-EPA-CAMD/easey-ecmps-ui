@@ -200,3 +200,10 @@ export const getAllFuelCodes = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+export const getAllFormulaCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/equation-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};

@@ -10,6 +10,7 @@ import { checkoutAPI } from "../../additional-functions/checkout";
 import DataTableSpans from "../datatablesContainer/DataTableSpans/DataTableSpans";
 import DataTableLoads from "../datatablesContainer/DataTableLoads/DataTableLoads";
 import DataTableDefaults from "../datatablesContainer/DataTableDefaults/DataTableDefaults";
+import DataTableFormulas from "../datatablesContainer/DataTableFormulas/DataTableFormulas";
 
 export const MonitoringPlanTabRender = ({
   resetTimer,
@@ -115,7 +116,20 @@ export const MonitoringPlanTabRender = ({
           "Defaults",
         ],
       ],
-      [], // formulats
+      [
+        [
+          <DataTableFormulas
+            locationSelectValue={parseInt(locationSelect[1])}
+            inactive={inactive}
+            settingInactiveCheckBox={settingInactiveCheckBox}
+            checkout={checkout}
+            user={user}
+            revertedState={revertedState}
+            setRevertedState={setRevertedState}
+          />,
+          "Formulas",
+        ],
+      ],
       [
         [
           <DataTableLoads
@@ -185,32 +199,32 @@ export const MonitoringPlanTabRender = ({
       tableArr = tableState.map((element, index) =>
         index === 4
           ? [
-              [
-                <DataTableMethod
-                  matsTableHandler={matsTableHandler}
-                  locationSelectValue={parseInt(locationSelect[1])}
-                  checkout={checkout}
-                  user={user}
-                  inactive={inactive}
-                  settingInactiveCheckBox={settingInactiveCheckBox}
-                  revertedState={revertedState}
-                  setRevertedState={setRevertedState}
-                />,
-                "Methods",
-              ],
-              [
-                <DataTableMats
-                  locationSelectValue={locationSelect[1]}
-                  checkout={checkout}
-                  user={user}
-                  inactive={inactive}
-                  settingInactiveCheckBox={settingInactiveCheckBox}
-                  revertedState={revertedState}
-                  setRevertedState={setRevertedState}
-                />,
-                "Supplemental Methods",
-              ],
-            ]
+            [
+              <DataTableMethod
+                matsTableHandler={matsTableHandler}
+                locationSelectValue={parseInt(locationSelect[1])}
+                checkout={checkout}
+                user={user}
+                inactive={inactive}
+                settingInactiveCheckBox={settingInactiveCheckBox}
+                revertedState={revertedState}
+                setRevertedState={setRevertedState}
+              />,
+              "Methods",
+            ],
+            [
+              <DataTableMats
+                locationSelectValue={locationSelect[1]}
+                checkout={checkout}
+                user={user}
+                inactive={inactive}
+                settingInactiveCheckBox={settingInactiveCheckBox}
+                revertedState={revertedState}
+                setRevertedState={setRevertedState}
+              />,
+              "Supplemental Methods",
+            ],
+          ]
           : element
       );
     }
@@ -234,7 +248,20 @@ export const MonitoringPlanTabRender = ({
         "Defaults",
       ],
     ],
-    [], // formulats
+    [
+      [
+        <DataTableFormulas
+          locationSelectValue={parseInt(locationSelect[1])}
+          inactive={inactive}
+          settingInactiveCheckBox={settingInactiveCheckBox}
+          checkout={checkout}
+          user={user}
+          revertedState={revertedState}
+          setRevertedState={setRevertedState}
+        />,
+        "Formulas",
+      ],
+    ],
     [
       [
         <DataTableLoads

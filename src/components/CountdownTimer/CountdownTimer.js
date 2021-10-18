@@ -26,7 +26,7 @@ export const CountdownTimerRender = ({ remainingTime }) => {
   return (
     <div className="time-wrapper">
       <div key={remainingTime} className={`time ${isTimeUp ? "up" : ""}`}>
-        <div>{remainingTime}</div>
+        <div aria-live="polite" >{remainingTime}</div>
         <div className="font-alt-md position-relative left-neg-4">
           seconds left
         </div>

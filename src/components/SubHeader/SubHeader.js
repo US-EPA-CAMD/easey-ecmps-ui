@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { config } from "../../config";
 import {
   Menu,
@@ -298,20 +299,125 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                 >
                   Log In
                 </Button>
-                {show ? (
-                  <Modal
-                    show={show}
-                    close={closeModalHandler}
-                    children={<Login isModal={true} />}
-                  />
+              </span>
+              <span className="text-bold text-white text-no-wrap float-right clearfix position-relative top-1 margin-x-1 display-none widescreen:display-block">
+                Welcome, {user.firstName}!
+              </span>
+              <span
+                data-testid="loggedInUserInitials"
+                data-initials={initials}
+                className="text-bold float-right clearfix cursor-pointer mobile:margin-top-1 desktop:margin-top-1 desktop:margin-top-2 desktop-lg:margin-top-0 margin-left-5"
+                tabIndex="0"
+                id="loggedInUserInitials"
+                aria-expanded="false"
+              >
+                <img
+                  src={userProfileIcon}
+                  className="margin-top-neg-1 position-relative left-neg-1"
+                  aria-hidden={true}
+                  tabIndex="-1"
+                  alt="Expand menu"
+                  onClick={() => toggleUserProfileDropdown()}
+                  onKeyPress={(event) => {
+                    if (event.key === "Enter") {
+                      toggleUserProfileDropdown();
+                    }
+                  }}
+                />
+                {userProfileExpanded ? (
+                  <span className="position-relative top-neg-2">
+                    <Menu
+                      className="font-body-sm"
+                      style={{ fontWeight: "normal" }}
+                      items={userProfileMenuLinks.items.map((item) => (
+                        <a href={item.link} target="_blank">
+                          {item.menu}
+                        </a>
+                      ))}
+                      isOpen={true}
+                    />
+                  </span>
                 ) : null}
               </span>
-            )}
-          </div>
+            </div>
+          ) : (
+            <span className="text-bold text-white text-no-wrap float-right clearfix position-relative margin-x-2">
+              <Button
+                type="button"
+                outline={true}
+                id="openModalBTN"
+                epa-testid="openModalBTN"
+                onClick={() => {
+                  setLoginBtn(document.activeElement);
+                  openModal(true);
+                }}
+                className="text-white border-white text-no-wrap"
+              >
+                Log In
+              </Button>
+              {show ? (
+                <Modal
+                  show={show}
+                  close={closeModalHandler}
+                  children={<Login isModal={true} />}
+                />
+              ) : null}
+            </span>
+          )}
+          <PrimaryNav
+            className="float-right desktop:margin-top-1 desktop-lg:margin-top-0"
+            items={subHeaderMenuList.map((el, i) => {
+              if (el.items.length === 0) {
+                return (
+                  <>
+                    <a
+                      href={config.app.path}
+                      title={el.label}
+                      aria-label={el.label}
+                      onClick={() => handleSubMenuClick(i)}
+                    >
+                      {el.label}
+                    </a>
+                    {categorySelected[i] === true ? (
+                      <div className="menu-underline" />
+                    ) : null}
+                  </>
+                );
+              } else {
+                return (
+                  <>
+                    <NavDropDownButton
+                      key={i}
+                      label={el.label}
+                      menuId={`menu-${el.label}`}
+                      isOpen={navDropdownOpen[i]}
+                      onToggle={() => {
+                        handleToggleNavDropdown(i);
+                      }}
+                      className="text-white"
+                    />
+                    <Menu
+                      id={
+                        i === subHeaderMenuList.length - 1
+                          ? `extended-nav-section-last`
+                          : null
+                      }
+                      className="font-body-sm"
+                      items={el.items.map((item) => (
+                        <Link to={item.link}>{item.menu}</Link>
+                      ))}
+                      isOpen={navDropdownOpen[i]}
+                    />
+                    {categorySelected[i] === true ? (
+                      <div className="menu-underline" />
+                    ) : null}
+                  </>
+                );
+              }
+            })}
+          />
         </div>
       </Header>
     </div>
   );
 };
-
-export default SubHeader;
