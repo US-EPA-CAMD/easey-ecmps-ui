@@ -41,6 +41,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
         }
         break;
+
       case "monitoringMethodCode":
         if (mats) {
           dmApi.getAllMatsMethodCodes().then((response) => {
@@ -409,6 +410,24 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             return {
               code: option["equationCode"],
               name: option["equationCodeDescription"],
+            };
+          });
+
+          options.unshift({ code: "", name: "" });
+          options.unshift({ code: "select", name: "-- Select a value --" });
+          const newData = totalOptions;
+          newData[x] = options;
+
+          setTotalOptions(newData);
+        });
+        break;
+
+      case "wafMethodCode":
+        dmApi.getAllRectangularDuctsCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["wafMethodCode"],
+              name: option["wafMethodCodeDescription"],
             };
           });
 

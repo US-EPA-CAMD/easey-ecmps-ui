@@ -207,3 +207,11 @@ export const getAllFormulaCodes = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+ 
+export const getAllRectangularDuctsCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/`)
+    .then(handleResponse)
+    .catch(handleError);
+};
