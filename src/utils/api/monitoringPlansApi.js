@@ -467,3 +467,33 @@ export const getMonitoringRectangularDucts = async (locationId) => {
 
   return axios.get(url).then(handleResponse).catch(handleError);
 };
+
+
+export const saveMonitoringDuct = async (payload) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/duct-wafs/${payload["id"]}`;
+  // *** remove attributes not needed by the API
+
+  console.log ('tesitng save',payload["locationId"],payload["id"] )
+  return secureAxios({
+    method: "PUT",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const createMonitoringDuct = async (payload) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/duct-wafs/`;
+
+  // *** remove attributes not needed by the API
+  delete payload["id"];
+
+  return secureAxios({
+    method: "POST",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};

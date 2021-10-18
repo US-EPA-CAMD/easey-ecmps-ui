@@ -172,7 +172,7 @@ export const MonitoringPlanTabRender = ({
           revertedState={revertedState}
           setRevertedState={setRevertedState}
         />,
-        "Spans",
+        "WAFs Rectangular Duct",
       ],], // rectangular duct
 
       [
