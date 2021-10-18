@@ -51,6 +51,7 @@ export const DataTableRectangularDucts = ({
       });
       setUpdateTable(false);
       setRevertedState(false);
+      console.log('update',updateTable)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
@@ -186,40 +187,39 @@ export const DataTableRectangularDucts = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ducts, inactive]);
 
-  // const testing = () => {
-  //   openLoadModal(false, false, true);
-  //   saveLoad();
-  // };
+  const testing = () => {
+    openDuctModal(false, false, true);
+    saveDuct();
+  };
 
-  // const testing2 = () => {
-  //   openLoadModal(
-  //     { col5: "MELISSARHO-CDF765BC7BF849EE9C23608B95540200" },
-  //     false,
-  //     false
-  //   );
-  // };
-  // const testing3 = () => {
-  //   openLoadModal(false, false, true);
-  //   createLoad();
-  // };
+  const testing2 = () => {
+    openDuctModal(
+      { col5: "MELISSARHO-CDF765BC7BF849EE9C23608B95540200" },
+      false,
+      false
+    );
+  };
+  const testing3 = () => {
+    openDuctModal(false, false, true);
+    createDuct();
+  };
 
   const saveDuct = () => {
-    // var radioName = "secondNormalIndicator";
 
-    // const userInput = extractUserInput(payload, ".modalUserInput", radioName);
+    const userInput = extractUserInput(payload, ".modalUserInput");
 
-    // mpApi
-    //   .saveMonitoringLoads(userInput)
-    //   .then((result) => {
-    //     console.log(result, " was saved");
-    //     // openModal(false);
-    //     setShow(false);
-    //   })
-    //   .catch((error) => {
-    //     console.log("error is", error);
-    //     // openModal(false);
-    //     setShow(false);
-    //   });
+    mpApi
+      .saveMonitoringDuct(userInput)
+      .then((result) => {
+        console.log(result, " was saved");
+        // openModal(false);
+        setShow(false);
+      })
+      .catch((error) => {
+        console.log("error is", error);
+        // openModal(false);
+        setShow(false);
+      });
     setUpdateTable(true);
   };
 
@@ -244,7 +244,7 @@ export const DataTableRectangularDucts = ({
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
-      {/* <input
+      <input
         tabIndex={-1}
         aria-hidden={true}
         role="button"
@@ -267,7 +267,7 @@ export const DataTableRectangularDucts = ({
         type="hidden"
         id="testingBtn3"
         onClick={() => testing3()}
-      /> */}
+      />
 
       <DataTableRender
         openHandler={openDuctModal}

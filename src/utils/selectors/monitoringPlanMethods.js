@@ -1,4 +1,5 @@
 export const getMonitoringPlansMethodsTableRecords = (totalData) => {
+  console.log("methods", totalData);
   const data = totalData;
   const records = [];
 
