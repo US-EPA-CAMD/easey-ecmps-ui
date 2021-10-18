@@ -11,6 +11,7 @@ import DataTableSpans from "../datatablesContainer/DataTableSpans/DataTableSpans
 import DataTableLoads from "../datatablesContainer/DataTableLoads/DataTableLoads";
 import DataTableDefaults from "../datatablesContainer/DataTableDefaults/DataTableDefaults";
 import DataTableFormulas from "../datatablesContainer/DataTableFormulas/DataTableFormulas";
+import DataTableRectangularDucts from "../datatablesContainer/DataTableRectangularDucts/DataTableRectangularDucts";
 
 export const MonitoringPlanTabRender = ({
   resetTimer,
@@ -161,7 +162,18 @@ export const MonitoringPlanTabRender = ({
         ],
       ],
       [], // qualifications
-      [], // rectangular duct
+      [ [
+        <DataTableRectangularDucts
+          locationSelectValue={parseInt(locationSelect[1])}
+          inactive={inactive}
+          settingInactiveCheckBox={settingInactiveCheckBox}
+          checkout={checkout}
+          user={user}
+          revertedState={revertedState}
+          setRevertedState={setRevertedState}
+        />,
+        "Spans",
+      ],], // rectangular duct
 
       [
         [

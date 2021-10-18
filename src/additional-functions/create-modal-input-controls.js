@@ -95,7 +95,14 @@ export const modalViewData = (
   }
 
   for (const y in time) {
-    if (y === "endDate" || y === "beginDate" || y === "loadAnalysisDate") {
+    if (
+      y === "endDate" ||
+      y === "beginDate" ||
+      y === "loadAnalysisDate" ||
+      y === "wafEndDate" ||
+      y === "wafBeginDate" ||
+      y === "wafDeterminationDate"
+    ) {
       let formattedDate = "";
       if (!createNew) {
         formattedDate = adjustDate(
@@ -113,7 +120,12 @@ export const modalViewData = (
         createNew ? "" : selected[y],
       ]);
     }
-    if (y === "endHour" || y === "beginHour") {
+    if (
+      y === "endHour" ||
+      y === "beginHour" ||
+      y === "wafEndHour" ||
+      y === "wafBeginHour"
+    ) {
       arr.push([
         y,
         time[y][0],
@@ -122,6 +134,9 @@ export const modalViewData = (
         "time",
         createNew ? "" : selected[y],
       ]);
+    }
+    if( y === "skip"){
+      arr.push([[], [], [], "", "skip"]);
     }
   }
   return arr;

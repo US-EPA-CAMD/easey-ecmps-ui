@@ -453,3 +453,17 @@ export const getMonitoringFormulas = async (locationId) => {
 
   return axios.get(url).then(handleResponse).catch(handleError);
 };
+
+export const getMonitoringRectangularDucts = async (locationId) => {
+  let url = `${config.services.monitorPlans.uri}`;
+
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+
+  // *** attach the rest of the url
+  url = `${url}/locations/${locationId}/duct-wafs`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
