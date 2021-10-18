@@ -38,6 +38,7 @@ export const DataTableFormulas = ({
 
   //Columns to be displayed in the data table
   const columnNames = [
+    "Formula ID",
     "Parameter",
     "Formula Code",
     "Formula",
@@ -113,9 +114,10 @@ export const DataTableFormulas = ({
       modalViewData(
         formula,
         {
+          formulaId: ["Formula ID", "input", ""],
           parameterCode: ["Parameter", "dropdown", ""],
           formulaCode: ["Formula Code", "dropdown", ""],
-          formulaId: ["Formula", "input", ""],
+          formulaText: ["Formula", "input", ""],
         },
         {
           beginDate: ["Start Date", "date", ""],
