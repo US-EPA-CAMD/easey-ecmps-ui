@@ -229,7 +229,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
               })}
             />
             {user ? (
-              <div>
+              <>
                 <span
                   data-testid="loggedInUserInitials"
                   data-initials={initials}
@@ -283,7 +283,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                     Log Out
                   </Button>
                 </span>
-              </div>
+              </>
             ) : (
               <span className="text-bold text-white text-no-wrap clearfix position-relative margin-x-2">
                 <Button

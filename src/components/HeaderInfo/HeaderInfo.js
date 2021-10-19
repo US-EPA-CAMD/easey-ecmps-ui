@@ -59,7 +59,7 @@ export const HeaderInfo = ({
         checkedOutLocations
           .map((location) => location["monPlanId"])
           .indexOf(selectedConfig.id)
-      ]["checkedOutBy"] === user["firstName"]
+      ]["checkedOutBy"] === user["userId"]
     );
   };
 
