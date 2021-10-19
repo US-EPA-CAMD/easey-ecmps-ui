@@ -56,7 +56,7 @@ export const Tabs = ({
         checkedOutLocations
           .map((location) => location["monPlanId"])
           .indexOf(locationId)
-      ]["checkedOutBy"] === user["firstName"]
+      ]["checkedOutBy"] === user["userId"]
     );
   };
 
@@ -111,7 +111,11 @@ export const Tabs = ({
                     {user &&
                     el.props.locationId &&
                     isCheckedOut(el.props.locationId) ? (
-                      <LockSharp className="text-bold tab-icon margin-right-2" aria-hidden="false" alt="locked"/>
+                      <LockSharp
+                        className="text-bold tab-icon margin-right-2"
+                        aria-hidden="false"
+                        alt="locked"
+                      />
                     ) : null}
                     {el.props.title.split("(")[0]}
                   </div>
