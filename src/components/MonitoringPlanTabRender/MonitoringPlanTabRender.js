@@ -162,18 +162,20 @@ export const MonitoringPlanTabRender = ({
         ],
       ],
       [], // qualifications
-      [ [
-        <DataTableRectangularDucts
-          locationSelectValue={parseInt(locationSelect[1])}
-          inactive={inactive}
-          settingInactiveCheckBox={settingInactiveCheckBox}
-          checkout={checkout}
-          user={user}
-          revertedState={revertedState}
-          setRevertedState={setRevertedState}
-        />,
-        "WAFs Rectangular Duct",
-      ],], // rectangular duct
+      [
+        [
+          <DataTableRectangularDucts
+            locationSelectValue={parseInt(locationSelect[1])}
+            inactive={inactive}
+            settingInactiveCheckBox={settingInactiveCheckBox}
+            checkout={checkout}
+            user={user}
+            revertedState={revertedState}
+            setRevertedState={setRevertedState}
+          />,
+          "WAFs Rectangular Duct",
+        ],
+      ], // rectangular duct
 
       [
         [
@@ -204,39 +206,65 @@ export const MonitoringPlanTabRender = ({
           "Systems",
         ],
       ],
-      [], // unit info
+      [
+        [
+          <DataTableMethod
+            matsTableHandler={matsTableHandler}
+            locationSelectValue={parseInt(locationSelect[1])}
+            checkout={checkout}
+            user={user}
+            inactive={inactive}
+            settingInactiveCheckBox={settingInactiveCheckBox}
+            revertedState={revertedState}
+            setRevertedState={setRevertedState}
+          />,
+          "Unit Fuel Data",
+        ],
+        [
+          <DataTableMats
+            locationSelectValue={locationSelect[1]}
+            checkout={checkout}
+            user={user}
+            inactive={inactive}
+            settingInactiveCheckBox={settingInactiveCheckBox}
+            revertedState={revertedState}
+            setRevertedState={setRevertedState}
+          />,
+          "Unit Control Data",
+        ],
+      ], // unit info
     ];
 
     if (matsTableFlag) {
       tableArr = tableState.map((element, index) =>
         index === 4
           ? [
-            [
-              <DataTableMethod
-                matsTableHandler={matsTableHandler}
-                locationSelectValue={parseInt(locationSelect[1])}
-                checkout={checkout}
-                user={user}
-                inactive={inactive}
-                settingInactiveCheckBox={settingInactiveCheckBox}
-                revertedState={revertedState}
-                setRevertedState={setRevertedState}
-              />,
-              "Methods",
-            ],
-            [
-              <DataTableMats
-                locationSelectValue={locationSelect[1]}
-                checkout={checkout}
-                user={user}
-                inactive={inactive}
-                settingInactiveCheckBox={settingInactiveCheckBox}
-                revertedState={revertedState}
-                setRevertedState={setRevertedState}
-              />,
-              "Supplemental Methods",
-            ],
-          ]
+              [
+                <DataTableMethod
+                  matsTableHandler={matsTableHandler}
+                  locationSelectValue={parseInt(locationSelect[1])}
+                  checkout={checkout}
+                  user={user}
+                  inactive={inactive}
+                  settingInactiveCheckBox={settingInactiveCheckBox}
+                  revertedState={revertedState}
+                  setRevertedState={setRevertedState}
+                />,
+                "Methods",
+              ],
+              [
+                <DataTableMats
+                  locationSelectValue={locationSelect[1]}
+                  checkout={checkout}
+                  user={user}
+                  inactive={inactive}
+                  settingInactiveCheckBox={settingInactiveCheckBox}
+                  revertedState={revertedState}
+                  setRevertedState={setRevertedState}
+                />,
+                "Supplemental Methods",
+              ],
+            ]
           : element
       );
     }
@@ -336,7 +364,33 @@ export const MonitoringPlanTabRender = ({
         "Systems",
       ],
     ],
-    [], // unit info
+    [
+      [
+        <DataTableMethod
+          matsTableHandler={matsTableHandler}
+          locationSelectValue={parseInt(locationSelect[1])}
+          checkout={checkout}
+          user={user}
+          inactive={inactive}
+          settingInactiveCheckBox={settingInactiveCheckBox}
+          revertedState={revertedState}
+          setRevertedState={setRevertedState}
+        />,
+        "Unit Fuel Data",
+      ],
+      [
+        <DataTableMats
+          locationSelectValue={locationSelect[1]}
+          checkout={checkout}
+          user={user}
+          inactive={inactive}
+          settingInactiveCheckBox={settingInactiveCheckBox}
+          revertedState={revertedState}
+          setRevertedState={setRevertedState}
+        />,
+        "Unit Control Data",
+      ],
+    ], // unit info
   ]);
 
   // not tested ***
