@@ -287,7 +287,7 @@ export const DataTableRectangularDucts = ({
         checkout={checkout}
         user={user}
         addBtn={openDuctModal}
-        addBtnName={"Create Duct"}
+        addBtnName={"Create Rectangular Duct WAF"}
         setViewBtn={setViewBtn}
         viewBtn={viewBtn}
         setAddBtn={setAddBtn}
@@ -299,8 +299,8 @@ export const DataTableRectangularDucts = ({
           save={createNewDuct ? createDuct : saveDuct}
           showCancel={!(user && checkout)}
           showSave={user && checkout}
-          title={createNewDuct ? "Create Duct" : "Duct"}
-          exitBTN={createNewDuct ? "Create Duct" : `Save and Close`}
+          title={createNewDuct ? "Create Rectangular Duct WAF" : "Rectangular Duct WAF"}
+          exitBTN={createNewDuct ? "Create Rectangular Duct WAF" : `Save and Close`}
           children={
             <div>
               <ModalDetails
