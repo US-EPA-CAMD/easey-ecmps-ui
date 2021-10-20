@@ -45,13 +45,28 @@ export const DataTableRectangularDucts = ({
       locationSelectValue ||
       revertedState
     ) {
+      if (updateTable) {
+        let timerFunc = setTimeout(() => {
+          mpApi
+            .getMonitoringRectangularDucts(locationSelectValue)
+            .then((res) => {
+              setDucts(res.data);
+              setDataLoaded(true);
+              setUpdateTable(false);
+            });
+
+          setRevertedState(false);
+        }, [1000]);
+        return () => clearTimeout(timerFunc);
+      }
       mpApi.getMonitoringRectangularDucts(locationSelectValue).then((res) => {
         setDucts(res.data);
         setDataLoaded(true);
+        setUpdateTable(false);
       });
-      setUpdateTable(false);
+
       setRevertedState(false);
-      console.log('update',updateTable)
+      console.log("update", updateTable);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
@@ -205,7 +220,6 @@ export const DataTableRectangularDucts = ({
   };
 
   const saveDuct = () => {
-
     const userInput = extractUserInput(payload, ".modalUserInput");
 
     mpApi

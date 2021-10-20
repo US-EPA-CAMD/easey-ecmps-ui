@@ -42,8 +42,8 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     {
       label: <span className="margin-right-1 text-no-wrap">Resources</span>,
       items: [
-        { menu: "FAQs", link: "/faqs" },
-        { menu: "Resources", link: "/resources" },
+        { menu: "FAQs", link: `/faqs` },
+        { menu: "Resources", link: `/resources` },
       ],
     },
     {
@@ -58,7 +58,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
           Help/Support
         </span>
       ),
-      items: [{ menu: "Help/Support", link: "/help-support" }],
+      items: [{ menu: "Help/Support", link: `/help-support` }],
     },
     {
       label: (
@@ -182,14 +182,14 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                 if (el.items.length === 0) {
                   return (
                     <>
-                      <a
+                      <Link
                         href={config.app.path}
                         title={el.label}
                         aria-label={el.label}
                         onClick={() => handleSubMenuClick(i)}
                       >
                         {el.label}
-                      </a>
+                      </Link>
                       {categorySelected[i] === true ? (
                         <div className="menu-underline" />
                       ) : null}
@@ -216,7 +216,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                         }
                         className="font-body-sm"
                         items={el.items.map((item) => (
-                          <a href={item.link}>{item.menu}</a>
+                          <Link to={item.link}>{item.menu}</Link>
                         ))}
                         isOpen={navDropdownOpen[i]}
                       />
@@ -233,7 +233,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                 <span
                   data-testid="loggedInUserInitials"
                   data-initials={initials}
-                  className="text-bold float-left clearfix cursor-pointer mobile:margin-top-1 desktop:margin-top-1 desktop:margin-top-2 desktop-lg:margin-top-0 margin-left-5"
+                  className="text-bold float-right clearfix cursor-pointer mobile:margin-top-1 desktop:margin-top-1 desktop:margin-top-2 desktop-lg:margin-top-0 margin-left-5"
                   tabIndex="0"
                   id="loggedInUserInitials"
                   aria-expanded="false"
@@ -261,9 +261,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                         className="font-body-sm"
                         style={{ fontWeight: "normal" }}
                         items={userProfileMenuLinks.items.map((item) => (
-                          <a href={item.link} target="_blank">
-                            {item.menu}
-                          </a>
+                          <Link to={item.link}>{item.menu}</Link>
                         ))}
                         isOpen={true}
                       />
