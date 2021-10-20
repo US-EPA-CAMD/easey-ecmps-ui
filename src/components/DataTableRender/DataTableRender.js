@@ -135,7 +135,11 @@ export const DataTableRender = ({
       if (isLocationCheckedOut(dataRowObject.row["facId"]) && user) {
         return (
           <>
-            <LockSharp className="row-lock margin-right-1" />{" "}
+            <LockSharp
+              className="row-lock margin-right-1"
+              aria-hidden="false"
+              title={`Locked Facility - ${dataRowObject.row["col1"]}`}
+            />{" "}
             {dataRowObject.row["col1"]}
           </>
         );
@@ -149,7 +153,11 @@ export const DataTableRender = ({
       if (isCurrentlyCheckedOutByUser(dataRowObject.row["monPlanId"])) {
         return (
           <>
-            <CreateSharp className="row-lock margin-right-1" />{" "}
+            <CreateSharp
+              aria-hidden="false"
+              className="row-lock margin-right-1"
+              title={`Checked-out Configuration - ${dataRowObject.row["col1"]}`}
+            />{" "}
             {dataRowObject.row["col1"]}
           </>
         );
