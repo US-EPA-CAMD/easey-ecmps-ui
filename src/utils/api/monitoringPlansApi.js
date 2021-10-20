@@ -112,7 +112,7 @@ export const postCheckoutMonitoringPlanConfiguration = async (id, user) => {
 };
 
 export const revertOfficialRecord = async (id) => {
-  console.log('id', id)
+  console.log("id", id);
   return secureAxios({
     method: "DELETE",
     url: `${config.services.monitorPlans.uri}/workspace/plans/${id}/revert`,
@@ -468,12 +468,9 @@ export const getMonitoringRectangularDucts = async (locationId) => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-
 export const saveMonitoringDuct = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/duct-wafs/${payload["id"]}`;
   // *** remove attributes not needed by the API
-
-  console.log ('tesitng save',payload["locationId"],payload["id"] )
   return secureAxios({
     method: "PUT",
     url: url,

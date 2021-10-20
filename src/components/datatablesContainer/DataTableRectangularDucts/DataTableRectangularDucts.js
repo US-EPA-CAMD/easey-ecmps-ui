@@ -45,13 +45,28 @@ export const DataTableRectangularDucts = ({
       locationSelectValue ||
       revertedState
     ) {
+      if (updateTable) {
+        let timerFunc = setTimeout(() => {
+          mpApi
+            .getMonitoringRectangularDucts(locationSelectValue)
+            .then((res) => {
+              setDucts(res.data);
+              setDataLoaded(true);
+              setUpdateTable(false);
+            });
+
+          setRevertedState(false);
+        }, [1000]);
+        return () => clearTimeout(timerFunc);
+      }
       mpApi.getMonitoringRectangularDucts(locationSelectValue).then((res) => {
         setDucts(res.data);
         setDataLoaded(true);
+        setUpdateTable(false);
       });
-      setUpdateTable(false);
+
       setRevertedState(false);
-      console.log('update',updateTable)
+      console.log("update", updateTable);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
@@ -205,40 +220,32 @@ export const DataTableRectangularDucts = ({
   };
 
   const saveDuct = () => {
-
     const userInput = extractUserInput(payload, ".modalUserInput");
 
     mpApi
       .saveMonitoringDuct(userInput)
       .then((result) => {
-        console.log(result, " was saved");
-        // openModal(false);
         setShow(false);
       })
       .catch((error) => {
         console.log("error is", error);
-        // openModal(false);
         setShow(false);
       });
     setUpdateTable(true);
   };
 
   const createDuct = () => {
-    // var radioName = "secondNormalIndicator";
-    // const userInput = extractUserInput(payload, ".modalUserInput", radioName);
-    // mpApi
-    //   .createMonitoringLoads(userInput)
-    //   .then((result) => {
-    //     console.log(result, " was created");
-    //     // openModal(false);
-    //     setShow(false);
-    //   })
-    //   .catch((error) => {
-    //     console.log("error is", error);
-    //     // openModal(false);
-    //     setShow(false);
-    //   });
-    // setUpdateTable(true);
+    const userInput = extractUserInput(payload, ".modalUserInput");
+    mpApi
+      .createMonitoringDuct(userInput)
+      .then((result) => {
+        setShow(false);
+      })
+      .catch((error) => {
+        console.log("error is", error);
+        setShow(false);
+      });
+    setUpdateTable(true);
   };
 
   return (
@@ -280,7 +287,7 @@ export const DataTableRectangularDucts = ({
         checkout={checkout}
         user={user}
         addBtn={openDuctModal}
-        addBtnName={"Create Duct"}
+        addBtnName={"Create Rectangular Duct WAF"}
         setViewBtn={setViewBtn}
         viewBtn={viewBtn}
         setAddBtn={setAddBtn}
@@ -292,8 +299,8 @@ export const DataTableRectangularDucts = ({
           save={createNewDuct ? createDuct : saveDuct}
           showCancel={!(user && checkout)}
           showSave={user && checkout}
-          title={createNewDuct ? "Create Duct" : "Duct"}
-          exitBTN={createNewDuct ? "Create Duct" : `Save and Close`}
+          title={createNewDuct ? "Create Rectangular Duct WAF" : "Rectangular Duct WAF"}
+          exitBTN={createNewDuct ? "Create Rectangular Duct WAF" : `Save and Close`}
           children={
             <div>
               <ModalDetails

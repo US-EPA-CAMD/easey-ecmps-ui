@@ -60,7 +60,6 @@ export const DataTableMethod = ({
       mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
         setMatsMethods(res.data);
       });
-      console.log('update',updateTable)
       setUpdateTable(false);
       setRevertedState(false);
     }
@@ -124,11 +123,7 @@ export const DataTableMethod = ({
         {
           parameterCode: ["Parameter", "dropdown", ""],
           monitoringMethodCode: ["Methodology", "dropdown", ""],
-          substituteDataCode: [
-            "Substitute Data Approach",
-            "dropdown",
-            "",
-          ],
+          substituteDataCode: ["Substitute Data Approach", "dropdown", ""],
           bypassApproachCode: ["Bypass Approach", "dropdown", ""],
         },
         {
