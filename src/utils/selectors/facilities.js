@@ -10,7 +10,7 @@ export function getTableRecords(facilities) {
       col2: el["facilityId"],
       col3: el["state"],
       col4: el["orisCode"],
-      facId: el["facId"],
+      facId: el["facilityRecordId"],
     });
   });
   return records;

@@ -35,6 +35,7 @@ export const MonitoringPlanTabRender = ({
   checkedOutLocations,
 }) => {
   const [matsTableFlag, setMatsTableFlag] = useState(false);
+  console.log('locations',locations,locationSelect[1])
   // // MONITORING METHODS
   const matsTableHandler = (flag) => {
     setMatsTableFlag(flag);

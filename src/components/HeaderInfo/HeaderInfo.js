@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button, Checkbox } from "@trussworks/react-uswds";
 import { CreateOutlined, LockOpenSharp, LockSharp } from "@material-ui/icons";
 
@@ -59,7 +59,7 @@ export const HeaderInfo = ({
         checkedOutLocations
           .map((location) => location["monPlanId"])
           .indexOf(selectedConfig.id)
-      ]["checkedOutBy"] === user["firstName"]
+      ]["checkedOutBy"] === user["userId"]
     );
   };
 
@@ -102,13 +102,12 @@ export const HeaderInfo = ({
     setCheckoutState(checkout);
   }, [checkout]);
 
-  // 508 
-//   const activeFocusRef = useRef(null);
-//   useEffect(() => {
-//     if (activeFocusRef.current) {
-//       activeFocusRef.current.focus();
-// }}, [checkout]);
-
+  // 508
+  //   const activeFocusRef = useRef(null);
+  //   useEffect(() => {
+  //     if (activeFocusRef.current) {
+  //       activeFocusRef.current.focus();
+  // }}, [checkout]);
 
   // direction -> false = check back in
   // true = check out
@@ -118,16 +117,16 @@ export const HeaderInfo = ({
     setDisplayLock(direction);
     checkoutAPI(direction, configID, selectedConfig.id, setCheckout);
 
-// 508
-    /// true means check out = > check back in 
-  //   setTimeout(() => {
-  //     if (direction) {
-  //       document.querySelector(`[id="checkInBTN"]`).focus();
-  //       console.log('  document.querySelector(`[id="checkInBTN"]`)',  document.querySelector(`[id="checkInBTN"]`))
-  //     } else {
-  //       document.querySelector(`[id="checkOutBTN"]`).focus();
-  //     }
-  //   },[1500]);
+    // 508
+    /// true means check out = > check back in
+    //   setTimeout(() => {
+    //     if (direction) {
+    //       document.querySelector(`[id="checkInBTN"]`).focus();
+    //       console.log('  document.querySelector(`[id="checkInBTN"]`)',  document.querySelector(`[id="checkInBTN"]`))
+    //     } else {
+    //       document.querySelector(`[id="checkOutBTN"]`).focus();
+    //     }
+    //   },[1500]);
   };
   // const [revertState, setRevertState] = useState(false);
   const closeModalHandler = () => setShow(false);

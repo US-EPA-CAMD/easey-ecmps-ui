@@ -457,6 +457,8 @@ export const getMonitoringFormulas = async (locationId) => {
 export const getMonitoringRectangularDucts = async (locationId) => {
   let url = `${config.services.monitorPlans.uri}`;
 
+
+  console.log('locationId',locationId)
   // *** workspace section url (authenticated)
   if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;

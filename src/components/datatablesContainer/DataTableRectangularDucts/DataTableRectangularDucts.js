@@ -225,34 +225,27 @@ export const DataTableRectangularDucts = ({
     mpApi
       .saveMonitoringDuct(userInput)
       .then((result) => {
-        console.log(result, " was saved");
-        // openModal(false);
         setShow(false);
       })
       .catch((error) => {
         console.log("error is", error);
-        // openModal(false);
         setShow(false);
       });
     setUpdateTable(true);
   };
 
   const createDuct = () => {
-    // var radioName = "secondNormalIndicator";
-    // const userInput = extractUserInput(payload, ".modalUserInput", radioName);
-    // mpApi
-    //   .createMonitoringLoads(userInput)
-    //   .then((result) => {
-    //     console.log(result, " was created");
-    //     // openModal(false);
-    //     setShow(false);
-    //   })
-    //   .catch((error) => {
-    //     console.log("error is", error);
-    //     // openModal(false);
-    //     setShow(false);
-    //   });
-    // setUpdateTable(true);
+    const userInput = extractUserInput(payload, ".modalUserInput");
+    mpApi
+      .createMonitoringDuct(userInput)
+      .then((result) => {
+        setShow(false);
+      })
+      .catch((error) => {
+        console.log("error is", error);
+        setShow(false);
+      });
+    setUpdateTable(true);
   };
 
   return (
