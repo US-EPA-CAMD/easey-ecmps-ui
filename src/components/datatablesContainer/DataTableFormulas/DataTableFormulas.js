@@ -4,7 +4,7 @@ import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
-
+import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import * as fs from "../../../utils/selectors/monitoringPlanFormulas";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
@@ -103,11 +103,10 @@ export const DataTableFormulas = ({
     let formula = null;
     setCreateNewFormula(create);
     if (formulas.length > 0 && !create) {
-      // console.log("row", row);
       formula = formulas.filter(
         (element) => element.id === row[`col${Object.keys(row).length - 1}`]
       )[0];
-      // console.log(load, "selected load");
+      console.log("formula", formula);
       setSelectedFormula(formula);
     }
     setSelectedModalData(
@@ -156,11 +155,35 @@ export const DataTableFormulas = ({
   };
 
   //Used for creating/updating formula data
-  // const payload = {};
+  const payload = {
+    formulaId: "string",
+    parameterCode: "string",
+    formulaCode: "string",
+    formulaText: "string",
+    beginDate: "2021-10-21T17:12:00.643Z",
+    beginHour: 0,
+    endDate: "2021-10-21T17:12:00.643Z",
+    endHour: 0,
+  };
 
-  // const saveFormula = () => { };
+  const saveFormula = () => {
+    const userInput = extractUserInput(payload, ".modalUserInput");
 
-  // const createFormula = () => { };
+    mpApi
+      .saveMonitoringFormulas(userInput, selectedFormula.locationId)
+      .then((result) => {
+        console.log(result, " was saved");
+        setShow(false);
+      })
+      .catch((error) => {
+        console.log("error is", error);
+        // openModal(false);
+        setShow(false);
+      });
+    setUpdateTable(true);
+  };
+
+  const createFormula = () => {};
 
   return (
     <div className="formulaTable">
@@ -185,7 +208,7 @@ export const DataTableFormulas = ({
         <Modal
           show={show}
           close={closeModalHandler}
-          //save={createNewFormula ? createFormula : saveFormula}
+          save={createNewFormula ? createFormula : saveFormula}
           showCancel={!(user && checkout)}
           showSave={user && checkout}
           title={createNewFormula ? "Create Formula" : "Formula"}
