@@ -5,6 +5,7 @@ import { loadMonitoringPlansArray } from "../../../store/actions/monitoringPlans
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import DataTableRender from "../../DataTableRender/DataTableRender";
 import { setCheckoutState } from "../../../store/actions/dynamicFacilityTab";
+
 export const DataTableConfigurations = ({
   loadMonitoringPlansData,
   monitoringPlans,
@@ -40,7 +41,7 @@ export const DataTableConfigurations = ({
     return val;
   };
 
-  const checkBackIn = (monitoringPlanId  ) => {
+  const checkBackIn = (monitoringPlanId) => {
     const crypto = window.crypto || window.msCrypto;
     const array = new Uint32Array(1);
     const randomNumber = crypto.getRandomValues(array);
@@ -64,7 +65,7 @@ export const DataTableConfigurations = ({
       });
   };
 
-  const [openAndCheckoutBTNFocus, setOpenAndCheckoutBTNFocus] = useState('');
+  const [openAndCheckoutBTNFocus, setOpenAndCheckoutBTNFocus] = useState("");
   const openConfig = (config, checkout, checkIn) => {
     const selectedConfigData = findSelectedConfig(config.col3);
     if (!checkIn) {
@@ -90,7 +91,11 @@ export const DataTableConfigurations = ({
 
       const ariaLabel = openBTN.getAttribute("aria-label");
 
-      setOpenAndCheckoutBTNFocus(ariaLabel.substring(0, 4) + " and checkout" + ariaLabel.substring(4, ariaLabel.length));
+      setOpenAndCheckoutBTNFocus(
+        ariaLabel.substring(0, 4) +
+          " and checkout" +
+          ariaLabel.substring(4, ariaLabel.length)
+      );
     }
   };
 

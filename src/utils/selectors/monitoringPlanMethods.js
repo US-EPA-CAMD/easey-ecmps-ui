@@ -51,3 +51,53 @@ export const getMonitoringPlansMatsMethodsTableRecords = (data) => {
 
   return records;
 };
+
+export const getMonitoringPlansFuelDataRecords = (data) => {
+  const records = [];
+
+  data.forEach((el) => {
+    const beginDate = el.beginDate
+      ? formatStringToDate(el.beginDate.toString())
+      : "";
+
+    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
+
+    records.push({
+      col1: el["fuelCode"],
+      col2: el["indicatorCode"],
+      col3: el["OzoneSeasonIndicator"],
+      col4: el["DemGCV"],
+      col5: el["DemSO2"],
+      col6: `${beginDate}`,
+      col7: `${endDate}`,
+      col8: el.id,
+    });
+  });
+
+  return records;
+};
+
+export const getMonitoringPlansUnitControlRecords = (data) => {
+  const records = [];
+
+  data.forEach((el) => {
+    const installDate = el["installDate"]
+      ? formatStringToDate(el["installDate"].toString())
+      : "";
+    const retireDate = el.retireDate
+      ? formatStringToDate(el.retireDate.toString())
+      : "";
+
+    records.push({
+      col1: el["parameterCode"],
+      col2: el["controlCode"],
+      col3: el["originalCode"],
+      col4: `${installDate}`,
+      col5: el["seasonalControlsIndicator"],
+      col6: `${retireDate}`,
+      col7: el.id,
+    });
+  });
+
+  return records;
+};
