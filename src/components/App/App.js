@@ -50,12 +50,14 @@ const App = () => {
   const [currentLink, setCurrentLink] = useState(
     window.location.href.replace(`${window.location.origin}`, "")
   );
- 
 
   return (
     <div>
       {user ? <TokenRefresher /> : ""}
-      {user ? <InactivityTracker /> : ""}
+      <div aria-live="polite" role="status">
+        <div>{user ? <InactivityTracker /> : ""}</div>
+      </div>
+
       <Layout
         user={user}
         currentLink={currentLink}

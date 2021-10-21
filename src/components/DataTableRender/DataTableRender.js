@@ -4,7 +4,11 @@ import React, { useState, useMemo, useEffect } from "react";
 
 // *** local
 import { config, oneSecond } from "../../config";
-import { cleanUp508, ensure508 } from "../../additional-functions/ensure-508";
+import {
+  cleanUp508,
+  ensure508,
+  addScreenReaderLabelForCollapses,
+} from "../../additional-functions/ensure-508";
 import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
 
 /*********** COMPONENTS ***********/
@@ -77,6 +81,7 @@ export const DataTableRender = ({
 
     return () => {
       cleanUp508();
+      addScreenReaderLabelForCollapses();
     };
   }, []);
 

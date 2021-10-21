@@ -290,3 +290,9 @@ div.ceRule {
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
+
+#hide-from-view {
+  position: absolute !important;
+  top: -9999px !important;
+  left: -9999px !important;
+}

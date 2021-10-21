@@ -21,7 +21,7 @@ export const ensure508 = () => {
 
   // *** assign aria sort handlers
   assignAriaSortHandlersToDatatable();
-  addScreenReaderLabel();
+  addScreenReaderLabelForCollapses();
 };
 
 /*****************************************************
@@ -59,7 +59,7 @@ export const changeGridCellAttributeValue = () => {
   });
 };
 
-export const addScreenReaderLabel = () => {
+export const addScreenReaderLabelForCollapses = () => {
   setTimeout(() => {
     document
       .querySelectorAll(`[aria-label="Expand Row"]`)
@@ -240,5 +240,18 @@ export const assignAriaLabelsToDatePickerButtons = () => {
     const label =
       "Toggle Calendar for " + element.parentNode.querySelector("input").id;
     element.ariaLabel = label;
+  });
+};
+
+export const removeAriaHiddenFromCountdown = () => {
+  setTimeout(() => {
+    let hiddenDiv = document.querySelectorAll(
+      "div[aria-label='Countdown timer'] > div[aria-hidden='true']"
+    );
+
+    if (hiddenDiv[0]) {
+      hiddenDiv[0].setAttribute("aria-hidden", false);
+    }
+    console.log(hiddenDiv);
   });
 };
