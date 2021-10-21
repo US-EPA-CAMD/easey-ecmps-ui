@@ -15,7 +15,7 @@ import {
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
-export const DataTableFuelData = ({
+export const DataTableUnitControl = ({
   locationSelectValue,
   user,
   checkout,
@@ -24,7 +24,7 @@ export const DataTableFuelData = ({
   selectedLocation,
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [fuelDataMethods, setFuelDataMethods] = useState([]);
+  const [unitControlMethods, setUnitControlMethods] = useState([]);
   const totalOptions = useRetrieveDropdownApi(
     ["parameterCode", "monitoringMethodCode"],
     true
@@ -34,70 +34,73 @@ export const DataTableFuelData = ({
   useEffect(() => {
     if (
       updateTable ||
-      fuelDataMethods.length <= 0 ||
+      unitControlMethods.length <= 0 ||
       locationSelectValue ||
       revertedState
     ) {
-      mpApi.getMonitoringPlansFuelDataRecords(selectedLocation).then((res) => {
-        setFuelDataMethods(res.data);
-        setDataLoaded(true);
-      });
+      mpApi
+        .getMonitoringPlansUnitControlRecords(selectedLocation)
+        .then((res) => {
+          setUnitControlMethods(res.data);
+          setDataLoaded(true);
+        });
       setUpdateTable(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
-  const [selectedFuelDataMethods, setSelectedFuelDataMethods] = useState(null);
+  const [selectedUnitControlMethods, setSelectedUnitControlMethods] = useState(
+    null
+  );
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = [
-    "Fuel Code",
-    "Indicator Code",
-    "Ozone Season Indicator",
-    "Dem GCV",
-    "Dem SO2",
-    "Start Date",
-    "End Date",
+    "Parameter Code",
+    "Control Code",
+    "Original Code",
+    "Install Date",
+    "Seasonal Controls Indicator",
+    "Retire Date",
   ];
 
   const payload = {
     locationId: locationSelectValue,
     id: null,
-    supplementalFuelDataMonitoringMethodCode: null,
-    supplementalFuelDataParameterCode: null,
+    supplementalUnitControlMonitoringMethodCode: null,
+    supplementalUnitControlParameterCode: null,
     beginDate: null,
     beginHour: 0,
     endDate: null,
     endHour: 0,
   };
   const data = useMemo(() => {
-    if (fuelDataMethods.length > 0) {
-      return fs.getMonitoringPlansFuelDataRecords(fuelDataMethods);
+    if (unitControlMethods.length > 0) {
+      return fs.getMonitoringPlansUnitControlRecords(unitControlMethods);
     }
     return [];
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fuelDataMethods]);
+  }, [unitControlMethods]);
   const testing = () => {
-    openFuelDataModal(false, false, true);
-    saveFuelData();
+    openUnitControlModal(false, false, true);
+    saveUnitControl();
   };
 
   const testing2 = () => {
-    openFuelDataModal(
+    openUnitControlModal(
       { col5: "MELISSARHO-CDF765BC7BF849EE9C23608B95540200" },
       false,
       false
     );
   };
   const testing3 = () => {
-    openFuelDataModal(false, false, true);
-    createFuelData();
+    openUnitControlModal(false, false, true);
+    createUnitControl();
   };
 
-  const saveFuelData = () => {
+  const saveUnitControl = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
     mpApi
-      .saveMonitoringPlansFuelData(userInput)
+      .saveMonitoringPlansUnitControl(userInput)
       .then((result) => {
         setShow(false);
       })
@@ -107,10 +110,10 @@ export const DataTableFuelData = ({
 
     setUpdateTable(true);
   };
-  const createFuelData = () => {
+  const createUnitControl = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
     mpApi
-      .createFuelData(userInput)
+      .createUnitControl(userInput)
       .then((result) => {
         setShow(false);
       })
@@ -120,24 +123,24 @@ export const DataTableFuelData = ({
     setUpdateTable(true);
   };
 
-  const [createNewFuelData, setCreateNewFuelData] = useState(false);
+  const [createNewUnitControl, setCreateNewUnitControl] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState(null);
 
-  const openFuelDataModal = (row, bool, create) => {
-    let fuelData = null;
-    setCreateNewFuelData(create);
-    if (fuelDataMethods.length > 0 && !create) {
-      fuelData = fuelDataMethods.filter(
+  const openUnitControlModal = (row, bool, create) => {
+    let unitControl = null;
+    setCreateNewUnitControl(create);
+    if (unitControlMethods.length > 0 && !create) {
+      unitControl = unitControlMethods.filter(
         (element) => element.id === row.col5
       )[0];
-      setSelectedFuelDataMethods(fuelData);
+      setSelectedUnitControlMethods(unitControl);
     }
     setSelectedModalData(
       modalViewData(
-        fuelData,
+        unitControl,
         {
-          supplementalFuelDataParameterCode: ["Parameter", "dropdown", ""],
-          supplementalFuelDataMonitoringMethodCode: [
+          supplementalUnitControlParameterCode: ["Parameter", "dropdown", ""],
+          supplementalUnitControlMonitoringMethodCode: [
             "Methodology",
             "dropdown",
             "",
@@ -214,10 +217,10 @@ export const DataTableFuelData = ({
         // actionsBtn={"View"}
         checkout={checkout}
         user={user}
-        openHandler={openFuelDataModal}
+        openHandler={openUnitControlModal}
         actionsBtn={"View"}
-        addBtn={openFuelDataModal}
-        addBtnName={"Create FuelData"}
+        addBtn={openUnitControlModal}
+        addBtnName={"Create Unit Control"}
         setViewBtn={setViewBtn}
         viewBtn={viewBtn}
         setAddBtn={setAddBtn}
@@ -227,22 +230,22 @@ export const DataTableFuelData = ({
         <Modal
           show={show}
           close={closeModalHandler}
-          save={createNewFuelData ? createFuelData : saveFuelData}
+          save={createNewUnitControl ? createUnitControl : saveUnitControl}
           showCancel={!(user && checkout)}
           showSave={user && checkout}
           title={
-            createNewFuelData
-              ? "Create FuelData"
-              : "Component: Monitoring FuelData Methods"
+            createNewUnitControl
+              ? "Create UnitControl"
+              : "Component: Monitoring Unit Control Methods"
           }
-          exitBTN={createNewFuelData ? "Create Fuel Data" : `Save and Close`}
+          exitBTN={createNewUnitControl ? "Create Fuel Data" : `Save and Close`}
           children={
             <div>
               <ModalDetails
-                modalData={selectedFuelDataMethods}
+                modalData={selectedUnitControlMethods}
                 data={selectedModalData}
                 cols={2}
-                title={"Component: Monitoring FuelData Methods"}
+                title={"Component: Monitoring Unit Control Methods"}
                 viewOnly={!(user && checkout)}
               />
             </div>
@@ -253,4 +256,4 @@ export const DataTableFuelData = ({
   );
 };
 
-export default DataTableFuelData;
+export default DataTableUnitControl;
