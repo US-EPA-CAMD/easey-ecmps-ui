@@ -112,9 +112,12 @@ export const Tabs = ({
                     el.props.locationId &&
                     isCheckedOut(el.props.locationId) ? (
                       <LockSharp
+                        role="img"
                         className="text-bold tab-icon margin-right-2"
                         aria-hidden="false"
-                        alt="locked"
+                        title={`Locked Facility - ${
+                          el.props.title.split("(")[0]
+                        }`}
                       />
                     ) : null}
                     {el.props.title.split("(")[0]}
@@ -122,7 +125,14 @@ export const Tabs = ({
                   <div className="text-center">
                     {el.props.locationId &&
                     isCheckedOutByUser(el.props.locationId) ? (
-                      <CreateSharp className="text-bold tab-icon margin-right-2" />
+                      <CreateSharp
+                        role="img"
+                        className="text-bold tab-icon margin-right-2"
+                        aria-hidden="false"
+                        title={`Checked-out Configuration - ${el.props.title
+                          .split("(")[1]
+                          .replace(")", "")}`}
+                      />
                     ) : null}
                     {el.props.title.split("(")[1].replace(")", "")}
                   </div>
