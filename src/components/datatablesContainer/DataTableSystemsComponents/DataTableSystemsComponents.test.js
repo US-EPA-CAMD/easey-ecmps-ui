@@ -41,8 +41,6 @@ const apiFuel = [
     systemFuelFlowUOMCode: "PNG",
     maximumFuelFlowRateSourceCode: "GAS",
     maximumFuelFlowRate: "10000.0",
-    maximumFuelFlowRateSourceCode: "URV",
-    systemFuelFlowUOMCode: "HSCF",
     beginDate: "2019-07-01",
     endDate: null,
     beginHour: "0",
@@ -250,9 +248,8 @@ const componentRenderer = (
     openFuelFlowsView: false,
     setOpenFuelFlowsView: jest.fn(),
     setBread: jest.fn(),
-    openComponentViewTest:openComponentViewTest,
-  openAddComponentTest:openAddComponentTest,
-
+    openComponentViewTest: openComponentViewTest,
+    openAddComponentTest: openAddComponentTest,
   };
   return render(<DataTableSystemsComponents {...props} />);
 };
@@ -308,7 +305,6 @@ test("tests a getMonitoringSystemsComponents", async () => {
 });
 
 test("tests a getMonitoringSystemsFuelFlows", async () => {
-
   const iState = false;
   axios.get.mockImplementation(() =>
     Promise.resolve({ status: 200, data: apiFuel })
@@ -321,7 +317,7 @@ test("tests a getMonitoringSystemsFuelFlows", async () => {
   const test = "";
 
   let { container } = await waitForElement(() =>
-    componentRenderer(false, true, true, false,false)
+    componentRenderer(false, true, true, false, false)
   );
 
   const fuelBtn = container.querySelectorAll("#btnOpenFuelFlows");
@@ -332,7 +328,7 @@ test("tests a getMonitoringSystemsFuelFlows", async () => {
 });
 
 test("tests opening the add modal page ", async () => {
-// needs to be second level with (openComponentView && addComponentFlag)
+  // needs to be second level with (openComponentView && addComponentFlag)
   const iState = false;
   axios.get.mockImplementation(() =>
     Promise.resolve({ status: 200, data: apiFuel })
@@ -345,12 +341,12 @@ test("tests opening the add modal page ", async () => {
   const test = "";
 
   let { container } = await waitForElement(() =>
-  //checkout,
-  // secondLevel,
-  // addComponentFlag,
-  // openComponentViewTest,
-  // openAddComponentTest
-    componentRenderer(true,false, true, true, false)
+    //checkout,
+    // secondLevel,
+    // addComponentFlag,
+    // openComponentViewTest,
+    // openAddComponentTest
+    componentRenderer(true, false, true, true, false)
   );
 
   const fuelBtn = container.querySelectorAll("#btnOpenFuelFlows");
@@ -359,7 +355,6 @@ test("tests opening the add modal page ", async () => {
   }
   expect(container.querySelector("#backBtn")).toBeDefined();
 
-  
   fireEvent.click(container.querySelector("#testingBtn"));
   fireEvent.click(container.querySelector("#testingBtn2"));
 });
