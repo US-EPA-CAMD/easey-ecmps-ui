@@ -99,7 +99,18 @@ export const Tabs = ({
                       : "tab-button react-transition flip-in-y"
                   }
                   tabIndex="0"
-                  aria-label={`open ${el.props.title} tab`}
+                  aria-label={`open ${
+                    user &&
+                    el.props.locationId &&
+                    isCheckedOut(el.props.locationId)
+                      ? "(locked)"
+                      : ""
+                  } ${
+                    el.props.locationId &&
+                    isCheckedOutByUser(el.props.locationId)
+                      ? "(checked-out)"
+                      : ""
+                  } ${el.props.title} tab`}
                   onClick={() => settingActiveTab(i)}
                   onKeyPress={(event) => {
                     if (event.key === "Enter") {
