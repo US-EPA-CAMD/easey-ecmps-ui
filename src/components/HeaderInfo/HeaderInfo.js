@@ -174,6 +174,7 @@ export const HeaderInfo = ({
               )}
               <span className="font-body-lg">{facilityMainName}</span>
             </h3>
+            { user?
             <div className="text-bold font-body-2xs">
               {checkoutState
                 ? `Currently checked out by: ${user.firstName} ${formatDate(
@@ -186,7 +187,7 @@ export const HeaderInfo = ({
                     findCurrentlyCheckedOutByInfo()["checkedOutOn"]
                   )}`
                 : null}
-            </div>
+            </div> :''}
           </div>
           <div className="">
             <div className="display-inline-block ">
@@ -282,7 +283,7 @@ export const HeaderInfo = ({
         </div>
         <div className="grid-col clearfix position-absolute top-1 right-0">
           <div className="grid-row">
-            {checkout ? (
+            {checkout && user  ? (
               <div>
                 <div className="grid-row padding-2 margin-left-10">
                   <Button

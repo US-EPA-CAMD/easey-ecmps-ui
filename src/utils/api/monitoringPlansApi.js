@@ -112,7 +112,6 @@ export const postCheckoutMonitoringPlanConfiguration = async (id, user) => {
 };
 
 export const revertOfficialRecord = async (id) => {
-  console.log("id", id);
   return secureAxios({
     method: "DELETE",
     url: `${config.services.monitorPlans.uri}/workspace/plans/${id}/revert`,
@@ -471,8 +470,6 @@ export const getMonitoringRectangularDucts = async (locationId) => {
 export const saveMonitoringDuct = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/duct-wafs/${payload["id"]}`;
   // *** remove attributes not needed by the API
-
-  console.log("tesitng save", payload["locationId"], payload["id"]);
   return secureAxios({
     method: "PUT",
     url: url,
@@ -568,6 +565,34 @@ export const saveMonitoringPlansUnitControl = async (payload) => {
 
 export const createUnitControl = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/duct-wafs/`;
+
+  // *** remove attributes not needed by the API
+  delete payload["id"];
+
+  return secureAxios({
+    method: "POST",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+
+export const saveMonitoringFormulas = async (payload, locID) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${locID}/formulas/${payload["id"]}`;
+  // *** remove attributes not needed by the API
+  return secureAxios({
+    method: "PUT",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const createMonitoringFormulas = async (payload) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/formulas/`;
 
   // *** remove attributes not needed by the API
   delete payload["id"];

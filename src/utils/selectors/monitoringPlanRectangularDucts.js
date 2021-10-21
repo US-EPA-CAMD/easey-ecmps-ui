@@ -1,5 +1,4 @@
 export const getMonitoringPlansRectangularDuctsTableRecords = (totalData) => {
-  console.log("wafs", totalData);
   const data = totalData;
   const records = [];
 
