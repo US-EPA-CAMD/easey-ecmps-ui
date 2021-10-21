@@ -14,16 +14,16 @@ export const config = {
     inactivityDuration:
       process.env
         .REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_CHECKOUT_MINUTES *
-        oneMinute || 0.5 * oneMinute, //Change ME
+        oneMinute || 2 * oneMinute, //Change ME
     inactivityLogoutDuration:
       process.env.REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_LOGOUT_MINUTES *
-        oneMinute || 0.5 * oneMinute, //Change ME
+        oneMinute || 2 * oneMinute, //Change ME
     activityPollingFrequency:
       process.env.REACT_APP_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS *
         oneSecond || oneSecond,
     countdownDuration:
       process.env.REACT_APP_EASEY_ECMPS_UI_ACTIVITY_COUNTDOWN_DURATION_SECONDS *
-        oneSecond || 15 * oneSecond,
+        oneSecond || 30 * oneSecond,
     paginationPerPage:
       process.env.REACT_APP_EASEY_ECMPS_UI_PAGINATION_PER_PAGE || 100,
     paginationPerPageOptions: [100, 200, 500],
