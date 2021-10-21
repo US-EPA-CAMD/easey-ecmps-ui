@@ -18,6 +18,7 @@ import HelpSupport from "../HelpSupport/HelpSupport";
 import "./App.scss";
 import { TokenRefresher } from "../TokenRefresher/TokenRefresher";
 import InactivityTracker from "../InactivityTracker/InactivityTracker";
+import config from "../../config";
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -74,7 +75,7 @@ const App = () => {
             )}
           />
 
-          <Route path="/faqs" exact component={() => <FAQ />} />
+          <Route path={`/faqs`} exact component={() => <FAQ />} />
           <Route path="/login" exact component={Login} />
           <Route
             path="/monitoring-plans"
@@ -99,8 +100,8 @@ const App = () => {
             exact
             component={ReportingInstructions}
           />
-          <Route path="/resources" exact component={Resources} />
-          <Route path="/help-support" exact component={HelpSupport} />
+          <Route path={`/resources`} exact component={Resources} />
+          <Route path={`/help-support`} exact component={HelpSupport} />
           <Route path="/admin/rules" exact component={RuleEditor} />
           <Route path="*" component={NotFound} />
         </Switch>
