@@ -92,7 +92,7 @@ export const getMonitoringPlansUnitControlRecords = (data) => {
       col1: el["parameterCode"],
       col2: el["controlCode"],
       col3: el["originalCode"],
-      col4: { installDate },
+      col4: `${installDate}`,
       col5: el["seasonalControlsIndicator"],
       col6: `${retireDate}`,
       col7: el.id,
