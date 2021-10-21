@@ -116,6 +116,7 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
                       role="button"
                       tabIndex="0"
                       aria-hidden={false}
+                      aria-live="off"
                     />
                     <div className="left-0 bottom-0 padding-2"></div>
                   </div>
@@ -136,6 +137,7 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
                         title="Click to close"
                         epa-testid="closeBtn"
                         className="float-left"
+                        aria-live="off"
                       >
                         {"Close"}
                       </Button>
