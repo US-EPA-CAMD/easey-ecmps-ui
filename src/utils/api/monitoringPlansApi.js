@@ -494,3 +494,30 @@ export const createMonitoringDuct = async (payload) => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+export const saveMonitoringFormulas = async (payload, locID) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${locID}/formulas/${payload["id"]}`;
+  // *** remove attributes not needed by the API
+  return secureAxios({
+    method: "PUT",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const createMonitoringFormulas = async (payload) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/formulas/`;
+
+  // *** remove attributes not needed by the API
+  delete payload["id"];
+
+  return secureAxios({
+    method: "POST",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
