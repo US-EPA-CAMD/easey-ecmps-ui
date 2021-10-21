@@ -10,7 +10,6 @@ import { connect } from "react-redux";
 import { Button } from "@trussworks/react-uswds";
 import { ClearSharp } from "@material-ui/icons";
 import "../Modal/Modal.scss";
-import { focusTrap } from "../../additional-functions/focus-trap";
 
 const modalClassName = "modal-wrapper bg-base-lightest radius-md";
 const modalContext = createContext(null, null);

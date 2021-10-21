@@ -245,7 +245,7 @@ export const assignAriaLabelsToDatePickerButtons = () => {
 
 export const removeAriaHiddenFromCountdown = () => {
   setTimeout(() => {
-    let hiddenDiv = document.querySelectorAll(
+    const hiddenDiv = document.querySelectorAll(
       "div[aria-label='Countdown timer'] > div[aria-hidden='true']"
     );
 

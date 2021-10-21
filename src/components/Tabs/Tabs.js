@@ -112,6 +112,7 @@ export const Tabs = ({
                     el.props.locationId &&
                     isCheckedOut(el.props.locationId) ? (
                       <LockSharp
+                        role="img"
                         className="text-bold tab-icon margin-right-2"
                         aria-hidden="false"
                         title={`Locked Facility - ${
@@ -125,6 +126,7 @@ export const Tabs = ({
                     {el.props.locationId &&
                     isCheckedOutByUser(el.props.locationId) ? (
                       <CreateSharp
+                        role="img"
                         className="text-bold tab-icon margin-right-2"
                         aria-hidden="false"
                         title={`Checked-out Configuration - ${el.props.title

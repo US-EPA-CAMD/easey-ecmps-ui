@@ -144,6 +144,7 @@ export const DataTableRender = ({
               className="row-lock margin-right-1"
               aria-hidden="false"
               title={`Locked Facility - ${dataRowObject.row["col1"]}`}
+              role="img"
             />{" "}
             {dataRowObject.row["col1"]}
           </>
@@ -162,6 +163,7 @@ export const DataTableRender = ({
               aria-hidden="false"
               className="row-lock margin-right-1"
               title={`Checked-out Configuration - ${dataRowObject.row["col1"]}`}
+              role="img"
             />{" "}
             {dataRowObject.row["col1"]}
           </>
