@@ -123,11 +123,7 @@ export const DataTableMethod = ({
         {
           parameterCode: ["Parameter", "dropdown", ""],
           monitoringMethodCode: ["Methodology", "dropdown", ""],
-          substituteDataCode: [
-            "Substitute Data Approach",
-            "dropdown",
-            "",
-          ],
+          substituteDataCode: ["Substitute Data Approach", "dropdown", ""],
           bypassApproachCode: ["Bypass Approach", "dropdown", ""],
         },
         {

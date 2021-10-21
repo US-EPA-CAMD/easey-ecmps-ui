@@ -10,8 +10,9 @@ export const LeftNavigation = (props) => {
     props.setCurrentLink(url);
   };
 
-  const makeHeader = (arr, noActive) => {
+  const makeHeader = (arr, noActive, isWorkspace) => {
     return arr.map((item) => {
+      const workspaceText = isWorkspace ? "_wks" : "";
       return (
         <USWDSLink
           className={
@@ -30,7 +31,7 @@ export const LeftNavigation = (props) => {
           rel={item.name}
           title={`Go to ${item.name} page`}
           key={item.url}
-          id={`${item.name.split(" ").join("")}`}
+          id={`${item.name.split(" ").join("")}${workspaceText}`}
           onClick={(event) => handleRouteChange(event, item.url)}
         >
           {item.name}
@@ -54,7 +55,7 @@ export const LeftNavigation = (props) => {
     [
       <SideNav
         key="sideNav"
-        items={makeHeader(workSpace, true)}
+        items={makeHeader(workSpace, true, true)}
         isSubnav={true}
       />,
     ],
@@ -62,9 +63,9 @@ export const LeftNavigation = (props) => {
   return (
     <div className="minh-tablet font-body-sm padding-3">
       {props.currentLink ? (
-        <SideNav items={makeHeader(head, true)} />
+        <SideNav items={makeHeader(head, true, false)} />
       ) : (
-        <SideNav items={makeHeader(head, false)} />
+        <SideNav items={makeHeader(head, false, false)} />
       )}
 
       {props.user ? (

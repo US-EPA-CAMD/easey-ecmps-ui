@@ -211,7 +211,7 @@ export const getAllFormulaCodes = async () => {
  
 export const getAllRectangularDuctsCodes = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/`)
+    .get(`${config.services.mdm.uri}/waf-method-codes`)
     .then(handleResponse)
     .catch(handleError);
 };
