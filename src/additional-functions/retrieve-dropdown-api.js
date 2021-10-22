@@ -210,7 +210,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           setTotalOptions(newData);
         });
         break;
-      case "fuelIndicatorCode":
+      case "indicatorCode":
         dmApi.getAllFuelIndicatorCodes().then((response) => {
           options = response.data.map((option) => {
             return {
@@ -227,7 +227,24 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           setTotalOptions(newData);
         });
         break;
-      case "demonstrationMethodCodeGCV", "demonstrationMethodCodeSO2":
+      case "demGCV":
+        dmApi.getAllDemonstrationMethodCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["demMethodCode"],
+              name: option["demMethodCodeDescription"],
+            };
+          });
+
+          options.unshift({ code: "", name: "" });
+          options.unshift({ code: "select", name: "-- Select a value --" });
+          const newData = totalOptions;
+          newData[x] = options;
+
+          setTotalOptions(newData);
+        });
+        break;
+      case "demSO2":
         dmApi.getAllDemonstrationMethodCodes().then((response) => {
           options = response.data.map((option) => {
             return {
