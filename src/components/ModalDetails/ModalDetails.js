@@ -23,6 +23,8 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
 
   // fixes rare instances where there is an enddate but no end time
   if (
+    data.hasOwnProperty("endDate") &&
+    data.hasOwnProperty("endTime") &&
     data[data.length - 2][4] === "date" &&
     data[data.length - 2][5] !== null &&
     data[data.length - 1][4] === "time" &&
@@ -53,8 +55,8 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
                     : "Yes"
                   : value[2]
                 : value[4] === "radio"
-                ? "No"
-                : ""}
+                  ? "No"
+                  : ""}
             </div>
           </FormGroup>
         )}

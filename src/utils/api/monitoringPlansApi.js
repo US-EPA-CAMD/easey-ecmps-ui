@@ -507,7 +507,7 @@ export const getMonitoringPlansFuelDataRecords = async (selectedLocation) => {
 };
 
 export const saveMonitoringPlansFuelData = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/duct-wafs/${payload["id"]}`;
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/unit-fuels/${payload["id"]}`;
   // *** remove attributes not needed by the API
 
   console.log("tesitng save", payload["locationId"], payload["id"]);
@@ -521,7 +521,7 @@ export const saveMonitoringPlansFuelData = async (payload) => {
 };
 
 export const createFuelData = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/duct-wafs/`;
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/units/${payload["unitRecordId"]}/unit-fuels`;
 
   // *** remove attributes not needed by the API
   delete payload["id"];
