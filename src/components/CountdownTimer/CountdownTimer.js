@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import "./CountdownTimer.scss";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
+
+import { removeAriaHiddenFromCountdown } from "../../additional-functions/ensure-508";
 
 export const CountdownTimerRender = ({ remainingTime }) => {
   const currentTime = React.useRef(remainingTime);
@@ -25,14 +27,24 @@ export const CountdownTimerRender = ({ remainingTime }) => {
 
   return (
     <div className="time-wrapper">
-      <div key={remainingTime} className={`time ${isTimeUp ? "up" : ""}`}>
-        <div aria-live="polite" >{remainingTime}</div>
+      <div
+        role="timer"
+        aria-live="off"
+        key={remainingTime}
+        className={`time ${isTimeUp ? "up" : ""}`}
+      >
+        <div>{remainingTime}</div>
         <div className="font-alt-md position-relative left-neg-4">
           seconds left
         </div>
       </div>
+      <span className="sr-only">{remainingTime}</span>
+      <span aria-live={remainingTime > 1 ? "off" : ""} className="sr-only">
+        {"Logging out due to inactivity"}
+      </span>
       {prevTime.current !== null ? (
         <div
+          aria-live="off"
           key={prevTime.current}
           className={`time ${isTimeUp ? "" : "down"}`}
         >
@@ -46,12 +58,20 @@ export const CountdownTimerRender = ({ remainingTime }) => {
 };
 
 export const CountdownTimer = ({ duration, countdownExpired }) => {
+  useEffect(() => {
+    removeAriaHiddenFromCountdown();
+  });
+
   return (
     <div className="countdown-timer-wrapper">
-      It looks like you have been inactive for a while. You will be logged out
-      in {duration} seconds. Click OK.
-      <div className="timer-container" aria-hidden="true">
+      <p aria-live="off">
+        It looks like you have been inactive for a while. You will be logged out
+        in {duration} seconds. Click Close.
+      </p>
+
+      <div className="timer-container" aria-hidden="false">
         <CountdownCircleTimer
+          id="test"
           isPlaying
           duration={duration}
           size={230}
