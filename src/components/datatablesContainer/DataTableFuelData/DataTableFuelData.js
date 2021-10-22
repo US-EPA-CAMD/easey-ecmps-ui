@@ -110,6 +110,7 @@ export const DataTableFuelData = ({
         //check it and disable checkbox
         settingInactiveCheckBox(true, true);
         return fs.getMonitoringPlansFuelDataRecords(fuelData);
+
       }
       // resets checkbox
       settingInactiveCheckBox(inactive[0], false);

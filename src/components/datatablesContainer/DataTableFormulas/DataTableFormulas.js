@@ -170,7 +170,7 @@ export const DataTableFormulas = ({
     const userInput = extractUserInput(payload, ".modalUserInput");
 
     mpApi
-      .saveMonitoringFormulas(userInput, selectedFormula.locationId)
+      .saveMonitoringFormulas(userInput, locationSelectValue)
       .then((result) => {
         console.log(result, " was saved");
         setShow(false);
@@ -183,7 +183,21 @@ export const DataTableFormulas = ({
     setUpdateTable(true);
   };
 
-  const createFormula = () => {};
+  const createFormula = () => {
+    const userInput = extractUserInput(payload, ".modalUserInput");
+
+    mpApi
+      .createMonitoringDuct(userInput, locationSelectValue)
+      .then((result) => {
+        console.log(result, " was created");
+        setShow(false);
+      })
+      .catch((error) => {
+        console.log("error is", error);
+        setShow(false);
+      });
+    setUpdateTable(true);
+  };
 
   return (
     <div className="formulaTable">
