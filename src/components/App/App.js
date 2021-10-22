@@ -55,7 +55,7 @@ const App = () => {
   return (
     <div>
       {user ? <TokenRefresher /> : ""}
-      <div aria-live="polite" role="status">
+      <div aria-live="polite" role="status" aria-atomic="true">
         <div>{user ? <InactivityTracker /> : ""}</div>
       </div>
 
