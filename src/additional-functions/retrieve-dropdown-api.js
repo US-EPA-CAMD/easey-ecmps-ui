@@ -439,6 +439,23 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           setTotalOptions(newData);
         });
         break;
+      case "controlCode":
+        dmApi.getAllControlTechnologies().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["controlCode"],
+              name: option["controlDescription"],
+            };
+          });
+
+          options.unshift({ code: "", name: "" });
+          options.unshift({ code: "select", name: "-- Select a value --" });
+          const newData = totalOptions;
+          newData[x] = options;
+
+          setTotalOptions(newData);
+        });
+        break;
       default:
         break;
     }

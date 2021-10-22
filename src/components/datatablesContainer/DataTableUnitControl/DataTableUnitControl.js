@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
-import * as fs from "../../../utils/selectors/monitoringPlanMethods";
+import * as fs from "../../../utils/selectors/monitoringPlanUnitControls";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 
 import Modal from "../../Modal/Modal";
@@ -23,34 +23,31 @@ export const DataTableUnitControl = ({
   setRevertedState,
   selectedLocation,
 }) => {
+  const [selectedUnitControl, setSelectedUnitControl] = useState(null);
+  const [selectedModalData, setSelectedModalData] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [unitControlMethods, setUnitControlMethods] = useState([]);
-  const totalOptions = useRetrieveDropdownApi(
-    ["parameterCode", "monitoringMethodCode"],
-    true
-  );
+  const [unitControls, setUnitControls] = useState([]);
+  const totalOptions = useRetrieveDropdownApi(["parameterCode", "controlCode"]);
   const [show, setShow] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
   useEffect(() => {
+    console.log("test");
     if (
       updateTable ||
-      unitControlMethods.length <= 0 ||
+      unitControls.length <= 0 ||
       locationSelectValue ||
       revertedState
     ) {
       mpApi
         .getMonitoringPlansUnitControlRecords(selectedLocation)
         .then((res) => {
-          setUnitControlMethods(res.data);
+          setUnitControls(res.data);
           setDataLoaded(true);
         });
       setUpdateTable(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
-  const [selectedUnitControlMethods, setSelectedUnitControlMethods] = useState(
-    null
-  );
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = [
@@ -58,6 +55,7 @@ export const DataTableUnitControl = ({
     "Control Code",
     "Original Code",
     "Install Date",
+    "Optimization Date",
     "Seasonal Controls Indicator",
     "Retire Date",
   ];
@@ -65,21 +63,22 @@ export const DataTableUnitControl = ({
   const payload = {
     locationId: locationSelectValue,
     id: null,
-    supplementalUnitControlMonitoringMethodCode: null,
-    supplementalUnitControlParameterCode: null,
-    beginDate: null,
-    beginHour: 0,
-    endDate: null,
-    endHour: 0,
+    parameterCode: "string",
+    controlCode: "string",
+    originalCode: "",
+    seasonalControlsIndicator: "",
+    installDate: null,
+    optimizationDate: null,
+    retireDate: null,
   };
   const data = useMemo(() => {
-    if (unitControlMethods.length > 0) {
-      return fs.getMonitoringPlansUnitControlRecords(unitControlMethods);
+    if (unitControls.length > 0) {
+      return fs.getMonitoringPlansUnitControlRecords(unitControls);
     }
     return [];
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [unitControlMethods]);
+  }, [unitControls]);
   const testing = () => {
     openUnitControlModal(false, false, true);
     saveUnitControl();
@@ -98,9 +97,18 @@ export const DataTableUnitControl = ({
   };
 
   const saveUnitControl = () => {
-    const userInput = extractUserInput(payload, ".modalUserInput");
+    const radios = ["originalCode", "seasonalControlsIndicator"];
+
+    const userInput = extractUserInput(payload, ".modalUserInput", radios);
+
+    const urlParameters = {
+      locId: selectedLocation.id,
+      unitRecordId: selectedLocation.unitRecordId,
+      unitControlId: payload.id,
+    };
+
     mpApi
-      .saveMonitoringPlansUnitControl(userInput)
+      .saveMonitoringPlansUnitControl(userInput, urlParameters)
       .then((result) => {
         setShow(false);
       })
@@ -109,11 +117,23 @@ export const DataTableUnitControl = ({
       });
 
     setUpdateTable(true);
+    setUpdateTable(true);
+    setUpdateTable(true);
+    setUpdateTable(true);
   };
   const createUnitControl = () => {
-    const userInput = extractUserInput(payload, ".modalUserInput");
+    const radios = ["originalCode", "seasonalControlsIndicator"];
+
+    const userInput = extractUserInput(payload, ".modalUserInput", radios);
+
+    const urlParameters = {
+      locId: selectedLocation.id,
+      unitRecordId: selectedLocation.unitRecordId,
+      unitControlId: payload.id,
+    };
+
     mpApi
-      .createUnitControl(userInput)
+      .createUnitControl(userInput, urlParameters)
       .then((result) => {
         setShow(false);
       })
@@ -124,33 +144,34 @@ export const DataTableUnitControl = ({
   };
 
   const [createNewUnitControl, setCreateNewUnitControl] = useState(false);
-  const [selectedModalData, setSelectedModalData] = useState(null);
 
   const openUnitControlModal = (row, bool, create) => {
     let unitControl = null;
+
     setCreateNewUnitControl(create);
-    if (unitControlMethods.length > 0 && !create) {
-      unitControl = unitControlMethods.filter(
-        (element) => element.id === row.col5
+    if (unitControls.length > 0 && !create) {
+      unitControl = unitControls.filter(
+        (element) => element.id === row[`col${Object.keys(row).length - 1}`]
       )[0];
-      setSelectedUnitControlMethods(unitControl);
+      setSelectedUnitControl(unitControl);
     }
     setSelectedModalData(
       modalViewData(
         unitControl,
         {
-          supplementalUnitControlParameterCode: ["Parameter", "dropdown", ""],
-          supplementalUnitControlMonitoringMethodCode: [
-            "Methodology",
-            "dropdown",
+          parameterCode: ["Parameter Code", "dropdown", ""],
+          controlCode: ["Control Code", "dropdown", ""],
+          originalCode: ["Original Code", "radio", ""],
+          seasonalControlsIndicator: [
+            "Seasonal Controls Indicator",
+            "radio",
             "",
           ],
         },
         {
-          beginDate: ["Start Date", "date", ""],
-          beginHour: ["Start Time", "time", ""],
-          endDate: ["End Date", "date", ""],
-          endHour: ["End Time", "time", ""],
+          installDate: ["Install Date", "date", ""],
+          optimizationDate: ["Optimization Date", "date", ""],
+          retireDate: ["Retire Date", "date", ""],
         },
         create,
         totalOptions
@@ -233,19 +254,17 @@ export const DataTableUnitControl = ({
           save={createNewUnitControl ? createUnitControl : saveUnitControl}
           showCancel={!(user && checkout)}
           showSave={user && checkout}
-          title={
-            createNewUnitControl
-              ? "Create UnitControl"
-              : "Component: Monitoring Unit Control Methods"
+          title={createNewUnitControl ? "Create Unit Control" : "Unit Control"}
+          exitBTN={
+            createNewUnitControl ? "Create Unit Control" : `Save and Close`
           }
-          exitBTN={createNewUnitControl ? "Create Fuel Data" : `Save and Close`}
           children={
             <div>
               <ModalDetails
-                modalData={selectedUnitControlMethods}
+                modalData={selectedUnitControl}
                 data={selectedModalData}
                 cols={2}
-                title={"Component: Monitoring Unit Control Methods"}
+                title={"Unit Control"}
                 viewOnly={!(user && checkout)}
               />
             </div>
