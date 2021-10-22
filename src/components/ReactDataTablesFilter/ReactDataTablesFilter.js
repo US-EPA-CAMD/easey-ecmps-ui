@@ -14,19 +14,6 @@ export const FilterComponent = ({
                     mobile-lg:padding-left-0"
     >
       {title}{" "}
-      {/*{title === "Select Configurations" ? (
-        <Checkbox
-          id="chkShowInactive"
-          name="chkShowInactive"
-          className="display-inline"
-          title="Select this checkbox to display inactive facilities"
-          label={
-            <strong className="font-body-md text-normal line-height-2 position-relative top-neg-2px">
-              Show Inactive
-            </strong>
-          }
-        />
-      ) : null}*/}
     </div>
 
     <table
