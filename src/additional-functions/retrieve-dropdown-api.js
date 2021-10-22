@@ -210,6 +210,40 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           setTotalOptions(newData);
         });
         break;
+      case "fuelIndicatorCode":
+        dmApi.getAllFuelIndicatorCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["fuelIndicatorCode"],
+              name: option["fuelIndicatorCodeDescription"],
+            };
+          });
+
+          options.unshift({ code: "", name: "" });
+          options.unshift({ code: "select", name: "-- Select a value --" });
+          const newData = totalOptions;
+          newData[x] = options;
+
+          setTotalOptions(newData);
+        });
+        break;
+      case "demonstrationMethodCodeGCV", "demonstrationMethodCodeSO2":
+        dmApi.getAllDemonstrationMethodCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["demMethodCode"],
+              name: option["demMethodCodeDescription"],
+            };
+          });
+
+          options.unshift({ code: "", name: "" });
+          options.unshift({ code: "select", name: "-- Select a value --" });
+          const newData = totalOptions;
+          newData[x] = options;
+
+          setTotalOptions(newData);
+        });
+        break;
       case "systemTypeCode":
         dmApi.getAllSystemTypeCodes().then((response) => {
           options = response.data.map((option) => {
