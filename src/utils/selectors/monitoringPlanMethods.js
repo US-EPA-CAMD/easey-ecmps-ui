@@ -30,6 +30,12 @@ const formatStringToDate = (date) => {
   return `${parts[1]}/${parts[2]}/${parts[0]}`;
 };
 
+const formatAndNormalizeDate = (date) => {
+  const parts = date.split("-");
+
+  return `${parts[1]}/${parts[2].substring(0, 2)}/${parts[0]}`;
+};
+
 export const getMonitoringPlansMatsMethodsTableRecords = (data) => {
   const records = [];
 
@@ -57,17 +63,19 @@ export const getMonitoringPlansFuelDataRecords = (data) => {
 
   data.forEach((el) => {
     const beginDate = el.beginDate
-      ? formatStringToDate(el.beginDate.toString())
+      ? formatAndNormalizeDate(el.beginDate.toString())
       : "";
 
-    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
+    const endDate = el.endDate
+      ? formatAndNormalizeDate(el.endDate.toString())
+      : "";
 
     records.push({
       col1: el["fuelCode"],
       col2: el["indicatorCode"],
-      col3: el["OzoneSeasonIndicator"],
-      col4: el["DemGCV"],
-      col5: el["DemSO2"],
+      col3: el["ozoneSeasonIndicator"] === 0 ? "Yes" : "No",
+      col4: el["demGCV"],
+      col5: el["demSO2"],
       col6: `${beginDate}`,
       col7: `${endDate}`,
       col8: el.id,
@@ -82,18 +90,18 @@ export const getMonitoringPlansUnitControlRecords = (data) => {
 
   data.forEach((el) => {
     const installDate = el["installDate"]
-      ? formatStringToDate(el["installDate"].toString())
+      ? formatAndNormalizeDate(el["installDate"].toString())
       : "";
     const retireDate = el.retireDate
-      ? formatStringToDate(el.retireDate.toString())
+      ? formatAndNormalizeDate(el.retireDate.toString())
       : "";
 
     records.push({
       col1: el["parameterCode"],
       col2: el["controlCode"],
-      col3: el["originalCode"],
+      col3: el["originalCode"] === 0 ? "Yes" : "No",
       col4: `${installDate}`,
-      col5: el["seasonalControlsIndicator"],
+      col5: el["seasonalControlsIndicator"] === 0 ? "Yes" : "No",
       col6: `${retireDate}`,
       col7: el.id,
     });
