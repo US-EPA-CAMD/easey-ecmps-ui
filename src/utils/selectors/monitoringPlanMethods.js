@@ -73,7 +73,12 @@ export const getMonitoringPlansFuelDataRecords = (data) => {
     records.push({
       col1: el["fuelCode"],
       col2: el["indicatorCode"],
-      col3: el["ozoneSeasonIndicator"] === 0 ? "Yes" : "No",
+      col3:
+        el["ozoneSeasonIndicator"] === null
+          ? null
+          : el["ozoneSeasonIndicator"] === 0
+          ? "Yes"
+          : "No",
       col4: el["demGCV"],
       col5: el["demSO2"],
       col6: `${beginDate}`,
@@ -89,21 +94,36 @@ export const getMonitoringPlansUnitControlRecords = (data) => {
   const records = [];
 
   data.forEach((el) => {
+    const optimizationDate = el["optimizationDate"]
+      ? formatAndNormalizeDate(el["optimizationDate"].toString())
+      : "";
+
     const installDate = el["installDate"]
       ? formatAndNormalizeDate(el["installDate"].toString())
       : "";
-    const retireDate = el.retireDate
-      ? formatAndNormalizeDate(el.retireDate.toString())
+    const retireDate = el["retireDate"]
+      ? formatAndNormalizeDate(el["retireDate"].toString())
       : "";
 
     records.push({
       col1: el["parameterCode"],
       col2: el["controlCode"],
-      col3: el["originalCode"] === 0 ? "Yes" : "No",
-      col4: `${installDate}`,
-      col5: el["seasonalControlsIndicator"] === 0 ? "Yes" : "No",
-      col6: `${retireDate}`,
-      col7: el.id,
+      col3:
+        el["originalCode"] === null
+          ? null
+          : el["originalCode"] === 0
+          ? "Yes"
+          : "No",
+      col4: `${optimizationDate}`,
+      col5: `${installDate}`,
+      col6:
+        el["seasonalControlsIndicator"] === null
+          ? null
+          : el["seasonalControlsIndicator"] === 0
+          ? "Yes"
+          : "No",
+      col7: `${retireDate}`,
+      col8: el.id,
     });
   });
 

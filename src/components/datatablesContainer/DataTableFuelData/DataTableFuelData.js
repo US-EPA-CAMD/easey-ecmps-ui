@@ -10,6 +10,11 @@ import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-d
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 import {
+  getActiveData,
+  getInactiveData,
+} from "../../../additional-functions/filter-data";
+
+import {
   attachChangeEventListeners,
   removeChangeEventListeners,
   unsavedDataMessage,
@@ -19,6 +24,8 @@ export const DataTableFuelData = ({
   locationSelectValue,
   user,
   checkout,
+  inactive,
+  settingInactiveCheckBox,
   revertedState,
   setRevertedState,
   selectedLocation,
@@ -71,12 +78,33 @@ export const DataTableFuelData = ({
   };
   const data = useMemo(() => {
     if (fuelDataMethods.length > 0) {
-      return fs.getMonitoringPlansFuelDataRecords(fuelDataMethods);
+      const activeOnly = getActiveData(fuelDataMethods);
+      const inactiveOnly = getInactiveData(fuelDataMethods);
+
+      // only active data >  disable checkbox and unchecks it
+      if (activeOnly.length === fuelDataMethods.length) {
+        // uncheck it and disable checkbox
+        //function parameters ( check flag, disable flag )
+        settingInactiveCheckBox(false, true);
+        return fs.getMonitoringPlansFuelDataRecords(fuelDataMethods);
+      }
+
+      // only inactive data > disables checkbox and checks it
+      if (inactiveOnly.length === fuelDataMethods.length) {
+        //check it and disable checkbox
+        settingInactiveCheckBox(true, true);
+        return fs.getMonitoringPlansFuelDataRecords(fuelDataMethods);
+      }
+      // resets checkbox
+      settingInactiveCheckBox(inactive[0], false);
+      return fs.getMonitoringPlansFuelDataRecords(
+        !inactive[0] ? getActiveData(fuelDataMethods) : fuelDataMethods
+      );
     }
     return [];
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fuelDataMethods]);
+  }, [fuelDataMethods, inactive]);
   const testing = () => {
     openFuelDataModal(false, false, true);
     saveFuelData();

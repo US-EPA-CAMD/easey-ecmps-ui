@@ -10,6 +10,11 @@ import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-d
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 import {
+  getActiveData,
+  getInactiveData,
+} from "../../../additional-functions/filter-data";
+
+import {
   attachChangeEventListeners,
   removeChangeEventListeners,
   unsavedDataMessage,
@@ -19,6 +24,8 @@ export const DataTableUnitControl = ({
   locationSelectValue,
   user,
   checkout,
+  inactive,
+  settingInactiveCheckBox,
   revertedState,
   setRevertedState,
   selectedLocation,
@@ -57,6 +64,7 @@ export const DataTableUnitControl = ({
     "Parameter Code",
     "Control Code",
     "Original Code",
+    "Optimization Date",
     "Install Date",
     "Seasonal Controls Indicator",
     "Retire Date",
@@ -74,12 +82,33 @@ export const DataTableUnitControl = ({
   };
   const data = useMemo(() => {
     if (unitControlMethods.length > 0) {
-      return fs.getMonitoringPlansUnitControlRecords(unitControlMethods);
+      const activeOnly = getActiveData(unitControlMethods);
+      const inactiveOnly = getInactiveData(unitControlMethods);
+
+      // only active data >  disable checkbox and unchecks it
+      if (activeOnly.length === unitControlMethods.length) {
+        // uncheck it and disable checkbox
+        //function parameters ( check flag, disable flag )
+        settingInactiveCheckBox(false, true);
+        return fs.getMonitoringPlansUnitControlRecords(unitControlMethods);
+      }
+
+      // only inactive data > disables checkbox and checks it
+      if (inactiveOnly.length === unitControlMethods.length) {
+        //check it and disable checkbox
+        settingInactiveCheckBox(true, true);
+        return fs.getMonitoringPlansUnitControlRecords(unitControlMethods);
+      }
+      // resets checkbox
+      settingInactiveCheckBox(inactive[0], false);
+      return fs.getMonitoringPlansUnitControlRecords(
+        !inactive[0] ? getActiveData(unitControlMethods) : unitControlMethods
+      );
     }
     return [];
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [unitControlMethods]);
+  }, [unitControlMethods, inactive]);
   const testing = () => {
     openUnitControlModal(false, false, true);
     saveUnitControl();
