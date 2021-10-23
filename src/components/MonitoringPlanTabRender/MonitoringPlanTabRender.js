@@ -156,7 +156,6 @@ export const MonitoringPlanTabRender = ({
       [
         [
           <DataTableFuelData
-            matsTableHandler={matsTableHandler}
             locationSelectValue={parseInt(locationSelect[1])}
             selectedLocation={locations.find(
               (element) => element.id === locationSelect[1]
@@ -172,7 +171,6 @@ export const MonitoringPlanTabRender = ({
         ],
         [
           <DataTableUnitControl
-            matsTableHandler={matsTableHandler}
             locationSelectValue={parseInt(locationSelect[1])}
             selectedLocation={locations.find(
               (element) => element.id === locationSelect[1]
@@ -320,8 +318,8 @@ export const MonitoringPlanTabRender = ({
     ],
     [
       [
-        <DataTableMethod
-          matsTableHandler={matsTableHandler}
+        <DataTableFuelData
+          // matsTableHandler={matsTableHandler}
           locationSelectValue={parseInt(locationSelect[1])}
           checkout={checkout}
           user={user}
@@ -333,7 +331,7 @@ export const MonitoringPlanTabRender = ({
         "Unit Fuels",
       ],
       [
-        <DataTableMats
+        <DataTableUnitControl
           locationSelectValue={locationSelect[1]}
           checkout={checkout}
           user={user}

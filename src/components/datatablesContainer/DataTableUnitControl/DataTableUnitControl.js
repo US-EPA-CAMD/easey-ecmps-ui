@@ -8,6 +8,10 @@ import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
+import {
+  getActiveData,
+  getInactiveData,
+} from "../../../additional-functions/filter-data";
 
 import {
   attachChangeEventListeners,
@@ -19,6 +23,8 @@ export const DataTableUnitControl = ({
   locationSelectValue,
   user,
   checkout,
+  inactive,
+  settingInactiveCheckBox,
   revertedState,
   setRevertedState,
   selectedLocation,
@@ -48,7 +54,7 @@ export const DataTableUnitControl = ({
           setDataLoaded(true);
         });
       setUpdateTable(false);
-      console.log("test");
+      setRevertedState(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
@@ -75,14 +81,9 @@ export const DataTableUnitControl = ({
     optimizationDate: null,
     retireDate: null,
   };
-  const data = useMemo(() => {
-    if (unitControls.length > 0) {
-      return fs.getMonitoringPlansUnitControlRecords(unitControls);
-    }
-    return [];
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [unitControls]);
+  const [createNewUnitControl, setCreateNewUnitControl] = useState(false);
+
   const testing = () => {
     openUnitControlModal(false, false, true);
     saveUnitControl();
@@ -99,52 +100,6 @@ export const DataTableUnitControl = ({
     openUnitControlModal(false, false, true);
     createUnitControl();
   };
-
-  const saveUnitControl = () => {
-    const radios = ["originalCode", "seasonalControlsIndicator"];
-
-    const userInput = extractUserInput(payload, ".modalUserInput", radios);
-
-    const urlParameters = {
-      locId: selectedLocation.id,
-      unitRecordId: selectedLocation.unitRecordId,
-      unitControlId: payload.id,
-    };
-
-    mpApi
-      .saveMonitoringPlansUnitControl(userInput, urlParameters)
-      .then((result) => {
-        setShow(false);
-      })
-      .catch((error) => {
-        setShow(false);
-      });
-
-    setUpdateTable(true);
-  };
-  const createUnitControl = () => {
-    const radios = ["originalCode", "seasonalControlsIndicator"];
-
-    const userInput = extractUserInput(payload, ".modalUserInput", radios);
-
-    const urlParameters = {
-      locId: selectedLocation.id,
-      unitRecordId: selectedLocation.unitRecordId,
-      unitControlId: payload.id,
-    };
-
-    mpApi
-      .createUnitControl(userInput, urlParameters)
-      .then((result) => {
-        setShow(false);
-      })
-      .catch((error) => {
-        setShow(false);
-      });
-    setUpdateTable(true);
-  };
-
-  const [createNewUnitControl, setCreateNewUnitControl] = useState(false);
 
   const openUnitControlModal = (row, bool, create) => {
     let unitControl = null;
@@ -203,10 +158,82 @@ export const DataTableUnitControl = ({
     }
   };
 
+  const data = useMemo(() => {
+    if (unitControls.length > 0) {
+      const activeOnly = getActiveData(unitControls);
+      const inactiveOnly = getInactiveData(unitControls);
+
+      // only active data >  disable checkbox and unchecks it
+      if (activeOnly.length === unitControls.length) {
+        // uncheck it and disable checkbox
+        //function parameters ( check flag, disable flag )
+        settingInactiveCheckBox(false, true);
+        return fs.getMonitoringPlansUnitControlRecords(unitControls);
+      }
+
+      // only inactive data > disables checkbox and checks it
+      if (inactiveOnly.length === unitControls.length) {
+        //check it and disable checkbox
+        settingInactiveCheckBox(true, true);
+        return fs.getMonitoringPlansUnitControlRecords(unitControls);
+      }
+      // resets checkbox
+      settingInactiveCheckBox(inactive[0], false);
+      return fs.getMonitoringPlansUnitControlRecords(
+        !inactive[0] ? getActiveData(unitControls) : unitControls
+      );
+    }
+    return [];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [unitControls, inactive]);
+
+  const saveUnitControl = () => {
+    const radios = ["originalCode", "seasonalControlsIndicator"];
+
+    const userInput = extractUserInput(payload, ".modalUserInput", radios);
+
+    const urlParameters = {
+      locId: selectedLocation.id,
+      unitRecordId: selectedLocation.unitRecordId,
+      unitControlId: payload.id,
+    };
+
+    mpApi
+      .saveUnitControl(userInput, urlParameters)
+      .then((result) => {
+        setShow(false);
+      })
+      .catch((error) => {
+        setShow(false);
+      });
+
+    setUpdateTable(true);
+  };
+  const createUnitControl = () => {
+    const radios = ["originalCode", "seasonalControlsIndicator"];
+
+    const userInput = extractUserInput(payload, ".modalUserInput", radios);
+
+    const urlParameters = {
+      locId: selectedLocation.id,
+      unitRecordId: selectedLocation.unitRecordId,
+      unitControlId: payload.id,
+    };
+
+    mpApi
+      .createUnitControl(userInput, urlParameters)
+      .then((result) => {
+        setShow(false);
+      })
+      .catch((error) => {
+        setShow(false);
+      });
+    setUpdateTable(true);
+  };
+
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
-
       <input
         tabIndex={-1}
         aria-hidden={true}
@@ -231,23 +258,20 @@ export const DataTableUnitControl = ({
         id="testingBtn3"
         onClick={() => testing3()}
       />
-
       <DataTableRender
+        openHandler={openUnitControlModal}
         columnNames={columnNames}
         data={data}
         dataLoaded={dataLoaded}
-        // actionsBtn={"View"}
+        actionsBtn={"View"}
         checkout={checkout}
         user={user}
-        openHandler={openUnitControlModal}
-        actionsBtn={"View"}
         addBtn={openUnitControlModal}
         addBtnName={"Create Unit Control"}
         setViewBtn={setViewBtn}
         viewBtn={viewBtn}
         setAddBtn={setAddBtn}
       />
-
       {show ? (
         <Modal
           show={show}

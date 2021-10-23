@@ -217,7 +217,7 @@ export const getAllRectangularDuctsCodes = async () => {
 
 export const getAllControlEquipmentParameterCodes = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/control-equi-param-codes`)
+    .get(`${config.services.mdm.uri}/control-equip-param-codes`)
     .then(handleResponse)
     .catch(handleError);
 };

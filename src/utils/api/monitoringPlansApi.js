@@ -549,10 +549,7 @@ export const getMonitoringPlansUnitControlRecords = async (
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const saveMonitoringPlansUnitControl = async (
-  payload,
-  urlParameters
-) => {
+export const saveUnitControl = async (payload, urlParameters) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}/unit-controls/${urlParameters["unitControlId"]}`;
   // *** remove attributes not needed by the API
 
