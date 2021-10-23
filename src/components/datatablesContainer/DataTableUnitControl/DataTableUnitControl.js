@@ -27,7 +27,10 @@ export const DataTableUnitControl = ({
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [unitControls, setUnitControls] = useState([]);
-  const totalOptions = useRetrieveDropdownApi(["parameterCode", "controlCode"]);
+  const totalOptions = useRetrieveDropdownApi([
+    "controlEquipParamCode",
+    "controlCode",
+  ]);
   const [show, setShow] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
   useEffect(() => {
@@ -45,6 +48,7 @@ export const DataTableUnitControl = ({
           setDataLoaded(true);
         });
       setUpdateTable(false);
+      console.log("test");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
@@ -116,9 +120,6 @@ export const DataTableUnitControl = ({
         setShow(false);
       });
 
-    setUpdateTable(true);
-    setUpdateTable(true);
-    setUpdateTable(true);
     setUpdateTable(true);
   };
   const createUnitControl = () => {

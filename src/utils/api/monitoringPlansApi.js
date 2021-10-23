@@ -568,8 +568,8 @@ export const saveMonitoringPlansUnitControl = async (
     .catch(handleError);
 };
 
-export const createUnitControl = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/duct-wafs/`;
+export const createUnitControl = async (payload, urlParameters) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}/unit-controls`;
 
   // *** remove attributes not needed by the API
   delete payload["id"];

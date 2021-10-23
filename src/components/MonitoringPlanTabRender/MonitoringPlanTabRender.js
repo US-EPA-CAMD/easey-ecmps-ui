@@ -37,7 +37,6 @@ export const MonitoringPlanTabRender = ({
   checkedOutLocations,
 }) => {
   const [matsTableFlag, setMatsTableFlag] = useState(false);
-  console.log('locations',locations,locationSelect[1])
   // // MONITORING METHODS
   const matsTableHandler = (flag) => {
     setMatsTableFlag(flag);
@@ -169,7 +168,7 @@ export const MonitoringPlanTabRender = ({
             revertedState={revertedState}
             setRevertedState={setRevertedState}
           />,
-          "Unit Fuel Data",
+          "Unit Fuels",
         ],
         [
           <DataTableUnitControl
@@ -185,7 +184,7 @@ export const MonitoringPlanTabRender = ({
             revertedState={revertedState}
             setRevertedState={setRevertedState}
           />,
-          "Unit Control Data",
+          "Unit Controls",
         ],
       ], // unit info
     ];
@@ -331,7 +330,7 @@ export const MonitoringPlanTabRender = ({
           revertedState={revertedState}
           setRevertedState={setRevertedState}
         />,
-        "Unit Fuel Data",
+        "Unit Fuels",
       ],
       [
         <DataTableMats
@@ -343,7 +342,7 @@ export const MonitoringPlanTabRender = ({
           revertedState={revertedState}
           setRevertedState={setRevertedState}
         />,
-        "Unit Control Data",
+        "Unit Controls",
       ],
     ], // unit info
   ]);
