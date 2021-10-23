@@ -201,6 +201,20 @@ export const getAllFuelCodes = async () => {
     .catch(handleError);
 };
 
+export const getAllFuelIndicatorCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/fuel-indicator-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getAllDemonstrationMethodCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/dem-method-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
 export const getAllFormulaCodes = async () => {
   return axios
     .get(`${config.services.mdm.uri}/equation-codes`)
@@ -208,7 +222,7 @@ export const getAllFormulaCodes = async () => {
     .catch(handleError);
 };
 
- 
+
 export const getAllRectangularDuctsCodes = async () => {
   return axios
     .get(`${config.services.mdm.uri}/waf-method-codes`)

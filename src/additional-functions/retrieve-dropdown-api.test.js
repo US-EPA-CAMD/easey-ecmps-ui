@@ -103,7 +103,7 @@ test("tests  empty ", () => {
   expect(func).toEqual(data);
 });
 
-test("tests formulaCode", async () => {
+test("tests getAllFormulaCodes", async () => {
   axios.get.mockImplementation(() =>
     Promise.resolve({ status: 200, data: data })
   );
@@ -113,5 +113,44 @@ test("tests formulaCode", async () => {
   expect(dataReturned.data).toEqual(data);
 
   let func = useRetrieveDropdownApi(["formulaCode"]);
+  expect(func).toEqual(data);
+});
+
+test("tests getAllFuelCodes", async () => {
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: data })
+  );
+  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+
+  const dataReturned = await dmApi.getAllFuelCodes();
+  expect(dataReturned.data).toEqual(data);
+
+  let func = useRetrieveDropdownApi(["fuelCode"]);
+  expect(func).toEqual(data);
+});
+
+test("tests getAllFuelIndicatorCodes", async () => {
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: data })
+  );
+  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+
+  const dataReturned = await dmApi.getAllFuelIndicatorCodes();
+  expect(dataReturned.data).toEqual(data);
+
+  let func = useRetrieveDropdownApi(["fuelIndicatorCode"]);
+  expect(func).toEqual(data);
+});
+
+test("tests getAllDemonstrationMethodCodes", async () => {
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: data })
+  );
+  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+
+  const dataReturned = await dmApi.getAllDemonstrationMethodCodes();
+  expect(dataReturned.data).toEqual(data);
+
+  let func = useRetrieveDropdownApi(["demMethodCode"]);
   expect(func).toEqual(data);
 });
