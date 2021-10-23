@@ -55,8 +55,8 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
                     : "Yes"
                   : value[2]
                 : value[4] === "radio"
-                ? "No"
-                : ""}
+                  ? "No"
+                  : ""}
             </div>
           </FormGroup>
         )}

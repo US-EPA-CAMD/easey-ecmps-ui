@@ -70,12 +70,12 @@ test("tests getMonitoringRectangularDucts", async () => {
   expect(container).toBeDefined();
 });
 
-// test("test create/save Ducts functions", async () => {
-//   let { container } = await waitForElement(() =>
-//     componentRenderer(false, false, false, true, false)
-//   );
+test("test create/save Ducts functions", async () => {
+  let { container } = await waitForElement(() =>
+    componentRenderer(false, false, false, true, false)
+  );
 
-//   fireEvent.click(container.querySelector("#testingBtn"));
-//   fireEvent.click(container.querySelector("#testingBtn2"));
-//   fireEvent.click(container.querySelector("#testingBtn3"));
-// });
+  fireEvent.click(container.querySelector("#testingBtn"));
+  fireEvent.click(container.querySelector("#testingBtn2"));
+  fireEvent.click(container.querySelector("#testingBtn3"));
+});

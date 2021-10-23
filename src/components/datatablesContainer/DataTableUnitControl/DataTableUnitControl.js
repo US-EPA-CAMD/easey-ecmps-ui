@@ -14,6 +14,11 @@ import {
 } from "../../../additional-functions/filter-data";
 
 import {
+  getActiveData,
+  getInactiveData,
+} from "../../../additional-functions/filter-data";
+
+import {
   attachChangeEventListeners,
   removeChangeEventListeners,
   unsavedDataMessage,
@@ -64,6 +69,7 @@ export const DataTableUnitControl = ({
     "Parameter Code",
     "Control Code",
     "Original Code",
+    "Optimization Date",
     "Install Date",
     "Optimization Date",
     "Seasonal Controls Indicator",
@@ -84,6 +90,35 @@ export const DataTableUnitControl = ({
 
   const [createNewUnitControl, setCreateNewUnitControl] = useState(false);
 
+  const data = useMemo(() => {
+    if (unitControlMethods.length > 0) {
+      const activeOnly = getActiveData(unitControlMethods);
+      const inactiveOnly = getInactiveData(unitControlMethods);
+
+      // only active data >  disable checkbox and unchecks it
+      if (activeOnly.length === unitControlMethods.length) {
+        // uncheck it and disable checkbox
+        //function parameters ( check flag, disable flag )
+        settingInactiveCheckBox(false, true);
+        return fs.getMonitoringPlansUnitControlRecords(unitControlMethods);
+      }
+
+      // only inactive data > disables checkbox and checks it
+      if (inactiveOnly.length === unitControlMethods.length) {
+        //check it and disable checkbox
+        settingInactiveCheckBox(true, true);
+        return fs.getMonitoringPlansUnitControlRecords(unitControlMethods);
+      }
+      // resets checkbox
+      settingInactiveCheckBox(inactive[0], false);
+      return fs.getMonitoringPlansUnitControlRecords(
+        !inactive[0] ? getActiveData(unitControlMethods) : unitControlMethods
+      );
+    }
+    return [];
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [unitControlMethods, inactive]);
   const testing = () => {
     openUnitControlModal(false, false, true);
     saveUnitControl();
