@@ -34,7 +34,6 @@ export const MonitoringPlanTab = ({
   setMostRecentlyCheckedInMonitorPlanIdForTab,
   mostRecentlyCheckedInMonitorPlanIdForTab,
 }) => {
-
   const [sectionSelect, setSectionSelect] = useState(tabs[activeTab].section);
   useEffect(() => {
     setSection(sectionSelect, title);

@@ -99,7 +99,18 @@ export const Tabs = ({
                       : "tab-button react-transition flip-in-y"
                   }
                   tabIndex="0"
-                  aria-label={`open ${el.props.title} tab`}
+                  aria-label={`open ${
+                    user &&
+                    el.props.locationId &&
+                    isCheckedOut(el.props.locationId)
+                      ? "(locked)"
+                      : ""
+                  } ${
+                    el.props.locationId &&
+                    isCheckedOutByUser(el.props.locationId)
+                      ? "(checked-out)"
+                      : ""
+                  } ${el.props.title} tab`}
                   onClick={() => settingActiveTab(i)}
                   onKeyPress={(event) => {
                     if (event.key === "Enter") {
@@ -112,9 +123,12 @@ export const Tabs = ({
                     el.props.locationId &&
                     isCheckedOut(el.props.locationId) ? (
                       <LockSharp
+                        role="img"
                         className="text-bold tab-icon margin-right-2"
                         aria-hidden="false"
-                        alt="locked"
+                        title={`Locked Facility - ${
+                          el.props.title.split("(")[0]
+                        }`}
                       />
                     ) : null}
                     {el.props.title.split("(")[0]}
@@ -122,7 +136,14 @@ export const Tabs = ({
                   <div className="text-center">
                     {el.props.locationId &&
                     isCheckedOutByUser(el.props.locationId) ? (
-                      <CreateSharp className="text-bold tab-icon margin-right-2" />
+                      <CreateSharp
+                        role="img"
+                        className="text-bold tab-icon margin-right-2"
+                        aria-hidden="false"
+                        title={`Checked-out Configuration - ${el.props.title
+                          .split("(")[1]
+                          .replace(")", "")}`}
+                      />
                     ) : null}
                     {el.props.title.split("(")[1].replace(")", "")}
                   </div>

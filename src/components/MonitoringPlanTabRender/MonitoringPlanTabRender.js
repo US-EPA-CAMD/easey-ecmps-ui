@@ -12,6 +12,8 @@ import DataTableLoads from "../datatablesContainer/DataTableLoads/DataTableLoads
 import DataTableDefaults from "../datatablesContainer/DataTableDefaults/DataTableDefaults";
 import DataTableFormulas from "../datatablesContainer/DataTableFormulas/DataTableFormulas";
 import DataTableRectangularDucts from "../datatablesContainer/DataTableRectangularDucts/DataTableRectangularDucts";
+import DataTableFuelData from "../datatablesContainer/DataTableFuelData/DataTableFuelData";
+import DataTableUnitControl from "../datatablesContainer/DataTableUnitControl/DataTableUnitControl";
 
 export const MonitoringPlanTabRender = ({
   resetTimer,
@@ -45,61 +47,6 @@ export const MonitoringPlanTabRender = ({
   };
 
   const [revertedState, setRevertedState] = useState(false);
-  // checks mats table
-  // useEffect(() => {
-  //   if (matsTableFlag) {
-  //     setTableState(
-  //       tableState.map((element, index) =>
-  //         index === 3
-  //           ? [
-  //               [
-  //                 <DataTableMethod
-  //                   matsTableHandler={matsTableHandler}
-  //                   locationSelectValue={parseInt(locationSelect[1])}
-  //                   checkout={checkout}
-  //                   user={user}
-  //                   inactive={inactive}
-  //                   settingInactiveCheckBox={settingInactiveCheckBox}
-  //                   revertedState={revertedState}
-  //                   setRevertedState={setRevertedState}
-  //                 />,
-  //                 "Methods",
-  //               ],
-  //               [
-  //                 <DataTableMats
-  //                   locationSelectValue={locationSelect[1]}
-  //                   checkout={checkout}
-  //                   user={user}
-  //                   inactive={inactive}
-  //                   settingInactiveCheckBox={settingInactiveCheckBox}
-  //                   revertedState={revertedState}
-  //                   setRevertedState={setRevertedState}
-  //                 />,
-  //                 "Supplemental Methods",
-  //               ],
-  //             ]
-  //           : element
-  //       )
-  //     );
-  //   }
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [matsTableFlag, inactive[0], checkout, revertedState]);
-
-  /*
-  useEffect(() => {
-    if (resetTimerFlag) {
-      console.log("Extending");
-      resetInactivityTimerApiCall();
-      resetTimer(false);
-    }
-    if (callApiFlag) {
-      console.log("EXPIRED");
-      countdownExpired();
-      setExpired(false);
-    }
-  }, [resetTimerFlag, callApiFlag]);
-  */
 
   // updates all tables whenever a location is changed
   useEffect(() => {
@@ -163,18 +110,20 @@ export const MonitoringPlanTabRender = ({
         ],
       ],
       [], // qualifications
-      [ [
-        <DataTableRectangularDucts
-          locationSelectValue={parseInt(locationSelect[1])}
-          inactive={inactive}
-          settingInactiveCheckBox={settingInactiveCheckBox}
-          checkout={checkout}
-          user={user}
-          revertedState={revertedState}
-          setRevertedState={setRevertedState}
-        />,
-        "WAFs Rectangular Duct",
-      ],], // rectangular duct
+      [
+        [
+          <DataTableRectangularDucts
+            locationSelectValue={parseInt(locationSelect[1])}
+            inactive={inactive}
+            settingInactiveCheckBox={settingInactiveCheckBox}
+            checkout={checkout}
+            user={user}
+            revertedState={revertedState}
+            setRevertedState={setRevertedState}
+          />,
+          "WAFs Rectangular Duct",
+        ],
+      ], // rectangular duct
 
       [
         [
@@ -205,39 +154,72 @@ export const MonitoringPlanTabRender = ({
           "Systems",
         ],
       ],
-      [], // unit info
+      [
+        [
+          <DataTableFuelData
+            matsTableHandler={matsTableHandler}
+            locationSelectValue={parseInt(locationSelect[1])}
+            selectedLocation={locations.find(
+              (element) => element.id === locationSelect[1]
+            )}
+            checkout={checkout}
+            user={user}
+            inactive={inactive}
+            settingInactiveCheckBox={settingInactiveCheckBox}
+            revertedState={revertedState}
+            setRevertedState={setRevertedState}
+          />,
+          "Unit Fuel Data",
+        ],
+        [
+          <DataTableUnitControl
+            matsTableHandler={matsTableHandler}
+            locationSelectValue={parseInt(locationSelect[1])}
+            selectedLocation={locations.find(
+              (element) => element.id === locationSelect[1]
+            )}
+            checkout={checkout}
+            user={user}
+            inactive={inactive}
+            settingInactiveCheckBox={settingInactiveCheckBox}
+            revertedState={revertedState}
+            setRevertedState={setRevertedState}
+          />,
+          "Unit Control Data",
+        ],
+      ], // unit info
     ];
 
     if (matsTableFlag) {
       tableArr = tableState.map((element, index) =>
         index === 4
           ? [
-            [
-              <DataTableMethod
-                matsTableHandler={matsTableHandler}
-                locationSelectValue={parseInt(locationSelect[1])}
-                checkout={checkout}
-                user={user}
-                inactive={inactive}
-                settingInactiveCheckBox={settingInactiveCheckBox}
-                revertedState={revertedState}
-                setRevertedState={setRevertedState}
-              />,
-              "Methods",
-            ],
-            [
-              <DataTableMats
-                locationSelectValue={locationSelect[1]}
-                checkout={checkout}
-                user={user}
-                inactive={inactive}
-                settingInactiveCheckBox={settingInactiveCheckBox}
-                revertedState={revertedState}
-                setRevertedState={setRevertedState}
-              />,
-              "Supplemental Methods",
-            ],
-          ]
+              [
+                <DataTableMethod
+                  matsTableHandler={matsTableHandler}
+                  locationSelectValue={parseInt(locationSelect[1])}
+                  checkout={checkout}
+                  user={user}
+                  inactive={inactive}
+                  settingInactiveCheckBox={settingInactiveCheckBox}
+                  revertedState={revertedState}
+                  setRevertedState={setRevertedState}
+                />,
+                "Methods",
+              ],
+              [
+                <DataTableMats
+                  locationSelectValue={locationSelect[1]}
+                  checkout={checkout}
+                  user={user}
+                  inactive={inactive}
+                  settingInactiveCheckBox={settingInactiveCheckBox}
+                  revertedState={revertedState}
+                  setRevertedState={setRevertedState}
+                />,
+                "Supplemental Methods",
+              ],
+            ]
           : element
       );
     }
@@ -337,7 +319,33 @@ export const MonitoringPlanTabRender = ({
         "Systems",
       ],
     ],
-    [], // unit info
+    [
+      [
+        <DataTableMethod
+          matsTableHandler={matsTableHandler}
+          locationSelectValue={parseInt(locationSelect[1])}
+          checkout={checkout}
+          user={user}
+          inactive={inactive}
+          settingInactiveCheckBox={settingInactiveCheckBox}
+          revertedState={revertedState}
+          setRevertedState={setRevertedState}
+        />,
+        "Unit Fuel Data",
+      ],
+      [
+        <DataTableMats
+          locationSelectValue={locationSelect[1]}
+          checkout={checkout}
+          user={user}
+          inactive={inactive}
+          settingInactiveCheckBox={settingInactiveCheckBox}
+          revertedState={revertedState}
+          setRevertedState={setRevertedState}
+        />,
+        "Unit Control Data",
+      ],
+    ], // unit info
   ]);
 
   // not tested ***

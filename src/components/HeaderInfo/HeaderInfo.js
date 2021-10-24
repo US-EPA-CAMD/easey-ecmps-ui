@@ -18,7 +18,7 @@ export const HeaderInfo = ({
   setInactive,
   setLocationSelect,
   setSectionSelect,
-  // reduxx store
+  // redux store
   sectionSelect,
   locationSelect,
   locations,
