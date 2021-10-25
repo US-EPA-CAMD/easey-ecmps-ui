@@ -64,12 +64,12 @@ export const CountdownTimer = ({ duration, countdownExpired }) => {
 
   return (
     <div className="countdown-timer-wrapper">
-      <p aria-live="off">
+      <p>
         It looks like you have been inactive for a while. You will be logged out
-        in {duration} seconds. Click Close.
+        in {duration} seconds for inactivity. Click Close to remain active.
       </p>
 
-      <div className="timer-container" aria-hidden="false">
+      <div className="timer-container" aria-hidden="true">
         <CountdownCircleTimer
           id="test"
           isPlaying
