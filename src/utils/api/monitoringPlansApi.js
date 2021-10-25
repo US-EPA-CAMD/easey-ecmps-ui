@@ -507,10 +507,9 @@ export const getMonitoringPlansFuelDataRecords = async (selectedLocation) => {
 };
 
 export const saveMonitoringPlansFuelData = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/unit-fuels/${payload["id"]}`;
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/units/${payload["unitRecordId"]}/unit-fuels/${payload["id"]}`;
   // *** remove attributes not needed by the API
 
-  console.log("testing save", payload["locationId"], payload["id"]);
   return secureAxios({
     method: "PUT",
     url: url,

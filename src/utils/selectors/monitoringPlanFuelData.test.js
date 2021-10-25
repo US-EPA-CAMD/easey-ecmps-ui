@@ -28,7 +28,7 @@ describe("testing monitoring plan fuel data selectors", () => {
                 unitId: "3",
                 fuelCode: "PNG",
                 indicatorCode: "S",
-                ozoneSeasonIndicator: "0",
+                ozoneSeasonIndicator: "1",
                 demGCV: null,
                 demSO2: null,
                 beginDate: null,
@@ -63,7 +63,7 @@ describe("testing monitoring plan fuel data selectors", () => {
             {
                 col1: "DSL",
                 col2: "S",
-                col3: "0",
+                col3: "No",
                 col4: null,
                 col5: null,
                 col6: "01/01/1995",
@@ -73,7 +73,7 @@ describe("testing monitoring plan fuel data selectors", () => {
             {
                 col1: "PNG",
                 col2: "S",
-                col3: "0",
+                col3: "Yes",
                 col4: null,
                 col5: null,
                 col6: "",
@@ -83,7 +83,7 @@ describe("testing monitoring plan fuel data selectors", () => {
             {
                 col1: "C",
                 col2: "P",
-                col3: "0",
+                col3: "No",
                 col4: null,
                 col5: null,
                 col6: "01/01/1995",

@@ -205,6 +205,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           options.unshift({ code: "", name: "" });
           options.unshift({ code: "select", name: "-- Select a value --" });
           const newData = totalOptions;
+          newData["fuelCode"] = options;
           newData[x] = options;
 
           setTotalOptions(newData);
