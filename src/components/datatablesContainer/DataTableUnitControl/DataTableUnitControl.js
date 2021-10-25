@@ -41,7 +41,6 @@ export const DataTableUnitControl = ({
   const [show, setShow] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
   useEffect(() => {
-    console.log("test");
     if (
       updateTable ||
       unitControls.length <= 0 ||
@@ -51,22 +50,18 @@ export const DataTableUnitControl = ({
       mpApi
         .getMonitoringPlansUnitControlRecords(selectedLocation)
         .then((res) => {
-          console.log(res);
           setUnitControls(res.data);
           setDataLoaded(true);
           setUpdateTable(false);
           setRevertedState(false);
         });
-      if (dataLoaded) {
-        console.log(data);
-      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = [
-    "Parameter Code",
+    "Equipment Parameter Code",
     "Control Code",
     "Original Code",
     "Install Date",
@@ -120,7 +115,7 @@ export const DataTableUnitControl = ({
       modalViewData(
         unitControl,
         {
-          parameterCode: ["Parameter Code", "dropdown", ""],
+          parameterCode: ["Equipment Parameter Code", "dropdown", ""],
           controlCode: ["Control Code", "dropdown", ""],
           originalCode: ["Original Code", "radio", ""],
           seasonalControlsIndicator: [

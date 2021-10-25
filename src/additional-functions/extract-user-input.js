@@ -31,36 +31,21 @@ export const extractUserInput = (payload, inputSelector, radios) => {
     radioPayload = document.querySelectorAll(".usa-radio");
     let counter = 0;
 
-    for (let button of radioPayload) {
+    for (const button of radioPayload) {
       if (button.firstElementChild.checked) {
         const item = { name: "", value: "" };
         item.name = radios[counter];
-        item.value = button.firstElementChild.defaultValue == "Yes" ? "1" : "0";
+        item.value =
+          button.firstElementChild.defaultValue === "Yes" ? "1" : "0";
         payloadArray.push(item);
         counter++;
       }
     }
-
-    // const item = { name: "", value: "" };
-    // item.name = radio;
-    // if (radioPayload[0]) {
-    //   if (radioPayload[0].firstElementChild.checked) {
-    //     item.value = "1";
-    //   }
-    // }
-    // if (radioPayload[1]) {
-    //   if (radioPayload[1].firstElementChild.checked) {
-    //     item.value = "0";
-    //   }
-    // }
-    // payloadArray.push(item);
   }
 
   payloadArray.forEach((item) => {
     payload[item.name] = item.value.trim() === "" ? null : item.value.trim();
   });
-
-  console.log(payload);
 
   return payload;
 };
