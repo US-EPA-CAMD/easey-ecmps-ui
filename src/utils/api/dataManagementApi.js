@@ -222,10 +222,16 @@ export const getAllFormulaCodes = async () => {
     .catch(handleError);
 };
 
-
 export const getAllRectangularDuctsCodes = async () => {
   return axios
     .get(`${config.services.mdm.uri}/waf-method-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getAllControlEquipmentParameterCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/control-equip-param-codes`)
     .then(handleResponse)
     .catch(handleError);
 };

@@ -46,7 +46,6 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
     setTimeInactive(0);
     setShowInactiveModal(false);
     window.countdownInitiated = false;
-    console.log("inactivity timer reset");
     /*
     console.log(
     mpApi.putLockTimerUpdateConfiguration(configID),

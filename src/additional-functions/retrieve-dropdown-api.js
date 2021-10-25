@@ -41,6 +41,24 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
           });
         }
         break;
+      case "controlEquipParamCode":
+        dmApi.getAllControlEquipmentParameterCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["controlEquipParamCode"],
+              name: option["controlEquipParamDescription"],
+            };
+          });
+
+          options.unshift({ code: "", name: "" });
+          options.unshift({ code: "select", name: "-- Select a value --" });
+          const newData = totalOptions;
+          newData["parameterCode"] = options;
+          newData[x] = options;
+
+          setTotalOptions(newData);
+        });
+        break;
 
       case "monitoringMethodCode":
         if (mats) {
@@ -479,6 +497,23 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             return {
               code: option["wafMethodCode"],
               name: option["wafMethodCodeDescription"],
+            };
+          });
+
+          options.unshift({ code: "", name: "" });
+          options.unshift({ code: "select", name: "-- Select a value --" });
+          const newData = totalOptions;
+          newData[x] = options;
+
+          setTotalOptions(newData);
+        });
+        break;
+      case "controlCode":
+        dmApi.getAllControlTechnologies().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["controlCode"],
+              name: option["controlDescription"],
             };
           });
 
