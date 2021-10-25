@@ -41,7 +41,6 @@ export const DataTableUnitControl = ({
   const [show, setShow] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
   useEffect(() => {
-    console.log("test");
     if (
       updateTable ||
       unitControls.length <= 0 ||
@@ -51,14 +50,12 @@ export const DataTableUnitControl = ({
       mpApi
         .getMonitoringPlansUnitControlRecords(selectedLocation)
         .then((res) => {
-          console.log(res);
           setUnitControls(res.data);
           setDataLoaded(true);
           setUpdateTable(false);
           setRevertedState(false);
         });
       if (dataLoaded) {
-        console.log(data);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
