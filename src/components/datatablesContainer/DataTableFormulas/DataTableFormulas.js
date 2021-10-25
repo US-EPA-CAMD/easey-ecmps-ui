@@ -187,7 +187,7 @@ export const DataTableFormulas = ({
     const userInput = extractUserInput(payload, ".modalUserInput");
 
     mpApi
-      .createMonitoringDuct(userInput, locationSelectValue)
+      .createMonitoringFormulas(userInput, locationSelectValue)
       .then((result) => {
         console.log(result, " was created");
         setShow(false);

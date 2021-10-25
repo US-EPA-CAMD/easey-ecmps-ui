@@ -411,8 +411,8 @@ export const getMonitoringDefaults = async (locationId) => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const saveMonitoringDefaults = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/defaults/${payload["id"]}`;
+export const saveMonitoringDefaults = async (payload,locID) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${locID}/defaults/${payload["id"]}`;
   // *** remove attributes not needed by the API
 
   return secureAxios({
@@ -424,8 +424,8 @@ export const saveMonitoringDefaults = async (payload) => {
     .catch(handleError);
 };
 
-export const createMonitoringDefaults = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/defaults/`;
+export const createMonitoringDefaults = async (payload,locID) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${locID}/defaults/`;
 
   // *** remove attributes not needed by the API
   delete payload["id"];
@@ -578,7 +578,6 @@ export const createUnitControl = async (payload) => {
     .catch(handleError);
 };
 
-
 export const saveMonitoringFormulas = async (payload, locID) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${locID}/formulas/${payload["id"]}`;
   // *** remove attributes not needed by the API
@@ -591,7 +590,7 @@ export const saveMonitoringFormulas = async (payload, locID) => {
     .catch(handleError);
 };
 
-export const createMonitoringFormulas = async (payload,locID) => {
+export const createMonitoringFormulas = async (payload, locID) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${locID}/formulas/`;
 
   // *** remove attributes not needed by the API
