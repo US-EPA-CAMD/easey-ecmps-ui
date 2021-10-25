@@ -60,6 +60,7 @@ export const DataTableAssert = ({
       locationSelectValue ||
       revertedState
     ) {
+      setDataLoaded(false);
       getDataTableApi(dataTableName, locationSelectValue);
 
       setUpdateTable(false);
