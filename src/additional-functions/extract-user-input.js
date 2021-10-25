@@ -60,5 +60,7 @@ export const extractUserInput = (payload, inputSelector, radios) => {
     payload[item.name] = item.value.trim() === "" ? null : item.value.trim();
   });
 
+  console.log(payload);
+
   return payload;
 };
