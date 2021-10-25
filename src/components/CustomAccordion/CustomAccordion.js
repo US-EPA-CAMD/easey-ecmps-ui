@@ -21,7 +21,7 @@ const CustomAccordion = ({ title, table }) => {
         <div
           key={index}
           className={`${
-            item[1] != "Unit Fuels" && item[1] != "Methods"
+            item[1] !== "Unit Fuels" && item[1] !== "Methods"
               ? "float-left clearfix"
               : "clearfix"
           }`}
