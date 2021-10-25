@@ -34,10 +34,7 @@ export const DataTableUnitControl = ({
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [unitControls, setUnitControls] = useState([]);
-  const totalOptions = useRetrieveDropdownApi([
-    "controlEquipParamCode",
-    "controlCode",
-  ]);
+  const totalOptions = useRetrieveDropdownApi(["parameterCode", "controlCode"]);
   const [show, setShow] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
   useEffect(() => {
@@ -63,7 +60,7 @@ export const DataTableUnitControl = ({
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = [
-    "Parameter Code",
+    "Equipment Parameter Code",
     "Control Code",
     "Original Code",
     "Install Date",
@@ -117,7 +114,7 @@ export const DataTableUnitControl = ({
       modalViewData(
         unitControl,
         {
-          parameterCode: ["Parameter Code", "dropdown", ""],
+          parameterCode: ["Equipment Parameter Code", "dropdown", ""],
           controlCode: ["Control Code", "dropdown", ""],
           originalCode: ["Original Code", "radio", ""],
           seasonalControlsIndicator: [
