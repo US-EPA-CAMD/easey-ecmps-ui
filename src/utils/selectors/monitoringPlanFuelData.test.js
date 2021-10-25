@@ -11,7 +11,7 @@ describe("testing monitoring plan fuel data selectors", () => {
                 unitId: "3",
                 fuelCode: "DSL",
                 indicatorCode: "S",
-                ozoneSeasonIndicator: "0",
+                ozoneSeasonIndicator: null,
                 demGCV: null,
                 demSO2: null,
                 beginDate: "1995-01-01T00:00:00.000Z",

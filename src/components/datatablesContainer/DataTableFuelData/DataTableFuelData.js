@@ -251,7 +251,7 @@ export const DataTableFuelData = ({
         openHandler={openFuelDataModal}
         actionsBtn={"View"}
         addBtn={openFuelDataModal}
-        addBtnName={"Create Fuel Data"}
+        addBtnName={"Create Unit Fuel"}
         setViewBtn={setViewBtn}
         viewBtn={viewBtn}
         setAddBtn={setAddBtn}
@@ -266,17 +266,17 @@ export const DataTableFuelData = ({
           showSave={user && checkout}
           title={
             createNewFuelData
-              ? "Create FuelData"
-              : "Component: Monitoring FuelData Methods"
+              ? "Create Unit Fuel "
+              : "Unit Fuel"
           }
-          exitBTN={createNewFuelData ? "Create Fuel Data" : `Save and Close`}
+          exitBTN={createNewFuelData ? "Create Unit Fuel" : `Save and Close`}
           children={
             <div>
               <ModalDetails
                 modalData={selectedFuelData}
                 data={selectedModalData}
                 cols={2}
-                title={"Component: Monitoring FuelData Methods"}
+                title={"Unit Fuel"}
                 viewOnly={!(user && checkout)}
               />
             </div>
