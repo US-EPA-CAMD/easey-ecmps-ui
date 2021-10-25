@@ -33,7 +33,7 @@ export const DataTableFuelData = ({
   const [dataLoaded, setDataLoaded] = useState(false);
   const [fuelData, setFuelData] = useState([]);
   const totalOptions = useRetrieveDropdownApi(
-    ["fuelCode", "indicatorCode", "demGCV", "demSO2"],
+    ["fuelType", "indicatorCode", "demGCV", "demSO2"],
     true
   );
   const [show, setShow] = useState(false);
@@ -45,25 +45,12 @@ export const DataTableFuelData = ({
       locationSelectValue ||
       revertedState
     ) {
-      if (updateTable) {
-        let timerFunc = setTimeout(() => {
-          mpApi.getMonitoringPlansFuelDataRecords(selectedLocation).then((res) => {
-            setFuelData(res.data);
-            setDataLoaded(true);
-            setUpdateTable(false);
-          });
-
-          setRevertedState(false);
-        }, [1000]);
-        return () => clearTimeout(timerFunc);
-      }
       mpApi.getMonitoringPlansFuelDataRecords(selectedLocation).then((res) => {
         setFuelData(res.data);
         setDataLoaded(true);
         setUpdateTable(false);
+        setRevertedState(false);
       });
-
-      setRevertedState(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
@@ -71,7 +58,7 @@ export const DataTableFuelData = ({
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = [
-    "Fuel Code",
+    "Fuel Type",
     "Indicator Code",
     "Ozone Season Indicator",
     "Dem GCV",
@@ -140,19 +127,21 @@ export const DataTableFuelData = ({
   };
 
   const saveFuelData = () => {
-    const userInput = extractUserInput(payload, ".modalUserInput");
-    console.log(payload);
+    var radioName = ["ozoneSeasonIndicator"];
+    const userInput = extractUserInput(payload, ".modalUserInput", radioName);
+
     mpApi
       .saveMonitoringPlansFuelData(userInput)
       .then((result) => {
         setShow(false);
+        setDataLoaded(false);
+        setUpdateTable(true);
       })
       .catch((error) => {
         setShow(false);
       });
-
-    setUpdateTable(true);
   };
+
   const createFuelData = () => {
     var radioName = "ozoneSeasonIndicator";
     const userInput = extractUserInput(payload, ".modalUserInput", radioName);
@@ -160,11 +149,12 @@ export const DataTableFuelData = ({
       .createFuelData(userInput)
       .then((result) => {
         setShow(false);
+        setDataLoaded(false);
+        setUpdateTable(true);
       })
       .catch((error) => {
         setShow(false);
       });
-    setUpdateTable(true);
   };
 
   const [createNewFuelData, setCreateNewFuelData] = useState(false);
@@ -183,7 +173,7 @@ export const DataTableFuelData = ({
       modalViewData(
         unitFuelData,
         {
-          fuelCode: ["Fuel Code", "dropdown", ""],
+          fuelCode: ["Fuel Type", "dropdown", ""],
           indicatorCode: ["Indicator Code", "dropdown", ""],
           ozoneSeasonIndicator: ["Ozone Season Indicator", "radio", ""],
           demGCV: ["Dem GCV", "dropdown", ""],
@@ -261,7 +251,7 @@ export const DataTableFuelData = ({
         openHandler={openFuelDataModal}
         actionsBtn={"View"}
         addBtn={openFuelDataModal}
-        addBtnName={"Create Fuel Data"}
+        addBtnName={"Create Unit Fuel"}
         setViewBtn={setViewBtn}
         viewBtn={viewBtn}
         setAddBtn={setAddBtn}
@@ -276,17 +266,17 @@ export const DataTableFuelData = ({
           showSave={user && checkout}
           title={
             createNewFuelData
-              ? "Create FuelData"
-              : "Component: Monitoring FuelData Methods"
+              ? "Create Unit Fuel "
+              : "Unit Fuel"
           }
-          exitBTN={createNewFuelData ? "Create Fuel Data" : `Save and Close`}
+          exitBTN={createNewFuelData ? "Create Unit Fuel" : `Save and Close`}
           children={
             <div>
               <ModalDetails
                 modalData={selectedFuelData}
                 data={selectedModalData}
                 cols={2}
-                title={"Component: Monitoring FuelData Methods"}
+                title={"Unit Fuel"}
                 viewOnly={!(user && checkout)}
               />
             </div>
