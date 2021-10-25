@@ -1,13 +1,18 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
-import * as fs from "../../../utils/selectors/monitoringPlanMethods";
+import * as fs from "../../../utils/selectors/monitoringPlanFuelData";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
+
+import {
+  getActiveData,
+  getInactiveData,
+} from "../../../additional-functions/filter-data";
 
 import {
   attachChangeEventListeners,
@@ -19,14 +24,16 @@ export const DataTableFuelData = ({
   locationSelectValue,
   user,
   checkout,
+  inactive,
+  settingInactiveCheckBox,
   revertedState,
   setRevertedState,
   selectedLocation,
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [fuelDataMethods, setFuelDataMethods] = useState([]);
+  const [fuelData, setFuelData] = useState([]);
   const totalOptions = useRetrieveDropdownApi(
-    ["parameterCode", "monitoringMethodCode"],
+    ["fuelCode", "indicatorCode", "demGCV", "demSO2"],
     true
   );
   const [show, setShow] = useState(false);
@@ -34,19 +41,33 @@ export const DataTableFuelData = ({
   useEffect(() => {
     if (
       updateTable ||
-      fuelDataMethods.length <= 0 ||
+      fuelData.length <= 0 ||
       locationSelectValue ||
       revertedState
     ) {
+      if (updateTable) {
+        let timerFunc = setTimeout(() => {
+          mpApi.getMonitoringPlansFuelDataRecords(selectedLocation).then((res) => {
+            setFuelData(res.data);
+            setDataLoaded(true);
+            setUpdateTable(false);
+          });
+
+          setRevertedState(false);
+        }, [1000]);
+        return () => clearTimeout(timerFunc);
+      }
       mpApi.getMonitoringPlansFuelDataRecords(selectedLocation).then((res) => {
-        setFuelDataMethods(res.data);
+        setFuelData(res.data);
         setDataLoaded(true);
+        setUpdateTable(false);
       });
-      setUpdateTable(false);
+
+      setRevertedState(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
-  const [selectedFuelDataMethods, setSelectedFuelDataMethods] = useState(null);
+  const [selectedFuelData, setSelectedFuelData] = useState(null);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = [
@@ -60,23 +81,47 @@ export const DataTableFuelData = ({
   ];
 
   const payload = {
-    locationId: locationSelectValue,
+    locationId: selectedLocation["id"],
+    unitRecordId: selectedLocation["unitRecordId"],
     id: null,
-    supplementalFuelDataMonitoringMethodCode: null,
-    supplementalFuelDataParameterCode: null,
+    fuelCode: null,
+    indicatorCode: null,
+    ozoneSeasonIndicator: 0,
+    demGCV: null,
+    demSO2: null,
     beginDate: null,
-    beginHour: 0,
-    endDate: null,
-    endHour: 0,
+    endDate: null
   };
   const data = useMemo(() => {
-    if (fuelDataMethods.length > 0) {
-      return fs.getMonitoringPlansFuelDataRecords(fuelDataMethods);
+    if (fuelData.length > 0) {
+      const activeOnly = getActiveData(fuelData);
+      const inactiveOnly = getInactiveData(fuelData);
+
+      // only active data >  disable checkbox and unchecks it
+      if (activeOnly.length === fuelData.length) {
+        // uncheck it and disable checkbox
+        //function parameters ( check flag, disable flag )
+        settingInactiveCheckBox(false, true);
+        return fs.getMonitoringPlansFuelDataRecords(fuelData);
+      }
+
+      // only inactive data > disables checkbox and checks it
+      if (inactiveOnly.length === fuelData.length) {
+        //check it and disable checkbox
+        settingInactiveCheckBox(true, true);
+        return fs.getMonitoringPlansFuelDataRecords(fuelData);
+
+      }
+      // resets checkbox
+      settingInactiveCheckBox(inactive[0], false);
+      return fs.getMonitoringPlansFuelDataRecords(
+        !inactive[0] ? getActiveData(fuelData) : fuelData
+      );
     }
     return [];
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fuelDataMethods]);
+  }, [fuelData, inactive]);
   const testing = () => {
     openFuelDataModal(false, false, true);
     saveFuelData();
@@ -96,6 +141,7 @@ export const DataTableFuelData = ({
 
   const saveFuelData = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
+    console.log(payload);
     mpApi
       .saveMonitoringPlansFuelData(userInput)
       .then((result) => {
@@ -108,7 +154,8 @@ export const DataTableFuelData = ({
     setUpdateTable(true);
   };
   const createFuelData = () => {
-    const userInput = extractUserInput(payload, ".modalUserInput");
+    var radioName = "ozoneSeasonIndicator";
+    const userInput = extractUserInput(payload, ".modalUserInput", radioName);
     mpApi
       .createFuelData(userInput)
       .then((result) => {
@@ -124,30 +171,27 @@ export const DataTableFuelData = ({
   const [selectedModalData, setSelectedModalData] = useState(null);
 
   const openFuelDataModal = (row, bool, create) => {
-    let fuelData = null;
+    let unitFuelData = null;
     setCreateNewFuelData(create);
-    if (fuelDataMethods.length > 0 && !create) {
-      fuelData = fuelDataMethods.filter(
-        (element) => element.id === row.col5
+    if (fuelData.length > 0 && !create) {
+      unitFuelData = fuelData.filter(
+        (element) => element.id === row[`col${Object.keys(row).length - 1}`]
       )[0];
-      setSelectedFuelDataMethods(fuelData);
+      setSelectedFuelData(unitFuelData);
     }
     setSelectedModalData(
       modalViewData(
-        fuelData,
+        unitFuelData,
         {
-          supplementalFuelDataParameterCode: ["Parameter", "dropdown", ""],
-          supplementalFuelDataMonitoringMethodCode: [
-            "Methodology",
-            "dropdown",
-            "",
-          ],
+          fuelCode: ["Fuel Code", "dropdown", ""],
+          indicatorCode: ["Indicator Code", "dropdown", ""],
+          ozoneSeasonIndicator: ["Ozone Season Indicator", "radio", ""],
+          demGCV: ["Dem GCV", "dropdown", ""],
+          demSO2: ["Dem SO2", "dropdown", ""],
         },
         {
           beginDate: ["Start Date", "date", ""],
-          beginHour: ["Start Time", "time", ""],
           endDate: ["End Date", "date", ""],
-          endHour: ["End Time", "time", ""],
         },
         create,
         totalOptions
@@ -239,7 +283,7 @@ export const DataTableFuelData = ({
           children={
             <div>
               <ModalDetails
-                modalData={selectedFuelDataMethods}
+                modalData={selectedFuelData}
                 data={selectedModalData}
                 cols={2}
                 title={"Component: Monitoring FuelData Methods"}

@@ -18,7 +18,14 @@ const CustomAccordion = ({ title, table }) => {
   return (
     <div className="">
       {table.map((item, index) => (
-        <div key={index} className="float-left clearfix">
+        <div
+          key={index}
+          className={`${
+            item[1] !== "Unit Fuels" && item[1] !== "Methods"
+              ? "float-left clearfix"
+              : "clearfix"
+          }`}
+        >
           {open[index] ? (
             <div className="text-bold font-body-xl display-block height-auto">
               <Button

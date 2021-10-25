@@ -101,7 +101,10 @@ export const modalViewData = (
       y === "loadAnalysisDate" ||
       y === "wafEndDate" ||
       y === "wafBeginDate" ||
-      y === "wafDeterminationDate"
+      y === "wafDeterminationDate" ||
+      y === "installDate" ||
+      y === "optimizationDate" ||
+      y === "retireDate"
     ) {
       let formattedDate = "";
       if (!createNew) {
@@ -135,7 +138,7 @@ export const modalViewData = (
         createNew ? "" : selected[y],
       ]);
     }
-    if( y === "skip"){
+    if (y === "skip") {
       arr.push([[], [], [], "", "skip"]);
     }
   }

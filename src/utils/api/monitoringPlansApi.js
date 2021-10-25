@@ -507,10 +507,10 @@ export const getMonitoringPlansFuelDataRecords = async (selectedLocation) => {
 };
 
 export const saveMonitoringPlansFuelData = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/duct-wafs/${payload["id"]}`;
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/unit-fuels/${payload["id"]}`;
   // *** remove attributes not needed by the API
 
-  console.log("tesitng save", payload["locationId"], payload["id"]);
+  console.log("testing save", payload["locationId"], payload["id"]);
   return secureAxios({
     method: "PUT",
     url: url,
@@ -521,7 +521,7 @@ export const saveMonitoringPlansFuelData = async (payload) => {
 };
 
 export const createFuelData = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/duct-wafs/`;
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/units/${payload["unitRecordId"]}/unit-fuels`;
 
   // *** remove attributes not needed by the API
   delete payload["id"];
@@ -549,11 +549,9 @@ export const getMonitoringPlansUnitControlRecords = async (
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const saveMonitoringPlansUnitControl = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/duct-wafs/${payload["id"]}`;
+export const saveUnitControl = async (payload, urlParameters) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}/unit-controls/${urlParameters["unitControlId"]}`;
   // *** remove attributes not needed by the API
-
-  console.log("tesitng save", payload["locationId"], payload["id"]);
   return secureAxios({
     method: "PUT",
     url: url,
@@ -563,8 +561,8 @@ export const saveMonitoringPlansUnitControl = async (payload) => {
     .catch(handleError);
 };
 
-export const createUnitControl = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/duct-wafs/`;
+export const createUnitControl = async (payload, urlParameters) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}/unit-controls`;
 
   // *** remove attributes not needed by the API
   delete payload["id"];
@@ -578,7 +576,6 @@ export const createUnitControl = async (payload) => {
     .catch(handleError);
 };
 
-
 export const saveMonitoringFormulas = async (payload, locID) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${locID}/formulas/${payload["id"]}`;
   // *** remove attributes not needed by the API
@@ -591,8 +588,8 @@ export const saveMonitoringFormulas = async (payload, locID) => {
     .catch(handleError);
 };
 
-export const createMonitoringFormulas = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/formulas/`;
+export const createMonitoringFormulas = async (payload, locID) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${locID}/formulas/`;
 
   // *** remove attributes not needed by the API
   delete payload["id"];
