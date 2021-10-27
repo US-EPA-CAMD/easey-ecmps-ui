@@ -1,11 +1,11 @@
 import { useState } from "react";
 import * as dmApi from "../utils/api/dataManagementApi";
-export const useRetrieveDropdownApi = (arr, mats = false) => {
+export const useRetrieveDropdownApi = (dropDownFields, mats = false) => {
   const [totalOptions, setTotalOptions] = useState({});
-  // useEffect(() => {
-  for (const x of arr) {
+
+  for (const fieldName of dropDownFields) {
     let options = [];
-    switch (x) {
+    switch (fieldName) {
       case "parameterCode":
         if (mats) {
           dmApi.getAllMatsParameterCodes().then((response) => {
@@ -16,12 +16,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
               };
             });
 
-            options.unshift({ code: "", name: "" });
-
-            options.unshift({ code: "select", name: "-- Select a value --" });
-            const newData = totalOptions;
-            newData["supplementalMATSParameterCode"] = options;
-            setTotalOptions(newData);
+            setDefaultOptions(options, "supplementalMATSParameterCode");
           });
         } else {
           dmApi.getAllParameterCodes().then((response) => {
@@ -32,12 +27,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
               };
             });
 
-            options.unshift({ code: "", name: "" });
-            options.unshift({ code: "select", name: "-- Select a value --" });
-            const newData = totalOptions;
-            newData[x] = options;
-
-            setTotalOptions(newData);
+            setDefaultOptions(options, fieldName);
           });
         }
         break;
@@ -50,13 +40,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData["parameterCode"] = options;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, "parameterCode");
         });
         break;
 
@@ -70,11 +54,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
               };
             });
 
-            options.unshift({ code: "", name: "" });
-            options.unshift({ code: "select", name: "-- Select a value --" });
-            const newData = totalOptions;
-            newData["supplementalMATSMonitoringMethodCode"] = options;
-            setTotalOptions(newData);
+            setDefaultOptions(options, "supplementalMATSMonitoringMethodCode");
           });
         } else {
           dmApi.getAllMethodCodes().then((response) => {
@@ -85,12 +65,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
               };
             });
 
-            options.unshift({ code: "", name: "" });
-            options.unshift({ code: "select", name: "-- Select a value --" });
-            const newData = totalOptions;
-            newData[x] = options;
-
-            setTotalOptions(newData);
+            setDefaultOptions(options, fieldName);
           });
         }
         break;
@@ -103,17 +78,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({
-            code: "select",
-            name: "-- Select a value --",
-          });
-          const data = {};
-          data[x] = options;
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
 
@@ -126,15 +91,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({
-            code: "select",
-            name: "-- Select a value --",
-          });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
       //Analyzer Range
@@ -146,12 +103,8 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
               name: option["analyzerRangeCodeDescription"],
             };
           });
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
 
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
       // System Fuel Flows
@@ -164,12 +117,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "defaultUnitsOfMeasureCode":
@@ -184,12 +132,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
 
@@ -202,13 +145,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData["fuelCode"] = options;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, "fuelCode");
         });
         break;
 
@@ -221,12 +158,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "indicatorCode":
@@ -238,12 +170,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "demGCV":
@@ -255,12 +182,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "demSO2":
@@ -272,12 +194,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "systemTypeCode":
@@ -289,12 +206,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "systemDesignationCode":
@@ -306,12 +218,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
 
@@ -324,12 +231,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "componentTypeCode":
@@ -341,12 +243,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "basisCode":
@@ -358,12 +255,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
       // for spans
@@ -377,12 +269,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "spanMethodCode":
@@ -394,12 +281,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "normalLevelCode":
@@ -412,12 +294,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
 
@@ -432,12 +309,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "defaultSourceCode":
@@ -449,12 +321,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "defaultPurposeCode":
@@ -466,12 +333,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "formulaCode":
@@ -483,12 +345,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
 
@@ -501,12 +358,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "controlCode":
@@ -518,19 +370,23 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          options.unshift({ code: "", name: "" });
-          options.unshift({ code: "select", name: "-- Select a value --" });
-          const newData = totalOptions;
-          newData[x] = options;
-
-          setTotalOptions(newData);
+          setDefaultOptions(options, fieldName);
         });
         break;
       default:
         break;
     }
   }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+
+  const setDefaultOptions = (items, field) => {
+    items.unshift({ code: "", name: "-- Select a value --" });
+    const newData = totalOptions;
+    newData[field] = items;
+
+    setTotalOptions(newData);
+  }
+
   return totalOptions;
 };
+
+
