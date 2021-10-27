@@ -1,11 +1,11 @@
 import { useState } from "react";
 import * as dmApi from "../utils/api/dataManagementApi";
-export const useRetrieveDropdownApi = (arr, mats = false) => {
+export const useRetrieveDropdownApi = (dropDownFields, mats = false) => {
   const [totalOptions, setTotalOptions] = useState({});
-  // useEffect(() => {
-  for (const x of arr) {
+
+  for (const fieldName of dropDownFields) {
     let options = [];
-    switch (x) {
+    switch (fieldName) {
       case "parameterCode":
         if (mats) {
           dmApi.getAllMatsParameterCodes().then((response) => {
@@ -27,7 +27,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
               };
             });
 
-            setDefaultOptions(options, x);
+            setDefaultOptions(options, fieldName);
           });
         }
         break;
@@ -65,7 +65,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
               };
             });
 
-            setDefaultOptions(options, x);
+            setDefaultOptions(options, fieldName);
           });
         }
         break;
@@ -78,7 +78,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
 
@@ -91,7 +91,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
       //Analyzer Range
@@ -104,7 +104,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
       // System Fuel Flows
@@ -117,7 +117,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "defaultUnitsOfMeasureCode":
@@ -132,7 +132,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
 
@@ -158,7 +158,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "indicatorCode":
@@ -170,7 +170,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "demGCV":
@@ -182,7 +182,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "demSO2":
@@ -194,7 +194,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "systemTypeCode":
@@ -206,7 +206,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "systemDesignationCode":
@@ -218,7 +218,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
 
@@ -231,7 +231,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "componentTypeCode":
@@ -243,7 +243,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "basisCode":
@@ -255,7 +255,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
       // for spans
@@ -269,7 +269,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "spanMethodCode":
@@ -281,7 +281,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "normalLevelCode":
@@ -294,7 +294,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
 
@@ -309,7 +309,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "defaultSourceCode":
@@ -321,7 +321,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "defaultPurposeCode":
@@ -333,7 +333,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "formulaCode":
@@ -345,7 +345,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
 
@@ -358,7 +358,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
       case "controlCode":
@@ -370,7 +370,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, x);
+          setDefaultOptions(options, fieldName);
         });
         break;
       default:
@@ -385,8 +385,7 @@ export const useRetrieveDropdownApi = (arr, mats = false) => {
 
     setTotalOptions(newData);
   }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+
   return totalOptions;
 };
 
