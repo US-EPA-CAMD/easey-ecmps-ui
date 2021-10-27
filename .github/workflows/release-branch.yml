@@ -43,7 +43,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.ARTIFACTS_STORAGE_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.ARTIFACTS_STORAGE_SECRET_ACCESS_KEY }}
-  Test-Deploynent:
+  Test-Deployment:
     needs: Build-Test-Package
     runs-on: ubuntu-latest
     environment:
@@ -78,7 +78,7 @@ jobs:
       - name: Deployment
         run: |
           devops/scripts/deploy.sh
-  Beta-Deploynent:
+  Beta-Deployment:
     needs: Build-Test-Package
     runs-on: ubuntu-latest
     environment:
@@ -103,8 +103,8 @@ jobs:
       - name: Login to cloud.gov
         run: devops/scripts/cf-login.sh
         env:
-          CF_USERNAME: ${{ secrets.CF_TST_DEPLOYMENT_SVC }}
-          CF_PASSWORD: ${{ secrets.CF_TST_DEPLOYMENT_SVC_PWD }}
+          CF_USERNAME: ${{ secrets.CF_BETA_DEPLOYMENT_SVC }}
+          CF_PASSWORD: ${{ secrets.CF_BETA_DEPLOYMENT_SVC_PWD }}
       - name: Download Deployment Package
         run: devops/scripts/download-artifact.sh
         env:
