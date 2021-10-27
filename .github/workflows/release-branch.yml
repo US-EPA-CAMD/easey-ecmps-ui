@@ -78,6 +78,41 @@ jobs:
       - name: Deployment
         run: |
           devops/scripts/deploy.sh
+  Beta-Deploynent:
+    needs: Build-Test-Package
+    runs-on: ubuntu-latest
+    environment:
+      name: Beta
+      url: 'https://easey-beta.app.cloud.gov/ecmps'
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Checkout devops repo
+        uses: actions/checkout@v2
+        with:
+          repository: US-EPA-CAMD/devops
+          path: devops
+      - name: Configure Env Vars
+        run: devops/scripts/environment-variables-noTag.sh BETA
+        env:
+          ENV_VAR_PREFIX: REACT_APP_EASEY
+      - name: Install cf cli
+        run: devops/scripts/install-cf-cli.sh
+      - name: Login to cloud.gov
+        run: devops/scripts/cf-login.sh
+        env:
+          CF_USERNAME: ${{ secrets.CF_TST_DEPLOYMENT_SVC }}
+          CF_PASSWORD: ${{ secrets.CF_TST_DEPLOYMENT_SVC_PWD }}
+      - name: Download Deployment Package
+        run: devops/scripts/download-artifact.sh
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.ARTIFACTS_STORAGE_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.ARTIFACTS_STORAGE_SECRET_ACCESS_KEY }}
+      - name: Deployment
+        run: |
+          devops/scripts/deploy.sh
   Staging-Deployment:
     needs: Test-Deploynent
     runs-on: ubuntu-latest
