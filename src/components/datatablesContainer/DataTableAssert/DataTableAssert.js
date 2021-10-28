@@ -1,9 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
+
+// selectors that normalize api data to fit the columns in UI datatable
 import * as loadSelector from "../../../utils/selectors/monitoringPlanLoads";
 import * as wafSelector from "../../../utils/selectors/monitoringPlanRectangularDucts";
 import * as spanSelector from "../../../utils/selectors/monitoringPlanSpans";
 import * as formulaSelector from "../../../utils/selectors/monitoringPlanFormulas";
 import * as defaultSelector from "../../../utils/selectors/monitoringPlanDefaults";
+import * as unitFuelSelector from "../../../utils/selectors/monitoringPlanFuelData";
+import * as unitControlSelector from "../../../utils/selectors/monitoringPlanUnitControls";
 
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
@@ -40,9 +44,11 @@ export const DataTableAssert = ({
   controlDatePickerInputs,
   radioName,
   payload,
+  urlParameters,
   columnNames,
   dropdownArray,
   dataTableName,
+  selectedLocation,
   showModal = false,
 }) => {
   const [dataPulled, setDataPulled] = useState([]);
@@ -51,7 +57,10 @@ export const DataTableAssert = ({
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [dataApi, setDataApi] = useState({});
-  const totalOptions = useRetrieveDropdownApi(dropdownArray);
+  const totalOptions = useRetrieveDropdownApi(
+    dropdownArray[0],
+    dropdownArray.length > 1 ? dropdownArray[1] : null
+  );
   const [updateTable, setUpdateTable] = useState(false);
   useEffect(() => {
     if (
@@ -105,6 +114,28 @@ export const DataTableAssert = ({
             setDataLoaded(true);
           });
           break;
+
+        case "Unit Fuel":
+          mpApi
+            .getMonitoringPlansFuelDataRecords(
+              selectedLocation ? selectedLocation : location
+            )
+            .then((res) => {
+              setDataPulled(res.data);
+              setDataLoaded(true);
+            });
+          break;
+
+        case "Unit Control":
+          mpApi
+            .getMonitoringPlansUnitControlRecords(
+              selectedLocation ? selectedLocation : location
+            )
+            .then((res) => {
+              setDataPulled(res.data);
+              setDataLoaded(true);
+            });
+          break;
         default:
           break;
       }
@@ -114,8 +145,6 @@ export const DataTableAssert = ({
   };
 
   const getDataTableRecords = (dataIn, name) => {
-    let options = [];
-
     switch (name) {
       case "Load":
         return loadSelector.getMonitoringPlansLoadsTableRecords(dataIn);
@@ -129,10 +158,183 @@ export const DataTableAssert = ({
         return formulaSelector.getMonitoringPlansFormulasTableRecords(dataIn);
       case "Default":
         return defaultSelector.getMonitoringPlansDefaultsTableRecords(dataIn);
+      case "Unit Fuel":
+        return unitFuelSelector.getMonitoringPlansFuelDataRecords(dataIn);
+
+      case "Unit Control":
+        return unitControlSelector.getMonitoringPlansUnitControlRecords(dataIn);
       default:
         break;
     }
   };
+
+  const saveData = () => {
+    const userInput = extractUserInput(
+      payload,
+      ".modalUserInput",
+      radioName ? radioName : null
+    );
+
+    switch (dataTableName) {
+      case "Load":
+        mpApi
+          .saveMonitoringLoads(userInput)
+          .then((result) => {
+            console.log(result, " was saved");
+          })
+          .catch((error) => {
+            console.log("error is", error);
+          });
+        break;
+      case "Rectangular Duct WAF":
+        mpApi
+          .saveMonitoringDuct(userInput)
+
+          .catch((error) => {
+            console.log("error is", error);
+          });
+        break;
+      case "Span":
+        mpApi
+          .saveMonitoringSpans(userInput)
+          .then((result) => {
+            console.log(result, " was saved");
+          })
+          .catch((error) => {
+            console.log("error is", error);
+          });
+        break;
+      case "Formula":
+        mpApi
+          .saveMonitoringFormulas(userInput, locationSelectValue)
+          .then((result) => {
+            console.log(result, " was saved");
+          })
+          .catch((error) => {
+            console.log("error is", error);
+          });
+        break;
+      case "Default":
+        mpApi
+          .saveMonitoringDefaults(userInput, locationSelectValue)
+          .then((result) => {
+            console.log(result, " was saved");
+          })
+          .catch((error) => {
+            console.log("error is", error);
+          });
+        break;
+      case "Unit Fuel":
+        mpApi
+          .saveMonitoringPlansFuelData(userInput)
+          .then((result) => {
+            console.log(result, " was saved");
+          })
+          .catch((error) => {
+            console.log("error is", error);
+          });
+        break;
+      case "Unit Control":
+        mpApi
+          .saveUnitControl(userInput, urlParameters ? urlParameters : null)
+          .then((result) => {
+            console.log(result, " was saved");
+          })
+          .catch((error) => {
+            console.log("error is", error);
+          });
+        break;
+      default:
+        break;
+    }
+    setShow(false);
+    setUpdateTable(true);
+  };
+
+  const createData = () => {
+    const userInput = extractUserInput(
+      payload,
+      ".modalUserInput",
+      radioName ? radioName : null
+    );
+
+    switch (dataTableName) {
+      case "Load":
+        mpApi
+          .createMonitoringLoads(userInput)
+          .then((result) => {
+            console.log(result, " was created");
+          })
+          .catch((error) => {
+            console.log("error is", error);
+          });
+        break;
+      case "Rectangular Duct WAF":
+        mpApi.createMonitoringDuct(userInput).catch((error) => {
+          console.log("error is", error);
+        });
+        break;
+
+      case "Span":
+        mpApi
+          .createMonitoringSpans(userInput)
+          .then((result) => {
+            console.log(result, " was created");
+          })
+          .catch((error) => {
+            console.log("error is", error);
+          });
+        break;
+      case "Formula":
+        mpApi
+          .createMonitoringFormulas(userInput, locationSelectValue)
+          .then((result) => {
+            console.log(result, " was created");
+          })
+          .catch((error) => {
+            console.log("error is", error);
+          });
+        break;
+
+      case "Default":
+        mpApi
+          .createMonitoringDefaults(userInput, locationSelectValue)
+          .then((result) => {
+            console.log(result, " was created");
+          })
+          .catch((error) => {
+            console.log("error is", error);
+          });
+        break;
+
+      case "Unit Fuel":
+        mpApi
+          .createFuelData(userInput, locationSelectValue)
+          .then((result) => {
+            console.log(result, " was created");
+          })
+          .catch((error) => {
+            console.log("error is", error);
+          });
+        break;
+
+      case "Unit Control":
+        mpApi
+          .createUnitControl(userInput, urlParameters ? urlParameters : null)
+          .then((result) => {
+            console.log(result, " was created");
+          })
+          .catch((error) => {
+            console.log("error is", error);
+          });
+        break;
+      default:
+        break;
+    }
+    setShow(false);
+    setUpdateTable(true);
+  };
+
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
 
@@ -230,131 +432,6 @@ export const DataTableAssert = ({
   const testing3 = () => {
     openModal(false, false, true);
     createData();
-  };
-
-  const saveData = () => {
-    const userInput = extractUserInput(
-      payload,
-      ".modalUserInput",
-      radioName ? radioName : null
-    );
-
-    switch (dataTableName) {
-      case "Load":
-        mpApi
-          .saveMonitoringLoads(userInput)
-          .then((result) => {
-            console.log(result, " was saved");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-      case "Rectangular Duct WAF":
-        mpApi
-          .saveMonitoringDuct(userInput)
-
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-      case "Span":
-        mpApi
-          .saveMonitoringSpans(userInput)
-          .then((result) => {
-            console.log(result, " was saved");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-      case "Formula":
-        mpApi
-          .saveMonitoringFormulas(userInput, locationSelectValue)
-          .then((result) => {
-            console.log(result, " was saved");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-      case "Default":
-        mpApi
-          .saveMonitoringDefaults(userInput, locationSelectValue)
-          .then((result) => {
-            console.log(result, " was saved");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-      default:
-        break;
-    }
-    setShow(false);
-    setUpdateTable(true);
-  };
-
-  const createData = () => {
-    const userInput = extractUserInput(
-      payload,
-      ".modalUserInput",
-      radioName ? radioName : null
-    );
-
-    switch (dataTableName) {
-      case "Load":
-        mpApi
-          .createMonitoringLoads(userInput)
-          .then((result) => {
-            console.log(result, " was created");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-      case "Rectangular Duct WAF":
-        mpApi.createMonitoringDuct(userInput).catch((error) => {
-          console.log("error is", error);
-        });
-        break;
-
-      case "Span":
-        mpApi
-          .createMonitoringSpans(userInput)
-          .then((result) => {
-            console.log(result, " was created");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-      case "Formula":
-        mpApi
-          .createMonitoringFormulas(userInput, locationSelectValue)
-          .then((result) => {
-            console.log(result, " was created");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-
-      case "Default":
-        mpApi
-          .createMonitoringDefaults(userInput, locationSelectValue)
-          .then((result) => {
-            console.log(result, " was created");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-      default:
-        break;
-    }
-    setShow(false);
-    setUpdateTable(true);
   };
 
   return (

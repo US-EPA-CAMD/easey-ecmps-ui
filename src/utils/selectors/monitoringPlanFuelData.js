@@ -7,10 +7,13 @@ export const getMonitoringPlansFuelDataRecords = (totalData) => {
             ? formatStringToDate(el.beginDate.toString())
             : "";
         const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
+
+        const ozoneSeasonIndicator = el.ozoneSeasonIndicator === "1" ? "Yes" : "No";
+
         records.push({
             col1: el.fuelCode,
             col2: el.indicatorCode,
-            col3: el.ozoneSeasonIndicator,
+            col3: `${ozoneSeasonIndicator}`,
             col4: el.demGCV,
             col5: el.demSO2,
             col6: `${beginDate}`,

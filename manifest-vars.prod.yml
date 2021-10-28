@@ -1,4 +1,5 @@
 host: easey.app.cloud.gov
+apiHost: api.epa.gov/easey
 environment: production
 memory: 2048M
 inactivityDurationCheckoutMinutes: 20

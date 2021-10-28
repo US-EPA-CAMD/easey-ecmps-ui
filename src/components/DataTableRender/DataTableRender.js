@@ -463,7 +463,7 @@ export const DataTableRender = ({
                   <Button
                     type="button"
                     // test-id={tableTitle? `btnAdd${tableTitle.split(" ").join("")}`: `${sectionTitle.split(" ").join("")}`}
-                    className="float-left clearfix margin-right-3"
+                    className={"float-left clearfix margin-right-3"}
                     outline="true"
                     color="black"
                     onClick={(event) => {

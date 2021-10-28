@@ -12,6 +12,15 @@ import DataTableDefaults from "../datatablesContainer/DataTableDefaults/DataTabl
 import DataTableFuelData from "../datatablesContainer/DataTableFuelData/DataTableFuelData";
 import DataTableUnitControl from "../datatablesContainer/DataTableUnitControl/DataTableUnitControl";
 import DataTableAssert from "../datatablesContainer/DataTableAssert/DataTableAssert";
+import {
+  spanDataTableProps,
+  formulasDataTableProps,
+  defaultsDataTableProps,
+  loadsDataTableProps,
+  rectWAFsDataTableProps,
+  unitControlDataTableProps,
+  unitFuelDataTableProps,
+} from "../../additional-functions/dataTable-props";
 
 export const MonitoringPlanTabRender = ({
   resetTimer,
@@ -56,57 +65,27 @@ export const MonitoringPlanTabRender = ({
             settingInactiveCheckBox={settingInactiveCheckBox}
             checkout={checkout}
             user={user}
-            payload={{
-              id: null,
-             
-              parameterCode: "string",
-              defaultValue: "0",
-              defaultUnitsOfMeasureCode: "string",
-              defaultPurposeCode: "string",
-              fuelCode: null,
-              operatingConditionCode: "string",
-              defaultSourceCode: null,
-              groupId: null,
-              beginDate: null,
-              beginHour: null,
-              endDate: null,
-              endHour: null,
-            }}
-            dropdownArray={[
-              "parameterCode",
-              "defaultUnitsOfMeasureCode",
-              "fuelCode",
-              "operatingConditionCode",
-              "defaultSourceCode",
-              "defaultPurposeCode",
-            ]}
-            columnNames={[
-              "Parameter Code",
-              "Units of Measure",
-              "Purpose",
-              "Fuel Code",
-              "Operating Condition",
-              "Source of Value",
-              "Begin Date and Time",
-              "End Date and Time",
-            ]}
-            controlInputs={{
-              parameterCode: ["Parameter", "dropdown", ""],
-              defaultValue: ["Default Value", "input", ""],
-              defaultUnitsOfMeasureCode: ["Units of Measure", "dropdown", ""],
-              defaultPurposeCode: ["Purpose", "dropdown", ""],
-              fuelCode: ["Fuel Code", "dropdown", ""],
-              operatingConditionCode: ["Operating Condition", "dropdown", ""],
-              defaultSourceCode: ["Source of Value", "dropdown", ""],
-              groupId: ["Group ID", "input", ""],
-              // skip: ["", "skip", ""],
-            }}
-            controlDatePickerInputs={{
-              beginDate: ["Start Date", "date", ""],
-              beginHour: ["Start Time", "time", ""],
-              endDate: ["End Date", "date", ""],
-              endHour: ["End Time", "time", ""],
-            }}
+            payload={
+              defaultsDataTableProps(parseInt(locationSelect[1]))["payload"]
+            }
+            dropdownArray={
+              defaultsDataTableProps(parseInt(locationSelect[1]))[
+                "dropdownArray"
+              ]
+            }
+            columnNames={
+              defaultsDataTableProps(parseInt(locationSelect[1]))["columnNames"]
+            }
+            controlInputs={
+              defaultsDataTableProps(parseInt(locationSelect[1]))[
+                "controlInputs"
+              ]
+            }
+            controlDatePickerInputs={
+              defaultsDataTableProps(parseInt(locationSelect[1]))[
+                "controlDatePickerInputs"
+              ]
+            }
             dataTableName={"Default"}
             revertedState={revertedState}
             setRevertedState={setRevertedState}
@@ -122,37 +101,27 @@ export const MonitoringPlanTabRender = ({
             settingInactiveCheckBox={settingInactiveCheckBox}
             checkout={checkout}
             user={user}
-            payload={{
-              formulaId: "string",
-              parameterCode: "string",
-              formulaCode: "string",
-              formulaText: "string",
-              beginDate: "2021-10-21T17:12:00.643Z",
-              beginHour: 0,
-              endDate: "2021-10-21T17:12:00.643Z",
-              endHour: 0,
-            }}
-            dropdownArray={["parameterCode", "formulaCode"]}
-            columnNames={[
-              "Formula ID",
-              "Parameter",
-              "Formula Code",
-              "Formula",
-              "Begin Date and Time",
-              "End Date and Time",
-            ]}
-            controlInputs={{
-              formulaId: ["Formula ID", "input", ""],
-              parameterCode: ["Parameter", "dropdown", ""],
-              formulaCode: ["Formula Code", "dropdown", ""],
-              formulaText: ["Formula", "input", ""],
-            }}
-            controlDatePickerInputs={{
-              beginDate: ["Start Date", "date", ""],
-              beginHour: ["Start Time", "time", ""],
-              endDate: ["End Date", "date", ""],
-              endHour: ["End Time", "time", ""],
-            }}
+            payload={
+              formulasDataTableProps(parseInt(locationSelect[1]))["payload"]
+            }
+            dropdownArray={
+              formulasDataTableProps(parseInt(locationSelect[1]))[
+                "dropdownArray"
+              ]
+            }
+            columnNames={
+              formulasDataTableProps(parseInt(locationSelect[1]))["columnNames"]
+            }
+            controlInputs={
+              formulasDataTableProps(parseInt(locationSelect[1]))[
+                "controlInputs"
+              ]
+            }
+            controlDatePickerInputs={
+              formulasDataTableProps(parseInt(locationSelect[1]))[
+                "controlDatePickerInputs"
+              ]
+            }
             dataTableName={"Formula"}
             revertedState={revertedState}
             setRevertedState={setRevertedState}
@@ -168,59 +137,23 @@ export const MonitoringPlanTabRender = ({
             settingInactiveCheckBox={settingInactiveCheckBox}
             checkout={checkout}
             user={user}
-            payload={{
-              locationId: locationSelect[1],
-              id: null,
-              maximumLoadValue: 0,
-              maximumLoadUnitsOfMeasureCode: "string",
-              lowerOperationBoundary: 0,
-              upperOperationBoundary: 0,
-              normalLevelCode: "string",
-              secondLevelCode: "string",
-              secondNormalIndicator: 0,
-              loadAnalysisDate: "2021-09-16T20:55:48.806Z",
-              beginDate: "2021-09-16T20:55:48.806Z",
-              beginHour: 0,
-              endDate: "2021-09-16T20:55:48.806Z",
-              endHour: 0,
-            }}
-            dropdownArray={[
-              "maximumLoadUnitsOfMeasureCode",
-              "normalLevelCode",
-              "secondLevelCode",
-            ]}
-            columnNames={[
-              "Maximum Load Value",
-              "Maximum Load Units of Measure",
-              "Lower Operation Boundary",
-              "Upper Operation Boundary",
-              "Normal Level",
-              "Second Level",
-              "Second Normal Indicator",
-              "Load Analysis Date",
-              "Begin Date and Time",
-              "End Date and Time",
-            ]}
-            controlInputs={{
-              maximumLoadValue: ["Maximum Load Value", "input", ""],
-              maximumLoadUnitsOfMeasureCode: [
-                "Maximum Load Units of Measure",
-                "dropdown",
-                "",
-              ],
-              lowerOperationBoundary: ["Lower Operation Boundary", "input", ""],
-              upperOperationBoundary: ["Upper Operation Boundary", "input", ""],
-              normalLevelCode: ["Normal Level", "dropdown", ""],
-              secondLevelCode: ["Second Level", "dropdown", ""],
-              secondNormalIndicator: ["Second Normal Indicator", "radio", ""],
-            }}
-            controlDatePickerInputs={{
-              loadAnalysisDate: ["Load Analysis Date", "date", ""],
-              beginDate: ["Start Date", "date", ""],
-              beginHour: ["Start Time", "time", ""],
-              endDate: ["End Date", "date", ""],
-              endHour: ["End Time", "time", ""],
-            }}
+            payload={
+              loadsDataTableProps(parseInt(locationSelect[1]))["payload"]
+            }
+            dropdownArray={
+              loadsDataTableProps(parseInt(locationSelect[1]))["dropdownArray"]
+            }
+            columnNames={
+              loadsDataTableProps(parseInt(locationSelect[1]))["columnNames"]
+            }
+            controlInputs={
+              loadsDataTableProps(parseInt(locationSelect[1]))["controlInputs"]
+            }
+            controlDatePickerInputs={
+              loadsDataTableProps(parseInt(locationSelect[1]))[
+                "controlDatePickerInputs"
+              ]
+            }
             radioName="secondNormalIndicator"
             dataTableName={"Load"}
             revertedState={revertedState}
@@ -254,59 +187,27 @@ export const MonitoringPlanTabRender = ({
             settingInactiveCheckBox={settingInactiveCheckBox}
             checkout={checkout}
             user={user}
-            payload={{
-              locationId: parseInt(locationSelect[1]),
-              id: "string",
-              userId: "string",
-              addDate: "2021-10-18T07:05:11.018Z",
-              updateDate: "2021-10-18T07:05:11.018Z",
-              wafDeterminationDate: "2021-10-18T07:05:11.018Z",
-              wafBeginDate: "2021-10-18T07:05:11.018Z",
-              wafBeginHour: 0,
-              wafMethodCode: "string",
-              wafValue: 0,
-              numberOfTestRuns: 0,
-              numberOfTraversePointsWaf: 0,
-              numberOfTestPorts: 0,
-              numberOfTraversePointsRef: 0,
-              ductWidth: 0,
-              ductDepth: 0,
-              wafEndDate: "2021-10-18T07:05:11.018Z",
-              wafEndHour: 0,
-            }}
-            dropdownArray={["wafMethodCode"]}
-            columnNames={[
-              "WAF Determination Date",
-              "WAF Method",
-              "Begin Date and Time",
-              "End Date and Time",
-            ]}
-            controlInputs={{
-              wafMethodCode: ["WAF Method", "dropdown", ""],
-              wafValue: ["WAF Value", "input", ""],
-              numberOfTestRuns: ["Number of Test Runs", "input", ""],
-              numberOfTraversePointsWaf: [
-                "Number of Traverse Points WAF",
-                "input",
-                "",
-              ],
-              numberOfTestPorts: ["Number of Test Ports", "input", ""],
-              numberOfTraversePointsRef: [
-                "Number of Traverse Points Reference",
-                "input",
-                "",
-              ],
-              ductWidth: ["Duct Width", "input", ""],
-              ductDepth: ["Duct Depth", "input", ""],
-            }}
-            controlDatePickerInputs={{
-              wafDeterminationDate: ["WAF Determination Date", "date", ""],
-              skip: ["", "skip", ""],
-              wafBeginDate: ["Start Date", "date", ""],
-              wafBeginHour: ["Start Time", "time", ""],
-              wafEndDate: ["End Date", "date", ""],
-              wafEndHour: ["End Time", "time", ""],
-            }}
+            payload={
+              rectWAFsDataTableProps(parseInt(locationSelect[1]))["payload"]
+            }
+            dropdownArray={
+              rectWAFsDataTableProps(parseInt(locationSelect[1]))[
+                "dropdownArray"
+              ]
+            }
+            columnNames={
+              rectWAFsDataTableProps(parseInt(locationSelect[1]))["columnNames"]
+            }
+            controlInputs={
+              rectWAFsDataTableProps(parseInt(locationSelect[1]))[
+                "controlInputs"
+              ]
+            }
+            controlDatePickerInputs={
+              rectWAFsDataTableProps(parseInt(locationSelect[1]))[
+                "controlDatePickerInputs"
+              ]
+            }
             dataTableName={"Rectangular Duct WAF"}
             revertedState={revertedState}
             setRevertedState={setRevertedState}
@@ -324,63 +225,23 @@ export const MonitoringPlanTabRender = ({
             settingInactiveCheckBox={settingInactiveCheckBox}
             checkout={checkout}
             user={user}
-            payload={{
-              locationId: parseInt(locationSelect[1]),
-              id: null,
-              componentTypeCode: "string",
-              spanScaleCode: "string",
-              spanMethodCode: "string",
-              mecValue: 0,
-              mpcValue: 0,
-              mpfValue: 0,
-              spanValue: 0,
-              fullScaleRange: 0,
-              spanUnitsOfMeasureCode: "string",
-              scaleTransitionPoint: "string",
-              defaultHighRange: 0,
-              flowSpanValue: 0,
-              flowFullScaleRange: 0,
-              beginDate: "2021-09-16T20:55:48.806Z",
-              beginHour: 0,
-              endDate: "2021-09-16T20:55:48.806Z",
-              endHour: 0,
-            }}
-            dropdownArray={[
-              "componentTypeCode",
-              "spanScaleCode",
-              "spanMethodCode",
-              "spanUnitsOfMeasureCode",
-            ]}
-            columnNames={[
-              "Component Type",
-              "Span Scale",
-              "Span Method",
-              "Span Units of Measure",
-              "Begin Date and Time",
-              "End Date and Time",
-            ]}
-            controlInputs={{
-              componentTypeCode: ["Component Type", "dropdown", ""],
-              spanScaleCode: ["Span Scale", "dropdown", ""],
-              spanMethodCode: ["Span Method", "dropdown", ""],
-              mecValue: ["MEC Value", "input", ""],
-              mpcValue: ["MPC Value", "input", ""],
-              mpfValue: ["MPF Value", "input", ""],
-              spanValue: ["Span Value", "input", ""],
-              fullScaleRange: ["Full Scale Range", "input", ""],
-              spanUnitsOfMeasureCode: ["Span Units of Measure", "dropdown", ""],
-              scaleTransitionPoint: ["Scale Transition Point", "input", ""],
-              defaultHighRange: ["Default High Range", "input", ""],
-              flowSpanValue: ["Flow Span Value", "input", ""],
-              flowFullScaleRange: ["Flow Full Scale Range", "input", ""],
-              skip: ["", "skip", ""],
-            }}
-            controlDatePickerInputs={{
-              beginDate: ["Start Date", "date", ""],
-              beginHour: ["Start Time", "time", ""],
-              endDate: ["End Date", "date", ""],
-              endHour: ["End Time", "time", ""],
-            }}
+            payload={
+              rectWAFsDataTableProps(parseInt(locationSelect[1]))["payload"]
+            }
+            dropdownArray={
+              spanDataTableProps(parseInt(locationSelect[1]))["dropdownArray"]
+            }
+            columnNames={
+              spanDataTableProps(parseInt(locationSelect[1]))["columnNames"]
+            }
+            controlInputs={
+              spanDataTableProps(parseInt(locationSelect[1]))["controlInputs"]
+            }
+            controlDatePickerInputs={
+              spanDataTableProps(parseInt(locationSelect[1]))[
+                "controlDatePickerInputs"
+              ]
+            }
             dataTableName={"Span"}
             revertedState={revertedState}
             setRevertedState={setRevertedState}
@@ -405,12 +266,43 @@ export const MonitoringPlanTabRender = ({
       ],
       [
         [
-          <DataTableFuelData
-            matsTableHandler={matsTableHandler}
+          <DataTableAssert
             locationSelectValue={parseInt(locationSelect[1])}
             selectedLocation={locations.find(
               (element) => element.id === locationSelect[1]
             )}
+            payload={
+              rectWAFsDataTableProps(
+                locations.find((element) => element.id === locationSelect[1])
+              )["payload"]
+            }
+            dropdownArray={
+              unitFuelDataTableProps(
+                locations.find((element) => element.id === locationSelect[1])
+              )["dropdownArray"]
+            }
+            columnNames={
+              unitFuelDataTableProps(
+                locations.find((element) => element.id === locationSelect[1])
+              )["columnNames"]
+            }
+            controlInputs={
+              unitFuelDataTableProps(
+                locations.find((element) => element.id === locationSelect[1])
+              )["controlInputs"]
+            }
+            controlDatePickerInputs={
+              unitFuelDataTableProps(
+                locations.find((element) => element.id === locationSelect[1])
+              )["controlDatePickerInputs"]
+            }
+            urlParameters={
+              unitFuelDataTableProps(
+                locations.find((element) => element.id === locationSelect[1])
+              )["urlParameters"]
+            }
+            dataTableName={"Unit Fuel"}
+            radioName={["ozoneSeasonIndicator"]}
             checkout={checkout}
             user={user}
             inactive={inactive}
@@ -418,15 +310,46 @@ export const MonitoringPlanTabRender = ({
             revertedState={revertedState}
             setRevertedState={setRevertedState}
           />,
-          "Unit Fuel Data",
+          "Unit Fuels",
         ],
         [
-          <DataTableUnitControl
-            matsTableHandler={matsTableHandler}
+          <DataTableAssert
             locationSelectValue={parseInt(locationSelect[1])}
             selectedLocation={locations.find(
               (element) => element.id === locationSelect[1]
             )}
+            payload={
+              rectWAFsDataTableProps(parseInt(locationSelect[1]),
+                locations.find((element) => element.id === locationSelect[1])
+              )["payload"]
+            }
+            dropdownArray={
+              unitControlDataTableProps(parseInt(locationSelect[1]),
+                locations.find((element) => element.id === locationSelect[1])
+              )["dropdownArray"]
+            }
+            columnNames={
+              unitControlDataTableProps(parseInt(locationSelect[1]),
+                locations.find((element) => element.id === locationSelect[1])
+              )["columnNames"]
+            }
+            controlInputs={
+              unitControlDataTableProps(parseInt(locationSelect[1]),
+                locations.find((element) => element.id === locationSelect[1])
+              )["controlInputs"]
+            }
+            controlDatePickerInputs={
+              unitControlDataTableProps(parseInt(locationSelect[1]),
+                locations.find((element) => element.id === locationSelect[1])
+              )["controlDatePickerInputs"]
+            }
+            urlParameters={
+              unitControlDataTableProps(parseInt(locationSelect[1]),
+                locations.find((element) => element.id === locationSelect[1])
+              )["urlParameters"]
+            }
+            radios={["originalCode", "seasonalControlsIndicator"]}
+            dataTableName={"Unit Control"}
             checkout={checkout}
             user={user}
             inactive={inactive}
@@ -434,7 +357,7 @@ export const MonitoringPlanTabRender = ({
             revertedState={revertedState}
             setRevertedState={setRevertedState}
           />,
-          "Unit Control Data",
+          "Unit Controls",
         ],
       ], // unit info
     ];
@@ -511,7 +434,6 @@ export const MonitoringPlanTabRender = ({
   const resetInactivityTimerApiCall = () => {
     console.log(mpApi.putLockTimerUpdateConfiguration(configID), "api called");
   };
-
 
   return (
     <div className=" padding-top-0">

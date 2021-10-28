@@ -2,110 +2,77 @@ import React from "react";
 import { render, waitForElement, fireEvent } from "@testing-library/react";
 import { DataTableUnitControl } from "./DataTableUnitControl";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-const axios = require("axios");
-
+import { extractUserInput } from "../../../additional-functions/extract-user-input";
+import { handleResponse, handleError } from "../../../utils/api/apiUtils";
+import { secureAxios } from "../../../utils/api/easeyAuthApi";
+import * as axios from "axios";
 jest.mock("axios");
 
-const monitoringUnitControlMethods = [
-  {
-    id: "MELISSARHO-FD768B60E4D343158F7AD52EFD704D0E",
-    supplementalUnitControlParameterCode: "TNHGM",
-    supplementalUnitControlMonitoringMethodCode: "QST",
-    beginDate: "2016-04-16",
-    beginHour: "0",
-    endDate: null,
-    endHour: null,
-    active: true,
-  },
-  {
-    id: "MELISSARHO-CDF765BC7BF849EE9C23608B95540200",
-    supplementalUnitControlParameterCode: "HG",
-    supplementalUnitControlMonitoringMethodCode: "LEE",
-    beginDate: "2016-04-16",
-    beginHour: "0",
-    endDate: null,
-    endHour: null,
-    active: true,
-  },
-];
+const selectedUnitControls = [{}];
+const returnedUnitControl = {};
+
+const selectedLocation = { id: "6", unitRecordId: 1 };
+
+const payload = {
+  locationId: "6",
+  id: null,
+  parameterCode: "string",
+  controlCode: "string",
+  originalCode: "",
+  seasonalControlsIndicator: "",
+  installDate: null,
+  optimizationDate: null,
+  retireDate: null,
+};
+
+const radios = ["originalCode", "seasonalControlsIndicator"];
+const userInput = extractUserInput(payload, ".modalUserInput", radios);
+
 //testing redux connected component to mimic props passed as argument
-const componentRenderer = (location) => {
+const componentRenderer = (
+  checkout,
+  secondLevel,
+  addComponentFlag,
+  openComponentViewTest,
+  openAddComponentTest
+) => {
   const props = {
-    user: { firstName: "test" },
-    checkout: true,
+    locationSelectValue: "6",
+    user: "testuser",
+    checkout: false,
+    inactive: [false],
+    settingInactiveCheckBox: jest.fn(),
+    revertedState: false,
     setRevertedState: jest.fn(),
-    locationSelectValue: location,
+    selectedLocation: selectedLocation,
   };
   return render(<DataTableUnitControl {...props} />);
 };
-function componentRendererNoData(args) {
-  const defualtProps = {
-    user: { firstName: "test" },
-    checkout: true,
-    inactive: true,
-    settingInactiveCheckBox: jest.fn(),
-    locationSelectValue: location,
-  };
 
-  const props = { ...defualtProps, ...args };
-  return render(<DataTableUnitControl {...props} />);
-}
-
-test("tests a configuration with only inactive methods", async () => {
+test("tests getMonitoringPlansUnitControlRecords", async () => {
   axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: monitoringUnitControlMethods })
+    Promise.resolve({ status: 200, data: selectedUnitControls })
   );
-  const title = await mpApi.getMonitoringMethods(5770);
-  expect(title.data).toEqual(monitoringUnitControlMethods);
-  let { container } = await waitForElement(() => componentRenderer(5770));
+  const title = await mpApi
+    .getMonitoringPlansUnitControlRecords(selectedLocation)
+    .catch((error) => {
+      console.log(error);
+    });
+  expect(title.data).toEqual(selectedUnitControls);
+
+  let { container } = await waitForElement(() =>
+    componentRenderer(false, false, false, true, false)
+  );
   // componentRenderer(6);
   expect(container).toBeDefined();
 });
 
-test("tests a create/save methods", async () => {
-  // axios.get.mockImplementation(() =>
-  //   Promise.resolve({ status: 200, data: methodsInactiveOnly })
-  // );
-
-  // axios.put.mockImplementation((url) => {
-  //   switch (url) {
-  //     case `https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/workspace/locations/3844/methods/WPC07008-24F0C0E2B4DD4AFC927FC2DEDC67B859`:
-  //       return Promise.resolve({ data: [{ name: "Bob", items: [] }] });
-  //     case "/items.json":
-  //       return Promise.resolve({ data: [{ id: 1 }, { id: 2 }] });
-  //     default:
-  //       return Promise.reject(new Error("not found"));
-  //   }
-  // });
-  // axios.put.mockImplementation(() =>
-  //   Promise.resolve({ status: 200, data: data })
-  // );
-
-  // const title = await mpApi.getMonitoringMethods(69);
-  // expect(title.data).toEqual(methodsInactiveOnly);
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: monitoringUnitControlMethods })
+test("test create/save Load functions", async () => {
+  let { container } = await waitForElement(() =>
+    componentRenderer(false, false, false, true, false)
   );
-
-  axios.put.mockImplementation((url) => {
-    switch (url) {
-      case `https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/workspace/locations/5770/unitControl-methods/MELISSARHO-CDF765BC7BF849EE9C23608B95540200`:
-        return Promise.resolve({ data: [{ name: "Bob", items: [] }] });
-      case "/items.json":
-        return Promise.resolve({ data: [{ id: 1 }, { id: 2 }] });
-      default:
-        return Promise.reject(new Error("not found"));
-    }
-  });
-  axios.put.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: data })
-  );
-
-  let { container } = await waitForElement(() => componentRenderer(5770));
 
   fireEvent.click(container.querySelector("#testingBtn"));
   fireEvent.click(container.querySelector("#testingBtn2"));
   fireEvent.click(container.querySelector("#testingBtn3"));
-  // componentRenderer(6);
-  expect(container).toBeDefined();
 });

@@ -1,4 +1,5 @@
 host: easey-tst.app.cloud.gov
+apiHost: api.epa.gov/easey/test
 environment: testing
 memory: 1024M
 inactivityDurationCheckoutMinutes: 5

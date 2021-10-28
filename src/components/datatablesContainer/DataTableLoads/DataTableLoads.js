@@ -206,9 +206,9 @@ export const DataTableLoads = ({
   };
 
   const saveLoad = () => {
-    var radioName = "secondNormalIndicator";
+    const radios = ["secondNormalIndicator"];
 
-    const userInput = extractUserInput(payload, ".modalUserInput", radioName);
+    const userInput = extractUserInput(payload, ".modalUserInput", radios);
 
     mpApi
       .saveMonitoringLoads(userInput)

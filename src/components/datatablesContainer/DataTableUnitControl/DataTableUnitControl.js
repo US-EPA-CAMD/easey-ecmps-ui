@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
-import * as fs from "../../../utils/selectors/monitoringPlanMethods";
+import * as fs from "../../../utils/selectors/monitoringPlanUnitControls";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 
 import Modal from "../../Modal/Modal";
@@ -30,42 +30,42 @@ export const DataTableUnitControl = ({
   setRevertedState,
   selectedLocation,
 }) => {
+  const [selectedUnitControl, setSelectedUnitControl] = useState(null);
+  const [selectedModalData, setSelectedModalData] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [unitControlMethods, setUnitControlMethods] = useState([]);
-  const totalOptions = useRetrieveDropdownApi(
-    ["parameterCode", "monitoringMethodCode"],
-    true
-  );
+  const [unitControls, setUnitControls] = useState([]);
+  const totalOptions = useRetrieveDropdownApi([
+    "controlEquipParamCode",
+    "controlCode",
+  ]);
   const [show, setShow] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
   useEffect(() => {
     if (
       updateTable ||
-      unitControlMethods.length <= 0 ||
+      unitControls.length <= 0 ||
       locationSelectValue ||
       revertedState
     ) {
       mpApi
         .getMonitoringPlansUnitControlRecords(selectedLocation)
         .then((res) => {
-          setUnitControlMethods(res.data);
+          setUnitControls(res.data);
           setDataLoaded(true);
+          setUpdateTable(false);
+          setRevertedState(false);
         });
-      setUpdateTable(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
-  const [selectedUnitControlMethods, setSelectedUnitControlMethods] = useState(
-    null
-  );
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = [
-    "Parameter Code",
+    "Equipment Parameter Code",
     "Control Code",
     "Original Code",
-    "Optimization Date",
     "Install Date",
+    "Optimization Date",
     "Seasonal Controls Indicator",
     "Retire Date",
   ];
@@ -73,42 +73,17 @@ export const DataTableUnitControl = ({
   const payload = {
     locationId: locationSelectValue,
     id: null,
-    supplementalUnitControlMonitoringMethodCode: null,
-    supplementalUnitControlParameterCode: null,
-    beginDate: null,
-    beginHour: 0,
-    endDate: null,
-    endHour: 0,
+    parameterCode: "string",
+    controlCode: "string",
+    originalCode: "",
+    seasonalControlsIndicator: "",
+    installDate: null,
+    optimizationDate: null,
+    retireDate: null,
   };
-  const data = useMemo(() => {
-    if (unitControlMethods.length > 0) {
-      const activeOnly = getActiveData(unitControlMethods);
-      const inactiveOnly = getInactiveData(unitControlMethods);
 
-      // only active data >  disable checkbox and unchecks it
-      if (activeOnly.length === unitControlMethods.length) {
-        // uncheck it and disable checkbox
-        //function parameters ( check flag, disable flag )
-        settingInactiveCheckBox(false, true);
-        return fs.getMonitoringPlansUnitControlRecords(unitControlMethods);
-      }
+  const [createNewUnitControl, setCreateNewUnitControl] = useState(false);
 
-      // only inactive data > disables checkbox and checks it
-      if (inactiveOnly.length === unitControlMethods.length) {
-        //check it and disable checkbox
-        settingInactiveCheckBox(true, true);
-        return fs.getMonitoringPlansUnitControlRecords(unitControlMethods);
-      }
-      // resets checkbox
-      settingInactiveCheckBox(inactive[0], false);
-      return fs.getMonitoringPlansUnitControlRecords(
-        !inactive[0] ? getActiveData(unitControlMethods) : unitControlMethods
-      );
-    }
-    return [];
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [unitControlMethods, inactive]);
   const testing = () => {
     openUnitControlModal(false, false, true);
     saveUnitControl();
@@ -126,60 +101,33 @@ export const DataTableUnitControl = ({
     createUnitControl();
   };
 
-  const saveUnitControl = () => {
-    const userInput = extractUserInput(payload, ".modalUserInput");
-    mpApi
-      .saveMonitoringPlansUnitControl(userInput)
-      .then((result) => {
-        setShow(false);
-      })
-      .catch((error) => {
-        setShow(false);
-      });
-
-    setUpdateTable(true);
-  };
-  const createUnitControl = () => {
-    const userInput = extractUserInput(payload, ".modalUserInput");
-    mpApi
-      .createUnitControl(userInput)
-      .then((result) => {
-        setShow(false);
-      })
-      .catch((error) => {
-        setShow(false);
-      });
-    setUpdateTable(true);
-  };
-
-  const [createNewUnitControl, setCreateNewUnitControl] = useState(false);
-  const [selectedModalData, setSelectedModalData] = useState(null);
-
   const openUnitControlModal = (row, bool, create) => {
     let unitControl = null;
+
     setCreateNewUnitControl(create);
-    if (unitControlMethods.length > 0 && !create) {
-      unitControl = unitControlMethods.filter(
-        (element) => element.id === row.col5
+    if (unitControls.length > 0 && !create) {
+      unitControl = unitControls.filter(
+        (element) => element.id === row[`col${Object.keys(row).length - 1}`]
       )[0];
-      setSelectedUnitControlMethods(unitControl);
+      setSelectedUnitControl(unitControl);
     }
     setSelectedModalData(
       modalViewData(
         unitControl,
         {
-          supplementalUnitControlParameterCode: ["Parameter", "dropdown", ""],
-          supplementalUnitControlMonitoringMethodCode: [
-            "Methodology",
-            "dropdown",
+          parameterCode: ["Equipment Parameter Code", "dropdown", ""],
+          controlCode: ["Control Code", "dropdown", ""],
+          originalCode: ["Original Code", "radio", ""],
+          seasonalControlsIndicator: [
+            "Seasonal Controls Indicator",
+            "radio",
             "",
           ],
         },
         {
-          beginDate: ["Start Date", "date", ""],
-          beginHour: ["Start Time", "time", ""],
-          endDate: ["End Date", "date", ""],
-          endHour: ["End Time", "time", ""],
+          installDate: ["Install Date", "date", ""],
+          optimizationDate: ["Optimization Date", "date", ""],
+          retireDate: ["Retire Date", "date", ""],
         },
         create,
         totalOptions
@@ -210,10 +158,83 @@ export const DataTableUnitControl = ({
     }
   };
 
+  const data = useMemo(() => {
+    if (unitControls.length > 0) {
+      const activeOnly = getActiveData(unitControls);
+      const inactiveOnly = getInactiveData(unitControls);
+
+      // only active data >  disable checkbox and unchecks it
+      if (activeOnly.length === unitControls.length) {
+        // uncheck it and disable checkbox
+        //function parameters ( check flag, disable flag )
+        settingInactiveCheckBox(false, true);
+        return fs.getMonitoringPlansUnitControlRecords(unitControls);
+      }
+
+      // only inactive data > disables checkbox and checks it
+      if (inactiveOnly.length === unitControls.length) {
+        //check it and disable checkbox
+        settingInactiveCheckBox(true, true);
+        return fs.getMonitoringPlansUnitControlRecords(unitControls);
+      }
+      // resets checkbox
+      settingInactiveCheckBox(inactive[0], false);
+      return fs.getMonitoringPlansUnitControlRecords(
+        !inactive[0] ? getActiveData(unitControls) : unitControls
+      );
+    }
+    return [];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [unitControls, inactive]);
+
+  const saveUnitControl = () => {
+    const radios = ["originalCode", "seasonalControlsIndicator"];
+
+    const userInput = extractUserInput(payload, ".modalUserInput", radios);
+
+    const urlParameters = {
+      locId: selectedLocation.id,
+      unitRecordId: selectedLocation.unitRecordId,
+      unitControlId: payload.id,
+    };
+
+    mpApi
+      .saveUnitControl(userInput, urlParameters)
+      .then((result) => {
+        setShow(false);
+        setDataLoaded(false);
+        setUpdateTable(true);
+      })
+      .catch((error) => {
+        setShow(false);
+      });
+  };
+  const createUnitControl = () => {
+    const radios = ["originalCode", "seasonalControlsIndicator"];
+
+    const userInput = extractUserInput(payload, ".modalUserInput", radios);
+
+    const urlParameters = {
+      locId: selectedLocation.id,
+      unitRecordId: selectedLocation.unitRecordId,
+      unitControlId: payload.id,
+    };
+
+    mpApi
+      .createUnitControl(userInput, urlParameters)
+      .then((result) => {
+        setShow(false);
+        setDataLoaded(false);
+        setUpdateTable(true);
+      })
+      .catch((error) => {
+        setShow(false);
+      });
+  };
+
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
-
       <input
         tabIndex={-1}
         aria-hidden={true}
@@ -238,23 +259,20 @@ export const DataTableUnitControl = ({
         id="testingBtn3"
         onClick={() => testing3()}
       />
-
       <DataTableRender
+        openHandler={openUnitControlModal}
         columnNames={columnNames}
         data={data}
         dataLoaded={dataLoaded}
-        // actionsBtn={"View"}
+        actionsBtn={"View"}
         checkout={checkout}
         user={user}
-        openHandler={openUnitControlModal}
-        actionsBtn={"View"}
         addBtn={openUnitControlModal}
         addBtnName={"Create Unit Control"}
         setViewBtn={setViewBtn}
         viewBtn={viewBtn}
         setAddBtn={setAddBtn}
       />
-
       {show ? (
         <Modal
           show={show}
@@ -262,19 +280,17 @@ export const DataTableUnitControl = ({
           save={createNewUnitControl ? createUnitControl : saveUnitControl}
           showCancel={!(user && checkout)}
           showSave={user && checkout}
-          title={
-            createNewUnitControl
-              ? "Create UnitControl"
-              : "Component: Monitoring Unit Control Methods"
+          title={createNewUnitControl ? "Create Unit Control" : "Unit Control"}
+          exitBTN={
+            createNewUnitControl ? "Create Unit Control" : `Save and Close`
           }
-          exitBTN={createNewUnitControl ? "Create Fuel Data" : `Save and Close`}
           children={
             <div>
               <ModalDetails
-                modalData={selectedUnitControlMethods}
+                modalData={selectedUnitControl}
                 data={selectedModalData}
                 cols={2}
-                title={"Component: Monitoring Unit Control Methods"}
+                title={"Unit Control"}
                 viewOnly={!(user && checkout)}
               />
             </div>
