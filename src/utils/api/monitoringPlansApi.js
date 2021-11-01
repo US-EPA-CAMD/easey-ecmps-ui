@@ -411,8 +411,8 @@ export const getMonitoringDefaults = async (locationId) => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const saveMonitoringDefaults = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/defaults/${payload["id"]}`;
+export const saveMonitoringDefaults = async (payload, locID) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${locID}/defaults/${payload["id"]}`;
   // *** remove attributes not needed by the API
 
   return secureAxios({
@@ -424,8 +424,8 @@ export const saveMonitoringDefaults = async (payload) => {
     .catch(handleError);
 };
 
-export const createMonitoringDefaults = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/defaults/`;
+export const createMonitoringDefaults = async (payload, locID) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${locID}/defaults/`;
 
   // *** remove attributes not needed by the API
   delete payload["id"];
@@ -601,3 +601,16 @@ export const createMonitoringFormulas = async (payload, locID) => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+export const getUnitCapacity = async (selectedLocation) => {
+  let url = `${config.services.monitorPlans.uri}`;
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+
+  url = `${url}/locations/${selectedLocation["id"]}/units/${selectedLocation["unitRecordId"]}/unit-capacities`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+

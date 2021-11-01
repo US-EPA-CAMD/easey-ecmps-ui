@@ -77,7 +77,7 @@ export const DataTableFuelData = ({
     demGCV: null,
     demSO2: null,
     beginDate: null,
-    endDate: null
+    endDate: null,
   };
   const data = useMemo(() => {
     if (fuelData.length > 0) {
@@ -97,7 +97,6 @@ export const DataTableFuelData = ({
         //check it and disable checkbox
         settingInactiveCheckBox(true, true);
         return fs.getMonitoringPlansFuelDataRecords(fuelData);
-
       }
       // resets checkbox
       settingInactiveCheckBox(inactive[0], false);
@@ -264,11 +263,7 @@ export const DataTableFuelData = ({
           save={createNewFuelData ? createFuelData : saveFuelData}
           showCancel={!(user && checkout)}
           showSave={user && checkout}
-          title={
-            createNewFuelData
-              ? "Create Unit Fuel "
-              : "Unit Fuel"
-          }
+          title={createNewFuelData ? "Create Unit Fuel " : "Unit Fuel"}
           exitBTN={createNewFuelData ? "Create Unit Fuel" : `Save and Close`}
           children={
             <div>
