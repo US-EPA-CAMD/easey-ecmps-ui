@@ -89,14 +89,14 @@ export const getAllMatsMethodCodes = async () => {
 // System Fuel Flows
 export const getAllMaxRateSourceCodes = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/max-rate-source-code`)
+    .get(`${config.services.mdm.uri}/max-rate-source-codes`)
     .then(handleResponse)
     .catch(handleError);
 };
 
 export const getAllUnitsOfMeasureCodes = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/units-of-measure`)
+    .get(`${config.services.mdm.uri}/units-of-measure-codes`)
     .then(handleResponse)
     .catch(handleError);
 };
