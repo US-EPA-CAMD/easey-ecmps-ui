@@ -8,6 +8,7 @@ import * as formulaSelector from "../../../utils/selectors/monitoringPlanFormula
 import * as defaultSelector from "../../../utils/selectors/monitoringPlanDefaults";
 import * as unitFuelSelector from "../../../utils/selectors/monitoringPlanFuelData";
 import * as unitControlSelector from "../../../utils/selectors/monitoringPlanUnitControls";
+import * as unitCapacitySelector from "../../../utils/selectors/monitoringPlanUnitCapacity";
 
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
@@ -136,6 +137,14 @@ export const DataTableAssert = ({
               setDataLoaded(true);
             });
           break;
+        case "Unit Capacity":
+          mpApi
+            .getUnitCapacity(selectedLocation ? selectedLocation : location)
+            .then((res) => {
+              setDataPulled(res.data);
+              setDataLoaded(true);
+            });
+          break;
         default:
           break;
       }
@@ -163,6 +172,11 @@ export const DataTableAssert = ({
 
       case "Unit Control":
         return unitControlSelector.getMonitoringPlansUnitControlRecords(dataIn);
+
+      case "Unit Capacity":
+        return unitCapacitySelector.getMonitoringPlansUnitCapacityRecords(
+          dataIn
+        );
       default:
         break;
     }
@@ -244,6 +258,17 @@ export const DataTableAssert = ({
             console.log("error is", error);
           });
         break;
+
+      // case "Unit Capacity":
+      //   mpApi
+      //     .saveUnitCapacity(userInput, urlParameters ? urlParameters : null)
+      //     .then((result) => {
+      //       console.log(result, " was saved");
+      //     })
+      //     .catch((error) => {
+      //       console.log("error is", error);
+      //     });
+      //   break;
       default:
         break;
     }

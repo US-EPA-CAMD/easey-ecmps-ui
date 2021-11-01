@@ -20,6 +20,7 @@ import {
   rectWAFsDataTableProps,
   unitControlDataTableProps,
   unitFuelDataTableProps,
+  unitCapacityDataTableProps,
 } from "../../additional-functions/dataTable-props";
 
 export const MonitoringPlanTabRender = ({
@@ -358,6 +359,52 @@ export const MonitoringPlanTabRender = ({
             setRevertedState={setRevertedState}
           />,
           "Unit Controls",
+        ],
+        [
+          <DataTableAssert
+            locationSelectValue={parseInt(locationSelect[1])}
+            selectedLocation={locations.find(
+              (element) => element.id === locationSelect[1]
+            )}
+            payload={
+              unitCapacityDataTableProps(
+                locations.find((element) => element.id === locationSelect[1])
+              )["payload"]
+            }
+            dropdownArray={
+              unitCapacityDataTableProps(
+                locations.find((element) => element.id === locationSelect[1])
+              )["dropdownArray"]
+            }
+            columnNames={
+              unitCapacityDataTableProps(
+                locations.find((element) => element.id === locationSelect[1])
+              )["columnNames"]
+            }
+            controlInputs={
+              unitCapacityDataTableProps(
+                locations.find((element) => element.id === locationSelect[1])
+              )["controlInputs"]
+            }
+            controlDatePickerInputs={
+              unitCapacityDataTableProps(
+                locations.find((element) => element.id === locationSelect[1])
+              )["controlDatePickerInputs"]
+            }
+            urlParameters={
+              unitCapacityDataTableProps(
+                locations.find((element) => element.id === locationSelect[1])
+              )["urlParameters"]
+            }
+            dataTableName={"Unit Capacity"}
+            checkout={checkout}
+            user={user}
+            inactive={inactive}
+            settingInactiveCheckBox={settingInactiveCheckBox}
+            revertedState={revertedState}
+            setRevertedState={setRevertedState}
+          />,
+          "Unit Fuels",
         ],
       ], // unit info
     ];

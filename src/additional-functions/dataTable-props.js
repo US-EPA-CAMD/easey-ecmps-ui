@@ -285,7 +285,7 @@ export const spanDataTableProps = (location) => {
   };
 };
 
-export const unitControlDataTableProps = (location,selectedLocation) => {
+export const unitControlDataTableProps = (location, selectedLocation) => {
   return {
     payload: {
       locationId: location,
@@ -320,10 +320,10 @@ export const unitControlDataTableProps = (location,selectedLocation) => {
       retireDate: ["Retire Date", "date", ""],
     },
     urlParameters: {
-        locId: selectedLocation.id,
-        unitRecordId: selectedLocation.unitRecordId,
-        unitControlId: location,
-      },
+      locId: selectedLocation.id,
+      unitRecordId: selectedLocation.unitRecordId,
+      unitControlId: location,
+    },
   };
 };
 
@@ -357,6 +357,39 @@ export const unitFuelDataTableProps = (selectedLocation) => {
       ozoneSeasonIndicator: ["Ozone Season Indicator", "radio", ""],
       demGCV: ["Dem GCV", "dropdown", ""],
       demSO2: ["Dem SO2", "dropdown", ""],
+    },
+    controlDatePickerInputs: {
+      beginDate: ["Start Date", "date", ""],
+      endDate: ["End Date", "date", ""],
+    },
+  };
+};
+
+export const unitCapacityDataTableProps = (location) => {
+  return {
+    payload: {
+      id: null,
+      fuelCode: null,
+      indicatorCode: null,
+    },
+    dropdownArray: [[]],
+    columnNames: [
+      // "Commercial Operation Date"
+      // "Operation Date"
+      // "Boiler/Turbine Type"
+      // "Boiler/Turbine Begin Date"
+      // "Boiler/Turbine End Date"
+      "Maximum Hourly Heat Input Capacity",
+      "Start Date",
+      "End Date",
+    ],
+    controlInputs: {
+      maximumHourlyHeatInputCapacity: [
+        "Maximum Hourly Heat Input Capacity",
+        "input",
+        "",
+      ],
+      skip: ["", "skip", ""],
     },
     controlDatePickerInputs: {
       beginDate: ["Start Date", "date", ""],
