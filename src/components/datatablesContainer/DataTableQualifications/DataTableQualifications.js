@@ -58,7 +58,7 @@ export const DataTableQualifications = ({
     // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
     // *** in the format expected by the modal / tabs plugins)
     const columnNames = [
-        "Qualification Type",
+        "Qualification Type Code",
         "Start Date",
         "End Date",
     ];
@@ -163,7 +163,7 @@ export const DataTableQualifications = ({
             modalViewData(
                 qualData,
                 {
-                    qualificationTypeCode: ["Qualification Type", "dropdown", ""],
+                    qualificationTypeCode: ["Qualification Type Code", "dropdown", ""],
 
                 },
                 {
