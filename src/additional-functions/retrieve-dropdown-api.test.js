@@ -167,3 +167,16 @@ test("tests getAllDemonstrationMethodCodes", async () => {
   let func = useRetrieveDropdownApi(["demMethodCode"]);
   expect(func).toEqual(data);
 });
+
+test("tests getAllQualificationTypeCodes", async () => {
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: data })
+  );
+  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+
+  const dataReturned = await dmApi.getAllQualificationTypeCodes();
+  expect(dataReturned.data).toEqual(data);
+
+  let func = useRetrieveDropdownApi(["qualificationTypeCode"]);
+  expect(func).toEqual(data);
+});

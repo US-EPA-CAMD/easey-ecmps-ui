@@ -614,3 +614,15 @@ export const getUnitCapacity = async (selectedLocation) => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
+export const getQualifications = async (locationId) => {
+  let url = `${config.services.monitorPlans.uri}`;
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+
+  url = `${url}/locations/${locationId}/qualifications`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+

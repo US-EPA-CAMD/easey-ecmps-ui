@@ -235,3 +235,10 @@ export const getAllControlEquipmentParameterCodes = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+export const getAllQualificationTypeCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/qual-type-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};

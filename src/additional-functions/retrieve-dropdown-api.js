@@ -373,6 +373,18 @@ export const useRetrieveDropdownApi = (dropDownFields, mats = false) => {
           setDefaultOptions(options, fieldName);
         });
         break;
+      case "qualificationTypeCode":
+        dmApi.getAllQualificationTypeCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["qualTypeCode"],
+              name: option["qualTypeCodeDescription"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
       default:
         break;
     }
