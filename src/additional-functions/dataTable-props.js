@@ -374,16 +374,29 @@ export const unitCapacityDataTableProps = (location) => {
     },
     dropdownArray: [[]],
     columnNames: [
-      // "Commercial Operation Date"
-      // "Operation Date"
-      // "Boiler/Turbine Type"
-      // "Boiler/Turbine Begin Date"
-      // "Boiler/Turbine End Date"
+      "Commercial Operation Date",
+      "Operation Date",
+      "Boiler/Turbine Type",
+      "Boiler/Turbine Begin Date",
+      "Boiler/Turbine End Date",
       "Maximum Hourly Heat Input Capacity",
       "Start Date",
       "End Date",
     ],
     controlInputs: {
+      maximumHourlyHeatInputCapacity2: [
+        "Commercial Operation Date",
+        "input",
+        "",
+      ],
+      maximumHourlyHeatInputCapacity1: ["Operation Date", "input", ""],
+      maximumHourlyHeatInputCapacity3: ["Boiler/Turbine Type", "input", ""],
+      maximumHourlyHeatInputCapacity4: [
+        "Boiler/Turbine Begin Date",
+        "input",
+        "",
+      ],
+      maximumHourlyHeatInputCapacity5: ["Boiler/Turbine End Date", "input", ""],
       maximumHourlyHeatInputCapacity: [
         "Maximum Hourly Heat Input Capacity",
         "input",
