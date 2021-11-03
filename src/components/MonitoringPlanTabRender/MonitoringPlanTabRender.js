@@ -416,7 +416,7 @@ export const MonitoringPlanTabRender = ({
             revertedState={revertedState}
             setRevertedState={setRevertedState}
           />,
-          "Unit Capacity",
+          "Unit Capacities",
         ],
       ], // unit info
     ];
