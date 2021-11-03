@@ -55,8 +55,8 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
                     : "Yes"
                   : value[2]
                 : value[4] === "radio"
-                  ? "No"
-                  : ""}
+                ? "No"
+                : ""}
             </div>
           </FormGroup>
         )}
@@ -66,6 +66,7 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
 
   const makeEditComp = (value) => {
     let comp = null;
+
     switch (value[4]) {
       case "dropdown":
         comp = (
@@ -208,7 +209,11 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
       if (viewOnly) {
         row.push(makeViewOnlyComp(value));
       } else {
-        row.push(makeEditComp(value));
+        if (value[4] === "locked") {
+          row.push(makeViewOnlyComp(value));
+        } else {
+          row.push(makeEditComp(value));
+        }
       }
     } else {
       items.push(row);
@@ -216,7 +221,11 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
       if (viewOnly) {
         row.push(makeViewOnlyComp(value));
       } else {
-        row.push(makeEditComp(value));
+        if (value[4] === "locked") {
+          row.push(makeViewOnlyComp(value));
+        } else {
+          row.push(makeEditComp(value));
+        }
       }
     }
   }

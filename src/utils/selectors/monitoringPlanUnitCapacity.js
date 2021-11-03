@@ -8,11 +8,18 @@ export const getMonitoringPlansUnitCapacityRecords = (data) => {
     const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
     const endHour = el.endHour ? el.endHour.toString() : "";
     records.push({
-      col1: el.maximumHourlyHeatInputCapacity,
+      col1: "", //el.maximumHourlyHeatInputCapacity,
 
-      col2: `${beginDate} ${beginHour}`,
-      col3: `${endDate} ${endHour}`,
-      col4: el.id,
+      col2: "", //`${beginDate} ${beginHour}`,
+      col3: "", //`${endDate} ${endHour}`,
+      col4: "", //el.id,
+
+      col5: "", //el.id,
+      col6: el.maximumHourlyHeatInputCapacity,
+
+      col7: `${beginDate} ${beginHour}`,
+      col8: `${endDate} ${endHour}`,
+      col9: el.id,
     });
   });
 

@@ -7,12 +7,11 @@ import DataTableSystems from "../datatablesContainer/DataTableSystems/DataTableS
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import { checkoutAPI } from "../../additional-functions/checkout";
-
+import DataTableQualifications from  "../datatablesContainer/DataTableQualifications/DataTableQualifications";
 import DataTableDefaults from "../datatablesContainer/DataTableDefaults/DataTableDefaults";
 import DataTableFuelData from "../datatablesContainer/DataTableFuelData/DataTableFuelData";
 import DataTableUnitControl from "../datatablesContainer/DataTableUnitControl/DataTableUnitControl";
 import DataTableAssert from "../datatablesContainer/DataTableAssert/DataTableAssert";
-import DataTableQualifications from "../datatablesContainer/DataTableQualifications/DataTableQualifications";
 import {
   spanDataTableProps,
   formulasDataTableProps,
@@ -80,12 +79,12 @@ export const MonitoringPlanTabRender = ({
             }
             controlInputs={
               defaultsDataTableProps(parseInt(locationSelect[1]))[
-              "controlInputs"
+                "controlInputs"
               ]
             }
             controlDatePickerInputs={
               defaultsDataTableProps(parseInt(locationSelect[1]))[
-              "controlDatePickerInputs"
+                "controlDatePickerInputs"
               ]
             }
             dataTableName={"Default"}
@@ -108,7 +107,7 @@ export const MonitoringPlanTabRender = ({
             }
             dropdownArray={
               formulasDataTableProps(parseInt(locationSelect[1]))[
-              "dropdownArray"
+                "dropdownArray"
               ]
             }
             columnNames={
@@ -116,7 +115,7 @@ export const MonitoringPlanTabRender = ({
             }
             controlInputs={
               formulasDataTableProps(parseInt(locationSelect[1]))[
-              "controlInputs"
+                "controlInputs"
               ]
             }
             controlDatePickerInputs={
@@ -286,7 +285,7 @@ export const MonitoringPlanTabRender = ({
               (element) => element.id === locationSelect[1]
             )}
             payload={
-              rectWAFsDataTableProps(
+              unitFuelDataTableProps(
                 locations.find((element) => element.id === locationSelect[1])
               )["payload"]
             }
@@ -333,7 +332,7 @@ export const MonitoringPlanTabRender = ({
               (element) => element.id === locationSelect[1]
             )}
             payload={
-              rectWAFsDataTableProps(parseInt(locationSelect[1]),
+              unitControlDataTableProps(parseInt(locationSelect[1]),
                 locations.find((element) => element.id === locationSelect[1])
               )["payload"]
             }
@@ -380,32 +379,32 @@ export const MonitoringPlanTabRender = ({
               (element) => element.id === locationSelect[1]
             )}
             payload={
-              unitCapacityDataTableProps(
+              unitCapacityDataTableProps(parseInt(locationSelect[1]),
                 locations.find((element) => element.id === locationSelect[1])
               )["payload"]
             }
             dropdownArray={
-              unitCapacityDataTableProps(
+              unitCapacityDataTableProps(parseInt(locationSelect[1]),
                 locations.find((element) => element.id === locationSelect[1])
               )["dropdownArray"]
             }
             columnNames={
-              unitCapacityDataTableProps(
+              unitCapacityDataTableProps(parseInt(locationSelect[1]),
                 locations.find((element) => element.id === locationSelect[1])
               )["columnNames"]
             }
             controlInputs={
-              unitCapacityDataTableProps(
+              unitCapacityDataTableProps(parseInt(locationSelect[1]),
                 locations.find((element) => element.id === locationSelect[1])
               )["controlInputs"]
             }
             controlDatePickerInputs={
-              unitCapacityDataTableProps(
+              unitCapacityDataTableProps(parseInt(locationSelect[1]),
                 locations.find((element) => element.id === locationSelect[1])
               )["controlDatePickerInputs"]
             }
             urlParameters={
-              unitCapacityDataTableProps(
+              unitCapacityDataTableProps(parseInt(locationSelect[1]),
                 locations.find((element) => element.id === locationSelect[1])
               )["urlParameters"]
             }
@@ -417,7 +416,7 @@ export const MonitoringPlanTabRender = ({
             revertedState={revertedState}
             setRevertedState={setRevertedState}
           />,
-          "Unit Fuels",
+          "Unit Capacities",
         ],
       ], // unit info
     ];

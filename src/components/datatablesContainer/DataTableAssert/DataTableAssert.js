@@ -62,6 +62,7 @@ export const DataTableAssert = ({
     dropdownArray[0],
     dropdownArray.length > 1 ? dropdownArray[1] : null
   );
+
   const [updateTable, setUpdateTable] = useState(false);
   useEffect(() => {
     if (
@@ -70,6 +71,14 @@ export const DataTableAssert = ({
       locationSelectValue ||
       revertedState
     ) {
+      console.log(
+        "payload,",
+        payload,
+        urlParameters,
+        columnNames,
+        dropdownArray,
+        dataTableName
+      );
       setDataLoaded(false);
       getDataTableApi(dataTableName, locationSelectValue);
 
@@ -259,16 +268,16 @@ export const DataTableAssert = ({
           });
         break;
 
-      // case "Unit Capacity":
-      //   mpApi
-      //     .saveUnitCapacity(userInput, urlParameters ? urlParameters : null)
-      //     .then((result) => {
-      //       console.log(result, " was saved");
-      //     })
-      //     .catch((error) => {
-      //       console.log("error is", error);
-      //     });
-      //   break;
+      case "Unit Capacity":
+        mpApi
+          .saveUnitCapacity(userInput, urlParameters ? urlParameters : null)
+          .then((result) => {
+            console.log(result, " was saved");
+          })
+          .catch((error) => {
+            console.log("error is", error);
+          });
+        break;
       default:
         break;
     }
@@ -411,7 +420,8 @@ export const DataTableAssert = ({
     }
   };
 
-  const data = useMemo(() => {
+  const [dataSet, setDataSet] = useState([]);
+  useEffect(() => {
     console.log("locationSelectValue", locationSelectValue, dataPulled);
     if (dataPulled.length > 0) {
       const activeOnly = getActiveData(dataPulled);
@@ -422,23 +432,25 @@ export const DataTableAssert = ({
         // uncheck it and disable checkbox
         //function parameters ( check flag, disable flag )
         settingInactiveCheckBox(false, true);
-        return getDataTableRecords(dataPulled, dataTableName);
+        setDataSet(getDataTableRecords(dataPulled, dataTableName));
       }
 
       // only inactive data > disables checkbox and checks it
       if (inactiveOnly.length === dataPulled.length) {
         //check it and disable checkbox
         settingInactiveCheckBox(true, true);
-        return getDataTableRecords(dataPulled, dataTableName);
+        setDataSet(getDataTableRecords(dataPulled, dataTableName));
       }
       // resets checkbox
       settingInactiveCheckBox(inactive[0], false);
-      return getDataTableRecords(
-        !inactive[0] ? getActiveData(dataPulled) : dataPulled,
-        dataTableName
+      setDataSet(
+        getDataTableRecords(
+          !inactive[0] ? getActiveData(dataPulled) : dataPulled,
+          dataTableName
+        )
       );
     }
-    return [];
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataPulled, inactive, locationSelectValue, dataTableName]);
 
@@ -490,7 +502,7 @@ export const DataTableAssert = ({
       <DataTableRender
         openHandler={openModal}
         columnNames={columnNames}
-        data={data}
+        data={dataSet}
         dataLoaded={dataLoaded}
         pagination={pagination}
         filter={filter}
