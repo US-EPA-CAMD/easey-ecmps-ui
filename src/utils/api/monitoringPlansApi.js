@@ -638,3 +638,16 @@ export const getQualifications = async (locationId) => {
 
   return axios.get(url).then(handleResponse).catch(handleError);
 };
+
+export const saveQualificationData = async (payload) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/qualifications/${payload["id"]}`;
+  // *** remove attributes not needed by the API
+
+  return secureAxios({
+    method: "PUT",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
