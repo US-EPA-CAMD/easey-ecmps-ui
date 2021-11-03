@@ -156,7 +156,7 @@ export const DataTableQualifications = ({
                 qualData,
                 {
                     qualificationTypeCode: ["Qualification Type Code", "dropdown", ""],
-
+                    emptyfield: ["", "skip", ""]
                 },
                 {
                     beginDate: ["Start Date", "date", ""],
