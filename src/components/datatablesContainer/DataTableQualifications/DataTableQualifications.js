@@ -99,37 +99,29 @@ export const DataTableQualifications = ({
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [qualificationData, inactive]);
-    //   const testing = () => {
-    //     openFuelDataModal(false, false, true);
-    //     saveFuelData();
-    //   };
+    const testingSave = () => {
+        openQualificationDataModal(false, false, true);
+        saveQualificationData();
+    };
 
-    //   const testing2 = () => {
-    //     openFuelDataModal(
-    //       { col5: "MELISSARHO-CDF765BC7BF849EE9C23608B95540200" },
-    //       false,
-    //       false
-    //     );
-    //   };
-    //   const testing3 = () => {
-    //     openFuelDataModal(false, false, true);
-    //     createFuelData();
+    //   const testingCreate = () => {
+    //     openQualificationDataModal(false, false, true);
+    //     createQualificationData();
     //   };
 
     const saveQualificationData = () => {
-        // var radioName = ["ozoneSeasonIndicator"];
-        // const userInput = extractUserInput(payload, ".modalUserInput", radioName);
+        const userInput = extractUserInput(payload, ".modalUserInput");
 
-        // mpApi
-        //   .saveMonitoringPlansFuelData(userInput)
-        //   .then((result) => {
-        //     setShow(false);
-        //     setDataLoaded(false);
-        //     setUpdateTable(true);
-        //   })
-        //   .catch((error) => {
-        //     setShow(false);
-        //   });
+        mpApi
+            .saveQualificationData(userInput)
+            .then((result) => {
+                setShow(false);
+                setDataLoaded(false);
+                setUpdateTable(true);
+            })
+            .catch((error) => {
+                setShow(false);
+            });
     };
 
     const createQualificationData = () => {
@@ -203,30 +195,22 @@ export const DataTableQualifications = ({
         <div className="methodTable">
             <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
 
+            <input
+                tabIndex={-1}
+                aria-hidden={true}
+                role="button"
+                type="hidden"
+                id="testingBtn"
+                onClick={() => testingSave()}
+            />
             {/* <input
-        tabIndex={-1}
-        aria-hidden={true}
-        role="button"
-        type="hidden"
-        id="testingBtn"
-        onClick={() => testing()}
-      />
-      <input
-        tabIndex={-1}
-        aria-hidden={true}
-        role="button"
-        type="hidden"
-        id="testingBtn2"
-        onClick={() => testing2()}
-      />
-      <input
-        tabIndex={-1}
-        aria-hidden={true}
-        role="button"
-        type="hidden"
-        id="testingBtn3"
-        onClick={() => testing3()}
-      /> */}
+                tabIndex={-1}
+                aria-hidden={true}
+                role="button"
+                type="hidden"
+                id="testingBtn3"
+                onClick={() => testingCreate()}
+            /> */}
 
             <DataTableRender
                 columnNames={columnNames}

@@ -89,12 +89,12 @@ test('test opening the Modal to view formula details and then closing', async ()
     });
 });
 
-// test("test create/save Load functions", async () => {
-//   let { container } = await waitForElement(() =>
-//     componentRenderer(false, false, false, true, false)
-//   );
+test("test create/save Load functions", async () => {
+    let { container } = await waitForElement(() =>
+        componentRenderer(false, false, false, true, false)
+    );
 
-//   fireEvent.click(container.querySelector("#testingBtn"));
-//   fireEvent.click(container.querySelector("#testingBtn2"));
-//   fireEvent.click(container.querySelector("#testingBtn3"));
-// });
+    fireEvent.click(container.querySelector("#testingBtn"));
+    // fireEvent.click(container.querySelector("#testingBtn2"));
+    // fireEvent.click(container.querySelector("#testingBtn3"));
+});
