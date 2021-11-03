@@ -365,12 +365,13 @@ export const unitFuelDataTableProps = (selectedLocation) => {
   };
 };
 
-export const unitCapacityDataTableProps = (location) => {
+export const unitCapacityDataTableProps = (location, selectedLocation) => {
+  console.log("selected location cap", selectedLocation);
   return {
     payload: {
-      id: null,
-      fuelCode: null,
-      indicatorCode: null,
+      maximumHourlyHeatInputCapacity: 0,
+      beginDate: "2021-11-03T05:45:28.844Z",
+      endDate: "2021-11-03T05:45:28.844Z",
     },
     dropdownArray: [[]],
     columnNames: [
@@ -384,29 +385,28 @@ export const unitCapacityDataTableProps = (location) => {
       "End Date",
     ],
     controlInputs: {
-      maximumHourlyHeatInputCapacity2: [
-        "Commercial Operation Date",
-        "input",
-        "",
-      ],
-      maximumHourlyHeatInputCapacity1: ["Operation Date", "input", ""],
-      maximumHourlyHeatInputCapacity3: ["Boiler/Turbine Type", "input", ""],
-      maximumHourlyHeatInputCapacity4: [
-        "Boiler/Turbine Begin Date",
-        "input",
-        "",
-      ],
-      maximumHourlyHeatInputCapacity5: ["Boiler/Turbine End Date", "input", ""],
+      comDate: ["Commercial Operation Date", "locked", ""],
+      operationDate: ["Operation Date", "locked", ""],
+      boilerType: ["Boiler/Turbine Type", "locked", ""],
+
+      skip: ["", "skip", ""],
+      boilerBeginDate: ["Boiler/Turbine Begin Date", "locked", ""],
+      boilerEndDate: ["Boiler/Turbine End Date", "locked", ""],
       maximumHourlyHeatInputCapacity: [
         "Maximum Hourly Heat Input Capacity",
         "input",
         "",
       ],
-      skip: ["", "skip", ""],
     },
     controlDatePickerInputs: {
+      skip: ["", "skip", ""],
       beginDate: ["Start Date", "date", ""],
       endDate: ["End Date", "date", ""],
+    },
+    urlParameters: {
+      locId: selectedLocation.id,
+      unitRecordId: selectedLocation.unitRecordId,
+      unitCapacityId: location,
     },
   };
 };

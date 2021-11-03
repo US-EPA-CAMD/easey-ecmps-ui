@@ -7,7 +7,7 @@ import DataTableSystems from "../datatablesContainer/DataTableSystems/DataTableS
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import { checkoutAPI } from "../../additional-functions/checkout";
-
+import DataTableQualifications from  "../datatablesContainer/DataTableQualifications/DataTableQualifications";
 import DataTableDefaults from "../datatablesContainer/DataTableDefaults/DataTableDefaults";
 import DataTableFuelData from "../datatablesContainer/DataTableFuelData/DataTableFuelData";
 import DataTableUnitControl from "../datatablesContainer/DataTableUnitControl/DataTableUnitControl";
@@ -71,7 +71,7 @@ export const MonitoringPlanTabRender = ({
             }
             dropdownArray={
               defaultsDataTableProps(parseInt(locationSelect[1]))[
-                "dropdownArray"
+              "dropdownArray"
               ]
             }
             columnNames={
@@ -120,7 +120,7 @@ export const MonitoringPlanTabRender = ({
             }
             controlDatePickerInputs={
               formulasDataTableProps(parseInt(locationSelect[1]))[
-                "controlDatePickerInputs"
+              "controlDatePickerInputs"
               ]
             }
             dataTableName={"Formula"}
@@ -152,7 +152,7 @@ export const MonitoringPlanTabRender = ({
             }
             controlDatePickerInputs={
               loadsDataTableProps(parseInt(locationSelect[1]))[
-                "controlDatePickerInputs"
+              "controlDatePickerInputs"
               ]
             }
             radioName="secondNormalIndicator"
@@ -179,7 +179,19 @@ export const MonitoringPlanTabRender = ({
           "Methods",
         ],
       ],
-      [], // qualifications
+      [
+        [<DataTableQualifications
+          locationSelectValue={parseInt(locationSelect[1])}
+          inactive={inactive}
+          settingInactiveCheckBox={settingInactiveCheckBox}
+          checkout={checkout}
+          user={user}
+          revertedState={revertedState}
+          setRevertedState={setRevertedState}
+        />,
+          "Qualifications",
+        ],
+      ],
       [
         [
           <DataTableAssert
@@ -193,7 +205,7 @@ export const MonitoringPlanTabRender = ({
             }
             dropdownArray={
               rectWAFsDataTableProps(parseInt(locationSelect[1]))[
-                "dropdownArray"
+              "dropdownArray"
               ]
             }
             columnNames={
@@ -201,12 +213,12 @@ export const MonitoringPlanTabRender = ({
             }
             controlInputs={
               rectWAFsDataTableProps(parseInt(locationSelect[1]))[
-                "controlInputs"
+              "controlInputs"
               ]
             }
             controlDatePickerInputs={
               rectWAFsDataTableProps(parseInt(locationSelect[1]))[
-                "controlDatePickerInputs"
+              "controlDatePickerInputs"
               ]
             }
             dataTableName={"Rectangular Duct WAF"}
@@ -240,7 +252,7 @@ export const MonitoringPlanTabRender = ({
             }
             controlDatePickerInputs={
               spanDataTableProps(parseInt(locationSelect[1]))[
-                "controlDatePickerInputs"
+              "controlDatePickerInputs"
               ]
             }
             dataTableName={"Span"}
@@ -273,7 +285,7 @@ export const MonitoringPlanTabRender = ({
               (element) => element.id === locationSelect[1]
             )}
             payload={
-              rectWAFsDataTableProps(
+              unitFuelDataTableProps(
                 locations.find((element) => element.id === locationSelect[1])
               )["payload"]
             }
@@ -320,7 +332,7 @@ export const MonitoringPlanTabRender = ({
               (element) => element.id === locationSelect[1]
             )}
             payload={
-              rectWAFsDataTableProps(parseInt(locationSelect[1]),
+              unitControlDataTableProps(parseInt(locationSelect[1]),
                 locations.find((element) => element.id === locationSelect[1])
               )["payload"]
             }
@@ -367,32 +379,32 @@ export const MonitoringPlanTabRender = ({
               (element) => element.id === locationSelect[1]
             )}
             payload={
-              unitCapacityDataTableProps(
+              unitCapacityDataTableProps(parseInt(locationSelect[1]),
                 locations.find((element) => element.id === locationSelect[1])
               )["payload"]
             }
             dropdownArray={
-              unitCapacityDataTableProps(
+              unitCapacityDataTableProps(parseInt(locationSelect[1]),
                 locations.find((element) => element.id === locationSelect[1])
               )["dropdownArray"]
             }
             columnNames={
-              unitCapacityDataTableProps(
+              unitCapacityDataTableProps(parseInt(locationSelect[1]),
                 locations.find((element) => element.id === locationSelect[1])
               )["columnNames"]
             }
             controlInputs={
-              unitCapacityDataTableProps(
+              unitCapacityDataTableProps(parseInt(locationSelect[1]),
                 locations.find((element) => element.id === locationSelect[1])
               )["controlInputs"]
             }
             controlDatePickerInputs={
-              unitCapacityDataTableProps(
+              unitCapacityDataTableProps(parseInt(locationSelect[1]),
                 locations.find((element) => element.id === locationSelect[1])
               )["controlDatePickerInputs"]
             }
             urlParameters={
-              unitCapacityDataTableProps(
+              unitCapacityDataTableProps(parseInt(locationSelect[1]),
                 locations.find((element) => element.id === locationSelect[1])
               )["urlParameters"]
             }
@@ -404,7 +416,7 @@ export const MonitoringPlanTabRender = ({
             revertedState={revertedState}
             setRevertedState={setRevertedState}
           />,
-          "Unit Fuels",
+          "Unit Capacity",
         ],
       ], // unit info
     ];
@@ -413,32 +425,32 @@ export const MonitoringPlanTabRender = ({
       tableArr = tableState.map((element, index) =>
         index === 4
           ? [
-              [
-                <DataTableMethod
-                  matsTableHandler={matsTableHandler}
-                  locationSelectValue={parseInt(locationSelect[1])}
-                  checkout={checkout}
-                  user={user}
-                  inactive={inactive}
-                  settingInactiveCheckBox={settingInactiveCheckBox}
-                  revertedState={revertedState}
-                  setRevertedState={setRevertedState}
-                />,
-                "Methods",
-              ],
-              [
-                <DataTableMats
-                  locationSelectValue={locationSelect[1]}
-                  checkout={checkout}
-                  user={user}
-                  inactive={inactive}
-                  settingInactiveCheckBox={settingInactiveCheckBox}
-                  revertedState={revertedState}
-                  setRevertedState={setRevertedState}
-                />,
-                "Supplemental Methods",
-              ],
-            ]
+            [
+              <DataTableMethod
+                matsTableHandler={matsTableHandler}
+                locationSelectValue={parseInt(locationSelect[1])}
+                checkout={checkout}
+                user={user}
+                inactive={inactive}
+                settingInactiveCheckBox={settingInactiveCheckBox}
+                revertedState={revertedState}
+                setRevertedState={setRevertedState}
+              />,
+              "Methods",
+            ],
+            [
+              <DataTableMats
+                locationSelectValue={locationSelect[1]}
+                checkout={checkout}
+                user={user}
+                inactive={inactive}
+                settingInactiveCheckBox={settingInactiveCheckBox}
+                revertedState={revertedState}
+                setRevertedState={setRevertedState}
+              />,
+              "Supplemental Methods",
+            ],
+          ]
           : element
       );
     }

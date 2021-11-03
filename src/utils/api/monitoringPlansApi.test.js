@@ -434,4 +434,17 @@ describe("testing monitoring plans data fetching APIs", () => {
     const result = await getMonitoringFormulas(monitoringLocationId);
     expect(result["data"].monitoringSystems).toEqual(mockSystems);
   });
+
+  test("Should fetch list of monitoring qualification data for a selected location", async () => {
+    const mock = new MockAdapter(axios);
+    mock
+      .onGet(
+        `${config.services.monitorPlans.uri}/monitor-locations/${monitoringLocationId}/qualifications`
+      )
+      .reply(200, {
+        monitoringSystems: mockSystems,
+      });
+    const result = await getQualifications(monitoringLocationId);
+    expect(result["data"].monitoringSystems).toEqual(mockSystems);
+  });
 });
