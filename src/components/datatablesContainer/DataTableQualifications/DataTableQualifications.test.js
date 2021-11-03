@@ -95,6 +95,5 @@ test("test create/save Load functions", async () => {
     );
 
     fireEvent.click(container.querySelector("#testingBtn"));
-    // fireEvent.click(container.querySelector("#testingBtn2"));
-    // fireEvent.click(container.querySelector("#testingBtn3"));
+    fireEvent.click(container.querySelector("#testingBtn2"));
 });

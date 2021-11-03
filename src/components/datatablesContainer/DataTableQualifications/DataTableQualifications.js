@@ -104,10 +104,10 @@ export const DataTableQualifications = ({
         saveQualificationData();
     };
 
-    //   const testingCreate = () => {
-    //     openQualificationDataModal(false, false, true);
-    //     createQualificationData();
-    //   };
+    const testingCreate = () => {
+        openQualificationDataModal(false, false, true);
+        createQualificationData();
+    };
 
     const saveQualificationData = () => {
         const userInput = extractUserInput(payload, ".modalUserInput");
@@ -125,18 +125,18 @@ export const DataTableQualifications = ({
     };
 
     const createQualificationData = () => {
-        // var radioName = "ozoneSeasonIndicator";
-        // const userInput = extractUserInput(payload, ".modalUserInput", radioName);
-        // mpApi
-        //   .createFuelData(userInput)
-        //   .then((result) => {
-        //     setShow(false);
-        //     setDataLoaded(false);
-        //     setUpdateTable(true);
-        //   })
-        //   .catch((error) => {
-        //     setShow(false);
-        //   });
+        const userInput = extractUserInput(payload, ".modalUserInput");
+
+        mpApi
+            .createQualificationData(userInput)
+            .then((result) => {
+                setShow(false);
+                setDataLoaded(false);
+                setUpdateTable(true);
+            })
+            .catch((error) => {
+                setShow(false);
+            });
     };
 
     const [createNewQualificationData, setCreateNewQualificationData] = useState(false);
@@ -203,14 +203,14 @@ export const DataTableQualifications = ({
                 id="testingBtn"
                 onClick={() => testingSave()}
             />
-            {/* <input
+            <input
                 tabIndex={-1}
                 aria-hidden={true}
                 role="button"
                 type="hidden"
-                id="testingBtn3"
+                id="testingBtn2"
                 onClick={() => testingCreate()}
-            /> */}
+            />
 
             <DataTableRender
                 columnNames={columnNames}
@@ -242,7 +242,7 @@ export const DataTableQualifications = ({
                             <ModalDetails
                                 modalData={selectedQualificationData}
                                 data={selectedModalData}
-                                cols={3}
+                                cols={2}
                                 title={"Qualification"}
                                 viewOnly={!(user && checkout)}
                             />
