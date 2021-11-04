@@ -13,15 +13,50 @@ export const modalViewData = (
 ) => {
   const arr = [];
 
-
+  // y = property name of the apis
   for (const y in label) {
-    let labels = "";
+    if (label[y][3] === "locked") {
+      if (createNew) {
+        arr.push([
+          y,
+          label[y][0],
+          createNew ? "" : selected[y],
+          label[y][2] === "required" ? "required" : false,
+         
+          "locked",
+        ]);
+      } else if (label[y][1] === "date") {
+        const parts = selected[y] ? selected[y].split("-") : "";
+
+        const formmatedDate = parts != "" ? `${parts[1]}/${parts[2]}/${parts[0]}` : "";
+        console.log("formmated", formmatedDate);
+        arr.push([
+          y,
+          label[y][0],
+          createNew ? "" : formmatedDate,
+          label[y][2] === "required" ? "required" : false,
+          "locked",
+        ])
+      }else{
+        arr.push([
+          y,
+          label[y][0],
+          createNew ? "" : selected[y],
+          label[y][2] === "required" ? "required" : false,
+          "locked",
+        ])
+
+      }
+    }
+    
+    else{
+let labels = "";
     switch (label[y][1]) {
       case "dropdown":
         if (!createNew) {
           if (totalOptions) {
             labels = findValue(totalOptions[y], selected[y], "name");
-          } 
+          }
         }
         arr.push([
           y,
@@ -43,15 +78,6 @@ export const modalViewData = (
         ]);
         break;
 
-      case "locked":
-        arr.push([
-          y,
-          label[y][0],
-          createNew ? "" : selected[y],
-          label[y][2] === "required" ? "required" : false,
-          "locked",
-        ]);
-        break;
       case "skip":
         arr.push([[], [], [], "", "skip"]);
         break;
@@ -87,7 +113,7 @@ export const modalViewData = (
         break;
     }
   }
-
+}
   for (const y in time) {
     if (
       y === "endDate" ||
