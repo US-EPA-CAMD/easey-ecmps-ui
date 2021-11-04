@@ -12,21 +12,7 @@ export const modalViewData = (
   mats = false
 ) => {
   const arr = [];
-  const codeList = {
-    // systemTypeCode: types,
-    // fuelCode: fuels,
-    // systemDesignationCode: designations,
-    // bypassApproachCode: bypassApproachCodes,
-    // substituteDataCode: substituteDataApproachCodes,
-    // parameterCode: parameterCodes,
-    // // methodCode: methodCodes,
-    // componentTypeCode: componentTypes,
-    // sampleAcquisitionMethodCode: acqMethodCode,
-    // basisCode: basisCode,
-    // maximumFuelFlowRateSourceCode: componentTypes,
-    // maximumFuelFlowRate: acqMethodCode,
-    // systemFuelFlowUOMCode: basisCode,
-  };
+
 
   for (const y in label) {
     let labels = "";
@@ -35,9 +21,7 @@ export const modalViewData = (
         if (!createNew) {
           if (totalOptions) {
             labels = findValue(totalOptions[y], selected[y], "name");
-          } else {
-            labels = findValue(codeList[y], selected[y], "name");
-          }
+          } 
         }
         arr.push([
           y,
@@ -46,7 +30,7 @@ export const modalViewData = (
           label[y][2] === "required" ? "required" : false,
           "dropdown",
           createNew ? "select" : selected[y],
-          totalOptions ? totalOptions[y] : codeList[y],
+          totalOptions ? totalOptions[y] : [],
         ]);
         break;
       case "input":
@@ -56,6 +40,16 @@ export const modalViewData = (
           createNew ? "" : selected[y],
           label[y][2] === "required" ? "required" : false,
           "input",
+        ]);
+        break;
+
+      case "locked":
+        arr.push([
+          y,
+          label[y][0],
+          createNew ? "" : selected[y],
+          label[y][2] === "required" ? "required" : false,
+          "locked",
         ]);
         break;
       case "skip":
@@ -101,7 +95,10 @@ export const modalViewData = (
       y === "loadAnalysisDate" ||
       y === "wafEndDate" ||
       y === "wafBeginDate" ||
-      y === "wafDeterminationDate"
+      y === "wafDeterminationDate" ||
+      y === "installDate" ||
+      y === "optimizationDate" ||
+      y === "retireDate"
     ) {
       let formattedDate = "";
       if (!createNew) {
@@ -135,7 +132,7 @@ export const modalViewData = (
         createNew ? "" : selected[y],
       ]);
     }
-    if( y === "skip"){
+    if (y === "skip") {
       arr.push([[], [], [], "", "skip"]);
     }
   }

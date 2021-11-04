@@ -119,7 +119,7 @@ export const addInitialAriaSort = () => {
         const sortIcon = column.querySelector(".MuiSvgIcon-root");
 
         // *** if svg element is displayed, set
-        if (window.getComputedStyle(sortIcon).opacity === "1") {
+        if (sortIcon && window.getComputedStyle(sortIcon).opacity === "1") {
           if (
             column
               .querySelector(".__rdt_custom_sort_icon__")
@@ -170,10 +170,12 @@ export const setAriaSort = (event) => {
     document.querySelectorAll(`.rdt_TableCol_Sortable`).forEach((column) => {
       if (column === currentColumn) {
         if (currentColumn.ariaSort === "none") {
-          if (sortIcon.classList.contains("asc")) {
-            currentColumn.ariaSort = "ascending";
-          } else if (sortIcon.classList.contains("desc")) {
-            currentColumn.ariaSort = "descending";
+          if (sortIcon && sortIcon.classList) {
+            if (sortIcon.classList.contains("asc")) {
+              currentColumn.ariaSort = "ascending";
+            } else if (sortIcon.classList.contains("desc")) {
+              currentColumn.ariaSort = "descending";
+            }
           }
         } else {
           if (currentColumn.ariaSort === "ascending") {

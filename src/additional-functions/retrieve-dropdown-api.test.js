@@ -129,6 +129,19 @@ test("tests getAllFuelCodes", async () => {
   expect(func).toEqual(data);
 });
 
+test("tests getAllFuelTypes", async () => {
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: data })
+  );
+  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+
+  const dataReturned = await dmApi.getAllFuelTypes();
+  expect(dataReturned.data).toEqual(data);
+
+  let func = useRetrieveDropdownApi(["fuelType"]);
+  expect(func).toEqual(data);
+});
+
 test("tests getAllFuelIndicatorCodes", async () => {
   axios.get.mockImplementation(() =>
     Promise.resolve({ status: 200, data: data })
@@ -152,5 +165,18 @@ test("tests getAllDemonstrationMethodCodes", async () => {
   expect(dataReturned.data).toEqual(data);
 
   let func = useRetrieveDropdownApi(["demMethodCode"]);
+  expect(func).toEqual(data);
+});
+
+test("tests getAllQualificationTypeCodes", async () => {
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: data })
+  );
+  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+
+  const dataReturned = await dmApi.getAllQualificationTypeCodes();
+  expect(dataReturned.data).toEqual(data);
+
+  let func = useRetrieveDropdownApi(["qualificationTypeCode"]);
   expect(func).toEqual(data);
 });

@@ -187,7 +187,7 @@ export const DataTableFormulas = ({
     const userInput = extractUserInput(payload, ".modalUserInput");
 
     mpApi
-      .createMonitoringDuct(userInput, locationSelectValue)
+      .createMonitoringFormulas(userInput, locationSelectValue)
       .then((result) => {
         console.log(result, " was created");
         setShow(false);
@@ -196,6 +196,7 @@ export const DataTableFormulas = ({
         console.log("error is", error);
         setShow(false);
       });
+      
     setUpdateTable(true);
   };
 
@@ -213,7 +214,7 @@ export const DataTableFormulas = ({
         checkout={checkout}
         user={user}
         addBtn={openFormulaModal}
-        addBtnName={"Create Formulas"}
+        addBtnName={"Create Formula"}
         setViewBtn={setViewBtn}
         viewBtn={viewBtn}
         setAddBtn={setAddBtn}

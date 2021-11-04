@@ -1,4 +1,4 @@
-export const getMonitoringPlansFuelDataRecords = (totalData) => {
+export const getMonitoringPlansQualifications = (totalData) => {
     const data = totalData;
     const records = [];
 
@@ -8,17 +8,11 @@ export const getMonitoringPlansFuelDataRecords = (totalData) => {
             : "";
         const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
 
-        const ozoneSeasonIndicator = el.ozoneSeasonIndicator === "1" ? "Yes" : "No";
-
         records.push({
-            col1: el.fuelCode,
-            col2: el.indicatorCode,
-            col3: `${ozoneSeasonIndicator}`,
-            col4: el.demGCV,
-            col5: el.demSO2,
-            col6: `${beginDate}`,
-            col7: `${endDate}`,
-            col8: el.id,
+            col1: el.qualificationTypeCode,
+            col2: `${beginDate}`,
+            col3: `${endDate}`,
+            col4: el.id,
         });
     });
 

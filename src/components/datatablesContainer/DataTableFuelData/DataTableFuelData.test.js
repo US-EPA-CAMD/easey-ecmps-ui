@@ -1,111 +1,96 @@
 import React from "react";
 import { render, waitForElement, fireEvent } from "@testing-library/react";
-import { DataTableFuelData } from "./DataTableFuelData";
+import { act } from "react-dom/test-utils";
+import DataTableFuelData from "./DataTableFuelData";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-const axios = require("axios");
-
+import * as axios from "axios";
 jest.mock("axios");
 
-const monitoringFuelDataMethods = [
-  {
-    id: "MELISSARHO-FD768B60E4D343158F7AD52EFD704D0E",
-    supplementalFuelDataParameterCode: "TNHGM",
-    supplementalFuelDataMonitoringMethodCode: "QST",
-    beginDate: "2016-04-16",
-    beginHour: "0",
-    endDate: null,
-    endHour: null,
-    active: true,
-  },
-  {
-    id: "MELISSARHO-CDF765BC7BF849EE9C23608B95540200",
-    supplementalFuelDataParameterCode: "HG",
-    supplementalFuelDataMonitoringMethodCode: "LEE",
-    beginDate: "2016-04-16",
-    beginHour: "0",
-    endDate: null,
-    endHour: null,
-    active: true,
-  },
-];
+const selectedFuelData = [{}];
+
+const locationSelectValue = 6;
+
 //testing redux connected component to mimic props passed as argument
-const componentRenderer = (location) => {
+const componentRenderer = (
+  checkout,
+  secondLevel,
+  addComponentFlag,
+  openComponentViewTest,
+  openAddComponentTest
+) => {
   const props = {
-    user: { firstName: "test" },
-    checkout: true,
+    locationSelectValue: "1111",
+    user: "testUser",
+    checkout: false,
+    inactive: [false],
+    settingInactiveCheckBox: jest.fn(),
+    revertedState: false,
+    selectedLocation: { id: "8", unitRedordId: "3" },
     setRevertedState: jest.fn(),
-    locationSelectValue: location,
   };
   return render(<DataTableFuelData {...props} />);
 };
-function componentRendererNoData(args) {
-  const defualtProps = {
-    user: { firstName: "test" },
-    checkout: true,
-    inactive: true,
-    settingInactiveCheckBox: jest.fn(),
-    locationSelectValue: location,
-  };
 
-  const props = { ...defualtProps, ...args };
-  return render(<DataTableFuelData {...props} />);
-}
-
-test("tests a configuration with only inactive methods", async () => {
+test("tests getMonitoringPlansFuelDataRecords", async () => {
   axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: monitoringFuelDataMethods })
+    Promise.resolve({ status: 200, data: selectedFuelData })
   );
-  const title = await mpApi.getMonitoringMethods(5770);
-  expect(title.data).toEqual(monitoringFuelDataMethods);
-  let { container } = await waitForElement(() => componentRenderer(5770));
-  // componentRenderer(6);
+  const title = await mpApi.getMonitoringPlansFuelDataRecords(locationSelectValue);
+  expect(title.data).toEqual(selectedFuelData);
+
+  let { container } = await waitForElement(() =>
+    componentRenderer(false, false, false, true, false)
+  );
   expect(container).toBeDefined();
 });
 
-test("tests a create/save methods", async () => {
-  // axios.get.mockImplementation(() =>
-  //   Promise.resolve({ status: 200, data: methodsInactiveOnly })
-  // );
 
-  // axios.put.mockImplementation((url) => {
-  //   switch (url) {
-  //     case `https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/workspace/locations/3844/methods/WPC07008-24F0C0E2B4DD4AFC927FC2DEDC67B859`:
-  //       return Promise.resolve({ data: [{ name: "Bob", items: [] }] });
-  //     case "/items.json":
-  //       return Promise.resolve({ data: [{ id: 1 }, { id: 2 }] });
-  //     default:
-  //       return Promise.reject(new Error("not found"));
-  //   }
-  // });
-  // axios.put.mockImplementation(() =>
-  //   Promise.resolve({ status: 200, data: data })
-  // );
+test('test opening the Modal to view formula details and then closing', async () => {
+  act(async () => {
 
-  // const title = await mpApi.getMonitoringMethods(69);
-  // expect(title.data).toEqual(methodsInactiveOnly);
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: monitoringFuelDataMethods })
-  );
+    let { container } = await waitForElement(() => {
+      componentRenderer(false, false, false, true, false);
+    });
 
-  axios.put.mockImplementation((url) => {
-    switch (url) {
-      case `https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/workspace/locations/5770/fuelData-methods/MELISSARHO-CDF765BC7BF849EE9C23608B95540200`:
-        return Promise.resolve({ data: [{ name: "Bob", items: [] }] });
-      case "/items.json":
-        return Promise.resolve({ data: [{ id: 1 }, { id: 2 }] });
-      default:
-        return Promise.reject(new Error("not found"));
-    }
+    jest.mock("../../../utils/api/monitoringPlansApi", () => {
+      const mockFormulas = [{
+        locationId: 6,
+        id: "8",
+        unitId: "3",
+        fuelCode: "DSL",
+        indicatorCode: "S",
+        ozoneSeasonIndicator: "0",
+        demGCV: null,
+        demSO2: null,
+        beginDate: "1995-01-01T00:00:00.000Z",
+        endDate: "2015-08-24T00:00:00.000Z",
+        actualOrProjectCode: "A",
+        sulfurContent: null,
+        userId: "bvick",
+        addDate: "2009-02-20T00:00:00.000Z",
+        updateDate: "2015-10-22T00:00:00.000Z",
+        active: false
+      }];
+      return {
+        getMonitoringPlansFuelDataRecords: jest.fn(() => Promise.resolve(mockFormulas))
+      }
+    });
+
+    viewBtn = container.getByText('View');
+
+    fireEvent.click(viewBtn);
+
+    closeBtn = container.getByTestId('closeModalBtn')
+    //Modal X button
+    expect(closeBtn).toBeInTheDocument();
+    //Header
+    expect(container.getByText('Unit Fuel')).toBeInTheDocument();
+
+    fireEvent.click(closeBtn);
+    expect(closeBtn).not.toBeInTheDocument();
+
+    fireEvent.click(container.querySelector("#testingBtn"));
+    fireEvent.click(container.querySelector("#testingBtn2"));
+    fireEvent.click(container.querySelector("#testingBtn3"));
   });
-  axios.put.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: data })
-  );
-
-  let { container } = await waitForElement(() => componentRenderer(5770));
-
-  fireEvent.click(container.querySelector("#testingBtn"));
-  fireEvent.click(container.querySelector("#testingBtn2"));
-  fireEvent.click(container.querySelector("#testingBtn3"));
-  // componentRenderer(6);
-  expect(container).toBeDefined();
 });
