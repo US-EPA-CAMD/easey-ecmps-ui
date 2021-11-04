@@ -29,7 +29,6 @@ import {
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
-//
 export const DataTableAssert = ({
   locationSelectValue,
   user,
@@ -57,7 +56,6 @@ export const DataTableAssert = ({
   const [selectedRow, setSelectedRow] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [dataApi, setDataApi] = useState({});
   const totalOptions = useRetrieveDropdownApi(
     dropdownArray[0],
     dropdownArray.length > 1 ? dropdownArray[1] : null
@@ -454,21 +452,49 @@ export const DataTableAssert = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataPulled, inactive, locationSelectValue, dataTableName]);
 
-  const testing = () => {
-    openModal(false, false, true);
+  const testSave = () => {
+    openModal(
+      { col5: "MELISSARHO-CDF765BC7BF849EE9C23608B95540200" },
+      false,
+      true
+    );
     saveData();
   };
-
-  const testing2 = () => {
+  const testOpen = () => {
     openModal(
       { col5: "MELISSARHO-CDF765BC7BF849EE9C23608B95540200" },
       false,
       false
     );
   };
-  const testing3 = () => {
-    openModal(false, false, true);
+  const testCreate = () => {
+    openModal(
+      { col5: "MELISSARHO-CDF765BC7BF849EE9C23608B95540200" },
+      false,
+      true
+    );
     createData();
+  };
+  const testData = () => {
+    const tableNames = [
+      "Load",
+      "Rectangular Duct WAF",
+      "Span",
+      "Formula",
+      "Default",
+      "Unit Fuel",
+      "Unit Control",
+      "Unit Capacity",
+    ];
+
+    for (const name in tableNames) {
+      getDataTableApi(name, "6");
+      getDataTableRecords([], name);
+    }
+
+    createData();
+    saveData();
+    closeModalHandler();
   };
 
   return (
@@ -479,24 +505,13 @@ export const DataTableAssert = ({
         aria-hidden={true}
         role="button"
         type="hidden"
-        id="testingBtn"
-        onClick={() => testing()}
-      />
-      <input
-        tabIndex={-1}
-        aria-hidden={true}
-        role="button"
-        type="hidden"
-        id="testingBtn2"
-        onClick={() => testing2()}
-      />
-      <input
-        tabIndex={-1}
-        aria-hidden={true}
-        role="button"
-        type="hidden"
-        id="testingBtn3"
-        onClick={() => testing3()}
+        id="testBtn"
+        onClick={() => {
+          testOpen();
+          testSave();
+          testCreate();
+          testData();
+        }}
       />
 
       <DataTableRender
