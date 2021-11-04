@@ -249,6 +249,8 @@ export const DataTableAssert = ({
       true
     );
     createData();
+    saveData();
+    closeModalHandler();
   };
 
   return (
