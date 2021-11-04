@@ -18,6 +18,7 @@ describe("testing monitoring plan data selectors", () => {
         methodCode: "AD",
         parameterCode: "HI",
         substituteDataCode: "SPTS",
+        retireDate: "2020-10-10",
       },
       {
         beginDate: null,
@@ -29,13 +30,14 @@ describe("testing monitoring plan data selectors", () => {
         methodCode: "AD",
         parameterCode: "HI",
         substituteDataCode: "SPTS",
+        retireDate: "2020-10-10",
       },
     ];
 
     monitoringMethdsTableRecods = [
       {
         col1: "HI",
-        col2: "AD",
+        col2: undefined,
         col3: "SPTS",
         col4: null,
         col5: "07/01/2019 0",
@@ -44,7 +46,7 @@ describe("testing monitoring plan data selectors", () => {
       },
       {
         col1: "HI",
-        col2: "AD",
+        col2: undefined,
         col3: "SPTS",
         col4: null,
         col5: " ",
@@ -101,5 +103,9 @@ describe("testing monitoring plan data selectors", () => {
     expect(
       fs.getMonitoringPlansMatsMethodsTableRecords(selectedMonitoringMatsMethod)
     ).toEqual(monitoringMatsMethdsTableRecods);
+  });
+
+  test("should return formatted date ", () => {
+    expect(fs.formatAndNormalizeDate("2020-10-10")).toEqual("10/10/2020");
   });
 });
