@@ -2,6 +2,7 @@
 name: ecmps-ui
 path: ecmps
 host: easey-dev.app.cloud.gov
+apiHost: api.epa.gov/easey/dev
 environment: development
 memory: 1024M
 inactivityDurationCheckoutMinutes: 2

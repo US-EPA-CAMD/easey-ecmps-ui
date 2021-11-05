@@ -12,31 +12,50 @@ export const modalViewData = (
   mats = false
 ) => {
   const arr = [];
-  const codeList = {
-    // systemTypeCode: types,
-    // fuelCode: fuels,
-    // systemDesignationCode: designations,
-    // bypassApproachCode: bypassApproachCodes,
-    // substituteDataCode: substituteDataApproachCodes,
-    // parameterCode: parameterCodes,
-    // // methodCode: methodCodes,
-    // componentTypeCode: componentTypes,
-    // sampleAcquisitionMethodCode: acqMethodCode,
-    // basisCode: basisCode,
-    // maximumFuelFlowRateSourceCode: componentTypes,
-    // maximumFuelFlowRate: acqMethodCode,
-    // systemFuelFlowUOMCode: basisCode,
-  };
 
+  // y = property name of the apis
   for (const y in label) {
-    let labels = "";
+    if (label[y][3] === "locked") {
+      if (createNew) {
+        arr.push([
+          y,
+          label[y][0],
+          createNew ? "" : selected[y],
+          label[y][2] === "required" ? "required" : false,
+         
+          "locked",
+        ]);
+      } else if (label[y][1] === "date") {
+        const parts = selected[y] ? selected[y].split("-") : "";
+
+        const formmatedDate = parts != "" ? `${parts[1]}/${parts[2]}/${parts[0]}` : "";
+        console.log("formmated", formmatedDate);
+        arr.push([
+          y,
+          label[y][0],
+          createNew ? "" : formmatedDate,
+          label[y][2] === "required" ? "required" : false,
+          "locked",
+        ])
+      }else{
+        arr.push([
+          y,
+          label[y][0],
+          createNew ? "" : selected[y],
+          label[y][2] === "required" ? "required" : false,
+          "locked",
+        ])
+
+      }
+    }
+    
+    else{
+let labels = "";
     switch (label[y][1]) {
       case "dropdown":
         if (!createNew) {
           if (totalOptions) {
             labels = findValue(totalOptions[y], selected[y], "name");
-          } else {
-            labels = findValue(codeList[y], selected[y], "name");
           }
         }
         arr.push([
@@ -46,7 +65,7 @@ export const modalViewData = (
           label[y][2] === "required" ? "required" : false,
           "dropdown",
           createNew ? "select" : selected[y],
-          totalOptions ? totalOptions[y] : codeList[y],
+          totalOptions ? totalOptions[y] : [],
         ]);
         break;
       case "input":
@@ -58,6 +77,7 @@ export const modalViewData = (
           "input",
         ]);
         break;
+
       case "skip":
         arr.push([[], [], [], "", "skip"]);
         break;
@@ -93,7 +113,7 @@ export const modalViewData = (
         break;
     }
   }
-
+}
   for (const y in time) {
     if (
       y === "endDate" ||
