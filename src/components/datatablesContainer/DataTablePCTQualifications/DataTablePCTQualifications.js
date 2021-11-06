@@ -110,14 +110,15 @@ export const DataTablePCTQualifications = ({
         {
           qualificationYear: ["Qualification Year", "input", ""],
           averagePercentValue: ["Average Percent Value", "input", ""],
+          emptyfield: ["", "skip", ""],
           yr1QualificationDataYear: ["Data Year 1", "input", ""],
           yr1QualificationDataTypeCode: ["Year 1 Type Code", "input", ""],
           yr1PercentageValue: ["Year 1 Percentage Value", "input", ""],
-          emptyfield: ["", "skip", ""],
+
           yr2QualificationDataYear: ["Data Year 2", "input", ""],
           yr2QualificationDataTypeCode: ["Year 2 Type Code", "input", ""],
           yr2PercentageValue: ["Year 2 Percentage Value", "input", ""],
-          emptyfield: ["", "skip", ""],
+
           yr3QualificationDataYear: ["Data Year 3", "input", ""],
           yr3QualificationDataTypeCode: ["Year 3 Type Code", "input", ""],
           yr3PercentageValue: ["Year 3 Percentage Value", "input", ""],
@@ -143,7 +144,7 @@ export const DataTablePCTQualifications = ({
             modalData={selectedQualPct}
             // backBtn={setBread}
             data={selectedModalData}
-            cols={2}
+            cols={3}
             title={`Qualification Percent: ${qualPctData["id"]}`}
             viewOnly={true}
           />
