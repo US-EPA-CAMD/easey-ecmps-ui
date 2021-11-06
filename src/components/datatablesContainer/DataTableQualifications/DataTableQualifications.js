@@ -155,7 +155,6 @@ export const DataTableQualifications = ({
         qualData,
         {
           qualificationTypeCode: ["Qualification Type Code", "dropdown", ""],
-          emptyfield: ["", "skip", ""],
         },
         {
           beginDate: ["Start Date", "date", ""],
@@ -256,7 +255,7 @@ export const DataTableQualifications = ({
                 <ModalDetails
                   modalData={selectedQualificationData}
                   data={selectedModalData}
-                  cols={2}
+                  cols={3}
                   title={"Qualification"}
                   viewOnly={!(user && checkout)}
                 />

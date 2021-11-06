@@ -142,10 +142,13 @@ export const DataTablePCTQualifications = ({
         <div>
           <ModalDetails
             modalData={selectedQualPct}
-            // backBtn={setBread}
+            backBtn={() => {
+              setOpenPCT(false);
+            }}
             data={selectedModalData}
             cols={3}
-            title={`Qualification Percent: ${qualPctData["id"]}`}
+            // title={`Qualification Percent: ${selectedQualPct["id"]}`}
+            title={"Qualification Percent"}
             viewOnly={true}
           />
         </div>
