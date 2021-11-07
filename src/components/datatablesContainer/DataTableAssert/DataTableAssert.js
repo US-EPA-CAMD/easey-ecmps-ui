@@ -1,22 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
 
-// selectors that normalize api data to fit the columns in UI datatable
-import * as loadSelector from "../../../utils/selectors/monitoringPlanLoads";
-import * as wafSelector from "../../../utils/selectors/monitoringPlanRectangularDucts";
-import * as spanSelector from "../../../utils/selectors/monitoringPlanSpans";
-import * as formulaSelector from "../../../utils/selectors/monitoringPlanFormulas";
-import * as defaultSelector from "../../../utils/selectors/monitoringPlanDefaults";
-import * as unitFuelSelector from "../../../utils/selectors/monitoringPlanFuelData";
-import * as unitControlSelector from "../../../utils/selectors/monitoringPlanUnitControls";
-import * as unitCapacitySelector from "../../../utils/selectors/monitoringPlanUnitCapacity";
-
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
+import * as assertSelector from "../../../utils/selectors/assert";
 
 import {
   getActiveData,
@@ -78,7 +68,7 @@ export const DataTableAssert = ({
         dataTableName
       );
       setDataLoaded(false);
-      getDataTableApi(dataTableName, locationSelectValue);
+      getDataTableApi(dataTableName, locationSelectValue, selectedLocation);
 
       setUpdateTable(false);
       setRevertedState(false);
@@ -88,105 +78,17 @@ export const DataTableAssert = ({
 
   // get API for data
   // in  a timer because WAFS get takes a lil bit exxtra time to process, fixes update of datatable after editing data
-  const getDataTableApi = (name, location) => {
+  const getDataTableApi = (name, location, selectedLocation) => {
     let timerFunc = setTimeout(() => {
-      switch (name) {
-        case "Load":
-          mpApi.getMonitoringLoads(location).then((res) => {
-            setDataPulled(res.data);
-            setDataLoaded(true);
-          });
-          break;
-        case "Rectangular Duct WAF":
-          mpApi.getMonitoringRectangularDucts(location).then((res) => {
-            setDataPulled(res.data);
-            setDataLoaded(true);
-          });
-          break;
-        case "Span":
-          mpApi.getMonitoringSpans(location).then((res) => {
-            setDataPulled(res.data);
-            setDataLoaded(true);
-          });
-          break;
-        case "Formula":
-          mpApi.getMonitoringFormulas(location).then((res) => {
-            setDataPulled(res.data);
-            setDataLoaded(true);
-          });
-          break;
-
-        case "Default":
-          mpApi.getMonitoringDefaults(location).then((res) => {
-            setDataPulled(res.data);
-            setDataLoaded(true);
-          });
-          break;
-
-        case "Unit Fuel":
-          mpApi
-            .getMonitoringPlansFuelDataRecords(
-              selectedLocation ? selectedLocation : location
-            )
-            .then((res) => {
-              setDataPulled(res.data);
-              setDataLoaded(true);
-            });
-          break;
-
-        case "Unit Control":
-          mpApi
-            .getMonitoringPlansUnitControlRecords(
-              selectedLocation ? selectedLocation : location
-            )
-            .then((res) => {
-              setDataPulled(res.data);
-              setDataLoaded(true);
-            });
-          break;
-        case "Unit Capacity":
-          mpApi
-            .getUnitCapacity(selectedLocation ? selectedLocation : location)
-            .then((res) => {
-              setDataPulled(res.data);
-              setDataLoaded(true);
-            });
-          break;
-        default:
-          break;
-      }
+      assertSelector
+        .getDataTableApis(name, location, selectedLocation)
+        .then((res) => {
+          setDataPulled(res.data);
+          setDataLoaded(true);
+        });
     }, [500]);
     setUpdateTable(true);
     return () => clearTimeout(timerFunc);
-  };
-
-  const getDataTableRecords = (dataIn, name) => {
-    switch (name) {
-      case "Load":
-        return loadSelector.getMonitoringPlansLoadsTableRecords(dataIn);
-      case "Rectangular Duct WAF":
-        return wafSelector.getMonitoringPlansRectangularDuctsTableRecords(
-          dataIn
-        );
-      case "Span":
-        return spanSelector.getMonitoringPlansSpansTableRecords(dataIn);
-      case "Formula":
-        return formulaSelector.getMonitoringPlansFormulasTableRecords(dataIn);
-      case "Default":
-        return defaultSelector.getMonitoringPlansDefaultsTableRecords(dataIn);
-      case "Unit Fuel":
-        return unitFuelSelector.getMonitoringPlansFuelDataRecords(dataIn);
-
-      case "Unit Control":
-        return unitControlSelector.getMonitoringPlansUnitControlRecords(dataIn);
-
-      case "Unit Capacity":
-        return unitCapacitySelector.getMonitoringPlansUnitCapacityRecords(
-          dataIn
-        );
-      default:
-        break;
-    }
   };
 
   const saveData = () => {
@@ -196,89 +98,13 @@ export const DataTableAssert = ({
       radioName ? radioName : null
     );
 
-    switch (dataTableName) {
-      case "Load":
-        mpApi
-          .saveMonitoringLoads(userInput)
-          .then((result) => {
-            console.log(result, " was saved");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-      case "Rectangular Duct WAF":
-        mpApi
-          .saveMonitoringDuct(userInput)
+    assertSelector.saveDataSwitch(
+      userInput,
+      dataTableName,
+      locationSelectValue,
+      urlParameters
+    );
 
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-      case "Span":
-        mpApi
-          .saveMonitoringSpans(userInput)
-          .then((result) => {
-            console.log(result, " was saved");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-      case "Formula":
-        mpApi
-          .saveMonitoringFormulas(userInput, locationSelectValue)
-          .then((result) => {
-            console.log(result, " was saved");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-      case "Default":
-        mpApi
-          .saveMonitoringDefaults(userInput, locationSelectValue)
-          .then((result) => {
-            console.log(result, " was saved");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-      case "Unit Fuel":
-        mpApi
-          .saveMonitoringPlansFuelData(userInput)
-          .then((result) => {
-            console.log(result, " was saved");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-      case "Unit Control":
-        mpApi
-          .saveUnitControl(userInput, urlParameters ? urlParameters : null)
-          .then((result) => {
-            console.log(result, " was saved");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-
-      case "Unit Capacity":
-        mpApi
-          .saveUnitCapacity(userInput, urlParameters ? urlParameters : null)
-          .then((result) => {
-            console.log(result, " was saved");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-      default:
-        break;
-    }
     setShow(false);
     setUpdateTable(true);
   };
@@ -290,79 +116,13 @@ export const DataTableAssert = ({
       radioName ? radioName : null
     );
 
-    switch (dataTableName) {
-      case "Load":
-        mpApi
-          .createMonitoringLoads(userInput)
-          .then((result) => {
-            console.log(result, " was created");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-      case "Rectangular Duct WAF":
-        mpApi.createMonitoringDuct(userInput).catch((error) => {
-          console.log("error is", error);
-        });
-        break;
+    assertSelector.createDataSwitch(
+      userInput,
+      dataTableName,
+      locationSelectValue,
+      urlParameters
+    );
 
-      case "Span":
-        mpApi
-          .createMonitoringSpans(userInput)
-          .then((result) => {
-            console.log(result, " was created");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-      case "Formula":
-        mpApi
-          .createMonitoringFormulas(userInput, locationSelectValue)
-          .then((result) => {
-            console.log(result, " was created");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-
-      case "Default":
-        mpApi
-          .createMonitoringDefaults(userInput, locationSelectValue)
-          .then((result) => {
-            console.log(result, " was created");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-
-      case "Unit Fuel":
-        mpApi
-          .createFuelData(userInput, locationSelectValue)
-          .then((result) => {
-            console.log(result, " was created");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-
-      case "Unit Control":
-        mpApi
-          .createUnitControl(userInput, urlParameters ? urlParameters : null)
-          .then((result) => {
-            console.log(result, " was created");
-          })
-          .catch((error) => {
-            console.log("error is", error);
-          });
-        break;
-      default:
-        break;
-    }
     setShow(false);
     setUpdateTable(true);
   };
@@ -430,19 +190,23 @@ export const DataTableAssert = ({
         // uncheck it and disable checkbox
         //function parameters ( check flag, disable flag )
         settingInactiveCheckBox(false, true);
-        setDataSet(getDataTableRecords(dataPulled, dataTableName));
+        setDataSet(
+          assertSelector.getDataTableRecords(dataPulled, dataTableName)
+        );
       }
 
       // only inactive data > disables checkbox and checks it
       if (inactiveOnly.length === dataPulled.length) {
         //check it and disable checkbox
         settingInactiveCheckBox(true, true);
-        setDataSet(getDataTableRecords(dataPulled, dataTableName));
+        setDataSet(
+          assertSelector.getDataTableRecords(dataPulled, dataTableName)
+        );
       }
       // resets checkbox
       settingInactiveCheckBox(inactive[0], false);
       setDataSet(
-        getDataTableRecords(
+        assertSelector.getDataTableRecords(
           !inactive[0] ? getActiveData(dataPulled) : dataPulled,
           dataTableName
         )
@@ -474,25 +238,6 @@ export const DataTableAssert = ({
       true
     );
     createData();
-  };
-  const testData = () => {
-    const tableNames = [
-      "Load",
-      "Rectangular Duct WAF",
-      "Span",
-      "Formula",
-      "Default",
-      "Unit Fuel",
-      "Unit Control",
-      "Unit Capacity",
-    ];
-
-    for (const name in tableNames) {
-      getDataTableApi(name, "6");
-      getDataTableRecords([], name);
-    }
-
-    createData();
     saveData();
     closeModalHandler();
   };
@@ -510,7 +255,7 @@ export const DataTableAssert = ({
           testOpen();
           testSave();
           testCreate();
-          testData();
+          closeModalHandler();
         }}
       />
 
@@ -525,7 +270,7 @@ export const DataTableAssert = ({
         checkout={checkout}
         user={user}
         addBtn={openModal}
-        addBtnName={"Create Load"}
+        addBtnName={`Create ${dataTableName}`}
         setViewBtn={setViewBtn}
         viewBtn={viewBtn}
         setAddBtn={setAddBtn}
