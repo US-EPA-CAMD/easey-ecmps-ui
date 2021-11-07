@@ -1,24 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import * as fs from "../../../utils/selectors/monitoringPlanPCTQualifications";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 
-import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
-import {
-  getActiveData,
-  getInactiveData,
-} from "../../../additional-functions/filter-data";
-
-import {
-  attachChangeEventListeners,
-  removeChangeEventListeners,
-  unsavedDataMessage,
-} from "../../../additional-functions/prompt-to-save-unsaved-changes";
+import { attachChangeEventListeners } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
 export const DataTablePCTQualifications = ({
   locationSelectValue,
@@ -26,12 +15,10 @@ export const DataTablePCTQualifications = ({
   user,
   checkout,
   inactive,
-  settingInactiveCheckBox,
   revertedState,
   setRevertedState,
   setOpenPCT,
   openPCT,
-  selectedLocation,
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [qualPctData, setQualPctData] = useState([]);
@@ -69,20 +56,21 @@ export const DataTablePCTQualifications = ({
     "Data Year 3",
   ];
 
-  const payload = {
-    id: null,
-    qualificationYear: "",
-    averagePercentValue: "",
-    yr1QualificationDataYear: "",
-    yr1QualificationDataTypeCode: "",
-    yr1PercentageValue: "",
-    yr2QualificationDataYear: "",
-    yr2QualificationDataTypeCode: "",
-    yr2PercentageValue: "",
-    yr3QualificationDataYear: "",
-    yr3QualificationDataTypeCode: "",
-    yr3PercentageValue: "",
-  };
+  // const payload = {
+  //   id: null,
+  //   qualificationYear: "",
+  //   averagePercentValue: "",
+  //   yr1QualificationDataYear: "",
+  //   yr1QualificationDataTypeCode: "",
+  //   yr1PercentageValue: "",
+  //   yr2QualificationDataYear: "",
+  //   yr2QualificationDataTypeCode: "",
+  //   yr2PercentageValue: "",
+  //   yr3QualificationDataYear: "",
+  //   yr3QualificationDataTypeCode: "",
+  //   yr3PercentageValue: "",
+  // };
+
   const data = useMemo(() => {
     if (qualPctData.length > 0) {
       return fs.getMonitoringPlansPCTQualifications(qualPctData);
@@ -94,7 +82,6 @@ export const DataTablePCTQualifications = ({
 
   const openPctQualModal = (row, bool, create) => {
     setOpenPCT(true);
-    openPCT = true;
     let pctData = null;
 
     if (qualPctData.length > 0 && !create) {
@@ -134,8 +121,6 @@ export const DataTablePCTQualifications = ({
     });
   };
 
-  const [viewBtn, setViewBtn] = useState(null);
-
   return (
     <div className="methodTable react-transition fade-in">
       {openPCT ? (
@@ -161,7 +146,6 @@ export const DataTablePCTQualifications = ({
           user={user}
           openHandler={openPctQualModal}
           actionsBtn={"View"}
-          viewBtn={viewBtn}
           tableTitle={"Qualification Percent"}
           componentStyling="systemsCompTable"
         />
