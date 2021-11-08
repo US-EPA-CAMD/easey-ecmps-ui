@@ -1,6 +1,6 @@
 import * as mpApi from "../api/monitoringPlansApi";
 
-// selectors that normalize api data to fit the columns in UI datatable
+// Selectors that normalize api data to fit the columns in UI datatable
 import * as loadSelector from "./monitoringPlanLoads";
 import * as wafSelector from "./monitoringPlanRectangularDucts";
 import * as spanSelector from "./monitoringPlanSpans";
@@ -10,57 +10,72 @@ import * as unitFuelSelector from "./monitoringPlanFuelData";
 import * as unitControlSelector from "./monitoringPlanUnitControls";
 import * as unitCapacitySelector from "./monitoringPlanUnitCapacity";
 
+// Table Names
+const load = "Load";
+const span = "Span";
+const def = "Default";
+const form = "Formula";
+const rectDuctWaf = "Rectangular Duct WAF";
+const unitCon = "Unit Control";
+const unitCap = "Unit Capacity";
+const unitFuel = "Unit Fuel";
+
+// Getting records from API
 export const getDataTableApis = async (name, location, selectedLocation) => {
-  if (name === "Load") {
+  if (name === load) {
     return mpApi.getMonitoringLoads(location);
-  } else if (name === "Rectangular Duct WAF") {
+  } else if (name === rectDuctWaf) {
     return mpApi.getMonitoringRectangularDucts(location);
-  } else if (name === "Span") {
+  } else if (name === span) {
     return mpApi.getMonitoringSpans(location);
-  } else if (name === "Formula") {
+  } else if (name === form) {
     return mpApi.getMonitoringFormulas(location);
-  } else if (name === "Default") {
+  } else if (name === def) {
     return mpApi.getMonitoringDefaults(location);
-  } else if (name === "Unit Fuel") {
+  } else if (name === unitFuel) {
     return mpApi.getMonitoringPlansFuelDataRecords(
       selectedLocation ? selectedLocation : location
     );
-  } else if (name === "Unit Control") {
+  } else if (name === unitCon) {
     return mpApi.getMonitoringPlansUnitControlRecords(
       selectedLocation ? selectedLocation : location
     );
-  } else if (name === "Unit Capacity") {
+  } else if (name === unitCap) {
     return mpApi.getUnitCapacity(
       selectedLocation ? selectedLocation : location
     );
   }
+  return { data: [] };
 };
 
+// Selectors
 export const getDataTableRecords = (dataIn, name) => {
   switch (name) {
-    case "Load":
+    case load:
       return loadSelector.getMonitoringPlansLoadsTableRecords(dataIn);
-    case "Rectangular Duct WAF":
+    case rectDuctWaf:
       return wafSelector.getMonitoringPlansRectangularDuctsTableRecords(dataIn);
-    case "Span":
+    case span:
       return spanSelector.getMonitoringPlansSpansTableRecords(dataIn);
-    case "Formula":
+    case form:
       return formulaSelector.getMonitoringPlansFormulasTableRecords(dataIn);
-    case "Default":
+    case def:
       return defaultSelector.getMonitoringPlansDefaultsTableRecords(dataIn);
-    case "Unit Fuel":
+    case unitFuel:
       return unitFuelSelector.getMonitoringPlansFuelDataRecords(dataIn);
 
-    case "Unit Control":
+    case unitCon:
       return unitControlSelector.getMonitoringPlansUnitControlRecords(dataIn);
 
-    case "Unit Capacity":
+    case unitCap:
       return unitCapacitySelector.getMonitoringPlansUnitCapacityRecords(dataIn);
     default:
       break;
   }
+  return [];
 };
 
+// Save (PUT) endpoints for API
 export const saveDataSwitch = (
   userInput,
   dataTableName,
@@ -68,7 +83,7 @@ export const saveDataSwitch = (
   urlParameters
 ) => {
   switch (dataTableName) {
-    case "Load":
+    case load:
       mpApi
         .saveMonitoringLoads(userInput)
         .then((result) => {
@@ -78,7 +93,7 @@ export const saveDataSwitch = (
           console.log("error is", error);
         });
       break;
-    case "Rectangular Duct WAF":
+    case rectDuctWaf:
       mpApi
         .saveMonitoringDuct(userInput)
 
@@ -86,7 +101,7 @@ export const saveDataSwitch = (
           console.log("error is", error);
         });
       break;
-    case "Span":
+    case span:
       mpApi
         .saveMonitoringSpans(userInput)
         .then((result) => {
@@ -96,7 +111,7 @@ export const saveDataSwitch = (
           console.log("error is", error);
         });
       break;
-    case "Formula":
+    case form:
       mpApi
         .saveMonitoringFormulas(userInput, locationSelectValue)
         .then((result) => {
@@ -106,7 +121,7 @@ export const saveDataSwitch = (
           console.log("error is", error);
         });
       break;
-    case "Default":
+    case def:
       mpApi
         .saveMonitoringDefaults(userInput, locationSelectValue)
         .then((result) => {
@@ -116,7 +131,7 @@ export const saveDataSwitch = (
           console.log("error is", error);
         });
       break;
-    case "Unit Fuel":
+    case unitFuel:
       mpApi
         .saveMonitoringPlansFuelData(userInput)
         .then((result) => {
@@ -126,7 +141,7 @@ export const saveDataSwitch = (
           console.log("error is", error);
         });
       break;
-    case "Unit Control":
+    case unitCon:
       mpApi
         .saveUnitControl(userInput, urlParameters ? urlParameters : null)
         .then((result) => {
@@ -137,7 +152,7 @@ export const saveDataSwitch = (
         });
       break;
 
-    case "Unit Capacity":
+    case unitCap:
       mpApi
         .saveUnitCapacity(userInput, urlParameters ? urlParameters : null)
         .then((result) => {
@@ -152,6 +167,7 @@ export const saveDataSwitch = (
   }
 };
 
+// Create (POST) endpoints for API
 export const createDataSwitch = (
   userInput,
   dataTableName,
@@ -159,7 +175,7 @@ export const createDataSwitch = (
   urlParameters
 ) => {
   switch (dataTableName) {
-    case "Load":
+    case load:
       mpApi
         .createMonitoringLoads(userInput)
         .then((result) => {
@@ -169,13 +185,13 @@ export const createDataSwitch = (
           console.log("error is", error);
         });
       break;
-    case "Rectangular Duct WAF":
+    case rectDuctWaf:
       mpApi.createMonitoringDuct(userInput).catch((error) => {
         console.log("error is", error);
       });
       break;
 
-    case "Span":
+    case span:
       mpApi
         .createMonitoringSpans(userInput)
         .then((result) => {
@@ -185,7 +201,7 @@ export const createDataSwitch = (
           console.log("error is", error);
         });
       break;
-    case "Formula":
+    case form:
       mpApi
         .createMonitoringFormulas(userInput, locationSelectValue)
         .then((result) => {
@@ -196,7 +212,7 @@ export const createDataSwitch = (
         });
       break;
 
-    case "Default":
+    case def:
       mpApi
         .createMonitoringDefaults(userInput, locationSelectValue)
         .then((result) => {
@@ -207,7 +223,7 @@ export const createDataSwitch = (
         });
       break;
 
-    case "Unit Fuel":
+    case unitFuel:
       mpApi
         .createFuelData(userInput, locationSelectValue)
         .then((result) => {
@@ -218,7 +234,7 @@ export const createDataSwitch = (
         });
       break;
 
-    case "Unit Control":
+    case unitCon:
       mpApi
         .createUnitControl(userInput, urlParameters ? urlParameters : null)
         .then((result) => {
@@ -228,6 +244,16 @@ export const createDataSwitch = (
           console.log("error is", error);
         });
       break;
+      case unitCap:
+        mpApi
+          .createUnitCapacity(userInput, urlParameters ? urlParameters : null)
+          .then((result) => {
+            console.log(result, " was created");
+          })
+          .catch((error) => {
+            console.log("error is", error);
+          });
+        break;
     default:
       break;
   }

@@ -1,21 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 
-// selectors that normalize api data to fit the columns in UI datatable
-import * as loadSelector from "../../../utils/selectors/monitoringPlanLoads";
-import * as wafSelector from "../../../utils/selectors/monitoringPlanRectangularDucts";
-import * as spanSelector from "../../../utils/selectors/monitoringPlanSpans";
-import * as formulaSelector from "../../../utils/selectors/monitoringPlanFormulas";
-import * as defaultSelector from "../../../utils/selectors/monitoringPlanDefaults";
-import * as unitFuelSelector from "../../../utils/selectors/monitoringPlanFuelData";
-import * as unitControlSelector from "../../../utils/selectors/monitoringPlanUnitControls";
-import * as unitCapacitySelector from "../../../utils/selectors/monitoringPlanUnitCapacity";
-
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import * as assertSelector from "../../../utils/selectors/assert";
 
@@ -191,7 +180,6 @@ export const DataTableAssert = ({
 
   const [dataSet, setDataSet] = useState([]);
   useEffect(() => {
-    console.log("locationSelectValue", locationSelectValue, dataPulled);
     if (dataPulled.length > 0) {
       const activeOnly = getActiveData(dataPulled);
       const inactiveOnly = getInactiveData(dataPulled);
@@ -222,10 +210,18 @@ export const DataTableAssert = ({
           dataTableName
         )
       );
+    } else {
+      setDataSet([]);
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataPulled, inactive, locationSelectValue, dataTableName]);
+  }, [
+    dataPulled,
+    inactive,
+    locationSelectValue,
+    dataTableName,
+    updateTable,
+    revertedState,
+  ]);
 
   const testSave = () => {
     openModal(
@@ -303,6 +299,7 @@ export const DataTableAssert = ({
                 cols={2}
                 title={`${dataTableName}`}
                 viewOnly={!(user && checkout)}
+                create={createNewData}
               />
             </div>
           }

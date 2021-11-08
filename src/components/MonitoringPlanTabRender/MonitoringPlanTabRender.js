@@ -239,7 +239,7 @@ export const MonitoringPlanTabRender = ({
             checkout={checkout}
             user={user}
             payload={
-              rectWAFsDataTableProps(parseInt(locationSelect[1]))["payload"]
+              spanDataTableProps(parseInt(locationSelect[1]))["payload"]
             }
             dropdownArray={
               spanDataTableProps(parseInt(locationSelect[1]))["dropdownArray"]
