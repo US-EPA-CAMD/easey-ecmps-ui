@@ -9,7 +9,6 @@ import * as defaultSelector from "./monitoringPlanDefaults";
 import * as unitFuelSelector from "./monitoringPlanFuelData";
 import * as unitControlSelector from "./monitoringPlanUnitControls";
 import * as unitCapacitySelector from "./monitoringPlanUnitCapacity";
-import { BreadcrumbLink } from "@trussworks/react-uswds";
 
 // Table Names
 const load = "Load";
@@ -135,6 +134,11 @@ export const createDataSwitch = (
       return mpApi.createFuelData(userInput, locationSelectValue);
     case unitCon:
       return mpApi.createUnitControl(
+        userInput,
+        urlParameters ? urlParameters : null
+      );
+    case unitCap:
+      return mpApi.createUnitCapacity(
         userInput,
         urlParameters ? urlParameters : null
       );

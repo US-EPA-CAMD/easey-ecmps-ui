@@ -16,7 +16,15 @@ import { ArrowBackSharp } from "@material-ui/icons";
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 
 // value in data => [0] api label, [1] our UI label, [2] value,[3], required or not for editing, [4] control form type
-const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
+const ModalDetails = ({
+  modalData,
+  data,
+  cols,
+  title,
+  viewOnly,
+  backBtn,
+  create,
+}) => {
   useEffect(() => {
     assignAriaLabelsToDatePickerButtons();
   }, []);
@@ -210,7 +218,11 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
         row.push(makeViewOnlyComp(value));
       } else {
         if (value[4] === "locked") {
-          row.push(makeViewOnlyComp(value));
+          if (!create) {
+            row.push(makeViewOnlyComp(value));
+          } else {
+            row.push(makeViewOnlyComp([false, false, false, false, false]));
+          }
         } else {
           row.push(makeEditComp(value));
         }
@@ -222,7 +234,11 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
         row.push(makeViewOnlyComp(value));
       } else {
         if (value[4] === "locked") {
-          row.push(makeViewOnlyComp(value));
+          if (!create) {
+            row.push(makeViewOnlyComp(value));
+          } else {
+            row.push(makeViewOnlyComp([false, false, false, false, false]));
+          }
         } else {
           row.push(makeEditComp(value));
         }
@@ -230,6 +246,8 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
     }
   }
   items.push(row);
+
+  console.log("ITEMS", items);
   return (
     <div className=" padding-top-0 systemsCompTable">
       <div className="grid-container margin-bottom-2">
@@ -270,7 +288,11 @@ const ModalDetails = ({ modalData, data, cols, title, viewOnly, backBtn }) => {
             return (
               <div
                 key={`${index}`}
-                className="grid-row padding-top-2 margin-right-2"
+                className={
+                  item[0]["key"] !== "false"
+                    ? "grid-row padding-top-2 margin-right-2"
+                    : ""
+                }
               >
                 {item}
               </div>
