@@ -627,6 +627,20 @@ export const saveUnitCapacity = async (payload, urlParameters) => {
     .catch(handleError);
 };
 
+
+export const createUnitCapacity = async (payload, urlParameters) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}/unit-capacities/`;
+  // *** remove attributes not needed by the API
+
+  return secureAxios({
+    method: "POST",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
 export const getPCTQualifications = async (locationId, qualId) => {
   let url = `${config.services.monitorPlans.uri}`;
   // *** workspace section url (authenticated)

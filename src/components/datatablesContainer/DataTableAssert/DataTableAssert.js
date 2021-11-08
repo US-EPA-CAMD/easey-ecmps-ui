@@ -180,7 +180,6 @@ export const DataTableAssert = ({
 
   const [dataSet, setDataSet] = useState([]);
   useEffect(() => {
-    console.log("locationSelectValue", locationSelectValue, dataPulled);
     if (dataPulled.length > 0) {
       const activeOnly = getActiveData(dataPulled);
       const inactiveOnly = getInactiveData(dataPulled);
@@ -211,10 +210,18 @@ export const DataTableAssert = ({
           dataTableName
         )
       );
+    } else {
+      setDataSet([]);
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataPulled, inactive, locationSelectValue, dataTableName]);
+  }, [
+    dataPulled,
+    inactive,
+    locationSelectValue,
+    dataTableName,
+    updateTable,
+    revertedState,
+  ]);
 
   const testSave = () => {
     openModal(
@@ -292,6 +299,7 @@ export const DataTableAssert = ({
                 cols={2}
                 title={`${dataTableName}`}
                 viewOnly={!(user && checkout)}
+                create={createNewData}
               />
             </div>
           }

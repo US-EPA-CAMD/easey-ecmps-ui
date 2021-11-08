@@ -244,6 +244,16 @@ export const createDataSwitch = (
           console.log("error is", error);
         });
       break;
+      case unitCap:
+        mpApi
+          .createUnitCapacity(userInput, urlParameters ? urlParameters : null)
+          .then((result) => {
+            console.log(result, " was created");
+          })
+          .catch((error) => {
+            console.log("error is", error);
+          });
+        break;
     default:
       break;
   }
