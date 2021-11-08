@@ -98,15 +98,17 @@ export const DataTableAssert = ({
       radioName ? radioName : null
     );
 
-    assertSelector.saveDataSwitch(
-      userInput,
-      dataTableName,
-      locationSelectValue,
-      urlParameters
-    );
-
-    setShow(false);
-    setUpdateTable(true);
+    assertSelector
+      .saveDataSwitch(
+        userInput,
+        dataTableName,
+        locationSelectValue,
+        urlParameters
+      )
+      .then(() => {
+        setShow(false);
+        setUpdateTable(true);
+      });
   };
 
   const createData = () => {

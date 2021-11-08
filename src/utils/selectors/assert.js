@@ -84,14 +84,15 @@ export const saveDataSwitch = (
 ) => {
   switch (dataTableName) {
     case load:
-      mpApi
-        .saveMonitoringLoads(userInput)
-        .then((result) => {
-          console.log(result, " was saved");
-        })
-        .catch((error) => {
-          console.log("error is", error);
-        });
+      // mpApi
+      //   .saveMonitoringLoads(userInput)
+      //   .then((result) => {
+      //     console.log(result, " was saved");
+      //   })
+      //   .catch((error) => {
+      //     console.log("error is", error);
+      //   });
+      return mpApi.saveMonitoringLoads(userInput);
       break;
     case rectDuctWaf:
       mpApi
