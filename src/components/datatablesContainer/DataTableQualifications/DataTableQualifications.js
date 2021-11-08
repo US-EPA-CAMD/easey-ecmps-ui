@@ -37,6 +37,7 @@ export const DataTableQualifications = ({
   const [show, setShow] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
   const [openPCT, setOpenPCT] = useState(false);
+  const [creating, setCreating] = useState(false);
   useEffect(() => {
     if (
       updateTable ||
@@ -143,6 +144,7 @@ export const DataTableQualifications = ({
 
   const openQualificationDataModal = (row, bool, create) => {
     let qualData = null;
+    setCreating(create);
     setCreateNewQualificationData(create);
     if (qualificationData.length > 0 && !create) {
       qualData = qualificationData.filter(
@@ -155,6 +157,7 @@ export const DataTableQualifications = ({
         qualData,
         {
           qualificationTypeCode: ["Qualification Type Code", "dropdown", ""],
+          skip: ["", "skip", "", ""],
         },
         {
           beginDate: ["Start Date", "date", ""],
@@ -255,25 +258,28 @@ export const DataTableQualifications = ({
                 <ModalDetails
                   modalData={selectedQualificationData}
                   data={selectedModalData}
-                  cols={3}
+                  cols={2}
                   title={"Qualification"}
                   viewOnly={!(user && checkout)}
                 />
               )}
-
-              <DataTablePCTQualifications
-                locationSelectValue={locationSelectValue}
-                user={user}
-                checkout={checkout}
-                inactive={inactive}
-                settingInactiveCheckBox={settingInactiveCheckBox}
-                revertedState={revertedState}
-                setRevertedState={setRevertedState}
-                selectedLocation={selectedLocation}
-                qualSelectValue={selectedQualificationData["id"]}
-                setOpenPCT={setOpenPCT}
-                openPCT={openPCT}
-              />
+              {creating ? (
+                ""
+              ) : (
+                <DataTablePCTQualifications
+                  locationSelectValue={locationSelectValue}
+                  user={user}
+                  checkout={checkout}
+                  inactive={inactive}
+                  settingInactiveCheckBox={settingInactiveCheckBox}
+                  revertedState={revertedState}
+                  setRevertedState={setRevertedState}
+                  selectedLocation={selectedLocation}
+                  qualSelectValue={selectedQualificationData["id"]}
+                  setOpenPCT={setOpenPCT}
+                  openPCT={openPCT}
+                />
+              )}
             </div>
           }
         />
