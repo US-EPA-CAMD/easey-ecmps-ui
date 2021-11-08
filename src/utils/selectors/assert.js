@@ -9,6 +9,7 @@ import * as defaultSelector from "./monitoringPlanDefaults";
 import * as unitFuelSelector from "./monitoringPlanFuelData";
 import * as unitControlSelector from "./monitoringPlanUnitControls";
 import * as unitCapacitySelector from "./monitoringPlanUnitCapacity";
+import { BreadcrumbLink } from "@trussworks/react-uswds";
 
 // Table Names
 const load = "Load";
@@ -22,28 +23,31 @@ const unitFuel = "Unit Fuel";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, selectedLocation) => {
-  if (name === load) {
-    return mpApi.getMonitoringLoads(location);
-  } else if (name === rectDuctWaf) {
-    return mpApi.getMonitoringRectangularDucts(location);
-  } else if (name === span) {
-    return mpApi.getMonitoringSpans(location);
-  } else if (name === form) {
-    return mpApi.getMonitoringFormulas(location);
-  } else if (name === def) {
-    return mpApi.getMonitoringDefaults(location);
-  } else if (name === unitFuel) {
-    return mpApi.getMonitoringPlansFuelDataRecords(
-      selectedLocation ? selectedLocation : location
-    );
-  } else if (name === unitCon) {
-    return mpApi.getMonitoringPlansUnitControlRecords(
-      selectedLocation ? selectedLocation : location
-    );
-  } else if (name === unitCap) {
-    return mpApi.getUnitCapacity(
-      selectedLocation ? selectedLocation : location
-    );
+  switch (name) {
+    case load:
+      return mpApi.getMonitoringLoads(location);
+    case rectDuctWaf:
+      return mpApi.getMonitoringRectangularDucts(location);
+    case span:
+      return mpApi.getMonitoringSpans(location);
+    case form:
+      return mpApi.getMonitoringFormulas(location);
+    case def:
+      return mpApi.getMonitoringDefaults(location);
+    case unitFuel:
+      return mpApi.getMonitoringPlansFuelDataRecords(
+        selectedLocation ? selectedLocation : location
+      );
+    case unitCon:
+      return mpApi.getMonitoringPlansUnitControlRecords(
+        selectedLocation ? selectedLocation : location
+      );
+    case unitCap:
+      return mpApi.getUnitCapacity(
+        selectedLocation ? selectedLocation : location
+      );
+    default:
+      break;
   }
   return { data: [] };
 };
@@ -63,10 +67,8 @@ export const getDataTableRecords = (dataIn, name) => {
       return defaultSelector.getMonitoringPlansDefaultsTableRecords(dataIn);
     case unitFuel:
       return unitFuelSelector.getMonitoringPlansFuelDataRecords(dataIn);
-
     case unitCon:
       return unitControlSelector.getMonitoringPlansUnitControlRecords(dataIn);
-
     case unitCap:
       return unitCapacitySelector.getMonitoringPlansUnitCapacityRecords(dataIn);
     default:
@@ -84,88 +86,31 @@ export const saveDataSwitch = (
 ) => {
   switch (dataTableName) {
     case load:
-      // mpApi
-      //   .saveMonitoringLoads(userInput)
-      //   .then((result) => {
-      //     console.log(result, " was saved");
-      //   })
-      //   .catch((error) => {
-      //     console.log("error is", error);
-      //   });
       return mpApi.saveMonitoringLoads(userInput);
-      break;
     case rectDuctWaf:
-      mpApi
-        .saveMonitoringDuct(userInput)
-
-        .catch((error) => {
-          console.log("error is", error);
-        });
-      break;
+      return mpApi.saveMonitoringDuct(userInput);
     case span:
-      mpApi
-        .saveMonitoringSpans(userInput)
-        .then((result) => {
-          console.log(result, " was saved");
-        })
-        .catch((error) => {
-          console.log("error is", error);
-        });
-      break;
+      return mpApi.saveMonitoringSpans(userInput);
     case form:
-      mpApi
-        .saveMonitoringFormulas(userInput, locationSelectValue)
-        .then((result) => {
-          console.log(result, " was saved");
-        })
-        .catch((error) => {
-          console.log("error is", error);
-        });
-      break;
+      return mpApi.saveMonitoringFormulas(userInput, locationSelectValue);
     case def:
-      mpApi
-        .saveMonitoringDefaults(userInput, locationSelectValue)
-        .then((result) => {
-          console.log(result, " was saved");
-        })
-        .catch((error) => {
-          console.log("error is", error);
-        });
-      break;
+      return mpApi.saveMonitoringDefaults(userInput, locationSelectValue);
     case unitFuel:
-      mpApi
-        .saveMonitoringPlansFuelData(userInput)
-        .then((result) => {
-          console.log(result, " was saved");
-        })
-        .catch((error) => {
-          console.log("error is", error);
-        });
-      break;
+      return mpApi.saveMonitoringPlansFuelData(userInput);
     case unitCon:
-      mpApi
-        .saveUnitControl(userInput, urlParameters ? urlParameters : null)
-        .then((result) => {
-          console.log(result, " was saved");
-        })
-        .catch((error) => {
-          console.log("error is", error);
-        });
-      break;
-
+      return mpApi.saveUnitControl(
+        userInput,
+        urlParameters ? urlParameters : null
+      );
     case unitCap:
-      mpApi
-        .saveUnitCapacity(userInput, urlParameters ? urlParameters : null)
-        .then((result) => {
-          console.log(result, " was saved");
-        })
-        .catch((error) => {
-          console.log("error is", error);
-        });
-      break;
+      return mpApi.saveUnitCapacity(
+        userInput,
+        urlParameters ? urlParameters : null
+      );
     default:
       break;
   }
+  return [];
 };
 
 // Create (POST) endpoints for API
@@ -177,75 +122,24 @@ export const createDataSwitch = (
 ) => {
   switch (dataTableName) {
     case load:
-      mpApi
-        .createMonitoringLoads(userInput)
-        .then((result) => {
-          console.log(result, " was created");
-        })
-        .catch((error) => {
-          console.log("error is", error);
-        });
-      break;
+      return mpApi.createMonitoringLoads(userInput);
     case rectDuctWaf:
-      mpApi.createMonitoringDuct(userInput).catch((error) => {
-        console.log("error is", error);
-      });
-      break;
-
+      return mpApi.createMonitoringDuct(userInput);
     case span:
-      mpApi
-        .createMonitoringSpans(userInput)
-        .then((result) => {
-          console.log(result, " was created");
-        })
-        .catch((error) => {
-          console.log("error is", error);
-        });
-      break;
+      return mpApi.createMonitoringSpans(userInput);
     case form:
-      mpApi
-        .createMonitoringFormulas(userInput, locationSelectValue)
-        .then((result) => {
-          console.log(result, " was created");
-        })
-        .catch((error) => {
-          console.log("error is", error);
-        });
-      break;
-
+      return mpApi.createMonitoringFormulas(userInput, locationSelectValue);
     case def:
-      mpApi
-        .createMonitoringDefaults(userInput, locationSelectValue)
-        .then((result) => {
-          console.log(result, " was created");
-        })
-        .catch((error) => {
-          console.log("error is", error);
-        });
-      break;
-
+      return mpApi.createMonitoringDefaults(userInput, locationSelectValue);
     case unitFuel:
-      mpApi
-        .createFuelData(userInput, locationSelectValue)
-        .then((result) => {
-          console.log(result, " was created");
-        })
-        .catch((error) => {
-          console.log("error is", error);
-        });
-      break;
-
+      return mpApi.createFuelData(userInput, locationSelectValue);
     case unitCon:
-      mpApi
-        .createUnitControl(userInput, urlParameters ? urlParameters : null)
-        .then((result) => {
-          console.log(result, " was created");
-        })
-        .catch((error) => {
-          console.log("error is", error);
-        });
-      break;
+      return mpApi.createUnitControl(
+        userInput,
+        urlParameters ? urlParameters : null
+      );
     default:
       break;
   }
+  return [];
 };

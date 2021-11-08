@@ -118,15 +118,17 @@ export const DataTableAssert = ({
       radioName ? radioName : null
     );
 
-    assertSelector.createDataSwitch(
-      userInput,
-      dataTableName,
-      locationSelectValue,
-      urlParameters
-    );
-
-    setShow(false);
-    setUpdateTable(true);
+    assertSelector
+      .createDataSwitch(
+        userInput,
+        dataTableName,
+        locationSelectValue,
+        urlParameters
+      )
+      .then(() => {
+        setShow(false);
+        setUpdateTable(true);
+      });
   };
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
