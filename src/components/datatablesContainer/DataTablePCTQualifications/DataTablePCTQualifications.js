@@ -19,6 +19,8 @@ export const DataTablePCTQualifications = ({
   setRevertedState,
   setOpenPCT,
   openPCT,
+  setUpdatePCT,
+  updatePCT,
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [qualPctData, setQualPctData] = useState([]);
@@ -28,6 +30,7 @@ export const DataTablePCTQualifications = ({
 
   useEffect(() => {
     if (
+      updatePCT ||
       updateTable ||
       qualPctData.length <= 0 ||
       locationSelectValue ||
@@ -41,10 +44,11 @@ export const DataTablePCTQualifications = ({
           setDataLoaded(true);
           setUpdateTable(false);
           setRevertedState(false);
+          setUpdatePCT(false);
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, updateTable, revertedState]);
+  }, [locationSelectValue, updateTable, revertedState, updatePCT]);
   const [selectedQualPct, setSelectedQualPct] = useState(null);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -95,7 +99,7 @@ export const DataTablePCTQualifications = ({
       modalViewData(
         pctData,
         {
-          qualificationYear: ["Qualification Year", "input", ""],
+          qualificationYear: ["Qualification Year", "dropdown", ""],
           averagePercentValue: ["Average Percent Value", "input", ""],
           emptyfield: ["", "skip", ""],
           yr1QualificationDataYear: ["Data Year 1", "input", ""],
@@ -134,7 +138,7 @@ export const DataTablePCTQualifications = ({
             cols={3}
             // title={`Qualification Percent: ${selectedQualPct["id"]}`}
             title={"Qualification Percent"}
-            viewOnly={true}
+            viewOnly={!(user && checkout)}
           />
         </div>
       ) : (
@@ -145,7 +149,7 @@ export const DataTablePCTQualifications = ({
           checkout={checkout}
           user={user}
           openHandler={openPctQualModal}
-          actionsBtn={"View"}
+          actionsBtn={checkout ? "View/Edit" : "View"}
           tableTitle={"Qualification Percent"}
           componentStyling="systemsCompTable"
         />

@@ -3,6 +3,26 @@ import * as dmApi from "../utils/api/dataManagementApi";
 export const useRetrieveDropdownApi = (dropDownFields, mats = false) => {
   const [totalOptions, setTotalOptions] = useState({});
 
+  const dataYearOptions = async () => {
+    const currYear = new Date().getFullYear();
+    const maxYear = currYear + 2;
+    const minYear = 2002;
+    let availableYears = [];
+
+    for (let i = minYear; i <= maxYear; i++) {
+      availableYears.push(i);
+    }
+    return availableYears;
+  };
+
+  const setDefaultOptions = (items, field) => {
+    items.unshift({ code: "", name: "-- Select a value --" });
+    const newData = totalOptions;
+    newData[field] = items;
+
+    setTotalOptions(newData);
+  };
+
   for (const fieldName of dropDownFields) {
     let options = [];
     switch (fieldName) {
@@ -385,20 +405,24 @@ export const useRetrieveDropdownApi = (dropDownFields, mats = false) => {
           setDefaultOptions(options, fieldName);
         });
         break;
+      case "qualificationYear":
+        dataYearOptions().then((years) => {
+          options = years.map((year) => {
+            return {
+              code: year.toString(),
+              name: year.toString(),
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+
+        break;
+
       default:
         break;
     }
   }
 
-  const setDefaultOptions = (items, field) => {
-    items.unshift({ code: "", name: "-- Select a value --" });
-    const newData = totalOptions;
-    newData[field] = items;
-
-    setTotalOptions(newData);
-  }
-
   return totalOptions;
 };
-
-

@@ -38,6 +38,7 @@ export const DataTableQualifications = ({
   const [updateTable, setUpdateTable] = useState(false);
   const [openPCT, setOpenPCT] = useState(false);
   const [creating, setCreating] = useState(false);
+  const [updatePCT, setUpdatePCT] = useState(false);
   useEffect(() => {
     if (
       updateTable ||
@@ -50,6 +51,7 @@ export const DataTableQualifications = ({
         setDataLoaded(true);
         setUpdateTable(false);
         setRevertedState(false);
+        setUpdatePCT(false);
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -99,42 +101,57 @@ export const DataTableQualifications = ({
   }, [qualificationData, inactive]);
   const testingSave = () => {
     openQualificationDataModal(false, false, true);
-    saveQualificationData();
+    // saveQualificationData();
   };
 
   const testingCreate = () => {
     openQualificationDataModal(false, false, true);
-    createQualificationData();
+    // createQualificationData();
   };
 
-  const saveQualificationData = () => {
-    const userInput = extractUserInput(payload, ".modalUserInput");
-
-    mpApi
-      .saveQualificationData(userInput)
-      .then((result) => {
-        setShow(false);
-        setDataLoaded(false);
-        setUpdateTable(true);
+  // function to handle what type of api call to make (edit/create -> qual/pct/lme/lee)
+  const handleRequest = (dataType, apiFunc, userInput) => {
+    apiFunc(userInput)
+      .then(() => {
+        if (dataType === "qual") {
+          // update qual table, then close qual modal
+          setDataLoaded(false);
+          setUpdateTable(true);
+          setShow(false);
+        } else if (dataType === "pct") {
+          // update pct modal, then return to parent qual page
+          setUpdatePCT(true);
+          setOpenPCT(false);
+        }
       })
       .catch((error) => {
+        console.log(error);
         setShow(false);
       });
   };
 
-  const createQualificationData = () => {
-    const userInput = extractUserInput(payload, ".modalUserInput");
+  // Manages SAVE button (either Parent, PCT, LME, or LEE)
+  const manageSaveBtn = () => {
+    let userInput = extractUserInput(payload, ".modalUserInput");
+    userInput["qualId"] = selectedQualificationData["id"];
 
-    mpApi
-      .createQualificationData(userInput)
-      .then((result) => {
-        setShow(false);
-        setDataLoaded(false);
-        setUpdateTable(true);
-      })
-      .catch((error) => {
-        setShow(false);
-      });
+    // PCT qual
+    if (openPCT) {
+      return handleRequest(
+        "pct",
+        creating ? "" : mpApi.savePCTQualificationData,
+        userInput
+      );
+    }
+    // else if(openLME){ LME qual here }
+    // else if(openLEE){ LEE qual here }
+
+    // Parent qual
+    return handleRequest(
+      "qual",
+      creating ? mpApi.createQualificationData : mpApi.saveQualificationData,
+      userInput
+    );
   };
 
   const [createNewQualificationData, setCreateNewQualificationData] = useState(
@@ -233,11 +250,7 @@ export const DataTableQualifications = ({
         <Modal
           show={show}
           close={closeModalHandler}
-          save={
-            createNewQualificationData
-              ? createQualificationData
-              : saveQualificationData
-          }
+          save={manageSaveBtn}
           showCancel={!(user && checkout)}
           showSave={user && checkout}
           title={
@@ -278,6 +291,8 @@ export const DataTableQualifications = ({
                   qualSelectValue={selectedQualificationData["id"]}
                   setOpenPCT={setOpenPCT}
                   openPCT={openPCT}
+                  setUpdatePCT={setUpdatePCT}
+                  updatePCT={updatePCT}
                 />
               )}
             </div>

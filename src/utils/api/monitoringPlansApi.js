@@ -627,7 +627,6 @@ export const saveUnitCapacity = async (payload, urlParameters) => {
     .catch(handleError);
 };
 
-
 export const createUnitCapacity = async (payload, urlParameters) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}/unit-capacities/`;
   // *** remove attributes not needed by the API
@@ -651,6 +650,19 @@ export const getPCTQualifications = async (locationId, qualId) => {
   url = `${url}/locations/${locationId}/qualifications/${qualId}/pct-qualifications`;
 
   return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const savePCTQualificationData = async (payload) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/qualifications/${payload["qualId"]}/pct-qualifications/${payload["id"]}`;
+  // *** remove attributes not needed by the API
+
+  return secureAxios({
+    method: "PUT",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getQualifications = async (locationId) => {
