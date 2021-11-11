@@ -7,7 +7,12 @@ import ModalDetails from "../../ModalDetails/ModalDetails";
 import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
-import { attachChangeEventListeners } from "../../../additional-functions/prompt-to-save-unsaved-changes";
+import {
+  attachChangeEventListeners,
+  removeChangeEventListeners,
+  resetIsDataChanged,
+  unsavedDataMessage,
+} from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
 export const DataTablePCTQualifications = ({
   locationSelectValue,
@@ -32,6 +37,7 @@ export const DataTablePCTQualifications = ({
   ]);
   const [updateTable, setUpdateTable] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState([]);
+  const [openBtn, setOpenBtn] = useState(null);
 
   useEffect(() => {
     if (
@@ -131,15 +137,29 @@ export const DataTablePCTQualifications = ({
     });
   };
 
+  const backBtnHandler = () => {
+    // when cancel is clicked in unsaved changed modal
+    if (
+      window.isDataChanged === true &&
+      window.confirm(unsavedDataMessage) === false
+    ) {
+      // do nothing
+    }
+    // otherwise return back to parent qual and reset change tracker
+    else {
+      setOpenPCT(false);
+      resetIsDataChanged();
+      removeChangeEventListeners(".modalUserInput");
+    }
+  };
+
   return (
     <div className="methodTable react-transition fade-in">
       {openPCT ? (
         <div>
           <ModalDetails
             modalData={selectedQualPct}
-            backBtn={() => {
-              setOpenPCT(false);
-            }}
+            backBtn={backBtnHandler}
             data={selectedModalData}
             cols={3}
             // title={`Qualification Percent: ${selectedQualPct["id"]}`}

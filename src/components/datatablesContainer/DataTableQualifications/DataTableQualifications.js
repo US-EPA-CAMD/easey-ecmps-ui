@@ -232,25 +232,19 @@ export const DataTableQualifications = ({
   const [addBtn, setAddBtn] = useState(null);
 
   const closeModalHandler = () => {
-    // modal changes detected - prompt user for unsaved changes
-    if (window.isDataChanged === true) {
-      // ok button clicked
-      if (window.confirm(unsavedDataMessage) === true) {
-        setShow(false);
-        if (openPCT) {
-          resetIsDataChanged();
-        }
-        setOpenPCT(false);
-        removeChangeEventListeners(".modalUserInput");
-      }
-      // cancel button clicked
-      else {
-        // do nothing
-      }
+    // when cancel is clicked in unsaved changed modal
+    if (
+      window.isDataChanged === true &&
+      window.confirm(unsavedDataMessage) === false
+    ) {
+      // do nothing
     }
-    // no changes, reset all flags and remove event listeners
+    // otherwise return back to parent qual and reset change tracker
     else {
       setShow(false);
+      if (openPCT) {
+        resetIsDataChanged();
+      }
       setOpenPCT(false);
       removeChangeEventListeners(".modalUserInput");
     }
