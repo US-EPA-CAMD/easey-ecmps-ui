@@ -11,6 +11,12 @@ import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-d
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 import {
+  Breadcrumb,
+  BreadcrumbBar,
+  BreadcrumbLink,
+} from "@trussworks/react-uswds";
+
+import {
   getActiveData,
   getInactiveData,
 } from "../../../additional-functions/filter-data";
@@ -161,6 +167,30 @@ export const DataTableQualifications = ({
     );
   };
 
+  const buildBreadBar = () => {
+    if (openPCT) {
+      const breadBar = (
+        <BreadcrumbBar className="padding-0">
+          <Breadcrumb
+            onClick={() => {
+              setOpenPCT(false);
+            }}
+          >
+            <BreadcrumbLink>
+              <span>Qualification</span>
+            </BreadcrumbLink>
+          </Breadcrumb>
+
+          <Breadcrumb current>
+            <span>Qualification Percent</span>
+          </Breadcrumb>
+        </BreadcrumbBar>
+      );
+      return breadBar;
+    }
+    return "";
+  };
+
   const [createNewQualificationData, setCreateNewQualificationData] = useState(
     false
   );
@@ -272,6 +302,7 @@ export const DataTableQualifications = ({
           save={manageSaveBtn}
           showCancel={!(user && checkout)}
           showSave={user && checkout}
+          breadCrumbBar={buildBreadBar()}
           title={
             createNewQualificationData
               ? "Create Qualification"
