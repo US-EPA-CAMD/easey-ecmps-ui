@@ -171,11 +171,7 @@ export const DataTableQualifications = ({
     if (openPCT) {
       const breadBar = (
         <BreadcrumbBar className="padding-0">
-          <Breadcrumb
-            onClick={() => {
-              setOpenPCT(false);
-            }}
-          >
+          <Breadcrumb onClick={closeModalHandler}>
             <BreadcrumbLink>
               <span>Qualification</span>
             </BreadcrumbLink>
@@ -241,9 +237,10 @@ export const DataTableQualifications = ({
     }
     // otherwise return back to parent qual and reset change tracker
     else {
-      setShow(false);
       if (openPCT) {
         resetIsDataChanged();
+      } else {
+        setShow(false);
       }
       setOpenPCT(false);
       removeChangeEventListeners(".modalUserInput");
