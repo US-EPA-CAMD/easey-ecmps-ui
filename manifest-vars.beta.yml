@@ -1,0 +1,7 @@
+host: easey-beta.app.cloud.gov
+apiHost: api.epa.gov/easey/beta
+environment: beta
+memory: 2048M
+inactivityDurationCheckoutMinutes: 20
+refreshTokenRateMinutes: 15
+inactivityDurationLogoutMinutes: 20
