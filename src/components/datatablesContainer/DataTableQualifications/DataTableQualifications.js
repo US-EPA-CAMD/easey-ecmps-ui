@@ -18,6 +18,7 @@ import {
 import {
   attachChangeEventListeners,
   removeChangeEventListeners,
+  resetIsDataChanged,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
@@ -100,16 +101,22 @@ export const DataTableQualifications = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qualificationData, inactive]);
   const testingSave = () => {
+    let userInput = extractUserInput(payload, ".modalUserInput");
     openQualificationDataModal(false, false, true);
-    // saveQualificationData();
+    handleRequest("qual", mpApi.saveQualificationData, userInput);
   };
 
   const testingCreate = () => {
+    let userInput = extractUserInput(payload, ".modalUserInput");
     openQualificationDataModal(false, false, true);
-    // createQualificationData();
+    handleRequest("qual", mpApi.createQualificationData, userInput);
   };
 
   // function to handle what type of api call to make (edit/create -> qual/pct/lme/lee)
+  // params:
+  //    - dataType: type of qualification record
+  //    - apiFunc: API function from imported utility
+  //    - userInput: user-entered values (payload)
   const handleRequest = (dataType, apiFunc, userInput) => {
     apiFunc(userInput)
       .then(() => {
@@ -143,8 +150,8 @@ export const DataTableQualifications = ({
         userInput
       );
     }
-    // else if(openLME){ LME qual here }
-    // else if(openLEE){ LEE qual here }
+    // else if(openLME){ LME qual logic here }
+    // else if(openLEE){ LEE qual logic here }
 
     // Parent qual
     return handleRequest(
@@ -195,19 +202,31 @@ export const DataTableQualifications = ({
   const [addBtn, setAddBtn] = useState(null);
 
   const closeModalHandler = () => {
+    // modal changes detected - prompt user for unsaved changes
     if (window.isDataChanged === true) {
+      // ok button clicked
       if (window.confirm(unsavedDataMessage) === true) {
         setShow(false);
+        if (openPCT) {
+          resetIsDataChanged();
+        }
+        setOpenPCT(false);
         removeChangeEventListeners(".modalUserInput");
       }
-    } else {
+      // cancel button clicked
+      else {
+        // do nothing
+      }
+    }
+    // no changes, reset all flags and remove event listeners
+    else {
       setShow(false);
+      setOpenPCT(false);
       removeChangeEventListeners(".modalUserInput");
     }
     if (addBtn) {
       addBtn.focus();
     }
-    setOpenPCT(false);
   };
 
   return (

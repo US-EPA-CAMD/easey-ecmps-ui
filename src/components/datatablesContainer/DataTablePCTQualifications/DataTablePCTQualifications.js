@@ -24,7 +24,12 @@ export const DataTablePCTQualifications = ({
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [qualPctData, setQualPctData] = useState([]);
-  const totalOptions = useRetrieveDropdownApi(["qualificationYear"], true);
+  const totalOptions = useRetrieveDropdownApi([
+    "qualificationYear",
+    "yr1QualificationDataYear",
+    "yr2QualificationDataYear",
+    "yr3QualificationDataYear",
+  ]);
   const [updateTable, setUpdateTable] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState([]);
 
@@ -94,6 +99,7 @@ export const DataTablePCTQualifications = ({
       )[0];
       setSelectedQualPct(pctData);
     }
+    console.log(pctData);
 
     setSelectedModalData(
       modalViewData(
@@ -102,15 +108,15 @@ export const DataTablePCTQualifications = ({
           qualificationYear: ["Qualification Year", "dropdown", ""],
           averagePercentValue: ["Average Percent Value", "input", ""],
           emptyfield: ["", "skip", ""],
-          yr1QualificationDataYear: ["Data Year 1", "input", ""],
+          yr1QualificationDataYear: ["Data Year 1", "dropdown", ""],
           yr1QualificationDataTypeCode: ["Year 1 Type Code", "input", ""],
           yr1PercentageValue: ["Year 1 Percentage Value", "input", ""],
 
-          yr2QualificationDataYear: ["Data Year 2", "input", ""],
+          yr2QualificationDataYear: ["Data Year 2", "dropdown", ""],
           yr2QualificationDataTypeCode: ["Year 2 Type Code", "input", ""],
           yr2PercentageValue: ["Year 2 Percentage Value", "input", ""],
 
-          yr3QualificationDataYear: ["Data Year 3", "input", ""],
+          yr3QualificationDataYear: ["Data Year 3", "dropdown", ""],
           yr3QualificationDataTypeCode: ["Year 3 Type Code", "input", ""],
           yr3PercentageValue: ["Year 3 Percentage Value", "input", ""],
         },
