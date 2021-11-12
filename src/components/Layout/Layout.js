@@ -1,10 +1,14 @@
 import React from "react";
 import { Link } from "@trussworks/react-uswds";
-import { WideHeader } from "../WideHeader/WideHeader";
+
+import { Header } from "@us-epa-camd/easey-design-system";
+import { AppVersion } from "@us-epa-camd/easey-design-system";
+
 import { SubHeader } from "../SubHeader/SubHeader";
 import { LeftNavigation } from "../LeftNavigation/LeftNavigation";
 import { LeftNavToSubHeader } from "../SubHeader/LeftNavToSubHeader";
-import { Footer } from "../Footer/Footer";
+
+import config from "../../config";
 
 import "./Layout.scss";
 
@@ -18,7 +22,7 @@ const Layout = (props) => {
         Skip to content
       </Link>
       <div className="topHeader">
-        <WideHeader />
+        <Header environment={config.app.env} />
         <SubHeader user={props.user} setCurrentLink={props.setCurrentLink} />
       </div>
       <div>
@@ -32,8 +36,11 @@ const Layout = (props) => {
           <main id="main">{childrenWithProps} </main>
         </div>
       </div>
-      <div className="bottomFooter">
-        <Footer />
+      <div className="position-fixed bottom-0 width-full">
+        <AppVersion
+          version={config.app.version}
+          publishDate={config.app.published}
+        />
       </div>
     </div>
   );

@@ -1,18 +1,53 @@
-import React,{useEffect} from "react";
+import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 
 import { Link as USWDSLink, Button } from "@trussworks/react-uswds";
 
 import { OpenInNew } from "@material-ui/icons";
 
-import { ContactUs } from "../ContactUs/ContactUs";
+import { ContactForm } from "@us-epa-camd/easey-design-system";
 
 import "./HelpSupport.scss";
 
 export const HelpSupport = () => {
+  const [submitted, setSubmitted] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(false);
+
   useEffect(() => {
     document.title = "ECMPS Help & Support";
-    }, [])
+  }, [])
+
+  const commentTypes = [
+    {
+      id: 1,
+      value: `Help using application`,
+    },
+    {
+      id: 2,
+      value: `Report a bug`,
+    },
+    {
+      id: 3,
+      value: `Data question`,
+    },
+    {
+      id: 4,
+      value: `Suggested enhancement`,
+    },
+    {
+      id: 5,
+      value: `Other`,
+    },
+  ];
+  
+  const onSubmitHandler = () => {
+    setSubmitted(true);
+  
+    // TODO: set this based on succesful call to api to send email
+    const x = Math.random() * (10 - 1) + 1
+    setSubmitStatus(x <= 5 ? false : true);
+  }
+
   return (
     <div className="padding-top-7 padding-2 react-transition fade-in">
       <div className="grid-row">
@@ -76,7 +111,18 @@ export const HelpSupport = () => {
           </li>
         </ul>
       </div>
-      <ContactUs />
+      <ContactForm
+        summary="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla massa in lectus volutpat scelerisque. Craseu leo vel lacus tincidunt molestie. Vestibulum faucibus enim sit amet pretium laoreet."
+        subjects={commentTypes}
+        onSubmit={() => onSubmitHandler()}
+        submitted={submitted}
+        submitStatus={submitStatus}
+        submitStatusText={
+          submitStatus ?
+            "Thank you, your form has been submitted and an email confirmation will be sent to you shortly."
+          : "An error occurred while submitting your comment. Please try again later!"
+        }
+      />
     </div>
   );
 };

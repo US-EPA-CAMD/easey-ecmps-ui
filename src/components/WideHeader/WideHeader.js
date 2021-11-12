@@ -49,6 +49,9 @@ export const WideHeader = () => {
   };
 
   const onSearch = (event) => {
+    // *** prevent automatic re-direction
+    event.preventDefault();
+
     // *** URI encode the component after trimming to get rid of leading/trailing spaces
     // *** and mitigate any character collision issues during http request with window.open
     const searchTerm = encodeURI(event.target[0].value.trim());
@@ -56,6 +59,7 @@ export const WideHeader = () => {
       `https://search.epa.gov/epasearch/?querytext=${searchTerm}`,
       "_blank"
     );
+
     return false;
   };
 

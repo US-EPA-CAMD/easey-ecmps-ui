@@ -22,7 +22,7 @@ const CustomAccordion = ({ title, table }) => {
           key={index}
           className={`${
             item[1] !== "Unit Fuels" && item[1] !== "Methods"
-              ? "float-left clearfix"
+              ? (item[1] !== "Unit Controls" && index !== 1) ? "float-left clearfix":"clearfix"
               : "clearfix"
           }`}
         >
