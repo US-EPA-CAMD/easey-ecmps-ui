@@ -101,14 +101,14 @@
   }
 
   .usa-nav__primary button[aria-expanded="false"] {
-    background-image: url("/images/icons/plus.svg"),
+    background-image: url("/ecmps/images/icons/plus.svg"),
       linear-gradient(transparent, transparent) !important;
     position: relative;
     left: 0.5em !important;
   }
 
   .usa-nav__primary button[aria-expanded="true"] {
-    background-image: url("/images/icons/minus.svg"),
+    background-image: url("/ecmps/images/icons/minus.svg"),
       linear-gradient(transparent, transparent) !important;
     position: relative;
     left: 0.5em !important;

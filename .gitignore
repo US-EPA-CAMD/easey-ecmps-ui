@@ -56,3 +56,6 @@ test-report.xml
 !.vscode/launch.json
 !.vscode/extensions.json
 node_modules
+
+# never include npms package-lock
+package-lock.json
