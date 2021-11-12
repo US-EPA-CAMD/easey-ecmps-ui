@@ -42,6 +42,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "up": "yarn --ignore-engines && yarn start",
     "test": "react-scripts test --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter",
     "test:dev": "react-scripts test",
     "dev": "react-scripts start"

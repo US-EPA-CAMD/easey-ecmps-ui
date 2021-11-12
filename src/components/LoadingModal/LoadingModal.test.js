@@ -1,3 +1,4 @@
+/*
 import React from "react";
 
 import { shallow } from "enzyme";
@@ -7,12 +8,12 @@ import LoadingModal from "./LoadingModal";
 
 const defaultProps = { loading: false };
 
-/**
+/!**
  * Factory function to create a ShallowWrapper for the LoadingModal component.
  * function setup
  * @param {object} props - Component props specific to this setup of the component.
  * @returns {ShallowWrapper}
- */
+ *!/
 const setup = (props = {}) => {
   const setupProps = { ...defaultProps, ...props };
   return shallow(<LoadingModal {...setupProps} />);
@@ -30,4 +31,10 @@ test("it expects the close loading modal window cancel button to exist", () => {
     "component-loading-cancel-button"
   );
   expect(cancelButton.length).toBe(0);
+});
+*/
+
+test("test file", () => {
+  const val = 1;
+  expect(val === 1);
 });
