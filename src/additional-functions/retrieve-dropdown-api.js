@@ -421,6 +421,20 @@ export const useRetrieveDropdownApi = (dropDownFields, mats = false) => {
         });
 
         break;
+      case "yr1QualificationDataTypeCode":
+      case "yr2QualificationDataTypeCode":
+      case "yr3QualificationDataTypeCode":
+        dmApi.getAllQualificationDataTypeCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["qualDataTypeCode"],
+              name: option["qualDataTypeCodeDescription"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
 
       default:
         break;

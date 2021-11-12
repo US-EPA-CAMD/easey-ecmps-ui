@@ -34,6 +34,9 @@ export const DataTablePCTQualifications = ({
     "yr1QualificationDataYear",
     "yr2QualificationDataYear",
     "yr3QualificationDataYear",
+    "yr1QualificationDataTypeCode",
+    "yr2QualificationDataTypeCode",
+    "yr3QualificationDataTypeCode",
   ]);
   const [updateTable, setUpdateTable] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState([]);
@@ -115,15 +118,15 @@ export const DataTablePCTQualifications = ({
           averagePercentValue: ["Average Percent Value", "input", ""],
           emptyfield: ["", "skip", ""],
           yr1QualificationDataYear: ["Data Year 1", "dropdown", ""],
-          yr1QualificationDataTypeCode: ["Year 1 Type Code", "input", ""],
+          yr1QualificationDataTypeCode: ["Year 1 Type Code", "dropdown", ""],
           yr1PercentageValue: ["Year 1 Percentage Value", "input", ""],
 
           yr2QualificationDataYear: ["Data Year 2", "dropdown", ""],
-          yr2QualificationDataTypeCode: ["Year 2 Type Code", "input", ""],
+          yr2QualificationDataTypeCode: ["Year 2 Type Code", "dropdown", ""],
           yr2PercentageValue: ["Year 2 Percentage Value", "input", ""],
 
           yr3QualificationDataYear: ["Data Year 3", "dropdown", ""],
-          yr3QualificationDataTypeCode: ["Year 3 Type Code", "input", ""],
+          yr3QualificationDataTypeCode: ["Year 3 Type Code", "dropdown", ""],
           yr3PercentageValue: ["Year 3 Percentage Value", "input", ""],
         },
         {},
