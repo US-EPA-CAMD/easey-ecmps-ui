@@ -60,6 +60,7 @@ export const DataTableMethod = ({
       mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
         setMatsMethods(res.data);
       });
+      console.log('updateTable',updateTable)
       setUpdateTable(false);
       setRevertedState(false);
     }
@@ -189,17 +190,17 @@ export const DataTableMethod = ({
     }
     return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [methods, inactive]);
+  }, [methods, inactive,updateTable]);
 
-  useEffect(() => {
-    if (matsTableHandler) {
-      if (matsMethods.length < 1) {
-        matsTableHandler(false);
-      } else {
-        matsTableHandler(true);
-      }
-    }
-  }, [matsMethods.length, matsTableHandler]);
+  // useEffect(() => {
+  //   if (matsTableHandler) {
+  //     if (matsMethods.length < 1) {
+  //       matsTableHandler(false);
+  //     } else {
+  //       matsTableHandler(true);
+  //     }
+  //   }
+  // }, [matsMethods.length, matsTableHandler]);
 
   const saveMethods = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
