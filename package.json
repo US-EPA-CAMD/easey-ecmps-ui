@@ -36,8 +36,21 @@
     "uswds": "2.12.1"
   },
   "resolutions": {
+    "ansi-regex": "^5.0.1",
+    "browserslist": "^4.16.5",
+    "glob-parent": "^5.1.2",
+    "immer": "^9.0.6",
+    "node-notifier": "^8.0.1",
+    "nth-check": "^2.0.1",
+    "object-path": "^0.11.8",
+    "postcss": "^7.0.36",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-dev-utils": "^11.0.4",
+    "serialize-javascript": "^3.1.0",
+    "set-value":"^4.0.1",
+    "sockjs": "^0.3.20",
+    "yargs-parser": "^13.1.2"
   },
   "scripts": {
     "start": "react-scripts start",
