@@ -72,14 +72,14 @@ const ModalDetails = ({
     );
   };
 
-  const makeEditComp = (value) => {
+  const makeEditComp = (value, cols) => {
     let comp = null;
 
     switch (value[4]) {
       case "dropdown":
         comp = (
           <SelectBox
-            className="modalUserInput width-mobile"
+            className={`modalUserInput ${cols === 3 ? "" : "width-mobile"}`}
             epadataname={value[0]}
             options={
               value[6] !== null || value[6] !== undefined
@@ -131,7 +131,7 @@ const ModalDetails = ({
       case "input":
         comp = (
           <TextInput
-            className="modalUserInput width-mobile"
+            className={`modalUserInput ${cols === 3 ? "" : "width-mobile"}`}
             id={`${value[1]}`}
             epa-testid={value[0]}
             epadataname={value[0]}
@@ -224,7 +224,7 @@ const ModalDetails = ({
             row.push(makeViewOnlyComp([false, false, false, false, false]));
           }
         } else {
-          row.push(makeEditComp(value));
+          row.push(makeEditComp(value, cols));
         }
       }
     } else {
@@ -240,7 +240,7 @@ const ModalDetails = ({
             row.push(makeViewOnlyComp([false, false, false, false, false]));
           }
         } else {
-          row.push(makeEditComp(value));
+          row.push(makeEditComp(value, cols));
         }
       }
     }

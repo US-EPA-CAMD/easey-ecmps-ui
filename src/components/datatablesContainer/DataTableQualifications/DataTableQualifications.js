@@ -11,6 +11,12 @@ import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-d
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 import {
+  Breadcrumb,
+  BreadcrumbBar,
+  BreadcrumbLink,
+} from "@trussworks/react-uswds";
+
+import {
   getActiveData,
   getInactiveData,
 } from "../../../additional-functions/filter-data";
@@ -18,6 +24,7 @@ import {
 import {
   attachChangeEventListeners,
   removeChangeEventListeners,
+  resetIsDataChanged,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
@@ -38,6 +45,7 @@ export const DataTableQualifications = ({
   const [updateTable, setUpdateTable] = useState(false);
   const [openPCT, setOpenPCT] = useState(false);
   const [creating, setCreating] = useState(false);
+  const [updatePCT, setUpdatePCT] = useState(false);
   useEffect(() => {
     if (
       updateTable ||
@@ -50,6 +58,7 @@ export const DataTableQualifications = ({
         setDataLoaded(true);
         setUpdateTable(false);
         setRevertedState(false);
+        setUpdatePCT(false);
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -98,43 +107,84 @@ export const DataTableQualifications = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qualificationData, inactive]);
   const testingSave = () => {
+    let userInput = extractUserInput(payload, ".modalUserInput");
     openQualificationDataModal(false, false, true);
-    saveQualificationData();
+    handleRequest("qual", mpApi.saveQualificationData, userInput);
   };
 
   const testingCreate = () => {
+    let userInput = extractUserInput(payload, ".modalUserInput");
     openQualificationDataModal(false, false, true);
-    createQualificationData();
+    handleRequest("qual", mpApi.createQualificationData, userInput);
   };
 
-  const saveQualificationData = () => {
-    const userInput = extractUserInput(payload, ".modalUserInput");
-
-    mpApi
-      .saveQualificationData(userInput)
-      .then((result) => {
-        setShow(false);
-        setDataLoaded(false);
-        setUpdateTable(true);
+  // function to handle what type of api call to make (edit/create -> qual/pct/lme/lee)
+  // params:
+  //    - dataType: type of qualification record
+  //    - apiFunc: API function from imported utility
+  //    - userInput: user-entered values (payload)
+  const handleRequest = (dataType, apiFunc, userInput) => {
+    apiFunc(userInput)
+      .then(() => {
+        if (dataType === "qual") {
+          // update qual table, then close qual modal
+          setDataLoaded(false);
+          setUpdateTable(true);
+          setShow(false);
+        } else if (dataType === "pct") {
+          // update pct modal, then return to parent qual page
+          setUpdatePCT(true);
+          setOpenPCT(false);
+        }
       })
       .catch((error) => {
+        console.log(error);
         setShow(false);
       });
   };
 
-  const createQualificationData = () => {
-    const userInput = extractUserInput(payload, ".modalUserInput");
+  // Manages SAVE button (either Parent, PCT, LME, or LEE)
+  const manageSaveBtn = () => {
+    let userInput = extractUserInput(payload, ".modalUserInput");
+    userInput["qualId"] = selectedQualificationData["id"];
 
-    mpApi
-      .createQualificationData(userInput)
-      .then((result) => {
-        setShow(false);
-        setDataLoaded(false);
-        setUpdateTable(true);
-      })
-      .catch((error) => {
-        setShow(false);
-      });
+    // PCT qual
+    if (openPCT) {
+      return handleRequest(
+        "pct",
+        creating ? "" : mpApi.savePCTQualificationData,
+        userInput
+      );
+    }
+    // else if(openLME){ LME qual logic here }
+    // else if(openLEE){ LEE qual logic here }
+
+    // Parent qual
+    return handleRequest(
+      "qual",
+      creating ? mpApi.createQualificationData : mpApi.saveQualificationData,
+      userInput
+    );
+  };
+
+  const buildBreadBar = () => {
+    if (openPCT) {
+      const breadBar = (
+        <BreadcrumbBar className="padding-0">
+          <Breadcrumb onClick={closeModalHandler}>
+            <BreadcrumbLink>
+              <span>Qualification</span>
+            </BreadcrumbLink>
+          </Breadcrumb>
+
+          <Breadcrumb current>
+            <span>Qualification Percent</span>
+          </Breadcrumb>
+        </BreadcrumbBar>
+      );
+      return breadBar;
+    }
+    return "";
   };
 
   const [createNewQualificationData, setCreateNewQualificationData] = useState(
@@ -178,19 +228,26 @@ export const DataTableQualifications = ({
   const [addBtn, setAddBtn] = useState(null);
 
   const closeModalHandler = () => {
-    if (window.isDataChanged === true) {
-      if (window.confirm(unsavedDataMessage) === true) {
+    // when cancel is clicked in unsaved changed modal
+    if (
+      window.isDataChanged === true &&
+      window.confirm(unsavedDataMessage) === false
+    ) {
+      // do nothing
+    }
+    // otherwise return back to parent qual and reset change tracker
+    else {
+      if (openPCT) {
+        resetIsDataChanged();
+      } else {
         setShow(false);
-        removeChangeEventListeners(".modalUserInput");
       }
-    } else {
-      setShow(false);
+      setOpenPCT(false);
       removeChangeEventListeners(".modalUserInput");
     }
     if (addBtn) {
       addBtn.focus();
     }
-    setOpenPCT(false);
   };
 
   return (
@@ -233,13 +290,10 @@ export const DataTableQualifications = ({
         <Modal
           show={show}
           close={closeModalHandler}
-          save={
-            createNewQualificationData
-              ? createQualificationData
-              : saveQualificationData
-          }
+          save={manageSaveBtn}
           showCancel={!(user && checkout)}
           showSave={user && checkout}
+          breadCrumbBar={buildBreadBar()}
           title={
             createNewQualificationData
               ? "Create Qualification"
@@ -278,6 +332,8 @@ export const DataTableQualifications = ({
                   qualSelectValue={selectedQualificationData["id"]}
                   setOpenPCT={setOpenPCT}
                   openPCT={openPCT}
+                  setUpdatePCT={setUpdatePCT}
+                  updatePCT={updatePCT}
                 />
               )}
             </div>

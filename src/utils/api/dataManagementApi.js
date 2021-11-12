@@ -242,3 +242,10 @@ export const getAllQualificationTypeCodes = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+export const getAllQualificationDataTypeCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/qual-data-type-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
