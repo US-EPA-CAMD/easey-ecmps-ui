@@ -665,6 +665,21 @@ export const savePCTQualificationData = async (payload) => {
     .catch(handleError);
 };
 
+export const createPCTQualificationData = async (payload) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/qualifications/${payload["qualId"]}/pct-qualifications/`;
+
+  // *** remove attributes not needed by the API
+  delete payload["id"];
+
+  return secureAxios({
+    method: "POST",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
 export const getQualifications = async (locationId) => {
   let url = `${config.services.monitorPlans.uri}`;
   // *** workspace section url (authenticated)

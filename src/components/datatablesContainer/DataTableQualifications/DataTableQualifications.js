@@ -45,6 +45,7 @@ export const DataTableQualifications = ({
   const [updateTable, setUpdateTable] = useState(false);
   const [openPCT, setOpenPCT] = useState(false);
   const [creating, setCreating] = useState(false);
+  const [creatingChild, setCreatingChild] = useState(false);
   const [updatePCT, setUpdatePCT] = useState(false);
   useEffect(() => {
     if (
@@ -63,9 +64,8 @@ export const DataTableQualifications = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
-  const [selectedQualificationData, setSelectedQualificationData] = useState(
-    null
-  );
+  const [selectedQualificationData, setSelectedQualificationData] =
+    useState(null);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = ["Qualification Type Code", "Start Date", "End Date"];
@@ -152,7 +152,9 @@ export const DataTableQualifications = ({
     if (openPCT) {
       return handleRequest(
         "pct",
-        creating ? "" : mpApi.savePCTQualificationData,
+        creatingChild
+          ? mpApi.createPCTQualificationData
+          : mpApi.savePCTQualificationData,
         userInput
       );
     }
@@ -187,9 +189,8 @@ export const DataTableQualifications = ({
     return "";
   };
 
-  const [createNewQualificationData, setCreateNewQualificationData] = useState(
-    false
-  );
+  const [createNewQualificationData, setCreateNewQualificationData] =
+    useState(false);
   const [selectedModalData, setSelectedModalData] = useState(null);
 
   const openQualificationDataModal = (row, bool, create) => {
@@ -334,6 +335,7 @@ export const DataTableQualifications = ({
                   openPCT={openPCT}
                   setUpdatePCT={setUpdatePCT}
                   updatePCT={updatePCT}
+                  setCreatingChild={setCreatingChild}
                 />
               )}
             </div>
