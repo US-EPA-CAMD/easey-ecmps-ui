@@ -114,7 +114,7 @@ export const DataTableLEEQualifications = ({
         {
           qualificationTestDate: ["Qualification Test Date", "date", ""],
           skip: ["", "skip", ""],
-          parameterCode: ["Parameter", "dropdown", ""],
+          parameterCode: ["Parameter Code", "dropdown", ""],
           qualificationTestType: ["Qualification Test Type", "dropdown", ""],
           potentialAnnualHgMassEmissions: [
             "Potential Annual Hg Mass Emissions",
