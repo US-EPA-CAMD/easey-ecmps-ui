@@ -64,7 +64,7 @@ export const DataTableLEEQualifications = ({
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = [
     "Qualification Test Date",
-    "Parameter",
+    "Parameter Code",
     "Qualification Test Type",
     "Potential Annual Hg Mass Emissions",
     "Applicable Emission Standard",
