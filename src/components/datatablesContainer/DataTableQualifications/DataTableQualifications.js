@@ -4,7 +4,7 @@ import { extractUserInput } from "../../../additional-functions/extract-user-inp
 import * as fs from "../../../utils/selectors/monitoringPlanQualifications";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import DataTablePCTQualifications from "../DataTablePCTQualifications/DataTablePCTQualifications";
-
+import DataTableLEEQualifications from "../DataTableLEEQualifications/DataTableLEEQualifications";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
@@ -43,10 +43,15 @@ export const DataTableQualifications = ({
   const totalOptions = useRetrieveDropdownApi(["qualificationTypeCode"], true);
   const [show, setShow] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
+
   const [openPCT, setOpenPCT] = useState(false);
   const [creating, setCreating] = useState(false);
   const [creatingChild, setCreatingChild] = useState(false);
   const [updatePCT, setUpdatePCT] = useState(false);
+
+  const [openLEE, setOpenLEE] = useState(false);
+  const [updateLEE, setUpdateLEE] = useState(false);
+
   useEffect(() => {
     if (
       updateTable ||
@@ -135,6 +140,10 @@ export const DataTableQualifications = ({
           // update pct modal, then return to parent qual page
           setUpdatePCT(true);
           setOpenPCT(false);
+        } else if (dataType === "lee") {
+          // update lee modal, then return to parent qual page
+          setUpdateLEE(true);
+          setOpenLEE(false);
         }
       })
       .catch((error) => {
@@ -170,7 +179,7 @@ export const DataTableQualifications = ({
   };
 
   const buildBreadBar = () => {
-    if (openPCT) {
+    if (openPCT||openLEE) {
       const breadBar = (
         <BreadcrumbBar className="padding-0">
           <Breadcrumb onClick={closeModalHandler}>
@@ -180,7 +189,7 @@ export const DataTableQualifications = ({
           </Breadcrumb>
 
           <Breadcrumb current>
-            <span>Qualification Percent</span>
+            <span>{openPCT ? "Qualification Percent" : "Qualification LEE"}</span>
           </Breadcrumb>
         </BreadcrumbBar>
       );
@@ -238,12 +247,13 @@ export const DataTableQualifications = ({
     }
     // otherwise return back to parent qual and reset change tracker
     else {
-      if (openPCT) {
+      if (openPCT||openLEE) {
         resetIsDataChanged();
       } else {
         setShow(false);
       }
       setOpenPCT(false);
+      setOpenLEE(false);
       removeChangeEventListeners(".modalUserInput");
     }
     if (addBtn) {
@@ -307,7 +317,7 @@ export const DataTableQualifications = ({
           }
           children={
             <div>
-              {openPCT ? (
+              {openPCT || openLEE ? (
                 ""
               ) : (
                 <ModalDetails
@@ -321,22 +331,46 @@ export const DataTableQualifications = ({
               {creating ? (
                 ""
               ) : (
-                <DataTablePCTQualifications
-                  locationSelectValue={locationSelectValue}
-                  user={user}
-                  checkout={checkout}
-                  inactive={inactive}
-                  settingInactiveCheckBox={settingInactiveCheckBox}
-                  revertedState={revertedState}
-                  setRevertedState={setRevertedState}
-                  selectedLocation={selectedLocation}
-                  qualSelectValue={selectedQualificationData["id"]}
-                  setOpenPCT={setOpenPCT}
-                  openPCT={openPCT}
-                  setUpdatePCT={setUpdatePCT}
-                  updatePCT={updatePCT}
-                  setCreatingChild={setCreatingChild}
-                />
+                <div>
+                  {openLEE ? (
+                    ""
+                  ) : (
+                    <DataTablePCTQualifications
+                      locationSelectValue={locationSelectValue}
+                      user={user}
+                      checkout={checkout}
+                      inactive={inactive}
+                      settingInactiveCheckBox={settingInactiveCheckBox}
+                      revertedState={revertedState}
+                      setRevertedState={setRevertedState}
+                      selectedLocation={selectedLocation}
+                      qualSelectValue={selectedQualificationData["id"]}
+                      setOpenPCT={setOpenPCT}
+                      openPCT={openPCT}
+                      setUpdatePCT={setUpdatePCT}
+                      updatePCT={updatePCT}
+                    />
+                  )}
+                  {openPCT ? (
+                    ""
+                  ) : (
+                    <DataTableLEEQualifications
+                      locationSelectValue={locationSelectValue}
+                      user={user}
+                      checkout={checkout}
+                      inactive={inactive}
+                      settingInactiveCheckBox={settingInactiveCheckBox}
+                      revertedState={revertedState}
+                      setRevertedState={setRevertedState}
+                      selectedLocation={selectedLocation}
+                      qualSelectValue={selectedQualificationData["id"]}
+                      setOpenLEE={setOpenLEE}
+                      openLEE={openLEE}
+                      setUpdateLEE={setUpdateLEE}
+                      updateLEE={updateLEE}
+                    />
+                  )}
+                </div>
               )}
             </div>
           }

@@ -22,13 +22,14 @@ export const modalViewData = (
           label[y][0],
           createNew ? "" : selected[y],
           label[y][2] === "required" ? "required" : false,
-         
+
           "locked",
         ]);
       } else if (label[y][1] === "date") {
         const parts = selected[y] ? selected[y].split("-") : "";
 
-        const formmatedDate = parts != "" ? `${parts[1]}/${parts[2]}/${parts[0]}` : "";
+        const formmatedDate =
+          parts != "" ? `${parts[1]}/${parts[2]}/${parts[0]}` : "";
         console.log("formmated", formmatedDate);
         arr.push([
           y,
@@ -36,84 +37,99 @@ export const modalViewData = (
           createNew ? "" : formmatedDate,
           label[y][2] === "required" ? "required" : false,
           "locked",
-        ])
-      }else{
+        ]);
+      } else {
         arr.push([
           y,
           label[y][0],
           createNew ? "" : selected[y],
           label[y][2] === "required" ? "required" : false,
           "locked",
-        ])
-
+        ]);
+      }
+    } else {
+      let labels = "";
+      switch (label[y][1]) {
+        case "dropdown":
+          if (!createNew) {
+            if (totalOptions) {
+              labels = findValue(totalOptions[y], selected[y], "name");
+              console.log("labsl", labels);
+            }
+          }
+          arr.push([
+            y,
+            label[y][0],
+            labels,
+            label[y][2] === "required" ? "required" : false,
+            "dropdown",
+            createNew ? "select" : selected[y],
+            totalOptions ? totalOptions[y] : [],
+          ]);
+          break;
+        case "input":
+          arr.push([
+            y,
+            label[y][0],
+            createNew ? "" : selected[y],
+            label[y][2] === "required" ? "required" : false,
+            "input",
+          ]);
+          break;
+        case "date":
+          let formattedDate = "";
+          if (!createNew) {
+            formattedDate = adjustDate(
+              "mm/dd/yyyy",
+              selected[y] ? selected[y] : null
+            );
+          }
+          console.log("TESTING", y, label[y][0]);
+          arr.push([
+            y,
+            label[y][0],
+            formattedDate,
+            label[y][2] === "required" ? "required" : false,
+            "date",
+            createNew ? "" : selected[y],
+          ]);
+          break;
+        case "skip":
+          arr.push([[], [], [], "", "skip"]);
+          break;
+        case "radio":
+          if (selected) {
+            arr.push([
+              y,
+              label[y][0],
+              selected[y],
+              label[y][2] === "required" ? "required" : false,
+              "radio",
+            ]);
+          } else {
+            arr.push([
+              y,
+              label[y][0],
+              false,
+              label[y][2] === "required" ? "required" : false,
+              "radio",
+            ]);
+          }
+          break;
+        // case "hidden":
+        //   arr.push([
+        //     y,
+        //     label[y][0],
+        //     selected[y],
+        //     false,
+        //     "input",
+        //   ]);
+        //   break;
+        default:
+          break;
       }
     }
-    
-    else{
-let labels = "";
-    switch (label[y][1]) {
-      case "dropdown":
-        if (!createNew) {
-          if (totalOptions) {
-            labels = findValue(totalOptions[y], selected[y], "name");
-          }
-        }
-        arr.push([
-          y,
-          label[y][0],
-          labels,
-          label[y][2] === "required" ? "required" : false,
-          "dropdown",
-          createNew ? "select" : selected[y],
-          totalOptions ? totalOptions[y] : [],
-        ]);
-        break;
-      case "input":
-        arr.push([
-          y,
-          label[y][0],
-          createNew ? "" : selected[y],
-          label[y][2] === "required" ? "required" : false,
-          "input",
-        ]);
-        break;
-
-      case "skip":
-        arr.push([[], [], [], "", "skip"]);
-        break;
-      case "radio":
-        if (selected) {
-          arr.push([
-            y,
-            label[y][0],
-            selected[y],
-            label[y][2] === "required" ? "required" : false,
-            "radio",
-          ]);
-        } else {
-          arr.push([
-            y,
-            label[y][0],
-            false,
-            label[y][2] === "required" ? "required" : false,
-            "radio",
-          ]);
-        }
-        break;
-      // case "hidden":
-      //   arr.push([
-      //     y,
-      //     label[y][0],
-      //     selected[y],
-      //     false,
-      //     "input",
-      //   ]);
-      //   break;
-      default:
-        break;
-    }
   }
-}
   for (const y in time) {
     if (
       y === "endDate" ||

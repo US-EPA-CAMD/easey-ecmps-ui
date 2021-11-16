@@ -249,3 +249,9 @@ export const getAllQualificationDataTypeCodes = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+export const getAllQualificationLEETestTypeCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/qual-lee-test-type-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
