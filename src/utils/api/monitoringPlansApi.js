@@ -704,3 +704,15 @@ export const createQualificationData = async (payload) => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+export const getLEEQualifications = async (locationId, qualId) => {
+  let url = `${config.services.monitorPlans.uri}`;
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+
+  url = `${url}/locations/${locationId}/qualifications/${qualId}/lee-qualifications`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
