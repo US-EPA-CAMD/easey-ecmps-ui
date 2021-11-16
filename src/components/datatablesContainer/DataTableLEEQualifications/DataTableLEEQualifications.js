@@ -64,7 +64,7 @@ export const DataTableLEEQualifications = ({
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = [
     "Qualification Test Date",
-    "Parameter",
+    "Parameter Code",
     "Qualification Test Type",
     "Potential Annual Hg Mass Emissions",
     "Applicable Emission Standard",
@@ -114,7 +114,7 @@ export const DataTableLEEQualifications = ({
         {
           qualificationTestDate: ["Qualification Test Date", "date", ""],
           skip: ["", "skip", ""],
-          parameterCode: ["Parameter", "dropdown", ""],
+          parameterCode: ["Parameter Code", "dropdown", ""],
           qualificationTestType: ["Qualification Test Type", "dropdown", ""],
           potentialAnnualHgMassEmissions: [
             "Potential Annual Hg Mass Emissions",

@@ -7,8 +7,8 @@ export const getMonitoringPlansLEEQualifications = (totalData) => {
       records.push({ 
         col1: testDate,
         col2: el.parameterCode  ? el.parameterCode : "",
-        col4: el.qualificationTestType  ? el.qualificationTestType : "",
-        col3: el.potentialAnnualHgMassEmissions  ? el.potentialAnnualHgMassEmissions : "",
+        col3: el.qualificationTestType  ? el.qualificationTestType : "",
+        col4: el.potentialAnnualHgMassEmissions  ? el.potentialAnnualHgMassEmissions : "",
         col5: el.applicableEmissionStandard  ? el.applicableEmissionStandard : "",
         col6: el.unitsOfStandard ? el.unitsOfStandard : "",
         col7: el.percentageOfEmissionStandard ? el.percentageOfEmissionStandard : "",
