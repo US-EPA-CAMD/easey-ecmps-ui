@@ -33,9 +33,8 @@ export const DataTableMethod = ({
   const [methods, setMethods] = useState([]);
   const [matsMethods, setMatsMethods] = useState([]);
   const [show, setShow] = useState(showModal);
-  const [selectedMonitoringMethod, setSelectedMonitoringMethod] = useState(
-    null
-  );
+  const [selectedMonitoringMethod, setSelectedMonitoringMethod] =
+    useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
 
@@ -60,7 +59,7 @@ export const DataTableMethod = ({
       mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
         setMatsMethods(res.data);
       });
-      console.log('updateTable',updateTable)
+      console.log("updateTable", updateTable);
       setUpdateTable(false);
       setRevertedState(false);
     }
@@ -190,7 +189,7 @@ export const DataTableMethod = ({
     }
     return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [methods, inactive,updateTable]);
+  }, [methods, inactive, updateTable]);
 
   // useEffect(() => {
   //   if (matsTableHandler) {
@@ -211,13 +210,13 @@ export const DataTableMethod = ({
         console.log(result, " was saved");
         // openModal(false);
         setShow(false);
+        setUpdateTable(true);
       })
       .catch((error) => {
         console.log("error is", error);
         // openModal(false);
         setShow(false);
       });
-    setUpdateTable(true);
   };
 
   const createMethods = () => {
