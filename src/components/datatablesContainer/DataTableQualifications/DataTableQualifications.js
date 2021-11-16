@@ -46,6 +46,7 @@ export const DataTableQualifications = ({
 
   const [openPCT, setOpenPCT] = useState(false);
   const [creating, setCreating] = useState(false);
+  const [creatingChild, setCreatingChild] = useState(false);
   const [updatePCT, setUpdatePCT] = useState(false);
 
   const [openLEE, setOpenLEE] = useState(false);
@@ -160,7 +161,9 @@ export const DataTableQualifications = ({
     if (openPCT) {
       return handleRequest(
         "pct",
-        creating ? "" : mpApi.savePCTQualificationData,
+        creatingChild
+          ? mpApi.createPCTQualificationData
+          : mpApi.savePCTQualificationData,
         userInput
       );
     }
@@ -194,28 +197,6 @@ export const DataTableQualifications = ({
     }
     return "";
   };
-
-
-  const buildBreadBarLEE = () => {
-    if (openLEE) {
-      const breadBar = (
-        <BreadcrumbBar className="padding-0">
-          <Breadcrumb onClick={closeModalHandler}>
-            <BreadcrumbLink>
-              <span>Qualification</span>
-            </BreadcrumbLink>
-          </Breadcrumb>
-
-          <Breadcrumb current>
-            <span>Qualification LEE</span>
-          </Breadcrumb>
-        </BreadcrumbBar>
-      );
-      return breadBar;
-    }
-    return "";
-  };
-
 
   const [createNewQualificationData, setCreateNewQualificationData] =
     useState(false);

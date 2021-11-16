@@ -26,6 +26,7 @@ export const DataTablePCTQualifications = ({
   openPCT,
   setUpdatePCT,
   updatePCT,
+  setCreatingChild,
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [qualPctData, setQualPctData] = useState([]);
@@ -100,6 +101,7 @@ export const DataTablePCTQualifications = ({
 
   const openPctQualModal = (row, bool, create) => {
     setOpenPCT(true);
+    setCreatingChild(create);
     let pctData = null;
 
     if (qualPctData.length > 0 && !create) {
@@ -181,6 +183,8 @@ export const DataTablePCTQualifications = ({
           actionsBtn={checkout ? "View/Edit" : "View"}
           tableTitle={"Qualification Percent"}
           componentStyling="systemsCompTable"
+          addBtnName={"Create Qualification Percent"}
+          addBtn={openPctQualModal}
         />
       )}
     </div>
