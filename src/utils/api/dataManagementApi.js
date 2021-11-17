@@ -2,6 +2,10 @@ import axios from "axios";
 import { handleResponse, handleError } from "./apiUtils";
 import config from "../../config";
 
+axios.defaults.headers.common = {
+  "x-api-key": config.app.apiKey,
+};
+
 export const getAllControlTechnologies = async () => {
   return axios
     .get(`${config.services.mdm.uri}/control-technologies`)

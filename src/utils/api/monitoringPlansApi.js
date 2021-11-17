@@ -3,6 +3,10 @@ import { handleResponse, handleError } from "./apiUtils";
 import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
 
+axios.defaults.headers.common = {
+  "x-api-key": config.app.apiKey,
+};
+
 // *** obtain monitoring plans
 export const getMonitoringPlans = async (orisCode) => {
   let url = `${config.services.monitorPlans.uri}`;

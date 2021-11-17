@@ -3,6 +3,10 @@ import axios from "axios";
 import { checkoutAPI } from "../../additional-functions/checkout";
 import { getCheckedOutLocations } from "./monitoringPlansApi";
 
+axios.defaults.headers.common = {
+  "x-api-key": config.app.apiKey,
+};
+
 export const secureAxios = (options) => {
   if (
     sessionStorage.getItem("cdx_user") &&
@@ -12,6 +16,7 @@ export const secureAxios = (options) => {
       authorization: `Bearer ${
         JSON.parse(sessionStorage.getItem("cdx_user")).token
       }`,
+      "x-api-key": config.app.apiKey,
     };
   }
 
