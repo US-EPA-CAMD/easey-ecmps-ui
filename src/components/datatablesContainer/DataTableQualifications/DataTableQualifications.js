@@ -168,7 +168,16 @@ export const DataTableQualifications = ({
       );
     }
     // else if(openLME){ LME qual logic here }
-    // else if(openLEE){ LEE qual logic here }
+    else if(openLEE){
+      return handleRequest(
+        "lee",
+        creatingChild
+          ? mpApi.createLEEQualificationData
+          : mpApi.saveLEEQualificationData,
+        userInput
+      );
+    
+    }
 
     // Parent qual
     return handleRequest(
