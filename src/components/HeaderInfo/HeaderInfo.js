@@ -49,22 +49,19 @@ export const HeaderInfo = ({
 
   const obtainCheckedOutLocationsHeader = async () => {
     console.log("CURRENT Checked out locations: ", checkedOutLocationsState);
-    const checkedOutLocationResult = await mpApi.getCheckedOutLocations().then();
-
-    let checkedOutLocationList = [];
-
-    if (checkedOutLocationResult.data) {
-      checkedOutLocationList = checkedOutLocationResult.data;
-    }
-
-    setcheckedOutLocationsState(checkedOutLocationList);
+    const checkedOutLocationResult = await mpApi.getCheckedOutLocations().then((response) => {
+      console.log("data ", response.data);
+      //setcheckedOutLocationsState(response.data);
+      return response.data;
+    });
+    setcheckedOutLocationsState(checkedOutLocationResult);
+    console.log("NEW Checked out locations RESULT: ", checkedOutLocationResult);
     console.log("NEW Checked out locations: ", checkedOutLocationsState);
-
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     setCheckoutState(checkout);
-    await obtainCheckedOutLocationsHeader().then();
+    obtainCheckedOutLocationsHeader();
     console.log("SELECTED CONFIG: ", selectedConfig);
   }, [checkout]);
 
@@ -131,13 +128,13 @@ export const HeaderInfo = ({
 
   // direction -> false = check back in
   // true = check out
-  const checkoutStateHandler = async (direction) => {
+  const checkoutStateHandler = (direction) => {
     setCheckoutState(direction);
     setCheckedOutByUser(direction);
     setDisplayLock(direction);
     checkoutAPI(direction, configID, selectedConfig.id, setCheckout);
 
-    await obtainCheckedOutLocationsHeader().then();
+    obtainCheckedOutLocationsHeader();
     // 508
     /// true means check out = > check back in
     //   setTimeout(() => {
