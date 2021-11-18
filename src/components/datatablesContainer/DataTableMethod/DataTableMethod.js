@@ -59,7 +59,7 @@ export const DataTableMethod = ({
       mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
         setMatsMethods(res.data);
       });
-      console.log("updateTable", updateTable);
+
       setUpdateTable(false);
       setRevertedState(false);
     }

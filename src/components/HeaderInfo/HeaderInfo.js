@@ -48,6 +48,7 @@ export const HeaderInfo = ({
 
   useEffect(() => {
     setCheckoutState(checkout);
+    console.log(user);
   }, [checkout]);
 
   const isCheckedOutByUser = () => {
@@ -97,6 +98,37 @@ export const HeaderInfo = ({
     isCheckedOutByUser()
   );
   const [displayLock, setDisplayLock] = useState(isCheckedOut());
+
+  const evalStatusStyle = () => {
+    switch (selectedConfig.evalStatusCode) {
+      case "ERR":
+      case "EVAL":
+        return "usa-alert--warning";
+      case "INFO":
+      case "PASS":
+        return "usa-alert--success";
+      case "INQ":
+      case "WIP":
+        return "usa-alert--info";
+    }
+    return "";
+  };
+
+  const evalStatusText = () => {
+    switch (selectedConfig.evalStatusCode) {
+      case "ERR":
+        return "Critical Errors";
+      case "INFO":
+        return "Informational Message";
+      case "PASS":
+        return "Passed";
+      case "INQ":
+        return "In Queue";
+      case "WIP":
+        return "In Progress";
+    }
+    return "Needs Evaluation";
+  };
 
   useEffect(() => {
     setCheckoutState(checkout);
@@ -174,20 +206,23 @@ export const HeaderInfo = ({
               )}
               <span className="font-body-lg">{facilityMainName}</span>
             </h3>
-            { user?
-            <div className="text-bold font-body-2xs">
-              {checkoutState
-                ? `Currently checked out by: ${user.firstName} ${formatDate(
-                    new Date()
-                  )}`
-                : displayLock
-                ? `Last checked out by: ${
-                    findCurrentlyCheckedOutByInfo()["checkedOutBy"]
-                  } ${formatDate(
-                    findCurrentlyCheckedOutByInfo()["checkedOutOn"]
-                  )}`
-                : null}
-            </div> :''}
+            {user ? (
+              <div className="text-bold font-body-2xs">
+                {checkoutState
+                  ? `Currently checked out by: ${user.firstName} ${formatDate(
+                      new Date()
+                    )}`
+                  : displayLock
+                  ? `Last checked out by: ${
+                      findCurrentlyCheckedOutByInfo()["checkedOutBy"]
+                    } ${formatDate(
+                      findCurrentlyCheckedOutByInfo()["checkedOutOn"]
+                    )}`
+                  : null}
+              </div>
+            ) : (
+              ""
+            )}
           </div>
           <div className="">
             <div className="display-inline-block ">
@@ -282,30 +317,35 @@ export const HeaderInfo = ({
           </div>
         </div>
         <div className="grid-col clearfix position-absolute top-1 right-0">
-          <div className="grid-row">
-            {checkout && user  ? (
+          <div className="">
+            {checkout && user ? (
               <div>
-                <div className="grid-row padding-2 margin-left-10">
-                  <Button
-                    type="button"
-                    className="margin-right-1 margin-left-4"
-                    outline={false}
-                  >
-                    Evaluate
-                  </Button>
-                  <Button
+                <div className="padding-2 margin-left-10">
+                  {evalStatusText() === "Needs Evaluation" ? (
+                    <Button
+                      type="button"
+                      className="margin-right-2 margin-left-4 float-right margin-bottom-2"
+                      outline={false}
+                    >
+                      Evaluate
+                    </Button>
+                  ) : (
+                    ""
+                  )}
+
+                  {/* <Button
                     type="button"
                     className="margin-left-1"
                     outline={false}
                   >
                     Submit
-                  </Button>
+                  </Button> */}
                 </div>
-                <div className="grid-row margin-left-10">
+                <div className="margin-right-3">
                   <Button
                     type="button"
                     id="showRevertModal"
-                    className="margin-left-4"
+                    className="float-right"
                     onClick={() => setShow(true)}
                     outline={true}
                   >
@@ -318,12 +358,16 @@ export const HeaderInfo = ({
             )}
           </div>
           {user ? (
-            <div className="grid-row padding-1 float-right text-right margin-right-3">
+            <div className="grid-row padding-1 float-right text-right margin-right-3 margin-top-1 mobile:display-none desktop:display-block">
               <table role="presentation">
                 <tbody>
                   <tr>
                     <th className="padding-1">Evaluation Status: </th>
-                    <td className="padding-1">Passed with no errors</td>
+                    <td
+                      className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle()}`}
+                    >
+                      {evalStatusText()}
+                    </td>
                   </tr>
                   <tr>
                     <th className="padding-1">Submission Status: </th>
