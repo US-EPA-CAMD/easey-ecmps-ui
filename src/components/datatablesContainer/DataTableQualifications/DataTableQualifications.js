@@ -348,7 +348,13 @@ export const DataTableQualifications = ({
           exitBTN={
             createNewQualificationData
               ? "Create Qualification"
-              : `Save and Close`
+              : user && checkout && openPCT
+              ? "Create Qualification Percent"
+              : user && checkout && openLEE
+              ? "Create Qualification LEE"
+              : user && checkout && openLME
+              ? "Create Qualification LME"
+              : "Save and Close"
           }
           children={
             <div>
@@ -407,7 +413,7 @@ export const DataTableQualifications = ({
                       setCreatingChild={setCreatingChild}
                     />
                   )}
-                  
+
                   {openLEE || openPCT ? (
                     ""
                   ) : (
@@ -428,8 +434,6 @@ export const DataTableQualifications = ({
                       setCreatingChild={setCreatingChild}
                     />
                   )}
-
-
                 </div>
               )}
             </div>
