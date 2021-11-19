@@ -139,6 +139,19 @@ export const HeaderInfo = ({
     return "Needs Evaluation";
   };
 
+  const showSubmit = (status) => {
+    return status === "PASS" || status === "INFO";
+  };
+
+  const showRevert = (status) => {
+    return (
+      status === "PASS" ||
+      status === "INFO" ||
+      status === "ERR" ||
+      status === "EVAL"
+    );
+  };
+
   // 508
   //   const activeFocusRef = useRef(null);
   //   useEffect(() => {
@@ -151,6 +164,8 @@ export const HeaderInfo = ({
   const checkoutStateHandler = (direction) => {
     checkoutAPI(direction, configID, selectedConfig.id, setCheckout).then(
       () => {
+        if (direction) {
+        }
         setCheckedOutByUser(direction);
         setDisplayLock(direction);
         setCheckoutState(direction);
@@ -334,7 +349,7 @@ export const HeaderInfo = ({
                   {evalStatusText() === "Needs Evaluation" ? (
                     <Button
                       type="button"
-                      className="margin-right-2 margin-left-4 float-right margin-bottom-2"
+                      className="margin-right-2 margin-left-4 float-right"
                       outline={false}
                     >
                       Evaluate
@@ -342,26 +357,34 @@ export const HeaderInfo = ({
                   ) : (
                     ""
                   )}
-
-                  {/* <Button
-                    type="button"
-                    className="margin-left-1"
-                    outline={false}
-                  >
-                    Submit
-                  </Button> */}
+                  {showSubmit(selectedConfig.evalStatusCode) ? (
+                    <Button
+                      type="button"
+                      className="margin-right-2 float-right"
+                      outline={false}
+                      title="Coming Soon"
+                    >
+                      Submit
+                    </Button>
+                  ) : (
+                    ""
+                  )}
                 </div>
-                <div className="margin-right-3">
-                  <Button
-                    type="button"
-                    id="showRevertModal"
-                    className="float-right"
-                    onClick={() => setShow(true)}
-                    outline={true}
-                  >
-                    {"Revert to Official Record"}
-                  </Button>
-                </div>
+                {showRevert(selectedConfig.evalStatusCode) ? (
+                  <div className="margin-right-3 margin-top-2 float-right">
+                    <Button
+                      type="button"
+                      id="showRevertModal"
+                      className="float-right"
+                      onClick={() => setShow(true)}
+                      outline={true}
+                    >
+                      {"Revert to Official Record"}
+                    </Button>
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
             ) : (
               ""
