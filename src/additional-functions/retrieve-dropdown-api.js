@@ -144,6 +144,7 @@ export const useRetrieveDropdownApi = (dropDownFields, mats = false) => {
       case "spanUnitsOfMeasureCode":
       case "maximumLoadUnitsOfMeasureCode":
       case "systemFuelFlowUOMCode":
+      case "unitsOfStandard":
         dmApi.getAllUnitsOfMeasureCodes().then((response) => {
           options = response.data.map((option) => {
             return {
@@ -435,7 +436,18 @@ export const useRetrieveDropdownApi = (dropDownFields, mats = false) => {
           setDefaultOptions(options, fieldName);
         });
         break;
+      case "qualificationTestType":
+        dmApi.getAllQualificationLEETestTypeCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["qualLeeTestTypeCode"],
+              name: option["qualLeeTestTypeDescription"],
+            };
+          });
 
+          setDefaultOptions(options, fieldName);
+        });
+        break;
       default:
         break;
     }

@@ -4,7 +4,9 @@ import { extractUserInput } from "../../../additional-functions/extract-user-inp
 import * as fs from "../../../utils/selectors/monitoringPlanQualifications";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import DataTablePCTQualifications from "../DataTablePCTQualifications/DataTablePCTQualifications";
+import DataTableLEEQualifications from "../DataTableLEEQualifications/DataTableLEEQualifications";
 
+import DataTableLMEQualifications from "../DataTableLMEQualifications/DataTableLMEQualifications";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
@@ -43,10 +45,18 @@ export const DataTableQualifications = ({
   const totalOptions = useRetrieveDropdownApi(["qualificationTypeCode"], true);
   const [show, setShow] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
+
   const [openPCT, setOpenPCT] = useState(false);
   const [creating, setCreating] = useState(false);
   const [creatingChild, setCreatingChild] = useState(false);
   const [updatePCT, setUpdatePCT] = useState(false);
+
+  const [openLEE, setOpenLEE] = useState(false);
+  const [updateLEE, setUpdateLEE] = useState(false);
+
+  const [openLME, setOpenLME] = useState(false);
+  const [updateLME, setUpdateLME] = useState(false);
+
   useEffect(() => {
     if (
       updateTable ||
@@ -60,6 +70,8 @@ export const DataTableQualifications = ({
         setUpdateTable(false);
         setRevertedState(false);
         setUpdatePCT(false);
+        setUpdateLEE(false);
+        setUpdateLME(false);
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -135,6 +147,14 @@ export const DataTableQualifications = ({
           // update pct modal, then return to parent qual page
           setUpdatePCT(true);
           setOpenPCT(false);
+        } else if (dataType === "lee") {
+          // update lee modal, then return to parent qual page
+          setUpdateLEE(true);
+          setOpenLEE(false);
+        } else if (dataType === "lMe") {
+          // update lee modal, then return to parent qual page
+          setUpdateLME(true);
+          setOpenLME(false);
         }
       })
       .catch((error) => {
@@ -158,8 +178,25 @@ export const DataTableQualifications = ({
         userInput
       );
     }
-    // else if(openLME){ LME qual logic here }
-    // else if(openLEE){ LEE qual logic here }
+    // else if(openLME){
+    //   return handleRequest(
+    //     "lme",
+    //     creatingChild
+    //       ? mpApi.createLMEQualificationData
+    //       : mpApi.saveLMEQualificationData,
+    //     userInput
+    //   );
+
+    // }
+    else if (openLEE) {
+      return handleRequest(
+        "lee",
+        creatingChild
+          ? mpApi.createLEEQualificationData
+          : mpApi.saveLEEQualificationData,
+        userInput
+      );
+    }
 
     // Parent qual
     return handleRequest(
@@ -170,7 +207,7 @@ export const DataTableQualifications = ({
   };
 
   const buildBreadBar = () => {
-    if (openPCT) {
+    if (openPCT || openLEE || openLME) {
       const breadBar = (
         <BreadcrumbBar className="padding-0">
           <Breadcrumb onClick={closeModalHandler}>
@@ -180,7 +217,13 @@ export const DataTableQualifications = ({
           </Breadcrumb>
 
           <Breadcrumb current>
-            <span>Qualification Percent</span>
+            <span>
+              {openPCT
+                ? "Qualification Percent"
+                : openLEE
+                ? "Qualification LEE"
+                : "Qualification LME"}
+            </span>
           </Breadcrumb>
         </BreadcrumbBar>
       );
@@ -238,12 +281,14 @@ export const DataTableQualifications = ({
     }
     // otherwise return back to parent qual and reset change tracker
     else {
-      if (openPCT) {
+      if (openPCT || openLEE || openLME) {
         resetIsDataChanged();
       } else {
         setShow(false);
       }
       setOpenPCT(false);
+      setOpenLEE(false);
+      setOpenLME(false);
       removeChangeEventListeners(".modalUserInput");
     }
     if (addBtn) {
@@ -303,11 +348,17 @@ export const DataTableQualifications = ({
           exitBTN={
             createNewQualificationData
               ? "Create Qualification"
-              : `Save and Close`
+              : user && checkout && openPCT
+              ? "Create Qualification Percent"
+              : user && checkout && openLEE
+              ? "Create Qualification LEE"
+              : user && checkout && openLME
+              ? "Create Qualification LME"
+              : "Save and Close"
           }
           children={
             <div>
-              {openPCT ? (
+              {openPCT || openLEE || openLME ? (
                 ""
               ) : (
                 <ModalDetails
@@ -321,22 +372,92 @@ export const DataTableQualifications = ({
               {creating ? (
                 ""
               ) : (
-                <DataTablePCTQualifications
-                  locationSelectValue={locationSelectValue}
-                  user={user}
-                  checkout={checkout}
-                  inactive={inactive}
-                  settingInactiveCheckBox={settingInactiveCheckBox}
-                  revertedState={revertedState}
-                  setRevertedState={setRevertedState}
-                  selectedLocation={selectedLocation}
-                  qualSelectValue={selectedQualificationData["id"]}
-                  setOpenPCT={setOpenPCT}
-                  openPCT={openPCT}
-                  setUpdatePCT={setUpdatePCT}
-                  updatePCT={updatePCT}
-                  setCreatingChild={setCreatingChild}
-                />
+                <div>
+                  {openLEE || openLME ? (
+                    ""
+                  ) : (
+                    <DataTablePCTQualifications
+                      locationSelectValue={locationSelectValue}
+                      user={user}
+                      checkout={checkout}
+                      inactive={inactive}
+                      settingInactiveCheckBox={settingInactiveCheckBox}
+                      revertedState={revertedState}
+                      setRevertedState={setRevertedState}
+                      selectedLocation={selectedLocation}
+                      qualSelectValue={selectedQualificationData["id"]}
+                      setOpenPCT={setOpenPCT}
+                      openPCT={openPCT}
+                      setUpdatePCT={setUpdatePCT}
+                      updatePCT={updatePCT}
+                      setCreatingChild={setCreatingChild}
+                    />
+                  )}
+                  {openPCT || openLME ? (
+                    ""
+                  ) : (
+                    <DataTableLEEQualifications
+                      locationSelectValue={locationSelectValue}
+                      user={user}
+                      checkout={checkout}
+                      inactive={inactive}
+                      settingInactiveCheckBox={settingInactiveCheckBox}
+                      revertedState={revertedState}
+                      setRevertedState={setRevertedState}
+                      selectedLocation={selectedLocation}
+                      qualSelectValue={selectedQualificationData["id"]}
+                      setOpenLEE={setOpenLEE}
+                      openLEE={openLEE}
+                      setUpdateLEE={setUpdateLEE}
+                      updateLEE={updateLEE}
+                      setCreatingChild={setCreatingChild}
+                    />
+                  )}
+
+                  {openLEE || openPCT ? (
+                    ""
+                  ) : (
+                    <DataTableLMEQualifications
+                      locationSelectValue={locationSelectValue}
+                      user={user}
+                      checkout={checkout}
+                      inactive={inactive}
+                      settingInactiveCheckBox={settingInactiveCheckBox}
+                      revertedState={revertedState}
+                      setRevertedState={setRevertedState}
+                      selectedLocation={selectedLocation}
+                      qualSelectValue={selectedQualificationData["id"]}
+                      setOpenLME={setOpenLME}
+                      openLME={openLME}
+                      setUpdateLME={setUpdateLME}
+                      updateLME={updateLME}
+                      setCreatingChild={setCreatingChild}
+                    />
+                  )}
+                  
+                  {openLEE || openPCT ? (
+                    ""
+                  ) : (
+                    <DataTableLMEQualifications
+                      locationSelectValue={locationSelectValue}
+                      user={user}
+                      checkout={checkout}
+                      inactive={inactive}
+                      settingInactiveCheckBox={settingInactiveCheckBox}
+                      revertedState={revertedState}
+                      setRevertedState={setRevertedState}
+                      selectedLocation={selectedLocation}
+                      qualSelectValue={selectedQualificationData["id"]}
+                      setOpenLME={setOpenLME}
+                      openLME={openLME}
+                      setUpdateLME={setUpdateLME}
+                      updateLME={updateLME}
+                      setCreatingChild={setCreatingChild}
+                    />
+                  )}
+
+
+                </div>
               )}
             </div>
           }
