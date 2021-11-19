@@ -348,7 +348,13 @@ export const DataTableQualifications = ({
           exitBTN={
             createNewQualificationData
               ? "Create Qualification"
-              : `Save and Close`
+              : user && checkout && openPCT
+              ? "Create Qualification Percent"
+              : user && checkout && openLEE
+              ? "Create Qualification LEE"
+              : user && checkout && openLME
+              ? "Create Qualification LME"
+              : "Save and Close"
           }
           children={
             <div>
@@ -404,6 +410,27 @@ export const DataTableQualifications = ({
                       openLEE={openLEE}
                       setUpdateLEE={setUpdateLEE}
                       updateLEE={updateLEE}
+                      setCreatingChild={setCreatingChild}
+                    />
+                  )}
+
+                  {openLEE || openPCT ? (
+                    ""
+                  ) : (
+                    <DataTableLMEQualifications
+                      locationSelectValue={locationSelectValue}
+                      user={user}
+                      checkout={checkout}
+                      inactive={inactive}
+                      settingInactiveCheckBox={settingInactiveCheckBox}
+                      revertedState={revertedState}
+                      setRevertedState={setRevertedState}
+                      selectedLocation={selectedLocation}
+                      qualSelectValue={selectedQualificationData["id"]}
+                      setOpenLME={setOpenLME}
+                      openLME={openLME}
+                      setUpdateLME={setUpdateLME}
+                      updateLME={updateLME}
                       setCreatingChild={setCreatingChild}
                     />
                   )}
