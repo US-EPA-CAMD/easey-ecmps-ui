@@ -434,6 +434,29 @@ export const DataTableQualifications = ({
                       setCreatingChild={setCreatingChild}
                     />
                   )}
+                  
+                  {openLEE || openPCT ? (
+                    ""
+                  ) : (
+                    <DataTableLMEQualifications
+                      locationSelectValue={locationSelectValue}
+                      user={user}
+                      checkout={checkout}
+                      inactive={inactive}
+                      settingInactiveCheckBox={settingInactiveCheckBox}
+                      revertedState={revertedState}
+                      setRevertedState={setRevertedState}
+                      selectedLocation={selectedLocation}
+                      qualSelectValue={selectedQualificationData["id"]}
+                      setOpenLME={setOpenLME}
+                      openLME={openLME}
+                      setUpdateLME={setUpdateLME}
+                      updateLME={updateLME}
+                      setCreatingChild={setCreatingChild}
+                    />
+                  )}
+
+
                 </div>
               )}
             </div>
