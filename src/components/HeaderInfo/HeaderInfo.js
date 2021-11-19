@@ -26,7 +26,6 @@ export const HeaderInfo = ({
   inactive,
   ///
   checkoutAPI,
-  // checkedOutConfigs,
   configID,
 }) => {
   const sections = [
@@ -53,19 +52,16 @@ export const HeaderInfo = ({
 
   useEffect(() => {
     setCheckoutState(checkout);
-    // checkoutStateHandler(checkout);
+    console.log(selectedConfig);
 
     if (!dataLoaded) {
-      // console.log("loading checked out locations...");
       mpApi.getCheckedOutLocations().then((res) => {
         const configs = res.data;
-        // console.log("configs: ", configs);
         setCheckedOutConfigs(configs);
         const currentConfig = findCurrentlyCheckedOutByInfo(configs);
         setCheckedOutByUser(isCheckedOutByUser(configs));
         setAuditInformation(createAuditMessage(checkout, currentConfig));
         setDataLoaded(true);
-        // console.log("end of getCheckedOutLocations");
       });
     }
   }, [checkout, dataLoaded]);
@@ -143,10 +139,6 @@ export const HeaderInfo = ({
     return "Needs Evaluation";
   };
 
-  useEffect(() => {
-    setCheckoutState(checkout);
-  }, [checkout]);
-
   // 508
   //   const activeFocusRef = useRef(null);
   //   useEffect(() => {
@@ -157,11 +149,6 @@ export const HeaderInfo = ({
   // direction -> false = check back in
   // true = check out
   const checkoutStateHandler = (direction) => {
-    // console.log(
-    //   "checkoutStateHandler is passing this to its functions: ",
-    //   direction
-    // );
-
     checkoutAPI(direction, configID, selectedConfig.id, setCheckout).then(
       () => {
         setCheckedOutByUser(direction);
@@ -170,8 +157,6 @@ export const HeaderInfo = ({
         setDataLoaded(false);
       }
     );
-
-    // console.log("end of checkoutStateHandler");
   };
 
   const closeModalHandler = () => setShow(false);
@@ -187,6 +172,7 @@ export const HeaderInfo = ({
   // Create audit message for header info
   const createAuditMessage = (checkedOut, currentConfig) => {
     const inWorkspace = user;
+    console.log(currentConfig);
 
     // WORKSPACE view
     if (inWorkspace) {
@@ -220,14 +206,9 @@ export const HeaderInfo = ({
         <Modal
           show={show}
           close={closeModalHandler}
-          // showCancel={true}
           showSave={true}
           exitBTN={"Yes"}
           save={revert}
-          // title={
-          //   "test title"
-          // }
-          // createNew={createNewMethod ? "Create Method" : `Save and Close`}
           children={
             <div>
               {
