@@ -49,6 +49,7 @@ export const HeaderInfo = ({
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const [checkedOutByUser, setCheckedOutByUser] = useState(false);
+  const [committedLastSave, setCommittedLastSave] = useState(false);
 
   useEffect(() => {
     setCheckoutState(checkout);
@@ -58,7 +59,19 @@ export const HeaderInfo = ({
       mpApi.getCheckedOutLocations().then((res) => {
         const configs = res.data;
         setCheckedOutConfigs(configs);
-        const currentConfig = findCurrentlyCheckedOutByInfo(configs);
+        console.log("committed last save: ", committedLastSave);
+
+        let currentConfig = committedLastSave
+          ? { userId: user["userId"], updateDate: new Date(Date.now()) }
+          : findCurrentlyCheckedOutByInfo(configs);
+
+        if (!currentConfig) {
+          currentConfig = {
+            userId: user["userId"],
+            updateDate: new Date(Date.now()),
+          };
+        }
+
         setCheckedOutByUser(isCheckedOutByUser(configs));
         setAuditInformation(createAuditMessage(checkout, currentConfig));
         setDataLoaded(true);
@@ -164,8 +177,12 @@ export const HeaderInfo = ({
   const checkoutStateHandler = (direction) => {
     checkoutAPI(direction, configID, selectedConfig.id, setCheckout).then(
       () => {
-        if (direction) {
+        if (!direction) {
+          setCommittedLastSave(true);
+        } else {
+          setCommittedLastSave(false);
         }
+
         setCheckedOutByUser(direction);
         setDisplayLock(direction);
         setCheckoutState(direction);
@@ -198,10 +215,8 @@ export const HeaderInfo = ({
         } ${formatDate(currentConfig["checkedOutOn"])}`;
       }
       // when config is not checked out
-      return `Last updated by: ${selectedConfig.userId} ${formatDate(
-        selectedConfig.updateDate
-          ? selectedConfig.updateDate
-          : selectedConfig.addDate,
+      return `Last updated by: ${currentConfig.userId} ${formatDate(
+        currentConfig.updateDate,
         true
       )}`;
     }
