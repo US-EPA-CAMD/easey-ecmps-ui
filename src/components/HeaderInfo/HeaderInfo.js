@@ -26,7 +26,7 @@ export const HeaderInfo = ({
   inactive,
   ///
   checkoutAPI,
-  checkedOutLocations,
+  // checkedOutConfigs,
   configID,
 }) => {
   const sections = [
@@ -45,90 +45,91 @@ export const HeaderInfo = ({
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
   const [checkoutState, setCheckoutState] = useState(checkout);
+  const [checkedOutConfigs, setCheckedOutConfigs] = useState([]);
+  const [auditInformation, setAuditInformation] = useState("");
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  const [checkedOutByUser, setCheckedOutByUser] = useState(false);
 
   useEffect(() => {
     setCheckoutState(checkout);
-  }, [checkout]);
+    // checkoutStateHandler(checkout);
 
-  const isCheckedOutByUser = () => {
+    if (!dataLoaded) {
+      // console.log("loading checked out locations...");
+      mpApi.getCheckedOutLocations().then((res) => {
+        const configs = res.data;
+        // console.log("configs: ", configs);
+        setCheckedOutConfigs(configs);
+        const currentConfig = findCurrentlyCheckedOutByInfo(configs);
+        setCheckedOutByUser(isCheckedOutByUser(configs));
+        setAuditInformation(createAuditMessage(checkout, currentConfig));
+        setDataLoaded(true);
+        // console.log("end of getCheckedOutLocations");
+      });
+    }
+  }, [checkout, dataLoaded]);
+
+  const findCurrentlyCheckedOutByInfo = (configs) => {
+    return configs[
+      configs.map((config) => config["monPlanId"]).indexOf(selectedConfig.id)
+    ];
+  };
+
+  const isCheckedOutByUser = (test) => {
     return (
-      checkedOutLocations
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id) > -1 &&
-      checkedOutLocations[
-        checkedOutLocations
-          .map((location) => location["monPlanId"])
-          .indexOf(selectedConfig.id)
+      test.map((location) => location["monPlanId"]).indexOf(selectedConfig.id) >
+        -1 &&
+      test[
+        test.map((location) => location["monPlanId"]).indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
 
   const isCheckedOut = () => {
     return (
-      checkedOutLocations
+      checkedOutConfigs
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1
     );
   };
 
-  const findCurrentlyCheckedOutByInfo = () => {
-    return checkedOutLocations[
-      checkedOutLocations
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id)
-    ];
-  };
+  const [displayLock, setDisplayLock] = useState(isCheckedOut());
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString, isUTC = false) => {
     const date = new Date(dateString);
+    //HANDLE -1 days from DB dates which are UTC
+    const day = isUTC ? date.getDate() + 1 : date.getDate();
     const formattedDate =
       (date.getMonth() > 8
         ? date.getMonth() + 1
         : "0" + (date.getMonth() + 1)) +
       "/" +
-      (date.getDate() > 9 ? date.getDate() : "0" + date.getDate()) +
+      (day > 9 ? day : "0" + day) +
       "/" +
       date.getFullYear();
 
     return formattedDate;
   };
 
-  const [checkedOutByUser, setCheckedOutByUser] = useState(
-    isCheckedOutByUser()
-  );
-  const [displayLock, setDisplayLock] = useState(isCheckedOut());
-
-  useEffect(() => {
-    setCheckoutState(checkout);
-  }, [checkout]);
-
-  // 508
-  //   const activeFocusRef = useRef(null);
-  //   useEffect(() => {
-  //     if (activeFocusRef.current) {
-  //       activeFocusRef.current.focus();
-  // }}, [checkout]);
-
-  // direction -> false = check back in
-  // true = check out
   const checkoutStateHandler = (direction) => {
-    setCheckoutState(direction);
-    setCheckedOutByUser(direction);
-    setDisplayLock(direction);
-    checkoutAPI(direction, configID, selectedConfig.id, setCheckout);
+    // console.log(
+    //   "checkoutStateHandler is passing this to its functions: ",
+    //   direction
+    // );
 
-    // 508
-    /// true means check out = > check back in
-    //   setTimeout(() => {
-    //     if (direction) {
-    //       document.querySelector(`[id="checkInBTN"]`).focus();
-    //       console.log('  document.querySelector(`[id="checkInBTN"]`)',  document.querySelector(`[id="checkInBTN"]`))
-    //     } else {
-    //       document.querySelector(`[id="checkOutBTN"]`).focus();
-    //     }
-    //   },[1500]);
+    checkoutAPI(direction, configID, selectedConfig.id, setCheckout).then(
+      () => {
+        setCheckedOutByUser(direction);
+        setDisplayLock(direction);
+        setCheckoutState(direction);
+        setDataLoaded(false);
+      }
+    );
+
+    // console.log("end of checkoutStateHandler");
   };
-  // const [revertState, setRevertState] = useState(false);
+
   const closeModalHandler = () => setShow(false);
 
   const [show, setShow] = useState(false);
@@ -138,9 +139,39 @@ export const HeaderInfo = ({
       setShow(false);
     });
   };
+
+  // Create audit message for header info
+  const createAuditMessage = (checkedOut, currentConfig) => {
+    const inWorkspace = user;
+
+    // WORKSPACE view
+    if (inWorkspace) {
+      // when config is checked out by someone
+      if (checkedOut) {
+        return `Currently checked-out by: ${
+          currentConfig["checkedOutBy"]
+        } ${formatDate(currentConfig["checkedOutOn"])}`;
+      }
+      // when config is not checked out
+      return `Last updated by: ${selectedConfig.userId} ${formatDate(
+        selectedConfig.updateDate
+          ? selectedConfig.updateDate
+          : selectedConfig.addDate,
+        true
+      )}`;
+    }
+    // GLOBAL view
+    return `Last submitted by: ${selectedConfig.userId} ${formatDate(
+      selectedConfig.updateDate
+        ? selectedConfig.updateDate
+        : selectedConfig.addDate,
+      true
+    )}`;
+  };
+
   return (
     <div className="header">
-      <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
+      <div className={`usa-overlay ${show ? "is-visible" : ""} `} />
       {show ? (
         <Modal
           show={show}
@@ -174,25 +205,14 @@ export const HeaderInfo = ({
               )}
               <span className="font-body-lg">{facilityMainName}</span>
             </h3>
-            { user?
             <div className="text-bold font-body-2xs">
-              {checkoutState
-                ? `Currently checked out by: ${user.firstName} ${formatDate(
-                    new Date()
-                  )}`
-                : displayLock
-                ? `Last checked out by: ${
-                    findCurrentlyCheckedOutByInfo()["checkedOutBy"]
-                  } ${formatDate(
-                    findCurrentlyCheckedOutByInfo()["checkedOutOn"]
-                  )}`
-                : null}
-            </div> :''}
+              {dataLoaded ? auditInformation : ""}
+            </div>
           </div>
           <div className="">
             <div className="display-inline-block ">
               <div className="text-bold font-body-xl display-block height-auto">
-                {user && (checkoutState || checkedOutByUser) ? (
+                {user && checkoutState && checkedOutByUser ? (
                   <CreateOutlined color="primary" fontSize="large" />
                 ) : (
                   ""
@@ -200,7 +220,7 @@ export const HeaderInfo = ({
                 {facilityAdditionalName}
                 {user ? (
                   <div className="text-bold font-body-2xs display-inline-block ">
-                    {checkoutState || checkedOutByUser === true ? (
+                    {checkedOutByUser === true ? (
                       <Button
                         autoFocus
                         outline={false}
@@ -213,7 +233,7 @@ export const HeaderInfo = ({
                       >
                         <LockOpenSharp /> {"Check Back In"}
                       </Button>
-                    ) : checkedOutLocations
+                    ) : checkedOutConfigs
                         .map((location) => location["monPlanId"])
                         .indexOf(selectedConfig.id) === -1 ? (
                       <Button
@@ -283,7 +303,7 @@ export const HeaderInfo = ({
         </div>
         <div className="grid-col clearfix position-absolute top-1 right-0">
           <div className="grid-row">
-            {checkout && user  ? (
+            {checkout && user ? (
               <div>
                 <div className="grid-row padding-2 margin-left-10">
                   <Button
