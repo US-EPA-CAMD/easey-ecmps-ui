@@ -376,7 +376,6 @@ export const unitFuelDataTableProps = (selectedLocation) => {
 };
 
 export const unitCapacityDataTableProps = (location, selectedLocation) => {
-  // console.log("selected location cap", selectedLocation);
   return {
     payload: {
       maximumHourlyHeatInputCapacity: 0,

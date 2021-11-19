@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-import * as fs from "../../../utils/selectors/monitoringPlanLEEQualifications";
+import * as fs from "../../../utils/selectors/monitoringPlanLMEQualifications";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 
 import ModalDetails from "../../ModalDetails/ModalDetails";
@@ -14,7 +14,7 @@ import {
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
-export const DataTableLEEQualifications = ({
+export const DataTableLMEQualifications = ({
   locationSelectValue,
   qualSelectValue,
   user,
@@ -22,14 +22,14 @@ export const DataTableLEEQualifications = ({
   inactive,
   revertedState,
   setRevertedState,
-  setOpenLEE,
-  openLEE,
-  setUpdateLEE,
-  updateLEE,
+  setOpenLME,
+  openLME,
+  setUpdateLME,
+  updateLME,
   setCreatingChild,
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [qualLeeData, setQualLeeData] = useState([]);
+  const [qualLmeData, setQualLmeData] = useState([]);
   const totalOptions = useRetrieveDropdownApi([
     "parameterCode",
     "qualificationTestType",
@@ -41,36 +41,33 @@ export const DataTableLEEQualifications = ({
 
   useEffect(() => {
     if (
-      updateLEE ||
+      updateLME ||
       updateTable ||
-      qualLeeData.length <= 0 ||
+      qualLmeData.length <= 0 ||
       locationSelectValue ||
       qualSelectValue ||
       revertedState
     ) {
       mpApi
-        .getLEEQualifications(locationSelectValue, qualSelectValue)
+        .getLMEQualifications(locationSelectValue, qualSelectValue)
         .then((res) => {
-          setQualLeeData(res.data);
+          setQualLmeData(res.data);
           setDataLoaded(true);
           setUpdateTable(false);
           setRevertedState(false);
-          setUpdateLEE(false);
+          setUpdateLME(false);
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, updateTable, revertedState, updateLEE]);
-  const [selectedQualLee, setSelectedQualLee] = useState(null);
+  }, [locationSelectValue, updateTable, revertedState, updateLME]);
+  const [selectedQualLme, setSelectedQualLme] = useState(null);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = [
-    "Qualification Test Date",
-    "Parameter Code",
-    "Qualification Test Type",
-    "Potential Annual Hg Mass Emissions",
-    "Applicable Emission Standard",
-    "Units of Standard",
-    "Percentage of Emission Standard",
+    "Qualification Data Year",
+    "Operating Hours",
+    "SO2 Tons",
+    "NOx Tons",
   ];
 
   // const payload = {
@@ -89,51 +86,35 @@ export const DataTableLEEQualifications = ({
   // };
 
   const data = useMemo(() => {
-    if (qualLeeData.length > 0) {
-      return fs.getMonitoringPlansLEEQualifications(qualLeeData);
+    if (qualLmeData.length > 0) {
+      return fs.getMonitoringPlansLMEQualifications(qualLmeData);
     }
     return [];
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [qualLeeData, inactive]);
+  }, [qualLmeData, inactive]);
 
-  const openLeeQualModal = (row, bool, create) => {
-    setOpenLEE(true);
+  const openLmeQualModal = (row, bool, create) => {
+    setOpenLME(true);
     setCreatingChild(create);
-    let leeData = null;
+    let lmeData = null;
 
-    if (qualLeeData.length > 0 && !create) {
-      leeData = qualLeeData.filter(
+    if (qualLmeData.length > 0 && !create) {
+      lmeData = qualLmeData.filter(
         (element) => element.id === row[`col${Object.keys(row).length - 1}`]
       )[0];
-      setSelectedQualLee(leeData);
+      setSelectedQualLme(lmeData);
     }
     console.log(totalOptions);
 
     setSelectedModalData(
       modalViewData(
-        leeData,
+        lmeData,
         {
-          qualificationTestDate: ["Qualification Test Date", "date", ""],
-          skip: ["", "skip", ""],
-          parameterCode: ["Parameter Code", "dropdown", ""],
-          qualificationTestType: ["Qualification Test Type", "dropdown", ""],
-          potentialAnnualHgMassEmissions: [
-            "Potential Annual Hg Mass Emissions",
-            "input",
-            "",
-          ],
-          applicableEmissionStandard: [
-            "Applicable Emission Standard",
-            "input",
-            "",
-          ],
-          unitsOfStandard: ["Units of Standard", "dropdown", ""],
-          percentageOfEmissionStandard: [
-            "Percentage of Emission Standard",
-            "input",
-            "",
-          ],
+          qualificationDataYear: ["Qualification Data Year", "dropdown", ""],
+          operatingHours: ["Operating Hours", "input", ""],
+          so2Tons: ["SO2 Tons", "input", ""],
+          noxTons: ["NOx Tons", "input", ""],
         },
         {},
         create,
@@ -156,7 +137,7 @@ export const DataTableLEEQualifications = ({
     }
     // otherwise return back to parent qual and reset change tracker
     else {
-      setOpenLEE(false);
+      setOpenLME(false);
       resetIsDataChanged();
       removeChangeEventListeners(".modalUserInput");
     }
@@ -164,15 +145,15 @@ export const DataTableLEEQualifications = ({
 
   return (
     <div className="methodTable react-transition fade-in">
-      {openLEE ? (
+      {openLME ? (
         <div>
           <ModalDetails
-            modalData={selectedQualLee}
+            modalData={selectedQualLme}
             backBtn={backBtnHandler}
             data={selectedModalData}
             cols={2}
             // title={`Qualification Percent: ${selectedQualPct["id"]}`}
-            title={"Qualification LEE"}
+            title={"Qualification LME"}
             viewOnly={!(user && checkout)}
           />
         </div>
@@ -183,16 +164,16 @@ export const DataTableLEEQualifications = ({
           dataLoaded={dataLoaded}
           checkout={checkout}
           user={user}
-          openHandler={openLeeQualModal}
+          openHandler={openLmeQualModal}
           actionsBtn={checkout ? "View/Edit" : "View"}
-          tableTitle={"Qualification LEE"}
+          tableTitle={"Qualification LME"}
           componentStyling="systemsCompTable"
-          addBtnName={"Create Qualification LEE"}
-          addBtn={openLeeQualModal}
+          addBtnName={"Create Qualification LME"}
+          addBtn={openLmeQualModal}
         />
       )}
     </div>
   );
 };
 
-export default DataTableLEEQualifications;
+export default DataTableLMEQualifications;
