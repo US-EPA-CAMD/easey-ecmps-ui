@@ -69,8 +69,8 @@ export const Modal = ({
                 : `${modalClassName}`
             }
             style={{
-              width: width,
-              left: left,
+              width: `${!width ? "50%" : width}`,
+              left: `${!left ? "50%" : left}`,
             }}
           >
             <div className="modal-content modal-color padding-y-3">
