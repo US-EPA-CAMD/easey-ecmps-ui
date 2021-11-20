@@ -200,6 +200,15 @@ export const getCheckedOutLocations = async () => {
     .catch(handleError);
 };
 
+export const getConfigInfo = async (planId) => {
+  return axios
+    .get(
+      `${config.services.monitorPlans.uri}/workspace/plans/information/${planId}`
+    )
+    .then(handleResponse)
+    .catch(handleError);
+};
+
 export const saveAnalyzerRanges = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locId"]}/components/${payload["compId"]}/analyzer-ranges/${payload["id"]}`;
   // *** remove attributes not needed by the API

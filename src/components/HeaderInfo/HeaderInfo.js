@@ -6,6 +6,7 @@ import * as mpApi from "../../utils/api/monitoringPlansApi";
 import Modal from "../Modal/Modal";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 import "./HeaderInfo.scss";
+import config from "../../config";
 
 export const HeaderInfo = ({
   facility,
@@ -40,10 +41,10 @@ export const HeaderInfo = ({
     { name: "Systems" },
     { name: "Unit Information" },
   ];
+
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
-  const [checkoutState, setCheckoutState] = useState(checkout);
   const [checkedOutConfigs, setCheckedOutConfigs] = useState([]);
   const [auditInformation, setAuditInformation] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -56,6 +57,16 @@ export const HeaderInfo = ({
   const closeRevertModal = () => setShowRevertModal(false);
   const closeEvalReportModal = () => setShowEvalReport(false);
 
+  const isCheckedOut = () => {
+    return (
+      checkedOutConfigs
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id) > -1
+    );
+  };
+
+  const [checkoutState, setCheckoutState] = useState(checkout);
+
   useEffect(() => {
     setCheckoutState(checkout);
     console.log(selectedConfig);
@@ -64,22 +75,48 @@ export const HeaderInfo = ({
       mpApi.getCheckedOutLocations().then((res) => {
         const configs = res.data;
         setCheckedOutConfigs(configs);
-        console.log("committed last save: ", committedLastSave);
 
-        let currentConfig = committedLastSave
-          ? { userId: user["userId"], updateDate: new Date(Date.now()) }
-          : findCurrentlyCheckedOutByInfo(configs);
+        let currDate = new Date(Date.now());
+        currDate.setDate(currDate.getDate() - 1);
 
-        if (!currentConfig) {
-          currentConfig = {
-            userId: user["userId"],
-            updateDate: new Date(Date.now()),
-          };
+        console.log("commited last save: ", committedLastSave);
+        console.log(
+          "findCurrentlyCheckedOutByInfo",
+          findCurrentlyCheckedOutByInfo(configs)
+        );
+
+        if (findCurrentlyCheckedOutByInfo(configs)) {
+          checkout = true;
+          setCheckout(true);
         }
 
-        setCheckedOutByUser(isCheckedOutByUser(configs));
-        setAuditInformation(createAuditMessage(checkout, currentConfig));
-        setDataLoaded(true);
+        // obtain current config info from last save or checkouts table
+        let currentConfig = committedLastSave
+          ? {
+              userId: user["userId"],
+              updateDate: currDate,
+            }
+          : findCurrentlyCheckedOutByInfo(configs);
+
+        // if config info is blank, then retrieve the info from the database
+        if (!currentConfig) {
+          // GET API call
+          mpApi.getConfigInfo(selectedConfig.id).then((info) => {
+            console.log(info);
+            // currentConfig = info.data;
+            currentConfig = {
+              userId: info.data.userId,
+              updateDate: info.data.updateDate,
+            };
+            setCheckedOutByUser(isCheckedOutByUser(configs));
+            setAuditInformation(createAuditMessage(checkout, currentConfig));
+            setDataLoaded(true);
+          });
+        } else {
+          setCheckedOutByUser(isCheckedOutByUser(configs));
+          setAuditInformation(createAuditMessage(checkout, currentConfig));
+          setDataLoaded(true);
+        }
       });
     }
   }, [checkout, dataLoaded]);
@@ -101,14 +138,6 @@ export const HeaderInfo = ({
       test[
         test.map((location) => location["monPlanId"]).indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
-    );
-  };
-
-  const isCheckedOut = () => {
-    return (
-      checkedOutConfigs
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id) > -1
     );
   };
 
