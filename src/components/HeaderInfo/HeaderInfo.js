@@ -50,6 +50,11 @@ export const HeaderInfo = ({
 
   const [checkedOutByUser, setCheckedOutByUser] = useState(false);
   const [committedLastSave, setCommittedLastSave] = useState(false);
+  const [showEvalReport, setShowEvalReport] = useState(false);
+  const [showRevertModal, setShowRevertModal] = useState(false);
+
+  const closeRevertModal = () => setShowRevertModal(false);
+  const closeEvalReportModal = () => setShowEvalReport(false);
 
   useEffect(() => {
     setCheckoutState(checkout);
@@ -78,6 +83,10 @@ export const HeaderInfo = ({
       });
     }
   }, [checkout, dataLoaded]);
+
+  const test = () => {
+    setShowEvalReport(true);
+  };
 
   const findCurrentlyCheckedOutByInfo = (configs) => {
     return configs[
@@ -152,6 +161,10 @@ export const HeaderInfo = ({
     return "Needs Evaluation";
   };
 
+  const showHyperLink = (status) => {
+    return status === "PASS" || status === "INFO" || status === "ERR";
+  };
+
   const showSubmit = (status) => {
     return status === "PASS" || status === "INFO";
   };
@@ -191,13 +204,10 @@ export const HeaderInfo = ({
     );
   };
 
-  const closeModalHandler = () => setShow(false);
-
-  const [show, setShow] = useState(false);
   const revert = () => {
     mpApi.revertOfficialRecord(selectedConfig.id).then((res) => {
       setRevertedState(true);
-      setShow(false);
+      setShowRevertModal(false);
     });
   };
 
@@ -231,11 +241,15 @@ export const HeaderInfo = ({
 
   return (
     <div className="header">
-      <div className={`usa-overlay ${show ? "is-visible" : ""} `} />
-      {show ? (
+      <div
+        className={`usa-overlay ${
+          showRevertModal || showEvalReport ? "is-visible" : ""
+        } `}
+      />
+      {showRevertModal ? (
         <Modal
-          show={show}
-          close={closeModalHandler}
+          show={showRevertModal}
+          close={closeRevertModal}
           showSave={true}
           exitBTN={"Yes"}
           save={revert}
@@ -244,6 +258,121 @@ export const HeaderInfo = ({
               {
                 "Reverting to Official Record will undo all saved and unsaved changes. This is not recoverable. Do you want to continue?"
               }
+            </div>
+          }
+        />
+      ) : null}
+      {showEvalReport ? (
+        <Modal
+          title="Evaluation Report"
+          width="80%"
+          left="10%"
+          show={showEvalReport}
+          close={closeEvalReportModal}
+          showSave={false}
+          children={
+            <div>
+              <p>
+                Lorem ipsum urna, auctor a tincidunt ut, rutrum et ante. Aliquam
+                varius, eros quis vestibulum congue, mauris urna luctus ante, ac
+                rhoncus nulla arcu quis justo. In gravida orci vel ex suscipit,
+                id euismod est accumsan. Fusce quis vehicula nulla. Cras ut
+                efficitur diam, ac suscipit dui. Morbi eu condimentum ex,
+                maximus porttitor urna. Donec non sem vitae ante suscipit
+                sollicitudin sed vitae nunc. Vestibulum vitae velit interdum,
+                viverra lacus sed, condimentum tortor. Pellentesque dictum
+                vehicula erat quis aliquam. Morbi sed consectetur leo, sed
+                lacinia metus. Phasellus tempus velit at dui convallis, eu
+                egestas neque ultrices. Nunc purus risus, commodo nec imperdiet
+                ac, tristique quis nunc. Mauris maximus euismod lacus sagittis
+                efficitur. Ut ut ullamcorper orci, et bibendum felis. Nunc
+                dignissim molestie quam, in vehicula nulla congue tempus.
+                Pellentesque semper tortor felis, nec ultricies elit tristique
+                et. Duis sed massa commodo, pulvinar purus quis, porta sapien.
+                Fusce lacinia, ex id finibus viverra, nisl tellus vehicula
+                purus, ut posuere metus tortor quis metus. Duis eleifend
+                hendrerit eros, sit amet semper justo elementum at. Nulla
+                sagittis, purus quis volutpat pulvinar, risus turpis feugiat
+                lorem, viverra lacinia est nibh id tortor. Morbi interdum auctor
+                turpis id aliquam. In ligula velit, volutpat id orci id,
+                hendrerit bibendum turpis.
+              </p>
+
+              <p>
+                Dolor sit amet, consectetur adipiscing elit. Vestibulum
+                tincidunt bibendum est nec ullamcorper. Fusce nec turpis sit
+                amet lectus consequat finibus. Duis sit amet orci vel risus
+                vestibulum lacinia. Duis nisi mi, semper elementum cursus non,
+                rutrum non leo. Cras vehicula, tortor eu mollis molestie, risus
+                turpis laoreet est, at cursus magna ipsum in ante. Pellentesque
+                vestibulum pretium blandit. Cras dictum mattis viverra.
+                Pellentesque imperdiet tristique neque, finibus bibendum mauris
+                euismod volutpat. Pellentesque consequat felis non orci iaculis,
+                at porta ligula accumsan. Sed mattis consequat felis, eu
+                sagittis justo dictum imperdiet. Pellentesque viverra pharetra
+                urna quis hendrerit. Quisque quam odio, dignissim eget porttitor
+                sed, laoreet vel ligula. Aenean lacus lectus, fermentum viverra
+                nisi a, rutrum aliquet orci. Maecenas posuere vitae ligula et
+                volutpat. Aenean eu tempus nisi. Cras nisl ipsum, consequat eget
+                consequat quis, dapibus vitae risus. Ut id tortor ac arcu varius
+                fringilla.
+              </p>
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Heading</th>
+                      <th scope="col">Heading</th>
+                      <th scope="col">Heading</th>
+                      <th scope="col">Heading</th>
+                      <th scope="col">Heading</th>
+                      <th scope="col">Heading</th>
+                      <th scope="col">Heading</th>
+                      <th scope="col">Heading</th>
+                      <th scope="col">Heading</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">3</th>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           }
         />
@@ -391,7 +520,7 @@ export const HeaderInfo = ({
                       type="button"
                       id="showRevertModal"
                       className="float-right"
-                      onClick={() => setShow(true)}
+                      onClick={() => setShowRevertModal(true)}
                       outline={true}
                     >
                       {"Revert to Official Record"}
@@ -414,7 +543,18 @@ export const HeaderInfo = ({
                     <td
                       className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle()}`}
                     >
-                      {evalStatusText()}
+                      <a
+                        style={{
+                          color: "#005EA2",
+                          textDecoration: "underline",
+                        }}
+                        href={showHyperLink ? "javascript:void(0);" : ""}
+                        onClick={() =>
+                          showHyperLink ? setShowEvalReport(true) : ""
+                        }
+                      >
+                        {evalStatusText()}
+                      </a>
                     </td>
                   </tr>
                   <tr>
