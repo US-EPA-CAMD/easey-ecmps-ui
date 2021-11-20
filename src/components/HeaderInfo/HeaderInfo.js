@@ -573,13 +573,24 @@ export const HeaderInfo = ({
                       className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle()}`}
                     >
                       <a
-                        style={{
-                          color: "#005EA2",
-                          textDecoration: "underline",
-                        }}
-                        href={showHyperLink ? "javascript:void(0);" : ""}
+                        style={
+                          showHyperLink(selectedConfig.evalStatusCode)
+                            ? {
+                                color: "#005EA2",
+                                textDecoration: "underline",
+                              }
+                            : {
+                                color: "black",
+                                textDecoration: "none",
+                                outline: "none",
+                                cursor: "default",
+                              }
+                        }
+                        href={"javascript:void(0);"}
                         onClick={() =>
-                          showHyperLink ? setShowEvalReport(true) : ""
+                          showHyperLink(selectedConfig.evalStatusCode)
+                            ? setShowEvalReport(true)
+                            : ""
                         }
                       >
                         {evalStatusText()}
