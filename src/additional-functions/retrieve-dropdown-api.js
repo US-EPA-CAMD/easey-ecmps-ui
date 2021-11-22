@@ -410,6 +410,7 @@ export const useRetrieveDropdownApi = (dropDownFields, mats = false) => {
       case "yr1QualificationDataYear":
       case "yr2QualificationDataYear":
       case "yr3QualificationDataYear":
+        case "qualificationDataYear":
         dataYearOptions().then((years) => {
           options = years.map((year) => {
             return {
