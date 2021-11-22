@@ -2,6 +2,7 @@
 
 import * as _axios from "axios";
 import axiosRetry from "axios-retry";
+import config from "../../config";
 
 const axios = _axios.create();
 
@@ -9,6 +10,10 @@ const retryDelay = (retryNumber = 0) => {
   const seconds = Math.pow(2, retryNumber) * 1000;
   const randomMs = 1000 * Math.random();
   return seconds + randomMs;
+};
+
+axios.defaults.headers.common = {
+  "x-api-key": config.app.apiKey,
 };
 
 axiosRetry(axios, {

@@ -52,15 +52,15 @@ export const DataTableMethod = ({
       locationSelectValue ||
       revertedState
     ) {
-      mpApi.getMonitoringMethods(locationSelectValue).then((res) => {
-        setMethods(res.data);
+      mpApi.getMonitoringMethods(locationSelectValue).then((methodRes) => {
+        setMethods(methodRes.data);
         setDataLoaded(true);
+        mpApi.getMonitoringMatsMethods(locationSelectValue).then((matRes) => {
+          setMatsMethods(matRes.data);
+          setUpdateTable(false);
+          setRevertedState(false);
+        });
       });
-      mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
-        setMatsMethods(res.data);
-      });
-      setUpdateTable(false);
-      setRevertedState(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
@@ -227,13 +227,13 @@ export const DataTableMethod = ({
         console.log(result, " was created");
         // openModal(false);
         setShow(false);
+        setUpdateTable(true);
       })
       .catch((error) => {
         console.log("error is", error);
         // openModal(false);
         setShow(false);
       });
-    setUpdateTable(true);
   };
   return (
     <div className="methodTable">
