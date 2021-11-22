@@ -6,7 +6,7 @@ export const useRetrieveDropdownApi = (dropDownFields, mats = false) => {
   const dataYearOptions = async () => {
     const currYear = new Date().getFullYear();
     const maxYear = currYear + 2;
-    const minYear = 2002;
+    const minYear = 2000;
     let availableYears = [];
 
     for (let i = minYear; i <= maxYear; i++) {

@@ -104,7 +104,7 @@ export const DataTableLMEQualifications = ({
       )[0];
       setSelectedQualLme(lmeData);
     }
-    console.log(totalOptions);
+
 
     setSelectedModalData(
       modalViewData(
