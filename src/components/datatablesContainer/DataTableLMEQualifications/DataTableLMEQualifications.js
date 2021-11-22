@@ -31,9 +31,8 @@ export const DataTableLMEQualifications = ({
   const [dataLoaded, setDataLoaded] = useState(false);
   const [qualLmeData, setQualLmeData] = useState([]);
   const totalOptions = useRetrieveDropdownApi([
-    "parameterCode",
-    "qualificationTestType",
-    "unitsOfStandard",
+    "qualificationDataYear"
+
   ]);
   const [updateTable, setUpdateTable] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState([]);
