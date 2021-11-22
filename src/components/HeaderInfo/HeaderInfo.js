@@ -50,7 +50,6 @@ export const HeaderInfo = ({
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const [checkedOutByUser, setCheckedOutByUser] = useState(false);
-  const [committedLastSave, setCommittedLastSave] = useState(false);
   const [showEvalReport, setShowEvalReport] = useState(false);
   const [showRevertModal, setShowRevertModal] = useState(false);
 
@@ -88,12 +87,7 @@ export const HeaderInfo = ({
         }
 
         // obtain current config info from last save or checkouts table
-        let currentConfig = committedLastSave
-          ? {
-              userId: user["userId"],
-              updateDate: currDate,
-            }
-          : findCurrentlyCheckedOutByInfo(configs);
+        let currentConfig = findCurrentlyCheckedOutByInfo(configs);
 
         // if config info is blank, then retrieve the info from the database
         if (!currentConfig) {
@@ -220,16 +214,10 @@ export const HeaderInfo = ({
   // true = check out
   const checkoutStateHandler = (direction) => {
     // trigger checkout API
-    //    - POST endpoint if direciton is TRUE
-    //    - DELETE endpoint if direction is FALSE
+    //    - POST endpoint if direction is TRUE (adding new record to checkouts table)
+    //    - DELETE endpoint if direction is FALSE (removing record from checkouts table)
     checkoutAPI(direction, configID, selectedConfig.id, setCheckout).then(
       () => {
-        if (!direction) {
-          setCommittedLastSave(true);
-        } else {
-          setCommittedLastSave(false);
-        }
-
         setCheckedOutByUser(direction);
         setDisplayLock(direction);
         setCheckoutState(direction);
