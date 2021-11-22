@@ -6,6 +6,7 @@ import * as mpApi from "../../utils/api/monitoringPlansApi";
 import Modal from "../Modal/Modal";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 import "./HeaderInfo.scss";
+import config from "../../config";
 
 export const HeaderInfo = ({
   facility,
@@ -26,7 +27,6 @@ export const HeaderInfo = ({
   inactive,
   ///
   checkoutAPI,
-  checkedOutLocations,
   configID,
 }) => {
   const sections = [
@@ -41,66 +41,171 @@ export const HeaderInfo = ({
     { name: "Systems" },
     { name: "Unit Information" },
   ];
+
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
-  const [checkoutState, setCheckoutState] = useState(checkout);
+  const [checkedOutConfigs, setCheckedOutConfigs] = useState([]);
+  const [auditInformation, setAuditInformation] = useState("");
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-  useEffect(() => {
-    setCheckoutState(checkout);
-  }, [checkout]);
+  const [checkedOutByUser, setCheckedOutByUser] = useState(false);
+  const [committedLastSave, setCommittedLastSave] = useState(false);
+  const [showEvalReport, setShowEvalReport] = useState(false);
+  const [showRevertModal, setShowRevertModal] = useState(false);
 
-  const isCheckedOutByUser = () => {
-    return (
-      checkedOutLocations
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id) > -1 &&
-      checkedOutLocations[
-        checkedOutLocations
-          .map((location) => location["monPlanId"])
-          .indexOf(selectedConfig.id)
-      ]["checkedOutBy"] === user["userId"]
-    );
-  };
+  const closeRevertModal = () => setShowRevertModal(false);
+  const closeEvalReportModal = () => setShowEvalReport(false);
 
   const isCheckedOut = () => {
     return (
-      checkedOutLocations
+      checkedOutConfigs
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1
     );
   };
 
-  const findCurrentlyCheckedOutByInfo = () => {
-    return checkedOutLocations[
-      checkedOutLocations
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id)
+  const [checkoutState, setCheckoutState] = useState(checkout);
+
+  useEffect(() => {
+    setCheckoutState(checkout);
+    console.log(selectedConfig);
+
+    if (!dataLoaded) {
+      mpApi.getCheckedOutLocations().then((res) => {
+        const configs = res.data;
+        setCheckedOutConfigs(configs);
+
+        let currDate = new Date(Date.now());
+        currDate.setDate(currDate.getDate() - 1);
+
+        console.log("commited last save: ", committedLastSave);
+        console.log(
+          "findCurrentlyCheckedOutByInfo",
+          findCurrentlyCheckedOutByInfo(configs)
+        );
+
+        if (findCurrentlyCheckedOutByInfo(configs)) {
+          checkout = true;
+          setCheckout(true);
+        }
+
+        // obtain current config info from last save or checkouts table
+        let currentConfig = committedLastSave
+          ? {
+              userId: user["userId"],
+              updateDate: currDate,
+            }
+          : findCurrentlyCheckedOutByInfo(configs);
+
+        // if config info is blank, then retrieve the info from the database
+        if (!currentConfig) {
+          // GET API call
+          mpApi.getConfigInfo(selectedConfig.id).then((info) => {
+            console.log(info);
+            // currentConfig = info.data;
+            currentConfig = {
+              userId: info.data.userId,
+              updateDate: info.data.updateDate,
+            };
+            setCheckedOutByUser(isCheckedOutByUser(configs));
+            setAuditInformation(createAuditMessage(checkout, currentConfig));
+            setDataLoaded(true);
+          });
+        } else {
+          setCheckedOutByUser(isCheckedOutByUser(configs));
+          setAuditInformation(createAuditMessage(checkout, currentConfig));
+          setDataLoaded(true);
+        }
+      });
+    }
+  }, [checkout, dataLoaded]);
+
+  const test = () => {
+    setShowEvalReport(true);
+  };
+
+  const findCurrentlyCheckedOutByInfo = (configs) => {
+    return configs[
+      configs.map((config) => config["monPlanId"]).indexOf(selectedConfig.id)
     ];
   };
 
-  const formatDate = (dateString) => {
+  const isCheckedOutByUser = (test) => {
+    return (
+      test.map((location) => location["monPlanId"]).indexOf(selectedConfig.id) >
+        -1 &&
+      test[
+        test.map((location) => location["monPlanId"]).indexOf(selectedConfig.id)
+      ]["checkedOutBy"] === user["userId"]
+    );
+  };
+
+  const [displayLock, setDisplayLock] = useState(isCheckedOut());
+
+  const formatDate = (dateString, isUTC = false) => {
     const date = new Date(dateString);
+    //HANDLE -1 days from DB dates which are UTC
+    const day = isUTC ? date.getDate() + 1 : date.getDate();
     const formattedDate =
       (date.getMonth() > 8
         ? date.getMonth() + 1
         : "0" + (date.getMonth() + 1)) +
       "/" +
-      (date.getDate() > 9 ? date.getDate() : "0" + date.getDate()) +
+      (day > 9 ? day : "0" + day) +
       "/" +
       date.getFullYear();
 
     return formattedDate;
   };
 
-  const [checkedOutByUser, setCheckedOutByUser] = useState(
-    isCheckedOutByUser()
-  );
-  const [displayLock, setDisplayLock] = useState(isCheckedOut());
+  const evalStatusStyle = () => {
+    switch (selectedConfig.evalStatusCode) {
+      case "ERR":
+      case "EVAL":
+        return "usa-alert--warning";
+      case "INFO":
+      case "PASS":
+        return "usa-alert--success";
+      case "INQ":
+      case "WIP":
+        return "usa-alert--info";
+    }
+    return "";
+  };
 
-  useEffect(() => {
-    setCheckoutState(checkout);
-  }, [checkout]);
+  const evalStatusText = () => {
+    switch (selectedConfig.evalStatusCode) {
+      case "ERR":
+        return "Critical Errors";
+      case "INFO":
+        return "Informational Message";
+      case "PASS":
+        return "Passed";
+      case "INQ":
+        return "In Queue";
+      case "WIP":
+        return "In Progress";
+    }
+    return "Needs Evaluation";
+  };
+
+  const showHyperLink = (status) => {
+    return status === "PASS" || status === "INFO" || status === "ERR";
+  };
+
+  const showSubmit = (status) => {
+    return status === "PASS" || status === "INFO";
+  };
+
+  const showRevert = (status) => {
+    return (
+      status === "PASS" ||
+      status === "INFO" ||
+      status === "ERR" ||
+      status === "EVAL"
+    );
+  };
 
   // 508
   //   const activeFocusRef = useRef(null);
@@ -112,52 +217,191 @@ export const HeaderInfo = ({
   // direction -> false = check back in
   // true = check out
   const checkoutStateHandler = (direction) => {
-    setCheckoutState(direction);
-    setCheckedOutByUser(direction);
-    setDisplayLock(direction);
-    checkoutAPI(direction, configID, selectedConfig.id, setCheckout);
+    checkoutAPI(direction, configID, selectedConfig.id, setCheckout).then(
+      () => {
+        if (!direction) {
+          setCommittedLastSave(true);
+        } else {
+          setCommittedLastSave(false);
+        }
 
-    // 508
-    /// true means check out = > check back in
-    //   setTimeout(() => {
-    //     if (direction) {
-    //       document.querySelector(`[id="checkInBTN"]`).focus();
-    //       console.log('  document.querySelector(`[id="checkInBTN"]`)',  document.querySelector(`[id="checkInBTN"]`))
-    //     } else {
-    //       document.querySelector(`[id="checkOutBTN"]`).focus();
-    //     }
-    //   },[1500]);
+        setCheckedOutByUser(direction);
+        setDisplayLock(direction);
+        setCheckoutState(direction);
+        setDataLoaded(false);
+      }
+    );
   };
-  // const [revertState, setRevertState] = useState(false);
-  const closeModalHandler = () => setShow(false);
 
-  const [show, setShow] = useState(false);
   const revert = () => {
     mpApi.revertOfficialRecord(selectedConfig.id).then((res) => {
       setRevertedState(true);
-      setShow(false);
+      setShowRevertModal(false);
     });
   };
+
+  // Create audit message for header info
+  const createAuditMessage = (checkedOut, currentConfig) => {
+    const inWorkspace = user;
+    console.log(currentConfig);
+
+    // WORKSPACE view
+    if (inWorkspace) {
+      // when config is checked out by someone
+      if (checkedOut) {
+        return `Currently checked-out by: ${
+          currentConfig["checkedOutBy"]
+        } ${formatDate(currentConfig["checkedOutOn"])}`;
+      }
+      // when config is not checked out
+      return `Last updated by: ${currentConfig.userId} ${formatDate(
+        currentConfig.updateDate,
+        true
+      )}`;
+    }
+    // GLOBAL view
+    return `Last submitted by: ${selectedConfig.userId} ${formatDate(
+      selectedConfig.updateDate
+        ? selectedConfig.updateDate
+        : selectedConfig.addDate,
+      true
+    )}`;
+  };
+
   return (
     <div className="header">
-      <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
-      {show ? (
+      <div
+        className={`usa-overlay ${
+          showRevertModal || showEvalReport ? "is-visible" : ""
+        } `}
+      />
+      {showRevertModal ? (
         <Modal
-          show={show}
-          close={closeModalHandler}
-          // showCancel={true}
+          show={showRevertModal}
+          close={closeRevertModal}
           showSave={true}
           exitBTN={"Yes"}
           save={revert}
-          // title={
-          //   "test title"
-          // }
-          // createNew={createNewMethod ? "Create Method" : `Save and Close`}
           children={
             <div>
               {
                 "Reverting to Official Record will undo all saved and unsaved changes. This is not recoverable. Do you want to continue?"
               }
+            </div>
+          }
+        />
+      ) : null}
+      {showEvalReport ? (
+        <Modal
+          title="Evaluation Report"
+          width="80%"
+          left="10%"
+          show={showEvalReport}
+          close={closeEvalReportModal}
+          showSave={false}
+          children={
+            <div>
+              <p>
+                Lorem ipsum urna, auctor a tincidunt ut, rutrum et ante. Aliquam
+                varius, eros quis vestibulum congue, mauris urna luctus ante, ac
+                rhoncus nulla arcu quis justo. In gravida orci vel ex suscipit,
+                id euismod est accumsan. Fusce quis vehicula nulla. Cras ut
+                efficitur diam, ac suscipit dui. Morbi eu condimentum ex,
+                maximus porttitor urna. Donec non sem vitae ante suscipit
+                sollicitudin sed vitae nunc. Vestibulum vitae velit interdum,
+                viverra lacus sed, condimentum tortor. Pellentesque dictum
+                vehicula erat quis aliquam. Morbi sed consectetur leo, sed
+                lacinia metus. Phasellus tempus velit at dui convallis, eu
+                egestas neque ultrices. Nunc purus risus, commodo nec imperdiet
+                ac, tristique quis nunc. Mauris maximus euismod lacus sagittis
+                efficitur. Ut ut ullamcorper orci, et bibendum felis. Nunc
+                dignissim molestie quam, in vehicula nulla congue tempus.
+                Pellentesque semper tortor felis, nec ultricies elit tristique
+                et. Duis sed massa commodo, pulvinar purus quis, porta sapien.
+                Fusce lacinia, ex id finibus viverra, nisl tellus vehicula
+                purus, ut posuere metus tortor quis metus. Duis eleifend
+                hendrerit eros, sit amet semper justo elementum at. Nulla
+                sagittis, purus quis volutpat pulvinar, risus turpis feugiat
+                lorem, viverra lacinia est nibh id tortor. Morbi interdum auctor
+                turpis id aliquam. In ligula velit, volutpat id orci id,
+                hendrerit bibendum turpis.
+              </p>
+
+              <p>
+                Dolor sit amet, consectetur adipiscing elit. Vestibulum
+                tincidunt bibendum est nec ullamcorper. Fusce nec turpis sit
+                amet lectus consequat finibus. Duis sit amet orci vel risus
+                vestibulum lacinia. Duis nisi mi, semper elementum cursus non,
+                rutrum non leo. Cras vehicula, tortor eu mollis molestie, risus
+                turpis laoreet est, at cursus magna ipsum in ante. Pellentesque
+                vestibulum pretium blandit. Cras dictum mattis viverra.
+                Pellentesque imperdiet tristique neque, finibus bibendum mauris
+                euismod volutpat. Pellentesque consequat felis non orci iaculis,
+                at porta ligula accumsan. Sed mattis consequat felis, eu
+                sagittis justo dictum imperdiet. Pellentesque viverra pharetra
+                urna quis hendrerit. Quisque quam odio, dignissim eget porttitor
+                sed, laoreet vel ligula. Aenean lacus lectus, fermentum viverra
+                nisi a, rutrum aliquet orci. Maecenas posuere vitae ligula et
+                volutpat. Aenean eu tempus nisi. Cras nisl ipsum, consequat eget
+                consequat quis, dapibus vitae risus. Ut id tortor ac arcu varius
+                fringilla.
+              </p>
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Heading</th>
+                      <th scope="col">Heading</th>
+                      <th scope="col">Heading</th>
+                      <th scope="col">Heading</th>
+                      <th scope="col">Heading</th>
+                      <th scope="col">Heading</th>
+                      <th scope="col">Heading</th>
+                      <th scope="col">Heading</th>
+                      <th scope="col">Heading</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">3</th>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                      <td>Cell</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           }
         />
@@ -174,25 +418,14 @@ export const HeaderInfo = ({
               )}
               <span className="font-body-lg">{facilityMainName}</span>
             </h3>
-            { user?
             <div className="text-bold font-body-2xs">
-              {checkoutState
-                ? `Currently checked out by: ${user.firstName} ${formatDate(
-                    new Date()
-                  )}`
-                : displayLock
-                ? `Last checked out by: ${
-                    findCurrentlyCheckedOutByInfo()["checkedOutBy"]
-                  } ${formatDate(
-                    findCurrentlyCheckedOutByInfo()["checkedOutOn"]
-                  )}`
-                : null}
-            </div> :''}
+              {dataLoaded ? auditInformation : ""}
+            </div>
           </div>
           <div className="">
             <div className="display-inline-block ">
               <div className="text-bold font-body-xl display-block height-auto">
-                {user && (checkoutState || checkedOutByUser) ? (
+                {user && checkoutState && checkedOutByUser ? (
                   <CreateOutlined color="primary" fontSize="large" />
                 ) : (
                   ""
@@ -200,7 +433,7 @@ export const HeaderInfo = ({
                 {facilityAdditionalName}
                 {user ? (
                   <div className="text-bold font-body-2xs display-inline-block ">
-                    {checkoutState || checkedOutByUser === true ? (
+                    {checkedOutByUser === true ? (
                       <Button
                         autoFocus
                         outline={false}
@@ -213,7 +446,7 @@ export const HeaderInfo = ({
                       >
                         <LockOpenSharp /> {"Check Back In"}
                       </Button>
-                    ) : checkedOutLocations
+                    ) : checkedOutConfigs
                         .map((location) => location["monPlanId"])
                         .indexOf(selectedConfig.id) === -1 ? (
                       <Button
@@ -282,48 +515,87 @@ export const HeaderInfo = ({
           </div>
         </div>
         <div className="grid-col clearfix position-absolute top-1 right-0">
-          <div className="grid-row">
-            {checkout && user  ? (
+          <div className="">
+            {checkout && user ? (
               <div>
-                <div className="grid-row padding-2 margin-left-10">
-                  <Button
-                    type="button"
-                    className="margin-right-1 margin-left-4"
-                    outline={false}
-                  >
-                    Evaluate
-                  </Button>
-                  <Button
-                    type="button"
-                    className="margin-left-1"
-                    outline={false}
-                  >
-                    Submit
-                  </Button>
+                <div className="padding-2 margin-left-10">
+                  {evalStatusText() === "Needs Evaluation" ? (
+                    <Button
+                      type="button"
+                      className="margin-right-2 margin-left-4 float-right"
+                      outline={false}
+                    >
+                      Evaluate
+                    </Button>
+                  ) : (
+                    ""
+                  )}
+                  {showSubmit(selectedConfig.evalStatusCode) ? (
+                    <Button
+                      type="button"
+                      className="margin-right-2 float-right"
+                      outline={false}
+                      title="Coming Soon"
+                    >
+                      Submit
+                    </Button>
+                  ) : (
+                    ""
+                  )}
                 </div>
-                <div className="grid-row margin-left-10">
-                  <Button
-                    type="button"
-                    id="showRevertModal"
-                    className="margin-left-4"
-                    onClick={() => setShow(true)}
-                    outline={true}
-                  >
-                    {"Revert to Official Record"}
-                  </Button>
-                </div>
+                {showRevert(selectedConfig.evalStatusCode) ? (
+                  <div className="margin-right-3 margin-top-2 float-right">
+                    <Button
+                      type="button"
+                      id="showRevertModal"
+                      className="float-right"
+                      onClick={() => setShowRevertModal(true)}
+                      outline={true}
+                    >
+                      {"Revert to Official Record"}
+                    </Button>
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
             ) : (
               ""
             )}
           </div>
           {user ? (
-            <div className="grid-row padding-1 float-right text-right margin-right-3">
+            <div className="grid-row padding-1 float-right text-right margin-right-3 margin-top-1 mobile:display-none desktop:display-block">
               <table role="presentation">
                 <tbody>
                   <tr>
                     <th className="padding-1">Evaluation Status: </th>
-                    <td className="padding-1">Passed with no errors</td>
+                    <td
+                      className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle()}`}
+                    >
+                      <a
+                        style={
+                          showHyperLink(selectedConfig.evalStatusCode)
+                            ? {
+                                color: "#005EA2",
+                                textDecoration: "underline",
+                              }
+                            : {
+                                color: "black",
+                                textDecoration: "none",
+                                outline: "none",
+                                cursor: "default",
+                              }
+                        }
+                        href={"javascript:void(0);"}
+                        onClick={() =>
+                          showHyperLink(selectedConfig.evalStatusCode)
+                            ? setShowEvalReport(true)
+                            : ""
+                        }
+                      >
+                        {evalStatusText()}
+                      </a>
+                    </td>
                   </tr>
                   <tr>
                     <th className="padding-1">Submission Status: </th>
