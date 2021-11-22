@@ -50,7 +50,6 @@ export const HeaderInfo = ({
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const [checkedOutByUser, setCheckedOutByUser] = useState(false);
-  const [committedLastSave, setCommittedLastSave] = useState(false);
   const [showEvalReport, setShowEvalReport] = useState(false);
   const [showRevertModal, setShowRevertModal] = useState(false);
 
@@ -69,50 +68,42 @@ export const HeaderInfo = ({
 
   useEffect(() => {
     setCheckoutState(checkout);
-    console.log(selectedConfig);
 
     if (!dataLoaded) {
+      // obtain checked-out configurations
       mpApi.getCheckedOutLocations().then((res) => {
+        // extract checked-out configs from response
         const configs = res.data;
         setCheckedOutConfigs(configs);
 
+        // get current date information
         let currDate = new Date(Date.now());
         currDate.setDate(currDate.getDate() - 1);
 
-        console.log("commited last save: ", committedLastSave);
-        console.log(
-          "findCurrentlyCheckedOutByInfo",
-          findCurrentlyCheckedOutByInfo(configs)
-        );
-
+        // syncing checkout state with database
         if (findCurrentlyCheckedOutByInfo(configs)) {
           checkout = true;
           setCheckout(true);
         }
 
         // obtain current config info from last save or checkouts table
-        let currentConfig = committedLastSave
-          ? {
-              userId: user["userId"],
-              updateDate: currDate,
-            }
-          : findCurrentlyCheckedOutByInfo(configs);
+        let currentConfig = findCurrentlyCheckedOutByInfo(configs);
 
         // if config info is blank, then retrieve the info from the database
         if (!currentConfig) {
-          // GET API call
+          // GET selected config info API call
           mpApi.getConfigInfo(selectedConfig.id).then((info) => {
-            console.log(info);
-            // currentConfig = info.data;
             currentConfig = {
               userId: info.data.userId,
               updateDate: info.data.updateDate,
             };
+            // afterwards, set checkedOutByUser and auditInformation states, then update table
             setCheckedOutByUser(isCheckedOutByUser(configs));
             setAuditInformation(createAuditMessage(checkout, currentConfig));
             setDataLoaded(true);
           });
         } else {
+          // if we already have config info, set these states and update table right away
           setCheckedOutByUser(isCheckedOutByUser(configs));
           setAuditInformation(createAuditMessage(checkout, currentConfig));
           setDataLoaded(true);
@@ -131,12 +122,15 @@ export const HeaderInfo = ({
     ];
   };
 
-  const isCheckedOutByUser = (test) => {
+  const isCheckedOutByUser = (configs) => {
     return (
-      test.map((location) => location["monPlanId"]).indexOf(selectedConfig.id) >
-        -1 &&
-      test[
-        test.map((location) => location["monPlanId"]).indexOf(selectedConfig.id)
+      configs
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id) > -1 &&
+      configs[
+        configs
+          .map((location) => location["monPlanId"])
+          .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -159,6 +153,7 @@ export const HeaderInfo = ({
     return formattedDate;
   };
 
+  // chooses correctly styling for evaluation status label
   const evalStatusStyle = () => {
     switch (selectedConfig.evalStatusCode) {
       case "ERR":
@@ -174,6 +169,7 @@ export const HeaderInfo = ({
     return "";
   };
 
+  // returns evaluation status (full text) from code
   const evalStatusText = () => {
     switch (selectedConfig.evalStatusCode) {
       case "ERR":
@@ -217,14 +213,11 @@ export const HeaderInfo = ({
   // direction -> false = check back in
   // true = check out
   const checkoutStateHandler = (direction) => {
+    // trigger checkout API
+    //    - POST endpoint if direction is TRUE (adding new record to checkouts table)
+    //    - DELETE endpoint if direction is FALSE (removing record from checkouts table)
     checkoutAPI(direction, configID, selectedConfig.id, setCheckout).then(
       () => {
-        if (!direction) {
-          setCommittedLastSave(true);
-        } else {
-          setCommittedLastSave(false);
-        }
-
         setCheckedOutByUser(direction);
         setDisplayLock(direction);
         setCheckoutState(direction);
@@ -243,7 +236,6 @@ export const HeaderInfo = ({
   // Create audit message for header info
   const createAuditMessage = (checkedOut, currentConfig) => {
     const inWorkspace = user;
-    console.log(currentConfig);
 
     // WORKSPACE view
     if (inWorkspace) {
