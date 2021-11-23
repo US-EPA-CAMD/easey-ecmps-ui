@@ -348,11 +348,11 @@ export const DataTableQualifications = ({
           exitBTN={
             createNewQualificationData
               ? "Create Qualification"
-              : user && checkout && openPCT
+              : user && checkout && openPCT && creatingChild
               ? "Create Qualification Percent"
-              : user && checkout && openLEE
+              : user && checkout && openLEE && creatingChild
               ? "Create Qualification LEE"
-              : user && checkout && openLME
+              : user && checkout && openLME && creatingChild
               ? "Create Qualification LME"
               : "Save and Close"
           }
