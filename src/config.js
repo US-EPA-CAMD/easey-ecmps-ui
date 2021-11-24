@@ -8,7 +8,7 @@ activityEvents.push("keydown");
 export const config = {
   app: {
     activityEvents,
-    apiKey: process.env.API_KEY || "TFarSUr2fc0OhhOyEmmOSU595tCQGhj1hoTFhNHb",
+    apiKey: process.env.API_KEY || "PXPWlQGB3wKXotkWN1PbSwbSoM7CoWW0ZMPWYtfc",
     refreshTokenRate:
       process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_TOKEN_RATE_MINUTES *
         oneMinute || 1 * oneMinute, // Change ME
