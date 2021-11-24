@@ -64,8 +64,8 @@ export const config = {
     authApi: {
       uri:
         process.env.REACT_APP_EASEY_AUTH_API ||
-        //"https://easey-dev.app.cloud.gov/api/auth-mgmt"
-        "https://api.epa.gov/easey/token/auth-mgmt"
+        "https://easey-dev.app.cloud.gov/api/auth-mgmt"
+        //"https://api.epa.gov/easey/token/auth-mgmt"
     },
   },
 };
