@@ -30,10 +30,7 @@ export const DataTableLMEQualifications = ({
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [qualLmeData, setQualLmeData] = useState([]);
-  const totalOptions = useRetrieveDropdownApi([
-    "qualificationDataYear"
-
-  ]);
+  const totalOptions = useRetrieveDropdownApi(["qualificationDataYear"]);
   const [updateTable, setUpdateTable] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState([]);
   const [openBtn, setOpenBtn] = useState(null);
@@ -69,21 +66,6 @@ export const DataTableLMEQualifications = ({
     "NOx Tons",
   ];
 
-  // const payload = {
-  //   id: null,
-  //   qualificationYear: "",
-  //   averagePercentValue: "",
-  //   yr1QualificationDataYear: "",
-  //   yr1QualificationDataTypeCode: "",
-  //   yr1PercentageValue: "",
-  //   yr2QualificationDataYear: "",
-  //   yr2QualificationDataTypeCode: "",
-  //   yr2PercentageValue: "",
-  //   yr3QualificationDataYear: "",
-  //   yr3QualificationDataTypeCode: "",
-  //   yr3PercentageValue: "",
-  // };
-
   const data = useMemo(() => {
     if (qualLmeData.length > 0) {
       return fs.getMonitoringPlansLMEQualifications(qualLmeData);
@@ -104,7 +86,6 @@ export const DataTableLMEQualifications = ({
       )[0];
       setSelectedQualLme(lmeData);
     }
-
 
     setSelectedModalData(
       modalViewData(
@@ -151,7 +132,6 @@ export const DataTableLMEQualifications = ({
             backBtn={backBtnHandler}
             data={selectedModalData}
             cols={2}
-            // title={`Qualification Percent: ${selectedQualPct["id"]}`}
             title={"Qualification LME"}
             viewOnly={!(user && checkout)}
           />
