@@ -772,6 +772,7 @@ export const createLEEQualificationData = async (payload) => {
     .then(handleResponse)
     .catch(handleError);
 };
+
 export const getLMEQualifications = async (locationId, qualId) => {
   let url = `${config.services.monitorPlans.uri}`;
   // *** workspace section url (authenticated)
@@ -782,4 +783,32 @@ export const getLMEQualifications = async (locationId, qualId) => {
   url = `${url}/locations/${locationId}/qualifications/${qualId}/lme-qualifications`;
 
   return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const saveLMEQualificationData = async (payload) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/qualifications/${payload["qualId"]}/lme-qualifications/${payload["id"]}`;
+  // *** remove attributes not needed by the API
+
+  return secureAxios({
+    method: "PUT",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const createLMEQualificationData = async (payload) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/qualifications/${payload["qualId"]}/lme-qualifications/`;
+
+  // *** remove attributes not needed by the API
+  delete payload["id"];
+
+  return secureAxios({
+    method: "POST",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };

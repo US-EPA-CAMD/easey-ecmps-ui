@@ -151,8 +151,8 @@ export const DataTableQualifications = ({
           // update lee modal, then return to parent qual page
           setUpdateLEE(true);
           setOpenLEE(false);
-        } else if (dataType === "lMe") {
-          // update lee modal, then return to parent qual page
+        } else if (dataType === "lme") {
+          // update lme modal, then return to parent qual page
           setUpdateLME(true);
           setOpenLME(false);
         }
@@ -178,16 +178,19 @@ export const DataTableQualifications = ({
         userInput
       );
     }
-    // else if(openLME){
-    //   return handleRequest(
-    //     "lme",
-    //     creatingChild
-    //       ? mpApi.createLMEQualificationData
-    //       : mpApi.saveLMEQualificationData,
-    //     userInput
-    //   );
 
-    // }
+    // LME qual
+    else if (openLME) {
+      return handleRequest(
+        "lme",
+        creatingChild
+          ? mpApi.createLMEQualificationData
+          : mpApi.saveLMEQualificationData,
+        userInput
+      );
+    }
+
+    // LEE qual
     else if (openLEE) {
       return handleRequest(
         "lee",
@@ -434,9 +437,6 @@ export const DataTableQualifications = ({
                       setCreatingChild={setCreatingChild}
                     />
                   )}
-                  
-
-
                 </div>
               )}
             </div>

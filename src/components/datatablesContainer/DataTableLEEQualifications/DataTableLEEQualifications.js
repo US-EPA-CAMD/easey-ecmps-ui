@@ -73,21 +73,6 @@ export const DataTableLEEQualifications = ({
     "Percentage of Emission Standard",
   ];
 
-  // const payload = {
-  //   id: null,
-  //   qualificationYear: "",
-  //   averagePercentValue: "",
-  //   yr1QualificationDataYear: "",
-  //   yr1QualificationDataTypeCode: "",
-  //   yr1PercentageValue: "",
-  //   yr2QualificationDataYear: "",
-  //   yr2QualificationDataTypeCode: "",
-  //   yr2PercentageValue: "",
-  //   yr3QualificationDataYear: "",
-  //   yr3QualificationDataTypeCode: "",
-  //   yr3PercentageValue: "",
-  // };
-
   const data = useMemo(() => {
     if (qualLeeData.length > 0) {
       return fs.getMonitoringPlansLEEQualifications(qualLeeData);

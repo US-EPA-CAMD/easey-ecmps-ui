@@ -75,21 +75,6 @@ export const DataTablePCTQualifications = ({
     "Data Year 3",
   ];
 
-  // const payload = {
-  //   id: null,
-  //   qualificationYear: "",
-  //   averagePercentValue: "",
-  //   yr1QualificationDataYear: "",
-  //   yr1QualificationDataTypeCode: "",
-  //   yr1PercentageValue: "",
-  //   yr2QualificationDataYear: "",
-  //   yr2QualificationDataTypeCode: "",
-  //   yr2PercentageValue: "",
-  //   yr3QualificationDataYear: "",
-  //   yr3QualificationDataTypeCode: "",
-  //   yr3PercentageValue: "",
-  // };
-
   const data = useMemo(() => {
     if (qualPctData.length > 0) {
       return fs.getMonitoringPlansPCTQualifications(qualPctData);
