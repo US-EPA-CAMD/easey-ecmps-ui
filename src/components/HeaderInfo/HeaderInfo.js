@@ -460,12 +460,12 @@ export const HeaderInfo = ({
                 ) : (
                   ""
                 )}
-                <Button type="button" className="margin-left-4" outline={true}>
+                <Button type="button" className="margin-left-4" outline={true} title="Coming Soon">
                   View Comments
                 </Button>
-                <Button type="button" className="margin-left-2" outline={true}>
+                {/* <Button type="button" className="margin-left-2" outline={true}>
                   Reports
-                </Button>
+                </Button> */}
               </div>
 
               <div className="grid-row">
