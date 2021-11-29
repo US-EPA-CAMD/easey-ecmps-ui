@@ -9,6 +9,8 @@ export const config = {
   app: {
     activityEvents,
     apiKey: process.env.API_KEY || "PXPWlQGB3wKXotkWN1PbSwbSoM7CoWW0ZMPWYtfc",
+    googleAnalyticsEnabled: process.env.GOOGLE_ANALYTICS_ENABLED || 'false',
+    googleAnalyticsContainerId: process.env.GOOGLE_ANALYTICS_CONTAINER_ID || '',
     refreshTokenRate:
       process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_TOKEN_RATE_MINUTES *
         oneMinute || 1 * oneMinute, // Change ME
