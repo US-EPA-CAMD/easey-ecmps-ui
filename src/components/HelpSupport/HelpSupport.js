@@ -37,13 +37,15 @@ export const HelpSupport = () => {
       value: `Other`,
     },
   ];
-  const onSubmitHandler = () => {
-    const payload = {};
-    sendNotificationEmail(payload).then((res) => {
-      console.log(res);
+  const onSubmitHandler = (e) => {
+    console.log(e);
+
+    sendNotificationEmail().then((res) => {
       // TODO: set this based on succesful call to api to send email
+      console.log(res);
       const x = Math.random() * (10 - 1) + 1;
       setSubmitStatus(x <= 5 ? false : true);
+      setSubmitted(true);
     });
   };
 
@@ -113,7 +115,7 @@ export const HelpSupport = () => {
       <ContactForm
         summary="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla massa in lectus volutpat scelerisque. Craseu leo vel lacus tincidunt molestie. Vestibulum faucibus enim sit amet pretium laoreet."
         subjects={commentTypes}
-        onSubmit={() => onSubmitHandler()}
+        onSubmit={(e) => onSubmitHandler(e)}
         submitted={submitted}
         submitStatus={submitStatus}
         submitStatusText={
