@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
 import { Link as USWDSLink, Button } from "@trussworks/react-uswds";
-
 import { OpenInNew } from "@material-ui/icons";
-
 import { ContactForm } from "@us-epa-camd/easey-design-system";
 
 import "./HelpSupport.scss";
+import { sendNotificationEmail } from "../../utils/api/quartzApi";
 
 export const HelpSupport = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -15,7 +13,7 @@ export const HelpSupport = () => {
 
   useEffect(() => {
     document.title = "ECMPS Help & Support";
-  }, [])
+  }, []);
 
   const commentTypes = [
     {
@@ -39,14 +37,15 @@ export const HelpSupport = () => {
       value: `Other`,
     },
   ];
-  
   const onSubmitHandler = () => {
-    setSubmitted(true);
-  
-    // TODO: set this based on succesful call to api to send email
-    const x = Math.random() * (10 - 1) + 1
-    setSubmitStatus(x <= 5 ? false : true);
-  }
+    const payload = {};
+    sendNotificationEmail(payload).then((res) => {
+      console.log(res);
+      // TODO: set this based on succesful call to api to send email
+      const x = Math.random() * (10 - 1) + 1;
+      setSubmitStatus(x <= 5 ? false : true);
+    });
+  };
 
   return (
     <div className="padding-top-7 padding-2 react-transition fade-in">
@@ -118,9 +117,9 @@ export const HelpSupport = () => {
         submitted={submitted}
         submitStatus={submitStatus}
         submitStatusText={
-          submitStatus ?
-            "Thank you, your form has been submitted and an email confirmation will be sent to you shortly."
-          : "An error occurred while submitting your comment. Please try again later!"
+          submitStatus
+            ? "Thank you, your form has been submitted and an email confirmation will be sent to you shortly."
+            : "An error occurred while submitting your comment. Please try again later!"
         }
       />
     </div>
