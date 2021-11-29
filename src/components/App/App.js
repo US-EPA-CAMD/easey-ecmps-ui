@@ -1,7 +1,7 @@
 // import "../../additional-functions/wdyr";
 import React, { useState, useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
-
+import ComingSoon from "../ComingSoon/ComingSoon";
 import NotFound from "../NotFound/NotFound";
 import AboutHome from "../AboutHome/AboutHome";
 import Layout from "../Layout/Layout";
@@ -51,7 +51,7 @@ const App = () => {
   const [currentLink, setCurrentLink] = useState(
     window.location.href.replace(`${window.location.origin}`, "")
   );
-  
+
   return (
     <div>
       {user ? <TokenRefresher /> : ""}
@@ -95,6 +95,17 @@ const App = () => {
               />
             )}
           />
+
+          <Route path="/qa_certifications/" exact component={ComingSoon} />
+          <Route path="/emission/" exact component={ComingSoon} />
+
+          <Route
+            path="/workspace/qa_certifications/"
+            exact
+            component={ComingSoon}
+          />
+          <Route path="/workspace/emission/" exact component={ComingSoon} />
+
           <Route
             path="/reporting-instructions"
             exact

@@ -146,6 +146,7 @@ export const MonitoringPlanHome = ({
             className="float-right clearfix radius-2 position-relative tablet-lg:margin-top-2 tablet:margin-top-2 tablet:margin-right-neg-3 desktop:margin-right-0"
             outline={true}
             id="input-button-search"
+            title="Coming Soon"
           >
             Import a Monitoring Plan
           </Button>

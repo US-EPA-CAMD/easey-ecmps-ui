@@ -62,21 +62,21 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     },
     {
       label: (
-        <span className="margin-right-1 text-no-wrap">
+        <span className="margin-right-1 text-no-wrap" title="Coming Soon">
           <span className="margin-right-20 menu-item-separator">|</span>
           Regulatory Partners
         </span>
       ),
       items: [{ menu: "", link: "" }],
     },
-    {
-      label: (
-        <span className="margin-right-1 text-no-wrap">
-          <span className="margin-right-20 menu-item-separator">|</span>Site Map
-        </span>
-      ),
-      items: [],
-    },
+    // {
+    //   label: (
+    //     <span className="margin-right-1 text-no-wrap">
+    //       <span className="margin-right-20 menu-item-separator">|</span>Site Map
+    //     </span>
+    //   ),
+    //   items: [],
+    // },
   ];
 
   useEffect(() => {
