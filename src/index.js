@@ -21,6 +21,8 @@ if(config.app.googleAnalyticsEnabled || config.app.googleAnalyticsEnabled == 'tr
     gtmId: config.app.googleAnalyticsContainerId
   }
 
+  console.log("Activating Google Tag Manager with container: " + tagManagerArgs.gtmId);
+
   TagManager.initialize(tagManagerArgs);
 }
 
