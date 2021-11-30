@@ -3,6 +3,7 @@ import { Link as USWDSLink, Button } from "@trussworks/react-uswds";
 import { OpenInNew } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import "./Resources.scss";
+import { useEventCallback } from "@material-ui/core";
 
 export const Resources = () => {
   useEffect(() => {
@@ -32,11 +33,13 @@ export const Resources = () => {
   const additionalResources = [
     {
       name: "CDX",
-      url: "./",
+      url: "https://cdx.epa.gov/",
+      type: "external",
     },
     {
       name: "Tutorials",
-      url: "./",
+      url: "/tutorials",
+      type: "internal",
     },
   ];
 
@@ -95,25 +98,42 @@ export const Resources = () => {
       </div>
 
       <ul className="margin-0 padding-0 margin-left-3">
-        {additionalResources.map((ele) => {
+        {additionalResources.map((resource) => {
           return (
             <li
-              key={`li_${ele.name.replace(/ /g, "")}`}
+              key={`li_${resource.name.replace(/ /g, "")}`}
               className="margin-top-1"
             >
-              <Button
-                type="button"
-                unstyled={true}
-                className="text-primary text-underline"
-                href={ele.url}
-                role="link"
-                rel={ele.name}
-                title={`Go to ${ele.name} page`}
-                key={ele.url}
-                id={`${ele.name.split(" ").join("")}`}
-              >
-                {ele.name} <OpenInNew />
-              </Button>
+              {resource.type === "external" ? (
+                <a
+                  type="button"
+                  unstyled={true}
+                  className="usa-button usa-button--unstyled text-primary text-underline no-hover-color-change"
+                  href={resource.url}
+                  role="link"
+                  rel={resource.name}
+                  title={`Go to ${resource.name} page`}
+                  key={resource.url}
+                  id={`${resource.name.split(" ").join("")}`}
+                  target="_blank"
+                >
+                  {resource.name} <OpenInNew />
+                </a>
+              ) : (
+                <Link
+                  type="button"
+                  unstyled={true}
+                  className="usa-button usa-button--unstyled text-primary text-underline no-hover-color-change"
+                  to={resource.url}
+                  role="link"
+                  rel={resource.name}
+                  title={`Go to ${resource.name} page`}
+                  key={resource.url}
+                  id={`${resource.name.split(" ").join("")}`}
+                >
+                  {resource.name} <OpenInNew />
+                </Link>
+              )}
             </li>
           );
         })}

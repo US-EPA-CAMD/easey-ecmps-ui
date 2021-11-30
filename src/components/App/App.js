@@ -105,6 +105,7 @@ const App = () => {
             component={ComingSoon}
           />
           <Route path="/workspace/emission/" exact component={ComingSoon} />
+          <Route path="/tutorials" exact component={ComingSoon} />
 
           <Route
             path="/reporting-instructions"

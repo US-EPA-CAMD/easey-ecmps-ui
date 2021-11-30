@@ -3,13 +3,9 @@ import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import { OpenInNew } from "@material-ui/icons";
 import "./ReportingInstructions.scss";
 
-import reportingInstructionsPDF from "./ECMPS Emissions Reporting Instructions 2021 Q3.pdf";
+import reportingInstructionsPDF from "./ECMPS Monitoring Plan Reporting Instructions 2021 Q4.pdf";
 
 export const ReportingInstructions = () => {
-  const openLink = (link) => {
-    console.log(link);
-  };
-
   const links = [
     {
       name: "Monitoring Plan Reporting Instructions",
@@ -61,7 +57,9 @@ export const ReportingInstructions = () => {
                     title={`Download ${link.name}`}
                     key={link.url}
                     id={`${link.name.split(" ").join("")}`}
-                    download={"Monitoring Plan Reporting Instructions"}
+                    download={
+                      "ECMPS Monitoring Plan Reporting Instructions 2021 Q4"
+                    }
                   >
                     {link.name} <OpenInNew />
                   </a>
@@ -76,7 +74,6 @@ export const ReportingInstructions = () => {
                     title={`Go to ${link.name} page`}
                     key={link.url}
                     id={`${link.name.split(" ").join("")}`}
-                    onClick={openLink(link.url)}
                     target="_blank"
                   >
                     {link.name} <OpenInNew />
