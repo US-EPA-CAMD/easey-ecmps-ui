@@ -7,19 +7,18 @@ axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
 };
 
-export const sendNotificationEmail = async () => {
+export const sendNotificationEmail = async (payload) => {
   let url = `${config.services.quartz.uri}`;
   url = `${url}/triggers/notifications/emails`;
-  console.log("email:", config.app.email);
 
-  const payload = {};
-  payload["toEmail"] = "dionolympia@cvpcorp.com";
-  payload["fromEmail"] = "dionolympia@cvpcorp.com";
-  payload["subject"] = "test subject";
-  payload["message"] = "test message";
+  payload["toEmail"] = config.app.email;
   payload["purpose"] = "Contact ECMPS Support";
 
-  console.log(payload);
-
-  return axios.post(url, payload).then(handleResponse).catch(handleError);
+  return axios
+    .post(url, payload)
+    .then(handleResponse)
+    .catch((error) => {
+      handleError(error);
+      throw new Error(error);
+    });
 };
