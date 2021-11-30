@@ -1,10 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { Button } from "@trussworks/react-uswds";
 import { DataTableRender } from "../DataTableRender/DataTableRender";
 
 
-export const MonitoringPlanEvaluationReport = ({
-}) => {
+export const MonitoringPlanEvaluationReport = () => {
 
     //Columns to be displayed in the data table
     const columnNames = [
@@ -27,12 +26,8 @@ export const MonitoringPlanEvaluationReport = ({
             href="#"
             role="link"
             rel="Check Code 1"
-        // title={`Go to ${ele.name} page`}
-        // key={ele.url}
-        // id={`${ele.name.split(" ").join("")}`}
         >
             Check Code 1
-            {/* {ele.name} <OpenInNew /> */}
         </Button>,
         col5: "Lorem ipsum urna, auctor a tincidunt ut, rutrum et ante. Aliquam \
         varius, eros quis vestibulum congue, mauris urna luctus ante, ac \
@@ -69,12 +64,8 @@ export const MonitoringPlanEvaluationReport = ({
             href="#"
             role="link"
             rel="Check Code 2"
-        // title={`Go to ${ele.name} page`}
-        // key={ele.url}
-        // id={`${ele.name.split(" ").join("")}`}
         >
             Check Code 2
-            {/* {ele.name} <OpenInNew /> */}
         </Button>,
         col5: "Dolor sit amet, consectetur adipiscing elit. Vestibulum \
         tincidunt bibendum est nec ullamcorper. Fusce nec turpis sit \
