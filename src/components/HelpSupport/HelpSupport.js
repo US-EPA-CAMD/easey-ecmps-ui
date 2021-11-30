@@ -68,6 +68,7 @@ export const HelpSupport = () => {
       const payload = {
         fromEmail: fromEmail,
         subject: subject,
+        message: message,
       };
 
       sendNotificationEmail(payload)
