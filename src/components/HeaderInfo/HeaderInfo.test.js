@@ -1,12 +1,12 @@
-// import React from "react";
-// import {
-//   render,
-//   screen,
-//   within,
-//   fireEvent,
-//   waitForElement,
-// } from "@testing-library/react";
-// import HeaderInfo from "./HeaderInfo";
+import React from "react";
+import {
+  render,
+  screen,
+  within,
+  fireEvent,
+  waitForElement,
+} from "@testing-library/react";
+import HeaderInfo from "./HeaderInfo";
 // // import { getActiveConfigurations } from "../../utils/selectors/monitoringConfigurations";
 // import * as mpApi from "../../utils/api/monitoringPlansApi";
 // const axios = require("axios");
@@ -1153,3 +1153,48 @@ test("test file", () => {
   const val = 1;
   expect(val === 1);
 });
+
+test("test audit records for workspace checked out", () => {
+
+  const { container } = render(
+    <HeaderInfo
+      facility={"Barry (1, 2, CS0AAN)"}
+      selectedConfig={{ id: 5770 }}
+      user={{ firstName: "test" }}
+      checkout={true}
+      checkedOutLocations={[{ monPlanId: [5770], checkedOutBy: "test" }]}
+      locationSelect={[0, "test"]}
+      sectionSelect={[4, "Methods"]}
+      inactive={[true, false]}
+      locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
+    />
+  )
+
+  expect(container.instance().setAuditInformation()).toContain("Currently checked out by:");
+});
+
+// test("test audit records for workspace checked in", () => {
+//   const { container, getByText } = render(
+//     <HeaderInfo
+//       facility={"Barry (1, 2, CS0AAN)"}
+//       selectedConfig={{ id: 5770 }}
+//       user={{ firstName: "test" }}
+//       checkout={false}
+//     />
+//   )
+
+//   expect(container.instance().setAuditInformation()).toContain("Last Updated by:");
+// });
+
+// test("test audit records for globalView", () => {
+//   const container = render(
+//     <HeaderInfo
+//       facility={"Barry (1, 2, CS0AAN)"}
+//       selectedConfig={{ id: 5770 }}
+//       checkout={false}
+//       checkedOutLocations={[{monPlanId:[5770], checkedOutBy:"test"}]}
+//     />
+//   )
+
+//   expect(container.instance().setAuditInformation()).toContain("Last Submitted by:");
+// });

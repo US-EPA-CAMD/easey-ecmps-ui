@@ -207,6 +207,7 @@ export const DataTableRender = ({
           name,
           selector: `col${index + 1}`,
           sortable: true,
+		  wrap: true
         });
         break;
     }
