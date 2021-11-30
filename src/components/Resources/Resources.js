@@ -1,14 +1,13 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import { Link as USWDSLink, Button } from "@trussworks/react-uswds";
 import { OpenInNew } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import "./Resources.scss";
 
 export const Resources = () => {
-
   useEffect(() => {
     document.title = "ECMPS Resources";
-    }, [])
+  }, []);
   const topics = [
     {
       name: "Glossary",
@@ -20,7 +19,7 @@ export const Resources = () => {
       name: "Reporting Instructions",
       descriptions:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt molestie. Vestibulum faucibus enim sit amet pretium laoreet.",
-      url: "/qa_certifications",
+      url: "/reporting-instructions",
     },
     {
       name: "CAM API",
