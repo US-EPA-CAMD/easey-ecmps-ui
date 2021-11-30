@@ -59,7 +59,7 @@ export const HelpSupport = () => {
       setSubmitStatus(false);
       setSubmitted(true);
       setEmailErrorMsg(
-        "All fields are required. Please fill in the form completely and try again."
+        "All fields are required. Please fill in the form completely and submit again."
       );
     }
 
