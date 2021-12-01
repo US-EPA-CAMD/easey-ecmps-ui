@@ -27,7 +27,7 @@ const App = () => {
   const [resetTimer, setResetTimer] = useState(false);
 
   useEffect(() => {
-    if(config.app.googleAnalyticsEnabled || config.app.googleAnalyticsEnabled == 'true'){
+    if(config.app.googleAnalyticsEnabled === 'true'){
       const tagManagerArgs = {
         gtmId: config.app.googleAnalyticsContainerId
       }
