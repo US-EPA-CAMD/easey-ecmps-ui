@@ -1,7 +1,9 @@
 import log from "loglevel";
 
+const successResponses = [200, 201];
+
 export async function handleResponse(response) {
-  if (response.status === 200) {
+  if (successResponses.includes(response.status)) {
     return response;
   } else {
     throw new Error("failed");
