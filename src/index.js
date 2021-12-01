@@ -15,17 +15,6 @@ import * as serviceWorker from "./serviceWorker";
 
 const store = configureStore();
 
-
-if(config.app.googleAnalyticsEnabled || config.app.googleAnalyticsEnabled == 'true'){
-  const tagManagerArgs = {
-    gtmId: config.app.googleAnalyticsContainerId
-  }
-
-  console.log("Activating Google Tag Manager with container: " + tagManagerArgs.gtmId);
-
-  TagManager.initialize(tagManagerArgs);
-}
-
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>

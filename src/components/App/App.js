@@ -26,6 +26,18 @@ const App = () => {
   const [resetTimer, setResetTimer] = useState(false);
 
   useEffect(() => {
+    if(config.app.googleAnalyticsEnabled || config.app.googleAnalyticsEnabled == 'true'){
+      const tagManagerArgs = {
+        gtmId: config.app.googleAnalyticsContainerId
+      }
+    
+      console.log("Activating Google Tag Manager");
+    
+      TagManager.initialize(tagManagerArgs);
+    }
+  }, [])
+
+  useEffect(() => {
     const cdxUser = sessionStorage.getItem("cdx_user")
       ? JSON.parse(sessionStorage.getItem("cdx_user"))
       : false;

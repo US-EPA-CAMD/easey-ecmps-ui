@@ -70,7 +70,7 @@ export const config = {
       uri:
         process.env.REACT_APP_EASEY_AUTH_API ||
         "https://easey-dev.app.cloud.gov/api/auth-mgmt",
-      //"https://api.epa.gov/easey/token/auth-mgmt"
+        //"https://api.epa.gov/easey/token/auth-mgmt"
     },
     quartz: {
       uri:
