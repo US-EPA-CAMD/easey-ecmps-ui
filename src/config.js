@@ -36,6 +36,9 @@ export const config = {
     published: process.env.REACT_APP_EASEY_ECMPS_UI_PUBLISHED || "local",
     version: process.env.REACT_APP_EASEY_ECMPS_UI_VERSION || "v0.0.0",
     title: process.env.REACT_APP_EASEY_ECMPS_UI_TITLE || "ECMPS",
+    email:
+      process.env.REACT_APP_EASEY_ECMPS_UI_EMAIL ||
+      "ecmps-beta@camdsupport.com",
   },
   services: {
     mdm: {
@@ -66,8 +69,13 @@ export const config = {
     authApi: {
       uri:
         process.env.REACT_APP_EASEY_AUTH_API ||
-        "https://easey-dev.app.cloud.gov/api/auth-mgmt"
-        //"https://api.epa.gov/easey/token/auth-mgmt"
+        "https://easey-dev.app.cloud.gov/api/auth-mgmt",
+      //"https://api.epa.gov/easey/token/auth-mgmt"
+    },
+    quartz: {
+      uri:
+        process.env.REACT_APP_EASEY_QUARTZ_API ||
+        "https://easey-dev.app.cloud.gov/quartz/api",
     },
   },
 };
