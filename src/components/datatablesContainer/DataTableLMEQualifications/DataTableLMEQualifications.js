@@ -33,7 +33,7 @@ export const DataTableLMEQualifications = ({
   const totalOptions = useRetrieveDropdownApi(["qualificationDataYear"]);
   const [updateTable, setUpdateTable] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState([]);
-  const [openBtn, setOpenBtn] = useState(null);
+
 
   useEffect(() => {
     if (

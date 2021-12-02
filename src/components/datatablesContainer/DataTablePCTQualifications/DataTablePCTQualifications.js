@@ -41,7 +41,7 @@ export const DataTablePCTQualifications = ({
   ]);
   const [updateTable, setUpdateTable] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState([]);
-  const [openBtn, setOpenBtn] = useState(null);
+
 
   useEffect(() => {
     if (

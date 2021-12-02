@@ -4,13 +4,10 @@ import "../MonitoringPlanTab/MonitoringPlanTab.scss";
 import DataTableMethod from "../datatablesContainer/DataTableMethod/DataTableMethod";
 import DataTableMats from "../datatablesContainer/DataTableMats/DataTableMats";
 import DataTableSystems from "../datatablesContainer/DataTableSystems/DataTableSystems";
-import * as mpApi from "../../utils/api/monitoringPlansApi";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import { checkoutAPI } from "../../additional-functions/checkout";
 import DataTableQualifications from "../datatablesContainer/DataTableQualifications/DataTableQualifications";
-import DataTableDefaults from "../datatablesContainer/DataTableDefaults/DataTableDefaults";
-import DataTableFuelData from "../datatablesContainer/DataTableFuelData/DataTableFuelData";
-import DataTableUnitControl from "../datatablesContainer/DataTableUnitControl/DataTableUnitControl";
+
 import DataTableAssert from "../datatablesContainer/DataTableAssert/DataTableAssert";
 import {
   spanDataTableProps,
@@ -21,6 +18,8 @@ import {
   unitControlDataTableProps,
   unitFuelDataTableProps,
   unitCapacityDataTableProps,
+  locationAttributesDataTableProps,
+  relationshipDataTableProps
 } from "../../additional-functions/dataTable-props";
 
 export const MonitoringPlanTabRender = ({
@@ -163,7 +162,70 @@ export const MonitoringPlanTabRender = ({
           "Loads",
         ],
       ],
-      [], // location attributes
+      [
+        [
+          <DataTableAssert
+            locationSelectValue={parseInt(locationSelect[1])}
+            inactive={inactive}
+            settingInactiveCheckBox={settingInactiveCheckBox}
+            checkout={checkout}
+            user={user}
+            payload={
+              locationAttributesDataTableProps(parseInt(locationSelect[1]))["payload"]
+            }
+            dropdownArray={
+              locationAttributesDataTableProps(parseInt(locationSelect[1]))["dropdownArray"]
+            }
+            columnNames={
+              locationAttributesDataTableProps(parseInt(locationSelect[1]))["columnNames"]
+            }
+            controlInputs={
+              locationAttributesDataTableProps(parseInt(locationSelect[1]))["controlInputs"]
+            }
+            controlDatePickerInputs={
+              locationAttributesDataTableProps(parseInt(locationSelect[1]))[
+                "controlDatePickerInputs"
+              ]
+            }
+            radioName="secondNormalIndicator"
+            dataTableName={"Location Attribute"}
+            revertedState={revertedState}
+            setRevertedState={setRevertedState}
+          />,
+          "Location Attributes",
+        ],
+        [
+          <DataTableAssert
+            locationSelectValue={parseInt(locationSelect[1])}
+            inactive={inactive}
+            settingInactiveCheckBox={settingInactiveCheckBox}
+            checkout={checkout}
+            user={user}
+            payload={
+              relationshipDataTableProps(parseInt(locationSelect[1]))["payload"]
+            }
+            dropdownArray={
+              relationshipDataTableProps(parseInt(locationSelect[1]))["dropdownArray"]
+            }
+            columnNames={
+              relationshipDataTableProps(parseInt(locationSelect[1]))["columnNames"]
+            }
+            controlInputs={
+              relationshipDataTableProps(parseInt(locationSelect[1]))["controlInputs"]
+            }
+            controlDatePickerInputs={
+              relationshipDataTableProps(parseInt(locationSelect[1]))[
+                "controlDatePickerInputs"
+              ]
+            }
+            radioName={[]}
+            dataTableName={"Relationship Data"}
+            revertedState={revertedState}
+            setRevertedState={setRevertedState}
+          />,
+          "Relationships Data",
+        ],
+      ], // location attributes
       [
         [
           <DataTableMethod
@@ -501,9 +563,9 @@ export const MonitoringPlanTabRender = ({
   ]);
 
   // not tested ***
-  const resetInactivityTimerApiCall = () => {
-    console.log(mpApi.putLockTimerUpdateConfiguration(configID), "api called");
-  };
+  // const resetInactivityTimerApiCall = () => {
+  //   console.log(mpApi.putLockTimerUpdateConfiguration(configID), "api called");
+  // };
 
   return (
     <div className=" padding-top-0">

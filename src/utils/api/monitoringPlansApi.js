@@ -812,3 +812,42 @@ export const createLMEQualificationData = async (payload) => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+export const getLocationAttributes = async (locationId) => {
+  let url = `${config.services.monitorPlans.uri}`;
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+
+  url = `${url}/locations/${locationId}/attributes`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const getRelationshipData = async (locationId) => {
+
+
+  let url = `${config.services.monitorPlans.uri}`;
+  // *** workspace section url (authenticated)
+  // if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  // }
+
+  url = `${url}/locations/${locationId}/relationships`;  
+  console.log(url,'locationId ')
+  // url = `${url}/locations/${locationId}/attributes`;
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const saveLocationAttribute = async (payload,locationId) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${locationId}/attributes/${payload["id"]}`;
+
+  return secureAxios({
+    method: "PUT",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};

@@ -3,7 +3,7 @@ import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 
 import { ArrowBackSharp } from "@material-ui/icons";
-import { FormGroup, Label, Button } from "@trussworks/react-uswds";
+import { FormGroup, Button } from "@trussworks/react-uswds";
 const ModalAddComponent = ({
   locationId,
   systemId,
@@ -20,8 +20,6 @@ const ModalAddComponent = ({
   );
 
   useEffect(() => {
-    let components = [];
-    let sysComponents = [];
     let main = [];
 
     let options = [];
@@ -54,6 +52,7 @@ const ModalAddComponent = ({
       options.unshift({ code: "", name: "" });
       setUnlinkedComponentsOptions(options);
     }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comps, sysComps]);
 
   const selectingCompHandler = (val) => {
