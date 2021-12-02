@@ -59,9 +59,11 @@ export const getMonitoringPlansRelationshipsDataRecords = (totalData) => {
     const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
 
     records.push({
-      col1: `${beginDate}`,
-      col2: `${endDate}`,
-      col3: el.id,
+      col1: el.stackPipeId,
+      col2: el.unitId,
+      col3: `${beginDate}`,
+      col4: `${endDate}`,
+      col5: el.id,
     });
   });
 
@@ -70,7 +72,8 @@ export const getMonitoringPlansRelationshipsDataRecords = (totalData) => {
 
 // year - month - day to  month / day/ year
 const formatStringToDate = (date) => {
-  const parts = date.split("-");
+  const splitDate = date.split("T");
+  const parts = splitDate[0].split("-");
   //Removes the time component from the Day part
   return `${parts[1]}/${parts[2].substring(0, 2)}/${parts[0]}`;
 };

@@ -127,7 +127,7 @@ export const saveDataSwitch = (
     case locationAttribute:
       return mpApi.saveLocationAttribute(
         userInput,
-        urlParameters ? urlParameters : null
+        locationSelectValue
       );
     default:
       break;

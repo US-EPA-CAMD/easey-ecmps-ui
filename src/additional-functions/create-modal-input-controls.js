@@ -13,8 +13,10 @@ export const modalViewData = (
 ) => {
   const arr = [];
 
+  console.log("selected", selected, label, time);
   // y = property name of the apis
   for (const y in label) {
+    console.log("Y", y);
     if (label[y][3] === "locked") {
       if (createNew) {
         arr.push([
@@ -53,7 +55,6 @@ export const modalViewData = (
           if (!createNew) {
             if (totalOptions) {
               labels = findValue(totalOptions[y], selected[y], "name");
-              console.log("labsl", labels);
             }
           }
           arr.push([
@@ -83,7 +84,6 @@ export const modalViewData = (
               selected[y] ? selected[y] : null
             );
           }
-          console.log("TESTING", y, label[y][0]);
           arr.push([
             y,
             label[y][0],
@@ -93,6 +93,7 @@ export const modalViewData = (
             createNew ? "" : selected[y],
           ]);
           break;
+
         case "skip":
           arr.push([[], [], [], "", "skip"]);
           break;
@@ -122,21 +123,42 @@ export const modalViewData = (
   }
   for (const y in time) {
     if (
-      y === "endDate" ||
-      y === "beginDate" ||
-      y === "loadAnalysisDate" ||
-      y === "wafEndDate" ||
-      y === "wafBeginDate" ||
-      y === "wafDeterminationDate" ||
-      y === "installDate" ||
-      y === "optimizationDate" ||
-      y === "retireDate"
+      (y === "endDate" ||
+        y === "beginDate" ||
+        y === "loadAnalysisDate" ||
+        y === "wafEndDate" ||
+        y === "wafBeginDate" ||
+        y === "wafDeterminationDate" ||
+        y === "installDate" ||
+        y === "optimizationDate" ||
+        y === "retireDate") &&
+      time[y][1] !== "dateTime"
     ) {
       let formattedDate = "";
       if (!createNew) {
         formattedDate = adjustDate(
           "mm/dd/yyyy",
           selected[y] ? selected[y] : null
+        );
+      }
+      arr.push([
+        y,
+        time[y][0],
+        formattedDate,
+        time[y][2] === "required" ? "required" : false,
+        "date",
+        createNew ? "" : selected[y],
+      ]);
+    }
+
+    // handles the dateTime format returned sometimes
+    if (y === "beginDate" && time[y][1] === "dateTime") {
+      let formattedDate = "";
+      let selectedDate = selected[y].split("T");
+      if (!createNew) {
+        formattedDate = adjustDate(
+          "mm/dd/yyyy",
+          selected[y] ? selectedDate[0] : null
         );
       }
 
@@ -146,7 +168,7 @@ export const modalViewData = (
         formattedDate,
         time[y][2] === "required" ? "required" : false,
         "date",
-        createNew ? "" : selected[y],
+        createNew ? "" : selected[y][1],
       ]);
     }
     if (
@@ -168,5 +190,6 @@ export const modalViewData = (
       arr.push([[], [], [], "", "skip"]);
     }
   }
+  console.log(arr, "arr");
   return arr;
 };

@@ -826,19 +826,22 @@ export const getLocationAttributes = async (locationId) => {
 };
 
 export const getRelationshipData = async (locationId) => {
+
+
   let url = `${config.services.monitorPlans.uri}`;
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf("workspace") > -1) {
+  // if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;
-  }
+  // }
 
-  // url = `${url}/locations/${locationId}/relationships`;
-  url = `${url}/locations/${locationId}/attributes`;
+  url = `${url}/locations/${locationId}/relationships`;  
+  console.log(url,'locationId ')
+  // url = `${url}/locations/${locationId}/attributes`;
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const saveLocationAttribute = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/attributes/${payload["id"]}`;
+export const saveLocationAttribute = async (payload,locationId) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${locationId}/attributes/${payload["id"]}`;
 
   return secureAxios({
     method: "PUT",

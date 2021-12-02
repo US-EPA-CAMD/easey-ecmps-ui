@@ -430,9 +430,7 @@ export const unitCapacityDataTableProps = (location, selectedLocation) => {
   };
 };
 
-export const locationAttributesDataTableProps = (
-  location,
-) => {
+export const locationAttributesDataTableProps = (location) => {
   return {
     payload: {
       ductIndicator: 0,
@@ -473,33 +471,26 @@ export const locationAttributesDataTableProps = (
       beginDate: ["Start Date", "date", "", ""],
       endDate: ["End Date", "date", "", ""],
     },
-
   };
 };
 
-export const relationshipDataTableProps = (
-  location,
-) => {
+export const relationshipDataTableProps = (location) => {
   return {
     payload: {
-      beginDate: "2021-11-29T14:35:56.711Z",
-      endDate: "2021-11-29T14:35:56.711Z",
+      unitId: "1",
+      stackPipeId: "MDC-CCB8D6D0D4E34D24A99C01DCD14078DF",
+      beginDate: "1995-01-01T00:00:00.000Z",
+      endDate: null,
     },
     dropdownArray: [[]],
-    columnNames: [
-      "Stack Pipe ID",
-      "Unit ID",
-      "Start Date",
-      "End Date",
-    ],
+    columnNames: ["Stack Pipe ID", "Unit ID", "Start Date", "End Date"],
     controlInputs: {
-      groundElevation: ["Stack Pipe ID", "input", ""],
-      stackHeight: ["Unit ID", "input", "", ""],
+      stackPipeId: ["Stack Pipe ID", "input", ""],
+      unitId: ["Unit ID", "input", "", ""],
     },
     controlDatePickerInputs: {
-      beginDate: ["Start Date", "date", "", ""],
-      endDate: ["End Date", "date", "", ""],
+      beginDate: ["Start Date", "dateTime", "", ""],
+      endDate: ["End Date", "dateTime", "", ""],
     },
-
   };
 };

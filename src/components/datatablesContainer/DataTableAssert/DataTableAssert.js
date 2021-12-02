@@ -59,14 +59,7 @@ export const DataTableAssert = ({
       locationSelectValue ||
       revertedState
     ) {
-      console.log(
-        "payload,",
-        payload,
-        urlParameters,
-        columnNames,
-        dropdownArray,
-        dataTableName
-      );
+
       setDataLoaded(false);
       getDataTableApi(dataTableName, locationSelectValue, selectedLocation);
 
