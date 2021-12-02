@@ -4,25 +4,17 @@ export const getMonitoringPlansLocationAttributeRecords = (totalData) => {
 
   data.forEach((el) => {
     var ductIndicator;
-    if (el.ductIndicator) {
-      if (el.ductIndicator === "1") {
-        ductIndicator = "Yes";
-      } else {
-        ductIndicator = "No";
-      }
+    if (el.ductIndicator && el.ductIndicator === "1") {
+      ductIndicator = "Yes";
     } else {
-      ductIndicator = "";
+      ductIndicator = "No";
     }
 
     var bypassIndicator;
-    if (el.bypassIndicator) {
-      if (el.bypassIndicator === "1") {
-        bypassIndicator = "Yes";
-      } else {
-        bypassIndicator = "No";
-      }
+    if (el.bypassIndicator && el.bypassIndicator === "1") {
+      bypassIndicator = "Yes";
     } else {
-      bypassIndicator = "";
+      bypassIndicator = "No";
     }
 
     const beginDate = el.beginDate
@@ -30,6 +22,7 @@ export const getMonitoringPlansLocationAttributeRecords = (totalData) => {
       : "";
     const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
 
+    console.log("EL", el);
     records.push({
       col1: ductIndicator,
       col2: bypassIndicator,
