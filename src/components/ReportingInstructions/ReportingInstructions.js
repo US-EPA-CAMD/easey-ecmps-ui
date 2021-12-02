@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 // import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 
-import samplePDF from "./ECMPS Monitoring Plan Reporting Instructions 2021 Q2.pdf";
+// import samplePDF from "./ECMPS Monitoring Plan Reporting Instructions 2021 Q2.pdf";
 
-const options = {
-  cMapUrl: "cmaps/",
-  cMapPacked: true,
-};
+// const options = {
+//   cMapUrl: "cmaps/",
+//   cMapPacked: true,
+// };
 
 export const ReportingInstructions = () => {
   // const [numPages, setNumPages] = useState(null);

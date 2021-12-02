@@ -259,3 +259,17 @@ export const getAllQualificationLEETestTypeCodes = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+export const getAllMaterialCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/material-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getAllShapeCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/shape-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};

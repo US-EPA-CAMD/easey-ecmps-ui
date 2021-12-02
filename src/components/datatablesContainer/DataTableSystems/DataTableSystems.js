@@ -270,8 +270,8 @@ export const DataTableSystems = ({
     setCreateAnalyzerRangesFlag(create);
   };
   //////////
-  const [createBTN, setCreateBTN] = useState("Save and Close");
-  const [createBtnAPI, setCreateBtnAPI] = useState(null);
+  // const [createBTN, setCreateBTN] = useState("Save and Close");
+  // const [createBtnAPI, setCreateBtnAPI] = useState(null);
 
   const [selectedRangeInFirst, setSelectedRangeInFirst] = useState(
     selectedRangeInFirstTest ? selectedRangeInFirstTest : null
@@ -607,7 +607,7 @@ export const DataTableSystems = ({
             show={show}
             extraBtn={
               secondLevel && !thirdLevel
-                ? secondLevelName == "Add Component"
+                ? secondLevelName === "Add Component"
                   ? () => {
                       setAddCompThirdLevelCreateTrigger(true);
                     }

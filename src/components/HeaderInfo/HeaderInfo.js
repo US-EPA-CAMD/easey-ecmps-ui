@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Checkbox } from "@trussworks/react-uswds";
 import { CreateOutlined, LockOpenSharp, LockSharp } from "@material-ui/icons";
 
@@ -6,7 +6,6 @@ import * as mpApi from "../../utils/api/monitoringPlansApi";
 import Modal from "../Modal/Modal";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 import "./HeaderInfo.scss";
-import config from "../../config";
 
 export const HeaderInfo = ({
   facility,
@@ -82,7 +81,7 @@ export const HeaderInfo = ({
 
         // syncing checkout state with database
         if (findCurrentlyCheckedOutByInfo(configs)) {
-          checkout = true;
+          // checkout = true;
           setCheckout(true);
         }
 
@@ -110,11 +109,12 @@ export const HeaderInfo = ({
         }
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkout, dataLoaded]);
 
-  const test = () => {
-    setShowEvalReport(true);
-  };
+  // const test = () => {
+  //   setShowEvalReport(true);
+  // };
 
   const findCurrentlyCheckedOutByInfo = (configs) => {
     return configs[
@@ -165,6 +165,8 @@ export const HeaderInfo = ({
       case "INQ":
       case "WIP":
         return "usa-alert--info";
+      default:
+        break;
     }
     return "";
   };
@@ -182,6 +184,8 @@ export const HeaderInfo = ({
         return "In Queue";
       case "WIP":
         return "In Progress";
+      default:
+        break;
     }
     return "Needs Evaluation";
   };
@@ -460,7 +464,12 @@ export const HeaderInfo = ({
                 ) : (
                   ""
                 )}
-                <Button type="button" className="margin-left-4" outline={true} title="Coming Soon">
+                <Button
+                  type="button"
+                  className="margin-left-4"
+                  outline={true}
+                  title="Coming Soon"
+                >
                   View Comments
                 </Button>
                 {/* <Button type="button" className="margin-left-2" outline={true}>
@@ -564,7 +573,8 @@ export const HeaderInfo = ({
                     <td
                       className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle()}`}
                     >
-                      <a
+                      <span
+                        href=""
                         style={
                           showHyperLink(selectedConfig.evalStatusCode)
                             ? {
@@ -578,15 +588,16 @@ export const HeaderInfo = ({
                                 cursor: "default",
                               }
                         }
-                        href={"javascript:void(0);"}
-                        onClick={() =>
-                          showHyperLink(selectedConfig.evalStatusCode)
-                            ? setShowEvalReport(true)
-                            : ""
-                        }
+                        onClick={(e) => {
+                          e.preventDefault()(
+                            showHyperLink(selectedConfig.evalStatusCode)
+                              ? setShowEvalReport(true)
+                              : ""
+                          );
+                        }}
                       >
                         {evalStatusText()}
-                      </a>
+                      </span>
                     </td>
                   </tr>
                   <tr>

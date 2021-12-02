@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
@@ -78,10 +78,10 @@ export const DataTableAssert = ({
 
   // get API for data
   // in  a timer because WAFS get takes a lil bit exxtra time to process, fixes update of datatable after editing data
-  const getDataTableApi = (name, location, selectedLocation) => {
+  const getDataTableApi = (name, location, selectedLocationParameter) => {
     let timerFunc = setTimeout(() => {
       assertSelector
-        .getDataTableApis(name, location, selectedLocation)
+        .getDataTableApis(name, location, selectedLocationParameter)
         .then((res) => {
           setDataPulled(res.data);
           setDataLoaded(true);

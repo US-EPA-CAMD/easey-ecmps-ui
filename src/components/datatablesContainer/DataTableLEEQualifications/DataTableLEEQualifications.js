@@ -37,7 +37,7 @@ export const DataTableLEEQualifications = ({
   ]);
   const [updateTable, setUpdateTable] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState([]);
-  const [openBtn, setOpenBtn] = useState(null);
+
 
   useEffect(() => {
     if (

@@ -29,8 +29,7 @@ export const modalViewData = (
         const parts = selected[y] ? selected[y].split("-") : "";
 
         const formmatedDate =
-          parts != "" ? `${parts[1]}/${parts[2]}/${parts[0]}` : "";
-        console.log("formmated", formmatedDate);
+          parts !== "" ? `${parts[1]}/${parts[2]}/${parts[0]}` : "";
         arr.push([
           y,
           label[y][0],
@@ -116,15 +115,6 @@ export const modalViewData = (
             ]);
           }
           break;
-        // case "hidden":
-        //   arr.push([
-        //     y,
-        //     label[y][0],
-        //     selected[y],
-        //     false,
-        //     "input",
-        //   ]);
-        //   break;
         default:
           break;
       }

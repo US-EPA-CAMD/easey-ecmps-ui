@@ -3,14 +3,9 @@ import * as fs from "../../../utils/selectors/monitoringPlanSystems";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import "./DataTableSystemsComponentsRender.scss";
-import {
-  attachChangeEventListeners,
-  removeChangeEventListeners,
-  unsavedDataMessage,
-} from "../../../additional-functions/prompt-to-save-unsaved-changes";
+import { attachChangeEventListeners } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
 import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import DataTableAnalyzerRanges from "../DataTableAnalyzerRanges/DataTableAnalyzerRanges";
@@ -60,28 +55,22 @@ export const DataTableSystemsComponents = ({
   openComponentViewTest = false,
   openAddComponentTest = false,
 }) => {
-  const [monitoringSystemsFuelFlows, setMonitoringSystemsFuelFlows] = useState(
-    ""
-  );
+  const [monitoringSystemsFuelFlows, setMonitoringSystemsFuelFlows] =
+    useState("");
   const [selectedUnlinkedComponent, setSelectedUnlinkedComponent] = useState(
     {}
   );
   const [dataLoaded, setDataLoaded] = useState(false);
   const [dataFuelLoaded, setFuelDataLoaded] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState(null);
-  const [
-    selectedComponentsModalData,
-    setSelectedComponentsModalData,
-  ] = useState(null);
-  const [selectedFuelFlowsModalData, setSelectedFuelFlowsModalData] = useState(
-    null
-  );
+  const [selectedComponentsModalData, setSelectedComponentsModalData] =
+    useState(null);
+  const [selectedFuelFlowsModalData, setSelectedFuelFlowsModalData] =
+    useState(null);
   const [selected, setSelected] = useState(1);
 
-  const [
-    monitoringSystemsComponents,
-    setMonitoringSystemsComponents,
-  ] = useState("");
+  const [monitoringSystemsComponents, setMonitoringSystemsComponents] =
+    useState("");
 
   useEffect(() => {
     if (addCompThirdLevelTrigger) {
@@ -92,6 +81,8 @@ export const DataTableSystemsComponents = ({
       }
       setAddCompThirdLevelTrigger(false);
     }
+
+       // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [addCompThirdLevelTrigger]);
 
   useEffect(() => {
@@ -99,6 +90,8 @@ export const DataTableSystemsComponents = ({
       openAddComponentHandler(false, true, true);
       setAddCompThirdLevelCreateTrigger(false);
     }
+    
+   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [addCompThirdLevelCreateTrigger]);
   useEffect(() => {
     mpApi.getMonitoringSystems(locationSelectValue).then((res) => {
@@ -128,6 +121,7 @@ export const DataTableSystemsComponents = ({
         setFuelDataLoaded(true);
         setUpdateFuelFlowTable(false);
       });
+         // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected, updateFuelFlowTable, updateComponentTable]);
 
   const columnNames = ["ID", "Type", "Date and Time"];
@@ -144,9 +138,8 @@ export const DataTableSystemsComponents = ({
   const [openComponentView, setComponentView] = React.useState(
     openComponentViewTest
   );
-  const [openAddComponent, setAddComponent] = React.useState(
-    openAddComponentTest
-  ); // for viewing the dropdown component page
+  const [openAddComponent, setAddComponent] =
+    React.useState(openAddComponentTest); // for viewing the dropdown component page
 
   //for analyzer ranges
   const [openAnalyzer, setOpenAnalyzer] = useState(false);
@@ -163,7 +156,7 @@ export const DataTableSystemsComponents = ({
   };
 
   const openAddComponentHandler = (selectedComp, create, page) => {
-    let selectComponents = null;
+
     setAddExistingComponentFlag(!create);
     setCreateNewComponentFlag(page);
     setOpenFuelFlowsView(false);
@@ -258,16 +251,6 @@ export const DataTableSystemsComponents = ({
     setBread(true, "Component");
   };
 
-  const payloadComponents = {
-    locationId: locationSelectValue,
-    id: null,
-    matsMethodCode: null,
-    matsMethodParameterCode: null,
-    beginDate: null,
-    beginHour: 0,
-    endDate: null,
-    endHour: 0,
-  };
 
   const totalFuelFlowssOptions = useRetrieveDropdownApi([
     "maximumFuelFlowRateSourceCode",
@@ -289,11 +272,7 @@ export const DataTableSystemsComponents = ({
         selectFuelFlows,
         {
           maximumFuelFlowRate: ["Max Fuel Flow Rate", "input", ""],
-          systemFuelFlowUOMCode: [
-            "Units of Measure Code",
-            "dropdown",
-            "",
-          ],
+          systemFuelFlowUOMCode: ["Units of Measure Code", "dropdown", ""],
           maximumFuelFlowRateSourceCode: [
             "Max Fuel Flow Rate Source",
             "dropdown",

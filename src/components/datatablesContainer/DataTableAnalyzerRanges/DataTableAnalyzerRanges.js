@@ -60,20 +60,20 @@ export const DataTableAnalyzerRanges = ({
   };
   const testing1 = () => {
     // need a valid row id for first paramter
-    const range = {
-      active: false,
-      addDate: "2009-02-20",
-      analyzerRangeCode: "H",
-      beginDate: "1993-10-01",
-      beginHour: "0",
-      componentRecordId: "CAMD-60A6D62FDAB14840BFCF67E049B4B4C5",
-      dualRangeIndicator: "0",
-      endDate: "2019-11-06",
-      endHour: "14",
-      id: "CAMD-A39804B8C17A4478970F7B2CCBF429B6",
-      updateDate: "2020-01-23",
-      userId: "bvick",
-    };
+    // const range = {
+    //   active: false,
+    //   addDate: "2009-02-20",
+    //   analyzerRangeCode: "H",
+    //   beginDate: "1993-10-01",
+    //   beginHour: "0",
+    //   componentRecordId: "CAMD-60A6D62FDAB14840BFCF67E049B4B4C5",
+    //   dualRangeIndicator: "0",
+    //   endDate: "2019-11-06",
+    //   endHour: "14",
+    //   id: "CAMD-A39804B8C17A4478970F7B2CCBF429B6",
+    //   updateDate: "2020-01-23",
+    //   userId: "bvick",
+    // };
     openAnalyzerRanges(
       { col3: "CAMD-A39804B8C17A4478970F7B2CCBF429B6" },
       false,

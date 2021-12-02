@@ -9,6 +9,7 @@ import * as defaultSelector from "./monitoringPlanDefaults";
 import * as unitFuelSelector from "./monitoringPlanFuelData";
 import * as unitControlSelector from "./monitoringPlanUnitControls";
 import * as unitCapacitySelector from "./monitoringPlanUnitCapacity";
+import * as locationRelationshipsSelector from "./monitoringPlanLocationAttributes";
 
 // Table Names
 const load = "Load";
@@ -19,7 +20,8 @@ const rectDuctWaf = "Rectangular Duct WAF";
 const unitCon = "Unit Control";
 const unitCap = "Unit Capacity";
 const unitFuel = "Unit Fuel";
-
+const locationAttribute = "Location Attribute";
+const relationshipData = "Relationship Data";
 // Getting records from API
 export const getDataTableApis = async (name, location, selectedLocation) => {
   switch (name) {
@@ -45,6 +47,12 @@ export const getDataTableApis = async (name, location, selectedLocation) => {
       return mpApi.getUnitCapacity(
         selectedLocation ? selectedLocation : location
       );
+
+    case locationAttribute:
+      return mpApi.getLocationAttributes(location);
+    case relationshipData:
+      return mpApi.getRelationshipData(location);
+
     default:
       break;
   }
@@ -70,12 +78,21 @@ export const getDataTableRecords = (dataIn, name) => {
       return unitControlSelector.getMonitoringPlansUnitControlRecords(dataIn);
     case unitCap:
       return unitCapacitySelector.getMonitoringPlansUnitCapacityRecords(dataIn);
+
+    case locationAttribute:
+      return locationRelationshipsSelector.getMonitoringPlansLocationAttributeRecords(
+        dataIn
+      );
+
+    case relationshipData:
+      return locationRelationshipsSelector.getMonitoringPlansRelationshipsDataRecords(
+        dataIn
+      );
     default:
       break;
   }
   return [];
 };
-
 // Save (PUT) endpoints for API
 export const saveDataSwitch = (
   userInput,
@@ -103,6 +120,12 @@ export const saveDataSwitch = (
       );
     case unitCap:
       return mpApi.saveUnitCapacity(
+        userInput,
+        urlParameters ? urlParameters : null
+      );
+
+    case locationAttribute:
+      return mpApi.saveLocationAttribute(
         userInput,
         urlParameters ? urlParameters : null
       );

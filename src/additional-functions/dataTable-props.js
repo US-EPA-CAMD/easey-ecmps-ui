@@ -430,22 +430,76 @@ export const unitCapacityDataTableProps = (location, selectedLocation) => {
   };
 };
 
-//   export const DataTableProps = (location) => {
-//     return {
-//       payload: {
+export const locationAttributesDataTableProps = (
+  location,
+) => {
+  return {
+    payload: {
+      ductIndicator: 0,
+      bypassIndicator: 0,
+      groundElevation: 0,
+      stackHeight: 0,
+      materialCode: "string",
+      shapeCode: "string",
+      crossAreaFlow: 0,
+      crossAreaStackExit: 0,
+      beginDate: "2021-11-29T14:35:56.711Z",
+      endDate: "2021-11-29T14:35:56.711Z",
+    },
+    dropdownArray: [["materialCode", "shapeCode"]],
+    columnNames: [
+      "Duct Indicator",
+      "Bypass Indicator",
+      "Ground Elevation",
+      "Stack Height",
+      "Material Code",
+      "Shape Code",
+      "Cross Area Flow",
+      "Cross Area Stack Exit",
+      "Start Date",
+      "End Date",
+    ],
+    controlInputs: {
+      ductIndicator: ["Duct Indicator", "radio", "", ""],
+      bypassIndicator: ["Bypass Indicator", "radio", "", ""],
+      groundElevation: ["Ground Elevation", "input", ""],
+      stackHeight: ["Stack Height", "input", "", ""],
+      materialCode: ["Material Code", "dropdown", "", ""],
+      shapeCode: ["Shape Code", "dropdown", "", ""],
+      crossAreaFlow: ["Cross Area Flow", "input", "", ""],
+      crossAreaStackExit: ["Cross Area Stack Exit", "input", "", ""],
+    },
+    controlDatePickerInputs: {
+      beginDate: ["Start Date", "date", "", ""],
+      endDate: ["End Date", "date", "", ""],
+    },
 
-//       },
-//       dropdownArray: [
+  };
+};
 
-//       ],
-//       columnNames: [
+export const relationshipDataTableProps = (
+  location,
+) => {
+  return {
+    payload: {
+      beginDate: "2021-11-29T14:35:56.711Z",
+      endDate: "2021-11-29T14:35:56.711Z",
+    },
+    dropdownArray: [[]],
+    columnNames: [
+      "Stack Pipe ID",
+      "Unit ID",
+      "Start Date",
+      "End Date",
+    ],
+    controlInputs: {
+      groundElevation: ["Stack Pipe ID", "input", ""],
+      stackHeight: ["Unit ID", "input", "", ""],
+    },
+    controlDatePickerInputs: {
+      beginDate: ["Start Date", "date", "", ""],
+      endDate: ["End Date", "date", "", ""],
+    },
 
-//       ],
-//       controlInputs: {
-
-//       },
-//       controlDatePickerInputs: {
-
-//       },
-//     };
-//   };
+  };
+};

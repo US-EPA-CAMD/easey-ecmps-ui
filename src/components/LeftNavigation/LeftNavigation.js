@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { SideNav, Link as USWDSLink } from "@trussworks/react-uswds";
 
 import { Link } from "react-router-dom";

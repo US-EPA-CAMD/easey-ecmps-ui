@@ -18,7 +18,7 @@ import HelpSupport from "../HelpSupport/HelpSupport";
 import "./App.scss";
 import { TokenRefresher } from "../TokenRefresher/TokenRefresher";
 import InactivityTracker from "../InactivityTracker/InactivityTracker";
-import config from "../../config";
+
 
 const App = () => {
   const [user, setUser] = useState(false);
