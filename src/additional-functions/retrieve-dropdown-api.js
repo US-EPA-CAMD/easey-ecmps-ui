@@ -410,7 +410,7 @@ export const useRetrieveDropdownApi = (dropDownFields, mats = false) => {
       case "yr1QualificationDataYear":
       case "yr2QualificationDataYear":
       case "yr3QualificationDataYear":
-        case "qualificationDataYear":
+      case "qualificationDataYear":
         dataYearOptions().then((years) => {
           options = years.map((year) => {
             return {
@@ -443,6 +443,32 @@ export const useRetrieveDropdownApi = (dropDownFields, mats = false) => {
             return {
               code: option["qualLeeTestTypeCode"],
               name: option["qualLeeTestTypeDescription"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+
+      case "materialCode":
+        dmApi.getAllMaterialCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["materialCode"],
+              name: option["materialCodeDescription"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+
+      case "shapeCode":
+        dmApi.getAllShapeCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["shapeCode"],
+              name: option["shapeCodeDescription"],
             };
           });
 

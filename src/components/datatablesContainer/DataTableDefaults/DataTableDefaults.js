@@ -168,7 +168,7 @@ export const DataTableDefaults = ({
 
   const data = useMemo(() => {
     if (defaults.length > 0) {
-      console.log("DEFAULTS", defaults);
+     
       const activeOnly = getActiveData(defaults);
       const inactiveOnly = getInactiveData(defaults);
 
