@@ -57,8 +57,9 @@ export const HeaderInfo = ({
   const closeEvalReportModal = () => setShowEvalReport(false);
 
   const [openIntervalId, setOpenIntervalId] = useState(null);
-  const delayInMilli = 1000;
+  const delayInMilli = 5000;
   const [evalStatus, setEvalStatus] = useState("");
+  const [evalStatusLoaded, setEvalStatusLoaded] = useState(false);
 
   const evalStatuses = ["ERR", "EVAL", "INFO", "PASS", "INQ", "WIP"];
 
@@ -75,8 +76,14 @@ export const HeaderInfo = ({
   useEffect(() => {
     // setCheckoutState(checkout);
 
-    if (!dataLoaded) {
-      const currentEvalStatus = selectedConfig.evalStatusCode;
+    if (!evalStatusLoaded) {
+      const status = getEvalStatus();
+      setEvalStatus(status);
+      setEvalStatusLoaded(true);
+    }
+
+    if (evalStatusLoaded && !dataLoaded) {
+      let currentCheckoutStatus = checkout;
 
       // obtain checked-out configurations
       mpApi.getCheckedOutLocations().then((res) => {
@@ -90,8 +97,7 @@ export const HeaderInfo = ({
 
         // syncing checkout state with database
         if (findCurrentlyCheckedOutByInfo(configs)) {
-          // checkout = true;
-          setCheckout(true);
+          currentCheckoutStatus = true;
         }
 
         // obtain current config info from last save or checkouts table
@@ -105,61 +111,58 @@ export const HeaderInfo = ({
               userId: info.data.userId,
               updateDate: info.data.updateDate,
             };
-            // afterwards, set checkedOutByUser and auditInformation states, then update table
-            console.log("if");
-            renderWithNewData(
-              configs,
-              checkout,
-              currentConfig,
-              currentEvalStatus
-            );
+            // afterwards, load new data onto page
+            renderWithNewData(configs, currentConfig, currentCheckoutStatus);
           });
-        } else {
-          // if we already have config info, set these states and update table right away
-          console.log("else");
 
-          renderWithNewData(
-            configs,
-            checkout,
-            currentConfig,
-            currentEvalStatus
-          );
+          // if we already have config info, load data onto page
+        } else {
+          renderWithNewData(configs, currentConfig, currentCheckoutStatus);
         }
       });
     }
 
     return () => {
-      clearOpenRefreshInterval();
+      if (evalStatusLoaded && dataLoaded) {
+        console.log("leaving monitor plan page...");
+        clearOpenRefreshInterval();
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkout, dataLoaded, evalStatus]);
-
-  // const test = () => {
-  //   setShowEvalReport(true);
-  // };
+  }, [checkout, dataLoaded, evalStatusLoaded]);
 
   const clearOpenRefreshInterval = () => {
     if (openIntervalId) {
-      console.log("clearing interval with ID of: ", openIntervalId);
       clearInterval(openIntervalId);
     }
   };
 
-  const startRefreshTimer = (currentEvalStatus) => {
+  const getEvalStatus = () => {
+    console.log("get current evaluation status from database");
+    const random = Math.floor(Math.random() * 5);
+    console.log("random number: ", random);
+    const returnedEvalStatus = evalStatuses[random];
+    return returnedEvalStatus;
+  };
+
+  const startRefreshTimer = () => {
+    console.log("start of refresh timer function");
     // if we already have a refresh interval open
     if (openIntervalId) {
       // get rid of it and clear the id state
       clearInterval(openIntervalId);
       setOpenIntervalId(null);
+      console.log("cleaning up last interval");
     }
 
+    console.log("executing setInterval function");
+    let returnedEvalStatus = "";
     const intervalId = setInterval(() => {
+      let currentEvalStatus = getEvalStatus();
       // check if status changed
       //
       //    retrieve returnedEvalStatus
-      console.log("get current evaluation status from database");
-      const random = Math.floor(Math.random() * 5);
-      const returnedEvalStatus = evalStatuses[random];
+      returnedEvalStatus = getEvalStatus();
 
       // if status changed (returnedEvalStatus !=== evalStatus)
       //
@@ -171,7 +174,9 @@ export const HeaderInfo = ({
             " to " +
             returnedEvalStatus
         );
-        setEvalStatus(evalStatus);
+        setEvalStatus(returnedEvalStatus);
+      } else {
+        console.log("Status stayed the same: ", returnedEvalStatus);
       }
 
       // if data is the same (returned data === evalStatus)
@@ -179,19 +184,18 @@ export const HeaderInfo = ({
       //    do nothing -- let the interval loop continue as is
     }, delayInMilli);
 
+    console.log("end of refresh timer function");
+
     return intervalId;
   };
 
-  const renderWithNewData = (
-    configs,
-    checkout,
-    currentConfig,
-    currentEvalStatus
-  ) => {
-    console.log(startRefreshTimer(currentEvalStatus));
+  const renderWithNewData = (configs, currentConfig, currentCheckoutStatus) => {
+    const intervalId = startRefreshTimer();
+    console.log(intervalId);
+    setOpenIntervalId(intervalId);
     setCheckedOutByUser(isCheckedOutByUser(configs));
     setAuditInformation(createAuditMessage(checkout, currentConfig));
-    setEvalStatus(currentEvalStatus);
+    setCheckout(currentCheckoutStatus);
     setDataLoaded(true);
   };
 
@@ -233,8 +237,8 @@ export const HeaderInfo = ({
   };
 
   // chooses correctly styling for evaluation status label
-  const evalStatusStyle = () => {
-    switch (selectedConfig.evalStatusCode) {
+  const evalStatusStyle = (evalStatus) => {
+    switch (evalStatus) {
       case "ERR":
       case "EVAL":
         return "usa-alert--warning";
@@ -251,8 +255,8 @@ export const HeaderInfo = ({
   };
 
   // returns evaluation status (full text) from code
-  const evalStatusText = () => {
-    switch (selectedConfig.evalStatusCode) {
+  const evalStatusText = (evalStatus) => {
+    switch (evalStatus) {
       case "ERR":
         return "Critical Errors";
       case "INFO":
@@ -377,216 +381,221 @@ export const HeaderInfo = ({
           children={<MonitoringPlanEvaluationReport />}
         />
       ) : null}
-      <div className="grid-row clearfix position-relative">
-        <div className="grid-col float-left">
-          <div>
-            <h3 className="display-inline-block">
-              {" "}
-              {user && (checkoutState || displayLock) ? (
-                <LockSharp className="lock-icon margin-right-1" />
+
+      {evalStatusLoaded && dataLoaded ? (
+        <div className="grid-row clearfix position-relative">
+          <div className="grid-col float-left">
+            <div>
+              <h3 className="display-inline-block">
+                {" "}
+                {user && (checkoutState || displayLock) ? (
+                  <LockSharp className="lock-icon margin-right-1" />
+                ) : (
+                  ""
+                )}
+                <span className="font-body-lg">{facilityMainName}</span>
+              </h3>
+              <div className="text-bold font-body-2xs">
+                {dataLoaded ? auditInformation : ""}
+              </div>
+            </div>
+            <div className="">
+              <div className="display-inline-block ">
+                <div className="text-bold font-body-xl display-block height-auto">
+                  {user && checkoutState && checkedOutByUser ? (
+                    <CreateOutlined color="primary" fontSize="large" />
+                  ) : (
+                    ""
+                  )}{" "}
+                  {facilityAdditionalName}
+                  {user ? (
+                    <div className="text-bold font-body-2xs display-inline-block ">
+                      {checkedOutByUser === true ? (
+                        <Button
+                          autoFocus
+                          outline={false}
+                          tabIndex="0"
+                          aria-label={`Check back in the configuration `}
+                          className=" padding-1 padding-right-3 padding-left-3 margin-2"
+                          onClick={() => checkoutStateHandler(false)}
+                          id="checkInBTN"
+                          epa-testid="checkInBTN"
+                        >
+                          <LockOpenSharp /> {"Check Back In"}
+                        </Button>
+                      ) : checkedOutConfigs
+                          .map((location) => location["monPlanId"])
+                          .indexOf(selectedConfig.id) === -1 ? (
+                        <Button
+                          autoFocus
+                          outline={true}
+                          tabIndex="0"
+                          aria-label={`Check out the configuration`}
+                          className="float-top padding-1 padding-right-3 padding-left-3 margin-2"
+                          onClick={() => checkoutStateHandler(true)}
+                          id="checkOutBTN"
+                          epa-testid="checkOutBTN"
+                          //508
+                          // ref={checkout ? activeFocusRef : null}
+                        >
+                          <CreateOutlined color="primary" /> {"Check Out"}
+                        </Button>
+                      ) : null}
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                  <Button
+                    type="button"
+                    className="margin-left-4"
+                    outline={true}
+                    title="Coming Soon"
+                  >
+                    View Comments
+                  </Button>
+                  {/* <Button type="button" className="margin-left-2" outline={true}>
+                  Reports
+                </Button> */}
+                </div>
+
+                <div className="grid-row">
+                  <DropdownSelection
+                    caption="Locations"
+                    orisCode={orisCode}
+                    options={locations}
+                    viewKey="name"
+                    selectKey="id"
+                    initialSelection={locationSelect[0]}
+                    selectionHandler={setLocationSelect}
+                  />
+                  <DropdownSelection
+                    caption="Sections"
+                    selectionHandler={setSectionSelect}
+                    options={sections}
+                    viewKey="name"
+                    selectKey="name"
+                    initialSelection={sectionSelect[0]}
+                    orisCode={orisCode}
+                  />
+                  <div className="">
+                    <div className="bottom-0 position-absolute padding-bottom-05">
+                      <Checkbox
+                        epa-testid="inactiveCheckBox"
+                        id="checkbox"
+                        name="checkbox"
+                        label="Show Inactive"
+                        checked={inactive[0]}
+                        disabled={inactive[1]}
+                        onChange={(e) =>
+                          setInactive([!inactive[0], inactive[1]], facility)
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="grid-col clearfix position-absolute top-1 right-0">
+            <div className="">
+              {checkoutState && user ? (
+                <div>
+                  <div className="padding-2 margin-left-10">
+                    {evalStatusText() === "Needs Evaluation" ? (
+                      <Button
+                        type="button"
+                        className="margin-right-2 margin-left-4 float-right"
+                        outline={false}
+                      >
+                        Evaluate
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+                    {showSubmit(evalStatus) ? (
+                      <Button
+                        type="button"
+                        className="margin-right-2 float-right"
+                        outline={false}
+                        title="Coming Soon"
+                      >
+                        Submit
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                  {showRevert(evalStatus) ? (
+                    <div className="margin-right-3 margin-top-2 float-right">
+                      <Button
+                        type="button"
+                        id="showRevertModal"
+                        className="float-right"
+                        onClick={() => setShowRevertModal(true)}
+                        outline={true}
+                      >
+                        {"Revert to Official Record"}
+                      </Button>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
               ) : (
                 ""
               )}
-              <span className="font-body-lg">{facilityMainName}</span>
-            </h3>
-            <div className="text-bold font-body-2xs">
-              {dataLoaded ? auditInformation : ""}
             </div>
-          </div>
-          <div className="">
-            <div className="display-inline-block ">
-              <div className="text-bold font-body-xl display-block height-auto">
-                {user && checkoutState && checkedOutByUser ? (
-                  <CreateOutlined color="primary" fontSize="large" />
-                ) : (
-                  ""
-                )}{" "}
-                {facilityAdditionalName}
-                {user ? (
-                  <div className="text-bold font-body-2xs display-inline-block ">
-                    {checkedOutByUser === true ? (
-                      <Button
-                        autoFocus
-                        outline={false}
-                        tabIndex="0"
-                        aria-label={`Check back in the configuration `}
-                        className=" padding-1 padding-right-3 padding-left-3 margin-2"
-                        onClick={() => checkoutStateHandler(false)}
-                        id="checkInBTN"
-                        epa-testid="checkInBTN"
+            {user ? (
+              <div className="grid-row padding-1 float-right text-right margin-right-3 margin-top-1 mobile:display-none desktop:display-block">
+                <table role="presentation">
+                  <tbody>
+                    <tr>
+                      <th className="padding-1">Evaluation Status: </th>
+                      <td
+                        className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
+                          evalStatus
+                        )}`}
                       >
-                        <LockOpenSharp /> {"Check Back In"}
-                      </Button>
-                    ) : checkedOutConfigs
-                        .map((location) => location["monPlanId"])
-                        .indexOf(selectedConfig.id) === -1 ? (
-                      <Button
-                        autoFocus
-                        outline={true}
-                        tabIndex="0"
-                        aria-label={`Check out the configuration`}
-                        className="float-top padding-1 padding-right-3 padding-left-3 margin-2"
-                        onClick={() => checkoutStateHandler(true)}
-                        id="checkOutBTN"
-                        epa-testid="checkOutBTN"
-                        //508
-                        // ref={checkout ? activeFocusRef : null}
-                      >
-                        <CreateOutlined color="primary" /> {"Check Out"}
-                      </Button>
-                    ) : null}
-                  </div>
-                ) : (
-                  ""
-                )}
-                <Button
-                  type="button"
-                  className="margin-left-4"
-                  outline={true}
-                  title="Coming Soon"
-                >
-                  View Comments
-                </Button>
-                {/* <Button type="button" className="margin-left-2" outline={true}>
-                  Reports
-                </Button> */}
-              </div>
-
-              <div className="grid-row">
-                <DropdownSelection
-                  caption="Locations"
-                  orisCode={orisCode}
-                  options={locations}
-                  viewKey="name"
-                  selectKey="id"
-                  initialSelection={locationSelect[0]}
-                  selectionHandler={setLocationSelect}
-                />
-                <DropdownSelection
-                  caption="Sections"
-                  selectionHandler={setSectionSelect}
-                  options={sections}
-                  viewKey="name"
-                  selectKey="name"
-                  initialSelection={sectionSelect[0]}
-                  orisCode={orisCode}
-                />
-                <div className="">
-                  <div className="bottom-0 position-absolute padding-bottom-05">
-                    <Checkbox
-                      epa-testid="inactiveCheckBox"
-                      id="checkbox"
-                      name="checkbox"
-                      label="Show Inactive"
-                      checked={inactive[0]}
-                      disabled={inactive[1]}
-                      onChange={(e) =>
-                        setInactive([!inactive[0], inactive[1]], facility)
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="grid-col clearfix position-absolute top-1 right-0">
-          <div className="">
-            {checkout && user ? (
-              <div>
-                <div className="padding-2 margin-left-10">
-                  {evalStatusText() === "Needs Evaluation" ? (
-                    <Button
-                      type="button"
-                      className="margin-right-2 margin-left-4 float-right"
-                      outline={false}
-                    >
-                      Evaluate
-                    </Button>
-                  ) : (
-                    ""
-                  )}
-                  {showSubmit(selectedConfig.evalStatusCode) ? (
-                    <Button
-                      type="button"
-                      className="margin-right-2 float-right"
-                      outline={false}
-                      title="Coming Soon"
-                    >
-                      Submit
-                    </Button>
-                  ) : (
-                    ""
-                  )}
-                </div>
-                {showRevert(selectedConfig.evalStatusCode) ? (
-                  <div className="margin-right-3 margin-top-2 float-right">
-                    <Button
-                      type="button"
-                      id="showRevertModal"
-                      className="float-right"
-                      onClick={() => setShowRevertModal(true)}
-                      outline={true}
-                    >
-                      {"Revert to Official Record"}
-                    </Button>
-                  </div>
-                ) : (
-                  ""
-                )}
+                        <button
+                          href
+                          style={
+                            showHyperLink(evalStatus)
+                              ? {
+                                  color: "#005EA2",
+                                  textDecoration: "underline",
+                                }
+                              : {
+                                  color: "black",
+                                  textDecoration: "none",
+                                  outline: "none",
+                                  cursor: "default",
+                                }
+                          }
+                          onClick={() => {
+                            showHyperLink(evalStatus)
+                              ? setShowEvalReport(true)
+                              : setShowEvalReport(false);
+                          }}
+                        >
+                          {evalStatusText(evalStatus)}
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th className="padding-1">Submission Status: </th>
+                      <td className="padding-1">Resubmission required</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             ) : (
               ""
             )}
           </div>
-          {user ? (
-            <div className="grid-row padding-1 float-right text-right margin-right-3 margin-top-1 mobile:display-none desktop:display-block">
-              <table role="presentation">
-                <tbody>
-                  <tr>
-                    <th className="padding-1">Evaluation Status: </th>
-                    <td
-                      className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle()}`}
-                    >
-                      <span
-                        href=""
-                        style={
-                          showHyperLink(selectedConfig.evalStatusCode)
-                            ? {
-                                color: "#005EA2",
-                                textDecoration: "underline",
-                              }
-                            : {
-                                color: "black",
-                                textDecoration: "none",
-                                outline: "none",
-                                cursor: "default",
-                              }
-                        }
-                        onClick={(e) => {
-                          e.preventDefault()(
-                            showHyperLink(selectedConfig.evalStatusCode)
-                              ? setShowEvalReport(true)
-                              : ""
-                          );
-                        }}
-                      >
-                        {evalStatusText()}
-                      </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th className="padding-1">Submission Status: </th>
-                    <td className="padding-1">Resubmission required</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            ""
-          )}
         </div>
-      </div>
+      ) : (
+        <p>"LOADING"</p>
+      )}
     </div>
   );
 };
