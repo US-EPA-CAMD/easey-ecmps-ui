@@ -56,6 +56,12 @@ export const HeaderInfo = ({
   const closeRevertModal = () => setShowRevertModal(false);
   const closeEvalReportModal = () => setShowEvalReport(false);
 
+  const [openIntervalId, setOpenIntervalId] = useState(null);
+  const delayInMilli = 1000;
+  const [evalStatus, setEvalStatus] = useState("");
+
+  const evalStatuses = ["ERR", "EVAL", "INFO", "PASS", "INQ", "WIP"];
+
   const isCheckedOut = () => {
     return (
       checkedOutConfigs
@@ -67,9 +73,11 @@ export const HeaderInfo = ({
   const [checkoutState, setCheckoutState] = useState(checkout);
 
   useEffect(() => {
-    setCheckoutState(checkout);
+    // setCheckoutState(checkout);
 
     if (!dataLoaded) {
+      const currentEvalStatus = selectedConfig.evalStatusCode;
+
       // obtain checked-out configurations
       mpApi.getCheckedOutLocations().then((res) => {
         // extract checked-out configs from response
@@ -98,24 +106,94 @@ export const HeaderInfo = ({
               updateDate: info.data.updateDate,
             };
             // afterwards, set checkedOutByUser and auditInformation states, then update table
-            setCheckedOutByUser(isCheckedOutByUser(configs));
-            setAuditInformation(createAuditMessage(checkout, currentConfig));
-            setDataLoaded(true);
+            console.log("if");
+            renderWithNewData(
+              configs,
+              checkout,
+              currentConfig,
+              currentEvalStatus
+            );
           });
         } else {
           // if we already have config info, set these states and update table right away
-          setCheckedOutByUser(isCheckedOutByUser(configs));
-          setAuditInformation(createAuditMessage(checkout, currentConfig));
-          setDataLoaded(true);
+          console.log("else");
+
+          renderWithNewData(
+            configs,
+            checkout,
+            currentConfig,
+            currentEvalStatus
+          );
         }
       });
     }
+
+    return () => {
+      clearOpenRefreshInterval();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkout, dataLoaded]);
+  }, [checkout, dataLoaded, evalStatus]);
 
   // const test = () => {
   //   setShowEvalReport(true);
   // };
+
+  const clearOpenRefreshInterval = () => {
+    if (openIntervalId) {
+      console.log("clearing interval with ID of: ", openIntervalId);
+      clearInterval(openIntervalId);
+    }
+  };
+
+  const startRefreshTimer = (currentEvalStatus) => {
+    // if we already have a refresh interval open
+    if (openIntervalId) {
+      // get rid of it and clear the id state
+      clearInterval(openIntervalId);
+      setOpenIntervalId(null);
+    }
+
+    const intervalId = setInterval(() => {
+      // check if status changed
+      //
+      //    retrieve returnedEvalStatus
+      console.log("get current evaluation status from database");
+      const random = Math.floor(Math.random() * 5);
+      const returnedEvalStatus = evalStatuses[random];
+
+      // if status changed (returnedEvalStatus !=== evalStatus)
+      //
+      //    set eval status to new value and reload data
+      if (returnedEvalStatus !== currentEvalStatus) {
+        console.log(
+          "Changing from status " +
+            currentEvalStatus +
+            " to " +
+            returnedEvalStatus
+        );
+        setEvalStatus(evalStatus);
+      }
+
+      // if data is the same (returned data === evalStatus)
+      //
+      //    do nothing -- let the interval loop continue as is
+    }, delayInMilli);
+
+    return intervalId;
+  };
+
+  const renderWithNewData = (
+    configs,
+    checkout,
+    currentConfig,
+    currentEvalStatus
+  ) => {
+    console.log(startRefreshTimer(currentEvalStatus));
+    setCheckedOutByUser(isCheckedOutByUser(configs));
+    setAuditInformation(createAuditMessage(checkout, currentConfig));
+    setEvalStatus(currentEvalStatus);
+    setDataLoaded(true);
+  };
 
   const findCurrentlyCheckedOutByInfo = (configs) => {
     return configs[
@@ -129,9 +207,9 @@ export const HeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-      configs
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id)
+        configs
+          .map((location) => location["monPlanId"])
+          .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -246,8 +324,9 @@ export const HeaderInfo = ({
     if (inWorkspace) {
       // when config is checked out by someone
       if (checkedOut) {
-        return `Currently checked-out by: ${currentConfig["checkedOutBy"]
-          } ${formatDate(currentConfig["checkedOutOn"])}`;
+        return `Currently checked-out by: ${
+          currentConfig["checkedOutBy"]
+        } ${formatDate(currentConfig["checkedOutOn"])}`;
       }
       // when config is not checked out
       return `Last updated by: ${currentConfig.userId} ${formatDate(
@@ -267,8 +346,9 @@ export const HeaderInfo = ({
   return (
     <div className="header">
       <div
-        className={`usa-overlay ${showRevertModal || showEvalReport ? "is-visible" : ""
-          } `}
+        className={`usa-overlay ${
+          showRevertModal || showEvalReport ? "is-visible" : ""
+        } `}
       />
       {showRevertModal ? (
         <Modal
@@ -294,9 +374,7 @@ export const HeaderInfo = ({
           show={showEvalReport}
           close={closeEvalReportModal}
           showSave={false}
-          children={
-            <MonitoringPlanEvaluationReport />
-          }
+          children={<MonitoringPlanEvaluationReport />}
         />
       ) : null}
       <div className="grid-row clearfix position-relative">
@@ -340,8 +418,8 @@ export const HeaderInfo = ({
                         <LockOpenSharp /> {"Check Back In"}
                       </Button>
                     ) : checkedOutConfigs
-                      .map((location) => location["monPlanId"])
-                      .indexOf(selectedConfig.id) === -1 ? (
+                        .map((location) => location["monPlanId"])
+                        .indexOf(selectedConfig.id) === -1 ? (
                       <Button
                         autoFocus
                         outline={true}
@@ -351,8 +429,8 @@ export const HeaderInfo = ({
                         onClick={() => checkoutStateHandler(true)}
                         id="checkOutBTN"
                         epa-testid="checkOutBTN"
-                      //508
-                      // ref={checkout ? activeFocusRef : null}
+                        //508
+                        // ref={checkout ? activeFocusRef : null}
                       >
                         <CreateOutlined color="primary" /> {"Check Out"}
                       </Button>
@@ -475,15 +553,15 @@ export const HeaderInfo = ({
                         style={
                           showHyperLink(selectedConfig.evalStatusCode)
                             ? {
-                              color: "#005EA2",
-                              textDecoration: "underline",
-                            }
+                                color: "#005EA2",
+                                textDecoration: "underline",
+                              }
                             : {
-                              color: "black",
-                              textDecoration: "none",
-                              outline: "none",
-                              cursor: "default",
-                            }
+                                color: "black",
+                                textDecoration: "none",
+                                outline: "none",
+                                cursor: "default",
+                              }
                         }
                         onClick={(e) => {
                           e.preventDefault()(
