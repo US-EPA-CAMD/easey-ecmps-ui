@@ -9,7 +9,6 @@ import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
 import RuleEditor from "../RuleEditor/RuleEditor";
 import Login from "../Login/Login";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
-import TagManager from "react-gtm-module";
 
 import { handleActiveElementFocus } from "../../additional-functions/add-active-class";
 import FAQ from "../FAQ/FAQ";
@@ -25,18 +24,6 @@ const App = () => {
   const [user, setUser] = useState(false);
   const [expired, setExpired] = useState(false);
   const [resetTimer, setResetTimer] = useState(false);
-
-  useEffect(() => {
-    if(config.app.googleAnalyticsEnabled === 'true'){
-      const tagManagerArgs = {
-        gtmId: config.app.googleAnalyticsContainerId
-      }
-    
-      console.log("Activating Google Tag Manager");
-    
-      TagManager.initialize(tagManagerArgs);
-    }
-  }, [])
 
   useEffect(() => {
     const cdxUser = sessionStorage.getItem("cdx_user")
