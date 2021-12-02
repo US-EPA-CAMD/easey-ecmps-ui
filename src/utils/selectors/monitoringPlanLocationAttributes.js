@@ -21,8 +21,6 @@ export const getMonitoringPlansLocationAttributeRecords = (totalData) => {
       ? formatStringToDate(el.beginDate.toString())
       : "";
     const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
-
-    console.log("EL", el);
     records.push({
       col1: ductIndicator,
       col2: bypassIndicator,
