@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
-import TagManager from "react-gtm-module";
 
 //import { createStore, applyMiddleware, combineReducers } from "redux";
 //import thunk from "redux-thunk";
@@ -15,16 +14,6 @@ import * as serviceWorker from "./serviceWorker";
 
 const store = configureStore();
 
-if(config.app.googleAnalyticsEnabled === 'true'){
-  const tagManagerArgs = {
-    gtmId: config.app.googleAnalyticsContainerId
-  }
-
-  console.log("Activating Google Tag Manager");
-
-  TagManager.initialize(tagManagerArgs);
-}
-
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
@@ -35,6 +24,7 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
+
 
 document.title = config.app.title;
 

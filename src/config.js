@@ -9,8 +9,9 @@ export const config = {
   app: {
     activityEvents,
     apiKey: process.env.REACT_APP_API_KEY || "PXPWlQGB3wKXotkWN1PbSwbSoM7CoWW0ZMPWYtfc",
-    googleAnalyticsEnabled: process.env.REACT_APP_GOOGLE_ANALYTICS_ENABLED || 'false',
-    googleAnalyticsContainerId: process.env.REACT_APP_GOOGLE_ANALYTICS_CONTAINER_ID || '',
+    googleAnalyticsEnabled: process.env.REACT_APP_GOOGLE_ANALYTICS_ENABLED || 'true',
+    googleAnalyticsPublicContainerId: process.env.REACT_APP_GOOGLE_ANALYTICS_PUBLIC_CONTAINER_ID || 'GTM-TT724Q9',
+    googleAnalyticsAuthenticatedContainerId: process.env.REACT_APP_GOOGLE_ANALYTICS_AUTHENTICATED_CONTAINER_ID || 'GTM-K3SJXHM',
     refreshTokenRate:
       process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_TOKEN_RATE_MINUTES *
         oneMinute || 1 * oneMinute, // Change ME
