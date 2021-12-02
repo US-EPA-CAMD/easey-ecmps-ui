@@ -17,7 +17,7 @@ const Layout = (props) => {
     React.cloneElement(child)
   );
   return (
-    <div>
+    <div className="react-transition fade-in padding-bottom-5">
       <Link className="skip-to-content-link" href={"#main"}>
         Skip to content
       </Link>
@@ -30,7 +30,12 @@ const Layout = (props) => {
       </div>
       <div className="grid-row">
         <div className="grid-col-2 bg-base-lightest display-none desktop-lg:display-block widescreen:display-block">
-          <LeftNavigation user={props.user} logOut={props.logOut} currentLink={props.currentLink} setCurrentLink={props.setCurrentLink}/>
+          <LeftNavigation
+            user={props.user}
+            logOut={props.logOut}
+            currentLink={props.currentLink}
+            setCurrentLink={props.setCurrentLink}
+          />
         </div>
         <div className="grid-col margin-x-2 minh-tablet-lg" id="main">
           <main id="main">{childrenWithProps} </main>
