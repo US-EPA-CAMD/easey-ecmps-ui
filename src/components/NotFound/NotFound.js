@@ -1,10 +1,9 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 const NotFound = () => {
-
   useEffect(() => {
     document.title = "ECMPS Not Found";
-    }, [])
+  }, []);
   return (
     <div className="minh-tablet-lg react-transition fade-in">
       <div className="text-center">
