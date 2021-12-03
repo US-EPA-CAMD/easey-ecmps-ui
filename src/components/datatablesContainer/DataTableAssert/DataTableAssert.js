@@ -27,6 +27,7 @@ export const DataTableAssert = ({
   settingInactiveCheckBox,
   revertedState,
   setRevertedState,
+  nonEditable,
 
   pagination,
   filter,
@@ -274,6 +275,7 @@ export const DataTableAssert = ({
         actionsBtn={"View"}
         checkout={checkout}
         user={user}
+        nonEditable={nonEditable}
         addBtn={openModal}
         addBtnName={`Create ${dataTableName}`}
         setViewBtn={setViewBtn}
@@ -285,8 +287,9 @@ export const DataTableAssert = ({
           show={show}
           close={closeModalHandler}
           save={createNewData ? createData : saveData}
-          showCancel={!(user && checkout)}
-          showSave={user && checkout}
+          showCancel={!(user && checkout) || nonEditable}
+          showSave={user && checkout && !nonEditable}
+          nonEditable={nonEditable}
           title={createNewData ? `Create ${dataTableName}` : `${dataTableName}`}
           exitBTN={createNewData ? `Create ${dataTableName}` : `Save and Close`}
           children={
@@ -296,7 +299,7 @@ export const DataTableAssert = ({
                 data={selectedModalData}
                 cols={2}
                 title={`${dataTableName}`}
-                viewOnly={!(user && checkout)}
+                viewOnly={!(user && checkout) || nonEditable}
                 create={createNewData}
               />
             </div>
