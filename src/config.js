@@ -8,10 +8,10 @@ activityEvents.push("keydown");
 export const config = {
   app: {
     activityEvents,
-    apiKey: process.env.REACT_APP_ECMPS_API_KEY,
+    apiKey: process.env.REACT_APP_ECMPS_API_KEY || '',
     googleAnalyticsEnabled: process.env.REACT_APP_GOOGLE_ANALYTICS_ENABLED || 'false',
-    googleAnalyticsPublicContainerId: process.env.REACT_APP_GOOGLE_ANALYTICS_PUBLIC_CONTAINER_ID || 'GTM-TT724Q9',
-    googleAnalyticsAuthenticatedContainerId: process.env.REACT_APP_GOOGLE_ANALYTICS_AUTHENTICATED_CONTAINER_ID || 'GTM-K3SJXHM',
+    googleAnalyticsPublicContainerId: process.env.REACT_APP_GOOGLE_ANALYTICS_PUBLIC_CONTAINER_ID || '',
+    googleAnalyticsAuthenticatedContainerId: process.env.REACT_APP_GOOGLE_ANALYTICS_AUTHENTICATED_CONTAINER_ID || '',
     refreshTokenRate:
       process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_TOKEN_RATE_MINUTES *
         oneMinute || 1 * oneMinute, // Change ME
