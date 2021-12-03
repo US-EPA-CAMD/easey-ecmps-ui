@@ -32,7 +32,7 @@ export const DataTableAssert = ({
   filter,
   controlInputs,
   controlDatePickerInputs,
-  radioName,
+  radioNames,
   payload,
   urlParameters,
   columnNames,
@@ -88,9 +88,10 @@ export const DataTableAssert = ({
     const userInput = extractUserInput(
       payload,
       ".modalUserInput",
-      radioName ? radioName : null
+      radioNames ? radioNames : null
     );
 
+    console.log('radioNames',radioNames)
     assertSelector
       .saveDataSwitch(
         userInput,
@@ -108,7 +109,7 @@ export const DataTableAssert = ({
     const userInput = extractUserInput(
       payload,
       ".modalUserInput",
-      radioName ? radioName : null
+      radioNames ? radioNames : null
     );
 
     assertSelector

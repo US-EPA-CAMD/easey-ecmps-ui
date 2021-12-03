@@ -1,19 +1,14 @@
-import React from 'react'
-import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-import NotFound from './NotFound'
-import { Link } from 'react-router-dom'
-configure ( { adapter: new Adapter() });
-
-describe('<NotFound/>', () => {
-
-    let wrapper ;
-    beforeEach(() => {
-       wrapper = shallow(<NotFound/>);
-    });
-
-    it('should take user to a "page not found" with a link to return to home, returns 1 <link> element' , () => {
-        expect(wrapper.find(Link)).toHaveLength(1);
-    });
-
+import React from "react";
+import NotFound from "./NotFound";
+import { render } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
+describe("<NotFound/>", () => {
+  test('should take user to a "not found" page', () => {
+    const { container } = render(
+      <BrowserRouter>
+        <NotFound />
+      </BrowserRouter>
+    );
+    expect(container).toBeDefined();
+  });
 });

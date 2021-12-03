@@ -29,7 +29,13 @@ const ModalDetails = ({
     assignAriaLabelsToDatePickerButtons();
   }, []);
 
-  console.log('data',data,modalData)
+  console.log('data', modalData,
+  data,
+  cols,
+  title,
+  viewOnly,
+  backBtn,
+  create,)
   // fixes rare instances where there is an enddate but no end time
   if (
     data.hasOwnProperty("endDate") &&
@@ -238,6 +244,7 @@ const ModalDetails = ({
           if (!create) {
             row.push(makeViewOnlyComp(value));
           } else {
+
             row.push(makeViewOnlyComp([false, false, false, false, false]));
           }
         } else {
@@ -248,7 +255,6 @@ const ModalDetails = ({
   }
   items.push(row);
 
-  console.log("ITEMS", items);
   return (
     <div className=" padding-top-0 systemsCompTable">
       <div className="grid-container margin-bottom-2">
