@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Checkbox } from "@trussworks/react-uswds";
 import { CreateOutlined, LockOpenSharp, LockSharp } from "@material-ui/icons";
 import config from "../../config";
+import { triggerEvaluation } from "../../utils/api/quartzApi";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import Modal from "../Modal/Modal";
@@ -146,7 +147,7 @@ export const HeaderInfo = ({
         setEvalStatus(databaseStatus);
         setEvalStatusLoaded(true);
 
-        console.log("Refreshed evaluation status successfully.");
+        console.log("Refreshed evaluation status to: ", databaseStatus);
       });
     }, delayInSeconds);
 
@@ -165,7 +166,7 @@ export const HeaderInfo = ({
 
   const findCurrentlyCheckedOutByInfo = (configs) => {
     return configs[
-      configs.map((config) => config["monPlanId"]).indexOf(selectedConfig.id)
+      configs.map((con) => con["monPlanId"]).indexOf(selectedConfig.id)
     ];
   };
 
@@ -209,8 +210,8 @@ export const HeaderInfo = ({
   };
 
   // chooses correctly styling for evaluation status label
-  const evalStatusStyle = (evalStatus) => {
-    switch (evalStatus) {
+  const evalStatusStyle = (status) => {
+    switch (status) {
       case "ERR":
       case "EVAL":
         return "usa-alert--warning";
@@ -227,8 +228,8 @@ export const HeaderInfo = ({
   };
 
   // returns evaluation status (full text) from code
-  const evalStatusText = (evalStatus) => {
-    switch (evalStatus) {
+  const evalStatusText = (status) => {
+    switch (status) {
       case "ERR":
         return "Critical Errors";
       case "INFO":
@@ -283,6 +284,22 @@ export const HeaderInfo = ({
       setRevertedState(true);
       setShowRevertModal(false);
     });
+  };
+
+  const evaluate = () => {
+    triggerEvaluation({
+      monitorPlanId: configID,
+      userId: user.userId,
+      userEmail: user.email,
+    })
+      .then(() => {
+        // Change front-end to display "In Queue" status after starting eval
+        setEvalStatus("INQ");
+        setEvalStatusLoaded(true);
+      })
+      .catch((error) => {
+        console.log("Error occurred: ", error);
+      });
   };
 
   // Create audit message for header info
@@ -466,6 +483,7 @@ export const HeaderInfo = ({
                         type="button"
                         className="margin-right-2 margin-left-4 float-right"
                         outline={false}
+                        onClick={evaluate}
                       >
                         Evaluate
                       </Button>
