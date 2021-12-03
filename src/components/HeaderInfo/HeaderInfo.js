@@ -8,6 +8,7 @@ import Modal from "../Modal/Modal";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 import "./HeaderInfo.scss";
 import MonitoringPlanEvaluationReport from "../MonitoringPlanEvaluationReport/MonitoringPlanEvaluationReport";
+import { Preloader } from "../Preloader/Preloader";
 
 export const HeaderInfo = ({
   facility,
@@ -57,29 +58,22 @@ export const HeaderInfo = ({
   const closeRevertModal = () => setShowRevertModal(false);
   const closeEvalReportModal = () => setShowEvalReport(false);
 
+  const [checkoutState, setCheckoutState] = useState(checkout);
+
+  // refreshing evaluation status
   const delayInSeconds = config.app.refreshEvalStatusRate;
   const [openIntervalId, setOpenIntervalId] = useState(null);
   const [evalStatus, setEvalStatus] = useState("");
   const [evalStatusLoaded, setEvalStatusLoaded] = useState(false);
 
-  const evalStatuses = ["ERR", "EVAL", "INFO", "PASS", "INQ", "WIP"];
-
-  const isCheckedOut = () => {
-    return (
-      checkedOutConfigs
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id) > -1
-    );
-  };
-
-  const [checkoutState, setCheckoutState] = useState(checkout);
-
   useEffect(() => {
     // get evaluation status
     if (!evalStatusLoaded) {
-      const status = getEvalStatus();
-      setEvalStatus(status);
-      setEvalStatusLoaded(true);
+      mpApi.getConfigInfo(configID).then((res) => {
+        const status = res.data.evalStatusCode;
+        setEvalStatus(status);
+        setEvalStatusLoaded(true);
+      });
     }
 
     // then load the rest of the data
@@ -103,7 +97,7 @@ export const HeaderInfo = ({
 
         // if not, obtain it from the database
         if (!currentConfig) {
-          mpApi.getConfigInfo(selectedConfig.id).then((info) => {
+          mpApi.getConfigInfo(configID).then((info) => {
             currentConfig = {
               userId: info.data.userId,
               updateDate: info.data.updateDate,
@@ -118,8 +112,8 @@ export const HeaderInfo = ({
 
     // clear open intervals when a different page is loaded
     return () => {
-      if (evalStatusLoaded && dataLoaded) {
-        console.log("leaving monitor plan page...");
+      if (dataLoaded && evalStatusLoaded) {
+        console.log("leaving monitor plan page (or checked-out/in config)...");
         clearOpenRefreshInterval();
       }
     };
@@ -133,15 +127,6 @@ export const HeaderInfo = ({
     }
   };
 
-  // temp: random evaluation status returned
-  const getEvalStatus = () => {
-    console.log("get current evaluation status from database");
-    const random = Math.floor(Math.random() * 5);
-    console.log("random number: ", random);
-    const returnedEvalStatus = evalStatuses[random];
-    return returnedEvalStatus;
-  };
-
   const startRefreshTimer = () => {
     // if we already have a refresh interval open (this shouldn't happen, but just in case)
     if (openIntervalId) {
@@ -151,14 +136,18 @@ export const HeaderInfo = ({
     }
 
     const intervalId = setInterval(() => {
-      // get current statuses in state and database
-      const currentEvalStatus = evalStatus;
-      const returnedEvalStatus = getEvalStatus();
+      // TO-DO: only update this state if the current state is different from database
+      //      - need to look into how to read an updating state in a setInterval
+      //      - (might use separate useEffect or useInterval hook)
 
-      // if statuses are different, set eval status to new value
-      if (returnedEvalStatus !== currentEvalStatus) {
-        setEvalStatus(returnedEvalStatus);
-      }
+      // get current status in database
+      mpApi.getConfigInfo(configID).then((res) => {
+        const databaseStatus = res.data.evalStatusCode;
+        setEvalStatus(databaseStatus);
+        setEvalStatusLoaded(true);
+
+        console.log("Refreshed evaluation status successfully.");
+      });
     }, delayInSeconds);
 
     return intervalId;
@@ -190,6 +179,14 @@ export const HeaderInfo = ({
           .map((location) => location["monPlanId"])
           .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
+    );
+  };
+
+  const isCheckedOut = () => {
+    return (
+      checkedOutConfigs
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id) > -1
     );
   };
 
@@ -380,7 +377,6 @@ export const HeaderInfo = ({
                     <div className="text-bold font-body-2xs display-inline-block ">
                       {checkedOutByUser === true ? (
                         <Button
-                          unstyled="true"
                           autoFocus
                           outline={false}
                           tabIndex="0"
@@ -465,7 +461,7 @@ export const HeaderInfo = ({
               {checkoutState && user ? (
                 <div>
                   <div className="padding-2 margin-left-10">
-                    {evalStatusText() === "Needs Evaluation" ? (
+                    {evalStatusText(evalStatus) === "Needs Evaluation" ? (
                       <Button
                         type="button"
                         className="margin-right-2 margin-left-4 float-right"
@@ -549,7 +545,7 @@ export const HeaderInfo = ({
           </div>
         </div>
       ) : (
-        <p>"LOADING"</p>
+        <Preloader />
       )}
     </div>
   );
