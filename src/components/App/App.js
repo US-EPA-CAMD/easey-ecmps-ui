@@ -1,6 +1,7 @@
 // import "../../additional-functions/wdyr";
 import React, { useState, useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
+import TagManager from "react-gtm-module";
 import ComingSoon from "../ComingSoon/ComingSoon";
 import NotFound from "../NotFound/NotFound";
 import AboutHome from "../AboutHome/AboutHome";
@@ -9,7 +10,6 @@ import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
 import RuleEditor from "../RuleEditor/RuleEditor";
 import Login from "../Login/Login";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
-import TagManager from "react-gtm-module";
 
 import { handleActiveElementFocus } from "../../additional-functions/add-active-class";
 import FAQ from "../FAQ/FAQ";
@@ -28,15 +28,17 @@ const App = () => {
 
   useEffect(() => {
     if(config.app.googleAnalyticsEnabled === 'true'){
-      const tagManagerArgs = {
-        gtmId: config.app.googleAnalyticsContainerId
+      let tagManagerArgs = {gtmId: ''};
+      if(window.location.href.search("workspace") === -1){
+        tagManagerArgs.gtmId = config.app.googleAnalyticsPublicContainerId;
       }
-    
-      console.log("Activating Google Tag Manager");
-    
+      else{
+        tagManagerArgs.gtmId = config.app.googleAnalyticsAuthenticatedContainerId;
+      }
+          
       TagManager.initialize(tagManagerArgs);
-    }
-  }, [])
+    }    
+  });
 
   useEffect(() => {
     const cdxUser = sessionStorage.getItem("cdx_user")
