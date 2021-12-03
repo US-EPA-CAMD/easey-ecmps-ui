@@ -2,7 +2,6 @@ import axios from "axios";
 import { handleResponse, handleError } from "./apiUtils";
 import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
-import { ContactlessOutlined } from "@material-ui/icons";
 
 axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
