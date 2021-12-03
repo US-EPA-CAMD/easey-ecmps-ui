@@ -1,4 +1,5 @@
 export const extractUserInput = (payload, inputSelector, radios) => {
+  console.log('RADIOS',radios)
   // *** construct payload
   const payloadInputs = document.querySelectorAll(inputSelector);
   const datepickerPayloads = document.querySelectorAll(
@@ -27,7 +28,7 @@ export const extractUserInput = (payload, inputSelector, radios) => {
     payloadArray.push(item);
   });
 
-  if (radios) {
+  if (radios ) {
     radioPayload = document.querySelectorAll(".usa-radio");
     let counter = 0;
 
@@ -38,9 +39,10 @@ export const extractUserInput = (payload, inputSelector, radios) => {
         item.value =
           button.firstElementChild.defaultValue === "Yes" ? "1" : "0";
         payloadArray.push(item);
-        counter++;
+        counter++;console.log('button',item)
       }
     }
+    
   }
 
   payloadArray.forEach((item) => {

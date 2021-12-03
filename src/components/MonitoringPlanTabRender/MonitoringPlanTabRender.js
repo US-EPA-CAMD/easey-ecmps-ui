@@ -154,7 +154,7 @@ export const MonitoringPlanTabRender = ({
                 "controlDatePickerInputs"
               ]
             }
-            radioName="secondNormalIndicator"
+            radioNames={["secondNormalIndicator"]}
             dataTableName={"Load"}
             revertedState={revertedState}
             setRevertedState={setRevertedState}
@@ -187,7 +187,7 @@ export const MonitoringPlanTabRender = ({
                 "controlDatePickerInputs"
               ]
             }
-            radioName="secondNormalIndicator"
+            radioNames={["ductIndicator","bypassIndicator"]}
             dataTableName={"Location Attribute"}
             revertedState={revertedState}
             setRevertedState={setRevertedState}
@@ -218,7 +218,7 @@ export const MonitoringPlanTabRender = ({
                 "controlDatePickerInputs"
               ]
             }
-            radioName={[]}
+            radioNames={[]}
             dataTableName={"Relationship Data"}
             revertedState={revertedState}
             setRevertedState={setRevertedState}
@@ -376,7 +376,7 @@ export const MonitoringPlanTabRender = ({
               )["urlParameters"]
             }
             dataTableName={"Unit Fuel"}
-            radioName={["ozoneSeasonIndicator"]}
+            radioNames={["ozoneSeasonIndicator"]}
             checkout={checkout}
             user={user}
             inactive={inactive}
