@@ -74,54 +74,48 @@ export const HeaderInfo = ({
   const [checkoutState, setCheckoutState] = useState(checkout);
 
   useEffect(() => {
-    // setCheckoutState(checkout);
-
+    // get evaluation status
     if (!evalStatusLoaded) {
       const status = getEvalStatus();
       setEvalStatus(status);
       setEvalStatusLoaded(true);
     }
 
+    // then load the rest of the data
     if (evalStatusLoaded && !dataLoaded) {
       let currentCheckoutStatus = checkout;
 
-      // obtain checked-out configurations
       mpApi.getCheckedOutLocations().then((res) => {
-        // extract checked-out configs from response
-        const configs = res.data;
+        // get info for current checked-out configs, checkout status, date
         setCheckedOutConfigs(configs);
-
-        // get current date information
+        const configs = res.data;
         let currDate = new Date(Date.now());
         currDate.setDate(currDate.getDate() - 1);
 
-        // syncing checkout state with database
-        if (findCurrentlyCheckedOutByInfo(configs)) {
+        // get selected config information...
+        let currentConfig = findCurrentlyCheckedOutByInfo(configs);
+
+        // from checkouts table (if available)
+        if (currentConfig) {
           currentCheckoutStatus = true;
         }
 
-        // obtain current config info from last save or checkouts table
-        let currentConfig = findCurrentlyCheckedOutByInfo(configs);
-
-        // if config info is blank, then retrieve the info from the database
+        // if not, obtain it from the database
         if (!currentConfig) {
-          // GET selected config info API call
           mpApi.getConfigInfo(selectedConfig.id).then((info) => {
             currentConfig = {
               userId: info.data.userId,
               updateDate: info.data.updateDate,
             };
-            // afterwards, load new data onto page
             renderWithNewData(configs, currentConfig, currentCheckoutStatus);
           });
-
-          // if we already have config info, load data onto page
         } else {
           renderWithNewData(configs, currentConfig, currentCheckoutStatus);
         }
       });
     }
 
+    // clear open intervals when a different page is loaded
     return () => {
       if (evalStatusLoaded && dataLoaded) {
         console.log("leaving monitor plan page...");
@@ -137,6 +131,7 @@ export const HeaderInfo = ({
     }
   };
 
+  // temp: random evaluation status returned
   const getEvalStatus = () => {
     console.log("get current evaluation status from database");
     const random = Math.floor(Math.random() * 5);
@@ -157,16 +152,14 @@ export const HeaderInfo = ({
 
     console.log("executing setInterval function");
     let returnedEvalStatus = "";
+
     const intervalId = setInterval(() => {
       let currentEvalStatus = getEvalStatus();
-      // check if status changed
-      //
-      //    retrieve returnedEvalStatus
+
+      // check if status changed, retrieve returnedEvalStatus
       returnedEvalStatus = getEvalStatus();
 
-      // if status changed (returnedEvalStatus !=== evalStatus)
-      //
-      //    set eval status to new value and reload data
+      // if status changed, set eval status to new value and reload data
       if (returnedEvalStatus !== currentEvalStatus) {
         console.log(
           "Changing from status " +
@@ -178,10 +171,6 @@ export const HeaderInfo = ({
       } else {
         console.log("Status stayed the same: ", returnedEvalStatus);
       }
-
-      // if data is the same (returned data === evalStatus)
-      //
-      //    do nothing -- let the interval loop continue as is
     }, delayInMilli);
 
     console.log("end of refresh timer function");
@@ -289,13 +278,6 @@ export const HeaderInfo = ({
       status === "EVAL"
     );
   };
-
-  // 508
-  //   const activeFocusRef = useRef(null);
-  //   useEffect(() => {
-  //     if (activeFocusRef.current) {
-  //       activeFocusRef.current.focus();
-  // }}, [checkout]);
 
   // direction -> false = check back in
   // true = check out
@@ -435,8 +417,6 @@ export const HeaderInfo = ({
                           onClick={() => checkoutStateHandler(true)}
                           id="checkOutBTN"
                           epa-testid="checkOutBTN"
-                          //508
-                          // ref={checkout ? activeFocusRef : null}
                         >
                           <CreateOutlined color="primary" /> {"Check Out"}
                         </Button>
@@ -453,9 +433,6 @@ export const HeaderInfo = ({
                   >
                     View Comments
                   </Button>
-                  {/* <Button type="button" className="margin-left-2" outline={true}>
-                  Reports
-                </Button> */}
                 </div>
 
                 <div className="grid-row">
