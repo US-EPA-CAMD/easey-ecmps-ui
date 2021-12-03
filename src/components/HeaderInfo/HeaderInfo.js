@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Checkbox } from "@trussworks/react-uswds";
 import { CreateOutlined, LockOpenSharp, LockSharp } from "@material-ui/icons";
+import config from "../../config";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import Modal from "../Modal/Modal";
@@ -56,8 +57,8 @@ export const HeaderInfo = ({
   const closeRevertModal = () => setShowRevertModal(false);
   const closeEvalReportModal = () => setShowEvalReport(false);
 
+  const delayInSeconds = config.app.refreshEvalStatusRate;
   const [openIntervalId, setOpenIntervalId] = useState(null);
-  const delayInMilli = 5000;
   const [evalStatus, setEvalStatus] = useState("");
   const [evalStatusLoaded, setEvalStatusLoaded] = useState(false);
 
@@ -87,8 +88,8 @@ export const HeaderInfo = ({
 
       mpApi.getCheckedOutLocations().then((res) => {
         // get info for current checked-out configs, checkout status, date
-        setCheckedOutConfigs(configs);
         const configs = res.data;
+        setCheckedOutConfigs(configs);
         let currDate = new Date(Date.now());
         currDate.setDate(currDate.getDate() - 1);
 
@@ -128,6 +129,7 @@ export const HeaderInfo = ({
   const clearOpenRefreshInterval = () => {
     if (openIntervalId) {
       clearInterval(openIntervalId);
+      console.log("STOPPED refresh interval with ID: ", openIntervalId);
     }
   };
 
@@ -141,46 +143,30 @@ export const HeaderInfo = ({
   };
 
   const startRefreshTimer = () => {
-    console.log("start of refresh timer function");
-    // if we already have a refresh interval open
+    // if we already have a refresh interval open (this shouldn't happen, but just in case)
     if (openIntervalId) {
       // get rid of it and clear the id state
       clearInterval(openIntervalId);
       setOpenIntervalId(null);
-      console.log("cleaning up last interval");
     }
 
-    console.log("executing setInterval function");
-    let returnedEvalStatus = "";
-
     const intervalId = setInterval(() => {
-      let currentEvalStatus = getEvalStatus();
+      // get current statuses in state and database
+      const currentEvalStatus = evalStatus;
+      const returnedEvalStatus = getEvalStatus();
 
-      // check if status changed, retrieve returnedEvalStatus
-      returnedEvalStatus = getEvalStatus();
-
-      // if status changed, set eval status to new value and reload data
+      // if statuses are different, set eval status to new value
       if (returnedEvalStatus !== currentEvalStatus) {
-        console.log(
-          "Changing from status " +
-            currentEvalStatus +
-            " to " +
-            returnedEvalStatus
-        );
         setEvalStatus(returnedEvalStatus);
-      } else {
-        console.log("Status stayed the same: ", returnedEvalStatus);
       }
-    }, delayInMilli);
-
-    console.log("end of refresh timer function");
+    }, delayInSeconds);
 
     return intervalId;
   };
 
   const renderWithNewData = (configs, currentConfig, currentCheckoutStatus) => {
     const intervalId = startRefreshTimer();
-    console.log(intervalId);
+    console.log("STARTED refresh interval with ID: ", intervalId);
     setOpenIntervalId(intervalId);
     setCheckedOutByUser(isCheckedOutByUser(configs));
     setAuditInformation(createAuditMessage(checkout, currentConfig));
@@ -394,6 +380,7 @@ export const HeaderInfo = ({
                     <div className="text-bold font-body-2xs display-inline-block ">
                       {checkedOutByUser === true ? (
                         <Button
+                          unstyled="true"
                           autoFocus
                           outline={false}
                           tabIndex="0"
@@ -534,19 +521,10 @@ export const HeaderInfo = ({
                         )}`}
                       >
                         <button
-                          href
-                          style={
+                          className={
                             showHyperLink(evalStatus)
-                              ? {
-                                  color: "#005EA2",
-                                  textDecoration: "underline",
-                                }
-                              : {
-                                  color: "black",
-                                  textDecoration: "none",
-                                  outline: "none",
-                                  cursor: "default",
-                                }
+                              ? "hyperlink-btn"
+                              : "unstyled-btn"
                           }
                           onClick={() => {
                             showHyperLink(evalStatus)
