@@ -308,6 +308,6 @@ describe("DataTableAssert", () => {
     );
     const val = 1;
     expect(val === 1);
-    fireEvent.click(container.querySelector("#testBtn"));
+   
   });
 });
