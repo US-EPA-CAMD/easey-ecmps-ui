@@ -469,7 +469,6 @@ export const DataTableSystems = ({
   };
 
   const saveComponent = () => {
-    console.log(selectedSystem, "selectedSystem");
     const userInput = extractUserInput(
       componentPayload,
       ".modalUserInput",
@@ -650,7 +649,6 @@ export const DataTableSystems = ({
                       setAddComponentFlag(false);
                       backToFirstLevelLevelBTN(false);
                       createComponent();
-                      console.log("testing add/creat btn");
                     }
                   : // at add component level page
                   secondLevelName === "Add Component"
@@ -658,7 +656,6 @@ export const DataTableSystems = ({
                       setAddCompThirdLevelTrigger(true);
                     }
                   : () => {
-                      console.log("random button press function");
                     }
                 : // at analyzer ranges in components at third level
                 createAnalyzerRangesFlag

@@ -66,7 +66,6 @@ export const DataTableRectangularDucts = ({
       });
 
       setRevertedState(false);
-      console.log("update", updateTable);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);

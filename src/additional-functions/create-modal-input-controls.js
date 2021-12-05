@@ -13,10 +13,8 @@ export const modalViewData = (
 ) => {
   const arr = [];
 
-  console.log("selected", selected, label, time);
   // y = property name of the apis
   for (const y in label) {
-    console.log("Y", y);
     if (label[y][3] === "locked") {
       if (createNew) {
         arr.push([
@@ -190,6 +188,5 @@ export const modalViewData = (
       arr.push([[], [], [], "", "skip"]);
     }
   }
-  console.log(arr, "arr");
   return arr;
 };

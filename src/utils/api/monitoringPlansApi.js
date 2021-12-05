@@ -834,7 +834,6 @@ export const getRelationshipData = async (locationId) => {
   // }
 
   url = `${url}/locations/${locationId}/relationships`;  
-  console.log(url,'locationId ')
   // url = `${url}/locations/${locationId}/attributes`;
   return axios.get(url).then(handleResponse).catch(handleError);
 };

@@ -95,7 +95,6 @@ export const DataTablePCTQualifications = ({
       )[0];
       setSelectedQualPct(pctData);
     }
-    console.log(pctData);
 
     setSelectedModalData(
       modalViewData(
