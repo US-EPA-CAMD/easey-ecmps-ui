@@ -14,7 +14,6 @@ export const getMonitoringPlansUnitControlRecords = (data) => {
 
     const seasonalControlsIndicator =
       el["seasonalControlsIndicator"] === "1" ? "Yes" : "No";
-
     const originalCode = el["originalCode"] === "1" ? "Yes" : "No";
 
     records.push({
@@ -28,7 +27,6 @@ export const getMonitoringPlansUnitControlRecords = (data) => {
       col8: el.id,
     });
   });
-
   return records;
 };
 

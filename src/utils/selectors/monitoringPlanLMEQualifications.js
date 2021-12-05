@@ -11,6 +11,5 @@ export const getMonitoringPlansLMEQualifications = (totalData) => {
       col5: el.id,
     });
   });
-
   return records;
 };

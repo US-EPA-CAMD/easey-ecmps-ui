@@ -343,7 +343,6 @@ export const saveMonitoringSpans = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/spans/${payload["id"]}`;
   // *** remove attributes not needed by the API
 
-  console.log(payload, "saving payload for wspans");
   return secureAxios({
     method: "PUT",
     url: url,
@@ -845,6 +844,20 @@ export const saveLocationAttribute = async (payload,locationId) => {
 
   return secureAxios({
     method: "PUT",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+export const createLocationAttribute = async (payload,locationSelectValue) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${locationSelectValue}/attributes/`;
+
+  // *** remove attributes not needed by the API
+  delete payload["id"];
+
+  return secureAxios({
+    method: "POST",
     url: url,
     data: payload,
   })

@@ -125,10 +125,7 @@ export const saveDataSwitch = (
       );
 
     case locationAttribute:
-      return mpApi.saveLocationAttribute(
-        userInput,
-        locationSelectValue
-      );
+      return mpApi.saveLocationAttribute(userInput, locationSelectValue);
     default:
       break;
   }
@@ -165,6 +162,8 @@ export const createDataSwitch = (
         userInput,
         urlParameters ? urlParameters : null
       );
+    case locationAttribute:
+      return mpApi.createLocationAttribute(userInput, locationSelectValue);
     default:
       break;
   }

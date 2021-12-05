@@ -19,7 +19,6 @@ export const getMonitoringPlansFormulasTableRecords = (totalData) => {
       col7: el.id,
     });
   });
-
   return records;
 };
 

@@ -53,6 +53,7 @@ export const DataTableAssert = ({
   );
 
   const [updateTable, setUpdateTable] = useState(false);
+  // need to test this part to fully test the page
   useEffect(() => {
     if (
       updateTable ||
@@ -60,7 +61,6 @@ export const DataTableAssert = ({
       locationSelectValue ||
       revertedState
     ) {
-
       setDataLoaded(false);
       getDataTableApi(dataTableName, locationSelectValue, selectedLocation);
 
@@ -92,7 +92,6 @@ export const DataTableAssert = ({
       radioNames ? radioNames : null
     );
 
-    console.log('radioNames',radioNames)
     assertSelector
       .saveDataSwitch(
         userInput,
@@ -126,10 +125,6 @@ export const DataTableAssert = ({
       });
   };
 
-  // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
-  // *** in the format expected by the modal / tabs plugins)
-
-  // cant unit test properly
   const [createNewData, setCreateNewData] = useState(false);
 
   // Executed when "View" action is clicked
@@ -222,35 +217,53 @@ export const DataTableAssert = ({
     revertedState,
   ]);
 
-  const testSave = () => {
-    openModal(
-      { col5: "MELISSARHO-CDF765BC7BF849EE9C23608B95540200" },
-      false,
-      true
-    );
-    saveData();
-  };
-  const testOpen = () => {
-    openModal(
-      { col5: "MELISSARHO-CDF765BC7BF849EE9C23608B95540200" },
-      false,
-      false
-    );
-  };
-  const testCreate = () => {
-    openModal(
-      { col5: "MELISSARHO-CDF765BC7BF849EE9C23608B95540200" },
-      false,
-      true
-    );
-    createData();
-    saveData();
-    closeModalHandler();
-  };
+  // span data test
+  // const testSave = () => {
+  //   openModal(
+  //     {
+  //       col1: "CO2",
+  //       col2: "H",
+  //       col3: "HD",
+  //       col4: "PCT",
+  //       col5: "09/20/2017 13",
+  //       col6: " ",
+  //       col7: "TWCORNEL5-88E25998894F4859B9D03C49E8CBD66D",
+  //     },
+  //     false,
+  //     true
+  //   );
+  //   saveData();
+  // };
+  // const testOpen = () => {
+  //   openModal(
+  //     {
+  //       col1: "CO2",
+  //       col2: "H",
+  //       col3: "HD",
+  //       col4: "PCT",
+  //       col5: "09/20/2017 13",
+  //       col6: " ",
+  //       col7: "TWCORNEL5-88E25998894F4859B9D03C49E8CBD66D",
+  //     },
+  //     false,
+  //     false
+  //   );
+  // };
+  // const testCreate = () => {
+  //   openModal(
+  //     { col5: "MELISSARHO-CDF765BC7BF849EE9C23608B95540200" },
+  //     false,
+  //     true
+  //   );
+  //   createData();
+
+  // };
 
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
+
+      {/* // strictly for testing 
       <input
         tabIndex={-1}
         aria-hidden={true}
@@ -258,13 +271,13 @@ export const DataTableAssert = ({
         type="hidden"
         id="testBtn"
         onClick={() => {
-          testOpen();
-          testSave();
-          testCreate();
+          // testOpen();
+          // testSave();
+          // // testCreate();
           closeModalHandler();
         }}
       />
-
+*/}
       <DataTableRender
         openHandler={openModal}
         columnNames={columnNames}

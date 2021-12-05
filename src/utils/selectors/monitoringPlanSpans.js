@@ -1,7 +1,6 @@
 export const getMonitoringPlansSpansTableRecords = (totalData) => {
     const data = totalData;
     const records = [];
-  
     data.forEach((el) => {
       const beginDate = el.beginDate
         ? formatStringToDate(el.beginDate.toString())
@@ -28,7 +27,6 @@ export const getMonitoringPlansSpansTableRecords = (totalData) => {
         col7: el.id,
       });
     });
-  
     return records;
   };
   // year - month - day to  month / day/ year
