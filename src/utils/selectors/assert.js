@@ -98,7 +98,7 @@ export const saveDataSwitch = (
   userInput,
   dataTableName,
   locationSelectValue,
-  urlParameters
+  urlParameters = null
 ) => {
   switch (dataTableName) {
     case load:
@@ -137,7 +137,7 @@ export const createDataSwitch = (
   userInput,
   dataTableName,
   locationSelectValue,
-  urlParameters
+  urlParameters = null
 ) => {
   switch (dataTableName) {
     case load:

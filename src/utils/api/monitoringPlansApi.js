@@ -825,20 +825,17 @@ export const getLocationAttributes = async (locationId) => {
 };
 
 export const getRelationshipData = async (locationId) => {
-
-
   let url = `${config.services.monitorPlans.uri}`;
   // *** workspace section url (authenticated)
-  // if (window.location.href.indexOf("workspace") > -1) {
+  if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;
-  // }
+  }
 
-  url = `${url}/locations/${locationId}/relationships`;  
-  // url = `${url}/locations/${locationId}/attributes`;
+  url = `${url}/locations/${locationId}/relationships`;
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const saveLocationAttribute = async (payload,locationId) => {
+export const saveLocationAttribute = async (payload, locationId) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${locationId}/attributes/${payload["id"]}`;
 
   return secureAxios({
@@ -849,7 +846,7 @@ export const saveLocationAttribute = async (payload,locationId) => {
     .then(handleResponse)
     .catch(handleError);
 };
-export const createLocationAttribute = async (payload,locationSelectValue) => {
+export const createLocationAttribute = async (payload, locationSelectValue) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${locationSelectValue}/attributes/`;
 
   // *** remove attributes not needed by the API
