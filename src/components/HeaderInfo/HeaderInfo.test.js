@@ -1154,24 +1154,24 @@ test("test file", () => {
   expect(val === 1);
 });
 
-test("test audit records for workspace checked out", () => {
+// test("test audit records for workspace checked out", () => {
 
-  const { container } = render(
-    <HeaderInfo
-      facility={"Barry (1, 2, CS0AAN)"}
-      selectedConfig={{ id: 5770 }}
-      user={{ firstName: "test" }}
-      checkout={true}
-      checkedOutLocations={[{ monPlanId: [5770], checkedOutBy: "test" }]}
-      locationSelect={[0, "test"]}
-      sectionSelect={[4, "Methods"]}
-      inactive={[true, false]}
-      locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
-    />
-  )
+//   const { container } = render(
+//     <HeaderInfo
+//       facility={"Barry (1, 2, CS0AAN)"}
+//       selectedConfig={{ id: 5770 }}
+//       user={{ firstName: "test" }}
+//       checkout={true}
+//       checkedOutLocations={[{ monPlanId: [5770], checkedOutBy: "test" }]}
+//       locationSelect={[0, "test"]}
+//       sectionSelect={[4, "Methods"]}
+//       inactive={[true, false]}
+//       locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
+//     />
+//   )
 
-  expect(container.instance().setAuditInformation()).toContain("Currently checked out by:");
-});
+//   expect(container.instance().setAuditInformation()).toContain("Currently checked out by:");
+// });
 
 // test("test audit records for workspace checked in", () => {
 //   const { container, getByText } = render(
