@@ -22,3 +22,19 @@ export const sendNotificationEmail = async (payload) => {
       throw new Error(error);
     });
 };
+
+export const triggerEvaluation = async (payload) => {
+  let url = `${config.services.quartz.uri}`;
+  url = `${url}/triggers/evaluations/monitor-plans`;
+  return secureAxios({
+    method: "POST",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch((error) => {
+      handleError(error);
+      console.log(error);
+      throw new Error(error);
+    });
+};

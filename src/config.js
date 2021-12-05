@@ -8,9 +8,10 @@ activityEvents.push("keydown");
 export const config = {
   app: {
     activityEvents,
-    apiKey: process.env.REACT_APP_API_KEY || "PXPWlQGB3wKXotkWN1PbSwbSoM7CoWW0ZMPWYtfc",
+    apiKey: process.env.REACT_APP_ECMPS_API_KEY || '',
     googleAnalyticsEnabled: process.env.REACT_APP_GOOGLE_ANALYTICS_ENABLED || 'false',
-    googleAnalyticsContainerId: process.env.REACT_APP_GOOGLE_ANALYTICS_CONTAINER_ID || '',
+    googleAnalyticsPublicContainerId: process.env.REACT_APP_GOOGLE_ANALYTICS_PUBLIC_CONTAINER_ID || '',
+    googleAnalyticsAuthenticatedContainerId: process.env.REACT_APP_GOOGLE_ANALYTICS_AUTHENTICATED_CONTAINER_ID || '',
     refreshTokenRate:
       process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_TOKEN_RATE_MINUTES *
         oneMinute || 1 * oneMinute, // Change ME
@@ -39,6 +40,9 @@ export const config = {
     email:
       process.env.REACT_APP_EASEY_ECMPS_UI_EMAIL ||
       "ecmps-beta@camdsupport.com",
+    refreshEvalStatusRate:
+      process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_RATE_SECONDS *
+        oneSecond || 30 * oneSecond,
   },
   services: {
     mdm: {
@@ -70,7 +74,7 @@ export const config = {
       uri:
         process.env.REACT_APP_EASEY_AUTH_API ||
         "https://easey-dev.app.cloud.gov/api/auth-mgmt",
-        //"https://api.epa.gov/easey/token/auth-mgmt"
+      //"https://api.epa.gov/easey/token/auth-mgmt"
     },
     quartz: {
       uri:
