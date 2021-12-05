@@ -27,6 +27,7 @@ export const SelectFacilitiesDataTable = ({
   useEffect(() => {
     facilitiesApi.getAllFacilities().then((res) => {
       setDataLoaded(true);
+      console.log('FAC',res.data)
       setFacilities(res.data);
     });
 
@@ -165,3 +166,5 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, null)(SelectFacilitiesDataTable);
+export { mapStateToProps };
+
