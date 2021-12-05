@@ -98,7 +98,7 @@ export const saveDataSwitch = (
   userInput,
   dataTableName,
   locationSelectValue,
-  urlParameters
+  urlParameters = null
 ) => {
   switch (dataTableName) {
     case load:
@@ -125,10 +125,7 @@ export const saveDataSwitch = (
       );
 
     case locationAttribute:
-      return mpApi.saveLocationAttribute(
-        userInput,
-        locationSelectValue
-      );
+      return mpApi.saveLocationAttribute(userInput, locationSelectValue);
     default:
       break;
   }
@@ -140,7 +137,7 @@ export const createDataSwitch = (
   userInput,
   dataTableName,
   locationSelectValue,
-  urlParameters
+  urlParameters = null
 ) => {
   switch (dataTableName) {
     case load:
@@ -165,6 +162,8 @@ export const createDataSwitch = (
         userInput,
         urlParameters ? urlParameters : null
       );
+    case locationAttribute:
+      return mpApi.createLocationAttribute(userInput, locationSelectValue);
     default:
       break;
   }

@@ -113,7 +113,6 @@ export const DataTableMethod = ({
     setCreateNewMethod(create);
     if (methods.length > 0 && !create) {
       monMethod = methods.filter((element) => element.id === row.col7)[0];
-      console.log(monMethod);
       setSelectedMonitoringMethod(monMethod);
     }
 

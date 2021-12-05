@@ -4,9 +4,9 @@ export const getMonitoringPlansUnitCapacityRecords = (data) => {
     const beginDate = el.beginDate
       ? formatStringToDate(el.beginDate.toString())
       : "";
-    const beginHour = el.beginHour ? el.beginHour.toString() : "";
+
     const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
-    const endHour = el.endHour ? el.endHour.toString() : "";
+
 
 
     const commercialOperationDateString = el.commercialOperationDate ? formatStringToDate(el.commercialOperationDate.toString()) : "";
@@ -24,8 +24,8 @@ export const getMonitoringPlansUnitCapacityRecords = (data) => {
       col5: boilerTurbineEndDateString,
       col6: el.maximumHourlyHeatInputCapacity,
 
-      col7: `${beginDate} ${beginHour}`,
-      col8: `${endDate} ${endHour}`,
+      col7: `${beginDate} `,
+      col8: `${endDate} `,
       col9: el.id,
     });
   });

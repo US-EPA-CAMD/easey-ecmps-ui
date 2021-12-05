@@ -66,7 +66,6 @@ export const DataTableRectangularDucts = ({
       });
 
       setRevertedState(false);
-      console.log("update", updateTable);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
@@ -299,8 +298,14 @@ export const DataTableRectangularDucts = ({
           save={createNewDuct ? createDuct : saveDuct}
           showCancel={!(user && checkout)}
           showSave={user && checkout}
-          title={createNewDuct ? "Create Rectangular Duct WAF" : "Rectangular Duct WAF"}
-          exitBTN={createNewDuct ? "Create Rectangular Duct WAF" : `Save and Close`}
+          title={
+            createNewDuct
+              ? "Create Rectangular Duct WAF"
+              : "Rectangular Duct WAF"
+          }
+          exitBTN={
+            createNewDuct ? "Create Rectangular Duct WAF" : `Save and Close`
+          }
           children={
             <div>
               <ModalDetails

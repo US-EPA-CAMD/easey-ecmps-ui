@@ -98,5 +98,6 @@ export const getMonitoringPlansSystemsAnalyzerRangesTableRecords = (data) => {
       col3: el.id,
     });
   });
+
   return records;
 };

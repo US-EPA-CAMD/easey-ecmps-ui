@@ -3,8 +3,8 @@ import { render, waitForElement, fireEvent } from "@testing-library/react";
 import { DataTableRectangularDucts } from "./DataTableRectangularDucts";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
-import { handleResponse, handleError } from "../../../utils/api/apiUtils";
-import { secureAxios } from "../../../utils/api/easeyAuthApi";
+// import { handleResponse, handleError } from "../../../utils/api/apiUtils";
+// import { secureAxios } from "../../../utils/api/easeyAuthApi";
 import * as axios from "axios";
 jest.mock("axios");
 
