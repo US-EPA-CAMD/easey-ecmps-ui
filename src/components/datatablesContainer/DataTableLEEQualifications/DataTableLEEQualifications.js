@@ -52,6 +52,7 @@ export const DataTableLEEQualifications = ({
         .getLEEQualifications(locationSelectValue, qualSelectValue)
         .then((res) => {
           setQualLeeData(res.data);
+         
           setDataLoaded(true);
           setUpdateTable(false);
           setRevertedState(false);

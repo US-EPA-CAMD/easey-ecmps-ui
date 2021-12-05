@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import * as dmApi from "../utils/api/dataManagementApi";
 export const useRetrieveDropdownApi = (dropDownFields, mats = false) => {
-  const [totalOptions, setTotalOptions] = React.useState({});
+  const [totalOptions, setTotalOptions] = useState({});
 
   const dataYearOptions = async () => {
     const currYear = new Date().getFullYear();

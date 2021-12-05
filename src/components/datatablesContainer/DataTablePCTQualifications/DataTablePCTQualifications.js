@@ -42,7 +42,6 @@ export const DataTablePCTQualifications = ({
   const [updateTable, setUpdateTable] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState([]);
 
-
   useEffect(() => {
     if (
       updatePCT ||
@@ -144,6 +143,16 @@ export const DataTablePCTQualifications = ({
 
   return (
     <div className="methodTable react-transition fade-in">
+      <input
+        tabIndex={-1}
+        aria-hidden={true}
+        role="button"
+        type="hidden"
+        id="testBtn"
+        onClick={() => {
+          backBtnHandler();
+        }}
+      />
       {openPCT ? (
         <div>
           <ModalDetails
