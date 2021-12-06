@@ -48,7 +48,6 @@ export const DataTableLMEQualifications = ({
         .getLMEQualifications(locationSelectValue, qualSelectValue)
         .then((res) => {
           setQualLmeData(res.data);
-          console.log(res.data,'LME')
           setDataLoaded(true);
           setUpdateTable(false);
           setRevertedState(false);
