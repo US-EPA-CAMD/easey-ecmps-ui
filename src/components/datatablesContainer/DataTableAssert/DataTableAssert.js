@@ -77,6 +77,8 @@ export const DataTableAssert = ({
       assertSelector
         .getDataTableApis(name, location, selectedLocationParameter)
         .then((res) => {
+
+          console.log(name,location,selectedLocationParameter,"testing error")
           setDataPulled(res.data);
           setDataLoaded(true);
         });
@@ -92,7 +94,6 @@ export const DataTableAssert = ({
       radioNames ? radioNames : null
     );
 
-    console.log('radioNames',radioNames)
     assertSelector
       .saveDataSwitch(
         userInput,
