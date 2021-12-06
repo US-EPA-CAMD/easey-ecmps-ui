@@ -11,3 +11,6 @@ activityCountdownDurationSeconds: 30
 refreshTokenRateMinutes: 1
 inactivityDurationLogoutMinutes: 2
 paginationPerPage: 100
+googleAnalyticsEnabled: "false"
+googleAnalyticsPublicContainerId: "GTM-W55ZK7"
+googleAnalyticsAuthenticatedContainerId: "GTM-W55ZK7"

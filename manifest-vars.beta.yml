@@ -5,3 +5,4 @@ memory: 2048M
 inactivityDurationCheckoutMinutes: 20
 refreshTokenRateMinutes: 15
 inactivityDurationLogoutMinutes: 20
+googleAnalyticsEnabled: "true"
