@@ -1,0 +1,417 @@
+{
+  "id": "",
+  "facId": "",
+  "orisCode": "",
+  "name": "",
+  "version": "??? in the xml but not sure what this is",
+  "comments": [
+    {
+      "id": "",
+      "monitoringPlanId": "",
+      "monitoringPlanComment": "",
+      "submissionAvailabilityCode": "",
+      "beginDate": "",
+      "endDate": "",
+      "userId": "",
+      "addDate": "",
+      "updateDate": "",
+      "active": ""
+    }
+  ],
+  "unitStackConfiguration": [
+    {
+      "id": "",
+      "unitId": "",
+      "stackPipeId": "",
+      "beginDate": "",
+      "endDate": "",
+      "userId": "",
+      "addDate": "",
+      "updateDate": "",
+      "active": ""
+    }
+  ],
+  "locations": [
+    {
+      "id": "",
+      "name": "",
+      "unitId": "",
+      "stackPipeId": "",
+      "activeDate": "",
+      "retireDate": "",
+      "nonLoadBasedIndicator": "",
+      "active": "",
+      "attributes": [
+        {
+          "id": "",
+          "locationId": "",
+          "ductIndicator": "",
+          "bypassIndicator": "",
+          "groundElevation": "",
+          "stackHeight": "",
+          "materialCode": "",
+          "shapeCode": "",
+          "crossAreaFlow": "",
+          "crossAreaStackExit": "",
+          "beginDate": "",
+          "endDate": "",
+          "userId": "",
+          "addDate": "",
+          "updateDate": "",
+          "active": ""
+        }
+      ],
+      "unitCapacity": [
+        {
+          "id": "",
+          "unitId": "",
+          "beginDate": "",
+          "endDate": "",
+          "maximumHourlyHeatInputCapacity": "",
+          "userId": "",
+          "addDate": "",
+          "updateDate": "",
+          "active": ""
+        }
+      ],
+      "unitControls": [
+        {
+          "id": "",
+          "unitId": "",
+          "parameterCode": "",
+          "controlCode": "",
+          "originalCode": "",
+          "installDate": "",
+          "optimizationDate": "",
+          "seasonalControlsIndicator": "",
+          "retireDate": "",
+          "indicatorCode": "",
+          "userId": "",
+          "addDate": "",
+          "updateDate": "",
+          "active": ""
+        }
+      ],
+      "unitfuels": [
+        {
+          "id": "",
+          "unitId": "",
+          "fuelCode": "",
+          "indicatorCode": "",
+          "ozoneSeasonIndicator": "",
+          "demGCV": "",
+          "demS02": "",
+          "beginDate": "",
+          "endDate": "",
+          "actualOrProjectedCode": "",
+          "sulfurContent": "",
+          "userId": "",
+          "addDate": "",
+          "updateDate": "",
+          "active": ""
+        }
+      ],
+      "methods": [
+        {
+          "id": "",
+          "locationId": "",
+          "parameterCode": "",
+          "monitoringMethodCode": "",
+          "substituteDataCode": "",
+          "bypassApproachCode": "",
+          "beginDate": "",
+          "beginHour": "",
+          "endDate": "",
+          "endHour": "",
+          "userId": "",
+          "addDate": "",
+          "updateDate": "",
+          "active": ""
+        }
+      ],
+      "matsMethods": [
+        {
+          "id": "",
+          "locationId": "",
+          "supplementalMATSParameterCode": "",
+          "supplementalMATSMonitoringMethodCode": "",
+          "beginDate": "",
+          "beginHour": "",
+          "endDate": "",
+          "endHour": "",
+          "userId": "",
+          "addDate": "",
+          "updateDate": "",
+          "active": ""
+        }
+      ],
+      "formulas": [
+        {
+          "id": "",
+          "locationId": "",
+          "formulaId": "",
+          "parameterCode": "",
+          "formulaCode": "",
+          "formulaText": "",
+          "beginDate": "",
+          "beginHour": "",
+          "endDate": "",
+          "endHour": "",
+          "userId": "",
+          "addDate": "",
+          "updateDate": "",
+          "active": ""
+        }
+      ],
+      "defaults": [
+        {
+          "id": "",
+          "locationId": "",
+          "parameterCode": "",
+          "defaultValue": "",
+          "defaultUnitsOfMeasureCode": "",
+          "defaultPurposeCode": "",
+          "fuelCode": "",
+          "operatingConditionCode": "",
+          "defaultSourceCode": "",
+          "groupId": "",
+          "beginDate": "",
+          "beginHour": "",
+          "endDate": "",
+          "endHour": "",
+          "userId": "",
+          "addDate": "",
+          "updateDate": "",
+          "active": ""
+        }
+      ],
+      "spans": [
+        {
+          "id": "",
+          "locationId": "",
+          "componentTypeCode": "",
+          "spanScaleCode": "",
+          "spanMethodCode": "",
+          "mecValue": "",
+          "mpcValue": "",
+          "mpfValue": "",
+          "spanValue": "",
+          "fullScaleRange": "",
+          "spanUnitsOfMeasureCode": "",
+          "scaleTransitionPoint": "",
+          "defaultHighRange": "",
+          "flowSpanValue": "",
+          "flowFullScaleRange": "",
+          "beginDate": "",
+          "beginHour": "",
+          "endDate": "",
+          "endHour": "",
+          "userId": "",
+          "addDate": "",
+          "updateDate": "",
+          "active": ""
+        }
+      ],
+      "ductWafs": [
+        {
+          "id": "",
+          "locationId": "",
+          "wafDeterminationDate": "",
+          "wafBeginDate": "",
+          "wafBeginHour": "",
+          "wafMethodCode": "",
+          "wafValue": "",
+          "numberOfTestRuns": "",
+          "numberOfTraversePointsWaf": "",
+          "numberOfTestPorts": "",
+          "numberOfTraversePointsRef": "",
+          "ductWidth": "",
+          "ductDepth": "",
+          "wafEndDate": "",
+          "wafEndHour": "",
+          "userId": "",
+          "addDate": "",
+          "updateDate": "",
+          "active": ""
+        }
+      ],
+      "loads": [
+        {
+          "id": "",
+          "locationId": "",
+          "maximumLoadValue": "",
+          "maximumLoadUnitsOfMeaseureCode": "",
+          "lowerOperationBoundary": "",
+          "UpperOperationBoundary": "",
+          "normalLevelCode": "",
+          "secondLevelCode": "",
+          "secondNormalIndicator": "",
+          "loadAnalysisDate": "",
+          "beginDate": "",
+          "beginHour": "",
+          "endDate": "",
+          "endHour": "",
+          "userId": "",
+          "addDate": "",
+          "updateDate": "",
+          "active": ""
+        }
+      ],
+      "components": [
+        {
+          "id": "",
+          "locationId": "",
+          "componentId": "",
+          "componentRecordId": "",
+          "componentTypeCode": "",
+          "sampleAcquisitionMethodCode": "",
+          "basisCode": "",
+          "manufacturer": "",
+          "modelVersion": "",
+          "serialNumber": "",
+          "hgConverterIndicator": "",
+          "userId": "",
+          "addDate": "",
+          "updateDate": "",
+          "active": "",
+          "analyzerRanges": [
+            {
+              "id": "",
+              "componentId": "",
+              "componentRecordId": "",
+              "analyzerRangeCode": "",
+              "dualRangeIndicator": "",
+              "beginDate": "",
+              "beginHour": "",
+              "endDate": "",
+              "endHour": "",
+              "userId": "",
+              "addDate": "",
+              "updateDate": "",
+              "active": ""
+            }
+          ]
+        }
+      ],
+      "systems": [
+        {
+          "id": "",
+          "locationId": "",
+          "monitoringSystemId": "",
+          "monitoringSystemRecordId": "",
+          "systemTypeCode": "",
+          "systemDesignationCode": "",
+          "fuelCode": "",
+          "beginDate": "",
+          "beginHour": "",
+          "endDate": "",
+          "endHour": "",
+          "userId": "",
+          "addDate": "",
+          "updateDate": "",
+          "active": "",
+          "components": [
+            {
+              "id": "",
+              " ": "",
+              "monitoringSystemRecordId": "",
+              "componentId": "",
+              "componentRecordId": "",
+              "beginDate": "",
+              "beginHour": "",
+              "endDate": "",
+              "endHour": "",
+              "userId": "",
+              "addDate": "",
+              "updateDate": "",
+              "active": ""
+            }
+          ],
+          "fuelFlows": [
+            {
+              "id": "",
+              "monitoringSystemId": "",
+              "monitoringSystemRecordId": "",
+              "maximumFuelFlowRate": "",
+              "systemFuelFlowUOMCode": "",
+              "maximumFuelFlowRateSourceCode": "",
+              "beginDate": "",
+              "beginHour": "",
+              "endDate": "",
+              "endHour": "",
+              "userId": "",
+              "addDate": "",
+              "updateDate": "",
+              "active": ""
+            }
+          ]
+        }
+      ],
+      "qualifications": [
+        {
+          "id": "",
+          "locationId": "",
+          "qualificationTypeCode": "",
+          "beginDate": "",
+          "endDate": "",
+          "userId": "",
+          "addDate": "",
+          "updateDate": "",
+          "active": "",
+          "leeQuals": [
+            {
+              "id": "",
+              "qualId": "",
+              "qualificationTestDate": "",
+              "parameterCode": "",
+              "qualificationTestType": "",
+              "potentialAnnualMassEmissions": "",
+              "applicableEmissionStandard": "",
+              "unitsOfStandard": "",
+              "percentageOfEmissionStandard": "",
+              "userId": "",
+              "addDate": "",
+              "updateDate": "",
+              "active": ""
+            }
+          ],
+          "lmeQuals": [
+            {
+              "id": "",
+              "qualId": "",
+              "qualificationDataYear": "",
+              "operatingHours": "",
+              "so2Tons": "",
+              "noxTons": "",
+              "userId": "",
+              "addDate": "",
+              "updateDate": "",
+              "active": ""
+            }
+          ],
+          "pctQuals": [
+            {
+              "id": "",
+              "qualId": "",
+              "qualificationYear": "",
+              "averagePercentValue": "",
+              "yr1QualificationDataYear": "",
+              "yr1QualificationDataTypeCode": "",
+              "yr1PercentageValue": "",
+              "yr2QualificationDataYear": "",
+              "yr2QualificationDataTypeCode": "",
+              "yr2PercentageValue": "",
+              "yr3QualificationDataYear": "",
+              "yr3QualificationDataTypeCode": "",
+              "yr3PercentageValue": "",
+              "userId": "",
+              "addDate": "",
+              "updateDate": "",
+              "active": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
