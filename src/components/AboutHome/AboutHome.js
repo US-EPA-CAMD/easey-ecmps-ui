@@ -13,7 +13,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
     {
       name: "Monitoring Plans",
       descriptions:
-        "The monitoring plan describes how a facility (monitoring configuration) monitors its emissions. Monitoring plan data define relationships between stacks, pipes, and units, specify locations at a facility from which emissions are monitored, and identify systems of monitoring equipment by detailing the individual system components. Monitoring plan data also provide operational characteristics and qualifications for certain special types of monitoring (e.g., low mass emissions monitoring). Draft beta monitoring plan instructions can be found here ",
+        "The monitoring plan describes how a facility (monitoring configuration) monitors its emissions. Monitoring plan data define relationships between stacks, pipes, and units, specify locations at a facility from which emissions are monitored, and identify systems of monitoring equipment by detailing the individual system components. Monitoring plan data also provide operational characteristics and qualifications for certain special types of monitoring (e.g., low mass emissions monitoring). Draft beta monitoring plan instructions can be found ",
       url: "/monitoring-plans",
       comingSoon: false,
     },
@@ -76,11 +76,14 @@ const AboutHome = ({ user, setCurrentLink }) => {
               https://ecmps.blogspot.com/
             </a>{" "}
             for additional updates. Have questions or feedback? Please contact
-            us at through our Contact Us form (
-            <a href={"https://easey-dev.app.cloud.gov/ecmps/help-support"}>
-              https://easey-dev.app.cloud.gov/ecmps/help-support
+            us at through our{" "}
+            <a
+              target="_blank"
+              href={"https://easey-dev.app.cloud.gov/ecmps/help-support"}
+            >
+              Contact Us form
             </a>
-            )
+            .
           </p>
         </div>
         {topics.map((topic) => {
@@ -102,16 +105,15 @@ const AboutHome = ({ user, setCurrentLink }) => {
                 {topic.descriptions}
                 {topic.name === "Monitoring Plans" ? (
                   <span>
-                    (
                     <a
                       target="_blank"
                       href={
                         "https://app.zenhub.com/files/287570343/449899ef-7a75-4129-995c-ae4bf2e347bf/download"
                       }
                     >
-                      https://app.zenhub.com/files/287570343/449899ef-7a75-4129-995c-ae4bf2e347bf/download
+                      here
                     </a>
-                    )
+                    .
                   </span>
                 ) : (
                   ""
@@ -144,11 +146,14 @@ const AboutHome = ({ user, setCurrentLink }) => {
               Welcome to the first release of the all new ECMPS 2.0 Beta! To
               view a list of functionality and how to get started go here
               (hyperlink to quick start guide, webinar release). Have questions
-              or feedback? Please contact us through our Contact Us form (
-              <a href="https://easey-dev.app.cloud.gov/ecmps/help-support">
-                https://easey-dev.app.cloud.gov/ecmps/help-support
+              or feedback? Please contact us through our{" "}
+              <a
+                target="_blank"
+                href={"https://easey-dev.app.cloud.gov/ecmps/help-support"}
+              >
+                Contact Us form
               </a>
-              )
+              .
             </div>
           </div>
         </div>{" "}
