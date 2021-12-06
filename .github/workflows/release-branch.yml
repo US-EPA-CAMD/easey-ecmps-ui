@@ -81,7 +81,7 @@ jobs:
         run: |
           cf set-env $APP_NAME REACT_APP_ECMPS_API_KEY $REACT_APP_ECMPS_API_KEY
         env:
-          REACT_APP_ECMPS_API_KEY: ${{ secrets.ECMPS_API_KEY }}
+          REACT_APP_ECMPS_API_KEY: ${{ secrets.ECMPS_NON_PROD_API_KEY }}
       - name: Deployment
         run: |
           devops/scripts/deploy.sh
@@ -117,13 +117,13 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.ARTIFACTS_STORAGE_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.ARTIFACTS_STORAGE_SECRET_ACCESS_KEY }}
-       - name: Init Application
+      - name: Init Application
         run: devops/scripts/cf-app-init.sh
       - name: Configure Env Vars (secrets)
         run: |
           cf set-env $APP_NAME REACT_APP_ECMPS_API_KEY $REACT_APP_ECMPS_API_KEY
         env:
-          REACT_APP_ECMPS_API_KEY: ${{ secrets.ECMPS_API_KEY }}
+          REACT_APP_ECMPS_API_KEY: ${{ secrets.ECMPS_NON_PROD_API_KEY }}
       - name: Deployment
         run: |
           devops/scripts/deploy.sh
@@ -165,7 +165,7 @@ jobs:
         run: |
           cf set-env $APP_NAME REACT_APP_ECMPS_API_KEY $REACT_APP_ECMPS_API_KEY
         env:
-          REACT_APP_ECMPS_API_KEY: ${{ secrets.ECMPS_API_KEY }}
+          REACT_APP_ECMPS_API_KEY: ${{ secrets.ECMPS_NON_PROD_API_KEY }}
       - name: Deployment
         run: |
           devops/scripts/deploy.sh
