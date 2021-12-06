@@ -19,7 +19,7 @@ import {
   unitFuelDataTableProps,
   unitCapacityDataTableProps,
   locationAttributesDataTableProps,
-  relationshipDataTableProps
+  relationshipDataTableProps,
 } from "../../additional-functions/dataTable-props";
 
 export const MonitoringPlanTabRender = ({
@@ -171,23 +171,31 @@ export const MonitoringPlanTabRender = ({
             checkout={checkout}
             user={user}
             payload={
-              locationAttributesDataTableProps(parseInt(locationSelect[1]))["payload"]
+              locationAttributesDataTableProps(parseInt(locationSelect[1]))[
+                "payload"
+              ]
             }
             dropdownArray={
-              locationAttributesDataTableProps(parseInt(locationSelect[1]))["dropdownArray"]
+              locationAttributesDataTableProps(parseInt(locationSelect[1]))[
+                "dropdownArray"
+              ]
             }
             columnNames={
-              locationAttributesDataTableProps(parseInt(locationSelect[1]))["columnNames"]
+              locationAttributesDataTableProps(parseInt(locationSelect[1]))[
+                "columnNames"
+              ]
             }
             controlInputs={
-              locationAttributesDataTableProps(parseInt(locationSelect[1]))["controlInputs"]
+              locationAttributesDataTableProps(parseInt(locationSelect[1]))[
+                "controlInputs"
+              ]
             }
             controlDatePickerInputs={
               locationAttributesDataTableProps(parseInt(locationSelect[1]))[
                 "controlDatePickerInputs"
               ]
             }
-            radioNames={["ductIndicator","bypassIndicator"]}
+            radioNames={["ductIndicator", "bypassIndicator"]}
             dataTableName={"Location Attribute"}
             revertedState={revertedState}
             setRevertedState={setRevertedState}
@@ -205,13 +213,19 @@ export const MonitoringPlanTabRender = ({
               relationshipDataTableProps(parseInt(locationSelect[1]))["payload"]
             }
             dropdownArray={
-              relationshipDataTableProps(parseInt(locationSelect[1]))["dropdownArray"]
+              relationshipDataTableProps(parseInt(locationSelect[1]))[
+                "dropdownArray"
+              ]
             }
             columnNames={
-              relationshipDataTableProps(parseInt(locationSelect[1]))["columnNames"]
+              relationshipDataTableProps(parseInt(locationSelect[1]))[
+                "columnNames"
+              ]
             }
             controlInputs={
-              relationshipDataTableProps(parseInt(locationSelect[1]))["controlInputs"]
+              relationshipDataTableProps(parseInt(locationSelect[1]))[
+                "controlInputs"
+              ]
             }
             controlDatePickerInputs={
               relationshipDataTableProps(parseInt(locationSelect[1]))[
@@ -221,7 +235,7 @@ export const MonitoringPlanTabRender = ({
             radioNames={[]}
             dataTableName={"Relationship Data"}
             revertedState={revertedState}
-            nonEditable = {true}
+            nonEditable={true}
             setRevertedState={setRevertedState}
           />,
           "Relationships Data",
