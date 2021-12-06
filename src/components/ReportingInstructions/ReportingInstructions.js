@@ -4,24 +4,59 @@ import { OpenInNew } from "@material-ui/icons";
 import "./ReportingInstructions.scss";
 
 import reportingInstructionsPDF from "./ECMPS Monitoring Plan Reporting Instructions 2021 Q4.pdf";
+import monitoringPlanJSON from "./monitoring-plan-json-format.json";
 
 export const ReportingInstructions = () => {
+  const createJsonFile = (url) => {
+    var dataStr =
+      "data:text/json;charset=utf-8," +
+      encodeURIComponent(JSON.stringify(url, null, "\t"));
+    return dataStr;
+  };
+
+  const createFileName = (type, name) => {
+    if (type === "json") {
+      return name + ".json";
+    } else if (type === "pdf") {
+      return name;
+    }
+    return "fix-createFileName-function";
+  };
+
   const links = [
     {
-      name: "Monitoring Plan Reporting Instructions",
+      linkName: "Monitoring Plan Reporting Instructions",
       url: reportingInstructionsPDF,
+      fileDownload: true,
+      fileType: "pdf",
+      fileName: "ECMPS Monitoring Plan Reporting Instructions 2021 Q4",
     },
     {
-      name: "Part 75 Regulations",
+      linkName: "Monitoring Plan - JSON Format",
+      url: monitoringPlanJSON,
+      fileDownload: true,
+      fileType: "json",
+      fileName: "ECMPS Monitoring Plan - JSON Format",
+    },
+    {
+      linkName: "Monitoring Plan - Swagger Page",
+      url: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/swagger",
+      fileDownload: false,
+    },
+    {
+      linkName: "Part 75 Regulations",
       url: "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-C/part-75?toc=1",
+      fileDownload: false,
     },
     {
-      name: "e-CFR",
+      linkName: "e-CFR",
       url: "https://www.ecfr.gov/cgi-bin/text-idx?SID=4002e94719ee5632c5970867e3c7e018&mc=true&tpl=/ecfrbrowse/Title40/40cfr75_main_02.tpl",
+      fileDownload: false,
     },
     {
-      name: "MATS",
+      linkName: "MATS",
       url: "https://www.ecfr.gov/cgi-bin/retrieveECFR?gp=&SID=6952010b8924c119705ba2727c050a07&mc=true&n=pt40.16.63&r=PART&ty=HTML#sp40.16.63.uuuuu",
+      fileDownload: false,
     },
   ];
 
@@ -43,25 +78,26 @@ export const ReportingInstructions = () => {
           {links.map((link) => {
             return (
               <li
-                key={`li_${link.name.replace(/ /g, "")}`}
+                key={`li_${link.linkName.replace(/ /g, "")}`}
                 className="margin-top-1"
               >
-                {link.name === "Monitoring Plan Reporting Instructions" ? (
+                {link.fileDownload ? (
                   <a
                     type="button"
                     unstyled={true}
                     className="usa-button usa-button--unstyled text-primary text-underline no-hover-color-change"
-                    href={link.url}
-                    role="link"
-                    rel={link.name}
+                    href={
+                      link.fileType === "json"
+                        ? createJsonFile(link.url)
+                        : link.url
+                    }
+                    rel={link.linkName}
                     title={`Download ${link.name}`}
                     key={link.url}
-                    id={`${link.name.split(" ").join("")}`}
-                    download={
-                      "ECMPS Monitoring Plan Reporting Instructions 2021 Q4"
-                    }
+                    id={`${link.linkName.split(" ").join("")}`}
+                    download={createFileName(link.fileType, link.fileName)}
                   >
-                    {link.name} <OpenInNew />
+                    {link.linkName} <OpenInNew />
                   </a>
                 ) : (
                   <a
@@ -69,14 +105,14 @@ export const ReportingInstructions = () => {
                     unstyled={true}
                     className="usa-button usa-button--unstyled text-primary text-underline no-hover-color-change"
                     href={link.url}
-                    role="link"
-                    rel={link.name}
-                    title={`Go to ${link.name} page`}
+                    rel={link.linkName}
+                    title={`Go to ${link.linkName} page`}
                     key={link.url}
-                    id={`${link.name.split(" ").join("")}`}
+                    id={`${link.linkName.split(" ").join("")}`}
+                    // eslint-disable-next-line react/jsx-no-target-blank
                     target="_blank"
                   >
-                    {link.name} <OpenInNew />
+                    {link.linkName} <OpenInNew />
                   </a>
                 )}
               </li>

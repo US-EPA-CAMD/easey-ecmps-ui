@@ -56,26 +56,26 @@ const Login = ({ isModal }) => {
       setLoading(true);
       setShowError(false);
 
-      try {
-        return await authenticate({ userId: username, password })
-          .then((response) => {
-            // *** commenting out the line below makes it so that the login modal doesn't come back into view
-            // *** after the loading graphic has been displayed
-            // setLoading(false);
-            if (response && response.error) {
-              throw response.error;
-            }
-          })
-          .catch((catchErr) => {
-            setLoading(false);
+      return await authenticate({ userId: username, password })
+        .then((response) => {
+          // *** commenting out the line below makes it so that the login modal doesn't come back into view
+          // *** after the loading graphic has been displayed
+          // setLoading(false);
+          if (response && response.error) {
+            throw response.error;
+          }
+        })
+        .catch((err) => {
+          setLoading(false);
+          setShowError(true);
+          if(err.response){
+            setFormErrorMessage(err.response.data.message);
+          }else{
+            setFormErrorMessage(err.message);
+          }
 
-            throw catchErr;
-          });
-      } catch (err) {
-        setLoading(false);
-        setShowError(true);
-        setFormErrorMessage(err.message);
-      }
+        });
+      
     }
 
     return true;

@@ -20,5 +20,8 @@ applications:
       REACT_APP_EASEY_ECMPS_UI_REFRESH_TOKEN_RATE_MINUTES: ((refreshTokenRateMinutes))
       REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_LOGOUT_MINUTES: ((inactivityDurationLogoutMinutes))
       REACT_APP_EASEY_ECMPS_UI_PAGINATION_PER_PAGE: ((paginationPerPage))
+      REACT_APP_GOOGLE_ANALYTICS_ENABLED: ((googleAnalyticsEnabled))
+      REACT_APP_GOOGLE_ANALYTICS_AUTHENTICATED_CONTAINER_ID: ((googleAnalyticsAuthenticatedContainerId))
+      REACT_APP_GOOGLE_ANALYTICS_PUBLIC_CONTAINER_ID: ((googleAnalyticsPublicContainerId))
     routes:
       - route: ((host))/((path))
