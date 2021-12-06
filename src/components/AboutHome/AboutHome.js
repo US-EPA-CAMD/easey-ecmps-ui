@@ -48,11 +48,14 @@ const AboutHome = ({ user, setCurrentLink }) => {
             users and the public to begin testing and learning the new
             application. The initial application, released in December of 2021,
             begins with the limited functionality of view (no login required)
-            and edit/evaluate (CDX Test login required) of monitoring plan data.
-            Subsequent releases throughout 2022 will add import and export
-            functionality and the additional data types—QA, certifications, and
-            emissions. Data in the beta is not production data and is only being
-            used for testing purposes.
+            and edit/evaluate (
+            <a target="_blank" href="https://test.epacdx.net/FAQ">
+              CDX Test login
+            </a>{" "}
+            required) of monitoring plan data. Subsequent releases throughout
+            2022 will add import and export functionality and the additional
+            data types—QA, certifications, and emissions. Data in the beta is
+            not production data and is only being used for testing purposes.
           </p>
           <p>
             There are two primary goals of the extended beta process.
@@ -69,7 +72,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
           </p>
           <p>
             Please subscribe to{" "}
-            <a href={"https://ecmps.blogspot.com/"}>
+            <a target="_blank" href={"https://ecmps.blogspot.com/"}>
               https://ecmps.blogspot.com/
             </a>{" "}
             for additional updates. Have questions or feedback? Please contact
@@ -101,6 +104,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
                   <span>
                     (
                     <a
+                      target="_blank"
                       href={
                         "https://app.zenhub.com/files/287570343/449899ef-7a75-4129-995c-ae4bf2e347bf/download"
                       }
@@ -140,8 +144,11 @@ const AboutHome = ({ user, setCurrentLink }) => {
               Welcome to the first release of the all new ECMPS 2.0 Beta! To
               view a list of functionality and how to get started go here
               (hyperlink to quick start guide, webinar release). Have questions
-              or feedback? Please contact us through our Contact Us form
-              (https://easey-dev.app.cloud.gov/ecmps/help-support)
+              or feedback? Please contact us through our Contact Us form (
+              <a href="https://easey-dev.app.cloud.gov/ecmps/help-support">
+                https://easey-dev.app.cloud.gov/ecmps/help-support
+              </a>
+              )
             </div>
           </div>
         </div>{" "}

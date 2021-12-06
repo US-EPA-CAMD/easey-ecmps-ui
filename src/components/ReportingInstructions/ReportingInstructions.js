@@ -40,7 +40,7 @@ export const ReportingInstructions = () => {
     },
     {
       linkName: "Monitoring Plan - Swagger Page",
-      url: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/swagger/#/Plans%20%26%20Configurations/MonitorPlanWorkspaceController_importPlan",
+      url: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/swagger",
       fileDownload: false,
     },
     {
