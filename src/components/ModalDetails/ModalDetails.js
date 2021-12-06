@@ -29,13 +29,7 @@ const ModalDetails = ({
     assignAriaLabelsToDatePickerButtons();
   }, []);
 
-  console.log('data', modalData,
-  data,
-  cols,
-  title,
-  viewOnly,
-  backBtn,
-  create,)
+
   // fixes rare instances where there is an enddate but no end time
   if (
     data.hasOwnProperty("endDate") &&

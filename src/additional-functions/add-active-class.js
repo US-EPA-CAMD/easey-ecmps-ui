@@ -12,9 +12,10 @@ export const addActiveClass = (event) => {
       ? event.target.parentElement.classList.add(epaActiveElemnt)
       : void 0;
   });
+  return 1;
 };
 export const removeActiveClass = (event) => {
-  event.target.classList.remove(epaActiveElemnt);
+  return event.target.classList !== undefined ? event.target.classList.remove(epaActiveElemnt) : null;
 };
 
 export const handleActiveElementFocus = () => {
@@ -40,4 +41,5 @@ export const handleActiveElementFocus = () => {
       true
     );
   });
+  return 1;
 };

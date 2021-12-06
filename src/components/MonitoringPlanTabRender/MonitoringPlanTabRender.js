@@ -221,6 +221,7 @@ export const MonitoringPlanTabRender = ({
             radioNames={[]}
             dataTableName={"Relationship Data"}
             revertedState={revertedState}
+            nonEditable = {true}
             setRevertedState={setRevertedState}
           />,
           "Relationships Data",

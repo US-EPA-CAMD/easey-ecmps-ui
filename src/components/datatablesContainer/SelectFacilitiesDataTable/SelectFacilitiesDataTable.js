@@ -165,3 +165,4 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, null)(SelectFacilitiesDataTable);
+export { mapStateToProps };

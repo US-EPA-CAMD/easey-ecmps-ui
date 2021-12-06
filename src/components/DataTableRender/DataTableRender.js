@@ -47,7 +47,7 @@ export const DataTableRender = ({
   openHandler,
   checkout,
   actionsBtn,
-
+  nonEditable,
   // for data table
   pagination,
   filter,
@@ -207,7 +207,7 @@ export const DataTableRender = ({
           name,
           selector: `col${index + 1}`,
           sortable: true,
-		  wrap: true
+          wrap: true,
         });
         break;
     }
@@ -323,7 +323,7 @@ export const DataTableRender = ({
                   }
                   autoFocus={willAutoFocus}
                 >
-                  {checkout ? "View / Edit" : "View"}
+                  {checkout && !nonEditable  ? "View / Edit" : "View"}
                 </Button>
               )
             ) : (
@@ -459,7 +459,7 @@ export const DataTableRender = ({
               }}
             />{" "}
             <div className={`${headerStyling}`}>
-              {addBtn && checkout && user ? (
+              {addBtn && checkout && user && !nonEditable ? (
                 <div className="padding-y-1">
                   <Button
                     type="button"
@@ -497,7 +497,7 @@ export const DataTableRender = ({
               <p>{"No data currently present"}</p>
             </div>
             <div className={`${headerStyling}`}>
-              {addBtn && checkout && user ? (
+              {addBtn && checkout && user && !nonEditable ? (
                 <h2 className="padding-0 page-subheader">
                   <div className="padding-y-1">
                     <Button

@@ -57,7 +57,6 @@ export const getMonitoringPlansRelationshipsDataRecords = (totalData) => {
       col5: el.id,
     });
   });
-
   return records;
 };
 
