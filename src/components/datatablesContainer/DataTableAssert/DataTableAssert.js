@@ -77,8 +77,6 @@ export const DataTableAssert = ({
       assertSelector
         .getDataTableApis(name, location, selectedLocationParameter)
         .then((res) => {
-
-          console.log(name,location,selectedLocationParameter,"testing error")
           setDataPulled(res.data);
           setDataLoaded(true);
         });
