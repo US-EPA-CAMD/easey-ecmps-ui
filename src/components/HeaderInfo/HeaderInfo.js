@@ -32,6 +32,7 @@ export const HeaderInfo = ({
   checkoutAPI,
   configID,
 }) => {
+
   const sections = [
     { name: "Defaults" },
     { name: "Formulas" },
@@ -72,6 +73,7 @@ export const HeaderInfo = ({
     // get evaluation status
     if (!evalStatusLoaded) {
       mpApi.getConfigInfo(configID).then((res) => {
+        console.log('config id', configID)
         const status = res.data.evalStatusCode;
         setEvalStatus(status);
         setEvalStatusLoaded(true);
