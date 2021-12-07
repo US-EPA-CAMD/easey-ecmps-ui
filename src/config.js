@@ -42,7 +42,9 @@ export const config = {
       "ecmps-beta@camdsupport.com",
     refreshEvalStatusRate:
       process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_RATE_SECONDS *
-        oneSecond || 30 * oneSecond,
+        oneSecond || 1 * oneSecond,
+
+
   },
   services: {
     mdm: {

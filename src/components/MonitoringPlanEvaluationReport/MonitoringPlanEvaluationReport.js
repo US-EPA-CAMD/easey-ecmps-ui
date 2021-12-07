@@ -8,6 +8,8 @@ export const MonitoringPlanEvaluationReport = ({
     monitorPlanId,
     facility
 }) => {
+
+    console.log("  monitorPlanId,facility",  monitorPlanId, facility)
     const facilityMainName = facility.split("(")[0];
     const facilityAdditionalName = facility.split("(")[1].replace(")", "");
     const [dataLoaded, setDataLoaded] = useState(false);
