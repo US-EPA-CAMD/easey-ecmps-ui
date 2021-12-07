@@ -71,6 +71,7 @@ export const HeaderInfo = ({
     // get evaluation status
     if (!evalStatusLoaded) {
       mpApi.getConfigInfo(configID).then((res) => {
+        console.log('config id', configID)
         const status = res.data.evalStatusCode;
         setEvalStatus(status);
         setEvalStatusLoaded(true);
@@ -143,6 +144,7 @@ export const HeaderInfo = ({
 
       // get current status in database
       mpApi.getConfigInfo(configID).then((res) => {
+        console.log(configID,'THIS IS CONFID ID')
         const databaseStatus = res.data.evalStatusCode;
         setEvalStatus(databaseStatus);
         setEvalStatusLoaded(true);

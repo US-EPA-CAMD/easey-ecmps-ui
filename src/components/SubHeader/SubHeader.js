@@ -239,6 +239,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                   aria-expanded="false"
                 >
                   <img
+                  id = "toggleDropDown"
                     src={userProfileIcon}
                     className="margin-top-neg-1 position-relative left-neg-1"
                     aria-hidden={true}
