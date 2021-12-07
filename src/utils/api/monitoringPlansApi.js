@@ -205,8 +205,6 @@ export const getCheckedOutLocations = async () => {
 };
 
 export const getConfigInfo = async (planId) => {
-
-  console.log(" `${config.services.monitorPlans.uri}/workspace/plans/information/${planId}`", `${config.services.monitorPlans.uri}/workspace/plans/information/${planId}`)
   return axios
     .get(
       `${config.services.monitorPlans.uri}/workspace/plans/information/${planId}`
@@ -823,7 +821,7 @@ export const getLocationAttributes = async (locationId) => {
 
   url = `${url}/locations/${locationId}/attributes`;
 
-  console.log('URL LOCATION',url)
+  console.log("URL LOCATION", url);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
@@ -833,13 +831,12 @@ export const getRelationshipData = async (locationId) => {
   // the non workspace api get endpoint is wrongly labeled in swagger, only the workspace is working but it is uneditable
   // *** workspace section url (authenticated)
   // if (window.location.href.indexOf("workspace") > -1) {
-    url = `${url}/workspace`;
+  url = `${url}/workspace`;
   // }
 
-  console.log('URL getRelationshipData',url)
+  console.log("URL getRelationshipData", url);
   url = `${url}/locations/${locationId}/relationships`;
-  console.log('URL getRelationshipData',url)
-
+  console.log("URL getRelationshipData", url);
 
   return axios.get(url).then(handleResponse).catch(handleError);
 };
