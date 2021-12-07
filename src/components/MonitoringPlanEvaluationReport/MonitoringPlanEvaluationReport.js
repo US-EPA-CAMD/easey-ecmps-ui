@@ -59,8 +59,7 @@ export const MonitoringPlanEvaluationReport = ({
 
             {dataLoaded ?
                 (<div><div className="grid-row clearfix position-relative float-right">
-                    {/* DISABLING UNTIL THE PAGE FORMAT CAN BE TRANSLATED TO THE PRINT FUNCTION 
-                    <Button
+                    {<Button
                         outline={false}
                         tabIndex="0"
                         aria-label={`Print the evaluation report`}
@@ -70,7 +69,7 @@ export const MonitoringPlanEvaluationReport = ({
                         epa-testid="printBTN"
                     >
                         Print Report
-                    </Button> */}
+                    </Button>}
                 </div><br /><br />
                     <div className="padding-x-3" id="printArea">
                         <div className="grid-row clearfix position-relative text-bold">
