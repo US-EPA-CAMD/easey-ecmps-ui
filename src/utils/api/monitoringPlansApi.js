@@ -205,8 +205,6 @@ export const getCheckedOutLocations = async () => {
 };
 
 export const getConfigInfo = async (planId) => {
-
-  console.log(" `${config.services.monitorPlans.uri}/workspace/plans/information/${planId}`", `${config.services.monitorPlans.uri}/workspace/plans/information/${planId}`)
   return axios
     .get(
       `${config.services.monitorPlans.uri}/workspace/plans/information/${planId}`
