@@ -358,6 +358,7 @@ export const HeaderInfo = ({
           show={showEvalReport}
           close={closeEvalReportModal}
           showSave={false}
+          showCancel={true}
           children={<MonitoringPlanEvaluationReport
             monitorPlanId={selectedConfig.id}
             facility={facility}

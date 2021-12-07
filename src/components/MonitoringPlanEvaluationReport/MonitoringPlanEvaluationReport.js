@@ -46,9 +46,12 @@ export const MonitoringPlanEvaluationReport = ({
         const printArea = document.getElementById("printArea").innerHTML;
         const originalArea = document.body.innerHTML;
 
-        document.body.innerHTML = printArea;
-        window.print();
-        document.body.innerHTML = originalArea;
+        var printWindow = window.open('', '', 'fullscreen=yes');
+        printWindow.document.write(originalArea);
+        printWindow.document.body.innerHTML = printArea;
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
     }
 
     return (
@@ -56,7 +59,7 @@ export const MonitoringPlanEvaluationReport = ({
 
             {dataLoaded ?
                 (<div><div className="grid-row clearfix position-relative float-right">
-                    <Button
+                    {<Button
                         outline={false}
                         tabIndex="0"
                         aria-label={`Print the evaluation report`}
@@ -66,14 +69,14 @@ export const MonitoringPlanEvaluationReport = ({
                         epa-testid="printBTN"
                     >
                         Print Report
-                    </Button>
+                    </Button>}
                 </div><br /><br />
                     <div className="padding-x-3" id="printArea">
                         <div className="grid-row clearfix position-relative text-bold">
                             {displayCurrentDate()}
                         </div>
                         <div className="grid-row clearfix position-relative padding-top-5 padding-bottom-2">
-                            Facility Name: <span className="text-bold"> {facilityMainName}</span>
+                            Facility Name: <span className="text-bold padding-left-1"> {facilityMainName}</span>
                         </div>
                         <div className="subheader-wrapper bg-epa-blue-base text-white text-normal">
                             Facility Details
