@@ -32,6 +32,7 @@ export const HeaderInfo = ({
   checkoutAPI,
   configID,
 }) => {
+
   const sections = [
     { name: "Defaults" },
     { name: "Formulas" },
