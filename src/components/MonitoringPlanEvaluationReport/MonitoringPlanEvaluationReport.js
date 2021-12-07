@@ -46,9 +46,12 @@ export const MonitoringPlanEvaluationReport = ({
         const printArea = document.getElementById("printArea").innerHTML;
         const originalArea = document.body.innerHTML;
 
-        document.body.innerHTML = printArea;
-        window.print();
-        document.body.innerHTML = originalArea;
+        var printWindow = window.open('', '', 'fullscreen=yes');
+        printWindow.document.write(originalArea);
+        printWindow.document.body.innerHTML = printArea;
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
     }
 
     return (
