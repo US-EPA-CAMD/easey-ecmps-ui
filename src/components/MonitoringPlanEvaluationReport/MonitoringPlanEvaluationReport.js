@@ -59,6 +59,7 @@ export const MonitoringPlanEvaluationReport = ({
 
             {dataLoaded ?
                 (<div><div className="grid-row clearfix position-relative float-right">
+                    {/* DISABLING UNTIL THE PAGE FORMAT CAN BE TRANSLATED TO THE PRINT FUNCTION 
                     <Button
                         outline={false}
                         tabIndex="0"
@@ -69,14 +70,14 @@ export const MonitoringPlanEvaluationReport = ({
                         epa-testid="printBTN"
                     >
                         Print Report
-                    </Button>
+                    </Button> */}
                 </div><br /><br />
                     <div className="padding-x-3" id="printArea">
                         <div className="grid-row clearfix position-relative text-bold">
                             {displayCurrentDate()}
                         </div>
                         <div className="grid-row clearfix position-relative padding-top-5 padding-bottom-2">
-                            Facility Name: <span className="text-bold"> {facilityMainName}</span>
+                            Facility Name: <span className="text-bold padding-left-1"> {facilityMainName}</span>
                         </div>
                         <div className="subheader-wrapper bg-epa-blue-base text-white text-normal">
                             Facility Details
