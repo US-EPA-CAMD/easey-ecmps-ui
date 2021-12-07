@@ -178,9 +178,9 @@ export const HeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-        configs
-          .map((location) => location["monPlanId"])
-          .indexOf(selectedConfig.id)
+      configs
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -312,9 +312,8 @@ export const HeaderInfo = ({
     if (inWorkspace) {
       // when config is checked out by someone
       if (checkedOut) {
-        return `Currently checked-out by: ${
-          currentConfig["checkedOutBy"]
-        } ${formatDate(currentConfig["checkedOutOn"])}`;
+        return `Currently checked-out by: ${currentConfig["checkedOutBy"]
+          } ${formatDate(currentConfig["checkedOutOn"])}`;
       }
       // when config is not checked out
       return `Last updated by: ${currentConfig.userId} ${formatDate(
@@ -334,9 +333,8 @@ export const HeaderInfo = ({
   return (
     <div className="header">
       <div
-        className={`usa-overlay ${
-          showRevertModal || showEvalReport ? "is-visible" : ""
-        } `}
+        className={`usa-overlay ${showRevertModal || showEvalReport ? "is-visible" : ""
+          } `}
       />
       {showRevertModal ? (
         <Modal
@@ -362,7 +360,10 @@ export const HeaderInfo = ({
           show={showEvalReport}
           close={closeEvalReportModal}
           showSave={false}
-          children={<MonitoringPlanEvaluationReport />}
+          children={<MonitoringPlanEvaluationReport
+            monitorPlanId={selectedConfig.id}
+            facility={facility}
+          />}
         />
       ) : null}
 
@@ -408,8 +409,8 @@ export const HeaderInfo = ({
                           <LockOpenSharp /> {"Check Back In"}
                         </Button>
                       ) : checkedOutConfigs
-                          .map((location) => location["monPlanId"])
-                          .indexOf(selectedConfig.id) === -1 ? (
+                        .map((location) => location["monPlanId"])
+                        .indexOf(selectedConfig.id) === -1 ? (
                         <Button
                           autoFocus
                           outline={true}
