@@ -60,6 +60,7 @@ export const HeaderInfo = ({
   const closeEvalReportModal = () => setShowEvalReport(false);
 
   const [checkoutState, setCheckoutState] = useState(checkout);
+  const inWorkspace = user;
 
   // refreshing evaluation status
   const delayInSeconds = config.app.refreshEvalStatusRate;
@@ -129,34 +130,39 @@ export const HeaderInfo = ({
   };
 
   const startRefreshTimer = () => {
-    // if we already have a refresh interval open (this shouldn't happen, but just in case)
-    if (openIntervalId) {
-      // get rid of it and clear the id state
-      clearInterval(openIntervalId);
-      setOpenIntervalId(null);
+    if (inWorkspace && evalStatus === "INQ") {
+      // if we already have a refresh interval open (this shouldn't happen, but just in case)
+      if (openIntervalId) {
+        // get rid of it and clear the id state
+        clearInterval(openIntervalId);
+        setOpenIntervalId(null);
+      }
+
+      const intervalId = setInterval(() => {
+        // TO-DO: only update this state if the current state is different from database
+        //      - need to look into how to read an updating state in a setInterval
+        //      - (might use separate useEffect or useInterval hook)
+
+        // get current status in database
+        mpApi.getConfigInfo(configID).then((res) => {
+          const databaseStatus = res.data.evalStatusCode;
+          setEvalStatus(databaseStatus);
+          setEvalStatusLoaded(true);
+
+          console.log("Refreshed evaluation status to: ", databaseStatus);
+        });
+      }, delayInSeconds);
+
+      return intervalId;
     }
-
-    const intervalId = setInterval(() => {
-      // TO-DO: only update this state if the current state is different from database
-      //      - need to look into how to read an updating state in a setInterval
-      //      - (might use separate useEffect or useInterval hook)
-
-      // get current status in database
-      mpApi.getConfigInfo(configID).then((res) => {
-        const databaseStatus = res.data.evalStatusCode;
-        setEvalStatus(databaseStatus);
-        setEvalStatusLoaded(true);
-
-        console.log("Refreshed evaluation status to: ", databaseStatus);
-      });
-    }, delayInSeconds);
-
-    return intervalId;
+    return 0;
   };
 
   const renderWithNewData = (configs, currentConfig, currentCheckoutStatus) => {
     const intervalId = startRefreshTimer();
-    console.log("STARTED refresh interval with ID: ", intervalId);
+    if (intervalId !== 0) {
+      console.log("STARTED refresh interval with ID: ", intervalId);
+    }
     setOpenIntervalId(intervalId);
     setCheckedOutByUser(isCheckedOutByUser(configs));
     setAuditInformation(createAuditMessage(checkout, currentConfig));
@@ -176,9 +182,9 @@ export const HeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-      configs
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id)
+        configs
+          .map((location) => location["monPlanId"])
+          .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -295,6 +301,7 @@ export const HeaderInfo = ({
       .then(() => {
         // Change front-end to display "In Queue" status after starting eval
         setEvalStatus("INQ");
+        setDataLoaded(false);
         setEvalStatusLoaded(true);
       })
       .catch((error) => {
@@ -304,14 +311,13 @@ export const HeaderInfo = ({
 
   // Create audit message for header info
   const createAuditMessage = (checkedOut, currentConfig) => {
-    const inWorkspace = user;
-
     // WORKSPACE view
     if (inWorkspace) {
       // when config is checked out by someone
       if (checkedOut) {
-        return `Currently checked-out by: ${currentConfig["checkedOutBy"]
-          } ${formatDate(currentConfig["checkedOutOn"])}`;
+        return `Currently checked-out by: ${
+          currentConfig["checkedOutBy"]
+        } ${formatDate(currentConfig["checkedOutOn"])}`;
       }
       // when config is not checked out
       return `Last updated by: ${currentConfig.userId} ${formatDate(
@@ -331,8 +337,9 @@ export const HeaderInfo = ({
   return (
     <div className="header">
       <div
-        className={`usa-overlay ${showRevertModal || showEvalReport ? "is-visible" : ""
-          } `}
+        className={`usa-overlay ${
+          showRevertModal || showEvalReport ? "is-visible" : ""
+        } `}
       />
       {showRevertModal ? (
         <Modal
@@ -359,10 +366,12 @@ export const HeaderInfo = ({
           close={closeEvalReportModal}
           showSave={false}
           showCancel={true}
-          children={<MonitoringPlanEvaluationReport
-            monitorPlanId={selectedConfig.id}
-            facility={facility}
-          />}
+          children={
+            <MonitoringPlanEvaluationReport
+              monitorPlanId={selectedConfig.id}
+              facility={facility}
+            />
+          }
         />
       ) : null}
 
@@ -408,8 +417,8 @@ export const HeaderInfo = ({
                           <LockOpenSharp /> {"Check Back In"}
                         </Button>
                       ) : checkedOutConfigs
-                        .map((location) => location["monPlanId"])
-                        .indexOf(selectedConfig.id) === -1 ? (
+                          .map((location) => location["monPlanId"])
+                          .indexOf(selectedConfig.id) === -1 ? (
                         <Button
                           autoFocus
                           outline={true}
