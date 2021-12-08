@@ -49,7 +49,11 @@ const AboutHome = ({ user, setCurrentLink }) => {
             application. The initial application, released in December of 2021,
             begins with the limited functionality of view (no login required)
             and edit/evaluate (
-            <a target="_blank" href="https://test.epacdx.net/FAQ">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://test.epacdx.net/FAQ"
+            >
               CDX Test login
             </a>{" "}
             required) of monitoring plan data. Subsequent releases throughout
@@ -72,13 +76,18 @@ const AboutHome = ({ user, setCurrentLink }) => {
           </p>
           <p>
             Please subscribe to{" "}
-            <a target="_blank" href={"https://ecmps.blogspot.com/"}>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={"https://ecmps.blogspot.com/"}
+            >
               https://ecmps.blogspot.com/
             </a>{" "}
             for additional updates. Have questions or feedback? Please contact
             us at through our{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href={"https://easey-dev.app.cloud.gov/ecmps/help-support"}
             >
               Contact Us form
@@ -107,6 +116,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
                   <span>
                     <a
                       target="_blank"
+                      rel="noopener noreferrer"
                       href={
                         "https://app.zenhub.com/files/287570343/449899ef-7a75-4129-995c-ae4bf2e347bf/download"
                       }
@@ -149,6 +159,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
               or feedback? Please contact us through our{" "}
               <a
                 target="_blank"
+                rel="noopener noreferrer"
                 href={"https://easey-dev.app.cloud.gov/ecmps/help-support"}
               >
                 Contact Us form
