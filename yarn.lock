@@ -1948,10 +1948,10 @@
     semver "^7.3.2"
     tsutils "^3.17.1"
 
-"@us-epa-camd/easey-design-system@1.13.4":
-  version "1.13.4"
-  resolved "https://npm.pkg.github.com/download/@us-epa-camd/easey-design-system/1.13.4/33bfe326a966268ffc369343152b5170e564d6b2496ca75f4cfdea9996abcbfb#6396e6c7c5cbe17f816c43018e5cbc3b60bff707"
-  integrity sha512-fO5Y0rgxR//a+n9694t6XZ+qJXftg9YiDdKT0ZihMrEimXjjRwD9iOe4cvThqiqpW7+EKkzcmtuQ5Fqm9G8aBA==
+"@us-epa-camd/easey-design-system@1.18.0":
+  version "1.18.0"
+  resolved "https://npm.pkg.github.com/download/@us-epa-camd/easey-design-system/1.18.0/834c23c256990fe0980bcc0dbf434fcc297e5971760a355ec2030f04fc0eca2e#41882b70fb041ea75ab98785842b520bb662da0c"
+  integrity sha512-+Lddfd40Bdy0Kzfl0W8wLW6T5pDRVfbIBM/8POz8brhLco1HAYC0hN4s/+P8ZXjAhvcNe0eqLMT07+L83Uxk1A==
 
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"
