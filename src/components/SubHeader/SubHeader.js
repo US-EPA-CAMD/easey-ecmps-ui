@@ -239,6 +239,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                   aria-expanded="false"
                 >
                   <img
+                    id="toggleDropDown"
                     src={userProfileIcon}
                     className="margin-top-neg-1 position-relative left-neg-1"
                     aria-hidden={true}
@@ -261,7 +262,11 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                         className="font-body-sm"
                         style={{ fontWeight: "normal" }}
                         items={userProfileMenuLinks.items.map((item) => (
-                          <a href={item.link} target="_blank" rel="noopener noreferrer">
+                          <a
+                            href={item.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
                             {item.menu}
                           </a>
                         ))}

@@ -92,7 +92,6 @@ export const DataTableAssert = ({
       radioNames ? radioNames : null
     );
 
-    console.log('radioNames',radioNames)
     assertSelector
       .saveDataSwitch(
         userInput,

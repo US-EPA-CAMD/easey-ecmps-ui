@@ -32,6 +32,7 @@ export const HeaderInfo = ({
   checkoutAPI,
   configID,
 }) => {
+
   const sections = [
     { name: "Defaults" },
     { name: "Formulas" },
@@ -60,6 +61,7 @@ export const HeaderInfo = ({
   const closeEvalReportModal = () => setShowEvalReport(false);
 
   const [checkoutState, setCheckoutState] = useState(checkout);
+  const inWorkspace = user;
 
   // refreshing evaluation status
   const delayInSeconds = config.app.refreshEvalStatusRate;
@@ -71,6 +73,7 @@ export const HeaderInfo = ({
     // get evaluation status
     if (!evalStatusLoaded) {
       mpApi.getConfigInfo(configID).then((res) => {
+        console.log('config id', configID)
         const status = res.data.evalStatusCode;
         setEvalStatus(status);
         setEvalStatusLoaded(true);
@@ -129,34 +132,39 @@ export const HeaderInfo = ({
   };
 
   const startRefreshTimer = () => {
-    // if we already have a refresh interval open (this shouldn't happen, but just in case)
-    if (openIntervalId) {
-      // get rid of it and clear the id state
-      clearInterval(openIntervalId);
-      setOpenIntervalId(null);
+    if (inWorkspace && evalStatus === "INQ") {
+      // if we already have a refresh interval open (this shouldn't happen, but just in case)
+      if (openIntervalId) {
+        // get rid of it and clear the id state
+        clearInterval(openIntervalId);
+        setOpenIntervalId(null);
+      }
+
+      const intervalId = setInterval(() => {
+        // TO-DO: only update this state if the current state is different from database
+        //      - need to look into how to read an updating state in a setInterval
+        //      - (might use separate useEffect or useInterval hook)
+
+        // get current status in database
+        mpApi.getConfigInfo(configID).then((res) => {
+          const databaseStatus = res.data.evalStatusCode;
+          setEvalStatus(databaseStatus);
+          setEvalStatusLoaded(true);
+
+          console.log("Refreshed evaluation status to: ", databaseStatus);
+        });
+      }, delayInSeconds);
+
+      return intervalId;
     }
-
-    const intervalId = setInterval(() => {
-      // TO-DO: only update this state if the current state is different from database
-      //      - need to look into how to read an updating state in a setInterval
-      //      - (might use separate useEffect or useInterval hook)
-
-      // get current status in database
-      mpApi.getConfigInfo(configID).then((res) => {
-        const databaseStatus = res.data.evalStatusCode;
-        setEvalStatus(databaseStatus);
-        setEvalStatusLoaded(true);
-
-        console.log("Refreshed evaluation status to: ", databaseStatus);
-      });
-    }, delayInSeconds);
-
-    return intervalId;
+    return 0;
   };
 
   const renderWithNewData = (configs, currentConfig, currentCheckoutStatus) => {
     const intervalId = startRefreshTimer();
-    console.log("STARTED refresh interval with ID: ", intervalId);
+    if (intervalId !== 0) {
+      console.log("STARTED refresh interval with ID: ", intervalId);
+    }
     setOpenIntervalId(intervalId);
     setCheckedOutByUser(isCheckedOutByUser(configs));
     setAuditInformation(createAuditMessage(checkout, currentConfig));
@@ -295,6 +303,7 @@ export const HeaderInfo = ({
       .then(() => {
         // Change front-end to display "In Queue" status after starting eval
         setEvalStatus("INQ");
+        setDataLoaded(false);
         setEvalStatusLoaded(true);
       })
       .catch((error) => {
@@ -304,8 +313,6 @@ export const HeaderInfo = ({
 
   // Create audit message for header info
   const createAuditMessage = (checkedOut, currentConfig) => {
-    const inWorkspace = user;
-
     // WORKSPACE view
     if (inWorkspace) {
       // when config is checked out by someone
@@ -360,7 +367,13 @@ export const HeaderInfo = ({
           show={showEvalReport}
           close={closeEvalReportModal}
           showSave={false}
-          children={<MonitoringPlanEvaluationReport />}
+          showCancel={true}
+          children={
+            <MonitoringPlanEvaluationReport
+              monitorPlanId={selectedConfig.id}
+              facility={facility}
+            />
+          }
         />
       ) : null}
 
