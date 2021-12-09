@@ -61,19 +61,19 @@ const AboutHome = ({ user, setCurrentLink }) => {
             data types—QA, certifications, and emissions. Data in the beta is
             not production data and is only being used for testing purposes.
           </p>
-          <p>
+          <div>
             There are two primary goals of the extended beta process.
             <ol>
-              <li>
+              <li key="ol_item_1">
                 Allow users to learn the new web-based reporting tool and
                 provide feedback to EPA.
               </li>
-              <li>
+              <li key="ol_item_2">
                 Allow EPA time to test and integrate the beta application into
                 the future production environment and incorporate user feedback.
               </li>
             </ol>
-          </p>
+          </div>
           <p>
             Please subscribe to{" "}
             <a
@@ -97,7 +97,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
         </div>
         {topics.map((topic) => {
           return (
-            <div className=" padding-top-2 padding-bottom-2">
+            <div className=" padding-top-2 padding-bottom-2" key={topic.name}>
               {" "}
               <h3 className="text-bold font-heading-xl">{topic.name} </h3>
               {topic.comingSoon ? (

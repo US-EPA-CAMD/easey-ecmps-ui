@@ -106,7 +106,6 @@ export const Resources = () => {
               {resource.type === "external" ? (
                 <a
                   type="button"
-                  unstyled={true}
                   className="usa-button usa-button--unstyled text-primary text-underline no-hover-color-change"
                   href={resource.url}
                   title={`Go to ${resource.name} page`}
