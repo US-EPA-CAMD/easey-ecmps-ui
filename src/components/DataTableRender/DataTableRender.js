@@ -84,7 +84,6 @@ export const DataTableRender = ({
       addScreenReaderLabelForCollapses();
     };
   }, []);
-
   useEffect(() => {
     if (openAndCheckoutBTNFocus) {
       setTimeout(() => {
@@ -323,7 +322,7 @@ export const DataTableRender = ({
                   }
                   autoFocus={willAutoFocus}
                 >
-                  {checkout && !nonEditable  ? "View / Edit" : "View"}
+                  {checkout && !nonEditable ? "View / Edit" : "View"}
                 </Button>
               )
             ) : (
@@ -373,10 +372,23 @@ export const DataTableRender = ({
       }
     }
   };
+
+  const resetExpandedRows = () => {
+    const expandedRows = document.querySelectorAll(
+      "[data-testid='expander-button-undefined"
+    );
+
+    for (const row of expandedRows) {
+      if (row["ariaLabel"].includes("Collapse")) {
+        row.click();
+      }
+    }
+  };
   const filteredItems = data.filter(colsFilter);
   const subHeaderComponentMemo = useMemo(() => {
     //cannot unit test properly
     const handleSearch = () => {
+      resetExpandedRows();
       setSearchText(document.querySelector("#txtSearchData").value);
     };
 
@@ -444,12 +456,15 @@ export const DataTableRender = ({
               striped={true}
               persistTableHead={false}
               // based on props
-              expandableRowExpanded={(row) => row.expanded}
+              // expandableRowExpanded={(row) => row.expanded}
               subHeaderComponent={subHeaderComponentMemo}
               paginationPerPage={config.app.paginationPerPage}
               paginationRowsPerPageOptions={config.app.paginationPerPageOptions}
               paginationComponentOptions={{
                 rangeSeparatorText: config.app.paginationRangeSeparatorText,
+              }}
+              onChangePage={() => {
+                resetExpandedRows();
               }}
               expandableRowDisabled={(row) => row.disabled}
               expandableRowsComponent={expandableRowComp}
