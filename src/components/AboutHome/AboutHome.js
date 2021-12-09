@@ -53,7 +53,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
               target="_blank"
               rel="noopener noreferrer"
               href="https://test.epacdx.net/FAQ"
-              className="forceUnderlineText"
+              className="forceUnderlineText colorContrast"
             >
               CDX Test login
             </a>{" "}
@@ -81,7 +81,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
               target="_blank"
               rel="noopener noreferrer"
               href={"https://ecmps.blogspot.com/"}
-              className="forceUnderlineText"
+              className="forceUnderlineText colorContrast"
             >
               https://ecmps.blogspot.com/
             </a>{" "}
@@ -91,7 +91,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
               target="_blank"
               rel="noopener noreferrer"
               href={"https://easey-dev.app.cloud.gov/ecmps/help-support"}
-              className="forceUnderlineText"
+              className="forceUnderlineText colorContrast"
             >
               Contact Us form
             </a>
@@ -123,7 +123,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
                       href={
                         "https://app.zenhub.com/files/287570343/449899ef-7a75-4129-995c-ae4bf2e347bf/download"
                       }
-                      className="forceUnderlineText"
+                      className="forceUnderlineText colorContrast"
                     >
                       here
                     </a>
