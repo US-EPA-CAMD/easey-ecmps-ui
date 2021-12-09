@@ -27,15 +27,20 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     `${process.env.PUBLIC_URL}/images/icons/menu-item-expand.svg`
   );
 
+  let profileMenuLinkItems = [
+    { menu: "Manage Login", link: config.app.cdxBaseUrl },
+  ];
+
+  if (config.app.enableManageDelegations !== "false") {
+    profileMenuLinkItems.push({
+      menu: "Manage Delegations",
+      link: `${config.app.cbsBaseUrl}${config.app.cbsManageDelegationsPath}`,
+    });
+  }
+
   const userProfileMenuLinks = {
     label: <span className="margin-right-1 text-no-wrap">User Profile</span>,
-    items: [
-      { menu: "Manage Login", link: "https://cdx.epa.gov/" },
-      {
-        menu: "Manage Delegations",
-        link: "https://camd.epa.gov/CBS/login/auth",
-      },
-    ],
+    items: profileMenuLinkItems,
   };
 
   const subHeaderMenuList = [
