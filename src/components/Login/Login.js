@@ -11,6 +11,7 @@ import {
 
 import { authenticate } from "../../utils/api/easeyAuthApi";
 import LoadingModal from "../LoadingModal/LoadingModal";
+import config from "../../config";
 
 const cdx_user = sessionStorage.getItem("cdx_user")
   ? JSON.parse(sessionStorage.getItem("cdx_user"))
@@ -68,14 +69,12 @@ const Login = ({ isModal }) => {
         .catch((err) => {
           setLoading(false);
           setShowError(true);
-          if(err.response){
+          if (err.response) {
             setFormErrorMessage(err.response.data.message);
-          }else{
+          } else {
             setFormErrorMessage(err.message);
           }
-
         });
-      
     }
 
     return true;
@@ -93,7 +92,7 @@ const Login = ({ isModal }) => {
             <span>
               or{" "}
               <a
-                href="https://dev.epacdx.net/Registration/Terms"
+                href={`${config.app.cdxBaseUrl}${config.app.cdxRegisterPath}`}
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -149,7 +148,7 @@ const Login = ({ isModal }) => {
             </p>
             <p>
               <a
-                href="https://dev.epacdx.net/AccountRecovery/ForgotUserId"
+                href={`${config.app.cdxBaseUrl}${config.app.cdxForgotUsernamePath}`}
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -158,7 +157,7 @@ const Login = ({ isModal }) => {
             </p>
             <p>
               <a
-                href="https://dev.epacdx.net/PasswordReset/GetResetCode"
+                href={`${config.app.cdxBaseUrl}${config.app.cdxForgotPasswordPath}`}
                 rel="noopener noreferrer"
                 target="_blank"
               >

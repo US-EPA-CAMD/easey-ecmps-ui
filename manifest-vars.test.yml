@@ -5,3 +5,4 @@ memory: 1024M
 inactivityDurationCheckoutMinutes: 5
 refreshTokenRateMinutes: 3
 inactivityDurationLogoutMinutes: 5
+cdxBaseUrl: test.epacdx.net
