@@ -32,7 +32,6 @@ export const HeaderInfo = ({
   checkoutAPI,
   configID,
 }) => {
-
   const sections = [
     { name: "Defaults" },
     { name: "Formulas" },
@@ -68,12 +67,12 @@ export const HeaderInfo = ({
   const [openIntervalId, setOpenIntervalId] = useState(null);
   const [evalStatus, setEvalStatus] = useState("");
   const [evalStatusLoaded, setEvalStatusLoaded] = useState(false);
+  const duringEvalStatuses = ["INQ", "WIP"];
 
   useEffect(() => {
     // get evaluation status
     if (!evalStatusLoaded) {
       mpApi.getConfigInfo(configID).then((res) => {
-        console.log('config id', configID)
         const status = res.data.evalStatusCode;
         setEvalStatus(status);
         setEvalStatusLoaded(true);
@@ -140,19 +139,22 @@ export const HeaderInfo = ({
         setOpenIntervalId(null);
       }
 
+      let currStatus = evalStatus;
       const intervalId = setInterval(() => {
-        // TO-DO: only update this state if the current state is different from database
-        //      - need to look into how to read an updating state in a setInterval
-        //      - (might use separate useEffect or useInterval hook)
+        // if status is INQ or WIP:
+        if (duringEvalStatuses.includes(currStatus)) {
+          // check database and update status
+          mpApi.getConfigInfo(configID).then((res) => {
+            const databaseStatus = res.data.evalStatusCode;
 
-        // get current status in database
-        mpApi.getConfigInfo(configID).then((res) => {
-          const databaseStatus = res.data.evalStatusCode;
-          setEvalStatus(databaseStatus);
-          setEvalStatusLoaded(true);
-
-          console.log("Refreshed evaluation status to: ", databaseStatus);
-        });
+            // if database is different than current status, then update
+            if (currStatus !== databaseStatus) {
+              currStatus = databaseStatus;
+              setEvalStatus(databaseStatus);
+              setEvalStatusLoaded(true);
+            }
+          });
+        }
       }, delayInSeconds);
 
       return intervalId;
