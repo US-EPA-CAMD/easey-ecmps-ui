@@ -148,7 +148,7 @@ const Login = ({ isModal }) => {
             </p>
             <p>
               <a
-                href={`${config.app.cdxBaseUrl}${config.app.cdxForgotUsernamePath}`}
+                href={`${config.app.cdxBaseUrl}${config.app.cdxForgotUserIdPath}`}
                 rel="noopener noreferrer"
                 target="_blank"
               >
