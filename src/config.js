@@ -55,8 +55,8 @@ export const config = {
     cdxBaseUrl:
       process.env.REACT_APP_EASEY_ECMPS_UI_CDX_BASE_URL ||
       "https://dev.epacdx.net",
-    cdxForgotUsernamePath:
-      process.env.REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_USERNAME_PATH ||
+    cdxForgotUserIdPath:
+      process.env.REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_USERID_PATH ||
       "/AccountRecovery/ForgotUserId",
     cdxForgotPasswordPath:
       process.env.REACT_APP_EASEY_ECMPS_UI_CDX_REGISTER_PATH ||

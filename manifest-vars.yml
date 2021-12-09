@@ -19,7 +19,7 @@ refreshEvalStatusRateSeconds: 1
 cbsBaseUrl: camd.epa.gov
 cbsManageDelegationsPath: "/CBS/login/auth"
 cdxBaseUrl: dev.epacdx.net
-cdxForgotUsernamePath: "/AccountRecovery/ForgotUserId"
+cdxForgotUserIdPath: "/AccountRecovery/ForgotUserId"
 cdxForgotPasswordPath: "/PasswordReset/GetResetCode"
 cdxRegisterPath: "/Registration/Terms"
 enableManageDelegations: "false"
