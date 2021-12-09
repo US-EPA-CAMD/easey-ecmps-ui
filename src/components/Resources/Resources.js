@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
-import { Link as USWDSLink, Button } from "@trussworks/react-uswds";
+import { Link as USWDSLink } from "@trussworks/react-uswds";
 import { OpenInNew } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import "./Resources.scss";
-import { useEventCallback } from "@material-ui/core";
 
 export const Resources = () => {
   useEffect(() => {
@@ -107,15 +106,13 @@ export const Resources = () => {
               {resource.type === "external" ? (
                 <a
                   type="button"
-                  unstyled={true}
                   className="usa-button usa-button--unstyled text-primary text-underline no-hover-color-change"
                   href={resource.url}
-                  role="link"
-                  rel={resource.name}
                   title={`Go to ${resource.name} page`}
                   key={resource.url}
                   id={`${resource.name.split(" ").join("")}`}
                   target="_blank"
+                  rel="noopener noreferrer"
                 >
                   {resource.name} <OpenInNew />
                 </a>
