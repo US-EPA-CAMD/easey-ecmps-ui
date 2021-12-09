@@ -66,6 +66,7 @@ export const MonitoringPlanEvaluationReport = ({ monitorPlanId, facility }) => {
           <div className="grid-row clearfix position-relative float-right">
             {
               <Button
+                type="button"
                 outline={false}
                 tabIndex="0"
                 aria-label={`Print the evaluation report`}
