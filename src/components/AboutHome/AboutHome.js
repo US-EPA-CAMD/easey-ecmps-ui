@@ -42,7 +42,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
       <div className="grid-col-9 fit-content">
         <div>
           <h2 className="text-bold font-heading-2xl">About ECMPS 2.0 Beta</h2>
-          <p className="text-bold font-heading-md">
+          <p className="text-bold font-heading-md text-italic">
             The Emissions Collection and Monitoring Plan System 2.0 Beta is the
             new web-based reporting tool released in beta form to allow industry
             users and the public to begin testing and learning the new
@@ -53,6 +53,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
               target="_blank"
               rel="noopener noreferrer"
               href="https://test.epacdx.net/FAQ"
+              className="forceUnderlineText colorContrast"
             >
               CDX Test login
             </a>{" "}
@@ -80,6 +81,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
               target="_blank"
               rel="noopener noreferrer"
               href={"https://ecmps.blogspot.com/"}
+              className="forceUnderlineText colorContrast"
             >
               https://ecmps.blogspot.com/
             </a>{" "}
@@ -89,6 +91,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
               target="_blank"
               rel="noopener noreferrer"
               href={"https://easey-dev.app.cloud.gov/ecmps/help-support"}
+              className="forceUnderlineText colorContrast"
             >
               Contact Us form
             </a>
@@ -120,6 +123,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
                       href={
                         "https://app.zenhub.com/files/287570343/449899ef-7a75-4129-995c-ae4bf2e347bf/download"
                       }
+                      className="forceUnderlineText colorContrast"
                     >
                       here
                     </a>
