@@ -14,6 +14,16 @@ applications:
       REACT_APP_EASEY_EMISSIONS_API: https://((apiHost))/emissions-mgmt
       REACT_APP_EASEY_MONITOR_PLAN_API: https://((apiHost))/monitor-plan-mgmt
       REACT_APP_EASEY_AUTH_API: https://((apiHost))/auth-mgmt
+      REACT_APP_EASEY_QUARTZ_API: https://((apiHost))/quartz/api
+      REACT_APP_EASEY_ECMPS_UI_EMAIL: ((email))
+      REACT_APP_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_RATE_SECONDS: ((refreshEvalStatusRateSeconds))
+      REACT_APP_EASEY_ECMPS_UI_CBS_BASE_URL: https://((cbsBaseUrl))
+      REACT_APP_EASEY_ECMPS_UI_CBS_MANAGE_DELEGATIONS_PATH: /((cbsManageDelegationsPath))
+      REACT_APP_EASEY_ECMPS_UI_CDX_BASE_URL: https://((cdxBaseUrl))
+      REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_USERNAME_PATH: /((cdxForgotUsernamePath))
+      REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_PASSWORD_PATH: /((cdxForgotPasswordPath))
+      REACT_APP_EASEY_ECMPS_UI_CDX_REGISTER_PATH: /((cdxRegisterPath))
+      REACT_APP_EASEY_ECMPS_UI_ENABLE_MANAGE_DELEGATIONS: ((enableManageDelegations))
       REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_CHECKOUT_MINUTES: ((inactivityDurationCheckoutMinutes))
       REACT_APP_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS: ((activityPollingFrequencySeconds))
       REACT_APP_EASEY_ECMPS_UI_ACTIVITY_COUNTDOWN_DURATION_SECONDS: ((activityCountdownDurationSeconds))

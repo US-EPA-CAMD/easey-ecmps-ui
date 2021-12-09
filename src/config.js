@@ -46,6 +46,26 @@ export const config = {
     refreshEvalStatusRate:
       process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_RATE_SECONDS *
         oneSecond || 1 * oneSecond,
+    cbsBaseUrl:
+      process.env.REACT_APP_EASEY_ECMPS_UI_CBS_BASE_URL ||
+      "https://camd.epa.gov",
+    cbsManageDelegationsPath:
+      process.env.REACT_APP_EASEY_ECMPS_UI_CBS_MANAGE_DELEGATIONS_PATH ||
+      "/CBS/login/auth",
+    cdxBaseUrl:
+      process.env.REACT_APP_EASEY_ECMPS_UI_CDX_BASE_URL ||
+      "https://dev.epacdx.net",
+    cdxForgotUsernamePath:
+      process.env.REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_USERNAME_PATH ||
+      "/AccountRecovery/ForgotUserId",
+    cdxForgotPasswordPath:
+      process.env.REACT_APP_EASEY_ECMPS_UI_CDX_REGISTER_PATH ||
+      "/PasswordReset/GetResetCode",
+    cdxRegisterPath:
+      process.env.REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_PASSWORD_PATH ||
+      "/Registration/Terms",
+    enableManageDelegations:
+      process.env.REACT_APP_EASEY_ECMPS_UI_ENABLE_MANAGE_DELEGATIONS || "false",
   },
   services: {
     mdm: {
@@ -76,8 +96,7 @@ export const config = {
     authApi: {
       uri:
         process.env.REACT_APP_EASEY_AUTH_API ||
-        "https://easey-dev.app.cloud.gov/api/auth-mgmt",
-      //"https://api.epa.gov/easey/token/auth-mgmt"
+        "https://api-easey-dev.app.cloud.gov/auth-mgmt",
     },
     quartz: {
       uri:
