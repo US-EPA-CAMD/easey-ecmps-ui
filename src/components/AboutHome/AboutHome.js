@@ -165,6 +165,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 href={"https://easey-dev.app.cloud.gov/ecmps/help-support"}
+                className="forceUnderlineText colorContrast"
               >
                 Contact Us form
               </a>
