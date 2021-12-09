@@ -42,14 +42,19 @@ const AboutHome = ({ user, setCurrentLink }) => {
       <div className="grid-col-9 fit-content">
         <div>
           <h2 className="text-bold font-heading-2xl">About ECMPS 2.0 Beta</h2>
-          <p className="text-bold font-heading-md">
+          <p className="text-bold font-heading-md text-italic">
             The Emissions Collection and Monitoring Plan System 2.0 Beta is the
             new web-based reporting tool released in beta form to allow industry
             users and the public to begin testing and learning the new
             application. The initial application, released in December of 2021,
             begins with the limited functionality of view (no login required)
             and edit/evaluate (
-            <a target="_blank" href="https://test.epacdx.net/FAQ">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://test.epacdx.net/FAQ"
+              className="forceUnderlineText"
+            >
               CDX Test login
             </a>{" "}
             required) of monitoring plan data. Subsequent releases throughout
@@ -57,29 +62,36 @@ const AboutHome = ({ user, setCurrentLink }) => {
             data types—QA, certifications, and emissions. Data in the beta is
             not production data and is only being used for testing purposes.
           </p>
-          <p>
+          <div>
             There are two primary goals of the extended beta process.
             <ol>
-              <li>
+              <li key="ol_item_1">
                 Allow users to learn the new web-based reporting tool and
                 provide feedback to EPA.
               </li>
-              <li>
+              <li key="ol_item_2">
                 Allow EPA time to test and integrate the beta application into
                 the future production environment and incorporate user feedback.
               </li>
             </ol>
-          </p>
+          </div>
           <p>
             Please subscribe to{" "}
-            <a target="_blank" href={"https://ecmps.blogspot.com/"}>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={"https://ecmps.blogspot.com/"}
+              className="forceUnderlineText"
+            >
               https://ecmps.blogspot.com/
             </a>{" "}
             for additional updates. Have questions or feedback? Please contact
             us at through our{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href={"https://easey-dev.app.cloud.gov/ecmps/help-support"}
+              className="forceUnderlineText"
             >
               Contact Us form
             </a>
@@ -88,7 +100,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
         </div>
         {topics.map((topic) => {
           return (
-            <div className=" padding-top-2 padding-bottom-2">
+            <div className=" padding-top-2 padding-bottom-2" key={topic.name}>
               {" "}
               <h3 className="text-bold font-heading-xl">{topic.name} </h3>
               {topic.comingSoon ? (
@@ -107,9 +119,11 @@ const AboutHome = ({ user, setCurrentLink }) => {
                   <span>
                     <a
                       target="_blank"
+                      rel="noopener noreferrer"
                       href={
                         "https://app.zenhub.com/files/287570343/449899ef-7a75-4129-995c-ae4bf2e347bf/download"
                       }
+                      className="forceUnderlineText"
                     >
                       here
                     </a>
@@ -149,6 +163,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
               or feedback? Please contact us through our{" "}
               <a
                 target="_blank"
+                rel="noopener noreferrer"
                 href={"https://easey-dev.app.cloud.gov/ecmps/help-support"}
               >
                 Contact Us form

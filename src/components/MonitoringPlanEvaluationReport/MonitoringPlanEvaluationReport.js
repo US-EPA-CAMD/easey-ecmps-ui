@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@trussworks/react-uswds";
 import { DataTableRender } from "../DataTableRender/DataTableRender";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
@@ -31,7 +31,7 @@ export const MonitoringPlanEvaluationReport = ({ monitorPlanId, facility }) => {
           setDataLoaded(true);
         });
     }
-  }, [dataLoaded]);
+  }, [dataLoaded, monitorPlanId]);
 
   const displayCurrentDate = () => {
     const date = new Date();
@@ -66,6 +66,7 @@ export const MonitoringPlanEvaluationReport = ({ monitorPlanId, facility }) => {
           <div className="grid-row clearfix position-relative float-right">
             {
               <Button
+                type="button"
                 outline={false}
                 tabIndex="0"
                 aria-label={`Print the evaluation report`}
