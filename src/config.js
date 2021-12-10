@@ -41,7 +41,7 @@ export const config = {
     version: process.env.REACT_APP_EASEY_ECMPS_UI_VERSION || "v0.0.0",
     title: process.env.REACT_APP_EASEY_ECMPS_UI_TITLE || "ECMPS",
     email:
-      process.env.REACT_APP_EASEY_ECMPS_UI_EMAIL ||
+      process.env.REACT_APP_EASEY_ECMPS_UI_SUPPORT_EMAIL ||
       "ecmps-beta@camdsupport.com",
     refreshEvalStatusRate:
       process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_RATE_SECONDS *
@@ -91,7 +91,7 @@ export const config = {
     monitorPlans: {
       uri:
         process.env.REACT_APP_EASEY_MONITOR_PLAN_API ||
-        "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt",
+        "https://api-easey-dev.app.cloud.gov/monitor-plan-mgmt",
     },
     authApi: {
       uri:
