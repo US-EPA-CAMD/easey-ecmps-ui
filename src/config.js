@@ -45,7 +45,10 @@ export const config = {
       "ecmps-beta@camdsupport.com",
     refreshEvalStatusRate:
       process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_RATE_SECONDS *
-        oneSecond || 1 * oneSecond,
+        oneSecond || 5 * oneSecond,
+    refreshEvalStatusTimeout:
+      process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_TIMEOUT_MINUTES *
+        oneMinute || 15 * oneMinute,
     cbsBaseUrl:
       process.env.REACT_APP_EASEY_ECMPS_UI_CBS_BASE_URL ||
       "https://camd.epa.gov",

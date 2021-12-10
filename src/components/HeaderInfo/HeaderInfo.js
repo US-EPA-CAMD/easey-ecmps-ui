@@ -116,7 +116,7 @@ export const HeaderInfo = ({
     // clear open intervals when a different page is loaded
     return () => {
       if (dataLoaded && evalStatusLoaded) {
-        console.log("leaving monitor plan page (or checked-out/in config)...");
+        console.log("leaving, refreshing, or checking-in/out)...");
         clearOpenRefreshInterval();
       }
     };
@@ -140,9 +140,14 @@ export const HeaderInfo = ({
       }
 
       let currStatus = evalStatus;
+      let totalTime = 0; // measured in milliseconds
       const intervalId = setInterval(() => {
+        totalTime += delayInSeconds;
         // if status is INQ or WIP:
-        if (duringEvalStatuses.includes(currStatus)) {
+        if (
+          totalTime < config.app.refreshEvalStatusTimeout &&
+          duringEvalStatuses.includes(currStatus)
+        ) {
           // check database and update status
           mpApi.getConfigInfo(configID).then((res) => {
             const databaseStatus = res.data.evalStatusCode;
@@ -154,6 +159,16 @@ export const HeaderInfo = ({
               setEvalStatusLoaded(true);
             }
           });
+        }
+
+        // if refresh timeout is reached,
+        // then refresh the header (will automatically clear the open interval)
+        if (totalTime >= config.app.refreshEvalStatusTimeout) {
+          console.log(
+            "Evaluation status refresh timeout reached.\nRefreshing header and stopping interval..."
+          );
+          setEvalStatusLoaded(false);
+          setDataLoaded(false);
         }
       }, delayInSeconds);
 
@@ -293,6 +308,8 @@ export const HeaderInfo = ({
     mpApi.revertOfficialRecord(selectedConfig.id).then((res) => {
       setRevertedState(true);
       setShowRevertModal(false);
+      setEvalStatusLoaded(false);
+      setDataLoaded(false);
     });
   };
 
