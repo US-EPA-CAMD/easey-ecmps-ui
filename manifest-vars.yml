@@ -15,7 +15,8 @@ googleAnalyticsEnabled: "false"
 googleAnalyticsPublicContainerId: "GTM-W55ZK7"
 googleAnalyticsAuthenticatedContainerId: "GTM-W55ZK7"
 email: ecmps-beta@camdsupport.com
-refreshEvalStatusRateSeconds: 1
+refreshEvalStatusRateSeconds: 5
+refreshEvalStatusTimeoutMinutes: 5
 cbsBaseUrl: camd.epa.gov
 cbsManageDelegationsPath: "/CBS/login/auth"
 cdxBaseUrl: dev.epacdx.net

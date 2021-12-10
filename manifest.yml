@@ -17,6 +17,7 @@ applications:
       REACT_APP_EASEY_QUARTZ_API: https://((apiHost))/quartz/api
       REACT_APP_EASEY_ECMPS_UI_SUPPORT_EMAIL: ((email))
       REACT_APP_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_RATE_SECONDS: ((refreshEvalStatusRateSeconds))
+      REACT_APP_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_TIMEOUT_MINUTES: ((refreshEvalStatusTimeoutMinutes))
       REACT_APP_EASEY_ECMPS_UI_CBS_BASE_URL: https://((cbsBaseUrl))
       REACT_APP_EASEY_ECMPS_UI_CBS_MANAGE_DELEGATIONS_PATH: ((cbsManageDelegationsPath))
       REACT_APP_EASEY_ECMPS_UI_CDX_BASE_URL: https://((cdxBaseUrl))
