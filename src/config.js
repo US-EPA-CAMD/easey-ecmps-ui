@@ -74,22 +74,22 @@ export const config = {
     mdm: {
       uri:
         process.env.REACT_APP_EASEY_MDM_API ||
-        "https://easey-dev.app.cloud.gov/api/master-data-mgmt",
+        "https://api-easey-dev.app.cloud.gov/master-data-mgmt",
     },
     rules: {
       uri:
         process.env.REACT_APP_EASEY_RULES_API ||
-        "https://easey-dev.app.cloud.gov/api/rules-mgmt",
+        "https://api-easey-dev.app.cloud.gov/rules-mgmt",
     },
     facilities: {
       uri:
         process.env.REACT_APP_EASEY_FACILITIES_API ||
-        "https://easey-dev.app.cloud.gov/api/facility-mgmt",
+        "https://api-easey-dev.app.cloud.gov/facilities-mgmt",
     },
     emissions: {
       uri:
         process.env.REACT_APP_EASEY_EMISSIONS_API ||
-        "https://easey-dev.app.cloud.gov/api/emissions-mgmt",
+        "https://api-easey-dev.app.cloud.gov/emissions-mgmt",
     },
     monitorPlans: {
       uri:
