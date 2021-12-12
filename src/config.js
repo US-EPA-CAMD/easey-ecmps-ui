@@ -104,7 +104,7 @@ export const config = {
     quartz: {
       uri:
         process.env.REACT_APP_EASEY_QUARTZ_API ||
-        "https://easey-dev.app.cloud.gov/quartz-mgmt",
+        "https://api-easey-dev.app.cloud.gov/quartz-mgmt",
     },
   },
 };
