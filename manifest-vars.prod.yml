@@ -7,3 +7,7 @@ refreshTokenRateMinutes: 15
 inactivityDurationLogoutMinutes: 20
 googleAnalyticsEnabled: "true"
 googleAnalyticsPublicContainerId: "GTM-L8ZB"
+cdxBaseUrl: cdx.epa.gov
+enableManageDelegations: "true"
+cbsBaseUrl: camd.epa.gov
+refreshEvalStatusTimeoutMinutes: 15

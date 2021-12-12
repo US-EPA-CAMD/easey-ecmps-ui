@@ -5,3 +5,6 @@ memory: 2048M
 inactivityDurationCheckoutMinutes: 20
 refreshTokenRateMinutes: 15
 inactivityDurationLogoutMinutes: 20
+cdxBaseUrl: test.epacdx.net
+cbsBaseUrl: camd.epa.gov
+refreshEvalStatusTimeoutMinutes: 15

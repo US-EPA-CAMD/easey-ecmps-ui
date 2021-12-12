@@ -41,11 +41,14 @@ export const config = {
     version: process.env.REACT_APP_EASEY_ECMPS_UI_VERSION || "v0.0.0",
     title: process.env.REACT_APP_EASEY_ECMPS_UI_TITLE || "ECMPS",
     email:
-      process.env.REACT_APP_EASEY_ECMPS_UI_EMAIL ||
+      process.env.REACT_APP_EASEY_ECMPS_UI_SUPPORT_EMAIL ||
       "ecmps-beta@camdsupport.com",
     refreshEvalStatusRate:
       process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_RATE_SECONDS *
-        oneSecond || 1 * oneSecond,
+        oneSecond || 5 * oneSecond,
+    refreshEvalStatusTimeout:
+      process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_TIMEOUT_MINUTES *
+        oneMinute || 15 * oneMinute,
     cbsBaseUrl:
       process.env.REACT_APP_EASEY_ECMPS_UI_CBS_BASE_URL ||
       "https://camd.epa.gov",
@@ -55,8 +58,8 @@ export const config = {
     cdxBaseUrl:
       process.env.REACT_APP_EASEY_ECMPS_UI_CDX_BASE_URL ||
       "https://dev.epacdx.net",
-    cdxForgotUsernamePath:
-      process.env.REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_USERNAME_PATH ||
+    cdxForgotUserIdPath:
+      process.env.REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_USERID_PATH ||
       "/AccountRecovery/ForgotUserId",
     cdxForgotPasswordPath:
       process.env.REACT_APP_EASEY_ECMPS_UI_CDX_REGISTER_PATH ||
@@ -71,27 +74,27 @@ export const config = {
     mdm: {
       uri:
         process.env.REACT_APP_EASEY_MDM_API ||
-        "https://easey-dev.app.cloud.gov/api/master-data-mgmt",
+        "https://api-easey-dev.app.cloud.gov/master-data-mgmt",
     },
     rules: {
       uri:
         process.env.REACT_APP_EASEY_RULES_API ||
-        "https://easey-dev.app.cloud.gov/api/rules-mgmt",
+        "https://api-easey-dev.app.cloud.gov/rules-mgmt",
     },
     facilities: {
       uri:
         process.env.REACT_APP_EASEY_FACILITIES_API ||
-        "https://easey-dev.app.cloud.gov/api/facility-mgmt",
+        "https://api-easey-dev.app.cloud.gov/facilities-mgmt",
     },
     emissions: {
       uri:
         process.env.REACT_APP_EASEY_EMISSIONS_API ||
-        "https://easey-dev.app.cloud.gov/api/emissions-mgmt",
+        "https://api-easey-dev.app.cloud.gov/emissions-mgmt",
     },
     monitorPlans: {
       uri:
         process.env.REACT_APP_EASEY_MONITOR_PLAN_API ||
-        "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt",
+        "https://api-easey-dev.app.cloud.gov/monitor-plan-mgmt",
     },
     authApi: {
       uri:
@@ -101,7 +104,7 @@ export const config = {
     quartz: {
       uri:
         process.env.REACT_APP_EASEY_QUARTZ_API ||
-        "https://easey-dev.app.cloud.gov/quartz/api",
+        "https://api-easey-dev.app.cloud.gov/quartz-mgmt",
     },
   },
 };
