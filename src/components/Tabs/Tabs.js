@@ -102,7 +102,11 @@ export const Tabs = ({
                   aria-label={`open ${el.props.title.split("(")[0]}${
                     user &&
                     el.props.locationId &&
-                    isCheckedOut(el.props.locationId)
+                    el.props.facId &&
+                    (isCheckedOut(el.props.locationId) ||
+                      checkedOutLocations.some(
+                        (loc) => loc.facId === parseInt(el.props.facId)
+                      ))
                       ? "(locked)"
                       : ""
                   } ${el.props.title
@@ -125,7 +129,11 @@ export const Tabs = ({
                   <div className="text-center tab-button-text-container ellipsis-text padding-left-2px">
                     {user &&
                     el.props.locationId &&
-                    isCheckedOut(el.props.locationId) ? (
+                    el.props.facId &&
+                    (isCheckedOut(el.props.locationId) ||
+                      checkedOutLocations.some(
+                        (plan) => plan.facId === parseInt(el.props.facId)
+                      )) ? (
                       <LockSharp
                         role="img"
                         className="text-bold tab-icon margin-right-2"
