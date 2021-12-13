@@ -1,6 +1,6 @@
 import React, { useState, cloneElement } from "react";
 import { connect } from "react-redux";
-import {Tabs} from "../Tabs/Tabs";
+import { Tabs } from "../Tabs/Tabs";
 import TabPane from "../TabPane/TabPane";
 import {
   addFacilityTab,
@@ -33,6 +33,7 @@ export const DynamicTabs = ({
           location: [0, t.selectedConfig.locations[0].id],
           section: [4, "Methods"],
           selectedConfig: t.selectedConfig,
+          facId: t.selectedConfig.locations[0].facId,
           inactive: [false, false],
         });
       }
@@ -73,6 +74,7 @@ export const DynamicTabs = ({
               locationId={
                 tab.selectedConfig ? tab.selectedConfig.id : "initial"
               }
+              facId={tab.selectedConfig ? tab.selectedConfig.facId : "initial"}
             >
               {cloneElement(tab.component, {
                 addtabs: addTabsHandler,

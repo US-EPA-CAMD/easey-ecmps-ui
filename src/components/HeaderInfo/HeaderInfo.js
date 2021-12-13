@@ -69,10 +69,14 @@ export const HeaderInfo = ({
   const [evalStatusLoaded, setEvalStatusLoaded] = useState(false);
   const duringEvalStatuses = ["INQ", "WIP"];
 
+  const [userHasCheckout, setUserHasCheckout] = useState(false);
+
+  const [lockedFacility, setLockedFacility] = useState(false);
+
   useEffect(() => {
     // get evaluation status
     if (!evalStatusLoaded) {
-      mpApi.getConfigInfo(configID).then((res) => {
+      mpApi.getRefreshInfo(configID).then((res) => {
         const status = res.data.evalStatusCode;
         setEvalStatus(status);
         setEvalStatusLoaded(true);
@@ -96,19 +100,25 @@ export const HeaderInfo = ({
         // from checkouts table (if available)
         if (currentConfig) {
           currentCheckoutStatus = true;
-        }
 
+          // set current facility as locked & render new data onto page
+          setLockedFacility(true);
+          renderWithNewData(configs, currentConfig, currentCheckoutStatus);
+        }
         // if not, obtain it from the database
-        if (!currentConfig) {
-          mpApi.getConfigInfo(configID).then((info) => {
+        else {
+          mpApi.getRefreshInfo(configID).then((info) => {
             currentConfig = {
               userId: info.data.userId,
               updateDate: info.data.updateDate,
             };
+
+            // update lock status of current facility & render new data onto page
+            setLockedFacility(
+              configs.some((plan) => plan.facId === parseInt(info.data.facId))
+            );
             renderWithNewData(configs, currentConfig, currentCheckoutStatus);
           });
-        } else {
-          renderWithNewData(configs, currentConfig, currentCheckoutStatus);
         }
       });
     }
@@ -149,7 +159,7 @@ export const HeaderInfo = ({
           duringEvalStatuses.includes(currStatus)
         ) {
           // check database and update status
-          mpApi.getConfigInfo(configID).then((res) => {
+          mpApi.getRefreshInfo(configID).then((res) => {
             const databaseStatus = res.data.evalStatusCode;
 
             // if database is different than current status, then update
@@ -183,6 +193,7 @@ export const HeaderInfo = ({
       console.log("STARTED refresh interval with ID: ", intervalId);
     }
     setOpenIntervalId(intervalId);
+    setUserHasCheckout(configs.some((plan) => plan.userId === user.id));
     setCheckedOutByUser(isCheckedOutByUser(configs));
     setAuditInformation(createAuditMessage(checkout, currentConfig));
     setCheckout(currentCheckoutStatus);
@@ -215,8 +226,6 @@ export const HeaderInfo = ({
         .indexOf(selectedConfig.id) > -1
     );
   };
-
-  const [displayLock, setDisplayLock] = useState(isCheckedOut());
 
   const formatDate = (dateString, isUTC = false) => {
     const date = new Date(dateString);
@@ -297,7 +306,7 @@ export const HeaderInfo = ({
     checkoutAPI(direction, configID, selectedConfig.id, setCheckout).then(
       () => {
         setCheckedOutByUser(direction);
-        setDisplayLock(direction);
+        setLockedFacility(direction);
         setCheckoutState(direction);
         setDataLoaded(false);
       }
@@ -402,7 +411,7 @@ export const HeaderInfo = ({
             <div>
               <h3 className="display-inline-block">
                 {" "}
-                {user && (checkoutState || displayLock) ? (
+                {user && (checkoutState || lockedFacility) ? (
                   <LockSharp className="lock-icon margin-right-1" />
                 ) : (
                   ""
@@ -437,7 +446,9 @@ export const HeaderInfo = ({
                         >
                           <LockOpenSharp /> {"Check Back In"}
                         </Button>
-                      ) : checkedOutConfigs
+                      ) : !lockedFacility &&
+                        !userHasCheckout &&
+                        checkedOutConfigs
                           .map((location) => location["monPlanId"])
                           .indexOf(selectedConfig.id) === -1 ? (
                         <Button
