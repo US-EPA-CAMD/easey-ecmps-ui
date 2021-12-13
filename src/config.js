@@ -62,10 +62,10 @@ export const config = {
       process.env.REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_USERID_PATH ||
       "/AccountRecovery/ForgotUserId",
     cdxForgotPasswordPath:
-      process.env.REACT_APP_EASEY_ECMPS_UI_CDX_REGISTER_PATH ||
+      process.env.REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_PASSWORD_PATH ||
       "/PasswordReset/GetResetCode",
     cdxRegisterPath:
-      process.env.REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_PASSWORD_PATH ||
+      process.env.REACT_APP_EASEY_ECMPS_UI_CDX_REGISTER_PATH ||
       "/Registration/Terms",
     enableManageDelegations:
       process.env.REACT_APP_EASEY_ECMPS_UI_ENABLE_MANAGE_DELEGATIONS || "false",
