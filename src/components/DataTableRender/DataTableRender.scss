@@ -5,10 +5,3 @@
   width: 100%; /*or whatever width you want the effect of <hr>*/
   border-top: 1px solid $epa-gray;
 }
-
-.rdt_TableRow:nth-child(odd) {
-  background-color: $epa-off-white !important;
-}
-.rdt_TableRow:nth-child(even) {
-  background-color: $epa-white !important;
-}

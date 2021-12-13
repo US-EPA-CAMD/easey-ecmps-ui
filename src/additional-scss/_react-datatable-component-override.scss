@@ -120,3 +120,10 @@
     padding: 0.5em 0;
   }
 }
+
+.rdt_TableRow:nth-child(odd) {
+  background-color: $epa-off-white !important;
+}
+.rdt_TableRow:nth-child(even) {
+  background-color: $epa-white !important;
+}
