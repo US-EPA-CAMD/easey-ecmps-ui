@@ -204,10 +204,10 @@ export const getCheckedOutLocations = async () => {
     .catch(handleError);
 };
 
-export const getConfigInfo = async (planId) => {
+export const getRefreshInfo = async (planId) => {
   return axios
     .get(
-      `${config.services.monitorPlans.uri}/workspace/plans/information/${planId}`
+      `${config.services.monitorPlans.uri}/workspace/plans/${planId}/refresh`
     )
     .then(handleResponse)
     .catch(handleError);
