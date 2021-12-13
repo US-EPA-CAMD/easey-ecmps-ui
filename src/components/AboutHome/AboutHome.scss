@@ -1,36 +1,24 @@
-.box--rss>.box__title, .box--rss>.box__footer {
-    background-color: green;
-    border-color: #005ea2;
-    color: #fff;
-}
-.box--alert>.box__title, .box--blog>.box__title, .box--highlight>.box__title, .box--multipurpose>.box__title, .box--news>.box__title, .box--related-info>.box__title, .box--rss>.box__title {
-    margin-bottom: 0;
-    text-align: center;
-}
-.box--alert>.box__title, .box--blog>.box__title, .box--highlight>.box__title, .box--multipurpose>.box__title, .box--news>.box__title, .box--related-info>.box__title, .box--rss>.box__title, .box--alert>.box__title>.box__title-link, .box--blog>.box__title>.box__title-link, .box--highlight>.box__title>.box__title-link, .box--multipurpose>.box__title>.box__title-link, .box--news>.box__title>.box__title-link, .box--related-info>.box__title>.box__title-link, .box--rss>.box__title>.box__title-link, .box--alert>.box__content, .box--blog>.box__content, .box--highlight>.box__content, .box--multipurpose>.box__content, .box--news>.box__content, .box--related-info>.box__content, .box--rss>.box__content, .box--alert>.box__footer, .box--blog>.box__footer, .box--highlight>.box__footer, .box--multipurpose>.box__footer, .box--news>.box__footer, .box--related-info>.box__footer, .box--rss>.box__footer {
-    padding: 1.25rem;
-}
-.box--alert>.box__title, .box--blog>.box__title, .box--highlight>.box__title, .box--multipurpose>.box__title, .box--news>.box__title, .box--related-info>.box__title, .box--rss>.box__title, .box--alert>.box__image-link>.box__image, .box--blog>.box__image-link>.box__image, .box--highlight>.box__image-link>.box__image, .box--multipurpose>.box__image-link>.box__image, .box--news>.box__image-link>.box__image, .box--related-info>.box__image-link>.box__image, .box--rss>.box__image-link>.box__image, .box--alert>.box__image, .box--blog>.box__image, .box--highlight>.box__image, .box--multipurpose>.box__image, .box--news>.box__image, .box--related-info>.box__image, .box--rss>.box__image, .box--alert>.box__content, .box--blog>.box__content, .box--highlight>.box__content, .box--multipurpose>.box__content, .box--news>.box__content, .box--related-info>.box__content, .box--rss>.box__content, .box--alert>.box__footer, .box--blog>.box__footer, .box--highlight>.box__footer, .box--multipurpose>.box__footer, .box--news>.box__footer, .box--related-info>.box__footer, .box--rss>.box__footer {
-    border: 1px solid green;
-}
-h4, .h4, .box--alert>.box__title, .box--blog>.box__title, .box--highlight>.box__title, .box--multipurpose>.box__title, .box--news>.box__title, .box--related-info>.box__title, .box--rss>.box__title, .field__label, .teaser__subtitle {
-    font-family: Merriweather Web, Georgia,Cambria,Times New Roman,Times,serif;
-    font-size: .98rem;
-    font-weight: bold;
-    line-height: 1.2;
-}
-.box--alert>.box__content, .box--blog>.box__content, .box--highlight>.box__content, .box--multipurpose>.box__content, .box--news>.box__content, .box--related-info>.box__content, .box--rss>.box__content {
-    border-bottom-width: .25rem;
-    margin: 0;
+@import "../../additional-scss/variables";
+
+.aboutHome {
+  .title {
+    background-color: $epa-green;
+    border-color: $epa-blue-base;
+  }
+
+  .box {
+    border-color: $epa-green;
+  }
 }
 
-.viewAboutBTN{
-    color:black !important;
+.viewAboutBTN {
+  color: $epa-black !important;
 }
 
-.forceUnderlineText{
-    text-decoration:underline !important;
+.forceUnderlineText {
+  text-decoration: underline !important;
 }
-.colorContrast{
-    color:#6161FF !important;
+
+.colorContrast {
+  color: $epa-teal !important;
 }

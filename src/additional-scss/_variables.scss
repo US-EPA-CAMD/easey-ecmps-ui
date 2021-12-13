@@ -1,17 +1,24 @@
-$epa-disabled-dark: #adadad;
+/* _variables.scss
+ *    Contains all variables used throughout this project.
+ *
+ *    NOTE: to avoid duplication of variables, please keep them in alphabetical order
+ *
+ */
 $epa-bg-secondary-darker: linear-gradient(to bottom, #520001 0%, #6c0810 100%);
 $epa-black: #000;
 $epa-blue-base: #005ea2;
+$epa-darkslate-blue: #365b8f;
+$epa-dark-gray: #666;
+$epa-darker-gray: #565c65;
+$epa-disabled-dark: #adadad;
+$epa-generic-font-family: "Source Sans Pro", sans-serif;
+$epa-gray: #ccc;
+$epa-green: #008000;
 $epa-info-base: #00bde3;
-$epa-white: #fff;
+$epa-navy: #808080;
 $epa-off-white: #f0f0f0;
 $epa-primary-dark: #1a4480;
-$epa-green: #009500;
-$epa-yellow: #f7b801;
 $epa-red: #950000;
-$epa-navy: #808080;
-$epa-darkslate-blue: #365b8f;
-$epa-gray: #ccc;
-$epa-dark-gray: #666;
-$epa-darker-gray: #565C65;
-$epa-generic-font-family: "Public Sans", sans-serif;
+$epa-teal: #6161ff;
+$epa-white: #fff;
+$epa-yellow: #f7b801;
