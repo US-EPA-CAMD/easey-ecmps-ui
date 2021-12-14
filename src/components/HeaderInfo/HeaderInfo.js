@@ -219,14 +219,6 @@ export const HeaderInfo = ({
     );
   };
 
-  const isCheckedOut = () => {
-    return (
-      checkedOutConfigs
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id) > -1
-    );
-  };
-
   const formatDate = (dateString, isUTC = false) => {
     const date = new Date(dateString);
     //HANDLE -1 days from DB dates which are UTC
