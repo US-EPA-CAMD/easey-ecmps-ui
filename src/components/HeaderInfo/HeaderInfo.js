@@ -67,7 +67,7 @@ export const HeaderInfo = ({
   const [openIntervalId, setOpenIntervalId] = useState(null);
   const [evalStatus, setEvalStatus] = useState("");
   const [evalStatusLoaded, setEvalStatusLoaded] = useState(false);
-  const duringEvalStatuses = ["INQ", "WIP"];
+  // const duringEvalStatuses = ["INQ", "WIP"];
 
   const [userHasCheckout, setUserHasCheckout] = useState(false);
 
@@ -141,7 +141,7 @@ export const HeaderInfo = ({
   };
 
   const startRefreshTimer = () => {
-    if (inWorkspace && evalStatus === "INQ") {
+    if (inWorkspace && evalStatus !== "EVAL") {
       // if we already have a refresh interval open (this shouldn't happen, but just in case)
       if (openIntervalId) {
         // get rid of it and clear the id state
@@ -155,8 +155,8 @@ export const HeaderInfo = ({
         totalTime += delayInSeconds;
         // if status is INQ or WIP:
         if (
-          totalTime < config.app.refreshEvalStatusTimeout &&
-          duringEvalStatuses.includes(currStatus)
+          totalTime < config.app.refreshEvalStatusTimeout
+          // && duringEvalStatuses.includes(currStatus)
         ) {
           // check database and update status
           mpApi.getRefreshInfo(configID).then((res) => {
