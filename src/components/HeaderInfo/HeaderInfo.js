@@ -155,8 +155,9 @@ export const HeaderInfo = ({
         totalTime += delayInSeconds;
         // if status is INQ or WIP:
         if (
-          totalTime < config.app.refreshEvalStatusTimeout
+          totalTime < config.app.refreshEvalStatusTimeout &&
           // && duringEvalStatuses.includes(currStatus)
+          currStatus !== "EVAL"
         ) {
           // check database and update status
           mpApi.getRefreshInfo(configID).then((res) => {
