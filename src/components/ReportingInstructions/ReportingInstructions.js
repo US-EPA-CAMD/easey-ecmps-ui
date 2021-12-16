@@ -2,6 +2,7 @@ import React from "react";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import { OpenInNew } from "@material-ui/icons";
 import "./ReportingInstructions.scss";
+import config from "../../config";
 
 import reportingInstructionsPDF from "./ECMPS Monitoring Plan Reporting Instructions 2021 Q4.pdf";
 import monitoringPlanJSON from "./monitoring-plan-json-format.json";
@@ -40,22 +41,22 @@ export const ReportingInstructions = () => {
     },
     {
       linkName: "Monitoring Plan - Swagger Page",
-      url: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/swagger",
+      url: `${config.services.monitorPlans.uri}/swagger`,
       fileDownload: false,
     },
     {
       linkName: "Part 75 Regulations",
-      url: "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-C/part-75?toc=1",
+      url: `${config.app.partSeventyFiveRegulationsBaseUrl}${config.app.partSeventyFiveRegulationsPath}`,
       fileDownload: false,
     },
     {
       linkName: "e-CFR",
-      url: "https://www.ecfr.gov/cgi-bin/text-idx?SID=4002e94719ee5632c5970867e3c7e018&mc=true&tpl=/ecfrbrowse/Title40/40cfr75_main_02.tpl",
+      url: `${config.app.ecfrBaseUrl}${config.app.ecfrPath}`,
       fileDownload: false,
     },
     {
       linkName: "MATS",
-      url: "https://www.ecfr.gov/cgi-bin/retrieveECFR?gp=&SID=6952010b8924c119705ba2727c050a07&mc=true&n=pt40.16.63&r=PART&ty=HTML#sp40.16.63.uuuuu",
+      url: `${config.app.matsBaseUrl}${config.app.matsPath}`,
       fileDownload: false,
     },
   ];
