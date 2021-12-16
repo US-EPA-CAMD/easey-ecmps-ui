@@ -99,17 +99,16 @@ export const HeaderInfo = ({
 
         // from checkouts table (if available)
         if (currentConfig) {
-          currentCheckoutStatus = true;
-
           // set current facility as locked & render new data onto page
           setLockedFacility(true);
-          renderWithNewData(configs, currentConfig, currentCheckoutStatus);
+          renderWithNewData(configs, currentConfig, true);
         }
         // if not, obtain it from the database
         else {
           mpApi.getRefreshInfo(configID).then((info) => {
             currentConfig = {
-              checkedOutBy: info.data.userId,
+              checkedOutBy: "N/A",
+              lastUpdatedBy: info.data.userId,
               updateDate: info.data.updateDate,
             };
 
@@ -117,7 +116,7 @@ export const HeaderInfo = ({
             setLockedFacility(
               configs.some((plan) => plan.facId === parseInt(info.data.facId))
             );
-            renderWithNewData(configs, currentConfig, currentCheckoutStatus);
+            renderWithNewData(configs, currentConfig, false);
           });
         }
       });
@@ -193,14 +192,15 @@ export const HeaderInfo = ({
     if (intervalId !== 0) {
       console.log("STARTED refresh interval with ID: ", intervalId);
     }
-
-    setCheckoutState(currentConfig.checkedOutBy === user["userId"]);
+    setCheckoutState(currentConfig.checkedOutBy !== "N/A");
     setOpenIntervalId(intervalId);
     setUserHasCheckout(
       configs.some((plan) => plan["checkedOutBy"] === user.userId)
     );
     setCheckedOutByUser(isCheckedOutByUser(configs));
-    setAuditInformation(createAuditMessage(checkout, currentConfig));
+    setAuditInformation(
+      createAuditMessage(currentConfig.checkedOutBy !== "N/A", currentConfig)
+    );
     setCheckout(currentCheckoutStatus);
     setDataLoaded(true);
   };
@@ -347,13 +347,13 @@ export const HeaderInfo = ({
         } ${formatDate(currentConfig["checkedOutOn"])}`;
       }
       // when config is not checked out
-      return `Last updated by: ${currentConfig["checkedOutBy"]} ${formatDate(
+      return `Last updated by: ${currentConfig.lastUpdatedBy} ${formatDate(
         currentConfig.updateDate,
         true
       )}`;
     }
     // GLOBAL view
-    return `Last submitted by: ${selectedConfig["checkedOutBy"]} ${formatDate(
+    return `Last submitted by: ${selectedConfig.lastUpdatedBy} ${formatDate(
       selectedConfig.updateDate
         ? selectedConfig.updateDate
         : selectedConfig.addDate,
@@ -408,7 +408,7 @@ export const HeaderInfo = ({
             <div>
               <h3 className="display-inline-block">
                 {" "}
-                {user && (checkoutState || lockedFacility) ? (
+                {user && (checkedOutByUser || lockedFacility) ? (
                   <LockSharp className="lock-icon margin-right-1" />
                 ) : (
                   ""
@@ -515,7 +515,7 @@ export const HeaderInfo = ({
           </div>
           <div className="grid-col clearfix position-absolute top-1 right-0">
             <div className="">
-              {checkoutState && user ? (
+              {user && checkedOutByUser ? (
                 <div>
                   <div className="padding-2 margin-left-10">
                     {evalStatusText(evalStatus) === "Needs Evaluation" ? (
