@@ -521,7 +521,7 @@ export const HeaderInfo = ({
                     {evalStatusText(evalStatus) === "Needs Evaluation" ? (
                       <Button
                         type="button"
-                        className="margin-right-2 margin-left-4 float-right"
+                        className="margin-right-2 margin-left-4 float-right margin-bottom-2"
                         outline={false}
                         onClick={evaluate}
                       >
@@ -533,7 +533,7 @@ export const HeaderInfo = ({
                     {showSubmit(evalStatus) ? (
                       <Button
                         type="button"
-                        className="margin-right-2 float-right"
+                        className="margin-right-2 float-right margin-bottom-2"
                         outline={false}
                         title="Coming Soon"
                       >
@@ -544,7 +544,7 @@ export const HeaderInfo = ({
                     )}
                   </div>
                   {showRevert(evalStatus) ? (
-                    <div className="margin-right-3 margin-top-2 float-right">
+                    <div className="margin-right-3 float-right margin-bottom-2">
                       <Button
                         type="button"
                         id="showRevertModal"
@@ -564,7 +564,7 @@ export const HeaderInfo = ({
               )}
             </div>
             {user ? (
-              <div className="grid-row padding-1 float-right text-right margin-right-3 margin-top-1 mobile:display-none desktop:display-block">
+              <div className="grid-row float-right text-right margin-right-3 mobile:display-none desktop:display-block">
                 <table role="presentation">
                   <tbody>
                     <tr>
