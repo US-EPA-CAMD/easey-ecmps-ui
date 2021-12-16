@@ -109,7 +109,7 @@ export const HeaderInfo = ({
         else {
           mpApi.getRefreshInfo(configID).then((info) => {
             currentConfig = {
-              userId: info.data.userId,
+              checkedOutBy: info.data.userId,
               updateDate: info.data.updateDate,
             };
 
@@ -193,8 +193,12 @@ export const HeaderInfo = ({
     if (intervalId !== 0) {
       console.log("STARTED refresh interval with ID: ", intervalId);
     }
+
+    setCheckoutState(currentConfig.checkedOutBy === user["userId"]);
     setOpenIntervalId(intervalId);
-    setUserHasCheckout(configs.some((plan) => plan.userId === user.id));
+    setUserHasCheckout(
+      configs.some((plan) => plan["checkedOutBy"] === user.userId)
+    );
     setCheckedOutByUser(isCheckedOutByUser(configs));
     setAuditInformation(createAuditMessage(checkout, currentConfig));
     setCheckout(currentCheckoutStatus);
@@ -343,13 +347,13 @@ export const HeaderInfo = ({
         } ${formatDate(currentConfig["checkedOutOn"])}`;
       }
       // when config is not checked out
-      return `Last updated by: ${currentConfig.userId} ${formatDate(
+      return `Last updated by: ${currentConfig["checkedOutBy"]} ${formatDate(
         currentConfig.updateDate,
         true
       )}`;
     }
     // GLOBAL view
-    return `Last submitted by: ${selectedConfig.userId} ${formatDate(
+    return `Last submitted by: ${selectedConfig["checkedOutBy"]} ${formatDate(
       selectedConfig.updateDate
         ? selectedConfig.updateDate
         : selectedConfig.addDate,
