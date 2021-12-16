@@ -24,3 +24,9 @@ cdxForgotUserIdPath: "/AccountRecovery/ForgotUserId"
 cdxForgotPasswordPath: "/PasswordReset/GetResetCode"
 cdxRegisterPath: "/Registration/Terms"
 enableManageDelegations: "false"
+partSeventyFiveRegulationsBaseUrl: www.ecfr.gov
+ecfrBaseUrl: www.ecfr.gov
+matsBaseUrl: www.ecfr.gov
+partSeventyFiveRegulationsPath: "/current/title-40/chapter-I/subchapter-C/part-75?toc=1"
+ecfrPath: "/cgi-bin/text-idx?SID=4002e94719ee5632c5970867e3c7e018&mc=true&tpl=/ecfrbrowse/Title40/40cfr75_main_02.tpl"
+matsPath: "/cgi-bin/retrieveECFR?gp=&SID=6952010b8924c119705ba2727c050a07&mc=true&n=pt40.16.63&r=PART&ty=HTML#sp40.16.63.uuuuu"
