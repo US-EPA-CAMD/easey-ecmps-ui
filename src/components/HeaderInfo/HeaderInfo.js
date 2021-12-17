@@ -351,7 +351,7 @@ export const HeaderInfo = ({
       )}`;
     }
     // GLOBAL view
-    return `Last submitted by: ${selectedConfig.lastUpdatedBy} ${formatDate(
+    return `Last submitted by: ${selectedConfig.userId} ${formatDate(
       selectedConfig.updateDate
         ? selectedConfig.updateDate
         : selectedConfig.addDate,
