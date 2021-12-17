@@ -298,11 +298,11 @@ export const DataTableSystems = ({
       .saveSystems(userInput, locationSelectValue, selectedSystem.id)
       .then((result) => {
         console.log("saving results", result);
+        setUpdateSystemTable(true);
       })
       .catch((error) => {
         console.log(error);
       });
-    setUpdateSystemTable(true);
   };
   const createSystems = () => {
     const userInput = extractUserInput(sysPayload, ".modalUserInput");
@@ -310,12 +310,12 @@ export const DataTableSystems = ({
       .createSystems(userInput, locationSelectValue)
       .then((result) => {
         console.log("saving results", result);
+        setSecondLevel(false);
+        setUpdateSystemTable(true);
       })
       .catch((error) => {
         console.log(error);
       });
-    setSecondLevel(false);
-    setUpdateSystemTable(true);
   };
 
   const saveAnalyzerRanges = () => {
