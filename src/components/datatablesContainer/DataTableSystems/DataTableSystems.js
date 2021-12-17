@@ -435,11 +435,9 @@ export const DataTableSystems = ({
   };
   const createComponent = () => {
     console.log("test createComponent");
-    const userInput = extractUserInput(
-      componentPayload,
-      ".modalUserInput",
-      "hgConverterIndicator"
-    );
+    const userInput = extractUserInput(componentPayload, ".modalUserInput", [
+      "hgConverterIndicator",
+    ]);
 
     mpApi
       .createSystemsComponents(
@@ -457,11 +455,9 @@ export const DataTableSystems = ({
   };
 
   const saveComponent = () => {
-    const userInput = extractUserInput(
-      componentPayload,
-      ".modalUserInput",
-      "hgConverterIndicator"
-    );
+    const userInput = extractUserInput(componentPayload, ".modalUserInput", [
+      "hgConverterIndicator",
+    ]);
     mpApi
       .saveSystemsComponents(
         userInput,
