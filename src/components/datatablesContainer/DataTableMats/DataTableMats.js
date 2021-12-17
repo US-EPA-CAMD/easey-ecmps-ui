@@ -99,13 +99,12 @@ export const DataTableMats = ({
       .then((result) => {
         console.log(result);
         setShow(false);
+        setUpdateTable(true);
       })
       .catch((error) => {
         console.log(error);
         setShow(false);
       });
-
-    setUpdateTable(true);
   };
   const createMats = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
@@ -113,12 +112,12 @@ export const DataTableMats = ({
       .createMats(userInput)
       .then((result) => {
         setShow(false);
+        setUpdateTable(true);
       })
       .catch((error) => {
         console.log(error);
         setShow(false);
       });
-    setUpdateTable(true);
   };
 
   const [createNewMats, setCreateNewMats] = useState(false);

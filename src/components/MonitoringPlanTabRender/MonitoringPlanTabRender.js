@@ -443,7 +443,7 @@ export const MonitoringPlanTabRender = ({
                 locations.find((element) => element.id === locationSelect[1])
               )["urlParameters"]
             }
-            radios={["originalCode", "seasonalControlsIndicator"]}
+            radioNames={["originalCode", "seasonalControlsIndicator"]}
             dataTableName={"Unit Control"}
             checkout={checkout}
             user={user}

@@ -102,7 +102,7 @@ export const saveDataSwitch = (
 ) => {
   switch (dataTableName) {
     case load:
-      return mpApi.saveMonitoringLoads(userInput);
+      return mpApi.saveMonitoringLoads(userInput, locationSelectValue);
     case rectDuctWaf:
       return mpApi.saveMonitoringDuct(userInput);
     case span:
@@ -141,7 +141,7 @@ export const createDataSwitch = (
 ) => {
   switch (dataTableName) {
     case load:
-      return mpApi.createMonitoringLoads(userInput);
+      return mpApi.createMonitoringLoads(userInput, locationSelectValue);
     case rectDuctWaf:
       return mpApi.createMonitoringDuct(userInput);
     case span:
