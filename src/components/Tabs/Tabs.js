@@ -27,9 +27,24 @@ export const Tabs = ({
     event.stopPropagation();
     removeTabs(index);
 
-    mpApi.deleteCheckInMonitoringPlanConfiguration(configId).then((res) => {
-      if (setCheckout) {
-        setCheckout(false, configId);
+    mpApi.getCheckedOutLocations().then((resOne) => {
+      const configs = resOne.data;
+      if (
+        configs.some(
+          (plan) =>
+            plan.monPlanId === configId && plan.checkedOutBy === user["userId"]
+        )
+      ) {
+        mpApi.deleteCheckInMonitoringPlanConfiguration(configId).then(() => {
+          console.log("X button - checked-in configuration: " + configId);
+          if (setCheckout) {
+            setCheckout(false, configId);
+          }
+        });
+      } else {
+        console.log(
+          "X button - cannot check-in configuration that you do not have checked-out"
+        );
       }
     });
 
