@@ -276,30 +276,22 @@ export const DataTableSystems = ({
   const [selectedRangeInFirst, setSelectedRangeInFirst] = useState(
     selectedRangeInFirstTest ? selectedRangeInFirstTest : null
   );
-  const [updateAnalyzerRangeTable, setUpdateAnalyzerRangeTable] = useState(
-    false
-  );
+  const [updateAnalyzerRangeTable, setUpdateAnalyzerRangeTable] =
+    useState(false);
   const [updateFuelFlowTable, setUpdateFuelFlowTable] = useState(false);
   const [updateComponentTable, setupdateComponentTable] = useState(false);
-  const [createAnalyzerRangesFlag, setCreateAnalyzerRangesFlag] = useState(
-    false
-  );
+  const [createAnalyzerRangesFlag, setCreateAnalyzerRangesFlag] =
+    useState(false);
   const [createFuelFlowFlag, setCreateFuelFlowFlag] = useState(false);
   const [createNewComponentFlag, setCreateNewComponentFlag] = useState(false);
 
   const [addComponentFlag, setAddComponentFlag] = React.useState(false);
-  const [
-    addExistingComponentFlag,
-    setAddExistingComponentFlag,
-  ] = React.useState(false);
-  const [
-    addCompThirdLevelTrigger,
-    setAddCompThirdLevelTrigger,
-  ] = React.useState(false);
-  const [
-    addCompThirdLevelCreateTrigger,
-    setAddCompThirdLevelCreateTrigger,
-  ] = React.useState(false);
+  const [addExistingComponentFlag, setAddExistingComponentFlag] =
+    React.useState(false);
+  const [addCompThirdLevelTrigger, setAddCompThirdLevelTrigger] =
+    React.useState(false);
+  const [addCompThirdLevelCreateTrigger, setAddCompThirdLevelCreateTrigger] =
+    React.useState(false);
   const saveSystems = () => {
     const userInput = extractUserInput(sysPayload, ".modalUserInput");
     mpApi
@@ -338,20 +330,18 @@ export const DataTableSystems = ({
       endDate: null,
       endHour: 0,
     };
-    const userInput = extractUserInput(
-      payload,
-      ".modalUserInput",
-      "dualRangeIndicator"
-    );
+    const userInput = extractUserInput(payload, ".modalUserInput", [
+      "dualRangeIndicator",
+    ]);
     mpApi
       .saveAnalyzerRanges(userInput)
       .then((result) => {
         console.log(result);
+        setUpdateAnalyzerRangeTable(true);
       })
       .catch((error) => {
         console.log(error);
       });
-    setUpdateAnalyzerRangeTable(true);
   };
 
   const createAnalyzerRange = () => {
@@ -367,11 +357,9 @@ export const DataTableSystems = ({
       endHour: 0,
     };
 
-    const userInput = extractUserInput(
-      payload,
-      ".modalUserInput",
-      "dualRangeIndicator"
-    );
+    const userInput = extractUserInput(payload, ".modalUserInput", [
+      "dualRangeIndicator",
+    ]);
 
     mpApi
       .createAnalyzerRanges(userInput)
@@ -406,11 +394,11 @@ export const DataTableSystems = ({
       )
       .then((result) => {
         console.log(result);
+        setUpdateFuelFlowTable(true);
       })
       .catch((error) => {
         console.log(error);
       });
-    setUpdateFuelFlowTable(true);
   };
 
   const createFuelFlows = () => {
@@ -424,11 +412,11 @@ export const DataTableSystems = ({
       )
       .then((result) => {
         console.log(result, " was created");
+        setUpdateFuelFlowTable(true);
       })
       .catch((error) => {
         console.log("error is", error);
       });
-    setUpdateFuelFlowTable(true);
   };
   // system components
 
@@ -461,11 +449,11 @@ export const DataTableSystems = ({
       )
       .then((result) => {
         console.log(result, " was created");
+        setupdateComponentTable(true);
       })
       .catch((error) => {
         console.log("error is", error);
       });
-    setupdateComponentTable(true);
   };
 
   const saveComponent = () => {
@@ -483,11 +471,11 @@ export const DataTableSystems = ({
       )
       .then((result) => {
         console.log(result);
+        setupdateComponentTable(true);
       })
       .catch((error) => {
         console.log(error);
       });
-    setupdateComponentTable(true);
   };
 
   // from analyzer ranges view to components view
@@ -655,8 +643,7 @@ export const DataTableSystems = ({
                   ? () => {
                       setAddCompThirdLevelTrigger(true);
                     }
-                  : () => {
-                    }
+                  : () => {}
                 : // at analyzer ranges in components at third level
                 createAnalyzerRangesFlag
                 ? // in creating a range
