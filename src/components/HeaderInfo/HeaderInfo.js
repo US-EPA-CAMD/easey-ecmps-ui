@@ -85,8 +85,6 @@ export const HeaderInfo = ({
 
     // then load the rest of the data
     if (evalStatusLoaded && !dataLoaded) {
-      let currentCheckoutStatus = checkout;
-
       mpApi.getCheckedOutLocations().then((res) => {
         // get info for current checked-out configs, checkout status, date
         const configs = res.data;
