@@ -367,8 +367,9 @@ export const createMonitoringSpans = async (payload) => {
     .catch(handleError);
 };
 
-export const saveMonitoringLoads = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/loads/${payload["id"]}`;
+export const saveMonitoringLoads = async (payload, locationId) => {
+  console.log("location ID: ", locationId);
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${locationId}/loads/${payload["id"]}`;
   // *** remove attributes not needed by the API
 
   return secureAxios({
@@ -380,8 +381,9 @@ export const saveMonitoringLoads = async (payload) => {
     .catch(handleError);
 };
 
-export const createMonitoringLoads = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/loads/`;
+export const createMonitoringLoads = async (payload, locationId) => {
+  console.log("location ID: ", locationId);
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${locationId}/loads/`;
 
   // *** remove attributes not needed by the API
   delete payload["id"];
@@ -561,7 +563,7 @@ export const getMonitoringPlansUnitControlRecords = async (
 };
 
 export const saveUnitControl = async (payload, urlParameters) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}/unit-controls/${urlParameters["unitControlId"]}`;
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}/unit-controls/${payload["id"]}`;
   // *** remove attributes not needed by the API
   return secureAxios({
     method: "PUT",
