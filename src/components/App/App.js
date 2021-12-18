@@ -78,7 +78,7 @@ const App = () => {
       <Switch>
         <Redirect from="/home" to="/" />
         <Route
-          path="/monitoring-plans/:id/evaluation-report"
+          path="/workspace/monitoring-plans/:id/evaluation-report"
           exact
           component={EvaluationReport}
         />
