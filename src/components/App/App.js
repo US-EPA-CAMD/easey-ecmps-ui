@@ -10,6 +10,7 @@ import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
 import RuleEditor from "../RuleEditor/RuleEditor";
 import Login from "../Login/Login";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
+import EvaluationReport from "../EvaluationReport/EvaluationReport";
 
 import { handleActiveElementFocus } from "../../additional-functions/add-active-class";
 import FAQ from "../FAQ/FAQ";
@@ -27,17 +28,17 @@ const App = () => {
   const [resetTimer, setResetTimer] = useState(false);
 
   useEffect(() => {
-    if(config.app.googleAnalyticsEnabled === 'true'){
-      let tagManagerArgs = {gtmId: ''};
-      if(window.location.href.search("workspace") === -1){
+    if (config.app.googleAnalyticsEnabled === "true") {
+      let tagManagerArgs = { gtmId: "" };
+      if (window.location.href.search("workspace") === -1) {
         tagManagerArgs.gtmId = config.app.googleAnalyticsPublicContainerId;
+      } else {
+        tagManagerArgs.gtmId =
+          config.app.googleAnalyticsAuthenticatedContainerId;
       }
-      else{
-        tagManagerArgs.gtmId = config.app.googleAnalyticsAuthenticatedContainerId;
-      }
-          
+
       TagManager.initialize(tagManagerArgs);
-    }    
+    }
   });
 
   useEffect(() => {
@@ -74,14 +75,18 @@ const App = () => {
         <div>{user ? <InactivityTracker /> : ""}</div>
       </div>
 
-      <Layout
-        user={user}
-        currentLink={currentLink}
-        setCurrentLink={setCurrentLink}
-      >
-        <Switch>
-          <Redirect from="/home" to="/" />
-
+      <Switch>
+        <Redirect from="/home" to="/" />
+        <Route
+          path="/monitoring-plans/:id/evaluation-report"
+          exact
+          component={EvaluationReport}
+        />
+        <Layout
+          user={user}
+          currentLink={currentLink}
+          setCurrentLink={setCurrentLink}
+        >
           <Route
             path="/"
             exact
@@ -130,9 +135,10 @@ const App = () => {
           <Route path={`/resources`} exact component={Resources} />
           <Route path={`/help-support`} exact component={HelpSupport} />
           <Route path="/admin/rules" exact component={RuleEditor} />
+
           <Route path="*" component={NotFound} />
-        </Switch>
-      </Layout>
+        </Layout>
+      </Switch>
     </div>
   );
 };
