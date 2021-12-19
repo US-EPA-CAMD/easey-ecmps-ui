@@ -1,0 +1,9 @@
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+  }
+
+  #printContainer {
+    display: none;
+  }
+}

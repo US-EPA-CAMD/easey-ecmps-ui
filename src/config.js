@@ -111,10 +111,14 @@ export const config = {
         "https://api-easey-dev.app.cloud.gov/emissions-mgmt",
     },
     monitorPlans: {
-      uri: "https://api-easey-dev.app.cloud.gov/monitor-plan-mgmt",
+      uri:
+        process.env.REACT_APP_EASEY_MONITOR_PLAN_API ||
+        "https://api-easey-dev.app.cloud.gov/monitor-plan-mgmt",
     },
     authApi: {
-      uri: "https://api-easey-dev.app.cloud.gov/auth-mgmt",
+      uri:
+        process.env.REACT_APP_EASEY_AUTH_API ||
+        "https://api-easey-dev.app.cloud.gov/auth-mgmt",
     },
     quartz: {
       uri:
