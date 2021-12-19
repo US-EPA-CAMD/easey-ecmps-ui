@@ -74,71 +74,72 @@ const App = () => {
       <div aria-live="polite" role="status" aria-atomic="true">
         <div>{user ? <InactivityTracker /> : ""}</div>
       </div>
-      <Layout
-        user={user}
-        currentLink={currentLink}
-        setCurrentLink={setCurrentLink}
-      >
-        <Switch>
-          <Redirect from="/home" to="/" />
-          <Route
-            path="/workspace/monitoring-plans/:id/evaluation-report"
-            exact
-            component={EvaluationReport}
-          />
+      <Switch>
+        <Route
+          path="/workspace/monitoring-plans/:id/evaluation-report"
+          exact
+          component={EvaluationReport}
+        />
+        <Layout
+          user={user}
+          currentLink={currentLink}
+          setCurrentLink={setCurrentLink}
+        >
+          <Switch>
+            <Redirect from="/home" to="/" />
+            <Route
+              path="/"
+              exact
+              component={() => (
+                <AboutHome user={user} setCurrentLink={setCurrentLink} />
+              )}
+            />
 
-          <Route
-            path="/"
-            exact
-            component={() => (
-              <AboutHome user={user} setCurrentLink={setCurrentLink} />
-            )}
-          />
+            <Route path={`/faqs`} exact component={() => <FAQ />} />
+            <Route path="/login" exact component={Login} />
+            <Route
+              path="/monitoring-plans"
+              exact
+              component={() => <MonitoringPlanHome user={false} />}
+            />
+            <Route
+              path="/workspace/monitoring-plans/"
+              exact
+              component={() => (
+                <MonitoringPlanHome
+                  resetTimer={setResetTimer}
+                  setExpired={setExpired}
+                  resetTimerFlag={resetTimer}
+                  callApiFlag={expired}
+                  user={user}
+                />
+              )}
+            />
 
-          <Route path={`/faqs`} exact component={() => <FAQ />} />
-          <Route path="/login" exact component={Login} />
-          <Route
-            path="/monitoring-plans"
-            exact
-            component={() => <MonitoringPlanHome user={false} />}
-          />
-          <Route
-            path="/workspace/monitoring-plans/"
-            exact
-            component={() => (
-              <MonitoringPlanHome
-                resetTimer={setResetTimer}
-                setExpired={setExpired}
-                resetTimerFlag={resetTimer}
-                callApiFlag={expired}
-                user={user}
-              />
-            )}
-          />
+            <Route path="/qa_certifications/" exact component={ComingSoon} />
+            <Route path="/emission/" exact component={ComingSoon} />
 
-          <Route path="/qa_certifications/" exact component={ComingSoon} />
-          <Route path="/emission/" exact component={ComingSoon} />
+            <Route
+              path="/workspace/qa_certifications/"
+              exact
+              component={ComingSoon}
+            />
+            <Route path="/workspace/emission/" exact component={ComingSoon} />
+            <Route path="/tutorials" exact component={ComingSoon} />
 
-          <Route
-            path="/workspace/qa_certifications/"
-            exact
-            component={ComingSoon}
-          />
-          <Route path="/workspace/emission/" exact component={ComingSoon} />
-          <Route path="/tutorials" exact component={ComingSoon} />
+            <Route
+              path="/reporting-instructions"
+              exact
+              component={ReportingInstructions}
+            />
+            <Route path={`/resources`} exact component={Resources} />
+            <Route path={`/help-support`} exact component={HelpSupport} />
+            <Route path="/admin/rules" exact component={RuleEditor} />
 
-          <Route
-            path="/reporting-instructions"
-            exact
-            component={ReportingInstructions}
-          />
-          <Route path={`/resources`} exact component={Resources} />
-          <Route path={`/help-support`} exact component={HelpSupport} />
-          <Route path="/admin/rules" exact component={RuleEditor} />
-
-          <Route path="*" component={NotFound} />
-        </Switch>
-      </Layout>
+            <Route path="*" component={NotFound} />
+          </Switch>
+        </Layout>
+      </Switch>
     </div>
   );
 };
