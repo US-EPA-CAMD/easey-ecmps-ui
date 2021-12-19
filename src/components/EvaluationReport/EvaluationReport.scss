@@ -3,7 +3,17 @@
     -webkit-print-color-adjust: exact;
   }
 
-  #printContainer {
+  #printContainer,
+  .modal-footer,
+  #closeModalBtn {
     display: none;
+  }
+
+  .usa-overlay.is-visible {
+    background: white !important;
+  }
+
+  .modal-content {
+    border: none;
   }
 }

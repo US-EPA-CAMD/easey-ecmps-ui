@@ -44,6 +44,7 @@ export const EvaluationReport = () => {
           <MonitoringPlanEvaluationReport
             monitorPlanId={id}
             facility={facility}
+            showTitle={true}
           />
         </div>
       )}

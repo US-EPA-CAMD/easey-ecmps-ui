@@ -5,7 +5,11 @@ import * as mpApi from "../../utils/api/monitoringPlansApi";
 import * as fs from "../../utils/selectors/monitoringPlanEvalData";
 import "./MonitoringPlanEvaluationReport.scss";
 
-export const MonitoringPlanEvaluationReport = ({ monitorPlanId, facility }) => {
+export const MonitoringPlanEvaluationReport = ({
+  monitorPlanId,
+  facility,
+  showTitle = false,
+}) => {
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -56,34 +60,49 @@ export const MonitoringPlanEvaluationReport = ({ monitorPlanId, facility }) => {
     <>
       {dataLoaded ? (
         <div>
-          <div className="float-left">
-            <div className="grid-row clearfix position-relative text-bold padding-left-3">
+          <div>
+            <div
+              id="printContainer"
+              className="grid-row clearfix position-relative float-right"
+            >
+              {
+                <Button
+                  type="button"
+                  outline={false}
+                  tabIndex="0"
+                  aria-label={`Print the evaluation report`}
+                  className=" padding-1 padding-right-3 padding-left-3 margin-2"
+                  onClick={print}
+                  id="printBTN"
+                  epa-testid="printBTN"
+                >
+                  Print PDF
+                </Button>
+              }
+            </div>
+          </div>
+          {showTitle ? (
+            <div class="epa-active-element">
+              <div class="left-0 bottom-0 padding-bottom-1 epa-active-element">
+                <h2 class="text-bold epa-active-element">
+                  Monitoring Plan Evaluation Report
+                </h2>
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
+
+          <div className="clearfix float-left w-100 border-bottom padding-bottom-1">
+            <div className="grid-row clearfix position-relative text-bold">
               {displayCurrentDate()}
             </div>
           </div>
-          <div
-            id="printContainer"
-            className="grid-row clearfix position-relative float-right"
-          >
-            {
-              <Button
-                type="button"
-                outline={false}
-                tabIndex="0"
-                aria-label={`Print the evaluation report`}
-                className=" padding-1 padding-right-3 padding-left-3 margin-2"
-                onClick={print}
-                id="printBTN"
-                epa-testid="printBTN"
-              >
-                Print PDF
-              </Button>
-            }
-          </div>
+
           <br />
           <br />
-          <div className="padding-x-3" id="printArea">
-            <div className="grid-row clearfix position-relative padding-top-5 padding-bottom-2">
+          <div className="" id="printArea">
+            <div className="position-relative padding-top-5 padding-bottom-2">
               Facility Name:{" "}
               <span className="text-bold padding-left-1">
                 {" "}
@@ -94,7 +113,7 @@ export const MonitoringPlanEvaluationReport = ({ monitorPlanId, facility }) => {
               Facility Details
             </div>
 
-            <div className="grid-row clearfix float-left">
+            <div className="grid-row clearfix float-left w-100 border-bottom padding-bottom-2 margin-bottom-2">
               <div className="text-right padding-right-1 display-inline-block text-nowrap padding-top-2">
                 Facility ID (ORISPL):
                 <br />
