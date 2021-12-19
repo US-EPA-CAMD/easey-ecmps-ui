@@ -1,21 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import * as mpApi from "../../utils/api/monitoringPlansApi";
+import * as facApi from "../../utils/api/facilityApi";
+import { Preloader } from "../Preloader/Preloader";
 
 import "./EvaluationReport.scss";
 import MonitoringPlanEvaluationReport from "../MonitoringPlanEvaluationReport/MonitoringPlanEvaluationReport";
 
 export const EvaluationReport = () => {
+  // get id from router params
+
   const { id } = useParams();
-  const facility = "Testing (1,2,3)";
+  const [facility, setFacility] = useState("");
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!dataLoaded) {
+      // get plan info
+      mpApi.getRefreshInfo(id).then((configRes) => {
+        const plan = configRes.data;
+        console.log({ plan });
+        facApi.getFacilityById(plan.facId).then((facRes) => {
+          const facility = facRes.data;
+          const orisCode = facility.facilityId;
+          console.log({ facility });
+          mpApi.getMonitoringPlans(orisCode).then((plansRes) => {
+            const plans = plansRes.data;
+            const currPlan = plans.find((ele) => ele.id === id);
+            setFacility(facility.facilityName + "(" + currPlan.name + ")");
+            setDataLoaded(true);
+          });
+        });
+      });
+    }
+  }, [dataLoaded, id]);
+
   return (
     <div className="usa-banner__content fade-in padding-bottom-5">
-      <div className="grid-col margin-x-2 minh-tablet-lg" id="main">
-        {/* <p>{`Placeholder page for evaluation report for monitor plan with ID: ${id}`}</p> */}
-        <MonitoringPlanEvaluationReport
-          monitorPlanId={id}
-          facility={facility}
-        />
-      </div>
+      {!dataLoaded ? (
+        <Preloader />
+      ) : (
+        <div className="grid-col margin-x-2 minh-tablet-lg" id="main">
+          <MonitoringPlanEvaluationReport
+            monitorPlanId={id}
+            facility={facility}
+          />
+        </div>
+      )}
     </div>
   );
 };
