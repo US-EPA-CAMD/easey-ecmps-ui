@@ -74,19 +74,19 @@ const App = () => {
       <div aria-live="polite" role="status" aria-atomic="true">
         <div>{user ? <InactivityTracker /> : ""}</div>
       </div>
+      <Layout
+        user={user}
+        currentLink={currentLink}
+        setCurrentLink={setCurrentLink}
+      >
+        <Switch>
+          <Redirect from="/home" to="/" />
+          <Route
+            path="/workspace/monitoring-plans/:id/evaluation-report"
+            exact
+            component={EvaluationReport}
+          />
 
-      <Switch>
-        <Redirect from="/home" to="/" />
-        <Route
-          path="/workspace/monitoring-plans/:id/evaluation-report"
-          exact
-          component={EvaluationReport}
-        />
-        <Layout
-          user={user}
-          currentLink={currentLink}
-          setCurrentLink={setCurrentLink}
-        >
           <Route
             path="/"
             exact
@@ -137,8 +137,8 @@ const App = () => {
           <Route path="/admin/rules" exact component={RuleEditor} />
 
           <Route path="*" component={NotFound} />
-        </Layout>
-      </Switch>
+        </Switch>
+      </Layout>
     </div>
   );
 };
