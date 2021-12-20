@@ -12,3 +12,10 @@ export async function getAllFacilities() {
     .then(handleResponse)
     .catch(handleError);
 }
+
+export async function getFacilityById(id) {
+  return axios
+    .get(`${config.services.facilities.uri}/facilities/${id}`)
+    .then(handleResponse)
+    .catch(handleError);
+}
