@@ -81,9 +81,9 @@ export const MonitoringPlanEvaluationReport = ({
             </div>
           </div>
           {showTitle ? (
-            <div class="epa-active-element">
-              <div class="left-0 bottom-0 padding-bottom-1 epa-active-element">
-                <h2 class="text-bold epa-active-element">
+            <div className="epa-active-element">
+              <div className="left-0 bottom-0 padding-bottom-1 epa-active-element">
+                <h2 className="text-bold epa-active-element">
                   Monitoring Plan Evaluation Report
                 </h2>
               </div>
