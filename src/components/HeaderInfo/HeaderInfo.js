@@ -11,6 +11,10 @@ import "./HeaderInfo.scss";
 import MonitoringPlanEvaluationReport from "../MonitoringPlanEvaluationReport/MonitoringPlanEvaluationReport";
 import { Preloader } from "../Preloader/Preloader";
 
+const displayReport = () => {
+  window.open("www.google.com", "ECMPS Monitoring Plan Report", "popup");
+};
+
 export const HeaderInfo = ({
   facility,
   selectedConfig,
@@ -578,11 +582,12 @@ export const HeaderInfo = ({
                               ? "hyperlink-btn"
                               : "unstyled-btn"
                           }
-                          onClick={() => {
+                          /*onClick={() => {
                             showHyperLink(evalStatus)
                               ? setShowEvalReport(true)
                               : setShowEvalReport(false);
-                          }}
+                          }}*/
+                          onClick={() => displayReport()}
                         >
                           {evalStatusText(evalStatus)}
                         </button>

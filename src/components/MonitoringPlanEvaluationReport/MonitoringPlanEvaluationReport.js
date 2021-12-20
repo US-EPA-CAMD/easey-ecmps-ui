@@ -35,7 +35,7 @@ export const MonitoringPlanEvaluationReport = ({ monitorPlanId, facility }) => {
 
   const displayCurrentDate = () => {
     const date = new Date();
-    var options = {
+    const options = {
       year: "numeric",
       month: "long",
       day: "numeric",
@@ -51,7 +51,7 @@ export const MonitoringPlanEvaluationReport = ({ monitorPlanId, facility }) => {
     const printArea = document.getElementById("printArea").innerHTML;
     const originalArea = document.body.innerHTML;
 
-    var printWindow = window.open("", "", "fullscreen=yes");
+    const printWindow = window.open("", "", "fullscreen=yes");
     printWindow.document.write(originalArea);
     printWindow.document.body.innerHTML = printArea;
     printWindow.focus();
