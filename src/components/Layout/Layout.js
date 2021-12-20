@@ -17,35 +17,43 @@ const Layout = (props) => {
     React.cloneElement(child)
   );
   return (
-    <div className="react-transition fade-in padding-bottom-5">
-      <Link className="skip-to-content-link" href={"#main"}>
-        Skip to content
-      </Link>
-      <div className="topHeader">
-        <Header environment={config.app.env} />
-        <SubHeader user={props.user} setCurrentLink={props.setCurrentLink} />
-      </div>
-      <div>
-        <LeftNavToSubHeader />
-      </div>
-      <div className="grid-row">
-        <div className="grid-col-2 bg-base-lightest display-none desktop-lg:display-block widescreen:display-block">
-          <LeftNavigation
-            user={props.user}
-            logOut={props.logOut}
-            currentLink={props.currentLink}
-            setCurrentLink={props.setCurrentLink}
+    <div id="layoutContainer">
+      <div className="react-transition fade-in padding-bottom-5" id="layout">
+        <div id="skipNav">
+          <Link className="skip-to-content-link" href={"#main"}>
+            Skip to content
+          </Link>
+        </div>
+
+        <div id="topHeader" className="topHeader">
+          <Header environment={config.app.env} />
+          <SubHeader user={props.user} setCurrentLink={props.setCurrentLink} />
+        </div>
+        <div id="leftNavToSubHeader">
+          <LeftNavToSubHeader />
+        </div>
+        <div className="grid-row">
+          <div
+            id="leftNav"
+            className="grid-col-2 bg-base-lightest display-none desktop-lg:display-block widescreen:display-block"
+          >
+            <LeftNavigation
+              user={props.user}
+              logOut={props.logOut}
+              currentLink={props.currentLink}
+              setCurrentLink={props.setCurrentLink}
+            />
+          </div>
+          <div className="grid-col margin-x-2 minh-tablet-lg" id="main">
+            <main id="main">{childrenWithProps} </main>
+          </div>
+        </div>
+        <div id="footer" className="position-fixed bottom-0 width-full">
+          <AppVersion
+            version={config.app.version}
+            publishDate={config.app.published}
           />
         </div>
-        <div className="grid-col margin-x-2 minh-tablet-lg" id="main">
-          <main id="main">{childrenWithProps} </main>
-        </div>
-      </div>
-      <div className="position-fixed bottom-0 width-full">
-        <AppVersion
-          version={config.app.version}
-          publishDate={config.app.published}
-        />
       </div>
     </div>
   );

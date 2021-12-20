@@ -7,6 +7,14 @@ axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
 };
 
+export const getMonitoringPlanById = async (id) => {
+  let url = `${config.services.monitorPlans.uri}/workspace`;
+
+  url = `${url}/plans/${id}`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
 // *** obtain monitoring plans
 export const getMonitoringPlans = async (orisCode) => {
   let url = `${config.services.monitorPlans.uri}`;
