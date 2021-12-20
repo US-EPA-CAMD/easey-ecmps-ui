@@ -9,7 +9,6 @@ import MonitoringPlanEvaluationReport from "../MonitoringPlanEvaluationReport/Mo
 
 export const EvaluationReport = () => {
   // get id from router params
-
   const { id } = useParams();
   const [facility, setFacility] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -19,15 +18,17 @@ export const EvaluationReport = () => {
       // get plan info
       mpApi.getRefreshInfo(id).then((configRes) => {
         const plan = configRes.data;
-        console.log({ plan });
+
         facApi.getFacilityById(plan.facId).then((facRes) => {
-          const facility = facRes.data;
-          const orisCode = facility.facilityId;
-          console.log({ facility });
+          const fac = facRes.data;
+          const orisCode = fac.facilityId;
+
           mpApi.getMonitoringPlans(orisCode).then((plansRes) => {
             const plans = plansRes.data;
             const currPlan = plans.find((ele) => ele.id === id);
-            setFacility(facility.facilityName + "(" + currPlan.name + ")");
+            const facName = fac.facilityName + "(" + currPlan.name + ")";
+
+            setFacility(facName);
             setDataLoaded(true);
           });
         });

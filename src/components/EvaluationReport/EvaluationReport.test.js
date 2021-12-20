@@ -9,16 +9,41 @@ jest.mock("react-router-dom", () => ({
   useParams: jest.fn(),
 }));
 
-const createWrapper = () => {
-  return render(<EvaluationReport />);
-};
+jest.mock("../../utils/api/monitoringPlansApi", () => ({
+  ...jest.requireActual("../../utils/api/monitoringPlansApi"),
+  getRefreshInfo: jest.fn(() => Promise.resolve({ data: { facId: 59 } })),
+  getMonitoringPlans: jest.fn(() =>
+    Promise.resolve({
+      data: [
+        {
+          id: "MDC-DD01BAF18A9F4F6CA4AF0D22E406EFC4",
+          facId: "59",
+          orisCode: "331",
+          name: "3",
+        },
+      ],
+    })
+  ),
+}));
+
+jest.mock("../../utils/api/facilityApi", () => ({
+  ...jest.requireActual("../../utils/api/facilityApi"),
+  getFacilityById: jest.fn(() =>
+    Promise.resolve({ data: { facilityId: 331 } })
+  ),
+}));
 
 describe("Evaluation Report Page", () => {
-  jest
-    .spyOn(Router, "useParams")
-    .mockReturnValue({ id: "MDC-DD01BAF18A9F4F6CA4AF0D22E406EFC4" });
+  it("should read the id parameter from react router", () => {
+    jest
+      .spyOn(Router, "useParams")
+      .mockReturnValue({ id: "MDC-DD01BAF18A9F4F6CA4AF0D22E406EFC4" });
+  });
 
   it("should render", () => {
+    const createWrapper = () => {
+      return render(<EvaluationReport />);
+    };
     const report = createWrapper();
     expect(report).toBeTruthy();
   });
@@ -32,6 +57,4 @@ describe("Evaluation Report Page", () => {
     );
     expect(childReport).toBeTruthy();
   });
-
-  it("should load the plan and facility info from the database", () => {});
 });

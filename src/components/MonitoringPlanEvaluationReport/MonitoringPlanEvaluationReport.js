@@ -3,7 +3,6 @@ import { Button } from "@trussworks/react-uswds";
 import { DataTableRender } from "../DataTableRender/DataTableRender";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import * as fs from "../../utils/selectors/monitoringPlanEvalData";
-import "./MonitoringPlanEvaluationReport.scss";
 
 export const MonitoringPlanEvaluationReport = ({
   monitorPlanId,
