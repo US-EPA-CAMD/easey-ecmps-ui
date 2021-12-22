@@ -7,6 +7,8 @@ activityEvents.push("keydown");
 
 export const config = {
   app: {
+    host:
+      process.env.REACT_APP_EASEY_ECMPS_UI_HOST || "easey-dev.app.cloud.gov",
     activityEvents,
     apiKey: process.env.REACT_APP_ECMPS_API_KEY || "",
     googleAnalyticsEnabled:
