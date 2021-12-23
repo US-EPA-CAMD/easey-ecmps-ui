@@ -3,6 +3,7 @@ import { Link as USWDSLink } from "@trussworks/react-uswds";
 
 import { Link } from "react-router-dom";
 import Login from "../Login/Login";
+import config from "../../config";
 
 import "./AboutHome.scss";
 const AboutHome = ({ user, setCurrentLink }) => {
@@ -52,7 +53,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href="https://test.epacdx.net/FAQ"
+              href={`${config.app.cdxBaseUrl}/FAQ`}
               className="forceUnderlineText colorContrast"
             >
               CDX Test login
@@ -90,7 +91,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href={"https://easey-dev.app.cloud.gov/ecmps/help-support"}
+              href={`https://${config.app.host}/ecmps/help-support`}
               className="forceUnderlineText colorContrast"
             >
               Contact Us form
@@ -165,7 +166,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href={"https://easey-dev.app.cloud.gov/ecmps/help-support"}
+              href={`https://${config.app.host}/ecmps/help-support`}
               className="forceUnderlineText colorContrast"
             >
               Contact Us form
