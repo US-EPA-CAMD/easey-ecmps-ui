@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import Router from "react-router-dom";
-import EvaluationReport from "./EvaluationReport";
+import ReportGenerator from "./ReportGenerator";
 import MonitoringPlanEvaluationReport from "../MonitoringPlanEvaluationReport/MonitoringPlanEvaluationReport";
 
 jest.mock("react-router-dom", () => ({
@@ -42,7 +42,7 @@ describe("Evaluation Report Page", () => {
 
   it("should render", () => {
     const createWrapper = () => {
-      return render(<EvaluationReport />);
+      return render(<ReportGenerator />);
     };
     const report = createWrapper();
     expect(report).toBeTruthy();
