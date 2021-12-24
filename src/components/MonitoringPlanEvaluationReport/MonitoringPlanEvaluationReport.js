@@ -18,6 +18,7 @@ export const MonitoringPlanEvaluationReport = ({
 
   const [dataLoaded, setDataLoaded] = useState(false);
   const [reportData, setReportData] = useState(null);
+  const [displayCloseButton, setDisplayCloseButton] = useState(true);
 
   const columnNames = [
     "Unit/Stack",
@@ -28,6 +29,12 @@ export const MonitoringPlanEvaluationReport = ({
   ];
 
   useEffect(() => {
+    if (window.opener && window.opener !== window) {
+      setDisplayCloseButton(true);
+    } else {
+      setDisplayCloseButton(false);
+    }
+
     if (!dataLoaded) {
       mpApi
         .getMonitoringPlansEvaluationReportData(monitorPlanId)
@@ -77,17 +84,19 @@ export const MonitoringPlanEvaluationReport = ({
                 title="EPA Logo"
                 src={`${process.env.PUBLIC_URL}/images/epa-logo-blue.svg`}
               />
-              <Button
-                type="button"
-                outline={true}
-                aria-label={`Print the evaluation report`}
-                className="float-right clearfix do-not-print"
-                onClick={() => closeReport()}
-                id="printBTN"
-                epa-testid="printBTN"
-              >
-                Close Report
-              </Button>
+              {displayCloseButton ? (
+                <Button
+                  type="button"
+                  outline={true}
+                  aria-label={`Print the evaluation report`}
+                  className="float-right clearfix do-not-print"
+                  onClick={() => closeReport()}
+                  id="printBTN"
+                  epa-testid="printBTN"
+                >
+                  Close Report
+                </Button>
+              ) : null}
             </div>
 
             <div className="padding-x-5">
