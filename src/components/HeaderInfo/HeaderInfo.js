@@ -75,7 +75,7 @@ export const HeaderInfo = ({
 
   const displayReport = () => {
     window.open(
-      `https://${config.app.path}/workspace/monitoring-plans/${selectedConfig.id}/evaluation-report`,
+      `/ecmps/workspace/monitoring-plans/${selectedConfig.id}/evaluation-report`,
       "ECMPS Monitoring Plan Report",
       "popup"
     );
@@ -585,11 +585,6 @@ export const HeaderInfo = ({
                               ? "hyperlink-btn"
                               : "unstyled-btn"
                           }
-                          /*onClick={() => {
-                            showHyperLink(evalStatus)
-                              ? setShowEvalReport(true)
-                              : setShowEvalReport(false);
-                          }}*/
                           onClick={() =>
                             showHyperLink(evalStatus) ? displayReport() : null
                           }

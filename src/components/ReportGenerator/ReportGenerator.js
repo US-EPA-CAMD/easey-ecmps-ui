@@ -73,19 +73,19 @@ export const ReportGenerator = (user) => {
   return (
     <div className="ReportGenerator">
       {!user.user ? (
-        <>
-          <div className="loginPanel">
-            <Login isModal={false} />
-          </div>
-        </>
+        <div className="loginPanel react-transition delayed-fade-in">
+          <Login isModal={false} source="ReportGenerator" />
+        </div>
       ) : (
-        <div className="usa-banner__content fade-in padding-bottom-5">
+        <div className="padding-bottom-5">
           {!dataLoaded ? (
             <Loading />
           ) : (
-            <div className="grid-col margin-x-2 minh-tablet-lg" id="main">
+            <div>
               <Suspense fallback={Loading}>
-                <Report />
+                <div className="react-transition scale-in">
+                  <Report />
+                </div>
               </Suspense>
             </div>
           )}
