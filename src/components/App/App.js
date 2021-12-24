@@ -10,7 +10,7 @@ import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
 import RuleEditor from "../RuleEditor/RuleEditor";
 import Login from "../Login/Login";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
-import EvaluationReport from "../EvaluationReport/EvaluationReport";
+import ReportGenerator from "../ReportGenerator/ReportGenerator";
 
 import { handleActiveElementFocus } from "../../additional-functions/add-active-class";
 import FAQ from "../FAQ/FAQ";
@@ -51,18 +51,20 @@ const App = () => {
 
   // *** assign / un-assign activity event listeners
   useEffect(() => {
-    handleActiveElementFocus();
-
-    document
-      .querySelector(".usa-banner__content")
-      .classList.add("react-transition");
-    document.querySelector(".usa-banner__content").classList.add("fade-in");
-
-    // * clean up
-    return () => {
+    if (user) {
       handleActiveElementFocus();
-    };
-  }, []);
+
+      document
+        .querySelector(".usa-banner__content")
+        .classList.add("react-transition");
+      document.querySelector(".usa-banner__content").classList.add("fade-in");
+
+      // * clean up
+      return () => {
+        handleActiveElementFocus();
+      };
+    }
+  }, [user]);
 
   const [currentLink, setCurrentLink] = useState(
     window.location.href.replace(`${window.location.origin}`, "")
@@ -78,7 +80,7 @@ const App = () => {
         <Route
           path="/workspace/monitoring-plans/:id/evaluation-report"
           exact
-          component={EvaluationReport}
+          component={() => <ReportGenerator user={user} />}
         />
         <Layout
           user={user}

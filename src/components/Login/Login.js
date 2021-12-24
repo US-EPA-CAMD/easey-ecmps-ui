@@ -86,7 +86,7 @@ const Login = ({ isModal }) => {
 
   return (
     <div className="" data-test="component-login">
-      <div style={{ padding: "1rem" }}>
+      <div className="padding-1">
         <Form onSubmit={submitForm} large>
           <Fieldset legend="Log In" legendStyle="large">
             <span>

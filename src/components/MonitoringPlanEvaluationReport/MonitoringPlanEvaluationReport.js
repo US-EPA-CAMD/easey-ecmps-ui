@@ -39,7 +39,7 @@ export const MonitoringPlanEvaluationReport = ({
 
   const displayCurrentDate = () => {
     const date = new Date();
-    var options = {
+    const options = {
       year: "numeric",
       month: "long",
       day: "numeric",
