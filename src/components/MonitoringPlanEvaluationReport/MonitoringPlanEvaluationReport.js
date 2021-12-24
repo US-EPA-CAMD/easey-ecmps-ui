@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "@trussworks/react-uswds";
+import { Button, GovBanner } from "@trussworks/react-uswds";
 import { DataTableRender } from "../DataTableRender/DataTableRender";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import * as fs from "../../utils/selectors/monitoringPlanEvalData";
+import { AppVersion } from "@us-epa-camd/easey-design-system";
+import config from "../../config";
 
 export const MonitoringPlanEvaluationReport = ({
   monitorPlanId,
   facility,
   showTitle = false,
 }) => {
-  const facilityMainName = facility.split("(")[0];
-  const facilityAdditionalName = facility.split("(")[1].replace(")", "");
+  // *** extract facility main and additional names
+  const splitFacility = facility.split("(");
+  const facilityMainName = splitFacility[0];
+  const facilityAdditionalName = splitFacility[1].replace(")", "");
+
   const [dataLoaded, setDataLoaded] = useState(false);
   const [reportData, setReportData] = useState(null);
-  //Columns to be displayed in the data table
+  const [displayCloseButton, setDisplayCloseButton] = useState(true);
+
   const columnNames = [
     "Unit/Stack",
     "Severity",
@@ -23,6 +29,12 @@ export const MonitoringPlanEvaluationReport = ({
   ];
 
   useEffect(() => {
+    if (window.opener && window.opener !== window) {
+      setDisplayCloseButton(true);
+    } else {
+      setDisplayCloseButton(false);
+    }
+
     if (!dataLoaded) {
       mpApi
         .getMonitoringPlansEvaluationReportData(monitorPlanId)
@@ -50,103 +62,133 @@ export const MonitoringPlanEvaluationReport = ({
     return date.toLocaleDateString("en-US", options);
   };
 
-  //Grabs the Report Area for printing (Print button is excluded)
+  // Grabs the Report Area for printing (Print button is excluded)
   const print = () => {
     window.print();
+  };
+
+  const closeReport = () => {
+    window.close();
   };
 
   return (
     <>
       {dataLoaded ? (
         <div>
-          <div>
-            <div
-              id="printContainer"
-              className="grid-row clearfix position-relative float-right"
-            >
-              {
+          <GovBanner className="padding-y-2px bg-base-lighter do-not-print" />
+
+          <div className="">
+            <div className="padding-x-5 padding-y-3 border-bottom-1px border-base-light">
+              <img
+                alt="EPA Logo"
+                title="EPA Logo"
+                src={`${process.env.PUBLIC_URL}/images/epa-logo-blue.svg`}
+              />
+              {displayCloseButton ? (
                 <Button
                   type="button"
-                  outline={false}
-                  tabIndex="0"
+                  outline={true}
                   aria-label={`Print the evaluation report`}
-                  className=" padding-1 padding-right-3 padding-left-3 margin-2"
-                  onClick={print}
+                  className="float-right clearfix do-not-print"
+                  onClick={() => closeReport()}
                   id="printBTN"
                   epa-testid="printBTN"
                 >
-                  Print PDF
+                  Close Report
                 </Button>
-              }
+              ) : null}
             </div>
-          </div>
-          {showTitle ? (
-            <div className="epa-active-element">
-              <div className="left-0 bottom-0 padding-bottom-1 epa-active-element">
-                <h2 className="text-bold epa-active-element">
+
+            <div className="padding-x-5">
+              {showTitle ? (
+                <h1 className="text-bold">
                   Monitoring Plan Evaluation Report
-                </h2>
-              </div>
-            </div>
-          ) : (
-            ""
-          )}
+                  <Button
+                    type="button"
+                    outline={false}
+                    aria-label="Print Monitoring Plan Evaluation report"
+                    className="float-right clearfix do-not-print"
+                    onClick={() => print()}
+                    id="printBTN"
+                    epa-testid="printBTN"
+                  >
+                    Print PDF
+                  </Button>
+                </h1>
+              ) : null}
 
-          <div className="clearfix float-left w-100 border-bottom padding-bottom-1">
-            <div className="grid-row clearfix position-relative text-bold">
-              {displayCurrentDate()}
-            </div>
-          </div>
-
-          <br />
-          <br />
-          <div className="" id="printArea">
-            <div className="position-relative padding-top-5 padding-bottom-2">
-              Facility Name:{" "}
-              <span className="text-bold padding-left-1">
-                {" "}
-                {facilityMainName}
-              </span>
-            </div>
-            <div className="subheader-wrapper bg-epa-blue-base text-white text-normal padding-left-1">
-              Facility Details
-            </div>
-
-            <div className="grid-row clearfix float-left w-100 border-bottom padding-bottom-2 margin-bottom-2">
-              <div className="text-right padding-right-1 display-inline-block text-nowrap padding-top-2">
-                Facility ID (ORISPL):
-                <br />
-                Monitoring Plan Location IDs: <br />
-                State:
-                <br />
-                County:
-                <br />
+              <div className="text-bold padding-bottom-2 border-bottom-1px border-base-light">
+                {displayCurrentDate()}
               </div>
-              <div className="grid-col text-bold text-left display-inline-block text-nowrap padding-top-2">
-                {reportData.facilityId}
-                <br />
-                {facilityAdditionalName}
-                <br />
-                {reportData.state}
-                <br />
-                {reportData.countyName}
-                <br />
+
+              <div className="padding-top-5 padding-bottom-2">
+                Facility Name:
+                <span className="text-bold margin-left-2">
+                  {facilityMainName}
+                </span>
               </div>
-            </div>
-            <div className="width-auto">
-              <DataTableRender
-                columnNames={columnNames}
-                data={reportData.mpReportResults}
-                dataLoaded={dataLoaded}
-                pagination={false}
-                filter={false}
-              />
+              <div className="subheader-wrapper bg-epa-blue-base text-white text-normal padding-left-1">
+                Facility Details
+              </div>
+
+              <table role="presentation" className="width-auto">
+                <tr>
+                  <th className="text-right width-auto padding-top-2 text-normal">
+                    Facility ID (ORISPL):
+                  </th>
+                  <td className="width-auto padding-left-1 padding-top-2 text-bold">
+                    {reportData.facilityId}
+                  </td>
+                </tr>
+                <tr>
+                  <th className="text-right width-auto text-normal">
+                    Monitoring Plan Location IDs:
+                  </th>
+                  <td className="width-auto padding-left-1 text-bold">
+                    {facilityAdditionalName}
+                  </td>
+                </tr>
+                <tr>
+                  <th className="text-right width-auto text-normal">
+                    Facility ID (ORISPL):
+                  </th>
+                  <td className="width-auto padding-left-1 text-bold">
+                    {reportData.facilityId}
+                  </td>
+                </tr>
+                <tr>
+                  <th className="text-right width-auto text-normal">State:</th>
+                  <td className="width-auto padding-left-1 text-bold">
+                    {reportData.state}
+                  </td>
+                </tr>
+                <tr>
+                  <th className="text-right width-auto text-normal">County:</th>
+                  <td className="width-auto padding-left-1 text-bold">
+                    {reportData.countyName}
+                  </td>
+                </tr>
+              </table>
+
+              <div className="width-auto border-top-1px border-base-light margin-top-3">
+                <DataTableRender
+                  columnNames={columnNames}
+                  data={reportData.mpReportResults}
+                  dataLoaded={dataLoaded}
+                  pagination={false}
+                  filter={false}
+                />
+              </div>
+              <div className="position-fixed bottom-0 right-0 width-full do-not-print">
+                <AppVersion
+                  version={config.app.version}
+                  publishDate={config.app.published}
+                />
+              </div>
             </div>
           </div>
         </div>
-      ) : (
-        ""
-      )}
+      ) : null}
     </>
   );
 };

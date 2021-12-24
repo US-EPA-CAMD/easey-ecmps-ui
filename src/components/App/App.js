@@ -54,10 +54,12 @@ const App = () => {
     if (user) {
       handleActiveElementFocus();
 
-      document
-        .querySelector(".usa-banner__content")
-        .classList.add("react-transition");
-      document.querySelector(".usa-banner__content").classList.add("fade-in");
+      if (document.querySelector(".usa-banner__content")) {
+        document
+          .querySelector(".usa-banner__content")
+          .classList.add("react-transition");
+        document.querySelector(".usa-banner__content").classList.add("fade-in");
+      }
 
       // * clean up
       return () => {

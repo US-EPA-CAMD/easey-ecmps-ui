@@ -1,3 +1,5 @@
+@import "../../additional-scss/variables";
+
 .ReportGenerator {
   .loginPanel {
     margin: 10% 0 0 35%;
@@ -8,18 +10,15 @@
       -webkit-print-color-adjust: exact;
     }
 
-    #printContainer,
-    .modal-footer,
-    #closeModalBtn {
+    .do-not-print {
       display: none;
     }
+  }
 
-    .usa-overlay.is-visible {
-      background: white !important;
-    }
-
-    .modal-content {
-      border: none;
-    }
+  .rdt_TableRow:nth-child(odd) {
+    background-color: $epa-off-white !important;
+  }
+  .rdt_TableRow:nth-child(even) {
+    background-color: $epa-white !important;
   }
 }

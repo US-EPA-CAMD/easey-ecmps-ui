@@ -17,7 +17,7 @@ const cdx_user = sessionStorage.getItem("cdx_user")
   ? JSON.parse(sessionStorage.getItem("cdx_user"))
   : false;
 
-const Login = ({ isModal }) => {
+const Login = ({ isModal, source }) => {
   const standardFormErrorMessage = "Please enter your username and password";
   const [showError, setShowError] = useState(false);
   const [formErrorMessage, setFormErrorMessage] = useState("");
@@ -28,12 +28,6 @@ const Login = ({ isModal }) => {
 
   const usernameText = isModal ? "modal-username" : "username";
   const passwordText = isModal ? "modal-password" : "password";
-
-  const checkLoggedIn = () => {
-    if (cdx_user) {
-      window.location = "/ecmps/monitoring-plans";
-    }
-  };
 
   const showPasswordHandler = () => {
     if (showPassword) {
@@ -81,8 +75,13 @@ const Login = ({ isModal }) => {
   };
 
   useEffect(() => {
+    const checkLoggedIn = () => {
+      if (cdx_user && source !== "ReportGenerator") {
+        window.location = "/ecmps/monitoring-plans";
+      }
+    };
     checkLoggedIn();
-  }, []);
+  }, [source]);
 
   return (
     <div className="" data-test="component-login">

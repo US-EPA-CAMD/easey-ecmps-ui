@@ -115,6 +115,13 @@ $animationDuration: 500ms;
   animation-duration: $animationDuration;
 }
 
+.delayed-fade-in {
+  animation-timing-function: ease-in-out;
+  transform-origin: bottom center;
+  animation-name: fadeIn;
+  animation-duration: 2000ms;
+}
+
 @keyframes fadeOut {
   from {
     opacity: 1;
