@@ -7,7 +7,7 @@ import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
+import { UseRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import {
   getActiveData,
   getInactiveData,
@@ -38,12 +38,6 @@ export const DataTableMethod = ({
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
 
-  const totalOptions = useRetrieveDropdownApi([
-    "parameterCode",
-    "monitoringMethodCode",
-    "substituteDataCode",
-    "bypassApproachCode",
-  ]);
   const [updateTable, setUpdateTable] = useState(false);
   useEffect(() => {
     if (
@@ -116,26 +110,33 @@ export const DataTableMethod = ({
       setSelectedMonitoringMethod(monMethod);
     }
 
-    setSelectedModalData(
-      modalViewData(
-        monMethod,
-        {
-          parameterCode: ["Parameter", "dropdown", ""],
-          monitoringMethodCode: ["Methodology", "dropdown", ""],
-          substituteDataCode: ["Substitute Data Approach", "dropdown", ""],
-          bypassApproachCode: ["Bypass Approach", "dropdown", ""],
-        },
-        {
-          beginDate: ["Start Date", "date", ""],
-          beginHour: ["Start Time", "time", ""],
-          endDate: ["End Date", "date", ""],
-          endHour: ["End Time", "time", ""],
-        },
-        create,
-        totalOptions
-      )
-    );
-    setShow(true);
+    UseRetrieveDropdownApi([
+      "parameterCode",
+      "monitoringMethodCode",
+      "substituteDataCode",
+      "bypassApproachCode",
+    ]).then((mdmData) => {
+      setSelectedModalData(
+        modalViewData(
+          monMethod,
+          {
+            parameterCode: ["Parameter", "dropdown", ""],
+            monitoringMethodCode: ["Methodology", "dropdown", ""],
+            substituteDataCode: ["Substitute Data Approach", "dropdown", ""],
+            bypassApproachCode: ["Bypass Approach", "dropdown", ""],
+          },
+          {
+            beginDate: ["Start Date", "date", ""],
+            beginHour: ["Start Time", "time", ""],
+            endDate: ["End Date", "date", ""],
+            endHour: ["End Time", "time", ""],
+          },
+          create,
+          mdmData
+        )
+      );
+      setShow(true);
+    });
 
     setTimeout(() => {
       attachChangeEventListeners(".modalUserInput");
