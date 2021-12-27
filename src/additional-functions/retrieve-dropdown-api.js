@@ -535,7 +535,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         }
         break;
       case "controlEquipParamCode":
-        dmApi.getAllControlEquipmentParameterCodes().then((response) => {
+        await dmApi.getAllControlEquipmentParameterCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["controlEquipParamCode"],
@@ -599,7 +599,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         break;
       //Analyzer Range
       case "analyzerRangeCode":
-        dmApi.getAllRangeCodes().then((response) => {
+        await dmApi.getAllRangeCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["analyzerRangeCode"],
@@ -612,7 +612,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         break;
       // System Fuel Flows
       case "maximumFuelFlowRateSourceCode":
-        dmApi.getAllMaxRateSourceCodes().then((response) => {
+        await dmApi.getAllMaxRateSourceCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["maxRateSourceCode"],
@@ -628,7 +628,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
       case "maximumLoadUnitsOfMeasureCode":
       case "systemFuelFlowUOMCode":
       case "unitsOfStandard":
-        dmApi.getAllUnitsOfMeasureCodes().then((response) => {
+        await dmApi.getAllUnitsOfMeasureCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["unitsOfMeasureCode"],
@@ -641,7 +641,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         break;
 
       case "fuelType":
-        dmApi.getAllFuelTypes().then((response) => {
+        await dmApi.getAllFuelTypes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["fuelTypeCode"],
@@ -654,7 +654,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         break;
 
       case "fuelCode":
-        dmApi.getAllFuelCodes().then((response) => {
+        await dmApi.getAllFuelCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["fuelCode"],
@@ -666,7 +666,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
       case "indicatorCode":
-        dmApi.getAllFuelIndicatorCodes().then((response) => {
+        await dmApi.getAllFuelIndicatorCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["fuelIndicatorCode"],
@@ -678,7 +678,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
       case "demGCV":
-        dmApi.getAllDemonstrationMethodCodes().then((response) => {
+        await dmApi.getAllDemonstrationMethodCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["demMethodCode"],
@@ -690,7 +690,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
       case "demSO2":
-        dmApi.getAllDemonstrationMethodCodes().then((response) => {
+        await dmApi.getAllDemonstrationMethodCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["demMethodCode"],
@@ -702,7 +702,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
       case "systemTypeCode":
-        dmApi.getAllSystemTypeCodes().then((response) => {
+        await dmApi.getAllSystemTypeCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["systemTypeCode"],
@@ -714,7 +714,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
       case "systemDesignationCode":
-        dmApi.getAllSystemDesignationCodes().then((response) => {
+        await dmApi.getAllSystemDesignationCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["systemDesignationCode"],
@@ -727,7 +727,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         break;
 
       case "sampleAcquisitionMethodCode":
-        dmApi.getAllAcquisitionMethodCodes().then((response) => {
+        await dmApi.getAllAcquisitionMethodCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["acquisitionMethodCode"],
@@ -739,7 +739,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
       case "componentTypeCode":
-        dmApi.getAllComponentTypeCodes().then((response) => {
+        await dmApi.getAllComponentTypeCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["componentTypeCode"],
@@ -751,7 +751,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
       case "basisCode":
-        dmApi.getAllBasisCodes().then((response) => {
+        await dmApi.getAllBasisCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["basisCode"],
@@ -765,7 +765,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
       // for spans
 
       case "spanScaleCode":
-        dmApi.getAllSpanScaleCodes().then((response) => {
+        await dmApi.getAllSpanScaleCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["spanScaleCode"],
@@ -777,7 +777,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
       case "spanMethodCode":
-        dmApi.getAllSpanMethodCodes().then((response) => {
+        await dmApi.getAllSpanMethodCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["spanMethodCode"],
@@ -790,7 +790,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         break;
       case "normalLevelCode":
       case "secondLevelCode":
-        dmApi.getAllOperatingLevelCodes().then((response) => {
+        await dmApi.getAllOperatingLevelCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["operatingLevelCode"],
@@ -805,7 +805,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
       // for defaults
 
       case "operatingConditionCode":
-        dmApi.getAllOperatingConditionCodes().then((response) => {
+        await dmApi.getAllOperatingConditionCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["operatingConditionCode"],
@@ -817,7 +817,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
       case "defaultSourceCode":
-        dmApi.getAllDefaultSourceCodes().then((response) => {
+        await dmApi.getAllDefaultSourceCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["defaultSourceCode"],
@@ -829,7 +829,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
       case "defaultPurposeCode":
-        dmApi.getAllDefaultPurposeCodes().then((response) => {
+        await dmApi.getAllDefaultPurposeCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["defaultPurposeCode"],
@@ -841,7 +841,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
       case "formulaCode":
-        dmApi.getAllFormulaCodes().then((response) => {
+        await dmApi.getAllFormulaCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["equationCode"],
@@ -854,7 +854,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         break;
 
       case "wafMethodCode":
-        dmApi.getAllRectangularDuctsCodes().then((response) => {
+        await dmApi.getAllRectangularDuctsCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["wafMethodCode"],
@@ -866,7 +866,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
       case "controlCode":
-        dmApi.getAllControlTechnologies().then((response) => {
+        await dmApi.getAllControlTechnologies().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["controlCode"],
@@ -878,7 +878,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
       case "qualificationTypeCode":
-        dmApi.getAllQualificationTypeCodes().then((response) => {
+        await dmApi.getAllQualificationTypeCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["qualTypeCode"],
@@ -909,7 +909,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
       case "yr1QualificationDataTypeCode":
       case "yr2QualificationDataTypeCode":
       case "yr3QualificationDataTypeCode":
-        dmApi.getAllQualificationDataTypeCodes().then((response) => {
+        await dmApi.getAllQualificationDataTypeCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["qualDataTypeCode"],
@@ -921,7 +921,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
       case "qualificationTestType":
-        dmApi.getAllQualificationLEETestTypeCodes().then((response) => {
+        await dmApi.getAllQualificationLEETestTypeCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["qualLeeTestTypeCode"],
@@ -934,7 +934,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         break;
 
       case "materialCode":
-        dmApi.getAllMaterialCodes().then((response) => {
+        await dmApi.getAllMaterialCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["materialCode"],
@@ -947,7 +947,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         break;
 
       case "shapeCode":
-        dmApi.getAllShapeCodes().then((response) => {
+        await dmApi.getAllShapeCodes().then((response) => {
           options = response.data.map((option) => {
             return {
               code: option["shapeCode"],
