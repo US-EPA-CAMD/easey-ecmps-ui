@@ -6,6 +6,10 @@ import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import { Preloader } from "../../Preloader/Preloader";
 import { connect } from "react-redux";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
+import {
+  convertSectionToStoreName,
+  METHODS_SECTION_NAME,
+} from "../../../additional-functions/data-table-section-and-store-names";
 
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
@@ -44,6 +48,14 @@ export const DataTableMethod = ({
 
   const [updateTable, setUpdateTable] = useState(false);
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
+  const dropdownArray = [
+    [
+      "parameterCode",
+      "monitoringMethodCode",
+      "substituteDataCode",
+      "bypassApproachCode",
+    ],
+  ];
 
   useEffect(() => {
     if (
@@ -68,7 +80,7 @@ export const DataTableMethod = ({
   // load dropdowns data (called once)
   useEffect(() => {
     if (mdmData.length === 0) {
-      loadDropdownsData("methods");
+      loadDropdownsData(METHODS_SECTION_NAME, dropdownArray);
       setDropdownsLoaded(true);
     } else {
       setDropdownsLoaded(true);
@@ -326,8 +338,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadDropdownsData: (section) => {
-      dispatch(loadDropdowns(section));
+    loadDropdownsData: (section, dropdownArray) => {
+      dispatch(
+        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
+      );
     },
   };
 };

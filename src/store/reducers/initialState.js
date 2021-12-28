@@ -19,7 +19,7 @@ export default {
     methods: [],
     qualifications: [],
     rectangularDuctWafs: [],
-    span: [],
+    spans: [],
     systems: [],
     unitInformation: [],
   },

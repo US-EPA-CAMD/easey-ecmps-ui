@@ -1,3 +1,4 @@
+import { actions } from "react-table";
 import * as types from "../actions/actionTypes";
 import initialState from "./initialState";
 
@@ -8,13 +9,20 @@ const reducer = (state, action) => {
   const dropdowns = {};
   dropdowns[`${action.section}`] = action.dropdowns;
 
-  if (action.type === types.LOAD_DROPDOWNS_SUCCESS) {
+  // to begin, set the current section property
+  if (action.type === types.BEGIN_MDM_API_CALL) {
+    return { ...currentState, currentSection: actions.currentSection };
+  }
+  // then, append newly loaded dropdowns into a copy of the current dropdowns object
+  else if (action.type === types.LOAD_DROPDOWNS_SUCCESS) {
     returnObject = {
       ...state,
       ...dropdowns,
     };
-  } else {
-    return currentState;
+  }
+  // otherwise, just keep old state
+  else {
+    returnObject = currentState;
   }
   return returnObject;
 };

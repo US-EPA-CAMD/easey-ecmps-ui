@@ -10,6 +10,7 @@ import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 import "./HeaderInfo.scss";
 import MonitoringPlanEvaluationReport from "../MonitoringPlanEvaluationReport/MonitoringPlanEvaluationReport";
 import { Preloader } from "../Preloader/Preloader";
+import * as sectionNames from "../../additional-functions/data-table-section-and-store-names";
 
 export const HeaderInfo = ({
   facility,
@@ -33,16 +34,16 @@ export const HeaderInfo = ({
   configID,
 }) => {
   const sections = [
-    { name: "Defaults" },
-    { name: "Formulas" },
-    { name: "Loads" },
-    { name: "Location Attributes and Relationships" },
-    { name: "Methods" },
-    { name: "Qualifications" },
-    { name: "Rectangular Duct WAFs" },
-    { name: "Span" },
-    { name: "Systems" },
-    { name: "Unit Information" },
+    { name: sectionNames.DEFAULTS_SECTION_NAME },
+    { name: sectionNames.FORMULAS_SECTION_NAME },
+    { name: sectionNames.LOADS_SECTION_NAME },
+    { name: sectionNames.LOCATION_ATTRIBUTES_AND_RELATIONSHIPS_SECTION_NAME },
+    { name: sectionNames.METHODS_SECTION_NAME },
+    { name: sectionNames.QUALIFICATIONS_SECTION_NAME },
+    { name: sectionNames.RECTANGULAR_DUCT_WAFS_SECTION_NAME },
+    { name: sectionNames.SPANS_SECTION_NAME },
+    { name: sectionNames.SYSTEMS_SECTION_NAME },
+    { name: sectionNames.UNIT_INFORMATION_SECTION_NAME },
   ];
 
   // *** parse apart facility name
