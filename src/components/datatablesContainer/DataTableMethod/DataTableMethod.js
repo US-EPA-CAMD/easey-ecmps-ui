@@ -3,11 +3,13 @@ import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
+import { Preloader } from "../../Preloader/Preloader";
+import { connect } from "react-redux";
+import { loadDropdowns } from "../../../store/actions/dropdowns";
 
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import { UseRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import {
   getActiveData,
   getInactiveData,
@@ -20,6 +22,8 @@ import {
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
 export const DataTableMethod = ({
+  mdmData,
+  loadDropdownsData,
   locationSelectValue,
   matsTableHandler,
   user,
@@ -39,6 +43,8 @@ export const DataTableMethod = ({
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const [updateTable, setUpdateTable] = useState(false);
+  const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
+
   useEffect(() => {
     if (
       updateTable ||
@@ -58,6 +64,18 @@ export const DataTableMethod = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
+
+  // load dropdowns data (called once)
+  useEffect(() => {
+    if (mdmData.length === 0) {
+      loadDropdownsData("methods");
+      setDropdownsLoaded(true);
+    } else {
+      setDropdownsLoaded(true);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -110,33 +128,26 @@ export const DataTableMethod = ({
       setSelectedMonitoringMethod(monMethod);
     }
 
-    UseRetrieveDropdownApi([
-      "parameterCode",
-      "monitoringMethodCode",
-      "substituteDataCode",
-      "bypassApproachCode",
-    ]).then((mdmData) => {
-      setSelectedModalData(
-        modalViewData(
-          monMethod,
-          {
-            parameterCode: ["Parameter", "dropdown", ""],
-            monitoringMethodCode: ["Methodology", "dropdown", ""],
-            substituteDataCode: ["Substitute Data Approach", "dropdown", ""],
-            bypassApproachCode: ["Bypass Approach", "dropdown", ""],
-          },
-          {
-            beginDate: ["Start Date", "date", ""],
-            beginHour: ["Start Time", "time", ""],
-            endDate: ["End Date", "date", ""],
-            endHour: ["End Time", "time", ""],
-          },
-          create,
-          mdmData
-        )
-      );
-      setShow(true);
-    });
+    setSelectedModalData(
+      modalViewData(
+        monMethod,
+        {
+          parameterCode: ["Parameter", "dropdown", ""],
+          monitoringMethodCode: ["Methodology", "dropdown", ""],
+          substituteDataCode: ["Substitute Data Approach", "dropdown", ""],
+          bypassApproachCode: ["Bypass Approach", "dropdown", ""],
+        },
+        {
+          beginDate: ["Start Date", "date", ""],
+          beginHour: ["Start Time", "time", ""],
+          endDate: ["End Date", "date", ""],
+          endHour: ["End Time", "time", ""],
+        },
+        create,
+        mdmData
+      )
+    );
+    setShow(true);
 
     setTimeout(() => {
       attachChangeEventListeners(".modalUserInput");
@@ -275,6 +286,7 @@ export const DataTableMethod = ({
         setViewBtn={setViewBtn}
         viewBtn={viewBtn}
         setAddBtn={setAddBtn}
+        show={show}
       />
       {show ? (
         <Modal
@@ -286,15 +298,19 @@ export const DataTableMethod = ({
           title={createNewMethod ? "Create Method" : "Method"}
           exitBTN={createNewMethod ? "Create Method" : `Save and Close`}
           children={
-            <div>
-              <ModalDetails
-                modalData={selectedMonitoringMethod}
-                data={selectedModalData}
-                cols={2}
-                title={"Method"}
-                viewOnly={!(user && checkout)}
-              />
-            </div>
+            dropdownsLoaded ? (
+              <div>
+                <ModalDetails
+                  modalData={selectedMonitoringMethod}
+                  data={selectedModalData}
+                  cols={2}
+                  title={"Method"}
+                  viewOnly={!(user && checkout)}
+                />
+              </div>
+            ) : (
+              <Preloader />
+            )
           }
         />
       ) : null}
@@ -302,4 +318,19 @@ export const DataTableMethod = ({
   );
 };
 
-export default DataTableMethod;
+const mapStateToProps = (state) => {
+  return {
+    mdmData: state.dropdowns["methods"],
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadDropdownsData: (section) => {
+      dispatch(loadDropdowns(section));
+    },
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(DataTableMethod);
+export { mapDispatchToProps };
+export { mapStateToProps };

@@ -6,3 +6,7 @@ export function beginFacilitiesApiCall() {
 export function beginMonitoringPlansApiCall() {
   return { type: types.BEGIN_MONITORING_PLANS_API_CALL };
 }
+
+export function beginMdmApiCall(section) {
+  return { type: types.BEGIN_MDM_API_CALL, currentSection: section };
+}

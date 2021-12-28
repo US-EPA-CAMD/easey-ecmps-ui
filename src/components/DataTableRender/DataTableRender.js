@@ -68,6 +68,7 @@ export const DataTableRender = ({
   setViewBtn,
   viewBtn,
   setAddBtn,
+  show = false,
 
   // for 508
   openAndCheckoutBTNFocus,
@@ -221,7 +222,11 @@ export const DataTableRender = ({
         const normalizedRow = normalizeRowObjectFormat(row, columnNames);
 
         let willAutoFocus;
-        if (viewBtn && viewBtn === row[`col${Object.keys(row).length - 1}`]) {
+        if (
+          !show &&
+          viewBtn &&
+          viewBtn === row[`col${Object.keys(row).length - 1}`]
+        ) {
           willAutoFocus = true;
         } else {
           willAutoFocus = false;
