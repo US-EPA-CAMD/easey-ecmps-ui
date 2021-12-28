@@ -5,8 +5,12 @@ import ModalDetails from "../../ModalDetails/ModalDetails";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import * as assertSelector from "../../../utils/selectors/assert";
+
+import { Preloader } from "../../Preloader/Preloader";
+import { connect } from "react-redux";
+import { loadDropdowns } from "../../../store/actions/dropdowns";
+import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
 
 import {
   getActiveData,
@@ -20,6 +24,8 @@ import {
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
 export const DataTableAssert = ({
+  mdmData,
+  loadDropdownsData,
   locationSelectValue,
   user,
   checkout,
@@ -47,10 +53,7 @@ export const DataTableAssert = ({
   const [selectedRow, setSelectedRow] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const totalOptions = useRetrieveDropdownApi(
-    dropdownArray[0],
-    dropdownArray.length > 1 ? dropdownArray[1] : null
-  );
+  const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
   const [updateTable, setUpdateTable] = useState(false);
   // need to test this part to fully test the page
@@ -69,6 +72,24 @@ export const DataTableAssert = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState, dataTableName]);
+
+  // load dropdowns data (called once)
+  useEffect(() => {
+    if (
+      mdmData.length === 0 &&
+      mdmData.dropdowns[convertSectionToStoreName(dataTableName)]
+    ) {
+      loadDropdownsData(
+        convertSectionToStoreName(dataTableName),
+        dropdownArray
+      );
+      setDropdownsLoaded(true);
+    } else {
+      setDropdownsLoaded(true);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // get API for data
   // in  a timer because WAFS get takes a lil bit exxtra time to process, fixes update of datatable after editing data
@@ -137,14 +158,13 @@ export const DataTableAssert = ({
       )[0];
       setSelectedRow(selectedData);
     }
-
     setSelectedModalData(
       modalViewData(
         selectedData,
         controlInputs,
         controlDatePickerInputs,
         create,
-        totalOptions
+        mdmData[convertSectionToStoreName(dataTableName)]
       )
     );
     setShow(true);
@@ -217,67 +237,10 @@ export const DataTableAssert = ({
     revertedState,
   ]);
 
-  // span data test
-  // const testSave = () => {
-  //   openModal(
-  //     {
-  //       col1: "CO2",
-  //       col2: "H",
-  //       col3: "HD",
-  //       col4: "PCT",
-  //       col5: "09/20/2017 13",
-  //       col6: " ",
-  //       col7: "TWCORNEL5-88E25998894F4859B9D03C49E8CBD66D",
-  //     },
-  //     false,
-  //     true
-  //   );
-  //   saveData();
-  // };
-  // const testOpen = () => {
-  //   openModal(
-  //     {
-  //       col1: "CO2",
-  //       col2: "H",
-  //       col3: "HD",
-  //       col4: "PCT",
-  //       col5: "09/20/2017 13",
-  //       col6: " ",
-  //       col7: "TWCORNEL5-88E25998894F4859B9D03C49E8CBD66D",
-  //     },
-  //     false,
-  //     false
-  //   );
-  // };
-  // const testCreate = () => {
-  //   openModal(
-  //     { col5: "MELISSARHO-CDF765BC7BF849EE9C23608B95540200" },
-  //     false,
-  //     true
-  //   );
-  //   createData();
-
-  // };
-
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
 
-      {/* // strictly for testing 
-      <input
-        tabIndex={-1}
-        aria-hidden={true}
-        role="button"
-        type="hidden"
-        id="testBtn"
-        onClick={() => {
-          // testOpen();
-          // testSave();
-          // // testCreate();
-          closeModalHandler();
-        }}
-      />
-*/}
       <DataTableRender
         openHandler={openModal}
         columnNames={columnNames}
@@ -294,6 +257,7 @@ export const DataTableAssert = ({
         setViewBtn={setViewBtn}
         viewBtn={viewBtn}
         setAddBtn={setAddBtn}
+        show={show}
       />
       {show ? (
         <Modal
@@ -306,16 +270,20 @@ export const DataTableAssert = ({
           title={createNewData ? `Create ${dataTableName}` : `${dataTableName}`}
           exitBTN={createNewData ? `Create ${dataTableName}` : `Save and Close`}
           children={
-            <div>
-              <ModalDetails
-                modalData={selectedRow}
-                data={selectedModalData}
-                cols={2}
-                title={`${dataTableName}`}
-                viewOnly={!(user && checkout) || nonEditable}
-                create={createNewData}
-              />
-            </div>
+            dropdownsLoaded ? (
+              <div>
+                <ModalDetails
+                  modalData={selectedRow}
+                  data={selectedModalData}
+                  cols={2}
+                  title={`${dataTableName}`}
+                  viewOnly={!(user && checkout) || nonEditable}
+                  create={createNewData}
+                />
+              </div>
+            ) : (
+              <Preloader />
+            )
           }
         />
       ) : null}
@@ -323,4 +291,21 @@ export const DataTableAssert = ({
   );
 };
 
-export default DataTableAssert;
+const mapStateToProps = (state) => {
+  return {
+    mdmData: state.dropdowns,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadDropdownsData: (section, dropdownArray) => {
+      dispatch(
+        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
+      );
+    },
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(DataTableAssert);
+export { mapDispatchToProps };
+export { mapStateToProps };

@@ -2,12 +2,22 @@ import React, { useEffect, useMemo, useState } from "react";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as fs from "../../../utils/selectors/monitoringPlanSystems";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
-import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 import { attachChangeEventListeners } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
+import { Preloader } from "../../Preloader/Preloader";
+import { connect } from "react-redux";
+import { loadDropdowns } from "../../../store/actions/dropdowns";
+import {
+  convertSectionToStoreName,
+  ANALYZER_RANGES_SECTION_NAME,
+  ANALYZER_RANGES_STORE_NAME,
+} from "../../../additional-functions/data-table-section-and-store-names";
+
 export const DataTableAnalyzerRanges = ({
+  mdmData,
+  loadDropdownsData,
   user,
   checkout,
   selectedRanges,
@@ -16,21 +26,18 @@ export const DataTableAnalyzerRanges = ({
   setOpenFuelFlowsView,
   setComponentView,
   setSelectedModalData,
-  // setCreateNewAnalyzerRange,
-  // setSaveAnalyzerRange,
   setSelectedRange,
   updateAnalyzerRangeTable,
   setCreateAnalyzerRangesFlag,
-  // setCreateBtn,
-  // setCreateBtnAPI,
-  // inactive,
-  // settingInactiveCheckBox,
 }) => {
   const [rangesLoaded, setRangesLoaded] = useState(false);
   const [ranges, setRanges] = useState([]);
   const [updateTable, setUpdateTable] = useState(updateAnalyzerRangeTable);
   const rangesColumnNames = ["Range", "Date and Time"];
-  const totalRangesOptions = useRetrieveDropdownApi(["analyzerRangeCode"]);
+
+  const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
+  const dropdownArray = [["analyzerRangeCode"]];
+
   useEffect(() => {
     if (updateTable || ranges.length <= 0) {
       mpApi
@@ -47,6 +54,18 @@ export const DataTableAnalyzerRanges = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedRanges, updateTable]);
 
+  // load dropdowns data (called once)
+  useEffect(() => {
+    if (mdmData.length === 0) {
+      loadDropdownsData(ANALYZER_RANGES_SECTION_NAME, dropdownArray);
+      setDropdownsLoaded(true);
+    } else {
+      setDropdownsLoaded(true);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const rangeData = useMemo(() => {
     if (ranges.length > 0) {
       return fs.getMonitoringPlansSystemsAnalyzerRangesTableRecords(ranges);
@@ -59,21 +78,6 @@ export const DataTableAnalyzerRanges = ({
     openAnalyzerRanges(false, false, true);
   };
   const testing1 = () => {
-    // need a valid row id for first paramter
-    // const range = {
-    //   active: false,
-    //   addDate: "2009-02-20",
-    //   analyzerRangeCode: "H",
-    //   beginDate: "1993-10-01",
-    //   beginHour: "0",
-    //   componentRecordId: "CAMD-60A6D62FDAB14840BFCF67E049B4B4C5",
-    //   dualRangeIndicator: "0",
-    //   endDate: "2019-11-06",
-    //   endHour: "14",
-    //   id: "CAMD-A39804B8C17A4478970F7B2CCBF429B6",
-    //   updateDate: "2020-01-23",
-    //   userId: "bvick",
-    // };
     openAnalyzerRanges(
       { col3: "CAMD-A39804B8C17A4478970F7B2CCBF429B6" },
       false,
@@ -107,10 +111,10 @@ export const DataTableAnalyzerRanges = ({
           endHour: ["End Time", "time", ""],
         },
         create,
-        totalRangesOptions
+        mdmData
       )
     );
-    setThirdLevel(true, "Analyzer Ranges", create? true:false);
+    setThirdLevel(true, "Analyzer Ranges", create ? true : false);
 
     setTimeout(() => {
       attachChangeEventListeners(".modalUserInput");
@@ -134,22 +138,47 @@ export const DataTableAnalyzerRanges = ({
         id="testingBtn1"
         onClick={() => testing1()}
       />
-      <DataTableRender
-        columnNames={rangesColumnNames}
-        data={rangeData}
-        openHandler={openAnalyzerRanges}
-        tableTitle="Analyzer Ranges"
-        componentStyling="systemsCompTable"
-        tableStyling="grid-container"
-        dataLoaded={rangesLoaded}
-        actionsBtn={"View"}
-        user={user}
-        checkout={checkout}
-        addBtn={openAnalyzerRanges}
-        addBtnName={"Create New Analyzer Range"}
-      />
+      {dropdownsLoaded ? (
+        <DataTableRender
+          columnNames={rangesColumnNames}
+          data={rangeData}
+          openHandler={openAnalyzerRanges}
+          tableTitle="Analyzer Ranges"
+          componentStyling="systemsCompTable"
+          tableStyling="grid-container"
+          dataLoaded={rangesLoaded}
+          actionsBtn={"View"}
+          user={user}
+          checkout={checkout}
+          addBtn={openAnalyzerRanges}
+          addBtnName={"Create New Analyzer Range"}
+        />
+      ) : (
+        <Preloader />
+      )}
     </div>
   );
 };
 
-export default DataTableAnalyzerRanges;
+const mapStateToProps = (state) => {
+  return {
+    mdmData: state.dropdowns[ANALYZER_RANGES_STORE_NAME],
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadDropdownsData: (section, dropdownArray) => {
+      dispatch(
+        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
+      );
+    },
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DataTableAnalyzerRanges);
+export { mapDispatchToProps };
+export { mapStateToProps };
