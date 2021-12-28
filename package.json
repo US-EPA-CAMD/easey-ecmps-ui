@@ -50,6 +50,7 @@
     "axios": "^0.21.1",
     "axios-mock-adapter": "^1.18.2",
     "axios-retry": "^3.1.8",
+    "html-react-parser": "^1.4.4",
     "loglevel": "^1.7.0",
     "prettier": "^2.2.1",
     "react": "^17.0.2",
