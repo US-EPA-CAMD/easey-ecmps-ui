@@ -257,8 +257,19 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                       }
                     }}
                   />
-                  <span className="text-bold text-white text-no-wrap float-left clearfix position-relative top-1 margin-x-1 display-none widescreen:display-block">
-                    Welcome, {user.firstName}!
+
+                  <span className="text-bold text-white text-no-wrap clearfix position-relative margin-x-2">
+                    <Button
+                      type="button"
+                      id="logoutBtn"
+                      epa-testid="logoutBtn"
+                      outline={true}
+                      onClick={(event) => logOut(event)}
+                      title="Click this button to logout"
+                      className="text-white border-white text-no-wrap"
+                    >
+                      Log Out
+                    </Button>
                   </span>
 
                   {userProfileExpanded ? (
@@ -280,18 +291,9 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                     </span>
                   ) : null}
                 </span>
-                <span className="text-bold text-white text-no-wrap clearfix position-relative margin-x-2">
-                  <Button
-                    type="button"
-                    id="logoutBtn"
-                    epa-testid="logoutBtn"
-                    outline={true}
-                    onClick={(event) => logOut(event)}
-                    title="Click this button to logout"
-                    className="text-white border-white text-no-wrap"
-                  >
-                    Log Out
-                  </Button>
+
+                <span className="text-bold text-white text-no-wrap float-left clearfix position-relative top-1 margin-x-1 display-none widescreen:display-block">
+                  Welcome, {user.firstName}!
                 </span>
               </>
             ) : (
