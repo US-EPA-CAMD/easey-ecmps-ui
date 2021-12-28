@@ -9,6 +9,7 @@ import { loadDropdowns } from "../../../store/actions/dropdowns";
 import {
   convertSectionToStoreName,
   METHODS_SECTION_NAME,
+  METHODS_STORE_NAME,
 } from "../../../additional-functions/data-table-section-and-store-names";
 
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
@@ -332,7 +333,7 @@ export const DataTableMethod = ({
 
 const mapStateToProps = (state) => {
   return {
-    mdmData: state.dropdowns["methods"],
+    mdmData: state.dropdowns[METHODS_STORE_NAME],
   };
 };
 

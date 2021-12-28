@@ -16,7 +16,7 @@ const reducer = (state, action) => {
   // then, append newly loaded dropdowns into a copy of the current dropdowns object
   else if (action.type === types.LOAD_DROPDOWNS_SUCCESS) {
     returnObject = {
-      ...state,
+      ...currentState,
       ...dropdowns,
     };
   }
