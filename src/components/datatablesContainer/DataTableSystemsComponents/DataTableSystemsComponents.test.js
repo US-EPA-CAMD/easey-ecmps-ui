@@ -250,6 +250,10 @@ const componentRenderer = (
     setBread: jest.fn(),
     openComponentViewTest: openComponentViewTest,
     openAddComponentTest: openAddComponentTest,
+    loadDropdownsData: jest.fn(),
+    mdmData: {
+      testCode: [],
+    },
   };
   return render(<DataTableSystemsComponents {...props} />);
 };
