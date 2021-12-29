@@ -1,4 +1,5 @@
 import log from "loglevel";
+import { displayAppError } from "../../additional-functions/app-error";
 
 const successResponses = [200, 201];
 
@@ -19,11 +20,14 @@ export function handleError(error) {
       status: error.response.status,
       headers: error.response.headers,
     });
+    displayAppError(error.response.data);
   } else if (error.request) {
     // client never received a response, or request never left
     log.error({ error: error.request });
+    displayAppError(error.response.data);
   } else {
     // anything else
     log.error({ error: error.message });
+    displayAppError(error.message);
   }
 }

@@ -2,6 +2,7 @@ import config from "../../config";
 import axios from "axios";
 import { checkoutAPI } from "../../additional-functions/checkout";
 import { getCheckedOutLocations } from "./monitoringPlansApi";
+import { displayAppError } from "../../additional-functions/app-error";
 
 axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
@@ -35,7 +36,7 @@ export const authenticate = async (data_payload) => {
       window.location.reload();
     })
     .catch((e) => {
-      throw e;
+      displayAppError(e);
     });
 };
 
@@ -46,14 +47,10 @@ export const logOut = async (event = "default") => {
 
   const user = JSON.parse(sessionStorage.getItem("cdx_user"));
   const checkedOutLocationResult = await getCheckedOutLocations();
-  for (const p in checkedOutLocationResult.data) {
-    if (checkedOutLocationResult.data[p].checkedOutBy === user.userId) {
-      await checkoutAPI(
-        false,
-        checkedOutLocationResult.data[p].facId,
-        checkedOutLocationResult.data[p].monPlanId,
-        undefined
-      );
+
+  for (const location of checkedOutLocationResult.data) {
+    if (location.checkedOutBy === user.userId) {
+      await checkoutAPI(false, location.facId, location.monPlanId, undefined);
     }
   }
 
@@ -67,7 +64,7 @@ export const logOut = async (event = "default") => {
       window.location = config.app.path;
     })
     .catch((e) => {
-      throw e;
+      displayAppError(e);
     });
 };
 
@@ -85,10 +82,10 @@ export const refreshToken = () => {
         sessionStorage.setItem("cdx_user", JSON.stringify(userData));
       })
       .catch((e) => {
-        throw e;
+        displayAppError(e);
       });
   } catch (e) {
-    throw e;
+    displayAppError(e);
   }
 };
 
