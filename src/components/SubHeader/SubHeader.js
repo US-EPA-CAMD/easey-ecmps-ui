@@ -257,10 +257,10 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                       }
                     }}
                   />
-                  <span className="text-bold text-white text-no-wrap position-relative left-neg-2 top-neg-1px">
+                  <span className="text-bold text-white text-no-wrap position-relative left-neg-2 top-neg-2">
                     Welcome, {user.firstName}!
                   </span>
-                  <span className="text-bold text-white text-no-wrap clearfix position-relative margin-x-2">
+                  <span className="text-bold text-white text-no-wrap clearfix position-relative top-neg-2 margin-x-2">
                     <Button
                       type="button"
                       id="logoutBtn"

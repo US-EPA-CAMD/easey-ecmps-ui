@@ -74,11 +74,19 @@ export const HeaderInfo = ({
 
   const [lockedFacility, setLockedFacility] = useState(false);
 
+  const reportWindowParams = [
+    // eslint-disable-next-line no-restricted-globals
+    `height=${screen.height}`,
+    // eslint-disable-next-line no-restricted-globals
+    `width=${screen.width}`,
+    `fullscreen=yes`,
+  ].join(",");
+
   const displayReport = () => {
     window.open(
       `/ecmps/workspace/monitoring-plans/${selectedConfig.id}/evaluation-report`,
       "ECMPS Monitoring Plan Report",
-      "popup"
+      reportWindowParams
     );
   };
 
@@ -473,7 +481,7 @@ export const HeaderInfo = ({
                   )}
                   <Button
                     type="button"
-                    className="margin-left-4"
+                    className="margin-left-4 position-relative top-neg-1"
                     outline={true}
                     title="Coming Soon"
                   >
@@ -583,7 +591,7 @@ export const HeaderInfo = ({
                         <button
                           className={
                             showHyperLink(evalStatus)
-                              ? "hyperlink-btn"
+                              ? "hyperlink-btn cursor-pointer"
                               : "unstyled-btn"
                           }
                           onClick={() =>
