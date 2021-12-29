@@ -2,7 +2,7 @@
 $animationDuration: 500ms;
 
 .react-transition {
-  animation-fill-mode: initial;
+  animation-fill-mode: inherit;
 }
 
 @-webkit-keyframes slidein-left {
