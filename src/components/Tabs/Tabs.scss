@@ -19,6 +19,8 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  min-height: 2em;
+  margin-top: 0.15em;
 }
 
 .active-tab-button {

@@ -36,7 +36,7 @@ export const authenticate = async (data_payload) => {
       window.location.reload();
     })
     .catch((e) => {
-      displayAppError(e);
+      throw e;
     });
 };
 

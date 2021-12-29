@@ -26,7 +26,7 @@ export function handleError(error) {
   } else if (error.request) {
     // client never received a response, or request never left
     log.error({ error: error.request });
-    errorMessage = error.request;
+    errorMessage = "API Communication error";
   } else {
     // anything else
     log.error({ error: error.message });

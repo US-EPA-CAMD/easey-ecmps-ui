@@ -15,6 +15,16 @@
     }
   }
 
+  .rdt_TableBody {
+    max-height: none !important;
+  }
+
+  .rdt_TableRow {
+    [role="cell"] {
+      padding: 0.5em;
+    }
+  }
+
   .rdt_TableRow:nth-child(odd) {
     background-color: $epa-off-white !important;
   }
