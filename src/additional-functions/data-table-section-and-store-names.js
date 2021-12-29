@@ -1,13 +1,16 @@
-export const DEFAULTS_SECTION_NAME = "Defaults";
-export const FORMULAS_SECTION_NAME = "Formulas";
-export const LOADS_SECTION_NAME = "Loads";
+export const DEFAULTS_SECTION_NAME = "Default";
+export const FORMULAS_SECTION_NAME = "Formula";
+export const LOADS_SECTION_NAME = "Load";
 export const LOCATION_ATTRIBUTES_AND_RELATIONSHIPS_SECTION_NAME =
-  "Location Attributes and Relationships";
+  "Location Attribute";
 export const METHODS_SECTION_NAME = "Methods";
 export const QUALIFICATIONS_SECTION_NAME = "Qualifications";
-export const RECTANGULAR_DUCT_WAFS_SECTION_NAME = "Rectangular Duct WAFs";
-export const SPANS_SECTION_NAME = "Spans";
+export const RECTANGULAR_DUCT_WAFS_SECTION_NAME = "Rectangular Duct WAF";
+export const SPANS_SECTION_NAME = "Span";
 export const SYSTEMS_SECTION_NAME = "Systems";
+export const UNIT_FUELS_SECTION_NAME = "Unit Fuel";
+export const UNIT_CONTROLS_SECTION_NAME = "Unit Control";
+export const UNIT_CAPACITIES_SECTION_NAME = "Unit Capacity";
 export const UNIT_INFORMATION_SECTION_NAME = "Unit Information";
 export const FUEL_FLOWS_SECTION_NAME = "Fuel Flows";
 export const SYSTEM_COMPONENTS_SECTION_NAME = "System Components";
@@ -27,7 +30,9 @@ export const QUALIFICATIONS_STORE_NAME = "qualifications";
 export const RECTANGULAR_DUCT_WAFS_STORE_NAME = "rectangularDuctWafs";
 export const SPANS_STORE_NAME = "spans";
 export const SYSTEMS_STORE_NAME = "systems";
-export const UNIT_INFORMATION_STORE_NAME = "unitInformation";
+export const UNIT_FUELS_STORE_NAME = "unitFuels";
+export const UNIT_CONTROLS_STORE_NAME = "unitControls";
+export const UNIT_CAPACITIES_STORE_NAME = "unitCapacities";
 export const FUEL_FLOWS_STORE_NAME = "fuelFlows";
 export const SYSTEM_COMPONENTS_STORE_NAME = "systemComponents";
 export const ANALYZER_RANGES_STORE_NAME = "analyzerRanges";
@@ -66,9 +71,6 @@ export const convertSectionToStoreName = (dataTableName) => {
     case SYSTEMS_SECTION_NAME:
       storeName = SYSTEMS_STORE_NAME;
       break;
-    case UNIT_INFORMATION_SECTION_NAME:
-      storeName = UNIT_INFORMATION_STORE_NAME;
-      break;
     case SYSTEM_COMPONENTS_SECTION_NAME:
       storeName = SYSTEM_COMPONENTS_STORE_NAME;
       break;
@@ -89,6 +91,15 @@ export const convertSectionToStoreName = (dataTableName) => {
       break;
     case MATS_METHODS_SECTION_NAME:
       storeName = MATS_METHODS_STORE_NAME;
+      break;
+    case UNIT_FUELS_SECTION_NAME:
+      storeName = UNIT_FUELS_STORE_NAME;
+      break;
+    case UNIT_CONTROLS_SECTION_NAME:
+      storeName = UNIT_CONTROLS_STORE_NAME;
+      break;
+    case UNIT_CAPACITIES_SECTION_NAME:
+      storeName = UNIT_CAPACITIES_STORE_NAME;
       break;
     default:
       break;
