@@ -111,7 +111,7 @@ export const DataTableSystemsComponents = ({
 
   // load dropdowns data (called once)
   useEffect(() => {
-    if (fuelFlowsData.length === 0) {
+    if (fuelFlowsMdmData.length === 0 && systemComponentsMdmData.length === 0) {
       loadDropdownsData(
         SYSTEM_COMPONENTS_SECTION_NAME,
         systemComponentsDataArray
