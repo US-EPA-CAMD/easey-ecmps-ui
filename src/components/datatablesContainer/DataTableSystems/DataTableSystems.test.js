@@ -1,5 +1,5 @@
 import React from "react";
-import { render,fireEvent, waitForElement } from "@testing-library/react";
+import { render, fireEvent, waitForElement } from "@testing-library/react";
 import { DataTableSystems } from "./DataTableSystems";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 const axios = require("axios");
@@ -125,10 +125,279 @@ const componentRenderer = (location) => {
     inactive: true,
     settingInactiveCheckBox: jest.fn(),
     locationSelectValue: location,
-    revertedState:false,
-    setRevertedState:jest.fn(),
-    selectedSysIdTest:'testId',
-    selectedRangeInFirstTest:{locationId:1,componentRecordId:1}
+    revertedState: false,
+    setRevertedState: jest.fn(),
+    selectedSysIdTest: "testId",
+    selectedRangeInFirstTest: { locationId: 1, componentRecordId: 1 },
+    mdmData: {
+      systemDesignationCode: [
+        {
+          code: "",
+          name: "-- Select a value --",
+        },
+        {
+          code: "B",
+          name: "Non-redundant Backup",
+        },
+        {
+          code: "CI",
+          name: "Certified Monitoring System at Inlet to Emission Control Device",
+        },
+        {
+          code: "DB",
+          name: "Data Backup",
+        },
+        {
+          code: "P",
+          name: "Primary",
+        },
+        {
+          code: "PB",
+          name: "Primary Bypass",
+        },
+        {
+          code: "RB",
+          name: "Redundant Backup",
+        },
+        {
+          code: "RM",
+          name: "Reference Method Backup",
+        },
+      ],
+      systemTypeCode: [
+        {
+          code: "",
+          name: "-- Select a value --",
+        },
+        {
+          code: "CO2",
+          name: "CO2 Concentration",
+        },
+        {
+          code: "FLOW",
+          name: "Stack Flow",
+        },
+        {
+          code: "GAS",
+          name: "Gas Fuel Flow",
+        },
+        {
+          code: "H2O",
+          name: "Moisture (O2 Wet and Dry)",
+        },
+        {
+          code: "H2OM",
+          name: "Moisture Sensor",
+        },
+        {
+          code: "H2OT",
+          name: "Moisture Table",
+        },
+        {
+          code: "HG",
+          name: "Hg Concentration CEMS",
+        },
+        {
+          code: "LTGS",
+          name: "Long-term Gas Fuel Flow",
+        },
+        {
+          code: "LTOL",
+          name: "Long-term Oil Fuel Flow",
+        },
+        {
+          code: "NOX",
+          name: "NOx Emission Rate",
+        },
+        {
+          code: "NOXC",
+          name: "NOx Concentration",
+        },
+        {
+          code: "NOXE",
+          name: "NOx Appendix E",
+        },
+        {
+          code: "NOXP",
+          name: "NOx PEMS",
+        },
+        {
+          code: "O2",
+          name: "O2 Concentration",
+        },
+        {
+          code: "OILM",
+          name: "Mass of Oil Fuel Flow",
+        },
+        {
+          code: "OILV",
+          name: "Volumetric Oil Fuel Flow",
+        },
+        {
+          code: "OP",
+          name: "Opacity",
+        },
+        {
+          code: "PM",
+          name: "Particulate Matter",
+        },
+        {
+          code: "SO2",
+          name: "SO2 Concentration",
+        },
+        {
+          code: "HCL",
+          name: "HCl Concentration CEMS",
+        },
+        {
+          code: "HF",
+          name: "HF Concentration CEMS",
+        },
+        {
+          code: "ST",
+          name: "Sorbent Trap Monitoring System",
+        },
+      ],
+      fuelCode: [
+        {
+          code: "",
+          name: "-- Select a value --",
+        },
+        {
+          code: "ANT",
+          name: "Anthracite Coal",
+        },
+        {
+          code: "BFG",
+          name: "Blast Furnace Gas",
+        },
+        {
+          code: "BT",
+          name: "Bituminous Coal",
+        },
+        {
+          code: "BUT",
+          name: "Butane Gas",
+        },
+        {
+          code: "C",
+          name: "Coal",
+        },
+        {
+          code: "CDG",
+          name: "Coal Derived Gas",
+        },
+        {
+          code: "COG",
+          name: "Coke Oven Gas",
+        },
+        {
+          code: "CRF",
+          name: "Coal Refuse",
+        },
+        {
+          code: "DGG",
+          name: "Digester Gas",
+        },
+        {
+          code: "DSL",
+          name: "Diesel Oil",
+        },
+        {
+          code: "LFG",
+          name: "Landfill Gas",
+        },
+        {
+          code: "LIG",
+          name: "Lignite Coal",
+        },
+        {
+          code: "LPG",
+          name: "Liquefied Petroleum Gas",
+        },
+        {
+          code: "MIX",
+          name: "Mixture (Co-Fired Fuels)",
+        },
+        {
+          code: "NFS",
+          name: "Non-Fuel Specific",
+        },
+        {
+          code: "NNG",
+          name: "Natural Gas",
+        },
+        {
+          code: "OGS",
+          name: "Other Gas",
+        },
+        {
+          code: "OIL",
+          name: "Residual Oil",
+        },
+        {
+          code: "OOL",
+          name: "Other Oil",
+        },
+        {
+          code: "OSF",
+          name: "Other Solid Fuel",
+        },
+        {
+          code: "PDG",
+          name: "Producer Gas",
+        },
+        {
+          code: "PNG",
+          name: "Pipeline Natural Gas",
+        },
+        {
+          code: "PRG",
+          name: "Process Gas",
+        },
+        {
+          code: "PRP",
+          name: "Propane Gas",
+        },
+        {
+          code: "PRS",
+          name: "Process Sludge",
+        },
+        {
+          code: "PTC",
+          name: "Petroleum Coke",
+        },
+        {
+          code: "R",
+          name: "Refuse",
+        },
+        {
+          code: "RFG",
+          name: "Refinery Gas",
+        },
+        {
+          code: "SRG",
+          name: "Unrefined Sour Gas",
+        },
+        {
+          code: "SUB",
+          name: "Sub-Bituminous Coal",
+        },
+        {
+          code: "TDF",
+          name: "Tire-Derived Fuel",
+        },
+        {
+          code: "W",
+          name: "Wood",
+        },
+        {
+          code: "WL",
+          name: "Waste Liquid",
+        },
+      ],
+    },
+    loadDropdownsData: jest.fn(),
   };
   return render(<DataTableSystems {...props} />);
 };
