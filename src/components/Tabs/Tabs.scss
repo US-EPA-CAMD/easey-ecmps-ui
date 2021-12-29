@@ -10,6 +10,8 @@
   cursor: pointer;
   font-weight: bold;
   width: 15em !important;
+  height: 3em !important;
+  padding-top: 0.25em !important;
 }
 
 .ellipsis-text {
@@ -24,4 +26,9 @@
   color: $epa-blue-base;
   cursor: default;
   // outline: none !important;
+}
+
+#closeXBtnTab {
+  position: relative;
+  top: -1.25em !important;
 }

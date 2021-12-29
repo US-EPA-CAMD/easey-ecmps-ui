@@ -12,6 +12,8 @@ export async function handleResponse(response) {
 }
 
 export function handleError(error) {
+  let errorMessage = "";
+
   if (error.response) {
     // client received an error response (5xx, 4xx)
     log.error({
@@ -20,14 +22,19 @@ export function handleError(error) {
       status: error.response.status,
       headers: error.response.headers,
     });
-    displayAppError(error.response.data);
+    errorMessage = `${error.response.data.error} ${error.response.data.message}`;
   } else if (error.request) {
     // client never received a response, or request never left
     log.error({ error: error.request });
-    displayAppError(error.response.data);
+    errorMessage = error.request;
   } else {
     // anything else
     log.error({ error: error.message });
-    displayAppError(error.message);
+    errorMessage = error.message;
+  }
+
+  // *** display error only if encountered
+  if (errorMessage !== "") {
+    displayAppError(errorMessage);
   }
 }

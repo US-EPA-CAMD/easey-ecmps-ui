@@ -321,7 +321,7 @@
   color: $epa-primary-dark !important;
 }
 
-.text-informational{
+.text-informational {
   color: $epa-blue-base !important;
 }
 
@@ -331,6 +331,9 @@
 
 .usa-button {
   font-family: $epa-generic-font-family !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .border-white {
@@ -379,4 +382,24 @@ ul.usa-nav__primary.usa-accordion {
 
 .usa-alert__heading {
   font-weight: bold;
+}
+
+button.usa-nav__close {
+  cursor: pointer;
+}
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 1rem;
+  border-top: 1px solid $epa-spiderweb;
+}
+
+.modal-body {
+  position: relative;
+  flex: 1 1 auto;
+  padding: 1rem;
+  justify-content: center;
+  align-items: center;
 }

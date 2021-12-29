@@ -473,7 +473,7 @@ export const HeaderInfo = ({
                   )}
                   <Button
                     type="button"
-                    className="margin-left-4"
+                    className="margin-left-4 margin-top-neg-1"
                     outline={true}
                     title="Coming Soon"
                   >

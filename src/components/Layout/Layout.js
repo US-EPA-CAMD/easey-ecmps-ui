@@ -64,7 +64,10 @@ const Layout = (props) => {
                   }
                 }}
               />
-              <span id="appErrorMessageText" />
+              <span
+                id="appErrorMessageText"
+                className="position-relative top-neg-1"
+              />
             </div>
             <main id="main">{childrenWithProps} </main>
           </div>

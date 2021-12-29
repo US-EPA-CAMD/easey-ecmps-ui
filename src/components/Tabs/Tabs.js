@@ -78,7 +78,7 @@ export const Tabs = ({
   return (
     <div>
       <div className="tab-buttons mobile-lg:margin-left-7 mobile-lg:padding-left-5 tablet:margin-left-0 tablet:padding-left-0">
-        <ul className="usa-button-group margin-top-2">
+        <ul className="usa-button-group margin-top-1">
           {children.map((el, i) => (
             <li
               key={i}
@@ -141,7 +141,7 @@ export const Tabs = ({
                     }
                   }}
                 >
-                  <div className="text-center tab-button-text-container ellipsis-text padding-left-2px">
+                  <div className="text-center tab-button-text-container ellipsis-text padding-2px position-relative top-neg-1">
                     {user &&
                     el.props.locationId &&
                     el.props.facId &&
@@ -151,7 +151,7 @@ export const Tabs = ({
                       )) ? (
                       <LockSharp
                         role="img"
-                        className="text-bold tab-icon margin-right-2"
+                        className="text-bold tab-icon margin-right-2 position-relative top-05"
                         aria-hidden="false"
                         title={`Locked Facility - ${
                           el.props.title.split("(")[0]
@@ -165,14 +165,16 @@ export const Tabs = ({
                     isCheckedOutByUser(el.props.locationId) ? (
                       <CreateSharp
                         role="img"
-                        className="text-bold tab-icon margin-right-2"
+                        className="text-bold tab-icon margin-right-2 position-relative top-neg-1"
                         aria-hidden="false"
                         title={`Checked-out Configuration - ${el.props.title
                           .split("(")[1]
                           .replace(")", "")}`}
                       />
                     ) : null}
-                    {el.props.title.split("(")[1].replace(")", "")}
+                    <span className="position-relative top-neg-105">
+                      {el.props.title.split("(")[1].replace(")", "")}
+                    </span>
                   </div>
 
                   {dynamic ? (
@@ -200,8 +202,9 @@ export const Tabs = ({
           ))}
         </ul>
       </div>
-      <hr className="height-3 position-relative top-3" />
-      <div className="tabContent">{children[activeTabIndex]}</div>
+      <div className="tabContent border-top-1px border-base-lighter margin-top-4 padding-top-4">
+        {children[activeTabIndex]}
+      </div>
     </div>
   );
 };
