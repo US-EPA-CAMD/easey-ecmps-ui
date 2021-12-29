@@ -7,12 +7,15 @@ import { AppVersion } from "@us-epa-camd/easey-design-system";
 import { SubHeader } from "../SubHeader/SubHeader";
 import { LeftNavigation } from "../LeftNavigation/LeftNavigation";
 import { LeftNavToSubHeader } from "../SubHeader/LeftNavToSubHeader";
+import { ErrorSharp, CloseSharp } from "@material-ui/icons";
 
 import config from "../../config";
 
 import "./Layout.scss";
+import { hideAppError } from "../../additional-functions/app-error";
 
 const Layout = (props) => {
+  // noinspection JSCheckFunctionSignatures
   const childrenWithProps = React.Children.map(props.children, (child) =>
     React.cloneElement(child)
   );
@@ -45,6 +48,24 @@ const Layout = (props) => {
             />
           </div>
           <div className="grid-col margin-x-2 minh-tablet-lg" id="main">
+            <div
+              id="appErrorMessage"
+              tabIndex="-1"
+              className="border-red border-1px margin-y-2 padding-2 bg-secondary-lighter
+                         text-bold text-secondary-vivid react-transition display-none"
+            >
+              <ErrorSharp className="margin-right-2" />
+              <CloseSharp
+                className="float-right cursor-pointer"
+                onClick={() => hideAppError()}
+                onKeyPress={(event) => {
+                  if (event.key === "Enter") {
+                    hideAppError();
+                  }
+                }}
+              />
+              <span id="appErrorMessageText" />
+            </div>
             <main id="main">{childrenWithProps} </main>
           </div>
         </div>
