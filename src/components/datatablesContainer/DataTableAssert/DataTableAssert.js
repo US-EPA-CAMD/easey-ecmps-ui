@@ -64,6 +64,16 @@ export const DataTableAssert = ({
       locationSelectValue ||
       revertedState
     ) {
+      // Load MDM data (for dropdowns) only if we don't have them already
+      if (mdmData && mdmData.length === 0) {
+        loadDropdownsData(dataTableName, dropdownArray);
+        console.log("loaded");
+        setDropdownsLoaded(true);
+      } else {
+        setDropdownsLoaded(true);
+      }
+
+      console.log("test");
       setDataLoaded(false);
       getDataTableApi(dataTableName, locationSelectValue, selectedLocation);
 
@@ -72,24 +82,6 @@ export const DataTableAssert = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState, dataTableName]);
-
-  // load dropdowns data (called once)
-  useEffect(() => {
-    if (
-      mdmData.length === 0 &&
-      mdmData.dropdowns[convertSectionToStoreName(dataTableName)]
-    ) {
-      loadDropdownsData(
-        convertSectionToStoreName(dataTableName),
-        dropdownArray
-      );
-      setDropdownsLoaded(true);
-    } else {
-      setDropdownsLoaded(true);
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   // get API for data
   // in  a timer because WAFS get takes a lil bit exxtra time to process, fixes update of datatable after editing data
@@ -164,7 +156,7 @@ export const DataTableAssert = ({
         controlInputs,
         controlDatePickerInputs,
         create,
-        mdmData[convertSectionToStoreName(dataTableName)]
+        mdmData
       )
     );
     setShow(true);
@@ -291,9 +283,10 @@ export const DataTableAssert = ({
   );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+  const { dataTableName } = ownProps;
   return {
-    mdmData: state.dropdowns,
+    mdmData: state.dropdowns[convertSectionToStoreName(dataTableName)],
   };
 };
 
