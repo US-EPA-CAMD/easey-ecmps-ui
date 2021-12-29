@@ -329,7 +329,7 @@
   left: -2rem;
 }
 
-.usa-button {
+.usa-button:not([data-testid="button"]) {
   font-family: $epa-generic-font-family !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -358,6 +358,7 @@
 
 #logoutBtn {
   border-radius: 0.25em !important;
+  color: $epa-white !important;
 }
 
 .usa-button-group__item {
