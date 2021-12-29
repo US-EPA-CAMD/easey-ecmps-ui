@@ -64,8 +64,7 @@ const Layout = (props) => {
                   }
                 }}
               />
-              Error:
-              <span id="appErrorMessageText" className="margin-left-2" />
+              <span id="appErrorMessageText" />
             </div>
             <main id="main">{childrenWithProps} </main>
           </div>
