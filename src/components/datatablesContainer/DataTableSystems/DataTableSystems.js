@@ -8,6 +8,15 @@ import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 
+import { Preloader } from "../../Preloader/Preloader";
+import { connect } from "react-redux";
+import { loadDropdowns } from "../../../store/actions/dropdowns";
+import {
+  convertSectionToStoreName,
+  SYSTEMS_SECTION_NAME,
+  SYSTEMS_STORE_NAME,
+} from "../../../additional-functions/data-table-section-and-store-names";
+
 import {
   Breadcrumb,
   BreadcrumbBar,
@@ -24,9 +33,10 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
-import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 
 export const DataTableSystems = ({
+  mdmData,
+  loadDropdownsData,
   locationSelectValue,
   inactive,
   user,
@@ -48,15 +58,14 @@ export const DataTableSystems = ({
 
   // for analyzer range view
   const [thirdLevel, setThirdLevel] = useState(false);
-
   const [dataLoaded, setDataLoaded] = useState(false);
-
   const [updateSystemTable, setUpdateSystemTable] = useState(false);
-  const totalSystemOptions = useRetrieveDropdownApi([
-    "systemDesignationCode",
-    "systemTypeCode",
-    "fuelCode",
-  ]);
+
+  const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
+  const dropdownArray = [
+    ["systemDesignationCode", "systemTypeCode", "fuelCode"],
+  ];
+
   useEffect(() => {
     if (
       updateSystemTable ||
@@ -73,6 +82,18 @@ export const DataTableSystems = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, revertedState, updateSystemTable]);
+
+  // load dropdowns data (called once)
+  useEffect(() => {
+    if (mdmData.length === 0) {
+      loadDropdownsData(SYSTEMS_SECTION_NAME, dropdownArray);
+      setDropdownsLoaded(true);
+    } else {
+      setDropdownsLoaded(true);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [selected, setSelected] = useState(null);
   const [selectedSystem, setSelectedSystem] = useState(
@@ -118,7 +139,7 @@ export const DataTableSystems = ({
           endHour: ["End Time", "time", ""],
         },
         create,
-        totalSystemOptions
+        mdmData
       )
     );
     if (create) {
@@ -557,6 +578,7 @@ export const DataTableSystems = ({
           setViewBtn={setViewBtn}
           viewBtn={viewBtn}
           setAddBtn={setAddBtn}
+          show={show}
         />
       </div>
       {show ? (
@@ -684,7 +706,7 @@ export const DataTableSystems = ({
               <div>
                 {secondLevel ? (
                   ""
-                ) : (
+                ) : dropdownsLoaded ? (
                   <ModalDetails
                     modalData={selected}
                     data={selectedModalData}
@@ -692,6 +714,8 @@ export const DataTableSystems = ({
                     title={`System: ${selected[0]["value"]}`}
                     viewOnly={!(user && checkout)}
                   />
+                ) : (
+                  <Preloader />
                 )}
 
                 <DataTableSystemsComponents
@@ -747,4 +771,21 @@ export const DataTableSystems = ({
   );
 };
 
-export default DataTableSystems;
+const mapStateToProps = (state) => {
+  return {
+    mdmData: state.dropdowns[SYSTEMS_STORE_NAME],
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadDropdownsData: (section, dropdownArray) => {
+      dispatch(
+        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
+      );
+    },
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(DataTableSystems);
+export { mapDispatchToProps };
+export { mapStateToProps };

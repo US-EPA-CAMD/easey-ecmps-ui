@@ -9,8 +9,16 @@ import DataTableLEEQualifications from "../DataTableLEEQualifications/DataTableL
 import DataTableLMEQualifications from "../DataTableLMEQualifications/DataTableLMEQualifications";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
-import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
+
+import { Preloader } from "../../Preloader/Preloader";
+import { connect } from "react-redux";
+import { loadDropdowns } from "../../../store/actions/dropdowns";
+import {
+  convertSectionToStoreName,
+  QUALIFICATIONS_SECTION_NAME,
+  QUALIFICATIONS_STORE_NAME,
+} from "../../../additional-functions/data-table-section-and-store-names";
 
 import {
   Breadcrumb,
@@ -31,6 +39,8 @@ import {
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
 export const DataTableQualifications = ({
+  mdmData,
+  loadDropdownsData,
   locationSelectValue,
   user,
   checkout,
@@ -42,7 +52,7 @@ export const DataTableQualifications = ({
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [qualificationData, setQualificationsData] = useState([]);
-  const totalOptions = useRetrieveDropdownApi(["qualificationTypeCode"], true);
+
   const [show, setShow] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
 
@@ -56,6 +66,9 @@ export const DataTableQualifications = ({
 
   const [openLME, setOpenLME] = useState(false);
   const [updateLME, setUpdateLME] = useState(false);
+
+  const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
+  const dropdownArray = [["qualificationTypeCode"]];
 
   useEffect(() => {
     if (
@@ -76,6 +89,19 @@ export const DataTableQualifications = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
+
+  // load dropdowns data (called once)
+  useEffect(() => {
+    if (mdmData.length === 0) {
+      loadDropdownsData(QUALIFICATIONS_SECTION_NAME, dropdownArray);
+      setDropdownsLoaded(true);
+    } else {
+      setDropdownsLoaded(true);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [selectedQualificationData, setSelectedQualificationData] =
     useState(null);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
@@ -261,7 +287,7 @@ export const DataTableQualifications = ({
           endDate: ["End Date", "date", ""],
         },
         create,
-        totalOptions
+        mdmData
       )
     );
     setShow(true);
@@ -363,7 +389,7 @@ export const DataTableQualifications = ({
             <div>
               {openPCT || openLEE || openLME ? (
                 ""
-              ) : (
+              ) : dropdownsLoaded ? (
                 <ModalDetails
                   modalData={selectedQualificationData}
                   data={selectedModalData}
@@ -371,6 +397,8 @@ export const DataTableQualifications = ({
                   title={"Qualification"}
                   viewOnly={!(user && checkout)}
                 />
+              ) : (
+                <Preloader />
               )}
               {creating ? (
                 ""
@@ -447,4 +475,25 @@ export const DataTableQualifications = ({
   );
 };
 
-export default DataTableQualifications;
+const mapStateToProps = (state) => {
+  return {
+    mdmData: state.dropdowns[QUALIFICATIONS_STORE_NAME],
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadDropdownsData: (section, dropdownArray) => {
+      dispatch(
+        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
+      );
+    },
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DataTableQualifications);
+export { mapDispatchToProps };
+export { mapStateToProps };

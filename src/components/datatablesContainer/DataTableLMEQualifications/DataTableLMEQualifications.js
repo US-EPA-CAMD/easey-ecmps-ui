@@ -14,7 +14,18 @@ import {
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
+import { Preloader } from "../../Preloader/Preloader";
+import { connect } from "react-redux";
+import { loadDropdowns } from "../../../store/actions/dropdowns";
+import {
+  convertSectionToStoreName,
+  LME_QUALIFICATIONS_SECTION_NAME,
+  LME_QUALIFICATIONS_STORE_NAME,
+} from "../../../additional-functions/data-table-section-and-store-names";
+
 export const DataTableLMEQualifications = ({
+  mdmData,
+  loadDropdownsData,
   locationSelectValue,
   qualSelectValue,
   user,
@@ -34,6 +45,8 @@ export const DataTableLMEQualifications = ({
   const [updateTable, setUpdateTable] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState([]);
 
+  const dropdownArray = [["qualificationDataYear"]];
+  const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
   useEffect(() => {
     if (
@@ -48,7 +61,6 @@ export const DataTableLMEQualifications = ({
         .getLMEQualifications(locationSelectValue, qualSelectValue)
         .then((res) => {
           setQualLmeData(res.data);
-          console.log(res.data,'LME')
           setDataLoaded(true);
           setUpdateTable(false);
           setRevertedState(false);
@@ -57,6 +69,19 @@ export const DataTableLMEQualifications = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState, updateLME]);
+
+  // load dropdowns data (called once)
+  useEffect(() => {
+    if (mdmData.length === 0) {
+      loadDropdownsData(LME_QUALIFICATIONS_SECTION_NAME, dropdownArray);
+      setDropdownsLoaded(true);
+    } else {
+      setDropdownsLoaded(true);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [selectedQualLme, setSelectedQualLme] = useState(null);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -137,7 +162,7 @@ export const DataTableLMEQualifications = ({
             viewOnly={!(user && checkout)}
           />
         </div>
-      ) : (
+      ) : dropdownsLoaded ? (
         <DataTableRender
           columnNames={columnNames}
           data={data}
@@ -151,9 +176,32 @@ export const DataTableLMEQualifications = ({
           addBtnName={"Create Qualification LME"}
           addBtn={openLmeQualModal}
         />
+      ) : (
+        <Preloader />
       )}
     </div>
   );
 };
 
-export default DataTableLMEQualifications;
+const mapStateToProps = (state) => {
+  return {
+    mdmData: state.dropdowns[LME_QUALIFICATIONS_STORE_NAME],
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadDropdownsData: (section, dropdownArray) => {
+      dispatch(
+        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
+      );
+    },
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DataTableLMEQualifications);
+export { mapDispatchToProps };
+export { mapStateToProps };
