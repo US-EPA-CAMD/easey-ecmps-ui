@@ -159,7 +159,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     <div className="subheader-wrapper bg-primary-dark ">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       <Header className="padding-y-2 mobile-lg:padding-x-1 desktop:padding-x-4">
-        <div className="usa-nav-container display-inline-flex padding-x-0 desktop-lg:margin-top-3">
+        <div className="usa-nav-container clearfix padding-x-0 desktop-lg:margin-top-3">
           <Title className="float-left margin-1 margin-top-0 desktop:margin-top-1  desktop-lg:margin-top-0 ">
             <h1 className="display-inline-block text-white text-bold desktop-lg:font-sans-2xl desktop:font-sans-2xl mobile-lg:font-sans-xl margin-0">
               ECMPS
@@ -175,7 +175,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
           <Button
             id="btnMobileMenu"
             type="button"
-            className="bg-transparent margin-0 height-2 position-absolute right-0 desktop:display-none padding-0 width-auto margin-top-1 margin-right-2"
+            className="bg-transparent margin-0 float-right clearfix desktop:display-none padding-0 width-auto margin-top-1 margin-right-2"
           >
             <img
               src={`${process.env.PUBLIC_URL}/images/icons/mobile-menu-expand.svg`}
