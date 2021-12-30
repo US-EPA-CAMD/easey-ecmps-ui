@@ -434,7 +434,7 @@ export const HeaderInfo = ({
             </div>
             <div className="">
               <div className="display-inline-block ">
-                <div className="text-bold font-body-xl display-block height-auto">
+                <div className="text-bold font-body-xl display-block height-9 padding-top-4 padding-bottom-2">
                   {user && checkoutState && checkedOutByUser ? (
                     <CreateOutlined color="primary" fontSize="large" />
                   ) : (

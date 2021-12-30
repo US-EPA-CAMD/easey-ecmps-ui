@@ -151,7 +151,7 @@ export const Tabs = ({
                       )) ? (
                       <LockSharp
                         role="img"
-                        className="text-bold tab-icon margin-right-2 position-relative top-05"
+                        className="text-bold tab-icon margin-top-1 margin-right-2 position-relative top-2px"
                         aria-hidden="false"
                         title={`Locked Facility - ${
                           el.props.title.split("(")[0]
@@ -179,7 +179,7 @@ export const Tabs = ({
 
                   {dynamic ? (
                     <ClearSharp
-                      className="text-bold margin-left-2 float-right position-relative left-neg-1 top-neg-3 margin-top-neg-2 cursor-pointer"
+                      className="text-bold margin-left-2 float-right position-relative left-neg-1 top-neg-3 margin-top-neg-3 cursor-pointer"
                       onClick={(e) => closeHandler(e, i, el.props.locationId)}
                       onKeyPress={(event) => {
                         if (event.key === "Enter") {
