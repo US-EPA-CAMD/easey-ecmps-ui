@@ -329,7 +329,7 @@
   left: -2rem;
 }
 
-.usa-button:not([data-testid="button"]) {
+.usa-button:not([id="btnMobileMenu"]) {
   font-family: $epa-generic-font-family !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -404,4 +404,11 @@ button.usa-nav__close {
   padding: 1rem;
   justify-content: center;
   align-items: center;
+}
+
+.usa-form-group {
+  input,
+  select {
+    margin-right: 0.5em;
+  }
 }
