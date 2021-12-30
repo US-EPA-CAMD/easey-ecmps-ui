@@ -52,7 +52,6 @@ test-report.xml
 # IDE - VSCode
 .vscode/*
 !.vscode/tasks.json
-!.vscode/launch.json
 node_modules
 
 # never include npms package-lock
