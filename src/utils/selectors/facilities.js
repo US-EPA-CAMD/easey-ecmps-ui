@@ -4,7 +4,7 @@ export function getTableRecords(facilities) {
     records.push({
       col1: el["facilityName"],
       col2: el["facilityId"],
-      col3: el["state"],
+      col3: el["stateCode"],
       col4: el["orisCode"],
       facId: el["facilityRecordId"],
     });
