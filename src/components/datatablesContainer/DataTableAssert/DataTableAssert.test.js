@@ -181,6 +181,10 @@ const dropdownData = [
   },
 ];
 const props = {
+  mdmData: {
+    testCode: [],
+  },
+  loadDropdownsData: jest.fn(),
   locationSelectValue: "6",
   user: "testuser",
   checkout: false,
@@ -308,6 +312,5 @@ describe("DataTableAssert", () => {
     );
     const val = 1;
     expect(val === 1);
-   
   });
 });

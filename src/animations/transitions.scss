@@ -2,7 +2,7 @@
 $animationDuration: 500ms;
 
 .react-transition {
-  animation-fill-mode: initial;
+  animation-fill-mode: inherit;
 }
 
 @-webkit-keyframes slidein-left {
@@ -113,6 +113,13 @@ $animationDuration: 500ms;
   transform-origin: bottom center;
   animation-name: fadeIn;
   animation-duration: $animationDuration;
+}
+
+.delayed-fade-in {
+  animation-timing-function: ease-in-out;
+  transform-origin: bottom center;
+  animation-name: fadeIn;
+  animation-duration: 2000ms;
 }
 
 @keyframes fadeOut {

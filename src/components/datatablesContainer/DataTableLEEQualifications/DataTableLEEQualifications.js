@@ -4,7 +4,6 @@ import * as fs from "../../../utils/selectors/monitoringPlanLEEQualifications";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 
 import ModalDetails from "../../ModalDetails/ModalDetails";
-import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 import {
@@ -14,7 +13,18 @@ import {
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
+import { Preloader } from "../../Preloader/Preloader";
+import { connect } from "react-redux";
+import { loadDropdowns } from "../../../store/actions/dropdowns";
+import {
+  convertSectionToStoreName,
+  LEE_QUALIFICATIONS_SECTION_NAME,
+  LEE_QUALIFICATIONS_STORE_NAME,
+} from "../../../additional-functions/data-table-section-and-store-names";
+
 export const DataTableLEEQualifications = ({
+  mdmData,
+  loadDropdownsData,
   locationSelectValue,
   qualSelectValue,
   user,
@@ -30,14 +40,13 @@ export const DataTableLEEQualifications = ({
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [qualLeeData, setQualLeeData] = useState([]);
-  const totalOptions = useRetrieveDropdownApi([
-    "parameterCode",
-    "qualificationTestType",
-    "unitsOfStandard",
-  ]);
   const [updateTable, setUpdateTable] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState([]);
 
+  const dropdownArray = [
+    ["parameterCode", "qualificationTestType", "unitsOfStandard"],
+  ];
+  const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
   useEffect(() => {
     if (
@@ -52,7 +61,7 @@ export const DataTableLEEQualifications = ({
         .getLEEQualifications(locationSelectValue, qualSelectValue)
         .then((res) => {
           setQualLeeData(res.data);
-         
+
           setDataLoaded(true);
           setUpdateTable(false);
           setRevertedState(false);
@@ -61,6 +70,19 @@ export const DataTableLEEQualifications = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState, updateLEE]);
+
+  // load dropdowns data (called once)
+  useEffect(() => {
+    if (mdmData.length === 0) {
+      loadDropdownsData(LEE_QUALIFICATIONS_SECTION_NAME, dropdownArray);
+      setDropdownsLoaded(true);
+    } else {
+      setDropdownsLoaded(true);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [selectedQualLee, setSelectedQualLee] = useState(null);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -94,7 +116,6 @@ export const DataTableLEEQualifications = ({
       )[0];
       setSelectedQualLee(leeData);
     }
-    console.log(totalOptions);
 
     setSelectedModalData(
       modalViewData(
@@ -123,7 +144,7 @@ export const DataTableLEEQualifications = ({
         },
         {},
         create,
-        totalOptions
+        mdmData
       )
     );
 
@@ -162,7 +183,7 @@ export const DataTableLEEQualifications = ({
             viewOnly={!(user && checkout)}
           />
         </div>
-      ) : (
+      ) : dropdownsLoaded ? (
         <DataTableRender
           columnNames={columnNames}
           data={data}
@@ -176,9 +197,32 @@ export const DataTableLEEQualifications = ({
           addBtnName={"Create Qualification LEE"}
           addBtn={openLeeQualModal}
         />
+      ) : (
+        <Preloader />
       )}
     </div>
   );
 };
 
-export default DataTableLEEQualifications;
+const mapStateToProps = (state) => {
+  return {
+    mdmData: state.dropdowns[LEE_QUALIFICATIONS_STORE_NAME],
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadDropdownsData: (section, dropdownArray) => {
+      dispatch(
+        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
+      );
+    },
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DataTableLEEQualifications);
+export { mapDispatchToProps };
+export { mapStateToProps };

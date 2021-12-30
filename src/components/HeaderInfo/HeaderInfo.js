@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Checkbox } from "@trussworks/react-uswds";
 import { CreateOutlined, LockOpenSharp, LockSharp } from "@material-ui/icons";
 import config from "../../config";
@@ -36,11 +36,13 @@ export const HeaderInfo = ({
     { name: "Defaults" },
     { name: "Formulas" },
     { name: "Loads" },
-    { name: "Location Attributes and Relationships" },
+    {
+      name: "Location Attributes and Relationships",
+    },
     { name: "Methods" },
     { name: "Qualifications" },
     { name: "Rectangular Duct WAFs" },
-    { name: "Span" },
+    { name: "Spans" },
     { name: "Systems" },
     { name: "Unit Information" },
   ];
@@ -72,6 +74,22 @@ export const HeaderInfo = ({
   const [userHasCheckout, setUserHasCheckout] = useState(false);
 
   const [lockedFacility, setLockedFacility] = useState(false);
+
+  const reportWindowParams = [
+    // eslint-disable-next-line no-restricted-globals
+    `height=${screen.height}`,
+    // eslint-disable-next-line no-restricted-globals
+    `width=${screen.width}`,
+    `fullscreen=yes`,
+  ].join(",");
+
+  const displayReport = () => {
+    window.open(
+      `/ecmps/workspace/monitoring-plans/${selectedConfig.id}/evaluation-report`,
+      "ECMPS Monitoring Plan Report",
+      reportWindowParams
+    );
+  };
 
   useEffect(() => {
     // get evaluation status
@@ -148,7 +166,7 @@ export const HeaderInfo = ({
 
       let currStatus = evalStatus;
       let totalTime = 0; // measured in milliseconds
-      const intervalId = setInterval(() => {
+      return setInterval(() => {
         totalTime += delayInSeconds;
         // if status is INQ or WIP:
         if (
@@ -179,8 +197,6 @@ export const HeaderInfo = ({
           setDataLoaded(false);
         }
       }, delayInSeconds);
-
-      return intervalId;
     }
     return 0;
   };
@@ -226,16 +242,15 @@ export const HeaderInfo = ({
     const date = new Date(dateString);
     //HANDLE -1 days from DB dates which are UTC
     const day = isUTC ? date.getDate() + 1 : date.getDate();
-    const formattedDate =
+    return (
       (date.getMonth() > 8
         ? date.getMonth() + 1
         : "0" + (date.getMonth() + 1)) +
       "/" +
       (day > 9 ? day : "0" + day) +
       "/" +
-      date.getFullYear();
-
-    return formattedDate;
+      date.getFullYear()
+    );
   };
 
   // chooses correctly styling for evaluation status label
@@ -309,7 +324,7 @@ export const HeaderInfo = ({
   };
 
   const revert = () => {
-    mpApi.revertOfficialRecord(selectedConfig.id).then((res) => {
+    mpApi.revertOfficialRecord(selectedConfig.id).then(() => {
       setRevertedState(true);
       setShowRevertModal(false);
       setEvalStatusLoaded(false);
@@ -430,6 +445,7 @@ export const HeaderInfo = ({
                     <div className="text-bold font-body-2xs display-inline-block ">
                       {checkedOutByUser === true ? (
                         <Button
+                          type="button"
                           autoFocus
                           outline={false}
                           tabIndex="0"
@@ -447,6 +463,7 @@ export const HeaderInfo = ({
                           .map((location) => location["monPlanId"])
                           .indexOf(selectedConfig.id) === -1 ? (
                         <Button
+                          type="button"
                           autoFocus
                           outline={true}
                           tabIndex="0"
@@ -465,7 +482,7 @@ export const HeaderInfo = ({
                   )}
                   <Button
                     type="button"
-                    className="margin-left-4"
+                    className="margin-left-4 position-relative top-neg-1"
                     outline={true}
                     title="Coming Soon"
                   >
@@ -501,7 +518,7 @@ export const HeaderInfo = ({
                         label="Show Inactive"
                         checked={inactive[0]}
                         disabled={inactive[1]}
-                        onChange={(e) =>
+                        onChange={() =>
                           setInactive([!inactive[0], inactive[1]], facility)
                         }
                       />
@@ -575,14 +592,12 @@ export const HeaderInfo = ({
                         <button
                           className={
                             showHyperLink(evalStatus)
-                              ? "hyperlink-btn"
+                              ? "hyperlink-btn cursor-pointer"
                               : "unstyled-btn"
                           }
-                          onClick={() => {
-                            showHyperLink(evalStatus)
-                              ? setShowEvalReport(true)
-                              : setShowEvalReport(false);
-                          }}
+                          onClick={() =>
+                            showHyperLink(evalStatus) ? displayReport() : null
+                          }
                         >
                           {evalStatusText(evalStatus)}
                         </button>

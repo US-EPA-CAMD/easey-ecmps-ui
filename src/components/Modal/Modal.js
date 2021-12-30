@@ -56,7 +56,7 @@ export const Modal = ({
     document.body.appendChild(modalRoot);
   }
 
-  const modalClassName = "modal-wrapper bg-base-lightest radius-md";
+  const modalClassName = "modal-wrapper radius-md";
 
   return ReactDom.createPortal(
     <div role="dialog" aria-modal="true">
@@ -91,7 +91,7 @@ export const Modal = ({
                   tabIndex="0"
                   aria-hidden={false}
                 />
-                <div className="left-0 bottom-0 padding-2">
+                <div className="left-2 bottom-0 padding-2">
                   <h2 className="text-bold">{title}</h2>
 
                   {breadCrumbBar ? breadCrumbBar : ""}

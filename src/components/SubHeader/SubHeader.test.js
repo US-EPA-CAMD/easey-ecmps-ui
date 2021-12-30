@@ -3,6 +3,7 @@ import { fireEvent, render, screen, container } from "@testing-library/react";
 
 import { BrowserRouter } from "react-router-dom";
 import { SubHeader } from "./SubHeader";
+import { config } from "../../config";
 
 describe("SubHeader Component", () => {
   test("Menu items render without errors", () => {
@@ -108,6 +109,8 @@ describe("SubHeader Component", () => {
       "/images/icons/menu-item-collapse.svg"
     );
     expect(screen.getByText("Manage Login")).toBeInTheDocument();
-    expect(screen.getByText("Manage Delegations")).toBeInTheDocument();
+    if (config.app.enableManageDelegations !== "false") {
+      expect(screen.getByText("Manage Delegations")).toBeInTheDocument();
+    }
   });
 });

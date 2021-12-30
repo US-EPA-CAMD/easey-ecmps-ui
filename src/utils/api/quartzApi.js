@@ -34,7 +34,6 @@ export const triggerEvaluation = async (payload) => {
     .then(handleResponse)
     .catch((error) => {
       handleError(error);
-      console.log(error);
       throw new Error(error);
     });
 };

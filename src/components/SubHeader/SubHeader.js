@@ -124,12 +124,13 @@ export const SubHeader = ({ user, setCurrentLink }) => {
   };
 
   const toggleUserProfileDropdown = () => {
-    console.log(userProfileExpanded);
     if (userProfileExpanded === true) {
+      document.querySelector("#logoutBtn").tabIndex = 0;
       setUserProfileIcon(
         `${process.env.PUBLIC_URL}/images/icons/menu-item-expand.svg`
       );
     } else {
+      document.querySelector("#logoutBtn").tabIndex = -1;
       setUserProfileIcon(
         `${process.env.PUBLIC_URL}/images/icons/menu-item-collapse.svg`
       );
@@ -238,8 +239,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                 <span
                   data-testid="loggedInUserInitials"
                   data-initials={initials}
-                  className="text-bold float-right clearfix cursor-pointer mobile:margin-top-1 desktop:margin-top-1 desktop:margin-top-2 desktop-lg:margin-top-0 margin-left-5"
-                  tabIndex="0"
+                  className="text-bold float-right clearfix cursor-pointer mobile:margin-top-1 desktop:margin-top-1 desktop:margin-top-2 desktop-lg:margin-top-0 margin-left-2"
                   id="loggedInUserInitials"
                   aria-expanded="false"
                 >
@@ -248,7 +248,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                     src={userProfileIcon}
                     className="margin-top-neg-1 position-relative left-neg-1"
                     aria-hidden={true}
-                    tabIndex="-1"
+                    tabIndex="0"
                     alt="Expand menu"
                     onClick={() => toggleUserProfileDropdown()}
                     onKeyPress={(event) => {
@@ -257,10 +257,22 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                       }
                     }}
                   />
-                  <span className="text-bold text-white text-no-wrap float-left clearfix position-relative top-1 margin-x-1 display-none widescreen:display-block">
+                  <span className="text-bold text-white text-no-wrap position-relative left-neg-2 top-neg-2">
                     Welcome, {user.firstName}!
                   </span>
-
+                  <span className="text-bold text-white text-no-wrap clearfix position-relative top-neg-2 margin-x-2">
+                    <Button
+                      type="button"
+                      id="logoutBtn"
+                      epa-testid="logoutBtn"
+                      outline={true}
+                      onClick={(event) => logOut(event)}
+                      title="Click this button to logout"
+                      className="text-white border-white text-no-wrap"
+                    >
+                      Log Out
+                    </Button>
+                  </span>
                   {userProfileExpanded ? (
                     <span className="position-relative top-neg-2">
                       <Menu
@@ -279,19 +291,6 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                       />
                     </span>
                   ) : null}
-                </span>
-                <span className="text-bold text-white text-no-wrap clearfix position-relative margin-x-2">
-                  <Button
-                    type="button"
-                    id="logoutBtn"
-                    epa-testid="logoutBtn"
-                    outline={true}
-                    onClick={(event) => logOut(event)}
-                    title="Click this button to logout"
-                    className="text-white border-white text-no-wrap"
-                  >
-                    Log Out
-                  </Button>
                 </span>
               </>
             ) : (

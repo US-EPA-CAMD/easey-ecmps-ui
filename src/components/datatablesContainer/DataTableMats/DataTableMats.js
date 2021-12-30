@@ -6,8 +6,16 @@ import { DataTableRender } from "../../DataTableRender/DataTableRender";
 
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
-import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
+
+import { Preloader } from "../../Preloader/Preloader";
+import { connect } from "react-redux";
+import { loadDropdowns } from "../../../store/actions/dropdowns";
+import {
+  convertSectionToStoreName,
+  MATS_METHODS_SECTION_NAME,
+  MATS_METHODS_STORE_NAME,
+} from "../../../additional-functions/data-table-section-and-store-names";
 
 import {
   attachChangeEventListeners,
@@ -16,6 +24,8 @@ import {
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
 export const DataTableMats = ({
+  mdmData,
+  loadDropdownsData,
   locationSelectValue,
   user,
   checkout,
@@ -26,12 +36,12 @@ export const DataTableMats = ({
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [matsMethods, setMatsMethods] = useState([]);
-  const totalOptions = useRetrieveDropdownApi(
-    ["parameterCode", "monitoringMethodCode"],
-    true
-  );
   const [show, setShow] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
+
+  const dropdownArray = [["parameterCode", "monitoringMethodCode"], true];
+  const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
+
   useEffect(() => {
     if (
       updateTable ||
@@ -47,6 +57,19 @@ export const DataTableMats = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
+
+  // load dropdowns data (called once)
+  useEffect(() => {
+    if (mdmData.length === 0) {
+      loadDropdownsData(MATS_METHODS_SECTION_NAME, dropdownArray);
+      setDropdownsLoaded(true);
+    } else {
+      setDropdownsLoaded(true);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [selectedMatsMethods, setSelectedMatsMethods] = useState(null);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -144,7 +167,7 @@ export const DataTableMats = ({
           endHour: ["End Time", "time", ""],
         },
         create,
-        totalOptions
+        mdmData
       )
     );
     setShow(true);
@@ -229,15 +252,19 @@ export const DataTableMats = ({
           }
           exitBTN={createNewMats ? "Create MATS" : `Save and Close`}
           children={
-            <div>
-              <ModalDetails
-                modalData={selectedMatsMethods}
-                data={selectedModalData}
-                cols={2}
-                title={"Component: Monitoring MATS Methods"}
-                viewOnly={!(user && checkout)}
-              />
-            </div>
+            dropdownsLoaded ? (
+              <div>
+                <ModalDetails
+                  modalData={selectedMatsMethods}
+                  data={selectedModalData}
+                  cols={2}
+                  title={"Component: Monitoring MATS Methods"}
+                  viewOnly={!(user && checkout)}
+                />
+              </div>
+            ) : (
+              <Preloader />
+            )
           }
         />
       ) : null}
@@ -245,4 +272,21 @@ export const DataTableMats = ({
   );
 };
 
-export default DataTableMats;
+const mapStateToProps = (state) => {
+  return {
+    mdmData: state.dropdowns[MATS_METHODS_STORE_NAME],
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadDropdownsData: (section, dropdownArray) => {
+      dispatch(
+        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
+      );
+    },
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(DataTableMats);
+export { mapDispatchToProps };
+export { mapStateToProps };
