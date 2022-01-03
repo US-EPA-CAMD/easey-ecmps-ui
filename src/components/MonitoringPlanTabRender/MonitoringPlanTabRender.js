@@ -60,29 +60,23 @@ export const MonitoringPlanTabRender = ({
       [
         [
           <DataTableAssert
-            locationSelectValue={parseInt(locationSelect[1])}
+            locationSelectValue={locationSelect[1]}
             inactive={inactive}
             settingInactiveCheckBox={settingInactiveCheckBox}
             checkout={checkout}
             user={user}
-            payload={
-              defaultsDataTableProps(parseInt(locationSelect[1]))["payload"]
-            }
+            payload={defaultsDataTableProps(locationSelect[1])["payload"]}
             dropdownArray={
-              defaultsDataTableProps(parseInt(locationSelect[1]))[
-                "dropdownArray"
-              ]
+              defaultsDataTableProps(locationSelect[1])["dropdownArray"]
             }
             columnNames={
-              defaultsDataTableProps(parseInt(locationSelect[1]))["columnNames"]
+              defaultsDataTableProps(locationSelect[1])["columnNames"]
             }
             controlInputs={
-              defaultsDataTableProps(parseInt(locationSelect[1]))[
-                "controlInputs"
-              ]
+              defaultsDataTableProps(locationSelect[1])["controlInputs"]
             }
             controlDatePickerInputs={
-              defaultsDataTableProps(parseInt(locationSelect[1]))[
+              defaultsDataTableProps(locationSelect[1])[
                 "controlDatePickerInputs"
               ]
             }
@@ -96,29 +90,23 @@ export const MonitoringPlanTabRender = ({
       [
         [
           <DataTableAssert
-            locationSelectValue={parseInt(locationSelect[1])}
+            locationSelectValue={locationSelect[1]}
             inactive={inactive}
             settingInactiveCheckBox={settingInactiveCheckBox}
             checkout={checkout}
             user={user}
-            payload={
-              formulasDataTableProps(parseInt(locationSelect[1]))["payload"]
-            }
+            payload={formulasDataTableProps(locationSelect[1])["payload"]}
             dropdownArray={
-              formulasDataTableProps(parseInt(locationSelect[1]))[
-                "dropdownArray"
-              ]
+              formulasDataTableProps(locationSelect[1])["dropdownArray"]
             }
             columnNames={
-              formulasDataTableProps(parseInt(locationSelect[1]))["columnNames"]
+              formulasDataTableProps(locationSelect[1])["columnNames"]
             }
             controlInputs={
-              formulasDataTableProps(parseInt(locationSelect[1]))[
-                "controlInputs"
-              ]
+              formulasDataTableProps(locationSelect[1])["controlInputs"]
             }
             controlDatePickerInputs={
-              formulasDataTableProps(parseInt(locationSelect[1]))[
+              formulasDataTableProps(locationSelect[1])[
                 "controlDatePickerInputs"
               ]
             }
@@ -132,27 +120,21 @@ export const MonitoringPlanTabRender = ({
       [
         [
           <DataTableAssert
-            locationSelectValue={parseInt(locationSelect[1])}
+            locationSelectValue={locationSelect[1]}
             inactive={inactive}
             settingInactiveCheckBox={settingInactiveCheckBox}
             checkout={checkout}
             user={user}
-            payload={
-              loadsDataTableProps(parseInt(locationSelect[1]))["payload"]
-            }
+            payload={loadsDataTableProps(locationSelect[1])["payload"]}
             dropdownArray={
-              loadsDataTableProps(parseInt(locationSelect[1]))["dropdownArray"]
+              loadsDataTableProps(locationSelect[1])["dropdownArray"]
             }
-            columnNames={
-              loadsDataTableProps(parseInt(locationSelect[1]))["columnNames"]
-            }
+            columnNames={loadsDataTableProps(locationSelect[1])["columnNames"]}
             controlInputs={
-              loadsDataTableProps(parseInt(locationSelect[1]))["controlInputs"]
+              loadsDataTableProps(locationSelect[1])["controlInputs"]
             }
             controlDatePickerInputs={
-              loadsDataTableProps(parseInt(locationSelect[1]))[
-                "controlDatePickerInputs"
-              ]
+              loadsDataTableProps(locationSelect[1])["controlDatePickerInputs"]
             }
             radioNames={["secondNormalIndicator"]}
             dataTableName={"Load"}
@@ -165,33 +147,29 @@ export const MonitoringPlanTabRender = ({
       [
         [
           <DataTableAssert
-            locationSelectValue={parseInt(locationSelect[1])}
+            locationSelectValue={locationSelect[1]}
             inactive={inactive}
             settingInactiveCheckBox={settingInactiveCheckBox}
             checkout={checkout}
             user={user}
             payload={
-              locationAttributesDataTableProps(parseInt(locationSelect[1]))[
-                "payload"
-              ]
+              locationAttributesDataTableProps(locationSelect[1])["payload"]
             }
             dropdownArray={
-              locationAttributesDataTableProps(parseInt(locationSelect[1]))[
+              locationAttributesDataTableProps(locationSelect[1])[
                 "dropdownArray"
               ]
             }
             columnNames={
-              locationAttributesDataTableProps(parseInt(locationSelect[1]))[
-                "columnNames"
-              ]
+              locationAttributesDataTableProps(locationSelect[1])["columnNames"]
             }
             controlInputs={
-              locationAttributesDataTableProps(parseInt(locationSelect[1]))[
+              locationAttributesDataTableProps(locationSelect[1])[
                 "controlInputs"
               ]
             }
             controlDatePickerInputs={
-              locationAttributesDataTableProps(parseInt(locationSelect[1]))[
+              locationAttributesDataTableProps(locationSelect[1])[
                 "controlDatePickerInputs"
               ]
             }
@@ -204,31 +182,23 @@ export const MonitoringPlanTabRender = ({
         ],
         [
           <DataTableAssert
-            locationSelectValue={parseInt(locationSelect[1])}
+            locationSelectValue={locationSelect[1]}
             inactive={inactive}
             settingInactiveCheckBox={settingInactiveCheckBox}
             checkout={checkout}
             user={user}
-            payload={
-              relationshipDataTableProps(parseInt(locationSelect[1]))["payload"]
-            }
+            payload={relationshipDataTableProps(locationSelect[1])["payload"]}
             dropdownArray={
-              relationshipDataTableProps(parseInt(locationSelect[1]))[
-                "dropdownArray"
-              ]
+              relationshipDataTableProps(locationSelect[1])["dropdownArray"]
             }
             columnNames={
-              relationshipDataTableProps(parseInt(locationSelect[1]))[
-                "columnNames"
-              ]
+              relationshipDataTableProps(locationSelect[1])["columnNames"]
             }
             controlInputs={
-              relationshipDataTableProps(parseInt(locationSelect[1]))[
-                "controlInputs"
-              ]
+              relationshipDataTableProps(locationSelect[1])["controlInputs"]
             }
             controlDatePickerInputs={
-              relationshipDataTableProps(parseInt(locationSelect[1]))[
+              relationshipDataTableProps(locationSelect[1])[
                 "controlDatePickerInputs"
               ]
             }
@@ -245,7 +215,7 @@ export const MonitoringPlanTabRender = ({
         [
           <DataTableMethod
             matsTableHandler={matsTableHandler}
-            locationSelectValue={parseInt(locationSelect[1])}
+            locationSelectValue={locationSelect[1]}
             checkout={checkout}
             user={user}
             inactive={inactive}
@@ -259,7 +229,7 @@ export const MonitoringPlanTabRender = ({
       [
         [
           <DataTableQualifications
-            locationSelectValue={parseInt(locationSelect[1])}
+            locationSelectValue={locationSelect[1]}
             inactive={inactive}
             settingInactiveCheckBox={settingInactiveCheckBox}
             checkout={checkout}
@@ -273,29 +243,23 @@ export const MonitoringPlanTabRender = ({
       [
         [
           <DataTableAssert
-            locationSelectValue={parseInt(locationSelect[1])}
+            locationSelectValue={locationSelect[1]}
             inactive={inactive}
             settingInactiveCheckBox={settingInactiveCheckBox}
             checkout={checkout}
             user={user}
-            payload={
-              rectWAFsDataTableProps(parseInt(locationSelect[1]))["payload"]
-            }
+            payload={rectWAFsDataTableProps(locationSelect[1])["payload"]}
             dropdownArray={
-              rectWAFsDataTableProps(parseInt(locationSelect[1]))[
-                "dropdownArray"
-              ]
+              rectWAFsDataTableProps(locationSelect[1])["dropdownArray"]
             }
             columnNames={
-              rectWAFsDataTableProps(parseInt(locationSelect[1]))["columnNames"]
+              rectWAFsDataTableProps(locationSelect[1])["columnNames"]
             }
             controlInputs={
-              rectWAFsDataTableProps(parseInt(locationSelect[1]))[
-                "controlInputs"
-              ]
+              rectWAFsDataTableProps(locationSelect[1])["controlInputs"]
             }
             controlDatePickerInputs={
-              rectWAFsDataTableProps(parseInt(locationSelect[1]))[
+              rectWAFsDataTableProps(locationSelect[1])[
                 "controlDatePickerInputs"
               ]
             }
@@ -311,25 +275,21 @@ export const MonitoringPlanTabRender = ({
       [
         [
           <DataTableAssert
-            locationSelectValue={parseInt(locationSelect[1])}
+            locationSelectValue={locationSelect[1]}
             inactive={inactive}
             settingInactiveCheckBox={settingInactiveCheckBox}
             checkout={checkout}
             user={user}
-            payload={spanDataTableProps(parseInt(locationSelect[1]))["payload"]}
+            payload={spanDataTableProps(locationSelect[1])["payload"]}
             dropdownArray={
-              spanDataTableProps(parseInt(locationSelect[1]))["dropdownArray"]
+              spanDataTableProps(locationSelect[1])["dropdownArray"]
             }
-            columnNames={
-              spanDataTableProps(parseInt(locationSelect[1]))["columnNames"]
-            }
+            columnNames={spanDataTableProps(locationSelect[1])["columnNames"]}
             controlInputs={
-              spanDataTableProps(parseInt(locationSelect[1]))["controlInputs"]
+              spanDataTableProps(locationSelect[1])["controlInputs"]
             }
             controlDatePickerInputs={
-              spanDataTableProps(parseInt(locationSelect[1]))[
-                "controlDatePickerInputs"
-              ]
+              spanDataTableProps(locationSelect[1])["controlDatePickerInputs"]
             }
             dataTableName={"Span"}
             revertedState={revertedState}
@@ -342,7 +302,7 @@ export const MonitoringPlanTabRender = ({
       [
         [
           <DataTableSystems
-            locationSelectValue={parseInt(locationSelect[1])}
+            locationSelectValue={locationSelect[1]}
             inactive={inactive}
             settingInactiveCheckBox={settingInactiveCheckBox}
             checkout={checkout}
@@ -356,7 +316,7 @@ export const MonitoringPlanTabRender = ({
       [
         [
           <DataTableAssert
-            locationSelectValue={parseInt(locationSelect[1])}
+            locationSelectValue={locationSelect[1]}
             selectedLocation={locations.find(
               (element) => element.id === locationSelect[1]
             )}
@@ -403,43 +363,43 @@ export const MonitoringPlanTabRender = ({
         ],
         [
           <DataTableAssert
-            locationSelectValue={parseInt(locationSelect[1])}
+            locationSelectValue={locationSelect[1]}
             selectedLocation={locations.find(
               (element) => element.id === locationSelect[1]
             )}
             payload={
               unitControlDataTableProps(
-                parseInt(locationSelect[1]),
+                locationSelect[1],
                 locations.find((element) => element.id === locationSelect[1])
               )["payload"]
             }
             dropdownArray={
               unitControlDataTableProps(
-                parseInt(locationSelect[1]),
+                locationSelect[1],
                 locations.find((element) => element.id === locationSelect[1])
               )["dropdownArray"]
             }
             columnNames={
               unitControlDataTableProps(
-                parseInt(locationSelect[1]),
+                locationSelect[1],
                 locations.find((element) => element.id === locationSelect[1])
               )["columnNames"]
             }
             controlInputs={
               unitControlDataTableProps(
-                parseInt(locationSelect[1]),
+                locationSelect[1],
                 locations.find((element) => element.id === locationSelect[1])
               )["controlInputs"]
             }
             controlDatePickerInputs={
               unitControlDataTableProps(
-                parseInt(locationSelect[1]),
+                locationSelect[1],
                 locations.find((element) => element.id === locationSelect[1])
               )["controlDatePickerInputs"]
             }
             urlParameters={
               unitControlDataTableProps(
-                parseInt(locationSelect[1]),
+                locationSelect[1],
                 locations.find((element) => element.id === locationSelect[1])
               )["urlParameters"]
             }
@@ -456,43 +416,43 @@ export const MonitoringPlanTabRender = ({
         ],
         [
           <DataTableAssert
-            locationSelectValue={parseInt(locationSelect[1])}
+            locationSelectValue={locationSelect[1]}
             selectedLocation={locations.find(
               (element) => element.id === locationSelect[1]
             )}
             payload={
               unitCapacityDataTableProps(
-                parseInt(locationSelect[1]),
+                locationSelect[1],
                 locations.find((element) => element.id === locationSelect[1])
               )["payload"]
             }
             dropdownArray={
               unitCapacityDataTableProps(
-                parseInt(locationSelect[1]),
+                locationSelect[1],
                 locations.find((element) => element.id === locationSelect[1])
               )["dropdownArray"]
             }
             columnNames={
               unitCapacityDataTableProps(
-                parseInt(locationSelect[1]),
+                locationSelect[1],
                 locations.find((element) => element.id === locationSelect[1])
               )["columnNames"]
             }
             controlInputs={
               unitCapacityDataTableProps(
-                parseInt(locationSelect[1]),
+                locationSelect[1],
                 locations.find((element) => element.id === locationSelect[1])
               )["controlInputs"]
             }
             controlDatePickerInputs={
               unitCapacityDataTableProps(
-                parseInt(locationSelect[1]),
+                locationSelect[1],
                 locations.find((element) => element.id === locationSelect[1])
               )["controlDatePickerInputs"]
             }
             urlParameters={
               unitCapacityDataTableProps(
-                parseInt(locationSelect[1]),
+                locationSelect[1],
                 locations.find((element) => element.id === locationSelect[1])
               )["urlParameters"]
             }
@@ -516,7 +476,7 @@ export const MonitoringPlanTabRender = ({
               [
                 <DataTableMethod
                   matsTableHandler={matsTableHandler}
-                  locationSelectValue={parseInt(locationSelect[1])}
+                  locationSelectValue={locationSelect[1]}
                   checkout={checkout}
                   user={user}
                   inactive={inactive}
@@ -557,7 +517,7 @@ export const MonitoringPlanTabRender = ({
       [
         <DataTableMethod
           matsTableHandler={matsTableHandler}
-          locationSelectValue={parseInt(locationSelect[1])}
+          locationSelectValue={locationSelect[1]}
           checkout={checkout}
           user={user}
           inactive={inactive}

@@ -173,6 +173,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
           </Title>
 
           <Button
+            id="btnMobileMenu"
             type="button"
             className="bg-transparent margin-0 float-right clearfix desktop:display-none padding-0 width-auto margin-top-1 margin-right-2"
           >
