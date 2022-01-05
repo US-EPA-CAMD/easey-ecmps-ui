@@ -5,8 +5,6 @@ import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 import { attachChangeEventListeners } from "../../../additional-functions/prompt-to-save-unsaved-changes";
-
-import { Preloader } from "../../Preloader/Preloader";
 import { connect } from "react-redux";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
 import {
@@ -138,24 +136,20 @@ export const DataTableAnalyzerRanges = ({
         id="testingBtn1"
         onClick={() => testing1()}
       />
-      {dropdownsLoaded ? (
-        <DataTableRender
-          columnNames={rangesColumnNames}
-          data={rangeData}
-          openHandler={openAnalyzerRanges}
-          tableTitle="Analyzer Ranges"
-          componentStyling="systemsCompTable"
-          tableStyling="grid-container"
-          dataLoaded={rangesLoaded}
-          actionsBtn={"View"}
-          user={user}
-          checkout={checkout}
-          addBtn={openAnalyzerRanges}
-          addBtnName={"Create New Analyzer Range"}
-        />
-      ) : (
-        <Preloader />
-      )}
+      <DataTableRender
+        columnNames={rangesColumnNames}
+        data={rangeData}
+        openHandler={openAnalyzerRanges}
+        tableTitle="Analyzer Ranges"
+        componentStyling="systemsCompTable"
+        tableStyling="grid-container"
+        dataLoaded={rangesLoaded && dropdownsLoaded}
+        actionsBtn={"View"}
+        user={user}
+        checkout={checkout}
+        addBtn={openAnalyzerRanges}
+        addBtnName={"Create New Analyzer Range"}
+      />
     </div>
   );
 };

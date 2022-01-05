@@ -566,7 +566,7 @@ export const DataTableSystems = ({
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       <div className="methodTable ">
         <DataTableRender
-          dataLoaded={dataLoaded}
+          dataLoaded={dataLoaded && dropdownsLoaded}
           data={data}
           columnNames={columnNames}
           openHandler={openSystem}
