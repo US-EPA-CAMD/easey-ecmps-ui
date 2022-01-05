@@ -1,7 +1,6 @@
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import { beginMonitoringPlansApiCall } from "./apiStatusActions";
 import * as types from "./actionTypes";
-import { resolveConfig } from "prettier";
 
 export function loadMonitoringPlansSuccess(monitoringPlans) {
   return {
