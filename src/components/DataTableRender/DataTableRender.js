@@ -389,6 +389,7 @@ export const DataTableRender = ({
       }
     }
   };
+  console.log({ data });
   const filteredItems = data.filter(colsFilter);
   const subHeaderComponentMemo = useMemo(() => {
     //cannot unit test properly

@@ -166,7 +166,7 @@ export const DataTableLMEQualifications = ({
         <DataTableRender
           columnNames={columnNames}
           data={data}
-          dataLoaded={dataLoaded}
+          dataLoaded={dataLoaded && dropdownsLoaded}
           checkout={checkout}
           user={user}
           openHandler={openLmeQualModal}

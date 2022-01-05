@@ -349,7 +349,7 @@ export const DataTableQualifications = ({
       <DataTableRender
         columnNames={columnNames}
         data={data}
-        dataLoaded={dataLoaded}
+        dataLoaded={dataLoaded && dropdownsLoaded}
         checkout={checkout}
         user={user}
         openHandler={openQualificationDataModal}
