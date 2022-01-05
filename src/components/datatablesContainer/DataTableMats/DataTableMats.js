@@ -61,8 +61,9 @@ export const DataTableMats = ({
   // load dropdowns data (called once)
   useEffect(() => {
     if (mdmData.length === 0) {
-      loadDropdownsData(MATS_METHODS_SECTION_NAME, dropdownArray);
-      setDropdownsLoaded(true);
+      loadDropdownsData(MATS_METHODS_SECTION_NAME, dropdownArray).then(() => {
+        setDropdownsLoaded(true);
+      });
     } else {
       setDropdownsLoaded(true);
     }
@@ -280,10 +281,16 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadDropdownsData: (section, dropdownArray) => {
-      dispatch(
-        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
-      );
+    loadDropdownsData: async (section, dropdownArray) => {
+      return new Promise((resolve, reject) => {
+        dispatch(
+          loadDropdowns(
+            convertSectionToStoreName(section),
+            dropdownArray,
+            resolve
+          )
+        );
+      });
     },
   };
 };
