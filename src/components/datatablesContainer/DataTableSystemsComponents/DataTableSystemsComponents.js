@@ -111,26 +111,23 @@ export const DataTableSystemsComponents = ({
 
   // load dropdowns data (called once)
   useEffect(() => {
-    if (fuelFlowsMdmData.length === 0 && systemComponentsMdmData.length === 0) {
+    if (systemComponentsMdmData.length === 0) {
       loadDropdownsData(
         SYSTEM_COMPONENTS_SECTION_NAME,
         systemComponentsDataArray
-      ).then(() => {
-        setSystemComponentDropdownsLoaded(true);
-      });
-
-      loadDropdownsData(FUEL_FLOWS_SECTION_NAME, fuelFlowsDataArray).then(
-        () => {
-          setFuelFlowDropdownsLoaded(true);
-        }
       );
     } else {
       setSystemComponentDropdownsLoaded(true);
+    }
+
+    if (fuelFlowsMdmData.length === 0) {
+      loadDropdownsData(FUEL_FLOWS_SECTION_NAME, fuelFlowsDataArray);
+    } else {
       setFuelFlowDropdownsLoaded(true);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [systemComponentsMdmData, fuelFlowsMdmData]);
 
   useEffect(() => {
     if (addCompThirdLevelCreateTrigger) {
@@ -564,15 +561,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     loadDropdownsData: async (section, dropdownArray) => {
-      return new Promise((resolve, reject) => {
-        dispatch(
-          loadDropdowns(
-            convertSectionToStoreName(section),
-            dropdownArray,
-            resolve
-          )
-        );
-      });
+      dispatch(
+        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
+      );
     },
   };
 };

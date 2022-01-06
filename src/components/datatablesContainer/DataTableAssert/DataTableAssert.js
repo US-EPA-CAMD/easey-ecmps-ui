@@ -64,14 +64,6 @@ export const DataTableAssert = ({
       locationSelectValue ||
       revertedState
     ) {
-      // Load MDM data (for dropdowns) only if we don't have them already
-      if (mdmData && mdmData.length === 0) {
-        loadDropdownsData(dataTableName, dropdownArray).then(() => {
-          setDropdownsLoaded(true);
-        });
-      } else {
-        setDropdownsLoaded(true);
-      }
       setDataLoaded(false);
       getDataTableApi(dataTableName, locationSelectValue, selectedLocation);
 
@@ -80,6 +72,15 @@ export const DataTableAssert = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState, dataTableName]);
+
+  useEffect(() => {
+    // Load MDM data (for dropdowns) only if we don't have them already
+    if (mdmData && mdmData.length === 0) {
+      loadDropdownsData(dataTableName, dropdownArray);
+    } else {
+      setDropdownsLoaded(true);
+    }
+  }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
 
   // get API for data
   // in  a timer because WAFS get takes a lil bit exxtra time to process, fixes update of datatable after editing data
@@ -185,36 +186,46 @@ export const DataTableAssert = ({
   const [dataSet, setDataSet] = useState([]);
   useEffect(() => {
     if (dataPulled.length > 0) {
-      const activeOnly = getActiveData(dataPulled);
-      const inactiveOnly = getInactiveData(dataPulled);
+      console.log({ inactive });
+      const activeRecords = getActiveData(dataPulled);
+      const inactiveRecords = getInactiveData(dataPulled);
+      // Note: settingInactiveCheckbox -> function parameters ( check flag, disable flag )
 
-      // only active data >  disable checkbox and unchecks it
-      if (activeOnly.length === dataPulled.length) {
-        // uncheck it and disable checkbox
-        //function parameters ( check flag, disable flag )
+      // if ONLY ACTIVE records return,
+      if (activeRecords.length === dataPulled.length) {
+        // then disable the inactive checkbox and set it as un-checked
         settingInactiveCheckBox(false, true);
         setDataSet(
           assertSelector.getDataTableRecords(dataPulled, dataTableName)
         );
       }
 
-      // only inactive data > disables checkbox and checks it
-      if (inactiveOnly.length === dataPulled.length) {
-        //check it and disable checkbox
+      // if ONLY INACTIVE records return
+      else if (inactiveRecords.length === dataPulled.length) {
+        // then disable the inactive checkbox and set it as checked
         settingInactiveCheckBox(true, true);
         setDataSet(
           assertSelector.getDataTableRecords(dataPulled, dataTableName)
         );
       }
-      // resets checkbox
-      settingInactiveCheckBox(inactive[0], false);
-      setDataSet(
-        assertSelector.getDataTableRecords(
-          !inactive[0] ? getActiveData(dataPulled) : dataPulled,
-          dataTableName
-        )
-      );
-    } else {
+
+      // if BOTH ACTIVE & INACTIVE records return
+      else {
+        // then enable the inactive checkbox (user can mark it as checked/un-checked manually)
+        settingInactiveCheckBox(inactive[0], false);
+        setDataSet(
+          assertSelector.getDataTableRecords(
+            !inactive[0] ? getActiveData(dataPulled) : dataPulled,
+            dataTableName
+          )
+        );
+      }
+    }
+
+    // If NO RECORDS are returned
+    else {
+      // disable the inactive checkbox and set it as un-checked
+      settingInactiveCheckBox(false, true);
       setDataSet([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -291,15 +302,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     loadDropdownsData: async (section, dropdownArray) => {
-      return new Promise((resolve, reject) => {
-        dispatch(
-          loadDropdowns(
-            convertSectionToStoreName(section),
-            dropdownArray,
-            resolve
-          )
-        );
-      });
+      dispatch(
+        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
+      );
     },
   };
 };

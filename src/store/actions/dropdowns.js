@@ -7,18 +7,17 @@ export function loadDropdownsSuccess(dropdowns, section, resolve) {
     type: types.LOAD_DROPDOWNS_SUCCESS,
     dropdowns: dropdowns,
     section: section,
-    resolve: resolve,
   };
 }
 
-export function loadDropdowns(section, dropdownArray, resolve) {
+export function loadDropdowns(section, dropdownArray) {
   return (dispatch) => {
     dispatch(beginMdmApiCall(section));
     return UseRetrieveDropdownApi(
       dropdownArray[0],
       dropdownArray.length > 1 ? dropdownArray[1] : null
     ).then((dropdowns) => {
-      dispatch(loadDropdownsSuccess(dropdowns, section, resolve));
+      dispatch(loadDropdownsSuccess(dropdowns, section));
     });
   };
 }
