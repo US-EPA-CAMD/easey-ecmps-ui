@@ -82,8 +82,11 @@ export const DataTablePCTQualifications = ({
   // load dropdowns data (called once)
   useEffect(() => {
     if (mdmData.length === 0) {
-      loadDropdownsData(PCT_QUALIFICATIONS_SECTION_NAME, dropdownArray);
-      setDropdownsLoaded(true);
+      loadDropdownsData(PCT_QUALIFICATIONS_SECTION_NAME, dropdownArray).then(
+        () => {
+          setDropdownsLoaded(true);
+        }
+      );
     } else {
       setDropdownsLoaded(true);
     }
@@ -222,10 +225,16 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadDropdownsData: (section, dropdownArray) => {
-      dispatch(
-        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
-      );
+    loadDropdownsData: async (section, dropdownArray) => {
+      return new Promise((resolve, reject) => {
+        dispatch(
+          loadDropdowns(
+            convertSectionToStoreName(section),
+            dropdownArray,
+            resolve
+          )
+        );
+      });
     },
   };
 };

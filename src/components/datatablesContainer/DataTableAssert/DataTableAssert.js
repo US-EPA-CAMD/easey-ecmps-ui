@@ -66,14 +66,12 @@ export const DataTableAssert = ({
     ) {
       // Load MDM data (for dropdowns) only if we don't have them already
       if (mdmData && mdmData.length === 0) {
-        loadDropdownsData(dataTableName, dropdownArray);
-        console.log("loaded");
-        setDropdownsLoaded(true);
+        loadDropdownsData(dataTableName, dropdownArray).then(() => {
+          setDropdownsLoaded(true);
+        });
       } else {
         setDropdownsLoaded(true);
       }
-
-      console.log("test");
       setDataLoaded(false);
       getDataTableApi(dataTableName, locationSelectValue, selectedLocation);
 
@@ -292,10 +290,16 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadDropdownsData: (section, dropdownArray) => {
-      dispatch(
-        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
-      );
+    loadDropdownsData: async (section, dropdownArray) => {
+      return new Promise((resolve, reject) => {
+        dispatch(
+          loadDropdowns(
+            convertSectionToStoreName(section),
+            dropdownArray,
+            resolve
+          )
+        );
+      });
     },
   };
 };

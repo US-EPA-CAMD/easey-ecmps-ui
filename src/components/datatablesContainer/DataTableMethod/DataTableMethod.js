@@ -81,8 +81,9 @@ export const DataTableMethod = ({
   // load dropdowns data (called once)
   useEffect(() => {
     if (mdmData.length === 0) {
-      loadDropdownsData(METHODS_SECTION_NAME, dropdownArray);
-      setDropdownsLoaded(true);
+      loadDropdownsData(METHODS_SECTION_NAME, dropdownArray).then(() => {
+        setDropdownsLoaded(true);
+      });
     } else {
       setDropdownsLoaded(true);
     }
@@ -290,7 +291,7 @@ export const DataTableMethod = ({
         openHandler={openMethodModal}
         columnNames={columnNames}
         data={data}
-        dataLoaded={dataLoaded}
+        dataLoaded={dataLoaded && dropdownsLoaded}
         actionsBtn={"View"}
         checkout={checkout}
         user={user}
@@ -339,10 +340,16 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadDropdownsData: (section, dropdownArray) => {
-      dispatch(
-        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
-      );
+    loadDropdownsData: async (section, dropdownArray) => {
+      return new Promise((resolve, reject) => {
+        dispatch(
+          loadDropdowns(
+            convertSectionToStoreName(section),
+            dropdownArray,
+            resolve
+          )
+        );
+      });
     },
   };
 };

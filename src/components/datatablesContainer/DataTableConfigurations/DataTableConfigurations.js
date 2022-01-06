@@ -107,8 +107,10 @@ export const DataTableConfigurations = ({
   }, [selectedConfig]);
 
   useEffect(() => {
-    loadMonitoringPlansData(data.col2);
-    setDataLoaded(true);
+    loadMonitoringPlansData(data.col2).then(() => {
+      setDataLoaded(true);
+    });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -167,8 +169,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadMonitoringPlansData: (orisCode) =>
-      dispatch(loadMonitoringPlansArray(orisCode)),
+    loadMonitoringPlansData: async (orisCode) => {
+      return new Promise((resolve, reject) => {
+        dispatch(loadMonitoringPlansArray(orisCode, resolve));
+      });
+    },
     setCheckout: (value, configID) =>
       dispatch(setCheckoutState(value, configID)),
   };

@@ -115,11 +115,15 @@ export const DataTableSystemsComponents = ({
       loadDropdownsData(
         SYSTEM_COMPONENTS_SECTION_NAME,
         systemComponentsDataArray
-      );
-      setSystemComponentDropdownsLoaded(true);
+      ).then(() => {
+        setSystemComponentDropdownsLoaded(true);
+      });
 
-      loadDropdownsData(FUEL_FLOWS_SECTION_NAME, fuelFlowsDataArray);
-      setFuelFlowDropdownsLoaded(true);
+      loadDropdownsData(FUEL_FLOWS_SECTION_NAME, fuelFlowsDataArray).then(
+        () => {
+          setFuelFlowDropdownsLoaded(true);
+        }
+      );
     } else {
       setSystemComponentDropdownsLoaded(true);
       setFuelFlowDropdownsLoaded(true);
@@ -559,10 +563,16 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadDropdownsData: (section, dropdownArray) => {
-      dispatch(
-        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
-      );
+    loadDropdownsData: async (section, dropdownArray) => {
+      return new Promise((resolve, reject) => {
+        dispatch(
+          loadDropdowns(
+            convertSectionToStoreName(section),
+            dropdownArray,
+            resolve
+          )
+        );
+      });
     },
   };
 };
