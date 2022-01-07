@@ -267,7 +267,7 @@ export const DataTableMats = ({
       <DataTableRender
         columnNames={columnNames}
         data={data}
-        dataLoaded={dataLoaded}
+        dataLoaded={dataLoaded && dropdownsLoaded}
         // actionsBtn={"View"}
         checkout={checkout}
         user={user}
