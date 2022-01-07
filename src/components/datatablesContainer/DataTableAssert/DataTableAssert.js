@@ -100,8 +100,6 @@ export const DataTableAssert = ({
     if (dataPulled.length > 0) {
       const activeRecords = getActiveData(dataPulled);
       const inactiveRecords = getInactiveData(dataPulled);
-      console.log({ activeRecords });
-      console.log({ inactiveRecords });
 
       // Note: settingInactiveCheckbox -> function parameters ( check flag, disable flag )
 
@@ -126,7 +124,6 @@ export const DataTableAssert = ({
       // if BOTH ACTIVE & INACTIVE records return
       else {
         // then enable the inactive checkbox (user can mark it as checked/un-checked manually)
-        console.log({ settingInactiveCheckBox });
         settingInactiveCheckBox(inactive[0], false);
 
         setDisplayedRecords(
