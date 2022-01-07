@@ -118,6 +118,7 @@ const componentRenderer = (location) => {
       ],
     },
     loadDropdownsData: jest.fn(),
+    settingInactiveCheckBox: jest.fn(),
   };
   return render(<DataTableMats {...props} />);
 };
