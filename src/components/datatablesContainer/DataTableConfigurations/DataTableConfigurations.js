@@ -107,8 +107,10 @@ export const DataTableConfigurations = ({
   }, [selectedConfig]);
 
   useEffect(() => {
-    loadMonitoringPlansData(data.col2);
-    setDataLoaded(true);
+    loadMonitoringPlansData(data.col2).then(() => {
+      setDataLoaded(true);
+    });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

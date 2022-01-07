@@ -9,7 +9,12 @@ export function loadMonitoringPlansSuccess(monitoringPlans) {
   };
 }
 
-export function loadMonitoringPlansArraySuccess(monitoringPlans, orisCode) {
+export function loadMonitoringPlansArraySuccess(
+  monitoringPlans,
+  orisCode,
+  resolve
+) {
+  resolve();
   return {
     type: types.LOAD_MONITORING_PLANS_ARRAY_SUCCESS,
     monitoringPlans,
@@ -27,7 +32,7 @@ export function loadMonitoringPlans(orisCode) {
   };
 }
 
-export function loadMonitoringPlansArray(orisCode) {
+export function loadMonitoringPlansArray(orisCode, resolve) {
   return (dispatch) => {
     dispatch(beginMonitoringPlansApiCall());
     return mpApi.getMonitoringPlans(orisCode).then((res) => {
