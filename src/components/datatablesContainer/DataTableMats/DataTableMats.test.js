@@ -119,6 +119,8 @@ const componentRenderer = (location) => {
     },
     loadDropdownsData: jest.fn(),
     settingInactiveCheckBox: jest.fn(),
+    setUpdateRelatedTables: jest.fn(),
+    updateRelatedTables: false,
   };
   return render(<DataTableMats {...props} />);
 };
