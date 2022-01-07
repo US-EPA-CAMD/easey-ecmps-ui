@@ -55,17 +55,13 @@ export const DataTableAnalyzerRanges = ({
   // load dropdowns data (called once)
   useEffect(() => {
     if (mdmData.length === 0) {
-      loadDropdownsData(ANALYZER_RANGES_SECTION_NAME, dropdownArray).then(
-        () => {
-          setDropdownsLoaded(true);
-        }
-      );
+      loadDropdownsData(ANALYZER_RANGES_SECTION_NAME, dropdownArray);
     } else {
       setDropdownsLoaded(true);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [mdmData]);
 
   const rangeData = useMemo(() => {
     if (ranges.length > 0) {
@@ -166,15 +162,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     loadDropdownsData: async (section, dropdownArray) => {
-      return new Promise((resolve, reject) => {
-        dispatch(
-          loadDropdowns(
-            convertSectionToStoreName(section),
-            dropdownArray,
-            resolve
-          )
-        );
-      });
+      dispatch(
+        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
+      );
     },
   };
 };

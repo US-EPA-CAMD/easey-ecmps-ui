@@ -82,17 +82,13 @@ export const DataTablePCTQualifications = ({
   // load dropdowns data (called once)
   useEffect(() => {
     if (mdmData.length === 0) {
-      loadDropdownsData(PCT_QUALIFICATIONS_SECTION_NAME, dropdownArray).then(
-        () => {
-          setDropdownsLoaded(true);
-        }
-      );
+      loadDropdownsData(PCT_QUALIFICATIONS_SECTION_NAME, dropdownArray);
     } else {
       setDropdownsLoaded(true);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [mdmData]);
 
   const [selectedQualPct, setSelectedQualPct] = useState(null);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
@@ -226,15 +222,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     loadDropdownsData: async (section, dropdownArray) => {
-      return new Promise((resolve, reject) => {
-        dispatch(
-          loadDropdowns(
-            convertSectionToStoreName(section),
-            dropdownArray,
-            resolve
-          )
-        );
-      });
+      dispatch(
+        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
+      );
     },
   };
 };

@@ -43,11 +43,6 @@ export const MonitoringPlanTabRender = ({
   inactive,
   checkedOutLocations,
 }) => {
-  const [matsTableFlag, setMatsTableFlag] = useState(false);
-  // // MONITORING METHODS
-  const matsTableHandler = (flag) => {
-    setMatsTableFlag(flag);
-  };
   const settingInactiveCheckBox = (check, disable) => {
     setInactive([check, disable], title);
   };
@@ -56,7 +51,7 @@ export const MonitoringPlanTabRender = ({
 
   // updates all tables whenever a location is changed
   useEffect(() => {
-    let tableArr = [
+    const tableArr = [
       [
         [
           <DataTableAssert
@@ -214,7 +209,6 @@ export const MonitoringPlanTabRender = ({
       [
         [
           <DataTableMethod
-            matsTableHandler={matsTableHandler}
             locationSelectValue={locationSelect[1]}
             checkout={checkout}
             user={user}
@@ -224,6 +218,18 @@ export const MonitoringPlanTabRender = ({
             setRevertedState={setRevertedState}
           />,
           "Methods",
+        ],
+        [
+          <DataTableMats
+            locationSelectValue={locationSelect[1]}
+            checkout={checkout}
+            user={user}
+            inactive={inactive}
+            settingInactiveCheckBox={settingInactiveCheckBox}
+            revertedState={revertedState}
+            setRevertedState={setRevertedState}
+          />,
+          "Supplemental Methods",
         ],
       ],
       [
@@ -468,43 +474,9 @@ export const MonitoringPlanTabRender = ({
         ],
       ], // unit info
     ];
-
-    if (matsTableFlag) {
-      tableArr = tableState.map((element, index) =>
-        index === 4
-          ? [
-              [
-                <DataTableMethod
-                  matsTableHandler={matsTableHandler}
-                  locationSelectValue={locationSelect[1]}
-                  checkout={checkout}
-                  user={user}
-                  inactive={inactive}
-                  settingInactiveCheckBox={settingInactiveCheckBox}
-                  revertedState={revertedState}
-                  setRevertedState={setRevertedState}
-                />,
-                "Methods",
-              ],
-              [
-                <DataTableMats
-                  locationSelectValue={locationSelect[1]}
-                  checkout={checkout}
-                  user={user}
-                  inactive={inactive}
-                  settingInactiveCheckBox={settingInactiveCheckBox}
-                  revertedState={revertedState}
-                  setRevertedState={setRevertedState}
-                />,
-                "Supplemental Methods",
-              ],
-            ]
-          : element
-      );
-    }
     setTableState(tableArr);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelect[1], inactive[0], checkout, matsTableFlag, revertedState]);
+  }, [locationSelect[1], inactive[0], checkout, revertedState]);
 
   // sets initial state
   // only need to initial methods since it is the default, everything else will update with above usestate
@@ -516,7 +488,6 @@ export const MonitoringPlanTabRender = ({
     [
       [
         <DataTableMethod
-          matsTableHandler={matsTableHandler}
           locationSelectValue={locationSelect[1]}
           checkout={checkout}
           user={user}
@@ -526,6 +497,18 @@ export const MonitoringPlanTabRender = ({
           setRevertedState={setRevertedState}
         />,
         "Methods",
+      ],
+      [
+        <DataTableMats
+          locationSelectValue={locationSelect[1]}
+          checkout={checkout}
+          user={user}
+          inactive={inactive}
+          settingInactiveCheckBox={settingInactiveCheckBox}
+          revertedState={revertedState}
+          setRevertedState={setRevertedState}
+        />,
+        "Supplemental Methods",
       ],
     ],
     [], // qualifications

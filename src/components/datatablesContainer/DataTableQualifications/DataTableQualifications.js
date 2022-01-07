@@ -93,15 +93,13 @@ export const DataTableQualifications = ({
   // load dropdowns data (called once)
   useEffect(() => {
     if (mdmData.length === 0) {
-      loadDropdownsData(QUALIFICATIONS_SECTION_NAME, dropdownArray).then(() => {
-        setDropdownsLoaded(true);
-      });
+      loadDropdownsData(QUALIFICATIONS_SECTION_NAME, dropdownArray);
     } else {
       setDropdownsLoaded(true);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [mdmData]);
 
   const [selectedQualificationData, setSelectedQualificationData] =
     useState(null);
@@ -130,18 +128,22 @@ export const DataTableQualifications = ({
       }
 
       // only inactive data > disables checkbox and checks it
-      if (inactiveOnly.length === qualificationData.length) {
+      else if (inactiveOnly.length === qualificationData.length) {
         //check it and disable checkbox
         settingInactiveCheckBox(true, true);
         return fs.getMonitoringPlansQualifications(qualificationData);
       }
       // resets checkbox
-      settingInactiveCheckBox(inactive[0], false);
-      return fs.getMonitoringPlansQualifications(
-        !inactive[0] ? getActiveData(qualificationData) : qualificationData
-      );
+      else {
+        settingInactiveCheckBox(inactive[0], false);
+        return fs.getMonitoringPlansQualifications(
+          !inactive[0] ? getActiveData(qualificationData) : qualificationData
+        );
+      }
+    } else {
+      settingInactiveCheckBox(false, true);
+      return [];
     }
-    return [];
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qualificationData, inactive]);
@@ -485,15 +487,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     loadDropdownsData: async (section, dropdownArray) => {
-      return new Promise((resolve, reject) => {
-        dispatch(
-          loadDropdowns(
-            convertSectionToStoreName(section),
-            dropdownArray,
-            resolve
-          )
-        );
-      });
+      dispatch(
+        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
+      );
     },
   };
 };

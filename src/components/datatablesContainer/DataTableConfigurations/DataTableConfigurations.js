@@ -170,9 +170,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     loadMonitoringPlansData: async (orisCode) => {
-      return new Promise((resolve, reject) => {
-        dispatch(loadMonitoringPlansArray(orisCode, resolve));
-      });
+      dispatch(loadMonitoringPlansArray(orisCode));
     },
     setCheckout: (value, configID) =>
       dispatch(setCheckoutState(value, configID)),

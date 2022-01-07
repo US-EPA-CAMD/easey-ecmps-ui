@@ -86,15 +86,13 @@ export const DataTableSystems = ({
   // load dropdowns data (called once)
   useEffect(() => {
     if (mdmData.length === 0) {
-      loadDropdownsData(SYSTEMS_SECTION_NAME, dropdownArray).then(() => {
-        setDropdownsLoaded(true);
-      });
+      loadDropdownsData(SYSTEMS_SECTION_NAME, dropdownArray);
     } else {
       setDropdownsLoaded(true);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [mdmData]);
 
   const [selected, setSelected] = useState(null);
   const [selectedSystem, setSelectedSystem] = useState(
@@ -511,28 +509,33 @@ export const DataTableSystems = ({
       const activeOnly = getActiveData(monitoringSystems);
       const inactiveOnly = getInactiveData(monitoringSystems);
 
-      // only active data >  disable checkbox and unchecks it
+      // active records only
       if (activeOnly.length === monitoringSystems.length) {
-        // uncheck it and disable checkbox
-        //function parameters ( check flag, disable flag )
         settingInactiveCheckBox(false, true);
         return fs.getMonitoringPlansSystemsTableRecords(monitoringSystems);
       }
 
-      // only inactive data > disables checkbox and checks it
-      if (inactiveOnly.length === monitoringSystems.length) {
-        //check it and disable checkbox
+      // inactive records only
+      else if (inactiveOnly.length === monitoringSystems.length) {
         settingInactiveCheckBox(true, true);
         return fs.getMonitoringPlansSystemsTableRecords(monitoringSystems);
       }
 
-      // resets checkbox
-      settingInactiveCheckBox(inactive[0], false);
-      return fs.getMonitoringPlansSystemsTableRecords(
-        !inactive[0] ? getActiveData(monitoringSystems) : monitoringSystems
-      );
+      // both active & inactive records
+      else {
+        settingInactiveCheckBox(inactive[0], false);
+        return fs.getMonitoringPlansSystemsTableRecords(
+          !inactive[0] ? getActiveData(monitoringSystems) : monitoringSystems
+        );
+      }
     }
-    return [];
+
+    // no records
+    else {
+      settingInactiveCheckBox(false, true);
+      return [];
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringSystems, inactive]);
   const [openFuelFlowsView, setOpenFuelFlowsView] = React.useState(false);
@@ -781,15 +784,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     loadDropdownsData: async (section, dropdownArray) => {
-      return new Promise((resolve, reject) => {
-        dispatch(
-          loadDropdowns(
-            convertSectionToStoreName(section),
-            dropdownArray,
-            resolve
-          )
-        );
-      });
+      dispatch(
+        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
+      );
     },
   };
 };

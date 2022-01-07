@@ -30,7 +30,6 @@ export const DataTableMethod = ({
   mdmData,
   loadDropdownsData,
   locationSelectValue,
-  matsTableHandler,
   user,
   checkout,
   inactive,
@@ -78,18 +77,16 @@ export const DataTableMethod = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
 
-  // load dropdowns data (called once)
+  // load dropdowns data (called when mdmData changes)
   useEffect(() => {
     if (mdmData.length === 0) {
-      loadDropdownsData(METHODS_SECTION_NAME, dropdownArray).then(() => {
-        setDropdownsLoaded(true);
-      });
+      loadDropdownsData(METHODS_SECTION_NAME, dropdownArray);
     } else {
       setDropdownsLoaded(true);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [mdmData]);
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -187,12 +184,13 @@ export const DataTableMethod = ({
   };
 
   const data = useMemo(() => {
-    if (methods.length > 0) {
-      const activeOnly = getActiveData(methods);
-      const inactiveOnly = getInactiveData(methods);
+    const matsAndMethods = matsMethods.concat(methods);
+    if (matsAndMethods.length > 0) {
+      const activeOnly = getActiveData(matsAndMethods);
+      const inactiveOnly = getInactiveData(matsAndMethods);
 
       // only active data >  disable checkbox and unchecks it
-      if (activeOnly.length === methods.length) {
+      if (activeOnly.length === matsAndMethods.length) {
         // uncheck it and disable checkbox
         //function parameters ( check flag, disable flag )
         settingInactiveCheckBox(false, true);
@@ -200,30 +198,25 @@ export const DataTableMethod = ({
       }
 
       // only inactive data > disables checkbox and checks it
-      if (inactiveOnly.length === methods.length) {
+      else if (inactiveOnly.length === matsAndMethods.length) {
         //check it and disable checkbox
         settingInactiveCheckBox(true, true);
         return fs.getMonitoringPlansMethodsTableRecords(methods);
       }
       // resets checkbox
-      settingInactiveCheckBox(inactive[0], false);
-      return fs.getMonitoringPlansMethodsTableRecords(
-        !inactive[0] ? getActiveData(methods) : methods
-      );
-    }
-    return [];
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [methods, inactive, updateTable]);
-
-  useEffect(() => {
-    if (matsTableHandler) {
-      if (matsMethods.length < 1) {
-        matsTableHandler(false);
-      } else {
-        matsTableHandler(true);
+      else {
+        settingInactiveCheckBox(inactive[0], false);
+        return fs.getMonitoringPlansMethodsTableRecords(
+          !inactive[0] ? getActiveData(methods) : methods
+        );
       }
+    } else {
+      settingInactiveCheckBox(false, true);
+      return [];
     }
-  }, [matsMethods.length, matsTableHandler]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [methods, matsMethods, inactive, updateTable]);
 
   const saveMethods = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
@@ -341,15 +334,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     loadDropdownsData: async (section, dropdownArray) => {
-      return new Promise((resolve, reject) => {
-        dispatch(
-          loadDropdowns(
-            convertSectionToStoreName(section),
-            dropdownArray,
-            resolve
-          )
-        );
-      });
+      dispatch(
+        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
+      );
     },
   };
 };
