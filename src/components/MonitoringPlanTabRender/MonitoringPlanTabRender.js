@@ -47,436 +47,484 @@ export const MonitoringPlanTabRender = ({
     setInactive([check, disable], title);
   };
 
+  const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
+
   const [revertedState, setRevertedState] = useState(false);
 
   // updates all tables whenever a location is changed
-  useEffect(() => {
-    const tableArr = [
-      [
+  useEffect(
+    () => {
+      const tableArr = [
         [
-          <DataTableAssert
-            locationSelectValue={locationSelect[1]}
-            inactive={inactive}
-            settingInactiveCheckBox={settingInactiveCheckBox}
-            checkout={checkout}
-            user={user}
-            payload={defaultsDataTableProps(locationSelect[1])["payload"]}
-            dropdownArray={
-              defaultsDataTableProps(locationSelect[1])["dropdownArray"]
-            }
-            columnNames={
-              defaultsDataTableProps(locationSelect[1])["columnNames"]
-            }
-            controlInputs={
-              defaultsDataTableProps(locationSelect[1])["controlInputs"]
-            }
-            controlDatePickerInputs={
-              defaultsDataTableProps(locationSelect[1])[
-                "controlDatePickerInputs"
-              ]
-            }
-            dataTableName={"Default"}
-            revertedState={revertedState}
-            setRevertedState={setRevertedState}
-          />,
-          "Defaults",
-        ],
-      ],
-      [
-        [
-          <DataTableAssert
-            locationSelectValue={locationSelect[1]}
-            inactive={inactive}
-            settingInactiveCheckBox={settingInactiveCheckBox}
-            checkout={checkout}
-            user={user}
-            payload={formulasDataTableProps(locationSelect[1])["payload"]}
-            dropdownArray={
-              formulasDataTableProps(locationSelect[1])["dropdownArray"]
-            }
-            columnNames={
-              formulasDataTableProps(locationSelect[1])["columnNames"]
-            }
-            controlInputs={
-              formulasDataTableProps(locationSelect[1])["controlInputs"]
-            }
-            controlDatePickerInputs={
-              formulasDataTableProps(locationSelect[1])[
-                "controlDatePickerInputs"
-              ]
-            }
-            dataTableName={"Formula"}
-            revertedState={revertedState}
-            setRevertedState={setRevertedState}
-          />,
-          "Formulas",
-        ],
-      ],
-      [
-        [
-          <DataTableAssert
-            locationSelectValue={locationSelect[1]}
-            inactive={inactive}
-            settingInactiveCheckBox={settingInactiveCheckBox}
-            checkout={checkout}
-            user={user}
-            payload={loadsDataTableProps(locationSelect[1])["payload"]}
-            dropdownArray={
-              loadsDataTableProps(locationSelect[1])["dropdownArray"]
-            }
-            columnNames={loadsDataTableProps(locationSelect[1])["columnNames"]}
-            controlInputs={
-              loadsDataTableProps(locationSelect[1])["controlInputs"]
-            }
-            controlDatePickerInputs={
-              loadsDataTableProps(locationSelect[1])["controlDatePickerInputs"]
-            }
-            radioNames={["secondNormalIndicator"]}
-            dataTableName={"Load"}
-            revertedState={revertedState}
-            setRevertedState={setRevertedState}
-          />,
-          "Loads",
-        ],
-      ],
-      [
-        [
-          <DataTableAssert
-            locationSelectValue={locationSelect[1]}
-            inactive={inactive}
-            settingInactiveCheckBox={settingInactiveCheckBox}
-            checkout={checkout}
-            user={user}
-            payload={
-              locationAttributesDataTableProps(locationSelect[1])["payload"]
-            }
-            dropdownArray={
-              locationAttributesDataTableProps(locationSelect[1])[
-                "dropdownArray"
-              ]
-            }
-            columnNames={
-              locationAttributesDataTableProps(locationSelect[1])["columnNames"]
-            }
-            controlInputs={
-              locationAttributesDataTableProps(locationSelect[1])[
-                "controlInputs"
-              ]
-            }
-            controlDatePickerInputs={
-              locationAttributesDataTableProps(locationSelect[1])[
-                "controlDatePickerInputs"
-              ]
-            }
-            radioNames={["ductIndicator", "bypassIndicator"]}
-            dataTableName={"Location Attribute"}
-            revertedState={revertedState}
-            setRevertedState={setRevertedState}
-          />,
-          "Location Attributes",
+          [
+            <DataTableAssert
+              locationSelectValue={locationSelect[1]}
+              inactive={inactive}
+              settingInactiveCheckBox={settingInactiveCheckBox}
+              checkout={checkout}
+              user={user}
+              payload={defaultsDataTableProps(locationSelect[1])["payload"]}
+              dropdownArray={
+                defaultsDataTableProps(locationSelect[1])["dropdownArray"]
+              }
+              columnNames={
+                defaultsDataTableProps(locationSelect[1])["columnNames"]
+              }
+              controlInputs={
+                defaultsDataTableProps(locationSelect[1])["controlInputs"]
+              }
+              controlDatePickerInputs={
+                defaultsDataTableProps(locationSelect[1])[
+                  "controlDatePickerInputs"
+                ]
+              }
+              dataTableName={"Default"}
+              revertedState={revertedState}
+              setRevertedState={setRevertedState}
+              setUpdateRelatedTables={setUpdateRelatedTables}
+              updateRelatedTables={updateRelatedTables}
+            />,
+            "Defaults",
+          ],
         ],
         [
-          <DataTableAssert
-            locationSelectValue={locationSelect[1]}
-            inactive={inactive}
-            settingInactiveCheckBox={settingInactiveCheckBox}
-            checkout={checkout}
-            user={user}
-            payload={relationshipDataTableProps(locationSelect[1])["payload"]}
-            dropdownArray={
-              relationshipDataTableProps(locationSelect[1])["dropdownArray"]
-            }
-            columnNames={
-              relationshipDataTableProps(locationSelect[1])["columnNames"]
-            }
-            controlInputs={
-              relationshipDataTableProps(locationSelect[1])["controlInputs"]
-            }
-            controlDatePickerInputs={
-              relationshipDataTableProps(locationSelect[1])[
-                "controlDatePickerInputs"
-              ]
-            }
-            radioNames={[]}
-            dataTableName={"Relationship Data"}
-            revertedState={revertedState}
-            nonEditable={true}
-            setRevertedState={setRevertedState}
-          />,
-          "Relationships Data",
-        ],
-      ], // location attributes
-      [
-        [
-          <DataTableMethod
-            locationSelectValue={locationSelect[1]}
-            checkout={checkout}
-            user={user}
-            inactive={inactive}
-            settingInactiveCheckBox={settingInactiveCheckBox}
-            revertedState={revertedState}
-            setRevertedState={setRevertedState}
-          />,
-          "Methods",
+          [
+            <DataTableAssert
+              locationSelectValue={locationSelect[1]}
+              inactive={inactive}
+              settingInactiveCheckBox={settingInactiveCheckBox}
+              checkout={checkout}
+              user={user}
+              payload={formulasDataTableProps(locationSelect[1])["payload"]}
+              dropdownArray={
+                formulasDataTableProps(locationSelect[1])["dropdownArray"]
+              }
+              columnNames={
+                formulasDataTableProps(locationSelect[1])["columnNames"]
+              }
+              controlInputs={
+                formulasDataTableProps(locationSelect[1])["controlInputs"]
+              }
+              controlDatePickerInputs={
+                formulasDataTableProps(locationSelect[1])[
+                  "controlDatePickerInputs"
+                ]
+              }
+              dataTableName={"Formula"}
+              revertedState={revertedState}
+              setRevertedState={setRevertedState}
+              setUpdateRelatedTables={setUpdateRelatedTables}
+              updateRelatedTables={updateRelatedTables}
+            />,
+            "Formulas",
+          ],
         ],
         [
-          <DataTableMats
-            locationSelectValue={locationSelect[1]}
-            checkout={checkout}
-            user={user}
-            inactive={inactive}
-            settingInactiveCheckBox={settingInactiveCheckBox}
-            revertedState={revertedState}
-            setRevertedState={setRevertedState}
-          />,
-          "Supplemental Methods",
+          [
+            <DataTableAssert
+              locationSelectValue={locationSelect[1]}
+              inactive={inactive}
+              settingInactiveCheckBox={settingInactiveCheckBox}
+              checkout={checkout}
+              user={user}
+              payload={loadsDataTableProps(locationSelect[1])["payload"]}
+              dropdownArray={
+                loadsDataTableProps(locationSelect[1])["dropdownArray"]
+              }
+              columnNames={
+                loadsDataTableProps(locationSelect[1])["columnNames"]
+              }
+              controlInputs={
+                loadsDataTableProps(locationSelect[1])["controlInputs"]
+              }
+              controlDatePickerInputs={
+                loadsDataTableProps(locationSelect[1])[
+                  "controlDatePickerInputs"
+                ]
+              }
+              radioNames={["secondNormalIndicator"]}
+              dataTableName={"Load"}
+              revertedState={revertedState}
+              setRevertedState={setRevertedState}
+              setUpdateRelatedTables={setUpdateRelatedTables}
+              updateRelatedTables={updateRelatedTables}
+            />,
+            "Loads",
+          ],
         ],
-      ],
-      [
         [
-          <DataTableQualifications
-            locationSelectValue={locationSelect[1]}
-            inactive={inactive}
-            settingInactiveCheckBox={settingInactiveCheckBox}
-            checkout={checkout}
-            user={user}
-            revertedState={revertedState}
-            setRevertedState={setRevertedState}
-          />,
-          "Qualifications",
+          [
+            <DataTableAssert
+              locationSelectValue={locationSelect[1]}
+              inactive={inactive}
+              settingInactiveCheckBox={settingInactiveCheckBox}
+              checkout={checkout}
+              user={user}
+              payload={
+                locationAttributesDataTableProps(locationSelect[1])["payload"]
+              }
+              dropdownArray={
+                locationAttributesDataTableProps(locationSelect[1])[
+                  "dropdownArray"
+                ]
+              }
+              columnNames={
+                locationAttributesDataTableProps(locationSelect[1])[
+                  "columnNames"
+                ]
+              }
+              controlInputs={
+                locationAttributesDataTableProps(locationSelect[1])[
+                  "controlInputs"
+                ]
+              }
+              controlDatePickerInputs={
+                locationAttributesDataTableProps(locationSelect[1])[
+                  "controlDatePickerInputs"
+                ]
+              }
+              radioNames={["ductIndicator", "bypassIndicator"]}
+              dataTableName={"Location Attribute"}
+              revertedState={revertedState}
+              setRevertedState={setRevertedState}
+              setUpdateRelatedTables={setUpdateRelatedTables}
+              updateRelatedTables={updateRelatedTables}
+            />,
+            "Location Attributes",
+          ],
+          [
+            <DataTableAssert
+              locationSelectValue={locationSelect[1]}
+              inactive={inactive}
+              settingInactiveCheckBox={settingInactiveCheckBox}
+              checkout={checkout}
+              user={user}
+              payload={relationshipDataTableProps(locationSelect[1])["payload"]}
+              dropdownArray={
+                relationshipDataTableProps(locationSelect[1])["dropdownArray"]
+              }
+              columnNames={
+                relationshipDataTableProps(locationSelect[1])["columnNames"]
+              }
+              controlInputs={
+                relationshipDataTableProps(locationSelect[1])["controlInputs"]
+              }
+              controlDatePickerInputs={
+                relationshipDataTableProps(locationSelect[1])[
+                  "controlDatePickerInputs"
+                ]
+              }
+              radioNames={[]}
+              dataTableName={"Relationship Data"}
+              revertedState={revertedState}
+              nonEditable={true}
+              setRevertedState={setRevertedState}
+              setUpdateRelatedTables={setUpdateRelatedTables}
+              updateRelatedTables={updateRelatedTables}
+            />,
+            "Relationships Data",
+          ],
+        ], // location attributes
+        [
+          [
+            <DataTableMethod
+              locationSelectValue={locationSelect[1]}
+              checkout={checkout}
+              user={user}
+              inactive={inactive}
+              settingInactiveCheckBox={settingInactiveCheckBox}
+              revertedState={revertedState}
+              setRevertedState={setRevertedState}
+              setUpdateRelatedTables={setUpdateRelatedTables}
+              updateRelatedTables={updateRelatedTables}
+            />,
+            "Methods",
+          ],
+          [
+            <DataTableMats
+              locationSelectValue={locationSelect[1]}
+              checkout={checkout}
+              user={user}
+              inactive={inactive}
+              settingInactiveCheckBox={settingInactiveCheckBox}
+              revertedState={revertedState}
+              setRevertedState={setRevertedState}
+              setUpdateRelatedTables={setUpdateRelatedTables}
+              updateRelatedTables={updateRelatedTables}
+            />,
+            "Supplemental Methods",
+          ],
         ],
-      ],
-      [
         [
-          <DataTableAssert
-            locationSelectValue={locationSelect[1]}
-            inactive={inactive}
-            settingInactiveCheckBox={settingInactiveCheckBox}
-            checkout={checkout}
-            user={user}
-            payload={rectWAFsDataTableProps(locationSelect[1])["payload"]}
-            dropdownArray={
-              rectWAFsDataTableProps(locationSelect[1])["dropdownArray"]
-            }
-            columnNames={
-              rectWAFsDataTableProps(locationSelect[1])["columnNames"]
-            }
-            controlInputs={
-              rectWAFsDataTableProps(locationSelect[1])["controlInputs"]
-            }
-            controlDatePickerInputs={
-              rectWAFsDataTableProps(locationSelect[1])[
-                "controlDatePickerInputs"
-              ]
-            }
-            dataTableName={"Rectangular Duct WAF"}
-            revertedState={revertedState}
-            setRevertedState={setRevertedState}
-          />,
+          [
+            <DataTableQualifications
+              locationSelectValue={locationSelect[1]}
+              inactive={inactive}
+              settingInactiveCheckBox={settingInactiveCheckBox}
+              checkout={checkout}
+              user={user}
+              revertedState={revertedState}
+              setRevertedState={setRevertedState}
+              setUpdateRelatedTables={setUpdateRelatedTables}
+              updateRelatedTables={updateRelatedTables}
+            />,
+            "Qualifications",
+          ],
+        ],
+        [
+          [
+            <DataTableAssert
+              locationSelectValue={locationSelect[1]}
+              inactive={inactive}
+              settingInactiveCheckBox={settingInactiveCheckBox}
+              checkout={checkout}
+              user={user}
+              payload={rectWAFsDataTableProps(locationSelect[1])["payload"]}
+              dropdownArray={
+                rectWAFsDataTableProps(locationSelect[1])["dropdownArray"]
+              }
+              columnNames={
+                rectWAFsDataTableProps(locationSelect[1])["columnNames"]
+              }
+              controlInputs={
+                rectWAFsDataTableProps(locationSelect[1])["controlInputs"]
+              }
+              controlDatePickerInputs={
+                rectWAFsDataTableProps(locationSelect[1])[
+                  "controlDatePickerInputs"
+                ]
+              }
+              dataTableName={"Rectangular Duct WAF"}
+              revertedState={revertedState}
+              setRevertedState={setRevertedState}
+              setUpdateRelatedTables={setUpdateRelatedTables}
+              updateRelatedTables={updateRelatedTables}
+            />,
 
-          "WAFs Rectangular Duct",
-        ],
-      ], // rectangular duct
+            "WAFs Rectangular Duct",
+          ],
+        ], // rectangular duct
 
-      [
         [
-          <DataTableAssert
-            locationSelectValue={locationSelect[1]}
-            inactive={inactive}
-            settingInactiveCheckBox={settingInactiveCheckBox}
-            checkout={checkout}
-            user={user}
-            payload={spanDataTableProps(locationSelect[1])["payload"]}
-            dropdownArray={
-              spanDataTableProps(locationSelect[1])["dropdownArray"]
-            }
-            columnNames={spanDataTableProps(locationSelect[1])["columnNames"]}
-            controlInputs={
-              spanDataTableProps(locationSelect[1])["controlInputs"]
-            }
-            controlDatePickerInputs={
-              spanDataTableProps(locationSelect[1])["controlDatePickerInputs"]
-            }
-            dataTableName={"Span"}
-            revertedState={revertedState}
-            setRevertedState={setRevertedState}
-          />,
-          "Spans",
+          [
+            <DataTableAssert
+              locationSelectValue={locationSelect[1]}
+              inactive={inactive}
+              settingInactiveCheckBox={settingInactiveCheckBox}
+              checkout={checkout}
+              user={user}
+              payload={spanDataTableProps(locationSelect[1])["payload"]}
+              dropdownArray={
+                spanDataTableProps(locationSelect[1])["dropdownArray"]
+              }
+              columnNames={spanDataTableProps(locationSelect[1])["columnNames"]}
+              controlInputs={
+                spanDataTableProps(locationSelect[1])["controlInputs"]
+              }
+              controlDatePickerInputs={
+                spanDataTableProps(locationSelect[1])["controlDatePickerInputs"]
+              }
+              dataTableName={"Span"}
+              revertedState={revertedState}
+              setRevertedState={setRevertedState}
+              setUpdateRelatedTables={setUpdateRelatedTables}
+              updateRelatedTables={updateRelatedTables}
+            />,
+            "Spans",
+          ],
         ],
-      ],
 
-      [
         [
-          <DataTableSystems
-            locationSelectValue={locationSelect[1]}
-            inactive={inactive}
-            settingInactiveCheckBox={settingInactiveCheckBox}
-            checkout={checkout}
-            user={user}
-            revertedState={revertedState}
-            setRevertedState={setRevertedState}
-          />,
-          "Systems",
-        ],
-      ],
-      [
-        [
-          <DataTableAssert
-            locationSelectValue={locationSelect[1]}
-            selectedLocation={locations.find(
-              (element) => element.id === locationSelect[1]
-            )}
-            payload={
-              unitFuelDataTableProps(
-                locations.find((element) => element.id === locationSelect[1])
-              )["payload"]
-            }
-            dropdownArray={
-              unitFuelDataTableProps(
-                locations.find((element) => element.id === locationSelect[1])
-              )["dropdownArray"]
-            }
-            columnNames={
-              unitFuelDataTableProps(
-                locations.find((element) => element.id === locationSelect[1])
-              )["columnNames"]
-            }
-            controlInputs={
-              unitFuelDataTableProps(
-                locations.find((element) => element.id === locationSelect[1])
-              )["controlInputs"]
-            }
-            controlDatePickerInputs={
-              unitFuelDataTableProps(
-                locations.find((element) => element.id === locationSelect[1])
-              )["controlDatePickerInputs"]
-            }
-            urlParameters={
-              unitFuelDataTableProps(
-                locations.find((element) => element.id === locationSelect[1])
-              )["urlParameters"]
-            }
-            dataTableName={"Unit Fuel"}
-            radioNames={["ozoneSeasonIndicator"]}
-            checkout={checkout}
-            user={user}
-            inactive={inactive}
-            settingInactiveCheckBox={settingInactiveCheckBox}
-            revertedState={revertedState}
-            setRevertedState={setRevertedState}
-          />,
-          "Unit Fuels",
+          [
+            <DataTableSystems
+              locationSelectValue={locationSelect[1]}
+              inactive={inactive}
+              settingInactiveCheckBox={settingInactiveCheckBox}
+              checkout={checkout}
+              user={user}
+              revertedState={revertedState}
+              setRevertedState={setRevertedState}
+              setUpdateRelatedTables={setUpdateRelatedTables}
+              updateRelatedTables={updateRelatedTables}
+            />,
+            "Systems",
+          ],
         ],
         [
-          <DataTableAssert
-            locationSelectValue={locationSelect[1]}
-            selectedLocation={locations.find(
-              (element) => element.id === locationSelect[1]
-            )}
-            payload={
-              unitControlDataTableProps(
-                locationSelect[1],
-                locations.find((element) => element.id === locationSelect[1])
-              )["payload"]
-            }
-            dropdownArray={
-              unitControlDataTableProps(
-                locationSelect[1],
-                locations.find((element) => element.id === locationSelect[1])
-              )["dropdownArray"]
-            }
-            columnNames={
-              unitControlDataTableProps(
-                locationSelect[1],
-                locations.find((element) => element.id === locationSelect[1])
-              )["columnNames"]
-            }
-            controlInputs={
-              unitControlDataTableProps(
-                locationSelect[1],
-                locations.find((element) => element.id === locationSelect[1])
-              )["controlInputs"]
-            }
-            controlDatePickerInputs={
-              unitControlDataTableProps(
-                locationSelect[1],
-                locations.find((element) => element.id === locationSelect[1])
-              )["controlDatePickerInputs"]
-            }
-            urlParameters={
-              unitControlDataTableProps(
-                locationSelect[1],
-                locations.find((element) => element.id === locationSelect[1])
-              )["urlParameters"]
-            }
-            radioNames={["originalCode", "seasonalControlsIndicator"]}
-            dataTableName={"Unit Control"}
-            checkout={checkout}
-            user={user}
-            inactive={inactive}
-            settingInactiveCheckBox={settingInactiveCheckBox}
-            revertedState={revertedState}
-            setRevertedState={setRevertedState}
-          />,
-          "Unit Controls",
-        ],
-        [
-          <DataTableAssert
-            locationSelectValue={locationSelect[1]}
-            selectedLocation={locations.find(
-              (element) => element.id === locationSelect[1]
-            )}
-            payload={
-              unitCapacityDataTableProps(
-                locationSelect[1],
-                locations.find((element) => element.id === locationSelect[1])
-              )["payload"]
-            }
-            dropdownArray={
-              unitCapacityDataTableProps(
-                locationSelect[1],
-                locations.find((element) => element.id === locationSelect[1])
-              )["dropdownArray"]
-            }
-            columnNames={
-              unitCapacityDataTableProps(
-                locationSelect[1],
-                locations.find((element) => element.id === locationSelect[1])
-              )["columnNames"]
-            }
-            controlInputs={
-              unitCapacityDataTableProps(
-                locationSelect[1],
-                locations.find((element) => element.id === locationSelect[1])
-              )["controlInputs"]
-            }
-            controlDatePickerInputs={
-              unitCapacityDataTableProps(
-                locationSelect[1],
-                locations.find((element) => element.id === locationSelect[1])
-              )["controlDatePickerInputs"]
-            }
-            urlParameters={
-              unitCapacityDataTableProps(
-                locationSelect[1],
-                locations.find((element) => element.id === locationSelect[1])
-              )["urlParameters"]
-            }
-            dataTableName={"Unit Capacity"}
-            checkout={checkout}
-            user={user}
-            inactive={inactive}
-            settingInactiveCheckBox={settingInactiveCheckBox}
-            revertedState={revertedState}
-            setRevertedState={setRevertedState}
-          />,
-          "Unit Capacities",
-        ],
-      ], // unit info
-    ];
-    setTableState(tableArr);
+          [
+            <DataTableAssert
+              locationSelectValue={locationSelect[1]}
+              selectedLocation={locations.find(
+                (element) => element.id === locationSelect[1]
+              )}
+              payload={
+                unitFuelDataTableProps(
+                  locations.find((element) => element.id === locationSelect[1])
+                )["payload"]
+              }
+              dropdownArray={
+                unitFuelDataTableProps(
+                  locations.find((element) => element.id === locationSelect[1])
+                )["dropdownArray"]
+              }
+              columnNames={
+                unitFuelDataTableProps(
+                  locations.find((element) => element.id === locationSelect[1])
+                )["columnNames"]
+              }
+              controlInputs={
+                unitFuelDataTableProps(
+                  locations.find((element) => element.id === locationSelect[1])
+                )["controlInputs"]
+              }
+              controlDatePickerInputs={
+                unitFuelDataTableProps(
+                  locations.find((element) => element.id === locationSelect[1])
+                )["controlDatePickerInputs"]
+              }
+              urlParameters={
+                unitFuelDataTableProps(
+                  locations.find((element) => element.id === locationSelect[1])
+                )["urlParameters"]
+              }
+              dataTableName={"Unit Fuel"}
+              radioNames={["ozoneSeasonIndicator"]}
+              checkout={checkout}
+              user={user}
+              inactive={inactive}
+              settingInactiveCheckBox={settingInactiveCheckBox}
+              revertedState={revertedState}
+              setRevertedState={setRevertedState}
+              setUpdateRelatedTables={setUpdateRelatedTables}
+              updateRelatedTables={updateRelatedTables}
+            />,
+            "Unit Fuels",
+          ],
+          [
+            <DataTableAssert
+              locationSelectValue={locationSelect[1]}
+              selectedLocation={locations.find(
+                (element) => element.id === locationSelect[1]
+              )}
+              payload={
+                unitControlDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["payload"]
+              }
+              dropdownArray={
+                unitControlDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["dropdownArray"]
+              }
+              columnNames={
+                unitControlDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["columnNames"]
+              }
+              controlInputs={
+                unitControlDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["controlInputs"]
+              }
+              controlDatePickerInputs={
+                unitControlDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["controlDatePickerInputs"]
+              }
+              urlParameters={
+                unitControlDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["urlParameters"]
+              }
+              radioNames={["originalCode", "seasonalControlsIndicator"]}
+              dataTableName={"Unit Control"}
+              checkout={checkout}
+              user={user}
+              inactive={inactive}
+              settingInactiveCheckBox={settingInactiveCheckBox}
+              revertedState={revertedState}
+              setRevertedState={setRevertedState}
+              setUpdateRelatedTables={setUpdateRelatedTables}
+              updateRelatedTables={updateRelatedTables}
+            />,
+            "Unit Controls",
+          ],
+          [
+            <DataTableAssert
+              locationSelectValue={locationSelect[1]}
+              selectedLocation={locations.find(
+                (element) => element.id === locationSelect[1]
+              )}
+              payload={
+                unitCapacityDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["payload"]
+              }
+              dropdownArray={
+                unitCapacityDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["dropdownArray"]
+              }
+              columnNames={
+                unitCapacityDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["columnNames"]
+              }
+              controlInputs={
+                unitCapacityDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["controlInputs"]
+              }
+              controlDatePickerInputs={
+                unitCapacityDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["controlDatePickerInputs"]
+              }
+              urlParameters={
+                unitCapacityDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["urlParameters"]
+              }
+              dataTableName={"Unit Capacity"}
+              checkout={checkout}
+              user={user}
+              inactive={inactive}
+              settingInactiveCheckBox={settingInactiveCheckBox}
+              revertedState={revertedState}
+              setRevertedState={setRevertedState}
+              setUpdateRelatedTables={setUpdateRelatedTables}
+              updateRelatedTables={updateRelatedTables}
+            />,
+            "Unit Capacities",
+          ],
+        ], // unit info
+      ];
+      setTableState(tableArr);
+    },
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelect[1], inactive[0], checkout, revertedState]);
+    [
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      locationSelect[1],
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      inactive[0],
+      checkout,
+      revertedState,
+      updateRelatedTables,
+    ]
+  );
 
   // sets initial state
   // only need to initial methods since it is the default, everything else will update with above usestate
@@ -495,6 +543,8 @@ export const MonitoringPlanTabRender = ({
           settingInactiveCheckBox={settingInactiveCheckBox}
           revertedState={revertedState}
           setRevertedState={setRevertedState}
+          setUpdateRelatedTables={setUpdateRelatedTables}
+          updateRelatedTables={updateRelatedTables}
         />,
         "Methods",
       ],
@@ -507,6 +557,8 @@ export const MonitoringPlanTabRender = ({
           settingInactiveCheckBox={settingInactiveCheckBox}
           revertedState={revertedState}
           setRevertedState={setRevertedState}
+          setUpdateRelatedTables={setUpdateRelatedTables}
+          updateRelatedTables={updateRelatedTables}
         />,
         "Supplemental Methods",
       ],

@@ -38,6 +38,8 @@ export const DataTableMats = ({
   setRevertedState,
   inactive,
   settingInactiveCheckBox,
+  setUpdateRelatedTables,
+  updateRelatedTables,
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [matsMethods, setMatsMethods] = useState([]);
@@ -53,7 +55,8 @@ export const DataTableMats = ({
       updateTable ||
       matsMethods.length <= 0 ||
       locationSelectValue ||
-      revertedState
+      revertedState ||
+      updateRelatedTables
     ) {
       mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
         setMatsMethods(res.data);
@@ -61,11 +64,12 @@ export const DataTableMats = ({
           setMethods(mets.data);
           setUpdateTable(false);
           setDataLoaded(true);
+          setUpdateRelatedTables(false);
         });
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, updateTable, revertedState]);
+  }, [locationSelectValue, updateTable, revertedState, updateRelatedTables]);
 
   // load dropdowns data (called once)
   useEffect(() => {
@@ -163,6 +167,7 @@ export const DataTableMats = ({
         console.log(result);
         setShow(false);
         setUpdateTable(true);
+        setUpdateRelatedTables(true);
       })
       .catch((error) => {
         console.log(error);
@@ -176,6 +181,7 @@ export const DataTableMats = ({
       .then((result) => {
         setShow(false);
         setUpdateTable(true);
+        setUpdateRelatedTables(true);
       })
       .catch((error) => {
         console.log(error);

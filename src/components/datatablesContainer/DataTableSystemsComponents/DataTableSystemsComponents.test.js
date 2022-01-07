@@ -254,6 +254,7 @@ const componentRenderer = (
     mdmData: {
       testCode: [],
     },
+    systemComponentsMdmData: { testCode: [] },
   };
   return render(<DataTableSystemsComponents {...props} />);
 };

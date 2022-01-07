@@ -240,6 +240,8 @@ const props = {
   dataTableName: "Span",
   selectedLocation: 5,
   showModal: false,
+  setUpdateRelatedTables: jest.fn(),
+  updateRelatedTables: false,
 };
 
 const componentTypeCode = {};

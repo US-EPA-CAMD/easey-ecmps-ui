@@ -47,6 +47,8 @@ export const DataTableAssert = ({
   dataTableName,
   selectedLocation,
   showModal = false,
+  setUpdateRelatedTables,
+  updateRelatedTables,
 }) => {
   const [dataPulled, setDataPulled] = useState([]);
   const [show, setShow] = useState(showModal);
@@ -87,7 +89,8 @@ export const DataTableAssert = ({
       updateTable ||
       dataPulled.length <= 0 ||
       locationSelectValue ||
-      revertedState
+      revertedState ||
+      updateRelatedTables
     ) {
       assertSelector
         .getDataTableApis(dataTableName, locationSelectValue, selectedLocation)
@@ -136,13 +139,20 @@ export const DataTableAssert = ({
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, updateTable, revertedState, dataTableName]);
+  }, [
+    locationSelectValue,
+    updateTable,
+    revertedState,
+    dataTableName,
+    updateRelatedTables,
+  ]);
 
   const finishedLoadingData = (loadedData) => {
     setDataPulled(loadedData);
     setDataLoaded(true);
     setUpdateTable(false);
     setRevertedState(false);
+    setUpdateRelatedTables(false);
   };
 
   useEffect(() => {
@@ -215,7 +225,7 @@ export const DataTableAssert = ({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataPulled, inactive, updateTable]);
+  }, [dataLoaded, dataPulled, inactive, updateTable]);
 
   const saveData = () => {
     const userInput = extractUserInput(
@@ -233,7 +243,9 @@ export const DataTableAssert = ({
       )
       .then(() => {
         setShow(false);
+        setDataLoaded(false);
         setUpdateTable(true);
+        setUpdateRelatedTables(true);
       });
   };
 
@@ -253,7 +265,9 @@ export const DataTableAssert = ({
       )
       .then(() => {
         setShow(false);
+        setDataLoaded(false);
         setUpdateTable(true);
+        setUpdateRelatedTables(true);
       });
   };
 
