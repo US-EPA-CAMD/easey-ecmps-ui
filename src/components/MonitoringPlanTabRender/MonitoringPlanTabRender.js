@@ -51,7 +51,7 @@ export const MonitoringPlanTabRender = ({
 
   // updates all tables whenever a location is changed
   useEffect(() => {
-    let tableArr = [
+    const tableArr = [
       [
         [
           <DataTableAssert

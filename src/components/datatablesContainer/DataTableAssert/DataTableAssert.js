@@ -57,17 +57,26 @@ export const DataTableAssert = ({
 
   const [updateTable, setUpdateTable] = useState(false);
   const [complimentaryData, setComplimentaryData] = useState([]);
+
+  // Unit Information variables
+  const uCon = "Unit Control";
+  const uFuel = "Unit Fuel";
+  const uCap = "Unit Capacity";
   const unitInfoDict = {
-    "Unit Control": ["Unit Fuel", "Unit Capacity"],
-    "Unit Fuel": ["Unit Control", "Unit Capacity"],
-    "Unit Capacity": ["Unit Fuel", "Unit Control"],
+    "Unit Control": [uFuel, uCap],
+    "Unit Fuel": [uCon, uCap],
+    "Unit Capacity": [uFuel, uCon],
   };
-  const unitInfoTables = ["Unit Control", "Unit Fuel", "Unit Capacity"];
+  const unitInfoTables = [uCon, uFuel, uCap];
+
+  // Location Attributes & Relationship Data variables
+  const lAttr = "Location Attribute";
+  const rDat = "Relationship Data";
   const locAttAndRelDataDict = {
-    "Location Attribute": "Relationship Data",
-    "Relationship Data": "Location Attribute",
+    "Location Attribute": rDat,
+    "Relationship Data": lAttr,
   };
-  const locAttAndRelDataTables = ["Location Attribute", "Relationship Data"];
+  const locAttAndRelDataTables = [lAttr, rDat];
 
   useEffect(() => {
     setDataLoaded(false);
@@ -197,8 +206,7 @@ export const DataTableAssert = ({
   // Setting "Show Inactive" checkbox disabled & checked statuses based on records
   useEffect(() => {
     if (
-      dataTableName === "Location Attribute" ||
-      dataTableName === "Relationship Data" ||
+      locAttAndRelDataTables.includes(dataTableName) ||
       unitInfoTables.includes(dataTableName)
     ) {
       inactiveCheckboxFiltering(dataPulled.concat(complimentaryData), true);

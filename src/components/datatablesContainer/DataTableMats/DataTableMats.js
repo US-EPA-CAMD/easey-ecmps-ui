@@ -57,8 +57,8 @@ export const DataTableMats = ({
     ) {
       mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
         setMatsMethods(res.data);
-        mpApi.getMonitoringMethods(locationSelectValue).then((methods) => {
-          setMethods(methods.data);
+        mpApi.getMonitoringMethods(locationSelectValue).then((mets) => {
+          setMethods(mets.data);
           setUpdateTable(false);
           setDataLoaded(true);
         });
