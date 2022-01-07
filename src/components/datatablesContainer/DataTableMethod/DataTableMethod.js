@@ -37,6 +37,8 @@ export const DataTableMethod = ({
   revertedState,
   setRevertedState,
   showModal = false,
+  setUpdateRelatedTables,
+  updateRelatedTables,
 }) => {
   const [methods, setMethods] = useState([]);
   const [matsMethods, setMatsMethods] = useState([]);
@@ -62,7 +64,8 @@ export const DataTableMethod = ({
       updateTable ||
       methods.length <= 0 ||
       locationSelectValue ||
-      revertedState
+      revertedState ||
+      updateRelatedTables
     ) {
       mpApi.getMonitoringMethods(locationSelectValue).then((methodRes) => {
         setMethods(methodRes.data);
@@ -71,11 +74,12 @@ export const DataTableMethod = ({
           setMatsMethods(matRes.data);
           setUpdateTable(false);
           setRevertedState(false);
+          setUpdateRelatedTables(false);
         });
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, updateTable, revertedState]);
+  }, [locationSelectValue, updateTable, revertedState, updateRelatedTables]);
 
   // load dropdowns data (called when mdmData changes)
   useEffect(() => {
@@ -228,6 +232,7 @@ export const DataTableMethod = ({
         // openModal(false);
         setShow(false);
         setUpdateTable(true);
+        setUpdateRelatedTables(true);
       })
       .catch((error) => {
         console.log("error is", error);
@@ -246,6 +251,7 @@ export const DataTableMethod = ({
         // openModal(false);
         setShow(false);
         setUpdateTable(true);
+        setUpdateRelatedTables(true);
       })
       .catch((error) => {
         console.log("error is", error);
