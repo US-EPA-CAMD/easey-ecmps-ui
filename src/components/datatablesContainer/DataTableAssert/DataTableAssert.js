@@ -56,6 +56,18 @@ export const DataTableAssert = ({
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
   const [updateTable, setUpdateTable] = useState(false);
+  const [complimentaryData, setComplimentaryData] = useState([]);
+  const unitInfoDict = {
+    "Unit Control": ["Unit Fuel", "Unit Capacity"],
+    "Unit Fuel": ["Unit Control", "Unit Capacity"],
+    "Unit Capacity": ["Unit Fuel", "Unit Control"],
+  };
+  const unitInfoTables = ["Unit Control", "Unit Fuel", "Unit Capacity"];
+  const locAttAndRelDataDict = {
+    "Location Attribute": "Relationship Data",
+    "Relationship Data": "Location Attribute",
+  };
+  const locAttAndRelDataTables = ["Location Attribute", "Relationship Data"];
 
   useEffect(() => {
     setDataLoaded(false);
@@ -71,20 +83,58 @@ export const DataTableAssert = ({
       assertSelector
         .getDataTableApis(dataTableName, locationSelectValue, selectedLocation)
         .then((res) => {
-          setDataPulled(res.data);
-          setDataLoaded(true);
-          setUpdateTable(true);
-          setRevertedState(false);
+          // Location Attributes & Relationship Data tables
+          if (locAttAndRelDataTables.includes(dataTableName)) {
+            assertSelector
+              .getDataTableApis(
+                locAttAndRelDataDict[dataTableName],
+                locationSelectValue,
+                selectedLocation
+              )
+              .then((locAtt) => {
+                setComplimentaryData(locAtt.data);
+                finishedLoadingData(res.data);
+              });
+          }
+
+          // Unit Information tables
+          else if (unitInfoTables.includes(dataTableName)) {
+            assertSelector
+              .getDataTableApis(
+                unitInfoDict[dataTableName][0],
+                locationSelectValue,
+                selectedLocation
+              )
+              .then((sec) => {
+                const secondTableData = sec.data;
+                assertSelector
+                  .getDataTableApis(
+                    unitInfoDict[dataTableName][1],
+                    locationSelectValue,
+                    selectedLocation
+                  )
+                  .then((third) => {
+                    const thirdTableData = third.data;
+                    setComplimentaryData(
+                      secondTableData.concat(thirdTableData)
+                    );
+                    finishedLoadingData(res.data);
+                  });
+              });
+          } else {
+            finishedLoadingData(res.data);
+          }
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    locationSelectValue,
-    updateTable,
-    revertedState,
-    dataTableName,
-    inactive,
-  ]);
+  }, [locationSelectValue, updateTable, revertedState, dataTableName]);
+
+  const finishedLoadingData = (loadedData) => {
+    setDataPulled(loadedData);
+    setDataLoaded(true);
+    setUpdateTable(false);
+    setRevertedState(false);
+  };
 
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
@@ -96,28 +146,30 @@ export const DataTableAssert = ({
   }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
 
   const [displayedRecords, setDisplayedRecords] = useState([]);
-  useEffect(() => {
-    if (dataPulled.length > 0) {
-      const activeRecords = getActiveData(dataPulled);
-      const inactiveRecords = getInactiveData(dataPulled);
+
+  const inactiveCheckboxFiltering = (records, multiTable) => {
+    if (records.length > 0) {
+      const activeRecords = getActiveData(records);
+      const inactiveRecords = getInactiveData(records);
+      const display = multiTable ? dataPulled : records;
 
       // Note: settingInactiveCheckbox -> function parameters ( check flag, disable flag )
 
       // if ONLY ACTIVE records return,
-      if (activeRecords.length === dataPulled.length) {
+      if (activeRecords.length === records.length) {
         // then disable the inactive checkbox and set it as un-checked
         settingInactiveCheckBox(false, true);
         setDisplayedRecords(
-          assertSelector.getDataTableRecords(dataPulled, dataTableName)
+          assertSelector.getDataTableRecords(display, dataTableName)
         );
       }
 
       // if ONLY INACTIVE records return
-      else if (inactiveRecords.length === dataPulled.length) {
+      else if (inactiveRecords.length === records.length) {
         // then disable the inactive checkbox and set it as checked
         settingInactiveCheckBox(true, true);
         setDisplayedRecords(
-          assertSelector.getDataTableRecords(dataPulled, dataTableName)
+          assertSelector.getDataTableRecords(display, dataTableName)
         );
       }
 
@@ -128,7 +180,7 @@ export const DataTableAssert = ({
 
         setDisplayedRecords(
           assertSelector.getDataTableRecords(
-            !inactive[0] ? getActiveData(dataPulled) : dataPulled,
+            !inactive[0] ? getActiveData(display) : display,
             dataTableName
           )
         );
@@ -139,6 +191,19 @@ export const DataTableAssert = ({
       // disable the inactive checkbox and set it as un-checked
       settingInactiveCheckBox(false, true);
       setDisplayedRecords([]);
+    }
+  };
+
+  // Setting "Show Inactive" checkbox disabled & checked statuses based on records
+  useEffect(() => {
+    if (
+      dataTableName === "Location Attribute" ||
+      dataTableName === "Relationship Data" ||
+      unitInfoTables.includes(dataTableName)
+    ) {
+      inactiveCheckboxFiltering(dataPulled.concat(complimentaryData), true);
+    } else {
+      inactiveCheckboxFiltering(dataPulled, false);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
