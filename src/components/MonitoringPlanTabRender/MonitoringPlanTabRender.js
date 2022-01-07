@@ -49,10 +49,6 @@ export const MonitoringPlanTabRender = ({
 
   const [revertedState, setRevertedState] = useState(false);
 
-  useEffect(() => {
-    console.log("inactive changes to: ", { inactive });
-  }, [inactive]);
-
   // updates all tables whenever a location is changed
   useEffect(() => {
     let tableArr = [
