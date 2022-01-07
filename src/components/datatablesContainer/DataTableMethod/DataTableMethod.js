@@ -30,7 +30,6 @@ export const DataTableMethod = ({
   mdmData,
   loadDropdownsData,
   locationSelectValue,
-  matsTableHandler,
   user,
   checkout,
   inactive,
@@ -187,7 +186,6 @@ export const DataTableMethod = ({
   const data = useMemo(() => {
     const matsAndMethods = matsMethods.concat(methods);
     if (matsAndMethods.length > 0) {
-      console.log(matsAndMethods);
       const activeOnly = getActiveData(matsAndMethods);
       const inactiveOnly = getInactiveData(matsAndMethods);
 
@@ -212,20 +210,13 @@ export const DataTableMethod = ({
           !inactive[0] ? getActiveData(methods) : methods
         );
       }
+    } else {
+      settingInactiveCheckBox(false, true);
+      return [];
     }
-    return [];
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [methods, matsMethods, inactive, updateTable]);
-
-  useEffect(() => {
-    if (matsTableHandler) {
-      if (matsMethods.length < 1) {
-        matsTableHandler(false);
-      } else {
-        matsTableHandler(true);
-      }
-    }
-  }, [matsMethods.length, matsTableHandler]);
 
   const saveMethods = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");

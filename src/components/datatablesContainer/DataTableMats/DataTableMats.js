@@ -37,10 +37,11 @@ export const DataTableMats = ({
   revertedState,
   setRevertedState,
   inactive,
-  // settingInactiveCheckBox,
+  settingInactiveCheckBox,
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [matsMethods, setMatsMethods] = useState([]);
+  const [methods, setMethods] = useState([]);
   const [show, setShow] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
 
@@ -56,9 +57,12 @@ export const DataTableMats = ({
     ) {
       mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
         setMatsMethods(res.data);
-        setDataLoaded(true);
+        mpApi.getMonitoringMethods(locationSelectValue).then((methods) => {
+          setMethods(methods.data);
+          setUpdateTable(false);
+          setDataLoaded(true);
+        });
       });
-      setUpdateTable(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
@@ -95,31 +99,45 @@ export const DataTableMats = ({
     endHour: 0,
   };
   const data = useMemo(() => {
-    if (matsMethods.length > 0) {
-      const activeOnly = getActiveData(matsMethods);
-      const inactiveOnly = getInactiveData(matsMethods);
+    const matsAndMethods = matsMethods.concat(methods);
+    if (matsAndMethods.length > 0) {
+      const activeOnly = getActiveData(matsAndMethods);
+      const inactiveOnly = getInactiveData(matsAndMethods);
+      // Note: settingInactiveCheckbox -> function parameters ( check flag, disable flag )
 
-      // only active data >  disable checkbox and unchecks it
-      if (activeOnly.length === matsMethods.length) {
-        // uncheck it and disable checkbox
-        //function parameters ( check flag, disable flag )
+      // if ONLY ACTIVE records return,
+      if (activeOnly.length === matsAndMethods.length) {
+        // then disable the inactive checkbox and set it as un-checked
+        settingInactiveCheckBox(false, true);
         return fs.getMonitoringPlansMatsMethodsTableRecords(matsMethods);
       }
 
-      // only inactive data > disables checkbox and checks it
-      else if (inactiveOnly.length === matsMethods.length) {
+      // if ONLY INACTIVE records return
+      else if (inactiveOnly.length === matsAndMethods.length) {
+        // then disable the inactive checkbox and set it as checked
+        settingInactiveCheckBox(true, true);
         return fs.getMonitoringPlansMatsMethodsTableRecords(matsMethods);
       }
-      // resets checkbox
+
+      // if BOTH ACTIVE & INACTIVE records return
       else {
+        // then enable the inactive checkbox (user can mark it as checked/un-checked manually)
+        settingInactiveCheckBox(inactive[0], false);
         return fs.getMonitoringPlansMatsMethodsTableRecords(
           !inactive[0] ? getActiveData(matsMethods) : matsMethods
         );
       }
     }
-    return [];
+
+    // if NO RECORDS are returned
+    else {
+      // disable the inactive checkbox and set it as un-checked
+      settingInactiveCheckBox(false, true);
+      return [];
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [matsMethods, inactive, updateTable]);
+  }, [matsMethods, methods, inactive, updateTable]);
   const testing = () => {
     openMatsModal(false, false, true);
     saveMats();

@@ -33,7 +33,7 @@ export const DataTableAssert = ({
   settingInactiveCheckBox,
   revertedState,
   setRevertedState,
-  nonEditable,
+  nonEditable = false,
 
   pagination,
   filter,
@@ -56,7 +56,11 @@ export const DataTableAssert = ({
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
   const [updateTable, setUpdateTable] = useState(false);
-  // need to test this part to fully test the page
+
+  useEffect(() => {
+    setDataLoaded(false);
+  }, [dataTableName]);
+
   useEffect(() => {
     if (
       updateTable ||
@@ -64,14 +68,23 @@ export const DataTableAssert = ({
       locationSelectValue ||
       revertedState
     ) {
-      setDataLoaded(false);
-      getDataTableApi(dataTableName, locationSelectValue, selectedLocation);
-
-      setUpdateTable(false);
-      setRevertedState(false);
+      assertSelector
+        .getDataTableApis(dataTableName, locationSelectValue, selectedLocation)
+        .then((res) => {
+          setDataPulled(res.data);
+          setDataLoaded(true);
+          setUpdateTable(true);
+          setRevertedState(false);
+        });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, updateTable, revertedState, dataTableName]);
+  }, [
+    locationSelectValue,
+    updateTable,
+    revertedState,
+    dataTableName,
+    inactive,
+  ]);
 
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
@@ -82,20 +95,57 @@ export const DataTableAssert = ({
     }
   }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
 
-  // get API for data
-  // in  a timer because WAFS get takes a lil bit exxtra time to process, fixes update of datatable after editing data
-  const getDataTableApi = (name, location, selectedLocationParameter) => {
-    let timerFunc = setTimeout(() => {
-      assertSelector
-        .getDataTableApis(name, location, selectedLocationParameter)
-        .then((res) => {
-          setDataPulled(res.data);
-          setDataLoaded(true);
-        });
-    }, [500]);
-    setUpdateTable(true);
-    return () => clearTimeout(timerFunc);
-  };
+  const [displayedRecords, setDisplayedRecords] = useState([]);
+  useEffect(() => {
+    if (dataPulled.length > 0) {
+      const activeRecords = getActiveData(dataPulled);
+      const inactiveRecords = getInactiveData(dataPulled);
+      console.log({ activeRecords });
+      console.log({ inactiveRecords });
+
+      // Note: settingInactiveCheckbox -> function parameters ( check flag, disable flag )
+
+      // if ONLY ACTIVE records return,
+      if (activeRecords.length === dataPulled.length) {
+        // then disable the inactive checkbox and set it as un-checked
+        settingInactiveCheckBox(false, true);
+        setDisplayedRecords(
+          assertSelector.getDataTableRecords(dataPulled, dataTableName)
+        );
+      }
+
+      // if ONLY INACTIVE records return
+      else if (inactiveRecords.length === dataPulled.length) {
+        // then disable the inactive checkbox and set it as checked
+        settingInactiveCheckBox(true, true);
+        setDisplayedRecords(
+          assertSelector.getDataTableRecords(dataPulled, dataTableName)
+        );
+      }
+
+      // if BOTH ACTIVE & INACTIVE records return
+      else {
+        // then enable the inactive checkbox (user can mark it as checked/un-checked manually)
+        console.log({ settingInactiveCheckBox });
+        settingInactiveCheckBox(inactive[0], false);
+
+        setDisplayedRecords(
+          assertSelector.getDataTableRecords(
+            !inactive[0] ? getActiveData(dataPulled) : dataPulled,
+            dataTableName
+          )
+        );
+      }
+    }
+    // if NO RECORDS are returned
+    else {
+      // disable the inactive checkbox and set it as un-checked
+      settingInactiveCheckBox(false, true);
+      setDisplayedRecords([]);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataPulled, inactive, updateTable]);
 
   const saveData = () => {
     const userInput = extractUserInput(
@@ -183,61 +233,6 @@ export const DataTableAssert = ({
     }
   };
 
-  const [dataSet, setDataSet] = useState([]);
-  useEffect(() => {
-    if (dataPulled.length > 0) {
-      console.log({ inactive });
-      const activeRecords = getActiveData(dataPulled);
-      const inactiveRecords = getInactiveData(dataPulled);
-      // Note: settingInactiveCheckbox -> function parameters ( check flag, disable flag )
-
-      // if ONLY ACTIVE records return,
-      if (activeRecords.length === dataPulled.length) {
-        // then disable the inactive checkbox and set it as un-checked
-        settingInactiveCheckBox(false, true);
-        setDataSet(
-          assertSelector.getDataTableRecords(dataPulled, dataTableName)
-        );
-      }
-
-      // if ONLY INACTIVE records return
-      else if (inactiveRecords.length === dataPulled.length) {
-        // then disable the inactive checkbox and set it as checked
-        settingInactiveCheckBox(true, true);
-        setDataSet(
-          assertSelector.getDataTableRecords(dataPulled, dataTableName)
-        );
-      }
-
-      // if BOTH ACTIVE & INACTIVE records return
-      else {
-        // then enable the inactive checkbox (user can mark it as checked/un-checked manually)
-        settingInactiveCheckBox(inactive[0], false);
-        setDataSet(
-          assertSelector.getDataTableRecords(
-            !inactive[0] ? getActiveData(dataPulled) : dataPulled,
-            dataTableName
-          )
-        );
-      }
-    }
-
-    // If NO RECORDS are returned
-    else {
-      // disable the inactive checkbox and set it as un-checked
-      settingInactiveCheckBox(false, true);
-      setDataSet([]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    dataPulled,
-    inactive,
-    locationSelectValue,
-    dataTableName,
-    updateTable,
-    revertedState,
-  ]);
-
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -245,7 +240,7 @@ export const DataTableAssert = ({
       <DataTableRender
         openHandler={openModal}
         columnNames={columnNames}
-        data={dataSet}
+        data={displayedRecords}
         dataLoaded={dataLoaded}
         pagination={pagination}
         filter={filter}
