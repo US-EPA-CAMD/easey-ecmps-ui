@@ -195,6 +195,7 @@ export const DataTableLEEQualifications = ({
           componentStyling="systemsCompTable"
           addBtnName={"Create Qualification LEE"}
           addBtn={openLeeQualModal}
+          ariaLabel={"LEE Qualifications"}
         />
       ) : (
         <Preloader />

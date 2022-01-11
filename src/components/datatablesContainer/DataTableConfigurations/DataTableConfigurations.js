@@ -21,6 +21,7 @@ export const DataTableConfigurations = ({
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = ["Configurations", "Status"];
+  const facility = data.col1;
 
   // *** generate columns array of object based on columnNames array above
 
@@ -156,6 +157,7 @@ export const DataTableConfigurations = ({
         }
         setCheckBackInState={setCheckout}
         openAndCheckoutBTNFocus={openAndCheckoutBTNFocus}
+        ariaLabel={`Configurations for ${facility}`}
       />
     </div>
   );

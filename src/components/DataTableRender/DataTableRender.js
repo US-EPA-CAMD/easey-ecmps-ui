@@ -69,6 +69,7 @@ export const DataTableRender = ({
   viewBtn,
   setAddBtn,
   show = false,
+  ariaLabel,
 
   // for 508
   openAndCheckoutBTNFocus,
@@ -439,9 +440,10 @@ export const DataTableRender = ({
             ) : (
               ""
             )}
+            <span data-aria-label={ariaLabel}></span>
             <DataTable
               keyField={!uniqueKey ? `col${columnNames.length + 1}` : "col1"}
-              className={`data-display-table react-transition fade-in ${className}`}
+              className={`data-display-table react-transition fade-in`}
               sortIcon={
                 <ArrowDownwardSharp className="margin-left-2 text-primary" />
               }

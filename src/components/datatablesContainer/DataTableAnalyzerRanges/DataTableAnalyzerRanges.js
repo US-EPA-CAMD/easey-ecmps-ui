@@ -148,6 +148,7 @@ export const DataTableAnalyzerRanges = ({
         checkout={checkout}
         addBtn={openAnalyzerRanges}
         addBtnName={"Create New Analyzer Range"}
+        ariaLabel={"Analyzer Ranges"}
       />
     </div>
   );

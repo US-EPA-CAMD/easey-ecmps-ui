@@ -300,6 +300,7 @@ export const DataTableMethod = ({
         viewBtn={viewBtn}
         setAddBtn={setAddBtn}
         show={show}
+        ariaLabel={"Methods"}
       />
       {show ? (
         <Modal

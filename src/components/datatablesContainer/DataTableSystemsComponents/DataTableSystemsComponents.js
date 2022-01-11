@@ -396,6 +396,7 @@ export const DataTableSystemsComponents = ({
                 addBtn={openAddComponents}
                 addBtnName={"Add Component"}
                 show={true}
+                ariaLabel={"System Components"}
               />
               <DataTableRender
                 columnNames={fuelFlowsColumnNames}
@@ -410,6 +411,7 @@ export const DataTableSystemsComponents = ({
                 addBtn={openFuelFlows}
                 addBtnName={"Create New Fuel Flow"}
                 show={true}
+                ariaLabel={"Fuel Flows"}
               />
             </div>
           );

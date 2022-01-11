@@ -31,7 +31,7 @@ const CustomAccordion = ({ title, table }) => {
                 <KeyboardArrowUpSharp />
               </Button>
               <h3
-                class="display-inline"
+                className="display-inline"
                 epa-testid={`${item[1].split(" ").join("")}`}
               >
                 {" "}
@@ -50,7 +50,7 @@ const CustomAccordion = ({ title, table }) => {
                 <KeyboardArrowDownSharp />
               </Button>
               <h3
-                class="display-inline"
+                className="display-inline"
                 epa-testid={`${item[1].split(" ").join("")}`}
               >
                 {" "}

@@ -153,6 +153,7 @@ export const SelectFacilitiesDataTable = ({
         setMostRecentlyCheckedInMonitorPlanIdForTab={
           setMostRecentlyCheckedInMonitorPlanIdForTab
         }
+        ariaLabel={"Select Configurations"}
       />
     </div>
   );
