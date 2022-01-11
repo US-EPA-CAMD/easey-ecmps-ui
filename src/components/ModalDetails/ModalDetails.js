@@ -72,8 +72,6 @@ const ModalDetails = ({
     );
   };
 
-  console.log({ title });
-
   const backBtnAriaLabel = () => {
     if (title.includes("Qualification")) {
       return "go back to Qualification details";
