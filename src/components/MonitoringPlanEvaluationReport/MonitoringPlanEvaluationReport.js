@@ -88,7 +88,7 @@ export const MonitoringPlanEvaluationReport = ({
                 <Button
                   type="button"
                   outline={true}
-                  aria-label={`Print the evaluation report`}
+                  aria-label="Print the evaluation report"
                   className="float-right clearfix do-not-print"
                   onClick={() => closeReport()}
                   id="printBTN"

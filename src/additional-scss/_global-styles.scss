@@ -36,9 +36,9 @@
   line-height: 2.5em;
   text-align: center;
   border-radius: 50%;
-  background: $epa-white;
+  background: $epa-info-base;
+  color: $epa-white;
   vertical-align: top;
-  color: $epa-blue-base;
   margin: -0.25em;
 }
 /*
@@ -101,4 +101,10 @@ header {
 
 h2 {
   font-size: 40px;
+}
+
+.no-hover-color-change {
+  a.text-primary:hover {
+    color: $epa-blue-base !important;
+  }
 }

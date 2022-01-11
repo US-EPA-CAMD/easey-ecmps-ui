@@ -1,3 +1,5 @@
+@import "../../additional-scss/variables";
+
 div.row.column1 {
   float: left;
   min-width: 50vw;
@@ -16,7 +18,7 @@ div.row.column1 {
   min-width: 700px;
   width: 90%;
   max-width: 100%;
-  margin-right: 0px;
+  margin-right: 0;
   padding-right: 20px;
 }
 /* .row {
@@ -34,15 +36,15 @@ div.row.column1 {
   flex-direction: column !important;
 }
 .skip-to-content-link {
-  left: 0;
   position: absolute;
-  transform: translateY(-100%);
-
-  background: #0071bc ;
+  left: 0;
+  background: $epa-light-blue;
+  color: $epa-white !important;
+  cursor: pointer;
   height: 30px;
   padding: 8px;
+  transform: translateY(-100%);
   transition: transform 0.3s;
-  color:black !important;
 }
 
 .skip-to-content-link:focus {
