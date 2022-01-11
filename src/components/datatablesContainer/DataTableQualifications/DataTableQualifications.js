@@ -362,6 +362,7 @@ export const DataTableQualifications = ({
         setViewBtn={setViewBtn}
         viewBtn={viewBtn}
         setAddBtn={setAddBtn}
+        ariaLabel="Qualifications"
       />
 
       {show ? (

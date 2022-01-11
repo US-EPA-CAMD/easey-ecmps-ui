@@ -72,6 +72,16 @@ const ModalDetails = ({
     );
   };
 
+  const backBtnAriaLabel = () => {
+    if (title.includes("Qualification")) {
+      return "go back to Qualification details";
+    }
+    if (title.includes("Component") || title.includes("Fuel")) {
+      return "go back to System details";
+    }
+    return "go back to previous component";
+  };
+
   const makeEditComp = (value, cols) => {
     let comp = null;
 
@@ -259,7 +269,7 @@ const ModalDetails = ({
                 unstyled="true"
                 epa-testid="backBtn"
                 id="backBtn"
-                aria-label="go back to systems details"
+                aria-label={backBtnAriaLabel()}
               >
                 {" "}
                 <ArrowBackSharp className=" font-body-sm backBTNColor position-relative top-neg-2px" />

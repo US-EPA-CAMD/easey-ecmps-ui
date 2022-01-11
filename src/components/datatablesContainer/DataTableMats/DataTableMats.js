@@ -293,6 +293,7 @@ export const DataTableMats = ({
           save={createNewMats ? createMats : saveMats}
           showCancel={!(user && checkout)}
           showSave={user && checkout}
+          ariaLabel={"MATS Methods"}
           title={
             createNewMats ? "Create MATS" : "Component: Monitoring MATS Methods"
           }

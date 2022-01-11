@@ -205,6 +205,7 @@ export const DataTablePCTQualifications = ({
           componentStyling="systemsCompTable"
           addBtnName={"Create Qualification Percent"}
           addBtn={openPctQualModal}
+          ariaLabel={"PCT Qualifications"}
         />
       ) : (
         <Preloader />

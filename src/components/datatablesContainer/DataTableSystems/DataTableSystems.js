@@ -583,6 +583,7 @@ export const DataTableSystems = ({
           viewBtn={viewBtn}
           setAddBtn={setAddBtn}
           show={show}
+          ariaLabel={"Systems"}
         />
       </div>
       {show ? (

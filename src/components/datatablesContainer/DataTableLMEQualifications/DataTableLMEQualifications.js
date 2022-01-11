@@ -174,6 +174,7 @@ export const DataTableLMEQualifications = ({
           componentStyling="systemsCompTable"
           addBtnName={"Create Qualification LME"}
           addBtn={openLmeQualModal}
+          ariaLabel={"LME Qualifications"}
         />
       ) : (
         <Preloader />

@@ -12,6 +12,8 @@ import { connect } from "react-redux";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
 import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
 
+import { addAriaLabelToDatatable } from "../../../additional-functions/ensure-508";
+
 import {
   getActiveData,
   getInactiveData,
@@ -153,6 +155,7 @@ export const DataTableAssert = ({
     setUpdateTable(false);
     setRevertedState(false);
     setUpdateRelatedTables(false);
+    addAriaLabelToDatatable();
   };
 
   useEffect(() => {
@@ -338,6 +341,7 @@ export const DataTableAssert = ({
         viewBtn={viewBtn}
         setAddBtn={setAddBtn}
         show={show}
+        ariaLabel={`${dataTableName}s`}
       />
       {show ? (
         <Modal
