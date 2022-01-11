@@ -74,6 +74,7 @@ export const DataTableRender = ({
   // for 508
   openAndCheckoutBTNFocus,
 }) => {
+  const ariaLabelProp = { "aria-label": ariaLabel };
   const [searchText, setSearchText] = useState("");
   const columns = [];
   useEffect(() => {
@@ -479,6 +480,7 @@ export const DataTableRender = ({
                 collapsed: <KeyboardArrowDownSharp />,
                 expanded: <KeyboardArrowUpSharp />,
               }}
+              {...ariaLabelProp}
             />{" "}
             <div className={`${headerStyling}`}>
               {addBtn && checkout && user && !nonEditable ? (

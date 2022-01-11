@@ -75,8 +75,11 @@ const ModalDetails = ({
   const backBtnAriaLabel = () => {
     if (title.includes("Qualification")) {
       return "go back to Qualification details";
-    } else if (title.includes("Component") || title.includes("Fuel"))
+    }
+    if (title.includes("Component") || title.includes("Fuel")) {
       return "go back to System details";
+    }
+    return "go back to previous component";
   };
 
   const makeEditComp = (value, cols) => {

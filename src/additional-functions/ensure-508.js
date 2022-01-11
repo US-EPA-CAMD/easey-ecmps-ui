@@ -137,11 +137,15 @@ export const addAriaLabelToDatatable = () => {
  *****************************************************/
 
 function getAllSiblings(elem, filter) {
-  let sibs = [];
+  const sibs = [];
   elem = elem.parentNode.firstChild;
   do {
-    if (elem.nodeType === 3) continue;
-    if (!filter || filter(elem)) sibs.push(elem);
+    if (elem.nodeType === 3) {
+      continue;
+    }
+    if (!filter || filter(elem)) {
+      sibs.push(elem);
+    }
   } while ((elem = elem.nextSibling));
   return sibs;
 }
