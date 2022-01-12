@@ -255,7 +255,7 @@ export const DataTableRender = ({
                         : `btnOpen`
                     }
                     onClick={() => openHandler(normalizedRow, false, false)}
-                    aria-label={`open ${row["col1"]} `}
+                    aria-label={`open ${row["col1"]} in a new tab`}
                   >
                     {"Open"}
                   </Button>
@@ -278,7 +278,7 @@ export const DataTableRender = ({
                             : `btnOpenAndCheckout`
                         }
                         onClick={() => openHandler(normalizedRow, true)}
-                        aria-label={`open and checkout ${row.col1} `}
+                        aria-label={`open and checkout ${row.col1} in a new tab`}
                       >
                         {"Open & Checkout"}
                       </Button>
@@ -352,7 +352,7 @@ export const DataTableRender = ({
                 }}
                 aria-label={
                   actionsBtn === `Open`
-                    ? `Open ${row.col1}`
+                    ? `Open ${row.col1} in a new tab`
                     : `View ${row.col1}`
                 }
                 autoFocus={willAutoFocus}
