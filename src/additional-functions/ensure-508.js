@@ -116,7 +116,7 @@ export const addAriaLabelToDatatable = () => {
       let ariaLabel = ariaLabelElement.attributes[0].value;
 
       // Fixing spelling
-      if ((ariaLabel = "Unit Capacitys")) {
+      if (ariaLabel === "Unit Capacitys") {
         ariaLabel = "Unit Capacities";
       }
 
