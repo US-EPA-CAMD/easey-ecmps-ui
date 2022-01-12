@@ -113,7 +113,13 @@ export const addAriaLabelToDatatable = () => {
       ariaLabelElement.tagName &&
       ariaLabelElement.tagName.toLowerCase() === "span"
     ) {
-      const ariaLabel = ariaLabelElement.attributes[0].value;
+      let ariaLabel = ariaLabelElement.attributes[0].value;
+
+      // Fixing spelling
+      if ((ariaLabel = "Unit Capacitys")) {
+        ariaLabel = "Unit Capacities";
+      }
+
       label = `${dataTableText} ${ariaLabel}`;
     } else {
       // NOTE: if this aria-label text shows, we need to refactor the code to assign the correct label
