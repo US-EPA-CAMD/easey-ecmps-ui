@@ -248,7 +248,6 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                     id="toggleDropDown"
                     src={userProfileIcon}
                     className="margin-top-neg-1 position-relative left-neg-1"
-                    aria-hidden={true}
                     tabIndex="0"
                     alt="Expand menu"
                     onClick={() => toggleUserProfileDropdown()}
