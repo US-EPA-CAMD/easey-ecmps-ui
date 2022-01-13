@@ -11,6 +11,7 @@ import {
   METHODS_SECTION_NAME,
   METHODS_STORE_NAME,
 } from "../../../additional-functions/data-table-section-and-store-names";
+import { returnFocusToLast } from "../../../additional-functions/manage-focus";
 
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
@@ -170,21 +171,25 @@ export const DataTableMethod = ({
   };
 
   const [viewBtn, setViewBtn] = useState(null);
-  const [addBtn, setAddBtn] = useState(null);
+  // const [addBtn, setAddBtn] = useState(null);
 
   const closeModalHandler = () => {
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
-        setShow(false);
-        removeChangeEventListeners(".modalUserInput");
+        executeOnClose();
       }
     } else {
-      setShow(false);
-      removeChangeEventListeners(".modalUserInput");
+      executeOnClose();
     }
-    if (addBtn) {
-      addBtn.focus();
-    }
+    // if (addBtn) {
+    //   addBtn.focus();
+    // }
+  };
+
+  const executeOnClose = () => {
+    setShow(false);
+    removeChangeEventListeners(".modalUserInput");
+    returnFocusToLast();
   };
 
   const data = useMemo(() => {
@@ -298,7 +303,7 @@ export const DataTableMethod = ({
         addBtnName={"Create Method"}
         setViewBtn={setViewBtn}
         viewBtn={viewBtn}
-        setAddBtn={setAddBtn}
+        // setAddBtn={setAddBtn}
         show={show}
         ariaLabel={"Methods"}
       />

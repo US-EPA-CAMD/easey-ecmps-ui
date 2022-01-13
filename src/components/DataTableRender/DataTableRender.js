@@ -9,6 +9,10 @@ import {
   ensure508,
   addScreenReaderLabelForCollapses,
 } from "../../additional-functions/ensure-508";
+import {
+  assignFocusEventListeners,
+  cleanupFocusEventListeners,
+} from "../../additional-functions/manage-focus";
 import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
 
 /*********** COMPONENTS ***********/
@@ -80,11 +84,13 @@ export const DataTableRender = ({
   useEffect(() => {
     setTimeout(() => {
       ensure508();
+      assignFocusEventListeners();
     }, oneSecond);
 
     return () => {
       cleanUp508();
       addScreenReaderLabelForCollapses();
+      cleanupFocusEventListeners();
     };
   }, []);
   useEffect(() => {
@@ -223,16 +229,16 @@ export const DataTableRender = ({
         // *** normalize the row object to be in the format expected by DynamicTabs
         const normalizedRow = normalizeRowObjectFormat(row, columnNames);
 
-        let willAutoFocus;
-        if (
-          !show &&
-          viewBtn &&
-          viewBtn === row[`col${Object.keys(row).length - 1}`]
-        ) {
-          willAutoFocus = true;
-        } else {
-          willAutoFocus = false;
-        }
+        // let willAutoFocus;
+        // if (
+        //   !show &&
+        //   viewBtn &&
+        //   viewBtn === row[`col${Object.keys(row).length - 1}`]
+        // ) {
+        //   willAutoFocus = true;
+        // } else {
+        //   willAutoFocus = false;
+        // }
 
         return (
           <div>
@@ -327,7 +333,7 @@ export const DataTableRender = ({
                       ? `view and/or edit ${row.col1}`
                       : `view ${row.col1}`
                   }
-                  autoFocus={willAutoFocus}
+                  // autoFocus={willAutoFocus}
                 >
                   {checkout && !nonEditable ? "View / Edit" : "View"}
                 </Button>
@@ -355,7 +361,7 @@ export const DataTableRender = ({
                     ? `Open ${row.col1} in a new tab`
                     : `View ${row.col1}`
                 }
-                autoFocus={willAutoFocus}
+                // autoFocus={willAutoFocus}
               >
                 {actionsBtn === "Open" ? "Open" : "View"}
               </Button>
@@ -415,13 +421,13 @@ export const DataTableRender = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const triggerAddBtn = (event) => {
-    if (setAddBtn) {
-      setAddBtn(event.target);
-      setViewBtn(null);
-    }
-    addBtn(false, false, true);
-  };
+  // const triggerAddBtn = (event) => {
+  //   if (setAddBtn) {
+  //     setAddBtn(event.target);
+  //     setViewBtn(null);
+  //   }
+  //   addBtn(false, false, true);
+  // };
 
   return (
     <div className={`${componentStyling}`}>
@@ -492,7 +498,7 @@ export const DataTableRender = ({
                     outline="true"
                     color="black"
                     onClick={(event) => {
-                      triggerAddBtn(event);
+                      // triggerAddBtn(event);
                     }}
                     id={
                       addBtnName.toLowerCase().split(" ").join("-") + "-add-btn"
@@ -531,7 +537,7 @@ export const DataTableRender = ({
                       outline="true"
                       color="black"
                       onClick={(event) => {
-                        triggerAddBtn(event);
+                        // triggerAddBtn(event);
                       }}
                       id="addBtn"
                     >

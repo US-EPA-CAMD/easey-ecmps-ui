@@ -155,7 +155,7 @@ export const DataTableRectangularDucts = ({
   };
 
   const [viewBtn, setViewBtn] = useState(null);
-  const [addBtn, setAddBtn] = useState(null);
+  // const [addBtn, setAddBtn] = useState(null);
 
   const closeModalHandler = () => {
     if (window.isDataChanged === true) {
@@ -167,9 +167,9 @@ export const DataTableRectangularDucts = ({
       setShow(false);
       removeChangeEventListeners(".modalUserInput");
     }
-    if (addBtn) {
-      addBtn.focus();
-    }
+    // if (addBtn) {
+    //   addBtn.focus();
+    // }
   };
 
   const data = useMemo(() => {
@@ -289,7 +289,7 @@ export const DataTableRectangularDucts = ({
         addBtnName={"Create Rectangular Duct WAF"}
         setViewBtn={setViewBtn}
         viewBtn={viewBtn}
-        setAddBtn={setAddBtn}
+        // setAddBtn={setAddBtn}
       />
       {show ? (
         <Modal

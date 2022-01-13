@@ -303,7 +303,7 @@ export const DataTableAssert = ({
   };
 
   const [viewBtn, setViewBtn] = useState(null);
-  const [addBtn, setAddBtn] = useState(null);
+  // const [addBtn, setAddBtn] = useState(null);
 
   const closeModalHandler = () => {
     if (window.isDataChanged === true) {
@@ -315,9 +315,9 @@ export const DataTableAssert = ({
       setShow(false);
       removeChangeEventListeners(".modalUserInput");
     }
-    if (addBtn) {
-      addBtn.focus();
-    }
+    // if (addBtn) {
+    //   addBtn.focus();
+    // }
   };
 
   return (
@@ -339,7 +339,7 @@ export const DataTableAssert = ({
         addBtnName={`Create ${dataTableName}`}
         setViewBtn={setViewBtn}
         viewBtn={viewBtn}
-        setAddBtn={setAddBtn}
+        // setAddBtn={setAddBtn}
         show={show}
         ariaLabel={`${dataTableName}s`}
       />
