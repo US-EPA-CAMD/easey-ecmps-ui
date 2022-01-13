@@ -300,9 +300,6 @@ export const DataTableQualifications = ({
     });
   };
 
-  const [viewBtn, setViewBtn] = useState(null);
-  // const [addBtn, setAddBtn] = useState(null);
-
   const closeModalHandler = () => {
     // when cancel is clicked in unsaved changed modal
     if (
@@ -323,9 +320,6 @@ export const DataTableQualifications = ({
       setOpenLME(false);
       removeChangeEventListeners(".modalUserInput");
     }
-    // if (addBtn) {
-    //   addBtn.focus();
-    // }
   };
 
   return (
@@ -359,9 +353,6 @@ export const DataTableQualifications = ({
         actionsBtn={"View"}
         addBtn={openQualificationDataModal}
         addBtnName={"Create Qualification"}
-        setViewBtn={setViewBtn}
-        viewBtn={viewBtn}
-        // setAddBtn={setAddBtn}
         ariaLabel="Qualifications"
       />
 

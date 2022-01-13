@@ -223,9 +223,6 @@ export const DataTableMats = ({
     });
   };
 
-  const [viewBtn, setViewBtn] = useState(null);
-  // const [addBtn, setAddBtn] = useState(null);
-
   const closeModalHandler = () => {
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
@@ -236,9 +233,6 @@ export const DataTableMats = ({
       setShow(false);
       removeChangeEventListeners(".modalUserInput");
     }
-    // if (addBtn) {
-    //   addBtn.focus();
-    // }
   };
 
   return (
@@ -281,9 +275,6 @@ export const DataTableMats = ({
         actionsBtn={"View"}
         addBtn={openMatsModal}
         addBtnName={"Create MATS"}
-        setViewBtn={setViewBtn}
-        viewBtn={viewBtn}
-        // setAddBtn={setAddBtn}
       />
 
       {show ? (

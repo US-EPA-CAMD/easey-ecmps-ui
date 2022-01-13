@@ -151,8 +151,6 @@ export const DataTableSystems = ({
     });
   };
 
-  const [viewBtn, setViewBtn] = useState(null);
-  // const [addBtn, setAddBtn] = useState(null);
   const resetFlags = () => {
     setSecondLevel(false);
     setThirdLevel(false);
@@ -175,9 +173,6 @@ export const DataTableSystems = ({
       setShow(false);
       removeChangeEventListeners(".modalUserInput");
     }
-    // if (addBtn) {
-    //   addBtn.focus();
-    // }
   };
 
   const [createNewSystem, setCreateNewSystem] = useState(false);
@@ -579,9 +574,6 @@ export const DataTableSystems = ({
           user={user}
           addBtn={openSystem}
           addBtnName={"Create System"}
-          setViewBtn={setViewBtn}
-          viewBtn={viewBtn}
-          // setAddBtn={setAddBtn}
           show={show}
           ariaLabel={"Systems"}
         />
