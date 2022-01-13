@@ -6,12 +6,12 @@ export const storeInFocusedArray = (event) => {
   // *** store item
   window["lastFocusedArray"].push(event.target);
 
-  console.log(window["lastFocusedArray"]);
-
   // *** make sure no extra elements are kept
-  if (window["lastFocusedArray"].length + 1 >= elementAmountToKeep) {
+  if (window["lastFocusedArray"].length > elementAmountToKeep) {
     window["lastFocusedArray"].shift();
   }
+
+  console.log(window["lastFocusedArray"]);
 };
 
 export const assignFocusEventListeners = () => {
@@ -37,11 +37,6 @@ export const assignFocusEventListeners = () => {
 };
 
 export const cleanupFocusEventListeners = () => {
-  // *** make sure super global object where we will be keeping the elements is defined
-  if (_.isNil(window["lastFocusedArray"])) {
-    window["lastFocusedArray"] = [];
-  }
-
   // *** find all focusable items on the page
   const focusableElements = [
     ...document.querySelectorAll(
@@ -61,6 +56,6 @@ export const cleanupFocusEventListeners = () => {
 
 export const returnFocusToLast = () => {
   if (!_.isNil(window["lastFocusedArray"])) {
-    window["lastFocusedArray"].focus();
+    window["lastFocusedArray"][window["lastFocusedArray"].length - 1].focus();
   }
 };
