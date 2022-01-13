@@ -79,6 +79,12 @@ export const DataTableRender = ({
   const columns = [];
   useEffect(() => {
     setTimeout(() => {
+      document
+        .querySelector("#datatableContainer")
+        .insertBefore(
+          document.querySelector("#datatableContainer table"),
+          document.querySelector("#datatableContainer").childNodes[0]
+        );
       ensure508();
     }, oneSecond);
 
@@ -382,7 +388,7 @@ export const DataTableRender = ({
 
   const resetExpandedRows = () => {
     const expandedRows = document.querySelectorAll(
-      "[data-testid='expander-button-undefined"
+      "[data-testid='expander-button-undefined']"
     );
 
     for (const row of expandedRows) {
@@ -425,7 +431,11 @@ export const DataTableRender = ({
 
   return (
     <div className={`${componentStyling}`}>
-      <div aria-live="polite" className={`${tableStyling}`}>
+      <div
+        aria-live="polite"
+        className={`${tableStyling}`}
+        id="datatableContainer"
+      >
         {dataLoaded && data.length > 0 ? (
           <div>
             {tableTitle ? (

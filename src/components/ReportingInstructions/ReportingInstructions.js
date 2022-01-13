@@ -9,10 +9,10 @@ import monitoringPlanJSON from "./monitoring-plan-json-format.json";
 
 export const ReportingInstructions = () => {
   const createJsonFile = (url) => {
-    var dataStr =
+    return (
       "data:text/json;charset=utf-8," +
-      encodeURIComponent(JSON.stringify(url, null, "\t"));
-    return dataStr;
+      encodeURIComponent(JSON.stringify(url, null, "\t"))
+    );
   };
 
   const createFileName = (type, name) => {
@@ -62,7 +62,7 @@ export const ReportingInstructions = () => {
   ];
 
   return (
-    <div className="padding-top-7 padding-2 react-transition fade-in">
+    <div className="padding-top-7 padding-2 react-transition fade-in reporting-instructions">
       <div className="grid-row">
         <h2 className="text-bold font-heading-2xl">Reporting Instructions</h2>
       </div>
@@ -84,9 +84,7 @@ export const ReportingInstructions = () => {
               >
                 {link.fileDownload ? (
                   <a
-                    type="button"
-                    unstyled={true}
-                    className="usa-button usa-button--unstyled text-primary text-underline no-hover-color-change"
+                    className="text-primary text-underline no-hover-color-change"
                     href={
                       link.fileType === "json"
                         ? createJsonFile(link.url)
@@ -102,9 +100,7 @@ export const ReportingInstructions = () => {
                   </a>
                 ) : (
                   <a
-                    type="button"
-                    unstyled={true}
-                    className="usa-button usa-button--unstyled text-primary text-underline no-hover-color-change"
+                    className="text-primary text-underline no-hover-color-change"
                     href={link.url}
                     rel={link.linkName}
                     title={`Go to ${link.linkName} page`}

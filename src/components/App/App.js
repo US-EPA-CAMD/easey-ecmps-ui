@@ -21,6 +21,10 @@ import "./App.scss";
 import { TokenRefresher } from "../TokenRefresher/TokenRefresher";
 import InactivityTracker from "../InactivityTracker/InactivityTracker";
 import config from "../../config";
+import {
+  assignFocusEventListeners,
+  cleanupFocusEventListeners,
+} from "../../additional-functions/manage-focus";
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -47,24 +51,26 @@ const App = () => {
       : false;
 
     setUser(cdxUser && cdxUser.firstName ? cdxUser : false);
+
+    assignFocusEventListeners();
+    handleActiveElementFocus();
+
+    // * clean up
+    return () => {
+      cleanupFocusEventListeners();
+      handleActiveElementFocus();
+    };
   }, []);
 
   // *** assign / un-assign activity event listeners
   useEffect(() => {
     if (user) {
-      handleActiveElementFocus();
-
       if (document.querySelector(".usa-banner__content")) {
         document
           .querySelector(".usa-banner__content")
           .classList.add("react-transition");
         document.querySelector(".usa-banner__content").classList.add("fade-in");
       }
-
-      // * clean up
-      return () => {
-        handleActiveElementFocus();
-      };
     }
   }, [user]);
 
