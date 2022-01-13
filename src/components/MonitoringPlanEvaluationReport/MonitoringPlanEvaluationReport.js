@@ -149,14 +149,6 @@ export const MonitoringPlanEvaluationReport = ({
                   </td>
                 </tr>
                 <tr>
-                  <th className="text-right width-auto text-normal">
-                    Facility ID (ORISPL):
-                  </th>
-                  <td className="width-auto padding-left-1 text-bold">
-                    {reportData.facilityId}
-                  </td>
-                </tr>
-                <tr>
                   <th className="text-right width-auto text-normal">State:</th>
                   <td className="width-auto padding-left-1 text-bold">
                     {reportData.state}

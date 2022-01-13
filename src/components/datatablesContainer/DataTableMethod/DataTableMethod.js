@@ -30,7 +30,6 @@ export const DataTableMethod = ({
   mdmData,
   loadDropdownsData,
   locationSelectValue,
-  matsTableHandler,
   user,
   checkout,
   inactive,
@@ -38,6 +37,8 @@ export const DataTableMethod = ({
   revertedState,
   setRevertedState,
   showModal = false,
+  setUpdateRelatedTables,
+  updateRelatedTables,
 }) => {
   const [methods, setMethods] = useState([]);
   const [matsMethods, setMatsMethods] = useState([]);
@@ -63,7 +64,8 @@ export const DataTableMethod = ({
       updateTable ||
       methods.length <= 0 ||
       locationSelectValue ||
-      revertedState
+      revertedState ||
+      updateRelatedTables
     ) {
       mpApi.getMonitoringMethods(locationSelectValue).then((methodRes) => {
         setMethods(methodRes.data);
@@ -72,23 +74,23 @@ export const DataTableMethod = ({
           setMatsMethods(matRes.data);
           setUpdateTable(false);
           setRevertedState(false);
+          setUpdateRelatedTables(false);
         });
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, updateTable, revertedState]);
+  }, [locationSelectValue, updateTable, revertedState, updateRelatedTables]);
 
-  // load dropdowns data (called once)
+  // load dropdowns data (called when mdmData changes)
   useEffect(() => {
     if (mdmData.length === 0) {
       loadDropdownsData(METHODS_SECTION_NAME, dropdownArray);
-      setDropdownsLoaded(true);
     } else {
       setDropdownsLoaded(true);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [mdmData]);
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -186,12 +188,13 @@ export const DataTableMethod = ({
   };
 
   const data = useMemo(() => {
-    if (methods.length > 0) {
-      const activeOnly = getActiveData(methods);
-      const inactiveOnly = getInactiveData(methods);
+    const matsAndMethods = matsMethods.concat(methods);
+    if (matsAndMethods.length > 0) {
+      const activeOnly = getActiveData(matsAndMethods);
+      const inactiveOnly = getInactiveData(matsAndMethods);
 
       // only active data >  disable checkbox and unchecks it
-      if (activeOnly.length === methods.length) {
+      if (activeOnly.length === matsAndMethods.length) {
         // uncheck it and disable checkbox
         //function parameters ( check flag, disable flag )
         settingInactiveCheckBox(false, true);
@@ -199,30 +202,25 @@ export const DataTableMethod = ({
       }
 
       // only inactive data > disables checkbox and checks it
-      if (inactiveOnly.length === methods.length) {
+      else if (inactiveOnly.length === matsAndMethods.length) {
         //check it and disable checkbox
         settingInactiveCheckBox(true, true);
         return fs.getMonitoringPlansMethodsTableRecords(methods);
       }
       // resets checkbox
-      settingInactiveCheckBox(inactive[0], false);
-      return fs.getMonitoringPlansMethodsTableRecords(
-        !inactive[0] ? getActiveData(methods) : methods
-      );
-    }
-    return [];
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [methods, inactive, updateTable]);
-
-  useEffect(() => {
-    if (matsTableHandler) {
-      if (matsMethods.length < 1) {
-        matsTableHandler(false);
-      } else {
-        matsTableHandler(true);
+      else {
+        settingInactiveCheckBox(inactive[0], false);
+        return fs.getMonitoringPlansMethodsTableRecords(
+          !inactive[0] ? getActiveData(methods) : methods
+        );
       }
+    } else {
+      settingInactiveCheckBox(false, true);
+      return [];
     }
-  }, [matsMethods.length, matsTableHandler]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [methods, matsMethods, inactive, updateTable]);
 
   const saveMethods = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
@@ -234,6 +232,7 @@ export const DataTableMethod = ({
         // openModal(false);
         setShow(false);
         setUpdateTable(true);
+        setUpdateRelatedTables(true);
       })
       .catch((error) => {
         console.log("error is", error);
@@ -252,6 +251,7 @@ export const DataTableMethod = ({
         // openModal(false);
         setShow(false);
         setUpdateTable(true);
+        setUpdateRelatedTables(true);
       })
       .catch((error) => {
         console.log("error is", error);
@@ -290,7 +290,7 @@ export const DataTableMethod = ({
         openHandler={openMethodModal}
         columnNames={columnNames}
         data={data}
-        dataLoaded={dataLoaded}
+        dataLoaded={dataLoaded && dropdownsLoaded}
         actionsBtn={"View"}
         checkout={checkout}
         user={user}
@@ -300,6 +300,7 @@ export const DataTableMethod = ({
         viewBtn={viewBtn}
         setAddBtn={setAddBtn}
         show={show}
+        ariaLabel={"Methods"}
       />
       {show ? (
         <Modal
@@ -339,7 +340,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadDropdownsData: (section, dropdownArray) => {
+    loadDropdownsData: async (section, dropdownArray) => {
       dispatch(
         loadDropdowns(convertSectionToStoreName(section), dropdownArray)
       );

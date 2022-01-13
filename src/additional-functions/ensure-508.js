@@ -92,13 +92,69 @@ export const addScreenReaderLabelForCollapses = () => {
  *****************************************************/
 export const addAriaLabelToDatatable = () => {
   document.querySelectorAll(`.rdt_Table`).forEach((element) => {
-    const defaultLabel = document.querySelector(".data-table-title")
-      ? document.querySelector(".data-table-title").textContent
-      : "Data Table";
+    let label;
+    let ariaLabelElement;
 
-    element.setAttribute("aria-label", defaultLabel);
+    const dataTableText = "DataTable for";
+    const siblings = getAllSiblings(element.parentElement.parentElement);
+
+    siblings.forEach((sib) => {
+      if (
+        sib.attributes &&
+        sib.attributes[0] &&
+        sib.attributes[0].name === "data-aria-label"
+      ) {
+        ariaLabelElement = sib;
+      }
+    });
+
+    if (
+      ariaLabelElement &&
+      ariaLabelElement.tagName &&
+      ariaLabelElement.tagName.toLowerCase() === "span"
+    ) {
+      let ariaLabel = ariaLabelElement.attributes[0].value;
+
+      // Fixing spelling
+      if (ariaLabel === "Unit Capacitys") {
+        ariaLabel = "Unit Capacities";
+      }
+
+      label = `${dataTableText} ${ariaLabel}`;
+    } else {
+      // NOTE: if this aria-label text shows, we need to refactor the code to assign the correct label
+      //       if this occurs, most likely the ariaLabel property is not assigned in the DataTableRender element
+      label = "DataTable Aria Label Missing";
+    }
+
+    element.setAttribute("aria-label", label);
   });
 };
+
+/*****************************************************
+ * getAllSiblings:
+ *
+ *   This function is used to retrieve the silbling elements of an element
+ *
+ *       Inputs:
+ *              element & filter (optional)
+ *       Outputs:
+ *              sibling elements
+ *****************************************************/
+
+function getAllSiblings(elem, filter) {
+  const sibs = [];
+  elem = elem.parentNode.firstChild;
+  do {
+    if (elem.nodeType === 3) {
+      continue;
+    }
+    if (!filter || filter(elem)) {
+      sibs.push(elem);
+    }
+  } while ((elem = elem.nextSibling));
+  return sibs;
+}
 
 /*****************************************************
  * addInitialAriaSort:

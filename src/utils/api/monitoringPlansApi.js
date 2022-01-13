@@ -376,7 +376,6 @@ export const createMonitoringSpans = async (payload) => {
 };
 
 export const saveMonitoringLoads = async (payload, locationId) => {
-  console.log("location ID: ", locationId);
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${locationId}/loads/${payload["id"]}`;
   // *** remove attributes not needed by the API
 
@@ -390,7 +389,6 @@ export const saveMonitoringLoads = async (payload, locationId) => {
 };
 
 export const createMonitoringLoads = async (payload, locationId) => {
-  console.log("location ID: ", locationId);
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${locationId}/loads/`;
 
   // *** remove attributes not needed by the API
@@ -830,8 +828,6 @@ export const getLocationAttributes = async (locationId) => {
   }
 
   url = `${url}/locations/${locationId}/attributes`;
-
-  console.log("URL LOCATION", url);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
@@ -844,10 +840,7 @@ export const getRelationshipData = async (locationId) => {
   url = `${url}/workspace`;
   // }
 
-  console.log("URL getRelationshipData", url);
   url = `${url}/locations/${locationId}/relationships`;
-  console.log("URL getRelationshipData", url);
-
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 

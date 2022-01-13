@@ -69,10 +69,12 @@ export const DataTableRender = ({
   viewBtn,
   setAddBtn,
   show = false,
+  ariaLabel,
 
   // for 508
   openAndCheckoutBTNFocus,
 }) => {
+  const ariaLabelProp = { "aria-label": ariaLabel };
   const [searchText, setSearchText] = useState("");
   const columns = [];
   useEffect(() => {
@@ -253,7 +255,7 @@ export const DataTableRender = ({
                         : `btnOpen`
                     }
                     onClick={() => openHandler(normalizedRow, false, false)}
-                    aria-label={`open ${row["col1"]} `}
+                    aria-label={`open ${row["col1"]} in a new tab`}
                   >
                     {"Open"}
                   </Button>
@@ -276,7 +278,7 @@ export const DataTableRender = ({
                             : `btnOpenAndCheckout`
                         }
                         onClick={() => openHandler(normalizedRow, true)}
-                        aria-label={`open and checkout ${row.col1} `}
+                        aria-label={`open and checkout ${row.col1} in a new tab`}
                       >
                         {"Open & Checkout"}
                       </Button>
@@ -350,7 +352,7 @@ export const DataTableRender = ({
                 }}
                 aria-label={
                   actionsBtn === `Open`
-                    ? `Open ${row.col1}`
+                    ? `Open ${row.col1} in a new tab`
                     : `View ${row.col1}`
                 }
                 autoFocus={willAutoFocus}
@@ -439,9 +441,10 @@ export const DataTableRender = ({
             ) : (
               ""
             )}
+            <span data-aria-label={ariaLabel}></span>
             <DataTable
               keyField={!uniqueKey ? `col${columnNames.length + 1}` : "col1"}
-              className={`data-display-table react-transition fade-in ${className}`}
+              className={`data-display-table react-transition fade-in`}
               sortIcon={
                 <ArrowDownwardSharp className="margin-left-2 text-primary" />
               }
@@ -477,6 +480,7 @@ export const DataTableRender = ({
                 collapsed: <KeyboardArrowDownSharp />,
                 expanded: <KeyboardArrowUpSharp />,
               }}
+              {...ariaLabelProp}
             />{" "}
             <div className={`${headerStyling}`}>
               {addBtn && checkout && user && !nonEditable ? (

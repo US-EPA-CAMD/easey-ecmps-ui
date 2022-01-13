@@ -111,22 +111,23 @@ export const DataTableSystemsComponents = ({
 
   // load dropdowns data (called once)
   useEffect(() => {
-    if (fuelFlowsMdmData.length === 0 && systemComponentsMdmData.length === 0) {
+    if (systemComponentsMdmData.length === 0) {
       loadDropdownsData(
         SYSTEM_COMPONENTS_SECTION_NAME,
         systemComponentsDataArray
       );
-      setSystemComponentDropdownsLoaded(true);
-
-      loadDropdownsData(FUEL_FLOWS_SECTION_NAME, fuelFlowsDataArray);
-      setFuelFlowDropdownsLoaded(true);
     } else {
       setSystemComponentDropdownsLoaded(true);
+    }
+
+    if (fuelFlowsMdmData.length === 0) {
+      loadDropdownsData(FUEL_FLOWS_SECTION_NAME, fuelFlowsDataArray);
+    } else {
       setFuelFlowDropdownsLoaded(true);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [systemComponentsMdmData, fuelFlowsMdmData]);
 
   useEffect(() => {
     if (addCompThirdLevelCreateTrigger) {
@@ -388,13 +389,14 @@ export const DataTableSystemsComponents = ({
                 openHandler={openComponent}
                 tableTitle="System Components"
                 componentStyling="systemsCompTable"
-                dataLoaded={dataLoaded}
+                dataLoaded={dataLoaded && systemComponentDropdownsLoaded}
                 actionsBtn={"View"}
                 user={user}
                 checkout={checkout}
                 addBtn={openAddComponents}
                 addBtnName={"Add Component"}
                 show={true}
+                ariaLabel={"System Components"}
               />
               <DataTableRender
                 columnNames={fuelFlowsColumnNames}
@@ -404,11 +406,12 @@ export const DataTableSystemsComponents = ({
                 user={user}
                 checkout={checkout}
                 componentStyling="systemsCompTable"
-                dataLoaded={dataFuelLoaded}
+                dataLoaded={dataFuelLoaded && fuelFlowDropdownsLoaded}
                 actionsBtn={"View"}
                 addBtn={openFuelFlows}
                 addBtnName={"Create New Fuel Flow"}
                 show={true}
+                ariaLabel={"Fuel Flows"}
               />
             </div>
           );
@@ -559,7 +562,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadDropdownsData: (section, dropdownArray) => {
+    loadDropdownsData: async (section, dropdownArray) => {
       dispatch(
         loadDropdowns(convertSectionToStoreName(section), dropdownArray)
       );

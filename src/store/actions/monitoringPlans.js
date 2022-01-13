@@ -20,10 +20,9 @@ export function loadMonitoringPlans(orisCode) {
   return (dispatch) => {
     dispatch(beginMonitoringPlansApiCall());
     return mpApi.getMonitoringPlans(orisCode).then((res) => {
-      if( res){
+      if (res) {
         dispatch(loadMonitoringPlansSuccess(res.data));
       }
-      
     });
   };
 }
@@ -32,8 +31,7 @@ export function loadMonitoringPlansArray(orisCode) {
   return (dispatch) => {
     dispatch(beginMonitoringPlansApiCall());
     return mpApi.getMonitoringPlans(orisCode).then((res) => {
-
-      if( res){
+      if (res) {
         dispatch(loadMonitoringPlansArraySuccess(res.data, orisCode));
       }
     });

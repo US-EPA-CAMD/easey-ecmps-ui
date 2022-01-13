@@ -621,6 +621,8 @@ const componentRenderer = (location, showModal) => {
       ],
     },
     loadDropdownsData: jest.fn(),
+    setUpdateRelatedTables: jest.fn(),
+    updateRelatedTables: false,
   };
   return render(<DataTableMethod {...props} />);
 };

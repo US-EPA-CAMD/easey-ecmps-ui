@@ -18,14 +18,7 @@ const CustomAccordion = ({ title, table }) => {
   return (
     <div className="">
       {table.map((item, index) => (
-        <div
-          key={index}
-          className={`${
-            item[1] !== "Unit Fuels" && item[1] !== "Methods" && item[1] !== "Location Attributes"
-              ? (item[1] !== "Unit Controls" && index !== 1) ? "float-left clearfix":"clearfix"
-              : "clearfix"
-          }`}
-        >
+        <div key={index} className={"clearfix"}>
           {open[index] ? (
             <div className="text-bold font-body-xl display-block height-auto">
               <Button
@@ -37,10 +30,13 @@ const CustomAccordion = ({ title, table }) => {
               >
                 <KeyboardArrowUpSharp />
               </Button>
-              <span epa-testid={`${item[1].split(" ").join("")}`}>
+              <h3
+                className="display-inline"
+                epa-testid={`${item[1].split(" ").join("")}`}
+              >
                 {" "}
                 {item[1]}
-              </span>
+              </h3>
             </div>
           ) : (
             <div className="text-bold font-body-xl display-block height-auto ">
@@ -53,10 +49,13 @@ const CustomAccordion = ({ title, table }) => {
               >
                 <KeyboardArrowDownSharp />
               </Button>
-              <span epa-testid={`${item[1].split(" ").join("")}`}>
+              <h3
+                className="display-inline"
+                epa-testid={`${item[1].split(" ").join("")}`}
+              >
                 {" "}
                 {item[1]}
-              </span>
+              </h3>
             </div>
           )}
           {open[index] ? <div className=" ">{item[0]} </div> : ""}

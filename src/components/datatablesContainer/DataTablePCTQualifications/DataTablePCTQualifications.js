@@ -83,13 +83,12 @@ export const DataTablePCTQualifications = ({
   useEffect(() => {
     if (mdmData.length === 0) {
       loadDropdownsData(PCT_QUALIFICATIONS_SECTION_NAME, dropdownArray);
-      setDropdownsLoaded(true);
     } else {
       setDropdownsLoaded(true);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [mdmData]);
 
   const [selectedQualPct, setSelectedQualPct] = useState(null);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
@@ -197,7 +196,7 @@ export const DataTablePCTQualifications = ({
         <DataTableRender
           columnNames={columnNames}
           data={data}
-          dataLoaded={dataLoaded}
+          dataLoaded={dataLoaded && dropdownsLoaded}
           checkout={checkout}
           user={user}
           openHandler={openPctQualModal}
@@ -206,6 +205,7 @@ export const DataTablePCTQualifications = ({
           componentStyling="systemsCompTable"
           addBtnName={"Create Qualification Percent"}
           addBtn={openPctQualModal}
+          ariaLabel={"PCT Qualifications"}
         />
       ) : (
         <Preloader />
@@ -222,7 +222,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadDropdownsData: (section, dropdownArray) => {
+    loadDropdownsData: async (section, dropdownArray) => {
       dispatch(
         loadDropdowns(convertSectionToStoreName(section), dropdownArray)
       );

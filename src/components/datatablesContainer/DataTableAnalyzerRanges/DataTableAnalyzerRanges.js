@@ -5,8 +5,6 @@ import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 import { attachChangeEventListeners } from "../../../additional-functions/prompt-to-save-unsaved-changes";
-
-import { Preloader } from "../../Preloader/Preloader";
 import { connect } from "react-redux";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
 import {
@@ -58,13 +56,12 @@ export const DataTableAnalyzerRanges = ({
   useEffect(() => {
     if (mdmData.length === 0) {
       loadDropdownsData(ANALYZER_RANGES_SECTION_NAME, dropdownArray);
-      setDropdownsLoaded(true);
     } else {
       setDropdownsLoaded(true);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [mdmData]);
 
   const rangeData = useMemo(() => {
     if (ranges.length > 0) {
@@ -138,24 +135,21 @@ export const DataTableAnalyzerRanges = ({
         id="testingBtn1"
         onClick={() => testing1()}
       />
-      {dropdownsLoaded ? (
-        <DataTableRender
-          columnNames={rangesColumnNames}
-          data={rangeData}
-          openHandler={openAnalyzerRanges}
-          tableTitle="Analyzer Ranges"
-          componentStyling="systemsCompTable"
-          tableStyling="grid-container"
-          dataLoaded={rangesLoaded}
-          actionsBtn={"View"}
-          user={user}
-          checkout={checkout}
-          addBtn={openAnalyzerRanges}
-          addBtnName={"Create New Analyzer Range"}
-        />
-      ) : (
-        <Preloader />
-      )}
+      <DataTableRender
+        columnNames={rangesColumnNames}
+        data={rangeData}
+        openHandler={openAnalyzerRanges}
+        tableTitle="Analyzer Ranges"
+        componentStyling="systemsCompTable"
+        tableStyling="grid-container"
+        dataLoaded={rangesLoaded && dropdownsLoaded}
+        actionsBtn={"View"}
+        user={user}
+        checkout={checkout}
+        addBtn={openAnalyzerRanges}
+        addBtnName={"Create New Analyzer Range"}
+        ariaLabel={"Analyzer Ranges"}
+      />
     </div>
   );
 };
@@ -168,7 +162,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadDropdownsData: (section, dropdownArray) => {
+    loadDropdownsData: async (section, dropdownArray) => {
       dispatch(
         loadDropdowns(convertSectionToStoreName(section), dropdownArray)
       );
