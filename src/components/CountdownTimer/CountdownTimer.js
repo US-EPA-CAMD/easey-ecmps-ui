@@ -1,11 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import "./CountdownTimer.scss";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
-import { removeAriaHiddenFromCountdown } from "../../additional-functions/ensure-508";
-
-export const CountdownTimerRender = ({ remainingTime }) => {
+export const CountdownTimerRender = ({ remainingTime, countdownExpired }) => {
   const currentTime = React.useRef(remainingTime);
   const prevTime = React.useRef(null);
   const isNewTimeFirstTick = React.useRef(false);
@@ -17,7 +15,7 @@ export const CountdownTimerRender = ({ remainingTime }) => {
 
     // *** do this when the countdown is done
     if (remainingTime === 0) {
-      //countdownExpired();
+      countdownExpired();
     }
   } else {
     isNewTimeFirstTick.current = false;
@@ -38,9 +36,9 @@ export const CountdownTimerRender = ({ remainingTime }) => {
           seconds left
         </div>
       </div>
-      <span className="sr-only">{remainingTime}</span>
-      <span aria-live={remainingTime > 1 ? "off" : ""} className="sr-only">
-        {"Logging out due to inactivity"}
+      <span className="usa-sr-only">{remainingTime}</span>
+      <span aria-live={remainingTime > 1 ? "off" : ""} className="usa-sr-only">
+        Logging out due to inactivity
       </span>
       {prevTime.current !== null ? (
         <div
@@ -58,10 +56,6 @@ export const CountdownTimerRender = ({ remainingTime }) => {
 };
 
 export const CountdownTimer = ({ duration, countdownExpired }) => {
-  useEffect(() => {
-    removeAriaHiddenFromCountdown();
-  });
-
   return (
     <div className="countdown-timer-wrapper">
       <p>
