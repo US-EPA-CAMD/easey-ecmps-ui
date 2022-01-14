@@ -436,7 +436,11 @@ export const HeaderInfo = ({
               <div className="display-inline-block ">
                 <div className="text-bold font-body-xl display-block height-9 padding-top-4 padding-bottom-2">
                   {user && checkoutState && checkedOutByUser ? (
-                    <CreateOutlined color="primary" fontSize="large" />
+                    <CreateOutlined
+                      color="primary"
+                      fontSize="large"
+                      className="position-relative top-2px"
+                    />
                   ) : (
                     ""
                   )}{" "}
