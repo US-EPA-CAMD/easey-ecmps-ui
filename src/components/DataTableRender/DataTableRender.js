@@ -9,10 +9,6 @@ import {
   ensure508,
   addScreenReaderLabelForCollapses,
 } from "../../additional-functions/ensure-508";
-import {
-  assignFocusEventListeners,
-  cleanupFocusEventListeners,
-} from "../../additional-functions/manage-focus";
 import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
 
 /*********** COMPONENTS ***********/
@@ -90,13 +86,11 @@ export const DataTableRender = ({
           );
       }
       ensure508();
-      assignFocusEventListeners();
     }, oneSecond);
 
     return () => {
       cleanUp508();
       addScreenReaderLabelForCollapses();
-      cleanupFocusEventListeners();
     };
   }, []);
   useEffect(() => {
