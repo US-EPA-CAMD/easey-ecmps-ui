@@ -300,16 +300,3 @@ export const assignAriaLabelsToDatePickerButtons = () => {
     element.ariaLabel = label;
   });
 };
-
-export const removeAriaHiddenFromCountdown = () => {
-  setTimeout(() => {
-    const hiddenDiv = document.querySelectorAll(
-      "div[aria-label='Countdown timer'] > div[aria-hidden='true']"
-    );
-
-    if (hiddenDiv[0]) {
-      hiddenDiv[0].setAttribute("aria-hidden", false);
-    }
-    console.log(hiddenDiv);
-  });
-};
