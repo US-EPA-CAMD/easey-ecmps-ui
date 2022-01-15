@@ -38,7 +38,6 @@ import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
   returnFocusToLast,
-  returnFocusToModalButton,
 } from "../../../additional-functions/manage-focus";
 
 export const DataTableSystems = ({
