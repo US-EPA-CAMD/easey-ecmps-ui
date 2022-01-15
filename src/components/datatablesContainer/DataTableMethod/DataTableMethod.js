@@ -11,6 +11,11 @@ import {
   METHODS_SECTION_NAME,
   METHODS_STORE_NAME,
 } from "../../../additional-functions/data-table-section-and-store-names";
+import {
+  assignFocusEventListeners,
+  cleanupFocusEventListeners,
+  returnFocusToLast,
+} from "../../../additional-functions/manage-focus";
 
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
@@ -58,6 +63,33 @@ export const DataTableMethod = ({
       "bypassApproachCode",
     ],
   ];
+
+  const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
+
+  // *** Assign initial event listeners after loading data/dropdowns
+  useEffect(() => {
+    if (dataLoaded && dropdownsLoaded) {
+      returnFocusToLast();
+      assignFocusEventListeners();
+    }
+  }, [dataLoaded, dropdownsLoaded]);
+
+  // *** Reassign handlers after pop-up modal is closed
+  useEffect(() => {
+    if (!returnedFocusToLast) {
+      setReturnedFocusToLast(true);
+    } else {
+      returnFocusToLast();
+      assignFocusEventListeners();
+    }
+  }, [returnedFocusToLast]);
+
+  // *** Clean up focus event listeners
+  useEffect(() => {
+    return () => {
+      cleanupFocusEventListeners();
+    };
+  }, []);
 
   useEffect(() => {
     if (
@@ -169,22 +201,20 @@ export const DataTableMethod = ({
     });
   };
 
-  const [viewBtn, setViewBtn] = useState(null);
-  const [addBtn, setAddBtn] = useState(null);
-
   const closeModalHandler = () => {
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
-        setShow(false);
-        removeChangeEventListeners(".modalUserInput");
+        executeOnClose();
       }
     } else {
-      setShow(false);
-      removeChangeEventListeners(".modalUserInput");
+      executeOnClose();
     }
-    if (addBtn) {
-      addBtn.focus();
-    }
+  };
+
+  const executeOnClose = () => {
+    setShow(false);
+    removeChangeEventListeners(".modalUserInput");
+    setReturnedFocusToLast(false);
   };
 
   const data = useMemo(() => {
@@ -221,6 +251,11 @@ export const DataTableMethod = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [methods, matsMethods, inactive, updateTable]);
+
+  // *** Reassign handlers when inactive checkbox is toggled
+  useEffect(() => {
+    assignFocusEventListeners();
+  }, [inactive, data]);
 
   const saveMethods = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
@@ -296,9 +331,6 @@ export const DataTableMethod = ({
         user={user}
         addBtn={openMethodModal}
         addBtnName={"Create Method"}
-        setViewBtn={setViewBtn}
-        viewBtn={viewBtn}
-        setAddBtn={setAddBtn}
         show={show}
         ariaLabel={"Methods"}
       />
