@@ -34,6 +34,12 @@ import {
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
+import {
+  assignFocusEventListeners,
+  cleanupFocusEventListeners,
+  returnFocusToLast,
+} from "../../../additional-functions/manage-focus";
+
 export const DataTableSystems = ({
   mdmData,
   loadDropdownsData,
@@ -65,6 +71,33 @@ export const DataTableSystems = ({
   const dropdownArray = [
     ["systemDesignationCode", "systemTypeCode", "fuelCode"],
   ];
+
+  const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
+
+  // *** Assign initial event listeners after loading data/dropdowns
+  useEffect(() => {
+    if (dataLoaded && dropdownsLoaded) {
+      returnFocusToLast();
+      assignFocusEventListeners();
+    }
+  }, [dataLoaded, dropdownsLoaded]);
+
+  // *** Reassign handlers after pop-up modal is closed
+  useEffect(() => {
+    if (!returnedFocusToLast) {
+      setReturnedFocusToLast(true);
+    } else {
+      returnFocusToLast();
+      assignFocusEventListeners();
+    }
+  }, [returnedFocusToLast]);
+
+  // *** Clean up focus event listeners
+  useEffect(() => {
+    return () => {
+      cleanupFocusEventListeners();
+    };
+  }, []);
 
   useEffect(() => {
     if (
@@ -151,8 +184,6 @@ export const DataTableSystems = ({
     });
   };
 
-  const [viewBtn, setViewBtn] = useState(null);
-  const [addBtn, setAddBtn] = useState(null);
   const resetFlags = () => {
     setSecondLevel(false);
     setThirdLevel(false);
@@ -166,18 +197,18 @@ export const DataTableSystems = ({
   const closeModalHandler = () => {
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
-        resetFlags();
-        setShow(false);
-        removeChangeEventListeners(".modalUserInput");
+        executeOnClose();
       }
     } else {
-      resetFlags();
-      setShow(false);
-      removeChangeEventListeners(".modalUserInput");
+      executeOnClose();
     }
-    if (addBtn) {
-      addBtn.focus();
-    }
+  };
+
+  const executeOnClose = () => {
+    resetFlags();
+    setShow(false);
+    removeChangeEventListeners(".modalUserInput");
+    setReturnedFocusToLast(false);
   };
 
   const [createNewSystem, setCreateNewSystem] = useState(false);
@@ -538,6 +569,12 @@ export const DataTableSystems = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringSystems, inactive]);
+
+  // *** Reassign handlers when inactive checkbox is toggled
+  useEffect(() => {
+    assignFocusEventListeners();
+  }, [inactive, data]);
+
   const [openFuelFlowsView, setOpenFuelFlowsView] = React.useState(false);
   return (
     <>
@@ -579,9 +616,6 @@ export const DataTableSystems = ({
           user={user}
           addBtn={openSystem}
           addBtnName={"Create System"}
-          setViewBtn={setViewBtn}
-          viewBtn={viewBtn}
-          setAddBtn={setAddBtn}
           show={show}
           ariaLabel={"Systems"}
         />

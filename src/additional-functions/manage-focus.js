@@ -3,21 +3,32 @@ import _ from "lodash";
 const elementAmountToKeep = 10;
 
 export const storeInFocusedArray = (event) => {
-  // *** store item
-  window["lastFocusedArray"].push(event.target);
+  if (event.target.innerHTML !== "Close") {
+    if (
+      window["lastModalButton"].length === 0 &&
+      event.target.innerHTML === "View"
+    ) {
+      window["lastModalButton"].push(event.target);
+    } else {
+      // *** store item
+      window["lastFocusedArray"].push(event.target);
 
-  // *** make sure no extra elements are kept
-  if (window["lastFocusedArray"].length > elementAmountToKeep) {
-    window["lastFocusedArray"].shift();
+      // *** make sure no extra elements are kept
+      if (window["lastFocusedArray"].length > elementAmountToKeep) {
+        window["lastFocusedArray"].shift();
+      }
+    }
   }
-
-  console.log(window["lastFocusedArray"]);
 };
 
 export const assignFocusEventListeners = () => {
   // *** make sure super global object where we will be keeping the elements is defined
   if (_.isNil(window["lastFocusedArray"])) {
     window["lastFocusedArray"] = [];
+  }
+
+  if (_.isNil(window["lastModalButton"])) {
+    window["lastModalButton"] = [];
   }
 
   // *** find all focusable items on the page
@@ -56,6 +67,28 @@ export const cleanupFocusEventListeners = () => {
 
 export const returnFocusToLast = () => {
   if (!_.isNil(window["lastFocusedArray"])) {
-    window["lastFocusedArray"][window["lastFocusedArray"].length - 1].focus();
+    const lastFocus =
+      window["lastFocusedArray"][window["lastFocusedArray"].length - 1];
+
+    if (lastFocus && lastFocus.id) {
+      document.querySelector(`#${lastFocus.id}`).focus();
+    }
+  }
+};
+
+export const returnFocusToModalButton = () => {
+  if (!_.isNil(window["lastModalButton"])) {
+    if (window["lastModalButton"].length > 0) {
+      const button =
+        window["lastModalButton"][window["lastModalButton"].length - 1];
+      if (button && button.id) {
+        const element = document.querySelector(`#${button.id}`);
+        if (element) {
+          element.focus();
+          window["lastModalButton"] = [];
+        } else {
+        }
+      }
+    }
   }
 };

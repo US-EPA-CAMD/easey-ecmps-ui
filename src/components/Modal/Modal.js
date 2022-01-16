@@ -74,7 +74,7 @@ export const Modal = ({
             }}
           >
             <div className="modal-content modal-color padding-y-3">
-              <div className="modal-header modal-color  ">
+              <div className="modal-header modal-color border-bottom-1px border-base-lighter">
                 <ClearSharp
                   className="position-absolute right-1 top-1 cursor-pointer text-bold"
                   onClick={close}

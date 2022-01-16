@@ -65,9 +65,6 @@ export const DataTableRender = ({
   setMostRecentlyCheckedInMonitorPlanId,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
   setCheckout,
-  setViewBtn,
-  viewBtn,
-  setAddBtn,
   show = false,
   ariaLabel,
 
@@ -232,17 +229,6 @@ export const DataTableRender = ({
         // *** normalize the row object to be in the format expected by DynamicTabs
         const normalizedRow = normalizeRowObjectFormat(row, columnNames);
 
-        let willAutoFocus;
-        if (
-          !show &&
-          viewBtn &&
-          viewBtn === row[`col${Object.keys(row).length - 1}`]
-        ) {
-          willAutoFocus = true;
-        } else {
-          willAutoFocus = false;
-        }
-
         return (
           <div>
             {/* user is logged in  */}
@@ -323,12 +309,9 @@ export const DataTableRender = ({
                   id={
                     tableTitle
                       ? `btnOpen${tableTitle.split(" ").join("")}`
-                      : `btnOpen`
+                      : `btnOpen${row[`col${Object.keys(row).length - 1}`]}`
                   }
                   onClick={() => {
-                    if (setViewBtn) {
-                      setViewBtn(row[`col${Object.keys(row).length - 1}`]);
-                    }
                     openHandler(normalizedRow, false);
                   }}
                   aria-label={
@@ -336,7 +319,6 @@ export const DataTableRender = ({
                       ? `view and/or edit ${row.col1}`
                       : `view ${row.col1}`
                   }
-                  autoFocus={willAutoFocus}
                 >
                   {checkout && !nonEditable ? "View / Edit" : "View"}
                 </Button>
@@ -354,9 +336,6 @@ export const DataTableRender = ({
                 }
                 className="cursor-pointer margin-left-2 open-modal-button"
                 onClick={() => {
-                  if (setViewBtn) {
-                    setViewBtn(row[`col${Object.keys(row).length - 1}`]);
-                  }
                   openHandler(normalizedRow, false);
                 }}
                 aria-label={
@@ -364,7 +343,6 @@ export const DataTableRender = ({
                     ? `Open ${row.col1} in a new tab`
                     : `View ${row.col1}`
                 }
-                autoFocus={willAutoFocus}
               >
                 {actionsBtn === "Open" ? "Open" : "View"}
               </Button>
@@ -423,15 +401,6 @@ export const DataTableRender = ({
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const triggerAddBtn = (event) => {
-    if (setAddBtn) {
-      setAddBtn(event.target);
-      setViewBtn(null);
-    }
-    addBtn(false, false, true);
-  };
-
   return (
     <div className={`${componentStyling}`}>
       <div
@@ -505,7 +474,7 @@ export const DataTableRender = ({
                     outline="true"
                     color="black"
                     onClick={(event) => {
-                      triggerAddBtn(event);
+                      addBtn(false, false, true);
                     }}
                     id={
                       addBtnName.toLowerCase().split(" ").join("-") + "-add-btn"
@@ -544,7 +513,7 @@ export const DataTableRender = ({
                       outline="true"
                       color="black"
                       onClick={(event) => {
-                        triggerAddBtn(event);
+                        addBtn(false, false, true);
                       }}
                       id="addBtn"
                     >
