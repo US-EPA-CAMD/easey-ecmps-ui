@@ -771,6 +771,7 @@ export const DataTableSystems = ({
                   updateComponentTable={updateComponentTable}
                   setupdateComponentTable={setupdateComponentTable}
                   updateAnalyzerRangeTable={updateAnalyzerRangeTable}
+                  setUpdateAnalyzerRangeTable={setUpdateAnalyzerRangeTable}
                   setCreateAnalyzerRangesFlag={setCreateAnalyzerRangesFlag}
                   createAnalyzerRangesFlag={createAnalyzerRangesFlag}
                   setCreateFuelFlowFlag={setCreateFuelFlowFlag}
