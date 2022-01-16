@@ -24,12 +24,25 @@ export const LeftNavigation = (props) => {
                 : "text-no-wrap"
               : "text-no-wrap"
           }
+          aria-label={
+            item.name !== "Home"
+              ? isWorkspace
+                ? `${item.name} - Workspace`
+                : `${item.name} - Global-View`
+              : "Go to Home"
+          }
           variant="unstyled"
           asCustom={Link}
           to={item.url}
           exact="true"
           rel={item.name}
-          title={`Go to ${item.name} page`}
+          title={
+            item.name !== "Home"
+              ? isWorkspace
+                ? ` Go to ${item.name} - Workspace page`
+                : `Go to ${item.name} - Global-View page`
+              : "Go to Home page"
+          }
           key={item.url}
           id={`${item.name.split(" ").join("")}${workspaceText}`}
           onClick={(event) => handleRouteChange(event, item.url)}
