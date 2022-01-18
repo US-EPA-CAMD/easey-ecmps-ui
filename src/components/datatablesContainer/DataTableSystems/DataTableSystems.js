@@ -261,6 +261,7 @@ export const DataTableSystems = ({
     setSecondLevel(val);
     setSecondLevelName(currentBread);
 
+    console.log('currentBread"',currentBread)
     // missing stepper if !currentBread
     if (!addComp && !currentBread) {
       setCreateFuelFlowFlag(create);
@@ -677,7 +678,6 @@ export const DataTableSystems = ({
                     : () => {
                         saveFuelFlows();
                         backToFirstLevelLevelBTN(false);
-
                         setOpenFuelFlowsView(false);
                       }
                   : secondLevelName === "Component" && !createNewComponentFlag
@@ -712,7 +712,10 @@ export const DataTableSystems = ({
                 : // in just editing a range
                   () => {
                     saveAnalyzerRanges();
+                    
                     backToSecondLevelBTN(false);
+                    setBread(true, "Component"); // fixes systems component "save and close" not working after saving analyzer range edit
+
                   }
             }
             close={closeModalHandler}
