@@ -16,14 +16,11 @@ export const getMonitoringPlansUnitCapacityRecords = (data) => {
 
     records.push({
       col1: commercialOperationDateString,
-
       col2: operationDateString,
       col3: el.boilerTurbineType,
       col4: boilerTurbineBeginDateString,
-
       col5: boilerTurbineEndDateString,
       col6: el.maximumHourlyHeatInputCapacity,
-
       col7: `${beginDate} `,
       col8: `${endDate} `,
       col9: el.id,
