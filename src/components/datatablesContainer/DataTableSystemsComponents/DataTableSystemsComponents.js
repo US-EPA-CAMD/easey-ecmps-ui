@@ -249,6 +249,7 @@ export const DataTableSystemsComponents = ({
     setOpenFuelFlowsView(false);
     setComponentView(true);
     if (monitoringSystemsComponents.length > 0 && !create) {
+      console.log(monitoringSystemsComponents, 'test', row);
       selectComponents = monitoringSystemsComponents.filter(
         element => element.componentId === row.col1,
       )[0];
