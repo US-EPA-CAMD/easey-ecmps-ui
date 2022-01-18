@@ -43,6 +43,7 @@ export const DataTableSystemsComponents = ({
   setSelectedRangeInFirst,
   backBTN,
   updateAnalyzerRangeTable,
+  setUpdateAnalyzerRangeTable,
   setUpdateFuelFlowTable,
   updateFuelFlowTable,
   setCreateAnalyzerRangesFlag,
@@ -513,7 +514,10 @@ export const DataTableSystemsComponents = ({
                         selectedRanges={openAnalyzer}
                         thirdLevel={thirdLevel}
                         setThirdLevel={setThirdLevel}
-                        updateTable={updateAnalyzerRangeTable}
+                        updateAnalyzerRangeTable={updateAnalyzerRangeTable}
+                        setUpdateAnalyzerRangeTable={
+                          setUpdateAnalyzerRangeTable
+                        }
                         user={user}
                         checkout={checkout}
                         setOpenFuelFlowsView={setOpenFuelFlowsView}

@@ -26,18 +26,18 @@ export const DataTableAnalyzerRanges = ({
   setSelectedModalData,
   setSelectedRange,
   updateAnalyzerRangeTable,
+  setUpdateAnalyzerRangeTable,
   setCreateAnalyzerRangesFlag,
 }) => {
   const [rangesLoaded, setRangesLoaded] = useState(false);
   const [ranges, setRanges] = useState([]);
-  const [updateTable, setUpdateTable] = useState(updateAnalyzerRangeTable);
   const rangesColumnNames = ["Range", "Date and Time"];
 
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
   const dropdownArray = [["analyzerRangeCode"]];
 
   useEffect(() => {
-    if (updateTable || ranges.length <= 0) {
+    if (updateAnalyzerRangeTable || ranges.length <= 0) {
       mpApi
         .getMonitoringAnalyzerRanges(
           selectedRanges.locationId,
@@ -47,10 +47,10 @@ export const DataTableAnalyzerRanges = ({
           setRanges(res.data);
           setRangesLoaded(true);
         });
-      setUpdateTable(false);
+      setUpdateAnalyzerRangeTable(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedRanges, updateTable]);
+  }, [selectedRanges, updateAnalyzerRangeTable]);
 
   // load dropdowns data (called once)
   useEffect(() => {
