@@ -119,7 +119,7 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
                     />
                     <div className="left-0 bottom-0 padding-2"></div>
                   </div>
-
+                  <span className="break-line" />
                   <div className="modal-body padding-top-0 modal-color maxh-tablet overflow-y-auto margin-top-2">
                     <div>
                       <CountdownTimer
