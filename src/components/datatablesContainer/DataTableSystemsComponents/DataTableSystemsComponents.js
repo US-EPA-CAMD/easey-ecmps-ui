@@ -8,7 +8,7 @@ import "./DataTableSystemsComponentsRender.scss";
 import { attachChangeEventListeners } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 import DataTableAnalyzerRanges from "../DataTableAnalyzerRanges/DataTableAnalyzerRanges";
 
-import { Preloader } from "../../Preloader/Preloader";
+import { Preloader } from "@us-epa-camd/easey-design-system";
 import { connect } from "react-redux";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
 import {
@@ -249,7 +249,7 @@ export const DataTableSystemsComponents = ({
     setOpenFuelFlowsView(false);
     setComponentView(true);
     if (monitoringSystemsComponents.length > 0 && !create) {
-      console.log(monitoringSystemsComponents, "test",row)
+      console.log(monitoringSystemsComponents, "test", row);
       selectComponents = monitoringSystemsComponents.filter(
         (element) => element.componentId === row.col1 && element.id === row.col4
       )[0];

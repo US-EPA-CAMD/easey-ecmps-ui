@@ -8,7 +8,7 @@ import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 
-import { Preloader } from "../../Preloader/Preloader";
+import { Preloader } from "@us-epa-camd/easey-design-system";
 import { connect } from "react-redux";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
 import {
@@ -261,7 +261,7 @@ export const DataTableSystems = ({
     setSecondLevel(val);
     setSecondLevelName(currentBread);
 
-    console.log('currentBread"',currentBread)
+    console.log('currentBread"', currentBread);
     // missing stepper if !currentBread
     if (!addComp && !currentBread) {
       setCreateFuelFlowFlag(create);
@@ -712,10 +712,9 @@ export const DataTableSystems = ({
                 : // in just editing a range
                   () => {
                     saveAnalyzerRanges();
-                    
+
                     backToSecondLevelBTN(false);
                     setBread(true, "Component"); // fixes systems component "save and close" not working after saving analyzer range edit
-
                   }
             }
             close={closeModalHandler}

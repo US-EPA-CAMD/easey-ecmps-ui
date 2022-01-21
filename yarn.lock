@@ -1532,6 +1532,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@ramonak/react-progress-bar@^4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@ramonak/react-progress-bar/-/react-progress-bar-4.2.0.tgz#010a31a740cdb906556cebc9d8534f6e6a571587"
+  integrity sha512-fMNwhvdqviup9QXv+3+SJwwh8Hdh4wqQLBtaruk2SHL7sSvchYg0iEsOqKB4U3vfQEwAtMqsorfxsgO5AnPmiA==
+
 "@sheerun/mutationobserver-shim@^0.3.2":
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/@sheerun/mutationobserver-shim/-/mutationobserver-shim-0.3.3.tgz#5405ee8e444ed212db44e79351f0c70a582aae25"
@@ -1959,10 +1964,12 @@
     semver "^7.3.2"
     tsutils "^3.17.1"
 
-"@us-epa-camd/easey-design-system@1.19.0":
-  version "1.19.0"
-  resolved "https://npm.pkg.github.com/download/@us-epa-camd/easey-design-system/1.19.0/12dc5df46e0050376f940ee2b63158dde6ea40acc14b6ef13117d0227fb5f3ac#643118f26e0f4eafd411ffa5381e9e2895215125"
-  integrity sha512-tcYuoSIvjjFiM51/91fktm+VVlXm86rn3109ecwJfS6Qrudoy4Fks7Rw71ao+5/0731/fKxtzYhCC7eZyhB4Cw==
+"@us-epa-camd/easey-design-system@1.23.0":
+  version "1.23.0"
+  resolved "https://npm.pkg.github.com/download/@us-epa-camd/easey-design-system/1.23.0/8c38f9e4af988b4c558947459ea518498406a1a2f7973ea90ab41f0200008e78#a7a870580172382cbd995728e77cedf49e0d29f3"
+  integrity sha512-Ftn+7tjcFpLdvf7syGfQhyi4t378sJ5VNDCTvgDSlO+vLgGJl6I5a/sTU1PwJxyECTPsuQt8h4W9iWQC2rXrzQ==
+  dependencies:
+    "@ramonak/react-progress-bar" "^4.2.0"
 
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"
