@@ -141,7 +141,7 @@ export const Tabs = ({
                     }
                   }}
                 >
-                  <div className="text-center tab-button-text-container ellipsis-text padding-2px position-relative top-neg-1">
+                  <div className="text-center tab-button-text-container ellipsis-text padding-2px position-relative top-neg-05">
                     {user &&
                     el.props.locationId &&
                     el.props.facId &&
@@ -179,7 +179,7 @@ export const Tabs = ({
 
                   {dynamic ? (
                     <ClearSharp
-                      className="text-bold margin-left-2 float-right position-relative left-neg-1 top-neg-3 margin-top-neg-3 cursor-pointer"
+                      className="text-bold margin-left-2 float-right position-relative left-neg-1 top-neg-1 margin-top-neg-3 cursor-pointer"
                       onClick={(e) => closeHandler(e, i, el.props.locationId)}
                       onKeyPress={(event) => {
                         if (event.key === "Enter") {

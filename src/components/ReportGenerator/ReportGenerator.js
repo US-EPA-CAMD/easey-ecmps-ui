@@ -2,7 +2,7 @@ import React, { useEffect, useState, Suspense, lazy } from "react";
 import { useParams } from "react-router-dom";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import * as facApi from "../../utils/api/facilityApi";
-import { Preloader } from "../Preloader/Preloader";
+import { Preloader } from "@us-epa-camd/easey-design-system";
 
 import "./ReportGenerator.scss";
 import Login from "../Login/Login";
