@@ -3,6 +3,7 @@ import { Link as USWDSLink } from "@trussworks/react-uswds";
 
 import { Link } from "react-router-dom";
 import Login from "../Login/Login";
+import config from "../../config";
 
 import "./AboutHome.scss";
 const AboutHome = ({ user, setCurrentLink }) => {
@@ -38,7 +39,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
   };
 
   return (
-    <div className="grid-row padding-top-7 padding-2 react-transition fade-in">
+    <div className="grid-row padding-top-7 padding-2 react-transition fade-in aboutHome">
       <div className="grid-col-9 fit-content">
         <div>
           <h2 className="text-bold font-heading-2xl">About ECMPS 2.0 Beta</h2>
@@ -52,8 +53,8 @@ const AboutHome = ({ user, setCurrentLink }) => {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href="https://test.epacdx.net/FAQ"
-              className="forceUnderlineText"
+              href={`${config.app.cdxBaseUrl}/FAQ`}
+              className="forceUnderlineText colorContrast"
             >
               CDX Test login
             </a>{" "}
@@ -81,7 +82,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
               target="_blank"
               rel="noopener noreferrer"
               href={"https://ecmps.blogspot.com/"}
-              className="forceUnderlineText"
+              className="forceUnderlineText colorContrast"
             >
               https://ecmps.blogspot.com/
             </a>{" "}
@@ -90,8 +91,8 @@ const AboutHome = ({ user, setCurrentLink }) => {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href={"https://easey-dev.app.cloud.gov/ecmps/help-support"}
-              className="forceUnderlineText"
+              href={`https://${config.app.host}/ecmps/help-support`}
+              className="forceUnderlineText colorContrast"
             >
               Contact Us form
             </a>
@@ -123,7 +124,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
                       href={
                         "https://app.zenhub.com/files/287570343/449899ef-7a75-4129-995c-ae4bf2e347bf/download"
                       }
-                      className="forceUnderlineText"
+                      className="forceUnderlineText colorContrast"
                     >
                       here
                     </a>
@@ -153,25 +154,27 @@ const AboutHome = ({ user, setCurrentLink }) => {
         })}{" "}
       </div>
       <div className="grid-col-3 float-right padding-2">
-        <div className="padding-bottom-2">
-          <div className="box box--rss">
-            <div className="box__title">What's New</div>
-            <div className="box__content">
-              Welcome to the first release of the all new ECMPS 2.0 Beta! To
-              view a list of functionality and how to get started go here
-              (hyperlink to quick start guide, webinar release). Have questions
-              or feedback? Please contact us through our{" "}
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={"https://easey-dev.app.cloud.gov/ecmps/help-support"}
-              >
-                Contact Us form
-              </a>
-              .
-            </div>
+        <div className="box border-1px">
+          <div className="title text-white text-center padding-y-2">
+            What's New
           </div>
-        </div>{" "}
+          <div className="padding-2">
+            Welcome to the first release of the all new ECMPS 2.0 Beta! To view
+            a list of functionality and how to get started go here (hyperlink to
+            quick start guide, webinar release). Have questions or feedback?
+            Please contact us through our{" "}
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`https://${config.app.host}/ecmps/help-support`}
+              className="forceUnderlineText colorContrast"
+            >
+              Contact Us form
+            </a>
+            .
+          </div>
+        </div>
+
         <div className="bg-base-lighter" data-testid="homeLogIn">
           {!user ? <Login isModal={false} /> : ""}
         </div>

@@ -9,7 +9,9 @@
   color: $epa-darker-gray;
   cursor: pointer;
   font-weight: bold;
-  width: 15em !important;
+  width: 15.5em !important;
+  height: 3.2em !important;
+  padding-bottom: 0.2em;
 }
 
 .ellipsis-text {
@@ -17,6 +19,8 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  min-height: 2em;
+  margin-top: 0.15em;
 }
 
 .active-tab-button {
@@ -24,4 +28,9 @@
   color: $epa-blue-base;
   cursor: default;
   // outline: none !important;
+}
+
+#closeXBtnTab {
+  position: relative;
+  top: -1.25em !important;
 }

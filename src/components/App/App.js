@@ -10,6 +10,7 @@ import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
 import RuleEditor from "../RuleEditor/RuleEditor";
 import Login from "../Login/Login";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
+import ReportGenerator from "../ReportGenerator/ReportGenerator";
 
 import { handleActiveElementFocus } from "../../additional-functions/add-active-class";
 import FAQ from "../FAQ/FAQ";
@@ -20,6 +21,10 @@ import "./App.scss";
 import { TokenRefresher } from "../TokenRefresher/TokenRefresher";
 import InactivityTracker from "../InactivityTracker/InactivityTracker";
 import config from "../../config";
+import {
+  assignFocusEventListeners,
+  cleanupFocusEventListeners,
+} from "../../additional-functions/manage-focus";
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -27,17 +32,17 @@ const App = () => {
   const [resetTimer, setResetTimer] = useState(false);
 
   useEffect(() => {
-    if(config.app.googleAnalyticsEnabled === 'true'){
-      let tagManagerArgs = {gtmId: ''};
-      if(window.location.href.search("workspace") === -1){
+    if (config.app.googleAnalyticsEnabled === "true") {
+      const tagManagerArgs = { gtmId: "" };
+      if (window.location.href.search("workspace") === -1) {
         tagManagerArgs.gtmId = config.app.googleAnalyticsPublicContainerId;
+      } else {
+        tagManagerArgs.gtmId =
+          config.app.googleAnalyticsAuthenticatedContainerId;
       }
-      else{
-        tagManagerArgs.gtmId = config.app.googleAnalyticsAuthenticatedContainerId;
-      }
-          
+
       TagManager.initialize(tagManagerArgs);
-    }    
+    }
   });
 
   useEffect(() => {
@@ -46,22 +51,28 @@ const App = () => {
       : false;
 
     setUser(cdxUser && cdxUser.firstName ? cdxUser : false);
+
+    assignFocusEventListeners();
+    handleActiveElementFocus();
+
+    // * clean up
+    return () => {
+      cleanupFocusEventListeners();
+      handleActiveElementFocus();
+    };
   }, []);
 
   // *** assign / un-assign activity event listeners
   useEffect(() => {
-    handleActiveElementFocus();
-
-    document
-      .querySelector(".usa-banner__content")
-      .classList.add("react-transition");
-    document.querySelector(".usa-banner__content").classList.add("fade-in");
-
-    // * clean up
-    return () => {
-      handleActiveElementFocus();
-    };
-  }, []);
+    if (user) {
+      if (document.querySelector(".usa-banner__content")) {
+        document
+          .querySelector(".usa-banner__content")
+          .classList.add("react-transition");
+        document.querySelector(".usa-banner__content").classList.add("fade-in");
+      }
+    }
+  }, [user]);
 
   const [currentLink, setCurrentLink] = useState(
     window.location.href.replace(`${window.location.origin}`, "")
@@ -73,66 +84,72 @@ const App = () => {
       <div aria-live="polite" role="status" aria-atomic="true">
         <div>{user ? <InactivityTracker /> : ""}</div>
       </div>
+      <Switch>
+        <Route
+          path="/workspace/monitoring-plans/:id/evaluation-report"
+          exact
+          component={() => <ReportGenerator user={user} />}
+        />
+        <Layout
+          user={user}
+          currentLink={currentLink}
+          setCurrentLink={setCurrentLink}
+        >
+          <Switch>
+            <Redirect from="/home" to="/" />
+            <Route
+              path="/"
+              exact
+              component={() => (
+                <AboutHome user={user} setCurrentLink={setCurrentLink} />
+              )}
+            />
 
-      <Layout
-        user={user}
-        currentLink={currentLink}
-        setCurrentLink={setCurrentLink}
-      >
-        <Switch>
-          <Redirect from="/home" to="/" />
+            <Route path={`/faqs`} exact component={() => <FAQ />} />
+            <Route path="/login" exact component={Login} />
+            <Route
+              path="/monitoring-plans"
+              exact
+              component={() => <MonitoringPlanHome user={false} />}
+            />
+            <Route
+              path="/workspace/monitoring-plans/"
+              exact
+              component={() => (
+                <MonitoringPlanHome
+                  resetTimer={setResetTimer}
+                  setExpired={setExpired}
+                  resetTimerFlag={resetTimer}
+                  callApiFlag={expired}
+                  user={user}
+                />
+              )}
+            />
 
-          <Route
-            path="/"
-            exact
-            component={() => (
-              <AboutHome user={user} setCurrentLink={setCurrentLink} />
-            )}
-          />
+            <Route path="/qa_certifications/" exact component={ComingSoon} />
+            <Route path="/emission/" exact component={ComingSoon} />
 
-          <Route path={`/faqs`} exact component={() => <FAQ />} />
-          <Route path="/login" exact component={Login} />
-          <Route
-            path="/monitoring-plans"
-            exact
-            component={() => <MonitoringPlanHome user={false} />}
-          />
-          <Route
-            path="/workspace/monitoring-plans/"
-            exact
-            component={() => (
-              <MonitoringPlanHome
-                resetTimer={setResetTimer}
-                setExpired={setExpired}
-                resetTimerFlag={resetTimer}
-                callApiFlag={expired}
-                user={user}
-              />
-            )}
-          />
+            <Route
+              path="/workspace/qa_certifications/"
+              exact
+              component={ComingSoon}
+            />
+            <Route path="/workspace/emission/" exact component={ComingSoon} />
+            <Route path="/tutorials" exact component={ComingSoon} />
 
-          <Route path="/qa_certifications/" exact component={ComingSoon} />
-          <Route path="/emission/" exact component={ComingSoon} />
+            <Route
+              path="/reporting-instructions"
+              exact
+              component={ReportingInstructions}
+            />
+            <Route path={`/resources`} exact component={Resources} />
+            <Route path={`/help-support`} exact component={HelpSupport} />
+            <Route path="/admin/rules" exact component={RuleEditor} />
 
-          <Route
-            path="/workspace/qa_certifications/"
-            exact
-            component={ComingSoon}
-          />
-          <Route path="/workspace/emission/" exact component={ComingSoon} />
-          <Route path="/tutorials" exact component={ComingSoon} />
-
-          <Route
-            path="/reporting-instructions"
-            exact
-            component={ReportingInstructions}
-          />
-          <Route path={`/resources`} exact component={Resources} />
-          <Route path={`/help-support`} exact component={HelpSupport} />
-          <Route path="/admin/rules" exact component={RuleEditor} />
-          <Route path="*" component={NotFound} />
-        </Switch>
-      </Layout>
+            <Route path="*" component={NotFound} />
+          </Switch>
+        </Layout>
+      </Switch>
     </div>
   );
 };

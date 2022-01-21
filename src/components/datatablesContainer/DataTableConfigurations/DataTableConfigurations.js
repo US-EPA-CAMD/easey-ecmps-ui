@@ -21,6 +21,7 @@ export const DataTableConfigurations = ({
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = ["Configurations", "Status"];
+  const facility = data.col1;
 
   // *** generate columns array of object based on columnNames array above
 
@@ -107,8 +108,10 @@ export const DataTableConfigurations = ({
   }, [selectedConfig]);
 
   useEffect(() => {
-    loadMonitoringPlansData(data.col2);
-    setDataLoaded(true);
+    loadMonitoringPlansData(data.col2).then(() => {
+      setDataLoaded(true);
+    });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -154,6 +157,7 @@ export const DataTableConfigurations = ({
         }
         setCheckBackInState={setCheckout}
         openAndCheckoutBTNFocus={openAndCheckoutBTNFocus}
+        ariaLabel={`Configurations for ${facility}`}
       />
     </div>
   );
@@ -167,8 +171,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadMonitoringPlansData: (orisCode) =>
-      dispatch(loadMonitoringPlansArray(orisCode)),
+    loadMonitoringPlansData: async (orisCode) => {
+      dispatch(loadMonitoringPlansArray(orisCode));
+    },
     setCheckout: (value, configID) =>
       dispatch(setCheckoutState(value, configID)),
   };

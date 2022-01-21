@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import parse from "html-react-parser";
 import { Link } from "react-router-dom";
 import { Link as USWDSLink, Button } from "@trussworks/react-uswds";
 import { OpenInNew } from "@material-ui/icons";
@@ -96,20 +97,12 @@ export const HelpSupport = () => {
       <div className="grid-row">
         <h2 className="text-bold font-heading-2xl">Help/Support</h2>
         <div className="flex-force-break" />
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla
-          massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt
-          molestie. Vestibulum faucibus enim sit amet pretium laoreet.
-        </p>
+        <p>Coming Soon</p>
       </div>
       <div className="grid-row margin-top-5">
         <h3 className="text-bold font-heading-2xl">FAQs</h3>
         <div className="flex-force-break" />
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla
-          massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt
-          molestie. Vestibulum faucibus enim sit amet pretium laoreet.
-        </p>
+        <p>Coming Soon</p>
         <div className="flex-force-break" />
         <USWDSLink
           className="usa-button usa-button--outline margin-0 margin-left-05"
@@ -132,11 +125,7 @@ export const HelpSupport = () => {
       <div className="grid-row margin-top-5">
         <h3 className="text-bold font-heading-2xl">Tutorials</h3>
         <div className="flex-force-break" />
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla
-          massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt
-          molestie. Vestibulum faucibus enim sit amet pretium laoreet.
-        </p>
+        <p>Coming Soon</p>
         <div className="flex-force-break" />
         <ul className="margin-0 padding-0 margin-left-3">
           <li key="liCDXHelp">
@@ -155,9 +144,12 @@ export const HelpSupport = () => {
         </ul>
       </div>
       <ContactForm
-        summary="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla massa in lectus volutpat scelerisque. Craseu leo vel lacus tincidunt molestie. Vestibulum faucibus enim sit amet pretium laoreet."
+        summary={parse(
+          `Please complete the fields below to send an email to ECMPS Beta Support. 
+            You may also send an email directly to <a href='mailto:ecmps-beta@camdsupport.com'>ecmps-beta@camdsupport.com</a>.`
+        )}
         subjects={commentTypes}
-        onSubmit={(e) => onSubmitHandler()}
+        onSubmit={() => onSubmitHandler()}
         submitted={submitted}
         submitStatus={submitStatus}
         submitStatusText={

@@ -1,0 +1,34 @@
+@import "../../additional-scss/variables";
+
+.ReportGenerator {
+  .loginPanel {
+    margin: 10% 0 0 35%;
+  }
+
+  @media print {
+    * {
+      -webkit-print-color-adjust: exact;
+    }
+
+    .do-not-print {
+      display: none;
+    }
+  }
+
+  .rdt_TableBody {
+    max-height: none !important;
+  }
+
+  .rdt_TableRow {
+    [role="cell"] {
+      padding: 0.5em;
+    }
+  }
+
+  .rdt_TableRow:nth-child(odd) {
+    background-color: $epa-off-white !important;
+  }
+  .rdt_TableRow:nth-child(even) {
+    background-color: $epa-white !important;
+  }
+}

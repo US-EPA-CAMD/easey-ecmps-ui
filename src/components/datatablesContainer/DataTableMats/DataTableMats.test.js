@@ -35,19 +35,105 @@ const componentRenderer = (location) => {
     checkout: true,
     setRevertedState: jest.fn(),
     locationSelectValue: location,
+    mdmData: {
+      supplementalMATSParameterCode: [
+        {
+          code: "",
+          name: "-- Select a value --",
+        },
+        {
+          code: "HCL",
+          name: "Hydrogen Chloride",
+        },
+        {
+          code: "HF",
+          name: "Hydrogen Fluoride",
+        },
+        {
+          code: "HG",
+          name: "Mercury",
+        },
+        {
+          code: "IM",
+          name: "Individual HAP Metals (Including Hg)",
+        },
+        {
+          code: "INHGM",
+          name: "Individual non-Hg HAP Metals",
+        },
+        {
+          code: "LU",
+          name: "Limited-Use Oil-Fired Unit",
+        },
+        {
+          code: "TM",
+          name: "Total HAP Metals (Including Hg)",
+        },
+        {
+          code: "TNHGM",
+          name: "Total non-Hg HAP Metals",
+        },
+      ],
+      supplementalMATSMonitoringMethodCode: [
+        {
+          code: "",
+          name: "-- Select a value --",
+        },
+        {
+          code: "CEMS",
+          name: "Continuous Emission Monitoring System (Requires Administrative Approval under 40 CFR 63.7(f))",
+        },
+        {
+          code: "LEE",
+          name: "Low Emitting EGU for Total HAP metals , including Hg",
+        },
+        {
+          code: "LEST",
+          name: "Low Emitting EGU for some of the non-Hg HAP metals and Quarterly Stack Testing for the rest",
+        },
+        {
+          code: "NA",
+          name: "No Applicable Method",
+        },
+        {
+          code: "PMCEMS",
+          name: "Particulate Matter Continuous Monitoring System",
+        },
+        {
+          code: "PMCPMS",
+          name: "Particulate Matter Continuous Parametric Monitoring System",
+        },
+        {
+          code: "PMO",
+          name: "Percent Moisture in the Oil (Oil-fired EGUs, only)",
+        },
+        {
+          code: "PMQST",
+          name: "Quarterly Stack Testing for Particulate Matter",
+        },
+        {
+          code: "QST",
+          name: "Quarterly Stack Testing",
+        },
+      ],
+    },
+    loadDropdownsData: jest.fn(),
+    settingInactiveCheckBox: jest.fn(),
+    setUpdateRelatedTables: jest.fn(),
+    updateRelatedTables: false,
   };
   return render(<DataTableMats {...props} />);
 };
 function componentRendererNoData(args) {
-  const defualtProps = {
+  const defaultProps = {
     user: { firstName: "test" },
     checkout: true,
     inactive: true,
     settingInactiveCheckBox: jest.fn(),
-    locationSelectValue: location,
+    locationSelectValue: 1,
   };
 
-  const props = { ...defualtProps, ...args };
+  const props = { ...defaultProps, ...args };
   return render(<DataTableMats {...props} />);
 }
 
@@ -98,7 +184,7 @@ test("tests a create/save methods", async () => {
     }
   });
   axios.put.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: data })
+    Promise.resolve({ status: 200, data: monitoringMatsMethods })
   );
 
   let { container } = await waitForElement(() => componentRenderer(5770));

@@ -6,3 +6,6 @@ inactivityDurationCheckoutMinutes: 20
 refreshTokenRateMinutes: 15
 inactivityDurationLogoutMinutes: 20
 googleAnalyticsEnabled: "true"
+cdxBaseUrl: test.epacdx.net
+cbsBaseUrl: camd.epa.gov
+refreshEvalStatusTimeoutMinutes: 15

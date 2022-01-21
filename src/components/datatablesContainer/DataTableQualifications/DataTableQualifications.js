@@ -9,8 +9,16 @@ import DataTableLEEQualifications from "../DataTableLEEQualifications/DataTableL
 import DataTableLMEQualifications from "../DataTableLMEQualifications/DataTableLMEQualifications";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
-import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
+
+import { Preloader } from "../../Preloader/Preloader";
+import { connect } from "react-redux";
+import { loadDropdowns } from "../../../store/actions/dropdowns";
+import {
+  convertSectionToStoreName,
+  QUALIFICATIONS_SECTION_NAME,
+  QUALIFICATIONS_STORE_NAME,
+} from "../../../additional-functions/data-table-section-and-store-names";
 
 import {
   Breadcrumb,
@@ -31,6 +39,8 @@ import {
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
 export const DataTableQualifications = ({
+  mdmData,
+  loadDropdownsData,
   locationSelectValue,
   user,
   checkout,
@@ -42,7 +52,7 @@ export const DataTableQualifications = ({
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [qualificationData, setQualificationsData] = useState([]);
-  const totalOptions = useRetrieveDropdownApi(["qualificationTypeCode"], true);
+
   const [show, setShow] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
 
@@ -56,6 +66,9 @@ export const DataTableQualifications = ({
 
   const [openLME, setOpenLME] = useState(false);
   const [updateLME, setUpdateLME] = useState(false);
+
+  const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
+  const dropdownArray = [["qualificationTypeCode"]];
 
   useEffect(() => {
     if (
@@ -76,6 +89,18 @@ export const DataTableQualifications = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
+
+  // load dropdowns data (called once)
+  useEffect(() => {
+    if (mdmData.length === 0) {
+      loadDropdownsData(QUALIFICATIONS_SECTION_NAME, dropdownArray);
+    } else {
+      setDropdownsLoaded(true);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mdmData]);
+
   const [selectedQualificationData, setSelectedQualificationData] =
     useState(null);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
@@ -103,18 +128,22 @@ export const DataTableQualifications = ({
       }
 
       // only inactive data > disables checkbox and checks it
-      if (inactiveOnly.length === qualificationData.length) {
+      else if (inactiveOnly.length === qualificationData.length) {
         //check it and disable checkbox
         settingInactiveCheckBox(true, true);
         return fs.getMonitoringPlansQualifications(qualificationData);
       }
       // resets checkbox
-      settingInactiveCheckBox(inactive[0], false);
-      return fs.getMonitoringPlansQualifications(
-        !inactive[0] ? getActiveData(qualificationData) : qualificationData
-      );
+      else {
+        settingInactiveCheckBox(inactive[0], false);
+        return fs.getMonitoringPlansQualifications(
+          !inactive[0] ? getActiveData(qualificationData) : qualificationData
+        );
+      }
+    } else {
+      settingInactiveCheckBox(false, true);
+      return [];
     }
-    return [];
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qualificationData, inactive]);
@@ -261,7 +290,7 @@ export const DataTableQualifications = ({
           endDate: ["End Date", "date", ""],
         },
         create,
-        totalOptions
+        mdmData
       )
     );
     setShow(true);
@@ -270,9 +299,6 @@ export const DataTableQualifications = ({
       attachChangeEventListeners(".modalUserInput");
     });
   };
-
-  const [viewBtn, setViewBtn] = useState(null);
-  const [addBtn, setAddBtn] = useState(null);
 
   const closeModalHandler = () => {
     // when cancel is clicked in unsaved changed modal
@@ -293,9 +319,6 @@ export const DataTableQualifications = ({
       setOpenLEE(false);
       setOpenLME(false);
       removeChangeEventListeners(".modalUserInput");
-    }
-    if (addBtn) {
-      addBtn.focus();
     }
   };
 
@@ -323,16 +346,14 @@ export const DataTableQualifications = ({
       <DataTableRender
         columnNames={columnNames}
         data={data}
-        dataLoaded={dataLoaded}
+        dataLoaded={dataLoaded && dropdownsLoaded}
         checkout={checkout}
         user={user}
         openHandler={openQualificationDataModal}
         actionsBtn={"View"}
         addBtn={openQualificationDataModal}
         addBtnName={"Create Qualification"}
-        setViewBtn={setViewBtn}
-        viewBtn={viewBtn}
-        setAddBtn={setAddBtn}
+        ariaLabel="Qualifications"
       />
 
       {show ? (
@@ -363,7 +384,7 @@ export const DataTableQualifications = ({
             <div>
               {openPCT || openLEE || openLME ? (
                 ""
-              ) : (
+              ) : dropdownsLoaded ? (
                 <ModalDetails
                   modalData={selectedQualificationData}
                   data={selectedModalData}
@@ -371,6 +392,8 @@ export const DataTableQualifications = ({
                   title={"Qualification"}
                   viewOnly={!(user && checkout)}
                 />
+              ) : (
+                <Preloader />
               )}
               {creating ? (
                 ""
@@ -447,4 +470,25 @@ export const DataTableQualifications = ({
   );
 };
 
-export default DataTableQualifications;
+const mapStateToProps = (state) => {
+  return {
+    mdmData: state.dropdowns[QUALIFICATIONS_STORE_NAME],
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadDropdownsData: async (section, dropdownArray) => {
+      dispatch(
+        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
+      );
+    },
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DataTableQualifications);
+export { mapDispatchToProps };
+export { mapStateToProps };

@@ -181,6 +181,10 @@ const dropdownData = [
   },
 ];
 const props = {
+  mdmData: {
+    testCode: [],
+  },
+  loadDropdownsData: jest.fn(),
   locationSelectValue: "6",
   user: "testuser",
   checkout: false,
@@ -236,6 +240,8 @@ const props = {
   dataTableName: "Span",
   selectedLocation: 5,
   showModal: false,
+  setUpdateRelatedTables: jest.fn(),
+  updateRelatedTables: false,
 };
 
 const componentTypeCode = {};
@@ -308,6 +314,5 @@ describe("DataTableAssert", () => {
     );
     const val = 1;
     expect(val === 1);
-   
   });
 });

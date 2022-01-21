@@ -4,10 +4,23 @@ import { extractUserInput } from "../../../additional-functions/extract-user-inp
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 
+import {
+  getActiveData,
+  getInactiveData,
+} from "../../../additional-functions/filter-data";
+
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
-import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
+
+import { Preloader } from "../../Preloader/Preloader";
+import { connect } from "react-redux";
+import { loadDropdowns } from "../../../store/actions/dropdowns";
+import {
+  convertSectionToStoreName,
+  MATS_METHODS_SECTION_NAME,
+  MATS_METHODS_STORE_NAME,
+} from "../../../additional-functions/data-table-section-and-store-names";
 
 import {
   attachChangeEventListeners,
@@ -16,37 +29,59 @@ import {
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
 export const DataTableMats = ({
+  mdmData,
+  loadDropdownsData,
   locationSelectValue,
   user,
   checkout,
   revertedState,
   setRevertedState,
-  // inactive,
-  // settingInactiveCheckBox,
+  inactive,
+  settingInactiveCheckBox,
+  setUpdateRelatedTables,
+  updateRelatedTables,
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [matsMethods, setMatsMethods] = useState([]);
-  const totalOptions = useRetrieveDropdownApi(
-    ["parameterCode", "monitoringMethodCode"],
-    true
-  );
+  const [methods, setMethods] = useState([]);
   const [show, setShow] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
+
+  const dropdownArray = [["parameterCode", "monitoringMethodCode"], true];
+  const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
+
   useEffect(() => {
     if (
       updateTable ||
       matsMethods.length <= 0 ||
       locationSelectValue ||
-      revertedState
+      revertedState ||
+      updateRelatedTables
     ) {
       mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
         setMatsMethods(res.data);
-        setDataLoaded(true);
+        mpApi.getMonitoringMethods(locationSelectValue).then((mets) => {
+          setMethods(mets.data);
+          setUpdateTable(false);
+          setDataLoaded(true);
+          setUpdateRelatedTables(false);
+        });
       });
-      setUpdateTable(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, updateTable, revertedState]);
+  }, [locationSelectValue, updateTable, revertedState, updateRelatedTables]);
+
+  // load dropdowns data (called once)
+  useEffect(() => {
+    if (mdmData.length === 0) {
+      loadDropdownsData(MATS_METHODS_SECTION_NAME, dropdownArray);
+    } else {
+      setDropdownsLoaded(true);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mdmData]);
+
   const [selectedMatsMethods, setSelectedMatsMethods] = useState(null);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -68,13 +103,45 @@ export const DataTableMats = ({
     endHour: 0,
   };
   const data = useMemo(() => {
-    if (matsMethods.length > 0) {
-      return fs.getMonitoringPlansMatsMethodsTableRecords(matsMethods);
+    const matsAndMethods = matsMethods.concat(methods);
+    if (matsAndMethods.length > 0) {
+      const activeOnly = getActiveData(matsAndMethods);
+      const inactiveOnly = getInactiveData(matsAndMethods);
+      // Note: settingInactiveCheckbox -> function parameters ( check flag, disable flag )
+
+      // if ONLY ACTIVE records return,
+      if (activeOnly.length === matsAndMethods.length) {
+        // then disable the inactive checkbox and set it as un-checked
+        settingInactiveCheckBox(false, true);
+        return fs.getMonitoringPlansMatsMethodsTableRecords(matsMethods);
+      }
+
+      // if ONLY INACTIVE records return
+      else if (inactiveOnly.length === matsAndMethods.length) {
+        // then disable the inactive checkbox and set it as checked
+        settingInactiveCheckBox(true, true);
+        return fs.getMonitoringPlansMatsMethodsTableRecords(matsMethods);
+      }
+
+      // if BOTH ACTIVE & INACTIVE records return
+      else {
+        // then enable the inactive checkbox (user can mark it as checked/un-checked manually)
+        settingInactiveCheckBox(inactive[0], false);
+        return fs.getMonitoringPlansMatsMethodsTableRecords(
+          !inactive[0] ? getActiveData(matsMethods) : matsMethods
+        );
+      }
     }
-    return [];
+
+    // if NO RECORDS are returned
+    else {
+      // disable the inactive checkbox and set it as un-checked
+      settingInactiveCheckBox(false, true);
+      return [];
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [matsMethods]);
+  }, [matsMethods, methods, inactive, updateTable]);
   const testing = () => {
     openMatsModal(false, false, true);
     saveMats();
@@ -99,13 +166,13 @@ export const DataTableMats = ({
       .then((result) => {
         console.log(result);
         setShow(false);
+        setUpdateTable(true);
+        setUpdateRelatedTables(true);
       })
       .catch((error) => {
         console.log(error);
         setShow(false);
       });
-
-    setUpdateTable(true);
   };
   const createMats = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
@@ -113,12 +180,13 @@ export const DataTableMats = ({
       .createMats(userInput)
       .then((result) => {
         setShow(false);
+        setUpdateTable(true);
+        setUpdateRelatedTables(true);
       })
       .catch((error) => {
         console.log(error);
         setShow(false);
       });
-    setUpdateTable(true);
   };
 
   const [createNewMats, setCreateNewMats] = useState(false);
@@ -145,7 +213,7 @@ export const DataTableMats = ({
           endHour: ["End Time", "time", ""],
         },
         create,
-        totalOptions
+        mdmData
       )
     );
     setShow(true);
@@ -154,9 +222,6 @@ export const DataTableMats = ({
       attachChangeEventListeners(".modalUserInput");
     });
   };
-
-  const [viewBtn, setViewBtn] = useState(null);
-  const [addBtn, setAddBtn] = useState(null);
 
   const closeModalHandler = () => {
     if (window.isDataChanged === true) {
@@ -167,9 +232,6 @@ export const DataTableMats = ({
     } else {
       setShow(false);
       removeChangeEventListeners(".modalUserInput");
-    }
-    if (addBtn) {
-      addBtn.focus();
     }
   };
 
@@ -205,7 +267,7 @@ export const DataTableMats = ({
       <DataTableRender
         columnNames={columnNames}
         data={data}
-        dataLoaded={dataLoaded}
+        dataLoaded={dataLoaded && dropdownsLoaded}
         // actionsBtn={"View"}
         checkout={checkout}
         user={user}
@@ -213,9 +275,6 @@ export const DataTableMats = ({
         actionsBtn={"View"}
         addBtn={openMatsModal}
         addBtnName={"Create MATS"}
-        setViewBtn={setViewBtn}
-        viewBtn={viewBtn}
-        setAddBtn={setAddBtn}
       />
 
       {show ? (
@@ -225,20 +284,25 @@ export const DataTableMats = ({
           save={createNewMats ? createMats : saveMats}
           showCancel={!(user && checkout)}
           showSave={user && checkout}
+          ariaLabel={"MATS Methods"}
           title={
             createNewMats ? "Create MATS" : "Component: Monitoring MATS Methods"
           }
           exitBTN={createNewMats ? "Create MATS" : `Save and Close`}
           children={
-            <div>
-              <ModalDetails
-                modalData={selectedMatsMethods}
-                data={selectedModalData}
-                cols={2}
-                title={"Component: Monitoring MATS Methods"}
-                viewOnly={!(user && checkout)}
-              />
-            </div>
+            dropdownsLoaded ? (
+              <div>
+                <ModalDetails
+                  modalData={selectedMatsMethods}
+                  data={selectedModalData}
+                  cols={2}
+                  title={"Component: Monitoring MATS Methods"}
+                  viewOnly={!(user && checkout)}
+                />
+              </div>
+            ) : (
+              <Preloader />
+            )
           }
         />
       ) : null}
@@ -246,4 +310,21 @@ export const DataTableMats = ({
   );
 };
 
-export default DataTableMats;
+const mapStateToProps = (state) => {
+  return {
+    mdmData: state.dropdowns[MATS_METHODS_STORE_NAME],
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadDropdownsData: async (section, dropdownArray) => {
+      dispatch(
+        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
+      );
+    },
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(DataTableMats);
+export { mapDispatchToProps };
+export { mapStateToProps };

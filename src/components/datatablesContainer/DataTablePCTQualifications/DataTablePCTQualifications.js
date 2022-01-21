@@ -4,8 +4,16 @@ import * as fs from "../../../utils/selectors/monitoringPlanPCTQualifications";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 
 import ModalDetails from "../../ModalDetails/ModalDetails";
-import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
+
+import { Preloader } from "../../Preloader/Preloader";
+import { connect } from "react-redux";
+import { loadDropdowns } from "../../../store/actions/dropdowns";
+import {
+  convertSectionToStoreName,
+  PCT_QUALIFICATIONS_SECTION_NAME,
+  PCT_QUALIFICATIONS_STORE_NAME,
+} from "../../../additional-functions/data-table-section-and-store-names";
 
 import {
   attachChangeEventListeners,
@@ -15,6 +23,8 @@ import {
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
 export const DataTablePCTQualifications = ({
+  mdmData,
+  loadDropdownsData,
   locationSelectValue,
   qualSelectValue,
   user,
@@ -30,15 +40,20 @@ export const DataTablePCTQualifications = ({
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [qualPctData, setQualPctData] = useState([]);
-  const totalOptions = useRetrieveDropdownApi([
-    "qualificationYear",
-    "yr1QualificationDataYear",
-    "yr2QualificationDataYear",
-    "yr3QualificationDataYear",
-    "yr1QualificationDataTypeCode",
-    "yr2QualificationDataTypeCode",
-    "yr3QualificationDataTypeCode",
-  ]);
+
+  const dropdownArray = [
+    [
+      "qualificationYear",
+      "yr1QualificationDataYear",
+      "yr2QualificationDataYear",
+      "yr3QualificationDataYear",
+      "yr1QualificationDataTypeCode",
+      "yr2QualificationDataTypeCode",
+      "yr3QualificationDataTypeCode",
+    ],
+  ];
+  const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
+
   const [updateTable, setUpdateTable] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState([]);
 
@@ -63,6 +78,18 @@ export const DataTablePCTQualifications = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState, updatePCT]);
+
+  // load dropdowns data (called once)
+  useEffect(() => {
+    if (mdmData.length === 0) {
+      loadDropdownsData(PCT_QUALIFICATIONS_SECTION_NAME, dropdownArray);
+    } else {
+      setDropdownsLoaded(true);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mdmData]);
+
   const [selectedQualPct, setSelectedQualPct] = useState(null);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -116,7 +143,7 @@ export const DataTablePCTQualifications = ({
         },
         {},
         create,
-        totalOptions
+        mdmData
       )
     );
 
@@ -165,11 +192,11 @@ export const DataTablePCTQualifications = ({
             viewOnly={!(user && checkout)}
           />
         </div>
-      ) : (
+      ) : dropdownsLoaded ? (
         <DataTableRender
           columnNames={columnNames}
           data={data}
-          dataLoaded={dataLoaded}
+          dataLoaded={dataLoaded && dropdownsLoaded}
           checkout={checkout}
           user={user}
           openHandler={openPctQualModal}
@@ -178,10 +205,34 @@ export const DataTablePCTQualifications = ({
           componentStyling="systemsCompTable"
           addBtnName={"Create Qualification Percent"}
           addBtn={openPctQualModal}
+          ariaLabel={"PCT Qualifications"}
         />
+      ) : (
+        <Preloader />
       )}
     </div>
   );
 };
 
-export default DataTablePCTQualifications;
+const mapStateToProps = (state) => {
+  return {
+    mdmData: state.dropdowns[PCT_QUALIFICATIONS_STORE_NAME],
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadDropdownsData: async (section, dropdownArray) => {
+      dispatch(
+        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
+      );
+    },
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DataTablePCTQualifications);
+export { mapDispatchToProps };
+export { mapStateToProps };

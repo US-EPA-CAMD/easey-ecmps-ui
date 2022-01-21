@@ -11,12 +11,13 @@ import {
 
 import { authenticate } from "../../utils/api/easeyAuthApi";
 import LoadingModal from "../LoadingModal/LoadingModal";
+import config from "../../config";
 
 const cdx_user = sessionStorage.getItem("cdx_user")
   ? JSON.parse(sessionStorage.getItem("cdx_user"))
   : false;
 
-const Login = ({ isModal }) => {
+const Login = ({ isModal, source }) => {
   const standardFormErrorMessage = "Please enter your username and password";
   const [showError, setShowError] = useState(false);
   const [formErrorMessage, setFormErrorMessage] = useState("");
@@ -27,12 +28,6 @@ const Login = ({ isModal }) => {
 
   const usernameText = isModal ? "modal-username" : "username";
   const passwordText = isModal ? "modal-password" : "password";
-
-  const checkLoggedIn = () => {
-    if (cdx_user) {
-      window.location = "/ecmps/monitoring-plans";
-    }
-  };
 
   const showPasswordHandler = () => {
     if (showPassword) {
@@ -68,32 +63,35 @@ const Login = ({ isModal }) => {
         .catch((err) => {
           setLoading(false);
           setShowError(true);
-          if(err.response){
+          if (err.response) {
             setFormErrorMessage(err.response.data.message);
-          }else{
+          } else {
             setFormErrorMessage(err.message);
           }
-
         });
-      
     }
 
     return true;
   };
 
   useEffect(() => {
+    const checkLoggedIn = () => {
+      if (cdx_user && source !== "ReportGenerator") {
+        window.location = "/ecmps/monitoring-plans";
+      }
+    };
     checkLoggedIn();
-  }, []);
+  }, [source]);
 
   return (
     <div className="" data-test="component-login">
-      <div style={{ padding: "1rem" }}>
+      <div className="padding-1">
         <Form onSubmit={submitForm} large>
           <Fieldset legend="Log In" legendStyle="large">
             <span>
               or{" "}
               <a
-                href="https://dev.epacdx.net/Registration/Terms"
+                href={`${config.app.cdxBaseUrl}${config.app.cdxRegisterPath}`}
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -149,7 +147,7 @@ const Login = ({ isModal }) => {
             </p>
             <p>
               <a
-                href="https://dev.epacdx.net/AccountRecovery/ForgotUserId"
+                href={`${config.app.cdxBaseUrl}${config.app.cdxForgotUserIdPath}`}
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -158,7 +156,7 @@ const Login = ({ isModal }) => {
             </p>
             <p>
               <a
-                href="https://dev.epacdx.net/PasswordReset/GetResetCode"
+                href={`${config.app.cdxBaseUrl}${config.app.cdxForgotPasswordPath}`}
                 rel="noopener noreferrer"
                 target="_blank"
               >

@@ -7,45 +7,77 @@ import { AppVersion } from "@us-epa-camd/easey-design-system";
 import { SubHeader } from "../SubHeader/SubHeader";
 import { LeftNavigation } from "../LeftNavigation/LeftNavigation";
 import { LeftNavToSubHeader } from "../SubHeader/LeftNavToSubHeader";
+import { ErrorSharp, CloseSharp } from "@material-ui/icons";
 
 import config from "../../config";
 
 import "./Layout.scss";
+import { hideAppError } from "../../additional-functions/app-error";
 
 const Layout = (props) => {
+  // noinspection JSCheckFunctionSignatures
   const childrenWithProps = React.Children.map(props.children, (child) =>
     React.cloneElement(child)
   );
   return (
-    <div className="react-transition fade-in padding-bottom-5">
-      <Link className="skip-to-content-link" href={"#main"}>
-        Skip to content
-      </Link>
-      <div className="topHeader">
-        <Header environment={config.app.env} />
-        <SubHeader user={props.user} setCurrentLink={props.setCurrentLink} />
-      </div>
-      <div>
-        <LeftNavToSubHeader />
-      </div>
-      <div className="grid-row">
-        <div className="grid-col-2 bg-base-lightest display-none desktop-lg:display-block widescreen:display-block">
-          <LeftNavigation
-            user={props.user}
-            logOut={props.logOut}
-            currentLink={props.currentLink}
-            setCurrentLink={props.setCurrentLink}
+    <div id="layoutContainer">
+      <div className="react-transition fade-in padding-bottom-5" id="layout">
+        <div id="skipNav">
+          <Link className="skip-to-content-link" href={"#main"}>
+            Skip to content
+          </Link>
+        </div>
+
+        <div id="topHeader" className="topHeader">
+          <Header environment={config.app.env} />
+          <SubHeader user={props.user} setCurrentLink={props.setCurrentLink} />
+        </div>
+        <div id="leftNavToSubHeader">
+          <LeftNavToSubHeader />
+        </div>
+        <div className="grid-row">
+          <div
+            id="leftNav"
+            className="grid-col-2 bg-base-lightest display-none desktop-lg:display-block widescreen:display-block"
+          >
+            <LeftNavigation
+              user={props.user}
+              logOut={props.logOut}
+              currentLink={props.currentLink}
+              setCurrentLink={props.setCurrentLink}
+            />
+          </div>
+          <div className="grid-col margin-x-2 minh-tablet-lg" id="main">
+            <div
+              id="appErrorMessage"
+              tabIndex="-1"
+              className="border-red border-1px margin-y-2 padding-2 bg-secondary-lighter
+                         text-bold text-secondary-vivid react-transition display-none"
+            >
+              <ErrorSharp className="margin-right-2" />
+              <CloseSharp
+                className="float-right cursor-pointer"
+                onClick={() => hideAppError()}
+                onKeyPress={(event) => {
+                  if (event.key === "Enter") {
+                    hideAppError();
+                  }
+                }}
+              />
+              <span
+                id="appErrorMessageText"
+                className="position-relative top-neg-1"
+              />
+            </div>
+            <main id="main">{childrenWithProps} </main>
+          </div>
+        </div>
+        <div id="footer" className="position-fixed bottom-0 width-full">
+          <AppVersion
+            version={config.app.version}
+            publishDate={config.app.published}
           />
         </div>
-        <div className="grid-col margin-x-2 minh-tablet-lg" id="main">
-          <main id="main">{childrenWithProps} </main>
-        </div>
-      </div>
-      <div className="position-fixed bottom-0 width-full">
-        <AppVersion
-          version={config.app.version}
-          publishDate={config.app.published}
-        />
       </div>
     </div>
   );

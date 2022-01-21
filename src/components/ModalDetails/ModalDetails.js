@@ -29,7 +29,6 @@ const ModalDetails = ({
     assignAriaLabelsToDatePickerButtons();
   }, []);
 
-
   // fixes rare instances where there is an enddate but no end time
   if (
     data.hasOwnProperty("endDate") &&
@@ -73,6 +72,16 @@ const ModalDetails = ({
     );
   };
 
+  const backBtnAriaLabel = () => {
+    if (title.includes("Qualification")) {
+      return "go back to Qualification details";
+    }
+    if (title.includes("Component") || title.includes("Fuel")) {
+      return "go back to System details";
+    }
+    return "go back to previous component";
+  };
+
   const makeEditComp = (value, cols) => {
     let comp = null;
 
@@ -80,7 +89,7 @@ const ModalDetails = ({
       case "dropdown":
         comp = (
           <SelectBox
-            className={`modalUserInput ${cols === 3 ? "" : "width-mobile"}`}
+            className={`modalUserInput ${cols === 3 ? "" : "width-card-lg"}`}
             epadataname={value[0]}
             options={
               value[6] !== null || value[6] !== undefined
@@ -105,7 +114,7 @@ const ModalDetails = ({
         const datePickerValue = `${year}-${month}-${day}`;
         comp = (
           <DatePicker
-            className="margin-0 modalUserInput width-mobile"
+            className="margin-0 modalUserInput width-card-lg"
             id={`${value[1]}`}
             name={value[1]}
             epadataname={value[0]}
@@ -132,7 +141,7 @@ const ModalDetails = ({
       case "input":
         comp = (
           <TextInput
-            className={`modalUserInput ${cols === 3 ? "" : "width-mobile"}`}
+            className={`modalUserInput ${cols === 3 ? "" : "width-card-lg"}`}
             id={`${value[1]}`}
             epa-testid={value[0]}
             epadataname={value[0]}
@@ -238,7 +247,6 @@ const ModalDetails = ({
           if (!create) {
             row.push(makeViewOnlyComp(value));
           } else {
-
             row.push(makeViewOnlyComp([false, false, false, false, false]));
           }
         } else {
@@ -261,7 +269,7 @@ const ModalDetails = ({
                 unstyled="true"
                 epa-testid="backBtn"
                 id="backBtn"
-                aria-label="go back to systems details"
+                aria-label={backBtnAriaLabel()}
               >
                 {" "}
                 <ArrowBackSharp className=" font-body-sm backBTNColor position-relative top-neg-2px" />

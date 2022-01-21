@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Checkbox } from "@trussworks/react-uswds";
 import { CreateOutlined, LockOpenSharp, LockSharp } from "@material-ui/icons";
 import config from "../../config";
@@ -36,11 +36,13 @@ export const HeaderInfo = ({
     { name: "Defaults" },
     { name: "Formulas" },
     { name: "Loads" },
-    { name: "Location Attributes and Relationships" },
+    {
+      name: "Location Attributes and Relationships",
+    },
     { name: "Methods" },
     { name: "Qualifications" },
     { name: "Rectangular Duct WAFs" },
-    { name: "Span" },
+    { name: "Spans" },
     { name: "Systems" },
     { name: "Unit Information" },
   ];
@@ -67,12 +69,32 @@ export const HeaderInfo = ({
   const [openIntervalId, setOpenIntervalId] = useState(null);
   const [evalStatus, setEvalStatus] = useState("");
   const [evalStatusLoaded, setEvalStatusLoaded] = useState(false);
-  const duringEvalStatuses = ["INQ", "WIP"];
+  // const duringEvalStatuses = ["INQ", "WIP"];
+
+  const [userHasCheckout, setUserHasCheckout] = useState(false);
+
+  const [lockedFacility, setLockedFacility] = useState(false);
+
+  const reportWindowParams = [
+    // eslint-disable-next-line no-restricted-globals
+    `height=${screen.height}`,
+    // eslint-disable-next-line no-restricted-globals
+    `width=${screen.width}`,
+    `fullscreen=yes`,
+  ].join(",");
+
+  const displayReport = () => {
+    window.open(
+      `/ecmps/workspace/monitoring-plans/${selectedConfig.id}/evaluation-report`,
+      "ECMPS Monitoring Plan Report",
+      reportWindowParams
+    );
+  };
 
   useEffect(() => {
     // get evaluation status
     if (!evalStatusLoaded) {
-      mpApi.getConfigInfo(configID).then((res) => {
+      mpApi.getRefreshInfo(configID).then((res) => {
         const status = res.data.evalStatusCode;
         setEvalStatus(status);
         setEvalStatusLoaded(true);
@@ -81,8 +103,6 @@ export const HeaderInfo = ({
 
     // then load the rest of the data
     if (evalStatusLoaded && !dataLoaded) {
-      let currentCheckoutStatus = checkout;
-
       mpApi.getCheckedOutLocations().then((res) => {
         // get info for current checked-out configs, checkout status, date
         const configs = res.data;
@@ -95,20 +115,25 @@ export const HeaderInfo = ({
 
         // from checkouts table (if available)
         if (currentConfig) {
-          currentCheckoutStatus = true;
+          // set current facility as locked & render new data onto page
+          setLockedFacility(true);
+          renderWithNewData(configs, currentConfig, true);
         }
-
         // if not, obtain it from the database
-        if (!currentConfig) {
-          mpApi.getConfigInfo(configID).then((info) => {
+        else {
+          mpApi.getRefreshInfo(configID).then((info) => {
             currentConfig = {
-              userId: info.data.userId,
+              checkedOutBy: "N/A",
+              lastUpdatedBy: info.data.userId,
               updateDate: info.data.updateDate,
             };
-            renderWithNewData(configs, currentConfig, currentCheckoutStatus);
+
+            // update lock status of current facility & render new data onto page
+            setLockedFacility(
+              configs.some((plan) => plan.facId === parseInt(info.data.facId))
+            );
+            renderWithNewData(configs, currentConfig, false);
           });
-        } else {
-          renderWithNewData(configs, currentConfig, currentCheckoutStatus);
         }
       });
     }
@@ -116,7 +141,7 @@ export const HeaderInfo = ({
     // clear open intervals when a different page is loaded
     return () => {
       if (dataLoaded && evalStatusLoaded) {
-        console.log("leaving monitor plan page (or checked-out/in config)...");
+        console.log("leaving, refreshing, or checking-in/out)...");
         clearOpenRefreshInterval();
       }
     };
@@ -131,7 +156,7 @@ export const HeaderInfo = ({
   };
 
   const startRefreshTimer = () => {
-    if (inWorkspace && evalStatus === "INQ") {
+    if (inWorkspace && evalStatus !== "EVAL") {
       // if we already have a refresh interval open (this shouldn't happen, but just in case)
       if (openIntervalId) {
         // get rid of it and clear the id state
@@ -140,11 +165,17 @@ export const HeaderInfo = ({
       }
 
       let currStatus = evalStatus;
-      const intervalId = setInterval(() => {
+      let totalTime = 0; // measured in milliseconds
+      return setInterval(() => {
+        totalTime += delayInSeconds;
         // if status is INQ or WIP:
-        if (duringEvalStatuses.includes(currStatus)) {
+        if (
+          totalTime < config.app.refreshEvalStatusTimeout &&
+          // && duringEvalStatuses.includes(currStatus)
+          currStatus !== "EVAL"
+        ) {
           // check database and update status
-          mpApi.getConfigInfo(configID).then((res) => {
+          mpApi.getRefreshInfo(configID).then((res) => {
             const databaseStatus = res.data.evalStatusCode;
 
             // if database is different than current status, then update
@@ -155,9 +186,17 @@ export const HeaderInfo = ({
             }
           });
         }
-      }, delayInSeconds);
 
-      return intervalId;
+        // if refresh timeout is reached,
+        // then refresh the header (will automatically clear the open interval)
+        if (totalTime >= config.app.refreshEvalStatusTimeout) {
+          console.log(
+            "Evaluation status refresh timeout reached.\nRefreshing header and stopping interval..."
+          );
+          setEvalStatusLoaded(false);
+          setDataLoaded(false);
+        }
+      }, delayInSeconds);
     }
     return 0;
   };
@@ -167,9 +206,15 @@ export const HeaderInfo = ({
     if (intervalId !== 0) {
       console.log("STARTED refresh interval with ID: ", intervalId);
     }
+    setCheckoutState(currentConfig.checkedOutBy !== "N/A");
     setOpenIntervalId(intervalId);
+    setUserHasCheckout(
+      configs.some((plan) => plan["checkedOutBy"] === user.userId)
+    );
     setCheckedOutByUser(isCheckedOutByUser(configs));
-    setAuditInformation(createAuditMessage(checkout, currentConfig));
+    setAuditInformation(
+      createAuditMessage(currentConfig.checkedOutBy !== "N/A", currentConfig)
+    );
     setCheckout(currentCheckoutStatus);
     setDataLoaded(true);
   };
@@ -193,30 +238,19 @@ export const HeaderInfo = ({
     );
   };
 
-  const isCheckedOut = () => {
-    return (
-      checkedOutConfigs
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id) > -1
-    );
-  };
-
-  const [displayLock, setDisplayLock] = useState(isCheckedOut());
-
   const formatDate = (dateString, isUTC = false) => {
     const date = new Date(dateString);
     //HANDLE -1 days from DB dates which are UTC
     const day = isUTC ? date.getDate() + 1 : date.getDate();
-    const formattedDate =
+    return (
       (date.getMonth() > 8
         ? date.getMonth() + 1
         : "0" + (date.getMonth() + 1)) +
       "/" +
       (day > 9 ? day : "0" + day) +
       "/" +
-      date.getFullYear();
-
-    return formattedDate;
+      date.getFullYear()
+    );
   };
 
   // chooses correctly styling for evaluation status label
@@ -282,7 +316,7 @@ export const HeaderInfo = ({
     checkoutAPI(direction, configID, selectedConfig.id, setCheckout).then(
       () => {
         setCheckedOutByUser(direction);
-        setDisplayLock(direction);
+        setLockedFacility(direction);
         setCheckoutState(direction);
         setDataLoaded(false);
       }
@@ -290,9 +324,11 @@ export const HeaderInfo = ({
   };
 
   const revert = () => {
-    mpApi.revertOfficialRecord(selectedConfig.id).then((res) => {
+    mpApi.revertOfficialRecord(selectedConfig.id).then(() => {
       setRevertedState(true);
       setShowRevertModal(false);
+      setEvalStatusLoaded(false);
+      setDataLoaded(false);
     });
   };
 
@@ -324,7 +360,7 @@ export const HeaderInfo = ({
         } ${formatDate(currentConfig["checkedOutOn"])}`;
       }
       // when config is not checked out
-      return `Last updated by: ${currentConfig.userId} ${formatDate(
+      return `Last updated by: ${currentConfig.lastUpdatedBy} ${formatDate(
         currentConfig.updateDate,
         true
       )}`;
@@ -385,7 +421,7 @@ export const HeaderInfo = ({
             <div>
               <h3 className="display-inline-block">
                 {" "}
-                {user && (checkoutState || displayLock) ? (
+                {user && (checkedOutByUser || lockedFacility) ? (
                   <LockSharp className="lock-icon margin-right-1" />
                 ) : (
                   ""
@@ -398,9 +434,13 @@ export const HeaderInfo = ({
             </div>
             <div className="">
               <div className="display-inline-block ">
-                <div className="text-bold font-body-xl display-block height-auto">
+                <div className="text-bold font-body-xl display-block height-9 padding-top-4 padding-bottom-2">
                   {user && checkoutState && checkedOutByUser ? (
-                    <CreateOutlined color="primary" fontSize="large" />
+                    <CreateOutlined
+                      color="primary"
+                      fontSize="large"
+                      className="position-relative top-2px"
+                    />
                   ) : (
                     ""
                   )}{" "}
@@ -409,6 +449,7 @@ export const HeaderInfo = ({
                     <div className="text-bold font-body-2xs display-inline-block ">
                       {checkedOutByUser === true ? (
                         <Button
+                          type="button"
                           autoFocus
                           outline={false}
                           tabIndex="0"
@@ -420,10 +461,13 @@ export const HeaderInfo = ({
                         >
                           <LockOpenSharp /> {"Check Back In"}
                         </Button>
-                      ) : checkedOutConfigs
+                      ) : !lockedFacility &&
+                        !userHasCheckout &&
+                        checkedOutConfigs
                           .map((location) => location["monPlanId"])
                           .indexOf(selectedConfig.id) === -1 ? (
                         <Button
+                          type="button"
                           autoFocus
                           outline={true}
                           tabIndex="0"
@@ -442,7 +486,7 @@ export const HeaderInfo = ({
                   )}
                   <Button
                     type="button"
-                    className="margin-left-4"
+                    className="margin-left-4 position-relative top-neg-1"
                     outline={true}
                     title="Coming Soon"
                   >
@@ -478,7 +522,7 @@ export const HeaderInfo = ({
                         label="Show Inactive"
                         checked={inactive[0]}
                         disabled={inactive[1]}
-                        onChange={(e) =>
+                        onChange={() =>
                           setInactive([!inactive[0], inactive[1]], facility)
                         }
                       />
@@ -490,13 +534,13 @@ export const HeaderInfo = ({
           </div>
           <div className="grid-col clearfix position-absolute top-1 right-0">
             <div className="">
-              {checkoutState && user ? (
+              {user && checkedOutByUser ? (
                 <div>
                   <div className="padding-2 margin-left-10">
                     {evalStatusText(evalStatus) === "Needs Evaluation" ? (
                       <Button
                         type="button"
-                        className="margin-right-2 margin-left-4 float-right"
+                        className="margin-right-2 margin-left-4 float-right margin-bottom-2"
                         outline={false}
                         onClick={evaluate}
                       >
@@ -508,7 +552,7 @@ export const HeaderInfo = ({
                     {showSubmit(evalStatus) ? (
                       <Button
                         type="button"
-                        className="margin-right-2 float-right"
+                        className="margin-right-2 float-right margin-bottom-2"
                         outline={false}
                         title="Coming Soon"
                       >
@@ -519,7 +563,7 @@ export const HeaderInfo = ({
                     )}
                   </div>
                   {showRevert(evalStatus) ? (
-                    <div className="margin-right-3 margin-top-2 float-right">
+                    <div className="margin-right-3 float-right margin-bottom-2">
                       <Button
                         type="button"
                         id="showRevertModal"
@@ -539,7 +583,7 @@ export const HeaderInfo = ({
               )}
             </div>
             {user ? (
-              <div className="grid-row padding-1 float-right text-right margin-right-3 margin-top-1 mobile:display-none desktop:display-block">
+              <div className="grid-row float-right text-right margin-right-3 mobile:display-none desktop:display-block">
                 <table role="presentation">
                   <tbody>
                     <tr>
@@ -552,14 +596,12 @@ export const HeaderInfo = ({
                         <button
                           className={
                             showHyperLink(evalStatus)
-                              ? "hyperlink-btn"
+                              ? "hyperlink-btn cursor-pointer"
                               : "unstyled-btn"
                           }
-                          onClick={() => {
-                            showHyperLink(evalStatus)
-                              ? setShowEvalReport(true)
-                              : setShowEvalReport(false);
-                          }}
+                          onClick={() =>
+                            showHyperLink(evalStatus) ? displayReport() : null
+                          }
                         >
                           {evalStatusText(evalStatus)}
                         </button>

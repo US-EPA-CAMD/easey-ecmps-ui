@@ -7,6 +7,14 @@ axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
 };
 
+export const getMonitoringPlanById = async (id) => {
+  let url = `${config.services.monitorPlans.uri}/workspace`;
+
+  url = `${url}/plans/${id}`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
 // *** obtain monitoring plans
 export const getMonitoringPlans = async (orisCode) => {
   let url = `${config.services.monitorPlans.uri}`;
@@ -204,10 +212,10 @@ export const getCheckedOutLocations = async () => {
     .catch(handleError);
 };
 
-export const getConfigInfo = async (planId) => {
+export const getRefreshInfo = async (planId) => {
   return axios
     .get(
-      `${config.services.monitorPlans.uri}/workspace/plans/information/${planId}`
+      `${config.services.monitorPlans.uri}/workspace/plans/${planId}/refresh`
     )
     .then(handleResponse)
     .catch(handleError);
@@ -367,8 +375,8 @@ export const createMonitoringSpans = async (payload) => {
     .catch(handleError);
 };
 
-export const saveMonitoringLoads = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/loads/${payload["id"]}`;
+export const saveMonitoringLoads = async (payload, locationId) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${locationId}/loads/${payload["id"]}`;
   // *** remove attributes not needed by the API
 
   return secureAxios({
@@ -380,8 +388,8 @@ export const saveMonitoringLoads = async (payload) => {
     .catch(handleError);
 };
 
-export const createMonitoringLoads = async (payload) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/loads/`;
+export const createMonitoringLoads = async (payload, locationId) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${locationId}/loads/`;
 
   // *** remove attributes not needed by the API
   delete payload["id"];
@@ -561,7 +569,7 @@ export const getMonitoringPlansUnitControlRecords = async (
 };
 
 export const saveUnitControl = async (payload, urlParameters) => {
-  const url = `${config.services.monitorPlans.uri}/workspace/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}/unit-controls/${urlParameters["unitControlId"]}`;
+  const url = `${config.services.monitorPlans.uri}/workspace/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}/unit-controls/${payload["id"]}`;
   // *** remove attributes not needed by the API
   return secureAxios({
     method: "PUT",
@@ -820,8 +828,6 @@ export const getLocationAttributes = async (locationId) => {
   }
 
   url = `${url}/locations/${locationId}/attributes`;
-
-  console.log("URL LOCATION", url);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
@@ -834,10 +840,7 @@ export const getRelationshipData = async (locationId) => {
   url = `${url}/workspace`;
   // }
 
-  console.log("URL getRelationshipData", url);
   url = `${url}/locations/${locationId}/relationships`;
-  console.log("URL getRelationshipData", url);
-
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
