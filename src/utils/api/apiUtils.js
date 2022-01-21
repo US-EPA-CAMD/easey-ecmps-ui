@@ -1,18 +1,19 @@
-import log from "loglevel";
-import { displayAppError } from "../../additional-functions/app-error";
+import log from 'loglevel';
+import { displayAppError } from '../../additional-functions/app-error';
 
 const successResponses = [200, 201];
 
 export async function handleResponse(response) {
+  console.log('response',response)
   if (successResponses.includes(response.status)) {
     return response;
   } else {
-    throw new Error("failed");
+    throw new Error('failed');
   }
 }
 
 export function handleError(error) {
-  let errorMessage = "";
+  let errorMessage = '';
 
   if (error.response) {
     // client received an error response (5xx, 4xx)
@@ -26,7 +27,7 @@ export function handleError(error) {
   } else if (error.request) {
     // client never received a response, or request never left
     log.error({ error: error.request });
-    errorMessage = "API Communication error";
+    errorMessage = 'API Communication error';
   } else {
     // anything else
     log.error({ error: error.message });
@@ -34,7 +35,7 @@ export function handleError(error) {
   }
 
   // *** display error only if encountered
-  if (errorMessage !== "") {
+  if (errorMessage !== '') {
     displayAppError(errorMessage);
   }
 }

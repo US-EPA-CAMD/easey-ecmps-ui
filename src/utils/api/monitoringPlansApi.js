@@ -203,7 +203,7 @@ export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
     .then((response) => response.data)
     .catch(handleError);
 };
-
+// not secure
 // *** obtain a list of all checked out locations (by all users)
 export const getCheckedOutLocations = async () => {
   return axios
@@ -872,6 +872,7 @@ export const createLocationAttribute = async (payload, locationSelectValue) => {
 
 export const getMonitoringPlansEvaluationReportData = async (monPlanId) => {
   let url = `${config.services.monitorPlans.uri}`;
+
   // *** workspace section url (authenticated)
   if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;
