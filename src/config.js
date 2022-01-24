@@ -120,7 +120,8 @@ export const config = {
     authApi: {
       uri:
         process.env.REACT_APP_EASEY_AUTH_API ||
-        "https://api-easey-dev.app.cloud.gov/auth-mgmt",
+        //"https://api-easey-dev.app.cloud.gov/auth-mgmt",
+        "http://localhost:8000/auth-mgmt",
     },
     quartz: {
       uri:

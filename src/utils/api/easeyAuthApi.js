@@ -29,6 +29,7 @@ export const authenticate = async (data_payload) => {
     method: "POST",
     url: `${config.services.authApi.uri}/authentication/sign-in`,
     data: data_payload,
+    withCredentials: true,
   })
     .then((data_response) => {
       const { data } = data_response;
@@ -57,6 +58,7 @@ export const logOut = async (event = "default") => {
   return secureAxios({
     method: "DELETE",
     url: `${config.services.authApi.uri}/authentication/sign-out`,
+    withCredentials: true,
   })
     .then(async () => {
       sessionStorage.removeItem("refreshTokenTimer");
