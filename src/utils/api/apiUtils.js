@@ -4,6 +4,7 @@ import { displayAppError } from '../../additional-functions/app-error';
 const successResponses = [200, 201];
 
 export async function handleResponse(response) {
+  console.log('response',response)
   if (successResponses.includes(response.status)) {
     return response;
   } else {

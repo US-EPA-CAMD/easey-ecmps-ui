@@ -6,7 +6,7 @@ import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
-import { Preloader } from "../../Preloader/Preloader";
+import { Preloader } from "@us-epa-camd/easey-design-system";
 import { connect } from "react-redux";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
 import {

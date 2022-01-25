@@ -11,7 +11,7 @@ import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
-import { Preloader } from "../../Preloader/Preloader";
+import { Preloader } from "@us-epa-camd/easey-design-system";
 import { connect } from "react-redux";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
 import {
@@ -195,7 +195,10 @@ export const DataTableQualifications = ({
   // Manages SAVE button (either Parent, PCT, LME, or LEE)
   const manageSaveBtn = () => {
     let userInput = extractUserInput(payload, ".modalUserInput");
-    userInput["qualId"] = selectedQualificationData["id"];
+   
+   if(!creating){
+     userInput["qualId"] = selectedQualificationData["id"];
+   } 
 
     // PCT qual
     if (openPCT) {
@@ -269,6 +272,7 @@ export const DataTableQualifications = ({
   const [selectedModalData, setSelectedModalData] = useState(null);
 
   const openQualificationDataModal = (row, bool, create) => {
+    console.log('create',create)
     let qualData = null;
     setCreating(create);
     setCreateNewQualificationData(create);
@@ -277,6 +281,7 @@ export const DataTableQualifications = ({
         (element) => element.id === row[`col${Object.keys(row).length - 1}`]
       )[0];
       setSelectedQualificationData(qualData);
+      console.log(qualData,'qualdata')
     }
     setSelectedModalData(
       modalViewData(

@@ -48,12 +48,15 @@ export const logOut = async (event = "default") => {
   const user = JSON.parse(sessionStorage.getItem("cdx_user"));
   const checkedOutLocationResult = await getCheckedOutLocations();
 
-  for (const location of checkedOutLocationResult.data) {
-    if (location.checkedOutBy === user.userId) {
-      await checkoutAPI(false, location.facId, location.monPlanId, undefined);
+  if (checkedOutLocationResult.data.length > 0) {
+    
+    for (const location of checkedOutLocationResult.data) {
+      if (location.checkedOutBy === user.userId) {
+        await checkoutAPI(false, location.facId, location.monPlanId, undefined);
+      }
     }
   }
-
+  const userInfo = sessionStorage.getItem('cdx_user');
   return secureAxios({
     method: "DELETE",
     url: `${config.services.authApi.uri}/authentication/sign-out`,

@@ -1,40 +1,160 @@
-// import React from "react";
-// import * as axios from "axios";
+import React from "react";
+import * as axios from "axios";
 
-// import { authenticate, refreshToken, logOut } from "./easeyAuthApi";
+import { deleteCheckInMonitoringPlanConfiguration } from "../api/monitoringPlansApi";
+import {
+  authenticate,
+  refreshToken,
+  logOut,
+  secureAxios,
+} from "./easeyAuthApi";
+import { getCheckedOutLocations } from "./monitoringPlansApi";
+// Mock out all top level functions, such as get, put, delete and post:
 
-// // Mock out all top level functions, such as get, put, delete and post:
+jest.mock("axios");
 
-// jest.mock("axios");
+describe("Easey Auth API", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-// describe("Easey Auth API", () => {
-//   test("Can we authenticate", async () => {
-//     axios.mockImplementationOnce(() => {
-//       return Promise.resolve({ data: {} });
-//     });
+  test("Can we authenticate", async () => {
+    axios.mockImplementationOnce(() => {
+      return Promise.resolve({ data: {} });
+    });
 
-//     await authenticate({});
-//     expect(sessionStorage.getItem("cdx_user")).toBe("{}");
-//   });
+    await authenticate({});
+    expect(sessionStorage.getItem("cdx_user")).toBe("{}");
+  });
 
-//   test("Can we logOut", async () => {
-//     sessionStorage.setItem("cdx_user", '{"token":"xyz"}');
-//     await logOut();
-//     expect(sessionStorage.getItem("cdx_user")).toBe(null);
-//   });
+  // test("Can we authenticate with error ", async () => {
+  //   axios.mockImplementationOnce(() => {
+  //     return Promise.reject( Error("some error"));
+  //   });
 
-//   test("Can we refreshToken", async () => {
-//     sessionStorage.setItem("cdx_user", '{"token":"xyz", "userId": "jeff"}');
+  //   await authenticate({});
+  //   expect(sessionStorage.getItem("cdx_user")).toBe("{}");
+  // });
 
-//     axios.mockImplementationOnce(() => {
-//       return Promise.resolve({ data: "token" });
-//     });
+  test("Can we refreshToken", async () => {
+    sessionStorage.setItem("cdx_user", '{"token":"xyz", "userId1": "jeff"}');
 
-//     await refreshToken();
-//     expect(JSON.parse(sessionStorage.getItem("cdx_user")).token).toBe("token");
-//   });
-// });
-test("test file", () => {
-  const val = 1;
-  expect(val === 1);
+    try {
+      axios.mockImplementationOnce(() => {
+        return Promise.resolve({ data: "token" });
+      });
+    } catch (e) {
+      expect(e).toEqual({
+        error: "error",
+      });
+    }
+
+    await refreshToken();
+    expect(JSON.parse(sessionStorage.getItem("cdx_user")).token).toBe("token");
+  });
+
+  test("Can we refreshToken with erro r", async () => {
+    sessionStorage.setItem("cdx_user", '{"token":"xyz", "userId": "jeff"}');
+
+    axios.mockImplementationOnce(() => {
+      return Promise.reject(new Error("some error"));
+    });
+
+    await refreshToken();
+    expect(JSON.parse(sessionStorage.getItem("cdx_user")).token).toBe("xyz");
+  });
+
+  test("Can we logOut", async () => {
+    sessionStorage.setItem("cdx_user", '{"token":"xyz", "userId": "test"}');
+
+    const checkedData = [
+      {
+        facId: 1,
+        monPlanId: "M",
+        checkedOutOn: "2022-01-21T03:01:20.493Z",
+        checkedOutBy: "test",
+        lastActivity: "2022-01-21T03:01:20.493Z",
+      },
+    ];
+    const userInfo = sessionStorage.getItem("cdx_user");
+
+    // mocks getCheckedOutLocations
+    axios.get.mockImplementation(() =>
+      Promise.resolve({
+        status: 200,
+        data: checkedData,
+      })
+    );
+    const apiCall = await getCheckedOutLocations();
+    expect(apiCall.data).toEqual(checkedData);
+    //-------
+    // mocks deleteCheckInMonitoringPlanConfiguration inside checkoutAPI when there is a checked out data
+    axios.mockImplementationOnce(() => {
+      return Promise.resolve({
+        data: {},
+      });
+    });
+    await deleteCheckInMonitoringPlanConfiguration(1);
+    //-------
+    // mocks the return secure Axios
+    axios.mockImplementationOnce(() => {
+      return Promise.resolve({
+        data: {},
+      });
+    });
+    axios.mockImplementationOnce(() => {
+      return Promise.resolve({
+        data: {},
+      });
+    });
+
+    await logOut();
+    expect(sessionStorage.getItem("cdx_user")).toBe(null);
+  });
+
+  test("Can we logOut with error ", async () => {
+    sessionStorage.setItem("cdx_user", '{"token":"xyz", "userId": "test"}');
+
+    const checkedData = [
+      {
+        facId: 1,
+        monPlanId: "M",
+        checkedOutOn: "2022-01-21T03:01:20.493Z",
+        checkedOutBy: "test",
+        lastActivity: "2022-01-21T03:01:20.493Z",
+      },
+    ];
+    const userInfo = sessionStorage.getItem("cdx_user");
+
+    // mocks getCheckedOutLocations
+    axios.get.mockImplementation(() =>
+      Promise.resolve({
+        status: 200,
+        data: checkedData,
+      })
+    );
+    const apiCall = await getCheckedOutLocations();
+    expect(apiCall.data).toEqual(checkedData);
+    //-------
+    // mocks deleteCheckInMonitoringPlanConfiguration inside checkoutAPI when there is a checked out data
+    axios.mockImplementationOnce(() => {
+      return Promise.resolve({
+        data: {},
+      });
+    });
+    await deleteCheckInMonitoringPlanConfiguration(1);
+    //-------
+    // mocks the return secure Axios
+    axios.mockImplementationOnce(() => {
+      return Promise.resolve({
+        data: {},
+      });
+    });
+    axios.mockImplementationOnce(() => {
+      return Promise.reject(new Error("some error"));
+    });
+
+    await logOut(null);
+    expect(sessionStorage.getItem("cdx_user")).not.toBe(null);
+  });
 });

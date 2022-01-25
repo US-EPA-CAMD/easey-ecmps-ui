@@ -9,7 +9,7 @@ import Modal from "../Modal/Modal";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 import "./HeaderInfo.scss";
 import MonitoringPlanEvaluationReport from "../MonitoringPlanEvaluationReport/MonitoringPlanEvaluationReport";
-import { Preloader } from "../Preloader/Preloader";
+import { Preloader } from "@us-epa-camd/easey-design-system";
 
 export const HeaderInfo = ({
   facility,

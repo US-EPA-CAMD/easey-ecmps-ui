@@ -18,7 +18,7 @@ import DataTable from "react-data-table-component";
 
 // *** local
 import { FilterComponent } from "../ReactDataTablesFilter/ReactDataTablesFilter";
-import { Preloader } from "../Preloader/Preloader";
+import { Preloader } from "@us-epa-camd/easey-design-system";
 
 /*********** LOOKS AND DECORATION (ICONS, SCSS, ETC.) ***********/
 // *** icons
@@ -77,14 +77,14 @@ export const DataTableRender = ({
   useEffect(() => {
     setTimeout(() => {
       // *** if 'search' table html element is present, move it
-      if (document.querySelector("#datatableContainer table")) {
+      /*if (document.querySelector("#datatableContainer table")) {
         document
           .querySelector("#datatableContainer")
-          .insertBefore(
+          .appendChild(
             document.querySelector("#datatableContainer table"),
             document.querySelector("#datatableContainer").childNodes[0]
           );
-      }
+      }*/
       ensure508();
     }, oneSecond);
 
