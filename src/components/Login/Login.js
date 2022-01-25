@@ -82,7 +82,9 @@ const Login = ({ isModal, source }) => {
     const checkLoggedIn = () => {
       if (logged_in !== undefined) {
         setShowError(true);
-        setFormErrorMessage("Already signed in another tab");
+        setFormErrorMessage(
+          "Session already exists in another tab. Close browser to start a new session."
+        );
       }
 
       if (cdx_user && source !== "ReportGenerator") {
