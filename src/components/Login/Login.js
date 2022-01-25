@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 
 import {
   Button,
@@ -17,9 +18,7 @@ const cdx_user = sessionStorage.getItem("cdx_user")
   ? JSON.parse(sessionStorage.getItem("cdx_user"))
   : false;
 
-const logged_in = document.cookie
-  .split("; ")
-  .find((row) => row.startsWith("cdxToken="));
+const logged_in = Cookies.get("cdxToken");
 
 const Login = ({ isModal, source }) => {
   const standardFormErrorMessage = "Please enter your username and password";
