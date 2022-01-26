@@ -13,6 +13,9 @@ export const ensure508 = () => {
   // *** add aria label to all data tables
   addAriaLabelToDatatable();
 
+  // *** move filter that may be present in datatable out of aria-live region
+  moveDataTableSearchOutOfAriaLive();
+
   // *** add aria sorted-by to data tables
   addInitialAriaSort();
 
@@ -59,13 +62,21 @@ export const changeGridCellAttributeValue = () => {
   });
 };
 
+export const moveDataTableSearchOutOfAriaLive = () => {
+  // *** if 'search' table html element is present, move it
+  if (document.querySelector("#datatableContainer table")) {
+    document
+      .querySelector("#datatableFilterContainer")
+      .appendChild(document.querySelector("#datatableContainer table"));
+  }
+};
+
 export const addScreenReaderLabelForCollapses = () => {
   setTimeout(() => {
     document
       .querySelectorAll(`[aria-label="Expand Row"]`)
       .forEach((element) => {
-        let fac = null;
-        fac = element.parentNode.parentNode.childNodes[1].outerText;
+        const fac = element.parentNode.parentNode.childNodes[1].outerText;
         element.setAttribute("aria-label", `Expand ${fac}`);
       });
   });
@@ -74,8 +85,7 @@ export const addScreenReaderLabelForCollapses = () => {
     document
       .querySelectorAll(`[aria-label="Collapse Row"]`)
       .forEach((element) => {
-        let fac = null;
-        fac = element.parentNode.parentNode.childNodes[1].outerText;
+        const fac = element.parentNode.parentNode.childNodes[1].outerText;
         element.setAttribute("aria-label", `Collapse ${fac}`);
       });
   });
@@ -295,8 +305,7 @@ export const removeAriaSortHandlersFromDatatable = () => {
  *****************************************************/
 export const assignAriaLabelsToDatePickerButtons = () => {
   document.querySelectorAll(".usa-date-picker__button").forEach((element) => {
-    const label =
+    element.ariaLabel =
       "Toggle Calendar for " + element.parentNode.querySelector("input").id;
-    element.ariaLabel = label;
   });
 };
