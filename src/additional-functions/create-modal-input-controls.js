@@ -9,10 +9,10 @@ export const modalViewData = (
   time,
   createNew,
   totalOptions,
+  prefilteredMdm,
   mats = false
 ) => {
   const arr = [];
-
   // y = property name of the apis
   for (const y in label) {
     if (label[y][3] === "locked") {
@@ -49,6 +49,7 @@ export const modalViewData = (
     } else {
       let labels = "";
       switch (label[y][1]) {
+        case "mainDropdown":
         case "dropdown":
           if (!createNew) {
             if (totalOptions) {
@@ -60,7 +61,7 @@ export const modalViewData = (
             label[y][0],
             labels,
             label[y][2] === "required" ? "required" : false,
-            "dropdown",
+            label[y][1] === "mainDropdown" ? "mainDropdown" : "dropdown",
             createNew ? "select" : selected[y],
             totalOptions ? totalOptions[y] : [],
           ]);

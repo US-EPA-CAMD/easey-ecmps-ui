@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Label,
   FormGroup,
@@ -19,15 +19,20 @@ import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 const ModalDetails = ({
   modalData,
   data,
+  prefilteredMdmData,
   cols,
   title,
   viewOnly,
   backBtn,
   create,
+  setMainDropdownChange,
+  mainDropdownChange,
 }) => {
   useEffect(() => {
     assignAriaLabelsToDatePickerButtons();
   }, []);
+
+  const [rerenderDropdown, setRerenderDropdown] = useState(false);
 
   // fixes rare instances where there is an enddate but no end time
   if (
@@ -82,10 +87,40 @@ const ModalDetails = ({
     return "go back to previous component";
   };
 
+  const [disableDropdownFlag, setDisableDropdownFlag] = useState(false);
+  const disableDropdowns = (value) => {
+    setMainDropdownChange(value);
+
+    if (value === "") {
+      setDisableDropdownFlag(true);
+    } else {
+      setDisableDropdownFlag(false);
+    }
+  };
   const makeEditComp = (value, cols) => {
     let comp = null;
 
     switch (value[4]) {
+      case "mainDropdown":
+        comp = (
+          <SelectBox
+            className={`modalUserInput ${cols === 3 ? "" : "width-card-lg"}`}
+            epadataname={value[0]}
+            options={
+              value[6] !== null || value[6] !== undefined
+                ? value[6]
+                : [{ code: "", name: "" }]
+            }
+            initialSelection={value[5]}
+            selectKey="code"
+            id={`${value[1]}`}
+            epa-testid={value[0]}
+            name={value[1]}
+            secondOption="name"
+            handler={disableDropdowns}
+          />
+        );
+        break;
       case "dropdown":
         comp = (
           <SelectBox
@@ -102,6 +137,7 @@ const ModalDetails = ({
             epa-testid={value[0]}
             name={value[1]}
             secondOption="name"
+            disableDropdownFlag={disableDropdownFlag}
           />
         );
         break;

@@ -9,7 +9,10 @@ import * as assertSelector from "../../../utils/selectors/assert";
 
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { connect } from "react-redux";
-import { loadDropdowns } from "../../../store/actions/dropdowns";
+import {
+  loadDropdowns,
+  updateDropdowns,
+} from "../../../store/actions/dropdowns";
 import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
 
 import { addAriaLabelToDatatable } from "../../../additional-functions/ensure-508";
@@ -24,10 +27,12 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
+import { values } from "lodash";
 
 export const DataTableAssert = ({
   mdmData,
   loadDropdownsData,
+  updateDropdowns,
   locationSelectValue,
   user,
   checkout,
@@ -273,8 +278,40 @@ export const DataTableAssert = ({
         setUpdateRelatedTables(true);
       });
   };
+  const [mainDropdownChange, setMainDropdownChange] = useState("");
 
+  const [rerenderDropdown, setRerenderDropdown] = useState(false);
   const [createNewData, setCreateNewData] = useState(false);
+  const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
+  useEffect(() => {
+    if (prefilteredMdmData) {
+      const result = prefilteredMdmData.filter(
+        (mdmData) => mdmData.parameterCode === mainDropdownChange
+      );
+
+      let newDropdownValuesObject = {};
+      if (result.length > 0 && !rerenderDropdown) {
+        for (const modalDetailData of selectedModalData) {
+          if (modalDetailData[4] === "dropdown") {
+            const selectedCodes = result[0];
+            const selectedCodeName = modalDetailData[0];
+            const prefilteredDataName =
+              dropdownArray[0][dropdownArray[0].length - 1];
+            const filteredOutSubDropdownOptions = mdmData[
+              modalDetailData[0]
+            ].filter((option) =>
+              selectedCodes[modalDetailData[0]].includes(option.code)
+            );
+            filteredOutSubDropdownOptions.unshift({
+              code: "",
+              name: "-- Select a value --",
+            });
+            modalDetailData[6] = filteredOutSubDropdownOptions;
+          }
+        }
+      }
+    }
+  }, [mainDropdownChange, selectedModalData]);
 
   // Executed when "View" action is clicked
   const openModal = (row, bool, create) => {
@@ -286,13 +323,74 @@ export const DataTableAssert = ({
       )[0];
       setSelectedRow(selectedData);
     }
+    let mainDropdownName = "";
+    for (const controlProperty in controlInputs) {
+      if (controlInputs[controlProperty][1] === "mainDropdown") {
+        mainDropdownName = controlProperty;
+      }
+    }
+    var seen = new Map();
+    const prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
+    const prefilteredMdmOnlyCodes = mdmData[prefilteredDataName].filter(
+      function (entry) {
+        var previous;
+        // Have we seen this label before?
+        const param = mainDropdownName;
+
+        if (seen.hasOwnProperty(entry[param])) {
+          // Yes, grab it and add this data to it
+          previous = seen[entry[param]];
+          for (const property in previous) {
+            if (property !== param) {
+              if (!Array.isArray(previous[property])) {
+                previous[property] = [previous[property]];
+                if (!previous[property].includes(entry[property])) {
+                  previous[property].push(entry[property]);
+                }
+              }
+            }
+          }
+
+          // Don't keep this entry, we've merged it into the previous one
+          return false;
+        }
+
+        for (const property in previous) {
+          if (property !== param) {
+            if (!Array.isArray(entry[property])) {
+              entry[property] = [entry[property]];
+            }
+          }
+        }
+
+        // Remember that we've seen it
+        seen[entry[mainDropdownName]] = entry;
+
+        // Keep this one, we'll merge any others that match into it
+        return true;
+      }
+    );
+    // need to add "select a value empty option"
+    const firstArray = mdmData[mainDropdownName];
+    const result = firstArray.filter((o) =>
+      prefilteredMdmOnlyCodes.some(
+        (element, index, arr) => o.code === element[mainDropdownName]
+      )
+    );
+    result.unshift({ code: "", name: "-- Select a value --" });
+    setPrefilteredMdmData(prefilteredMdmOnlyCodes);
+
+    let newMdmData = JSON.parse(JSON.stringify(mdmData));
+    newMdmData[mainDropdownName] = result;
+
     setSelectedModalData(
       modalViewData(
         selectedData,
         controlInputs,
         controlDatePickerInputs,
         create,
-        mdmData
+        newMdmData,
+        prefilteredMdmOnlyCodes
       )
     );
     setShow(true);
@@ -350,10 +448,13 @@ export const DataTableAssert = ({
                 <ModalDetails
                   modalData={selectedRow}
                   data={selectedModalData}
+                  prefilteredMdmData={prefilteredMdmData}
                   cols={2}
                   title={`${dataTableName}`}
                   viewOnly={!(user && checkout) || nonEditable}
                   create={createNewData}
+                  setMainDropdownChange={setMainDropdownChange}
+                  mainDropdownChange={mainDropdownChange}
                 />
               </div>
             ) : (
@@ -375,11 +476,10 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadDropdownsData: async (section, dropdownArray) => {
+    loadDropdownsData: async (section, dropdownArray) =>
       dispatch(
         loadDropdowns(convertSectionToStoreName(section), dropdownArray)
-      );
-    },
+      ),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(DataTableAssert);

@@ -958,6 +958,46 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           setDefaultOptions(options, fieldName);
         });
         break;
+
+      case "prefilteredFormulas":
+        await dmApi.getPrefilteredFormulas().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              parameterCode: option["parameterCode"],
+              formulaCode: option["formulaCode"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+
+      case "prefilteredMethods":
+        await dmApi.getPrefilteredMethods().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              parameterCode: option["parameterCode"],
+              formulaCode: option["formulaCode"],
+            };
+          });
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+
+      case "prefilteredSpans":
+        await dmApi.getPrefilteredSpans().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              componentTypeCode: option["componentTypeCode"],
+              spanScaleCode: option["spanScaleCode"],
+              spanMethodCode: option["spanMethodCode"],
+              spanUnitsOfMeasureCode: option["spanUnitsOfMeasureCode"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
       default:
         break;
     }

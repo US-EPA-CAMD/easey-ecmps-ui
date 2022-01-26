@@ -68,7 +68,7 @@ export const formulasDataTableProps = (location) => {
       endDate: "2021-10-21T17:12:00.643Z",
       endHour: 0,
     },
-    dropdownArray: [["parameterCode", "formulaCode"]],
+    dropdownArray: [["parameterCode", "formulaCode","prefilteredFormulas"]],
     columnNames: [
       "Formula ID",
       "Parameter",
@@ -79,7 +79,7 @@ export const formulasDataTableProps = (location) => {
     ],
     controlInputs: {
       formulaId: ["Formula ID", "input", "", ""],
-      parameterCode: ["Parameter", "dropdown", "", ""],
+      parameterCode: ["Parameter", "mainDropdown", "", ""],
       formulaCode: ["Formula Code", "dropdown", "", ""],
       formulaText: ["Formula", "input", "", ""],
     },
@@ -255,6 +255,7 @@ export const spanDataTableProps = (location) => {
         "spanScaleCode",
         "spanMethodCode",
         "spanUnitsOfMeasureCode",
+        "prefilteredSpans"
       ],
     ],
     columnNames: [
@@ -266,7 +267,7 @@ export const spanDataTableProps = (location) => {
       "End Date and Time",
     ],
     controlInputs: {
-      componentTypeCode: ["Component Type", "dropdown", "", ""],
+      componentTypeCode: ["Component Type", "mainDropdown", "", ""],
       spanScaleCode: ["Span Scale", "dropdown", "", ""],
       spanMethodCode: ["Span Method", "dropdown", "", ""],
       mecValue: ["MEC Value", "input", "", ""],

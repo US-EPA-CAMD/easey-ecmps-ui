@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Label, Dropdown, FormGroup } from "@trussworks/react-uswds";
 
 export const DetailsSelectBox = ({
@@ -14,6 +14,8 @@ export const DetailsSelectBox = ({
   id,
   handler,
   hyphenatedCaption,
+  eventHandler,
+  disableDropdownFlag,
 }) => {
   const [selectionState, setSelectionState] = useState(
     initialSelection ? initialSelection : null
@@ -52,8 +54,14 @@ export const DetailsSelectBox = ({
           <Dropdown
             name={caption}
             // weird bug without this
-            value={selectionState !== null ? selectionState : initialSelection}
-            disabled={viewOnly}
+            value={
+              disableDropdownFlag
+                ? null
+                : selectionState !== null
+                ? selectionState
+                : initialSelection
+            }
+            disabled={viewOnly || disableDropdownFlag}
             id={id === null ? caption : id}
             className={className}
             epadataname={epadataname}
