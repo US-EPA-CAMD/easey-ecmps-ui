@@ -76,15 +76,6 @@ export const DataTableRender = ({
   const columns = [];
   useEffect(() => {
     setTimeout(() => {
-      // *** if 'search' table html element is present, move it
-      if (document.querySelector("#datatableContainer table")) {
-        document
-          .querySelector("#datatableFilterContainer")
-          .appendChild(
-            document.querySelector("#datatableContainer table"),
-            document.querySelector("#datatableFilterContainer").childNodes[0]
-          );
-      }
       ensure508();
     }, oneSecond);
 
