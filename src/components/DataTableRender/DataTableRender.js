@@ -77,14 +77,14 @@ export const DataTableRender = ({
   useEffect(() => {
     setTimeout(() => {
       // *** if 'search' table html element is present, move it
-      /*if (document.querySelector("#datatableContainer table")) {
+      if (document.querySelector("#datatableContainer table")) {
         document
-          .querySelector("#datatableContainer")
+          .querySelector("#datatableFilterContainer")
           .appendChild(
             document.querySelector("#datatableContainer table"),
-            document.querySelector("#datatableContainer").childNodes[0]
+            document.querySelector("#datatableFilterContainer").childNodes[0]
           );
-      }*/
+      }
       ensure508();
     }, oneSecond);
 
@@ -403,6 +403,7 @@ export const DataTableRender = ({
   }, []);
   return (
     <div className={`${componentStyling}`}>
+      <div id="datatableFilterContainer" />
       <div
         aria-live="polite"
         className={`${tableStyling}`}
