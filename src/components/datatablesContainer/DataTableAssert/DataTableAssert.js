@@ -284,24 +284,29 @@ export const DataTableAssert = ({
   const [createNewData, setCreateNewData] = useState(false);
   const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
   useEffect(() => {
+    const prefilteredDataName = dropdownArray[0][0];
+    console.log("maindropdownChange,", prefilteredDataName, dropdownArray);
     if (prefilteredMdmData) {
       const result = prefilteredMdmData.filter(
-        (mdmData) => mdmData.parameterCode === mainDropdownChange
+        (mdmData) => mdmData[prefilteredDataName] === mainDropdownChange
       );
-
+      console.log("result", result);
       let newDropdownValuesObject = {};
       if (result.length > 0 && !rerenderDropdown) {
         for (const modalDetailData of selectedModalData) {
           if (modalDetailData[4] === "dropdown") {
             const selectedCodes = result[0];
             const selectedCodeName = modalDetailData[0];
-            const prefilteredDataName =
-              dropdownArray[0][dropdownArray[0].length - 1];
+            console.log(
+              "mdmData[modalDetailData[0]]",
+              mdmData[modalDetailData[0]],"modalDetailData[0],",modalDetailData[0],"selectedCodes",selectedCodes
+            );
             const filteredOutSubDropdownOptions = mdmData[
               modalDetailData[0]
             ].filter((option) =>
               selectedCodes[modalDetailData[0]].includes(option.code)
             );
+            console.log('filteredOutSubDropdownOptions',filteredOutSubDropdownOptions)
             filteredOutSubDropdownOptions.unshift({
               code: "",
               name: "-- Select a value --",
@@ -331,15 +336,16 @@ export const DataTableAssert = ({
     }
     const prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
     const mainDropdownResult = mdmData[mainDropdownName].filter((o) =>
-    mdmData[prefilteredDataName].some(
+      mdmData[prefilteredDataName].some(
         (element, index, arr) => o.code === element[mainDropdownName]
       )
     );
-    if (!mainDropdownResult.includes({ code: "", name: "-- Select a value --" })) {
+    if (
+      !mainDropdownResult.includes({ code: "", name: "-- Select a value --" })
+    ) {
       mainDropdownResult.unshift({ code: "", name: "-- Select a value --" });
     }
     setPrefilteredMdmData(mdmData[prefilteredDataName]);
-
 
     setSelectedModalData(
       modalViewData(
