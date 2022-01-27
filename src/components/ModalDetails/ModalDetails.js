@@ -31,7 +31,12 @@ const ModalDetails = ({
   useEffect(() => {
     assignAriaLabelsToDatePickerButtons();
   }, []);
-
+  useEffect(() => {
+    setRerenderDropdown(true);
+    if(rerenderDropdown){
+      setRerenderDropdown(false)
+    }
+   }, [mainDropdownChange])
   const [rerenderDropdown, setRerenderDropdown] = useState(false);
 
   // fixes rare instances where there is an enddate but no end time
@@ -137,6 +142,7 @@ const ModalDetails = ({
             epa-testid={value[0]}
             name={value[1]}
             secondOption="name"
+            mainDropdownChange={mainDropdownChange}
             disableDropdownFlag={disableDropdownFlag}
           />
         );
@@ -329,7 +335,7 @@ const ModalDetails = ({
           />
         </div>
         <div>
-          {items.map((item, index) => {
+          { items.map((item, index) => {
             return (
               <div
                 key={`${index}`}
@@ -342,7 +348,10 @@ const ModalDetails = ({
                 {item}
               </div>
             );
-          })}
+          })
+        
+        
+        }
         </div>
       </div>
     </div>

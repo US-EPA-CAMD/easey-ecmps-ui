@@ -329,59 +329,21 @@ export const DataTableAssert = ({
         mainDropdownName = controlProperty;
       }
     }
-    var seen = new Map();
     const prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
-    const prefilteredMdmOnlyCodes = mdmData[prefilteredDataName].filter(
-      function (entry) {
-        var previous;
-        // Have we seen this label before?
-        const param = mainDropdownName;
-
-        if (seen.hasOwnProperty(entry[param])) {
-          // Yes, grab it and add this data to it
-          previous = seen[entry[param]];
-          for (const property in previous) {
-            if (property !== param) {
-              if (!Array.isArray(previous[property])) {
-                previous[property] = [previous[property]];
-                if (!previous[property].includes(entry[property])) {
-                  previous[property].push(entry[property]);
-                }
-              }
-            }
-          }
-
-          // Don't keep this entry, we've merged it into the previous one
-          return false;
-        }
-
-        for (const property in previous) {
-          if (property !== param) {
-            if (!Array.isArray(entry[property])) {
-              entry[property] = [entry[property]];
-            }
-          }
-        }
-
-        // Remember that we've seen it
-        seen[entry[mainDropdownName]] = entry;
-
-        // Keep this one, we'll merge any others that match into it
-        return true;
-      }
-    );
-    // need to add "select a value empty option"
-    const firstArray = mdmData[mainDropdownName];
-    const result = firstArray.filter((o) =>
-      prefilteredMdmOnlyCodes.some(
+    const mainDropdownResult = mdmData[mainDropdownName].filter((o) =>
+    mdmData[prefilteredDataName].some(
         (element, index, arr) => o.code === element[mainDropdownName]
       )
     );
-    result.unshift({ code: "", name: "-- Select a value --" });
-    setPrefilteredMdmData(prefilteredMdmOnlyCodes);
+    if (!mainDropdownResult.includes({ code: "", name: "-- Select a value --" })) {
+      mainDropdownResult.unshift({ code: "", name: "-- Select a value --" });
+    }
+    setPrefilteredMdmData(mdmData[prefilteredDataName]);
 
+    console.log('result',mainDropdownResult)
+    // changes paramtercode in redux mdm 
     let newMdmData = JSON.parse(JSON.stringify(mdmData));
-    newMdmData[mainDropdownName] = result;
+    newMdmData[mainDropdownName] = mainDropdownResult;
 
     setSelectedModalData(
       modalViewData(
@@ -389,12 +351,13 @@ export const DataTableAssert = ({
         controlInputs,
         controlDatePickerInputs,
         create,
-        newMdmData,
-        prefilteredMdmOnlyCodes
+        mdmData,
+        mdmData[prefilteredDataName],
+        mainDropdownResult
       )
     );
     setShow(true);
-
+    console.log("  mdmData[prefilteredDataName]",   mdmData[prefilteredDataName]);
     setTimeout(() => {
       attachChangeEventListeners(".modalUserInput");
     });

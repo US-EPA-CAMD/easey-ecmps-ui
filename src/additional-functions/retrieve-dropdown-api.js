@@ -960,15 +960,34 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         break;
 
       case "prefilteredFormulas":
+        let noDupesFormCodes = [];
         await dmApi.getPrefilteredFormulas().then((response) => {
-          options = response.data.map((option) => {
-            return {
-              parameterCode: option["parameterCode"],
-              formulaCode: option["formulaCode"],
-            };
+          noDupesFormCodes = response.data.map((code) => {
+            return code["parameterCode"];
           });
 
-          setDefaultOptions(options, fieldName);
+          noDupesFormCodes = [...new Set(noDupesFormCodes)];
+          var seen = new Map();
+
+          let prefilteredMdmOptions = [];
+          for (const code of noDupesFormCodes) {
+            const filteredArray = response.data.filter(
+              (element) => element.parameterCode === code
+            );
+            let formulaCodeArray = [];
+            let spanMethodCodeArray = [];
+            // *** rest of sub-arrays
+            filteredArray.forEach((element) => {
+              formulaCodeArray.push(element.formulaCode);
+            });
+            formulaCodeArray = [...new Set(formulaCodeArray)];
+
+            let organizedMDMrow = {};
+            organizedMDMrow["parameterCode"] = code;
+            organizedMDMrow["formulaCode"] = formulaCodeArray;
+            prefilteredMdmOptions.push(organizedMDMrow);
+          }
+          setDefaultOptions(prefilteredMdmOptions, fieldName);
         });
         break;
 
@@ -985,17 +1004,48 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         break;
 
       case "prefilteredSpans":
+        let noDupesFormCodesSpans = [];
         await dmApi.getPrefilteredSpans().then((response) => {
-          options = response.data.map((option) => {
-            return {
-              componentTypeCode: option["componentTypeCode"],
-              spanScaleCode: option["spanScaleCode"],
-              spanMethodCode: option["spanMethodCode"],
-              spanUnitsOfMeasureCode: option["spanUnitsOfMeasureCode"],
-            };
+          console.log("data", response.data);
+
+          noDupesFormCodesSpans = response.data.map((code) => {
+            return code["componentTypeCode"];
           });
 
-          setDefaultOptions(options, fieldName);
+          noDupesFormCodesSpans = [...new Set(noDupesFormCodesSpans)];
+          var seen = new Map();
+
+          let prefilteredMdmOptions = [];
+          for (const code of noDupesFormCodesSpans) {
+            const filteredArray = response.data.filter(
+              (element) => element.componentTypeCode === code
+            );
+            let spanScaleCodeArray = [];
+            let spanMethodCodeArray = [];
+            let spanUnitsOfMeasureCodeArray = [];
+            // *** rest of sub-arrays
+            filteredArray.forEach((element) => {
+              spanScaleCodeArray.push(element.spanScaleCode);
+              spanMethodCodeArray.push(element.spanMethodCode);
+              spanUnitsOfMeasureCodeArray.push(element.spanUnitsOfMeasureCode);
+            });
+            spanScaleCodeArray = [...new Set(spanScaleCodeArray)];
+            spanMethodCodeArray = [...new Set(spanMethodCodeArray)];
+            spanUnitsOfMeasureCodeArray = [
+              ...new Set(spanUnitsOfMeasureCodeArray),
+            ];
+
+            let organizedMDMrow = {};
+            organizedMDMrow["componentTypeCode"] = code;
+            organizedMDMrow["spanScaleCode"] = spanScaleCodeArray;
+            organizedMDMrow["spanMethodCode"] = spanMethodCodeArray;
+            organizedMDMrow["spanUnitsOfMeasureCode"] =
+              spanUnitsOfMeasureCodeArray;
+            prefilteredMdmOptions.push(organizedMDMrow);
+          }
+
+          setDefaultOptions(prefilteredMdmOptions, fieldName);
+          console.log("prefilteredspans", prefilteredMdmOptions);
         });
         break;
       default:

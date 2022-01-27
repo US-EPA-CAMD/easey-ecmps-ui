@@ -16,6 +16,7 @@ export const DetailsSelectBox = ({
   hyphenatedCaption,
   eventHandler,
   disableDropdownFlag,
+  mainDropdownChange
 }) => {
   const [selectionState, setSelectionState] = useState(
     initialSelection ? initialSelection : null
@@ -27,7 +28,6 @@ export const DetailsSelectBox = ({
       handler(val.target.value);
     }
   };
-
   const populateOptions = (optionsList) => {
     return optionsList.map((info, index) => {
       return (

@@ -4,13 +4,19 @@ import { findValue, adjustDate } from "./find-values-in-array";
 
 //arr = [property name, ui label, value, required or not labeling for edit, control input type ... ]
 export const modalViewData = (
-  selected,
-  label,
-  time,
-  createNew,
-  totalOptions,
-  prefilteredMdm,
+  selected,// selectedData,
+  label,// controlInputs,
+  time,// controlDatePickerInputs,
+  createNew, // create,
+  totalOptions, // mdmData,
+  prefilteredMdmTotal,// mdmData[prefilteredDataName],
+  prefilterMdmMain, // result
   mats = false
+
+  
+ 
+  
+ 
 ) => {
   const arr = [];
   // y = property name of the apis
