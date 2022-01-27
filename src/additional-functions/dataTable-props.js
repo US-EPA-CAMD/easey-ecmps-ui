@@ -24,6 +24,7 @@ export const defaultsDataTableProps = (location) => {
         "operatingConditionCode",
         "defaultSourceCode",
         "defaultPurposeCode",
+        "prefilteredDefaults"
       ],
     ],
     columnNames: [
@@ -37,7 +38,7 @@ export const defaultsDataTableProps = (location) => {
       "End Date and Time",
     ],
     controlInputs: {
-      parameterCode: ["Parameter", "dropdown", "", ""],
+      parameterCode: ["Parameter", "mainDropdown", "", ""],
       defaultValue: ["Default Value", "input", "", ""],
       defaultUnitsOfMeasureCode: ["Units of Measure", "dropdown", "", ""],
       defaultPurposeCode: ["Purpose", "dropdown", "", ""],

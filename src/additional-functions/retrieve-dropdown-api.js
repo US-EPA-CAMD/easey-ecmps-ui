@@ -1048,6 +1048,65 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           console.log("prefilteredspans", prefilteredMdmOptions);
         });
         break;
+      case "prefilteredDefaults":
+        let noDupesFormCodesDefaults = [];
+        await dmApi.getPrefilteredDefaults().then((response) => {
+          console.log("data", response.data);
+
+          noDupesFormCodesDefaults = response.data.map((code) => {
+            return code["parameterCode"];
+          });
+
+          noDupesFormCodesDefaults = [...new Set(noDupesFormCodesDefaults)];
+          var seen = new Map();
+
+          let prefilteredMdmOptions = [];
+          for (const code of noDupesFormCodesDefaults) {
+            const filteredArray = response.data.filter(
+              (element) => element.parameterCode === code
+            );
+            let operatingConditionCodeArray = [];
+            let defaultUnitsOfMeasureCodeArray = [];
+            let defaultPurposeCodeArray = [];
+            let fuelCodeArray = [];
+            let defaultSourceCodeArray = [];
+            // *** rest of sub-arrays
+            filteredArray.forEach((element) => {
+              operatingConditionCodeArray.push(element.operatingConditionCode);
+              defaultUnitsOfMeasureCodeArray.push(
+                element.defaultUnitsOfMeasureCode
+              );
+              defaultPurposeCodeArray.push(element.defaultPurposeCode);
+              fuelCodeArray.push(element.fuelCode);
+              defaultSourceCodeArray.push(element.defaultSourceCode);
+            });
+            operatingConditionCodeArray = [
+              ...new Set(operatingConditionCodeArray),
+            ];
+            defaultUnitsOfMeasureCodeArray = [
+              ...new Set(defaultUnitsOfMeasureCodeArray),
+            ];
+            defaultPurposeCodeArray = [...new Set(defaultPurposeCodeArray)];
+            fuelCodeArray = [...new Set(fuelCodeArray)];
+            defaultSourceCodeArray = [...new Set(defaultSourceCodeArray)];
+
+            let organizedMDMrow = {};
+            organizedMDMrow["parameterCode"] = code;
+            organizedMDMrow["operatingConditionCode"] =
+              operatingConditionCodeArray;
+            organizedMDMrow["defaultUnitsOfMeasureCode"] =
+              defaultUnitsOfMeasureCodeArray;
+            organizedMDMrow["defaultPurposeCode"] = defaultPurposeCodeArray;
+            organizedMDMrow["fuelCode"] = fuelCodeArray;
+            organizedMDMrow["defaultSourceCode"] = defaultSourceCodeArray;
+            prefilteredMdmOptions.push(organizedMDMrow);
+          }
+
+          setDefaultOptions(prefilteredMdmOptions, fieldName);
+          console.log("prefilteredspans", prefilteredMdmOptions);
+        });
+        break;
+
       default:
         break;
     }

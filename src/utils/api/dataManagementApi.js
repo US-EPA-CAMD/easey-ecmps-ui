@@ -295,3 +295,10 @@ export const getPrefilteredSpans = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+export const getPrefilteredDefaults = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/relationships/defaults`)
+    .then(handleResponse)
+    .catch(handleError);
+};
