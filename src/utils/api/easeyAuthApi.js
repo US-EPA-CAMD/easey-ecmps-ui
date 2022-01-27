@@ -1,5 +1,6 @@
 import config from "../../config";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { checkoutAPI } from "../../additional-functions/checkout";
 import { getCheckedOutLocations } from "./monitoringPlansApi";
 import { displayAppError } from "../../additional-functions/app-error";
@@ -14,6 +15,7 @@ export const secureAxios = (options) => {
     JSON.parse(sessionStorage.getItem("cdx_user")).token
   ) {
     options.headers = {
+      //authorization: `Bearer ${Cookies.get("cdxToken")}`,
       authorization: `Bearer ${
         JSON.parse(sessionStorage.getItem("cdx_user")).token
       }`,
@@ -29,6 +31,7 @@ export const authenticate = async (data_payload) => {
     method: "POST",
     url: `${config.services.authApi.uri}/authentication/sign-in`,
     data: data_payload,
+    withCredentials: true,
   })
     .then((data_response) => {
       const { data } = data_response;
@@ -49,17 +52,17 @@ export const logOut = async (event = "default") => {
   const checkedOutLocationResult = await getCheckedOutLocations();
 
   if (checkedOutLocationResult.data.length > 0) {
-    
     for (const location of checkedOutLocationResult.data) {
       if (location.checkedOutBy === user.userId) {
         await checkoutAPI(false, location.facId, location.monPlanId, undefined);
       }
     }
   }
-  const userInfo = sessionStorage.getItem('cdx_user');
+  const userInfo = sessionStorage.getItem("cdx_user");
   return secureAxios({
     method: "DELETE",
     url: `${config.services.authApi.uri}/authentication/sign-out`,
+    withCredentials: true,
   })
     .then(async () => {
       sessionStorage.removeItem("refreshTokenTimer");
@@ -78,6 +81,7 @@ export const refreshToken = () => {
       method: "POST",
       url: `${config.services.authApi.uri}/tokens`,
       data: { userId },
+      withCredentials: true,
     })
       .then((data_response) => {
         const userData = JSON.parse(sessionStorage.getItem("cdx_user"));

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 
 import {
   Button,
@@ -16,6 +17,8 @@ import config from "../../config";
 const cdx_user = sessionStorage.getItem("cdx_user")
   ? JSON.parse(sessionStorage.getItem("cdx_user"))
   : false;
+
+const logged_in = Cookies.get("cdxToken");
 
 const Login = ({ isModal, source }) => {
   const standardFormErrorMessage = "Please enter your username and password";
@@ -76,6 +79,13 @@ const Login = ({ isModal, source }) => {
 
   useEffect(() => {
     const checkLoggedIn = () => {
+      if (logged_in !== undefined) {
+        setShowError(true);
+        setFormErrorMessage(
+          "Session already exists in another tab. Close browser to start a new session."
+        );
+      }
+
       if (cdx_user && source !== "ReportGenerator") {
         window.location = "/ecmps/monitoring-plans";
       }
@@ -125,13 +135,16 @@ const Login = ({ isModal, source }) => {
               onChange={(event) => setPassword(event.target.value)}
             />
 
-            <Button
-              data-test="component-login-submit-button"
-              className="margin-bottom-2"
-              type="submit"
-            >
-              Log In
-            </Button>
+            {!logged_in ? (
+              <Button
+                data-test="component-login-submit-button"
+                className="margin-bottom-2"
+                type="submit"
+              >
+                Log In
+              </Button>
+            ) : null}
+
             <p className="usa-form__note">
               <Button
                 type="button"
