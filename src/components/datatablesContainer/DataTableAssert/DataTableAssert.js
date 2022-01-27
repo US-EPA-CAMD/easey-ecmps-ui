@@ -340,10 +340,6 @@ export const DataTableAssert = ({
     }
     setPrefilteredMdmData(mdmData[prefilteredDataName]);
 
-    console.log('result',mainDropdownResult)
-    // changes paramtercode in redux mdm 
-    let newMdmData = JSON.parse(JSON.stringify(mdmData));
-    newMdmData[mainDropdownName] = mainDropdownResult;
 
     setSelectedModalData(
       modalViewData(
@@ -353,11 +349,11 @@ export const DataTableAssert = ({
         create,
         mdmData,
         mdmData[prefilteredDataName],
+        mainDropdownName,
         mainDropdownResult
       )
     );
     setShow(true);
-    console.log("  mdmData[prefilteredDataName]",   mdmData[prefilteredDataName]);
     setTimeout(() => {
       attachChangeEventListeners(".modalUserInput");
     });

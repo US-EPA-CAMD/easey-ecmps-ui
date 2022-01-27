@@ -4,21 +4,21 @@ import { findValue, adjustDate } from "./find-values-in-array";
 
 //arr = [property name, ui label, value, required or not labeling for edit, control input type ... ]
 export const modalViewData = (
-  selected,// selectedData,
-  label,// controlInputs,
-  time,// controlDatePickerInputs,
+  selected, // selectedData,
+  label, // controlInputs,
+  time, // controlDatePickerInputs,
   createNew, // create,
   totalOptions, // mdmData,
-  prefilteredMdmTotal,// mdmData[prefilteredDataName],
+  prefilteredMdmTotal, // mdmData[prefilteredDataName],\
+  mainDropdownName,
   prefilterMdmMain, // result
+  
   mats = false
-
-  
- 
-  
- 
 ) => {
   const arr = [];
+
+  totalOptions[mainDropdownName]= prefilterMdmMain;
+  console.log('totalOptions in controls',totalOptions, 'prefilteredMdmTotal',prefilterMdmMain,'prefilteredDataName',mainDropdownName)
   // y = property name of the apis
   for (const y in label) {
     if (label[y][3] === "locked") {
