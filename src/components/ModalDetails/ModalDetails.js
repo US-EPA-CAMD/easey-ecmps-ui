@@ -33,10 +33,11 @@ const ModalDetails = ({
   }, []);
   useEffect(() => {
     setRerenderDropdown(true);
-    if(rerenderDropdown){
-      setRerenderDropdown(false)
+    if (rerenderDropdown) {
+      setRerenderDropdown(false);
     }
-   }, [mainDropdownChange])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mainDropdownChange]);
   const [rerenderDropdown, setRerenderDropdown] = useState(false);
 
   // fixes rare instances where there is an enddate but no end time
@@ -335,7 +336,7 @@ const ModalDetails = ({
           />
         </div>
         <div>
-          { items.map((item, index) => {
+          {items.map((item, index) => {
             return (
               <div
                 key={`${index}`}
@@ -348,10 +349,7 @@ const ModalDetails = ({
                 {item}
               </div>
             );
-          })
-        
-        
-        }
+          })}
         </div>
       </div>
     </div>

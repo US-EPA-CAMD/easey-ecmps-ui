@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Label, Dropdown, FormGroup } from "@trussworks/react-uswds";
 
 export const DetailsSelectBox = ({

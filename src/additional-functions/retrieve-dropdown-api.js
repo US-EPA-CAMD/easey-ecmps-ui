@@ -967,7 +967,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           });
 
           noDupesFormCodes = [...new Set(noDupesFormCodes)];
-          var seen = new Map();
+      
 
           let prefilteredMdmOptions = [];
           for (const code of noDupesFormCodes) {
@@ -975,7 +975,6 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
               (element) => element.parameterCode === code
             );
             let formulaCodeArray = [];
-            let spanMethodCodeArray = [];
             // *** rest of sub-arrays
             filteredArray.forEach((element) => {
               formulaCodeArray.push(element.formulaCode);
@@ -1013,7 +1012,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           });
 
           noDupesFormCodesSpans = [...new Set(noDupesFormCodesSpans)];
-          var seen = new Map();
+      
 
           let prefilteredMdmOptions = [];
           for (const code of noDupesFormCodesSpans) {
@@ -1058,7 +1057,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           });
 
           noDupesFormCodesDefaults = [...new Set(noDupesFormCodesDefaults)];
-          var seen = new Map();
+          
 
           let prefilteredMdmOptions = [];
           for (const code of noDupesFormCodesDefaults) {

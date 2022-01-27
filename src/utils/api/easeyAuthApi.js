@@ -1,6 +1,6 @@
 import config from "../../config";
 import axios from "axios";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 import { checkoutAPI } from "../../additional-functions/checkout";
 import { getCheckedOutLocations } from "./monitoringPlansApi";
 import { displayAppError } from "../../additional-functions/app-error";
@@ -58,7 +58,7 @@ export const logOut = async (event = "default") => {
       }
     }
   }
-  const userInfo = sessionStorage.getItem("cdx_user");
+  // const userInfo = sessionStorage.getItem("cdx_user");
   return secureAxios({
     method: "DELETE",
     url: `${config.services.authApi.uri}/authentication/sign-out`,

@@ -11,7 +11,6 @@ import { Preloader } from "@us-epa-camd/easey-design-system";
 import { connect } from "react-redux";
 import {
   loadDropdowns,
-  updateDropdowns,
 } from "../../../store/actions/dropdowns";
 import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
 
@@ -27,7 +26,7 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
-import { values } from "lodash";
+
 
 export const DataTableAssert = ({
   mdmData,
@@ -280,9 +279,9 @@ export const DataTableAssert = ({
   };
   const [mainDropdownChange, setMainDropdownChange] = useState("");
 
-  const [rerenderDropdown, setRerenderDropdown] = useState(false);
   const [createNewData, setCreateNewData] = useState(false);
   const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
+
   useEffect(() => {
     const prefilteredDataName = dropdownArray[0][0];
     console.log("maindropdownChange,", prefilteredDataName, dropdownArray);
@@ -290,23 +289,15 @@ export const DataTableAssert = ({
       const result = prefilteredMdmData.filter(
         (mdmData) => mdmData[prefilteredDataName] === mainDropdownChange
       );
-      console.log("result", result);
-      let newDropdownValuesObject = {};
-      if (result.length > 0 && !rerenderDropdown) {
+      if (result.length > 0) {
         for (const modalDetailData of selectedModalData) {
           if (modalDetailData[4] === "dropdown") {
             const selectedCodes = result[0];
-            const selectedCodeName = modalDetailData[0];
-            console.log(
-              "mdmData[modalDetailData[0]]",
-              mdmData[modalDetailData[0]],"modalDetailData[0],",modalDetailData[0],"selectedCodes",selectedCodes
-            );
             const filteredOutSubDropdownOptions = mdmData[
               modalDetailData[0]
             ].filter((option) =>
               selectedCodes[modalDetailData[0]].includes(option.code)
             );
-            console.log('filteredOutSubDropdownOptions',filteredOutSubDropdownOptions)
             filteredOutSubDropdownOptions.unshift({
               code: "",
               name: "-- Select a value --",
@@ -316,6 +307,7 @@ export const DataTableAssert = ({
         }
       }
     }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainDropdownChange, selectedModalData]);
 
   // Executed when "View" action is clicked
