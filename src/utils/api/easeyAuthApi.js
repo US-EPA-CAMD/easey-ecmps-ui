@@ -15,7 +15,10 @@ export const secureAxios = (options) => {
     JSON.parse(sessionStorage.getItem("cdx_user")).token
   ) {
     options.headers = {
-      authorization: `Bearer ${Cookies.get("cdxToken")}`,
+      //authorization: `Bearer ${Cookies.get("cdxToken")}`,
+      authorization: `Bearer ${
+        JSON.parse(sessionStorage.getItem("cdx_user")).token
+      }`,
       "x-api-key": config.app.apiKey,
     };
   }
@@ -49,14 +52,13 @@ export const logOut = async (event = "default") => {
   const checkedOutLocationResult = await getCheckedOutLocations();
 
   if (checkedOutLocationResult.data.length > 0) {
-    
     for (const location of checkedOutLocationResult.data) {
       if (location.checkedOutBy === user.userId) {
         await checkoutAPI(false, location.facId, location.monPlanId, undefined);
       }
     }
   }
-  const userInfo = sessionStorage.getItem('cdx_user');
+  const userInfo = sessionStorage.getItem("cdx_user");
   return secureAxios({
     method: "DELETE",
     url: `${config.services.authApi.uri}/authentication/sign-out`,
