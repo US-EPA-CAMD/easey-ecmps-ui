@@ -1042,14 +1042,11 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           }
 
           setDefaultOptions(prefilteredMdmOptions, fieldName);
-          console.log("prefilteredspans", prefilteredMdmOptions);
         });
         break;
       case "prefilteredDefaults":
         let noDupesFormCodesDefaults = [];
         await dmApi.getPrefilteredDefaults().then((response) => {
-          console.log("data", response.data);
-
           noDupesFormCodesDefaults = response.data.map((code) => {
             return code["parameterCode"];
           });
@@ -1099,7 +1096,6 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           }
 
           setDefaultOptions(prefilteredMdmOptions, fieldName);
-          console.log("prefilteredspans", prefilteredMdmOptions);
         });
         break;
 

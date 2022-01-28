@@ -282,7 +282,6 @@ export const DataTableAssert = ({
 
   useEffect(() => {
     const prefilteredDataName = dropdownArray[0][0];
-    console.log("maindropdownChange,", prefilteredDataName, dropdownArray);
     if (prefilteredMdmData) {
       const result = prefilteredMdmData.filter(
         (data) => data[prefilteredDataName] === mainDropdownChange

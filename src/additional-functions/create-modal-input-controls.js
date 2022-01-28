@@ -21,14 +21,6 @@ export const modalViewData = (
   const totalOptionsClone = _.cloneDeep(totalOptions);
   totalOptionsClone[mainDropdownName] = prefilterMdmMain;
 
-  console.log(
-    "totalOptions in controls",
-    totalOptionsClone,
-    "prefilteredMdmTotal",
-    prefilterMdmMain,
-    "prefilteredDataName",
-    mainDropdownName
-  );
   // y = property name of the apis
   for (const y in label) {
     if (label[y][3] === "locked") {
