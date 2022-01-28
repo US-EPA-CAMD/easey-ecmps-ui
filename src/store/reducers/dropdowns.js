@@ -18,7 +18,7 @@ const reducer = (state, action) => {
       ...currentState,
       ...dropdowns,
     };
-  } 
+  }
   // else if (action.type === types.UPDATE_DROPDOWNS) {
   //   returnObject = {...state, action.section: {...state.cartData, ...action.payload}}
   // }

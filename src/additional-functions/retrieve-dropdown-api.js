@@ -1012,7 +1012,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
 
           noDupesFormCodesSpans = [...new Set(noDupesFormCodesSpans)];
 
-          let prefilteredMdmOptions = [];
+          const prefilteredMdmOptions = [];
           for (const code of noDupesFormCodesSpans) {
             const filteredArray = response.data.filter(
               (element) => element.componentTypeCode === code
@@ -1032,7 +1032,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
               ...new Set(spanUnitsOfMeasureCodeArray),
             ];
 
-            let organizedMDMrow = {};
+            const organizedMDMrow = {};
             organizedMDMrow["componentTypeCode"] = code;
             organizedMDMrow["spanScaleCode"] = spanScaleCodeArray;
             organizedMDMrow["spanMethodCode"] = spanMethodCodeArray;
