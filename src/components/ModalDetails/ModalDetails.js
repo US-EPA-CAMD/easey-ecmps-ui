@@ -39,6 +39,7 @@ const ModalDetails = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainDropdownChange]);
   const [rerenderDropdown, setRerenderDropdown] = useState(false);
+  const largeWidthCardStyle = "width-card-lg";
 
   // fixes rare instances where there is an enddate but no end time
   if (
@@ -110,7 +111,9 @@ const ModalDetails = ({
       case "mainDropdown":
         comp = (
           <SelectBox
-            className={`modalUserInput ${cols === 3 ? "" : "width-card-lg"}`}
+            className={`modalUserInput ${
+              cols === 3 ? "" : largeWidthCardStyle
+            }`}
             epadataname={value[0]}
             options={
               value[6] !== null || value[6] !== undefined
@@ -130,7 +133,9 @@ const ModalDetails = ({
       case "dropdown":
         comp = (
           <SelectBox
-            className={`modalUserInput ${cols === 3 ? "" : "width-card-lg"}`}
+            className={`modalUserInput ${
+              cols === 3 ? "" : largeWidthCardStyle
+            }`}
             epadataname={value[0]}
             options={
               value[6] !== null || value[6] !== undefined
@@ -184,7 +189,9 @@ const ModalDetails = ({
       case "input":
         comp = (
           <TextInput
-            className={`modalUserInput ${cols === 3 ? "" : "width-card-lg"}`}
+            className={`modalUserInput ${
+              cols === 3 ? "" : largeWidthCardStyle
+            }`}
             id={`${value[1]}`}
             epa-testid={value[0]}
             epadataname={value[0]}

@@ -9,9 +9,7 @@ import * as assertSelector from "../../../utils/selectors/assert";
 
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { connect } from "react-redux";
-import {
-  loadDropdowns,
-} from "../../../store/actions/dropdowns";
+import { loadDropdowns } from "../../../store/actions/dropdowns";
 import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
 
 import { addAriaLabelToDatatable } from "../../../additional-functions/ensure-508";
@@ -26,7 +24,6 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
-
 
 export const DataTableAssert = ({
   mdmData,
@@ -85,6 +82,7 @@ export const DataTableAssert = ({
     "Relationship Data": lAttr,
   };
   const locAttAndRelDataTables = [lAttr, rDat];
+  const selectText = "-- Select a value --";
 
   useEffect(() => {
     setDataLoaded(false);
@@ -287,7 +285,7 @@ export const DataTableAssert = ({
     console.log("maindropdownChange,", prefilteredDataName, dropdownArray);
     if (prefilteredMdmData) {
       const result = prefilteredMdmData.filter(
-        (mdmData) => mdmData[prefilteredDataName] === mainDropdownChange
+        (data) => data[prefilteredDataName] === mainDropdownChange
       );
       if (result.length > 0) {
         for (const modalDetailData of selectedModalData) {
@@ -300,14 +298,14 @@ export const DataTableAssert = ({
             );
             filteredOutSubDropdownOptions.unshift({
               code: "",
-              name: "-- Select a value --",
+              name: selectText,
             });
             modalDetailData[6] = filteredOutSubDropdownOptions;
           }
         }
       }
     }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainDropdownChange, selectedModalData]);
 
   // Executed when "View" action is clicked
@@ -332,10 +330,8 @@ export const DataTableAssert = ({
         (element, index, arr) => o.code === element[mainDropdownName]
       )
     );
-    if (
-      !mainDropdownResult.includes({ code: "", name: "-- Select a value --" })
-    ) {
-      mainDropdownResult.unshift({ code: "", name: "-- Select a value --" });
+    if (!mainDropdownResult.includes({ code: "", name: selectText })) {
+      mainDropdownResult.unshift({ code: "", name: selectText });
     }
     setPrefilteredMdmData(mdmData[prefilteredDataName]);
 

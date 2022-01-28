@@ -1,6 +1,5 @@
 import config from "../../config";
 import axios from "axios";
-// import Cookies from "js-cookie";
 import { checkoutAPI } from "../../additional-functions/checkout";
 import { getCheckedOutLocations } from "./monitoringPlansApi";
 import { displayAppError } from "../../additional-functions/app-error";
@@ -15,7 +14,6 @@ export const secureAxios = (options) => {
     JSON.parse(sessionStorage.getItem("cdx_user")).token
   ) {
     options.headers = {
-      //authorization: `Bearer ${Cookies.get("cdxToken")}`,
       authorization: `Bearer ${
         JSON.parse(sessionStorage.getItem("cdx_user")).token
       }`,
@@ -58,7 +56,7 @@ export const logOut = async (event = "default") => {
       }
     }
   }
-  // const userInfo = sessionStorage.getItem("cdx_user");
+
   return secureAxios({
     method: "DELETE",
     url: `${config.services.authApi.uri}/authentication/sign-out`,
@@ -95,24 +93,3 @@ export const refreshToken = () => {
     displayAppError(e);
   }
 };
-
-/*
-export async function validateToken() {
-  try {
-    const token = JSON.parse(sessionStorage.getItem("cdx_user")).token;
-    return secureAxios({
-      method: "POST",
-      url: `${config.services.authApi.uri}/tokens/validate`,
-      data: { token },
-    })
-      .then((data_response) => {
-        return data_response.data;
-      })
-      .catch((e) => {
-        throw e;
-      });
-  } catch (e) {
-    throw e;
-  }
-}
-*/

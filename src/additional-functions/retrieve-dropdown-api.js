@@ -967,9 +967,8 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           });
 
           noDupesFormCodes = [...new Set(noDupesFormCodes)];
-      
 
-          let prefilteredMdmOptions = [];
+          const prefilteredMdmOptions = [];
           for (const code of noDupesFormCodes) {
             const filteredArray = response.data.filter(
               (element) => element.parameterCode === code
@@ -981,7 +980,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
             });
             formulaCodeArray = [...new Set(formulaCodeArray)];
 
-            let organizedMDMrow = {};
+            const organizedMDMrow = {};
             organizedMDMrow["parameterCode"] = code;
             organizedMDMrow["formulaCode"] = formulaCodeArray;
             prefilteredMdmOptions.push(organizedMDMrow);
@@ -1012,7 +1011,6 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           });
 
           noDupesFormCodesSpans = [...new Set(noDupesFormCodesSpans)];
-      
 
           let prefilteredMdmOptions = [];
           for (const code of noDupesFormCodesSpans) {
@@ -1057,9 +1055,8 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           });
 
           noDupesFormCodesDefaults = [...new Set(noDupesFormCodesDefaults)];
-          
 
-          let prefilteredMdmOptions = [];
+          const prefilteredMdmOptions = [];
           for (const code of noDupesFormCodesDefaults) {
             const filteredArray = response.data.filter(
               (element) => element.parameterCode === code
@@ -1089,7 +1086,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
             fuelCodeArray = [...new Set(fuelCodeArray)];
             defaultSourceCodeArray = [...new Set(defaultSourceCodeArray)];
 
-            let organizedMDMrow = {};
+            const organizedMDMrow = {};
             organizedMDMrow["parameterCode"] = code;
             organizedMDMrow["operatingConditionCode"] =
               operatingConditionCodeArray;

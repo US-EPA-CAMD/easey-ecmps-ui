@@ -18,7 +18,7 @@ export const modalViewData = (
 ) => {
   const arr = [];
 
-  let totalOptionsClone = _.cloneDeep(totalOptions);
+  const totalOptionsClone = _.cloneDeep(totalOptions);
   totalOptionsClone[mainDropdownName] = prefilterMdmMain;
 
   console.log(
