@@ -281,24 +281,31 @@ export const DataTableAssert = ({
   const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
 
   useEffect(() => {
+    // Update all the "secondary dropdowns" (based on the "main" dropdown)
     const prefilteredDataName = dropdownArray[0][0];
     if (prefilteredMdmData) {
       const result = prefilteredMdmData.filter(
         (data) => data[prefilteredDataName] === mainDropdownChange
       );
+
       if (result.length > 0) {
+        // Go through the inputs in the modal
         for (const modalDetailData of selectedModalData) {
+          // For each dropdown
           if (modalDetailData[4] === "dropdown") {
             const selectedCodes = result[0];
+            // Filter their options (based on the value of the driving dropdown)
             const filteredOutSubDropdownOptions = mdmData[
               modalDetailData[0]
             ].filter((option) =>
               selectedCodes[modalDetailData[0]].includes(option.code)
             );
+            // Add select option
             filteredOutSubDropdownOptions.unshift({
               code: "",
               name: selectText,
             });
+            // Load the filtered data into the dropdown
             modalDetailData[6] = filteredOutSubDropdownOptions;
           }
         }
@@ -320,15 +327,22 @@ export const DataTableAssert = ({
     let mainDropdownName = "";
     for (const controlProperty in controlInputs) {
       if (controlInputs[controlProperty][1] === "mainDropdown") {
+        // find the main "driving" dropdown
         mainDropdownName = controlProperty;
       }
     }
+
+    // Get the name of the property of the correct array in mdmData (full data set)
     const prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
+
+    // Get the descriptions from the original dropdowns set
     const mainDropdownResult = mdmData[mainDropdownName].filter((o) =>
       mdmData[prefilteredDataName].some(
         (element, index, arr) => o.code === element[mainDropdownName]
       )
     );
+
+    // Add the select text if necessary
     if (!mainDropdownResult.includes({ code: "", name: selectText })) {
       mainDropdownResult.unshift({ code: "", name: selectText });
     }
