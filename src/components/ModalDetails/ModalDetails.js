@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Label,
   FormGroup,
@@ -19,15 +19,27 @@ import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 const ModalDetails = ({
   modalData,
   data,
+  prefilteredMdmData,
   cols,
   title,
   viewOnly,
   backBtn,
   create,
+  setMainDropdownChange,
+  mainDropdownChange,
 }) => {
   useEffect(() => {
     assignAriaLabelsToDatePickerButtons();
   }, []);
+  useEffect(() => {
+    setRerenderDropdown(true);
+    if (rerenderDropdown) {
+      setRerenderDropdown(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mainDropdownChange]);
+  const [rerenderDropdown, setRerenderDropdown] = useState(false);
+  const largeWidthCardStyle = "width-card-lg";
 
   // fixes rare instances where there is an enddate but no end time
   if (
@@ -82,14 +94,26 @@ const ModalDetails = ({
     return "go back to previous component";
   };
 
+  const [disableDropdownFlag, setDisableDropdownFlag] = useState(false);
+  const disableDropdowns = (value) => {
+    setMainDropdownChange(value);
+
+    if (value === "") {
+      setDisableDropdownFlag(true);
+    } else {
+      setDisableDropdownFlag(false);
+    }
+  };
   const makeEditComp = (value, cols) => {
     let comp = null;
 
     switch (value[4]) {
-      case "dropdown":
+      case "mainDropdown":
         comp = (
           <SelectBox
-            className={`modalUserInput ${cols === 3 ? "" : "width-card-lg"}`}
+            className={`modalUserInput ${
+              cols === 3 ? "" : largeWidthCardStyle
+            }`}
             epadataname={value[0]}
             options={
               value[6] !== null || value[6] !== undefined
@@ -102,6 +126,30 @@ const ModalDetails = ({
             epa-testid={value[0]}
             name={value[1]}
             secondOption="name"
+            handler={disableDropdowns}
+          />
+        );
+        break;
+      case "dropdown":
+        comp = (
+          <SelectBox
+            className={`modalUserInput ${
+              cols === 3 ? "" : largeWidthCardStyle
+            }`}
+            epadataname={value[0]}
+            options={
+              value[6] !== null || value[6] !== undefined
+                ? value[6]
+                : [{ code: "", name: "" }]
+            }
+            initialSelection={!disableDropdownFlag ? value[5] : "select"}
+            selectKey="code"
+            id={`${value[1]}`}
+            epa-testid={value[0]}
+            name={value[1]}
+            secondOption="name"
+            mainDropdownChange={mainDropdownChange}
+            disableDropdownFlag={disableDropdownFlag}
           />
         );
         break;
@@ -141,7 +189,9 @@ const ModalDetails = ({
       case "input":
         comp = (
           <TextInput
-            className={`modalUserInput ${cols === 3 ? "" : "width-card-lg"}`}
+            className={`modalUserInput ${
+              cols === 3 ? "" : largeWidthCardStyle
+            }`}
             id={`${value[1]}`}
             epa-testid={value[0]}
             epadataname={value[0]}

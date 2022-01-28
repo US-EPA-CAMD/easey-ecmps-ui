@@ -28,6 +28,7 @@ import {
 export const DataTableAssert = ({
   mdmData,
   loadDropdownsData,
+  updateDropdowns,
   locationSelectValue,
   user,
   checkout,
@@ -81,6 +82,7 @@ export const DataTableAssert = ({
     "Relationship Data": lAttr,
   };
   const locAttAndRelDataTables = [lAttr, rDat];
+  const selectText = "-- Select a value --";
 
   useEffect(() => {
     setDataLoaded(false);
@@ -273,8 +275,37 @@ export const DataTableAssert = ({
         setUpdateRelatedTables(true);
       });
   };
+  const [mainDropdownChange, setMainDropdownChange] = useState("");
 
   const [createNewData, setCreateNewData] = useState(false);
+  const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
+
+  useEffect(() => {
+    const prefilteredDataName = dropdownArray[0][0];
+    if (prefilteredMdmData) {
+      const result = prefilteredMdmData.filter(
+        (data) => data[prefilteredDataName] === mainDropdownChange
+      );
+      if (result.length > 0) {
+        for (const modalDetailData of selectedModalData) {
+          if (modalDetailData[4] === "dropdown") {
+            const selectedCodes = result[0];
+            const filteredOutSubDropdownOptions = mdmData[
+              modalDetailData[0]
+            ].filter((option) =>
+              selectedCodes[modalDetailData[0]].includes(option.code)
+            );
+            filteredOutSubDropdownOptions.unshift({
+              code: "",
+              name: selectText,
+            });
+            modalDetailData[6] = filteredOutSubDropdownOptions;
+          }
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mainDropdownChange, selectedModalData]);
 
   // Executed when "View" action is clicked
   const openModal = (row, bool, create) => {
@@ -286,17 +317,36 @@ export const DataTableAssert = ({
       )[0];
       setSelectedRow(selectedData);
     }
+    let mainDropdownName = "";
+    for (const controlProperty in controlInputs) {
+      if (controlInputs[controlProperty][1] === "mainDropdown") {
+        mainDropdownName = controlProperty;
+      }
+    }
+    const prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
+    const mainDropdownResult = mdmData[mainDropdownName].filter((o) =>
+      mdmData[prefilteredDataName].some(
+        (element, index, arr) => o.code === element[mainDropdownName]
+      )
+    );
+    if (!mainDropdownResult.includes({ code: "", name: selectText })) {
+      mainDropdownResult.unshift({ code: "", name: selectText });
+    }
+    setPrefilteredMdmData(mdmData[prefilteredDataName]);
+
     setSelectedModalData(
       modalViewData(
         selectedData,
         controlInputs,
         controlDatePickerInputs,
         create,
-        mdmData
+        mdmData,
+        mdmData[prefilteredDataName],
+        mainDropdownName,
+        mainDropdownResult
       )
     );
     setShow(true);
-
     setTimeout(() => {
       attachChangeEventListeners(".modalUserInput");
     });
@@ -350,10 +400,13 @@ export const DataTableAssert = ({
                 <ModalDetails
                   modalData={selectedRow}
                   data={selectedModalData}
+                  prefilteredMdmData={prefilteredMdmData}
                   cols={2}
                   title={`${dataTableName}`}
                   viewOnly={!(user && checkout) || nonEditable}
                   create={createNewData}
+                  setMainDropdownChange={setMainDropdownChange}
+                  mainDropdownChange={mainDropdownChange}
                 />
               </div>
             ) : (
@@ -375,11 +428,10 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadDropdownsData: async (section, dropdownArray) => {
+    loadDropdownsData: async (section, dropdownArray) =>
       dispatch(
         loadDropdowns(convertSectionToStoreName(section), dropdownArray)
-      );
-    },
+      ),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(DataTableAssert);

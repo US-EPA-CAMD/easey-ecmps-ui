@@ -273,3 +273,32 @@ export const getAllShapeCodes = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+export const getPrefilteredFormulas = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/relationships/formulas`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+
+export const getPrefilteredMethods = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/relationships/methods`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getPrefilteredSpans = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/relationships/spans`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getPrefilteredDefaults = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/relationships/defaults`)
+    .then(handleResponse)
+    .catch(handleError);
+};

@@ -1,17 +1,25 @@
 import { findValue, adjustDate } from "./find-values-in-array";
+import _ from "lodash";
 
 // object property,Label Name, value
 
 //arr = [property name, ui label, value, required or not labeling for edit, control input type ... ]
 export const modalViewData = (
-  selected,
-  label,
-  time,
-  createNew,
-  totalOptions,
+  selected, // selectedData,
+  label, // controlInputs,
+  time, // controlDatePickerInputs,
+  createNew, // create,
+  totalOptions, // mdmData,
+  prefilteredMdmTotal, // mdmData[prefilteredDataName],\
+  mainDropdownName,
+  prefilterMdmMain, // result
+
   mats = false
 ) => {
   const arr = [];
+
+  const totalOptionsClone = _.cloneDeep(totalOptions);
+  totalOptionsClone[mainDropdownName] = prefilterMdmMain;
 
   // y = property name of the apis
   for (const y in label) {
@@ -49,10 +57,11 @@ export const modalViewData = (
     } else {
       let labels = "";
       switch (label[y][1]) {
+        case "mainDropdown":
         case "dropdown":
           if (!createNew) {
-            if (totalOptions) {
-              labels = findValue(totalOptions[y], selected[y], "name");
+            if (totalOptionsClone) {
+              labels = findValue(totalOptionsClone[y], selected[y], "name");
             }
           }
           arr.push([
@@ -60,9 +69,9 @@ export const modalViewData = (
             label[y][0],
             labels,
             label[y][2] === "required" ? "required" : false,
-            "dropdown",
+            label[y][1] === "mainDropdown" ? "mainDropdown" : "dropdown",
             createNew ? "select" : selected[y],
-            totalOptions ? totalOptions[y] : [],
+            totalOptionsClone ? totalOptionsClone[y] : [],
           ]);
           break;
         case "input":

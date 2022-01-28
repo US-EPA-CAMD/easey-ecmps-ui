@@ -958,6 +958,147 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           setDefaultOptions(options, fieldName);
         });
         break;
+
+      case "prefilteredFormulas":
+        let noDupesFormCodes = [];
+        await dmApi.getPrefilteredFormulas().then((response) => {
+          noDupesFormCodes = response.data.map((code) => {
+            return code["parameterCode"];
+          });
+
+          noDupesFormCodes = [...new Set(noDupesFormCodes)];
+
+          const prefilteredMdmOptions = [];
+          for (const code of noDupesFormCodes) {
+            const filteredArray = response.data.filter(
+              (element) => element.parameterCode === code
+            );
+            let formulaCodeArray = [];
+            // *** rest of sub-arrays
+            filteredArray.forEach((element) => {
+              formulaCodeArray.push(element.formulaCode);
+            });
+            formulaCodeArray = [...new Set(formulaCodeArray)];
+
+            const organizedMDMrow = {};
+            organizedMDMrow["parameterCode"] = code;
+            organizedMDMrow["formulaCode"] = formulaCodeArray;
+            prefilteredMdmOptions.push(organizedMDMrow);
+          }
+          setDefaultOptions(prefilteredMdmOptions, fieldName);
+        });
+        break;
+
+      case "prefilteredMethods":
+        await dmApi.getPrefilteredMethods().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              parameterCode: option["parameterCode"],
+              formulaCode: option["formulaCode"],
+            };
+          });
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+
+      case "prefilteredSpans":
+        let noDupesFormCodesSpans = [];
+        await dmApi.getPrefilteredSpans().then((response) => {
+          console.log("data", response.data);
+
+          noDupesFormCodesSpans = response.data.map((code) => {
+            return code["componentTypeCode"];
+          });
+
+          noDupesFormCodesSpans = [...new Set(noDupesFormCodesSpans)];
+
+          const prefilteredMdmOptions = [];
+          for (const code of noDupesFormCodesSpans) {
+            const filteredArray = response.data.filter(
+              (element) => element.componentTypeCode === code
+            );
+            let spanScaleCodeArray = [];
+            let spanMethodCodeArray = [];
+            let spanUnitsOfMeasureCodeArray = [];
+            // *** rest of sub-arrays
+            filteredArray.forEach((element) => {
+              spanScaleCodeArray.push(element.spanScaleCode);
+              spanMethodCodeArray.push(element.spanMethodCode);
+              spanUnitsOfMeasureCodeArray.push(element.spanUnitsOfMeasureCode);
+            });
+            spanScaleCodeArray = [...new Set(spanScaleCodeArray)];
+            spanMethodCodeArray = [...new Set(spanMethodCodeArray)];
+            spanUnitsOfMeasureCodeArray = [
+              ...new Set(spanUnitsOfMeasureCodeArray),
+            ];
+
+            const organizedMDMrow = {};
+            organizedMDMrow["componentTypeCode"] = code;
+            organizedMDMrow["spanScaleCode"] = spanScaleCodeArray;
+            organizedMDMrow["spanMethodCode"] = spanMethodCodeArray;
+            organizedMDMrow["spanUnitsOfMeasureCode"] =
+              spanUnitsOfMeasureCodeArray;
+            prefilteredMdmOptions.push(organizedMDMrow);
+          }
+
+          setDefaultOptions(prefilteredMdmOptions, fieldName);
+        });
+        break;
+      case "prefilteredDefaults":
+        let noDupesFormCodesDefaults = [];
+        await dmApi.getPrefilteredDefaults().then((response) => {
+          noDupesFormCodesDefaults = response.data.map((code) => {
+            return code["parameterCode"];
+          });
+
+          noDupesFormCodesDefaults = [...new Set(noDupesFormCodesDefaults)];
+
+          const prefilteredMdmOptions = [];
+          for (const code of noDupesFormCodesDefaults) {
+            const filteredArray = response.data.filter(
+              (element) => element.parameterCode === code
+            );
+            let operatingConditionCodeArray = [];
+            let defaultUnitsOfMeasureCodeArray = [];
+            let defaultPurposeCodeArray = [];
+            let fuelCodeArray = [];
+            let defaultSourceCodeArray = [];
+            // *** rest of sub-arrays
+            filteredArray.forEach((element) => {
+              operatingConditionCodeArray.push(element.operatingConditionCode);
+              defaultUnitsOfMeasureCodeArray.push(
+                element.defaultUnitsOfMeasureCode
+              );
+              defaultPurposeCodeArray.push(element.defaultPurposeCode);
+              fuelCodeArray.push(element.fuelCode);
+              defaultSourceCodeArray.push(element.defaultSourceCode);
+            });
+            operatingConditionCodeArray = [
+              ...new Set(operatingConditionCodeArray),
+            ];
+            defaultUnitsOfMeasureCodeArray = [
+              ...new Set(defaultUnitsOfMeasureCodeArray),
+            ];
+            defaultPurposeCodeArray = [...new Set(defaultPurposeCodeArray)];
+            fuelCodeArray = [...new Set(fuelCodeArray)];
+            defaultSourceCodeArray = [...new Set(defaultSourceCodeArray)];
+
+            const organizedMDMrow = {};
+            organizedMDMrow["parameterCode"] = code;
+            organizedMDMrow["operatingConditionCode"] =
+              operatingConditionCodeArray;
+            organizedMDMrow["defaultUnitsOfMeasureCode"] =
+              defaultUnitsOfMeasureCodeArray;
+            organizedMDMrow["defaultPurposeCode"] = defaultPurposeCodeArray;
+            organizedMDMrow["fuelCode"] = fuelCodeArray;
+            organizedMDMrow["defaultSourceCode"] = defaultSourceCodeArray;
+            prefilteredMdmOptions.push(organizedMDMrow);
+          }
+
+          setDefaultOptions(prefilteredMdmOptions, fieldName);
+        });
+        break;
+
       default:
         break;
     }

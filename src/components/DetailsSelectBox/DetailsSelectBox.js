@@ -14,6 +14,9 @@ export const DetailsSelectBox = ({
   id,
   handler,
   hyphenatedCaption,
+  eventHandler,
+  disableDropdownFlag,
+  mainDropdownChange,
 }) => {
   const [selectionState, setSelectionState] = useState(
     initialSelection ? initialSelection : null
@@ -25,7 +28,6 @@ export const DetailsSelectBox = ({
       handler(val.target.value);
     }
   };
-
   const populateOptions = (optionsList) => {
     return optionsList.map((info, index) => {
       return (
@@ -52,8 +54,14 @@ export const DetailsSelectBox = ({
           <Dropdown
             name={caption}
             // weird bug without this
-            value={selectionState !== null ? selectionState : initialSelection}
-            disabled={viewOnly}
+            value={
+              disableDropdownFlag
+                ? "select"
+                : selectionState !== null
+                ? selectionState
+                : initialSelection
+            }
+            disabled={viewOnly || disableDropdownFlag}
             id={id === null ? caption : id}
             className={className}
             epadataname={epadataname}

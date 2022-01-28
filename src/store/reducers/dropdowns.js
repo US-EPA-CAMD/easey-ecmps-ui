@@ -19,6 +19,10 @@ const reducer = (state, action) => {
       ...dropdowns,
     };
   }
+  // else if (action.type === types.UPDATE_DROPDOWNS) {
+  //   returnObject = {...state, action.section: {...state.cartData, ...action.payload}}
+  // }
+
   // otherwise, just keep old state
   else {
     returnObject = currentState;

@@ -8,7 +8,6 @@ const GetDataTableApi = (dataTableName, locationSelectValue) => {
   switch (dataTableName) {
     case "loads":
       mpApi.getMonitoringLoads(locationSelectValue).then((response) => {
-        console.log("resoonse", response.data);
         options = response.data;
       });
       break;
