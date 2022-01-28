@@ -41,6 +41,8 @@ const ModalDetails = ({
   const [rerenderDropdown, setRerenderDropdown] = useState(false);
   const largeWidthCardStyle = "width-card-lg";
 
+  const [mainDropdownUntouched, setMainDropdownUntouched] = useState(true);
+
   // fixes rare instances where there is an enddate but no end time
   if (
     data.hasOwnProperty("endDate") &&
@@ -97,6 +99,7 @@ const ModalDetails = ({
   const [disableDropdownFlag, setDisableDropdownFlag] = useState(false);
   const disableDropdowns = (value) => {
     setMainDropdownChange(value);
+    setMainDropdownUntouched(false);
 
     if (value === "") {
       setDisableDropdownFlag(true);
@@ -142,14 +145,20 @@ const ModalDetails = ({
                 ? value[6]
                 : [{ code: "", name: "" }]
             }
-            initialSelection={!disableDropdownFlag ? value[5] : "select"}
+            initialSelection={
+              !disableDropdownFlag || (create && !mainDropdownUntouched)
+                ? value[5]
+                : "select"
+            }
             selectKey="code"
             id={`${value[1]}`}
             epa-testid={value[0]}
             name={value[1]}
             secondOption="name"
             mainDropdownChange={mainDropdownChange}
-            disableDropdownFlag={disableDropdownFlag}
+            disableDropdownFlag={
+              disableDropdownFlag || (create && mainDropdownUntouched)
+            }
           />
         );
         break;
