@@ -961,30 +961,47 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
 
       case "prefilteredFormulas":
         let noDupesFormCodes = [];
+        // returns all the parameter codes
         await dmApi.getPrefilteredFormulas().then((response) => {
-          noDupesFormCodes = response.data.map((code) => {
+          const viewData = response.data;
+
+          // Get parameter codes
+          noDupesFormCodes = viewData.map((code) => {
             return code["parameterCode"];
           });
 
+          // Filter out the duplicates
           noDupesFormCodes = [...new Set(noDupesFormCodes)];
 
           const prefilteredMdmOptions = [];
+
+          // For each unique parameter code...
           for (const code of noDupesFormCodes) {
-            const filteredArray = response.data.filter(
+            // Find the records from the view that have that parameter code
+            const filteredArray = viewData.filter(
               (element) => element.parameterCode === code
             );
+
+            // Gather all formula codes from those records
             let formulaCodeArray = [];
             // *** rest of sub-arrays
             filteredArray.forEach((element) => {
               formulaCodeArray.push(element.formulaCode);
             });
+
+            // Find the distinct ones
             formulaCodeArray = [...new Set(formulaCodeArray)];
 
+            // Pair the current parameter code with the list of matching formula codes
             const organizedMDMrow = {};
             organizedMDMrow["parameterCode"] = code;
             organizedMDMrow["formulaCode"] = formulaCodeArray;
+
+            // Push this object (containing the pairing) to the array
             prefilteredMdmOptions.push(organizedMDMrow);
           }
+
+          // Afterwards, we should have an array that has all the possible formula codes for each parameter code
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         });
         break;
