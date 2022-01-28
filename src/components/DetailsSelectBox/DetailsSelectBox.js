@@ -16,7 +16,7 @@ export const DetailsSelectBox = ({
   hyphenatedCaption,
   eventHandler,
   disableDropdownFlag,
-  mainDropdownChange
+  mainDropdownChange,
 }) => {
   const [selectionState, setSelectionState] = useState(
     initialSelection ? initialSelection : null
@@ -56,7 +56,7 @@ export const DetailsSelectBox = ({
             // weird bug without this
             value={
               disableDropdownFlag
-                ? null
+                ? "select"
                 : selectionState !== null
                 ? selectionState
                 : initialSelection

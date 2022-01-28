@@ -142,7 +142,7 @@ const ModalDetails = ({
                 ? value[6]
                 : [{ code: "", name: "" }]
             }
-            initialSelection={value[5]}
+            initialSelection={!disableDropdownFlag ? value[5] : "select"}
             selectKey="code"
             id={`${value[1]}`}
             epa-testid={value[0]}
