@@ -161,6 +161,10 @@ export const DataTableAssert = ({
   };
 
   useEffect(() => {
+    setDropdownsLoaded(false);
+  }, [dataTableName]);
+
+  useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
     if (mdmData && mdmData.length === 0) {
       loadDropdownsData(dataTableName, dropdownArray);
