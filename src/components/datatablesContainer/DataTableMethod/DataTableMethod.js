@@ -417,6 +417,7 @@ export const DataTableMethod = ({
                   cols={2}
                   title={"Method"}
                   viewOnly={!(user && checkout)}
+                  create={createNewMethod}
                   setMainDropdownChange={setMainDropdownChange}
                   mainDropdownChange={mainDropdownChange}
                 />
