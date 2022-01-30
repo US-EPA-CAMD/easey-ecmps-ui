@@ -161,7 +161,7 @@ export const DataTableMethod = ({
     const prefilteredDataName = dropdownArray[0][0];
     if (prefilteredMdmData) {
       const result = prefilteredMdmData.filter(
-        (data) => data[prefilteredDataName] === mainDropdownChange
+        (prefiltered) => prefiltered[prefilteredDataName] === mainDropdownChange
       );
 
       if (result.length > 0) {
@@ -218,7 +218,7 @@ export const DataTableMethod = ({
       setSelectedMonitoringMethod(monMethod);
     }
 
-    let mainDropdownName = "parameterCode";
+    const mainDropdownName = "parameterCode";
 
     // Get the name of the property of the correct array in mdmData (full data set)
     const prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
