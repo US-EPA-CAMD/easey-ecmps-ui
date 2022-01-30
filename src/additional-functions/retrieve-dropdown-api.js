@@ -959,6 +959,57 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
 
+      case "prefilteredMatsMethods":
+        let noDupesMatsMethodCodes = [];
+        // returns all the parameter codes
+        await dmApi.getPrefilteredMatsMethods().then((response) => {
+          const viewData = response.data;
+
+          // Get parameter codes
+          noDupesMatsMethodCodes = viewData.map((code) => {
+            return code["supplementalMATSParameterCode"];
+          });
+
+          // Filter out the duplicates
+          noDupesMatsMethodCodes = [...new Set(noDupesMatsMethodCodes)];
+
+          const prefilteredMdmOptions = [];
+
+          // For each unique parameter code...
+          for (const code of noDupesMatsMethodCodes) {
+            // Find the records from the view that have that parameter code
+            const filteredArray = viewData.filter(
+              (element) => element.parameterCode === code
+            );
+
+            // Gather all formula codes from those records
+            let methodCodeArray = [];
+
+            // *** rest of sub-arrays
+            filteredArray.forEach((element) => {
+              methodCodeArray.push(
+                element.supplementalMATSMonitoringMethodCode
+              );
+            });
+
+            // Find the distinct ones
+            methodCodeArray = [...new Set(methodCodeArray)];
+
+            // Pair the current parameter code with the list of matching formula codes
+            const organizedMDMrow = {};
+            organizedMDMrow["supplementalMATSParameterCode"] = code;
+            organizedMDMrow["supplementalMATSMonitoringMethodCode"] =
+              methodCodeArray;
+
+            // Push this object (containing the pairing) to the array
+            prefilteredMdmOptions.push(organizedMDMrow);
+          }
+
+          // Afterwards, we should have an array that has all the possible formula codes for each parameter code
+          setDefaultOptions(prefilteredMdmOptions, fieldName);
+        });
+        break;
+
       case "prefilteredMethods":
         let noDupesMethodCodes = [];
         // returns all the parameter codes

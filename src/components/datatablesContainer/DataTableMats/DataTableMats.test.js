@@ -189,9 +189,9 @@ test("tests a create/save methods", async () => {
 
   let { container } = await waitForElement(() => componentRenderer(5770));
 
-  fireEvent.click(container.querySelector("#testingBtn"));
-  fireEvent.click(container.querySelector("#testingBtn2"));
-  fireEvent.click(container.querySelector("#testingBtn3"));
+  // fireEvent.click(container.querySelector("#testingBtn"));
+  // fireEvent.click(container.querySelector("#testingBtn2"));
+  // fireEvent.click(container.querySelector("#testingBtn3"));
   // componentRenderer(6);
   expect(container).toBeDefined();
 });

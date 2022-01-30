@@ -281,10 +281,16 @@ export const getPrefilteredFormulas = async () => {
     .catch(handleError);
 };
 
-
 export const getPrefilteredMethods = async () => {
   return axios
     .get(`${config.services.mdm.uri}/relationships/methods`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getPrefilteredMatsMethods = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/relationships/mats-methods`)
     .then(handleResponse)
     .catch(handleError);
 };
