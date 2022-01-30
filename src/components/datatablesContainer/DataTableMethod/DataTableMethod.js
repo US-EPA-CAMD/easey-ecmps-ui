@@ -61,8 +61,11 @@ export const DataTableMethod = ({
       "monitoringMethodCode",
       "substituteDataCode",
       "bypassApproachCode",
+      "prefilteredMethods",
     ],
   ];
+
+  const selectText = "-- Select a value --";
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
 
@@ -149,6 +152,46 @@ export const DataTableMethod = ({
   // cant unit test properly
   const [createNewMethod, setCreateNewMethod] = useState(false);
 
+  // state for handling dynamic dropdowns
+  const [mainDropdownChange, setMainDropdownChange] = useState("");
+  const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
+
+  useEffect(() => {
+    // Update all the "secondary dropdowns" (based on the "main" dropdown)
+    const prefilteredDataName = dropdownArray[0][0];
+    if (prefilteredMdmData) {
+      const result = prefilteredMdmData.filter(
+        (prefiltered) => prefiltered[prefilteredDataName] === mainDropdownChange
+      );
+
+      if (result.length > 0) {
+        // Go through the inputs in the modal
+        for (const modalDetailData of selectedModalData) {
+          // For each dropdown
+          if (modalDetailData[4] === "dropdown") {
+            const selectedCodes = result[0];
+
+            // Filter their options (based on the value of the driving dropdown)
+            const filteredOutSubDropdownOptions = mdmData[
+              modalDetailData[0]
+            ].filter((option) =>
+              selectedCodes[modalDetailData[0]].includes(option.code)
+            );
+
+            // Add select option
+            filteredOutSubDropdownOptions.unshift({
+              code: "",
+              name: selectText,
+            });
+            // Load the filtered data into the dropdown
+            modalDetailData[6] = filteredOutSubDropdownOptions;
+          }
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mainDropdownChange, selectedModalData]);
+
   const testing = () => {
     openMethodModal(false, false, true);
     saveMethods();
@@ -175,11 +218,30 @@ export const DataTableMethod = ({
       setSelectedMonitoringMethod(monMethod);
     }
 
+    const mainDropdownName = "parameterCode";
+
+    // Get the name of the property of the correct array in mdmData (full data set)
+    const prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
+
+    // Get the descriptions from the original dropdowns set
+    const mainDropdownResult = mdmData[mainDropdownName].filter((o) =>
+      mdmData[prefilteredDataName].some(
+        (element, index, arr) => o.code === element[mainDropdownName]
+      )
+    );
+
+    // Add the select text if necessary
+    if (!mainDropdownResult.includes({ code: "", name: selectText })) {
+      mainDropdownResult.unshift({ code: "", name: selectText });
+    }
+
+    setPrefilteredMdmData(mdmData[prefilteredDataName]);
+
     setSelectedModalData(
       modalViewData(
         monMethod,
         {
-          parameterCode: ["Parameter", "dropdown", ""],
+          parameterCode: ["Parameter", "mainDropdown", ""],
           monitoringMethodCode: ["Methodology", "dropdown", ""],
           substituteDataCode: ["Substitute Data Approach", "dropdown", ""],
           bypassApproachCode: ["Bypass Approach", "dropdown", ""],
@@ -191,11 +253,13 @@ export const DataTableMethod = ({
           endHour: ["End Time", "time", ""],
         },
         create,
-        mdmData
+        mdmData,
+        mdmData[prefilteredDataName],
+        mainDropdownName,
+        mainDropdownResult
       )
     );
     setShow(true);
-
     setTimeout(() => {
       attachChangeEventListeners(".modalUserInput");
     });
@@ -349,9 +413,13 @@ export const DataTableMethod = ({
                 <ModalDetails
                   modalData={selectedMonitoringMethod}
                   data={selectedModalData}
+                  prefilteredMdmData={prefilteredMdmData}
                   cols={2}
                   title={"Method"}
                   viewOnly={!(user && checkout)}
+                  create={createNewMethod}
+                  setMainDropdownChange={setMainDropdownChange}
+                  mainDropdownChange={mainDropdownChange}
                 />
               </div>
             ) : (

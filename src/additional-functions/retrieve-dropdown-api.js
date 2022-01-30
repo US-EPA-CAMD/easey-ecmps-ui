@@ -959,6 +959,62 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
 
+      case "prefilteredMethods":
+        let noDupesMethodCodes = [];
+        // returns all the parameter codes
+        await dmApi.getPrefilteredMethods().then((response) => {
+          const viewData = response.data;
+
+          // Get parameter codes
+          noDupesMethodCodes = viewData.map((code) => {
+            return code["parameterCode"];
+          });
+
+          // Filter out the duplicates
+          noDupesMethodCodes = [...new Set(noDupesMethodCodes)];
+
+          const prefilteredMdmOptions = [];
+
+          // For each unique parameter code...
+          for (const code of noDupesMethodCodes) {
+            // Find the records from the view that have that parameter code
+            const filteredArray = viewData.filter(
+              (element) => element.parameterCode === code
+            );
+
+            // Gather all formula codes from those records
+            let methodCodeArray = [];
+            let substituteDataCodeArray = [];
+            let bypassApproachCodeArray = [];
+
+            // *** rest of sub-arrays
+            filteredArray.forEach((element) => {
+              methodCodeArray.push(element.monitoringMethodCode);
+              substituteDataCodeArray.push(element.substituteDataCode);
+              bypassApproachCodeArray.push(element.bypassApproachCode);
+            });
+
+            // Find the distinct ones
+            methodCodeArray = [...new Set(methodCodeArray)];
+            substituteDataCodeArray = [...new Set(substituteDataCodeArray)];
+            bypassApproachCodeArray = [...new Set(bypassApproachCodeArray)];
+
+            // Pair the current parameter code with the list of matching formula codes
+            const organizedMDMrow = {};
+            organizedMDMrow["parameterCode"] = code;
+            organizedMDMrow["monitoringMethodCode"] = methodCodeArray;
+            organizedMDMrow["substituteDataCode"] = substituteDataCodeArray;
+            organizedMDMrow["bypassApproachCode"] = bypassApproachCodeArray;
+
+            // Push this object (containing the pairing) to the array
+            prefilteredMdmOptions.push(organizedMDMrow);
+          }
+
+          // Afterwards, we should have an array that has all the possible formula codes for each parameter code
+          setDefaultOptions(prefilteredMdmOptions, fieldName);
+        });
+        break;
+
       case "prefilteredFormulas":
         let noDupesFormCodes = [];
         // returns all the parameter codes
@@ -1003,18 +1059,6 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
 
           // Afterwards, we should have an array that has all the possible formula codes for each parameter code
           setDefaultOptions(prefilteredMdmOptions, fieldName);
-        });
-        break;
-
-      case "prefilteredMethods":
-        await dmApi.getPrefilteredMethods().then((response) => {
-          options = response.data.map((option) => {
-            return {
-              parameterCode: option["parameterCode"],
-              formulaCode: option["formulaCode"],
-            };
-          });
-          setDefaultOptions(options, fieldName);
         });
         break;
 
