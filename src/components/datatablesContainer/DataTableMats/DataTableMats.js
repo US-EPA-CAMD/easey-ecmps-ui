@@ -187,7 +187,7 @@ export const DataTableMats = ({
 
   useEffect(() => {
     // Update all the "secondary dropdowns" (based on the "main" dropdown)
-    const prefilteredDataName = dropdownArray[0][0];
+    const prefilteredDataName = "supplementalMATSParameterCode";
     if (prefilteredMdmData) {
       const result = prefilteredMdmData.filter(
         (prefiltered) => prefiltered[prefilteredDataName] === mainDropdownChange
@@ -229,7 +229,7 @@ export const DataTableMats = ({
       setSelectedMatsMethods(mats);
     }
 
-    const mainDropdownName = "parameterCode";
+    const mainDropdownName = "supplementalMATSParameterCode";
 
     // Get the name of the property of the correct array in mdmData (full data set)
     const prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
@@ -252,7 +252,7 @@ export const DataTableMats = ({
       modalViewData(
         mats,
         {
-          supplementalMATSParameterCode: ["Parameter", "dropdown", ""],
+          supplementalMATSParameterCode: ["Parameter", "mainDropdown", ""],
           supplementalMATSMonitoringMethodCode: ["Methodology", "dropdown", ""],
         },
         {

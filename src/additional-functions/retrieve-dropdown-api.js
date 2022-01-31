@@ -979,7 +979,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           for (const code of noDupesMatsMethodCodes) {
             // Find the records from the view that have that parameter code
             const filteredArray = viewData.filter(
-              (element) => element.parameterCode === code
+              (element) => element.supplementalMATSParameterCode === code
             );
 
             // Gather all formula codes from those records
