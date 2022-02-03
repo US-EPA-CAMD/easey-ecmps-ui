@@ -112,7 +112,7 @@ export const loadsDataTableProps = (location) => {
       endHour: 0,
     },
     dropdownArray: [
-      ["maximumLoadUnitsOfMeasureCode", "normalLevelCode", "secondLevelCode"],
+      ["maximumLoadUnitsOfMeasureCode", "normalLevelCode", "secondLevelCode","prefilteredLoads"],
     ],
     columnNames: [
       "Maximum Load Value",
@@ -130,7 +130,7 @@ export const loadsDataTableProps = (location) => {
       maximumLoadValue: ["Maximum Load Value", "input", "", ""],
       maximumLoadUnitsOfMeasureCode: [
         "Maximum Load Units of Measure",
-        "dropdown",
+        "mainDropdown",
         "",
       ],
       lowerOperationBoundary: ["Lower Operation Boundary", "input", "", ""],

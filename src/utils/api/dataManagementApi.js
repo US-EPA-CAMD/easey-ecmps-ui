@@ -308,3 +308,11 @@ export const getPrefilteredDefaults = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+
+export const getPrefilteredLoads = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/relationships/loads`)
+    .then(handleResponse)
+    .catch(handleError);
+};
