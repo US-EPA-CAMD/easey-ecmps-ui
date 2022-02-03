@@ -1116,42 +1116,17 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
       case "prefilteredSpans":
         let noDupesFormCodesSpans = [];
         await dmApi.getPrefilteredSpans().then((response) => {
-          console.log("data", response.data);
-
           noDupesFormCodesSpans = response.data.map((code) => {
             return code["componentTypeCode"];
           });
 
           noDupesFormCodesSpans = [...new Set(noDupesFormCodesSpans)];
 
-          const prefilteredMdmOptions = [];
-          for (const code of noDupesFormCodesSpans) {
-            const filteredArray = response.data.filter(
-              (element) => element.componentTypeCode === code
-            );
-            let spanScaleCodeArray = [];
-            let spanMethodCodeArray = [];
-            let spanUnitsOfMeasureCodeArray = [];
-            // *** rest of sub-arrays
-            filteredArray.forEach((element) => {
-              spanScaleCodeArray.push(element.spanScaleCode);
-              spanMethodCodeArray.push(element.spanMethodCode);
-              spanUnitsOfMeasureCodeArray.push(element.spanUnitsOfMeasureCode);
-            });
-            spanScaleCodeArray = [...new Set(spanScaleCodeArray)];
-            spanMethodCodeArray = [...new Set(spanMethodCodeArray)];
-            spanUnitsOfMeasureCodeArray = [
-              ...new Set(spanUnitsOfMeasureCodeArray),
-            ];
-
-            const organizedMDMrow = {};
-            organizedMDMrow["componentTypeCode"] = code;
-            organizedMDMrow["spanScaleCode"] = spanScaleCodeArray;
-            organizedMDMrow["spanMethodCode"] = spanMethodCodeArray;
-            organizedMDMrow["spanUnitsOfMeasureCode"] =
-              spanUnitsOfMeasureCodeArray;
-            prefilteredMdmOptions.push(organizedMDMrow);
-          }
+          const prefilteredMdmOptions = organizePrefilterMDMData(
+            noDupesFormCodesSpans,
+            "componentTypeCode",
+            response.data
+          );
 
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         });
@@ -1165,56 +1140,87 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
 
           noDupesFormCodesDefaults = [...new Set(noDupesFormCodesDefaults)];
 
-          const prefilteredMdmOptions = [];
-          for (const code of noDupesFormCodesDefaults) {
-            const filteredArray = response.data.filter(
-              (element) => element.parameterCode === code
-            );
-            let operatingConditionCodeArray = [];
-            let defaultUnitsOfMeasureCodeArray = [];
-            let defaultPurposeCodeArray = [];
-            let fuelCodeArray = [];
-            let defaultSourceCodeArray = [];
-            // *** rest of sub-arrays
-            filteredArray.forEach((element) => {
-              operatingConditionCodeArray.push(element.operatingConditionCode);
-              defaultUnitsOfMeasureCodeArray.push(
-                element.defaultUnitsOfMeasureCode
-              );
-              defaultPurposeCodeArray.push(element.defaultPurposeCode);
-              fuelCodeArray.push(element.fuelCode);
-              defaultSourceCodeArray.push(element.defaultSourceCode);
-            });
-            operatingConditionCodeArray = [
-              ...new Set(operatingConditionCodeArray),
-            ];
-            defaultUnitsOfMeasureCodeArray = [
-              ...new Set(defaultUnitsOfMeasureCodeArray),
-            ];
-            defaultPurposeCodeArray = [...new Set(defaultPurposeCodeArray)];
-            fuelCodeArray = [...new Set(fuelCodeArray)];
-            defaultSourceCodeArray = [...new Set(defaultSourceCodeArray)];
-
-            const organizedMDMrow = {};
-            organizedMDMrow["parameterCode"] = code;
-            organizedMDMrow["operatingConditionCode"] =
-              operatingConditionCodeArray;
-            organizedMDMrow["defaultUnitsOfMeasureCode"] =
-              defaultUnitsOfMeasureCodeArray;
-            organizedMDMrow["defaultPurposeCode"] = defaultPurposeCodeArray;
-            organizedMDMrow["fuelCode"] = fuelCodeArray;
-            organizedMDMrow["defaultSourceCode"] = defaultSourceCodeArray;
-            prefilteredMdmOptions.push(organizedMDMrow);
-          }
-
+          const prefilteredMdmOptions = organizePrefilterMDMData(
+            noDupesFormCodesDefaults,
+            "parameterCode",
+            response.data
+          );
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         });
         break;
 
+      case "prefilteredLoads":
+        let noDupesFormCodesLoads = [];
+        await dmApi.getPrefilteredLoads().then((response) => {
+          noDupesFormCodesLoads = response.data.map((code) => {
+            return code["maximumLoadUnitsOfMeasureCode"];
+          });
+
+          noDupesFormCodesLoads = [...new Set(noDupesFormCodesLoads)];
+
+          const prefilteredMdmOptions = organizePrefilterMDMData(
+            noDupesFormCodesLoads,
+            "maximumLoadUnitsOfMeasureCode",
+            response.data
+          );
+
+          setDefaultOptions(prefilteredMdmOptions, fieldName);
+        });
+        break;
       default:
         break;
     }
   }
 
   return totalOptions;
+};
+
+const organizePrefilterMDMData = (noDupesFormCodes, drivingInput, response) => {
+  const prefilteredMdmOptions = [];
+  // for each unique main driving input code
+  for (const code of noDupesFormCodes) {
+    // get all of the secondary dropdowns that follows the unique main driving input
+    const filteredArray = response.filter(
+      (element) => element[drivingInput] === code
+    );
+
+    let setOfSecondaryDropdownArrayCodes = {};
+
+    // finds the secondary dropdown property names and makes array and pushes into object above
+    for (const secondaryCodeName in filteredArray[0]) {
+      if (secondaryCodeName !== drivingInput) {
+        //  dynamically creates array for each secondary
+        setOfSecondaryDropdownArrayCodes[secondaryCodeName] = [];
+      }
+    }
+
+    // *** rest of sub-arrays
+    // runs through each secondary belonging to the unique main driving input array and adds it to an array 
+    filteredArray.forEach((element) => {
+      for (const secondaryCode in setOfSecondaryDropdownArrayCodes) {
+        if (
+          // filters out secondary code duplicates 
+          !setOfSecondaryDropdownArrayCodes[secondaryCode].includes(
+            element[secondaryCode]
+          )
+        ) {
+          setOfSecondaryDropdownArrayCodes[secondaryCode].push(
+            element[secondaryCode]
+          );
+        }
+      }
+    });
+
+    const organizedMDMrow = {};
+    organizedMDMrow[drivingInput] = code;
+    // creates returning object of 
+    // {drivingInput: uniqueCode , secondaryArray : [uniqueCode,uniqueCode2,uniqueCode3], secondaryArray2: [uniqueCode,uniqueCode2]}
+    for (const secondaryCode in setOfSecondaryDropdownArrayCodes) {
+      organizedMDMrow[secondaryCode] =
+        setOfSecondaryDropdownArrayCodes[secondaryCode];
+    }
+
+    prefilteredMdmOptions.push(organizedMDMrow);
+  }
+  return prefilteredMdmOptions;
 };
