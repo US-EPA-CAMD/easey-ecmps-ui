@@ -150,11 +150,14 @@ export const collapsableFooterTopics = [
   },
 ];
 
-export const head = [
-  { name: "Home", url: "/" },
+export const globalView = [
   { name: "Monitoring Plans", url: "/monitoring-plans" },
   { name: "QA & Certifications", url: "/qa_certifications" },
   { name: "Emissions", url: "/emission" },
+];
+
+export const home = [
+  { name: "Home", url: "/" },
 ];
 
 export const workSpace = [
