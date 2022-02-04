@@ -7,9 +7,14 @@ export const extractUserInput = (payload, inputSelector, radios) => {
   let radioPayload = null;
   const payloadArray = [];
 
-  // play load is not recognizing the correct ID, probably taking in previous modaldataID
+  // payload is not recognizing the correct ID, probably taking in previous modaldataID
   payloadInputs.forEach((input) => {
-    if (input.id === undefined || input.id === null || input.id === "") {
+    if (
+      input.id === undefined ||
+      input.id === null ||
+      input.id === "" ||
+      radios.includes(input.id)
+    ) {
       return;
     }
     const item = { name: "", value: "" };
@@ -44,7 +49,9 @@ export const extractUserInput = (payload, inputSelector, radios) => {
   }
 
   payloadArray.forEach((item) => {
-    payload[item.name] = item.value.trim() === "" ? null : item.value.trim();
+    if (item.value !== undefined) {
+      payload[item.name] = item.value.trim() === "" ? null : item.value.trim();
+    }
   });
 
   return payload;
