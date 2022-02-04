@@ -19,7 +19,9 @@ export const modalViewData = (
   const arr = [];
 
   const totalOptionsClone = _.cloneDeep(totalOptions);
-  totalOptionsClone[mainDropdownName] = prefilterMdmMain;
+  if (mainDropdownName !== "") {
+    totalOptionsClone[mainDropdownName] = prefilterMdmMain;
+  }
 
   // y = property name of the apis
   for (const y in label) {
