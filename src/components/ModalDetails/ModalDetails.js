@@ -41,7 +41,16 @@ const ModalDetails = ({
   const [rerenderDropdown, setRerenderDropdown] = useState(false);
   const largeWidthCardStyle = "width-card-lg";
 
-  const [mainDropdownUntouched, setMainDropdownUntouched] = useState(true);
+  let hasMainDropdown = false;
+  for (const input of data) {
+    if (input[4] === "mainDropdown") {
+      hasMainDropdown = true;
+      break;
+    }
+  }
+
+  const [mainDropdownUntouched, setMainDropdownUntouched] =
+    useState(hasMainDropdown);
 
   // fixes rare instances where there is an enddate but no end time
   if (

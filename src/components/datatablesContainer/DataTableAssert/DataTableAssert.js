@@ -62,6 +62,7 @@ export const DataTableAssert = ({
 
   const [updateTable, setUpdateTable] = useState(false);
   const [complimentaryData, setComplimentaryData] = useState([]);
+  const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
   // Unit Information variables
   const uCon = "Unit Control";
@@ -309,7 +310,6 @@ export const DataTableAssert = ({
 
   // Executed when "View" action is clicked
   const openModal = (row, bool, create) => {
-    const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
     let selectedData = null;
     setCreateNewData(create);
     if (dataPulled.length > 0 && !create) {
