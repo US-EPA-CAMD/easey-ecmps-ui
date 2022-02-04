@@ -309,6 +309,7 @@ export const DataTableAssert = ({
 
   // Executed when "View" action is clicked
   const openModal = (row, bool, create) => {
+    const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
     let selectedData = null;
     setCreateNewData(create);
     if (dataPulled.length > 0 && !create) {
@@ -323,16 +324,29 @@ export const DataTableAssert = ({
         mainDropdownName = controlProperty;
       }
     }
-    const prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
-    const mainDropdownResult = mdmData[mainDropdownName].filter((o) =>
-      mdmData[prefilteredDataName].some(
-        (element, index, arr) => o.code === element[mainDropdownName]
-      )
-    );
-    if (!mainDropdownResult.includes({ code: "", name: selectText })) {
-      mainDropdownResult.unshift({ code: "", name: selectText });
+
+    let prefilteredDataName;
+    if (!dropdownArrayIsEmpty) {
+      prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
     }
-    setPrefilteredMdmData(mdmData[prefilteredDataName]);
+
+    let mainDropdownResult;
+    if (mainDropdownName !== "") {
+      mainDropdownResult = mdmData[mainDropdownName].filter((o) =>
+        mdmData[prefilteredDataName].some(
+          (element, index, arr) => o.code === element[mainDropdownName]
+        )
+      );
+      if (!mainDropdownResult.includes({ code: "", name: selectText })) {
+        mainDropdownResult.unshift({ code: "", name: selectText });
+      }
+    } else {
+      mainDropdownResult = [];
+    }
+
+    if (!dropdownArrayIsEmpty) {
+      setPrefilteredMdmData(mdmData[prefilteredDataName]);
+    }
 
     setSelectedModalData(
       modalViewData(
@@ -341,7 +355,7 @@ export const DataTableAssert = ({
         controlDatePickerInputs,
         create,
         mdmData,
-        mdmData[prefilteredDataName],
+        prefilteredDataName ? mdmData[prefilteredDataName] : "",
         mainDropdownName,
         mainDropdownResult
       )
