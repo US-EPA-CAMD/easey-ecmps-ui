@@ -13,7 +13,7 @@ export const extractUserInput = (payload, inputSelector, radios) => {
       input.id === undefined ||
       input.id === null ||
       input.id === "" ||
-      radios.includes(input.id)
+      (radios && radios.includes(input.id))
     ) {
       return;
     }
