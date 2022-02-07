@@ -34,7 +34,7 @@ export const authenticate = async (data_payload) => {
     .then((data_response) => {
       const { data } = data_response;
       sessionStorage.setItem("cdx_user", JSON.stringify(data));
-      
+
       //Paths to UI locations in global view
       const globalOnly = [
         "/ecmps/monitoring-plans",
@@ -45,10 +45,7 @@ export const authenticate = async (data_payload) => {
       // if they're in a global view (exclusive) page
       if (globalOnly.includes(window.location.pathname)) {
         // move them to the workspace version of that page (after finding '/ecmps')
-        const newPathname =
-          window.location.pathname.slice(0, 6) +
-          "/workspace" +
-          window.location.pathname.slice(6);
+        const newPathname = `${window.location.pathname.slice(0, 6)}/workspace${window.location.pathname.slice(6)}`
         window.location.assign(newPathname);
       }
       // otherwise return them to their current page
