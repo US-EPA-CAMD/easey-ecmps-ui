@@ -66,8 +66,12 @@ export const moveDataTableSearchOutOfAriaLive = () => {
   // *** if 'search' table html element is present, move it
   if (document.querySelector("#datatableContainer table")) {
     document
-      .querySelector("#datatableFilterContainer")
-      .appendChild(document.querySelector("#datatableContainer table"));
+      .querySelectorAll("#datatableContainer table")
+      .forEach((element) => {
+        document
+          .querySelector("#datatableFilterContainer")
+          .appendChild(document.querySelector("#datatableContainer table"));
+      });
   }
 };
 
