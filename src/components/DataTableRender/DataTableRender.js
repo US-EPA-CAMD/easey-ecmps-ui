@@ -67,6 +67,7 @@ export const DataTableRender = ({
   setCheckout,
   show = false,
   ariaLabel,
+  noDataString = `No data currently present.`,
 
   // for 508
   openAndCheckoutBTNFocus,
@@ -492,7 +493,7 @@ export const DataTableRender = ({
               {tableTitle}
             </h3>
             <div className="text-center">
-              <p>{"No data currently present"}</p>
+              <p>{noDataString}</p>
             </div>
             <div className={`${headerStyling}`}>
               {addBtn && checkout && user && !nonEditable ? (
