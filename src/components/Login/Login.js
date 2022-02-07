@@ -14,10 +14,6 @@ import { authenticate } from "../../utils/api/easeyAuthApi";
 import LoadingModal from "../LoadingModal/LoadingModal";
 import config from "../../config";
 
-const cdx_user = sessionStorage.getItem("cdx_user")
-  ? JSON.parse(sessionStorage.getItem("cdx_user"))
-  : false;
-
 const logged_in = Cookies.get("cdxToken");
 
 const Login = ({ isModal, source }) => {
@@ -84,10 +80,6 @@ const Login = ({ isModal, source }) => {
         setFormErrorMessage(
           "Session already exists in another tab. Close browser to start a new session."
         );
-      }
-
-      if (cdx_user && source !== "ReportGenerator") {
-        window.location = "/ecmps/monitoring-plans";
       }
     };
     checkLoggedIn();
