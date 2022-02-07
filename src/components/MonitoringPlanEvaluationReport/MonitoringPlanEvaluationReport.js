@@ -169,6 +169,7 @@ export const MonitoringPlanEvaluationReport = ({
                   dataLoaded={dataLoaded}
                   pagination={false}
                   filter={false}
+                  noDataString={`Evaluation complete with no errors or messages`}
                 />
               </div>
               <div className="position-fixed bottom-0 right-0 width-full do-not-print">
