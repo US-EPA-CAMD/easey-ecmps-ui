@@ -36,15 +36,15 @@ const ModalDetails = ({
         setMainDropdown(input[1]);
         found = true;
         if (input[2] === "") {
-          setShowDropdownText(true);
+          setShowInitialHelpText(true);
         } else {
-          setShowDropdownText(false);
+          setShowInitialHelpText(false);
         }
         break;
       }
     }
     if (!found) {
-      setShowDropdownText(false);
+      setShowInitialHelpText(false);
       setHasMainDropdown(false);
     } else {
       setHasMainDropdown(true);
@@ -58,14 +58,16 @@ const ModalDetails = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainDropdownChange]);
   const [rerenderDropdown, setRerenderDropdown] = useState(false);
-  const [showDropdownText, setShowDropdownText] = useState(true);
+  const [showInitialHelpText, setShowInitialHelpText] = useState(true);
   const [mainDropdown, setMainDropdown] = useState("");
 
   const [hasMainDropdown, setHasMainDropdown] = useState("false");
 
   const largeWidthCardStyle = "width-card-lg";
 
-  const dropdownText = `Please make a selection for the '${mainDropdown}' field to enable other dropdown fields.`;
+  const initialDropdownText = `Please make a selection for the '${mainDropdown}' field to enable other dropdown fields.`;
+  const selectedDropdownText = `Changing the selection for the '${mainDropdown}' field shall update the dropdown options available for the other fields.`;
+
   const [mainDropdownUntouched, setMainDropdownUntouched] =
     useState(hasMainDropdown);
 
@@ -129,10 +131,10 @@ const ModalDetails = ({
 
     if (value === "") {
       setDisableDropdownFlag(true);
-      setShowDropdownText(true);
+      setShowInitialHelpText(true);
     } else {
       setDisableDropdownFlag(false);
-      setShowDropdownText(false);
+      setShowInitialHelpText(false);
     }
   };
   const makeEditComp = (value, cols) => {
@@ -380,10 +382,16 @@ const ModalDetails = ({
           />
         </div>
         <div>
-          {hasMainDropdown && !viewOnly && showDropdownText ? (
+          {hasMainDropdown && !viewOnly && showInitialHelpText ? (
             <div className="margin-bottom-2">
               <p className="margin-top-0">
-                <b>{dropdownText}</b>
+                <b>{initialDropdownText}</b>
+              </p>
+            </div>
+          ) : hasMainDropdown && !viewOnly && !showInitialHelpText ? (
+            <div className="margin-bottom-2">
+              <p className="margin-top-0">
+                <b>{selectedDropdownText}</b>
               </p>
             </div>
           ) : (
