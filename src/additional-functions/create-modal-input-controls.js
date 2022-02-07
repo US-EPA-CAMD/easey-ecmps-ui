@@ -59,6 +59,7 @@ export const modalViewData = (
       switch (label[y][1]) {
         case "mainDropdown":
         case "dropdown":
+          case "independentDropdown":
           if (!createNew) {
             if (totalOptionsClone) {
               labels = findValue(totalOptionsClone[y], selected[y], "name");
@@ -69,7 +70,7 @@ export const modalViewData = (
             label[y][0],
             labels,
             label[y][2] === "required" ? "required" : false,
-            label[y][1] === "mainDropdown" ? "mainDropdown" : "dropdown",
+            label[y][1] === "mainDropdown" ? "mainDropdown" : "dropdown" ? "dropdown":"independentDropdown",
             createNew ? "select" : selected[y],
             totalOptionsClone ? totalOptionsClone[y] : [],
           ]);

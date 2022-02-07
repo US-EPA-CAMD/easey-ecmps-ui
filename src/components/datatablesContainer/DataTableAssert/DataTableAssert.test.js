@@ -1,10 +1,12 @@
 import React from "react";
 import { render, waitForElement, fireEvent } from "@testing-library/react";
-import { DataTableAssert } from "./DataTableAssert";
+import { DataTableAssert,mapDispatchToProps,mapStateToProps } from "./DataTableAssert";
 import { act } from "react-dom/test-utils";
 import * as assertSelector from "../../../utils/selectors/assert";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
+
+import { loadDropdowns } from "../../../store/actions/dropdowns";
 const axios = require("axios");
 jest.mock("axios");
 
@@ -249,7 +251,7 @@ const spanScaleCode = {};
 const spanMethodCode = {};
 const spanUnitsOfMeasureCode = {};
 describe("DataTableAssert", () => {
-  it("should fire test button", async () => {
+  test("should fire test button", async () => {
     const spanData = [
       {
         id: "TWCORNEL5-C434ED1A575B40F6A928CBF092852955",
@@ -314,5 +316,21 @@ describe("DataTableAssert", () => {
     );
     const val = 1;
     expect(val === 1);
+  });
+  test('mapStateToProps calls the appropriate state', async () => {
+    // mock the 'dispatch' object
+    const dispatch = jest.fn();
+    const state = jest.fn();
+    const stateProps = mapStateToProps(state);
+  });
+  
+  test("mapDispatchToProps calls the appropriate action", async () => {
+    // mock the 'dispatch' object
+    const dispatch = jest.fn();
+    const actionProps = mapDispatchToProps(dispatch);
+    const formData = [];
+    // verify the appropriate action was called
+    actionProps.loadDropdownsData();
+    expect(loadDropdowns).toHaveBeenCalled();
   });
 });
