@@ -30,7 +30,24 @@ const ModalDetails = ({
 }) => {
   useEffect(() => {
     assignAriaLabelsToDatePickerButtons();
-  }, []);
+    let found = false;
+    for (const input of data) {
+      if (input[4] === "mainDropdown") {
+        setMainDropdown(input[1]);
+        found = true;
+        if (input[2] === "") {
+          setShowDropdownText(true);
+        }
+        break;
+      }
+    }
+    if (!found) {
+      setShowDropdownText(false);
+      setHasMainDropdown(false);
+    } else {
+      setHasMainDropdown(true);
+    }
+  }, [data]);
   useEffect(() => {
     setRerenderDropdown(true);
     if (rerenderDropdown) {
@@ -39,16 +56,14 @@ const ModalDetails = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainDropdownChange]);
   const [rerenderDropdown, setRerenderDropdown] = useState(false);
+  const [showDropdownText, setShowDropdownText] = useState(true);
+  const [mainDropdown, setMainDropdown] = useState("");
+
+  const [hasMainDropdown, setHasMainDropdown] = useState("false");
+
   const largeWidthCardStyle = "width-card-lg";
 
-  let hasMainDropdown = false;
-  for (const input of data) {
-    if (input[4] === "mainDropdown") {
-      hasMainDropdown = true;
-      break;
-    }
-  }
-
+  const dropdownText = `Please make a selection for the '${mainDropdown}' field to enable other dropdown fields.`;
   const [mainDropdownUntouched, setMainDropdownUntouched] =
     useState(hasMainDropdown);
 
@@ -112,8 +127,10 @@ const ModalDetails = ({
 
     if (value === "") {
       setDisableDropdownFlag(true);
+      setShowDropdownText(true);
     } else {
       setDisableDropdownFlag(false);
+      setShowDropdownText(false);
     }
   };
   const makeEditComp = (value, cols) => {
@@ -361,6 +378,15 @@ const ModalDetails = ({
           />
         </div>
         <div>
+          {hasMainDropdown && !viewOnly && showDropdownText ? (
+            <div className="margin-bottom-2">
+              <p className="margin-top-0">
+                <b>{dropdownText}</b>
+              </p>
+            </div>
+          ) : (
+            ""
+          )}
           {items.map((item, index) => {
             return (
               <div

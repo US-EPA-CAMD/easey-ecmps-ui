@@ -1,13 +1,13 @@
-import React, { createContext, useEffect, createRef } from 'react';
-import ReactDom from 'react-dom';
+import React, { createContext, useEffect, createRef } from "react";
+import ReactDom from "react-dom";
 
-import { Button } from '@trussworks/react-uswds';
+import { Button } from "@trussworks/react-uswds";
 
-import { ClearSharp } from '@material-ui/icons';
+import { ClearSharp } from "@material-ui/icons";
 
-import './Modal.scss';
+import "./Modal.scss";
 
-import { focusTrap } from '../../additional-functions/focus-trap';
+import { focusTrap } from "../../additional-functions/focus-trap";
 
 const modalContext = createContext(null, null);
 
@@ -18,10 +18,10 @@ export const Modal = ({
   children,
   showCancel,
   showSave,
-  width = '50%',
-  left = '25%',
-  cancelButtonText = 'Cancel',
-  saveButtonText = 'Save and Close',
+  width = "50%",
+  left = "25%",
+  cancelButtonText = "Cancel",
+  saveButtonText = "Save and Close",
   secondLevel,
   title,
   backBtn,
@@ -33,10 +33,10 @@ export const Modal = ({
 }) => {
   const modalRef = createRef();
   useEffect(() => {
-    const { handleKeyPress } = focusTrap('.modal-content', close);
+    const { handleKeyPress } = focusTrap(".modal-content", close);
 
     // *** FOCUS TRAP
-    document.addEventListener('keydown', handleKeyPress);
+    document.addEventListener("keydown", handleKeyPress);
 
     // *** 508 remediation; scroll to top on modal open
     setTimeout(() => {
@@ -45,18 +45,18 @@ export const Modal = ({
 
     // * clean up
     return () => {
-      document.removeEventListener('keydown', handleKeyPress);
+      document.removeEventListener("keydown", handleKeyPress);
     };
   }, [close]);
 
-  let modalRoot = document.getElementById('portal');
+  let modalRoot = document.getElementById("portal");
   if (!modalRoot) {
-    modalRoot = document.createElement('div');
-    modalRoot.setAttribute('id', 'portal');
+    modalRoot = document.createElement("div");
+    modalRoot.setAttribute("id", "portal");
     document.body.appendChild(modalRoot);
   }
 
-  const modalClassName = 'modal-wrapper radius-md';
+  const modalClassName = "modal-wrapper radius-md";
 
   return ReactDom.createPortal(
     <div role="dialog" aria-modal="true">
@@ -69,8 +69,8 @@ export const Modal = ({
                 : `${modalClassName}`
             }
             style={{
-              width: `${!width ? '50%' : width}`,
-              left: `${!left ? '50%' : left}`,
+              width: `${!width ? "50%" : width}`,
+              left: `${!left ? "50%" : left}`,
             }}
           >
             <div className="modal-content modal-color padding-y-3">
@@ -78,8 +78,8 @@ export const Modal = ({
                 <ClearSharp
                   className="position-absolute right-1 top-1 cursor-pointer text-bold"
                   onClick={close}
-                  onKeyPress={event => {
-                    if (event.key === 'Enter') {
+                  onKeyPress={(event) => {
+                    if (event.key === "Enter") {
                       close();
                     }
                   }}
@@ -94,11 +94,11 @@ export const Modal = ({
                 <div className="left-2 bottom-0 padding-2">
                   <h2 className="text-bold">{title}</h2>
 
-                  {breadCrumbBar ? breadCrumbBar : ''}
+                  {breadCrumbBar ? breadCrumbBar : ""}
                 </div>
               </div>
 
-              <div className="modal-body padding-top-0 modal-color maxh-tablet overflow-y-auto margin-top-2">
+              <div className="modal-body padding-top-0 modal-color maxh-tablet overflow-y-auto">
                 {children}
               </div>
               <span className="break-line" />
@@ -114,7 +114,7 @@ export const Modal = ({
                       data-testid="saveBtn"
                       className="margin-right-2"
                     >
-                      {exitBTN ? exitBTN : 'Save and Go Back'}
+                      {exitBTN ? exitBTN : "Save and Go Back"}
 
                       {/* // ? createNew
                         // : saveButtonText} */}
@@ -133,7 +133,7 @@ export const Modal = ({
                         {extraBtnText}
                       </Button>
                     ) : (
-                      ''
+                      ""
                     )}
                     <Button
                       type="button"
@@ -141,7 +141,7 @@ export const Modal = ({
                       title="Click to cancel"
                       epa-testid="cancelBtn"
                       outline={true}
-                      unstyled={'true'}
+                      unstyled={"true"}
                     >
                       {cancelButtonText}
                     </Button>
@@ -155,7 +155,7 @@ export const Modal = ({
                     epa-testid="closeBtn"
                     className="float-left"
                   >
-                    {'Close'}
+                    {"Close"}
                   </Button>
                 ) : null}
               </div>
@@ -164,7 +164,7 @@ export const Modal = ({
         </modalContext.Provider>
       </div>
     </div>,
-    modalRoot,
+    modalRoot
   );
 };
 export default Modal;
