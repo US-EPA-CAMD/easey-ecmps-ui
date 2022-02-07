@@ -37,6 +37,8 @@ const ModalDetails = ({
         found = true;
         if (input[2] === "") {
           setShowDropdownText(true);
+        } else {
+          setShowDropdownText(false);
         }
         break;
       }
