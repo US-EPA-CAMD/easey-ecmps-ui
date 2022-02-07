@@ -1195,11 +1195,11 @@ const organizePrefilterMDMData = (noDupesFormCodes, drivingInput, response) => {
     }
 
     // *** rest of sub-arrays
-    // runs through each secondary belonging to the unique main driving input array and adds it to an array
+    // runs through each secondary belonging to the unique main driving input array and adds it to an array 
     filteredArray.forEach((element) => {
       for (const secondaryCode in setOfSecondaryDropdownArrayCodes) {
         if (
-          // filters out secondary code duplicates
+          // filters out secondary code duplicates 
           !setOfSecondaryDropdownArrayCodes[secondaryCode].includes(
             element[secondaryCode]
           )
@@ -1213,7 +1213,7 @@ const organizePrefilterMDMData = (noDupesFormCodes, drivingInput, response) => {
 
     const organizedMDMrow = {};
     organizedMDMrow[drivingInput] = code;
-    // creates returning object of
+    // creates returning object of 
     // {drivingInput: uniqueCode , secondaryArray : [uniqueCode,uniqueCode2,uniqueCode3], secondaryArray2: [uniqueCode,uniqueCode2]}
     for (const secondaryCode in setOfSecondaryDropdownArrayCodes) {
       organizedMDMrow[secondaryCode] =

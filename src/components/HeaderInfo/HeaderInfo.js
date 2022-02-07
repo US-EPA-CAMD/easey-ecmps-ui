@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Checkbox } from "@trussworks/react-uswds";
+import { Button, Checkbox, Alert } from "@trussworks/react-uswds";
 import { CreateOutlined, LockOpenSharp, LockSharp } from "@material-ui/icons";
 import config from "../../config";
 import { triggerEvaluation } from "../../utils/api/quartzApi";
@@ -413,6 +413,16 @@ export const HeaderInfo = ({
             />
           }
         />
+      ) : null}
+
+      {evalStatusText(evalStatus) === "Passed" ? (
+        <div data-testid="evaluationPassedMessage">
+          <Alert type="success" noIcon>
+            <span className="text-green">
+              Evaluation complete with no errors or messages
+            </span>
+          </Alert>
+        </div>
       ) : null}
 
       {evalStatusLoaded && dataLoaded ? (
