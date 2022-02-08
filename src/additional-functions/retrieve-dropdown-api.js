@@ -670,7 +670,6 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         break;
 
       case "prefilteredLoads":
-        let noDupesFormCodesLoads = [];
         await dmApi.getPrefilteredLoads().then((response) => {
           const prefilteredMdmOptions = organizeStaticPrefilterMDMData(
             response.data
