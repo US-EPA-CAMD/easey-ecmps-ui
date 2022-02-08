@@ -670,6 +670,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         break;
 
       case "prefilteredLoads":
+      case "prefilteredUnitFuels":
         await dmApi.getPrefilteredLoads().then((response) => {
           const prefilteredMdmOptions = organizeStaticPrefilterMDMData(
             response.data
@@ -677,6 +678,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           setDefaultOptions(prefilteredMdmOptions, fieldName, false);
         });
         break;
+
       default:
         break;
     }
