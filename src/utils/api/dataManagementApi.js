@@ -322,3 +322,10 @@ export const prefilteredLEEQualifications = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+export const getPrefilteredUnitFuels = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/relationships/unit-fuels`)
+    .then(handleResponse)
+    .catch(handleError);
+};
