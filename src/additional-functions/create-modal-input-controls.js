@@ -1,5 +1,5 @@
 import { findValue, adjustDate } from "./find-values-in-array";
-import _ from "lodash";
+import _, { property } from "lodash";
 
 // object property,Label Name, value
 
@@ -13,15 +13,37 @@ export const modalViewData = (
   prefilteredMdmTotal, // mdmData[prefilteredDataName],\
   mainDropdownName,
   prefilterMdmMain, // result
+  staticDropdownFlag,
+  prefilteredTotalName,
 
   mats = false
 ) => {
   const arr = [];
 
   const totalOptionsClone = _.cloneDeep(totalOptions);
-  if (mainDropdownName !== "") {
+
+  if (!staticDropdownFlag) {
     totalOptionsClone[mainDropdownName] = prefilterMdmMain;
   }
+
+  const setInitialPreFilter = (
+    dropdownType,
+    propertyName,
+    singleMDMCodeList
+  ) => {
+    const allFilteredMDMCodesArray = totalOptionsClone[prefilteredTotalName];
+
+    const selectedFilteredCodeArray = allFilteredMDMCodesArray[0];
+
+    const filteredOutSingleMDMCodeList = singleMDMCodeList.filter((code) =>
+      selectedFilteredCodeArray[propertyName].includes(code.code)
+    );
+    filteredOutSingleMDMCodeList.unshift({
+      code: "",
+      name: "-- Select a value --",
+    });
+    totalOptionsClone[propertyName] = filteredOutSingleMDMCodeList;
+  };
 
   // y = property name of the apis
   for (const y in label) {
@@ -61,7 +83,6 @@ export const modalViewData = (
       switch (label[y][1]) {
         case "mainDropdown":
         case "dropdown":
-          case "independentDropdown":
           if (!createNew) {
             if (totalOptionsClone) {
               labels = findValue(totalOptionsClone[y], selected[y], "name");
@@ -72,7 +93,24 @@ export const modalViewData = (
             label[y][0],
             labels,
             label[y][2] === "required" ? "required" : false,
-            label[y][1] === "mainDropdown" ? "mainDropdown" : "dropdown" ? "dropdown":"independentDropdown",
+            label[y][1] === "mainDropdown" ? "mainDropdown" : "dropdown",
+            createNew ? "select" : selected[y],
+            totalOptionsClone ? totalOptionsClone[y] : [],
+          ]);
+          break;
+        case "independentDropdown":
+          setInitialPreFilter(label[y][1], y, totalOptionsClone[y]);
+          if (!createNew) {
+            if (totalOptionsClone) {
+              labels = findValue(totalOptionsClone[y], selected[y], "name");
+            }
+          }
+          arr.push([
+            y,
+            label[y][0],
+            labels,
+            label[y][2] === "required" ? "required" : false,
+            "independentDropdown",
             createNew ? "select" : selected[y],
             totalOptionsClone ? totalOptionsClone[y] : [],
           ]);

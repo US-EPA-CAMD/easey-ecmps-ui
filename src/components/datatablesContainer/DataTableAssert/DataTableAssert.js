@@ -308,6 +308,54 @@ export const DataTableAssert = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainDropdownChange, selectedModalData]);
 
+  const [staticDropdownFlag, setStaticDropdownFlag] = useState(false);
+  // useEffect(() => {
+  //   if (staticDropdownFlag) {
+  //     setInitialPrefilter();
+  //     setStaticDropdownFlag(false);
+  //   }
+  // }, [staticDropdownFlag]);
+
+  const setInitialPrefilter = () => {
+    // maximumLoadUnitsOfMeasureCode: (3)[("MW", "KLBHR", "MMBTUHR")];
+    // normalLevelCode: (3)[("L", "M", "H")];
+    // secondLevelCode: (3)[("L", "M", "H")];
+    const prefilteredTotalName = dropdownArray[0][dropdownArray[0].length - 1];
+
+    if (prefilteredMdmData) {
+      // removes unneccessary select a value that is added
+      // if(prefilteredMdmData[prefilteredTotalName][0] ===  {code: '', name: '-- Select a value --'}){
+      //   prefilteredMdmData[prefilteredTotalName].shift();
+      // }
+      //modalDetailData ex =
+      // "['maximumLoadUnitsOfMeasureCode', 'Maximum Load Units of Measure', 'Megawatt', false, 'independentDropdown', 'MW', Array(76)] "
+      for (const modalDetailData of selectedModalData) {
+        if (modalDetailData[4] === "independentDropdown") {
+          // console.log(
+          //   "modalDetailData",
+          //   modalDetailData,
+          //   prefilteredTotalName,
+          //   mdmData[prefilteredTotalName][modalDetailData[0]]
+          // );
+          const singlePrefilterCodesOnly =
+            mdmData[prefilteredTotalName][modalDetailData[0]];
+          const newMdmCodesList = modalDetailData[6].filter((selection) =>
+            singlePrefilterCodesOnly.includes(selection.code)
+          );
+          // console.log(newMdmCodesList, "recheck");
+
+          newMdmCodesList.unshift({
+            code: "",
+            name: selectText,
+          });
+          modalDetailData[6] = newMdmCodesList;
+        }
+      
+      }
+      setSelectedModalData(selectedModalData)
+    }
+  };
+
   // Executed when "View" action is clicked
   const openModal = (row, bool, create) => {
     let selectedData = null;
@@ -319,19 +367,26 @@ export const DataTableAssert = ({
       setSelectedRow(selectedData);
     }
     let mainDropdownName = "";
+    let staticDropdownFlag = false;
     for (const controlProperty in controlInputs) {
       if (controlInputs[controlProperty][1] === "mainDropdown") {
         mainDropdownName = controlProperty;
+        break;
+      }
+      if (controlInputs[controlProperty][1] === "independentDropdown") {
+        staticDropdownFlag = true;
+        break;
       }
     }
 
+    console.log('mdmData',mdmData);
     let prefilteredDataName;
     if (!dropdownArrayIsEmpty) {
       prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
     }
 
     let mainDropdownResult;
-    if (mainDropdownName !== "") {
+    if (mainDropdownName !== "" && staticDropdownFlag === false) {
       mainDropdownResult = mdmData[mainDropdownName].filter((o) =>
         mdmData[prefilteredDataName].some(
           (element, index, arr) => o.code === element[mainDropdownName]
@@ -348,6 +403,7 @@ export const DataTableAssert = ({
       setPrefilteredMdmData(mdmData[prefilteredDataName]);
     }
 
+    const prefilteredTotalName = dropdownArray[0][dropdownArray[0].length - 1];
     setSelectedModalData(
       modalViewData(
         selectedData,
@@ -357,9 +413,12 @@ export const DataTableAssert = ({
         mdmData,
         prefilteredDataName ? mdmData[prefilteredDataName] : "",
         mainDropdownName,
-        mainDropdownResult
+        mainDropdownResult,
+        staticDropdownFlag,
+        prefilteredTotalName
       )
     );
+
     setShow(true);
     setTimeout(() => {
       attachChangeEventListeners(".modalUserInput");

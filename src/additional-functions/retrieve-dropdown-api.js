@@ -17,6 +17,7 @@ export const useRetrieveDropdownApi = (dropDownFields, mats = false) => {
 
   const setDefaultOptions = (items, field) => {
     items.unshift({ code: "", name: "-- Select a value --" });
+
     const newData = totalOptions;
     newData[field] = items;
 
@@ -498,8 +499,11 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
     return availableYears;
   };
 
-  const setDefaultOptions = (items, field) => {
-    items.unshift({ code: "", name: "-- Select a value --" });
+  const setDefaultOptions = (items, field, select = true) => {
+    if (select) {
+      items.unshift({ code: "", name: "-- Select a value --" });
+    }
+
     const newData = totalOptions;
     newData[field] = items;
 
@@ -1152,19 +1156,10 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
       case "prefilteredLoads":
         let noDupesFormCodesLoads = [];
         await dmApi.getPrefilteredLoads().then((response) => {
-          noDupesFormCodesLoads = response.data.map((code) => {
-            return code["maximumLoadUnitsOfMeasureCode"];
-          });
-
-          noDupesFormCodesLoads = [...new Set(noDupesFormCodesLoads)];
-
-          const prefilteredMdmOptions = organizePrefilterMDMData(
-            noDupesFormCodesLoads,
-            "maximumLoadUnitsOfMeasureCode",
+          const prefilteredMdmOptions = organizeStaticPrefilterMDMData(
             response.data
           );
-
-          setDefaultOptions(prefilteredMdmOptions, fieldName);
+          setDefaultOptions(prefilteredMdmOptions, fieldName, false);
         });
         break;
       default:
@@ -1175,6 +1170,29 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
   return totalOptions;
 };
 
+const organizeStaticPrefilterMDMData = (response) => {
+  let setOfCodeNames = {};
+  // creates an array based on the property name of the mdm coming in
+  for (const codeName in response[0]) {
+    setOfCodeNames[codeName] = [];
+  }
+
+  // for each unique property name, it will find the unique value and add it (no duplicates)
+  for (const mdmDataRow of response) {
+    for (const codeNameOfRow in mdmDataRow) {
+      if (
+        // filters out code duplicates
+        !setOfCodeNames[codeNameOfRow].includes(mdmDataRow[codeNameOfRow])
+      ) {
+        setOfCodeNames[codeNameOfRow].push(mdmDataRow[codeNameOfRow]);
+      }
+    }
+  }
+
+  const setOfCodeNamesArray = [];
+  setOfCodeNamesArray.push(setOfCodeNames);
+  return setOfCodeNamesArray;
+};
 const organizePrefilterMDMData = (noDupesFormCodes, drivingInput, response) => {
   const prefilteredMdmOptions = [];
   // for each unique main driving input code
@@ -1195,11 +1213,11 @@ const organizePrefilterMDMData = (noDupesFormCodes, drivingInput, response) => {
     }
 
     // *** rest of sub-arrays
-    // runs through each secondary belonging to the unique main driving input array and adds it to an array 
+    // runs through each secondary belonging to the unique main driving input array and adds it to an array
     filteredArray.forEach((element) => {
       for (const secondaryCode in setOfSecondaryDropdownArrayCodes) {
         if (
-          // filters out secondary code duplicates 
+          // filters out secondary code duplicates
           !setOfSecondaryDropdownArrayCodes[secondaryCode].includes(
             element[secondaryCode]
           )
@@ -1213,7 +1231,7 @@ const organizePrefilterMDMData = (noDupesFormCodes, drivingInput, response) => {
 
     const organizedMDMrow = {};
     organizedMDMrow[drivingInput] = code;
-    // creates returning object of 
+    // creates returning object of
     // {drivingInput: uniqueCode , secondaryArray : [uniqueCode,uniqueCode2,uniqueCode3], secondaryArray2: [uniqueCode,uniqueCode2]}
     for (const secondaryCode in setOfSecondaryDropdownArrayCodes) {
       organizedMDMrow[secondaryCode] =

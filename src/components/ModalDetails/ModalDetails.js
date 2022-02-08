@@ -120,6 +120,7 @@ const ModalDetails = ({
     let comp = null;
 
     switch (value[4]) {
+      
       case "mainDropdown":
         comp = (
           <SelectBox
@@ -143,6 +144,7 @@ const ModalDetails = ({
         );
         break;
       case "dropdown":
+        console.log('value[5]',value[5],',value[5]',value[4])
         comp = (
           <SelectBox
             className={`modalUserInput ${
@@ -171,7 +173,8 @@ const ModalDetails = ({
           />
         );
         break;
-        case "independentDropdown":
+      case "independentDropdown":
+        console.log('value[5] independentDropdown',value)
           comp = (
             <SelectBox
               className={`modalUserInput ${
@@ -184,7 +187,7 @@ const ModalDetails = ({
                   : [{ code: "", name: "" }]
               }
               initialSelection={
-                  ? value[5]
+                !create ? value[5]
                   : "select"
               }
               selectKey="code"
@@ -193,9 +196,10 @@ const ModalDetails = ({
               name={value[1]}
               secondOption="name"
               mainDropdownChange={mainDropdownChange}
+              disableDropdownFlag={false}
             />
           );
-          break;
+      break;
 
       case "date":
         let [year, month, day] = [];

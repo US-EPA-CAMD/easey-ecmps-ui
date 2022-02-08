@@ -130,7 +130,7 @@ export const loadsDataTableProps = (location) => {
       maximumLoadValue: ["Maximum Load Value", "input", "", ""],
       maximumLoadUnitsOfMeasureCode: [
         "Maximum Load Units of Measure",
-        "mainDropdown",
+        "independentDropdown",
         "",
         "",
       ],
