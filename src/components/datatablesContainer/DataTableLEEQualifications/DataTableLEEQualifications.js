@@ -44,7 +44,12 @@ export const DataTableLEEQualifications = ({
   const [selectedModalData, setSelectedModalData] = useState([]);
 
   const dropdownArray = [
-    ["parameterCode", "qualificationTestType", "unitsOfStandard"],
+    [
+      "parameterCode",
+      "qualificationTestType",
+      "unitsOfStandard",
+      "prefilteredLEEQualifications",
+    ],
   ];
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 

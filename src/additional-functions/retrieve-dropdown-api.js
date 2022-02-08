@@ -677,6 +677,14 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           setDefaultOptions(prefilteredMdmOptions, fieldName, false);
         });
         break;
+      case "prefilteredLEEQualifications":
+        await dmApi.prefilteredLEEQualifications().then((response) => {
+          const prefilteredMdmOptions = organizeStaticPrefilterMDMData(
+            response.data
+          );
+          setDefaultOptions(prefilteredMdmOptions, fieldName, false);
+        });
+        break;
       default:
         break;
     }

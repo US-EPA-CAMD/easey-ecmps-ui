@@ -309,10 +309,16 @@ export const getPrefilteredDefaults = async () => {
     .catch(handleError);
 };
 
-
 export const getPrefilteredLoads = async () => {
   return axios
     .get(`${config.services.mdm.uri}/relationships/loads`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const prefilteredLEEQualifications = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/relationships/lee-qualifications`)
     .then(handleResponse)
     .catch(handleError);
 };
