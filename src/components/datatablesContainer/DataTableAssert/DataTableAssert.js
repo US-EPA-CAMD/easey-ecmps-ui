@@ -308,6 +308,7 @@ export const DataTableAssert = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainDropdownChange, selectedModalData]);
 
+
   // Executed when "View" action is clicked
   const openModal = (row, bool, create) => {
     let selectedData = null;
@@ -319,19 +320,24 @@ export const DataTableAssert = ({
       setSelectedRow(selectedData);
     }
     let mainDropdownName = "";
+    let staticDropdownFlag = false;
     for (const controlProperty in controlInputs) {
       if (controlInputs[controlProperty][1] === "mainDropdown") {
         mainDropdownName = controlProperty;
+        break;
+      }
+      if (controlInputs[controlProperty][1] === "independentDropdown") {
+        staticDropdownFlag = true;
+        break;
       }
     }
-
     let prefilteredDataName;
     if (!dropdownArrayIsEmpty) {
       prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
     }
 
     let mainDropdownResult;
-    if (mainDropdownName !== "") {
+    if (mainDropdownName !== "" && staticDropdownFlag === false) {
       mainDropdownResult = mdmData[mainDropdownName].filter((o) =>
         mdmData[prefilteredDataName].some(
           (element, index, arr) => o.code === element[mainDropdownName]
@@ -348,6 +354,7 @@ export const DataTableAssert = ({
       setPrefilteredMdmData(mdmData[prefilteredDataName]);
     }
 
+    const prefilteredTotalName = dropdownArray[0][dropdownArray[0].length - 1];
     setSelectedModalData(
       modalViewData(
         selectedData,
@@ -357,9 +364,12 @@ export const DataTableAssert = ({
         mdmData,
         prefilteredDataName ? mdmData[prefilteredDataName] : "",
         mainDropdownName,
-        mainDropdownResult
+        mainDropdownResult,
+        staticDropdownFlag,
+        prefilteredTotalName
       )
     );
+
     setShow(true);
     setTimeout(() => {
       attachChangeEventListeners(".modalUserInput");

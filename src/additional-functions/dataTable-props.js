@@ -130,13 +130,14 @@ export const loadsDataTableProps = (location) => {
       maximumLoadValue: ["Maximum Load Value", "input", "", ""],
       maximumLoadUnitsOfMeasureCode: [
         "Maximum Load Units of Measure",
-        "mainDropdown",
+        "independentDropdown",
+        "",
         "",
       ],
       lowerOperationBoundary: ["Lower Operation Boundary", "input", "", ""],
       upperOperationBoundary: ["Upper Operation Boundary", "input", "", ""],
-      normalLevelCode: ["Normal Level", "dropdown", "", ""],
-      secondLevelCode: ["Second Level", "dropdown", "", ""],
+      normalLevelCode: ["Normal Level", "independentDropdown", "", ""],
+      secondLevelCode: ["Second Level", "independentDropdown", "", ""],
       secondNormalIndicator: ["Second Normal Indicator", "radio", "", ""],
     },
     controlDatePickerInputs: {

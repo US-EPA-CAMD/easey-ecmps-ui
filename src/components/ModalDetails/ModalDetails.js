@@ -164,6 +164,7 @@ const ModalDetails = ({
         );
         break;
       case "dropdown":
+        console.log("value[5]", value[5], ",value[5]", value[4]);
         comp = (
           <SelectBox
             className={`modalUserInput ${
@@ -192,6 +193,30 @@ const ModalDetails = ({
           />
         );
         break;
+      case "independentDropdown":
+        comp = (
+          <SelectBox
+            className={`modalUserInput ${
+              cols === 3 ? "" : largeWidthCardStyle
+            }`}
+            epadataname={value[0]}
+            options={
+              value[6] !== null || value[6] !== undefined
+                ? value[6]
+                : [{ code: "", name: "" }]
+            }
+            initialSelection={!create ? value[5] : "select"}
+            selectKey="code"
+            id={`${value[1]}`}
+            epa-testid={value[0]}
+            name={value[1]}
+            secondOption="name"
+            mainDropdownChange={mainDropdownChange}
+            disableDropdownFlag={false}
+          />
+        );
+        break;
+
       case "date":
         let [year, month, day] = [];
         if (value[5] || value[5] !== null) {
