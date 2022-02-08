@@ -18,8 +18,6 @@ export const DetailsSelectBox = ({
   disableDropdownFlag,
   mainDropdownChange,
 }) => {
-
-  console.log('disableDropdownFlag',disableDropdownFlag)
   const [selectionState, setSelectionState] = useState(
     initialSelection ? initialSelection : null
   );

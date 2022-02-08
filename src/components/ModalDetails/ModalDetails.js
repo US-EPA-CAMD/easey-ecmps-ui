@@ -30,7 +30,26 @@ const ModalDetails = ({
 }) => {
   useEffect(() => {
     assignAriaLabelsToDatePickerButtons();
-  }, []);
+    let found = false;
+    for (const input of data) {
+      if (input[4] === "mainDropdown") {
+        setMainDropdown(input[1]);
+        found = true;
+        if (input[2] === "") {
+          setShowInitialHelpText(true);
+        } else {
+          setShowInitialHelpText(false);
+        }
+        break;
+      }
+    }
+    if (!found) {
+      setShowInitialHelpText(false);
+      setHasMainDropdown(false);
+    } else {
+      setHasMainDropdown(true);
+    }
+  }, [data]);
   useEffect(() => {
     setRerenderDropdown(true);
     if (rerenderDropdown) {
@@ -39,15 +58,15 @@ const ModalDetails = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainDropdownChange]);
   const [rerenderDropdown, setRerenderDropdown] = useState(false);
+  const [showInitialHelpText, setShowInitialHelpText] = useState(true);
+  const [mainDropdown, setMainDropdown] = useState("");
+
+  const [hasMainDropdown, setHasMainDropdown] = useState(false);
+
   const largeWidthCardStyle = "width-card-lg";
 
-  let hasMainDropdown = false;
-  for (const input of data) {
-    if (input[4] === "mainDropdown") {
-      hasMainDropdown = true;
-      break;
-    }
-  }
+  const initialDropdownText = `You must make a selection for the '${mainDropdown}' field to enable dropdowns for the other fields.`;
+  const selectedDropdownText = `Changing the selection for the '${mainDropdown}' field shall update the dropdown options available for the other fields.`;
 
   const [mainDropdownUntouched, setMainDropdownUntouched] =
     useState(hasMainDropdown);
@@ -112,15 +131,16 @@ const ModalDetails = ({
 
     if (value === "") {
       setDisableDropdownFlag(true);
+      setShowInitialHelpText(true);
     } else {
       setDisableDropdownFlag(false);
+      setShowInitialHelpText(false);
     }
   };
   const makeEditComp = (value, cols) => {
     let comp = null;
 
     switch (value[4]) {
-      
       case "mainDropdown":
         comp = (
           <SelectBox
@@ -144,7 +164,7 @@ const ModalDetails = ({
         );
         break;
       case "dropdown":
-        console.log('value[5]',value[5],',value[5]',value[4])
+        console.log("value[5]", value[5], ",value[5]", value[4]);
         comp = (
           <SelectBox
             className={`modalUserInput ${
@@ -174,32 +194,28 @@ const ModalDetails = ({
         );
         break;
       case "independentDropdown":
-        console.log('value[5] independentDropdown',value)
-          comp = (
-            <SelectBox
-              className={`modalUserInput ${
-                cols === 3 ? "" : largeWidthCardStyle
-              }`}
-              epadataname={value[0]}
-              options={
-                value[6] !== null || value[6] !== undefined
-                  ? value[6]
-                  : [{ code: "", name: "" }]
-              }
-              initialSelection={
-                !create ? value[5]
-                  : "select"
-              }
-              selectKey="code"
-              id={`${value[1]}`}
-              epa-testid={value[0]}
-              name={value[1]}
-              secondOption="name"
-              mainDropdownChange={mainDropdownChange}
-              disableDropdownFlag={false}
-            />
-          );
-      break;
+        comp = (
+          <SelectBox
+            className={`modalUserInput ${
+              cols === 3 ? "" : largeWidthCardStyle
+            }`}
+            epadataname={value[0]}
+            options={
+              value[6] !== null || value[6] !== undefined
+                ? value[6]
+                : [{ code: "", name: "" }]
+            }
+            initialSelection={!create ? value[5] : "select"}
+            selectKey="code"
+            id={`${value[1]}`}
+            epa-testid={value[0]}
+            name={value[1]}
+            secondOption="name"
+            mainDropdownChange={mainDropdownChange}
+            disableDropdownFlag={false}
+          />
+        );
+        break;
 
       case "date":
         let [year, month, day] = [];
@@ -391,6 +407,21 @@ const ModalDetails = ({
           />
         </div>
         <div>
+          {hasMainDropdown && !viewOnly && showInitialHelpText ? (
+            <div className="margin-bottom-2">
+              <p className="margin-top-0">
+                <b>{initialDropdownText}</b>
+              </p>
+            </div>
+          ) : hasMainDropdown && !viewOnly && !showInitialHelpText ? (
+            <div className="margin-bottom-2">
+              <p className="margin-top-0">
+                <b>{selectedDropdownText}</b>
+              </p>
+            </div>
+          ) : (
+            ""
+          )}
           {items.map((item, index) => {
             return (
               <div

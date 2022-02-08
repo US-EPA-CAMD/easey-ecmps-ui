@@ -34,7 +34,24 @@ export const authenticate = async (data_payload) => {
     .then((data_response) => {
       const { data } = data_response;
       sessionStorage.setItem("cdx_user", JSON.stringify(data));
-      window.location.reload();
+
+      //Paths to UI locations in global view
+      const globalOnly = [
+        "/ecmps/monitoring-plans",
+        "/ecmps/qa_certifications",
+        "/ecmps/emission",
+      ];
+
+      // if they're in a global view (exclusive) page
+      if (globalOnly.includes(window.location.pathname)) {
+        // move them to the workspace version of that page (after finding '/ecmps')
+        const newPathname = window.location.pathname.replace("/ecmps","/ecmps/workspace");
+        window.location.assign(newPathname);
+      }
+      // otherwise return them to their current page
+      else {
+        window.location.reload();
+      }
     })
     .catch((e) => {
       throw e;

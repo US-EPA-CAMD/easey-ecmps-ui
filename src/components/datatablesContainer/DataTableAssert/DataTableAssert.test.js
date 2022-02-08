@@ -4,9 +4,6 @@ import { DataTableAssert,mapDispatchToProps,mapStateToProps } from "./DataTableA
 import { act } from "react-dom/test-utils";
 import * as assertSelector from "../../../utils/selectors/assert";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
-
-import { loadDropdowns } from "../../../store/actions/dropdowns";
 const axios = require("axios");
 jest.mock("axios");
 

@@ -1,4 +1,4 @@
-// import { useRetrieveDropdownApi } from "./retrieve-dropdown-api";
+// import { UseRetrieveDropdownApi } from "./retrieve-dropdown-api";
 // import React from "react";
 // import * as dmApi from "../utils/api/dataManagementApi";
 // const axios = require("axios");
@@ -18,7 +18,7 @@
 //   const dataReturned = await dmApi.getAllParameterCodes();
 //   expect(dataReturned.data).toEqual(data);
 
-//   let func = useRetrieveDropdownApi(["parameterCode"]);
+//   let func = UseRetrieveDropdownApi(["parameterCode"]);
 //   expect(func).toEqual(data);
 // });
 
@@ -30,7 +30,7 @@
 
 //   const dataReturned = await dmApi.getAllUnitsOfMeasureCodes();
 //   expect(dataReturned.data).toEqual(data);
-//   let func = useRetrieveDropdownApi(["systemFuelFlowUOMCode"]);
+//   let func = UseRetrieveDropdownApi(["systemFuelFlowUOMCode"]);
 //   expect(func).toEqual(data);
 // });
 
@@ -41,7 +41,7 @@
 //   React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
 //   const dataReturned = await dmApi.getAllMaxRateSourceCodes();
 //   expect(dataReturned.data).toEqual(data);
-//   let func = useRetrieveDropdownApi(["maximumFuelFlowRateSourceCode"]);
+//   let func = UseRetrieveDropdownApi(["maximumFuelFlowRateSourceCode"]);
 //   expect(func).toEqual(data);
 // });
 // test("tests analyzerRangeCode", async () => {
@@ -51,7 +51,7 @@
 //   React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
 //   const dataReturned = await dmApi.getAllRangeCodes();
 //   expect(dataReturned.data).toEqual(data);
-//   let func = useRetrieveDropdownApi(["analyzerRangeCode"]);
+//   let func = UseRetrieveDropdownApi(["analyzerRangeCode"]);
 //   expect(func).toEqual(data);
 // });
 // test("tests substituteDataCode", async () => {
@@ -61,7 +61,7 @@
 //   React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
 //   const dataReturned = await dmApi.getAllSubstituteDataCodes();
 //   expect(dataReturned.data).toEqual(data);
-//   let func = useRetrieveDropdownApi(["substituteDataCode"]);
+//   let func = UseRetrieveDropdownApi(["substituteDataCode"]);
 
 //   expect(func).toEqual(data);
 // });
@@ -72,7 +72,7 @@
 //   React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
 //   const dataReturned = await dmApi.getAllBypassApproachCodes();
 //   expect(dataReturned.data).toEqual(data);
-//   let func = useRetrieveDropdownApi(["bypassApproachCode"]);
+//   let func = UseRetrieveDropdownApi(["bypassApproachCode"]);
 //   expect(func).toEqual(data);
 // });
 
@@ -83,7 +83,7 @@
 //   React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
 //   const dataReturned = await dmApi.getAllMatsParameterCodes();
 //   expect(dataReturned.data).toEqual(data);
-//   let func = useRetrieveDropdownApi(["parameterCode"], true);
+//   let func = UseRetrieveDropdownApi(["parameterCode"], true);
 //   expect(func).toEqual(data);
 // });
 // test("tests mats getAllMatsMethodCodes", async () => {
@@ -93,13 +93,13 @@
 //   React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
 //   const dataReturned = await dmApi.getAllMatsMethodCodes();
 //   expect(dataReturned.data).toEqual(data);
-//   let func = useRetrieveDropdownApi(["monitoringMethodCode"], true);
+//   let func = UseRetrieveDropdownApi(["monitoringMethodCode"], true);
 //   expect(func).toEqual(data);
 // });
 
 // test("tests  empty ", () => {
 //   React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
-//   let func = useRetrieveDropdownApi([""]);
+//   let func = UseRetrieveDropdownApi([""]);
 //   expect(func).toEqual(data);
 // });
 
@@ -112,7 +112,7 @@
 //   const dataReturned = await dmApi.getAllFormulaCodes();
 //   expect(dataReturned.data).toEqual(data);
 
-//   let func = useRetrieveDropdownApi(["formulaCode"]);
+//   let func = UseRetrieveDropdownApi(["formulaCode"]);
 //   expect(func).toEqual(data);
 // });
 
@@ -125,7 +125,7 @@
 //   const dataReturned = await dmApi.getAllFuelCodes();
 //   expect(dataReturned.data).toEqual(data);
 
-//   let func = useRetrieveDropdownApi(["fuelCode"]);
+//   let func = UseRetrieveDropdownApi(["fuelCode"]);
 //   expect(func).toEqual(data);
 // });
 
@@ -138,7 +138,7 @@
 //   const dataReturned = await dmApi.getAllFuelTypes();
 //   expect(dataReturned.data).toEqual(data);
 
-//   let func = useRetrieveDropdownApi(["fuelType"]);
+//   let func = UseRetrieveDropdownApi(["fuelType"]);
 //   expect(func).toEqual(data);
 // });
 
@@ -151,7 +151,7 @@
 //   const dataReturned = await dmApi.getAllFuelIndicatorCodes();
 //   expect(dataReturned.data).toEqual(data);
 
-//   let func = useRetrieveDropdownApi(["fuelIndicatorCode"]);
+//   let func = UseRetrieveDropdownApi(["fuelIndicatorCode"]);
 //   expect(func).toEqual(data);
 // });
 
@@ -164,7 +164,7 @@
 //   const dataReturned = await dmApi.getAllDemonstrationMethodCodes();
 //   expect(dataReturned.data).toEqual(data);
 
-//   let func = useRetrieveDropdownApi(["demMethodCode"]);
+//   let func = UseRetrieveDropdownApi(["demMethodCode"]);
 //   expect(func).toEqual(data);
 // });
 
@@ -177,7 +177,7 @@
 //   const dataReturned = await dmApi.getAllQualificationTypeCodes();
 //   expect(dataReturned.data).toEqual(data);
 
-//   let func = useRetrieveDropdownApi(["qualificationTypeCode"]);
+//   let func = UseRetrieveDropdownApi(["qualificationTypeCode"]);
 //   expect(func).toEqual(data);
 // });
 test("test file", () => {
