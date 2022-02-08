@@ -686,7 +686,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
 };
 
 const organizeStaticPrefilterMDMData = (response) => {
-  let setOfCodeNames = {};
+  const setOfCodeNames = {};
   // creates an array based on the property name of the mdm coming in
   for (const codeName in response[0]) {
     setOfCodeNames[codeName] = [];

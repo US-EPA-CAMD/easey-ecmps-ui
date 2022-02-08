@@ -1,5 +1,5 @@
 import { findValue, adjustDate } from "./find-values-in-array";
-import _, { property } from "lodash";
+import _ from "lodash";
 
 // object property,Label Name, value
 
