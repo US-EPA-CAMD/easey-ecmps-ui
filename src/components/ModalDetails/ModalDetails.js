@@ -61,7 +61,7 @@ const ModalDetails = ({
   const [showInitialHelpText, setShowInitialHelpText] = useState(true);
   const [mainDropdown, setMainDropdown] = useState("");
 
-  const [hasMainDropdown, setHasMainDropdown] = useState("false");
+  const [hasMainDropdown, setHasMainDropdown] = useState(false);
 
   const largeWidthCardStyle = "width-card-lg";
 

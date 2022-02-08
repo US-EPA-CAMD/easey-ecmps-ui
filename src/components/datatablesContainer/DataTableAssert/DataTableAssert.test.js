@@ -4,7 +4,6 @@ import { DataTableAssert } from "./DataTableAssert";
 import { act } from "react-dom/test-utils";
 import * as assertSelector from "../../../utils/selectors/assert";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import { useRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 const axios = require("axios");
 jest.mock("axios");
 
