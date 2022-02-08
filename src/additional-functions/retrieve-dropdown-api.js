@@ -1,4 +1,4 @@
-import * as dmApi from '../utils/api/dataManagementApi';
+import * as dmApi from "../utils/api/dataManagementApi";
 
 export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
   let totalOptions = {};
@@ -17,7 +17,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
 
   const setDefaultOptions = (items, field, select = true) => {
     if (select) {
-      items.unshift({ code: '', name: '-- Select a value --' });
+      items.unshift({ code: "", name: "-- Select a value --" });
     }
 
     const newData = totalOptions;
@@ -29,24 +29,24 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
   for (const fieldName of dropDownFields) {
     let options = [];
     switch (fieldName) {
-      case 'parameterCode':
+      case "parameterCode":
         if (mats) {
-          await dmApi.getAllMatsParameterCodes().then(response => {
-            options = response.data.map(option => {
+          await dmApi.getAllMatsParameterCodes().then((response) => {
+            options = response.data.map((option) => {
               return {
-                code: option['matsMethodParamCode'],
-                name: option['matsMethodParamCodeDescription'],
+                code: option["matsMethodParamCode"],
+                name: option["matsMethodParamCodeDescription"],
               };
             });
 
-            setDefaultOptions(options, 'supplementalMATSParameterCode');
+            setDefaultOptions(options, "supplementalMATSParameterCode");
           });
         } else {
-          await dmApi.getAllParameterCodes().then(response => {
-            options = response.data.map(option => {
+          await dmApi.getAllParameterCodes().then((response) => {
+            options = response.data.map((option) => {
               return {
-                code: option['parameterCode'],
-                name: option['parameterCodeDescription'],
+                code: option["parameterCode"],
+                name: option["parameterCodeDescription"],
               };
             });
 
@@ -54,37 +54,37 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           });
         }
         break;
-      case 'controlEquipParamCode':
-        await dmApi.getAllControlEquipmentParameterCodes().then(response => {
-          options = response.data.map(option => {
+      case "controlEquipParamCode":
+        await dmApi.getAllControlEquipmentParameterCodes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['controlEquipParamCode'],
-              name: option['controlEquipParamDescription'],
+              code: option["controlEquipParamCode"],
+              name: option["controlEquipParamDescription"],
             };
           });
 
-          setDefaultOptions(options, 'parameterCode');
+          setDefaultOptions(options, "parameterCode");
         });
         break;
 
-      case 'monitoringMethodCode':
+      case "monitoringMethodCode":
         if (mats) {
-          await dmApi.getAllMatsMethodCodes().then(response => {
-            options = response.data.map(option => {
+          await dmApi.getAllMatsMethodCodes().then((response) => {
+            options = response.data.map((option) => {
               return {
-                code: option['matsMethodCode'],
-                name: option['matsMethodCodeDescription'],
+                code: option["matsMethodCode"],
+                name: option["matsMethodCodeDescription"],
               };
             });
 
-            setDefaultOptions(options, 'supplementalMATSMonitoringMethodCode');
+            setDefaultOptions(options, "supplementalMATSMonitoringMethodCode");
           });
         } else {
-          await dmApi.getAllMethodCodes().then(response => {
-            options = response.data.map(option => {
+          await dmApi.getAllMethodCodes().then((response) => {
+            options = response.data.map((option) => {
               return {
-                code: option['methodCode'],
-                name: option['methodCodeDescription'],
+                code: option["methodCode"],
+                name: option["methodCodeDescription"],
               };
             });
 
@@ -92,12 +92,12 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           });
         }
         break;
-      case 'substituteDataCode':
-        await dmApi.getAllSubstituteDataCodes().then(response => {
-          options = response.data.map(option => {
+      case "substituteDataCode":
+        await dmApi.getAllSubstituteDataCodes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['subDataCode'],
-              name: option['subDataCodeDescription'],
+              code: option["subDataCode"],
+              name: option["subDataCodeDescription"],
             };
           });
 
@@ -105,12 +105,12 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
 
-      case 'bypassApproachCode':
-        await dmApi.getAllBypassApproachCodes().then(response => {
-          options = response.data.map(option => {
+      case "bypassApproachCode":
+        await dmApi.getAllBypassApproachCodes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['bypassApproachCode'],
-              name: option['bypassApproachCodeDescription'],
+              code: option["bypassApproachCode"],
+              name: option["bypassApproachCodeDescription"],
             };
           });
 
@@ -118,12 +118,12 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
       //Analyzer Range
-      case 'analyzerRangeCode':
-        await dmApi.getAllRangeCodes().then(response => {
-          options = response.data.map(option => {
+      case "analyzerRangeCode":
+        await dmApi.getAllRangeCodes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['analyzerRangeCode'],
-              name: option['analyzerRangeCodeDescription'],
+              code: option["analyzerRangeCode"],
+              name: option["analyzerRangeCodeDescription"],
             };
           });
 
@@ -131,114 +131,28 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
       // System Fuel Flows
-      case 'maximumFuelFlowRateSourceCode':
-        await dmApi.getAllMaxRateSourceCodes().then(response => {
-          options = response.data.map(option => {
+      case "maximumFuelFlowRateSourceCode":
+        await dmApi.getAllMaxRateSourceCodes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['maxRateSourceCode'],
-              name: option['maxRateSourceCodeDescription'],
+              code: option["maxRateSourceCode"],
+              name: option["maxRateSourceCodeDescription"],
             };
           });
 
           setDefaultOptions(options, fieldName);
         });
         break;
-      case 'defaultUnitsOfMeasureCode':
-      case 'spanUnitsOfMeasureCode':
-      case 'maximumLoadUnitsOfMeasureCode':
-      case 'systemFuelFlowUOMCode':
-      case 'unitsOfStandard':
-        await dmApi.getAllUnitsOfMeasureCodes().then(response => {
-          options = response.data.map(option => {
+      case "defaultUnitsOfMeasureCode":
+      case "spanUnitsOfMeasureCode":
+      case "maximumLoadUnitsOfMeasureCode":
+      case "systemFuelFlowUOMCode":
+      case "unitsOfStandard":
+        await dmApi.getAllUnitsOfMeasureCodes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['unitsOfMeasureCode'],
-              name: option['unitsOfMeasureCodeDescription'],
-            };
-          });
-
-          setDefaultOptions(options, fieldName);
-        });
-        break;
-
-      case 'fuelType':
-        await dmApi.getAllFuelTypes().then(response => {
-          options = response.data.map(option => {
-            return {
-              code: option['fuelTypeCode'],
-              name: option['fuelTypeDescription'],
-            };
-          });
-
-          setDefaultOptions(options, 'fuelCode');
-        });
-        break;
-
-      case 'fuelCode':
-        await dmApi.getAllFuelCodes().then(response => {
-          options = response.data.map(option => {
-            return {
-              code: option['fuelCode'],
-              name: option['fuelCodeDescription'],
-            };
-          });
-
-          setDefaultOptions(options, fieldName);
-        });
-        break;
-      case 'indicatorCode':
-        await dmApi.getAllFuelIndicatorCodes().then(response => {
-          options = response.data.map(option => {
-            return {
-              code: option['fuelIndicatorCode'],
-              name: option['fuelIndicatorCodeDescription'],
-            };
-          });
-
-          setDefaultOptions(options, fieldName);
-        });
-        break;
-      case 'demGCV':
-        await dmApi.getAllDemonstrationMethodCodes().then(response => {
-          options = response.data.map(option => {
-            return {
-              code: option['demMethodCode'],
-              name: option['demMethodCodeDescription'],
-            };
-          });
-
-          setDefaultOptions(options, fieldName);
-        });
-        break;
-      case 'demSO2':
-        await dmApi.getAllDemonstrationMethodCodes().then(response => {
-          options = response.data.map(option => {
-            return {
-              code: option['demMethodCode'],
-              name: option['demMethodCodeDescription'],
-            };
-          });
-
-          setDefaultOptions(options, fieldName);
-        });
-        break;
-      case 'systemTypeCode':
-        await dmApi.getAllSystemTypeCodes().then(response => {
-          options = response.data.map(option => {
-            return {
-              code: option['systemTypeCode'],
-              name: option['systemTypeCodeDescription'],
-            };
-          });
-
-          setDefaultOptions(options, fieldName);
-        });
-        break;
-      case 'systemDesignationCode':
-        await dmApi.getAllSystemDesignationCodes().then(response => {
-          options = response.data.map(option => {
-            return {
-              code: option['systemDesignationCode'],
-              name: option['systemDesignationCodeDescription'],
+              code: option["unitsOfMeasureCode"],
+              name: option["unitsOfMeasureCodeDescription"],
             };
           });
 
@@ -246,36 +160,122 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
 
-      case 'sampleAcquisitionMethodCode':
-        await dmApi.getAllAcquisitionMethodCodes().then(response => {
-          options = response.data.map(option => {
+      case "fuelType":
+        await dmApi.getAllFuelTypes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['acquisitionMethodCode'],
-              name: option['acquisitionMethodCodeDescription'],
+              code: option["fuelTypeCode"],
+              name: option["fuelTypeDescription"],
+            };
+          });
+
+          setDefaultOptions(options, "fuelCode");
+        });
+        break;
+
+      case "fuelCode":
+        await dmApi.getAllFuelCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["fuelCode"],
+              name: option["fuelCodeDescription"],
             };
           });
 
           setDefaultOptions(options, fieldName);
         });
         break;
-      case 'componentTypeCode':
-        await dmApi.getAllComponentTypeCodes().then(response => {
-          options = response.data.map(option => {
+      case "indicatorCode":
+        await dmApi.getAllFuelIndicatorCodes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['componentTypeCode'],
-              name: option['componentTypeCodeDescription'],
+              code: option["fuelIndicatorCode"],
+              name: option["fuelIndicatorCodeDescription"],
             };
           });
 
           setDefaultOptions(options, fieldName);
         });
         break;
-      case 'basisCode':
-        await dmApi.getAllBasisCodes().then(response => {
-          options = response.data.map(option => {
+      case "demGCV":
+        await dmApi.getAllDemonstrationMethodCodes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['basisCode'],
-              name: option['basisCodeDescription'],
+              code: option["demMethodCode"],
+              name: option["demMethodCodeDescription"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+      case "demSO2":
+        await dmApi.getAllDemonstrationMethodCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["demMethodCode"],
+              name: option["demMethodCodeDescription"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+      case "systemTypeCode":
+        await dmApi.getAllSystemTypeCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["systemTypeCode"],
+              name: option["systemTypeCodeDescription"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+      case "systemDesignationCode":
+        await dmApi.getAllSystemDesignationCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["systemDesignationCode"],
+              name: option["systemDesignationCodeDescription"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+
+      case "sampleAcquisitionMethodCode":
+        await dmApi.getAllAcquisitionMethodCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["acquisitionMethodCode"],
+              name: option["acquisitionMethodCodeDescription"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+      case "componentTypeCode":
+        await dmApi.getAllComponentTypeCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["componentTypeCode"],
+              name: option["componentTypeCodeDescription"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+      case "basisCode":
+        await dmApi.getAllBasisCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["basisCode"],
+              name: option["basisCodeDescription"],
             };
           });
 
@@ -284,37 +284,37 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         break;
       // for spans
 
-      case 'spanScaleCode':
-        await dmApi.getAllSpanScaleCodes().then(response => {
-          options = response.data.map(option => {
+      case "spanScaleCode":
+        await dmApi.getAllSpanScaleCodes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['spanScaleCode'],
-              name: option['spanScaleCodeDescription'],
+              code: option["spanScaleCode"],
+              name: option["spanScaleCodeDescription"],
             };
           });
 
           setDefaultOptions(options, fieldName);
         });
         break;
-      case 'spanMethodCode':
-        await dmApi.getAllSpanMethodCodes().then(response => {
-          options = response.data.map(option => {
+      case "spanMethodCode":
+        await dmApi.getAllSpanMethodCodes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['spanMethodCode'],
-              name: option['spanMethodCodeDescription'],
+              code: option["spanMethodCode"],
+              name: option["spanMethodCodeDescription"],
             };
           });
 
           setDefaultOptions(options, fieldName);
         });
         break;
-      case 'normalLevelCode':
-      case 'secondLevelCode':
-        await dmApi.getAllOperatingLevelCodes().then(response => {
-          options = response.data.map(option => {
+      case "normalLevelCode":
+      case "secondLevelCode":
+        await dmApi.getAllOperatingLevelCodes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['operatingLevelCode'],
-              name: option['operatingLevelCodeDescription'],
+              code: option["operatingLevelCode"],
+              name: option["operatingLevelCodeDescription"],
             };
           });
 
@@ -324,48 +324,48 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
 
       // for defaults
 
-      case 'operatingConditionCode':
-        await dmApi.getAllOperatingConditionCodes().then(response => {
-          options = response.data.map(option => {
+      case "operatingConditionCode":
+        await dmApi.getAllOperatingConditionCodes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['operatingConditionCode'],
-              name: option['operatingConditionCodeDescription'],
+              code: option["operatingConditionCode"],
+              name: option["operatingConditionCodeDescription"],
             };
           });
 
           setDefaultOptions(options, fieldName);
         });
         break;
-      case 'defaultSourceCode':
-        await dmApi.getAllDefaultSourceCodes().then(response => {
-          options = response.data.map(option => {
+      case "defaultSourceCode":
+        await dmApi.getAllDefaultSourceCodes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['defaultSourceCode'],
-              name: option['defaultSourceCodeDescription'],
+              code: option["defaultSourceCode"],
+              name: option["defaultSourceCodeDescription"],
             };
           });
 
           setDefaultOptions(options, fieldName);
         });
         break;
-      case 'defaultPurposeCode':
-        await dmApi.getAllDefaultPurposeCodes().then(response => {
-          options = response.data.map(option => {
+      case "defaultPurposeCode":
+        await dmApi.getAllDefaultPurposeCodes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['defaultPurposeCode'],
-              name: option['defaultPurposeCodeDescription'],
+              code: option["defaultPurposeCode"],
+              name: option["defaultPurposeCodeDescription"],
             };
           });
 
           setDefaultOptions(options, fieldName);
         });
         break;
-      case 'formulaCode':
-        await dmApi.getAllFormulaCodes().then(response => {
-          options = response.data.map(option => {
+      case "formulaCode":
+        await dmApi.getAllFormulaCodes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['equationCode'],
-              name: option['equationCodeDescription'],
+              code: option["equationCode"],
+              name: option["equationCodeDescription"],
             };
           });
 
@@ -373,49 +373,49 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
 
-      case 'wafMethodCode':
-        await dmApi.getAllRectangularDuctsCodes().then(response => {
-          options = response.data.map(option => {
+      case "wafMethodCode":
+        await dmApi.getAllRectangularDuctsCodes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['wafMethodCode'],
-              name: option['wafMethodCodeDescription'],
+              code: option["wafMethodCode"],
+              name: option["wafMethodCodeDescription"],
             };
           });
 
           setDefaultOptions(options, fieldName);
         });
         break;
-      case 'controlCode':
-        await dmApi.getAllControlTechnologies().then(response => {
-          options = response.data.map(option => {
+      case "controlCode":
+        await dmApi.getAllControlTechnologies().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['controlCode'],
-              name: option['controlDescription'],
+              code: option["controlCode"],
+              name: option["controlDescription"],
             };
           });
 
           setDefaultOptions(options, fieldName);
         });
         break;
-      case 'qualificationTypeCode':
-        await dmApi.getAllQualificationTypeCodes().then(response => {
-          options = response.data.map(option => {
+      case "qualificationTypeCode":
+        await dmApi.getAllQualificationTypeCodes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['qualTypeCode'],
-              name: option['qualTypeCodeDescription'],
+              code: option["qualTypeCode"],
+              name: option["qualTypeCodeDescription"],
             };
           });
 
           setDefaultOptions(options, fieldName);
         });
         break;
-      case 'qualificationYear':
-      case 'yr1QualificationDataYear':
-      case 'yr2QualificationDataYear':
-      case 'yr3QualificationDataYear':
-      case 'qualificationDataYear':
-        dataYearOptions().then(years => {
-          options = years.map(year => {
+      case "qualificationYear":
+      case "yr1QualificationDataYear":
+      case "yr2QualificationDataYear":
+      case "yr3QualificationDataYear":
+      case "qualificationDataYear":
+        dataYearOptions().then((years) => {
+          options = years.map((year) => {
             return {
               code: year.toString(),
               name: year.toString(),
@@ -426,39 +426,26 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
 
         break;
-      case 'yr1QualificationDataTypeCode':
-      case 'yr2QualificationDataTypeCode':
-      case 'yr3QualificationDataTypeCode':
-        await dmApi.getAllQualificationDataTypeCodes().then(response => {
-          options = response.data.map(option => {
+      case "yr1QualificationDataTypeCode":
+      case "yr2QualificationDataTypeCode":
+      case "yr3QualificationDataTypeCode":
+        await dmApi.getAllQualificationDataTypeCodes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['qualDataTypeCode'],
-              name: option['qualDataTypeCodeDescription'],
+              code: option["qualDataTypeCode"],
+              name: option["qualDataTypeCodeDescription"],
             };
           });
 
           setDefaultOptions(options, fieldName);
         });
         break;
-      case 'qualificationTestType':
-        await dmApi.getAllQualificationLEETestTypeCodes().then(response => {
-          options = response.data.map(option => {
+      case "qualificationTestType":
+        await dmApi.getAllQualificationLEETestTypeCodes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['qualLeeTestTypeCode'],
-              name: option['qualLeeTestTypeDescription'],
-            };
-          });
-
-          setDefaultOptions(options, fieldName);
-        });
-        break;
-
-      case 'materialCode':
-        await dmApi.getAllMaterialCodes().then(response => {
-          options = response.data.map(option => {
-            return {
-              code: option['materialCode'],
-              name: option['materialCodeDescription'],
+              code: option["qualLeeTestTypeCode"],
+              name: option["qualLeeTestTypeDescription"],
             };
           });
 
@@ -466,12 +453,12 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
 
-      case 'shapeCode':
-        await dmApi.getAllShapeCodes().then(response => {
-          options = response.data.map(option => {
+      case "materialCode":
+        await dmApi.getAllMaterialCodes().then((response) => {
+          options = response.data.map((option) => {
             return {
-              code: option['shapeCode'],
-              name: option['shapeCodeDescription'],
+              code: option["materialCode"],
+              name: option["materialCodeDescription"],
             };
           });
 
@@ -479,15 +466,28 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
 
-      case 'prefilteredMatsMethods':
+      case "shapeCode":
+        await dmApi.getAllShapeCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["shapeCode"],
+              name: option["shapeCodeDescription"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+
+      case "prefilteredMatsMethods":
         let noDupesMatsMethodCodes = [];
         // returns all the parameter codes
-        await dmApi.getPrefilteredMatsMethods().then(response => {
+        await dmApi.getPrefilteredMatsMethods().then((response) => {
           const viewData = response.data;
 
           // Get parameter codes
-          noDupesMatsMethodCodes = viewData.map(code => {
-            return code['supplementalMATSParameterCode'];
+          noDupesMatsMethodCodes = viewData.map((code) => {
+            return code["supplementalMATSParameterCode"];
           });
 
           // Filter out the duplicates
@@ -499,16 +499,16 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           for (const code of noDupesMatsMethodCodes) {
             // Find the records from the view that have that parameter code
             const filteredArray = viewData.filter(
-              element => element.supplementalMATSParameterCode === code,
+              (element) => element.supplementalMATSParameterCode === code
             );
 
             // Gather all formula codes from those records
             let methodCodeArray = [];
 
             // *** rest of sub-arrays
-            filteredArray.forEach(element => {
+            filteredArray.forEach((element) => {
               methodCodeArray.push(
-                element.supplementalMATSMonitoringMethodCode,
+                element.supplementalMATSMonitoringMethodCode
               );
             });
 
@@ -517,8 +517,8 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
 
             // Pair the current parameter code with the list of matching formula codes
             const organizedMDMrow = {};
-            organizedMDMrow['supplementalMATSParameterCode'] = code;
-            organizedMDMrow['supplementalMATSMonitoringMethodCode'] =
+            organizedMDMrow["supplementalMATSParameterCode"] = code;
+            organizedMDMrow["supplementalMATSMonitoringMethodCode"] =
               methodCodeArray;
 
             // Push this object (containing the pairing) to the array
@@ -530,15 +530,15 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
 
-      case 'prefilteredMethods':
+      case "prefilteredMethods":
         let noDupesMethodCodes = [];
         // returns all the parameter codes
-        await dmApi.getPrefilteredMethods().then(response => {
+        await dmApi.getPrefilteredMethods().then((response) => {
           const viewData = response.data;
 
           // Get parameter codes
-          noDupesMethodCodes = viewData.map(code => {
-            return code['parameterCode'];
+          noDupesMethodCodes = viewData.map((code) => {
+            return code["parameterCode"];
           });
 
           // Filter out the duplicates
@@ -550,7 +550,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           for (const code of noDupesMethodCodes) {
             // Find the records from the view that have that parameter code
             const filteredArray = viewData.filter(
-              element => element.parameterCode === code,
+              (element) => element.parameterCode === code
             );
 
             // Gather all formula codes from those records
@@ -559,7 +559,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
             let bypassApproachCodeArray = [];
 
             // *** rest of sub-arrays
-            filteredArray.forEach(element => {
+            filteredArray.forEach((element) => {
               methodCodeArray.push(element.monitoringMethodCode);
               substituteDataCodeArray.push(element.substituteDataCode);
               bypassApproachCodeArray.push(element.bypassApproachCode);
@@ -572,10 +572,10 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
 
             // Pair the current parameter code with the list of matching formula codes
             const organizedMDMrow = {};
-            organizedMDMrow['parameterCode'] = code;
-            organizedMDMrow['monitoringMethodCode'] = methodCodeArray;
-            organizedMDMrow['substituteDataCode'] = substituteDataCodeArray;
-            organizedMDMrow['bypassApproachCode'] = bypassApproachCodeArray;
+            organizedMDMrow["parameterCode"] = code;
+            organizedMDMrow["monitoringMethodCode"] = methodCodeArray;
+            organizedMDMrow["substituteDataCode"] = substituteDataCodeArray;
+            organizedMDMrow["bypassApproachCode"] = bypassApproachCodeArray;
 
             // Push this object (containing the pairing) to the array
             prefilteredMdmOptions.push(organizedMDMrow);
@@ -586,15 +586,15 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
 
-      case 'prefilteredFormulas':
+      case "prefilteredFormulas":
         let noDupesFormCodes = [];
         // returns all the parameter codes
-        await dmApi.getPrefilteredFormulas().then(response => {
+        await dmApi.getPrefilteredFormulas().then((response) => {
           const viewData = response.data;
 
           // Get parameter codes
-          noDupesFormCodes = viewData.map(code => {
-            return code['parameterCode'];
+          noDupesFormCodes = viewData.map((code) => {
+            return code["parameterCode"];
           });
 
           // Filter out the duplicates
@@ -606,13 +606,13 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           for (const code of noDupesFormCodes) {
             // Find the records from the view that have that parameter code
             const filteredArray = viewData.filter(
-              element => element.parameterCode === code,
+              (element) => element.parameterCode === code
             );
 
             // Gather all formula codes from those records
             let formulaCodeArray = [];
             // *** rest of sub-arrays
-            filteredArray.forEach(element => {
+            filteredArray.forEach((element) => {
               formulaCodeArray.push(element.formulaCode);
             });
 
@@ -621,8 +621,8 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
 
             // Pair the current parameter code with the list of matching formula codes
             const organizedMDMrow = {};
-            organizedMDMrow['parameterCode'] = code;
-            organizedMDMrow['formulaCode'] = formulaCodeArray;
+            organizedMDMrow["parameterCode"] = code;
+            organizedMDMrow["formulaCode"] = formulaCodeArray;
 
             // Push this object (containing the pairing) to the array
             prefilteredMdmOptions.push(organizedMDMrow);
@@ -633,55 +633,47 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
 
-      case 'prefilteredSpans':
+      case "prefilteredSpans":
         let noDupesFormCodesSpans = [];
-        await dmApi.getPrefilteredSpans().then(response => {
-          noDupesFormCodesSpans = response.data.map(code => {
-            return code['componentTypeCode'];
+        await dmApi.getPrefilteredSpans().then((response) => {
+          noDupesFormCodesSpans = response.data.map((code) => {
+            return code["componentTypeCode"];
           });
 
           noDupesFormCodesSpans = [...new Set(noDupesFormCodesSpans)];
 
           const prefilteredMdmOptions = organizePrefilterMDMData(
             noDupesFormCodesSpans,
-            'componentTypeCode',
-            response.data,
+            "componentTypeCode",
+            response.data
           );
 
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         });
         break;
-      case 'prefilteredDefaults':
+      case "prefilteredDefaults":
         let noDupesFormCodesDefaults = [];
-        await dmApi.getPrefilteredDefaults().then(response => {
-          noDupesFormCodesDefaults = response.data.map(code => {
-            return code['parameterCode'];
+        await dmApi.getPrefilteredDefaults().then((response) => {
+          noDupesFormCodesDefaults = response.data.map((code) => {
+            return code["parameterCode"];
           });
 
           noDupesFormCodesDefaults = [...new Set(noDupesFormCodesDefaults)];
 
           const prefilteredMdmOptions = organizePrefilterMDMData(
             noDupesFormCodesDefaults,
-            'parameterCode',
-            response.data,
+            "parameterCode",
+            response.data
           );
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         });
         break;
 
-      case 'prefilteredLoads':
-        await dmApi.getPrefilteredLoads().then(response => {
+      case "prefilteredLoads":
+      case "prefilteredUnitFuels":
+        await dmApi.getPrefilteredLoads().then((response) => {
           const prefilteredMdmOptions = organizeStaticPrefilterMDMData(
-            response.data,
-          );
-          setDefaultOptions(prefilteredMdmOptions, fieldName, false);
-        });
-        break;
-
-      case 'prefilteredUnitFuels':
-        await dmApi.getPrefilteredUnitFuels().then(response => {
-          const prefilteredMdmOptions = organizeStaticPrefilterMDMData(
-            response.data,
+            response.data
           );
           setDefaultOptions(prefilteredMdmOptions, fieldName, false);
         });
@@ -695,7 +687,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
   return totalOptions;
 };
 
-const organizeStaticPrefilterMDMData = response => {
+const organizeStaticPrefilterMDMData = (response) => {
   const setOfCodeNames = {};
   // creates an array based on the property name of the mdm coming in
   for (const codeName in response[0]) {
@@ -724,7 +716,7 @@ const organizePrefilterMDMData = (noDupesFormCodes, drivingInput, response) => {
   for (const code of noDupesFormCodes) {
     // get all of the secondary dropdowns that follows the unique main driving input
     const filteredArray = response.filter(
-      element => element[drivingInput] === code,
+      (element) => element[drivingInput] === code
     );
 
     let setOfSecondaryDropdownArrayCodes = {};
@@ -739,16 +731,16 @@ const organizePrefilterMDMData = (noDupesFormCodes, drivingInput, response) => {
 
     // *** rest of sub-arrays
     // runs through each secondary belonging to the unique main driving input array and adds it to an array
-    filteredArray.forEach(element => {
+    filteredArray.forEach((element) => {
       for (const secondaryCode in setOfSecondaryDropdownArrayCodes) {
         if (
           // filters out secondary code duplicates
           !setOfSecondaryDropdownArrayCodes[secondaryCode].includes(
-            element[secondaryCode],
+            element[secondaryCode]
           )
         ) {
           setOfSecondaryDropdownArrayCodes[secondaryCode].push(
-            element[secondaryCode],
+            element[secondaryCode]
           );
         }
       }
