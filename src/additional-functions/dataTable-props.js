@@ -373,7 +373,7 @@ export const unitFuelDataTableProps = selectedLocation => {
       'End Date',
     ],
     controlInputs: {
-      fuelCode: ['Fuel Type', 'independentDropdown', '', ''],
+      fuelCode: ['Fuel Type', 'dropdown', '', ''],
       indicatorCode: ['Indicator Code', 'independentDropdown', '', ''],
       ozoneSeasonIndicator: ['Ozone Season Indicator', 'radio', '', ''],
       demGCV: ['Dem GCV', 'independentDropdown', '', ''],
