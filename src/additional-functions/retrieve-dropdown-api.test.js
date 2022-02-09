@@ -8,430 +8,410 @@ afterAll(() => {
   jest.restoreAllMocks();
 });
 
-test("tests parameterCode for non-MATS", async () => {
-  const expectedApiResponse = {
-    status: 201,
-    data: [{ parameterCode: "", parameterCodeDescription: "" }],
-  };
-  const expectedDropdownOptions = {
-    parameterCode: [
-      { code: "", name: "-- Select a value --" },
-      { code: "", name: "" },
-    ],
-  };
-  axios.get.mockImplementation(() => Promise.resolve(expectedApiResponse));
-  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+const successCode = 201;
 
-  const apiResponse = await dmApi.getAllParameterCodes();
-  expect(apiResponse.data).toEqual(expectedApiResponse.data);
+const dropdownOptions = [
+  { code: "", name: "-- Select a value --" },
+  { code: "", name: "" },
+];
 
-  UseRetrieveDropdownApi(["parameterCode"], false).then((dropdownOptions) => {
-    expect(dropdownOptions).toEqual(expectedDropdownOptions);
+// Iterates through the testObjects array to test all of the cases in the switch statement
+const executeTests = () => {
+  testObjects.forEach((testObject) => {
+    test(`testing ${testObject.name}`, async () => {
+      axios.get.mockImplementation(() =>
+        Promise.resolve(testObject.expectedApiResponse)
+      );
+      React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+
+      const apiResponse = await testObject.function();
+      expect(apiResponse.data).toEqual(testObject.expectedApiResponse.data);
+
+      UseRetrieveDropdownApi(
+        [testObject.case],
+        testObject.mats ? testObject.mats : false
+      ).then((dropdownOptions) => {
+        expect(dropdownOptions).toEqual(testObject.expectedDropdownOptions);
+      });
+    });
   });
-});
+};
 
-test("tests parameterCode for MATS", async () => {
-  const expectedApiResponse = {
-    status: 201,
-    data: [{ matsMethodParamCode: "", matsMethodParamCodeDescription: "" }],
-  };
-  const expectedDropdownOptions = {
-    supplementalMATSParameterCode: [
-      { code: "", name: "-- Select a value --" },
-      { code: "", name: "" },
-    ],
-  };
-  axios.get.mockImplementation(() => Promise.resolve(expectedApiResponse));
-  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+// After adding a new case in retrieve-dropdown-api.js, all you need to do is add a new test object following the current structure:
+//    - name:                     this text appears when you run the test
+//    - expectedApiResponse:      mock response with the properties that will be returned
+//    - expectedDropdownOptions:  options object containing name of the field in the UI
+//    - case:                     the fieldName used in the switch statement in retrieve-dropdown-api.js
+//    - mats:                     MATS flag set to true (optional)
+//    - function:                 function called in dataManagementApi.js
+const testObjects = [
+  {
+    name: "parameter Code for non-MATS",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ parameterCode: "", parameterCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      parameterCode: dropdownOptions,
+    },
+    case: "parameterCode",
+    function: dmApi.getAllParameterCodes,
+  },
+  {
+    name: "parameter Code for MATS",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ matsMethodParamCode: "", matsMethodParamCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      supplementalMATSParameterCode: dropdownOptions,
+    },
+    case: "parameterCode",
+    mats: true,
+    function: dmApi.getAllMatsParameterCodes,
+  },
+  {
+    name: "controlEquipParamCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ controlEquipParamCode: "", controlEquipParamDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      parameterCode: dropdownOptions,
+    },
+    case: "controlEquipParamCode",
+    function: dmApi.getAllControlEquipmentParameterCodes,
+  },
 
-  const apiResponse = await dmApi.getAllMatsParameterCodes();
-  expect(apiResponse.data).toEqual(expectedApiResponse.data);
+  {
+    name: "monitoringMethodCode for non-MATS",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ methodCode: "", methodCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      monitoringMethodCode: dropdownOptions,
+    },
+    case: "monitoringMethodCode",
+    function: dmApi.getAllMethodCodes,
+  },
 
-  UseRetrieveDropdownApi(["parameterCode"], true).then((dropdownOptions) => {
-    expect(dropdownOptions).toEqual(expectedDropdownOptions);
-  });
-});
+  {
+    name: "monitoringMethodCode for MATS",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ matsMethodCode: "", matsMethodCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      supplementalMATSMonitoringMethodCode: dropdownOptions,
+    },
+    case: "monitoringMethodCode",
+    mats: true,
+    function: dmApi.getAllMatsMethodCodes,
+  },
 
-test("tests controlEquipParamCode", async () => {
-  const expectedApiResponse = {
-    status: 201,
-    data: [{ controlEquipParamCode: "", controlEquipParamDescription: "" }],
-  };
-  const expectedDropdownOptions = {
-    parameterCode: [
-      { code: "", name: "-- Select a value --" },
-      { code: "", name: "" },
-    ],
-  };
-  axios.get.mockImplementation(() => Promise.resolve(expectedApiResponse));
-  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+  {
+    name: "substituteDataCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ subDataCode: "", subDataCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      substituteDataCode: dropdownOptions,
+    },
+    case: "substituteDataCode",
+    function: dmApi.getAllSubstituteDataCodes,
+  },
 
-  const apiResponse = await dmApi.getAllControlEquipmentParameterCodes();
-  expect(apiResponse.data).toEqual(expectedApiResponse.data);
+  {
+    name: "bypassApproachCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ bypassApproachCode: "", bypassApproachCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      bypassApproachCode: dropdownOptions,
+    },
+    case: "bypassApproachCode",
+    function: dmApi.getAllBypassApproachCodes,
+  },
 
-  UseRetrieveDropdownApi(["controlEquipParamCode"]).then((dropdownOptions) => {
-    expect(dropdownOptions).toEqual(expectedDropdownOptions);
-  });
-});
+  {
+    name: "analyzerRangeCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ analyzerRangeCode: "", analyzerRangeCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      analyzerRangeCode: dropdownOptions,
+    },
+    case: "analyzerRangeCode",
+    function: dmApi.getAllRangeCodes,
+  },
 
-test("tests monitoringMethodCode for non-MATS", async () => {
-  const expectedApiResponse = {
-    status: 201,
-    data: [{ matsMethodCode: "", matsMethodCodeDescription: "" }],
-  };
-  const expectedDropdownOptions = {
-    supplementalMATSMonitoringMethodCode: [
-      { code: "", name: "-- Select a value --" },
-      { code: "", name: "" },
-    ],
-  };
-  axios.get.mockImplementation(() => Promise.resolve(expectedApiResponse));
-  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+  {
+    name: "maximumFuelFlowRateSourceCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ maxRateSourceCode: "", maxRateSourceCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      maximumFuelFlowRateSourceCode: dropdownOptions,
+    },
+    case: "maximumFuelFlowRateSourceCode",
+    function: dmApi.getAllMaxRateSourceCodes,
+  },
 
-  const apiResponse = await dmApi.getAllMethodCodes();
-  expect(apiResponse.data).toEqual(expectedApiResponse.data);
+  {
+    name: "defaultUnitsOfMeasureCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ unitsOfMeasureCode: "", unitsOfMeasureCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      defaultUnitsOfMeasureCode: dropdownOptions,
+    },
+    case: "defaultUnitsOfMeasureCode",
+    function: dmApi.getAllUnitsOfMeasureCodes,
+  },
 
-  UseRetrieveDropdownApi(["monitoringMethodCode"], true).then(
-    (dropdownOptions) => {
-      expect(dropdownOptions).toEqual(expectedDropdownOptions);
-    }
-  );
-});
+  {
+    name: "spanUnitsOfMeasureCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ unitsOfMeasureCode: "", unitsOfMeasureCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      spanUnitsOfMeasureCode: dropdownOptions,
+    },
+    case: "spanUnitsOfMeasureCode",
+    function: dmApi.getAllUnitsOfMeasureCodes,
+  },
 
-test("tests monitoringMethodCode for MATS", async () => {
-  const expectedApiResponse = {
-    status: 201,
-    data: [{ matsMethodCode: "", matsMethodCodeDescription: "" }],
-  };
-  const expectedDropdownOptions = {
-    supplementalMATSMonitoringMethodCode: [
-      { code: "", name: "-- Select a value --" },
-      { code: "", name: "" },
-    ],
-  };
-  axios.get.mockImplementation(() => Promise.resolve(expectedApiResponse));
-  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+  {
+    name: "maximumLoadUnitsOfMeasureCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ unitsOfMeasureCode: "", unitsOfMeasureCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      maximumLoadUnitsOfMeasureCode: dropdownOptions,
+    },
+    case: "maximumLoadUnitsOfMeasureCode",
+    function: dmApi.getAllUnitsOfMeasureCodes,
+  },
 
-  const apiResponse = await dmApi.getAllMatsMethodCodes();
-  expect(apiResponse.data).toEqual(expectedApiResponse.data);
+  {
+    name: "systemFuelFlowUOMCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ unitsOfMeasureCode: "", unitsOfMeasureCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      systemFuelFlowUOMCode: dropdownOptions,
+    },
+    case: "systemFuelFlowUOMCode",
+    function: dmApi.getAllUnitsOfMeasureCodes,
+  },
 
-  UseRetrieveDropdownApi(["monitoringMethodCode"], true).then(
-    (dropdownOptions) => {
-      expect(dropdownOptions).toEqual(expectedDropdownOptions);
-    }
-  );
-});
+  {
+    name: "unitsOfStandard",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ unitsOfMeasureCode: "", unitsOfMeasureCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      unitsOfStandard: dropdownOptions,
+    },
+    case: "unitsOfStandard",
+    function: dmApi.getAllUnitsOfMeasureCodes,
+  },
 
-test("tests substituteDataCode", async () => {
-  const expectedApiResponse = {
-    status: 201,
-    data: [{ subDataCode: "", subDataCodeDescription: "" }],
-  };
-  const expectedDropdownOptions = {
-    substituteDataCode: [
-      { code: "", name: "-- Select a value --" },
-      { code: "", name: "" },
-    ],
-  };
-  axios.get.mockImplementation(() => Promise.resolve(expectedApiResponse));
-  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+  {
+    name: "fuelType",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ fuelTypeCode: "", fuelTypeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      fuelCode: dropdownOptions,
+    },
+    case: "fuelType",
+    function: dmApi.getAllFuelTypes,
+  },
 
-  const apiResponse = await dmApi.getAllSubstituteDataCodes();
-  expect(apiResponse.data).toEqual(expectedApiResponse.data);
+  {
+    name: "fuelCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ fuelCode: "", fuelCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      fuelCode: dropdownOptions,
+    },
+    case: "fuelCode",
+    function: dmApi.getAllFuelCodes,
+  },
 
-  UseRetrieveDropdownApi(["substituteDataCode"]).then((dropdownOptions) => {
-    expect(dropdownOptions).toEqual(expectedDropdownOptions);
-  });
-});
+  {
+    name: "indicatorCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ fuelIndicatorCode: "", fuelIndicatorCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      indicatorCode: dropdownOptions,
+    },
+    case: "indicatorCode",
+    function: dmApi.getAllFuelIndicatorCodes,
+  },
 
-test("tests bypassApproachCode", async () => {
-  const expectedApiResponse = {
-    status: 201,
-    data: [{ bypassApproachCode: "", bypassApproachCodeDescription: "" }],
-  };
-  const expectedDropdownOptions = {
-    bypassApproachCode: [
-      { code: "", name: "-- Select a value --" },
-      { code: "", name: "" },
-    ],
-  };
-  axios.get.mockImplementation(() => Promise.resolve(expectedApiResponse));
-  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+  {
+    name: "demGCV",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ demMethodCode: "", demMethodCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      demGCV: dropdownOptions,
+    },
+    case: "demGCV",
+    function: dmApi.getAllDemonstrationMethodCodes,
+  },
 
-  const apiResponse = await dmApi.getAllBypassApproachCodes();
-  expect(apiResponse.data).toEqual(expectedApiResponse.data);
+  {
+    name: "demSO2",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ demMethodCode: "", demMethodCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      demSO2: dropdownOptions,
+    },
+    case: "demSO2",
+    function: dmApi.getAllDemonstrationMethodCodes,
+  },
 
-  UseRetrieveDropdownApi(["bypassApproachCode"]).then((dropdownOptions) => {
-    expect(dropdownOptions).toEqual(expectedDropdownOptions);
-  });
-});
+  {
+    name: "systemTypeCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ systemTypeCode: "", systemTypeCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      systemTypeCode: dropdownOptions,
+    },
+    case: "systemTypeCode",
+    function: dmApi.getAllSystemTypeCodes,
+  },
 
-test("tests analyzerRangeCode", async () => {
-  const expectedApiResponse = {
-    status: 201,
-    data: [{ analyzerRangeCode: "", analyzerRangeCodeDescription: "" }],
-  };
-  const expectedDropdownOptions = {
-    analyzerRangeCode: [
-      { code: "", name: "-- Select a value --" },
-      { code: "", name: "" },
-    ],
-  };
-  axios.get.mockImplementation(() => Promise.resolve(expectedApiResponse));
-  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+  {
+    name: "systemDesignationCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [
+        { systemDesignationCode: "", systemDesignationCodeDescription: "" },
+      ],
+    },
+    expectedDropdownOptions: {
+      systemDesignationCode: dropdownOptions,
+    },
+    case: "systemDesignationCode",
+    function: dmApi.getAllSystemDesignationCodes,
+  },
 
-  const apiResponse = await dmApi.getAllRangeCodes();
-  expect(apiResponse.data).toEqual(expectedApiResponse.data);
+  {
+    name: "sampleAcquisitionMethodCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [
+        { acquisitionMethodCode: "", acquisitionMethodCodeDescription: "" },
+      ],
+    },
+    expectedDropdownOptions: {
+      sampleAcquisitionMethodCode: dropdownOptions,
+    },
+    case: "sampleAcquisitionMethodCode",
+    function: dmApi.getAllSystemDesignationCodes,
+  },
 
-  UseRetrieveDropdownApi(["analyzerRangeCode"]).then((dropdownOptions) => {
-    expect(dropdownOptions).toEqual(expectedDropdownOptions);
-  });
-});
+  {
+    name: "componentTypeCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ componentTypeCode: "", componentTypeCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      componentTypeCode: dropdownOptions,
+    },
+    case: "componentTypeCode",
+    function: dmApi.getAllComponentTypeCodes,
+  },
 
-test("tests maximumFuelFlowRateSourceCode", async () => {
-  const expectedApiResponse = {
-    status: 201,
-    data: [{ maxRateSourceCode: "", maxRateSourceCodeDescription: "" }],
-  };
-  const expectedDropdownOptions = {
-    maximumFuelFlowRateSourceCode: [
-      { code: "", name: "-- Select a value --" },
-      { code: "", name: "" },
-    ],
-  };
-  axios.get.mockImplementation(() => Promise.resolve(expectedApiResponse));
-  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+  {
+    name: "basisCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ basisCode: "", basisCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      basisCode: dropdownOptions,
+    },
+    case: "basisCode",
+    function: dmApi.getAllBasisCodes,
+  },
 
-  const apiResponse = await dmApi.getAllMaxRateSourceCodes();
-  expect(apiResponse.data).toEqual(expectedApiResponse.data);
+  {
+    name: "spanScaleCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ spanScaleCode: "", spanScaleCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      spanScaleCode: dropdownOptions,
+    },
+    case: "spanScaleCode",
+    function: dmApi.getAllSpanScaleCodes,
+  },
 
-  UseRetrieveDropdownApi(["maximumFuelFlowRateSourceCode"]).then(
-    (dropdownOptions) => {
-      expect(dropdownOptions).toEqual(expectedDropdownOptions);
-    }
-  );
-});
+  {
+    name: "spanMethodCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ spanMethodCode: "", spanMethodCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      spanMethodCode: dropdownOptions,
+    },
+    case: "spanMethodCode",
+    function: dmApi.getAllSpanMethodCodes,
+  },
 
-test("tests defaultUnitsOfMeasureCode", async () => {
-  const expectedApiResponse = {
-    status: 201,
-    data: [{ unitsOfMeasureCode: "", unitsOfMeasureCodeDescription: "" }],
-  };
-  const expectedDropdownOptions = {
-    defaultUnitsOfMeasureCode: [
-      { code: "", name: "-- Select a value --" },
-      { code: "", name: "" },
-    ],
-  };
-  axios.get.mockImplementation(() => Promise.resolve(expectedApiResponse));
-  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
+  {
+    name: "normalLevelCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ operatingLevelCode: "", operatingLevelCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      normalLevelCode: dropdownOptions,
+    },
+    case: "normalLevelCode",
+    function: dmApi.getAllOperatingLevelCodes,
+  },
 
-  const apiResponse = await dmApi.getAllUnitsOfMeasureCodes();
-  expect(apiResponse.data).toEqual(expectedApiResponse.data);
+  {
+    name: "secondLevelCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ operatingLevelCode: "", operatingLevelCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      secondLevelCode: dropdownOptions,
+    },
+    case: "secondLevelCode",
+    function: dmApi.getAllOperatingLevelCodes,
+  },
+];
 
-  UseRetrieveDropdownApi(["defaultUnitsOfMeasureCode"]).then(
-    (dropdownOptions) => {
-      expect(dropdownOptions).toEqual(expectedDropdownOptions);
-    }
-  );
-});
-
-test("tests spanUnitsOfMeasureCode", async () => {
-  const expectedApiResponse = {
-    status: 201,
-    data: [{ unitsOfMeasureCode: "", unitsOfMeasureCodeDescription: "" }],
-  };
-  const expectedDropdownOptions = {
-    spanUnitsOfMeasureCode: [
-      { code: "", name: "-- Select a value --" },
-      { code: "", name: "" },
-    ],
-  };
-  axios.get.mockImplementation(() => Promise.resolve(expectedApiResponse));
-  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
-
-  const apiResponse = await dmApi.getAllUnitsOfMeasureCodes();
-  expect(apiResponse.data).toEqual(expectedApiResponse.data);
-
-  UseRetrieveDropdownApi(["spanUnitsOfMeasureCode"]).then((dropdownOptions) => {
-    expect(dropdownOptions).toEqual(expectedDropdownOptions);
-  });
-});
-
-test("tests maximumLoadUnitsOfMeasureCode", async () => {
-  const expectedApiResponse = {
-    status: 201,
-    data: [{ unitsOfMeasureCode: "", unitsOfMeasureCodeDescription: "" }],
-  };
-  const expectedDropdownOptions = {
-    maximumLoadUnitsOfMeasureCode: [
-      { code: "", name: "-- Select a value --" },
-      { code: "", name: "" },
-    ],
-  };
-  axios.get.mockImplementation(() => Promise.resolve(expectedApiResponse));
-  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
-
-  const apiResponse = await dmApi.getAllUnitsOfMeasureCodes();
-  expect(apiResponse.data).toEqual(expectedApiResponse.data);
-
-  UseRetrieveDropdownApi(["maximumLoadUnitsOfMeasureCode"]).then(
-    (dropdownOptions) => {
-      expect(dropdownOptions).toEqual(expectedDropdownOptions);
-    }
-  );
-});
-
-test("tests systemFuelFlowUOMCode", async () => {
-  const expectedApiResponse = {
-    status: 201,
-    data: [{ unitsOfMeasureCode: "", unitsOfMeasureCodeDescription: "" }],
-  };
-  const expectedDropdownOptions = {
-    systemFuelFlowUOMCode: [
-      { code: "", name: "-- Select a value --" },
-      { code: "", name: "" },
-    ],
-  };
-  axios.get.mockImplementation(() => Promise.resolve(expectedApiResponse));
-  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
-
-  const apiResponse = await dmApi.getAllUnitsOfMeasureCodes();
-  expect(apiResponse.data).toEqual(expectedApiResponse.data);
-
-  UseRetrieveDropdownApi(["systemFuelFlowUOMCode"]).then((dropdownOptions) => {
-    expect(dropdownOptions).toEqual(expectedDropdownOptions);
-  });
-});
-
-test("tests unitsOfStandard", async () => {
-  const expectedApiResponse = {
-    status: 201,
-    data: [{ unitsOfMeasureCode: "", unitsOfMeasureCodeDescription: "" }],
-  };
-  const expectedDropdownOptions = {
-    unitsOfStandard: [
-      { code: "", name: "-- Select a value --" },
-      { code: "", name: "" },
-    ],
-  };
-  axios.get.mockImplementation(() => Promise.resolve(expectedApiResponse));
-  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
-
-  const apiResponse = await dmApi.getAllUnitsOfMeasureCodes();
-  expect(apiResponse.data).toEqual(expectedApiResponse.data);
-
-  UseRetrieveDropdownApi(["unitsOfStandard"]).then((dropdownOptions) => {
-    expect(dropdownOptions).toEqual(expectedDropdownOptions);
-  });
-});
-
-test("tests fuelType", async () => {
-  const expectedApiResponse = {
-    status: 201,
-    data: [{ fuelTypeCode: "", fuelTypeDescription: "" }],
-  };
-  const expectedDropdownOptions = {
-    fuelCode: [
-      { code: "", name: "-- Select a value --" },
-      { code: "", name: "" },
-    ],
-  };
-  axios.get.mockImplementation(() => Promise.resolve(expectedApiResponse));
-  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
-
-  const apiResponse = await dmApi.getAllFuelTypes();
-  expect(apiResponse.data).toEqual(expectedApiResponse.data);
-
-  UseRetrieveDropdownApi(["fuelType"]).then((dropdownOptions) => {
-    expect(dropdownOptions).toEqual(expectedDropdownOptions);
-  });
-});
-
-test("tests fuelCode", async () => {
-  const expectedApiResponse = {
-    status: 201,
-    data: [{ fuelCode: "", fuelCodeDescription: "" }],
-  };
-  const expectedDropdownOptions = {
-    fuelCode: [
-      { code: "", name: "-- Select a value --" },
-      { code: "", name: "" },
-    ],
-  };
-  axios.get.mockImplementation(() => Promise.resolve(expectedApiResponse));
-  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
-
-  const apiResponse = await dmApi.getAllFuelCodes();
-  expect(apiResponse.data).toEqual(expectedApiResponse.data);
-
-  UseRetrieveDropdownApi(["fuelCode"]).then((dropdownOptions) => {
-    expect(dropdownOptions).toEqual(expectedDropdownOptions);
-  });
-});
-
-test("tests indicatorCode", async () => {
-  const expectedApiResponse = {
-    status: 201,
-    data: [{ fuelIndicatorCode: "", fuelIndicatorCodeDescription: "" }],
-  };
-  const expectedDropdownOptions = {
-    indicatorCode: [
-      { code: "", name: "-- Select a value --" },
-      { code: "", name: "" },
-    ],
-  };
-  axios.get.mockImplementation(() => Promise.resolve(expectedApiResponse));
-  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
-
-  const apiResponse = await dmApi.getAllFuelIndicatorCodes();
-  expect(apiResponse.data).toEqual(expectedApiResponse.data);
-
-  UseRetrieveDropdownApi(["indicatorCode"]).then((dropdownOptions) => {
-    expect(dropdownOptions).toEqual(expectedDropdownOptions);
-  });
-});
-
-test("tests demGCV", async () => {
-  const expectedApiResponse = {
-    status: 201,
-    data: [{ demMethodCode: "", demMethodCodeDescription: "" }],
-  };
-  const expectedDropdownOptions = {
-    demGCV: [
-      { code: "", name: "-- Select a value --" },
-      { code: "", name: "" },
-    ],
-  };
-  axios.get.mockImplementation(() => Promise.resolve(expectedApiResponse));
-  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
-
-  const apiResponse = await dmApi.getAllDemonstrationMethodCodes();
-  expect(apiResponse.data).toEqual(expectedApiResponse.data);
-
-  UseRetrieveDropdownApi(["demGCV"]).then((dropdownOptions) => {
-    expect(dropdownOptions).toEqual(expectedDropdownOptions);
-  });
-});
-
-test("tests demSO2", async () => {
-  const expectedApiResponse = {
-    status: 201,
-    data: [{ demMethodCode: "", demMethodCodeDescription: "" }],
-  };
-  const expectedDropdownOptions = {
-    demSO2: [
-      { code: "", name: "-- Select a value --" },
-      { code: "", name: "" },
-    ],
-  };
-  axios.get.mockImplementation(() => Promise.resolve(expectedApiResponse));
-  React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
-
-  const apiResponse = await dmApi.getAllDemonstrationMethodCodes();
-  expect(apiResponse.data).toEqual(expectedApiResponse.data);
-
-  UseRetrieveDropdownApi(["demSO2"]).then((dropdownOptions) => {
-    expect(dropdownOptions).toEqual(expectedDropdownOptions);
-  });
-});
+executeTests();
