@@ -1,9 +1,9 @@
-import axios from 'axios';
-import { handleResponse, handleError } from './apiUtils';
-import config from '../../config';
+import axios from "axios";
+import { handleResponse, handleError } from "./apiUtils";
+import config from "../../config";
 
 axios.defaults.headers.common = {
-  'x-api-key': config.app.apiKey,
+  "x-api-key": config.app.apiKey,
 };
 
 export const getAllControlTechnologies = async () => {
@@ -312,6 +312,13 @@ export const getPrefilteredDefaults = async () => {
 export const getPrefilteredLoads = async () => {
   return axios
     .get(`${config.services.mdm.uri}/relationships/loads`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const prefilteredLEEQualifications = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/relationships/lee-qualifications`)
     .then(handleResponse)
     .catch(handleError);
 };

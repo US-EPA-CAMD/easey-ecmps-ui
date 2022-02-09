@@ -26,6 +26,11 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
     totalOptions = newData;
   };
 
+  const setStaticDropdown = (data, fieldName) => {
+    const prefilteredMdmOptions = organizeStaticPrefilterMDMData(data);
+    setDefaultOptions(prefilteredMdmOptions, fieldName, false);
+  };
+
   for (const fieldName of dropDownFields) {
     let options = [];
     switch (fieldName) {
@@ -670,15 +675,20 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         break;
 
       case "prefilteredLoads":
-      case "prefilteredUnitFuels":
         await dmApi.getPrefilteredLoads().then((response) => {
-          const prefilteredMdmOptions = organizeStaticPrefilterMDMData(
-            response.data
-          );
-          setDefaultOptions(prefilteredMdmOptions, fieldName, false);
+          setStaticDropdown(response.data, fieldName);
         });
         break;
-
+      case "prefilteredUnitFuels":
+        await dmApi.getPrefilteredUnitFuels().then((response) => {
+          setStaticDropdown(response.data, fieldName);
+        });
+        break;
+      case "prefilteredLEEQualifications":
+        await dmApi.prefilteredLEEQualifications().then((response) => {
+          setStaticDropdown(response.data, fieldName);
+        });
+        break;
       default:
         break;
     }
