@@ -1,4 +1,7 @@
-import { UseRetrieveDropdownApi } from "./retrieve-dropdown-api";
+import {
+  UseRetrieveDropdownApi,
+  dataYearOptions,
+} from "./retrieve-dropdown-api";
 import React from "react";
 import * as dmApi from "../utils/api/dataManagementApi";
 import axios from "axios";
@@ -9,6 +12,29 @@ afterAll(() => {
 });
 
 const successCode = 201;
+
+const addDataYears = () => {
+  const currYear = new Date().getFullYear();
+  const maxYear = currYear + 2;
+  const minYear = 2000;
+  let availableYears = [];
+
+  for (let i = minYear; i <= maxYear; i++) {
+    availableYears.push(i);
+  }
+  return availableYears;
+};
+
+const dataYears = addDataYears();
+
+const dataYearDropdownOptions = dataYears.map((year) => {
+  return {
+    code: year.toString(),
+    name: year.toString(),
+  };
+});
+
+dataYearDropdownOptions.unshift({ code: "", name: "-- Select a value --" });
 
 const dropdownOptions = [
   { code: "", name: "-- Select a value --" },
@@ -25,14 +51,25 @@ const executeTests = () => {
       React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
 
       const apiResponse = await testObject.function();
-      expect(apiResponse.data).toEqual(testObject.expectedApiResponse.data);
+      if (!testObject.yearsDropdown) {
+        expect(apiResponse.data).toEqual(testObject.expectedApiResponse.data);
 
-      UseRetrieveDropdownApi(
-        [testObject.case],
-        testObject.mats ? testObject.mats : false
-      ).then((dropdownOptions) => {
-        expect(dropdownOptions).toEqual(testObject.expectedDropdownOptions);
-      });
+        UseRetrieveDropdownApi(
+          [testObject.case],
+          testObject.mats ? testObject.mats : false
+        ).then((dropdownOptions) => {
+          expect(dropdownOptions).toEqual(testObject.expectedDropdownOptions);
+        });
+      } else {
+        expect(apiResponse).toEqual(testObject.expectedApiResponse.data);
+
+        UseRetrieveDropdownApi(
+          [testObject.case],
+          testObject.mats ? testObject.mats : false
+        ).then((dropdownOptions) => {
+          expect(dropdownOptions).toEqual(testObject.expectedDropdownOptions);
+        });
+      }
     });
   });
 };
@@ -411,6 +448,247 @@ const testObjects = [
     },
     case: "secondLevelCode",
     function: dmApi.getAllOperatingLevelCodes,
+  },
+
+  {
+    name: "operatingConditionCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [
+        { operatingConditionCode: "", operatingConditionCodeDescription: "" },
+      ],
+    },
+    expectedDropdownOptions: {
+      operatingConditionCode: dropdownOptions,
+    },
+    case: "operatingConditionCode",
+    function: dmApi.getAllOperatingConditionCodes,
+  },
+
+  {
+    name: "defaultSourceCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ defaultSourceCode: "", defaultSourceCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      defaultSourceCode: dropdownOptions,
+    },
+    case: "defaultSourceCode",
+    function: dmApi.getAllDefaultSourceCodes,
+  },
+
+  {
+    name: "defaultPurposeCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ defaultPurposeCode: "", defaultPurposeCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      defaultPurposeCode: dropdownOptions,
+    },
+    case: "defaultPurposeCode",
+    function: dmApi.getAllDefaultPurposeCodes,
+  },
+
+  {
+    name: "formulaCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ equationCode: "", equationCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      formulaCode: dropdownOptions,
+    },
+    case: "formulaCode",
+    function: dmApi.getAllFormulaCodes,
+  },
+
+  {
+    name: "wafMethodCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ wafMethodCode: "", wafMethodCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      wafMethodCode: dropdownOptions,
+    },
+    case: "wafMethodCode",
+    function: dmApi.getAllRectangularDuctsCodes,
+  },
+
+  {
+    name: "controlCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ controlCode: "", controlDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      controlCode: dropdownOptions,
+    },
+    case: "controlCode",
+    function: dmApi.getAllControlTechnologies,
+  },
+
+  {
+    name: "qualificationTypeCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ qualTypeCode: "", qualTypeCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      qualificationTypeCode: dropdownOptions,
+    },
+    case: "qualificationTypeCode",
+    function: dmApi.getAllQualificationTypeCodes,
+  },
+
+  {
+    name: "qualificationYear",
+    expectedApiResponse: {
+      status: successCode,
+      data: dataYears,
+    },
+    expectedDropdownOptions: {
+      qualificationYear: dataYearDropdownOptions,
+    },
+    case: "qualificationYear",
+    function: dataYearOptions,
+    yearsDropdown: true,
+  },
+
+  {
+    name: "yr1QualificationDataYear",
+    expectedApiResponse: {
+      status: successCode,
+      data: dataYears,
+    },
+    expectedDropdownOptions: {
+      yr1QualificationDataYear: dataYearDropdownOptions,
+    },
+    case: "yr1QualificationDataYear",
+    function: dataYearOptions,
+    yearsDropdown: true,
+  },
+
+  {
+    name: "yr2QualificationDataYear",
+    expectedApiResponse: {
+      status: successCode,
+      data: dataYears,
+    },
+    expectedDropdownOptions: {
+      yr2QualificationDataYear: dataYearDropdownOptions,
+    },
+    case: "yr2QualificationDataYear",
+    function: dataYearOptions,
+    yearsDropdown: true,
+  },
+
+  {
+    name: "yr3QualificationDataYear",
+    expectedApiResponse: {
+      status: successCode,
+      data: dataYears,
+    },
+    expectedDropdownOptions: {
+      yr3QualificationDataYear: dataYearDropdownOptions,
+    },
+    case: "yr3QualificationDataYear",
+    function: dataYearOptions,
+    yearsDropdown: true,
+  },
+
+  {
+    name: "qualificationDataYear",
+    expectedApiResponse: {
+      status: successCode,
+      data: dataYears,
+    },
+    expectedDropdownOptions: {
+      qualificationDataYear: dataYearDropdownOptions,
+    },
+    case: "qualificationDataYear",
+    function: dataYearOptions,
+    yearsDropdown: true,
+  },
+
+  {
+    name: "yr1QualificationDataTypeCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ qualDataTypeCode: "", qualDataTypeCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      yr1QualificationDataTypeCode: dropdownOptions,
+    },
+    case: "yr1QualificationDataTypeCode",
+    function: dmApi.getAllQualificationDataTypeCodes,
+  },
+
+  {
+    name: "yr2QualificationDataTypeCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ qualDataTypeCode: "", qualDataTypeCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      yr2QualificationDataTypeCode: dropdownOptions,
+    },
+    case: "yr2QualificationDataTypeCode",
+    function: dmApi.getAllQualificationDataTypeCodes,
+  },
+
+  {
+    name: "yr3QualificationDataTypeCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ qualDataTypeCode: "", qualDataTypeCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      yr3QualificationDataTypeCode: dropdownOptions,
+    },
+    case: "yr3QualificationDataTypeCode",
+    function: dmApi.getAllQualificationDataTypeCodes,
+  },
+
+  {
+    name: "qualificationTestType",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ qualLeeTestTypeCode: "", qualLeeTestTypeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      qualificationTestType: dropdownOptions,
+    },
+    case: "qualificationTestType",
+    function: dmApi.getAllQualificationLEETestTypeCodes,
+  },
+
+  {
+    name: "materialCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ materialCode: "", materialCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      materialCode: dropdownOptions,
+    },
+    case: "materialCode",
+    function: dmApi.getAllMaterialCodes,
+  },
+
+  {
+    name: "shapeCode",
+    expectedApiResponse: {
+      status: successCode,
+      data: [{ shapeCode: "", shapeCodeDescription: "" }],
+    },
+    expectedDropdownOptions: {
+      shapeCode: dropdownOptions,
+    },
+    case: "shapeCode",
+    function: dmApi.getAllShapeCodes,
   },
 ];
 

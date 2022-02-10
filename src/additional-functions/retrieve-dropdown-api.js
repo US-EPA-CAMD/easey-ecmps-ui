@@ -1,19 +1,19 @@
 import * as dmApi from "../utils/api/dataManagementApi";
 
+export const dataYearOptions = async () => {
+  const currYear = new Date().getFullYear();
+  const maxYear = currYear + 2;
+  const minYear = 2000;
+  let availableYears = [];
+
+  for (let i = minYear; i <= maxYear; i++) {
+    availableYears.push(i);
+  }
+  return availableYears;
+};
+
 export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
   let totalOptions = {};
-
-  const dataYearOptions = async () => {
-    const currYear = new Date().getFullYear();
-    const maxYear = currYear + 2;
-    const minYear = 2000;
-    let availableYears = [];
-
-    for (let i = minYear; i <= maxYear; i++) {
-      availableYears.push(i);
-    }
-    return availableYears;
-  };
 
   const setDefaultOptions = (items, field, select = true) => {
     if (select) {
