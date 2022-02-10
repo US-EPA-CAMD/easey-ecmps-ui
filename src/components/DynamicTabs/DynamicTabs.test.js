@@ -1,5 +1,5 @@
 import React from "react";
-import { DynamicTabs, mapDispatchToProps } from "./DynamicTabs";
+import { DynamicTabs, mapDispatchToProps,mapStateToProps } from "./DynamicTabs";
 import { render, fireEvent, screen } from "@testing-library/react";
 // import {
 //   addFacilityTab,

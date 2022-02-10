@@ -44,7 +44,12 @@ export const DataTableLEEQualifications = ({
   const [selectedModalData, setSelectedModalData] = useState([]);
 
   const dropdownArray = [
-    ["parameterCode", "qualificationTestType", "unitsOfStandard"],
+    [
+      "parameterCode",
+      "qualificationTestType",
+      "unitsOfStandard",
+      "prefilteredLEEQualifications",
+    ],
   ];
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
@@ -116,14 +121,23 @@ export const DataTableLEEQualifications = ({
       setSelectedQualLee(leeData);
     }
 
+    const prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
+    const mainDropdownName = "";
+    const staticDropdownFlag = true;
+    const mainDropdownResult = [];
+
     setSelectedModalData(
       modalViewData(
         leeData,
         {
           qualificationTestDate: ["Qualification Test Date", "date", ""],
           skip: ["", "skip", ""],
-          parameterCode: ["Parameter Code", "dropdown", ""],
-          qualificationTestType: ["Qualification Test Type", "dropdown", ""],
+          parameterCode: ["Parameter Code", "independentDropdown", ""],
+          qualificationTestType: [
+            "Qualification Test Type",
+            "independentDropdown",
+            "",
+          ],
           potentialAnnualHgMassEmissions: [
             "Potential Annual Hg Mass Emissions",
             "input",
@@ -134,7 +148,7 @@ export const DataTableLEEQualifications = ({
             "input",
             "",
           ],
-          unitsOfStandard: ["Units of Standard", "dropdown", ""],
+          unitsOfStandard: ["Units of Standard", "independentDropdown", ""],
           percentageOfEmissionStandard: [
             "Percentage of Emission Standard",
             "input",
@@ -143,7 +157,12 @@ export const DataTableLEEQualifications = ({
         },
         {},
         create,
-        mdmData
+        mdmData,
+        prefilteredDataName ? mdmData[prefilteredDataName] : "",
+        mainDropdownName,
+        mainDropdownResult,
+        staticDropdownFlag,
+        prefilteredDataName
       )
     );
 

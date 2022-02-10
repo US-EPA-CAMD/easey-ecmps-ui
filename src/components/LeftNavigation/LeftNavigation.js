@@ -3,7 +3,7 @@ import { SideNav, Link as USWDSLink } from "@trussworks/react-uswds";
 
 import { Link } from "react-router-dom";
 
-import { head, workSpace } from "../../utils/constants/menuTopics";
+import { globalView, workSpace, home } from "../../utils/constants/menuTopics";
 
 export const LeftNavigation = (props) => {
   const handleRouteChange = (event, url) => {
@@ -17,8 +17,7 @@ export const LeftNavigation = (props) => {
         <USWDSLink
           className={
             noActive
-              ? // currentRoute === item.url ||
-                props.currentLink === `/ecmps${item.url}` ||
+              ? props.currentLink === `/ecmps${item.url}` ||
                 props.currentLink === item.url
                 ? "usa-current text-no-wrap"
                 : "text-no-wrap"
@@ -75,17 +74,15 @@ export const LeftNavigation = (props) => {
   ];
   return (
     <div className="minh-tablet font-body-sm padding-3">
-      {props.currentLink ? (
-        <SideNav items={makeHeader(head, true, false)} />
-      ) : (
-        <SideNav items={makeHeader(head, false, false)} />
-      )}
-
-      {props.user ? (
-        <div className="margin-top-7">
+        {props.user ? (
+        <div>
+          <SideNav items={makeHeader(home, true, false)} />
           <SideNav items={wsItems} />
-        </div>
-      ) : null}
+        </div>)
+      : (<div>
+          <SideNav items={makeHeader(home, true, false)} />
+          <SideNav items={makeHeader(globalView, true, false)} />
+        </div>)}
     </div>
   );
 };
