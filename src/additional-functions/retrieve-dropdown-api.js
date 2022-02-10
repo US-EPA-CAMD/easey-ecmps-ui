@@ -745,7 +745,6 @@ const organizePrefilterMDMData = (noDupesFormCodes, drivingInput, response) => {
       (element) => element[drivingInput] === code
     );
 
-    console.log("test 750");
     let setOfSecondaryDropdownArrayCodes = {};
 
     // finds the secondary dropdown property names and makes array and pushes into object above
@@ -772,7 +771,6 @@ const organizePrefilterMDMData = (noDupesFormCodes, drivingInput, response) => {
         }
       }
     });
-    console.log("test 1150");
     const organizedMDMrow = {};
     organizedMDMrow[drivingInput] = code;
     // creates returning object of
@@ -784,6 +782,5 @@ const organizePrefilterMDMData = (noDupesFormCodes, drivingInput, response) => {
 
     prefilteredMdmOptions.push(organizedMDMrow);
   }
-  console.log("test", prefilteredMdmOptions);
   return prefilteredMdmOptions;
 };
