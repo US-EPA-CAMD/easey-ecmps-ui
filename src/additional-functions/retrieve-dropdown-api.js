@@ -498,37 +498,11 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           // Filter out the duplicates
           noDupesMatsMethodCodes = [...new Set(noDupesMatsMethodCodes)];
 
-          const prefilteredMdmOptions = [];
-
-          // For each unique parameter code...
-          for (const code of noDupesMatsMethodCodes) {
-            // Find the records from the view that have that parameter code
-            const filteredArray = viewData.filter(
-              (element) => element.supplementalMATSParameterCode === code
-            );
-
-            // Gather all formula codes from those records
-            let methodCodeArray = [];
-
-            // *** rest of sub-arrays
-            filteredArray.forEach((element) => {
-              methodCodeArray.push(
-                element.supplementalMATSMonitoringMethodCode
-              );
-            });
-
-            // Find the distinct ones
-            methodCodeArray = [...new Set(methodCodeArray)];
-
-            // Pair the current parameter code with the list of matching formula codes
-            const organizedMDMrow = {};
-            organizedMDMrow["supplementalMATSParameterCode"] = code;
-            organizedMDMrow["supplementalMATSMonitoringMethodCode"] =
-              methodCodeArray;
-
-            // Push this object (containing the pairing) to the array
-            prefilteredMdmOptions.push(organizedMDMrow);
-          }
+          const prefilteredMdmOptions = organizePrefilterMDMData(
+            noDupesMatsMethodCodes,
+            "supplementalMATSParameterCode",
+            response.data
+          );
 
           // Afterwards, we should have an array that has all the possible formula codes for each parameter code
           setDefaultOptions(prefilteredMdmOptions, fieldName);
@@ -549,42 +523,11 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           // Filter out the duplicates
           noDupesMethodCodes = [...new Set(noDupesMethodCodes)];
 
-          const prefilteredMdmOptions = [];
-
-          // For each unique parameter code...
-          for (const code of noDupesMethodCodes) {
-            // Find the records from the view that have that parameter code
-            const filteredArray = viewData.filter(
-              (element) => element.parameterCode === code
-            );
-
-            // Gather all formula codes from those records
-            let methodCodeArray = [];
-            let substituteDataCodeArray = [];
-            let bypassApproachCodeArray = [];
-
-            // *** rest of sub-arrays
-            filteredArray.forEach((element) => {
-              methodCodeArray.push(element.monitoringMethodCode);
-              substituteDataCodeArray.push(element.substituteDataCode);
-              bypassApproachCodeArray.push(element.bypassApproachCode);
-            });
-
-            // Find the distinct ones
-            methodCodeArray = [...new Set(methodCodeArray)];
-            substituteDataCodeArray = [...new Set(substituteDataCodeArray)];
-            bypassApproachCodeArray = [...new Set(bypassApproachCodeArray)];
-
-            // Pair the current parameter code with the list of matching formula codes
-            const organizedMDMrow = {};
-            organizedMDMrow["parameterCode"] = code;
-            organizedMDMrow["monitoringMethodCode"] = methodCodeArray;
-            organizedMDMrow["substituteDataCode"] = substituteDataCodeArray;
-            organizedMDMrow["bypassApproachCode"] = bypassApproachCodeArray;
-
-            // Push this object (containing the pairing) to the array
-            prefilteredMdmOptions.push(organizedMDMrow);
-          }
+          const prefilteredMdmOptions = organizePrefilterMDMData(
+            noDupesMethodCodes,
+            "parameterCode",
+            response.data
+          );
 
           // Afterwards, we should have an array that has all the possible formula codes for each parameter code
           setDefaultOptions(prefilteredMdmOptions, fieldName);
@@ -592,46 +535,24 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         break;
 
       case "prefilteredFormulas":
-        let noDupesFormCodes = [];
+        let noDupesFormulaCodes = [];
         // returns all the parameter codes
         await dmApi.getPrefilteredFormulas().then((response) => {
           const viewData = response.data;
 
           // Get parameter codes
-          noDupesFormCodes = viewData.map((code) => {
+          noDupesFormulaCodes = viewData.map((code) => {
             return code["parameterCode"];
           });
 
           // Filter out the duplicates
-          noDupesFormCodes = [...new Set(noDupesFormCodes)];
+          noDupesFormulaCodes = [...new Set(noDupesFormulaCodes)];
 
-          const prefilteredMdmOptions = [];
-
-          // For each unique parameter code...
-          for (const code of noDupesFormCodes) {
-            // Find the records from the view that have that parameter code
-            const filteredArray = viewData.filter(
-              (element) => element.parameterCode === code
-            );
-
-            // Gather all formula codes from those records
-            let formulaCodeArray = [];
-            // *** rest of sub-arrays
-            filteredArray.forEach((element) => {
-              formulaCodeArray.push(element.formulaCode);
-            });
-
-            // Find the distinct ones
-            formulaCodeArray = [...new Set(formulaCodeArray)];
-
-            // Pair the current parameter code with the list of matching formula codes
-            const organizedMDMrow = {};
-            organizedMDMrow["parameterCode"] = code;
-            organizedMDMrow["formulaCode"] = formulaCodeArray;
-
-            // Push this object (containing the pairing) to the array
-            prefilteredMdmOptions.push(organizedMDMrow);
-          }
+          const prefilteredMdmOptions = organizePrefilterMDMData(
+            noDupesFormulaCodes,
+            "parameterCode",
+            response.data
+          );
 
           // Afterwards, we should have an array that has all the possible formula codes for each parameter code
           setDefaultOptions(prefilteredMdmOptions, fieldName);
@@ -639,16 +560,16 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         break;
 
       case "prefilteredSpans":
-        let noDupesFormCodesSpans = [];
+        let noDupesSpanCodes = [];
         await dmApi.getPrefilteredSpans().then((response) => {
-          noDupesFormCodesSpans = response.data.map((code) => {
+          noDupesSpanCodes = response.data.map((code) => {
             return code["componentTypeCode"];
           });
 
-          noDupesFormCodesSpans = [...new Set(noDupesFormCodesSpans)];
+          noDupesSpanCodes = [...new Set(noDupesSpanCodes)];
 
           const prefilteredMdmOptions = organizePrefilterMDMData(
-            noDupesFormCodesSpans,
+            noDupesSpanCodes,
             "componentTypeCode",
             response.data
           );
@@ -657,16 +578,16 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
         });
         break;
       case "prefilteredDefaults":
-        let noDupesFormCodesDefaults = [];
+        let noDupesDefaultCodes = [];
         await dmApi.getPrefilteredDefaults().then((response) => {
-          noDupesFormCodesDefaults = response.data.map((code) => {
+          noDupesDefaultCodes = response.data.map((code) => {
             return code["parameterCode"];
           });
 
-          noDupesFormCodesDefaults = [...new Set(noDupesFormCodesDefaults)];
+          noDupesDefaultCodes = [...new Set(noDupesDefaultCodes)];
 
           const prefilteredMdmOptions = organizePrefilterMDMData(
-            noDupesFormCodesDefaults,
+            noDupesDefaultCodes,
             "parameterCode",
             response.data
           );

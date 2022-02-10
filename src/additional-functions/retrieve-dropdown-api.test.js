@@ -2,7 +2,6 @@ import {
   UseRetrieveDropdownApi,
   dataYearOptions,
 } from "./retrieve-dropdown-api";
-import React from "react";
 import * as dmApi from "../utils/api/dataManagementApi";
 import axios from "axios";
 jest.mock("axios");
@@ -41,27 +40,54 @@ const dropdownOptions = [
   { code: "", name: "" },
 ];
 
+const prefilterReturnedArray = [{ shapeCode: "", shapeCodeDescription: "" }];
+
+beforeAll(() => {
+  jest.clearAllMocks();
+});
+
 // Iterates through the testObjects array to test all of the cases in the switch statement
 const executeTests = () => {
   testObjects.forEach((testObject) => {
+    // execute test with parameters from current test object
     test(`testing ${testObject.name}`, async () => {
-      axios.get.mockImplementation(() =>
-        Promise.resolve(testObject.expectedApiResponse)
-      );
-      React.useState = jest.fn().mockReturnValueOnce([{}, {}]);
-
-      const apiResponse = await testObject.function();
-      if (!testObject.yearsDropdown) {
-        expect(apiResponse.data).toEqual(testObject.expectedApiResponse.data);
+      // Testing prefilter dropdowns
+      if (testObject.dynamicPrefilterDropdown) {
+        const prefilterResponse = await testObject.function();
+        const viewData = prefilterResponse.data;
+        expect(viewData).toEqual(prefilterReturnedArray);
 
         UseRetrieveDropdownApi(
           [testObject.case],
           testObject.mats ? testObject.mats : false
         ).then((dropdownOptions) => {
-          expect(dropdownOptions).toEqual(testObject.expectedDropdownOptions);
+          expect(dropdownOptions).toHaveProperty(testObject.case);
         });
-      } else {
-        expect(apiResponse).toEqual(testObject.expectedApiResponse.data);
+      } else if (testObject.staticPrefilterDropdown) {
+        UseRetrieveDropdownApi(
+          [testObject.case],
+          testObject.mats ? testObject.mats : false
+        ).then((dropdownOptions) => {
+          expect(dropdownOptions).toHaveProperty(testObject.case);
+        });
+      }
+
+      // Testing...
+      else {
+        axios.get.mockImplementation(() =>
+          Promise.resolve(testObject.expectedApiResponse)
+        );
+        const apiResponse = await testObject.function();
+
+        // ... Normal dropdowns
+        if (!testObject.yearDropdown) {
+          expect(apiResponse.data).toEqual(testObject.expectedApiResponse.data);
+        }
+
+        // ... Data year dropdowns
+        else {
+          expect(apiResponse).toEqual(testObject.expectedApiResponse.data);
+        }
 
         UseRetrieveDropdownApi(
           [testObject.case],
@@ -75,12 +101,15 @@ const executeTests = () => {
 };
 
 // After adding a new case in retrieve-dropdown-api.js, all you need to do is add a new test object following the current structure:
-//    - name:                     this text appears when you run the test
-//    - expectedApiResponse:      mock response with the properties that will be returned
-//    - expectedDropdownOptions:  options object containing name of the field in the UI
-//    - case:                     the fieldName used in the switch statement in retrieve-dropdown-api.js
-//    - mats:                     MATS flag set to true (optional)
-//    - function:                 function called in dataManagementApi.js
+//    - name:                           this text appears when you run the test
+//    - expectedApiResponse:            mock response with the properties that will be returned
+//    - expectedDropdownOptions:        options object containing name of the field in the UI
+//    - case:                           the fieldName used in the switch statement in retrieve-dropdown-api.js
+//    - mats:                           MATS flag set to true (optional)
+//    - function:                       function called in dataManagementApi.js
+//    - yearDropdown:                   flag to indicate a data year dropdown
+//    - dynamicPrefilterDropdown:       flag to indicate a dynamic prefilter dropdown
+//    - staticPrefilterDropdown:        flag to indicate a dynamic prefilter dropdown
 const testObjects = [
   {
     name: "parameter Code for non-MATS",
@@ -554,7 +583,7 @@ const testObjects = [
     },
     case: "qualificationYear",
     function: dataYearOptions,
-    yearsDropdown: true,
+    yearDropdown: true,
   },
 
   {
@@ -568,7 +597,7 @@ const testObjects = [
     },
     case: "yr1QualificationDataYear",
     function: dataYearOptions,
-    yearsDropdown: true,
+    yearDropdown: true,
   },
 
   {
@@ -582,7 +611,7 @@ const testObjects = [
     },
     case: "yr2QualificationDataYear",
     function: dataYearOptions,
-    yearsDropdown: true,
+    yearDropdown: true,
   },
 
   {
@@ -596,7 +625,7 @@ const testObjects = [
     },
     case: "yr3QualificationDataYear",
     function: dataYearOptions,
-    yearsDropdown: true,
+    yearDropdown: true,
   },
 
   {
@@ -610,7 +639,7 @@ const testObjects = [
     },
     case: "qualificationDataYear",
     function: dataYearOptions,
-    yearsDropdown: true,
+    yearDropdown: true,
   },
 
   {
@@ -689,6 +718,62 @@ const testObjects = [
     },
     case: "shapeCode",
     function: dmApi.getAllShapeCodes,
+  },
+
+  {
+    name: "prefilteredMatsMethods",
+    case: "prefilteredMatsMethods",
+    function: dmApi.getPrefilteredMatsMethods,
+    dynamicPrefilterDropdown: true,
+  },
+
+  {
+    name: "prefilteredMethods",
+    case: "prefilteredMethods",
+    function: dmApi.getPrefilteredMethods,
+    dynamicPrefilterDropdown: true,
+  },
+
+  {
+    name: "prefilteredFormulas",
+    case: "prefilteredFormulas",
+    function: dmApi.getPrefilteredFormulas,
+    dynamicPrefilterDropdown: true,
+  },
+
+  {
+    name: "prefilteredSpans",
+    case: "prefilteredSpans",
+    function: dmApi.getPrefilteredSpans,
+    dynamicPrefilterDropdown: true,
+  },
+
+  {
+    name: "prefilteredDefaults",
+    case: "prefilteredDefaults",
+    function: dmApi.getPrefilteredDefaults,
+    dynamicPrefilterDropdown: true,
+  },
+
+  {
+    name: "prefilteredLoads",
+    case: "prefilteredLoads",
+    function: dmApi.getPrefilteredLoads,
+    dynamicPrefilterDropdown: true,
+  },
+
+  {
+    name: "prefilteredUnitFuels",
+    case: "prefilteredUnitFuels",
+    function: dmApi.getPrefilteredUnitFuels,
+    dynamicPrefilterDropdown: true,
+  },
+
+  {
+    name: "prefilteredLEEQualifications",
+    case: "prefilteredLEEQualifications",
+    function: dmApi.prefilteredLEEQualifications,
+    dynamicPrefilterDropdown: true,
   },
 ];
 
