@@ -329,3 +329,10 @@ export const getPrefilteredUnitFuels = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+export const getPrefilteredUnitControls = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/relationships/unit-controls`)
+    .then(handleResponse)
+    .catch(handleError);
+};
