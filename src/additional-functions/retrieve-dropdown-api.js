@@ -684,6 +684,22 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           setStaticDropdown(response.data, fieldName);
         });
         break;
+      case "prefilteredUnitControls":
+        let noDupesFormCodesControls = [];
+        await dmApi.getPrefilteredUnitControls().then((response) => {
+          noDupesFormCodesControls = response.data.map((code) => {
+            return code["parameterCode"];
+          });
+          noDupesFormCodesControls = [...new Set(noDupesFormCodesControls)];
+          const prefilteredMdmOptions = organizePrefilterMDMData(
+            noDupesFormCodesControls,
+            "parameterCode",
+            response.data
+          );
+          setDefaultOptions(prefilteredMdmOptions, fieldName);
+        });
+        break;
+
       case "prefilteredLEEQualifications":
         await dmApi.prefilteredLEEQualifications().then((response) => {
           setStaticDropdown(response.data, fieldName);
@@ -755,7 +771,6 @@ const organizePrefilterMDMData = (noDupesFormCodes, drivingInput, response) => {
         }
       }
     });
-
     const organizedMDMrow = {};
     organizedMDMrow[drivingInput] = code;
     // creates returning object of
