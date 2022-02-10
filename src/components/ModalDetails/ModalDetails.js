@@ -37,6 +37,7 @@ const ModalDetails = ({
         found = true;
         if (input[2] === "") {
           setShowInitialHelpText(true);
+          setMainDropdownUntouched(true);
         } else {
           setShowInitialHelpText(false);
         }
@@ -69,7 +70,7 @@ const ModalDetails = ({
   const selectedDropdownText = `Changing the selection for the '${mainDropdown}' field shall update the dropdown options available for the other fields.`;
 
   const [mainDropdownUntouched, setMainDropdownUntouched] =
-    useState(hasMainDropdown);
+    useState(false);
 
   // fixes rare instances where there is an enddate but no end time
   if (
