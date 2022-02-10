@@ -759,20 +759,27 @@ const testObjects = [
     name: "prefilteredLoads",
     case: "prefilteredLoads",
     function: dmApi.getPrefilteredLoads,
-    dynamicPrefilterDropdown: true,
+    staticPrefilterDropdown: true,
   },
 
   {
     name: "prefilteredUnitFuels",
     case: "prefilteredUnitFuels",
     function: dmApi.getPrefilteredUnitFuels,
-    dynamicPrefilterDropdown: true,
+    staticPrefilterDropdown: true,
   },
 
   {
     name: "prefilteredLEEQualifications",
     case: "prefilteredLEEQualifications",
     function: dmApi.prefilteredLEEQualifications,
+    staticPrefilterDropdown: true,
+  },
+
+  {
+    name: "prefilteredUnitControls",
+    case: "prefilteredUnitControls",
+    function: dmApi.getPrefilteredUnitControls,
     dynamicPrefilterDropdown: true,
   },
 ];
