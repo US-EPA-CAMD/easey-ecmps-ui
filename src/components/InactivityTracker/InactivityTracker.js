@@ -12,9 +12,8 @@ import { ClearSharp } from "@material-ui/icons";
 import "../Modal/Modal.scss";
 
 const modalClassName = "modal-wrapper bg-base-lightest radius-md";
-const modalContext = createContext(null, null);
-const width = "50%";
-const left = "25%";
+const modalContext = createContext(null);
+const widthPercent = 50;
 const showCancel = true;
 
 export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
@@ -27,8 +26,7 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
 
   const checkInactivity = (inactivityDuration) => {
     if (inactivityDuration - timeInactive <= config.app.countdownDuration) {
-      // Display the countdown timer
-
+      // display the countdown timer if not already initiated
       if (window.countdownInitiated === false) {
         window.countdownInitiated = true;
         setShowInactiveModal(true);
@@ -37,8 +35,7 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
 
     if (timeInactive >= inactivityDuration) {
       resetUserInactivityTimer();
-
-      logOut(undefined);
+      logOut().then();
     }
   };
 
@@ -46,12 +43,6 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
     setTimeInactive(0);
     setShowInactiveModal(false);
     window.countdownInitiated = false;
-    /*
-    console.log(
-    mpApi.putLockTimerUpdateConfiguration(configID),
-    "api called"
-    );
-    */
   };
 
   useEffect(() => {
@@ -70,8 +61,7 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
   }, []);
 
   useInterval(() => {
-    // First check if a record is checked out
-
+    // first check if a record is checked out
     if (isFacilityCheckedOut()) {
       checkInactivity(config.app.inactivityDuration);
     } else {
@@ -82,7 +72,7 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
   }, config.app.activityPollingFrequency);
 
   return (
-    // in order to allow screenreader accessibility, the "Modal" component had to be copied
+    // in order to allow screen reader accessibility, the "Modal" component had to be copied
     // to create the inactivity timer modal inside of the aria-live region because
     // the shared modal file places the component inside portal using ReactDom.createPortal()
     <div>
@@ -94,8 +84,8 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
               <div
                 className={`${modalClassName} react-transition flip-in-x`}
                 style={{
-                  width: width,
-                  left: left,
+                  width: `${widthPercent}%`,
+                  left: `${(100 - widthPercent) / 2}`,
                 }}
               >
                 <div className="modal-content modal-color padding-y-3">
@@ -117,7 +107,7 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
                       aria-hidden={false}
                       aria-live="off"
                     />
-                    <div className="left-0 bottom-0 padding-2"></div>
+                    <div className="left-0 bottom-0 padding-2" />
                   </div>
                   <span className="break-line" />
                   <div className="modal-body padding-top-0 modal-color maxh-tablet overflow-y-auto margin-top-2">

@@ -1,13 +1,7 @@
-import React from "react";
 import * as axios from "axios";
 
-import { deleteCheckInMonitoringPlanConfiguration } from "../api/monitoringPlansApi";
-import {
-  authenticate,
-  refreshToken,
-  logOut,
-  secureAxios,
-} from "./easeyAuthApi";
+import { deleteCheckInMonitoringPlanConfiguration } from "./monitoringPlansApi";
+import { authenticate, refreshToken, logOut } from "./easeyAuthApi";
 import { getCheckedOutLocations } from "./monitoringPlansApi";
 // Mock out all top level functions, such as get, put, delete and post:
 
@@ -76,7 +70,6 @@ describe("Easey Auth API", () => {
         lastActivity: "2022-01-21T03:01:20.493Z",
       },
     ];
-    const userInfo = sessionStorage.getItem("cdx_user");
 
     // mocks getCheckedOutLocations
     axios.get.mockImplementation(() =>
@@ -124,7 +117,6 @@ describe("Easey Auth API", () => {
         lastActivity: "2022-01-21T03:01:20.493Z",
       },
     ];
-    const userInfo = sessionStorage.getItem("cdx_user");
 
     // mocks getCheckedOutLocations
     axios.get.mockImplementation(() =>
@@ -154,7 +146,7 @@ describe("Easey Auth API", () => {
       return Promise.reject(new Error("some error"));
     });
 
-    await logOut(null);
+    await logOut();
     expect(sessionStorage.getItem("cdx_user")).not.toBe(null);
   });
 });
