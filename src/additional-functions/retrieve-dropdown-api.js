@@ -68,11 +68,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
             };
           });
 
-<<<<<<< HEAD
           setDefaultOptions(options, "controlEquipParamCode");
-=======
-          setDefaultOptions(options, 'parameterCode');
->>>>>>> d91f0ac0d0279779bc0e640ef61668469d0d6946
         });
         break;
 
