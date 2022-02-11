@@ -91,7 +91,11 @@ export const DataTableSystemsComponents = ({
     useState(false);
 
   const fuelFlowsDataArray = [
-    ["maximumFuelFlowRateSourceCode", "systemFuelFlowUOMCode"],
+    [
+      "maximumFuelFlowRateSourceCode",
+      "systemFuelFlowUOMCode",
+      "prefilteredSystemFuelFlows",
+    ],
   ];
   const systemComponentsDataArray = [
     ["sampleAcquisitionMethodCode", "componentTypeCode", "basisCode"],
@@ -289,7 +293,8 @@ export const DataTableSystemsComponents = ({
     });
     setBread(true, "Component");
   };
-
+  const [prefilteredMdmDataFuelFlows, setPrefilteredMdmDataFuelFlows] =
+    useState(false);
   const openFuelFlows = (row, bool, create) => {
     let selectFuelFlows = null;
     setCreateFuelFlowFlag(create);
@@ -301,28 +306,47 @@ export const DataTableSystemsComponents = ({
       )[0];
       setSelectedFuelFlows(selectFuelFlows);
     }
+
+    // Get the name of the property of the correct array in mdmData (full data set)
+    const prefilteredDataName = "prefilteredSystemFuelFlows";
+
+    const mainDropdownResult = [];
+
+    setPrefilteredMdmDataFuelFlows(fuelFlowsMdmData[prefilteredDataName]);
+
     setSelectedFuelFlowsModalData(
       modalViewData(
         selectFuelFlows,
         {
-          maximumFuelFlowRate: ["Max Fuel Flow Rate", "input", ""],
-          systemFuelFlowUOMCode: ["Units of Measure Code", "dropdown", ""],
+          maximumFuelFlowRate: ["Max Fuel Flow Rate", "input", "", ""],
+          systemFuelFlowUOMCode: [
+            "Units of Measure Code",
+            "independentDropdown",
+            "",
+            "",
+          ],
           maximumFuelFlowRateSourceCode: [
             "Max Fuel Flow Rate Source",
-            "dropdown",
+            "independentDropdown",
+            "",
             "",
           ],
 
-          skip: ["", "skip", ""],
+          skip: ["", "skip", "", ""],
         },
         {
-          beginDate: ["Start Date", "date", ""],
-          beginHour: ["Start Time", "time", ""],
-          endDate: ["End Date", "date", ""],
-          endHour: ["End Time", "time", ""],
+          beginDate: ["Start Date", "date", "", ""],
+          beginHour: ["Start Time", "time", "", ""],
+          endDate: ["End Date", "date", "", ""],
+          endHour: ["End Time", "time", "", ""],
         },
         create,
-        fuelFlowsMdmData
+        fuelFlowsMdmData,
+        prefilteredDataName ? fuelFlowsMdmData[prefilteredDataName] : "",
+        "", // mainDropdownName'',
+        mainDropdownResult,
+        true, // staticDropdownFlag,
+        "prefilteredSystemFuelFlows" // "prefilteredTotalName"
       )
     );
     setTimeout(() => {
@@ -424,6 +448,7 @@ export const DataTableSystemsComponents = ({
               <ModalDetails
                 modalData={selectedFuelFlows}
                 backBtn={setBread}
+                prefilteredMdmData={prefilteredMdmDataFuelFlows}
                 data={selectedFuelFlowsModalData}
                 cols={2}
                 title={
