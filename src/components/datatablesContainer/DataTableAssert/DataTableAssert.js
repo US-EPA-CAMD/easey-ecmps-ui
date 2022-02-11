@@ -24,6 +24,7 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
+import { ContactSupportSharp } from "@material-ui/icons";
 
 export const DataTableAssert = ({
   mdmData,
@@ -284,9 +285,11 @@ export const DataTableAssert = ({
   useEffect(() => {
     const prefilteredDataName = dropdownArray[0][0];
     if (prefilteredMdmData) {
+      console.log('GOT CHANGED',prefilteredMdmData,prefilteredDataName,mainDropdownChange)
       const result = prefilteredMdmData.filter(
         (data) => data[prefilteredDataName] === mainDropdownChange
       );
+      console.log('result',result)
       if (result.length > 0) {
         for (const modalDetailData of selectedModalData) {
           if (modalDetailData[4] === "dropdown") {
@@ -336,6 +339,7 @@ export const DataTableAssert = ({
       prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
     }
 
+    console.log('prefilteredDataName',prefilteredDataName,mainDropdownName)
     let mainDropdownResult;
     if (mainDropdownName !== "" && staticDropdownFlag === false) {
       mainDropdownResult = mdmData[mainDropdownName].filter((o) =>

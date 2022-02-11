@@ -68,7 +68,7 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
             };
           });
 
-          setDefaultOptions(options, "parameterCode");
+          setDefaultOptions(options, "controlEquipParamCode");
         });
         break;
 
@@ -611,12 +611,26 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           noDupesFormCodesControls = response.data.map((code) => {
             return code["parameterCode"];
           });
+          options = response.data.map((option) => {
+            return {
+              "controlEquipParamCode": option["parameterCode"],
+              "controlCode": option["controlCode"],
+            };
+          });
           noDupesFormCodesControls = [...new Set(noDupesFormCodesControls)];
           const prefilteredMdmOptions = organizePrefilterMDMData(
             noDupesFormCodesControls,
-            "parameterCode",
-            response.data
+            "controlEquipParamCode",
+            options
           );
+
+          console.log(
+            "noDupesFormCodesControls",
+            noDupesFormCodesControls,
+            response.data,
+            options
+          );
+          console.log("prefilteredMdmOptions", prefilteredMdmOptions);
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         });
         break;

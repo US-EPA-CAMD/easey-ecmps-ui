@@ -322,7 +322,7 @@ export const unitControlDataTableProps = (location, selectedLocation) => {
       'Retire Date',
     ],
     controlInputs: {
-      parameterCode: ['Equipment Parameter Code', 'mainDropdown', '', ''],
+      controlEquipParamCode: ['Equipment Parameter Code', 'mainDropdown', '', ''],
       controlCode: ['Control Code', 'dropdown', '', ''],
       originalCode: ['Original Code', 'radio', '', ''],
       seasonalControlsIndicator: [
