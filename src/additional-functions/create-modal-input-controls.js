@@ -84,12 +84,10 @@ export const modalViewData = (
         case "mainDropdown":
         case "dropdown":
           if (!createNew) {
-            console.log( 'testing in create',label[y][1], totalOptionsClone, y ,selected)
             if (totalOptionsClone) {
               labels = findValue(totalOptionsClone[y], selected[y], "name");
             }
           }
-          console.log('labels',labels)
           arr.push([
             y,
             label[y][0],

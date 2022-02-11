@@ -285,11 +285,10 @@ export const DataTableAssert = ({
   useEffect(() => {
     const prefilteredDataName = dropdownArray[0][0];
     if (prefilteredMdmData) {
-      console.log('GOT CHANGED',prefilteredMdmData,prefilteredDataName,mainDropdownChange)
+
       const result = prefilteredMdmData.filter(
         (data) => data[prefilteredDataName] === mainDropdownChange
       );
-      console.log('result',result)
       if (result.length > 0) {
         for (const modalDetailData of selectedModalData) {
           if (modalDetailData[4] === "dropdown") {
@@ -310,7 +309,6 @@ export const DataTableAssert = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainDropdownChange, selectedModalData]);
-
 
   // Executed when "View" action is clicked
   const openModal = (row, bool, create) => {
@@ -338,8 +336,6 @@ export const DataTableAssert = ({
     if (!dropdownArrayIsEmpty) {
       prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
     }
-
-    console.log('prefilteredDataName',prefilteredDataName,mainDropdownName)
     let mainDropdownResult;
     if (mainDropdownName !== "" && staticDropdownFlag === false) {
       mainDropdownResult = mdmData[mainDropdownName].filter((o) =>

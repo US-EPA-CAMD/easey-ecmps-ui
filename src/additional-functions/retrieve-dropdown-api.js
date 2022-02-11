@@ -613,8 +613,8 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           });
           options = response.data.map((option) => {
             return {
-              "controlEquipParamCode": option["parameterCode"],
-              "controlCode": option["controlCode"],
+              controlEquipParamCode: option["parameterCode"],
+              controlCode: option["controlCode"],
             };
           });
           noDupesFormCodesControls = [...new Set(noDupesFormCodesControls)];
@@ -624,13 +624,6 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
             options
           );
 
-          console.log(
-            "noDupesFormCodesControls",
-            noDupesFormCodesControls,
-            response.data,
-            options
-          );
-          console.log("prefilteredMdmOptions", prefilteredMdmOptions);
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         });
         break;
