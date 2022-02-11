@@ -1,9 +1,9 @@
-import axios from "axios";
-import { handleResponse, handleError } from "./apiUtils";
-import config from "../../config";
+import axios from 'axios';
+import { handleResponse, handleError } from './apiUtils';
+import config from '../../config';
 
 axios.defaults.headers.common = {
-  "x-api-key": config.app.apiKey,
+  'x-api-key': config.app.apiKey,
 };
 
 export const getAllControlTechnologies = async () => {
@@ -333,6 +333,13 @@ export const getPrefilteredUnitFuels = async () => {
 export const getPrefilteredUnitControls = async () => {
   return axios
     .get(`${config.services.mdm.uri}/relationships/unit-controls`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getPrefilteredSystemFuelFlows = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/relationships/system-fuels`)
     .then(handleResponse)
     .catch(handleError);
 };
