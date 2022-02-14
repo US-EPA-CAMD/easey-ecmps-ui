@@ -19,7 +19,6 @@ export const sendNotificationEmail = async (payload) => {
     .then(handleResponse)
     .catch((error) => {
       handleError(error);
-      throw new Error(error);
     });
 };
 
@@ -34,6 +33,5 @@ export const triggerEvaluation = async (payload) => {
     .then(handleResponse)
     .catch((error) => {
       handleError(error);
-      throw new Error(error);
     });
 };

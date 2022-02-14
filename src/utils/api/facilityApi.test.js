@@ -1,6 +1,6 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { getAllFacilities } from "./facilityApi";
+import { getAllFacilities, getFacilityById } from "./facilityApi";
 import config from "../../config";
 
 const facilities = [
@@ -17,5 +17,18 @@ test("Should fetch list of facilities from FACT API", async () => {
   });
 
   const result = await getAllFacilities();
-  expect(result['data'].facilities).toEqual(facilities);
+  expect(result["data"].facilities).toEqual(facilities);
+});
+
+test("Should get facility data from a specific facility ID", async () => {
+  const mock = new MockAdapter(axios);
+  const facData = { data: { orisCode: 3, name: "Barry" } };
+  const id = 1;
+
+  mock.onGet(`${config.services.facilities.uri}/facilities/${id}`).reply(200, {
+    data: { orisCode: 3, name: "Barry" },
+  });
+
+  const result = await getFacilityById(id);
+  expect(result.data).toEqual(facData);
 });
