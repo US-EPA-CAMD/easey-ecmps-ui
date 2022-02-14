@@ -7,7 +7,7 @@ axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
 };
 
-test("Should test evaluation trigger endpoint", async () => {
+test("Should test email notification endpoint", async () => {
   let url = `${config.services.quartz.uri}`;
   url = `${url}/triggers/notifications/emails`;
 
@@ -27,12 +27,12 @@ test("Should test evaluation trigger endpoint", async () => {
   expect(result.status).toEqual(successResponse);
 
   // test error
-  const errorMsg = "error occurred while triggerring evaluation process";
+  const errorMsg = "error occurred while sending notification email";
   mock.onPost(url).reply(400, errorMsg);
   await sendNotificationEmail(payload);
 });
 
-test("Should test email notification endpoint", async () => {
+test("Should test evaluation trigger endpoint", async () => {
   let url = `${config.services.quartz.uri}`;
   url = `${url}/triggers/evaluations/monitor-plans`;
 
@@ -49,7 +49,7 @@ test("Should test email notification endpoint", async () => {
   expect(result.status).toEqual(successResponse);
 
   // test error
-  const errorMsg = "error occurred while sending notification email";
+  const errorMsg = "error occurred while triggerring evaluation process";
   mock.onPost(url).reply(400, errorMsg);
-  await sendNotificationEmail(payload);
+  await triggerEvaluation(payload);
 });

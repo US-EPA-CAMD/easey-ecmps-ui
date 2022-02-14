@@ -3,6 +3,7 @@ import axios from "axios";
 import { checkoutAPI } from "../../additional-functions/checkout";
 import { getCheckedOutLocations } from "./monitoringPlansApi";
 import { displayAppError } from "../../additional-functions/app-error";
+import log from "loglevel";
 
 axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
@@ -44,7 +45,10 @@ export const authenticate = async (payload) => {
       // if they're in a global view (exclusive) page
       if (globalOnly.includes(window.location.pathname)) {
         // move them to the workspace version of that page (after finding '/ecmps')
-        const newPathname = window.location.pathname.replace("/ecmps","/ecmps/workspace");
+        const newPathname = window.location.pathname.replace(
+          "/ecmps",
+          "/ecmps/workspace"
+        );
         window.location.assign(newPathname);
       }
       // otherwise return them to their current page
@@ -74,11 +78,15 @@ export const logOut = async () => {
     method: "DELETE",
     url: `${config.services.authApi.uri}/authentication/sign-out`,
     withCredentials: true,
-  });
-
-  sessionStorage.removeItem("refreshTokenTimer");
-  sessionStorage.removeItem("cdx_user");
-  window.location = config.app.path;
+  })
+    .then(() => {
+      sessionStorage.removeItem("refreshTokenTimer");
+      sessionStorage.removeItem("cdx_user");
+      window.location = config.app.path;
+    })
+    .catch((e) => {
+      log.error({ error: e.message });
+    });
 };
 
 export const refreshToken = () => {
