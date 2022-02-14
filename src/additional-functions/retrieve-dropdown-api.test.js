@@ -143,7 +143,7 @@ const testObjects = [
       data: [{ controlEquipParamCode: "", controlEquipParamDescription: "" }],
     },
     expectedDropdownOptions: {
-      parameterCode: dropdownOptions,
+      controlEquipParamCode: dropdownOptions,
     },
     case: "controlEquipParamCode",
     function: dmApi.getAllControlEquipmentParameterCodes,
