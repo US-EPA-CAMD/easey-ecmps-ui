@@ -1,6 +1,15 @@
 import React from "react";
-import { render, waitForElement, fireEvent,screen } from "@testing-library/react";
-import { DataTableAssert,mapDispatchToProps,mapStateToProps } from "./DataTableAssert";
+import {
+  render,
+  waitForElement,
+  fireEvent,
+  screen,
+} from "@testing-library/react";
+import {
+  DataTableAssert,
+  mapDispatchToProps,
+  mapStateToProps,
+} from "./DataTableAssert";
 import { act } from "react-dom/test-utils";
 import * as assertSelector from "../../../utils/selectors/assert";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
@@ -313,17 +322,17 @@ describe("DataTableAssert", () => {
       render(<DataTableAssert {...props} />)
     );
     const btns = screen.getAllByText("View");
-    fireEvent.click(btns[0])
+    fireEvent.click(btns[0]);
     const val = 1;
     expect(val === 1);
   });
-  test('mapStateToProps calls the appropriate state', async () => {
+  test("mapStateToProps calls the appropriate state", async () => {
     // mock the 'dispatch' object
     const dispatch = jest.fn();
-    const state = {dropdowns:[1]}
-    const stateProps = mapStateToProps(state,true);
+    const state = { dropdowns: [1] };
+    const stateProps = mapStateToProps(state, true);
   });
-  
+
   test("mapDispatchToProps calls the appropriate action", async () => {
     // mock the 'dispatch' object
     const dispatch = jest.fn();
