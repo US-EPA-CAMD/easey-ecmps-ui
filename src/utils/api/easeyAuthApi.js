@@ -24,16 +24,15 @@ export const secureAxios = (options) => {
   return axios(options);
 };
 
-export const authenticate = async (data_payload) => {
+export const authenticate = async (payload) => {
   return axios({
     method: "POST",
     url: `${config.services.authApi.uri}/authentication/sign-in`,
-    data: data_payload,
+    data: payload,
     withCredentials: true,
   })
-    .then((data_response) => {
-      const { data } = data_response;
-      sessionStorage.setItem("cdx_user", JSON.stringify(data));
+    .then((response) => {
+      sessionStorage.setItem("cdx_user", JSON.stringify(response.data));
 
       //Paths to UI locations in global view
       const globalOnly = [
@@ -58,55 +57,45 @@ export const authenticate = async (data_payload) => {
     });
 };
 
-export const logOut = async (event = "default") => {
-  if (event !== "default" && event) {
-    event.preventDefault();
-  }
-
+export const logOut = async () => {
   const user = JSON.parse(sessionStorage.getItem("cdx_user"));
+
   const checkedOutLocationResult = await getCheckedOutLocations();
 
   if (checkedOutLocationResult.data.length > 0) {
     for (const location of checkedOutLocationResult.data) {
       if (location.checkedOutBy === user.userId) {
-        await checkoutAPI(false, location.facId, location.monPlanId, undefined);
+        checkoutAPI(false, location.facId, location.monPlanId).then();
       }
     }
   }
 
-  return secureAxios({
+  secureAxios({
     method: "DELETE",
     url: `${config.services.authApi.uri}/authentication/sign-out`,
     withCredentials: true,
+  });
+
+  sessionStorage.removeItem("refreshTokenTimer");
+  sessionStorage.removeItem("cdx_user");
+  window.location = config.app.path;
+};
+
+export const refreshToken = () => {
+  const userId = JSON.parse(sessionStorage.getItem("cdx_user")).userId;
+
+  secureAxios({
+    method: "POST",
+    url: `${config.services.authApi.uri}/tokens`,
+    data: { userId },
+    withCredentials: true,
   })
-    .then(async () => {
-      sessionStorage.removeItem("refreshTokenTimer");
-      sessionStorage.removeItem("cdx_user");
-      window.location = config.app.path;
+    .then((response) => {
+      const user = JSON.parse(sessionStorage.getItem("cdx_user"));
+      user.token = response.data;
+      sessionStorage.setItem("cdx_user", JSON.stringify(user));
     })
     .catch((e) => {
       displayAppError(e);
     });
-};
-
-export const refreshToken = () => {
-  try {
-    const userId = JSON.parse(sessionStorage.getItem("cdx_user")).userId;
-    return secureAxios({
-      method: "POST",
-      url: `${config.services.authApi.uri}/tokens`,
-      data: { userId },
-      withCredentials: true,
-    })
-      .then((data_response) => {
-        const userData = JSON.parse(sessionStorage.getItem("cdx_user"));
-        userData.token = data_response.data;
-        sessionStorage.setItem("cdx_user", JSON.stringify(userData));
-      })
-      .catch((e) => {
-        displayAppError(e);
-      });
-  } catch (e) {
-    displayAppError(e);
-  }
 };

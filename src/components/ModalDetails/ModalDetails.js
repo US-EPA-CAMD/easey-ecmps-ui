@@ -92,13 +92,8 @@ const ModalDetails = ({
           ""
         ) : (
           <FormGroup className="margin-top-0">
-            <h3
-              className="text-bold margin-bottom-0 usa-label"
-              htmlFor={`${value[1]}`}
-            >
-              {value[1]}
-            </h3>
-            <div id={`${value[1]}`}>
+            <h3 className="text-bold margin-bottom-0 usa-label">{value[1]}</h3>
+            <div id={`${value[1].split(" ").join("-")}`}>
               {value[2]
                 ? value[4] === "radio"
                   ? value[2] === "0"
@@ -139,7 +134,7 @@ const ModalDetails = ({
     }
   };
   const makeEditComp = (value, cols) => {
-    let comp = null;
+    let comp;
 
     switch (value[4]) {
       case "mainDropdown":
@@ -156,8 +151,8 @@ const ModalDetails = ({
             }
             initialSelection={value[5]}
             selectKey="code"
-            id={`${value[1]}`}
-            epa-testid={value[0]}
+            id={`${value[1].split(" ").join("-")}`}
+            epa-testid={value[0].split(" ").join("-")}
             name={value[1]}
             secondOption="name"
             handler={disableDropdowns}
@@ -165,7 +160,6 @@ const ModalDetails = ({
         );
         break;
       case "dropdown":
-        console.log("value[5]", value[5], ",value[5]", value[4]);
         comp = (
           <SelectBox
             className={`modalUserInput ${
@@ -183,8 +177,8 @@ const ModalDetails = ({
                 : "select"
             }
             selectKey="code"
-            id={`${value[1]}`}
-            epa-testid={value[0]}
+            id={`${value[1].split(" ").join("-")}`}
+            epa-testid={value[0].split(" ").join("-")}
             name={value[1]}
             secondOption="name"
             mainDropdownChange={mainDropdownChange}
@@ -208,8 +202,8 @@ const ModalDetails = ({
             }
             initialSelection={!create ? value[5] : "select"}
             selectKey="code"
-            id={`${value[1]}`}
-            epa-testid={value[0]}
+            id={`${value[1].split(" ").join("-")}`}
+            epa-testid={value[0].split(" ").join("-")}
             name={value[1]}
             secondOption="name"
             mainDropdownChange={mainDropdownChange}
@@ -228,10 +222,10 @@ const ModalDetails = ({
         comp = (
           <DatePicker
             className="margin-0 modalUserInput width-card-lg"
-            id={`${value[1]}`}
+            id={`${value[1].split(" ").join("-")}`}
             name={value[1]}
             epadataname={value[0]}
-            epa-testid={value[0]}
+            epa-testid={value[0].split(" ").join("-")}
             defaultValue={datePickerValue}
             onChange={() => void 0}
           />
@@ -241,8 +235,8 @@ const ModalDetails = ({
         comp = (
           <TextInput
             className="modalUserInput width-7"
-            id={`${value[1]}`}
-            epa-testid={value[0]}
+            id={`${value[1].split(" ").join("-")}`}
+            epa-testid={value[0].split(" ").join("-")}
             epadataname={value[0]}
             name={value[0]}
             type="text"
@@ -257,8 +251,8 @@ const ModalDetails = ({
             className={`modalUserInput ${
               cols === 3 ? "" : largeWidthCardStyle
             }`}
-            id={`${value[1]}`}
-            epa-testid={value[0]}
+            id={`${value[1].split(" ").join("-")}`}
+            epa-testid={value[0].split(" ").join("-")}
             epadataname={value[0]}
             name={value[0]}
             type="text"
@@ -273,7 +267,7 @@ const ModalDetails = ({
             className=" display-inline-flex modalUserInput"
             id={`${value[1].split(" ").join("-")}`}
             epadataname={value[0]}
-            epa-testid={value[0]}
+            epa-testid={value[0].split(" ").join("-")}
             name={value[0]}
           >
             <legend className=" margin-bottom-0 usa-label">{value[1]}</legend>
@@ -283,7 +277,7 @@ const ModalDetails = ({
               label="Yes"
               value="Yes"
               className="padding-right-1  "
-              defaultChecked={value[2] && value[2] === "1" ? true : false}
+              defaultChecked={value[2] && value[2] === "1"}
             />
             <Radio
               id={`${value[1].split(" ").join("")}-2`}
@@ -293,8 +287,6 @@ const ModalDetails = ({
               className="padding-left-1"
               defaultChecked={
                 value[2] === null || value[2] === false || value[2] === "0"
-                  ? true
-                  : false
               }
             />
           </Fieldset>
@@ -335,38 +327,27 @@ const ModalDetails = ({
       </div>
     );
   };
+
   const items = [];
   let row = [];
+
   for (const value of data) {
-    if (row.length < cols) {
-      if (viewOnly) {
-        row.push(makeViewOnlyComp(value));
-      } else {
-        if (value[4] === "locked") {
-          if (!create) {
-            row.push(makeViewOnlyComp(value));
-          } else {
-            row.push(makeViewOnlyComp([false, false, false, false, false]));
-          }
-        } else {
-          row.push(makeEditComp(value, cols));
-        }
-      }
-    } else {
+    if (row.length >= cols) {
       items.push(row);
       row = [];
-      if (viewOnly) {
-        row.push(makeViewOnlyComp(value));
-      } else {
-        if (value[4] === "locked") {
-          if (!create) {
-            row.push(makeViewOnlyComp(value));
-          } else {
-            row.push(makeViewOnlyComp([false, false, false, false, false]));
-          }
+    }
+
+    if (viewOnly) {
+      row.push(makeViewOnlyComp(value));
+    } else {
+      if (value[4] === "locked") {
+        if (!create) {
+          row.push(makeViewOnlyComp(value));
         } else {
-          row.push(makeEditComp(value, cols));
+          row.push(makeViewOnlyComp([false, false, false, false, false]));
         }
+      } else {
+        row.push(makeEditComp(value, cols));
       }
     }
   }
@@ -379,6 +360,7 @@ const ModalDetails = ({
           {backBtn ? (
             <div className="display-block">
               <Button
+                type="button"
                 onClick={() => backBtn(false)}
                 className="float-left margin-right-1"
                 unstyled="true"
