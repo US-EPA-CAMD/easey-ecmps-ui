@@ -14,6 +14,9 @@ import { authenticate } from "../../utils/api/easeyAuthApi";
 import LoadingModal from "../LoadingModal/LoadingModal";
 import config from "../../config";
 
+// *** validation
+import * as yup from "yup";
+
 const logged_in = Cookies.get("cdxToken");
 
 const Login = ({ isModal, source }) => {
@@ -28,6 +31,14 @@ const Login = ({ isModal, source }) => {
   const usernameText = isModal ? "modal-username" : "username";
   const passwordText = isModal ? "modal-password" : "password";
 
+  // *** VALIDATION
+  // * describe form object (NOTE: does not have to be an html form.
+  // * however, data passed to it for validation must be in the same exact format)
+  const formSchema = yup.object().shape({
+    username: yup.string().required("Username is required"),
+    password: yup.string().required("Password is required"),
+  });
+
   const showPasswordHandler = () => {
     if (showPassword) {
       setShowPassword(false);
@@ -36,29 +47,41 @@ const Login = ({ isModal, source }) => {
     }
   };
 
-  const submitForm = async (e) => {
-    e.preventDefault();
-    setFormErrorMessage("");
-    const formReady = !(username !== "" || password !== "");
+  const submitForm = async (event) => {
+    event.preventDefault();
 
-    // issue here
-    if (!formReady) {
-      setFormErrorMessage(standardFormErrorMessage);
-    }
+    // *** trigger yup validation
+    const isFormValid = await formSchema.isValid(
+      { username, password },
+      {
+        abortEarly: false, // *** prevent aborting validation after first error
+      }
+    );
 
-    if (username !== "" && password !== "") {
+    // *** display clientside errors
+    if (!isFormValid) {
+      await formSchema
+        .validate({ username, password }, { abortEarly: false })
+        .catch((jsonErrors) => {
+          // *** NOTE: we are NOT displaying actual individual messages that go with each field,
+          // ***       instead displaying a general message for both fields.  Individual messages are available
+          // ***       in commented out object below
+          // console.log(jsonErrors.errors);
+          setShowError(true);
+          setFormErrorMessage(standardFormErrorMessage);
+        });
+    } else {
+      setFormErrorMessage("");
       setLoading(true);
       setShowError(false);
 
-      return await authenticate({ userId: username, password })
+      await authenticate({ userId: username, password })
         .then((response) => {
-          // *** commenting out the line below makes it so that the login modal doesn't come back into view
-          // *** after the loading graphic has been displayed
-          // setLoading(false);
           if (response && response.error) {
             throw response.error;
           }
         })
+        // *** display serverside errors
         .catch((err) => {
           setLoading(false);
           setShowError(true);
@@ -69,8 +92,6 @@ const Login = ({ isModal, source }) => {
           }
         });
     }
-
-    return true;
   };
 
   useEffect(() => {
@@ -88,7 +109,7 @@ const Login = ({ isModal, source }) => {
   return (
     <div className="" data-test="component-login">
       <div className="padding-1">
-        <Form onSubmit={submitForm} large>
+        <Form onSubmit={async (event) => await submitForm(event)} large>
           <Fieldset legend="Log In" legendStyle="large">
             <span>
               or{" "}
