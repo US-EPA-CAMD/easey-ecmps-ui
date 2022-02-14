@@ -327,14 +327,12 @@ export const DataTableMethod = ({
     mpApi
       .saveMonitoringMethods(userInput)
       .then((result) => {
-        console.log(result, " was saved");
         // openModal(false);
         setShow(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
       })
       .catch((error) => {
-        console.log("error is", error);
         // openModal(false);
         setShow(false);
       });
@@ -346,15 +344,11 @@ export const DataTableMethod = ({
     mpApi
       .createMethods(userInput)
       .then((result) => {
-        console.log(result, " was created");
-        // openModal(false);
         setShow(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
       })
       .catch((error) => {
-        console.log("error is", error);
-        // openModal(false);
         setShow(false);
       });
   };

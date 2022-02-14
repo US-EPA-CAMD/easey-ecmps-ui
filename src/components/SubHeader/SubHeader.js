@@ -266,7 +266,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                       id="logoutBtn"
                       epa-testid="logoutBtn"
                       outline={true}
-                      onClick={(event) => logOut(event)}
+                      onClick={() => logOut()}
                       title="Click this button to logout"
                       className="text-white border-white text-no-wrap"
                     >

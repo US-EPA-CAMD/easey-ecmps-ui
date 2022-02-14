@@ -141,7 +141,6 @@ export const HeaderInfo = ({
     // clear open intervals when a different page is loaded
     return () => {
       if (dataLoaded && evalStatusLoaded) {
-        console.log("leaving, refreshing, or checking-in/out)...");
         clearOpenRefreshInterval();
       }
     };
@@ -151,7 +150,6 @@ export const HeaderInfo = ({
   const clearOpenRefreshInterval = () => {
     if (openIntervalId) {
       clearInterval(openIntervalId);
-      console.log("STOPPED refresh interval with ID: ", openIntervalId);
     }
   };
 
@@ -203,9 +201,7 @@ export const HeaderInfo = ({
 
   const renderWithNewData = (configs, currentConfig, currentCheckoutStatus) => {
     const intervalId = startRefreshTimer();
-    if (intervalId !== 0) {
-      console.log("STARTED refresh interval with ID: ", intervalId);
-    }
+
     setCheckoutState(currentConfig.checkedOutBy !== "N/A");
     setOpenIntervalId(intervalId);
     setUserHasCheckout(
