@@ -69,8 +69,7 @@ const ModalDetails = ({
   const initialDropdownText = `You must make a selection for the '${mainDropdown}' field to enable dropdowns for the other fields.`;
   const selectedDropdownText = `Changing the selection for the '${mainDropdown}' field shall update the dropdown options available for the other fields.`;
 
-  const [mainDropdownUntouched, setMainDropdownUntouched] =
-    useState(false);
+  const [mainDropdownUntouched, setMainDropdownUntouched] = useState(false);
 
   // fixes rare instances where there is an enddate but no end time
   if (
@@ -372,7 +371,7 @@ const ModalDetails = ({
                 <ArrowBackSharp className=" font-body-sm backBTNColor position-relative top-neg-2px" />
               </Button>
 
-              <h3 className="text-bold float-left mobile:font-body-md mobile:text-bold">
+              <h3 className="text-bold float-left mobile:font-body-md mobile:text-bold position-relative top-neg-205">
                 {title}
               </h3>
             </div>
