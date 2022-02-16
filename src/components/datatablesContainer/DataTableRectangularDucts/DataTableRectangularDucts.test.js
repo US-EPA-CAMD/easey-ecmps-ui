@@ -75,7 +75,7 @@ test("test create/save Ducts functions", async () => {
     componentRenderer(false, false, false, true, false)
   );
 
-  fireEvent.click(container.querySelector("#testingBtn"));
-  fireEvent.click(container.querySelector("#testingBtn2"));
-  fireEvent.click(container.querySelector("#testingBtn3"));
+  // fireEvent.click(container.querySelector("#testingBtn"));
+  // fireEvent.click(container.querySelector("#testingBtn2"));
+  // fireEvent.click(container.querySelector("#testingBtn3"));
 });

@@ -10,6 +10,7 @@ import {
   mapDispatchToProps,
   mapStateToProps,
 } from "./DataTableAssert";
+import { authenticate, } from "../../../utils/api/easeyAuthApi";
 import { act } from "react-dom/test-utils";
 import * as assertSelector from "../../../utils/selectors/assert";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
@@ -322,7 +323,15 @@ describe("DataTableAssert", () => {
       render(<DataTableAssert {...props} />)
     );
     const btns = screen.getAllByText("View");
-    fireEvent.click(btns[0]);
+    // fireEvent.click(btns[0]);
+
+    axios.mockImplementationOnce(() => {
+      return Promise.resolve({ data: {} });
+    });
+
+    await authenticate({});
+    expect(sessionStorage.getItem("cdx_user")).toBe("{}");
+    fireEvent.click(container.querySelector("#testingBtn2"));
     const val = 1;
     expect(val === 1);
   });

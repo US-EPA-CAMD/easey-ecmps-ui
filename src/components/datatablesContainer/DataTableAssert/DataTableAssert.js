@@ -285,7 +285,6 @@ export const DataTableAssert = ({
   useEffect(() => {
     const prefilteredDataName = dropdownArray[0][0];
     if (prefilteredMdmData) {
-
       const result = prefilteredMdmData.filter(
         (data) => data[prefilteredDataName] === mainDropdownChange
       );
@@ -390,6 +389,17 @@ export const DataTableAssert = ({
 
   return (
     <div className="methodTable">
+      {/* tests saving functionality */}
+      <input
+        tabIndex={-1}
+        aria-hidden={true}
+        role="button"
+        type="hidden"
+        id="testingBtn2"
+        onClick={() => {
+          saveData();
+        }}
+      />
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
 
       <DataTableRender
