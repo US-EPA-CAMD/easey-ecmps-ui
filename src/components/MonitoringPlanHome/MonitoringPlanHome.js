@@ -140,7 +140,7 @@ export const MonitoringPlanHome = ({
         >
           Monitoring Plans
         </h2>
-        {user ? (
+        {/* {user ? (
           <Button
             type="button"
             className="float-right clearfix radius-2 position-relative tablet-lg:margin-top-2 tablet:margin-top-2 tablet:margin-right-neg-3 desktop:margin-right-0"
@@ -152,7 +152,7 @@ export const MonitoringPlanHome = ({
           </Button>
         ) : (
           ""
-        )}
+        )} */}
       </div>
 
       <div className="display-none mobile:display-block tablet:display-none">
