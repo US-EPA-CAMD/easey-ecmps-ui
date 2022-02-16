@@ -146,7 +146,14 @@ describe("Easey Auth API", () => {
       return Promise.reject(new Error("some error"));
     });
 
-    await logOut();
-    expect(sessionStorage.getItem("cdx_user")).not.toBe(null);
+    try {
+      await logOut().catch((e) => {
+        throw e;
+      });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      expect(sessionStorage.getItem("cdx_user")).not.toBe(null);
+    }
   });
 });
