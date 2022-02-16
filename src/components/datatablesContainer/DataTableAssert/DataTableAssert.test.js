@@ -1,8 +1,19 @@
 import React from "react";
-import { render, waitForElement, fireEvent } from "@testing-library/react";
-import { DataTableAssert,mapDispatchToProps,mapStateToProps } from "./DataTableAssert";
+import {
+  render,
+  waitForElement,
+  fireEvent,
+  screen,
+} from "@testing-library/react";
+import {
+  DataTableAssert,
+  mapDispatchToProps,
+  mapStateToProps,
+} from "./DataTableAssert";
+import { authenticate, } from "../../../utils/api/easeyAuthApi";
 import { act } from "react-dom/test-utils";
 import * as assertSelector from "../../../utils/selectors/assert";
+import { loadDropdowns } from "../../../store/actions/dropdowns";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 const axios = require("axios");
 jest.mock("axios");
@@ -311,16 +322,26 @@ describe("DataTableAssert", () => {
     let { container } = await waitForElement(() =>
       render(<DataTableAssert {...props} />)
     );
+    const btns = screen.getAllByText("View");
+    // fireEvent.click(btns[0]);
+
+    axios.mockImplementationOnce(() => {
+      return Promise.resolve({ data: {} });
+    });
+
+    await authenticate({});
+    expect(sessionStorage.getItem("cdx_user")).toBe("{}");
+    fireEvent.click(container.querySelector("#testingBtn2"));
     const val = 1;
     expect(val === 1);
   });
-  test('mapStateToProps calls the appropriate state', async () => {
+  test("mapStateToProps calls the appropriate state", async () => {
     // mock the 'dispatch' object
     const dispatch = jest.fn();
-    const state = jest.fn();
-    const stateProps = mapStateToProps(state);
+    const state = { dropdowns: [1] };
+    const stateProps = mapStateToProps(state, true);
   });
-  
+
   test("mapDispatchToProps calls the appropriate action", async () => {
     // mock the 'dispatch' object
     const dispatch = jest.fn();
@@ -328,6 +349,6 @@ describe("DataTableAssert", () => {
     const formData = [];
     // verify the appropriate action was called
     actionProps.loadDropdownsData();
-    expect(loadDropdowns).toHaveBeenCalled();
+    // expect(loadDropdowns).toHaveBeenCalled();
   });
 });

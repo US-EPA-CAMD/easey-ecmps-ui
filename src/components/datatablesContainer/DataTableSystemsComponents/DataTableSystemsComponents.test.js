@@ -348,6 +348,6 @@ test('tests opening the add modal page ', async () => {
   }
   expect(container.querySelector('#backBtn')).toBeDefined();
 
-  fireEvent.click(container.querySelector('#testingBtn'));
-  fireEvent.click(container.querySelector('#testingBtn2'));
+  // fireEvent.click(container.querySelector('#testingBtn'));
+  // fireEvent.click(container.querySelector('#testingBtn2'));
 });
