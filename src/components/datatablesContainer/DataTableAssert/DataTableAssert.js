@@ -24,7 +24,6 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
-import { ContactSupportSharp } from "@material-ui/icons";
 
 export const DataTableAssert = ({
   mdmData,
