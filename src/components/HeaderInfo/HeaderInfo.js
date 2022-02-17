@@ -459,6 +459,7 @@ export const HeaderInfo = ({
                         </Button>
                       ) : !lockedFacility &&
                         !userHasCheckout &&
+                        selectedConfig.active &&
                         checkedOutConfigs
                           .map((location) => location["monPlanId"])
                           .indexOf(selectedConfig.id) === -1 ? (
