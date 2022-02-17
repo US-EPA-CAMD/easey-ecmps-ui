@@ -1950,10 +1950,10 @@
     semver "^7.3.2"
     tsutils "^3.17.1"
 
-"@us-epa-camd/easey-design-system@1.30.0":
-  version "1.30.0"
-  resolved "https://npm.pkg.github.com/download/@us-epa-camd/easey-design-system/1.30.0/864bff2c8ba3c58e23e12abb079cc321540c6151aa3a6ca112e7a1fd71d52017#6efff84a32e4b9652874522d2be60e62c226f11b"
-  integrity sha512-HLHiG+6Ujowpwtyt9QAXCo+Bn1MUIPaFlhqUyRj9rzup/FHG15f2lps2dgXPqwzjG68Q548ijAf5y3o5XbIytw==
+"@us-epa-camd/easey-design-system@1.31.0":
+  version "1.31.0"
+  resolved "https://npm.pkg.github.com/download/@us-epa-camd/easey-design-system/1.31.0/57d27298402f3e53c07e02244b5da42421e6bc818cb9076ae940920ba137c301#e44681c8c028063e44ae6478b8810916260247ac"
+  integrity sha512-KM7pIEl/e0IiR0hPmHOW5cv2ge+w0u/o1V8wkeyMrRYmXtOSCM89fzsf1/GIIauqA543VgU5XHPy/BPFJAoGiA==
   dependencies:
     "@ramonak/react-progress-bar" "^4.2.0"
 
