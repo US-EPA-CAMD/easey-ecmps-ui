@@ -121,11 +121,13 @@ const Login = ({ isModal, source }) => {
               </a>
             </span>
 
-            {showError && (
-              <Alert type="error" heading="Log In Errors">
-                {formErrorMessage}
-              </Alert>
-            )}
+            <div aria-live="polite">
+              {showError && (
+                <Alert type="error" heading="Log In Errors" role="alert">
+                  {formErrorMessage}
+                </Alert>
+              )}
+            </div>
 
             <Label htmlFor={usernameText}>Username</Label>
             <TextInput
