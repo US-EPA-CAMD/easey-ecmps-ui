@@ -17,7 +17,7 @@ export const getMonitoringPlansUnitControlRecords = (data) => {
     const originalCode = el["originalCode"] === "1" ? "Yes" : "No";
 
     records.push({
-      col1: el["parameterCode"],
+      col1: el["controlEquipParamCode"],
       col2: el["controlCode"],
       col3: `${originalCode}`,
       col4: `${installDate}`,

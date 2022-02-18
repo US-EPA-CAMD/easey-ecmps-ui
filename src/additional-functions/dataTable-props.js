@@ -303,7 +303,7 @@ export const unitControlDataTableProps = (location, selectedLocation) => {
     payload: {
       locationId: location,
       id: null,
-      parameterCode: null,
+      controlEquipParamCode: null,
       controlCode: null,
       originalCode: 0,
       seasonalControlsIndicator: 0,
