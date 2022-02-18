@@ -1,4 +1,4 @@
-import { render, screen, waitForElement } from "@testing-library/react";
+import { render, screen, wait, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import * as React from "react";
 import Login from "./Login";
@@ -22,12 +22,11 @@ jest.mock("../../utils/api/easeyAuthApi", () => {
         error: true,
       })
       .mockRejectedValueOnce(new Error("Error occurred while authenticating."))
-      // .mockRejectedValueOnce(new Error("Error occurred while authenticating."))
       .mockRejectedValueOnce(errorWithResponse),
   };
 });
 
-test("renders and tests Login form (modal)", async () => {
+test("renders and tests Login component", async () => {
   // render component
   render(<Login isModal={true} />);
 
@@ -59,9 +58,11 @@ test("renders and tests Login form (modal)", async () => {
   const btns = screen.getAllByRole("button");
 
   // click on hide password toggle
-  await waitForElement(async () => {
+  await wait(async () => {
     const hidePwdBtn = btns[1];
+    console.log({ hidePwdBtn });
     expect(hidePwdBtn).not.toBeDisabled();
+    userEvent.click(hidePwdBtn);
     userEvent.click(hidePwdBtn);
   });
 
@@ -69,23 +70,32 @@ test("renders and tests Login form (modal)", async () => {
   const loginBtn = btns[0];
   expect(loginBtn).not.toBeDisabled();
 
-  // attempt login (success)
-  await waitForElement(async () => {
+  // successful login
+  await wait(async () => {
     userEvent.click(loginBtn);
   });
 
-  // attempt login (response contains error)
-  await waitForElement(async () => {
+  // login response contains error
+  await wait(async () => {
     userEvent.click(loginBtn);
   });
 
-  // attempt login (authentication error with response)
-  await waitForElement(async () => {
+  // receives authentication error with a response
+  await wait(async () => {
     userEvent.click(loginBtn);
   });
 
-  // attempt login (authentication error without response)
-  await waitForElement(async () => {
+  // receives authentication error without a response
+  await wait(async () => {
+    userEvent.click(loginBtn);
+  });
+
+  // clear username & password fields
+  fireEvent.change(usernameInput, { target: { value: "" } });
+  fireEvent.change(passwordInput, { target: { value: "" } });
+
+  // fails form validation (due to blank fields)
+  await wait(async () => {
     userEvent.click(loginBtn);
   });
 });
