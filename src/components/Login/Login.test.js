@@ -3,6 +3,13 @@ import userEvent from "@testing-library/user-event";
 import * as React from "react";
 import Login from "./Login";
 
+// mock get function to return a fa
+jest.mock("js-cookie", () => {
+  return {
+    get: jest.fn(() => false),
+  };
+});
+
 // mock authenticate method
 jest.mock("../../utils/api/easeyAuthApi", () => {
   const errorWithResponse = new Error("Error occurred while authenticating.");
@@ -28,7 +35,7 @@ jest.mock("../../utils/api/easeyAuthApi", () => {
 
 test("renders and tests Login component", async () => {
   // render component
-  render(<Login isModal={true} />);
+  render(<Login isModal={false} />);
 
   // click on create an account link
   const createAcc = screen.getByText("create an account");
@@ -60,7 +67,6 @@ test("renders and tests Login component", async () => {
   // click on hide password toggle
   await wait(async () => {
     const hidePwdBtn = btns[1];
-    console.log({ hidePwdBtn });
     expect(hidePwdBtn).not.toBeDisabled();
     userEvent.click(hidePwdBtn);
     userEvent.click(hidePwdBtn);
