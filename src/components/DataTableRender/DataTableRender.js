@@ -249,7 +249,8 @@ export const DataTableRender = ({
 
                   {/* display a checkout option only if no other locations are currently checked out by user */}
                   {isAnyLocationCheckedOutByUser() === false &&
-                  isLocationCheckedOut(row["facId"]) === false ? (
+                  isLocationCheckedOut(row["facId"]) === false &&
+                  row["col2"] === "Active" ? (
                     <>
                       <span className="margin-x-1">|</span>
                       <Button
