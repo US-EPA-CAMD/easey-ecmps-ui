@@ -1,8 +1,9 @@
-import { render, screen, act } from "@testing-library/react";
+import { render, screen, waitForElement } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import * as React from "react";
 import Login from "./Login";
 
+// mock authenticate method
 jest.mock("../../utils/api/easeyAuthApi", () => {
   return {
     authenticate: jest
@@ -46,21 +47,21 @@ test("renders and tests Login form (modal)", async () => {
   const btns = screen.getAllByRole("button");
 
   // click on hide password toggle
-  await act(async () => {
+  await waitForElement(async () => {
     const hidePwdBtn = btns[1];
     expect(hidePwdBtn).not.toBeDisabled();
     userEvent.click(hidePwdBtn);
   });
 
   // attempt login (success)
-  await act(async () => {
+  await waitForElement(async () => {
     const loginBtn = btns[0];
     expect(loginBtn).not.toBeDisabled();
     userEvent.click(loginBtn);
   });
 
   // attempt login (error)
-  await act(async () => {
+  await waitForElement(async () => {
     const loginBtn = btns[0];
     expect(loginBtn).not.toBeDisabled();
 
