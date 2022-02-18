@@ -5,13 +5,25 @@ import Login from "./Login";
 
 // mock authenticate method
 jest.mock("../../utils/api/easeyAuthApi", () => {
+  const errorWithResponse = new Error("Error occurred while authenticating.");
+  const res = {
+    data: {
+      message: "Authentication error occurred with a response",
+    },
+  };
+  errorWithResponse["response"] = res;
   return {
     authenticate: jest
       .fn()
       .mockResolvedValueOnce({
-        data: [],
+        error: false,
       })
-      .mockRejectedValueOnce(new Error("Error occurred while authenticating.")),
+      .mockResolvedValueOnce({
+        error: true,
+      })
+      .mockRejectedValueOnce(new Error("Error occurred while authenticating."))
+      // .mockRejectedValueOnce(new Error("Error occurred while authenticating."))
+      .mockRejectedValueOnce(errorWithResponse),
   };
 });
 
@@ -53,18 +65,27 @@ test("renders and tests Login form (modal)", async () => {
     userEvent.click(hidePwdBtn);
   });
 
+  // login button
+  const loginBtn = btns[0];
+  expect(loginBtn).not.toBeDisabled();
+
   // attempt login (success)
   await waitForElement(async () => {
-    const loginBtn = btns[0];
-    expect(loginBtn).not.toBeDisabled();
     userEvent.click(loginBtn);
   });
 
-  // attempt login (error)
+  // attempt login (response contains error)
   await waitForElement(async () => {
-    const loginBtn = btns[0];
-    expect(loginBtn).not.toBeDisabled();
+    userEvent.click(loginBtn);
+  });
 
+  // attempt login (authentication error with response)
+  await waitForElement(async () => {
+    userEvent.click(loginBtn);
+  });
+
+  // attempt login (authentication error without response)
+  await waitForElement(async () => {
     userEvent.click(loginBtn);
   });
 });
