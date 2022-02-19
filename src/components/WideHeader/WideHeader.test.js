@@ -13,25 +13,26 @@ describe("testing WideHeader components", () => {
       </BrowserRouter>
     );
 
+    // nav menu button elements
+    const navMenuBtn = wideHeader.container.querySelector(
+      "[data-testid='navMenuButton']"
+    );
+    const closeNavBtn = wideHeader.container.querySelector(
+      "[data-testid='navCloseButton']"
+    );
+
+    // search bar elements
+    const searchForm = screen.getByRole("search");
+    const searchFormItems = searchForm.children;
+    const searchBtn = searchFormItems[2];
+
+    // mocking window.open JavaScript built-in function
+    const closeSpy = jest.fn();
+    window.open = jest.fn().mockReturnValue({ close: closeSpy });
+
     // test nav menu (search bar & close button)
     await wait(async () => {
-      const navMenuBtn = wideHeader.container.querySelector(
-        "[data-testid='navMenuButton']"
-      );
-      const closeNavBtn = wideHeader.container.querySelector(
-        "[data-testid='navCloseButton']"
-      );
-
-      const searchForm = screen.getByRole("search");
-      const searchFormItems = searchForm.children;
-      const searchBtn = searchFormItems[2];
-
-      const closeSpy = jest.fn();
-      window.open = jest.fn().mockReturnValue({ close: closeSpy });
-      // encodeURI = jest.fn(() => "test");
-
       // toggle nav menu
-      userEvent.click(navMenuBtn);
       userEvent.click(navMenuBtn);
 
       // use search bar
@@ -44,6 +45,18 @@ describe("testing WideHeader components", () => {
 
       // close nav menu
       userEvent.click(closeNavBtn);
+    });
+
+    // trigger callback function for escape keydown (closes menu)
+    await wait(async () => {
+      userEvent.click(navMenuBtn);
+      for (let i = 0; i < 1000; i++) {
+        fireEvent.keyDown(document, {
+          key: "Escape",
+          code: 27,
+          charCode: 27,
+        });
+      }
     });
   });
 });
