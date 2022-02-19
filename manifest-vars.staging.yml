@@ -1,7 +1,7 @@
+instances: 2
+environment: staging
 host: easey-stg.app.cloud.gov
 apiHost: api.epa.gov/easey/staging
-environment: staging
-memory: 2048M
 inactivityDurationCheckoutMinutes: 20
 refreshTokenRateMinutes: 15
 inactivityDurationLogoutMinutes: 20
