@@ -54,7 +54,7 @@ export const WideHeader = () => {
 
     // *** URI encode the component after trimming to get rid of leading/trailing spaces
     // *** and mitigate any character collision issues during http request with window.open
-    let searchTerm = event.target[0]
+    const searchTerm = event.target[0]
       ? encodeURI(event.target[0].value.trim())
       : "";
 
