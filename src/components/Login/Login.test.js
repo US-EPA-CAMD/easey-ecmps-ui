@@ -35,7 +35,7 @@ jest.mock("../../utils/api/easeyAuthApi", () => {
 
 test("renders and tests Login component", async () => {
   // render component
-  render(<Login isModal={false} />);
+  const login = render(<Login isModal={false} />);
 
   // click on create an account link
   const createAcc = screen.getByText("create an account");
@@ -56,6 +56,7 @@ test("renders and tests Login component", async () => {
   const usernameInput = screen.getByLabelText("Username");
   expect(usernameInput).not.toBeDisabled();
   userEvent.type(usernameInput, "myusername");
+  expect(screen.getByDisplayValue("myusername")).toBeInTheDocument();
 
   // password
   const passwordInput = screen.getByLabelText("Password");
@@ -70,6 +71,7 @@ test("renders and tests Login component", async () => {
     expect(hidePwdBtn).not.toBeDisabled();
     userEvent.click(hidePwdBtn);
     userEvent.click(hidePwdBtn);
+    expect(screen.getByDisplayValue("pass1234")).toBeInTheDocument();
   });
 
   // login button
@@ -103,5 +105,8 @@ test("renders and tests Login component", async () => {
   // fails form validation (due to blank fields)
   await wait(async () => {
     userEvent.click(loginBtn);
+    expect(
+      screen.getByText("Please enter your username and password")
+    ).toBeInTheDocument();
   });
 });
