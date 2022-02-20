@@ -2,7 +2,6 @@
 name: ecmps-ui
 path: ecmps
 memory: 2048
-heap: 1536
 disk: 2048
 instances: 1
 environment: development
