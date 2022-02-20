@@ -1,106 +1,136 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
-import { Provider } from "react-redux";
-import { MemoryRouter } from "react-router-dom";
-
-import configureStore from "../../store/configureStore.dev";
+import { render, screen, fireEvent, wait } from "@testing-library/react";
+import { Route, Switch, BrowserRouter } from "react-router-dom";
 import HelpSupport from "./HelpSupport";
+import userEvent from "@testing-library/user-event";
 
-const store = configureStore();
+jest.mock("../../utils/api/quartzApi", () => {
+  return {
+    sendNotificationEmail: jest
+      .fn()
+      .mockRejectedValueOnce(
+        new Error(
+          "Server error occurred while attempting to submit the contact form."
+        )
+      )
+      .mockResolvedValueOnce({}),
+  };
+});
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useHistory: () => ({
-    push: jest.fn(),
-  }),
-}));
+describe("renders and tests HelpSupport component", () => {
+  const commentTypes = [
+    {
+      id: 1,
+      comment: `Help using application`,
+    },
+    {
+      id: 2,
+      comment: `Report a bug`,
+    },
+    {
+      id: 3,
+      comment: `Data question`,
+    },
+    {
+      id: 4,
+      comment: `Suggested enhancement`,
+    },
+    {
+      id: 5,
+      comment: `Other`,
+    },
+  ];
 
-const topics = [
-  {
-    name: "Help/Support",
-    descriptions:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt molestie. Vestibulum faucibus enim sit amet pretium laoreet.",
-  },
-  {
-    name: "FAQs",
-    descriptions:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt molestie. Vestibulum faucibus enim sit amet pretium laoreet.",
-  },
-  {
-    name: "Tutorials",
-    descriptions:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt molestie. Vestibulum faucibus enim sit amet pretium laoreet.",
-  },
-  {
-    name: "Contact Us",
-    descriptions:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt molestie. Vestibulum faucibus enim sit amet pretium laoreet.",
-  },
-];
+  const topics = [
+    {
+      name: "Help/Support",
+    },
+    {
+      name: "FAQs",
+    },
+    {
+      name: "Tutorials",
+    },
+    {
+      name: "Contact Us",
+    },
+  ];
 
-const commentTypes = [
-  {
-    id: 1,
-    comment: `Help using application`,
-  },
-  {
-    id: 2,
-    comment: `Report a bug`,
-  },
-  {
-    id: 3,
-    comment: `Data question`,
-  },
-  {
-    id: 4,
-    comment: `Suggested enhancement`,
-  },
-  {
-    id: 5,
-    comment: `Other`,
-  },
-];
-
-describe("HelpSources: ", () => {
-  let query;
+  let helpSupport;
 
   beforeEach(() => {
-    query = render(
-      <Provider store={store}>
-        <MemoryRouter>
-          <HelpSupport />
-        </MemoryRouter>
-      </Provider>
+    helpSupport = render(
+      <BrowserRouter>
+        <HelpSupport />
+      </BrowserRouter>
     );
   });
 
   afterEach(() => {
-    query = null;
+    helpSupport = null;
   });
 
-  test("sections render without errors", () => {
-    const { getByText } = query;
-
+  test("render and check sections", () => {
     topics.forEach((element) => {
-      expect(getByText(element.name)).toBeTruthy();
+      expect(helpSupport.getByText(element.name)).toBeTruthy();
     });
   });
 
-  test("Visit FAQ link renders", () => {
-    expect(screen.getByTestId("linkFAQ")).toBeTruthy();
+  test("submit blank contact form and get validation error", () => {
+    const blankFieldsMsg =
+      "All fields are required. Please fill in the form completely and submit again.";
+    const submitBtn = helpSupport.container.querySelector(
+      "[data-testid='input-button-search']"
+    );
+
+    userEvent.click(submitBtn);
+    expect(screen.getByText(blankFieldsMsg)).toBeInTheDocument();
   });
 
-  test("CDX Help Topics renders ", () => {
-    expect(screen.getByTestId("linkCDXHelp")).toBeTruthy();
-  });
-
-  test("Comment options are populated properly", () => {
-    const { getByText } = query;
-
+  test("comment options are populated properly", () => {
     commentTypes.forEach((element) => {
       if (element.comment !== "") {
-        expect(getByText(element.comment)).toBeTruthy();
+        expect(helpSupport.getByText(element.comment)).toBeTruthy();
       }
     });
+  });
+
+  test("submit completed contact form (twice) and get server error & success message", async () => {
+    const submitBtn = helpSupport.container.querySelector(
+      "[data-testid='input-button-search']"
+    );
+
+    // email
+    const emailInput = screen.getByLabelText("* Email");
+    expect(emailInput).not.toBeDisabled();
+    userEvent.type(emailInput, "myemail@email.com");
+    expect(screen.getByDisplayValue("myemail@email.com")).toBeInTheDocument();
+
+    // comment type
+    const commentTypeInput = screen.getByLabelText("Help using application");
+    expect(commentTypeInput).not.toBeDisabled();
+    userEvent.click(commentTypeInput);
+
+    // comment
+    const commentInput = screen.getByTestId("textarea");
+    expect(commentInput).not.toBeDisabled();
+    userEvent.type(commentInput, "mycomment");
+
+    const errorMsg =
+      "An error occurred while submitting your comment. Please try again later!";
+    const successMsg =
+      "Thank you, your form has been submitted and an email confirmation will be sent to you shortly.";
+
+    // submit form (receive server error)
+    await wait(() => {
+      userEvent.click(submitBtn);
+    });
+    expect(screen.getByText(errorMsg)).toBeInTheDocument();
+
+    // submit form (successful)
+    await wait(() => {
+      userEvent.click(submitBtn);
+    });
+    expect(screen.getByText(successMsg)).toBeInTheDocument();
   });
 });
