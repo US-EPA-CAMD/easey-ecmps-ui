@@ -8,7 +8,6 @@ applications:
     env:
       OPTIMIZE_MEMORY: true
       PUBLIC_URL: https://((host))/((path))
-      NODE_OPTIONS: --max-old-space-size=((heap))
       REACT_APP_EASEY_ECMPS_UI_ENV: ((environment))
       REACT_APP_EASEY_ECMPS_UI_HOST: ((host))
       REACT_APP_EASEY_ECMPS_UI_PATH: /((path))
