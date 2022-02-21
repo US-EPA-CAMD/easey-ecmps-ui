@@ -74,6 +74,7 @@ export const DataTableSystemsComponents = ({
   const [selectedUnlinkedComponent, setSelectedUnlinkedComponent] = useState(
     {}
   );
+  const selectText = "-- Select a value --";
   const [dataLoaded, setDataLoaded] = useState(false);
   const [dataFuelLoaded, setFuelDataLoaded] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState(null);
@@ -90,6 +91,8 @@ export const DataTableSystemsComponents = ({
   const [systemComponentDropdownsLoaded, setSystemComponentDropdownsLoaded] =
     useState(false);
 
+    const [prefilteredSystemComponentMdmData, setSystemComponentPrefilteredMdmData] = useState(false);
+    const [mainSystemComponentDropdownChange, setSystemComponenMainDropdownChange] = useState("");
   const fuelFlowsDataArray = [
     [
       "maximumFuelFlowRateSourceCode",
@@ -98,7 +101,12 @@ export const DataTableSystemsComponents = ({
     ],
   ];
   const systemComponentsDataArray = [
-    ["sampleAcquisitionMethodCode", "componentTypeCode", "basisCode"],
+    [
+      "sampleAcquisitionMethodCode",
+      "componentTypeCode",
+      "basisCode",
+      "prefilteredSystemsComponents",
+    ],
   ];
 
   useEffect(() => {
@@ -173,6 +181,34 @@ export const DataTableSystemsComponents = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected, updateFuelFlowTable, updateComponentTable]);
 
+  // triggers on change prefilter of systems component
+  useEffect(() => { 
+    const prefilteredDataName = "componentTypeCode";
+    if (prefilteredSystemComponentMdmData) {
+      const result = prefilteredSystemComponentMdmData.filter(
+        (data) => data[prefilteredDataName] === mainSystemComponentDropdownChange
+      );
+      if (result.length > 0) {
+        for (const modalDetailData of selectedComponentsModalData) {
+          if (modalDetailData[4] === "dropdown") {
+            const selectedCodes = result[0];
+            const filteredOutSubDropdownOptions = systemComponentsMdmData[
+              modalDetailData[0]
+            ].filter((option) =>
+              selectedCodes[modalDetailData[0]].includes(option.code)
+            );
+            filteredOutSubDropdownOptions.unshift({
+              code: "",
+              name: selectText,
+            });
+            modalDetailData[6] = filteredOutSubDropdownOptions;
+          }
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mainSystemComponentDropdownChange, selectedComponentsModalData]);
+
   const columnNames = ["ID", "Type", "Date and Time"];
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -225,7 +261,7 @@ export const DataTableSystemsComponents = ({
             "dropdown",
             "",
           ],
-          componentTypeCode: ["Component Type", "dropdown", ""],
+          componentTypeCode: ["Component Type", "mainDropdown", ""],
           basisCode: ["Basis Description", "dropdown", ""],
           manufacturer: ["Manufacturer", "input", ""],
           modelVersion: ["Model or Version", "input", ""],
@@ -247,8 +283,10 @@ export const DataTableSystemsComponents = ({
     });
     setBread(true, "Component");
   };
+
   const openComponent = (row, bool, create) => {
     let selectComponents = null;
+    const prefilteredDataName = "prefilteredSystemsComponents"
     setCreateNewComponentFlag(create);
     setOpenFuelFlowsView(false);
     setComponentView(true);
@@ -261,6 +299,21 @@ export const DataTableSystemsComponents = ({
       setOpenAnalyzer(selectComponents);
       setSelectedRangeInFirst(selectComponents); // for saving
     }
+    let mainDropdownResult = [];
+    let mainDropdownName = "componentTypeCode";
+
+
+
+    mainDropdownResult = systemComponentsMdmData[mainDropdownName].filter((o) =>
+    systemComponentsMdmData[prefilteredDataName].some(
+        (element, index, arr) => o.code === element[mainDropdownName]
+      )
+    );
+    if (!mainDropdownResult.includes({ code: "", name: selectText })) {
+      mainDropdownResult.unshift({ code: "", name: selectText });
+    }
+
+    setSystemComponentPrefilteredMdmData(systemComponentsMdmData[prefilteredDataName]);
     setSelectedComponentsModalData(
       modalViewData(
         selectComponents,
@@ -271,7 +324,7 @@ export const DataTableSystemsComponents = ({
             "dropdown",
             "",
           ],
-          componentTypeCode: ["Component Type", "dropdown", ""],
+          componentTypeCode: ["Component Type", "mainDropdown", ""],
           basisCode: ["Basis Description", "dropdown", ""],
           manufacturer: ["Manufacturer", "input", ""],
           modelVersion: ["Model or Version", "input", ""],
@@ -285,7 +338,12 @@ export const DataTableSystemsComponents = ({
           endHour: ["End Time", "time", ""],
         },
         create,
-        systemComponentsMdmData
+        systemComponentsMdmData,
+        systemComponentsMdmData[prefilteredDataName],
+        "", // mainDropdownName'',
+        mainDropdownResult,
+        false, // staticDropdownFlag,
+        "prefilteredSystemsComponents" // "prefilteredTotalName"
       )
     );
     setTimeout(() => {
@@ -530,6 +588,8 @@ export const DataTableSystemsComponents = ({
                           ? `Edit Component: ${selectedComponent["componentId"]}`
                           : `Component: ${selectedComponent["componentId"]}`
                       }
+                      setMainDropdownChange={setSystemComponenMainDropdownChange}
+                      mainDropdownChange={mainSystemComponentDropdownChange}
                       viewOnly={!(user && checkout)}
                     />
                     {createNewComponentFlag ? (
