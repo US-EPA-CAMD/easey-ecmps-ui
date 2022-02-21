@@ -1,65 +1,115 @@
 import { modalViewData } from "./create-modal-input-controls";
+import * as mpApi from "../utils/api/monitoringPlansApi";
+import axios from "axios";
 
-describe("modalViewData function", () => {
-  let selected = {
-    sampleAcquisitionMethodCode: "ORF",
-    active: true,
-    basisCode: null,
-    beginDate: "2019-07-01",
-    beginHour: "0",
-    componentRecordId: "TWCORNEL5-4EA39F9E01AB411EB84E313A212084C1",
-    componentRecordIdentifier: "AFA",
-    componentTypeCode: "GFFM",
-    endDate: null,
-    endHour: null,
-    hgConverterIndicator: null,
-    id: "TWCORNEL5-902F83FCDE244546ABB2E2F46EC873E3",
-    manufacturer: "FLUIDID TECHNOLOGIES",
-    modelVersion: "FAB-3161-2A",
-    locationId: "6",
-    monitoringSystemRecordId: "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D",
-    serialNumber: "001-NG-FE-1000",
-  };
+// mock get function to return a fa
+jest.mock("axios");
 
-  const label = {
-    sampleAcquisitionMethodCode: ["Sample Acquistion Method", "dropdown", ""],
-    basisCode: ["Basis Description", "dropdown", ""],
-    componentRecordId: ["Component ID", "input", "required"],
-    componentTypeCode: ["Component Type", "dropdown", "required"],
-    hgConverterIndicator: ["Hg Converter Indicator", "radio", ""],
-    hgConverterIndicator2: ["Hg Converter Indicator", "radio", "required"],
-    manufacturer: ["Manufacturer", "input", ""],
-    modelVersion: ["Modal or Version", "input", ""],
-    serialNumber: ["Serial Number", "input", ""],
-    break: ["Serial Number", "", ""],
-    skip: ["Serial Number", "skip", ""],
-  };
-  const labelWithConditional = {
-    sampleAcquisitionMethodCode: ["Sample Acquistion Method", "dropdown", ""],
-    basisCode: ["Basis Description", "dropdown", ""],
-    componentRecordId: ["Component ID", "input", "required"],
-    componentTypeCode: ["Component Type", "dropdown", "required"],
-    hgConverterIndicator: ["Hg Converter Indicator", "radio", "required"],
-    hgConverterIndicator2: ["Hg Converter Indicator", "radio", ""],
-    manufacturer: ["Manufacturer", "input", ""],
-    modelVersion: ["Modal or Version", "input", ""],
-    serialNumber: ["Serial Number", "input", ""],
-    break: ["Serial Number", "", ""],
-    skip: ["Serial Number", "skip", ""],
-  };
-  const time = {
-    beginDate: ["Start Date", "date", "required"],
-    beginHour: ["Start Time", "time", "required"],
-    endDate: ["End Date", "date", ""],
-    endHour: ["End Time", "time", ""],
-  };
-  let createNew = false;
-  it("returns an array of the control inputs ", () => {
-    expect(modalViewData(selected, label, time, createNew).length).toBe(14);
-  });
-  it("test coniditonals ", () => {
-    expect(modalViewData(null, labelWithConditional, time, true).length).toBe(
-      14
+const controlInputs = {
+  input: ["Input", "input", "", ""],
+  lockedInput: ["Locked Input", "input", "", "locked"],
+  lockedDate: ["Locked Date", "date", "", "locked"],
+  date: ["Date", "date", "", ""],
+  radio: ["Radio", "radio", "", ""],
+  skip: ["Skip", "skip", "", ""],
+  blah: ["Blah", "blah", "blah", "blah"],
+};
+
+const controlDatePickerInputs = {
+  beginDate: ["Start Date", "date", ""],
+  beginDate: ["Start Date", "dateTime", ""],
+  beginHour: ["Start Time", "time", ""],
+  endDate: ["End Date", "date", ""],
+  endHour: ["End Time", "time", ""],
+  skip: ["skip", "skip", ""],
+};
+
+const locationSelectValue = 200;
+const mdmData = {
+  staticDropdown: [{ staticDropdown: [""] }],
+  filteredTest: [{ staticDropdown: [""] }],
+};
+const mainDropdownName = "";
+const staticDropdownFlag = true;
+const prefilteredTotalName = "filteredTest";
+const result = "";
+const boolOptions = [true, false];
+
+describe("create all options for modal input controls", () => {
+  test("create method modal input controls", async () => {
+    axios.get.mockImplementation(() =>
+      Promise.resolve({
+        status: 200,
+        data: [{ testInput: "", beginDate: "2/22/22T123" }],
+      })
     );
+    const response = await mpApi.getMonitoringMethods(locationSelectValue);
+    const methods = response.data;
+    const selectedData = methods[0];
+
+    for (const isCreate of boolOptions) {
+      for (const isMats of boolOptions) {
+        for (const hasStaticDropdown of boolOptions) {
+          const data = modalViewData(
+            selectedData,
+            controlInputs,
+            controlDatePickerInputs,
+            isCreate,
+            mdmData,
+            "",
+            mainDropdownName,
+            result,
+            hasStaticDropdown,
+            prefilteredTotalName,
+            isMats
+          );
+
+          // Check that the returned modal data match the control and date picker input arrays
+          for (const arr of data) {
+            if (!Array.isArray(arr[0])) {
+              expect(
+                controlInputs[arr[0]] || controlDatePickerInputs[arr[0]]
+              ).toBeTruthy();
+            }
+          }
+        }
+      }
+    }
+
+    // Test radio button with no selected data
+    modalViewData(
+      false,
+      { radio: ["Radio", "radio", "", ""] },
+      {},
+      true,
+      mdmData,
+      "",
+      mainDropdownName,
+      result,
+      staticDropdownFlag,
+      prefilteredTotalName,
+      false
+    );
+
+    // Test radio button with no selected data
+    for (const isCreate of boolOptions) {
+      modalViewData(
+        false,
+        {
+          staticDropdown: ["Static Dropdown", "independentDropdown", "", ""],
+          mainDropdown: ["Main Dropdown", "mainDropdown", "", ""],
+          dropdown: ["Dropdown", "dropdown", "", ""],
+        },
+        {},
+        isCreate,
+        mdmData,
+        "filteredTest",
+        mainDropdownName,
+        result,
+        staticDropdownFlag,
+        prefilteredTotalName,
+        false
+      );
+    }
   });
 });

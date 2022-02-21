@@ -1,85 +1,112 @@
-import React from 'react';
+import { render, screen, wait, fireEvent } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import * as React from "react";
+import Login from "./Login";
 
-import { shallow } from 'enzyme';
+// mock get function to return a fa
+jest.mock("js-cookie", () => {
+  return {
+    get: jest.fn(() => false),
+  };
+});
 
-import { findByTestAttr } from '../../test/testUtils';
-import { authenticate } from '../../utils/api/easeyAuthApi';
-import Login from './Login';
+// mock authenticate method
+jest.mock("../../utils/api/easeyAuthApi", () => {
+  const errorWithResponse = new Error("Error occurred while authenticating.");
+  const res = {
+    data: {
+      message: "Authentication error occurred with a response",
+    },
+  };
+  errorWithResponse["response"] = res;
+  return {
+    authenticate: jest
+      .fn()
+      .mockResolvedValueOnce({
+        error: false,
+      })
+      .mockResolvedValueOnce({
+        error: true,
+      })
+      .mockRejectedValueOnce(new Error("Error occurred while authenticating."))
+      .mockRejectedValueOnce(errorWithResponse),
+  };
+});
 
-const mockSetInputField = jest.fn();
+test("renders and tests Login component", async () => {
+  // render component
+  const login = render(<Login isModal={false} />);
 
-jest.mock('react', () => ({
-  ...jest.requireActual('react'),
-  useState: initialState => [initialState, mockSetInputField],
-}));
+  // click on create an account link
+  const createAcc = screen.getByText("create an account");
+  expect(createAcc).not.toBeDisabled();
+  userEvent.click(createAcc);
 
-const defaultProps = { loading: false };
+  // click on forgot username link
+  const forgotUser = screen.getByText("Forgot username?");
+  expect(forgotUser).not.toBeDisabled();
+  userEvent.click(forgotUser);
 
-/**
- * Factory function to create a ShallowWrapper for the Login component.
- * function setup
- * @param {object} props - Component props specific to this setup.
- * @returns {ShallowWrapper}
- */
-const setup = (props = {}) => {
-  const setupProps = { ...defaultProps, ...props };
-  return shallow(<Login {...setupProps} />);
-};
+  // click on forgot password link
+  const forgotPwd = screen.getByText("Forgot password?");
+  expect(forgotPwd).not.toBeDisabled();
+  userEvent.click(forgotPwd);
 
-describe('tests for login form component', () => {
-  test('renders component without crashing', () => {
-    const wrapper = setup();
-    const component = findByTestAttr(wrapper, 'component-login');
-    expect(component.length).toBe(1);
+  // username
+  const usernameInput = screen.getByLabelText("Username");
+  expect(usernameInput).not.toBeDisabled();
+  userEvent.type(usernameInput, "myusername");
+  expect(screen.getByDisplayValue("myusername")).toBeInTheDocument();
+
+  // password
+  const passwordInput = screen.getByLabelText("Password");
+  expect(passwordInput).not.toBeDisabled();
+  userEvent.type(passwordInput, "pass1234");
+
+  const btns = screen.getAllByRole("button");
+
+  // click on hide password toggle
+  await wait(async () => {
+    const hidePwdBtn = btns[1];
+    expect(hidePwdBtn).not.toBeDisabled();
+    userEvent.click(hidePwdBtn);
+    userEvent.click(hidePwdBtn);
+    expect(screen.getByDisplayValue("pass1234")).toBeInTheDocument();
   });
-  test('it will ensure that a username is given', () => {
-    const wrapper = setup();
-    const componentInput = findByTestAttr(wrapper, 'component-login-username');
 
-    const mockEvent = { target: { value: 'myusername' } };
-    componentInput.simulate('change', mockEvent);
+  // login button
+  const loginBtn = btns[0];
+  expect(loginBtn).not.toBeDisabled();
 
-    expect(mockSetInputField).toHaveBeenCalledWith('myusername');
+  // successful login
+  await wait(async () => {
+    userEvent.click(loginBtn);
   });
-  test('it will ensure a password is given', () => {
-    const wrapper = setup();
-    const componentInput = findByTestAttr(wrapper, 'component-login-password');
 
-    const mockEvent = { target: { value: 'mypassword' } };
-    componentInput.simulate('change', mockEvent);
-
-    expect(mockSetInputField).toHaveBeenCalledWith('mypassword');
+  // login response contains error
+  await wait(async () => {
+    userEvent.click(loginBtn);
   });
-  test('it will ensure that an api server response is returned in the error block', async () => {
-    const wrapper = setup();
-    const componentUsernameInput = findByTestAttr(
-      wrapper,
-      'component-login-username',
-    );
-    const componentPasswordInput = findByTestAttr(
-      wrapper,
-      'component-login-password',
-    );
-    const componentSubmitButton = findByTestAttr(
-      wrapper,
-      'component-login-submit-button',
-    );
-    const username = 'myusername';
-    const password = 'mypassword';
-    const mockUsernameEvent = { target: { value: username } };
-    const mockPasswordEvent = { target: { value: password } };
-    componentUsernameInput.simulate('change', mockUsernameEvent);
-    componentPasswordInput.simulate('change', mockPasswordEvent);
-    componentSubmitButton.simulate('click');
 
-    try {
-      await authenticate({ userId: username, password })
-        .then(response => response)
-        .catch(err => {
-          throw err;
-        });
-    } catch (error) {
-      expect(error).toBe(true);
-    }
+  // receives authentication error with a response
+  await wait(async () => {
+    userEvent.click(loginBtn);
+  });
+
+  // receives authentication error without a response
+  await wait(async () => {
+    userEvent.click(loginBtn);
+  });
+
+  // clear username & password fields
+  fireEvent.change(usernameInput, { target: { value: "" } });
+  fireEvent.change(passwordInput, { target: { value: "" } });
+
+  // fails form validation (due to blank fields)
+  await wait(async () => {
+    userEvent.click(loginBtn);
+    expect(
+      screen.getByText("Please enter your username and password")
+    ).toBeInTheDocument();
   });
 });

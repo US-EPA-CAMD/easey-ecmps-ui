@@ -34,7 +34,7 @@ export const config = {
       process.env.REACT_APP_EASEY_ECMPS_UI_ACTIVITY_COUNTDOWN_DURATION_SECONDS *
         oneSecond || 30 * oneSecond,
     paginationPerPage:
-      process.env.REACT_APP_EASEY_ECMPS_UI_PAGINATION_PER_PAGE || 100,
+      +process.env.REACT_APP_EASEY_ECMPS_UI_PAGINATION_PER_PAGE || 100,
     paginationPerPageOptions: [100, 200, 500],
     paginationRangeSeparatorText: "out of",
     path: process.env.REACT_APP_EASEY_ECMPS_UI_PATH || "/ecmps/",

@@ -1,7 +1,7 @@
+instances: 1
 host: easey-tst.app.cloud.gov
 apiHost: api.epa.gov/easey/test
 environment: testing
-memory: 1024M
 inactivityDurationCheckoutMinutes: 5
 refreshTokenRateMinutes: 3
 inactivityDurationLogoutMinutes: 5
