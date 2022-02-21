@@ -226,7 +226,7 @@ export const DataTableRender = ({
             <div>
               {/* user is logged in  */}
               {user ? (
-                // user is at the configuration table
+                // user is at the configuration table main page
                 // needs 2 buttons, open and open and checkout
                 actionsBtn === "Open" ? (
                   <div>
