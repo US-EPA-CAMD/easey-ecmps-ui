@@ -328,7 +328,7 @@ export const DataTableRender = ({
       columns.unshift({
         name: "Actions",
         button: true,
-        width: "25%",
+        width: "15%",
         cell: (row) => {
           // *** normalize the row object to be in the format expected by DynamicTabs
           const normalizedRow = normalizeRowObjectFormat(row, columnNames);
