@@ -343,3 +343,9 @@ export const getPrefilteredSystemFuelFlows = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+export const getPrefilteredSystemComponents= async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/relationships/system-components`)
+    .then(handleResponse)
+    .catch(handleError);
+};
