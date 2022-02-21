@@ -213,87 +213,130 @@ export const DataTableRender = ({
     }
   });
   if (actionsBtn) {
-    columns.push({
-      name: "Actions",
-      button: true,
-      width: "25%",
-      cell: (row) => {
-        // *** normalize the row object to be in the format expected by DynamicTabs
-        const normalizedRow = normalizeRowObjectFormat(row, columnNames);
+    if (actionsBtn === "Open") {
+      columns.push({
+        name: "Actions",
+        button: true,
+        width: "25%",
+        cell: (row) => {
+          // *** normalize the row object to be in the format expected by DynamicTabs
+          const normalizedRow = normalizeRowObjectFormat(row, columnNames);
 
-        return (
-          <div>
-            {/* user is logged in  */}
-            {user ? (
-              // user is at the configuration table
-              // needs 2 buttons, open and open and checkout
-              // user is at a section table, it only says view/edit if checked out
-              // or just view if not checked out
-              actionsBtn === "Open" ? (
-                <div>
-                  <Button
-                    type="button"
-                    unstyled="true"
-                    epa-testid="btnOpen"
-                    className="cursor-pointer open-modal-button"
-                    id={
-                      tableTitle
-                        ? `btnOpen${tableTitle.split(" ").join("")}`
-                        : `btnOpen`
-                    }
-                    onClick={() => openHandler(normalizedRow, false, false)}
-                    aria-label={`open ${row["col1"]} in a new tab`}
-                  >
-                    {"Open"}
-                  </Button>
+          return (
+            <div>
+              {/* user is logged in  */}
+              {user ? (
+                // user is at the configuration table main page
+                // needs 2 buttons, open and open and checkout
+                actionsBtn === "Open" ? (
+                  <div>
+                    <Button
+                      type="button"
+                      unstyled="true"
+                      epa-testid="btnOpen"
+                      className="cursor-pointer open-modal-button"
+                      id={
+                        tableTitle
+                          ? `btnOpen${tableTitle.split(" ").join("")}`
+                          : `btnOpen`
+                      }
+                      onClick={() => openHandler(normalizedRow, false, false)}
+                      aria-label={`open ${row["col1"]} in a new tab`}
+                    >
+                      {"Open"}
+                    </Button>
 
-                  {/* display a checkout option only if no other locations are currently checked out by user */}
-                  {isAnyLocationCheckedOutByUser() === false &&
-                  isLocationCheckedOut(row["facId"]) === false &&
-                  row["col2"] === "Active" ? (
-                    <>
-                      <span className="margin-x-1">|</span>
-                      <Button
-                        type="button"
-                        unstyled="true"
-                        epa-testid="btnOpenAndCheckout"
-                        className="cursor-pointer open-modal-button"
-                        id={
-                          tableTitle
-                            ? `btnOpenAndCheckout${tableTitle
-                                .split(" ")
-                                .join("")}`
-                            : `btnOpenAndCheckout`
-                        }
-                        onClick={() => openHandler(normalizedRow, true)}
-                        aria-label={`open and checkout ${row.col1} in a new tab`}
-                      >
-                        {"Open & Checkout"}
-                      </Button>
-                    </>
-                  ) : /* display check in option only if THIS location is currently checked out by user */
-                  isCurrentlyCheckedOutByUser(row.col3) === true ? (
-                    <>
-                      <span className="margin-x-1">|</span>
-                      <Button
-                        type="button"
-                        unstyled="true"
-                        epa-testid="btnCheckBackIn"
-                        className="cursor-pointer open-modal-button"
-                        id={
-                          tableTitle
-                            ? `btnCheckBackIn${tableTitle.split(" ").join("")}`
-                            : `btnCheckBackIn`
-                        }
-                        onClick={() => openHandler(normalizedRow, false, true)}
-                        aria-label={`check back in ${row.col1} `}
-                      >
-                        {"Check Back In"}
-                      </Button>
-                    </>
-                  ) : null}
-                </div>
+                    {/* display a checkout option only if no other locations are currently checked out by user */}
+                    {isAnyLocationCheckedOutByUser() === false &&
+                    isLocationCheckedOut(row["facId"]) === false &&
+                    row["col2"] === "Active" ? (
+                      <>
+                        <span className="margin-x-1">|</span>
+                        <Button
+                          type="button"
+                          unstyled="true"
+                          epa-testid="btnOpenAndCheckout"
+                          className="cursor-pointer open-modal-button"
+                          id={
+                            tableTitle
+                              ? `btnOpenAndCheckout${tableTitle
+                                  .split(" ")
+                                  .join("")}`
+                              : `btnOpenAndCheckout`
+                          }
+                          onClick={() => openHandler(normalizedRow, true)}
+                          aria-label={`open and checkout ${row.col1} in a new tab`}
+                        >
+                          {"Open & Checkout"}
+                        </Button>
+                      </>
+                    ) : /* display check in option only if THIS location is currently checked out by user */
+                    isCurrentlyCheckedOutByUser(row.col3) === true ? (
+                      <>
+                        <span className="margin-x-1">|</span>
+                        <Button
+                          type="button"
+                          unstyled="true"
+                          epa-testid="btnCheckBackIn"
+                          className="cursor-pointer open-modal-button"
+                          id={
+                            tableTitle
+                              ? `btnCheckBackIn${tableTitle
+                                  .split(" ")
+                                  .join("")}`
+                              : `btnCheckBackIn`
+                          }
+                          onClick={() =>
+                            openHandler(normalizedRow, false, true)
+                          }
+                          aria-label={`check back in ${row.col1} `}
+                        >
+                          {"Check Back In"}
+                        </Button>
+                      </>
+                    ) : null}
+                  </div>
+                ) : (
+                  <div></div>
+                )
               ) : (
+                // user is not logged in (in public record)
+                <Button
+                  type="button"
+                  unstyled="true"
+                  epa-testid="btnOpen"
+                  id={
+                    tableTitle
+                      ? `btnOpen${tableTitle.split(" ").join("")}`
+                      : `btnOpen_${row[`col${Object.keys(row).length - 1}`]}`
+                  }
+                  className="cursor-pointer margin-left-2 open-modal-button"
+                  onClick={() => {
+                    openHandler(normalizedRow, false);
+                  }}
+                  aria-label={`Open ${row.col1} in a new tab`}
+                >
+                  {"Open"}
+                </Button>
+              )}
+            </div>
+          );
+        },
+      });
+    }
+    if (actionsBtn === "View") {
+      columns.unshift({
+        name: "Actions",
+        button: true,
+        width: "25%",
+        cell: (row) => {
+          // *** normalize the row object to be in the format expected by DynamicTabs
+          const normalizedRow = normalizeRowObjectFormat(row, columnNames);
+
+          return (
+            <div>
+              {/* user is logged in  */}
+              {user ? (
                 <Button
                   type="button"
                   unstyled="true"
@@ -315,35 +358,31 @@ export const DataTableRender = ({
                 >
                   {checkout && !nonEditable ? "View / Edit" : "View"}
                 </Button>
-              )
-            ) : (
-              // user is not logged in (in public record)
-              <Button
-                type="button"
-                unstyled="true"
-                epa-testid="btnOpen"
-                id={
-                  tableTitle
-                    ? `btnOpen${tableTitle.split(" ").join("")}`
-                    : `btnOpen_${row[`col${Object.keys(row).length - 1}`]}`
-                }
-                className="cursor-pointer margin-left-2 open-modal-button"
-                onClick={() => {
-                  openHandler(normalizedRow, false);
-                }}
-                aria-label={
-                  actionsBtn === `Open`
-                    ? `Open ${row.col1} in a new tab`
-                    : `View ${row.col1}`
-                }
-              >
-                {actionsBtn === "Open" ? "Open" : "View"}
-              </Button>
-            )}
-          </div>
-        );
-      },
-    });
+              ) : (
+                // user is not logged in (in public record)
+                <Button
+                  type="button"
+                  unstyled="true"
+                  epa-testid="btnOpen"
+                  id={
+                    tableTitle
+                      ? `btnOpen${tableTitle.split(" ").join("")}`
+                      : `btnOpen_${row[`col${Object.keys(row).length - 1}`]}`
+                  }
+                  className="cursor-pointer margin-left-2 open-modal-button"
+                  onClick={() => {
+                    openHandler(normalizedRow, false);
+                  }}
+                  aria-label={`View ${row.col1}`}
+                >
+                  {"View"}
+                </Button>
+              )}
+            </div>
+          );
+        },
+      });
+    }
   }
 
   const colsFilter = (currentElement) => {
