@@ -13,7 +13,7 @@ export const modalViewData = (
   prefilteredMdmTotal, // mdmData[prefilteredDataName],\
   mainDropdownName,
   prefilterMdmMain, // result
-  staticDropdownFlag,
+  hasMainDropdown,
   prefilteredTotalName,
 
   mats = false
@@ -22,7 +22,7 @@ export const modalViewData = (
 
   const totalOptionsClone = _.cloneDeep(totalOptions);
 
-  if (!staticDropdownFlag) {
+  if (hasMainDropdown) {
     totalOptionsClone[mainDropdownName] = prefilterMdmMain;
   }
 
@@ -143,7 +143,7 @@ export const modalViewData = (
           break;
 
         case "skip":
-          arr.push([[], [], [], "", "skip"]);
+          arr.push(["", "", "", "", "skip"]);
           break;
         case "radio":
           if (selected) {
@@ -235,7 +235,7 @@ export const modalViewData = (
       ]);
     }
     if (y === "skip") {
-      arr.push([[], [], [], "", "skip"]);
+      arr.push(["", "", "", "", "skip"]);
     }
   }
   return arr;
