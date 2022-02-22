@@ -1,6 +1,8 @@
 applications:
   - name: ((name))
-    memory: ((memory))
+    memory: ((memory))M
+    disk_quota: ((disk))M
+    instances: ((instances))
     buildpacks:
       - nodejs_buildpack
     env:

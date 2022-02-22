@@ -54,7 +54,10 @@ export const WideHeader = () => {
 
     // *** URI encode the component after trimming to get rid of leading/trailing spaces
     // *** and mitigate any character collision issues during http request with window.open
-    const searchTerm = encodeURI(event.target[0].value.trim());
+    const searchTerm = event.target[0]
+      ? encodeURI(event.target[0].value.trim())
+      : "";
+
     window.open(
       `https://search.epa.gov/epasearch/?querytext=${searchTerm}`,
       "_blank"

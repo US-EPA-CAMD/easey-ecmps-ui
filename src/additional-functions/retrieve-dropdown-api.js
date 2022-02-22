@@ -617,11 +617,12 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
               controlCode: option["controlCode"],
             };
           });
+          console.log("response.data control", response.data, options);
           noDupesFormCodesControls = [...new Set(noDupesFormCodesControls)];
           const prefilteredMdmOptions = organizePrefilterMDMData(
             noDupesFormCodesControls,
             "controlEquipParamCode",
-            options
+            response.data
           );
 
           setDefaultOptions(prefilteredMdmOptions, fieldName);
@@ -635,6 +636,26 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
       case "prefilteredSystemFuelFlows":
         await dmApi.getPrefilteredSystemFuelFlows().then((response) => {
           setStaticDropdown(response.data, fieldName);
+        });
+        break;
+
+      case "prefilteredSystemsComponents":
+        let noDupesSysComps = [];
+        await dmApi.getPrefilteredSystemComponents().then((response) => {
+          noDupesSysComps = response.data.map((code) => {
+            return code["componentTypeCode"];
+          });
+
+          noDupesSysComps = [...new Set(noDupesSysComps)];
+
+          const prefilteredMdmOptions = organizePrefilterMDMData(
+            noDupesSysComps,
+            "componentTypeCode",
+            response.data
+          );
+
+          console.log('prefilteredMdmOptions',prefilteredMdmOptions)
+          setDefaultOptions(prefilteredMdmOptions, fieldName);
         });
         break;
       default:

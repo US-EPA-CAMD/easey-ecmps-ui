@@ -87,7 +87,8 @@ const ModalDetails = ({
   const makeViewOnlyComp = (value) => {
     return (
       <div key={`${value[1]}`} className="grid-col">
-        {(value[4] === "time" || value[4] === "date") && value[5] === null ? (
+        {((value[4] === "time" || value[4] === "date") && value[5] === null) ||
+        value[0] === false ? (
           ""
         ) : (
           <FormGroup className="margin-top-0">
