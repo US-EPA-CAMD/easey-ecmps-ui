@@ -115,9 +115,7 @@
       "!src/store/reducers/index.js",
       "!src/store/reducers/initialState.js",
       "!src/utils/api/axiosSetup.js",
-      "!src/utils/api/setupTests.js",
-      "!src/utils/api/apiUtils.js",
-      "!src/utils/api/apiUtils.js"
+      "!src/utils/api/setupTests.js"
     ]
   }
 }
