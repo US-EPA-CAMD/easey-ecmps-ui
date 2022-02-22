@@ -534,6 +534,22 @@ export const HeaderInfo = ({
               {user && checkedOutByUser ? (
                 <div>
                   <div className="padding-2 margin-left-10">
+                    <Button
+                      type="button"
+                      className="margin-right-2 float-right margin-bottom-2"
+                      outline={true}
+                    >
+                      Export Monitoring Plan
+                    </Button>
+                    <Button
+                      type="button"
+                      className="margin-right-2 float-right margin-bottom-2"
+                      outline={true}
+                    >
+                      Import Monitoring Plan
+                    </Button>
+                  </div>
+                  <div className="padding-2 margin-left-10">
                     {evalStatusText(evalStatus) === "Needs Evaluation" ? (
                       <Button
                         type="button"
