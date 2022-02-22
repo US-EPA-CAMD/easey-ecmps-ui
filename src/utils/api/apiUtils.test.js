@@ -52,6 +52,7 @@ describe("test response and error handler functions", () => {
     const err3 = {
       message: lastErrorMsg,
     };
+    const err4 = { message: "" };
 
     handleError(err1);
     expect(globalMsg).toBe(`${errorName} ${firstErrorMsg}`);
@@ -61,5 +62,7 @@ describe("test response and error handler functions", () => {
 
     handleError(err3);
     expect(globalMsg).toBe(lastErrorMsg);
+
+    handleError(err4);
   });
 });
