@@ -319,14 +319,11 @@ export const DataTableAssert = ({
       setSelectedRow(selectedData);
     }
     let mainDropdownName = "";
-    let staticDropdownFlag = false;
+    let hasMainDropdown = false;
     for (const controlProperty in controlInputs) {
       if (controlInputs[controlProperty][1] === "mainDropdown") {
         mainDropdownName = controlProperty;
-        break;
-      }
-      if (controlInputs[controlProperty][1] === "independentDropdown") {
-        staticDropdownFlag = true;
+        hasMainDropdown = true;
         break;
       }
     }
@@ -335,7 +332,7 @@ export const DataTableAssert = ({
       prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
     }
     let mainDropdownResult;
-    if (mainDropdownName !== "" && staticDropdownFlag === false) {
+    if (mainDropdownName !== "" && hasMainDropdown === true) {
       mainDropdownResult = mdmData[mainDropdownName].filter((o) =>
         mdmData[prefilteredDataName].some(
           (element, index, arr) => o.code === element[mainDropdownName]
@@ -363,7 +360,7 @@ export const DataTableAssert = ({
         prefilteredDataName ? mdmData[prefilteredDataName] : "",
         mainDropdownName,
         mainDropdownResult,
-        staticDropdownFlag,
+        hasMainDropdown,
         prefilteredTotalName
       )
     );
