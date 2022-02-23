@@ -10,6 +10,14 @@ import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 import "./HeaderInfo.scss";
 import MonitoringPlanEvaluationReport from "../MonitoringPlanEvaluationReport/MonitoringPlanEvaluationReport";
 import { Preloader } from "@us-epa-camd/easey-design-system";
+import ImportModal from "../ImportModal/ImportModal";
+import UploadModal from "../UploadModal/UploadModal";
+import {
+  attachChangeEventListeners,
+  removeChangeEventListeners,
+  unsavedDataMessage,
+} from "../../additional-functions/prompt-to-save-unsaved-changes";
+
 
 export const HeaderInfo = ({
   facility,
@@ -71,6 +79,7 @@ export const HeaderInfo = ({
   const [evalStatusLoaded, setEvalStatusLoaded] = useState(false);
   // const duringEvalStatuses = ["INQ", "WIP"];
 
+  const [showModal, setShowModal] = useState(false);
   const [userHasCheckout, setUserHasCheckout] = useState(false);
 
   const [lockedFacility, setLockedFacility] = useState(false);
@@ -90,6 +99,21 @@ export const HeaderInfo = ({
       reportWindowParams
     );
   };
+
+
+  
+  const closeModalHandler = () => {
+    if (window.isDataChanged === true) {
+      if (window.confirm(unsavedDataMessage) === true) {
+        setShowModal(false);
+        removeChangeEventListeners(".modalUserInput");
+      }
+    } else {
+      setShowModal(false);
+      removeChangeEventListeners(".modalUserInput");
+    }
+  };
+
 
   useEffect(() => {
     // get evaluation status
@@ -545,6 +569,7 @@ export const HeaderInfo = ({
                       type="button"
                       className="margin-right-2 float-right margin-bottom-2"
                       outline={true}
+                      onClick={() => setShowModal(true)}
                     >
                       Import Monitoring Plan
                     </Button>
@@ -635,6 +660,25 @@ export const HeaderInfo = ({
       ) : (
         <Preloader />
       )}
+
+      {showModal ? (
+        <UploadModal
+          show={showModal}
+          close={closeModalHandler}
+          save={true}
+          showCancel={true}
+          showSave={true}
+          title={"Import a Monitoring Plan to continue"}
+          children={
+              <div>
+                <ImportModal
+
+                />
+              </div>
+            
+          }
+        />
+      ) : null}
     </div>
   );
 };
