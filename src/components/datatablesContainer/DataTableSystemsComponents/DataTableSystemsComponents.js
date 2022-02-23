@@ -91,8 +91,14 @@ export const DataTableSystemsComponents = ({
   const [systemComponentDropdownsLoaded, setSystemComponentDropdownsLoaded] =
     useState(false);
 
-    const [prefilteredSystemComponentMdmData, setSystemComponentPrefilteredMdmData] = useState(false);
-    const [mainSystemComponentDropdownChange, setSystemComponenMainDropdownChange] = useState("");
+  const [
+    prefilteredSystemComponentMdmData,
+    setSystemComponentPrefilteredMdmData,
+  ] = useState(false);
+  const [
+    mainSystemComponentDropdownChange,
+    setSystemComponentMainDropdownChange,
+  ] = useState("");
   const fuelFlowsDataArray = [
     [
       "maximumFuelFlowRateSourceCode",
@@ -182,11 +188,12 @@ export const DataTableSystemsComponents = ({
   }, [selected, updateFuelFlowTable, updateComponentTable]);
 
   // triggers on change prefilter of systems component
-  useEffect(() => { 
+  useEffect(() => {
     const prefilteredDataName = "componentTypeCode";
     if (prefilteredSystemComponentMdmData) {
       const result = prefilteredSystemComponentMdmData.filter(
-        (data) => data[prefilteredDataName] === mainSystemComponentDropdownChange
+        (data) =>
+          data[prefilteredDataName] === mainSystemComponentDropdownChange
       );
       if (result.length > 0) {
         for (const modalDetailData of selectedComponentsModalData) {
@@ -241,6 +248,8 @@ export const DataTableSystemsComponents = ({
     setOpenFuelFlowsView(false);
     setAddComponent(false);
     setComponentView(true);
+
+    const prefilteredDataName = "prefilteredSystemsComponents";
     if (selectedComp) {
       selectedComp["beginDate"] = null;
       selectedComp["beginHour"] = null;
@@ -251,31 +260,52 @@ export const DataTableSystemsComponents = ({
       setSelectedComponent(null);
     }
 
+    let mainDropdownResult = [];
+    let mainDropdownName = "componentTypeCode";
+
+    mainDropdownResult = systemComponentsMdmData[mainDropdownName].filter((o) =>
+      systemComponentsMdmData[prefilteredDataName].some(
+        (element, index, arr) => o.code === element[mainDropdownName]
+      )
+    );
+    if (!mainDropdownResult.includes({ code: "", name: selectText })) {
+      mainDropdownResult.unshift({ code: "", name: selectText });
+    }
+
+    setSystemComponentPrefilteredMdmData(
+      systemComponentsMdmData[prefilteredDataName]
+    );
     setSelectedComponentsModalData(
       modalViewData(
         !create ? selectedComp : null,
         {
-          componentId: ["Component ID", "input", ""],
+          componentId: ["Component ID", "input", "", ""],
           sampleAcquisitionMethodCode: [
             "Sample Acquistion Method",
             "dropdown",
             "",
+            "",
           ],
-          componentTypeCode: ["Component Type", "mainDropdown", ""],
-          basisCode: ["Basis Description", "dropdown", ""],
-          manufacturer: ["Manufacturer", "input", ""],
-          modelVersion: ["Model or Version", "input", ""],
-          serialNumber: ["Serial Number", "input", ""],
-          hgConverterIndicator: ["Hg Converter Indicator", "radio", ""],
+          componentTypeCode: ["Component Type", "mainDropdown", "", ""],
+          basisCode: ["Basis Description", "dropdown", "", ""],
+          manufacturer: ["Manufacturer", "input", "", ""],
+          modelVersion: ["Model or Version", "input", "", ""],
+          serialNumber: ["Serial Number", "input", "", ""],
+          hgConverterIndicator: ["Hg Converter Indicator", "radio", "", ""],
         },
         {
-          beginDate: ["Start Date", "date", ""],
-          beginHour: ["Start Time", "time", ""],
-          endDate: ["End Date", "date", ""],
-          endHour: ["End Time", "time", ""],
+          beginDate: ["Start Date", "date", "", ""],
+          beginHour: ["Start Time", "time", "", ""],
+          endDate: ["End Date", "date", "", ""],
+          endHour: ["End Time", "time", "", ""],
         },
         create,
-        systemComponentsMdmData
+        systemComponentsMdmData,
+        systemComponentsMdmData[prefilteredDataName],
+        mainDropdownName, // mainDropdownName'',
+        mainDropdownResult,
+        false, // staticDropdownFlag,
+        "prefilteredSystemsComponents" // "prefilteredTotalName"
       )
     );
     setTimeout(() => {
@@ -286,7 +316,7 @@ export const DataTableSystemsComponents = ({
 
   const openComponent = (row, bool, create) => {
     let selectComponents = null;
-    const prefilteredDataName = "prefilteredSystemsComponents"
+    const prefilteredDataName = "prefilteredSystemsComponents";
     setCreateNewComponentFlag(create);
     setOpenFuelFlowsView(false);
     setComponentView(true);
@@ -302,10 +332,8 @@ export const DataTableSystemsComponents = ({
     let mainDropdownResult = [];
     let mainDropdownName = "componentTypeCode";
 
-
-
     mainDropdownResult = systemComponentsMdmData[mainDropdownName].filter((o) =>
-    systemComponentsMdmData[prefilteredDataName].some(
+      systemComponentsMdmData[prefilteredDataName].some(
         (element, index, arr) => o.code === element[mainDropdownName]
       )
     );
@@ -313,34 +341,37 @@ export const DataTableSystemsComponents = ({
       mainDropdownResult.unshift({ code: "", name: selectText });
     }
 
-    setSystemComponentPrefilteredMdmData(systemComponentsMdmData[prefilteredDataName]);
+    setSystemComponentPrefilteredMdmData(
+      systemComponentsMdmData[prefilteredDataName]
+    );
     setSelectedComponentsModalData(
       modalViewData(
         selectComponents,
         {
-          componentId: ["Component ID", "input", ""],
+          componentId: ["Component ID", "input", "", ""],
           sampleAcquisitionMethodCode: [
             "Sample Acquistion Method",
             "dropdown",
             "",
+            "",
           ],
-          componentTypeCode: ["Component Type", "mainDropdown", ""],
-          basisCode: ["Basis Description", "dropdown", ""],
-          manufacturer: ["Manufacturer", "input", ""],
-          modelVersion: ["Model or Version", "input", ""],
-          serialNumber: ["Serial Number", "input", ""],
-          hgConverterIndicator: ["Hg Converter Indicator", "radio", ""],
+          componentTypeCode: ["Component Type", "mainDropdown", "", ""],
+          basisCode: ["Basis Description", "dropdown", "", ""],
+          manufacturer: ["Manufacturer", "input", "", ""],
+          modelVersion: ["Model or Version", "input", "", ""],
+          serialNumber: ["Serial Number", "input", "", ""],
+          hgConverterIndicator: ["Hg Converter Indicator", "radio", "", ""],
         },
         {
-          beginDate: ["Start Date", "date", ""],
+          beginDate: ["Start Date", "date", "", ""],
           beginHour: ["Start Time", "time", ""],
-          endDate: ["End Date", "date", ""],
-          endHour: ["End Time", "time", ""],
+          endDate: ["End Date", "date", "", ""],
+          endHour: ["End Time", "time", "", ""],
         },
         create,
         systemComponentsMdmData,
         systemComponentsMdmData[prefilteredDataName],
-        "", // mainDropdownName'',
+        mainDropdownName, // mainDropdownName'',
         mainDropdownResult,
         false, // staticDropdownFlag,
         "prefilteredSystemsComponents" // "prefilteredTotalName"
@@ -530,6 +561,7 @@ export const DataTableSystemsComponents = ({
                 systemId={selected.id}
                 selectionHandler={setSelectedUnlinkedComponent}
                 caption={"Select Component by ID or Type"}
+                data={selectedComponentsModalData}
                 backBtn={() => {
                   setCreateNewComponentFlag(false);
                   setAddComponentFlag(false);
@@ -555,6 +587,9 @@ export const DataTableSystemsComponents = ({
                     }}
                     data={selectedComponentsModalData}
                     cols={2}
+                    create={createNewComponentFlag}
+                    setMainDropdownChange={setSystemComponentMainDropdownChange}
+                    mainDropdownChange={mainSystemComponentDropdownChange}
                     title={
                       selectedComponent !== null
                         ? ` Add Component: ${selectedComponent["componentId"]}`
@@ -588,7 +623,10 @@ export const DataTableSystemsComponents = ({
                           ? `Edit Component: ${selectedComponent["componentId"]}`
                           : `Component: ${selectedComponent["componentId"]}`
                       }
-                      setMainDropdownChange={setSystemComponenMainDropdownChange}
+                      create={createNewComponentFlag}
+                      setMainDropdownChange={
+                        setSystemComponentMainDropdownChange
+                      }
                       mainDropdownChange={mainSystemComponentDropdownChange}
                       viewOnly={!(user && checkout)}
                     />

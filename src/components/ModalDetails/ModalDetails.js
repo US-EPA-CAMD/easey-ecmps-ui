@@ -125,6 +125,7 @@ const ModalDetails = ({
     setMainDropdownChange(value);
     setMainDropdownUntouched(false);
 
+    console.log("thi is value", value);
     if (value === "") {
       setDisableDropdownFlag(true);
       setShowInitialHelpText(true);
