@@ -77,7 +77,6 @@ export const DataTableLMEQualifications = ({
     } else {
       setDropdownsLoaded(true);
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mdmData]);
 
@@ -116,14 +115,19 @@ export const DataTableLMEQualifications = ({
       modalViewData(
         lmeData,
         {
-          qualificationDataYear: ["Qualification Data Year", "dropdown", ""],
-          operatingHours: ["Operating Hours", "input", ""],
-          so2Tons: ["SO2 Tons", "input", ""],
-          noxTons: ["NOx Tons", "input", ""],
+          qualificationDataYear: [
+            "Qualification Data Year",
+            "dropdown",
+            "",
+            "",
+          ],
+          operatingHours: ["Operating Hours", "input", "", ""],
+          so2Tons: ["SO2 Tons", "input", "", ""],
+          noxTons: ["NOx Tons", "input", "", ""],
         },
         {},
         create,
-        totalOptions
+        mdmData
       )
     );
 
