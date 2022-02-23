@@ -18,7 +18,6 @@ import {
   unsavedDataMessage,
 } from "../../additional-functions/prompt-to-save-unsaved-changes";
 
-
 export const HeaderInfo = ({
   facility,
   selectedConfig,
@@ -79,7 +78,7 @@ export const HeaderInfo = ({
   const [evalStatusLoaded, setEvalStatusLoaded] = useState(false);
   // const duringEvalStatuses = ["INQ", "WIP"];
 
-  const [showModal, setShowModal] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
   const [userHasCheckout, setUserHasCheckout] = useState(false);
 
   const [lockedFacility, setLockedFacility] = useState(false);
@@ -100,20 +99,25 @@ export const HeaderInfo = ({
     );
   };
 
+  const openImportModal = () => {
+    setShowImportModal(true);
 
-  
+    setTimeout(() => {
+      attachChangeEventListeners(".modalUserInput");
+    });
+  };
+
   const closeModalHandler = () => {
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
-        setShowModal(false);
+        setShowImportModal(false);
         removeChangeEventListeners(".modalUserInput");
       }
     } else {
-      setShowModal(false);
+      setShowImportModal(false);
       removeChangeEventListeners(".modalUserInput");
     }
   };
-
 
   useEffect(() => {
     // get evaluation status
@@ -569,7 +573,7 @@ export const HeaderInfo = ({
                       type="button"
                       className="margin-right-2 float-right margin-bottom-2"
                       outline={true}
-                      onClick={() => setShowModal(true)}
+                      onClick={() => openImportModal()}
                     >
                       Import Monitoring Plan
                     </Button>
@@ -661,21 +665,18 @@ export const HeaderInfo = ({
         <Preloader />
       )}
 
-      {showModal ? (
+      {showImportModal ? (
         <UploadModal
-          show={showModal}
+          show={showImportModal}
           close={closeModalHandler}
           save={true}
           showCancel={true}
           showSave={true}
           title={"Import a Monitoring Plan to continue"}
           children={
-              <div>
-                <ImportModal
-
-                />
-              </div>
-            
+            <div>
+              <ImportModal />
+            </div>
           }
         />
       ) : null}

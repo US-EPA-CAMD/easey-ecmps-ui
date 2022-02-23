@@ -4,7 +4,6 @@ import * as fs from "../../../utils/selectors/monitoringPlanLMEQualifications";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 
 import ModalDetails from "../../ModalDetails/ModalDetails";
-import { UseRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
 import {
@@ -41,7 +40,6 @@ export const DataTableLMEQualifications = ({
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [qualLmeData, setQualLmeData] = useState([]);
-  const totalOptions = UseRetrieveDropdownApi(["qualificationDataYear"]);
   const [updateTable, setUpdateTable] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState([]);
 
