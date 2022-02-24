@@ -83,6 +83,9 @@ export const HeaderInfo = ({
 
   const [lockedFacility, setLockedFacility] = useState(false);
 
+  const [disablePortBtn, setDisablePortBtn] = useState(true);
+  const [usePortBtn, setUsePortBtn] = useState(false);
+  const [finishedLoading, setFinishedLoading] = useState(false);
   const reportWindowParams = [
     // eslint-disable-next-line no-restricted-globals
     `height=${screen.height}`,
@@ -677,14 +680,34 @@ export const HeaderInfo = ({
             showSave={true}
             title={"Import a Monitoring Plan to continue"}
             exitBTN={"Import"}
+            disablePortBtn={disablePortBtn}
+            port={() => {
+              setUsePortBtn(true);
+              setShowImportModal(false);
+            }}
             children={
               <div>
-                <ImportModal />
+                <ImportModal
+                  setDisablePortBtn={setDisablePortBtn}
+                  disablePortBtn={disablePortBtn}
+                />
               </div>
             }
           />
         </div>
       ) : null}
+
+      {usePortBtn && !finishedLoading ? (
+        <UploadModal
+          setFinishedLoading={setFinishedLoading}
+          setShowImportModal={setShowImportModal}
+          timer={true}
+          children={<Preloader />}
+          preloader
+        />
+      ) : (
+        ""
+      )}
     </div>
   );
 };

@@ -14,14 +14,32 @@ const modalContext = createContext(null, null);
 export const UploadModal = ({
   show,
   close,
-  save,
+  port,
   children,
   showCancel,
   width = "50%",
   left = "25%",
   title,
   exitBTN,
+  disablePortBtn,
+  timer,
+  setFinishedLoading,
+  setShowImportModal,
+  preloader,
 }) => {
+  const [isLoading, setLoading] = useState(true);
+
+  const onLoadEffect = () => {
+    if (timer) {
+      setTimeout(() => {
+        setLoading(false);
+        setFinishedLoading(true);
+        setShowImportModal(true);
+      }, 2000);
+    }
+  };
+
+  useEffect(onLoadEffect, []);
   const modalRef = createRef();
   const styles = {
     loadingWrapper: {
@@ -112,58 +130,66 @@ export const UploadModal = ({
                 }}
               >
                 <div className="modal-content modal-color padding-y-3">
-                  <div className="modal-header modal-color border-bottom-1px border-base-lighter">
-                    <ClearSharp
-                      className="position-absolute right-1 top-1 cursor-pointer text-bold"
-                      onClick={close}
-                      onKeyPress={(event) => {
-                        if (event.key === "Enter") {
-                          close();
-                        }
-                      }}
-                      id="closeModalBtn"
-                      data-testid="closeModalBtn"
-                      title="Close Modal"
-                      epa-testid="closeXBtn"
-                      role="button"
-                      tabIndex="0"
-                      aria-hidden={false}
-                    />
-                    <div className="left-2 bottom-0 padding-2">
-                      <h2 className="text-bold">{title}</h2>
+                  {" "}
+                  {!preloader ? (
+                    <div className="modal-header modal-color border-bottom-1px border-base-lighter">
+                      <ClearSharp
+                        className="position-absolute right-1 top-1 cursor-pointer text-bold"
+                        onClick={close}
+                        onKeyPress={(event) => {
+                          if (event.key === "Enter") {
+                            close();
+                          }
+                        }}
+                        id="closeModalBtn"
+                        data-testid="closeModalBtn"
+                        title="Close Modal"
+                        epa-testid="closeXBtn"
+                        role="button"
+                        tabIndex="0"
+                        aria-hidden={false}
+                      />
+                      <div className="left-2 bottom-0 padding-2">
+                        <h2 className="text-bold">{title}</h2>
+                      </div>
                     </div>
-                  </div>
-
+                  ) : (
+                    ""
+                  )}
                   <div className="modal-body padding-top-0 modal-color maxh-tablet overflow-y-auto">
                     {children}
                   </div>
-                  <div className="modal-footer ">
-                    <Button
-                      type="button"
-                      onClick={save}
-                      title="Click to save"
-                      epa-testid="saveBtn"
-                      id="saveBtn"
-                      data-testid="saveBtn"
-                      className="margin-right-2"
-                      disabled={disableBtn}
-                    >
-                      {exitBTN ? exitBTN : "Import"}
-                    </Button>
-
-                    {showCancel ? (
+                  {!preloader ? (
+                    <div className="modal-footer ">
                       <Button
                         type="button"
-                        onClick={close}
-                        title="Click to cancel"
-                        epa-testid="cancelBtn"
-                        outline={true}
-                        unstyled={"true"}
+                        onClick={port}
+                        title="Click to import"
+                        epa-testid="importBtn"
+                        id="importBtn"
+                        data-testid="importBtn"
+                        className="margin-right-2"
+                        disabled={disablePortBtn}
                       >
-                        {"Cancel"}
+                        {"Import"}
                       </Button>
-                    ) : null}
-                  </div>
+
+                      {showCancel ? (
+                        <Button
+                          type="button"
+                          onClick={close}
+                          title="Click to cancel"
+                          epa-testid="cancelBtn"
+                          outline={true}
+                          unstyled={"true"}
+                        >
+                          {"Cancel"}
+                        </Button>
+                      ) : null}
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
             </modalContext.Provider>
