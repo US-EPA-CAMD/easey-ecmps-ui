@@ -1,0 +1,10 @@
+@import "../../additional-scss/variables";
+
+.import-modal-container {
+  .usa-file-input__accepted-files-message {
+    display: none;
+  }
+  .has-invalid-file {
+    border-color: $epa-red !important;
+  }
+}

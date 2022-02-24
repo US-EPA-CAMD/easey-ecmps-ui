@@ -666,19 +666,24 @@ export const HeaderInfo = ({
       )}
 
       {showImportModal ? (
-        <UploadModal
-          show={showImportModal}
-          close={closeModalHandler}
-          save={true}
-          showCancel={true}
-          showSave={true}
-          title={"Import a Monitoring Plan to continue"}
-          children={
-            <div>
-              <ImportModal />
-            </div>
-          }
-        />
+        <div>
+          <div
+            className={`usa-overlay ${showImportModal ? "is-visible" : ""}`}
+          />
+          <UploadModal
+            show={showImportModal}
+            close={closeModalHandler}
+            showCancel={true}
+            showSave={true}
+            title={"Import a Monitoring Plan to continue"}
+            exitBTN={"Import"}
+            children={
+              <div>
+                <ImportModal />
+              </div>
+            }
+          />
+        </div>
       ) : null}
     </div>
   );

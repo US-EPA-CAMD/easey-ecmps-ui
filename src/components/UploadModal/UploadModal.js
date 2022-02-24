@@ -1,4 +1,4 @@
-import React, { createContext, useEffect,useState, createRef } from "react";
+import React, { createContext, useEffect, useState, createRef } from "react";
 import ReactDom from "react-dom";
 
 import { Button } from "@trussworks/react-uswds";
@@ -17,16 +17,10 @@ export const UploadModal = ({
   save,
   children,
   showCancel,
-  showSave,
-  width = "25%",
+  width = "50%",
   left = "25%",
   title,
-
   exitBTN,
-  breadCrumbBar,
-  setSecondLevel,
-  extraBtn,
-  extraBtnText,
 }) => {
   const modalRef = createRef();
   const styles = {
@@ -67,7 +61,10 @@ export const UploadModal = ({
     },
   };
 
+  const [disableBtn, setDisableBtn] = useState(false);
+
   useEffect(() => {
+    setDisableBtn(true);
     const { handleKeyPress } = focusTrap(".modal-content", close);
 
     // *** FOCUS TRAP
@@ -93,7 +90,6 @@ export const UploadModal = ({
 
   const modalClassName = "modal-wrapper radius-md";
 
-  const [disableBtn, setDisableBtn] = useState(false);
   return ReactDom.createPortal(
     <div role="dialog" aria-modal="true">
       <div
@@ -112,7 +108,7 @@ export const UploadModal = ({
                 }
                 style={{
                   width: `${!width ? "50%" : width}`,
-                  left: `${!left ? "50%" : left}`,
+                  left: `${!left ? "25%" : left}`,
                 }}
               >
                 <div className="modal-content modal-color padding-y-3">
