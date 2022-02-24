@@ -3,7 +3,12 @@ import React from "react";
 import { FormGroup, Label, FileInput } from "@trussworks/react-uswds";
 import "./ImportModal.scss";
 
-const ImportModal = ({ setDisablePortBtn, disablePortBtn }) => {
+const ImportModal = ({
+  setDisablePortBtn,
+  complete,
+  setFileName,
+  fileName,
+}) => {
   const settingImportBtn = (name, type, event) => {
     const fileTypeManual = name.split(".");
 
@@ -12,6 +17,7 @@ const ImportModal = ({ setDisablePortBtn, disablePortBtn }) => {
       setDisablePortBtn(true);
     } else {
       setDisablePortBtn(false);
+      setFileName(name);
     }
     // const reader = new FileReader();
     // reader.onload = ({ target: { result } }) => {
@@ -35,49 +41,47 @@ const ImportModal = ({ setDisablePortBtn, disablePortBtn }) => {
   //   return true;
   // };
 
+  const onChangeHandler = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      console.log(file.name);
+      console.log(file.type);
+      settingImportBtn(file.name, file.type, e);
+    } else {
+      setDisablePortBtn(true);
+    }
+  };
+
+  const onDropHandler = () => {
+    const fileInput = document.querySelector("#file-input-single");
+    console.log("clear error message");
+    console.log(fileInput.value);
+    if (fileInput.value === "") {
+      console.log("show error message");
+    }
+  };
+
   return (
     <div className="import-modal-container">
+      {complete ? (
+        <p>{fileName}</p>
+      ) : (
+        <FormGroup>
+          <Label htmlFor="file-input-single"> Upload MP JSON File</Label>
+          <FileInput
+            id="file-input-single"
+            name="file-input-single"
+            accept=".json"
+            onChange={(e) => {
+              onChangeHandler(e);
+            }}
+            onDrop={() => {
+              onDropHandler();
+            }}
+          />
+        </FormGroup>
+      )}
       {/* need to center in modal */}
-      <FormGroup>
-        <Label htmlFor="file-input-single"> Upload MP JSON File</Label>
-        <FileInput
-          id="file-input-single"
-          name="file-input-single"
-          accept=".json"
-          onChange={(e) => {
-            if (e.target.files && e.target.files.length > 0) {
-              const file = e.target.files[0];
-              console.log(file.name);
-              console.log(file.type);
-              settingImportBtn(file.name, file.type, e);
-            }
-          }}
-          onDrop={() => {
-            const fileInput = document.querySelector("#file-input-single");
-            console.log("clear error message");
-            console.log(fileInput.value);
-            if (fileInput.value === "") {
-              console.log("show error message");
-            }
-          }}
-          onError={() => {
-            const fileInput = document.querySelector("#file-input-single");
-            console.log("clear error message2");
-            console.log(fileInput.value);
-            if (fileInput.value === "") {
-              console.log("show error message2");
-            }
-          }}
-          onErrorCapture={() => {
-            const fileInput = document.querySelector("#file-input-single");
-            console.log("clear error message1");
-            console.log(fileInput.value);
-            if (fileInput.value === "") {
-              console.log("show error message1");
-            }
-          }}
-        />
-      </FormGroup>
     </div>
   );
 };

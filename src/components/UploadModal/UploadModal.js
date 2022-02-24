@@ -1,11 +1,11 @@
-import React, { createContext, useEffect, useState, createRef } from "react";
+import React, { createContext, useEffect, createRef } from "react";
 import ReactDom from "react-dom";
 
-import { Button } from "@trussworks/react-uswds";
+import { Button, Alert } from "@trussworks/react-uswds";
 
 import { ClearSharp } from "@material-ui/icons";
 
-import "./Modal.scss";
+import "./UploadModal.scss";
 
 import { focusTrap } from "../../additional-functions/focus-trap";
 
@@ -17,25 +17,28 @@ export const UploadModal = ({
   port,
   children,
   showCancel,
-  width = "50%",
-  left = "25%",
+  width,
+  left,
   title,
-  exitBTN,
   disablePortBtn,
   timer,
   setFinishedLoading,
   setShowImportModal,
   preloader,
+  complete,
+  setIsLoading,
 }) => {
-  const [isLoading, setLoading] = useState(true);
+  // const [isLoading, setLoading] = useState(true);
+
+  const milisecondsToLoad = 4000;
 
   const onLoadEffect = () => {
     if (timer) {
       setTimeout(() => {
-        setLoading(false);
         setFinishedLoading(true);
+        setIsLoading(false);
         setShowImportModal(true);
-      }, 2000);
+      }, milisecondsToLoad);
     }
   };
 
@@ -79,10 +82,7 @@ export const UploadModal = ({
     },
   };
 
-  const [disableBtn, setDisableBtn] = useState(false);
-
   useEffect(() => {
-    setDisableBtn(true);
     const { handleKeyPress } = focusTrap(".modal-content", close);
 
     // *** FOCUS TRAP
@@ -109,7 +109,7 @@ export const UploadModal = ({
   const modalClassName = "modal-wrapper radius-md";
 
   return ReactDom.createPortal(
-    <div role="dialog" aria-modal="true">
+    <div role="dialog" aria-modal="true" className="upload-modal-container">
       <div
         data-test="component-loading"
         className="loading-modal"
@@ -125,14 +125,18 @@ export const UploadModal = ({
                     : `${modalClassName}`
                 }
                 style={{
-                  width: `${!width ? "50%" : width}`,
-                  left: `${!left ? "25%" : left}`,
+                  width: `${!width ? "34%" : width}`,
+                  left: `${!left ? "33%" : left}`,
                 }}
               >
-                <div className="modal-content modal-color padding-y-3">
+                <div
+                  className={`modal-content modal-color ${
+                    !complete ? "padding-y-3" : ""
+                  }`}
+                >
                   {" "}
                   {!preloader ? (
-                    <div className="modal-header modal-color border-bottom-1px border-base-lighter">
+                    <div className="">
                       <ClearSharp
                         className="position-absolute right-1 top-1 cursor-pointer text-bold"
                         onClick={close}
@@ -149,30 +153,58 @@ export const UploadModal = ({
                         tabIndex="0"
                         aria-hidden={false}
                       />
-                      <div className="left-2 bottom-0 padding-2">
-                        <h2 className="text-bold">{title}</h2>
-                      </div>
+                      {!complete ? (
+                        <div className="left-2 bottom-0 padding-x-2">
+                          <h2 className="text-bold">{title}</h2>
+                        </div>
+                      ) : (
+                        <div className="left-2 padding-x-5 padding-top-5 padding-bottom-1">
+                          <Alert type="success" heading="Success">
+                            Monitoring Plan has been successfully imported
+                          </Alert>
+                        </div>
+                      )}
                     </div>
                   ) : (
                     ""
                   )}
-                  <div className="modal-body padding-top-0 modal-color maxh-tablet overflow-y-auto">
+                  <div className="modal-body padding-top-1 padding-bottom-1 modal-color overflow-y-auto">
                     {children}
                   </div>
                   {!preloader ? (
-                    <div className="modal-footer ">
-                      <Button
-                        type="button"
-                        onClick={port}
-                        title="Click to import"
-                        epa-testid="importBtn"
-                        id="importBtn"
-                        data-testid="importBtn"
-                        className="margin-right-2"
-                        disabled={disablePortBtn}
-                      >
-                        {"Import"}
-                      </Button>
+                    <div
+                      className={`${
+                        !complete
+                          ? "upload-modal-footer padding-x-5"
+                          : "upload-modal-footer--complete"
+                      }`}
+                    >
+                      {complete ? (
+                        <Button
+                          type="button"
+                          onClick={close}
+                          title="Click to close import modal"
+                          epa-testid="okBtn"
+                          id="okBtn"
+                          data-testid="okBtn"
+                          className="margin-right-2"
+                        >
+                          Ok
+                        </Button>
+                      ) : (
+                        <Button
+                          type="button"
+                          onClick={port}
+                          title="Click to import"
+                          epa-testid="importBtn"
+                          id="importBtn"
+                          data-testid="importBtn"
+                          className="margin-right-2"
+                          disabled={disablePortBtn}
+                        >
+                          Import
+                        </Button>
+                      )}
 
                       {showCancel ? (
                         <Button
@@ -180,6 +212,7 @@ export const UploadModal = ({
                           onClick={close}
                           title="Click to cancel"
                           epa-testid="cancelBtn"
+                          id="cancelBtn"
                           outline={true}
                           unstyled={"true"}
                         >
