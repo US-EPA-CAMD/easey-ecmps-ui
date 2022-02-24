@@ -35,10 +35,12 @@
   }
 
   .modal-body {
+    padding-right: 0rem;
+    padding-left: 0rem;
     padding-top: 0rem;
-    padding-bottom: 0rem;
-    padding-left: 3rem;
-    padding-right: 3rem;
+    padding-bottom: 0.5rem;
+    margin-left: 2.5rem;
+    margin-right: 2.5rem;
   }
 
   #okBtn {

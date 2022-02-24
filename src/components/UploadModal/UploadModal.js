@@ -154,7 +154,7 @@ export const UploadModal = ({
                         aria-hidden={false}
                       />
                       {!complete ? (
-                        <div className="left-2 bottom-0 padding-x-2">
+                        <div className="left-2 bottom-0 padding-x-4 padding-top-2">
                           <h2 className="text-bold">{title}</h2>
                         </div>
                       ) : (

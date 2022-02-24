@@ -64,7 +64,7 @@ const ImportModal = ({
   return (
     <div className="import-modal-container">
       {complete ? (
-        <p>{fileName}</p>
+        <span id="fileName">{fileName}</span>
       ) : (
         <FormGroup>
           <Label htmlFor="file-input-single"> Upload MP JSON File</Label>
