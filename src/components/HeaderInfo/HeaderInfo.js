@@ -88,6 +88,8 @@ export const HeaderInfo = ({
   const [finishedLoading, setFinishedLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [fileName, setFileName] = useState("");
+  const [hasFormatError, setHasFormatError] = useState(false);
+  const [hasInvalidJsonError, setHasInvalidJsonError] = useState(false);
 
   const resetImportFlags = () => {
     setShowImportModal(false);
@@ -96,6 +98,8 @@ export const HeaderInfo = ({
     setFinishedLoading(false);
     setIsLoading(false);
     setFileName("");
+    setHasFormatError(false);
+    setHasInvalidJsonError(false);
   };
 
   const reportWindowParams = [
@@ -123,14 +127,18 @@ export const HeaderInfo = ({
   };
 
   const closeImportModalHandler = () => {
+    const importBtn = document.querySelector("#importMonitoringPlanBtn");
+
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
         resetImportFlags();
         removeChangeEventListeners(".modalUserInput");
+        importBtn.focus();
       }
     } else {
       resetImportFlags();
       removeChangeEventListeners(".modalUserInput");
+      importBtn.focus();
     }
   };
 
@@ -589,6 +597,7 @@ export const HeaderInfo = ({
                       className="margin-right-2 float-right margin-bottom-2"
                       outline={true}
                       onClick={() => openImportModal()}
+                      id="importMonitoringPlanBtn"
                     >
                       Import Monitoring Plan
                     </Button>
@@ -695,11 +704,15 @@ export const HeaderInfo = ({
               setUsePortBtn(true);
               setIsLoading(true);
             }}
+            hasFormatError={hasFormatError}
+            hasInvalidJsonError={hasInvalidJsonError}
             children={
               <ImportModal
                 setDisablePortBtn={setDisablePortBtn}
                 disablePortBtn={disablePortBtn}
                 setFileName={setFileName}
+                setHasFormatError={setHasFormatError}
+                setHasInvalidJsonError={setHasInvalidJsonError}
               />
             }
           />

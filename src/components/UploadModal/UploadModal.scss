@@ -30,6 +30,10 @@
     width: 75%;
   }
 
+  .usa-button:disabled {
+    cursor: default !important;
+  }
+
   #cancelBtn {
     width: 15%;
   }
@@ -46,5 +50,17 @@
   #okBtn {
     float: right;
     width: 7rem;
+  }
+
+  .usa-alert--error.usa-alert--slim {
+    background-color: $epa-white;
+
+    .usa-alert__heading {
+      font-size: 20px !important;
+    }
+    .usa-alert__text {
+      color: #d54309;
+      font-weight: 800;
+    }
   }
 }

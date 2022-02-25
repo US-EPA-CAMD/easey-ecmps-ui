@@ -27,6 +27,8 @@ export const UploadModal = ({
   preloader,
   complete,
   setIsLoading,
+  hasFormatError,
+  hasInvalidJsonError,
 }) => {
   // const [isLoading, setLoading] = useState(true);
 
@@ -154,8 +156,25 @@ export const UploadModal = ({
                         aria-hidden={false}
                       />
                       {!complete ? (
-                        <div className="left-2 bottom-0 padding-x-4 padding-top-2">
-                          <h2 className="text-bold">{title}</h2>
+                        <div>
+                          {hasFormatError || hasInvalidJsonError ? (
+                            <div className="left-2 padding-x-4 padding-top-2 padding-bottom-1">
+                              <Alert
+                                type="error"
+                                heading="Import Monitoring Plan error"
+                                slim
+                                noIcon
+                              >
+                                {hasFormatError
+                                  ? "Only JSON files may be submitted"
+                                  : "JSON file is invalid"}
+                              </Alert>
+                            </div>
+                          ) : (
+                            <div className="left-2 bottom-0 padding-x-4 padding-top-2">
+                              <h2 className="text-bold">{title}</h2>
+                            </div>
+                          )}
                         </div>
                       ) : (
                         <div className="left-2 padding-x-5 padding-top-5 padding-bottom-1">
