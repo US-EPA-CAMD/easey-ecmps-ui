@@ -8,56 +8,49 @@ const ImportModal = ({
   complete,
   setFileName,
   fileName,
+  setHasFormatError,
+  setHasInvalidJsonError,
 }) => {
-  const settingImportBtn = (name, type, event) => {
+  const validateJSON = (name, type, event) => {
     const fileTypeManual = name.split(".");
 
     if (fileTypeManual[fileTypeManual.length - 1] !== "json") {
-      console.log("failed", fileTypeManual);
+      setHasFormatError(true);
       setDisablePortBtn(true);
     } else {
-      setDisablePortBtn(false);
       setFileName(name);
+      readFile(event);
     }
-    // const reader = new FileReader();
-    // reader.onload = ({ target: { result } }) => {
-    //   if (!validateJSON(result)) {
-    //     alert("Please select JSON files only!");
-    //     this.value = "";
-    //     return;
-    //   }
-    //   // display the contents of the file
-    //   console.log(result);
-    // };
-    // reader.readAsText(event.target.files.file);
   };
 
-  // const validateJSON = (data) => {
-  //   try {
-  //     JSON.parse(data);
-  //   } catch {
-  //     return false;
-  //   }
-  //   return true;
-  // };
+  function readFile(event) {
+    var reader = new FileReader();
+    reader.onload = onReaderLoad;
+    reader.readAsText(event.target.files[0]);
+  }
+
+  function onReaderLoad(event) {
+    try {
+      JSON.parse(event.target.result);
+      setHasFormatError(false);
+      setHasInvalidJsonError(false);
+      setDisablePortBtn(false);
+    } catch (e) {
+      console.log("invalid json file error: ", e);
+      setHasInvalidJsonError(true);
+      setHasFormatError(false);
+      setDisablePortBtn(true);
+    }
+  }
 
   const onChangeHandler = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
-      console.log(file.name);
-      console.log(file.type);
-      settingImportBtn(file.name, file.type, e);
+      validateJSON(file.name, file.type, e);
     } else {
       setDisablePortBtn(true);
-    }
-  };
-
-  const onDropHandler = () => {
-    const fileInput = document.querySelector("#file-input-single");
-    console.log("clear error message");
-    console.log(fileInput.value);
-    if (fileInput.value === "") {
-      console.log("show error message");
+      setHasFormatError(false);
+      setHasInvalidJsonError(false);
     }
   };
 
@@ -71,12 +64,8 @@ const ImportModal = ({
           <FileInput
             id="file-input-single"
             name="file-input-single"
-            accept=".json"
             onChange={(e) => {
               onChangeHandler(e);
-            }}
-            onDrop={() => {
-              onDropHandler();
             }}
           />
         </FormGroup>
