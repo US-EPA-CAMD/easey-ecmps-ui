@@ -7,4 +7,18 @@
   .has-invalid-file {
     border-color: $epa-red !important;
   }
+  #import-file-name-text {
+    margin-right: 0.5rem;
+  }
+  .usa-form-group {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  #fileName {
+    margin-top: 0 !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .usa-file-input__preview-heading {
+    background-color: $epa-white !important;
+  }
 }

@@ -1,0 +1,64 @@
+@import "../../additional-scss/variables";
+
+.upload-modal-container {
+  position: absolute;
+  z-index: 500;
+  top: 3%;
+  box-shadow: 0px -2px 22px -6px rgba(60, 55, 61, 0.37),
+    -10px 10px 22px -6px rgba(60, 55, 61, 0.37);
+  border-radius: 1% !important;
+  background: $epa-white;
+
+  h2 {
+    font-size: 20px;
+    margin: 0px;
+  }
+
+  .upload-modal-footer {
+    padding-top: 1rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+
+  .upload-modal-footer--complete {
+    padding-top: 1rem;
+    padding-bottom: 3.5rem;
+    padding-right: 1.5rem;
+  }
+
+  #importBtn {
+    width: 75%;
+  }
+
+  .usa-button:disabled {
+    cursor: default !important;
+  }
+
+  #cancelBtn {
+    width: 15%;
+  }
+
+  .modal-body {
+    padding-right: 0rem;
+    padding-left: 0rem;
+    padding-top: 0rem;
+    padding-bottom: 0.5rem;
+    margin-left: 2.5rem;
+    margin-right: 2.5rem;
+  }
+
+  #okBtn {
+    float: right;
+    width: 7rem;
+  }
+
+  .usa-alert--error.usa-alert--slim {
+    .usa-alert__heading {
+      font-size: 20px !important;
+    }
+    .usa-alert__text {
+      color: #d54309;
+      font-weight: 800;
+    }
+  }
+}
