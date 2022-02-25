@@ -158,7 +158,7 @@ export const UploadModal = ({
                       {!complete ? (
                         <div>
                           {hasFormatError || hasInvalidJsonError ? (
-                            <div className="left-2 padding-x-4 padding-top-2 padding-bottom-1">
+                            <div className="left-2 padding-x-5 padding-top-2 padding-bottom-1">
                               <Alert
                                 type="error"
                                 heading="Import Monitoring Plan error"
