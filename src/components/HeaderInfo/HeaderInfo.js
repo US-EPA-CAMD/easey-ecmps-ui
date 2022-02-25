@@ -10,6 +10,13 @@ import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 import "./HeaderInfo.scss";
 import MonitoringPlanEvaluationReport from "../MonitoringPlanEvaluationReport/MonitoringPlanEvaluationReport";
 import { Preloader } from "@us-epa-camd/easey-design-system";
+import ImportModal from "../ImportModal/ImportModal";
+import UploadModal from "../UploadModal/UploadModal";
+import {
+  attachChangeEventListeners,
+  removeChangeEventListeners,
+  unsavedDataMessage,
+} from "../../additional-functions/prompt-to-save-unsaved-changes";
 
 export const HeaderInfo = ({
   facility,
@@ -71,9 +78,25 @@ export const HeaderInfo = ({
   const [evalStatusLoaded, setEvalStatusLoaded] = useState(false);
   // const duringEvalStatuses = ["INQ", "WIP"];
 
+  const [showImportModal, setShowImportModal] = useState(false);
   const [userHasCheckout, setUserHasCheckout] = useState(false);
 
   const [lockedFacility, setLockedFacility] = useState(false);
+
+  const [disablePortBtn, setDisablePortBtn] = useState(true);
+  const [usePortBtn, setUsePortBtn] = useState(false);
+  const [finishedLoading, setFinishedLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [fileName, setFileName] = useState("");
+
+  const resetImportFlags = () => {
+    setShowImportModal(false);
+    setDisablePortBtn(true);
+    setUsePortBtn(false);
+    setFinishedLoading(false);
+    setIsLoading(false);
+    setFileName("");
+  };
 
   const reportWindowParams = [
     // eslint-disable-next-line no-restricted-globals
@@ -89,6 +112,26 @@ export const HeaderInfo = ({
       "ECMPS Monitoring Plan Report",
       reportWindowParams
     );
+  };
+
+  const openImportModal = () => {
+    setShowImportModal(true);
+
+    setTimeout(() => {
+      attachChangeEventListeners(".modalUserInput");
+    });
+  };
+
+  const closeImportModalHandler = () => {
+    if (window.isDataChanged === true) {
+      if (window.confirm(unsavedDataMessage) === true) {
+        resetImportFlags();
+        removeChangeEventListeners(".modalUserInput");
+      }
+    } else {
+      resetImportFlags();
+      removeChangeEventListeners(".modalUserInput");
+    }
   };
 
   useEffect(() => {
@@ -545,6 +588,7 @@ export const HeaderInfo = ({
                       type="button"
                       className="margin-right-2 float-right margin-bottom-2"
                       outline={true}
+                      onClick={() => openImportModal()}
                     >
                       Import Monitoring Plan
                     </Button>
@@ -634,6 +678,68 @@ export const HeaderInfo = ({
         </div>
       ) : (
         <Preloader />
+      )}
+      <div className={`usa-overlay ${showImportModal ? "is-visible" : ""}`} />
+
+      {showImportModal && !finishedLoading && !isLoading ? (
+        <div>
+          <UploadModal
+            show={showImportModal}
+            close={closeImportModalHandler}
+            showCancel={true}
+            showSave={true}
+            title={"Import a Monitoring Plan to continue"}
+            exitBTN={"Import"}
+            disablePortBtn={disablePortBtn}
+            port={() => {
+              setUsePortBtn(true);
+              setIsLoading(true);
+            }}
+            children={
+              <ImportModal
+                setDisablePortBtn={setDisablePortBtn}
+                disablePortBtn={disablePortBtn}
+                setFileName={setFileName}
+              />
+            }
+          />
+        </div>
+      ) : null}
+
+      {isLoading && !finishedLoading ? (
+        <UploadModal
+          width={"30%"}
+          left={"35%"}
+          setFinishedLoading={setFinishedLoading}
+          setShowImportModal={setShowImportModal}
+          setIsLoading={setIsLoading}
+          timer={true}
+          children={<Preloader />}
+          preloader
+        />
+      ) : (
+        ""
+      )}
+
+      {showImportModal && usePortBtn && finishedLoading ? (
+        <UploadModal
+          show={showImportModal}
+          close={closeImportModalHandler}
+          showCancel={false}
+          showSave={true}
+          exitBtn={"Ok"}
+          complete={true}
+          children={
+            <ImportModal
+              setDisablePortBtn={setDisablePortBtn}
+              disablePortBtn={disablePortBtn}
+              complete={true}
+              fileName={fileName}
+            />
+          }
+        />
+      ) : (
+        ""
       )}
     </div>
   );

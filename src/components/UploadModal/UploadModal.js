@@ -1,0 +1,237 @@
+import React, { createContext, useEffect, createRef } from "react";
+import ReactDom from "react-dom";
+
+import { Button, Alert } from "@trussworks/react-uswds";
+
+import { ClearSharp } from "@material-ui/icons";
+
+import "./UploadModal.scss";
+
+import { focusTrap } from "../../additional-functions/focus-trap";
+
+const modalContext = createContext(null, null);
+
+export const UploadModal = ({
+  show,
+  close,
+  port,
+  children,
+  showCancel,
+  width,
+  left,
+  title,
+  disablePortBtn,
+  timer,
+  setFinishedLoading,
+  setShowImportModal,
+  preloader,
+  complete,
+  setIsLoading,
+}) => {
+  // const [isLoading, setLoading] = useState(true);
+
+  const milisecondsToLoad = 4000;
+
+  const onLoadEffect = () => {
+    if (timer) {
+      setTimeout(() => {
+        setFinishedLoading(true);
+        setIsLoading(false);
+        setShowImportModal(true);
+      }, milisecondsToLoad);
+    }
+  };
+
+  useEffect(onLoadEffect, []);
+  const modalRef = createRef();
+  const styles = {
+    loadingWrapper: {
+      position: "fixed",
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      width: "100%",
+      height: "100%",
+      margin: 0,
+      padding: 0,
+      zIndex: 815,
+    },
+    innerWrapper: {
+      position: "fixed",
+      top: "40%",
+      transform: "translateY(-50%)",
+      left: 0,
+      right: 0,
+      width: "80%",
+      height: "400px",
+      margin: "0 auto",
+      padding: 0,
+      zIndex: 17,
+    },
+    modalTintScreen: {
+      position: "absolute",
+      top: 0,
+      bottom: 0,
+      width: "100%",
+      height: "100%",
+      opacity: "0.9",
+      zIndex: "0",
+      textIndent: "-9999px",
+      backgroundColor: "gray",
+    },
+  };
+
+  useEffect(() => {
+    const { handleKeyPress } = focusTrap(".modal-content", close);
+
+    // *** FOCUS TRAP
+    document.addEventListener("keydown", handleKeyPress);
+
+    // *** 508 remediation; scroll to top on modal open
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    });
+
+    // * clean up
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [close]);
+
+  let modalRoot = document.getElementById("portal");
+  if (!modalRoot) {
+    modalRoot = document.createElement("div");
+    modalRoot.setAttribute("id", "portal");
+    document.body.appendChild(modalRoot);
+  }
+
+  const modalClassName = "modal-wrapper radius-md";
+
+  return ReactDom.createPortal(
+    <div role="dialog" aria-modal="true" className="upload-modal-container">
+      <div
+        data-test="component-loading"
+        className="loading-modal"
+        style={styles.loadingWrapper}
+      >
+        <div style={styles.innerWrapper}>
+          <div ref={modalRef}>
+            <modalContext.Provider value={{ close }}>
+              <div
+                className={
+                  show
+                    ? `${modalClassName} react-transition flip-in-x`
+                    : `${modalClassName}`
+                }
+                style={{
+                  width: `${!width ? "34%" : width}`,
+                  left: `${!left ? "33%" : left}`,
+                }}
+              >
+                <div
+                  className={`modal-content modal-color ${
+                    !complete ? "padding-y-3" : ""
+                  }`}
+                >
+                  {" "}
+                  {!preloader ? (
+                    <div className="">
+                      <ClearSharp
+                        className="position-absolute right-1 top-1 cursor-pointer text-bold"
+                        onClick={close}
+                        onKeyPress={(event) => {
+                          if (event.key === "Enter") {
+                            close();
+                          }
+                        }}
+                        id="closeModalBtn"
+                        data-testid="closeModalBtn"
+                        title="Close Modal"
+                        epa-testid="closeXBtn"
+                        role="button"
+                        tabIndex="0"
+                        aria-hidden={false}
+                      />
+                      {!complete ? (
+                        <div className="left-2 bottom-0 padding-x-4 padding-top-2">
+                          <h2 className="text-bold">{title}</h2>
+                        </div>
+                      ) : (
+                        <div className="left-2 padding-x-5 padding-top-5 padding-bottom-1">
+                          <Alert type="success" heading="Success">
+                            Monitoring Plan has been successfully imported
+                          </Alert>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                  <div className="modal-body padding-top-1 padding-bottom-1 modal-color overflow-y-auto">
+                    {children}
+                  </div>
+                  {!preloader ? (
+                    <div
+                      className={`${
+                        !complete
+                          ? "upload-modal-footer padding-x-5"
+                          : "upload-modal-footer--complete"
+                      }`}
+                    >
+                      {complete ? (
+                        <Button
+                          type="button"
+                          onClick={close}
+                          title="Click to close import modal"
+                          epa-testid="okBtn"
+                          id="okBtn"
+                          data-testid="okBtn"
+                          className="margin-right-2"
+                        >
+                          Ok
+                        </Button>
+                      ) : (
+                        <Button
+                          type="button"
+                          onClick={port}
+                          title="Click to import"
+                          epa-testid="importBtn"
+                          id="importBtn"
+                          data-testid="importBtn"
+                          className="margin-right-2"
+                          disabled={disablePortBtn}
+                        >
+                          Import
+                        </Button>
+                      )}
+
+                      {showCancel ? (
+                        <Button
+                          type="button"
+                          onClick={close}
+                          title="Click to cancel"
+                          epa-testid="cancelBtn"
+                          id="cancelBtn"
+                          outline={true}
+                          unstyled={"true"}
+                        >
+                          {"Cancel"}
+                        </Button>
+                      ) : null}
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </div>
+            </modalContext.Provider>
+          </div>
+        </div>{" "}
+      </div>
+      <div style={styles.modalTintScreen} />
+    </div>,
+    modalRoot
+  );
+};
+export default UploadModal;

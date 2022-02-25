@@ -21,13 +21,9 @@ export const Modal = ({
   width = "50%",
   left = "25%",
   cancelButtonText = "Cancel",
-  saveButtonText = "Save and Close",
-  secondLevel,
   title,
-  backBtn,
   exitBTN,
   breadCrumbBar,
-  setSecondLevel,
   extraBtn,
   extraBtnText,
 }) => {
@@ -70,7 +66,7 @@ export const Modal = ({
             }
             style={{
               width: `${!width ? "50%" : width}`,
-              left: `${!left ? "50%" : left}`,
+              left: `${!left ? "25%" : left}`,
             }}
           >
             <div className="modal-content modal-color padding-y-3">
