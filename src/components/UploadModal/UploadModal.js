@@ -29,10 +29,19 @@ export const UploadModal = ({
   setIsLoading,
   hasFormatError,
   hasInvalidJsonError,
+  importApiErrors,
+  setImportApiErrors,
+  fileName,
 }) => {
-  // const [isLoading, setLoading] = useState(true);
-
+  const hasErrors = importApiErrors && importApiErrors.length > 0;
   const milisecondsToLoad = 4000;
+  const numErrs = 17;
+  let apiErrors = [];
+  for (let i = 0; i < numErrs; i++) {
+    apiErrors.push(
+      'You have reported a MonitorQualPercent record for a location with the Qualification Type Code not equal to "PK," "SK" or "GF." A MonitorQualPercent record should not be reported for qualification Codes other than "PK," "SK" or "GF".'
+    );
+  }
 
   const onLoadEffect = () => {
     if (timer) {
@@ -40,6 +49,9 @@ export const UploadModal = ({
         setFinishedLoading(true);
         setIsLoading(false);
         setShowImportModal(true);
+        if (fileName !== "valid.json") {
+          setImportApiErrors(apiErrors);
+        }
       }, milisecondsToLoad);
     }
   };
@@ -126,15 +138,20 @@ export const UploadModal = ({
                     ? `${modalClassName} react-transition flip-in-x`
                     : `${modalClassName}`
                 }
-                style={{
-                  width: `${!width ? "34%" : width}`,
-                  left: `${!left ? "33%" : left}`,
-                }}
+                style={
+                  hasErrors
+                    ? {
+                        width: "70%",
+                        left: "15%",
+                      }
+                    : {
+                        width: `${!width ? "34%" : width}`,
+                        left: `${!left ? "33%" : left}`,
+                      }
+                }
               >
                 <div
-                  className={`modal-content modal-color ${
-                    !complete ? "padding-y-3" : ""
-                  }`}
+                  className={`modal-content ${!complete ? "padding-y-3" : ""}`}
                 >
                   {" "}
                   {!preloader ? (
@@ -167,7 +184,7 @@ export const UploadModal = ({
                               >
                                 {hasFormatError
                                   ? "Only JSON files may be submitted"
-                                  : "JSON file is invalid"}
+                                  : "Selected JSON file is invalid"}
                               </Alert>
                             </div>
                           ) : (
@@ -177,19 +194,45 @@ export const UploadModal = ({
                           )}
                         </div>
                       ) : (
-                        <div className="left-2 padding-x-5 padding-top-5 padding-bottom-1">
-                          <Alert type="success" heading="Success">
-                            Monitoring Plan has been successfully imported
-                          </Alert>
+                        <div>
+                          {hasErrors ? (
+                            <div className="padding-x-8 padding-top-3">
+                              <h3 id="importErrorsHeading">
+                                File Import Error(s)
+                              </h3>
+                              <p id="importErrorSubText">
+                                {`The file selected for import has ${importApiErrors.length} errors.`}
+                              </p>
+                            </div>
+                          ) : (
+                            <div className="left-2 padding-x-5 padding-top-5 padding-bottom-1">
+                              <Alert type="success" heading="Success">
+                                Monitoring Plan has been successfully imported
+                              </Alert>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
                   ) : (
                     ""
                   )}
-                  <div className="modal-body padding-top-1 padding-bottom-1 modal-color overflow-y-auto">
+                  <div
+                    className={`modal-body padding-top-1 padding-bottom-1 overflow-y-auto ${
+                      hasErrors ? "error-modal-body" : ""
+                    } `}
+                  >
                     {children}
                   </div>
+                  {complete && hasErrors ? (
+                    <div className="padding-x-8">
+                      <p className="text-right">
+                        Please import revised file, once errors have been fixed.
+                      </p>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                   {!preloader ? (
                     <div
                       className={`${
@@ -206,7 +249,9 @@ export const UploadModal = ({
                           epa-testid="okBtn"
                           id="okBtn"
                           data-testid="okBtn"
-                          className="margin-right-2"
+                          className={
+                            hasErrors ? "margin-right-5" : "margin-right-2"
+                          }
                         >
                           Ok
                         </Button>

@@ -19,6 +19,14 @@
     margin-bottom: 0.5rem !important;
   }
   .usa-file-input__preview-heading {
-    background-color: $epa-white !important;
+    background: $epa-white !important;
+  }
+
+  .usa-alert--error.usa-alert--slim {
+    .usa-alert__text {
+      color: $epa-black !important;
+      font-weight: 400 !important;
+      font-size: 1rem !important;
+    }
   }
 }

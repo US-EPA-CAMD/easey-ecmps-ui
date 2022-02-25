@@ -83,6 +83,7 @@ export const HeaderInfo = ({
 
   const [lockedFacility, setLockedFacility] = useState(false);
 
+  // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
   const [usePortBtn, setUsePortBtn] = useState(false);
   const [finishedLoading, setFinishedLoading] = useState(false);
@@ -90,6 +91,7 @@ export const HeaderInfo = ({
   const [fileName, setFileName] = useState("");
   const [hasFormatError, setHasFormatError] = useState(false);
   const [hasInvalidJsonError, setHasInvalidJsonError] = useState(false);
+  const [importApiErrors, setImportApiErrors] = useState([]);
 
   const resetImportFlags = () => {
     setShowImportModal(false);
@@ -100,6 +102,7 @@ export const HeaderInfo = ({
     setFileName("");
     setHasFormatError(false);
     setHasInvalidJsonError(false);
+    setImportApiErrors([]);
   };
 
   const reportWindowParams = [
@@ -729,6 +732,8 @@ export const HeaderInfo = ({
           timer={true}
           children={<Preloader />}
           preloader
+          setImportApiErrors={setImportApiErrors}
+          fileName={fileName}
         />
       ) : (
         ""
@@ -742,12 +747,14 @@ export const HeaderInfo = ({
           showSave={true}
           exitBtn={"Ok"}
           complete={true}
+          importApiErrors={importApiErrors}
           children={
             <ImportModal
               setDisablePortBtn={setDisablePortBtn}
               disablePortBtn={disablePortBtn}
               complete={true}
               fileName={fileName}
+              importApiErrors={importApiErrors}
             />
           }
         />
