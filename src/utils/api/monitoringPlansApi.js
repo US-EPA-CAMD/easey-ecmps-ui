@@ -116,7 +116,7 @@ export const postCheckoutMonitoringPlanConfiguration = async (id, user) => {
   const userName = { username: user };
   return secureAxios({
     method: "POST",
-    url: `${config.services.monitorPlans.uri}/workspace/plans/${id}/check-outs`,
+    url: `${config.services.monitorPlans.uri}/workspace/check-outs/plans/${id}`,
     data: userName,
   })
     .then((response) => response.data)
@@ -158,7 +158,7 @@ export const createMats = async (payload) => {
 export const putLockTimerUpdateConfiguration = async (id) => {
   return secureAxios({
     method: "PUT",
-    url: `${config.services.monitorPlans.uri}/workspace/plans/${id}/check-outs`,
+    url: `${config.services.monitorPlans.uri}/workspace/check-outs/plans/${id}`,
   })
     .then(handleResponse)
     .catch(handleError);
@@ -198,7 +198,7 @@ export const saveMonitoringMats = async (payload) => {
 export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
   return secureAxios({
     method: "DELETE",
-    url: `${config.services.monitorPlans.uri}/workspace/plans/${id}/check-outs`,
+    url: `${config.services.monitorPlans.uri}/workspace/check-outs/plans/${id}`,
   })
     .then((response) => response.data)
     .catch(handleError);
@@ -207,7 +207,7 @@ export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
 // *** obtain a list of all checked out locations (by all users)
 export const getCheckedOutLocations = async () => {
   return axios
-    .get(`${config.services.monitorPlans.uri}/workspace/plans/check-outs`)
+    .get(`${config.services.monitorPlans.uri}/workspace/check-outs/plans`)
     .then(handleResponse)
     .catch(handleError);
 };
