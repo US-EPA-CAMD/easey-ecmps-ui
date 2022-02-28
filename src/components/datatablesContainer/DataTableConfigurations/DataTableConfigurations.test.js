@@ -15,7 +15,7 @@ const axios = require("axios");
 import * as actions from "../../../store/actions/monitoringPlans";
 jest.mock("axios");
 //testing redux connected component to mimic props passed as argument
-const data = [
+const datat = [
   "5",
   [
     {
@@ -72,7 +72,7 @@ const store = mockStore({});
 function componentRenderer() {
   const props = {
     user: { firstName: "test" },
-    monitoringPlans: data,
+    monitoringPlans: datat,
     data: dataProp,
     selectedRowHandler: jest.fn(),
     className: "test",
@@ -80,7 +80,19 @@ function componentRenderer() {
   };
   return render(
     <Provider store={store}>
-      <DataTableConfigurations {...props} />
+      <DataTableConfigurations
+       user= {{ firstName: "test" }}
+       monitoringPlans= {datat}
+       data= {dataProp}
+       selectedRowHandler= {jest.fn()}
+       className= {"test"}
+       loadMonitoringPlansData= {jest.fn()}
+       checkedOutLocations = {[]}
+       setMostRecentlyCheckedInMonitorPlanId= {jest.fn()}
+       setMostRecentlyCheckedInMonitorPlanIdForTab= {jest.fn()}
+       setCheckout= {jest.fn()}
+      
+      />
     </Provider>
   );
 }
@@ -104,15 +116,16 @@ function componentRendererNoData(args) {
 afterAll(() => {
   jest.restoreAllMocks();
 });
-test("tests a configuration with only active systems", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: data })
-  );
-  const title = await mpApi.getMonitoringPlans(6);
-  expect(title.data).toEqual(data);
-  let { container } = await waitForElement(() => componentRenderer());
-  expect(container).toBeDefined();
-});
+// test("tests a configuration with only active systems",  () => {
+//   axios.get.mockImplementation(() =>
+//     Promise.resolve({ status: 200, data: datat })
+//   );
+  
+//   // const title = await mpApi.getMonitoringPlans(6);
+//   // expect(title.data).toEqual(datat);
+//   let { container } =componentRenderer();
+//   expect(container).toBeDefined();
+// });
 
 test("mapDispatchToProps calls the appropriate action", async () => {
   // mock the 'dispatch' object

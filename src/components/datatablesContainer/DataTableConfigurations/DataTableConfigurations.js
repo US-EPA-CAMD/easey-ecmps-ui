@@ -108,6 +108,7 @@ export const DataTableConfigurations = ({
   }, [selectedConfig]);
 
   useEffect(() => {
+    console.log('testing data',data)
     loadMonitoringPlansData(data.col2).then(() => {
       setDataLoaded(true);
     });

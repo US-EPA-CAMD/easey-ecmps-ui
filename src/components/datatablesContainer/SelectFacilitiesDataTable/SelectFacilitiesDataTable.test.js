@@ -115,7 +115,7 @@ test('testing redux connected data-table component renders all records', async (
   let { container } = await waitForElement(() => componentRenderer());
   expect(container).toBeDefined();
   const headerColumns = container.querySelectorAll('tbody tr');
-  expect(headerColumns.length).toEqual(0);
+  expect(headerColumns.length).toEqual(5);
 });
 
 test('mapDispatchToProps calls the appropriate action', async () => {
