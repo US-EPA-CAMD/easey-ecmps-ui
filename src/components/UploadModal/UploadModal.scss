@@ -47,6 +47,10 @@
     margin-right: 2.5rem;
   }
 
+  .error-modal-body {
+    margin-right: 4rem;
+  }
+
   #okBtn {
     float: right;
     width: 7rem;
@@ -60,5 +64,14 @@
       color: #d54309;
       font-weight: 800;
     }
+  }
+
+  #importErrorsHeading {
+    font-size: 20px !important;
+    margin-bottom: 0rem;
+  }
+
+  #importErrorSubText {
+    margin-top: 0.5rem;
   }
 }
