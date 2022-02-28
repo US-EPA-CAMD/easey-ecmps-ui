@@ -1,6 +1,6 @@
 import React from "react";
 
-import { FormGroup, Label, FileInput } from "@trussworks/react-uswds";
+import { FormGroup, Label, FileInput, Alert } from "@trussworks/react-uswds";
 import "./ImportModal.scss";
 
 const ImportModal = ({
@@ -10,6 +10,7 @@ const ImportModal = ({
   fileName,
   setHasFormatError,
   setHasInvalidJsonError,
+  importApiErrors,
 }) => {
   const validateJSON = (name, type, event) => {
     const fileTypeManual = name.split(".");
@@ -56,8 +57,18 @@ const ImportModal = ({
 
   return (
     <div className="import-modal-container">
-      {complete ? (
+      {complete && importApiErrors.length === 0 ? (
         <span id="fileName">{fileName}</span>
+      ) : complete && importApiErrors.length > 0 ? (
+        <div className="overflow-y-auto maxh-mobile">
+          <div className="padding-right-2 padding-left-3">
+            {importApiErrors.map((error, i) => (
+              <Alert type="error" slim noIcon key={i}>
+                {error}
+              </Alert>
+            ))}
+          </div>
+        </div>
       ) : (
         <FormGroup>
           <Label htmlFor="file-input-single"> Upload MP JSON File</Label>
