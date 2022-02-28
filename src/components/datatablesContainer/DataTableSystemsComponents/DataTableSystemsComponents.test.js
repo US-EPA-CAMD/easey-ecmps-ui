@@ -211,10 +211,13 @@ const componentRenderer = (
   openAddComponentTest,
 ) => {
   const props = {
+    fuelFlowsMdmData: {testCode: []},
     systemID: 'AF1',
     viewOnly: false,
     setSecondLevel: jest.fn(),
     secondLevel: secondLevel,
+    thirdLevel:false,
+    setThirdLevel:jest.fn(),
     locationSelectValue: 6,
     user: { firstName: 'test' },
     checkout: checkout,

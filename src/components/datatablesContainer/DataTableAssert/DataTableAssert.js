@@ -394,6 +394,12 @@ export const DataTableAssert = ({
         id="testingBtn2"
         onClick={() => {
           saveData();
+          openModal(false, false, true);
+          closeModalHandler();
+          saveData();
+          window.isDataChanged = true;
+          closeModalHandler();
+          createData();
         }}
       />
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -451,7 +457,6 @@ export const DataTableAssert = ({
 
 const mapStateToProps = (state, ownProps) => {
   const { dataTableName } = ownProps;
-  console.log('ownprops',ownProps,dataTableName)
   return {
     mdmData: state.dropdowns[convertSectionToStoreName(dataTableName)],
   };

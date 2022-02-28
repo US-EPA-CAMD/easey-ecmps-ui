@@ -318,7 +318,11 @@ describe("DataTableAssert", () => {
 
     const spanDataReturned = await mpApi.getMonitoringSpans(6);
     expect(spanDataReturned.data).toEqual(spanData);
-
+    axios.mockImplementationOnce(() => {
+      return Promise.resolve({
+        data: {},
+      });
+    });
     let { container } = await waitForElement(() =>
       render(<DataTableAssert {...props} />)
     );
@@ -329,6 +333,15 @@ describe("DataTableAssert", () => {
       return Promise.resolve({ data: {} });
     });
 
+    // mocks for saveData() 
+    axios.mockImplementationOnce(() => {
+      return Promise.resolve({ data: {} });
+    });
+    // mocks for createData();
+    axios.mockImplementationOnce(() => {
+      return Promise.resolve({ data: {} });
+    });
+    
     await authenticate({});
     expect(sessionStorage.getItem("cdx_user")).toBe("{}");
     fireEvent.click(container.querySelector("#testingBtn2"));

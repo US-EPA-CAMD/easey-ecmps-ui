@@ -617,7 +617,6 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
               controlCode: option["controlCode"],
             };
           });
-          console.log("response.data control", response.data, options);
           noDupesFormCodesControls = [...new Set(noDupesFormCodesControls)];
           const prefilteredMdmOptions = organizePrefilterMDMData(
             noDupesFormCodesControls,
@@ -653,8 +652,6 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
             "componentTypeCode",
             response.data
           );
-
-          console.log('prefilteredMdmOptions',prefilteredMdmOptions)
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         });
         break;
