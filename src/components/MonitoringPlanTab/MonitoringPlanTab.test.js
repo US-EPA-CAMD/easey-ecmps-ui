@@ -1,176 +1,110 @@
-// import React from "react";
-// import {
-//   MonitoringPlanTab,
-//   mapStateToProps,
-//   mapDispatchToProps,
-// } from "./MonitoringPlanTab";
-// import Adapter from "enzyme-adapter-react-16";
-// import { shallow, configure, mount } from "enzyme";
-// import configureMockStore from "redux-mock-store";
-// jest.mock("../../store/actions/dynamicFacilityTab");
-// import * as actions from "../../store/actions/dynamicFacilityTab";
+import React from "react";
+import { render, fireEvent, screen } from "@testing-library/react";
+import {
+  MonitoringPlanTab,
+  mapStateToProps,
+  mapDispatchToProps,
+} from "./MonitoringPlanTab";
+import * as axios from "axios";
+import { deleteCheckInMonitoringPlanConfiguration } from "../../utils/api/monitoringPlansApi";
+import configureMockStore from "redux-mock-store";
+jest.mock("../../store/actions/dynamicFacilityTab");
+import * as actions from "../../store/actions/dynamicFacilityTab";
 
-// jest.mock("../../store/actions/activeTab");
-// import * as activeTabCall from "../../store/actions/activeTab";
-// //testing redux connected component to mimic props passed as argument
-// const mockStore = configureMockStore();
-// const store = mockStore({});
+jest.mock("../../store/actions/activeTab");
+//testing redux connected component to mimic props passed as argument
+const mockStore = configureMockStore();
+const store = mockStore({});
+
+jest.mock("axios");
 // configure({ adapter: new Adapter() });
-// describe("Shallow render to avoid issues with redux store ", () => {
-//   it("should render without throwing an error", () => {
-//     const facilities = [
-//       { orisCode: 3, name: "Barry", state: "Alabama" },
-//       { orisCode: 8, name: "Gorgas", state: "Alabama" },
-//       { orisCode: 9, name: "Copper Station", state: "Washington" },
-//     ];
-//     const monitoringPlans = [
-//       {
-//         id: "6",
-//         name: "1",
-//         locations: [
-//           { id: "x", name: "location1" },
-//           { id: "y", name: "location2" },
-//         ],
-//       },
-//       { id: "7", name: "2" },
-//       { id: "8", name: "3" },
-//     ];
+describe("Monitoring plan tab", () => {
+  test("renders component", async () => {
+    // mock the 'dispatch' object
 
-//     const defaultProps = {
-//       orisCode: 5,
-//       selectedConfig: {
-//         id: "MDC-7C15B3D1B20542C3B54DD57F03A516E5",
-//         name: "110",
-//         locations: [
-//           {
-//             id: "65",
-//             name: "110",
-//             type: "Unit",
-//             active: false,
-//             retireDate: null,
-//             links: [
-//               {
-//                 rel: "self",
-//                 href:
-//                   "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/65",
-//               },
-//               {
-//                 rel: "methods",
-//                 href:
-//                   "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/65/methods",
-//               },
-//               {
-//                 rel: "systems",
-//                 href:
-//                   "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/65/systems",
-//               },
-//               {
-//                 rel: "spans",
-//                 href:
-//                   "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/65/spans",
-//               },
-//             ],
-//           },
-//         ],
-//         endReportPeriodId: "24",
-//         active: false,
-//         links: [
-//           {
-//             rel: "self",
-//             href:
-//               "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-plans/MDC-7C15B3D1B20542C3B54DD57F03A516E5",
-//           },
-//         ],
-//       },
+    axios.mockImplementationOnce(() => {
+      return Promise.resolve({
+        data: {},
+      });
+    });
+    await deleteCheckInMonitoringPlanConfiguration(1);
+    //-------
+    // mocks the return secure Axios
+    axios.mockImplementationOnce(() => {
+      return Promise.resolve({
+        data: {},
+      });
+    });
+    axios.mockImplementationOnce(() => {
+      return Promise.reject(new Error("some error"));
+    });
+    const { container, getByText, getAllByRole } = render(
+      <MonitoringPlanTab
+        resetTimer={jest.fn()}
+        setExpired={jest.fn()}
+        resetTimerFlag={false}
+        callApiFlag={false}
+        orisCode={false}
+        selectedConfig={false}
+        title={false}
+        locations={false}
+        user={false}
+        checkout={false}
+        tabs={false}
+        activeTab={0}
+        setSection={jest.fn()}
+        setLocation={jest.fn()}
+        setCheckout={jest.fn()}
+        setInactive={jest.fn()}
+        checkedOutLocations={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+        mostRecentlyCheckedInMonitorPlanIdForTab={false}
+      />
+    );
 
-//       title: "( test ) ",
-//       locations: [],
-//       user: { firstName: "test" },
-//       checkout: false,
+    container = render(
+      <MonitoringPlanTab
+        resetTimer={jest.fn()}
+        setExpired={jest.fn()}
+        resetTimerFlag={false}
+        callApiFlag={false}
+        orisCode={1}
+        selectedConfig={false}
+        title={false}
+        locations={false}
+        user={false}
+        checkout={false}
+        tabs={false}
+        activeTab={false}
+        setSection={jest.fn()}
+        setLocation={jest.fn()}
+        setCheckout={jest.fn()}
+        setInactive={jest.fn()}
+        checkedOutLocations={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+        mostRecentlyCheckedInMonitorPlanIdForTab={false}
+      />
+    );
 
-//       tabs: [
-//         {
-//           orisCode: 1,
-//           name: "test",
-//           checkout: false,
-//           inactive: [false, true],
+    expect(container).toBeDefined();
+  });
 
-//           section: [3, "Methods"],
-//           location: [0, "65"],
-//           selectedConfig: {
-//             id: "MDC-7C15B3D1B20542C3B54DD57F03A516E5",
-//             name: "110",
-//             locations: [
-//               {
-//                 id: "65",
-//                 name: "110",
-//                 type: "Unit",
-//                 active: false,
-//                 retireDate: null,
-//               },
-//             ],
-//             active: false,
-//           },
-//         },
-//       ],
-//       setActiveTab: jest.fn(),
-//       activeTab: [0],
-//       setSection: jest.fn(),
-//       setCheckout: jest.fn(),
-//       setLocation: jest.fn(),
-//       setInactive: jest.fn(),
-//     };
-//     const props = { ...defaultProps };
-//     // mock the 'dispatch' object
-//     const dispatch = jest.fn();
-//     const actionProps = mapDispatchToProps(dispatch);
-//     actionProps.setLocation();
-//     expect(actions.setLocationSelectionState).toHaveBeenCalled();
-//     actionProps.setSection();
-//     expect(actions.setSectionSelectionState).toHaveBeenCalled();
-//     actionProps.setActiveTab();
-//     expect(activeTabCall.setActiveTab).toHaveBeenCalled();
-//     actionProps.setInactive();
-//     expect(actions.setInactiveState).toHaveBeenCalled();
-//     actionProps.setCheckout();
-//     expect(actions.setCheckoutState).toHaveBeenCalled();
+  test("mapDispatchToProps calls the appropriate action", async () => {
+    // mock the 'dispatch' object
+    const dispatch = jest.fn();
+    const actionProps = mapDispatchToProps(dispatch);
+    const state = jest.fn();
+    const stateProps = mapStateToProps(state);
 
-//     const state = jest.fn();
-//     const stateProps = mapStateToProps(state);
-
-//     const wrapper = mount(<MonitoringPlanTab {...props} />);
-
-//     wrapper.setProps({
-//       tabs: [
-//         {
-//           orisCode: 1,
-//           name: "( test ) ",
-//           checkout: false,
-//           inactive: [false, true],
-
-//           section: [4, "Systes"],
-//           location: [1, "655"],
-//           selectedConfig: {
-//             id: "1",
-//             name: "1101",
-//             locations: [
-//               {
-//                 id: "655",
-//                 name: "110",
-//                 type: "Unit",
-//                 active: false,
-//                 retireDate: null,
-//               },
-//             ],
-//             active: false,
-//           },
-//         },
-//       ],
-//     });
-//     expect(wrapper.find("MonitoringPlanTabRender")).toHaveLength(1);
-//   });
-// });
-test("test file", () => {
-  const val = 1;
-  expect(val === 1);
+    const formData = [];
+    // verify the appropriate action was called
+    actionProps.setLocation();
+    actionProps.setSection();
+    actionProps.setActiveTab();
+    actionProps.setInactive();
+    actionProps.setCheckout();
+    expect(state).toBeDefined();
+  });
 });

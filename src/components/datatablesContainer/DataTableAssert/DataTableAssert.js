@@ -451,6 +451,7 @@ export const DataTableAssert = ({
 
 const mapStateToProps = (state, ownProps) => {
   const { dataTableName } = ownProps;
+  console.log('ownprops',ownProps,dataTableName)
   return {
     mdmData: state.dropdowns[convertSectionToStoreName(dataTableName)],
   };

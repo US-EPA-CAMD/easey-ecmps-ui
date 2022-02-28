@@ -24,6 +24,7 @@ const locationAttribute = "Location Attribute";
 const relationshipData = "Relationship Data";
 // Getting records from API
 export const getDataTableApis = async (name, location, selectedLocation) => {
+  console.log('NAME',name)
   switch (name) {
     case load:
       return mpApi.getMonitoringLoads(location);
@@ -50,8 +51,10 @@ export const getDataTableApis = async (name, location, selectedLocation) => {
 
     case locationAttribute:
       return mpApi.getLocationAttributes(location);
-    case relationshipData:
-      return mpApi.getRelationshipData(location);
+      // error is here 
+    // case relationshipData:
+    //   console.log('testing relationship')
+    //   return mpApi.getRelationshipData(location);
 
     default:
       break;

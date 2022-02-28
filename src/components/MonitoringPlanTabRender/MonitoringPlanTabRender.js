@@ -54,6 +54,7 @@ export const MonitoringPlanTabRender = ({
   // updates all tables whenever a location is changed
   useEffect(
     () => {
+      console.log('TESTING')
       const tableArr = [
         [
           [
@@ -514,6 +515,7 @@ export const MonitoringPlanTabRender = ({
       setTableState(tableArr);
     },
 
+  
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       // eslint-disable-next-line react-hooks/exhaustive-deps

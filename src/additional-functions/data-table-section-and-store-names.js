@@ -1,8 +1,11 @@
 export const DEFAULTS_SECTION_NAME = "Default";
 export const FORMULAS_SECTION_NAME = "Formula";
 export const LOADS_SECTION_NAME = "Load";
-export const LOCATION_ATTRIBUTES_AND_RELATIONSHIPS_SECTION_NAME =
+export const LOCATION_ATTRIBUTES_SECTION_NAME =
   "Location Attribute";
+
+  export const LOCATION_RELATIONSHIPS_SECTION_NAME =
+  "Relationship Data";
 export const METHODS_SECTION_NAME = "Methods";
 export const QUALIFICATIONS_SECTION_NAME = "Qualifications";
 export const RECTANGULAR_DUCT_WAFS_SECTION_NAME = "Rectangular Duct WAF";
@@ -22,8 +25,8 @@ export const MATS_METHODS_SECTION_NAME = "Supplemental Methods";
 export const DEFAULTS_STORE_NAME = "defaults";
 export const FORMULAS_STORE_NAME = "formulas";
 export const LOADS_STORE_NAME = "loads";
-export const LOCATION_ATTRIBUTES_AND_RELATIONSHIPS_STORE_NAME =
-  "locationAttributesAndRelationships";
+export const LOCATION_ATTRIBUTES_STORE_NAME = "locationAttributes";
+export const LOCATION_RELATIONSHIPS_STORE_NAME = "locationRelationships";
 export const METHODS_STORE_NAME = "methods";
 export const QUALIFICATIONS_STORE_NAME = "qualifications";
 export const RECTANGULAR_DUCT_WAFS_STORE_NAME = "rectangularDuctWafs";
@@ -52,8 +55,11 @@ export const convertSectionToStoreName = (dataTableName) => {
     case LOADS_SECTION_NAME:
       storeName = LOADS_STORE_NAME;
       break;
-    case LOCATION_ATTRIBUTES_AND_RELATIONSHIPS_SECTION_NAME:
-      storeName = LOCATION_ATTRIBUTES_AND_RELATIONSHIPS_STORE_NAME;
+    case LOCATION_ATTRIBUTES_STORE_NAME:
+      storeName = LOCATION_ATTRIBUTES_STORE_NAME;
+      break;
+    case LOCATION_RELATIONSHIPS_SECTION_NAME:
+      storeName = LOCATION_RELATIONSHIPS_STORE_NAME;
       break;
     case METHODS_SECTION_NAME:
       storeName = METHODS_STORE_NAME;
