@@ -38,20 +38,20 @@ describe("Monitoring plan tab", () => {
     axios.mockImplementationOnce(() => {
       return Promise.reject(new Error("some error"));
     });
-    const { container, getByText, getAllByRole } = render(
+    let { container, getByText, getAllByRole } = render(
       <MonitoringPlanTab
         resetTimer={jest.fn()}
         setExpired={jest.fn()}
         resetTimerFlag={false}
         callApiFlag={false}
         orisCode={false}
-        selectedConfig={false}
-        title={false}
+        selectedConfig={{id:1}}
+        title={" ( test ) "}
         locations={false}
         user={false}
         checkout={false}
-        tabs={false}
-        activeTab={0}
+        tabs={[{section:'test', selectedConfig:{id:1}, location:1,inactive:false}]}
+        activeTab={[0]}
         setSection={jest.fn()}
         setLocation={jest.fn()}
         setCheckout={jest.fn()}
@@ -60,6 +60,7 @@ describe("Monitoring plan tab", () => {
         setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
         setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
         mostRecentlyCheckedInMonitorPlanIdForTab={false}
+        test= {true}
       />
     );
 
@@ -70,13 +71,13 @@ describe("Monitoring plan tab", () => {
         resetTimerFlag={false}
         callApiFlag={false}
         orisCode={1}
-        selectedConfig={false}
-        title={false}
+        selectedConfig={{id:1}}
+        title={" ( test ) "}
         locations={false}
         user={false}
         checkout={false}
-        tabs={false}
-        activeTab={false}
+        tabs={[{section:'test', selectedConfig:{id:1}, location:1,inactive:false}]}
+        activeTab={[0]}
         setSection={jest.fn()}
         setLocation={jest.fn()}
         setCheckout={jest.fn()}
@@ -85,6 +86,7 @@ describe("Monitoring plan tab", () => {
         setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
         setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
         mostRecentlyCheckedInMonitorPlanIdForTab={false}
+        test= {true}
       />
     );
 

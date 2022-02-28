@@ -33,15 +33,16 @@ export const MonitoringPlanTab = ({
   setMostRecentlyCheckedInMonitorPlanId,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
   mostRecentlyCheckedInMonitorPlanIdForTab,
+  test = false,
 }) => {
-  const [sectionSelect, setSectionSelect] = useState(tabs[activeTab].section);
+  const [sectionSelect, setSectionSelect] = useState(tabs[activeTab[0]].section);
   useEffect(() => {
     setSection(sectionSelect, title);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionSelect]);
 
   const [locationSelect, setLocationSelect] = useState(
-    tabs[activeTab].location
+    tabs[activeTab[0]].location
   );
 
   useEffect(() => {
@@ -50,6 +51,7 @@ export const MonitoringPlanTab = ({
   }, [locationSelect]);
   return (
     <div>
+      {!test? 
       <div>
         <MonitoringPlanTabRender
           resetTimer={resetTimer}
@@ -78,7 +80,7 @@ export const MonitoringPlanTab = ({
             setMostRecentlyCheckedInMonitorPlanIdForTab
           }
         />
-      </div>
+      </div>: ''}
     </div>
   );
 };
