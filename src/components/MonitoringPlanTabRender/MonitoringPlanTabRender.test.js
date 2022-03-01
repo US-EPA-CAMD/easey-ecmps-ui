@@ -137,82 +137,78 @@ const data = [
 afterEach(() => {
   jest.restoreAllMocks();
 });
-// test("tests api call post/get/delete", async () => {
-//   axios.mockImplementationOnce(() => {
-//     return Promise.resolve({
-//       data: {},
-//     });
-//   });
-//   await deleteCheckInMonitoringPlanConfiguration(1);
-//   //-------
-//   // mocks the return secure Axios
-//   axios.mockImplementationOnce(() => {
-//     return Promise.resolve({
-//       data: {},
-//     });
-//   });
-//   // mocks the return secure Axios
-//   axios.mockImplementationOnce(() => {
-//     return Promise.resolve({
-//       data: {},
-//     });
-//   });
-//   axios.get.mockImplementation((url) => {
-//     switch (url) {
-//       case "/users.json":
-//         return Promise.resolve({ data: [{ name: "Bob", items: [] }] });
-//       case "/items.json":
-//         return Promise.resolve({ data: [{ id: 1 }, { id: 2 }] });
-//       default:
-//         return Promise.reject(new Error("not found"));
-//     }
-//   });
+test("tests api call post/get/delete", async () => {
+  axios.mockImplementationOnce(() => {
+    return Promise.resolve({
+      data: {},
+    });
+  });
+  await deleteCheckInMonitoringPlanConfiguration(1);
+  //-------
+  // mocks the return secure Axios
+  axios.mockImplementationOnce(() => {
+    return Promise.resolve({
+      data: {},
+    });
+  });
+  // mocks the return secure Axios
+  axios.mockImplementationOnce(() => {
+    return Promise.resolve({
+      data: {},
+    });
+  });
+  axios.get.mockImplementation((url) => {
+    switch (url) {
+      case "/users.json":
+        return Promise.resolve({ data: [{ name: "Bob", items: [] }] });
+      case "/items.json":
+        return Promise.resolve({ data: [{ id: 1 }, { id: 2 }] });
+      default:
+        return Promise.reject(new Error("not found"));
+    }
+  });
 
-//   axios.get.mockImplementation(() =>
-//     Promise.resolve({ status: 200, data: data })
-//   );
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: data })
+  );
 
-//   axios.post.mockImplementation((url) => {
-//     switch (url) {
-//       case "/users.json":
-//         return Promise.resolve({ data: [{ name: "Bob", items: [] }] });
-//       case "/items.json":
-//         return Promise.resolve({ data: [{ id: 1 }, { id: 2 }] });
-//       default:
-//         return Promise.reject(new Error("not found"));
-//     }
-//   });
+  axios.post.mockImplementation((url) => {
+    switch (url) {
+      case "/users.json":
+        return Promise.resolve({ data: [{ name: "Bob", items: [] }] });
+      case "/items.json":
+        return Promise.resolve({ data: [{ id: 1 }, { id: 2 }] });
+      default:
+        return Promise.reject(new Error("not found"));
+    }
+  });
 
-//   axios.post.mockImplementation(() =>
-//     Promise.resolve({ status: 200, data: data })
-//   );
+  axios.post.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: data })
+  );
 
-//   axios.delete.mockImplementation((url) => {
-//     switch (url) {
-//       case "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/workspace/plans/MDC-7C15B3D1B20542C3B54DD57F03A516E5/check-outs":
-//         return Promise.resolve({ data: [{ name: "Bob", items: [] }] });
-//       case "/items.json":
-//         return Promise.resolve({ data: [{ id: 1 }, { id: 2 }] });
-//       default:
-//         return Promise.reject(new Error(url));
-//     }
-//   });
-//   axios.delete.mockImplementation(() =>
-//     Promise.resolve({ status: 200, data: data })
-//   );
-//   const title = await mpApi.getMonitoringMatsMethods(6);
+  axios.delete.mockImplementation((url) => {
+    switch (url) {
+      case "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/workspace/plans/MDC-7C15B3D1B20542C3B54DD57F03A516E5/check-outs":
+        return Promise.resolve({ data: [{ name: "Bob", items: [] }] });
+      case "/items.json":
+        return Promise.resolve({ data: [{ id: 1 }, { id: 2 }] });
+      default:
+        return Promise.reject(new Error(url));
+    }
+  });
+  axios.delete.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: data })
+  );
+  const title = await mpApi.getMonitoringMatsMethods(6);
 
-//   const deleteId = await mpApi.deleteCheckInMonitoringPlanConfiguration(5);
+  const deleteId = await mpApi.deleteCheckInMonitoringPlanConfiguration(5);
 
-//   const postId = await mpApi.postCheckoutMonitoringPlanConfiguration(5, {
-//     firstName: "test1",
-//   });
-//   let { container } = await waitForElement(() => componentRenderer(true));
-//   fireEvent.click(container.querySelector("#checkInBTN"));
-//   // fireEvent.click(container.querySelector("#checkOutBTN"));
-//   expect(container).toBeDefined();
-// });
-test('test file', () => {
-  const val = 1;
-  expect(val === 1);
+  const postId = await mpApi.postCheckoutMonitoringPlanConfiguration(5, {
+    firstName: "test1",
+  });
+  let { container } = await waitForElement(() => componentRenderer(true));
+  fireEvent.click(container.querySelector("#checkInBTN"));
+  // fireEvent.click(container.querySelector("#checkOutBTN"));
+  expect(container).toBeDefined();
 });
