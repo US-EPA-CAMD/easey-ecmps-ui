@@ -192,38 +192,38 @@ export const MonitoringPlanTabRender = ({
             />,
             "Location Attributes",
           ],
-          [
-            <DataTableAssert
-              locationSelectValue={locationSelect[1]}
-              inactive={inactive}
-              settingInactiveCheckBox={settingInactiveCheckBox}
-              checkout={checkout}
-              user={user}
-              payload={relationshipDataTableProps(locationSelect[1])["payload"]}
-              dropdownArray={
-                relationshipDataTableProps(locationSelect[1])["dropdownArray"]
-              }
-              columnNames={
-                relationshipDataTableProps(locationSelect[1])["columnNames"]
-              }
-              controlInputs={
-                relationshipDataTableProps(locationSelect[1])["controlInputs"]
-              }
-              controlDatePickerInputs={
-                relationshipDataTableProps(locationSelect[1])[
-                  "controlDatePickerInputs"
-                ]
-              }
-              radioNames={[]}
-              dataTableName={"Relationship Data"}
-              revertedState={revertedState}
-              nonEditable={true}
-              setRevertedState={setRevertedState}
-              setUpdateRelatedTables={setUpdateRelatedTables}
-              updateRelatedTables={updateRelatedTables}
-            />,
-            "Relationships Data",
-          ],
+          // [
+          //   <DataTableAssert
+          //     locationSelectValue={locationSelect[1]}
+          //     inactive={inactive}
+          //     settingInactiveCheckBox={settingInactiveCheckBox}
+          //     checkout={checkout}
+          //     user={user}
+          //     payload={relationshipDataTableProps(locationSelect[1])["payload"]}
+          //     dropdownArray={
+          //       relationshipDataTableProps(locationSelect[1])["dropdownArray"]
+          //     }
+          //     columnNames={
+          //       relationshipDataTableProps(locationSelect[1])["columnNames"]
+          //     }
+          //     controlInputs={
+          //       relationshipDataTableProps(locationSelect[1])["controlInputs"]
+          //     }
+          //     controlDatePickerInputs={
+          //       relationshipDataTableProps(locationSelect[1])[
+          //         "controlDatePickerInputs"
+          //       ]
+          //     }
+          //     radioNames={[]}
+          //     dataTableName={"Relationship Data"}
+          //     revertedState={revertedState}
+          //     nonEditable={true}
+          //     setRevertedState={setRevertedState}
+          //     setUpdateRelatedTables={setUpdateRelatedTables}
+          //     updateRelatedTables={updateRelatedTables}
+          //   />,
+          //   "Relationships Data",
+          // ],
         ], // location attributes
         [
           [

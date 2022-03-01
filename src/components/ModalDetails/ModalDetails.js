@@ -85,6 +85,7 @@ const ModalDetails = ({
   }
 
   const makeViewOnlyComp = (value) => {
+    console.log('VALUE',value)
     return (
       <div key={`${value[1]}`} className="grid-col">
         {((value[4] === "time" || value[4] === "date") && value[5] === null) ||

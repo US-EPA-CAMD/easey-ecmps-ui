@@ -1,6 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render } from "@testing-library/react";
 import ModalDetails from "./ModalDetails";
 
 let options = [];
@@ -39,7 +38,7 @@ beforeAll(() => {
     ],
     ["operationDate", "Operation Date", "08/12/1951", false, "locked"],
     ["boilerTurbineType", "Boiler/Turbine Type", "T", false, "locked"],
-    [[], [], [], "", "skip"],
+    ["", "", "", "", "skip"],
     [
       "boilerTurbineBeginDate",
       "Boiler/Turbine Begin Date",
@@ -55,7 +54,7 @@ beforeAll(() => {
       false,
       "input",
     ],
-    [[], [], [], "", "skip"],
+    ["", "", "", "", "skip"],
     ["beginDate", "Start Date", "10/31/2002", false, "date", "2002-10-31"],
     ["endDate", "End Date", "", false, "date", null],
   ];
