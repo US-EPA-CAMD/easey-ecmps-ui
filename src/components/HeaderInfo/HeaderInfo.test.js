@@ -1,228 +1,277 @@
 import React from "react";
-import {
-  render,
-  screen,
-  within,
-  fireEvent,
-  waitForElement,
-} from "@testing-library/react";
-import HeaderInfo from "./HeaderInfo";
-import { act } from "react-dom/test-utils";
-import * as mpApi from "../../utils/api/monitoringPlansApi";
-const axios = require("axios");
+import { render, screen, wait, fireEvent } from "@testing-library/react";
+import config from "../../config";
 
-jest.mock("axios");
-test("test file", () => {
-  const val = 1;
-  expect(val === 1);
+import userEvent from "@testing-library/user-event";
+
+import HeaderInfo from "./HeaderInfo";
+
+jest.mock("downloadjs", () => {
+  return {
+    download: jest.fn(),
+  };
 });
 
-// describe("tests the header of configuration component", () => {
-//   test("renders preloader ", async () => {
-//     act(async () => {
-//       jest.mock("../../utils/api/monitoringPlansApi", () => {
-//         const mockreturnedConfig = [
-//           {
-//             id: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
-//             updateDate: "2021-12-06",
-//             userId: "mddee-dp",
-//             evalStatusCode: "INQ",
-//           },
-//         ];
-//         return {
-//           getConfigInfo: jest.fn(() => Promise.resolve(mockreturnedConfig)),
-//         };
-//       });
-//       const { container } = await waitForElement(() =>
-//         render(
-//           <HeaderInfo
-//             facility={"Barry (1, 2, CS0AAN)"}
-//             selectedConfig={[]}
-//             orisCode={3}
-//             setSectionSelect={jest.fn()}
-//             sectionSelect={[4, "Methods"]}
-//             setLocationSelect={jest.fn()}
-//             locationSelect={[0, "test"]}
-//             locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
-//             checkout={false}
-//             user={{ firstName: "test" }}
-//             checkoutAPI={jest.fn()}
-//             setInactive={jest.fn()}
-//             setCheckout={jest.fn()}
-//             inactive={[true, false]}
-//             checkoutAPI={jest.fn()}
-//             checkedOutLocations={[{ monPlanId: [1, 2, 3] }]}
-//             setRevertedState={jest.fn()}
-//             configID={"TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A"}
-//           />
-//         )
-//       );
+jest.mock("../../utils/api/quartzApi", () => {
+  return {
+    triggerEvaluation: jest.fn().mockResolvedValue({}),
+  };
+});
+jest.mock("../../utils/api/monitoringPlansApi", () => {
+  return {
+    getMonitoringPlanById: jest
+      .fn()
+      .mockResolvedValue({ data: { facId: "testFacId", name: "testName" } }),
+    revertOfficialRecord: jest.fn().mockResolvedValue({}),
+    getRefreshInfo: jest
+      .fn()
+      .mockResolvedValueOnce({
+        data: {
+          userid: "testUserId",
+          updateDate: "1/1/1111",
+          facId: "testFacId",
+          evalStatusCode: "EVAL",
+        },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          userid: "testUserId",
+          updateDate: "1/1/1111",
+          facId: "testFacId",
+          evalStatusCode: "EVAL",
+        },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          userid: "testUserId",
+          updateDate: "1/1/1111",
+          facId: "testFacId",
+          evalStatusCode: "INQ",
+        },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          userid: "testUserId",
+          updateDate: "1/1/1111",
+          facId: "testFacId",
+          evalStatusCode: "WIP",
+        },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          userid: "testUserId",
+          updateDate: "1/1/1111",
+          facId: "testFacId",
+          evalStatusCode: "ERR",
+        },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          userid: "testUserId",
+          updateDate: "1/1/1111",
+          facId: "testFacId",
+          evalStatusCode: "INFO",
+        },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          userid: "testUserId",
+          updateDate: "1/1/1111",
+          facId: "testFacId",
+          evalStatusCode: "PASS",
+        },
+      })
+      .mockResolvedValue({
+        data: {
+          userid: "testUserId",
+          updateDate: "1/1/1111",
+          facId: "testFacId",
+          evalStatusCode: "EVAL",
+        },
+      }),
 
-//       const img = container.querySelectorAll("img");
+    getCheckedOutLocations: jest
+      .fn()
+      .mockResolvedValueOnce({
+        data: [{ monPlanId: "testConfigId", facId: "testFacId" }],
+      })
+      .mockResolvedValueOnce({
+        data: [],
+      })
+      .mockResolvedValue({
+        data: [{ monPlanId: "testConfigId", facId: "testFacId" }],
+      }),
+  };
+});
+jest.mock("../../utils/api/facilityApi", () => {
+  return {
+    getFacilityById: jest
+      .fn()
+      .mockResolvedValue({ data: { facilityName: "testFacName" } }),
+  };
+});
+jest.mock("axios");
 
-//       expect(img.length).toBe(2);
-//     });
-//   });
-// });
-    // const { container } = await waitForElement(() =>
-    //   render(
-    //     <HeaderInfo
-    //       facility={"Barry (1, 2, CS0AAN)"}
-    //       selectedConfig={[]}
-    //       orisCode={3}
-    //       setSectionSelect={jest.fn()}
-    //       sectionSelect={[4, "Methods"]}
-    //       setLocationSelect={jest.fn()}
-    //       locationSelect={[0, "test"]}
-    //       locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
-    //       checkout={false}
-    //       user={{ firstName: "test" }}
-    //       checkoutAPI={jest.fn()}
-    //       setInactive={jest.fn()}
-    //       setCheckout={jest.fn()}
-    //       inactive={[true, false]}
-    //       checkoutAPI={jest.fn()}
-    //       checkedOutLocations={[{ monPlanId: [1, 2, 3] }]}
-    //       setRevertedState={jest.fn()}
-    //       configID={"TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A"}
-    //     />
-    //   )
-    // );
-    // fireEvent.click(screen.getByText("Check Out"));
-    // fireEvent.click(screen.getByText("Check Back In"));
+const date = new Date();
+const dateString = date.toString();
 
+const selectedConfig = {
+  id: "testConfigId",
+  userId: "testUserId",
+  updateDate: dateString,
+  addDate: dateString,
+  active: true,
+};
 
-// describe("renders header with checked out ", () => {
-//   test("cliks check  back in, then check out , 3 buttons because of the rest of header", () => {
-//     const { container, getByText } = render(
-//       <HeaderInfo
-//         facility={"Barry (1, 2, CS0AAN)"}
-//         selectedConfig={[]}
-//         orisCode={3}
-//         user={{ firstName: "test" }}
-//         setRevertedState={jest.fn()}
-//         setCheckout={jest.fn()}
-//         setInactive={jest.fn()}
-//         setLocationSelect={jest.fn()}
-//         setSectionSelect={jest.fn()}
-//         sectionSelect={[4, "Methods"]}
-//         locationSelect={[0, "test"]}
-//         locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
-//         inactive={[true, false]}
-//         checkoutAPI={jest.fn()}
-//         configID={1}
-//       />
-//     );
-//     fireEvent.click(container.querySelector("#checkInBTN"));
-//     fireEvent.click(container.querySelector("#checkOutBTN"));
+const props = {
+  facility: "Test (1, 2, 3)",
+  selectedConfig: selectedConfig,
+  orisCode: "testOrisCode",
+  sectionSelect: [4, "Methods"],
+  setSectionSelect: jest.fn(),
+  setLocationSelect: jest.fn(),
+  locationSelect: [0, "testLocName"],
+  locations: [
+    { id: "testLocId", name: "testLocName", type: "testType", active: true },
+  ],
+  checkout: false,
+  user: { firstName: "test" },
+  checkoutAPI: jest.fn().mockReturnValue(Promise.resolve({})),
+  setCheckout: jest.fn(),
+  setInactive: jest.fn(),
+  inactive: false,
+  setRevertedState: jest.fn(),
+  configID: "testConfigId",
+};
 
-//     fireEvent.click(container.querySelector("#checkbox"));
-//     const btns = screen.getAllByRole("button");
+// mocking JavaScript built-in window functions
+window.open = jest.fn().mockReturnValue({ close: jest.fn() });
+window.scrollTo = jest.fn();
 
-//     fireEvent.click(container.querySelector("#showRevertModal"));
-//     fireEvent.click(screen.getByTestId("saveBtn"));
-//     expect(btns).toHaveLength(4);
-//   });
-// });
+const oneMin = 60000;
+jest.setTimeout(oneMin);
 
-// describe("renders header with no user logged in ", () => {
-//   test("verifies everythign is rendered only 2 buttons, no checkout/check in", () => {
-//     const { container, getByText } = render(
-//       <HeaderInfo
-//         facility={"Barry (1, 2, CS0AAN)"}
-//         selectedConfig={[]}
-//         orisCode={3}
-//         setSectionSelect={jest.fn()}
-//         sectionSelect={[4, "Methods"]}
-//         setLocationSelect={jest.fn()}
-//         locationSelect={[0, "test"]}
-//         locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
-//         checkoutAPI={jest.fn()}
-//         setCheckout={jest.fn()}
-//         setInactive={jest.fn()}
-//         inactive={[true, false]}
-//         checkoutAPI={jest.fn()}
-//         checkedOutLocations={[{monPlanId:[1,2,3]}]}
-//       />
-//     );
+function timeout(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
-//     expect(container).toBeDefined();
-//   });
-// });
-// checkedOutLocations[checkedOutLocations.map((location) => location["monPlanId"]).indexOf(selectedConfig.id)]      ["checkedOutBy"] === user["firstName"]
-//   describe("renders header with no user logged in ", () => {
-//     test("verifies everythign is rendered only 2 buttons, no checkout/check in", () => {
-//       const { container, getByText } = render(
-//         <HeaderInfo
-//           facility={"Barry (1, 2, CS0AAN)"}
-//           selectedConfig={{ id: 5770 }}
-//           user={{ firstName: "test" }}
-//           orisCode={3}
-//           setSectionSelect={jest.fn()}
-//           sectionSelect={[4, "Methods"]}
-//           setLocationSelect={jest.fn()}
-//           locationSelect={[0, "test"]}
-//           locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
-//           checkoutAPI={jest.fn()}
-//           setCheckout={jest.fn()}
-//           setInactive={jest.fn()}
-//           inactive={[true, false]}
-//           checkoutAPI={jest.fn()}
-//           checkedOutLocations={[{ monPlanId: [5770], checkedOutBy: "test" }]}
-//         />
-//       );
+const jsonFile = new File(["{}"], "test.json");
 
-//       expect(container).toBeDefined();
-//     });
-//   });
-// });
+let header;
 
-// test("test audit records for workspace checked out", () => {
-//   const { container } = render(
-//     <HeaderInfo
-//       facility={"Barry (1, 2, CS0AAN)"}
-//       selectedConfig={{ id: 5770 }}
-//       user={{ firstName: "test" }}
-//       checkout={true}
-//       checkedOutLocations={[{ monPlanId: [5770], checkedOutBy: "test" }]}
-//       locationSelect={[0, "test"]}
-//       sectionSelect={[4, "Methods"]}
-//       inactive={[true, false]}
-//       locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
-//     />
-//   );
+beforeEach(async () => {
+  jest.clearAllMocks();
 
-//   expect(container.instance().setAuditInformation()).toContain(
-//     "Currently checked out by:"
-//   );
-// });
+  await wait(() => {
+    header = render(<HeaderInfo {...props} />);
+  });
+});
 
-// test("test audit records for workspace checked in", () => {
-//   const { container, getByText } = render(
-//     <HeaderInfo
-//       facility={"Barry (1, 2, CS0AAN)"}
-//       selectedConfig={{ id: 5770 }}
-//       user={{ firstName: "test" }}
-//       checkout={false}
-//     />
-//   );
+afterEach(() => {
+  header = null;
+});
 
-//   expect(container.instance().setAuditInformation()).toContain(
-//     "Last Updated by:"
-//   );
-// });
+describe("testing HeaderInfo component", () => {
+  // ------------------------------- //
 
-// test("test audit records for globalView", () => {
-//   const container = render(
-//     <HeaderInfo
-//       facility={"Barry (1, 2, CS0AAN)"}
-//       selectedConfig={{ id: 5770 }}
-//       checkout={false}
-//       checkedOutLocations={[{ monPlanId: [5770], checkedOutBy: "test" }]}
-//     />
-//   );
+  /*** TESTING EVALUATION PROCESS ***/
+  it("should go through evaluation process", async () => {
+    expect(screen.getByText("Check Back In")).toBeInTheDocument();
 
-//   expect(container.instance().setAuditInformation()).toContain(
-//     "Last Submitted by:"
-//   );
-// });
+    // check-in config
+    await wait(() => {
+      const checkInBtn = screen.getByText("Check Back In");
+      userEvent.click(checkInBtn);
+    });
+
+    expect(screen.getByText("Check Out")).toBeInTheDocument();
+
+    // check-out config
+    await wait(() => {
+      const checkOutBtn = screen.getByText("Check Out");
+      userEvent.click(checkOutBtn);
+    });
+
+    expect(screen.getByText("Check Back In")).toBeInTheDocument();
+    expect(screen.getByText("Evaluate")).toBeInTheDocument();
+
+    // click on evaluation button
+    await wait(() => {
+      const evalBtn = screen.getByText("Evaluate");
+      userEvent.click(evalBtn);
+    });
+
+    expect(screen.getByText("In Queue")).toBeInTheDocument();
+
+    // check statuses while evaluation process executes
+    await wait(async () => {
+      await timeout(config.app.refreshEvalStatusRate);
+      expect(screen.getByText("In Queue")).toBeInTheDocument();
+
+      await timeout(config.app.refreshEvalStatusRate);
+      expect(screen.getByText("In Progress")).toBeInTheDocument();
+
+      await timeout(config.app.refreshEvalStatusRate);
+      expect(screen.getByText("Critical Errors")).toBeInTheDocument();
+
+      await timeout(config.app.refreshEvalStatusRate);
+      expect(screen.getByText("Informational Message")).toBeInTheDocument();
+
+      await timeout(config.app.refreshEvalStatusRate);
+      expect(screen.getByText("Passed")).toBeInTheDocument();
+    });
+
+    // click on evaluation status hyperlink
+    await wait(() => {
+      const statusLink = screen.getByText("Passed");
+      userEvent.click(statusLink);
+    });
+  });
+
+  /*** TESTING REVERT FUNCTIONALITY ***/
+  it("should revert the current configuration", async () => {
+    expect(
+      header.container.querySelector("#showRevertModal")
+    ).toBeInTheDocument();
+
+    // open revert modal
+    await wait(() => {
+      const revertBtn = header.container.querySelector("#showRevertModal");
+      userEvent.click(revertBtn);
+    });
+
+    expect(
+      screen.getByText(
+        "Reverting to Official Record will undo all saved and unsaved changes. This is not recoverable. Do you want to continue?"
+      )
+    ).toBeInTheDocument();
+
+    // revert configuration
+    await wait(() => {
+      const yesBtn = screen.getByText("Yes");
+      userEvent.click(yesBtn);
+    });
+  });
+
+  /*** TESTING EXPORT FUNCTIONALITY ***/
+  it("should test the export modal", async () => {
+    expect(screen.getByText("Export Monitoring Plan")).toBeInTheDocument();
+
+    // export config
+    await wait(() => {
+      const exportBtn = screen.getByText("Export Monitoring Plan");
+      userEvent.click(exportBtn);
+    });
+  });
+
+  /*** TESTING IMPORT FUNCTIONALITY ***/
+  it("should test the import modal", async () => {
+    // open import modal
+    await wait(() => {
+      const importBtn = screen.getByText("Import Monitoring Plan");
+      userEvent.click(importBtn);
+    });
+  });
+
+  /*** TESTING LEFT-SIDE FUNCTIONALITY***/
+});

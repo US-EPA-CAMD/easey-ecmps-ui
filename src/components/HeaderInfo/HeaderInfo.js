@@ -5,6 +5,8 @@ import config from "../../config";
 import { triggerEvaluation } from "../../utils/api/quartzApi";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
+import * as facApi from "../../utils/api/facilityApi";
+
 import Modal from "../Modal/Modal";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 import "./HeaderInfo.scss";
@@ -17,6 +19,7 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../additional-functions/prompt-to-save-unsaved-changes";
+import download from "downloadjs";
 
 export const HeaderInfo = ({
   facility,
@@ -76,7 +79,6 @@ export const HeaderInfo = ({
   const [openIntervalId, setOpenIntervalId] = useState(null);
   const [evalStatus, setEvalStatus] = useState("");
   const [evalStatusLoaded, setEvalStatusLoaded] = useState(false);
-  // const duringEvalStatuses = ["INQ", "WIP"];
 
   const [showImportModal, setShowImportModal] = useState(false);
   const [userHasCheckout, setUserHasCheckout] = useState(false);
@@ -143,6 +145,33 @@ export const HeaderInfo = ({
       removeChangeEventListeners(".modalUserInput");
       importBtn.focus();
     }
+  };
+
+  const exportHandler = () => {
+    mpApi
+      .getMonitoringPlanById(configID)
+      .then((mpRes) => {
+        const facId = mpRes.data["facId"];
+        const mpName = mpRes.data["name"];
+        const date = new Date();
+        const year = date.getUTCFullYear();
+        const month = date.getUTCMonth() + 1;
+        const day = date.getUTCDate();
+        const fullDateString = `${month}-${day}-${year}`;
+        facApi
+          .getFacilityById(facId)
+          .then((facRes) => {
+            const facName = facRes.data["facilityName"];
+            const exportFileName = `MP Export - ${facName}, ${mpName} (${fullDateString}).json`;
+            download(JSON.stringify(mpRes.data, null, "\t"), exportFileName);
+          })
+          .catch((facErr) => {
+            console.log(facErr);
+          });
+      })
+      .catch((mpErr) => {
+        console.log(mpErr);
+      });
   };
 
   useEffect(() => {
@@ -223,7 +252,6 @@ export const HeaderInfo = ({
         // if status is INQ or WIP:
         if (
           totalTime < config.app.refreshEvalStatusTimeout &&
-          // && duringEvalStatuses.includes(currStatus)
           currStatus !== "EVAL"
         ) {
           // check database and update status
@@ -592,6 +620,7 @@ export const HeaderInfo = ({
                       type="button"
                       className="margin-right-2 float-right margin-bottom-2"
                       outline={true}
+                      onClick={exportHandler}
                     >
                       Export Monitoring Plan
                     </Button>
