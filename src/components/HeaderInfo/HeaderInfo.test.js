@@ -1,16 +1,16 @@
 import React from "react";
-import {
-  render,
-  screen,
-  within,
-  fireEvent,
-  wait,
-} from "@testing-library/react";
+import { render, screen, wait, fireEvent } from "@testing-library/react";
 import config from "../../config";
 
 import userEvent from "@testing-library/user-event";
 
 import HeaderInfo from "./HeaderInfo";
+
+jest.mock("downloadjs", () => {
+  return {
+    download: jest.fn(),
+  };
+});
 
 jest.mock("../../utils/api/quartzApi", () => {
   return {
@@ -19,6 +19,10 @@ jest.mock("../../utils/api/quartzApi", () => {
 });
 jest.mock("../../utils/api/monitoringPlansApi", () => {
   return {
+    getMonitoringPlanById: jest
+      .fn()
+      .mockResolvedValue({ data: { facId: "testFacId", name: "testName" } }),
+    revertOfficialRecord: jest.fn().mockResolvedValue({}),
     getRefreshInfo: jest
       .fn()
       .mockResolvedValueOnce({
@@ -76,6 +80,14 @@ jest.mock("../../utils/api/monitoringPlansApi", () => {
           facId: "testFacId",
           evalStatusCode: "PASS",
         },
+      })
+      .mockResolvedValue({
+        data: {
+          userid: "testUserId",
+          updateDate: "1/1/1111",
+          facId: "testFacId",
+          evalStatusCode: "EVAL",
+        },
       }),
 
     getCheckedOutLocations: jest
@@ -91,7 +103,13 @@ jest.mock("../../utils/api/monitoringPlansApi", () => {
       }),
   };
 });
-jest.mock("../../utils/api/facilityApi");
+jest.mock("../../utils/api/facilityApi", () => {
+  return {
+    getFacilityById: jest
+      .fn()
+      .mockResolvedValue({ data: { facilityName: "testFacName" } }),
+  };
+});
 jest.mock("axios");
 
 const date = new Date();
@@ -126,19 +144,38 @@ const props = {
   configID: "testConfigId",
 };
 
-jest.setTimeout(30000);
+// mocking JavaScript built-in window functions
+window.open = jest.fn().mockReturnValue({ close: jest.fn() });
+window.scrollTo = jest.fn();
+
+const oneMin = 60000;
+jest.setTimeout(oneMin);
 
 function timeout(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-describe("testing HeaderInfo component", () => {
-  it("should render header and go through evaluation process", async () => {
-    // render header
-    await wait(() => {
-      const header = render(<HeaderInfo {...props} />);
-    });
+const jsonFile = new File(["{}"], "test.json");
 
+let header;
+
+beforeEach(async () => {
+  jest.clearAllMocks();
+
+  await wait(() => {
+    header = render(<HeaderInfo {...props} />);
+  });
+});
+
+afterEach(() => {
+  header = null;
+});
+
+describe("testing HeaderInfo component", () => {
+  // ------------------------------- //
+
+  /*** TESTING EVALUATION PROCESS ***/
+  it("should go through evaluation process", async () => {
     expect(screen.getByText("Check Back In")).toBeInTheDocument();
 
     // check-in config
@@ -190,4 +227,51 @@ describe("testing HeaderInfo component", () => {
       userEvent.click(statusLink);
     });
   });
+
+  /*** TESTING REVERT FUNCTIONALITY ***/
+  it("should revert the current configuration", async () => {
+    expect(
+      header.container.querySelector("#showRevertModal")
+    ).toBeInTheDocument();
+
+    // open revert modal
+    await wait(() => {
+      const revertBtn = header.container.querySelector("#showRevertModal");
+      userEvent.click(revertBtn);
+    });
+
+    expect(
+      screen.getByText(
+        "Reverting to Official Record will undo all saved and unsaved changes. This is not recoverable. Do you want to continue?"
+      )
+    ).toBeInTheDocument();
+
+    // revert configuration
+    await wait(() => {
+      const yesBtn = screen.getByText("Yes");
+      userEvent.click(yesBtn);
+    });
+  });
+
+  /*** TESTING EXPORT FUNCTIONALITY ***/
+  it("should test the export modal", async () => {
+    expect(screen.getByText("Export Monitoring Plan")).toBeInTheDocument();
+
+    // export config
+    await wait(() => {
+      const exportBtn = screen.getByText("Export Monitoring Plan");
+      userEvent.click(exportBtn);
+    });
+  });
+
+  /*** TESTING IMPORT FUNCTIONALITY ***/
+  it("should test the import modal", async () => {
+    // open import modal
+    await wait(() => {
+      const importBtn = screen.getByText("Import Monitoring Plan");
+      userEvent.click(importBtn);
+    });
+  });
+
+  /*** TESTING LEFT-SIDE FUNCTIONALITY***/
 });
