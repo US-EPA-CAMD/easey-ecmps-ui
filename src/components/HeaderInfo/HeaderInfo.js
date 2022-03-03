@@ -79,7 +79,6 @@ export const HeaderInfo = ({
   const [openIntervalId, setOpenIntervalId] = useState(null);
   const [evalStatus, setEvalStatus] = useState("");
   const [evalStatusLoaded, setEvalStatusLoaded] = useState(false);
-  // const duringEvalStatuses = ["INQ", "WIP"];
 
   const [showImportModal, setShowImportModal] = useState(false);
   const [userHasCheckout, setUserHasCheckout] = useState(false);
@@ -253,7 +252,6 @@ export const HeaderInfo = ({
         // if status is INQ or WIP:
         if (
           totalTime < config.app.refreshEvalStatusTimeout &&
-          // && duringEvalStatuses.includes(currStatus)
           currStatus !== "EVAL"
         ) {
           // check database and update status

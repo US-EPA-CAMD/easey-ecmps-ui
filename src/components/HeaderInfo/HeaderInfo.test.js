@@ -4,225 +4,190 @@ import {
   screen,
   within,
   fireEvent,
-  waitForElement,
+  wait,
 } from "@testing-library/react";
+import config from "../../config";
+
+import userEvent from "@testing-library/user-event";
+
 import HeaderInfo from "./HeaderInfo";
-import { act } from "react-dom/test-utils";
-import * as mpApi from "../../utils/api/monitoringPlansApi";
-const axios = require("axios");
 
-jest.mock("axios");
-test("test file", () => {
-  const val = 1;
-  expect(val === 1);
+jest.mock("../../utils/api/quartzApi", () => {
+  return {
+    triggerEvaluation: jest.fn().mockResolvedValue({}),
+  };
 });
+jest.mock("../../utils/api/monitoringPlansApi", () => {
+  return {
+    getRefreshInfo: jest
+      .fn()
+      .mockResolvedValueOnce({
+        data: {
+          userid: "testUserId",
+          updateDate: "1/1/1111",
+          facId: "testFacId",
+          evalStatusCode: "EVAL",
+        },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          userid: "testUserId",
+          updateDate: "1/1/1111",
+          facId: "testFacId",
+          evalStatusCode: "EVAL",
+        },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          userid: "testUserId",
+          updateDate: "1/1/1111",
+          facId: "testFacId",
+          evalStatusCode: "INQ",
+        },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          userid: "testUserId",
+          updateDate: "1/1/1111",
+          facId: "testFacId",
+          evalStatusCode: "WIP",
+        },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          userid: "testUserId",
+          updateDate: "1/1/1111",
+          facId: "testFacId",
+          evalStatusCode: "ERR",
+        },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          userid: "testUserId",
+          updateDate: "1/1/1111",
+          facId: "testFacId",
+          evalStatusCode: "INFO",
+        },
+      })
+      .mockResolvedValueOnce({
+        data: {
+          userid: "testUserId",
+          updateDate: "1/1/1111",
+          facId: "testFacId",
+          evalStatusCode: "PASS",
+        },
+      }),
 
-// describe("tests the header of configuration component", () => {
-//   test("renders preloader ", async () => {
-//     act(async () => {
-//       jest.mock("../../utils/api/monitoringPlansApi", () => {
-//         const mockreturnedConfig = [
-//           {
-//             id: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
-//             updateDate: "2021-12-06",
-//             userId: "mddee-dp",
-//             evalStatusCode: "INQ",
-//           },
-//         ];
-//         return {
-//           getConfigInfo: jest.fn(() => Promise.resolve(mockreturnedConfig)),
-//         };
-//       });
-//       const { container } = await waitForElement(() =>
-//         render(
-//           <HeaderInfo
-//             facility={"Barry (1, 2, CS0AAN)"}
-//             selectedConfig={[]}
-//             orisCode={3}
-//             setSectionSelect={jest.fn()}
-//             sectionSelect={[4, "Methods"]}
-//             setLocationSelect={jest.fn()}
-//             locationSelect={[0, "test"]}
-//             locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
-//             checkout={false}
-//             user={{ firstName: "test" }}
-//             checkoutAPI={jest.fn()}
-//             setInactive={jest.fn()}
-//             setCheckout={jest.fn()}
-//             inactive={[true, false]}
-//             checkoutAPI={jest.fn()}
-//             checkedOutLocations={[{ monPlanId: [1, 2, 3] }]}
-//             setRevertedState={jest.fn()}
-//             configID={"TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A"}
-//           />
-//         )
-//       );
+    getCheckedOutLocations: jest
+      .fn()
+      .mockResolvedValueOnce({
+        data: [{ monPlanId: "testConfigId", facId: "testFacId" }],
+      })
+      .mockResolvedValueOnce({
+        data: [],
+      })
+      .mockResolvedValue({
+        data: [{ monPlanId: "testConfigId", facId: "testFacId" }],
+      }),
+  };
+});
+jest.mock("../../utils/api/facilityApi");
+jest.mock("axios");
 
-//       const img = container.querySelectorAll("img");
+const date = new Date();
+const dateString = date.toString();
 
-//       expect(img.length).toBe(2);
-//     });
-//   });
-// });
-    // const { container } = await waitForElement(() =>
-    //   render(
-    //     <HeaderInfo
-    //       facility={"Barry (1, 2, CS0AAN)"}
-    //       selectedConfig={[]}
-    //       orisCode={3}
-    //       setSectionSelect={jest.fn()}
-    //       sectionSelect={[4, "Methods"]}
-    //       setLocationSelect={jest.fn()}
-    //       locationSelect={[0, "test"]}
-    //       locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
-    //       checkout={false}
-    //       user={{ firstName: "test" }}
-    //       checkoutAPI={jest.fn()}
-    //       setInactive={jest.fn()}
-    //       setCheckout={jest.fn()}
-    //       inactive={[true, false]}
-    //       checkoutAPI={jest.fn()}
-    //       checkedOutLocations={[{ monPlanId: [1, 2, 3] }]}
-    //       setRevertedState={jest.fn()}
-    //       configID={"TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A"}
-    //     />
-    //   )
-    // );
-    // fireEvent.click(screen.getByText("Check Out"));
-    // fireEvent.click(screen.getByText("Check Back In"));
+const selectedConfig = {
+  id: "testConfigId",
+  userId: "testUserId",
+  updateDate: dateString,
+  addDate: dateString,
+  active: true,
+};
 
+const props = {
+  facility: "Test (1, 2, 3)",
+  selectedConfig: selectedConfig,
+  orisCode: "testOrisCode",
+  sectionSelect: [4, "Methods"],
+  setSectionSelect: jest.fn(),
+  setLocationSelect: jest.fn(),
+  locationSelect: [0, "testLocName"],
+  locations: [
+    { id: "testLocId", name: "testLocName", type: "testType", active: true },
+  ],
+  checkout: false,
+  user: { firstName: "test" },
+  checkoutAPI: jest.fn().mockReturnValue(Promise.resolve({})),
+  setCheckout: jest.fn(),
+  setInactive: jest.fn(),
+  inactive: false,
+  setRevertedState: jest.fn(),
+  configID: "testConfigId",
+};
 
-// describe("renders header with checked out ", () => {
-//   test("cliks check  back in, then check out , 3 buttons because of the rest of header", () => {
-//     const { container, getByText } = render(
-//       <HeaderInfo
-//         facility={"Barry (1, 2, CS0AAN)"}
-//         selectedConfig={[]}
-//         orisCode={3}
-//         user={{ firstName: "test" }}
-//         setRevertedState={jest.fn()}
-//         setCheckout={jest.fn()}
-//         setInactive={jest.fn()}
-//         setLocationSelect={jest.fn()}
-//         setSectionSelect={jest.fn()}
-//         sectionSelect={[4, "Methods"]}
-//         locationSelect={[0, "test"]}
-//         locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
-//         inactive={[true, false]}
-//         checkoutAPI={jest.fn()}
-//         configID={1}
-//       />
-//     );
-//     fireEvent.click(container.querySelector("#checkInBTN"));
-//     fireEvent.click(container.querySelector("#checkOutBTN"));
+jest.setTimeout(30000);
 
-//     fireEvent.click(container.querySelector("#checkbox"));
-//     const btns = screen.getAllByRole("button");
+function timeout(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
-//     fireEvent.click(container.querySelector("#showRevertModal"));
-//     fireEvent.click(screen.getByTestId("saveBtn"));
-//     expect(btns).toHaveLength(4);
-//   });
-// });
+describe("testing HeaderInfo component", () => {
+  it("should render header and go through evaluation process", async () => {
+    // render header
+    await wait(() => {
+      const header = render(<HeaderInfo {...props} />);
+    });
 
-// describe("renders header with no user logged in ", () => {
-//   test("verifies everythign is rendered only 2 buttons, no checkout/check in", () => {
-//     const { container, getByText } = render(
-//       <HeaderInfo
-//         facility={"Barry (1, 2, CS0AAN)"}
-//         selectedConfig={[]}
-//         orisCode={3}
-//         setSectionSelect={jest.fn()}
-//         sectionSelect={[4, "Methods"]}
-//         setLocationSelect={jest.fn()}
-//         locationSelect={[0, "test"]}
-//         locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
-//         checkoutAPI={jest.fn()}
-//         setCheckout={jest.fn()}
-//         setInactive={jest.fn()}
-//         inactive={[true, false]}
-//         checkoutAPI={jest.fn()}
-//         checkedOutLocations={[{monPlanId:[1,2,3]}]}
-//       />
-//     );
+    expect(screen.getByText("Check Back In")).toBeInTheDocument();
 
-//     expect(container).toBeDefined();
-//   });
-// });
-// checkedOutLocations[checkedOutLocations.map((location) => location["monPlanId"]).indexOf(selectedConfig.id)]      ["checkedOutBy"] === user["firstName"]
-//   describe("renders header with no user logged in ", () => {
-//     test("verifies everythign is rendered only 2 buttons, no checkout/check in", () => {
-//       const { container, getByText } = render(
-//         <HeaderInfo
-//           facility={"Barry (1, 2, CS0AAN)"}
-//           selectedConfig={{ id: 5770 }}
-//           user={{ firstName: "test" }}
-//           orisCode={3}
-//           setSectionSelect={jest.fn()}
-//           sectionSelect={[4, "Methods"]}
-//           setLocationSelect={jest.fn()}
-//           locationSelect={[0, "test"]}
-//           locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
-//           checkoutAPI={jest.fn()}
-//           setCheckout={jest.fn()}
-//           setInactive={jest.fn()}
-//           inactive={[true, false]}
-//           checkoutAPI={jest.fn()}
-//           checkedOutLocations={[{ monPlanId: [5770], checkedOutBy: "test" }]}
-//         />
-//       );
+    // check-in config
+    await wait(() => {
+      const checkInBtn = screen.getByText("Check Back In");
+      userEvent.click(checkInBtn);
+    });
 
-//       expect(container).toBeDefined();
-//     });
-//   });
-// });
+    expect(screen.getByText("Check Out")).toBeInTheDocument();
 
-// test("test audit records for workspace checked out", () => {
-//   const { container } = render(
-//     <HeaderInfo
-//       facility={"Barry (1, 2, CS0AAN)"}
-//       selectedConfig={{ id: 5770 }}
-//       user={{ firstName: "test" }}
-//       checkout={true}
-//       checkedOutLocations={[{ monPlanId: [5770], checkedOutBy: "test" }]}
-//       locationSelect={[0, "test"]}
-//       sectionSelect={[4, "Methods"]}
-//       inactive={[true, false]}
-//       locations={[{ id: "6", name: "1", type: "Unit", active: true }]}
-//     />
-//   );
+    // check-out config
+    await wait(() => {
+      const checkOutBtn = screen.getByText("Check Out");
+      userEvent.click(checkOutBtn);
+    });
 
-//   expect(container.instance().setAuditInformation()).toContain(
-//     "Currently checked out by:"
-//   );
-// });
+    expect(screen.getByText("Check Back In")).toBeInTheDocument();
+    expect(screen.getByText("Evaluate")).toBeInTheDocument();
 
-// test("test audit records for workspace checked in", () => {
-//   const { container, getByText } = render(
-//     <HeaderInfo
-//       facility={"Barry (1, 2, CS0AAN)"}
-//       selectedConfig={{ id: 5770 }}
-//       user={{ firstName: "test" }}
-//       checkout={false}
-//     />
-//   );
+    // click on evaluation button
+    await wait(() => {
+      const evalBtn = screen.getByText("Evaluate");
+      userEvent.click(evalBtn);
+    });
 
-//   expect(container.instance().setAuditInformation()).toContain(
-//     "Last Updated by:"
-//   );
-// });
+    expect(screen.getByText("In Queue")).toBeInTheDocument();
 
-// test("test audit records for globalView", () => {
-//   const container = render(
-//     <HeaderInfo
-//       facility={"Barry (1, 2, CS0AAN)"}
-//       selectedConfig={{ id: 5770 }}
-//       checkout={false}
-//       checkedOutLocations={[{ monPlanId: [5770], checkedOutBy: "test" }]}
-//     />
-//   );
+    // check statuses while evaluation process executes
+    await wait(async () => {
+      await timeout(config.app.refreshEvalStatusRate);
+      expect(screen.getByText("In Queue")).toBeInTheDocument();
 
-//   expect(container.instance().setAuditInformation()).toContain(
-//     "Last Submitted by:"
-//   );
-// });
+      await timeout(config.app.refreshEvalStatusRate);
+      expect(screen.getByText("In Progress")).toBeInTheDocument();
+
+      await timeout(config.app.refreshEvalStatusRate);
+      expect(screen.getByText("Critical Errors")).toBeInTheDocument();
+
+      await timeout(config.app.refreshEvalStatusRate);
+      expect(screen.getByText("Informational Message")).toBeInTheDocument();
+
+      await timeout(config.app.refreshEvalStatusRate);
+      expect(screen.getByText("Passed")).toBeInTheDocument();
+    });
+
+    // click on evaluation status hyperlink
+    await wait(() => {
+      const statusLink = screen.getByText("Passed");
+      userEvent.click(statusLink);
+    });
+  });
+});
