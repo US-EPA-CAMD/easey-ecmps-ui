@@ -40,8 +40,7 @@ export const extractUserInput = (payload, inputSelector, radios) => {
       if (button.firstElementChild.checked) {
         const item = { name: "", value: "" };
         item.name = radios[counter];
-        item.value =
-          button.firstElementChild.defaultValue === "Yes" ? "1" : "0";
+        item.value = button.firstElementChild.defaultValue === "Yes" ? 1 : 0;
         payloadArray.push(item);
         counter++;
       }
