@@ -9,6 +9,27 @@
   .box {
     border-color: $epa-green;
   }
+
+  .main-content {
+    h2 {
+      font-size: 39px;
+      font-weight: bold;
+    }
+  }
+
+  .emissions-content,
+  .monitor-plan-content,
+  .qa-certification-content {
+    h3 {
+      font-size: 31px;
+      font-weight: bold;
+    }
+
+    p {
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
 }
 
 .viewAboutBTN {

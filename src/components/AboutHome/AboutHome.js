@@ -1,38 +1,40 @@
-import React, { useEffect } from "react";
-import { Link as USWDSLink } from "@trussworks/react-uswds";
+import React, { useEffect, useState } from "react";
 
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { getContent } from "../../utils/api/contentApi";
+
+import { Link as USWDSLink } from "@trussworks/react-uswds";
 import { Link } from "react-router-dom";
 import Login from "../Login/Login";
-import config from "../../config";
 
 import "./AboutHome.scss";
 const AboutHome = ({ user, setCurrentLink }) => {
+  const [mainContent, setMainContent] = useState();
+  const [emissionsContent, setEmissionsContent] = useState();
+  const [whatIsNewContent, setWhatIsNewContent] = useState();
+  const [monitorPlanContent, setMonitorPlanContent] = useState();
+  const [qaCertificationContent, setQACertificationContent] = useState();
+
   useEffect(() => {
     document.title = "ECMPS Home";
+
+    getContent("/ecmps/home/index.md").then((resp) =>
+      setMainContent(resp.data)
+    );
+    getContent("/ecmps/home/emissions.md").then((resp) =>
+      setEmissionsContent(resp.data)
+    );
+    getContent("/ecmps/home/what-is-new.md").then((resp) =>
+      setWhatIsNewContent(resp.data)
+    );
+    getContent("/ecmps/home/monitoring-plans.md").then((resp) =>
+      setMonitorPlanContent(resp.data)
+    );
+    getContent("/ecmps/home/qa-certifications.md").then((resp) =>
+      setQACertificationContent(resp.data)
+    );
   }, []);
-  const topics = [
-    {
-      name: "Monitoring Plans",
-      descriptions:
-        "The monitoring plan describes how a facility (monitoring configuration) monitors its emissions. Monitoring plan data define relationships between stacks, pipes, and units, specify locations at a facility from which emissions are monitored, and identify systems of monitoring equipment by detailing the individual system components. Monitoring plan data also provide operational characteristics and qualifications for certain special types of monitoring (e.g., low mass emissions monitoring). Draft beta monitoring plan instructions can be found ",
-      url: "/monitoring-plans",
-      comingSoon: false,
-    },
-    {
-      name: "QA & Certifications",
-      descriptions:
-        "QA and certification tests are required for all types of monitoring systems. Test extension or exemption data indicate variances from prescribed testing requirements or extensions to the normal QA testing schedule. QA or certification events (e.g., monitor replacements), as well as data elements for submitting an electronic certification application when certifications are required, are submitted when there is either diagnostic or recertification testing of specific monitoring systems or components. ",
-      url: "/qa_certifications",
-      comingSoon: true,
-    },
-    {
-      name: "Emissions",
-      descriptions:
-        "Emissions data are hourly values for measured parameters, calculated hourly emissions values, instrument calibration data, and aggregated summary data. An emissions file contains one calendar quarter of hourly and aggregate emissions measurements for a specified unit or group of related units, including stacks and pipes. Each unit that is required to submit emissions data for a particular calendar quarter must be included in one and only one emissions file for that quarter. Each emissions file should contain all relevant operating, daily quality assurance, and emissions data for all units, common stacks, multiple stacks, or common pipes that were in a common monitoring configuration for any part of the quarter. ",
-      url: "/emission",
-      comingSoon: true,
-    },
-  ];
 
   const handleRouteChange = (event, url) => {
     setCurrentLink(url);
@@ -41,117 +43,91 @@ const AboutHome = ({ user, setCurrentLink }) => {
   return (
     <div className="grid-row padding-top-7 padding-2 react-transition fade-in aboutHome">
       <div className="grid-col-9 fit-content">
-        <div>
-          <h2 className="text-bold font-heading-2xl">About ECMPS 2.0 Beta</h2>
-          <p className="text-bold font-heading-md text-italic">
-            The Emissions Collection and Monitoring Plan System 2.0 Beta is the
-            new web-based reporting tool released in beta form to allow industry
-            users and the public to begin testing and learning the new
-            application. The initial application, released in December of 2021,
-            begins with the limited functionality of view (no login required)
-            and edit/evaluate (
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href={`${config.app.cdxBaseUrl}/FAQ`}
-              className="forceUnderlineText colorContrast"
-            >
-              CDX Test login
-            </a>{" "}
-            required) of monitoring plan data. Subsequent releases throughout
-            2022 will add import and export functionality and the additional
-            data types—QA, certifications, and emissions. Data in the beta is
-            not production data and is only being used for testing purposes.
-          </p>
-          <div>
-            There are two primary goals of the extended beta process.
-            <ol>
-              <li key="ol_item_1">
-                Allow users to learn the new web-based reporting tool and
-                provide feedback to EPA.
-              </li>
-              <li key="ol_item_2">
-                Allow EPA time to test and integrate the beta application into
-                the future production environment and incorporate user feedback.
-              </li>
-            </ol>
-          </div>
-          <p>
-            Please subscribe to{" "}
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href={"https://ecmps.blogspot.com/"}
-              className="forceUnderlineText colorContrast"
-            >
-              https://ecmps.blogspot.com/
-            </a>{" "}
-            for additional updates. Have questions or feedback? Please contact
-            us at through our{" "}
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href={`https://${config.app.host}/ecmps/help-support`}
-              className="forceUnderlineText colorContrast"
-            >
-              Contact Us form
-            </a>
-            .
-          </p>
-        </div>
-        {topics.map((topic) => {
-          return (
-            <div className=" padding-top-2 padding-bottom-2" key={topic.name}>
-              {" "}
-              <h3 className="text-bold font-heading-xl">{topic.name} </h3>
-              {topic.comingSoon ? (
-                <p>
-                  <strong>
-                    This data is not included as part of the initial beta
-                    release and will be added with updates in 2022
-                  </strong>
-                </p>
-              ) : (
-                ""
-              )}
-              <div>
-                {topic.descriptions}
-                {topic.name === "Monitoring Plans" ? (
-                  <span>
-                    <a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={
-                        "https://app.zenhub.com/files/287570343/449899ef-7a75-4129-995c-ae4bf2e347bf/download"
-                      }
-                      className="forceUnderlineText colorContrast"
-                    >
-                      here
-                    </a>
-                    .
-                  </span>
-                ) : (
-                  ""
-                )}
-              </div>
-              <USWDSLink
-                className="usa-button viewAboutBTN bg-accent-cool margin-1"
-                variant="unstyled"
-                asCustom={Link}
-                to={topic.url}
-                role="link"
-                exact="true"
-                rel={topic.name}
-                title={`Go to ${topic.name} page`}
-                key={topic.url}
-                id={`${topic.name.split(" ").join("")}_btn`}
-                onClick={(event) => handleRouteChange(event, topic.url)}
-              >
-                View {topic.name}
-              </USWDSLink>
-            </div>
-          );
-        })}{" "}
+        <ReactMarkdown
+          className="main-content"
+          children={mainContent}
+          remarkPlugins={[remarkGfm]}
+          components={{
+            a: ({ node, ...props }) => (
+              <USWDSLink {...props} target="_blank" rel="noopener noreferrer" />
+            ),
+          }}
+        />
+        <ReactMarkdown
+          className="padding-top-2 monitor-plan-content"
+          children={monitorPlanContent}
+          remarkPlugins={[remarkGfm]}
+          components={{
+            a: ({ node, ...props }) => (
+              <USWDSLink {...props} target="_blank" rel="noopener noreferrer" />
+            ),
+          }}
+        />
+        <USWDSLink
+          className="usa-button viewAboutBTN bg-accent-cool margin-1"
+          variant="unstyled"
+          asCustom={Link}
+          to="/monitoring-plans"
+          role="link"
+          exact="true"
+          rel="Monitoring Plans"
+          title="Go to Monitoring Plans page"
+          key="monitoring-plans"
+          id="monitoringPlansBtn"
+          onClick={(event) => handleRouteChange(event, "/monitoring-plans")}
+        >
+          View Monitoring Plans
+        </USWDSLink>
+        <ReactMarkdown
+          className="padding-top-2 qa-certification-content"
+          children={qaCertificationContent}
+          remarkPlugins={[remarkGfm]}
+          components={{
+            a: ({ node, ...props }) => (
+              <USWDSLink {...props} target="_blank" rel="noopener noreferrer" />
+            ),
+          }}
+        />
+        <USWDSLink
+          className="usa-button viewAboutBTN bg-accent-cool margin-1"
+          variant="unstyled"
+          asCustom={Link}
+          to="/qa-certifications"
+          role="link"
+          exact="true"
+          rel="QA & Certifications"
+          title="Go to QA & Certifications page"
+          key="qa-certifications"
+          id="qaCertificationsBtn"
+          onClick={(event) => handleRouteChange(event, "/qa-certifications")}
+        >
+          View QA & Certifications
+        </USWDSLink>
+        <ReactMarkdown
+          className="padding-top-2 emissions-content"
+          children={emissionsContent}
+          remarkPlugins={[remarkGfm]}
+          components={{
+            a: ({ node, ...props }) => (
+              <USWDSLink {...props} target="_blank" rel="noopener noreferrer" />
+            ),
+          }}
+        />
+        <USWDSLink
+          className="usa-button viewAboutBTN bg-accent-cool margin-1"
+          variant="unstyled"
+          asCustom={Link}
+          to="/emissions"
+          role="link"
+          exact="true"
+          rel="Emissions"
+          title="Go to Emissions page"
+          key="emissions"
+          id="emissionsBtn"
+          onClick={(event) => handleRouteChange(event, "/emissions")}
+        >
+          View Emissions Data
+        </USWDSLink>
       </div>
       <div className="grid-col-3 float-right padding-2">
         <div className="box border-1px">
@@ -159,19 +135,19 @@ const AboutHome = ({ user, setCurrentLink }) => {
             What's New
           </div>
           <div className="padding-2">
-            Welcome to the first release of the all new ECMPS 2.0 Beta! To view
-            a list of functionality and how to get started go here (hyperlink to
-            quick start guide, webinar release). Have questions or feedback?
-            Please contact us through our{" "}
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href={`https://${config.app.host}/ecmps/help-support`}
-              className="forceUnderlineText colorContrast"
-            >
-              Contact Us form
-            </a>
-            .
+            <ReactMarkdown
+              children={whatIsNewContent}
+              remarkPlugins={[remarkGfm]}
+              components={{
+                a: ({ node, ...props }) => (
+                  <USWDSLink
+                    {...props}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
+                ),
+              }}
+            />
           </div>
         </div>
 
