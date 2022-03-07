@@ -49,7 +49,14 @@ export const extractUserInput = (payload, inputSelector, radios) => {
 
   payloadArray.forEach((item) => {
     if (item.value !== undefined) {
-      payload[item.name] = item.value.trim() === "" ? null : item.value.trim();
+      if (typeof item.value === "string") {
+        console.log(item.value);
+        payload[item.name] =
+          item.value.trim() === "" ? null : item.value.trim();
+      }
+      if (typeof item.value === "number") {
+        payload[item.name] = item.value;
+      }
     }
   });
 
