@@ -1,20 +1,37 @@
 import React, { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import { Link } from "react-router-dom";
-import { Link as USWDSLink, Button } from "@trussworks/react-uswds";
-import { OpenInNew } from "@material-ui/icons";
+import { Link as USWDSLink } from "@trussworks/react-uswds";
 import { ContactForm } from "@us-epa-camd/easey-design-system";
 
 import "./HelpSupport.scss";
 import { sendNotificationEmail } from "../../utils/api/quartzApi";
+
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { getContent } from "../../utils/api/contentApi";
 
 export const HelpSupport = () => {
   const [submitted, setSubmitted] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(false);
   const [emailErrorMsg, setEmailErrorMsg] = useState("");
 
+  const [mainContent, setMainContent] = useState();
+  const [faqsContent, setFaqsContent] = useState();
+  const [tutorialsContent, setTutorialsContent] = useState();
+
   useEffect(() => {
     document.title = "ECMPS Help & Support";
+
+    getContent("/ecmps/help-support/index.md").then((resp) =>
+      setMainContent(resp.data)
+    );
+    getContent("/ecmps/help-support/faqs.md").then((resp) =>
+      setFaqsContent(resp.data)
+    );
+    getContent("/ecmps/help-support/tutorials.md").then((resp) =>
+      setTutorialsContent(resp.data)
+    );
   }, []);
 
   const commentTypes = [
@@ -93,16 +110,20 @@ export const HelpSupport = () => {
   };
 
   return (
-    <div className="padding-top-7 padding-2 react-transition fade-in">
+    <div className="padding-top-7 padding-2 react-transition fade-in help-support-container">
       <div className="grid-row">
-        <h2 className="text-bold font-heading-2xl">Help/Support</h2>
-        <div className="flex-force-break" />
-        <p>Coming Soon</p>
+        <ReactMarkdown
+          className="main-content"
+          children={mainContent}
+          remarkPlugins={[remarkGfm]}
+        />
       </div>
       <div className="grid-row margin-top-5">
-        <h3 className="text-bold font-heading-2xl">FAQs</h3>
-        <div className="flex-force-break" />
-        <p>Coming Soon</p>
+        <ReactMarkdown
+          className="main-content"
+          children={faqsContent}
+          remarkPlugins={[remarkGfm]}
+        />
         <div className="flex-force-break" />
         <USWDSLink
           className="usa-button usa-button--outline margin-0 margin-left-05"
@@ -123,25 +144,11 @@ export const HelpSupport = () => {
         </USWDSLink>
       </div>
       <div className="grid-row margin-top-5">
-        <h3 className="text-bold font-heading-2xl">Tutorials</h3>
-        <div className="flex-force-break" />
-        <p>Coming Soon</p>
-        <div className="flex-force-break" />
-        <ul className="margin-0 padding-0 margin-left-3">
-          <li key="liCDXHelp">
-            <Button
-              type="button"
-              unstyled={true}
-              className="text-primary text-underline"
-              role="link"
-              title="Go to CDX Help Topics page"
-              key="linkCDXHelp"
-              data-testid="linkCDXHelp"
-            >
-              CDX Help Topics <OpenInNew />
-            </Button>
-          </li>
-        </ul>
+        <ReactMarkdown
+          className="main-content"
+          children={tutorialsContent}
+          remarkPlugins={[remarkGfm]}
+        />
       </div>
       <ContactForm
         summary={parse(
