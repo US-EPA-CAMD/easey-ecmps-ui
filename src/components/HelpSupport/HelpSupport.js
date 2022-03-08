@@ -120,7 +120,7 @@ export const HelpSupport = () => {
       </div>
       <div className="grid-row margin-top-5">
         <ReactMarkdown
-          className="main-content"
+          className="faqs-content"
           children={faqsContent}
           remarkPlugins={[remarkGfm]}
         />
@@ -145,7 +145,7 @@ export const HelpSupport = () => {
       </div>
       <div className="grid-row margin-top-5">
         <ReactMarkdown
-          className="main-content"
+          className="tutorials-content"
           children={tutorialsContent}
           remarkPlugins={[remarkGfm]}
         />

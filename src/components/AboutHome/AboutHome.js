@@ -49,7 +49,12 @@ const AboutHome = ({ user, setCurrentLink }) => {
           remarkPlugins={[remarkGfm]}
           components={{
             a: ({ node, ...props }) => (
-              <USWDSLink {...props} target="_blank" rel="noopener noreferrer" />
+              <USWDSLink
+                {...props}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="forceUnderlineText colorContrast"
+              />
             ),
           }}
         />
@@ -59,7 +64,12 @@ const AboutHome = ({ user, setCurrentLink }) => {
           remarkPlugins={[remarkGfm]}
           components={{
             a: ({ node, ...props }) => (
-              <USWDSLink {...props} target="_blank" rel="noopener noreferrer" />
+              <USWDSLink
+                {...props}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="forceUnderlineText colorContrast"
+              />
             ),
           }}
         />
@@ -84,7 +94,12 @@ const AboutHome = ({ user, setCurrentLink }) => {
           remarkPlugins={[remarkGfm]}
           components={{
             a: ({ node, ...props }) => (
-              <USWDSLink {...props} target="_blank" rel="noopener noreferrer" />
+              <USWDSLink
+                {...props}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="forceUnderlineText colorContrast"
+              />
             ),
           }}
         />
@@ -109,7 +124,12 @@ const AboutHome = ({ user, setCurrentLink }) => {
           remarkPlugins={[remarkGfm]}
           components={{
             a: ({ node, ...props }) => (
-              <USWDSLink {...props} target="_blank" rel="noopener noreferrer" />
+              <USWDSLink
+                {...props}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="forceUnderlineText colorContrast"
+              />
             ),
           }}
         />
@@ -144,6 +164,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
                     {...props}
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="forceUnderlineText colorContrast"
                   />
                 ),
               }}

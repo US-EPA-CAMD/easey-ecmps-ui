@@ -39,40 +39,24 @@ export const Resources = () => {
     );
   }, []);
 
-  const additionalResources = [
-    {
-      name: "CDX",
-      url: "https://cdx.epa.gov/",
-      type: "external",
-    },
-    {
-      name: "Tutorials",
-      url: "/tutorials",
-      type: "internal",
-    },
-  ];
-
   return (
     <div className="padding-top-7 padding-2 react-transition fade-in resources-container">
       <div className="grid-row">
-        <h2 className="text-bold font-heading-2xl">Resources</h2>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla
-          massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt
-          molestie. Vestibulum faucibus enim sit amet pretium laoreet.
-        </p>
+        <ReactMarkdown
+          className="main-content"
+          children={mainContent}
+          remarkPlugins={[remarkGfm]}
+        />
       </div>
       <div className="grid-row">
         <div className="padding-top-2 padding-bottom-2 desktop:grid-col-6 desktop-lg:grid-col-4 mobile-lg:grid-col-12 padding-right-3">
-          <h3 className="text-bold font-heading-xl">Glossary</h3>
-          <div>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
-            fringilla massa in lectus volutpat scelerisque. Cras eu leo vel
-            lacus tincidunt molestie. Vestibulum faucibus enim sit amet pretium
-            laoreet.
-          </div>
+          <ReactMarkdown
+            className="glossary-content"
+            children={glossaryContent}
+            remarkPlugins={[remarkGfm]}
+          />
           <USWDSLink
-            className="usa-button usa-button--outline margin-top-1 margin-left-05"
+            className="usa-button usa-button--outline margin-top-1 margin-left-05 "
             outline="true"
             type="button"
             variant="unstyled"
@@ -83,25 +67,68 @@ export const Resources = () => {
             rel="Glossary"
             title="Go to Glossary page"
             key="/glossary"
-            id={"Glossary"}
+            id={"glossary-link"}
           >
             Visit The Glossary
           </USWDSLink>
         </div>
-        );
+        <div className="padding-top-2 padding-bottom-2 desktop:grid-col-6 desktop-lg:grid-col-4 mobile-lg:grid-col-12 padding-right-3">
+          <ReactMarkdown
+            className="reporting-instructions-content"
+            children={reportingInsContent}
+            remarkPlugins={[remarkGfm]}
+          />
+          <USWDSLink
+            className="usa-button usa-button--outline margin-top-1 margin-left-05"
+            outline="true"
+            type="button"
+            variant="unstyled"
+            asCustom={Link}
+            to="/reporting-instructions"
+            role="link"
+            exact="true"
+            rel="Reporting Instructions"
+            title="Go to Reporting Instructions page"
+            key="/reporting-instructions"
+            id={"reporting-instructions-link"}
+          >
+            Visit Reporting Instructions
+          </USWDSLink>
+        </div>
+        <div className="padding-top-2 padding-bottom-2 desktop:grid-col-6 desktop-lg:grid-col-4 mobile-lg:grid-col-12 padding-right-3">
+          <ReactMarkdown
+            className="cam-api-content"
+            children={camApiContent}
+            remarkPlugins={[remarkGfm]}
+          />
+          <USWDSLink
+            className="usa-button usa-button--outline margin-top-1 margin-left-05"
+            outline="true"
+            type="button"
+            variant="unstyled"
+            asCustom={Link}
+            to="/cam-api"
+            role="link"
+            exact="true"
+            rel="CAM API"
+            title="Go to CAM API page"
+            key="/cam-api"
+            id={"cam-api-link"}
+          >
+            Visit CAM API
+          </USWDSLink>
+        </div>
       </div>
       <div className="margin-top-2">
-        <h2 className="text-bold font-heading-2xl">Additional Resources</h2>
-        <p>
-          {" "}
-          Examine she brother prudent add day ham. Far stairs now coming bed
-          oppose hunted become his. You zealously departure had procuring
-          suspicion. Books who{" "}
-        </p>
+        <ReactMarkdown
+          className="additional-resources-content"
+          children={additionalResContent}
+          remarkPlugins={[remarkGfm]}
+        />
       </div>
 
       <ul className="margin-0 padding-0 margin-left-3">
-        {additionalResources.map((resource) => {
+        {resourcesLinks.map((resource) => {
           return (
             <li
               key={`li_${resource.name.replace(/ /g, "")}`}
@@ -109,7 +136,7 @@ export const Resources = () => {
             >
               {resource.type === "external" ? (
                 <a
-                  className="text-primary text-underline no-hover-color-change"
+                  className="text-primary text-underline no-hover-color-change forceUnderlineText colorContrast"
                   href={resource.url}
                   title={`Go to ${resource.name} page`}
                   key={resource.url}
@@ -123,7 +150,7 @@ export const Resources = () => {
                 <Link
                   type="button"
                   unstyled={true}
-                  className="text-primary text-underline no-hover-color-change"
+                  className="text-primary text-underline no-hover-color-change forceUnderlineText colorContrast"
                   to={resource.url}
                   role="link"
                   rel={resource.name}
@@ -131,7 +158,7 @@ export const Resources = () => {
                   key={resource.url}
                   id={`${resource.name.split(" ").join("")}`}
                 >
-                  {resource.name} <OpenInNew />
+                  {resource.name}
                 </Link>
               )}
             </li>
