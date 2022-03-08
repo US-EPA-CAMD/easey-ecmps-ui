@@ -3,6 +3,12 @@ import AboutHome from "./AboutHome";
 import { render, fireEvent, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 
+jest.mock("react-markdown", () => (props) => {
+  return <>{props.children}</>;
+});
+
+jest.mock("remark-gfm", () => () => {});
+
 describe("testing home page ", () => {
   it("should not show a log in box ", () => {
     const { container } = render(
@@ -11,11 +17,10 @@ describe("testing home page ", () => {
       </BrowserRouter>
     );
 
-    const btns = screen.getAllByText("View Emissions");
-    expect(btns).toBeDefined();
-    for (var x of btns) {
-      fireEvent.click(x);
-    }
+    const emissionsBtn = container.querySelector("#emissionsBtn");
+    expect(emissionsBtn).toBeDefined();
+
+    fireEvent.click(emissionsBtn);
   });
 
   it("should show a log in box ", () => {

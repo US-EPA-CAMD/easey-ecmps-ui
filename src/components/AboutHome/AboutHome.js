@@ -146,7 +146,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
           id="emissionsBtn"
           onClick={(event) => handleRouteChange(event, "/emissions")}
         >
-          View Emissions Data
+          View Emissions
         </USWDSLink>
       </div>
       <div className="grid-col-3 float-right padding-2">
