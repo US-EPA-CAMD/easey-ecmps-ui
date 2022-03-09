@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "@trussworks/react-uswds";
+import React, { useState, useEffect } from "react";
+import { Link, SiteAlert } from "@trussworks/react-uswds";
 
 import { Header } from "@us-epa-camd/easey-design-system";
 import { AppVersion } from "@us-epa-camd/easey-design-system";
@@ -14,7 +14,17 @@ import config from "../../config";
 import "./Layout.scss";
 import { hideAppError } from "../../additional-functions/app-error";
 
+import { getContent } from "../../utils/api/contentApi";
+
 const Layout = (props) => {
+  const [outageMsgContent, setOutageMsgContent] = useState();
+
+  useEffect(() => {
+    getContent("/ecmps/layout/outage-message.json").then((resp) => {
+      setOutageMsgContent(resp.data);
+    });
+  }, []);
+
   // noinspection JSCheckFunctionSignatures
   const childrenWithProps = React.Children.map(props.children, (child) =>
     React.cloneElement(child)
@@ -29,6 +39,11 @@ const Layout = (props) => {
         </div>
 
         <div id="topHeader" className="topHeader">
+          {outageMsgContent && outageMsgContent.enabled === "true" ? (
+            <SiteAlert variant="info" heading={outageMsgContent.heading}>
+              {outageMsgContent.message}
+            </SiteAlert>
+          ) : null}
           <Header environment={config.app.env} />
           <SubHeader user={props.user} setCurrentLink={props.setCurrentLink} />
         </div>
