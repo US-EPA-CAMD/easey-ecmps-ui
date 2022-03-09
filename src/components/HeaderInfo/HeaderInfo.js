@@ -20,6 +20,7 @@ import {
   unsavedDataMessage,
 } from "../../additional-functions/prompt-to-save-unsaved-changes";
 import download from "downloadjs";
+import GenericTable from "../GenericTable/GenericTable";
 
 export const HeaderInfo = ({
   facility,
@@ -79,7 +80,8 @@ export const HeaderInfo = ({
   const [openIntervalId, setOpenIntervalId] = useState(null);
   const [evalStatus, setEvalStatus] = useState("");
   const [evalStatusLoaded, setEvalStatusLoaded] = useState(false);
-
+  const [showCommentsModal, setShowCommentsModal] = useState(false);
+  const [commentsData, setCommentsData] = useState([]);
   const [showImportModal, setShowImportModal] = useState(false);
   const [userHasCheckout, setUserHasCheckout] = useState(false);
 
@@ -174,6 +176,38 @@ export const HeaderInfo = ({
       });
   };
 
+  const formatCommentsToTable = (data) => {
+    console.log("data in header", data);
+    const formmatedData = [];
+    if (data.length >= 1) {
+      data.forEach((element) => {
+        formmatedData.push({
+          "Date, Time": new Date(element.addDate).toLocaleString("en-US", {
+            hour12: false,
+          }),
+          Comment: element.monitoringPlanComment,
+        });
+      });
+      return formmatedData;
+    }
+    return [
+      {
+        // "Monitoring Plan": "",
+        "Date, Time": " ",
+        Comment: " ",
+      },
+    ];
+  };
+  const openViewComments = () => {
+    mpApi.getMonitoringPlanComments(selectedConfig.id).then((data) => {
+      setCommentsData(formatCommentsToTable(data.data));
+      setShowCommentsModal(true);
+    });
+
+    setTimeout(() => {
+      attachChangeEventListeners(".modalUserInput");
+    });
+  };
   useEffect(() => {
     // get evaluation status
     if (!evalStatusLoaded) {
@@ -567,7 +601,8 @@ export const HeaderInfo = ({
                     type="button"
                     className="margin-left-4 position-relative top-neg-1"
                     outline={true}
-                    title="Coming Soon"
+                    title="Open Comments"
+                    onClick={() => openViewComments()}
                   >
                     View Comments
                   </Button>
@@ -787,6 +822,33 @@ export const HeaderInfo = ({
             />
           }
         />
+      ) : (
+        ""
+      )}
+
+      <div className={`usa-overlay ${showCommentsModal ? "is-visible" : ""}`} />
+      {showCommentsModal ? (
+        <div>
+          <UploadModal
+            show={showCommentsModal}
+            width={"50%"}
+            left={"25%"}
+            close={() => setShowCommentsModal(false)}
+            showCancel={false}
+            showSave={false}
+            complete={true}
+            xBtn
+            notUploadVersion
+            children={
+              <GenericTable
+                data1={commentsData}
+                title={"Monitoring Plan - Comments"}
+                expandable={true}
+                additionalTitle={facilityAdditionalName}
+              />
+            }
+          />
+        </div>
       ) : (
         ""
       )}

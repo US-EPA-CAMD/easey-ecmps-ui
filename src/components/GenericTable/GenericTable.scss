@@ -1,0 +1,30 @@
+.genericTable {
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td,
+  th {
+    text-align: left;
+    padding: 8px;
+  }
+
+  th {
+    background-color: #dddddd;
+  }
+
+  td.collapsed {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .expanded {
+    word-wrap: break-word;
+  }
+  .expandBtn{
+    text-align: center;
+  }
+
+}
