@@ -881,3 +881,15 @@ export const getMonitoringPlansEvaluationReportData = async (monPlanId) => {
 
   return axios.get(url).then(handleResponse).catch(handleError);
 };
+
+export const getMonitoringPlanComments = async (monPlanId) => {
+  let url = `${config.services.monitorPlans.uri}`;
+
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+  url = `${url}/plans/${monPlanId}/comments`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};

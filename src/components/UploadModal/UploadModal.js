@@ -32,6 +32,7 @@ export const UploadModal = ({
   importApiErrors,
   setImportApiErrors,
   fileName,
+  notUploadVersion,
 }) => {
   const hasErrors = importApiErrors && importApiErrors.length > 0;
   const milisecondsToLoad = 4000;
@@ -92,7 +93,7 @@ export const UploadModal = ({
       opacity: "0.9",
       zIndex: "0",
       textIndent: "-9999px",
-      backgroundColor: "gray",
+      backgroundColor: "black",
     },
   };
 
@@ -154,7 +155,24 @@ export const UploadModal = ({
                   className={`modal-content ${!complete ? "padding-y-3" : ""}`}
                 >
                   {" "}
-                  {!preloader ? (
+                  {notUploadVersion ? (
+                    <ClearSharp
+                      className="position-absolute right-1 top-1 cursor-pointer text-bold"
+                      onClick={close}
+                      onKeyPress={(event) => {
+                        if (event.key === "Enter") {
+                          close();
+                        }
+                      }}
+                      id="closeModalBtn"
+                      data-testid="closeModalBtn"
+                      title="Close Modal"
+                      epa-testid="closeXBtn"
+                      role="button"
+                      tabIndex="0"
+                      aria-hidden={false}
+                    />
+                  ) : !preloader ? (
                     <div className="">
                       <ClearSharp
                         className="position-absolute right-1 top-1 cursor-pointer text-bold"
@@ -233,7 +251,9 @@ export const UploadModal = ({
                   ) : (
                     ""
                   )}
-                  {!preloader ? (
+                  {notUploadVersion ? (
+                    ""
+                  ) : !preloader ? (
                     <div
                       className={`${
                         !complete
