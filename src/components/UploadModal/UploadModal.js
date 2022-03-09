@@ -93,7 +93,7 @@ export const UploadModal = ({
       opacity: "0.9",
       zIndex: "0",
       textIndent: "-9999px",
-      backgroundColor: "black",
+      backgroundColor: "grey",
     },
   };
 

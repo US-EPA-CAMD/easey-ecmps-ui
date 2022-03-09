@@ -825,34 +825,30 @@ export const HeaderInfo = ({
       ) : (
         ""
       )}
-      {showCommentsModal ? (
-        <UploadModal
-          show={showCommentsModal}
-          width={"50%"}
-          left={"25%"}
-          close={() => setShowCommentsModal(false)}
-          showCancel={false}
-          showSave={false}
-          // exitBtn={"Ok"}
-          complete={true}
-          // importApiErrors={importApiErrors}
-          xBtn
-          notUploadVersion={true}
-          children={
-            <GenericTable
-              data1={commentsData}
-              title={"Monitoring Plan - Comments"}
-              expandable={true}
-              additionalTitle={facilityAdditionalName}
 
-              // setDisablePortBtn={setDisablePortBtn}
-              // disablePortBtn={disablePortBtn}
-              // complete={true}
-              // fileName={fileName}
-              // importApiErrors={importApiErrors}
-            />
-          }
-        />
+      <div className={`usa-overlay ${showCommentsModal ? "is-visible" : ""}`} />
+      {showCommentsModal ? (
+        <div>
+          <UploadModal
+            show={showCommentsModal}
+            width={"50%"}
+            left={"25%"}
+            close={() => setShowCommentsModal(false)}
+            showCancel={false}
+            showSave={false}
+            complete={true}
+            xBtn
+            notUploadVersion
+            children={
+              <GenericTable
+                data1={commentsData}
+                title={"Monitoring Plan - Comments"}
+                expandable={true}
+                additionalTitle={facilityAdditionalName}
+              />
+            }
+          />
+        </div>
       ) : (
         ""
       )}
