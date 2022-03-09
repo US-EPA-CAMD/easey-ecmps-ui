@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
 const ComingSoon = () => {
   useEffect(() => {
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    });
     document.title = "ECMPS Coming Soon";
   }, []);
   return (

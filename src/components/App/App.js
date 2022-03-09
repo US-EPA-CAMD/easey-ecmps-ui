@@ -107,8 +107,17 @@ const App = () => {
 
             <Route path={`/faqs`} exact component={() => <FAQ />} />
             <Route path="/login" exact component={Login} />
-            {user ? <Redirect from="/monitoring-plans" to="/workspace/monitoring-plans" />
-            : <Redirect from="/workspace/monitoring-plans" to="/monitoring-plans" />}
+            {user ? (
+              <Redirect
+                from="/monitoring-plans"
+                to="/workspace/monitoring-plans"
+              />
+            ) : (
+              <Redirect
+                from="/workspace/monitoring-plans"
+                to="/monitoring-plans"
+              />
+            )}
             <Route
               path="/monitoring-plans"
               exact
@@ -127,19 +136,33 @@ const App = () => {
                 />
               )}
             />
-            {user ? <Redirect from="/qa_certifications" to="/workspace/qa_certifications" />
-            : <Redirect from="/workspace/qa_certifications" to="/qa_certifications" />}
+            {user ? (
+              <Redirect
+                from="/qa_certifications"
+                to="/workspace/qa_certifications"
+              />
+            ) : (
+              <Redirect
+                from="/workspace/qa_certifications"
+                to="/qa_certifications"
+              />
+            )}
             <Route path="/qa_certifications/" exact component={ComingSoon} />
             <Route
               path="/workspace/qa_certifications/"
               exact
               component={ComingSoon}
             />
-            {user ? <Redirect from="/emission" to="/workspace/emission" />
-            : <Redirect from="/workspace/emission" to="/emission" />}
+            {user ? (
+              <Redirect from="/emission" to="/workspace/emission" />
+            ) : (
+              <Redirect from="/workspace/emission" to="/emission" />
+            )}
             <Route path="/emission/" exact component={ComingSoon} />
             <Route path="/workspace/emission/" exact component={ComingSoon} />
             <Route path="/tutorials" exact component={ComingSoon} />
+            <Route path="/cam-api" exact component={ComingSoon} />
+            <Route path="/glossary" exact component={ComingSoon} />
 
             <Route
               path="/reporting-instructions"
