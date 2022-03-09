@@ -1,12 +1,29 @@
-import React from 'react'
+import React from "react";
 import { fireEvent, render, waitForElement } from "@testing-library/react";
-import ReportingInstructions from './ReportingInstructions.js'
+import ReportingInstructions from "./ReportingInstructions.js";
 
+jest.mock("react-markdown", () => (props) => {
+  return <>{props.children}</>;
+});
 
-describe('<reporting instructions/>', () => {
-    test("renders reporting instructions", () => {
-        const { container, queryByPlaceholderText } = render(<ReportingInstructions/>);
+jest.mock("remark-gfm", () => () => {});
 
-        expect(container).toBeDefined();
-    });
+jest.mock("../../utils/api/contentApi", () => {
+  const testContent = {
+    headers: { "content-type": "text/markdown" },
+    data: "test",
+  };
+  return {
+    getContent: jest.fn().mockResolvedValue(testContent),
+  };
+});
+
+describe("<reporting instructions/>", () => {
+  test("renders reporting instructions", () => {
+    const { container, queryByPlaceholderText } = render(
+      <ReportingInstructions />
+    );
+
+    expect(container).toBeDefined();
+  });
 });

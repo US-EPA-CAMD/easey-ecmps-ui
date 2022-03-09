@@ -113,6 +113,7 @@ export const HelpSupport = () => {
     <div className="padding-top-7 padding-2 react-transition fade-in help-support-container">
       <div className="grid-row">
         <ReactMarkdown
+          id="main-content"
           className="main-content"
           children={mainContent}
           remarkPlugins={[remarkGfm]}

@@ -1,8 +1,24 @@
 import React from "react";
-import { render, screen, fireEvent, wait } from "@testing-library/react";
-import { Route, Switch, BrowserRouter } from "react-router-dom";
+import { render, screen, wait } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
 import HelpSupport from "./HelpSupport";
 import userEvent from "@testing-library/user-event";
+
+jest.mock("react-markdown", () => (props) => {
+  return <>{props.children}</>;
+});
+
+jest.mock("remark-gfm", () => () => {});
+
+jest.mock("../../utils/api/contentApi", () => {
+  const testContent = {
+    headers: { "content-type": "text/markdown" },
+    data: "test",
+  };
+  return {
+    getContent: jest.fn().mockResolvedValue(testContent),
+  };
+});
 
 jest.mock("../../utils/api/quartzApi", () => {
   return {
@@ -41,24 +57,9 @@ describe("renders and tests HelpSupport component", () => {
     },
   ];
 
-  const topics = [
-    {
-      name: "Help/Support",
-    },
-    {
-      name: "FAQs",
-    },
-    {
-      name: "Tutorials",
-    },
-    {
-      name: "Contact Us",
-    },
-  ];
-
   let helpSupport;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     helpSupport = render(
       <BrowserRouter>
         <HelpSupport />
@@ -68,12 +69,6 @@ describe("renders and tests HelpSupport component", () => {
 
   afterEach(() => {
     helpSupport = null;
-  });
-
-  test("render and check sections", () => {
-    topics.forEach((element) => {
-      expect(helpSupport.getByText(element.name)).toBeTruthy();
-    });
   });
 
   test("submit blank contact form and get validation error", () => {
