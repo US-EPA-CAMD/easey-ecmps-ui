@@ -40,8 +40,7 @@ export const extractUserInput = (payload, inputSelector, radios) => {
       if (button.firstElementChild.checked) {
         const item = { name: "", value: "" };
         item.name = radios[counter];
-        item.value =
-          button.firstElementChild.defaultValue === "Yes" ? "1" : "0";
+        item.value = button.firstElementChild.defaultValue === "Yes" ? 1 : 0;
         payloadArray.push(item);
         counter++;
       }
@@ -50,7 +49,13 @@ export const extractUserInput = (payload, inputSelector, radios) => {
 
   payloadArray.forEach((item) => {
     if (item.value !== undefined) {
-      payload[item.name] = item.value.trim() === "" ? null : item.value.trim();
+      if (typeof item.value === "string") {
+        payload[item.name] =
+          item.value.trim() === "" ? null : item.value.trim();
+      }
+      if (typeof item.value === "number") {
+        payload[item.name] = item.value;
+      }
     }
   });
 
