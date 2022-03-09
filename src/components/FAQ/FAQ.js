@@ -1,63 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Accordion } from "@trussworks/react-uswds";
 
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { getContent } from "../../utils/api/contentApi";
+
 const FAQ = () => {
+  const [mainContent, setMainContent] = useState();
+  const [questionsAnswers, setQuestionsAnswers] = useState([]);
+
   useEffect(() => {
     document.title = "ECMPS FAQs";
+    getContent("/ecmps/faqs/index.md").then((resp) =>
+      setMainContent(resp.data)
+    );
+    getContent("/ecmps/faqs/questions-answers.json").then((resp) =>
+      setQuestionsAnswers(resp.data)
+    );
   }, []);
-  const topics = [
-    {
-      name: "Monitoring Plans",
-      questions: [
-        {
-          question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
-          answer: "Phasellus tincidunt velit sed leo porttitor tincidunt",
-        },
-        {
-          question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
-          answer: "Phasellus tincidunt velit sed leo porttitor tincidunt",
-        },
-        {
-          question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
-          answer: "Phasellus tincidunt velit sed leo porttitor tincidunt",
-        },
-      ],
-    },
-    {
-      name: "QA & Certifications",
-      questions: [
-        {
-          question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
-          answer: "Phasellus tincidunt velit sed leo porttitor tincidunt",
-        },
-        {
-          question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
-          answer: "Phasellus tincidunt velit sed leo porttitor tincidunt",
-        },
-      ],
-    },
-    {
-      name: "Emissions",
-      questions: [
-        {
-          question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
-          answer: "Phasellus tincidunt velit sed leo porttitor tincidunt",
-        },
-        {
-          question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
-          answer: "Phasellus tincidunt velit sed leo porttitor tincidunt",
-        },
-        {
-          question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
-          answer: "Phasellus tincidunt velit sed leo porttitor tincidunt",
-        },
-        {
-          question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
-          answer: "Phasellus tincidunt velit sed leo porttitor tincidunt",
-        },
-      ],
-    },
-  ];
 
   const createAccordionItems = (questions, name) => {
     // *** create items
@@ -66,6 +26,7 @@ const FAQ = () => {
 
     questions.forEach((element, index) => {
       items.push({
+        key: index,
         title: element.question,
         content: element.answer,
         expanded: false,
@@ -82,22 +43,17 @@ const FAQ = () => {
       id="faqPage"
     >
       <div className="grid-col-9 fit-content">
-        <div>
-          <h2 className="text-bold font-heading-2xl">FAQs</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis
-            arcu in ipsum sollicitudin viverra. Vestibulum ut tincidunt lacus.
-            Aliquam erat volutpat. Donec eget tincidunt mauris. Sed ac orci a
-            risus vehicula molestie quis sit amet ligula. Sed faucibus, neque
-            eget finibus lobortis, nunc erat molestie diam, sed pulvinar metus
-          </p>
-        </div>
-        {topics.map((topic) => {
+        <ReactMarkdown
+          className="main-content"
+          children={mainContent}
+          remarkPlugins={[remarkGfm]}
+        />
+        {questionsAnswers.map((item) => {
           return (
-            <div className=" padding-top-2 padding-bottom-2">
+            <div className=" padding-top-2 padding-bottom-2" key={item.name}>
               {" "}
-              <h3 className="text-bold font-heading-xl">{topic.name} </h3>
-              {createAccordionItems(topic.questions, topic.name)}
+              <h3 className="text-bold font-heading-xl">{item.name} </h3>
+              {createAccordionItems(item.questions, item.name)}
             </div>
           );
         })}{" "}

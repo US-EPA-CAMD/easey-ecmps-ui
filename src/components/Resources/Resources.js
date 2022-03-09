@@ -1,103 +1,134 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link as USWDSLink } from "@trussworks/react-uswds";
 import { OpenInNew } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import "./Resources.scss";
 
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { getContent } from "../../utils/api/contentApi";
+
 export const Resources = () => {
+  const [mainContent, setMainContent] = useState();
+  const [glossaryContent, setGlossaryContent] = useState();
+  const [reportingInsContent, setReportingInsContent] = useState();
+  const [camApiContent, setCamApiContent] = useState();
+  const [additionalResContent, setAdditionalResContent] = useState();
+  const [resourcesLinks, setResourcesLinks] = useState([]);
+
   useEffect(() => {
     document.title = "ECMPS Resources";
-  }, []);
-  const topics = [
-    {
-      name: "Glossary",
-      descriptions:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt molestie. Vestibulum faucibus enim sit amet pretium laoreet.",
-      url: "/glossary",
-    },
-    {
-      name: "Reporting Instructions",
-      descriptions:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt molestie. Vestibulum faucibus enim sit amet pretium laoreet.",
-      url: "/reporting-instructions",
-    },
-    {
-      name: "CAM API",
-      descriptions:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt molestie. Vestibulum faucibus enim sit amet pretium laoreet.",
-      url: "/emission",
-    },
-  ];
 
-  const additionalResources = [
-    {
-      name: "CDX",
-      url: "https://cdx.epa.gov/",
-      type: "external",
-    },
-    {
-      name: "Tutorials",
-      url: "/tutorials",
-      type: "internal",
-    },
-  ];
+    getContent("/ecmps/resources/index.md").then((resp) =>
+      setMainContent(resp.data)
+    );
+    getContent("/ecmps/resources/glossary.md").then((resp) =>
+      setGlossaryContent(resp.data)
+    );
+    getContent("/ecmps/resources/reporting-instructions.md").then((resp) =>
+      setReportingInsContent(resp.data)
+    );
+    getContent("/ecmps/resources/cam-api.md").then((resp) =>
+      setCamApiContent(resp.data)
+    );
+    getContent("/ecmps/resources/additional-resources.md").then((resp) =>
+      setAdditionalResContent(resp.data)
+    );
+    getContent("/ecmps/resources/resources-links.json").then((resp) =>
+      setResourcesLinks(resp.data)
+    );
+  }, []);
 
   return (
-    <div className="padding-top-7 padding-2 react-transition fade-in">
+    <div className="padding-top-7 padding-2 react-transition fade-in resources-container">
       <div className="grid-row">
-        <h2 className="text-bold font-heading-2xl">Resources</h2>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla
-          massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt
-          molestie. Vestibulum faucibus enim sit amet pretium laoreet.
-        </p>
+        <ReactMarkdown
+          className="main-content"
+          children={mainContent}
+          remarkPlugins={[remarkGfm]}
+        />
       </div>
       <div className="grid-row">
-        {topics.map((topic) => {
-          return (
-            <div
-              className="padding-top-2 padding-bottom-2 desktop:grid-col-6 desktop-lg:grid-col-4 mobile-lg:grid-col-12 padding-right-3"
-              key={`container-${topic.name.replace(/ /g, "-")}`}
-            >
-              {" "}
-              <h3 className="text-bold font-heading-xl">{topic.name} </h3>
-              <div>{topic.descriptions}</div>
-              <USWDSLink
-                className="usa-button usa-button--outline margin-top-1 margin-left-05"
-                outline="true"
-                type="button"
-                variant="unstyled"
-                asCustom={Link}
-                to={topic.url}
-                role="link"
-                exact="true"
-                rel={topic.name}
-                title={`Go to ${topic.name} page`}
-                key={topic.url}
-                id={`${topic.name.split(" ").join("")}`}
-                // onClick={(event) => handleRouteChange(event, topic.url)}
-              >
-                Visit{" "}
-                {topic.name === "Glossary"
-                  ? `the ${topic.name}`
-                  : `${topic.name}`}
-              </USWDSLink>
-            </div>
-          );
-        })}
+        <div className="padding-top-2 padding-bottom-2 desktop:grid-col-6 desktop-lg:grid-col-4 mobile-lg:grid-col-12 padding-right-3">
+          <ReactMarkdown
+            className="glossary-content"
+            children={glossaryContent}
+            remarkPlugins={[remarkGfm]}
+          />
+          <USWDSLink
+            className="usa-button usa-button--outline margin-top-1 margin-left-05 "
+            outline="true"
+            type="button"
+            variant="unstyled"
+            asCustom={Link}
+            to="/glossary"
+            role="link"
+            exact="true"
+            rel="Glossary"
+            title="Go to Glossary page"
+            key="/glossary"
+            id={"glossary-link"}
+          >
+            Visit The Glossary
+          </USWDSLink>
+        </div>
+        <div className="padding-top-2 padding-bottom-2 desktop:grid-col-6 desktop-lg:grid-col-4 mobile-lg:grid-col-12 padding-right-3">
+          <ReactMarkdown
+            className="reporting-instructions-content"
+            children={reportingInsContent}
+            remarkPlugins={[remarkGfm]}
+          />
+          <USWDSLink
+            className="usa-button usa-button--outline margin-top-1 margin-left-05"
+            outline="true"
+            type="button"
+            variant="unstyled"
+            asCustom={Link}
+            to="/reporting-instructions"
+            role="link"
+            exact="true"
+            rel="Reporting Instructions"
+            title="Go to Reporting Instructions page"
+            key="/reporting-instructions"
+            id={"reporting-instructions-link"}
+          >
+            Visit Reporting Instructions
+          </USWDSLink>
+        </div>
+        <div className="padding-top-2 padding-bottom-2 desktop:grid-col-6 desktop-lg:grid-col-4 mobile-lg:grid-col-12 padding-right-3">
+          <ReactMarkdown
+            className="cam-api-content"
+            children={camApiContent}
+            remarkPlugins={[remarkGfm]}
+          />
+          <USWDSLink
+            className="usa-button usa-button--outline margin-top-1 margin-left-05"
+            outline="true"
+            type="button"
+            variant="unstyled"
+            asCustom={Link}
+            to="/cam-api"
+            role="link"
+            exact="true"
+            rel="CAM API"
+            title="Go to CAM API page"
+            key="/cam-api"
+            id={"cam-api-link"}
+          >
+            Visit CAM API
+          </USWDSLink>
+        </div>
       </div>
       <div className="margin-top-2">
-        <h2 className="text-bold font-heading-2xl">Additional Resources</h2>
-        <p>
-          {" "}
-          Examine she brother prudent add day ham. Far stairs now coming bed
-          oppose hunted become his. You zealously departure had procuring
-          suspicion. Books who{" "}
-        </p>
+        <ReactMarkdown
+          className="additional-resources-content"
+          children={additionalResContent}
+          remarkPlugins={[remarkGfm]}
+        />
       </div>
 
       <ul className="margin-0 padding-0 margin-left-3">
-        {additionalResources.map((resource) => {
+        {resourcesLinks.map((resource) => {
           return (
             <li
               key={`li_${resource.name.replace(/ /g, "")}`}
@@ -105,7 +136,7 @@ export const Resources = () => {
             >
               {resource.type === "external" ? (
                 <a
-                  className="text-primary text-underline no-hover-color-change"
+                  className="text-primary text-underline no-hover-color-change forceUnderlineText colorContrast"
                   href={resource.url}
                   title={`Go to ${resource.name} page`}
                   key={resource.url}
@@ -119,7 +150,7 @@ export const Resources = () => {
                 <Link
                   type="button"
                   unstyled={true}
-                  className="text-primary text-underline no-hover-color-change"
+                  className="text-primary text-underline no-hover-color-change forceUnderlineText colorContrast"
                   to={resource.url}
                   role="link"
                   rel={resource.name}
@@ -127,7 +158,7 @@ export const Resources = () => {
                   key={resource.url}
                   id={`${resource.name.split(" ").join("")}`}
                 >
-                  {resource.name} <OpenInNew />
+                  {resource.name}
                 </Link>
               )}
             </li>
