@@ -181,39 +181,25 @@ export const HeaderInfo = ({
     const formmatedData = [];
     if (data.length >= 1) {
       data.forEach((element) => {
-        console.log(element.addDate)
         formmatedData.push({
-          // "Monitoring Plan": element.planId,
-          "Date, Time": new Date(element.addDate).toLocaleString('en-US', {hour12: false}),
+          "Date, Time": new Date(element.addDate).toLocaleString("en-US", {
+            hour12: false,
+          }),
           Comment: element.monitoringPlanComment,
         });
       });
       return formmatedData;
-    } else {
-      return [
-        {
-          // "Monitoring Plan": "",
-          "Date, Time": " ",
-          Comment: " ",
-        },
-      ];
     }
+    return [
+      {
+        // "Monitoring Plan": "",
+        "Date, Time": " ",
+        Comment: " ",
+      },
+    ];
   };
   const openViewComments = () => {
-    //   {
-    //     "id": "MIKE-DELL--C5C618C517D84FF19B8701FBBC42E841",
-    //     "planId": "MDC-6C1145BD3933499C944F4A7C732BDBF0",
-    //     "monitoringPlanComment": "EMRC flow monitor was replaced a SICK ultrasonic flow monitor.",
-    //     "beginDate": "2012-01-01",
-    //     "endDate": "2012-03-31",
-    //     "userId": "moconnel",
-    //     "addDate": "2012-01-31",
-    //     "updateDate": null,
-    //     "active": false
-    // }
-
     mpApi.getMonitoringPlanComments(selectedConfig.id).then((data) => {
-      // setCommentsData(data);
       setCommentsData(formatCommentsToTable(data.data));
       setShowCommentsModal(true);
     });
@@ -221,21 +207,6 @@ export const HeaderInfo = ({
     setTimeout(() => {
       attachChangeEventListeners(".modalUserInput");
     });
-  };
-
-  const closeComments = () => {
-    // const importBtn = document.querySelector("#importMonitoringPlanBtn");
-    // if (window.isDataChanged === true) {
-    //   if (window.confirm(unsavedDataMessage) === true) {
-    //     resetImportFlags();
-    //     removeChangeEventListeners(".modalUserInput");
-    //     importBtn.focus();
-    //   }
-    // } else {
-    //   resetImportFlags();
-    //   removeChangeEventListeners(".modalUserInput");
-    //   importBtn.focus();
-    // }
   };
   useEffect(() => {
     // get evaluation status
@@ -872,8 +843,8 @@ export const HeaderInfo = ({
               data1={commentsData}
               title={"Monitoring Plan - Comments"}
               expandable={true}
-              additionalTitle = {facilityAdditionalName}
-              
+              additionalTitle={facilityAdditionalName}
+
               // setDisablePortBtn={setDisablePortBtn}
               // disablePortBtn={disablePortBtn}
               // complete={true}

@@ -154,42 +154,26 @@ export const UploadModal = ({
                 <div
                   className={`modal-content ${!complete ? "padding-y-3" : ""}`}
                 >
-                  {" "}
+                  <ClearSharp
+                    className="position-absolute right-1 top-1 cursor-pointer text-bold"
+                    onClick={close}
+                    onKeyPress={(event) => {
+                      if (event.key === "Enter") {
+                        close();
+                      }
+                    }}
+                    id="closeModalBtn"
+                    data-testid="closeModalBtn"
+                    title="Close Modal"
+                    epa-testid="closeXBtn"
+                    role="button"
+                    tabIndex="0"
+                    aria-hidden={false}
+                  />
                   {notUploadVersion ? (
-                    <ClearSharp
-                      className="position-absolute right-1 top-1 cursor-pointer text-bold"
-                      onClick={close}
-                      onKeyPress={(event) => {
-                        if (event.key === "Enter") {
-                          close();
-                        }
-                      }}
-                      id="closeModalBtn"
-                      data-testid="closeModalBtn"
-                      title="Close Modal"
-                      epa-testid="closeXBtn"
-                      role="button"
-                      tabIndex="0"
-                      aria-hidden={false}
-                    />
+                    ""
                   ) : !preloader ? (
                     <div className="">
-                      <ClearSharp
-                        className="position-absolute right-1 top-1 cursor-pointer text-bold"
-                        onClick={close}
-                        onKeyPress={(event) => {
-                          if (event.key === "Enter") {
-                            close();
-                          }
-                        }}
-                        id="closeModalBtn"
-                        data-testid="closeModalBtn"
-                        title="Close Modal"
-                        epa-testid="closeXBtn"
-                        role="button"
-                        tabIndex="0"
-                        aria-hidden={false}
-                      />
                       {!complete ? (
                         <div>
                           {hasFormatError || hasInvalidJsonError ? (
