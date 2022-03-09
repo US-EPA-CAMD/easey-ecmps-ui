@@ -1,73 +1,70 @@
 import React from "react";
-import { render } from "@testing-library/react";
-import { Provider } from "react-redux";
-import { MemoryRouter } from "react-router-dom";
-
-import configureStore from "../../store/configureStore.dev";
 import Resources from "./Resources";
-const store = configureStore();
+import { render, fireEvent, screen, wait } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useHistory: () => ({
-    push: jest.fn(),
-  }),
-}));
+jest.mock("react-markdown", () => (props) => {
+  return <>{props.children}</>;
+});
 
-const topics = [
-  {
-    name: "Glossary",
-    descriptions:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt molestie. Vestibulum faucibus enim sit amet pretium laoreet.",
-    url: "/monitoring-plans",
-  },
-  {
-    name: "Reporting Instructions",
-    descriptions:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt molestie. Vestibulum faucibus enim sit amet pretium laoreet.",
-    url: "/qa_certifications",
-  },
-  {
-    name: "CAM API",
-    descriptions:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut fringilla massa in lectus volutpat scelerisque. Cras eu leo vel lacus tincidunt molestie. Vestibulum faucibus enim sit amet pretium laoreet.",
-    url: "/emission",
-  },
-];
+jest.mock("remark-gfm", () => () => {});
+
+jest.mock("../../utils/api/contentApi", () => {
+  const testContent = {
+    headers: { "content-type": "text/markdown" },
+    data: "[Test Link] [Test Link]: <https://dev.epacdx.net/FAQ>",
+  };
+
+  const testResourceLinks = {
+    data: [
+      {
+        name: "CDX",
+        url: "https://cdx.epa.gov/",
+        type: "external",
+      },
+      {
+        name: "Tutorials",
+        url: "/tutorials",
+        type: "internal",
+      },
+    ],
+  };
+
+  return {
+    getContent: jest
+      .fn()
+      .mockResolvedValueOnce(testContent)
+      .mockResolvedValueOnce(testContent)
+      .mockResolvedValueOnce(testContent)
+      .mockResolvedValueOnce(testContent)
+      .mockResolvedValueOnce(testContent)
+      .mockResolvedValueOnce(testResourceLinks),
+  };
+});
 
 describe("Resources: ", () => {
-  test("sections render without errors", () => {
-    const query = render(
-      <Provider store={store}>
-        <MemoryRouter>
+  it("render Resources component and check buttons", async () => {
+    let resources;
+    await wait(() => {
+      resources = render(
+        <BrowserRouter>
           <Resources />
-        </MemoryRouter>
-      </Provider>
-    );
-    const { getByText } = query;
-
-    topics.forEach((element) => {
-      const section = getByText(element.name);
-      expect(section).toBeTruthy();
+        </BrowserRouter>
+      );
     });
-  });
 
-  test("buttons render without errors", () => {
-    const query = render(
-      <Provider store={store}>
-        <MemoryRouter>
-          <Resources />
-        </MemoryRouter>
-      </Provider>
-    );
-    const { getByText } = query;
+    await wait(() => {
+      const topics = [
+        "Visit The Glossary",
+        "Visit Reporting Instructions",
+        "Visit CAM API",
+      ];
 
-    topics.forEach((element) => {
-      const text = `Visit${element.name === "Glossary" ? " the " : " "}${
-        element.name
-      }`;
-      const button = getByText(text);
-      expect(button).toBeTruthy();
+      topics.forEach((topic) => {
+        console.log(topic);
+        const button = resources.getByText(topic);
+        expect(button).toBeTruthy();
+      });
     });
   });
 });
