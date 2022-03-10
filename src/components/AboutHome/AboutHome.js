@@ -74,7 +74,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
           }}
         />
         <USWDSLink
-          className="usa-button viewAboutBTN bg-accent-cool margin-1"
+          className="usa-button bg-accent-cool margin-1"
           variant="unstyled"
           asCustom={Link}
           to="/monitoring-plans"
@@ -104,7 +104,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
           }}
         />
         <USWDSLink
-          className="usa-button viewAboutBTN bg-accent-cool margin-1"
+          className="usa-button bg-accent-cool margin-1"
           variant="unstyled"
           asCustom={Link}
           to="/qa-certifications"
@@ -134,7 +134,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
           }}
         />
         <USWDSLink
-          className="usa-button viewAboutBTN bg-accent-cool margin-1"
+          className="usa-button bg-accent-cool margin-1"
           variant="unstyled"
           asCustom={Link}
           to="/emissions"
