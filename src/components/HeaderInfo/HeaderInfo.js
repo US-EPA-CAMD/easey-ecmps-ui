@@ -183,6 +183,11 @@ export const HeaderInfo = ({
       data.forEach((element) => {
         formmatedData.push({
           "Date, Time": new Date(element.addDate).toLocaleString("en-US", {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
             hour12: false,
           }),
           Comment: element.monitoringPlanComment,
@@ -529,6 +534,112 @@ export const HeaderInfo = ({
 
       {evalStatusLoaded && dataLoaded ? (
         <div className="grid-row clearfix position-relative">
+          <div className="grid-col clearfix position-absolute top-1 right-0">
+            <div className="">
+              {user && checkedOutByUser ? (
+                <div>
+                  <div className="padding-2 margin-left-10">
+                    <Button
+                      type="button"
+                      className="margin-right-2 float-left margin-bottom-2"
+                      outline={true}
+                      onClick={() => openImportModal()}
+                      id="importMonitoringPlanBtn"
+                    >
+                      Import Monitoring Plan
+                    </Button>
+                    <Button
+                      type="button"
+                      className="margin-right-2 float-right margin-bottom-2"
+                      outline={true}
+                      onClick={exportHandler}
+                    >
+                      Export Monitoring Plan
+                    </Button>
+                  </div>
+                  <div className="padding-2 margin-left-10">
+                    {showSubmit(evalStatus) ? (
+                      <Button
+                        type="button"
+                        className="margin-right-2 float-right margin-bottom-2"
+                        outline={false}
+                        title="Coming Soon"
+                      >
+                        Submit
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+
+                    {showRevert(evalStatus) ? (
+                      <div className="margin-right-3 float-left margin-bottom-2">
+                        <Button
+                          type="button"
+                          id="showRevertModal"
+                          className="float-right"
+                          onClick={() => setShowRevertModal(true)}
+                          outline={true}
+                        >
+                          {"Revert to Official Record"}
+                        </Button>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                    {evalStatusText(evalStatus) === "Needs Evaluation" ? (
+                      <Button
+                        type="button"
+                        className="margin-right-2 margin-left-4 float-right margin-bottom-2"
+                        outline={false}
+                        onClick={evaluate}
+                      >
+                        Evaluate
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+            {user ? (
+              <div className="grid-row float-right text-right margin-right-3 mobile:display-none desktop:display-block">
+                <table role="presentation">
+                  <tbody>
+                    <tr>
+                      <th className="padding-1">Evaluation Status: </th>
+                      <td
+                        className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
+                          evalStatus
+                        )}`}
+                      >
+                        <button
+                          className={
+                            showHyperLink(evalStatus)
+                              ? "hyperlink-btn cursor-pointer"
+                              : "unstyled-btn"
+                          }
+                          onClick={() =>
+                            showHyperLink(evalStatus) ? displayReport() : null
+                          }
+                        >
+                          {evalStatusText(evalStatus)}
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th className="padding-1">Submission Status: </th>
+                      <td className="padding-1">Resubmission required</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
           <div className="grid-col float-left">
             <div>
               <h3 className="display-inline-block">
@@ -645,111 +756,6 @@ export const HeaderInfo = ({
                 </div>
               </div>
             </div>
-          </div>
-          <div className="grid-col clearfix position-absolute top-1 right-0">
-            <div className="">
-              {user && checkedOutByUser ? (
-                <div>
-                  <div className="padding-2 margin-left-10">
-                    <Button
-                      type="button"
-                      className="margin-right-2 float-right margin-bottom-2"
-                      outline={true}
-                      onClick={exportHandler}
-                    >
-                      Export Monitoring Plan
-                    </Button>
-                    <Button
-                      type="button"
-                      className="margin-right-2 float-right margin-bottom-2"
-                      outline={true}
-                      onClick={() => openImportModal()}
-                      id="importMonitoringPlanBtn"
-                    >
-                      Import Monitoring Plan
-                    </Button>
-                  </div>
-                  <div className="padding-2 margin-left-10">
-                    {evalStatusText(evalStatus) === "Needs Evaluation" ? (
-                      <Button
-                        type="button"
-                        className="margin-right-2 margin-left-4 float-right margin-bottom-2"
-                        outline={false}
-                        onClick={evaluate}
-                      >
-                        Evaluate
-                      </Button>
-                    ) : (
-                      ""
-                    )}
-                    {showSubmit(evalStatus) ? (
-                      <Button
-                        type="button"
-                        className="margin-right-2 float-right margin-bottom-2"
-                        outline={false}
-                        title="Coming Soon"
-                      >
-                        Submit
-                      </Button>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  {showRevert(evalStatus) ? (
-                    <div className="margin-right-3 float-right margin-bottom-2">
-                      <Button
-                        type="button"
-                        id="showRevertModal"
-                        className="float-right"
-                        onClick={() => setShowRevertModal(true)}
-                        outline={true}
-                      >
-                        {"Revert to Official Record"}
-                      </Button>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              ) : (
-                ""
-              )}
-            </div>
-            {user ? (
-              <div className="grid-row float-right text-right margin-right-3 mobile:display-none desktop:display-block">
-                <table role="presentation">
-                  <tbody>
-                    <tr>
-                      <th className="padding-1">Evaluation Status: </th>
-                      <td
-                        className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
-                          evalStatus
-                        )}`}
-                      >
-                        <button
-                          className={
-                            showHyperLink(evalStatus)
-                              ? "hyperlink-btn cursor-pointer"
-                              : "unstyled-btn"
-                          }
-                          onClick={() =>
-                            showHyperLink(evalStatus) ? displayReport() : null
-                          }
-                        >
-                          {evalStatusText(evalStatus)}
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th className="padding-1">Submission Status: </th>
-                      <td className="padding-1">Resubmission required</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              ""
-            )}
           </div>
         </div>
       ) : (
