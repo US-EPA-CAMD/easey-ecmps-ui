@@ -416,3 +416,18 @@ button.usa-nav__close {
 .text-green {
   color: $epa-green;
 }
+
+.bg-accent-cool {
+  background-color: $eds-accent-cool;
+  &.usa-button {
+    color: $epa-black;
+  }
+  &:hover {
+    background-color: $eds-accent-cool-hover;
+    color: $epa-white;
+  }
+  &:active {
+    background-color: $eds-accent-cool-active;
+    color: $epa-white;
+  }
+}
