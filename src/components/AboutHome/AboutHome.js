@@ -107,14 +107,14 @@ const AboutHome = ({ user, setCurrentLink }) => {
           className="usa-button bg-accent-cool margin-1"
           variant="unstyled"
           asCustom={Link}
-          to="/qa-certifications"
+          to="/qa_certifications"
           role="link"
           exact="true"
           rel="QA & Certifications"
           title="Go to QA & Certifications page"
           key="qa-certifications"
           id="qaCertificationsBtn"
-          onClick={(event) => handleRouteChange(event, "/qa-certifications")}
+          onClick={(event) => handleRouteChange(event, "/qa_certifications")}
         >
           View QA & Certifications
         </USWDSLink>
@@ -137,14 +137,14 @@ const AboutHome = ({ user, setCurrentLink }) => {
           className="usa-button bg-accent-cool margin-1"
           variant="unstyled"
           asCustom={Link}
-          to="/emissions"
+          to="/emission"
           role="link"
           exact="true"
           rel="Emissions"
           title="Go to Emissions page"
           key="emissions"
           id="emissionsBtn"
-          onClick={(event) => handleRouteChange(event, "/emissions")}
+          onClick={(event) => handleRouteChange(event, "/emission")}
         >
           View Emissions
         </USWDSLink>
