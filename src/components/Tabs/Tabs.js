@@ -75,6 +75,15 @@ export const Tabs = ({
     );
   };
 
+  const cleanConfigStr = (name) => {
+    return name
+      .replaceAll(",", "")
+      .replaceAll("(", "")
+      .replaceAll(")", "")
+      .trim()
+      .replaceAll(" ", "-");
+  };
+
   return (
     <div>
       <div className="tab-buttons mobile-lg:margin-left-7 mobile-lg:padding-left-5 tablet:margin-left-0 tablet:padding-left-0">
@@ -179,18 +188,22 @@ export const Tabs = ({
 
                   {dynamic ? (
                     <ClearSharp
-                      className="text-bold margin-left-2 float-right position-relative left-neg-1 top-neg-1 margin-top-neg-3 cursor-pointer"
+                      className="text-bold margin-left-2 float-right position-relative left-neg-1 top-neg-1 margin-top-neg-3 cursor-pointer closeXBtnTab"
                       onClick={(e) => closeHandler(e, i, el.props.locationId)}
                       onKeyPress={(event) => {
                         if (event.key === "Enter") {
                           closeHandler(event, i);
                         }
                       }}
-                      title="Click to close tab"
-                      name="closeXBtnTab"
-                      id="closeXBtnTab"
-                      data-test-id="closeXBtnTab"
-                      epa-testid="closeXBtnTab"
+                      title={`Click to close ${el.props.title} tab`}
+                      name={`closeXBtnTab-${cleanConfigStr(el.props.title)}`}
+                      id={`closeXBtnTab-${cleanConfigStr(el.props.title)}`}
+                      data-test-id={`closeXBtnTab-${cleanConfigStr(
+                        el.props.title
+                      )}`}
+                      epa-testid={`closeXBtnTab-${cleanConfigStr(
+                        el.props.title
+                      )}`}
                       role="button"
                       tabIndex="0"
                       aria-hidden="false"
