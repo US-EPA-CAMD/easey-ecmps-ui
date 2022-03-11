@@ -29,11 +29,11 @@ export const MonitoringPlanEvaluationReport = ({
   ];
 
   useEffect(() => {
-    if (window.opener && window.opener !== window) {
-      setDisplayCloseButton(true);
-    } else {
-      setDisplayCloseButton(false);
-    }
+    // if (window.opener && window.opener !== window) {
+    //   setDisplayCloseButton(true);
+    // } else {
+    //   setDisplayCloseButton(false);
+    // }
 
     if (!dataLoaded) {
       mpApi
