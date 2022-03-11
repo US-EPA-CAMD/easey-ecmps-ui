@@ -95,7 +95,7 @@ export const DataTableSystems = ({
   // *** Clean up focus event listeners
   useEffect(() => {
     return () => {
-      cleanupFocusEventListeners();
+      /// cleanupFocusEventListeners();
     };
   }, []);
 
@@ -261,7 +261,6 @@ export const DataTableSystems = ({
     setSecondLevel(val);
     setSecondLevelName(currentBread);
 
-    console.log('currentBread"', currentBread);
     // missing stepper if !currentBread
     if (!addComp && !currentBread) {
       setCreateFuelFlowFlag(create);

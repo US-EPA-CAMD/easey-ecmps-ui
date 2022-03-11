@@ -4,20 +4,24 @@ const elementAmountToKeep = 10;
 
 export const storeInFocusedArray = (event) => {
   if (event.target.innerHTML !== "Close") {
-    if (
+    /*if (
       window["lastModalButton"].length === 0 &&
       event.target.innerHTML === "View"
     ) {
       window["lastModalButton"].push(event.target);
-    } else {
-      // *** store item
-      window["lastFocusedArray"].push(event.target);
+    } else {*/
+    // *** store item
+    window["lastFocusedArray"].push(event.target);
 
-      // *** make sure no extra elements are kept
-      if (window["lastFocusedArray"].length > elementAmountToKeep) {
-        window["lastFocusedArray"].shift();
-      }
+    // *** make sure no extra elements are kept
+    if (window["lastFocusedArray"].length > elementAmountToKeep) {
+      window["lastFocusedArray"].shift();
     }
+
+    console.log("stored:");
+
+    console.log(window["lastFocusedArray"]);
+    // }
   }
 };
 
@@ -62,7 +66,7 @@ export const cleanupFocusEventListeners = () => {
     element.removeEventListener("focus", storeInFocusedArray);
   });
 
-  delete window["lastFocusedArray"];
+  // delete window["lastFocusedArray"];
 };
 
 export const returnFocusToLast = () => {
@@ -70,7 +74,10 @@ export const returnFocusToLast = () => {
     const lastFocus =
       window["lastFocusedArray"][window["lastFocusedArray"].length - 1];
 
+    console.log("found: ", lastFocus);
+
     if (lastFocus && lastFocus.id) {
+      console.log("set");
       document.querySelector(`#${lastFocus.id}`).focus();
     }
   }
