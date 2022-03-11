@@ -615,18 +615,20 @@ export const HeaderInfo = ({
                           evalStatus
                         )}`}
                       >
-                        <button
-                          className={
-                            showHyperLink(evalStatus)
-                              ? "hyperlink-btn cursor-pointer"
-                              : "unstyled-btn"
-                          }
-                          onClick={() =>
-                            showHyperLink(evalStatus) ? displayReport() : null
-                          }
-                        >
-                          {evalStatusText(evalStatus)}
-                        </button>
+                        {/* needed to separate the text and button otherwise it tabs to a text causing 508 errors */}
+                        {showHyperLink(evalStatus) ? (
+                          <button
+                            className={"hyperlink-btn cursor-pointer"}
+                            onClick={() => displayReport()}
+                          >
+                            {evalStatusText(evalStatus)}
+                          </button>
+                        ) : (
+                          // prevents tabbing to this message when there is no valid link to click
+                          <div className="unstyled-btn">
+                            {evalStatusText(evalStatus)}
+                          </div>
+                        )}
                       </td>
                     </tr>
                     <tr>
