@@ -20,6 +20,10 @@ import {
 } from "../../../additional-functions/data-table-section-and-store-names";
 
 import ModalAddComponent from "../../ModalAddComponent/ModalAddComponent";
+import {
+  assignFocusEventListeners,
+  returnFocusToLast,
+} from "../../../additional-functions/manage-focus";
 export const DataTableSystemsComponents = ({
   fuelFlowsMdmData,
   systemComponentsMdmData,
@@ -114,6 +118,14 @@ export const DataTableSystemsComponents = ({
       "prefilteredSystemsComponents",
     ],
   ];
+
+  // *** Assign initial event listeners after loading data/dropdowns
+  useEffect(() => {
+    if (dataLoaded) {
+      returnFocusToLast();
+      assignFocusEventListeners();
+    }
+  }, [dataLoaded]);
 
   useEffect(() => {
     if (addCompThirdLevelTrigger) {
