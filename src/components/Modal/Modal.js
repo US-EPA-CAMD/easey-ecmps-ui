@@ -37,11 +37,12 @@ export const Modal = ({
     // *** 508 remediation; scroll to top on modal open
     setTimeout(() => {
       window.scrollTo(0, 0);
-      document.querySelector("#closeModalBtn").focus();
     });
 
     setTimeout(() => {
-      document.querySelector("#closeModalBtn").focus();
+      if (document.querySelector("#closeModalBtn")) {
+        document.querySelector("#closeModalBtn").focus();
+      }
     }, 1000);
 
     // * clean up
