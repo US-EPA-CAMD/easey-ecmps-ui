@@ -533,71 +533,77 @@ export const HeaderInfo = ({
       ) : null}
 
       {evalStatusLoaded && dataLoaded ? (
-        <div className="grid-row clearfix position-relative">
-          <div className="grid-col clearfix position-absolute top-1 right-0">
+        // adding display-block here allows buttons to be clickable ( has somesort of hidden overlay without it)
+        <div className="grid-row clearfix position-relative display-block">
+          <div className="grid-col clearfix position-absolute top-1 right-0 ">
             <div className="">
               {user && checkedOutByUser ? (
                 <div>
-                  <div className="padding-2 margin-left-10">
+                  <div className=" margin-left-10 display-block">
                     <Button
                       type="button"
                       className="margin-right-2 float-left margin-bottom-2"
-                      outline={true}
-                      onClick={() => openImportModal()}
-                      id="importMonitoringPlanBtn"
-                    >
-                      Import Monitoring Plan
-                    </Button>
-                    <Button
-                      type="button"
-                      className="margin-right-2 float-right margin-bottom-2"
                       outline={true}
                       onClick={exportHandler}
                     >
                       Export Monitoring Plan
                     </Button>
+                    <Button
+                      type="button"
+                      className="margin-right-2 float-right"
+                      outline={false}
+                      onClick={() => openImportModal()}
+                      id="importMonitoringPlanBtn"
+                    >
+                      Import Monitoring Plan
+                    </Button>
                   </div>
-                  <div className="padding-2 margin-left-10">
-                    {showSubmit(evalStatus) ? (
-                      <Button
-                        type="button"
-                        className="margin-right-2 float-right margin-bottom-2"
-                        outline={false}
-                        title="Coming Soon"
-                      >
-                        Submit
-                      </Button>
-                    ) : (
-                      ""
-                    )}
 
-                    {showRevert(evalStatus) ? (
-                      <div className="margin-right-3 float-left margin-bottom-2">
+                  <div className="grid-row float-right text-right desktop:display-block">
+                    <div className="padding-1">
+                      {showSubmit(evalStatus) ? (
                         <Button
                           type="button"
-                          id="showRevertModal"
-                          className="float-right"
-                          onClick={() => setShowRevertModal(true)}
-                          outline={true}
+                          className="margin-right-2 float-right margin-bottom-2"
+                          outline={false}
+                          title="Coming Soon"
                         >
-                          {"Revert to Official Record"}
+                          Submit
                         </Button>
+                      ) : (
+                        ""
+                      )}
+
+                      {evalStatusText(evalStatus) === "Needs Evaluation" ? (
+                        <Button
+                          type="button"
+                          className=" margin-left-4 float-right margin-bottom-2"
+                          outline={false}
+                          onClick={evaluate}
+                        >
+                          Evaluate
+                        </Button>
+                      ) : (
+                        ""
+                      )}
+                      <div className="desktop:display-block">
+                        {showRevert(evalStatus) ? (
+                          <div className=" float-right position-relative margin-bottom-2">
+                            <Button
+                              type="button"
+                              id="showRevertModal"
+                              className="float-right"
+                              onClick={() => setShowRevertModal(true)}
+                              outline={true}
+                            >
+                              {"Revert to Official Record"}
+                            </Button>
+                          </div>
+                        ) : (
+                          ""
+                        )}
                       </div>
-                    ) : (
-                      ""
-                    )}
-                    {evalStatusText(evalStatus) === "Needs Evaluation" ? (
-                      <Button
-                        type="button"
-                        className="margin-right-2 margin-left-4 float-right margin-bottom-2"
-                        outline={false}
-                        onClick={evaluate}
-                      >
-                        Evaluate
-                      </Button>
-                    ) : (
-                      ""
-                    )}
+                    </div>
                   </div>
                 </div>
               ) : (
@@ -605,7 +611,7 @@ export const HeaderInfo = ({
               )}
             </div>
             {user ? (
-              <div className="grid-row float-right text-right margin-right-3 mobile:display-none desktop:display-block">
+              <div className="grid-row float-right text-right margin-right-2 mobile:display-none desktop:display-block">
                 <table role="presentation">
                   <tbody>
                     <tr>
