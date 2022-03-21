@@ -1,5 +1,4 @@
 import { checkoutAPI } from "./checkout";
-import * as mpApi from "../utils/api/monitoringPlansApi";
 
 JSON.parse = jest.fn().mockReturnValue({
   userId: "testuser",
@@ -11,6 +10,21 @@ describe("testing checkout function", () => {
   const setCheckout = (state, config) => {};
 
   it("returns an array of the inactive Data", () => {
+    // jest.mock("../utils/api/monitoringPlansApi", () => {
+    //   const testContent = {
+    //     data: "test",
+    //   };
+
+    //   return {
+    //     deleteCheckInMonitoringPlanConfiguration: jest
+    //       .fn()
+    //       .mockResolvedValueOnce(testContent),
+    //     postCheckoutMonitoringPlanConfiguration: jest
+    //       .fn()
+    //       .mockResolvedValueOnce(testContent),
+    //   };
+    // });
+
     checkoutAPI(false, "1", "1", setCheckout);
     checkoutAPI(true, "1", "1", setCheckout);
     checkoutAPI(false, configID, monitorPlanId, null);
