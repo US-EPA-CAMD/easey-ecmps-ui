@@ -8,26 +8,41 @@ describe("testing checkout function", () => {
   const configID = "MDC-0046E2E41EE8478DA4F57A4760C3AF97";
   const monitorPlanId = "1";
   const setCheckout = (state, config) => {};
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-  it("returns an array of the inactive Data", () => {
-    // jest.mock("../utils/api/monitoringPlansApi", () => {
-    //   const testContent = {
-    //     data: "test",
-    //   };
+  it("conditional for undefined data returned for post call", async () => {
+    jest.mock("../utils/api/monitoringPlansApi", () => {
+      return {
+        postCheckoutMonitoringPlanConfiguration: jest.fn(() =>
+          Promise.resolve(undefined)
+        ),
+      };
+    });
+    await checkoutAPI(true, "1", "1", jest.fn());
+  });
 
-    //   return {
-    //     deleteCheckInMonitoringPlanConfiguration: jest
-    //       .fn()
-    //       .mockResolvedValueOnce(testContent),
-    //     postCheckoutMonitoringPlanConfiguration: jest
-    //       .fn()
-    //       .mockResolvedValueOnce(testContent),
-    //   };
-    // });
+  it("conditional for undefined data returned for delete call", async () => {
+    jest.clearAllMocks();
+    jest.mock("../utils/api/monitoringPlansApi", () => {
+      return {
+        deleteCheckInMonitoringPlanConfiguration: jest.fn(() =>
+          Promise.resolve(undefined)
+        ),
+      };
+    });
+    await checkoutAPI(false, "1", "1", jest.fn());
+  });
 
-    checkoutAPI(false, "1", "1", setCheckout);
-    checkoutAPI(true, "1", "1", setCheckout);
-    checkoutAPI(false, configID, monitorPlanId, null);
-    checkoutAPI(true, configID, monitorPlanId, null);
+  it("conditional testing for props", async () => {
+    jest.clearAllMocks();
+    await checkoutAPI(false, "1", "1", undefined);
+    await checkoutAPI(true, "1", "1", undefined);
+  });
+  
+  it("returns an array of the inactive Data", async () => {
+    await checkoutAPI(false, "1", "1", setCheckout);
+    await checkoutAPI(true, "1", "1", setCheckout);
   });
 });
