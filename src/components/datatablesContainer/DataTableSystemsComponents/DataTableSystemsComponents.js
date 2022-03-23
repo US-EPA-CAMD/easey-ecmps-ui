@@ -146,7 +146,9 @@ export const DataTableSystemsComponents = ({
       loadDropdownsData(
         SYSTEM_COMPONENTS_SECTION_NAME,
         systemComponentsDataArray
+        
       );
+     
     } else {
       setSystemComponentDropdownsLoaded(true);
     }
@@ -344,6 +346,8 @@ export const DataTableSystemsComponents = ({
     let mainDropdownResult = [];
     let mainDropdownName = "componentTypeCode";
 
+
+    console.log('systemComponentsMdmData',systemComponentsMdmData,mainDropdownName)
     mainDropdownResult = systemComponentsMdmData[mainDropdownName].filter((o) =>
       systemComponentsMdmData[prefilteredDataName].some(
         (element, index, arr) => o.code === element[mainDropdownName]
