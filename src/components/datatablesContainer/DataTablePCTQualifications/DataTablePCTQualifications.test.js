@@ -26,7 +26,7 @@ const componentRenderer = (
   openAddComponentTest
 ) => {
   const props = {
-    mdmData: [{test:''}],
+    mdmData: [{ test: "" }],
     locationSelectValue: "60",
     qualSelectValue: "60",
     user: "testUser",
@@ -54,6 +54,12 @@ test("tests getMonitoringQualifications", async () => {
   let { container } = await waitForElement(() =>
     componentRenderer(false, false, false, true, false)
   );
+
+  let backBtns = container.querySelectorAll("#testBtn");
+
+  for (var x of backBtns) {
+    fireEvent.click(x);
+  }
   expect(container).toBeDefined();
 });
 
@@ -93,13 +99,16 @@ test("test opening the Modal to view formula details and then closing", async ()
 
     fireEvent.click(viewBtn);
 
-    let backBtn = container.querySelector('#testBtn');
+    let backBtns = container.querySelectorAll("#testBtn");
     // //Modal X button
     // expect(closeBtn).toBeInTheDocument();
     //Header
     // expect(container.getByText("Formula")).toBeInTheDocument();
 
-    fireEvent.click(backBtn);
+    // fireEvent.click(backBtns);
+    for (var x of backBtns) {
+      fireEvent.click(x);
+    }
     // expect(closeBtn).not.toBeInTheDocument();
   });
 });
