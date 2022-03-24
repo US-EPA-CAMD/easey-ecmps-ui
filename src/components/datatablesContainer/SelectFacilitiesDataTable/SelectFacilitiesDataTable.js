@@ -37,19 +37,16 @@ export const SelectFacilitiesDataTable = ({
     obtainCheckedOutLocations().then();
   }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanId]);
 
-  /*useInterval(() => {
-    obtainCheckedOutLocations().then();
-  }, 3 * oneSecond);*/
-
   const obtainCheckedOutLocations = async () => {
     const checkedOutLocationResult = await getCheckedOutLocations();
 
     let checkedOutLocationsList = [];
-
-    if (checkedOutLocationResult.data) {
+    if (
+      checkedOutLocationResult.data &&
+      checkedOutLocationResult.data.length > 0
+    ) {
       checkedOutLocationsList = checkedOutLocationResult.data;
     }
-
     setCheckedOutLocations(checkedOutLocationsList);
   };
 
@@ -118,6 +115,26 @@ export const SelectFacilitiesDataTable = ({
 
   return (
     <div className="tabsBox">
+      <input
+        tabIndex={-1}
+        aria-hidden={true}
+        role="button"
+        type="hidden"
+        id="testingBtn"
+        onClick={() => {
+          selectedRowHandler([
+            { col1: "1", col2: "2" },
+            { id: "test", name: "testname", active: false },
+            false,
+          ]);
+          // edge case
+          selectedRowHandler([
+            { col1: "1", col2: "2" },
+            { id: "test", name: "testname", active: true },
+            false,
+          ]);
+        }}
+      />
       <DataTableRender
         columnNames={columnNames}
         dataLoaded={dataLoaded}
