@@ -31,7 +31,7 @@ export const modalViewData = (
     propertyName,
     singleMDMCodeList
   ) => {
-    console.log(totalOptionsClone,"totalOptionsClone",prefilteredTotalName)
+    console.log(totalOptionsClone, "totalOptionsClone", prefilteredTotalName);
     const allFilteredMDMCodesArray = totalOptionsClone[prefilteredTotalName];
 
     const selectedFilteredCodeArray = allFilteredMDMCodesArray[0];
@@ -86,7 +86,11 @@ export const modalViewData = (
         case "dropdown":
           if (!createNew) {
             if (totalOptionsClone) {
-              labels = findValue(totalOptionsClone[y], selected[y], "name");
+              labels = findValue(
+                totalOptionsClone[y],
+                selected ? selected[y] : null,
+                "name"
+              );
             }
           }
           arr.push([
@@ -95,7 +99,7 @@ export const modalViewData = (
             labels,
             label[y][2] === "required" ? "required" : false,
             label[y][1] === "mainDropdown" ? "mainDropdown" : "dropdown",
-            createNew ? "select" : selected[y],
+            createNew ? "select" : selected ? selected[y] : "",
             totalOptionsClone ? totalOptionsClone[y] : [],
           ]);
           break;
@@ -103,7 +107,11 @@ export const modalViewData = (
           setInitialPreFilter(label[y][1], y, totalOptionsClone[y]);
           if (!createNew) {
             if (totalOptionsClone) {
-              labels = findValue(totalOptionsClone[y], selected[y], "name");
+              labels = findValue(
+                totalOptionsClone[y],
+                selected ? selected[y] : null,
+                "name"
+              );
             }
           }
           arr.push([
@@ -112,7 +120,7 @@ export const modalViewData = (
             labels,
             label[y][2] === "required" ? "required" : false,
             "independentDropdown",
-            createNew ? "select" : selected[y],
+            createNew ? "select" : selected ? selected[y] : "",
             totalOptionsClone ? totalOptionsClone[y] : [],
           ]);
           break;
@@ -120,7 +128,7 @@ export const modalViewData = (
           arr.push([
             y,
             label[y][0],
-            createNew ? "" : selected[y],
+            createNew ? "" : selected ? selected[y] : "",
             label[y][2] === "required" ? "required" : false,
             "input",
           ]);
@@ -130,7 +138,7 @@ export const modalViewData = (
           if (!createNew) {
             formattedDate = adjustDate(
               "mm/dd/yyyy",
-              selected[y] ? selected[y] : null
+              selected ? selected[y] : null
             );
           }
           arr.push([
@@ -139,7 +147,7 @@ export const modalViewData = (
             formattedDate,
             label[y][2] === "required" ? "required" : false,
             "date",
-            createNew ? "" : selected[y],
+            createNew ? "" : selected ? selected[y] : "",
           ]);
           break;
 
@@ -185,10 +193,7 @@ export const modalViewData = (
     ) {
       let formattedDate = "";
       if (!createNew) {
-        formattedDate = adjustDate(
-          "mm/dd/yyyy",
-          selected[y] ? selected[y] : null
-        );
+        formattedDate = adjustDate("mm/dd/yyyy", selected ? selected[y] : null);
       }
       arr.push([
         y,
@@ -196,7 +201,7 @@ export const modalViewData = (
         formattedDate,
         time[y][2] === "required" ? "required" : false,
         "date",
-        createNew ? "" : selected[y],
+        createNew ? "" : selected ? selected[y] : "",
       ]);
     }
 
@@ -207,7 +212,7 @@ export const modalViewData = (
       if (!createNew) {
         formattedDate = adjustDate(
           "mm/dd/yyyy",
-          selected[y] ? selectedDate[0] : null
+          selected ? selectedDate[0] : null
         );
       }
 
@@ -217,7 +222,7 @@ export const modalViewData = (
         formattedDate,
         time[y][2] === "required" ? "required" : false,
         "date",
-        createNew ? "" : selected[y][1],
+        createNew ? "" : selected ? selected[y][1] : "",
       ]);
     }
     if (
@@ -229,10 +234,10 @@ export const modalViewData = (
       arr.push([
         y,
         time[y][0],
-        createNew ? "" : selected[y],
+        createNew ? "" : selected ? selected[y] : "",
         time[y][2] === "required" ? "required" : false,
         "time",
-        createNew ? "" : selected[y],
+        createNew ? "" : selected ? selected[y] : "",
       ]);
     }
     if (y === "skip") {

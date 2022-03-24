@@ -78,6 +78,7 @@ export const DataTableQualifications = ({
       revertedState
     ) {
       mpApi.getQualifications(locationSelectValue).then((res) => {
+        console.log(res.data, "res.data");
         setQualificationsData(res.data);
         setDataLoaded(true);
         setUpdateTable(false);
@@ -147,16 +148,68 @@ export const DataTableQualifications = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qualificationData, inactive]);
+
+  //also tests edge cases for some functions between open PCT/LEE/LME
   const testingSave = () => {
+    setCreating(true);
+    setOpenPCT(true);
+    setOpenLEE(false);
+    setOpenLME(false);
+    buildBreadBar();
     let userInput = extractUserInput(payload, ".modalUserInput");
-    openQualificationDataModal(false, false, true);
+    openQualificationDataModal(
+      {
+        col1: "LEE",
+        col2: "07/15/2018",
+        col3: "",
+        col4: "MIKE",
+      },
+      false,
+      null
+    );
+    setSelectedQualificationData({
+      id: "MIKE",
+      locationId: "129",
+      qualificationTypeCode: "LEE",
+      beginDate: "2-07-15",
+      endDate: null,
+      active: true,
+      leeQualifications: [],
+      lmeQualifications: [],
+      pctQualifications: [],
+    });
     handleRequest("qual", mpApi.saveQualificationData, userInput);
+
+    closeModalHandler();
+    manageSaveBtn();
+
+    //2nd ccondition
+    setOpenPCT(false);
+    setOpenLEE(true);
+    setOpenLME(false);
+    manageSaveBtn();
+    //3rd condition
+    setOpenPCT(false);
+    setOpenLEE(false);
+    setOpenLME(true);
+    manageSaveBtn();
+    closeModalHandler();
+
+    setOpenPCT(false);
+    setOpenLEE(false);
+    setOpenLME(false);
+    buildBreadBar();
   };
 
   const testingCreate = () => {
     let userInput = extractUserInput(payload, ".modalUserInput");
     openQualificationDataModal(false, false, true);
+    setCreating(true);
+    setOpenPCT(false);
+    setOpenLEE(false);
+    setOpenLME(false);
     handleRequest("qual", mpApi.createQualificationData, userInput);
+    closeModalHandler();
   };
 
   // function to handle what type of api call to make (edit/create -> qual/pct/lme/lee)
@@ -195,10 +248,10 @@ export const DataTableQualifications = ({
   // Manages SAVE button (either Parent, PCT, LME, or LEE)
   const manageSaveBtn = () => {
     let userInput = extractUserInput(payload, ".modalUserInput");
-   
-   if(!creating){
-     userInput["qualId"] = selectedQualificationData["id"];
-   } 
+
+    if (!creating) {
+      userInput["qualId"] = selectedQualificationData["id"];
+    }
 
     // PCT qual
     if (openPCT) {
@@ -272,7 +325,7 @@ export const DataTableQualifications = ({
   const [selectedModalData, setSelectedModalData] = useState(null);
 
   const openQualificationDataModal = (row, bool, create) => {
-    console.log('create',create)
+    console.log("create", row, bool, create);
     let qualData = null;
     setCreating(create);
     setCreateNewQualificationData(create);
@@ -281,7 +334,7 @@ export const DataTableQualifications = ({
         (element) => element.id === row[`col${Object.keys(row).length - 1}`]
       )[0];
       setSelectedQualificationData(qualData);
-      console.log(qualData,'qualdata')
+      console.log(qualData, "qualdata", qualificationData);
     }
     setSelectedModalData(
       modalViewData(
@@ -330,6 +383,14 @@ export const DataTableQualifications = ({
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
+      <input
+        tabIndex={-1}
+        aria-hidden={true}
+        role="button"
+        type="hidden"
+        id="testingBtn2"
+        onClick={() => testingCreate()}
+      />
 
       <input
         tabIndex={-1}
@@ -338,14 +399,6 @@ export const DataTableQualifications = ({
         type="hidden"
         id="testingBtn"
         onClick={() => testingSave()}
-      />
-      <input
-        tabIndex={-1}
-        aria-hidden={true}
-        role="button"
-        type="hidden"
-        id="testingBtn2"
-        onClick={() => testingCreate()}
       />
 
       <DataTableRender
