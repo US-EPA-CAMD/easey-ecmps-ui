@@ -152,6 +152,17 @@ export const DataTableLMEQualifications = ({
 
   return (
     <div className="methodTable react-transition fade-in">
+      <input
+        tabIndex={-1}
+        aria-hidden={true}
+        role="button"
+        type="hidden"
+        id="testBtn"
+        onClick={() => {
+          backBtnHandler();
+          openLmeQualModal(false, false, true);
+        }}
+      />
       {openLME ? (
         <div>
           <ModalDetails

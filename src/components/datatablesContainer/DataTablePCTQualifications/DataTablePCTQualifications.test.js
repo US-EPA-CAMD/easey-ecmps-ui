@@ -23,10 +23,18 @@ const componentRenderer = (
   secondLevel,
   addComponentFlag,
   openComponentViewTest,
-  openAddComponentTest
+  openAddComponentTest,
+  mdmData
 ) => {
+  let currentData = [];
+
+  if (mdmData) {
+    currentData = mdmData;
+  }
+
   const props = {
-    mdmData: [{ test: "" }],
+    mdmData: currentData,
+    loadDropdownsData: jest.fn(),
     locationSelectValue: "60",
     qualSelectValue: "60",
     user: "testUser",
@@ -52,7 +60,7 @@ test("tests getMonitoringQualifications", async () => {
   expect(title.data).toEqual(selectedQualifications);
 
   let { container } = await waitForElement(() =>
-    componentRenderer(false, false, false, true, false)
+    componentRenderer(false, false, false, true, false, { test: "" })
   );
 
   let backBtns = container.querySelectorAll("#testBtn");
@@ -63,55 +71,67 @@ test("tests getMonitoringQualifications", async () => {
   expect(container).toBeDefined();
 });
 
-test("test opening the Modal to view formula details and then closing", async () => {
-  act(async () => {
-    let { container } = await waitForElement(() => {
-      componentRenderer(false, false, false, true, false);
-    });
+test("tests getMonitoringQualifications", async () => {
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: selectedQualifications })
+  );
+  const title = await mpApi.getQualifications(locationSelectValue);
+  expect(title.data).toEqual(selectedQualifications);
 
-    jest.mock("../../../utils/api/monitoringPlansApi", () => {
-      const mockPCTQual = [
-        {
-          id: "DPGLISSO9-635AF13C866142E6A5CF72782D274618",
-          qualificationId: "DPGLISSO9-EB4EDE87B8294FBC86FED070BA25E9E8",
-          qualificationYear: "2013",
-          averagePercentValue: "0.9",
-          yr1QualificationDataYear: "2010",
-          yr1QualificationDataTypeCode: "A",
-          yr1PercentageValue: "1.1",
-          yr2QualificationDataYear: "2011",
-          yr2QualificationDataTypeCode: "A",
-          yr2PercentageValue: "1.6",
-          yr3QualificationDataYear: "2012",
-          yr3QualificationDataTypeCode: "A",
-          yr3PercentageValue: "0.0",
-          userId: "phh",
-          addDate: "2013-04-16",
-          updateDate: null,
-        },
-      ];
-      return {
-        getQualifications: jest.fn(() => Promise.resolve(mockPCTQual)),
-      };
-    });
+  let { container } = await waitForElement(() =>
+    componentRenderer(false, false, false, true, false, false)
+  );
 
-    let viewBtn = container.getByText("View");
+  let backBtns = container.querySelectorAll("#testBtn");
 
-    fireEvent.click(viewBtn);
-
-    let backBtns = container.querySelectorAll("#testBtn");
-    // //Modal X button
-    // expect(closeBtn).toBeInTheDocument();
-    //Header
-    // expect(container.getByText("Formula")).toBeInTheDocument();
-
-    // fireEvent.click(backBtns);
-    for (var x of backBtns) {
-      fireEvent.click(x);
-    }
-    // expect(closeBtn).not.toBeInTheDocument();
-  });
+  for (var x of backBtns) {
+    fireEvent.click(x);
+  }
+  expect(container).toBeDefined();
 });
+
+// test("test opening the Modal to view formula details and then closing", async () => {
+//   act(async () => {
+//     let { container } = await waitForElement(() => {
+//       componentRenderer(false, false, false, true, false);
+//     });
+
+//     jest.mock("../../../utils/api/monitoringPlansApi", () => {
+//       const mockPCTQual = [
+//         {
+//           id: "DPGLISSO9",
+//           qualificationId: "DPGLISSO9",
+//           qualificationYear: "2013",
+//           averagePercentValue: "0.9",
+//           yr1QualificationDataYear: "2010",
+//           yr1QualificationDataTypeCode: "A",
+//           yr1PercentageValue: "1.1",
+//           yr2QualificationDataYear: "2011",
+//           yr2QualificationDataTypeCode: "A",
+//           yr2PercentageValue: "1.6",
+//           yr3QualificationDataYear: "2012",
+//           yr3QualificationDataTypeCode: "A",
+//           yr3PercentageValue: "0.0",
+//           userId: "phh",
+//           addDate: "2013-04-16",
+//           updateDate: null,
+//         },
+//       ];
+//       return {
+//         getQualifications: jest.fn(() => Promise.resolve(mockPCTQual)),
+//       };
+//     });
+
+//     let viewBtn = container.getByText("View");
+
+//     fireEvent.click(viewBtn);
+
+//     let backBtns = container.querySelectorAll("#testBtn");
+//     for (var x of backBtns) {
+//       fireEvent.click(x);
+//     }
+//   });
+// });
 
 test("mapStateToProps calls the appropriate state", async () => {
   // mock the 'dispatch' object
@@ -127,5 +147,4 @@ test("mapDispatchToProps calls the appropriate action", async () => {
   const formData = [];
   // verify the appropriate action was called
   actionProps.loadDropdownsData();
-  // expect(loadDropdowns).toHaveBeenCalled();
 });

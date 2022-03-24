@@ -401,9 +401,6 @@ test("tests opening the add modal page ", async () => {
     fireEvent.click(x);
   }
   expect(container.querySelector("#backBtn")).toBeDefined();
-
-  // fireEvent.click(container.querySelector('#testingBtn'));
-  // fireEvent.click(container.querySelector('#testingBtn2'));
 });
 test("mapDispatchToProps calls the appropriate action", async () => {
   // mock the 'dispatch' object

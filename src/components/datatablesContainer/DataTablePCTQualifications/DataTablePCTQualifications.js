@@ -179,7 +179,6 @@ export const DataTablePCTQualifications = ({
         onClick={() => {
           backBtnHandler();
           openPctQualModal(false, false, true);
-
         }}
       />
       {openPCT ? (

@@ -71,16 +71,7 @@ export const DataTableAnalyzerRanges = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ranges]);
-  const testing = () => {
-    openAnalyzerRanges(false, false, true);
-  };
-  const testing1 = () => {
-    openAnalyzerRanges(
-      { col3: "CAMD-A39804B8C17A4478970F7B2CCBF429B6" },
-      false,
-      false
-    );
-  };
+
   // row is just the data in the datatable row, need to compare it to the entire API dataset to get correct data
   const openAnalyzerRanges = (row, bool, create) => {
     let selectRange = null;
@@ -125,15 +116,8 @@ export const DataTableAnalyzerRanges = ({
         role="button"
         type="hidden"
         id="testingBtn"
-        onClick={() => testing()}
+        onClick={() => openAnalyzerRanges(false, false, true)}
       />
-      <input
-        tabIndex={-1}
-        aria-hidden={true}
-        role="button"
-        type="hidden"
-        id="testingBtn1"
-        onClick={() => testing1()}
       />
       <DataTableRender
         columnNames={rangesColumnNames}
