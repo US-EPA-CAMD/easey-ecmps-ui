@@ -219,19 +219,19 @@ export const DataTableQualifications = ({
 
     closeModalHandler();
     handleRequest("lee", mpApi.saveQualificationData, userInput);
-    // manageSaveBtn();
+    manageSaveBtn();
 
     //2nd ccondition
-    // setOpenPCT(false);
-    // setOpenLEE(true);
-    // manageSaveBtn();
+    setOpenPCT(false);
+    setOpenLEE(true);
+    manageSaveBtn();
     handleRequest("pct", mpApi.saveQualificationData, userInput);
     //3rd condition
 
     setOpenLEE(false);
     setOpenLME(true);
     buildBreadBar();
-    // manageSaveBtn();
+    manageSaveBtn();
     handleRequest("lme", mpApi.saveQualificationData, userInput);
     window.isDataChanged = false;
     closeModalHandler();
@@ -246,14 +246,15 @@ export const DataTableQualifications = ({
     setOpenLEE(true);
     setOpenLME(false);
     manageSaveBtn();
+  };
 
+  const testingManage = () => {
     setOpenPCT(false);
-    setOpenLEE(false);
+    setOpenLEE(true);
     setOpenLME(false);
     manageSaveBtn();
     buildBreadBar();
-  };
-
+  }
   const testingCreate = () => {
     let userInput = extractUserInput(payload, ".modalUserInput");
     openQualificationDataModal(false, false, true);
@@ -283,23 +284,19 @@ export const DataTableQualifications = ({
     apiFunc(userInput)
       .then(() => {
         if (dataType === "qual") {
-          console.log('truuuuuuuuuue')
           // update qual table, then close qual modal
           setDataLoaded(false);
           setUpdateTable(true);
           setShow(false);
         } else if (dataType === "pct") {
-          console.log('truuuuuuuuuue PCT')
           // update pct modal, then return to parent qual page
           setUpdatePCT(true);
           setOpenPCT(false);
         } else if (dataType === "lee") {
-          console.log('truuuuuuuuuue lee')
           // update lee modal, then return to parent qual page
           setUpdateLEE(true);
           setOpenLEE(false);
         } else if (dataType === "lme") {
-          console.log('truuuuuuuuuue LMMMM')
           // update lme modal, then return to parent qual page
           setUpdateLME(true);
           setOpenLME(false);
@@ -459,7 +456,15 @@ export const DataTableQualifications = ({
         id="testingBtn2"
         onClick={() => testingCreate()}
       />
-
+            <input
+        tabIndex={-1}
+        aria-hidden={true}
+        role="button"
+        type="hidden"
+        id="testingBtn3"
+        onClick={() => testingManage()}
+      />
+ 
       <input
         tabIndex={-1}
         aria-hidden={true}

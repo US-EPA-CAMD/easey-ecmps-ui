@@ -135,6 +135,7 @@ const title = await mpApi.saveQualificationData(locationSelectValue);
   );
 
   fireEvent.click(container.querySelector("#testingBtn2"));
+  fireEvent.click(container.querySelector("#testingBtn3"));
   fireEvent.click(container.querySelector("#testingBtn"));
 });
 
