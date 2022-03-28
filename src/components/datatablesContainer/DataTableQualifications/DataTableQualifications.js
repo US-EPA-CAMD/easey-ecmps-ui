@@ -182,9 +182,7 @@ export const DataTableQualifications = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qualificationData, inactive]);
-   const emptyfunction = (test) => {
-      return 1;
-    };
+
   //also tests edge cases for some functions between open PCT/LEE/LME
   const testingSave = () => {
  
