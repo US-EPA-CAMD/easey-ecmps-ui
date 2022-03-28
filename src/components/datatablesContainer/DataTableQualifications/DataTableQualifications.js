@@ -264,6 +264,7 @@ export const DataTableQualifications = ({
     handleRequest("qual", mpApi.createQualificationData, userInput);
     window.isDataChanged = false;
     closeModalHandler();
+    setShow(true);
   };
 
 
