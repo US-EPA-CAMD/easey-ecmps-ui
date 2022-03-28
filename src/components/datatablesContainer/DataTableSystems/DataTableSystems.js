@@ -260,7 +260,10 @@ export const DataTableSystems = ({
   const setBread = (val, currentBread, create, addComp = false) => {
     setSecondLevel(val);
     setSecondLevelName(currentBread);
-    setReturnedFocusToLast(false);
+    if(!val){
+       setReturnedFocusToLast(false);
+    }
+   
     // missing stepper if !currentBread
     if (!addComp && !currentBread) {
       setCreateFuelFlowFlag(create);

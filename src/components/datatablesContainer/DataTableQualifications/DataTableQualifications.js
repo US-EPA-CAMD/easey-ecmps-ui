@@ -264,15 +264,15 @@ export const DataTableQualifications = ({
     handleRequest("qual", mpApi.createQualificationData, userInput);
     window.isDataChanged = false;
     closeModalHandler();
+    setShow(true);
   };
-
-
 
 
   const executeOnClose = () => {
     removeChangeEventListeners(".modalUserInput");
     setReturnedFocusToLast(false);
   };
+
 
   // function to handle what type of api call to make (edit/create -> qual/pct/lme/lee)
   // params:
