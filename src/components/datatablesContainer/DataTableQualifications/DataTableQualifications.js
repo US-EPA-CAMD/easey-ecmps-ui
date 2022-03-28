@@ -11,6 +11,12 @@ import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 
+import {
+  assignFocusEventListeners,
+  cleanupFocusEventListeners,
+  returnFocusToLast,
+} from "../../../additional-functions/manage-focus";
+
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { connect } from "react-redux";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
@@ -69,6 +75,34 @@ export const DataTableQualifications = ({
 
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
   const dropdownArray = [["qualificationTypeCode"]];
+
+
+  const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
+
+  // *** Assign initial event listeners after loading data/dropdowns
+  useEffect(() => {
+    if (dataLoaded && dropdownsLoaded) {
+      returnFocusToLast();
+      assignFocusEventListeners();
+    }
+  }, [dataLoaded, dropdownsLoaded]);
+
+  // *** Reassign handlers after pop-up modal is closed
+  useEffect(() => {
+    if (!returnedFocusToLast) {
+      setReturnedFocusToLast(true);
+    } else {
+      returnFocusToLast();
+      assignFocusEventListeners();
+    }
+  }, [returnedFocusToLast]);
+
+  // *** Clean up focus event listeners
+  useEffect(() => {
+    return () => {
+      cleanupFocusEventListeners();
+    };
+  }, []);
 
   useEffect(() => {
     if (
@@ -234,6 +268,14 @@ export const DataTableQualifications = ({
     closeModalHandler();
   };
 
+
+
+
+  const executeOnClose = () => {
+    removeChangeEventListeners(".modalUserInput");
+    setReturnedFocusToLast(false);
+  };
+
   // function to handle what type of api call to make (edit/create -> qual/pct/lme/lee)
   // params:
   //    - dataType: type of qualification record
@@ -391,6 +433,7 @@ export const DataTableQualifications = ({
       window.confirm(unsavedDataMessage) === false
     ) {
       // do nothing
+      executeOnClose();
     }
     // otherwise return back to parent qual and reset change tracker
     else {
@@ -403,6 +446,7 @@ export const DataTableQualifications = ({
       setOpenLEE(false);
       setOpenLME(false);
       removeChangeEventListeners(".modalUserInput");
+      executeOnClose();
     }
   };
 

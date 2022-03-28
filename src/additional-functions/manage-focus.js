@@ -78,7 +78,7 @@ export const returnFocusToLast = () => {
 
     if (lastFocus && lastFocus.id) {
       console.log("set");
-      document.querySelector(`#${lastFocus.id}`).focus();
+      document.querySelector(`#${lastFocus.id}`)?  document.querySelector(`#${lastFocus.id}`).focus():console.log('did not find lastfocus id element');
     }
   }
 };
