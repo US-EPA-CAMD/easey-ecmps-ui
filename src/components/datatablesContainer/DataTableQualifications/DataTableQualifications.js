@@ -268,20 +268,11 @@ export const DataTableQualifications = ({
   };
 
 
-
-
   const executeOnClose = () => {
     removeChangeEventListeners(".modalUserInput");
     setReturnedFocusToLast(false);
   };
 
-
-
-
-  const executeOnClose = () => {
-    removeChangeEventListeners(".modalUserInput");
-    setReturnedFocusToLast(false);
-  };
 
   // function to handle what type of api call to make (edit/create -> qual/pct/lme/lee)
   // params:
