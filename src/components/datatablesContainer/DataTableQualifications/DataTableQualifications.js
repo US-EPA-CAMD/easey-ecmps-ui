@@ -3,10 +3,10 @@ import { modalViewData } from "../../../additional-functions/create-modal-input-
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import * as fs from "../../../utils/selectors/monitoringPlanQualifications";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
-import DataTablePCTQualifications from "../DataTablePCTQualifications/DataTablePCTQualifications";
-import DataTableLEEQualifications from "../DataTableLEEQualifications/DataTableLEEQualifications";
+import {DataTablePCTQualifications} from "../DataTablePCTQualifications/DataTablePCTQualifications";
+import {DataTableLEEQualifications} from "../DataTableLEEQualifications/DataTableLEEQualifications";
 
-import DataTableLMEQualifications from "../DataTableLMEQualifications/DataTableLMEQualifications";
+import {DataTableLMEQualifications} from "../DataTableLMEQualifications/DataTableLMEQualifications";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
@@ -148,13 +148,17 @@ export const DataTableQualifications = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qualificationData, inactive]);
-
+   const emptyfunction = (test) => {
+      return 1;
+    };
   //also tests edge cases for some functions between open PCT/LEE/LME
   const testingSave = () => {
+ 
     setCreating(true);
     setOpenPCT(true);
     setOpenLEE(false);
     setOpenLME(false);
+    console.log(openPCT, "openPCT");
     buildBreadBar();
     let userInput = extractUserInput(payload, ".modalUserInput");
     openQualificationDataModal(
@@ -178,26 +182,43 @@ export const DataTableQualifications = ({
       lmeQualifications: [],
       pctQualifications: [],
     });
+    // openQualificationDataModal(false, false, true);
     handleRequest("qual", mpApi.saveQualificationData, userInput);
 
     closeModalHandler();
-    manageSaveBtn();
+    handleRequest("lee", mpApi.saveQualificationData, userInput);
+    // manageSaveBtn();
 
     //2nd ccondition
-    setOpenPCT(false);
-    setOpenLEE(true);
-    setOpenLME(false);
-    manageSaveBtn();
+    // setOpenPCT(false);
+    // setOpenLEE(true);
+    // manageSaveBtn();
+    handleRequest("pct", mpApi.saveQualificationData, userInput);
     //3rd condition
+
+    setOpenLEE(false);
+    setOpenLME(true);
+    buildBreadBar();
+    // manageSaveBtn();
+    handleRequest("lme", mpApi.saveQualificationData, userInput);
+    window.isDataChanged = false;
+    closeModalHandler();
+
+    
     setOpenPCT(false);
     setOpenLEE(false);
     setOpenLME(true);
     manageSaveBtn();
-    closeModalHandler();
+
+    setOpenPCT(false);
+    setOpenLEE(true);
+    setOpenLME(false);
+    manageSaveBtn();
 
     setOpenPCT(false);
     setOpenLEE(false);
     setOpenLME(false);
+    manageSaveBtn();
     buildBreadBar();
   };
 
@@ -209,6 +230,7 @@ export const DataTableQualifications = ({
     setOpenLEE(false);
     setOpenLME(false);
     handleRequest("qual", mpApi.createQualificationData, userInput);
+    window.isDataChanged = false;
     closeModalHandler();
   };
 
@@ -221,19 +243,23 @@ export const DataTableQualifications = ({
     apiFunc(userInput)
       .then(() => {
         if (dataType === "qual") {
+          console.log('truuuuuuuuuue')
           // update qual table, then close qual modal
           setDataLoaded(false);
           setUpdateTable(true);
           setShow(false);
         } else if (dataType === "pct") {
+          console.log('truuuuuuuuuue PCT')
           // update pct modal, then return to parent qual page
           setUpdatePCT(true);
           setOpenPCT(false);
         } else if (dataType === "lee") {
+          console.log('truuuuuuuuuue lee')
           // update lee modal, then return to parent qual page
           setUpdateLEE(true);
           setOpenLEE(false);
         } else if (dataType === "lme") {
+          console.log('truuuuuuuuuue LMMMM')
           // update lme modal, then return to parent qual page
           setUpdateLME(true);
           setOpenLME(false);
@@ -398,7 +424,11 @@ export const DataTableQualifications = ({
         role="button"
         type="hidden"
         id="testingBtn"
-        onClick={() => testingSave()}
+        onClick={() => {
+          testingSave();
+          setOpenPCT(true);
+          buildBreadBar();
+        }}
       />
 
       <DataTableRender
