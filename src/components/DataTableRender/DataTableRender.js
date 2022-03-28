@@ -343,9 +343,10 @@ export const DataTableRender = ({
                   epa-testid="btnOpen"
                   className="cursor-pointer open-modal-button"
                   id={
-                    tableTitle
-                      ? `btnOpen${tableTitle.split(" ").join("")}`
-                      : `btnOpen${row[`col${Object.keys(row).length - 1}`]}`
+                    // tableTitle
+                    //   ? `btnOpen${tableTitle.split(" ").join("")}`
+                      // : 
+                      `btnOpen${row[`col${Object.keys(row).length - 1}`]}`
                   }
                   onClick={() => {
                     openHandler(normalizedRow, false);
@@ -365,9 +366,10 @@ export const DataTableRender = ({
                   unstyled="true"
                   epa-testid="btnOpen"
                   id={
-                    tableTitle
-                      ? `btnOpen${tableTitle.split(" ").join("")}`
-                      : `btnOpen_${row[`col${Object.keys(row).length - 1}`]}`
+                    // tableTitle
+                    //   ? `btnOpen${tableTitle.split(" ").join("")}`
+                      // : 
+                      `btnOpen_${row[`col${Object.keys(row).length - 1}`]}`
                   }
                   className="cursor-pointer margin-left-2 open-modal-button"
                   onClick={() => {

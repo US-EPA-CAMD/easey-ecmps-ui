@@ -15,6 +15,11 @@ import { convertSectionToStoreName } from "../../../additional-functions/data-ta
 import { addAriaLabelToDatatable } from "../../../additional-functions/ensure-508";
 
 import {
+  assignFocusEventListeners,
+  cleanupFocusEventListeners,
+  returnFocusToLast,
+} from "../../../additional-functions/manage-focus";
+import {
   getActiveData,
   getInactiveData,
 } from "../../../additional-functions/filter-data";
@@ -89,6 +94,32 @@ export const DataTableAssert = ({
     setDataLoaded(false);
   }, [dataTableName]);
 
+  const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
+
+  // *** Assign initial event listeners after loading data/dropdowns
+  useEffect(() => {
+    if (dataLoaded && dropdownsLoaded) {
+      returnFocusToLast();
+      assignFocusEventListeners();
+    }
+  }, [dataLoaded, dropdownsLoaded]);
+
+  // *** Reassign handlers after pop-up modal is closed
+  useEffect(() => {
+    if (!returnedFocusToLast) {
+      setReturnedFocusToLast(true);
+    } else {
+      returnFocusToLast();
+      assignFocusEventListeners();
+    }
+  }, [returnedFocusToLast]);
+
+  // *** Clean up focus event listeners
+  useEffect(() => {
+    return () => {
+      cleanupFocusEventListeners();
+    };
+  }, []);
   useEffect(() => {
     if (
       updateTable ||
@@ -374,15 +405,17 @@ export const DataTableAssert = ({
   const closeModalHandler = () => {
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
-        setShow(false);
-        removeChangeEventListeners(".modalUserInput");
+        executeOnClose();
       }
     } else {
-      setShow(false);
-      removeChangeEventListeners(".modalUserInput");
+      executeOnClose();
     }
   };
-
+  const executeOnClose = () => {
+    setReturnedFocusToLast(false);
+    setShow(false);
+    removeChangeEventListeners(".modalUserInput");
+  };
   return (
     <div className="methodTable">
       {/* tests saving functionality */}

@@ -3,7 +3,11 @@ import { modalViewData } from "../../../additional-functions/create-modal-input-
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
-
+import {
+  assignFocusEventListeners,
+  cleanupFocusEventListeners,
+  returnFocusToLast,
+} from "../../../additional-functions/manage-focus";
 import {
   getActiveData,
   getInactiveData,
@@ -54,6 +58,33 @@ export const DataTableMats = ({
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
   const selectText = "-- Select a value --";
+
+  const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
+
+  // *** Assign initial event listeners after loading data/dropdowns
+  useEffect(() => {
+    if (dataLoaded && dropdownsLoaded) {
+      returnFocusToLast();
+      assignFocusEventListeners();
+    }
+  }, [dataLoaded, dropdownsLoaded]);
+
+  // *** Reassign handlers after pop-up modal is closed
+  useEffect(() => {
+    if (!returnedFocusToLast) {
+      setReturnedFocusToLast(true);
+    } else {
+      returnFocusToLast();
+      assignFocusEventListeners();
+    }
+  }, [returnedFocusToLast]);
+
+  // *** Clean up focus event listeners
+  useEffect(() => {
+    return () => {
+      cleanupFocusEventListeners();
+    };
+  }, []);
 
   useEffect(() => {
     if (
@@ -277,13 +308,17 @@ export const DataTableMats = ({
   const closeModalHandler = () => {
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
-        setShow(false);
-        removeChangeEventListeners(".modalUserInput");
+        executeOnClose();
       }
     } else {
-      setShow(false);
-      removeChangeEventListeners(".modalUserInput");
+      executeOnClose();
     }
+  };
+
+  const executeOnClose = () => {
+    setShow(false);
+    removeChangeEventListeners(".modalUserInput");
+    setReturnedFocusToLast(false);
   };
 
   return (

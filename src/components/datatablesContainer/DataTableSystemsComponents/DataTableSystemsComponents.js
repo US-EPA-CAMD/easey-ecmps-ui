@@ -7,7 +7,11 @@ import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import "./DataTableSystemsComponentsRender.scss";
 import { attachChangeEventListeners } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 import DataTableAnalyzerRanges from "../DataTableAnalyzerRanges/DataTableAnalyzerRanges";
-
+import {
+  assignFocusEventListeners,
+  cleanupFocusEventListeners,
+  returnFocusToLast,
+} from "../../../additional-functions/manage-focus";
 import { Preloader } from "../../Preloader/Preloader";
 import { connect } from "react-redux";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
@@ -20,10 +24,7 @@ import {
 } from "../../../additional-functions/data-table-section-and-store-names";
 
 import ModalAddComponent from "../../ModalAddComponent/ModalAddComponent";
-import {
-  assignFocusEventListeners,
-  returnFocusToLast,
-} from "../../../additional-functions/manage-focus";
+
 export const DataTableSystemsComponents = ({
   fuelFlowsMdmData,
   systemComponentsMdmData,
@@ -121,12 +122,31 @@ export const DataTableSystemsComponents = ({
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
-    if (dataLoaded) {
+    if (dataLoaded && systemComponentDropdownsLoaded) {
       returnFocusToLast();
       assignFocusEventListeners();
     }
-  }, [dataLoaded]);
+  }, [dataLoaded, systemComponentDropdownsLoaded]);
 
+
+  const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
+    // *** Reassign handlers after pop-up modal is closed
+    useEffect(() => {
+      if (!returnedFocusToLast) {
+        setReturnedFocusToLast(true);
+      } else {
+        returnFocusToLast();
+        assignFocusEventListeners();
+      }
+    }, [returnedFocusToLast]);
+  
+    // *** Clean up focus event listeners
+    useEffect(() => {
+      return () => {
+        cleanupFocusEventListeners();
+      };
+    }, []);
+  
   useEffect(() => {
     if (addCompThirdLevelTrigger) {
       if (selectedUnlinkedComponent[0]) {
