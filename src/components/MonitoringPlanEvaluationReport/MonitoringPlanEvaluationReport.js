@@ -45,6 +45,7 @@ export const MonitoringPlanEvaluationReport = ({
           );
           setReportData(reportResults);
           setDataLoaded(true);
+          console.log('TEST',reportResults)
         });
     }
   }, [dataLoaded, monitorPlanId]);

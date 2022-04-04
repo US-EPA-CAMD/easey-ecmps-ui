@@ -43,6 +43,7 @@ export const MonitoringPlanHome = ({
 
     let checkedOutLocationList = [];
 
+    console.log('getCheckedOutLocations',checkedOutLocationResult)
     if (checkedOutLocationResult.data) {
       checkedOutLocationList = checkedOutLocationResult.data;
     }
@@ -154,7 +155,16 @@ export const MonitoringPlanHome = ({
           ""
         )} */}
       </div>
-
+      <input
+        tabIndex={-1}
+        aria-hidden={true}
+        role="button"
+        type="hidden"
+        id="testingBtn2"
+        onClick={() => {
+          obtainCheckedOutLocations();
+        }}
+      />
       <div className="display-none mobile:display-block tablet:display-none">
         <h1
           className="display-inline-block font-body-xl text-bold margin-left-neg-2"
