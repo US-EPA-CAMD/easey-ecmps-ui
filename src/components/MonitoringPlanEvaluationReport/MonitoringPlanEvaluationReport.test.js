@@ -9,7 +9,7 @@ import { act } from "react-dom/test-utils";
 import MonitoringPlanEvaluationReport from "./MonitoringPlanEvaluationReport";
 
 test("tests Loading Eval Report", () => {
-  const {container} = render(
+  const { container } = render(
     <MonitoringPlanEvaluationReport
       monitorPlanId={"TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A"}
       facility={"Barry(1, 2, CS0AAN)"}
@@ -49,7 +49,35 @@ test("tests Loading Eval Report", () => {
     };
   });
 
-//   const prntBTN = container.querySelector("#printBTN")
-//   fireEvent.click(prntBTN);
+  //   const prntBTN = container.querySelector("#printBTN")
+  //   fireEvent.click(prntBTN);
   expect(container).toBeDefined();
+});
+
+test("tests Loading Eval Report with showtitle", async () => {
+  const mockEvalData = {
+    facilityId: "Sample U/S 1",
+    state: "Severity 1",
+    countyName: "   category 1",
+    mpReportResults: [],
+  };
+  const { container, unmount } = await waitForElement(() =>
+    render(
+      <MonitoringPlanEvaluationReport
+        monitorPlanId={"TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A"}
+        facility={"Barry(1, 2, CS0AAN)"}
+        showTitle={true}
+        dataLoadedState={true}
+        reportDataState={mockEvalData}
+      />
+    )
+  );
+  
+  const btns = container.querySelectorAll("#printBTN");
+  btns.forEach((element) => {
+    fireEvent.click(element);
+  });
+unmount();
+  expect(container).toBeDefined();
+  
 });
