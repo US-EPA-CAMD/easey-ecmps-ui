@@ -1,5 +1,5 @@
 import React from "react";
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent,waitForElement } from "@testing-library/react";
 import { MonitoringPlanHome, mapStateToProps } from "./MonitoringPlanHome";
 import { Provider } from "react-redux";
 import configureStore from "../../store/configureStore.dev";
@@ -118,6 +118,13 @@ test("renders monitoring plan home with redux", async () => {
           checkedOutBy: "test",
           lastActivity: "2022-04-04T06:16:59.959Z",
         },
+        {
+          facId: 1,
+          monPlanId: "TWA7A",
+          checkedOutOn: "2022-04-04T06:16:59.959Z",
+          checkedOutBy: "",
+          lastActivity: "2022-04-04T06:16:59.959Z",
+        },
       ],
     };
     return {
@@ -127,20 +134,21 @@ test("renders monitoring plan home with redux", async () => {
 
   window.currentlyCheckedOutMonPlanId = 123;
 
-  const { container, getAllByText, getByText } = await render(
-    <Provider store={store}>
-      <MonitoringPlanHome
-        user={{ firstName: "test" }}
-        openedFacilityTabs={openFac}
-        resetTimer={jest.fn()}
-        setExpired={jest.fn()}
-        resetTimerFlag={jest.fn()}
-        callApiFlag={jest.fn()}
-      />
-    </Provider>
+  const { container, getAllByText, getByText } = await waitForElement(() =>
+    render(
+      <Provider store={store}>
+        <MonitoringPlanHome
+          user={{ firstName: "test" }}
+          openedFacilityTabs={openFac}
+          resetTimer={jest.fn()}
+          setExpired={jest.fn()}
+          resetTimerFlag={jest.fn()}
+          callApiFlag={jest.fn()}
+        />
+      </Provider>
+    )
   );
 
-  
   fireEvent.click(container.querySelector("#testingBtn2"));
   const renderedComponent = container.querySelector(".home-container");
   expect(renderedComponent).not.toBeUndefined();

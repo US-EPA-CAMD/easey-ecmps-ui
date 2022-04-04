@@ -43,7 +43,7 @@ export const MonitoringPlanHome = ({
 
     let checkedOutLocationList = [];
 
-    console.log('getCheckedOutLocations',checkedOutLocationResult)
+    console.log("getCheckedOutLocations", checkedOutLocationResult);
     if (checkedOutLocationResult.data) {
       checkedOutLocationList = checkedOutLocationResult.data;
     }
@@ -163,6 +163,7 @@ export const MonitoringPlanHome = ({
         id="testingBtn2"
         onClick={() => {
           obtainCheckedOutLocations();
+          checkInAll();
         }}
       />
       <div className="display-none mobile:display-block tablet:display-none">
