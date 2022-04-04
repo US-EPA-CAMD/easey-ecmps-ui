@@ -39,22 +39,24 @@ describe("Evaluation Report Page", () => {
       .spyOn(Router, "useParams")
       .mockReturnValue({ id: "MDC-DD01BAF18A9F4F6CA4AF0D22E406EFC4" });
   });
-
-  it("should render with ", () => {
-    const createWrapper = () => {
-      return render(<ReportGenerator user={user:'test'} />);
-    };
-    const report = createWrapper();
-    expect(report).toBeTruthy();
-  });
-
   it("should render without user", () => {
     const createWrapper = () => {
-      return render(<ReportGenerator  />);
+      return render(<ReportGenerator />);
     };
+
     const report = createWrapper();
     expect(report).toBeTruthy();
   });
+  it("should render with ", () => {
+    const createWrapper = () => {
+      return render(<ReportGenerator user={{ user: "test" }} />);
+    };
+    delete window.location;
+    window.location = new URL(`https://test.com/workspace/evaluation-report`);
+    const report = createWrapper();
+    expect(report).toBeTruthy();
+  });
+
   it("should render the child Monitoring Plan Evaluation Report Component", () => {
     const childReport = render(
       <MonitoringPlanEvaluationReport
