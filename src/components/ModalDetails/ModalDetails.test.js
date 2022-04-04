@@ -55,6 +55,64 @@ beforeAll(() => {
       false,
       "input",
     ],
+    ["ozoneSeasonIndicator", "Ozone Season Indicator", null, false, "radio"],
+    ["ozoneSeasonIndicator", "Ozone Season Indicator", null, false, "time"],
+    [
+      "parameterCode",
+      "Parameter",
+      "CO2 Hourly Mass Rate (ton/hr)",
+      false,
+      "mainDropdown",
+      "CO2",
+      [
+        {
+          code: "",
+          name: "-- Select a value --",
+        },
+      ],
+    ],
+    [
+      "monitoringMethodCode",
+      "Methodology",
+      "Appendix D",
+      false,
+      "dropdown",
+      "AD",
+      [
+        {
+          code: "",
+          name: "-- Select a value --",
+        },
+      ],
+    ],
+    [
+      "parameterCode",
+      "Parameter",
+      "CO2 Hourly Mass Rate (ton/hr)",
+      false,
+      "mainDropdown",
+      "CO2",
+      [
+        {
+          code: "",
+          name: "-- Select a value --",
+        },
+      ],
+    ],
+    [
+      "monitoringMethodCode",
+      "Methodology",
+      "Appendix D",
+      false,
+      "independentDropdown",
+      "AD",
+      [
+        {
+          code: "",
+          name: "-- Select a value --",
+        },
+      ],
+    ],
     [[], [], [], "", "skip"],
     ["beginDate", "Start Date", "10/31/2002", false, "date", "2002-10-31"],
     ["endDate", "End Date", "", false, "date", null],
@@ -73,16 +131,17 @@ describe("rendering a modal pop up detail ", () => {
         data={data}
         cols={cols}
         title={title}
-        viewOnly={true}
-        backBtn={undefined}
-        create={false}
+        viewOnly={false}
+        backBtn={jest.fn()}
+        create={true}
       />
     );
     const labels = container.querySelectorAll(".grid-col");
 
-    expect(labels.length).toEqual(10);
+    fireEvent.click(container.querySelector("#backBtn"));
+    expect(labels.length).toEqual(16);
   });
-  test("renders create only ", () => {
+  test("renders create only", () => {
     const { container } = render(
       <ModalDetails
         modalData={modalData}
@@ -91,11 +150,28 @@ describe("rendering a modal pop up detail ", () => {
         title={title}
         viewOnly={true}
         backBtn={undefined}
-        create={true}
+        create={false}
       />
     );
     const labels = container.querySelectorAll(".grid-col");
 
-    expect(labels.length).toEqual(10);
+    expect(labels.length).toEqual(16);
+  });
+
+  test("renders view and create false", () => {
+    const { container } = render(
+      <ModalDetails
+        modalData={modalData}
+        data={data}
+        cols={1}
+        title={title}
+        viewOnly={false}
+        backBtn={undefined}
+        create={false}
+      />
+    );
+    const labels = container.querySelectorAll(".grid-col");
+
+    expect(labels.length).toEqual(16);
   });
 });

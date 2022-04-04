@@ -9,15 +9,17 @@ import config from "../../config";
 export const MonitoringPlanEvaluationReport = ({
   monitorPlanId,
   facility,
+  dataLoadedState = false,
   showTitle = false,
+  reportDataState = null,
 }) => {
   // *** extract facility main and additional names
   const splitFacility = facility.split("(");
   const facilityMainName = splitFacility[0];
   const facilityAdditionalName = splitFacility[1].replace(")", "");
 
-  const [dataLoaded, setDataLoaded] = useState(false);
-  const [reportData, setReportData] = useState(null);
+  const [dataLoaded, setDataLoaded] = useState(dataLoadedState);
+  const [reportData, setReportData] = useState(reportDataState);
   const [displayCloseButton, setDisplayCloseButton] = useState(true);
 
   const columnNames = [
@@ -45,7 +47,7 @@ export const MonitoringPlanEvaluationReport = ({
           );
           setReportData(reportResults);
           setDataLoaded(true);
-          console.log('TEST',reportResults)
+          console.log("TEST", reportResults);
         });
     }
   }, [dataLoaded, monitorPlanId]);
@@ -92,8 +94,8 @@ export const MonitoringPlanEvaluationReport = ({
                   aria-label="Print the evaluation report"
                   className="float-right clearfix do-not-print"
                   onClick={() => closeReport()}
-                  id="printBTN"
-                  epa-testid="printBTN"
+                  id="closeBTN"
+                  epa-testid="closeBTN"
                 >
                   Close Report
                 </Button>

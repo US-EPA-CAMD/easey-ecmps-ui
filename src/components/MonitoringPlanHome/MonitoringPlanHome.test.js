@@ -109,11 +109,23 @@ test("renders monitoring plan home with redux", async () => {
   const stateProps = mapStateToProps(state);
 
   jest.mock("../../utils/api/monitoringPlansApi", () => {
-    const data = { data: [1, 2, 3] };
+    const data = {
+      data: [
+        {
+          facId: 1,
+          monPlanId: "TWA7A",
+          checkedOutOn: "2022-04-04T06:16:59.959Z",
+          checkedOutBy: "test",
+          lastActivity: "2022-04-04T06:16:59.959Z",
+        },
+      ],
+    };
     return {
       getCheckedOutLocations: jest.fn(() => Promise.resolve(data)),
     };
   });
+
+  window.currentlyCheckedOutMonPlanId = 123;
 
   const { container, getAllByText, getByText } = await render(
     <Provider store={store}>
@@ -128,6 +140,7 @@ test("renders monitoring plan home with redux", async () => {
     </Provider>
   );
 
+  
   fireEvent.click(container.querySelector("#testingBtn2"));
   const renderedComponent = container.querySelector(".home-container");
   expect(renderedComponent).not.toBeUndefined();
