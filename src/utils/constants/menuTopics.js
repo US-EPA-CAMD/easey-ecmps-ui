@@ -12,13 +12,11 @@ export const environmentalTopics = [
     name: "Bed Bugs",
   },
   {
-    link:
-      "https://www.epa.gov/environmental-topics/chemicals-and-toxics-topics",
+    link: "https://www.epa.gov/environmental-topics/chemicals-and-toxics-topics",
     name: "Chemicals and Toxics",
   },
   {
-    link:
-      "https://www.epa.gov/environmental-topics/location-specific-environmental-information",
+    link: "https://www.epa.gov/environmental-topics/location-specific-environmental-information",
     name: "Environmental Information by Location",
   },
   {
@@ -30,8 +28,7 @@ export const environmentalTopics = [
     name: "Health",
   },
   {
-    link:
-      "https://www.epa.gov/environmental-topics/land-waste-and-cleanup-topics",
+    link: "https://www.epa.gov/environmental-topics/land-waste-and-cleanup-topics",
     name: "Land, Waste, and Cleanup",
   },
   {
@@ -129,8 +126,7 @@ export const aboutEPATopics = [
     name: "Regional Offices",
   },
   {
-    link:
-      "https://www.epa.gov/aboutepa/research-centers-programs-and-science-advisory-organizations",
+    link: "https://www.epa.gov/aboutepa/research-centers-programs-and-science-advisory-organizations",
     name: "Labs and Research Centers",
   },
 ];
@@ -152,17 +148,49 @@ export const collapsableFooterTopics = [
 
 export const globalView = [
   { name: "Monitoring Plans", url: "/monitoring-plans" },
-  { name: "QA & Certifications", url: "/qa_certifications" },
+  {
+    name: "QA & Certifications",
+    url: "/qa_certifications",
+    children: [
+      {
+        name: "Test Summary Data",
+        url: "/qa_certifications_test_summary_data",
+      },
+      {
+        name: "QA Cert Event Data",
+        url: "/qa_certifications_event_data",
+      },
+      {
+        name: "Test Extension Exemptions Data",
+        url: "/qa_certifications_test_extension_exemptions_data",
+      },
+    ],
+  },
   { name: "Emissions", url: "/emission" },
 ];
 
-export const home = [
-  { name: "Home", url: "/" },
-];
+export const home = [{ name: "Home", url: "/" }];
 
 export const workSpace = [
   { name: "Monitoring Plans", url: "/workspace/monitoring-plans" },
-  { name: "QA & Certifications", url: "/workspace/qa_certifications" },
+  {
+    name: "QA & Certifications",
+    url: "/workspace/qa_certifications",
+    children: [
+      {
+        name: "Test Summary Data",
+        url: "/workspace/qa_certifications_test_summary_data",
+      },
+      {
+        name: "QA Cert Event Data",
+        url: "/workspace/qa_certifications_event_data",
+      },
+      {
+        name: "Test Extension Exemptions Data",
+        url: "/workspace/qa_certifications_test_extension_exemptions_data",
+      },
+    ],
+  },
   { name: "Emissions", url: "/workspace/emission" },
 ];
 
