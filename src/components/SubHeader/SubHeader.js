@@ -8,6 +8,7 @@ import {
   NavDropDownButton,
   Title,
   Button,
+  Link as USWDSLink,
 } from "@trussworks/react-uswds";
 
 import "./SubHeader.scss";
@@ -63,7 +64,14 @@ export const SubHeader = ({ user, setCurrentLink }) => {
           Help/Support
         </span>
       ),
-      items: [{ menu: "Help/Support", link: `/help-support` }],
+      items: [
+        { menu: "Help/Support", link: `/help-support`, tab: false },
+        {
+          menu: "Contact Us",
+          link: `https://www.epa.gov/airmarkets/forms/ecmps-beta-contact-us`,
+          tab: true,
+        },
+      ],
     },
     {
       label: (
@@ -191,6 +199,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                     <>
                       <Link
                         href={config.app.path}
+                        target="_blank"
                         title={el.label}
                         aria-label={el.label}
                         onClick={() => handleSubMenuClick(i)}
@@ -222,9 +231,19 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                             : null
                         }
                         className="font-body-sm"
-                        items={el.items.map((item) => (
-                          <Link to={item.link}>{item.menu}</Link>
-                        ))}
+                        items={el.items.map((item) =>
+                          item.tab ? (
+                            <USWDSLink
+                              href={item.link}
+                              rel={item.link}
+                              target="_blank"
+                            >
+                              {item.menu}
+                            </USWDSLink>
+                          ) : (
+                            <Link to={item.link}>{item.menu}</Link>
+                          )
+                        )}
                         isOpen={navDropdownOpen[i]}
                       />
                       {categorySelected[i] === true ? (
