@@ -41,9 +41,9 @@ export const LeftNavigation = (props) => {
               noActive
                 ? props.currentLink === `/ecmps${item.url}` ||
                   props.currentLink === item.url
-                  ? "usa-current text-no-wrap"
-                  : "text-no-wrap"
-                : "text-no-wrap"
+                  ? "usa-current text-wrap"
+                  : "text-wrap"
+                : "text-wrap"
             }
             aria-label={
               item.name !== "Home"
