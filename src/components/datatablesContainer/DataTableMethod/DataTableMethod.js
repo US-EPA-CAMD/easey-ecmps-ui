@@ -256,7 +256,7 @@ export const DataTableMethod = ({
         mdmData,
         mdmData[prefilteredDataName],
         mainDropdownName,
-        mainDropdownResult
+        mainDropdownResult,true,prefilteredDataName
       )
     );
     setShow(true);

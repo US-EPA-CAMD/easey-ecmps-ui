@@ -26,12 +26,13 @@ export const modalViewData = (
     totalOptionsClone[mainDropdownName] = prefilterMdmMain;
   }
 
+  //for independent dropdowns
   const setInitialPreFilter = (
     dropdownType,
     propertyName,
     singleMDMCodeList
   ) => {
-    console.log(totalOptionsClone, "totalOptionsClone", prefilteredTotalName);
+    console.log("test", singleMDMCodeList, "singleMDMCodeList");
     const allFilteredMDMCodesArray = totalOptionsClone[prefilteredTotalName];
 
     const selectedFilteredCodeArray = allFilteredMDMCodesArray[0];
@@ -44,6 +45,10 @@ export const modalViewData = (
       name: "-- Select a value --",
     });
     totalOptionsClone[propertyName] = filteredOutSingleMDMCodeList;
+  };
+
+  const setInitialPreFilterDependent = (propertyName) => {
+    totalOptionsClone[propertyName] = totalOptionsClone[mainDropdownName];
   };
 
   // y = property name of the apis
@@ -83,6 +88,26 @@ export const modalViewData = (
       let labels = "";
       switch (label[y][1]) {
         case "mainDropdown":
+          setInitialPreFilterDependent(y);
+          if (!createNew) {
+            if (totalOptionsClone) {
+              labels = findValue(
+                totalOptionsClone[y],
+                selected ? selected[y] : null,
+                "name"
+              );
+            }
+          }
+          arr.push([
+            y,
+            label[y][0],
+            labels,
+            label[y][2] === "required" ? "required" : false,
+            label[y][1] === "mainDropdown" ? "mainDropdown" : "dropdown",
+            createNew ? "select" : selected ? selected[y] : "",
+            totalOptionsClone ? totalOptionsClone[y] : [],
+          ]);
+          break;
         case "dropdown":
           if (!createNew) {
             if (totalOptionsClone) {
