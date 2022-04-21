@@ -51,16 +51,22 @@ export const extractUserInput = (payload, inputSelector, radios) => {
     if (item.value !== undefined) {
       if (
         typeof item.value === "string" &&
-        (item.name !== "endHour" || item.name !== "beginHour")
+        isNaN(item.value)
       ) {
         payload[item.name] =
           item.value.trim() === "" ? null : item.value.trim();
       }
       if (
         typeof item.value === "string" &&
-        (item.name === "endHour" || item.name === "beginHour")
+        !isNaN(item.value)
       ) {
-        payload[item.name] = parseInt(item.value);
+        // not a decimal
+        if(item.value.indexOf(".") == -1){
+          payload[item.name] = parseInt(item.value);
+        }
+        else{
+          payload[item.name] = parseFloat(item.value);
+        }
       }
       if (typeof item.value === "number") {
         payload[item.name] = item.value;

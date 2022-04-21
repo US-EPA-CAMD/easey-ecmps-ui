@@ -69,6 +69,7 @@ export const DataTablePCTQualifications = ({
       mpApi
         .getPCTQualifications(locationSelectValue, qualSelectValue)
         .then((res) => {
+          console.log('res.data',res.data)
           setQualPctData(res.data);
           setDataLoaded(true);
           setUpdateTable(false);
