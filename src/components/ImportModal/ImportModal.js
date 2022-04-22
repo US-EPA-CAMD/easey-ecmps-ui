@@ -61,9 +61,9 @@ const ImportModal = ({
         <span id="fileName">{fileName}</span>
       ) : complete && importApiErrors.length > 0 ? (
         <div className="overflow-y-auto maxh-mobile">
-          <div className="padding-right-2 padding-left-3">
+          <div className="padding-right-2 padding-left-3" aria-live="polite">
             {importApiErrors.map((error, i) => (
-              <Alert type="error" slim noIcon key={i}>
+              <Alert type="error" slim noIcon key={i} role="alert">
                 {error}
               </Alert>
             ))}

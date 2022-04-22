@@ -142,13 +142,13 @@ export const UploadModal = ({
                 style={
                   hasErrors
                     ? {
-                        width: "70%",
-                        left: "15%",
-                      }
+                      width: "70%",
+                      left: "15%",
+                    }
                     : {
-                        width: `${!width ? "34%" : width}`,
-                        left: `${!left ? "33%" : left}`,
-                      }
+                      width: `${!width ? "34%" : width}`,
+                      left: `${!left ? "33%" : left}`,
+                    }
                 }
               >
                 <div
@@ -183,6 +183,7 @@ export const UploadModal = ({
                                 heading="Import Monitoring Plan error"
                                 slim
                                 noIcon
+                                role="alert"
                               >
                                 {hasFormatError
                                   ? "Only JSON files may be submitted"
@@ -208,7 +209,7 @@ export const UploadModal = ({
                             </div>
                           ) : (
                             <div className="left-2 padding-x-5 padding-top-5 padding-bottom-1">
-                              <Alert type="success" heading="Success">
+                              <Alert type="success" heading="Success" role="success">
                                 Monitoring Plan has been successfully imported
                               </Alert>
                             </div>
@@ -220,9 +221,8 @@ export const UploadModal = ({
                     ""
                   )}
                   <div
-                    className={`modal-body padding-top-1 padding-bottom-1 overflow-y-auto ${
-                      hasErrors ? "error-modal-body" : ""
-                    } `}
+                    className={`modal-body padding-top-1 padding-bottom-1 overflow-y-auto ${hasErrors ? "error-modal-body" : ""
+                      } `}
                   >
                     {children}
                   </div>
@@ -239,11 +239,10 @@ export const UploadModal = ({
                     ""
                   ) : !preloader ? (
                     <div
-                      className={`${
-                        !complete
+                      className={`${!complete
                           ? "upload-modal-footer padding-x-5"
                           : "upload-modal-footer--complete"
-                      }`}
+                        }`}
                     >
                       {complete ? (
                         <Button
