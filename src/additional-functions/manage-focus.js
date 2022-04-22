@@ -75,16 +75,17 @@ export const returnFocusToLast = () => {
       window["lastFocusedArray"][window["lastFocusedArray"].length - 1];
 
     console.log("found: ", lastFocus);
-
+    let counter = 0;
     if (lastFocus && lastFocus.id) {
       const selectedFocus = document.querySelector(`#${lastFocus.id}`);
       console.log("set", selectedFocus);
 
-      while (document.activeElement !== selectedFocus) {
+      while (document.activeElement !== selectedFocus && counter < 5) {
         selectedFocus
           ? console.log('selectedFocus.focus()',selectedFocus.focus())
-          : console.log("did not find lastfocus id element");
-        console.log("testing while");
+          : console.log("did not find lastfocus id element",window["lastFocusedArray"][0].focus());
+        console.log("testing while",)
+        counter++;
       }
     }
   }
