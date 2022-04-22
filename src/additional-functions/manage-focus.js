@@ -80,13 +80,15 @@ export const returnFocusToLast = () => {
       const selectedFocus = document.querySelector(`#${lastFocus.id}`);
       console.log("set", selectedFocus);
 
-      // counter is trivial number, can be 1. 
+      // counter is trivial number, can be 1.
       while (document.activeElement !== selectedFocus && counter < 5) {
         selectedFocus
-          ? console.log('selectedFocus.focus()',selectedFocus.focus())
-          // might need to check for an edge case when the array is empty 
-          : console.log("did not find lastfocus id element",window["lastFocusedArray"][0].focus());
-        console.log("testing while",)
+          ? console.log("selectedFocus.focus()", selectedFocus.focus())
+          : // might need to check for an edge case when the array is empty
+            console.log(
+              "did not find lastfocus id element",
+              window["lastFocusedArray"][0].focus()
+            );
         counter++;
       }
     }
