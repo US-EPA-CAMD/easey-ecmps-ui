@@ -32,6 +32,8 @@
 
   .usa-button:disabled {
     cursor: default !important;
+    background-color: $epa-gray-4;
+    opacity: .65;
   }
 
   #cancelBtn {
@@ -61,7 +63,7 @@
       font-size: 20px !important;
     }
     .usa-alert__text {
-      color: #d54309;
+      color: $epa-error-dark;
       font-weight: 800;
     }
   }
