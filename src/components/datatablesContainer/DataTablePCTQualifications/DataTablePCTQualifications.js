@@ -23,7 +23,7 @@ import {
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
 export const DataTablePCTQualifications = ({
-  mdmData,
+  mdmDataPCT,
   loadDropdownsData,
   locationSelectValue,
   qualSelectValue,
@@ -82,14 +82,18 @@ export const DataTablePCTQualifications = ({
 
   // load dropdowns data (called once)
   useEffect(() => {
-    if (mdmData.length === 0) {
+    console.log('PCT_QUALIFICATIONS_SECTION_NAME',PCT_QUALIFICATIONS_SECTION_NAME)
+
+    console.log('STORE',PCT_QUALIFICATIONS_STORE_NAME)
+    console.log('mdmData',mdmDataPCT)
+    if (mdmDataPCT.length === 0) {
       loadDropdownsData(PCT_QUALIFICATIONS_SECTION_NAME, dropdownArray);
     } else {
       setDropdownsLoaded(true);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mdmData]);
+  }, [mdmDataPCT]);
 
   const [selectedQualPct, setSelectedQualPct] = useState(null);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
@@ -144,7 +148,7 @@ export const DataTablePCTQualifications = ({
         },
         {},
         create,
-        mdmData
+        mdmDataPCT
       )
     );
 
@@ -217,8 +221,9 @@ export const DataTablePCTQualifications = ({
 };
 
 const mapStateToProps = (state) => {
+  console.log('STATE',state)
   return {
-    mdmData: state.dropdowns[PCT_QUALIFICATIONS_STORE_NAME],
+    mdmDataPCT: state.dropdowns[PCT_QUALIFICATIONS_STORE_NAME],
   };
 };
 
