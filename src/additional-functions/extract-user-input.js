@@ -61,7 +61,7 @@ export const extractUserInput = (payload, inputSelector, radios) => {
         !isNaN(item.value)
       ) {
         // not a decimal
-        if(item.value.indexOf(".") == -1){
+        if(item.value.indexOf(".") === -1){
           payload[item.name] = parseInt(item.value);
         }
         else{

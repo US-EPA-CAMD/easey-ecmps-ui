@@ -3,7 +3,6 @@ import * as types from "./actionTypes";
 import { UseRetrieveDropdownApi } from "../../additional-functions/retrieve-dropdown-api";
 
 export function loadDropdownsSuccess(dropdowns, section) {
-  console.log(dropdowns, section,"test")
   return {
     type: types.LOAD_DROPDOWNS_SUCCESS,
     dropdowns: dropdowns,

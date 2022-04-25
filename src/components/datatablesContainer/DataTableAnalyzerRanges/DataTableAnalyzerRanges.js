@@ -118,7 +118,6 @@ export const DataTableAnalyzerRanges = ({
         id="testingBtn"
         onClick={() => openAnalyzerRanges(false, false, true)}
       />
-      />
       <DataTableRender
         columnNames={rangesColumnNames}
         data={rangeData}

@@ -85,7 +85,6 @@ const ModalDetails = ({
   }
 
   const makeViewOnlyComp = (value) => {
-    console.log('value1',value[1])
     return (
       <div key={`${value[1]}`} className="grid-col">
         {((value[4] === "time" || value[4] === "date") && value[5] === null) ||
@@ -94,7 +93,9 @@ const ModalDetails = ({
         ) : (
           <FormGroup className="margin-top-0">
             <h3 className="text-bold margin-bottom-0 usa-label">{value[1]}</h3>
-            <div id={`${value[4] !== "skip" ? value[1].split(" ").join("-") : ""}`}>
+            <div
+              id={`${value[4] !== "skip" ? value[1].split(" ").join("-") : ""}`}
+            >
               {value[2]
                 ? value[4] === "radio"
                   ? value[2] === "0"
@@ -136,8 +137,6 @@ const ModalDetails = ({
   };
   const makeEditComp = (value, cols) => {
     let comp;
-
-    console.log(value,'value')
     switch (value[4]) {
       case "mainDropdown":
         comp = (
@@ -191,7 +190,6 @@ const ModalDetails = ({
         );
         break;
       case "independentDropdown":
-        
         comp = (
           <SelectBox
             className={`modalUserInput ${

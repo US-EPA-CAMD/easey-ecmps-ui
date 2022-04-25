@@ -42,8 +42,6 @@ export const MonitoringPlanHome = ({
     const checkedOutLocationResult = await getCheckedOutLocations();
 
     let checkedOutLocationList = [];
-
-    console.log("getCheckedOutLocations", checkedOutLocationResult);
     if (checkedOutLocationResult.data) {
       checkedOutLocationList = checkedOutLocationResult.data;
     }

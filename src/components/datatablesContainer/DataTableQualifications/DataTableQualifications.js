@@ -3,10 +3,10 @@ import { modalViewData } from "../../../additional-functions/create-modal-input-
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import * as fs from "../../../utils/selectors/monitoringPlanQualifications";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
-import {DataTablePCTQualifications} from "../DataTablePCTQualifications/DataTablePCTQualifications";
-import {DataTableLEEQualifications} from "../DataTableLEEQualifications/DataTableLEEQualifications";
+import DataTablePCTQualifications from "../DataTablePCTQualifications/DataTablePCTQualifications";
+import DataTableLEEQualifications from "../DataTableLEEQualifications/DataTableLEEQualifications";
 
-import {DataTableLMEQualifications} from "../DataTableLMEQualifications/DataTableLMEQualifications";
+import DataTableLMEQualifications from "../DataTableLMEQualifications/DataTableLMEQualifications";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
