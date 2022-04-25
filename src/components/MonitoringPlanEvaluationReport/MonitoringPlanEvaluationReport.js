@@ -136,29 +136,29 @@ export const MonitoringPlanEvaluationReport = ({
 
               <table role="presentation" className="width-auto">
                 <tr>
-                  <th className="text-right width-auto padding-top-2 text-normal">
+                  <td className="text-right width-auto padding-top-2 text-normal">
                     Facility ID (ORISPL):
-                  </th>
+                  </td>
                   <td className="width-auto padding-left-1 padding-top-2 text-bold">
                     {reportData.facilityId}
                   </td>
                 </tr>
                 <tr>
-                  <th className="text-right width-auto text-normal">
+                  <td className="text-right width-auto text-normal">
                     Monitoring Plan Location IDs:
-                  </th>
+                  </td>
                   <td className="width-auto padding-left-1 text-bold">
                     {facilityAdditionalName}
                   </td>
                 </tr>
                 <tr>
-                  <th className="text-right width-auto text-normal">State:</th>
+                  <td className="text-right width-auto text-normal">State:</td>
                   <td className="width-auto padding-left-1 text-bold">
                     {reportData.state}
                   </td>
                 </tr>
                 <tr>
-                  <th className="text-right width-auto text-normal">County:</th>
+                  <td className="text-right width-auto text-normal">County:</td>
                   <td className="width-auto padding-left-1 text-bold">
                     {reportData.countyName}
                   </td>
