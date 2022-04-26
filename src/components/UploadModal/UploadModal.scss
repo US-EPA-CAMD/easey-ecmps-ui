@@ -32,8 +32,7 @@
 
   .usa-button:disabled {
     cursor: default !important;
-    background-color: $epa-gray-4;
-    opacity: .65;
+    background-color: $epa-disabled-darker;
   }
 
   #cancelBtn {
