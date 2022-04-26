@@ -138,7 +138,7 @@ export const DataTableLEEQualifications = ({
             "independentDropdown",
             "",
           ],
-          potentialAnnualHgMassEmissions: [
+          potentialAnnualMassEmissions: [
             "Potential Annual Hg Mass Emissions",
             "input",
             "",
