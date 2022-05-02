@@ -40,8 +40,6 @@ export function handleError(error) {
   }
 }
 export function handleImportError(error) {
-  let errorMessage = "";
-
   if (error.response) {
     // client received an error response (5xx, 4xx)
     log.error({
@@ -50,7 +48,6 @@ export function handleImportError(error) {
       status: error.response.status,
       headers: error.response.headers,
     });
-    errorMessage = `${error.response.data.error} ${error.response.data.message}`;
   } else if (error.request) {
     // client never received a response, or request never left
     log.error({ error: error.request });
