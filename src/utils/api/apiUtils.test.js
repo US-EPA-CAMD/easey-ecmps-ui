@@ -1,4 +1,4 @@
-import { handleResponse, handleError } from "./apiUtils";
+import { handleResponse, handleError, handleImportError } from "./apiUtils";
 
 let globalMsg = "";
 
@@ -62,7 +62,9 @@ describe("test response and error handler functions", () => {
 
     handleError(err3);
     expect(globalMsg).toBe(lastErrorMsg);
-
+    
+    handleImportError(err3);
+    expect(globalMsg).toBe(lastErrorMsg);
     handleError(err4);
   });
 });
