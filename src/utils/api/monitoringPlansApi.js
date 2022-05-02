@@ -1,5 +1,5 @@
 import axios from "axios";
-import { handleResponse, handleError } from "./apiUtils";
+import { handleResponse, handleError,handleImportError } from "./apiUtils";
 import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
 
@@ -892,4 +892,16 @@ export const getMonitoringPlanComments = async (monPlanId) => {
   url = `${url}/plans/${monPlanId}/comments`;
 
   return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const importMP = async (payload) => {
+  const url = `${config.services.monitorPlans.uri}/workspace/plans/import/`;
+
+  return secureAxios({
+    method: "POST",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleImportError);
 };

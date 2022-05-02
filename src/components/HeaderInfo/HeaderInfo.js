@@ -449,6 +449,18 @@ export const HeaderInfo = ({
     });
   };
 
+  const [importedFile, setImportedFile] = useState([]);
+  const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState([]);
+
+  const importMPBtn = (payload) => {
+    mpApi.importMP(payload).then((response) => {
+      setUsePortBtn(true);
+      setIsLoading(true);
+      if(response){
+        setImportedFileErrorMsgs(response);
+      }
+    });
+  };
   const evaluate = () => {
     triggerEvaluation({
       monitorPlanId: configID,
@@ -782,8 +794,7 @@ export const HeaderInfo = ({
             exitBTN={"Import"}
             disablePortBtn={disablePortBtn}
             port={() => {
-              setUsePortBtn(true);
-              setIsLoading(true);
+              importMPBtn(importedFile);
             }}
             hasFormatError={hasFormatError}
             hasInvalidJsonError={hasInvalidJsonError}
@@ -794,6 +805,7 @@ export const HeaderInfo = ({
                 setFileName={setFileName}
                 setHasFormatError={setHasFormatError}
                 setHasInvalidJsonError={setHasInvalidJsonError}
+                setImportedFile={setImportedFile}
               />
             }
           />
@@ -811,6 +823,8 @@ export const HeaderInfo = ({
           children={<Preloader />}
           preloader
           setImportApiErrors={setImportApiErrors}
+          importedFileErrorMsgs={importedFileErrorMsgs}
+          setImportedFileErrorMsgs={setImportedFileErrorMsgs}
           fileName={fileName}
         />
       ) : (
@@ -826,6 +840,7 @@ export const HeaderInfo = ({
           exitBtn={"Ok"}
           complete={true}
           importApiErrors={importApiErrors}
+          importedFileErrorMsgs={importedFileErrorMsgs}
           children={
             <ImportModal
               setDisablePortBtn={setDisablePortBtn}
@@ -833,6 +848,7 @@ export const HeaderInfo = ({
               complete={true}
               fileName={fileName}
               importApiErrors={importApiErrors}
+              importedFileErrorMsgs={importedFileErrorMsgs}
             />
           }
         />

@@ -11,6 +11,8 @@ const ImportModal = ({
   setHasFormatError,
   setHasInvalidJsonError,
   importApiErrors,
+  importedFileErrorMsgs,
+  setImportedFile,
 }) => {
   const validateJSON = (name, type, event) => {
     const fileTypeManual = name.split(".");
@@ -33,6 +35,11 @@ const ImportModal = ({
   function onReaderLoad(event) {
     try {
       JSON.parse(event.target.result);
+      setImportedFile(JSON.parse(event.target.result));
+      console.log(
+        JSON.parse(event.target.result),
+        "JSON.parse(event.target.result)"
+      );
       setHasFormatError(false);
       setHasInvalidJsonError(false);
       setDisablePortBtn(false);
@@ -57,12 +64,12 @@ const ImportModal = ({
 
   return (
     <div className="import-modal-container">
-      {complete && importApiErrors.length === 0 ? (
+      {complete && importedFileErrorMsgs.length === 0 ? (
         <span id="fileName">{fileName}</span>
-      ) : complete && importApiErrors.length > 0 ? (
+      ) : complete && importedFileErrorMsgs.length > 0 ? (
         <div className="overflow-y-auto maxh-mobile">
           <div className="padding-right-2 padding-left-3" aria-live="polite">
-            {importApiErrors.map((error, i) => (
+            {importedFileErrorMsgs.map((error, i) => (
               <Alert type="error" slim noIcon key={i} role="alert">
                 {error}
               </Alert>

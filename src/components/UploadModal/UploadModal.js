@@ -8,7 +8,7 @@ import { ClearSharp } from "@material-ui/icons";
 import "./UploadModal.scss";
 
 import { focusTrap } from "../../additional-functions/focus-trap";
-
+import * as mpApi from "../../utils/api/monitoringPlansApi";
 const modalContext = createContext(null, null);
 
 export const UploadModal = ({
@@ -31,18 +31,20 @@ export const UploadModal = ({
   hasInvalidJsonError,
   importApiErrors,
   setImportApiErrors,
+  importedFileErrorMsgs,
+  setImportedFileErrorMsgs,
   fileName,
   notUploadVersion,
 }) => {
-  const hasErrors = importApiErrors && importApiErrors.length > 0;
+  const hasErrors = importedFileErrorMsgs && importedFileErrorMsgs.length > 0;
   const milisecondsToLoad = 4000;
   const numErrs = 17;
-  let apiErrors = [];
-  for (let i = 0; i < numErrs; i++) {
-    apiErrors.push(
-      'You have reported a MonitorQualPercent record for a location with the Qualification Type Code not equal to "PK," "SK" or "GF." A MonitorQualPercent record should not be reported for qualification Codes other than "PK," "SK" or "GF".'
-    );
-  }
+  // let apiErrors = [];
+  // for (let i = 0; i < numErrs; i++) {
+  //   apiErrors.push(
+  //     'You have reported a MonitorQualPercent record for a location with the Qualification Type Code not equal to "PK," "SK" or "GF." A MonitorQualPercent record should not be reported for qualification Codes other than "PK," "SK" or "GF".'
+  //   );
+  // }
 
   const onLoadEffect = () => {
     if (timer) {
@@ -50,10 +52,11 @@ export const UploadModal = ({
         setFinishedLoading(true);
         setIsLoading(false);
         setShowImportModal(true);
-        if (fileName !== "valid.json") {
-          setImportApiErrors(apiErrors);
-        }
+        // if (fileName !== "valid.json") {
+        //   setImportApiErrors(apiErrors);
+        // }
       }, milisecondsToLoad);
+      // console.log('timer')
     }
   };
 
@@ -142,13 +145,13 @@ export const UploadModal = ({
                 style={
                   hasErrors
                     ? {
-                      width: "70%",
-                      left: "15%",
-                    }
+                        width: "70%",
+                        left: "15%",
+                      }
                     : {
-                      width: `${!width ? "34%" : width}`,
-                      left: `${!left ? "33%" : left}`,
-                    }
+                        width: `${!width ? "34%" : width}`,
+                        left: `${!left ? "33%" : left}`,
+                      }
                 }
               >
                 <div
@@ -204,12 +207,16 @@ export const UploadModal = ({
                                 File Import Error(s)
                               </h3>
                               <p id="importErrorSubText">
-                                {`The file selected for import has ${importApiErrors.length} errors.`}
+                                {`The file selected for import has ${importedFileErrorMsgs.length} errors.`}
                               </p>
                             </div>
                           ) : (
                             <div className="left-2 padding-x-5 padding-top-5 padding-bottom-1">
-                              <Alert type="success" heading="Success" role="success">
+                              <Alert
+                                type="success"
+                                heading="Success"
+                                role="success"
+                              >
                                 Monitoring Plan has been successfully imported
                               </Alert>
                             </div>
@@ -221,8 +228,9 @@ export const UploadModal = ({
                     ""
                   )}
                   <div
-                    className={`modal-body padding-top-1 padding-bottom-1 overflow-y-auto ${hasErrors ? "error-modal-body" : ""
-                      } `}
+                    className={`modal-body padding-top-1 padding-bottom-1 overflow-y-auto ${
+                      hasErrors ? "error-modal-body" : ""
+                    } `}
                   >
                     {children}
                   </div>
@@ -239,10 +247,11 @@ export const UploadModal = ({
                     ""
                   ) : !preloader ? (
                     <div
-                      className={`${!complete
+                      className={`${
+                        !complete
                           ? "upload-modal-footer padding-x-5"
                           : "upload-modal-footer--complete"
-                        }`}
+                      }`}
                     >
                       {complete ? (
                         <Button
