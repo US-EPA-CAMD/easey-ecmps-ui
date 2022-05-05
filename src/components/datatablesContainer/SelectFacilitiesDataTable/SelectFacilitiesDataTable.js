@@ -41,11 +41,13 @@ export const SelectFacilitiesDataTable = ({
     const checkedOutLocationResult = await getCheckedOutLocations();
 
     let checkedOutLocationsList = [];
-    if (
-      checkedOutLocationResult.data &&
-      checkedOutLocationResult.data.length > 0
-    ) {
-      checkedOutLocationsList = checkedOutLocationResult.data;
+    if (checkedOutLocationResult) {
+      if (
+        checkedOutLocationResult.data &&
+        checkedOutLocationResult.data.length > 0
+      ) {
+        checkedOutLocationsList = checkedOutLocationResult.data;
+      }
     }
     setCheckedOutLocations(checkedOutLocationsList);
   };

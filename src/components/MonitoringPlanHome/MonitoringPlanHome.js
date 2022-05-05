@@ -42,22 +42,23 @@ export const MonitoringPlanHome = ({
     const checkedOutLocationResult = await getCheckedOutLocations();
 
     let checkedOutLocationList = [];
-    if (checkedOutLocationResult.data) {
-      checkedOutLocationList = checkedOutLocationResult.data;
-    }
-    // *** find locations currently checked out by the user
-    const currentlyCheckedOutMonPlanId = checkedOutLocationList.filter(
-      (element) => element["checkedOutBy"] === user.firstName
-    )[0]
-      ? checkedOutLocationList.filter(
-          (element) => element["checkedOutBy"] === user.firstName
-        )[0]["monPlanId"]
-      : null;
+    if (checkedOutLocationResult) {
+      if (checkedOutLocationResult.data) {
+        checkedOutLocationList = checkedOutLocationResult.data;
+      }
+      // *** find locations currently checked out by the user
+      const currentlyCheckedOutMonPlanId = checkedOutLocationList.filter(
+        (element) => element["checkedOutBy"] === user.firstName
+      )[0]
+        ? checkedOutLocationList.filter(
+            (element) => element["checkedOutBy"] === user.firstName
+          )[0]["monPlanId"]
+        : null;
 
-    if (currentlyCheckedOutMonPlanId) {
-      window.currentlyCheckedOutMonPlanId = currentlyCheckedOutMonPlanId;
+      if (currentlyCheckedOutMonPlanId) {
+        window.currentlyCheckedOutMonPlanId = currentlyCheckedOutMonPlanId;
+      }
     }
-
     setCheckedOutLocations(checkedOutLocationList);
   };
 

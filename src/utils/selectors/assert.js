@@ -51,6 +51,7 @@ export const getDataTableApis = async (name, location, selectedLocation) => {
     case locationAttribute:
       return mpApi.getLocationAttributes(location);
     case relationshipData:
+      console.log( 'test' ,mpApi.getRelationshipData(location) )
       return mpApi.getRelationshipData(location);
 
     default:

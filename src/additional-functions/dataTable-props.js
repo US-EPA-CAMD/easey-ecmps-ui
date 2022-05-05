@@ -501,10 +501,10 @@ export const relationshipDataTableProps = (location) => {
       endDate: null,
     },
     dropdownArray: [[]],
-    columnNames: ["Stack Pipe Name", "Unit ID", "Start Date", "End Date"],
+    columnNames: ["Stack Pipe Name", "Unit Name", "Start Date", "End Date"],
     controlInputs: {
-      stackPipeId: ["Stack Pipe Name", "input", ""],
-      unitId: ["Unit ID", "input", "", ""],
+      stackPipeId : ["Stack Pipe Name", "input", "", ""],
+      unitId : ["Unit Name", "input", "", ""],
     },
     controlDatePickerInputs: {
       beginDate: ["Start Date", "dateTime", "", ""],
