@@ -1,6 +1,6 @@
 import React from "react";
 import { SideNav, Link as USWDSLink } from "@trussworks/react-uswds";
-
+import "./LeftNavigation.scss";
 import { Link } from "react-router-dom";
 
 import { globalView, workSpace, home } from "../../utils/constants/menuTopics";
@@ -13,6 +13,7 @@ export const LeftNavigation = (props) => {
   const makeHeader = (arr, noActive, isWorkspace) => {
     return arr.map((item) => {
       const workspaceText = isWorkspace ? "_wks" : "";
+
       if (item.children) {
         return [
           <USWDSLink
@@ -22,7 +23,7 @@ export const LeftNavigation = (props) => {
             key="wsKey"
             className={
               window.location.href.indexOf(`${item.url}`) > -1
-                ? "usa-current"
+                ? "usa-current wkspaceMainMenu"
                 : ""
             }
           >
@@ -30,7 +31,7 @@ export const LeftNavigation = (props) => {
           </USWDSLink>,
           <SideNav
             key="sideNav"
-            items={makeHeader(item.children, true, true)}
+            items={makeHeader(item.children, false, true)}
             isSubnav={true}
           />,
         ];
@@ -41,9 +42,12 @@ export const LeftNavigation = (props) => {
               noActive
                 ? props.currentLink === `/ecmps${item.url}` ||
                   props.currentLink === item.url
-                  ? "usa-current text-wrap"
+                  ? "usa-current text-wrap  usa-sidenav usa-current wkspaceMainMenu"
                   : "text-wrap"
-                : "text-wrap"
+                : props.currentLink === `/ecmps${item.url}` ||
+                  props.currentLink === item.url
+                ? "emulateCurrentLink"
+                : "text-wrap "
             }
             aria-label={
               item.name !== "Home"
@@ -75,13 +79,33 @@ export const LeftNavigation = (props) => {
     });
   };
 
-  const wsItems = makeHeader(workSpace, true, true);
+  const makeWKspaceHeader = () => {
+    return [
+      <USWDSLink
+        to="/workspace"
+        rel="workspace"
+        title="Go to the workspace page"
+        key="wsKey"
+      >
+        Workspace
+      </USWDSLink>,
+      [
+        <SideNav
+          key="sideNav"
+          items={makeHeader(workSpace, true, true)}
+          isSubnav={true}
+        />,
+      ],
+    ];
+  };
+
+  const globalItems = makeHeader(workSpace, true, true);
   return (
     <div className="minh-tablet font-body-sm padding-3">
       {props.user ? (
         <div>
           <SideNav items={makeHeader(home, true, true)} />
-          <SideNav items={wsItems} />
+          <SideNav items={makeWKspaceHeader()} />
         </div>
       ) : (
         <div>
