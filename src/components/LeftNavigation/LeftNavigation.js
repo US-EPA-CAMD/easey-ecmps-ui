@@ -80,7 +80,7 @@ export const LeftNavigation = (props) => {
     <div className="minh-tablet font-body-sm padding-3">
       {props.user ? (
         <div>
-          <SideNav items={makeHeader(home, true, false)} />
+          <SideNav items={makeHeader(home, true, true)} />
           <SideNav items={wsItems} />
         </div>
       ) : (
