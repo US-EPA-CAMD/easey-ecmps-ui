@@ -55,6 +55,7 @@
     "downloadjs": "^1.4.7",
     "html-react-parser": "^1.4.4",
     "js-cookie": "^3.0.1",
+    "jsonschema": "https://github.com/tdegrunt/jsonschema",
     "lodash": "^4.17.21",
     "loglevel": "^1.7.0",
     "markdown": "^0.5.0",

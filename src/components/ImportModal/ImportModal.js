@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { FormGroup, Label, FileInput, Alert } from "@trussworks/react-uswds";
 import "./ImportModal.scss";
@@ -14,6 +14,7 @@ const ImportModal = ({
   importedFileErrorMsgs,
   setImportedFile,
 }) => {
+  const [schemaErrors, setSchemaErrors] = useState([]);
   const validateJSON = (name, type, event) => {
     const fileTypeManual = name.split(".");
 
@@ -26,6 +27,14 @@ const ImportModal = ({
     }
   };
 
+  const formatSchemaErrors = (errors) => {
+    const formattedErrors = errors.errors.map((error) => {
+      console.log(error);
+      return error.stack;
+    });
+
+    setSchemaErrors(formattedErrors);
+  };
   function readFile(event) {
     var reader = new FileReader();
     reader.onload = onReaderLoad;
@@ -34,15 +43,28 @@ const ImportModal = ({
 
   function onReaderLoad(event) {
     try {
-      JSON.parse(event.target.result);
-      setImportedFile(JSON.parse(event.target.result));
-      console.log(
-        JSON.parse(event.target.result),
-        "JSON.parse(event.target.result)"
-      );
-      setHasFormatError(false);
-      setHasInvalidJsonError(false);
-      setDisablePortBtn(false);
+      const fileLoaded = JSON.parse(event.target.result);
+      setImportedFile(fileLoaded);
+
+      var util = require("util");
+      var Validator = require("jsonschema").Validator;
+      var v = new Validator();
+      var schemaaa = {
+        id: "age",
+        type: "object",
+        properties: {
+          age: { type: "number" },
+          name: { type: "string" },
+        },
+      };
+
+      if (v.validate(fileLoaded, schemaaa).valid) {
+        setHasFormatError(false);
+        setHasInvalidJsonError(false);
+        setDisablePortBtn(false);
+      } else {
+        formatSchemaErrors(v.validate(fileLoaded, schemaaa));
+      }
     } catch (e) {
       console.log("invalid json file error: ", e);
       setHasInvalidJsonError(true);
@@ -52,6 +74,7 @@ const ImportModal = ({
   }
 
   const onChangeHandler = (e) => {
+    setSchemaErrors([]);
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       validateJSON(file.name, file.type, e);
@@ -77,16 +100,25 @@ const ImportModal = ({
           </div>
         </div>
       ) : (
-        <FormGroup>
-          <Label htmlFor="file-input-single"> Upload MP JSON File</Label>
-          <FileInput
-            id="file-input-single"
-            name="file-input-single"
-            onChange={(e) => {
-              onChangeHandler(e);
-            }}
-          />
-        </FormGroup>
+        <div>
+          {schemaErrors.length > 0
+            ? schemaErrors.map((error, i) => (
+                <Alert type="error" slim noIcon key={i} role="alert">
+                  {error}
+                </Alert>
+              ))
+            : ""}
+          <FormGroup>
+            <Label htmlFor="file-input-single"> Upload MP JSON File</Label>
+            <FileInput
+              id="file-input-single"
+              name="file-input-single"
+              onChange={(e) => {
+                onChangeHandler(e);
+              }}
+            />
+          </FormGroup>
+        </div>
       )}
       {/* need to center in modal */}
     </div>
