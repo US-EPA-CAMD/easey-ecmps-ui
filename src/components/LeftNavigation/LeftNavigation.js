@@ -46,7 +46,7 @@ export const LeftNavigation = (props) => {
                   : "text-wrap"
                 : props.currentLink === `/ecmps${item.url}` ||
                   props.currentLink === item.url
-                ? "emulateCurrentLink"
+                ? "emulateCurrentLink "
                 : "text-wrap "
             }
             aria-label={
