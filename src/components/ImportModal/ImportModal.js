@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
-=======
-import React, { useState } from "react";
->>>>>>> 674fbaee2c940fb949632ad58a8c61d469a96cc4
 
 import { FormGroup, Label, FileInput, Alert } from "@trussworks/react-uswds";
 
