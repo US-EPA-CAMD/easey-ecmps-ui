@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
+=======
+import React, { useState } from "react";
+>>>>>>> 674fbaee2c940fb949632ad58a8c61d469a96cc4
 
 import { FormGroup, Label, FileInput, Alert } from "@trussworks/react-uswds";
 
@@ -16,6 +20,7 @@ const ImportModal = ({
   importedFileErrorMsgs,
   setImportedFile,
 }) => {
+<<<<<<< HEAD
   const [mpSchema, setMpSchema] = useState([]);
   useEffect(() => {
     mpApi.getMPSchema().then((res) => {
@@ -23,6 +28,8 @@ const ImportModal = ({
       console.log(res.data, "res", res);
     });
   }, []);
+=======
+>>>>>>> 674fbaee2c940fb949632ad58a8c61d469a96cc4
   const [schemaErrors, setSchemaErrors] = useState([]);
   const validateJSON = (name, type, event) => {
     const fileTypeManual = name.split(".");
@@ -67,12 +74,20 @@ const ImportModal = ({
         },
       };
 
+<<<<<<< HEAD
       if (v.validate(fileLoaded, mpSchema).valid) {
+=======
+      if (v.validate(fileLoaded, schemaaa).valid) {
+>>>>>>> 674fbaee2c940fb949632ad58a8c61d469a96cc4
         setHasFormatError(false);
         setHasInvalidJsonError(false);
         setDisablePortBtn(false);
       } else {
+<<<<<<< HEAD
         formatSchemaErrors(v.validate(fileLoaded, mpSchema));
+=======
+        formatSchemaErrors(v.validate(fileLoaded, schemaaa));
+>>>>>>> 674fbaee2c940fb949632ad58a8c61d469a96cc4
       }
     } catch (e) {
       console.log("invalid json file error: ", e);
