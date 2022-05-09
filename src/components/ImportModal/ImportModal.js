@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { FormGroup, Label, FileInput, Alert } from "@trussworks/react-uswds";
+
+import * as mpApi from "../../utils/api/monitoringPlansApi";
 import "./ImportModal.scss";
 
 const ImportModal = ({
@@ -14,6 +16,13 @@ const ImportModal = ({
   importedFileErrorMsgs,
   setImportedFile,
 }) => {
+  const [mpSchema, setMpSchema] = useState([]);
+  useEffect(() => {
+    mpApi.getMPSchema().then((res) => {
+      setMpSchema(res.data);
+      console.log(res.data, "res", res);
+    });
+  }, []);
   const [schemaErrors, setSchemaErrors] = useState([]);
   const validateJSON = (name, type, event) => {
     const fileTypeManual = name.split(".");
@@ -58,12 +67,12 @@ const ImportModal = ({
         },
       };
 
-      if (v.validate(fileLoaded, schemaaa).valid) {
+      if (v.validate(fileLoaded, mpSchema).valid) {
         setHasFormatError(false);
         setHasInvalidJsonError(false);
         setDisablePortBtn(false);
       } else {
-        formatSchemaErrors(v.validate(fileLoaded, schemaaa));
+        formatSchemaErrors(v.validate(fileLoaded, mpSchema));
       }
     } catch (e) {
       console.log("invalid json file error: ", e);
@@ -91,7 +100,10 @@ const ImportModal = ({
         <span id="fileName">{fileName}</span>
       ) : complete && importedFileErrorMsgs.length > 0 ? (
         <div className="overflow-y-auto maxh-mobile">
-          <div className="padding-right-2 padding-left-3" aria-live="polite">
+          <div
+            className="padding-right-2 padding-left-3 "
+            aria-live="polite"
+          >
             {importedFileErrorMsgs.map((error, i) => (
               <Alert type="error" slim noIcon key={i} role="alert">
                 {error}
@@ -101,13 +113,22 @@ const ImportModal = ({
         </div>
       ) : (
         <div>
-          {schemaErrors.length > 0
-            ? schemaErrors.map((error, i) => (
+          {schemaErrors.length > 0 ? (
+            <div className="overflow-y-auto maxh-mobile">
+              <div
+                className="padding-right-2 padding-left-3 "
+                aria-live="polite"
+              >
+                {schemaErrors.map((error, i) => (
                 <Alert type="error" slim noIcon key={i} role="alert">
                   {error}
                 </Alert>
-              ))
-            : ""}
+                ))}
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
           <FormGroup>
             <Label htmlFor="file-input-single"> Upload MP JSON File</Label>
             <FileInput

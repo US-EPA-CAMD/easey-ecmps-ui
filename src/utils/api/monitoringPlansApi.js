@@ -905,3 +905,10 @@ export const importMP = async (payload) => {
     .then(handleResponse)
     .catch(handleImportError);
 };
+
+export const getMPSchema = async () => {
+
+  const url = `${config.services.content.uri}/ecmps/reporting-instructions/monitor-plan.schema.json`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+}
