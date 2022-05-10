@@ -295,7 +295,11 @@ export const HeaderInfo = ({
         ) {
           // check database and update status
           mpApi.getRefreshInfo(configID).then((res) => {
-            const databaseStatus = res.data.evalStatusCode;
+            let databaseStatus = '';
+            if(res){
+               databaseStatus = res.data.evalStatusCode;
+            }
+           
 
             // if database is different than current status, then update
             if (currStatus !== databaseStatus) {
@@ -416,11 +420,13 @@ export const HeaderInfo = ({
   };
 
   const showRevert = (status) => {
+    console.log("statiuus", status);
     return (
       status === "PASS" ||
       status === "INFO" ||
       status === "ERR" ||
-      status === "EVAL"
+      status === "EVAL" ||
+      status === "Y"
     );
   };
 
@@ -456,7 +462,7 @@ export const HeaderInfo = ({
     mpApi.importMP(payload).then((response) => {
       setUsePortBtn(true);
       setIsLoading(true);
-      if(response){
+      if (response) {
         setImportedFileErrorMsgs(response);
       }
     });
@@ -599,7 +605,7 @@ export const HeaderInfo = ({
                         ""
                       )}
                       <div className="desktop:display-block">
-                        {showRevert(evalStatus) ? (
+                        {/* {showRevert(evalStatus) ? ( */}
                           <div className=" float-right position-relative margin-bottom-2">
                             <Button
                               type="button"
@@ -611,9 +617,9 @@ export const HeaderInfo = ({
                               {"Revert to Official Record"}
                             </Button>
                           </div>
-                        ) : (
-                          ""
-                        )}
+                        {/* // ) : (
+                        //  ""
+                        // )} */}
                       </div>
                     </div>
                   </div>
