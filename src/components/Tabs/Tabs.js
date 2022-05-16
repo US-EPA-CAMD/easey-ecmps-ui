@@ -16,6 +16,7 @@ export const Tabs = ({
   checkedOutLocations,
   user,
   setCheckout,
+  sectionType =false,
 }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
@@ -27,27 +28,29 @@ export const Tabs = ({
     event.stopPropagation();
     removeTabs(index);
 
-    mpApi.getCheckedOutLocations().then((resOne) => {
-      const configs = resOne.data;
-      if (
-        configs.some(
-          (plan) =>
-            plan.monPlanId === configId && plan.checkedOutBy === user["userId"]
-        )
-      ) {
-        mpApi.deleteCheckInMonitoringPlanConfiguration(configId).then(() => {
-          console.log("X button - checked-in configuration: " + configId);
-          if (setCheckout) {
-            setCheckout(false, configId);
-          }
-        });
-      } else {
-        console.log(
-          "X button - cannot check-in configuration that you do not have checked-out"
-        );
-      }
-    });
-
+    if (!sectionType) {
+      mpApi.getCheckedOutLocations().then((resOne) => {
+        const configs = resOne.data;
+        if (
+          configs.some(
+            (plan) =>
+              plan.monPlanId === configId &&
+              plan.checkedOutBy === user["userId"]
+          )
+        ) {
+          mpApi.deleteCheckInMonitoringPlanConfiguration(configId).then(() => {
+            console.log("X button - checked-in configuration: " + configId);
+            if (setCheckout) {
+              setCheckout(false, configId);
+            }
+          });
+        } else {
+          console.log(
+            "X button - cannot check-in configuration that you do not have checked-out"
+          );
+        }
+      });
+    }
     if (activeTabIndex === children.length - 1) {
       setActiveTabIndex(index - 1);
       setActive(false, index - 2);
@@ -55,24 +58,28 @@ export const Tabs = ({
   };
 
   const isCheckedOut = (locationId) => {
-    return (
-      checkedOutLocations
-        .map((location) => location["monPlanId"])
-        .indexOf(locationId) > -1
-    );
+    if (!sectionType) {
+      return (
+        checkedOutLocations
+          .map((location) => location["monPlanId"])
+          .indexOf(locationId) > -1
+      );
+    }
   };
 
   const isCheckedOutByUser = (locationId) => {
-    return (
-      checkedOutLocations
-        .map((location) => location["monPlanId"])
-        .indexOf(locationId) > -1 &&
-      checkedOutLocations[
+    if (!sectionType) {
+      return (
         checkedOutLocations
           .map((location) => location["monPlanId"])
-          .indexOf(locationId)
-      ]["checkedOutBy"] === user["userId"]
-    );
+          .indexOf(locationId) > -1 &&
+        checkedOutLocations[
+          checkedOutLocations
+            .map((location) => location["monPlanId"])
+            .indexOf(locationId)
+        ]["checkedOutBy"] === user["userId"]
+      );
+    }
   };
 
   const cleanConfigStr = (name) => {
@@ -126,7 +133,7 @@ export const Tabs = ({
                   aria-label={`open ${el.props.title.split("(")[0]}${
                     user &&
                     el.props.locationId &&
-                    el.props.facId &&
+                    el.props.facId && !sectionType &&
                     (isCheckedOut(el.props.locationId) ||
                       checkedOutLocations.some(
                         (loc) => loc.facId === parseInt(el.props.facId)
@@ -151,7 +158,7 @@ export const Tabs = ({
                   }}
                 >
                   <div className="text-center tab-button-text-container ellipsis-text padding-2px position-relative top-neg-05">
-                    {user &&
+                    {user && !sectionType &&
                     el.props.locationId &&
                     el.props.facId &&
                     (isCheckedOut(el.props.locationId) ||
@@ -170,7 +177,7 @@ export const Tabs = ({
                     {el.props.title.split("(")[0]}
                   </div>
                   <div className="text-center">
-                    {el.props.locationId &&
+                    {!sectionType && el.props.locationId &&
                     isCheckedOutByUser(el.props.locationId) ? (
                       <CreateSharp
                         role="img"

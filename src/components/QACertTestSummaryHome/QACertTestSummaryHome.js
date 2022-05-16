@@ -1,0 +1,114 @@
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+
+import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
+import { MonitoringPlanTab as SelectedFacilityTab } from "../MonitoringPlanTab/MonitoringPlanTab";
+import DynamicTabs from "../DynamicTabs/DynamicTabs";
+
+
+import * as mpApi from "../../utils/api/monitoringPlansApi";
+import NotFound from "../NotFound/NotFound";
+
+
+export const QACertTestSummaryHome = ({
+  user,
+  resetTimer,
+  setExpired,
+  resetTimerFlag,
+  callApiFlag,
+  openedFacilityTabs,
+}) => {
+  useEffect(() => {
+    document.title = "QA Certifications Test Data";
+  }, []);
+
+
+
+
+  // useEffect(() => {
+  //   window.addEventListener("beforeunload", checkInAll);
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", checkInAll);
+  //   };
+  // }, []);
+
+  const handleTabState = () => {
+    const tabArr = [
+      {
+        title: "Select Configurations",
+        component: (
+          <DataTable
+            user={user}
+            keyField="col2"
+            openedFacilityTabs={openedFacilityTabs}
+            sectionType={"qaCert"}
+          />
+        ),
+      },
+    ];
+// uses Redux to put the saved Tabs back in the UI if the user leaves the page
+    for (const row of openedFacilityTabs) {
+      tabArr.push({
+        title: row.name,
+        component: (
+          <NotFound
+            // resetTimer={resetTimer}
+            // setExpired={setExpired}
+            // resetTimerFlag={resetTimerFlag}
+            // callApiFlag={callApiFlag}
+            // orisCode={row.orisCode}
+            // selectedConfig={row.selectedConfig}
+            // title={row.name}
+            // user={user}
+            // checkout={row.checkout}
+          />
+        ),
+        orisCode: row.orisCode,
+        selectedConfig: row.selectedConfig,
+        checkout: row.checkout,
+      });
+    }
+    return tabArr;
+  };
+
+  return (
+    <div className="react-transition fade-in padding-x-3">
+      <div className="text-black margin-top-1 display-none tablet:display-block">
+        <h2
+          className="display-inline-block page-header margin-top-2"
+          epa-testid="qaCertTitle"
+        >
+          QA Certifications Test Data
+        </h2>
+      </div>
+
+      <div className="display-none mobile:display-block tablet:display-none">
+        <h1
+          className="display-inline-block font-body-xl text-bold margin-left-neg-2"
+          epa-testid="qaCertTitle"
+        >
+          QA Certifications Test Data
+        </h1>
+
+      </div>
+
+      <div>
+        <DynamicTabs
+          tabsProps={() => handleTabState()}
+          user={user}
+          sectionType={"QACert"}
+        />
+      </div>
+    </div>
+  );
+};
+
+const mapStateToProps = (state) => {
+  return {
+    openedFacilityTabs: state.openedFacilityTabs,
+  };
+};
+
+export default connect(mapStateToProps, null)(QACertTestSummaryHome);
+export { mapStateToProps };

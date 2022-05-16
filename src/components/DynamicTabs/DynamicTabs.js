@@ -19,6 +19,7 @@ export const DynamicTabs = ({
   setActive,
   setMostRecentlyCheckedInMonitorPlanId,
   mostRecentlyCheckedInMonitorPlanId,
+  sectionType = false,
 }) => {
   const [tabs, setTabs] = useState(tabsProps);
 
@@ -55,33 +56,64 @@ export const DynamicTabs = ({
 
   return (
     <div>
-      <Tabs
-        dynamic={true}
-        removeTabs={removeTabsHandler}
-        setActive={setActive}
-        tabProps={tabs}
-        checkedOutLocations={checkedOutLocations}
-        user={user}
-        setMostRecentlyCheckedInMonitorPlanId={
-          setMostRecentlyCheckedInMonitorPlanId
-        }
-      >
-        {tabs &&
-          tabs.map((tab, i) => (
-            <TabPane
-              key={i}
-              title={tab.title}
-              locationId={
-                tab.selectedConfig ? tab.selectedConfig.id : "initial"
-              }
-              facId={tab.selectedConfig ? tab.selectedConfig.facId : "initial"}
-            >
-              {cloneElement(tab.component, {
-                addtabs: addTabsHandler,
-              })}
-            </TabPane>
-          ))}
-      </Tabs>
+      {sectionType === "QACert" ? (
+        <Tabs
+          dynamic={true}
+          removeTabs={removeTabsHandler}
+          setActive={setActive}
+          tabProps={tabs}
+          user={user}
+          sectionType={sectionType}
+        >
+          {tabs &&
+            tabs.map((tab, i) => (
+              <TabPane
+                key={i}
+                title={tab.title}
+                locationId={
+                  tab.selectedConfig ? tab.selectedConfig.id : "initial"
+                }
+                facId={
+                  tab.selectedConfig ? tab.selectedConfig.facId : "initial"
+                }
+              >
+                {cloneElement(tab.component, {
+                  addtabs: addTabsHandler,
+                })}
+              </TabPane>
+            ))}
+        </Tabs>
+      ) : (
+        <Tabs
+          dynamic={true}
+          removeTabs={removeTabsHandler}
+          setActive={setActive}
+          tabProps={tabs}
+          checkedOutLocations={checkedOutLocations}
+          user={user}
+          setMostRecentlyCheckedInMonitorPlanId={
+            setMostRecentlyCheckedInMonitorPlanId
+          }
+        >
+          {tabs &&
+            tabs.map((tab, i) => (
+              <TabPane
+                key={i}
+                title={tab.title}
+                locationId={
+                  tab.selectedConfig ? tab.selectedConfig.id : "initial"
+                }
+                facId={
+                  tab.selectedConfig ? tab.selectedConfig.facId : "initial"
+                }
+              >
+                {cloneElement(tab.component, {
+                  addtabs: addTabsHandler,
+                })}
+              </TabPane>
+            ))}
+        </Tabs>
+      )}
     </div>
   );
 };
