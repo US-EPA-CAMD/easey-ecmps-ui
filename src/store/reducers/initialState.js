@@ -10,6 +10,7 @@ export default {
     monitoringSystemsComponents: false,
   },
   openedFacilityTabs: [],
+  
   activeTab: [0],
   dropdowns: {
     defaults: [],

@@ -7,6 +7,7 @@ import "./SelectFacilitiesDataTable.scss";
 import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigurations";
 import * as facilitiesApi from "../../../utils/api/facilityApi";
 import { getCheckedOutLocations } from "../../../utils/api/monitoringPlansApi";
+import NotFound from "../../NotFound/NotFound";
 
 export const SelectFacilitiesDataTable = ({
   user,
@@ -14,6 +15,7 @@ export const SelectFacilitiesDataTable = ({
   openedFacilityTabs,
   mostRecentlyCheckedInMonitorPlanIdForTab,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
+  sectionType = false,
 }) => {
   const [facilities, setFacilities] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -56,6 +58,7 @@ export const SelectFacilitiesDataTable = ({
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = ["Facility", "ORIS", "State"];
 
+  // handles the actual component that appears after clicking on the dynamic tabs
   const selectedRowHandler = (info) => {
     addtabs([
       {
@@ -63,6 +66,7 @@ export const SelectFacilitiesDataTable = ({
           info[1].active ? "" : "Inactive"
         }`,
         component: (
+          !sectionType ?
           <div className="selectedTabsBox">
             <SelectedFacilityTab
               orisCode={info[0].col2}
@@ -86,7 +90,7 @@ export const SelectFacilitiesDataTable = ({
                 setMostRecentlyCheckedInMonitorPlanIdForTab
               }
             />
-          </div>
+          </div>: <NotFound/>
         ),
         orisCode: info[0].col2,
         selectedConfig: info[1],
@@ -137,43 +141,69 @@ export const SelectFacilitiesDataTable = ({
           ]);
         }}
       />
-      <DataTableRender
-        columnNames={columnNames}
-        dataLoaded={dataLoaded}
-        data={data}
-        defaultSort="col2"
-        openedFacilityTabs={openedFacilityTabs}
-        user={user}
-        pagination={true}
-        filter={true}
-        sectionTitle="Select Configurations"
-        checkedOutLocations={checkedOutLocations}
-        expandableRows={true}
-        expandableRowComp={
-          <DataTableConfigurations
-            selectedRowHandler={selectedRowHandler}
-            user={user}
-            className="expand-row-data-table"
-            checkedOutLocations={checkedOutLocations}
-            actionsBtn={"Open"}
-            setMostRecentlyCheckedInMonitorPlanId={
-              setMostRecentlyCheckedInMonitorPlanId
-            }
-            setMostRecentlyCheckedInMonitorPlanIdForTab={
-              setMostRecentlyCheckedInMonitorPlanIdForTab
-            }
-          />
-        }
-        headerStyling="padding-top-0 padding-left-2"
-        setShowInactive={() => {}}
-        setMostRecentlyCheckedInMonitorPlanId={
-          setMostRecentlyCheckedInMonitorPlanId
-        }
-        setMostRecentlyCheckedInMonitorPlanIdForTab={
-          setMostRecentlyCheckedInMonitorPlanIdForTab
-        }
-        ariaLabel={"Select Configurations"}
-      />
+      {!sectionType ? (
+        <DataTableRender
+          columnNames={columnNames}
+          dataLoaded={dataLoaded}
+          data={data}
+          defaultSort="col2"
+          openedFacilityTabs={openedFacilityTabs}
+          user={user}
+          pagination={true}
+          filter={true}
+          sectionTitle="Select Configurations"
+          checkedOutLocations={checkedOutLocations}
+          expandableRows={true}
+          expandableRowComp={
+            <DataTableConfigurations
+              selectedRowHandler={selectedRowHandler}
+              user={user}
+              className="expand-row-data-table"
+              checkedOutLocations={checkedOutLocations}
+              actionsBtn={"Open"}
+              setMostRecentlyCheckedInMonitorPlanId={
+                setMostRecentlyCheckedInMonitorPlanId
+              }
+              setMostRecentlyCheckedInMonitorPlanIdForTab={
+                setMostRecentlyCheckedInMonitorPlanIdForTab
+              }
+            />
+          }
+          headerStyling="padding-top-0 padding-left-2"
+          setShowInactive={() => {}}
+          setMostRecentlyCheckedInMonitorPlanId={
+            setMostRecentlyCheckedInMonitorPlanId
+          }
+          setMostRecentlyCheckedInMonitorPlanIdForTab={
+            setMostRecentlyCheckedInMonitorPlanIdForTab
+          }
+          ariaLabel={"Select Configurations"}
+        />
+      ) : (
+        <DataTableRender
+          columnNames={columnNames}
+          dataLoaded={dataLoaded}
+          data={data}
+          defaultSort="col2"
+          openedFacilityTabs={openedFacilityTabs}
+          user={user}
+          pagination={true}
+          filter={true}
+          sectionTitle="Select Configurations"
+          expandableRows={true}
+          expandableRowComp={
+            <DataTableConfigurations
+              selectedRowHandler={selectedRowHandler}
+              user={user}
+              className="expand-row-data-table"
+              actionsBtn={"Open"}
+            />
+          }
+          headerStyling="padding-top-0 padding-left-2"
+          setShowInactive={() => {}}
+          ariaLabel={"Select Configurationss"}
+        />
+      )}
     </div>
   );
 };

@@ -7,6 +7,7 @@ import NotFound from "../NotFound/NotFound";
 import AboutHome from "../AboutHome/AboutHome";
 import Layout from "../Layout/Layout";
 import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
+import QACertTestSummaryHome from "../QACertTestSummaryHome/QACertTestSummaryHome";
 import RuleEditor from "../RuleEditor/RuleEditor";
 import Login from "../Login/Login";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
@@ -136,7 +137,7 @@ const App = () => {
                 />
               )}
             />
-            {user ? (
+            {/* {user ? (
               <Redirect
                 from="/qa_certifications"
                 to="/workspace/qa_certifications"
@@ -146,13 +147,33 @@ const App = () => {
                 from="/workspace/qa_certifications"
                 to="/qa_certifications"
               />
-            )}
-            <Route path="/qa_certifications/" exact component={ComingSoon} />
+            )} */}
             <Route
+              path="/qa_certifications_test_summary_data"
+              exact
+              component={() => (
+                <QACertTestSummaryHome
+                  resetTimer={setResetTimer}
+                  setExpired={setExpired}
+                  resetTimerFlag={resetTimer}
+                  callApiFlag={expired}
+                  user={user}
+                />
+              )}
+            />
+            {/* <Route
               path="/workspace/qa_certifications/"
               exact
-              component={ComingSoon}
-            />
+              component={
+                <QACertTestSummaryHome
+                  resetTimer={setResetTimer}
+                  setExpired={setExpired}
+                  resetTimerFlag={resetTimer}
+                  callApiFlag={expired}
+                  user={user}
+                />
+              }
+            /> */}
             {user ? (
               <Redirect from="/emission" to="/workspace/emission" />
             ) : (
