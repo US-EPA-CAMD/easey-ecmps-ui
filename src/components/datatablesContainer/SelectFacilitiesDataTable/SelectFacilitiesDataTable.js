@@ -197,11 +197,13 @@ export const SelectFacilitiesDataTable = ({
               user={user}
               className="expand-row-data-table"
               actionsBtn={"Open"}
+              sectionType={sectionType}
             />
           }
           headerStyling="padding-top-0 padding-left-2"
           setShowInactive={() => {}}
           ariaLabel={"Select Configurationss"}
+          sectionType={sectionType}
         />
       )}
     </div>

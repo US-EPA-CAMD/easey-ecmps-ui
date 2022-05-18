@@ -57,20 +57,22 @@ export const DataTableRender = ({
   headerStyling,
   tableStyling,
   componentStyling,
-  className,
+  // className,
   addBtnName,
   uniqueKey,
   setShowInactive,
   openedFacilityTabs,
-  setMostRecentlyCheckedInMonitorPlanId,
-  setMostRecentlyCheckedInMonitorPlanIdForTab,
-  setCheckout,
+  // setMostRecentlyCheckedInMonitorPlanId,
+  // setMostRecentlyCheckedInMonitorPlanIdForTab,
+  // setCheckout,
   show = false,
   ariaLabel,
   noDataString = `No data currently present.`,
 
   // for 508
   openAndCheckoutBTNFocus,
+
+  sectionType = false,
 }) => {
   const ariaLabelProp = { "aria-label": ariaLabel };
   const [searchText, setSearchText] = useState("");
@@ -108,12 +110,13 @@ export const DataTableRender = ({
 
   const isAnyLocationCheckedOutByUser = () => {
     let result = false;
-
-    if (checkedOutLocations.length > 0) {
-      result =
-        checkedOutLocations
-          .map((location) => location["checkedOutBy"])
-          .indexOf(user.userId) > -1;
+    if (!sectionType) {
+      if (checkedOutLocations.length > 0) {
+        result =
+          checkedOutLocations
+            .map((location) => location["checkedOutBy"])
+            .indexOf(user.userId) > -1;
+      }
     }
     return result;
   };
@@ -136,7 +139,7 @@ export const DataTableRender = ({
   };
 
   const AddLock = (dataRowObject) => {
-    if (checkedOutLocations && checkedOutLocations.length > 0) {
+    if (!sectionType && checkedOutLocations && checkedOutLocations.length > 0) {
       if (isLocationCheckedOut(dataRowObject.row["facId"]) && user) {
         return (
           <>
@@ -155,7 +158,7 @@ export const DataTableRender = ({
   };
 
   const AddPencil = (dataRowObject) => {
-    if (checkedOutLocations && checkedOutLocations.length > 0) {
+    if (!sectionType && checkedOutLocations && checkedOutLocations.length > 0) {
       if (isCurrentlyCheckedOutByUser(dataRowObject.row["monPlanId"])) {
         return (
           <>
@@ -247,7 +250,9 @@ export const DataTableRender = ({
                     </Button>
 
                     {/* display a checkout option only if no other locations are currently checked out by user */}
-                    {isAnyLocationCheckedOutByUser() === false &&
+
+                    {!sectionType &&
+                    isAnyLocationCheckedOutByUser() === false &&
                     isLocationCheckedOut(row["facId"]) === false &&
                     row["col2"] === "Active" ? (
                       <>
@@ -271,7 +276,8 @@ export const DataTableRender = ({
                         </Button>
                       </>
                     ) : /* display check in option only if THIS location is currently checked out by user */
-                    isCurrentlyCheckedOutByUser(row.col3) === true ? (
+                    !sectionType &&
+                      isCurrentlyCheckedOutByUser(row.col3) === true ? (
                       <>
                         <span className="margin-x-1">|</span>
                         <Button
@@ -345,8 +351,8 @@ export const DataTableRender = ({
                   id={
                     // tableTitle
                     //   ? `btnOpen${tableTitle.split(" ").join("")}`
-                      // : 
-                      `btnOpen${row[`col${Object.keys(row).length - 1}`]}`
+                    // :
+                    `btnOpen${row[`col${Object.keys(row).length - 1}`]}`
                   }
                   onClick={() => {
                     openHandler(normalizedRow, false);
@@ -368,8 +374,8 @@ export const DataTableRender = ({
                   id={
                     // tableTitle
                     //   ? `btnOpen${tableTitle.split(" ").join("")}`
-                      // : 
-                      `btnOpen_${row[`col${Object.keys(row).length - 1}`]}`
+                    // :
+                    `btnOpen_${row[`col${Object.keys(row).length - 1}`]}`
                   }
                   className="cursor-pointer margin-left-2 open-modal-button"
                   onClick={() => {
