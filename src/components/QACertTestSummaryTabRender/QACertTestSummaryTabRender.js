@@ -1,5 +1,4 @@
 import React from "react";
-// import "../MonitoringPlanTab/MonitoringPlanTab.scss";
 import QACertTestSummaryHeaderInfo from "../QACertTestSummaryHeaderInfo/QACertTestSummaryHeaderInfo";
 export const QACertTestSummaryRender = ({
   title,

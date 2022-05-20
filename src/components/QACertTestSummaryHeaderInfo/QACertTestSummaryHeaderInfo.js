@@ -83,11 +83,12 @@ export const QACertTestSummaryHeaderInfo = ({
             </div>{" "}
             <div className="grid-col-3"></div>{" "}
             <div className="grid-col-3">
+              {user ? 
               <div className=" float-right right-0 bottom-0 text-no-wrap position-absolute padding-bottom-1">
                 <Button type="button" id="showRevertModal" outline={false} >
                   {"Import Test Data"}
                 </Button>
-              </div>
+              </div>: ""}
             </div>
           </div>
           <div className="grid-row float-right">

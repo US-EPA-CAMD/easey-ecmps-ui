@@ -57,7 +57,7 @@ export const QACertTestSummaryTab = ({
           setLocationSelect={setLocationSelect}
           locations={selectedConfig.locations}
           user={user}
-          configID={tabs[activeTab[0]].selectedConfig.id}
+          configID={tabs[activeTab].selectedConfig.id}
 
         />
       </div>
