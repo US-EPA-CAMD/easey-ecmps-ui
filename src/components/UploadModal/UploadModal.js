@@ -8,7 +8,6 @@ import { ClearSharp } from "@material-ui/icons";
 import "./UploadModal.scss";
 
 import { focusTrap } from "../../additional-functions/focus-trap";
-import * as mpApi from "../../utils/api/monitoringPlansApi";
 const modalContext = createContext(null, null);
 
 export const UploadModal = ({
@@ -29,22 +28,15 @@ export const UploadModal = ({
   setIsLoading,
   hasFormatError,
   hasInvalidJsonError,
-  importApiErrors,
-  setImportApiErrors,
+  // importApiErrors,
+  // setImportApiErrors,
   importedFileErrorMsgs,
-  setImportedFileErrorMsgs,
-  fileName,
+  // setImportedFileErrorMsgs,
+  // fileName,
   notUploadVersion,
 }) => {
   const hasErrors = importedFileErrorMsgs && importedFileErrorMsgs.length > 0;
   const milisecondsToLoad = 4000;
-  const numErrs = 17;
-  // let apiErrors = [];
-  // for (let i = 0; i < numErrs; i++) {
-  //   apiErrors.push(
-  //     'You have reported a MonitorQualPercent record for a location with the Qualification Type Code not equal to "PK," "SK" or "GF." A MonitorQualPercent record should not be reported for qualification Codes other than "PK," "SK" or "GF".'
-  //   );
-  // }
 
   const onLoadEffect = () => {
     if (timer) {

@@ -99,7 +99,6 @@ export const LeftNavigation = (props) => {
     ];
   };
 
-  const globalItems = makeHeader(workSpace, true, true);
   return (
     <div className="minh-tablet font-body-sm padding-3">
       {props.user ? (

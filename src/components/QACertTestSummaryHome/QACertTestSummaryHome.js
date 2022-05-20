@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
 import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
-import { MonitoringPlanTab as SelectedFacilityTab } from "../MonitoringPlanTab/MonitoringPlanTab";
+import { QACertTestSummaryTab as SelectedFacilityTab } from "../QACertTestSummaryTab/QACertTestSummaryTab";
 import DynamicTabs from "../DynamicTabs/DynamicTabs";
 
-
-import * as mpApi from "../../utils/api/monitoringPlansApi";
-import NotFound from "../NotFound/NotFound";
 
 
 export const QACertTestSummaryHome = ({
@@ -52,15 +49,15 @@ export const QACertTestSummaryHome = ({
       tabArr.push({
         title: row.name,
         component: (
-          <NotFound
-            // resetTimer={resetTimer}
-            // setExpired={setExpired}
-            // resetTimerFlag={resetTimerFlag}
-            // callApiFlag={callApiFlag}
-            // orisCode={row.orisCode}
-            // selectedConfig={row.selectedConfig}
-            // title={row.name}
-            // user={user}
+          <SelectedFacilityTab
+            resetTimer={resetTimer}
+            setExpired={setExpired}
+            resetTimerFlag={resetTimerFlag}
+            callApiFlag={callApiFlag}
+            orisCode={row.orisCode}
+            selectedConfig={row.selectedConfig}
+            title={row.name}
+            user={user}
             // checkout={row.checkout}
           />
         ),
