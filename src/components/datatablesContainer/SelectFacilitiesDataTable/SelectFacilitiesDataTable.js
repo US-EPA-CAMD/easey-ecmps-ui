@@ -8,6 +8,7 @@ import "./SelectFacilitiesDataTable.scss";
 import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigurations";
 import * as facilitiesApi from "../../../utils/api/facilityApi";
 import { getCheckedOutLocations } from "../../../utils/api/monitoringPlansApi";
+import NotFound from "../../NotFound/NotFound";
 
 export const SelectFacilitiesDataTable = ({
   user,
