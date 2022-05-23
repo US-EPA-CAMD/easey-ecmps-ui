@@ -7,7 +7,10 @@ import "./Tabs.scss";
 import { setCheckoutState } from "../../store/actions/dynamicFacilityTab";
 import { connect } from "react-redux";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
-
+import {
+  convertSectionToStoreName,
+  MONITORING_PLAN_STORE_NAME,
+} from "../../additional-functions/workspace-section-and-store-names";
 export const Tabs = ({
   children,
   dynamic = false,
@@ -16,7 +19,7 @@ export const Tabs = ({
   checkedOutLocations,
   user,
   setCheckout,
-  sectionType =false,
+  workspaceSection =false,
 }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
@@ -28,7 +31,7 @@ export const Tabs = ({
     event.stopPropagation();
     removeTabs(index);
 
-    if (!sectionType) {
+    if (workspaceSection === MONITORING_PLAN_STORE_NAME) {
       mpApi.getCheckedOutLocations().then((resOne) => {
         const configs = resOne.data;
         if (
@@ -41,7 +44,7 @@ export const Tabs = ({
           mpApi.deleteCheckInMonitoringPlanConfiguration(configId).then(() => {
             console.log("X button - checked-in configuration: " + configId);
             if (setCheckout) {
-              setCheckout(false, configId);
+              setCheckout(false, configId,workspaceSection);
             }
           });
         } else {
@@ -58,7 +61,7 @@ export const Tabs = ({
   };
 
   const isCheckedOut = (locationId) => {
-    if (!sectionType) {
+    if (workspaceSection === MONITORING_PLAN_STORE_NAME) {
       return (
         checkedOutLocations
           .map((location) => location["monPlanId"])
@@ -68,7 +71,7 @@ export const Tabs = ({
   };
 
   const isCheckedOutByUser = (locationId) => {
-    if (!sectionType) {
+    if (workspaceSection === MONITORING_PLAN_STORE_NAME) {
       return (
         checkedOutLocations
           .map((location) => location["monPlanId"])
@@ -133,7 +136,7 @@ export const Tabs = ({
                   aria-label={`open ${el.props.title.split("(")[0]}${
                     user &&
                     el.props.locationId &&
-                    el.props.facId && !sectionType &&
+                    el.props.facId && workspaceSection === MONITORING_PLAN_STORE_NAME &&
                     (isCheckedOut(el.props.locationId) ||
                       checkedOutLocations.some(
                         (loc) => loc.facId === parseInt(el.props.facId)
@@ -158,7 +161,7 @@ export const Tabs = ({
                   }}
                 >
                   <div className="text-center tab-button-text-container ellipsis-text padding-2px position-relative top-neg-05">
-                    {user && !sectionType &&
+                    {user && workspaceSection === MONITORING_PLAN_STORE_NAME &&
                     el.props.locationId &&
                     el.props.facId &&
                     (isCheckedOut(el.props.locationId) ||
@@ -177,7 +180,7 @@ export const Tabs = ({
                     {el.props.title.split("(")[0]}
                   </div>
                   <div className="text-center">
-                    {!sectionType && el.props.locationId &&
+                    {workspaceSection === MONITORING_PLAN_STORE_NAME && el.props.locationId &&
                     isCheckedOutByUser(el.props.locationId) ? (
                       <CreateSharp
                         role="img"
@@ -237,8 +240,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setCheckout: (value, configID) =>
-      dispatch(setCheckoutState(value, configID)),
+    setCheckout: (value, configID,workspaceSection) =>
+      dispatch(setCheckoutState(value, configID,convertSectionToStoreName(workspaceSection))),
   };
 };
 

@@ -17,7 +17,7 @@ export const DataTableConfigurations = ({
   setMostRecentlyCheckedInMonitorPlanId,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
   setCheckout,
-  sectionType=false,
+  workspaceSection=false,
 }) => {
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -159,7 +159,7 @@ export const DataTableConfigurations = ({
         setCheckBackInState={setCheckout}
         openAndCheckoutBTNFocus={openAndCheckoutBTNFocus}
         ariaLabel={`Configurations for ${facility}`}
-        sectionType={sectionType}
+        workspaceSection={workspaceSection}
       />
     </div>
   );

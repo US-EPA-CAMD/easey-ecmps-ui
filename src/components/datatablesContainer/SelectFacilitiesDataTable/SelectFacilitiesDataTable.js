@@ -8,14 +8,15 @@ import "./SelectFacilitiesDataTable.scss";
 import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigurations";
 import * as facilitiesApi from "../../../utils/api/facilityApi";
 import { getCheckedOutLocations } from "../../../utils/api/monitoringPlansApi";
-import NotFound from "../../NotFound/NotFound";
-
+import {
+  MONITORING_PLAN_STORE_NAME,
+} from "../../../additional-functions/workspace-section-and-store-names";
 export const SelectFacilitiesDataTable = ({
   user,
   addtabs,
   openedFacilityTabs,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
-  sectionType = false,
+  workspaceSection = false,
 }) => {
   const [facilities, setFacilities] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -68,7 +69,7 @@ export const SelectFacilitiesDataTable = ({
         title: `${info[0].col1} (${info[1].name}) ${
           info[1].active ? "" : "Inactive"
         }`,
-        component: !sectionType ? (
+        component: workspaceSection === MONITORING_PLAN_STORE_NAME ? (
           <div className="selectedTabsBox">
             <SelectedFacilityTab
               orisCode={info[0].col2}
@@ -154,7 +155,7 @@ export const SelectFacilitiesDataTable = ({
           ]);
         }}
       />
-      {!sectionType ? (
+      {workspaceSection ===MONITORING_PLAN_STORE_NAME ? (
         <DataTableRender
           columnNames={columnNames}
           dataLoaded={dataLoaded}
@@ -210,13 +211,13 @@ export const SelectFacilitiesDataTable = ({
               user={user}
               className="expand-row-data-table"
               actionsBtn={"Open"}
-              sectionType={sectionType}
+              workspaceSection={workspaceSection}
             />
           }
           headerStyling="padding-top-0 padding-left-2"
           setShowInactive={() => {}}
           ariaLabel={"Select Configurationss"}
-          sectionType={sectionType}
+          workspaceSection={workspaceSection}
         />
       )}
     </div>

@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 
 import { connect } from "react-redux";
 import QACertTestSummaryTabRender from "../QACertTestSummaryTabRender/QACertTestSummaryTabRender";
-
+import {
+  convertSectionToStoreName,
+  QA_CERT_TEST_SUMMARY_STORE_NAME,
+} from "../../additional-functions/workspace-section-and-store-names";
 import { setActiveTab } from "../../store/actions/activeTab";
 import {
   setSectionSelectionState,
@@ -25,7 +28,8 @@ export const QACertTestSummaryTab = ({
   setSection,
   setLocation,
 }) => {
-  const [sectionSelect, setSectionSelect] = useState(tabs[activeTab].section);
+    console.log('tabs[activeTab[0]]',tabs[activeTab[0]])
+  const [sectionSelect, setSectionSelect] = useState(tabs[activeTab[0]].section);
   useEffect(() => {
     setSection(sectionSelect, title);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -64,17 +68,29 @@ export const QACertTestSummaryTab = ({
 };
 const mapStateToProps = (state) => {
   return {
-    tabs: state.openedFacilityTabs,
-    activeTab: state.activeTab,
+    tabs: state.openedFacilityTabs[QA_CERT_TEST_SUMMARY_STORE_NAME],
+    activeTab: state.activeTab[0],
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setLocation: (location, title) =>
-      dispatch(setLocationSelectionState(location, title)),
+      dispatch(
+        setLocationSelectionState(
+          location,
+          title,
+          convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
+        )
+      ),
     setSection: (section, title) =>
-      dispatch(setSectionSelectionState(section, title)),
+      dispatch(
+        setSectionSelectionState(
+          section,
+          title,
+          convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
+        )
+      ),
     setActiveTab: (orisCode, value) => dispatch(setActiveTab(orisCode, value)),
   };
 };

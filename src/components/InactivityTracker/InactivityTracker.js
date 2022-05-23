@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import { Button } from "@trussworks/react-uswds";
 import { ClearSharp } from "@material-ui/icons";
 import "../Modal/Modal.scss";
-
+import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 const modalClassName = "modal-wrapper bg-base-lightest radius-md";
 const modalContext = createContext(null);
 const widthPercent = 50;
@@ -151,7 +151,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
   return {
-    openedFacilityTabs: state.openedFacilityTabs,
+    openedFacilityTabs: state.openedFacilityTabs[MONITORING_PLAN_STORE_NAME],
   };
 };
 

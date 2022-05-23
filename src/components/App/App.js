@@ -122,7 +122,7 @@ const App = () => {
             <Route
               path="/monitoring-plans"
               exact
-              component={() => <MonitoringPlanHome user={false} />}
+              component={() => <MonitoringPlanHome user={false} workspaceSection={'monitoringPlans'}/>}
             />
             <Route
               path="/workspace/monitoring-plans/"
@@ -134,6 +134,7 @@ const App = () => {
                   resetTimerFlag={resetTimer}
                   callApiFlag={expired}
                   user={user}
+                  workspaceSection={'monitoringPlans'}
                 />
               )}
             />

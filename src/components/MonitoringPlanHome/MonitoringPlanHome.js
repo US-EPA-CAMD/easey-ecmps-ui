@@ -11,17 +11,21 @@ import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 
 import "./MonitoringPlanHome.scss";
-
+import {
+  convertSectionToStoreName,
+  MONITORING_PLAN_STORE_NAME,
+} from "../../additional-functions/workspace-section-and-store-names";
 export const MonitoringPlanHome = ({
   user,
   resetTimer,
   setExpired,
   resetTimerFlag,
   callApiFlag,
-  openedFacilityTabs,
+  openedFacilityTabs
 }) => {
   useEffect(() => {
     document.title = "ECMPS Monitoring Plans";
+    console.log('open',openedFacilityTabs)
   }, []);
   const [checkedOutLocations, setCheckedOutLocations] = useState([]);
   const [
@@ -187,6 +191,7 @@ export const MonitoringPlanHome = ({
           tabsProps={() => handleTabState()}
           checkedOutLocations={checkedOutLocations}
           user={user}
+          workspaceSection={MONITORING_PLAN_STORE_NAME}
         />
       </div>
     </div>
@@ -195,7 +200,7 @@ export const MonitoringPlanHome = ({
 
 const mapStateToProps = (state) => {
   return {
-    openedFacilityTabs: state.openedFacilityTabs,
+    openedFacilityTabs: state.openedFacilityTabs[MONITORING_PLAN_STORE_NAME],
   };
 };
 
