@@ -24,7 +24,6 @@ export const QACertTestSummaryTab = ({
   activeTab,
   setSection,
   setLocation,
-
 }) => {
   const [sectionSelect, setSectionSelect] = useState(tabs[activeTab].section);
   useEffect(() => {
@@ -58,7 +57,6 @@ export const QACertTestSummaryTab = ({
           locations={selectedConfig.locations}
           user={user}
           configID={tabs[activeTab].selectedConfig.id}
-
         />
       </div>
     </div>
@@ -78,10 +76,11 @@ const mapDispatchToProps = (dispatch) => {
     setSection: (section, title) =>
       dispatch(setSectionSelectionState(section, title)),
     setActiveTab: (orisCode, value) => dispatch(setActiveTab(orisCode, value)),
-
-    
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(QACertTestSummaryTab);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(QACertTestSummaryTab);
 export { mapStateToProps };
 export { mapDispatchToProps };

@@ -1,6 +1,10 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import { QACertTestSummaryTab, mapStateToProps,mapDispatchToProps } from "./QACertTestSummaryTab";
+import {
+  QACertTestSummaryTab,
+  mapStateToProps,
+  mapDispatchToProps,
+} from "./QACertTestSummaryTab";
 
 const axios = require("axios");
 jest.mock("axios");
@@ -28,20 +32,18 @@ const props = {
   sectionSelect: [3, "Methods"],
   locationSelect: [0, "65"],
   orisCode: "5",
-  tabs: [{ selectedConfig:selectedConfig ,location:0,section:0}],
+  tabs: [{ selectedConfig: selectedConfig, location: 0, section: 0 }],
   configID: selectedConfig.id,
   activeTab: 0,
-  setSection:jest.fn(),
-  setLocation:jest.fn(),
+  setSection: jest.fn(),
+  setLocation: jest.fn(),
 };
 test("tests QACertTestSummaryTab", async () => {
-
-  
   const { container } = render(<QACertTestSummaryTab {...props} />);
 
   expect(container).not.toBeUndefined();
 });
-test('mapDispatchToProps calls the appropriate action', async () => {
+test("mapDispatchToProps calls the appropriate action", async () => {
   // mock the 'dispatch' object
   const dispatch = jest.fn();
   const actionProps = mapDispatchToProps(dispatch);
