@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { connect } from "react-redux";
 import * as fs from "../../../utils/selectors/facilities";
 import SelectedFacilityTab from "../../MonitoringPlanTab/MonitoringPlanTab";
+import QACertTestSummaryTab from "../../QACertTestSummaryTab/QACertTestSummaryTab";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import "./SelectFacilitiesDataTable.scss";
 import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigurations";
@@ -13,7 +14,6 @@ export const SelectFacilitiesDataTable = ({
   user,
   addtabs,
   openedFacilityTabs,
-  mostRecentlyCheckedInMonitorPlanIdForTab,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
   sectionType = false,
 }) => {
@@ -37,6 +37,9 @@ export const SelectFacilitiesDataTable = ({
 
   useEffect(() => {
     obtainCheckedOutLocations().then();
+    return () => {
+      setCheckedOutLocations([]); 
+    };
   }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanId]);
 
   const obtainCheckedOutLocations = async () => {
@@ -65,8 +68,7 @@ export const SelectFacilitiesDataTable = ({
         title: `${info[0].col1} (${info[1].name}) ${
           info[1].active ? "" : "Inactive"
         }`,
-        component: (
-          !sectionType ?
+        component: !sectionType ? (
           <div className="selectedTabsBox">
             <SelectedFacilityTab
               orisCode={info[0].col2}
@@ -90,7 +92,18 @@ export const SelectFacilitiesDataTable = ({
                 setMostRecentlyCheckedInMonitorPlanIdForTab
               }
             />
-          </div>: <NotFound/>
+          </div>
+        ) : (
+          <div className="selectedTabsBox">
+            <QACertTestSummaryTab
+              orisCode={info[0].col2}
+              selectedConfig={info[1]}
+              title={`${info[0].col1} (${info[1].name}) ${
+                info[1].active ? "" : "Inactive"
+              }`}
+              user={user}
+            />
+          </div>
         ),
         orisCode: info[0].col2,
         selectedConfig: info[1],
@@ -197,11 +210,13 @@ export const SelectFacilitiesDataTable = ({
               user={user}
               className="expand-row-data-table"
               actionsBtn={"Open"}
+              sectionType={sectionType}
             />
           }
           headerStyling="padding-top-0 padding-left-2"
           setShowInactive={() => {}}
           ariaLabel={"Select Configurationss"}
+          sectionType={sectionType}
         />
       )}
     </div>

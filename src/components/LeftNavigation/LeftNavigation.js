@@ -99,9 +99,8 @@ export const LeftNavigation = (props) => {
     ];
   };
 
-  const globalItems = makeHeader(workSpace, true, true);
   return (
-    <div className="minh-tablet font-body-sm padding-3">
+    <div className="minh-tablet font-body-sm padding-3 leftNav">
       {props.user ? (
         <div>
           <SideNav items={makeHeader(home, true, true)} />

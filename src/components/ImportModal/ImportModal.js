@@ -54,17 +54,8 @@ const ImportModal = ({
       const fileLoaded = JSON.parse(event.target.result);
       setImportedFile(fileLoaded);
 
-      var util = require("util");
       var Validator = require("jsonschema").Validator;
       var v = new Validator();
-      var schemaaa = {
-        id: "age",
-        type: "object",
-        properties: {
-          age: { type: "number" },
-          name: { type: "string" },
-        },
-      };
 
       if (v.validate(fileLoaded, mpSchema).valid) {
         setHasFormatError(false);

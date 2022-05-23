@@ -420,7 +420,6 @@ export const HeaderInfo = ({
   };
 
   const showRevert = (status) => {
-    console.log("statiuus", status);
     return (
       status === "PASS" ||
       status === "INFO" ||
