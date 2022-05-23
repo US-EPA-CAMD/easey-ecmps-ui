@@ -48,28 +48,31 @@ export const extractUserInput = (payload, inputSelector, radios) => {
   }
 
   payloadArray.forEach((item) => {
+
     if (item.value !== undefined) {
-      if (
-        typeof item.value === "string" &&
-        isNaN(item.value)
-      ) {
+      if (typeof item.value === "string" && isNaN(item.value)) {
         payload[item.name] =
           item.value.trim() === "" ? null : item.value.trim();
       }
-      if (
-        typeof item.value === "string" &&
-        !isNaN(item.value)
-      ) {
-        // not a decimal
-        if(item.value.indexOf(".") === -1){
-          payload[item.name] = parseInt(item.value);
+      // is a number
+      if (typeof item.value === "string" && !isNaN(item.value)) {
+        if (payload[item.name] === "string") {
+          payload[item.name] =
+            item.value.trim() === "" ? null : item.value.trim();
         }
-        else{
+        // not a decimal
+        else if (item.value.indexOf(".") === -1) {
+          payload[item.name] = parseInt(item.value);
+        } else {
           payload[item.name] = parseFloat(item.value);
         }
       }
       if (typeof item.value === "number") {
-        payload[item.name] = item.value;
+        if (payload[item.name] === "string") {
+          payload[item.name] = item.value.toString();
+        } else {
+          payload[item.name] = item.value;
+        }
       }
     }
   });
