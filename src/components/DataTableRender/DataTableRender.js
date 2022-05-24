@@ -583,14 +583,14 @@ export const DataTableRender = ({
 
 const mapStateToProps = (state) => {
   return {
-    openedFacilityTabs: state.openedFacilityTabs,
+    openedFacilityTabs: state.openedFacilityTabs[ MONITORING_PLAN_STORE_NAME],
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setCheckout: (value, configID) =>
-      dispatch(setCheckoutState(value, configID)),
+    setCheckout: (value, configID,workspaceSection) =>
+      dispatch(setCheckoutState(value, configID,workspaceSection)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(DataTableRender);

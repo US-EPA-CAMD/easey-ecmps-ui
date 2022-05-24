@@ -10,6 +10,7 @@ import * as mpApi from "../../utils/api/monitoringPlansApi";
 import {
   convertSectionToStoreName,
   MONITORING_PLAN_STORE_NAME,
+  QA_CERT_TEST_SUMMARY_STORE_NAME
 } from "../../additional-functions/workspace-section-and-store-names";
 export const Tabs = ({
   children,
@@ -19,13 +20,13 @@ export const Tabs = ({
   checkedOutLocations,
   user,
   setCheckout,
-  workspaceSection =false,
+  workspaceSection ,
 }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   const settingActiveTab = (index) => {
     setActiveTabIndex(index);
-    setActive(false, index - 1);
+    setActive(false, index - 1,workspaceSection);
   };
   const closeHandler = (event, index, configId) => {
     event.stopPropagation();
@@ -56,7 +57,7 @@ export const Tabs = ({
     }
     if (activeTabIndex === children.length - 1) {
       setActiveTabIndex(index - 1);
-      setActive(false, index - 2);
+      setActive(false, index - 2,workspaceSection);
     }
   };
 
@@ -234,7 +235,7 @@ export const Tabs = ({
 
 const mapStateToProps = (state) => {
   return {
-    openedFacilityTabs: state.openedFacilityTabs,
+    openedFacilityTabs: state.openedFacilityTabs(convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)),
   };
 };
 

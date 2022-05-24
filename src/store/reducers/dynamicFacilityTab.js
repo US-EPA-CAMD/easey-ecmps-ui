@@ -5,7 +5,6 @@ const reducer = (state, action) => {
   const currentState = state ? state : initialState.openedFacilityTabs;
   let returnObject;
   const workspaceSectionSelected = {};
-  console.log("ACTION", action, state, "current", currentState);
 
   const fac = {};
   fac[`${action.workspaceSection}`] = action.facility;
@@ -87,7 +86,6 @@ const reducer = (state, action) => {
 
       break;
     case types.SET_INACTIVE_STATE:
-      console.log('currentState[`${action.workspaceSection}`]', currentState[`${action.workspaceSection}`])
       returnObject = {
         ...currentState,
         [`${action.workspaceSection}`]: currentState[

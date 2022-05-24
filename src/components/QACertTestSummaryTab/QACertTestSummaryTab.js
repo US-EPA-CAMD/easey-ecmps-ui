@@ -28,15 +28,14 @@ export const QACertTestSummaryTab = ({
   setSection,
   setLocation,
 }) => {
-    console.log('tabs[activeTab[0]]',tabs[activeTab[0]])
-  const [sectionSelect, setSectionSelect] = useState(tabs[activeTab[0]].section);
+  const [sectionSelect, setSectionSelect] = useState(tabs?tabs[activeTab].section:'');
   useEffect(() => {
     setSection(sectionSelect, title);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionSelect]);
 
   const [locationSelect, setLocationSelect] = useState(
-    tabs[activeTab].location
+    tabs?tabs[activeTab].location:''
   );
 
   useEffect(() => {
@@ -54,13 +53,13 @@ export const QACertTestSummaryTab = ({
           title={title}
           orisCode={orisCode}
           selectedConfig={selectedConfig}
-          sectionSelect={tabs[activeTab].section}
+          sectionSelect={tabs? tabs[activeTab].section:null}
           setSectionSelect={setSectionSelect}
-          locationSelect={tabs[activeTab].location}
+          locationSelect={tabs?tabs[activeTab].location:null}
           setLocationSelect={setLocationSelect}
           locations={selectedConfig.locations}
           user={user}
-          configID={tabs[activeTab].selectedConfig.id}
+          configID={tabs?tabs[activeTab].selectedConfig.id:null}
         />
       </div>
     </div>
@@ -69,7 +68,7 @@ export const QACertTestSummaryTab = ({
 const mapStateToProps = (state) => {
   return {
     tabs: state.openedFacilityTabs[QA_CERT_TEST_SUMMARY_STORE_NAME],
-    activeTab: state.activeTab[0],
+    activeTab: state.activeTab[QA_CERT_TEST_SUMMARY_STORE_NAME][0],
   };
 };
 
@@ -91,7 +90,7 @@ const mapDispatchToProps = (dispatch) => {
           convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
         )
       ),
-    setActiveTab: (orisCode, value) => dispatch(setActiveTab(orisCode, value)),
+    setActiveTab: (orisCode, value) => dispatch(setActiveTab(orisCode, value,convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME))),
   };
 };
 export default connect(

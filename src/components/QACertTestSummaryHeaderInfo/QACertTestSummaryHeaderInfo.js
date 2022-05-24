@@ -66,7 +66,7 @@ export const QACertTestSummaryHeaderInfo = ({
                 options={locations}
                 viewKey="name"
                 selectKey="id"
-                initialSelection={locationSelect[0]}
+                initialSelection={locationSelect?locationSelect[0]:null}
                 selectionHandler={setLocationSelect}
               />
             </div>
@@ -77,7 +77,7 @@ export const QACertTestSummaryHeaderInfo = ({
                 options={sections}
                 viewKey="name"
                 selectKey="name"
-                initialSelection={sectionSelect[0]}
+                initialSelection={sectionSelect?sectionSelect[0]:null}
                 orisCode={orisCode}
               />
             </div>{" "}

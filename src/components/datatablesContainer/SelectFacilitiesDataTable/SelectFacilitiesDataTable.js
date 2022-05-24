@@ -10,13 +10,14 @@ import * as facilitiesApi from "../../../utils/api/facilityApi";
 import { getCheckedOutLocations } from "../../../utils/api/monitoringPlansApi";
 import {
   MONITORING_PLAN_STORE_NAME,
+  QA_CERT_TEST_SUMMARY_STORE_NAME
 } from "../../../additional-functions/workspace-section-and-store-names";
 export const SelectFacilitiesDataTable = ({
   user,
   addtabs,
   openedFacilityTabs,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
-  workspaceSection = false,
+  workspaceSection ,
 }) => {
   const [facilities, setFacilities] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -92,6 +93,7 @@ export const SelectFacilitiesDataTable = ({
               setMostRecentlyCheckedInMonitorPlanIdForTab={
                 setMostRecentlyCheckedInMonitorPlanIdForTab
               }
+              workspaceSection={workspaceSection}
             />
           </div>
         ) : (
@@ -103,6 +105,7 @@ export const SelectFacilitiesDataTable = ({
                 info[1].active ? "" : "Inactive"
               }`}
               user={user}
+              workspaceSection={workspaceSection}
             />
           </div>
         ),
@@ -161,7 +164,7 @@ export const SelectFacilitiesDataTable = ({
           dataLoaded={dataLoaded}
           data={data}
           defaultSort="col2"
-          openedFacilityTabs={openedFacilityTabs}
+          openedFacilityTabs={openedFacilityTabs[MONITORING_PLAN_STORE_NAME]}
           user={user}
           pagination={true}
           filter={true}
@@ -199,7 +202,7 @@ export const SelectFacilitiesDataTable = ({
           dataLoaded={dataLoaded}
           data={data}
           defaultSort="col2"
-          openedFacilityTabs={openedFacilityTabs}
+          openedFacilityTabs={openedFacilityTabs[QA_CERT_TEST_SUMMARY_STORE_NAME]}
           user={user}
           pagination={true}
           filter={true}

@@ -11,7 +11,7 @@ export default {
   },
   openedFacilityTabs: { monitoringPlans: [], qaCertTestSummary: [] },
 
-  activeTab: [0],
+  activeTab: { monitoringPlans: [0], qaCertTestSummary: [0] },
   dropdowns: {
     defaults: [],
     formulas: [],

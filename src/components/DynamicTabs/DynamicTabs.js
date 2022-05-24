@@ -10,6 +10,7 @@ import { setActiveTab } from "../../store/actions/activeTab";
 import {
   convertSectionToStoreName,
   QA_CERT_TEST_SUMMARY_STORE_NAME,
+  MONITORING_PLAN_STORE_NAME
 } from "../../additional-functions/workspace-section-and-store-names";
 import "./DynamicTabs.scss";
 
@@ -59,7 +60,6 @@ export const DynamicTabs = ({
     removeFacility(index, workspaceSection);
     setTabs([...tabs]);
   };
-
   return (
     <div>
       {workspaceSection === QA_CERT_TEST_SUMMARY_STORE_NAME ? (
@@ -100,6 +100,7 @@ export const DynamicTabs = ({
           setMostRecentlyCheckedInMonitorPlanId={
             setMostRecentlyCheckedInMonitorPlanId
           }
+          workspaceSection={workspaceSection}
         >
           {tabs &&
             tabs.map((tab, i) => (

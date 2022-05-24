@@ -35,7 +35,7 @@ export const QACertTestSummaryHome = ({
             user={user}
             keyField="col2"
             openedFacilityTabs={openedFacilityTabs}
-            workspaceSection={"qaCert"}
+            workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
           />
         ),
       },

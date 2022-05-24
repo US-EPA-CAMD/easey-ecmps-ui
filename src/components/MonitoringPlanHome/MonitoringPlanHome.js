@@ -99,6 +99,7 @@ export const MonitoringPlanHome = ({
             setMostRecentlyCheckedInMonitorPlanIdForTab={
               setMostRecentlyCheckedInMonitorPlanIdForTab
             }
+            workspaceSection={MONITORING_PLAN_STORE_NAME}
           />
         ),
       },
@@ -125,6 +126,7 @@ export const MonitoringPlanHome = ({
             setMostRecentlyCheckedInMonitorPlanIdForTab={
               setMostRecentlyCheckedInMonitorPlanIdForTab
             }
+            workspaceSection={MONITORING_PLAN_STORE_NAME}
           />
         ),
         orisCode: row.orisCode,

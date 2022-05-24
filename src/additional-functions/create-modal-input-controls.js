@@ -32,7 +32,6 @@ export const modalViewData = (
     propertyName,
     singleMDMCodeList
   ) => {
-    console.log("test", singleMDMCodeList, "singleMDMCodeList");
     const allFilteredMDMCodesArray = totalOptionsClone[prefilteredTotalName];
 
     const selectedFilteredCodeArray = allFilteredMDMCodesArray[0];

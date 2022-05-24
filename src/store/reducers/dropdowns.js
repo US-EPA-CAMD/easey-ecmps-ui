@@ -7,8 +7,6 @@ const reducer = (state, action) => {
 
   const dropdowns = {};
   dropdowns[`${action.section}`] = action.dropdowns;
-
-  console.log('action.section',action.section)
   // to begin, set the current section property
   if (action.type === types.BEGIN_MDM_API_CALL) {
     return { ...currentState, currentSection: action.section };
