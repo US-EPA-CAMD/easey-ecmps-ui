@@ -30,6 +30,9 @@ import {
   LockSharp,
 } from "@material-ui/icons";
 
+import {
+  MONITORING_PLAN_STORE_NAME,
+} from "../../additional-functions/workspace-section-and-store-names";
 // *** scss
 import "./DataTableRender.scss";
 import { setCheckoutState } from "../../store/actions/dynamicFacilityTab";
@@ -64,7 +67,7 @@ export const DataTableRender = ({
   openedFacilityTabs,
   // setMostRecentlyCheckedInMonitorPlanId,
   // setMostRecentlyCheckedInMonitorPlanIdForTab,
-  // setCheckout,
+  setCheckout,
   show = false,
   ariaLabel,
   noDataString = `No data currently present.`,
@@ -72,8 +75,9 @@ export const DataTableRender = ({
   // for 508
   openAndCheckoutBTNFocus,
 
-  sectionType = false,
+  workspaceSection,
 }) => {
+  console.log('workspaceSection',workspaceSection)
   const ariaLabelProp = { "aria-label": ariaLabel };
   const [searchText, setSearchText] = useState("");
   const columns = [];
@@ -110,7 +114,7 @@ export const DataTableRender = ({
 
   const isAnyLocationCheckedOutByUser = () => {
     let result = false;
-    if (!sectionType) {
+    if (workspaceSection ===  MONITORING_PLAN_STORE_NAME) {
       if (checkedOutLocations.length > 0) {
         result =
           checkedOutLocations
@@ -139,7 +143,7 @@ export const DataTableRender = ({
   };
 
   const AddLock = (dataRowObject) => {
-    if (!sectionType && checkedOutLocations && checkedOutLocations.length > 0) {
+    if (workspaceSection ===  MONITORING_PLAN_STORE_NAME && checkedOutLocations && checkedOutLocations.length > 0) {
       if (isLocationCheckedOut(dataRowObject.row["facId"]) && user) {
         return (
           <>
@@ -158,7 +162,7 @@ export const DataTableRender = ({
   };
 
   const AddPencil = (dataRowObject) => {
-    if (!sectionType && checkedOutLocations && checkedOutLocations.length > 0) {
+    if (workspaceSection ===  MONITORING_PLAN_STORE_NAME && checkedOutLocations && checkedOutLocations.length > 0) {
       if (isCurrentlyCheckedOutByUser(dataRowObject.row["monPlanId"])) {
         return (
           <>
@@ -251,7 +255,7 @@ export const DataTableRender = ({
 
                     {/* display a checkout option only if no other locations are currently checked out by user */}
 
-                    {!sectionType &&
+                    {workspaceSection ===  MONITORING_PLAN_STORE_NAME &&
                     isAnyLocationCheckedOutByUser() === false &&
                     isLocationCheckedOut(row["facId"]) === false &&
                     row["col2"] === "Active" ? (
@@ -276,7 +280,7 @@ export const DataTableRender = ({
                         </Button>
                       </>
                     ) : /* display check in option only if THIS location is currently checked out by user */
-                    !sectionType &&
+                    workspaceSection ===  MONITORING_PLAN_STORE_NAME &&
                       isCurrentlyCheckedOutByUser(row.col3) === true ? (
                       <>
                         <span className="margin-x-1">|</span>
@@ -579,14 +583,14 @@ export const DataTableRender = ({
 
 const mapStateToProps = (state) => {
   return {
-    openedFacilityTabs: state.openedFacilityTabs,
+    openedFacilityTabs: state.openedFacilityTabs[ MONITORING_PLAN_STORE_NAME],
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setCheckout: (value, configID) =>
-      dispatch(setCheckoutState(value, configID)),
+    setCheckout: (value, configID,workspaceSection) =>
+      dispatch(setCheckoutState(value, configID,workspaceSection)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(DataTableRender);

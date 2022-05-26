@@ -8,14 +8,16 @@ import "./SelectFacilitiesDataTable.scss";
 import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigurations";
 import * as facilitiesApi from "../../../utils/api/facilityApi";
 import { getCheckedOutLocations } from "../../../utils/api/monitoringPlansApi";
-import NotFound from "../../NotFound/NotFound";
-
+import {
+  MONITORING_PLAN_STORE_NAME,
+  QA_CERT_TEST_SUMMARY_STORE_NAME
+} from "../../../additional-functions/workspace-section-and-store-names";
 export const SelectFacilitiesDataTable = ({
   user,
   addtabs,
   openedFacilityTabs,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
-  sectionType = false,
+  workspaceSection ,
 }) => {
   const [facilities, setFacilities] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -68,7 +70,7 @@ export const SelectFacilitiesDataTable = ({
         title: `${info[0].col1} (${info[1].name}) ${
           info[1].active ? "" : "Inactive"
         }`,
-        component: !sectionType ? (
+        component: workspaceSection === MONITORING_PLAN_STORE_NAME ? (
           <div className="selectedTabsBox">
             <SelectedFacilityTab
               orisCode={info[0].col2}
@@ -91,6 +93,7 @@ export const SelectFacilitiesDataTable = ({
               setMostRecentlyCheckedInMonitorPlanIdForTab={
                 setMostRecentlyCheckedInMonitorPlanIdForTab
               }
+              workspaceSection={workspaceSection}
             />
           </div>
         ) : (
@@ -102,6 +105,7 @@ export const SelectFacilitiesDataTable = ({
                 info[1].active ? "" : "Inactive"
               }`}
               user={user}
+              workspaceSection={workspaceSection}
             />
           </div>
         ),
@@ -154,13 +158,13 @@ export const SelectFacilitiesDataTable = ({
           ]);
         }}
       />
-      {!sectionType ? (
+      {workspaceSection ===MONITORING_PLAN_STORE_NAME ? (
         <DataTableRender
           columnNames={columnNames}
           dataLoaded={dataLoaded}
           data={data}
           defaultSort="col2"
-          openedFacilityTabs={openedFacilityTabs}
+          openedFacilityTabs={openedFacilityTabs[MONITORING_PLAN_STORE_NAME]}
           user={user}
           pagination={true}
           filter={true}
@@ -180,6 +184,7 @@ export const SelectFacilitiesDataTable = ({
               setMostRecentlyCheckedInMonitorPlanIdForTab={
                 setMostRecentlyCheckedInMonitorPlanIdForTab
               }
+              workspaceSection={workspaceSection}
             />
           }
           headerStyling="padding-top-0 padding-left-2"
@@ -191,6 +196,7 @@ export const SelectFacilitiesDataTable = ({
             setMostRecentlyCheckedInMonitorPlanIdForTab
           }
           ariaLabel={"Select Configurations"}
+          workspaceSection={workspaceSection}
         />
       ) : (
         <DataTableRender
@@ -198,7 +204,7 @@ export const SelectFacilitiesDataTable = ({
           dataLoaded={dataLoaded}
           data={data}
           defaultSort="col2"
-          openedFacilityTabs={openedFacilityTabs}
+          openedFacilityTabs={openedFacilityTabs[QA_CERT_TEST_SUMMARY_STORE_NAME]}
           user={user}
           pagination={true}
           filter={true}
@@ -210,13 +216,13 @@ export const SelectFacilitiesDataTable = ({
               user={user}
               className="expand-row-data-table"
               actionsBtn={"Open"}
-              sectionType={sectionType}
+              workspaceSection={workspaceSection}
             />
           }
           headerStyling="padding-top-0 padding-left-2"
           setShowInactive={() => {}}
           ariaLabel={"Select Configurationss"}
-          sectionType={sectionType}
+          workspaceSection={workspaceSection}
         />
       )}
     </div>

@@ -394,6 +394,7 @@ export const HeaderInfo = ({
 
   // returns evaluation status (full text) from code
   const evalStatusText = (status) => {
+    console.log(status,'status')
     switch (status) {
       case "ERR":
         return "Critical Errors";
@@ -604,7 +605,7 @@ export const HeaderInfo = ({
                         ""
                       )}
                       <div className="desktop:display-block">
-                        {/* {showRevert(evalStatus) ? ( */}
+                        {showRevert(evalStatus) ? (
                           <div className=" float-right position-relative margin-bottom-2">
                             <Button
                               type="button"
@@ -616,9 +617,9 @@ export const HeaderInfo = ({
                               {"Revert to Official Record"}
                             </Button>
                           </div>
-                        {/* // ) : (
-                        //  ""
-                        // )} */}
+                        ) : (
+                         ""
+                        )}
                       </div>
                     </div>
                   </div>
@@ -773,7 +774,7 @@ export const HeaderInfo = ({
                         checked={inactive[0]}
                         disabled={inactive[1]}
                         onChange={() =>
-                          setInactive([!inactive[0], inactive[1]], facility)
+                          setInactive([!inactive[0], inactive[1]], facility,)
                         }
                       />
                     </div>

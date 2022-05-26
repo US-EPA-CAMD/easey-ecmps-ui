@@ -21,7 +21,9 @@ import {
   locationAttributesDataTableProps,
   relationshipDataTableProps,
 } from "../../additional-functions/dataTable-props";
-
+import {
+  MONITORING_PLAN_STORE_NAME,
+} from "../../additional-functions/workspace-section-and-store-names";
 export const MonitoringPlanTabRender = ({
   resetTimer,
   setExpired,
@@ -44,7 +46,7 @@ export const MonitoringPlanTabRender = ({
   checkedOutLocations,
 }) => {
   const settingInactiveCheckBox = (check, disable) => {
-    setInactive([check, disable], title);
+    setInactive([check, disable], title,MONITORING_PLAN_STORE_NAME);
   };
 
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);

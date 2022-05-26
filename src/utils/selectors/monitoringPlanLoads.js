@@ -2,7 +2,6 @@ export const getMonitoringPlansLoadsTableRecords = (totalData) => {
   const data = totalData;
   const records = [];
 
-  console.log('loads',totalData)
   data.forEach((el) => {
     const beginDate = el.beginDate
       ? formatStringToDate(el.beginDate.toString())

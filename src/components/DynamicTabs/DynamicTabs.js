@@ -7,7 +7,10 @@ import {
   removeFacilityTab,
 } from "../../store/actions/dynamicFacilityTab";
 import { setActiveTab } from "../../store/actions/activeTab";
-
+import {
+  convertSectionToStoreName,
+  QA_CERT_TEST_SUMMARY_STORE_NAME,
+} from "../../additional-functions/workspace-section-and-store-names";
 import "./DynamicTabs.scss";
 
 export const DynamicTabs = ({
@@ -19,7 +22,7 @@ export const DynamicTabs = ({
   setActive,
   setMostRecentlyCheckedInMonitorPlanId,
   mostRecentlyCheckedInMonitorPlanId,
-  sectionType = false,
+  workspaceSection,
 }) => {
   const [tabs, setTabs] = useState(tabsProps);
 
@@ -27,16 +30,19 @@ export const DynamicTabs = ({
     newTabs.forEach((t) => {
       if (!tabs.some((facility) => facility.title === t.title)) {
         tabs.push(t);
-        addFacility({
-          orisCode: t.orisCode,
-          checkout: t.checkout,
-          name: t.title,
-          location: [0, t.selectedConfig.locations[0].id],
-          section: [4, "Methods"],
-          selectedConfig: t.selectedConfig,
-          facId: t.selectedConfig.locations[0].facId,
-          inactive: [false, false],
-        });
+        addFacility(
+          {
+            orisCode: t.orisCode,
+            checkout: t.checkout,
+            name: t.title,
+            location: [0, t.selectedConfig.locations[0].id],
+            section: [4, "Methods"],
+            selectedConfig: t.selectedConfig,
+            facId: t.selectedConfig.locations[0].facId,
+            inactive: [false, false],
+          },
+          workspaceSection
+        );
       }
     });
     setTabs([...tabs]);
@@ -50,20 +56,19 @@ export const DynamicTabs = ({
 
   const removeTabsHandler = (index) => {
     tabs.splice(index, 1);
-    removeFacility(index);
+    removeFacility(index, workspaceSection);
     setTabs([...tabs]);
   };
-
   return (
     <div>
-      {sectionType === "QACert" ? (
+      {workspaceSection === QA_CERT_TEST_SUMMARY_STORE_NAME ? (
         <Tabs
           dynamic={true}
           removeTabs={removeTabsHandler}
           setActive={setActive}
           tabProps={tabs}
           user={user}
-          sectionType={sectionType}
+          workspaceSection={workspaceSection}
         >
           {tabs &&
             tabs.map((tab, i) => (
@@ -94,6 +99,7 @@ export const DynamicTabs = ({
           setMostRecentlyCheckedInMonitorPlanId={
             setMostRecentlyCheckedInMonitorPlanId
           }
+          workspaceSection={workspaceSection}
         >
           {tabs &&
             tabs.map((tab, i) => (
@@ -120,9 +126,22 @@ export const DynamicTabs = ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    removeFacility: (facility) => dispatch(removeFacilityTab(facility)),
-    addFacility: (facility) => dispatch(addFacilityTab(facility)),
-    setActive: (orisCode, value) => dispatch(setActiveTab(orisCode, value)),
+    removeFacility: (facility, workspaceSection) =>
+      dispatch(
+        removeFacilityTab(facility, convertSectionToStoreName(workspaceSection))
+      ),
+    addFacility: (facility, workspaceSection) =>
+      dispatch(
+        addFacilityTab(facility, convertSectionToStoreName(workspaceSection))
+      ),
+    setActive: (orisCode, value, workspaceSection) =>
+      dispatch(
+        setActiveTab(
+          orisCode,
+          value,
+          convertSectionToStoreName(workspaceSection)
+        )
+      ),
   };
 };
 

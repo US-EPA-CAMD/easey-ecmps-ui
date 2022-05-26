@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import { Button } from "@trussworks/react-uswds";
 import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
-import { MonitoringPlanTab as SelectedFacilityTab } from "../MonitoringPlanTab/MonitoringPlanTab";
+import MonitoringPlanTab from "../MonitoringPlanTab/MonitoringPlanTab";
 import DynamicTabs from "../DynamicTabs/DynamicTabs";
 
 import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
@@ -11,7 +11,7 @@ import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 
 import "./MonitoringPlanHome.scss";
-
+import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 export const MonitoringPlanHome = ({
   user,
   resetTimer,
@@ -22,6 +22,7 @@ export const MonitoringPlanHome = ({
 }) => {
   useEffect(() => {
     document.title = "ECMPS Monitoring Plans";
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [checkedOutLocations, setCheckedOutLocations] = useState([]);
   const [
@@ -95,6 +96,7 @@ export const MonitoringPlanHome = ({
             setMostRecentlyCheckedInMonitorPlanIdForTab={
               setMostRecentlyCheckedInMonitorPlanIdForTab
             }
+            workspaceSection={MONITORING_PLAN_STORE_NAME}
           />
         ),
       },
@@ -104,7 +106,7 @@ export const MonitoringPlanHome = ({
       tabArr.push({
         title: row.name,
         component: (
-          <SelectedFacilityTab
+          <MonitoringPlanTab
             resetTimer={resetTimer}
             setExpired={setExpired}
             resetTimerFlag={resetTimerFlag}
@@ -121,6 +123,7 @@ export const MonitoringPlanHome = ({
             setMostRecentlyCheckedInMonitorPlanIdForTab={
               setMostRecentlyCheckedInMonitorPlanIdForTab
             }
+            workspaceSection={MONITORING_PLAN_STORE_NAME}
           />
         ),
         orisCode: row.orisCode,
@@ -187,6 +190,7 @@ export const MonitoringPlanHome = ({
           tabsProps={() => handleTabState()}
           checkedOutLocations={checkedOutLocations}
           user={user}
+          workspaceSection={MONITORING_PLAN_STORE_NAME}
         />
       </div>
     </div>
@@ -195,7 +199,7 @@ export const MonitoringPlanHome = ({
 
 const mapStateToProps = (state) => {
   return {
-    openedFacilityTabs: state.openedFacilityTabs,
+    openedFacilityTabs: state.openedFacilityTabs[MONITORING_PLAN_STORE_NAME],
   };
 };
 

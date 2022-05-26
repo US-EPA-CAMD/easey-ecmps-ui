@@ -10,6 +10,10 @@ import {
   setCheckoutState,
   setInactiveState,
 } from "../../store/actions/dynamicFacilityTab";
+import {
+  convertSectionToStoreName,
+  MONITORING_PLAN_STORE_NAME,
+} from "../../additional-functions/workspace-section-and-store-names";
 export const MonitoringPlanTab = ({
   resetTimer,
   setExpired,
@@ -33,10 +37,11 @@ export const MonitoringPlanTab = ({
   setMostRecentlyCheckedInMonitorPlanId,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
   mostRecentlyCheckedInMonitorPlanIdForTab,
+  workspaceSection
 }) => {
-  const [sectionSelect, setSectionSelect] = useState(tabs[activeTab].section);
+  const [sectionSelect, setSectionSelect] = useState(tabs[activeTab[0]].section);
   useEffect(() => {
-    setSection(sectionSelect, title);
+    setSection(sectionSelect, title, MONITORING_PLAN_STORE_NAME);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionSelect]);
 
@@ -45,7 +50,7 @@ export const MonitoringPlanTab = ({
   );
 
   useEffect(() => {
-    setLocation(locationSelect, title);
+    setLocation(locationSelect, title,workspaceSection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect]);
   return (
@@ -84,21 +89,53 @@ export const MonitoringPlanTab = ({
 };
 const mapStateToProps = (state) => {
   return {
-    tabs: state.openedFacilityTabs,
-    activeTab: state.activeTab,
+    tabs: state.openedFacilityTabs[MONITORING_PLAN_STORE_NAME],
+    activeTab: state.activeTab[MONITORING_PLAN_STORE_NAME],
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setLocation: (location, title) =>
-      dispatch(setLocationSelectionState(location, title)),
-    setSection: (section, title) =>
-      dispatch(setSectionSelectionState(section, title)),
-    setActiveTab: (orisCode, value) => dispatch(setActiveTab(orisCode, value)),
-    setInactive: (value, title) => dispatch(setInactiveState(value, title)),
-    setCheckout: (value, configID) =>
-      dispatch(setCheckoutState(value, configID)),
+    setLocation: (location, title, workspaceSection) =>
+      dispatch(
+        setLocationSelectionState(
+          location,
+          title,
+          convertSectionToStoreName(workspaceSection)
+        )
+      ),
+    setSection: (section, title, workspaceSection) =>
+      dispatch(
+        setSectionSelectionState(
+          section,
+          title,
+          convertSectionToStoreName(workspaceSection)
+        )
+      ),
+    setActiveTab: (orisCode, value, workspaceSection) =>
+      dispatch(
+        setActiveTab(
+          orisCode,
+          value,
+          convertSectionToStoreName(workspaceSection)
+        )
+      ),
+    setInactive: (value, title, workspaceSection) =>
+      dispatch(
+        setInactiveState(
+          value,
+          title,
+          convertSectionToStoreName(workspaceSection)
+        )
+      ),
+    setCheckout: (value, configID, workspaceSection) =>
+      dispatch(
+        setCheckoutState(
+          value,
+          configID,
+          convertSectionToStoreName(workspaceSection)
+        )
+      ),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(MonitoringPlanTab);

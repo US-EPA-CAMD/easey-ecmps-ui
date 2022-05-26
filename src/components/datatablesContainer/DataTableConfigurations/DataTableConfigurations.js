@@ -17,7 +17,7 @@ export const DataTableConfigurations = ({
   setMostRecentlyCheckedInMonitorPlanId,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
   setCheckout,
-  sectionType=false,
+  workspaceSection,
 }) => {
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -59,7 +59,7 @@ export const DataTableConfigurations = ({
         );
 
         try {
-          setCheckout(false, monitoringPlanId);
+          setCheckout(false, monitoringPlanId,workspaceSection);
         } catch (error) {
           // *** do nothing.  this is just in case someone tries to check in a facility
           // *** that does not have an open tab
@@ -159,7 +159,7 @@ export const DataTableConfigurations = ({
         setCheckBackInState={setCheckout}
         openAndCheckoutBTNFocus={openAndCheckoutBTNFocus}
         ariaLabel={`Configurations for ${facility}`}
-        sectionType={sectionType}
+        workspaceSection={workspaceSection}
       />
     </div>
   );
@@ -176,8 +176,8 @@ const mapDispatchToProps = (dispatch) => {
     loadMonitoringPlansData: async (orisCode) => {
       dispatch(loadMonitoringPlansArray(orisCode));
     },
-    setCheckout: (value, configID) =>
-      dispatch(setCheckoutState(value, configID)),
+    setCheckout: (value, configID,workspaceSection) =>
+      dispatch(setCheckoutState(value, configID,workspaceSection)),
   };
 };
 export default connect(
