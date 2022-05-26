@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
 import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
-import { QACertTestSummaryTab as SelectedFacilityTab } from "../QACertTestSummaryTab/QACertTestSummaryTab";
+import QACertTestSummaryTab  from "../QACertTestSummaryTab/QACertTestSummaryTab";
 import DynamicTabs from "../DynamicTabs/DynamicTabs";
 import { QA_CERT_TEST_SUMMARY_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 
@@ -45,7 +45,7 @@ export const QACertTestSummaryHome = ({
       tabArr.push({
         title: row.name,
         component: (
-          <SelectedFacilityTab
+          <QACertTestSummaryTab
             resetTimer={resetTimer}
             setExpired={setExpired}
             resetTimerFlag={resetTimerFlag}

@@ -10,7 +10,6 @@ import { setActiveTab } from "../../store/actions/activeTab";
 import {
   convertSectionToStoreName,
   QA_CERT_TEST_SUMMARY_STORE_NAME,
-  MONITORING_PLAN_STORE_NAME
 } from "../../additional-functions/workspace-section-and-store-names";
 import "./DynamicTabs.scss";
 

@@ -22,7 +22,6 @@ import {
   relationshipDataTableProps,
 } from "../../additional-functions/dataTable-props";
 import {
-  convertSectionToStoreName,
   MONITORING_PLAN_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 export const MonitoringPlanTabRender = ({

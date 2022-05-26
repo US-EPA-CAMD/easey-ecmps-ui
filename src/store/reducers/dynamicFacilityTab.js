@@ -4,7 +4,6 @@ import initialState from "./initialState";
 const reducer = (state, action) => {
   const currentState = state ? state : initialState.openedFacilityTabs;
   let returnObject;
-  const workspaceSectionSelected = {};
 
   const fac = {};
   fac[`${action.workspaceSection}`] = action.facility;
@@ -66,7 +65,7 @@ const reducer = (state, action) => {
 
       break;
     case types.SET_CHECKOUT_STATE:
-      if (currentState && currentState.length > 0) {
+      if (currentState[`${action.workspaceSection}`]) {
         returnObject = {
           ...currentState,
           [`${action.workspaceSection}`]: currentState[

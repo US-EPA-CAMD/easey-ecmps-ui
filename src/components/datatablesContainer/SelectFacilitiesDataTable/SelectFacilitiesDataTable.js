@@ -184,6 +184,7 @@ export const SelectFacilitiesDataTable = ({
               setMostRecentlyCheckedInMonitorPlanIdForTab={
                 setMostRecentlyCheckedInMonitorPlanIdForTab
               }
+              workspaceSection={workspaceSection}
             />
           }
           headerStyling="padding-top-0 padding-left-2"
@@ -195,6 +196,7 @@ export const SelectFacilitiesDataTable = ({
             setMostRecentlyCheckedInMonitorPlanIdForTab
           }
           ariaLabel={"Select Configurations"}
+          workspaceSection={workspaceSection}
         />
       ) : (
         <DataTableRender

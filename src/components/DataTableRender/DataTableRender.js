@@ -31,7 +31,6 @@ import {
 } from "@material-ui/icons";
 
 import {
-  convertSectionToStoreName,
   MONITORING_PLAN_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 // *** scss
@@ -68,7 +67,7 @@ export const DataTableRender = ({
   openedFacilityTabs,
   // setMostRecentlyCheckedInMonitorPlanId,
   // setMostRecentlyCheckedInMonitorPlanIdForTab,
-  // setCheckout,
+  setCheckout,
   show = false,
   ariaLabel,
   noDataString = `No data currently present.`,
@@ -76,8 +75,9 @@ export const DataTableRender = ({
   // for 508
   openAndCheckoutBTNFocus,
 
-  workspaceSection = false,
+  workspaceSection,
 }) => {
+  console.log('workspaceSection',workspaceSection)
   const ariaLabelProp = { "aria-label": ariaLabel };
   const [searchText, setSearchText] = useState("");
   const columns = [];

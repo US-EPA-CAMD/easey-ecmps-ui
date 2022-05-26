@@ -122,7 +122,12 @@ const App = () => {
             <Route
               path="/monitoring-plans"
               exact
-              component={() => <MonitoringPlanHome user={false} workspaceSection={'monitoringPlans'}/>}
+              component={() => (
+                <MonitoringPlanHome
+                  user={false}
+                  workspaceSection={"monitoringPlans"}
+                />
+              )}
             />
             <Route
               path="/workspace/monitoring-plans/"
@@ -134,7 +139,7 @@ const App = () => {
                   resetTimerFlag={resetTimer}
                   callApiFlag={expired}
                   user={user}
-                  workspaceSection={'monitoringPlans'}
+                  workspaceSection={"monitoringPlans"}
                 />
               )}
             />
@@ -152,11 +157,7 @@ const App = () => {
             <Route
               path="/qa_certifications_test_summary_data"
               exact
-              component={() => (
-                <QACertTestSummaryHome
-                  user={false}
-                />
-              )}
+              component={() => <QACertTestSummaryHome user={false} />}
             />
             <Route
               path="/workspace/qa_certifications_test_summary_data"
