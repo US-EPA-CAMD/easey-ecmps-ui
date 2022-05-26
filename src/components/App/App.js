@@ -164,6 +164,15 @@ const App = () => {
               exact
               component={() => (
                 <QACertTestSummaryHome
+                  user={false}
+                />
+              )}
+            />
+            <Route
+              path="/workspace/qa_certifications_test_summary_data"
+              exact
+              component={() => (
+                <QACertTestSummaryHome
                   resetTimer={setResetTimer}
                   setExpired={setExpired}
                   resetTimerFlag={resetTimer}
