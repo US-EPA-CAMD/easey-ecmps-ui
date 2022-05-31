@@ -177,7 +177,6 @@ export const HeaderInfo = ({
   };
 
   const formatCommentsToTable = (data) => {
-    console.log("data in header", data);
     const formmatedData = [];
     if (data.length >= 1) {
       data.forEach((element) => {
@@ -394,7 +393,6 @@ export const HeaderInfo = ({
 
   // returns evaluation status (full text) from code
   const evalStatusText = (status) => {
-    console.log(status,'status')
     switch (status) {
       case "ERR":
         return "Critical Errors";

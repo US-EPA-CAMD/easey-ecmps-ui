@@ -43,7 +43,6 @@ export const extractUserInput = (payload, inputSelector, radios) => {
         item.value = button.firstElementChild.defaultValue === "Yes" ? 1 : 0;
         payloadArray.push(item);
         counter++;
-        console.log('typeof item.value === "string"',typeof item.value,item.value)
       }
     }
   }
@@ -78,8 +77,6 @@ export const extractUserInput = (payload, inputSelector, radios) => {
         }
       }
     }
-    console.log('  payload[item.name]',  payload[item.name],item.name)
   });
-  console.log('  payload',payload)
   return payload;
 };

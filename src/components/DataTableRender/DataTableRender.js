@@ -77,7 +77,6 @@ export const DataTableRender = ({
 
   workspaceSection,
 }) => {
-  console.log('workspaceSection',workspaceSection)
   const ariaLabelProp = { "aria-label": ariaLabel };
   const [searchText, setSearchText] = useState("");
   const columns = [];

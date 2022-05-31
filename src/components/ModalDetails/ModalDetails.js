@@ -96,7 +96,6 @@ const ModalDetails = ({
             <div
               id={`${value[4] !== "skip" ? value[1].split(" ").join("-") : ""}`}
             >
-              {console.log(value[2], 'radio')}
               {value[2]
                 ? value[4] === "radio"
                   ? value[2] === "0"
@@ -264,7 +263,6 @@ const ModalDetails = ({
         break;
 
       case "radio":
-        {console.log(value[2], 'radio')}
         comp = (
           <Fieldset
             className=" display-inline-flex modalUserInput"
