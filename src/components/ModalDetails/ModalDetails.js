@@ -278,7 +278,7 @@ const ModalDetails = ({
               label="Yes"
               value="Yes"
               className="padding-right-1  "
-              defaultChecked={value[2] && value[2] === "1"}
+              defaultChecked={value[2] && value[2] === 1}
             />
             <Radio
               id={`${value[1].split(" ").join("")}-2`}
@@ -287,7 +287,7 @@ const ModalDetails = ({
               value="No"
               className="padding-left-1"
               defaultChecked={
-                value[2] === null || value[2] === false || value[2] === "0"
+                value[2] === null || value[2] === false || value[2] === 0
               }
             />
           </Fieldset>

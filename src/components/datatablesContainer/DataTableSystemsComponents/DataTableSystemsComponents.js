@@ -128,25 +128,24 @@ export const DataTableSystemsComponents = ({
     }
   }, [dataLoaded, systemComponentDropdownsLoaded]);
 
-
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
-    // *** Reassign handlers after pop-up modal is closed
-    useEffect(() => {
-      if (!returnedFocusToLast) {
-        setReturnedFocusToLast(true);
-      } else {
-        returnFocusToLast();
-        assignFocusEventListeners();
-      }
-    }, [returnedFocusToLast]);
-  
-    // *** Clean up focus event listeners
-    useEffect(() => {
-      return () => {
-        cleanupFocusEventListeners();
-      };
-    }, []);
-  
+  // *** Reassign handlers after pop-up modal is closed
+  useEffect(() => {
+    if (!returnedFocusToLast) {
+      setReturnedFocusToLast(true);
+    } else {
+      returnFocusToLast();
+      assignFocusEventListeners();
+    }
+  }, [returnedFocusToLast]);
+
+  // *** Clean up focus event listeners
+  useEffect(() => {
+    return () => {
+      cleanupFocusEventListeners();
+    };
+  }, []);
+
   useEffect(() => {
     if (addCompThirdLevelTrigger) {
       if (selectedUnlinkedComponent[0]) {
@@ -166,9 +165,7 @@ export const DataTableSystemsComponents = ({
       loadDropdownsData(
         SYSTEM_COMPONENTS_SECTION_NAME,
         systemComponentsDataArray
-        
       );
-     
     } else {
       setSystemComponentDropdownsLoaded(true);
     }
@@ -365,9 +362,6 @@ export const DataTableSystemsComponents = ({
     }
     let mainDropdownResult = [];
     let mainDropdownName = "componentTypeCode";
-
-
-    console.log('systemComponentsMdmData',systemComponentsMdmData,mainDropdownName)
     mainDropdownResult = systemComponentsMdmData[mainDropdownName].filter((o) =>
       systemComponentsMdmData[prefilteredDataName].some(
         (element, index, arr) => o.code === element[mainDropdownName]

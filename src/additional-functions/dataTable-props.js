@@ -104,7 +104,7 @@ export const loadsDataTableProps = (location) => {
       upperOperationBoundary: 0,
       normalLevelCode: "string",
       secondLevelCode: "string",
-      secondNormalIndicator: 0,
+      secondNormalIndicator: "radio",
       loadAnalysisDate: "2021-09-16T20:55:48.806Z",
       beginDate: "2021-09-16T20:55:48.806Z",
       beginHour: 0,
@@ -306,7 +306,7 @@ export const unitControlDataTableProps = (location, selectedLocation) => {
       controlEquipParamCode: null,
       controlCode: null,
       originalCode: 0,
-      seasonalControlsIndicator: 0,
+      seasonalControlsIndicator: "radio",
       installDate: null,
       optimizationDate: null,
       retireDate: null,
@@ -360,7 +360,7 @@ export const unitFuelDataTableProps = (selectedLocation) => {
       id: null,
       fuelCode: null,
       indicatorCode: null,
-      ozoneSeasonIndicator: 0,
+      ozoneSeasonIndicator: "radio",
       demGCV: null,
       demSO2: null,
       beginDate: null,
@@ -451,8 +451,8 @@ export const unitCapacityDataTableProps = (location, selectedLocation) => {
 export const locationAttributesDataTableProps = (location) => {
   return {
     payload: {
-      ductIndicator: 0,
-      bypassIndicator: 0,
+      ductIndicator: "radio",
+      bypassIndicator: "radio",
       groundElevation: 0,
       stackHeight: 0,
       materialCode: "string",
