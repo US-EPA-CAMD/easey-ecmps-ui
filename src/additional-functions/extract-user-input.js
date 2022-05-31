@@ -43,6 +43,7 @@ export const extractUserInput = (payload, inputSelector, radios) => {
         item.value = button.firstElementChild.defaultValue === "Yes" ? 1 : 0;
         payloadArray.push(item);
         counter++;
+        console.log('typeof item.value === "string"',typeof item.value,item.value)
       }
     }
   }
@@ -63,19 +64,22 @@ export const extractUserInput = (payload, inputSelector, radios) => {
         // not a decimal
         else if (item.value.indexOf(".") === -1) {
           payload[item.name] = parseInt(item.value);
+          console.log('item.name not a decimal',item.name )
         } else {
           payload[item.name] = parseFloat(item.value);
         }
       }
       if (typeof item.value === "number") {
         if (payload[item.name] === "string") {
+          
           payload[item.name] = item.value.toString();
         } else {
           payload[item.name] = item.value;
         }
       }
     }
+    console.log('  payload[item.name]',  payload[item.name],item.name)
   });
-
+  console.log('  payload',payload)
   return payload;
 };

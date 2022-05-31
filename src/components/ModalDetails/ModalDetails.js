@@ -96,6 +96,7 @@ const ModalDetails = ({
             <div
               id={`${value[4] !== "skip" ? value[1].split(" ").join("-") : ""}`}
             >
+              {console.log(value[2], 'radio')}
               {value[2]
                 ? value[4] === "radio"
                   ? value[2] === "0"
@@ -263,6 +264,7 @@ const ModalDetails = ({
         break;
 
       case "radio":
+        {console.log(value[2], 'radio')}
         comp = (
           <Fieldset
             className=" display-inline-flex modalUserInput"
@@ -278,7 +280,7 @@ const ModalDetails = ({
               label="Yes"
               value="Yes"
               className="padding-right-1  "
-              defaultChecked={value[2] && value[2] === "1"}
+              defaultChecked={value[2] && value[2] === 1}
             />
             <Radio
               id={`${value[1].split(" ").join("")}-2`}
@@ -287,7 +289,7 @@ const ModalDetails = ({
               value="No"
               className="padding-left-1"
               defaultChecked={
-                value[2] === null || value[2] === false || value[2] === "0"
+                value[2] === null || value[2] === false || value[2] === 0
               }
             />
           </Fieldset>
