@@ -7,12 +7,12 @@ const environmentalTopics = [
   {
     link: "https://www.epa.gov/environmental-topics",
     name: "Environmental Topics",
-    key:"environmental"
+    key: "environmental",
   },
   {
     link: "https://www.epa.gov/environmental-topics/air-topics",
     name: "Air",
-    key:"air"
+    key: "air",
   },
 ];
 const myInitialState = [false];
@@ -31,4 +31,3 @@ describe("testing the creation of a submenu", () => {
     expect(mpLink).toBeInTheDocument();
   });
 });
-

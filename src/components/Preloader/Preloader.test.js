@@ -4,7 +4,7 @@ import Preloader from "./Preloader";
 
 describe("testing preloader", () => {
   test("renders the content of Home component", () => {
-    const { container } = render(<Preloader/>);
+    const { container } = render(<Preloader />);
     const renderedComponent = container.querySelector("img");
     expect(renderedComponent).not.toBeUndefined();
   });

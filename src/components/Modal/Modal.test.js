@@ -36,7 +36,7 @@ describe("testing the creation of a modal", () => {
         showCancel={true}
         showSave={true}
         extraBtn={jest.fn()}
-        extraBtnText={'test'}
+        extraBtnText={"test"}
       />
     );
     const cancelBTN = getByText(/Cancel/i);
@@ -46,7 +46,6 @@ describe("testing the creation of a modal", () => {
     cancelBTN.focus();
 
     expect(cancelBTN).toHaveFocus();
-
 
     const e = {
       keyCode: 9,
@@ -101,7 +100,6 @@ describe("testing the creation of a modal", () => {
         show={false}
         showCancel={false}
         showSave={false}
-        
         breadCrumbBar={true}
       />
     );
@@ -120,16 +118,16 @@ describe("testing the creation of a modal", () => {
     // fireEvent.click(cancelBTN);
     // cancelBTN.focus();
 
-  //   const newCLose = container.querySelector("#closeModalBtn");
-  // const newCLose= screen.getByTestId("closeModalBtn");
-  //   newCLose.focus();
-  //   fireEvent.keyPress(newCLose, {
-  //     key: "Enter",
-  //     code: "Enter",
-  //     keyCode: 13,
-  //     charCode: 13,
-  //   });
-  //   fireEvent.keyDown(newCLose, { key: "Enter", code: "Enter" });
-  // fireEvent.click(screen.getByTestId("closeModalBtn"));
+    //   const newCLose = container.querySelector("#closeModalBtn");
+    // const newCLose= screen.getByTestId("closeModalBtn");
+    //   newCLose.focus();
+    //   fireEvent.keyPress(newCLose, {
+    //     key: "Enter",
+    //     code: "Enter",
+    //     keyCode: 13,
+    //     charCode: 13,
+    //   });
+    //   fireEvent.keyDown(newCLose, { key: "Enter", code: "Enter" });
+    // fireEvent.click(screen.getByTestId("closeModalBtn"));
   });
 });

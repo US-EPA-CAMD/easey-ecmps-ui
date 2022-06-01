@@ -42,8 +42,6 @@ export const QACertTestSummaryHeaderInfo = ({
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
   const [dataLoaded, setDataLoaded] = useState(true);
 
- 
-
   return (
     <div className="header QACertHeader ">
       {dataLoaded ? (
@@ -66,7 +64,7 @@ export const QACertTestSummaryHeaderInfo = ({
                 options={locations}
                 viewKey="name"
                 selectKey="id"
-                initialSelection={locationSelect?locationSelect[0]:null}
+                initialSelection={locationSelect ? locationSelect[0] : null}
                 selectionHandler={setLocationSelect}
               />
             </div>
@@ -77,18 +75,26 @@ export const QACertTestSummaryHeaderInfo = ({
                 options={sections}
                 viewKey="name"
                 selectKey="name"
-                initialSelection={sectionSelect?sectionSelect[0]:null}
+                initialSelection={sectionSelect ? sectionSelect[0] : null}
                 orisCode={orisCode}
               />
             </div>{" "}
             <div className="grid-col-3"></div>{" "}
             <div className="grid-col-3">
-              {user ? 
-              <div className=" float-right right-0 bottom-0 text-no-wrap position-absolute padding-bottom-1">
-                <Button type="button" id="showRevertModal" outline={false} >
-                  {"Import Test Data"}
-                </Button>
-              </div>: ""}
+              {user ? (
+                <div className=" float-right right-0 bottom-0 text-no-wrap position-absolute padding-bottom-1">
+                  <Button
+                    className="padding-x-5"
+                    type="button"
+                    id="showRevertModal"
+                    outline={false}
+                  >
+                    {"Import Test Data"}
+                  </Button>
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
           <div className="grid-row float-right">
@@ -108,6 +114,18 @@ export const QACertTestSummaryHeaderInfo = ({
             >
               {"Test History Report"}
             </Button>
+            {user ? (
+              <Button
+                className="float-right text-right bottom-0 text-no-wrap "
+                type="button"
+                id="showRevertModal"
+                outline={false}
+              >
+                {"Evaluate"}
+              </Button>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       ) : (

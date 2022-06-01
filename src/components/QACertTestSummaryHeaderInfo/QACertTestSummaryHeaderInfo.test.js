@@ -1,5 +1,5 @@
 import React from "react";
-import { render,waitForElement } from "@testing-library/react";
+import { render, waitForElement } from "@testing-library/react";
 import QACertTestSummaryHeaderInfo from "./QACertTestSummaryHeaderInfo";
 
 jest.mock("axios");
@@ -43,7 +43,6 @@ function timeout(ms) {
 }
 
 test("testing QACertTestSummaryHeaderInfo component", () => {
-
   const { container } = render(<QACertTestSummaryHeaderInfo {...props} />);
 
   expect(container).toBeDefined();

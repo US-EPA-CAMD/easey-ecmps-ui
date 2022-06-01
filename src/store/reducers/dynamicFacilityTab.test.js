@@ -23,23 +23,19 @@ beforeAll(() => {
               links: [
                 {
                   rel: "self",
-                  href:
-                    "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/6",
+                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/6",
                 },
                 {
                   rel: "methods",
-                  href:
-                    "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/6/methods",
+                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/6/methods",
                 },
                 {
                   rel: "systems",
-                  href:
-                    "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/6/systems",
+                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/6/systems",
                 },
                 {
                   rel: "spans",
-                  href:
-                    "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/6/spans",
+                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/6/spans",
                 },
               ],
             },
@@ -52,23 +48,19 @@ beforeAll(() => {
               links: [
                 {
                   rel: "self",
-                  href:
-                    "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/7",
+                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/7",
                 },
                 {
                   rel: "methods",
-                  href:
-                    "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/7/methods",
+                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/7/methods",
                 },
                 {
                   rel: "systems",
-                  href:
-                    "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/7/systems",
+                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/7/systems",
                 },
                 {
                   rel: "spans",
-                  href:
-                    "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/7/spans",
+                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/7/spans",
                 },
               ],
             },
@@ -81,23 +73,19 @@ beforeAll(() => {
               links: [
                 {
                   rel: "self",
-                  href:
-                    "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/5",
+                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/5",
                 },
                 {
                   rel: "methods",
-                  href:
-                    "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/5/methods",
+                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/5/methods",
                 },
                 {
                   rel: "systems",
-                  href:
-                    "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/5/systems",
+                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/5/systems",
                 },
                 {
                   rel: "spans",
-                  href:
-                    "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/5/spans",
+                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/5/spans",
                 },
               ],
             },
@@ -107,8 +95,7 @@ beforeAll(() => {
           links: [
             {
               rel: "self",
-              href:
-                "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-plans/TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
+              href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-plans/TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
             },
           ],
         },

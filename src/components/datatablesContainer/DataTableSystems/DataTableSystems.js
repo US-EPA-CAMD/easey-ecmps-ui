@@ -95,7 +95,7 @@ export const DataTableSystems = ({
   // *** Clean up focus event listeners
   useEffect(() => {
     return () => {
-     cleanupFocusEventListeners();
+      cleanupFocusEventListeners();
     };
   }, []);
 
@@ -260,10 +260,10 @@ export const DataTableSystems = ({
   const setBread = (val, currentBread, create, addComp = false) => {
     setSecondLevel(val);
     setSecondLevelName(currentBread);
-    if(!val){
-       setReturnedFocusToLast(false);
+    if (!val) {
+      setReturnedFocusToLast(false);
     }
-   
+
     // missing stepper if !currentBread
     if (!addComp && !currentBread) {
       setCreateFuelFlowFlag(create);

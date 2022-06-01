@@ -10,7 +10,7 @@ import * as mpApi from "../../utils/api/monitoringPlansApi";
 import {
   convertSectionToStoreName,
   MONITORING_PLAN_STORE_NAME,
-  QA_CERT_TEST_SUMMARY_STORE_NAME
+  QA_CERT_TEST_SUMMARY_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 export const Tabs = ({
   children,
@@ -20,13 +20,13 @@ export const Tabs = ({
   checkedOutLocations,
   user,
   setCheckout,
-  workspaceSection ,
+  workspaceSection,
 }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   const settingActiveTab = (index) => {
     setActiveTabIndex(index);
-    setActive(false, index - 1,workspaceSection);
+    setActive(false, index - 1, workspaceSection);
   };
   const closeHandler = (event, index, configId) => {
     event.stopPropagation();
@@ -45,7 +45,7 @@ export const Tabs = ({
           mpApi.deleteCheckInMonitoringPlanConfiguration(configId).then(() => {
             console.log("X button - checked-in configuration: " + configId);
             if (setCheckout) {
-              setCheckout(false, configId,workspaceSection);
+              setCheckout(false, configId, workspaceSection);
             }
           });
         } else {
@@ -57,7 +57,7 @@ export const Tabs = ({
     }
     if (activeTabIndex === children.length - 1) {
       setActiveTabIndex(index - 1);
-      setActive(false, index - 2,workspaceSection);
+      setActive(false, index - 2, workspaceSection);
     }
   };
 
@@ -137,7 +137,8 @@ export const Tabs = ({
                   aria-label={`open ${el.props.title.split("(")[0]}${
                     user &&
                     el.props.locationId &&
-                    el.props.facId && workspaceSection === MONITORING_PLAN_STORE_NAME &&
+                    el.props.facId &&
+                    workspaceSection === MONITORING_PLAN_STORE_NAME &&
                     (isCheckedOut(el.props.locationId) ||
                       checkedOutLocations.some(
                         (loc) => loc.facId === parseInt(el.props.facId)
@@ -162,7 +163,8 @@ export const Tabs = ({
                   }}
                 >
                   <div className="text-center tab-button-text-container ellipsis-text padding-2px position-relative top-neg-05">
-                    {user && workspaceSection === MONITORING_PLAN_STORE_NAME &&
+                    {user &&
+                    workspaceSection === MONITORING_PLAN_STORE_NAME &&
                     el.props.locationId &&
                     el.props.facId &&
                     (isCheckedOut(el.props.locationId) ||
@@ -181,7 +183,8 @@ export const Tabs = ({
                     {el.props.title.split("(")[0]}
                   </div>
                   <div className="text-center">
-                    {workspaceSection === MONITORING_PLAN_STORE_NAME && el.props.locationId &&
+                    {workspaceSection === MONITORING_PLAN_STORE_NAME &&
+                    el.props.locationId &&
                     isCheckedOutByUser(el.props.locationId) ? (
                       <CreateSharp
                         role="img"
@@ -235,14 +238,22 @@ export const Tabs = ({
 
 const mapStateToProps = (state) => {
   return {
-    openedFacilityTabs: state.openedFacilityTabs(convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)),
+    openedFacilityTabs: state.openedFacilityTabs(
+      convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
+    ),
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setCheckout: (value, configID,workspaceSection) =>
-      dispatch(setCheckoutState(value, configID,convertSectionToStoreName(workspaceSection))),
+    setCheckout: (value, configID, workspaceSection) =>
+      dispatch(
+        setCheckoutState(
+          value,
+          configID,
+          convertSectionToStoreName(workspaceSection)
+        )
+      ),
   };
 };
 

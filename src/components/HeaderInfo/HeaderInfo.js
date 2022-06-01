@@ -294,11 +294,10 @@ export const HeaderInfo = ({
         ) {
           // check database and update status
           mpApi.getRefreshInfo(configID).then((res) => {
-            let databaseStatus = '';
-            if(res){
-               databaseStatus = res.data.evalStatusCode;
+            let databaseStatus = "";
+            if (res) {
+              databaseStatus = res.data.evalStatusCode;
             }
-           
 
             // if database is different than current status, then update
             if (currStatus !== databaseStatus) {
@@ -616,7 +615,7 @@ export const HeaderInfo = ({
                             </Button>
                           </div>
                         ) : (
-                         ""
+                          ""
                         )}
                       </div>
                     </div>
@@ -772,7 +771,7 @@ export const HeaderInfo = ({
                         checked={inactive[0]}
                         disabled={inactive[1]}
                         onChange={() =>
-                          setInactive([!inactive[0], inactive[1]], facility,)
+                          setInactive([!inactive[0], inactive[1]], facility)
                         }
                       />
                     </div>
