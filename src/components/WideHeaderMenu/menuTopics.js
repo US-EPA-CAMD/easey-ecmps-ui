@@ -12,13 +12,11 @@ export const environmentalTopics = [
     name: "Bed Bugs",
   },
   {
-    link:
-      "https://www.epa.gov/environmental-topics/chemicals-and-toxics-topics",
+    link: "https://www.epa.gov/environmental-topics/chemicals-and-toxics-topics",
     name: "Chemicals and Toxics",
   },
   {
-    link:
-      "https://www.epa.gov/environmental-topics/location-specific-environmental-information",
+    link: "https://www.epa.gov/environmental-topics/location-specific-environmental-information",
     name: "Environmental Information by Location",
   },
   {
@@ -30,8 +28,7 @@ export const environmentalTopics = [
     name: "Health",
   },
   {
-    link:
-      "https://www.epa.gov/environmental-topics/land-waste-and-cleanup-topics",
+    link: "https://www.epa.gov/environmental-topics/land-waste-and-cleanup-topics",
     name: "Land, Waste, and Cleanup",
   },
   {
@@ -129,8 +126,7 @@ export const aboutEPATopics = [
     name: "Regional Offices",
   },
   {
-    link:
-      "https://www.epa.gov/aboutepa/research-centers-programs-and-science-advisory-organizations",
+    link: "https://www.epa.gov/aboutepa/research-centers-programs-and-science-advisory-organizations",
     name: "Labs and Research Centers",
   },
 ];

@@ -143,17 +143,17 @@ const App = () => {
                 />
               )}
             />
-            {/* {user ? (
+            {user ? (
               <Redirect
-                from="/qa_certifications"
-                to="/workspace/qa_certifications"
+                from="/qa_certifications_test_summary_data"
+                to="/workspace/qa_certifications_test_summary_data"
               />
             ) : (
               <Redirect
-                from="/workspace/qa_certifications"
-                to="/qa_certifications"
+                from="/workspace/qa_certifications_test_summary_data"
+                to="/qa_certifications_test_summary_data"
               />
-            )} */}
+            )}
             <Route
               path="/qa_certifications_test_summary_data"
               exact
@@ -164,15 +164,6 @@ const App = () => {
               exact
               component={() => (
                 <QACertTestSummaryHome
-                  user={false}
-                />
-              )}
-            />
-            <Route
-              path="/workspace/qa_certifications_test_summary_data"
-              exact
-              component={() => (
-                <QACertTestSummaryHome
                   resetTimer={setResetTimer}
                   setExpired={setExpired}
                   resetTimerFlag={resetTimer}
@@ -181,19 +172,6 @@ const App = () => {
                 />
               )}
             />
-            {/* <Route
-              path="/workspace/qa_certifications/"
-              exact
-              component={
-                <QACertTestSummaryHome
-                  resetTimer={setResetTimer}
-                  setExpired={setExpired}
-                  resetTimerFlag={resetTimer}
-                  callApiFlag={expired}
-                  user={user}
-                />
-              }
-            /> */}
             {user ? (
               <Redirect from="/emission" to="/workspace/emission" />
             ) : (

@@ -69,7 +69,7 @@ describe("test response and error handler functions", () => {
 
     handleImportError(err3);
     expect(globalMsg).toBe(lastErrorMsg);
-    
+
     handleError(err4);
   });
 });

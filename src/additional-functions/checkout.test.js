@@ -40,7 +40,7 @@ describe("testing checkout function", () => {
     await checkoutAPI(false, "1", "1", undefined);
     await checkoutAPI(true, "1", "1", undefined);
   });
-  
+
   it("returns an array of the inactive Data", async () => {
     await checkoutAPI(false, "1", "1", setCheckout);
     await checkoutAPI(true, "1", "1", setCheckout);

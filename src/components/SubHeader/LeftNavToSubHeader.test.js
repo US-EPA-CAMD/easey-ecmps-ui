@@ -26,5 +26,4 @@ describe("LeftNavToSubHeader Component", () => {
       fireEvent.click(x);
     }
   });
-
 });

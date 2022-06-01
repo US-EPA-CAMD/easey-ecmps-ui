@@ -32,7 +32,6 @@ class Test extends React.Component {
         <Radio
           name="secondNormalIndicator2"
           label={"secondNormalIndicator2"}
-          
           key={`key2`}
         />
         <Radio

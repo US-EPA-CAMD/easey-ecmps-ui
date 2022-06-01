@@ -16,7 +16,6 @@ describe("testing unit controls data selectors", () => {
         maximumHourlyHeatInputCapacity: "2322.0",
         beginDate: "2002-10-31",
         endDate: "2002-10-31",
-
       },
       {
         id: "30334",
@@ -27,9 +26,8 @@ describe("testing unit controls data selectors", () => {
         boilerTurbineBeginDate: null,
         boilerTurbineEndDate: null,
         maximumHourlyHeatInputCapacity: "2322.0",
-        beginDate:null,
+        beginDate: null,
         endDate: null,
-
       },
     ];
 
@@ -48,12 +46,12 @@ describe("testing unit controls data selectors", () => {
 
       {
         col1: "",
-        col2:  "",
+        col2: "",
         col3: "T",
-        col4:  "",
-        col5:  "",
+        col4: "",
+        col5: "",
         col6: "2322.0",
-        col7:  " ",
+        col7: " ",
         col8: " ",
         col9: "30334",
       },

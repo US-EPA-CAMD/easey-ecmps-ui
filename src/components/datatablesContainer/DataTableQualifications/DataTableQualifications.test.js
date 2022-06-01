@@ -89,47 +89,45 @@ test("tests getMonitoringQualifications WITHOUT mdmdata", async () => {
 test("test create/save Load functions", async () => {
   jest.mock("../../../utils/api/monitoringPlansApi", () => {
     return {
-      saveQualificationData: jest.fn(() =>
-        Promise.resolve({})
-      ),
+      saveQualificationData: jest.fn(() => Promise.resolve({})),
     };
   });
 
   axios.get.mockImplementation(() =>
-  Promise.resolve({ status: 200, data: selectedQualifications })
-);
-// mocks axios.secure
-axios.mockImplementationOnce(() => {
-  return Promise.resolve({
-    data: {},
+    Promise.resolve({ status: 200, data: selectedQualifications })
+  );
+  // mocks axios.secure
+  axios.mockImplementationOnce(() => {
+    return Promise.resolve({
+      data: {},
+    });
   });
-});
-axios.mockImplementationOnce(() => {
-  return Promise.resolve({
-    data: {},
+  axios.mockImplementationOnce(() => {
+    return Promise.resolve({
+      data: {},
+    });
   });
-});
-axios.mockImplementationOnce(() => {
-  return Promise.resolve({
-    data: {},
+  axios.mockImplementationOnce(() => {
+    return Promise.resolve({
+      data: {},
+    });
   });
-});
-axios.mockImplementationOnce(() => {
-  return Promise.resolve({
-    data: {},
+  axios.mockImplementationOnce(() => {
+    return Promise.resolve({
+      data: {},
+    });
   });
-});
-axios.mockImplementationOnce(() => {
-  return Promise.resolve({
-    data: {},
+  axios.mockImplementationOnce(() => {
+    return Promise.resolve({
+      data: {},
+    });
   });
-});
-axios.mockImplementationOnce(() => {
-  return Promise.resolve({
-    data: {},
+  axios.mockImplementationOnce(() => {
+    return Promise.resolve({
+      data: {},
+    });
   });
-});
-const title = await mpApi.saveQualificationData(locationSelectValue);
+  const title = await mpApi.saveQualificationData(locationSelectValue);
   let { container } = await waitForElement(() =>
     componentRenderer(false, false, false, true, false, { test: "" })
   );

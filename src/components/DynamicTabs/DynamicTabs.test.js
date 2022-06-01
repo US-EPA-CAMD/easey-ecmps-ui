@@ -1,5 +1,9 @@
 import React from "react";
-import { DynamicTabs, mapDispatchToProps,mapStateToProps } from "./DynamicTabs";
+import {
+  DynamicTabs,
+  mapDispatchToProps,
+  mapStateToProps,
+} from "./DynamicTabs";
 import { render, fireEvent, screen } from "@testing-library/react";
 // import {
 //   addFacilityTab,
@@ -54,18 +58,18 @@ describe("testing a reusable Dynamic Tabs component", () => {
       removeFacility={jest.fn()}
       setActive={jest.fn()}
       checkedOutLocations={[]}
-      user={{firstName:'test'}}
+      user={{ firstName: "test" }}
       setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
-      mostRecentlyCheckedInMonitorPlanId={''}
+      mostRecentlyCheckedInMonitorPlanId={""}
       tabsProps={[
         {
           title: "Welcome ( test )",
           component: <Welcome name="Addis" />,
           selectedConfig: selectedConfig,
-        },   {
+        },
+        {
           title: "Welcome ( test )",
           component: <Welcome name="Addis" />,
-          
         },
       ]}
     />
@@ -77,14 +81,15 @@ describe("testing a reusable Dynamic Tabs component", () => {
       removeFacility={jest.fn()}
       setActive={jest.fn()}
       checkedOutLocations={[]}
-      user={{firstName:'test'}}
+      user={{ firstName: "test" }}
       setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
-      mostRecentlyCheckedInMonitorPlanId={''}
+      mostRecentlyCheckedInMonitorPlanId={""}
       tabsProps={[
         {
           title: "Welcome ( test )",
           component: <Welcome name="Addis" />,
-          selectedConfig: selectedConfig}
+          selectedConfig: selectedConfig,
+        },
       ]}
     />
   );

@@ -25,7 +25,7 @@ describe("testing monitoring plan fuel data selectors", () => {
         beginDate: "2017-09-20",
         beginHour: "13",
         endDate: "2017-09-20",
-        endHour:  "13",
+        endHour: "13",
         userid: "bvick",
         addDate: "2017-10-23",
         updateDate: null,
