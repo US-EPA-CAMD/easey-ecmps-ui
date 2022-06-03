@@ -3,7 +3,8 @@ import { Button } from "@trussworks/react-uswds";
 
 import "./QACertTestSummaryHeaderInfo.scss";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
-
+import {QA_CERT_TEST_SUMMARY_STORE_NAME
+} from "../../additional-functions/workspace-section-and-store-names";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 
 export const QACertTestSummaryHeaderInfo = ({
@@ -68,6 +69,7 @@ export const QACertTestSummaryHeaderInfo = ({
                 selectKey="id"
                 initialSelection={locationSelect?locationSelect[0]:null}
                 selectionHandler={setLocationSelect}
+                workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
               />
             </div>
             <div className="grid-col-4">
@@ -79,6 +81,7 @@ export const QACertTestSummaryHeaderInfo = ({
                 selectKey="name"
                 initialSelection={sectionSelect?sectionSelect[0]:null}
                 orisCode={orisCode}
+                workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
               />
             </div>{" "}
             <div className="grid-col-3"></div>{" "}

@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import QACertTestSummaryHeaderInfo from "../QACertTestSummaryHeaderInfo/QACertTestSummaryHeaderInfo";
+import { dataColumnSwap } from "../../additional-functions/datatable-swap";
+import { getLinearitySummary } from "../../utils/selectors/QACert/LinearitySummary.js";
+import QALinearitySummaryDataTable from "../qaDatatablesContainer/QALinearitySummaryDataTable/QALinearitySummaryDataTable";
 export const QACertTestSummaryRender = ({
   title,
   user,
@@ -12,6 +15,12 @@ export const QACertTestSummaryRender = ({
   orisCode,
   configID,
 }) => {
+  const [dataSet, setDataSet] = useState([]);
+  useEffect(() => {
+   
+    dataColumnSwap()
+  }, [sectionSelect]);
+
   return (
     <div className=" padding-top-0">
       <div className="grid-row">
@@ -29,9 +38,8 @@ export const QACertTestSummaryRender = ({
         />
       </div>
       <hr />
-      {/* <div className="grid-row">
-        <NotFound />
-      </div> */}
+      <QALinearitySummaryDataTable 
+       />
     </div>
   );
 };

@@ -10,13 +10,14 @@ export const DropdownSelection = ({
   options,
   selectionHandler,
   initialSelection,
+  workspaceSection
 }) => {
   const getIndex = (val) => {
     return options.findIndex((obj) => obj[selectKey] === val);
   };
 
   const handleChange = (val) => {
-    selectionHandler([getIndex(val.target.value), val.target.value], MONITORING_PLAN_STORE_NAME);
+    selectionHandler([getIndex(val.target.value), val.target.value], workspaceSection);
   };
 
   const populateOptions = (optionsList) => {
