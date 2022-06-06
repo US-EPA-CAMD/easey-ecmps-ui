@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 
 import { getLinearitySummary } from "../../../utils/selectors/QACert/LinearitySummary.js";
+import { getTestSummary } from "../../../utils/selectors/QACert/TestSummary.js";
 /*********** COMPONENTS ***********/
 // *** 3rd party
 import DataTable from "react-data-table-component";
@@ -8,11 +9,13 @@ import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
 import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
 
+// contains test summary data table
+
 const QALinearitySummaryDataTable = ({ data }) => {
   const [dataSet, setDataSet] = useState([]);
   useEffect(() => {
     console.log(data);
-    setDataSet(getLinearitySummary("test"));
+    setDataSet(getLinearitySummary(3));
   }, []);
 
   const columns = [
