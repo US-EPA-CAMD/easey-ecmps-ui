@@ -8,7 +8,7 @@ axios.defaults.headers.common = {
 };
 
 export const getQATestSummary = async (locID) => {
-  let url = `${config.services.qaCertification.uri}/`;
+  let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
   if (window.location.href.indexOf("workspace") > -1) {

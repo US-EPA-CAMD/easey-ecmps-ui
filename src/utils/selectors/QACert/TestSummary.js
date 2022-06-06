@@ -1,8 +1,8 @@
 export const getTestSummary = (totalData) => {
-  //   const data = totalData;
+  const data = totalData;
   const records = [];
-//   let data = [1, 2];
-  totalData.forEach((el) => {
+  //   let data = [1, 2];
+  data.forEach((el) => {
     const beginDate = el.beginDate
       ? formatStringToDate(el.beginDate.toString())
       : "";
@@ -13,7 +13,12 @@ export const getTestSummary = (totalData) => {
 
     const endMinute = el.endMinute ? el.endMinute.toString() : "";
     records.push({
-      col1: el.stackPipeId,
+      col1:
+        el.stackPipeId !== null
+          ? el.stackPipeId
+          : el.unitId !== null
+          ? el.unitId
+          : "",
       //   col2: el.unitId,
       col2: el.testTypeCode,
       col3: el.monitoringSystemId,

@@ -78,7 +78,6 @@ const App = () => {
   const [currentLink, setCurrentLink] = useState(
     window.location.href.replace(`${window.location.origin}`, "")
   );
-
   return (
     <div>
       {user ? <TokenRefresher /> : ""}
@@ -164,23 +163,11 @@ const App = () => {
               exact
               component={() => (
                 <QACertTestSummaryHome
-                  user={false}
-                />
-              )}
-            />
-            <Route
-              path="/workspace/qa_certifications_test_summary_data"
-              exact
-              component={() => (
-                <QACertTestSummaryHome
-                  resetTimer={setResetTimer}
-                  setExpired={setExpired}
-                  resetTimerFlag={resetTimer}
-                  callApiFlag={expired}
                   user={user}
                 />
               )}
             />
+
             {/* <Route
               path="/workspace/qa_certifications/"
               exact

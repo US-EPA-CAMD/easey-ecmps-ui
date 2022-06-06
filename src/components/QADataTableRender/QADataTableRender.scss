@@ -1,0 +1,9 @@
+@import "../../additional-scss/variables";
+
+.expandBTN:hover {
+    cursor:pointer;
+}
+.editViewExpandGroup{
+    display: flex;
+    align-items: center;
+}
