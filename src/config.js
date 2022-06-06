@@ -98,6 +98,11 @@ export const config = {
         process.env.REACT_APP_EASEY_MONITOR_PLAN_API ||
         "https://api-easey-dev.app.cloud.gov/monitor-plan-mgmt",
     },
+    qaCertification: {
+      uri:
+        process.env.REACT_APP_EASEY_MONITOR_PLAN_API ||
+        "https://api-easey-dev.app.cloud.gov/qa-certification-mgmt",
+    },
     authApi: {
       uri:
         process.env.REACT_APP_EASEY_AUTH_API ||

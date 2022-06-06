@@ -30,7 +30,7 @@
       color: $epa-black !important;
       font-weight: bold;
       border: solid 1px $epa-white;
-      text-align: center;
+     justify-content: left !important;
       :focus {
         outline: none;
         border: solid 4px #2672de;

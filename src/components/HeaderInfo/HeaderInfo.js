@@ -6,7 +6,9 @@ import { triggerEvaluation } from "../../utils/api/quartzApi";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import * as facApi from "../../utils/api/facilityApi";
-
+import {
+  MONITORING_PLAN_STORE_NAME,
+} from "../../additional-functions/workspace-section-and-store-names";
 import Modal from "../Modal/Modal";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 import "./HeaderInfo.scss";
@@ -751,6 +753,8 @@ export const HeaderInfo = ({
                     selectKey="id"
                     initialSelection={locationSelect[0]}
                     selectionHandler={setLocationSelect}
+                    workspaceSection={  MONITORING_PLAN_STORE_NAME
+                    }
                   />
                   <DropdownSelection
                     caption="Sections"
@@ -760,6 +764,8 @@ export const HeaderInfo = ({
                     selectKey="name"
                     initialSelection={sectionSelect[0]}
                     orisCode={orisCode}
+                    workspaceSection={  MONITORING_PLAN_STORE_NAME
+                    }
                   />
                   <div className="">
                     <div className="bottom-0 position-absolute padding-bottom-05">
