@@ -1,5 +1,5 @@
 import axios from "axios";
-import { handleResponse, handleError,handleImportError } from "./apiUtils";
+import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
 
@@ -907,8 +907,7 @@ export const importMP = async (payload) => {
 };
 
 export const getMPSchema = async () => {
-
   const url = `${config.services.content.uri}/ecmps/reporting-instructions/monitor-plan.schema.json`;
 
   return axios.get(url).then(handleResponse).catch(handleError);
-}
+};

@@ -72,12 +72,11 @@ test("tests Loading Eval Report with showtitle", async () => {
       />
     )
   );
-  
+
   const btns = container.querySelectorAll("#printBTN");
   btns.forEach((element) => {
     fireEvent.click(element);
   });
-unmount();
+  unmount();
   expect(container).toBeDefined();
-  
 });

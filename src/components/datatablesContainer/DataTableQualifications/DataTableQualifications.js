@@ -76,7 +76,6 @@ export const DataTableQualifications = ({
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
   const dropdownArray = [["qualificationTypeCode"]];
 
-
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
 
   // *** Assign initial event listeners after loading data/dropdowns
@@ -185,7 +184,6 @@ export const DataTableQualifications = ({
 
   //also tests edge cases for some functions between open PCT/LEE/LME
   const testingSave = () => {
- 
     setCreating(true);
     setOpenPCT(true);
     setOpenLEE(false);
@@ -236,7 +234,6 @@ export const DataTableQualifications = ({
     window.isDataChanged = false;
     closeModalHandler();
 
-    
     setOpenPCT(false);
     setOpenLEE(false);
     setOpenLME(true);
@@ -254,7 +251,7 @@ export const DataTableQualifications = ({
     setOpenLME(false);
     manageSaveBtn();
     buildBreadBar();
-  }
+  };
   const testingCreate = () => {
     let userInput = extractUserInput(payload, ".modalUserInput");
     openQualificationDataModal(false, false, true);
@@ -268,12 +265,10 @@ export const DataTableQualifications = ({
     setShow(true);
   };
 
-
   const executeOnClose = () => {
     removeChangeEventListeners(".modalUserInput");
     setReturnedFocusToLast(false);
   };
-
 
   // function to handle what type of api call to make (edit/create -> qual/pct/lme/lee)
   // params:
@@ -456,7 +451,7 @@ export const DataTableQualifications = ({
         id="testingBtn2"
         onClick={() => testingCreate()}
       />
-            <input
+      <input
         tabIndex={-1}
         aria-hidden={true}
         role="button"
@@ -464,7 +459,7 @@ export const DataTableQualifications = ({
         id="testingBtn3"
         onClick={() => testingManage()}
       />
- 
+
       <input
         tabIndex={-1}
         aria-hidden={true}

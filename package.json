@@ -17,7 +17,8 @@
     "up": "yarn --ignore-engines && yarn start",
     "test": "react-scripts test --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter",
     "test:dev": "react-scripts test",
-    "dev": "react-scripts start"
+    "dev": "react-scripts start",
+    "format": "prettier --write \"src/**/*.js\" \"src/**/*.test.js\" \"src/**/*.scss\""
   },
   "resolutions": {
     "ansi-regex": "^5.0.1",

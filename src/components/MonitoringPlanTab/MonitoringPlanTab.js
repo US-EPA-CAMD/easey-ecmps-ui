@@ -37,9 +37,11 @@ export const MonitoringPlanTab = ({
   setMostRecentlyCheckedInMonitorPlanId,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
   mostRecentlyCheckedInMonitorPlanIdForTab,
-  workspaceSection
+  workspaceSection,
 }) => {
-  const [sectionSelect, setSectionSelect] = useState(tabs[activeTab[0]].section);
+  const [sectionSelect, setSectionSelect] = useState(
+    tabs[activeTab[0]].section
+  );
   useEffect(() => {
     setSection(sectionSelect, title, MONITORING_PLAN_STORE_NAME);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -50,7 +52,7 @@ export const MonitoringPlanTab = ({
   );
 
   useEffect(() => {
-    setLocation(locationSelect, title,workspaceSection);
+    setLocation(locationSelect, title, workspaceSection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect]);
   return (

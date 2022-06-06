@@ -1,8 +1,6 @@
 import React from "react";
 import { Label, Dropdown, FormGroup } from "@trussworks/react-uswds";
-import {
-  MONITORING_PLAN_STORE_NAME,
-} from "../../additional-functions/workspace-section-and-store-names";
+import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 export const DropdownSelection = ({
   caption,
   selectKey,

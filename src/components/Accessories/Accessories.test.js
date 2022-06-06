@@ -38,12 +38,7 @@ test("renders accesory links ", () => {
           <Route
             path="/"
             exact
-            component={() => (
-              <Accessories
-               
-                logOut={jest.fn()}
-              />
-            )}
+            component={() => <Accessories logOut={jest.fn()} />}
           />
         </Switch>
       </Layout>

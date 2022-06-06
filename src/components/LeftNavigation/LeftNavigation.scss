@@ -1,5 +1,5 @@
 .leftNav {
-.usa-current:after {
+  .usa-current:after {
     background-color: #005ea2 !important;
     border-radius: 99rem !important;
     content: "" !important;
@@ -9,13 +9,11 @@
     top: 0.25rem !important;
     width: 0.25rem !important;
     left: 0.25rem !important;
-
-}
-
+  }
 }
 
 .emulateCurrentLink {
-    position: relative;
-    color: #005ea2 !important;
-    font-weight: 700;
+  position: relative;
+  color: #005ea2 !important;
+  font-weight: 700;
 }

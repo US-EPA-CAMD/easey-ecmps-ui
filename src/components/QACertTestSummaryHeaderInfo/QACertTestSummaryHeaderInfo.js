@@ -42,7 +42,6 @@ export const QACertTestSummaryHeaderInfo = ({
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
   const [dataLoaded, setDataLoaded] = useState(true);
 
-
   return (
     <div className="header QACertHeader ">
       {dataLoaded ? (
@@ -86,7 +85,12 @@ export const QACertTestSummaryHeaderInfo = ({
             <div className="grid-col-3">
               {user ? (
                 <div className=" float-right right-0 bottom-0 text-no-wrap position-absolute padding-bottom-1">
-                  <Button type="button" id="showRevertModal" outline={false}>
+                  <Button
+                    className="padding-x-5"
+                    type="button"
+                    id="showRevertModal"
+                    outline={false}
+                  >
                     {"Import Test Data"}
                   </Button>
                 </div>
@@ -112,6 +116,18 @@ export const QACertTestSummaryHeaderInfo = ({
             >
               {"Test History Report"}
             </Button>
+            {user ? (
+              <Button
+                className="float-right text-right bottom-0 text-no-wrap "
+                type="button"
+                id="showRevertModal"
+                outline={false}
+              >
+                {"Evaluate"}
+              </Button>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       ) : (

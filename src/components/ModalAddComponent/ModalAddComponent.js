@@ -52,7 +52,7 @@ const ModalAddComponent = ({
       options.unshift({ code: "", name: "" });
       setUnlinkedComponentsOptions(options);
     }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comps, sysComps]);
 
   const selectingCompHandler = (val) => {

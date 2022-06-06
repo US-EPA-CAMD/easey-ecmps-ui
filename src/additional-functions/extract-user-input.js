@@ -48,7 +48,6 @@ export const extractUserInput = (payload, inputSelector, radios) => {
   }
 
   payloadArray.forEach((item) => {
-
     if (item.value !== undefined) {
       if (typeof item.value === "string" && isNaN(item.value)) {
         payload[item.name] =
@@ -63,14 +62,13 @@ export const extractUserInput = (payload, inputSelector, radios) => {
         // not a decimal
         else if (item.value.indexOf(".") === -1) {
           payload[item.name] = parseInt(item.value);
-          console.log('item.name not a decimal',item.name )
+          console.log("item.name not a decimal", item.name);
         } else {
           payload[item.name] = parseFloat(item.value);
         }
       }
       if (typeof item.value === "number") {
         if (payload[item.name] === "string") {
-          
           payload[item.name] = item.value.toString();
         } else {
           payload[item.name] = item.value;

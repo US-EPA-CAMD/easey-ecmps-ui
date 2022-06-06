@@ -10,14 +10,14 @@ import * as facilitiesApi from "../../../utils/api/facilityApi";
 import { getCheckedOutLocations } from "../../../utils/api/monitoringPlansApi";
 import {
   MONITORING_PLAN_STORE_NAME,
-  QA_CERT_TEST_SUMMARY_STORE_NAME
+  QA_CERT_TEST_SUMMARY_STORE_NAME,
 } from "../../../additional-functions/workspace-section-and-store-names";
 export const SelectFacilitiesDataTable = ({
   user,
   addtabs,
   openedFacilityTabs,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
-  workspaceSection ,
+  workspaceSection,
 }) => {
   const [facilities, setFacilities] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -40,7 +40,7 @@ export const SelectFacilitiesDataTable = ({
   useEffect(() => {
     obtainCheckedOutLocations().then();
     return () => {
-      setCheckedOutLocations([]); 
+      setCheckedOutLocations([]);
     };
   }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanId]);
 
@@ -70,45 +70,46 @@ export const SelectFacilitiesDataTable = ({
         title: `${info[0].col1} (${info[1].name}) ${
           info[1].active ? "" : "Inactive"
         }`,
-        component: workspaceSection === MONITORING_PLAN_STORE_NAME ? (
-          <div className="selectedTabsBox">
-            <SelectedFacilityTab
-              orisCode={info[0].col2}
-              selectedConfig={info[1]}
-              title={`${info[0].col1} (${info[1].name}) ${
-                info[1].active ? "" : "Inactive"
-              }`}
-              user={user}
-              checkout={
-                checkedOutLocations.length > 0
-                  ? checkedOutLocations[0].monPlanId === info[1].id
-                    ? true
+        component:
+          workspaceSection === MONITORING_PLAN_STORE_NAME ? (
+            <div className="selectedTabsBox">
+              <SelectedFacilityTab
+                orisCode={info[0].col2}
+                selectedConfig={info[1]}
+                title={`${info[0].col1} (${info[1].name}) ${
+                  info[1].active ? "" : "Inactive"
+                }`}
+                user={user}
+                checkout={
+                  checkedOutLocations.length > 0
+                    ? checkedOutLocations[0].monPlanId === info[1].id
+                      ? true
+                      : info[2]
                     : info[2]
-                  : info[2]
-              }
-              checkedOutLocations={checkedOutLocations}
-              setMostRecentlyCheckedInMonitorPlanId={
-                setMostRecentlyCheckedInMonitorPlanId
-              }
-              setMostRecentlyCheckedInMonitorPlanIdForTab={
-                setMostRecentlyCheckedInMonitorPlanIdForTab
-              }
-              workspaceSection={workspaceSection}
-            />
-          </div>
-        ) : (
-          <div className="selectedTabsBox">
-            <QACertTestSummaryTab
-              orisCode={info[0].col2}
-              selectedConfig={info[1]}
-              title={`${info[0].col1} (${info[1].name}) ${
-                info[1].active ? "" : "Inactive"
-              }`}
-              user={user}
-              workspaceSection={workspaceSection}
-            />
-          </div>
-        ),
+                }
+                checkedOutLocations={checkedOutLocations}
+                setMostRecentlyCheckedInMonitorPlanId={
+                  setMostRecentlyCheckedInMonitorPlanId
+                }
+                setMostRecentlyCheckedInMonitorPlanIdForTab={
+                  setMostRecentlyCheckedInMonitorPlanIdForTab
+                }
+                workspaceSection={workspaceSection}
+              />
+            </div>
+          ) : (
+            <div className="selectedTabsBox">
+              <QACertTestSummaryTab
+                orisCode={info[0].col2}
+                selectedConfig={info[1]}
+                title={`${info[0].col1} (${info[1].name}) ${
+                  info[1].active ? "" : "Inactive"
+                }`}
+                user={user}
+                workspaceSection={workspaceSection}
+              />
+            </div>
+          ),
         orisCode: info[0].col2,
         selectedConfig: info[1],
         checkout:
@@ -158,7 +159,7 @@ export const SelectFacilitiesDataTable = ({
           ]);
         }}
       />
-      {workspaceSection ===MONITORING_PLAN_STORE_NAME ? (
+      {workspaceSection === MONITORING_PLAN_STORE_NAME ? (
         <DataTableRender
           columnNames={columnNames}
           dataLoaded={dataLoaded}
@@ -204,7 +205,9 @@ export const SelectFacilitiesDataTable = ({
           dataLoaded={dataLoaded}
           data={data}
           defaultSort="col2"
-          openedFacilityTabs={openedFacilityTabs[QA_CERT_TEST_SUMMARY_STORE_NAME]}
+          openedFacilityTabs={
+            openedFacilityTabs[QA_CERT_TEST_SUMMARY_STORE_NAME]
+          }
           user={user}
           pagination={true}
           filter={true}

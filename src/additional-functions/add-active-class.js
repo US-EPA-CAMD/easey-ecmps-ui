@@ -2,7 +2,6 @@
 
 const epaActiveElemnt = "epa-active-element";
 export const addActiveClass = (event) => {
-
   // *** remove any existing elements first
   removeActiveClass(event);
   setTimeout(() => {
@@ -15,7 +14,9 @@ export const addActiveClass = (event) => {
   return 1;
 };
 export const removeActiveClass = (event) => {
-  return event.target.classList !== undefined ? event.target.classList.remove(epaActiveElemnt) : null;
+  return event.target.classList !== undefined
+    ? event.target.classList.remove(epaActiveElemnt)
+    : null;
 };
 
 export const handleActiveElementFocus = () => {

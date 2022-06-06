@@ -43,7 +43,7 @@ export const DataTableRectangularDucts = ({
 
   const totalOptions = UseRetrieveDropdownApi(["wafMethodCode"]);
   const [updateTable, setUpdateTable] = useState(false);
-  
+
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
 
   // *** Assign initial event listeners after loading data/dropdowns
@@ -67,7 +67,7 @@ export const DataTableRectangularDucts = ({
   // *** Clean up focus event listeners
   useEffect(() => {
     return () => {
-     cleanupFocusEventListeners();
+      cleanupFocusEventListeners();
     };
   }, []);
 
@@ -201,7 +201,6 @@ export const DataTableRectangularDucts = ({
     removeChangeEventListeners(".modalUserInput");
     setReturnedFocusToLast(false);
   };
-
 
   const data = useMemo(() => {
     if (ducts.length > 0) {

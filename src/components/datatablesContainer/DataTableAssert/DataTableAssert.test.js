@@ -10,7 +10,7 @@ import {
   mapDispatchToProps,
   mapStateToProps,
 } from "./DataTableAssert";
-import { authenticate, } from "../../../utils/api/easeyAuthApi";
+import { authenticate } from "../../../utils/api/easeyAuthApi";
 import { act } from "react-dom/test-utils";
 import * as assertSelector from "../../../utils/selectors/assert";
 import { loadDropdowns } from "../../../store/actions/dropdowns";

@@ -9,15 +9,11 @@ export function loadFacilitiesSuccess(facilities) {
   };
 }
 
-
 export function loadFacilities() {
   return (dispatch) => {
     dispatch(beginFacilitiesApiCall());
-    return facilitiesApi
-      .getAllFacilities()
-      .then((res) => {
-        dispatch(loadFacilitiesSuccess(res.data));
-      })
+    return facilitiesApi.getAllFacilities().then((res) => {
+      dispatch(loadFacilitiesSuccess(res.data));
+    });
   };
 }
-

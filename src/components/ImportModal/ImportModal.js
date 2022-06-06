@@ -90,10 +90,9 @@ const ImportModal = ({
         <span id="fileName">{fileName}</span>
       ) : complete && importedFileErrorMsgs.length > 0 ? (
         <div className="overflow-y-auto maxh-mobile">
-          <div
-            className="padding-right-2 padding-left-3 "
-            aria-live="polite"
-          > { console.log('imported error',importedFileErrorMsgs)}
+          <div className="padding-right-2 padding-left-3 " aria-live="polite">
+            {" "}
+            {console.log("imported error", importedFileErrorMsgs)}
             {importedFileErrorMsgs.map((error, i) => (
               <Alert type="error" slim noIcon key={i} role="alert">
                 {error}
@@ -110,9 +109,9 @@ const ImportModal = ({
                 aria-live="polite"
               >
                 {schemaErrors.map((error, i) => (
-                <Alert type="error" slim noIcon key={i} role="alert">
-                  {error}
-                </Alert>
+                  <Alert type="error" slim noIcon key={i} role="alert">
+                    {error}
+                  </Alert>
                 ))}
               </div>
             </div>

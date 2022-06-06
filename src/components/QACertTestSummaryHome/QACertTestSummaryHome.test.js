@@ -1,6 +1,9 @@
 import React from "react";
-import { render,waitForElement } from "@testing-library/react";
-import { QACertTestSummaryHome, mapStateToProps } from "./QACertTestSummaryHome";
+import { render, waitForElement } from "@testing-library/react";
+import {
+  QACertTestSummaryHome,
+  mapStateToProps,
+} from "./QACertTestSummaryHome";
 import { Provider } from "react-redux";
 import configureStore from "../../store/configureStore.dev";
 const openFac = [
@@ -107,7 +110,6 @@ const store = configureStore();
 test("renders monitoring plan home with redux", async () => {
   const state = jest.fn();
   const stateProps = mapStateToProps(state);
-
 
   const { container, getAllByText, getByText } = await waitForElement(() =>
     render(
