@@ -100,7 +100,7 @@ export const config = {
     },
     qaCertification: {
       uri:
-        process.env.REACT_APP_EASEY_MONITOR_PLAN_API ||
+        process.env.REACT_APP_EASEY_QA_CERTIFICATION_API ||
         "https://api-easey-dev.app.cloud.gov/qa-certification-mgmt",
     },
     authApi: {
