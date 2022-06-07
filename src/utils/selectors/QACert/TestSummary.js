@@ -1,5 +1,6 @@
 export const getTestSummary = (totalData) => {
   const data = totalData;
+  console.log('total qa',totalData)
   const records = [];
   //   let data = [1, 2];
   data.forEach((el) => {
@@ -50,6 +51,7 @@ export const getTestSummary = (totalData) => {
       //   col30: el.calculatedTestResultCode,
     });
   });
+  console.log('records',records)
   return records;
 };
 
