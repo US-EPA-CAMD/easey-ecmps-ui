@@ -19,6 +19,7 @@ const ImportModal = ({
   const [mpSchema, setMpSchema] = useState([]);
   useEffect(() => {
     mpApi.getMPSchema().then((res) => {
+      console.log('res scheme',res.data)
       setMpSchema(res.data);
     });
   }, []);
@@ -37,7 +38,7 @@ const ImportModal = ({
 
   const formatSchemaErrors = (errors) => {
     const formattedErrors = errors.errors.map((error) => {
-      console.log(error);
+      console.log(error,'file errors');
       return error.stack;
     });
 
@@ -51,6 +52,7 @@ const ImportModal = ({
 
   function onReaderLoad(event) {
     try {
+      setSchemaErrors([]);
       const fileLoaded = JSON.parse(event.target.result);
       setImportedFile(fileLoaded);
 

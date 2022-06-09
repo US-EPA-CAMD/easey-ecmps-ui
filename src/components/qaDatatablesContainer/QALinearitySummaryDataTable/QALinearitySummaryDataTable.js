@@ -1,35 +1,17 @@
 import React, { useState, useMemo, useEffect } from "react";
-import {
-  getQATestSummaryByID,
-  getQATestSummary,
-} from "../../../utils/api/qaCertificationsAPI.js";
-import { getLinearitySummary } from "../../../utils/selectors/QACert/LinearitySummary.js";
+import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI.js";
 import { getTestSummary } from "../../../utils/selectors/QACert/TestSummary.js";
 /*********** COMPONENTS ***********/
 
-import { Preloader } from "@us-epa-camd/easey-design-system";
-// *** 3rd party
-import DataTable from "react-data-table-component";
-
-import { dataColumnSwap } from "../../../additional-functions/datatable-swap";
-import { connect } from "react-redux";
 import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
 import { Button } from "@trussworks/react-uswds";
 
 // contains test summary data table
 
-const QALinearitySummaryDataTable = ({
-  locationSelectValue,
-  user,
-}) => {
+const QALinearitySummaryDataTable = ({ locationSelectValue, user }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const [qaTestSummary, setQATestSummary] = useState([]);
-  // useEffect(() => {
-  //   console.log(data);
-  //   // setDataSet(getTestSummary(getQATestSummaryByID(3)));
-  //   console.log(getQATestSummary(3));
-  // }, []);
 
   useEffect(() => {
     console.log("location", locationSelectValue);
@@ -42,7 +24,7 @@ const QALinearitySummaryDataTable = ({
       getQATestSummary(locationSelectValue).then((res) => {
         console.log(res.data, "res");
         setQATestSummary(res.data);
-        
+
         setDataLoaded(true);
       });
     }
@@ -77,7 +59,7 @@ const QALinearitySummaryDataTable = ({
     "Injection Protocol Code",
   ];
 
-  return  (
+  return (
     <div>
       <div className=" padding-3">
         <h3 className="display-inline padding-right-3">Test Summary Data</h3>
@@ -92,9 +74,9 @@ const QALinearitySummaryDataTable = ({
         user={user}
       />
     </div>
-  // ) : (
-  //   <Preloader />
-   );
+    // ) : (
+    //   <Preloader />
+  );
 };
 
 export default QALinearitySummaryDataTable;
