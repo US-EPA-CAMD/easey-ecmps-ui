@@ -32,7 +32,7 @@ export const QACertTestSummaryHeaderInfo = ({
     { name: "Linearity Summary" },
     { name: "Online Offline Calibration" },
     { name: "RATA" },
-    { name: "Test Qualifcation" },
+    { name: "Test Qualification" },
     { name: "Transmitter Transducer Accuracy" },
     { name: "Unit Test" },
   ];

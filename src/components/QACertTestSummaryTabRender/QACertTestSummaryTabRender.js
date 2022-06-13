@@ -32,7 +32,7 @@ export const QACertTestSummaryRender = ({
     { name: "Linearity Summary" },
     { name: "Online Offline Calibration" },
     { name: "RATA" },
-    { name: "Test Qualifcation" },
+    { name: "Test Qualification" },
     { name: "Transmitter Transducer Accuracy" },
     { name: "Unit Test" },
   ];
@@ -87,7 +87,7 @@ export const QACertTestSummaryRender = ({
     [["Linearity Summary"]],
     [["Online Offline Calibration"]],
     [["RATA"]],
-    [["Test Qualifcation"]],
+    [["Test Qualification"]],
     [["Transmitter Transducer Accuracy"]],
     [["Unit Test"]],
   ]);
