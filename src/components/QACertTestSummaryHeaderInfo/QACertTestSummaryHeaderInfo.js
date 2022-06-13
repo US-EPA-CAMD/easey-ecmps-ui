@@ -26,7 +26,7 @@ export const QACertTestSummaryHeaderInfo = ({
     { name: "Flow to Load Check" },
     { name: "Flow to Load Reference" },
     { name: "Fuel Flow to Load Baseline" },
-    { name: "Fuel Flow to Load Test" },
+    { name: "Fuel Flow to Load" },
     { name: "Fuel Flowmeter Accuracy" },
     { name: "Hg Linearity and 3-Level Summary" },
     { name: "Linearity Summary" },
