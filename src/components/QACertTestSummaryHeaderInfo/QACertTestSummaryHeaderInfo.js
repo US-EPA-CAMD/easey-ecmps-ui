@@ -34,7 +34,7 @@ export const QACertTestSummaryHeaderInfo = ({
     { name: "RATA" },
     { name: "Test Qualification" },
     { name: "Transmitter Transducer Accuracy" },
-    { name: "Unit Test" },
+    { name: "Unit Default" },
   ];
 
   // *** parse apart facility name

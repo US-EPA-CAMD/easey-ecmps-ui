@@ -34,7 +34,7 @@ export const QACertTestSummaryRender = ({
     { name: "RATA" },
     { name: "Test Qualification" },
     { name: "Transmitter Transducer Accuracy" },
-    { name: "Unit Test" },
+    { name: "Unit Default" },
   ];
   // updates all tables whenever a location is changed
   useEffect(
@@ -89,7 +89,7 @@ export const QACertTestSummaryRender = ({
     [["RATA"]],
     [["Test Qualification"]],
     [["Transmitter Transducer Accuracy"]],
-    [["Unit Test"]],
+    [["Unit Default"]],
   ]);
   return (
     <div className=" padding-top-0">
