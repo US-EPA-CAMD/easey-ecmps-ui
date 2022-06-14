@@ -1,6 +1,5 @@
 import * as mpApi from "./monitoringPlansApi";
 const axios = require("axios");
-import config from "../../config";
 jest.mock("axios");
 
 const selectedFacilityOrisCode = "3";
