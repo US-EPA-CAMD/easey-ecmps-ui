@@ -183,7 +183,7 @@ export const modalViewData = (
             arr.push([
               y,
               label[y][0],
-              selected[y],
+              parseInt(selected[y]),
               label[y][2] === "required" ? "required" : false,
               "radio",
             ]);
