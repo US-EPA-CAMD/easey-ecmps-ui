@@ -403,20 +403,6 @@ export const DataTableRender = ({
     }
   }
 
-  const colsFilter = (currentElement) => {
-    for (const prop in currentElement) {
-      // filters out any boolean properties in the data since it does
-      // not work with toLowercase and includes
-      if (
-        currentElement.hasOwnProperty(prop) &&
-        typeof currentElement[prop] === "string" &&
-        currentElement[prop].toLowerCase().includes(searchText.toLowerCase())
-      ) {
-        return currentElement;
-      }
-    }
-  };
-
   const resetExpandedRows = () => {
     const expandedRows = document.querySelectorAll(
       "[data-testid='expander-button-undefined']"
@@ -428,7 +414,12 @@ export const DataTableRender = ({
       }
     }
   };
-  const filteredItems = data.filter(colsFilter);
+  const filteredItems = data.filter((row) => {
+    const facilityStr = row.col1.toString().toLowerCase();
+    const orisStr = row.col2.toString().toLowerCase();
+    const searchStr = searchText.toLowerCase();
+    if (facilityStr.includes(searchStr) || orisStr.includes(searchStr)) return true;
+  });
   const subHeaderComponentMemo = useMemo(() => {
     //cannot unit test properly
     const handleSearch = () => {
