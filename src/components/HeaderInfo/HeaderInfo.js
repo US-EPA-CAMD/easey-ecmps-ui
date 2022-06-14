@@ -821,6 +821,8 @@ export const HeaderInfo = ({
         </div>
       ) : null}
 
+{/* while uploading, just shows preloader spinner  */}
+
       {isLoading && !finishedLoading ? (
         <UploadModal
           width={"30%"}
@@ -840,6 +842,7 @@ export const HeaderInfo = ({
         ""
       )}
 
+{/* after it finishes uploading , shows either api errors or success messages */}
       {showImportModal && usePortBtn && finishedLoading ? (
         <UploadModal
           show={showImportModal}
