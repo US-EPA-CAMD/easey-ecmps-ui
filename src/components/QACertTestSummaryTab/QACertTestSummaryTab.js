@@ -55,13 +55,13 @@ export const QACertTestSummaryTab = ({
           title={title}
           orisCode={orisCode}
           selectedConfig={selectedConfig}
-          sectionSelect={tabs ? tabs[activeTab].section : null}
+          sectionSelect={tabs ? tabs[activeTab].section : 0}
           setSectionSelect={setSectionSelect}
-          locationSelect={tabs ? tabs[activeTab].location : null}
+          locationSelect={tabs ? tabs[activeTab].location : 0}
           setLocationSelect={setLocationSelect}
           locations={selectedConfig.locations}
           user={user}
-          configID={tabs ? tabs[activeTab].selectedConfig.id : null}
+          configID={tabs ? tabs[activeTab].selectedConfig.id : 0}
         />
       </div>
     </div>
@@ -69,8 +69,8 @@ export const QACertTestSummaryTab = ({
 };
 const mapStateToProps = (state) => {
   return {
-    tabs: state.openedFacilityTabs[QA_CERT_TEST_SUMMARY_STORE_NAME],
-    activeTab: state.activeTab[QA_CERT_TEST_SUMMARY_STORE_NAME][0],
+    tabs: state.openedFacilityTabs[convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)],
+    activeTab: state.activeTab[convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)][0],
   };
 };
 
