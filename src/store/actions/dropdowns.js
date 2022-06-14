@@ -21,3 +21,4 @@ export function loadDropdowns(section, dropdownArray) {
     });
   };
 }
+

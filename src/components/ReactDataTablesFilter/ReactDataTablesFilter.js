@@ -5,7 +5,6 @@ export const FilterComponent = ({
   filterText,
   onSearch,
   title,
-  setShowInactive,
 }) => (
   <div className="width-full">
     <div
