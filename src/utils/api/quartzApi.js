@@ -25,11 +25,13 @@ export const sendNotificationEmail = async (payload) => {
 export const triggerEvaluation = async (payload) => {
   let url = `${config.services.quartz.uri}`;
   url = `${url}/triggers/evaluations/monitor-plans`;
-  return secureAxios({
-    method: "POST",
-    url: url,
-    data: payload,
-  })
+  return (
+    await secureAxios({
+      method: "POST",
+      url: url,
+      data: payload,
+    })
+  )
     .then(handleResponse)
     .catch((error) => {
       handleError(error);
