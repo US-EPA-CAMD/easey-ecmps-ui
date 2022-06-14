@@ -18,10 +18,7 @@ import { Button } from "@trussworks/react-uswds";
 
 // contains test summary data table
 
-const QALinearitySummaryDataTable = ({
-  locationSelectValue,
-  user,
-}) => {
+const QALinearitySummaryDataTable = ({ locationSelectValue, user }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const [qaTestSummary, setQATestSummary] = useState([]);
@@ -42,7 +39,7 @@ const QALinearitySummaryDataTable = ({
       getQATestSummary(locationSelectValue).then((res) => {
         console.log(res.data, "res");
         setQATestSummary(res.data);
-        
+
         setDataLoaded(true);
       });
     }
@@ -77,7 +74,7 @@ const QALinearitySummaryDataTable = ({
     "Injection Protocol Code",
   ];
 
-  return  (
+  return (
     <div>
       <div className=" padding-3">
         <h3 className="display-inline padding-right-3">Test Summary Data</h3>
@@ -92,9 +89,9 @@ const QALinearitySummaryDataTable = ({
         user={user}
       />
     </div>
-  // ) : (
-  //   <Preloader />
-   );
+    // ) : (
+    //   <Preloader />
+  );
 };
 
 export default QALinearitySummaryDataTable;

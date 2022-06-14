@@ -108,7 +108,7 @@ export const QACertTestSummaryRender = ({
         />
       </div>
       <hr />
-      <div >{tableState[sectionSelect[0]]}</div>
+      <div>{tableState[sectionSelect[0]]}</div>
     </div>
   );
 };

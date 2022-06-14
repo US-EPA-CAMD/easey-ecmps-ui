@@ -161,11 +161,7 @@ const App = () => {
             <Route
               path="/workspace/qa_certifications_test_summary_data"
               exact
-              component={() => (
-                <QACertTestSummaryHome
-                  user={user}
-                />
-              )}
+              component={() => <QACertTestSummaryHome user={user} />}
             />
 
             {/* <Route

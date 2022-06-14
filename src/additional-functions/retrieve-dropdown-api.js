@@ -12,7 +12,11 @@ export const dataYearOptions = async () => {
   return availableYears;
 };
 
-export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
+export const UseRetrieveDropdownApi = async (
+  dropDownFields,
+  mats = false,
+  equipmentControl = false
+) => {
   let totalOptions = {};
 
   const setDefaultOptions = (items, field, select = true) => {
@@ -46,6 +50,25 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
 
             setDefaultOptions(options, "supplementalMATSParameterCode");
           });
+        } else if (equipmentControl) {
+          await dmApi
+            .getAllControlEquipmentParameterCodes()
+            .then((response) => {
+              options = response.data.map((option) => {
+                return {
+                  code: option["controlEquipParamCode"],
+                  name: option["controlEquipParamDescription"],
+                };
+              });
+              console.log(
+                "Line 59",
+                "controlEquipParamCode",
+                options,
+                fieldName
+              );
+
+              setDefaultOptions(options, "parameterCode");
+            });
         } else {
           await dmApi.getAllParameterCodes().then((response) => {
             options = response.data.map((option) => {
@@ -58,18 +81,6 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
             setDefaultOptions(options, fieldName);
           });
         }
-        break;
-      case "controlEquipParamCode":
-        await dmApi.getAllControlEquipmentParameterCodes().then((response) => {
-          options = response.data.map((option) => {
-            return {
-              code: option["controlEquipParamCode"],
-              name: option["controlEquipParamDescription"],
-            };
-          });
-
-          setDefaultOptions(options, "controlEquipParamCode");
-        });
         break;
 
       case "monitoringMethodCode":
@@ -613,15 +624,15 @@ export const UseRetrieveDropdownApi = async (dropDownFields, mats = false) => {
           });
           options = response.data.map((option) => {
             return {
-              controlEquipParamCode: option["controlEquipParamCode"],
+              parameterCode: option["controlEquipParamCode"],
               controlCode: option["controlCode"],
             };
           });
           noDupesFormCodesControls = [...new Set(noDupesFormCodesControls)];
           const prefilteredMdmOptions = organizePrefilterMDMData(
             noDupesFormCodesControls,
-            "controlEquipParamCode",
-            response.data
+            "parameterCode",
+            options
           );
 
           setDefaultOptions(prefilteredMdmOptions, fieldName);

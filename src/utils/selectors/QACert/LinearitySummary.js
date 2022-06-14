@@ -1,7 +1,7 @@
 export const getLinearitySummary = (totalData) => {
-//   const data = totalData;
+  //   const data = totalData;
   const records = [];
-  let data = [1,2];
+  let data = [1, 2];
   data.forEach((el) => {
     // const beginDate = el.beginDate
     //   ? formatStringToDate(el.beginDate.toString())
