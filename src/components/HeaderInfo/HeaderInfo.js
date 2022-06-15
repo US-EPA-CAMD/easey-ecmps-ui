@@ -453,12 +453,13 @@ export const HeaderInfo = ({
   };
 
   const [importedFile, setImportedFile] = useState([]);
-  const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState([]);
+  const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
 
   const importMPBtn = (payload) => {
     mpApi.importMP(payload).then((response) => {
       setUsePortBtn(true);
       setIsLoading(true);
+      console.log(response);
       if (response) {
         setImportedFileErrorMsgs(response);
       }
@@ -817,7 +818,7 @@ export const HeaderInfo = ({
         </div>
       ) : null}
 
-{/* while uploading, just shows preloader spinner  */}
+      {/* while uploading, just shows preloader spinner  */}
 
       {isLoading && !finishedLoading ? (
         <UploadModal
@@ -838,7 +839,7 @@ export const HeaderInfo = ({
         ""
       )}
 
-{/* after it finishes uploading , shows either api errors or success messages */}
+      {/* after it finishes uploading , shows either api errors or success messages */}
       {showImportModal && usePortBtn && finishedLoading ? (
         <UploadModal
           show={showImportModal}

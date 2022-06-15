@@ -1,5 +1,5 @@
 import axios from "axios";
-import { handleResponse, handleError } from "./apiUtils";
+import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
 
@@ -1041,7 +1041,7 @@ export const getMonitoringPlanComments = async (monPlanId) => {
 
 export const importMP = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/plans/import/`;
-  try {
+  /* ry {
     return handleResponse(
       await secureAxios({
         method: "POST",
@@ -1050,8 +1050,17 @@ export const importMP = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
-  }
+    console.log(error)
+    // handleImportError(error);
+  } */
+
+  return secureAxios({
+    method: "POST",
+    url: url,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch(handleImportError);
 };
 
 export const getMPSchema = async () => {

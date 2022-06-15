@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { FormGroup, Label, FileInput, Alert } from "@trussworks/react-uswds";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
+import { successResponses } from "../../utils/api/apiUtils.js";
 import "./ImportModal.scss";
 
 const ImportModal = ({
@@ -19,7 +20,7 @@ const ImportModal = ({
   const [mpSchema, setMpSchema] = useState([]);
   useEffect(() => {
     mpApi.getMPSchema().then((res) => {
-      console.log('res scheme',res.data)
+      console.log("res scheme", res.data);
       setMpSchema(res.data);
     });
   }, []);
@@ -38,7 +39,7 @@ const ImportModal = ({
 
   const formatSchemaErrors = (errors) => {
     const formattedErrors = errors.errors.map((error) => {
-      console.log(error,'file errors');
+      console.log(error, "file errors");
       return error.stack;
     });
 
@@ -85,10 +86,12 @@ const ImportModal = ({
       setHasInvalidJsonError(false);
     }
   };
+  // && typeof importedFileErrorMsgs.data.message === "string"
 
   return (
     <div className="import-modal-container">
-      {complete && importedFileErrorMsgs.length === 0 ? (
+      {console.log('importedFileErrorMsgs', importedFileErrorMsgs)}
+      {complete && importedFileErrorMsgs !== undefined && successResponses.includes(importedFileErrorMsgs.status) ? (
         <span id="fileName">{fileName}</span>
       ) : complete && importedFileErrorMsgs.length > 0 ? (
         <div className="overflow-y-auto maxh-mobile">

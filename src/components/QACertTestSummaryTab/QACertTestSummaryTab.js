@@ -69,8 +69,13 @@ export const QACertTestSummaryTab = ({
 };
 const mapStateToProps = (state) => {
   return {
-    tabs: state.openedFacilityTabs[convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)],
-    activeTab: state.activeTab[convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)][0],
+    tabs: state.openedFacilityTabs[
+      convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
+    ],
+    activeTab:
+      state.activeTab[
+        convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
+      ][0],
   };
 };
 
