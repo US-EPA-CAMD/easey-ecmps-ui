@@ -9,17 +9,20 @@ axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
 };
 
-export const secureAxios = (options) => {
-  if (
-    sessionStorage.getItem("cdx_user") &&
-    JSON.parse(sessionStorage.getItem("cdx_user")).token
-  ) {
+export const secureAxios = async (options) => {
+  try {
+    const user = JSON.parse(sessionStorage.getItem("cdx_user"));
+
+    if (new Date() > new Date(user.tokenExpiration)) {
+      await refreshToken();
+    }
+
     options.headers = {
-      authorization: `Bearer ${
-        JSON.parse(sessionStorage.getItem("cdx_user")).token
-      }`,
+      authorization: `Bearer ${user.token}`,
       "x-api-key": config.app.apiKey,
     };
+  } catch (e) {
+    displayAppError(e);
   }
 
   return axios(options);
@@ -74,13 +77,18 @@ export const logOut = async () => {
     }
   }
 
-  secureAxios({
+  const payload = {
+    userId: user.userId,
+    token: user.token,
+  };
+
+  axios({
     method: "DELETE",
     url: `${config.services.authApi.uri}/authentication/sign-out`,
     withCredentials: true,
+    data: payload,
   })
     .then(() => {
-      sessionStorage.removeItem("refreshTokenTimer");
       sessionStorage.removeItem("cdx_user");
       window.location = config.app.path;
     })
@@ -89,21 +97,27 @@ export const logOut = async () => {
     });
 };
 
-export const refreshToken = () => {
-  const userId = JSON.parse(sessionStorage.getItem("cdx_user")).userId;
+export const refreshToken = async () => {
+  const user = JSON.parse(sessionStorage.getItem("cdx_user"));
+  const payload = {
+    userId: user.userId,
+    token: user.token,
+  };
 
-  secureAxios({
-    method: "POST",
-    url: `${config.services.authApi.uri}/tokens`,
-    data: { userId },
-    withCredentials: true,
-  })
-    .then((response) => {
-      const user = JSON.parse(sessionStorage.getItem("cdx_user"));
-      user.token = response.data;
-      sessionStorage.setItem("cdx_user", JSON.stringify(user));
-    })
-    .catch((e) => {
-      displayAppError(e);
+  console.log("Refreshing Token");
+
+  try {
+    const result = await axios({
+      method: "POST",
+      url: `${config.services.authApi.uri}/tokens`,
+      data: payload,
+      withCredentials: true,
     });
+
+    user.token = result.data.token;
+    user.tokenExpiration = result.data.tokenExpiration;
+    await sessionStorage.setItem("cdx_user", JSON.stringify(user));
+  } catch (e) {
+    displayAppError(e);
+  }
 };

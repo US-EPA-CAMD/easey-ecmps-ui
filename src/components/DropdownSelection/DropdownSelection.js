@@ -8,14 +8,17 @@ export const DropdownSelection = ({
   options,
   selectionHandler,
   initialSelection,
-  workspaceSection
+  workspaceSection,
 }) => {
   const getIndex = (val) => {
     return options.findIndex((obj) => obj[selectKey] === val);
   };
 
   const handleChange = (val) => {
-    selectionHandler([getIndex(val.target.value), val.target.value], workspaceSection);
+    selectionHandler(
+      [getIndex(val.target.value), val.target.value],
+      workspaceSection
+    );
   };
 
   const populateOptions = (optionsList) => {
