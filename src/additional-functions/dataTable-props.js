@@ -315,7 +315,7 @@ export const unitControlDataTableProps = (location, selectedLocation) => {
       ["parameterCode", "controlCode", "prefilteredUnitControls"],
     ],
     columnNames: [
-      "Equipment Parameter Code",
+      "Parameter Code",
       "Control Code",
       "Original Code",
       "Install Date",
@@ -324,7 +324,7 @@ export const unitControlDataTableProps = (location, selectedLocation) => {
       "Retire Date",
     ],
     controlInputs: {
-      parameterCode: ["Equipment Parameter Code", "mainDropdown", "", ""],
+      parameterCode: ["Parameter Code", "mainDropdown", "", ""],
       controlCode: ["Control Code", "dropdown", "", ""],
       originalCode: ["Original Code", "radio", "", ""],
       seasonalControlsIndicator: [
