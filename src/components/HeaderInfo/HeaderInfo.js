@@ -459,7 +459,6 @@ export const HeaderInfo = ({
     mpApi.importMP(payload).then((response) => {
       setUsePortBtn(true);
       setIsLoading(true);
-      console.log(response);
       if (response) {
         setImportedFileErrorMsgs(response);
       }

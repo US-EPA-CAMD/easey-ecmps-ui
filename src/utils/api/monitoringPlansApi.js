@@ -1041,7 +1041,7 @@ export const getMonitoringPlanComments = async (monPlanId) => {
 
 export const importMP = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/plans/import/`;
-  /* ry {
+  try {
     return handleResponse(
       await secureAxios({
         method: "POST",
@@ -1050,17 +1050,8 @@ export const importMP = async (payload) => {
       })
     );
   } catch (error) {
-    console.log(error)
-    // handleImportError(error);
-  } */
-
-  return secureAxios({
-    method: "POST",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleImportError);
+    return handleImportError(error);
+  }
 };
 
 export const getMPSchema = async () => {

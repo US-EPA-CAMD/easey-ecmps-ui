@@ -90,14 +90,15 @@ const ImportModal = ({
 
   return (
     <div className="import-modal-container">
-      {console.log('importedFileErrorMsgs', importedFileErrorMsgs)}
-      {complete && importedFileErrorMsgs !== undefined && successResponses.includes(importedFileErrorMsgs.status) ? (
+      {complete &&
+      importedFileErrorMsgs !== undefined &&
+      successResponses.includes(importedFileErrorMsgs.status) ? (
         <span id="fileName">{fileName}</span>
       ) : complete && importedFileErrorMsgs.length > 0 ? (
         <div className="overflow-y-auto maxh-mobile">
           <div className="padding-right-2 padding-left-3 " aria-live="polite">
             {" "}
-            {console.log("imported error", importedFileErrorMsgs)}
+            {console.log("import errors", importedFileErrorMsgs)}
             {importedFileErrorMsgs.map((error, i) => (
               <Alert type="error" slim noIcon key={i} role="alert">
                 {error}
