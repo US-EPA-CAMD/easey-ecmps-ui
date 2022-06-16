@@ -39,11 +39,6 @@ const Layout = (props) => {
         </div>
 
         <div id="topHeader" className="topHeader">
-          {outageMsgContent && outageMsgContent.enabled === "true" ? (
-            <SiteAlert variant="info" heading={outageMsgContent.heading}>
-              {outageMsgContent.message}
-            </SiteAlert>
-          ) : null}
           <Header environment={config.app.env} />
           <SubHeader user={props.user} setCurrentLink={props.setCurrentLink} />
         </div>
@@ -62,7 +57,12 @@ const Layout = (props) => {
               setCurrentLink={props.setCurrentLink}
             />
           </div>
-          <div className="grid-col margin-x-2 minh-tablet-lg" id="main">
+          <div className="grid-col minh-tablet-lg" id="main">
+            {outageMsgContent && outageMsgContent.enabled === "true" ? (
+              <SiteAlert variant="info" heading={outageMsgContent.heading}>
+                {outageMsgContent.message}
+              </SiteAlert>
+            ) : null}
             <div
               id="appErrorMessage"
               tabIndex="-1"
@@ -84,7 +84,9 @@ const Layout = (props) => {
                 className="position-relative top-neg-1"
               />
             </div>
-            <main id="main">{childrenWithProps} </main>
+            <main class="margin-x-2" id="main">
+              {childrenWithProps}{" "}
+            </main>
           </div>
         </div>
         <div id="footer" className="position-fixed bottom-0 width-full">
