@@ -1,7 +1,7 @@
 import log from "loglevel";
 import { displayAppError } from "../../additional-functions/app-error";
 
-const successResponses = [200, 201];
+export const successResponses = [200, 201];
 
 export async function handleResponse(response) {
   if (successResponses.includes(response.status) && response.data) {

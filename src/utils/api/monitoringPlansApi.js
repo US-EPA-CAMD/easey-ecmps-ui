@@ -1,5 +1,5 @@
 import axios from "axios";
-import { handleResponse, handleError } from "./apiUtils";
+import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
 
@@ -1050,7 +1050,7 @@ export const importMP = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleImportError(error);
   }
 };
 
