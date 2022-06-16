@@ -174,7 +174,7 @@ describe("InactivityTracker", () => {
       </Provider>
     );
 
-    jest.advanceTimersByTime(100000000);
+    jest.advanceTimersByTime(100000);
     expect(container).not.toBeUndefined();
   });
   test("mapDispatchToProps calls the appropriate action", async () => {
