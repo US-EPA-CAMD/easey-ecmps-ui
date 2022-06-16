@@ -303,19 +303,19 @@ export const unitControlDataTableProps = (location, selectedLocation) => {
     payload: {
       locationId: location,
       id: null,
-      controlEquipParamCode: null,
-      controlCode: null,
-      originalCode: 0,
-      seasonalControlsIndicator: "radio",
-      installDate: null,
-      optimizationDate: null,
-      retireDate: null,
+      parameterCode: "string",
+      controlCode: "string",
+      originalCode: "string",
+      seasonalControlsIndicator: "string",
+      installDate: "2021-09-16T20:55:48.806Z",
+      optimizationDate: "2021-09-16T20:55:48.806Z",
+      retireDate: "2021-09-16T20:55:48.806Z",
     },
     dropdownArray: [
-      ["controlEquipParamCode", "controlCode", "prefilteredUnitControls"],
+      ["parameterCode", "controlCode", "prefilteredUnitControls"],
     ],
     columnNames: [
-      "Equipment Parameter Code",
+      "Parameter Code",
       "Control Code",
       "Original Code",
       "Install Date",
@@ -324,12 +324,7 @@ export const unitControlDataTableProps = (location, selectedLocation) => {
       "Retire Date",
     ],
     controlInputs: {
-      controlEquipParamCode: [
-        "Equipment Parameter Code",
-        "mainDropdown",
-        "",
-        "",
-      ],
+      parameterCode: ["Parameter Code", "mainDropdown", "", ""],
       controlCode: ["Control Code", "dropdown", "", ""],
       originalCode: ["Original Code", "radio", "", ""],
       seasonalControlsIndicator: [

@@ -30,7 +30,6 @@ const props = {
   configID: selectedConfig.id,
 };
 test("tests QACertTestSummaryTabRender", () => {
-  const { container } = render(
-  <QACertTestSummaryTabRender {...props} />);
+  const { container } = render(<QACertTestSummaryTabRender {...props} />);
   expect(container).not.toBeUndefined();
 });

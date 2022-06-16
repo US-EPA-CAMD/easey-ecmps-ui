@@ -8,7 +8,7 @@ describe("testing unit controls data selectors", () => {
       {
         id: "15829",
         unitId: "1",
-        controlEquipParamCode: "NOX",
+        parameterCode: "NOX",
         controlCode: "SNCR",
         originalCode: "1",
         installDate: "2006-05-01",
@@ -23,7 +23,7 @@ describe("testing unit controls data selectors", () => {
       {
         id: "15829",
         unitId: "1",
-        controlEquipParamCode: "NOX",
+        parameterCode: "NOX",
         controlCode: "SNCR",
         originalCode: "0",
         installDate: null,

@@ -209,7 +209,7 @@ export const UploadModal = ({
                                 heading="Success"
                                 role="success"
                               >
-                                Monitoring Plan has been successfully imported
+                                Monitoring Plan has been Successfully Imported.
                               </Alert>
                             </div>
                           )}

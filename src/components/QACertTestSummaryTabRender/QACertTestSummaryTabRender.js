@@ -51,7 +51,7 @@ export const QACertTestSummaryRender = ({
         [<ComingSoon />],
         [
           <QALinearitySummaryDataTable
-            locationSelectValue={locationSelect ? locationSelect[1]:0}
+            locationSelectValue={locationSelect ? locationSelect[1] : 0}
             user={user}
           />,
         ],
@@ -108,7 +108,7 @@ export const QACertTestSummaryRender = ({
         />
       </div>
       <hr />
-      <div >{tableState[sectionSelect[0]]}</div>
+      <div>{tableState[sectionSelect[0]]}</div>
     </div>
   );
 };
