@@ -13,11 +13,11 @@ export const getMonitoringPlansUnitControlRecords = (data) => {
       : "";
 
     const seasonalControlsIndicator =
-      el["seasonalControlsIndicator"] === 1 ? "Yes" : "No";
-    const originalCode = el["originalCode"] === 1 ? "Yes" : "No";
+      el["seasonalControlsIndicator"] === "1" ? "Yes" : "No";
+    const originalCode = el["originalCode"] === "1" ? "Yes" : "No";
 
     records.push({
-      col1: el["controlEquipParamCode"],
+      col1: el["parameterCode"],
       col2: el["controlCode"],
       col3: `${originalCode}`,
       col4: `${installDate}`,

@@ -16,7 +16,7 @@ export const QACertTestSummaryHome = ({
 }) => {
   useEffect(() => {
     document.title = "QA Certifications Test Data";
-    console.log('user at home',user)
+    console.log("user at home", user);
   }, []);
 
   // useEffect(() => {

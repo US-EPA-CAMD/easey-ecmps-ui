@@ -35,6 +35,7 @@ const QADataTableRender = ({
   actionsBtn,
   expandableRowComp,
 }) => {
+  console.log("data", data);
   const columns = [];
   columnNames.forEach((name, index) => {
     switch (name) {
@@ -75,6 +76,7 @@ const QADataTableRender = ({
     for (let i = 0; i < data.length; i++) {
       emptyArr.push(0);
     }
+    console.log("data", data);
     setTotalExpand(emptyArr);
   }, [data]);
 

@@ -114,22 +114,30 @@ export const getMonitoringAnalyzerRanges = async (locId, componentRecordId) => {
 
 export const postCheckoutMonitoringPlanConfiguration = async (id, user) => {
   const userName = { username: user };
-  return secureAxios({
-    method: "POST",
-    url: `${config.services.monitorPlans.uri}/workspace/check-outs/plans/${id}`,
-    data: userName,
-  })
-    .then((response) => response.data)
-    .catch(handleError);
+  try {
+    return (
+      await secureAxios({
+        method: "POST",
+        url: `${config.services.monitorPlans.uri}/workspace/check-outs/plans/${id}`,
+        data: userName,
+      })
+    ).data;
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const revertOfficialRecord = async (id) => {
-  return secureAxios({
-    method: "DELETE",
-    url: `${config.services.monitorPlans.uri}/workspace/plans/${id}/revert`,
-  })
-    .then((response) => response.data)
-    .catch(handleError);
+  try {
+    return (
+      await secureAxios({
+        method: "DELETE",
+        url: `${config.services.monitorPlans.uri}/workspace/plans/${id}/revert`,
+      })
+    ).data;
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const createMethods = async (payload) => {
@@ -139,9 +147,13 @@ export const createMethods = async (payload) => {
   delete payload["locationId"];
   delete payload["id"];
 
-  return secureAxios({ method: "POST", url: url, data: payload })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({ method: "POST", url: url, data: payload })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 export const createMats = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/mats-methods`;
@@ -150,18 +162,26 @@ export const createMats = async (payload) => {
   delete payload["locationId"];
   delete payload["id"];
 
-  return secureAxios({ method: "POST", url: url, data: payload })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({ method: "POST", url: url, data: payload })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const putLockTimerUpdateConfiguration = async (id) => {
-  return secureAxios({
-    method: "PUT",
-    url: `${config.services.monitorPlans.uri}/workspace/check-outs/plans/${id}`,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: `${config.services.monitorPlans.uri}/workspace/check-outs/plans/${id}`,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const saveMonitoringMethods = async (payload) => {
@@ -170,14 +190,17 @@ export const saveMonitoringMethods = async (payload) => {
   // *** remove attributes not needed by the API
   delete payload["locationId"];
   delete payload["id"];
-
-  return secureAxios({
-    method: "PUT",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const saveMonitoringMats = async (payload) => {
@@ -186,22 +209,30 @@ export const saveMonitoringMats = async (payload) => {
   delete payload["locationId"];
   delete payload["id"];
 
-  return secureAxios({
-    method: "PUT",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
-  return secureAxios({
-    method: "DELETE",
-    url: `${config.services.monitorPlans.uri}/workspace/check-outs/plans/${id}`,
-  })
-    .then((response) => response.data)
-    .catch(handleError);
+  try {
+    return (
+      await secureAxios({
+        method: "DELETE",
+        url: `${config.services.monitorPlans.uri}/workspace/check-outs/plans/${id}`,
+      })
+    ).data;
+  } catch (error) {
+    handleError(error);
+  }
 };
 // not secure
 // *** obtain a list of all checked out locations (by all users)
@@ -227,13 +258,17 @@ export const saveAnalyzerRanges = async (payload) => {
   delete payload["locId"];
   delete payload["id"];
   delete payload["compId"];
-  return secureAxios({
-    method: "PUT",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 export const createAnalyzerRanges = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locId"]}/components/${payload["compId"]}/analyzer-ranges/`;
@@ -241,13 +276,17 @@ export const createAnalyzerRanges = async (payload) => {
   delete payload["locId"];
   delete payload["compId"];
 
-  return secureAxios({
-    method: "POST",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const saveSystemsFuelFlows = async (payload, locId, sysId) => {
@@ -255,13 +294,17 @@ export const saveSystemsFuelFlows = async (payload, locId, sysId) => {
   // *** remove attributes not needed by the API
   delete payload["id"];
 
-  return secureAxios({
-    method: "PUT",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const createSystemsFuelFlows = async (payload, locId, sysId) => {
@@ -269,13 +312,17 @@ export const createSystemsFuelFlows = async (payload, locId, sysId) => {
   // *** remove attributes not needed by the API
   delete payload["id"];
 
-  return secureAxios({
-    method: "POST",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const saveSystems = async (payload, locId, sysId) => {
@@ -283,13 +330,17 @@ export const saveSystems = async (payload, locId, sysId) => {
   // *** remove attributes not needed by the API
   delete payload["id"];
 
-  return secureAxios({
-    method: "PUT",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const createSystems = async (payload, locId, sysId) => {
@@ -297,26 +348,34 @@ export const createSystems = async (payload, locId, sysId) => {
   // *** remove attributes not needed by the API
   delete payload["id"];
 
-  return secureAxios({
-    method: "POST",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const saveSystemsComponents = async (payload, locId, sysId, compId) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${locId}/systems/${sysId}/components/${compId}`;
   // *** remove attributes not needed by the API
   delete payload["id"];
-  return secureAxios({
-    method: "PUT",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const createSystemsComponents = async (payload, locId, sysId) => {
@@ -324,13 +383,17 @@ export const createSystemsComponents = async (payload, locId, sysId) => {
   // *** remove attributes not needed by the API
   delete payload["id"];
 
-  return secureAxios({
-    method: "POST",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const getMonitoringSpans = async (locationId) => {
@@ -351,13 +414,17 @@ export const saveMonitoringSpans = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/spans/${payload["id"]}`;
   // *** remove attributes not needed by the API
 
-  return secureAxios({
-    method: "PUT",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const createMonitoringSpans = async (payload) => {
@@ -365,27 +432,33 @@ export const createMonitoringSpans = async (payload) => {
 
   // *** remove attributes not needed by the API
   delete payload["id"];
-
-  return secureAxios({
-    method: "POST",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const saveMonitoringLoads = async (payload, locationId) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${locationId}/loads/${payload["id"]}`;
   // *** remove attributes not needed by the API
-
-  return secureAxios({
-    method: "PUT",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const createMonitoringLoads = async (payload, locationId) => {
@@ -393,14 +466,17 @@ export const createMonitoringLoads = async (payload, locationId) => {
 
   // *** remove attributes not needed by the API
   delete payload["id"];
-
-  return secureAxios({
-    method: "POST",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const getMonitoringLoads = async (locationId) => {
@@ -434,14 +510,17 @@ export const getMonitoringDefaults = async (locationId) => {
 export const saveMonitoringDefaults = async (payload, locID) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${locID}/defaults/${payload["id"]}`;
   // *** remove attributes not needed by the API
-
-  return secureAxios({
-    method: "PUT",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const createMonitoringDefaults = async (payload, locID) => {
@@ -449,14 +528,17 @@ export const createMonitoringDefaults = async (payload, locID) => {
 
   // *** remove attributes not needed by the API
   delete payload["id"];
-
-  return secureAxios({
-    method: "POST",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const getMonitoringFormulas = async (locationId) => {
@@ -490,13 +572,17 @@ export const getMonitoringRectangularDucts = async (locationId) => {
 export const saveMonitoringDuct = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/duct-wafs/${payload["id"]}`;
   // *** remove attributes not needed by the API
-  return secureAxios({
-    method: "PUT",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const createMonitoringDuct = async (payload) => {
@@ -504,14 +590,17 @@ export const createMonitoringDuct = async (payload) => {
 
   // *** remove attributes not needed by the API
   delete payload["id"];
-
-  return secureAxios({
-    method: "POST",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const getMonitoringPlansFuelDataRecords = async (selectedLocation) => {
@@ -529,14 +618,17 @@ export const getMonitoringPlansFuelDataRecords = async (selectedLocation) => {
 export const saveMonitoringPlansFuelData = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/units/${payload["unitRecordId"]}/unit-fuels/${payload["id"]}`;
   // *** remove attributes not needed by the API
-
-  return secureAxios({
-    method: "PUT",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const createFuelData = async (payload) => {
@@ -544,14 +636,17 @@ export const createFuelData = async (payload) => {
 
   // *** remove attributes not needed by the API
   delete payload["id"];
-
-  return secureAxios({
-    method: "POST",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const getMonitoringPlansUnitControlRecords = async (
@@ -571,13 +666,17 @@ export const getMonitoringPlansUnitControlRecords = async (
 export const saveUnitControl = async (payload, urlParameters) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}/unit-controls/${payload["id"]}`;
   // *** remove attributes not needed by the API
-  return secureAxios({
-    method: "PUT",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const createUnitControl = async (payload, urlParameters) => {
@@ -585,26 +684,33 @@ export const createUnitControl = async (payload, urlParameters) => {
 
   // *** remove attributes not needed by the API
   delete payload["id"];
-
-  return secureAxios({
-    method: "POST",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const saveMonitoringFormulas = async (payload, locID) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${locID}/formulas/${payload["id"]}`;
   // *** remove attributes not needed by the API
-  return secureAxios({
-    method: "PUT",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const createMonitoringFormulas = async (payload, locID) => {
@@ -612,14 +718,17 @@ export const createMonitoringFormulas = async (payload, locID) => {
 
   // *** remove attributes not needed by the API
   delete payload["id"];
-
-  return secureAxios({
-    method: "POST",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const getUnitCapacity = async (selectedLocation) => {
@@ -637,27 +746,33 @@ export const getUnitCapacity = async (selectedLocation) => {
 export const saveUnitCapacity = async (payload, urlParameters) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}/unit-capacities/${payload["id"]}`;
   // *** remove attributes not needed by the API
-
-  return secureAxios({
-    method: "PUT",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const createUnitCapacity = async (payload, urlParameters) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}/unit-capacities/`;
   // *** remove attributes not needed by the API
-
-  return secureAxios({
-    method: "POST",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const getPCTQualifications = async (locationId, qualId) => {
@@ -674,15 +789,18 @@ export const getPCTQualifications = async (locationId, qualId) => {
 
 export const savePCTQualificationData = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/qualifications/${payload["qualId"]}/pct-qualifications/${payload["id"]}`;
-  // *** remove attributes not needed by the API
-
-  return secureAxios({
-    method: "PUT",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  // ***  remove attributes not needed by the API
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const createPCTQualificationData = async (payload) => {
@@ -690,14 +808,17 @@ export const createPCTQualificationData = async (payload) => {
 
   // *** remove attributes not needed by the API
   delete payload["id"];
-
-  return secureAxios({
-    method: "POST",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const getQualifications = async (locationId) => {
@@ -715,14 +836,17 @@ export const getQualifications = async (locationId) => {
 export const saveQualificationData = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/qualifications/${payload["id"]}`;
   // *** remove attributes not needed by the API
-
-  return secureAxios({
-    method: "PUT",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const createQualificationData = async (payload) => {
@@ -730,14 +854,17 @@ export const createQualificationData = async (payload) => {
 
   // *** remove attributes not needed by the API
   delete payload["id"];
-
-  return secureAxios({
-    method: "POST",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const getLEEQualifications = async (locationId, qualId) => {
@@ -755,14 +882,17 @@ export const getLEEQualifications = async (locationId, qualId) => {
 export const saveLEEQualificationData = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/qualifications/${payload["qualId"]}/lee-qualifications/${payload["id"]}`;
   // *** remove attributes not needed by the API
-
-  return secureAxios({
-    method: "PUT",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const createLEEQualificationData = async (payload) => {
@@ -770,14 +900,17 @@ export const createLEEQualificationData = async (payload) => {
 
   // *** remove attributes not needed by the API
   delete payload["id"];
-
-  return secureAxios({
-    method: "POST",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const getLMEQualifications = async (locationId, qualId) => {
@@ -795,14 +928,17 @@ export const getLMEQualifications = async (locationId, qualId) => {
 export const saveLMEQualificationData = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/qualifications/${payload["qualId"]}/lme-qualifications/${payload["id"]}`;
   // *** remove attributes not needed by the API
-
-  return secureAxios({
-    method: "PUT",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const createLMEQualificationData = async (payload) => {
@@ -810,14 +946,17 @@ export const createLMEQualificationData = async (payload) => {
 
   // *** remove attributes not needed by the API
   delete payload["id"];
-
-  return secureAxios({
-    method: "POST",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const getLocationAttributes = async (locationId) => {
@@ -846,28 +985,34 @@ export const getRelationshipData = async (locationId) => {
 
 export const saveLocationAttribute = async (payload, locationId) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${locationId}/attributes/${payload["id"]}`;
-
-  return secureAxios({
-    method: "PUT",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 export const createLocationAttribute = async (payload, locationSelectValue) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${locationSelectValue}/attributes/`;
 
   // *** remove attributes not needed by the API
   delete payload["id"];
-
-  return secureAxios({
-    method: "POST",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const getMonitoringPlansEvaluationReportData = async (monPlanId) => {
@@ -896,14 +1041,17 @@ export const getMonitoringPlanComments = async (monPlanId) => {
 
 export const importMP = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/plans/import/`;
-
-  return secureAxios({
-    method: "POST",
-    url: url,
-    data: payload,
-  })
-    .then(handleResponse)
-    .catch(handleImportError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
 };
 
 export const getMPSchema = async () => {

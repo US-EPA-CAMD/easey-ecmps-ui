@@ -91,8 +91,11 @@ export const MonitoringPlanTab = ({
 };
 const mapStateToProps = (state) => {
   return {
-    tabs: state.openedFacilityTabs[MONITORING_PLAN_STORE_NAME],
-    activeTab: state.activeTab[MONITORING_PLAN_STORE_NAME],
+    tabs: state.openedFacilityTabs[
+      convertSectionToStoreName(MONITORING_PLAN_STORE_NAME)
+    ],
+    activeTab:
+      state.activeTab[convertSectionToStoreName(MONITORING_PLAN_STORE_NAME)],
   };
 };
 

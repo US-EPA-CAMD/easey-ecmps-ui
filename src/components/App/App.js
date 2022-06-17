@@ -19,7 +19,6 @@ import Resources from "../Resources/Resources";
 
 import HelpSupport from "../HelpSupport/HelpSupport";
 import "./App.scss";
-import { TokenRefresher } from "../TokenRefresher/TokenRefresher";
 import InactivityTracker from "../InactivityTracker/InactivityTracker";
 import config from "../../config";
 import {
@@ -80,7 +79,6 @@ const App = () => {
   );
   return (
     <div>
-      {user ? <TokenRefresher /> : ""}
       <div aria-live="polite" role="status" aria-atomic="true">
         <div>{user ? <InactivityTracker /> : ""}</div>
       </div>
@@ -161,11 +159,7 @@ const App = () => {
             <Route
               path="/workspace/qa_certifications_test_summary_data"
               exact
-              component={() => (
-                <QACertTestSummaryHome
-                  user={user}
-                />
-              )}
+              component={() => <QACertTestSummaryHome user={user} />}
             />
 
             {/* <Route
