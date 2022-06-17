@@ -23,10 +23,10 @@ export const config = {
     inactivityDuration:
       process.env
         .REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_CHECKOUT_MINUTES *
-        oneMinute || 200 * oneMinute, //Change ME
+        oneMinute || 1 * oneMinute, //Change ME
     inactivityLogoutDuration:
       process.env.REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_LOGOUT_MINUTES *
-        oneMinute || 201 * oneMinute, //Change ME
+        oneMinute || 1 * oneMinute, //Change ME
     activityPollingFrequency:
       process.env.REACT_APP_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS *
         oneSecond || oneSecond,

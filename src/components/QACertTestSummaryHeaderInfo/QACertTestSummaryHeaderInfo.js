@@ -26,15 +26,15 @@ export const QACertTestSummaryHeaderInfo = ({
     { name: "Flow to Load Check" },
     { name: "Flow to Load Reference" },
     { name: "Fuel Flow to Load Baseline" },
-    { name: "Fuel Flow to Load Test" },
+    { name: "Fuel Flow to Load" },
     { name: "Fuel Flowmeter Accuracy" },
     { name: "Hg Linearity and 3-Level Summary" },
     { name: "Linearity Summary" },
     { name: "Online Offline Calibration" },
     { name: "RATA" },
-    { name: "Test Qualifcation" },
+    { name: "Test Qualification" },
     { name: "Transmitter Transducer Accuracy" },
-    { name: "Unit Test" },
+    { name: "Unit Default" },
   ];
 
   // *** parse apart facility name

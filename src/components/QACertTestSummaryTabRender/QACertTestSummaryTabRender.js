@@ -26,15 +26,15 @@ export const QACertTestSummaryRender = ({
     { name: "Flow to Load Check" },
     { name: "Flow to Load Reference" },
     { name: "Fuel Flow to Load Baseline" },
-    { name: "Fuel Flow to Load Test" },
+    { name: "Fuel Flow to Load" },
     { name: "Fuel Flowmeter Accuracy" },
     { name: "Hg Linearity and 3-Level Summary" },
     { name: "Linearity Summary" },
     { name: "Online Offline Calibration" },
     { name: "RATA" },
-    { name: "Test Qualifcation" },
+    { name: "Test Qualification" },
     { name: "Transmitter Transducer Accuracy" },
-    { name: "Unit Test" },
+    { name: "Unit Default" },
   ];
   // updates all tables whenever a location is changed
   useEffect(
@@ -51,7 +51,7 @@ export const QACertTestSummaryRender = ({
         [<ComingSoon />],
         [
           <QALinearitySummaryDataTable
-            locationSelectValue={locationSelect ? locationSelect[1]:0}
+            locationSelectValue={locationSelect ? locationSelect[1] : 0}
             user={user}
           />,
         ],
@@ -81,15 +81,15 @@ export const QACertTestSummaryRender = ({
     [["Flow to Load Check"]],
     [["Flow to Load Reference"]],
     [["Fuel Flow to Load Baseline"]],
-    [["Fuel Flow to Load Test"]],
+    [["Fuel Flow to Load"]],
     [["Fuel Flowmeter Accuracy"]],
     [["Hg Linearity and 3-Level Summary"]],
     [["Linearity Summary"]],
     [["Online Offline Calibration"]],
     [["RATA"]],
-    [["Test Qualifcation"]],
+    [["Test Qualification"]],
     [["Transmitter Transducer Accuracy"]],
-    [["Unit Test"]],
+    [["Unit Default"]],
   ]);
   return (
     <div className=" padding-top-0">
