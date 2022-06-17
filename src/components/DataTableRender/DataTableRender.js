@@ -129,9 +129,9 @@ export const DataTableRender = ({
         .map((location) => location["monPlanId"])
         .indexOf(monitoringPlanId) > -1 &&
       checkedOutLocations[
-        checkedOutLocations
-          .map((location) => location["monPlanId"])
-          .indexOf(monitoringPlanId)
+      checkedOutLocations
+        .map((location) => location["monPlanId"])
+        .indexOf(monitoringPlanId)
       ]["checkedOutBy"] === user["userId"]
     ) {
       result = true;
@@ -261,9 +261,9 @@ export const DataTableRender = ({
                     {/* display a checkout option only if no other locations are currently checked out by user */}
 
                     {workspaceSection === MONITORING_PLAN_STORE_NAME &&
-                    isAnyLocationCheckedOutByUser() === false &&
-                    isLocationCheckedOut(row["facId"]) === false &&
-                    row["col2"] === "Active" ? (
+                      isAnyLocationCheckedOutByUser() === false &&
+                      isLocationCheckedOut(row["facId"]) === false &&
+                      row["col2"] === "Active" ? (
                       <>
                         <span className="margin-x-1">|</span>
                         <Button
@@ -274,8 +274,8 @@ export const DataTableRender = ({
                           id={
                             tableTitle
                               ? `btnOpenAndCheckout${tableTitle
-                                  .split(" ")
-                                  .join("")}`
+                                .split(" ")
+                                .join("")}`
                               : `btnOpenAndCheckout`
                           }
                           onClick={() => openHandler(normalizedRow, true)}
@@ -285,31 +285,31 @@ export const DataTableRender = ({
                         </Button>
                       </>
                     ) : /* display check in option only if THIS location is currently checked out by user */
-                    workspaceSection === MONITORING_PLAN_STORE_NAME &&
-                      isCurrentlyCheckedOutByUser(row.col3) === true ? (
-                      <>
-                        <span className="margin-x-1">|</span>
-                        <Button
-                          type="button"
-                          unstyled="true"
-                          epa-testid="btnCheckBackIn"
-                          className="cursor-pointer open-modal-button"
-                          id={
-                            tableTitle
-                              ? `btnCheckBackIn${tableTitle
+                      workspaceSection === MONITORING_PLAN_STORE_NAME &&
+                        isCurrentlyCheckedOutByUser(row.col3) === true ? (
+                        <>
+                          <span className="margin-x-1">|</span>
+                          <Button
+                            type="button"
+                            unstyled="true"
+                            epa-testid="btnCheckBackIn"
+                            className="cursor-pointer open-modal-button"
+                            id={
+                              tableTitle
+                                ? `btnCheckBackIn${tableTitle
                                   .split(" ")
                                   .join("")}`
-                              : `btnCheckBackIn`
-                          }
-                          onClick={() =>
-                            openHandler(normalizedRow, false, true)
-                          }
-                          aria-label={`check back in ${row.col1} `}
-                        >
-                          {"Check Back In"}
-                        </Button>
-                      </>
-                    ) : null}
+                                : `btnCheckBackIn`
+                            }
+                            onClick={() =>
+                              openHandler(normalizedRow, false, true)
+                            }
+                            aria-label={`check back in ${row.col1} `}
+                          >
+                            {"Check Back In"}
+                          </Button>
+                        </>
+                      ) : null}
                   </div>
                 ) : (
                   <div></div>
@@ -402,20 +402,6 @@ export const DataTableRender = ({
     }
   }
 
-  const colsFilter = (currentElement) => {
-    for (const prop in currentElement) {
-      // filters out any boolean properties in the data since it does
-      // not work with toLowercase and includes
-      if (
-        currentElement.hasOwnProperty(prop) &&
-        typeof currentElement[prop] === "string" &&
-        currentElement[prop].toLowerCase().includes(searchText.toLowerCase())
-      ) {
-        return currentElement;
-      }
-    }
-  };
-
   const resetExpandedRows = () => {
     const expandedRows = document.querySelectorAll(
       "[data-testid='expander-button-undefined']"
@@ -427,7 +413,12 @@ export const DataTableRender = ({
       }
     }
   };
-  const filteredItems = data.filter(colsFilter);
+  const filteredItems = data.filter((row) => {
+    const facilityStr = row.col1.toString().toLowerCase();
+    const orisStr = row.col2.toString().toLowerCase();
+    const searchStr = searchText.toLowerCase();
+    return facilityStr.includes(searchStr) || orisStr.includes(searchStr);
+  });
   const subHeaderComponentMemo = useMemo(() => {
     //cannot unit test properly
     const handleSearch = () => {
@@ -462,11 +453,10 @@ export const DataTableRender = ({
           <div>
             {tableTitle ? (
               <h3
-                className={`margin-top-5 text-bold ${
-                  tableStyling
+                className={`margin-top-5 text-bold ${tableStyling
                     ? "mobile:font-body-md mobile:text-bold"
                     : "mobile:font-body-xl mobile:text-bold"
-                }`}
+                  }`}
               >
                 {tableTitle}
               </h3>
@@ -541,11 +531,10 @@ export const DataTableRender = ({
         ) : dataLoaded && data.length === 0 ? (
           <div>
             <h3
-              className={`margin-top-5 text-bold ${
-                tableStyling
+              className={`margin-top-5 text-bold ${tableStyling
                   ? "mobile:font-body-md mobile:text-bold"
                   : "mobile:font-body-xl mobile:text-bold"
-              }`}
+                }`}
             >
               {tableTitle}
             </h3>

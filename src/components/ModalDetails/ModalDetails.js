@@ -94,7 +94,7 @@ const ModalDetails = ({
           <FormGroup className="margin-top-0">
             <h3 className="text-bold margin-bottom-0 usa-label">{value[1]}</h3>
             <div
-              id={`${value[4] !== "skip" ? value[1].split(" ").join("-") : ""}`}
+              id={`${value[4] !== "skip" ? value[1] : ""}`}
             >
               {value[2]
                 ? value[4] === "radio"
@@ -152,7 +152,7 @@ const ModalDetails = ({
             }
             initialSelection={value[5]}
             selectKey="code"
-            id={`${value[1].split(" ").join("-")}`}
+            id={value[1]}
             epa-testid={value[0].split(" ").join("-")}
             name={value[1]}
             secondOption="name"
@@ -178,7 +178,7 @@ const ModalDetails = ({
                 : "select"
             }
             selectKey="code"
-            id={`${value[1].split(" ").join("-")}`}
+            id={value[1]}
             epa-testid={value[0].split(" ").join("-")}
             name={value[1]}
             secondOption="name"
@@ -203,7 +203,7 @@ const ModalDetails = ({
             }
             initialSelection={!create ? value[5] : "select"}
             selectKey="code"
-            id={`${value[1].split(" ").join("-")}`}
+            id={value[1]}
             epa-testid={value[0].split(" ").join("-")}
             name={value[1]}
             secondOption="name"
@@ -223,7 +223,7 @@ const ModalDetails = ({
         comp = (
           <DatePicker
             className="margin-0 modalUserInput width-card-lg"
-            id={`${value[1].split(" ").join("-")}`}
+            id={value[1]}
             name={value[1]}
             epadataname={value[0]}
             epa-testid={value[0].split(" ").join("-")}
@@ -236,7 +236,7 @@ const ModalDetails = ({
         comp = (
           <TextInput
             className="modalUserInput width-7"
-            id={`${value[1].split(" ").join("-")}`}
+            id={value[1]}
             epa-testid={value[0].split(" ").join("-")}
             epadataname={value[0]}
             name={value[0]}
@@ -252,7 +252,7 @@ const ModalDetails = ({
             className={`modalUserInput ${
               cols === 3 ? "" : largeWidthCardStyle
             }`}
-            id={`${value[1].split(" ").join("-")}`}
+            id={value[1]}
             epa-testid={value[0].split(" ").join("-")}
             epadataname={value[0]}
             name={value[0]}
@@ -266,7 +266,7 @@ const ModalDetails = ({
         comp = (
           <Fieldset
             className=" display-inline-flex modalUserInput"
-            id={`${value[1].split(" ").join("-")}`}
+            id={value[1]}
             epadataname={value[0]}
             epa-testid={value[0].split(" ").join("-")}
             name={value[0]}
