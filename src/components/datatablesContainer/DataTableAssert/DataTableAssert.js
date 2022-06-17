@@ -13,7 +13,10 @@ import { loadDropdowns } from "../../../store/actions/dropdowns";
 import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
 
 import { addAriaLabelToDatatable } from "../../../additional-functions/ensure-508";
-
+import {
+  displayAppError,
+  needEndDate,
+} from "../../../additional-functions/app-error";
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
@@ -270,20 +273,27 @@ export const DataTableAssert = ({
       ".modalUserInput",
       radioNames ? radioNames : null
     );
-
-    assertSelector
-      .saveDataSwitch(
-        userInput,
-        dataTableName,
-        locationSelectValue,
-        urlParameters
-      )
-      .then(() => {
-        setShow(false);
-        setDataLoaded(false);
-        setUpdateTable(true);
-        setUpdateRelatedTables(true);
-      });
+    if (
+      (userInput.endHour && !userInput.endDate) ||
+      (!userInput.endHour && userInput.endDate)
+    ) {
+      displayAppError(needEndDate);
+      setShow(false);
+    } else {
+      assertSelector
+        .saveDataSwitch(
+          userInput,
+          dataTableName,
+          locationSelectValue,
+          urlParameters
+        )
+        .then(() => {
+          setShow(false);
+          setDataLoaded(false);
+          setUpdateTable(true);
+          setUpdateRelatedTables(true);
+        });
+    }
   };
 
   const createData = () => {
@@ -292,20 +302,27 @@ export const DataTableAssert = ({
       ".modalUserInput",
       radioNames ? radioNames : null
     );
-
-    assertSelector
-      .createDataSwitch(
-        userInput,
-        dataTableName,
-        locationSelectValue,
-        urlParameters
-      )
-      .then(() => {
-        setShow(false);
-        setDataLoaded(false);
-        setUpdateTable(true);
-        setUpdateRelatedTables(true);
-      });
+    if (
+      (userInput.endHour && !userInput.endDate) ||
+      (!userInput.endHour && userInput.endDate)
+    ) {
+      displayAppError(needEndDate);
+      setShow(false);
+    } else {
+      assertSelector
+        .createDataSwitch(
+          userInput,
+          dataTableName,
+          locationSelectValue,
+          urlParameters
+        )
+        .then(() => {
+          setShow(false);
+          setDataLoaded(false);
+          setUpdateTable(true);
+          setUpdateRelatedTables(true);
+        });
+    }
   };
   const [mainDropdownChange, setMainDropdownChange] = useState("");
 

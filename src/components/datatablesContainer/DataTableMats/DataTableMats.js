@@ -9,6 +9,10 @@ import {
   returnFocusToLast,
 } from "../../../additional-functions/manage-focus";
 import {
+  displayAppError,
+  needEndDate,
+} from "../../../additional-functions/app-error";
+import {
   getActiveData,
   getInactiveData,
 } from "../../../additional-functions/filter-data";
@@ -181,21 +185,33 @@ export const DataTableMats = ({
 
   const saveMats = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-    mpApi
-      .saveMonitoringMats(userInput)
-      .then((result) => {
-        console.log(result);
-        setShow(false);
-        setUpdateTable(true);
-        setUpdateRelatedTables(true);
-      })
-      .catch((error) => {
-        console.log(error);
-        setShow(false);
-      });
+    if (
+      (userInput.endHour && !userInput.endDate) ||
+      (!userInput.endHour && userInput.endDate)
+    ) {
+      displayAppError(needEndDate);
+      setShow(false);
+    } else {
+      mpApi
+        .saveMonitoringMats(userInput)
+        .then((result) => {
+          console.log(result);
+          setShow(false);
+          setUpdateTable(true);
+          setUpdateRelatedTables(true);
+        })
+        .catch((error) => {
+          console.log(error);
+          setShow(false);
+        });
+    }
   };
   const createMats = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
+    if ((userInput.endHour && !userInput.endDate)|| (!userInput.endHour && userInput.endDate)) {
+      displayAppError(needEndDate);
+      setShow(false);
+    } else {
     mpApi
       .createMats(userInput)
       .then((result) => {
@@ -207,6 +223,7 @@ export const DataTableMats = ({
         console.log(error);
         setShow(false);
       });
+    }
   };
 
   const [createNewMats, setCreateNewMats] = useState(false);

@@ -7,7 +7,10 @@ import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
-
+import {
+  displayAppError,
+  needEndDate,
+} from "../../../additional-functions/app-error";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { connect } from "react-redux";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
@@ -348,28 +351,44 @@ export const DataTableSystems = ({
     React.useState(false);
   const saveSystems = () => {
     const userInput = extractUserInput(sysPayload, ".modalUserInput");
-    mpApi
-      .saveSystems(userInput, locationSelectValue, selectedSystem.id)
-      .then((result) => {
-        console.log("saving results", result);
-        setUpdateSystemTable(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (
+      (userInput.endHour && !userInput.endDate) ||
+      (!userInput.endHour && userInput.endDate)
+    ) {
+      displayAppError(needEndDate);
+      setShow(false);
+    } else {
+      mpApi
+        .saveSystems(userInput, locationSelectValue, selectedSystem.id)
+        .then((result) => {
+          console.log("saving results", result);
+          setUpdateSystemTable(true);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
   const createSystems = () => {
     const userInput = extractUserInput(sysPayload, ".modalUserInput");
-    mpApi
-      .createSystems(userInput, locationSelectValue)
-      .then((result) => {
-        console.log("saving results", result);
-        setSecondLevel(false);
-        setUpdateSystemTable(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (
+      (userInput.endHour && !userInput.endDate) ||
+      (!userInput.endHour && userInput.endDate)
+    ) {
+      displayAppError(needEndDate);
+      setShow(false);
+    } else {
+      mpApi
+        .createSystems(userInput, locationSelectValue)
+        .then((result) => {
+          console.log("saving results", result);
+          setSecondLevel(false);
+          setUpdateSystemTable(true);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   const saveAnalyzerRanges = () => {
@@ -387,15 +406,23 @@ export const DataTableSystems = ({
     const userInput = extractUserInput(payload, ".modalUserInput", [
       "dualRangeIndicator",
     ]);
-    mpApi
-      .saveAnalyzerRanges(userInput)
-      .then((result) => {
-        console.log(result);
-        setUpdateAnalyzerRangeTable(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (
+      (userInput.endHour && !userInput.endDate) ||
+      (!userInput.endHour && userInput.endDate)
+    ) {
+      displayAppError(needEndDate);
+      setShow(false);
+    } else {
+      mpApi
+        .saveAnalyzerRanges(userInput)
+        .then((result) => {
+          console.log(result);
+          setUpdateAnalyzerRangeTable(true);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   const createAnalyzerRange = () => {
@@ -414,16 +441,23 @@ export const DataTableSystems = ({
     const userInput = extractUserInput(payload, ".modalUserInput", [
       "dualRangeIndicator",
     ]);
-
-    mpApi
-      .createAnalyzerRanges(userInput)
-      .then((result) => {
-        console.log(result, " was created");
-        setUpdateAnalyzerRangeTable(true);
-      })
-      .catch((error) => {
-        console.log("error is", error);
-      });
+    if (
+      (userInput.endHour && !userInput.endDate) ||
+      (!userInput.endHour && userInput.endDate)
+    ) {
+      displayAppError(needEndDate);
+      setShow(false);
+    } else {
+      mpApi
+        .createAnalyzerRanges(userInput)
+        .then((result) => {
+          console.log(result, " was created");
+          setUpdateAnalyzerRangeTable(true);
+        })
+        .catch((error) => {
+          console.log("error is", error);
+        });
+    }
   };
 
   const [selectedFuelFlows, setSelectedFuelFlows] = useState("");
@@ -440,37 +474,52 @@ export const DataTableSystems = ({
   };
   const saveFuelFlows = () => {
     const userInput = extractUserInput(fuelFlowsPayload, ".modalUserInput");
-    mpApi
-      .saveSystemsFuelFlows(
-        userInput,
-        selectedSystem.locationId,
-        selectedSystem.id
-      )
-      .then((result) => {
-        console.log(result);
-        setUpdateFuelFlowTable(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (
+      (userInput.endHour && !userInput.endDate) ||
+      (!userInput.endHour && userInput.endDate)
+    ) {
+      displayAppError(needEndDate);
+      setShow(false);
+    } else {
+      mpApi
+        .saveSystemsFuelFlows(
+          userInput,
+          selectedSystem.locationId,
+          selectedSystem.id
+        )
+        .then((result) => {
+          console.log(result);
+          setUpdateFuelFlowTable(true);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   const createFuelFlows = () => {
     const userInput = extractUserInput(fuelFlowsPayload, ".modalUserInput");
-
-    mpApi
-      .createSystemsFuelFlows(
-        userInput,
-        selectedSystem.locationId,
-        selectedSystem.id
-      )
-      .then((result) => {
-        console.log(result, " was created");
-        setUpdateFuelFlowTable(true);
-      })
-      .catch((error) => {
-        console.log("error is", error);
-      });
+    if (
+      (userInput.endHour && !userInput.endDate) ||
+      (!userInput.endHour && userInput.endDate)
+    ) {
+      displayAppError(needEndDate);
+      setShow(false);
+    } else {
+      mpApi
+        .createSystemsFuelFlows(
+          userInput,
+          selectedSystem.locationId,
+          selectedSystem.id
+        )
+        .then((result) => {
+          console.log(result, " was created");
+          setUpdateFuelFlowTable(true);
+        })
+        .catch((error) => {
+          console.log("error is", error);
+        });
+    }
   };
   // system components
 
@@ -492,40 +541,55 @@ export const DataTableSystems = ({
     const userInput = extractUserInput(componentPayload, ".modalUserInput", [
       "hgConverterIndicator",
     ]);
-
-    mpApi
-      .createSystemsComponents(
-        userInput,
-        selectedSystem.locationId,
-        selectedSystem.id
-      )
-      .then((result) => {
-        console.log(result, " was created");
-        setupdateComponentTable(true);
-      })
-      .catch((error) => {
-        console.log("error is", error);
-      });
+    if (
+      (userInput.endHour && !userInput.endDate) ||
+      (!userInput.endHour && userInput.endDate)
+    ) {
+      displayAppError(needEndDate);
+      setShow(false);
+    } else {
+      mpApi
+        .createSystemsComponents(
+          userInput,
+          selectedSystem.locationId,
+          selectedSystem.id
+        )
+        .then((result) => {
+          console.log(result, " was created");
+          setupdateComponentTable(true);
+        })
+        .catch((error) => {
+          console.log("error is", error);
+        });
+    }
   };
 
   const saveComponent = () => {
     const userInput = extractUserInput(componentPayload, ".modalUserInput", [
       "hgConverterIndicator",
     ]);
-    mpApi
-      .saveSystemsComponents(
-        userInput,
-        selectedSystem.locationId,
-        selectedSystem.id,
-        selectedRangeInFirst.componentRecordId
-      )
-      .then((result) => {
-        console.log(result);
-        setupdateComponentTable(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (
+      (userInput.endHour && !userInput.endDate) ||
+      (!userInput.endHour && userInput.endDate)
+    ) {
+      displayAppError(needEndDate);
+      setShow(false);
+    } else {
+      mpApi
+        .saveSystemsComponents(
+          userInput,
+          selectedSystem.locationId,
+          selectedSystem.id,
+          selectedRangeInFirst.componentRecordId
+        )
+        .then((result) => {
+          console.log(result);
+          setupdateComponentTable(true);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   // from analyzer ranges view to components view
