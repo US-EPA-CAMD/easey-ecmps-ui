@@ -417,7 +417,7 @@ export const DataTableRender = ({
     const facilityStr = row.col1.toString().toLowerCase();
     const orisStr = row.col2.toString().toLowerCase();
     const searchStr = searchText.toLowerCase();
-    if (facilityStr.includes(searchStr) || orisStr.includes(searchStr)) return true;
+    return facilityStr.includes(searchStr) || orisStr.includes(searchStr);
   });
   const subHeaderComponentMemo = useMemo(() => {
     //cannot unit test properly
