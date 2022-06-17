@@ -773,7 +773,7 @@ export const HeaderInfo = ({
                         checked={inactive[0]}
                         disabled={inactive[1]}
                         onChange={() =>
-                          setInactive([!inactive[0], inactive[1]], facility)
+                          setInactive([!inactive[0], inactive[1]], facility,MONITORING_PLAN_STORE_NAME)
                         }
                       />
                     </div>
