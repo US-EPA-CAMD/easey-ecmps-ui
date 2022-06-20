@@ -1,5 +1,10 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import {
+  render,
+  screen,
+  fireEvent,
+  waitForElement,
+} from "@testing-library/react";
 import { Provider } from "react-redux";
 import {
   DataTableRender,
@@ -67,131 +72,139 @@ describe("renders datatable with all values ", () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
-  test("makes sure 3 rows of data are passed in + 1 for header +2 for rest of table",async () => {
-    const { container, queryByPlaceholderText } =  await  render(
-      <Provider store={store}>
-      <DataTableRender
-        dataLoaded={false}
-        sectionTitle="sectionTitle"
-        tableTitle="tableTitle"
-        button={true}
-        columnNames={columnNames}
-        data={[]}
-        user={{ firstName: "test" }}
-        selectedRowHandler={jest.fn()}
-        pagination={true}
-        filter={true}
-        expandableRowComp={<button>{"click me"}</button>}
-        expandableRows={true}
-        headerStyling="headerStyling"
-        tableStyling="tableStyling"
-        componentStyling="componentStyling"
-        openHandler={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
-        setCheckout={jest.fn()}
-        setShowInactive={jest.fn()}
-        workspaceSection={MONITORING_PLAN_STORE_NAME}
-        checkedOutLocations={[
-          {
-            facId: 1,
-            monPlanId: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
-            checkedOutBy: "test",
-          },
-        ]}
-      />
-      </Provider>
+  test("makes sure 3 rows of data are passed in + 1 for header +2 for rest of table", async () => {
+    const { container, queryByPlaceholderText } = await waitForElement(() =>
+      render(
+        <Provider store={store}>
+          <DataTableRender
+            dataLoaded={false}
+            sectionTitle="sectionTitle"
+            tableTitle="tableTitle"
+            button={true}
+            columnNames={columnNames}
+            data={[]}
+            user={{ firstName: "test" }}
+            selectedRowHandler={jest.fn()}
+            pagination={true}
+            filter={true}
+            expandableRowComp={<button>{"click me"}</button>}
+            expandableRows={true}
+            headerStyling="headerStyling"
+            tableStyling="tableStyling"
+            componentStyling="componentStyling"
+            openHandler={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+            setCheckout={jest.fn()}
+            setShowInactive={jest.fn()}
+            workspaceSection={MONITORING_PLAN_STORE_NAME}
+            checkedOutLocations={[
+              {
+                facId: 1,
+                monPlanId: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
+                checkedOutBy: "test",
+              },
+            ]}
+          />
+        </Provider>
+      )
     );
     const noData = screen.getByAltText("Content loading");
     expect(noData).toBeDefined();
   });
-  test("data is loaded but no preloader or dt ",async () => {
-    const { container } =  await render(
-      <Provider store={store}>
-      <DataTableRender
-        dataLoaded={true}
-        sectionTitle="sectionTitle"
-        tableTitle="tableTitle"
-        button={true}
-        columnNames={columnNames}
-        data={[]}
-        user={{ username: "test" }}
-        selectedRowHandler={jest.fn()}
-        pagination={true}
-        filter={true}
-        expandableRowComp={<button>{"click me"}</button>}
-        expandableRows={true}
-        headerStyling="headerStyling"
-        tableStyling="tableStyling"
-        componentStyling="componentStyling"
-        openHandler={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
-        setCheckout={jest.fn()}
-        setShowInactive={jest.fn()}
-        workspaceSection={MONITORING_PLAN_STORE_NAME}
-      />
-      </Provider>
+  test("data is loaded but no preloader or dt ", async () => {
+    const { container } = await waitForElement(() =>
+      render(
+        <Provider store={store}>
+          <DataTableRender
+            dataLoaded={true}
+            sectionTitle="sectionTitle"
+            tableTitle="tableTitle"
+            button={true}
+            columnNames={columnNames}
+            data={[]}
+            user={{ username: "test" }}
+            selectedRowHandler={jest.fn()}
+            pagination={true}
+            filter={true}
+            expandableRowComp={<button>{"click me"}</button>}
+            expandableRows={true}
+            headerStyling="headerStyling"
+            tableStyling="tableStyling"
+            componentStyling="componentStyling"
+            openHandler={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+            setCheckout={jest.fn()}
+            setShowInactive={jest.fn()}
+            workspaceSection={MONITORING_PLAN_STORE_NAME}
+          />
+        </Provider>
+      )
     );
     expect(container).toBeDefined();
   });
 
-  test("data is loaded but no preloader or dt coniditonal no tableStyling ", async() => {
-    const { container } = await render(
-      <Provider store={store}>
-      <DataTableRender
-        dataLoaded={true}
-        sectionTitle="sectionTitle"
-        tableTitle="tableTitle"
-        button={true}
-        columnNames={columnNames}
-        data={[]}
-        user={{ username: "test" }}
-        selectedRowHandler={jest.fn()}
-        pagination={true}
-        filter={true}
-        expandableRowComp={<button>{"click me"}</button>}
-        expandableRows={true}
-        headerStyling="headerStyling"
-        componentStyling="componentStyling"
-        openHandler={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
-        setCheckout={jest.fn()}
-        setShowInactive={jest.fn()}
-        workspaceSection={MONITORING_PLAN_STORE_NAME}
-        
-      /></Provider>
+  test("data is loaded but no preloader or dt coniditonal no tableStyling ", async () => {
+    const { container } = await waitForElement(() =>
+      render(
+        <Provider store={store}>
+          <DataTableRender
+            dataLoaded={true}
+            sectionTitle="sectionTitle"
+            tableTitle="tableTitle"
+            button={true}
+            columnNames={columnNames}
+            data={[]}
+            user={{ username: "test" }}
+            selectedRowHandler={jest.fn()}
+            pagination={true}
+            filter={true}
+            expandableRowComp={<button>{"click me"}</button>}
+            expandableRows={true}
+            headerStyling="headerStyling"
+            componentStyling="componentStyling"
+            openHandler={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+            setCheckout={jest.fn()}
+            setShowInactive={jest.fn()}
+            workspaceSection={MONITORING_PLAN_STORE_NAME}
+          />
+        </Provider>
+      )
     );
     expect(container).toBeDefined();
   });
-  test("test no title with section title user is logged in and at configuration table trying to search",async () => {
-    const { container } = await render(
-      <Provider store={store}>
-      <DataTableRender
-        dataLoaded={true}
-        sectionTitle="tableTitle"
-        addBtn={true}
-        columnNames={columnNames}
-        data={data}
-        user={{ username: "test" }}
-        pagination={true}
-        filter={true}
-        expandableRowComp={<button>{"click me"}</button>}
-        expandableRows={true}
-        headerStyling="headerStyling"
-        componentStyling="componentStyling"
-        actionsBtn={"Open"}
-        openHandler={jest.fn()}
-        uniqueKey={true}
-        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
-        setCheckout={jest.fn()}
-        setShowInactive={jest.fn()}
-        checkedOutLocations={[]}
-        workspaceSection={MONITORING_PLAN_STORE_NAME}
-      />
-      </Provider>
+  test("test no title with section title user is logged in and at configuration table trying to search", async () => {
+    const { container } = await waitForElement(() =>
+      render(
+        <Provider store={store}>
+          <DataTableRender
+            dataLoaded={true}
+            sectionTitle="tableTitle"
+            addBtn={true}
+            columnNames={columnNames}
+            data={data}
+            user={{ username: "test" }}
+            pagination={true}
+            filter={true}
+            expandableRowComp={<button>{"click me"}</button>}
+            expandableRows={true}
+            headerStyling="headerStyling"
+            componentStyling="componentStyling"
+            actionsBtn={"Open"}
+            openHandler={jest.fn()}
+            uniqueKey={true}
+            setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+            setCheckout={jest.fn()}
+            setShowInactive={jest.fn()}
+            checkedOutLocations={[]}
+            workspaceSection={MONITORING_PLAN_STORE_NAME}
+          />
+        </Provider>
+      )
     );
     const btn = container.querySelector("#btnOpen");
     fireEvent.click(btn);
@@ -220,31 +233,33 @@ describe("renders datatable with all values ", () => {
     const rows = screen.getAllByRole("row");
     expect(rows.length).toEqual(2);
   });
-  test("test no title with no section title- user is logged in and at a sections data table", async() => {
-    const { container } = await render(
-      <Provider store={store}>
-      <DataTableRender
-        dataLoaded={true}
-        columnNames={columnNames}
-        data={data}
-        user={{ username: "test" }}
-        pagination={true}
-        filter={true}
-        defaultSort={"col2"}
-        // expandableRowComp={true}
-        expandableRows={true}
-        headerStyling="headerStyling"
-        tableStyling="tableStyling"
-        componentStyling="componentStyling"
-        actionsBtn={"View"}
-        openHandler={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
-        setCheckout={jest.fn()}
-        setShowInactive={jest.fn()}
-        workspaceSection={MONITORING_PLAN_STORE_NAME}
-      />
-      </Provider>
+  test("test no title with no section title- user is logged in and at a sections data table", async () => {
+    const { container } = await waitForElement(() =>
+      render(
+        <Provider store={store}>
+          <DataTableRender
+            dataLoaded={true}
+            columnNames={columnNames}
+            data={data}
+            user={{ username: "test" }}
+            pagination={true}
+            filter={true}
+            defaultSort={"col2"}
+            // expandableRowComp={true}
+            expandableRows={true}
+            headerStyling="headerStyling"
+            tableStyling="tableStyling"
+            componentStyling="componentStyling"
+            actionsBtn={"View"}
+            openHandler={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+            setCheckout={jest.fn()}
+            setShowInactive={jest.fn()}
+            workspaceSection={MONITORING_PLAN_STORE_NAME}
+          />
+        </Provider>
+      )
     );
 
     const btn = container.querySelector("#btnOpen");
@@ -254,31 +269,33 @@ describe("renders datatable with all values ", () => {
     const rows = screen.getAllByRole("row");
     expect(rows.length).toEqual(6);
   });
-  test("user is not logged in and at a sections data table", async() => {
-    const { container } = await render(
-      <Provider store={store}>
-      <DataTableRender
-        dataLoaded={true}
-        columnNames={columnNames}
-        data={data}
-        selectedRowHandler={jest.fn()}
-        pagination={true}
-        filter={true}
-        defaultSort={"col2"}
-        // expandableRowComp={true}
-        expandableRows={true}
-        headerStyling="headerStyling"
-        tableStyling="tableStyling"
-        componentStyling="componentStyling"
-        actionsBtn={"View"}
-        openHandler={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
-        setCheckout={jest.fn()}
-        setShowInactive={jest.fn()}
-        workspaceSection={MONITORING_PLAN_STORE_NAME}
-      />
-      </Provider>
+  test("user is not logged in and at a sections data table", async () => {
+    const { container } = await waitForElement(() =>
+      render(
+        <Provider store={store}>
+          <DataTableRender
+            dataLoaded={true}
+            columnNames={columnNames}
+            data={data}
+            selectedRowHandler={jest.fn()}
+            pagination={true}
+            filter={true}
+            defaultSort={"col2"}
+            // expandableRowComp={true}
+            expandableRows={true}
+            headerStyling="headerStyling"
+            tableStyling="tableStyling"
+            componentStyling="componentStyling"
+            actionsBtn={"View"}
+            openHandler={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+            setCheckout={jest.fn()}
+            setShowInactive={jest.fn()}
+            workspaceSection={MONITORING_PLAN_STORE_NAME}
+          />
+        </Provider>
+      )
     );
     const btn = container.querySelector("#btnOpen");
     // fireEvent.click(btn);
@@ -287,63 +304,68 @@ describe("renders datatable with all values ", () => {
     const rows = screen.getAllByRole("row");
     expect(rows.length).toEqual(6);
   });
-  test("user is not logged in and at a sections data table WITH tabletitle",async () => {
-    const { container, queryByPlaceholderText } = await render(
-      <Provider store={store}>
-      <DataTableRender
-        dataLoaded={true}
-        columnNames={columnNames}
-        data={data}
-        selectedRowHandler={jest.fn()}
-        pagination={true}
-        filter={true}
-        defaultSort={"col2"}
-        // expandableRowComp={true}
-        expandableRows={true}
-        headerStyling="headerStyling"
-        tableStyling="tableStyling"
-        tableTitle="tableTitle"
-        componentStyling="componentStyling"
-        actionsBtn={"View"}
-        openHandler={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
-        setCheckout={jest.fn()}
-        setShowInactive={jest.fn()}
-        workspaceSection={MONITORING_PLAN_STORE_NAME}
-      /> </Provider>
+  test("user is not logged in and at a sections data table WITH tabletitle", async () => {
+    const { container, queryByPlaceholderText } = await waitForElement(() =>
+      render(
+        <Provider store={store}>
+          <DataTableRender
+            dataLoaded={true}
+            columnNames={columnNames}
+            data={data}
+            selectedRowHandler={jest.fn()}
+            pagination={true}
+            filter={true}
+            defaultSort={"col2"}
+            // expandableRowComp={true}
+            expandableRows={true}
+            headerStyling="headerStyling"
+            tableStyling="tableStyling"
+            tableTitle="tableTitle"
+            componentStyling="componentStyling"
+            actionsBtn={"View"}
+            openHandler={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+            setCheckout={jest.fn()}
+            setShowInactive={jest.fn()}
+            workspaceSection={MONITORING_PLAN_STORE_NAME}
+          />{" "}
+        </Provider>
+      )
     );
 
     const rows = screen.getAllByRole("row");
     expect(rows.length).toEqual(6);
   });
 
-  test("user is  logged in and at a sections data table",async () => {
-    const { container, queryByPlaceholderText } = await render(
-      <Provider store={store}>
-      <DataTableRender
-        dataLoaded={true}
-        columnNames={columnNames}
-        data={data}
-        user={{ firstName: "test" }}
-        selectedRowHandler={jest.fn()}
-        pagination={true}
-        filter={true}
-        defaultSort={"col2"}
-        // expandableRowComp={true}
-        expandableRows={true}
-        headerStyling="headerStyling"
-        tableTitle="tableStyling"
-        componentStyling="componentStyling"
-        actionsBtn={"View"}
-        openHandler={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
-        setCheckout={jest.fn()}
-        setShowInactive={jest.fn()}
-        workspaceSection={MONITORING_PLAN_STORE_NAME}
-      />
-      </Provider>
+  test("user is  logged in and at a sections data table", async () => {
+    const { container, queryByPlaceholderText } = await waitForElement(() =>
+      render(
+        <Provider store={store}>
+          <DataTableRender
+            dataLoaded={true}
+            columnNames={columnNames}
+            data={data}
+            user={{ firstName: "test" }}
+            selectedRowHandler={jest.fn()}
+            pagination={true}
+            filter={true}
+            defaultSort={"col2"}
+            // expandableRowComp={true}
+            expandableRows={true}
+            headerStyling="headerStyling"
+            tableTitle="tableStyling"
+            componentStyling="componentStyling"
+            actionsBtn={"View"}
+            openHandler={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+            setCheckout={jest.fn()}
+            setShowInactive={jest.fn()}
+            workspaceSection={MONITORING_PLAN_STORE_NAME}
+          />
+        </Provider>
+      )
     );
 
     const rows = screen.getAllByRole("row");
@@ -351,33 +373,34 @@ describe("renders datatable with all values ", () => {
   });
 
   test("user is  logged in and at a sections data table with      tableTitle=tableTitle tableStyling=tableStyling", async () => {
-    const { container, queryByPlaceholderText } = await render(
-
-      <Provider store={store}>
-      <DataTableRender
-        dataLoaded={true}
-        columnNames={columnNames}
-        data={data}
-        user={{ firstName: "test" }}
-        selectedRowHandler={jest.fn()}
-        pagination={true}
-        filter={true}
-        defaultSort={"col2"}
-        // expandableRowComp={true}
-        expandableRows={true}
-        headerStyling="headerStyling"
-        tableTitle="tableTitle"
-        tableStyling="tableStyling"
-        componentStyling="componentStyling"
-        actionsBtn={"View"}
-        openHandler={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
-        setCheckout={jest.fn()}
-        setShowInactive={jest.fn()}
-        workspaceSection={MONITORING_PLAN_STORE_NAME}
-      />
-      </Provider>
+    const { container, queryByPlaceholderText } = await waitForElement(() =>
+      render(
+        <Provider store={store}>
+          <DataTableRender
+            dataLoaded={true}
+            columnNames={columnNames}
+            data={data}
+            user={{ firstName: "test" }}
+            selectedRowHandler={jest.fn()}
+            pagination={true}
+            filter={true}
+            defaultSort={"col2"}
+            // expandableRowComp={true}
+            expandableRows={true}
+            headerStyling="headerStyling"
+            tableTitle="tableTitle"
+            tableStyling="tableStyling"
+            componentStyling="componentStyling"
+            actionsBtn={"View"}
+            openHandler={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+            setCheckout={jest.fn()}
+            setShowInactive={jest.fn()}
+            workspaceSection={MONITORING_PLAN_STORE_NAME}
+          />
+        </Provider>
+      )
     );
 
     const rows = screen.getAllByRole("row");
@@ -385,32 +408,34 @@ describe("renders datatable with all values ", () => {
   });
 
   test("user is  logged in and at a config data table with  nothing checked out  no tableTitle nothing checked out ", async () => {
-    const { container, queryByPlaceholderText } = await render(
-      <Provider store={store}>
-      <DataTableRender
-        dataLoaded={true}
-        columnNames={columnNames}
-        data={data}
-        user={{ firstName: "test" }}
-        selectedRowHandler={jest.fn()}
-        pagination={true}
-        filter={true}
-        defaultSort={"col2"}
-        // expandableRowComp={true}
-        expandableRows={true}
-        headerStyling="headerStyling"
-        tableStyling="tableStyling"
-        checkedOutLocations={[]}
-        componentStyling="componentStyling"
-        actionsBtn={"Open"}
-        openHandler={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
-        setCheckout={jest.fn()}
-        setShowInactive={jest.fn()}
-        workspaceSection={MONITORING_PLAN_STORE_NAME}
-      />
-      </Provider>
+    const { container, queryByPlaceholderText } = await waitForElement(() =>
+      render(
+        <Provider store={store}>
+          <DataTableRender
+            dataLoaded={true}
+            columnNames={columnNames}
+            data={data}
+            user={{ firstName: "test" }}
+            selectedRowHandler={jest.fn()}
+            pagination={true}
+            filter={true}
+            defaultSort={"col2"}
+            // expandableRowComp={true}
+            expandableRows={true}
+            headerStyling="headerStyling"
+            tableStyling="tableStyling"
+            checkedOutLocations={[]}
+            componentStyling="componentStyling"
+            actionsBtn={"Open"}
+            openHandler={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+            setCheckout={jest.fn()}
+            setShowInactive={jest.fn()}
+            workspaceSection={MONITORING_PLAN_STORE_NAME}
+          />
+        </Provider>
+      )
     );
 
     const rows = screen.getAllByRole("row");
@@ -418,32 +443,34 @@ describe("renders datatable with all values ", () => {
   });
 
   test("user is  logged in and at a config data table with  nothing checked out  no tableTitle nothing checked out ", async () => {
-    const { container, queryByPlaceholderText } = await render(
-      <Provider store={store}>
-      <DataTableRender
-        dataLoaded={true}
-        columnNames={columnNames}
-        data={data}
-        user={{ firstName: "test" }}
-        selectedRowHandler={jest.fn()}
-        pagination={true}
-        filter={true}
-        defaultSort={"col2"}
-        // expandableRowComp={true}
-        expandableRows={true}
-        headerStyling="headerStyling"
-        tableStyling="tableStyling"
-        checkedOutLocations={[]}
-        componentStyling="componentStyling"
-        actionsBtn={"Open"}
-        openHandler={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
-        setCheckout={jest.fn()}
-        setShowInactive={jest.fn()}
-        workspaceSection={MONITORING_PLAN_STORE_NAME}
-      />
-      </Provider>
+    const { container, queryByPlaceholderText } = await waitForElement(() =>
+      render(
+        <Provider store={store}>
+          <DataTableRender
+            dataLoaded={true}
+            columnNames={columnNames}
+            data={data}
+            user={{ firstName: "test" }}
+            selectedRowHandler={jest.fn()}
+            pagination={true}
+            filter={true}
+            defaultSort={"col2"}
+            // expandableRowComp={true}
+            expandableRows={true}
+            headerStyling="headerStyling"
+            tableStyling="tableStyling"
+            checkedOutLocations={[]}
+            componentStyling="componentStyling"
+            actionsBtn={"Open"}
+            openHandler={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+            setCheckout={jest.fn()}
+            setShowInactive={jest.fn()}
+            workspaceSection={MONITORING_PLAN_STORE_NAME}
+          />
+        </Provider>
+      )
     );
 
     const rows = screen.getAllByRole("row");
@@ -451,65 +478,69 @@ describe("renders datatable with all values ", () => {
   });
 
   test("user is  logged in and at a config data table with  nothing checked out WITH  tableTitle nothing checked out ", async () => {
-    const { container, queryByPlaceholderText } = await render(
-      <Provider store={store}>
-      <DataTableRender
-        dataLoaded={true}
-        columnNames={columnNames}
-        data={data}
-        user={{ firstName: "test" }}
-        selectedRowHandler={jest.fn()}
-        pagination={true}
-        filter={true}
-        defaultSort={"col2"}
-        // expandableRowComp={true}
-        expandableRows={true}
-        headerStyling="headerStyling"
-        tableTitle="tableTitle"
-        tableStyling="tableStyling"
-        checkedOutLocations={[]}
-        componentStyling="componentStyling"
-        actionsBtn={"Open"}
-        openHandler={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
-        setCheckout={jest.fn()}
-        setShowInactive={jest.fn()}
-        workspaceSection={MONITORING_PLAN_STORE_NAME}
-      />
-      </Provider>
+    const { container, queryByPlaceholderText } = await waitForElement(() =>
+      render(
+        <Provider store={store}>
+          <DataTableRender
+            dataLoaded={true}
+            columnNames={columnNames}
+            data={data}
+            user={{ firstName: "test" }}
+            selectedRowHandler={jest.fn()}
+            pagination={true}
+            filter={true}
+            defaultSort={"col2"}
+            // expandableRowComp={true}
+            expandableRows={true}
+            headerStyling="headerStyling"
+            tableTitle="tableTitle"
+            tableStyling="tableStyling"
+            checkedOutLocations={[]}
+            componentStyling="componentStyling"
+            actionsBtn={"Open"}
+            openHandler={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+            setCheckout={jest.fn()}
+            setShowInactive={jest.fn()}
+            workspaceSection={MONITORING_PLAN_STORE_NAME}
+          />
+        </Provider>
+      )
     );
 
     const rows = screen.getAllByRole("row");
     expect(rows.length).toEqual(6);
   });
 
-  test("user is not logged in and at a configuration data table",  async () => {
-    const { container, queryByPlaceholderText } = await render(
-      <Provider store={store}>
-      <DataTableRender
-        dataLoaded={true}
-        addBtn={true}
-        columnNames={columnNames}
-        data={data}
-        selectedRowHandler={jest.fn()}
-        pagination={true}
-        filter={true}
-        defaultSort={"col2"}
-        // expandableRowComp={true}
-        expandableRows={true}
-        headerStyling="headerStyling"
-        tableStyling="tableStyling"
-        componentStyling="componentStyling"
-        actionsBtn={"Open"}
-        openHandler={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
-        setCheckout={jest.fn()}
-        setShowInactive={jest.fn()}
-        workspaceSection={MONITORING_PLAN_STORE_NAME}
-      />
-      </Provider>
+  test("user is not logged in and at a configuration data table", async () => {
+    const { container, queryByPlaceholderText } = await waitForElement(() =>
+      render(
+        <Provider store={store}>
+          <DataTableRender
+            dataLoaded={true}
+            addBtn={true}
+            columnNames={columnNames}
+            data={data}
+            selectedRowHandler={jest.fn()}
+            pagination={true}
+            filter={true}
+            defaultSort={"col2"}
+            // expandableRowComp={true}
+            expandableRows={true}
+            headerStyling="headerStyling"
+            tableStyling="tableStyling"
+            componentStyling="componentStyling"
+            actionsBtn={"Open"}
+            openHandler={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+            setCheckout={jest.fn()}
+            setShowInactive={jest.fn()}
+            workspaceSection={MONITORING_PLAN_STORE_NAME}
+          />
+        </Provider>
+      )
     );
 
     const btn = container.querySelector("#btnOpen");
@@ -521,39 +552,41 @@ describe("renders datatable with all values ", () => {
   });
 
   test("user is logged in and at a configuration data table with a checked out fac ", async () => {
-    const { container, queryByPlaceholderText } = await render(
-      <Provider store={store}>
-      <DataTableRender
-        dataLoaded={true}
-        addBtn={true}
-        columnNames={columnNames}
-        data={data}
-        user={{ firstName: "test" }}
-        selectedRowHandler={jest.fn()}
-        pagination={true}
-        filter={true}
-        defaultSort={"col2"}
-        // expandableRowComp={true}
-        expandableRows={true}
-        headerStyling="headerStyling"
-        tableStyling="tableStyling"
-        componentStyling="componentStyling"
-        actionsBtn={"Open"}
-        openHandler={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
-        setCheckout={jest.fn()}
-        setShowInactive={jest.fn()}
-        checkedOutLocations={[
-          {
-            facId: 1,
-            monPlanId: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
-            checkedOutBy: "test",
-          },
-        ]}
-        workspaceSection={MONITORING_PLAN_STORE_NAME}
-      />
-      </Provider>
+    const { container, queryByPlaceholderText } = await waitForElement(() =>
+      render(
+        <Provider store={store}>
+          <DataTableRender
+            dataLoaded={true}
+            addBtn={true}
+            columnNames={columnNames}
+            data={data}
+            user={{ firstName: "test" }}
+            selectedRowHandler={jest.fn()}
+            pagination={true}
+            filter={true}
+            defaultSort={"col2"}
+            // expandableRowComp={true}
+            expandableRows={true}
+            headerStyling="headerStyling"
+            tableStyling="tableStyling"
+            componentStyling="componentStyling"
+            actionsBtn={"Open"}
+            openHandler={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+            setCheckout={jest.fn()}
+            setShowInactive={jest.fn()}
+            checkedOutLocations={[
+              {
+                facId: 1,
+                monPlanId: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
+                checkedOutBy: "test",
+              },
+            ]}
+            workspaceSection={MONITORING_PLAN_STORE_NAME}
+          />
+        </Provider>
+      )
     );
 
     const btn = container.querySelector("#btnCheckBackIn");
@@ -564,64 +597,68 @@ describe("renders datatable with all values ", () => {
     expect(rows.length).toEqual(6);
   });
 
-  test("user is logged in and at a sections data table and checked out ('view/Edit')",  async () => {
-    const { container, queryByPlaceholderText } = await render(
-      <Provider store={store}>
-      <DataTableRender
-        dataLoaded={true}
-        addBtn={jest.fn()}
-        addBtnName={"test test"}
-        columnNames={columnNames}
-        data={data}
-        selectedRowHandler={jest.fn()}
-        pagination={true}
-        filter={true}
-        user={{ username: "test" }}
-        defaultSort={"col2"}
-        checkout={true}
-        // expandableRowComp={true}
-        expandableRows={true}
-        headerStyling="headerStyling"
-        tableStyling="tableStyling"
-        componentStyling="componentStyling"
-        actionsBtn={"View"}
-        openHandler={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
-        setCheckout={jest.fn()}
-        setShowInactive={jest.fn()}
-        workspaceSection={MONITORING_PLAN_STORE_NAME}
-      />
-      </Provider>
+  test("user is logged in and at a sections data table and checked out ('view/Edit')", async () => {
+    const { container, queryByPlaceholderText } = await waitForElement(() =>
+      render(
+        <Provider store={store}>
+          <DataTableRender
+            dataLoaded={true}
+            addBtn={jest.fn()}
+            addBtnName={"test test"}
+            columnNames={columnNames}
+            data={data}
+            selectedRowHandler={jest.fn()}
+            pagination={true}
+            filter={true}
+            user={{ username: "test" }}
+            defaultSort={"col2"}
+            checkout={true}
+            // expandableRowComp={true}
+            expandableRows={true}
+            headerStyling="headerStyling"
+            tableStyling="tableStyling"
+            componentStyling="componentStyling"
+            actionsBtn={"View"}
+            openHandler={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+            setCheckout={jest.fn()}
+            setShowInactive={jest.fn()}
+            workspaceSection={MONITORING_PLAN_STORE_NAME}
+          />
+        </Provider>
+      )
     );
-    await render(
-      <Provider store={store}>
-      <DataTableRender
-        dataLoaded={true}
-        addBtn={jest.fn()}
-        addBtnName={"test test"}
-        columnNames={columnNames}
-        data={data}
-        selectedRowHandler={jest.fn()}
-        pagination={true}
-        filter={true}
-        user={{ username: "test" }}
-        defaultSort={"col2"}
-        checkout={true}
-        // expandableRowComp={true}
-        expandableRows={true}
-        headerStyling="headerStyling"
-        tableStyling="tableStyling"
-        componentStyling="componentStyling"
-        actionsBtn={"View"}
-        openHandler={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
-        setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
-        setCheckout={jest.fn()}
-        setShowInactive={jest.fn()}
-        workspaceSection={MONITORING_PLAN_STORE_NAME}
-      />
-      </Provider>
+    await waitForElement(() =>
+      render(
+        <Provider store={store}>
+          <DataTableRender
+            dataLoaded={true}
+            addBtn={jest.fn()}
+            addBtnName={"test test"}
+            columnNames={columnNames}
+            data={data}
+            selectedRowHandler={jest.fn()}
+            pagination={true}
+            filter={true}
+            user={{ username: "test" }}
+            defaultSort={"col2"}
+            checkout={true}
+            // expandableRowComp={true}
+            expandableRows={true}
+            headerStyling="headerStyling"
+            tableStyling="tableStyling"
+            componentStyling="componentStyling"
+            actionsBtn={"View"}
+            openHandler={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanId={jest.fn()}
+            setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
+            setCheckout={jest.fn()}
+            setShowInactive={jest.fn()}
+            workspaceSection={MONITORING_PLAN_STORE_NAME}
+          />
+        </Provider>
+      )
     );
     const btn = container.querySelector("#btnOpen");
     // fireEvent.click(btn);
