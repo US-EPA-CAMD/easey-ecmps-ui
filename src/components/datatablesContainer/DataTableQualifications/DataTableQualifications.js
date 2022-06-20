@@ -10,7 +10,10 @@ import DataTableLMEQualifications from "../DataTableLMEQualifications/DataTableL
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-
+import {
+  displayAppError,
+  needEndDate,
+} from "../../../additional-functions/app-error";
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
@@ -310,46 +313,53 @@ export const DataTableQualifications = ({
     if (!creating) {
       userInput["qualId"] = selectedQualificationData["id"];
     }
+    if (
+      (userInput.endHour && !userInput.endDate) ||
+      (!userInput.endHour && userInput.endDate)
+    ) {
+      displayAppError(needEndDate);
+      setShow(false);
+    } else {
+      // PCT qual
+      if (openPCT) {
+        return handleRequest(
+          "pct",
+          creatingChild
+            ? mpApi.createPCTQualificationData
+            : mpApi.savePCTQualificationData,
+          userInput
+        );
+      }
 
-    // PCT qual
-    if (openPCT) {
+      // LME qual
+      else if (openLME) {
+        return handleRequest(
+          "lme",
+          creatingChild
+            ? mpApi.createLMEQualificationData
+            : mpApi.saveLMEQualificationData,
+          userInput
+        );
+      }
+
+      // LEE qual
+      else if (openLEE) {
+        return handleRequest(
+          "lee",
+          creatingChild
+            ? mpApi.createLEEQualificationData
+            : mpApi.saveLEEQualificationData,
+          userInput
+        );
+      }
+
+      // Parent qual
       return handleRequest(
-        "pct",
-        creatingChild
-          ? mpApi.createPCTQualificationData
-          : mpApi.savePCTQualificationData,
+        "qual",
+        creating ? mpApi.createQualificationData : mpApi.saveQualificationData,
         userInput
       );
     }
-
-    // LME qual
-    else if (openLME) {
-      return handleRequest(
-        "lme",
-        creatingChild
-          ? mpApi.createLMEQualificationData
-          : mpApi.saveLMEQualificationData,
-        userInput
-      );
-    }
-
-    // LEE qual
-    else if (openLEE) {
-      return handleRequest(
-        "lee",
-        creatingChild
-          ? mpApi.createLEEQualificationData
-          : mpApi.saveLEEQualificationData,
-        userInput
-      );
-    }
-
-    // Parent qual
-    return handleRequest(
-      "qual",
-      creating ? mpApi.createQualificationData : mpApi.saveQualificationData,
-      userInput
-    );
   };
 
   const buildBreadBar = () => {

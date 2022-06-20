@@ -42,6 +42,7 @@ export const HeaderInfo = ({
   ///
   checkoutAPI,
   configID,
+  setUpdateRelatedTables,
 }) => {
   const sections = [
     { name: "Defaults" },
@@ -849,6 +850,7 @@ export const HeaderInfo = ({
           complete={true}
           importApiErrors={importApiErrors}
           importedFileErrorMsgs={importedFileErrorMsgs}
+          setUpdateRelatedTables={setUpdateRelatedTables}
           children={
             <ImportModal
               setDisablePortBtn={setDisablePortBtn}
