@@ -106,7 +106,6 @@
 // import { checkoutAPI } from "../../additional-functions/checkout";
 import React from "react";
 import { render,fireEvent } from "@testing-library/react";
-import { renderHook } from "@testing-library/react-hooks";
 import {
   InactivityTracker,
   mapStateToProps,
@@ -184,7 +183,6 @@ describe("InactivityTracker", () => {
     const state = store.getState();
     const stateProps = mapStateToProps(state);
 
-    const formData = [];
     // verify the appropriate action was called
     actionProps.setCheckout();
     expect(state).toBeDefined();

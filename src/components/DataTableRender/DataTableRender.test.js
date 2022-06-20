@@ -6,14 +6,14 @@ import {
   mapDispatchToProps,
   mapStateToProps,
 } from "./DataTableRender";
-import configureMockStore from "redux-mock-store";
 let options = [];
 let data = [];
 let columnNames = [];
 let columns = [];
-const mockStore = configureMockStore();
-const store = mockStore({});
 
+import configureStore from "../../store/configureStore.dev";
+const store = configureStore();
+import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 beforeAll(() => {
   columns = [
     { name: "ORIS", selector: "col1", sortable: true },
@@ -91,6 +91,7 @@ describe("renders datatable with all values ", () => {
         setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
         setCheckout={jest.fn()}
         setShowInactive={jest.fn()}
+        workspaceSection={MONITORING_PLAN_STORE_NAME}
         checkedOutLocations={[
           {
             facId: 1,
@@ -128,6 +129,7 @@ describe("renders datatable with all values ", () => {
         setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
         setCheckout={jest.fn()}
         setShowInactive={jest.fn()}
+        workspaceSection={MONITORING_PLAN_STORE_NAME}
       />
       </Provider>
     );
@@ -157,6 +159,7 @@ describe("renders datatable with all values ", () => {
         setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
         setCheckout={jest.fn()}
         setShowInactive={jest.fn()}
+        workspaceSection={MONITORING_PLAN_STORE_NAME}
         
       /></Provider>
     );
@@ -186,18 +189,19 @@ describe("renders datatable with all values ", () => {
         setCheckout={jest.fn()}
         setShowInactive={jest.fn()}
         checkedOutLocations={[]}
+        workspaceSection={MONITORING_PLAN_STORE_NAME}
       />
       </Provider>
     );
     const btn = container.querySelector("#btnOpen");
-    // fireEvent.click(btn);
-    // btn.focus();
-    // fireEvent.keyPress(btn, {
-    //   key: "Enter",
-    //   code: "Enter",
-    //   keyCode: 13,
-    //   charCode: 13,
-    // });
+    fireEvent.click(btn);
+    btn.focus();
+    fireEvent.keyPress(btn, {
+      key: "Enter",
+      code: "Enter",
+      keyCode: 13,
+      charCode: 13,
+    });
     // const btnCheckOut = container.querySelector("#btnOpenAndCheckout");
     // fireEvent.click(btnCheckOut);
     // btnCheckOut.focus();
@@ -214,7 +218,7 @@ describe("renders datatable with all values ", () => {
 
     fireEvent.click(container.querySelector("#searchDataTableBTN"));
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(5);
+    expect(rows.length).toEqual(2);
   });
   test("test no title with no section title- user is logged in and at a sections data table", () => {
     const { container } = render(
@@ -238,6 +242,7 @@ describe("renders datatable with all values ", () => {
         setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
         setCheckout={jest.fn()}
         setShowInactive={jest.fn()}
+        workspaceSection={MONITORING_PLAN_STORE_NAME}
       />
       </Provider>
     );
@@ -271,6 +276,7 @@ describe("renders datatable with all values ", () => {
         setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
         setCheckout={jest.fn()}
         setShowInactive={jest.fn()}
+        workspaceSection={MONITORING_PLAN_STORE_NAME}
       />
       </Provider>
     );
@@ -304,6 +310,7 @@ describe("renders datatable with all values ", () => {
         setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
         setCheckout={jest.fn()}
         setShowInactive={jest.fn()}
+        workspaceSection={MONITORING_PLAN_STORE_NAME}
       /> </Provider>
     );
 
@@ -334,6 +341,7 @@ describe("renders datatable with all values ", () => {
         setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
         setCheckout={jest.fn()}
         setShowInactive={jest.fn()}
+        workspaceSection={MONITORING_PLAN_STORE_NAME}
       />
       </Provider>
     );
@@ -367,6 +375,7 @@ describe("renders datatable with all values ", () => {
         setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
         setCheckout={jest.fn()}
         setShowInactive={jest.fn()}
+        workspaceSection={MONITORING_PLAN_STORE_NAME}
       />
       </Provider>
     );
@@ -399,6 +408,7 @@ describe("renders datatable with all values ", () => {
         setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
         setCheckout={jest.fn()}
         setShowInactive={jest.fn()}
+        workspaceSection={MONITORING_PLAN_STORE_NAME}
       />
       </Provider>
     );
@@ -431,6 +441,7 @@ describe("renders datatable with all values ", () => {
         setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
         setCheckout={jest.fn()}
         setShowInactive={jest.fn()}
+        workspaceSection={MONITORING_PLAN_STORE_NAME}
       />
       </Provider>
     );
@@ -464,6 +475,7 @@ describe("renders datatable with all values ", () => {
         setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
         setCheckout={jest.fn()}
         setShowInactive={jest.fn()}
+        workspaceSection={MONITORING_PLAN_STORE_NAME}
       />
       </Provider>
     );
@@ -495,6 +507,7 @@ describe("renders datatable with all values ", () => {
         setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
         setCheckout={jest.fn()}
         setShowInactive={jest.fn()}
+        workspaceSection={MONITORING_PLAN_STORE_NAME}
       />
       </Provider>
     );
@@ -538,6 +551,7 @@ describe("renders datatable with all values ", () => {
             checkedOutBy: "test",
           },
         ]}
+        workspaceSection={MONITORING_PLAN_STORE_NAME}
       />
       </Provider>
     );
@@ -576,6 +590,7 @@ describe("renders datatable with all values ", () => {
         setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
         setCheckout={jest.fn()}
         setShowInactive={jest.fn()}
+        workspaceSection={MONITORING_PLAN_STORE_NAME}
       />
       </Provider>
     );
@@ -604,16 +619,17 @@ describe("renders datatable with all values ", () => {
         setMostRecentlyCheckedInMonitorPlanIdForTab={jest.fn()}
         setCheckout={jest.fn()}
         setShowInactive={jest.fn()}
+        workspaceSection={MONITORING_PLAN_STORE_NAME}
       />
       </Provider>
     );
     const btn = container.querySelector("#btnOpen");
     // fireEvent.click(btn);
     // btn.focus();
-    const addBtn = container.querySelector("#addBtn");
-    fireEvent.click(addBtn);
+    // const addBtn = container.querySelector("#addBtn");
+    // fireEvent.click(addBtn);
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(18);
+    expect(rows.length).toEqual(12);
   });
 
   test("mapDispatchToProps calls the appropriate action", async () => {
@@ -622,8 +638,6 @@ describe("renders datatable with all values ", () => {
     const actionProps = mapDispatchToProps(dispatch);
     const state = store.getState();
     const stateProps = mapStateToProps(state);
-
-    const formData = [];
     // verify the appropriate action was called
     actionProps.setCheckout();
 

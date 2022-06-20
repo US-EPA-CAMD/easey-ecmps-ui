@@ -34,6 +34,7 @@ export const UploadModal = ({
   // setImportedFileErrorMsgs,
   // fileName,
   notUploadVersion,
+  setUpdateRelatedTables
 }) => {
   const hasErrors = importedFileErrorMsgs && importedFileErrorMsgs.length > 0;
   const milisecondsToLoad = 4000;
@@ -248,7 +249,10 @@ export const UploadModal = ({
                       {complete ? (
                         <Button
                           type="button"
-                          onClick={close}
+                          onClick={()=>{
+                            close();
+                            setUpdateRelatedTables(true);
+                          }}
                           title="Click to close import modal"
                           epa-testid="okBtn"
                           id="okBtn"
