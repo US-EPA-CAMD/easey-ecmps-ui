@@ -67,7 +67,7 @@ describe("renders datatable with all values ", () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
-  test("makes sure 3 rows of data are passed in + 1 for header +2 for rest of table", () => {
+  test("makes sure 3 rows of data are passed in + 1 for header +2 for rest of table",async () => {
     const { container, queryByPlaceholderText } = render(
       <Provider store={store}>
       <DataTableRender
@@ -105,7 +105,7 @@ describe("renders datatable with all values ", () => {
     const noData = screen.getByAltText("Content loading");
     expect(noData).toBeDefined();
   });
-  test("data is loaded but no preloader or dt ", () => {
+  test("data is loaded but no preloader or dt ",async () => {
     const { container } = render(
       <Provider store={store}>
       <DataTableRender
@@ -136,7 +136,7 @@ describe("renders datatable with all values ", () => {
     expect(container).toBeDefined();
   });
 
-  test("data is loaded but no preloader or dt coniditonal no tableStyling ", () => {
+  test("data is loaded but no preloader or dt coniditonal no tableStyling ", async() => {
     const { container } = render(
       <Provider store={store}>
       <DataTableRender
@@ -165,7 +165,7 @@ describe("renders datatable with all values ", () => {
     );
     expect(container).toBeDefined();
   });
-  test("test no title with section title user is logged in and at configuration table trying to search", () => {
+  test("test no title with section title user is logged in and at configuration table trying to search",async () => {
     const { container } = render(
       <Provider store={store}>
       <DataTableRender
@@ -220,7 +220,7 @@ describe("renders datatable with all values ", () => {
     const rows = screen.getAllByRole("row");
     expect(rows.length).toEqual(2);
   });
-  test("test no title with no section title- user is logged in and at a sections data table", () => {
+  test("test no title with no section title- user is logged in and at a sections data table", async() => {
     const { container } = render(
       <Provider store={store}>
       <DataTableRender
@@ -254,7 +254,7 @@ describe("renders datatable with all values ", () => {
     const rows = screen.getAllByRole("row");
     expect(rows.length).toEqual(6);
   });
-  test("user is not logged in and at a sections data table", () => {
+  test("user is not logged in and at a sections data table", async() => {
     const { container } = render(
       <Provider store={store}>
       <DataTableRender
@@ -287,7 +287,7 @@ describe("renders datatable with all values ", () => {
     const rows = screen.getAllByRole("row");
     expect(rows.length).toEqual(6);
   });
-  test("user is not logged in and at a sections data table WITH tabletitle", () => {
+  test("user is not logged in and at a sections data table WITH tabletitle",async () => {
     const { container, queryByPlaceholderText } = render(
       <Provider store={store}>
       <DataTableRender
@@ -318,7 +318,7 @@ describe("renders datatable with all values ", () => {
     expect(rows.length).toEqual(6);
   });
 
-  test("user is  logged in and at a sections data table", () => {
+  test("user is  logged in and at a sections data table",async () => {
     const { container, queryByPlaceholderText } = render(
       <Provider store={store}>
       <DataTableRender
@@ -350,7 +350,7 @@ describe("renders datatable with all values ", () => {
     expect(rows.length).toEqual(6);
   });
 
-  test("user is  logged in and at a sections data table with      tableTitle=tableTitle tableStyling=tableStyling", () => {
+  test("user is  logged in and at a sections data table with      tableTitle=tableTitle tableStyling=tableStyling", async () => {
     const { container, queryByPlaceholderText } = render(
 
       <Provider store={store}>
@@ -384,7 +384,7 @@ describe("renders datatable with all values ", () => {
     expect(rows.length).toEqual(6);
   });
 
-  test("user is  logged in and at a config data table with  nothing checked out  no tableTitle nothing checked out ", () => {
+  test("user is  logged in and at a config data table with  nothing checked out  no tableTitle nothing checked out ", async () => {
     const { container, queryByPlaceholderText } = render(
       <Provider store={store}>
       <DataTableRender
@@ -417,7 +417,7 @@ describe("renders datatable with all values ", () => {
     expect(rows.length).toEqual(6);
   });
 
-  test("user is  logged in and at a config data table with  nothing checked out  no tableTitle nothing checked out ", () => {
+  test("user is  logged in and at a config data table with  nothing checked out  no tableTitle nothing checked out ", async () => {
     const { container, queryByPlaceholderText } = render(
       <Provider store={store}>
       <DataTableRender
@@ -450,7 +450,7 @@ describe("renders datatable with all values ", () => {
     expect(rows.length).toEqual(6);
   });
 
-  test("user is  logged in and at a config data table with  nothing checked out WITH  tableTitle nothing checked out ", () => {
+  test("user is  logged in and at a config data table with  nothing checked out WITH  tableTitle nothing checked out ", async () => {
     const { container, queryByPlaceholderText } = render(
       <Provider store={store}>
       <DataTableRender
@@ -484,7 +484,7 @@ describe("renders datatable with all values ", () => {
     expect(rows.length).toEqual(6);
   });
 
-  test("user is not logged in and at a configuration data table", () => {
+  test("user is not logged in and at a configuration data table",  async () => {
     const { container, queryByPlaceholderText } = render(
       <Provider store={store}>
       <DataTableRender
@@ -520,7 +520,7 @@ describe("renders datatable with all values ", () => {
     expect(rows.length).toEqual(6);
   });
 
-  test("user is logged in and at a configuration data table with a checked out fac ", () => {
+  test("user is logged in and at a configuration data table with a checked out fac ", async () => {
     const { container, queryByPlaceholderText } = render(
       <Provider store={store}>
       <DataTableRender
@@ -564,7 +564,7 @@ describe("renders datatable with all values ", () => {
     expect(rows.length).toEqual(6);
   });
 
-  test("user is logged in and at a sections data table and checked out ('view/Edit')", () => {
+  test("user is logged in and at a sections data table and checked out ('view/Edit')",  async () => {
     const { container, queryByPlaceholderText } = render(
       <Provider store={store}>
       <DataTableRender
