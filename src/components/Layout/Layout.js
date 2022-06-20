@@ -64,7 +64,7 @@ const Layout = (props) => {
               setCurrentLink={props.setCurrentLink}
             />
           </div>
-          <div className="grid-col minh-tablet-lg" id="main">
+          <div className="grid-col margin-x-2 minh-tablet-lg" id="main">
             {outageMsgContent && outageMsgContent.enabled === "true" ? (
               <SiteAlert variant="info" heading={outageMsgContent.heading}>
                 {outageMsgContent.message}
