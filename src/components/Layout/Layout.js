@@ -25,6 +25,13 @@ const Layout = (props) => {
     });
   }, []);
 
+  useEffect(() => {
+    var elem = document.querySelector(".usa-alert__heading");
+    if (elem) {
+      elem.outerHTML = '<h2 class="usa-alert__heading">' + elem.innerHTML + "</h2>";
+    }
+  }, [outageMsgContent]);
+
   // noinspection JSCheckFunctionSignatures
   const childrenWithProps = React.Children.map(props.children, (child) =>
     React.cloneElement(child)
@@ -84,7 +91,7 @@ const Layout = (props) => {
                 className="position-relative top-neg-1"
               />
             </div>
-            <main class="margin-x-2" id="main">
+            <main class="margin-x-2">
               {childrenWithProps}{" "}
             </main>
           </div>

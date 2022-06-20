@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { config } from "../../config";
 import {
   Menu,
-  Header,
   PrimaryNav,
   NavDropDownButton,
   Title,
@@ -166,7 +165,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
   return (
     <div className="subheader-wrapper bg-primary-dark ">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
-      <Header className="padding-y-2 mobile-lg:padding-x-1 desktop:padding-x-4">
+      <div className="padding-y-2 mobile-lg:padding-x-1 desktop:padding-x-4">
         <div className="usa-nav-container clearfix padding-x-0 desktop-lg:margin-top-3">
           <Title className="float-left margin-1 margin-top-0 desktop:margin-top-1  desktop-lg:margin-top-0 ">
             <h1 className="display-inline-block text-white text-bold desktop-lg:font-sans-2xl desktop:font-sans-2xl mobile-lg:font-sans-xl margin-0">
@@ -338,7 +337,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
             )}
           </div>
         </div>
-      </Header>
+      </div>
     </div>
   );
 };
