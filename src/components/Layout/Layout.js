@@ -65,7 +65,7 @@ const Layout = (props) => {
               setCurrentLink={props.setCurrentLink}
             />
           </div>
-          <div className="grid-col margin-x-2 minh-tablet-lg" id="main">
+          <div className="grid-col minh-tablet-lg" id="main">
             {outageMsgContent && outageMsgContent.enabled === "true" ? (
               <SiteAlert variant="info" heading={outageMsgContent.heading}>
                 {outageMsgContent.message}
@@ -92,7 +92,7 @@ const Layout = (props) => {
                 className="position-relative top-neg-1"
               />
             </div>
-            <main id="main">{childrenWithProps}</main>
+            <main class="margin-x-2">{childrenWithProps}</main>
           </div>
         </div>
         <div id="footer" className="position-fixed bottom-0 width-full">
