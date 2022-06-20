@@ -435,7 +435,6 @@ export const DataTableRender = ({
     }
   };
   const filteredItems = data.filter(colsFilter);
-
   // const filteredItems = data.filter((row) => {
   //   const facilityStr = row.col1.toString().toLowerCase();
   //   const orisStr = row.col2.toString().toLowerCase();
