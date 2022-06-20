@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabs, mapDispatchToProps, mapStateToProps } from "./Tabs";
+import { Tabs, mapDispatchToProps } from "./Tabs";
 import TabPane from "../TabPane/TabPane";
 import {
   render,
@@ -7,6 +7,13 @@ import {
   screen,
   waitForElement,
 } from "@testing-library/react";
+
+import {
+  MONITORING_PLAN_STORE_NAME,
+  QA_CERT_TEST_SUMMARY_STORE_NAME,
+} from "../../additional-functions/workspace-section-and-store-names";
+import configureStore from "../../store/configureStore.dev";
+const store = configureStore();
 
 const testMonPlanId = "testMonPlanId";
 const testFacId = "123";
@@ -64,6 +71,7 @@ const TabsUsage = (bool) => (
     removeTabs={jest.fn()}
     checkedOutLocations={testCheckedOutLocations}
     user={{ firstName: testFirstName, userId: testUserId }}
+    workspaceSection={MONITORING_PLAN_STORE_NAME}
   >
     <TabPane {...childProps}>Tab1 Content</TabPane>
     <TabPane title="Select configurations">Tab2 Content</TabPane>
@@ -99,6 +107,11 @@ describe("testing a reusable Tabs component", () => {
     expect(initTabContent).not.toBeUndefined();
   });
   test("renders the user selected tab", async () => {
+    const dispatch = jest.fn();
+    const actionProps = mapDispatchToProps(dispatch);
+
+    // verify the appropriate action was called
+    actionProps.setCheckout();
     const { container } = await waitForElement(() =>
       render(
         <Tabs
@@ -108,6 +121,7 @@ describe("testing a reusable Tabs component", () => {
           checkedOutLocations={testCheckedOutLocations}
           user={{ firstName: testFirstName }}
           setCheckout={jest.fn()}
+          workspaceSection={MONITORING_PLAN_STORE_NAME}
         >
           <TabPane {...childProps}>Tab1 Content</TabPane>
           <TabPane title="Select configurations">Tab2 Content</TabPane>
@@ -177,19 +191,28 @@ describe("testing a reusable Tabs component", () => {
 
     fireEvent.keyDown(newCLose, { key: "Enter", code: "Enter" });
   });
-  test("mapDispatchToProps calls the appropriate action", async () => {
-    // mock the 'dispatch' object
-    const dispatch = jest.fn();
-    const actionProps = mapDispatchToProps(dispatch);
-    const state = jest.fn();
+  // test("mapDispatchToProps calls the appropriate action", async () => {
+  //   // mock the 'dispatch' object
+  //   const dispatch = jest.fn();
+  //   const actionProps = mapDispatchToProps(dispatch);
+  //   const state = jest.fn();
 
-    // verify the appropriate action was called
-    actionProps.setCheckout();
+  //   // verify the appropriate action was called
+  //   actionProps.setCheckout();
 
-    expect(state).toBeDefined();
-  });
-  test("mapStateToProps calls the appropriate state", async () => {
-    const state = { dropdowns: [1] };
-    mapStateToProps(state, true);
-  });
+  //   expect(state).toBeDefined();
+  // });
+  // test("mapStateToProps calls the appropriate state", async () => {
+  //   const state = { dropdowns: [1] };
+  //   mapStateToProps(state, true);
+  // });
+
+  // test("mapDispatchToProps calls the appropriate action", async () => {
+  //   // mock the 'dispatch' object
+  //   const dispatch = jest.fn();
+  //   const actionProps = mapDispatchToProps(dispatch);
+
+  //   // verify the appropriate action was called
+  //   actionProps.setCheckout();
+  // });
 });

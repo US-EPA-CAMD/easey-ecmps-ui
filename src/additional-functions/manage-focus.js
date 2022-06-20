@@ -49,6 +49,7 @@ export const assignFocusEventListeners = () => {
     element.removeEventListener("focus", storeInFocusedArray);
     element.addEventListener("focus", storeInFocusedArray);
   });
+  
 };
 
 export const cleanupFocusEventListeners = () => {
@@ -104,6 +105,7 @@ export const returnFocusToModalButton = () => {
         const element = document.querySelector(`#${button.id}`);
         if (element) {
           element.focus();
+          console.log('element',element)
           window["lastModalButton"] = [];
         } else {
         }

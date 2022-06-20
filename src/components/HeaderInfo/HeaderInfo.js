@@ -21,7 +21,11 @@ import {
 } from "../../additional-functions/prompt-to-save-unsaved-changes";
 import download from "downloadjs";
 import GenericTable from "../GenericTable/GenericTable";
-
+import {
+  assignFocusEventListeners,
+  cleanupFocusEventListeners,
+  returnFocusToLast,
+} from "../../additional-functions/manage-focus";
 export const HeaderInfo = ({
   facility,
   selectedConfig,
@@ -97,6 +101,40 @@ export const HeaderInfo = ({
   const [hasFormatError, setHasFormatError] = useState(false);
   const [hasInvalidJsonError, setHasInvalidJsonError] = useState(false);
   const [importApiErrors, setImportApiErrors] = useState([]);
+
+
+  
+  const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
+
+  // *** Assign initial event listeners after loading data/dropdowns
+  useEffect(() => {
+    if (showCommentsModal) {
+      returnFocusToLast();
+      assignFocusEventListeners();
+    }
+  }, [showCommentsModal]);
+
+  // *** Reassign handlers after pop-up modal is closed
+  useEffect(() => {
+    if (!returnedFocusToLast) {
+      setReturnedFocusToLast(true);
+    } else {
+      returnFocusToLast();
+      assignFocusEventListeners();
+    }
+  }, [returnedFocusToLast]);
+
+  // *** Clean up focus event listeners
+  useEffect(() => {
+    return () => {
+      cleanupFocusEventListeners();
+    };
+  }, []);
+  const executeOnClose = () => {
+    setShowCommentsModal(false);
+    removeChangeEventListeners(".modalUserInput");
+    setReturnedFocusToLast(false);
+  };
 
   const resetImportFlags = () => {
     setShowImportModal(false);
@@ -873,7 +911,7 @@ export const HeaderInfo = ({
             show={showCommentsModal}
             width={"50%"}
             left={"25%"}
-            close={() => setShowCommentsModal(false)}
+            close={() => executeOnClose()}
             showCancel={false}
             showSave={false}
             complete={true}

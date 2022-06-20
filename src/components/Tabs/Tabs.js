@@ -236,13 +236,7 @@ export const Tabs = ({
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    openedFacilityTabs: state.openedFacilityTabs(
-      convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
-    ),
-  };
-};
+
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -257,6 +251,5 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Tabs);
-export { mapStateToProps };
+export default connect(null, mapDispatchToProps)(Tabs);
 export { mapDispatchToProps };

@@ -108,9 +108,6 @@ const openFac = [
 
 const store = configureStore();
 test("renders monitoring plan home with redux", async () => {
-  const state = jest.fn();
-  const stateProps = mapStateToProps(state);
-
   const { container, getAllByText, getByText } = await waitForElement(() =>
     render(
       <Provider store={store}>
@@ -127,4 +124,11 @@ test("renders monitoring plan home with redux", async () => {
   );
   const renderedComponent = container.querySelector(".home-container");
   expect(renderedComponent).not.toBeUndefined();
+});
+test("mapStateToProps calls the appropriate action", async () => {
+  // mock the 'dispatch' object
+
+  const state = store.getState();
+  const stateProps = mapStateToProps(state);
+  expect(state).toBeDefined();
 });
