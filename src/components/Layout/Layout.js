@@ -28,8 +28,7 @@ const Layout = (props) => {
   useEffect(() => {
     var elem = document.querySelector(".usa-alert__heading");
     if (elem) {
-      elem.outerHTML =
-        '<h2 class="usa-alert__heading">' + elem.innerHTML + "</h2>";
+      elem.outerHTML = `<h2 class="usa-alert__heading">${elem.innerHTML}</h2>`;
     }
   }, [outageMsgContent]);
 
