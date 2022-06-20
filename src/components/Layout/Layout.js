@@ -91,7 +91,7 @@ const Layout = (props) => {
                 className="position-relative top-neg-1"
               />
             </div>
-            <main class="margin-x-2">
+            <main id="main">
               {childrenWithProps}{" "}
             </main>
           </div>
