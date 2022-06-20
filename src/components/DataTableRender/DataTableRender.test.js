@@ -510,7 +510,7 @@ describe("renders datatable with all values ", () => {
     );
 
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(12);
+    expect(rows.length).toEqual(6);
   });
 
   test("user is not logged in and at a configuration data table", async () => {
