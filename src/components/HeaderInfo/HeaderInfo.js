@@ -17,6 +17,7 @@ import UploadModal from "../UploadModal/UploadModal";
 import {
   attachChangeEventListeners,
   removeChangeEventListeners,
+
   unsavedDataMessage,
 } from "../../additional-functions/prompt-to-save-unsaved-changes";
 import download from "downloadjs";
@@ -24,6 +25,7 @@ import GenericTable from "../GenericTable/GenericTable";
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
+  returnFocusToCommentButton,
   returnFocusToLast,
 } from "../../additional-functions/manage-focus";
 export const HeaderInfo = ({
@@ -108,10 +110,14 @@ export const HeaderInfo = ({
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
-    if (showCommentsModal) {
-      returnFocusToLast();
+    if(showCommentsModal){
+        returnFocusToLast();
       assignFocusEventListeners();
+    }else{
+      returnFocusToCommentButton();
     }
+    
+    
   }, [showCommentsModal]);
 
   // *** Reassign handlers after pop-up modal is closed
