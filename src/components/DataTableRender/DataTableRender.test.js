@@ -510,7 +510,7 @@ describe("renders datatable with all values ", () => {
     );
 
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(6);
+    expect(rows.length).toEqual(12);
   });
 
   test("user is not logged in and at a configuration data table", async () => {
@@ -666,7 +666,7 @@ describe("renders datatable with all values ", () => {
     // const addBtn = container.querySelector("#addBtn");
     // fireEvent.click(addBtn);
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(12);
+    expect(rows.length).toEqual(24);
   });
 
   test("mapDispatchToProps calls the appropriate action", async () => {
