@@ -51,11 +51,11 @@ export const DataTableRectangularDucts = ({
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
-    if (dataLoaded && dropdownsLoaded) {
+    if (dataLoaded ) {
       returnFocusToLast();
       assignFocusEventListeners();
     }
-  }, [dataLoaded, dropdownsLoaded]);
+  }, [dataLoaded]);
 
   // *** Reassign handlers after pop-up modal is closed
   useEffect(() => {

@@ -8,7 +8,7 @@ import {
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 const axios = require("axios");
 import { Provider } from "react-redux";
-import configureStore from "../../store/configureStore.dev";
+import configureStore from "../../../store/configureStore.dev";
 const store = configureStore();
 jest.mock("axios");
 
@@ -56,7 +56,9 @@ const componentRenderer = (update, mdmData) => {
     setCreateAnalyzerRangesFlag: jest.fn(),
     setUpdateAnalyzerRangeTable: jest.fn(),
   };
-  return render(<DataTableAnalyzerRanges {...props} />);
+  return render(
+  
+    <Provider store={store}> <DataTableAnalyzerRanges {...props} /> </Provider>);
 };
 
 test("renders an analyzer range with mdm data", async () => {
