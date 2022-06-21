@@ -6,9 +6,9 @@ export const getMonitoringPlansMethodsTableRecords = (totalData) => {
     const beginDate = el.beginDate
       ? formatStringToDate(el.beginDate.toString())
       : "";
-    const beginHour = el.beginHour ? el.beginHour.toString() : "";
+    const beginHour = el.beginHour !== null ? el.beginHour.toString() : "";
     const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
-    const endHour = el.endHour ? el.endHour.toString() : "";
+    const endHour = el.endHour !== null ? el.endHour.toString() : "";
     records.push({
       col1: el.parameterCode,
       col2: el.monitoringMethodCode,
@@ -42,9 +42,9 @@ export const getMonitoringPlansMatsMethodsTableRecords = (data) => {
     const beginDate = el.beginDate
       ? formatStringToDate(el.beginDate.toString())
       : "";
-    const beginHour = el.beginHour ? el.beginHour.toString() : "";
+    const beginHour = el.beginHour!== null ? el.beginHour.toString() : "";
     const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
-    const endHour = el.endHour ? el.endHour.toString() : "";
+    const endHour = el.endHour!== null ? el.endHour.toString() : "";
     records.push({
       col1: el.supplementalMATSParameterCode,
       col2: el.supplementalMATSMonitoringMethodCode,
