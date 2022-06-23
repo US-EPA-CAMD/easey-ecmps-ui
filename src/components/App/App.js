@@ -183,6 +183,9 @@ const App = () => {
             )}
             <Route path="/emission/" exact component={ComingSoon} />
             <Route path="/workspace/emission/" exact component={ComingSoon} />
+            {user ? <Redirect from="/export" to="/workspace/export" /> : <Redirect from="/workspace/export" to="/export" />}
+            <Route path="/export" exact component={() => <QACertTestSummaryHome user={false} />} />
+            <Route path="/workspace/export" exact component={() => <QACertTestSummaryHome user={user} />} />
             <Route path="/tutorials" exact component={ComingSoon} />
             <Route path="/cam-api" exact component={ComingSoon} />
             <Route path="/glossary" exact component={ComingSoon} />
