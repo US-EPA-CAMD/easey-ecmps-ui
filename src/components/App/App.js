@@ -25,7 +25,7 @@ import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
 } from "../../additional-functions/manage-focus";
-import { QA_CERT_TEST_SUMMARY_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
+import { QA_CERT_TEST_SUMMARY_STORE_NAME,EXPORT_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -163,19 +163,6 @@ const App = () => {
               component={() => <SelectConfigurationBaseModuleHome user={user} workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME} />}
             />
 
-            {/* <Route
-              path="/workspace/qa_certifications/"
-              exact
-              component={
-                <QACertTestSummaryHome
-                  resetTimer={setResetTimer}
-                  setExpired={setExpired}
-                  resetTimerFlag={resetTimer}
-                  callApiFlag={expired}
-                  user={user}
-                />
-              }
-            /> */}
             {user ? (
               <Redirect from="/emission" to="/workspace/emission" />
             ) : (
@@ -184,8 +171,8 @@ const App = () => {
             <Route path="/emission/" exact component={ComingSoon} />
             <Route path="/workspace/emission/" exact component={ComingSoon} />
             {user ? <Redirect from="/export" to="/workspace/export" /> : <Redirect from="/workspace/export" to="/export" />}
-            <Route path="/export" exact component={() => <QACertTestSummaryHome user={false} />} />
-            <Route path="/workspace/export" exact component={() => <QACertTestSummaryHome user={user} />} />
+            <Route path="/export" exact component={() => <SelectConfigurationBaseModuleHome user={false} workspaceSection={EXPORT_STORE_NAME}  />} />
+            <Route path="/workspace/export" exact component={() => <SelectConfigurationBaseModuleHome user={user}  workspaceSection={EXPORT_STORE_NAME} />} />
             <Route path="/tutorials" exact component={ComingSoon} />
             <Route path="/cam-api" exact component={ComingSoon} />
             <Route path="/glossary" exact component={ComingSoon} />

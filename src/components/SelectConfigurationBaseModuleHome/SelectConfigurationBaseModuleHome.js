@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
 import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
@@ -19,12 +19,16 @@ export const SelectConfigurationBaseModuleHome = ({
     switch (workspaceSection) {
       case QA_CERT_TEST_SUMMARY_STORE_NAME:
         document.title = qa_Certifications_Test_Summary_Module;
+        setTitleName(qa_Certifications_Test_Summary_Module)
         break;
       case EXPORT_STORE_NAME:
         document.title = export_Module;
+        setTitleName(export_Module)
         break;
     }
   }, []);
+
+  const [titleName, setTitleName] = useState(document.title);
 
   const handleTabState = () => {
     const tabArr = [
@@ -96,18 +100,18 @@ export const SelectConfigurationBaseModuleHome = ({
       <div className="text-black margin-top-1 display-none tablet:display-block">
         <h2
           className="display-inline-block page-header margin-top-2"
-          epa-testid={`${document.title.split(" ").join("")}Title`}
+          epa-testid={`${titleName.split(" ").join("")}Title`}
         >
-         {document.title}
+         {titleName}
         </h2>
       </div>
 
       <div className="display-none mobile:display-block tablet:display-none">
         <h1
           className="display-inline-block font-body-xl text-bold margin-left-neg-2"
-          epa-testid={`${document.title.split(" ").join("")}Title`}
+          epa-testid={`${titleName.split(" ").join("")}Title`}
         >
-            {document.title}
+            {titleName}
         </h1>
       </div>
 
