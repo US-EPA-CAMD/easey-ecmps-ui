@@ -9,7 +9,11 @@ export default {
     monitoringMatsMethods: false,
     monitoringSystemsComponents: false,
   },
-  openedFacilityTabs: { monitoringPlans: [], qaCertTestSummary: [] },
+  openedFacilityTabs: {
+    monitoringPlans: [],
+    qaCertTestSummary: [],
+    export: [],
+  },
 
   activeTab: { monitoringPlans: [0], qaCertTestSummary: [0] },
   dropdowns: {

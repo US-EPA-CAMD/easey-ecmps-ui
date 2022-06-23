@@ -7,7 +7,7 @@ import NotFound from "../NotFound/NotFound";
 import AboutHome from "../AboutHome/AboutHome";
 import Layout from "../Layout/Layout";
 import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
-import QACertTestSummaryHome from "../QACertTestSummaryHome/QACertTestSummaryHome";
+import SelectConfigurationBaseModuleHome from "../SelectConfigurationBaseModuleHome/SelectConfigurationBaseModuleHome";
 import RuleEditor from "../RuleEditor/RuleEditor";
 import Login from "../Login/Login";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
@@ -25,6 +25,7 @@ import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
 } from "../../additional-functions/manage-focus";
+import { QA_CERT_TEST_SUMMARY_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -154,12 +155,12 @@ const App = () => {
             <Route
               path="/qa_certifications_test_summary_data"
               exact
-              component={() => <QACertTestSummaryHome user={false} />}
+              component={() => <SelectConfigurationBaseModuleHome user={false} workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}/>}
             />
             <Route
               path="/workspace/qa_certifications_test_summary_data"
               exact
-              component={() => <QACertTestSummaryHome user={user} />}
+              component={() => <SelectConfigurationBaseModuleHome user={user} workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME} />}
             />
 
             {/* <Route

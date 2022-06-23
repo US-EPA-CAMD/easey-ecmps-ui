@@ -1,9 +1,9 @@
 import React from "react";
 import { render, waitForElement } from "@testing-library/react";
 import {
-  QACertTestSummaryHome,
+  SelectConfigurationBaseModuleHome,
   mapStateToProps,
-} from "./QACertTestSummaryHome";
+} from "./SelectConfigurationBaseModuleHome";
 import { Provider } from "react-redux";
 import configureStore from "../../store/configureStore.dev";
 const openFac = [
@@ -111,7 +111,7 @@ test("renders monitoring plan home with redux", async () => {
   const { container, getAllByText, getByText } = await waitForElement(() =>
     render(
       <Provider store={store}>
-        <QACertTestSummaryHome
+        <SelectConfigurationBaseModuleHome
           user={{ firstName: "test" }}
           openedFacilityTabs={openFac}
           resetTimer={jest.fn()}
