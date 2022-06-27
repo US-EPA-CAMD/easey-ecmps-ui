@@ -23,7 +23,6 @@ describe("Left Navigation links", () => {
     );
 
     const homeLink = screen.getAllByText("Home");
-    const homeBtn = container.querySelector("#Home");
     fireEvent.click(homeLink[homeLink.length - 1]);
     expect(homeLink).not.toBeUndefined();
 
@@ -38,5 +37,8 @@ describe("Left Navigation links", () => {
 
     const emLink = screen.getAllByText("Emissions");
     expect(emLink).not.toBeUndefined();
+
+    const exportLink = screen.getAllByText("Export");
+    expect(exportLink).not.toBeUndefined();
   });
 });
