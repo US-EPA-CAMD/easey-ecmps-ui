@@ -4,6 +4,7 @@ import {
   SelectConfigurationBaseModuleHome,
   mapStateToProps,
 } from "./SelectConfigurationBaseModuleHome";
+import { QA_CERT_TEST_SUMMARY_STORE_NAME,EXPORT_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 import { Provider } from "react-redux";
 import configureStore from "../../store/configureStore.dev";
 const openFac = [
@@ -107,7 +108,7 @@ const openFac = [
 ];
 
 const store = configureStore();
-test("renders monitoring plan home with redux", async () => {
+test("renders qa and cert home with redux", async () => {
   const { container, getAllByText, getByText } = await waitForElement(() =>
     render(
       <Provider store={store}>
@@ -118,6 +119,27 @@ test("renders monitoring plan home with redux", async () => {
           setExpired={jest.fn()}
           resetTimerFlag={jest.fn()}
           callApiFlag={jest.fn()}
+          workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
+        />
+      </Provider>
+    )
+  );
+  const renderedComponent = container.querySelector(".home-container");
+  expect(renderedComponent).not.toBeUndefined();
+});
+
+test("renders export home with redux", async () => {
+  const { container, getAllByText, getByText } = await waitForElement(() =>
+    render(
+      <Provider store={store}>
+        <SelectConfigurationBaseModuleHome
+          user={{ firstName: "test" }}
+          openedFacilityTabs={openFac}
+          resetTimer={jest.fn()}
+          setExpired={jest.fn()}
+          resetTimerFlag={jest.fn()}
+          callApiFlag={jest.fn()}
+          workspaceSection={EXPORT_STORE_NAME}
         />
       </Provider>
     )
@@ -129,6 +151,6 @@ test("mapStateToProps calls the appropriate action", async () => {
   // mock the 'dispatch' object
 
   const state = store.getState();
-  const stateProps = mapStateToProps(state);
+  const stateProps = mapStateToProps(state,{workspaceSection:QA_CERT_TEST_SUMMARY_STORE_NAME});
   expect(state).toBeDefined();
 });
