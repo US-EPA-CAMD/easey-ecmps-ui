@@ -167,6 +167,7 @@ export const globalView = [
     ],
   },
   { name: "Emissions", url: "/emission" },
+  { name: "Export", url: "/export" },
 ];
 
 export const home = [{ name: "Home", url: "/" }];
@@ -192,6 +193,7 @@ export const workSpace = [
     ],
   },
   { name: "Emissions", url: "/workspace/emission" },
+  { name: "Export", url: "/workspace/export" },
 ];
 
 export const appNavItems = [
