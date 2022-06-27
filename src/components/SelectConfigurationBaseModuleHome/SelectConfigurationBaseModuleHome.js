@@ -4,8 +4,15 @@ import { connect } from "react-redux";
 import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
 import QACertTestSummaryTab from "../QACertTestSummaryTab/QACertTestSummaryTab";
 import DynamicTabs from "../DynamicTabs/DynamicTabs";
-import { QA_CERT_TEST_SUMMARY_STORE_NAME,EXPORT_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
-import { qa_Certifications_Test_Summary_Module,export_Module } from "../../utils/constants/moduleTitles";
+import {
+  QA_CERT_TEST_SUMMARY_STORE_NAME,
+  EXPORT_STORE_NAME,
+} from "../../additional-functions/workspace-section-and-store-names";
+import {
+  qa_Certifications_Test_Summary_Module,
+  export_Module,
+} from "../../utils/constants/moduleTitles";
+import NotFound from "../NotFound/NotFound";
 export const SelectConfigurationBaseModuleHome = ({
   user,
   resetTimer,
@@ -19,11 +26,11 @@ export const SelectConfigurationBaseModuleHome = ({
     switch (workspaceSection) {
       case QA_CERT_TEST_SUMMARY_STORE_NAME:
         document.title = qa_Certifications_Test_Summary_Module;
-        setTitleName(qa_Certifications_Test_Summary_Module)
+        setTitleName(qa_Certifications_Test_Summary_Module);
         break;
       case EXPORT_STORE_NAME:
         document.title = export_Module;
-        setTitleName(export_Module)
+        setTitleName(export_Module);
         break;
     }
   }, []);
@@ -46,6 +53,7 @@ export const SelectConfigurationBaseModuleHome = ({
     ];
     // uses Redux to put the saved Tabs back in the UI if the user leaves the page
     switch (workspaceSection) {
+      
       case QA_CERT_TEST_SUMMARY_STORE_NAME:
         for (const row of openedFacilityTabs) {
           tabArr.push({
@@ -68,29 +76,20 @@ export const SelectConfigurationBaseModuleHome = ({
             checkout: row.checkout,
           });
         }
-
-        case EXPORT_STORE_NAME:
-          for (const row of openedFacilityTabs) {
-            tabArr.push({
-              title: row.name,
-              component: (
-                <QACertTestSummaryTab
-                  resetTimer={resetTimer}
-                  setExpired={setExpired}
-                  resetTimerFlag={resetTimerFlag}
-                  callApiFlag={callApiFlag}
-                  orisCode={row.orisCode}
-                  selectedConfig={row.selectedConfig}
-                  title={row.name}
-                  user={user}
-                  // checkout={row.checkout}
-                />
-              ),
-              orisCode: row.orisCode,
-              selectedConfig: row.selectedConfig,
-              checkout: row.checkout,
-            });
-          }
+        break;
+      case EXPORT_STORE_NAME:
+        for (const row of openedFacilityTabs) {
+          tabArr.push({
+            title: row.name,
+            component: <NotFound />,
+            orisCode: row.orisCode,
+            selectedConfig: row.selectedConfig,
+            checkout: row.checkout,
+          });
+        }
+        break;
+      default:
+        break;
     }
     return tabArr;
   };
@@ -102,7 +101,7 @@ export const SelectConfigurationBaseModuleHome = ({
           className="display-inline-block page-header margin-top-2"
           epa-testid={`${titleName.split(" ").join("")}Title`}
         >
-         {titleName}
+          {titleName}
         </h2>
       </div>
 
@@ -111,7 +110,7 @@ export const SelectConfigurationBaseModuleHome = ({
           className="display-inline-block font-body-xl text-bold margin-left-neg-2"
           epa-testid={`${titleName.split(" ").join("")}Title`}
         >
-            {titleName}
+          {titleName}
         </h1>
       </div>
 
