@@ -1,4 +1,4 @@
- import React, { useState, cloneElement } from "react";
+import React, { useState, cloneElement } from "react";
 import { connect } from "react-redux";
 import { Tabs } from "../Tabs/Tabs";
 import TabPane from "../TabPane/TabPane";
@@ -9,6 +9,7 @@ import {
 import { setActiveTab } from "../../store/actions/activeTab";
 import {
   convertSectionToStoreName,
+  EXPORT_STORE_NAME,
   QA_CERT_TEST_SUMMARY_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import "./DynamicTabs.scss";
@@ -26,6 +27,8 @@ export const DynamicTabs = ({
 }) => {
   const [tabs, setTabs] = useState(tabsProps);
 
+
+  console.log('workspaceSection',workspaceSection)
   const addTabsHandler = (newTabs) => {
     newTabs.forEach((t) => {
       if (!tabs.some((facility) => facility.title === t.title)) {
@@ -62,6 +65,34 @@ export const DynamicTabs = ({
   return (
     <div>
       {workspaceSection === QA_CERT_TEST_SUMMARY_STORE_NAME ? (
+      
+        <Tabs
+          dynamic={true}
+          removeTabs={removeTabsHandler}
+          setActive={setActive}
+          tabProps={tabs}
+          user={user}
+          workspaceSection={workspaceSection}
+        > =
+          {tabs &&
+            tabs.map((tab, i) => (
+              <TabPane
+                key={i}
+                title={tab.title}
+                locationId={
+                  tab.selectedConfig ? tab.selectedConfig.id : "initial"
+                }
+                facId={
+                  tab.selectedConfig ? tab.selectedConfig.facId : "initial"
+                }
+              >
+                {cloneElement(tab.component, {
+                  addtabs: addTabsHandler,
+                })}
+              </TabPane>
+            ))}
+        </Tabs>
+      ) : workspaceSection === EXPORT_STORE_NAME ? (
         <Tabs
           dynamic={true}
           removeTabs={removeTabsHandler}

@@ -36,6 +36,11 @@ export const QACertTestSummaryTab = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionSelect]);
 
+  useEffect(() => {
+    console.log('tabs',tabs)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [locationSelect, setLocationSelect] = useState(
     tabs ? tabs[activeTab].location : ""
   );
