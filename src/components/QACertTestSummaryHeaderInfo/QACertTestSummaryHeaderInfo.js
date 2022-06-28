@@ -72,7 +72,7 @@ export const QACertTestSummaryHeaderInfo = ({
   const [hasInvalidJsonError, setHasInvalidJsonError] = useState(false);
   const [importApiErrors, setImportApiErrors] = useState([]);
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
-
+  const [showHistoryImportModal, setShowHistoryImportModal] = useState(false);
   // *** Reassign handlers after pop-up modal is closed
   useEffect(() => {
     if (!returnedFocusToLast) {
@@ -94,16 +94,16 @@ export const QACertTestSummaryHeaderInfo = ({
 
   // },[]);
   useEffect(() => {
-    if (importTypeSelection != 0) {
+    if (importTypeSelection != "select") {
       setDisablePortBtn(false);
-    }else{
+    } else {
       setDisablePortBtn(true);
     }
 
-    console.log('importype',importTypeSelection)
+    console.log("importype", importTypeSelection);
   }, [importTypeSelection]);
   const closeImportModalHandler = () => {
-    const importBtn = document.querySelector("#importMonitoringPlanBtn");
+    const importBtn = document.querySelector("#importSelectionQAModal");
 
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
@@ -137,6 +137,14 @@ export const QACertTestSummaryHeaderInfo = ({
     setImportApiErrors([]);
   };
 
+  const openModalType = (modalType) => {
+    setShowSelectionTypeImportModal(false);
+    if (modalType === "file") {
+      setShowImportModal(true);
+    } else {
+      setShowHistoryImportModal(true);
+    }
+  };
   return (
     <div className="header QACertHeader ">
       {dataLoaded ? (
@@ -190,7 +198,7 @@ export const QACertTestSummaryHeaderInfo = ({
                   {"Import Test Data"}
                 </Button>
               </div>
-              
+
               {/* ): (
                 ""
               )} */}
@@ -246,9 +254,9 @@ export const QACertTestSummaryHeaderInfo = ({
             title={"Import Test Data"}
             mainBTN={"Continue"}
             disablePortBtn={disablePortBtn}
-            // port={() => {
-            //   importMPBtn(importedFile);
-            // }}
+            port={() => {
+              openModalType(importTypeSelection);
+            }}
             children={
               <QAImportModalSelect
                 setImportTypeSelection={setImportTypeSelection}
@@ -267,9 +275,9 @@ export const QACertTestSummaryHeaderInfo = ({
             title={"Import a Monitoring Plan to continue"}
             exitBTN={"Import"}
             disablePortBtn={disablePortBtn}
-            // port={() => {
-            //   importMPBtn(importedFile);
-            // }}
+            port={() => {
+              // importMPBtn(importedFile);
+            }}
             hasFormatError={hasFormatError}
             hasInvalidJsonError={hasInvalidJsonError}
             children={
