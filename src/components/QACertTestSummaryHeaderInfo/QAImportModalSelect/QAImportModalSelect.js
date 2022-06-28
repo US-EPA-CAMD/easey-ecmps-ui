@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-
-import { FormGroup, Label, FileInput, Alert } from "@trussworks/react-uswds";
 import DropdownSelection from "../../DropdownSelection/DropdownSelection";
 
 const QAImportModalSelect = ({setImportTypeSelection}) => {
@@ -12,7 +10,6 @@ const QAImportModalSelect = ({setImportTypeSelection}) => {
   const [selection, setSelection] = useState(0);
   useEffect(() =>{
     setImportTypeSelection(selection);
-    console.log('selection',selection)
   },[selection]);
 
   return (

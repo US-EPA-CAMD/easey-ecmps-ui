@@ -183,10 +183,9 @@ export const QACertTestSummaryHeaderInfo = ({
                 <Button
                   className="padding-x-5"
                   type="button"
-                  id="showRevertModal"
                   outline={false}
                   onClick={() => openSelectionTypeImportModal()}
-                  id="importMonitoringPlanBtn"
+                  id="importSelectionQAModal"
                 >
                   {"Import Test Data"}
                 </Button>
