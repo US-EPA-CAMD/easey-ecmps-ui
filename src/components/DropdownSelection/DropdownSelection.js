@@ -1,13 +1,12 @@
 import React from "react";
 import { Label, Dropdown, FormGroup } from "@trussworks/react-uswds";
-import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 export const DropdownSelection = ({
   caption,
-  selectKey,
-  viewKey,
-  options,
-  selectionHandler,
-  initialSelection,
+  selectKey, // the key in the object property to identify
+  viewKey, // the key in the object property to display in dropdown
+  options, // array of objects with at least 2 properties
+  selectionHandler, // needs to setState with [0] for the index, to change dropdown
+  initialSelection, // needs useState to change the dropdown 
   workspaceSection,
 }) => {
   const getIndex = (val) => {
@@ -15,10 +14,12 @@ export const DropdownSelection = ({
   };
 
   const handleChange = (val) => {
-    selectionHandler(
-      [getIndex(val.target.value), val.target.value],
-      workspaceSection
-    );
+    workspaceSection
+      ? selectionHandler(
+          [getIndex(val.target.value), val.target.value],
+          workspaceSection
+        )
+      : selectionHandler([getIndex(val.target.value), val.target.value]);
   };
 
   const populateOptions = (optionsList) => {
