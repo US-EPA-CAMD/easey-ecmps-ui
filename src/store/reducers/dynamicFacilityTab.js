@@ -64,6 +64,22 @@ const reducer = (state, action) => {
       };
 
       break;
+    case types.SET_EXPORT_STATE:
+      returnObject = {
+        ...currentState,
+        [`${action.workspaceSection}`]: currentState[
+          `${action.workspaceSection}`
+        ].map((x) =>
+          x.selectedConfig.id === action.configId
+            ? {
+                ...x,
+                exportState: action.exportState,
+              }
+            : x
+        ),
+      };
+
+      break;
     case types.SET_CHECKOUT_STATE:
       if (currentState[`${action.workspaceSection}`]) {
         returnObject = {
