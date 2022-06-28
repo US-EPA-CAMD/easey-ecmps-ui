@@ -75,7 +75,7 @@ const ExportTab = ({
         <div className='grid-col-3 padding-left-8 padding-top-3'>
           <Button
             className='width-card'
-            disabled={dataTypes.find(e=> e.name ==="monitoring-plan").checked}
+            disabled={dataTypes.find(e=> e.name ==="monitoring-plan").checked || dataTypes.filter(e=>e.checked).length === 0}
           >
             Preview
           </Button>
