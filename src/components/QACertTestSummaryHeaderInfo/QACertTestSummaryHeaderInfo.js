@@ -3,9 +3,24 @@ import { Button } from "@trussworks/react-uswds";
 
 import "./QACertTestSummaryHeaderInfo.scss";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
+
+import NotFound from "../NotFound/NotFound";
 import { QA_CERT_TEST_SUMMARY_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 import { Preloader } from "@us-epa-camd/easey-design-system";
-
+import {
+  assignFocusEventListeners,
+  cleanupFocusEventListeners,
+  returnFocusToCommentButton,
+  returnFocusToLast,
+} from "../../additional-functions/manage-focus";
+import {
+  attachChangeEventListeners,
+  removeChangeEventListeners,
+  unsavedDataMessage,
+} from "../../additional-functions/prompt-to-save-unsaved-changes";
+import ImportModal from "../ImportModal/ImportModal";
+import UploadModal from "../UploadModal/UploadModal";
+import QAImportModalSelect from "./QAImportModalSelect/QAImportModalSelect";
 export const QACertTestSummaryHeaderInfo = ({
   facility,
   selectedConfig,
@@ -37,10 +52,90 @@ export const QACertTestSummaryHeaderInfo = ({
     { name: "Unit Default" },
   ];
 
+  const [showImportModal, setShowImportModal] = useState(false);
+
+  const [showSelectionTypeImportModal, setShowSelectionTypeImportModal] =
+    useState(false);
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
   const [dataLoaded, setDataLoaded] = useState(true);
+
+  // import modal states
+  const [disablePortBtn, setDisablePortBtn] = useState(true);
+  const [importTypeSelection, setImportTypeSelection] = useState(true);
+  const [usePortBtn, setUsePortBtn] = useState(false);
+  const [finishedLoading, setFinishedLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [fileName, setFileName] = useState("");
+  const [hasFormatError, setHasFormatError] = useState(false);
+  const [hasInvalidJsonError, setHasInvalidJsonError] = useState(false);
+  const [importApiErrors, setImportApiErrors] = useState([]);
+  const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
+
+  // *** Reassign handlers after pop-up modal is closed
+  useEffect(() => {
+    if (!returnedFocusToLast) {
+      setReturnedFocusToLast(true);
+    } else {
+      returnFocusToLast();
+      assignFocusEventListeners();
+    }
+  }, [returnedFocusToLast]);
+
+  // *** Clean up focus event listeners
+  useEffect(() => {
+    return () => {
+      cleanupFocusEventListeners();
+    };
+  }, []);
+
+  // useEffect (( )=> {
+
+  // },[]);
+  useEffect(() => {
+    if (importTypeSelection != 0) {
+      setDisablePortBtn(false);
+    }else{
+      setDisablePortBtn(true);
+    }
+
+    console.log('importype',importTypeSelection)
+  }, [importTypeSelection]);
+  const closeImportModalHandler = () => {
+    const importBtn = document.querySelector("#importMonitoringPlanBtn");
+
+    if (window.isDataChanged === true) {
+      if (window.confirm(unsavedDataMessage) === true) {
+        resetImportFlags();
+        removeChangeEventListeners(".modalUserInput");
+        importBtn.focus();
+      }
+    } else {
+      resetImportFlags();
+      removeChangeEventListeners(".modalUserInput");
+      importBtn.focus();
+    }
+  };
+  const openSelectionTypeImportModal = () => {
+    setShowSelectionTypeImportModal(true);
+  };
+  const openImportModal = () => {
+    setShowImportModal(true);
+  };
+
+  const resetImportFlags = () => {
+    setShowSelectionTypeImportModal(false);
+    setShowImportModal(false);
+    setDisablePortBtn(true);
+    setUsePortBtn(false);
+    setFinishedLoading(false);
+    setIsLoading(false);
+    setFileName("");
+    setHasFormatError(false);
+    setHasInvalidJsonError(false);
+    setImportApiErrors([]);
+  };
 
   return (
     <div className="header QACertHeader ">
@@ -83,20 +178,23 @@ export const QACertTestSummaryHeaderInfo = ({
             </div>{" "}
             <div className="grid-col-3"></div>{" "}
             <div className="grid-col-3">
-              {user ? (
-                <div className=" float-right right-0 bottom-0 text-no-wrap position-absolute padding-bottom-1">
-                  <Button
-                    className="padding-x-5"
-                    type="button"
-                    id="showRevertModal"
-                    outline={false}
-                  >
-                    {"Import Test Data"}
-                  </Button>
-                </div>
-              ) : (
+              {/* {user ? ( */}
+              <div className=" float-right right-0 bottom-0 text-no-wrap position-absolute padding-bottom-1">
+                <Button
+                  className="padding-x-5"
+                  type="button"
+                  id="showRevertModal"
+                  outline={false}
+                  onClick={() => openSelectionTypeImportModal()}
+                  id="importMonitoringPlanBtn"
+                >
+                  {"Import Test Data"}
+                </Button>
+              </div>
+              
+              {/* ): (
                 ""
-              )}
+              )} */}
             </div>
           </div>
           <div className="grid-row float-right">
@@ -133,6 +231,61 @@ export const QACertTestSummaryHeaderInfo = ({
       ) : (
         <Preloader />
       )}
+
+      <div
+        className={`usa-overlay ${
+          showImportModal || showSelectionTypeImportModal ? "is-visible" : ""
+        }`}
+      />
+      {showSelectionTypeImportModal ? (
+        <div>
+          <UploadModal
+            show={showSelectionTypeImportModal}
+            close={closeImportModalHandler}
+            showCancel={true}
+            showSave={true}
+            title={"Import Test Data"}
+            mainBTN={"Continue"}
+            disablePortBtn={disablePortBtn}
+            // port={() => {
+            //   importMPBtn(importedFile);
+            // }}
+            children={
+              <QAImportModalSelect
+                setImportTypeSelection={setImportTypeSelection}
+              />
+            }
+          />
+        </div>
+      ) : null}
+      {showImportModal ? (
+        <div>
+          <UploadModal
+            show={showImportModal}
+            close={closeImportModalHandler}
+            showCancel={true}
+            showSave={true}
+            title={"Import a Monitoring Plan to continue"}
+            exitBTN={"Import"}
+            disablePortBtn={disablePortBtn}
+            // port={() => {
+            //   importMPBtn(importedFile);
+            // }}
+            hasFormatError={hasFormatError}
+            hasInvalidJsonError={hasInvalidJsonError}
+            children={
+              <ImportModal
+                setDisablePortBtn={setDisablePortBtn}
+                disablePortBtn={disablePortBtn}
+                setFileName={setFileName}
+                setHasFormatError={setHasFormatError}
+                setHasInvalidJsonError={setHasInvalidJsonError}
+                // setImportedFile={setImportedFile}
+              />
+            }
+          />
+        </div>
+      ) : null}
     </div>
   );
 };

@@ -27,8 +27,7 @@ export const DynamicTabs = ({
 }) => {
   const [tabs, setTabs] = useState(tabsProps);
 
-
-  console.log('workspaceSection',workspaceSection)
+  console.log("workspaceSection", workspaceSection);
   const addTabsHandler = (newTabs) => {
     newTabs.forEach((t) => {
       if (!tabs.some((facility) => facility.title === t.title)) {
@@ -65,7 +64,6 @@ export const DynamicTabs = ({
   return (
     <div>
       {workspaceSection === QA_CERT_TEST_SUMMARY_STORE_NAME ? (
-      
         <Tabs
           dynamic={true}
           removeTabs={removeTabsHandler}
@@ -73,7 +71,7 @@ export const DynamicTabs = ({
           tabProps={tabs}
           user={user}
           workspaceSection={workspaceSection}
-        > =
+        >
           {tabs &&
             tabs.map((tab, i) => (
               <TabPane

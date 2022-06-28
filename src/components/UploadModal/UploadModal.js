@@ -28,6 +28,7 @@ export const UploadModal = ({
   setIsLoading,
   hasFormatError,
   hasInvalidJsonError,
+  mainBTN,
   // importApiErrors,
   // setImportApiErrors,
   importedFileErrorMsgs,
@@ -274,7 +275,7 @@ export const UploadModal = ({
                           className="margin-right-2"
                           disabled={disablePortBtn}
                         >
-                          Import
+                          {mainBTN? mainBTN: 'Import'}
                         </Button>
                       )}
 
