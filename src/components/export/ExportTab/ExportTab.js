@@ -67,7 +67,7 @@ const ExportTab = ({
         <div className='grid-col-6'>
           <ReportingPeriodSelector
             isExport={true}
-            selectedDataTypes={dataTypes.filter(e=>e.checked)}
+            dataTypes={dataTypes.filter(e=>e.checked)}
             reportingPeroidSelectionHandler = {reportingPeroidSelectionHandler}
             exportState={exportState}
           />
@@ -75,7 +75,7 @@ const ExportTab = ({
         <div className='grid-col-3 padding-left-8 padding-top-3'>
           <Button
             className='width-card'
-            disabled={dataTypes.find(e=> e.name ==="monitoring-plan").checked || dataTypes.filter(e=>e.checked).length === 0}
+            disabled={dataTypes.filter(e=>e.checked).length === 0 || (dataTypes.filter(e=>e.checked).length === 1 && dataTypes.find(e=> e.name ==="monitoring-plan").checked)}
           >
             Preview
           </Button>
