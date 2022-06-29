@@ -42,6 +42,7 @@ const ReportingPeriodSelector = ({
       const quarterObjs = reportingPeriod.filter(e=> e.calendarYear === selectedObj.calendarYear);
       setQuarters(quarterObjs.map(e=>e.quarter));
     }
+
   },[reportingPeriod]);
 
   const updateReportingPeriod = (selectedObj) =>{
@@ -55,7 +56,7 @@ const ReportingPeriodSelector = ({
         return e;
       })
     );
-    reportingPeroidSelectionHandler(selectedObj.id);
+    reportingPeroidSelectionHandler(selectedObj);
   };
   const yearSelectionHandler =(event) =>{
     const selectedObj = reportingPeriod.find(e=> Number(e.calendarYear) === Number(event.target.value) && e.quarter === 1);

@@ -10,6 +10,8 @@ const ExportTab = ({
   setExportState,
   workspaceSection
 }) =>{
+  
+  console.log('exportState', exportState);
 
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
@@ -32,11 +34,12 @@ const ExportTab = ({
       reportingPeriodId : reportingPeriodId
       },workspaceSection);
   };
-  const reportingPeroidSelectionHandler = (selectedId) =>{
-    setReportingPeriodId(selectedId);
+  const reportingPeroidSelectionHandler = (selectedObj) =>{
+    console.log('selected obj in exort tab', selectedObj);
+    setReportingPeriodId(selectedObj.id);
     setExportState(selectedConfig.id, {
       checkedDataTypes : dataTypes.filter(e=>e.checked).map(e=>e.name),
-      reportingPeriodId : selectedId
+      reportingPeriodId : selectedObj.id
     }, workspaceSection);
   }
   return(
