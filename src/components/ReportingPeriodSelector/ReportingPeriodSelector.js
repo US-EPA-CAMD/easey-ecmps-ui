@@ -6,7 +6,7 @@ import "./ReportingPeriodSelector.scss";
 
 const ReportingPeriodSelector = ({
   isExport,
-  selectedDataTypes,
+  dataTypes,
   reportingPeroidSelectionHandler,
   exportState
 }) =>{
@@ -98,7 +98,7 @@ const ReportingPeriodSelector = ({
               className="width-15"
               onChange={yearSelectionHandler}
               value={reportingPeriod.find(e=> e.selected).calendarYear}
-              disabled={isExport && selectedDataTypes.find(e => e.name === "monitoring-plan")?.checked}
+              disabled={isExport && dataTypes.filter(e=>e.checked).length ===1 && dataTypes.find(e => e.name === "monitoring-plan")?.checked}
               >
               {populateYears()}
             </Dropdown>
@@ -116,7 +116,7 @@ const ReportingPeriodSelector = ({
               className="width-15"
               onChange={quarterSelectionHandler}
               value={reportingPeriod.find(e=> e.selected).quarter}
-              disabled={isExport && selectedDataTypes.find(e => e.name === "monitoring-plan")?.checked}
+              disabled={isExport && dataTypes.filter(e=>e.checked).length ===1 && dataTypes.find(e => e.name === "monitoring-plan")?.checked}
               >
               {
                 quarters.map((quarter, i)=>(
