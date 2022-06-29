@@ -273,7 +273,7 @@ export const QACertTestSummaryHeaderInfo = ({
             close={closeImportModalHandler}
             showCancel={true}
             showSave={true}
-            title={"Import a Monitoring Plan to continue"}
+            title={"Import Test Data"}
             exitBTN={"Import"}
             disablePortBtn={disablePortBtn}
             port={() => {
