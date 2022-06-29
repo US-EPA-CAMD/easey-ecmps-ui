@@ -52,6 +52,7 @@ export const QACertTestSummaryHeaderInfo = ({
     { name: "Unit Default" },
   ];
 
+  const importTestTitle = "Import Test Data";
   const [showImportModal, setShowImportModal] = useState(false);
 
   const [showSelectionTypeImportModal, setShowSelectionTypeImportModal] =
@@ -196,7 +197,7 @@ export const QACertTestSummaryHeaderInfo = ({
                   onClick={() => openSelectionTypeImportModal()}
                   id="importSelectionQAModal"
                 >
-                  {"Import Test Data"}
+                  {importTestTitle}
                 </Button>
               </div>
 
@@ -252,7 +253,7 @@ export const QACertTestSummaryHeaderInfo = ({
             close={closeImportModalHandler}
             showCancel={true}
             showSave={true}
-            title={"Import Test Data"}
+            title={importTestTitle}
             mainBTN={"Continue"}
             disablePortBtn={disablePortBtn}
             port={() => {
@@ -273,7 +274,7 @@ export const QACertTestSummaryHeaderInfo = ({
             close={closeImportModalHandler}
             showCancel={true}
             showSave={true}
-            title={"Import Test Data"}
+            title={importTestTitle}
             exitBTN={"Import"}
             disablePortBtn={disablePortBtn}
             port={() => {
