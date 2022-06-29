@@ -73,6 +73,7 @@ export const QACertTestSummaryHeaderInfo = ({
   const [importApiErrors, setImportApiErrors] = useState([]);
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const [showHistoryImportModal, setShowHistoryImportModal] = useState(false);
+  const [importedFile, setImportedFile] = useState([]);
   // *** Reassign handlers after pop-up modal is closed
   useEffect(() => {
     if (!returnedFocusToLast) {
@@ -288,6 +289,8 @@ export const QACertTestSummaryHeaderInfo = ({
                 setHasFormatError={setHasFormatError}
                 setHasInvalidJsonError={setHasInvalidJsonError}
                 // setImportedFile={setImportedFile}
+                setImportedFile={setImportedFile}
+                workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
               />
             }
           />

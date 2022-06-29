@@ -33,3 +33,8 @@ export const getQATestSummaryByID = async (locID, id) => {
 
   return axios.get(url).then(handleResponse).catch(handleError);
 };
+export const getQASchema = async () => {
+  const url = `${config.services.content.uri}/ecmps/reporting-instructions/qa-certification.schema.json`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
