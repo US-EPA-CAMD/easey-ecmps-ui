@@ -38,3 +38,9 @@ export const getQASchema = async () => {
 
   return axios.get(url).then(handleResponse).catch(handleError);
 };
+
+export const getReportingPeriod = async () =>{
+  //const url = `${config.services.mdm.uri}/reporting-periods`;
+  const url = "https://api.epa.gov/easey/dev/master-data-mgmt/reporting-periods";
+  return axios.get(url).then(handleResponse).catch(handleError);
+};

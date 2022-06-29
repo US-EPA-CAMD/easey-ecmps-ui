@@ -13,7 +13,8 @@ import {
   MONITORING_PLAN_STORE_NAME,
   QA_CERT_TEST_SUMMARY_STORE_NAME,
 } from "../../../additional-functions/workspace-section-and-store-names";
-import NotFound from "../../NotFound/NotFound";
+import Export from "../../export/Export/Export";
+
 export const SelectFacilitiesDataTable = ({
   user,
   addtabs,
@@ -118,7 +119,14 @@ export const SelectFacilitiesDataTable = ({
           ) : (
             // handles export
             <div className="selectedTabsBox">
-              <NotFound
+              <Export
+                orisCode={info[0].col2}
+                selectedConfig={info[1]}
+                title={`${info[0].col1} (${info[1].name}) ${
+                  info[1].active ? "" : "Inactive"
+                }`}
+                user={user}
+                workspaceSection={workspaceSection}
               />
             </div>
           ),

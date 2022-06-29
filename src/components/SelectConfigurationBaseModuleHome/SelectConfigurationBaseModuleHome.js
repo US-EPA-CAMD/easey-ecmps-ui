@@ -12,7 +12,8 @@ import {
   qa_Certifications_Test_Summary_Module,
   export_Module,
 } from "../../utils/constants/moduleTitles";
-import NotFound from "../NotFound/NotFound";
+import Export from "../export/Export/Export";
+
 export const SelectConfigurationBaseModuleHome = ({
   user,
   resetTimer,
@@ -81,7 +82,15 @@ export const SelectConfigurationBaseModuleHome = ({
         for (const row of openedFacilityTabs) {
           tabArr.push({
             title: row.name,
-            component: <NotFound />,
+            component: (
+              <Export
+                orisCode={row.orisCode}
+                selectedConfig={row.selectedConfig}
+                title={row.name}
+                user={user}
+                workspaceSection={workspaceSection}
+              />
+            ),
             orisCode: row.orisCode,
             selectedConfig: row.selectedConfig,
             checkout: row.checkout,
