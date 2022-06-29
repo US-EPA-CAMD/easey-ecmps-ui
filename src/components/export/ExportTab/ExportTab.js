@@ -42,6 +42,9 @@ const ExportTab = ({
       reportingPeriodId : selectedObj.id
     }, workspaceSection);
   }
+  const getInitSelection = (reportingPeriodObj) => {
+    console.log(reportingPeriodObj);
+  }
   return(
     <div className="margin-x-3 grid-container">
       <div className="grid-row">
@@ -73,6 +76,7 @@ const ExportTab = ({
             dataTypes={dataTypes.filter(e=>e.checked)}
             reportingPeroidSelectionHandler = {reportingPeroidSelectionHandler}
             exportState={exportState}
+            getInitSelection={getInitSelection}
           />
         </div>
         <div className='grid-col-3 padding-left-8 padding-top-3'>

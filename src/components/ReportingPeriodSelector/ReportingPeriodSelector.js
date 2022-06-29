@@ -8,7 +8,8 @@ const ReportingPeriodSelector = ({
   isExport,
   dataTypes,
   reportingPeroidSelectionHandler,
-  exportState
+  exportState,
+  getInitSelection
 }) =>{
   const [ reportingPeriod, setReportingPeriod ] = useState(null);
   const [ years, setYears ] = useState([]);
@@ -41,6 +42,7 @@ const ReportingPeriodSelector = ({
       const selectedObj = reportingPeriod.find(e=> e.selected);
       const quarterObjs = reportingPeriod.filter(e=> e.calendarYear === selectedObj.calendarYear);
       setQuarters(quarterObjs.map(e=>e.quarter));
+      getInitSelection(reportingPeriod.find(e => e.selected));
     }
 
   },[reportingPeriod]);
