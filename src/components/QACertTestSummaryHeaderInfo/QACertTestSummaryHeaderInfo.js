@@ -21,6 +21,9 @@ import {
 import ImportModal from "../ImportModal/ImportModal";
 import UploadModal from "../UploadModal/UploadModal";
 import QAImportModalSelect from "./QAImportModalSelect/QAImportModalSelect";
+import QAImportHistoricalDataPreview from "../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
+import Modal from "../Modal/Modal";
+
 export const QACertTestSummaryHeaderInfo = ({
   facility,
   selectedConfig,
@@ -56,6 +59,7 @@ export const QACertTestSummaryHeaderInfo = ({
 
   const [showSelectionTypeImportModal, setShowSelectionTypeImportModal] =
     useState(false);
+  const [ showImportDataPreview , setShowImportDataPreview ] = useState(false);
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
@@ -246,9 +250,13 @@ export const QACertTestSummaryHeaderInfo = ({
             title={"Import Test Data"}
             mainBTN={"Continue"}
             disablePortBtn={disablePortBtn}
-            // port={() => {
-            //   importMPBtn(importedFile);
-            // }}
+            port={() => {
+              if(importTypeSelection === 2){
+                setShowImportDataPreview(true);
+                setShowSelectionTypeImportModal(false);
+              }
+              //importMPBtn(importedFile);
+            }}
             children={
               <QAImportModalSelect
                 setImportTypeSelection={setImportTypeSelection}
@@ -285,6 +293,23 @@ export const QACertTestSummaryHeaderInfo = ({
           />
         </div>
       ) : null}
+      {showImportDataPreview && (
+        <Modal
+          show={showImportDataPreview}
+          close={()=>setShowImportDataPreview(false)}
+          showSave={false}
+          showCancel={true}
+          exitBTN={"Import"}
+          title="Import Historical Data"
+          //port ={}
+          children= {
+            <QAImportHistoricalDataPreview 
+              locations={locations}
+              workspaceSection={{QA_CERT_TEST_SUMMARY_STORE_NAME}}
+            />
+          }
+        />
+      )}
     </div>
   );
 };

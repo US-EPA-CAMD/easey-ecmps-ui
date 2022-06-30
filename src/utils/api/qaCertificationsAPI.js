@@ -39,3 +39,10 @@ export const getReportingPeriod = async () =>{
   const url = "https://api.epa.gov/easey/dev/master-data-mgmt/reporting-periods";
   return axios.get(url).then(handleResponse).catch(handleError);
 };
+
+export const getQATestSummaryByReportingPeriod = async (locId, beginDate, endDate) =>{
+  const url = `https://api.epa.gov/easey/dev/qa-certification-mgmt/locations/${locId}/test-summary?beginDate=${beginDate}&endDate=${endDate}`;
+  //const url = "https://api.epa.gov/easey/dev/qa-certification-mgmt/locations/5/test-summary?beginDate=2004-01-01&endDate=2004-03-31";
+  console.log("url", url);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};

@@ -8,7 +8,9 @@ const ReportingPeriodSelector = ({
   isExport,
   dataTypes,
   reportingPeroidSelectionHandler,
-  exportState
+  exportState,
+  getInitSelection,
+  setLoading
 }) =>{
   const [ reportingPeriod, setReportingPeriod ] = useState(null);
   const [ years, setYears ] = useState([]);
@@ -16,6 +18,7 @@ const ReportingPeriodSelector = ({
 
   useEffect(()=>{
     if(reportingPeriod === null){
+      setLoading(true);
       getReportingPeriod()
       .then(res => {
         if(exportState && exportState.reportingPeriodId){//retain state as tab is opened back
@@ -35,12 +38,14 @@ const ReportingPeriodSelector = ({
             return e;
           }));
         }
+        setLoading(false);
       });
     }else if(years.length === 0 && quarters.length === 0){
       setYears(new Set(reportingPeriod.map(e=> e.calendarYear).sort().reverse()));
       const selectedObj = reportingPeriod.find(e=> e.selected);
       const quarterObjs = reportingPeriod.filter(e=> e.calendarYear === selectedObj.calendarYear);
       setQuarters(quarterObjs.map(e=>e.quarter));
+      getInitSelection(reportingPeriod.find(e=>e.selected));
     }
   },[reportingPeriod]);
 
@@ -55,7 +60,7 @@ const ReportingPeriodSelector = ({
         return e;
       })
     );
-    reportingPeroidSelectionHandler(selectedObj.id);
+    reportingPeroidSelectionHandler(selectedObj);
   };
   const yearSelectionHandler =(event) =>{
     const selectedObj = reportingPeriod.find(e=> Number(e.calendarYear) === Number(event.target.value) && e.quarter === 1);
@@ -83,7 +88,7 @@ const ReportingPeriodSelector = ({
   return(
     <>
     {
-      reportingPeriod ? (
+      reportingPeriod && (
         <div id="reporting-period-wrapper" className="display-flex flex-row flex-justify"> 
           <div>
             <Label
@@ -134,7 +139,7 @@ const ReportingPeriodSelector = ({
               </div>
           </div>
         </div>
-      ) : <Preloader/>
+      )
     }</>
   )
 };
