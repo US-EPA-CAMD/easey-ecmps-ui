@@ -56,12 +56,17 @@ const QAImportHistoricalDataPreview = ({
     },
     {
       name: 'Component ID',
-      selector: row => row.componentId,
+      selector: row => row.componentID,
       sortable: true,
     },
     {
       name: 'Test Number',
       selector: row => row.testNumber,
+      sortable: true,
+    },
+    {
+      name: 'Test Result Code',
+      selector: row => row.testResultCode,
       sortable: true,
     },
     {
