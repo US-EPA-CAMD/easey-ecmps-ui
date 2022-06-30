@@ -32,11 +32,11 @@ const ExportTab = ({
       reportingPeriodId : reportingPeriodId
       },workspaceSection);
   };
-  const reportingPeroidSelectionHandler = (selectedId) =>{
-    setReportingPeriodId(selectedId);
+  const reportingPeroidSelectionHandler = (selectedObj) =>{
+    setReportingPeriodId(selectedObj.id);
     setExportState(selectedConfig.id, {
       checkedDataTypes : dataTypes.filter(e=>e.checked).map(e=>e.name),
-      reportingPeriodId : selectedId
+      reportingPeriodId : selectedObj.id
     }, workspaceSection);
   }
   return(
