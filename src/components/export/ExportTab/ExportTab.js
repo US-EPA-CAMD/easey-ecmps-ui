@@ -96,7 +96,12 @@ const ExportTab = ({
           </Button>
         </div>
       </div>
-      <ExportTablesContainer selectionData={selectedOptions} orisCode={orisCode}/>
+      {selectedOptions && <ExportTablesContainer selectionData={selectedOptions} orisCode={orisCode} />}
+      <Button
+       className='width-card float-right'
+      >
+        Export
+      </Button>
     </div>
 
   )
