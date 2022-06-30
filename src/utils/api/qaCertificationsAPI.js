@@ -1,7 +1,7 @@
 import axios from "axios";
-import { handleResponse, handleError } from "./apiUtils";
+import { handleResponse, handleError,handleImportError } from "./apiUtils";
 import config from "../../config";
-
+import { secureAxios } from "./easeyAuthApi";
 axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
 };
@@ -43,4 +43,19 @@ export const getReportingPeriod = async () =>{
   //const url = `${config.services.mdm.uri}/reporting-periods`;
   const url = "https://api.epa.gov/easey/dev/master-data-mgmt/reporting-periods";
   return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const importQA = async (payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/import/`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
 };

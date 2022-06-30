@@ -4,6 +4,7 @@ import { Button } from "@trussworks/react-uswds";
 import "./QACertTestSummaryHeaderInfo.scss";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 
+import * as qaApi from "../../utils/api/qaCertificationsAPI";
 import NotFound from "../NotFound/NotFound";
 import { QA_CERT_TEST_SUMMARY_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 import { Preloader } from "@us-epa-camd/easey-design-system";
@@ -71,10 +72,12 @@ export const QACertTestSummaryHeaderInfo = ({
   const [fileName, setFileName] = useState("");
   const [hasFormatError, setHasFormatError] = useState(false);
   const [hasInvalidJsonError, setHasInvalidJsonError] = useState(false);
-  const [importApiErrors, setImportApiErrors] = useState([]);
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const [showHistoryImportModal, setShowHistoryImportModal] = useState(false);
   const [importedFile, setImportedFile] = useState([]);
+  const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
+
+  const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
   // *** Reassign handlers after pop-up modal is closed
   useEffect(() => {
     if (!returnedFocusToLast) {
@@ -96,14 +99,21 @@ export const QACertTestSummaryHeaderInfo = ({
 
   // },[]);
   useEffect(() => {
-    if (importTypeSelection != "select") {
+    if (importTypeSelection != "select" || importedFile.length != 0) {
       setDisablePortBtn(false);
     } else {
       setDisablePortBtn(true);
     }
+  }, [importTypeSelection, importedFile]);
 
-    console.log("importype", importTypeSelection);
-  }, [importTypeSelection]);
+  useEffect(() => {
+    if (importedFile.length != 0) {
+      setDisablePortBtn(false);
+    } else {
+      setDisablePortBtn(true);
+    }
+  }, [importedFile.length, showImportModal]);
+
   const closeImportModalHandler = () => {
     const importBtn = document.querySelector("#importSelectionQAModal");
 
@@ -136,16 +146,26 @@ export const QACertTestSummaryHeaderInfo = ({
     setFileName("");
     setHasFormatError(false);
     setHasInvalidJsonError(false);
-    setImportApiErrors([]);
   };
 
   const openModalType = (modalType) => {
     setShowSelectionTypeImportModal(false);
+    setDisablePortBtn(false);
     if (modalType === "file") {
       setShowImportModal(true);
     } else {
       setShowHistoryImportModal(true);
     }
+  };
+
+  const importQABtn = (payload) => {
+    qaApi.importQA(payload).then((response) => {
+      setUsePortBtn(true);
+      setIsLoading(true);
+      if (response) {
+        setImportedFileErrorMsgs(response);
+      }
+    });
   };
   return (
     <div className="header QACertHeader ">
@@ -188,22 +208,21 @@ export const QACertTestSummaryHeaderInfo = ({
             </div>{" "}
             <div className="grid-col-3"></div>{" "}
             <div className="grid-col-3">
-              {/* {user ? ( */}
-              <div className=" float-right right-0 bottom-0 text-no-wrap position-absolute padding-bottom-1">
-                <Button
-                  className="padding-x-5"
-                  type="button"
-                  outline={false}
-                  onClick={() => openSelectionTypeImportModal()}
-                  id="importSelectionQAModal"
-                >
-                  {importTestTitle}
-                </Button>
-              </div>
-
-              {/* ): (
+              {user ? (
+                <div className=" float-right right-0 bottom-0 text-no-wrap position-absolute padding-bottom-1">
+                  <Button
+                    className="padding-x-5"
+                    type="button"
+                    outline={false}
+                    onClick={() => openSelectionTypeImportModal()}
+                    id="importSelectionQAModal"
+                  >
+                    {importTestTitle}
+                  </Button>
+                </div>
+              ) : (
                 ""
-              )} */}
+              )}
             </div>
           </div>
           <div className="grid-row float-right">
@@ -246,6 +265,8 @@ export const QACertTestSummaryHeaderInfo = ({
           showImportModal || showSelectionTypeImportModal ? "is-visible" : ""
         }`}
       />
+
+      {/* // selects either historical data or file data */}
       {showSelectionTypeImportModal ? (
         <div>
           <UploadModal
@@ -267,7 +288,9 @@ export const QACertTestSummaryHeaderInfo = ({
           />
         </div>
       ) : null}
-      {showImportModal ? (
+
+      {/* // file data */}
+      {showImportModal && !finishedLoading && !isLoading ? (
         <div>
           <UploadModal
             show={showImportModal}
@@ -278,7 +301,7 @@ export const QACertTestSummaryHeaderInfo = ({
             exitBTN={"Import"}
             disablePortBtn={disablePortBtn}
             port={() => {
-              // importMPBtn(importedFile);
+              importQABtn(importedFile);
             }}
             hasFormatError={hasFormatError}
             hasInvalidJsonError={hasInvalidJsonError}
@@ -289,7 +312,6 @@ export const QACertTestSummaryHeaderInfo = ({
                 setFileName={setFileName}
                 setHasFormatError={setHasFormatError}
                 setHasInvalidJsonError={setHasInvalidJsonError}
-                // setImportedFile={setImportedFile}
                 setImportedFile={setImportedFile}
                 workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
               />
@@ -297,6 +319,51 @@ export const QACertTestSummaryHeaderInfo = ({
           />
         </div>
       ) : null}
+
+      {/* while uploading, just shows preloader spinner  */}
+
+      {isLoading && !finishedLoading ? (
+        <UploadModal
+          width={"30%"}
+          left={"35%"}
+          setFinishedLoading={setFinishedLoading}
+          setShowImportModal={setShowImportModal}
+          setIsLoading={setIsLoading}
+          timer={true}
+          children={<Preloader />}
+          preloader
+          importedFileErrorMsgs={importedFileErrorMsgs}
+          setImportedFileErrorMsgs={setImportedFileErrorMsgs}
+          fileName={fileName}
+        />
+      ) : (
+        ""
+      )}
+
+      {/* after it finishes uploading , shows either api errors or success messages */}
+      {showImportModal && usePortBtn && finishedLoading ? (
+        <UploadModal
+          show={showImportModal}
+          close={closeImportModalHandler}
+          showCancel={false}
+          showSave={true}
+          exitBtn={"Ok"}
+          complete={true}
+          importedFileErrorMsgs={importedFileErrorMsgs}
+          setUpdateRelatedTables={setUpdateRelatedTables}
+          children={
+            <ImportModal
+              setDisablePortBtn={setDisablePortBtn}
+              disablePortBtn={disablePortBtn}
+              complete={true}
+              fileName={fileName}
+              importedFileErrorMsgs={importedFileErrorMsgs}
+            />
+          }
+        />
+      ) : (
+        ""
+      )}
     </div>
   );
 };
