@@ -1,6 +1,7 @@
 import React , { useState } from 'react';
 import ReportingPeriodSelector from "../../ReportingPeriodSelector/ReportingPeriodSelector";
 import { Checkbox, Button } from "@trussworks/react-uswds";
+import ExportTablesContainer from './ExportTablesContainer';
 
 const ExportTab = ({
   facility,
@@ -11,6 +12,7 @@ const ExportTab = ({
   workspaceSection
 }) =>{
   
+  console.log('export tab render');
   console.log('exportState', exportState);
 
   const facilityMainName = facility.split("(")[0];
@@ -20,7 +22,9 @@ const ExportTab = ({
     { label: "QA & Certification", name: "qa-and-certification", checked: exportState ? exportState.checkedDataTypes.includes('qa-and-certification'): false},
     { label: "Emissions", name: "emissions", checked:  exportState ? exportState.checkedDataTypes.includes('emissions'): false}
   ]);
-  const [ reportingPeriodId, setReportingPeriodId ] = useState(null);
+  const [ reportingPeriod, setReportingPeriod ] = useState(null);
+
+  const [selectedOptions, setSelectedOptions] = useState()
 
   const dataTypeSelectionHanlder =(e) =>{
     const dataTypesCopy = [...dataTypes];
@@ -31,12 +35,13 @@ const ExportTab = ({
     }
     setExportState(selectedConfig.id, {
       checkedDataTypes : dataTypesCopy.filter(e=>e.checked).map(e=>e.name),
-      reportingPeriodId : reportingPeriodId
+      reportingPeriodId : reportingPeriod.id
       },workspaceSection);
   };
   const reportingPeroidSelectionHandler = (selectedObj) =>{
     console.log('selected obj in exort tab', selectedObj);
-    setReportingPeriodId(selectedObj.id);
+    const { id, beginDate, endDate } = selectedObj;
+    setReportingPeriod({id, beginDate, endDate});
     setExportState(selectedConfig.id, {
       checkedDataTypes : dataTypes.filter(e=>e.checked).map(e=>e.name),
       reportingPeriodId : selectedObj.id
@@ -44,6 +49,8 @@ const ExportTab = ({
   }
   const getInitSelection = (reportingPeriodObj) => {
     console.log(reportingPeriodObj);
+    const { id, beginDate, endDate } = reportingPeriodObj;
+    setReportingPeriod({id, beginDate, endDate})
   }
   return(
     <div className="margin-x-3 grid-container">
@@ -83,11 +90,13 @@ const ExportTab = ({
           <Button
             className='width-card'
             disabled={dataTypes.filter(e=>e.checked).length === 0 || (dataTypes.filter(e=>e.checked).length === 1 && dataTypes.find(e=> e.name ==="monitoring-plan").checked)}
+            onClick={() => setSelectedOptions({beginDate: reportingPeriod.beginDate, endDate: reportingPeriod.endDate})}
           >
             Preview
           </Button>
         </div>
       </div>
+      <ExportTablesContainer selectionData={selectedOptions} orisCode={orisCode}/>
     </div>
 
   )
