@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 
 import { FormGroup, Label, FileInput, Alert } from "@trussworks/react-uswds";
 
+import {
+  QA_CERT_TEST_SUMMARY_STORE_NAME,
+  MONITORING_PLAN_STORE_NAME,
+} from "../../additional-functions/workspace-section-and-store-names";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
+
+import * as qaApi from "../../utils/api/qaCertificationsAPI";
 import { successResponses } from "../../utils/api/apiUtils.js";
 import "./ImportModal.scss";
 
@@ -16,13 +22,26 @@ const ImportModal = ({
   importApiErrors,
   importedFileErrorMsgs,
   setImportedFile,
+  workspaceSection,
 }) => {
-  const [mpSchema, setMpSchema] = useState([]);
+  const [schema, setSchema] = useState([]);
   useEffect(() => {
-    mpApi.getMPSchema().then((res) => {
-      console.log("res scheme", res.data);
-      setMpSchema(res.data);
-    });
+    switch (workspaceSection) {
+      case MONITORING_PLAN_STORE_NAME:
+        mpApi.getMPSchema().then((res) => {
+          console.log("res scheme", res.data);
+          setSchema(res.data);
+        });
+        break;
+
+      case QA_CERT_TEST_SUMMARY_STORE_NAME:
+        qaApi.getQASchema().then((res) => {
+          setSchema(res.data);
+        });
+        break;
+      default:
+        break;
+    }
   }, []);
   const [schemaErrors, setSchemaErrors] = useState([]);
   const validateJSON = (name, type, event) => {
@@ -60,12 +79,12 @@ const ImportModal = ({
       var Validator = require("jsonschema").Validator;
       var v = new Validator();
 
-      if (v.validate(fileLoaded, mpSchema).valid) {
+      if (v.validate(fileLoaded, schema).valid) {
         setHasFormatError(false);
         setHasInvalidJsonError(false);
         setDisablePortBtn(false);
       } else {
-        formatSchemaErrors(v.validate(fileLoaded, mpSchema));
+        formatSchemaErrors(v.validate(fileLoaded, schema));
       }
     } catch (e) {
       console.log("invalid json file error: ", e);

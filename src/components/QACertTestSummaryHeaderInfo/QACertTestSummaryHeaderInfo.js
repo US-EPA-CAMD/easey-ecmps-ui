@@ -55,6 +55,7 @@ export const QACertTestSummaryHeaderInfo = ({
     { name: "Unit Default" },
   ];
 
+  const importTestTitle = "Import Test Data";
   const [showImportModal, setShowImportModal] = useState(false);
 
   const [showSelectionTypeImportModal, setShowSelectionTypeImportModal] =
@@ -76,7 +77,7 @@ export const QACertTestSummaryHeaderInfo = ({
   const [hasInvalidJsonError, setHasInvalidJsonError] = useState(false);
   const [importApiErrors, setImportApiErrors] = useState([]);
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
-
+  const [importedFile, setImportedFile] = useState([]);
   // *** Reassign handlers after pop-up modal is closed
   useEffect(() => {
     if (!returnedFocusToLast) {
@@ -98,16 +99,16 @@ export const QACertTestSummaryHeaderInfo = ({
 
   // },[]);
   useEffect(() => {
-    if (importTypeSelection != 0) {
+    if (importTypeSelection != "select") {
       setDisablePortBtn(false);
-    }else{
+    } else {
       setDisablePortBtn(true);
     }
 
-    console.log('importype',importTypeSelection)
+    console.log("importype", importTypeSelection);
   }, [importTypeSelection]);
   const closeImportModalHandler = () => {
-    const importBtn = document.querySelector("#importMonitoringPlanBtn");
+    const importBtn = document.querySelector("#importSelectionQAModal");
 
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
@@ -141,6 +142,15 @@ export const QACertTestSummaryHeaderInfo = ({
     setImportApiErrors([]);
   };
 
+  const openModalType = (modalType) => {
+    setShowSelectionTypeImportModal(false);
+    if (modalType === "file") {
+      setShowImportModal(true);
+    } else {
+      setShowImportDataPreview(true);
+      setShowSelectionTypeImportModal(false);
+    }
+  };
   return (
     <div className="header QACertHeader ">
       {dataLoaded ? (
@@ -191,10 +201,10 @@ export const QACertTestSummaryHeaderInfo = ({
                   onClick={() => openSelectionTypeImportModal()}
                   id="importSelectionQAModal"
                 >
-                  {"Import Test Data"}
+                  {importTestTitle}
                 </Button>
               </div>
-              
+
               {/* ): (
                 ""
               )} */}
@@ -247,15 +257,11 @@ export const QACertTestSummaryHeaderInfo = ({
             close={closeImportModalHandler}
             showCancel={true}
             showSave={true}
-            title={"Import Test Data"}
+            title={importTestTitle}
             mainBTN={"Continue"}
             disablePortBtn={disablePortBtn}
             port={() => {
-              if(importTypeSelection === 2){
-                setShowImportDataPreview(true);
-                setShowSelectionTypeImportModal(false);
-              }
-              //importMPBtn(importedFile);
+              openModalType(importTypeSelection);
             }}
             children={
               <QAImportModalSelect
@@ -272,12 +278,12 @@ export const QACertTestSummaryHeaderInfo = ({
             close={closeImportModalHandler}
             showCancel={true}
             showSave={true}
-            title={"Import a Monitoring Plan to continue"}
+            title={importTestTitle}
             exitBTN={"Import"}
             disablePortBtn={disablePortBtn}
-            // port={() => {
-            //   importMPBtn(importedFile);
-            // }}
+            port={() => {
+              // importMPBtn(importedFile);
+            }}
             hasFormatError={hasFormatError}
             hasInvalidJsonError={hasInvalidJsonError}
             children={
@@ -288,6 +294,8 @@ export const QACertTestSummaryHeaderInfo = ({
                 setHasFormatError={setHasFormatError}
                 setHasInvalidJsonError={setHasInvalidJsonError}
                 // setImportedFile={setImportedFile}
+                setImportedFile={setImportedFile}
+                workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
               />
             }
           />

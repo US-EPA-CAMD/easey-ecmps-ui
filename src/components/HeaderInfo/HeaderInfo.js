@@ -856,6 +856,7 @@ export const HeaderInfo = ({
                 setHasFormatError={setHasFormatError}
                 setHasInvalidJsonError={setHasInvalidJsonError}
                 setImportedFile={setImportedFile}
+                workspaceSection={MONITORING_PLAN_STORE_NAME}
               />
             }
           />

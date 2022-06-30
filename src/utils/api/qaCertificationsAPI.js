@@ -33,16 +33,19 @@ export const getQATestSummaryByID = async (locID, id) => {
 
   return axios.get(url).then(handleResponse).catch(handleError);
 };
+export const getQASchema = async () => {
+  const url = `${config.services.content.uri}/ecmps/reporting-instructions/qa-certification.schema.json`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
 
 export const getReportingPeriod = async () =>{
-  //const url = `${config.services.mdm.uri}/reporting-periods`;
-  const url = "https://api.epa.gov/easey/dev/master-data-mgmt/reporting-periods";
+  const url = `${config.services.mdm.uri}/reporting-periods`;
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
 export const getQATestSummaryByReportingPeriod = async (locId, beginDate, endDate) =>{
-  const url = `https://api.epa.gov/easey/dev/qa-certification-mgmt/locations/${locId}/test-summary?beginDate=${beginDate}&endDate=${endDate}`;
-  //const url = "https://api.epa.gov/easey/dev/qa-certification-mgmt/locations/5/test-summary?beginDate=2004-01-01&endDate=2004-03-31";
+  const url = `${config.services.qaCertification.uri}/locations/${locId}/test-summary?beginDate=${beginDate}&endDate=${endDate}`;
   console.log("url", url);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
