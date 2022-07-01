@@ -49,7 +49,6 @@ export const assignFocusEventListeners = () => {
     element.removeEventListener("focus", storeInFocusedArray);
     element.addEventListener("focus", storeInFocusedArray);
   });
-  
 };
 
 export const cleanupFocusEventListeners = () => {

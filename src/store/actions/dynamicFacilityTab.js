@@ -59,6 +59,6 @@ export const setExportState = (configId, exportState, workspaceSection) => {
     type: types.SET_EXPORT_STATE,
     configId,
     exportState,
-    workspaceSection
+    workspaceSection,
   };
 };

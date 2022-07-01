@@ -57,8 +57,11 @@ const componentRenderer = (update, mdmData) => {
     setUpdateAnalyzerRangeTable: jest.fn(),
   };
   return render(
-  
-    <Provider store={store}> <DataTableAnalyzerRanges {...props} /> </Provider>);
+    <Provider store={store}>
+      {" "}
+      <DataTableAnalyzerRanges {...props} />{" "}
+    </Provider>
+  );
 };
 
 test("renders an analyzer range with mdm data", async () => {

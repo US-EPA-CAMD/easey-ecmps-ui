@@ -4,7 +4,10 @@ import {
   SelectConfigurationBaseModuleHome,
   mapStateToProps,
 } from "./SelectConfigurationBaseModuleHome";
-import { QA_CERT_TEST_SUMMARY_STORE_NAME,EXPORT_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
+import {
+  QA_CERT_TEST_SUMMARY_STORE_NAME,
+  EXPORT_STORE_NAME,
+} from "../../additional-functions/workspace-section-and-store-names";
 import { Provider } from "react-redux";
 import configureStore from "../../store/configureStore.dev";
 const openFac = [
@@ -151,6 +154,8 @@ test("mapStateToProps calls the appropriate action", async () => {
   // mock the 'dispatch' object
 
   const state = store.getState();
-  const stateProps = mapStateToProps(state,{workspaceSection:QA_CERT_TEST_SUMMARY_STORE_NAME});
+  const stateProps = mapStateToProps(state, {
+    workspaceSection: QA_CERT_TEST_SUMMARY_STORE_NAME,
+  });
   expect(state).toBeDefined();
 });
