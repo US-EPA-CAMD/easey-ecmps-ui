@@ -16,6 +16,8 @@ const ExportTab = ({
   console.log('export tab render');
   console.log('exportState', exportState);
 
+  console.log('facility', facility);
+
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
   const [dataTypes, setDataTypes] = useState([
@@ -103,7 +105,7 @@ const ExportTab = ({
             </Button>
           </div>
         </div>
-        {selectedOptions && <ExportTablesContainer selectionData={selectedOptions} orisCode={orisCode} />}
+        {selectedOptions && <ExportTablesContainer selectionData={selectedOptions} selectedConfig={selectedConfig} />}
       </div>
     </>
   )

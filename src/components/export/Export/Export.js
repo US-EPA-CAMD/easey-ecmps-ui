@@ -17,6 +17,8 @@ export const Export = ({
   exportTab,
   setExportState
 }) => {
+  
+  console.log('selected config', selectedConfig) // todo: remove
 
   const getExportState = () =>{
     const currentTabObj = exportTab.find(e=>e.selectedConfig.id === selectedConfig.id);
