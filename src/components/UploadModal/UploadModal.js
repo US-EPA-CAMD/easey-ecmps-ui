@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, createRef, useState } from "react";
+import React, { createContext, useEffect, createRef } from "react";
 import ReactDom from "react-dom";
 
 import { Button, Alert } from "@trussworks/react-uswds";
