@@ -9,7 +9,8 @@ const ReportingPeriodSelector = ({
   dataTypes,
   reportingPeroidSelectionHandler,
   exportState,
-  getInitSelection
+  getInitSelection,
+  setLoading
 }) =>{
   const [ reportingPeriod, setReportingPeriod ] = useState(null);
   const [ years, setYears ] = useState([]);
@@ -17,6 +18,7 @@ const ReportingPeriodSelector = ({
 
   useEffect(()=>{
     if(reportingPeriod === null){
+      setLoading(true);
       getReportingPeriod()
       .then(res => {
         if(exportState && exportState.reportingPeriodId){//retain state as tab is opened back
@@ -36,6 +38,7 @@ const ReportingPeriodSelector = ({
             return e;
           }));
         }
+        setLoading(false);
       });
     }else if(years.length === 0 && quarters.length === 0){
       setYears(new Set(reportingPeriod.map(e=> e.calendarYear).sort().reverse()));
@@ -86,7 +89,7 @@ const ReportingPeriodSelector = ({
   return(
     <>
     {
-      reportingPeriod ? (
+      reportingPeriod && (
         <div id="reporting-period-wrapper" className="display-flex flex-row flex-justify"> 
           <div>
             <Label
@@ -137,7 +140,7 @@ const ReportingPeriodSelector = ({
               </div>
           </div>
         </div>
-      ) : <Preloader/>
+      )
     }</>
   )
 };
