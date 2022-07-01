@@ -51,7 +51,7 @@ export const DataTableRectangularDucts = ({
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
-    if (dataLoaded ) {
+    if (dataLoaded) {
       returnFocusToLast();
       assignFocusEventListeners();
     }

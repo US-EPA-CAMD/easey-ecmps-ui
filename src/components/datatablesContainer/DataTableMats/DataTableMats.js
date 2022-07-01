@@ -208,21 +208,24 @@ export const DataTableMats = ({
   };
   const createMats = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-    if ((userInput.endHour && !userInput.endDate)|| (!userInput.endHour && userInput.endDate)) {
+    if (
+      (userInput.endHour && !userInput.endDate) ||
+      (!userInput.endHour && userInput.endDate)
+    ) {
       displayAppError(needEndDate);
       setShow(false);
     } else {
-    mpApi
-      .createMats(userInput)
-      .then((result) => {
-        setShow(false);
-        setUpdateTable(true);
-        setUpdateRelatedTables(true);
-      })
-      .catch((error) => {
-        console.log(error);
-        setShow(false);
-      });
+      mpApi
+        .createMats(userInput)
+        .then((result) => {
+          setShow(false);
+          setUpdateTable(true);
+          setUpdateRelatedTables(true);
+        })
+        .catch((error) => {
+          console.log(error);
+          setShow(false);
+        });
     }
   };
 

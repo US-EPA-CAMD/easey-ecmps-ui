@@ -1,5 +1,5 @@
 import React from "react";
-import { render, waitForElement,fireEvent } from "@testing-library/react";
+import { render, waitForElement, fireEvent } from "@testing-library/react";
 import QACertTestSummaryHeaderInfo from "./QACertTestSummaryHeaderInfo";
 
 jest.mock("axios");
