@@ -22,6 +22,9 @@ import {
 import ImportModal from "../ImportModal/ImportModal";
 import UploadModal from "../UploadModal/UploadModal";
 import QAImportModalSelect from "./QAImportModalSelect/QAImportModalSelect";
+import QAImportHistoricalDataPreview from "../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
+import Modal from "../Modal/Modal";
+
 export const QACertTestSummaryHeaderInfo = ({
   facility,
   selectedConfig,
@@ -58,6 +61,7 @@ export const QACertTestSummaryHeaderInfo = ({
 
   const [showSelectionTypeImportModal, setShowSelectionTypeImportModal] =
     useState(false);
+  const [ showImportDataPreview , setShowImportDataPreview ] = useState(false);
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
@@ -73,7 +77,6 @@ export const QACertTestSummaryHeaderInfo = ({
   const [hasFormatError, setHasFormatError] = useState(false);
   const [hasInvalidJsonError, setHasInvalidJsonError] = useState(false);
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
-  const [showHistoryImportModal, setShowHistoryImportModal] = useState(false);
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
 
@@ -154,7 +157,8 @@ export const QACertTestSummaryHeaderInfo = ({
     if (modalType === "file") {
       setShowImportModal(true);
     } else {
-      setShowHistoryImportModal(true);
+      setShowImportDataPreview(true);
+      setShowSelectionTypeImportModal(false);
     }
   };
 
@@ -361,8 +365,24 @@ export const QACertTestSummaryHeaderInfo = ({
             />
           }
         />
-      ) : (
-        ""
+      ) : 
+        ""}
+      {showImportDataPreview && (
+        <Modal
+          show={showImportDataPreview}
+          close={()=>setShowImportDataPreview(false)}
+          showSave={false}
+          showCancel={true}
+          exitBTN={"Import"}
+          title="Import Historical Data"
+          //port ={}
+          children= {
+            <QAImportHistoricalDataPreview 
+              locations={locations}
+              workspaceSection={{QA_CERT_TEST_SUMMARY_STORE_NAME}}
+            />
+          }
+        />
       )}
     </div>
   );

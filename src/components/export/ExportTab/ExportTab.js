@@ -1,6 +1,7 @@
 import React , { useState } from 'react';
 import ReportingPeriodSelector from "../../ReportingPeriodSelector/ReportingPeriodSelector";
 import { Checkbox, Button } from "@trussworks/react-uswds";
+import { Preloader } from "@us-epa-camd/easey-design-system";
 
 const ExportTab = ({
   facility,
@@ -19,6 +20,7 @@ const ExportTab = ({
     { label: "Emissions", name: "emissions", checked:  exportState ? exportState.checkedDataTypes.includes('emissions'): false}
   ]);
   const [ reportingPeriodId, setReportingPeriodId ] = useState(null);
+  const [ loading, setLoading ] = useState(false);
 
   const dataTypeSelectionHanlder =(e) =>{
     const dataTypesCopy = [...dataTypes];
@@ -32,57 +34,63 @@ const ExportTab = ({
       reportingPeriodId : reportingPeriodId
       },workspaceSection);
   };
-  const reportingPeroidSelectionHandler = (selectedId) =>{
-    setReportingPeriodId(selectedId);
+  const reportingPeroidSelectionHandler = (selectedObj) =>{
+    setReportingPeriodId(selectedObj.id);
     setExportState(selectedConfig.id, {
       checkedDataTypes : dataTypes.filter(e=>e.checked).map(e=>e.name),
-      reportingPeriodId : selectedId
+      reportingPeriodId : selectedObj.id
     }, workspaceSection);
   }
   return(
-    <div className="margin-x-3 grid-container">
-      <div className="grid-row">
-        <h3 className="display-inline-block">
-          <span className="font-body-lg">{facilityMainName}</span>
-        </h3>{" "}
-      </div>
-      <div className=" grid-row text-bold font-body-xl display-block">
-        {facilityAdditionalName}
-      </div>
-      <div className="grid-row margin-top-3">
-        <div className='grid-col-3'>
-          {
-            dataTypes.map((d,i) =>(
-              <Checkbox
-                id={d.name}
-                name={d.name}
-                label={<strong>{d.label}</strong>}
-                checked={d.checked}
-                onChange={dataTypeSelectionHanlder}
-                key={i}
-              />
-            ))
-          }
+    <>
+      {
+      loading ? <Preloader/> : (null)
+      }
+      <div className="margin-x-3 grid-container">
+        <div className="grid-row">
+          <h3 className="display-inline-block">
+            <span className="font-body-lg">{facilityMainName}</span>
+          </h3>{" "}
         </div>
-        <div className='grid-col-6'>
-          <ReportingPeriodSelector
-            isExport={true}
-            dataTypes={dataTypes.filter(e=>e.checked)}
-            reportingPeroidSelectionHandler = {reportingPeroidSelectionHandler}
-            exportState={exportState}
-          />
+        <div className=" grid-row text-bold font-body-xl display-block">
+          {facilityAdditionalName}
         </div>
-        <div className='grid-col-3 padding-left-8 padding-top-3'>
-          <Button
-            className='width-card'
-            disabled={dataTypes.filter(e=>e.checked).length === 0 || (dataTypes.filter(e=>e.checked).length === 1 && dataTypes.find(e=> e.name ==="monitoring-plan").checked)}
-          >
-            Preview
-          </Button>
+        <div className="grid-row margin-top-3">
+          <div className='grid-col-3'>
+            {
+              dataTypes.map((d,i) =>(
+                <Checkbox
+                  id={d.name}
+                  name={d.name}
+                  label={<strong>{d.label}</strong>}
+                  checked={d.checked}
+                  onChange={dataTypeSelectionHanlder}
+                  key={i}
+                />
+              ))
+            }
+          </div>
+          <div className='grid-col-6'>
+            <ReportingPeriodSelector
+              isExport={true}
+              dataTypes={dataTypes.filter(e=>e.checked)}
+              reportingPeroidSelectionHandler = {reportingPeroidSelectionHandler}
+              exportState={exportState}
+              setLoading={setLoading}
+              getInitSelection={()=>null}
+            />
+          </div>
+          <div className='grid-col-3 padding-left-8 padding-top-3'>
+            <Button
+              className='width-card'
+              disabled={dataTypes.filter(e=>e.checked).length === 0 || (dataTypes.filter(e=>e.checked).length === 1 && dataTypes.find(e=> e.name ==="monitoring-plan").checked)}
+            >
+              Preview
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
-
+    </>
   )
 };
 
