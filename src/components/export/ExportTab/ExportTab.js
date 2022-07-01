@@ -37,7 +37,7 @@ const ExportTab = ({
         : false,
     },
   ]);
-  
+
   const [reportingPeriod, setReportingPeriod] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState();
   const [loading, setLoading] = useState(false);
@@ -60,7 +60,7 @@ const ExportTab = ({
       workspaceSection
     );
   };
-  
+
   const reportingPeroidSelectionHandler = (selectedObj) => {
     const { id, beginDate, endDate } = selectedObj;
     setReportingPeriod({ id, beginDate, endDate });
@@ -146,7 +146,12 @@ const ExportTab = ({
           />
         )}
         <div className="border-top-1px border-base-lighter padding-y-2">
-          <Button className="float-right margin-top-3">Export</Button>
+          <Button
+            className="float-right margin-top-3"
+            disabled={!dataTypes.find((e) => e.name === "monitoring-plan").checked}
+          >
+            Export
+          </Button>
         </div>
       </div>
     </>
