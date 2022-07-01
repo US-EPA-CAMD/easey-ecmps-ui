@@ -60,7 +60,7 @@ export const QACertTestSummaryHeaderInfo = ({
 
   const [showSelectionTypeImportModal, setShowSelectionTypeImportModal] =
     useState(false);
-  const [ showImportDataPreview , setShowImportDataPreview ] = useState(false);
+  const [showImportDataPreview, setShowImportDataPreview] = useState(false);
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
@@ -246,9 +246,8 @@ export const QACertTestSummaryHeaderInfo = ({
       )}
 
       <div
-        className={`usa-overlay ${
-          showImportModal || showSelectionTypeImportModal ? "is-visible" : ""
-        }`}
+        className={`usa-overlay ${showImportModal || showSelectionTypeImportModal ? "is-visible" : ""
+          }`}
       />
       {showSelectionTypeImportModal ? (
         <div>
@@ -304,16 +303,16 @@ export const QACertTestSummaryHeaderInfo = ({
       {showImportDataPreview && (
         <Modal
           show={showImportDataPreview}
-          close={()=>setShowImportDataPreview(false)}
+          close={() => setShowImportDataPreview(false)}
           showSave={false}
           showCancel={true}
           exitBTN={"Import"}
           title="Import Historical Data"
           //port ={}
-          children= {
-            <QAImportHistoricalDataPreview 
+          children={
+            <QAImportHistoricalDataPreview
               locations={locations}
-              workspaceSection={{QA_CERT_TEST_SUMMARY_STORE_NAME}}
+              workspaceSection={{ QA_CERT_TEST_SUMMARY_STORE_NAME }}
             />
           }
         />

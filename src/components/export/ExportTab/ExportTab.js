@@ -12,12 +12,6 @@ const ExportTab = ({
   setExportState,
   workspaceSection
 }) => {
-
-  console.log('export tab render');
-  console.log('exportState', exportState);
-
-  console.log('facility', facility);
-
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
   const [dataTypes, setDataTypes] = useState([
@@ -43,7 +37,6 @@ const ExportTab = ({
     }, workspaceSection);
   };
   const reportingPeroidSelectionHandler = (selectedObj) => {
-    console.log('selected obj in exort tab', selectedObj);
     const { id, beginDate, endDate } = selectedObj;
     setReportingPeriod({ id, beginDate, endDate });
     setExportState(selectedConfig.id, {
@@ -52,9 +45,11 @@ const ExportTab = ({
     }, workspaceSection);
   }
   const getInitSelection = (reportingPeriodObj) => {
-    console.log(reportingPeriodObj);
     const { id, beginDate, endDate } = reportingPeriodObj;
     setReportingPeriod({ id, beginDate, endDate })
+    if (exportState) {
+      setSelectedOptions({ beginDate, endDate })
+    }
   }
   return (
     <>
@@ -105,7 +100,15 @@ const ExportTab = ({
             </Button>
           </div>
         </div>
-        {selectedOptions && <ExportTablesContainer selectionData={selectedOptions} selectedConfig={selectedConfig} />}
+        {selectedOptions &&
+          <ExportTablesContainer
+            selectionData={selectedOptions}
+            selectedConfig={selectedConfig}
+            exportState={exportState}
+            setExportState={setExportState}
+            workspaceSection={workspaceSection}
+          />
+        }
       </div>
     </>
   )

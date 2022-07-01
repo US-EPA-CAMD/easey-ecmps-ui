@@ -5,19 +5,19 @@ import { ArrowDownwardSharp } from "@material-ui/icons";
 
 import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
 
-const ExportTablesContainer = (props) => {
-  const { selectionData, selectedConfig } = props;
+const ExportTablesContainer = ({
+  selectionData,
+  selectedConfig,
+  exportState,
+  setExportState,
+  workspaceSection
+}) => {
   const { beginDate: beginDateOption, endDate: endDateOption } = selectionData;
   const { locations } = selectedConfig;
-  const [qaTestSummaryData, setQATestSummaryData] = useState();
+  const [qaTestSummaryData, setQATestSummaryData] = useState(exportState.qaTestSummaryRows);
 
   useEffect(() => {
-    console.log("use effect export tables container");
-
     const fetchQATestSummary = async () => {
-      // const result = await getQATestSummary(orisCode, beginDateOption, endDateOption)
-      // setQATestSummaryData(result.data)
-
       const allPromises = [];
       locations.forEach((e) => {
         allPromises.push(
@@ -25,7 +25,6 @@ const ExportTablesContainer = (props) => {
         );
       });
       Promise.all(allPromises).then((res) => {
-        console.log("res", res);
         setQATestSummaryData(res.map((e) => e.data).flat());
       });
     };
@@ -55,6 +54,20 @@ const ExportTablesContainer = (props) => {
     };
   });
 
+  const onSelectRowsHandler = ({ _allSelected, _selectedCount, selectedRows }) => {
+    const selectedIds = selectedRows.map(row => row.id)
+
+    setExportState(selectedConfig.id, {
+      ...exportState,
+      selectedIds,
+      qaTestSummaryRows: rows,
+    }, workspaceSection);
+  }
+
+  const selectableRowSelectedHandler = row => {
+    return exportState?.selectedIds?.includes(row.id)
+  }
+
   const dataTable = (
     <div className="margin-x-3 margin-y-4">
       <h3 className="margin-y-1">Test Summary</h3>
@@ -68,6 +81,8 @@ const ExportTablesContainer = (props) => {
         columns={qaTestSummaryCols}
         data={rows}
         selectableRows
+        onSelectedRowsChange={onSelectRowsHandler}
+        selectableRowSelected={selectableRowSelectedHandler}
       />
     </div>
   );
