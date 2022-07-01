@@ -82,15 +82,17 @@ const ExportTab = ({
     <>
       {loading ? <Preloader /> : null}
       <div className="margin-x-3 grid-container">
-        <div className="grid-row">
-          <h3 className="display-inline-block">
-            <span className="font-body-lg">{facilityMainName}</span>
-          </h3>{" "}
+        <div className="border-bottom-1px border-base-lighter padding-bottom-2">
+          <div className="grid-row">
+            <h3 className="display-inline-block">
+              <span className="font-body-lg">{facilityMainName}</span>
+            </h3>{" "}
+          </div>
+          <div className=" grid-row text-bold font-body-xl display-block">
+            {facilityAdditionalName}
+          </div>
         </div>
-        <div className=" grid-row text-bold font-body-xl display-block">
-          {facilityAdditionalName}
-        </div>
-        <div className="grid-row margin-top-3">
+        <div className="grid-row margin-y-3">
           <div className="grid-col-3">
             {dataTypes.map((d, i) => (
               <Checkbox
@@ -141,6 +143,9 @@ const ExportTab = ({
             workspaceSection={workspaceSection}
           />
         )}
+        <div className="border-top-1px border-base-lighter padding-y-2">
+          <Button className="float-right margin-top-3">Export</Button>
+        </div>
       </div>
     </>
   );

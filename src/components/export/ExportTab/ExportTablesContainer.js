@@ -4,17 +4,20 @@ import DataTable from "react-data-table-component";
 import { ArrowDownwardSharp } from "@material-ui/icons";
 
 import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
+import { Button } from "@trussworks/react-uswds";
 
 const ExportTablesContainer = ({
   selectionData,
   selectedConfig,
   exportState,
   setExportState,
-  workspaceSection
+  workspaceSection,
 }) => {
   const { beginDate: beginDateOption, endDate: endDateOption } = selectionData;
   const { locations } = selectedConfig;
-  const [qaTestSummaryData, setQATestSummaryData] = useState(exportState.qaTestSummaryRows);
+  const [qaTestSummaryData, setQATestSummaryData] = useState(
+    exportState.qaTestSummaryRows
+  );
 
   useEffect(() => {
     const fetchQATestSummary = async () => {
@@ -54,19 +57,27 @@ const ExportTablesContainer = ({
     };
   });
 
-  const onSelectRowsHandler = ({ _allSelected, _selectedCount, selectedRows }) => {
-    const selectedIds = selectedRows.map(row => row.id)
+  const onSelectRowsHandler = ({
+    _allSelected,
+    _selectedCount,
+    selectedRows,
+  }) => {
+    const selectedIds = selectedRows.map((row) => row.id);
 
-    setExportState(selectedConfig.id, {
-      ...exportState,
-      selectedIds,
-      qaTestSummaryRows: rows,
-    }, workspaceSection);
-  }
+    setExportState(
+      selectedConfig.id,
+      {
+        ...exportState,
+        selectedIds,
+        qaTestSummaryRows: rows,
+      },
+      workspaceSection
+    );
+  };
 
-  const selectableRowSelectedHandler = row => {
-    return exportState?.selectedIds?.includes(row.id)
-  }
+  const selectableRowSelectedHandler = (row) => {
+    return exportState?.selectedIds?.includes(row.id);
+  };
 
   const dataTable = (
     <div className="margin-x-3 margin-y-4">
