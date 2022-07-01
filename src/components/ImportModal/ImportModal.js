@@ -19,7 +19,6 @@ const ImportModal = ({
   fileName,
   setHasFormatError,
   setHasInvalidJsonError,
-  importApiErrors,
   importedFileErrorMsgs,
   setImportedFile,
   workspaceSection,
@@ -29,7 +28,6 @@ const ImportModal = ({
     switch (workspaceSection) {
       case MONITORING_PLAN_STORE_NAME:
         mpApi.getMPSchema().then((res) => {
-          console.log("res scheme", res.data);
           setSchema(res.data);
         });
         break;
@@ -111,6 +109,7 @@ const ImportModal = ({
     <div className="import-modal-container">
       {complete &&
       importedFileErrorMsgs !== undefined &&
+      importedFileErrorMsgs !== null &&
       successResponses.includes(importedFileErrorMsgs.status) ? (
         <span id="fileName">{fileName}</span>
       ) : complete && importedFileErrorMsgs.length > 0 ? (

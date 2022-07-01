@@ -20,7 +20,6 @@ const ExportTab = ({
     { label: "Emissions", name: "emissions", checked: exportState ? exportState.checkedDataTypes.includes('emissions') : false }
   ]);
   const [reportingPeriod, setReportingPeriod] = useState(null);
-
   const [selectedOptions, setSelectedOptions] = useState()
   const [loading, setLoading] = useState(false);
 
