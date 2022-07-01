@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ReportingPeriodSelector from "../../ReportingPeriodSelector/ReportingPeriodSelector";
-import { Button } from "@trussworks/react-uswds";
+import { Button, Checkbox } from "@trussworks/react-uswds";
 import ExportTablesContainer from './ExportTablesContainer';
 import { Preloader } from "@us-epa-camd/easey-design-system";
 
@@ -65,34 +65,47 @@ const ExportTab = ({
             <span className="font-body-lg">{facilityMainName}</span>
           </h3>{" "}
         </div>
-        <div className='grid-col-6'>
-          <ReportingPeriodSelector
-            isExport={true}
-            dataTypes={dataTypes.filter(e => e.checked)}
-            reportingPeroidSelectionHandler={reportingPeroidSelectionHandler}
-            exportState={exportState}
-            getInitSelection={getInitSelection}
-            setLoading={setLoading}
-          />
+        <div className=" grid-row text-bold font-body-xl display-block">
+          {facilityAdditionalName}
         </div>
-        <div className='grid-col-3 padding-left-8 padding-top-3'>
-          <Button
-            className='width-card'
-            disabled={dataTypes.filter(e => e.checked).length === 0 || (dataTypes.filter(e => e.checked).length === 1 && dataTypes.find(e => e.name === "monitoring-plan").checked)}
-            onClick={() => setSelectedOptions({ beginDate: reportingPeriod.beginDate, endDate: reportingPeriod.endDate })}
-          >
-            Preview
-          </Button>
+        <div className="grid-row margin-top-3">
+          <div className='grid-col-3'>
+            {
+              dataTypes.map((d, i) => (
+                <Checkbox
+                  id={d.name}
+                  name={d.name}
+                  label={<strong>{d.label}</strong>}
+                  checked={d.checked}
+                  onChange={dataTypeSelectionHanlder}
+                  key={i}
+                />
+              ))
+            }
+          </div>
+          <div className='grid-col-6'>
+            <ReportingPeriodSelector
+              isExport={true}
+              dataTypes={dataTypes.filter(e => e.checked)}
+              reportingPeroidSelectionHandler={reportingPeroidSelectionHandler}
+              exportState={exportState}
+              setLoading={setLoading}
+              getInitSelection={getInitSelection}
+            />
+          </div>
+          <div className='grid-col-3 padding-left-8 padding-top-3'>
+            <Button
+              className='width-card'
+              disabled={dataTypes.filter(e => e.checked).length === 0 || (dataTypes.filter(e => e.checked).length === 1 && dataTypes.find(e => e.name === "monitoring-plan").checked)}
+              onClick={() => setSelectedOptions({ beginDate: reportingPeriod.beginDate, endDate: reportingPeriod.endDate })}
+            >
+              Preview
+            </Button>
+          </div>
         </div>
+        {selectedOptions && <ExportTablesContainer selectionData={selectedOptions} orisCode={orisCode} />}
       </div>
-      {selectedOptions && <ExportTablesContainer selectionData={selectedOptions} orisCode={orisCode} />}
-      <Button
-        className='width-card float-right'
-      >
-        Export
-      </Button>
-    </div>
-
+    </>
   )
 };
 

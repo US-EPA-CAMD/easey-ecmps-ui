@@ -1,6 +1,8 @@
 import { Preloader } from '@us-epa-camd/easey-design-system';
 import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
+import { ArrowDownwardSharp } from "@material-ui/icons";
+
 import { getQATestSummary } from '../../../utils/api/qaCertificationsAPI';
 
 const ExportTablesContainer = props => {
@@ -23,11 +25,27 @@ const ExportTablesContainer = props => {
     return { id, componentId, testNumber, testResultCode, beginDate, beginHour, endDate, endHour }
   })
 
-  const tableContent = qaTestSummaryData ? <DataTable columns={qaTestSummaryCols} data={rows} selectableRows /> : <Preloader />
+  const dataTable = <div className='margin-x-3 margin-y-4'>
+    <h3 className='margin-y-1'>Test Summary</h3>
+    <DataTable
+      responsive={true}
+      fixedHeader={true}
+      noHeader={true}
+      striped={false}
+      highlightOnHover={true}
+      sortIcon={
+        <ArrowDownwardSharp className="margin-left-2 text-primary" />
+      }
+      columns={qaTestSummaryCols}
+      data={rows}
+      selectableRows
+    />
+  </div>
+
+  const tableContent = qaTestSummaryData ? dataTable : <Preloader />
 
   return (
     <>
-      <h1>Test Summary</h1>
       {tableContent}
     </>
   )
