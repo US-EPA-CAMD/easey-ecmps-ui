@@ -21,29 +21,29 @@ const ExportTablesContainer = ({
     exportState.qaTestSummaryRows
   );
   const [loading, setLoading] = useState(false);
-  const fetchQATestSummary = async () => {
-    setLoading(true);
-    const { unitIds, stackPipeIds } = getUnitIdAndStackPipeIds(locations);
-    try {
-      const response = await exportQA(
-        orisCode,
-        unitIds,
-        stackPipeIds,
-        beginDate,
-        endDate
-      );
-      if (response) {
-        setQATestSummaryData(response.data.testSummaryData);
-        setLoading(false);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   useEffect(() => {
+    const fetchQATestSummary = async () => {
+      setLoading(true);
+      const { unitIds, stackPipeIds } = getUnitIdAndStackPipeIds(locations);
+      try {
+        const response = await exportQA(
+          orisCode,
+          unitIds,
+          stackPipeIds,
+          beginDate,
+          endDate
+        );
+        if (response) {
+          setQATestSummaryData(response.data.testSummaryData);
+          setLoading(false);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
     fetchQATestSummary();
-  }, [beginDate, endDate]);
+  }, [beginDate, endDate, locations, orisCode]);
 
   const onSelectRowsHandler = ({
     _allSelected,
