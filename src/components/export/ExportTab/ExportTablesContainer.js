@@ -3,12 +3,9 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { ArrowDownwardSharp } from "@material-ui/icons";
 
-import {
-  exportQA,
-  getQATestSummary,
-} from "../../../utils/api/qaCertificationsAPI";
-import { getUnitIdAndStackPipeIds } from "../../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
+import { exportQA } from "../../../utils/api/qaCertificationsAPI";
 import { qaTestSummaryCols } from "../../../utils/constants/tableColumns";
+import { getUnitIdAndStackPipeIds } from "../../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
 
 const ExportTablesContainer = ({
   selectionData,
