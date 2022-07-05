@@ -92,13 +92,13 @@ const ExportTab = ({
     // export if preview not clicked
     if (!exportState.qaTestSummaryRows) {
       const { unitIds, stackPipeIds } = getUnitIdAndStackPipeIds(selectedConfig.locations);
-      const response = await exportQA({
+      const response = await exportQA(
         orisCode,
         unitIds,
         stackPipeIds,
         beginDate,
         endDate,
-      });
+      );
       download(JSON.stringify(response.data, null, "\t"), exportFileName);
     }
     // export if preview was clicked

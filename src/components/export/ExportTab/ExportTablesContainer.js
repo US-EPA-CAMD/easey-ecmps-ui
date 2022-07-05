@@ -25,13 +25,13 @@ const ExportTablesContainer = ({
     setLoading(true);
     const { unitIds, stackPipeIds } = getUnitIdAndStackPipeIds(locations);
     try {
-      const response = await exportQA({
+      const response = await exportQA(
         orisCode,
         unitIds,
         stackPipeIds,
         beginDate,
         endDate,
-      });
+      );
       if (response) {
         setQATestSummaryData(response.data.testSummaryData);
         setLoading(false);
