@@ -112,6 +112,12 @@ const ExportTab = ({
     download(JSON.stringify(exportJson, null, "\t"), exportFileName);
   }
 
+  const isExportDisabled = () => {
+    const isMonitoringPlanChecked = dataTypes.find((e) => e.name === "monitoring-plan").checked
+    const rowHasSelected = exportState?.selectedIds?.length > 0
+    return !isMonitoringPlanChecked && !rowHasSelected
+  }
+
   return (
     <>
       {loading ? <Preloader /> : null}
@@ -181,9 +187,7 @@ const ExportTab = ({
         <div className="border-top-1px border-base-lighter padding-y-2">
           <Button
             className="float-right margin-top-3"
-            disabled={
-              (!dataTypes.find((e) => e.name === "monitoring-plan").checked || exportState?.selectedIds?.length === 0)
-            }
+            disabled={isExportDisabled()}
             onClick={exportClickHandler}
           >
             Export
