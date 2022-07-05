@@ -73,3 +73,17 @@ export const importQA = async (payload) => {
     return handleImportError(error);
   }
 };
+
+export const exportQA = async ({ facilityId, unitIds, stackPipeIds, beginDate, endDate }) => {
+  let url = `${config.services.qaCertification.uri}/export`;
+  url = `${url}?facilityId=${facilityId}&beginDate=${beginDate}&endDate=${endDate}`
+  if (unitIds.length > 0) {
+    const unitIdsQueryParam = unitIds.join('|')
+    url = `${url}&unitIds=${unitIdsQueryParam}`
+  }
+  if (stackPipeIds.length > 0) {
+    const stackPipeIdsQueryParam = stackPipeIds.join('|')
+    url = `${url}&stackPipeIds=${stackPipeIdsQueryParam}`
+  }
+  return axios.get(url).then(handleResponse).catch(handleError);
+}
