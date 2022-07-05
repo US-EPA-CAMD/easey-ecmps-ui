@@ -23,10 +23,8 @@ const ExportTablesContainer = ({
   const [loading, setLoading] = useState(false);
   const fetchQATestSummary = async () => {
     setLoading(true);
-    const unitIdsAndStackPipeIds = getUnitIdAndStackPipeIds(locations);
+    const { unitIds, stackPipeIds } = getUnitIdAndStackPipeIds(locations);
     try {
-      const unitIds = unitIdsAndStackPipeIds.unitIds;
-      const stackPipeIds = unitIdsAndStackPipeIds.stackPipeIds;
       const response = await exportQA({
         orisCode,
         unitIds,
@@ -35,7 +33,6 @@ const ExportTablesContainer = ({
         endDate,
       });
       if (response) {
-        console.log("response", response.data);
         setQATestSummaryData(response.data.testSummaryData);
         setLoading(false);
       }

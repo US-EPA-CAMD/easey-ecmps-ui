@@ -7,6 +7,7 @@ import ReportingPeriodSelector from "../../ReportingPeriodSelector/ReportingPeri
 import ExportTablesContainer from "./ExportTablesContainer";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { exportQA } from "../../../utils/api/qaCertificationsAPI";
+import { getUnitIdAndStackPipeIds } from "../../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
 
 
 const ExportTab = ({
@@ -76,6 +77,7 @@ const ExportTab = ({
       workspaceSection
     );
   };
+
   const getInitSelection = (reportingPeriodObj) => {
     const { id, beginDate, endDate } = reportingPeriodObj;
     setReportingPeriod({ id, beginDate, endDate });
@@ -85,30 +87,22 @@ const ExportTab = ({
   };
 
   const exportClickHandler = async () => {
-    console.log('export clicked')
-    // get facilityId, unitIds, stackPipeIds, begin/end date
-    console.log('facility', facility);
-    console.log('selectedConfig', selectedConfig);
-    console.log('exportState', exportState);
-
-    const selectedRows = exportState.qaTestSummaryRows.filter(row => {
-      return exportState.selectedIds.includes(row.id)
-    })
-
-    let unitIds = selectedRows.filter(row => row.unitId).map(row => row.unitId)
-    unitIds = [...new Set(unitIds)]
-
-    let stackPipeIds = selectedRows.filter(row => row.stackPipeId).map(row => row.stackPipeId)
-    stackPipeIds = [...new Set(stackPipeIds)]
-
-    const { beginDate, endDate } = previewOptions
-
-    const result = await exportQA({ orisCode, unitIds, stackPipeIds, beginDate, endDate })
-    console.log('result exportQA', result);
-
-    const exportFileName = `Export - ${orisCode} - ${selectedConfig.name}.json`
+    const { beginDate, endDate } = reportingPeriod
+    const exportFileName = `Export - ${facility}.json`
+    // export if preview not clicked
+    if (!exportState.qaTestSummaryRows) {
+      const { unitIds, stackPipeIds } = getUnitIdAndStackPipeIds(selectedConfig.locations);
+      const response = await exportQA({
+        orisCode,
+        unitIds,
+        stackPipeIds,
+        beginDate,
+        endDate,
+      });
+      download(JSON.stringify(response.data, null, "\t"), exportFileName);
+    }
+    // export if preview was clicked
     const exportJson = exportState.qaTestSummaryRows
-
     download(JSON.stringify(exportJson, null, "\t"), exportFileName);
   }
 
