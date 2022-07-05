@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-import ReportingPeriodSelector from "../../ReportingPeriodSelector/ReportingPeriodSelector";
+import download from "downloadjs";
 import { Button, Checkbox } from "@trussworks/react-uswds";
+
+import ReportingPeriodSelector from "../../ReportingPeriodSelector/ReportingPeriodSelector";
+
 import ExportTablesContainer from "./ExportTablesContainer";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { exportQA } from "../../../utils/api/qaCertificationsAPI";
+
 
 const ExportTab = ({
   facility,
@@ -101,6 +105,11 @@ const ExportTab = ({
 
     const result = await exportQA({ orisCode, unitIds, stackPipeIds, beginDate, endDate })
     console.log('result exportQA', result);
+
+    const exportFileName = `Export - ${orisCode} - ${selectedConfig.name}.json`
+    const exportJson = exportState.qaTestSummaryRows
+
+    download(JSON.stringify(exportJson, null, "\t"), exportFileName);
   }
 
   return (
@@ -173,7 +182,7 @@ const ExportTab = ({
           <Button
             className="float-right margin-top-3"
             disabled={
-              !dataTypes.find((e) => e.name === "monitoring-plan").checked
+              (!dataTypes.find((e) => e.name === "monitoring-plan").checked || exportState?.selectedIds?.length === 0)
             }
             onClick={exportClickHandler}
           >
