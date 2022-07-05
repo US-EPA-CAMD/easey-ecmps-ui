@@ -4,6 +4,7 @@ import DataTable from "react-data-table-component";
 import { ArrowDownwardSharp } from "@material-ui/icons";
 
 import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
+import { qaTestSummaryCols } from "../../../utils/constants/tableColumns"
 
 const ExportTablesContainer = ({
   selectionData,
@@ -36,6 +37,8 @@ const ExportTablesContainer = ({
   const rows = qaTestSummaryData?.map((obj) => {
     const {
       id,
+      unitId,
+      stackPipeId,
       componentID,
       testNumber,
       testResultCode,
@@ -46,6 +49,8 @@ const ExportTablesContainer = ({
     } = obj;
     return {
       id,
+      unitId,
+      stackPipeId,
       componentID,
       testNumber,
       testResultCode,
@@ -62,7 +67,6 @@ const ExportTablesContainer = ({
     selectedRows,
   }) => {
     const selectedIds = selectedRows.map((row) => row.id);
-
     setExportState(
       selectedConfig.id,
       {
@@ -103,38 +107,3 @@ const ExportTablesContainer = ({
 };
 
 export default ExportTablesContainer;
-
-const qaTestSummaryCols = [
-  {
-    name: "Unit or Stack Pipe ID",
-    selector: (row) => row.unitOrStackPipeId,
-  },
-  {
-    name: "Component ID",
-    selector: (row) => row.componentID,
-  },
-  {
-    name: "Test Number",
-    selector: (row) => row.testNumber,
-  },
-  {
-    name: "Test Result Code",
-    selector: (row) => row.testResultCode,
-  },
-  {
-    name: "Begin Date",
-    selector: (row) => row.beginDate,
-  },
-  {
-    name: "Begin Hour",
-    selector: (row) => row.beginHour,
-  },
-  {
-    name: "End Date",
-    selector: (row) => row.endDate,
-  },
-  {
-    name: "End Hour",
-    selector: (row) => row.endHour,
-  },
-];
