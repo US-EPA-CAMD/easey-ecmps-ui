@@ -3,6 +3,7 @@ import ReportingPeriodSelector from "../../ReportingPeriodSelector/ReportingPeri
 import { Button, Checkbox } from "@trussworks/react-uswds";
 import ExportTablesContainer from "./ExportTablesContainer";
 import { Preloader } from "@us-epa-camd/easey-design-system";
+import { exportQA } from "../../../utils/api/qaCertificationsAPI";
 
 const ExportTab = ({
   facility,
@@ -37,7 +38,7 @@ const ExportTab = ({
     },
   ]);
   const [reportingPeriod, setReportingPeriod] = useState(null);
-  const [selectedOptions, setSelectedOptions] = useState();
+  const [previewOptions, setPreviewOptions] = useState();
   const [loading, setLoading] = useState(false);
 
   const dataTypeSelectionHanlder = (e) => {
@@ -75,9 +76,35 @@ const ExportTab = ({
     const { id, beginDate, endDate } = reportingPeriodObj;
     setReportingPeriod({ id, beginDate, endDate });
     if (exportState) {
-      setSelectedOptions({ beginDate, endDate });
+      setPreviewOptions({ beginDate, endDate });
     }
   };
+
+  const exportClickHandler = async () => {
+    console.log('export clicked')
+    // get facilityId, unitIds, stackPipeIds, begin/end date
+    console.log('facility', facility);
+    console.log('selectedConfig', selectedConfig);
+    console.log('exportState', exportState);
+
+    const selectedRows = exportState.qaTestSummaryRows.filter(row => {
+      return exportState.selectedIds.includes(row.id)
+    })
+
+    const facilityId = selectedConfig.facId
+
+    let unitIds = selectedRows.filter(row => row.unitId).map(row => row.unitId)
+    unitIds = [...new Set(unitIds)]
+
+    let stackPipeIds = selectedRows.filter(row => row.stackPipeId).map(row => row.stackPipeId)
+    stackPipeIds = [...new Set(stackPipeIds)]
+
+    const { beginDate, endDate } = previewOptions
+
+    const result = await exportQA({ facilityId, unitIds, stackPipeIds, beginDate, endDate })
+    console.log('result exportQA', result);
+  }
+
   return (
     <>
       {loading ? <Preloader /> : null}
@@ -124,7 +151,7 @@ const ExportTab = ({
                   dataTypes.find((e) => e.name === mp).checked)
               }
               onClick={() =>
-                setSelectedOptions({
+                setPreviewOptions({
                   beginDate: reportingPeriod.beginDate,
                   endDate: reportingPeriod.endDate,
                 })
@@ -134,9 +161,9 @@ const ExportTab = ({
             </Button>
           </div>
         </div>
-        {selectedOptions && (
+        {previewOptions && (
           <ExportTablesContainer
-            selectionData={selectedOptions}
+            selectionData={previewOptions}
             selectedConfig={selectedConfig}
             exportState={exportState}
             setExportState={setExportState}
@@ -149,6 +176,7 @@ const ExportTab = ({
             disabled={
               !dataTypes.find((e) => e.name === "monitoring-plan").checked
             }
+            onClick={exportClickHandler}
           >
             Export
           </Button>
