@@ -405,6 +405,7 @@ export const QACertTestSummaryHeaderInfo = ({
               setSelectedHistoricalData={setSelectedHistoricalData}
               setFileName={setFileName}
               setDisablePortBtn={setDisablePortBtn}
+              orisCode={orisCode}
             />
           }
         />

@@ -49,16 +49,6 @@ export const getReportingPeriod = async () => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const getQATestSummaryByReportingPeriod = async (
-  locId,
-  beginDate,
-  endDate
-) => {
-  const url = `${config.services.qaCertification.uri}/locations/${locId}/test-summary?beginDate=${beginDate}&endDate=${endDate}`;
-  console.log("url", url);
-  return axios.get(url).then(handleResponse).catch(handleError);
-};
-
 export const importQA = async (payload) => {
   const url = `${config.services.qaCertification.uri}/workspace/import/`;
   try {
@@ -74,16 +64,27 @@ export const importQA = async (payload) => {
   }
 };
 
-export const exportQA = async ({ orisCode, unitIds, stackPipeIds, beginDate, endDate }) => {
-  let url = `${config.services.qaCertification.uri}/export`;
-  url = `${url}?facilityId=${orisCode}&beginDate=${beginDate}&endDate=${endDate}`
-  if (unitIds.length > 0) {
+export const exportQA = async (facilityId, unitIds, stackPipeIds, beginDate, endDate) => {
+  let url = `${config.services.qaCertification.uri}/export?facilityId=${facilityId}`;
+  if (unitIds?.length > 0) {
     const unitIdsQueryParam = unitIds.join('|')
     url = `${url}&unitIds=${unitIdsQueryParam}`
   }
-  if (stackPipeIds.length > 0) {
+  if (stackPipeIds?.length > 0) {
     const stackPipeIdsQueryParam = stackPipeIds.join('|')
     url = `${url}&stackPipeIds=${stackPipeIdsQueryParam}`
   }
-  return axios.get(url).then(handleResponse).catch(handleError);
+  if (beginDate && endDate) {
+    url = `${url}&beginDate=${beginDate}&endDate=${endDate}`;
+  }
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "GET",
+        url: url,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
 }
