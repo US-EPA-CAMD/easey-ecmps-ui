@@ -8,6 +8,8 @@ import ExportTablesContainer from "./ExportTablesContainer";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { exportQA } from "../../../utils/api/qaCertificationsAPI";
 import { getUnitIdAndStackPipeIds } from "../../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
+import { getMonitoringPlanById } from "../../../utils/api/monitoringPlansApi";
+import { getFacilityById } from "../../../utils/api/facilityApi";
 
 const ExportTab = ({
   facility,
@@ -86,23 +88,25 @@ const ExportTab = ({
   };
 
   const exportClickHandler = async () => {
-    const { beginDate, endDate } = reportingPeriod;
-    const exportFileName = `Export - ${facility}.json`;
-    // export if preview not clicked
-    if (!exportState.qaTestSummaryRows) {
-      const { unitIds, stackPipeIds } = getUnitIdAndStackPipeIds(
-        selectedConfig.locations
-      );
-      const response = await exportQA(
-        orisCode,
-        unitIds,
-        stackPipeIds,
-        beginDate,
-        endDate
-      );
-      download(JSON.stringify(response.data, null, "\t"), exportFileName);
+    let exportFileName
+    // export monitoring plan
+    if (dataTypes.find((e) => e.name === "monitoring-plan").checked) {
+      const mpRes = await getMonitoringPlanById(selectedConfig.id)
+      const facId = mpRes.data["facId"];
+      const mpName = mpRes.data["name"];
+      const date = new Date();
+      const year = date.getUTCFullYear();
+      const month = date.getUTCMonth() + 1;
+      const day = date.getUTCDate();
+      const fullDateString = `${month}-${day}-${year}`;
+      const facRes = await getFacilityById(facId)
+      const facName = facRes.data["facilityName"];
+      exportFileName = `MP Export - ${facName}, ${mpName} (${fullDateString}).json`;
+      download(JSON.stringify(mpRes.data, null, "\t"), exportFileName);
+      return;
     }
     // export if preview was clicked
+    exportFileName = `Export - ${facility}.json`;
     const exportJson = exportState.qaTestSummaryRows;
     download(JSON.stringify(exportJson, null, "\t"), exportFileName);
   };
