@@ -17,7 +17,6 @@ import UploadModal from "../UploadModal/UploadModal";
 import {
   attachChangeEventListeners,
   removeChangeEventListeners,
-
   unsavedDataMessage,
 } from "../../additional-functions/prompt-to-save-unsaved-changes";
 import download from "downloadjs";
@@ -104,20 +103,16 @@ export const HeaderInfo = ({
   const [hasInvalidJsonError, setHasInvalidJsonError] = useState(false);
   const [importApiErrors, setImportApiErrors] = useState([]);
 
-
-  
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
-    if(showCommentsModal){
-        returnFocusToLast();
+    if (showCommentsModal) {
+      returnFocusToLast();
       assignFocusEventListeners();
-    }else{
+    } else {
       returnFocusToCommentButton();
     }
-    
-    
   }, [showCommentsModal]);
 
   // *** Reassign handlers after pop-up modal is closed
@@ -818,7 +813,11 @@ export const HeaderInfo = ({
                         checked={inactive[0]}
                         disabled={inactive[1]}
                         onChange={() =>
-                          setInactive([!inactive[0], inactive[1]], facility,MONITORING_PLAN_STORE_NAME)
+                          setInactive(
+                            [!inactive[0], inactive[1]],
+                            facility,
+                            MONITORING_PLAN_STORE_NAME
+                          )
                         }
                       />
                     </div>
@@ -896,6 +895,7 @@ export const HeaderInfo = ({
           importApiErrors={importApiErrors}
           importedFileErrorMsgs={importedFileErrorMsgs}
           setUpdateRelatedTables={setUpdateRelatedTables}
+          successMsg={"Monitoring Plan has been Successfully Imported."}
           children={
             <ImportModal
               setDisablePortBtn={setDisablePortBtn}

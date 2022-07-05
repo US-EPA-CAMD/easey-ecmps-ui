@@ -93,9 +93,7 @@ const ModalDetails = ({
         ) : (
           <FormGroup className="margin-top-0">
             <h3 className="text-bold margin-bottom-0 usa-label">{value[1]}</h3>
-            <div
-              id={`${value[4] !== "skip" ? value[1] : ""}`}
-            >
+            <div id={`${value[4] !== "skip" ? value[1] : ""}`}>
               {value[2]
                 ? value[4] === "radio"
                   ? value[2] === "0"

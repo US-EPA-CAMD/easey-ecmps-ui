@@ -37,7 +37,7 @@ export const QACertTestSummaryTab = ({
   }, [sectionSelect]);
 
   useEffect(() => {
-    console.log('tabs',tabs)
+    console.log("tabs", tabs);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

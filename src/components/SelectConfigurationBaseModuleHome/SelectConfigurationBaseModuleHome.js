@@ -54,7 +54,6 @@ export const SelectConfigurationBaseModuleHome = ({
     ];
     // uses Redux to put the saved Tabs back in the UI if the user leaves the page
     switch (workspaceSection) {
-      
       case QA_CERT_TEST_SUMMARY_STORE_NAME:
         for (const row of openedFacilityTabs) {
           tabArr.push({

@@ -31,10 +31,9 @@ export const SelectFacilitiesDataTable = ({
     setMostRecentlyCheckedInMonitorPlanId,
   ] = useState("");
 
-  useEffect(()=>{
-
-    console.log(workspaceSection,'workspace')
-  },[])
+  useEffect(() => {
+    console.log(workspaceSection, "workspace");
+  }, []);
   useEffect(() => {
     facilitiesApi.getAllFacilities().then((res) => {
       setDataLoaded(true);

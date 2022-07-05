@@ -6,7 +6,7 @@ export const DropdownSelection = ({
   viewKey, // the key in the object property to display in dropdown
   options, // array of objects with at least 2 properties
   selectionHandler, // needs to setState with [0] for the index, to change dropdown
-  initialSelection, // needs useState to change the dropdown 
+  initialSelection, // needs useState to change the dropdown
   workspaceSection,
 }) => {
   const getIndex = (val) => {

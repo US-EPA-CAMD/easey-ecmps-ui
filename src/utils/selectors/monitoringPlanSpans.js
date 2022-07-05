@@ -5,9 +5,10 @@ export const getMonitoringPlansSpansTableRecords = (totalData) => {
     const beginDate = el.beginDate
       ? formatStringToDate(el.beginDate.toString())
       : "";
-    const beginHour = el.beginHour!== null ? el.beginHour.toString() : "";
-    const endDate = el.endDate!== null ? formatStringToDate(el.endDate.toString()) : "";
-    const endHour = el.endHour!== null ? el.endHour.toString() : "";
+    const beginHour = el.beginHour !== null ? el.beginHour.toString() : "";
+    const endDate =
+      el.endDate !== null ? formatStringToDate(el.endDate.toString()) : "";
+    const endHour = el.endHour !== null ? el.endHour.toString() : "";
     records.push({
       col1: el.componentTypeCode,
       col2: el.spanScaleCode,

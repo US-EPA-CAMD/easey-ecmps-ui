@@ -406,7 +406,7 @@ describe("checking false conditions", () => {
     monitoringPlans: [],
   };
   const monitoringPlans = [];
-  it("passing in no action.type for default case",  async () => {
+  it("passing in no action.type for default case", async () => {
     const newState = monitoringPlansReducer(initialState.monitoringPlans, {
       type: "",
     });
