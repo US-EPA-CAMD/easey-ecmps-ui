@@ -74,9 +74,9 @@ export const importQA = async (payload) => {
   }
 };
 
-export const exportQA = async ({ facilityId, unitIds, stackPipeIds, beginDate, endDate }) => {
+export const exportQA = async ({ orisCode, unitIds, stackPipeIds, beginDate, endDate }) => {
   let url = `${config.services.qaCertification.uri}/export`;
-  url = `${url}?facilityId=${facilityId}&beginDate=${beginDate}&endDate=${endDate}`
+  url = `${url}?facilityId=${orisCode}&beginDate=${beginDate}&endDate=${endDate}`
   if (unitIds.length > 0) {
     const unitIdsQueryParam = unitIds.join('|')
     url = `${url}&unitIds=${unitIdsQueryParam}`
