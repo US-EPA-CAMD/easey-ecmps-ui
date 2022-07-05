@@ -145,7 +145,9 @@ const ExportTab = ({
         <div className="border-top-1px border-base-lighter padding-y-2">
           <Button
             className="float-right margin-top-3"
-            disabled={!dataTypes.find((e) => e.name === "monitoring-plan").checked}
+            disabled={
+              !dataTypes.find((e) => e.name === "monitoring-plan").checked
+            }
           >
             Export
           </Button>

@@ -19,7 +19,7 @@ export const getQATestSummary = async (locID, beginDate, endDate) => {
 
   // *** attach query params
   if (beginDate && endDate) {
-    url = `${url}?beginDate=${beginDate}&endDate=${endDate}`
+    url = `${url}?beginDate=${beginDate}&endDate=${endDate}`;
   }
 
   return axios.get(url).then(handleResponse).catch(handleError);

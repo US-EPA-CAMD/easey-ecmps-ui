@@ -5,7 +5,7 @@ import DataTable from "react-data-table-component";
 import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { ArrowDownwardSharp } from "@material-ui/icons";
-import { qaTestSummaryCols as columns } from '../../utils/constants/tableColumns';
+import { qaTestSummaryCols as columns } from "../../utils/constants/tableColumns";
 
 const QAImportHistoricalDataPreview = ({
   locations,
@@ -56,7 +56,7 @@ const QAImportHistoricalDataPreview = ({
     if (previewData) {
       setPreviewData(false);
     }
-  }
+  };
 
   const handleHistoricalDataSelection = (state) => {
     console.log("SelectedHistoricalData", state.selectedRows);
