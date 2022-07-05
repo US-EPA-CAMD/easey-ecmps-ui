@@ -26,6 +26,7 @@ export const Modal = ({
   breadCrumbBar,
   extraBtn,
   extraBtnText,
+  disableExitBtn,
 }) => {
   const modalRef = createRef();
   useEffect(() => {
@@ -115,6 +116,7 @@ export const Modal = ({
                       id="saveBtn"
                       data-testid="saveBtn"
                       className="margin-right-2"
+                      disabled={disableExitBtn}
                     >
                       {exitBTN ? exitBTN : "Save and Go Back"}
 

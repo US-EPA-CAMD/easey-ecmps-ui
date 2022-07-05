@@ -1,5 +1,5 @@
 import axios from "axios";
-import { handleResponse, handleError,handleImportError } from "./apiUtils";
+import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
 axios.defaults.headers.common = {
@@ -44,12 +44,16 @@ export const getQASchema = async () => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const getReportingPeriod = async () =>{
+export const getReportingPeriod = async () => {
   const url = `${config.services.mdm.uri}/reporting-periods`;
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const getQATestSummaryByReportingPeriod = async (locId, beginDate, endDate) =>{
+export const getQATestSummaryByReportingPeriod = async (
+  locId,
+  beginDate,
+  endDate
+) => {
   const url = `${config.services.qaCertification.uri}/locations/${locId}/test-summary?beginDate=${beginDate}&endDate=${endDate}`;
   console.log("url", url);
   return axios.get(url).then(handleResponse).catch(handleError);

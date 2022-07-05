@@ -236,8 +236,6 @@ export const Tabs = ({
   );
 };
 
-
-
 const mapDispatchToProps = (dispatch) => {
   return {
     setCheckout: (value, configID, workspaceSection) =>

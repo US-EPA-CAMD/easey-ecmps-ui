@@ -14,32 +14,29 @@ const ExportTab = ({
 }) => {
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
+
+  const mp = "monitoring-plan";
+  const qa = "qa-and-certification";
+  const em = "emissions";
+
   const [dataTypes, setDataTypes] = useState([
     {
       label: "Monitoring Plan",
-      name: "monitoring-plan",
-      checked: exportState
-        ? exportState.checkedDataTypes.includes("monitoring-plan")
-        : false,
+      name: mp,
+      checked: exportState ? exportState.checkedDataTypes.includes(mp) : false,
     },
     {
       label: "QA & Certification",
-      name: "qa-and-certification",
-      checked: exportState
-        ? exportState.checkedDataTypes.includes("qa-and-certification")
-        : false,
+      name: qa,
+      checked: exportState ? exportState.checkedDataTypes.includes(qa) : false,
     },
     {
       label: "Emissions",
-      name: "emissions",
-      checked: exportState
-        ? exportState.checkedDataTypes.includes("emissions")
-        : false,
+      name: em,
+      checked: exportState ? exportState.checkedDataTypes.includes(em) : false,
     },
   ]);
-
-  const [reportingPeriod, setReportingPeriod] = useState(null);
-  const [selectedOptions, setSelectedOptions] = useState();
+  const [reportingPeriodId, setReportingPeriodId] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const dataTypeSelectionHanlder = (e) => {
@@ -53,9 +50,9 @@ const ExportTab = ({
       selectedConfig.id,
       {
         checkedDataTypes: dataTypesCopy
-          .filter((e) => e.checked)
+          .filter((f) => f.checked)
           .map((e) => e.name),
-        reportingPeriodId: reportingPeriod.id,
+        reportingPeriodId: reportingPeriodId,
       },
       workspaceSection
     );
@@ -123,7 +120,7 @@ const ExportTab = ({
               disabled={
                 dataTypes.filter((e) => e.checked).length === 0 ||
                 (dataTypes.filter((e) => e.checked).length === 1 &&
-                  dataTypes.find((e) => e.name === "monitoring-plan").checked)
+                  dataTypes.find((e) => e.name === mp).checked)
               }
               onClick={() =>
                 setSelectedOptions({

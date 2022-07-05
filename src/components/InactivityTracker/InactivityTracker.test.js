@@ -105,7 +105,7 @@
 // import { logOut } from "../../utils/api/easeyAuthApi";
 // import { checkoutAPI } from "../../additional-functions/checkout";
 import React from "react";
-import { render,fireEvent } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import {
   InactivityTracker,
   mapStateToProps,
@@ -159,10 +159,9 @@ describe("InactivityTracker", () => {
     );
     jest.advanceTimersByTime(3000);
 
-    
     const clickDiv = container.querySelector("div");
-    console.log('div',clickDiv);
-    fireEvent.click(clickDiv)
+    console.log("div", clickDiv);
+    fireEvent.click(clickDiv);
     expect(container).not.toBeUndefined();
   });
 

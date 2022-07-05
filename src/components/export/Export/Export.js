@@ -15,15 +15,17 @@ export const Export = ({
   title,
   workspaceSection,
   exportTab,
-  setExportState
+  setExportState,
 }) => {
-  const getExportState = () =>{
-    const currentTabObj = exportTab.find(e=>e.selectedConfig.id === selectedConfig.id);
-    if(currentTabObj && currentTabObj.hasOwnProperty('exportState')){
+  const getExportState = () => {
+    const currentTabObj = exportTab.find(
+      (e) => e.selectedConfig.id === selectedConfig.id
+    );
+    if (currentTabObj && currentTabObj.hasOwnProperty("exportState")) {
       return currentTabObj.exportState;
-    }else{
+    } else {
       return null;
-    }  
+    }
   };
 
   return (
@@ -61,18 +63,9 @@ const mapDispatchToProps = (dispatch) => {
         )
       ),
     setExportState: (configId, exportState, workspaceSection) =>
-      dispatch(
-        setExportState(
-          configId,
-          exportState,
-          workspaceSection
-        )
-      ),
+      dispatch(setExportState(configId, exportState, workspaceSection)),
   };
 };
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Export);
+export default connect(mapStateToProps, mapDispatchToProps)(Export);
 export { mapStateToProps };
 export { mapDispatchToProps };

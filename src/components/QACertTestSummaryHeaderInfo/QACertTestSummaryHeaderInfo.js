@@ -4,7 +4,6 @@ import { Button } from "@trussworks/react-uswds";
 import "./QACertTestSummaryHeaderInfo.scss";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 
-import * as qaApi from "../../utils/api/qaCertificationsAPI";
 import NotFound from "../NotFound/NotFound";
 import { QA_CERT_TEST_SUMMARY_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 import { Preloader } from "@us-epa-camd/easey-design-system";
@@ -24,6 +23,7 @@ import UploadModal from "../UploadModal/UploadModal";
 import QAImportModalSelect from "./QAImportModalSelect/QAImportModalSelect";
 import QAImportHistoricalDataPreview from "../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
 import Modal from "../Modal/Modal";
+import { importQA } from "../../utils/api/qaCertificationsAPI";
 
 export const QACertTestSummaryHeaderInfo = ({
   facility,
@@ -81,6 +81,8 @@ export const QACertTestSummaryHeaderInfo = ({
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
 
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
+  const [selectedHistoricalData, setSelectedHistoricalData] = useState([]);
+
   // *** Reassign handlers after pop-up modal is closed
   useEffect(() => {
     if (!returnedFocusToLast) {
@@ -163,7 +165,7 @@ export const QACertTestSummaryHeaderInfo = ({
   };
 
   const importQABtn = (payload) => {
-    qaApi.importQA(payload).then((response) => {
+    importQA(payload).then((response) => {
       setUsePortBtn(true);
       setIsLoading(true);
       if (response) {
@@ -171,6 +173,17 @@ export const QACertTestSummaryHeaderInfo = ({
       }
     });
   };
+
+  const importHistoricalData = () => {
+    const payload = {
+      orisCode: orisCode,
+      testSummaryData: selectedHistoricalData,
+    };
+    console.log(payload);
+    importQABtn(payload);
+    setShowImportDataPreview(false);
+  };
+
   return (
     <div className="header QACertHeader ">
       {dataLoaded ? (
@@ -265,8 +278,14 @@ export const QACertTestSummaryHeaderInfo = ({
       )}
 
       <div
-        className={`usa-overlay ${showImportModal || showSelectionTypeImportModal ? "is-visible" : ""
-          }`}
+        className={`usa-overlay ${
+          showImportModal ||
+          showSelectionTypeImportModal ||
+          showImportDataPreview ||
+          isLoading
+            ? "is-visible"
+            : ""
+        }`}
       />
 
       {/* // selects either historical data or file data */}
@@ -354,6 +373,7 @@ export const QACertTestSummaryHeaderInfo = ({
           complete={true}
           importedFileErrorMsgs={importedFileErrorMsgs}
           setUpdateRelatedTables={setUpdateRelatedTables}
+          successMsg={"QA Certification has been Successfully Imported."}
           children={
             <ImportModal
               setDisablePortBtn={setDisablePortBtn}
@@ -364,21 +384,27 @@ export const QACertTestSummaryHeaderInfo = ({
             />
           }
         />
-      ) : 
-        ""}
+      ) : (
+        ""
+      )}
       {showImportDataPreview && (
         <Modal
           show={showImportDataPreview}
           close={() => setShowImportDataPreview(false)}
-          showSave={false}
-          showCancel={true}
+          showSave={true}
           exitBTN={"Import"}
           title="Import Historical Data"
-          //port ={}
+          disableExitBtn={disablePortBtn}
+          save={() => {
+            importHistoricalData();
+          }}
           children={
             <QAImportHistoricalDataPreview
               locations={locations}
               workspaceSection={{ QA_CERT_TEST_SUMMARY_STORE_NAME }}
+              setSelectedHistoricalData={setSelectedHistoricalData}
+              setFileName={setFileName}
+              setDisablePortBtn={setDisablePortBtn}
             />
           }
         />

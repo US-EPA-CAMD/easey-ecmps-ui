@@ -35,11 +35,12 @@ export const UploadModal = ({
   // setImportedFileErrorMsgs,
   // fileName,
   notUploadVersion,
-  setUpdateRelatedTables
+  setUpdateRelatedTables,
+  successMsg,
 }) => {
   const hasErrors = importedFileErrorMsgs && importedFileErrorMsgs.length > 0;
   const milisecondsToLoad = 4000;
-
+  // Monitoring Plan has been Successfully Imported.
   const onLoadEffect = () => {
     if (timer) {
       setTimeout(() => {
@@ -211,7 +212,7 @@ export const UploadModal = ({
                                 heading="Success"
                                 role="success"
                               >
-                                Monitoring Plan has been Successfully Imported.
+                                {successMsg}
                               </Alert>
                             </div>
                           )}
@@ -250,7 +251,7 @@ export const UploadModal = ({
                       {complete ? (
                         <Button
                           type="button"
-                          onClick={()=>{
+                          onClick={() => {
                             close();
                             setUpdateRelatedTables(true);
                           }}
@@ -275,7 +276,7 @@ export const UploadModal = ({
                           className="margin-right-2"
                           disabled={disablePortBtn}
                         >
-                          {mainBTN? mainBTN: 'Import'}
+                          {mainBTN ? mainBTN : "Import"}
                         </Button>
                       )}
 
