@@ -36,7 +36,8 @@ const ExportTab = ({
       checked: exportState ? exportState.checkedDataTypes.includes(em) : false,
     },
   ]);
-  const [reportingPeriodId, setReportingPeriodId] = useState(null);
+  const [reportingPeriod, setReportingPeriod] = useState(null);
+  const [selectedOptions, setSelectedOptions] = useState();
   const [loading, setLoading] = useState(false);
 
   const dataTypeSelectionHanlder = (e) => {
@@ -52,7 +53,7 @@ const ExportTab = ({
         checkedDataTypes: dataTypesCopy
           .filter((f) => f.checked)
           .map((e) => e.name),
-        reportingPeriodId: reportingPeriodId,
+        reportingPeriodId: reportingPeriod.id,
       },
       workspaceSection
     );
