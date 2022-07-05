@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ReportingPeriodSelector from "../../ReportingPeriodSelector/ReportingPeriodSelector";
-import { Checkbox, Button } from "@trussworks/react-uswds";
+import { Button, Checkbox } from "@trussworks/react-uswds";
+import ExportTablesContainer from "./ExportTablesContainer";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 
 const ExportTab = ({
@@ -35,7 +36,8 @@ const ExportTab = ({
       checked: exportState ? exportState.checkedDataTypes.includes(em) : false,
     },
   ]);
-  const [reportingPeriodId, setReportingPeriodId] = useState(null);
+  const [reportingPeriod, setReportingPeriod] = useState(null);
+  const [selectedOptions, setSelectedOptions] = useState();
   const [loading, setLoading] = useState(false);
 
   const dataTypeSelectionHanlder = (e) => {
@@ -51,13 +53,15 @@ const ExportTab = ({
         checkedDataTypes: dataTypesCopy
           .filter((f) => f.checked)
           .map((e) => e.name),
-        reportingPeriodId: reportingPeriodId,
+        reportingPeriodId: reportingPeriod.id,
       },
       workspaceSection
     );
   };
+
   const reportingPeroidSelectionHandler = (selectedObj) => {
-    setReportingPeriodId(selectedObj.id);
+    const { id, beginDate, endDate } = selectedObj;
+    setReportingPeriod({ id, beginDate, endDate });
     setExportState(
       selectedConfig.id,
       {
@@ -67,19 +71,28 @@ const ExportTab = ({
       workspaceSection
     );
   };
+  const getInitSelection = (reportingPeriodObj) => {
+    const { id, beginDate, endDate } = reportingPeriodObj;
+    setReportingPeriod({ id, beginDate, endDate });
+    if (exportState) {
+      setSelectedOptions({ beginDate, endDate });
+    }
+  };
   return (
     <>
       {loading ? <Preloader /> : null}
       <div className="margin-x-3 grid-container">
-        <div className="grid-row">
-          <h3 className="display-inline-block">
-            <span className="font-body-lg">{facilityMainName}</span>
-          </h3>{" "}
+        <div className="border-bottom-1px border-base-lighter padding-bottom-2">
+          <div className="grid-row">
+            <h3 className="display-inline-block">
+              <span className="font-body-lg">{facilityMainName}</span>
+            </h3>{" "}
+          </div>
+          <div className=" grid-row text-bold font-body-xl display-block">
+            {facilityAdditionalName}
+          </div>
         </div>
-        <div className=" grid-row text-bold font-body-xl display-block">
-          {facilityAdditionalName}
-        </div>
-        <div className="grid-row margin-top-3">
+        <div className="grid-row margin-y-3">
           <div className="grid-col-3">
             {dataTypes.map((d, i) => (
               <Checkbox
@@ -99,7 +112,7 @@ const ExportTab = ({
               reportingPeroidSelectionHandler={reportingPeroidSelectionHandler}
               exportState={exportState}
               setLoading={setLoading}
-              getInitSelection={() => null}
+              getInitSelection={getInitSelection}
             />
           </div>
           <div className="grid-col-3 padding-left-8 padding-top-3">
@@ -110,10 +123,35 @@ const ExportTab = ({
                 (dataTypes.filter((e) => e.checked).length === 1 &&
                   dataTypes.find((e) => e.name === mp).checked)
               }
+              onClick={() =>
+                setSelectedOptions({
+                  beginDate: reportingPeriod.beginDate,
+                  endDate: reportingPeriod.endDate,
+                })
+              }
             >
               Preview
             </Button>
           </div>
+        </div>
+        {selectedOptions && (
+          <ExportTablesContainer
+            selectionData={selectedOptions}
+            selectedConfig={selectedConfig}
+            exportState={exportState}
+            setExportState={setExportState}
+            workspaceSection={workspaceSection}
+          />
+        )}
+        <div className="border-top-1px border-base-lighter padding-y-2">
+          <Button
+            className="float-right margin-top-3"
+            disabled={
+              !dataTypes.find((e) => e.name === "monitoring-plan").checked
+            }
+          >
+            Export
+          </Button>
         </div>
       </div>
     </>
