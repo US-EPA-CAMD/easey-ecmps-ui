@@ -3,8 +3,12 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { ArrowDownwardSharp } from "@material-ui/icons";
 
-import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
-import { qaTestSummaryCols } from "../../../utils/constants/tableColumns"
+import {
+  exportQA,
+  getQATestSummary,
+} from "../../../utils/api/qaCertificationsAPI";
+import { getUnitIdAndStackPipeIds } from "../../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
+import { qaTestSummaryCols } from "../../../utils/constants/tableColumns";
 
 const ExportTablesContainer = ({
   selectionData,
@@ -12,54 +16,40 @@ const ExportTablesContainer = ({
   exportState,
   setExportState,
   workspaceSection,
+  orisCode,
 }) => {
-  const { beginDate: beginDateOption, endDate: endDateOption } = selectionData;
+  const { beginDate, endDate } = selectionData;
   const { locations } = selectedConfig;
   const [qaTestSummaryData, setQATestSummaryData] = useState(
     exportState.qaTestSummaryRows
   );
+  const [loading, setLoading] = useState(false);
+  const fetchQATestSummary = async () => {
+    setLoading(true);
+    const unitIdsAndStackPipeIds = getUnitIdAndStackPipeIds(locations);
+    try {
+      const unitIds = unitIdsAndStackPipeIds.unitIds;
+      const stackPipeIds = unitIdsAndStackPipeIds.stackPipeIds;
+      const response = await exportQA({
+        orisCode,
+        unitIds,
+        stackPipeIds,
+        beginDate,
+        endDate,
+      });
+      if (response) {
+        console.log("response", response.data);
+        setQATestSummaryData(response.data.testSummaryData);
+        setLoading(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
-    const fetchQATestSummary = async () => {
-      const allPromises = [];
-      locations.forEach((e) => {
-        allPromises.push(
-          getQATestSummary(e.id, beginDateOption, endDateOption)
-        );
-      });
-      Promise.all(allPromises).then((res) => {
-        setQATestSummaryData(res.map((e) => e.data).flat());
-      });
-    };
     fetchQATestSummary();
-  }, [beginDateOption, endDateOption]);
-
-  const rows = qaTestSummaryData?.map((obj) => {
-    const {
-      id,
-      unitId,
-      stackPipeId,
-      componentID,
-      testNumber,
-      testResultCode,
-      beginDate,
-      beginHour,
-      endDate,
-      endHour,
-    } = obj;
-    return {
-      id,
-      unitId,
-      stackPipeId,
-      componentID,
-      testNumber,
-      testResultCode,
-      beginDate,
-      beginHour,
-      endDate,
-      endHour,
-    };
-  });
+  }, [beginDate, endDate]);
 
   const onSelectRowsHandler = ({
     _allSelected,
@@ -67,12 +57,13 @@ const ExportTablesContainer = ({
     selectedRows,
   }) => {
     const selectedIds = selectedRows.map((row) => row.id);
+
     setExportState(
       selectedConfig.id,
       {
         ...exportState,
         selectedIds,
-        qaTestSummaryRows: rows,
+        qaTestSummaryRows: qaTestSummaryData,
       },
       workspaceSection
     );
@@ -93,7 +84,7 @@ const ExportTablesContainer = ({
         highlightOnHover={true}
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
         columns={qaTestSummaryCols}
-        data={rows}
+        data={qaTestSummaryData}
         selectableRows
         onSelectedRowsChange={onSelectRowsHandler}
         selectableRowSelected={selectableRowSelectedHandler}
@@ -101,9 +92,12 @@ const ExportTablesContainer = ({
     </div>
   );
 
-  const tableContent = qaTestSummaryData ? dataTable : <Preloader />;
-
-  return <>{tableContent}</>;
+  return (
+    <>
+      {loading && <Preloader />}
+      {!loading && dataTable}
+    </>
+  );
 };
 
 export default ExportTablesContainer;
