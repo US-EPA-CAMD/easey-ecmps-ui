@@ -64,15 +64,21 @@ export const importQA = async (payload) => {
   }
 };
 
-export const exportQA = async (facilityId, unitIds, stackPipeIds, beginDate, endDate) => {
+export const exportQA = async (
+  facilityId,
+  unitIds,
+  stackPipeIds,
+  beginDate,
+  endDate
+) => {
   let url = `${config.services.qaCertification.uri}/export?facilityId=${facilityId}`;
   if (unitIds?.length > 0) {
-    const unitIdsQueryParam = unitIds.join('|')
-    url = `${url}&unitIds=${unitIdsQueryParam}`
+    const unitIdsQueryParam = unitIds.join("|");
+    url = `${url}&unitIds=${unitIdsQueryParam}`;
   }
   if (stackPipeIds?.length > 0) {
-    const stackPipeIdsQueryParam = stackPipeIds.join('|')
-    url = `${url}&stackPipeIds=${stackPipeIdsQueryParam}`
+    const stackPipeIdsQueryParam = stackPipeIds.join("|");
+    url = `${url}&stackPipeIds=${stackPipeIdsQueryParam}`;
   }
   if (beginDate && endDate) {
     url = `${url}&beginDate=${beginDate}&endDate=${endDate}`;
@@ -87,4 +93,4 @@ export const exportQA = async (facilityId, unitIds, stackPipeIds, beginDate, end
   } catch (error) {
     return handleError(error);
   }
-}
+};

@@ -30,7 +30,7 @@ const ExportTablesContainer = ({
         unitIds,
         stackPipeIds,
         beginDate,
-        endDate,
+        endDate
       );
       if (response) {
         setQATestSummaryData(response.data.testSummaryData);

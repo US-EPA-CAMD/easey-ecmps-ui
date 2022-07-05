@@ -9,7 +9,6 @@ import { Preloader } from "@us-epa-camd/easey-design-system";
 import { exportQA } from "../../../utils/api/qaCertificationsAPI";
 import { getUnitIdAndStackPipeIds } from "../../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
 
-
 const ExportTab = ({
   facility,
   selectedConfig,
@@ -87,30 +86,34 @@ const ExportTab = ({
   };
 
   const exportClickHandler = async () => {
-    const { beginDate, endDate } = reportingPeriod
-    const exportFileName = `Export - ${facility}.json`
+    const { beginDate, endDate } = reportingPeriod;
+    const exportFileName = `Export - ${facility}.json`;
     // export if preview not clicked
     if (!exportState.qaTestSummaryRows) {
-      const { unitIds, stackPipeIds } = getUnitIdAndStackPipeIds(selectedConfig.locations);
+      const { unitIds, stackPipeIds } = getUnitIdAndStackPipeIds(
+        selectedConfig.locations
+      );
       const response = await exportQA(
         orisCode,
         unitIds,
         stackPipeIds,
         beginDate,
-        endDate,
+        endDate
       );
       download(JSON.stringify(response.data, null, "\t"), exportFileName);
     }
     // export if preview was clicked
-    const exportJson = exportState.qaTestSummaryRows
+    const exportJson = exportState.qaTestSummaryRows;
     download(JSON.stringify(exportJson, null, "\t"), exportFileName);
-  }
+  };
 
   const isExportDisabled = () => {
-    const isMonitoringPlanChecked = dataTypes.find((e) => e.name === "monitoring-plan").checked
-    const rowHasSelected = exportState?.selectedIds?.length > 0
-    return !isMonitoringPlanChecked && !rowHasSelected
-  }
+    const isMonitoringPlanChecked = dataTypes.find(
+      (e) => e.name === "monitoring-plan"
+    ).checked;
+    const rowHasSelected = exportState?.selectedIds?.length > 0;
+    return !isMonitoringPlanChecked && !rowHasSelected;
+  };
 
   return (
     <>
