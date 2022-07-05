@@ -4,7 +4,6 @@ import DataTable from "react-data-table-component";
 import { ArrowDownwardSharp } from "@material-ui/icons";
 
 import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
-import { Button } from "@trussworks/react-uswds";
 
 const ExportTablesContainer = ({
   selectionData,
@@ -37,7 +36,7 @@ const ExportTablesContainer = ({
   const rows = qaTestSummaryData?.map((obj) => {
     const {
       id,
-      componentID: componentId,
+      componentID,
       testNumber,
       testResultCode,
       beginDate,
@@ -47,7 +46,7 @@ const ExportTablesContainer = ({
     } = obj;
     return {
       id,
-      componentId,
+      componentID,
       testNumber,
       testResultCode,
       beginDate,
@@ -112,7 +111,7 @@ const qaTestSummaryCols = [
   },
   {
     name: "Component ID",
-    selector: (row) => row.componentId,
+    selector: (row) => row.componentID,
   },
   {
     name: "Test Number",
@@ -137,18 +136,5 @@ const qaTestSummaryCols = [
   {
     name: "End Hour",
     selector: (row) => row.endHour,
-  },
-];
-
-const data = [
-  {
-    id: 1,
-    title: "Beetlejuice",
-    year: "1988",
-  },
-  {
-    id: 2,
-    title: "Ghostbusters",
-    year: "1984",
   },
 ];
