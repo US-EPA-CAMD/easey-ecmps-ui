@@ -91,8 +91,6 @@ const ExportTab = ({
       return exportState.selectedIds.includes(row.id)
     })
 
-    const facilityId = selectedConfig.facId
-
     let unitIds = selectedRows.filter(row => row.unitId).map(row => row.unitId)
     unitIds = [...new Set(unitIds)]
 
@@ -101,7 +99,7 @@ const ExportTab = ({
 
     const { beginDate, endDate } = previewOptions
 
-    const result = await exportQA({ facilityId, unitIds, stackPipeIds, beginDate, endDate })
+    const result = await exportQA({ orisCode, unitIds, stackPipeIds, beginDate, endDate })
     console.log('result exportQA', result);
   }
 
