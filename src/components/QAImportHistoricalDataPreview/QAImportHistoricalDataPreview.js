@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReportingPeriodSelector from "../ReportingPeriodSelector/ReportingPeriodSelector";
-import { getQATestSummaryByReportingPeriod } from "../../utils/api/qaCertificationsAPI";
+import { exportQA } from "../../utils/api/qaCertificationsAPI";
 import DataTable from "react-data-table-component";
 import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
@@ -12,31 +12,51 @@ const QAImportHistoricalDataPreview = ({
   setSelectedHistoricalData,
   setFileName,
   setDisablePortBtn,
+  orisCode,
 }) => {
   const [reportingPeriodObj, setReportingPeriodObj] = useState(null);
   const [testSummaryData, setTestSummaryData] = useState(null);
   const [previewData, setPreviewData] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const fetchDataPreviewRecords = () => {
+  const getUnitIdAndStackPipeIds = (locs) => {
+    const unitIds = [];
+    const stackPipeIds = [];
+    locs.forEach((e) => {
+      if (e.type === "stack") {
+        stackPipeIds.push(e.stackPipeId);
+      }
+      if (e.type === "unit") {
+        unitIds.push(e.unitId);
+      }
+    });
+    return {
+      unitIds,
+      stackPipeIds,
+    };
+  };
+
+  const fetchDataPreviewRecords = async () => {
     if (reportingPeriodObj && !previewData) {
-      const allPromises = [];
       setLoading(true);
-      locations.forEach((e) => {
-        allPromises.push(
-          getQATestSummaryByReportingPeriod(
-            e.id,
-            reportingPeriodObj.beginDate,
-            reportingPeriodObj.endDate
-          )
+      const unitIdsAndStackPipeIds = getUnitIdAndStackPipeIds(locations);
+      try {
+        const response = await exportQA(
+          orisCode,
+          unitIdsAndStackPipeIds.unitIds,
+          unitIdsAndStackPipeIds.stackPipeIds,
+          reportingPeriodObj.beginDate,
+          reportingPeriodObj.endDate
         );
-      });
-      Promise.all(allPromises).then((res) => {
-        console.log("res", res);
-        setTestSummaryData(res.map((e) => e.data).flat());
-        setPreviewData(true);
-        setLoading(false);
-      });
+        if (response) {
+          console.log("response", response.data);
+          setTestSummaryData(response.data.testSummaryData);
+          setPreviewData(true);
+          setLoading(false);
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 

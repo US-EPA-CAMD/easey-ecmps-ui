@@ -49,16 +49,6 @@ export const getReportingPeriod = async () => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const getQATestSummaryByReportingPeriod = async (
-  locId,
-  beginDate,
-  endDate
-) => {
-  const url = `${config.services.qaCertification.uri}/locations/${locId}/test-summary?beginDate=${beginDate}&endDate=${endDate}`;
-  console.log("url", url);
-  return axios.get(url).then(handleResponse).catch(handleError);
-};
-
 export const importQA = async (payload) => {
   const url = `${config.services.qaCertification.uri}/workspace/import/`;
   try {
@@ -71,5 +61,52 @@ export const importQA = async (payload) => {
     );
   } catch (error) {
     return handleImportError(error);
+  }
+};
+
+export const exportQA = async (
+  facilityId,
+  unitIds,
+  stackPipeIds,
+  beginDate,
+  endDate
+) => {
+  let url = `${config.services.qaCertification.uri}/export?facilityId=${facilityId}`;
+
+  if (unitIds && unitIds.length > 0) {
+    let unitIdsString = "";
+    unitIds.forEach((e, idx) => {
+      if (idx !== 0 && idx < unitIds.length) {
+        unitIdsString += "|";
+      }
+      unitIdsString += e;
+    });
+    url = `${url}&unitIds=${unitIdsString}`;
+  }
+
+  if (stackPipeIds && stackPipeIds.length > 0) {
+    let stackPipeIdsString = "";
+    stackPipeIds.forEach((e, idx) => {
+      if (idx !== 0 && idx < unitIds.length) {
+        stackPipeIdsString += "|";
+      }
+      stackPipeIdsString += e;
+    });
+    url = `${url}&stackPipeIds=${stackPipeIdsString}`;
+  }
+
+  if (beginDate && endDate) {
+    url = `${url}&beginDate=${beginDate}&endDate=${endDate}`;
+  }
+
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "GET",
+        url: url,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
   }
 };
