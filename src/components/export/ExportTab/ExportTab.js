@@ -168,6 +168,7 @@ const ExportTab = ({
             exportState={exportState}
             setExportState={setExportState}
             workspaceSection={workspaceSection}
+            orisCode={orisCode}
           />
         )}
         <div className="border-top-1px border-base-lighter padding-y-2">
