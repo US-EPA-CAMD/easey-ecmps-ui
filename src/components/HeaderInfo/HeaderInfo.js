@@ -189,7 +189,32 @@ export const HeaderInfo = ({
     }
   };
 
-  const exportHandler = () => mpApi.exportMonitoringPlanDownload(configID);
+  const exportHandler = () => {
+    mpApi
+      .getMonitoringPlanById(configID)
+      .then((mpRes) => {
+        const facId = mpRes.data["facId"];
+        const mpName = mpRes.data["name"];
+        const date = new Date();
+        const year = date.getUTCFullYear();
+        const month = date.getUTCMonth() + 1;
+        const day = date.getUTCDate();
+        const fullDateString = `${month}-${day}-${year}`;
+        facApi
+          .getFacilityById(facId)
+          .then((facRes) => {
+            const facName = facRes.data["facilityName"];
+            const exportFileName = `MP Export - ${facName}, ${mpName} (${fullDateString}).json`;
+            download(JSON.stringify(mpRes.data, null, "\t"), exportFileName);
+          })
+          .catch((facErr) => {
+            console.log(facErr);
+          });
+      })
+      .catch((mpErr) => {
+        console.log(mpErr);
+      });
+  };
 
   const formatCommentsToTable = (data) => {
     const formmatedData = [];
@@ -365,9 +390,9 @@ export const HeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-      configs
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id)
+        configs
+          .map((location) => location["monPlanId"])
+          .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -502,8 +527,9 @@ export const HeaderInfo = ({
     if (inWorkspace) {
       // when config is checked out by someone
       if (checkedOut) {
-        return `Currently checked-out by: ${currentConfig["checkedOutBy"]
-          } ${formatDate(currentConfig["checkedOutOn"])}`;
+        return `Currently checked-out by: ${
+          currentConfig["checkedOutBy"]
+        } ${formatDate(currentConfig["checkedOutOn"])}`;
       }
       // when config is not checked out
       return `Last updated by: ${currentConfig.lastUpdatedBy} ${formatDate(
@@ -523,8 +549,9 @@ export const HeaderInfo = ({
   return (
     <div className="header">
       <div
-        className={`usa-overlay ${showRevertModal || showEvalReport ? "is-visible" : ""
-          } `}
+        className={`usa-overlay ${
+          showRevertModal || showEvalReport ? "is-visible" : ""
+        } `}
       />
       {showRevertModal ? (
         <Modal

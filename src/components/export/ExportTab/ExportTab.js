@@ -1,12 +1,8 @@
 import React, { useState } from "react";
-import download from "downloadjs";
-import { Button, Checkbox } from "@trussworks/react-uswds";
-
 import ReportingPeriodSelector from "../../ReportingPeriodSelector/ReportingPeriodSelector";
-
+import { Button, Checkbox } from "@trussworks/react-uswds";
 import ExportTablesContainer from "./ExportTablesContainer";
 import { Preloader } from "@us-epa-camd/easey-design-system";
-import { exportMonitoringPlanDownload } from "../../../utils/api/monitoringPlansApi";
 
 const ExportTab = ({
   facility,
@@ -41,7 +37,7 @@ const ExportTab = ({
     },
   ]);
   const [reportingPeriod, setReportingPeriod] = useState(null);
-  const [previewOptions, setPreviewOptions] = useState();
+  const [selectedOptions, setSelectedOptions] = useState();
   const [loading, setLoading] = useState(false);
 
   const dataTypeSelectionHanlder = (e) => {
@@ -54,7 +50,6 @@ const ExportTab = ({
     setExportState(
       selectedConfig.id,
       {
-        ...exportState,
         checkedDataTypes: dataTypesCopy
           .filter((f) => f.checked)
           .map((e) => e.name),
@@ -70,46 +65,19 @@ const ExportTab = ({
     setExportState(
       selectedConfig.id,
       {
-        ...exportState,
         checkedDataTypes: dataTypes.filter((e) => e.checked).map((e) => e.name),
         reportingPeriodId: selectedObj.id,
       },
       workspaceSection
     );
   };
-
   const getInitSelection = (reportingPeriodObj) => {
     const { id, beginDate, endDate } = reportingPeriodObj;
     setReportingPeriod({ id, beginDate, endDate });
     if (exportState) {
-      setPreviewOptions({ beginDate, endDate });
+      setSelectedOptions({ beginDate, endDate });
     }
   };
-
-  const exportClickHandler = async () => {
-    let exportFileName
-    // export monitoring plan
-    if (dataTypes.find((e) => e.name === mp).checked) {
-      exportMonitoringPlanDownload(selectedConfig.id)
-    }
-    // export qa
-    if (dataTypes.find((e) => e.name === qa).checked) {
-      exportFileName = `QA & Certification | Export - ${facility}.json`;
-      const selectedRows = exportState?.qaTestSummaryRows?.filter(row => exportState?.selectedIds?.includes(row.id)) ?? []
-      const exportJson = {
-        orisCode: orisCode,
-        testSummaryData: selectedRows
-      }
-      download(JSON.stringify(exportJson, null, "\t"), exportFileName);
-    }
-  };
-
-  const isExportDisabled = () => {
-    const isMonitoringPlanChecked = dataTypes.find(e => e.name === mp).checked;
-    const rowHasSelected = exportState?.selectedIds?.length > 0;
-    return !isMonitoringPlanChecked && !rowHasSelected;
-  };
-
   return (
     <>
       {loading ? <Preloader /> : null}
@@ -156,7 +124,7 @@ const ExportTab = ({
                   dataTypes.find((e) => e.name === mp).checked)
               }
               onClick={() =>
-                setPreviewOptions({
+                setSelectedOptions({
                   beginDate: reportingPeriod.beginDate,
                   endDate: reportingPeriod.endDate,
                 })
@@ -166,21 +134,21 @@ const ExportTab = ({
             </Button>
           </div>
         </div>
-        {previewOptions && (
+        {selectedOptions && (
           <ExportTablesContainer
-            selectionData={previewOptions}
+            selectionData={selectedOptions}
             selectedConfig={selectedConfig}
             exportState={exportState}
             setExportState={setExportState}
             workspaceSection={workspaceSection}
-            orisCode={orisCode}
           />
         )}
         <div className="border-top-1px border-base-lighter padding-y-2">
           <Button
             className="float-right margin-top-3"
-            disabled={isExportDisabled()}
-            onClick={exportClickHandler}
+            disabled={
+              !dataTypes.find((e) => e.name === "monitoring-plan").checked
+            }
           >
             Export
           </Button>

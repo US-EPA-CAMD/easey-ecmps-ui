@@ -3,9 +3,7 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { ArrowDownwardSharp } from "@material-ui/icons";
 
-import { exportQA } from "../../../utils/api/qaCertificationsAPI";
-import { qaTestSummaryCols } from "../../../utils/constants/tableColumns";
-import { getUnitIdAndStackPipeIds } from "../../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
+import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
 
 const ExportTablesContainer = ({
   selectionData,
@@ -13,37 +11,50 @@ const ExportTablesContainer = ({
   exportState,
   setExportState,
   workspaceSection,
-  orisCode,
 }) => {
-  const { beginDate, endDate } = selectionData;
+  const { beginDate: beginDateOption, endDate: endDateOption } = selectionData;
   const { locations } = selectedConfig;
   const [qaTestSummaryData, setQATestSummaryData] = useState(
     exportState.qaTestSummaryRows
   );
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchQATestSummary = async () => {
-      setLoading(true);
-      const { unitIds, stackPipeIds } = getUnitIdAndStackPipeIds(locations);
-      try {
-        const response = await exportQA(
-          orisCode,
-          unitIds,
-          stackPipeIds,
-          beginDate,
-          endDate
+      const allPromises = [];
+      locations.forEach((e) => {
+        allPromises.push(
+          getQATestSummary(e.id, beginDateOption, endDateOption)
         );
-        if (response) {
-          setQATestSummaryData(response.data.testSummaryData);
-          setLoading(false);
-        }
-      } catch (err) {
-        console.log(err);
-      }
+      });
+      Promise.all(allPromises).then((res) => {
+        setQATestSummaryData(res.map((e) => e.data).flat());
+      });
     };
     fetchQATestSummary();
-  }, [beginDate, endDate, locations, orisCode]);
+  }, [beginDateOption, endDateOption]);
+
+  const rows = qaTestSummaryData?.map((obj) => {
+    const {
+      id,
+      componentID,
+      testNumber,
+      testResultCode,
+      beginDate,
+      beginHour,
+      endDate,
+      endHour,
+    } = obj;
+    return {
+      id,
+      componentID,
+      testNumber,
+      testResultCode,
+      beginDate,
+      beginHour,
+      endDate,
+      endHour,
+    };
+  });
 
   const onSelectRowsHandler = ({
     _allSelected,
@@ -57,7 +68,7 @@ const ExportTablesContainer = ({
       {
         ...exportState,
         selectedIds,
-        qaTestSummaryRows: qaTestSummaryData,
+        qaTestSummaryRows: rows,
       },
       workspaceSection
     );
@@ -78,7 +89,7 @@ const ExportTablesContainer = ({
         highlightOnHover={true}
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
         columns={qaTestSummaryCols}
-        data={qaTestSummaryData}
+        data={rows}
         selectableRows
         onSelectedRowsChange={onSelectRowsHandler}
         selectableRowSelected={selectableRowSelectedHandler}
@@ -86,12 +97,44 @@ const ExportTablesContainer = ({
     </div>
   );
 
-  return (
-    <>
-      {loading && <Preloader />}
-      {!loading && dataTable}
-    </>
-  );
+  const tableContent = qaTestSummaryData ? dataTable : <Preloader />;
+
+  return <>{tableContent}</>;
 };
 
 export default ExportTablesContainer;
+
+const qaTestSummaryCols = [
+  {
+    name: "Unit or Stack Pipe ID",
+    selector: (row) => row.unitOrStackPipeId,
+  },
+  {
+    name: "Component ID",
+    selector: (row) => row.componentID,
+  },
+  {
+    name: "Test Number",
+    selector: (row) => row.testNumber,
+  },
+  {
+    name: "Test Result Code",
+    selector: (row) => row.testResultCode,
+  },
+  {
+    name: "Begin Date",
+    selector: (row) => row.beginDate,
+  },
+  {
+    name: "Begin Hour",
+    selector: (row) => row.beginHour,
+  },
+  {
+    name: "End Date",
+    selector: (row) => row.endDate,
+  },
+  {
+    name: "End Hour",
+    selector: (row) => row.endHour,
+  },
+];
