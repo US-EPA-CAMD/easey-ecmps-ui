@@ -183,21 +183,21 @@ describe("dynamicFacilityTab Reducer State checking false conditional", () => {
   it("empty state", () => {
     const setInactiveState = actions.setInactiveState(
       [false, false],
-      "Barry (1, 2, CSAN) ",
+      "Barry (1, 2, CS0AAN) ",
       MONITORING_PLAN_STORE_NAME
     );
-    const newInactive = dynamicFacilityTabReducer({}, setInactiveState);
-    expect(newInactive).not.toBeDefined();
+    const newInactive = dynamicFacilityTabReducer(initialState.openedFacilityTabs, setInactiveState);
+    expect(newInactive).toBeDefined();
 
     const setCheckoutState = actions.setCheckoutState(
       true,
-      "Barry (1, 2, CS0N) ",
+      "Barry (1, 2, CS0AAN) ",
       MONITORING_PLAN_STORE_NAME
     );
-    const newcheckout = dynamicFacilityTabReducer({}, setCheckoutState);
+    const newcheckout = dynamicFacilityTabReducer(initialState.openedFacilityTabs, setCheckoutState);
     expect(newcheckout).toBeDefined();
 
-    const emptyState = dynamicFacilityTabReducer(null, setCheckoutState);
+    const emptyState = dynamicFacilityTabReducer(initialState.openedFacilityTabs, setCheckoutState);
     expect(emptyState).toBeDefined();
   });
 });
