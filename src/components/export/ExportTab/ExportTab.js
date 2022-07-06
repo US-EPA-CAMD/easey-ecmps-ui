@@ -54,6 +54,7 @@ const ExportTab = ({
     setExportState(
       selectedConfig.id,
       {
+        ...exportState,
         checkedDataTypes: dataTypesCopy
           .filter((f) => f.checked)
           .map((e) => e.name),
@@ -69,6 +70,7 @@ const ExportTab = ({
     setExportState(
       selectedConfig.id,
       {
+        ...exportState,
         checkedDataTypes: dataTypes.filter((e) => e.checked).map((e) => e.name),
         reportingPeriodId: selectedObj.id,
       },
@@ -93,7 +95,7 @@ const ExportTab = ({
     // export qa
     if (dataTypes.find((e) => e.name === qa).checked) {
       exportFileName = `QA & Certification | Export - ${facility}.json`;
-      const selectedRows = exportState.qaTestSummaryRows.filter(row => exportState.selectedIds.includes(row.id))
+      const selectedRows = exportState?.qaTestSummaryRows?.filter(row => exportState?.selectedIds?.includes(row.id)) ?? []
       const exportJson = {
         orisCode: orisCode,
         testSummaryData: selectedRows
@@ -103,9 +105,7 @@ const ExportTab = ({
   };
 
   const isExportDisabled = () => {
-    const isMonitoringPlanChecked = dataTypes.find(
-      (e) => e.name === "monitoring-plan"
-    ).checked;
+    const isMonitoringPlanChecked = dataTypes.find(e => e.name === mp).checked;
     const rowHasSelected = exportState?.selectedIds?.length > 0;
     return !isMonitoringPlanChecked && !rowHasSelected;
   };
