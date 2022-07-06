@@ -50,7 +50,9 @@ const ExportTablesContainer = ({
     selectedRows,
   }) => {
     dataRef.current = selectedRows;
-    const selectedIds = selectedRows.map((row) => row.id);
+    const selectedIds = {
+      testSummary: selectedRows.map((row) => row.id)
+    }
     setExportState(
       selectedConfig.id,
       {
@@ -62,7 +64,7 @@ const ExportTablesContainer = ({
   };
 
   const selectableRowSelectedHandler = (row) => {
-    return exportState?.selectedIds?.includes(row.id);
+    return exportState?.selectedIds?.testSummary?.includes(row.id);
   };
 
   const dataTable = (

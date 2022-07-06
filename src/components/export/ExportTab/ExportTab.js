@@ -107,7 +107,7 @@ const ExportTab = ({
 
   const isExportDisabled = () => {
     const isMonitoringPlanChecked = dataTypes.find(e => e.name === mp).checked;
-    const rowHasSelected = exportState?.selectedIds?.length > 0;
+    const rowHasSelected = exportState?.selectedIds?.testSummary?.length > 0;
     return !isMonitoringPlanChecked && !rowHasSelected;
   };
 
