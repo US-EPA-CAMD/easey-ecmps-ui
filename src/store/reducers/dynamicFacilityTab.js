@@ -11,8 +11,6 @@ const reducer = (state, action) => {
   switch (action.type) {
     case types.ADD_FACILITY_TAB:
       // returnObject = [...currentState,action.facility]; //...currentState; //...currentState
-
-      console.log(action.workspaceSection)
       returnObject = {
         ...currentState,
         [`${action.workspaceSection}`]: [
@@ -22,7 +20,6 @@ const reducer = (state, action) => {
       };
       break;
     case types.REMOVE_FACILITY_TAB:
-      console.log(action.workspaceSection,"REMOVE_FACILITY_TAB")
       returnObject = {
         ...currentState,
         [`${action.workspaceSection}`]: currentState[
@@ -35,7 +32,6 @@ const reducer = (state, action) => {
       };
       break;
     case types.SET_LOCATION_SELECTION_STATE:
-      console.log(action.workspaceSection,"SET_LOCATION_SELECTION_STATE")
       returnObject = {
         ...currentState,
         [`${action.workspaceSection}`]: currentState[
@@ -52,7 +48,6 @@ const reducer = (state, action) => {
 
       break;
     case types.SET_SECTION_SELECTION_STATE:
-      console.log(action.workspaceSection,"SET_SECTION_SELECTION_STATE")
       returnObject = {
         ...currentState,
         [`${action.workspaceSection}`]: currentState[
