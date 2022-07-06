@@ -7,6 +7,23 @@ import { Preloader } from "@us-epa-camd/easey-design-system";
 import { ArrowDownwardSharp } from "@material-ui/icons";
 import { qaTestSummaryCols as columns } from "../../utils/constants/tableColumns";
 
+export const getUnitIdAndStackPipeIds = (locs) => {
+  const unitIds = [];
+  const stackPipeIds = [];
+  locs.forEach((e) => {
+    if (e.type === "stack") {
+      stackPipeIds.push(e.stackPipeId);
+    }
+    if (e.type === "unit") {
+      unitIds.push(e.unitId);
+    }
+  });
+  return {
+    unitIds,
+    stackPipeIds,
+  };
+};
+
 const QAImportHistoricalDataPreview = ({
   locations,
   setSelectedHistoricalData,
@@ -18,23 +35,6 @@ const QAImportHistoricalDataPreview = ({
   const [testSummaryData, setTestSummaryData] = useState(null);
   const [previewData, setPreviewData] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const getUnitIdAndStackPipeIds = (locs) => {
-    const unitIds = [];
-    const stackPipeIds = [];
-    locs.forEach((e) => {
-      if (e.type === "stack") {
-        stackPipeIds.push(e.stackPipeId);
-      }
-      if (e.type === "unit") {
-        unitIds.push(e.unitId);
-      }
-    });
-    return {
-      unitIds,
-      stackPipeIds,
-    };
-  };
 
   const fetchDataPreviewRecords = async () => {
     if (reportingPeriodObj && !previewData) {

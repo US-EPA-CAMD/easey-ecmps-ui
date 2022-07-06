@@ -1,8 +1,12 @@
-import React, { useState } from "react";
-import ReportingPeriodSelector from "../../ReportingPeriodSelector/ReportingPeriodSelector";
+import React, { useRef, useState } from "react";
+import download from "downloadjs";
 import { Button, Checkbox } from "@trussworks/react-uswds";
+
+import ReportingPeriodSelector from "../../ReportingPeriodSelector/ReportingPeriodSelector";
+
 import ExportTablesContainer from "./ExportTablesContainer";
 import { Preloader } from "@us-epa-camd/easey-design-system";
+import { exportMonitoringPlanDownload } from "../../../utils/api/monitoringPlansApi";
 
 const ExportTab = ({
   facility,
@@ -37,8 +41,9 @@ const ExportTab = ({
     },
   ]);
   const [reportingPeriod, setReportingPeriod] = useState(null);
-  const [selectedOptions, setSelectedOptions] = useState();
+  const [previewOptions, setPreviewOptions] = useState();
   const [loading, setLoading] = useState(false);
+  const qaTestSummaryData = useRef();
 
   const dataTypeSelectionHanlder = (e) => {
     const dataTypesCopy = [...dataTypes];
@@ -50,6 +55,7 @@ const ExportTab = ({
     setExportState(
       selectedConfig.id,
       {
+        ...exportState,
         checkedDataTypes: dataTypesCopy
           .filter((f) => f.checked)
           .map((e) => e.name),
@@ -65,19 +71,46 @@ const ExportTab = ({
     setExportState(
       selectedConfig.id,
       {
+        ...exportState,
         checkedDataTypes: dataTypes.filter((e) => e.checked).map((e) => e.name),
         reportingPeriodId: selectedObj.id,
       },
       workspaceSection
     );
   };
+
   const getInitSelection = (reportingPeriodObj) => {
     const { id, beginDate, endDate } = reportingPeriodObj;
     setReportingPeriod({ id, beginDate, endDate });
     if (exportState) {
-      setSelectedOptions({ beginDate, endDate });
+      setPreviewOptions({ beginDate, endDate });
     }
   };
+
+  const exportClickHandler = async () => {
+    let exportFileName
+    // export monitoring plan
+    if (dataTypes.find((e) => e.name === mp).checked) {
+      exportMonitoringPlanDownload(selectedConfig.id)
+    }
+    // export qa
+    if (dataTypes.find((e) => e.name === qa).checked) {
+      exportFileName = `QA & Certification | Export - ${facility}.json`;
+      const selectedRows = qaTestSummaryData.current
+      const exportJson = {
+        orisCode: orisCode,
+        testSummaryData: selectedRows
+      }
+      download(JSON.stringify(exportJson, null, "\t"), exportFileName);
+    }
+  };
+
+  const isExportDisabled = () => {
+    const isMonitoringPlanChecked = dataTypes.find(e => e.name === mp).checked;
+    const rowHasSelected = exportState?.selectedIds?.length > 0;
+    return !isMonitoringPlanChecked && !rowHasSelected;
+  };
+
   return (
     <>
       {loading ? <Preloader /> : null}
@@ -124,7 +157,7 @@ const ExportTab = ({
                   dataTypes.find((e) => e.name === mp).checked)
               }
               onClick={() =>
-                setSelectedOptions({
+                setPreviewOptions({
                   beginDate: reportingPeriod.beginDate,
                   endDate: reportingPeriod.endDate,
                 })
@@ -134,21 +167,22 @@ const ExportTab = ({
             </Button>
           </div>
         </div>
-        {selectedOptions && (
+        {previewOptions && (
           <ExportTablesContainer
-            selectionData={selectedOptions}
+            selectionData={previewOptions}
             selectedConfig={selectedConfig}
             exportState={exportState}
             setExportState={setExportState}
             workspaceSection={workspaceSection}
+            orisCode={orisCode}
+            dataRef={qaTestSummaryData}
           />
         )}
         <div className="border-top-1px border-base-lighter padding-y-2">
           <Button
             className="float-right margin-top-3"
-            disabled={
-              !dataTypes.find((e) => e.name === "monitoring-plan").checked
-            }
+            disabled={isExportDisabled()}
+            onClick={exportClickHandler}
           >
             Export
           </Button>
