@@ -1,5 +1,6 @@
 import dynamicFacilityTabReducer from "./dynamicFacilityTab";
 import * as actions from "../actions/dynamicFacilityTab";
+import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 let initialState = {};
 beforeAll(() => {
   initialState = {
@@ -109,7 +110,7 @@ describe("dynamicFacilityTab Reducer State Update", () => {
     const selectedFacility = "Berry";
     const selectedFacilityTabIndex = 1;
 
-    let action = actions.addFacilityTab(selectedFacility);
+    let action = actions.addFacilityTab(selectedFacility,MONITORING_PLAN_STORE_NAME);
     const newState = dynamicFacilityTabReducer(
       initialState.openedFacilityTabs,
       action
@@ -134,7 +135,8 @@ describe("dynamicFacilityTab Reducer State Adding with data", () => {
 
     const setLocationSelectionState = actions.setLocationSelectionState(
       [2, 1],
-      "Barry (1, 2, CS0AAN) "
+      "Barry (1, 2, CS0AAN) ",
+      MONITORING_PLAN_STORE_NAME
     );
     const newLoc = dynamicFacilityTabReducer(
       initialState.openedFacilityTabs,
@@ -144,7 +146,8 @@ describe("dynamicFacilityTab Reducer State Adding with data", () => {
 
     const setSectionSelectionState = actions.setSectionSelectionState(
       3,
-      "Barry (1, 2, CS0AAN) "
+      "Barry (1, 2, CS0AAN) ",
+      MONITORING_PLAN_STORE_NAME
     );
     const newSec = dynamicFacilityTabReducer(newLoc, setSectionSelectionState);
     expect(newSec[0].section).toBeDefined();
@@ -157,7 +160,8 @@ describe("dynamicFacilityTab Reducer State Adding with data", () => {
 
     const setInactiveState = actions.setInactiveState(
       [false, false],
-      "Barry (1, 2, CS0AAN) "
+      "Barry (1, 2, CS0AAN) ",
+      MONITORING_PLAN_STORE_NAME
     );
     const newInactive = dynamicFacilityTabReducer(emptyLocs, setInactiveState);
     expect(newInactive[0].inactive).toBeDefined();
@@ -186,7 +190,8 @@ describe("dynamicFacilityTab Reducer State checking false conditional", () => {
 
     const setLocationSelectionState = actions.setLocationSelectionState(
       [2, 1],
-      "Barry (1, 2, CS0A) "
+      "Barry (1, 2, CS0A) ",
+      MONITORING_PLAN_STORE_NAME
     );
     const newLoc = dynamicFacilityTabReducer(
       initialState.openedFacilityTabs,
@@ -196,7 +201,8 @@ describe("dynamicFacilityTab Reducer State checking false conditional", () => {
 
     const setSectionSelectionState = actions.setSectionSelectionState(
       3,
-      "Barry (1, 2, CS0N) "
+      "Barry (1, 2, CS0N) ",
+      MONITORING_PLAN_STORE_NAME
     );
     const newSec = dynamicFacilityTabReducer(newLoc, setSectionSelectionState);
     expect(newSec[0].section).toBeDefined();
@@ -209,14 +215,16 @@ describe("dynamicFacilityTab Reducer State checking false conditional", () => {
 
     const setInactiveState = actions.setInactiveState(
       [false, false],
-      "Barry (1, 2, CSAN) "
+      "Barry (1, 2, CSAN) ",
+      MONITORING_PLAN_STORE_NAME
     );
     const newInactive = dynamicFacilityTabReducer(emptyLocs, setInactiveState);
     expect(newInactive[0].inactive).toBeDefined();
 
     const setCheckoutState = actions.setCheckoutState(
       true,
-      "Barry (1, 2, CS0N) "
+      "Barry (1, 2, CS0N) ",
+      MONITORING_PLAN_STORE_NAME
     );
     const newcheckout = dynamicFacilityTabReducer(
       newInactive,
@@ -227,7 +235,8 @@ describe("dynamicFacilityTab Reducer State checking false conditional", () => {
   it("empty state", () => {
     const setInactiveState = actions.setInactiveState(
       [false, false],
-      "Barry (1, 2, CSAN) "
+      "Barry (1, 2, CSAN) ",
+      MONITORING_PLAN_STORE_NAME
     );
     const newInactive = dynamicFacilityTabReducer({}, setInactiveState);
     expect(newInactive).not.toBeDefined();

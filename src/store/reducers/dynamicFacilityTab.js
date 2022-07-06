@@ -12,6 +12,7 @@ const reducer = (state, action) => {
     case types.ADD_FACILITY_TAB:
       // returnObject = [...currentState,action.facility]; //...currentState; //...currentState
 
+      console.log(action.workspaceSection)
       returnObject = {
         ...currentState,
         [`${action.workspaceSection}`]: [
@@ -65,6 +66,7 @@ const reducer = (state, action) => {
 
       break;
     case types.SET_EXPORT_STATE:
+      console.log(action.workspaceSection)
       returnObject = {
         ...currentState,
         [`${action.workspaceSection}`]: currentState[
