@@ -11,8 +11,6 @@ const reducer = (state, action) => {
   switch (action.type) {
     case types.ADD_FACILITY_TAB:
       // returnObject = [...currentState,action.facility]; //...currentState; //...currentState
-
-      console.log(action.workspaceSection)
       returnObject = {
         ...currentState,
         [`${action.workspaceSection}`]: [

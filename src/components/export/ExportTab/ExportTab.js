@@ -8,7 +8,7 @@ import ExportTablesContainer from "./ExportTablesContainer";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { exportMonitoringPlanDownload } from "../../../utils/api/monitoringPlansApi";
 
-const ExportTab = ({
+export const ExportTab = ({
   facility,
   selectedConfig,
   orisCode,
