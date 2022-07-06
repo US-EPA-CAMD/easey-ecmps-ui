@@ -1,5 +1,6 @@
 import dynamicFacilityTabReducer from "./dynamicFacilityTab";
 import * as actions from "../actions/dynamicFacilityTab";
+import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 let initialState = {};
 beforeAll(() => {
   initialState = {
@@ -109,7 +110,7 @@ describe("dynamicFacilityTab Reducer State Update", () => {
     const selectedFacility = "Berry";
     const selectedFacilityTabIndex = 1;
 
-    let action = actions.addFacilityTab(selectedFacility);
+    let action = actions.addFacilityTab(selectedFacility,MONITORING_PLAN_STORE_NAME);
     const newState = dynamicFacilityTabReducer(
       initialState.openedFacilityTabs,
       action
@@ -122,124 +123,132 @@ describe("dynamicFacilityTab Reducer State Update", () => {
   });
 });
 
-// describe("dynamicFacilityTab Reducer State Adding with data", () => {
-//   it("should add a new tab with data ", () => {
-//     const selectedFacility = {
-//       orisCode: 7,
-//       name: "test",
-//       location: [0, 0],
-//       section: 1,
-//       locations: [],
-//     };
+describe("dynamicFacilityTab Reducer State Adding with data", () => {
+  it("should add a new tab with data ", () => {
+    const selectedFacility = {
+      orisCode: 7,
+      name: "test",
+      location: [0, 0],
+      section: 1,
+      locations: [],
+    };
 
-//     const setLocationSelectionState = actions.setLocationSelectionState(
-//       [2, 1],
-//       "Barry (1, 2, CS0AAN) "
-//     );
-//     const newLoc = dynamicFacilityTabReducer(
-//       initialState.openedFacilityTabs,
-//       setLocationSelectionState
-//     );
-//     expect(newLoc[0].location).toBeDefined();
+    const setLocationSelectionState = actions.setLocationSelectionState(
+      [2, 1],
+      "Barry (1, 2, CS0AAN) ",
+      MONITORING_PLAN_STORE_NAME
+    );
+    const newLoc = dynamicFacilityTabReducer(
+      initialState.openedFacilityTabs,
+      setLocationSelectionState
+    );
+    expect(newLoc[0].location).toBeDefined();
 
-//     const setSectionSelectionState = actions.setSectionSelectionState(
-//       3,
-//       "Barry (1, 2, CS0AAN) "
-//     );
-//     const newSec = dynamicFacilityTabReducer(newLoc, setSectionSelectionState);
-//     expect(newSec[0].section).toBeDefined();
+    const setSectionSelectionState = actions.setSectionSelectionState(
+      3,
+      "Barry (1, 2, CS0AAN) ",
+      MONITORING_PLAN_STORE_NAME
+    );
+    const newSec = dynamicFacilityTabReducer(newLoc, setSectionSelectionState);
+    expect(newSec[0].section).toBeDefined();
 
-//     const emptyLocs = dynamicFacilityTabReducer(
-//       initialState.openedFacilityTabs,
-//       { type: "empty" }
-//     );
-//     expect(emptyLocs).toBe(initialState.openedFacilityTabs);
+    const emptyLocs = dynamicFacilityTabReducer(
+      initialState.openedFacilityTabs,
+      { type: "empty" }
+    );
+    expect(emptyLocs).toBe(initialState.openedFacilityTabs);
 
-//     const setInactiveState = actions.setInactiveState(
-//       [false, false],
-//       "Barry (1, 2, CS0AAN) "
-//     );
-//     const newInactive = dynamicFacilityTabReducer(emptyLocs, setInactiveState);
-//     expect(newInactive[0].inactive).toBeDefined();
+    const setInactiveState = actions.setInactiveState(
+      [false, false],
+      "Barry (1, 2, CS0AAN) ",
+      MONITORING_PLAN_STORE_NAME
+    );
+    const newInactive = dynamicFacilityTabReducer(emptyLocs, setInactiveState);
+    expect(newInactive[0].inactive).toBeDefined();
 
-//     const setCheckoutState = actions.setCheckoutState(
-//       true,
-//       "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A"
-//     );
-//     const newcheckout = dynamicFacilityTabReducer(
-//       newInactive,
-//       setCheckoutState
-//     );
-//     expect(newcheckout[0].checkout).toBeDefined();
-//   });
-// });
+    const setCheckoutState = actions.setCheckoutState(
+      true,
+      "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A"
+    );
+    const newcheckout = dynamicFacilityTabReducer(
+      newInactive,
+      setCheckoutState
+    );
+    expect(newcheckout[0].checkout).toBeDefined();
+  });
+});
 
-// describe("dynamicFacilityTab Reducer State checking false conditional", () => {
-//   it("testing x.name === action.title ", () => {
-//     const selectedFacility = {
-//       orisCode: 7,
-//       name: "test",
-//       location: [0, 0],
-//       section: 1,
-//       locations: [],
-//     };
+describe("dynamicFacilityTab Reducer State checking false conditional", () => {
+  it("testing x.name === action.title ", () => {
+    const selectedFacility = {
+      orisCode: 7,
+      name: "test",
+      location: [0, 0],
+      section: 1,
+      locations: [],
+    };
 
-//     const setLocationSelectionState = actions.setLocationSelectionState(
-//       [2, 1],
-//       "Barry (1, 2, CS0A) "
-//     );
-//     const newLoc = dynamicFacilityTabReducer(
-//       initialState.openedFacilityTabs,
-//       setLocationSelectionState
-//     );
-//     expect(newLoc[0].location).toBeDefined();
+    const setLocationSelectionState = actions.setLocationSelectionState(
+      [2, 1],
+      "Barry (1, 2, CS0A) ",
+      MONITORING_PLAN_STORE_NAME
+    );
+    const newLoc = dynamicFacilityTabReducer(
+      initialState.openedFacilityTabs,
+      setLocationSelectionState
+    );
+    expect(newLoc[0].location).toBeDefined();
 
-//     const setSectionSelectionState = actions.setSectionSelectionState(
-//       3,
-//       "Barry (1, 2, CS0N) "
-//     );
-//     const newSec = dynamicFacilityTabReducer(newLoc, setSectionSelectionState);
-//     expect(newSec[0].section).toBeDefined();
+    const setSectionSelectionState = actions.setSectionSelectionState(
+      3,
+      "Barry (1, 2, CS0N) ",
+      MONITORING_PLAN_STORE_NAME
+    );
+    const newSec = dynamicFacilityTabReducer(newLoc, setSectionSelectionState);
+    expect(newSec[0].section).toBeDefined();
 
-//     const emptyLocs = dynamicFacilityTabReducer(
-//       initialState.openedFacilityTabs,
-//       { type: "empty" }
-//     );
-//     expect(emptyLocs).toBe(initialState.openedFacilityTabs);
+    const emptyLocs = dynamicFacilityTabReducer(
+      initialState.openedFacilityTabs,
+      { type: "empty" }
+    );
+    expect(emptyLocs).toBe(initialState.openedFacilityTabs);
 
-//     const setInactiveState = actions.setInactiveState(
-//       [false, false],
-//       "Barry (1, 2, CSAN) "
-//     );
-//     const newInactive = dynamicFacilityTabReducer(emptyLocs, setInactiveState);
-//     expect(newInactive[0].inactive).toBeDefined();
+    const setInactiveState = actions.setInactiveState(
+      [false, false],
+      "Barry (1, 2, CSAN) ",
+      MONITORING_PLAN_STORE_NAME
+    );
+    const newInactive = dynamicFacilityTabReducer(emptyLocs, setInactiveState);
+    expect(newInactive[0].inactive).toBeDefined();
 
-//     const setCheckoutState = actions.setCheckoutState(
-//       true,
-//       "Barry (1, 2, CS0N) "
-//     );
-//     const newcheckout = dynamicFacilityTabReducer(
-//       newInactive,
-//       setCheckoutState
-//     );
-//     expect(newcheckout[0].checkout).toBeDefined();
-//   });
-//   it("empty state", () => {
-//     const setInactiveState = actions.setInactiveState(
-//       [false, false],
-//       "Barry (1, 2, CSAN) "
-//     );
-//     const newInactive = dynamicFacilityTabReducer({}, setInactiveState);
-//     expect(newInactive).not.toBeDefined();
+    const setCheckoutState = actions.setCheckoutState(
+      true,
+      "Barry (1, 2, CS0N) ",
+      MONITORING_PLAN_STORE_NAME
+    );
+    const newcheckout = dynamicFacilityTabReducer(
+      newInactive,
+      setCheckoutState
+    );
+    expect(newcheckout[0].checkout).toBeDefined();
+  });
+  it("empty state", () => {
+    const setInactiveState = actions.setInactiveState(
+      [false, false],
+      "Barry (1, 2, CSAN) ",
+      MONITORING_PLAN_STORE_NAME
+    );
+    const newInactive = dynamicFacilityTabReducer({}, setInactiveState);
+    expect(newInactive).not.toBeDefined();
 
-//     const setCheckoutState = actions.setCheckoutState(
-//       true,
-//       "Barry (1, 2, CS0N) "
-//     );
-//     const newcheckout = dynamicFacilityTabReducer({}, setCheckoutState);
-//     expect(newcheckout).toBeDefined();
+    const setCheckoutState = actions.setCheckoutState(
+      true,
+      "Barry (1, 2, CS0N) "
+    );
+    const newcheckout = dynamicFacilityTabReducer({}, setCheckoutState);
+    expect(newcheckout).toBeDefined();
 
-//     const emptyState = dynamicFacilityTabReducer(null, setCheckoutState);
-//     expect(emptyState).toBeDefined();
-//   });
-// });
+    const emptyState = dynamicFacilityTabReducer(null, setCheckoutState);
+    expect(emptyState).toBeDefined();
+  });
+});
