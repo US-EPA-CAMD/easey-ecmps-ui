@@ -72,17 +72,33 @@ export const exportQA = async (
   endDate
 ) => {
   let url = `${config.services.qaCertification.uri}/export?facilityId=${facilityId}`;
-  if (unitIds?.length > 0) {
-    const unitIdsQueryParam = unitIds.join("|");
-    url = `${url}&unitIds=${unitIdsQueryParam}`;
+
+  if (unitIds && unitIds.length > 0) {
+    let unitIdsString = "";
+    unitIds.forEach((e, idx) => {
+      if (idx !== 0 && idx < unitIds.length) {
+        unitIdsString += "|";
+      }
+      unitIdsString += e;
+    });
+    url = `${url}&unitIds=${unitIdsString}`;
   }
-  if (stackPipeIds?.length > 0) {
-    const stackPipeIdsQueryParam = stackPipeIds.join("|");
-    url = `${url}&stackPipeIds=${stackPipeIdsQueryParam}`;
+
+  if (stackPipeIds && stackPipeIds.length > 0) {
+    let stackPipeIdsString = "";
+    stackPipeIds.forEach((e, idx) => {
+      if (idx !== 0 && idx < unitIds.length) {
+        stackPipeIdsString += "|";
+      }
+      stackPipeIdsString += e;
+    });
+    url = `${url}&stackPipeIds=${stackPipeIdsString}`;
   }
+
   if (beginDate && endDate) {
     url = `${url}&beginDate=${beginDate}&endDate=${endDate}`;
   }
+
   try {
     return handleResponse(
       await secureAxios({
