@@ -14,12 +14,11 @@ const ExportTablesContainer = ({
   setExportState,
   workspaceSection,
   orisCode,
+  dataRef,
 }) => {
   const { beginDate, endDate } = selectionData;
   const { locations } = selectedConfig;
-  const [qaTestSummaryData, setQATestSummaryData] = useState(
-    exportState.qaTestSummaryRows
-  );
+  const [qaTestSummaryData, setQATestSummaryData] = useState();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -50,14 +49,13 @@ const ExportTablesContainer = ({
     _selectedCount,
     selectedRows,
   }) => {
+    dataRef.current = selectedRows;
     const selectedIds = selectedRows.map((row) => row.id);
-
     setExportState(
       selectedConfig.id,
       {
         ...exportState,
         selectedIds,
-        qaTestSummaryRows: qaTestSummaryData,
       },
       workspaceSection
     );

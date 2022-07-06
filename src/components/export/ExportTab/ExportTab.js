@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import download from "downloadjs";
 import { Button, Checkbox } from "@trussworks/react-uswds";
 
@@ -43,6 +43,7 @@ const ExportTab = ({
   const [reportingPeriod, setReportingPeriod] = useState(null);
   const [previewOptions, setPreviewOptions] = useState();
   const [loading, setLoading] = useState(false);
+  const qaTestSummaryData = useRef();
 
   const dataTypeSelectionHanlder = (e) => {
     const dataTypesCopy = [...dataTypes];
@@ -95,7 +96,7 @@ const ExportTab = ({
     // export qa
     if (dataTypes.find((e) => e.name === qa).checked) {
       exportFileName = `QA & Certification | Export - ${facility}.json`;
-      const selectedRows = exportState?.qaTestSummaryRows?.filter(row => exportState?.selectedIds?.includes(row.id)) ?? []
+      const selectedRows = qaTestSummaryData.current
       const exportJson = {
         orisCode: orisCode,
         testSummaryData: selectedRows
@@ -174,6 +175,7 @@ const ExportTab = ({
             setExportState={setExportState}
             workspaceSection={workspaceSection}
             orisCode={orisCode}
+            dataRef={qaTestSummaryData}
           />
         )}
         <div className="border-top-1px border-base-lighter padding-y-2">
