@@ -50,8 +50,8 @@ export const getMonitoringPlansRelationshipsDataRecords = (totalData) => {
     const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
 
     records.push({
-      col1: el.stackPipeId,
-      col2: el.unitId,
+      col1: el.stackPipeRecordId,
+      col2: el.unitRecordId,
       col3: `${beginDate}`,
       col4: `${endDate}`,
       col5: el.id,
