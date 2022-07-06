@@ -7,7 +7,7 @@ import { exportQA } from "../../../utils/api/qaCertificationsAPI";
 import { qaTestSummaryCols } from "../../../utils/constants/tableColumns";
 import { getUnitIdAndStackPipeIds } from "../../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
 
-const ExportTablesContainer = ({
+export const ExportTablesContainer = ({
   selectionData,
   selectedConfig,
   exportState,

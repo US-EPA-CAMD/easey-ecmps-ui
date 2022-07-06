@@ -117,7 +117,7 @@ describe("dynamicFacilityTab Reducer State Update", () => {
     );
     expect(newState.length).toBe(2);
 
-    action = actions.removeFacilityTab(selectedFacilityTabIndex);
+    action = actions.removeFacilityTab(selectedFacilityTabIndex,MONITORING_PLAN_STORE_NAME);
     const updatedState = dynamicFacilityTabReducer(newState, action);
     expect(updatedState.length).toBe(1);
   });
@@ -168,7 +168,8 @@ describe("dynamicFacilityTab Reducer State Adding with data", () => {
 
     const setCheckoutState = actions.setCheckoutState(
       true,
-      "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A"
+      "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
+      MONITORING_PLAN_STORE_NAME
     );
     const newcheckout = dynamicFacilityTabReducer(
       newInactive,
@@ -243,7 +244,8 @@ describe("dynamicFacilityTab Reducer State checking false conditional", () => {
 
     const setCheckoutState = actions.setCheckoutState(
       true,
-      "Barry (1, 2, CS0N) "
+      "Barry (1, 2, CS0N) ",
+      MONITORING_PLAN_STORE_NAME
     );
     const newcheckout = dynamicFacilityTabReducer({}, setCheckoutState);
     expect(newcheckout).toBeDefined();

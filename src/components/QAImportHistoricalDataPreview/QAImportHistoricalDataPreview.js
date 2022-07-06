@@ -24,7 +24,7 @@ export const getUnitIdAndStackPipeIds = (locs) => {
   };
 };
 
-const QAImportHistoricalDataPreview = ({
+export const QAImportHistoricalDataPreview = ({
   locations,
   setSelectedHistoricalData,
   setFileName,
