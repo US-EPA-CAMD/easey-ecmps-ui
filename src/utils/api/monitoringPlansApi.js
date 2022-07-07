@@ -2,6 +2,8 @@ import axios from "axios";
 import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
+import { getFacilityById } from "./facilityApi";
+import download from "downloadjs";
 
 axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
@@ -1060,3 +1062,22 @@ export const getMPSchema = async () => {
 
   return axios.get(url).then(handleResponse).catch(handleError);
 };
+
+export const exportMonitoringPlanDownload = async (configID) => {
+  try {
+    const mpRes = await getMonitoringPlanById(configID)
+    const facId = mpRes.data["facId"];
+    const mpName = mpRes.data["name"];
+    const date = new Date();
+    const year = date.getUTCFullYear();
+    const month = date.getUTCMonth() + 1;
+    const day = date.getUTCDate();
+    const fullDateString = `${month}-${day}-${year}`;
+    const facRes = await getFacilityById(facId)
+    const facName = facRes.data["facilityName"];
+    const exportFileName = `MP Export - ${facName}, ${mpName} (${fullDateString}).json`;
+    download(JSON.stringify(mpRes.data, null, "\t"), exportFileName);
+  } catch (error) {
+    console.log(error);
+  }
+}

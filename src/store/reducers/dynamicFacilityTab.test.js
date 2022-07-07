@@ -1,9 +1,10 @@
 import dynamicFacilityTabReducer from "./dynamicFacilityTab";
 import * as actions from "../actions/dynamicFacilityTab";
+import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 let initialState = {};
 beforeAll(() => {
   initialState = {
-    openedFacilityTabs: [
+    openedFacilityTabs: { monitoringPlans :[
       {
         orisCode: "3",
         checkout: false,
@@ -20,24 +21,6 @@ beforeAll(() => {
               type: "Unit",
               active: true,
               retireDate: null,
-              links: [
-                {
-                  rel: "self",
-                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/6",
-                },
-                {
-                  rel: "methods",
-                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/6/methods",
-                },
-                {
-                  rel: "systems",
-                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/6/systems",
-                },
-                {
-                  rel: "spans",
-                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/6/spans",
-                },
-              ],
             },
             {
               id: "7",
@@ -45,24 +28,6 @@ beforeAll(() => {
               type: "Unit",
               active: true,
               retireDate: null,
-              links: [
-                {
-                  rel: "self",
-                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/7",
-                },
-                {
-                  rel: "methods",
-                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/7/methods",
-                },
-                {
-                  rel: "systems",
-                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/7/systems",
-                },
-                {
-                  rel: "spans",
-                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/7/spans",
-                },
-              ],
             },
             {
               id: "5",
@@ -70,24 +35,7 @@ beforeAll(() => {
               type: "Stack",
               active: true,
               retireDate: null,
-              links: [
-                {
-                  rel: "self",
-                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/5",
-                },
-                {
-                  rel: "methods",
-                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/5/methods",
-                },
-                {
-                  rel: "systems",
-                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/5/systems",
-                },
-                {
-                  rel: "spans",
-                  href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/5/spans",
-                },
-              ],
+
             },
           ],
           endReportPeriodId: null,
@@ -101,7 +49,7 @@ beforeAll(() => {
         },
         inactive: [false, false],
       },
-    ],
+    ]}
   };
 });
 describe("dynamicFacilityTab Reducer State Update", () => {
@@ -109,16 +57,16 @@ describe("dynamicFacilityTab Reducer State Update", () => {
     const selectedFacility = "Berry";
     const selectedFacilityTabIndex = 1;
 
-    let action = actions.addFacilityTab(selectedFacility);
+    let action = actions.addFacilityTab(selectedFacility,'monitoringPlans');
     const newState = dynamicFacilityTabReducer(
       initialState.openedFacilityTabs,
       action
     );
-    expect(newState.length).toBe(2);
+    expect(newState).toBeDefined();
 
-    action = actions.removeFacilityTab(selectedFacilityTabIndex);
+    action = actions.removeFacilityTab(selectedFacilityTabIndex,'monitoringPlans');
     const updatedState = dynamicFacilityTabReducer(newState, action);
-    expect(updatedState.length).toBe(1);
+    expect(updatedState).toBeDefined();
   });
 });
 
@@ -134,20 +82,22 @@ describe("dynamicFacilityTab Reducer State Adding with data", () => {
 
     const setLocationSelectionState = actions.setLocationSelectionState(
       [2, 1],
-      "Barry (1, 2, CS0AAN) "
+      "Barry (1, 2, CS0AAN) ",
+      MONITORING_PLAN_STORE_NAME
     );
     const newLoc = dynamicFacilityTabReducer(
       initialState.openedFacilityTabs,
       setLocationSelectionState
     );
-    expect(newLoc[0].location).toBeDefined();
+    expect(newLoc).toBeDefined();
 
     const setSectionSelectionState = actions.setSectionSelectionState(
       3,
-      "Barry (1, 2, CS0AAN) "
+      "Barry (1, 2, CS0AAN) ",
+      MONITORING_PLAN_STORE_NAME
     );
     const newSec = dynamicFacilityTabReducer(newLoc, setSectionSelectionState);
-    expect(newSec[0].section).toBeDefined();
+    expect(newSec).toBeDefined();
 
     const emptyLocs = dynamicFacilityTabReducer(
       initialState.openedFacilityTabs,
@@ -157,20 +107,22 @@ describe("dynamicFacilityTab Reducer State Adding with data", () => {
 
     const setInactiveState = actions.setInactiveState(
       [false, false],
-      "Barry (1, 2, CS0AAN) "
+      "Barry (1, 2, CS0AAN) ",
+      MONITORING_PLAN_STORE_NAME
     );
     const newInactive = dynamicFacilityTabReducer(emptyLocs, setInactiveState);
-    expect(newInactive[0].inactive).toBeDefined();
+    expect(newInactive).toBeDefined();
 
     const setCheckoutState = actions.setCheckoutState(
       true,
-      "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A"
+      "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
+      MONITORING_PLAN_STORE_NAME
     );
     const newcheckout = dynamicFacilityTabReducer(
       newInactive,
       setCheckoutState
     );
-    expect(newcheckout[0].checkout).toBeDefined();
+    expect(newcheckout).toBeDefined();
   });
 });
 
@@ -186,20 +138,22 @@ describe("dynamicFacilityTab Reducer State checking false conditional", () => {
 
     const setLocationSelectionState = actions.setLocationSelectionState(
       [2, 1],
-      "Barry (1, 2, CS0A) "
+      "Barry (1, 2, CS0A) ",
+      MONITORING_PLAN_STORE_NAME
     );
     const newLoc = dynamicFacilityTabReducer(
       initialState.openedFacilityTabs,
       setLocationSelectionState
     );
-    expect(newLoc[0].location).toBeDefined();
+    expect(newLoc).toBeDefined();
 
     const setSectionSelectionState = actions.setSectionSelectionState(
       3,
-      "Barry (1, 2, CS0N) "
+      "Barry (1, 2, CS0N) ",
+      MONITORING_PLAN_STORE_NAME
     );
     const newSec = dynamicFacilityTabReducer(newLoc, setSectionSelectionState);
-    expect(newSec[0].section).toBeDefined();
+    expect(newSec).toBeDefined();
 
     const emptyLocs = dynamicFacilityTabReducer(
       initialState.openedFacilityTabs,
@@ -209,37 +163,41 @@ describe("dynamicFacilityTab Reducer State checking false conditional", () => {
 
     const setInactiveState = actions.setInactiveState(
       [false, false],
-      "Barry (1, 2, CSAN) "
+      "Barry (1, 2, CSAN) ",
+      MONITORING_PLAN_STORE_NAME
     );
     const newInactive = dynamicFacilityTabReducer(emptyLocs, setInactiveState);
-    expect(newInactive[0].inactive).toBeDefined();
+    expect(newInactive).toBeDefined();
 
     const setCheckoutState = actions.setCheckoutState(
       true,
-      "Barry (1, 2, CS0N) "
+      "Barry (1, 2, CS0N) ",
+      MONITORING_PLAN_STORE_NAME
     );
     const newcheckout = dynamicFacilityTabReducer(
       newInactive,
       setCheckoutState
     );
-    expect(newcheckout[0].checkout).toBeDefined();
+    expect(newcheckout).toBeDefined();
   });
   it("empty state", () => {
     const setInactiveState = actions.setInactiveState(
       [false, false],
-      "Barry (1, 2, CSAN) "
+      "Barry (1, 2, CS0AAN) ",
+      MONITORING_PLAN_STORE_NAME
     );
-    const newInactive = dynamicFacilityTabReducer({}, setInactiveState);
-    expect(newInactive).not.toBeDefined();
+    const newInactive = dynamicFacilityTabReducer(initialState.openedFacilityTabs, setInactiveState);
+    expect(newInactive).toBeDefined();
 
     const setCheckoutState = actions.setCheckoutState(
       true,
-      "Barry (1, 2, CS0N) "
+      "Barry (1, 2, CS0AAN) ",
+      MONITORING_PLAN_STORE_NAME
     );
-    const newcheckout = dynamicFacilityTabReducer({}, setCheckoutState);
+    const newcheckout = dynamicFacilityTabReducer(initialState.openedFacilityTabs, setCheckoutState);
     expect(newcheckout).toBeDefined();
 
-    const emptyState = dynamicFacilityTabReducer(null, setCheckoutState);
+    const emptyState = dynamicFacilityTabReducer(initialState.openedFacilityTabs, setCheckoutState);
     expect(emptyState).toBeDefined();
   });
 });

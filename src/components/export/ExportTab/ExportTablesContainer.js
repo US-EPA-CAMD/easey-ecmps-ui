@@ -3,79 +3,68 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { ArrowDownwardSharp } from "@material-ui/icons";
 
-import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
+import { exportQA } from "../../../utils/api/qaCertificationsAPI";
+import { qaTestSummaryCols } from "../../../utils/constants/tableColumns";
+import { getUnitIdAndStackPipeIds } from "../../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
 
-const ExportTablesContainer = ({
+export const ExportTablesContainer = ({
   selectionData,
   selectedConfig,
   exportState,
   setExportState,
   workspaceSection,
+  orisCode,
+  dataRef,
 }) => {
-  const { beginDate: beginDateOption, endDate: endDateOption } = selectionData;
+  const { beginDate, endDate } = selectionData;
   const { locations } = selectedConfig;
-  const [qaTestSummaryData, setQATestSummaryData] = useState(
-    exportState.qaTestSummaryRows
-  );
+  const [qaTestSummaryData, setQATestSummaryData] = useState();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchQATestSummary = async () => {
-      const allPromises = [];
-      locations.forEach((e) => {
-        allPromises.push(
-          getQATestSummary(e.id, beginDateOption, endDateOption)
+      setLoading(true);
+      const { unitIds, stackPipeIds } = getUnitIdAndStackPipeIds(locations);
+      try {
+        const response = await exportQA(
+          orisCode,
+          unitIds,
+          stackPipeIds,
+          beginDate,
+          endDate
         );
-      });
-      Promise.all(allPromises).then((res) => {
-        setQATestSummaryData(res.map((e) => e.data).flat());
-      });
+        if (response) {
+          setQATestSummaryData(response.data.testSummaryData);
+          setLoading(false);
+        }
+      } catch (err) {
+        console.log(err);
+      }
     };
     fetchQATestSummary();
-  }, [beginDateOption, endDateOption]);
-
-  const rows = qaTestSummaryData?.map((obj) => {
-    const {
-      id,
-      componentID,
-      testNumber,
-      testResultCode,
-      beginDate,
-      beginHour,
-      endDate,
-      endHour,
-    } = obj;
-    return {
-      id,
-      componentID,
-      testNumber,
-      testResultCode,
-      beginDate,
-      beginHour,
-      endDate,
-      endHour,
-    };
-  });
+  }, [beginDate, endDate, locations, orisCode]);
 
   const onSelectRowsHandler = ({
     _allSelected,
     _selectedCount,
     selectedRows,
   }) => {
-    const selectedIds = selectedRows.map((row) => row.id);
-
+    dataRef.current = selectedRows;
+    const selectedIds = {
+      testSummary: selectedRows.map((row) => row.id)
+    }
     setExportState(
       selectedConfig.id,
       {
         ...exportState,
         selectedIds,
-        qaTestSummaryRows: rows,
       },
       workspaceSection
     );
   };
 
   const selectableRowSelectedHandler = (row) => {
-    return exportState?.selectedIds?.includes(row.id);
+    return exportState?.selectedIds?.testSummary?.includes(row.id);
   };
 
   const dataTable = (
@@ -89,7 +78,7 @@ const ExportTablesContainer = ({
         highlightOnHover={true}
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
         columns={qaTestSummaryCols}
-        data={rows}
+        data={qaTestSummaryData}
         selectableRows
         onSelectedRowsChange={onSelectRowsHandler}
         selectableRowSelected={selectableRowSelectedHandler}
@@ -97,44 +86,12 @@ const ExportTablesContainer = ({
     </div>
   );
 
-  const tableContent = qaTestSummaryData ? dataTable : <Preloader />;
-
-  return <>{tableContent}</>;
+  return (
+    <>
+      {loading && <Preloader />}
+      {!loading && dataTable}
+    </>
+  );
 };
 
 export default ExportTablesContainer;
-
-const qaTestSummaryCols = [
-  {
-    name: "Unit or Stack Pipe ID",
-    selector: (row) => row.unitOrStackPipeId,
-  },
-  {
-    name: "Component ID",
-    selector: (row) => row.componentID,
-  },
-  {
-    name: "Test Number",
-    selector: (row) => row.testNumber,
-  },
-  {
-    name: "Test Result Code",
-    selector: (row) => row.testResultCode,
-  },
-  {
-    name: "Begin Date",
-    selector: (row) => row.beginDate,
-  },
-  {
-    name: "Begin Hour",
-    selector: (row) => row.beginHour,
-  },
-  {
-    name: "End Date",
-    selector: (row) => row.endDate,
-  },
-  {
-    name: "End Hour",
-    selector: (row) => row.endHour,
-  },
-];
