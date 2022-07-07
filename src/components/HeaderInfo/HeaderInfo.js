@@ -5,7 +5,6 @@ import config from "../../config";
 import { triggerEvaluation } from "../../utils/api/quartzApi";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
-import * as facApi from "../../utils/api/facilityApi";
 import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 import Modal from "../Modal/Modal";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
@@ -19,7 +18,6 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../additional-functions/prompt-to-save-unsaved-changes";
-import download from "downloadjs";
 import GenericTable from "../GenericTable/GenericTable";
 import {
   assignFocusEventListeners,
@@ -189,32 +187,7 @@ export const HeaderInfo = ({
     }
   };
 
-  const exportHandler = () => {
-    mpApi
-      .getMonitoringPlanById(configID)
-      .then((mpRes) => {
-        const facId = mpRes.data["facId"];
-        const mpName = mpRes.data["name"];
-        const date = new Date();
-        const year = date.getUTCFullYear();
-        const month = date.getUTCMonth() + 1;
-        const day = date.getUTCDate();
-        const fullDateString = `${month}-${day}-${year}`;
-        facApi
-          .getFacilityById(facId)
-          .then((facRes) => {
-            const facName = facRes.data["facilityName"];
-            const exportFileName = `MP Export - ${facName}, ${mpName} (${fullDateString}).json`;
-            download(JSON.stringify(mpRes.data, null, "\t"), exportFileName);
-          })
-          .catch((facErr) => {
-            console.log(facErr);
-          });
-      })
-      .catch((mpErr) => {
-        console.log(mpErr);
-      });
-  };
+  const exportHandler = () => mpApi.exportMonitoringPlanDownload(configID);
 
   const formatCommentsToTable = (data) => {
     const formmatedData = [];
@@ -390,9 +363,9 @@ export const HeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-        configs
-          .map((location) => location["monPlanId"])
-          .indexOf(selectedConfig.id)
+      configs
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -527,9 +500,8 @@ export const HeaderInfo = ({
     if (inWorkspace) {
       // when config is checked out by someone
       if (checkedOut) {
-        return `Currently checked-out by: ${
-          currentConfig["checkedOutBy"]
-        } ${formatDate(currentConfig["checkedOutOn"])}`;
+        return `Currently checked-out by: ${currentConfig["checkedOutBy"]
+          } ${formatDate(currentConfig["checkedOutOn"])}`;
       }
       // when config is not checked out
       return `Last updated by: ${currentConfig.lastUpdatedBy} ${formatDate(
@@ -549,9 +521,8 @@ export const HeaderInfo = ({
   return (
     <div className="header">
       <div
-        className={`usa-overlay ${
-          showRevertModal || showEvalReport ? "is-visible" : ""
-        } `}
+        className={`usa-overlay ${showRevertModal || showEvalReport ? "is-visible" : ""
+          } `}
       />
       {showRevertModal ? (
         <Modal

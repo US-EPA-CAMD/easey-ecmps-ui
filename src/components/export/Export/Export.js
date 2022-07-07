@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import ExportTab from "../ExportTab/ExportTab";
 import {
   convertSectionToStoreName,
-  QA_CERT_TEST_SUMMARY_STORE_NAME,
+  EXPORT_STORE_NAME
 } from "../../../additional-functions/workspace-section-and-store-names";
 import { setActiveTab } from "../../../store/actions/activeTab";
 import { setExportState } from "../../../store/actions/dynamicFacilityTab";
@@ -42,11 +42,11 @@ export const Export = ({
 const mapStateToProps = (state) => {
   return {
     tabs: state.openedFacilityTabs[
-      convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
+      convertSectionToStoreName(EXPORT_STORE_NAME)
     ],
     activeTab:
       state.activeTab[
-        convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
+        convertSectionToStoreName(EXPORT_STORE_NAME)
       ][0],
     exportTab: state.openedFacilityTabs.export,
   };
@@ -59,7 +59,7 @@ const mapDispatchToProps = (dispatch) => {
         setActiveTab(
           orisCode,
           value,
-          convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
+          convertSectionToStoreName(EXPORT_STORE_NAME)
         )
       ),
     setExportState: (configId, exportState, workspaceSection) =>
