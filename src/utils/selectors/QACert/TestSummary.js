@@ -1,13 +1,7 @@
-export const getTestSummary = (totalData) => {
-  const data = totalData;
+export const getTestSummary = (data) => {
   const records = [];
   //   let data = [1, 2];
   data.forEach((el) => {
-    const beginDate = el.beginDate
-      ? formatStringToDate(el.beginDate.toString())
-      : "";
-    const beginHour = el.beginHour ? el.beginHour.toString() : "";
-    const beginMinute = el.beginMinute ? el.beginMinute.toString() : "";
     const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
     const endHour = el.endHour ? el.endHour.toString() : "";
 
@@ -19,35 +13,13 @@ export const getTestSummary = (totalData) => {
           : el.unitId !== null
           ? el.unitId
           : "",
-      //   col2: el.unitId,
-      col2: el.testTypeCode,
-      col3: el.monitoringSystemId,
-      col4: el.componentId,
-      col5: el.spanScaleCode,
-      col6: el.testNumber,
-      col7: el.testReasonCode,
-      col8: el.testDescription,
-      col9: el.testResultCode,
-      col10: beginDate,
-      col11: beginHour,
-      col12: beginMinute,
-      col13: endDate,
-      col14: endHour,
-      col15: endMinute,
-      col16: el.gracePeriodIndicator,
-      col17: el.year,
-      col18: el.quarter,
-      col19: el.testComment,
-      col20: el.injectionProtocolCode,
-      col21: el.id,
-      //   col23: el.calculatedGracePeriodIndicator,
-      //   col24: el.calculatedTestResultCode,
-      //   col25: el.reportPeriodId,
-      //   col26: el.calculatedSpanValue,
-      //   col27: el.userId,
-      //   col28: el.id,
-      //   col29: el.calculatedGracePeriodIndicator,
-      //   col30: el.calculatedTestResultCode,
+      col2: el.componentId,
+      col3: el.testNumber,
+      col4: el.testReasonCode,
+      col5: el.testResultCode,
+      col6: endDate,
+      col7: endHour,
+      col8: endMinute,
     });
   });
   return records;
