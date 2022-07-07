@@ -5,7 +5,7 @@ export const successResponses = [200, 201];
 
 export async function handleResponse(response) {
   console.log(response);
-  if (successResponses.includes(response.status) && response.data) {
+  if (successResponses.includes(response.status) && (response.data !== null || response.data !== undefined)) {
     return response;
   } else {
     throw new Error("failed");
