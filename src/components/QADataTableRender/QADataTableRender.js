@@ -194,11 +194,9 @@ const QADataTableRender = ({
                     {"Remove"}
                   </Button> */}
                   <RemoveButton onConfirmHandler={async () => {
-                    console.log('row', row);
-                    const id = row.id
-                    const locId = row.locationId
-                    const deletedSuccessfully = await deleteQATestSummary(locId, id)
-                    if (!deletedSuccessfully) return
+                    const { id, locId } = row
+                    // const deletedSuccessfully = await deleteQATestSummary(locId, id)
+                    // if (!deletedSuccessfully) return
                     setTableData(oldRows => oldRows.filter(curRow => curRow.id !== id))
                   }} />
 
