@@ -5,7 +5,6 @@ import config from "../../config";
 import { triggerEvaluation } from "../../utils/api/quartzApi";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
-import * as facApi from "../../utils/api/facilityApi";
 import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 import Modal from "../Modal/Modal";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
@@ -19,7 +18,6 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../additional-functions/prompt-to-save-unsaved-changes";
-import download from "downloadjs";
 import GenericTable from "../GenericTable/GenericTable";
 import {
   assignFocusEventListeners,

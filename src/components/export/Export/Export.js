@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import ExportTab from "../ExportTab/ExportTab";
 import {
   convertSectionToStoreName,
-  QA_CERT_TEST_SUMMARY_STORE_NAME,
   EXPORT_STORE_NAME
 } from "../../../additional-functions/workspace-section-and-store-names";
 import { setActiveTab } from "../../../store/actions/activeTab";
