@@ -5,27 +5,27 @@ import { getTestSummary } from "../../../utils/selectors/QACert/TestSummary.js";
 
 import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
 import { Button } from "@trussworks/react-uswds";
+import { Preloader } from "@us-epa-camd/easey-design-system";
 
 // contains test summary data table
 
 const QALinearitySummaryDataTable = ({ locationSelectValue, user }) => {
-  const [dataLoaded, setDataLoaded] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [qaTestSummary, setQATestSummary] = useState([]);
 
   useEffect(() => {
     console.log("location", locationSelectValue);
-    setDataLoaded(false);
     if (
       // updateTable ||
       qaTestSummary.length <= 0 ||
       locationSelectValue
     ) {
+      setLoading(true);
       getQATestSummary(locationSelectValue).then((res) => {
         console.log(res.data, "res");
         setQATestSummary(res.data);
-
-        setDataLoaded(true);
+        setLoading(false);
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -38,25 +38,13 @@ const QALinearitySummaryDataTable = ({ locationSelectValue, user }) => {
   }, [qaTestSummary]);
   const columns = [
     "Unit or Stack Pipe ID",
-    "Test Type Code",
-    "Monitoring System Code",
     "Component ID",
-    "Span Scale Code",
     "Test Number",
     "Test Reason Code",
-    "Test Description",
     "Test Result Code",
-    "Begin Date",
-    "Begin Hour",
-    "Begin Minute",
     "End Date",
     "End Hour",
     "End Minute",
-    "Grace Period Indicator",
-    "Year",
-    "Quarter",
-    "Test Comment",
-    "Injection Protocol Code",
   ];
 
   return (
@@ -65,18 +53,19 @@ const QALinearitySummaryDataTable = ({ locationSelectValue, user }) => {
         <h3 className="display-inline padding-right-3">Test Summary Data</h3>
         {user ? <Button> Add Test Summary Data</Button> : ""}
       </div>
-
-      <QADataTableRender
-        columnNames={columns}
-        data={data}
-        expandableRows
-        actionsBtn={"View"}
-        user={user}
-      />
+      {
+        !loading ? 
+        (<QADataTableRender
+            columnNames={columns}
+            data={data}
+            expandableRows
+            actionsBtn={"View"}
+            user={user}
+          />
+        ) : (<Preloader />)
+      }
     </div>
-    // ) : (
-    //   <Preloader />
-  );
+  )
 };
 
 export default QALinearitySummaryDataTable;

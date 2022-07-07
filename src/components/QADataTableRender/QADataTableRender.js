@@ -45,7 +45,7 @@ const QADataTableRender = ({
           selector: `col${index + 1}`,
           sortable: true,
           wrap: true,
-          width: "5%",
+          width: "10%",
           style: {
             justifyContent: "left",
           },
@@ -140,7 +140,7 @@ const QADataTableRender = ({
       columns.unshift({
         name: "Actions",
         button: true,
-        width: user ? "8%" : "4%",
+        width: user ? "15%" : "10%",
         style: {
           justifyContent: "left",
           // width:'fit-content'
