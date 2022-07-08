@@ -12,8 +12,8 @@ const ConfirmActionButton = ({
   description = defaultDescription,
   confirmText = defaultConfirmText,
   cancelText = defaultCancelText,
-  onConfirmHandler,
-  onCancelHandler,
+  onConfirm,
+  onCancel,
 }) => {
   const modalRef = useRef()
   return (
@@ -23,25 +23,25 @@ const ConfirmActionButton = ({
       </ModalToggleButton>
       <Modal
         ref={modalRef}
-        id="example-modal-1"
+        id="confirmation-modal-1"
         aria-labelledby="modal-1-heading"
         aria-describedby="modal-1-description">
         <ModalHeading id="modal-1-heading">
           {heading}
         </ModalHeading>
-        <div className="usa-prose" onClick={() => console.log(modalRef)}>
+        <div className="usa-prose">
           <p id="modal-1-description">
             {description}
           </p>
         </div>
         <ModalFooter className="float-right">
           <ButtonGroup>
-            <div onClick={onConfirmHandler}>
+            <div onClick={onConfirm}>
               <ModalToggleButton modalRef={modalRef} closer >
                 {confirmText}
               </ModalToggleButton>
             </div>
-            <div onClick={onCancelHandler}>
+            <div onClick={onCancel}>
               <ModalToggleButton
                 modalRef={modalRef}
                 closer

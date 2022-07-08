@@ -193,7 +193,7 @@ const QADataTableRender = ({
                   >
                     {"Remove"}
                   </Button> */}
-                  <RemoveButton onConfirmHandler={async () => {
+                  <RemoveButton onConfirm={async () => {
                     const { id, locId } = row
                     // const deletedSuccessfully = await deleteQATestSummary(locId, id)
                     // if (!deletedSuccessfully) return
@@ -250,11 +250,11 @@ const QADataTableRender = ({
 export default QADataTableRender;
 
 const RemoveButton = ({
-  onConfirmHandler
+  onConfirm
 }) => {
   return <ConfirmActionButton
     buttonText="Remove"
     description="Are you sure you want to remove the selected data?"
-    onConfirmHandler={onConfirmHandler}
+    onConfirm={onConfirm}
   />
 }
