@@ -174,29 +174,10 @@ const QADataTableRender = ({
                   >
                     {"Edit"}
                   </Button>
-
-                  {/* <Button
-                    type="button"
-                    epa-testid="btnOpen"
-                    className="cursor-pointer open-modal-button"
-                    outline={true}
-                    id={
-                      // tableTitle
-                      //   ? `btnOpen${tableTitle.split(" ").join("")}`
-                      // :
-                      `btnOpen${row[`col${Object.keys(row).length - 1}`]}`
-                    }
-                    onClick={(event) => {
-                      // openHandler(normalizedRow, false);
-                      console.log('event', event);
-                    }}
-                  >
-                    {"Remove"}
-                  </Button> */}
                   <RemoveButton onConfirm={async () => {
                     const { id, locId } = row
-                    // const deletedSuccessfully = await deleteQATestSummary(locId, id)
-                    // if (!deletedSuccessfully) return
+                    const deletedSuccessfully = await deleteQATestSummary(locId, id)
+                    if (!deletedSuccessfully) return
                     setTableData(oldRows => oldRows.filter(curRow => curRow.id !== id))
                   }} />
 
