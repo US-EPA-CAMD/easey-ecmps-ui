@@ -1,8 +1,6 @@
-import React, { useState, useMemo, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
-import { ArrowLeft, Remove } from "@material-ui/icons";
-import { Add } from "@material-ui/icons";
-import { dataColumnSwap } from "../../additional-functions/datatable-swap";
+import { Add, Remove } from "@material-ui/icons";
 import "./QADataTableRender.scss";
 
 // *** local
@@ -177,7 +175,7 @@ const QADataTableRender = ({
                   <RemoveButton onConfirm={async () => {
                     const { id, locId } = row
                     const deletedSuccessfully = await deleteQATestSummary(locId, id)
-                    if (!deletedSuccessfully) return
+                    if (!deletedSuccessfully) { return }
                     setTableData(oldRows => oldRows.filter(curRow => curRow.id !== id))
                   }} />
 
