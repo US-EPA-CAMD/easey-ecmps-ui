@@ -6,7 +6,7 @@ const defaultDescription = 'Please confirm your action'
 const defaultConfirmText = 'Yes'
 const defaultCancelText = 'Cancel'
 
-const ConfirmActionButton = ({
+const ConfirmActionModal = ({
   buttonText,
   heading = defaultHeading,
   description = defaultDescription,
@@ -57,4 +57,4 @@ const ConfirmActionButton = ({
   )
 }
 
-export default ConfirmActionButton
+export default ConfirmActionModal

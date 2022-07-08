@@ -24,7 +24,7 @@ import {
   ensure508,
   addScreenReaderLabelForCollapses,
 } from "../../additional-functions/ensure-508";
-import ConfirmActionButton from "../ConfirmActionModal/ConfirmActionButton";
+import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
 import { deleteQATestSummary } from "../../utils/api/qaCertificationsAPI";
 
 const QADataTableRender = ({
@@ -231,7 +231,7 @@ export default QADataTableRender;
 const RemoveButton = ({
   onConfirm
 }) => {
-  return <ConfirmActionButton
+  return <ConfirmActionModal
     buttonText="Remove"
     description="Are you sure you want to remove the selected data?"
     onConfirm={onConfirm}
