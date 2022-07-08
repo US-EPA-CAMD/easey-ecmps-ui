@@ -7,6 +7,8 @@ export const getTestSummary = (data) => {
 
     const endMinute = el.endMinute ? el.endMinute.toString() : "";
     records.push({
+      id: el.id,
+      locationId: el.locationId,
       col1:
         el.stackPipeId !== null
           ? el.stackPipeId

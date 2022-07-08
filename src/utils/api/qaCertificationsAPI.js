@@ -94,3 +94,17 @@ export const exportQA = async (
     return handleError(error);
   }
 };
+
+export const deleteQATestSummary = async (locId, id) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
+}

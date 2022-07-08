@@ -1,8 +1,6 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
-import { ArrowLeft, Remove } from "@material-ui/icons";
-import { Add } from "@material-ui/icons";
-import { dataColumnSwap } from "../../additional-functions/datatable-swap";
+import { Add, Remove } from "@material-ui/icons";
 import "./QADataTableRender.scss";
 
 // *** local
@@ -26,6 +24,8 @@ import {
   ensure508,
   addScreenReaderLabelForCollapses,
 } from "../../additional-functions/ensure-508";
+import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
+import { deleteQATestSummary } from "../../utils/api/qaCertificationsAPI";
 
 const QADataTableRender = ({
   columnNames,
@@ -70,7 +70,10 @@ const QADataTableRender = ({
       addScreenReaderLabelForCollapses();
     };
   }, []);
+
   const [totalExpand, setTotalExpand] = useState([]);
+  const [tableData, setTableData] = useState(data);
+
   useEffect(() => {
     const emptyArr = [];
     for (let i = 0; i < data.length; i++) {
@@ -169,24 +172,12 @@ const QADataTableRender = ({
                   >
                     {"Edit"}
                   </Button>
-
-                  <Button
-                    type="button"
-                    epa-testid="btnOpen"
-                    className="cursor-pointer open-modal-button"
-                    outline={true}
-                    id={
-                      // tableTitle
-                      //   ? `btnOpen${tableTitle.split(" ").join("")}`
-                      // :
-                      `btnOpen${row[`col${Object.keys(row).length - 1}`]}`
-                    }
-                    onClick={() => {
-                      // openHandler(normalizedRow, false);
-                    }}
-                  >
-                    {"Remove"}
-                  </Button>
+                  <RemoveButton onConfirm={async () => {
+                    const { id, locId } = row
+                    const deletedSuccessfully = await deleteQATestSummary(locId, id)
+                    if (!deletedSuccessfully) { return }
+                    setTableData(oldRows => oldRows.filter(curRow => curRow.id !== id))
+                  }} />
 
                   {createExpandBTNS(index, row)}
                 </div>
@@ -226,7 +217,7 @@ const QADataTableRender = ({
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
         className={`data-display-table react-transition fade-in`}
         columns={columns}
-        data={data}
+        data={tableData}
         expandableRows
         expandableRowsHideExpander
         expandableRowExpanded={(row) => row.expanded}
@@ -236,3 +227,13 @@ const QADataTableRender = ({
 };
 
 export default QADataTableRender;
+
+const RemoveButton = ({
+  onConfirm
+}) => {
+  return <ConfirmActionModal
+    buttonText="Remove"
+    description="Are you sure you want to remove the selected data?"
+    onConfirm={onConfirm}
+  />
+}
