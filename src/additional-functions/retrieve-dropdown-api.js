@@ -661,47 +661,46 @@ export const UseRetrieveDropdownApi = async (
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         });
         break;
-        //// QA & cert
+      //// QA & cert
 
-        case "testResultCode":
-          await dmApi.getAllTestResultCodes().then((response) => {
-            options = response.data.map((option) => {
-              return {
-                code: option["testResultCode"],
-                name: option["testResultCodeDescription"],
-              };
-            });
-
-            setDefaultOptions(options, fieldName);
+      case "testResultCode":
+        await dmApi.getAllTestResultCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["testResultCode"],
+              name: option["testResultCodeDescription"],
+            };
           });
-          break;
 
-          case "testReasonCode":
-            await dmApi.getAllTestReasonCodes().then((response) => {
-              options = response.data.map((option) => {
-                return {
-                  code: option["testReasonCode"],
-                  name: option["testReasonCodeDescription"],
-                };
-              });
-    
-              setDefaultOptions(options, fieldName);
-            });
-            break;
+          setDefaultOptions(options, fieldName);
+        });
+        break;
 
+      case "testReasonCode":
+        await dmApi.getAllTestReasonCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["testReasonCode"],
+              name: option["testReasonCodeDescription"],
+            };
+          });
 
-            case "testTypeCode":
-              await dmApi.getAllTestTypeCodes().then((response) => {
-                options = response.data.map((option) => {
-                  return {
-                    code: option["testTypeCode"],
-                    name: option["testTypeCodeDescription"],
-                  };
-                });
-      
-                setDefaultOptions(options, fieldName);
-              });
-              break;
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+
+      case "testTypeCode":
+        await dmApi.getAllTestTypeCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["testTypeCode"],
+              name: option["testTypeCodeDescription"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
       default:
         break;
     }

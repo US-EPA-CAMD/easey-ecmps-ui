@@ -68,29 +68,31 @@ const QALinearitySummaryDataTable = ({
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const selectText = "-- Select a value --";
-//*****
-// pull these out and make components reuseable like monitoring plan 
-  const dropdownArray = [["testTypeCode", "testReasonCode", "testResultCode"]];
+  //*****
+  // pull these out and make components reuseable like monitoring plan
+  const dropdownArray = [
+    ["spanScaleCode", "testTypeCode", "testReasonCode", "testResultCode"],
+  ];
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
   const dataTableName = "Test Summary Data";
   const controlInputs = {
     unitId: ["Unit or Stack Pipe ID", "input", "", ""],
-    testTypeCode: ["Test Reason Code", "dropdown", "", ""],
+    testTypeCode: ["Test Type Code", "dropdown", "", ""],
     componentID: ["Component ID", "input", "", ""],
     spanScaleCode: ["Span Scale Code", "dropdown", "", ""],
     testNumber: ["Test Number", "input", "", ""],
     testReasonCode: ["Test Reason Code", "dropdown", "", ""],
     testResultCode: ["Test Result Code", "dropdown", "", ""],
     gracePeriodIndicator: ["Grace Period Indicator ", "radio", "", ""],
-    skip: ["", "skip", "" , ""],
+    skip: ["", "skip", "", ""],
   };
 
   // goes after dateinput in modals
   const extraControlInputs = {
     testDescription: ["Test Description", "input", "", ""],
-    skip: ["", "skip", "" , ""],
-    skip1: ["", "skip", "" , ""],
+    skip: ["", "skip", "", ""],
+    skip1: ["", "skip", "", ""],
     testComment: ["Test Comment", "input", "", ""],
   };
   const controlDatePickerInputs = {
@@ -230,7 +232,7 @@ const QALinearitySummaryDataTable = ({
   };
   return (
     <div>
-       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
+      <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       <div className=" padding-3">
         <h3 className="display-inline padding-right-3">Test Summary Data</h3>
         {user ? <Button> Add Test Summary Data</Button> : ""}
