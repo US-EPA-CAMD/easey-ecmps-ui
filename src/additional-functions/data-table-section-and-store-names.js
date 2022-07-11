@@ -19,6 +19,10 @@ export const LME_QUALIFICATIONS_SECTION_NAME = "Qualification LME";
 export const LEE_QUALIFICATIONS_SECTION_NAME = "Qualification LEE";
 export const MATS_METHODS_SECTION_NAME = "Supplemental Methods";
 
+// qa & cert
+
+export const LINE_TEST_SUMMARY_SECTION_NAME = "Test Summary Data";
+
 export const DEFAULTS_STORE_NAME = "defaults";
 export const FORMULAS_STORE_NAME = "formulas";
 export const LOADS_STORE_NAME = "loads";
@@ -39,6 +43,10 @@ export const PCT_QUALIFICATIONS_STORE_NAME = "pctQualifications";
 export const LME_QUALIFICATIONS_STORE_NAME = "lmeQualifications";
 export const LEE_QUALIFICATIONS_STORE_NAME = "leeQualifications";
 export const MATS_METHODS_STORE_NAME = "matsMethods";
+
+// qa & cert
+
+export const LINE_TEST_SUMMARY_STORE_NAME = "lineTestSummary";
 
 export const convertSectionToStoreName = (dataTableName) => {
   let storeName = "";
@@ -99,6 +107,12 @@ export const convertSectionToStoreName = (dataTableName) => {
       break;
     case UNIT_CAPACITIES_SECTION_NAME:
       storeName = UNIT_CAPACITIES_STORE_NAME;
+      break;
+
+    // qa & cert
+
+    case LINE_TEST_SUMMARY_SECTION_NAME:
+      storeName = LINE_TEST_SUMMARY_STORE_NAME;
       break;
     default:
       break;

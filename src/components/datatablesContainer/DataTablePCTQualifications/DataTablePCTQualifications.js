@@ -82,13 +82,7 @@ export const DataTablePCTQualifications = ({
 
   // load dropdowns data (called once)
   useEffect(() => {
-    console.log(
-      "PCT_QUALIFICATIONS_SECTION_NAME",
-      PCT_QUALIFICATIONS_SECTION_NAME
-    );
 
-    console.log("STORE", PCT_QUALIFICATIONS_STORE_NAME);
-    console.log("mdmData", mdmDataPCT);
     if (mdmDataPCT.length === 0) {
       loadDropdownsData(PCT_QUALIFICATIONS_SECTION_NAME, dropdownArray);
     } else {
@@ -224,7 +218,6 @@ export const DataTablePCTQualifications = ({
 };
 
 const mapStateToProps = (state) => {
-  console.log("STATE", state);
   return {
     mdmDataPCT: state.dropdowns[PCT_QUALIFICATIONS_STORE_NAME],
   };

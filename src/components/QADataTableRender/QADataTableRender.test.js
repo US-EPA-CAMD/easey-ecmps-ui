@@ -99,7 +99,6 @@ describe("renders datatable with all values ", () => {
         actionsBtn={"View"}
       />
     );
-    console.log("container", container);
     const expandBTN = container.querySelector("#expandRow1");
     fireEvent.click(expandBTN);
     const collapseBTN = container.querySelector("#collapseRow1");

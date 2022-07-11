@@ -27,7 +27,6 @@ export const DynamicTabs = ({
 }) => {
   const [tabs, setTabs] = useState(tabsProps);
 
-  console.log("workspaceSection", workspaceSection);
   const addTabsHandler = (newTabs) => {
     newTabs.forEach((t) => {
       if (!tabs.some((facility) => facility.title === t.title)) {

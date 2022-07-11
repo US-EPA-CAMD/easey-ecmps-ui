@@ -29,13 +29,12 @@ import { deleteQATestSummary } from "../../utils/api/qaCertificationsAPI";
 
 const QADataTableRender = ({
   columnNames,
-
+  openHandler,
   data,
   user,
   actionsBtn,
   expandableRowComp,
 }) => {
-  console.log("data", data);
   const columns = [];
   columnNames.forEach((name, index) => {
     switch (name) {
@@ -167,17 +166,26 @@ const QADataTableRender = ({
                       `btnOpen${row[`col${Object.keys(row).length - 1}`]}`
                     }
                     onClick={() => {
-                      // openHandler(normalizedRow, false);
+                      openHandler(normalizedRow, false);
                     }}
                   >
                     {"Edit"}
                   </Button>
-                  <RemoveButton onConfirm={async () => {
-                    const { id, locId } = row
-                    const deletedSuccessfully = await deleteQATestSummary(locId, id)
-                    if (!deletedSuccessfully) { return }
-                    setTableData(oldRows => oldRows.filter(curRow => curRow.id !== id))
-                  }} />
+                  <RemoveButton
+                    onConfirm={async () => {
+                      const { id, locId } = row;
+                      const deletedSuccessfully = await deleteQATestSummary(
+                        locId,
+                        id
+                      );
+                      if (!deletedSuccessfully) {
+                        return;
+                      }
+                      setTableData((oldRows) =>
+                        oldRows.filter((curRow) => curRow.id !== id)
+                      );
+                    }}
+                  />
 
                   {createExpandBTNS(index, row)}
                 </div>
@@ -196,7 +204,7 @@ const QADataTableRender = ({
                       `btnOpen${row[`col${Object.keys(row).length - 1}`]}`
                     }
                     onClick={() => {
-                      // openHandler(normalizedRow, false);
+                      openHandler(normalizedRow, false);
                     }}
                   >
                     {"View"}
@@ -228,12 +236,12 @@ const QADataTableRender = ({
 
 export default QADataTableRender;
 
-const RemoveButton = ({
-  onConfirm
-}) => {
-  return <ConfirmActionModal
-    buttonText="Remove"
-    description="Are you sure you want to remove the selected data?"
-    onConfirm={onConfirm}
-  />
-}
+const RemoveButton = ({ onConfirm }) => {
+  return (
+    <ConfirmActionModal
+      buttonText="Remove"
+      description="Are you sure you want to remove the selected data?"
+      onConfirm={onConfirm}
+    />
+  );
+};

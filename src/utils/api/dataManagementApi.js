@@ -349,3 +349,26 @@ export const getPrefilteredSystemComponents = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+// * QA & CERT
+
+export const getAllTestTypeCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/test-type-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getAllTestResultCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/test-result-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getAllTestReasonCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/test-reason-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
