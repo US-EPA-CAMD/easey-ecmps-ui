@@ -15,7 +15,7 @@ export const modalViewData = (
   prefilterMdmMain, // result
   hasMainDropdown,
   prefilteredTotalName,
-
+  extraControlInputs = false, 
   mats = false
 ) => {
   const arr = [];
@@ -50,42 +50,43 @@ export const modalViewData = (
     totalOptionsClone[propertyName] = totalOptionsClone[mainDropdownName];
   };
 
+  const createInputControls = (inputs) => {
   // y = property name of the apis
-  for (const y in label) {
-    if (label[y][3] === "locked") {
+  for (const y in inputs) {
+    if (inputs[y][3] === "locked") {
       if (createNew) {
         arr.push([
           y,
-          label[y][0],
+          inputs[y][0],
           createNew ? "" : selected[y],
-          label[y][2] === "required" ? "required" : false,
+          inputs[y][2] === "required" ? "required" : false,
 
           "locked",
         ]);
-      } else if (label[y][1] === "date") {
+      } else if (inputs[y][1] === "date") {
         const parts = selected[y] ? selected[y].split("-") : "";
 
         const formmatedDate =
           parts !== "" ? `${parts[1]}/${parts[2]}/${parts[0]}` : "";
         arr.push([
           y,
-          label[y][0],
+          inputs[y][0],
           createNew ? "" : formmatedDate,
-          label[y][2] === "required" ? "required" : false,
+          inputs[y][2] === "required" ? "required" : false,
           "locked",
         ]);
       } else {
         arr.push([
           y,
-          label[y][0],
+          inputs[y][0],
           createNew ? "" : selected[y],
-          label[y][2] === "required" ? "required" : false,
+          inputs[y][2] === "required" ? "required" : false,
           "locked",
         ]);
       }
     } else {
       let labels = "";
-      switch (label[y][1]) {
+      switch (inputs[y][1]) {
         case "mainDropdown":
           setInitialPreFilterDependent(y);
           if (!createNew) {
@@ -99,10 +100,10 @@ export const modalViewData = (
           }
           arr.push([
             y,
-            label[y][0],
+            inputs[y][0],
             labels,
-            label[y][2] === "required" ? "required" : false,
-            label[y][1] === "mainDropdown" ? "mainDropdown" : "dropdown",
+            inputs[y][2] === "required" ? "required" : false,
+            inputs[y][1] === "mainDropdown" ? "mainDropdown" : "dropdown",
             createNew ? "select" : selected ? selected[y] : "",
             totalOptionsClone ? totalOptionsClone[y] : [],
           ]);
@@ -119,16 +120,16 @@ export const modalViewData = (
           }
           arr.push([
             y,
-            label[y][0],
+            inputs[y][0],
             labels,
-            label[y][2] === "required" ? "required" : false,
-            label[y][1] === "mainDropdown" ? "mainDropdown" : "dropdown",
+            inputs[y][2] === "required" ? "required" : false,
+            inputs[y][1] === "mainDropdown" ? "mainDropdown" : "dropdown",
             createNew ? "select" : selected ? selected[y] : "",
             totalOptionsClone ? totalOptionsClone[y] : [],
           ]);
           break;
         case "independentDropdown":
-          setInitialPreFilter(label[y][1], y, totalOptionsClone[y]);
+          setInitialPreFilter(inputs[y][1], y, totalOptionsClone[y]);
           if (!createNew) {
             if (totalOptionsClone) {
               labels = findValue(
@@ -140,9 +141,9 @@ export const modalViewData = (
           }
           arr.push([
             y,
-            label[y][0],
+            inputs[y][0],
             labels,
-            label[y][2] === "required" ? "required" : false,
+            inputs[y][2] === "required" ? "required" : false,
             "independentDropdown",
             createNew ? "select" : selected ? selected[y] : "",
             totalOptionsClone ? totalOptionsClone[y] : [],
@@ -151,9 +152,9 @@ export const modalViewData = (
         case "input":
           arr.push([
             y,
-            label[y][0],
+            inputs[y][0],
             createNew ? "" : selected ? selected[y] : "",
-            label[y][2] === "required" ? "required" : false,
+            inputs[y][2] === "required" ? "required" : false,
             "input",
           ]);
           break;
@@ -167,9 +168,9 @@ export const modalViewData = (
           }
           arr.push([
             y,
-            label[y][0],
+            inputs[y][0],
             formattedDate,
-            label[y][2] === "required" ? "required" : false,
+            inputs[y][2] === "required" ? "required" : false,
             "date",
             createNew ? "" : selected ? selected[y] : "",
           ]);
@@ -182,17 +183,17 @@ export const modalViewData = (
           if (selected) {
             arr.push([
               y,
-              label[y][0],
+              inputs[y][0],
               parseInt(selected[y]),
-              label[y][2] === "required" ? "required" : false,
+              inputs[y][2] === "required" ? "required" : false,
               "radio",
             ]);
           } else {
             arr.push([
               y,
-              label[y][0],
+              inputs[y][0],
               false,
-              label[y][2] === "required" ? "required" : false,
+              inputs[y][2] === "required" ? "required" : false,
               "radio",
             ]);
           }
@@ -202,7 +203,12 @@ export const modalViewData = (
       }
     }
   }
-  for (const y in time) {
+}
+
+
+  const createTimeInputControls = () =>{
+    
+    for (const y in time) {
     if (
       (y === "endDate" ||
         y === "beginDate" ||
@@ -249,11 +255,12 @@ export const modalViewData = (
         createNew ? "" : selected ? selected[y][1] : "",
       ]);
     }
-    if (
+    // text input time 
+    if ((
       y === "endHour" ||
       y === "beginHour" ||
       y === "wafEndHour" ||
-      y === "wafBeginHour"
+      y === "wafBeginHour") && time[y][2] === ""
     ) {
       arr.push([
         y,
@@ -264,9 +271,46 @@ export const modalViewData = (
         createNew ? "" : selected ? selected[y] : "",
       ]);
     }
+// dropdown time selection
+    if (
+      y === "endHour" ||
+      y === "beginHour" 
+    ) {
+      arr.push([
+        y,
+        time[y][0],
+        createNew ? "" : selected ? selected[y] : "",
+        time[y][2] === "required" ? "required" : false,
+        "hourDropdown",
+        createNew ? "" : selected ? selected[y] : "",
+      ]);
+    }
+    if (
+      y === "endMinute" ||
+      y === "beginMinute"
+    ) {
+      arr.push([
+        y,
+        time[y][0],
+        createNew ? "" : selected ? selected[y] : "",
+        time[y][2] === "required" ? "required" : false,
+        "minuteDropdown",
+        createNew ? "" : selected ? selected[y] : "",
+      ]);
+    }
+
     if (y === "skip") {
       arr.push(["", "", "", "", "skip"]);
     }
   }
+
+  }
+  createInputControls(label);
+  createTimeInputControls();
+  if(extraControlInputs){
+    createInputControls(extraControlInputs);
+  }
+
+
   return arr;
 };

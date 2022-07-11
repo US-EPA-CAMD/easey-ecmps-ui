@@ -85,9 +85,11 @@ const ModalDetails = ({
   }
 
   const makeViewOnlyComp = (value) => {
+    console.log('value',value)
     return (
       <div key={`${value[1]}`} className="grid-col">
-        {((value[4] === "time" || value[4] === "date") && value[5] === null) ||
+        {
+        // ((value[4] === "time" || value[4] === "date") && value[5] === null) ||
         value[0] === false ? (
           ""
         ) : (
@@ -243,7 +245,50 @@ const ModalDetails = ({
           />
         );
         break;
-
+      case "minuteDropdown":
+        const minuteArr = [];
+        for (let i = 0; i <= 60; i++) {
+          minuteArr.push({ code: i, name: i });
+        }
+        comp = (
+          <SelectBox
+            className={`modalUserInput ${
+              cols === 3 ? "" : largeWidthCardStyle
+            }`}
+            epadataname={value[0]}
+            options={minuteArr}
+            initialSelection={!create ? value[5] : "select"}
+            selectKey="code"
+            id={value[1]}
+            epa-testid={value[0].split(" ").join("-")}
+            name={value[1]}
+            secondOption="name"
+            disableDropdownFlag={false}
+          />
+        );
+        break;
+        case "hourDropdown":
+          const hourArr = [];
+          for (let i = 0; i <= 23; i++) {
+            hourArr.push({ code: i, name: i });
+          }
+          comp = (
+            <SelectBox
+              className={`modalUserInput ${
+                cols === 3 ? "" : largeWidthCardStyle
+              }`}
+              epadataname={value[0]}
+              options={hourArr}
+              initialSelection={!create ? value[5] : "select"}
+              selectKey="code"
+              id={value[1]}
+              epa-testid={value[0].split(" ").join("-")}
+              name={value[1]}
+              secondOption="name"
+              disableDropdownFlag={false}
+            />
+          );
+          break;
       case "input":
         comp = (
           <TextInput

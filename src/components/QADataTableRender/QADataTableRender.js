@@ -29,7 +29,7 @@ import { deleteQATestSummary } from "../../utils/api/qaCertificationsAPI";
 
 const QADataTableRender = ({
   columnNames,
-
+  openHandler,
   data,
   user,
   actionsBtn,
@@ -167,7 +167,7 @@ const QADataTableRender = ({
                       `btnOpen${row[`col${Object.keys(row).length - 1}`]}`
                     }
                     onClick={() => {
-                      // openHandler(normalizedRow, false);
+                      openHandler(normalizedRow, false);
                     }}
                   >
                     {"Edit"}
@@ -196,7 +196,7 @@ const QADataTableRender = ({
                       `btnOpen${row[`col${Object.keys(row).length - 1}`]}`
                     }
                     onClick={() => {
-                      // openHandler(normalizedRow, false);
+                      openHandler(normalizedRow, false);
                     }}
                   >
                     {"View"}

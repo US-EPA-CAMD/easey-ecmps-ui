@@ -24,7 +24,6 @@ const locationAttribute = "Location Attribute";
 const relationshipData = "Relationship Data";
 // Getting records from API
 export const getDataTableApis = async (name, location, selectedLocation) => {
-  console.log("name", name, location, selectedLocation);
   switch (name) {
     case load:
       return mpApi.getMonitoringLoads(location);

@@ -114,7 +114,6 @@ export const DataTableQualifications = ({
       revertedState
     ) {
       mpApi.getQualifications(locationSelectValue).then((res) => {
-        console.log(res.data, "res.data");
         setQualificationsData(res.data);
         setDataLoaded(true);
         setUpdateTable(false);
@@ -191,7 +190,6 @@ export const DataTableQualifications = ({
     setOpenPCT(true);
     setOpenLEE(false);
     setOpenLME(false);
-    console.log(openPCT, "openPCT");
     buildBreadBar();
     let userInput = extractUserInput(payload, ".modalUserInput");
     openQualificationDataModal(
@@ -393,7 +391,6 @@ export const DataTableQualifications = ({
   const [selectedModalData, setSelectedModalData] = useState(null);
 
   const openQualificationDataModal = (row, bool, create) => {
-    console.log("create", row, bool, create);
     let qualData = null;
     setCreating(create);
     setCreateNewQualificationData(create);
@@ -402,7 +399,6 @@ export const DataTableQualifications = ({
         (element) => element.id === row[`col${Object.keys(row).length - 1}`]
       )[0];
       setSelectedQualificationData(qualData);
-      console.log(qualData, "qualdata", qualificationData);
     }
     setSelectedModalData(
       modalViewData(
