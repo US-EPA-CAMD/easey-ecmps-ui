@@ -79,6 +79,7 @@ const QALinearitySummaryDataTable = ({
   const controlInputs = {
     unitId: ["Unit or Stack Pipe ID", "input", "", ""],
     testTypeCode: ["Test Type Code", "dropdown", "", ""],
+    skip2: ["", "skip", "", ""],
     componentID: ["Component ID", "input", "", ""],
     spanScaleCode: ["Span Scale Code", "dropdown", "", ""],
     testNumber: ["Test Number", "input", "", ""],
