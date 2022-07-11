@@ -90,9 +90,6 @@ const QALinearitySummaryDataTable = ({
 
   // goes after dateinput in modals
   const extraControlInputs = {
-    testDescription: ["Test Description", "input", "", ""],
-    skip: ["", "skip", "", ""],
-    skip1: ["", "skip", "", ""],
     testComment: ["Test Comment", "input", "", ""],
   };
   const controlDatePickerInputs = {
