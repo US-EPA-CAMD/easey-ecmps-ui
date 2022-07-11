@@ -142,7 +142,7 @@ const QADataTableRender = ({
       columns.unshift({
         name: "Actions",
         button: true,
-        width: user ? "15%" : "10%",
+        width: user ? "22%" : "10%",
         style: {
           justifyContent: "left",
           // width:'fit-content'
@@ -155,6 +155,9 @@ const QADataTableRender = ({
               {/* user is logged in  */}
               {user ? (
                 <div className="editViewExpandGroup ">
+                  <Button>
+                    Evaluate
+                  </Button>
                   <Button
                     type="button"
                     epa-testid="btnOpen"
