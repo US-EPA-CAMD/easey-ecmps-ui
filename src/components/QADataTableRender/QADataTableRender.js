@@ -29,13 +29,14 @@ import { deleteQATestSummary } from "../../utils/api/qaCertificationsAPI";
 
 const QADataTableRender = ({
   columnNames,
-
+  actionColumnName,
+  columnWidth,
   data,
   user,
   actionsBtn,
   expandableRowComp,
 }) => {
-  console.log("data", data);
+
   const columns = [];
   columnNames.forEach((name, index) => {
     switch (name) {
@@ -45,7 +46,7 @@ const QADataTableRender = ({
           selector: `col${index + 1}`,
           sortable: true,
           wrap: true,
-          width: "10%",
+          width: `${columnWidth}%`,
           style: {
             justifyContent: "left",
           },
@@ -79,7 +80,7 @@ const QADataTableRender = ({
     for (let i = 0; i < data.length; i++) {
       emptyArr.push(0);
     }
-    console.log("data", data);
+    //console.log("data", data);
     setTotalExpand(emptyArr);
   }, [data]);
 
@@ -141,9 +142,9 @@ const QADataTableRender = ({
   if (actionsBtn) {
     if (actionsBtn === "View") {
       columns.unshift({
-        name: "Actions",
+        name: actionColumnName,
         button: true,
-        width: user ? "15%" : "10%",
+        width: user ? "15%" : `${columnWidth}%`,
         style: {
           justifyContent: "left",
           // width:'fit-content'
@@ -179,7 +180,7 @@ const QADataTableRender = ({
                     setTableData(oldRows => oldRows.filter(curRow => curRow.id !== id))
                   }} />
 
-                  {createExpandBTNS(index, row)}
+                  {/* {createExpandBTNS(index, row)} */}
                 </div>
               ) : (
                 // user is not logged in (in public record)
@@ -201,7 +202,7 @@ const QADataTableRender = ({
                   >
                     {"View"}
                   </Button>
-                  {createExpandBTNS(index, row)}
+                  {/* {createExpandBTNS(index, row)} */}
                 </div>
               )}
             </div>
@@ -219,8 +220,8 @@ const QADataTableRender = ({
         columns={columns}
         data={tableData}
         expandableRows
-        expandableRowsHideExpander
-        expandableRowExpanded={(row) => row.expanded}
+        //expandableRowsHideExpander
+        expandableRowsComponent={expandableRowComp}
       />
     </div>
   );

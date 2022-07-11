@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI.js";
 import { getTestSummary } from "../../../utils/selectors/QACert/TestSummary.js";
+import QALinearitySummaryExpandableRows from "../QALinearitySummaryExpandableRows/QALinearitySummaryExpandableRows";
 /*********** COMPONENTS ***********/
 
 import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
@@ -57,10 +58,12 @@ const QALinearitySummaryDataTable = ({ locationSelectValue, user }) => {
         !loading ? 
         (<QADataTableRender
             columnNames={columns}
+            columnWidth={10}
             data={data}
-            expandableRows
+            actionColumnName={"Actions"}
             actionsBtn={"View"}
             user={user}
+            expandableRowComp={<QALinearitySummaryExpandableRows user={user}/>}
           />
         ) : (<Preloader />)
       }

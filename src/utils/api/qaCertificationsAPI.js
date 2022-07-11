@@ -108,3 +108,17 @@ export const deleteQATestSummary = async (locId, id) => {
     return handleError(error);
   }
 }
+
+export const getQALinearitySummary = async (locID, testSumId) => {
+  let url = `${config.services.qaCertification.uri}`;
+
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+
+  // *** attach the rest of the url
+  url = `${url}/locations/${locID}/test-summary/${testSumId}/linearities`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
