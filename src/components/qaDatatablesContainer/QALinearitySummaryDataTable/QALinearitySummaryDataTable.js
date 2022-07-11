@@ -79,14 +79,13 @@ const QALinearitySummaryDataTable = ({
   const controlInputs = {
     unitId: ["Unit or Stack Pipe ID", "input", "", ""],
     testTypeCode: ["Test Type Code", "dropdown", "", ""],
-    skip2: ["", "skip", "", ""],
+    skip: ["", "skip", "", ""],
     componentID: ["Component ID", "input", "", ""],
     spanScaleCode: ["Span Scale Code", "dropdown", "", ""],
     testNumber: ["Test Number", "input", "", ""],
     testReasonCode: ["Test Reason Code", "dropdown", "", ""],
     testResultCode: ["Test Result Code", "dropdown", "", ""],
     gracePeriodIndicator: ["Grace Period Indicator ", "radio", "", ""],
-    skip: ["", "skip", "", ""],
   };
 
   // goes after dateinput in modals
