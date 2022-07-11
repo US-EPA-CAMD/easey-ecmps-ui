@@ -68,7 +68,8 @@ const QALinearitySummaryDataTable = ({
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const selectText = "-- Select a value --";
-
+//*****
+// pull these out and make components reuseable like monitoring plan 
   const dropdownArray = [["testTypeCode", "testReasonCode", "testResultCode"]];
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
@@ -103,6 +104,8 @@ const QALinearitySummaryDataTable = ({
 
     endMinute: ["End Minute", "minuteDropdown", "dropdown", ""],
   };
+
+  //**** */
   useEffect(() => {
     if (
       // updateTable ||
@@ -229,6 +232,7 @@ const QALinearitySummaryDataTable = ({
   };
   return (
     <div>
+       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       <div className=" padding-3">
         <h3 className="display-inline padding-right-3">Test Summary Data</h3>
         {user ? <Button> Add Test Summary Data</Button> : ""}

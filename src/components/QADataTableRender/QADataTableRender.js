@@ -35,7 +35,6 @@ const QADataTableRender = ({
   actionsBtn,
   expandableRowComp,
 }) => {
-  console.log("data", data);
   const columns = [];
   columnNames.forEach((name, index) => {
     switch (name) {
@@ -172,12 +171,21 @@ const QADataTableRender = ({
                   >
                     {"Edit"}
                   </Button>
-                  <RemoveButton onConfirm={async () => {
-                    const { id, locId } = row
-                    const deletedSuccessfully = await deleteQATestSummary(locId, id)
-                    if (!deletedSuccessfully) { return }
-                    setTableData(oldRows => oldRows.filter(curRow => curRow.id !== id))
-                  }} />
+                  <RemoveButton
+                    onConfirm={async () => {
+                      const { id, locId } = row;
+                      const deletedSuccessfully = await deleteQATestSummary(
+                        locId,
+                        id
+                      );
+                      if (!deletedSuccessfully) {
+                        return;
+                      }
+                      setTableData((oldRows) =>
+                        oldRows.filter((curRow) => curRow.id !== id)
+                      );
+                    }}
+                  />
 
                   {createExpandBTNS(index, row)}
                 </div>
@@ -228,12 +236,12 @@ const QADataTableRender = ({
 
 export default QADataTableRender;
 
-const RemoveButton = ({
-  onConfirm
-}) => {
-  return <ConfirmActionModal
-    buttonText="Remove"
-    description="Are you sure you want to remove the selected data?"
-    onConfirm={onConfirm}
-  />
-}
+const RemoveButton = ({ onConfirm }) => {
+  return (
+    <ConfirmActionModal
+      buttonText="Remove"
+      description="Are you sure you want to remove the selected data?"
+      onConfirm={onConfirm}
+    />
+  );
+};
