@@ -247,7 +247,7 @@ const ModalDetails = ({
         break;
       case "minuteDropdown":
         const minuteArr = [];
-        for (let i = 0; i <= 60; i++) {
+        for (let i = 0; i <= 59; i++) {
           minuteArr.push({ code: i, name: i });
         }
         comp = (
@@ -304,6 +304,7 @@ const ModalDetails = ({
           />
         );
         break;
+
 
       case "radio":
         comp = (
