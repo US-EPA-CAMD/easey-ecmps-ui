@@ -7,7 +7,7 @@ import "./ReportingPeriodSelector.scss";
 const ReportingPeriodSelector = ({
   isExport,
   dataTypes,
-  reportingPeroidSelectionHandler,
+  reportingPeriodSelectionHandler,
   exportState,
   getInitSelection,
   setLoading,
@@ -74,7 +74,7 @@ const ReportingPeriodSelector = ({
         return e;
       })
     );
-    reportingPeroidSelectionHandler(selectedObj);
+    reportingPeriodSelectionHandler(selectedObj);
   };
   const yearSelectionHandler = (event) => {
     const selectedObj = reportingPeriod.find(
