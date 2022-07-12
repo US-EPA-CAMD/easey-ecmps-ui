@@ -65,7 +65,7 @@ export const ExportTab = ({
     );
   };
 
-  const reportingPeroidSelectionHandler = (selectedObj) => {
+  const reportingPeriodSelectionHandler = (selectedObj) => {
     const { id, beginDate, endDate } = selectedObj;
     setReportingPeriod({ id, beginDate, endDate });
     setExportState(
@@ -142,7 +142,7 @@ export const ExportTab = ({
             <ReportingPeriodSelector
               isExport={true}
               dataTypes={dataTypes.filter((e) => e.checked)}
-              reportingPeroidSelectionHandler={reportingPeroidSelectionHandler}
+              reportingPeriodSelectionHandler={reportingPeriodSelectionHandler}
               exportState={exportState}
               setLoading={setLoading}
               getInitSelection={getInitSelection}
