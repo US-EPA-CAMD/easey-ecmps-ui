@@ -33,3 +33,19 @@ const formatStringToDate = (date) => {
 
   return `${parts[1]}/${parts[2]}/${parts[0]}`;
 };
+
+export const getLinearitySummaryRecords = (data) =>{
+  const records = [];
+  data.forEach((el) => {
+    records.push({
+      id: el.id,
+      testSumId: el.testSumId,
+      col1: el.gasLevelCode,
+      col2: el.meanMeasuredValue,
+      col3: el.meanReferenceValue,
+      col4: el.percentError,
+      col5: el.apsIndicator,
+    });
+  });
+  return records;
+}

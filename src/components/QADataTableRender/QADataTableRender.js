@@ -22,19 +22,22 @@ import { connect } from "react-redux";
 import {
   cleanUp508,
   ensure508,
-  addScreenReaderLabelForCollapses,
+  addRowNumberAsScreenReaderLabelForExpandables,
 } from "../../additional-functions/ensure-508";
 import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
 import { deleteQATestSummary } from "../../utils/api/qaCertificationsAPI";
 
 const QADataTableRender = ({
   columnNames,
+  actionColumnName,
+  columnWidth,
   openHandler,
   data,
   user,
   actionsBtn,
   expandableRowComp,
 }) => {
+
   const columns = [];
   columnNames.forEach((name, index) => {
     switch (name) {
@@ -44,7 +47,7 @@ const QADataTableRender = ({
           selector: `col${index + 1}`,
           sortable: true,
           wrap: true,
-          width: "10%",
+          width: `${columnWidth}%`,
           style: {
             justifyContent: "left",
           },
@@ -66,7 +69,6 @@ const QADataTableRender = ({
 
     return () => {
       cleanUp508();
-      addScreenReaderLabelForCollapses();
     };
   }, []);
 
@@ -78,7 +80,7 @@ const QADataTableRender = ({
     for (let i = 0; i < data.length; i++) {
       emptyArr.push(0);
     }
-    console.log("data", data);
+    //console.log("data", data);
     setTotalExpand(emptyArr);
   }, [data]);
 
@@ -140,9 +142,9 @@ const QADataTableRender = ({
   if (actionsBtn) {
     if (actionsBtn === "View") {
       columns.unshift({
-        name: "Actions",
+        name: actionColumnName,
         button: true,
-        width: user ? "22%" : "10%",
+        width: user ? "25%" : `${columnWidth}%`,
         style: {
           justifyContent: "left",
           // width:'fit-content'
@@ -232,6 +234,7 @@ const QADataTableRender = ({
         expandableRows
         expandableRowsHideExpander
         expandableRowExpanded={(row) => row.expanded}
+        expandableRowsComponent={expandableRowComp}
       />
     </div>
   );

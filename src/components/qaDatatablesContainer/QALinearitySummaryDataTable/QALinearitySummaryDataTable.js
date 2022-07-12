@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { connect } from "react-redux";
 import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI.js";
 import { getTestSummary } from "../../../utils/selectors/QACert/TestSummary.js";
+import QALinearitySummaryExpandableRows from "../QALinearitySummaryExpandableRows/QALinearitySummaryExpandableRows";
 
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
@@ -234,18 +235,20 @@ const QALinearitySummaryDataTable = ({
         <h3 className="display-inline padding-right-3">Test Summary Data</h3>
         {user ? <Button> Add Test Summary Data</Button> : ""}
       </div>
-      {!loading ? (
-        <QADataTableRender
-          columnNames={columns}
-          data={data}
-          openHandler={openModal}
-          expandableRows
-          actionsBtn={"View"}
-          user={user}
-        />
-      ) : (
-        <Preloader />
-      )}
+      {
+        !loading ? 
+        (<QADataTableRender
+            columnNames={columns}
+            columnWidth={10}
+            data={data}
+            openHandler={openModal}
+            actionColumnName={"Actions"}
+            actionsBtn={"View"}
+            user={user}
+            expandableRowComp={<QALinearitySummaryExpandableRows user={user}/>}
+          />
+        ) : (<Preloader />)
+      }
       {show ? (
         <Modal
           show={show}
