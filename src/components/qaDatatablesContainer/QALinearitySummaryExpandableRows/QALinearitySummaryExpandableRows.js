@@ -14,9 +14,6 @@ const QALinearitySummaryExpandableRows = (props) => {
   const [qaLinearitySummary, setQaLinearitySummary] = useState([]);
 
   useEffect(() => {
-    console.log("props.data ", props.data);
-    console.log("qaLinearitySummary", qaLinearitySummary);
-    //if (qaLinearitySummary.testSumId === testSumId && qaLinearitySummary.data.length === 0) {
     if(qaLinearitySummary.length === 0){
       setLoading(true);
       getQALinearitySummary(locationId, id).then((res) => {
@@ -49,6 +46,7 @@ const QALinearitySummaryExpandableRows = (props) => {
             columnNames={columns}
             columnWidth={15}
             data={data}
+            openHandler={()=>{}}
             actionColumnName={"Linearity Summary Data"}
             actionsBtn={"View"}
             user={props.user}

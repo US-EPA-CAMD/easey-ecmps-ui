@@ -32,9 +32,6 @@ export const SelectFacilitiesDataTable = ({
   ] = useState("");
 
   useEffect(() => {
-    console.log(workspaceSection, "workspace");
-  }, []);
-  useEffect(() => {
     facilitiesApi.getAllFacilities().then((res) => {
       setDataLoaded(true);
       setFacilities(res.data);

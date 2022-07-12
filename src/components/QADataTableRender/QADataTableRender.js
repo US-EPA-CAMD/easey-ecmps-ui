@@ -22,7 +22,7 @@ import { connect } from "react-redux";
 import {
   cleanUp508,
   ensure508,
-  addScreenReaderLabelForCollapses,
+  addRowNumberAsScreenReaderLabelForExpandables,
 } from "../../additional-functions/ensure-508";
 import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
 import { deleteQATestSummary } from "../../utils/api/qaCertificationsAPI";
@@ -31,6 +31,7 @@ const QADataTableRender = ({
   columnNames,
   actionColumnName,
   columnWidth,
+  openHandler,
   data,
   user,
   actionsBtn,
@@ -68,7 +69,6 @@ const QADataTableRender = ({
 
     return () => {
       cleanUp508();
-      addScreenReaderLabelForCollapses();
     };
   }, []);
 
@@ -144,7 +144,7 @@ const QADataTableRender = ({
       columns.unshift({
         name: actionColumnName,
         button: true,
-        width: user ? "15%" : `${columnWidth}%`,
+        width: user ? "25%" : `${columnWidth}%`,
         style: {
           justifyContent: "left",
           // width:'fit-content'
@@ -157,6 +157,9 @@ const QADataTableRender = ({
               {/* user is logged in  */}
               {user ? (
                 <div className="editViewExpandGroup ">
+                  <Button>
+                    Evaluate
+                  </Button>
                   <Button
                     type="button"
                     epa-testid="btnOpen"
@@ -168,19 +171,28 @@ const QADataTableRender = ({
                       `btnOpen${row[`col${Object.keys(row).length - 1}`]}`
                     }
                     onClick={() => {
-                      // openHandler(normalizedRow, false);
+                      openHandler(normalizedRow, false);
                     }}
                   >
                     {"Edit"}
                   </Button>
-                  <RemoveButton onConfirm={async () => {
-                    const { id, locId } = row
-                    const deletedSuccessfully = await deleteQATestSummary(locId, id)
-                    if (!deletedSuccessfully) { return }
-                    setTableData(oldRows => oldRows.filter(curRow => curRow.id !== id))
-                  }} />
+                  <RemoveButton
+                    onConfirm={async () => {
+                      const { id, locId } = row;
+                      const deletedSuccessfully = await deleteQATestSummary(
+                        locId,
+                        id
+                      );
+                      if (!deletedSuccessfully) {
+                        return;
+                      }
+                      setTableData((oldRows) =>
+                        oldRows.filter((curRow) => curRow.id !== id)
+                      );
+                    }}
+                  />
 
-                  {/* {createExpandBTNS(index, row)} */}
+                  {createExpandBTNS(index, row)}
                 </div>
               ) : (
                 // user is not logged in (in public record)
@@ -197,12 +209,12 @@ const QADataTableRender = ({
                       `btnOpen${row[`col${Object.keys(row).length - 1}`]}`
                     }
                     onClick={() => {
-                      // openHandler(normalizedRow, false);
+                      openHandler(normalizedRow, false);
                     }}
                   >
                     {"View"}
                   </Button>
-                  {/* {createExpandBTNS(index, row)} */}
+                  {createExpandBTNS(index, row)}
                 </div>
               )}
             </div>
@@ -220,7 +232,8 @@ const QADataTableRender = ({
         columns={columns}
         data={tableData}
         expandableRows
-        //expandableRowsHideExpander
+        expandableRowsHideExpander
+        expandableRowExpanded={(row) => row.expanded}
         expandableRowsComponent={expandableRowComp}
       />
     </div>
@@ -229,12 +242,12 @@ const QADataTableRender = ({
 
 export default QADataTableRender;
 
-const RemoveButton = ({
-  onConfirm
-}) => {
-  return <ConfirmActionModal
-    buttonText="Remove"
-    description="Are you sure you want to remove the selected data?"
-    onConfirm={onConfirm}
-  />
-}
+const RemoveButton = ({ onConfirm }) => {
+  return (
+    <ConfirmActionModal
+      buttonText="Remove"
+      description="Are you sure you want to remove the selected data?"
+      onConfirm={onConfirm}
+    />
+  );
+};

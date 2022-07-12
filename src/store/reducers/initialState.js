@@ -36,6 +36,7 @@ export default {
     systemComponents: [],
     analyzerRanges: [],
     matsMethods: [],
+    lineTestSummary:[]
   },
   currentSection: "",
 };

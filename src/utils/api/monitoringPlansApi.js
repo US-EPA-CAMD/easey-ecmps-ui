@@ -189,7 +189,6 @@ export const putLockTimerUpdateConfiguration = async (id) => {
 export const saveMonitoringMethods = async (payload) => {
   const url = `${config.services.monitorPlans.uri}/workspace/locations/${payload["locationId"]}/methods/${payload["id"]}`;
 
-  console.log("PAYLOAD", payload);
   // *** remove attributes not needed by the API
   delete payload["locationId"];
   delete payload["id"];

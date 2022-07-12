@@ -11,7 +11,6 @@ export const getMonitoringPlansLoadsTableRecords = (totalData) => {
     const endHour = el.endHour !== null ? el.endHour.toString() : "";
 
     var secondNormalIndicator;
-    console.log("secondNormalIndicator", el.secondNormalIndicator);
     if (el.secondNormalIndicator || el.secondNormalIndicator === 0) {
       if (el.secondNormalIndicator === 1) {
         secondNormalIndicator = "Yes";

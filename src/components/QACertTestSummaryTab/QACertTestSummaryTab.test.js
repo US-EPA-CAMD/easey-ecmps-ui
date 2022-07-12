@@ -79,7 +79,6 @@ test("mapDispatchToProps calls the appropriate action", async () => {
   const dispatch = jest.fn();
   const actionProps = mapDispatchToProps(dispatch);
   const state = store.getState();
-  console.log("TEST", state);
   const stateProps = mapStateToProps(state);
 
   const formData = [];
