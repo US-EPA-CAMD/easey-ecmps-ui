@@ -17,30 +17,34 @@ const ReportingPeriodSelector = ({
   const [quarters, setQuarters] = useState([]);
 
   useEffect(() => {
-
-    const fetchReportingPeriod = async () => {
-      const res = await getReportingPeriod()
-      const rpData = res.data.map(rp => {
-        rp.selected = false
-        return rp
-      })
-
-      if (exportState?.reportingPeriodId) {
-        // retain state as tab is opened back
-        const prevSelected = rpData.find(rp => rp.id === exportState.reportingPeriodId)
-        prevSelected.selected = true;
-      } else {
-        // tab is new so set the latest reporting period
-        const latestPeriod = rpData.at(-1)
-        latestPeriod.selected = true
-      }
-      setReportingPeriod(rpData);
-      setLoading(false);
-    }
-
     if (reportingPeriod === null) {
       setLoading(true);
-      fetchReportingPeriod()
+      getReportingPeriod().then((res) => {
+        if (exportState && exportState.reportingPeriodId) {
+          // retain state as tab is opened back
+          setReportingPeriod(
+            res.data.map((e) => {
+              e.selected = false;
+              if (exportState.reportingPeriodId === e.id) {
+                e.selected = true;
+              }
+              return e;
+            })
+          );
+        } else {
+          setReportingPeriod(
+            res.data.map((e, i) => {
+              e.selected = false;
+              if (i === res.data.length - 1) {
+                // tab is new so set the latest reporting period
+                e.selected = true;
+              }
+              return e;
+            })
+          );
+        }
+        setLoading(false);
+      });
     } else if (years.length === 0 && quarters.length === 0) {
       setYears(
         new Set(
