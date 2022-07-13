@@ -27,15 +27,14 @@ const ReportingPeriodSelector = ({
 
       if (exportState?.reportingPeriodId) {
         // retain state as tab is opened back
-        const selectedPeriod = rpData.find(rp => rp.id === exportState.reportingPeriodId)
-        selectedPeriod.selected = true;
-        setReportingPeriod(rpData);
+        const prevSelected = rpData.find(rp => rp.id === exportState.reportingPeriodId)
+        prevSelected.selected = true;
       } else {
         // tab is new so set the latest reporting period
         const latestPeriod = rpData.at(-1)
         latestPeriod.selected = true
-        setReportingPeriod(rpData);
       }
+      setReportingPeriod(rpData);
       setLoading(false);
     }
 
