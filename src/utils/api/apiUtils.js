@@ -1,5 +1,7 @@
 import log from "loglevel";
 import { displayAppError } from "../../additional-functions/app-error";
+import { clientTokenAxios } from "./clientTokenAxios";
+import config from "./../../config";
 
 const successResponses = [200, 201];
 
@@ -8,6 +10,23 @@ export async function handleResponse(response) {
     return response;
   } else {
     throw new Error("failed");
+  }
+}
+
+export async function logServerError(message, metadata = {}) {
+  const url = config.services.camd.uri + "/logging/error";
+
+  try {
+    await clientTokenAxios({
+      method: "POST",
+      url: url,
+      data: {
+        errorMessage: message,
+        metadata: metadata,
+      },
+    });
+  } catch (error) {
+    handleError(error);
   }
 }
 
