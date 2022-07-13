@@ -75,7 +75,6 @@ export const DataTableRender = ({
 
   workspaceSection,
 }) => {
-
   const ariaLabelProp = { "aria-label": ariaLabel };
   const [searchText, setSearchText] = useState("");
   const columns = [];
@@ -403,20 +402,6 @@ export const DataTableRender = ({
     }
   }
 
-  const colsFilter = (currentElement) => {
-    for (const prop in currentElement) {
-      // filters out any boolean properties in the data since it does
-      // not work with toLowercase and includes
-      if (
-        currentElement.hasOwnProperty(prop) &&
-        typeof currentElement[prop] === "string" &&
-        currentElement[prop].toLowerCase().includes(searchText.toLowerCase())
-      ) {
-        return currentElement;
-      }
-    }
-  };
-
   const resetExpandedRows = () => {
     const expandedRows = document.querySelectorAll(
       "[data-testid='expander-button-undefined']"
@@ -428,7 +413,35 @@ export const DataTableRender = ({
       }
     }
   };
+
+  const colsFilter = (currentElement) => {
+    for (const prop in currentElement) {
+      // filters out any boolean properties in the data since it does
+      // not work with toLowercase and includes
+      if (
+        currentElement.hasOwnProperty(prop) &&
+        typeof currentElement[prop] === "string" &&
+        currentElement[prop].toLowerCase().includes(searchText.toLowerCase())
+      ) {
+        return currentElement;
+      } else if (
+        currentElement.hasOwnProperty(prop) &&
+        typeof currentElement[prop] === "number" &&
+        prop === "col2" &&
+        (currentElement[prop] + "").indexOf(searchText) > -1
+      ) {
+        return currentElement;
+      }
+    }
+  };
   const filteredItems = data.filter(colsFilter);
+  // const filteredItems = data.filter((row) => {
+  //   const facilityStr = row.col1.toString().toLowerCase();
+  //   const orisStr = row.col2.toString().toLowerCase();
+  //   const searchStr = searchText.toLowerCase();
+  //   return facilityStr.includes(searchStr) || orisStr.includes(searchStr);
+  // });
+
   const subHeaderComponentMemo = useMemo(() => {
     //cannot unit test properly
     const handleSearch = () => {

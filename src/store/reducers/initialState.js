@@ -9,9 +9,13 @@ export default {
     monitoringMatsMethods: false,
     monitoringSystemsComponents: false,
   },
-  openedFacilityTabs: { monitoringPlans: [], qaCertTestSummary: [] },
+  openedFacilityTabs: {
+    monitoringPlans: [],
+    qaCertTestSummary: [],
+    export: [],
+  },
 
-  activeTab: { monitoringPlans: [0], qaCertTestSummary: [0] },
+  activeTab: { monitoringPlans: [0], qaCertTestSummary: [0],export:[0] },
   dropdowns: {
     defaults: [],
     formulas: [],
@@ -32,6 +36,7 @@ export default {
     systemComponents: [],
     analyzerRanges: [],
     matsMethods: [],
+    lineTestSummary:[]
   },
   currentSection: "",
 };

@@ -2,7 +2,7 @@ import monitoringPlansReducer from "./monitoringPlans";
 import * as actions from "../actions/monitoringPlans";
 
 describe("Monitoring plans Reducer State Update", () => {
-  it("should update state with list of monitoring plans when passed LOAD_MONITORING_PLANS_SUCCESS", () => {
+  it("should update state with list of monitoring plans when passed LOAD_MONITORING_PLANS_SUCCESS", async () => {
     const initialState = {
       monitoringPlans: [],
     };
@@ -201,7 +201,7 @@ describe("Monitoring plans Reducer State Update", () => {
     );
     expect(newState.length).toEqual(2);
   });
-  it("should update state with list of monitoring plans when passed LOAD_MONITORING_PLANS_ARRAY_SUCCESS", () => {
+  it("should update state with list of monitoring plans when passed LOAD_MONITORING_PLANS_ARRAY_SUCCESS", async () => {
     const initialState = {
       monitoringPlans: [],
     };
@@ -406,14 +406,14 @@ describe("checking false conditions", () => {
     monitoringPlans: [],
   };
   const monitoringPlans = [];
-  it("passing in no action.type for default case", () => {
+  it("passing in no action.type for default case", async () => {
     const newState = monitoringPlansReducer(initialState.monitoringPlans, {
       type: "",
     });
     expect(newState.length).toBe(0);
   });
 
-  it("passing in no state", () => {
+  it("passing in no state", async () => {
     const newState = monitoringPlansReducer(null, {
       type: "",
     });

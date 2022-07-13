@@ -53,3 +53,12 @@ export const setInactiveState = (inactive, title, workspaceSection) => {
     workspaceSection,
   };
 };
+
+export const setExportState = (configId, exportState, workspaceSection) => {
+  return {
+    type: types.SET_EXPORT_STATE,
+    configId,
+    exportState,
+    workspaceSection,
+  };
+};

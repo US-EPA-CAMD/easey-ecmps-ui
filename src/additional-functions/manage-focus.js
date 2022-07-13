@@ -95,6 +95,17 @@ export const returnFocusToLast = () => {
   }
 };
 
+export const returnFocusToCommentButton = () => {
+  if (!_.isNil(window["lastFocusedArray"])) {
+    const lastFocus =
+      window["lastFocusedArray"][window["lastFocusedArray"].length - 1];
+
+    console.log("found: ", lastFocus);
+    if (lastFocus) {
+      lastFocus.focus();
+    }
+  }
+};
 export const returnFocusToModalButton = () => {
   if (!_.isNil(window["lastModalButton"])) {
     if (window["lastModalButton"].length > 0) {
@@ -104,6 +115,7 @@ export const returnFocusToModalButton = () => {
         const element = document.querySelector(`#${button.id}`);
         if (element) {
           element.focus();
+          console.log("element", element);
           window["lastModalButton"] = [];
         } else {
         }

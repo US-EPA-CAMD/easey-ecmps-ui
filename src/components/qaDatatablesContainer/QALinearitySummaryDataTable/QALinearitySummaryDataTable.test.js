@@ -1,6 +1,6 @@
 import React from "react";
 import { fireEvent, render, waitForElement } from "@testing-library/react";
-import QALinearitySummaryDataTable  from "./QALinearitySummaryDataTable";
+import QALinearitySummaryDataTable from "./QALinearitySummaryDataTable";
 
 import * as qaApi from "../../../utils/api/qaCertificationsAPI";
 const axios = require("axios");
@@ -53,7 +53,6 @@ const componentRenderer = (location) => {
 function componentRendererNoData(args) {
   const defualtProps = {
     locationSelectValue: "0",
-    
   };
 
   const props = { ...defualtProps, ...args };
@@ -71,11 +70,11 @@ test("tests a test summary", async () => {
 });
 
 test("tests a test summary NO USER/NO DATA", async () => {
-    axios.get.mockImplementation(() =>
-      Promise.resolve({ status: 200, data: [] })
-    );
-    const title = await qaApi.getQATestSummary(3);
-    expect(title.data).toEqual([]);
-    let { container } = await waitForElement(() => componentRendererNoData(3));
-    expect(container).toBeDefined();
-  });
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: [] })
+  );
+  const title = await qaApi.getQATestSummary(3);
+  expect(title.data).toEqual([]);
+  let { container } = await waitForElement(() => componentRendererNoData(3));
+  expect(container).toBeDefined();
+});

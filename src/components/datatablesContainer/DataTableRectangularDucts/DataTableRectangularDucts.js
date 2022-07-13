@@ -3,7 +3,10 @@ import * as fs from "../../../utils/selectors/monitoringPlanRectangularDucts";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
-
+import {
+  displayAppError,
+  needEndDate,
+} from "../../../additional-functions/app-error";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
@@ -48,11 +51,11 @@ export const DataTableRectangularDucts = ({
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
-    if (dataLoaded && dropdownsLoaded) {
+    if (dataLoaded) {
       returnFocusToLast();
       assignFocusEventListeners();
     }
-  }, [dataLoaded, dropdownsLoaded]);
+  }, [dataLoaded]);
 
   // *** Reassign handlers after pop-up modal is closed
   useEffect(() => {
@@ -250,31 +253,46 @@ export const DataTableRectangularDucts = ({
 
   const saveDuct = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-
-    mpApi
-      .saveMonitoringDuct(userInput)
-      .then((result) => {
-        setShow(false);
-      })
-      .catch((error) => {
-        console.log("error is", error);
-        setShow(false);
-      });
-    setUpdateTable(true);
+    if (
+      (userInput.endHour && !userInput.endDate) ||
+      (!userInput.endHour && userInput.endDate)
+    ) {
+      displayAppError(needEndDate);
+      setShow(false);
+    } else {
+      mpApi
+        .saveMonitoringDuct(userInput)
+        .then((result) => {
+          setShow(false);
+        })
+        .catch((error) => {
+          console.log("error is", error);
+          setShow(false);
+        });
+      setUpdateTable(true);
+    }
   };
 
   const createDuct = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-    mpApi
-      .createMonitoringDuct(userInput)
-      .then((result) => {
-        setShow(false);
-      })
-      .catch((error) => {
-        console.log("error is", error);
-        setShow(false);
-      });
-    setUpdateTable(true);
+    if (
+      (userInput.endHour && !userInput.endDate) ||
+      (!userInput.endHour && userInput.endDate)
+    ) {
+      displayAppError(needEndDate);
+      setShow(false);
+    } else {
+      mpApi
+        .createMonitoringDuct(userInput)
+        .then((result) => {
+          setShow(false);
+        })
+        .catch((error) => {
+          console.log("error is", error);
+          setShow(false);
+        });
+      setUpdateTable(true);
+    }
   };
 
   return (

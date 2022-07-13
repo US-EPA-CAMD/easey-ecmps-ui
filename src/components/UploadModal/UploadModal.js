@@ -28,16 +28,19 @@ export const UploadModal = ({
   setIsLoading,
   hasFormatError,
   hasInvalidJsonError,
+  mainBTN,
   // importApiErrors,
   // setImportApiErrors,
   importedFileErrorMsgs,
   // setImportedFileErrorMsgs,
   // fileName,
   notUploadVersion,
+  setUpdateRelatedTables,
+  successMsg,
 }) => {
   const hasErrors = importedFileErrorMsgs && importedFileErrorMsgs.length > 0;
   const milisecondsToLoad = 4000;
-
+  // Monitoring Plan has been Successfully Imported.
   const onLoadEffect = () => {
     if (timer) {
       setTimeout(() => {
@@ -209,7 +212,7 @@ export const UploadModal = ({
                                 heading="Success"
                                 role="success"
                               >
-                                Monitoring Plan has been successfully imported
+                                {successMsg}
                               </Alert>
                             </div>
                           )}
@@ -248,7 +251,10 @@ export const UploadModal = ({
                       {complete ? (
                         <Button
                           type="button"
-                          onClick={close}
+                          onClick={() => {
+                            close();
+                            setUpdateRelatedTables(true);
+                          }}
                           title="Click to close import modal"
                           epa-testid="okBtn"
                           id="okBtn"
@@ -270,7 +276,7 @@ export const UploadModal = ({
                           className="margin-right-2"
                           disabled={disablePortBtn}
                         >
-                          Import
+                          {mainBTN ? mainBTN : "Import"}
                         </Button>
                       )}
 

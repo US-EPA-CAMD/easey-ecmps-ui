@@ -11,7 +11,6 @@ const reducer = (state, action) => {
   switch (action.type) {
     case types.ADD_FACILITY_TAB:
       // returnObject = [...currentState,action.facility]; //...currentState; //...currentState
-
       returnObject = {
         ...currentState,
         [`${action.workspaceSection}`]: [
@@ -58,6 +57,23 @@ const reducer = (state, action) => {
             ? {
                 ...x,
                 section: action.section,
+              }
+            : x
+        ),
+      };
+
+      break;
+    case types.SET_EXPORT_STATE:
+      console.log(action.workspaceSection)
+      returnObject = {
+        ...currentState,
+        [`${action.workspaceSection}`]: currentState[
+          `${action.workspaceSection}`
+        ].map((x) =>
+          x.selectedConfig.id === action.configId
+            ? {
+                ...x,
+                exportState: action.exportState,
               }
             : x
         ),

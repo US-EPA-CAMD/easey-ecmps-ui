@@ -5,10 +5,7 @@ import config from "../../config";
 import { triggerEvaluation } from "../../utils/api/quartzApi";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
-import * as facApi from "../../utils/api/facilityApi";
-import {
-  MONITORING_PLAN_STORE_NAME,
-} from "../../additional-functions/workspace-section-and-store-names";
+import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 import Modal from "../Modal/Modal";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 import "./HeaderInfo.scss";
@@ -21,9 +18,13 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../additional-functions/prompt-to-save-unsaved-changes";
-import download from "downloadjs";
 import GenericTable from "../GenericTable/GenericTable";
-
+import {
+  assignFocusEventListeners,
+  cleanupFocusEventListeners,
+  returnFocusToCommentButton,
+  returnFocusToLast,
+} from "../../additional-functions/manage-focus";
 export const HeaderInfo = ({
   facility,
   selectedConfig,
@@ -44,6 +45,7 @@ export const HeaderInfo = ({
   ///
   checkoutAPI,
   configID,
+  setUpdateRelatedTables,
 }) => {
   const sections = [
     { name: "Defaults" },
@@ -99,6 +101,40 @@ export const HeaderInfo = ({
   const [hasInvalidJsonError, setHasInvalidJsonError] = useState(false);
   const [importApiErrors, setImportApiErrors] = useState([]);
 
+  const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
+
+  // *** Assign initial event listeners after loading data/dropdowns
+  useEffect(() => {
+    if (showCommentsModal) {
+      returnFocusToLast();
+      assignFocusEventListeners();
+    } else {
+      returnFocusToCommentButton();
+    }
+  }, [showCommentsModal]);
+
+  // *** Reassign handlers after pop-up modal is closed
+  useEffect(() => {
+    if (!returnedFocusToLast) {
+      setReturnedFocusToLast(true);
+    } else {
+      returnFocusToLast();
+      assignFocusEventListeners();
+    }
+  }, [returnedFocusToLast]);
+
+  // *** Clean up focus event listeners
+  useEffect(() => {
+    return () => {
+      cleanupFocusEventListeners();
+    };
+  }, []);
+  const executeOnClose = () => {
+    setShowCommentsModal(false);
+    removeChangeEventListeners(".modalUserInput");
+    setReturnedFocusToLast(false);
+  };
+
   const resetImportFlags = () => {
     setShowImportModal(false);
     setDisablePortBtn(true);
@@ -151,32 +187,7 @@ export const HeaderInfo = ({
     }
   };
 
-  const exportHandler = () => {
-    mpApi
-      .getMonitoringPlanById(configID)
-      .then((mpRes) => {
-        const facId = mpRes.data["facId"];
-        const mpName = mpRes.data["name"];
-        const date = new Date();
-        const year = date.getUTCFullYear();
-        const month = date.getUTCMonth() + 1;
-        const day = date.getUTCDate();
-        const fullDateString = `${month}-${day}-${year}`;
-        facApi
-          .getFacilityById(facId)
-          .then((facRes) => {
-            const facName = facRes.data["facilityName"];
-            const exportFileName = `MP Export - ${facName}, ${mpName} (${fullDateString}).json`;
-            download(JSON.stringify(mpRes.data, null, "\t"), exportFileName);
-          })
-          .catch((facErr) => {
-            console.log(facErr);
-          });
-      })
-      .catch((mpErr) => {
-        console.log(mpErr);
-      });
-  };
+  const exportHandler = () => mpApi.exportMonitoringPlanDownload(configID);
 
   const formatCommentsToTable = (data) => {
     const formmatedData = [];
@@ -352,9 +363,9 @@ export const HeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-        configs
-          .map((location) => location["monPlanId"])
-          .indexOf(selectedConfig.id)
+      configs
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -455,7 +466,7 @@ export const HeaderInfo = ({
   };
 
   const [importedFile, setImportedFile] = useState([]);
-  const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState([]);
+  const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
 
   const importMPBtn = (payload) => {
     mpApi.importMP(payload).then((response) => {
@@ -489,9 +500,8 @@ export const HeaderInfo = ({
     if (inWorkspace) {
       // when config is checked out by someone
       if (checkedOut) {
-        return `Currently checked-out by: ${
-          currentConfig["checkedOutBy"]
-        } ${formatDate(currentConfig["checkedOutOn"])}`;
+        return `Currently checked-out by: ${currentConfig["checkedOutBy"]
+          } ${formatDate(currentConfig["checkedOutOn"])}`;
       }
       // when config is not checked out
       return `Last updated by: ${currentConfig.lastUpdatedBy} ${formatDate(
@@ -511,9 +521,8 @@ export const HeaderInfo = ({
   return (
     <div className="header">
       <div
-        className={`usa-overlay ${
-          showRevertModal || showEvalReport ? "is-visible" : ""
-        } `}
+        className={`usa-overlay ${showRevertModal || showEvalReport ? "is-visible" : ""
+          } `}
       />
       {showRevertModal ? (
         <Modal
@@ -753,8 +762,7 @@ export const HeaderInfo = ({
                     selectKey="id"
                     initialSelection={locationSelect[0]}
                     selectionHandler={setLocationSelect}
-                    workspaceSection={  MONITORING_PLAN_STORE_NAME
-                    }
+                    workspaceSection={MONITORING_PLAN_STORE_NAME}
                   />
                   <DropdownSelection
                     caption="Sections"
@@ -764,8 +772,7 @@ export const HeaderInfo = ({
                     selectKey="name"
                     initialSelection={sectionSelect[0]}
                     orisCode={orisCode}
-                    workspaceSection={  MONITORING_PLAN_STORE_NAME
-                    }
+                    workspaceSection={MONITORING_PLAN_STORE_NAME}
                   />
                   <div className="">
                     <div className="bottom-0 position-absolute padding-bottom-05">
@@ -777,7 +784,11 @@ export const HeaderInfo = ({
                         checked={inactive[0]}
                         disabled={inactive[1]}
                         onChange={() =>
-                          setInactive([!inactive[0], inactive[1]], facility)
+                          setInactive(
+                            [!inactive[0], inactive[1]],
+                            facility,
+                            MONITORING_PLAN_STORE_NAME
+                          )
                         }
                       />
                     </div>
@@ -815,13 +826,14 @@ export const HeaderInfo = ({
                 setHasFormatError={setHasFormatError}
                 setHasInvalidJsonError={setHasInvalidJsonError}
                 setImportedFile={setImportedFile}
+                workspaceSection={MONITORING_PLAN_STORE_NAME}
               />
             }
           />
         </div>
       ) : null}
 
-{/* while uploading, just shows preloader spinner  */}
+      {/* while uploading, just shows preloader spinner  */}
 
       {isLoading && !finishedLoading ? (
         <UploadModal
@@ -842,7 +854,7 @@ export const HeaderInfo = ({
         ""
       )}
 
-{/* after it finishes uploading , shows either api errors or success messages */}
+      {/* after it finishes uploading , shows either api errors or success messages */}
       {showImportModal && usePortBtn && finishedLoading ? (
         <UploadModal
           show={showImportModal}
@@ -853,6 +865,8 @@ export const HeaderInfo = ({
           complete={true}
           importApiErrors={importApiErrors}
           importedFileErrorMsgs={importedFileErrorMsgs}
+          setUpdateRelatedTables={setUpdateRelatedTables}
+          successMsg={"Monitoring Plan has been Successfully Imported."}
           children={
             <ImportModal
               setDisablePortBtn={setDisablePortBtn}
@@ -875,7 +889,7 @@ export const HeaderInfo = ({
             show={showCommentsModal}
             width={"50%"}
             left={"25%"}
-            close={() => setShowCommentsModal(false)}
+            close={() => executeOnClose()}
             showCancel={false}
             showSave={false}
             complete={true}

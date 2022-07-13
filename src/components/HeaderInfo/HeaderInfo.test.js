@@ -254,7 +254,7 @@ describe("testing HeaderInfo component", () => {
   });
 
   /*** TESTING EXPORT FUNCTIONALITY ***/
-  it("should test the export modal", async () => {
+  /* it("should test the export modal", async () => {
     expect(screen.getByText("Export Monitoring Plan")).toBeInTheDocument();
 
     // export config
@@ -262,16 +262,16 @@ describe("testing HeaderInfo component", () => {
       const exportBtn = screen.getByText("Export Monitoring Plan");
       userEvent.click(exportBtn);
     });
-  });
+  }); */
 
-  /*** TESTING IMPORT FUNCTIONALITY ***/
-  it("should test the import modal", async () => {
-    // open import modal
-    await wait(() => {
-      const importBtn = screen.getByText("Import Monitoring Plan");
-      userEvent.click(importBtn);
-    });
-  });
+  // /*** TESTING IMPORT FUNCTIONALITY ***/
+  // it("should test the import modal", async () => {
+  //   // open import modal
+  //   await wait(() => {
+  //     const importBtn = screen.getByText("Import Monitoring Plan");
+  //     userEvent.click(importBtn);
+  //   });
+  // });
 
   /*** TESTING LEFT-SIDE FUNCTIONALITY***/
 });

@@ -3,10 +3,11 @@ import { displayAppError } from "../../additional-functions/app-error";
 import { clientTokenAxios } from "./clientTokenAxios";
 import config from "./../../config";
 
-const successResponses = [200, 201];
+export const successResponses = [200, 201];
 
 export async function handleResponse(response) {
-  if (successResponses.includes(response.status) && response.data) {
+  console.log(response);
+  if (successResponses.includes(response.status) && (response.data !== null || response.data !== undefined)) {
     return response;
   } else {
     throw new Error("failed");

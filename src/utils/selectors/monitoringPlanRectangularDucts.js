@@ -6,11 +6,12 @@ export const getMonitoringPlansRectangularDuctsTableRecords = (totalData) => {
     const beginDate = el.wafBeginDate
       ? formatStringToDate(el.wafBeginDate.toString())
       : "";
-    const beginHour = el.wafBeginHour ? el.wafBeginHour.toString() : "";
+    const beginHour =
+      el.wafBeginHour !== null ? el.wafBeginHour.toString() : "";
     const endDate = el.wafEndDate
       ? formatStringToDate(el.wafEndDate.toString())
       : "";
-    const endHour = el.wafEndHour ? el.wafEndHour.toString() : "";
+    const endHour = el.wafEndHour !== null ? el.wafEndHour.toString() : "";
     const wafDeterminationDate = el.wafDeterminationDate
       ? formatStringToDate(el.wafDeterminationDate.toString())
       : "";

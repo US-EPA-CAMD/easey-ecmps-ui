@@ -7,7 +7,9 @@ import {
 } from "./DataTableAnalyzerRanges";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 const axios = require("axios");
-
+import { Provider } from "react-redux";
+import configureStore from "../../../store/configureStore.dev";
+const store = configureStore();
 jest.mock("axios");
 
 const ranges = [
@@ -54,7 +56,12 @@ const componentRenderer = (update, mdmData) => {
     setCreateAnalyzerRangesFlag: jest.fn(),
     setUpdateAnalyzerRangeTable: jest.fn(),
   };
-  return render(<DataTableAnalyzerRanges {...props} />);
+  return render(
+    <Provider store={store}>
+      {" "}
+      <DataTableAnalyzerRanges {...props} />{" "}
+    </Provider>
+  );
 };
 
 test("renders an analyzer range with mdm data", async () => {
@@ -94,7 +101,10 @@ test("mapDispatchToProps calls the appropriate action", async () => {
   // mock the 'dispatch' object
   const dispatch = jest.fn();
   const actionProps = mapDispatchToProps(dispatch);
-  const formData = [];
+  const state = store.getState();
+  const stateProps = mapStateToProps(state);
+
   // verify the appropriate action was called
   actionProps.loadDropdownsData();
+  expect(state).toBeDefined();
 });

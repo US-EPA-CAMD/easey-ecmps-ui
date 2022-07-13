@@ -2,7 +2,14 @@ import React, { useState, useEffect } from "react";
 
 import { FormGroup, Label, FileInput, Alert } from "@trussworks/react-uswds";
 
+import {
+  QA_CERT_TEST_SUMMARY_STORE_NAME,
+  MONITORING_PLAN_STORE_NAME,
+} from "../../additional-functions/workspace-section-and-store-names";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
+
+import * as qaApi from "../../utils/api/qaCertificationsAPI";
+import { successResponses } from "../../utils/api/apiUtils.js";
 import "./ImportModal.scss";
 
 const ImportModal = ({
@@ -12,16 +19,27 @@ const ImportModal = ({
   fileName,
   setHasFormatError,
   setHasInvalidJsonError,
-  importApiErrors,
   importedFileErrorMsgs,
   setImportedFile,
+  workspaceSection,
 }) => {
-  const [mpSchema, setMpSchema] = useState([]);
+  const [schema, setSchema] = useState([]);
   useEffect(() => {
-    mpApi.getMPSchema().then((res) => {
-      console.log('res scheme',res.data)
-      setMpSchema(res.data);
-    });
+    switch (workspaceSection) {
+      case MONITORING_PLAN_STORE_NAME:
+        mpApi.getMPSchema().then((res) => {
+          setSchema(res.data);
+        });
+        break;
+
+      case QA_CERT_TEST_SUMMARY_STORE_NAME:
+        qaApi.getQASchema().then((res) => {
+          setSchema(res.data);
+        });
+        break;
+      default:
+        break;
+    }
   }, []);
   const [schemaErrors, setSchemaErrors] = useState([]);
   const validateJSON = (name, type, event) => {
@@ -38,7 +56,7 @@ const ImportModal = ({
 
   const formatSchemaErrors = (errors) => {
     const formattedErrors = errors.errors.map((error) => {
-      console.log(error,'file errors');
+      console.log(error, "file errors");
       return error.stack;
     });
 
@@ -59,12 +77,12 @@ const ImportModal = ({
       var Validator = require("jsonschema").Validator;
       var v = new Validator();
 
-      if (v.validate(fileLoaded, mpSchema).valid) {
+      if (v.validate(fileLoaded, schema).valid) {
         setHasFormatError(false);
         setHasInvalidJsonError(false);
         setDisablePortBtn(false);
       } else {
-        formatSchemaErrors(v.validate(fileLoaded, mpSchema));
+        formatSchemaErrors(v.validate(fileLoaded, schema));
       }
     } catch (e) {
       console.log("invalid json file error: ", e);
@@ -85,16 +103,20 @@ const ImportModal = ({
       setHasInvalidJsonError(false);
     }
   };
+  // && typeof importedFileErrorMsgs.data.message === "string"
 
   return (
     <div className="import-modal-container">
-      {complete && importedFileErrorMsgs.length === 0 ? (
+      {complete &&
+      importedFileErrorMsgs !== undefined &&
+      importedFileErrorMsgs !== null &&
+      successResponses.includes(importedFileErrorMsgs.status) ? (
         <span id="fileName">{fileName}</span>
       ) : complete && importedFileErrorMsgs.length > 0 ? (
         <div className="overflow-y-auto maxh-mobile">
           <div className="padding-right-2 padding-left-3 " aria-live="polite">
             {" "}
-            {console.log("imported error", importedFileErrorMsgs)}
+            {console.log("import errors", importedFileErrorMsgs)}
             {importedFileErrorMsgs.map((error, i) => (
               <Alert type="error" slim noIcon key={i} role="alert">
                 {error}

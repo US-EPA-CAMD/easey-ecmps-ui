@@ -6,12 +6,11 @@ export const getMonitoringPlansLoadsTableRecords = (totalData) => {
     const beginDate = el.beginDate
       ? formatStringToDate(el.beginDate.toString())
       : "";
-    const beginHour = el.beginHour ? el.beginHour.toString() : "";
+    const beginHour = el.beginHour !== null ? el.beginHour.toString() : "";
     const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
-    const endHour = el.endHour ? el.endHour.toString() : "";
+    const endHour = el.endHour !== null ? el.endHour.toString() : "";
 
     var secondNormalIndicator;
-    console.log("secondNormalIndicator", el.secondNormalIndicator);
     if (el.secondNormalIndicator || el.secondNormalIndicator === 0) {
       if (el.secondNormalIndicator === 1) {
         secondNormalIndicator = "Yes";

@@ -50,10 +50,7 @@ test("tests QACertTestSummaryTab", async () => {
   expect(container).not.toBeUndefined();
 });
 
-
 test("tests QACertTestSummaryTab with conditionals ", async () => {
-
-
   const condProps = {
     title: " ( test ) ",
     user: { firstName: "test" },
@@ -71,7 +68,7 @@ test("tests QACertTestSummaryTab with conditionals ", async () => {
   };
   const { container } = render(
     <Provider store={store}>
-      <QACertTestSummaryTab {... condProps} />{" "}
+      <QACertTestSummaryTab {...condProps} />{" "}
     </Provider>
   );
 
@@ -82,7 +79,6 @@ test("mapDispatchToProps calls the appropriate action", async () => {
   const dispatch = jest.fn();
   const actionProps = mapDispatchToProps(dispatch);
   const state = store.getState();
-  console.log('TEST',state)
   const stateProps = mapStateToProps(state);
 
   const formData = [];

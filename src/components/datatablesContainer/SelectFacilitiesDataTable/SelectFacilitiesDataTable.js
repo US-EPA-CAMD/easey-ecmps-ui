@@ -9,9 +9,12 @@ import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigu
 import * as facilitiesApi from "../../../utils/api/facilityApi";
 import { getCheckedOutLocations } from "../../../utils/api/monitoringPlansApi";
 import {
+  EXPORT_STORE_NAME,
   MONITORING_PLAN_STORE_NAME,
   QA_CERT_TEST_SUMMARY_STORE_NAME,
 } from "../../../additional-functions/workspace-section-and-store-names";
+import Export from "../../export/Export/Export";
+
 export const SelectFacilitiesDataTable = ({
   user,
   addtabs,
@@ -97,7 +100,7 @@ export const SelectFacilitiesDataTable = ({
                 workspaceSection={workspaceSection}
               />
             </div>
-          ) : (
+          ) : workspaceSection === QA_CERT_TEST_SUMMARY_STORE_NAME ? (
             <div className="selectedTabsBox">
               <QACertTestSummaryTab
                 orisCode={info[0].col2}
@@ -109,7 +112,21 @@ export const SelectFacilitiesDataTable = ({
                 workspaceSection={workspaceSection}
               />
             </div>
+          ) : (
+            // handles export
+            <div className="selectedTabsBox">
+              <Export
+                orisCode={info[0].col2}
+                selectedConfig={info[1]}
+                title={`${info[0].col1} (${info[1].name}) ${
+                  info[1].active ? "" : "Inactive"
+                }`}
+                user={user}
+                workspaceSection={workspaceSection}
+              />
+            </div>
           ),
+
         orisCode: info[0].col2,
         selectedConfig: info[1],
         checkout:

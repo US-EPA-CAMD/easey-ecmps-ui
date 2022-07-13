@@ -1,3 +1,4 @@
+export const needEndDate = "Must enter in both End Date and End Time";
 export const displayAppError = (error) => {
   const appearAnimation = "flip-in-x-reverse";
 

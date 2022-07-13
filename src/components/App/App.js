@@ -7,7 +7,7 @@ import NotFound from "../NotFound/NotFound";
 import AboutHome from "../AboutHome/AboutHome";
 import Layout from "../Layout/Layout";
 import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
-import QACertTestSummaryHome from "../QACertTestSummaryHome/QACertTestSummaryHome";
+import SelectConfigurationBaseModuleHome from "../SelectConfigurationBaseModuleHome/SelectConfigurationBaseModuleHome";
 import RuleEditor from "../RuleEditor/RuleEditor";
 import Login from "../Login/Login";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
@@ -25,6 +25,10 @@ import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
 } from "../../additional-functions/manage-focus";
+import {
+  QA_CERT_TEST_SUMMARY_STORE_NAME,
+  EXPORT_STORE_NAME,
+} from "../../additional-functions/workspace-section-and-store-names";
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -154,27 +158,24 @@ const App = () => {
             <Route
               path="/qa_certifications_test_summary_data"
               exact
-              component={() => <QACertTestSummaryHome user={false} />}
+              component={() => (
+                <SelectConfigurationBaseModuleHome
+                  user={false}
+                  workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
+                />
+              )}
             />
             <Route
               path="/workspace/qa_certifications_test_summary_data"
               exact
-              component={() => <QACertTestSummaryHome user={user} />}
+              component={() => (
+                <SelectConfigurationBaseModuleHome
+                  user={user}
+                  workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
+                />
+              )}
             />
 
-            {/* <Route
-              path="/workspace/qa_certifications/"
-              exact
-              component={
-                <QACertTestSummaryHome
-                  resetTimer={setResetTimer}
-                  setExpired={setExpired}
-                  resetTimerFlag={resetTimer}
-                  callApiFlag={expired}
-                  user={user}
-                />
-              }
-            /> */}
             {user ? (
               <Redirect from="/emission" to="/workspace/emission" />
             ) : (
@@ -182,6 +183,31 @@ const App = () => {
             )}
             <Route path="/emission/" exact component={ComingSoon} />
             <Route path="/workspace/emission/" exact component={ComingSoon} />
+            {user ? (
+              <Redirect from="/export" to="/workspace/export" />
+            ) : (
+              <Redirect from="/workspace/export" to="/export" />
+            )}
+            <Route
+              path="/export"
+              exact
+              component={() => (
+                <SelectConfigurationBaseModuleHome
+                  user={false}
+                  workspaceSection={EXPORT_STORE_NAME}
+                />
+              )}
+            />
+            <Route
+              path="/workspace/export"
+              exact
+              component={() => (
+                <SelectConfigurationBaseModuleHome
+                  user={user}
+                  workspaceSection={EXPORT_STORE_NAME}
+                />
+              )}
+            />
             <Route path="/tutorials" exact component={ComingSoon} />
             <Route path="/cam-api" exact component={ComingSoon} />
             <Route path="/glossary" exact component={ComingSoon} />
