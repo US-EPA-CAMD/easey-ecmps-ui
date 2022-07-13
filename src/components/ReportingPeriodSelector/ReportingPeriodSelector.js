@@ -7,7 +7,7 @@ import "./ReportingPeriodSelector.scss";
 const ReportingPeriodSelector = ({
   isExport,
   dataTypes,
-  reportingPeroidSelectionHandler,
+  reportingPeriodSelectionHandler,
   exportState,
   getInitSelection,
   setLoading,
@@ -21,7 +21,7 @@ const ReportingPeriodSelector = ({
       setLoading(true);
       getReportingPeriod().then((res) => {
         if (exportState && exportState.reportingPeriodId) {
-          //retain state as tab is opened back
+          // retain state as tab is opened back
           setReportingPeriod(
             res.data.map((e) => {
               e.selected = false;
@@ -36,7 +36,7 @@ const ReportingPeriodSelector = ({
             res.data.map((e, i) => {
               e.selected = false;
               if (i === res.data.length - 1) {
-                //tab is new so set the latest reporting period
+                // tab is new so set the latest reporting period
                 e.selected = true;
               }
               return e;
@@ -74,7 +74,7 @@ const ReportingPeriodSelector = ({
         return e;
       })
     );
-    reportingPeroidSelectionHandler(selectedObj);
+    reportingPeriodSelectionHandler(selectedObj);
   };
   const yearSelectionHandler = (event) => {
     const selectedObj = reportingPeriod.find(
@@ -107,9 +107,7 @@ const ReportingPeriodSelector = ({
     });
     return options;
   };
-  // console.log("reportingPeriod ",reportingPeriod);
-  // console.log("years ",years);
-  // console.log("quarters ", quarters);
+
   return (
     <>
       {reportingPeriod && (
