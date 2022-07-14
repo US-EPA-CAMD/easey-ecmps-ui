@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
-import { Add, Remove } from "@material-ui/icons";
 import "./QADataTableRender.scss";
 
 // *** local
@@ -9,23 +8,18 @@ import { config, oneSecond } from "../../config";
 /*********** COMPONENTS ***********/
 // *** 3rd party
 import {
+  Add,
+  Remove,
   ArrowDownwardSharp,
-  CreateSharp,
-  KeyboardArrowDownSharp,
-  KeyboardArrowUpSharp,
-  LockSharp,
 } from "@material-ui/icons";
 import { Button } from "@trussworks/react-uswds";
 import DataTable from "react-data-table-component";
 
-import { connect } from "react-redux";
 import {
   cleanUp508,
   ensure508,
-  addRowNumberAsScreenReaderLabelForExpandables,
 } from "../../additional-functions/ensure-508";
 import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
-import { deleteQATestSummary } from "../../utils/api/qaCertificationsAPI";
 
 const QADataTableRender = ({
   columnNames,
@@ -73,14 +67,12 @@ const QADataTableRender = ({
   }, []);
 
   const [totalExpand, setTotalExpand] = useState([]);
-  const [tableData, setTableData] = useState(data);
 
   useEffect(() => {
     const emptyArr = [];
     for (let i = 0; i < data.length; i++) {
       emptyArr.push(0);
     }
-    //console.log("data", data);
     setTotalExpand(emptyArr);
   }, [data]);
 
@@ -174,27 +166,8 @@ const QADataTableRender = ({
                   >
                     {"Edit"}
                   </Button>
-                  {/* <RemoveButton
-                    onConfirm={async () => {
-                      const { id, locId } = row;
-                      const deletedSuccessfully = await deleteQATestSummary(
-                        locId,
-                        id
-                      );
-                      if (!deletedSuccessfully) {
-                        return;
-                      }
-                      setTableData((oldRows) =>
-                        oldRows.filter((curRow) => curRow.id !== id)
-                      );
-                    }}
-                  /> */}
                   <RemoveButton
-                    onConfirm={() => {
-                      console.log("row", row);
-                      console.log("normalized", normalizedRow);
-                      onRemoveHandler(normalizedRow);
-                    }}
+                    onConfirm={() => onRemoveHandler(normalizedRow)}
                   />
 
                   {createExpandBTNS(index, row)}
@@ -235,7 +208,7 @@ const QADataTableRender = ({
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
         className={`data-display-table react-transition fade-in`}
         columns={columns}
-        data={tableData}
+        data={data}
         expandableRows
         expandableRowsHideExpander
         expandableRowExpanded={(row) => row.expanded}

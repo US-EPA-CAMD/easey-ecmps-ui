@@ -130,6 +130,7 @@ const QALinearitySummaryDataTable = ({
   }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
 
   const data = useMemo(() => {
+    console.log('useMemo getTestsummary called');
     return getTestSummary(qaTestSummary);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -230,11 +231,15 @@ const QALinearitySummaryDataTable = ({
   };
 
   const onRemoveHandler = async (row) => {
-    const { id, locId } = row;
+    const { id, locationId } = row;
     // const deletedSuccessfully = await deleteQATestSummary(locId, id);
     // if (!deletedSuccessfully) {
     //   return;
     // }
+    console.log('onRemoveHandler called');
+    console.log(id, locationId);
+    const dataPostRemove = qaTestSummary.filter(rowData => rowData.id !== id)
+    setQATestSummary(dataPostRemove)
   };
 
   return (
@@ -280,8 +285,8 @@ const QALinearitySummaryDataTable = ({
                   title={`${dataTableName}`}
                   viewOnly={!user || nonEditable}
                   create={createNewData}
-                  // setMainDropdownChange={setMainDropdownChange}
-                  // mainDropdownChange={mainDropdownChange}
+                // setMainDropdownChange={setMainDropdownChange}
+                // mainDropdownChange={mainDropdownChange}
                 />
               </div>
             ) : (
