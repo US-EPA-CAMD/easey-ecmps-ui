@@ -122,3 +122,17 @@ export const getQALinearitySummary = async (locID, testSumId) => {
 
   return axios.get(url).then(handleResponse).catch(handleError);
 };
+
+export const deleteQALinearitySummary = async (locId, testSumId, id) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/linearities/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
+}
