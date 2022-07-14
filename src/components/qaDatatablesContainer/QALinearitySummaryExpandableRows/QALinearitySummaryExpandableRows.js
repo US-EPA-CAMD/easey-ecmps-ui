@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { getQALinearitySummary } from "../../../utils/api/qaCertificationsAPI.js";
+import { deleteQALinearitySummary, getQALinearitySummary } from "../../../utils/api/qaCertificationsAPI.js";
 import { getLinearitySummaryRecords } from "../../../utils/selectors/QACert/TestSummary.js";
 /*********** COMPONENTS ***********/
 
@@ -17,7 +17,6 @@ const QALinearitySummaryExpandableRows = (props) => {
     if (qaLinearitySummary.length === 0) {
       setLoading(true);
       getQALinearitySummary(locationId, id).then((res) => {
-        console.log(res.data, "expandedRowData");
         setQaLinearitySummary(res.data);
         setLoading(false);
       });
@@ -38,13 +37,10 @@ const QALinearitySummaryExpandableRows = (props) => {
     "APS Indicator",
   ];
 
-  const onRemoveHandler = async (row) => {
-    console.log('on remove handler qqa expand row called')
-    console.log('row', row);
-    console.log('all data', qaLinearitySummary)
-    const { id: idToRemove } = row
+  const onRemoveHandler = (row) => {
+    const { id: idToRemove, testSumId } = row
+    deleteQALinearitySummary(locationId, testSumId, idToRemove)
     const dataPostRemove = qaLinearitySummary.filter(rowData => rowData.id !== idToRemove);
-    console.log('data post remove', dataPostRemove);
     setQaLinearitySummary(dataPostRemove)
   }
 
