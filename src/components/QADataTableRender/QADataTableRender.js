@@ -36,8 +36,8 @@ const QADataTableRender = ({
   user,
   actionsBtn,
   expandableRowComp,
+  onRemoveHandler,
 }) => {
-
   const columns = [];
   columnNames.forEach((name, index) => {
     switch (name) {
@@ -157,9 +157,7 @@ const QADataTableRender = ({
               {/* user is logged in  */}
               {user ? (
                 <div className="editViewExpandGroup ">
-                  <Button>
-                    Evaluate
-                  </Button>
+                  <Button>Evaluate</Button>
                   <Button
                     type="button"
                     epa-testid="btnOpen"
@@ -176,7 +174,7 @@ const QADataTableRender = ({
                   >
                     {"Edit"}
                   </Button>
-                  <RemoveButton
+                  {/* <RemoveButton
                     onConfirm={async () => {
                       const { id, locId } = row;
                       const deletedSuccessfully = await deleteQATestSummary(
@@ -189,6 +187,13 @@ const QADataTableRender = ({
                       setTableData((oldRows) =>
                         oldRows.filter((curRow) => curRow.id !== id)
                       );
+                    }}
+                  /> */}
+                  <RemoveButton
+                    onConfirm={() => {
+                      console.log("row", row);
+                      console.log("normalized", normalizedRow);
+                      onRemoveHandler(normalizedRow);
                     }}
                   />
 

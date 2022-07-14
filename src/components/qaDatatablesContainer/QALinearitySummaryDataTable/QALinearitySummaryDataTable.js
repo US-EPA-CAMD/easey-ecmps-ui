@@ -228,6 +228,15 @@ const QALinearitySummaryDataTable = ({
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
   };
+
+  const onRemoveHandler = async (row) => {
+    const { id, locId } = row;
+    // const deletedSuccessfully = await deleteQATestSummary(locId, id);
+    // if (!deletedSuccessfully) {
+    //   return;
+    // }
+  };
+
   return (
     <div>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -235,20 +244,21 @@ const QALinearitySummaryDataTable = ({
         <h3 className="display-inline padding-right-3">Test Summary Data</h3>
         {user ? <Button> Add Test Summary Data</Button> : ""}
       </div>
-      {
-        !loading ? 
-        (<QADataTableRender
-            columnNames={columns}
-            columnWidth={10}
-            data={data}
-            openHandler={openModal}
-            actionColumnName={"Actions"}
-            actionsBtn={"View"}
-            user={user}
-            expandableRowComp={<QALinearitySummaryExpandableRows user={user}/>}
-          />
-        ) : (<Preloader />)
-      }
+      {!loading ? (
+        <QADataTableRender
+          columnNames={columns}
+          columnWidth={10}
+          data={data}
+          openHandler={openModal}
+          onRemoveHandler={onRemoveHandler}
+          actionColumnName={"Actions"}
+          actionsBtn={"View"}
+          user={user}
+          expandableRowComp={<QALinearitySummaryExpandableRows user={user} />}
+        />
+      ) : (
+        <Preloader />
+      )}
       {show ? (
         <Modal
           show={show}
