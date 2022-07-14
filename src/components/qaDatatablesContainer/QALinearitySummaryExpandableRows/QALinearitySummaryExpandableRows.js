@@ -14,7 +14,7 @@ const QALinearitySummaryExpandableRows = (props) => {
   const [qaLinearitySummary, setQaLinearitySummary] = useState([]);
 
   useEffect(() => {
-    if(qaLinearitySummary.length === 0){
+    if (qaLinearitySummary.length === 0) {
       setLoading(true);
       getQALinearitySummary(locationId, id).then((res) => {
         console.log(res.data, "expandedRowData");
@@ -29,7 +29,7 @@ const QALinearitySummaryExpandableRows = (props) => {
     return getLinearitySummaryRecords(qaLinearitySummary);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qaLinearitySummary]);
-  
+
   const columns = [
     "Gas Level Code",
     "Mean Measured Value",
@@ -38,20 +38,31 @@ const QALinearitySummaryExpandableRows = (props) => {
     "APS Indicator",
   ];
 
+  const onRemoveHandler = async (row) => {
+    console.log('on remove handler qqa expand row called')
+    console.log('row', row);
+    console.log('all data', qaLinearitySummary)
+    const { id: idToRemove } = row
+    const dataPostRemove = qaLinearitySummary.filter(rowData => rowData.id !== idToRemove);
+    console.log('data post remove', dataPostRemove);
+    setQaLinearitySummary(dataPostRemove)
+  }
+
   return (
     <div className="padding-3">
       {
-        !loading ? 
-        (<QADataTableRender
+        !loading ?
+          (<QADataTableRender
             columnNames={columns}
             columnWidth={15}
             data={data}
-            openHandler={()=>{}}
+            openHandler={() => { }}
+            onRemoveHandler={onRemoveHandler}
             actionColumnName={"Linearity Summary Data"}
             actionsBtn={"View"}
             user={props.user}
           />
-        ) : (<Preloader />)
+          ) : (<Preloader />)
       }
     </div>
   )
