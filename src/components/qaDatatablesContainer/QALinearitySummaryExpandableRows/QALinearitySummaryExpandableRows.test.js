@@ -65,6 +65,8 @@ const linearitySummary = [
   },
 ];
 
+
+
 //testing redux connected component to mimic props passed as argument
 const componentRenderer = (locId, testSummaryId) => {
   const props = {
@@ -125,9 +127,6 @@ test("when remove button on a row is clicked then that row is deleted from the t
 
   // row exists before remove
   expect(screen.getByText(rowToRemoveText)).toBeInTheDocument()
-
-  console.log('rows to remove', screen.getAllByText(rowToRemoveText));
-  // screen.debug()
 
   // Act
   // click remove button in second row
