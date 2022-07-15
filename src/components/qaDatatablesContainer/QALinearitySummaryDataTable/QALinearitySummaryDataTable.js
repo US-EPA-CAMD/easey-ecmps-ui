@@ -231,12 +231,11 @@ const QALinearitySummaryDataTable = ({
 
   const onRemoveHandler = async (row) => {
     const { id, locationId } = row;
-    const deletedSuccessfully = await deleteQATestSummary(locationId, id);
-    if (!deletedSuccessfully) {
-      return;
+    const resp = await deleteQATestSummary(locationId, id);
+    if (resp.status === 200) {
+      const dataPostRemove = qaTestSummary.filter(rowData => rowData.id !== id)
+      setQATestSummary(dataPostRemove)
     }
-    const dataPostRemove = qaTestSummary.filter(rowData => rowData.id !== id)
-    setQATestSummary(dataPostRemove)
   };
 
   return (

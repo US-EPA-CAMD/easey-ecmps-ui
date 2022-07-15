@@ -37,11 +37,13 @@ const QALinearitySummaryExpandableRows = (props) => {
     "APS Indicator",
   ];
 
-  const onRemoveHandler = (row) => {
+  const onRemoveHandler = async (row) => {
     const { id: idToRemove, testSumId } = row
-    deleteQALinearitySummary(locationId, testSumId, idToRemove)
-    const dataPostRemove = qaLinearitySummary.filter(rowData => rowData.id !== idToRemove);
-    setQaLinearitySummary(dataPostRemove)
+    const resp = await deleteQALinearitySummary(locationId, testSumId, idToRemove)
+    if (resp.status === 200) {
+      const dataPostRemove = qaLinearitySummary.filter(rowData => rowData.id !== idToRemove);
+      setQaLinearitySummary(dataPostRemove)
+    }
   }
 
   return (
