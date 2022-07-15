@@ -92,22 +92,42 @@ test("testing linearity summary expandable records from test summary data", asyn
   expect(screen.getAllByRole("row").length).toBe(linearitySummary.length + 1);
 });
 
-test.only("when remove button on a row is clicked then that row is deleted from the table", async () => {
+test("when remove button on a row is clicked then that row is deleted from the table", async () => {
   // Arrange
+  axios.get.mockReset()
+  axios.get.mockClear()
   axios.get.mockImplementation(() => Promise.resolve({ status: 200, data: linearitySummary }));
   // works with this mock
   qaApi.deleteQALinearitySummary = jest.fn()
   // fails and encounters error with this mock
   // axios.delete.mockImplementation(() => Promise.resolve({ status: 200, data: 'delete succeeded' }))
   const rowIndex = 1
-  const res = await qaApi.getQALinearitySummary("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB");
-  expect(res.data).toEqual(linearitySummary);
-  await waitForElement(() => componentRenderer("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB"));
+  // await waitForElement(() => componentRenderer("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB"));
 
-  const removeButtons = screen.getAllByRole('button', { name: /remove/i })
+  const props = {
+    user: { firstName: "test" },
+    data: {
+      locationId: '5930',
+      id: 'IT07D0112-70AA39C4632746999222EC8FB3C530FB'
+    },
+    actionsBtn: 'View',
+    actionColumnName: 'Linearity Summary Data"'
+  };
+  render(<QALinearitySummaryExpandableRows {...props} />)
+
+  // does not work in combination with screen.getAllByRole(button)
+  // waitForElement(() => render(<QALinearitySummaryExpandableRows {...props} />))
+
+  const removeButtons = await screen.findAllByRole('button', { name: /remove/i })
+
+  // does not work in combination with waitForelement
+  // const removeButtons = screen.getAllByRole('button', { name: /remove/i })
 
   // row exists before remove
-  expect(screen.queryByText(rowToRemoveText)).toBeInTheDocument()
+  expect(screen.getByText(rowToRemoveText)).toBeInTheDocument()
+
+  console.log('rows to remove', screen.getAllByText(rowToRemoveText));
+  // screen.debug()
 
   // Act
   // click remove button in second row
