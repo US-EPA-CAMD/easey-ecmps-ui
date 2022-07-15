@@ -136,3 +136,17 @@ export const deleteQALinearitySummary = async (locId, testSumId, id) => {
     return handleError(error);
   }
 }
+export const updateQALinearityTestSummary = async (locId, testSumId, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
