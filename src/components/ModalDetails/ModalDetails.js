@@ -27,6 +27,7 @@ const ModalDetails = ({
   create,
   setMainDropdownChange,
   mainDropdownChange,
+  onEditUpdateHandler
 }) => {
   useEffect(() => {
     assignAriaLabelsToDatePickerButtons();
@@ -85,7 +86,7 @@ const ModalDetails = ({
   }
 
   const makeViewOnlyComp = (value) => {
-    console.log('value',value)
+    //console.log('value',value)
     return (
       <div key={`${value[1]}`} className="grid-col">
         {
@@ -183,6 +184,7 @@ const ModalDetails = ({
             name={value[1]}
             secondOption="name"
             mainDropdownChange={mainDropdownChange}
+            handler={(updatedValue) => onEditUpdateHandler? onEditUpdateHandler(updatedValue, 'dropdown', value[0]) : null}
             disableDropdownFlag={
               disableDropdownFlag || (create && mainDropdownUntouched)
             }
@@ -228,7 +230,7 @@ const ModalDetails = ({
             epadataname={value[0]}
             epa-testid={value[0].split(" ").join("-")}
             defaultValue={datePickerValue}
-            onChange={() => void 0}
+            onChange={(updatedValue) => onEditUpdateHandler? onEditUpdateHandler(updatedValue, 'date', value[0]) : null}
           />
         );
         break;
@@ -264,6 +266,7 @@ const ModalDetails = ({
             name={value[1]}
             secondOption="name"
             disableDropdownFlag={false}
+            handler={(updatedValue) => onEditUpdateHandler? onEditUpdateHandler(updatedValue, 'minuteDropdown', value[0]) : null}
           />
         );
         break;
@@ -286,6 +289,7 @@ const ModalDetails = ({
               name={value[1]}
               secondOption="name"
               disableDropdownFlag={false}
+              handler={(updatedValue) => onEditUpdateHandler? onEditUpdateHandler(updatedValue, 'hourDropdown', value[0]) : null}
             />
           );
           break;
@@ -301,6 +305,7 @@ const ModalDetails = ({
             name={value[0]}
             type="text"
             defaultValue={value[2] ? value[2] : ""}
+            onChange={(e) => onEditUpdateHandler? onEditUpdateHandler(e.target.value, 'input', value[0]) : null}
           />
         );
         break;
@@ -323,6 +328,7 @@ const ModalDetails = ({
               value="Yes"
               className="padding-right-1  "
               defaultChecked={value[2] && value[2] === 1}
+              onChange={() => onEditUpdateHandler? onEditUpdateHandler(1, 'radio', value[0]) : null}
             />
             <Radio
               id={`${value[1].split(" ").join("")}-2`}
@@ -333,6 +339,7 @@ const ModalDetails = ({
               defaultChecked={
                 value[2] === null || value[2] === false || value[2] === 0
               }
+              onChange={() => onEditUpdateHandler? onEditUpdateHandler(0, 'radio', value[0]) : null}
             />
           </Fieldset>
         );

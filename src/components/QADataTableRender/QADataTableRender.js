@@ -82,6 +82,7 @@ const QADataTableRender = ({
     }
     //console.log("data", data);
     setTotalExpand(emptyArr);
+    setTableData(data);
   }, [data]);
 
   const expandRowBTN = (index) => {
