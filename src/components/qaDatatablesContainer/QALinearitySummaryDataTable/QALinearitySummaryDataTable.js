@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { connect } from "react-redux";
-import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI.js";
+import { deleteQATestSummary, getQATestSummary } from "../../../utils/api/qaCertificationsAPI.js";
 import { getTestSummary } from "../../../utils/selectors/QACert/TestSummary.js";
 import QALinearitySummaryExpandableRows from "../QALinearitySummaryExpandableRows/QALinearitySummaryExpandableRows";
 
