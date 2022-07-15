@@ -232,10 +232,10 @@ const QALinearitySummaryDataTable = ({
 
   const onRemoveHandler = async (row) => {
     const { id, locationId } = row;
-    // const deletedSuccessfully = await deleteQATestSummary(locId, id);
-    // if (!deletedSuccessfully) {
-    //   return;
-    // }
+    const deletedSuccessfully = await deleteQATestSummary(locationId, id);
+    if (!deletedSuccessfully) {
+      return;
+    }
     console.log('onRemoveHandler called');
     console.log(id, locationId);
     const dataPostRemove = qaTestSummary.filter(rowData => rowData.id !== id)
