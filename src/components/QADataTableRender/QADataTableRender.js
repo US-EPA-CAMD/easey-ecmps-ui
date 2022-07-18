@@ -7,18 +7,11 @@ import { config, oneSecond } from "../../config";
 // import { getLinearitySummary } from "../../../utils/selectors/QACert/LinearitySummary.js";
 /*********** COMPONENTS ***********/
 // *** 3rd party
-import {
-  Add,
-  Remove,
-  ArrowDownwardSharp,
-} from "@material-ui/icons";
+import { Add, Remove, ArrowDownwardSharp } from "@material-ui/icons";
 import { Button } from "@trussworks/react-uswds";
 import DataTable from "react-data-table-component";
 
-import {
-  cleanUp508,
-  ensure508,
-} from "../../additional-functions/ensure-508";
+import { cleanUp508, ensure508 } from "../../additional-functions/ensure-508";
 import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
 
 const QADataTableRender = ({
@@ -74,7 +67,6 @@ const QADataTableRender = ({
       emptyArr.push(0);
     }
     setTotalExpand(emptyArr);
-    setTableData(data);
   }, [data]);
 
   const expandRowBTN = (index) => {
