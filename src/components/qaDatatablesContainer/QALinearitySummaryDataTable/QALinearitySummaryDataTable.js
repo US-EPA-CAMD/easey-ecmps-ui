@@ -1,6 +1,10 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { connect } from "react-redux";
-import { getQATestSummary, updateQALinearityTestSummary } from "../../../utils/api/qaCertificationsAPI.js";
+import {
+  getQATestSummary,
+  updateQALinearityTestSummary,
+  deleteQATestSummary,
+} from "../../../utils/api/qaCertificationsAPI.js";
 import { getTestSummary } from "../../../utils/selectors/QACert/TestSummary.js";
 import QALinearitySummaryExpandableRows from "../QALinearitySummaryExpandableRows/QALinearitySummaryExpandableRows";
 
@@ -217,6 +221,7 @@ export const QALinearitySummaryDataTable = ({
       attachChangeEventListeners(".modalUserInput");
     });
   };
+
   const closeModalHandler = () => {
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
@@ -226,43 +231,56 @@ export const QALinearitySummaryDataTable = ({
       executeOnClose();
     }
   };
+
   const executeOnClose = () => {
     setReturnedFocusToLast(false);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
   };
 
-  const apiFormatDate = (dateString) =>{
-    const dateSplit = dateString.split("/");
-    return  `${dateSplit[2]}-${dateSplit[0]}-${dateSplit[1]}`;
+  const onRemoveHandler = async (row) => {
+    const { id, locationId } = row;
+    const resp = await deleteQATestSummary(locationId, id);
+    if (resp.status === 200) {
+      const dataPostRemove = qaTestSummary.filter(
+        (rowData) => rowData.id !== id
+      );
+      setQATestSummary(dataPostRemove);
+    }
   };
 
-  const onEditUpdateHandler = (updatedValue, fieldType, fieldCode) =>{
-    if(!selectedModalDataCloned){
+  const apiFormatDate = (dateString) => {
+    const dateSplit = dateString.split("/");
+    return `${dateSplit[2]}-${dateSplit[0]}-${dateSplit[1]}`;
+  };
+
+  const onEditUpdateHandler = (updatedValue, fieldType, fieldCode) => {
+    if (!selectedModalDataCloned) {
       selectedModalDataCloned = [...selectedModalData];
     }
-    if(!selectedRowCloned){
-      selectedRowCloned = {...selectedRow};
+    if (!selectedRowCloned) {
+      selectedRowCloned = { ...selectedRow };
     }
-    selectedModalDataCloned.forEach(arr =>{
-      if(arr[0] === fieldCode){
-        switch(fieldType){
-          case 'date':
+    selectedModalDataCloned.forEach((arr) => {
+      if (arr[0] === fieldCode) {
+        switch (fieldType) {
+          case "date":
             arr[2] = updatedValue;
             arr[5] = apiFormatDate(updatedValue);
             break;
-          case 'input':
-          case 'radio':
+          case "input":
+          case "radio":
             arr[2] = updatedValue;
             break;
-          default://any kind of dropdown field
+          default:
+            //any kind of dropdown field
             arr[5] = updatedValue;
-            if(arr[6]){
-              const optionFound = arr[6].find(e=> e.code === updatedValue);
-              if(optionFound){
+            if (arr[6]) {
+              const optionFound = arr[6].find((e) => e.code === updatedValue);
+              if (optionFound) {
                 arr[2] = optionFound.name;
-              }             
-            }else{
+              }
+            } else {
               arr[2] = updatedValue;
             }
             break;
@@ -273,43 +291,47 @@ export const QALinearitySummaryDataTable = ({
     //console.log("selectedModalDataCloned",selectedModalDataCloned); console.log("selectedRowCloned", selectedRowCloned);
   };
 
-  const saveData = () =>{
+  const saveData = () => {
     const payload = {
-      "stackPipeId": selectedRowCloned.stackPipeId,
-      "unitId": selectedRowCloned.unitId,
-      "testTypeCode": selectedRowCloned.testTypeCode,
-      "componentID": selectedRowCloned.componentID,
-      "spanScaleCode": selectedRowCloned.spanScaleCode,
-      "testNumber": selectedRowCloned.testNumber,
-      "testReasonCode": selectedRowCloned.testReasonCode,
-      "testResultCode": selectedRowCloned.testResultCode,
-      "beginDate": apiFormatDate(selectedRowCloned.beginDate),
-      "beginHour": selectedRowCloned.beginHour,
-      "beginMinute": selectedRowCloned.beginMinute,
-      "endDate": apiFormatDate(selectedRowCloned.endDate),
-      "endHour": selectedRowCloned.endHour,
-      "endMinute": selectedRowCloned.endMinute,
-      "gracePeriodIndicator": selectedRowCloned.gracePeriodIndicator,
-      "testComment": selectedRowCloned.testComment,
+      stackPipeId: selectedRowCloned.stackPipeId,
+      unitId: selectedRowCloned.unitId,
+      testTypeCode: selectedRowCloned.testTypeCode,
+      componentID: selectedRowCloned.componentID,
+      spanScaleCode: selectedRowCloned.spanScaleCode,
+      testNumber: selectedRowCloned.testNumber,
+      testReasonCode: selectedRowCloned.testReasonCode,
+      testResultCode: selectedRowCloned.testResultCode,
+      beginDate: apiFormatDate(selectedRowCloned.beginDate),
+      beginHour: selectedRowCloned.beginHour,
+      beginMinute: selectedRowCloned.beginMinute,
+      endDate: apiFormatDate(selectedRowCloned.endDate),
+      endHour: selectedRowCloned.endHour,
+      endMinute: selectedRowCloned.endMinute,
+      gracePeriodIndicator: selectedRowCloned.gracePeriodIndicator,
+      testComment: selectedRowCloned.testComment,
     };
-    updateQALinearityTestSummary(selectedRowCloned.locationId, selectedRowCloned.id, payload)
-      .then(res => {
-        //console.log("res", res);
-        if(Object.prototype.toString.call(res) === "[object Array]"){
-          alert(res[0]);
-        }else{
-          const newQaTestSummary = qaTestSummary.map(e=>{
-            if(e.id === selectedRowCloned.id){
-              return res.data;
-            }else{
-              return e;
-            }
-          })
-          finishedLoadingData(newQaTestSummary);
-          setQATestSummary(newQaTestSummary);
-          executeOnClose();
-        }
-      });
+
+    updateQALinearityTestSummary(
+      selectedRowCloned.locationId,
+      selectedRowCloned.id,
+      payload
+    ).then((res) => {
+      //console.log("res", res);
+      if (Object.prototype.toString.call(res) === "[object Array]") {
+        alert(res[0]);
+      } else {
+        const newQaTestSummary = qaTestSummary.map((e) => {
+          if (e.id === selectedRowCloned.id) {
+            return res.data;
+          } else {
+            return e;
+          }
+        });
+        finishedLoadingData(newQaTestSummary);
+        setQATestSummary(newQaTestSummary);
+        executeOnClose();
+      }
+    });
   };
 
   return (
@@ -319,20 +341,21 @@ export const QALinearitySummaryDataTable = ({
         <h3 className="display-inline padding-right-3">Test Summary Data</h3>
         {user ? <Button> Add Test Summary Data</Button> : ""}
       </div>
-      {
-        !loading ? 
-        (<QADataTableRender
-            columnNames={columns}
-            columnWidth={10}
-            data={data}
-            openHandler={openModal}
-            actionColumnName={"Actions"}
-            actionsBtn={"View"}
-            user={user}
-            expandableRowComp={<QALinearitySummaryExpandableRows user={user}/>}
-          />
-        ) : (<Preloader />)
-      }
+      {!loading ? (
+        <QADataTableRender
+          columnNames={columns}
+          columnWidth={10}
+          data={data}
+          openHandler={openModal}
+          onRemoveHandler={onRemoveHandler}
+          actionColumnName={"Actions"}
+          actionsBtn={"View"}
+          user={user}
+          expandableRowComp={<QALinearitySummaryExpandableRows user={user} />}
+        />
+      ) : (
+        <Preloader />
+      )}
       {show ? (
         <Modal
           show={show}
@@ -368,6 +391,7 @@ export const QALinearitySummaryDataTable = ({
     </div>
   );
 };
+
 const mapStateToProps = (state, ownProps) => {
   const dataTableName = "Test Summary Data";
   return {
@@ -383,6 +407,7 @@ const mapDispatchToProps = (dispatch) => {
       ),
   };
 };
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps

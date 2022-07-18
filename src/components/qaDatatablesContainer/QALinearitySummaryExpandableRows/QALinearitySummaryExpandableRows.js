@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { getQALinearitySummary } from "../../../utils/api/qaCertificationsAPI.js";
+import { deleteQALinearitySummary, getQALinearitySummary } from "../../../utils/api/qaCertificationsAPI.js";
 import { getLinearitySummaryRecords } from "../../../utils/selectors/QACert/TestSummary.js";
 /*********** COMPONENTS ***********/
 
@@ -14,10 +14,9 @@ const QALinearitySummaryExpandableRows = (props) => {
   const [qaLinearitySummary, setQaLinearitySummary] = useState([]);
 
   useEffect(() => {
-    if(qaLinearitySummary.length === 0){
+    if (qaLinearitySummary.length === 0) {
       setLoading(true);
       getQALinearitySummary(locationId, id).then((res) => {
-        console.log(res.data, "expandedRowData");
         setQaLinearitySummary(res.data);
         setLoading(false);
       });
@@ -29,7 +28,7 @@ const QALinearitySummaryExpandableRows = (props) => {
     return getLinearitySummaryRecords(qaLinearitySummary);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qaLinearitySummary]);
-  
+
   const columns = [
     "Gas Level Code",
     "Mean Measured Value",
@@ -38,20 +37,30 @@ const QALinearitySummaryExpandableRows = (props) => {
     "APS Indicator",
   ];
 
+  const onRemoveHandler = async (row) => {
+    const { id: idToRemove, testSumId } = row
+    const resp = await deleteQALinearitySummary(locationId, testSumId, idToRemove)
+    if (resp.status === 200) {
+      const dataPostRemove = qaLinearitySummary.filter(rowData => rowData.id !== idToRemove);
+      setQaLinearitySummary(dataPostRemove)
+    }
+  }
+
   return (
     <div className="padding-3">
       {
-        !loading ? 
-        (<QADataTableRender
+        !loading ?
+          (<QADataTableRender
             columnNames={columns}
             columnWidth={15}
             data={data}
-            openHandler={()=>{}}
+            openHandler={() => { }}
+            onRemoveHandler={onRemoveHandler}
             actionColumnName={"Linearity Summary Data"}
             actionsBtn={"View"}
             user={props.user}
           />
-        ) : (<Preloader />)
+          ) : (<Preloader />)
       }
     </div>
   )
