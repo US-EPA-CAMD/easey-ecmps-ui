@@ -247,152 +247,149 @@ export const QALinearitySummaryDataTable = ({
       );
       setQATestSummary(dataPostRemove);
     }
-    const apiFormatDate = (dateString) => {
-      const dateSplit = dateString.split("/");
-      return `${dateSplit[2]}-${dateSplit[0]}-${dateSplit[1]}`;
-    };
-
-    const onEditUpdateHandler = (updatedValue, fieldType, fieldCode) => {
-      if (!selectedModalDataCloned) {
-        selectedModalDataCloned = [...selectedModalData];
-      }
-      if (!selectedRowCloned) {
-        selectedRowCloned = { ...selectedRow };
-      }
-      selectedModalDataCloned.forEach((arr) => {
-        if (arr[0] === fieldCode) {
-          switch (fieldType) {
-            case "date":
-              arr[2] = updatedValue;
-              arr[5] = apiFormatDate(updatedValue);
-              break;
-            case "input":
-            case "radio":
-              arr[2] = updatedValue;
-              break;
-            default:
-              //any kind of dropdown field
-              arr[5] = updatedValue;
-              if (arr[6]) {
-                const optionFound = arr[6].find((e) => e.code === updatedValue);
-                if (optionFound) {
-                  arr[2] = optionFound.name;
-                }
-              } else {
-                arr[2] = updatedValue;
-              }
-              break;
-          }
-        }
-      });
-      selectedRowCloned[fieldCode] = updatedValue;
-      //console.log("selectedModalDataCloned",selectedModalDataCloned); console.log("selectedRowCloned", selectedRowCloned);
-    };
-
-    const saveData = () => {
-      const payload = {
-        stackPipeId: selectedRowCloned.stackPipeId,
-        unitId: selectedRowCloned.unitId,
-        testTypeCode: selectedRowCloned.testTypeCode,
-        componentID: selectedRowCloned.componentID,
-        spanScaleCode: selectedRowCloned.spanScaleCode,
-        testNumber: selectedRowCloned.testNumber,
-        testReasonCode: selectedRowCloned.testReasonCode,
-        testResultCode: selectedRowCloned.testResultCode,
-        beginDate: apiFormatDate(selectedRowCloned.beginDate),
-        beginHour: selectedRowCloned.beginHour,
-        beginMinute: selectedRowCloned.beginMinute,
-        endDate: apiFormatDate(selectedRowCloned.endDate),
-        endHour: selectedRowCloned.endHour,
-        endMinute: selectedRowCloned.endMinute,
-        gracePeriodIndicator: selectedRowCloned.gracePeriodIndicator,
-        testComment: selectedRowCloned.testComment,
-      };
-
-      updateQALinearityTestSummary(
-        selectedRowCloned.locationId,
-        selectedRowCloned.id,
-        payload
-      ).then((res) => {
-        //console.log("res", res);
-        if (Object.prototype.toString.call(res) === "[object Array]") {
-          alert(res[0]);
-        } else {
-          const newQaTestSummary = qaTestSummary.map((e) => {
-            if (e.id === selectedRowCloned.id) {
-              return res.data;
-            } else {
-              return e;
-            }
-          });
-          finishedLoadingData(newQaTestSummary);
-          setQATestSummary(newQaTestSummary);
-          executeOnClose();
-        }
-      });
-    };
-
-    return (
-      <div>
-        <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
-        <div className=" padding-3">
-          <h3 className="display-inline padding-right-3">Test Summary Data</h3>
-          {user ? <Button> Add Test Summary Data</Button> : ""}
-        </div>
-        {!loading ? (
-          <QADataTableRender
-            columnNames={columns}
-            columnWidth={10}
-            data={data}
-            openHandler={openModal}
-            onRemoveHandler={onRemoveHandler}
-            actionColumnName={"Actions"}
-            actionsBtn={"View"}
-            user={user}
-            expandableRowComp={<QALinearitySummaryExpandableRows user={user} />}
-          />
-        ) : (
-          <Preloader />
-        )}
-        {show ? (
-          <Modal
-            show={show}
-            close={closeModalHandler}
-            save={saveData}
-            showCancel={!user || nonEditable}
-            showSave={user && !nonEditable}
-            nonEditable={nonEditable}
-            title={
-              createNewData ? `Create ${dataTableName}` : `${dataTableName}`
-            }
-            exitBTN={
-              createNewData ? `Create ${dataTableName}` : `Save and Close`
-            }
-            children={
-              dropdownsLoaded ? (
-                <div>
-                  <ModalDetails
-                    modalData={selectedRow}
-                    data={selectedModalData}
-                    // prefilteredMdmData={prefilteredMdmData}
-                    cols={3}
-                    title={`${dataTableName}`}
-                    viewOnly={!user || nonEditable}
-                    create={createNewData}
-                    // setMainDropdownChange={setMainDropdownChange}
-                    //mainDropdownChange={mainDropdownChange}
-                    onEditUpdateHandler={onEditUpdateHandler}
-                  />
-                </div>
-              ) : (
-                <Preloader />
-              )
-            }
-          />
-        ) : null}
-      </div>
-    );
   };
+
+  const apiFormatDate = (dateString) => {
+    const dateSplit = dateString.split("/");
+    return `${dateSplit[2]}-${dateSplit[0]}-${dateSplit[1]}`;
+  };
+
+  const onEditUpdateHandler = (updatedValue, fieldType, fieldCode) => {
+    if (!selectedModalDataCloned) {
+      selectedModalDataCloned = [...selectedModalData];
+    }
+    if (!selectedRowCloned) {
+      selectedRowCloned = { ...selectedRow };
+    }
+    selectedModalDataCloned.forEach((arr) => {
+      if (arr[0] === fieldCode) {
+        switch (fieldType) {
+          case "date":
+            arr[2] = updatedValue;
+            arr[5] = apiFormatDate(updatedValue);
+            break;
+          case "input":
+          case "radio":
+            arr[2] = updatedValue;
+            break;
+          default:
+            //any kind of dropdown field
+            arr[5] = updatedValue;
+            if (arr[6]) {
+              const optionFound = arr[6].find((e) => e.code === updatedValue);
+              if (optionFound) {
+                arr[2] = optionFound.name;
+              }
+            } else {
+              arr[2] = updatedValue;
+            }
+            break;
+        }
+      }
+    });
+    selectedRowCloned[fieldCode] = updatedValue;
+    //console.log("selectedModalDataCloned",selectedModalDataCloned); console.log("selectedRowCloned", selectedRowCloned);
+  };
+
+  const saveData = () => {
+    const payload = {
+      stackPipeId: selectedRowCloned.stackPipeId,
+      unitId: selectedRowCloned.unitId,
+      testTypeCode: selectedRowCloned.testTypeCode,
+      componentID: selectedRowCloned.componentID,
+      spanScaleCode: selectedRowCloned.spanScaleCode,
+      testNumber: selectedRowCloned.testNumber,
+      testReasonCode: selectedRowCloned.testReasonCode,
+      testResultCode: selectedRowCloned.testResultCode,
+      beginDate: apiFormatDate(selectedRowCloned.beginDate),
+      beginHour: selectedRowCloned.beginHour,
+      beginMinute: selectedRowCloned.beginMinute,
+      endDate: apiFormatDate(selectedRowCloned.endDate),
+      endHour: selectedRowCloned.endHour,
+      endMinute: selectedRowCloned.endMinute,
+      gracePeriodIndicator: selectedRowCloned.gracePeriodIndicator,
+      testComment: selectedRowCloned.testComment,
+    };
+
+    updateQALinearityTestSummary(
+      selectedRowCloned.locationId,
+      selectedRowCloned.id,
+      payload
+    ).then((res) => {
+      //console.log("res", res);
+      if (Object.prototype.toString.call(res) === "[object Array]") {
+        alert(res[0]);
+      } else {
+        const newQaTestSummary = qaTestSummary.map((e) => {
+          if (e.id === selectedRowCloned.id) {
+            return res.data;
+          } else {
+            return e;
+          }
+        });
+        finishedLoadingData(newQaTestSummary);
+        setQATestSummary(newQaTestSummary);
+        executeOnClose();
+      }
+    });
+  };
+
+  return (
+    <div>
+      <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
+      <div className=" padding-3">
+        <h3 className="display-inline padding-right-3">Test Summary Data</h3>
+        {user ? <Button> Add Test Summary Data</Button> : ""}
+      </div>
+      {!loading ? (
+        <QADataTableRender
+          columnNames={columns}
+          columnWidth={10}
+          data={data}
+          openHandler={openModal}
+          onRemoveHandler={onRemoveHandler}
+          actionColumnName={"Actions"}
+          actionsBtn={"View"}
+          user={user}
+          expandableRowComp={<QALinearitySummaryExpandableRows user={user} />}
+        />
+      ) : (
+        <Preloader />
+      )}
+      {show ? (
+        <Modal
+          show={show}
+          close={closeModalHandler}
+          save={saveData}
+          showCancel={!user || nonEditable}
+          showSave={user && !nonEditable}
+          nonEditable={nonEditable}
+          title={createNewData ? `Create ${dataTableName}` : `${dataTableName}`}
+          exitBTN={createNewData ? `Create ${dataTableName}` : `Save and Close`}
+          children={
+            dropdownsLoaded ? (
+              <div>
+                <ModalDetails
+                  modalData={selectedRow}
+                  data={selectedModalData}
+                  // prefilteredMdmData={prefilteredMdmData}
+                  cols={3}
+                  title={`${dataTableName}`}
+                  viewOnly={!user || nonEditable}
+                  create={createNewData}
+                  // setMainDropdownChange={setMainDropdownChange}
+                  //mainDropdownChange={mainDropdownChange}
+                  onEditUpdateHandler={onEditUpdateHandler}
+                />
+              </div>
+            ) : (
+              <Preloader />
+            )
+          }
+        />
+      ) : null}
+    </div>
+  );
 };
 
 const mapStateToProps = (state, ownProps) => {
