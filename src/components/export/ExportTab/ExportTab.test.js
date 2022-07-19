@@ -1,12 +1,16 @@
 import React from "react";
 import { render, screen, waitForElement } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import download from "downloadjs";
 
 import ExportTab from "./ExportTab";
+import * as qaCertificationsAPI from "../../../utils/api/qaCertificationsAPI";
 import * as monitoringPlansApi from "../../../utils/api/monitoringPlansApi";
 
 const axios = require("axios");
 jest.mock("axios");
+
+jest.mock('downloadjs')
 
 const mpCheckboxName = /Monitoring Plan/i
 const qaCheckboxName = /QA & Certification/i
@@ -25,6 +29,16 @@ const props = {
   orisCode,
   setExportState: jest.fn(),
   workspaceSection
+}
+
+const previewResp = {
+  data: {
+    orisCode: 3,
+    testSummaryData: [
+      { id: "EPA-250DCA42B886527F86DC36246117F257" },
+      { id: "EPA-521DD042253347A19CA6947185AA0805" }
+    ]
+  }
 }
 
 beforeEach(() => {
@@ -116,12 +130,31 @@ test('when monitoring plan is checked then the export button is enabled', async 
   expect(exportBtn).not.toHaveAttribute('disabled')
 })
 
+test.skip('given QA is checked when preview button is clicked then a table of data is displayed', async () => {
+  // Arrange
+  await waitForElement(() => render(<ExportTab {...props} />))
+  const qaCheckbox = screen.getByRole('checkbox', { name: qaCheckboxName })
+  const previewBtn = screen.getByRole('button', { name: /Preview/i })
+  // qaCertificationsAPI.exportQA = jest.fn().mockResolvedValueOnce(previewResp)
+  axios.get.mockResolvedValueOnce({ status: 200, data: previewResp })
+  // exportQA which above line is trying to mock uses secureAxios, may be the issue
+
+  // Act
+  userEvent.click(qaCheckbox)
+  // userEvent.click(previewBtn)
+
+
+  // Assert
+  const rows = screen.findAllByRole('row')
+  expect(rows).toHaveLength(3)
+})
+
 test('given monitoring plan is checked when export button is clicked then monitoring plan is downloaded', async () => {
   // Arrange
-  monitoringPlansApi.exportMonitoringPlanDownload = jest.fn()
   await waitForElement(() => render(<ExportTab {...props} />))
   const mpcheckbox = screen.getByRole('checkbox', { name: mpCheckboxName })
   const exportBtn = screen.getByRole('button', { name: /Export/i })
+  monitoringPlansApi.exportMonitoringPlanDownload = jest.fn()
 
   // Act
   userEvent.click(mpcheckbox)
@@ -131,7 +164,7 @@ test('given monitoring plan is checked when export button is clicked then monito
   expect(monitoringPlansApi.exportMonitoringPlanDownload).toHaveBeenCalled()
 })
 
-test.skip('given QA & Certifications is checked when export button is clicked then QA is downloaded', async () => {
+test.skip('given QA & Certifications is checked and a row is selected when export button is clicked then QA is downloaded', async () => {
   // Arrange
   await waitForElement(() => render(<ExportTab {...props} />))
   const qaCheckbox = screen.getByRole('checkbox', { name: qaCheckboxName })
@@ -142,9 +175,5 @@ test.skip('given QA & Certifications is checked when export button is clicked th
   userEvent.click(exportBtn)
 
   // Assert
-  expect(monitoringPlansApi.exportMonitoringPlanDownload).toHaveBeenCalled()
-})
-
-test.skip('when preview button is clicked then a table of data is displayed', async () => {
-  
+  expect(download).toHaveBeenCalled()
 })
