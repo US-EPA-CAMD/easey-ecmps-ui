@@ -9,19 +9,20 @@ export const getTestSummary = (data) => {
     records.push({
       id: el.id,
       locationId: el.locationId,
-      col1:
+      col1: el.testTypeCode,
+      col2:
         el.stackPipeId !== null
           ? el.stackPipeId
           : el.unitId !== null
           ? el.unitId
           : "",
-      col2: el.componentId,
-      col3: el.testNumber,
-      col4: el.testReasonCode,
-      col5: el.testResultCode,
-      col6: endDate,
-      col7: endHour,
-      col8: endMinute,
+      col3: el.componentId,
+      col4: el.testNumber,
+      col5: el.testReasonCode,
+      col6: el.testResultCode,
+      col7: endDate,
+      col8: endHour,
+      col9: endMinute,
     });
   });
   return records;

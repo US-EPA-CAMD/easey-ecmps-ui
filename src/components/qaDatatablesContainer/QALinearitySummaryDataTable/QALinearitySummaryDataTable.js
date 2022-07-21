@@ -142,6 +142,7 @@ export const QALinearitySummaryDataTable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qaTestSummary]);
   const columns = [
+    "Test Type Code",
     "Unit or Stack Pipe ID",
     "Component ID",
     "Test Number",
