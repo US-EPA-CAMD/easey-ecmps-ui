@@ -1,6 +1,6 @@
 import React from "react";
 import { fireEvent, render, waitForElement } from "@testing-library/react";
-import {QALinearitySummaryDataTable} from "./QALinearitySummaryDataTable";
+import { QALinearitySummaryDataTable } from "./QALinearitySummaryDataTable";
 
 import * as qaApi from "../../../utils/api/qaCertificationsAPI";
 const axios = require("axios");
@@ -80,9 +80,7 @@ test("tests a test summary NO USER/NO DATA", async () => {
 });
 
 test("tests updating test summary data", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: testSummary })
-  );
+  axios.get.mockResolvedValue({ status: 200, data: testSummary })
   const payload = {
     "stackPipeId": testSummary.stackPipeId,
     "unitId": testSummary.unitId,
@@ -101,9 +99,7 @@ test("tests updating test summary data", async () => {
     "gracePeriodIndicator": testSummary.gracePeriodIndicator,
     "testComment": "dev testing",
   };
-  axios.put.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: payload })
-  );
+  axios.mockResolvedValueOnce(Promise.resolve({ status: 200, data: payload }))
   const title = await qaApi.updateQALinearityTestSummary(1873, "f6e4056f-c779-4a61-b265-2932898a9033", payload);
   expect(title.data).toEqual(payload);
   let { container } = await waitForElement(() => componentRenderer(1873));
