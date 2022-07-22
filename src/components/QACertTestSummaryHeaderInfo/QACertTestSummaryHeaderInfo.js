@@ -24,6 +24,7 @@ import QAImportModalSelect from "./QAImportModalSelect/QAImportModalSelect";
 import QAImportHistoricalDataPreview from "../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
 import Modal from "../Modal/Modal";
 import { importQA } from "../../utils/api/qaCertificationsAPI";
+import { getAllTestTypeGroupCodes } from "../../utils/api/dataManagementApi";
 
 export const QACertTestSummaryHeaderInfo = ({
   facility,
@@ -49,7 +50,9 @@ export const QACertTestSummaryHeaderInfo = ({
     { name: "Fuel Flowmeter Accuracy" },
     { name: "Hg Linearity and 3-Level Summary" },
     { name: "Linearity Summary" },
+    { name: "Miscellaneous" },
     { name: "Online Offline Calibration" },
+    { name: "PEI" },
     { name: "RATA" },
     { name: "Test Qualification" },
     { name: "Transmitter Transducer Accuracy" },
@@ -82,6 +85,18 @@ export const QACertTestSummaryHeaderInfo = ({
 
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
   const [selectedHistoricalData, setSelectedHistoricalData] = useState([]);
+
+  const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([{ name: 'Loading...' }]);
+
+  useEffect(() => {
+    const fetchTestTypeGroupCodes = async () => {
+      const resp = await getAllTestTypeGroupCodes()
+      console.log('fetchTestTypeGroupCodes', resp);
+      // set state or something
+      setTestTypeGroupOptions(resp)
+    }
+    fetchTestTypeGroupCodes()
+  }, [])
 
   // *** Reassign handlers after pop-up modal is closed
   useEffect(() => {
@@ -215,7 +230,8 @@ export const QACertTestSummaryHeaderInfo = ({
               <DropdownSelection
                 caption="Test Type Group"
                 selectionHandler={setSectionSelect}
-                options={sections}
+                // options={sections}
+                options={testTypeGroupOptions}
                 viewKey="name"
                 selectKey="name"
                 initialSelection={sectionSelect ? sectionSelect[0] : null}
@@ -278,14 +294,13 @@ export const QACertTestSummaryHeaderInfo = ({
       )}
 
       <div
-        className={`usa-overlay ${
-          showImportModal ||
+        className={`usa-overlay ${showImportModal ||
           showSelectionTypeImportModal ||
           showImportDataPreview ||
           isLoading
-            ? "is-visible"
-            : ""
-        }`}
+          ? "is-visible"
+          : ""
+          }`}
       />
 
       {/* // selects either historical data or file data */}
