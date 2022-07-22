@@ -372,3 +372,34 @@ export const getAllTestReasonCodes = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+export const getAllTestTypeGroupCodes = async () => {
+  // return axios
+  //   .get(`${config.services.mdm.uri}/test-type-group-codes`)
+
+  // return dummy response
+  const resp = [
+    { name: "AppendixE Correlation Test Summary" },
+    { name: "Calibration Injection" },
+    { name: "Cycle Time Summary" },
+    { name: "Flow to Load Check" },
+    { name: "Flow to Load Reference" },
+    { name: "Fuel Flow to Load Baseline" },
+    { name: "Fuel Flow to Load" },
+    { name: "Fuel Flowmeter Accuracy" },
+    { name: "Hg Linearity and 3-Level Summary" },
+    { name: "Linearity Summary" },
+    { name: "Miscellaneous" },
+    { name: "Online Offline Calibration" },
+    { name: "PEI" },
+    { name: "RATA" },
+    { name: "Test Qualification" },
+    { name: "Transmitter Transducer Accuracy" },
+    { name: "Unit Default" },
+  ];
+
+  console.log('getAllTestTypeCodes called');
+  await new Promise(resolve => setTimeout(resolve, 3000));
+  console.log('getAllTestTypeCodes resp');
+  return resp
+}
