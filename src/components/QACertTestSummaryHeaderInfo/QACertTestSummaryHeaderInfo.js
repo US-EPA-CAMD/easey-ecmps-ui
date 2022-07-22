@@ -213,7 +213,7 @@ export const QACertTestSummaryHeaderInfo = ({
             </div>
             <div className="grid-col-4">
               <DropdownSelection
-                caption="Test Type"
+                caption="Test Type Group"
                 selectionHandler={setSectionSelect}
                 options={sections}
                 viewKey="name"
