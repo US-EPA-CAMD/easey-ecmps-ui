@@ -91,7 +91,6 @@ export const QACertTestSummaryHeaderInfo = ({
   useEffect(() => {
     const fetchTestTypeGroupCodes = async () => {
       const resp = await getAllTestTypeGroupCodes()
-      console.log('fetchTestTypeGroupCodes', resp);
       const options = resp.data.map(e => {
         return { name: e.testTypeGroupCodeDescription }
       })
@@ -117,9 +116,6 @@ export const QACertTestSummaryHeaderInfo = ({
     };
   }, []);
 
-  // useEffect (( )=> {
-
-  // },[]);
   useEffect(() => {
     if (importTypeSelection != "select" || importedFile.length != 0) {
       setDisablePortBtn(false);
