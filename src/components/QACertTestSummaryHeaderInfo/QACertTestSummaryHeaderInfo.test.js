@@ -1,5 +1,7 @@
 import React from "react";
-import { render, waitForElement, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitForElement, within } from "@testing-library/react";
+import axios from "axios";
+
 import QACertTestSummaryHeaderInfo from "./QACertTestSummaryHeaderInfo";
 
 jest.mock("axios");
@@ -31,6 +33,13 @@ const props = {
   configID: "testConfigId",
 };
 
+const testTypeDropdownLabel = /Test Type Group/i
+const testTypeDropdownData = [
+  { testTypeGroupCodeDescription: 'Test Type Group option 1' },
+  { testTypeGroupCodeDescription: 'Test Type Group option 2' },
+  { testTypeGroupCodeDescription: 'Test Type Group option 3' },
+]
+
 // mocking JavaScript built-in window functions
 window.open = jest.fn().mockReturnValue({ close: jest.fn() });
 window.scrollTo = jest.fn();
@@ -41,6 +50,10 @@ jest.setTimeout(oneMin);
 function timeout(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+beforeEach(() => {
+  axios.get.mockResolvedValueOnce({ status: 200, data: testTypeDropdownData })
+})
 
 test("testing QACertTestSummaryHeaderInfo component", () => {
   const { container } = render(<QACertTestSummaryHeaderInfo {...props} />);
@@ -55,3 +68,14 @@ test("testing QACertTestSummaryHeaderInfo component and opening selection modal 
   fireEvent.click(openBtn);
   expect(container).toBeDefined();
 });
+
+test('test type dropdown selection renders with options', async () => {
+  // Arrange
+  await waitForElement(() => render(<QACertTestSummaryHeaderInfo {...props} />))
+  const testTypeDropdown = screen.getByLabelText(testTypeDropdownLabel)
+  const options = within(testTypeDropdown).getAllByRole('option')
+
+  // Assert
+  expect(testTypeDropdown).toBeInTheDocument()
+  expect(options).toHaveLength(testTypeDropdownData.length)
+})
