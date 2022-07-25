@@ -91,9 +91,11 @@ export const QACertTestSummaryHeaderInfo = ({
   useEffect(() => {
     const fetchTestTypeGroupCodes = async () => {
       const resp = await getAllTestTypeGroupCodes()
-      const options = resp.data.map(e => {
-        return { name: e.testTypeGroupCodeDescription, code: e.testTypeGroupCode }
-      })
+      const options = resp.data
+        .map(e => {
+          return { name: e.testTypeGroupCodeDescription, code: e.testTypeGroupCode }
+        })
+        .sort((a, b) => a.name.localeCompare(b.name))
       setTestTypeGroupOptions(options)
     }
     fetchTestTypeGroupCodes()
