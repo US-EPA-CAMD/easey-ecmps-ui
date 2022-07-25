@@ -22,7 +22,10 @@ export const MATS_METHODS_SECTION_NAME = "Supplemental Methods";
 // qa & cert
 
 export const LINE_TEST_SUMMARY_SECTION_NAME = "Test Summary Data";
+export const LINEARITY_SUMMARY_TEST_SECOND_LEVEL_SECTION_NAME = "Linearity Test"
 
+
+// __________
 export const DEFAULTS_STORE_NAME = "defaults";
 export const FORMULAS_STORE_NAME = "formulas";
 export const LOADS_STORE_NAME = "loads";
@@ -47,7 +50,7 @@ export const MATS_METHODS_STORE_NAME = "matsMethods";
 // qa & cert
 
 export const LINE_TEST_SUMMARY_STORE_NAME = "lineTestSummary";
-
+export const LINEARITY_SUMMARY_TEST_SECOND_LEVEL_STORE_NAME = "linearitySummeryTestSecondLevel";
 export const convertSectionToStoreName = (dataTableName) => {
   let storeName = "";
   switch (dataTableName) {
@@ -114,6 +117,9 @@ export const convertSectionToStoreName = (dataTableName) => {
     case LINE_TEST_SUMMARY_SECTION_NAME:
       storeName = LINE_TEST_SUMMARY_STORE_NAME;
       break;
+      case LINE_TEST_SUMMARY_SECTION_NAME:
+        storeName = LINEARITY_SUMMARY_TEST_SECOND_LEVEL_STORE_NAME;
+        break;
     default:
       break;
   }

@@ -352,7 +352,14 @@ export const QALinearitySummaryDataTable = ({
           actionColumnName={"Actions"}
           actionsBtn={"View"}
           user={user}
-          expandableRowComp={<QALinearitySummaryExpandableRows user={user} />}
+          expandableRowComp={
+            <QALinearitySummaryExpandableRows
+              locationId={selectedRow.locationId}
+              id={selectedRow.id}
+              user={user}
+              nonEditable={nonEditable}
+            />
+          }
         />
       ) : (
         <Preloader />

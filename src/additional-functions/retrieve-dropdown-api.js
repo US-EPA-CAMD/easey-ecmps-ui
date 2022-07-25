@@ -701,6 +701,19 @@ export const UseRetrieveDropdownApi = async (
           setDefaultOptions(options, fieldName);
         });
         break;
+
+        case "gasLevelCode":
+          await dmApi.getAllGasLevelCodes().then((response) => {
+            options = response.data.map((option) => {
+              return {
+                code: option["gasLevelCode"],
+                name: option["gasLevelDescription"],
+              };
+            });
+  
+            setDefaultOptions(options, fieldName);
+          });
+          break;
       default:
         break;
     }

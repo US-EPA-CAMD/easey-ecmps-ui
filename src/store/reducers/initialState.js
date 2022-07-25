@@ -36,7 +36,8 @@ export default {
     systemComponents: [],
     analyzerRanges: [],
     matsMethods: [],
-    lineTestSummary:[]
+    lineTestSummary:[],
+    linearitySummeryTestSecondLevel:[]
   },
   currentSection: "",
 };
