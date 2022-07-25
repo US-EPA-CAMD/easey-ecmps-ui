@@ -92,7 +92,7 @@ export const QACertTestSummaryHeaderInfo = ({
     const fetchTestTypeGroupCodes = async () => {
       const resp = await getAllTestTypeGroupCodes()
       const options = resp.data.map(e => {
-        return { name: e.testTypeGroupCodeDescription }
+        return { name: e.testTypeGroupCodeDescription, code: e.testTypeGroupCode }
       })
       setTestTypeGroupOptions(options)
     }
