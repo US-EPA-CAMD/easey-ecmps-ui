@@ -198,6 +198,24 @@ export const modalViewData = (
               ]);
             }
             break;
+          case "customDropdown":
+            if (!createNew) {
+              labels = findValue(
+                inputs[y][4], // custom dropdown objecct
+                selected ? selected[y] : null,
+                "name"
+              );
+            }
+            arr.push([
+              y,
+              inputs[y][0],
+              labels,
+              inputs[y][2] === "required" ? "required" : false,
+              "dropdown",
+              createNew ? "select" : selected ? selected[y] : "",
+              inputs[y][4],
+            ]);
+            break;
           default:
             break;
         }
