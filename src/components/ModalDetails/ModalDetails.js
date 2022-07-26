@@ -29,6 +29,7 @@ const ModalDetails = ({
   mainDropdownChange,
   onEditUpdateHandler
 }) => {
+  console.log(data,'data')
   useEffect(() => {
     assignAriaLabelsToDatePickerButtons();
     let found = false;
@@ -191,6 +192,8 @@ const ModalDetails = ({
           />
         );
         break;
+
+      
       case "independentDropdown":
         comp = (
           <SelectBox

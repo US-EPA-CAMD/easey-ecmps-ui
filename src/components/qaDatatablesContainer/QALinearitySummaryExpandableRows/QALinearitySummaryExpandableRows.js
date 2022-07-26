@@ -113,7 +113,7 @@ const QALinearitySummaryExpandableRows = ({
     meanMeasuredValue: ["Mean Measured Value", "input", "", ""],
     meanReferenceValue: ["Mean Reference Value", "input", "", ""],
     percentError: ["Percent Error", "input", "", ""],
-    apsIndicator: ["APS Indicator", "radio", "", ""],
+    apsIndicator: ["APS Indicator", "customDropdown", "", "", [{name:'-- Select a value --', code: null }, {name:"0",code:0},{name:"1",code:1} ]],
     skip: ["", "skip", "", ""],
   };
   useEffect(() => {
@@ -154,7 +154,6 @@ const QALinearitySummaryExpandableRows = ({
         (element) => element.id === row[`id`]
       )[0];
       setSelectedRow(selectedData);
-      console.log("selectedrow", selectedData);
     }
     let mainDropdownName = "";
     let hasMainDropdown = false;
@@ -225,7 +224,6 @@ const QALinearitySummaryExpandableRows = ({
       "apsIndicator",
     ]);
 
-    console.log("selectedrow", selectedRow);
     updateQALinearitySummaryTestSecondLevel(
       locationId,
       selectedRow.testSumId,
@@ -233,7 +231,6 @@ const QALinearitySummaryExpandableRows = ({
       userInput
     )
       .then((res) => {
-        console.log("res", res);
 
         setUpdateTable(true);
         setLinearityTest(res.data);
