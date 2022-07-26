@@ -53,6 +53,7 @@ export const modalViewData = (
   const createInputControls = (inputs) => {
     // y = property name of the apis
     for (const y in inputs) {
+      console.log(y,inputs)
       if (inputs[y][3] === "locked") {
         if (createNew) {
           arr.push([

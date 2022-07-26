@@ -37,7 +37,7 @@ export default {
     analyzerRanges: [],
     matsMethods: [],
     lineTestSummary:[],
-    linearitySummeryTestSecondLevel:[]
+    linearitySummaryTestSecondLevel:[]
   },
   currentSection: "",
 };

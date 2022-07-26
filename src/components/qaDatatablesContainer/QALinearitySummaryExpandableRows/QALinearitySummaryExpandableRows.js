@@ -32,27 +32,31 @@ import ModalDetails from "../../ModalDetails/ModalDetails";
 
 const QALinearitySummaryExpandableRows = ({
   user,
-  id,
-  locationId,
   nonEditable,
   mdmData,
+  loadDropdownsData,
+  locationSelectValue,
+  data,
 }) => {
-  // const { locationId, id } = data;
+  const { locationId, id } = data;
   const [loading, setLoading] = useState(false);
   const [qaLinearitySummary, setQaLinearitySummary] = useState([]);
 
+  const [updateTable, setUpdateTable] = useState(false);
   useEffect(() => {
-    if (qaLinearitySummary.length === 0) {
+    if (qaLinearitySummary.length === 0 || updateTable) {
       setLoading(true);
       getQALinearitySummary(locationId, id).then((res) => {
+        finishedLoadingData(res.data);
         setQaLinearitySummary(res.data);
         setLoading(false);
       });
+      setUpdateTable(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [data, updateTable]);
 
-  const data = useMemo(() => {
+  const data1 = useMemo(() => {
     return getLinearitySummaryRecords(qaLinearitySummary);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qaLinearitySummary]);
@@ -69,7 +73,6 @@ const QALinearitySummaryExpandableRows = ({
   const [createNewData, setCreateNewData] = useState(false);
   const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
 
-  const [updateTable, setUpdateTable] = useState(false);
   const [complimentaryData, setComplimentaryData] = useState([]);
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
@@ -110,8 +113,17 @@ const QALinearitySummaryExpandableRows = ({
     meanMeasuredValue: ["Mean Measured Value", "input", "", ""],
     meanReferenceValue: ["Mean Reference Value", "input", "", ""],
     percentError: ["Percent Error", "input", "", ""],
-    apsIndicator: ["APS Indicator", "dropdown", "", ""],
+    apsIndicator: ["APS Indicator", "radio", "", ""],
+    skip: ["", "skip", "", ""],
   };
+  useEffect(() => {
+    // Load MDM data (for dropdowns) only if we don't have them already
+    if (mdmData && mdmData.length === 0) {
+      loadDropdownsData(dataTableName, dropdownArray);
+    } else {
+      setDropdownsLoaded(true);
+    }
+  }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
 
   const controlDatePickerInputs = {};
   const closeModalHandler = () => {
@@ -129,7 +141,7 @@ const QALinearitySummaryExpandableRows = ({
     removeChangeEventListeners(".modalUserInput");
   };
   const finishedLoadingData = (loadedData) => {
-    // setDataPulled(loadedData);
+    setDataPulled(loadedData);
     setDataLoaded(true);
     addAriaLabelToDatatable();
   };
@@ -142,6 +154,7 @@ const QALinearitySummaryExpandableRows = ({
         (element) => element.id === row[`id`]
       )[0];
       setSelectedRow(selectedData);
+      console.log("selectedrow", selectedData);
     }
     let mainDropdownName = "";
     let hasMainDropdown = false;
@@ -197,36 +210,38 @@ const QALinearitySummaryExpandableRows = ({
       attachChangeEventListeners(".modalUserInput");
     });
   };
+
+
   const saveData = () => {
+
     const payload = {
-      gasLevelCode: "string",
+      gasLevelCode: selectedRow.gasLevelCode,
       meanMeasuredValue: 0,
       meanReferenceValue: 0,
       percentError: 0,
       apsIndicator: 0,
     };
+    const userInput = extractUserInput(payload, ".modalUserInput", [
+      "apsIndicator",
+    ]);
 
+    console.log("selectedrow", selectedRow);
     updateQALinearitySummaryTestSecondLevel(
-      selectedRow.locationId,
+      locationId,
+      selectedRow.testSumId,
       selectedRow.id,
-      payload
-    ).then((res) => {
-      //console.log("res", res);
-      if (Object.prototype.toString.call(res) === "[object Array]") {
-        alert(res[0]);
-      } else {
-        const newQaLinearityTest = qaLinearityTest.map((e) => {
-          if (e.id === selectedRow.id) {
-            return res.data;
-          } else {
-            return e;
-          }
-        });
-        finishedLoadingData(newQaLinearityTest);
-        setLinearityTest(newQaLinearityTest);
+      userInput
+    )
+      .then((res) => {
+        console.log("res", res);
+
+        setUpdateTable(true);
+        setLinearityTest(res.data);
         executeOnClose();
-      }
-    });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   return (
     <div className="padding-3">
@@ -235,8 +250,8 @@ const QALinearitySummaryExpandableRows = ({
         <QADataTableRender
           columnNames={columns}
           columnWidth={15}
-          data={data}
-          openHandler={() => {}}
+          data={data1}
+          openHandler={openModal}
           onRemoveHandler={onRemoveHandler}
           actionColumnName={"Linearity Summary Data"}
           actionsBtn={"View"}

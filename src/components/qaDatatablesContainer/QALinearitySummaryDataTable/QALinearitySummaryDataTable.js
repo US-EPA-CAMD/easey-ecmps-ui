@@ -354,10 +354,9 @@ export const QALinearitySummaryDataTable = ({
           user={user}
           expandableRowComp={
             <QALinearitySummaryExpandableRows
-              locationId={selectedRow.locationId}
-              id={selectedRow.id}
               user={user}
               nonEditable={nonEditable}
+              locationSelectValue={locationSelectValue}
             />
           }
         />
