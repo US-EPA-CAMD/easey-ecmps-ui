@@ -5,6 +5,9 @@ import ComingSoon from "../ComingSoon/ComingSoon";
 
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import QALinearitySummaryDataTable from "../qaDatatablesContainer/QALinearitySummaryDataTable/QALinearitySummaryDataTable";
+import HgLinearitySummaryDataTable from "../qaDatatablesContainer/HgLinearitySummaryDataTable/HgLinearitySummaryDataTable";
+
+
 export const QACertTestSummaryRender = ({
   title,
   user,
@@ -48,14 +51,19 @@ export const QACertTestSummaryRender = ({
         [<ComingSoon />],
         [<ComingSoon />],
         [<ComingSoon />],
-        [<ComingSoon />],
+        [
+          <HgLinearitySummaryDataTable
+            locationSelectValue={locationSelect ? locations[1] : 0}
+            user={user}
+          />,
+        ],
         [
           <QALinearitySummaryDataTable
             locationSelectValue={locationSelect ? locationSelect[1] : 0}
             user={user}
           />,
         ],
-        [<ComingSoon />],
+        [<h1>Miscellaneous temp</h1>],
         [<ComingSoon />],
         [<ComingSoon />],
         [<ComingSoon />],
