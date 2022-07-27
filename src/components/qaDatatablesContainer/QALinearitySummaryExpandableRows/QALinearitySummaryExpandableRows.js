@@ -113,7 +113,7 @@ const QALinearitySummaryExpandableRows = ({
     meanMeasuredValue: ["Mean Measured Value", "input", "", ""],
     meanReferenceValue: ["Mean Reference Value", "input", "", ""],
     percentError: ["Percent Error", "input", "", ""],
-    apsIndicator: ["APS Indicator", "customDropdown", "", "", [{name:'-- Select a value --', code: null }, {name:"0",code:0},{name:"1",code:1} ]],
+    apsIndicator: ["APS Indicator", "radio", "", ""],
     skip: ["", "skip", "", ""],
   };
   useEffect(() => {
@@ -210,9 +210,7 @@ const QALinearitySummaryExpandableRows = ({
     });
   };
 
-
   const saveData = () => {
-
     const payload = {
       gasLevelCode: selectedRow.gasLevelCode,
       meanMeasuredValue: 0,
@@ -231,7 +229,6 @@ const QALinearitySummaryExpandableRows = ({
       userInput
     )
       .then((res) => {
-
         setUpdateTable(true);
         setLinearityTest(res.data);
         executeOnClose();
@@ -266,7 +263,13 @@ const QALinearitySummaryExpandableRows = ({
           showCancel={!user || nonEditable}
           showSave={user && !nonEditable}
           nonEditable={nonEditable}
-          title={createNewData ? `Create ${dataTableName}` : `${dataTableName}`}
+          title={
+            createNewData
+              ? `Create ${dataTableName}`
+              : user
+              ? ` Edit ${dataTableName}`
+              : ` ${dataTableName}`
+          }
           exitBTN={createNewData ? `Create ${dataTableName}` : `Save and Close`}
           children={
             dropdownsLoaded ? (
