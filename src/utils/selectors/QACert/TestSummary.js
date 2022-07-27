@@ -45,7 +45,7 @@ export const getLinearitySummaryRecords = (data) =>{
       col2: el.meanMeasuredValue,
       col3: el.meanReferenceValue,
       col4: el.percentError,
-      col5: el.apsIndicator,
+      col5: el.apsIndicator === 1 ? 'Yes' : 'No',
     });
   });
   return records;
