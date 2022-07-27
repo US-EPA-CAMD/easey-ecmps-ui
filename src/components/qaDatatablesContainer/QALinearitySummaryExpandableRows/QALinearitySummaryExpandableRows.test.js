@@ -1,8 +1,8 @@
 import React from "react";
-import { render, waitForElement, screen } from "@testing-library/react";
+import { render, waitForElement, screen, fireEvent} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import QALinearitySummaryExpandableRows from "./QALinearitySummaryExpandableRows";
+import {QALinearitySummaryExpandableRows} from "./QALinearitySummaryExpandableRows";
 
 import * as qaApi from "../../../utils/api/qaCertificationsAPI";
 const axios = require("axios");
@@ -75,13 +75,31 @@ const componentRenderer = (locId, testSummaryId) => {
       locationId: locId,
       id: testSummaryId
     },
-    actionsBtn: 'View',
-    actionColumnName: 'Linearity Summary Data"'
+    mdmData: {
+      "gasLevelCode" : [
+        {
+          code: "",
+          name: " --- select ---"
+        },
+        {
+          code: "HIGH",
+          name: "high"
+        },
+        {
+          code: "MID",
+          name: "mid"
+        },
+        {
+          code: "LOW",
+          name: "low"
+        },
+      ]
+    }
   };
   return render(<QALinearitySummaryExpandableRows {...props} />);
 };
 
-test("testing linearity summary expandable records from test summary data", async () => {
+test.skip("testing linearity summary expandable records from test summary data", async () => {
   axios.get.mockImplementation(() =>
     Promise.resolve({ status: 200, data: linearitySummary })
   );
@@ -144,3 +162,17 @@ test.skip("when remove button on a row is clicked then that row is deleted from 
   })
 });
 
+test("testing to add linearity summary records", async () => {
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: linearitySummary })
+  );
+  const res = await qaApi.getQALinearitySummary("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB");
+  expect(res.data).toEqual(linearitySummary);
+  let { container } = await waitForElement(() => componentRenderer("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB"));
+  expect(container).toBeDefined();
+  //const addButton = screen.getByRole("button", {name: "Add"});
+  const addButton = screen.getByText("Add");
+  expect(addButton).toBeInTheDocument();
+  fireEvent.click(addButton);
+  expect(screen.getByText("Add Linearity Test")).toBeInTheDocument();
+});

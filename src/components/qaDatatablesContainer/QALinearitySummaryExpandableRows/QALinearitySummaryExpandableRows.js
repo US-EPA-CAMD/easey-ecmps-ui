@@ -4,6 +4,7 @@ import {
   deleteQALinearitySummary,
   getQALinearitySummary,
   updateQALinearitySummaryTestSecondLevel,
+  createQALinearitySummaryTestSecondLevel
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
 import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
@@ -13,6 +14,7 @@ import {
   cleanupFocusEventListeners,
   returnFocusToLast,
 } from "../../../additional-functions/manage-focus";
+import { Button } from "@trussworks/react-uswds";
 import {
   attachChangeEventListeners,
   removeChangeEventListeners,
@@ -30,7 +32,7 @@ import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 // contains test summary data table
 
-const QALinearitySummaryExpandableRows = ({
+export const QALinearitySummaryExpandableRows = ({
   user,
   nonEditable,
   mdmData,
@@ -149,6 +151,9 @@ const QALinearitySummaryExpandableRows = ({
   const openModal = (row, bool, create) => {
     let selectedData = null;
     setCreateNewData(create);
+    if(create){
+      controlInputs.gasLevelCode = ["Gas Level Code", "dropdown", "", ""];
+    }
     if (dataPulled.length > 0 && !create) {
       selectedData = dataPulled.filter(
         (element) => element.id === row[`id`]
@@ -240,6 +245,31 @@ const QALinearitySummaryExpandableRows = ({
         console.log(error);
       });
   };
+  const createData = () => {
+    const uiControls = {
+      gasLevelCode: null,
+      meanMeasuredValue: 0,
+      meanReferenceValue: 0,
+      percentError: 0,
+      apsIndicator: 0,
+    };
+    const userInput = extractUserInput( uiControls, ".modalUserInput");
+    createQALinearitySummaryTestSecondLevel(locationId, data.id, userInput)
+      .then((res) => {
+        console.log("res", res);
+        if (Object.prototype.toString.call(res) === "[object Array]") {
+          alert(res[0]);
+        } else {
+        setUpdateTable(true);
+        setLinearityTest(res.data);
+        executeOnClose();
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
+  
   return (
     <div className="padding-3">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -250,7 +280,20 @@ const QALinearitySummaryExpandableRows = ({
           data={data1}
           openHandler={openModal}
           onRemoveHandler={onRemoveHandler}
-          actionColumnName={"Linearity Summary Data"}
+          actionColumnName={
+          <>
+            <span className="padding-right-2">
+              Linearity Summary Data
+            </span>
+              <Button
+                epa-testid="btnOpen" 
+                className="text-white" 
+                onClick={()=> openModal(false, false, true)}
+              >
+                Add
+              </Button>
+          </>
+          }
           actionsBtn={"View"}
           user={user}
         />
@@ -262,12 +305,12 @@ const QALinearitySummaryExpandableRows = ({
         <Modal
           show={show}
           close={closeModalHandler}
-          save={saveData}
+          save={createNewData ? createData : saveData}
           showCancel={!user || nonEditable}
           showSave={user && !nonEditable}
           nonEditable={nonEditable}
-          title={createNewData ? `Create ${dataTableName}` : `${dataTableName}`}
-          exitBTN={createNewData ? `Create ${dataTableName}` : `Save and Close`}
+          title={createNewData ? `Add ${dataTableName}` : `${dataTableName}`}
+          exitBTN={`Save and Close`}
           children={
             dropdownsLoaded ? (
               <div>
