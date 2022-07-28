@@ -16,11 +16,13 @@ const testTypeCodes = [
 ]
 
 const MiscDataTables = ({
+  _user,
   locationSelectValue,
 }) => {
 
   return (
     <TestSummaryDataTable
+      user
       locationSelectValue={locationSelectValue}
       testTypeCodes={testTypeCodes}
       mapDataToRows={getTestSummary}

@@ -3,9 +3,9 @@ import QACertTestSummaryHeaderInfo from "../QACertTestSummaryHeaderInfo/QACertTe
 
 import ComingSoon from "../ComingSoon/ComingSoon";
 
-import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import QALinearitySummaryDataTable from "../qaDatatablesContainer/QALinearitySummaryDataTable/QALinearitySummaryDataTable";
 import HgLinearitySummaryDataTable from "../qaDatatablesContainer/HgLinearitySummaryDataTable/HgLinearitySummaryDataTable";
+import MiscDataTables from "../qaDatatablesContainer/MiscDatatables/MiscDataTables";
 
 
 export const QACertTestSummaryRender = ({
@@ -53,7 +53,7 @@ export const QACertTestSummaryRender = ({
         [<ComingSoon />],
         [
           <HgLinearitySummaryDataTable
-            locationSelectValue={locationSelect ? locations[1] : 0}
+            locationSelectValue={locationSelect ? locationSelect[1] : 0}
             user={user}
           />,
         ],
@@ -63,7 +63,12 @@ export const QACertTestSummaryRender = ({
             user={user}
           />,
         ],
-        [<h1>Miscellaneous temp</h1>],
+        [
+          <MiscDataTables
+            locationSelectValue={locationSelect ? locationSelect[1] : 0}
+            user={user}
+          />
+        ],
         [<ComingSoon />],
         [<ComingSoon />],
         [<ComingSoon />],
