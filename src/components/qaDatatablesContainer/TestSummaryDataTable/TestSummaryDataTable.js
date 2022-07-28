@@ -55,12 +55,8 @@ export const TestSummaryDataTable = ({
           columnNames={columns}
           columnWidth={10}
           data={rowData}
-          // openHandler={openModal}
-          // onRemoveHandler={onRemoveHandler}
           actionColumnName={"Actions"}
           actionsBtn={"View"}
-        // user={user}
-        // expandableRowComp={<QALinearitySummaryExpandableRows user={user} />}
         />
       ) : (
         <Preloader />
@@ -69,27 +65,4 @@ export const TestSummaryDataTable = ({
   )
 }
 
-const mapStateToProps = (state, ownProps) => {
-  // const dataTableName = "Test Summary Data";
-  // return {
-  //   mdmData: state.dropdowns[convertSectionToStoreName(dataTableName)],
-  // };
-  return {}
-};
-
-const mapDispatchToProps = (dispatch) => {
-  // return {
-  //   loadDropdownsData: async (section, dropdownArray) =>
-  //     dispatch(
-  //       loadDropdowns(convertSectionToStoreName(section), dropdownArray)
-  //     ),
-  // };
-  return {}
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TestSummaryDataTable);
-export { mapDispatchToProps };
-export { mapStateToProps };
+export default TestSummaryDataTable
