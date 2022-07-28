@@ -153,7 +153,6 @@ export const updateQALinearityTestSummary = async (locId, testSumId, payload) =>
 
 export const updateQALinearitySummaryTestSecondLevel = async (locId, testSumId,id, payload) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/linearities/${id}`;
-  console.log('payload',payload)
   try {
     return handleResponse(
       await secureAxios({
@@ -167,3 +166,17 @@ export const updateQALinearitySummaryTestSecondLevel = async (locId, testSumId,i
   }
 };
 
+export const createQALinearitySummaryTestSecondLevel = async (locId, testSumId, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/linearities`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+}; 
