@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import React from "react";
 
 import { getTestSummary } from "../../../utils/selectors/QACert/TestSummary";
