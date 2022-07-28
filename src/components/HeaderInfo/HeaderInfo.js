@@ -102,6 +102,7 @@ export const HeaderInfo = ({
   const [importApiErrors, setImportApiErrors] = useState([]);
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
+  const [isReverting, setIsReverting] = useState(false);
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
@@ -363,9 +364,9 @@ export const HeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-      configs
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id)
+        configs
+          .map((location) => location["monPlanId"])
+          .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -460,9 +461,13 @@ export const HeaderInfo = ({
     mpApi.revertOfficialRecord(selectedConfig.id).then(() => {
       setRevertedState(true);
       setShowRevertModal(false);
+      setIsReverting(false);
       setEvalStatusLoaded(false);
       setDataLoaded(false);
     });
+    // this code executes first while we wait for api to finish returning
+    setIsReverting(true);
+    setShowRevertModal(false);
   };
 
   const [importedFile, setImportedFile] = useState([]);
@@ -500,8 +505,9 @@ export const HeaderInfo = ({
     if (inWorkspace) {
       // when config is checked out by someone
       if (checkedOut) {
-        return `Currently checked-out by: ${currentConfig["checkedOutBy"]
-          } ${formatDate(currentConfig["checkedOutOn"])}`;
+        return `Currently checked-out by: ${
+          currentConfig["checkedOutBy"]
+        } ${formatDate(currentConfig["checkedOutOn"])}`;
       }
       // when config is not checked out
       return `Last updated by: ${currentConfig.lastUpdatedBy} ${formatDate(
@@ -521,9 +527,11 @@ export const HeaderInfo = ({
   return (
     <div className="header">
       <div
-        className={`usa-overlay ${showRevertModal || showEvalReport ? "is-visible" : ""
-          } `}
+        className={`usa-overlay ${
+          showRevertModal || showEvalReport ? "is-visible" : ""
+        } `}
       />
+
       {showRevertModal ? (
         <Modal
           show={showRevertModal}
@@ -801,7 +809,11 @@ export const HeaderInfo = ({
       ) : (
         <Preloader />
       )}
-      <div className={`usa-overlay ${showImportModal ? "is-visible" : ""}`} />
+      <div
+        className={`usa-overlay ${
+          showImportModal || isReverting ? "is-visible" : ""
+        }`}
+      />
 
       {showImportModal && !finishedLoading && !isLoading ? (
         <div>
@@ -832,7 +844,16 @@ export const HeaderInfo = ({
           />
         </div>
       ) : null}
-
+      {isReverting ? (
+        <UploadModal
+          width={"30%"}
+          left={"35%"}
+          children={<Preloader />}
+          preloader
+        />
+      ) : (
+        ""
+      )}
       {/* while uploading, just shows preloader spinner  */}
 
       {isLoading && !finishedLoading ? (
