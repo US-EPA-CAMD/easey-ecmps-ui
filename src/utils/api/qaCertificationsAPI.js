@@ -170,3 +170,20 @@ export const updateQALinearityTestSummary = async (locId, testSumId, payload) =>
     return handleImportError(error);
   }
 };
+
+export const updateQALinearitySummaryTestSecondLevel = async (locId, testSumId,id, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/linearities/${id}`;
+  console.log('payload',payload)
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+

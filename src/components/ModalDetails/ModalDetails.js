@@ -27,7 +27,7 @@ const ModalDetails = ({
   create,
   setMainDropdownChange,
   mainDropdownChange,
-  onEditUpdateHandler
+  onEditUpdateHandler,
 }) => {
   useEffect(() => {
     assignAriaLabelsToDatePickerButtons();
@@ -85,30 +85,39 @@ const ModalDetails = ({
     data[data.length - 1][5] = "0";
   }
 
-  const makeViewOnlyComp = (value) => {
+  const makeViewOnlyComp = (value, locked) => {
     //console.log('value',value)
     return (
       <div key={`${value[1]}`} className="grid-col">
         {
-        // ((value[4] === "time" || value[4] === "date") && value[5] === null) ||
-        value[0] === false ? (
-          ""
-        ) : (
-          <FormGroup className="margin-top-0">
-            <h3 className="text-bold margin-bottom-0 usa-label">{value[1]}</h3>
-            <div id={`${value[4] !== "skip" ? value[1] : ""}`}>
-              {value[2]
-                ? value[4] === "radio"
-                  ? value[2] === "0"
-                    ? "No"
-                    : "Yes"
-                  : value[2]
-                : value[4] === "radio"
-                ? "No"
-                : ""}
-            </div>
-          </FormGroup>
-        )}
+          // ((value[4] === "time" || value[4] === "date") && value[5] === null) ||
+          value[0] === false ? (
+            ""
+          ) : (
+            <FormGroup className="margin-top-0">
+              <h3
+                className={
+                  locked
+                    ? " margin-bottom-0 usa-label"
+                    : "text-bold margin-bottom-0 usa-label "
+                }
+              >
+                {value[1]}
+              </h3>
+              <div id={`${value[4] !== "skip" ? value[1] : ""}`}>
+                {value[2]
+                  ? value[4] === "radio"
+                    ? value[2] === "0"
+                      ? "No"
+                      : "Yes"
+                    : value[2]
+                  : value[4] === "radio"
+                  ? "No"
+                  : ""}
+              </div>
+            </FormGroup>
+          )
+        }
       </div>
     );
   };
@@ -184,13 +193,18 @@ const ModalDetails = ({
             name={value[1]}
             secondOption="name"
             mainDropdownChange={mainDropdownChange}
-            handler={(updatedValue) => onEditUpdateHandler? onEditUpdateHandler(updatedValue, 'dropdown', value[0]) : null}
+            handler={(updatedValue) =>
+              onEditUpdateHandler
+                ? onEditUpdateHandler(updatedValue, "dropdown", value[0])
+                : null
+            }
             disableDropdownFlag={
               disableDropdownFlag || (create && mainDropdownUntouched)
             }
           />
         );
         break;
+
       case "independentDropdown":
         comp = (
           <SelectBox
@@ -230,7 +244,11 @@ const ModalDetails = ({
             epadataname={value[0]}
             epa-testid={value[0].split(" ").join("-")}
             defaultValue={datePickerValue}
-            onChange={(updatedValue) => onEditUpdateHandler? onEditUpdateHandler(updatedValue, 'date', value[0]) : null}
+            onChange={(updatedValue) =>
+              onEditUpdateHandler
+                ? onEditUpdateHandler(updatedValue, "date", value[0])
+                : null
+            }
           />
         );
         break;
@@ -266,33 +284,41 @@ const ModalDetails = ({
             name={value[1]}
             secondOption="name"
             disableDropdownFlag={false}
-            handler={(updatedValue) => onEditUpdateHandler? onEditUpdateHandler(updatedValue, 'minuteDropdown', value[0]) : null}
+            handler={(updatedValue) =>
+              onEditUpdateHandler
+                ? onEditUpdateHandler(updatedValue, "minuteDropdown", value[0])
+                : null
+            }
           />
         );
         break;
-        case "hourDropdown":
-          const hourArr = [];
-          for (let i = 0; i <= 23; i++) {
-            hourArr.push({ code: i, name: i });
-          }
-          comp = (
-            <SelectBox
-              className={`modalUserInput ${
-                cols === 3 ? "" : largeWidthCardStyle
-              }`}
-              epadataname={value[0]}
-              options={hourArr}
-              initialSelection={!create ? value[5] : "select"}
-              selectKey="code"
-              id={value[1]}
-              epa-testid={value[0].split(" ").join("-")}
-              name={value[1]}
-              secondOption="name"
-              disableDropdownFlag={false}
-              handler={(updatedValue) => onEditUpdateHandler? onEditUpdateHandler(updatedValue, 'hourDropdown', value[0]) : null}
-            />
-          );
-          break;
+      case "hourDropdown":
+        const hourArr = [];
+        for (let i = 0; i <= 23; i++) {
+          hourArr.push({ code: i, name: i });
+        }
+        comp = (
+          <SelectBox
+            className={`modalUserInput ${
+              cols === 3 ? "" : largeWidthCardStyle
+            }`}
+            epadataname={value[0]}
+            options={hourArr}
+            initialSelection={!create ? value[5] : "select"}
+            selectKey="code"
+            id={value[1]}
+            epa-testid={value[0].split(" ").join("-")}
+            name={value[1]}
+            secondOption="name"
+            disableDropdownFlag={false}
+            handler={(updatedValue) =>
+              onEditUpdateHandler
+                ? onEditUpdateHandler(updatedValue, "hourDropdown", value[0])
+                : null
+            }
+          />
+        );
+        break;
       case "input":
         comp = (
           <TextInput
@@ -305,11 +331,14 @@ const ModalDetails = ({
             name={value[0]}
             type="text"
             defaultValue={value[2] ? value[2] : ""}
-            onChange={(e) => onEditUpdateHandler? onEditUpdateHandler(e.target.value, 'input', value[0]) : null}
+            onChange={(e) =>
+              onEditUpdateHandler
+                ? onEditUpdateHandler(e.target.value, "input", value[0])
+                : null
+            }
           />
         );
         break;
-
 
       case "radio":
         comp = (
@@ -328,7 +357,11 @@ const ModalDetails = ({
               value="Yes"
               className="padding-right-1  "
               defaultChecked={value[2] && value[2] === 1}
-              onChange={() => onEditUpdateHandler? onEditUpdateHandler(1, 'radio', value[0]) : null}
+              onChange={() =>
+                onEditUpdateHandler
+                  ? onEditUpdateHandler(1, "radio", value[0])
+                  : null
+              }
             />
             <Radio
               id={`${value[1].split(" ").join("")}-2`}
@@ -339,7 +372,11 @@ const ModalDetails = ({
               defaultChecked={
                 value[2] === null || value[2] === false || value[2] === 0
               }
-              onChange={() => onEditUpdateHandler? onEditUpdateHandler(0, 'radio', value[0]) : null}
+              onChange={() =>
+                onEditUpdateHandler
+                  ? onEditUpdateHandler(0, "radio", value[0])
+                  : null
+              }
             />
           </Fieldset>
         );
@@ -351,7 +388,7 @@ const ModalDetails = ({
 
     return (
       <div className="grid-col">
-        <FormGroup className="margin-top-0">
+        <FormGroup className="margin-top-0 colMaxWidth">
           {value[4] === "radio" ? (
             ""
           ) : (
@@ -394,7 +431,7 @@ const ModalDetails = ({
     } else {
       if (value[4] === "locked") {
         if (!create) {
-          row.push(makeViewOnlyComp(value));
+          row.push(makeViewOnlyComp(value,true));
         } else {
           row.push(makeViewOnlyComp([false, false, false, false, false]));
         }

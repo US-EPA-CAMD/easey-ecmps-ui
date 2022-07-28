@@ -372,6 +372,12 @@ export const getAllTestReasonCodes = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+export const getAllGasLevelCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/gas-level-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
 
 export const getAllTestTypeGroupCodes = async () => {
   return axios
