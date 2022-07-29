@@ -179,4 +179,4 @@ export const createQALinearitySummaryTestSecondLevel = async (locId, testSumId, 
   } catch (error) {
     return handleImportError(error);
   }
-}; 
+};
