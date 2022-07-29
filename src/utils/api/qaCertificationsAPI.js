@@ -50,11 +50,6 @@ export const getQATestSummaryByCode = async (locId, { _beginDate, _endDate, test
     url = `${url}?testTypeCode=${param}`
   }
 
-  // hardcode test
-  // url = `${url}?testTypeCode=HGSI3&testTypeCode=HGLINE`
-
-  console.log('url getQaTestSummaryByCode', url);
-
   return axios.get(url).then(handleResponse).catch(handleError);
 }
 
