@@ -31,7 +31,6 @@ export const TestSummaryDataTable = ({
     const fetchTestSummaryData = async () => {
       setLoading(true)
       const resp = await getQATestSummaryByCode(locationSelectValue, { testTypeCodes })
-      console.log('resp', resp);
       setLoading(false)
       setTestSummaryData(resp.data)
     }
