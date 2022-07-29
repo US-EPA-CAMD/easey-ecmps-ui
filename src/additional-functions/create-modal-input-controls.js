@@ -290,6 +290,7 @@ export const modalViewData = (
           "time",
           createNew ? "" : selected ? selected[y] : "",
         ]);
+        continue;
       }
       // dropdown time selection
       if (y === "endHour" || y === "beginHour") {
