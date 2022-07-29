@@ -343,6 +343,7 @@ export const QALinearitySummaryDataTable = ({
               locationSelectValue={locationSelectValue}
             />
           }
+          evaluate={true}
         />
       ) : (
         <Preloader />
