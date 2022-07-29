@@ -1,9 +1,6 @@
-import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import React, { useEffect, useMemo, useState } from "react";
-import { connect } from "react-redux";
 
-import { loadDropdowns } from "../../../store/actions/dropdowns";
 import { getQATestSummaryByCode } from "../../../utils/api/qaCertificationsAPI";
 import QADataTableRender from "../../QADataTableRender/QADataTableRender";
 

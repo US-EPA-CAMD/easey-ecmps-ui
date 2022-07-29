@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import QACertTestSummaryHeaderInfo from "../QACertTestSummaryHeaderInfo/QACertTestSummaryHeaderInfo";
 
-import ComingSoon from "../ComingSoon/ComingSoon";
-
 import QALinearitySummaryDataTable from "../qaDatatablesContainer/QALinearitySummaryDataTable/QALinearitySummaryDataTable";
 import { getAllTestTypeCodes, getAllTestTypeGroupCodes } from "../../utils/api/dataManagementApi";
 import TestSummaryDataTable from "../qaDatatablesContainer/TestSummaryDataTable/TestSummaryDataTable";
