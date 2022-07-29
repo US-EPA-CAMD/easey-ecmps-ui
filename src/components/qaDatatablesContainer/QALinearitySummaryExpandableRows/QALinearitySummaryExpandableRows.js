@@ -32,7 +32,7 @@ import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 // contains test summary data table
 
-export const QALinearitySummaryExpandableRows = ({
+const QALinearitySummaryExpandableRows = ({
   user,
   nonEditable,
   mdmData,
@@ -232,7 +232,6 @@ export const QALinearitySummaryExpandableRows = ({
     )
       .then((res) => {
         setUpdateTable(true);
-        setLinearityTest(res.data);
         executeOnClose();
       })
       .catch((error) => {
@@ -256,7 +255,6 @@ export const QALinearitySummaryExpandableRows = ({
           alert(res[0]);
         } else {
         setUpdateTable(true);
-        setLinearityTest(res.data);
         executeOnClose();
         }
       })
