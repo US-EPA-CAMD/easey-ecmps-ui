@@ -288,6 +288,7 @@ const QALinearitySummaryExpandableRows = ({
           }
           actionsBtn={"View"}
           user={user}
+          evaluate={false}
         />
       ) : (
         <Preloader />
