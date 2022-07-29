@@ -153,7 +153,7 @@ export const updateQALinearityTestSummary = async (locId, testSumId, payload) =>
 
 export const updateQALinearitySummaryTestSecondLevel = async (locId, testSumId,id, payload) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/linearities/${id}`;
-  console.log('payload',payload)
+  //console.log('payload',payload)
   try {
     return handleResponse(
       await secureAxios({
