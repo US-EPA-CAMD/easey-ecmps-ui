@@ -4,8 +4,6 @@ import QACertTestSummaryHeaderInfo from "../QACertTestSummaryHeaderInfo/QACertTe
 import ComingSoon from "../ComingSoon/ComingSoon";
 
 import QALinearitySummaryDataTable from "../qaDatatablesContainer/QALinearitySummaryDataTable/QALinearitySummaryDataTable";
-import HgLinearitySummaryDataTable from "../qaDatatablesContainer/HgLinearitySummaryDataTable/HgLinearitySummaryDataTable";
-import MiscDataTables from "../qaDatatablesContainer/MiscDatatables/MiscDataTables";
 import { getAllTestTypeCodes, getAllTestTypeGroupCodes } from "../../utils/api/dataManagementApi";
 import TestSummaryDataTable from "../qaDatatablesContainer/TestSummaryDataTable/TestSummaryDataTable";
 import { getTestSummary } from "../../utils/selectors/QACert/TestSummary";
