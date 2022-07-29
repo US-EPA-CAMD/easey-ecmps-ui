@@ -43,7 +43,7 @@ export const TestSummaryDataTable = ({
 
   const rowData = useMemo(() => {
     return mapDataToRows(testSummaryData);
-  }, [testSummaryData]);
+  }, [testSummaryData, mapDataToRows]);
 
   return (
     <>
