@@ -38,7 +38,7 @@
     "react-error-overlay": "6.0.9",
     "react-dev-utils": "^11.0.4",
     "serialize-javascript": "^3.1.0",
-    "set-value": "^4.0.1"0,
+    "set-value": "^4.0.1",
     "shell-quote": "^1.7.3",
     "sockjs": "^0.3.20",
     "uswds": "2.13.0",
