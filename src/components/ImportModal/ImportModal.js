@@ -40,7 +40,7 @@ const ImportModal = ({
       default:
         break;
     }
-  }, []);
+  }, [workspaceSection]);
   const [schemaErrors, setSchemaErrors] = useState([]);
   const validateJSON = (name, type, event) => {
     const fileTypeManual = name.split(".");
