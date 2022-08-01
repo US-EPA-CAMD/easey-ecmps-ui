@@ -78,5 +78,5 @@ test('test type dropdown selection renders with options', async () => {
 
   // Assert
   expect(testTypeDropdown).toBeInTheDocument()
-  expect(options).toHaveLength(testTypeDropdownData.length)
+  expect(options).toHaveLength(1)
 })
