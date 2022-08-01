@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import QACertTestSummaryHeaderInfo from "../QACertTestSummaryHeaderInfo/QACertTestSummaryHeaderInfo";
 
-import ComingSoon from "../ComingSoon/ComingSoon";
-
-import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import QALinearitySummaryDataTable from "../qaDatatablesContainer/QALinearitySummaryDataTable/QALinearitySummaryDataTable";
+import { getAllTestTypeCodes, getAllTestTypeGroupCodes } from "../../utils/api/dataManagementApi";
+import TestSummaryDataTable from "../qaDatatablesContainer/TestSummaryDataTable/TestSummaryDataTable";
+import { getTestSummary } from "../../utils/selectors/QACert/TestSummary";
+
+
 export const QACertTestSummaryRender = ({
   title,
   user,
@@ -17,87 +19,50 @@ export const QACertTestSummaryRender = ({
   orisCode,
   configID,
 }) => {
-  const [dataSet, setDataSet] = useState([]);
 
-  const sections = [
-    { name: "AppendixE Correlation Test Summary" },
-    { name: "Calibration Injection" },
-    { name: "Cycle Time Summary" },
-    { name: "Flow to Load Check" },
-    { name: "Flow to Load Reference" },
-    { name: "Fuel Flow to Load Baseline" },
-    { name: "Fuel Flow to Load" },
-    { name: "Fuel Flowmeter Accuracy" },
-    { name: "Hg Linearity and 3-Level Summary" },
-    { name: "Linearity Summary" },
-    { name: "Online Offline Calibration" },
-    { name: "RATA" },
-    { name: "Test Qualification" },
-    { name: "Transmitter Transducer Accuracy" },
-    { name: "Unit Default" },
-  ];
-  // updates all tables whenever a location is changed
-  useEffect(
-    () => {
-      const tableArr = [
-        [<ComingSoon />],
-        [<ComingSoon />],
-        [<ComingSoon />],
-        [<ComingSoon />],
-        [<ComingSoon />],
-        [<ComingSoon />],
-        [<ComingSoon />],
-        [<ComingSoon />],
-        [<ComingSoon />],
-        [
-          <QALinearitySummaryDataTable
-            locationSelectValue={locationSelect ? locationSelect[1] : 0}
-            user={user}
-            selectedLocation={ 
-              {
-                name: locations[locationSelect[0]]["name"],
-                stackPipeId: locations[locationSelect[0]]["stackPipeId"],
-                unitId: locations[locationSelect[0]]["unitId"],
-              } 
-            }
-          />,
-        ],
-        [<ComingSoon />],
-        [<ComingSoon />],
-        [<ComingSoon />],
-        [<ComingSoon />],
-        [<ComingSoon />],
-      ];
-      setTableState(tableArr);
-    },
+  const [allTestTypeCodes, setAllTestTypeCodes] = useState([])
+  const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([{ name: 'Loading...' }]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      locationSelect[1],
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    ]
-  );
+  useEffect(() => {
+    const fetchTestTypeCodes = async () => {
+      let resp = await getAllTestTypeCodes()
+      const allTtc = resp.data
+      setAllTestTypeCodes(allTtc)
 
-  // sets initial state
-  // only need to initial methods since it is the default, everything else will update with above usestate
-  const [tableState, setTableState] = useState([
-    [["AppendixE Correlation Test Summary"]],
-    [["Calibration Injection"]],
-    [["Cycle Time Summary"]],
-    [["Flow to Load Check"]],
-    [["Flow to Load Reference"]],
-    [["Fuel Flow to Load Baseline"]],
-    [["Fuel Flow to Load"]],
-    [["Fuel Flowmeter Accuracy"]],
-    [["Hg Linearity and 3-Level Summary"]],
-    [["Linearity Summary"]],
-    [["Online Offline Calibration"]],
-    [["RATA"]],
-    [["Test Qualification"]],
-    [["Transmitter Transducer Accuracy"]],
-    [["Unit Default"]],
-  ]);
+      resp = await getAllTestTypeGroupCodes()
+      const options = resp.data
+        .map(e => {
+          return { name: e.testTypeGroupCodeDescription, code: e.testTypeGroupCode }
+        })
+        .sort((a, b) => a.name.localeCompare(b.name))
+      setTestTypeGroupOptions(options)
+    }
+    fetchTestTypeCodes()
+  }, [configID])
+
+  const selectedIndex = sectionSelect[0]
+  const selectedTestTypeGroupOptionObj = testTypeGroupOptions[selectedIndex]
+  const codesForSelectedTestTypeGroup = allTestTypeCodes
+    .filter(data => {
+      return data.testTypeGroupCode === selectedTestTypeGroupOptionObj?.code
+    })
+    .map(obj => {
+      return obj.testTypeCode
+    })
+
+  let testSummaryTable = <TestSummaryDataTable
+    locationSelectValue={locationSelect ? locationSelect[1] : 0}
+    testTypeCodes={codesForSelectedTestTypeGroup}
+    mapDataToRows={getTestSummary}
+  />
+
+  if (selectedTestTypeGroupOptionObj?.code === 'LINSUM') {
+    testSummaryTable = <QALinearitySummaryDataTable
+      locationSelectValue={locationSelect ? locationSelect[1] : 0}
+      user={user}
+    />
+  }
+
   return (
     <div className=" padding-top-0">
       <div className="grid-row">
@@ -115,7 +80,7 @@ export const QACertTestSummaryRender = ({
         />
       </div>
       <hr />
-      <div>{tableState[sectionSelect[0]]}</div>
+      {selectedTestTypeGroupOptionObj && testSummaryTable}
     </div>
   );
 };
