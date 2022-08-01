@@ -10,7 +10,6 @@ import * as mpApi from "../../utils/api/monitoringPlansApi";
 import {
   convertSectionToStoreName,
   MONITORING_PLAN_STORE_NAME,
-  QA_CERT_TEST_SUMMARY_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 export const Tabs = ({
   children,
@@ -78,9 +77,9 @@ export const Tabs = ({
           .map((location) => location["monPlanId"])
           .indexOf(locationId) > -1 &&
         checkedOutLocations[
-          checkedOutLocations
-            .map((location) => location["monPlanId"])
-            .indexOf(locationId)
+        checkedOutLocations
+          .map((location) => location["monPlanId"])
+          .indexOf(locationId)
         ]["checkedOutBy"] === user["userId"]
       );
     }
@@ -134,8 +133,7 @@ export const Tabs = ({
                       : "tab-button react-transition flip-in-y"
                   }
                   tabIndex="0"
-                  aria-label={`open ${el.props.title.split("(")[0]}${
-                    user &&
+                  aria-label={`open ${el.props.title.split("(")[0]}${user &&
                     el.props.locationId &&
                     el.props.facId &&
                     workspaceSection === MONITORING_PLAN_STORE_NAME &&
@@ -143,18 +141,17 @@ export const Tabs = ({
                       checkedOutLocations.some(
                         (loc) => loc.facId === parseInt(el.props.facId)
                       ))
-                      ? "(locked)"
-                      : ""
-                  } ${el.props.title
-                    .split("(")[1]
-                    .replace(")", "")
-                    .replace("Inactive", "(Inactive)")
-                    .replace("Active", "(Active)")} ${
-                    el.props.locationId &&
-                    isCheckedOutByUser(el.props.locationId)
-                      ? "(checked-out)"
-                      : ""
-                  } tab`}
+                    ? "(locked)"
+                    : ""
+                    } ${el.props.title
+                      .split("(")[1]
+                      .replace(")", "")
+                      .replace("Inactive", "(Inactive)")
+                      .replace("Active", "(Active)")} ${el.props.locationId &&
+                        isCheckedOutByUser(el.props.locationId)
+                        ? "(checked-out)"
+                        : ""
+                    } tab`}
                   onClick={() => settingActiveTab(i)}
                   onKeyPress={(event) => {
                     if (event.key === "Enter") {
@@ -164,28 +161,27 @@ export const Tabs = ({
                 >
                   <div className="text-center tab-button-text-container ellipsis-text padding-2px position-relative top-neg-05">
                     {user &&
-                    workspaceSection === MONITORING_PLAN_STORE_NAME &&
-                    el.props.locationId &&
-                    el.props.facId &&
-                    (isCheckedOut(el.props.locationId) ||
-                      checkedOutLocations.some(
-                        (plan) => plan.facId === parseInt(el.props.facId)
-                      )) ? (
+                      workspaceSection === MONITORING_PLAN_STORE_NAME &&
+                      el.props.locationId &&
+                      el.props.facId &&
+                      (isCheckedOut(el.props.locationId) ||
+                        checkedOutLocations.some(
+                          (plan) => plan.facId === parseInt(el.props.facId)
+                        )) ? (
                       <LockSharp
                         role="img"
                         className="text-bold tab-icon margin-top-1 margin-right-2 position-relative top-2px"
                         aria-hidden="false"
-                        title={`Locked Facility - ${
-                          el.props.title.split("(")[0]
-                        }`}
+                        title={`Locked Facility - ${el.props.title.split("(")[0]
+                          }`}
                       />
                     ) : null}
                     {el.props.title.split("(")[0]}
                   </div>
                   <div className="text-center">
                     {workspaceSection === MONITORING_PLAN_STORE_NAME &&
-                    el.props.locationId &&
-                    isCheckedOutByUser(el.props.locationId) ? (
+                      el.props.locationId &&
+                      isCheckedOutByUser(el.props.locationId) ? (
                       <CreateSharp
                         role="img"
                         className="text-bold tab-icon margin-right-2 position-relative top-neg-1"
