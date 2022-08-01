@@ -4,17 +4,14 @@ import { Button } from "@trussworks/react-uswds";
 import "./QACertTestSummaryHeaderInfo.scss";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 
-import NotFound from "../NotFound/NotFound";
 import { QA_CERT_TEST_SUMMARY_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
-  returnFocusToCommentButton,
   returnFocusToLast,
 } from "../../additional-functions/manage-focus";
 import {
-  attachChangeEventListeners,
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../additional-functions/prompt-to-save-unsaved-changes";
@@ -25,13 +22,10 @@ import QAImportHistoricalDataPreview from "../QAImportHistoricalDataPreview/QAIm
 import Modal from "../Modal/Modal";
 import { importQA } from "../../utils/api/qaCertificationsAPI";
 
-import QALinearitySummaryDataTable from "../qaDatatablesContainer/QALinearitySummaryDataTable/QALinearitySummaryDataTable";
 import {
   getAllTestTypeCodes,
   getAllTestTypeGroupCodes,
 } from "../../utils/api/dataManagementApi";
-import TestSummaryDataTable from "../qaDatatablesContainer/TestSummaryDataTable/TestSummaryDataTable";
-import { getTestSummary } from "../../utils/selectors/QACert/TestSummary";
 
 export const QACertTestSummaryHeaderInfo = ({
   facility,
@@ -57,6 +51,7 @@ export const QACertTestSummaryHeaderInfo = ({
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
+  // eslint-disable-next-line no-unused-vars
   const [dataLoaded, setDataLoaded] = useState(true);
 
   // import modal states
@@ -72,6 +67,7 @@ export const QACertTestSummaryHeaderInfo = ({
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
 
+  // eslint-disable-next-line no-unused-vars
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
   const [selectedHistoricalData, setSelectedHistoricalData] = useState([]);
 
@@ -114,7 +110,7 @@ export const QACertTestSummaryHeaderInfo = ({
       });
     setSelectedTestCode(codesForSelectedTestTypeGroup);
 
-  }, [testTypeGroupOptions,sectionSelect]);
+  }, [testTypeGroupOptions, sectionSelect, allTestTypeCodes, setSelectedTestCode]);
 
   // let testSummaryTable = <TestSummaryDataTable
   //   locationSelectValue={locationSelect ? locationSelect[1] : 0}
@@ -147,7 +143,7 @@ export const QACertTestSummaryHeaderInfo = ({
   }, []);
 
   useEffect(() => {
-    if (importTypeSelection != "select" || importedFile.length != 0) {
+    if (importTypeSelection !== "select" || importedFile.length !== 0) {
       setDisablePortBtn(false);
     } else {
       setDisablePortBtn(true);
@@ -155,7 +151,7 @@ export const QACertTestSummaryHeaderInfo = ({
   }, [importTypeSelection, importedFile]);
 
   useEffect(() => {
-    if (importedFile.length != 0) {
+    if (importedFile.length !== 0) {
       setDisablePortBtn(false);
     } else {
       setDisablePortBtn(true);
@@ -179,9 +175,6 @@ export const QACertTestSummaryHeaderInfo = ({
   };
   const openSelectionTypeImportModal = () => {
     setShowSelectionTypeImportModal(true);
-  };
-  const openImportModal = () => {
-    setShowImportModal(true);
   };
 
   const resetImportFlags = () => {
