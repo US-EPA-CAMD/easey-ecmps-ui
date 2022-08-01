@@ -13,11 +13,7 @@ import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-import {
-  assignFocusEventListeners,
-  cleanupFocusEventListeners,
-  returnFocusToLast,
-} from "../../../additional-functions/manage-focus";
+
 import {
   attachChangeEventListeners,
   removeChangeEventListeners,
@@ -40,19 +36,12 @@ import { Preloader } from "@us-epa-camd/easey-design-system";
 export const QALinearitySummaryDataTable = ({
   mdmData,
   loadDropdownsData,
-  updateDropdowns,
   locationSelectValue,
   user,
   nonEditable = false,
 
-  radioNames,
-  payload,
-  urlParameters,
-
-  selectedLocation,
   showModal = false,
-  setUpdateRelatedTables,
-  updateRelatedTables,
+
   selectedTestCode,
 }) => {
   const [loading, setLoading] = useState(false);
@@ -113,14 +102,12 @@ export const QALinearitySummaryDataTable = ({
   useEffect(() => {
     if (updateTable || qaTestSummary.length <= 0 || locationSelectValue) {
       setLoading(true);
-      console.log("selectedTestCode", selectedTestCode);
-      if (selectedTestCode) {
+      if (selectedTestCode !== "" && selectedTestCode.length !== 0) {
         getQATestSummary(locationSelectValue, selectedTestCode).then((res) => {
-          
           if (res !== undefined && res.data.length > 0) {
             finishedLoadingData(res.data);
             setQATestSummary(res.data);
-          }else{
+          } else {
             finishedLoadingData([]);
             setQATestSummary([]);
           }
@@ -139,6 +126,7 @@ export const QALinearitySummaryDataTable = ({
     } else {
       setDropdownsLoaded(true);
     }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
 
   const data = useMemo(() => {
