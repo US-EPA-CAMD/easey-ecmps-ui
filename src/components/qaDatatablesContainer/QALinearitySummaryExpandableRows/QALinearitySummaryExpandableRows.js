@@ -273,6 +273,7 @@ const QALinearitySummaryExpandableRows = ({
           openHandler={openModal}
           onRemoveHandler={onRemoveHandler}
           actionColumnName={
+            user ?
             <>
               <span className="padding-right-2">
                 Linearity Summary Data
@@ -285,6 +286,7 @@ const QALinearitySummaryExpandableRows = ({
                   Add
                 </Button>
             </>
+            : "Linearity Summary Data"
           }
           actionsBtn={"View"}
           user={user}
