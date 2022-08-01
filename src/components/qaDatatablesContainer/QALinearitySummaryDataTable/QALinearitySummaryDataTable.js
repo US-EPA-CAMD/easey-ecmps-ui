@@ -4,7 +4,7 @@ import {
   getQATestSummary,
   updateQALinearityTestSummary,
   deleteQATestSummary,
-  createQATestData
+  createQATestData,
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { getTestSummary } from "../../../utils/selectors/QACert/TestSummary.js";
 import QALinearitySummaryExpandableRows from "../QALinearitySummaryExpandableRows/QALinearitySummaryExpandableRows";
@@ -13,11 +13,7 @@ import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-import {
-  assignFocusEventListeners,
-  cleanupFocusEventListeners,
-  returnFocusToLast,
-} from "../../../additional-functions/manage-focus";
+
 import {
   attachChangeEventListeners,
   removeChangeEventListeners,
@@ -40,19 +36,13 @@ import { Preloader } from "@us-epa-camd/easey-design-system";
 export const QALinearitySummaryDataTable = ({
   mdmData,
   loadDropdownsData,
-  updateDropdowns,
   locationSelectValue,
   user,
   nonEditable = false,
 
-  radioNames,
-  payload,
-  urlParameters,
-
-  selectedLocation,
   showModal = false,
-  setUpdateRelatedTables,
-  updateRelatedTables,
+
+  selectedTestCode,
 }) => {
   const [loading, setLoading] = useState(false);
 
@@ -110,21 +100,24 @@ export const QALinearitySummaryDataTable = ({
 
   //**** */
   useEffect(() => {
-    if (
-      updateTable ||
-      qaTestSummary.length <= 0 ||
-      locationSelectValue
-    ) {
+    if (updateTable || qaTestSummary.length <= 0 || locationSelectValue) {
       setLoading(true);
-      getQATestSummary(locationSelectValue).then((res) => {
-        finishedLoadingData(res.data);
-        setQATestSummary(res.data);
-        setLoading(false);
-      });
-      setUpdateTable(false);
+      if (selectedTestCode !== "" && selectedTestCode.length !== 0) {
+        getQATestSummary(locationSelectValue, selectedTestCode).then((res) => {
+          if (res !== undefined && res.data.length > 0) {
+            finishedLoadingData(res.data);
+            setQATestSummary(res.data);
+          } else {
+            finishedLoadingData([]);
+            setQATestSummary([]);
+          }
+          setLoading(false);
+        });
+        setUpdateTable(false);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, updateTable]);
+  }, [locationSelectValue, updateTable, selectedTestCode]);
 
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
@@ -133,6 +126,7 @@ export const QALinearitySummaryDataTable = ({
     } else {
       setDropdownsLoaded(true);
     }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
 
   const data = useMemo(() => {
@@ -266,38 +260,41 @@ export const QALinearitySummaryDataTable = ({
     endMinute: null,
     gracePeriodIndicator: null,
     testComment: null,
-    injectionProtocolCode: null
+    injectionProtocolCode: null,
   };
 
   const saveData = () => {
-    const userInput = extractUserInput( uiControls, ".modalUserInput", ["gracePeriodIndicator"]);
-    updateQALinearityTestSummary(
-      locationSelectValue,
-      userInput.id,
-      userInput
-    ).then((res) => {
-      if (Object.prototype.toString.call(res) === "[object Array]") {
-        alert(res[0]);
-      } else {
-        setUpdateTable(true);
-        executeOnClose();
-      }
-    })
-    .catch((error) => {
-      console.error("error", error);
-    });
+    const userInput = extractUserInput(uiControls, ".modalUserInput", [
+      "gracePeriodIndicator",
+    ]);
+    updateQALinearityTestSummary(locationSelectValue, userInput.id, userInput)
+      .then((res) => {
+        if (Object.prototype.toString.call(res) === "[object Array]") {
+          alert(res[0]);
+        } else {
+          setUpdateTable(true);
+          executeOnClose();
+        }
+      })
+      .catch((error) => {
+        console.error("error", error);
+      });
   };
 
   const createData = () => {
-    const userInput = extractUserInput( uiControls, ".modalUserInput", ["gracePeriodIndicator"]);
-    userInput.unitId ? userInput.unitId = String(userInput.unitId) : userInput.stackPipeId = String(userInput.stackPipeId);
+    const userInput = extractUserInput(uiControls, ".modalUserInput", [
+      "gracePeriodIndicator",
+    ]);
+    userInput.unitId
+      ? (userInput.unitId = String(userInput.unitId))
+      : (userInput.stackPipeId = String(userInput.stackPipeId));
     createQATestData(locationSelectValue, userInput)
       .then((res) => {
         if (Object.prototype.toString.call(res) === "[object Array]") {
           alert(res[0]);
         } else {
-        setUpdateTable(true);
-        executeOnClose();
+          setUpdateTable(true);
+          executeOnClose();
         }
       })
       .catch((error) => {
@@ -319,20 +316,20 @@ export const QALinearitySummaryDataTable = ({
           openHandler={openModal}
           onRemoveHandler={onRemoveHandler}
           actionColumnName={
-            user ?
-            <>
-              <span className="padding-right-2">
-                Test Data
-              </span>
+            user ? (
+              <>
+                <span className="padding-right-2">Test Data</span>
                 <Button
-                  epa-testid="btnOpen" 
-                  className="text-white" 
-                  onClick={()=> openModal(false, false, true)}
+                  epa-testid="btnOpen"
+                  className="text-white"
+                  onClick={() => openModal(false, false, true)}
                 >
                   Add
                 </Button>
-            </>
-            : "Test Data"
+              </>
+            ) : (
+              "Test Data"
+            )
           }
           actionsBtn={"View"}
           user={user}

@@ -31,6 +31,7 @@ const props = {
   user: { firstName: "test" },
 
   configID: "testConfigId",
+  setSelectedTestCode: jest.fn(),
 };
 
 const testTypeDropdownLabel = /Test Type Group/i
@@ -55,14 +56,14 @@ beforeEach(() => {
   axios.get.mockResolvedValueOnce({ status: 200, data: testTypeDropdownData })
 })
 
-test("testing QACertTestSummaryHeaderInfo component", () => {
-  const { container } = render(<QACertTestSummaryHeaderInfo {...props} />);
+test("testing QACertTestSummaryHeaderInfo component", async () => {
+  const { container } =  await waitForElement(() =>  render(<QACertTestSummaryHeaderInfo {...props} />));
 
   expect(container).toBeDefined();
 });
 
-test("testing QACertTestSummaryHeaderInfo component and opening selection modal import", () => {
-  const { container } = render(<QACertTestSummaryHeaderInfo {...props} />);
+test("testing QACertTestSummaryHeaderInfo component and opening selection modal import",async  () => {
+  const { container } =  await waitForElement(() =>  render(<QACertTestSummaryHeaderInfo {...props} />));
   const openBtn = container.querySelector("#importSelectionQAModal");
 
   fireEvent.click(openBtn);
@@ -77,5 +78,5 @@ test('test type dropdown selection renders with options', async () => {
 
   // Assert
   expect(testTypeDropdown).toBeInTheDocument()
-  expect(options).toHaveLength(testTypeDropdownData.length)
+  expect(options).toHaveLength(1)
 })
