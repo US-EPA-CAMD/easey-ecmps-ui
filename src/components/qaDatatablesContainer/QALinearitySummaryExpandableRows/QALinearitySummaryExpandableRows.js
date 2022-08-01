@@ -9,11 +9,6 @@ import {
 import { loadDropdowns } from "../../../store/actions/dropdowns";
 import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
 import { getLinearitySummaryRecords } from "../../../utils/selectors/QACert/TestSummary.js";
-import {
-  assignFocusEventListeners,
-  cleanupFocusEventListeners,
-  returnFocusToLast,
-} from "../../../additional-functions/manage-focus";
 import { Button } from "@trussworks/react-uswds";
 import {
   attachChangeEventListeners,
@@ -37,7 +32,6 @@ const QALinearitySummaryExpandableRows = ({
   nonEditable,
   mdmData,
   loadDropdownsData,
-  locationSelectValue,
   data,
 }) => {
   const { locationId, id } = data;
@@ -62,7 +56,6 @@ const QALinearitySummaryExpandableRows = ({
     return getLinearitySummaryRecords(qaLinearitySummary);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qaLinearitySummary]);
-  const [qaLinearityTest, setLinearityTest] = useState([]);
   const [dataPulled, setDataPulled] = useState([]);
   const [show, setShow] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -70,12 +63,8 @@ const QALinearitySummaryExpandableRows = ({
   const [dataLoaded, setDataLoaded] = useState(false);
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
-  const [mainDropdownChange, setMainDropdownChange] = useState("");
-
   const [createNewData, setCreateNewData] = useState(false);
   const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
-
-  const [complimentaryData, setComplimentaryData] = useState([]);
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const selectText = "-- Select a value --";
@@ -145,7 +134,7 @@ const QALinearitySummaryExpandableRows = ({
     addAriaLabelToDatatable();
   };
   // Executed when "View" action is clicked
-  const openModal = (row, bool, create) => {
+  const openModal = (row, _bool, create) => {
     let selectedData = null;
     setCreateNewData(create);
     if(create){
@@ -175,7 +164,7 @@ const QALinearitySummaryExpandableRows = ({
     if (mainDropdownName !== "" && hasMainDropdown === true) {
       mainDropdownResult = mdmData[mainDropdownName].filter((o) =>
         mdmData[prefilteredDataName].some(
-          (element, index, arr) => o.code === element[mainDropdownName]
+          (element, _index, _arr) => o.code === element[mainDropdownName]
         )
       );
       if (!mainDropdownResult.includes({ code: "", name: selectText })) {
@@ -230,7 +219,7 @@ const QALinearitySummaryExpandableRows = ({
       selectedRow.id,
       userInput
     )
-      .then((res) => {
+      .then((_res) => {
         setUpdateTable(true);
         executeOnClose();
       })
@@ -323,9 +312,6 @@ const QALinearitySummaryExpandableRows = ({
                   title={`${dataTableName}`}
                   viewOnly={!user || nonEditable}
                   create={createNewData}
-                  // setMainDropdownChange={setMainDropdownChange}
-                  //mainDropdownChange={mainDropdownChange}
-                  // onEditUpdateHandler={onEditUpdateHandler}
                 />
               </div>
             ) : (
