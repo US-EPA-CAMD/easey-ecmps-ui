@@ -22,12 +22,12 @@ import {
   relationshipDataTableProps,
 } from "../../additional-functions/dataTable-props";
 import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
-import { Preloader } from "@us-epa-camd/easey-design-system";
+
 export const MonitoringPlanTabRender = ({
-  resetTimer,
-  setExpired,
-  resetTimerFlag,
-  callApiFlag,
+  _resetTimer,
+  _setExpired,
+  _resetTimerFlag,
+  _callApiFlag,
   title,
   user,
   locations,
@@ -42,7 +42,7 @@ export const MonitoringPlanTabRender = ({
   setCheckout,
   setInactive,
   inactive,
-  checkedOutLocations,
+  _checkedOutLocations,
 }) => {
   const settingInactiveCheckBox = (check, disable) => {
     setInactive([check, disable], title, MONITORING_PLAN_STORE_NAME);
