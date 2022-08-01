@@ -3,6 +3,10 @@ import { render, waitForElement, screen, fireEvent } from "@testing-library/reac
 import userEvent from "@testing-library/user-event";
 
 import QALinearitySummaryExpandableRows  from "./QALinearitySummaryExpandableRows";
+import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
+import configureStore from "../../../store/configureStore.dev";
+import initialState from "../../../store/reducers/initialState";
 
 import * as qaApi from "../../../utils/api/qaCertificationsAPI";
 const axios = require("axios");
@@ -64,7 +68,217 @@ const linearitySummary = [
     "linearityInjectionData": []
   },
 ];
-
+initialState.dropdowns.lineTestSummary = {
+  spanScaleCode: [
+    {
+      code: '',
+      name: '-- Select a value --'
+    },
+    {
+      code: 'H',
+      name: 'High'
+    },
+    {
+      code: 'L',
+      name: 'Low'
+    }
+  ],
+  testTypeCode: [
+    {
+      code: '',
+      name: '-- Select a value --'
+    },
+    {
+      code: 'DAYCAL',
+      name: 'Daily Calibration'
+    },
+    {
+      code: 'INTCHK',
+      name: 'Flow Interference Check'
+    },
+    {
+      code: 'PEMSCAL',
+      name: 'Daily PEMS Calibration'
+    },
+    {
+      code: 'AF2LCHK',
+      name: 'Abbreviated Flow-to-Load Check'
+    },
+    {
+      code: 'HGSI1',
+      name: 'One-Point Hg System Integrity Check'
+    },
+    {
+      code: '7DAY',
+      name: '7-Day Calibration'
+    },
+    {
+      code: 'CYCLE',
+      name: 'Cycle Time Test'
+    },
+    {
+      code: 'LINE',
+      name: 'Linearity Check'
+    },
+    {
+      code: 'RATA',
+      name: 'Relative Accuracy Test'
+    },
+    {
+      code: 'F2LREF',
+      name: 'Flow-to-Load or GHR Reference Data'
+    },
+    {
+      code: 'F2LCHK',
+      name: 'Flow-to-Load Ratio or GHR Test'
+    },
+    {
+      code: 'ONOFF',
+      name: 'On-Line/Off-Line Calibration'
+    },
+    {
+      code: 'APPE',
+      name: 'Appendix E NOx Rate Test'
+    },
+    {
+      code: 'FFACC',
+      name: 'Fuel Flowmeter Accuracy Test'
+    },
+    {
+      code: 'FFACCTT',
+      name: 'Transmitter Transducer Test'
+    },
+    {
+      code: 'FF2LBAS',
+      name: 'Fuel Flow-to-Load Baseline Data'
+    },
+    {
+      code: 'FF2LTST',
+      name: 'Fuel Flow-to-Load Test'
+    },
+    {
+      code: 'UNITDEF',
+      name: 'Unit-Specific Default NOx Rate Test'
+    },
+    {
+      code: 'PEI',
+      name: 'Primary Element Inspection'
+    },
+    {
+      code: 'HGLINE',
+      name: 'Mercury Linearity'
+    },
+    {
+      code: 'HGSI3',
+      name: 'Three-Point Hg System Integrity Check'
+    },
+    {
+      code: 'DAHS',
+      name: 'DAHS Verification'
+    },
+    {
+      code: 'LEAK',
+      name: 'Leak Check'
+    },
+    {
+      code: 'OTHER',
+      name: 'Other Test'
+    },
+    {
+      code: 'PEMSACC',
+      name: 'PEMS Accuracy Check'
+    },
+    {
+      code: 'DGFMCAL',
+      name: 'Dry Gas Meter Calibration (Sorbent Trap Monitoring System)'
+    },
+    {
+      code: 'MFMCAL',
+      name: 'Mass Flow Meter Calibration (Sorbent Trap Monitoring System)'
+    },
+    {
+      code: 'BCAL',
+      name: 'Barometer calibration (sorbent trap monitoring systems)'
+    },
+    {
+      code: 'QGA',
+      name: 'Quarterly Gas Audit (HCl and HF monitoring systems)'
+    },
+    {
+      code: 'TSCAL',
+      name: 'Temperature sensor calibration (sorbent trap monitoring systems)'
+    }
+  ],
+  testReasonCode: [
+    {
+      code: '',
+      name: '-- Select a value --'
+    },
+    {
+      code: 'DIAG',
+      name: 'Diagnostic'
+    },
+    {
+      code: 'INITIAL',
+      name: 'Initial Certification'
+    },
+    {
+      code: 'QA',
+      name: 'Quality Assurance'
+    },
+    {
+      code: 'RECERT',
+      name: 'Recertification'
+    }
+  ],
+  testResultCode: [
+    {
+      code: '',
+      name: '-- Select a value --'
+    },
+    {
+      code: 'IGNORED',
+      name: 'Does Not Fulfill Testing Requirement'
+    },
+    {
+      code: 'ABORTED',
+      name: 'Test Aborted'
+    },
+    {
+      code: 'EXC168H',
+      name: 'Fewer than 168 Hours after Exclusions'
+    },
+    {
+      code: 'FAILED',
+      name: 'Test Failed'
+    },
+    {
+      code: 'FEW168H',
+      name: 'Fewer than 168 QA Operating Hours'
+    },
+    {
+      code: 'INC',
+      name: 'Incomplete Test'
+    },
+    {
+      code: 'INPROG',
+      name: 'Baseline Data Collection In Progress'
+    },
+    {
+      code: 'INVALID',
+      name: 'Invalid Test'
+    },
+    {
+      code: 'PASSAPS',
+      name: 'Test Passed Alt Spec'
+    },
+    {
+      code: 'PASSED',
+      name: 'Test Passed'
+    }
+  ]
+};
+let store = configureStore(initialState);
 //testing redux connected component to mimic props passed as argument
 const componentRenderer = (locId, testSummaryId) => {
   const props = {
@@ -94,7 +308,11 @@ const componentRenderer = (locId, testSummaryId) => {
       ]
     }
   };
-  return render(<QALinearitySummaryExpandableRows {...props} />);
+  return render(
+    <Provider store={store}>
+      <QALinearitySummaryExpandableRows {...props} />
+    </Provider>
+  );
 };
 
 test("testing linearity summary expandable records from test summary data", async () => {
@@ -160,19 +378,19 @@ test.skip("when remove button on a row is clicked then that row is deleted from 
   })
 });
 
-// test("testing to add linearity summary records", async () => {
-//   axios.get.mockImplementation(() =>
-//     Promise.resolve({ status: 200, data: linearitySummary })
-//   );
-//   const res = await qaApi.getQALinearitySummary("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB");
-//   expect(res.data).toEqual(linearitySummary);
-//   let { container } = await waitForElement(() => componentRenderer("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB"));
-//   expect(container).toBeDefined();
-//   const addButtons = screen.getAllByRole("button", {name: "Add"});
-//   //const addButton = screen.getByText("Add");
+test("testing to add linearity summary records", async () => {
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: linearitySummary })
+  );
+  const res = await qaApi.getQALinearitySummary("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB");
+  expect(res.data).toEqual(linearitySummary);
+  let { container } = await waitForElement(() => componentRenderer("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB"));
+  expect(container).toBeDefined();
+  const addButtons = screen.getAllByRole("button", {name: "Add"});
+  //const addButton = screen.getByText("Add");
 
-//   expect(addButtons.length).toBe(2);
-//   fireEvent.click(addButtons[1]);
-//   //screen.debug();
-//   expect(screen.getByText("Add Linearity Test")).toBeInTheDocument();
-// });
+  expect(addButtons.length).toBe(2);
+  fireEvent.click(addButtons[1]);
+  //screen.debug();
+  expect(screen.getByText("Add Linearity Test")).toBeInTheDocument();
+});

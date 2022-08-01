@@ -123,6 +123,7 @@ describe("renders datatable with all values ", () => {
         columnNames={columnNames}
         data={data}
         user={{ firstName: "test" }}
+        evaluate={true}
       />
     );
 
