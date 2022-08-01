@@ -32,7 +32,7 @@ import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 // contains test summary data table
 
-export const QALinearitySummaryExpandableRows = ({
+const QALinearitySummaryExpandableRows = ({
   user,
   nonEditable,
   mdmData,

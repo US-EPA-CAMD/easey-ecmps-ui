@@ -2,7 +2,7 @@ import React from "react";
 import { render, waitForElement, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import  { QALinearitySummaryExpandableRows }  from "./QALinearitySummaryExpandableRows";
+import QALinearitySummaryExpandableRows  from "./QALinearitySummaryExpandableRows";
 
 import * as qaApi from "../../../utils/api/qaCertificationsAPI";
 const axios = require("axios");
