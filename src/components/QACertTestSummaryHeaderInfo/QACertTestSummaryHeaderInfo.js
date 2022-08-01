@@ -83,27 +83,31 @@ export const QACertTestSummaryHeaderInfo = ({
   // const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
   useEffect(() => {
     const fetchTestTypeCodes = async () => {
-      let resp ='';
+      let resp = "";
 
-      await getAllTestTypeCodes().then((res) => {
-       setAllTestTypeCodes(res.data);
-      });
-      
-      
-      await getAllTestTypeGroupCodes().then((res) => {
-        const options = res.data
-        .map((e) => {
-          return {
-            name: e.testTypeGroupCodeDescription,
-            code: e.testTypeGroupCode,
-          };
+      await getAllTestTypeCodes()
+        .then((res) => {
+          setAllTestTypeCodes(res.data);
         })
-        .sort((a, b) => a.name.localeCompare(b.name));
-         setTestTypeGroupOptions(options);
-       });
+        .catch((error) => {
+          console.log(error);
+        });
 
-
-     
+      await getAllTestTypeGroupCodes()
+        .then((res) => {
+          const options = res.data
+            .map((e) => {
+              return {
+                name: e.testTypeGroupCodeDescription,
+                code: e.testTypeGroupCode,
+              };
+            })
+            .sort((a, b) => a.name.localeCompare(b.name));
+          setTestTypeGroupOptions(options);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
     fetchTestTypeCodes();
   }, [configID]);
@@ -120,8 +124,7 @@ export const QACertTestSummaryHeaderInfo = ({
         return obj.testTypeCode;
       });
     setSelectedTestCode(codesForSelectedTestTypeGroup);
-
-  }, [testTypeGroupOptions,sectionSelect]);
+  }, [testTypeGroupOptions, sectionSelect]);
 
   // let testSummaryTable = <TestSummaryDataTable
   //   locationSelectValue={locationSelect ? locationSelect[1] : 0}
