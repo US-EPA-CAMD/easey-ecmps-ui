@@ -9,7 +9,6 @@ import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigu
 import * as facilitiesApi from "../../../utils/api/facilityApi";
 import { getCheckedOutLocations } from "../../../utils/api/monitoringPlansApi";
 import {
-  EXPORT_STORE_NAME,
   MONITORING_PLAN_STORE_NAME,
   QA_CERT_TEST_SUMMARY_STORE_NAME,
 } from "../../../additional-functions/workspace-section-and-store-names";
@@ -70,18 +69,16 @@ export const SelectFacilitiesDataTable = ({
   const selectedRowHandler = (info) => {
     addtabs([
       {
-        title: `${info[0].col1} (${info[1].name}) ${
-          info[1].active ? "" : "Inactive"
-        }`,
+        title: `${info[0].col1} (${info[1].name}) ${info[1].active ? "" : "Inactive"
+          }`,
         component:
           workspaceSection === MONITORING_PLAN_STORE_NAME ? (
             <div className="selectedTabsBox">
               <SelectedFacilityTab
                 orisCode={info[0].col2}
                 selectedConfig={info[1]}
-                title={`${info[0].col1} (${info[1].name}) ${
-                  info[1].active ? "" : "Inactive"
-                }`}
+                title={`${info[0].col1} (${info[1].name}) ${info[1].active ? "" : "Inactive"
+                  }`}
                 user={user}
                 checkout={
                   checkedOutLocations.length > 0
@@ -105,9 +102,8 @@ export const SelectFacilitiesDataTable = ({
               <QACertTestSummaryTab
                 orisCode={info[0].col2}
                 selectedConfig={info[1]}
-                title={`${info[0].col1} (${info[1].name}) ${
-                  info[1].active ? "" : "Inactive"
-                }`}
+                title={`${info[0].col1} (${info[1].name}) ${info[1].active ? "" : "Inactive"
+                  }`}
                 user={user}
                 workspaceSection={workspaceSection}
               />
@@ -118,9 +114,8 @@ export const SelectFacilitiesDataTable = ({
               <Export
                 orisCode={info[0].col2}
                 selectedConfig={info[1]}
-                title={`${info[0].col1} (${info[1].name}) ${
-                  info[1].active ? "" : "Inactive"
-                }`}
+                title={`${info[0].col1} (${info[1].name}) ${info[1].active ? "" : "Inactive"
+                  }`}
                 user={user}
                 workspaceSection={workspaceSection}
               />
@@ -206,7 +201,7 @@ export const SelectFacilitiesDataTable = ({
             />
           }
           headerStyling="padding-top-0 padding-left-2"
-          setShowInactive={() => {}}
+          setShowInactive={() => { }}
           setMostRecentlyCheckedInMonitorPlanId={
             setMostRecentlyCheckedInMonitorPlanId
           }
@@ -240,7 +235,7 @@ export const SelectFacilitiesDataTable = ({
             />
           }
           headerStyling="padding-top-0 padding-left-2"
-          setShowInactive={() => {}}
+          setShowInactive={() => { }}
           ariaLabel={"Select Configurationss"}
           workspaceSection={workspaceSection}
         />
