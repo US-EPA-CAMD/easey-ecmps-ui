@@ -6,7 +6,7 @@ axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
 };
 
-export const getQATestSummary = async (locID, beginDate, endDate) => {
+export const getQATestSummary = async (locID,selectedTestCode, beginDate, endDate) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
@@ -16,12 +16,16 @@ export const getQATestSummary = async (locID, beginDate, endDate) => {
 
   // *** attach the rest of the url
   url = `${url}/locations/${locID}/test-summary`;
-
+  if (selectedTestCode) {
+    console.log('selectedTestCode',selectedTestCode)
+    url = `${url}?testTypeCodes=${selectedTestCode}`;
+  }
   // *** attach query params
   if (beginDate && endDate) {
     url = `${url}?beginDate=${beginDate}&endDate=${endDate}`;
   }
 
+  console.log('URL',url)
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
