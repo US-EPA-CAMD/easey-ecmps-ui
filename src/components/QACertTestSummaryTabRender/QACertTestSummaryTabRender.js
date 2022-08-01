@@ -1,13 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import QACertTestSummaryHeaderInfo from "../QACertTestSummaryHeaderInfo/QACertTestSummaryHeaderInfo";
 
 import QALinearitySummaryDataTable from "../qaDatatablesContainer/QALinearitySummaryDataTable/QALinearitySummaryDataTable";
-import {
-  getAllTestTypeCodes,
-  getAllTestTypeGroupCodes,
-} from "../../utils/api/dataManagementApi";
-import TestSummaryDataTable from "../qaDatatablesContainer/TestSummaryDataTable/TestSummaryDataTable";
-import { getTestSummary } from "../../utils/selectors/QACert/TestSummary";
 
 export const QACertTestSummaryRender = ({
   title,
@@ -21,7 +15,7 @@ export const QACertTestSummaryRender = ({
   orisCode,
   configID,
 }) => {
-  const [selectedTestCode, setSelectedTestCode] = useState(['LINSUM']);
+  const [selectedTestCode, setSelectedTestCode] = useState(["LINE"]);
   return (
     <div className=" padding-top-0">
       <div className="grid-row">
@@ -49,8 +43,7 @@ export const QACertTestSummaryRender = ({
             stackPipeId: locations[locationSelect[0]]["stackPipeId"],
             unitId: locations[locationSelect[0]]["unitId"],
           }}
-          selectedTestCode = {selectedTestCode}
-        
+          selectedTestCode={selectedTestCode}
         />
       }
     </div>

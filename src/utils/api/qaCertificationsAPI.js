@@ -6,7 +6,12 @@ axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
 };
 
-export const getQATestSummary = async (locID,selectedTestCode, beginDate, endDate) => {
+export const getQATestSummary = async (
+  locID,
+  selectedTestCode,
+  beginDate,
+  endDate
+) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
@@ -17,15 +22,24 @@ export const getQATestSummary = async (locID,selectedTestCode, beginDate, endDat
   // *** attach the rest of the url
   url = `${url}/locations/${locID}/test-summary`;
   if (selectedTestCode) {
-    console.log('selectedTestCode',selectedTestCode)
-    url = `${url}?testTypeCodes=${selectedTestCode}`;
+    if (selectedTestCode.length === 1) {
+      url = `${url}?testTypeCodes=${selectedTestCode}`;
+      console.log("selectedTestCode", selectedTestCode);
+    } else {
+      let additionalUrl = '';
+      for (const x of selectedTestCode) {
+        additionalUrl = ` ${additionalUrl} ${x} |`
+      }
+      url = `${url}?testTypeCodes=${additionalUrl}`
+      console.log('URL',url)
+    }
   }
   // *** attach query params
   if (beginDate && endDate) {
     url = `${url}?beginDate=${beginDate}&endDate=${endDate}`;
   }
 
-  console.log('URL',url)
+  console.log("URL", url);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
@@ -43,19 +57,22 @@ export const getQATestSummaryByID = async (locID, id) => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const getQATestSummaryByCode = async (locId, { _beginDate, _endDate, testTypeCodes = [] }) => {
+export const getQATestSummaryByCode = async (
+  locId,
+  { _beginDate, _endDate, testTypeCodes = [] }
+) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** attach the rest of the url
   url = `${url}/locations/${locId}/test-summary`;
 
   if (testTypeCodes.length > 0) {
-    const param = testTypeCodes.join('|')
-    url = `${url}?testTypeCode=${param}`
+    const param = testTypeCodes.join("|");
+    url = `${url}?testTypeCode=${param}`;
   }
 
   return axios.get(url).then(handleResponse).catch(handleError);
-}
+};
 
 export const getQASchema = async () => {
   const url = `${config.services.content.uri}/ecmps/reporting-instructions/qa-certification.schema.json`;
@@ -126,7 +143,7 @@ export const deleteQATestSummary = async (locId, id) => {
   } catch (error) {
     return handleError(error);
   }
-}
+};
 
 export const getQALinearitySummary = async (locID, testSumId) => {
   let url = `${config.services.qaCertification.uri}`;
@@ -154,8 +171,12 @@ export const deleteQALinearitySummary = async (locId, testSumId, id) => {
   } catch (error) {
     return handleError(error);
   }
-}
-export const updateQALinearityTestSummary = async (locId, testSumId, payload) => {
+};
+export const updateQALinearityTestSummary = async (
+  locId,
+  testSumId,
+  payload
+) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}`;
   try {
     return handleResponse(
@@ -170,7 +191,12 @@ export const updateQALinearityTestSummary = async (locId, testSumId, payload) =>
   }
 };
 
-export const updateQALinearitySummaryTestSecondLevel = async (locId, testSumId,id, payload) => {
+export const updateQALinearitySummaryTestSecondLevel = async (
+  locId,
+  testSumId,
+  id,
+  payload
+) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/linearities/${id}`;
   try {
     return handleResponse(
@@ -198,9 +224,13 @@ export const createQATestData = async (locId, payload) => {
   } catch (error) {
     return handleImportError(error);
   }
-};  
+};
 
-export const createQALinearitySummaryTestSecondLevel = async (locId, testSumId, payload) => {
+export const createQALinearitySummaryTestSecondLevel = async (
+  locId,
+  testSumId,
+  payload
+) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/linearities`;
   try {
     return handleResponse(
