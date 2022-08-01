@@ -24,14 +24,12 @@ export const getQATestSummary = async (
   if (selectedTestCode) {
     if (selectedTestCode.length === 1) {
       url = `${url}?testTypeCodes=${selectedTestCode}`;
-      console.log("selectedTestCode", selectedTestCode);
     } else {
-      let additionalUrl = '';
+      let additionalUrl = "";
       for (const x of selectedTestCode) {
-        additionalUrl = ` ${additionalUrl} ${x} |`
+        additionalUrl = `${additionalUrl} ${x} |`;
       }
-      url = `${url}?testTypeCodes=${additionalUrl}`
-      console.log('URL',url)
+      url = `${url}?testTypeCodes=${additionalUrl}`;
     }
   }
   // *** attach query params
@@ -39,7 +37,6 @@ export const getQATestSummary = async (
     url = `${url}?beginDate=${beginDate}&endDate=${endDate}`;
   }
 
-  console.log("URL", url);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
