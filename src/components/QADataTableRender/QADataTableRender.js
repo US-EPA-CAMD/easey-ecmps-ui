@@ -3,8 +3,8 @@ import { normalizeRowObjectFormat } from "../../additional-functions/react-data-
 import "./QADataTableRender.scss";
 
 // *** local
-import { config, oneSecond } from "../../config";
-// import { getLinearitySummary } from "../../../utils/selectors/QACert/LinearitySummary.js";
+import { oneSecond } from "../../config";
+
 /*********** COMPONENTS ***********/
 // *** 3rd party
 import { Add, Remove, ArrowDownwardSharp } from "@material-ui/icons";
