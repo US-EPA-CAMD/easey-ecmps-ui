@@ -32,7 +32,7 @@ import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 // contains test summary data table
 
-const QALinearitySummaryExpandableRows = ({
+export const QALinearitySummaryExpandableRows = ({
   user,
   nonEditable,
   mdmData,
@@ -48,11 +48,15 @@ const QALinearitySummaryExpandableRows = ({
   useEffect(() => {
     if (qaLinearitySummary.length === 0 || updateTable) {
       setLoading(true);
-      getQALinearitySummary(locationId, id).then((res) => {
-        finishedLoadingData(res.data);
-        setQaLinearitySummary(res.data);
-        setLoading(false);
-      });
+      getQALinearitySummary(locationId, id)
+        .then((res) => {
+          finishedLoadingData(res.data);
+          setQaLinearitySummary(res.data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
       setUpdateTable(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
