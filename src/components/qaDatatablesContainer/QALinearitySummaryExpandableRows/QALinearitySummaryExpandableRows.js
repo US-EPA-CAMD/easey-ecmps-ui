@@ -4,6 +4,7 @@ import {
   deleteQALinearitySummary,
   getQALinearitySummary,
   updateQALinearitySummaryTestSecondLevel,
+  createQALinearitySummaryTestSecondLevel
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
 import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
@@ -13,6 +14,7 @@ import {
   cleanupFocusEventListeners,
   returnFocusToLast,
 } from "../../../additional-functions/manage-focus";
+import { Button } from "@trussworks/react-uswds";
 import {
   attachChangeEventListeners,
   removeChangeEventListeners,
@@ -28,7 +30,6 @@ import { extractUserInput } from "../../../additional-functions/extract-user-inp
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
-import { Button } from "@trussworks/react-uswds";
 // contains test summary data table
 
 const QALinearitySummaryExpandableRows = ({
@@ -82,9 +83,6 @@ const QALinearitySummaryExpandableRows = ({
   // pull these out and make components reuseable like monitoring plan
   const dropdownArray = [["gasLevelCode"]];
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
-
-  let selectedModalDataCloned;
-  let selectedRowCloned;
 
   const columns = [
     "Gas Level Code",
@@ -150,6 +148,9 @@ const QALinearitySummaryExpandableRows = ({
   const openModal = (row, bool, create) => {
     let selectedData = null;
     setCreateNewData(create);
+    if(create){
+      controlInputs.gasLevelCode = ["Gas Level Code", "dropdown", "", ""];
+    }
     if (dataPulled.length > 0 && !create) {
       selectedData = dataPulled.filter(
         (element) => element.id === row[`id`]
@@ -231,11 +232,34 @@ const QALinearitySummaryExpandableRows = ({
     )
       .then((res) => {
         setUpdateTable(true);
-        setLinearityTest(res.data);
         executeOnClose();
       })
       .catch((error) => {
         console.log(error);
+      });
+  };
+
+  const createData = () => {
+    const uiControls = {
+      gasLevelCode: null,
+      meanMeasuredValue: 0,
+      meanReferenceValue: 0,
+      percentError: 0,
+      apsIndicator: 0,
+    };
+    const userInput = extractUserInput( uiControls, ".modalUserInput");
+    createQALinearitySummaryTestSecondLevel(locationId, data.id, userInput)
+      .then((res) => {
+        console.log("res", res);
+        if (Object.prototype.toString.call(res) === "[object Array]") {
+          alert(res[0]);
+        } else {
+        setUpdateTable(true);
+        executeOnClose();
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
       });
   };
   return (
@@ -266,6 +290,7 @@ const QALinearitySummaryExpandableRows = ({
           }
           actionsBtn={"View"}
           user={user}
+          evaluate={false}
         />
       ) : (
         <Preloader />
@@ -275,13 +300,13 @@ const QALinearitySummaryExpandableRows = ({
         <Modal
           show={show}
           close={closeModalHandler}
-          save={saveData}
+          save={createNewData ? createData : saveData}
           showCancel={!user || nonEditable}
           showSave={user && !nonEditable}
           nonEditable={nonEditable}
           title={
             createNewData
-              ? `Create ${dataTableName}`
+              ? `Add  ${dataTableName}`
               : user
               ? ` Edit ${dataTableName}`
               : ` ${dataTableName}`

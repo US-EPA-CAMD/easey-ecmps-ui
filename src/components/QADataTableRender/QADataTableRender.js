@@ -24,6 +24,7 @@ const QADataTableRender = ({
   actionsBtn,
   expandableRowComp,
   onRemoveHandler,
+  evaluate
 }) => {
   const columns = [];
   columnNames.forEach((name, index) => {
@@ -142,7 +143,7 @@ const QADataTableRender = ({
               {/* user is logged in  */}
               {user ? (
                 <div className="editViewExpandGroup ">
-                  <Button>Evaluate</Button>
+                  {evaluate ? <Button>Evaluate</Button> : null} 
                   <Button
                     type="button"
                     epa-testid="btnOpen"
