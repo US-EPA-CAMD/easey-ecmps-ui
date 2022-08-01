@@ -42,7 +42,7 @@ const ImportModal = ({
     }
   }, [workspaceSection]);
   const [schemaErrors, setSchemaErrors] = useState([]);
-  const validateJSON = (name, type, event) => {
+  const validateJSON = (name, _type, event) => {
     const fileTypeManual = name.split(".");
 
     if (fileTypeManual[fileTypeManual.length - 1] !== "json") {
@@ -63,7 +63,7 @@ const ImportModal = ({
     setSchemaErrors(formattedErrors);
   };
   function readFile(event) {
-    var reader = new FileReader();
+    let reader = new FileReader();
     reader.onload = onReaderLoad;
     reader.readAsText(event.target.files[0]);
   }
@@ -74,8 +74,8 @@ const ImportModal = ({
       const fileLoaded = JSON.parse(event.target.result);
       setImportedFile(fileLoaded);
 
-      var Validator = require("jsonschema").Validator;
-      var v = new Validator();
+      let Validator = require("jsonschema").Validator;
+      let v = new Validator();
 
       if (v.validate(fileLoaded, schema).valid) {
         setHasFormatError(false);
