@@ -28,6 +28,7 @@ import { extractUserInput } from "../../../additional-functions/extract-user-inp
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
+import { Button } from "@trussworks/react-uswds";
 // contains test summary data table
 
 const QALinearitySummaryExpandableRows = ({
@@ -247,7 +248,22 @@ const QALinearitySummaryExpandableRows = ({
           data={data1}
           openHandler={openModal}
           onRemoveHandler={onRemoveHandler}
-          actionColumnName={"Linearity Summary Data"}
+          actionColumnName={
+            user ?
+            <>
+              <span className="padding-right-2">
+                Linearity Summary Data
+              </span>
+                <Button
+                  epa-testid="btnOpen" 
+                  className="text-white" 
+                  onClick={()=> openModal(false, false, true)}
+                >
+                  Add
+                </Button>
+            </>
+            : "Linearity Summary Data"
+          }
           actionsBtn={"View"}
           user={user}
         />
