@@ -80,15 +80,18 @@ export const QACertTestSummaryHeaderInfo = ({
   ]);
 
   const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
-
+  // const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
   useEffect(() => {
     const fetchTestTypeCodes = async () => {
-      let resp = await getAllTestTypeCodes();
-      const allTtc = resp.data;
-      setAllTestTypeCodes(allTtc);
+      let resp ='';
 
-      resp = await getAllTestTypeGroupCodes();
-      const options = resp.data
+      await getAllTestTypeCodes().then((res) => {
+       setAllTestTypeCodes(res.data);
+      });
+      
+      
+      await getAllTestTypeGroupCodes().then((res) => {
+        const options = res.data
         .map((e) => {
           return {
             name: e.testTypeGroupCodeDescription,
@@ -96,7 +99,11 @@ export const QACertTestSummaryHeaderInfo = ({
           };
         })
         .sort((a, b) => a.name.localeCompare(b.name));
-      setTestTypeGroupOptions(options);
+         setTestTypeGroupOptions(options);
+       });
+
+
+     
     };
     fetchTestTypeCodes();
   }, [configID]);
