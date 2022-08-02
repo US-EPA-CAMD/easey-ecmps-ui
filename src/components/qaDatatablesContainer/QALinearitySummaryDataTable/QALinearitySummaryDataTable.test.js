@@ -47,12 +47,14 @@ const componentRenderer = (location) => {
   const props = {
     user: { firstName: "test" },
     locationSelectValue: location,
+    selectedTestCode: "LINE",
   };
   return render(<QALinearitySummaryDataTable {...props} />);
 };
 function componentRendererNoData(args) {
   const defualtProps = {
     locationSelectValue: "0",
+    selectedTestCode: "LINE",
   };
 
   const props = { ...defualtProps, ...args };
@@ -80,27 +82,31 @@ test("tests a test summary NO USER/NO DATA", async () => {
 });
 
 test("tests updating test summary data", async () => {
-  axios.get.mockResolvedValue({ status: 200, data: testSummary })
+  axios.get.mockResolvedValue({ status: 200, data: testSummary });
   const payload = {
-    "stackPipeId": testSummary.stackPipeId,
-    "unitId": testSummary.unitId,
-    "testTypeCode": testSummary.testTypeCode,
-    "componentID": testSummary.componentID,
-    "spanScaleCode": testSummary.spanScaleCode,
-    "testNumber": "A05-Q4-2011-20",
-    "testReasonCode": testSummary.testReasonCode,
-    "testResultCode": testSummary.testResultCode,
-    "beginDate": testSummary.beginDate,
-    "beginHour": testSummary.beginHour,
-    "beginMinute": testSummary.beginMinute,
-    "endDate": testSummary.endDate,
-    "endHour": testSummary.endHour,
-    "endMinute": testSummary.endMinute,
-    "gracePeriodIndicator": testSummary.gracePeriodIndicator,
-    "testComment": "dev testing",
+    stackPipeId: testSummary.stackPipeId,
+    unitId: testSummary.unitId,
+    testTypeCode: testSummary.testTypeCode,
+    componentID: testSummary.componentID,
+    spanScaleCode: testSummary.spanScaleCode,
+    testNumber: "A05-Q4-2011-20",
+    testReasonCode: testSummary.testReasonCode,
+    testResultCode: testSummary.testResultCode,
+    beginDate: testSummary.beginDate,
+    beginHour: testSummary.beginHour,
+    beginMinute: testSummary.beginMinute,
+    endDate: testSummary.endDate,
+    endHour: testSummary.endHour,
+    endMinute: testSummary.endMinute,
+    gracePeriodIndicator: testSummary.gracePeriodIndicator,
+    testComment: "dev testing",
   };
-  axios.mockResolvedValueOnce(Promise.resolve({ status: 200, data: payload }))
-  const title = await qaApi.updateQALinearityTestSummary(1873, "f6e4056f-c779-4a61-b265-2932898a9033", payload);
+  axios.mockResolvedValueOnce(Promise.resolve({ status: 200, data: payload }));
+  const title = await qaApi.updateQALinearityTestSummary(
+    1873,
+    "f6e4056f-c779-4a61-b265-2932898a9033",
+    payload
+  );
   expect(title.data).toEqual(payload);
   let { container } = await waitForElement(() => componentRenderer(1873));
   expect(container).toBeDefined();

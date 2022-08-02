@@ -22,10 +22,13 @@ import QAImportHistoricalDataPreview from "../QAImportHistoricalDataPreview/QAIm
 import Modal from "../Modal/Modal";
 import { importQA } from "../../utils/api/qaCertificationsAPI";
 
+import QALinearitySummaryDataTable from "../qaDatatablesContainer/QALinearitySummaryDataTable/QALinearitySummaryDataTable";
 import {
   getAllTestTypeCodes,
   getAllTestTypeGroupCodes,
 } from "../../utils/api/dataManagementApi";
+import TestSummaryDataTable from "../qaDatatablesContainer/TestSummaryDataTable/TestSummaryDataTable";
+import { getTestSummary } from "../../utils/selectors/QACert/TestSummary";
 
 export const QACertTestSummaryHeaderInfo = ({
   facility,
@@ -76,23 +79,34 @@ export const QACertTestSummaryHeaderInfo = ({
   ]);
 
   const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
-
+  // const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
   useEffect(() => {
     const fetchTestTypeCodes = async () => {
-      let resp = await getAllTestTypeCodes();
-      const allTtc = resp.data;
-      setAllTestTypeCodes(allTtc);
+      let resp = "";
 
-      resp = await getAllTestTypeGroupCodes();
-      const options = resp.data
-        .map((e) => {
-          return {
-            name: e.testTypeGroupCodeDescription,
-            code: e.testTypeGroupCode,
-          };
+      await getAllTestTypeCodes()
+        .then((res) => {
+          setAllTestTypeCodes(res.data);
         })
-        .sort((a, b) => a.name.localeCompare(b.name));
-      setTestTypeGroupOptions(options);
+        .catch((error) => {
+          console.log(error);
+        });
+
+      await getAllTestTypeGroupCodes()
+        .then((res) => {
+          const options = res.data
+            .map((e) => {
+              return {
+                name: e.testTypeGroupCodeDescription,
+                code: e.testTypeGroupCode,
+              };
+            })
+            .sort((a, b) => a.name.localeCompare(b.name));
+          setTestTypeGroupOptions(options);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
     fetchTestTypeCodes();
   }, [configID]);
@@ -109,8 +123,7 @@ export const QACertTestSummaryHeaderInfo = ({
         return obj.testTypeCode;
       });
     setSelectedTestCode(codesForSelectedTestTypeGroup);
-
-  }, [testTypeGroupOptions, sectionSelect, allTestTypeCodes, setSelectedTestCode]);
+  }, [testTypeGroupOptions, sectionSelect]);
 
   // let testSummaryTable = <TestSummaryDataTable
   //   locationSelectValue={locationSelect ? locationSelect[1] : 0}

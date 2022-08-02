@@ -34,7 +34,7 @@ const staticDropdownFlag = true;
 const prefilteredTotalName = "filteredTest";
 const result = "";
 const boolOptions = [true, false];
-
+const extraControlInputs = false;
 describe("create all options for modal input controls", () => {
   test("create method modal input controls", async () => {
     axios.get.mockImplementation(() =>
@@ -50,6 +50,7 @@ describe("create all options for modal input controls", () => {
     for (const isCreate of boolOptions) {
       for (const isMats of boolOptions) {
         for (const hasStaticDropdown of boolOptions) {
+          
           const data = modalViewData(
             selectedData,
             controlInputs,
@@ -61,8 +62,9 @@ describe("create all options for modal input controls", () => {
             result,
             hasStaticDropdown,
             prefilteredTotalName,
+            extraControlInputs,
             isMats
-          );
+          ); 
 
           // Check that the returned modal data match the control and date picker input arrays
           for (const arr of data) {
@@ -88,6 +90,7 @@ describe("create all options for modal input controls", () => {
       result,
       staticDropdownFlag,
       prefilteredTotalName,
+      extraControlInputs,
       false
     );
 
@@ -108,6 +111,7 @@ describe("create all options for modal input controls", () => {
         result,
         staticDropdownFlag,
         prefilteredTotalName,
+        extraControlInputs,
         false
       );
     }
