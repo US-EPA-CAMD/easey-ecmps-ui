@@ -1,104 +1,96 @@
-// import React from "react";
-// import {
-//   render,
-//   waitForElement,
-//   fireEvent,
-//   screen,
-// } from "@testing-library/react";
-// import * as mpApi from "../../../utils/api/monitoringPlansApi";
-// //import { extractUserInput } from "../../../additional-functions/extract-user-input";
-// import * as axios from "axios";
-// import DataTableLEEQualifications from "./DataTableLEEQualifications";
-// import { act } from "react-dom/test-utils";
-// jest.mock("axios");
+import React from "react";
+import { render, waitForElement, fireEvent } from "@testing-library/react";
+import * as mpApi from "../../../utils/api/monitoringPlansApi";
+import * as axios from "axios";
+import {
+  mapStateToProps,
+  mapDispatchToProps,
+  DataTableLEEQualifications
+} from "./DataTableLEEQualifications";
 
-// const selectedQualifications = [{}];
 
-// const locationSelectValue = 60;
+jest.mock("axios");
 
-// // const userInput = extractUserInput(payload, ".modalUserInput", radioName);
+const selectedQualifications = [{}];
 
-// //testing redux connected component to mimic props passed as argument
-// const componentRenderer = (
-//   checkout,
-//   secondLevel,
-//   addComponentFlag,
-//   openComponentViewTest,
-//   openAddComponentTest
-// ) => {
-//   const props = {
-//     locationSelectValue: "60",
-//     user: "testUser",
-//     checkout: false,
-//     inactive: [false],
-//     settingInactiveCheckBox: jest.fn(),
-//     revertedState: false,
-//     setRevertedState: jest.fn(),
-//     setOpenLEE: jest.fn(),
-//     openLEE: false,
-//     setUpdateLEE: jest.fn(),
-//     updateLEE: false,
-//     setCreatingChild: jest.fn(),
-//   };
-//   return render(<DataTableLEEQualifications {...props} />);
-// };
+const locationSelectValue = 60;
 
-// test("tests getMonitoringQualifications", async () => {
-//   axios.get.mockImplementation(() =>
-//     Promise.resolve({ status: 200, data: selectedQualifications })
-//   );
-//   const title = await mpApi.getQualifications(locationSelectValue);
-//   expect(title.data).toEqual(selectedQualifications);
+//testing redux connected component to mimic props passed as argument
+const componentRenderer = (
+  checkout,
+  secondLevel,
+  addComponentFlag,
+  openComponentViewTest,
+  openAddComponentTest,
+  mdmData
+) => {
+  let currentData = [];
 
-//   let { container } = await waitForElement(() =>
-//     componentRenderer(false, false, false, true, false)
-//   );
-//   expect(container).toBeDefined();
-// });
+  if (mdmData) {
+    currentData = mdmData;
+  }
 
-// test("test opening the Modal to view formula details and then closing", async () => {
-//   act(async () => {
-//     let { container } = await waitForElement(() => {
-//       componentRenderer(false, false, false, true, false);
-//     });
+  const props = {
+    mdmData: currentData,
+    loadDropdownsData: jest.fn(),
+    locationSelectValue: "60",
+    user: "testUser",
+    checkout: false,
+    inactive: [false],
+    settingInactiveCheckBox: jest.fn(),
+    revertedState: false,
+    setRevertedState: jest.fn(),
+    setOpenLEE: jest.fn(),
+    openLEE: false,
+    setUpdateLEE: jest.fn(),
+    updateLEE: false,
+    setCreatingChild: jest.fn(),
+  };
+  return render(<DataTableLEEQualifications {...props} />);
+};
 
-//     jest.mock("../../../utils/api/monitoringPlansApi", () => {
-//       const mockLEEQual = [
-//         {
-//           addDate: "2018-10-25",
-//           applicableEmissionStandard: "29.0000",
-//           id: "MIKE-DELL-CFEDE4EB21124391BE13E7FB5A56081C",
-//           parameterCode: "HG",
-//           percentageOfEmissionStandard: "72.8",
-//           potentialAnnualHgMassEmissions: null,
-//           qualificationId: "MIKE-DELL-E4CE3931A24E4C1395B3C81457B300CC",
-//           qualificationTestDate: "2018-07-15",
-//           qualificationTestType: "INITIAL",
-//           unitsOfStandard: "LBGWH",
-//           updateDate: null,
-//           userId: "moconnel",
-//         },
-//       ];
-//       return {
-//         getQualifications: jest.fn(() => Promise.resolve(mockLEEQual)),
-//       };
-//     });
+test("tests getMonitoringQualifications", async () => {
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: selectedQualifications })
+  );
+  const title = await mpApi.getQualifications(locationSelectValue);
+  expect(title.data).toEqual(selectedQualifications);
 
-//     let viewBtn = container.getByText("View");
+  let { container } = await waitForElement(() =>
+    componentRenderer(false, false, false, true, false, { test: "" })
+  );
+  let backBtns = container.querySelectorAll("#testBtn");
 
-//     fireEvent.click(viewBtn);
+  for (let x of backBtns) {
+    fireEvent.click(x);
+  }
+  expect(container).toBeDefined();
+});
 
-//     let closeBtn = container.getByTestId("closeModalBtn");
-//     //Modal X button
-//     expect(closeBtn).toBeInTheDocument();
-//     //Header
-//     // expect(container.getByText("Formula")).toBeInTheDocument();
+test("tests getMonitoringQualifications WITHOUT mdmdata", async () => {
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: selectedQualifications })
+  );
+  const title = await mpApi.getQualifications(locationSelectValue);
+  expect(title.data).toEqual(selectedQualifications);
 
-//     fireEvent.click(closeBtn);
-//     // expect(closeBtn).not.toBeInTheDocument();
-//   });
-// });
-test("test file", () => {
-  const val = 1;
-  expect(val === 1);
+  let { container } = await waitForElement(() =>
+    componentRenderer(false, false, false, true, false, false)
+  );
+  expect(container).toBeDefined();
+});
+
+test("mapStateToProps calls the appropriate state", async () => {
+  // mock the 'dispatch' object
+  const dispatch = jest.fn();
+  const state = { dropdowns: [1] };
+  const stateProps = mapStateToProps(state, true);
+});
+
+test("mapDispatchToProps calls the appropriate action", async () => {
+  // mock the 'dispatch' object
+  const dispatch = jest.fn();
+  const actionProps = mapDispatchToProps(dispatch);
+  // verify the appropriate action was called
+  actionProps.loadDropdownsData();
 });
