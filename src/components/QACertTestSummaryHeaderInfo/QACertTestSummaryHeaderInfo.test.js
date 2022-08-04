@@ -1,5 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent, waitForElement, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import axios from "axios";
 
 import QACertTestSummaryHeaderInfo from "./QACertTestSummaryHeaderInfo";
@@ -57,13 +58,13 @@ beforeEach(() => {
 })
 
 test("testing QACertTestSummaryHeaderInfo component", async () => {
-  const { container } =  await waitForElement(() =>  render(<QACertTestSummaryHeaderInfo {...props} />));
+  const { container } = await waitForElement(() => render(<QACertTestSummaryHeaderInfo {...props} />));
 
   expect(container).toBeDefined();
 });
 
-test("testing QACertTestSummaryHeaderInfo component and opening selection modal import",async  () => {
-  const { container } =  await waitForElement(() =>  render(<QACertTestSummaryHeaderInfo {...props} />));
+test("testing QACertTestSummaryHeaderInfo component and opening selection modal import", async () => {
+  const { container } = await waitForElement(() => render(<QACertTestSummaryHeaderInfo {...props} />));
   const openBtn = container.querySelector("#importSelectionQAModal");
 
   fireEvent.click(openBtn);
@@ -79,4 +80,33 @@ test('test type dropdown selection renders with options', async () => {
   // Assert
   expect(testTypeDropdown).toBeInTheDocument()
   expect(options).toHaveLength(1)
+})
+
+test('renders buttons for "Import Test Data", "Test Data Report", "Test History Report", and "Evaluate All"', async () => {
+  // Arrange
+  await waitForElement(() => render(<QACertTestSummaryHeaderInfo {...props} />))
+  const importTestDataBtn = screen.getByRole('button', { name: /Import Test Data/i })
+  const testDataReportBtn = screen.getByRole('button', { name: /Test Data Report/i })
+  const testHistoryReportBtn = screen.getByRole('button', { name: /Test History Report/i })
+  const evalAllBtn = screen.getByRole('button', { name: /Evaluate All/i })
+
+  // Assert
+  expect(importTestDataBtn).toBeInTheDocument()
+  expect(testDataReportBtn).toBeInTheDocument()
+  expect(testHistoryReportBtn).toBeInTheDocument()
+  expect(evalAllBtn).toBeInTheDocument()
+})
+
+test('when import test data button is clicked then a modal is rendered', async () => {
+  // Arrange
+  await waitForElement(() => render(<QACertTestSummaryHeaderInfo {...props} />))
+  const importTestDataBtn = screen.getByRole('button', { name: /Import Test Data/i })
+
+  // Act
+  userEvent.click(importTestDataBtn)
+
+  const importText = screen.getByText(/Import Historical Data/i)
+
+  // Assert
+  expect(importText).toBeInTheDocument()
 })
