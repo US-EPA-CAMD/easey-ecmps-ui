@@ -295,6 +295,32 @@ const QALinearitySummaryExpandableRows = ({
           actionsBtn={"View"}
           user={user}
           evaluate={false}
+          noDataComp={
+            user ?
+            (<QADataTableRender
+              columnNames={columns}
+              columnWidth={15}
+              data={[]}
+              actionColumnName={
+                user ? (
+                  <>
+                    <span className="padding-right-2">Test Data</span>
+                    <Button
+                      epa-testid="btnOpen"
+                      className="text-white"
+                      onClick={() => openModal(false, false, true)}
+                    >
+                      Add
+                    </Button>
+                  </>
+                ) : (
+                  "Test Data"
+                )
+              }
+              actionsBtn={"View"}
+              user={user}
+            />) : "There're no records available."
+          }
         />
       ) : (
         <Preloader />
