@@ -1,6 +1,6 @@
 import React from "react";
 import { fireEvent, render, waitForElement } from "@testing-library/react";
-import { QALinearitySummaryDataTable } from "./QALinearitySummaryDataTable";
+import  QALinearitySummaryDataTable  from "./QALinearitySummaryDataTable";
 
 import * as qaApi from "../../../utils/api/qaCertificationsAPI";
 const axios = require("axios");

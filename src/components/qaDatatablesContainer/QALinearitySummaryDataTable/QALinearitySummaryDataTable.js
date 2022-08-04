@@ -33,7 +33,7 @@ import { Preloader } from "@us-epa-camd/easey-design-system";
 
 // contains test summary data table
 
-export const QALinearitySummaryDataTable = ({
+const QALinearitySummaryDataTable = ({
   mdmData,
   loadDropdownsData,
   locationSelectValue,
