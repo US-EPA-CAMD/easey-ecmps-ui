@@ -112,7 +112,7 @@ const QALinearitySummaryDataTable = ({
             setQATestSummary([]);
           }
           setLoading(false);
-        });
+        }).catch(err => console.error(err));
         setUpdateTable(false);
       }
     }
@@ -301,8 +301,7 @@ const QALinearitySummaryDataTable = ({
         console.error("error", error);
       });
   };
-  console.log("locationSelectValue", locationSelectValue);
-  console.log("qaTestSummary", qaTestSummary);
+
   return (
     <div>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
