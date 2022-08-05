@@ -50,3 +50,11 @@ export const getLinearitySummaryRecords = (data) =>{
   });
   return records;
 }
+
+export const getEmptyRows = (columns) =>{
+  let obj = {};
+  columns.forEach((c,i)=>{
+    obj[`col${i+1}`] = "";
+  });
+  return [obj];
+}

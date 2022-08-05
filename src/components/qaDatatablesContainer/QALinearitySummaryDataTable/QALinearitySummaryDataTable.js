@@ -33,7 +33,7 @@ import { Preloader } from "@us-epa-camd/easey-design-system";
 
 // contains test summary data table
 
-export const QALinearitySummaryDataTable = ({
+const QALinearitySummaryDataTable = ({
   mdmData,
   loadDropdownsData,
   locationSelectValue,
@@ -341,6 +341,30 @@ export const QALinearitySummaryDataTable = ({
             />
           }
           evaluate={true}
+          noDataComp={
+            user ?
+              (<QADataTableRender
+                columnNames={columns}
+                columnWidth={10}
+                data={[]}
+                actionColumnName={
+                  (
+                    <>
+                      <span className="padding-right-2">Test Data</span>
+                      <Button
+                        epa-testid="btnOpen"
+                        className="text-white"
+                        onClick={() => openModal(false, false, true)}
+                      >
+                        Add
+                      </Button>
+                    </>
+                  )
+                }
+                actionsBtn={"View"}
+                user={user}
+              />) : "There're no records available."
+          }
         />
       ) : (
         <Preloader />
