@@ -112,7 +112,7 @@ const QALinearitySummaryDataTable = ({
             setQATestSummary([]);
           }
           setLoading(false);
-        }).catch(err => console.error(err));
+        });
         setUpdateTable(false);
       }
     }
