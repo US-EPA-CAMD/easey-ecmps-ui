@@ -75,7 +75,7 @@ const QALinearitySummaryDataTable = ({
   const controlInputs = {
     unitId: ["Unit or Stack Pipe ID", "input", "", ""],
     testTypeCode: ["Test Type Code", "dropdown", "", ""],
-    skip: ["", "skip", "", ""],
+    monitoringSystemID: ["Monitoring System ID", "input", "", ""],
     componentID: ["Component ID", "input", "", ""],
     spanScaleCode: ["Span Scale Code", "dropdown", "", ""],
     testNumber: ["Test Number", "input", "", ""],
@@ -126,7 +126,7 @@ const QALinearitySummaryDataTable = ({
     } else {
       setDropdownsLoaded(true);
     }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
 
   const data = useMemo(() => {
@@ -390,8 +390,8 @@ const QALinearitySummaryDataTable = ({
                   title={`${dataTableName}`}
                   viewOnly={!user || nonEditable}
                   create={createNewData}
-                  // setMainDropdownChange={setMainDropdownChange}
-                  //mainDropdownChange={mainDropdownChange}
+                // setMainDropdownChange={setMainDropdownChange}
+                //mainDropdownChange={mainDropdownChange}
                 />
               </div>
             ) : (
