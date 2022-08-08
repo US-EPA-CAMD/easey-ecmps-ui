@@ -30,6 +30,7 @@ import { addAriaLabelToDatatable } from "../../../additional-functions/ensure-50
 import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
 import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
+import { getQAColsByTestCode, getQAModalDetailsByTestCode } from "../../../utils/selectors/QACert/LinearitySummary.js";
 
 // contains test summary data table
 
@@ -72,31 +73,6 @@ const QALinearitySummaryDataTable = ({
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
   const dataTableName = "Test Summary Data";
-  const controlInputs = {
-    unitId: ["Unit or Stack Pipe ID", "input", "", ""],
-    testTypeCode: ["Test Type Code", "dropdown", "", ""],
-    skip: ["", "skip", "", ""],
-    componentID: ["Component ID", "input", "", ""],
-    spanScaleCode: ["Span Scale Code", "dropdown", "", ""],
-    testNumber: ["Test Number", "input", "", ""],
-    testReasonCode: ["Test Reason Code", "dropdown", "", ""],
-    testResultCode: ["Test Result Code", "dropdown", "", ""],
-    gracePeriodIndicator: ["Grace Period Indicator ", "radio", "", ""],
-  };
-
-  // goes after dateinput in modals
-  const extraControlInputs = {
-    testComment: ["Test Comment", "input", "", ""],
-  };
-  const controlDatePickerInputs = {
-    beginDate: ["Begin Date", "date", "", ""],
-    beginHour: ["Begin Hour", "hourDropdown", "dropdown", ""],
-    beginMinute: ["Begin Minute", "minuteDropdown", "dropdown", ""],
-    endDate: ["End Date", "date", "", ""],
-    endHour: ["End Hour", "hourDropdown", "dropdown", ""],
-
-    endMinute: ["End Minute", "minuteDropdown", "dropdown", ""],
-  };
 
   //**** */
   useEffect(() => {
@@ -126,7 +102,7 @@ const QALinearitySummaryDataTable = ({
     } else {
       setDropdownsLoaded(true);
     }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
 
   const data = useMemo(() => {
@@ -134,17 +110,9 @@ const QALinearitySummaryDataTable = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qaTestSummary]);
-  const columns = [
-    "Test Type Code",
-    "Unit or Stack Pipe ID",
-    "Component ID",
-    "Test Number",
-    "Test Reason Code",
-    "Test Result Code",
-    "End Date",
-    "End Hour",
-    "End Minute",
-  ];
+
+  const columns = getQAColsByTestCode(selectedTestCode[0])
+  const { controlInputs, extraControlInputs, controlDatePickerInputs } = getQAModalDetailsByTestCode(selectedTestCode[0])
 
   const finishedLoadingData = (loadedData) => {
     setDataPulled(loadedData);
@@ -390,8 +358,8 @@ const QALinearitySummaryDataTable = ({
                   title={`${dataTableName}`}
                   viewOnly={!user || nonEditable}
                   create={createNewData}
-                  // setMainDropdownChange={setMainDropdownChange}
-                  //mainDropdownChange={mainDropdownChange}
+                // setMainDropdownChange={setMainDropdownChange}
+                //mainDropdownChange={mainDropdownChange}
                 />
               </div>
             ) : (
