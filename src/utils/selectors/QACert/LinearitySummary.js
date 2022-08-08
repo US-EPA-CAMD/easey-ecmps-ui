@@ -76,7 +76,7 @@ export const getQAModalDetailsByTestCode = (testCode) => {
     extraControlInputs: {
       testComment: ["Test Comment", "input", "", ""],
     },
-    defaultControlDatePickerInputs: {
+    controlDatePickerInputs: {
       beginDate: ["Begin Date", "date", "", ""],
       beginHour: ["Begin Hour", "hourDropdown", "dropdown", ""],
       beginMinute: ["Begin Minute", "minuteDropdown", "dropdown", ""],
@@ -94,8 +94,8 @@ export const getQAModalDetailsByTestCode = (testCode) => {
           unitId: ["Unit or Stack Pipe ID", "input", "", ""],
           testTypeCode: ["Test Type Code", "dropdown", "", ""],
           monitoringSystemID: ["Monitoring System ID", "input", "", ""],
-          componentID: ["Component ID", "input", "", ""],
-          spanScaleCode: ["Span Scale Code", "dropdown", "", ""],
+          componentID: ["Component ID", "skip", "", ""],
+          spanScaleCode: ["Span Scale Code", "skip", "", ""],
           testNumber: ["Test Number", "input", "", ""],
           testReasonCode: ["Test Reason Code", "dropdown", "", ""],
           testResultCode: ["Test Result Code", "dropdown", "", ""],
@@ -104,7 +104,7 @@ export const getQAModalDetailsByTestCode = (testCode) => {
         extraControlInputs: {
           testComment: ["Test Comment", "input", "", ""],
         },
-        defaultControlDatePickerInputs: {
+        controlDatePickerInputs: {
           beginDate: ["Begin Date", "date", "", ""],
           beginHour: ["Begin Hour", "hourDropdown", "dropdown", ""],
           beginMinute: ["Begin Minute", "minuteDropdown", "dropdown", ""],
