@@ -522,7 +522,7 @@ test("tests updating test summary data", async () => {
   // expect(container).toBeDefined();
 });
 
-test.only('renders QALinearitySummaryDataTable', () => {
+test('renders QALinearitySummaryDataTable', () => {
   // Arrange
   axios.get.mockResolvedValueOnce({ status: 200, data: testSummary })
   const { container } = render(<Provider store={store}><QALinearitySummaryDataTable {...props} /></Provider>)
