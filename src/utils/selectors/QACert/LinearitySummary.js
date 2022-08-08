@@ -28,3 +28,95 @@ const formatStringToDate = (date) => {
 
   return `${parts[1]}/${parts[2]}/${parts[0]}`;
 };
+
+export const getQAColsByTestCode = (testCode) => {
+  let cols = [
+    "Test Type Code",
+    "Unit or Stack Pipe ID",
+    "Component ID",
+    "Test Number",
+    "Test Reason Code",
+    "Test Result Code",
+    "End Date",
+    "End Hour",
+    "End Minute",
+  ]
+  switch (testCode) {
+    case 'RATA':
+      cols = [
+        "Test Type Code",
+        "Unit or Stack Pipe ID",
+        "Component ID",
+        "Test Number",
+        "Test Reason Code",
+        "Test Result Code",
+        "End Date",
+        "End Hour",
+        "End Minute",
+      ]
+      break
+    default:
+  }
+  return cols
+}
+
+export const getQAModalDetailsByTestCode = (testCode) => {
+  let modalDetails = {
+    controlInputs: {
+      unitId: ["Unit or Stack Pipe ID", "input", "", ""],
+      testTypeCode: ["Test Type Code", "dropdown", "", ""],
+      monitoringSystemID: ["Monitoring System ID", "input", "", ""],
+      componentID: ["Component ID", "input", "", ""],
+      spanScaleCode: ["Span Scale Code", "dropdown", "", ""],
+      testNumber: ["Test Number", "input", "", ""],
+      testReasonCode: ["Test Reason Code", "dropdown", "", ""],
+      testResultCode: ["Test Result Code", "dropdown", "", ""],
+      gracePeriodIndicator: ["Grace Period Indicator ", "radio", "", ""],
+    },
+    extraControlInputs: {
+      testComment: ["Test Comment", "input", "", ""],
+    },
+    defaultControlDatePickerInputs: {
+      beginDate: ["Begin Date", "date", "", ""],
+      beginHour: ["Begin Hour", "hourDropdown", "dropdown", ""],
+      beginMinute: ["Begin Minute", "minuteDropdown", "dropdown", ""],
+      endDate: ["End Date", "date", "", ""],
+      endHour: ["End Hour", "hourDropdown", "dropdown", ""],
+
+      endMinute: ["End Minute", "minuteDropdown", "dropdown", ""],
+    }
+  }
+
+  switch (testCode) {
+    case 'RATA':
+      modalDetails = {
+        controlInputs: {
+          unitId: ["Unit or Stack Pipe ID", "input", "", ""],
+          testTypeCode: ["Test Type Code", "dropdown", "", ""],
+          monitoringSystemID: ["Monitoring System ID", "input", "", ""],
+          componentID: ["Component ID", "input", "", ""],
+          spanScaleCode: ["Span Scale Code", "dropdown", "", ""],
+          testNumber: ["Test Number", "input", "", ""],
+          testReasonCode: ["Test Reason Code", "dropdown", "", ""],
+          testResultCode: ["Test Result Code", "dropdown", "", ""],
+          gracePeriodIndicator: ["Grace Period Indicator ", "radio", "", ""],
+        },
+        extraControlInputs: {
+          testComment: ["Test Comment", "input", "", ""],
+        },
+        defaultControlDatePickerInputs: {
+          beginDate: ["Begin Date", "date", "", ""],
+          beginHour: ["Begin Hour", "hourDropdown", "dropdown", ""],
+          beginMinute: ["Begin Minute", "minuteDropdown", "dropdown", ""],
+          endDate: ["End Date", "date", "", ""],
+          endHour: ["End Hour", "hourDropdown", "dropdown", ""],
+
+          endMinute: ["End Minute", "minuteDropdown", "dropdown", ""],
+        }
+      }
+      break
+    default:
+  }
+
+  return modalDetails
+}
