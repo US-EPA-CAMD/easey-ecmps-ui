@@ -22,6 +22,7 @@ import {
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 import { addAriaLabelToDatatable } from "../../../additional-functions/ensure-508";
 /*********** COMPONENTS ***********/
+import QALinearityInjectionExpandableRows from "../QALinearityInjectionExpandableRows/QALinearityInjectionExpandableRows";
 
 import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
 import { Preloader } from "@us-epa-camd/easey-design-system";
@@ -41,6 +42,7 @@ const QALinearitySummaryExpandableRows = ({
   data,
 }) => {
   const { locationId, id } = data;
+  
   const [loading, setLoading] = useState(false);
   const [qaLinearitySummary, setQaLinearitySummary] = useState([]);
 
@@ -48,7 +50,8 @@ const QALinearitySummaryExpandableRows = ({
   useEffect(() => {
     if (qaLinearitySummary.length === 0 || updateTable) {
       setLoading(true);
-      getQALinearitySummary(locationId, id)
+      console.log('locationid in linearity summary',locationId,id)
+      getQALinearitySummary(locationId, id) //locID, testSumId
         .then((res) => {
           finishedLoadingData(res.data);
           setQaLinearitySummary(res.data);
@@ -295,6 +298,16 @@ const QALinearitySummaryExpandableRows = ({
           actionsBtn={"View"}
           user={user}
           evaluate={false}
+          expandableRowComp={
+            <QALinearityInjectionExpandableRows
+              user={user}
+              nonEditable={nonEditable}
+              locationSelectValue={locationSelectValue}
+              linSumId={locationId}
+              testSumId={id}
+
+            />
+          }
           noDataComp={
             user ?
             (<QADataTableRender
