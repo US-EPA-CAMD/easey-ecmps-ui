@@ -91,17 +91,17 @@ export const getQAModalDetailsByTestCode = (testCode) => {
     case 'RATA':
       modalDetails = {
         controlInputs: {
-          unitId: ["Unit or Stack Pipe ID", "input", "", ""],
           testTypeCode: ["Test Type Code", "dropdown", "", ""],
+          unitId: ["Unit or Stack Pipe ID", "input", "", ""],
           monitoringSystemID: ["Monitoring System ID", "input", "", ""],
-          componentID: ["Component ID", "skip", "", ""],
-          spanScaleCode: ["Span Scale Code", "skip", "", ""],
           testNumber: ["Test Number", "input", "", ""],
           testReasonCode: ["Test Reason Code", "dropdown", "", ""],
           testResultCode: ["Test Result Code", "dropdown", "", ""],
-          gracePeriodIndicator: ["Grace Period Indicator ", "radio", "", ""],
         },
         extraControlInputs: {
+          gracePeriodIndicator: ["Grace Period Indicator ", "radio", "", ""],
+          skip: ["Span Scale Code", "skip", "", ""],
+          skip2: ["Span Scale Code", "skip", "", ""],
           testComment: ["Test Comment", "input", "", ""],
         },
         controlDatePickerInputs: {
@@ -110,7 +110,6 @@ export const getQAModalDetailsByTestCode = (testCode) => {
           beginMinute: ["Begin Minute", "minuteDropdown", "dropdown", ""],
           endDate: ["End Date", "date", "", ""],
           endHour: ["End Hour", "hourDropdown", "dropdown", ""],
-
           endMinute: ["End Minute", "minuteDropdown", "dropdown", ""],
         }
       }
