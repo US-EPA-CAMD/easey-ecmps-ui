@@ -207,7 +207,6 @@ export const updateQALinearitySummaryTestSecondLevel = async (
     return handleImportError(error);
   }
 };
-
 export const createQATestData = async (locId, payload) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary`;
   try {
@@ -242,8 +241,7 @@ export const createQALinearitySummaryTestSecondLevel = async (
   }
 };
 
-
-export const getQALinearityInjection = async (locID, testSumId,linSumId) => {
+export const getQALinearityInjection = async (locID, testSumId, linSumId) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
@@ -257,7 +255,12 @@ export const getQALinearityInjection = async (locID, testSumId,linSumId) => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const editQALinearityInjection = async (locID, testSumId,linSumId,id) => {
+export const editQALinearityInjection = async (
+  locID,
+  testSumId,
+  linSumId,
+  id
+) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
