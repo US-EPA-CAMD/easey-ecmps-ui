@@ -30,7 +30,7 @@ import { extractUserInput } from "../../../additional-functions/extract-user-inp
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
-import QALinearitySummaryDataRows from "./QALinearitySummaryDataRows.js";
+import QALinearitySummaryDataRows from "./LinearitySummaryDataRows.js";
 // contains test summary data table
 
 const QALinearitySummaryExpandableRows = ({
