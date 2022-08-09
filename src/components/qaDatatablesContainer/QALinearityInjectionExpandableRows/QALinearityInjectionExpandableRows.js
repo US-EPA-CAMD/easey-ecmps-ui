@@ -50,7 +50,6 @@ const QALinearityInjectionExpandableRows = ({
   useEffect(() => {
     if (qaLinearityInjection.length === 0 || updateTable) {
       setLoading(true);
-console.log('(locationId, testSumId, id',linSumId, testSumId, id)
       getQALinearityInjection(linSumId, testSumId, id)
       
         .then((res) => {
@@ -163,7 +162,6 @@ console.log('(locationId, testSumId, id',linSumId, testSumId, id)
     if (create) {
       controlInputs.gasLevelCode = ["Gas Level Code", "dropdown", "", ""];
     }
-    console.log("datapulled", dataPulled, row);
     if (dataPulled.length > 0 && !create) {
       selectedData = dataPulled.filter(
         (element) => element.id === row[`id`]
@@ -243,7 +241,6 @@ console.log('(locationId, testSumId, id',linSumId, testSumId, id)
       userInput
     )
       .then((res) => {
-        console.log('res',res)
         setUpdateTable(true);
         executeOnClose();
       })

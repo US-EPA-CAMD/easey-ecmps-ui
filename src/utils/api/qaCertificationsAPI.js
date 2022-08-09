@@ -248,7 +248,6 @@ export const getQALinearityInjection = async (locID, testSumId, linSumId) => {
   if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;
   }
-console.log('locid',locID)
   // *** attach the rest of the url
   url = `${url}/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections`;
 
