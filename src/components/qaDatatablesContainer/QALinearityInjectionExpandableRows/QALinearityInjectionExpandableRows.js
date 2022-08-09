@@ -50,8 +50,9 @@ const QALinearityInjectionExpandableRows = ({
   useEffect(() => {
     if (qaLinearityInjection.length === 0 || updateTable) {
       setLoading(true);
-
-      getQALinearityInjection(locationId, testSumId, id)
+console.log('(locationId, testSumId, id',linSumId, testSumId, id)
+      getQALinearityInjection(linSumId, testSumId, id)
+      
         .then((res) => {
           console.log("res.data", res.data);
           finishedLoadingData(res.data);
@@ -235,13 +236,14 @@ const QALinearityInjectionExpandableRows = ({
     const userInput = extractUserInput(payload, ".modalUserInput");
 
     editQALinearityInjection(
-      locationId,
+      linSumId,
       testSumId,
       id, // linsumid
       selectedRow.id,
       userInput
     )
       .then((res) => {
+        console.log('res',res)
         setUpdateTable(true);
         executeOnClose();
       })

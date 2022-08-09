@@ -248,7 +248,7 @@ export const getQALinearityInjection = async (locID, testSumId, linSumId) => {
   if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;
   }
-
+console.log('locid',locID)
   // *** attach the rest of the url
   url = `${url}/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections`;
 
@@ -259,7 +259,8 @@ export const editQALinearityInjection = async (
   locID,
   testSumId,
   linSumId,
-  id
+  id,
+  payload
 ) => {
   let url = `${config.services.qaCertification.uri}`;
 
@@ -270,6 +271,15 @@ export const editQALinearityInjection = async (
 
   // *** attach the rest of the url
   url = `${url}/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections/${id}`;
-
-  return axios.get(url).then(handleResponse).catch(handleError);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
 };
