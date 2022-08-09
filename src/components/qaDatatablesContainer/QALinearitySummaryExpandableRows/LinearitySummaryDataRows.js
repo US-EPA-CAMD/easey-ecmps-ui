@@ -32,7 +32,7 @@ import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 // contains test summary data table
 
-const QALinearitySummaryDataRows = ({
+const LinearitySummaryDataRows = ({
   user,
   nonEditable,
   mdmData,
@@ -152,7 +152,7 @@ const QALinearitySummaryDataRows = ({
   const openModal = (row, bool, create) => {
     let selectedData = null;
     setCreateNewData(create);
-    if(create){
+    if (create) {
       controlInputs.gasLevelCode = ["Gas Level Code", "dropdown", "", ""];
     }
     if (dataPulled.length > 0 && !create) {
@@ -251,15 +251,15 @@ const QALinearitySummaryDataRows = ({
       percentError: 0,
       apsIndicator: 0,
     };
-    const userInput = extractUserInput( uiControls, ".modalUserInput");
+    const userInput = extractUserInput(uiControls, ".modalUserInput");
     createQALinearitySummaryTestSecondLevel(locationId, data.id, userInput)
       .then((res) => {
         console.log("res", res);
         if (Object.prototype.toString.call(res) === "[object Array]") {
           alert(res[0]);
         } else {
-        setUpdateTable(true);
-        executeOnClose();
+          setUpdateTable(true);
+          executeOnClose();
         }
       })
       .catch((error) => {
@@ -278,48 +278,48 @@ const QALinearitySummaryDataRows = ({
           onRemoveHandler={onRemoveHandler}
           actionColumnName={
             user ?
-            <>
-              <span className="padding-right-2">
-                Linearity Summary Data
-              </span>
+              <>
+                <span className="padding-right-2">
+                  Linearity Summary Data
+                </span>
                 <Button
-                  epa-testid="btnOpen" 
-                  className="text-white" 
-                  onClick={()=> openModal(false, false, true)}
+                  epa-testid="btnOpen"
+                  className="text-white"
+                  onClick={() => openModal(false, false, true)}
                 >
                   Add
                 </Button>
-            </>
-            : "Linearity Summary Data"
+              </>
+              : "Linearity Summary Data"
           }
           actionsBtn={"View"}
           user={user}
           evaluate={false}
           noDataComp={
             user ?
-            (<QADataTableRender
-              columnNames={columns}
-              columnWidth={15}
-              data={[]}
-              actionColumnName={
-                user ? (
-                  <>
-                    <span className="padding-right-2">Test Data</span>
-                    <Button
-                      epa-testid="btnOpen"
-                      className="text-white"
-                      onClick={() => openModal(false, false, true)}
-                    >
-                      Add
-                    </Button>
-                  </>
-                ) : (
-                  "Test Data"
-                )
-              }
-              actionsBtn={"View"}
-              user={user}
-            />) : "There're no records available."
+              (<QADataTableRender
+                columnNames={columns}
+                columnWidth={15}
+                data={[]}
+                actionColumnName={
+                  user ? (
+                    <>
+                      <span className="padding-right-2">Test Data</span>
+                      <Button
+                        epa-testid="btnOpen"
+                        className="text-white"
+                        onClick={() => openModal(false, false, true)}
+                      >
+                        Add
+                      </Button>
+                    </>
+                  ) : (
+                    "Test Data"
+                  )
+                }
+                actionsBtn={"View"}
+                user={user}
+              />) : "There're no records available."
           }
         />
       ) : (
@@ -338,8 +338,8 @@ const QALinearitySummaryDataRows = ({
             createNewData
               ? `Add  ${dataTableName}`
               : user
-              ? ` Edit ${dataTableName}`
-              : ` ${dataTableName}`
+                ? ` Edit ${dataTableName}`
+                : ` ${dataTableName}`
           }
           exitBTN={createNewData ? `Create ${dataTableName}` : `Save and Close`}
           children={
@@ -353,9 +353,9 @@ const QALinearitySummaryDataRows = ({
                   title={`${dataTableName}`}
                   viewOnly={!user || nonEditable}
                   create={createNewData}
-                  // setMainDropdownChange={setMainDropdownChange}
-                  //mainDropdownChange={mainDropdownChange}
-                  // onEditUpdateHandler={onEditUpdateHandler}
+                // setMainDropdownChange={setMainDropdownChange}
+                //mainDropdownChange={mainDropdownChange}
+                // onEditUpdateHandler={onEditUpdateHandler}
                 />
               </div>
             ) : (
@@ -386,6 +386,6 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(QALinearitySummaryDataRows);
+)(LinearitySummaryDataRows);
 export { mapDispatchToProps };
 export { mapStateToProps };
