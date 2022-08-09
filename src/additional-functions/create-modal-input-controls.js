@@ -228,6 +228,7 @@ export const modalViewData = (
       if (
         (y === "endDate" ||
           y === "beginDate" ||
+          y=== "injectionDate" ||
           y === "loadAnalysisDate" ||
           y === "wafEndDate" ||
           y === "wafBeginDate" ||
@@ -293,7 +294,7 @@ export const modalViewData = (
         continue;
       }
       // dropdown time selection
-      if (y === "endHour" || y === "beginHour") {
+      if (y === "endHour" || y === "beginHour" || y === "injectionHour") {
         arr.push([
           y,
           time[y][0],
@@ -303,7 +304,7 @@ export const modalViewData = (
           createNew ? "" : selected ? selected[y] : "",
         ]);
       }
-      if (y === "endMinute" || y === "beginMinute") {
+      if (y === "endMinute" || y === "beginMinute" || y==="injectionMinute") {
         arr.push([
           y,
           time[y][0],

@@ -1,52 +1,78 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { connect } from "react-redux";
 import {
-  getQATestSummary,
-  updateQALinearityTestSummary,
-  deleteQATestSummary,
-  createQATestData,
+  deleteQALinearitySummary,
+  getQALinearityInjection,
+  updateQALinearitySummaryTestSecondLevel,
+  createQALinearitySummaryTestSecondLevel,
 } from "../../../utils/api/qaCertificationsAPI.js";
-import { getTestSummary } from "../../../utils/selectors/QACert/TestSummary.js";
-import QALinearitySummaryExpandableRows from "../QALinearitySummaryExpandableRows/QALinearitySummaryExpandableRows";
-
-import Modal from "../../Modal/Modal";
-import ModalDetails from "../../ModalDetails/ModalDetails";
-import { extractUserInput } from "../../../additional-functions/extract-user-input";
-import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-
+import { loadDropdowns } from "../../../store/actions/dropdowns";
+import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
+import { getLinearityInjection } from "../../../utils/selectors/QACert/LinearityInjection";
+import {
+  assignFocusEventListeners,
+  cleanupFocusEventListeners,
+  returnFocusToLast,
+} from "../../../additional-functions/manage-focus";
+import { Button } from "@trussworks/react-uswds";
 import {
   attachChangeEventListeners,
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
-
-import { loadDropdowns } from "../../../store/actions/dropdowns";
-import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
-
 import { addAriaLabelToDatatable } from "../../../additional-functions/ensure-508";
-
 /*********** COMPONENTS ***********/
 
 import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
-import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 
+import { extractUserInput } from "../../../additional-functions/extract-user-input";
+import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
+import Modal from "../../Modal/Modal";
+import ModalDetails from "../../ModalDetails/ModalDetails";
 // contains test summary data table
 
-const QALinearitySummaryDataTable = ({
+const QALinearityInjectionExpandableRows = ({
+  user,
+  nonEditable,
   mdmData,
   loadDropdownsData,
   locationSelectValue,
-  user,
-  nonEditable = false,
-  showModal = false,
-  selectedTestCode,
+  linSumId,
+  testSumId,
+  data,
 }) => {
+  const { locationId, id } = data;
   const [loading, setLoading] = useState(false);
+  const [qaLinearityInjection, setQaLinearityInjection] = useState([]);
 
-  const [qaTestSummary, setQATestSummary] = useState([]);
+  const [updateTable, setUpdateTable] = useState(false);
+  useEffect(() => {
+    if (qaLinearityInjection.length === 0 || updateTable) {
+      setLoading(true);
+
+      getQALinearityInjection(locationId,testSumId, id)
+        .then((res) => {
+          console.log("res.data", res.data);
+          finishedLoadingData(res.data);
+          setQaLinearityInjection(res.data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+      setUpdateTable(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, updateTable]);
+
+  const data1 = useMemo(() => {
+    return getLinearityInjection(qaLinearityInjection);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [qaLinearityInjection]);
+  const [qaLinearityTest, setLinearityTest] = useState([]);
   const [dataPulled, setDataPulled] = useState([]);
-  const [show, setShow] = useState(showModal);
+  const [show, setShow] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -57,67 +83,39 @@ const QALinearitySummaryDataTable = ({
   const [createNewData, setCreateNewData] = useState(false);
   const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
 
-  const [updateTable, setUpdateTable] = useState(false);
   const [complimentaryData, setComplimentaryData] = useState([]);
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
-  const dropdownArray = [
-    ["spanScaleCode", "testTypeCode", "testReasonCode", "testResultCode"],
-  ];
+  const dropdownArray = [["gasLevelCode"]];
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
-  const dataTableName = "Test Summary Data";
-  const controlInputs = {
-    unitId: ["Unit or Stack Pipe ID", "input", "", ""],
-    testTypeCode: ["Test Type Code", "dropdown", "", ""],
-    skip: ["", "skip", "", ""],
-    componentID: ["Component ID", "input", "", ""],
-    spanScaleCode: ["Span Scale Code", "dropdown", "", ""],
-    testNumber: ["Test Number", "input", "", ""],
-    testReasonCode: ["Test Reason Code", "dropdown", "", ""],
-    testResultCode: ["Test Result Code", "dropdown", "", ""],
-    gracePeriodIndicator: ["Grace Period Indicator ", "radio", "", ""],
-  };
+  const columns = [
+    "Injection Date",
+    "Injection Hour",
+    "Injection Minute",
+    "Measured Value",
+    "Reference Value",
+  ];
 
-  // goes after dateinput in modals
-  const extraControlInputs = {
-    testComment: ["Test Comment", "input", "", ""],
-  };
-  const controlDatePickerInputs = {
-    beginDate: ["Begin Date", "date", "", ""],
-    beginHour: ["Begin Hour", "hourDropdown", "dropdown", ""],
-    beginMinute: ["Begin Minute", "minuteDropdown", "dropdown", ""],
-    endDate: ["End Date", "date", "", ""],
-    endHour: ["End Hour", "hourDropdown", "dropdown", ""],
-
-    endMinute: ["End Minute", "minuteDropdown", "dropdown", ""],
-  };
-
-  //**** */
-  useEffect(() => {
-    if (updateTable || qaTestSummary.length <= 0 || locationSelectValue) {
-      setLoading(true);
-      
-      if (selectedTestCode !== "" && selectedTestCode.length !== 0) {
-        getQATestSummary(locationSelectValue, selectedTestCode).then((res) => {
-          if (res !== undefined && res.data.length > 0) {
-            finishedLoadingData(res.data);
-            setQATestSummary(res.data);
-          } else {
-            finishedLoadingData([]);
-            setQATestSummary([]);
-          }
-          setLoading(false);
-        });
-        setUpdateTable(false);
-      }
+  const onRemoveHandler = async (row) => {
+    const { id: idToRemove, testSumId } = row;
+    const resp = await deleteQALinearitySummary(
+      locationId,
+      testSumId,
+      idToRemove
+    );
+    if (resp.status === 200) {
+      const dataPostRemove = qaLinearityInjection.filter(
+        (rowData) => rowData.id !== idToRemove
+      );
+      setQaLinearityInjection(dataPostRemove);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, updateTable, selectedTestCode]);
-
+  };
+  const dataTableName = "Linearity Test";
+  const controlInputs = {};
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
     if (mdmData && mdmData.length === 0) {
@@ -125,26 +123,33 @@ const QALinearitySummaryDataTable = ({
     } else {
       setDropdownsLoaded(true);
     }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
 
-  const data = useMemo(() => {
-    return getTestSummary(qaTestSummary);
+  const controlDatePickerInputs = {
+    injectionDate: ["Injection Date", "date", "", ""],
+    injectionHour: ["Injection Hour", "hourDropdown", "dropdown", ""],
+    injectionMinute: ["Injection Minute", "minuteDropdown", "dropdown", ""],
+  };
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [qaTestSummary]);
-  const columns = [
-    "Test Type Code",
-    "Unit or Stack Pipe ID",
-    "Component ID",
-    "Test Number",
-    "Test Reason Code",
-    "Test Result Code",
-    "End Date",
-    "End Hour",
-    "End Minute",
-  ];
-
+  const extraControlInputs = {
+    measuredValue: ["Measured Value", "input", "", ""],
+    referenceValue: ["Reference Value", "input", "", ""],
+    skip: ["", "skip", "", ""],
+  };
+  const closeModalHandler = () => {
+    if (window.isDataChanged === true) {
+      if (window.confirm(unsavedDataMessage) === true) {
+        executeOnClose();
+      }
+    } else {
+      executeOnClose();
+    }
+  };
+  const executeOnClose = () => {
+    setReturnedFocusToLast(false);
+    setShow(false);
+    removeChangeEventListeners(".modalUserInput");
+  };
   const finishedLoadingData = (loadedData) => {
     setDataPulled(loadedData);
     setDataLoaded(true);
@@ -154,7 +159,12 @@ const QALinearitySummaryDataTable = ({
   const openModal = (row, bool, create) => {
     let selectedData = null;
     setCreateNewData(create);
+    if (create) {
+      controlInputs.gasLevelCode = ["Gas Level Code", "dropdown", "", ""];
+    }
+    console.log('datapulled',dataPulled,row)
     if (dataPulled.length > 0 && !create) {
+
       selectedData = dataPulled.filter(
         (element) => element.id === row[`id`]
       )[0];
@@ -196,7 +206,7 @@ const QALinearitySummaryDataTable = ({
     setSelectedModalData(
       modalViewData(
         selectedData,
-        controlInputs,
+        false,
         controlDatePickerInputs,
         create,
         mdmData,
@@ -205,7 +215,7 @@ const QALinearitySummaryDataTable = ({
         mainDropdownResult,
         hasMainDropdown,
         prefilteredTotalName,
-        extraControlInputs
+        extraControlInputs //  extra controls
       )
     );
 
@@ -215,80 +225,45 @@ const QALinearitySummaryDataTable = ({
     });
   };
 
-  const closeModalHandler = () => {
-    if (window.isDataChanged === true) {
-      if (window.confirm(unsavedDataMessage) === true) {
-        executeOnClose();
-      }
-    } else {
-      executeOnClose();
-    }
-  };
-
-  const executeOnClose = () => {
-    setReturnedFocusToLast(false);
-    setShow(false);
-    removeChangeEventListeners(".modalUserInput");
-  };
-
-  const onRemoveHandler = async (row) => {
-    const { id, locationId } = row;
-    const resp = await deleteQATestSummary(locationId, id);
-    if (resp.status === 200) {
-      const dataPostRemove = qaTestSummary.filter(
-        (rowData) => rowData.id !== id
-      );
-      setQATestSummary(dataPostRemove);
-    }
-  };
-
-  const uiControls = {
-    stackPipeId: null,
-    unitId: null,
-    testTypeCode: null,
-    componentID: null,
-    spanScaleCode: null,
-    testNumber: null,
-    testReasonCode: null,
-    testResultCode: null,
-    beginDate: null,
-    beginHour: null,
-    beginMinute: null,
-    endDate: null,
-    endHour: null,
-    endMinute: null,
-    gracePeriodIndicator: null,
-    testComment: null,
-    injectionProtocolCode: null,
-  };
-
   const saveData = () => {
-    const userInput = extractUserInput(uiControls, ".modalUserInput", [
-      "gracePeriodIndicator",
+    const payload = {
+      gasLevelCode: selectedRow.gasLevelCode,
+      meanMeasuredValue: 0,
+      meanReferenceValue: 0,
+      percentError: 0,
+      apsIndicator: 0,
+    };
+    const userInput = extractUserInput(payload, ".modalUserInput", [
+      "apsIndicator",
     ]);
-    updateQALinearityTestSummary(locationSelectValue, userInput.id, userInput)
+
+    updateQALinearitySummaryTestSecondLevel(
+      locationId,
+      selectedRow.testSumId,
+      selectedRow.id,
+      userInput
+    )
       .then((res) => {
-        if (Object.prototype.toString.call(res) === "[object Array]") {
-          alert(res[0]);
-        } else {
-          setUpdateTable(true);
-          executeOnClose();
-        }
+        setUpdateTable(true);
+        executeOnClose();
       })
       .catch((error) => {
-        console.error("error", error);
+        console.log(error);
       });
   };
 
   const createData = () => {
-    const userInput = extractUserInput(uiControls, ".modalUserInput", [
-      "gracePeriodIndicator",
-    ]);
-    userInput.unitId
-      ? (userInput.unitId = String(userInput.unitId))
-      : (userInput.stackPipeId = String(userInput.stackPipeId));
-    createQATestData(locationSelectValue, userInput)
+    const payload = {
+      gasLevelCode: selectedRow.gasLevelCode,
+      meanMeasuredValue: 0,
+      meanReferenceValue: 0,
+      percentError: 0,
+      apsIndicator: 0,
+    };
+    const userInput = extractUserInput(payload, ".modalUserInput");
+    createQALinearitySummaryTestSecondLevel(locationId, data.id, userInput)
       .then((res) => {
+        console.log("res", res);
         if (Object.prototype.toString.call(res) === "[object Array]") {
           alert(res[0]);
         } else {
@@ -297,27 +272,23 @@ const QALinearitySummaryDataTable = ({
         }
       })
       .catch((error) => {
-        console.error("error", error);
+        console.log("error", error);
       });
   };
-
   return (
-    <div>
+    <div className="padding-3">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
-      <div className=" padding-3">
-        <h3 className="display-inline padding-right-3">Test Summary Data</h3>
-      </div>
       {!loading ? (
         <QADataTableRender
           columnNames={columns}
-          columnWidth={10}
-          data={data}
+          columnWidth={15}
+          data={data1}
           openHandler={openModal}
           onRemoveHandler={onRemoveHandler}
           actionColumnName={
             user ? (
               <>
-                <span className="padding-right-2">Test Data</span>
+                <span className="padding-right-2">Linearity Summary Data</span>
                 <Button
                   epa-testid="btnOpen"
                   className="text-white"
@@ -327,27 +298,20 @@ const QALinearitySummaryDataTable = ({
                 </Button>
               </>
             ) : (
-              "Test Data"
+              "Linearity Injection Data"
             )
           }
           actionsBtn={"View"}
           user={user}
-          expandableRowComp={
-            <QALinearitySummaryExpandableRows
-              user={user}
-              nonEditable={nonEditable}
-              locationSelectValue={locationSelectValue}
-            />
-          }
-          evaluate={true}
+          evaluate={false}
           noDataComp={
-            user ?
-              (<QADataTableRender
+            user ? (
+              <QADataTableRender
                 columnNames={columns}
-                columnWidth={10}
+                columnWidth={15}
                 data={[]}
                 actionColumnName={
-                  (
+                  user ? (
                     <>
                       <span className="padding-right-2">Test Data</span>
                       <Button
@@ -358,16 +322,22 @@ const QALinearitySummaryDataTable = ({
                         Add
                       </Button>
                     </>
+                  ) : (
+                    "Test Data"
                   )
                 }
                 actionsBtn={"View"}
                 user={user}
-              />) : "There're no records available."
+              />
+            ) : (
+              "There're no records available."
+            )
           }
         />
       ) : (
         <Preloader />
       )}
+
       {show ? (
         <Modal
           show={show}
@@ -376,8 +346,14 @@ const QALinearitySummaryDataTable = ({
           showCancel={!user || nonEditable}
           showSave={user && !nonEditable}
           nonEditable={nonEditable}
-          title={createNewData ? `Add ${dataTableName}` : `${dataTableName}`}
-          exitBTN={`Save and Close`}
+          title={
+            createNewData
+              ? `Add  ${dataTableName}`
+              : user
+              ? ` Edit ${dataTableName}`
+              : ` ${dataTableName}`
+          }
+          exitBTN={createNewData ? `Create ${dataTableName}` : `Save and Close`}
           children={
             dropdownsLoaded ? (
               <div>
@@ -391,6 +367,7 @@ const QALinearitySummaryDataTable = ({
                   create={createNewData}
                   // setMainDropdownChange={setMainDropdownChange}
                   //mainDropdownChange={mainDropdownChange}
+                  // onEditUpdateHandler={onEditUpdateHandler}
                 />
               </div>
             ) : (
@@ -402,9 +379,8 @@ const QALinearitySummaryDataTable = ({
     </div>
   );
 };
-
 const mapStateToProps = (state, ownProps) => {
-  const dataTableName = "Test Summary Data";
+  const dataTableName = "Linearity Test";
   return {
     mdmData: state.dropdowns[convertSectionToStoreName(dataTableName)],
   };
@@ -422,6 +398,6 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(QALinearitySummaryDataTable);
+)(QALinearityInjectionExpandableRows);
 export { mapDispatchToProps };
 export { mapStateToProps };
