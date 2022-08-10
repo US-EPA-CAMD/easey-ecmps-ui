@@ -282,3 +282,36 @@ export const editQALinearityInjection = async (
     return handleImportError(error);
   }
 };
+
+export const getProtocolGas = async (locID, testSumId) => {
+  let url = `${config.services.qaCertification.uri}`;
+
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+
+  // *** attach the rest of the url
+  url = `${url}/locations/${locID}/test-summary/${testSumId}/protocol-gases`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createProtocolGas = async (
+  locId,
+  testSumId,
+  payload
+) => {console.log("payload",payload);
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/protocol-gases`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};

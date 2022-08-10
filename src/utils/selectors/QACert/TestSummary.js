@@ -58,3 +58,19 @@ export const getEmptyRows = (columns) =>{
   });
   return [obj];
 }
+
+export const getProtocolGasRecords = (data) =>{
+  const records = [];
+  data.forEach((el) => {
+    records.push({
+      id: el.id,
+      testSumId: el.testSumId,
+      col1: el.gasLevelCode,
+      col2: el.gasTypeCode,
+      col3: el.vendorID,
+      col4: el.cylinderID,
+      col5: el.expirationDate ? formatStringToDate(el.expirationDate) :  ""
+    });
+  });
+  return records;
+}
