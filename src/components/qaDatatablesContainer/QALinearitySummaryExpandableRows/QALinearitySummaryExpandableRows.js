@@ -1,4 +1,6 @@
+/* istanbul ignore file */
 import React from "react";
+
 import LinearitySummaryDataRows from "./LinearitySummaryDataRows.js";
 import ProtocolGasDataRows from "./ProtocolGasDataRows.js";
 
@@ -18,6 +20,9 @@ const QALinearitySummaryExpandableRows = ({
         data={data}
       />
       <ProtocolGasDataRows
+        user={user}
+        nonEditable={nonEditable}
+        locationSelectValue={locationSelectValue}
         data={data}
       />
     </>

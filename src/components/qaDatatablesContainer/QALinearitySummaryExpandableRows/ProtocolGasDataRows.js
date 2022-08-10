@@ -39,7 +39,6 @@ const ProtocolGasDataRows = ({
   user,
   data
 }) => {
-
   const { locationId, id } = data;
 
   const [protocolGasData, setProtocolGasData] = useState()
