@@ -11,7 +11,6 @@ const QALinearitySummaryExpandableRows = ({
 
   return (
     <>
-      <h1>qa lineary summary data rows</h1>
       <LinearitySummaryDataRows
         user={user}
         nonEditable={nonEditable}
