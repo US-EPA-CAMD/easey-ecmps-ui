@@ -5,6 +5,7 @@ import { Button } from "@trussworks/react-uswds";
 import { getQAProtocolGas } from "../../../utils/api/qaCertificationsAPI";
 import QADataTableRender from "../../QADataTableRender/QADataTableRender";
 import { Preloader } from "@us-epa-camd/easey-design-system";
+import { mapProtocolGasDataToRows } from "../../../utils/selectors/QACert/ProtocolGas";
 
 const tableLabel = 'Protocol Gas'
 
@@ -74,21 +75,3 @@ const ProtocolGasDataRows = ({
 }
 
 export default ProtocolGasDataRows
-
-const mapProtocolGasDataToRows = (data = []) => {
-  const records = [];
-  for (const cur of data) {
-    const row = {
-      id: cur.id,
-      col1: cur.gasLevelCode,
-      col2: cur.gasTypeCode,
-      col3: cur.cylinderID,
-      col4: cur.vendorID,
-      col5: cur.expirationDate
-    }
-    records.push(row)
-  }
-  // sort rows alphabetically by col1 (gas level code)
-  records.sort((row1, row2) => row1.col1.localeCompare(row2.col1))
-  return records;
-}
