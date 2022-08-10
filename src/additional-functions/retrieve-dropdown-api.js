@@ -704,11 +704,22 @@ export const UseRetrieveDropdownApi = async (
 
         case "gasLevelCode":
           await dmApi.getAllGasLevelCodes().then((response) => {
-            console.log('checking api', response)
             options = response.data.map((option) => {
               return {
                 code: option["gasLevelCode"],
                 name: option["gasLevelDescription"],
+              };
+            });
+  
+            setDefaultOptions(options, fieldName);
+          });
+          break;
+        case "gasTypeCode":
+          await dmApi.getAllGasTypeCodes().then((response) => {
+            options = response.data.map((option) => {
+              return {
+                code: option["gasTypeCode"],
+                name: option["gasTypeDescription"],
               };
             });
   
