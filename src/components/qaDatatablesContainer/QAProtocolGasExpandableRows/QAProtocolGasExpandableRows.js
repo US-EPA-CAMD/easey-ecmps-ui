@@ -93,8 +93,8 @@ const QAProtocolGasExpandableRows = ({
   const controlInputs = {
     gasLevelCode: ["Summary Type/Gas Level Code", "input", "", "locked"],
     gasTypeCode: ["Gas Type Code", "dropdown", "", ""],
-    cylinderId: ["Cylinder ID", "input", "", ""],
-    vendorId: ["Vendor ID", "input", "", ""],
+    cylinderID: ["Cylinder ID", "input", "", ""],
+    vendorID: ["Vendor ID", "input", "", ""],
     expirationDate: ["Expiration Date", "date", "", ""],
     skip: ["", "skip", "", ""],
     
@@ -200,8 +200,8 @@ const QAProtocolGasExpandableRows = ({
     const uiControls = {
       gasLevelCode: null,
       gasTypeCode: null,
-      cylinderId: 0,
-      vendorId: 0,
+      cylinderID: null,
+      vendorID: null,
       expirationDate: null,
     };
     const userInput = extractUserInput( uiControls, ".modalUserInput"); 
