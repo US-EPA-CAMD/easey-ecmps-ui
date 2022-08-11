@@ -283,6 +283,45 @@ export const editQALinearityInjection = async (
   }
 };
 
+export const createQALinearityInjection = async (
+  locID,
+  testSumId,
+  linSumId,
+  payload
+) => {
+  url = `${url}/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections/`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const deleteQALinearityInjection = async (
+  locID,
+  testSumId,
+  linSumId,
+  id
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
 export const getProtocolGas = async (locID, testSumId) => {
   let url = `${config.services.qaCertification.uri}`;
 
@@ -297,11 +336,8 @@ export const getProtocolGas = async (locID, testSumId) => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const createProtocolGas = async (
-  locId,
-  testSumId,
-  payload
-) => {console.log("payload",payload);
+export const createProtocolGas = async (locId, testSumId, payload) => {
+  console.log("payload", payload);
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/protocol-gases`;
   try {
     return handleResponse(
