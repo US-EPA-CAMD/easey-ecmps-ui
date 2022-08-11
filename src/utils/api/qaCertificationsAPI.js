@@ -289,7 +289,10 @@ export const createQALinearityInjection = async (
   linSumId,
   payload
 ) => {
-  const url = `${url}/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections/`;
+  let url = `${config.services.qaCertification.uri}`;
+   url = `${url}/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections/`;
+   delete payload["id"];
+   console.log('paylod',payload)
   try {
     return handleResponse(
       await secureAxios({

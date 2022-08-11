@@ -252,11 +252,11 @@ const QALinearityInjectionExpandableRows = ({
 
   const createData = () => {
     const payload = {
-      gasLevelCode: selectedRow.gasLevelCode,
-      meanMeasuredValue: 0,
-      meanReferenceValue: 0,
-      percentError: 0,
-      apsIndicator: 0,
+      injectionDate: "",
+      injectionHour: 0,
+      injectionMinute: 0,
+      measuredValue: 0,
+      referenceValue: 0,
     };
     const userInput = extractUserInput(payload, ".modalUserInput");
     createQALinearityInjection(
