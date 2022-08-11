@@ -31,31 +31,133 @@ const formatStringToDate = (date) => {
 
 export const getQAColsByTestCode = (testCode) => {
   let cols = [
-    "Test Type Code",
-    "Unit or Stack Pipe ID",
-    "Component ID",
-    "Test Number",
-    "Test Reason Code",
-    "Test Result Code",
-    "End Date",
-    "End Hour",
-    "End Minute",
+    'Test Type Code',
+    'Unit or Stack Pipe ID',
+    'Component ID',
+    'Test Number',
+    'Test Reason Code',
+    'Test Result Code',
+    'End Date',
+    'End Hour',
+    'End Minute',
   ]
   switch (testCode) {
-    case 'RATA':
+    case 'APPESUM': // Appendix E Correlation Test Summary
       cols = [
-        "Test Type Code",
-        "Unit or Stack Pipe ID",
-        "Component ID",
-        "Test Number",
-        "Test Reason Code",
-        "Test Result Code",
-        "End Date",
-        "End Hour",
-        "End Minute",
+        'Test Type Code',
+        'Unit or Stack Pipe ID',
+        'Monitoring System ID',
+        'Test Number',
+        'Test Reason Code',
+        'End Date',
+        'End Hour',
+        'End Minute',
+      ]
+      break
+    case 'CALINJ': // Calibration Injection
+    case 'CYCSUM': // Cycle Time Summary
+    case 'FFACC': // Fuel Flowmeter Accuracy
+    case 'HGL3LS': // Hg Linearity and 3-Level Summary
+    case 'PEI': // Primary Element Inspection
+    case 'TTACC': // Transmitter Transducer Accuracy
+      cols = [
+        'Test Type Code',
+        'Unit or Stack Pipe ID',
+        'Component ID',
+        'Test Number',
+        'Test Reason Code',
+        'Test Result Code',
+        'End Date',
+        'End Hour',
+        'End Minute',
+      ]
+      break
+    case 'FLC': // Flow to Load Check
+    case 'FFL': // Fuel Flow to Load
+      cols = [
+        'Test Type Code',
+        'Unit or Stack Pipe ID',
+        'Monitoring System ID',
+        'Test Number',
+        'Test Reason Code',
+        'Test Result Code',
+        'Year',
+        'Quarter',
+      ]
+      break
+    case 'FLR': // Flow to Load Reference
+      cols = [
+        'Test Type Code',
+        'Unit or Stack Pipe ID',
+        'Monitoring System ID',
+        'Test Number',
+        'End Date',
+        'End Hour',
+        'End Minute',
+      ]
+      break
+    case 'FFLB': // Fuel Flow to Load Baseline
+      cols = [
+        'Test Type Code',
+        'Unit or Stack Pipe ID',
+        'Monitoring System ID',
+        'Test Number',
+        'End Date',
+        'End Hour',
+      ]
+      break
+    case 'OLOLCAL': // Online Offline Calibration
+      cols = [
+        'Test Type Code',
+        'Unit or Stack Pipe ID',
+        'Component ID',
+        'Test Number',
+        'Test Reason Code',
+        'Test Result Code',
+        'End Date',
+        'End Hour',
+      ]
+      break
+    case 'RELACC': // Relative Accuracy
+      cols = [
+        'Test Type Code',
+        'Unit or Stack Pipe ID',
+        'Monitoring System ID',
+        'Test Number',
+        'Test Reason Code',
+        'Test Result Code',
+        'End Date',
+        'End Hour',
+        'End Minute',
+      ]
+      break
+    case 'LME': // Unit Default
+      cols = [
+        'Test Type Code',
+        'Unit or Stack Pipe ID',
+        'Test Number',
+        'Test Reason Code',
+        'End Date',
+        'End Hour',
+        'End Minute',
+      ]
+      break
+    case 'MISC': // Miscellaneous
+      cols = [
+        'Test Type Code',
+        'Unit or Stack Pipe ID',
+        'Monitoring System ID',
+        'Component ID',
+        'Test Number',
+        'Test Reason Code',
+        'Test Result Code',
+        'End Date',
+        'End Hour',
+        'End Minute',
       ]
       break
     default:
+      console.log(`getQAColsByTestCode default case w/ testCode: ${testCode}`);
   }
   return cols
 }
@@ -115,6 +217,7 @@ export const getQAModalDetailsByTestCode = (testCode) => {
       }
       break
     default:
+      console.log(`getQAModalDetailsByTestCode default case w/ testCode: ${testCode}`);
   }
 
   return modalDetails
