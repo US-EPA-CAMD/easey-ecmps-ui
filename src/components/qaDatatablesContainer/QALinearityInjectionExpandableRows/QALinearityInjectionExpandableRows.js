@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { connect } from "react-redux";
 import {
-  deleteQALinearitySummary,
+  deleteQALinearityInjection,
   getQALinearityInjection,
   editQALinearityInjection,
   createQALinearityInjection,
@@ -103,7 +103,6 @@ const QALinearityInjectionExpandableRows = ({
     const { id: idToRemove } = row;
     const resp = await deleteQALinearityInjection(
       locationId,
-
       testSumId,
       linSumId,
       idToRemove
