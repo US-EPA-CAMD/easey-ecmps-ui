@@ -290,7 +290,7 @@ export const createQALinearityInjection = async (
   payload
 ) => {
   let url = `${config.services.qaCertification.uri}`;
-   url = `${url}/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections/`;
+   url = `${url}/workspace/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections/`;
    delete payload["id"];
    console.log('paylod',payload)
   try {
