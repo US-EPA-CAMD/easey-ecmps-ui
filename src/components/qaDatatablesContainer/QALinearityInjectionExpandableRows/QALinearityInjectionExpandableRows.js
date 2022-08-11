@@ -1,10 +1,10 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { connect } from "react-redux";
 import {
-  deleteQALinearitySummary,
+  deleteQALinearityInjection,
   getQALinearityInjection,
   editQALinearityInjection,
-  createQALinearitySummaryTestSecondLevel,
+  createQALinearityInjection,
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
 import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
@@ -51,7 +51,6 @@ const QALinearityInjectionExpandableRows = ({
     if (qaLinearityInjection.length === 0 || updateTable) {
       setLoading(true);
       getQALinearityInjection(linSumId, testSumId, id)
-      
         .then((res) => {
           console.log("res.data", res.data);
           finishedLoadingData(res.data);
@@ -101,12 +100,14 @@ const QALinearityInjectionExpandableRows = ({
   ];
 
   const onRemoveHandler = async (row) => {
-    const { id: idToRemove, testSumId } = row;
-    const resp = await deleteQALinearitySummary(
+    const { id: idToRemove } = row;
+    const resp = await deleteQALinearityInjection(
       locationId,
       testSumId,
+      linSumId,
       idToRemove
     );
+
     if (resp.status === 200) {
       const dataPostRemove = qaLinearityInjection.filter(
         (rowData) => rowData.id !== idToRemove
@@ -251,14 +252,19 @@ const QALinearityInjectionExpandableRows = ({
 
   const createData = () => {
     const payload = {
-      gasLevelCode: selectedRow.gasLevelCode,
-      meanMeasuredValue: 0,
-      meanReferenceValue: 0,
-      percentError: 0,
-      apsIndicator: 0,
+      injectionDate: "",
+      injectionHour: 0,
+      injectionMinute: 0,
+      measuredValue: 0,
+      referenceValue: 0,
     };
     const userInput = extractUserInput(payload, ".modalUserInput");
-    createQALinearitySummaryTestSecondLevel(locationId, data.id, userInput)
+    createQALinearityInjection(
+      linSumId,
+      testSumId,
+      id, // linsumid
+      userInput
+    )
       .then((res) => {
         console.log("res", res);
         if (Object.prototype.toString.call(res) === "[object Array]") {
