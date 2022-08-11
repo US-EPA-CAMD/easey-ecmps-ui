@@ -379,6 +379,13 @@ export const getAllGasLevelCodes = async () => {
     .catch(handleError);
 };
 
+export const getAllGasTypeCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/gas-type-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
 export const getAllTestTypeGroupCodes = async () => {
   return axios
     .get(`${config.services.mdm.uri}/test-type-group-codes`)

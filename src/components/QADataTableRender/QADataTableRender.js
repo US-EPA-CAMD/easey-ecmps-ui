@@ -163,7 +163,7 @@ const QADataTableRender = ({
                         <RemoveButton
                           onConfirm={() => onRemoveHandler(normalizedRow)}
                         />
-                        {createExpandBTNS(index, row)}
+                        {expandableRowComp ? createExpandBTNS(index, row) : null}
                       </>
                   }
                 </div>
@@ -187,7 +187,7 @@ const QADataTableRender = ({
                   >
                     {"View"}
                   </Button>
-                  {createExpandBTNS(index, row)}
+                  {expandableRowComp ? createExpandBTNS(index, row) : null}
                 </div>
               )}
             </div>
@@ -207,7 +207,7 @@ const QADataTableRender = ({
         expandableRows
         expandableRowsHideExpander
         expandableRowExpanded={(row) => row.expanded}
-        expandableRowsComponent={expandableRowComp ? expandableRowComp : null}
+        expandableRowsComponent={expandableRowComp}
         noDataComponent={noDataComp}
       />
     </div>

@@ -207,7 +207,6 @@ export const updateQALinearitySummaryTestSecondLevel = async (
     return handleImportError(error);
   }
 };
-
 export const createQATestData = async (locId, payload) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary`;
   try {
@@ -242,22 +241,26 @@ export const createQALinearitySummaryTestSecondLevel = async (
   }
 };
 
-
-export const getQALinearityInjection = async (locID, testSumId,linSumId) => {
+export const getQALinearityInjection = async (locID, testSumId, linSumId) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
   if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;
   }
-
   // *** attach the rest of the url
   url = `${url}/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections`;
 
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const editQALinearityInjection = async (locID, testSumId,linSumId,id) => {
+export const editQALinearityInjection = async (
+  locID,
+  testSumId,
+  linSumId,
+  id,
+  payload
+) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
@@ -267,6 +270,48 @@ export const editQALinearityInjection = async (locID, testSumId,linSumId,id) => 
 
   // *** attach the rest of the url
   url = `${url}/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const getProtocolGas = async (locID, testSumId) => {
+  let url = `${config.services.qaCertification.uri}`;
+
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+
+  // *** attach the rest of the url
+  url = `${url}/locations/${locID}/test-summary/${testSumId}/protocol-gases`;
 
   return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createProtocolGas = async (
+  locId,
+  testSumId,
+  payload
+) => {console.log("payload",payload);
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/protocol-gases`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
 };

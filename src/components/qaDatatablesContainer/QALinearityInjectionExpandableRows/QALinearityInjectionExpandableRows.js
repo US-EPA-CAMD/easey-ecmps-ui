@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import {
   deleteQALinearitySummary,
   getQALinearityInjection,
-  updateQALinearitySummaryTestSecondLevel,
+  editQALinearityInjection,
   createQALinearitySummaryTestSecondLevel,
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
@@ -50,8 +50,8 @@ const QALinearityInjectionExpandableRows = ({
   useEffect(() => {
     if (qaLinearityInjection.length === 0 || updateTable) {
       setLoading(true);
-
-      getQALinearityInjection(locationId,testSumId, id)
+      getQALinearityInjection(linSumId, testSumId, id)
+      
         .then((res) => {
           console.log("res.data", res.data);
           finishedLoadingData(res.data);
@@ -114,7 +114,7 @@ const QALinearityInjectionExpandableRows = ({
       setQaLinearityInjection(dataPostRemove);
     }
   };
-  const dataTableName = "Linearity Test";
+  const dataTableName = "Linearity Injection";
   const controlInputs = {};
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
@@ -162,9 +162,7 @@ const QALinearityInjectionExpandableRows = ({
     if (create) {
       controlInputs.gasLevelCode = ["Gas Level Code", "dropdown", "", ""];
     }
-    console.log('datapulled',dataPulled,row)
     if (dataPulled.length > 0 && !create) {
-
       selectedData = dataPulled.filter(
         (element) => element.id === row[`id`]
       )[0];
@@ -227,19 +225,18 @@ const QALinearityInjectionExpandableRows = ({
 
   const saveData = () => {
     const payload = {
-      gasLevelCode: selectedRow.gasLevelCode,
-      meanMeasuredValue: 0,
-      meanReferenceValue: 0,
-      percentError: 0,
-      apsIndicator: 0,
+      injectionDate: "",
+      injectionHour: 0,
+      injectionMinute: 0,
+      measuredValue: 0,
+      referenceValue: 0,
     };
-    const userInput = extractUserInput(payload, ".modalUserInput", [
-      "apsIndicator",
-    ]);
+    const userInput = extractUserInput(payload, ".modalUserInput");
 
-    updateQALinearitySummaryTestSecondLevel(
-      locationId,
-      selectedRow.testSumId,
+    editQALinearityInjection(
+      linSumId,
+      testSumId,
+      id, // linsumid
       selectedRow.id,
       userInput
     )
@@ -288,7 +285,9 @@ const QALinearityInjectionExpandableRows = ({
           actionColumnName={
             user ? (
               <>
-                <span className="padding-right-2">Linearity Summary Data</span>
+                <span className="padding-right-2">
+                  Linearity Injection Data
+                </span>
                 <Button
                   epa-testid="btnOpen"
                   className="text-white"
