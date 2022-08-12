@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import {
   getProtocolGas,
   createProtocolGas,
-  updateProtocolGas
+  updateProtocolGas,
+  deleteProtocolGas
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
 import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
@@ -33,7 +34,7 @@ const QAProtocolGasExpandableRows = ({
   locId,
   testSumId
 }) => {
-  // console.log("locationId", locId, "testsumid", testSumId);
+  console.log("locationId", locId, "testsumid", testSumId);
   const [loading, setLoading] = useState(false);
   const [protocolGas, setProtocolGas] = useState([]);
   const [updateTable, setUpdateTable] = useState(false);
@@ -93,8 +94,8 @@ const QAProtocolGasExpandableRows = ({
   const controlInputs = {
     gasLevelCode: ["Summary Type/Gas Level Code", "input", "", "locked"],
     gasTypeCode: ["Gas Type Code", "dropdown", "", ""],
-    cylinderId: ["Cylinder ID", "input", "", ""],
-    vendorId: ["Vendor ID", "input", "", ""],
+    cylinderID: ["Cylinder ID", "input", "", ""],
+    vendorID: ["Vendor ID", "input", "", ""],
     expirationDate: ["Expiration Date", "date", "", ""],
     skip: ["", "skip", "", ""],
     
@@ -196,12 +197,37 @@ const QAProtocolGasExpandableRows = ({
     });
   };
 
+  const saveData = () => {
+    const payload = {
+      gasLevelCode: selectedRow.gasLevelCode,
+      gasTypeCode: null,
+      cylinderID: null,
+      vendorID: null,
+      expirationDate: null,
+    };
+    const userInput = extractUserInput(payload, ".modalUserInput");
+
+    updateProtocolGas(
+      locId,
+      testSumId,
+      selectedRow.id,
+      userInput
+    )
+      .then((res) => {
+        setUpdateTable(true);
+        executeOnClose();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const createData = () => {
     const uiControls = {
       gasLevelCode: null,
       gasTypeCode: null,
-      cylinderId: 0,
-      vendorId: 0,
+      cylinderID: 0,
+      vendorID: 0,
       expirationDate: null,
     };
     const userInput = extractUserInput( uiControls, ".modalUserInput"); 
@@ -219,6 +245,22 @@ const QAProtocolGasExpandableRows = ({
         console.log("error", error);
       });
   };
+
+  const onRemoveHandler = async (row) => {
+    const { id: idToRemove, testSumId } = row;
+    const resp = await deleteProtocolGas(
+      locId,
+      testSumId,
+      idToRemove
+    );
+    if (resp.status === 200) {
+      const dataPostRemove = protocolGas.filter(
+        (rowData) => rowData.id !== idToRemove
+      );
+      setProtocolGas(dataPostRemove);
+    }
+  };
+
   return (
     <div className="padding-y-3">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -227,8 +269,8 @@ const QAProtocolGasExpandableRows = ({
           columnNames={columns}
           columnWidth={15}
           data={data}
-          openHandler={()=>{}}
-          onRemoveHandler={()=>{}}
+          openHandler={openModal}
+          onRemoveHandler={onRemoveHandler}
           actionColumnName={
             user ?
             <>
@@ -281,7 +323,7 @@ const QAProtocolGasExpandableRows = ({
         <Modal
           show={show}
           close={closeModalHandler}
-          save={createNewData ? createData : null}
+          save={createNewData ? createData : saveData}
           showCancel={!user ? true: false}
           showSave={user? true: false}
           title={
@@ -314,7 +356,7 @@ const QAProtocolGasExpandableRows = ({
   );
 };
 const mapStateToProps = (state, ownProps) => {
-  const dataTableName = "Linearity Test";
+  const dataTableName = "Protocol Gas";
   return {
     mdmData: state.dropdowns[convertSectionToStoreName(dataTableName)],
   };
