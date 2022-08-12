@@ -339,8 +339,11 @@ export const getProtocolGas = async (locID, testSumId) => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const createProtocolGas = async (locId, testSumId, payload) => {
-  console.log("payload", payload);
+export const createProtocolGas = async (
+  locId,
+  testSumId,
+  payload
+) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/protocol-gases`;
   try {
     return handleResponse(
@@ -352,5 +355,38 @@ export const createProtocolGas = async (locId, testSumId, payload) => {
     );
   } catch (error) {
     return handleImportError(error);
+  }
+};
+
+export const updateProtocolGas = async (
+  locId,
+  testSumId,
+  protocolGasId,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/protocol-gases/${protocolGasId}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+export const deleteProtocolGas = async (locId, testSumId, id) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/protocol-gases/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
   }
 };
