@@ -105,14 +105,14 @@ const QALinearitySummaryDataTable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
 
+  const columns = getQAColsByTestCode(selectedTestCode.testTypeGroupCode)
+  const { controlInputs, extraControlInputs, controlDatePickerInputs } = getQAModalDetailsByTestCode(selectedTestCode.testTypeGroupCode)
+
   const data = useMemo(() => {
-    return getTestSummary(qaTestSummary);
+    return getTestSummary(qaTestSummary, columns);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qaTestSummary]);
-
-  const columns = getQAColsByTestCode(selectedTestCode.testTypeGroupCode)
-  const { controlInputs, extraControlInputs, controlDatePickerInputs } = getQAModalDetailsByTestCode(selectedTestCode.testTypeGroupCode)
 
   const finishedLoadingData = (loadedData) => {
     setDataPulled(loadedData);
