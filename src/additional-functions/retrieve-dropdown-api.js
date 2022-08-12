@@ -702,31 +702,50 @@ export const UseRetrieveDropdownApi = async (
         });
         break;
 
-        case "gasLevelCode":
-          await dmApi.getAllGasLevelCodes().then((response) => {
-            options = response.data.map((option) => {
-              return {
-                code: option["gasLevelCode"],
-                name: option["gasLevelDescription"],
-              };
-            });
-  
-            setDefaultOptions(options, fieldName);
+      case "gasLevelCode":
+        await dmApi.getAllGasLevelCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["gasLevelCode"],
+              name: option["gasLevelDescription"],
+            };
           });
-          break;
-        case "gasTypeCode":
-          await dmApi.getAllGasTypeCodes().then((response) => {
-            options = response.data.map((option) => {
-              return {
-                code: option["gasTypeCode"],
-                name: option["gasTypeDescription"],
-              };
-            });
-  
-            setDefaultOptions(options, fieldName);
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+      case "gasTypeCode":
+        await dmApi.getAllGasTypeCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["gasTypeCode"],
+              name: option["gasTypeDescription"],
+            };
           });
-          break;
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
       default:
+
+      case "prefilteredTestSummaries":
+        let noDupesTestCodes = [];
+        await dmApi.getPrefilteredTestSummaries().then((response) => {
+          noDupesTestCodes = response.data.map((code) => {
+            return code["componentTypeCode"];
+          });
+
+          noDupesTestCodes = [...new Set(noDupesTestCodes)];
+
+          const prefilteredMdmOptions = organizePrefilterMDMData(
+            noDupesTestCodes,
+            "componentTypeCode",
+            response.data
+          );
+
+          setDefaultOptions(prefilteredMdmOptions, fieldName);
+        });
+        break;
         break;
     }
   }
