@@ -726,7 +726,6 @@ export const UseRetrieveDropdownApi = async (
           setDefaultOptions(options, fieldName);
         });
         break;
-      default:
 
       case "prefilteredTestSummaries":
         let noDupesTestCodes = [];
@@ -746,6 +745,7 @@ export const UseRetrieveDropdownApi = async (
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         });
         break;
+      default:
         break;
     }
   }
