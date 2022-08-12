@@ -226,8 +226,8 @@ const QAProtocolGasExpandableRows = ({
     const uiControls = {
       gasLevelCode: null,
       gasTypeCode: null,
-      cylinderID: 0,
-      vendorID: 0,
+      cylinderID: null,
+      vendorID: null,
       expirationDate: null,
     };
     const userInput = extractUserInput( uiControls, ".modalUserInput"); 
