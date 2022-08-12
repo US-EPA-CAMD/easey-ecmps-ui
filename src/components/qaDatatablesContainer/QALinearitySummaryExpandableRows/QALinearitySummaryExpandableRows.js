@@ -306,7 +306,6 @@ const QALinearitySummaryExpandableRows = ({
               locationSelectValue={locationSelectValue}
               linSumId={locationId}
               testSumId={id}
-              
 
             />
           }

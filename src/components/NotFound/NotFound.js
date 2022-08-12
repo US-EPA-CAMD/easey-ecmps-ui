@@ -10,8 +10,8 @@ const NotFound = () => {
         <h1>Sorry, but this web page does not exist.</h1>
         <h3>We want to help you find what you are looking for.</h3>
         <h3>
-          Try locating this information from the
-          <Link to="/"> EPA home page.</Link>
+          Try locating this information from the{" "}
+          <Link to="/">EPA home page.</Link>
         </h3>
       </div>
     </div>
