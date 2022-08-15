@@ -28,6 +28,7 @@ import {
 import {
   QA_CERT_TEST_SUMMARY_STORE_NAME,
   EXPORT_STORE_NAME,
+  EMISSIONS_DAILY_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 
 const App = () => {
@@ -182,7 +183,45 @@ const App = () => {
               <Redirect from="/workspace/emission" to="/emission" />
             )}
             <Route path="/emission/" exact component={ComingSoon} />
+
             <Route path="/workspace/emission/" exact component={ComingSoon} />
+            {user ? (
+              <Redirect
+                from="/emissions_daily"
+                to="/workspace/emissions_daily"
+              />
+            ) : (
+              <Redirect
+                from="/workspace/emissions_daily"
+                to="/emissions_daily"
+              />
+            )}
+            <Route
+              path="/emissions_daily"
+              exact
+              component={() => {
+                return (
+                  <SelectConfigurationBaseModuleHome
+                    user={false}
+                    workspaceSection={EMISSIONS_DAILY_STORE_NAME}
+                  />
+                );
+              }}
+            />
+            <Route
+              path="/workspace/emissions_daily"
+              exact
+              component={() => (
+                <SelectConfigurationBaseModuleHome
+                  user={user}
+                  workspaceSection={EMISSIONS_DAILY_STORE_NAME}
+                />
+              )}
+            />
+
+            <Route path="/emissions_hourly" component={ComingSoon} />
+            <Route path="/emissions_mats" component={ComingSoon} />
+
             {user ? (
               <Redirect from="/export" to="/workspace/export" />
             ) : (
