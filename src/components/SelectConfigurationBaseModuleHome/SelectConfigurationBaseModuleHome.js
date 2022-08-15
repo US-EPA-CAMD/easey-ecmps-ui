@@ -7,10 +7,12 @@ import DynamicTabs from "../DynamicTabs/DynamicTabs";
 import {
   QA_CERT_TEST_SUMMARY_STORE_NAME,
   EXPORT_STORE_NAME,
+  EMISSIONS_DAILY_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import {
   qa_Certifications_Test_Summary_Module,
   export_Module,
+  emissions_daily_module,
 } from "../../utils/constants/moduleTitles";
 import Export from "../export/Export/Export";
 
@@ -33,8 +35,12 @@ export const SelectConfigurationBaseModuleHome = ({
         document.title = export_Module;
         setTitleName(export_Module);
         break;
+      case EMISSIONS_DAILY_STORE_NAME:
+        document.title = emissions_daily_module;
+        setTitleName(emissions_daily_module);
+        break;
     }
-  }, []);
+  }, [workspaceSection]);
 
   const [titleName, setTitleName] = useState(document.title);
 

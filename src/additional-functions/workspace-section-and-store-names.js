@@ -1,6 +1,8 @@
 export const MONITORING_PLAN_STORE_NAME = "monitoringPlans";
 export const QA_CERT_TEST_SUMMARY_STORE_NAME = "qaCertTestSummary";
 export const EXPORT_STORE_NAME = "export";
+export const EMISSIONS_DAILY_STORE_NAME = "emissionsDaily";
+
 export const convertSectionToStoreName = (dataTableName) => {
   let storeName = "";
   switch (dataTableName) {
@@ -12,6 +14,9 @@ export const convertSectionToStoreName = (dataTableName) => {
       break;
     case EXPORT_STORE_NAME:
       storeName = EXPORT_STORE_NAME;
+      break;
+    case EMISSIONS_DAILY_STORE_NAME:
+      storeName = EMISSIONS_DAILY_STORE_NAME;
       break;
     default:
       break;
