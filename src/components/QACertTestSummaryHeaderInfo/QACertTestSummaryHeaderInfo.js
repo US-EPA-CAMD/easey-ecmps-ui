@@ -80,7 +80,7 @@ export const QACertTestSummaryHeaderInfo = ({
   ]);
 
   const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
-  // const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
+
   useEffect(() => {
     const fetchTestTypeCodes = async () => {
       let resp = "";
@@ -123,7 +123,11 @@ export const QACertTestSummaryHeaderInfo = ({
       .map((obj) => {
         return obj.testTypeCode;
       });
-    setSelectedTestCode(codesForSelectedTestTypeGroup);
+    const testCodeObj = {
+      testTypeGroupCode: selectedTestTypeGroupOptionObj?.code,
+      testTypeCodes: codesForSelectedTestTypeGroup
+    }
+    setSelectedTestCode(testCodeObj);
   }, [testTypeGroupOptions, sectionSelect]);
 
   // let testSummaryTable = <TestSummaryDataTable
@@ -332,14 +336,13 @@ export const QACertTestSummaryHeaderInfo = ({
       )}
 
       <div
-        className={`usa-overlay ${
-          showImportModal ||
+        className={`usa-overlay ${showImportModal ||
           showSelectionTypeImportModal ||
           showImportDataPreview ||
           isLoading
-            ? "is-visible"
-            : ""
-        }`}
+          ? "is-visible"
+          : ""
+          }`}
       />
 
       {/* // selects either historical data or file data */}

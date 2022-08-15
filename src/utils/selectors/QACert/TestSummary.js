@@ -1,41 +1,100 @@
-export const getTestSummary = (data) => {
+export const getTestSummary = (data, colTitles) => {
   const records = [];
-  //   let data = [1, 2];
-  data.forEach((el) => {
-    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
-    const endHour = el.endHour ? el.endHour.toString() : "";
+  if (!colTitles) {
+    data.forEach((el) => {
+      const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
+      const endHour = el.endHour ? el.endHour.toString() : "";
 
-    const endMinute = el.endMinute ? el.endMinute.toString() : "";
-    records.push({
-      id: el.id,
-      locationId: el.locationId,
-      col1: el.testTypeCode,
-      col2:
-        el.stackPipeId !== null
-          ? el.stackPipeId
-          : el.unitId !== null
-          ? el.unitId
-          : "",
-      col3: el.componentId,
-      col4: el.testNumber,
-      col5: el.testReasonCode,
-      col6: el.testResultCode,
-      col7: endDate,
-      col8: endHour,
-      col9: endMinute,
+      const endMinute = el.endMinute ? el.endMinute.toString() : "";
+      records.push({
+        id: el.id,
+        locationId: el.locationId,
+        col1: el.testTypeCode,
+        col2:
+          el.stackPipeId !== null
+            ? el.stackPipeId
+            : el.unitId !== null
+              ? el.unitId
+              : "",
+        col3: el.componentId,
+        col4: el.testNumber,
+        col5: el.testReasonCode,
+        col6: el.testResultCode,
+        col7: endDate,
+        col8: endHour,
+        col9: endMinute,
+      });
     });
-  });
+  }
+
+  if (colTitles) {
+    for (const curData of data) {
+      const { id, locationId } = curData
+      const columnDef = { id, locationId }
+      // loop through column titles and assign data to column index based on column title
+      for (const [index, colTitle] of colTitles.entries()) {
+        const colIndex = index + 1
+        const colKey = `col${colIndex}`
+        // get corresponding dto key based on column title
+        const dtoKey = mapTestSummaryColTitleToDTOKey(colTitle)
+        let colValue = curData[dtoKey]
+        // special cases
+        switch (colTitle) {
+          case 'End Date':
+            colValue = curData.endDate ? formatStringToDate(curData.endDate.toString()) : ''
+            break
+          case 'End Hour':
+            colValue = curData?.endHour?.toString() ?? ''
+            break
+          case 'End Minute':
+            colValue = curData?.endMinute?.toString() ?? ''
+            break
+          case 'Unit or Stack Pipe ID':
+            colValue = curData.unitId ?? curData.stackPipeId
+            break
+          default:
+        }
+        columnDef[colKey] = colValue
+      }
+      records.push(columnDef)
+    }
+  }
   return records;
 };
 
 // year - month - day to  month / day/ year
 const formatStringToDate = (date) => {
   const parts = date.split("-");
-
   return `${parts[1]}/${parts[2]}/${parts[0]}`;
 };
 
-export const getLinearitySummaryRecords = (data) =>{
+const colTitleToDtoKeyMap = {
+  'Test Type Code': 'testTypeCode',
+  'Monitoring System ID': 'monitoringSystemID',
+  'Component ID': 'componentID',
+  'Span Scale Code': 'spanScaleCode',
+  'Test Number': 'testNumber',
+  'Test Reason Code': 'testReasonCode',
+  'Test Description': 'testDescription',
+  'Test Result Code': 'testResultCode',
+  'Begin Date': 'beginDate',
+  'Begin Hour': 'beginHour',
+  'Begin Minute': 'beginMinute',
+  'End Date': 'endDate',
+  'End Hour': 'endHour',
+  'End Minute': 'endnMinute',
+  'Grace Period Indicator': 'gracePeriodIndicator',
+  'Year': 'year',
+  'Quarter': 'quarter',
+  'Injection Protocol Code': 'injectionProtocolCode',
+  'Test Comment': 'testComment'
+}
+
+const mapTestSummaryColTitleToDTOKey = (columnTitle) => {
+  return colTitleToDtoKeyMap[columnTitle]
+}
+
+export const getLinearitySummaryRecords = (data) => {
   const records = [];
   data.forEach((el) => {
     records.push({
@@ -51,15 +110,15 @@ export const getLinearitySummaryRecords = (data) =>{
   return records;
 }
 
-export const getEmptyRows = (columns) =>{
+export const getEmptyRows = (columns) => {
   let obj = {};
-  columns.forEach((c,i)=>{
-    obj[`col${i+1}`] = "";
+  columns.forEach((c, i) => {
+    obj[`col${i + 1}`] = "";
   });
   return [obj];
 }
 
-export const getProtocolGasRecords = (data) =>{
+export const getProtocolGasRecords = (data) => {
   const records = [];
   data.forEach((el) => {
     records.push({
@@ -69,7 +128,7 @@ export const getProtocolGasRecords = (data) =>{
       col2: el.gasTypeCode,
       col3: el.vendorID,
       col4: el.cylinderID,
-      col5: el.expirationDate ? formatStringToDate(el.expirationDate) :  ""
+      col5: el.expirationDate ? formatStringToDate(el.expirationDate) : ""
     });
   });
   return records;

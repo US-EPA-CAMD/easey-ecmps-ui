@@ -15,7 +15,7 @@ export const QACertTestSummaryRender = ({
   orisCode,
   configID,
 }) => {
-  const [selectedTestCode, setSelectedTestCode] = useState(["LINE"]);
+  const [selectedTestCode, setSelectedTestCode] = useState({ testTypeGroupCode: 'LINSUM', testTypeCodes: ['LINE'] });
   return (
     <div className=" padding-top-0">
       <div className="grid-row">

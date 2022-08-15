@@ -76,9 +76,10 @@ const QALinearitySummaryDataTable = ({
   useEffect(() => {
     if (updateTable || qaTestSummary.length <= 0 || locationSelectValue) {
       setLoading(true);
-      
-      if (selectedTestCode !== "" && selectedTestCode.length !== 0) {
-        getQATestSummary(locationSelectValue, selectedTestCode).then((res) => {
+
+      const { testTypeCodes } = selectedTestCode
+      if (testTypeCodes && testTypeCodes.length !== 0) {
+        getQATestSummary(locationSelectValue, testTypeCodes).then((res) => {
           if (res !== undefined && res.data.length > 0) {
             finishedLoadingData(res.data);
             setQATestSummary(res.data);
@@ -104,14 +105,14 @@ const QALinearitySummaryDataTable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
 
+  const columns = getQAColsByTestCode(selectedTestCode.testTypeGroupCode)
+  const { controlInputs, extraControlInputs, controlDatePickerInputs } = getQAModalDetailsByTestCode(selectedTestCode.testTypeGroupCode)
+
   const data = useMemo(() => {
-    return getTestSummary(qaTestSummary);
+    return getTestSummary(qaTestSummary, columns);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qaTestSummary]);
-
-  const columns = getQAColsByTestCode(selectedTestCode[0])
-  const { controlInputs, extraControlInputs, controlDatePickerInputs } = getQAModalDetailsByTestCode(selectedTestCode[0])
 
   const finishedLoadingData = (loadedData) => {
     setDataPulled(loadedData);
