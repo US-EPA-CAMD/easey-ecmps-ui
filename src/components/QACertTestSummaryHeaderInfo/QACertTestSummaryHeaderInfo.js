@@ -130,19 +130,6 @@ export const QACertTestSummaryHeaderInfo = ({
     setSelectedTestCode(testCodeObj);
   }, [testTypeGroupOptions, sectionSelect]);
 
-  // let testSummaryTable = <TestSummaryDataTable
-  //   locationSelectValue={locationSelect ? locationSelect[1] : 0}
-  //   testTypeCodes={codesForSelectedTestTypeGroup}
-  //   mapDataToRows={getTestSummary}
-  // />
-
-  // if (selectedTestTypeGroupOptionObj?.code === 'LINSUM') {
-  //   testSummaryTable = <QALinearitySummaryDataTable
-  //     locationSelectValue={locationSelect ? locationSelect[1] : 0}
-  //     user={user}
-  //   />
-  // }
-
   // *** Reassign handlers after pop-up modal is closed
   useEffect(() => {
     if (!returnedFocusToLast) {
@@ -236,7 +223,6 @@ export const QACertTestSummaryHeaderInfo = ({
       orisCode: orisCode,
       testSummaryData: selectedHistoricalData,
     };
-    console.log(payload);
     importQABtn(payload);
     setShowImportDataPreview(false);
   };

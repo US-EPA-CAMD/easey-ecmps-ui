@@ -88,7 +88,7 @@ const QALinearityInjectionExpandableRows = ({
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
-  const dropdownArray = [["gasLevelCode"]];
+  const dropdownArray = [["gasLevelCode","prefilteredTestSummaries"]];
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
   const columns = [
@@ -169,7 +169,7 @@ const QALinearityInjectionExpandableRows = ({
       )[0];
       setSelectedRow(selectedData);
     }
-    let mainDropdownName = "";
+    let mainDropdownName = "testTypeCode";
     let hasMainDropdown = false;
     for (const controlProperty in controlInputs) {
       if (controlInputs[controlProperty][1] === "mainDropdown") {

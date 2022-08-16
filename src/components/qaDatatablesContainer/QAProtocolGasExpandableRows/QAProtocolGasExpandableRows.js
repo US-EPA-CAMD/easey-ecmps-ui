@@ -34,7 +34,6 @@ const QAProtocolGasExpandableRows = ({
   locId,
   testSumId
 }) => {
-  console.log("locationId", locId, "testsumid", testSumId);
   const [loading, setLoading] = useState(false);
   const [protocolGas, setProtocolGas] = useState([]);
   const [updateTable, setUpdateTable] = useState(false);

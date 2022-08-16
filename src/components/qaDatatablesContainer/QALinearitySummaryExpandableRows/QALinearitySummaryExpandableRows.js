@@ -51,7 +51,6 @@ const QALinearitySummaryExpandableRows = ({
   useEffect(() => {
     if (qaLinearitySummary.length === 0 || updateTable) {
       setLoading(true);
-      console.log('locationid in linearity summary',locationId,id)
       getQALinearitySummary(locationId, id) //locID, testSumId
         .then((res) => {
           finishedLoadingData(res.data);
