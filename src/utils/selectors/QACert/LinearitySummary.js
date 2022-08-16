@@ -58,6 +58,7 @@ export const getQAColsByTestCode = (testCode) => {
     case 'CYCSUM': // Cycle Time Summary
     case 'FFACC': // Fuel Flowmeter Accuracy
     case 'HGL3LS': // Hg Linearity and 3-Level Summary
+    case 'LINSUM': // Linearity Summary
     case 'PEI': // Primary Element Inspection
     case 'TTACC': // Transmitter Transducer Accuracy
       cols = [
@@ -157,7 +158,7 @@ export const getQAColsByTestCode = (testCode) => {
       ]
       break
     default:
-      // console.log(`getQAColsByTestCode default case w/ testCode: ${testCode}`);
+    // console.log(`getQAColsByTestCode default case w/ testCode: ${testCode}`);
   }
   return cols
 }
@@ -285,6 +286,7 @@ export const getQAModalDetailsByTestCode = (testCode) => {
       }
       break
     case 'HGL3LS': // Hg Linearity and 3-Level Summary
+    case 'LINSUM': // Linearity Summary
       modalDetails = {
         controlInputs: {
           testTypeCode,
@@ -497,7 +499,7 @@ export const getQAModalDetailsByTestCode = (testCode) => {
       }
       break
     default:
-      // console.log(`getQAModalDetailsByTestCode default case w/ testCode: ${testCode}`);
+    // console.log(`getQAModalDetailsByTestCode default case w/ testCode: ${testCode}`);
   }
 
   return modalDetails
