@@ -157,23 +157,24 @@ export const getQAColsByTestCode = (testCode) => {
       ]
       break
     default:
-      console.log(`getQAColsByTestCode default case w/ testCode: ${testCode}`);
+      // console.log(`getQAColsByTestCode default case w/ testCode: ${testCode}`);
   }
   return cols
 }
 
 export const getQAModalDetailsByTestCode = (testCode) => {
   const unitId = ["Unit or Stack Pipe ID", "input", "", ""]
-  const testTypeCode = ["Test Type Code", "dropdown", "", ""]
+  const testTypeCode = ["Test Type Code", "mainDropdown", "mainDropdown", ""]
   const monitoringSystemID = ["Monitoring System ID", "input", "", ""]
   const componentID = ["Component ID", "input", "", ""]
-  const spanScaleCode = ["Span Scale Code", "dropdown", "", ""]
+  const spanScaleCode = ["Span Scale Code", "nonFilteredDropdown", "", ""]
   const testNumber = ["Test Number", "input", "", ""]
   const testReasonCode = ["Test Reason Code", "dropdown", "", ""]
   const testResultCode = ["Test Result Code", "dropdown", "", ""]
+  const gasLevelCode = ["Gas Level Code Code", "nonFilteredDropdown", "", ""]
   const testDescription = ["Test Description", "input", "", ""]
   const gracePeriodIndicator = ["Grace Period Indicator", "radio", "", ""]
-  const injectionProtocolCode = ["Injection Protocol Code", "dropdown", "", ""]
+  const injectionProtocolCode = ["Injection Protocol Code", "nonFilteredDropdown", "", ""]
 
   // extra control inputs
   const testComment = ["Test Comment", "input", "", ""]
@@ -496,7 +497,7 @@ export const getQAModalDetailsByTestCode = (testCode) => {
       }
       break
     default:
-      console.log(`getQAModalDetailsByTestCode default case w/ testCode: ${testCode}`);
+      // console.log(`getQAModalDetailsByTestCode default case w/ testCode: ${testCode}`);
   }
 
   return modalDetails

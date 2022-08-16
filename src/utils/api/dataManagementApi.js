@@ -394,7 +394,7 @@ export const getAllTestTypeGroupCodes = async () => {
 }
 export const getPrefilteredTestSummaries = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/relationships/stest-summaries`)
+    .get(`${config.services.mdm.uri}/relationships/test-summaries`)
     .then(handleResponse)
     .catch(handleError);
 };

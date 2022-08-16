@@ -15,7 +15,8 @@ export const dataYearOptions = async () => {
 export const UseRetrieveDropdownApi = async (
   dropDownFields,
   mats = false,
-  equipmentControl = false
+  equipmentControl = false,
+  selectedTestCode = false,
 ) => {
   let totalOptions = {};
 
@@ -697,7 +698,9 @@ export const UseRetrieveDropdownApi = async (
               name: option["testTypeCodeDescription"],
             };
           });
-
+          options = options.filter(
+            (option) => selectedTestCode.testTypeCodes.includes(option.code)
+          );
           setDefaultOptions(options, fieldName);
         });
         break;
@@ -731,14 +734,14 @@ export const UseRetrieveDropdownApi = async (
         let noDupesTestCodes = [];
         await dmApi.getPrefilteredTestSummaries().then((response) => {
           noDupesTestCodes = response.data.map((code) => {
-            return code["componentTypeCode"];
+            return code["testTypeCode"];
           });
 
           noDupesTestCodes = [...new Set(noDupesTestCodes)];
 
           const prefilteredMdmOptions = organizePrefilterMDMData(
             noDupesTestCodes,
-            "componentTypeCode",
+            "testTypeCode",
             response.data
           );
 
@@ -750,6 +753,7 @@ export const UseRetrieveDropdownApi = async (
     }
   }
 
+  console.log('totaloptions',totalOptions)
   return totalOptions;
 };
 

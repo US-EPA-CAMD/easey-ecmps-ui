@@ -33,18 +33,17 @@ export const QACertTestSummaryTab = ({
   );
   useEffect(() => {
     setSection(sectionSelect, title);
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionSelect]);
-
-  useEffect(() => {
-    console.log("tabs", tabs);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const [locationSelect, setLocationSelect] = useState(
     tabs ? tabs[activeTab].location : ""
   );
-
+  const [selectedTestCode, setSelectedTestCode] = useState({
+    testTypeGroupCode: "LINSUM",
+    testTypeCodes: ["LINE"],
+  });
   useEffect(() => {
     setLocation(locationSelect, title);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -66,6 +65,8 @@ export const QACertTestSummaryTab = ({
           setLocationSelect={setLocationSelect}
           locations={selectedConfig.locations}
           user={user}
+          setSelectedTestCode={setSelectedTestCode}
+          selectedTestCode={selectedTestCode}
           configID={tabs ? tabs[activeTab].selectedConfig.id : 0}
         />
       </div>
@@ -95,6 +96,14 @@ const mapDispatchToProps = (dispatch) => {
         )
       ),
     setSection: (section, title) =>
+      dispatch(
+        setSectionSelectionState(
+          section,
+          title,
+          convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
+        )
+      ),
+    updateTestTypeCodes: (section, title) =>
       dispatch(
         setSectionSelectionState(
           section,

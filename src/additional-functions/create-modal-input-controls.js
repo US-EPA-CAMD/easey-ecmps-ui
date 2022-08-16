@@ -88,6 +88,7 @@ export const modalViewData = (
         let labels = "";
         switch (inputs[y][1]) {
           case "mainDropdown":
+            console.log('y',y,inputs,totalOptionsClone)
             setInitialPreFilterDependent(y);
             if (!createNew) {
               if (totalOptionsClone) {
@@ -128,6 +129,27 @@ export const modalViewData = (
               totalOptionsClone ? totalOptionsClone[y] : [],
             ]);
             break;
+
+            case "nonFilteredDropdown":
+              if (!createNew) {
+                if (totalOptionsClone) {
+                  labels = findValue(
+                    totalOptionsClone[y],
+                    selected ? selected[y] : null,
+                    "name"
+                  );
+                }
+              }
+              arr.push([
+                y,
+                inputs[y][0],
+                labels,
+                inputs[y][2] === "required" ? "required" : false,
+                "nonFilteredDropdown",
+                createNew ? "select" : selected ? selected[y] : "",
+                totalOptionsClone ? totalOptionsClone[y] : [],
+              ]);
+              break;
           case "independentDropdown":
             setInitialPreFilter(inputs[y][1], y, totalOptionsClone[y]);
             if (!createNew) {

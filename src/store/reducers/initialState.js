@@ -38,6 +38,7 @@ export default {
     matsMethods: [],
     lineTestSummary:[],
     linearitySummaryTestSecondLevel:[],
+    linearityInjectionTestThirdLevel:[],
     protocolGas: []
   },
   currentSection: "",
