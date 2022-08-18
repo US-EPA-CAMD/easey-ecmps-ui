@@ -49,7 +49,6 @@ export const QAImportHistoricalDataPreview = ({
           reportingPeriodObj.endDate
         );
         if (response) {
-          console.log("response", response.data);
           setTestSummaryData(response.data.testSummaryData);
           setPreviewData(true);
           setLoading(false);
@@ -71,7 +70,7 @@ export const QAImportHistoricalDataPreview = ({
     setReportingPeriodObj(selectedObj);
   };
 
-  const reportingPeroidSelectionHandler = (selectedObj) => {
+  const reportingPeriodSelectionHandler = (selectedObj) => {
     setReportingPeriodObj(selectedObj);
     if (previewData) {
       setPreviewData(false);
@@ -79,7 +78,6 @@ export const QAImportHistoricalDataPreview = ({
   };
 
   const handleHistoricalDataSelection = (state) => {
-    console.log("SelectedHistoricalData", state.selectedRows);
 
     let fName = "";
     const length = state.selectedRows.length;
@@ -108,7 +106,7 @@ export const QAImportHistoricalDataPreview = ({
           <ReportingPeriodSelector
             isExport={false}
             dataTypes={null}
-            reportingPeroidSelectionHandler={reportingPeroidSelectionHandler}
+            reportingPeriodSelectionHandler={reportingPeriodSelectionHandler}
             exportState={null}
             getInitSelection={getInitSelection}
             setLoading={setLoading}

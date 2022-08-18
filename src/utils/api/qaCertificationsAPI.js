@@ -6,7 +6,12 @@ axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
 };
 
-export const getQATestSummary = async (locID, beginDate, endDate) => {
+export const getQATestSummary = async (
+  locID,
+  selectedTestCode,
+  beginDate,
+  endDate
+) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
@@ -16,7 +21,17 @@ export const getQATestSummary = async (locID, beginDate, endDate) => {
 
   // *** attach the rest of the url
   url = `${url}/locations/${locID}/test-summary`;
-
+  if (selectedTestCode) {
+    if (selectedTestCode.length === 1) {
+      url = `${url}?testTypeCodes=${selectedTestCode}`;
+    } else {
+      let additionalUrl = "";
+      for (const x of selectedTestCode) {
+        additionalUrl = `${additionalUrl} ${x} |`;
+      }
+      url = `${url}?testTypeCodes=${additionalUrl}`;
+    }
+  }
   // *** attach query params
   if (beginDate && endDate) {
     url = `${url}?beginDate=${beginDate}&endDate=${endDate}`;
@@ -38,6 +53,24 @@ export const getQATestSummaryByID = async (locID, id) => {
 
   return axios.get(url).then(handleResponse).catch(handleError);
 };
+
+export const getQATestSummaryByCode = async (
+  locId,
+  { _beginDate, _endDate, testTypeCodes = [] }
+) => {
+  let url = `${config.services.qaCertification.uri}`;
+
+  // *** attach the rest of the url
+  url = `${url}/locations/${locId}/test-summary`;
+
+  if (testTypeCodes.length > 0) {
+    const param = testTypeCodes.join("|");
+    url = `${url}?testTypeCode=${param}`;
+  }
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
 export const getQASchema = async () => {
   const url = `${config.services.content.uri}/ecmps/reporting-instructions/qa-certification.schema.json`;
 
@@ -107,7 +140,7 @@ export const deleteQATestSummary = async (locId, id) => {
   } catch (error) {
     return handleError(error);
   }
-}
+};
 
 export const getQALinearitySummary = async (locID, testSumId) => {
   let url = `${config.services.qaCertification.uri}`;
@@ -121,4 +154,238 @@ export const getQALinearitySummary = async (locID, testSumId) => {
   url = `${url}/locations/${locID}/test-summary/${testSumId}/linearities`;
 
   return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const deleteQALinearitySummary = async (locId, testSumId, id) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/linearities/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
+};
+export const updateQALinearityTestSummary = async (
+  locId,
+  testSumId,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const updateQALinearitySummaryTestSecondLevel = async (
+  locId,
+  testSumId,
+  id,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/linearities/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+export const createQATestData = async (locId, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const createQALinearitySummaryTestSecondLevel = async (
+  locId,
+  testSumId,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/linearities`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const getQALinearityInjection = async (locID, testSumId, linSumId) => {
+  let url = `${config.services.qaCertification.uri}`;
+
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+  // *** attach the rest of the url
+  url = `${url}/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const editQALinearityInjection = async (
+  locID,
+  testSumId,
+  linSumId,
+  id,
+  payload
+) => {
+  let url = `${config.services.qaCertification.uri}`;
+
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+
+  // *** attach the rest of the url
+  url = `${url}/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const createQALinearityInjection = async (
+  locID,
+  testSumId,
+  linSumId,
+  payload
+) => {
+  let url = `${config.services.qaCertification.uri}`;
+   url = `${url}/workspace/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections/`;
+   delete payload["id"];
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const deleteQALinearityInjection = async (
+  locID,
+  testSumId,
+  linSumId,
+  id
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+export const getProtocolGas = async (locID, testSumId) => {
+  let url = `${config.services.qaCertification.uri}`;
+
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+
+  // *** attach the rest of the url
+  url = `${url}/locations/${locID}/test-summary/${testSumId}/protocol-gases`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createProtocolGas = async (
+  locId,
+  testSumId,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/protocol-gases`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const updateProtocolGas = async (
+  locId,
+  testSumId,
+  protocolGasId,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/protocol-gases/${protocolGasId}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+export const deleteProtocolGas = async (locId, testSumId, id) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/protocol-gases/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
 };

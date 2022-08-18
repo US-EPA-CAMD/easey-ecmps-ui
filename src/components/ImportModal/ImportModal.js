@@ -116,7 +116,6 @@ const ImportModal = ({
         <div className="overflow-y-auto maxh-mobile">
           <div className="padding-right-2 padding-left-3 " aria-live="polite">
             {" "}
-            {console.log("import errors", importedFileErrorMsgs)}
             {importedFileErrorMsgs.map((error, i) => (
               <Alert type="error" slim noIcon key={i} role="alert">
                 {error}

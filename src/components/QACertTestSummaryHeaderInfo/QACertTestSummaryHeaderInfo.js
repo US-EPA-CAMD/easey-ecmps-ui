@@ -25,11 +25,20 @@ import QAImportHistoricalDataPreview from "../QAImportHistoricalDataPreview/QAIm
 import Modal from "../Modal/Modal";
 import { importQA } from "../../utils/api/qaCertificationsAPI";
 
+import QALinearitySummaryDataTable from "../qaDatatablesContainer/QALinearitySummaryDataTable/QALinearitySummaryDataTable";
+import {
+  getAllTestTypeCodes,
+  getAllTestTypeGroupCodes,
+} from "../../utils/api/dataManagementApi";
+import TestSummaryDataTable from "../qaDatatablesContainer/TestSummaryDataTable/TestSummaryDataTable";
+import { getTestSummary } from "../../utils/selectors/QACert/TestSummary";
+
 export const QACertTestSummaryHeaderInfo = ({
   facility,
   selectedConfig,
   orisCode,
   user,
+  configID,
   //redux sets
   setLocationSelect,
   setSectionSelect,
@@ -37,25 +46,8 @@ export const QACertTestSummaryHeaderInfo = ({
   sectionSelect,
   locationSelect,
   locations,
+  setSelectedTestCode,
 }) => {
-  const sections = [
-    { name: "AppendixE Correlation Test Summary" },
-    { name: "Calibration Injection" },
-    { name: "Cycle Time Summary" },
-    { name: "Flow to Load Check" },
-    { name: "Flow to Load Reference" },
-    { name: "Fuel Flow to Load Baseline" },
-    { name: "Fuel Flow to Load" },
-    { name: "Fuel Flowmeter Accuracy" },
-    { name: "Hg Linearity and 3-Level Summary" },
-    { name: "Linearity Summary" },
-    { name: "Online Offline Calibration" },
-    { name: "RATA" },
-    { name: "Test Qualification" },
-    { name: "Transmitter Transducer Accuracy" },
-    { name: "Unit Default" },
-  ];
-
   const importTestTitle = "Import Test Data";
   const [showImportModal, setShowImportModal] = useState(false);
 
@@ -83,6 +75,61 @@ export const QACertTestSummaryHeaderInfo = ({
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
   const [selectedHistoricalData, setSelectedHistoricalData] = useState([]);
 
+  const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([
+    { name: "Loading..." },
+  ]);
+
+  const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
+
+  useEffect(() => {
+    const fetchTestTypeCodes = async () => {
+      let resp = "";
+
+      await getAllTestTypeCodes()
+        .then((res) => {
+          setAllTestTypeCodes(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      await getAllTestTypeGroupCodes()
+        .then((res) => {
+          const options = res.data
+            .map((e) => {
+              return {
+                name: e.testTypeGroupCodeDescription,
+                code: e.testTypeGroupCode,
+              };
+            })
+            .sort((a, b) => a.name.localeCompare(b.name));
+          setTestTypeGroupOptions(options);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    fetchTestTypeCodes();
+  }, [configID]);
+
+  useEffect(() => {
+    const selectedIndex = sectionSelect[0];
+    const selectedTestTypeGroupOptionObj = testTypeGroupOptions[selectedIndex];
+
+    const codesForSelectedTestTypeGroup = allTestTypeCodes
+      .filter((data) => {
+        return data.testTypeGroupCode === selectedTestTypeGroupOptionObj?.code;
+      })
+      .map((obj) => {
+        return obj.testTypeCode;
+      });
+    const testCodeObj = {
+      testTypeGroupCode: selectedTestTypeGroupOptionObj?.code,
+      testTypeCodes: codesForSelectedTestTypeGroup
+    }
+    setSelectedTestCode(testCodeObj);
+  }, [testTypeGroupOptions, sectionSelect]);
+
   // *** Reassign handlers after pop-up modal is closed
   useEffect(() => {
     if (!returnedFocusToLast) {
@@ -100,9 +147,6 @@ export const QACertTestSummaryHeaderInfo = ({
     };
   }, []);
 
-  // useEffect (( )=> {
-
-  // },[]);
   useEffect(() => {
     if (importTypeSelection != "select" || importedFile.length != 0) {
       setDisablePortBtn(false);
@@ -179,7 +223,6 @@ export const QACertTestSummaryHeaderInfo = ({
       orisCode: orisCode,
       testSummaryData: selectedHistoricalData,
     };
-    console.log(payload);
     importQABtn(payload);
     setShowImportDataPreview(false);
   };
@@ -213,9 +256,10 @@ export const QACertTestSummaryHeaderInfo = ({
             </div>
             <div className="grid-col-4">
               <DropdownSelection
-                caption="Test Type"
+                caption="Test Type Group"
                 selectionHandler={setSectionSelect}
-                options={sections}
+                // options={sections}
+                options={testTypeGroupOptions}
                 viewKey="name"
                 selectKey="name"
                 initialSelection={sectionSelect ? sectionSelect[0] : null}
@@ -278,14 +322,13 @@ export const QACertTestSummaryHeaderInfo = ({
       )}
 
       <div
-        className={`usa-overlay ${
-          showImportModal ||
+        className={`usa-overlay ${showImportModal ||
           showSelectionTypeImportModal ||
           showImportDataPreview ||
           isLoading
-            ? "is-visible"
-            : ""
-        }`}
+          ? "is-visible"
+          : ""
+          }`}
       />
 
       {/* // selects either historical data or file data */}

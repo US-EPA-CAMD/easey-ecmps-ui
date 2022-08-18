@@ -372,3 +372,29 @@ export const getAllTestReasonCodes = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+export const getAllGasLevelCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/gas-level-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getAllGasTypeCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/gas-type-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getAllTestTypeGroupCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/test-type-group-codes`)
+    .then(handleResponse)
+    .catch(handleError)
+}
+export const getPrefilteredTestSummaries = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/relationships/test-summaries`)
+    .then(handleResponse)
+    .catch(handleError);
+};

@@ -2,7 +2,7 @@ import React from "react";
 import { render, waitForElement, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import QALinearitySummaryExpandableRows  from "./QALinearitySummaryExpandableRows";
+import QALinearityInjectionExpandableRows  from "./QALinearityInjectionExpandableRows";
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import configureStore from "../../../store/configureStore.dev";
@@ -310,23 +310,23 @@ const componentRenderer = (locId, testSummaryId) => {
   };
   return render(
     <Provider store={store}>
-      <QALinearitySummaryExpandableRows {...props} />
+      <QALinearityInjectionExpandableRows {...props} />
     </Provider>
   );
 };
 
 test("testing linearity summary expandable records from test summary data", async () => {
   expect(true).toBe(true);
-  // axios.get.mockImplementation(() =>
-  //   Promise.resolve({ status: 200, data: linearitySummary })
-  // );
-  // const res = await qaApi.getQALinearitySummary("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB");
-  // expect(res.data).toEqual(linearitySummary);
-  // let { container } = await waitForElement(() => componentRenderer("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB"));
-  // expect(container).toBeDefined();
-  // expect(screen.getByRole("table")).toBeDefined();
-  // expect(screen.getAllByRole("columnheader").length).toBe(6);
-  // expect(screen.getAllByRole("row").length).toBe(linearitySummary.length + 1);
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: linearitySummary })
+  );
+  const res = await qaApi.getQALinearityInjection("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB","IT07D0112-70AA39C4632746999222EC8FB3C530FB");
+  expect(res.data).toEqual(linearitySummary);
+  let { container } = await waitForElement(() => componentRenderer("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB","IT07D0112-70AA39C4632746999222EC8FB3C530FB"));
+  expect(container).toBeDefined();
+  expect(screen.getByRole("table")).toBeDefined();
+  expect(screen.getAllByRole("columnheader").length).toBe(6);
+  expect(screen.getAllByRole("row").length).toBe(linearitySummary.length + 1);
 });
 
 test.skip("when remove button on a row is clicked then that row is deleted from the table", async () => {
@@ -349,7 +349,7 @@ test.skip("when remove button on a row is clicked then that row is deleted from 
     actionsBtn: 'View',
     actionColumnName: 'Linearity Summary Data"'
   };
-  render(<QALinearitySummaryExpandableRows {...props} />)
+  render(<QALinearityInjectionExpandableRows {...props} />)
 
   // does not work in combination with screen.getAllByRole(button)
   // waitForElement(() => render(<QALinearitySummaryExpandableRows {...props} />))
@@ -379,20 +379,20 @@ test.skip("when remove button on a row is clicked then that row is deleted from 
   })
 });
 
-test("testing to add linearity summary records", async () => {
-  expect(true).toBe(true);
-  // axios.get.mockImplementation(() =>
-  //   Promise.resolve({ status: 200, data: linearitySummary })
-  // );
-  // const res = await qaApi.getQALinearitySummary("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB");
-  // expect(res.data).toEqual(linearitySummary);
-  // let { container } = await waitForElement(() => componentRenderer("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB"));
-  // expect(container).toBeDefined();
-  // const addButtons = screen.getAllByRole("button", {name: "Add"});
-  // //const addButton = screen.getByText("Add");
+// test("testing to add linearity summary records", async () => {
+//   expect(true).toBe(true);
+//   // axios.get.mockImplementation(() =>
+//   //   Promise.resolve({ status: 200, data: linearitySummary })
+//   // );
+//   // const res = await qaApi.getQALinearitySummary("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB");
+//   // expect(res.data).toEqual(linearitySummary);
+//   // let { container } = await waitForElement(() => componentRenderer("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB"));
+//   // expect(container).toBeDefined();
+//   // const addButtons = screen.getAllByRole("button", {name: "Add"});
+//   // //const addButton = screen.getByText("Add");
 
-  // expect(addButtons.length).toBe(2);
-  // fireEvent.click(addButtons[1]);
-  // //screen.debug();
-  // expect(screen.getByText("Add Linearity Test")).toBeInTheDocument();
-});
+//   // expect(addButtons.length).toBe(2);
+//   // fireEvent.click(addButtons[1]);
+//   // //screen.debug();
+//   // expect(screen.getByText("Add Linearity Test")).toBeInTheDocument();
+// });
