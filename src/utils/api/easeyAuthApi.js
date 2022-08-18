@@ -28,6 +28,23 @@ export const secureAxios = async (options) => {
   return axios(options);
 };
 
+export const refreshClientToken = async () => {
+  const url = `${config.services.authApi.uri}/tokens/client`;
+
+  try {
+    const response = await axios.post(
+      url,
+      { clientId: config.app.clientId, clientSecret: config.app.clientSecret },
+      { headers: { "x-api-key": config.app.apiKey } }
+    );
+
+    sessionStorage.setItem("client_token", response.data.token);
+    sessionStorage.setItem("client_token_expiration", response.data.expiration);
+  } catch (err) {
+    displayAppError(err);
+  }
+};
+
 export const authenticate = async (payload) => {
   return axios({
     method: "POST",
