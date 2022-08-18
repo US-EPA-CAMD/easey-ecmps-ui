@@ -248,7 +248,7 @@ export const getCheckedOutLocations = async () => {
 export const getRefreshInfo = async (planId) => {
   return axios
     .get(
-      `${config.services.monitorPlans.uri}/workspace/plans/${planId}/refresh`
+      `${config.services.monitorPlans.uri}/workspace/plans/${planId}`
     )
     .then(handleResponse)
     .catch(handleError);
