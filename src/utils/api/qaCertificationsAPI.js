@@ -389,3 +389,36 @@ export const deleteProtocolGas = async (locId, testSumId, id) => {
     return handleError(error);
   }
 };
+
+export const getRataData = async (locID, testSumId) => {
+  let url = `${config.services.qaCertification.uri}`;
+
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+
+  // *** attach the rest of the url
+  url = `${url}/locations/${locID}/test-summary/${testSumId}/rata`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createRataData = async (
+  locId,
+  testSumId,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};

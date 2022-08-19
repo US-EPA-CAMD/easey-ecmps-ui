@@ -398,3 +398,10 @@ export const getPrefilteredTestSummaries = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+export const getAllRataFreqCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/rata-frequency-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};

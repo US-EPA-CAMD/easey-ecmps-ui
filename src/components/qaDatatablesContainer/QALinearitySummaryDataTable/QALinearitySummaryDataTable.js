@@ -8,6 +8,7 @@ import {
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { getTestSummary } from "../../../utils/selectors/QACert/TestSummary.js";
 import QALinearitySummaryExpandableRows from "../QALinearitySummaryExpandableRows/QALinearitySummaryExpandableRows";
+import QARataDataExpandableRows from "../QARataDataExpandableRows/QARataDataExpandableRows.js";
 
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
@@ -367,6 +368,17 @@ const QALinearitySummaryDataTable = ({
       });
   };
 
+  const getExpandableComponent = (testTypeGroupCode, props) =>{
+    switch(testTypeGroupCode){
+      case "LINSUM":
+        return <QALinearitySummaryExpandableRows {...props}/>
+      case "RELACC":
+        return <QARataDataExpandableRows {...props}/>
+      default:
+        return null;       
+    }
+  }
+
   return (
     <div>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -399,11 +411,16 @@ const QALinearitySummaryDataTable = ({
           actionsBtn={"View"}
           user={user}
           expandableRowComp={
-            <QALinearitySummaryExpandableRows
-              user={user}
-              nonEditable={nonEditable}
-              locationSelectValue={locationSelectValue}
-            />
+            getExpandableComponent(selectedTestCode.testTypeGroupCode, {
+              user: user,
+              nonEditable: nonEditable,
+              locationSelectValue: locationSelectValue
+            })
+            // <QALinearitySummaryExpandableRows
+            //   user={user}
+            //   nonEditable={nonEditable}
+            //   locationSelectValue={locationSelectValue}
+            // />
           }
           evaluate={true}
           noDataComp={
@@ -428,7 +445,7 @@ const QALinearitySummaryDataTable = ({
                 user={user}
               />
             ) : (
-              "There're no records available."
+              "There're no test summary records available."
             )
           }
         />

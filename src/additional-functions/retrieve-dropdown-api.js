@@ -748,6 +748,20 @@ export const UseRetrieveDropdownApi = async (
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         });
         break;
+
+      case "rataFrequencyCode":
+        await dmApi.getAllRataFreqCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["rataFrequencyCode"],
+              name: option["rataFrequencyCodeDescription"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+
       default:
         break;
     }
