@@ -290,8 +290,8 @@ export const createQALinearityInjection = async (
   payload
 ) => {
   let url = `${config.services.qaCertification.uri}`;
-   url = `${url}/workspace/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections/`;
-   delete payload["id"];
+  url = `${url}/workspace/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections/`;
+  delete payload["id"];
   try {
     return handleResponse(
       await secureAxios({
@@ -422,3 +422,95 @@ export const createRataData = async (
     return handleImportError(error);
   }
 };
+
+export const getRataSummary = async () => {
+  // dummy fetch
+  await Promise.resolve(resolve => setTimeout(resolve, 3000))
+  const data = [
+    {
+      operatingLevelCode: "opLvlCode2",
+      averageGrossUnitLoad: 0,
+      referenceMethodCode: "string",
+      meanCEMValue: 0,
+      meanRATAReferenceValue: 1,
+      meanDifference: 0,
+      standardDeviationDifference: 0,
+      confidenceCoefficient: 0,
+      tValue: 0,
+      apsIndicator: 0,
+      apsCode: "string",
+      relativeAccuracy: 0,
+      biasAdjustmentFactor: 0,
+      co2OrO2ReferenceMethodCode: "string",
+      stackDiameter: 0,
+      stackArea: 0,
+      numberOfTraversePoints: 0,
+      calculatedWAF: 0,
+      defaultWAF: 0,
+      id: "string",
+      rataId: "string",
+      calculatedAverageGrossUnitLoad: 0,
+      calculatedMeanCEMValue: 0,
+      calculatedMeanRATAReferenceValue: 0,
+      calculatedMeanDifference: 0,
+      calculatedStandardDeviationDifference: 0,
+      calculatedConfidenceCoefficient: 0,
+      calculatedTValue: 0,
+      calculatedApsIndicator: 0,
+      calculatedRelativeAccuracy: 0,
+      calculatedBiasAdjustmentFactor: 0,
+      calculatedStackArea: 0,
+      calculatedCalculatedWAF: 0,
+      userId: "string",
+      addDate: "string",
+      updateDate: "string"
+    },
+    {
+      operatingLevelCode: "opLvlCode1",
+      averageGrossUnitLoad: 0,
+      referenceMethodCode: "string",
+      meanCEMValue: 0,
+      meanRATAReferenceValue: 1,
+      meanDifference: 0,
+      standardDeviationDifference: 0,
+      confidenceCoefficient: 0,
+      tValue: 0,
+      apsIndicator: 0,
+      apsCode: "string",
+      relativeAccuracy: 0,
+      biasAdjustmentFactor: 0,
+      co2OrO2ReferenceMethodCode: "string",
+      stackDiameter: 0,
+      stackArea: 0,
+      numberOfTraversePoints: 0,
+      calculatedWAF: 0,
+      defaultWAF: 0,
+      id: "string",
+      rataId: "string",
+      calculatedAverageGrossUnitLoad: 0,
+      calculatedMeanCEMValue: 0,
+      calculatedMeanRATAReferenceValue: 0,
+      calculatedMeanDifference: 0,
+      calculatedStandardDeviationDifference: 0,
+      calculatedConfidenceCoefficient: 0,
+      calculatedTValue: 0,
+      calculatedApsIndicator: 0,
+      calculatedRelativeAccuracy: 0,
+      calculatedBiasAdjustmentFactor: 0,
+      calculatedStackArea: 0,
+      calculatedCalculatedWAF: 0,
+      userId: "string",
+      addDate: "string",
+      updateDate: "string"
+    }
+  ]
+  return { status: 200, data }
+}
+
+export const createRataSummary = async () => {
+
+}
+
+export const updateRataSummary = async () => {
+
+}
