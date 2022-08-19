@@ -340,12 +340,6 @@ const QALinearitySummaryExpandableRows = ({
         <Preloader />
       )}
 
-      <QARataSummaryExpandableRows
-        user={user}
-        locId={locationId}
-        testSumId={id}
-      />
-
       <QAProtocolGasExpandableRows
         user={user}
         locId={locationId}
