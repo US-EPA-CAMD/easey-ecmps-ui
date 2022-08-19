@@ -133,3 +133,18 @@ export const getProtocolGasRecords = (data) => {
   });
   return records;
 }
+
+export const getRataDataRecords = (data) => {
+  const records = [];
+  data.forEach((el) => {
+    records.push({
+      id: el.id,
+      testSumId: el.testSumId,
+      col1: el.numberLoadLevel,
+      col2: el.relativeAccuracy,
+      col3: el.rataFrequencyCode,
+      col4: el.overallBiasAdjustmentFactor,
+    });
+  });
+  return records;
+}
