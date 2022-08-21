@@ -88,6 +88,7 @@ export const modalViewData = (
         let labels = "";
         switch (inputs[y][1]) {
           case "mainDropdown":
+            console.log('y',y,inputs,totalOptionsClone)
             setInitialPreFilterDependent(y);
             if (!createNew) {
               if (totalOptionsClone) {
@@ -128,6 +129,27 @@ export const modalViewData = (
               totalOptionsClone ? totalOptionsClone[y] : [],
             ]);
             break;
+
+            case "nonFilteredDropdown":
+              if (!createNew) {
+                if (totalOptionsClone) {
+                  labels = findValue(
+                    totalOptionsClone[y],
+                    selected ? selected[y] : null,
+                    "name"
+                  );
+                }
+              }
+              arr.push([
+                y,
+                inputs[y][0],
+                labels,
+                inputs[y][2] === "required" ? "required" : false,
+                "nonFilteredDropdown",
+                createNew ? "select" : selected ? selected[y] : "",
+                totalOptionsClone ? totalOptionsClone[y] : [],
+              ]);
+              break;
           case "independentDropdown":
             setInitialPreFilter(inputs[y][1], y, totalOptionsClone[y]);
             if (!createNew) {
@@ -228,6 +250,7 @@ export const modalViewData = (
       if (
         (y === "endDate" ||
           y === "beginDate" ||
+          y=== "injectionDate" ||
           y === "loadAnalysisDate" ||
           y === "wafEndDate" ||
           y === "wafBeginDate" ||
@@ -293,7 +316,7 @@ export const modalViewData = (
         continue;
       }
       // dropdown time selection
-      if (y === "endHour" || y === "beginHour") {
+      if (y === "endHour" || y === "beginHour" || y === "injectionHour") {
         arr.push([
           y,
           time[y][0],
@@ -303,7 +326,7 @@ export const modalViewData = (
           createNew ? "" : selected ? selected[y] : "",
         ]);
       }
-      if (y === "endMinute" || y === "beginMinute") {
+      if (y === "endMinute" || y === "beginMinute" || y==="injectionMinute") {
         arr.push([
           y,
           time[y][0],

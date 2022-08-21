@@ -37,7 +37,10 @@ export default {
     analyzerRanges: [],
     matsMethods: [],
     lineTestSummary:[],
-    linearitySummaryTestSecondLevel:[]
+    linearitySummaryTestSecondLevel:[],
+    linearityInjectionTestThirdLevel:[],
+    protocolGas: [],
+    rataData: []
   },
   currentSection: "",
 };

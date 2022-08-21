@@ -20,7 +20,6 @@ export function loadMonitoringPlans(orisCode) {
   return (dispatch) => {
     dispatch(beginMonitoringPlansApiCall());
     return mpApi.getMonitoringPlans(orisCode).then((res) => {
-      console.log("res.data", res.data);
       if (res) {
         dispatch(loadMonitoringPlansSuccess(res.data));
       }

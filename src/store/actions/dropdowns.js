@@ -11,7 +11,11 @@ export function loadDropdownsSuccess(dropdowns, section) {
   };
 }
 
-export function loadDropdowns(section, dropdownArray) {
+export function loadDropdowns(
+  section,
+  dropdownArray,
+  selectedTestCode = false
+) {
   let equipmentControlParameterFlag = false;
   if (section === UNIT_CONTROLS_STORE_NAME) {
     equipmentControlParameterFlag = true;
@@ -21,9 +25,18 @@ export function loadDropdowns(section, dropdownArray) {
     return UseRetrieveDropdownApi(
       dropdownArray[0],
       dropdownArray.length > 1 ? dropdownArray[1] : null,
-      equipmentControlParameterFlag
+      equipmentControlParameterFlag,
+      selectedTestCode
     ).then((dropdowns) => {
       dispatch(loadDropdownsSuccess(dropdowns, section));
     });
+  };
+}
+
+export function updateDropdowns(dropdowns, section) {
+  return {
+    type: types.UPDATE_DROPDOWN_SUCCESS,
+    dropdowns: dropdowns,
+    section: section,
   };
 }

@@ -8,6 +8,7 @@ import {
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { getTestSummary } from "../../../utils/selectors/QACert/TestSummary.js";
 import QALinearitySummaryExpandableRows from "../QALinearitySummaryExpandableRows/QALinearitySummaryExpandableRows";
+import QARataDataExpandableRows from "../QARataDataExpandableRows/QARataDataExpandableRows.js";
 
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
@@ -20,7 +21,10 @@ import {
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
-import { loadDropdowns } from "../../../store/actions/dropdowns";
+import {
+  loadDropdowns,
+  updateDropdowns,
+} from "../../../store/actions/dropdowns";
 import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
 
 import { addAriaLabelToDatatable } from "../../../additional-functions/ensure-508";
@@ -30,20 +34,24 @@ import { addAriaLabelToDatatable } from "../../../additional-functions/ensure-50
 import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
 import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
+import {
+  getQAColsByTestCode,
+  getQAModalDetailsByTestCode,
+} from "../../../utils/selectors/QACert/LinearitySummary.js";
 
 // contains test summary data table
 
-export const QALinearitySummaryDataTable = ({
+const QALinearitySummaryDataTable = ({
   mdmData,
   loadDropdownsData,
   locationSelectValue,
   user,
   nonEditable = false,
-
   showModal = false,
-
   selectedTestCode,
+  sectionSelect,
 }) => {
+  console.log("selectedTestCode", selectedTestCode);
   const [loading, setLoading] = useState(false);
 
   const [qaTestSummary, setQATestSummary] = useState([]);
@@ -63,47 +71,34 @@ export const QALinearitySummaryDataTable = ({
   const [complimentaryData, setComplimentaryData] = useState([]);
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
+  const [prevSelectedTest, setPrevSelectedTest] = useState(
+    selectedTestCode.testTypeGroupCode
+  );
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
   const dropdownArray = [
-    ["spanScaleCode", "testTypeCode", "testReasonCode", "testResultCode"],
+    [
+      "testTypeCode",
+      "spanScaleCode",
+
+      "testReasonCode",
+      "testResultCode",
+      "prefilteredTestSummaries",
+    ],
   ];
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
   const dataTableName = "Test Summary Data";
-  const controlInputs = {
-    unitId: ["Unit or Stack Pipe ID", "input", "", ""],
-    testTypeCode: ["Test Type Code", "dropdown", "", ""],
-    skip: ["", "skip", "", ""],
-    componentID: ["Component ID", "input", "", ""],
-    spanScaleCode: ["Span Scale Code", "dropdown", "", ""],
-    testNumber: ["Test Number", "input", "", ""],
-    testReasonCode: ["Test Reason Code", "dropdown", "", ""],
-    testResultCode: ["Test Result Code", "dropdown", "", ""],
-    gracePeriodIndicator: ["Grace Period Indicator ", "radio", "", ""],
-  };
-
-  // goes after dateinput in modals
-  const extraControlInputs = {
-    testComment: ["Test Comment", "input", "", ""],
-  };
-  const controlDatePickerInputs = {
-    beginDate: ["Begin Date", "date", "", ""],
-    beginHour: ["Begin Hour", "hourDropdown", "dropdown", ""],
-    beginMinute: ["Begin Minute", "minuteDropdown", "dropdown", ""],
-    endDate: ["End Date", "date", "", ""],
-    endHour: ["End Hour", "hourDropdown", "dropdown", ""],
-
-    endMinute: ["End Minute", "minuteDropdown", "dropdown", ""],
-  };
 
   //**** */
   useEffect(() => {
     if (updateTable || qaTestSummary.length <= 0 || locationSelectValue) {
       setLoading(true);
-      if (selectedTestCode !== "" && selectedTestCode.length !== 0) {
-        getQATestSummary(locationSelectValue, selectedTestCode).then((res) => {
+
+      const { testTypeCodes } = selectedTestCode;
+      if (testTypeCodes && testTypeCodes.length !== 0) {
+        getQATestSummary(locationSelectValue, testTypeCodes).then((res) => {
           if (res !== undefined && res.data.length > 0) {
             finishedLoadingData(res.data);
             setQATestSummary(res.data);
@@ -122,29 +117,87 @@ export const QALinearitySummaryDataTable = ({
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
     if (mdmData && mdmData.length === 0) {
-      loadDropdownsData(dataTableName, dropdownArray);
+      loadDropdownsData(dataTableName, dropdownArray, selectedTestCode);
+
+      setPrevSelectedTest(selectedTestCode.testTypeGroupCode);
+    } else if (prevSelectedTest !== selectedTestCode.testTypeGroupCode) {
+      loadDropdownsData(dataTableName, dropdownArray, selectedTestCode);
+      setPrevSelectedTest(selectedTestCode.testTypeGroupCode);
+      setDropdownsLoaded(true);
     } else {
       setDropdownsLoaded(true);
     }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTestCode, sectionSelect,mdmData]);
+  useEffect(() => {
+    // Update all the "secondary dropdowns" (based on the "main" dropdown)
+    const prefilteredDataName = dropdownArray[0][0];
+    if (prefilteredMdmData) {
+      const result = prefilteredMdmData.filter(
+        (prefiltered) => prefiltered[prefilteredDataName] === mainDropdownChange
+      );
+
+      if (result.length > 0) {
+        // Go through the inputs in the modal
+        for (const modalDetailData of selectedModalData) {
+          // For each dropdown
+          if (modalDetailData[4] === "dropdown") {
+            const selectedCodes = result[0];
+            // Filter their options (based on the value of the driving dropdown)
+            const filteredOutSubDropdownOptions = mdmData[
+              modalDetailData[0]
+            ].filter((option) =>
+              selectedCodes[modalDetailData[0]].includes(option.code)
+            );
+
+            // Add select option
+            filteredOutSubDropdownOptions.unshift({
+              code: "",
+              name: selectText,
+            });
+            // Load the filtered data into the dropdown
+            modalDetailData[6] = filteredOutSubDropdownOptions;
+          }
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mainDropdownChange, selectedModalData]);
+  const columns = getQAColsByTestCode(selectedTestCode.testTypeGroupCode);
+  const { controlInputs, extraControlInputs, controlDatePickerInputs } =
+    getQAModalDetailsByTestCode(selectedTestCode.testTypeGroupCode);
+
+  // prefilters the test type code dropdown based on group selection
+  useEffect(() => {
+    console.log("mdm", mdmData);
+    if (dropdownsLoaded) {
+      console.log("control", controlInputs);
+      // Go through the inputs in the modal
+      if (controlInputs["testTypeCode"][1] === "mainDropdown") {
+        const filteredOutSubDropdownOptions = mdmData["testTypeCode"].filter(
+          (option) => selectedTestCode.testTypeCodes.includes(option.code)
+        );
+
+        // Add select option
+        filteredOutSubDropdownOptions.unshift({
+          code: "",
+          name: selectText,
+        });
+        console.log(
+          "filteredOutSubDropdownOptions",
+          filteredOutSubDropdownOptions
+        );
+        setPrefilteredMdmData(filteredOutSubDropdownOptions);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTestCode, dropdownsLoaded]);
 
   const data = useMemo(() => {
-    return getTestSummary(qaTestSummary);
+    return getTestSummary(qaTestSummary, columns);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qaTestSummary]);
-  const columns = [
-    "Test Type Code",
-    "Unit or Stack Pipe ID",
-    "Component ID",
-    "Test Number",
-    "Test Reason Code",
-    "Test Result Code",
-    "End Date",
-    "End Hour",
-    "End Minute",
-  ];
 
   const finishedLoadingData = (loadedData) => {
     setDataPulled(loadedData);
@@ -161,12 +214,15 @@ export const QALinearitySummaryDataTable = ({
       )[0];
       setSelectedRow(selectedData);
     }
+    console.log("controlInputs", controlInputs);
     let mainDropdownName = "";
     let hasMainDropdown = false;
     for (const controlProperty in controlInputs) {
+      console.log("controlprop", controlProperty);
       if (controlInputs[controlProperty][1] === "mainDropdown") {
         mainDropdownName = controlProperty;
         hasMainDropdown = true;
+
         break;
       }
     }
@@ -177,11 +233,21 @@ export const QALinearitySummaryDataTable = ({
     let mainDropdownResult;
     // only applies if there is prefiltering based on a primary driver dropdown
     if (mainDropdownName !== "" && hasMainDropdown === true) {
+      console.log("maindropdownName", mainDropdownName); //testTypeCode
+      console.log(
+        " mdmData[mainDropdownName]",
+        mdmData[mainDropdownName],
+        mdmData[prefilteredDataName]
+      );
+
       mainDropdownResult = mdmData[mainDropdownName].filter((o) =>
         mdmData[prefilteredDataName].some(
           (element, index, arr) => o.code === element[mainDropdownName]
         )
       );
+      console.log("prefilteredDataName", prefilteredDataName); //prefilteredTestSummaries
+      console.log("mdmData", mdmData);
+      console.log("mainDropdownResult", mainDropdownResult);
       if (!mainDropdownResult.includes({ code: "", name: selectText })) {
         mainDropdownResult.unshift({ code: "", name: selectText });
       }
@@ -302,6 +368,17 @@ export const QALinearitySummaryDataTable = ({
       });
   };
 
+  const getExpandableComponent = (testTypeGroupCode, props) =>{
+    switch(testTypeGroupCode){
+      case "LINSUM":
+        return <QALinearitySummaryExpandableRows {...props}/>
+      case "RELACC":
+        return <QARataDataExpandableRows {...props}/>
+      default:
+        return null;       
+    }
+  }
+
   return (
     <div>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -334,13 +411,43 @@ export const QALinearitySummaryDataTable = ({
           actionsBtn={"View"}
           user={user}
           expandableRowComp={
-            <QALinearitySummaryExpandableRows
-              user={user}
-              nonEditable={nonEditable}
-              locationSelectValue={locationSelectValue}
-            />
+            getExpandableComponent(selectedTestCode.testTypeGroupCode, {
+              user: user,
+              nonEditable: nonEditable,
+              locationSelectValue: locationSelectValue
+            })
+            // <QALinearitySummaryExpandableRows
+            //   user={user}
+            //   nonEditable={nonEditable}
+            //   locationSelectValue={locationSelectValue}
+            // />
           }
           evaluate={true}
+          noDataComp={
+            user ? (
+              <QADataTableRender
+                columnNames={columns}
+                columnWidth={10}
+                data={[]}
+                actionColumnName={
+                  <>
+                    <span className="padding-right-2">Test Data</span>
+                    <Button
+                      epa-testid="btnOpen"
+                      className="text-white"
+                      onClick={() => openModal(false, false, true)}
+                    >
+                      Add
+                    </Button>
+                  </>
+                }
+                actionsBtn={"View"}
+                user={user}
+              />
+            ) : (
+              "There're no test summary records available."
+            )
+          }
         />
       ) : (
         <Preloader />
@@ -366,8 +473,8 @@ export const QALinearitySummaryDataTable = ({
                   title={`${dataTableName}`}
                   viewOnly={!user || nonEditable}
                   create={createNewData}
-                  // setMainDropdownChange={setMainDropdownChange}
-                  //mainDropdownChange={mainDropdownChange}
+                  setMainDropdownChange={setMainDropdownChange}
+                  mainDropdownChange={mainDropdownChange}
                 />
               </div>
             ) : (
@@ -389,9 +496,13 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadDropdownsData: async (section, dropdownArray) =>
+    loadDropdownsData: async (section, dropdownArray, selectedTestCode) =>
       dispatch(
-        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
+        loadDropdowns(
+          convertSectionToStoreName(section),
+          dropdownArray,
+          selectedTestCode
+        )
       ),
   };
 };

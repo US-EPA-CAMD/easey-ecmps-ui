@@ -80,7 +80,7 @@ export const QACertTestSummaryHeaderInfo = ({
   ]);
 
   const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
-  // const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
+
   useEffect(() => {
     const fetchTestTypeCodes = async () => {
       let resp = "";
@@ -123,21 +123,12 @@ export const QACertTestSummaryHeaderInfo = ({
       .map((obj) => {
         return obj.testTypeCode;
       });
-    setSelectedTestCode(codesForSelectedTestTypeGroup);
+    const testCodeObj = {
+      testTypeGroupCode: selectedTestTypeGroupOptionObj?.code,
+      testTypeCodes: codesForSelectedTestTypeGroup
+    }
+    setSelectedTestCode(testCodeObj);
   }, [testTypeGroupOptions, sectionSelect]);
-
-  // let testSummaryTable = <TestSummaryDataTable
-  //   locationSelectValue={locationSelect ? locationSelect[1] : 0}
-  //   testTypeCodes={codesForSelectedTestTypeGroup}
-  //   mapDataToRows={getTestSummary}
-  // />
-
-  // if (selectedTestTypeGroupOptionObj?.code === 'LINSUM') {
-  //   testSummaryTable = <QALinearitySummaryDataTable
-  //     locationSelectValue={locationSelect ? locationSelect[1] : 0}
-  //     user={user}
-  //   />
-  // }
 
   // *** Reassign handlers after pop-up modal is closed
   useEffect(() => {
@@ -232,7 +223,6 @@ export const QACertTestSummaryHeaderInfo = ({
       orisCode: orisCode,
       testSummaryData: selectedHistoricalData,
     };
-    console.log(payload);
     importQABtn(payload);
     setShowImportDataPreview(false);
   };
@@ -332,14 +322,13 @@ export const QACertTestSummaryHeaderInfo = ({
       )}
 
       <div
-        className={`usa-overlay ${
-          showImportModal ||
+        className={`usa-overlay ${showImportModal ||
           showSelectionTypeImportModal ||
           showImportDataPreview ||
           isLoading
-            ? "is-visible"
-            : ""
-        }`}
+          ? "is-visible"
+          : ""
+          }`}
       />
 
       {/* // selects either historical data or file data */}

@@ -49,7 +49,6 @@ export const QAImportHistoricalDataPreview = ({
           reportingPeriodObj.endDate
         );
         if (response) {
-          console.log("response", response.data);
           setTestSummaryData(response.data.testSummaryData);
           setPreviewData(true);
           setLoading(false);
@@ -79,7 +78,6 @@ export const QAImportHistoricalDataPreview = ({
   };
 
   const handleHistoricalDataSelection = (state) => {
-    console.log("SelectedHistoricalData", state.selectedRows);
 
     let fName = "";
     const length = state.selectedRows.length;

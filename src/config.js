@@ -71,6 +71,8 @@ export const config = {
       "/Registration/Terms",
     enableManageDelegations:
       process.env.REACT_APP_EASEY_ECMPS_UI_ENABLE_MANAGE_DELEGATIONS || "false",
+    clientId: process.env.REACT_APP_EASEY_ECMPS_UI_CLIENT_ID || "",
+    clientSecret: process.env.REACT_APP_EASEY_ECMPS_UI_CLIENT_SECRET || "",
   },
   services: {
     mdm: {
@@ -117,6 +119,11 @@ export const config = {
       uri:
         process.env.REACT_APP_EASEY_CONTENT_API ||
         "https://api.epa.gov/easey/dev/content-mgmt",
+    },
+    camd: {
+      uri:
+        process.env.REACT_APP_EASEY_CAMD_SERVICES ||
+        "https://api-easey-dev.app.cloud.gov/camd-services",
     },
   },
 };
