@@ -78,10 +78,10 @@ export const config = {
         process.env.REACT_APP_EASEY_MDM_API ||
         "https://api-easey-dev.app.cloud.gov/master-data-mgmt",
     },
-    rules: {
+    camd: {
       uri:
-        process.env.REACT_APP_EASEY_RULES_API ||
-        "https://api-easey-dev.app.cloud.gov/rules-mgmt",
+        process.env.REACT_APP_EASEY_CAMD_API ||
+        "https://api-easey-dev.app.cloud.gov/camd-services",
     },
     facilities: {
       uri:

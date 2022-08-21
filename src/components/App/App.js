@@ -88,7 +88,7 @@ const App = () => {
       </div>
       <Switch>
         <Route
-          path="/workspace/monitoring-plans/:id/evaluation-report"
+          path="/workspace/reports"
           exact
           component={() => <ReportGenerator user={user} />}
         />

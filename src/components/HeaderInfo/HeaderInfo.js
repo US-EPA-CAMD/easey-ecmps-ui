@@ -9,7 +9,7 @@ import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace
 import Modal from "../Modal/Modal";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 import "./HeaderInfo.scss";
-import MonitoringPlanEvaluationReport from "../MonitoringPlanEvaluationReport/MonitoringPlanEvaluationReport";
+import ReportGenerator from "../ReportGenerator/ReportGenerator";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import ImportModal from "../ImportModal/ImportModal";
 import UploadModal from "../UploadModal/UploadModal";
@@ -158,7 +158,7 @@ export const HeaderInfo = ({
 
   const displayReport = () => {
     window.open(
-      `/ecmps/workspace/monitoring-plans/${selectedConfig.id}/evaluation-report`,
+      `/ecmps/workspace/reports?type=MP_EVAL&monitorPlanId=${selectedConfig.id}`,
       "ECMPS Monitoring Plan Report",
       reportWindowParams
     );
@@ -558,10 +558,7 @@ export const HeaderInfo = ({
           showSave={false}
           showCancel={true}
           children={
-            <MonitoringPlanEvaluationReport
-              monitorPlanId={selectedConfig.id}
-              facility={facility}
-            />
+            <ReportGenerator user={user} />
           }
         />
       ) : null}

@@ -6,6 +6,30 @@ axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
 };
 
+export const getQAEvaluationReportData = async (
+  type,
+  monPlanId,
+  testId,
+  batchId,
+) => {
+  let url = `${config.services.qaCertification.uri}`;
+
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+
+  type = type.replace('_EVAL', '');
+  const test = testId ? `&testId=${testId}` : '';
+  const batch = batchId ? `&batchId=${batchId}` : '';
+
+  url = `${url}/evaluations/results?type=${type}&monitorPlanId=${monPlanId}${test}${batch}`;
+
+  console.log(url);
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
 export const getQATestSummary = async (
   locID,
   selectedTestCode,
