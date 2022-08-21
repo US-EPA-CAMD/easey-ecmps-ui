@@ -153,12 +153,12 @@ export const HeaderInfo = ({
     `height=${screen.height}`,
     // eslint-disable-next-line no-restricted-globals
     `width=${screen.width}`,
-    `fullscreen=yes`,
+    //`fullscreen=yes`,
   ].join(",");
 
   const displayReport = () => {
     window.open(
-      `/ecmps/workspace/reports?type=MP_EVAL&monitorPlanId=${selectedConfig.id}`,
+      `/ecmps/workspace/reports?reportCode=MP_EVAL&monitorPlanId=${selectedConfig.id}`,
       "ECMPS Monitoring Plan Report",
       reportWindowParams
     );
