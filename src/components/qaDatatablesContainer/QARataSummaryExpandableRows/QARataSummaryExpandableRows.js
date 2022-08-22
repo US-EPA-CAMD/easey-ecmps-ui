@@ -104,7 +104,7 @@ const QARataSummaryExpandableRows = ({
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
-  const dropdownArray = [["gasLevelCode", "gasTypeCode"]];
+  const dropdownArray = [['normalLevelCode', 'referenceMethodCode', 'apsCode', 'co2OrO2ReferenceMethodCode']];
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
 
@@ -120,7 +120,7 @@ const QARataSummaryExpandableRows = ({
   // controls modal detail form inputs
   const controlInputs = {
     operatingLevelCode: ["Operating Level Code", "dropdown", "", "locked"],
-    referenceMethodCode: ["Reference Method Code", "dropdown", ""],
+    referenceMethodCode: ["Reference Method Code", "dropdown", "", ""],
     apsIndicator: ["APS Indicator", "radio", "", ""],
     apsCode: ["APS Code", "dropdown", "", ""],
     relativeAccuracy: ["Relative Accuracy", "input", "", ""],
