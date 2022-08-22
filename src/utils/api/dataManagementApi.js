@@ -405,3 +405,28 @@ export const getAllRataFreqCodes = async () => {
     .then(handleResponse)
     .catch(handleError);
 };
+
+export const getAllApsCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/aps-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export const getAllReferenceMethodCodes = async () => {
+  const referenceMethodCode = [
+    {
+      referenceMethodCode: 'refCode1',
+      referenceMethodCodeDescription: 'refCodeDescript1'
+    },
+    {
+      referenceMethodCode: 'refCode2',
+      referenceMethodCodeDescription: 'refCodeDescript2'
+    },
+    {
+      referenceMethodCode: 'refCode3',
+      referenceMethodCodeDescription: 'refCodeDescript3'
+    }
+  ]
+  return { status: 200, data: referenceMethodCode }
+}
