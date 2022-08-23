@@ -115,14 +115,27 @@ const QARataSummaryExpandableRows = ({
     'Relative Accuracy',
     'CO2 or O2 Reference Method Code',
   ];
+
   // controls modal detail form inputs
   const controlInputs = {
     operatingLevelCode: ["Operating Level Code", "dropdown", "", ""],
+    averageGrossUnitLoad: ["Average Gross Unit Load", "input", "", ""],
     referenceMethodCode: ["Reference Method Code", "dropdown", "", ""],
+    meanCEMValue: ["Mean CEM Value", "input", "", ""],
+    meanRATAReferenceValue: ["Mean RATA Reference Value", "input", "", ""],
+    meanDifference: ["Mean Difference", "input", "", ""],
+    standardDeviationDifference: ["Standard Deviation Difference", "input", "", ""],
+    confidenceCoefficient: ["Confidence Coefficient", "input", "", ""],
+    tValue: ["T-Value", "input", "", ""],
     apsIndicator: ["APS Indicator", "radio", "", ""],
     apsCode: ["APS Code", "dropdown", "", ""],
     relativeAccuracy: ["Relative Accuracy", "input", "", ""],
+    biasAdjustmentFactor: ["Bias Adjustment Factor", "input", "", ""],
     co2OrO2ReferenceMethodCode: ["CO2 or O2 Reference Method Code", "dropdown", "", ""],
+    stackDiameter: ["Stack Diameter", "input", "", ""],
+    stackArea: ["Stack Area", "input", "", ""],
+    numberOfTraversePoints: ["Number of Traverse Points", "input", "", ""],
+    calculatedWAF: ["Calculated WAF", "input", "", ""],
   };
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
@@ -273,15 +286,15 @@ const QARataSummaryExpandableRows = ({
 
   const createData = async () => {
     const uiControls = {
-      gasLevelCode: null,
-      gasTypeCode: null,
-      cylinderID: null,
-      vendorID: null,
-      expirationDate: null,
+      operatingLevelCode: null,
+      referenceMethodCode: null,
+      apsIndicator: null,
+      apsCode: null,
+      relativeAccuracy: null,
+      co2OrO2ReferenceMethodCode: null,
     };
     const userInput = extractUserInput(uiControls, ".modalUserInput");
-    // TODO: change function that is called when data is added
-    createProtocolGas(locId, testSumId, userInput)
+    createRataSummary(locId, testSumId, rataId, userInput)
       .then((res) => {
         console.log("res", res);
         if (Object.prototype.toString.call(res) === "[object Array]") {
@@ -294,20 +307,6 @@ const QARataSummaryExpandableRows = ({
       .catch((error) => {
         console.log("error", error);
       });
-
-
-    try {
-      const resp = await createRataSummary()
-      console.log('resp', resp);
-      if (Object.prototype.toString.call(resp) === "[object Array]") {
-        alert(resp[0]);
-      } else {
-        setUpdateTable(true);
-        executeOnClose();
-      }
-    } catch (error) {
-      console.log('error creating rata summary', error)
-    }
   };
 
   const onRemoveHandler = async (row) => {
