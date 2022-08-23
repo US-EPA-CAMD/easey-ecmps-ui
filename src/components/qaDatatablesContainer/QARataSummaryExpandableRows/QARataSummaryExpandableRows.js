@@ -42,27 +42,10 @@ const QARataSummaryExpandableRows = ({
   const [rataSummaryData, setRataSummaryData] = useState([])
 
   useEffect(() => {
-    // if (rataSummaryData.length === 0 || updateTable) {
-    //   setLoading(true);
-    //   getRataSummary(locId, testSumId, 'rataId')
-    //     .then((res) => {
-    //       console.log('res.data', res.data);
-    //       finishedLoadingData(res.data);
-    //       setRataSummaryData(res.data);
-    //       setLoading(false);
-    //       console.log('rata summary data after setstate', rataSummaryData);
-    //     })
-    //     .catch((error) => {
-    //       console.log("error", error);
-    //     });
-    //   setUpdateTable(false);
-    // }
-
     const fetchData = async () => {
       setLoading(true)
       try {
         const resp = await getRataSummary(locId, testSumId, rataId)
-        console.log('resp.data', resp.data);
         finishedLoadingData(resp.data)
         setRataSummaryData(resp.data)
         setLoading(false)
@@ -79,8 +62,6 @@ const QARataSummaryExpandableRows = ({
   }, [locId, testSumId, updateTable]);
 
   const rowData = useMemo(() => {
-    const mappedData = mapRataSummaryToRows(rataSummaryData)
-    console.log('mappedData', mappedData);
     return mapRataSummaryToRows(rataSummaryData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rataSummaryData]);
@@ -296,7 +277,6 @@ const QARataSummaryExpandableRows = ({
     const userInput = extractUserInput(uiControls, ".modalUserInput");
     createRataSummary(locId, testSumId, rataId, userInput)
       .then((res) => {
-        console.log("res", res);
         if (Object.prototype.toString.call(res) === "[object Array]") {
           alert(res[0]);
         } else {
