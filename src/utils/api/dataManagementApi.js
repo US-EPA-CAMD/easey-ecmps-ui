@@ -414,19 +414,8 @@ export const getAllApsCodes = async () => {
 }
 
 export const getAllReferenceMethodCodes = async () => {
-  const referenceMethodCode = [
-    {
-      referenceMethodCode: 'refCode1',
-      referenceMethodCodeDescription: 'refCodeDescript1'
-    },
-    {
-      referenceMethodCode: 'refCode2',
-      referenceMethodCodeDescription: 'refCodeDescript2'
-    },
-    {
-      referenceMethodCode: 'refCode3',
-      referenceMethodCodeDescription: 'refCodeDescript3'
-    }
-  ]
-  return { status: 200, data: referenceMethodCode }
+  return axios
+    .get(`${config.services.mdm.uri}/reference-method-codes`)
+    .then(handleResponse)
+    .catch(handleError);
 }

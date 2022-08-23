@@ -107,7 +107,6 @@ const QARataSummaryExpandableRows = ({
   const dropdownArray = [['normalLevelCode', 'referenceMethodCode', 'apsCode', 'co2OrO2ReferenceMethodCode']];
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
-
   const dataTableName = "RATA Summary";
   const columns = [
     'Operating Level Code',
