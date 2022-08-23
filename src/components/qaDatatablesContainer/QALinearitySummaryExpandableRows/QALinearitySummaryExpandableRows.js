@@ -32,8 +32,8 @@ import { modalViewData } from "../../../additional-functions/create-modal-input-
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import QAProtocolGasExpandableRows from "../QAProtocolGasExpandableRows/QAProtocolGasExpandableRows.js";
-// contains test summary data table
 
+// contains test summary data table
 const QALinearitySummaryExpandableRows = ({
   user,
   nonEditable,

@@ -321,6 +321,7 @@ export const UseRetrieveDropdownApi = async (
         break;
       case "normalLevelCode":
       case "secondLevelCode":
+      case "operatingLevelCode":
         await dmApi.getAllOperatingLevelCodes().then((response) => {
           options = response.data.map((option) => {
             return {
@@ -761,13 +762,36 @@ export const UseRetrieveDropdownApi = async (
           setDefaultOptions(options, fieldName);
         });
         break;
+      case "apsCode":
+        await dmApi.getAllApsCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["apsCode"],
+              name: option["apsCodeDescription"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+      case "referenceMethodCode":
+      case "co2OrO2ReferenceMethodCode":
+        await dmApi.getAllReferenceMethodCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["referenceMethodCode"],
+              name: option["referenceMethodCodeDescription"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
 
       default:
         break;
     }
   }
-
-  console.log('totaloptions',totalOptions)
   return totalOptions;
 };
 

@@ -26,6 +26,7 @@ export const LINEARITY_SUMMARY_TEST_SECOND_LEVEL_SECTION_NAME = "Linearity Test"
 export const LINEARITY_INJECTION_TEST_THIRD_LEVEL_SECTION_NAME = "Linearity Injection";
 export const PROTOCOL_GAS_SECTION_NAME = "Protocol Gas";
 export const RATA_DATA_SECTION_NAME = "RATA Data";
+export const RATA_SUMMARY_SECTION_NAME = 'RATA Summary'
 
 // __________
 export const DEFAULTS_STORE_NAME = "defaults";
@@ -57,6 +58,7 @@ export const LINEARITY_SUMMARY_TEST_SECOND_LEVEL_STORE_NAME = "linearitySummaryT
 export const LINEARITY_INJECTION_TEST_THIRD_LEVEL_STORE_NAME = "linearityInjectionThirdLevel";
 export const PROTOCOL_GAS_STORE_NAME = "protocolGas";
 export const RATA_DATA_STORE_NAME = "rataData";
+export const RATA_SUMMARY_STORE_NAME = 'rataSummary';
 
 export const convertSectionToStoreName = (dataTableName) => {
   let storeName = "";
@@ -127,14 +129,18 @@ export const convertSectionToStoreName = (dataTableName) => {
     case LINEARITY_SUMMARY_TEST_SECOND_LEVEL_SECTION_NAME:
       storeName = LINEARITY_SUMMARY_TEST_SECOND_LEVEL_STORE_NAME;
       break;
-      case LINEARITY_INJECTION_TEST_THIRD_LEVEL_SECTION_NAME:
-        storeName = LINEARITY_INJECTION_TEST_THIRD_LEVEL_STORE_NAME;
-        break;
+    case LINEARITY_INJECTION_TEST_THIRD_LEVEL_SECTION_NAME:
+      storeName = LINEARITY_INJECTION_TEST_THIRD_LEVEL_STORE_NAME;
+      break;
     case PROTOCOL_GAS_SECTION_NAME:
       storeName = PROTOCOL_GAS_STORE_NAME;
       break;
     case RATA_DATA_SECTION_NAME:
       storeName = RATA_DATA_STORE_NAME;
+      break;
+    case RATA_SUMMARY_SECTION_NAME:
+      storeName = RATA_SUMMARY_STORE_NAME;
+      break;
     default:
       break;
   }

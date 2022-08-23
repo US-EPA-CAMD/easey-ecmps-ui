@@ -1,12 +1,15 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { connect } from "react-redux";
 import {
-  getRataData,
-  createRataData,
+  deleteProtocolGas,
+  getRataSummary,
+  createRataSummary,
+  updateRataSummary,
+  deleteRataSummary
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
 import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
-import { getRataDataRecords } from "../../../utils/selectors/QACert/TestSummary.js";
+import { mapRataSummaryToRows } from "../../../utils/selectors/QACert/TestSummary.js";
 import { Button } from "@trussworks/react-uswds";
 import {
   attachChangeEventListeners,
@@ -23,69 +26,97 @@ import { extractUserInput } from "../../../additional-functions/extract-user-inp
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
-import QARataSummaryExpandableRows from "../QARataSummaryExpandableRows/QARataSummaryExpandableRows.js";
-// contains RATA data table
+// contains rata summary data table
 
-const QARataDataExpandableRows = ({
+const QARataSummaryExpandableRows = ({
   user,
   mdmData,
   loadDropdownsData,
+  locId,
+  testSumId,
   data
 }) => {
-  const locId = data.locationId;
-  const testSumId = data.id;
+  const rataId = data.id
   const [loading, setLoading] = useState(false);
-  const [rataData, setRataData] = useState([]);
   const [updateTable, setUpdateTable] = useState(false);
+  const [rataSummaryData, setRataSummaryData] = useState([])
 
   useEffect(() => {
-    if (rataData.length === 0 || updateTable) {
-      setLoading(true);
-      getRataData(locId, testSumId)
-        .then((res) => {
-          finishedLoadingData(res.data);
-          setRataData(res.data);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
+    const fetchData = async () => {
+      setLoading(true)
+      try {
+        const resp = await getRataSummary(locId, testSumId, rataId)
+        finishedLoadingData(resp.data)
+        setRataSummaryData(resp.data)
+        setLoading(false)
+      } catch (error) {
+        console.log(error)
+      }
       setUpdateTable(false);
+    }
+
+    if (rataSummaryData.length === 0 || updateTable) {
+      fetchData()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locId, testSumId, updateTable]);
 
-  const dataRecords = useMemo(() => {
-    return getRataDataRecords(rataData);
+  const rowData = useMemo(() => {
+    return mapRataSummaryToRows(rataSummaryData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rataData]);
+  }, [rataSummaryData]);
 
   const [dataPulled, setDataPulled] = useState([]);
   const [show, setShow] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
+  const [dataLoaded, setDataLoaded] = useState(false);
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
+  const [mainDropdownChange, setMainDropdownChange] = useState("");
+
   const [createNewData, setCreateNewData] = useState(false);
+  const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
+
+  const [complimentaryData, setComplimentaryData] = useState([]);
+
+  const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
-  const dropdownArray = [["rataFrequencyCode"]];
+  const dropdownArray = [['operatingLevelCode', 'referenceMethodCode', 'apsCode', 'co2OrO2ReferenceMethodCode']];
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
+  const dataTableName = "RATA Summary";
   const columns = [
-    "Number of Load Levels",
-    "Relative Accuracy",
-    "RATA Frequency Code",
-    "Overall Bias Adjustment Factor",
+    'Operating Level Code',
+    'Reference Method Code',
+    'APS Indicator',
+    'APS Code',
+    'Relative Accuracy',
+    'CO2 or O2 Reference Method Code',
   ];
 
-  const dataTableName = "RATA Data";
+  // controls modal detail form inputs
   const controlInputs = {
-    numberLoadLevel: ["Number of Load Levels", "dropdown", "", "locked"],
+    operatingLevelCode: ["Operating Level Code", "dropdown", "", ""],
+    averageGrossUnitLoad: ["Average Gross Unit Load", "input", "", ""],
+    referenceMethodCode: ["Reference Method Code", "dropdown", "", ""],
+    meanCEMValue: ["Mean CEM Value", "input", "", ""],
+    meanRATAReferenceValue: ["Mean RATA Reference Value", "input", "", ""],
+    meanDifference: ["Mean Difference", "input", "", ""],
+    standardDeviationDifference: ["Standard Deviation Difference", "input", "", ""],
+    confidenceCoefficient: ["Confidence Coefficient", "input", "", ""],
+    tValue: ["T-Value", "input", "", ""],
+    apsIndicator: ["APS Indicator", "radio", "", ""],
+    apsCode: ["APS Code", "dropdown", "", ""],
     relativeAccuracy: ["Relative Accuracy", "input", "", ""],
-    rataFrequencyCode: ["RATA Frequency Code", "dropdown", "", ""],
-    overallBiasAdjustmentFactor: ["Overall Bias Adjustment Factor", "input", "", ""],
+    biasAdjustmentFactor: ["Bias Adjustment Factor", "input", "", ""],
+    co2OrO2ReferenceMethodCode: ["CO2 or O2 Reference Method Code", "dropdown", "", ""],
+    stackDiameter: ["Stack Diameter", "input", "", ""],
+    stackArea: ["Stack Area", "input", "", ""],
+    numberOfTraversePoints: ["Number of Traverse Points", "input", "", ""],
+    calculatedWAF: ["Calculated WAF", "input", "", ""],
   };
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
@@ -93,9 +124,6 @@ const QARataDataExpandableRows = ({
       loadDropdownsData(dataTableName, dropdownArray);
     } else {
       setDropdownsLoaded(true);
-      mdmData.numberLoadLevel = [
-        { code: "", name: selectText }, { code: 1, name: 1 }, { code: 2, name: 2 }, { code: 3, name: 3 },
-      ];
     }
   }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
 
@@ -110,11 +138,13 @@ const QARataDataExpandableRows = ({
     }
   };
   const executeOnClose = () => {
+    setReturnedFocusToLast(false);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
   };
   const finishedLoadingData = (loadedData) => {
     setDataPulled(loadedData);
+    setDataLoaded(true);
     addAriaLabelToDatatable();
   };
   // Executed when "View" action is clicked
@@ -122,7 +152,8 @@ const QARataDataExpandableRows = ({
     let selectedData = null;
     setCreateNewData(create);
     if (create) {
-      controlInputs.numberLoadLevel = ["Number of Load Levels", "dropdown", "", ""];
+      // set first option (operating level code) to default blank
+      controlInputs.operatingLevelCode = ["Operating Level Code", "dropdown", "", ""];
     }
     if (dataPulled.length > 0 && !create) {
       selectedData = dataPulled.filter(
@@ -158,6 +189,10 @@ const QARataDataExpandableRows = ({
       mainDropdownResult = [];
     }
 
+    if (!dropdownArrayIsEmpty) {
+      setPrefilteredMdmData(mdmData[prefilteredDataName]);
+    }
+
     const prefilteredTotalName = dropdownArray[0][dropdownArray[0].length - 1];
     setSelectedModalData(
       modalViewData(
@@ -181,13 +216,25 @@ const QARataDataExpandableRows = ({
     });
   };
 
-  const createData = () => {
+  const saveData = async () => {
     const uiControls = {}
     Object.keys(controlInputs).forEach((key) => { uiControls[key] = null });
     const userInput = extractUserInput(uiControls, ".modalUserInput");
-    createRataData(locId, testSumId, userInput)
+    try {
+      await updateRataSummary(locId, testSumId, rataId, userInput)
+      setUpdateTable(true);
+      executeOnClose();
+    } catch (error) {
+      console.log('error updating rata summary', error);
+    }
+  };
+
+  const createData = async () => {
+    const uiControls = {}
+    Object.keys(controlInputs).forEach((key) => { uiControls[key] = null });
+    const userInput = extractUserInput(uiControls, ".modalUserInput");
+    createRataSummary(locId, testSumId, rataId, userInput)
       .then((res) => {
-        console.log("res", res);
         if (Object.prototype.toString.call(res) === "[object Array]") {
           alert(res[0]);
         } else {
@@ -200,6 +247,22 @@ const QARataDataExpandableRows = ({
       });
   };
 
+  const onRemoveHandler = async (row) => {
+    const { id: idToRemove, testSumId } = row;
+    const resp = await deleteRataSummary(
+      locId,
+      testSumId,
+      rataId,
+      idToRemove
+    );
+    if (resp.status === 200) {
+      const dataPostRemove = rataSummaryData.filter(
+        (curRowData) => curRowData.id !== idToRemove
+      );
+      setRataSummaryData(dataPostRemove)
+    }
+  };
+
   return (
     <div className="padding-y-3">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -207,19 +270,14 @@ const QARataDataExpandableRows = ({
         <QADataTableRender
           columnNames={columns}
           columnWidth={15}
-          data={dataRecords}
-          openHandler={!user ? openModal : () => { }}
-          onRemoveHandler={() => { }}
-          expandableRowComp={<QARataSummaryExpandableRows
-            user={user}
-            locId={locId}
-            testSumId={testSumId}
-          />}
+          data={rowData}
+          openHandler={openModal}
+          onRemoveHandler={onRemoveHandler}
           actionColumnName={
             user ?
               <>
                 <span className="padding-right-2">
-                  RATA Data
+                  {dataTableName}
                 </span>
                 <Button
                   epa-testid="btnOpen"
@@ -229,7 +287,7 @@ const QARataDataExpandableRows = ({
                   Add
                 </Button>
               </>
-              : "RATA Data"
+              : dataTableName
           }
           actionsBtn={"View"}
           user={user}
@@ -243,7 +301,7 @@ const QARataDataExpandableRows = ({
                 actionColumnName={
                   (
                     <>
-                      <span className="padding-right-2">RATA Data</span>
+                      <span className="padding-right-2">{dataTableName}</span>
                       <Button
                         epa-testid="btnOpen"
                         className="text-white"
@@ -256,7 +314,7 @@ const QARataDataExpandableRows = ({
                 }
                 actionsBtn={"View"}
                 user={user}
-              />) : "There're no RATA data records available."
+              />) : "There're no records available."
           }
         />
       ) : (
@@ -267,7 +325,7 @@ const QARataDataExpandableRows = ({
         <Modal
           show={show}
           close={closeModalHandler}
-          save={createNewData ? createData : () => { }}
+          save={createNewData ? createData : saveData}
           showCancel={!user ? true : false}
           showSave={user ? true : false}
           title={
@@ -300,9 +358,9 @@ const QARataDataExpandableRows = ({
   );
 };
 const mapStateToProps = (state, ownProps) => {
-  const dataTableName = "RATA Data";
+  const dataTableName = 'RATA Summary'
   return {
-    mdmData: JSON.parse(JSON.stringify(state.dropdowns[convertSectionToStoreName(dataTableName)])),
+    mdmData: state.dropdowns[convertSectionToStoreName(dataTableName)],
   };
 };
 
@@ -318,6 +376,6 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(QARataDataExpandableRows);
+)(QARataSummaryExpandableRows);
 export { mapDispatchToProps };
 export { mapStateToProps };
