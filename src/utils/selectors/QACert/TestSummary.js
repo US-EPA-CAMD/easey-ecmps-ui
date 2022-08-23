@@ -156,7 +156,7 @@ export const mapRataSummaryToRows = (data) => {
       id: el.id,
       col1: el.operatingLevelCode,
       col2: el.referenceMethodCode,
-      col3: el.apsIndicator,
+      col3: el.apsIndicator === 1 ? 'Yes' : 'No',
       col4: el.apsCode,
       col5: el.relativeAccuracy,
       col6: el.co2OrO2ReferenceMethodCode,
