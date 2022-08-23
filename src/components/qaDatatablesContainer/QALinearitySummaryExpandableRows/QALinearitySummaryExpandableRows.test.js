@@ -316,17 +316,16 @@ const componentRenderer = (locId, testSummaryId) => {
 };
 
 test("testing linearity summary expandable records from test summary data", async () => {
-  expect(true).toBe(true);
-  // axios.get.mockImplementation(() =>
-  //   Promise.resolve({ status: 200, data: linearitySummary })
-  // );
-  // const res = await qaApi.getQALinearitySummary("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB");
-  // expect(res.data).toEqual(linearitySummary);
-  // let { container } = await waitForElement(() => componentRenderer("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB"));
-  // expect(container).toBeDefined();
-  // expect(screen.getByRole("table")).toBeDefined();
-  // expect(screen.getAllByRole("columnheader").length).toBe(6);
-  // expect(screen.getAllByRole("row").length).toBe(linearitySummary.length + 1);
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: linearitySummary })
+  );
+  const res = await qaApi.getQALinearitySummary("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB");
+  expect(res.data).toEqual(linearitySummary);
+  let { container } = await waitForElement(() => componentRenderer("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB"));
+  expect(container).toBeDefined();
+  expect(screen.getAllByRole("table").length).toBe(2);//includes protocol gas
+  expect(screen.getAllByRole("columnheader").length).toBe(12);
+  expect(screen.getAllByRole("row").length).toBe(8);
 });
 
 test.skip("when remove button on a row is clicked then that row is deleted from the table", async () => {
@@ -380,19 +379,17 @@ test.skip("when remove button on a row is clicked then that row is deleted from 
 });
 
 test("testing to add linearity summary records", async () => {
-  expect(true).toBe(true);
-  // axios.get.mockImplementation(() =>
-  //   Promise.resolve({ status: 200, data: linearitySummary })
-  // );
-  // const res = await qaApi.getQALinearitySummary("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB");
-  // expect(res.data).toEqual(linearitySummary);
-  // let { container } = await waitForElement(() => componentRenderer("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB"));
-  // expect(container).toBeDefined();
-  // const addButtons = screen.getAllByRole("button", {name: "Add"});
-  // //const addButton = screen.getByText("Add");
-
-  // expect(addButtons.length).toBe(2);
-  // fireEvent.click(addButtons[1]);
-  // //screen.debug();
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: linearitySummary })
+  );
+  const res = await qaApi.getQALinearitySummary("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB");
+  expect(res.data).toEqual(linearitySummary);
+  let { container } = await waitForElement(() => componentRenderer("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB"));
+  expect(container).toBeDefined();
+  const addButtons = screen.getAllByRole("button", {name: "Add"});
+  console.log(addButtons);
+  expect(addButtons.length).toBe(4);
+  // fireEvent.click(addButtons[0]);
   // expect(screen.getByText("Add Linearity Test")).toBeInTheDocument();
+  //screen.debug();
 });

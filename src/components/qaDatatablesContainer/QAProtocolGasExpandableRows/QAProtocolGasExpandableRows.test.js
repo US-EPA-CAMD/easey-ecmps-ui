@@ -262,13 +262,13 @@ test('renders QAProtocolGasExpandableRows properly',async () => {
   // Assert
   expect(container).toBeDefined();
   expect(findByRole).toBeDefined();
-  // const addButton = await findByRole ("button", {name: "Add"});
-  // expect(addButton).toBeDefined();
-  // fireEvent.click(addButton);
-  // expect(screen.getByText("Add Protocol Gas")).toBeInTheDocument();
+  const addButton = await findByRole ("button", {name: "Add"});
+  expect(addButton).toBeDefined();
+  fireEvent.click(addButton);
+  expect(screen.getByText("Add Protocol Gas")).toBeInTheDocument();
 
-  // const saveButton = screen.getByRole("button", {name: "Click to save"});
-  // expect(saveButton).toBeDefined();
+  const saveButton = screen.getByRole("button", {name: "Click to save"});
+  expect(saveButton).toBeDefined();
   // // screen.debug();
   // expect(screen.getAllByText("Gas Level Code").length).toBe(1);
   // expect(screen.getAllByText("Gas Type Code").length).toBe(2);

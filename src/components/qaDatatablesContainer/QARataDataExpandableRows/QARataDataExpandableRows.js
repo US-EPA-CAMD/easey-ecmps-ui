@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import {
   getRataData,
   createRataData,
+  updateRataData
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
 import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
@@ -23,6 +24,7 @@ import { extractUserInput } from "../../../additional-functions/extract-user-inp
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
+import QAProtocolGasExpandableRows from "../QAProtocolGasExpandableRows/QAProtocolGasExpandableRows.js";
 // contains RATA data table
 
 const QARataDataExpandableRows = ({
@@ -199,6 +201,27 @@ const QARataDataExpandableRows = ({
       });
   };
 
+  const saveData = () => {
+    const uiControls = {}
+    Object.keys(controlInputs).forEach((key) => { uiControls[key] = null});
+    const userInput = extractUserInput( uiControls, ".modalUserInput"); 
+    updateRataData(selectedRow.id, locId, testSumId, userInput)
+      .then((res) => {
+        console.log("res", res);
+        if (Object.prototype.toString.call(res) === "[object Array]") {
+          alert(res[0]);
+        } else {
+        setUpdateTable(true);
+        executeOnClose();
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
+
+
+
   return (
     <div className="padding-y-3">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -207,7 +230,7 @@ const QARataDataExpandableRows = ({
           columnNames={columns}
           columnWidth={15}
           data={dataRecords}
-          openHandler={!user? openModal : ()=>{}}
+          openHandler={openModal}
           onRemoveHandler={()=>{}}
           actionColumnName={
             user ?
@@ -257,11 +280,17 @@ const QARataDataExpandableRows = ({
         <Preloader />
       )}
 
+      <QAProtocolGasExpandableRows
+        user={user}
+        locId={locId}
+        testSumId={testSumId}
+      />
+
       {show ? (
         <Modal
           show={show}
           close={closeModalHandler}
-          save={createNewData ? createData : ()=>{}}
+          save={createNewData ? createData : saveData}
           showCancel={!user ? true: false}
           showSave={user? true: false}
           title={
