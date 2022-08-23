@@ -1,11 +1,11 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { connect } from "react-redux";
 import {
-  createProtocolGas,
-  updateProtocolGas,
   deleteProtocolGas,
   getRataSummary,
-  createRataSummary
+  createRataSummary,
+  updateRataSummary,
+  deleteRataSummary
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
 import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
@@ -216,64 +216,22 @@ const QARataSummaryExpandableRows = ({
     });
   };
 
-  const saveData = () => {
-    // const payload = {
-    //   gasLevelCode: selectedRow.gasLevelCode,
-    //   gasTypeCode: null,
-    //   cylinderID: null,
-    //   vendorID: null,
-    //   expirationDate: null,
-    // };
-
-    // TODO: extract payload details from somewhere?
-    const payload = {
-      operatingLevelCode: selectedRow.operatingLevelCode,
-      averageGrossUnitLoad: 0,
-      referenceMethodCode: "string",
-      meanCEMValue: 0,
-      meanRATAReferenceValue: 1,
-      meanDifference: 0,
-      standardDeviationDifference: 0,
-      confidenceCoefficient: 0,
-      tValue: 0,
-      apsIndicator: 0,
-      apsCode: "string",
-      relativeAccuracy: 0,
-      biasAdjustmentFactor: 0,
-      co2OrO2ReferenceMethodCode: "string",
-      stackDiameter: 0,
-      stackArea: 0,
-      numberOfTraversePoints: 0,
-      calculatedWAF: 0,
-      defaultWAF: 0
+  const saveData = async () => {
+    const uiControls = {}
+    Object.keys(controlInputs).forEach((key) => { uiControls[key] = null });
+    const userInput = extractUserInput(uiControls, ".modalUserInput");
+    try {
+      await updateRataSummary(locId, testSumId, rataId, userInput)
+      setUpdateTable(true);
+      executeOnClose();
+    } catch (error) {
+      console.log('error updating rata summary', error);
     }
-    const userInput = extractUserInput(payload, ".modalUserInput");
-
-    // TODO: change function that is called when data is edited/saved
-    updateProtocolGas(
-      locId,
-      testSumId,
-      selectedRow.id,
-      userInput
-    )
-      .then((res) => {
-        setUpdateTable(true);
-        executeOnClose();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
 
   const createData = async () => {
-    const uiControls = {
-      operatingLevelCode: null,
-      referenceMethodCode: null,
-      apsIndicator: null,
-      apsCode: null,
-      relativeAccuracy: null,
-      co2OrO2ReferenceMethodCode: null,
-    };
+    const uiControls = {}
+    Object.keys(controlInputs).forEach((key) => { uiControls[key] = null });
     const userInput = extractUserInput(uiControls, ".modalUserInput");
     createRataSummary(locId, testSumId, rataId, userInput)
       .then((res) => {
@@ -291,14 +249,15 @@ const QARataSummaryExpandableRows = ({
 
   const onRemoveHandler = async (row) => {
     const { id: idToRemove, testSumId } = row;
-    const resp = await deleteProtocolGas(
+    const resp = await deleteRataSummary(
       locId,
       testSumId,
+      rataId,
       idToRemove
     );
     if (resp.status === 200) {
       const dataPostRemove = rataSummaryData.filter(
-        (rowData) => rowData.id !== idToRemove
+        (curRowData) => curRowData.id !== idToRemove
       );
       setRataSummaryData(dataPostRemove)
     }

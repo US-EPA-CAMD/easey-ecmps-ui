@@ -160,7 +160,7 @@ test('renders QARataSummaryExpandableRows', async () => {
   );
   const res = await qaApi.getRataData("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15");
   expect(res.data).toEqual(rataSummaryApiResponse);
-  let { container, findByRole } = await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15", "test_user"));
+  let { container } = await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15", "test_user"));
 
   // Assert
   expect(container).toBeDefined();

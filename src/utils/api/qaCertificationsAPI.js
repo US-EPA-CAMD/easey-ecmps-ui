@@ -466,3 +466,17 @@ export const updateRataSummary = async (locId, testSumId, rataId, payload) => {
     return handleImportError(error);
   }
 }
+
+export const deleteRataSummary = async (locId, testSumId, rataId, id) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-sumarries/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+}
