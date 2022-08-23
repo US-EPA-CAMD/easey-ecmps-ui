@@ -423,6 +423,26 @@ export const createRataData = async (
   }
 };
 
+export const updateRataData = async (
+  id,
+  locId,
+  testSumId,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const getRataSummary = async (locId, testSumId, rataId) => {
   let url = `${config.services.qaCertification.uri}`;
 

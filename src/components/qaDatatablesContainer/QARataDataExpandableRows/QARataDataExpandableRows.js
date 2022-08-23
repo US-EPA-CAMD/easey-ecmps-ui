@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import {
   getRataData,
   createRataData,
+  updateRataData
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
 import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
@@ -23,6 +24,7 @@ import { extractUserInput } from "../../../additional-functions/extract-user-inp
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
+import QAProtocolGasExpandableRows from "../QAProtocolGasExpandableRows/QAProtocolGasExpandableRows.js";
 import QARataSummaryExpandableRows from "../QARataSummaryExpandableRows/QARataSummaryExpandableRows.js";
 // contains RATA data table
 
@@ -82,7 +84,7 @@ const QARataDataExpandableRows = ({
 
   const dataTableName = "RATA Data";
   const controlInputs = {
-    numberLoadLevel: ["Number of Load Levels", "dropdown", "", "locked"],
+    numberOfLoadLevels: ["Number of Load Levels", "dropdown", "", "locked"],
     relativeAccuracy: ["Relative Accuracy", "input", "", ""],
     rataFrequencyCode: ["RATA Frequency Code", "dropdown", "", ""],
     overallBiasAdjustmentFactor: ["Overall Bias Adjustment Factor", "input", "", ""],
@@ -93,7 +95,7 @@ const QARataDataExpandableRows = ({
       loadDropdownsData(dataTableName, dropdownArray);
     } else {
       setDropdownsLoaded(true);
-      mdmData.numberLoadLevel = [
+      mdmData.numberOfLoadLevels = [
         { code: "", name: selectText }, { code: 1, name: 1 }, { code: 2, name: 2 }, { code: 3, name: 3 },
       ];
     }
@@ -122,7 +124,7 @@ const QARataDataExpandableRows = ({
     let selectedData = null;
     setCreateNewData(create);
     if (create) {
-      controlInputs.numberLoadLevel = ["Number of Load Levels", "dropdown", "", ""];
+      controlInputs.numberOfLoadLevels = ["Number of Load Levels", "dropdown", "", ""];
     }
     if (dataPulled.length > 0 && !create) {
       selectedData = dataPulled.filter(
@@ -200,6 +202,33 @@ const QARataDataExpandableRows = ({
       });
   };
 
+  const saveData = () => {
+    const uiControls = {}
+    Object.keys(controlInputs).forEach((key) => {
+      if(key === 'numberOfLoadLevels'){
+        uiControls[key] = selectedRow.numberOfLoadLevels
+      }else{
+        uiControls[key] = null;
+      }
+    });
+    const userInput = extractUserInput( uiControls, ".modalUserInput"); 
+    updateRataData(selectedRow.id, locId, testSumId, userInput)
+      .then((res) => {
+        console.log("res", res);
+        if (Object.prototype.toString.call(res) === "[object Array]") {
+          alert(res[0]);
+        } else {
+        setUpdateTable(true);
+        executeOnClose();
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
+
+
+
   return (
     <div className="padding-y-3">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -208,7 +237,7 @@ const QARataDataExpandableRows = ({
           columnNames={columns}
           columnWidth={15}
           data={dataRecords}
-          openHandler={!user ? openModal : () => { }}
+          openHandler={openModal}
           onRemoveHandler={() => { }}
           expandableRowComp={<QARataSummaryExpandableRows
             user={user}
@@ -263,13 +292,19 @@ const QARataDataExpandableRows = ({
         <Preloader />
       )}
 
+      <QAProtocolGasExpandableRows
+        user={user}
+        locId={locId}
+        testSumId={testSumId}
+      />
+
       {show ? (
         <Modal
           show={show}
           close={closeModalHandler}
-          save={createNewData ? createData : () => { }}
-          showCancel={!user ? true : false}
-          showSave={user ? true : false}
+          save={createNewData ? createData : saveData}
+          showCancel={!user ? true: false}
+          showSave={user? true: false}
           title={
             createNewData
               ? `Add  ${dataTableName}`

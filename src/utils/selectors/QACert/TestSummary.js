@@ -140,7 +140,7 @@ export const getRataDataRecords = (data) => {
     records.push({
       id: el.id,
       testSumId: el.testSumId,
-      col1: el.numberLoadLevel,
+      col1: el.numberOfLoadLevels,
       col2: el.relativeAccuracy,
       col3: el.rataFrequencyCode,
       col4: el.overallBiasAdjustmentFactor,
