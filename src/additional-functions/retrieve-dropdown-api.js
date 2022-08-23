@@ -321,6 +321,7 @@ export const UseRetrieveDropdownApi = async (
         break;
       case "normalLevelCode":
       case "secondLevelCode":
+      case "operatingLevelCode":
         await dmApi.getAllOperatingLevelCodes().then((response) => {
           options = response.data.map((option) => {
             return {

@@ -424,87 +424,87 @@ export const createRataData = async (
 };
 
 export const getRataSummary = async (locId, testSumId, rataId) => {
-  // dummy fetch
-  await Promise.resolve(resolve => setTimeout(resolve, 3000))
-  const data = [
-    {
-      operatingLevelCode: "opLvlCode2",
-      averageGrossUnitLoad: 0,
-      referenceMethodCode: "refMethodCode2",
-      meanCEMValue: 0,
-      meanRATAReferenceValue: 1,
-      meanDifference: 0,
-      standardDeviationDifference: 0,
-      confidenceCoefficient: 0,
-      tValue: 0,
-      apsIndicator: 0,
-      apsCode: "apsCode2",
-      relativeAccuracy: 0,
-      biasAdjustmentFactor: 0,
-      co2OrO2ReferenceMethodCode: "co2OrO2RefMethodCode2",
-      stackDiameter: 0,
-      stackArea: 0,
-      numberOfTraversePoints: 0,
-      calculatedWAF: 0,
-      defaultWAF: 0,
-      id: "string",
-      rataId: "string",
-      calculatedAverageGrossUnitLoad: 0,
-      calculatedMeanCEMValue: 0,
-      calculatedMeanRATAReferenceValue: 0,
-      calculatedMeanDifference: 0,
-      calculatedStandardDeviationDifference: 0,
-      calculatedConfidenceCoefficient: 0,
-      calculatedTValue: 0,
-      calculatedApsIndicator: 0,
-      calculatedRelativeAccuracy: 0,
-      calculatedBiasAdjustmentFactor: 0,
-      calculatedStackArea: 0,
-      calculatedCalculatedWAF: 0,
-      userId: "string",
-      addDate: "string",
-      updateDate: "string"
-    },
-    {
-      operatingLevelCode: "opLvlCode1",
-      averageGrossUnitLoad: 0,
-      referenceMethodCode: "refMethodCode1",
-      meanCEMValue: 0,
-      meanRATAReferenceValue: 1,
-      meanDifference: 0,
-      standardDeviationDifference: 0,
-      confidenceCoefficient: 0,
-      tValue: 0,
-      apsIndicator: 0,
-      apsCode: "apsCode1",
-      relativeAccuracy: 0,
-      biasAdjustmentFactor: 0,
-      co2OrO2ReferenceMethodCode: "co2OrO2RefMethodCode1",
-      stackDiameter: 0,
-      stackArea: 0,
-      numberOfTraversePoints: 0,
-      calculatedWAF: 0,
-      defaultWAF: 0,
-      id: "string",
-      rataId: "string",
-      calculatedAverageGrossUnitLoad: 0,
-      calculatedMeanCEMValue: 0,
-      calculatedMeanRATAReferenceValue: 0,
-      calculatedMeanDifference: 0,
-      calculatedStandardDeviationDifference: 0,
-      calculatedConfidenceCoefficient: 0,
-      calculatedTValue: 0,
-      calculatedApsIndicator: 0,
-      calculatedRelativeAccuracy: 0,
-      calculatedBiasAdjustmentFactor: 0,
-      calculatedStackArea: 0,
-      calculatedCalculatedWAF: 0,
-      userId: "string",
-      addDate: "string",
-      updateDate: "string"
-    }
-  ]
-  return { status: 200, data }
+  // // dummy fetch
+  // await Promise.resolve(resolve => setTimeout(resolve, 3000))
+  // const data = [
+  //   {
+  //     operatingLevelCode: "M",
+  //     averageGrossUnitLoad: 0,
+  //     referenceMethodCode: "2FH",
+  //     meanCEMValue: 0,
+  //     meanRATAReferenceValue: 1,
+  //     meanDifference: 0,
+  //     standardDeviationDifference: 0,
+  //     confidenceCoefficient: 0,
+  //     tValue: 0,
+  //     apsIndicator: 0,
+  //     apsCode: "PS15",
+  //     relativeAccuracy: 0,
+  //     biasAdjustmentFactor: 0,
+  //     co2OrO2ReferenceMethodCode: "6C,3A",
+  //     stackDiameter: 0,
+  //     stackArea: 0,
+  //     numberOfTraversePoints: 0,
+  //     calculatedWAF: 0,
+  //     defaultWAF: 0,
+  //     id: "string",
+  //     rataId: "string",
+  //     calculatedAverageGrossUnitLoad: 0,
+  //     calculatedMeanCEMValue: 0,
+  //     calculatedMeanRATAReferenceValue: 0,
+  //     calculatedMeanDifference: 0,
+  //     calculatedStandardDeviationDifference: 0,
+  //     calculatedConfidenceCoefficient: 0,
+  //     calculatedTValue: 0,
+  //     calculatedApsIndicator: 0,
+  //     calculatedRelativeAccuracy: 0,
+  //     calculatedBiasAdjustmentFactor: 0,
+  //     calculatedStackArea: 0,
+  //     calculatedCalculatedWAF: 0,
+  //     userId: "string",
+  //     addDate: "string",
+  //     updateDate: "string"
+  //   },
+  //   {
+  //     operatingLevelCode: "H",
+  //     averageGrossUnitLoad: 0,
+  //     referenceMethodCode: "6A",
+  //     meanCEMValue: 0,
+  //     meanRATAReferenceValue: 1,
+  //     meanDifference: 0,
+  //     standardDeviationDifference: 0,
+  //     confidenceCoefficient: 0,
+  //     tValue: 0,
+  //     apsIndicator: 0,
+  //     apsCode: "PS18",
+  //     relativeAccuracy: 0,
+  //     biasAdjustmentFactor: 0,
+  //     co2OrO2ReferenceMethodCode: "20",
+  //     stackDiameter: 0,
+  //     stackArea: 0,
+  //     numberOfTraversePoints: 0,
+  //     calculatedWAF: 0,
+  //     defaultWAF: 0,
+  //     id: "string",
+  //     rataId: "string",
+  //     calculatedAverageGrossUnitLoad: 0,
+  //     calculatedMeanCEMValue: 0,
+  //     calculatedMeanRATAReferenceValue: 0,
+  //     calculatedMeanDifference: 0,
+  //     calculatedStandardDeviationDifference: 0,
+  //     calculatedConfidenceCoefficient: 0,
+  //     calculatedTValue: 0,
+  //     calculatedApsIndicator: 0,
+  //     calculatedRelativeAccuracy: 0,
+  //     calculatedBiasAdjustmentFactor: 0,
+  //     calculatedStackArea: 0,
+  //     calculatedCalculatedWAF: 0,
+  //     userId: "string",
+  //     addDate: "string",
+  //     updateDate: "string"
+  //   }
+  // ]
+  // return { status: 200, data }
 
   // actual fetch
   let url = `${config.services.qaCertification.uri}`;
@@ -515,13 +515,13 @@ export const getRataSummary = async (locId, testSumId, rataId) => {
   }
 
   // *** attach the rest of the url
-  url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summary`;
+  url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries`;
 
   return axios.get(url).then(handleResponse).catch(handleError);
 }
 
 export const createRataSummary = async (locId, testSumId, rataId, payload) => {
-  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summary`;
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries`;
   try {
     return handleResponse(
       await secureAxios({
@@ -536,7 +536,7 @@ export const createRataSummary = async (locId, testSumId, rataId, payload) => {
 }
 
 export const updateRataSummary = async (locId, testSumId, rataId, payload) => {
-  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summary`;
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-sumarries`;
   try {
     return handleResponse(
       await secureAxios({
