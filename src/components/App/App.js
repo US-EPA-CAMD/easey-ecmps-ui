@@ -30,6 +30,7 @@ import {
   EXPORT_STORE_NAME,
   EMISSIONS_DAILY_STORE_NAME,
   EMISSIONS_HOURLY_STORE_NAME,
+  EMISSIONS_MATS_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 
 const App = () => {
@@ -249,12 +250,38 @@ const App = () => {
               component={() => (
                 <SelectConfigurationBaseModuleHome
                   user={user}
-                  workspaceSection={EMISSIONS_HOURLY_STORE_NAME}
+                  workspaceSection={EMISSIONS_MATS_STORE_NAME}
                 />
               )}
             />
 
-            <Route path="/emissions_mats" component={ComingSoon} />
+            {user ? (
+              <Redirect from="/emissions_mats" to="/workspace/emissions_mats" />
+            ) : (
+              <Redirect from="/workspace/emissions_mats" to="/emissions_mats" />
+            )}
+            <Route
+              path="/emissions_mats"
+              exact
+              component={() => {
+                return (
+                  <SelectConfigurationBaseModuleHome
+                    user={false}
+                    workspaceSection={EMISSIONS_MATS_STORE_NAME}
+                  />
+                );
+              }}
+            />
+            <Route
+              path="/workspace/emissions_mats"
+              exact
+              component={() => (
+                <SelectConfigurationBaseModuleHome
+                  user={user}
+                  workspaceSection={EMISSIONS_HOURLY_STORE_NAME}
+                />
+              )}
+            />
 
             {user ? (
               <Redirect from="/export" to="/workspace/export" />
