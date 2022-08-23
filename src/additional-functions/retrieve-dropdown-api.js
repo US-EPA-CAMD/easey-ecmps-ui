@@ -792,8 +792,6 @@ export const UseRetrieveDropdownApi = async (
         break;
     }
   }
-
-  console.log('totaloptions', totalOptions)
   return totalOptions;
 };
 
