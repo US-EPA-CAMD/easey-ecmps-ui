@@ -443,6 +443,20 @@ export const updateRataData = async (
   }
 };
 
+export const deleteRataData = async (locId, testSumId, id) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+}
+
 export const getRataSummary = async (locId, testSumId, rataId) => {
   let url = `${config.services.qaCertification.uri}`;
 

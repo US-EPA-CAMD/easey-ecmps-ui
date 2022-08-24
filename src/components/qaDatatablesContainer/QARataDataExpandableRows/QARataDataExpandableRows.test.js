@@ -5,6 +5,7 @@ import configureStore from "../../../store/configureStore.dev";
 import initialState from "../../../store/reducers/initialState";
 import * as qaApi from "../../../utils/api/qaCertificationsAPI";
 import QARataDataExpandableRows from "./QARataDataExpandableRows"
+import userEvent from "@testing-library/user-event";
 
 const axios = require("axios");
 jest.mock("axios");
@@ -86,11 +87,11 @@ initialState.dropdowns.rataData = {
 let store = configureStore(initialState);
 const componentRenderer = (locId, testSummaryId, user) => {
   const props = {
-    user : user,
-    loadDropdownsData : jest.fn(),
+    user: user,
+    loadDropdownsData: jest.fn(),
     data: {
       locationId: locId,
-      id:testSummaryId
+      id: testSummaryId
     }
   }
   return render(
@@ -99,23 +100,23 @@ const componentRenderer = (locId, testSummaryId, user) => {
     </Provider>
   );
 };
-test('renders QARataDataExpandableRows properly',async () => {
+test('renders QARataDataExpandableRows properly', async () => {
   // Arrange
   axios.get.mockImplementation(() =>
     Promise.resolve({ status: 200, data: rataDataApiResponse })
   );
   const res = await qaApi.getRataData("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15");
   expect(res.data).toEqual(rataDataApiResponse);
-  let { container, findByRole } = await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15","test_user"));
+  let { container, findByRole } = await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15", "test_user"));
   // Assert
   expect(container).toBeDefined();
   expect(findByRole).toBeDefined();
-  const addButton = await findByRole ("button", {name: "Add"});
+  const addButton = await findByRole("button", { name: "Add" });
   expect(addButton).toBeDefined();
   fireEvent.click(addButton);
   expect(screen.getByText("Add RATA Data")).toBeInTheDocument();
 
-  const saveButton = screen.getByRole("button", {name: "Click to save"});
+  const saveButton = screen.getByRole("button", { name: "Click to save" });
   expect(saveButton).toBeDefined();
   //screen.debug();
   // expect(screen.getAllByText("Gas Level Code").length).toBe(1);
@@ -128,3 +129,27 @@ test('renders QARataDataExpandableRows properly',async () => {
   // expect(rowGroups).toBeDefined();
   // expect(rowGroups.length).toBe(protocolGasApiResponse.length + 1);
 });
+
+test.only('given a user when "Delete" button is clicked then a row is deleted', async () => {
+  // Arrange
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: rataDataApiResponse })
+  );
+  const res = await qaApi.getRataData("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15");
+  expect(res.data).toEqual(rataDataApiResponse);
+  let { getAllByRole } = await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15", "test_user"));
+
+  axios.mockResolvedValue({ status: 200, data: 'deleted successfully' })
+  const deleteBtns = getAllByRole('button', { name: /Remove/i })
+  const firstDeleteBtn = deleteBtns[0]
+
+  // Act
+  userEvent.click(firstDeleteBtn)
+
+  const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+  const firstConfirmBtn = confirmBtns[0]
+  userEvent.click(firstConfirmBtn)
+
+  // Assert
+  expect(axios).toHaveBeenCalled()
+})
