@@ -64,7 +64,6 @@ const reducer = (state, action) => {
 
       break;
     case types.SET_EXPORT_STATE:
-      console.log(action.workspaceSection)
       returnObject = {
         ...currentState,
         [`${action.workspaceSection}`]: currentState[

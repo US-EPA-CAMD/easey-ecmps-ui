@@ -85,7 +85,6 @@ const ModalDetails = ({
   }
 
   const makeViewOnlyComp = (value, locked) => {
-    //console.log('value',value)
     return (
       <div key={`${value[1]}`} className="grid-col">
         {
@@ -198,7 +197,31 @@ const ModalDetails = ({
           />
         );
         break;
-
+      case "nonFilteredDropdown":
+        comp = (
+          <SelectBox
+            className={`modalUserInput ${
+              cols === 3 ? "" : largeWidthCardStyle
+            }`}
+            epadataname={value[0]}
+            options={
+              value[6] !== null || value[6] !== undefined
+                ? value[6]
+                : [{ code: "", name: "" }]
+            }
+            initialSelection={
+              !disableDropdownFlag || (create && !mainDropdownUntouched)
+                ? value[5]
+                : "select"
+            }
+            selectKey="code"
+            id={value[1]}
+            epa-testid={value[0].split(" ").join("-")}
+            name={value[1]}
+            secondOption="name"
+          />
+        );
+        break;
       case "independentDropdown":
         comp = (
           <SelectBox
@@ -395,7 +418,7 @@ const ModalDetails = ({
     } else {
       if (value[4] === "locked") {
         if (!create) {
-          row.push(makeViewOnlyComp(value,true));
+          row.push(makeViewOnlyComp(value, true));
         } else {
           row.push(makeViewOnlyComp([false, false, false, false, false]));
         }

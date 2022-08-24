@@ -10,12 +10,13 @@ export const QACertTestSummaryRender = ({
   selectedConfig,
   setSectionSelect,
   setLocationSelect,
+  setSelectedTestCode,
+  selectedTestCode,
   sectionSelect,
   locationSelect,
   orisCode,
   configID,
 }) => {
-  const [selectedTestCode, setSelectedTestCode] = useState(["LINE"]);
   return (
     <div className=" padding-top-0">
       <div className="grid-row">
@@ -38,6 +39,7 @@ export const QACertTestSummaryRender = ({
         <QALinearitySummaryDataTable
           locationSelectValue={locationSelect ? locationSelect[1] : 0}
           user={user}
+          sectionSelect={sectionSelect}
           selectedLocation={{
             name: locations[locationSelect[0]]["name"],
             stackPipeId: locations[locationSelect[0]]["stackPipeId"],

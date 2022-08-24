@@ -15,7 +15,8 @@ export const dataYearOptions = async () => {
 export const UseRetrieveDropdownApi = async (
   dropDownFields,
   mats = false,
-  equipmentControl = false
+  equipmentControl = false,
+  selectedTestCode = false,
 ) => {
   let totalOptions = {};
 
@@ -320,6 +321,7 @@ export const UseRetrieveDropdownApi = async (
         break;
       case "normalLevelCode":
       case "secondLevelCode":
+      case "operatingLevelCode":
         await dmApi.getAllOperatingLevelCodes().then((response) => {
           options = response.data.map((option) => {
             return {
@@ -697,40 +699,99 @@ export const UseRetrieveDropdownApi = async (
               name: option["testTypeCodeDescription"],
             };
           });
+          options = options.filter(
+            (option) => selectedTestCode.testTypeCodes.includes(option.code)
+          );
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+
+      case "gasLevelCode":
+        await dmApi.getAllGasLevelCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["gasLevelCode"],
+              name: option["gasLevelDescription"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+      case "gasTypeCode":
+        await dmApi.getAllGasTypeCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["gasTypeCode"],
+              name: option["gasTypeDescription"],
+            };
+          });
 
           setDefaultOptions(options, fieldName);
         });
         break;
 
-        case "gasLevelCode":
-          await dmApi.getAllGasLevelCodes().then((response) => {
-            options = response.data.map((option) => {
-              return {
-                code: option["gasLevelCode"],
-                name: option["gasLevelDescription"],
-              };
-            });
-  
-            setDefaultOptions(options, fieldName);
+      case "prefilteredTestSummaries":
+        let noDupesTestCodes = [];
+        await dmApi.getPrefilteredTestSummaries().then((response) => {
+          noDupesTestCodes = response.data.map((code) => {
+            return code["testTypeCode"];
           });
-          break;
-        case "gasTypeCode":
-          await dmApi.getAllGasTypeCodes().then((response) => {
-            options = response.data.map((option) => {
-              return {
-                code: option["gasTypeCode"],
-                name: option["gasTypeDescription"],
-              };
-            });
-  
-            setDefaultOptions(options, fieldName);
+
+          noDupesTestCodes = [...new Set(noDupesTestCodes)];
+
+          const prefilteredMdmOptions = organizePrefilterMDMData(
+            noDupesTestCodes,
+            "testTypeCode",
+            response.data
+          );
+
+          setDefaultOptions(prefilteredMdmOptions, fieldName);
+        });
+        break;
+
+      case "rataFrequencyCode":
+        await dmApi.getAllRataFreqCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["rataFrequencyCode"],
+              name: option["rataFrequencyCodeDescription"],
+            };
           });
-          break;
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+      case "apsCode":
+        await dmApi.getAllApsCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["apsCode"],
+              name: option["apsCodeDescription"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+      case "referenceMethodCode":
+      case "co2OrO2ReferenceMethodCode":
+        await dmApi.getAllReferenceMethodCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["referenceMethodCode"],
+              name: option["referenceMethodCodeDescription"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        });
+        break;
+
       default:
         break;
     }
   }
-
   return totalOptions;
 };
 

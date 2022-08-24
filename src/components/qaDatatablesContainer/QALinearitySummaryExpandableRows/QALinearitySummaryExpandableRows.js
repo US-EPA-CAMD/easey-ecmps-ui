@@ -32,8 +32,8 @@ import { modalViewData } from "../../../additional-functions/create-modal-input-
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import QAProtocolGasExpandableRows from "../QAProtocolGasExpandableRows/QAProtocolGasExpandableRows.js";
-// contains test summary data table
 
+// contains test summary data table
 const QALinearitySummaryExpandableRows = ({
   user,
   nonEditable,
@@ -51,7 +51,6 @@ const QALinearitySummaryExpandableRows = ({
   useEffect(() => {
     if (qaLinearitySummary.length === 0 || updateTable) {
       setLoading(true);
-      console.log('locationid in linearity summary',locationId,id)
       getQALinearitySummary(locationId, id) //locID, testSumId
         .then((res) => {
           finishedLoadingData(res.data);

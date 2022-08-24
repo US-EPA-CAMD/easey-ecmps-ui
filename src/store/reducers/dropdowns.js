@@ -17,10 +17,21 @@ const reducer = (state, action) => {
       ...currentState,
       ...dropdowns,
     };
+  } else if (action.type === types.UPDATE_DROPDOWN_SUCCESS) {
+    returnObject = {
+      ...currentState,
+      [`${action.workspaceSection}`]: currentState[
+        `${action.workspaceSection}`
+      ].map((x) =>
+        x.name === action.title
+          ? {
+              ...x,
+              inactive: action.inactive,
+            }
+          : x
+      ),
+    };
   }
-  // else if (action.type === types.UPDATE_DROPDOWNS) {
-  //   returnObject = {...state, action.section: {...state.cartData, ...action.payload}}
-  // }
 
   // otherwise, just keep old state
   else {

@@ -28,6 +28,9 @@ import {
 import {
   QA_CERT_TEST_SUMMARY_STORE_NAME,
   EXPORT_STORE_NAME,
+  EMISSIONS_DAILY_STORE_NAME,
+  EMISSIONS_HOURLY_STORE_NAME,
+  EMISSIONS_MATS_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 
 const App = () => {
@@ -183,6 +186,103 @@ const App = () => {
             )}
             <Route path="/emission/" exact component={ComingSoon} />
             <Route path="/workspace/emission/" exact component={ComingSoon} />
+
+            {user ? (
+              <Redirect
+                from="/emissions_daily"
+                to="/workspace/emissions_daily"
+              />
+            ) : (
+              <Redirect
+                from="/workspace/emissions_daily"
+                to="/emissions_daily"
+              />
+            )}
+            <Route
+              path="/emissions_daily"
+              exact
+              component={() => {
+                return (
+                  <SelectConfigurationBaseModuleHome
+                    user={false}
+                    workspaceSection={EMISSIONS_DAILY_STORE_NAME}
+                  />
+                );
+              }}
+            />
+            <Route
+              path="/workspace/emissions_daily"
+              exact
+              component={() => (
+                <SelectConfigurationBaseModuleHome
+                  user={user}
+                  workspaceSection={EMISSIONS_DAILY_STORE_NAME}
+                />
+              )}
+            />
+
+            {user ? (
+              <Redirect
+                from="/emissions_hourly"
+                to="/workspace/emissions_hourly"
+              />
+            ) : (
+              <Redirect
+                from="/workspace/emissions_hourly"
+                to="/emissions_hourly"
+              />
+            )}
+            <Route
+              path="/emissions_hourly"
+              exact
+              component={() => {
+                return (
+                  <SelectConfigurationBaseModuleHome
+                    user={false}
+                    workspaceSection={EMISSIONS_HOURLY_STORE_NAME}
+                  />
+                );
+              }}
+            />
+            <Route
+              path="/workspace/emissions_hourly"
+              exact
+              component={() => (
+                <SelectConfigurationBaseModuleHome
+                  user={user}
+                  workspaceSection={EMISSIONS_MATS_STORE_NAME}
+                />
+              )}
+            />
+
+            {user ? (
+              <Redirect from="/emissions_mats" to="/workspace/emissions_mats" />
+            ) : (
+              <Redirect from="/workspace/emissions_mats" to="/emissions_mats" />
+            )}
+            <Route
+              path="/emissions_mats"
+              exact
+              component={() => {
+                return (
+                  <SelectConfigurationBaseModuleHome
+                    user={false}
+                    workspaceSection={EMISSIONS_MATS_STORE_NAME}
+                  />
+                );
+              }}
+            />
+            <Route
+              path="/workspace/emissions_mats"
+              exact
+              component={() => (
+                <SelectConfigurationBaseModuleHome
+                  user={user}
+                  workspaceSection={EMISSIONS_HOURLY_STORE_NAME}
+                />
+              )}
+            />
+
             {user ? (
               <Redirect from="/export" to="/workspace/export" />
             ) : (

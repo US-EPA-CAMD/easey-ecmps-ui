@@ -392,3 +392,30 @@ export const getAllTestTypeGroupCodes = async () => {
     .then(handleResponse)
     .catch(handleError)
 }
+export const getPrefilteredTestSummaries = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/relationships/test-summaries`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getAllRataFreqCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/rata-frequency-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getAllApsCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/aps-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export const getAllReferenceMethodCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/reference-method-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+}
