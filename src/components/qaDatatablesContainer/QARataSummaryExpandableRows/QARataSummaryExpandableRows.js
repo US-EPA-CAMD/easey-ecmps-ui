@@ -248,18 +248,22 @@ const QARataSummaryExpandableRows = ({
   };
 
   const onRemoveHandler = async (row) => {
-    const { id: idToRemove, testSumId } = row;
-    const resp = await deleteRataSummary(
-      locId,
-      testSumId,
-      rataId,
-      idToRemove
-    );
-    if (resp.status === 200) {
-      const dataPostRemove = rataSummaryData.filter(
-        (curRowData) => curRowData.id !== idToRemove
+    const { id: idToRemove } = row;
+    try {
+      const resp = await deleteRataSummary(
+        locId,
+        testSumId,
+        rataId,
+        idToRemove
       );
-      setRataSummaryData(dataPostRemove)
+      if (resp.status === 200) {
+        const dataPostRemove = rataSummaryData.filter(
+          (curRowData) => curRowData.id !== idToRemove
+        );
+        setRataSummaryData(dataPostRemove)
+      }
+    } catch (error) {
+      console.log('error deleting rata summary', error);
     }
   };
 
