@@ -84,7 +84,7 @@ const QARataDataExpandableRows = ({
 
   const dataTableName = "RATA Data";
   const controlInputs = {
-    numberOfLoadLevels: ["Number of Load Levels", "dropdown", "", "locked"],
+    numberOfLoadLevels: ["Number of Load Levels", "dropdown", "", ""],
     relativeAccuracy: ["Relative Accuracy", "input", "", ""],
     rataFrequencyCode: ["RATA Frequency Code", "dropdown", "", ""],
     overallBiasAdjustmentFactor: ["Overall Bias Adjustment Factor", "input", "", ""],
