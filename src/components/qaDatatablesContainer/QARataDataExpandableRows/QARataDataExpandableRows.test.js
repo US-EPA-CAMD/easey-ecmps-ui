@@ -130,7 +130,7 @@ test('renders QARataDataExpandableRows properly', async () => {
   // expect(rowGroups.length).toBe(protocolGasApiResponse.length + 1);
 });
 
-test.only('given a user when "Delete" button is clicked then a row is deleted', async () => {
+test('given a user when "Delete" button is clicked then a row is deleted', async () => {
   // Arrange
   axios.get.mockImplementation(() =>
     Promise.resolve({ status: 200, data: rataDataApiResponse })
