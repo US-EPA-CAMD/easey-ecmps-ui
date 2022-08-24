@@ -257,9 +257,7 @@ const QARataSummaryExpandableRows = ({
         idToRemove
       );
       if (resp.status === 200) {
-        const dataPostRemove = rataSummaryData.filter(
-          (curRowData) => curRowData.id !== idToRemove
-        );
+        const dataPostRemove = rataSummaryData.filter(curRowData => curRowData.id !== idToRemove);
         setRataSummaryData(dataPostRemove)
       }
     } catch (error) {
