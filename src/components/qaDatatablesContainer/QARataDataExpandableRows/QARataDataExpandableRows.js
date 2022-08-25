@@ -37,6 +37,7 @@ const QARataDataExpandableRows = ({
 }) => {
   const locId = data.locationId;
   const testSumId = data.id;
+  const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [rataData, setRataData] = useState([]);
   const [updateTable, setUpdateTable] = useState(false);
@@ -92,15 +93,19 @@ const QARataDataExpandableRows = ({
   };
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
-    if (mdmData && mdmData.length === 0) {
-      loadDropdownsData(dataTableName, dropdownArray);
+    if (!dropdownArrayIsEmpty && mdmData.length === 0) {
+      if(!dropdownsLoading){
+        loadDropdownsData(dataTableName, dropdownArray);
+        setDropdownsLoading(true);
+      }
     } else {
       setDropdownsLoaded(true);
+      setDropdownsLoading(false);
       mdmData.numberOfLoadLevels = [
         { code: "", name: selectText }, { code: 1, name: 1 }, { code: 2, name: 2 }, { code: 3, name: 3 },
       ];
     }
-  }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
+  }, [mdmData]);
 
   const controlDatePickerInputs = {};
   const closeModalHandler = () => {
