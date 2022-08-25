@@ -486,8 +486,8 @@ export const createRataSummary = async (locId, testSumId, rataId, payload) => {
   }
 }
 
-export const updateRataSummary = async (locId, testSumId, rataId, payload) => {
-  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-sumarries`;
+export const updateRataSummary = async (locId, testSumId, rataId, id, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${id}`;
   try {
     return handleResponse(
       await secureAxios({
