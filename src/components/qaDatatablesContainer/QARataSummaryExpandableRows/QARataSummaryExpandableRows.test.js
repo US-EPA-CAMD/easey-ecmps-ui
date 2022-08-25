@@ -153,12 +153,13 @@ const componentRenderer = (locId, testSummaryId, user) => {
     </Provider>
   );
 };
+
 test('renders QARataSummaryExpandableRows', async () => {
   // Arrange
   axios.get.mockImplementation(() =>
     Promise.resolve({ status: 200, data: rataSummaryApiResponse })
   );
-  const res = await qaApi.getRataData("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15");
+  const res = await qaApi.getRataSummary("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15", "rataId");
   expect(res.data).toEqual(rataSummaryApiResponse);
   let { container } = await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15", "test_user"));
 
@@ -215,4 +216,26 @@ test('given no user when "View" button is clicked then data is displayed in a mo
   // Assert
   const rataSummaryTitles = screen.getAllByText(/RATA Summary/i)
   expect(rataSummaryTitles).toHaveLength(rataSummaryApiResponse.length + 1)
+})
+
+test('given a user when "Delete" button is clicked then a row is deleted', async () => {
+  // Arrange
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: rataSummaryApiResponse })
+  );
+  let { getAllByRole } = await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15", "test_user"));
+
+  axios.mockResolvedValue({ status: 200, data: 'deleted successfully' })
+  const deleteBtns = getAllByRole('button', { name: /Remove/i })
+  const firstDeleteBtn = deleteBtns[0]
+
+  // Act
+  userEvent.click(firstDeleteBtn)
+
+  const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+  const firstConfirmBtn = confirmBtns[0]
+  userEvent.click(firstConfirmBtn)
+
+  // Assert
+  expect(axios).toHaveBeenCalled()
 })

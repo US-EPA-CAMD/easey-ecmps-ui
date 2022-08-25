@@ -502,7 +502,7 @@ export const updateRataSummary = async (locId, testSumId, rataId, id, payload) =
 }
 
 export const deleteRataSummary = async (locId, testSumId, rataId, id) => {
-  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-sumarries/${id}`;
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${id}`;
   try {
     return handleResponse(
       await secureAxios({
