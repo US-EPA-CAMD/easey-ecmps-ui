@@ -444,9 +444,11 @@ const initialState = {
 const store = configureStore(initialState)
 
 const props = {
-  selectedTestCode: [
-    "UNITDEF"
-  ]
+  selectedTestCode: {
+    testTypeCodes: [
+      "UNITDEF"
+    ]
+  }
 }
 
 //testing redux connected component to mimic props passed as argument
