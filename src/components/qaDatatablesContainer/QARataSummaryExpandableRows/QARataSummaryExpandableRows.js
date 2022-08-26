@@ -36,7 +36,8 @@ const QARataSummaryExpandableRows = ({
   testSumId,
   data
 }) => {
-  const rataId = data.id
+  const rataId = data.id;
+  const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
   const [rataSummaryData, setRataSummaryData] = useState([])
@@ -120,12 +121,16 @@ const QARataSummaryExpandableRows = ({
   };
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
-    if (mdmData && mdmData.length === 0) {
-      loadDropdownsData(dataTableName, dropdownArray);
+    if (!dropdownArrayIsEmpty && mdmData.length === 0) {
+      if(!dropdownsLoading){
+        loadDropdownsData(dataTableName, dropdownArray);
+        setDropdownsLoading(true);
+      }
     } else {
       setDropdownsLoaded(true);
+      setDropdownsLoading(false);
     }
-  }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
+  }, [mdmData]);
 
   const controlDatePickerInputs = {};
   const closeModalHandler = () => {
@@ -151,10 +156,6 @@ const QARataSummaryExpandableRows = ({
   const openModal = (row, bool, create) => {
     let selectedData = null;
     setCreateNewData(create);
-    if (create) {
-      // set first option (operating level code) to default blank
-      controlInputs.operatingLevelCode = ["Operating Level Code", "dropdown", "", ""];
-    }
     if (dataPulled.length > 0 && !create) {
       selectedData = dataPulled.filter(
         (element) => element.id === row[`id`]
@@ -216,23 +217,29 @@ const QARataSummaryExpandableRows = ({
     });
   };
 
-  const saveData = async () => {
+  const saveData = () => {
     const uiControls = {}
     Object.keys(controlInputs).forEach((key) => { uiControls[key] = null });
-    const userInput = extractUserInput(uiControls, ".modalUserInput");
-    try {
-      await updateRataSummary(locId, testSumId, rataId, userInput)
-      setUpdateTable(true);
-      executeOnClose();
-    } catch (error) {
-      console.log('error updating rata summary', error);
-    }
+    const userInput = extractUserInput( uiControls, ".modalUserInput", ["apsIndicator"]); 
+    updateRataSummary(locId, testSumId, rataId, selectedRow.id, userInput)
+      .then((res) => {
+        console.log("res", res);
+        if (Object.prototype.toString.call(res) === "[object Array]") {
+          alert(res[0]);
+        } else {
+        setUpdateTable(true);
+        executeOnClose();
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
   };
 
   const createData = async () => {
     const uiControls = {}
     Object.keys(controlInputs).forEach((key) => { uiControls[key] = null });
-    const userInput = extractUserInput(uiControls, ".modalUserInput");
+    const userInput = extractUserInput(uiControls, ".modalUserInput", ["apsIndicator"]);
     createRataSummary(locId, testSumId, rataId, userInput)
       .then((res) => {
         if (Object.prototype.toString.call(res) === "[object Array]") {
@@ -248,23 +255,25 @@ const QARataSummaryExpandableRows = ({
   };
 
   const onRemoveHandler = async (row) => {
-    const { id: idToRemove, testSumId } = row;
-    const resp = await deleteRataSummary(
-      locId,
-      testSumId,
-      rataId,
-      idToRemove
-    );
-    if (resp.status === 200) {
-      const dataPostRemove = rataSummaryData.filter(
-        (curRowData) => curRowData.id !== idToRemove
+    const { id: idToRemove } = row;
+    try {
+      const resp = await deleteRataSummary(
+        locId,
+        testSumId,
+        rataId,
+        idToRemove
       );
-      setRataSummaryData(dataPostRemove)
+      if (resp.status === 200) {
+        const dataPostRemove = rataSummaryData.filter(curRowData => curRowData.id !== idToRemove);
+        setRataSummaryData(dataPostRemove)
+      }
+    } catch (error) {
+      console.log('error deleting rata summary', error);
     }
   };
 
   return (
-    <div className="padding-y-3">
+    <div className="padding-y-3 padding-left-1">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       {!loading ? (
         <QADataTableRender

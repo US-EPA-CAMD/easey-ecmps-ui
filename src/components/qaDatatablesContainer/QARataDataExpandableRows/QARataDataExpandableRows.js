@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import {
   getRataData,
   createRataData,
-  updateRataData
+  updateRataData,
+  deleteRataData
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
 import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
@@ -36,6 +37,7 @@ const QARataDataExpandableRows = ({
 }) => {
   const locId = data.locationId;
   const testSumId = data.id;
+  const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [rataData, setRataData] = useState([]);
   const [updateTable, setUpdateTable] = useState(false);
@@ -84,22 +86,26 @@ const QARataDataExpandableRows = ({
 
   const dataTableName = "RATA Data";
   const controlInputs = {
-    numberOfLoadLevels: ["Number of Load Levels", "dropdown", "", "locked"],
+    numberOfLoadLevels: ["Number of Load Levels", "dropdown", "", ""],
     relativeAccuracy: ["Relative Accuracy", "input", "", ""],
     rataFrequencyCode: ["RATA Frequency Code", "dropdown", "", ""],
     overallBiasAdjustmentFactor: ["Overall Bias Adjustment Factor", "input", "", ""],
   };
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
-    if (mdmData && mdmData.length === 0) {
-      loadDropdownsData(dataTableName, dropdownArray);
+    if (!dropdownArrayIsEmpty && mdmData.length === 0) {
+      if(!dropdownsLoading){
+        loadDropdownsData(dataTableName, dropdownArray);
+        setDropdownsLoading(true);
+      }
     } else {
       setDropdownsLoaded(true);
+      setDropdownsLoading(false);
       mdmData.numberOfLoadLevels = [
         { code: "", name: selectText }, { code: 1, name: 1 }, { code: 2, name: 2 }, { code: 3, name: 3 },
       ];
     }
-  }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
+  }, [mdmData]);
 
   const controlDatePickerInputs = {};
   const closeModalHandler = () => {
@@ -205,21 +211,21 @@ const QARataDataExpandableRows = ({
   const saveData = () => {
     const uiControls = {}
     Object.keys(controlInputs).forEach((key) => {
-      if(key === 'numberOfLoadLevels'){
+      if (key === 'numberOfLoadLevels') {
         uiControls[key] = selectedRow.numberOfLoadLevels
-      }else{
+      } else {
         uiControls[key] = null;
       }
     });
-    const userInput = extractUserInput( uiControls, ".modalUserInput"); 
+    const userInput = extractUserInput(uiControls, ".modalUserInput");
     updateRataData(selectedRow.id, locId, testSumId, userInput)
       .then((res) => {
         console.log("res", res);
         if (Object.prototype.toString.call(res) === "[object Array]") {
           alert(res[0]);
         } else {
-        setUpdateTable(true);
-        executeOnClose();
+          setUpdateTable(true);
+          executeOnClose();
         }
       })
       .catch((error) => {
@@ -227,7 +233,24 @@ const QARataDataExpandableRows = ({
       });
   };
 
-
+  const onRemoveHandler = async (row) => {
+    const { id: idToRemove, testSumId } = row;
+    try {
+      const resp = await deleteRataData(
+        locId,
+        testSumId,
+        idToRemove
+      );
+      if (resp.status === 200) {
+        const dataPostRemove = rataData.filter(
+          (rowData) => rowData.id !== idToRemove
+        );
+        setRataData(dataPostRemove);
+      }
+    } catch (error) {
+      console.log('error deleting rata data', error);
+    }
+  };
 
   return (
     <div className="padding-y-3">
@@ -238,7 +261,7 @@ const QARataDataExpandableRows = ({
           columnWidth={15}
           data={dataRecords}
           openHandler={openModal}
-          onRemoveHandler={() => { }}
+          onRemoveHandler={onRemoveHandler}
           expandableRowComp={<QARataSummaryExpandableRows
             user={user}
             locId={locId}
@@ -303,8 +326,8 @@ const QARataDataExpandableRows = ({
           show={show}
           close={closeModalHandler}
           save={createNewData ? createData : saveData}
-          showCancel={!user ? true: false}
-          showSave={user? true: false}
+          showCancel={!user ? true : false}
+          showSave={user ? true : false}
           title={
             createNewData
               ? `Add  ${dataTableName}`
