@@ -199,37 +199,6 @@ export const SummaryReport = ({
                 })
               }
 
-              <div className="bg-epa-blue-base text-white text-bold margin-top-5">
-                <div className="display-flex flex-row">
-                  <div className="border-white padding-1">Unit/Stack</div>
-                  <div>
-                    <div className="text-center border-white padding-1">System</div>
-                    <div className="display-flex flex-row">
-                      <div className="border-white padding-1">ID</div>
-                      <div className="border-white padding-1">Type</div>
-                      <div className="border-white padding-1">Des</div>
-                      <div className="border-white padding-1">Begin Date/Hr</div>
-                      <div className="border-white padding-1">End Date/Hr</div>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-center border-white padding-1">Component</div>
-                    <div className="display-flex flex-row">
-                      <div className="border-white padding-1">ID</div>
-                      <div className="border-white padding-1">Type</div>
-                      <div className="border-white padding-1">SAM</div>
-                      <div className="border-white padding-1">BAS</div>
-                      <div className="border-white padding-1">Manufacturer</div>
-                      <div className="border-white padding-1">Model/Version</div>
-                      <div className="border-white padding-1">Serial #</div>
-                      <div className="border-white padding-1">Begin Date/Hr</div>
-                      <div className="border-white padding-1">End Date/Hr</div>
-                      <div className="border-white padding-1">Hg Converter Ind</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               <div className="position-fixed bottom-0 right-0 width-full do-not-print">
                 <AppVersion
                   version={config.app.version}
