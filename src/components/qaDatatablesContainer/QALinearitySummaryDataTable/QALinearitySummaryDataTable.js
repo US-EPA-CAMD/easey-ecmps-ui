@@ -51,7 +51,6 @@ const QALinearitySummaryDataTable = ({
   selectedTestCode,
   sectionSelect,
 }) => {
-  console.log("selectedTestCode", selectedTestCode);
   const [loading, setLoading] = useState(false);
 
   const [qaTestSummary, setQATestSummary] = useState([]);
@@ -415,13 +414,7 @@ const QALinearitySummaryDataTable = ({
               user: user,
               nonEditable: nonEditable,
               locationSelectValue: locationSelectValue
-            })
-            // <QALinearitySummaryExpandableRows
-            //   user={user}
-            //   nonEditable={nonEditable}
-            //   locationSelectValue={locationSelectValue}
-            // />
-          }
+            })}
           evaluate={true}
           noDataComp={
             user ? (

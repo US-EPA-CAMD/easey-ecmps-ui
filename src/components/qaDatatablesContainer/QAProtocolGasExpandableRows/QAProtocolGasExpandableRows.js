@@ -34,6 +34,7 @@ const QAProtocolGasExpandableRows = ({
   locId,
   testSumId
 }) => {
+  const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [protocolGas, setProtocolGas] = useState([]);
   const [updateTable, setUpdateTable] = useState(false);
@@ -101,12 +102,16 @@ const QAProtocolGasExpandableRows = ({
   };
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
-    if (mdmData && mdmData.length === 0) {
-      loadDropdownsData(dataTableName, dropdownArray);
+    if (!dropdownArrayIsEmpty && mdmData.length === 0) {
+      if(!dropdownsLoading){
+        loadDropdownsData(dataTableName, dropdownArray);
+        setDropdownsLoading(true);
+      }
     } else {
       setDropdownsLoaded(true);
+      setDropdownsLoading(false);
     }
-  }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
+  }, [mdmData]);
 
   const controlDatePickerInputs = {};
   const closeModalHandler = () => {

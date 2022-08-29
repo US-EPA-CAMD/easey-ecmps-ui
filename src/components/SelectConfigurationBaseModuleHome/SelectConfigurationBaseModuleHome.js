@@ -9,12 +9,14 @@ import {
   EXPORT_STORE_NAME,
   EMISSIONS_DAILY_STORE_NAME,
   EMISSIONS_HOURLY_STORE_NAME,
+  EMISSIONS_MATS_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import {
   qa_Certifications_Test_Summary_Module,
   export_Module,
   emissions_daily_module,
   emissions_hourly_module,
+  emissions_mats_module,
 } from "../../utils/constants/moduleTitles";
 import Export from "../export/Export/Export";
 
@@ -44,6 +46,11 @@ export const SelectConfigurationBaseModuleHome = ({
       case EMISSIONS_HOURLY_STORE_NAME:
         document.title = emissions_hourly_module;
         setTitleName(emissions_hourly_module);
+        break;
+      case EMISSIONS_MATS_STORE_NAME:
+        document.title = emissions_mats_module;
+        setTitleName(emissions_mats_module);
+        break;
     }
   }, [workspaceSection]);
 
