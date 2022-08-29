@@ -788,22 +788,13 @@ export const UseRetrieveDropdownApi = async (
         });
         break;
         case "runStatusCode":
-          // await dmApi.getAllRunStatusCodes().then((response) => {
-          //   options = response.data.map((option) => {
-          //     return {
-          //       code: option["runStatusCode"],
-          //       name: option["runStatusCodeDescription"],
-          //     };
-          //   });
-          await dmApi.getAllReferenceMethodCodes().then((response) => {
+          await dmApi.getAllRunStatusCodes().then((response) => {
             options = response.data.map((option) => {
               return {
-                code: option["referenceMethodCode"],
-                name: option["referenceMethodCodeDescription"],
+                code: option["runStatusCode"],
+                name: option["runStatusCodeDescription"],
               };
             });
-            setDefaultOptions(options, fieldName);
-          });
           break;
       default:
         break;

@@ -75,7 +75,7 @@ const QARataRunDataExpandableRows = ({
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
-  const dropdownArray = [["referenceMethodCode"]];
+  const dropdownArray = [["runStatusCode"]];
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
   const columns = [
@@ -102,7 +102,7 @@ const QARataRunDataExpandableRows = ({
     cemValue: ["CEM Value", "input", "", ""],
     rataReferenceValue: ["RATA Reference Value", "input", "", ""],
     grossUnitLoad: ["Gross Unit Load ", "input", "", ""],
-    referenceMethodCode: ["Run Number", "dropdown", "", ""],
+    runStatusCode: ["Run Number", "dropdown", "", ""],
   };
 
   const controlDatePickerInputs = {
