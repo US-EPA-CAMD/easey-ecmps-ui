@@ -41,6 +41,7 @@ export default {
     linearityInjectionTestThirdLevel: [],
     protocolGas: [],
     rataData: [],
+    rataRunData: [],
     rataSummary: [],
   },
   currentSection: "",
