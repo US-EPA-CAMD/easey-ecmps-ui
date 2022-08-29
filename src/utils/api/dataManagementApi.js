@@ -419,3 +419,10 @@ export const getAllReferenceMethodCodes = async () => {
     .then(handleResponse)
     .catch(handleError);
 }
+
+export const getAllRunStatusCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/run-status-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+}
