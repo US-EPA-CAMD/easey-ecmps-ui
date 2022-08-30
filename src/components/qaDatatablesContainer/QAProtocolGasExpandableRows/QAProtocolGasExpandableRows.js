@@ -252,17 +252,20 @@ const QAProtocolGasExpandableRows = ({
 
   const onRemoveHandler = async (row) => {
     const { id: idToRemove, testSumId } = row;
-    const resp = await deleteProtocolGas(
+    deleteProtocolGas(
       locId,
       testSumId,
       idToRemove
-    );
-    if (resp.status === 200) {
-      const dataPostRemove = protocolGas.filter(
-        (rowData) => rowData.id !== idToRemove
-      );
-      setProtocolGas(dataPostRemove);
-    }
+    ).then((resp)=>{
+      if (resp.status === 200) {
+        const dataPostRemove = protocolGas.filter(
+          (rowData) => rowData.id !== idToRemove
+        );
+        setProtocolGas(dataPostRemove);
+      }
+    }).catch((error) => {
+      console.log("error", error);
+    });
   };
 
   return (

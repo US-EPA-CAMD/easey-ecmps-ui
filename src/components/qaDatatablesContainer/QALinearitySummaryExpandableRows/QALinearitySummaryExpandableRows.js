@@ -41,6 +41,7 @@ const QALinearitySummaryExpandableRows = ({
   loadDropdownsData,
   locationSelectValue,
   data,
+  showProtocolGas=true
 }) => {
   const { locationId, id } = data;
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
@@ -101,17 +102,21 @@ const QALinearitySummaryExpandableRows = ({
 
   const onRemoveHandler = async (row) => {
     const { id: idToRemove, testSumId } = row;
-    const resp = await deleteQALinearitySummary(
+    deleteQALinearitySummary(
       locationId,
       testSumId,
       idToRemove
-    );
-    if (resp.status === 200) {
-      const dataPostRemove = qaLinearitySummary.filter(
-        (rowData) => rowData.id !== idToRemove
-      );
-      setQaLinearitySummary(dataPostRemove);
-    }
+    ).then((resp)=>{
+      if (resp.status === 200) {
+        const dataPostRemove = qaLinearitySummary.filter(
+          (rowData) => rowData.id !== idToRemove
+        );
+        setQaLinearitySummary(dataPostRemove);
+      }
+    }).catch((error) => {
+      console.log("error", error);
+    });
+    
   };
   const dataTableName = "Linearity Test";
   const controlInputs = {
@@ -343,11 +348,14 @@ const QALinearitySummaryExpandableRows = ({
         <Preloader />
       )}
 
-      <QAProtocolGasExpandableRows
-        user={user}
-        locId={locationId}
-        testSumId={id}
-      />
+      {
+        showProtocolGas &&
+        <QAProtocolGasExpandableRows
+          user={user}
+          locId={locationId}
+          testSumId={id}
+        />
+      }
       
       {show ? (
         <Modal

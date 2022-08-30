@@ -33,7 +33,8 @@ const QARataDataExpandableRows = ({
   user,
   mdmData,
   loadDropdownsData,
-  data
+  data,
+  showProtocolGas=true
 }) => {
   const locId = data.locationId;
   const testSumId = data.id;
@@ -314,12 +315,14 @@ const QARataDataExpandableRows = ({
       ) : (
         <Preloader />
       )}
-
-      <QAProtocolGasExpandableRows
-        user={user}
-        locId={locId}
-        testSumId={testSumId}
-      />
+      {
+        showProtocolGas &&
+        <QAProtocolGasExpandableRows
+          user={user}
+          locId={locId}
+          testSumId={testSumId}
+        />
+      }
 
       {show ? (
         <Modal
