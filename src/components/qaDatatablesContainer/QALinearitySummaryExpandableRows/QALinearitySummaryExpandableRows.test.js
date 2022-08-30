@@ -1,14 +1,11 @@
 import React from "react";
-import { render, waitForElement, screen, fireEvent } from "@testing-library/react";
+import { render, waitForElement, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import QALinearitySummaryExpandableRows from "./QALinearitySummaryExpandableRows";
 import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
 import configureStore from "../../../store/configureStore.dev";
 import initialState from "../../../store/reducers/initialState";
-
-import * as qaApi from "../../../utils/api/qaCertificationsAPI";
 import config from "../../../config";
 
 const axios = require("axios");
@@ -336,7 +333,7 @@ const componentRenderer = (locId, testSummaryId) => {
   );
 };
 
-test.only('renders QALinearitySummaryExpandableRows', async () => {
+test('renders QALinearitySummaryExpandableRows', async () => {
   // Arrange
   const { container } = await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15"))
 
@@ -344,12 +341,31 @@ test.only('renders QALinearitySummaryExpandableRows', async () => {
   expect(container).toBeDefined()
 })
 
-test.only('add', async () => {
+test('given a user then user can add new data', async () => {
+  // Assert
   await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15"))
 
   const addBtn = screen.getAllByRole('button', { name: /Add/i })
 
+  // Act
   userEvent.click(addBtn[0])
+
+  // Assert
+  expect(addBtn[0]).toBeDefined()
+})
+
+test('given a user when there are no records then user can add new data', async () => {
+  // Arrange
+  mock.onGet(url).reply(200, []);
+  await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15"))
+
+  const addBtn = screen.getAllByRole('button', { name: /Add/i })
+
+  // Act
+  userEvent.click(addBtn[0])
+
+  // Assert
+  expect(addBtn).toBeDefined()
 })
 
 test("testing linearity summary expandable records from test summary data", async () => {
