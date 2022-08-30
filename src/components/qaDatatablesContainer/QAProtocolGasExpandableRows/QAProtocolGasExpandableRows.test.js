@@ -1,13 +1,23 @@
 import React from "react";
-import { render, waitForElement, screen, fireEvent, waitFor} from "@testing-library/react";
+import { render, waitForElement, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Provider } from 'react-redux';
+import userEvent from "@testing-library/user-event";
+
 import configureStore from "../../../store/configureStore.dev";
 import initialState from "../../../store/reducers/initialState";
 import * as qaApi from "../../../utils/api/qaCertificationsAPI";
 import QAProtocolGasExpandableRows from "./QAProtocolGasExpandableRows"
+import config from "../../../config";
 
 const axios = require("axios");
-jest.mock("axios");
+const MockAdapter = require("axios-mock-adapter")
+const mock = new MockAdapter(axios)
+
+// matches alphanumeric strings including hyphens (-)
+const idRegex = '[\\w\\-]+'
+
+const url = new RegExp(`${config.services.qaCertification.uri}/locations/${idRegex}/test-summary/${idRegex}/protocol-gases`)
+const deleteUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary/${idRegex}/protocol-gases/${idRegex}`)
 
 const protocolGasApiResponse = [
   {
@@ -35,6 +45,10 @@ const protocolGasApiResponse = [
     "updateDate": "2022-08-11T12:11:25.000Z"
   }
 ];
+
+mock.onGet(url).reply(200, protocolGasApiResponse);
+mock.onDelete(deleteUrl).reply(200, 'protocol gas deleted')
+
 initialState.dropdowns.protocolGas = {
   gasLevelCode: [
     {
@@ -240,8 +254,8 @@ initialState.dropdowns.protocolGas = {
 let store = configureStore(initialState);
 const componentRenderer = (locId, testSummaryId) => {
   const props = {
-    user : "test_user",
-    loadDropdownsData : jest.fn(),
+    user: "test_user",
+    loadDropdownsData: jest.fn(),
     locId: locId,
     testSumId: testSummaryId
   }
@@ -251,13 +265,8 @@ const componentRenderer = (locId, testSummaryId) => {
     </Provider>
   );
 };
-test('renders QAProtocolGasExpandableRows properly',async () => {
+test('renders QAProtocolGasExpandableRows properly', async () => {
   // Arrange
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: protocolGasApiResponse })
-  );
-  const res = await qaApi.getProtocolGas("1873", "a53e88ab-13bc-4775-b5a0-a9cf3c3b6040");
-  expect(res.data).toEqual(protocolGasApiResponse);
   let { container, findByRole } = await waitForElement(() => componentRenderer("1873", "a53e88ab-13bc-4775-b5a0-a9cf3c3b6040"));
   // Assert
   expect(container).toBeDefined();
@@ -279,4 +288,35 @@ test('renders QAProtocolGasExpandableRows properly',async () => {
   // const rowGroups = screen.getByRole ("rowGroup");
   // expect(rowGroups).toBeDefined();
   // expect(rowGroups.length).toBe(protocolGasApiResponse.length + 1);
+})
+
+test('given a user then user can add new data', async () => {
+  // Assert
+  await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15"))
+
+  const addBtn = screen.getAllByRole('button', { name: /Add/i })
+
+  // Act
+  userEvent.click(addBtn[0])
+
+  // Assert
+  expect(addBtn).toBeDefined()
+})
+
+test('given a user when "Delete" button is clicked then a row is deleted', async () => {
+  // Arrange
+  let { getAllByRole } = await waitForElement(() => componentRenderer("1873", "a53e88ab-13bc-4775-b5a0-a9cf3c3b6040"));
+
+  const deleteBtns = getAllByRole('button', { name: /Remove/i })
+  const firstDeleteBtn = deleteBtns[0]
+
+  // Act
+  userEvent.click(firstDeleteBtn)
+
+  const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+  const firstConfirmBtn = confirmBtns[0]
+  userEvent.click(firstConfirmBtn)
+
+  // Assert
+  expect(mock.history.delete.length).toBe(1)
 })
