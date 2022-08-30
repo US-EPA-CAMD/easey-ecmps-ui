@@ -16,7 +16,7 @@ export const UseRetrieveDropdownApi = async (
   dropDownFields,
   mats = false,
   equipmentControl = false,
-  selectedTestCode = false,
+  selectedTestCode = false
 ) => {
   let totalOptions = {};
 
@@ -699,8 +699,8 @@ export const UseRetrieveDropdownApi = async (
               name: option["testTypeCodeDescription"],
             };
           });
-          options = options.filter(
-            (option) => selectedTestCode.testTypeCodes.includes(option.code)
+          options = options.filter((option) =>
+            selectedTestCode.testTypeCodes.includes(option.code)
           );
           setDefaultOptions(options, fieldName);
         });
@@ -774,6 +774,17 @@ export const UseRetrieveDropdownApi = async (
           setDefaultOptions(options, fieldName);
         });
         break;
+      case "runStatusCode":
+        await dmApi.getAllRunStatusCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["runStatusCode"],
+              name: option["runStatusCodeDescription"],
+            };
+          });
+          setDefaultOptions(options, fieldName);
+        });
+        break;
       case "referenceMethodCode":
       case "co2OrO2ReferenceMethodCode":
         await dmApi.getAllReferenceMethodCodes().then((response) => {
@@ -787,17 +798,7 @@ export const UseRetrieveDropdownApi = async (
           setDefaultOptions(options, fieldName);
         });
         break;
-        case "runStatusCode":
-          await dmApi.getAllRunStatusCodes().then((response) => {
-            options = response.data.map((option) => {
-              return {
-                code: option["runStatusCode"],
-                name: option["runStatusCodeDescription"],
-              };
-            });
 
-          });
-          break;
       default:
         break;
     }
