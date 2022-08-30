@@ -1,14 +1,25 @@
 import React from "react";
 import { render, waitForElement, screen, fireEvent } from "@testing-library/react";
 import { Provider } from 'react-redux';
+
 import configureStore from "../../../store/configureStore.dev";
 import initialState from "../../../store/reducers/initialState";
-import * as qaApi from "../../../utils/api/qaCertificationsAPI";
 import QARataDataExpandableRows from "./QARataDataExpandableRows"
 import userEvent from "@testing-library/user-event";
+import config from "../../../config";
 
 const axios = require("axios");
-jest.mock("axios");
+const MockAdapter = require("axios-mock-adapter")
+const mock = new MockAdapter(axios)
+
+// matches alphanumeric strings including hyphens (-)
+const idRegex = '[\\w\\-]+'
+
+const url = new RegExp(`${config.services.qaCertification.uri}/locations/${idRegex}/test-summary/${idRegex}/rata`)
+const deleteUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary/${idRegex}/rata/${idRegex}`)
+const protocolGasUrl = new RegExp(`${config.services.qaCertification.uri}/locations/${idRegex}/test-summary/${idRegex}/protocol-gases`)
+const gasLevelCodesUrl = 'https://api-easey-dev.app.cloud.gov/master-data-mgmt/gas-level-codes'
+const gasTypeCodesUrl = 'https://api-easey-dev.app.cloud.gov/master-data-mgmt/gas-type-codes'
 
 const rataDataApiResponse = [
   {
@@ -42,6 +53,13 @@ const rataDataApiResponse = [
     "updateDate": "8/18/2022, 2:21:23 PM"
   }
 ];
+
+mock.onGet(url).reply(200, rataDataApiResponse)
+mock.onDelete(deleteUrl).reply(200, 'deleted')
+mock.onGet(protocolGasUrl).reply(200, [])
+mock.onGet(gasLevelCodesUrl).reply(200, [])
+mock.onGet(gasTypeCodesUrl).reply(200, [])
+
 initialState.dropdowns.rataData = {
   numberLoadLevel: [
     {
@@ -84,6 +102,7 @@ initialState.dropdowns.rataData = {
     }
   ]
 };
+
 let store = configureStore(initialState);
 const componentRenderer = (locId, testSummaryId, user) => {
   const props = {
@@ -100,46 +119,32 @@ const componentRenderer = (locId, testSummaryId, user) => {
     </Provider>
   );
 };
+
 test('renders QARataDataExpandableRows properly', async () => {
   // Arrange
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: rataDataApiResponse })
-  );
-  const res = await qaApi.getRataData("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15");
-  expect(res.data).toEqual(rataDataApiResponse);
-  let { container, findByRole } = await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15", "test_user"));
-  // Assert
-  expect(container).toBeDefined();
-  expect(findByRole).toBeDefined();
-  const addButton = await findByRole("button", { name: "Add" });
-  expect(addButton).toBeDefined();
-  fireEvent.click(addButton);
-  expect(screen.getByText("Add RATA Data")).toBeInTheDocument();
+  let { container } = await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15", "test_user"));
 
-  const saveButton = screen.getByRole("button", { name: "Click to save" });
-  expect(saveButton).toBeDefined();
-  //screen.debug();
-  // expect(screen.getAllByText("Gas Level Code").length).toBe(1);
-  // expect(screen.getAllByText("Gas Type Code").length).toBe(2);
-  // expect(screen.getAllByText("Vendor ID").length).toBe(2);
-  // expect(screen.getAllByText("Cylinder ID").length).toBe(2);
-  // expect(screen.getAllByText("Expiration Date").length).toBe(2);
-  // fireEvent.click(saveButton);
-  // const rowGroups = screen.getByRole ("rowGroup");
-  // expect(rowGroups).toBeDefined();
-  // expect(rowGroups.length).toBe(protocolGasApiResponse.length + 1);
+  // Assert
+  expect(container).toBeDefined()
 });
+
+test('given a user then user can add new data', async () => {
+  // Assert
+  await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15", "test_user"))
+
+  const addBtn = screen.getAllByRole('button', { name: /Add/i })
+
+  // Act
+  userEvent.click(addBtn[0])
+
+  // Assert
+  expect(addBtn).toBeDefined()
+})
 
 test('given a user when "Delete" button is clicked then a row is deleted', async () => {
   // Arrange
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: rataDataApiResponse })
-  );
-  const res = await qaApi.getRataData("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15");
-  expect(res.data).toEqual(rataDataApiResponse);
   let { getAllByRole } = await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15", "test_user"));
 
-  axios.mockResolvedValue({ status: 200, data: 'deleted successfully' })
   const deleteBtns = getAllByRole('button', { name: /Remove/i })
   const firstDeleteBtn = deleteBtns[0]
 
@@ -151,5 +156,5 @@ test('given a user when "Delete" button is clicked then a row is deleted', async
   userEvent.click(firstConfirmBtn)
 
   // Assert
-  expect(axios).toHaveBeenCalled()
+  expect(mock.history.delete.length).toBe(1)
 })
