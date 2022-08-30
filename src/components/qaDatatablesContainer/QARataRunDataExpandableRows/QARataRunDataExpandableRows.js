@@ -115,7 +115,9 @@ const QARataRunDataExpandableRows = ({
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
     if (!dropdownArrayIsEmpty && mdmData.length === 0) {
+      
       if (!dropdownsLoading) {
+        console.log('checking')
         loadDropdownsData(dataTableName, dropdownArray);
         setDropdownsLoading(true);
       }
