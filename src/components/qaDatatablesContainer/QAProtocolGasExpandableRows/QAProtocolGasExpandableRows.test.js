@@ -1,11 +1,10 @@
 import React from "react";
-import { render, waitForElement, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, waitForElement, screen } from "@testing-library/react";
 import { Provider } from 'react-redux';
 import userEvent from "@testing-library/user-event";
 
 import configureStore from "../../../store/configureStore.dev";
 import initialState from "../../../store/reducers/initialState";
-import * as qaApi from "../../../utils/api/qaCertificationsAPI";
 import QAProtocolGasExpandableRows from "./QAProtocolGasExpandableRows"
 import config from "../../../config";
 
