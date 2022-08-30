@@ -34,10 +34,9 @@ const QARataRunDataExpandableRows = ({
   testSumId,
   rataId,
   data,
-  
 }) => {
   const locId = data.locationId;
-  const rataSumId = data.id
+  const rataSumId = data.id;
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [rataRunData, setRataRunData] = useState([]);
@@ -46,7 +45,7 @@ const QARataRunDataExpandableRows = ({
   useEffect(() => {
     if (rataRunData.length === 0 || updateTable) {
       setLoading(true);
-      getRataRunData(locId, testSumId,rataId,rataSumId)
+      getRataRunData(locId, testSumId, rataId, rataSumId)
         .then((res) => {
           finishedLoadingData(res.data);
           setRataRunData(res.data);
@@ -95,14 +94,14 @@ const QARataRunDataExpandableRows = ({
   const dataTableName = "RATA Run Data";
   const controlInputs = {
     runNumber: ["Run Number", "input", "", ""],
-    skip: ["","skip","",""],
-    skip1: ["","skip","",""]
+    skip: ["", "skip", "", ""],
+    skip1: ["", "skip", "", ""],
   };
   const extraControlInputs = {
     cemValue: ["CEM Value", "input", "", ""],
     rataReferenceValue: ["RATA Reference Value", "input", "", ""],
     grossUnitLoad: ["Gross Unit Load ", "input", "", ""],
-    runStatusCode: ["Run Number", "dropdown", "", ""],
+    runStatusCode: ["Run Status Code", "dropdown", "", ""],
   };
 
   const controlDatePickerInputs = {
@@ -156,13 +155,13 @@ const QARataRunDataExpandableRows = ({
     }
     let mainDropdownName = "";
     let hasMainDropdown = false;
-    for (const controlProperty in controlInputs) {
-      if (controlInputs[controlProperty][1] === "mainDropdown") {
-        mainDropdownName = controlProperty;
-        hasMainDropdown = true;
-        break;
-      }
-    }
+    // for (const controlProperty in controlInputs) {
+    //   if (controlInputs[controlProperty][1] === "mainDropdown") {
+    //     mainDropdownName = controlProperty;
+    //     hasMainDropdown = true;
+    //     break;
+    //   }
+    // }
     let prefilteredDataName;
     if (!dropdownArrayIsEmpty) {
       prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
@@ -182,6 +181,7 @@ const QARataRunDataExpandableRows = ({
       mainDropdownResult = [];
     }
 
+    console.log("mdmData", mdmData);
     const prefilteredTotalName = dropdownArray[0][dropdownArray[0].length - 1];
     setSelectedModalData(
       modalViewData(
@@ -211,7 +211,7 @@ const QARataRunDataExpandableRows = ({
       uiControls[key] = null;
     });
     const userInput = extractUserInput(uiControls, ".modalUserInput");
-    createRataRunData(locId, testSumId,rataId,rataSumId, userInput)
+    createRataRunData(locId, testSumId, rataId, rataSumId, userInput)
       .then((res) => {
         console.log("res", res);
         if (Object.prototype.toString.call(res) === "[object Array]") {
@@ -318,7 +318,6 @@ const QARataRunDataExpandableRows = ({
         <Preloader />
       )}
 
-
       {show ? (
         <Modal
           show={show}
@@ -358,9 +357,7 @@ const QARataRunDataExpandableRows = ({
 const mapStateToProps = (state, ownProps) => {
   const dataTableName = "RATA Run Data";
   return {
-    mdmData: JSON.parse(
-      JSON.stringify(state.dropdowns[convertSectionToStoreName(dataTableName)])
-    ),
+    mdmData: state.dropdowns[convertSectionToStoreName(dataTableName)],
   };
 };
 
