@@ -2,16 +2,28 @@ import React from "react";
 import { render, waitForElement, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import QALinearitySummaryExpandableRows  from "./QALinearitySummaryExpandableRows";
+import QALinearitySummaryExpandableRows from "./QALinearitySummaryExpandableRows";
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import configureStore from "../../../store/configureStore.dev";
 import initialState from "../../../store/reducers/initialState";
 
 import * as qaApi from "../../../utils/api/qaCertificationsAPI";
-const axios = require("axios");
+import config from "../../../config";
 
-jest.mock("axios");
+const axios = require("axios");
+const MockAdapter = require("axios-mock-adapter")
+const mock = new MockAdapter(axios)
+
+// matches alphanumeric strings including hyphens (-)
+const idRegex = '[\\w\\-]+'
+
+const workspaceUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary`)
+const url = new RegExp(`${config.services.qaCertification.uri}/locations/${idRegex}/test-summary/${idRegex}/linearities`)
+const protocolGasUrl = new RegExp(`${config.services.qaCertification.uri}/locations/${idRegex}/test-summary/${idRegex}/protocol-gases`)
+
+const gasLevelCodesUrl = 'https://api-easey-dev.app.cloud.gov/master-data-mgmt/gas-level-codes'
+const gasTypeCodesUrl = 'https://api-easey-dev.app.cloud.gov/master-data-mgmt/gas-type-codes'
 
 const rowToRemoveText = 'this row should be removed'
 
@@ -68,6 +80,15 @@ const linearitySummary = [
     "linearityInjectionData": []
   },
 ];
+
+// Mock any GET request to /users
+// arguments for reply are (status, data, headers)
+mock.onGet(url).reply(200, linearitySummary);
+mock.onGet(workspaceUrl).reply(200, linearitySummary)
+mock.onGet(gasLevelCodesUrl).reply(200, [])
+mock.onGet(gasTypeCodesUrl).reply(200, [])
+mock.onGet(protocolGasUrl).reply(200, [])
+
 initialState.dropdowns.lineTestSummary = {
   spanScaleCode: [
     {
@@ -288,7 +309,7 @@ const componentRenderer = (locId, testSummaryId) => {
       id: testSummaryId
     },
     mdmData: {
-      "gasLevelCode" : [
+      "gasLevelCode": [
         {
           code: "",
           name: " --- select ---"
@@ -315,6 +336,22 @@ const componentRenderer = (locId, testSummaryId) => {
   );
 };
 
+test.only('renders QALinearitySummaryExpandableRows', async () => {
+  // Arrange
+  const { container } = await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15"))
+
+  // Assert
+  expect(container).toBeDefined()
+})
+
+test.only('add', async () => {
+  await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15"))
+
+  const addBtn = screen.getAllByRole('button', { name: /Add/i })
+
+  userEvent.click(addBtn[0])
+})
+
 test("testing linearity summary expandable records from test summary data", async () => {
   expect(true).toBe(true);
   // axios.get.mockImplementation(() =>
@@ -327,56 +364,6 @@ test("testing linearity summary expandable records from test summary data", asyn
   // expect(screen.getAllByRole("table").length).toBe(2);//includes protocol gas
   // expect(screen.getAllByRole("columnheader").length).toBe(12);
   // expect(screen.getAllByRole("row").length).toBe(8);
-});
-
-test.skip("when remove button on a row is clicked then that row is deleted from the table", async () => {
-  // Arrange
-  axios.get.mockReset()
-  axios.get.mockClear()
-  axios.get.mockImplementation(() => Promise.resolve({ status: 200, data: linearitySummary }));
-  // works with this mock
-  qaApi.deleteQALinearitySummary = jest.fn().mockResolvedValue({ status: 200, data: 'deleted' })
-  // fails and encounters error with this mock
-  // axios.delete.mockImplementation(() => Promise.resolve({ status: 200, data: 'delete succeeded' }))
-  const rowIndex = 1
-
-  const props = {
-    user: { firstName: "test" },
-    data: {
-      locationId: '5930',
-      id: 'IT07D0112-70AA39C4632746999222EC8FB3C530FB'
-    },
-    actionsBtn: 'View',
-    actionColumnName: 'Linearity Summary Data"'
-  };
-  render(<QALinearitySummaryExpandableRows {...props} />)
-
-  // does not work in combination with screen.getAllByRole(button)
-  // waitForElement(() => render(<QALinearitySummaryExpandableRows {...props} />))
-
-  const removeButtons = await screen.findAllByRole('button', { name: /remove/i })
-
-  // does not work in combination with waitForelement
-  // const removeButtons = screen.getAllByRole('button', { name: /remove/i })
-
-  // row exists before remove
-  expect(screen.getByText(rowToRemoveText)).toBeInTheDocument()
-
-  // Act
-  // click remove button in second row
-  const secondRemoveButton = removeButtons[rowIndex]
-  userEvent.click(secondRemoveButton)
-
-  // click 'yes' in confirmation modal
-  const confirmBtns = screen.getAllByRole('button', { name: /yes/i })
-  const secondConfirmBtn = confirmBtns[rowIndex]
-  userEvent.click(secondConfirmBtn)
-
-  // Assert
-  await waitForElement(() => {
-    const removedRowText = screen.queryByText(rowToRemoveText)
-    expect(removedRowText).toBeNull()
-  })
 });
 
 test("testing to add linearity summary records", async () => {
