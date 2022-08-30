@@ -4,9 +4,17 @@ import QALinearitySummaryDataTable from "./QALinearitySummaryDataTable";
 
 import configureStore from "../../../store/configureStore.dev";
 import { Provider } from "react-redux";
-const axios = require("axios");
+import config from "../../../config";
 
-jest.mock("axios");
+const axios = require("axios");
+const MockAdapter = require("axios-mock-adapter")
+const mock = new MockAdapter(axios);
+
+const idRegex = '[\\w\\-]+'
+
+const workspaceUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary`)
+const globalUrl = new RegExp(`${config.services.qaCertification.uri}/locations/${idRegex}/test-summary`)
+const deleteUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary/${idRegex}`)
 
 const testSummary = [
   {
@@ -42,6 +50,11 @@ const testSummary = [
     reportPeriodId: null,
   },
 ];
+
+mock.onGet(globalUrl).reply(200, testSummary);
+mock.onGet(workspaceUrl).reply(200, testSummary)
+mock.onPost(workspaceUrl).reply(200, 'created')
+mock.onDelete(deleteUrl).reply(200, 'deleted')
 
 const initialState = {
   facilities: [],
@@ -444,6 +457,7 @@ const initialState = {
 const store = configureStore(initialState)
 
 const props = {
+  loadDropdownsData: jest.fn(),
   selectedTestCode: {
     testTypeCodes: [
       "UNITDEF"
@@ -526,7 +540,6 @@ test("tests updating test summary data", async () => {
 
 test('renders QALinearitySummaryDataTable', () => {
   // Arrange
-  axios.get.mockResolvedValueOnce({ status: 200, data: testSummary })
   const { container } = render(<Provider store={store}><QALinearitySummaryDataTable {...props} /></Provider>)
 
   // Assert

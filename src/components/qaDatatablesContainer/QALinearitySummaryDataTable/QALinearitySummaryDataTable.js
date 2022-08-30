@@ -23,7 +23,6 @@ import {
 
 import {
   loadDropdowns,
-  updateDropdowns,
 } from "../../../store/actions/dropdowns";
 import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
 
@@ -97,16 +96,21 @@ const QALinearitySummaryDataTable = ({
 
       const { testTypeCodes } = selectedTestCode;
       if (testTypeCodes && testTypeCodes.length !== 0) {
-        getQATestSummary(locationSelectValue, testTypeCodes).then((res) => {
-          if (res !== undefined && res.data.length > 0) {
-            finishedLoadingData(res.data);
-            setQATestSummary(res.data);
-          } else {
-            finishedLoadingData([]);
-            setQATestSummary([]);
-          }
-          setLoading(false);
-        });
+        getQATestSummary(locationSelectValue, testTypeCodes)
+          .then((res) => {
+            // console.log('getQaTestSumm resp', res);
+            if (res !== undefined && res.data.length > 0) {
+              finishedLoadingData(res.data);
+              setQATestSummary(res.data);
+            } else {
+              finishedLoadingData([]);
+              setQATestSummary([]);
+            }
+            setLoading(false);
+          })
+          .catch(error => {
+            console.log('error fetching test summary', error);
+          })
         setUpdateTable(false);
       }
     }
@@ -127,7 +131,7 @@ const QALinearitySummaryDataTable = ({
       setDropdownsLoaded(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedTestCode, sectionSelect,mdmData]);
+  }, [selectedTestCode, sectionSelect, mdmData]);
   useEffect(() => {
     // Update all the "secondary dropdowns" (based on the "main" dropdown)
     const prefilteredDataName = dropdownArray[0][0];
@@ -168,9 +172,7 @@ const QALinearitySummaryDataTable = ({
 
   // prefilters the test type code dropdown based on group selection
   useEffect(() => {
-    console.log("mdm", mdmData);
     if (dropdownsLoaded) {
-      console.log("control", controlInputs);
       // Go through the inputs in the modal
       if (controlInputs["testTypeCode"][1] === "mainDropdown") {
         const filteredOutSubDropdownOptions = mdmData["testTypeCode"].filter(
@@ -182,10 +184,6 @@ const QALinearitySummaryDataTable = ({
           code: "",
           name: selectText,
         });
-        console.log(
-          "filteredOutSubDropdownOptions",
-          filteredOutSubDropdownOptions
-        );
         setPrefilteredMdmData(filteredOutSubDropdownOptions);
       }
     }
@@ -213,11 +211,9 @@ const QALinearitySummaryDataTable = ({
       )[0];
       setSelectedRow(selectedData);
     }
-    console.log("controlInputs", controlInputs);
     let mainDropdownName = "";
     let hasMainDropdown = false;
     for (const controlProperty in controlInputs) {
-      console.log("controlprop", controlProperty);
       if (controlInputs[controlProperty][1] === "mainDropdown") {
         mainDropdownName = controlProperty;
         hasMainDropdown = true;
@@ -232,21 +228,11 @@ const QALinearitySummaryDataTable = ({
     let mainDropdownResult;
     // only applies if there is prefiltering based on a primary driver dropdown
     if (mainDropdownName !== "" && hasMainDropdown === true) {
-      console.log("maindropdownName", mainDropdownName); //testTypeCode
-      console.log(
-        " mdmData[mainDropdownName]",
-        mdmData[mainDropdownName],
-        mdmData[prefilteredDataName]
-      );
-
       mainDropdownResult = mdmData[mainDropdownName].filter((o) =>
         mdmData[prefilteredDataName].some(
           (element, index, arr) => o.code === element[mainDropdownName]
         )
       );
-      console.log("prefilteredDataName", prefilteredDataName); //prefilteredTestSummaries
-      console.log("mdmData", mdmData);
-      console.log("mainDropdownResult", mainDropdownResult);
       if (!mainDropdownResult.includes({ code: "", name: selectText })) {
         mainDropdownResult.unshift({ code: "", name: selectText });
       }
@@ -367,14 +353,14 @@ const QALinearitySummaryDataTable = ({
       });
   };
 
-  const getExpandableComponent = (testTypeGroupCode, props) =>{
-    switch(testTypeGroupCode){
+  const getExpandableComponent = (testTypeGroupCode, props) => {
+    switch (testTypeGroupCode) {
       case "LINSUM":
-        return <QALinearitySummaryExpandableRows {...props}/>
+        return <QALinearitySummaryExpandableRows {...props} />
       case "RELACC":
-        return <QARataDataExpandableRows {...props}/>
+        return <QARataDataExpandableRows {...props} />
       default:
-        return null;       
+        return null;
     }
   }
 
