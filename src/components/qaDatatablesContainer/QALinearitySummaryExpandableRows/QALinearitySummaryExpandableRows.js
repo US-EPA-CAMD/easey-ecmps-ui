@@ -88,7 +88,7 @@ const QALinearitySummaryExpandableRows = ({
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
-  const dropdownArray = [["gasLevelCode","gasTypeCode"]];
+  const dropdownArray = [["gasLevelCode", "gasTypeCode"]];
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
   const columns = [
@@ -125,7 +125,7 @@ const QALinearitySummaryExpandableRows = ({
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
     if (!dropdownArrayIsEmpty && mdmData.length === 0) {
-      if(!dropdownsLoading){
+      if (!dropdownsLoading) {
         loadDropdownsData(dataTableName, dropdownArray);
         setDropdownsLoading(true);
       }
@@ -159,7 +159,7 @@ const QALinearitySummaryExpandableRows = ({
   const openModal = (row, bool, create) => {
     let selectedData = null;
     setCreateNewData(create);
-    if(create){
+    if (create) {
       controlInputs.gasLevelCode = ["Gas Level Code", "dropdown", "", ""];
     }
     if (dataPulled.length > 0 && !create) {
@@ -258,15 +258,15 @@ const QALinearitySummaryExpandableRows = ({
       percentError: 0,
       apsIndicator: 0,
     };
-    const userInput = extractUserInput( uiControls, ".modalUserInput");
+    const userInput = extractUserInput(uiControls, ".modalUserInput");
     createQALinearitySummaryTestSecondLevel(locationId, data.id, userInput)
       .then((res) => {
         console.log("res", res);
         if (Object.prototype.toString.call(res) === "[object Array]") {
           alert(res[0]);
         } else {
-        setUpdateTable(true);
-        executeOnClose();
+          setUpdateTable(true);
+          executeOnClose();
         }
       })
       .catch((error) => {
@@ -285,19 +285,19 @@ const QALinearitySummaryExpandableRows = ({
           onRemoveHandler={onRemoveHandler}
           actionColumnName={
             user ?
-            <>
-              <span className="padding-right-2">
-                Linearity Summary Data
-              </span>
+              <>
+                <span className="padding-right-2">
+                  Linearity Summary Data
+                </span>
                 <Button
-                  epa-testid="btnOpen" 
-                  className="text-white" 
-                  onClick={()=> openModal(false, false, true)}
+                  epa-testid="btnOpen"
+                  className="text-white"
+                  onClick={() => openModal(false, false, true)}
                 >
                   Add
                 </Button>
-            </>
-            : "Linearity Summary Data"
+              </>
+              : "Linearity Summary Data"
           }
           actionsBtn={"View"}
           user={user}
@@ -314,29 +314,29 @@ const QALinearitySummaryExpandableRows = ({
           }
           noDataComp={
             user ?
-            (<QADataTableRender
-              columnNames={columns}
-              columnWidth={15}
-              data={[]}
-              actionColumnName={
-                user ? (
-                  <>
-                    <span className="padding-right-2">Test Data</span>
-                    <Button
-                      epa-testid="btnOpen"
-                      className="text-white"
-                      onClick={() => openModal(false, false, true)}
-                    >
-                      Add
-                    </Button>
-                  </>
-                ) : (
-                  "Test Data"
-                )
-              }
-              actionsBtn={"View"}
-              user={user}
-            />) : "There're no records available."
+              (<QADataTableRender
+                columnNames={columns}
+                columnWidth={15}
+                data={[]}
+                actionColumnName={
+                  user ? (
+                    <>
+                      <span className="padding-right-2">Test Data</span>
+                      <Button
+                        epa-testid="btnOpen"
+                        className="text-white"
+                        onClick={() => openModal(false, false, true)}
+                      >
+                        Add
+                      </Button>
+                    </>
+                  ) : (
+                    "Test Data"
+                  )
+                }
+                actionsBtn={"View"}
+                user={user}
+              />) : "There're no records available."
           }
         />
       ) : (
@@ -348,7 +348,7 @@ const QALinearitySummaryExpandableRows = ({
         locId={locationId}
         testSumId={id}
       />
-      
+
       {show ? (
         <Modal
           show={show}
@@ -361,8 +361,8 @@ const QALinearitySummaryExpandableRows = ({
             createNewData
               ? `Add  ${dataTableName}`
               : user
-              ? ` Edit ${dataTableName}`
-              : ` ${dataTableName}`
+                ? ` Edit ${dataTableName}`
+                : ` ${dataTableName}`
           }
           exitBTN={createNewData ? `Create ${dataTableName}` : `Save and Close`}
           children={
@@ -376,9 +376,9 @@ const QALinearitySummaryExpandableRows = ({
                   title={`${dataTableName}`}
                   viewOnly={!user || nonEditable}
                   create={createNewData}
-                  // setMainDropdownChange={setMainDropdownChange}
-                  //mainDropdownChange={mainDropdownChange}
-                  // onEditUpdateHandler={onEditUpdateHandler}
+                // setMainDropdownChange={setMainDropdownChange}
+                //mainDropdownChange={mainDropdownChange}
+                // onEditUpdateHandler={onEditUpdateHandler}
                 />
               </div>
             ) : (
