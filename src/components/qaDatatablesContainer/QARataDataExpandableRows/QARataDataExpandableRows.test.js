@@ -112,9 +112,6 @@ describe("Testing QARataDataExpandableRows", () => {
 
   const mock = new MockAdapter(axios);
   mock
-      .onGet(getUrl)
-      .reply(200, rataDataApiResponse);
-  mock
     .onDelete(deleteUrl)  
     .reply(200, "success");
   mock
