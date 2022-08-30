@@ -52,7 +52,6 @@ const QALinearityInjectionExpandableRows = ({
       setLoading(true);
       getQALinearityInjection(linSumId, testSumId, id)
         .then((res) => {
-          console.log("res.data", res.data);
           finishedLoadingData(res.data);
           setQaLinearityInjection(res.data);
           setLoading(false);
@@ -88,7 +87,7 @@ const QALinearityInjectionExpandableRows = ({
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
-  const dropdownArray = [["gasLevelCode","prefilteredTestSummaries"]];
+  const dropdownArray = [["gasLevelCode", "prefilteredTestSummaries"]];
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
   const columns = [
@@ -355,8 +354,8 @@ const QALinearityInjectionExpandableRows = ({
             createNewData
               ? `Add  ${dataTableName}`
               : user
-              ? ` Edit ${dataTableName}`
-              : ` ${dataTableName}`
+                ? ` Edit ${dataTableName}`
+                : ` ${dataTableName}`
           }
           exitBTN={createNewData ? `Create ${dataTableName}` : `Save and Close`}
           children={
@@ -370,9 +369,9 @@ const QALinearityInjectionExpandableRows = ({
                   title={`${dataTableName}`}
                   viewOnly={!user || nonEditable}
                   create={createNewData}
-                  // setMainDropdownChange={setMainDropdownChange}
-                  //mainDropdownChange={mainDropdownChange}
-                  // onEditUpdateHandler={onEditUpdateHandler}
+                // setMainDropdownChange={setMainDropdownChange}
+                //mainDropdownChange={mainDropdownChange}
+                // onEditUpdateHandler={onEditUpdateHandler}
                 />
               </div>
             ) : (
