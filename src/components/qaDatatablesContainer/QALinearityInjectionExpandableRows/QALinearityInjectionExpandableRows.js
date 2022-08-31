@@ -265,7 +265,6 @@ const QALinearityInjectionExpandableRows = ({
       userInput
     )
       .then((res) => {
-        console.log("res", res);
         if (Object.prototype.toString.call(res) === "[object Array]") {
           alert(res[0]);
         } else {
