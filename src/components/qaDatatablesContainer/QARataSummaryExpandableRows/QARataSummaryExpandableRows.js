@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { connect } from "react-redux";
 import {
-  deleteProtocolGas,
   getRataSummary,
   createRataSummary,
   updateRataSummary,
