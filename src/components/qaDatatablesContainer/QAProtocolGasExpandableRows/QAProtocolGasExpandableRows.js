@@ -79,7 +79,7 @@ const QAProtocolGasExpandableRows = ({
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
-  const dropdownArray = [["gasLevelCode","gasTypeCode"]];
+  const dropdownArray = [["gasLevelCode", "gasTypeCode"]];
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
   const columns = [
@@ -98,12 +98,12 @@ const QAProtocolGasExpandableRows = ({
     vendorID: ["Vendor ID", "input", "", ""],
     expirationDate: ["Expiration Date", "date", "", ""],
     skip: ["", "skip", "", ""],
-    
+
   };
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
     if (!dropdownArrayIsEmpty && mdmData.length === 0) {
-      if(!dropdownsLoading){
+      if (!dropdownsLoading) {
         loadDropdownsData(dataTableName, dropdownArray);
         setDropdownsLoading(true);
       }
@@ -137,7 +137,7 @@ const QAProtocolGasExpandableRows = ({
   const openModal = (row, bool, create) => {
     let selectedData = null;
     setCreateNewData(create);
-    if(create){
+    if (create) {
       controlInputs.gasLevelCode = ["Summary Type/Gas Level Code", "dropdown", "", ""];
     }
     if (dataPulled.length > 0 && !create) {
@@ -234,15 +234,15 @@ const QAProtocolGasExpandableRows = ({
       vendorID: null,
       expirationDate: null,
     };
-    const userInput = extractUserInput( uiControls, ".modalUserInput"); 
+    const userInput = extractUserInput(uiControls, ".modalUserInput");
     createProtocolGas(locId, testSumId, userInput)
       .then((res) => {
         console.log("res", res);
         if (Object.prototype.toString.call(res) === "[object Array]") {
           alert(res[0]);
         } else {
-        setUpdateTable(true);
-        executeOnClose();
+          setUpdateTable(true);
+          executeOnClose();
         }
       })
       .catch((error) => {
@@ -252,20 +252,21 @@ const QAProtocolGasExpandableRows = ({
 
   const onRemoveHandler = async (row) => {
     const { id: idToRemove, testSumId } = row;
-    deleteProtocolGas(
-      locId,
-      testSumId,
-      idToRemove
-    ).then((resp)=>{
+    try {
+      const resp = await deleteProtocolGas(
+        locId,
+        testSumId,
+        idToRemove
+      );
       if (resp.status === 200) {
         const dataPostRemove = protocolGas.filter(
           (rowData) => rowData.id !== idToRemove
         );
         setProtocolGas(dataPostRemove);
       }
-    }).catch((error) => {
-      console.log("error", error);
-    });
+    } catch (error) {
+      console.log('error deleting protocol gas', error);
+    }
   };
 
   return (
@@ -280,46 +281,46 @@ const QAProtocolGasExpandableRows = ({
           onRemoveHandler={onRemoveHandler}
           actionColumnName={
             user ?
-            <>
-              <span className="padding-right-2">
-                Protocol Gas
-              </span>
+              <>
+                <span className="padding-right-2">
+                  Protocol Gas
+                </span>
                 <Button
-                  epa-testid="btnOpen" 
-                  className="text-white" 
-                  onClick={()=> openModal(false, false, true)}
+                  epa-testid="btnOpen"
+                  className="text-white"
+                  onClick={() => openModal(false, false, true)}
                 >
                   Add
                 </Button>
-            </>
-            : "Protocol Gas"
+              </>
+              : "Protocol Gas"
           }
           actionsBtn={"View"}
           user={user}
           evaluate={false}
           noDataComp={
             user ?
-            (<QADataTableRender
-              columnNames={columns}
-              columnWidth={15}
-              data={[]}
-              actionColumnName={
-                (
-                  <>
-                    <span className="padding-right-2">Protocol Gas</span>
-                    <Button
-                      epa-testid="btnOpen"
-                      className="text-white"
-                      onClick={() => openModal(false, false, true)}
-                    >
-                      Add
-                    </Button>
-                  </>
-                )
-              }
-              actionsBtn={"View"}
-              user={user}
-            />) : "There're no protocol gas records available."
+              (<QADataTableRender
+                columnNames={columns}
+                columnWidth={15}
+                data={[]}
+                actionColumnName={
+                  (
+                    <>
+                      <span className="padding-right-2">Protocol Gas</span>
+                      <Button
+                        epa-testid="btnOpen"
+                        className="text-white"
+                        onClick={() => openModal(false, false, true)}
+                      >
+                        Add
+                      </Button>
+                    </>
+                  )
+                }
+                actionsBtn={"View"}
+                user={user}
+              />) : "There're no protocol gas records available."
           }
         />
       ) : (
@@ -331,14 +332,14 @@ const QAProtocolGasExpandableRows = ({
           show={show}
           close={closeModalHandler}
           save={createNewData ? createData : saveData}
-          showCancel={!user ? true: false}
-          showSave={user? true: false}
+          showCancel={!user ? true : false}
+          showSave={user ? true : false}
           title={
             createNewData
               ? `Add  ${dataTableName}`
               : user
-              ? ` Edit ${dataTableName}`
-              : ` ${dataTableName}`
+                ? ` Edit ${dataTableName}`
+                : ` ${dataTableName}`
           }
           exitBTN={`Save and Close`}
           children={
@@ -349,7 +350,7 @@ const QAProtocolGasExpandableRows = ({
                   data={selectedModalData}
                   cols={2}
                   title={`${dataTableName}`}
-                  viewOnly={!user ? true: false}
+                  viewOnly={!user ? true : false}
                   create={createNewData}
                 />
               </div>

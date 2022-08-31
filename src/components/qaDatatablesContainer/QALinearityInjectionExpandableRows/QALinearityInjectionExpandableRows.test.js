@@ -1,73 +1,61 @@
 import React from "react";
-import { render, waitForElement, screen, fireEvent } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-
-import QALinearityInjectionExpandableRows  from "./QALinearityInjectionExpandableRows";
 import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
+import { render, waitForElement, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import MockAdapter from "axios-mock-adapter";
+import axios from "axios";
+
+import QALinearityInjectionExpandableRows from "./QALinearityInjectionExpandableRows";
 import configureStore from "../../../store/configureStore.dev";
 import initialState from "../../../store/reducers/initialState";
+import config from "../../../config";
 
-import * as qaApi from "../../../utils/api/qaCertificationsAPI";
-const axios = require("axios");
+const mock = new MockAdapter(axios)
 
-jest.mock("axios");
+// matches alphanumeric strings including hyphens (-)
+const idRegex = '[\\w\\-]+'
 
-const rowToRemoveText = 'this row should be removed'
+const url = new RegExp(`${config.services.qaCertification.uri}/locations/${idRegex}/test-summary/${idRegex}/linearities/${idRegex}/injections`)
+const postUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary/${idRegex}/linearities/${idRegex}/injections`)
+const putUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary/${idRegex}/linearities/${idRegex}/injections/${idRegex}`)
+const deleteUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary/${idRegex}/linearities/${idRegex}/injections/${idRegex}`)
+const gasLevelCodesUrl = 'https://api-easey-dev.app.cloud.gov/master-data-mgmt/gas-level-codes'
+const testSummaryUrl = 'https://api-easey-dev.app.cloud.gov/master-data-mgmt/relationships/test-summaries'
 
-const linearitySummary = [
+const linearityInjection = [
   {
-    "id": "IT07D0112-4CBC1A08D61B403DBB179D0B78EC51A8",
-    "testSumId": "IT07D0112-70AA39C4632746999222EC8FB3C530FB",
-    "gasLevelCode": "MID",
-    "meanMeasuredValue": 55.3,
-    "calculatedMeanMeasuredValue": 55.3,
-    "meanReferenceValue": 55.9,
-    "calculatedMeanReferenceValue": 55.9,
-    "percentError": 1.1,
-    "calculatedPercentError": 1.1,
-    "apsIndicator": 0,
-    "calculatedAPSIndicator": 0,
-    "userId": "lperez",
-    "addDate": "4/25/2011, 7:30:54 PM",
-    "updateDate": null,
-    "linearityInjectionData": []
+    injectionDate: "2022-08-30T19:31:28.214Z",
+    injectionHour: 0,
+    injectionMinute: 0,
+    measuredValue: 0,
+    referenceValue: 0,
+    id: 'id1',
+    linSumId: 'linSumId1',
+    userId: 'userId1',
+    addDate: "2022-08-30T19:31:28.214Z",
+    updateDate: "2022-08-30T19:31:28.214Z"
   },
   {
-    "id": "idToRemove",
-    "testSumId": "IT07D0112-70AA39C4632746999222EC8FB3C530FB",
-    "gasLevelCode": rowToRemoveText,
-    "meanMeasuredValue": 55.3,
-    "calculatedMeanMeasuredValue": 55.3,
-    "meanReferenceValue": 55.9,
-    "calculatedMeanReferenceValue": 55.9,
-    "percentError": 1.1,
-    "calculatedPercentError": 1.1,
-    "apsIndicator": 0,
-    "calculatedAPSIndicator": 0,
-    "userId": "lperez",
-    "addDate": "4/25/2011, 7:30:54 PM",
-    "updateDate": null,
-    "linearityInjectionData": []
+    injectionDate: "2022-08-30T19:31:28.214Z",
+    injectionHour: 0,
+    injectionMinute: 0,
+    measuredValue: 0,
+    referenceValue: 0,
+    id: 'id2',
+    linSumId: 'linSumId2',
+    userId: 'userId2',
+    addDate: "2022-08-30T19:31:28.214Z",
+    updateDate: "2022-08-30T19:31:28.214Z"
   },
-  {
-    "id": "IT07D0112-7B71D94A53784A5282585A35DDB346C0",
-    "testSumId": "IT07D0112-70AA39C4632746999222EC8FB3C530FB",
-    "gasLevelCode": "LOW",
-    "meanMeasuredValue": 25.233,
-    "calculatedMeanMeasuredValue": 25.233,
-    "meanReferenceValue": 25.2,
-    "calculatedMeanReferenceValue": 25.2,
-    "percentError": 0.1,
-    "calculatedPercentError": 0.1,
-    "apsIndicator": 0,
-    "calculatedAPSIndicator": 0,
-    "userId": "lperez",
-    "addDate": "4/25/2011, 7:30:54 PM",
-    "updateDate": null,
-    "linearityInjectionData": []
-  },
-];
+]
+
+mock.onGet(url).reply(200, linearityInjection);
+mock.onPost(postUrl).reply(200, 'created')
+mock.onPut(putUrl).reply(200, 'updated')
+mock.onDelete(deleteUrl).reply(200, 'deleted')
+mock.onGet(gasLevelCodesUrl).reply(200, [])
+mock.onGet(testSummaryUrl).reply(200, [])
+
 initialState.dropdowns.lineTestSummary = {
   spanScaleCode: [
     {
@@ -278,36 +266,39 @@ initialState.dropdowns.lineTestSummary = {
     }
   ]
 };
+
 let store = configureStore(initialState);
 //testing redux connected component to mimic props passed as argument
-const componentRenderer = (locId, testSummaryId) => {
-  const props = {
-    user: { firstName: "test" },
-    data: {
-      locationId: locId,
-      id: testSummaryId
-    },
-    mdmData: {
-      "gasLevelCode" : [
-        {
-          code: "",
-          name: " --- select ---"
-        },
-        {
-          code: "HIGH",
-          name: "high"
-        },
-        {
-          code: "MID",
-          name: "mid"
-        },
-        {
-          code: "LOW",
-          name: "low"
-        },
-      ]
-    }
-  };
+const locId = 'locId'
+const testSummaryId = 'testSummaryId'
+const props = {
+  user: 'user',
+  data: {
+    locationId: locId,
+    id: testSummaryId
+  },
+  mdmData: {
+    "gasLevelCode": [
+      {
+        code: "",
+        name: " --- select ---"
+      },
+      {
+        code: "HIGH",
+        name: "high"
+      },
+      {
+        code: "MID",
+        name: "mid"
+      },
+      {
+        code: "LOW",
+        name: "low"
+      },
+    ]
+  }
+};
+const componentRenderer = () => {
   return render(
     <Provider store={store}>
       <QALinearityInjectionExpandableRows {...props} />
@@ -315,84 +306,58 @@ const componentRenderer = (locId, testSummaryId) => {
   );
 };
 
-test("testing linearity summary expandable records from test summary data", async () => {
-  expect(true).toBe(true);
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: linearitySummary })
-  );
-  const res = await qaApi.getQALinearityInjection("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB","IT07D0112-70AA39C4632746999222EC8FB3C530FB");
-  expect(res.data).toEqual(linearitySummary);
-  let { container } = await waitForElement(() => componentRenderer("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB","IT07D0112-70AA39C4632746999222EC8FB3C530FB"));
-  expect(container).toBeDefined();
-  expect(screen.getByRole("table")).toBeDefined();
-  expect(screen.getAllByRole("columnheader").length).toBe(6);
-  expect(screen.getAllByRole("row").length).toBe(linearitySummary.length + 1);
-});
-
-test.skip("when remove button on a row is clicked then that row is deleted from the table", async () => {
+test('renders QALinearityInjectionExpandableRows', async () => {
   // Arrange
-  axios.get.mockReset()
-  axios.get.mockClear()
-  axios.get.mockImplementation(() => Promise.resolve({ status: 200, data: linearitySummary }));
-  // works with this mock
-  qaApi.deleteQALinearitySummary = jest.fn().mockResolvedValue({ status: 200, data: 'deleted' })
-  // fails and encounters error with this mock
-  // axios.delete.mockImplementation(() => Promise.resolve({ status: 200, data: 'delete succeeded' }))
-  const rowIndex = 1
-
-  const props = {
-    user: { firstName: "test" },
-    data: {
-      locationId: '5930',
-      id: 'IT07D0112-70AA39C4632746999222EC8FB3C530FB'
-    },
-    actionsBtn: 'View',
-    actionColumnName: 'Linearity Summary Data"'
-  };
-  render(<QALinearityInjectionExpandableRows {...props} />)
-
-  // does not work in combination with screen.getAllByRole(button)
-  // waitForElement(() => render(<QALinearitySummaryExpandableRows {...props} />))
-
-  const removeButtons = await screen.findAllByRole('button', { name: /remove/i })
-
-  // does not work in combination with waitForelement
-  // const removeButtons = screen.getAllByRole('button', { name: /remove/i })
-
-  // row exists before remove
-  expect(screen.getByText(rowToRemoveText)).toBeInTheDocument()
-
-  // Act
-  // click remove button in second row
-  const secondRemoveButton = removeButtons[rowIndex]
-  userEvent.click(secondRemoveButton)
-
-  // click 'yes' in confirmation modal
-  const confirmBtns = screen.getAllByRole('button', { name: /yes/i })
-  const secondConfirmBtn = confirmBtns[rowIndex]
-  userEvent.click(secondConfirmBtn)
+  const { container } = await waitForElement(() => componentRenderer())
 
   // Assert
-  await waitForElement(() => {
-    const removedRowText = screen.queryByText(rowToRemoveText)
-    expect(removedRowText).toBeNull()
-  })
-});
+  expect(container).toBeDefined()
+})
 
-// test("testing to add linearity summary records", async () => {
-//   expect(true).toBe(true);
-//   // axios.get.mockImplementation(() =>
-//   //   Promise.resolve({ status: 200, data: linearitySummary })
-//   // );
-//   // const res = await qaApi.getQALinearitySummary("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB");
-//   // expect(res.data).toEqual(linearitySummary);
-//   // let { container } = await waitForElement(() => componentRenderer("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB"));
-//   // expect(container).toBeDefined();
-//   // const addButtons = screen.getAllByRole("button", {name: "Add"});
-//   // //const addButton = screen.getByText("Add");
+test('given a user when they add data and save then a POST request is made', async () => {
+  // Assert
+  await waitForElement(() => componentRenderer())
+  const addBtn = screen.getAllByRole('button', { name: /Add/i })
 
-//   // expect(addButtons.length).toBe(2);
-//   // fireEvent.click(addButtons[1]);
-//   // //screen.debug();
-//   // expect(screen.getByText("Add Linearity Test")).toBeInTheDocument();
-// });
+  // Act
+  userEvent.click(addBtn[0])
+
+  const saveBtn = screen.getByRole('button', { name: /Click to Save/i })
+  userEvent.click(saveBtn)
+
+  // Assert
+  expect(mock.history.post.length).toBe(1)
+})
+
+test('given a user when they edit data and save then a PUT request is made', async () => {
+  // Arrange
+  await waitForElement(() => componentRenderer())
+  const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+
+  // Act
+  const firstEditBtn = editBtns[0]
+  userEvent.click(firstEditBtn)
+
+  const saveBtn = screen.getByRole('button', { name: /Click to Save/i })
+  userEvent.click(saveBtn)
+
+  // Assert
+  expect(mock.history.put.length).toBe(1)
+})
+
+test('given a user when they delete data then a DELETE request is made', async () => {
+  // Arrange
+  await waitForElement(() => componentRenderer())
+  const deleteBtns = screen.getAllByRole('button', { name: /Remove/i })
+  const firstDeleteBtn = deleteBtns[0]
+
+  // Act
+  userEvent.click(firstDeleteBtn)
+
+  const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+  const firstConfirmBtn = confirmBtns[0]
+  userEvent.click(firstConfirmBtn)
+
+  // Assert
+  expect(mock.history.delete.length).toBe(1)
+})

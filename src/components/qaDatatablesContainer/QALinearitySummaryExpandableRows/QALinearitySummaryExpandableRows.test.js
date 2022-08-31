@@ -2,7 +2,7 @@ import React from "react";
 import { render, waitForElement, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import QALinearitySummaryExpandableRows  from "./QALinearitySummaryExpandableRows";
+import QALinearitySummaryExpandableRows from "./QALinearitySummaryExpandableRows";
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import configureStore from "../../../store/configureStore.dev";
@@ -48,10 +48,10 @@ const linearitySummary = [
     "linearityInjectionData": []
   },
 ];
-const locId= "1873";
-const testSummaryId= "4f2d07c0-55f9-49b0-8946-ea80c1febb15";
+const locId = "1873";
+const testSummaryId = "4f2d07c0-55f9-49b0-8946-ea80c1febb15";
 initialState.dropdowns.linearitySummaryTestSecondLevel = {
-  gasLevelCode : [
+  gasLevelCode: [
     {
       code: "",
       name: " --- select ---"
@@ -93,8 +93,8 @@ const componentRenderer = () => {
       locationId: locId,
       id: testSummaryId
     },
-    showProtocolGas:false,
-    locationSelectValue:locId,
+    showProtocolGas: false,
+    locationSelectValue: locId,
   };
   return render(
     <Provider store={store}>
@@ -114,10 +114,10 @@ describe("Testing QAProtocolGasExpandableRows", () => {
     .onGet(getUrl)
     .reply(200, linearitySummary);
   mock
-    .onDelete(deleteUrl)  
+    .onDelete(deleteUrl)
     .reply(200, "success");
   mock
-    .onPost(postUrl, 
+    .onPost(postUrl,
       {
         "testSumId": "4f2d07c0-55f9-49b0-8946-ea80c1febb15",
         "gasLevelCode": "LOW",
@@ -128,9 +128,9 @@ describe("Testing QAProtocolGasExpandableRows", () => {
       }
     ).reply(200, 'success');
   mock
-    .onPut(putUrl, 
+    .onPut(putUrl,
       {
-        
+
         "testSumId": "4f2d07c0-55f9-49b0-8946-ea80c1febb15",
         "gasLevelCode": "HIGH",
         "meanMeasuredValue": 25.233,
@@ -156,35 +156,35 @@ describe("Testing QAProtocolGasExpandableRows", () => {
     const remBtns = utils.getAllByRole("button", { name: "Remove" });
     expect(remBtns.length).toBe(2);
     fireEvent.click(remBtns[0]);
-    expect(utils.getByRole("dialog",{name:"Confirmation"})).toBeInTheDocument();
+    expect(utils.getByRole("dialog", { name: "Confirmation" })).toBeInTheDocument();
     const confirmBtn = utils.getAllByRole("button", { name: "Yes" });
     expect(confirmBtn).toBeDefined();
     fireEvent.click(confirmBtn[0]);
     expect(mock.history.delete[0].url).toEqual(deleteUrl);
     // //add record
-    const addBtn = utils.getByRole("button", { name: "Add" }); 
+    const addBtn = utils.getByRole("button", { name: "Add" });
     expect(addBtn).toBeDefined();
     fireEvent.click(addBtn);
     expect(utils.getByText("Add Linearity Test")).toBeInTheDocument();
     const input = utils.getByLabelText('Percent Error');
-    fireEvent.change(input, {target: {value: '23'}});
+    fireEvent.change(input, { target: { value: '23' } });
     fireEvent.change(utils.getAllByTestId('dropdown')[0], { target: { value: 2 } })
     const saveBtn = utils.getByRole("button", { name: "Click to save" });
     expect(saveBtn).toBeDefined();
     fireEvent.click(saveBtn);
     expect(mock.history.post[0].url).toEqual(postUrl);
     // //edit record
-    const editBtns = utils.getAllByRole("button", { name: "Edit" }); 
+    const editBtns = utils.getAllByRole("button", { name: "Edit" });
     expect(editBtns.length).toBe(2);
     fireEvent.click(editBtns[1]);
     expect(utils.getByText("Edit Linearity Test")).toBeInTheDocument();
     const inputPE = utils.getByLabelText('Percent Error');
-    fireEvent.change(inputPE, {target: {value: '70'}});
+    fireEvent.change(inputPE, { target: { value: '70' } });
     const updateBtn = utils.getByRole("button", { name: "Click to save" });
     expect(updateBtn).toBeDefined();
     fireEvent.click(updateBtn);
     expect(mock.history.put[0].url).toEqual(putUrl);
     //console.log("END mock.history",mock.history);
   });
-  
+
 });

@@ -41,8 +41,8 @@ const rataDataApiResponse = [
     "updateDate": "8/18/2022, 2:21:23 PM"
   }
 ];
-const locId= "1873";
-const testSummaryId= "4f2d07c0-55f9-49b0-8946-ea80c1febb15";
+const locId = "1873";
+const testSummaryId = "4f2d07c0-55f9-49b0-8946-ea80c1febb15";
 
 initialState.dropdowns.rataData = {
   numberOfLoadLevels: [
@@ -112,13 +112,13 @@ describe("Testing QARataDataExpandableRows", () => {
 
   const mock = new MockAdapter(axios);
   mock
-    .onDelete(deleteUrl)  
+    .onDelete(deleteUrl)
     .reply(200, "success");
   mock
     .onGet(getUrl)
     .reply(200, rataDataApiResponse);
   mock
-    .onPost(postUrl, 
+    .onPost(postUrl,
       {
         "testSumId": "4f2d07c0-55f9-49b0-8946-ea80c1febb15",
         "rataFrequencyCode": "8QTRS",
@@ -129,7 +129,7 @@ describe("Testing QARataDataExpandableRows", () => {
       }
     ).reply(200, 'success');
   mock
-    .onPut(putUrl, 
+    .onPut(putUrl,
       {
         "testSumId": "4f2d07c0-55f9-49b0-8946-ea80c1febb15",
         "rataFrequencyCode": "8QT4YU",
@@ -155,24 +155,24 @@ describe("Testing QARataDataExpandableRows", () => {
     const remBtns = utils.getAllByRole("button", { name: "Remove" });
     expect(remBtns.length).toBe(2);
     fireEvent.click(remBtns[0]);
-    expect(utils.getByRole("dialog",{name:"Confirmation"})).toBeInTheDocument();
+    expect(utils.getByRole("dialog", { name: "Confirmation" })).toBeInTheDocument();
     const confirmBtn = utils.getAllByRole("button", { name: "Yes" });
     fireEvent.click(confirmBtn[0]);
     expect(mock.history.delete[0].url).toEqual(deleteUrl);
     //add record
-    const addBtn = utils.getByRole("button", { name: "Add" }); 
+    const addBtn = utils.getByRole("button", { name: "Add" });
     expect(addBtn).toBeDefined();
     fireEvent.click(addBtn);
     expect(utils.getByText("Add RATA Data")).toBeInTheDocument();
     const input = utils.getByLabelText('Relative Accuracy');
-    fireEvent.change(input, {target: {value: '23'}});
+    fireEvent.change(input, { target: { value: '23' } });
     fireEvent.change(utils.getAllByTestId('dropdown')[0], { target: { value: 2 } })
     const saveBtn = utils.getByRole("button", { name: "Click to save" });
     expect(saveBtn).toBeDefined();
     fireEvent.click(saveBtn);
     expect(mock.history.post[0].url).toEqual(postUrl);
     //edit record
-    const editBtns = utils.getAllByRole("button", { name: "Edit" }); 
+    const editBtns = utils.getAllByRole("button", { name: "Edit" });
     expect(editBtns.length).toBe(2);
     fireEvent.click(editBtns[1]);
     expect(utils.getByText("Edit RATA Data")).toBeInTheDocument();
@@ -182,5 +182,4 @@ describe("Testing QARataDataExpandableRows", () => {
     fireEvent.click(updateBtn);
     expect(mock.history.put[0].url).toEqual(putUrl);
   });
-  
 });

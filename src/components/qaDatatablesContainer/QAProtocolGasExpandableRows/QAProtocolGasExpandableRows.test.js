@@ -1,5 +1,5 @@
 import React from "react";
-import { render, waitForElement, screen, fireEvent, waitFor} from "@testing-library/react";
+import { render, waitForElement, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Provider } from 'react-redux';
 import configureStore from "../../../store/configureStore.dev";
 import initialState from "../../../store/reducers/initialState";
@@ -35,8 +35,8 @@ const protocolGasApiResponse = [
     "updateDate": "2022-08-11T12:11:25.000Z"
   }
 ];
-const locId= "1873";
-const testSummaryId= "4f2d07c0-55f9-49b0-8946-ea80c1febb15";
+const locId = "1873";
+const testSummaryId = "4f2d07c0-55f9-49b0-8946-ea80c1febb15";
 initialState.dropdowns.protocolGas = {
   gasLevelCode: [
     {
@@ -242,7 +242,7 @@ initialState.dropdowns.protocolGas = {
 let store = configureStore(initialState);
 const componentRenderer = () => {
   const props = {
-    user : "test_user",
+    user: "test_user",
     locId: locId,
     testSumId: testSummaryId
   }
@@ -263,10 +263,10 @@ describe("Testing QAProtocolGasExpandableRows", () => {
     .onGet(getUrl)
     .reply(200, protocolGasApiResponse);
   mock
-    .onDelete(deleteUrl)  
+    .onDelete(deleteUrl)
     .reply(200, "success");
   mock
-    .onPost(postUrl, 
+    .onPost(postUrl,
       {
         "testSumId": "a53e88ab-13bc-4775-b5a0-a9cf3c3b6040",
         "gasLevelCode": "HIGH",
@@ -278,7 +278,7 @@ describe("Testing QAProtocolGasExpandableRows", () => {
       }
     ).reply(200, 'success');
   mock
-    .onPut(putUrl, 
+    .onPut(putUrl,
       {
         "testSumId": "a53e88ab-13bc-4775-b5a0-a9cf3c3b6040",
         "gasLevelCode": "MID",
@@ -306,25 +306,25 @@ describe("Testing QAProtocolGasExpandableRows", () => {
     const remBtns = utils.getAllByRole("button", { name: "Remove" });
     expect(remBtns.length).toBe(2);
     fireEvent.click(remBtns[0]);
-    expect(utils.getByRole("dialog",{name:"Confirmation"})).toBeInTheDocument();
+    expect(utils.getByRole("dialog", { name: "Confirmation" })).toBeInTheDocument();
     const confirmBtn = utils.getAllByRole("button", { name: "Yes" });
     expect(confirmBtn).toBeDefined();
     fireEvent.click(confirmBtn[0]);
     expect(mock.history.delete[0].url).toEqual(deleteUrl);
     //add record
-    const addBtn = utils.getByRole("button", { name: "Add" }); 
+    const addBtn = utils.getByRole("button", { name: "Add" });
     expect(addBtn).toBeDefined();
     fireEvent.click(addBtn);
     expect(utils.getByText("Add Protocol Gas")).toBeInTheDocument();
     const input = utils.getByLabelText('Cylinder ID');
-    fireEvent.change(input, {target: {value: '23'}});
+    fireEvent.change(input, { target: { value: '23' } });
     fireEvent.change(utils.getAllByTestId('dropdown')[0], { target: { value: 2 } })
     const saveBtn = utils.getByRole("button", { name: "Click to save" });
     expect(saveBtn).toBeDefined();
     fireEvent.click(saveBtn);
     expect(mock.history.post[0].url).toEqual(postUrl);
     // //edit record
-    const editBtns = utils.getAllByRole("button", { name: "Edit" }); 
+    const editBtns = utils.getAllByRole("button", { name: "Edit" });
     expect(editBtns.length).toBe(2);
     fireEvent.click(editBtns[1]);
     expect(utils.getByText("Edit Protocol Gas")).toBeInTheDocument();
@@ -335,5 +335,4 @@ describe("Testing QAProtocolGasExpandableRows", () => {
     expect(mock.history.put[0].url).toEqual(putUrl);
     //console.log("END mock.history",mock.history);
   });
-  
 });

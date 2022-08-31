@@ -128,7 +128,6 @@ export const getEmptyRows = (columns) => {
 export const getProtocolGasRecords = (data) => {
   const records = [];
   data.forEach((el) => {
-    console.log("protocol", el);
     records.push({
       id: el.id,
       testSumId: el.testSumId,
