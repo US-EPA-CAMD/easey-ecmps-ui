@@ -1,32 +1,16 @@
 import React from "react";
-import { Provider } from 'react-redux';
-import { render, waitForElement, screen } from "@testing-library/react";
+import { render, waitForElement, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
-
 
 import QALinearitySummaryExpandableRows from "./QALinearitySummaryExpandableRows";
+import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 import configureStore from "../../../store/configureStore.dev";
 import initialState from "../../../store/reducers/initialState";
-import config from "../../../config";
 import * as qaApi from "../../../utils/api/qaCertificationsAPI";
-
-// const axios = require("axios");
-// const MockAdapter = require("axios-mock-adapter")
-const mock = new MockAdapter(axios)
-
-// matches alphanumeric strings including hyphens (-)
-const idRegex = '[\\w\\-]+'
-
-const workspaceUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary`)
-const url = new RegExp(`${config.services.qaCertification.uri}/locations/${idRegex}/test-summary/${idRegex}/linearities`)
-const protocolGasUrl = new RegExp(`${config.services.qaCertification.uri}/locations/${idRegex}/test-summary/${idRegex}/protocol-gases`)
-
-const gasLevelCodesUrl = 'https://api-easey-dev.app.cloud.gov/master-data-mgmt/gas-level-codes'
-const gasTypeCodesUrl = 'https://api-easey-dev.app.cloud.gov/master-data-mgmt/gas-type-codes'
-
-const rowToRemoveText = 'this row should be removed'
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
+import config from "../../../config";
 
 const linearitySummary = [
   {
@@ -64,15 +48,6 @@ const linearitySummary = [
     "linearityInjectionData": []
   },
 ];
-
-// Mock any GET request to /users
-// arguments for reply are (status, data, headers)
-mock.onGet(url).reply(200, linearitySummary);
-mock.onGet(workspaceUrl).reply(200, linearitySummary)
-mock.onGet(gasLevelCodesUrl).reply(200, [])
-mock.onGet(gasTypeCodesUrl).reply(200, [])
-mock.onGet(protocolGasUrl).reply(200, [])
-
 const locId = "1873";
 const testSummaryId = "4f2d07c0-55f9-49b0-8946-ea80c1febb15";
 initialState.dropdowns.linearitySummaryTestSecondLevel = {
@@ -118,8 +93,8 @@ const componentRenderer = () => {
       locationId: locId,
       id: testSummaryId
     },
-    showProtocolGas:false,
-    locationSelectValue:locId,
+    showProtocolGas: false,
+    locationSelectValue: locId,
   };
   return render(
     <Provider store={store}>
@@ -127,55 +102,6 @@ const componentRenderer = () => {
     </Provider>
   );
 };
-
-test('renders QALinearitySummaryExpandableRows', async () => {
-  // Arrange
-  const { container } = await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15"))
-
-  // Assert
-  expect(container).toBeDefined()
-})
-
-test('given a user then user can add new data', async () => {
-  // Assert
-  await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15"))
-
-  const addBtn = screen.getAllByRole('button', { name: /Add/i })
-
-  // Act
-  userEvent.click(addBtn[0])
-
-  // Assert
-  expect(addBtn[0]).toBeDefined()
-})
-
-test('given a user when there are no records then user can add new data', async () => {
-  // Arrange
-  mock.onGet(url).reply(200, []);
-  await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15"))
-
-  const addBtn = screen.getAllByRole('button', { name: /Add/i })
-
-  // Act
-  userEvent.click(addBtn[0])
-
-  // Assert
-  expect(addBtn).toBeDefined()
-})
-
-test("testing linearity summary expandable records from test summary data", async () => {
-  expect(true).toBe(true);
-  // axios.get.mockImplementation(() =>
-  //   Promise.resolve({ status: 200, data: linearitySummary })
-  // );
-  // const res = await qaApi.getQALinearitySummary("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB");
-  // expect(res.data).toEqual(linearitySummary);
-  // let { container } = await waitForElement(() => componentRenderer("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB"));
-  // expect(container).toBeDefined();
-  // expect(screen.getAllByRole("table").length).toBe(2);//includes protocol gas
-  // expect(screen.getAllByRole("columnheader").length).toBe(12);
-  // expect(screen.getAllByRole("row").length).toBe(8);
-});
 
 describe("Testing QAProtocolGasExpandableRows", () => {
   const getUrl = `${config.services.qaCertification.uri}/locations/${locId}/test-summary/${testSummaryId}/linearities`;
@@ -229,34 +155,34 @@ describe("Testing QAProtocolGasExpandableRows", () => {
     //remove record
     const remBtns = utils.getAllByRole("button", { name: "Remove" });
     expect(remBtns.length).toBe(2);
-    userEvent.click(remBtns[0]);
-    expect(utils.getByRole("dialog",{name:"Confirmation"})).toBeInTheDocument();
+    fireEvent.click(remBtns[0]);
+    expect(utils.getByRole("dialog", { name: "Confirmation" })).toBeInTheDocument();
     const confirmBtn = utils.getAllByRole("button", { name: "Yes" });
     expect(confirmBtn).toBeDefined();
-    userEvent.click(confirmBtn[0]);
+    fireEvent.click(confirmBtn[0]);
     expect(mock.history.delete[0].url).toEqual(deleteUrl);
     // //add record
     const addBtn = utils.getByRole("button", { name: "Add" });
     expect(addBtn).toBeDefined();
-    userEvent.click(addBtn);
+    fireEvent.click(addBtn);
     expect(utils.getByText("Add Linearity Test")).toBeInTheDocument();
     const input = utils.getByLabelText('Percent Error');
-    userEvent.change(input, {target: {value: '23'}});
-    userEvent.change(utils.getAllByTestId('dropdown')[0], { target: { value: 2 } })
+    fireEvent.change(input, { target: { value: '23' } });
+    fireEvent.change(utils.getAllByTestId('dropdown')[0], { target: { value: 2 } })
     const saveBtn = utils.getByRole("button", { name: "Click to save" });
     expect(saveBtn).toBeDefined();
-    userEvent.click(saveBtn);
+    fireEvent.click(saveBtn);
     expect(mock.history.post[0].url).toEqual(postUrl);
     // //edit record
     const editBtns = utils.getAllByRole("button", { name: "Edit" });
     expect(editBtns.length).toBe(2);
-    userEvent.click(editBtns[1]);
+    fireEvent.click(editBtns[1]);
     expect(utils.getByText("Edit Linearity Test")).toBeInTheDocument();
     const inputPE = utils.getByLabelText('Percent Error');
-    userEvent.change(inputPE, {target: {value: '70'}});
+    fireEvent.change(inputPE, { target: { value: '70' } });
     const updateBtn = utils.getByRole("button", { name: "Click to save" });
     expect(updateBtn).toBeDefined();
-    userEvent.click(updateBtn);
+    fireEvent.click(updateBtn);
     expect(mock.history.put[0].url).toEqual(putUrl);
     //console.log("END mock.history",mock.history);
   });

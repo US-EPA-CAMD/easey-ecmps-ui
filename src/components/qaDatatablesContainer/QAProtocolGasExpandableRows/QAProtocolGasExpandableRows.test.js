@@ -1,22 +1,13 @@
 import React from "react";
-import { render, waitForElement, screen } from "@testing-library/react";
+import { render, waitForElement, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Provider } from 'react-redux';
-import userEvent from "@testing-library/user-event";
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
-
 import configureStore from "../../../store/configureStore.dev";
 import initialState from "../../../store/reducers/initialState";
+import * as qaApi from "../../../utils/api/qaCertificationsAPI";
 import QAProtocolGasExpandableRows from "./QAProtocolGasExpandableRows"
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
 import config from "../../../config";
-
-const mock = new MockAdapter(axios)
-
-// matches alphanumeric strings including hyphens (-)
-const idRegex = '[\\w\\-]+'
-
-const url = new RegExp(`${config.services.qaCertification.uri}/locations/${idRegex}/test-summary/${idRegex}/protocol-gases`)
-const deleteUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary/${idRegex}/protocol-gases/${idRegex}`)
 
 const protocolGasApiResponse = [
   {
@@ -44,10 +35,6 @@ const protocolGasApiResponse = [
     "updateDate": "2022-08-11T12:11:25.000Z"
   }
 ];
-
-mock.onGet(url).reply(200, protocolGasApiResponse);
-mock.onDelete(deleteUrl).reply(200, 'protocol gas deleted')
-
 const locId = "1873";
 const testSummaryId = "4f2d07c0-55f9-49b0-8946-ea80c1febb15";
 initialState.dropdowns.protocolGas = {
@@ -265,45 +252,6 @@ const componentRenderer = () => {
     </Provider>
   );
 };
-test('renders QAProtocolGasExpandableRows properly', async () => {
-  // Arrange
-  let { container, findByRole } = await waitForElement(() => componentRenderer("1873", "a53e88ab-13bc-4775-b5a0-a9cf3c3b6040"));
-  // Assert
-  expect(container).toBeDefined();
-  expect(findByRole).toBeDefined();
-})
-
-test('given a user then user can add new data', async () => {
-  // Assert
-  await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15"))
-
-  const addBtn = screen.getAllByRole('button', { name: /Add/i })
-
-  // Act
-  userEvent.click(addBtn[0])
-
-  // Assert
-  expect(addBtn).toBeDefined()
-})
-
-test('given a user when "Delete" button is clicked then a row is deleted', async () => {
-  // Arrange
-  let { getAllByRole } = await waitForElement(() => componentRenderer("1873", "a53e88ab-13bc-4775-b5a0-a9cf3c3b6040"));
-
-  const deleteBtns = getAllByRole('button', { name: /Remove/i })
-  const firstDeleteBtn = deleteBtns[0]
-
-  // Act
-  userEvent.click(firstDeleteBtn)
-
-  const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
-  const firstConfirmBtn = confirmBtns[0]
-  userEvent.click(firstConfirmBtn)
-
-  // Assert
-  expect(mock.history.delete.length).toBe(1)
-})
-
 describe("Testing QAProtocolGasExpandableRows", () => {
   const getUrl = `${config.services.qaCertification.uri}/locations/${locId}/test-summary/${testSummaryId}/protocol-gases`;
   const deleteUrl = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSummaryId}/protocol-gases/${protocolGasApiResponse[0].id}`;
@@ -357,35 +305,34 @@ describe("Testing QAProtocolGasExpandableRows", () => {
     //remove record
     const remBtns = utils.getAllByRole("button", { name: "Remove" });
     expect(remBtns.length).toBe(2);
-    userEvent.click(remBtns[0]);
+    fireEvent.click(remBtns[0]);
     expect(utils.getByRole("dialog", { name: "Confirmation" })).toBeInTheDocument();
     const confirmBtn = utils.getAllByRole("button", { name: "Yes" });
     expect(confirmBtn).toBeDefined();
-    userEvent.click(confirmBtn[0]);
+    fireEvent.click(confirmBtn[0]);
     expect(mock.history.delete[0].url).toEqual(deleteUrl);
     //add record
     const addBtn = utils.getByRole("button", { name: "Add" });
     expect(addBtn).toBeDefined();
-    userEvent.click(addBtn);
+    fireEvent.click(addBtn);
     expect(utils.getByText("Add Protocol Gas")).toBeInTheDocument();
     const input = utils.getByLabelText('Cylinder ID');
-    userEvent.change(input, { target: { value: '23' } });
-    userEvent.change(utils.getAllByTestId('dropdown')[0], { target: { value: 2 } })
+    fireEvent.change(input, { target: { value: '23' } });
+    fireEvent.change(utils.getAllByTestId('dropdown')[0], { target: { value: 2 } })
     const saveBtn = utils.getByRole("button", { name: "Click to save" });
     expect(saveBtn).toBeDefined();
-    userEvent.click(saveBtn);
+    fireEvent.click(saveBtn);
     expect(mock.history.post[0].url).toEqual(postUrl);
     // //edit record
     const editBtns = utils.getAllByRole("button", { name: "Edit" });
     expect(editBtns.length).toBe(2);
-    userEvent.click(editBtns[1]);
+    fireEvent.click(editBtns[1]);
     expect(utils.getByText("Edit Protocol Gas")).toBeInTheDocument();
-    userEvent.change(utils.getAllByTestId('dropdown')[0], { target: { value: 1 } })
+    fireEvent.change(utils.getAllByTestId('dropdown')[0], { target: { value: 1 } })
     const updateBtn = utils.getByRole("button", { name: "Click to save" });
     expect(updateBtn).toBeDefined();
-    userEvent.click(updateBtn);
+    fireEvent.click(updateBtn);
     expect(mock.history.put[0].url).toEqual(putUrl);
     //console.log("END mock.history",mock.history);
   });
-
 });
