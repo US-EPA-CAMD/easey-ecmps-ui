@@ -1,23 +1,23 @@
 import React from "react";
+import { Provider } from 'react-redux';
 import { render, waitForElement, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import MockAdapter from "axios-mock-adapter";
+import axios from "axios";
 
 import QALinearityInjectionExpandableRows from "./QALinearityInjectionExpandableRows";
-import { Provider } from 'react-redux';
 import configureStore from "../../../store/configureStore.dev";
 import initialState from "../../../store/reducers/initialState";
-
-import * as qaApi from "../../../utils/api/qaCertificationsAPI";
 import config from "../../../config";
 
-const axios = require("axios");
-const MockAdapter = require("axios-mock-adapter")
 const mock = new MockAdapter(axios)
 
 // matches alphanumeric strings including hyphens (-)
 const idRegex = '[\\w\\-]+'
 
 const url = new RegExp(`${config.services.qaCertification.uri}/locations/${idRegex}/test-summary/${idRegex}/linearities/${idRegex}/injections`)
+const postUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary/${idRegex}/linearities/${idRegex}/injections`)
+const putUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary/${idRegex}/linearities/${idRegex}/injections/${idRegex}`)
 const deleteUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary/${idRegex}/linearities/${idRegex}/injections/${idRegex}`)
 const gasLevelCodesUrl = 'https://api-easey-dev.app.cloud.gov/master-data-mgmt/gas-level-codes'
 const testSummaryUrl = 'https://api-easey-dev.app.cloud.gov/master-data-mgmt/relationships/test-summaries'
@@ -50,6 +50,8 @@ const linearityInjection = [
 ]
 
 mock.onGet(url).reply(200, linearityInjection);
+mock.onPost(postUrl).reply(200, 'created')
+mock.onPut(putUrl).reply(200, 'updated')
 mock.onDelete(deleteUrl).reply(200, 'deleted')
 mock.onGet(gasLevelCodesUrl).reply(200, [])
 mock.onGet(testSummaryUrl).reply(200, [])
@@ -267,34 +269,36 @@ initialState.dropdowns.lineTestSummary = {
 
 let store = configureStore(initialState);
 //testing redux connected component to mimic props passed as argument
-const componentRenderer = (locId, testSummaryId) => {
-  const props = {
-    user: { firstName: "test" },
-    data: {
-      locationId: locId,
-      id: testSummaryId
-    },
-    mdmData: {
-      "gasLevelCode": [
-        {
-          code: "",
-          name: " --- select ---"
-        },
-        {
-          code: "HIGH",
-          name: "high"
-        },
-        {
-          code: "MID",
-          name: "mid"
-        },
-        {
-          code: "LOW",
-          name: "low"
-        },
-      ]
-    }
-  };
+const locId = 'locId'
+const testSummaryId = 'testSummaryId'
+const props = {
+  user: 'user',
+  data: {
+    locationId: locId,
+    id: testSummaryId
+  },
+  mdmData: {
+    "gasLevelCode": [
+      {
+        code: "",
+        name: " --- select ---"
+      },
+      {
+        code: "HIGH",
+        name: "high"
+      },
+      {
+        code: "MID",
+        name: "mid"
+      },
+      {
+        code: "LOW",
+        name: "low"
+      },
+    ]
+  }
+};
+const componentRenderer = () => {
   return render(
     <Provider store={store}>
       <QALinearityInjectionExpandableRows {...props} />
@@ -302,42 +306,48 @@ const componentRenderer = (locId, testSummaryId) => {
   );
 };
 
-test.skip("testing linearity summary expandable records from test summary data", async () => {
-  expect(true).toBe(true);
-  const res = await qaApi.getQALinearityInjection("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB", "IT07D0112-70AA39C4632746999222EC8FB3C530FB");
-  expect(res.data).toEqual(linearityInjection);
-  let { container } = await waitForElement(() => componentRenderer("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB", "IT07D0112-70AA39C4632746999222EC8FB3C530FB"));
-  expect(container).toBeDefined();
-  expect(screen.getByRole("table")).toBeDefined();
-  expect(screen.getAllByRole("columnheader").length).toBe(6);
-  expect(screen.getAllByRole("row").length).toBe(linearityInjection.length + 1);
-});
-
-test('renders QALinearityInectionExpandableRows', async () => {
+test('renders QALinearityInjectionExpandableRows', async () => {
   // Arrange
-  const { container } = await waitForElement(() => componentRenderer("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB"))
+  const { container } = await waitForElement(() => componentRenderer())
 
   // Assert
   expect(container).toBeDefined()
 })
 
-test('given a user then user can add new data', async () => {
+test('given a user when they add data and save then a POST request is made', async () => {
   // Assert
-  await waitForElement(() => componentRenderer("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB"))
-
+  await waitForElement(() => componentRenderer())
   const addBtn = screen.getAllByRole('button', { name: /Add/i })
 
   // Act
   userEvent.click(addBtn[0])
 
+  const saveBtn = screen.getByRole('button', { name: /Click to Save/i })
+  userEvent.click(saveBtn)
+
   // Assert
-  expect(addBtn).toBeDefined()
+  expect(mock.history.post.length).toBe(1)
 })
 
-test('given a user when "Delete" button is clicked then a row is deleted', async () => {
+test('given a user when they edit data and save then a PUT request is made', async () => {
   // Arrange
-  await waitForElement(() => componentRenderer("5930", "IT07D0112-70AA39C4632746999222EC8FB3C530FB"))
+  await waitForElement(() => componentRenderer())
+  const editBtns = screen.getAllByRole('button', { name: /Edit/i })
 
+  // Act
+  const firstEditBtn = editBtns[0]
+  userEvent.click(firstEditBtn)
+
+  const saveBtn = screen.getByRole('button', { name: /Click to Save/i })
+  userEvent.click(saveBtn)
+
+  // Assert
+  expect(mock.history.put.length).toBe(1)
+})
+
+test('given a user when they delete data then a DELETE request is made', async () => {
+  // Arrange
+  await waitForElement(() => componentRenderer())
   const deleteBtns = screen.getAllByRole('button', { name: /Remove/i })
   const firstDeleteBtn = deleteBtns[0]
 
