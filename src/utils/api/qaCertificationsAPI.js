@@ -36,7 +36,6 @@ export const getQATestSummary = async (
   if (beginDate && endDate) {
     url = `${url}?beginDate=${beginDate}&endDate=${endDate}`;
   }
-  console.log('url',url)
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
@@ -515,7 +514,7 @@ export const deleteRataSummary = async (locId, testSumId, rataId, id) => {
   }
 }
 
-export const getRataRunData = async (locId, testSumId, rataId,rataSumId) => {
+export const getRataRunData = async (locId, testSumId, rataId, rataSumId) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
@@ -525,14 +524,12 @@ export const getRataRunData = async (locId, testSumId, rataId,rataSumId) => {
 
   // *** attach the rest of the url
   url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/`;
-  console.log('url',url)
   return axios.get(url).then(handleResponse).catch(handleError);
 }
 
-export const createRataRunData = async (locId, testSumId, rataId,rataSumId,payload) => {
+export const createRataRunData = async (locId, testSumId, rataId, rataSumId, payload) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs`;
 
-  console.log('url',url)
   try {
     return handleResponse(
       await secureAxios({
@@ -546,7 +543,7 @@ export const createRataRunData = async (locId, testSumId, rataId,rataSumId,paylo
   }
 }
 
-export const updateRataRunData = async (locId, testSumId, rataId, id, payload,rataSumId) => {
+export const updateRataRunData = async (locId, testSumId, rataId, id, payload, rataSumId) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${id}`;
   try {
     return handleResponse(
@@ -561,7 +558,7 @@ export const updateRataRunData = async (locId, testSumId, rataId, id, payload,ra
   }
 }
 
-export const deleteRataRunData = async (locId, testSumId, rataId, id,rataSumId) => {
+export const deleteRataRunData = async (locId, testSumId, rataId, id, rataSumId) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${id}`;
   try {
     return handleResponse(
