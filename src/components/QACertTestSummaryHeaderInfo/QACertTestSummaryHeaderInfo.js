@@ -286,7 +286,7 @@ export const QACertTestSummaryHeaderInfo = ({
               )}
             </div>
           </div>
-          <div className="grid-row float-right">
+          <div className="grid-row float-left">
             <Button
               className="float-right text-right bottom-0 text-no-wrap "
               type="button"
