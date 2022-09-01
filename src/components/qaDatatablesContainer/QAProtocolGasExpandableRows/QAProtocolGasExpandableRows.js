@@ -85,8 +85,8 @@ const QAProtocolGasExpandableRows = ({
   const columns = [
     "Gas Level Code",
     "Gas Type Code",
-    "Cylinder ID",
     "Vendor ID",
+    "Cylinder ID",
     "Expiration Date",
   ];
 
