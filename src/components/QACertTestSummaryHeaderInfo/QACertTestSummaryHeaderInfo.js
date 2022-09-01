@@ -232,14 +232,22 @@ export const QACertTestSummaryHeaderInfo = ({
       {dataLoaded ? (
         // adding display-block here allows buttons to be clickable ( has somesort of hidden overlay without it)
         <div className="grid-container width-full clearfix position-relative">
-          <div className="grid-row">
-            <h3 className="display-inline-block">
-              <span className="font-body-lg">{facilityMainName}</span>
-            </h3>{" "}
+          <div className="display-flex flex-row flex-justify flex-align-center">
+            <div className="grid-row">
+              <h3 className="margin-y-auto font-body-lg margin-right-2">
+                {facilityMainName}
+              </h3>
+              <p className="text-bold font-body-xl">
+                {facilityAdditionalName}
+              </p>
+            </div>
+            <div>
+              <Button>Import Data (temp)</Button>
+              <Button>Evaluate (temp)</Button>
+            </div>
           </div>
-          <div className=" grid-row text-bold font-body-xl display-block">
-            {facilityAdditionalName}
-          </div>
+
+          <p>checked out by</p>
 
           <div className="grid-row positon-relative">
             <div className="grid-col-2">
