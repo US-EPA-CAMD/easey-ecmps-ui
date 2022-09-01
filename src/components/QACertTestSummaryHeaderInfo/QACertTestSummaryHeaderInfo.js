@@ -310,7 +310,7 @@ export const QACertTestSummaryHeaderInfo = ({
                 id="showRevertModal"
                 outline={false}
               >
-                {"Evaluate All"}
+                {"Evaluate"}
               </Button>
             ) : (
               ""
