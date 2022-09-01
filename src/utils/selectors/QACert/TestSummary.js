@@ -16,8 +16,8 @@ export const getTestSummary = (data, colTitles) => {
           el.stackPipeId !== null
             ? el.stackPipeId
             : el.unitId !== null
-            ? el.unitId
-            : "",
+              ? el.unitId
+              : "",
         col3: el.componentId,
         col4: el.testNumber,
         col5: el.testReasonCode,
@@ -133,8 +133,8 @@ export const getProtocolGasRecords = (data) => {
       testSumId: el.testSumId,
       col1: el.gasLevelCode,
       col2: el.gasTypeCode,
-      col3: el.vendorID,
-      col4: el.cylinderID,
+      col3: el.cylinderID,
+      col4: el.vendorID,
       col5: el.expirationDate ? formatStringToDate(el.expirationDate) : "",
     });
   });
