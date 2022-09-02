@@ -32,18 +32,18 @@ import { modalViewData } from "../../../additional-functions/create-modal-input-
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import QAProtocolGasExpandableRows from "../QAProtocolGasExpandableRows/QAProtocolGasExpandableRows.js";
+import * as dmApi from "../../../utils/api/dataManagementApi";
 
 // contains test summary data table
 const QALinearitySummaryExpandableRows = ({
   user,
   nonEditable,
-  mdmData,
-  loadDropdownsData,
   locationSelectValue,
   data,
   showProtocolGas=true
 }) => {
   const { locationId, id } = data;
+  const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [qaLinearitySummary, setQaLinearitySummary] = useState([]);
@@ -89,8 +89,8 @@ const QALinearitySummaryExpandableRows = ({
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
-  const dropdownArray = [["gasLevelCode", "gasTypeCode"]];
-  const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
+  const dropdownArray = ["gasLevelCode", "gasTypeCode"];
+  const dropdownArrayIsEmpty = dropdownArray.length === 0;
 
   const columns = [
     "Gas Level Code",
@@ -127,11 +127,41 @@ const QALinearitySummaryExpandableRows = ({
     apsIndicator: ["APS Indicator", "radio", "", ""],
     skip: ["", "skip", "", ""],
   };
+  const loadDropdownsData = () =>{
+    let dropdowns = {};
+    const allPromises = [];
+    allPromises.push(dmApi.getAllGasLevelCodes());
+    allPromises.push(dmApi.getAllGasTypeCodes());
+    Promise.all(allPromises).then((values) => {
+      values.forEach((val, i) =>{
+        if(i==0){
+          dropdowns[dropdownArray[i]] = 
+          val.data.map(d => {
+            return {
+              code: d["gasLevelCode"],
+              name: d["gasLevelDescription"],
+            };
+          });
+          dropdowns[dropdownArray[i]].unshift({ code: "", name: "-- Select a value --" });
+        }else{
+          dropdowns[dropdownArray[i]] = 
+          val.data.map(d => {
+            return {
+              code: d["gasTypeCode"],
+              name: d["gasTypeDescription"],
+            };
+          });
+          dropdowns[dropdownArray[i]].unshift({ code: "", name: "-- Select a value --" });
+        }
+      });
+      setMdmData(dropdowns);
+    });
+  }
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
-    if (!dropdownArrayIsEmpty && mdmData.length === 0) {
+    if (!dropdownArrayIsEmpty && mdmData === null) {
       if (!dropdownsLoading) {
-        loadDropdownsData(dataTableName, dropdownArray);
+        loadDropdownsData();
         setDropdownsLoading(true);
       }
     } else {
@@ -184,7 +214,7 @@ const QALinearitySummaryExpandableRows = ({
     }
     let prefilteredDataName;
     if (!dropdownArrayIsEmpty) {
-      prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
+      prefilteredDataName = dropdownArray[dropdownArray.length - 1];
     }
     let mainDropdownResult;
     // only applies if there is prefiltering based on a primary driver dropdown
@@ -205,7 +235,7 @@ const QALinearitySummaryExpandableRows = ({
       setPrefilteredMdmData(mdmData[prefilteredDataName]);
     }
 
-    const prefilteredTotalName = dropdownArray[0][dropdownArray[0].length - 1];
+    const prefilteredTotalName = dropdownArray[dropdownArray.length - 1];
     setSelectedModalData(
       modalViewData(
         selectedData,
@@ -263,7 +293,7 @@ const QALinearitySummaryExpandableRows = ({
       percentError: 0,
       apsIndicator: 0,
     };
-    const userInput = extractUserInput(uiControls, ".modalUserInput");
+    const userInput = extractUserInput(uiControls, ".modalUserInput",["apsIndicator"]);
     createQALinearitySummaryTestSecondLevel(locationId, data.id, userInput)
       .then((res) => {
         console.log("res", res);
@@ -292,7 +322,7 @@ const QALinearitySummaryExpandableRows = ({
             user ?
               <>
                 <span className="padding-right-2">
-                  Linearity Summary Data
+                  Linearity Summary
                 </span>
                 <Button
                   epa-testid="btnOpen"
@@ -302,7 +332,7 @@ const QALinearitySummaryExpandableRows = ({
                   Add
                 </Button>
               </>
-              : "Linearity Summary Data"
+              : "Linearity Summary"
           }
           actionsBtn={"View"}
           user={user}
@@ -341,7 +371,7 @@ const QALinearitySummaryExpandableRows = ({
                 }
                 actionsBtn={"View"}
                 user={user}
-              />) : "There're no records available."
+              />) : "There're no linearity summary records available."
           }
         />
       ) : (
@@ -398,25 +428,5 @@ const QALinearitySummaryExpandableRows = ({
     </div>
   );
 };
-const mapStateToProps = (state, ownProps) => {
-  const dataTableName = "Linearity Test";
-  return {
-    mdmData: state.dropdowns[convertSectionToStoreName(dataTableName)],
-  };
-};
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loadDropdownsData: async (section, dropdownArray) =>
-      dispatch(
-        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
-      ),
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(QALinearitySummaryExpandableRows);
-export { mapDispatchToProps };
-export { mapStateToProps };
+export default QALinearitySummaryExpandableRows;

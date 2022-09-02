@@ -27,17 +27,17 @@ import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import QAProtocolGasExpandableRows from "../QAProtocolGasExpandableRows/QAProtocolGasExpandableRows.js";
 import QARataSummaryExpandableRows from "../QARataSummaryExpandableRows/QARataSummaryExpandableRows.js";
+import * as dmApi from "../../../utils/api/dataManagementApi";
 // contains RATA data table
 
 const QARataDataExpandableRows = ({
   user,
-  mdmData,
-  loadDropdownsData,
   data,
   showProtocolGas=true
 }) => {
   const locId = data.locationId;
   const testSumId = data.id;
+  const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [rataData, setRataData] = useState([]);
@@ -75,8 +75,8 @@ const QARataDataExpandableRows = ({
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
-  const dropdownArray = [["rataFrequencyCode"]];
-  const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
+  const dropdownArray = ["rataFrequencyCode"];
+  const dropdownArrayIsEmpty = dropdownArray.length === 0;
 
   const columns = [
     "Number of Load Levels",
@@ -92,11 +92,25 @@ const QARataDataExpandableRows = ({
     rataFrequencyCode: ["RATA Frequency Code", "dropdown", "", ""],
     overallBiasAdjustmentFactor: ["Overall Bias Adjustment Factor", "input", "", ""],
   };
+  const loadDropdownsData = () =>{
+    let dropdowns = {};
+    dmApi.getAllRataFreqCodes()
+      .then((response) => {
+        dropdowns[dropdownArray[0]] = response.data.map((option) => {
+          return {
+            code: option["rataFrequencyCode"],
+            name: option["rataFrequencyCodeDescription"],
+          };
+        });
+        dropdowns[dropdownArray[0]].unshift({ code: "", name: "-- Select a value --" });
+        setMdmData(dropdowns);
+      });
+  };
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
-    if (!dropdownArrayIsEmpty && mdmData.length === 0) {
+    if (!dropdownArrayIsEmpty && mdmData === null) {
       if(!dropdownsLoading){
-        loadDropdownsData(dataTableName, dropdownArray);
+        loadDropdownsData();
         setDropdownsLoading(true);
       }
     } else {
@@ -150,7 +164,7 @@ const QARataDataExpandableRows = ({
     }
     let prefilteredDataName;
     if (!dropdownArrayIsEmpty) {
-      prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
+      prefilteredDataName = dropdownArray[dropdownArray.length - 1];
     }
     let mainDropdownResult;
     // only applies if there is prefiltering based on a primary driver dropdown
@@ -167,7 +181,7 @@ const QARataDataExpandableRows = ({
       mainDropdownResult = [];
     }
 
-    const prefilteredTotalName = dropdownArray[0][dropdownArray[0].length - 1];
+    const prefilteredTotalName = dropdownArray[dropdownArray.length - 1];
     setSelectedModalData(
       modalViewData(
         selectedData,
@@ -360,25 +374,5 @@ const QARataDataExpandableRows = ({
     </div>
   );
 };
-const mapStateToProps = (state, ownProps) => {
-  const dataTableName = "RATA Data";
-  return {
-    mdmData: JSON.parse(JSON.stringify(state.dropdowns[convertSectionToStoreName(dataTableName)])),
-  };
-};
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loadDropdownsData: async (section, dropdownArray) =>
-      dispatch(
-        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
-      ),
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(QARataDataExpandableRows);
-export { mapDispatchToProps };
-export { mapStateToProps };
+export default QARataDataExpandableRows;

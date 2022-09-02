@@ -1,10 +1,7 @@
 import React from "react";
 import { render, waitForElement, screen, fireEvent } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 
 import QALinearitySummaryExpandableRows from "./QALinearitySummaryExpandableRows";
-import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
 import configureStore from "../../../store/configureStore.dev";
 import initialState from "../../../store/reducers/initialState";
 import * as qaApi from "../../../utils/api/qaCertificationsAPI";
@@ -50,26 +47,26 @@ const linearitySummary = [
 ];
 const locId = "1873";
 const testSummaryId = "4f2d07c0-55f9-49b0-8946-ea80c1febb15";
-initialState.dropdowns.linearitySummaryTestSecondLevel = {
-  gasLevelCode: [
-    {
-      code: "",
-      name: " --- select ---"
-    },
-    {
-      code: "HIGH",
-      name: "high"
-    },
-    {
-      code: "MID",
-      name: "mid"
-    },
-    {
-      code: "LOW",
-      name: "low"
-    },
-  ],
-  gasTypeCode: [
+const gasLevelCodes = [
+  {
+    code: "",
+    name: " --- select ---"
+  },
+  {
+    code: "HIGH",
+    name: "high"
+  },
+  {
+    code: "MID",
+    name: "mid"
+  },
+  {
+    code: "LOW",
+    name: "low"
+  },
+];
+
+const gasTypeCode = [
     {
       code: '',
       name: '-- Select a value --'
@@ -82,8 +79,7 @@ initialState.dropdowns.linearitySummaryTestSecondLevel = {
       code: 'ZAM',
       name: 'Zero Air Material'
     },
-  ]
-};
+];
 let store = configureStore(initialState);
 //testing redux connected component to mimic props passed as argument
 const componentRenderer = () => {
@@ -96,15 +92,13 @@ const componentRenderer = () => {
     showProtocolGas: false,
     locationSelectValue: locId,
   };
-  return render(
-    <Provider store={store}>
-      <QALinearitySummaryExpandableRows {...props} />
-    </Provider>
-  );
+  return render(<QALinearitySummaryExpandableRows {...props} /> );
 };
 
 describe("Testing QAProtocolGasExpandableRows", () => {
   const getUrl = `${config.services.qaCertification.uri}/locations/${locId}/test-summary/${testSummaryId}/linearities`;
+  const getGasLevelCodes = `${config.services.mdm.uri}/gas-level-codes`;
+  const getGasTypeCodes = `${config.services.mdm.uri}/gas-type-codes`;
   const deleteUrl = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSummaryId}/linearities/${linearitySummary[0].id}`;
   const postUrl = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSummaryId}/linearities`;
   const putUrl = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSummaryId}/linearities/${linearitySummary[1].id}`;
@@ -113,6 +107,12 @@ describe("Testing QAProtocolGasExpandableRows", () => {
   mock
     .onGet(getUrl)
     .reply(200, linearitySummary);
+  mock
+    .onGet(getGasLevelCodes)
+    .reply(200, gasLevelCodes);
+  mock
+    .onGet(getGasTypeCodes)
+    .reply(200, gasTypeCode);
   mock
     .onDelete(deleteUrl)
     .reply(200, "success");

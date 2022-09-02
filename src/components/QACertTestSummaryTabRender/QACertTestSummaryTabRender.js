@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import QACertTestSummaryHeaderInfo from "../QACertTestSummaryHeaderInfo/QACertTestSummaryHeaderInfo";
 
-import QALinearitySummaryDataTable from "../qaDatatablesContainer/QALinearitySummaryDataTable/QALinearitySummaryDataTable";
+import QATestSummaryDataTable from "../qaDatatablesContainer/QATestSummaryDataTable/QATestSummaryDataTable";
 
 export const QACertTestSummaryRender = ({
   title,
@@ -36,7 +36,7 @@ export const QACertTestSummaryRender = ({
       </div>
       <hr />
       {
-        <QALinearitySummaryDataTable
+        <QATestSummaryDataTable
           locationSelectValue={locationSelect ? locationSelect[1] : 0}
           user={user}
           sectionSelect={sectionSelect}

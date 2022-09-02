@@ -43,50 +43,29 @@ const rataDataApiResponse = [
 ];
 const locId = "1873";
 const testSummaryId = "4f2d07c0-55f9-49b0-8946-ea80c1febb15";
+const rataFrequencyCode = [
+  {
+    "rataFrequencyCode": "2QTRS",
+    "rataFrequencyCodeDescription": "Two Quarters"
+  },
+  {
+    "rataFrequencyCode": "4QTRS",
+    "rataFrequencyCodeDescription": "Four Quarters"
+  },
+  {
+    "rataFrequencyCode": "8QTRS",
+    "rataFrequencyCodeDescription": "Eight Quarters"
+  },
+  {
+    "rataFrequencyCode": "ALTSL",
+    "rataFrequencyCodeDescription": "Alt Single-Load Flow"
+  },
+  {
+    "rataFrequencyCode": "OS",
+    "rataFrequencyCodeDescription": "Ozone Season"
+  }
+]
 
-initialState.dropdowns.rataData = {
-  numberOfLoadLevels: [
-    {
-      code: '',
-      name: '-- Select a value --'
-    },
-    {
-      code: '1',
-      name: '1'
-    },
-    {
-      code: '2',
-      name: '2'
-    },
-    {
-      code: '3',
-      name: '3'
-    }
-  ],
-  rataFrequencyCode: [
-    {
-      "rataFrequencyCode": "2QTRS",
-      "rataFrequencyCodeDescription": "Two Quarters"
-    },
-    {
-      "rataFrequencyCode": "4QTRS",
-      "rataFrequencyCodeDescription": "Four Quarters"
-    },
-    {
-      "rataFrequencyCode": "8QTRS",
-      "rataFrequencyCodeDescription": "Eight Quarters"
-    },
-    {
-      "rataFrequencyCode": "ALTSL",
-      "rataFrequencyCodeDescription": "Alt Single-Load Flow"
-    },
-    {
-      "rataFrequencyCode": "OS",
-      "rataFrequencyCodeDescription": "Ozone Season"
-    }
-  ]
-};
-let store = configureStore(initialState);
 const componentRenderer = () => {
   const props = {
     user: "test_user",
@@ -97,20 +76,20 @@ const componentRenderer = () => {
     },
     showProtocolGas: false
   }
-  return render(
-    <Provider store={store}>
-      <QARataDataExpandableRows {...props} />
-    </Provider>
-  );
+  return render(<QARataDataExpandableRows {...props} />);
 };
 
 describe("Testing QARataDataExpandableRows", () => {
   const getUrl = `${config.services.qaCertification.uri}/locations/${locId}/test-summary/${testSummaryId}/rata`;
+  const getRataFerqCodes = `${config.services.mdm.uri}/rata-frequency-codes`;
   const deleteUrl = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSummaryId}/rata/${rataDataApiResponse[0].id}`;
   const postUrl = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSummaryId}/rata`;
   const putUrl = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSummaryId}/rata/${rataDataApiResponse[1].id}`;
 
   const mock = new MockAdapter(axios);
+  mock
+    .onGet(getRataFerqCodes)
+    .reply(200, rataFrequencyCode);
   mock
     .onDelete(deleteUrl)
     .reply(200, "success");

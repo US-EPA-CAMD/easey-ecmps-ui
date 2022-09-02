@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import QALinearitySummaryDataTable from "./QALinearitySummaryDataTable";
+import QATestSummaryDataTable from "./QATestSummaryDataTable";
 
 import configureStore from "../../../store/configureStore.dev";
 import { Provider } from "react-redux";
@@ -472,7 +472,7 @@ const componentRenderer = (location) => {
     locationSelectValue: location,
     selectedTestCode: "LINE",
   };
-  return render(<QALinearitySummaryDataTable {...props} />);
+  return render(<QATestSummaryDataTable {...props} />);
 };
 function componentRendererNoData(args) {
   const defualtProps = {
@@ -481,12 +481,12 @@ function componentRendererNoData(args) {
   };
 
   const props = { ...defualtProps, ...args };
-  return render(<QALinearitySummaryDataTable {...props} />);
+  return render(<QATestSummaryDataTable {...props} />);
 }
 
-test('renders QALinearitySummaryDataTable', () => {
+test('renders QATestSummaryDataTable', () => {
   // Arrange
-  const { container } = render(<Provider store={store}><QALinearitySummaryDataTable {...props} /></Provider>)
+  const { container } = render(<Provider store={store}><QATestSummaryDataTable {...props} /></Provider>)
 
   // Assert
   expect(container).toBeDefined()

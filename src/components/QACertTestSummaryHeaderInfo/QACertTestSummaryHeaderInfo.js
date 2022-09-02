@@ -24,13 +24,10 @@ import QAImportModalSelect from "./QAImportModalSelect/QAImportModalSelect";
 import QAImportHistoricalDataPreview from "../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
 import Modal from "../Modal/Modal";
 import { importQA } from "../../utils/api/qaCertificationsAPI";
-
-import QALinearitySummaryDataTable from "../qaDatatablesContainer/QALinearitySummaryDataTable/QALinearitySummaryDataTable";
 import {
   getAllTestTypeCodes,
   getAllTestTypeGroupCodes,
 } from "../../utils/api/dataManagementApi";
-import TestSummaryDataTable from "../qaDatatablesContainer/TestSummaryDataTable/TestSummaryDataTable";
 import { getTestSummary } from "../../utils/selectors/QACert/TestSummary";
 
 export const QACertTestSummaryHeaderInfo = ({
@@ -82,10 +79,10 @@ export const QACertTestSummaryHeaderInfo = ({
   const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
 
   useEffect(() => {
-    const fetchTestTypeCodes = async () => {
+    const fetchTestTypeCodes = () => {
       let resp = "";
 
-      await getAllTestTypeCodes()
+      getAllTestTypeCodes()
         .then((res) => {
           setAllTestTypeCodes(res.data);
         })
@@ -93,7 +90,7 @@ export const QACertTestSummaryHeaderInfo = ({
           console.log(error);
         });
 
-      await getAllTestTypeGroupCodes()
+      getAllTestTypeGroupCodes()
         .then((res) => {
           const options = res.data
             .map((e) => {
@@ -128,7 +125,7 @@ export const QACertTestSummaryHeaderInfo = ({
       testTypeCodes: codesForSelectedTestTypeGroup
     }
     setSelectedTestCode(testCodeObj);
-  }, [testTypeGroupOptions, sectionSelect]);
+  }, [testTypeGroupOptions, allTestTypeCodes, sectionSelect]);
 
   // *** Reassign handlers after pop-up modal is closed
   useEffect(() => {

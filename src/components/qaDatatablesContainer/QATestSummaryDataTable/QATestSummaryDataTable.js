@@ -37,12 +37,12 @@ import {
   getQAColsByTestCode,
   getQAModalDetailsByTestCode,
 } from "../../../utils/selectors/QACert/LinearitySummary.js";
+import * as dmApi from "../../../utils/api/dataManagementApi";
+import {organizePrefilterMDMData} from "../../../additional-functions/retrieve-dropdown-api";
 
 // contains test summary data table
 
-const QALinearitySummaryDataTable = ({
-  mdmData,
-  loadDropdownsData,
+const QATestSummaryDataTable = ({
   locationSelectValue,
   user,
   nonEditable = false,
@@ -51,7 +51,8 @@ const QALinearitySummaryDataTable = ({
   sectionSelect,
 }) => {
   const [loading, setLoading] = useState(false);
-
+  const [mdmData, setMdmData] = useState(null);
+  const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [qaTestSummary, setQATestSummary] = useState([]);
   const [dataPulled, setDataPulled] = useState([]);
   const [show, setShow] = useState(showModal);
@@ -72,6 +73,7 @@ const QALinearitySummaryDataTable = ({
   const [prevSelectedTest, setPrevSelectedTest] = useState(
     selectedTestCode.testTypeGroupCode
   );
+  const [allTestTypeCodes, setAllTestTypeCodes]= useState(null);
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
@@ -79,7 +81,6 @@ const QALinearitySummaryDataTable = ({
     [
       "testTypeCode",
       "spanScaleCode",
-
       "testReasonCode",
       "testResultCode",
       "prefilteredTestSummaries",
@@ -92,13 +93,11 @@ const QALinearitySummaryDataTable = ({
   //**** */
   useEffect(() => {
     if (updateTable || qaTestSummary.length <= 0 || locationSelectValue) {
-      setLoading(true);
-
-      const { testTypeCodes } = selectedTestCode;
-      if (testTypeCodes && testTypeCodes.length !== 0) {
+      const { testTypeCodes, testTypeGroupCode } = selectedTestCode;
+      if (testTypeGroupCode && testTypeCodes?.length > 0) {
+        setLoading(true);
         getQATestSummary(locationSelectValue, testTypeCodes)
           .then((res) => {
-            // console.log('getQaTestSumm resp', res);
             if (res !== undefined && res.data.length > 0) {
               finishedLoadingData(res.data);
               setQATestSummary(res.data);
@@ -116,22 +115,72 @@ const QALinearitySummaryDataTable = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, selectedTestCode]);
+  
+  const getOptions = (obj, code, name) =>{
+    return {
+      code: obj[code],
+      name: obj[name]
+    }
+  }
 
+  const loadDropdownsData = () =>{
+    //if(mdmData === null){
+    setDropdownsLoading(true);
+      let dropdowns = {};
+      const allPromises = [];
+      allPromises.push(dmApi.getAllTestTypeCodes());
+      allPromises.push(dmApi.getAllSpanScaleCodes());
+      allPromises.push(dmApi.getAllTestReasonCodes());
+      allPromises.push(dmApi.getAllTestResultCodes());
+      allPromises.push(dmApi.getPrefilteredTestSummaries());
+      Promise.all(allPromises).then((response) => {
+        dropdownArray[0].forEach((val, i) =>{
+          if(i==0){
+            const options = response[0].data.map(d => getOptions(d,"testTypeCode","testTypeCodeDescription"));
+            setAllTestTypeCodes(options);
+            dropdowns[dropdownArray[0][i]] = options.filter((option) => selectedTestCode.testTypeCodes.includes(option.code));
+          }else if(i===1){
+            dropdowns[dropdownArray[0][i]] = 
+            response[1].data.map(d => getOptions(d,"spanScaleCode","spanScaleCodeDescription"));
+          }else if(i===2) {
+            dropdowns[dropdownArray[0][i]] = 
+            response[2].data.map(d => getOptions(d,"testReasonCode","testReasonCodeDescription"));
+          }else if(i===3) {
+            dropdowns[dropdownArray[0][i]] = 
+            response[3].data.map(d => getOptions(d,"testResultCode","testResultCodeDescription"));
+          }else if(i===4) {
+            let noDupesTestCodes = response[4].data.map((code) => {
+              return code["testTypeCode"];
+            });
+            noDupesTestCodes = [...new Set(noDupesTestCodes)];
+            dropdowns[dropdownArray[0][i]] = organizePrefilterMDMData(
+              noDupesTestCodes,
+              "testTypeCode",
+              response[4].data
+            );
+          }
+          dropdowns[dropdownArray[0][i]].unshift({ code: "", name: "-- Select a value --" });
+        });
+        setMdmData(dropdowns);
+        setDropdownsLoaded(true);
+        setDropdownsLoading(false);
+      });
+  };
   useEffect(() => {
-    // Load MDM data (for dropdowns) only if we don't have them already
-    if (mdmData && mdmData.length === 0) {
-      loadDropdownsData(dataTableName, dropdownArray, selectedTestCode);
-
-      setPrevSelectedTest(selectedTestCode.testTypeGroupCode);
-    } else if (prevSelectedTest !== selectedTestCode.testTypeGroupCode) {
-      loadDropdownsData(dataTableName, dropdownArray, selectedTestCode);
-      setPrevSelectedTest(selectedTestCode.testTypeGroupCode);
-      setDropdownsLoaded(true);
-    } else {
-      setDropdownsLoaded(true);
+    //console.log("TEST TYPE GROUPE CODE CHANGED");
+    const { testTypeCodes, testTypeGroupCode } = selectedTestCode;
+    if(mdmData === null){
+      if(testTypeGroupCode){
+        loadDropdownsData();
+      }
+    }else{
+      const mdmDataClone = {...mdmData};
+      mdmDataClone["testTypeCode"] = allTestTypeCodes.filter((option) => testTypeCodes.includes(option.code));
+      setMdmData(mdmDataClone);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedTestCode, sectionSelect, mdmData]);
+  }, [selectedTestCode]);
+
   useEffect(() => {
     // Update all the "secondary dropdowns" (based on the "main" dropdown)
     const prefilteredDataName = dropdownArray[0][0];
@@ -370,7 +419,7 @@ const QALinearitySummaryDataTable = ({
       <div className=" padding-3">
         <h3 className="display-inline padding-right-3">Test Summary Data</h3>
       </div>
-      {!loading ? (
+      {!loading || !dropdownsLoading ? (
         <QADataTableRender
           columnNames={columns}
           columnWidth={10}
@@ -466,29 +515,4 @@ const QALinearitySummaryDataTable = ({
   );
 };
 
-const mapStateToProps = (state, ownProps) => {
-  const dataTableName = "Test Summary Data";
-  return {
-    mdmData: state.dropdowns[convertSectionToStoreName(dataTableName)],
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loadDropdownsData: async (section, dropdownArray, selectedTestCode) =>
-      dispatch(
-        loadDropdowns(
-          convertSectionToStoreName(section),
-          dropdownArray,
-          selectedTestCode
-        )
-      ),
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(QALinearitySummaryDataTable);
-export { mapDispatchToProps };
-export { mapStateToProps };
+export default QATestSummaryDataTable;

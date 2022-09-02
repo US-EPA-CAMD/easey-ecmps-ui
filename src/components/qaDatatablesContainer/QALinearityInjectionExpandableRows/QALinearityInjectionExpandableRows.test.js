@@ -1,363 +1,137 @@
 import React from "react";
-import { Provider } from 'react-redux';
-import { render, waitForElement, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import MockAdapter from "axios-mock-adapter";
-import axios from "axios";
+import { render, waitForElement, screen, fireEvent } from "@testing-library/react";
 
 import QALinearityInjectionExpandableRows from "./QALinearityInjectionExpandableRows";
-import configureStore from "../../../store/configureStore.dev";
-import initialState from "../../../store/reducers/initialState";
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
 import config from "../../../config";
 
-const mock = new MockAdapter(axios)
-
-// matches alphanumeric strings including hyphens (-)
-const idRegex = '[\\w\\-]+'
-
-const url = new RegExp(`${config.services.qaCertification.uri}/locations/${idRegex}/test-summary/${idRegex}/linearities/${idRegex}/injections`)
-const postUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary/${idRegex}/linearities/${idRegex}/injections`)
-const putUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary/${idRegex}/linearities/${idRegex}/injections/${idRegex}`)
-const deleteUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary/${idRegex}/linearities/${idRegex}/injections/${idRegex}`)
-const gasLevelCodesUrl = 'https://api-easey-dev.app.cloud.gov/master-data-mgmt/gas-level-codes'
-const testSummaryUrl = 'https://api-easey-dev.app.cloud.gov/master-data-mgmt/relationships/test-summaries'
-
-const linearityInjection = [
+const linearityInjections = [
   {
-    injectionDate: "2022-08-30T19:31:28.214Z",
-    injectionHour: 0,
-    injectionMinute: 0,
-    measuredValue: 0,
-    referenceValue: 0,
-    id: 'id1',
-    linSumId: 'linSumId1',
-    userId: 'userId1',
-    addDate: "2022-08-30T19:31:28.214Z",
-    updateDate: "2022-08-30T19:31:28.214Z"
+    "id": "IT07D0112-68805043F1FA4D9BB0FED78E115C1D02",
+    "linSumId": "IT07D0112-7B71D94A53784A5282585A35DDB346C0",
+    "injectionDate": "2011-02-06",
+    "injectionHour": 9,
+    "injectionMinute": 41,
+    "measuredValue": 25.3,
+    "referenceValue": 25.2,
+    "userId": "lperez",
+    "addDate": "4/25/2011, 7:30:54 PM",
+    "updateDate": null
   },
   {
-    injectionDate: "2022-08-30T19:31:28.214Z",
-    injectionHour: 0,
-    injectionMinute: 0,
-    measuredValue: 0,
-    referenceValue: 0,
-    id: 'id2',
-    linSumId: 'linSumId2',
-    userId: 'userId2',
-    addDate: "2022-08-30T19:31:28.214Z",
-    updateDate: "2022-08-30T19:31:28.214Z"
+    "id": "IT07D0112-3D2D240CE7CF460199A58478173CD30C",
+    "linSumId": "IT07D0112-7B71D94A53784A5282585A35DDB346C0",
+    "injectionDate": "2011-02-06",
+    "injectionHour": 10,
+    "injectionMinute": 3,
+    "measuredValue": 25.2,
+    "referenceValue": 25.2,
+    "userId": "lperez",
+    "addDate": "4/25/2011, 7:30:54 PM",
+    "updateDate": null
   },
-]
+];
+const locId = "1873";
+const testSummaryId = "4f2d07c0-55f9-49b0-8946-ea80c1febb15";
+const lineSumId = "IT07D0112-7B71D94A53784A5282585A35DDB346C0"
 
-mock.onGet(url).reply(200, linearityInjection);
-mock.onPost(postUrl).reply(200, 'created')
-mock.onPut(putUrl).reply(200, 'updated')
-mock.onDelete(deleteUrl).reply(200, 'deleted')
-mock.onGet(gasLevelCodesUrl).reply(200, [])
-mock.onGet(testSummaryUrl).reply(200, [])
-
-initialState.dropdowns.lineTestSummary = {
-  spanScaleCode: [
-    {
-      code: '',
-      name: '-- Select a value --'
-    },
-    {
-      code: 'H',
-      name: 'High'
-    },
-    {
-      code: 'L',
-      name: 'Low'
-    }
-  ],
-  testTypeCode: [
-    {
-      code: '',
-      name: '-- Select a value --'
-    },
-    {
-      code: 'DAYCAL',
-      name: 'Daily Calibration'
-    },
-    {
-      code: 'INTCHK',
-      name: 'Flow Interference Check'
-    },
-    {
-      code: 'PEMSCAL',
-      name: 'Daily PEMS Calibration'
-    },
-    {
-      code: 'AF2LCHK',
-      name: 'Abbreviated Flow-to-Load Check'
-    },
-    {
-      code: 'HGSI1',
-      name: 'One-Point Hg System Integrity Check'
-    },
-    {
-      code: '7DAY',
-      name: '7-Day Calibration'
-    },
-    {
-      code: 'CYCLE',
-      name: 'Cycle Time Test'
-    },
-    {
-      code: 'LINE',
-      name: 'Linearity Check'
-    },
-    {
-      code: 'RATA',
-      name: 'Relative Accuracy Test'
-    },
-    {
-      code: 'F2LREF',
-      name: 'Flow-to-Load or GHR Reference Data'
-    },
-    {
-      code: 'F2LCHK',
-      name: 'Flow-to-Load Ratio or GHR Test'
-    },
-    {
-      code: 'ONOFF',
-      name: 'On-Line/Off-Line Calibration'
-    },
-    {
-      code: 'APPE',
-      name: 'Appendix E NOx Rate Test'
-    },
-    {
-      code: 'FFACC',
-      name: 'Fuel Flowmeter Accuracy Test'
-    },
-    {
-      code: 'FFACCTT',
-      name: 'Transmitter Transducer Test'
-    },
-    {
-      code: 'FF2LBAS',
-      name: 'Fuel Flow-to-Load Baseline Data'
-    },
-    {
-      code: 'FF2LTST',
-      name: 'Fuel Flow-to-Load Test'
-    },
-    {
-      code: 'UNITDEF',
-      name: 'Unit-Specific Default NOx Rate Test'
-    },
-    {
-      code: 'PEI',
-      name: 'Primary Element Inspection'
-    },
-    {
-      code: 'HGLINE',
-      name: 'Mercury Linearity'
-    },
-    {
-      code: 'HGSI3',
-      name: 'Three-Point Hg System Integrity Check'
-    },
-    {
-      code: 'DAHS',
-      name: 'DAHS Verification'
-    },
-    {
-      code: 'LEAK',
-      name: 'Leak Check'
-    },
-    {
-      code: 'OTHER',
-      name: 'Other Test'
-    },
-    {
-      code: 'PEMSACC',
-      name: 'PEMS Accuracy Check'
-    },
-    {
-      code: 'DGFMCAL',
-      name: 'Dry Gas Meter Calibration (Sorbent Trap Monitoring System)'
-    },
-    {
-      code: 'MFMCAL',
-      name: 'Mass Flow Meter Calibration (Sorbent Trap Monitoring System)'
-    },
-    {
-      code: 'BCAL',
-      name: 'Barometer calibration (sorbent trap monitoring systems)'
-    },
-    {
-      code: 'QGA',
-      name: 'Quarterly Gas Audit (HCl and HF monitoring systems)'
-    },
-    {
-      code: 'TSCAL',
-      name: 'Temperature sensor calibration (sorbent trap monitoring systems)'
-    }
-  ],
-  testReasonCode: [
-    {
-      code: '',
-      name: '-- Select a value --'
-    },
-    {
-      code: 'DIAG',
-      name: 'Diagnostic'
-    },
-    {
-      code: 'INITIAL',
-      name: 'Initial Certification'
-    },
-    {
-      code: 'QA',
-      name: 'Quality Assurance'
-    },
-    {
-      code: 'RECERT',
-      name: 'Recertification'
-    }
-  ],
-  testResultCode: [
-    {
-      code: '',
-      name: '-- Select a value --'
-    },
-    {
-      code: 'IGNORED',
-      name: 'Does Not Fulfill Testing Requirement'
-    },
-    {
-      code: 'ABORTED',
-      name: 'Test Aborted'
-    },
-    {
-      code: 'EXC168H',
-      name: 'Fewer than 168 Hours after Exclusions'
-    },
-    {
-      code: 'FAILED',
-      name: 'Test Failed'
-    },
-    {
-      code: 'FEW168H',
-      name: 'Fewer than 168 QA Operating Hours'
-    },
-    {
-      code: 'INC',
-      name: 'Incomplete Test'
-    },
-    {
-      code: 'INPROG',
-      name: 'Baseline Data Collection In Progress'
-    },
-    {
-      code: 'INVALID',
-      name: 'Invalid Test'
-    },
-    {
-      code: 'PASSAPS',
-      name: 'Test Passed Alt Spec'
-    },
-    {
-      code: 'PASSED',
-      name: 'Test Passed'
-    }
-  ]
-};
-
-let store = configureStore(initialState);
 //testing redux connected component to mimic props passed as argument
-const locId = 'locId'
-const testSummaryId = 'testSummaryId'
-const props = {
-  user: 'user',
-  data: {
-    locationId: locId,
-    id: testSummaryId
-  },
-  mdmData: {
-    "gasLevelCode": [
-      {
-        code: "",
-        name: " --- select ---"
-      },
-      {
-        code: "HIGH",
-        name: "high"
-      },
-      {
-        code: "MID",
-        name: "mid"
-      },
-      {
-        code: "LOW",
-        name: "low"
-      },
-    ]
-  }
-};
 const componentRenderer = () => {
-  return render(
-    <Provider store={store}>
-      <QALinearityInjectionExpandableRows {...props} />
-    </Provider>
-  );
+  const props = {
+    user: { firstName: "test" },
+    testSumId:testSummaryId,
+    linSumId:locId,
+    data: {
+      locationId: locId,
+      id: lineSumId
+    },
+    showProtocolGas: false,
+    locationSelectValue: locId,
+  };
+  return render(<QALinearityInjectionExpandableRows {...props} /> );
 };
 
-test('renders QALinearityInjectionExpandableRows', async () => {
-  // Arrange
-  const { container } = await waitForElement(() => componentRenderer())
+describe("Testing QALinearityInjectionExpandableRows", () => {
+  const getUrl = `${config.services.qaCertification.uri}/locations/${locId}/test-summary/${testSummaryId}/linearities/${lineSumId}/injections`;
+  const deleteUrl = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSummaryId}/linearities/${lineSumId}/injections/${linearityInjections[0].id}`;
+  const postUrl = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSummaryId}/linearities/${lineSumId}/injections/`;
+  const putUrl = `${config.services.qaCertification.uri}/locations/${locId}/test-summary/${testSummaryId}/linearities/${lineSumId}/injections/${linearityInjections[1].id}`;
 
-  // Assert
-  expect(container).toBeDefined()
-})
+  const mock = new MockAdapter(axios);
+  mock
+    .onGet(getUrl)
+    .reply(200, linearityInjections);
+  mock
+    .onDelete(deleteUrl)
+    .reply(200, "success");
+  mock
+    .onPost(postUrl,
+      {
+        "injectionDate": "2011-02-06",
+        "injectionHour": 10,
+        "injectionMinute": 3,
+        "measuredValue": 25.2,
+        "referenceValue": 25.2,
+      }
+    ).reply(200, 'success');
+  mock
+    .onPut(putUrl,
+      {
 
-test('given a user when they add data and save then a POST request is made', async () => {
-  // Assert
-  await waitForElement(() => componentRenderer())
-  const addBtn = screen.getAllByRole('button', { name: /Add/i })
+        "injectionDate": "2011-02-06",
+        "injectionHour": 10,
+        "injectionMinute": 3,
+        "measuredValue": 25.2,
+        "referenceValue": 25.2,
+      }
+    ).reply(200, 'success');
 
-  // Act
-  userEvent.click(addBtn[0])
+  test('testing component renders properly and functionlity for add/edit/remove', async () => {
+    //console.log("START mock.history",mock.history);
+    //render
+    const utils = await waitForElement(() => componentRenderer());
+    expect(utils.container).toBeDefined();
+    expect(mock.history.get[0].url).toEqual(getUrl);
+    const table = utils.getAllByRole("table");
+    expect(table.length).toBe(1);
+    const rowGroup = utils.getAllByRole("rowgroup");
+    expect(rowGroup.length).toBe(2);
+    const row = utils.getAllByRole("row");
+    expect(row.length).toBe(3);
+    //remove record
+    const remBtns = utils.getAllByRole("button", { name: "Remove" });
+    expect(remBtns.length).toBe(2);
+    fireEvent.click(remBtns[0]);
+    expect(utils.getByRole("dialog", { name: "Confirmation" })).toBeInTheDocument();
+    const confirmBtn = utils.getAllByRole("button", { name: "Yes" });
+    expect(confirmBtn).toBeDefined();
+    fireEvent.click(confirmBtn[0]);
+    expect(mock.history.delete[0].url).toEqual(deleteUrl);
+    // //add record
+    const addBtn = utils.getByRole("button", { name: "Add" });
+    expect(addBtn).toBeDefined();
+    fireEvent.click(addBtn);
+    expect(utils.getByText("Add Linearity Injection")).toBeInTheDocument();
+    const input = utils.getByLabelText('Measured Value');
+    fireEvent.change(input, { target: { value: '23' } });
+    fireEvent.change(utils.getAllByTestId('dropdown')[0], { target: { value: 2 } })
+    const saveBtn = utils.getByRole("button", { name: "Click to save" });
+    expect(saveBtn).toBeDefined();
+    fireEvent.click(saveBtn);
+    expect(mock.history.post[0].url).toEqual(postUrl);
+    // //edit record
+    const editBtns = utils.getAllByRole("button", { name: "Edit" });
+    expect(editBtns.length).toBe(2);
+    fireEvent.click(editBtns[1]);
+    expect(utils.getByText("Edit Linearity Injection")).toBeInTheDocument();
+    const inputPE = utils.getByLabelText('Measured Value');
+    fireEvent.change(inputPE, { target: { value: '70' } });
+    const updateBtn = utils.getByRole("button", { name: "Click to save" });
+    expect(updateBtn).toBeDefined();
+    fireEvent.click(updateBtn);
+    expect(mock.history.put[0].url).toEqual(putUrl);
+    //console.log("END mock.history",mock.history);
+  });
 
-  const saveBtn = screen.getByRole('button', { name: /Click to Save/i })
-  userEvent.click(saveBtn)
-
-  // Assert
-  expect(mock.history.post.length).toBe(1)
-})
-
-test('given a user when they edit data and save then a PUT request is made', async () => {
-  // Arrange
-  await waitForElement(() => componentRenderer())
-  const editBtns = screen.getAllByRole('button', { name: /Edit/i })
-
-  // Act
-  const firstEditBtn = editBtns[0]
-  userEvent.click(firstEditBtn)
-
-  const saveBtn = screen.getByRole('button', { name: /Click to Save/i })
-  userEvent.click(saveBtn)
-
-  // Assert
-  expect(mock.history.put.length).toBe(1)
-})
-
-test('given a user when they delete data then a DELETE request is made', async () => {
-  // Arrange
-  await waitForElement(() => componentRenderer())
-  const deleteBtns = screen.getAllByRole('button', { name: /Remove/i })
-  const firstDeleteBtn = deleteBtns[0]
-
-  // Act
-  userEvent.click(firstDeleteBtn)
-
-  const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
-  const firstConfirmBtn = confirmBtns[0]
-  userEvent.click(firstConfirmBtn)
-
-  // Assert
-  expect(mock.history.delete.length).toBe(1)
-})
+});
