@@ -1,155 +1,173 @@
 import React from "react";
 import { render, waitForElement, screen, fireEvent } from "@testing-library/react";
-import { Provider } from 'react-redux';
-import configureStore from "../../../store/configureStore.dev";
-import initialState from "../../../store/reducers/initialState";
-import * as qaApi from "../../../utils/api/qaCertificationsAPI";
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
+import config from "../../../config";
 import QARataDataExpandableRows from "./QARataRunDataExpandableRows"
-import userEvent from "@testing-library/user-event";
 
-const axios = require("axios");
-jest.mock("axios");
-
+const locId = "1873";
+const testSummaryId = "4f2d07c0-55f9-49b0-8946-ea80c1febb15";
+const rataId = "EPA-CC367C89032A4719A7794B951EDCC4EB";
+const rataSumId = "EPA-56FCDFE610D245BC9AB440F83E98D226";
 const rataDataApiResponse = [
   {
-    "id": "a9d95061-1b15-4a40-bb9c-c830f4734de1",
-    "testSumId": "4f2d07c0-55f9-49b0-8946-ea80c1febb15",
-    "rataFrequencyCode": "8QTRS",
-    "calculatedRataFrequencyCode": null,
-    "relativeAccuracy": 2,
-    "calculatedRelativeAccuracy": null,
-    "overallBiasAdjustmentFactor": 2.2,
-    "calculatedOverallBiasAdjustmentFactor": null,
-    "numberOfLoadLevels": null,
-    "calculatedNumberLoadLevel": null,
-    "userId": "testUser",
-    "addDate": "8/18/2022, 1:55:28 PM",
-    "updateDate": "8/18/2022, 1:55:28 PM"
+    "id": "EPA-7C826B56DF4D4B43BD9AEBFEB7920AF3",
+    "rataSumId": rataSumId ,
+    "runNumber": 1,
+    "beginDate": "2003-10-30",
+    "beginHour": 9,
+    "beginMinute": 50,
+    "endDate": "2003-10-30",
+    "endHour": 10,
+    "endMinute": 10,
+    "cemValue": 10.9,
+    "rataReferenceValue": 11,
+    "calculatedRataReferenceValue": null,
+    "grossUnitLoad": 35,
+    "runStatusCode": "RUNUSED",
+    "userId": "PQA09Q1",
+    "addDate": "2/21/2009, 7:35:37 PM",
+    "updateDate": null,
+    "flowRataRunData": []
   },
   {
-    "id": "fc8bada3-1e36-4218-87d2-26701965b951",
-    "testSumId": "4f2d07c0-55f9-49b0-8946-ea80c1febb15",
-    "rataFrequencyCode": "8QTRS",
-    "calculatedRataFrequencyCode": null,
-    "relativeAccuracy": 3,
-    "calculatedRelativeAccuracy": null,
-    "overallBiasAdjustmentFactor": 3.3,
-    "calculatedOverallBiasAdjustmentFactor": null,
-    "numberOfLoadLevels": 3,
-    "calculatedNumberLoadLevel": null,
-    "userId": "testUser",
-    "addDate": "8/18/2022, 2:21:23 PM",
-    "updateDate": "8/18/2022, 2:21:23 PM"
+    "id": "EPA-AF13B20FF490449C9AB108A5E9A6398E",
+    "rataSumId": rataSumId,
+    "runNumber": 2,
+    "beginDate": "2003-10-30",
+    "beginHour": 10,
+    "beginMinute": 30,
+    "endDate": "2003-10-30",
+    "endHour": 10,
+    "endMinute": 50,
+    "cemValue": 11,
+    "rataReferenceValue": 11.1,
+    "calculatedRataReferenceValue": null,
+    "grossUnitLoad": 34,
+    "runStatusCode": "RUNUSED",
+    "userId": "PQA09Q1",
+    "addDate": "2/21/2009, 7:35:37 PM",
+    "updateDate": null,
+    "flowRataRunData": []
+  },
+];
+const rataStatusCode = [
+  {
+    "runStatusCode": "NOTUSED",
+    "runStatusCodeDescription": "Run Not Used in RATA Calculation"
+  },
+  {
+    "runStatusCode": "RUNUSED",
+    "runStatusCodeDescription": "Run Used in RATA Calculation"
+  },
+  {
+    "runStatusCode": "IGNORED",
+    "runStatusCodeDescription": "Run Not Used in RATA Calculations. Data can be used in hourly emissions reporting but does not meet QA criteria. (Sorbent Trap Systems Only)"
   }
 ];
-initialState.dropdowns.rataData = {
-  numberLoadLevel: [
-    {
-      code: '',
-      name: '-- Select a value --'
-    },
-    {
-      code: '1',
-      name: '1'
-    },
-    {
-      code: '2',
-      name: '2'
-    },
-    {
-      code: '3',
-      name: '3'
-    }
-  ],
-  rataFrequencyCode: [
-    {
-      "rataFrequencyCode": "2QTRS",
-      "rataFrequencyCodeDescription": "Two Quarters"
-    },
-    {
-      "rataFrequencyCode": "4QTRS",
-      "rataFrequencyCodeDescription": "Four Quarters"
-    },
-    {
-      "rataFrequencyCode": "8QTRS",
-      "rataFrequencyCodeDescription": "Eight Quarters"
-    },
-    {
-      "rataFrequencyCode": "ALTSL",
-      "rataFrequencyCodeDescription": "Alt Single-Load Flow"
-    },
-    {
-      "rataFrequencyCode": "OS",
-      "rataFrequencyCodeDescription": "Ozone Season"
-    }
-  ]
-};
-let store = configureStore(initialState);
-const componentRenderer = (locId, testSummaryId, user) => {
+const componentRenderer = () => {
   const props = {
-    user: user,
+    user: "user",
     loadDropdownsData: jest.fn(),
+    testSumId:testSummaryId,
+    rataId:rataId,
     data: {
       locationId: locId,
-      id: testSummaryId
+      id: rataSumId
     }
   }
-  return render(
-    <Provider store={store}>
-      <QARataDataExpandableRows {...props} />
-    </Provider>
-  );
+  return render(<QARataDataExpandableRows {...props} />);
 };
-test('renders QARataDataExpandableRows properly', async () => {
-  // Arrange
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: rataDataApiResponse })
-  );
-  const res = await qaApi.getRataData("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15");
-  expect(res.data).toEqual(rataDataApiResponse);
-  let { container, findByRole } = await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15", "test_user"));
-  // Assert
-  expect(container).toBeDefined();
-  expect(findByRole).toBeDefined();
-  const addButton = await findByRole("button", { name: "Add" });
-  expect(addButton).toBeDefined();
-  fireEvent.click(addButton);
-  expect(screen.getByText("Add RATA Data")).toBeInTheDocument();
+describe("Testing QARataRunExpandableRows", () => {
+  const getUrl = `${config.services.qaCertification.uri}/locations/${locId}/test-summary/${testSummaryId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/`;
+  const getRataStatusCodes = `${config.services.mdm.uri}/run-status-codes`;
+  const deleteUrl = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSummaryId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataDataApiResponse[0].id}`;
+  const postUrl = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSummaryId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs`;
+  const putUrl = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSummaryId}//rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataDataApiResponse[1].id}`;
 
-  const saveButton = screen.getByRole("button", { name: "Click to save" });
-  expect(saveButton).toBeDefined();
-  //screen.debug();
-  // expect(screen.getAllByText("Gas Level Code").length).toBe(1);
-  // expect(screen.getAllByText("Gas Type Code").length).toBe(2);
-  // expect(screen.getAllByText("Vendor ID").length).toBe(2);
-  // expect(screen.getAllByText("Cylinder ID").length).toBe(2);
-  // expect(screen.getAllByText("Expiration Date").length).toBe(2);
-  // fireEvent.click(saveButton);
-  // const rowGroups = screen.getByRole ("rowGroup");
-  // expect(rowGroups).toBeDefined();
-  // expect(rowGroups.length).toBe(protocolGasApiResponse.length + 1);
+  const mock = new MockAdapter(axios);
+  mock
+    .onGet(getUrl)
+    .reply(200, rataDataApiResponse);
+  mock
+    .onGet(getRataStatusCodes)
+    .reply(200, rataStatusCode);
+  mock
+    .onDelete(deleteUrl)
+    .reply(200, "success");
+  mock
+    .onPost(postUrl,
+      {
+        "rataSumId": rataSumId,
+        "runNumber": 2,
+        "beginDate": "2003-10-30",
+        "beginHour": 10,
+        "beginMinute": 30,
+        "endDate": "2003-10-30",
+        "endHour": 10,
+        "endMinute": 50,
+        "cemValue": 11,
+      }
+    ).reply(200, 'success');
+  mock
+    .onPut(putUrl,
+      {
+        "rataSumId": rataSumId,
+        "runNumber": 2,
+        "beginDate": "2003-10-30",
+        "beginHour": 10,
+        "beginMinute": 30,
+        "endDate": "2003-10-30",
+        "endHour": 10,
+        "endMinute": 50,
+        "cemValue": 11,
+      }
+    ).reply(200, 'success');
+
+  test('testing component renders properly and functionlity for add/edit/remove', async () => {
+    //render
+    const utils = await waitForElement(() => componentRenderer());
+    expect(utils.container).toBeDefined();
+    expect(mock.history.get[0].url).toEqual(getUrl);
+    const table = utils.getAllByRole("table");
+    expect(table.length).toBe(1);
+    const rowGroup = utils.getAllByRole("rowgroup");
+    expect(rowGroup.length).toBe(2);
+    const row = utils.getAllByRole("row");
+    expect(row.length).toBe(3);
+    //remove record
+    const remBtns = utils.getAllByRole("button", { name: "Remove" });
+    expect(remBtns.length).toBe(2);
+    fireEvent.click(remBtns[0]);
+    expect(utils.getByRole("dialog", { name: "Confirmation" })).toBeInTheDocument();
+    const confirmBtn = utils.getAllByRole("button", { name: "Yes" });
+    expect(confirmBtn).toBeDefined();
+    fireEvent.click(confirmBtn[0]);
+    console.log("START mock.history",mock.history);
+    expect(mock.history.delete[0].url).toEqual(deleteUrl);
+    // //add record
+    const addBtn = utils.getByRole("button", { name: "Add" });
+    expect(addBtn).toBeDefined();
+    fireEvent.click(addBtn);
+    expect(utils.getByText("Add RATA Run Data")).toBeInTheDocument();
+    const input = utils.getByLabelText('CEM Value');
+    fireEvent.change(input, { target: { value: '23' } });
+    const saveBtn = utils.getByRole("button", { name: "Click to save" });
+    expect(saveBtn).toBeDefined();
+    fireEvent.click(saveBtn);
+    expect(mock.history.post[0].url).toEqual(postUrl);
+    // //edit record
+    const editBtns = utils.getAllByRole("button", { name: "Edit" });
+    expect(editBtns.length).toBe(2);
+    fireEvent.click(editBtns[1]);
+    expect(utils.getByText("Edit RATA Run Data")).toBeInTheDocument();
+    const inputPE = utils.getByLabelText('CEM Value');
+    fireEvent.change(inputPE, { target: { value: '70' } });
+    const updateBtn = utils.getByRole("button", { name: "Click to save" });
+    expect(updateBtn).toBeDefined();
+    fireEvent.click(updateBtn);
+    expect(mock.history.put[0].url).toEqual(putUrl);
+    //console.log("END mock.history",mock.history);
+  });
+
 });
-
-test('given a user when "Delete" button is clicked then a row is deleted', async () => {
-  // Arrange
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: rataDataApiResponse })
-  );
-  const res = await qaApi.getRataData("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15");
-  expect(res.data).toEqual(rataDataApiResponse);
-  let { getAllByRole } = await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15", "test_user"));
-
-  axios.mockResolvedValue({ status: 200, data: 'deleted successfully' })
-  const deleteBtns = getAllByRole('button', { name: /Remove/i })
-  const firstDeleteBtn = deleteBtns[0]
-
-  // Act
-  userEvent.click(firstDeleteBtn)
-
-  const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
-  const firstConfirmBtn = confirmBtns[0]
-  userEvent.click(firstConfirmBtn)
-
-  // Assert
-  expect(axios).toHaveBeenCalled()
-})

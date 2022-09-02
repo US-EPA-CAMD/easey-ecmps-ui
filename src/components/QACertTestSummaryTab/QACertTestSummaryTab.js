@@ -41,8 +41,8 @@ export const QACertTestSummaryTab = ({
     tabs ? tabs[activeTab].location : ""
   );
   const [selectedTestCode, setSelectedTestCode] = useState({
-    testTypeGroupCode: "LINSUM",
-    testTypeCodes: ["LINE"],
+    testTypeGroupCode: null,
+    testTypeCodes: [],
   });
   useEffect(() => {
     setLocation(locationSelect, title);

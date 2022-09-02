@@ -25,18 +25,18 @@ import { extractUserInput } from "../../../additional-functions/extract-user-inp
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
+import * as dmApi from "../../../utils/api/dataManagementApi";
 // contains RATA data table
 
 const QARataRunDataExpandableRows = ({
   user,
-  mdmData,
-  loadDropdownsData,
   testSumId,
   rataId,
   data,
 }) => {
   const locId = data.locationId;
   const rataSumId = data.id;
+  const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [rataRunData, setRataRunData] = useState([]);
@@ -112,13 +112,29 @@ const QARataRunDataExpandableRows = ({
     endHour: ["End Hour", "hourDropdown", "dropdown", ""],
     endMinute: ["End Minute", "minuteDropdown", "dropdown", ""],
   };
+  const loadDropdownsData = () =>{
+    let dropdowns = {};
+    dmApi.getAllRunStatusCodes()
+      .then((res)=>{
+        dropdowns[dropdownArray[0][0]] = 
+          res.data.map(d => {
+            return {
+              code: d["runStatusCode"],
+              name: d["runStatusCodeDescription"],
+            };
+        });
+        dropdowns[dropdownArray[0][0]].unshift({ code: "", name: "-- Select a value --" });
+        setMdmData(dropdowns);
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  }
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
-    if (!dropdownArrayIsEmpty && mdmData.length === 0) {
-      
+    if (!dropdownArrayIsEmpty && mdmData === null) {     
       if (!dropdownsLoading) {
-        console.log('checking')
-        loadDropdownsData(dataTableName, dropdownArray);
+        loadDropdownsData();
         setDropdownsLoading(true);
       }
     } else {
@@ -274,7 +290,7 @@ const QARataRunDataExpandableRows = ({
           actionColumnName={
             user ? (
               <>
-                <span className="padding-right-2">RATA Run Data</span>
+                <span className="padding-right-2">RATA Run</span>
                 <Button
                   epa-testid="btnOpen"
                   className="text-white"
@@ -284,7 +300,7 @@ const QARataRunDataExpandableRows = ({
                 </Button>
               </>
             ) : (
-              "RATA Run Data"
+              "RATA Run"
             )
           }
           actionsBtn={"View"}
@@ -312,7 +328,7 @@ const QARataRunDataExpandableRows = ({
                 user={user}
               />
             ) : (
-              "There're no RATA Run data records available."
+              "There're no RATA Run records available."
             )
           }
         />
@@ -356,25 +372,5 @@ const QARataRunDataExpandableRows = ({
     </div>
   );
 };
-const mapStateToProps = (state, ownProps) => {
-  const dataTableName = "RATA Run Data";
-  return {
-    mdmData: state.dropdowns[convertSectionToStoreName(dataTableName)],
-  };
-};
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loadDropdownsData: async (section, dropdownArray) =>
-      dispatch(
-        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
-      ),
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(QARataRunDataExpandableRows);
-export { mapDispatchToProps };
-export { mapStateToProps };
+export default QARataRunDataExpandableRows;

@@ -1,13 +1,10 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { connect } from "react-redux";
 import {
   getProtocolGas,
   createProtocolGas,
   updateProtocolGas,
   deleteProtocolGas
 } from "../../../utils/api/qaCertificationsAPI.js";
-import { loadDropdowns } from "../../../store/actions/dropdowns";
-import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
 import { getProtocolGasRecords } from "../../../utils/selectors/QACert/TestSummary.js";
 import { Button } from "@trussworks/react-uswds";
 import {
@@ -25,15 +22,15 @@ import { extractUserInput } from "../../../additional-functions/extract-user-inp
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
+import * as dmApi from "../../../utils/api/dataManagementApi";
 // contains protocol gas data table
 
 const QAProtocolGasExpandableRows = ({
   user,
-  mdmData,
-  loadDropdownsData,
   locId,
   testSumId
 }) => {
+  const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [protocolGas, setProtocolGas] = useState([]);
@@ -79,8 +76,8 @@ const QAProtocolGasExpandableRows = ({
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
-  const dropdownArray = [["gasLevelCode", "gasTypeCode"]];
-  const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
+  const dropdownArray = ["gasLevelCode", "gasTypeCode"];
+  const dropdownArrayIsEmpty = dropdownArray.length === 0;
 
   const columns = [
     "Gas Level Code",
@@ -100,11 +97,41 @@ const QAProtocolGasExpandableRows = ({
     skip: ["", "skip", "", ""],
 
   };
+  const loadDropdownsData = () =>{
+    let dropdowns = {};
+    const allPromises = [];
+    allPromises.push(dmApi.getAllGasLevelCodes());
+    allPromises.push(dmApi.getAllGasTypeCodes());
+    Promise.all(allPromises).then((values) => {
+      values.forEach((val, i) =>{
+        if(i==0){
+          dropdowns[dropdownArray[i]] = 
+          val.data.map(d => {
+            return {
+              code: d["gasLevelCode"],
+              name: d["gasLevelDescription"],
+            };
+          });
+          dropdowns[dropdownArray[i]].unshift({ code: "", name: "-- Select a value --" });
+        }else{
+          dropdowns[dropdownArray[i]] = 
+          val.data.map(d => {
+            return {
+              code: d["gasTypeCode"],
+              name: d["gasTypeDescription"],
+            };
+          });
+          dropdowns[dropdownArray[i]].unshift({ code: "", name: "-- Select a value --" });
+        }
+      });
+      setMdmData(dropdowns);
+    });
+  }
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
-    if (!dropdownArrayIsEmpty && mdmData.length === 0) {
+    if (!dropdownArrayIsEmpty && mdmData === null) {
       if (!dropdownsLoading) {
-        loadDropdownsData(dataTableName, dropdownArray);
+        loadDropdownsData();
         setDropdownsLoading(true);
       }
     } else {
@@ -157,7 +184,7 @@ const QAProtocolGasExpandableRows = ({
     }
     let prefilteredDataName;
     if (!dropdownArrayIsEmpty) {
-      prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
+      prefilteredDataName = dropdownArray[dropdownArray.length - 1];
     }
     let mainDropdownResult;
     // only applies if there is prefiltering based on a primary driver dropdown
@@ -178,7 +205,7 @@ const QAProtocolGasExpandableRows = ({
       setPrefilteredMdmData(mdmData[prefilteredDataName]);
     }
 
-    const prefilteredTotalName = dropdownArray[0][dropdownArray[0].length - 1];
+    const prefilteredTotalName = dropdownArray[dropdownArray.length - 1];
     setSelectedModalData(
       modalViewData(
         selectedData,
@@ -363,25 +390,5 @@ const QAProtocolGasExpandableRows = ({
     </div>
   );
 };
-const mapStateToProps = (state, ownProps) => {
-  const dataTableName = "Protocol Gas";
-  return {
-    mdmData: state.dropdowns[convertSectionToStoreName(dataTableName)],
-  };
-};
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loadDropdownsData: async (section, dropdownArray) =>
-      dispatch(
-        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
-      ),
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(QAProtocolGasExpandableRows);
-export { mapDispatchToProps };
-export { mapStateToProps };
+export default QAProtocolGasExpandableRows;

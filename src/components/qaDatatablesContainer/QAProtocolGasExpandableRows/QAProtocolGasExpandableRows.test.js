@@ -1,9 +1,5 @@
 import React from "react";
 import { render, waitForElement, screen, fireEvent, waitFor } from "@testing-library/react";
-import { Provider } from 'react-redux';
-import configureStore from "../../../store/configureStore.dev";
-import initialState from "../../../store/reducers/initialState";
-import * as qaApi from "../../../utils/api/qaCertificationsAPI";
 import QAProtocolGasExpandableRows from "./QAProtocolGasExpandableRows"
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
@@ -37,30 +33,26 @@ const protocolGasApiResponse = [
 ];
 const locId = "1873";
 const testSummaryId = "4f2d07c0-55f9-49b0-8946-ea80c1febb15";
-initialState.dropdowns.protocolGas = {
-  gasLevelCode: [
-    {
-      code: '',
-      name: '-- Select a value --'
-    },
-    {
-      code: 'HIGH',
-      name: 'High'
-    },
-    {
-      code: 'LOW',
-      name: 'Low'
-    },
-    {
-      code: 'MID',
-      name: 'Mid'
-    },
-    {
-      code: 'ZERO',
-      name: 'Zero'
-    }
-  ],
-  gasTypeCode: [
+const gasLevelCodes = [
+  {
+    code: "",
+    name: " --- select ---"
+  },
+  {
+    code: "HIGH",
+    name: "high"
+  },
+  {
+    code: "MID",
+    name: "mid"
+  },
+  {
+    code: "LOW",
+    name: "low"
+  },
+];
+
+const gasTypeCode = [
     {
       code: '',
       name: '-- Select a value --'
@@ -73,187 +65,19 @@ initialState.dropdowns.protocolGas = {
       code: 'ZAM',
       name: 'Zero Air Material'
     },
-    {
-      code: 'AIR',
-      name: 'Purified air material'
-    },
-    {
-      code: 'APPVD',
-      name: 'Other EPA-approved EPA Protocol gas blend'
-    },
-    {
-      code: 'CO2',
-      name: 'EPA Protocol gas consisting of CO2, and a balance gas'
-    },
-    {
-      code: 'GMIS',
-      name: 'Gas manufacturer\'s intermediate standard'
-    },
-    {
-      code: 'N2C',
-      name: 'EPA Protocol gas bi-blend consisting of NO2 and CO, and a balance gas'
-    },
-    {
-      code: 'N2C2',
-      name: 'EPA Protocol gas bi-blend consisting of NO2 and CO2, and a balance gas'
-    },
-    {
-      code: 'N2CC',
-      name: 'EPA Protocol gas tri-blend consisting of NO2, CO, and CO2, and a balance gas'
-    },
-    {
-      code: 'NC',
-      name: 'EPA Protocol gas bi-blend consisting of NO and CO, and a balance gas'
-    },
-    {
-      code: 'NC2',
-      name: 'EPA Protocol gas bi-blend consisting of NO and CO2, and a balance gas'
-    },
-    {
-      code: 'NCC',
-      name: 'EPA Protocol gas tri-blend consisting of NO, CO, and CO2, and a balance gas'
-    },
-    {
-      code: 'NO',
-      name: 'EPA Protocol gas consisting of NO, and a balance gas'
-    },
-    {
-      code: 'NO2',
-      name: 'EPA Protocol gas consisting of NO2, and a balance gas'
-    },
-    {
-      code: 'NTRM',
-      name: 'NIST-traceable reference material'
-    },
-    {
-      code: 'NX',
-      name: 'EPA Protocol gas bi-blend consisting of NO and NO2, and a balance gas'
-    },
-    {
-      code: 'NXC',
-      name: 'EPA Protocol gas tri-blend consisting of NO, NO2, and CO, and a balance gas'
-    },
-    {
-      code: 'NXC2',
-      name: 'EPA Protocol gas tri-blend consisting of NO, NO2, and CO2, and a balance gas'
-    },
-    {
-      code: 'NXCC',
-      name: 'EPA Protocol gas quad-blend consisting of NO, NO2, CO, and CO2, and a balance gas'
-    },
-    {
-      code: 'O2',
-      name: 'EPA Protocol gas consisting of O2, and a balance gas'
-    },
-    {
-      code: 'OC',
-      name: 'EPA Protocol gas bi-blend consisting of O2 and CO, and a balance gas'
-    },
-    {
-      code: 'OC2',
-      name: 'EPA Protocol gas bi-blend consisting of O2 and CO2, and a balance gas'
-    },
-    {
-      code: 'OCC',
-      name: 'EPA Protocol gas tri-blend consisting of O2, CO, and CO2, and a balance gas'
-    },
-    {
-      code: 'PRM',
-      name: 'SRM-equivalent compressed gas primary reference material'
-    },
-    {
-      code: 'RGM',
-      name: 'Research gas mixture'
-    },
-    {
-      code: 'SC',
-      name: 'EPA Protocol gas bi-blend consisting of SO2 and CO, and a balance gas'
-    },
-    {
-      code: 'SC2',
-      name: 'EPA Protocol gas bi-blend consisting of SO2 and CO2, and a balance gas'
-    },
-    {
-      code: 'SN',
-      name: 'EPA Protocol gas bi-blend consisting of SO2 and NO, and a balance gas'
-    },
-    {
-      code: 'SN2',
-      name: 'EPA Protocol gas bi-blend consisting of SO2 and NO2, and a balance gas'
-    },
-    {
-      code: 'SN2C',
-      name: 'EPA Protocol gas tri-blend consisting of SO2, NO2, and CO, and a balance gas'
-    },
-    {
-      code: 'SN2C2',
-      name: 'EPA Protocol gas tri-blend consisting of SO2, NO2, and CO2, and a balance gas'
-    },
-    {
-      code: 'SN2CC',
-      name: 'EPA Protocol gas quad-blend consisting of SO2, NO2, CO, and CO2, and a balance gas'
-    },
-    {
-      code: 'SNC',
-      name: 'EPA Protocol gas tri-blend consisting of SO2, NO, and CO, and a balance gas'
-    },
-    {
-      code: 'SNC2',
-      name: 'EPA Protocol gas tri-blend consisting of SO2, NO, and CO2, and a balance gas'
-    },
-    {
-      code: 'SNCC',
-      name: 'EPA Protocol gas quad-blend consisting of SO2, NO, CO, and CO2, and a balance gas'
-    },
-    {
-      code: 'SNX',
-      name: 'EPA Protocol gas tri-blend consisting of SO2, NO, and NO2, and a balance gas'
-    },
-    {
-      code: 'SNXC',
-      name: 'EPA Protocol gas quad-blend consisting of SO2, NO, NO2, and CO, and a balance gas'
-    },
-    {
-      code: 'SNXC2',
-      name: 'EPA Protocol gas quad-blend consisting of SO2, NO, NO2, and CO2, and a balance gas'
-    },
-    {
-      code: 'SNXCC',
-      name: 'EPA Protocol gas quint-blend consisting of SO2, NO, NO2, CO, and CO2, and a balance gas'
-    },
-    {
-      code: 'SO',
-      name: 'EPA Protocol gas bi-blend consisting of SO2 and O2, and a balance gas'
-    },
-    {
-      code: 'SO2',
-      name: 'EPA Protocol gas consisting of SO2, and a balance gas'
-    },
-    {
-      code: 'SOC',
-      name: 'EPA Protocol gas tri-blend consisting of SO2, O2, and CO, and a balance gas'
-    },
-    {
-      code: 'SRM',
-      name: 'Standard reference material'
-    }
-  ]
-};
-let store = configureStore(initialState);
+];
 const componentRenderer = () => {
   const props = {
     user: "test_user",
     locId: locId,
     testSumId: testSummaryId
   }
-  return render(
-    <Provider store={store}>
-      <QAProtocolGasExpandableRows {...props} />
-    </Provider>
-  );
+  return render(<QAProtocolGasExpandableRows {...props} />);
 };
 describe("Testing QAProtocolGasExpandableRows", () => {
   const getUrl = `${config.services.qaCertification.uri}/locations/${locId}/test-summary/${testSummaryId}/protocol-gases`;
+  const getGasLevelCodes = `${config.services.mdm.uri}/gas-level-codes`;
+  const getGasTypeCodes = `${config.services.mdm.uri}/gas-type-codes`;
   const deleteUrl = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSummaryId}/protocol-gases/${protocolGasApiResponse[0].id}`;
   const postUrl = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSummaryId}/protocol-gases`;
   const putUrl = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSummaryId}/protocol-gases/${protocolGasApiResponse[1].id}`;
@@ -265,6 +89,12 @@ describe("Testing QAProtocolGasExpandableRows", () => {
   mock
     .onDelete(deleteUrl)
     .reply(200, "success");
+  mock
+    .onGet(getGasLevelCodes)
+    .reply(200, gasLevelCodes);
+  mock
+    .onGet(getGasTypeCodes)
+    .reply(200, gasTypeCode);
   mock
     .onPost(postUrl,
       {

@@ -36,13 +36,6 @@ export default {
     systemComponents: [],
     analyzerRanges: [],
     matsMethods: [],
-    lineTestSummary: [],
-    linearitySummaryTestSecondLevel: [],
-    linearityInjectionTestThirdLevel: [],
-    protocolGas: [],
-    rataData: [],
-    rataRunData: [],
-    rataSummary: [],
   },
   currentSection: "",
 };
