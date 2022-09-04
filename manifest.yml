@@ -4,9 +4,8 @@ applications:
     disk_quota: ((disk))M
     instances: ((instances))
     buildpacks:
-      - nodejs_buildpack
+      - nginx_buildpack
     env:
-      OPTIMIZE_MEMORY: true
       PUBLIC_URL: https://((host))/((path))
       REACT_APP_EASEY_ECMPS_UI_ENV: ((environment))
       REACT_APP_EASEY_ECMPS_UI_HOST: ((host))

@@ -5,125 +5,134 @@ const activityEvents = [];
 activityEvents.push("click");
 activityEvents.push("keydown");
 
+const getConfigValue = (key, defaultValue = '') => {
+  let returnValue;
+
+  if (window._env_) {
+    returnValue = window._env_[key];
+  }
+  else if (!returnValue && process.env) {
+    returnValue = process.env[key];
+  }
+  return returnValue || defaultValue;
+};
+
 export const config = {
   app: {
-    host:
-      process.env.REACT_APP_EASEY_ECMPS_UI_HOST || "easey-dev.app.cloud.gov",
     activityEvents,
-    apiKey: process.env.REACT_APP_ECMPS_API_KEY || "",
-    googleAnalyticsEnabled:
-      process.env.REACT_APP_GOOGLE_ANALYTICS_ENABLED || "false",
-    googleAnalyticsPublicContainerId:
-      process.env.REACT_APP_GOOGLE_ANALYTICS_PUBLIC_CONTAINER_ID || "",
-    googleAnalyticsAuthenticatedContainerId:
-      process.env.REACT_APP_GOOGLE_ANALYTICS_AUTHENTICATED_CONTAINER_ID || "",
-    refreshTokenRate:
-      process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_TOKEN_RATE_MINUTES *
-        oneMinute || 1 * oneMinute, // Change ME
-    inactivityDuration:
-      process.env
-        .REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_CHECKOUT_MINUTES *
-        oneMinute || 1 * oneMinute, //Change ME
-    inactivityLogoutDuration:
-      process.env.REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_LOGOUT_MINUTES *
-        oneMinute || 1 * oneMinute, //Change ME
-    activityPollingFrequency:
-      process.env.REACT_APP_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS *
-        oneSecond || oneSecond,
-    countdownDuration:
-      process.env.REACT_APP_EASEY_ECMPS_UI_ACTIVITY_COUNTDOWN_DURATION_SECONDS *
-        oneSecond || 30 * oneSecond,
-    paginationPerPage:
-      +process.env.REACT_APP_EASEY_ECMPS_UI_PAGINATION_PER_PAGE || 100,
-    paginationPerPageOptions: [100, 200, 500],
     paginationRangeSeparatorText: "out of",
-    path: process.env.REACT_APP_EASEY_ECMPS_UI_PATH || "/ecmps/",
-    env: process.env.REACT_APP_EASEY_ECMPS_UI_ENV || "local-dev",
-    published: process.env.REACT_APP_EASEY_ECMPS_UI_PUBLISHED || "local",
-    version: process.env.REACT_APP_EASEY_ECMPS_UI_VERSION || "v0.0.0",
-    title: process.env.REACT_APP_EASEY_ECMPS_UI_TITLE || "ECMPS",
+    paginationPerPageOptions: [100, 200, 500],
+    apiKey:
+      getConfigValue('REACT_APP_ECMPS_API_KEY'),
+    host:
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_HOST', 'easey-dev.app.cloud.gov'),
+    googleAnalyticsEnabled:
+      getConfigValue('REACT_APP_GOOGLE_ANALYTICS_ENABLED', "false"),
+    googleAnalyticsPublicContainerId:
+      getConfigValue('REACT_APP_GOOGLE_ANALYTICS_PUBLIC_CONTAINER_ID'),
+    googleAnalyticsAuthenticatedContainerId:
+      getConfigValue('REACT_APP_GOOGLE_ANALYTICS_AUTHENTICATED_CONTAINER_ID'),
+    refreshTokenRate:
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_REFRESH_TOKEN_RATE_MINUTES', 1) * oneMinute,
+    inactivityDuration:
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_CHECKOUT_MINUTES', 1) * oneMinute,
+    inactivityLogoutDuration:
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_LOGOUT_MINUTES', 1) * oneMinute,
+    activityPollingFrequency:
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS', 1) * oneSecond,
+    countdownDuration:
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_ACTIVITY_COUNTDOWN_DURATION_SECONDS', 30) * oneSecond,
+    paginationPerPage:
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_PAGINATION_PER_PAGE', 100),
+    path:
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_PATH', "/ecmps/"),
+    env:
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_ENV', "local-dev"),
+    published:
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_PUBLISHED', "local"),
+    version:
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_VERSION', "v0.0.0"),
+    title:
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_TITLE', "ECMPS"),
     email:
-      process.env.REACT_APP_EASEY_ECMPS_UI_SUPPORT_EMAIL ||
-      "ecmps-beta@camdsupport.com",
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_SUPPORT_EMAIL', "ecmps-beta@camdsupport.com"),
     refreshEvalStatusRate:
-      process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_RATE_SECONDS *
-        oneSecond || 5 * oneSecond,
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_RATE_SECONDS', 5) * oneSecond,
     refreshEvalStatusTimeout:
-      process.env.REACT_APP_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_TIMEOUT_MINUTES *
-        oneMinute || 15 * oneMinute,
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_TIMEOUT_MINUTES', 15) * oneMinute,
     cbsBaseUrl:
-      process.env.REACT_APP_EASEY_ECMPS_UI_CBS_BASE_URL ||
-      "https://camd.epa.gov",
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_CBS_BASE_URL', "https://camd.epa.gov"),
     cbsManageDelegationsPath:
-      process.env.REACT_APP_EASEY_ECMPS_UI_CBS_MANAGE_DELEGATIONS_PATH ||
-      "/CBS/login/auth",
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_CBS_MANAGE_DELEGATIONS_PATH', "/CBS/login/auth"),
     cdxBaseUrl:
-      process.env.REACT_APP_EASEY_ECMPS_UI_CDX_BASE_URL ||
-      "https://dev.epacdx.net",
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_CDX_BASE_URL', "https://dev.epacdx.net"),
     cdxForgotUserIdPath:
-      process.env.REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_USERID_PATH ||
-      "/AccountRecovery/ForgotUserId",
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_USERID_PATH', "/AccountRecovery/ForgotUserId"),
     cdxForgotPasswordPath:
-      process.env.REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_PASSWORD_PATH ||
-      "/PasswordReset/GetResetCode",
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_PASSWORD_PATH', "/PasswordReset/GetResetCode"),
     cdxRegisterPath:
-      process.env.REACT_APP_EASEY_ECMPS_UI_CDX_REGISTER_PATH ||
-      "/Registration/Terms",
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_CDX_REGISTER_PATH', "/Registration/Terms"),
     enableManageDelegations:
-      process.env.REACT_APP_EASEY_ECMPS_UI_ENABLE_MANAGE_DELEGATIONS || "false",
-    clientId: process.env.REACT_APP_EASEY_ECMPS_UI_CLIENT_ID || "",
-    clientSecret: process.env.REACT_APP_EASEY_ECMPS_UI_CLIENT_SECRET || "",
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_ENABLE_MANAGE_DELEGATIONS', "false"),
+    clientId:
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_CLIENT_ID'),
+    clientSecret:
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_CLIENT_SECRET'),
   },
   services: {
     mdm: {
-      uri:
-        process.env.REACT_APP_EASEY_MDM_API ||
+      uri: getConfigValue(
+        'REACT_APP_EASEY_MDM_API',
         "https://api-easey-dev.app.cloud.gov/master-data-mgmt",
-    },
-    rules: {
-      uri:
-        process.env.REACT_APP_EASEY_RULES_API ||
-        "https://api-easey-dev.app.cloud.gov/rules-mgmt",
+      ),
     },
     facilities: {
-      uri:
-        process.env.REACT_APP_EASEY_FACILITIES_API ||
+      uri: getConfigValue(
+        'REACT_APP_EASEY_FACILITIES_API',
         "https://api-easey-dev.app.cloud.gov/facilities-mgmt",
+      ),
     },
     emissions: {
-      uri:
-        process.env.REACT_APP_EASEY_EMISSIONS_API ||
+      uri: getConfigValue(
+        'REACT_APP_EASEY_EMISSIONS_API',
         "https://api-easey-dev.app.cloud.gov/emissions-mgmt",
+      ),
     },
     monitorPlans: {
-      uri:
-        process.env.REACT_APP_EASEY_MONITOR_PLAN_API ||
+      uri: getConfigValue(
+        'REACT_APP_EASEY_MONITOR_PLAN_API',
         "https://api-easey-dev.app.cloud.gov/monitor-plan-mgmt",
+      ),
     },
     qaCertification: {
-      uri:
-        process.env.REACT_APP_EASEY_QA_CERTIFICATION_API ||
+      uri: getConfigValue(
+        'REACT_APP_EASEY_QA_CERTIFICATION_API',
         "https://api-easey-dev.app.cloud.gov/qa-certification-mgmt",
+      ),
     },
     authApi: {
-      uri:
-        process.env.REACT_APP_EASEY_AUTH_API ||
+      uri: getConfigValue(
+        'REACT_APP_EASEY_AUTH_API',
         "https://api-easey-dev.app.cloud.gov/auth-mgmt",
+      ),
     },
     quartz: {
-      uri:
-        process.env.REACT_APP_EASEY_QUARTZ_API ||
+      uri: getConfigValue(
+        'REACT_APP_EASEY_QUARTZ_API',
         "https://api-easey-dev.app.cloud.gov/quartz-mgmt",
+      ),
     },
     content: {
-      uri:
-        process.env.REACT_APP_EASEY_CONTENT_API ||
+      uri: getConfigValue(
+        'REACT_APP_EASEY_CONTENT_API',
         "https://api.epa.gov/easey/dev/content-mgmt",
+      ),
     },
     camd: {
-      uri:
-        process.env.REACT_APP_EASEY_CAMD_SERVICES ||
+      uri: getConfigValue(
+        'REACT_APP_EASEY_CAMD_SERVICES',
         "https://api-easey-dev.app.cloud.gov/camd-services",
+      ),
     },
   },
 };

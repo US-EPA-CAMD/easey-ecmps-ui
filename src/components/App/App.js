@@ -1,4 +1,3 @@
-// import "../../additional-functions/wdyr";
 import React, { useState, useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import TagManager from "react-gtm-module";
@@ -37,6 +36,23 @@ const App = () => {
   const [user, setUser] = useState(false);
   const [expired, setExpired] = useState(false);
   const [resetTimer, setResetTimer] = useState(false);
+
+  const prepDocument = () => {
+    setTimeout(() => {
+      const mainContent = document.querySelector('.mainContent');
+      mainContent.setAttribute('id', 'main-content');
+    });
+    // To avoid css sytling conflicts in production build 
+    // position the link tag to external stylesheet as the last element of head section.
+    const linkTag = document.querySelector('link[rel="stylesheet"]');
+    if (linkTag) {
+      linkTag.parentNode.appendChild(linkTag);
+    }
+  };
+
+  useEffect(() => {
+    prepDocument();
+  });
 
   useEffect(() => {
     if (config.app.googleAnalyticsEnabled === "true") {
