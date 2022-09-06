@@ -596,7 +596,8 @@ export const HeaderInfo = ({
                       }
                       <div className="desktop:display-block">
                         {showRevert(evalStatus) &&
-                          <div className=" float-right position-relative margin-bottom-2">
+                          // <div className=" float-right position-relative margin-bottom-2">
+                          <div>
                             <Button
                               type="button"
                               id="showRevertModal"
@@ -604,7 +605,7 @@ export const HeaderInfo = ({
                               onClick={() => setShowRevertModal(true)}
                               outline={true}
                             >
-                              {"Revert to Official Record"}
+                              Revert to Official Record - line 607
                             </Button>
                           </div>
                         }
@@ -742,7 +743,7 @@ export const HeaderInfo = ({
                     </div>
                   }
 
-                  {showRevert(evalStatus) &&
+                  {/* {showRevert(evalStatus) &&
                     <div className=" float-right position-relative margin-bottom-2">
                       <Button
                         type="button"
@@ -751,24 +752,24 @@ export const HeaderInfo = ({
                         onClick={() => setShowRevertModal(true)}
                         outline={true}
                       >
-                        Revert to Official Record
+                        Revert to Official Record - line 754
                       </Button>
                     </div>
-                  }
+                  } */}
 
-                  {/* View comments */}
-                  {/* <Button
-                    type="button"
-                    className="margin-left-4 position-relative top-neg-1"
-                    outline={true}
-                    title="Open Comments"
-                    onClick={() => openViewComments()}
-                  >
-                    View Comments
-                  </Button> */}
+                  {showRevert(evalStatus) &&
+                    <Button
+                      type="button"
+                      id="showRevertModal"
+                      onClick={() => setShowRevertModal(true)}
+                      outline={true}
+                    >
+                      Revert to Official Record
+                    </Button>
+                  }
                 </div>
 
-                <div className="grid-row">
+                {/* <div className="grid-row">
                   <DropdownSelection
                     caption="Locations"
                     orisCode={orisCode}
@@ -808,7 +809,70 @@ export const HeaderInfo = ({
                       />
                     </div>
                   </div>
+                </div> */}
+
+
+                {/* dropdowns and checkbox */}
+                <div className="display-flex flex-row">
+                  <DropdownSelection
+                    caption="Locations"
+                    orisCode={orisCode}
+                    options={locations}
+                    viewKey="name"
+                    selectKey="id"
+                    initialSelection={locationSelect[0]}
+                    selectionHandler={setLocationSelect}
+                    workspaceSection={MONITORING_PLAN_STORE_NAME}
+                  />
+                  <DropdownSelection
+                    caption="Sections"
+                    selectionHandler={setSectionSelect}
+                    options={sections}
+                    viewKey="name"
+                    selectKey="name"
+                    initialSelection={sectionSelect[0]}
+                    orisCode={orisCode}
+                    workspaceSection={MONITORING_PLAN_STORE_NAME}
+                  />
+                  <div className="margin-top-6">
+                    <Checkbox
+                      epa-testid="inactiveCheckBox"
+                      id="checkbox"
+                      name="checkbox"
+                      label="Show Inactive"
+                      checked={inactive[0]}
+                      disabled={inactive[1]}
+                      onChange={() =>
+                        setInactive(
+                          [!inactive[0], inactive[1]],
+                          facility,
+                          MONITORING_PLAN_STORE_NAME
+                        )}
+                    />
+                  </div>
                 </div>
+
+
+
+                {/* view comments, monitor audit report, monitor plan report */}
+                <div>
+                  <Button
+                    type="button"
+                    // className="margin-left-4 position-relative top-neg-1"
+                    outline={true}
+                    title="Open Comments"
+                    onClick={() => openViewComments()}
+                  >
+                    View Comments
+                  </Button>
+                  <Button>
+                    Monitor Audit Report
+                  </Button>
+                  <Button>
+                    Monitor Plan Report
+                  </Button>
+                </div>
+
               </div>
             </div>
           </div>
