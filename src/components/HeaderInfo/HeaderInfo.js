@@ -569,31 +569,11 @@ export const HeaderInfo = ({
         <div className="grid-row clearfix position-relative display-block">
           <div className="grid-col clearfix position-absolute top-1 right-0 ">
             <div className="">
-              {user && checkedOutByUser ? (
+              {user && checkedOutByUser &&
                 <div>
-                  <div className=" margin-left-10 display-block">
-                    <Button
-                      type="button"
-                      className="margin-right-2 float-left margin-bottom-2"
-                      outline={true}
-                      onClick={exportHandler}
-                    >
-                      Export Monitoring Plan
-                    </Button>
-                    <Button
-                      type="button"
-                      className="margin-right-2 float-right"
-                      outline={false}
-                      onClick={() => openImportModal()}
-                      id="importMonitoringPlanBtn"
-                    >
-                      Import Monitoring Plan
-                    </Button>
-                  </div>
-
                   <div className="grid-row float-right text-right desktop:display-block">
                     <div className="padding-1">
-                      {showSubmit(evalStatus) ? (
+                      {showSubmit(evalStatus) &&
                         <Button
                           type="button"
                           className="margin-right-2 float-right margin-bottom-2"
@@ -602,11 +582,9 @@ export const HeaderInfo = ({
                         >
                           Submit
                         </Button>
-                      ) : (
-                        ""
-                      )}
+                      }
 
-                      {evalStatusText(evalStatus) === "Needs Evaluation" ? (
+                      {evalStatusText(evalStatus) === "Needs Evaluation" &&
                         <Button
                           type="button"
                           className=" margin-left-4 float-right margin-bottom-2"
@@ -615,11 +593,9 @@ export const HeaderInfo = ({
                         >
                           Evaluate
                         </Button>
-                      ) : (
-                        ""
-                      )}
+                      }
                       <div className="desktop:display-block">
-                        {showRevert(evalStatus) ? (
+                        {showRevert(evalStatus) &&
                           <div className=" float-right position-relative margin-bottom-2">
                             <Button
                               type="button"
@@ -631,18 +607,14 @@ export const HeaderInfo = ({
                               {"Revert to Official Record"}
                             </Button>
                           </div>
-                        ) : (
-                          ""
-                        )}
+                        }
                       </div>
                     </div>
                   </div>
                 </div>
-              ) : (
-                ""
-              )}
+              }
             </div>
-            {user ? (
+            {user &&
               <div className="grid-row float-right text-right margin-right-2 mobile:display-none desktop:display-block">
                 <table role="presentation">
                   <tbody>
@@ -676,29 +648,10 @@ export const HeaderInfo = ({
                   </tbody>
                 </table>
               </div>
-            ) : (
-              ""
-            )}
+            }
           </div>
-          <div className="grid-col float-left">
 
-            {/* facility name previous */}
-            <div>
-              <h3 className="display-inline-block">
-                {" "}
-                {user && (checkedOutByUser || lockedFacility) ? (
-                  <LockSharp className="lock-icon margin-right-1" />
-                ) : (
-                  ""
-                )}
-                <span className="font-body-lg">{facilityMainName}</span>
-              </h3>
-              <div className="text-bold font-body-2xs">
-                {dataLoaded ? auditInformation : ""}
-              </div>
-            </div>
-
-            {/* facility name new */}
+          <div className="display-flex flex-row flex-justify flex-align-center height-2">
             <div className="grid-row">
               <h3 className="margin-y-auto font-body-lg margin-right-2">
                 {facilityMainName}
@@ -707,12 +660,40 @@ export const HeaderInfo = ({
                 {facilityAdditionalName}
               </p>
             </div>
+            {(user && checkedOutByUser) &&
+              <div>
+                <Button
+                  type="button"
+                  className="margin-right-2 float-left margin-bottom-2"
+                  outline={true}
+                  onClick={exportHandler}
+                >
+                  Export Monitoring Plan
+                </Button>
+                <Button
+                  type="button"
+                  className="margin-right-2 float-right"
+                  outline={false}
+                  onClick={() => openImportModal()}
+                  id="importMonitoringPlanBtn"
+                >
+                  Import Monitoring Plan
+                </Button>
+              </div>
+            }
+          </div>
 
+          {dataLoaded &&
+            <p className="text-bold font-body-2xs">
+              {auditInformation}
+            </p>
+          }
 
+          <div className="grid-col float-left">
             <div className="">
               <div className="display-inline-block ">
                 <div className="text-bold font-body-xl display-block height-9 padding-top-4 padding-bottom-2">
-                  {user && checkoutState && checkedOutByUser ? (
+                  {/* {user && checkoutState && checkedOutByUser ? (
                     <CreateOutlined
                       color="primary"
                       fontSize="large"
@@ -721,8 +702,8 @@ export const HeaderInfo = ({
                   ) : (
                     ""
                   )}{" "}
-                  {facilityAdditionalName}
-                  {user ? (
+                  {facilityAdditionalName + 'facaddname'} */}
+                  {user &&
                     <div className="text-bold font-body-2xs display-inline-block ">
                       {checkedOutByUser === true ? (
                         <Button
@@ -759,10 +740,24 @@ export const HeaderInfo = ({
                         </Button>
                       ) : null}
                     </div>
-                  ) : (
-                    ""
-                  )}
-                  <Button
+                  }
+
+                  {showRevert(evalStatus) &&
+                    <div className=" float-right position-relative margin-bottom-2">
+                      <Button
+                        type="button"
+                        id="showRevertModal"
+                        className="float-right"
+                        onClick={() => setShowRevertModal(true)}
+                        outline={true}
+                      >
+                        Revert to Official Record
+                      </Button>
+                    </div>
+                  }
+
+                  {/* View comments */}
+                  {/* <Button
                     type="button"
                     className="margin-left-4 position-relative top-neg-1"
                     outline={true}
@@ -770,7 +765,7 @@ export const HeaderInfo = ({
                     onClick={() => openViewComments()}
                   >
                     View Comments
-                  </Button>
+                  </Button> */}
                 </div>
 
                 <div className="grid-row">
@@ -855,19 +850,17 @@ export const HeaderInfo = ({
           />
         </div>
       ) : null}
-      {isReverting ? (
+      {isReverting &&
         <UploadModal
           width={"30%"}
           left={"35%"}
           children={<Preloader />}
           preloader
         />
-      ) : (
-        ""
-      )}
+      }
       {/* while uploading, just shows preloader spinner  */}
 
-      {isLoading && !finishedLoading ? (
+      {(isLoading && !finishedLoading) &&
         <UploadModal
           width={"30%"}
           left={"35%"}
@@ -882,12 +875,10 @@ export const HeaderInfo = ({
           setImportedFileErrorMsgs={setImportedFileErrorMsgs}
           fileName={fileName}
         />
-      ) : (
-        ""
-      )}
+      }
 
       {/* after it finishes uploading , shows either api errors or success messages */}
-      {showImportModal && usePortBtn && finishedLoading ? (
+      {(showImportModal && usePortBtn && finishedLoading) &&
         <UploadModal
           show={showImportModal}
           close={closeImportModalHandler}
@@ -910,12 +901,10 @@ export const HeaderInfo = ({
             />
           }
         />
-      ) : (
-        ""
-      )}
+      }
 
       <div className={`usa-overlay ${showCommentsModal ? "is-visible" : ""}`} />
-      {showCommentsModal ? (
+      {showCommentsModal &&
         <div>
           <UploadModal
             show={showCommentsModal}
@@ -937,9 +926,7 @@ export const HeaderInfo = ({
             }
           />
         </div>
-      ) : (
-        ""
-      )}
+      }
     </div>
   );
 };
