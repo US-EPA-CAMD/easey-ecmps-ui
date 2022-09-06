@@ -364,9 +364,9 @@ export const HeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-        configs
-          .map((location) => location["monPlanId"])
-          .indexOf(selectedConfig.id)
+      configs
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -505,9 +505,8 @@ export const HeaderInfo = ({
     if (inWorkspace) {
       // when config is checked out by someone
       if (checkedOut) {
-        return `Currently checked-out by: ${
-          currentConfig["checkedOutBy"]
-        } ${formatDate(currentConfig["checkedOutOn"])}`;
+        return `Currently checked-out by: ${currentConfig["checkedOutBy"]
+          } ${formatDate(currentConfig["checkedOutOn"])}`;
       }
       // when config is not checked out
       return `Last updated by: ${currentConfig.lastUpdatedBy} ${formatDate(
@@ -527,9 +526,8 @@ export const HeaderInfo = ({
   return (
     <div className="header">
       <div
-        className={`usa-overlay ${
-          showRevertModal || showEvalReport ? "is-visible" : ""
-        } `}
+        className={`usa-overlay ${showRevertModal || showEvalReport ? "is-visible" : ""
+          } `}
       />
 
       {showRevertModal ? (
@@ -683,6 +681,8 @@ export const HeaderInfo = ({
             )}
           </div>
           <div className="grid-col float-left">
+
+            {/* facility name previous */}
             <div>
               <h3 className="display-inline-block">
                 {" "}
@@ -697,6 +697,18 @@ export const HeaderInfo = ({
                 {dataLoaded ? auditInformation : ""}
               </div>
             </div>
+
+            {/* facility name new */}
+            <div className="grid-row">
+              <h3 className="margin-y-auto font-body-lg margin-right-2">
+                {facilityMainName}
+              </h3>
+              <p className="text-bold font-body-xl">
+                {facilityAdditionalName}
+              </p>
+            </div>
+
+
             <div className="">
               <div className="display-inline-block ">
                 <div className="text-bold font-body-xl display-block height-9 padding-top-4 padding-bottom-2">
@@ -810,9 +822,8 @@ export const HeaderInfo = ({
         <Preloader />
       )}
       <div
-        className={`usa-overlay ${
-          showImportModal || isReverting ? "is-visible" : ""
-        }`}
+        className={`usa-overlay ${showImportModal || isReverting ? "is-visible" : ""
+          }`}
       />
 
       {showImportModal && !finishedLoading && !isLoading ? (
