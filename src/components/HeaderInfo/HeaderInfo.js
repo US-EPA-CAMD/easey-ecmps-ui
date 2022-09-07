@@ -445,7 +445,7 @@ export const HeaderInfo = ({
         </button>
       </div>
 
-    if (showHyperLink(evalStatus) && false) {
+    if (showHyperLink(evalStatus)) {
       return evalStatusHyperlink
     } else {
       return <p className={alertStyle}>{evalStatusText(evalStatus)}</p>
@@ -707,7 +707,7 @@ export const HeaderInfo = ({
               </div>
 
               {user &&
-                <div class="display-flex flex-align-center">
+                <div className="display-flex flex-align-center">
                   <p className="text-bold margin-right-1">Evaluation Status:</p>
                   {evalStatusContent()}
                   <p className="text-bold margin-x-1">Submission Status: </p>
