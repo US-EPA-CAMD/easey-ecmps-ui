@@ -1,6 +1,6 @@
 instances: 2
 environment: beta
-host: easey-beta.app.cloud.gov
+host: ecmps-beta.app.cloud.gov
 apiHost: api.epa.gov/easey/beta
 inactivityDurationCheckoutMinutes: 20
 refreshTokenRateMinutes: 15

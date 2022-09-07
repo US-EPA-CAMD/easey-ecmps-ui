@@ -10,9 +10,6 @@ echo "window._env_ = {" >> ./env-config.js
 env | while IFS= read -r line; do
   value=${line#*=}
   name=${line%%=*}
-  if [[ $name == "PUBLIC_URL" ]]; then
-    echo "$name : '$value'," >> ./env-config.js
-  fi
   if [[ $name == *"REACT_APP"* ]]; then
     echo "$name : '$value'," >> ./env-config.js
   fi
