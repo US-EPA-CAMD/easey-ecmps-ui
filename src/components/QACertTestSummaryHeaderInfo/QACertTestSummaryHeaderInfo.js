@@ -220,6 +220,7 @@ export const QACertTestSummaryHeaderInfo = ({
   const importHistoricalData = () => {
     const payload = {
       orisCode: orisCode,
+      historicalData: true,
       testSummaryData: selectedHistoricalData,
     };
     importQABtn(payload);
