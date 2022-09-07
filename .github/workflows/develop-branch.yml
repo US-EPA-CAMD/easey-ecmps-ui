@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Dev
-      url: https://easey-dev.app.cloud.gov/ecmps
+      url: https://ecmps-dev.app.cloud.gov
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2

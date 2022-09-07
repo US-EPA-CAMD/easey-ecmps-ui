@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Test
-      url: https://easey-tst.app.cloud.gov/ecmps
+      url: https://ecmps-tst.app.cloud.gov
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -96,7 +96,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Beta
-      url: https://easey-beta.app.cloud.gov/ecmps
+      url: https://ecmps-beta.app.cloud.gov
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -139,7 +139,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Staging
-      url: https://easey-stg.app.cloud.gov/ecmps
+      url: https://ecmps-stg.app.cloud.gov
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
