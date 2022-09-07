@@ -45,7 +45,7 @@ export const config = {
     paginationPerPage:
       getConfigValue('REACT_APP_EASEY_ECMPS_UI_PAGINATION_PER_PAGE', 100),
     path:
-      getConfigValue('REACT_APP_EASEY_ECMPS_UI_PATH', "/ecmps/"),
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_PATH', "/ecmps"),
     env:
       getConfigValue('REACT_APP_EASEY_ECMPS_UI_ENV', "local-dev"),
     published:
