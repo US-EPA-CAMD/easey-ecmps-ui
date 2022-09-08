@@ -4,13 +4,10 @@ applications:
     disk_quota: ((disk))M
     instances: ((instances))
     buildpacks:
-      - nodejs_buildpack
+      - nginx_buildpack
     env:
-      OPTIMIZE_MEMORY: true
-      PUBLIC_URL: https://((host))/((path))
       REACT_APP_EASEY_ECMPS_UI_ENV: ((environment))
       REACT_APP_EASEY_ECMPS_UI_HOST: ((host))
-      REACT_APP_EASEY_ECMPS_UI_PATH: /((path))
       REACT_APP_EASEY_MDM_API: https://((apiHost))/master-data-mgmt
       REACT_APP_EASEY_FACILITIES_API: https://((apiHost))/facilities-mgmt
       REACT_APP_EASEY_EMISSIONS_API: https://((apiHost))/emissions-mgmt
@@ -39,4 +36,4 @@ applications:
       REACT_APP_GOOGLE_ANALYTICS_AUTHENTICATED_CONTAINER_ID: ((googleAnalyticsAuthenticatedContainerId))
       REACT_APP_GOOGLE_ANALYTICS_PUBLIC_CONTAINER_ID: ((googleAnalyticsPublicContainerId))
     routes:
-      - route: ((host))/((path))
+      - route: ((host))

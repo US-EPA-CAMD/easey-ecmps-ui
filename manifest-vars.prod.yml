@@ -1,6 +1,6 @@
 instances: 2
 environment: production
-host: easey.app.cloud.gov
+host: ecmps.app.cloud.gov
 apiHost: api.epa.gov/easey
 inactivityDurationCheckoutMinutes: 20
 refreshTokenRateMinutes: 15
