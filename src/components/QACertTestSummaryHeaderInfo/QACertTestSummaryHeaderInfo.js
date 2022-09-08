@@ -4,17 +4,14 @@ import { Button } from "@trussworks/react-uswds";
 import "./QACertTestSummaryHeaderInfo.scss";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 
-import NotFound from "../NotFound/NotFound";
 import { QA_CERT_TEST_SUMMARY_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
-  returnFocusToCommentButton,
   returnFocusToLast,
 } from "../../additional-functions/manage-focus";
 import {
-  attachChangeEventListeners,
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../additional-functions/prompt-to-save-unsaved-changes";
@@ -28,7 +25,6 @@ import {
   getAllTestTypeCodes,
   getAllTestTypeGroupCodes,
 } from "../../utils/api/dataManagementApi";
-import { getTestSummary } from "../../utils/selectors/QACert/TestSummary";
 import { LockOpenSharp, LockSharp } from "@material-ui/icons";
 
 export const QACertTestSummaryHeaderInfo = ({
@@ -55,7 +51,7 @@ export const QACertTestSummaryHeaderInfo = ({
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
-  const [dataLoaded, setDataLoaded] = useState(true);
+ 
 
   // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
@@ -69,7 +65,6 @@ export const QACertTestSummaryHeaderInfo = ({
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
-  const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
   const [selectedHistoricalData, setSelectedHistoricalData] = useState([]);
   const [isCheckedOut, setIsCheckedOut] = useState(false)
 
@@ -82,7 +77,7 @@ export const QACertTestSummaryHeaderInfo = ({
 
   useEffect(() => {
     const fetchTestTypeCodes = () => {
-      let resp = "";
+      
 
       getAllTestTypeCodes()
         .then((res) => {
@@ -127,6 +122,7 @@ export const QACertTestSummaryHeaderInfo = ({
       testTypeCodes: codesForSelectedTestTypeGroup
     }
     setSelectedTestCode(testCodeObj);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [testTypeGroupOptions, allTestTypeCodes, sectionSelect]);
 
   // *** Reassign handlers after pop-up modal is closed
@@ -147,7 +143,7 @@ export const QACertTestSummaryHeaderInfo = ({
   }, []);
 
   useEffect(() => {
-    if (importTypeSelection != "select" || importedFile.length != 0) {
+    if (importTypeSelection !== "select" || importedFile.length !== 0) {
       setDisablePortBtn(false);
     } else {
       setDisablePortBtn(true);
@@ -155,7 +151,7 @@ export const QACertTestSummaryHeaderInfo = ({
   }, [importTypeSelection, importedFile]);
 
   useEffect(() => {
-    if (importedFile.length != 0) {
+    if (importedFile.length !== 0) {
       setDisablePortBtn(false);
     } else {
       setDisablePortBtn(true);
@@ -179,9 +175,6 @@ export const QACertTestSummaryHeaderInfo = ({
   };
   const openSelectionTypeImportModal = () => {
     setShowSelectionTypeImportModal(true);
-  };
-  const openImportModal = () => {
-    setShowImportModal(true);
   };
 
   const resetImportFlags = () => {
@@ -231,8 +224,8 @@ export const QACertTestSummaryHeaderInfo = ({
 
   return (
     <div className="header QACertHeader ">
-      {dataLoaded ? (
-        // adding display-block here allows buttons to be clickable ( has somesort of hidden overlay without it)
+    
+        {/* // adding display-block here allows buttons to be clickable ( has somesort of hidden overlay without it) */}
         <div className="grid-container width-full clearfix position-relative">
           <div className="display-flex flex-row flex-justify flex-align-center height-2">
             <div className="grid-row">
@@ -332,9 +325,7 @@ export const QACertTestSummaryHeaderInfo = ({
             )}
           </div>
         </div>
-      ) : (
-        <Preloader />
-      )}
+      ) 
 
       <div
         className={`usa-overlay ${showImportModal ||
@@ -430,7 +421,6 @@ export const QACertTestSummaryHeaderInfo = ({
           exitBtn={"Ok"}
           complete={true}
           importedFileErrorMsgs={importedFileErrorMsgs}
-          setUpdateRelatedTables={setUpdateRelatedTables}
           successMsg={"QA Certification has been Successfully Imported."}
           children={
             <ImportModal

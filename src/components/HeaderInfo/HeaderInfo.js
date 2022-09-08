@@ -76,7 +76,7 @@ export const HeaderInfo = ({
   const closeRevertModal = () => setShowRevertModal(false);
   const closeEvalReportModal = () => setShowEvalReport(false);
 
-  const [checkoutState, setCheckoutState] = useState(checkout);
+  // const [checkoutState, setCheckoutState] = useState(checkout);
   const inWorkspace = user;
 
   // refreshing evaluation status
@@ -339,7 +339,7 @@ export const HeaderInfo = ({
   const renderWithNewData = (configs, currentConfig, currentCheckoutStatus) => {
     const intervalId = startRefreshTimer();
 
-    setCheckoutState(currentConfig.checkedOutBy !== "N/A");
+    // setCheckoutState(currentConfig.checkedOutBy !== "N/A");
     setOpenIntervalId(intervalId);
     setUserHasCheckout(
       configs.some((plan) => plan["checkedOutBy"] === user.userId)
@@ -480,7 +480,7 @@ export const HeaderInfo = ({
       () => {
         setCheckedOutByUser(direction);
         setLockedFacility(direction);
-        setCheckoutState(direction);
+        // setCheckoutState(direction);
         setDataLoaded(false);
       }
     );

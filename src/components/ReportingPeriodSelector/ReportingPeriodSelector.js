@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Dropdown, Label } from "@trussworks/react-uswds";
 import { getReportingPeriod } from "../../utils/api/qaCertificationsAPI";
-import { Preloader } from "@us-epa-camd/easey-design-system";
 import "./ReportingPeriodSelector.scss";
 
 const ReportingPeriodSelector = ({
@@ -61,6 +60,7 @@ const ReportingPeriodSelector = ({
       setQuarters(quarterObjs.map((e) => e.quarter));
       getInitSelection(reportingPeriod.find((e) => e.selected));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reportingPeriod]);
 
   const updateReportingPeriod = (selectedObj) => {

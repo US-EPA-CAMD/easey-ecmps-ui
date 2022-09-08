@@ -3,8 +3,7 @@ import { normalizeRowObjectFormat } from "../../additional-functions/react-data-
 import "./QADataTableRender.scss";
 
 // *** local
-import { config, oneSecond } from "../../config";
-// import { getLinearitySummary } from "../../../utils/selectors/QACert/LinearitySummary.js";
+import { oneSecond } from "../../config";
 /*********** COMPONENTS ***********/
 // *** 3rd party
 import { Add, Remove, ArrowDownwardSharp } from "@material-ui/icons";
@@ -26,7 +25,7 @@ const QADataTableRender = ({
   expandableRowComp,
   onRemoveHandler,
   evaluate,
-  noDataComp
+  noDataComp,
 }) => {
   const columns = [];
   columnNames.forEach((name, index) => {
@@ -132,7 +131,7 @@ const QADataTableRender = ({
       columns.unshift({
         name: actionColumnName,
         button: true,
-        width: user ? evaluate? "25%" :"20%" : `${columnWidth}%`,
+        width: user ? (evaluate ? "25%" : "20%") : `${columnWidth}%`,
         style: {
           justifyContent: "left",
           // width:'fit-content'
@@ -145,27 +144,28 @@ const QADataTableRender = ({
               {/* user is logged in  */}
               {user ? (
                 <div className="editViewExpandGroup ">
-                  {
-                    data.length > 0 && 
-                      <>
-                        {evaluate ? <Button>Evaluate</Button> : null} 
-                        <Button
-                          type="button"
-                          epa-testid="btnOpen"
-                          className="cursor-pointer open-modal-button"
-                          id={`btnOpen${row[`col${Object.keys(row).length - 1}`]}`}
-                          onClick={() => {
-                            openHandler(normalizedRow, false);
-                          }}
-                        >
-                          {"Edit"}
-                        </Button>
-                        <RemoveButton
-                          onConfirm={() => onRemoveHandler(normalizedRow)}
-                        />
-                        {expandableRowComp ? createExpandBTNS(index, row) : null}
-                      </>
-                  }
+                  {data.length > 0 && (
+                    <>
+                      {evaluate ? <Button>Evaluate</Button> : null}
+                      <Button
+                        type="button"
+                        epa-testid="btnOpen"
+                        className="cursor-pointer open-modal-button"
+                        id={`btnOpen${
+                          row[`col${Object.keys(row).length - 1}`]
+                        }`}
+                        onClick={() => {
+                          openHandler(normalizedRow, false);
+                        }}
+                      >
+                        {"Edit"}
+                      </Button>
+                      <RemoveButton
+                        onConfirm={() => onRemoveHandler(normalizedRow)}
+                      />
+                      {expandableRowComp ? createExpandBTNS(index, row) : null}
+                    </>
+                  )}
                 </div>
               ) : (
                 // user is not logged in (in public record)
@@ -198,12 +198,12 @@ const QADataTableRender = ({
   }
 
   return (
-    <div aria-live="polite padding-3">
+    <div aria-live="polite" className="padding-3">
       <DataTable
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
         className={`data-display-table react-transition fade-in`}
         columns={columns}
-        data={data.length > 0 ? data : user? getEmptyRows(columns) : []}
+        data={data.length > 0 ? data : user ? getEmptyRows(columns) : []}
         expandableRows
         expandableRowsHideExpander
         expandableRowExpanded={(row) => row.expanded}

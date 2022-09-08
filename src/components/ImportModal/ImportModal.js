@@ -40,6 +40,7 @@ const ImportModal = ({
       default:
         break;
     }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [schemaErrors, setSchemaErrors] = useState([]);
   const validateJSON = (name, type, event) => {

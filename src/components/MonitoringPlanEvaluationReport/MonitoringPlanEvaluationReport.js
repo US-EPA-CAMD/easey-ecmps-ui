@@ -20,8 +20,8 @@ export const MonitoringPlanEvaluationReport = ({
 
   const [dataLoaded, setDataLoaded] = useState(dataLoadedState);
   const [reportData, setReportData] = useState(reportDataState);
-  const [displayCloseButton, setDisplayCloseButton] = useState(true);
-
+  // const [displayCloseButton, setDisplayCloseButton] = useState(true);
+ const displayCloseButton = true;
   const columnNames = [
     "Unit/Stack",
     "Severity",

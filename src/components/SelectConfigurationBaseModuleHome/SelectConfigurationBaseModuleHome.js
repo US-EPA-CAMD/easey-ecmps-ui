@@ -51,6 +51,8 @@ export const SelectConfigurationBaseModuleHome = ({
         document.title = emissions_mats_module;
         setTitleName(emissions_mats_module);
         break;
+      default:
+        break;
     }
   }, [workspaceSection]);
 
