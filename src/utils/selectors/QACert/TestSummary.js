@@ -2,7 +2,9 @@ export const getTestSummary = (data, colTitles) => {
   const records = [];
   if (!colTitles) {
     data.forEach((el) => {
-      const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
+      const endDate = el.endDate
+        ? formatStringToDate(el.endDate.toString())
+        : "";
       const endHour = el.endHour ? el.endHour.toString() : "";
 
       const endMinute = el.endMinute ? el.endMinute.toString() : "";
@@ -29,34 +31,36 @@ export const getTestSummary = (data, colTitles) => {
 
   if (colTitles) {
     for (const curData of data) {
-      const { id, locationId } = curData
-      const columnDef = { id, locationId }
+      const { id, locationId } = curData;
+      const columnDef = { id, locationId };
       // loop through column titles and assign data to column index based on column title
       for (const [index, colTitle] of colTitles.entries()) {
-        const colIndex = index + 1
-        const colKey = `col${colIndex}`
+        const colIndex = index + 1;
+        const colKey = `col${colIndex}`;
         // get corresponding dto key based on column title
-        const dtoKey = mapTestSummaryColTitleToDTOKey(colTitle)
-        let colValue = curData[dtoKey]
+        const dtoKey = mapTestSummaryColTitleToDTOKey(colTitle);
+        let colValue = curData[dtoKey];
         // special cases
         switch (colTitle) {
-          case 'End Date':
-            colValue = curData.endDate ? formatStringToDate(curData.endDate.toString()) : ''
-            break
-          case 'End Hour':
-            colValue = curData?.endHour?.toString() ?? ''
-            break
-          case 'End Minute':
-            colValue = curData?.endMinute?.toString() ?? ''
-            break
-          case 'Unit or Stack Pipe ID':
-            colValue = curData.unitId ?? curData.stackPipeId
-            break
+          case "End Date":
+            colValue = curData.endDate
+              ? formatStringToDate(curData.endDate.toString())
+              : "";
+            break;
+          case "End Hour":
+            colValue = curData?.endHour?.toString() ?? "";
+            break;
+          case "End Minute":
+            colValue = curData?.endMinute?.toString() ?? "";
+            break;
+          case "Unit or Stack Pipe ID":
+            colValue = curData.unitId ?? curData.stackPipeId;
+            break;
           default:
         }
-        columnDef[colKey] = colValue
+        columnDef[colKey] = colValue;
       }
-      records.push(columnDef)
+      records.push(columnDef);
     }
   }
   return records;
@@ -64,35 +68,38 @@ export const getTestSummary = (data, colTitles) => {
 
 // year - month - day to  month / day/ year
 const formatStringToDate = (date) => {
-  const parts = date.split("-");
+  let parts;
+
+  parts = date.split("-");
+
   return `${parts[1]}/${parts[2]}/${parts[0]}`;
 };
 
 const colTitleToDtoKeyMap = {
-  'Test Type Code': 'testTypeCode',
-  'Monitoring System ID': 'monitoringSystemID',
-  'Component ID': 'componentID',
-  'Span Scale Code': 'spanScaleCode',
-  'Test Number': 'testNumber',
-  'Test Reason Code': 'testReasonCode',
-  'Test Description': 'testDescription',
-  'Test Result Code': 'testResultCode',
-  'Begin Date': 'beginDate',
-  'Begin Hour': 'beginHour',
-  'Begin Minute': 'beginMinute',
-  'End Date': 'endDate',
-  'End Hour': 'endHour',
-  'End Minute': 'endnMinute',
-  'Grace Period Indicator': 'gracePeriodIndicator',
-  'Year': 'year',
-  'Quarter': 'quarter',
-  'Injection Protocol Code': 'injectionProtocolCode',
-  'Test Comment': 'testComment'
-}
+  "Test Type Code": "testTypeCode",
+  "Monitoring System ID": "monitoringSystemID",
+  "Component ID": "componentID",
+  "Span Scale Code": "spanScaleCode",
+  "Test Number": "testNumber",
+  "Test Reason Code": "testReasonCode",
+  "Test Description": "testDescription",
+  "Test Result Code": "testResultCode",
+  "Begin Date": "beginDate",
+  "Begin Hour": "beginHour",
+  "Begin Minute": "beginMinute",
+  "End Date": "endDate",
+  "End Hour": "endHour",
+  "End Minute": "endnMinute",
+  "Grace Period Indicator": "gracePeriodIndicator",
+  Year: "year",
+  Quarter: "quarter",
+  "Injection Protocol Code": "injectionProtocolCode",
+  "Test Comment": "testComment",
+};
 
 const mapTestSummaryColTitleToDTOKey = (columnTitle) => {
-  return colTitleToDtoKeyMap[columnTitle]
-}
+  return colTitleToDtoKeyMap[columnTitle];
+};
 
 export const getLinearitySummaryRecords = (data) => {
   const records = [];
@@ -104,11 +111,11 @@ export const getLinearitySummaryRecords = (data) => {
       col2: el.meanMeasuredValue,
       col3: el.meanReferenceValue,
       col4: el.percentError,
-      col5: el.apsIndicator === 1 ? 'Yes' : 'No',
+      col5: el.apsIndicator === 1 ? "Yes" : "No",
     });
   });
   return records;
-}
+};
 
 export const getEmptyRows = (columns) => {
   let obj = {};
@@ -116,7 +123,7 @@ export const getEmptyRows = (columns) => {
     obj[`col${i + 1}`] = "";
   });
   return [obj];
-}
+};
 
 export const getProtocolGasRecords = (data) => {
   const records = [];
@@ -126,14 +133,15 @@ export const getProtocolGasRecords = (data) => {
       testSumId: el.testSumId,
       col1: el.gasLevelCode,
       col2: el.gasTypeCode,
-      col3: el.vendorID,
-      col4: el.cylinderID,
-      col5: el.expirationDate ? formatStringToDate(el.expirationDate) : ""
+      col3: el.cylinderID,
+      col4: el.vendorID,
+      col5: el.expirationDate ? formatStringToDate(el.expirationDate) : "",
     });
   });
   return records;
-}
+};
 
+//2nd level
 export const getRataDataRecords = (data) => {
   const records = [];
   data.forEach((el) => {
@@ -147,21 +155,55 @@ export const getRataDataRecords = (data) => {
     });
   });
   return records;
-}
-
+};
+// 3rd level
 export const mapRataSummaryToRows = (data) => {
-  const records = []
+  const records = [];
   for (const el of data) {
     const row = {
       id: el.id,
+      rataId: el.rataId,
       col1: el.operatingLevelCode,
       col2: el.referenceMethodCode,
-      col3: el.apsIndicator === 1 ? 'Yes' : 'No',
+      col3: el.apsIndicator === 1 ? "Yes" : "No",
       col4: el.apsCode,
       col5: el.relativeAccuracy,
       col6: el.co2OrO2ReferenceMethodCode,
-    }
-    records.push(row)
+    };
+    records.push(row);
   }
-  return records
-}
+  return records;
+};
+//4th level
+export const getRataRunDataRecords = (data) => {
+  const records = [];
+  data.forEach((el) => {
+    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
+    const endHour = el.endHour ? el.endHour.toString() : "";
+
+    const endMinute = el.endMinute ? el.endMinute.toString() : "";
+
+    const beginDate = el.endDate
+      ? formatStringToDate(el.endDate.toString())
+      : "";
+    const beginHour = el.endHour ? el.endHour.toString() : "";
+
+    const beginMinute = el.endMinute ? el.endMinute.toString() : "";
+    records.push({
+      id: el.id,
+      rataSumId: el.rataSumId,
+      col1: el.runNumber,
+      col2: beginDate,
+      col3: beginHour,
+      col4: beginMinute,
+      col5: endDate,
+      col6: endHour,
+      col7: endMinute,
+      col8: el.cemValue,
+      col9: el.rataReferenceValue,
+      col10: el.grossUnitLoad,
+      col11: el.runStatusCode,
+    });
+  });
+  return records;
+};

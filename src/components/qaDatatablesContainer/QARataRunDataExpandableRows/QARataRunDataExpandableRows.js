@@ -1,11 +1,14 @@
 import React, { useState, useMemo, useEffect } from "react";
+import { connect } from "react-redux";
 import {
-  getProtocolGas,
-  createProtocolGas,
-  updateProtocolGas,
-  deleteProtocolGas
+  getRataRunData,
+  createRataRunData,
+  updateRataRunData,
+  deleteRataRunData,
 } from "../../../utils/api/qaCertificationsAPI.js";
-import { getProtocolGasRecords } from "../../../utils/selectors/QACert/TestSummary.js";
+import { loadDropdowns } from "../../../store/actions/dropdowns";
+import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
+import { getRataRunDataRecords } from "../../../utils/selectors/QACert/TestSummary.js";
 import { Button } from "@trussworks/react-uswds";
 import {
   attachChangeEventListeners,
@@ -23,26 +26,29 @@ import { modalViewData } from "../../../additional-functions/create-modal-input-
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import * as dmApi from "../../../utils/api/dataManagementApi";
-// contains protocol gas data table
+// contains RATA data table
 
-const QAProtocolGasExpandableRows = ({
+const QARataRunDataExpandableRows = ({
   user,
-  locId,
-  testSumId
+  testSumId,
+  rataId,
+  data,
 }) => {
+  const locId = data.locationId;
+  const rataSumId = data.id;
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [protocolGas, setProtocolGas] = useState([]);
+  const [rataRunData, setRataRunData] = useState([]);
   const [updateTable, setUpdateTable] = useState(false);
 
   useEffect(() => {
-    if (protocolGas.length === 0 || updateTable) {
+    if (rataRunData.length === 0 || updateTable) {
       setLoading(true);
-      getProtocolGas(locId, testSumId)
+      getRataRunData(locId, testSumId, rataId, rataSumId)
         .then((res) => {
           finishedLoadingData(res.data);
-          setProtocolGas(res.data);
+          setRataRunData(res.data);
           setLoading(false);
         })
         .catch((error) => {
@@ -53,83 +59,80 @@ const QAProtocolGasExpandableRows = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locId, testSumId, updateTable]);
 
-  const data = useMemo(() => {
-    return getProtocolGasRecords(protocolGas);
+  const dataRecords = useMemo(() => {
+    return getRataRunDataRecords(rataRunData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [protocolGas]);
+  }, [rataRunData]);
 
   const [dataPulled, setDataPulled] = useState([]);
   const [show, setShow] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
-  const [dataLoaded, setDataLoaded] = useState(false);
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
-  const [mainDropdownChange, setMainDropdownChange] = useState("");
-
   const [createNewData, setCreateNewData] = useState(false);
-  const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
-
-  const [complimentaryData, setComplimentaryData] = useState([]);
-
-  const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
-  const dropdownArray = ["gasLevelCode", "gasTypeCode"];
-  const dropdownArrayIsEmpty = dropdownArray.length === 0;
+  const dropdownArray = [["runStatusCode"]];
+  const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
   const columns = [
-    "Gas Level Code",
-    "Gas Type Code",
-    "Cylinder ID",
-    "Vendor ID",
-    "Expiration Date",
+    "Run Number",
+    "Begin Date ",
+    "Begin Hour",
+    "Begin Minute",
+    "End Date",
+    "End Hour ",
+    "End Minute",
+    "CEM Value",
+    "RATA Reference Value",
+    "Gross Unit Load ",
+    "Run Status Code ",
   ];
 
-  const dataTableName = "Protocol Gas";
+  const dataTableName = "RATA Run Data";
   const controlInputs = {
-    gasLevelCode: ["Summary Type/Gas Level Code", "input", "", "locked"],
-    gasTypeCode: ["Gas Type Code", "dropdown", "", ""],
-    cylinderID: ["Cylinder ID", "input", "", ""],
-    vendorID: ["Vendor ID", "input", "", ""],
-    expirationDate: ["Expiration Date", "date", "", ""],
+    runNumber: ["Run Number", "input", "", ""],
     skip: ["", "skip", "", ""],
+    skip1: ["", "skip", "", ""],
+  };
+  const extraControlInputs = {
+    cemValue: ["CEM Value", "input", "", ""],
+    rataReferenceValue: ["RATA Reference Value", "input", "", ""],
+    grossUnitLoad: ["Gross Unit Load ", "input", "", ""],
+    runStatusCode: ["Run Status Code", "dropdown", "", ""],
+  };
 
+  const controlDatePickerInputs = {
+    beginDate: ["Begin Date", "date", "", ""],
+    beginHour: ["Begin Hour", "hourDropdown", "dropdown", ""],
+    beginMinute: ["Begin Minute", "minuteDropdown", "dropdown", ""],
+    endDate: ["End Date", "date", "", ""],
+    endHour: ["End Hour", "hourDropdown", "dropdown", ""],
+    endMinute: ["End Minute", "minuteDropdown", "dropdown", ""],
   };
   const loadDropdownsData = () =>{
     let dropdowns = {};
-    const allPromises = [];
-    allPromises.push(dmApi.getAllGasLevelCodes());
-    allPromises.push(dmApi.getAllGasTypeCodes());
-    Promise.all(allPromises).then((values) => {
-      values.forEach((val, i) =>{
-        if(i==0){
-          dropdowns[dropdownArray[i]] = 
-          val.data.map(d => {
+    dmApi.getAllRunStatusCodes()
+      .then((res)=>{
+        dropdowns[dropdownArray[0][0]] = 
+          res.data.map(d => {
             return {
-              code: d["gasLevelCode"],
-              name: d["gasLevelDescription"],
+              code: d["runStatusCode"],
+              name: d["runStatusCodeDescription"],
             };
-          });
-          dropdowns[dropdownArray[i]].unshift({ code: "", name: "-- Select a value --" });
-        }else{
-          dropdowns[dropdownArray[i]] = 
-          val.data.map(d => {
-            return {
-              code: d["gasTypeCode"],
-              name: d["gasTypeDescription"],
-            };
-          });
-          dropdowns[dropdownArray[i]].unshift({ code: "", name: "-- Select a value --" });
-        }
+        });
+        dropdowns[dropdownArray[0][0]].unshift({ code: "", name: "-- Select a value --" });
+        setMdmData(dropdowns);
+      })
+      .catch((error) => {
+        console.log("error", error);
       });
-      setMdmData(dropdowns);
-    });
   }
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
-    if (!dropdownArrayIsEmpty && mdmData === null) {
+    if (!dropdownArrayIsEmpty && mdmData === null) {     
       if (!dropdownsLoading) {
         loadDropdownsData();
         setDropdownsLoading(true);
@@ -140,7 +143,6 @@ const QAProtocolGasExpandableRows = ({
     }
   }, [mdmData]);
 
-  const controlDatePickerInputs = {};
   const closeModalHandler = () => {
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
@@ -151,22 +153,18 @@ const QAProtocolGasExpandableRows = ({
     }
   };
   const executeOnClose = () => {
-    setReturnedFocusToLast(false);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
   };
   const finishedLoadingData = (loadedData) => {
     setDataPulled(loadedData);
-    setDataLoaded(true);
     addAriaLabelToDatatable();
   };
   // Executed when "View" action is clicked
   const openModal = (row, bool, create) => {
     let selectedData = null;
     setCreateNewData(create);
-    if (create) {
-      controlInputs.gasLevelCode = ["Summary Type/Gas Level Code", "dropdown", "", ""];
-    }
+
     if (dataPulled.length > 0 && !create) {
       selectedData = dataPulled.filter(
         (element) => element.id === row[`id`]
@@ -175,16 +173,16 @@ const QAProtocolGasExpandableRows = ({
     }
     let mainDropdownName = "";
     let hasMainDropdown = false;
-    for (const controlProperty in controlInputs) {
-      if (controlInputs[controlProperty][1] === "mainDropdown") {
-        mainDropdownName = controlProperty;
-        hasMainDropdown = true;
-        break;
-      }
-    }
+    // for (const controlProperty in controlInputs) {
+    //   if (controlInputs[controlProperty][1] === "mainDropdown") {
+    //     mainDropdownName = controlProperty;
+    //     hasMainDropdown = true;
+    //     break;
+    //   }
+    // }
     let prefilteredDataName;
     if (!dropdownArrayIsEmpty) {
-      prefilteredDataName = dropdownArray[dropdownArray.length - 1];
+      prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
     }
     let mainDropdownResult;
     // only applies if there is prefiltering based on a primary driver dropdown
@@ -201,11 +199,8 @@ const QAProtocolGasExpandableRows = ({
       mainDropdownResult = [];
     }
 
-    if (!dropdownArrayIsEmpty) {
-      setPrefilteredMdmData(mdmData[prefilteredDataName]);
-    }
-
-    const prefilteredTotalName = dropdownArray[dropdownArray.length - 1];
+    console.log("mdmData", mdmData);
+    const prefilteredTotalName = dropdownArray[0][dropdownArray[0].length - 1];
     setSelectedModalData(
       modalViewData(
         selectedData,
@@ -218,7 +213,7 @@ const QAProtocolGasExpandableRows = ({
         mainDropdownResult,
         hasMainDropdown,
         prefilteredTotalName,
-        false // no extra controls
+        extraControlInputs
       )
     );
 
@@ -228,41 +223,31 @@ const QAProtocolGasExpandableRows = ({
     });
   };
 
-  const saveData = () => {
-    const payload = {
-      gasLevelCode: selectedRow.gasLevelCode,
-      gasTypeCode: null,
-      cylinderID: null,
-      vendorID: null,
-      expirationDate: null,
-    };
-    const userInput = extractUserInput(payload, ".modalUserInput");
-
-    updateProtocolGas(
-      locId,
-      testSumId,
-      selectedRow.id,
-      userInput
-    )
+  const createData = () => {
+    const uiControls = {};
+    Object.keys(controlInputs).forEach((key) => {
+      uiControls[key] = null;
+    });
+    const userInput = extractUserInput(uiControls, ".modalUserInput");
+    createRataRunData(locId, testSumId, rataId, rataSumId, userInput)
       .then((res) => {
-        setUpdateTable(true);
-        executeOnClose();
+        console.log("res", res);
+        if (Object.prototype.toString.call(res) === "[object Array]") {
+          alert(res[0]);
+        } else {
+          setUpdateTable(true);
+          executeOnClose();
+        }
       })
       .catch((error) => {
-        console.log(error);
+        console.log("error", error);
       });
   };
 
-  const createData = () => {
-    const uiControls = {
-      gasLevelCode: null,
-      gasTypeCode: null,
-      cylinderID: null,
-      vendorID: null,
-      expirationDate: null,
-    };
+  const saveData = () => {
+    const uiControls = {};
     const userInput = extractUserInput(uiControls, ".modalUserInput");
-    createProtocolGas(locId, testSumId, userInput)
+    updateRataRunData(selectedRow.id, locId, testSumId, userInput)
       .then((res) => {
         console.log("res", res);
         if (Object.prototype.toString.call(res) === "[object Array]") {
@@ -280,19 +265,15 @@ const QAProtocolGasExpandableRows = ({
   const onRemoveHandler = async (row) => {
     const { id: idToRemove, testSumId } = row;
     try {
-      const resp = await deleteProtocolGas(
-        locId,
-        testSumId,
-        idToRemove
-      );
+      const resp = await deleteRataRunData(locId, testSumId, idToRemove);
       if (resp.status === 200) {
-        const dataPostRemove = protocolGas.filter(
+        const dataPostRemove = rataRunData.filter(
           (rowData) => rowData.id !== idToRemove
         );
-        setProtocolGas(dataPostRemove);
+        setRataRunData(dataPostRemove);
       }
     } catch (error) {
-      console.log('error deleting protocol gas', error);
+      console.log("error deleting rata data", error);
     }
   };
 
@@ -303,15 +284,13 @@ const QAProtocolGasExpandableRows = ({
         <QADataTableRender
           columnNames={columns}
           columnWidth={15}
-          data={data}
+          data={dataRecords}
           openHandler={openModal}
           onRemoveHandler={onRemoveHandler}
           actionColumnName={
-            user ?
+            user ? (
               <>
-                <span className="padding-right-2">
-                  Protocol Gas
-                </span>
+                <span className="padding-right-2">RATA Run</span>
                 <Button
                   epa-testid="btnOpen"
                   className="text-white"
@@ -320,34 +299,37 @@ const QAProtocolGasExpandableRows = ({
                   Add
                 </Button>
               </>
-              : "Protocol Gas"
+            ) : (
+              "RATA Run"
+            )
           }
           actionsBtn={"View"}
           user={user}
           evaluate={false}
           noDataComp={
-            user ?
-              (<QADataTableRender
+            user ? (
+              <QADataTableRender
                 columnNames={columns}
                 columnWidth={15}
                 data={[]}
                 actionColumnName={
-                  (
-                    <>
-                      <span className="padding-right-2">Protocol Gas</span>
-                      <Button
-                        epa-testid="btnOpen"
-                        className="text-white"
-                        onClick={() => openModal(false, false, true)}
-                      >
-                        Add
-                      </Button>
-                    </>
-                  )
+                  <>
+                    <span className="padding-right-2">RATA Run Data</span>
+                    <Button
+                      epa-testid="btnOpen"
+                      className="text-white"
+                      onClick={() => openModal(false, false, true)}
+                    >
+                      Add
+                    </Button>
+                  </>
                 }
                 actionsBtn={"View"}
                 user={user}
-              />) : "There're no protocol gas records available."
+              />
+            ) : (
+              "There're no RATA Run records available."
+            )
           }
         />
       ) : (
@@ -365,8 +347,8 @@ const QAProtocolGasExpandableRows = ({
             createNewData
               ? `Add  ${dataTableName}`
               : user
-                ? ` Edit ${dataTableName}`
-                : ` ${dataTableName}`
+              ? ` Edit ${dataTableName}`
+              : ` ${dataTableName}`
           }
           exitBTN={`Save and Close`}
           children={
@@ -375,7 +357,7 @@ const QAProtocolGasExpandableRows = ({
                 <ModalDetails
                   modalData={selectedRow}
                   data={selectedModalData}
-                  cols={2}
+                  cols={3}
                   title={`${dataTableName}`}
                   viewOnly={!user ? true : false}
                   create={createNewData}
@@ -391,4 +373,4 @@ const QAProtocolGasExpandableRows = ({
   );
 };
 
-export default QAProtocolGasExpandableRows;
+export default QARataRunDataExpandableRows;

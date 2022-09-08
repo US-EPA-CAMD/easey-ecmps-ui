@@ -91,7 +91,9 @@ const Layout = (props) => {
                 className="position-relative top-neg-1"
               />
             </div>
-            <main class="margin-x-2">{childrenWithProps}</main>
+            <main className="mainContent" id="main-content" role="main">
+              {childrenWithProps}
+            </main>
           </div>
         </div>
         <div id="footer" className="position-fixed bottom-0 width-full">

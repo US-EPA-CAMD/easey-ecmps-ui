@@ -1,0 +1,8 @@
+*.md
+.github/*
+node_modules/*
+.gitignore
+docker-compose.yml
+Dockerfile.dev
+LICENSE
+sonar-project.properties

@@ -24,14 +24,12 @@ import QAImportModalSelect from "./QAImportModalSelect/QAImportModalSelect";
 import QAImportHistoricalDataPreview from "../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
 import Modal from "../Modal/Modal";
 import { importQA } from "../../utils/api/qaCertificationsAPI";
-
-import QALinearitySummaryDataTable from "../qaDatatablesContainer/QALinearitySummaryDataTable/QALinearitySummaryDataTable";
 import {
   getAllTestTypeCodes,
   getAllTestTypeGroupCodes,
 } from "../../utils/api/dataManagementApi";
-import TestSummaryDataTable from "../qaDatatablesContainer/TestSummaryDataTable/TestSummaryDataTable";
 import { getTestSummary } from "../../utils/selectors/QACert/TestSummary";
+import { LockOpenSharp, LockSharp } from "@material-ui/icons";
 
 export const QACertTestSummaryHeaderInfo = ({
   facility,
@@ -48,7 +46,7 @@ export const QACertTestSummaryHeaderInfo = ({
   locations,
   setSelectedTestCode,
 }) => {
-  const importTestTitle = "Import Test Data";
+  const importTestTitle = "Import Data";
   const [showImportModal, setShowImportModal] = useState(false);
 
   const [showSelectionTypeImportModal, setShowSelectionTypeImportModal] =
@@ -71,9 +69,10 @@ export const QACertTestSummaryHeaderInfo = ({
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
-
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
   const [selectedHistoricalData, setSelectedHistoricalData] = useState([]);
+  const [isCheckedOut, setIsCheckedOut] = useState(false)
+
 
   const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([
     { name: "Loading..." },
@@ -82,10 +81,10 @@ export const QACertTestSummaryHeaderInfo = ({
   const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
 
   useEffect(() => {
-    const fetchTestTypeCodes = async () => {
+    const fetchTestTypeCodes = () => {
       let resp = "";
 
-      await getAllTestTypeCodes()
+      getAllTestTypeCodes()
         .then((res) => {
           setAllTestTypeCodes(res.data);
         })
@@ -93,7 +92,7 @@ export const QACertTestSummaryHeaderInfo = ({
           console.log(error);
         });
 
-      await getAllTestTypeGroupCodes()
+      getAllTestTypeGroupCodes()
         .then((res) => {
           const options = res.data
             .map((e) => {
@@ -128,7 +127,7 @@ export const QACertTestSummaryHeaderInfo = ({
       testTypeCodes: codesForSelectedTestTypeGroup
     }
     setSelectedTestCode(testCodeObj);
-  }, [testTypeGroupOptions, sectionSelect]);
+  }, [testTypeGroupOptions, allTestTypeCodes, sectionSelect]);
 
   // *** Reassign handlers after pop-up modal is closed
   useEffect(() => {
@@ -227,19 +226,52 @@ export const QACertTestSummaryHeaderInfo = ({
     setShowImportDataPreview(false);
   };
 
+  const checkoutBtnText = isCheckedOut ? 'Check Back In' : 'Check Out'
+  const checkoutBtnIcon = isCheckedOut ? <LockSharp /> : <LockOpenSharp />
+
   return (
     <div className="header QACertHeader ">
       {dataLoaded ? (
         // adding display-block here allows buttons to be clickable ( has somesort of hidden overlay without it)
         <div className="grid-container width-full clearfix position-relative">
-          <div className="grid-row">
-            <h3 className="display-inline-block">
-              <span className="font-body-lg">{facilityMainName}</span>
-            </h3>{" "}
+          <div className="display-flex flex-row flex-justify flex-align-center height-2">
+            <div className="grid-row">
+              <h3 className="margin-y-auto font-body-lg margin-right-2">
+                {facilityMainName}
+              </h3>
+              <p className="text-bold font-body-xl">
+                {facilityAdditionalName}
+              </p>
+            </div>
+            {user && <div>
+              <Button
+                // className="padding-x-5"
+                type="button"
+                outline={false}
+                onClick={() => openSelectionTypeImportModal()}
+                id="importSelectionQAModal"
+              >
+                {importTestTitle}
+              </Button>
+              <Button
+                // className="float-right text-right bottom-0 text-no-wrap"
+                type="button"
+                id="showRevertModal"
+                outline={false}
+              >
+                Evaluate
+              </Button>
+            </div>}
           </div>
-          <div className=" grid-row text-bold font-body-xl display-block">
-            {facilityAdditionalName}
-          </div>
+
+          {user && <p>checked-out by:</p>}
+
+          {user && <div className="grid-row">
+            <Button onClick={() => setIsCheckedOut(prevState => !prevState)}>
+              {checkoutBtnIcon} {checkoutBtnText}
+            </Button>
+            <Button outline={true}>Revert to Official Record</Button>
+          </div>}
 
           <div className="grid-row positon-relative">
             <div className="grid-col-2">
@@ -268,25 +300,8 @@ export const QACertTestSummaryHeaderInfo = ({
               />
             </div>{" "}
             <div className="grid-col-3"></div>{" "}
-            <div className="grid-col-3">
-              {user ? (
-                <div className=" float-right right-0 bottom-0 text-no-wrap position-absolute padding-bottom-1">
-                  <Button
-                    className="padding-x-5"
-                    type="button"
-                    outline={false}
-                    onClick={() => openSelectionTypeImportModal()}
-                    id="importSelectionQAModal"
-                  >
-                    {importTestTitle}
-                  </Button>
-                </div>
-              ) : (
-                ""
-              )}
-            </div>
           </div>
-          <div className="grid-row float-right">
+          <div className="grid-row float-left">
             <Button
               className="float-right text-right bottom-0 text-no-wrap "
               type="button"
@@ -310,7 +325,7 @@ export const QACertTestSummaryHeaderInfo = ({
                 id="showRevertModal"
                 outline={false}
               >
-                {"Evaluate All"}
+                {"Evaluation Report"}
               </Button>
             ) : (
               ""

@@ -1,6 +1,6 @@
 instances: 2
 environment: staging
-host: easey-stg.app.cloud.gov
+host: ecmps-stg.app.cloud.gov
 apiHost: api.epa.gov/easey/staging
 inactivityDurationCheckoutMinutes: 20
 refreshTokenRateMinutes: 15

@@ -3,6 +3,10 @@ name: Release Branch Workflow
 on:
   push:
     branches: [ release/* ]
+    paths-ignore:
+    - '**/*.md'
+    - 'LICENSE'
+    - '.gitignore'
 
 jobs:
   Build-Test-Package:
@@ -43,12 +47,13 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.ARTIFACTS_STORAGE_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.ARTIFACTS_STORAGE_SECRET_ACCESS_KEY }}
+  
   Test-Deployment:
     needs: Build-Test-Package
     runs-on: ubuntu-latest
     environment:
       name: Test
-      url: https://easey-tst.app.cloud.gov/ecmps
+      url: https://ecmps-tst.app.cloud.gov
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -85,12 +90,13 @@ jobs:
       - name: Deployment
         run: |
           devops/scripts/deploy.sh
+  
   Beta-Deployment:
     needs: Build-Test-Package
     runs-on: ubuntu-latest
     environment:
       name: Beta
-      url: https://easey-beta.app.cloud.gov/ecmps
+      url: https://ecmps-beta.app.cloud.gov
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -127,12 +133,13 @@ jobs:
       - name: Deployment
         run: |
           devops/scripts/deploy.sh
+
   Staging-Deployment:
-    needs: Test-Deployment
+    needs: Build-Test-Package
     runs-on: ubuntu-latest
     environment:
       name: Staging
-      url: https://easey-stg.app.cloud.gov/ecmps
+      url: https://ecmps-stg.app.cloud.gov
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
