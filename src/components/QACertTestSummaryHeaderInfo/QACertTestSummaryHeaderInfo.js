@@ -267,7 +267,9 @@ export const QACertTestSummaryHeaderInfo = ({
           {user && <p>checked-out by:</p>}
 
           {user && <div className="grid-row">
-            <Button onClick={() => setIsCheckedOut(prevState => !prevState)}>
+            <Button
+              outline={!isCheckedOut}
+              onClick={() => setIsCheckedOut(prevState => !prevState)}>
               {checkoutBtnIcon} {checkoutBtnText}
             </Button>
             <Button outline={true}>Revert to Official Record</Button>
