@@ -1,13 +1,10 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { connect } from "react-redux";
 import {
   getRataRunData,
   createRataRunData,
   updateRataRunData,
   deleteRataRunData,
 } from "../../../utils/api/qaCertificationsAPI.js";
-import { loadDropdowns } from "../../../store/actions/dropdowns";
-import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
 import { getRataRunDataRecords } from "../../../utils/selectors/QACert/TestSummary.js";
 import { Button } from "@trussworks/react-uswds";
 import {
@@ -28,12 +25,7 @@ import ModalDetails from "../../ModalDetails/ModalDetails";
 import * as dmApi from "../../../utils/api/dataManagementApi";
 // contains RATA data table
 
-const QARataRunDataExpandableRows = ({
-  user,
-  testSumId,
-  rataId,
-  data,
-}) => {
+const QARataRunDataExpandableRows = ({ user, testSumId, rataId, data }) => {
   const locId = data.locationId;
   const rataSumId = data.id;
   const [mdmData, setMdmData] = useState(null);
@@ -112,27 +104,30 @@ const QARataRunDataExpandableRows = ({
     endHour: ["End Hour", "hourDropdown", "dropdown", ""],
     endMinute: ["End Minute", "minuteDropdown", "dropdown", ""],
   };
-  const loadDropdownsData = () =>{
+  const loadDropdownsData = () => {
     let dropdowns = {};
-    dmApi.getAllRunStatusCodes()
-      .then((res)=>{
-        dropdowns[dropdownArray[0][0]] = 
-          res.data.map(d => {
-            return {
-              code: d["runStatusCode"],
-              name: d["runStatusCodeDescription"],
-            };
+    dmApi
+      .getAllRunStatusCodes()
+      .then((res) => {
+        dropdowns[dropdownArray[0][0]] = res.data.map((d) => {
+          return {
+            code: d["runStatusCode"],
+            name: d["runStatusCodeDescription"],
+          };
         });
-        dropdowns[dropdownArray[0][0]].unshift({ code: "", name: "-- Select a value --" });
+        dropdowns[dropdownArray[0][0]].unshift({
+          code: "",
+          name: "-- Select a value --",
+        });
         setMdmData(dropdowns);
       })
       .catch((error) => {
         console.log("error", error);
       });
-  }
+  };
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
-    if (!dropdownArrayIsEmpty && mdmData === null) {     
+    if (!dropdownArrayIsEmpty && mdmData === null) {
       if (!dropdownsLoading) {
         loadDropdownsData();
         setDropdownsLoading(true);
@@ -141,6 +136,7 @@ const QARataRunDataExpandableRows = ({
       setDropdownsLoaded(true);
       setDropdownsLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mdmData]);
 
   const closeModalHandler = () => {

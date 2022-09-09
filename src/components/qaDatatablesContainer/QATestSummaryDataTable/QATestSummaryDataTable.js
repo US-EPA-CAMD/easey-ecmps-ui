@@ -6,14 +6,16 @@ import {
   createQATestData,
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { getTestSummary } from "../../../utils/selectors/QACert/TestSummary.js";
-import QALinearitySummaryExpandableRows from "../QALinearitySummaryExpandableRows/QALinearitySummaryExpandableRows";
 import QARataDataExpandableRows from "../QARataDataExpandableRows/QARataDataExpandableRows.js";
-
+import QALinearitySummaryExpandableRows from "../QALinearitySummaryExpandableRows/QALinearitySummaryExpandableRows.js";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-
+// import {
+//   qaLinearitySummaryProps,
+  // qaRataDataProps,
+// } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
   removeChangeEventListeners,
@@ -33,7 +35,7 @@ import {
 } from "../../../utils/selectors/QACert/LinearitySummary.js";
 import * as dmApi from "../../../utils/api/dataManagementApi";
 import { organizePrefilterMDMData } from "../../../additional-functions/retrieve-dropdown-api";
-
+// import QAExpandableRowsRender from "../QAExpandableRowsRender/QAExpandableRowsRender";
 // contains test summary data table
 
 const QATestSummaryDataTable = ({
@@ -60,7 +62,6 @@ const QATestSummaryDataTable = ({
   const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
 
   const [updateTable, setUpdateTable] = useState(false);
-
 
   const [allTestTypeCodes, setAllTestTypeCodes] = useState(null);
   const selectText = "-- Select a value --";
@@ -406,9 +407,28 @@ const QATestSummaryDataTable = ({
   const getExpandableComponent = (testTypeGroupCode, props) => {
     switch (testTypeGroupCode) {
       case "LINSUM":
-        return <QALinearitySummaryExpandableRows {...props} />;
+
+      // const obj = qaLinearitySummaryProps();
+        // return (
+        //   <QAExpandableRowsRender
+        //     payload={obj["payload"]}
+        //     dropdownArray={obj["dropdownArray"]}
+        //     columns={obj["columnNames"]}
+        //     controlInputs={obj["controlInputs"]}
+        //     controlDatePickerInputs={
+        //       obj["controlDatePickerInputs"]
+        //     }
+        //     dataTableName={obj["dataTableName"]}
+        //     extraControls={obj["extraControls"]}
+        //     {...props}
+        //   />
+        // );
+      return <QALinearitySummaryExpandableRows {...props} />;
+
       case "RELACC":
-        return <QARataDataExpandableRows {...props} />;
+        return (
+           <QARataDataExpandableRows {...props} />
+        );
       default:
         return null;
     }

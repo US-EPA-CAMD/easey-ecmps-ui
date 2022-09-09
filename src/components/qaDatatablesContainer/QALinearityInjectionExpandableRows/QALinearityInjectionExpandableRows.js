@@ -1,19 +1,12 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { connect } from "react-redux";
 import {
   deleteQALinearityInjection,
   getQALinearityInjection,
   editQALinearityInjection,
   createQALinearityInjection,
 } from "../../../utils/api/qaCertificationsAPI.js";
-import { loadDropdowns } from "../../../store/actions/dropdowns";
-import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
 import { getLinearityInjection } from "../../../utils/selectors/QACert/LinearityInjection";
-import {
-  assignFocusEventListeners,
-  cleanupFocusEventListeners,
-  returnFocusToLast,
-} from "../../../additional-functions/manage-focus";
+
 import { Button } from "@trussworks/react-uswds";
 import {
   attachChangeEventListeners,
@@ -65,22 +58,16 @@ const QALinearityInjectionExpandableRows = ({
     return getLinearityInjection(qaLinearityInjection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qaLinearityInjection]);
-  const [qaLinearityTest, setLinearityTest] = useState([]);
   const [dataPulled, setDataPulled] = useState([]);
   const [show, setShow] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
-  const [dataLoaded, setDataLoaded] = useState(false);
-  const [dropdownsLoaded, setDropdownsLoaded] = useState(true);
 
-  const [mainDropdownChange, setMainDropdownChange] = useState("");
+  // const [mainDropdownChange, setMainDropdownChange] = useState("");
 
   const [createNewData, setCreateNewData] = useState(false);
-  const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
+  // const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
 
-  const [complimentaryData, setComplimentaryData] = useState([]);
-
-  const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
@@ -138,13 +125,11 @@ const QALinearityInjectionExpandableRows = ({
     }
   };
   const executeOnClose = () => {
-    setReturnedFocusToLast(false);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
   };
   const finishedLoadingData = (loadedData) => {
     setDataPulled(loadedData);
-    setDataLoaded(true);
     addAriaLabelToDatatable();
   };
   // Executed when "View" action is clicked
@@ -184,9 +169,9 @@ const QALinearityInjectionExpandableRows = ({
     } else {
       mainDropdownResult = [];
     }
-    if (!dropdownArrayIsEmpty) {
-      setPrefilteredMdmData(mdmData[prefilteredDataName]);
-    }
+    // if (!dropdownArrayIsEmpty) {
+    //   setPrefilteredMdmData(mdmData[prefilteredDataName]);
+    // }
 
     const prefilteredTotalName = dropdownArray[0][dropdownArray[0].length - 1];
     setSelectedModalData(
@@ -346,7 +331,7 @@ const QALinearityInjectionExpandableRows = ({
           }
           exitBTN={createNewData ? `Create ${dataTableName}` : `Save and Close`}
           children={
-            dropdownsLoaded ? (
+          
               <div>
                 <ModalDetails
                   modalData={selectedRow}
@@ -361,9 +346,7 @@ const QALinearityInjectionExpandableRows = ({
                 // onEditUpdateHandler={onEditUpdateHandler}
                 />
               </div>
-            ) : (
-              <Preloader />
-            )
+            
           }
         />
       ) : null}
