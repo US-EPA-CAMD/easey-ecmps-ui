@@ -6,7 +6,6 @@ import {
   convertSectionToStoreName,
   QA_CERT_TEST_SUMMARY_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
-import { setActiveTab } from "../../store/actions/activeTab";
 import {
   setSectionSelectionState,
   setLocationSelectionState,
@@ -81,10 +80,6 @@ const mapStateToProps = (state) => {
     tabs: state.openedFacilityTabs[
       convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
     ],
-    activeTab:
-      state.activeTab[
-        convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
-      ][0],
   };
 };
 
@@ -111,14 +106,6 @@ const mapDispatchToProps = (dispatch) => {
         setSectionSelectionState(
           section,
           title,
-          convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
-        )
-      ),
-    setActiveTab: (orisCode, value) =>
-      dispatch(
-        setActiveTab(
-          orisCode,
-          value,
           convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
         )
       ),

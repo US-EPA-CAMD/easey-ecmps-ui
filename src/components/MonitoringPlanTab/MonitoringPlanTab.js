@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 
 import { connect } from "react-redux";
 import MonitoringPlanTabRender from "../MonitoringPlanTabRender/MonitoringPlanTabRender";
-
-import { setActiveTab } from "../../store/actions/activeTab";
 import {
   setSectionSelectionState,
   setLocationSelectionState,
@@ -28,7 +26,6 @@ export const MonitoringPlanTab = ({
   checkout,
   tabs,
 
-  activeTab,
   setSection,
   setLocation,
   setCheckout,
@@ -104,8 +101,6 @@ const mapStateToProps = (state) => {
     tabs: state.openedFacilityTabs[
       convertSectionToStoreName(MONITORING_PLAN_STORE_NAME)
     ],
-    activeTab:
-      state.activeTab[convertSectionToStoreName(MONITORING_PLAN_STORE_NAME)],
   };
 };
 
@@ -124,14 +119,6 @@ const mapDispatchToProps = (dispatch) => {
         setSectionSelectionState(
           section,
           title,
-          convertSectionToStoreName(workspaceSection)
-        )
-      ),
-    setActiveTab: (orisCode, value, workspaceSection) =>
-      dispatch(
-        setActiveTab(
-          orisCode,
-          value,
           convertSectionToStoreName(workspaceSection)
         )
       ),
