@@ -28,8 +28,11 @@ export const QACertTestSummaryTab = ({
   setSection,
   setLocation,
 }) => {
+  const getCurrentTab = () =>{
+    return tabs.find(tab => tab.selectedConfig.id === selectedConfig.id);
+  }
   const [sectionSelect, setSectionSelect] = useState(
-    tabs ? tabs[activeTab].section : ""
+    getCurrentTab().section
   );
   useEffect(() => {
     setSection(sectionSelect, title);
@@ -38,7 +41,7 @@ export const QACertTestSummaryTab = ({
   }, [sectionSelect]);
 
   const [locationSelect, setLocationSelect] = useState(
-    tabs ? tabs[activeTab].location : ""
+    getCurrentTab().location
   );
   const [selectedTestCode, setSelectedTestCode] = useState({
     testTypeGroupCode: null,
@@ -59,15 +62,15 @@ export const QACertTestSummaryTab = ({
           title={title}
           orisCode={orisCode}
           selectedConfig={selectedConfig}
-          sectionSelect={tabs ? tabs[activeTab].section : 0}
-          setSectionSelect={setSectionSelect}
-          locationSelect={tabs ? tabs[activeTab].location : 0}
-          setLocationSelect={setLocationSelect}
+          sectionSelect={sectionSelect}
+          setSectionSelect={(section) => setSectionSelect(section)}
+          locationSelect={locationSelect}
+          setLocationSelect={(location) => setLocationSelect(location)}
           locations={selectedConfig.locations}
           user={user}
           setSelectedTestCode={setSelectedTestCode}
           selectedTestCode={selectedTestCode}
-          configID={tabs ? tabs[activeTab].selectedConfig.id : 0}
+          configID={selectedConfig.id}
         />
       </div>
     </div>
