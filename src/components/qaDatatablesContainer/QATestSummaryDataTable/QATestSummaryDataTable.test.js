@@ -1,21 +1,20 @@
 import React from "react";
-import { render, screen, waitForElement } from "@testing-library/react";
-import QATestSummaryDataTable from "./QATestSummaryDataTable";
-
-import configureStore from "../../../store/configureStore.dev";
 import { Provider } from "react-redux";
-import config from "../../../config";
+import { render, screen, waitForElement } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
 
-const axios = require("axios");
-const MockAdapter = require("axios-mock-adapter")
-const mock = new MockAdapter(axios);
+import QATestSummaryDataTable from "./QATestSummaryDataTable";
+import configureStore from "../../../store/configureStore.dev";
+import config from "../../../config";
+
+const mock = new MockAdapter(axios)
 
 const idRegex = '[\\w\\-]+'
+const locId = 'locId'
 
-const getUrl = new RegExp(`${config.services.qaCertification.uri}/locations/${idRegex}/test-summary`)
-// const hardcodeGetUrl = /https:\/\/api-easey-dev.app.cloud.gov\/qa-certification-mgmt\/locations\/undefined\/test-summary?testTypeCodes=UNITDEF/
-const hardcodeGetUrl = 'https://api-easey-dev.app.cloud.gov/qa-certification-mgmt/locations/locationSelectValue/test-summary?testTypeCodes=UNITDEF'
+const getUrl = `${config.services.qaCertification.uri}/locations/${locId}/test-summary?testTypeCodes=UNITDEF`
 const postUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary`)
 const putUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary/${idRegex}`)
 const deleteUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary/${idRegex}`)
@@ -61,16 +60,10 @@ const testSummary = [
   },
 ];
 
-mock.onGet(hardcodeGetUrl).reply(200, testSummary);
+mock.onGet(getUrl).reply(200, testSummary);
 mock.onPost(postUrl).reply(200, 'created')
 mock.onPut(putUrl).reply(200, 'updated')
 mock.onDelete(deleteUrl).reply(200, 'deleted')
-
-// mock.onGet(testTypeCodesUrl).reply(200, testTypeCodes)
-// mock.onGet(spanScaleCodesUrl).reply(200, spanScaleCodes)
-// mock.onGet(testReasonCodesUrl).reply(200, testReasonCodes)
-// mock.onGet(testResultCodesUrl).reply(200, testResultCodes)
-// mock.onGet(prefilterTestSummariesUrl).reply(200, testSummaries)
 
 mock.onGet(testTypeCodesUrl).reply(200, [])
 mock.onGet(spanScaleCodesUrl).reply(200, [])
@@ -486,7 +479,7 @@ const props = {
     ],
     testTypeGroupCode: 'testTypeGroupCode'
   },
-  locationSelectValue: 'locationSelectValue',
+  locationSelectValue: locId,
 }
 
 const componentRenderer = () => {
@@ -499,7 +492,6 @@ test('testing component renders properly and functionlity for add/edit/remove', 
 
   // Add
   const addBtn = screen.getAllByRole('button', { name: /Add/i })
-  console.log('addBtn.len', addBtn.length);
   userEvent.click(addBtn[0])
   const addSaveBtn = screen.getByRole('button', { name: /Click to Save/i })
   userEvent.click(addSaveBtn)
