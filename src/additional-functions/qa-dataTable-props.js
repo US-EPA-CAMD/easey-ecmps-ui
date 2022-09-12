@@ -57,6 +57,7 @@ export const qaLinearitySummaryProps = (selectedRow) => {
     },
     controlDatePickerInputs: {},
     extraControls: {},
+    radioBtnPayload: ["apsIndicator"],
   };
 };
 
@@ -70,7 +71,7 @@ export const qaLinearityInjectionProps = () => {
       measuredValue: 0,
       referenceValue: 0,
     },
-    dropdownArray: [["gasLevelCode", "gasTypeCode"]],
+    dropdownArray: ["gasLevelCode", "gasTypeCode"],
     columnNames: [
       "Injection Date",
       "Injection Hour",
@@ -92,11 +93,11 @@ export const qaLinearityInjectionProps = () => {
   };
 };
 
-export const qaRataDataProps = (selectedRow) => {
+export const qaRataDataProps = () => {
   return {
     dataTableName: "RATA Data",
     payload: {},
-    dropdownArray: ["gasLevelCode", "gasTypeCode"],
+    dropdownArray: ["rataFrequencyCode"],
     columnNames: [
       "Number of Load Levels",
       "Relative Accuracy",
@@ -115,7 +116,7 @@ export const qaRataDataProps = (selectedRow) => {
       ],
     },
     controlDatePickerInputs: {},
-    extraControls: {},
+    extraControls: false,
   };
 };
 
@@ -140,7 +141,7 @@ export const qaRataRunDataProps = () => {
     controlInputs: {
       runNumber: ["Run Number", "input", "", ""],
       skip: ["", "skip", "", ""],
-      skip1: ["", "skip", "", ""],
+
     },
     controlDatePickerInputs: {
       beginDate: ["Begin Date", "date", "", ""],
@@ -209,5 +210,6 @@ export const qaRataSummaryProps = () => {
     },
     controlDatePickerInputs: {},
     extraControls: {},
+    radioBtnPayload: ["apsIndicator"],
   };
 };

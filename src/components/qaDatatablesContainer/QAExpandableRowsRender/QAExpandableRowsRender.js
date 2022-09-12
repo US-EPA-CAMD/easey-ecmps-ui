@@ -1,39 +1,5 @@
-import React, { useState, useMemo, useEffect } from "react";
-import {
-  getProtocolGas,
-  createProtocolGas,
-  updateProtocolGas,
-  deleteProtocolGas,
-  getRataSummary,
-  createRataSummary,
-  updateRataSummary,
-  deleteRataSummary,
-  getRataRunData,
-  createRataRunData,
-  updateRataRunData,
-  deleteRataRunData,
-  getRataData,
-  createRataData,
-  updateRataData,
-  deleteRataData,
-  deleteQALinearitySummary,
-  getQALinearitySummary,
-  updateQALinearitySummaryTestSecondLevel,
-  createQALinearitySummaryTestSecondLevel,
-  deleteQALinearityInjection,
-  getQALinearityInjection,
-  editQALinearityInjection,
-  createQALinearityInjection,
-} from "../../../utils/api/qaCertificationsAPI.js";
-import { getLinearityInjection } from "../../../utils/selectors/QACert/LinearityInjection";
+import React, { useState, useEffect } from "react";
 
-import {
-  getProtocolGasRecords,
-  getRataDataRecords,
-  mapRataSummaryToRows,
-  getRataRunDataRecords,
-  getLinearitySummaryRecords,
-} from "../../../utils/selectors/QACert/TestSummary.js";
 import { Button } from "@trussworks/react-uswds";
 import {
   attachChangeEventListeners,
@@ -55,11 +21,11 @@ import * as assertSelector from "../../../utils/selectors/QACert/assert";
 import {
   qaProtocalGasProps,
   qaLinearityInjectionProps,
+  qaRataSummaryProps,
+  qaRataRunDataProps,
 } from "../../../additional-functions/qa-dataTable-props";
 const QAExpandableRowsRender = ({
   user,
-  locId,
-  testSumId,
   controlInputs,
   controlDatePickerInputs,
   extraControls,
@@ -68,152 +34,147 @@ const QAExpandableRowsRender = ({
   dropdownArray,
   payload,
   expandable,
+  radioBtnPayload,
+  extraIDs, // [locid, testsumid, linsumid,   ]
   data,
 }) => {
-  const { locationId, id } = data;
-  console.log("data", data);
+  const { locationId, id } = dataTableName !== "Protocol Gas" ? data : ""; // id / testsumid
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
   const [dataPulled, setDataPulled] = useState([]);
-  // useEffect(() => {
-  //   if (dataPulled.length === 0 || updateTable) {
-  //     setLoading(true);
-  //     const name = dataTableName;
-  //     switch (name) {
-  //       case "Protocol Gas":
-  //         getProtocolGas(locId, testSumId)
-  //           .then((res) => {
-  //             finishedLoadingData(res.data);
-  //             setLoading(false);
-  //           })
-  //           .catch((error) => {
-  //             console.log("error", error);
-  //           });
-  //         break;
-  //       case "Linearity Test":
-  //         getQALinearitySummary(locationId, id)
-  //           .then((res) => {
-  //             console.log("testing", res.data);
-  //             finishedLoadingData(res.data);
-  //             setLoading(false);
-  //           })
-  //           .catch((error) => {
-  //             console.log("error", error);
-  //           });
-  //         break;
-  //       case "Linearity Injection":
-  //         getQALinearityInjection(locationId, id)
-  //           .then((res) => {
-  //             finishedLoadingData(res.data);
-  //             setLoading(false);
-  //             console.log("testing", res.data);
-  //           })
-  //           .catch((error) => {
-  //             console.log("error", error);
-  //           });
-  //         break;
-  //       default:
-  //         break;
-  //     }
 
-  //     setUpdateTable(false);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [locId, testSumId, updateTable]);
   const [displayedRecords, setDisplayedRecords] = useState([]);
   useEffect(() => {
-    if (updateTable || dataPulled.length === 0) {
-      console.log("test???");
-      setLoading(true)
+    if (updateTable || (dataPulled && dataPulled.length === 0)) {
+      setLoading(true);
       assertSelector
-        .getDataTableApis(dataTableName, locationId, id)
+        .getDataTableApis(dataTableName, locationId, id, extraIDs)
         .then((res) => {
-          finishedLoadingData(res.data);
           console.log("res", res.data);
-          
-          
+          finishedLoadingData(res.data);
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataTableName, locId, testSumId,updateTable]);
+  }, [dataTableName, updateTable]);
 
   useEffect(() => {
-    if (updateTable || dataPulled.length > 0) {
+    if (updateTable || (dataPulled && dataPulled.length > 0)) {
+      setLoading(true);
       setDisplayedRecords(
         assertSelector.getDataTableRecords(dataPulled, dataTableName)
       );
-      setLoading(false);
     }
+    setLoading(false);
+
+    setUpdateTable(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataPulled,updateTable]);
+  }, [dataPulled, updateTable]);
 
   const [show, setShow] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
-  const [dataLoaded, setDataLoaded] = useState(false);
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
-  const [mainDropdownChange, setMainDropdownChange] = useState("");
+  // const [mainDropdownChange, setMainDropdownChange] = useState("");
 
   const [createNewData, setCreateNewData] = useState(false);
-  const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
+  // const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
 
-  const [complimentaryData, setComplimentaryData] = useState([]);
-
-  const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
+  // const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const selectText = "-- Select a value --";
 
   const dropdownArrayIsEmpty = dropdownArray.length === 0;
   const nextExpandableRow = (name) => {
+    console.log("expanded", name);
     switch (name) {
-      case "Protocal Gas":
+      case "Protocol Gas":
+        const objGas = qaProtocalGasProps(data);
         return (
           <QAExpandableRowsRender
-            payload={qaProtocalGasProps()["payload"]}
-            dropdownArray={qaProtocalGasProps()["dropdownArray"]}
-            columns={qaProtocalGasProps()["columnNames"]}
-            controlInputs={qaProtocalGasProps()["controlInputs"]}
-            controlDatePickerInputs={
-              qaProtocalGasProps()["controlDatePickerInputs"]
-            }
-            dataTableName={qaProtocalGasProps()["dataTableName"]}
-            extraControls={qaProtocalGasProps()["extraControls"]}
+            payload={objGas["payload"]}
+            dropdownArray={objGas["dropdownArray"]}
+            columns={objGas["columnNames"]}
+            controlInputs={objGas["controlInputs"]}
+            controlDatePickerInputs={objGas["controlDatePickerInputs"]}
+            dataTableName={objGas["dataTableName"]}
+            extraControls={objGas["extraControls"]}
+            data={data}
+            user={user}
           />
         );
       // test  > injections
       case "Linearity Test":
+        const idArr = [locationId, id];
+        const obj = qaLinearityInjectionProps();
         return (
           <QAExpandableRowsRender
-            payload={qaLinearityInjectionProps()["payload"]}
-            dropdownArray={qaLinearityInjectionProps()["dropdownArray"]}
-            columns={qaLinearityInjectionProps()["columnNames"]}
-            controlInputs={qaLinearityInjectionProps()["controlInputs"]}
-            controlDatePickerInputs={
-              qaLinearityInjectionProps()["controlDatePickerInputs"]
-            }
-            dataTableName={qaLinearityInjectionProps()["dataTableName"]}
-            extraControls={qaLinearityInjectionProps()["extraControls"]}
+            payload={obj["payload"]}
+            dropdownArray={obj["dropdownArray"]}
+            columns={obj["columnNames"]}
+            controlInputs={obj["controlInputs"]}
+            controlDatePickerInputs={obj["controlDatePickerInputs"]}
+            dataTableName={obj["dataTableName"]}
+            extraControls={obj["extraControls"]}
+            extraIDs={idArr}
+            user={user}
           />
         );
-        break;
+      // rata data > rata summary > rata run
+      case "RATA Data":
+        const rataIdArray = [locationId, id];
+        const rataSumObj = qaRataSummaryProps();
+        return (
+          <QAExpandableRowsRender
+            payload={rataSumObj["payload"]}
+            dropdownArray={rataSumObj["dropdownArray"]}
+            columns={rataSumObj["columnNames"]}
+            controlInputs={rataSumObj["controlInputs"]}
+            controlDatePickerInputs={rataSumObj["controlDatePickerInputs"]}
+            dataTableName={rataSumObj["dataTableName"]}
+            extraControls={rataSumObj["extraControls"]}
+            extraIDs={rataIdArray}
+            expandable
+            user={user}
+          />
+        );
+
+      case "RATA Summary":
+        const rataRunIdArray = [...extraIDs, locationId, id];
+        const rataRunObj = qaRataRunDataProps();
+        return (
+          <QAExpandableRowsRender
+            payload={rataRunObj["payload"]}
+            dropdownArray={rataRunObj["dropdownArray"]}
+            columns={rataRunObj["columnNames"]}
+            controlInputs={rataRunObj["controlInputs"]}
+            controlDatePickerInputs={rataRunObj["controlDatePickerInputs"]}
+            dataTableName={rataRunObj["dataTableName"]}
+            extraControls={rataRunObj["extraControls"]}
+            extraIDs={rataRunIdArray}
+            expandable
+            user={user}
+          />
+        );
+
       default:
         break;
     }
   };
-  const loadDropdownsData = (dataTableName) => {
+  const loadDropdownsData = (name) => {
     let dropdowns = {};
     const allPromises = [];
 
-    switch (dataTableName) {
-      case "Protocal Gas":
+    switch (name) {
+      case "Protocol Gas":
       case "Linearity Test":
+      case "Linearity Injection":
         allPromises.push(dmApi.getAllGasLevelCodes());
         allPromises.push(dmApi.getAllGasTypeCodes());
         Promise.all(allPromises).then((values) => {
           values.forEach((val, i) => {
-            if (i == 0) {
+            if (i === 0) {
               dropdowns[dropdownArray[i]] = val.data.map((d) => {
                 return {
                   code: d["gasLevelCode"],
@@ -241,6 +202,102 @@ const QAExpandableRowsRender = ({
           setMdmData(dropdowns);
         });
         break;
+      case "RATA Data":
+        allPromises.push(dmApi.getAllRataFreqCodes());
+        Promise.all(allPromises).then((values) => {
+          values.forEach((val, i) => {
+            if (i === 0) {
+              dropdowns[dropdownArray[i]] = val.data.map((d) => {
+                return {
+                  code: d["rataFrequencyCode"],
+                  name: d["rataFrequencyCodeDescription"],
+                };
+              });
+              dropdowns[dropdownArray[i]].unshift({
+                code: "",
+                name: "-- Select a value --",
+              });
+            }
+          });
+
+          dropdowns.numberOfLoadLevels = [
+            { code: "", name: selectText },
+            { code: 1, name: 1 },
+            { code: 2, name: 2 },
+            { code: 3, name: 3 },
+          ];
+          console.log(dropdowns, "dropdowns");
+          setMdmData(dropdowns);
+        });
+        break;
+
+      case "RATA Run Data":
+        allPromises.push(dmApi.getAllRunStatusCodes());
+        Promise.all(allPromises).then((response) => {
+          dropdownArray.forEach((val, i) => {
+            if (i === 0) {
+              dropdowns[dropdownArray[i]] = response[0].data.map((d) => {
+                return {
+                  code: d["runStatusCode"],
+                  name: d["runStatusCodeDescription"],
+                };
+              });
+              dropdowns[dropdownArray[i]].unshift({
+                code: "",
+                name: "-- Select a value --",
+              });
+            }
+          });
+          console.log("dropdowns", dropdowns);
+          setMdmData(dropdowns);
+        });
+        break;
+
+      case "RATA Summary":
+        allPromises.push(dmApi.getAllOperatingLevelCodes());
+        allPromises.push(dmApi.getAllReferenceMethodCodes());
+        allPromises.push(dmApi.getAllApsCodes());
+        Promise.all(allPromises).then((response) => {
+          dropdownArray.forEach((val, i) => {
+            if (i === 0) {
+              dropdowns[dropdownArray[i]] = response[0].data.map((d) => {
+                return {
+                  code: d["operatingLevelCode"],
+                  name: d["operatingLevelCodeDescription"],
+                };
+              });
+              dropdowns[dropdownArray[i]].unshift({
+                code: "",
+                name: "-- Select a value --",
+              });
+            } else if (i === 1 || i === 3) {
+              dropdowns[dropdownArray[i]] = response[1].data.map((d) => {
+                return {
+                  code: d["referenceMethodCode"],
+                  name: d["referenceMethodCodeDescription"],
+                };
+              });
+              dropdowns[dropdownArray[i]].unshift({
+                code: "",
+                name: "-- Select a value --",
+              });
+            } else {
+              dropdowns[dropdownArray[i]] = response[2].data.map((d) => {
+                return {
+                  code: d["apsCode"],
+                  name: d["apsCodeDescription"],
+                };
+              });
+              dropdowns[dropdownArray[i]].unshift({
+                code: "",
+                name: "-- Select a value --",
+              });
+            }
+          });
+          console.log("dropdowns", dropdowns);
+          setMdmData(dropdowns);
+        });
+        break;
       default:
         break;
     }
@@ -255,7 +312,16 @@ const QAExpandableRowsRender = ({
     } else {
       setDropdownsLoaded(true);
       setDropdownsLoading(false);
+      if (dataTableName === "Rata Data") {
+        mdmData.numberOfLoadLevels = [
+          { code: "", name: selectText },
+          { code: 1, name: 1 },
+          { code: 2, name: 2 },
+          { code: 3, name: 3 },
+        ];
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mdmData]);
 
   const closeModalHandler = () => {
@@ -268,13 +334,12 @@ const QAExpandableRowsRender = ({
     }
   };
   const executeOnClose = () => {
-    setReturnedFocusToLast(false);
+    // setReturnedFocusToLast(false);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
   };
   const finishedLoadingData = (loadedData) => {
     setDataPulled(loadedData);
-    setDataLoaded(true);
     addAriaLabelToDatatable();
   };
   // Executed when "View" action is clicked
@@ -282,13 +347,20 @@ const QAExpandableRowsRender = ({
     let selectedData = null;
     setCreateNewData(create);
     if (create) {
-      controlInputs.gasLevelCode = [
-        "Summary Type/Gas Level Code",
-        "dropdown",
-        "",
-        "",
-      ];
+      if (dataTableName === "Linearity Test") {
+        controlInputs.gasLevelCode = ["Gas Level Code", "dropdown", "", ""];
+      }
+      if (dataTableName === "Rata Data") {
+        console.log("control inputs", controlInputs);
+        controlInputs.numberOfLoadLevels = [
+          "Number of Load Levels",
+          "dropdown",
+          "",
+          "",
+        ];
+      }
     }
+
     if (dataPulled.length > 0 && !create) {
       selectedData = dataPulled.filter(
         (element) => element.id === row[`id`]
@@ -323,10 +395,6 @@ const QAExpandableRowsRender = ({
       mainDropdownResult = [];
     }
 
-    if (!dropdownArrayIsEmpty) {
-      setPrefilteredMdmData(mdmData[prefilteredDataName]);
-    }
-
     const prefilteredTotalName = dropdownArray[dropdownArray.length - 1];
     setSelectedModalData(
       modalViewData(
@@ -350,49 +418,48 @@ const QAExpandableRowsRender = ({
     });
   };
 
-  const saveData = () => {
-    const userInput = extractUserInput(payload, ".modalUserInput");
+  const saveData = async () => {
+    const userInput = extractUserInput(
+      payload,
+      ".modalUserInput",
+      radioBtnPayload
+    );
 
-    // updateProtocolGas(locId, testSumId, selectedRow.id, userInput)
-    //   .then((res) => {
-    //     setUpdateTable(true);
-    //     executeOnClose();
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    assertSelector
+      .saveDataSwitch(userInput, dataTableName, locationId, id, extraIDs)
+      .then((res) => {
+        console.log(res.data);
+        setUpdateTable(true);
+        executeOnClose();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const createData = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-    // createProtocolGas(locId, testSumId, userInput)
-    //   .then((res) => {
-    //     console.log("res", res);
-    //     if (Object.prototype.toString.call(res) === "[object Array]") {
-    //       alert(res[0]);
-    //     } else {
-    //       setUpdateTable(true);
-    //       executeOnClose();
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log("error", error);
-    //   });
+    assertSelector
+      .createDataSwitch(userInput, dataTableName, locationId, id, extraIDs)
+      .then((res) => {
+        console.log(res.data, "create");
+        setUpdateTable(true);
+        executeOnClose();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const onRemoveHandler = async (row) => {
-    const { id: idToRemove, testSumId } = row;
-    // try {
-    //   const resp = await deleteProtocolGas(locId, testSumId, idToRemove);
-    //   if (resp.status === 200) {
-    //     const dataPostRemove = data.filter(
-    //       (rowData) => rowData.id !== idToRemove
-    //     );
-    //     setDataPulled(dataPostRemove);
-    //   }
-    // } catch (error) {
-    //   console.log("error deleting protocol gas", error);
-    // }
+    assertSelector
+      .removeDataSwitch(row, dataTableName, locationId, id, extraIDs)
+      .then((res) => {
+        console.log("res", res.data);
+        finishedLoadingData(res.data);
+        setUpdateTable(true);
+        executeOnClose();
+      });
   };
 
   return (
@@ -405,6 +472,8 @@ const QAExpandableRowsRender = ({
           data={displayedRecords}
           openHandler={openModal}
           onRemoveHandler={onRemoveHandler}
+          user={user}
+          actionsBtn={"View"}
           actionColumnName={
             user ? (
               <>
@@ -418,38 +487,39 @@ const QAExpandableRowsRender = ({
                 </Button>
               </>
             ) : (
-              { dataTableName }
+              dataTableName
             )
           }
-          actionsBtn={"View"}
-          user={user}
           evaluate={false}
-          // expandableRowComp={
-          //   expandable ? nextExpandableRow(dataTableName) : false
-          // }
+          expandableRowComp={
+            expandable ? nextExpandableRow(dataTableName) : false
+          }
+          // shows empty table with add if user is logged in
           noDataComp={
             user ? (
-              <QADataTableRender
-                columnNames={columns}
-                columnWidth={15}
-                data={[]}
-                actionColumnName={
-                  <>
-                    <span className="padding-right-2">{dataTableName}</span>
-                    <Button
-                      epa-testid="btnOpen"
-                      className="text-white"
-                      onClick={() => openModal(false, false, true)}
-                    >
-                      Add
-                    </Button>
-                  </>
-                }
-                actionsBtn={"View"}
-                user={user}
-              />
+              <div>
+                <QADataTableRender
+                  columnNames={columns}
+                  columnWidth={15}
+                  data={[]}
+                  actionColumnName={
+                    <>
+                      <span className="padding-right-2">{dataTableName}</span>
+                      <Button
+                        epa-testid="btnOpen"
+                        className="text-white"
+                        onClick={() => openModal(false, false, true)}
+                      >
+                        Add
+                      </Button>
+                    </>
+                  }
+                  actionsBtn={"View"}
+                  user={user}
+                />
+              </div>
             ) : (
-              `There're no ${dataTableName}s records available.`
+              `There're no ${dataTableName} records available.`
             )
           }
         />
@@ -457,6 +527,9 @@ const QAExpandableRowsRender = ({
         <Preloader />
       )}
 
+      {dataTableName === "Linearity Test"
+        ? nextExpandableRow("Protocol Gas")
+        : ""}
       {show ? (
         <Modal
           show={show}

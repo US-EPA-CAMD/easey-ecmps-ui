@@ -2,111 +2,198 @@ import * as qaApi from "../../api/qaCertificationsAPI";
 
 // Selectors that normalize api data to fit the columns in UI datatable
 import * as selector from "./TestSummary";
-
+import * as injectionSelector from "./LinearityInjection";
 // Table Names
 const proGas = "Protocol Gas";
 const lineTest = "Linearity Test";
 const lineInjection = "Linearity Injection";
+const rataData = "RATA Data";
+const rataRunData = "RATA Run Data";
+const rataSummary = "RATA Summary";
 
 // Getting records from API
-export const getDataTableApis = async (name, location, id) => {
+export const getDataTableApis = async (name, location, id, extraIdsArr) => {
+  console.log("assert", name, location, id, extraIdsArr);
   switch (name) {
     case lineTest:
       return qaApi.getQALinearitySummary(location, id);
 
     case proGas:
+      return qaApi.getProtocolGas(location, id);
     case lineInjection:
+      return qaApi.getQALinearityInjection(extraIdsArr[0], extraIdsArr[1], id);
+    case rataData:
+      return qaApi.getRataData(location, id);
+
+    case rataRunData:
+      console.log('name, location, id, extraIdsArr',name, location, id, extraIdsArr)
+      return qaApi.getRataRunData(extraIdsArr[0], extraIdsArr[1],extraIdsArr[2], id);
+
+    case rataSummary:
+      return qaApi.getRataSummary(extraIdsArr[0], extraIdsArr[1], id);
     default:
       break;
   }
 };
-
 // Selectors
 export const getDataTableRecords = (dataIn, name) => {
   switch (name) {
     case lineTest:
-      console.log("datain", dataIn);
       return selector.getLinearitySummaryRecords(dataIn);
     case proGas:
+      return selector.getProtocolGasRecords(dataIn);
     case lineInjection:
+      return injectionSelector.getLinearityInjection(dataIn);
+    case rataData:
+      return selector.getRataDataRecords(dataIn);
+
+    case rataRunData:
+      return selector.getRataRunDataRecords(dataIn);
+
+    case rataSummary:
+      return selector.mapRataSummaryToRows(dataIn);
     default:
       break;
   }
 };
 
-// // Save (PUT) endpoints for API
-// export const saveDataSwitch = (
-//   userInput,
-//   dataTableName,
-//   locationSelectValue,
-//   urlParameters = null
-// ) => {
-//   switch (dataTableName) {
-//     case load:
-//       return mpApi.saveMonitoringLoads(userInput, locationSelectValue);
-//     case rectDuctWaf:
-//       return mpApi.saveMonitoringDuct(userInput);
-//     case span:
-//       return mpApi.saveMonitoringSpans(userInput);
-//     case form:
-//       return mpApi.saveMonitoringFormulas(userInput, locationSelectValue);
-//     case def:
-//       return mpApi.saveMonitoringDefaults(userInput, locationSelectValue);
-//     case unitFuel:
-//       return mpApi.saveMonitoringPlansFuelData(userInput);
-//     case unitCon:
-//       return mpApi.saveUnitControl(
-//         userInput,
-//         urlParameters ? urlParameters : null
-//       );
-//     case unitCap:
-//       return mpApi.saveUnitCapacity(
-//         userInput,
-//         urlParameters ? urlParameters : null
-//       );
+export const removeDataSwitch = async (
+  row,
+  name,
+  locationId,
+  id,
+  extraIdsArr
+) => {
+  switch (name) {
+    case lineTest:
+      return qaApi
+        .deleteQALinearitySummary(locationId, id, row.id)
+        .then((resp) => {
+          console.log("data removed", resp.data);
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    case proGas:
+      return qaApi.deleteProtocolGas(locationId, id, row.id);
+    case lineInjection:
+      return qaApi.deleteQALinearityInjection(
+        extraIdsArr[0],
+        extraIdsArr[1],
+        id,
+        row.id
+      );
 
-//     case locationAttribute:
-//       return mpApi.saveLocationAttribute(userInput, locationSelectValue);
-//     default:
-//       break;
-//   }
-//   return [];
-// };
+    case rataData:
+      return qaApi.deleteRataData(locationId, id, row.id);
 
-// // Create (POST) endpoints for API
-// export const createDataSwitch = (
-//   userInput,
-//   dataTableName,
-//   locationSelectValue,
-//   urlParameters = null
-// ) => {
-//   switch (dataTableName) {
-//     case load:
-//       return mpApi.createMonitoringLoads(userInput, locationSelectValue);
-//     case rectDuctWaf:
-//       return mpApi.createMonitoringDuct(userInput);
-//     case span:
-//       return mpApi.createMonitoringSpans(userInput);
-//     case form:
-//       return mpApi.createMonitoringFormulas(userInput, locationSelectValue);
-//     case def:
-//       return mpApi.createMonitoringDefaults(userInput, locationSelectValue);
-//     case unitFuel:
-//       return mpApi.createFuelData(userInput, locationSelectValue);
-//     case unitCon:
-//       return mpApi.createUnitControl(
-//         userInput,
-//         urlParameters ? urlParameters : null
-//       );
-//     case unitCap:
-//       return mpApi.createUnitCapacity(
-//         userInput,
-//         urlParameters ? urlParameters : null
-//       );
-//     case locationAttribute:
-//       return mpApi.createLocationAttribute(userInput, locationSelectValue);
-//     default:
-//       break;
-//   }
-//   return [];
-// };
+    case rataRunData:
+      return qaApi.deleteRataRunData(locationId, id);
+
+    case rataSummary:
+      return qaApi.deleteRataSummary(
+        locationId,
+        id,
+        extraIdsArr[0],
+        extraIdsArr[1],
+        id,
+        row.id
+      );
+    default:
+      break;
+  }
+  return [];
+};
+// Save (PUT) endpoints for API
+export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
+  switch (name) {
+    case lineTest:
+      console.log("thisone", name);
+      return qaApi.updateQALinearitySummaryTestSecondLevel(
+        location,
+        id,
+        userInput.id,
+        userInput
+      );
+
+    case proGas:
+      return qaApi.updateProtocolGas(location, id, userInput.id, userInput);
+    case lineInjection:
+      return qaApi.getQALinearityInjection(
+        extraIdsArr[0],
+        extraIdsArr[1],
+        id,
+        userInput.id,
+        userInput
+      );
+
+    case rataData:
+      return qaApi.updateRataData(userInput.id, location, id, userInput);
+
+    case rataRunData:
+      return qaApi.updateRataRunData(location, id);
+
+    case rataSummary:
+      return qaApi.updateRataSummary(
+        extraIdsArr[0],
+        extraIdsArr[1],
+        id,
+        userInput.id,
+        userInput
+      );
+    default:
+      break;
+  }
+  return [];
+};
+
+//create endpoints for API
+export const createDataSwitch = (
+  userInput,
+  name,
+  location,
+  id,
+  extraIdsArr
+) => {
+  switch (name) {
+    case lineTest:
+      return qaApi.createQALinearitySummaryTestSecondLevel(
+        location,
+        id,
+        userInput
+      );
+
+    case proGas:
+      return qaApi.createProtocolGas(location, id, userInput);
+    case lineInjection:
+      return qaApi.createQALinearityInjection(
+        extraIdsArr[0],
+        extraIdsArr[1],
+        id,
+        userInput
+      );
+
+    case rataData:
+      return qaApi.createRataData(location, id, userInput);
+
+    case rataRunData:
+      return qaApi.createRataRunData(
+        extraIdsArr[0],
+        extraIdsArr[1],
+        id,
+        userInput
+      );
+
+    case rataSummary:
+      return qaApi.createRataSummary(
+        extraIdsArr[0],
+        extraIdsArr[1],
+        id,
+        userInput
+      );
+
+    default:
+      break;
+  }
+  return [];
+};

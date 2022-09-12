@@ -265,6 +265,7 @@ const QALinearitySummaryExpandableRows = ({
       userInput
     )
       .then((res) => {
+        console.log('res.data',res.data)
         setUpdateTable(true);
         executeOnClose();
       })

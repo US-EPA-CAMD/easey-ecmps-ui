@@ -6,16 +6,16 @@ import {
   createQATestData,
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { getTestSummary } from "../../../utils/selectors/QACert/TestSummary.js";
-import QARataDataExpandableRows from "../QARataDataExpandableRows/QARataDataExpandableRows.js";
-import QALinearitySummaryExpandableRows from "../QALinearitySummaryExpandableRows/QALinearitySummaryExpandableRows.js";
+// import QARataDataExpandableRows from "../QARataDataExpandableRows/QARataDataExpandableRows.js";
+// import QALinearitySummaryExpandableRows from "../QALinearitySummaryExpandableRows/QALinearitySummaryExpandableRows.js";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-// import {
-//   qaLinearitySummaryProps,
-  // qaRataDataProps,
-// } from "../../../additional-functions/qa-dataTable-props";
+import {
+  qaLinearitySummaryProps,
+  qaRataDataProps,
+} from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
   removeChangeEventListeners,
@@ -35,7 +35,7 @@ import {
 } from "../../../utils/selectors/QACert/LinearitySummary.js";
 import * as dmApi from "../../../utils/api/dataManagementApi";
 import { organizePrefilterMDMData } from "../../../additional-functions/retrieve-dropdown-api";
-// import QAExpandableRowsRender from "../QAExpandableRowsRender/QAExpandableRowsRender";
+import QAExpandableRowsRender from "../QAExpandableRowsRender/QAExpandableRowsRender";
 // contains test summary data table
 
 const QATestSummaryDataTable = ({
@@ -408,27 +408,51 @@ const QATestSummaryDataTable = ({
     switch (testTypeGroupCode) {
       case "LINSUM":
 
-      // const obj = qaLinearitySummaryProps();
-        // return (
-        //   <QAExpandableRowsRender
-        //     payload={obj["payload"]}
-        //     dropdownArray={obj["dropdownArray"]}
-        //     columns={obj["columnNames"]}
-        //     controlInputs={obj["controlInputs"]}
-        //     controlDatePickerInputs={
-        //       obj["controlDatePickerInputs"]
-        //     }
-        //     dataTableName={obj["dataTableName"]}
-        //     extraControls={obj["extraControls"]}
-        //     {...props}
-        //   />
-        // );
-      return <QALinearitySummaryExpandableRows {...props} />;
+      const obj = qaLinearitySummaryProps();
+        return (
+          <QAExpandableRowsRender
+            payload={obj["payload"]}
+            dropdownArray={obj["dropdownArray"]}
+            columns={obj["columnNames"]}
+            controlInputs={obj["controlInputs"]}
+            controlDatePickerInputs={
+              obj["controlDatePickerInputs"]
+            }
+            dataTableName={obj["dataTableName"]}
+            extraControls={obj["extraControls"]}
+            radioBtnPayload={obj["radioBtnPayload"]}
+            expandable
+            {...props}
+            extraIDs={null}
+          />
+        );
+      // return <QALinearitySummaryExpandableRows {...props} />;
 
       case "RELACC":
+
+
+        const rataObj = qaRataDataProps();
         return (
-           <QARataDataExpandableRows {...props} />
+          <QAExpandableRowsRender
+            payload={rataObj["payload"]}
+            dropdownArray={rataObj["dropdownArray"]}
+            columns={rataObj["columnNames"]}
+            controlInputs={rataObj["controlInputs"]}
+            controlDatePickerInputs={
+              rataObj["controlDatePickerInputs"]
+            }
+            dataTableName={rataObj["dataTableName"]}
+            extraControls={rataObj["extraControls"]}
+            radioBtnPayload={rataObj["radioBtnPayload"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            
+          />
         );
+        // return (
+        //    <QARataDataExpandableRows {...props} />
+        // );
       default:
         return null;
     }
