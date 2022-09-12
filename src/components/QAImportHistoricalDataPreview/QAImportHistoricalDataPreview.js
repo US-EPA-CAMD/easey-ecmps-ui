@@ -64,6 +64,7 @@ export const QAImportHistoricalDataPreview = ({
     if (testSummaryData === null) {
       fetchDataPreviewRecords();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reportingPeriodObj]);
 
   const getInitSelection = (selectedObj) => {
@@ -78,7 +79,6 @@ export const QAImportHistoricalDataPreview = ({
   };
 
   const handleHistoricalDataSelection = (state) => {
-
     let fName = "";
     const length = state.selectedRows.length;
 

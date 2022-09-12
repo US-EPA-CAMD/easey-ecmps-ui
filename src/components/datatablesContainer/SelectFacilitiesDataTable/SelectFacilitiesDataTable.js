@@ -9,7 +9,6 @@ import DataTableConfigurations from "../DataTableConfigurations/DataTableConfigu
 import * as facilitiesApi from "../../../utils/api/facilityApi";
 import { getCheckedOutLocations } from "../../../utils/api/monitoringPlansApi";
 import {
-  EXPORT_STORE_NAME,
   MONITORING_PLAN_STORE_NAME,
   QA_CERT_TEST_SUMMARY_STORE_NAME,
 } from "../../../additional-functions/workspace-section-and-store-names";

@@ -510,7 +510,7 @@ describe("renders datatable with all values ", () => {
     );
 
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(12);
+    expect(rows.length).toEqual(6);
   });
 
   test("user is not logged in and at a configuration data table", async () => {
@@ -548,7 +548,7 @@ describe("renders datatable with all values ", () => {
     // btn.focus();
 
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(12);
+    expect(rows.length).toEqual(6);
   });
 
   test("user is logged in and at a configuration data table with a checked out fac ", async () => {
@@ -594,7 +594,7 @@ describe("renders datatable with all values ", () => {
     // btn.focus();
 
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(12);
+    expect(rows.length).toEqual(6);
   });
 
   test("user is logged in and at a sections data table and checked out ('view/Edit')", async () => {
@@ -666,7 +666,7 @@ describe("renders datatable with all values ", () => {
     // const addBtn = container.querySelector("#addBtn");
     // fireEvent.click(addBtn);
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(24);
+    expect(rows.length).toEqual(18);
   });
 
   test("mapDispatchToProps calls the appropriate action", async () => {

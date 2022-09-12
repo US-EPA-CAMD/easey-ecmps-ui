@@ -6,14 +6,16 @@ import {
   createQATestData,
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { getTestSummary } from "../../../utils/selectors/QACert/TestSummary.js";
-import QALinearitySummaryExpandableRows from "../QALinearitySummaryExpandableRows/QALinearitySummaryExpandableRows";
-import QARataDataExpandableRows from "../QARataDataExpandableRows/QARataDataExpandableRows.js";
-
+// import QARataDataExpandableRows from "../QARataDataExpandableRows/QARataDataExpandableRows.js";
+// import QALinearitySummaryExpandableRows from "../QALinearitySummaryExpandableRows/QALinearitySummaryExpandableRows.js";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-
+import {
+  qaLinearitySummaryProps,
+  qaRataDataProps,
+} from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
   removeChangeEventListeners,
@@ -34,6 +36,8 @@ import {
 import * as dmApi from "../../../utils/api/dataManagementApi";
 import { organizePrefilterMDMData } from "../../../additional-functions/retrieve-dropdown-api";
 
+import QAExpandableRowsRender from "../QAExpandableRowsRender/QAExpandableRowsRender";
+
 // contains test summary data table
 
 const QATestSummaryDataTable = ({
@@ -52,7 +56,6 @@ const QATestSummaryDataTable = ({
   const [show, setShow] = useState(showModal);
   const [selectedRow, setSelectedRow] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
-  const [dataLoaded, setDataLoaded] = useState(false);
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
   const [mainDropdownChange, setMainDropdownChange] = useState("");
@@ -61,8 +64,6 @@ const QATestSummaryDataTable = ({
   const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
 
   const [updateTable, setUpdateTable] = useState(false);
-
-  const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
 
   const [allTestTypeCodes, setAllTestTypeCodes] = useState(null);
   const selectText = "-- Select a value --";
@@ -98,9 +99,9 @@ const QATestSummaryDataTable = ({
             }
             setLoading(false);
           })
-          .catch(error => {
-            console.log('error fetching test summary', error);
-          })
+          .catch((error) => {
+            console.log("error fetching test summary", error);
+          });
         setUpdateTable(false);
       }
     }
@@ -110,9 +111,9 @@ const QATestSummaryDataTable = ({
   const getOptions = (obj, code, name) => {
     return {
       code: obj[code],
-      name: obj[name]
-    }
-  }
+      name: obj[name],
+    };
+  };
 
   const loadDropdownsData = () => {
     //if(mdmData === null){
@@ -127,18 +128,33 @@ const QATestSummaryDataTable = ({
     Promise.all(allPromises).then((response) => {
       dropdownArray[0].forEach((val, i) => {
         if (i === 0) {
-          const options = response[0].data.map(d => getOptions(d, "testTypeCode", "testTypeCodeDescription"));
+          const options = response[0].data.map((d) =>
+            getOptions(d, "testTypeCode", "testTypeCodeDescription")
+          );
           setAllTestTypeCodes(options);
-          dropdowns[dropdownArray[0][i]] = options.filter((option) => selectedTestCode.testTypeCodes.includes(option.code));
+          dropdowns[dropdownArray[0][i]] = options.filter((option) =>
+            selectedTestCode.testTypeCodes.includes(option.code)
+          );
         } else if (i === 1) {
-          dropdowns[dropdownArray[0][i]] =
-            response[1].data.map(d => getOptions(d, "spanScaleCode", "spanScaleCodeDescription"));
+          dropdowns[dropdownArray[0][i]] = response[1].data.map((d) =>
+            getOptions(d, "spanScaleCode", "spanScaleCodeDescription")
+          );
         } else if (i === 2) {
-          dropdowns[dropdownArray[0][i]] =
-            response[2].data.map(d => getOptions(d, "testReasonCode", "testReasonCodeDescription"));
+          dropdowns[dropdownArray[0][i]] = response[2].data.map((d) =>
+            getOptions(d, "testReasonCode", "testReasonCodeDescription")
+          );
         } else if (i === 3) {
-          dropdowns[dropdownArray[0][i]] =
-            response[3].data.map(d => getOptions(d, "testResultCode", "testResultCodeDescription"));
+          dropdowns[dropdownArray[0][i]] = response[3].data.map((d) =>
+            getOptions(d, "testResultCode", "testResultCodeDescription")
+          );
+
+          const options = response[0].data.map((d) =>
+            getOptions(d, "testTypeCode", "testTypeCodeDescription")
+          );
+          setAllTestTypeCodes(options);
+          dropdowns[dropdownArray[0][i]] = options.filter((option) =>
+            selectedTestCode.testTypeCodes.includes(option.code)
+          );
         } else if (i === 4) {
           let noDupesTestCodes = response[4].data.map((code) => {
             return code["testTypeCode"];
@@ -150,7 +166,10 @@ const QATestSummaryDataTable = ({
             response[4].data
           );
         }
-        dropdowns[dropdownArray[0][i]].unshift({ code: "", name: "-- Select a value --" });
+        dropdowns[dropdownArray[0][i]].unshift({
+          code: "",
+          name: "-- Select a value --",
+        });
       });
       setMdmData(dropdowns);
       setDropdownsLoaded(true);
@@ -166,7 +185,11 @@ const QATestSummaryDataTable = ({
       }
     } else {
       const mdmDataClone = { ...mdmData };
-      mdmDataClone["testTypeCode"] = allTestTypeCodes.filter((option) => testTypeCodes.includes(option.code));
+
+      mdmDataClone["testTypeCode"] = allTestTypeCodes.filter((option) =>
+        testTypeCodes.includes(option.code)
+      );
+
       setMdmData(mdmDataClone);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -239,7 +262,7 @@ const QATestSummaryDataTable = ({
 
   const finishedLoadingData = (loadedData) => {
     setDataPulled(loadedData);
-    setDataLoaded(true);
+    // setDataLoaded(true);
     addAriaLabelToDatatable();
   };
   // Executed when "View" action is clicked
@@ -291,13 +314,15 @@ const QATestSummaryDataTable = ({
       controlDatePickerInputs,
       create,
       mdmData,
-      prefilteredDataName ? mdmData[prefilteredDataName] : "defaultPrefilteredDataName",
+      prefilteredDataName
+        ? mdmData[prefilteredDataName]
+        : "defaultPrefilteredDataName",
       mainDropdownName,
       mainDropdownResult,
       hasMainDropdown,
       prefilteredTotalName,
       extraControlInputs
-    )
+    );
     setSelectedModalData(modalData);
 
     setShow(true);
@@ -317,7 +342,7 @@ const QATestSummaryDataTable = ({
   };
 
   const executeOnClose = () => {
-    setReturnedFocusToLast(false);
+    // setReturnedFocusToLast(false);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
   };
@@ -392,16 +417,52 @@ const QATestSummaryDataTable = ({
       });
   };
 
+  // add here for future test type code selection dts
   const getExpandableComponent = (testTypeGroupCode, props) => {
     switch (testTypeGroupCode) {
       case "LINSUM":
-        return <QALinearitySummaryExpandableRows {...props} />
+        const obj = qaLinearitySummaryProps();
+        return (
+          <QAExpandableRowsRender
+            payload={obj["payload"]}
+            dropdownArray={obj["dropdownArray"]}
+            columns={obj["columnNames"]}
+            controlInputs={obj["controlInputs"]}
+            controlDatePickerInputs={obj["controlDatePickerInputs"]}
+            dataTableName={obj["dataTableName"]}
+            extraControls={obj["extraControls"]}
+            radioBtnPayload={obj["radioBtnPayload"]}
+            expandable
+            {...props}
+            extraIDs={null}
+          />
+        );
+      // return <QALinearitySummaryExpandableRows {...props} />;
+
       case "RELACC":
-        return <QARataDataExpandableRows {...props} />
+        const rataObj = qaRataDataProps();
+        return (
+          <QAExpandableRowsRender
+            payload={rataObj["payload"]}
+            dropdownArray={rataObj["dropdownArray"]}
+            columns={rataObj["columnNames"]}
+            controlInputs={rataObj["controlInputs"]}
+            controlDatePickerInputs={rataObj["controlDatePickerInputs"]}
+            dataTableName={rataObj["dataTableName"]}
+            extraControls={rataObj["extraControls"]}
+            radioBtnPayload={rataObj["radioBtnPayload"]}
+            expandable
+            {...props}
+            extraIDs={null}
+          />
+        );
+      // return (
+      //    <QARataDataExpandableRows {...props} />
+      // );
       default:
         return null;
     }
-  }
+  };
 
   return (
     <div>
@@ -434,12 +495,14 @@ const QATestSummaryDataTable = ({
           }
           actionsBtn={"View"}
           user={user}
-          expandableRowComp={
-            getExpandableComponent(selectedTestCode.testTypeGroupCode, {
+          expandableRowComp={getExpandableComponent(
+            selectedTestCode.testTypeGroupCode,
+            {
               user: user,
               nonEditable: nonEditable,
-              locationSelectValue: locationSelectValue
-            })}
+              locationSelectValue: locationSelectValue,
+            }
+          )}
           evaluate={true}
           noDataComp={
             user ? (
