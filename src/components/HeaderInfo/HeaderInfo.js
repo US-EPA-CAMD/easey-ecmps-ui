@@ -612,7 +612,7 @@ export const HeaderInfo = ({
                   outline={true}
                   onClick={exportHandler}
                 >
-                  Export Monitoring Plan
+                  Export Data
                 </Button>
                 <Button
                   type="button"
@@ -621,7 +621,7 @@ export const HeaderInfo = ({
                   onClick={() => openImportModal()}
                   id="importMonitoringPlanBtn"
                 >
-                  Import Monitoring Plan
+                  Import Data
                 </Button>
               </div>
             }
