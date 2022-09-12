@@ -456,10 +456,6 @@ export const HeaderInfo = ({
     return status === "PASS" || status === "INFO" || status === "ERR";
   };
 
-  const showSubmit = (status) => {
-    return status === "PASS" || status === "INFO";
-  };
-
   const showRevert = (status) => {
     return (
       status === "PASS" ||
