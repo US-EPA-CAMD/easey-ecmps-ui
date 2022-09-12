@@ -686,7 +686,7 @@ export const HeaderInfo = ({
               </div>
 
               {user &&
-                <div className="display-flex flex-align-center">
+                <div className="display-flex flex-align-center margin-top-2">
                   <p className="text-bold margin-right-1">Evaluation Status:</p>
                   {evalStatusContent()}
                   <p className="text-bold margin-x-1">Submission Status: </p>
