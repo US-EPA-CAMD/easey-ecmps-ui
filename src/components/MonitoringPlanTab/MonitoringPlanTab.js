@@ -43,6 +43,7 @@ export const MonitoringPlanTab = ({
 
   useEffect(()=>{
     setCurrentTab(getCurrentTab())
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   },[selectedConfig]);
 
   const [sectionSelect, setSectionSelect] = useState(

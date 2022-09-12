@@ -34,7 +34,7 @@ import {
   getQAModalDetailsByTestCode,
 } from "../../../utils/selectors/QACert/LinearitySummary.js";
 import * as dmApi from "../../../utils/api/dataManagementApi";
-import { organizePrefilterMDMData } from "../../../additional-functions/retrieve-dropdown-api";
+// import { organizePrefilterMDMData } from "../../../additional-functions/retrieve-dropdown-api";
 
 import QAExpandableRowsRender from "../QAExpandableRowsRender/QAExpandableRowsRender";
 
