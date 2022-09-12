@@ -100,7 +100,6 @@ export const modalViewData = (
         let labels = "";
         switch (inputs[y][1]) {
           case "mainDropdown":
-            console.log("y", y, inputs, totalOptionsClone);
             setInitialPreFilterDependent(y);
             if (!createNew) {
               if (totalOptionsClone) {

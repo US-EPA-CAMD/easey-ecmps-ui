@@ -4,7 +4,7 @@ import initialState from "./initialState";
 const reducer = (state, action) => {
   const currentState = state ? state : initialState.openedFacilityTabs;
   let returnObject;
-
+  const workspaceSections = ["monitoringPlans","qaCertTestSummary","export","emissionsDaily","emissionsHourly","emissionsMats"];
   const fac = {};
   fac[`${action.workspaceSection}`] = action.facility;
 
@@ -13,11 +13,13 @@ const reducer = (state, action) => {
       // returnObject = [...currentState,action.facility]; //...currentState; //...currentState
       returnObject = {
         ...currentState,
-        [`${action.workspaceSection}`]: [
-          ...currentState[`${action.workspaceSection}`],
+      };
+      workspaceSections.forEach(section =>
+        returnObject[`${section}`] = [
+          ...currentState[`${section}`],
           action.facility,
         ],
-      };
+      );
       break;
     case types.REMOVE_FACILITY_TAB:
       returnObject = {

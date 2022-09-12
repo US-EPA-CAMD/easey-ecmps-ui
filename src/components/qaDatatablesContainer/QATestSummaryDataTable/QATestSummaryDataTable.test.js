@@ -1,20 +1,29 @@
 import React from "react";
-import { render } from "@testing-library/react";
-import QATestSummaryDataTable from "./QATestSummaryDataTable";
-
-import configureStore from "../../../store/configureStore.dev";
 import { Provider } from "react-redux";
+import { render, screen, waitForElement } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
+
+import QATestSummaryDataTable from "./QATestSummaryDataTable";
+import configureStore from "../../../store/configureStore.dev";
 import config from "../../../config";
 
-const axios = require("axios");
-const MockAdapter = require("axios-mock-adapter")
-const mock = new MockAdapter(axios);
+const mock = new MockAdapter(axios)
 
 const idRegex = '[\\w\\-]+'
+const locId = 'locId'
 
-const workspaceUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary`)
-const globalUrl = new RegExp(`${config.services.qaCertification.uri}/locations/${idRegex}/test-summary`)
+const getUrl = `${config.services.qaCertification.uri}/locations/${locId}/test-summary?testTypeCodes=UNITDEF`
+const postUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary`)
+const putUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary/${idRegex}`)
 const deleteUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary/${idRegex}`)
+
+const testTypeCodesUrl = new RegExp(`${config.services.mdm.uri}/test-type-codes`)
+const spanScaleCodesUrl = new RegExp(`${config.services.mdm.uri}/span-scale-codes`)
+const testReasonCodesUrl = new RegExp(`${config.services.mdm.uri}/test-reason-codes`)
+const testResultCodesUrl = new RegExp(`${config.services.mdm.uri}/test-result-codes`)
+const prefilterTestSummariesUrl = new RegExp(`${config.services.mdm.uri}/relationships/test-summaries`)
 
 const testSummary = [
   {
@@ -51,10 +60,16 @@ const testSummary = [
   },
 ];
 
-mock.onGet(globalUrl).reply(200, testSummary);
-mock.onGet(workspaceUrl).reply(200, testSummary)
-mock.onPost(workspaceUrl).reply(200, 'created')
+mock.onGet(getUrl).reply(200, testSummary);
+mock.onPost(postUrl).reply(200, 'created')
+mock.onPut(putUrl).reply(200, 'updated')
 mock.onDelete(deleteUrl).reply(200, 'deleted')
+
+mock.onGet(testTypeCodesUrl).reply(200, [])
+mock.onGet(spanScaleCodesUrl).reply(200, [])
+mock.onGet(testReasonCodesUrl).reply(200, [])
+mock.onGet(testResultCodesUrl).reply(200, [])
+mock.onGet(prefilterTestSummariesUrl).reply(200, [])
 
 const initialState = {
   facilities: [],
@@ -457,37 +472,42 @@ const initialState = {
 const store = configureStore(initialState)
 
 const props = {
-  loadDropdownsData: jest.fn(),
+  user: 'user',
   selectedTestCode: {
     testTypeCodes: [
       "UNITDEF"
-    ]
-  }
+    ],
+    testTypeGroupCode: 'testTypeGroupCode'
+  },
+  locationSelectValue: locId,
 }
 
-//testing redux connected component to mimic props passed as argument
-const componentRenderer = (location) => {
-  const props = {
-    user: { firstName: "test" },
-    locationSelectValue: location,
-    selectedTestCode: "LINE",
-  };
-  return render(<QATestSummaryDataTable {...props} />);
-};
-function componentRendererNoData(args) {
-  const defualtProps = {
-    locationSelectValue: "0",
-    selectedTestCode: "LINE",
-  };
-
-  const props = { ...defualtProps, ...args };
-  return render(<QATestSummaryDataTable {...props} />);
+const componentRenderer = () => {
+  return render(<Provider store={store}><QATestSummaryDataTable {...props} /></Provider>);
 }
 
-test('renders QATestSummaryDataTable', () => {
-  // Arrange
-  const { container } = render(<Provider store={store}><QATestSummaryDataTable {...props} /></Provider>)
-
-  // Assert
+test('testing component renders properly and functionlity for add/edit/remove', async () => {
+  const { container } = await waitForElement(() => componentRenderer())
   expect(container).toBeDefined()
+
+  // Add
+  const addBtn = screen.getAllByRole('button', { name: /Add/i })
+  userEvent.click(addBtn[0])
+  const addSaveBtn = screen.getByRole('button', { name: /Click to Save/i })
+  userEvent.click(addSaveBtn)
+  expect(mock.history.post).toHaveLength(1)
+
+  // Edit
+  const editBtn = screen.getByRole('button', { name: /Edit/i })
+  userEvent.click(editBtn)
+  const editSaveBtn = screen.getByRole('button', { name: /Click to Save/i })
+  userEvent.click(editSaveBtn)
+  expect(mock.history.put).toHaveLength(1)
+
+  // Remove
+  const removeBtn = screen.getByRole('button', { name: /Remove/i })
+  userEvent.click(removeBtn)
+  const confirmBtn = screen.getByRole('button', { name: /Yes/i })
+  userEvent.click(confirmBtn)
+  expect(mock.history.delete).toHaveLength(1)
 })
