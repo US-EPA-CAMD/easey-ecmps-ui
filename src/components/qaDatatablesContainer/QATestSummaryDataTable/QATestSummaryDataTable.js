@@ -155,18 +155,6 @@ const QATestSummaryDataTable = ({
           dropdowns[dropdownArray[0][i]] = options.filter((option) =>
             selectedTestCode.testTypeCodes.includes(option.code)
           );
-        } else if (i === 1) {
-          dropdowns[dropdownArray[0][i]] = response[1].data.map((d) =>
-            getOptions(d, "spanScaleCode", "spanScaleCodeDescription")
-          );
-        } else if (i === 2) {
-          dropdowns[dropdownArray[0][i]] = response[2].data.map((d) =>
-            getOptions(d, "testReasonCode", "testReasonCodeDescription")
-          );
-        } else if (i === 3) {
-          dropdowns[dropdownArray[0][i]] = response[3].data.map((d) =>
-            getOptions(d, "testResultCode", "testResultCodeDescription")
-          );
         } else if (i === 4) {
           let noDupesTestCodes = response[4].data.map((code) => {
             return code["testTypeCode"];

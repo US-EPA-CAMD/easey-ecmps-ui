@@ -51,7 +51,6 @@ export const QACertTestSummaryHeaderInfo = ({
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
- 
 
   // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
@@ -66,8 +65,7 @@ export const QACertTestSummaryHeaderInfo = ({
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
   const [selectedHistoricalData, setSelectedHistoricalData] = useState([]);
-  const [isCheckedOut, setIsCheckedOut] = useState(false)
-
+  const [isCheckedOut, setIsCheckedOut] = useState(false);
 
   const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([
     { name: "Loading..." },
@@ -77,8 +75,6 @@ export const QACertTestSummaryHeaderInfo = ({
 
   useEffect(() => {
     const fetchTestTypeCodes = () => {
-      
-
       getAllTestTypeCodes()
         .then((res) => {
           setAllTestTypeCodes(res.data);
@@ -119,10 +115,10 @@ export const QACertTestSummaryHeaderInfo = ({
       });
     const testCodeObj = {
       testTypeGroupCode: selectedTestTypeGroupOptionObj?.code,
-      testTypeCodes: codesForSelectedTestTypeGroup
-    }
+      testTypeCodes: codesForSelectedTestTypeGroup,
+    };
     setSelectedTestCode(testCodeObj);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [testTypeGroupOptions, allTestTypeCodes, sectionSelect]);
 
   // *** Reassign handlers after pop-up modal is closed
@@ -143,7 +139,7 @@ export const QACertTestSummaryHeaderInfo = ({
   }, []);
 
   useEffect(() => {
-    if (importTypeSelection !== "select" || importedFile.length !== 0) {
+    if (importTypeSelection != "select" || importedFile.length !== 0) {
       setDisablePortBtn(false);
     } else {
       setDisablePortBtn(true);
@@ -219,24 +215,22 @@ export const QACertTestSummaryHeaderInfo = ({
     setShowImportDataPreview(false);
   };
 
-  const checkoutBtnText = isCheckedOut ? 'Check Back In' : 'Check Out'
-  const checkoutBtnIcon = isCheckedOut ? <LockSharp /> : <LockOpenSharp />
+  const checkoutBtnText = isCheckedOut ? "Check Back In" : "Check Out";
+  const checkoutBtnIcon = isCheckedOut ? <LockSharp /> : <LockOpenSharp />;
 
   return (
     <div className="header QACertHeader ">
-    
-        {/* // adding display-block here allows buttons to be clickable ( has somesort of hidden overlay without it) */}
-        <div className="grid-container width-full clearfix position-relative">
-          <div className="display-flex flex-row flex-justify flex-align-center height-2">
-            <div className="grid-row">
-              <h3 className="margin-y-auto font-body-lg margin-right-2">
-                {facilityMainName}
-              </h3>
-              <p className="text-bold font-body-xl">
-                {facilityAdditionalName}
-              </p>
-            </div>
-            {user && <div>
+      {/* // adding display-block here allows buttons to be clickable ( has somesort of hidden overlay without it) */}
+      <div className="grid-container width-full clearfix position-relative">
+        <div className="display-flex flex-row flex-justify flex-align-center height-2">
+          <div className="grid-row">
+            <h3 className="margin-y-auto font-body-lg margin-right-2">
+              {facilityMainName}
+            </h3>
+            <p className="text-bold font-body-xl">{facilityAdditionalName}</p>
+          </div>
+          {user && (
+            <div>
               <Button
                 // className="padding-x-5"
                 type="button"
@@ -254,91 +248,94 @@ export const QACertTestSummaryHeaderInfo = ({
               >
                 Evaluate
               </Button>
-            </div>}
-          </div>
+            </div>
+          )}
+        </div>
 
-          {user && <p>checked-out by:</p>}
+        {user && <p>checked-out by:</p>}
 
-          {user && <div className="grid-row">
+        {user && (
+          <div className="grid-row">
             <Button
               outline={!isCheckedOut}
-              onClick={() => setIsCheckedOut(prevState => !prevState)}>
+              onClick={() => setIsCheckedOut((prevState) => !prevState)}
+            >
               {checkoutBtnIcon} {checkoutBtnText}
             </Button>
             <Button outline={true}>Revert to Official Record</Button>
-          </div>}
+          </div>
+        )}
 
-          <div className="grid-row positon-relative">
-            <div className="grid-col-2">
-              <DropdownSelection
-                caption="Locations"
-                orisCode={orisCode}
-                options={locations}
-                viewKey="name"
-                selectKey="id"
-                initialSelection={locationSelect ? locationSelect[0] : null}
-                selectionHandler={setLocationSelect}
-                workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
-              />
-            </div>
-            <div className="grid-col-4">
-              <DropdownSelection
-                caption="Test Type Group"
-                selectionHandler={setSectionSelect}
-                // options={sections}
-                options={testTypeGroupOptions}
-                viewKey="name"
-                selectKey="name"
-                initialSelection={sectionSelect ? sectionSelect[0] : null}
-                orisCode={orisCode}
-                workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
-              />
-            </div>{" "}
-            <div className="grid-col-3"></div>{" "}
+        <div className="grid-row positon-relative">
+          <div className="grid-col-2">
+            <DropdownSelection
+              caption="Locations"
+              orisCode={orisCode}
+              options={locations}
+              viewKey="name"
+              selectKey="id"
+              initialSelection={locationSelect ? locationSelect[0] : null}
+              selectionHandler={setLocationSelect}
+              workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
+            />
           </div>
-          <div className="grid-row float-left">
-            <Button
-              className="float-right text-right bottom-0 text-no-wrap "
-              type="button"
-              id="showRevertModal"
-              outline={true}
-            >
-              {"Test Data Report"}
-            </Button>
-            <Button
-              className="float-right text-right bottom-0 text-no-wrap "
-              type="button"
-              id="showRevertModal"
-              outline={true}
-            >
-              {"Test History Report"}
-            </Button>
-            {user ? (
-              <Button
-                className="float-right text-right bottom-0 text-no-wrap "
-                type="button"
-                id="showRevertModal"
-                outline={false}
-              >
-                {"Evaluation Report"}
-              </Button>
-            ) : (
-              ""
-            )}
-          </div>
+          <div className="grid-col-4">
+            <DropdownSelection
+              caption="Test Type Group"
+              selectionHandler={setSectionSelect}
+              // options={sections}
+              options={testTypeGroupOptions}
+              viewKey="name"
+              selectKey="name"
+              initialSelection={sectionSelect ? sectionSelect[0] : null}
+              orisCode={orisCode}
+              workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
+            />
+          </div>{" "}
+          <div className="grid-col-3"></div>{" "}
         </div>
-      ) 
-
+        <div className="grid-row float-left">
+          <Button
+            className="float-right text-right bottom-0 text-no-wrap "
+            type="button"
+            id="showRevertModal"
+            outline={true}
+          >
+            {"Test Data Report"}
+          </Button>
+          <Button
+            className="float-right text-right bottom-0 text-no-wrap "
+            type="button"
+            id="showRevertModal"
+            outline={true}
+          >
+            {"Test History Report"}
+          </Button>
+          {user ? (
+            <Button
+              className="float-right text-right bottom-0 text-no-wrap "
+              type="button"
+              id="showRevertModal"
+              outline={false}
+            >
+              {"Evaluation Report"}
+            </Button>
+          ) : (
+            ""
+          )}
+        </div>
+      </div>
+      )
       <div
-        className={`usa-overlay ${showImportModal ||
+        className={`usa-overlay ${
+          showImportModal ||
           showSelectionTypeImportModal ||
           showImportDataPreview ||
           isLoading
-          ? "is-visible"
-          : ""
-          }`}
+            ? "is-visible"
+            : ""
+        }`}
       />
-
       {/* // selects either historical data or file data */}
       {showSelectionTypeImportModal ? (
         <div>
@@ -361,7 +358,6 @@ export const QACertTestSummaryHeaderInfo = ({
           />
         </div>
       ) : null}
-
       {/* // file data */}
       {showImportModal && !finishedLoading && !isLoading ? (
         <div>
@@ -392,9 +388,7 @@ export const QACertTestSummaryHeaderInfo = ({
           />
         </div>
       ) : null}
-
       {/* while uploading, just shows preloader spinner  */}
-
       {isLoading && !finishedLoading ? (
         <UploadModal
           width={"30%"}
@@ -412,7 +406,6 @@ export const QACertTestSummaryHeaderInfo = ({
       ) : (
         ""
       )}
-
       {/* after it finishes uploading , shows either api errors or success messages */}
       {showImportModal && usePortBtn && finishedLoading ? (
         <UploadModal
