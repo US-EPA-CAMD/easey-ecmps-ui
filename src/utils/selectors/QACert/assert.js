@@ -16,21 +16,42 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
   console.log("assert", name, location, id, extraIdsArr);
   switch (name) {
     case lineTest:
-      return qaApi.getQALinearitySummary(location, id);
-
+      return qaApi.getQALinearitySummary(location, id).catch((error) => {
+        console.log("error", error);
+      });
     case proGas:
-      return qaApi.getProtocolGas(location, id);
+      return qaApi.getProtocolGas(location, id).catch((error) => {
+        console.log("error", error);
+      });
     case lineInjection:
-      return qaApi.getQALinearityInjection(extraIdsArr[0], extraIdsArr[1], id);
+      return qaApi
+        .getQALinearityInjection(extraIdsArr[0], extraIdsArr[1], id)
+        .catch((error) => {
+          console.log("error", error);
+        });
     case rataData:
-      return qaApi.getRataData(location, id);
+      return qaApi.getRataData(location, id).catch((error) => {
+        console.log("error", error);
+      });
 
     case rataRunData:
-      console.log('name, location, id, extraIdsArr',name, location, id, extraIdsArr)
-      return qaApi.getRataRunData(extraIdsArr[0], extraIdsArr[1],extraIdsArr[2], id);
+      console
+        .log("name, location, id, extraIdsArr", name, location, id, extraIdsArr)
+        .catch((error) => {
+          console.log("error", error);
+        });
+      return qaApi
+        .getRataRunData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], id)
+        .catch((error) => {
+          console.log("error", error);
+        });
 
     case rataSummary:
-      return qaApi.getRataSummary(extraIdsArr[0], extraIdsArr[1], id);
+      return qaApi
+        .getRataSummary(extraIdsArr[0], extraIdsArr[1], id)
+        .catch((error) => {
+          console.log("error", error);
+        });
     default:
       break;
   }
@@ -68,37 +89,48 @@ export const removeDataSwitch = async (
     case lineTest:
       return qaApi
         .deleteQALinearitySummary(locationId, id, row.id)
-        .then((resp) => {
-          console.log("data removed", resp.data);
-        })
         .catch((error) => {
           console.log("error", error);
         });
     case proGas:
-      return qaApi.deleteProtocolGas(locationId, id, row.id);
+      return qaApi.deleteProtocolGas(locationId, id, row.id).catch((error) => {
+        console.log("error", error);
+      });
     case lineInjection:
-      return qaApi.deleteQALinearityInjection(
-        extraIdsArr[0],
-        extraIdsArr[1],
-        id,
-        row.id
-      );
+      return qaApi
+        .deleteQALinearityInjection(extraIdsArr[0], extraIdsArr[1], id, row.id)
+        .catch((error) => {
+          console.log("error", error);
+        });
 
     case rataData:
-      return qaApi.deleteRataData(locationId, id, row.id);
+      return qaApi
+        .deleteRataData(locationId, id, row.id)
+        .catch((error) => {
+          console.log("error", error);
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
 
     case rataRunData:
-      return qaApi.deleteRataRunData(locationId, id);
+      return qaApi.deleteRataRunData(locationId, id).catch((error) => {
+        console.log("error", error);
+      });
 
     case rataSummary:
-      return qaApi.deleteRataSummary(
-        locationId,
-        id,
-        extraIdsArr[0],
-        extraIdsArr[1],
-        id,
-        row.id
-      );
+      return qaApi
+        .deleteRataSummary(
+          locationId,
+          id,
+          extraIdsArr[0],
+          extraIdsArr[1],
+          id,
+          row.id
+        )
+        .catch((error) => {
+          console.log("error", error);
+        });
     default:
       break;
   }
@@ -109,38 +141,56 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
   switch (name) {
     case lineTest:
       console.log("thisone", name);
-      return qaApi.updateQALinearitySummaryTestSecondLevel(
-        location,
-        id,
-        userInput.id,
-        userInput
-      );
+      return qaApi
+        .updateQALinearitySummaryTestSecondLevel(
+          location,
+          id,
+          userInput.id,
+          userInput
+        )
+        .catch((error) => {
+          console.log("error", error);
+        });
 
     case proGas:
       return qaApi.updateProtocolGas(location, id, userInput.id, userInput);
     case lineInjection:
-      return qaApi.getQALinearityInjection(
-        extraIdsArr[0],
-        extraIdsArr[1],
-        id,
-        userInput.id,
-        userInput
-      );
+      return qaApi
+        .getQALinearityInjection(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          id,
+          userInput.id,
+          userInput
+        )
+        .catch((error) => {
+          console.log("error", error);
+        });
 
     case rataData:
-      return qaApi.updateRataData(userInput.id, location, id, userInput);
+      return qaApi
+        .updateRataData(userInput.id, location, id, userInput)
+        .catch((error) => {
+          console.log("error", error);
+        });
 
     case rataRunData:
-      return qaApi.updateRataRunData(location, id);
+      return qaApi.updateRataRunData(location, id).catch((error) => {
+        console.log("error", error);
+      });
 
     case rataSummary:
-      return qaApi.updateRataSummary(
-        extraIdsArr[0],
-        extraIdsArr[1],
-        id,
-        userInput.id,
-        userInput
-      );
+      return qaApi
+        .updateRataSummary(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          id,
+          userInput.id,
+          userInput
+        )
+        .catch((error) => {
+          console.log("error", error);
+        });
     default:
       break;
   }
@@ -157,40 +207,44 @@ export const createDataSwitch = (
 ) => {
   switch (name) {
     case lineTest:
-      return qaApi.createQALinearitySummaryTestSecondLevel(
-        location,
-        id,
-        userInput
-      );
+      return qaApi
+        .createQALinearitySummaryTestSecondLevel(location, id, userInput)
+        .catch((error) => {
+          console.log("error", error);
+        });
 
     case proGas:
       return qaApi.createProtocolGas(location, id, userInput);
     case lineInjection:
-      return qaApi.createQALinearityInjection(
-        extraIdsArr[0],
-        extraIdsArr[1],
-        id,
-        userInput
-      );
+      return qaApi
+        .createQALinearityInjection(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          id,
+          userInput
+        )
+        .catch((error) => {
+          console.log("error", error);
+        });
 
     case rataData:
-      return qaApi.createRataData(location, id, userInput);
+      return qaApi.createRataData(location, id, userInput).catch((error) => {
+        console.log("error", error);
+      });
 
     case rataRunData:
-      return qaApi.createRataRunData(
-        extraIdsArr[0],
-        extraIdsArr[1],
-        id,
-        userInput
-      );
+      return qaApi
+        .createRataRunData(extraIdsArr[0], extraIdsArr[1], id, userInput)
+        .catch((error) => {
+          console.log("error", error);
+        });
 
     case rataSummary:
-      return qaApi.createRataSummary(
-        extraIdsArr[0],
-        extraIdsArr[1],
-        id,
-        userInput
-      );
+      return qaApi
+        .createRataSummary(extraIdsArr[0], extraIdsArr[1], id, userInput)
+        .catch((error) => {
+          console.log("error", error);
+        });
 
     default:
       break;

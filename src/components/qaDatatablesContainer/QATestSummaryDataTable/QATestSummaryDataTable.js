@@ -34,7 +34,7 @@ import {
   getQAModalDetailsByTestCode,
 } from "../../../utils/selectors/QACert/LinearitySummary.js";
 import * as dmApi from "../../../utils/api/dataManagementApi";
-// import { organizePrefilterMDMData } from "../../../additional-functions/retrieve-dropdown-api";
+import { organizePrefilterMDMData } from "../../../additional-functions/retrieve-dropdown-api";
 
 import QAExpandableRowsRender from "../QAExpandableRowsRender/QAExpandableRowsRender";
 
@@ -167,17 +167,16 @@ const QATestSummaryDataTable = ({
           dropdowns[dropdownArray[0][i]] = response[3].data.map((d) =>
             getOptions(d, "testResultCode", "testResultCodeDescription")
           );
-          // >>>>>>> f73f2ac43db7e3b7fb2786f66a85d29c03376540
-          //         } else if (i === 4) {
-          //           let noDupesTestCodes = response[4].data.map((code) => {
-          //             return code["testTypeCode"];
-          //           });
-        //   noDupesTestCodes = [...new Set(noDupesTestCodes)];
-        //   dropdowns[dropdownArray[0][i]] = organizePrefilterMDMData(
-        //     noDupesTestCodes,
-        //     "testTypeCode",
-        //     response[4].data
-        //   );
+        } else if (i === 4) {
+          let noDupesTestCodes = response[4].data.map((code) => {
+            return code["testTypeCode"];
+          });
+          noDupesTestCodes = [...new Set(noDupesTestCodes)];
+          dropdowns[dropdownArray[0][i]] = organizePrefilterMDMData(
+            noDupesTestCodes,
+            "testTypeCode",
+            response[4].data
+          );
         }
         dropdowns[dropdownArray[0][i]].unshift({
           code: "",
@@ -430,6 +429,7 @@ const QATestSummaryDataTable = ({
       });
   };
 
+  // add here for future test type code selection dts
   const getExpandableComponent = (testTypeGroupCode, props) => {
     switch (testTypeGroupCode) {
       case "LINSUM":

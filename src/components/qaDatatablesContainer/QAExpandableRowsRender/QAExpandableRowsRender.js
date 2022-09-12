@@ -140,7 +140,7 @@ const QAExpandableRowsRender = ({
           />
         );
 
-      case "RATA Summary":
+      case "RATA Summary": // 3rd level 
         const rataRunIdArray = [...extraIDs, locationId, id];
         const rataRunObj = qaRataRunDataProps();
         return (
