@@ -11,14 +11,14 @@ import {
   mapDispatchToProps,
   mapStateToProps,
 } from "./DataTableRender";
+
+import configureStore from "../../store/configureStore.dev";
+import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 let options = [];
 let data = [];
 let columnNames = [];
 let columns = [];
-
-import configureStore from "../../store/configureStore.dev";
 const store = configureStore();
-import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 beforeAll(() => {
   columns = [
     { name: "ORIS", selector: "col1", sortable: true },

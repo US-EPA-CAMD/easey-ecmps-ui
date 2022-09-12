@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { connect } from "react-redux";
 import {
   getQATestSummary,
   updateQALinearityTestSummary,
@@ -21,11 +20,6 @@ import {
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
-import {
-  loadDropdowns,
-} from "../../../store/actions/dropdowns";
-import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
-
 import { addAriaLabelToDatatable } from "../../../additional-functions/ensure-508";
 
 /*********** COMPONENTS ***********/
@@ -38,7 +32,7 @@ import {
   getQAModalDetailsByTestCode,
 } from "../../../utils/selectors/QACert/LinearitySummary.js";
 import * as dmApi from "../../../utils/api/dataManagementApi";
-import {organizePrefilterMDMData} from "../../../additional-functions/retrieve-dropdown-api";
+import { organizePrefilterMDMData } from "../../../additional-functions/retrieve-dropdown-api";
 
 // contains test summary data table
 
@@ -67,13 +61,10 @@ const QATestSummaryDataTable = ({
   const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
 
   const [updateTable, setUpdateTable] = useState(false);
-  const [complimentaryData, setComplimentaryData] = useState([]);
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
-  const [prevSelectedTest, setPrevSelectedTest] = useState(
-    selectedTestCode.testTypeGroupCode
-  );
-  const [allTestTypeCodes, setAllTestTypeCodes]= useState(null);
+
+  const [allTestTypeCodes, setAllTestTypeCodes] = useState(null);
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
@@ -115,66 +106,66 @@ const QATestSummaryDataTable = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, selectedTestCode]);
-  
-  const getOptions = (obj, code, name) =>{
+
+  const getOptions = (obj, code, name) => {
     return {
       code: obj[code],
       name: obj[name]
     }
   }
 
-  const loadDropdownsData = () =>{
+  const loadDropdownsData = () => {
     //if(mdmData === null){
     setDropdownsLoading(true);
-      let dropdowns = {};
-      const allPromises = [];
-      allPromises.push(dmApi.getAllTestTypeCodes());
-      allPromises.push(dmApi.getAllSpanScaleCodes());
-      allPromises.push(dmApi.getAllTestReasonCodes());
-      allPromises.push(dmApi.getAllTestResultCodes());
-      allPromises.push(dmApi.getPrefilteredTestSummaries());
-      Promise.all(allPromises).then((response) => {
-        dropdownArray[0].forEach((val, i) =>{
-          if(i==0){
-            const options = response[0].data.map(d => getOptions(d,"testTypeCode","testTypeCodeDescription"));
-            setAllTestTypeCodes(options);
-            dropdowns[dropdownArray[0][i]] = options.filter((option) => selectedTestCode.testTypeCodes.includes(option.code));
-          }else if(i===1){
-            dropdowns[dropdownArray[0][i]] = 
-            response[1].data.map(d => getOptions(d,"spanScaleCode","spanScaleCodeDescription"));
-          }else if(i===2) {
-            dropdowns[dropdownArray[0][i]] = 
-            response[2].data.map(d => getOptions(d,"testReasonCode","testReasonCodeDescription"));
-          }else if(i===3) {
-            dropdowns[dropdownArray[0][i]] = 
-            response[3].data.map(d => getOptions(d,"testResultCode","testResultCodeDescription"));
-          }else if(i===4) {
-            let noDupesTestCodes = response[4].data.map((code) => {
-              return code["testTypeCode"];
-            });
-            noDupesTestCodes = [...new Set(noDupesTestCodes)];
-            dropdowns[dropdownArray[0][i]] = organizePrefilterMDMData(
-              noDupesTestCodes,
-              "testTypeCode",
-              response[4].data
-            );
-          }
-          dropdowns[dropdownArray[0][i]].unshift({ code: "", name: "-- Select a value --" });
-        });
-        setMdmData(dropdowns);
-        setDropdownsLoaded(true);
-        setDropdownsLoading(false);
+    let dropdowns = {};
+    const allPromises = [];
+    allPromises.push(dmApi.getAllTestTypeCodes());
+    allPromises.push(dmApi.getAllSpanScaleCodes());
+    allPromises.push(dmApi.getAllTestReasonCodes());
+    allPromises.push(dmApi.getAllTestResultCodes());
+    allPromises.push(dmApi.getPrefilteredTestSummaries());
+    Promise.all(allPromises).then((response) => {
+      dropdownArray[0].forEach((val, i) => {
+        if (i === 0) {
+          const options = response[0].data.map(d => getOptions(d, "testTypeCode", "testTypeCodeDescription"));
+          setAllTestTypeCodes(options);
+          dropdowns[dropdownArray[0][i]] = options.filter((option) => selectedTestCode.testTypeCodes.includes(option.code));
+        } else if (i === 1) {
+          dropdowns[dropdownArray[0][i]] =
+            response[1].data.map(d => getOptions(d, "spanScaleCode", "spanScaleCodeDescription"));
+        } else if (i === 2) {
+          dropdowns[dropdownArray[0][i]] =
+            response[2].data.map(d => getOptions(d, "testReasonCode", "testReasonCodeDescription"));
+        } else if (i === 3) {
+          dropdowns[dropdownArray[0][i]] =
+            response[3].data.map(d => getOptions(d, "testResultCode", "testResultCodeDescription"));
+        } else if (i === 4) {
+          let noDupesTestCodes = response[4].data.map((code) => {
+            return code["testTypeCode"];
+          });
+          noDupesTestCodes = [...new Set(noDupesTestCodes)];
+          dropdowns[dropdownArray[0][i]] = organizePrefilterMDMData(
+            noDupesTestCodes,
+            "testTypeCode",
+            response[4].data
+          );
+        }
+        dropdowns[dropdownArray[0][i]].unshift({ code: "", name: "-- Select a value --" });
       });
+      setMdmData(dropdowns);
+      setDropdownsLoaded(true);
+      setDropdownsLoading(false);
+    });
   };
   useEffect(() => {
     //console.log("TEST TYPE GROUPE CODE CHANGED");
     const { testTypeCodes, testTypeGroupCode } = selectedTestCode;
-    if(mdmData === null){
-      if(testTypeGroupCode){
+    if (mdmData === null) {
+      if (testTypeGroupCode) {
         loadDropdownsData();
       }
-    }else{
-      const mdmDataClone = {...mdmData};
+    } else {
+      const mdmDataClone = { ...mdmData };
       mdmDataClone["testTypeCode"] = allTestTypeCodes.filter((option) => testTypeCodes.includes(option.code));
       setMdmData(mdmDataClone);
     }
@@ -215,6 +206,7 @@ const QATestSummaryDataTable = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainDropdownChange, selectedModalData]);
+
   const columns = getQAColsByTestCode(selectedTestCode.testTypeGroupCode);
   const { controlInputs, extraControlInputs, controlDatePickerInputs } =
     getQAModalDetailsByTestCode(selectedTestCode.testTypeGroupCode);
@@ -266,7 +258,6 @@ const QATestSummaryDataTable = ({
       if (controlInputs[controlProperty][1] === "mainDropdown") {
         mainDropdownName = controlProperty;
         hasMainDropdown = true;
-
         break;
       }
     }
@@ -294,21 +285,20 @@ const QATestSummaryDataTable = ({
     }
 
     const prefilteredTotalName = dropdownArray[0][dropdownArray[0].length - 1];
-    setSelectedModalData(
-      modalViewData(
-        selectedData,
-        controlInputs,
-        controlDatePickerInputs,
-        create,
-        mdmData,
-        prefilteredDataName ? mdmData[prefilteredDataName] : "",
-        mainDropdownName,
-        mainDropdownResult,
-        hasMainDropdown,
-        prefilteredTotalName,
-        extraControlInputs
-      )
-    );
+    const modalData = modalViewData(
+      selectedData,
+      controlInputs,
+      controlDatePickerInputs,
+      create,
+      mdmData,
+      prefilteredDataName ? mdmData[prefilteredDataName] : "defaultPrefilteredDataName",
+      mainDropdownName,
+      mainDropdownResult,
+      hasMainDropdown,
+      prefilteredTotalName,
+      extraControlInputs
+    )
+    setSelectedModalData(modalData);
 
     setShow(true);
     setTimeout(() => {
