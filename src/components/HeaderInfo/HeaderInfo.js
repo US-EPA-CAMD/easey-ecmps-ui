@@ -595,27 +595,6 @@ export const HeaderInfo = ({
 
       {evalStatusLoaded && dataLoaded ? (
         <div>
-          <div>
-            {user && checkedOutByUser &&
-              <div>
-                <div className="grid-row float-right text-right desktop:display-block">
-                  <div className="padding-1">
-                    {showSubmit(evalStatus) &&
-                      <Button
-                        type="button"
-                        className="margin-right-2 float-right margin-bottom-2"
-                        outline={false}
-                        title="Coming Soon"
-                      >
-                        Submit
-                      </Button>
-                    }
-                  </div>
-                </div>
-              </div>
-            }
-          </div>
-
           <div className="display-flex flex-row flex-justify flex-align-center height-2">
             <div className="grid-row">
               <h3 className="margin-y-auto font-body-lg margin-right-2">
