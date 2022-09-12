@@ -765,17 +765,17 @@ export const HeaderInfo = ({
                 </Button>
                 <Button
                   outline
-                  title="Monitor Audit Report"
+                  title="View Audit Report"
                   type="button"
                 >
-                  Monitor Audit Report
+                  View Audit Report
                 </Button>
                 <Button
                   outline
-                  title="Monitor Plan Report"
+                  title="View Printout Report"
                   type="button"
                 >
-                  Monitor Plan Report
+                  View Printout Report
                 </Button>
               </div>
             </div>
