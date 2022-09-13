@@ -5,12 +5,20 @@ import {
   KeyboardArrowDownSharp,
   KeyboardArrowUpSharp,
 } from "@material-ui/icons";
-const CustomAccordion = ({ title, table }) => {
+const CustomAccordion = ({ title, table, section }) => {
   const [open, setOpen] = useState(table.map((item, index) => true));
 
   useEffect(() => {
-    setOpen(table.map((item, index) => true));
-  }, [table]);
+    //closes all dropdowns before rendering new section
+
+    // avoids rendering issues when one sections has more datatables than next sections
+    setOpen(table.map((item, index) => false));
+
+    // reopens dropdowns to mimic past expectations
+    setTimeout(() => {
+      setOpen(table.map((item, index) => true));
+    }, 600);
+  }, [table, section]);
   // updates all tables whenever a location is changed
   const tableState = (index, val) => {
     setOpen(table.map((item, ind) => (ind === index ? val : open[ind])));
