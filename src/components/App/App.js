@@ -165,17 +165,17 @@ const App = () => {
             />
             {user ? (
               <Redirect
-                from="/qa_certifications_test_summary_data"
-                to="/workspace/qa_certifications_test_summary_data"
+                from="/qa-test"
+                to="/workspace/qa-test"
               />
             ) : (
               <Redirect
-                from="/workspace/qa_certifications_test_summary_data"
-                to="/qa_certifications_test_summary_data"
+                from="/workspace/qa-test"
+                to="/qa-test"
               />
             )}
             <Route
-              path="/qa_certifications_test_summary_data"
+              path="/qa-test"
               exact
               component={() => (
                 <SelectConfigurationBaseModuleHome
@@ -185,7 +185,7 @@ const App = () => {
               )}
             />
             <Route
-              path="/workspace/qa_certifications_test_summary_data"
+              path="/workspace/qa-test"
               exact
               component={() => (
                 <SelectConfigurationBaseModuleHome
