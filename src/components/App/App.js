@@ -205,17 +205,17 @@ const App = () => {
 
             {user ? (
               <Redirect
-                from="/emissions_daily"
-                to="/workspace/emissions_daily"
+                from="/emissions-daily"
+                to="/workspace/emissions-daily"
               />
             ) : (
               <Redirect
-                from="/workspace/emissions_daily"
-                to="/emissions_daily"
+                from="/workspace/emissions-daily"
+                to="/emissions-daily"
               />
             )}
             <Route
-              path="/emissions_daily"
+              path="/emissions-daily"
               exact
               component={() => {
                 return (
@@ -227,7 +227,7 @@ const App = () => {
               }}
             />
             <Route
-              path="/workspace/emissions_daily"
+              path="/workspace/emissions-daily"
               exact
               component={() => (
                 <SelectConfigurationBaseModuleHome
@@ -239,17 +239,17 @@ const App = () => {
 
             {user ? (
               <Redirect
-                from="/emissions_hourly"
-                to="/workspace/emissions_hourly"
+                from="/emissions-hourly"
+                to="/workspace/emissions-hourly"
               />
             ) : (
               <Redirect
-                from="/workspace/emissions_hourly"
-                to="/emissions_hourly"
+                from="/workspace/emissions-hourly"
+                to="/emissions-hourly"
               />
             )}
             <Route
-              path="/emissions_hourly"
+              path="/emissions-hourly"
               exact
               component={() => {
                 return (
@@ -261,7 +261,7 @@ const App = () => {
               }}
             />
             <Route
-              path="/workspace/emissions_hourly"
+              path="/workspace/emissions-hourly"
               exact
               component={() => (
                 <SelectConfigurationBaseModuleHome
@@ -272,12 +272,12 @@ const App = () => {
             />
 
             {user ? (
-              <Redirect from="/emissions_mats" to="/workspace/emissions_mats" />
+              <Redirect from="/emissions-mats" to="/workspace/emissions-mats" />
             ) : (
-              <Redirect from="/workspace/emissions_mats" to="/emissions_mats" />
+              <Redirect from="/workspace/emissions-mats" to="/emissions-mats" />
             )}
             <Route
-              path="/emissions_mats"
+              path="/emissions-mats"
               exact
               component={() => {
                 return (
@@ -289,7 +289,7 @@ const App = () => {
               }}
             />
             <Route
-              path="/workspace/emissions_mats"
+              path="/workspace/emissions-mats"
               exact
               component={() => (
                 <SelectConfigurationBaseModuleHome
