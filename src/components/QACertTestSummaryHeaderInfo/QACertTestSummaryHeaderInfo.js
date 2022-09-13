@@ -325,7 +325,6 @@ export const QACertTestSummaryHeaderInfo = ({
           )}
         </div>
       </div>
-      )
       <div
         className={`usa-overlay ${
           showImportModal ||
