@@ -62,17 +62,14 @@ const QAProtocolGasExpandableRows = ({
   const [show, setShow] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
-  const [dataLoaded, setDataLoaded] = useState(false);
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
-  const [mainDropdownChange, setMainDropdownChange] = useState("");
+  // const [mainDropdownChange, setMainDropdownChange] = useState("");
 
   const [createNewData, setCreateNewData] = useState(false);
-  const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
+  // const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
 
-  const [complimentaryData, setComplimentaryData] = useState([]);
 
-  const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
@@ -104,7 +101,7 @@ const QAProtocolGasExpandableRows = ({
     allPromises.push(dmApi.getAllGasTypeCodes());
     Promise.all(allPromises).then((values) => {
       values.forEach((val, i) =>{
-        if(i==0){
+        if(i===0){
           dropdowns[dropdownArray[i]] = 
           val.data.map(d => {
             return {
@@ -138,6 +135,8 @@ const QAProtocolGasExpandableRows = ({
       setDropdownsLoaded(true);
       setDropdownsLoading(false);
     }
+
+       // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mdmData]);
 
   const controlDatePickerInputs = {};
@@ -151,13 +150,11 @@ const QAProtocolGasExpandableRows = ({
     }
   };
   const executeOnClose = () => {
-    setReturnedFocusToLast(false);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
   };
   const finishedLoadingData = (loadedData) => {
     setDataPulled(loadedData);
-    setDataLoaded(true);
     addAriaLabelToDatatable();
   };
   // Executed when "View" action is clicked
@@ -201,9 +198,9 @@ const QAProtocolGasExpandableRows = ({
       mainDropdownResult = [];
     }
 
-    if (!dropdownArrayIsEmpty) {
-      setPrefilteredMdmData(mdmData[prefilteredDataName]);
-    }
+    // if (!dropdownArrayIsEmpty) {
+    //   setPrefilteredMdmData(mdmData[prefilteredDataName]);
+    // }
 
     const prefilteredTotalName = dropdownArray[dropdownArray.length - 1];
     setSelectedModalData(

@@ -150,19 +150,19 @@ export const globalView = [
   { name: "Monitoring Plans", url: "/monitoring-plans" },
   {
     name: "QA & Certifications",
-    url: "/qa_certifications",
+    url: "/qa",
     children: [
       {
         name: "Test Summary Data",
-        url: "/qa_certifications_test_summary_data",
+        url: "/qa-test",
       },
       {
         name: "QA Cert Event Data",
-        url: "/qa_certifications_event_data",
+        url: "/qa-qce",
       },
       {
         name: "Test Extension Exemptions Data",
-        url: "/qa_certifications_test_extension_exemptions_data",
+        url: "/qa-tee",
       },
     ],
   },
@@ -172,15 +172,15 @@ export const globalView = [
     children: [
       {
         name: "Daily",
-        url: "/emissions_daily",
+        url: "/emissions-daily",
       },
       {
         name: "Hourly",
-        url: "/emissions_hourly",
+        url: "/emissions-hourly",
       },
       {
         name: "MATS",
-        url: "/emissions_mats",
+        url: "/emissions-mats",
       },
     ],
   },
@@ -193,19 +193,19 @@ export const workSpace = [
   { name: "Monitoring Plans", url: "/workspace/monitoring-plans" },
   {
     name: "QA & Certifications",
-    url: "/workspace/qa_certifications",
+    url: "/workspace/qa",
     children: [
       {
         name: "Test Summary Data",
-        url: "/workspace/qa_certifications_test_summary_data",
+        url: "/workspace/qa-test",
       },
       {
         name: "QA Cert Event Data",
-        url: "/workspace/qa_certifications_event_data",
+        url: "/workspace/qa-qce",
       },
       {
         name: "Test Extension Exemptions Data",
-        url: "/workspace/qa_certifications_test_extension_exemptions_data",
+        url: "/workspace/qa-tee",
       },
     ],
   },
@@ -215,15 +215,15 @@ export const workSpace = [
     children: [
       {
         name: "Daily",
-        url: "/workspace/emissions_daily",
+        url: "/workspace/emissions-daily",
       },
       {
         name: "Hourly",
-        url: "/workspace/emissions_hourly",
+        url: "/workspace/emissions-hourly",
       },
       {
         name: "MATS",
-        url: "/workspace/emissions_mats",
+        url: "/workspace/emissions-mats",
       },
     ],
   },

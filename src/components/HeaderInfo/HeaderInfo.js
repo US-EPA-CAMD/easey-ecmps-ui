@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Checkbox } from "@trussworks/react-uswds";
-import { CreateOutlined, LockOpenSharp, LockSharp } from "@material-ui/icons";
+import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
 import config from "../../config";
 import { triggerEvaluation } from "../../utils/api/quartzApi";
 
@@ -76,7 +76,7 @@ export const HeaderInfo = ({
   const closeRevertModal = () => setShowRevertModal(false);
   const closeEvalReportModal = () => setShowEvalReport(false);
 
-  const [checkoutState, setCheckoutState] = useState(checkout);
+  // const [checkoutState, setCheckoutState] = useState(checkout);
   const inWorkspace = user;
 
   // refreshing evaluation status
@@ -339,7 +339,7 @@ export const HeaderInfo = ({
   const renderWithNewData = (configs, currentConfig, currentCheckoutStatus) => {
     const intervalId = startRefreshTimer();
 
-    setCheckoutState(currentConfig.checkedOutBy !== "N/A");
+    // setCheckoutState(currentConfig.checkedOutBy !== "N/A");
     setOpenIntervalId(intervalId);
     setUserHasCheckout(
       configs.some((plan) => plan["checkedOutBy"] === user.userId)
@@ -364,9 +364,9 @@ export const HeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-        configs
-          .map((location) => location["monPlanId"])
-          .indexOf(selectedConfig.id)
+      configs
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -423,12 +423,37 @@ export const HeaderInfo = ({
     return "Needs Evaluation";
   };
 
+  const evalStatusContent = () => {
+    if (evalStatusText(evalStatus) === "Needs Evaluation") {
+      return <Button
+        type="button"
+        outline={false}
+        onClick={evaluate}
+      >
+        Evaluate
+      </Button>
+    }
+
+    const alertStyle = `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(evalStatus)} margin-y-0`
+    const evalStatusHyperlink =
+      <div className={alertStyle}>
+        <button
+          className={"hyperlink-btn cursor-pointer"}
+          onClick={() => displayReport()}
+        >
+          {evalStatusText(evalStatus)}
+        </button>
+      </div>
+
+    if (showHyperLink(evalStatus)) {
+      return evalStatusHyperlink
+    } else {
+      return <p className={alertStyle}>{evalStatusText(evalStatus)}</p>
+    }
+  }
+
   const showHyperLink = (status) => {
     return status === "PASS" || status === "INFO" || status === "ERR";
-  };
-
-  const showSubmit = (status) => {
-    return status === "PASS" || status === "INFO";
   };
 
   const showRevert = (status) => {
@@ -451,7 +476,7 @@ export const HeaderInfo = ({
       () => {
         setCheckedOutByUser(direction);
         setLockedFacility(direction);
-        setCheckoutState(direction);
+        // setCheckoutState(direction);
         setDataLoaded(false);
       }
     );
@@ -505,9 +530,8 @@ export const HeaderInfo = ({
     if (inWorkspace) {
       // when config is checked out by someone
       if (checkedOut) {
-        return `Currently checked-out by: ${
-          currentConfig["checkedOutBy"]
-        } ${formatDate(currentConfig["checkedOutOn"])}`;
+        return `Currently checked-out by: ${currentConfig["checkedOutBy"]
+          } ${formatDate(currentConfig["checkedOutOn"])}`;
       }
       // when config is not checked out
       return `Last updated by: ${currentConfig.lastUpdatedBy} ${formatDate(
@@ -527,9 +551,8 @@ export const HeaderInfo = ({
   return (
     <div className="header">
       <div
-        className={`usa-overlay ${
-          showRevertModal || showEvalReport ? "is-visible" : ""
-        } `}
+        className={`usa-overlay ${showRevertModal || showEvalReport ? "is-visible" : ""
+          } `}
       />
 
       {showRevertModal ? (
@@ -567,296 +590,225 @@ export const HeaderInfo = ({
       ) : null}
 
       {evalStatusLoaded && dataLoaded ? (
-        // adding display-block here allows buttons to be clickable ( has somesort of hidden overlay without it)
-        <div className="grid-row clearfix position-relative display-block">
-          <div className="grid-col clearfix position-absolute top-1 right-0 ">
-            <div className="">
-              {user && checkedOutByUser ? (
-                <div>
-                  <div className=" margin-left-10 display-block">
-                    <Button
-                      type="button"
-                      className="margin-right-2 float-left margin-bottom-2"
-                      outline={true}
-                      onClick={exportHandler}
-                    >
-                      Export Monitoring Plan
-                    </Button>
-                    <Button
-                      type="button"
-                      className="margin-right-2 float-right"
-                      outline={false}
-                      onClick={() => openImportModal()}
-                      id="importMonitoringPlanBtn"
-                    >
-                      Import Monitoring Plan
-                    </Button>
-                  </div>
-
-                  <div className="grid-row float-right text-right desktop:display-block">
-                    <div className="padding-1">
-                      {showSubmit(evalStatus) ? (
-                        <Button
-                          type="button"
-                          className="margin-right-2 float-right margin-bottom-2"
-                          outline={false}
-                          title="Coming Soon"
-                        >
-                          Submit
-                        </Button>
-                      ) : (
-                        ""
-                      )}
-
-                      {evalStatusText(evalStatus) === "Needs Evaluation" ? (
-                        <Button
-                          type="button"
-                          className=" margin-left-4 float-right margin-bottom-2"
-                          outline={false}
-                          onClick={evaluate}
-                        >
-                          Evaluate
-                        </Button>
-                      ) : (
-                        ""
-                      )}
-                      <div className="desktop:display-block">
-                        {showRevert(evalStatus) ? (
-                          <div className=" float-right position-relative margin-bottom-2">
-                            <Button
-                              type="button"
-                              id="showRevertModal"
-                              className="float-right"
-                              onClick={() => setShowRevertModal(true)}
-                              outline={true}
-                            >
-                              {"Revert to Official Record"}
-                            </Button>
-                          </div>
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                ""
-              )}
+        <div>
+          <div className="display-flex flex-row flex-justify flex-align-center height-2">
+            <div className="grid-row">
+              <h3 className="margin-y-auto font-body-lg margin-right-2">
+                {facilityMainName}
+              </h3>
+              <p className="text-bold font-body-xl">
+                {facilityAdditionalName}
+              </p>
             </div>
-            {user ? (
-              <div className="grid-row float-right text-right margin-right-2 mobile:display-none desktop:display-block">
-                <table role="presentation">
-                  <tbody>
-                    <tr>
-                      <th className="padding-1">Evaluation Status: </th>
-                      <td
-                        className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
-                          evalStatus
-                        )}`}
-                      >
-                        {/* needed to separate the text and button otherwise it tabs to a text causing 508 errors */}
-                        {showHyperLink(evalStatus) ? (
-                          <button
-                            className={"hyperlink-btn cursor-pointer"}
-                            onClick={() => displayReport()}
-                          >
-                            {evalStatusText(evalStatus)}
-                          </button>
-                        ) : (
-                          // prevents tabbing to this message when there is no valid link to click
-                          <div className="unstyled-btn">
-                            {evalStatusText(evalStatus)}
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th className="padding-1">Submission Status: </th>
-                      <td className="padding-1">Resubmission required</td>
-                    </tr>
-                  </tbody>
-                </table>
+            {(user && checkedOutByUser) &&
+              <div>
+                <Button
+                  type="button"
+                  className="margin-right-2 float-left margin-bottom-2"
+                  outline={true}
+                  onClick={exportHandler}
+                >
+                  Export Data
+                </Button>
+                <Button
+                  type="button"
+                  className="margin-right-2 float-right"
+                  outline={false}
+                  onClick={() => openImportModal()}
+                  id="importMonitoringPlanBtn"
+                >
+                  Import Data
+                </Button>
               </div>
-            ) : (
-              ""
-            )}
+            }
           </div>
+
+          {dataLoaded &&
+            <p className="text-bold font-body-2xs">
+              {auditInformation}
+            </p>
+          }
+
           <div className="grid-col float-left">
             <div>
-              <h3 className="display-inline-block">
-                {" "}
-                {user && (checkedOutByUser || lockedFacility) ? (
-                  <LockSharp className="lock-icon margin-right-1" />
-                ) : (
-                  ""
-                )}
-                <span className="font-body-lg">{facilityMainName}</span>
-              </h3>
-              <div className="text-bold font-body-2xs">
-                {dataLoaded ? auditInformation : ""}
-              </div>
-            </div>
-            <div className="">
-              <div className="display-inline-block ">
-                <div className="text-bold font-body-xl display-block height-9 padding-top-4 padding-bottom-2">
-                  {user && checkoutState && checkedOutByUser ? (
-                    <CreateOutlined
-                      color="primary"
-                      fontSize="large"
-                      className="position-relative top-2px"
-                    />
-                  ) : (
-                    ""
-                  )}{" "}
-                  {facilityAdditionalName}
-                  {user ? (
-                    <div className="text-bold font-body-2xs display-inline-block ">
-                      {checkedOutByUser === true ? (
-                        <Button
-                          type="button"
-                          autoFocus
-                          outline={false}
-                          tabIndex="0"
-                          aria-label={`Check back in the configuration `}
-                          className=" padding-1 padding-right-3 padding-left-3 margin-2"
-                          onClick={() => checkoutStateHandler(false)}
-                          id="checkInBTN"
-                          epa-testid="checkInBTN"
-                        >
-                          <LockOpenSharp /> {"Check Back In"}
-                        </Button>
-                      ) : !lockedFacility &&
-                        !userHasCheckout &&
-                        selectedConfig.active &&
-                        checkedOutConfigs
-                          .map((location) => location["monPlanId"])
-                          .indexOf(selectedConfig.id) === -1 ? (
-                        <Button
-                          type="button"
-                          autoFocus
-                          outline={true}
-                          tabIndex="0"
-                          aria-label={`Check out the configuration`}
-                          className="float-top padding-1 padding-right-3 padding-left-3 margin-2"
-                          onClick={() => checkoutStateHandler(true)}
-                          id="checkOutBTN"
-                          epa-testid="checkOutBTN"
-                        >
-                          <CreateOutlined color="primary" /> {"Check Out"}
-                        </Button>
-                      ) : null}
-                    </div>
-                  ) : (
-                    ""
-                  )}
+              <div className="grid-row">
+                {user &&
+                  <div>
+                    {checkedOutByUser === true ? (
+                      <Button
+                        type="button"
+                        autoFocus
+                        outline={false}
+                        tabIndex="0"
+                        aria-label={`Check back in the configuration `}
+                        onClick={() => checkoutStateHandler(false)}
+                        id="checkInBTN"
+                        epa-testid="checkInBTN"
+                      >
+                        <LockOpenSharp /> {"Check Back In"}
+                      </Button>
+                    ) : !lockedFacility &&
+                      !userHasCheckout &&
+                      selectedConfig.active &&
+                      checkedOutConfigs
+                        .map((location) => location["monPlanId"])
+                        .indexOf(selectedConfig.id) === -1 ? (
+                      <Button
+                        type="button"
+                        autoFocus
+                        outline={true}
+                        tabIndex="0"
+                        aria-label={`Check out the configuration`}
+                        onClick={() => checkoutStateHandler(true)}
+                        id="checkOutBTN"
+                        epa-testid="checkOutBTN"
+                      >
+                        <CreateOutlined color="primary" /> {"Check Out"}
+                      </Button>
+                    ) : null}
+                  </div>
+                }
+
+                {showRevert(evalStatus) &&
                   <Button
                     type="button"
-                    className="margin-left-4 position-relative top-neg-1"
+                    id="showRevertModal"
+                    onClick={() => setShowRevertModal(true)}
                     outline={true}
-                    title="Open Comments"
-                    onClick={() => openViewComments()}
                   >
-                    View Comments
+                    Revert to Official Record
                   </Button>
-                </div>
+                }
+              </div>
 
-                <div className="grid-row">
-                  <DropdownSelection
-                    caption="Locations"
-                    orisCode={orisCode}
-                    options={locations}
-                    viewKey="name"
-                    selectKey="id"
-                    initialSelection={locationSelect[0]}
-                    selectionHandler={setLocationSelect}
-                    workspaceSection={MONITORING_PLAN_STORE_NAME}
-                  />
-                  <DropdownSelection
-                    caption="Sections"
-                    selectionHandler={setSectionSelect}
-                    options={sections}
-                    viewKey="name"
-                    selectKey="name"
-                    initialSelection={sectionSelect[0]}
-                    orisCode={orisCode}
-                    workspaceSection={MONITORING_PLAN_STORE_NAME}
-                  />
-                  <div className="">
-                    <div className="bottom-0 position-absolute padding-bottom-05">
-                      <Checkbox
-                        epa-testid="inactiveCheckBox"
-                        id="checkbox"
-                        name="checkbox"
-                        label="Show Inactive"
-                        checked={inactive[0]}
-                        disabled={inactive[1]}
-                        onChange={() =>
-                          setInactive(
-                            [!inactive[0], inactive[1]],
-                            facility,
-                            MONITORING_PLAN_STORE_NAME
-                          )
-                        }
-                      />
-                    </div>
-                  </div>
+              {user &&
+                <div className="display-flex flex-align-center margin-top-2">
+                  <p className="text-bold margin-right-1">Evaluation Status:</p>
+                  {evalStatusContent()}
+                  <p className="text-bold margin-x-1">Submission Status: </p>
+                  <p className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(evalStatus)} margin-0`}>Resubmission required</p>
                 </div>
+              }
+
+              <div className="display-flex flex-row">
+                <DropdownSelection
+                  caption="Locations"
+                  orisCode={orisCode}
+                  options={locations}
+                  viewKey="name"
+                  selectKey="id"
+                  initialSelection={locationSelect[0]}
+                  selectionHandler={setLocationSelect}
+                  workspaceSection={MONITORING_PLAN_STORE_NAME}
+                />
+                <DropdownSelection
+                  caption="Sections"
+                  selectionHandler={setSectionSelect}
+                  options={sections}
+                  viewKey="name"
+                  selectKey="name"
+                  initialSelection={sectionSelect[0]}
+                  orisCode={orisCode}
+                  workspaceSection={MONITORING_PLAN_STORE_NAME}
+                />
+                <div className="margin-top-6">
+                  <Checkbox
+                    epa-testid="inactiveCheckBox"
+                    id="checkbox"
+                    name="checkbox"
+                    label="Show Inactive"
+                    checked={inactive[0]}
+                    disabled={inactive[1]}
+                    onChange={() =>
+                      setInactive(
+                        [!inactive[0], inactive[1]],
+                        facility,
+                        MONITORING_PLAN_STORE_NAME
+                      )}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Button
+                  type="button"
+                  outline
+                  title="Open Comments"
+                  onClick={() => openViewComments()}
+                >
+                  View Comments
+                </Button>
+                <Button
+                  outline
+                  title="View Audit Report"
+                  type="button"
+                >
+                  View Audit Report
+                </Button>
+                <Button
+                  outline
+                  title="View Printout Report"
+                  type="button"
+                >
+                  View Printout Report
+                </Button>
               </div>
             </div>
           </div>
         </div>
       ) : (
         <Preloader />
-      )}
+      )
+      }
       <div
-        className={`usa-overlay ${
-          showImportModal || isReverting ? "is-visible" : ""
-        }`}
+        className={`usa-overlay ${showImportModal || isReverting ? "is-visible" : ""
+          }`}
       />
 
-      {showImportModal && !finishedLoading && !isLoading ? (
-        <div>
-          <UploadModal
-            show={showImportModal}
-            close={closeImportModalHandler}
-            showCancel={true}
-            showSave={true}
-            title={"Import a Monitoring Plan to continue"}
-            exitBTN={"Import"}
-            disablePortBtn={disablePortBtn}
-            port={() => {
-              importMPBtn(importedFile);
-            }}
-            hasFormatError={hasFormatError}
-            hasInvalidJsonError={hasInvalidJsonError}
-            children={
-              <ImportModal
-                setDisablePortBtn={setDisablePortBtn}
-                disablePortBtn={disablePortBtn}
-                setFileName={setFileName}
-                setHasFormatError={setHasFormatError}
-                setHasInvalidJsonError={setHasInvalidJsonError}
-                setImportedFile={setImportedFile}
-                workspaceSection={MONITORING_PLAN_STORE_NAME}
-              />
-            }
-          />
-        </div>
-      ) : null}
-      {isReverting ? (
+      {
+        showImportModal && !finishedLoading && !isLoading ? (
+          <div>
+            <UploadModal
+              show={showImportModal}
+              close={closeImportModalHandler}
+              showCancel={true}
+              showSave={true}
+              title={"Import a Monitoring Plan to continue"}
+              exitBTN={"Import"}
+              disablePortBtn={disablePortBtn}
+              port={() => {
+                importMPBtn(importedFile);
+              }}
+              hasFormatError={hasFormatError}
+              hasInvalidJsonError={hasInvalidJsonError}
+              children={
+                <ImportModal
+                  setDisablePortBtn={setDisablePortBtn}
+                  disablePortBtn={disablePortBtn}
+                  setFileName={setFileName}
+                  setHasFormatError={setHasFormatError}
+                  setHasInvalidJsonError={setHasInvalidJsonError}
+                  setImportedFile={setImportedFile}
+                  workspaceSection={MONITORING_PLAN_STORE_NAME}
+                />
+              }
+            />
+          </div>
+        ) : null
+      }
+      {
+        isReverting &&
         <UploadModal
           width={"30%"}
           left={"35%"}
           children={<Preloader />}
           preloader
         />
-      ) : (
-        ""
-      )}
+      }
       {/* while uploading, just shows preloader spinner  */}
 
-      {isLoading && !finishedLoading ? (
+      {
+        (isLoading && !finishedLoading) &&
         <UploadModal
           width={"30%"}
           left={"35%"}
@@ -871,12 +823,11 @@ export const HeaderInfo = ({
           setImportedFileErrorMsgs={setImportedFileErrorMsgs}
           fileName={fileName}
         />
-      ) : (
-        ""
-      )}
+      }
 
       {/* after it finishes uploading , shows either api errors or success messages */}
-      {showImportModal && usePortBtn && finishedLoading ? (
+      {
+        (showImportModal && usePortBtn && finishedLoading) &&
         <UploadModal
           show={showImportModal}
           close={closeImportModalHandler}
@@ -899,12 +850,11 @@ export const HeaderInfo = ({
             />
           }
         />
-      ) : (
-        ""
-      )}
+      }
 
       <div className={`usa-overlay ${showCommentsModal ? "is-visible" : ""}`} />
-      {showCommentsModal ? (
+      {
+        showCommentsModal &&
         <div>
           <UploadModal
             show={showCommentsModal}
@@ -926,10 +876,8 @@ export const HeaderInfo = ({
             }
           />
         </div>
-      ) : (
-        ""
-      )}
-    </div>
+      }
+    </div >
   );
 };
 

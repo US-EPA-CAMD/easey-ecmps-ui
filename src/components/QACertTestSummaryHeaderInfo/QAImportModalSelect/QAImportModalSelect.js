@@ -10,6 +10,7 @@ const QAImportModalSelect = ({ setImportTypeSelection }) => {
   const [selection, setSelection] = useState(0);
   useEffect(() => {
     setImportTypeSelection(selectOptions[selection]["key"]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selection]);
 
   return (

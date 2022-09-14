@@ -13,7 +13,7 @@ const props = {
   dataRef: {},
 }
 
-test.only('renders QA Test Summary table title', async () => {
+test('renders QA Test Summary table title', async () => {
   const response = { data: { testSummaryData: [] } }
   qaCertificationsAPI.exportQA = jest.fn().mockReturnValue(response)
   render(<ExportTablesContainer {...props} />);

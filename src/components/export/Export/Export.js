@@ -6,7 +6,6 @@ import {
   convertSectionToStoreName,
   EXPORT_STORE_NAME
 } from "../../../additional-functions/workspace-section-and-store-names";
-import { setActiveTab } from "../../../store/actions/activeTab";
 import { setExportState } from "../../../store/actions/dynamicFacilityTab";
 
 export const Export = ({
@@ -44,24 +43,12 @@ const mapStateToProps = (state) => {
     tabs: state.openedFacilityTabs[
       convertSectionToStoreName(EXPORT_STORE_NAME)
     ],
-    activeTab:
-      state.activeTab[
-        convertSectionToStoreName(EXPORT_STORE_NAME)
-      ][0],
     exportTab: state.openedFacilityTabs.export,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setActiveTab: (orisCode, value) =>
-      dispatch(
-        setActiveTab(
-          orisCode,
-          value,
-          convertSectionToStoreName(EXPORT_STORE_NAME)
-        )
-      ),
     setExportState: (configId, exportState, workspaceSection) =>
       dispatch(setExportState(configId, exportState, workspaceSection)),
   };

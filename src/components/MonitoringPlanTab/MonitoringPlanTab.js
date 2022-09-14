@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 
 import { connect } from "react-redux";
 import MonitoringPlanTabRender from "../MonitoringPlanTabRender/MonitoringPlanTabRender";
-
-import { setActiveTab } from "../../store/actions/activeTab";
 import {
   setSectionSelectionState,
   setLocationSelectionState,
@@ -28,7 +26,6 @@ export const MonitoringPlanTab = ({
   checkout,
   tabs,
 
-  activeTab,
   setSection,
   setLocation,
   setCheckout,
@@ -39,8 +36,18 @@ export const MonitoringPlanTab = ({
   mostRecentlyCheckedInMonitorPlanIdForTab,
   workspaceSection,
 }) => {
+  const getCurrentTab = () =>{
+    return tabs.find(tab => tab.selectedConfig.id === selectedConfig.id);
+  }
+  const [ currentTab, setCurrentTab ] = useState(getCurrentTab());
+
+  useEffect(()=>{
+    setCurrentTab(getCurrentTab())
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[selectedConfig]);
+
   const [sectionSelect, setSectionSelect] = useState(
-    tabs[activeTab[0]].section
+    getCurrentTab().section
   );
   useEffect(() => {
     setSection(sectionSelect, title, MONITORING_PLAN_STORE_NAME);
@@ -48,13 +55,14 @@ export const MonitoringPlanTab = ({
   }, [sectionSelect]);
 
   const [locationSelect, setLocationSelect] = useState(
-    tabs[activeTab].location
+    getCurrentTab().location
   );
 
   useEffect(() => {
     setLocation(locationSelect, title, workspaceSection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect]);
+
   return (
     <div>
       <div>
@@ -66,17 +74,17 @@ export const MonitoringPlanTab = ({
           title={title}
           orisCode={orisCode}
           selectedConfig={selectedConfig}
-          sectionSelect={tabs[activeTab].section}
-          setSectionSelect={setSectionSelect}
-          locationSelect={tabs[activeTab].location}
-          setLocationSelect={setLocationSelect}
+          sectionSelect={sectionSelect}
+          setSectionSelect={(section)=>setSectionSelect(section)}
+          locationSelect={locationSelect}
+          setLocationSelect={(location)=>setLocationSelect(location)}
           locations={selectedConfig.locations}
           user={user}
-          configID={tabs[activeTab[0]].selectedConfig.id}
-          checkout={tabs[activeTab[0]].checkout}
+          configID={currentTab.selectedConfig.id}
+          checkout={currentTab.checkout}
           setCheckout={setCheckout}
           setInactive={setInactive}
-          inactive={tabs[activeTab[0]].inactive}
+          inactive={currentTab.inactive}
           checkedOutLocations={checkedOutLocations}
           setMostRecentlyCheckedInMonitorPlanId={
             setMostRecentlyCheckedInMonitorPlanId
@@ -94,8 +102,6 @@ const mapStateToProps = (state) => {
     tabs: state.openedFacilityTabs[
       convertSectionToStoreName(MONITORING_PLAN_STORE_NAME)
     ],
-    activeTab:
-      state.activeTab[convertSectionToStoreName(MONITORING_PLAN_STORE_NAME)],
   };
 };
 
@@ -114,14 +120,6 @@ const mapDispatchToProps = (dispatch) => {
         setSectionSelectionState(
           section,
           title,
-          convertSectionToStoreName(workspaceSection)
-        )
-      ),
-    setActiveTab: (orisCode, value, workspaceSection) =>
-      dispatch(
-        setActiveTab(
-          orisCode,
-          value,
           convertSectionToStoreName(workspaceSection)
         )
       ),
