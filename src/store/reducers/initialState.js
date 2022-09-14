@@ -13,9 +13,10 @@ export default {
     monitoringPlans: [],
     qaCertTestSummary: [],
     export: [],
+    emissionsDaily:[],
+    emissionsHourly:[],
+    emissionsMats:[]
   },
-
-  activeTab: { monitoringPlans: [0], qaCertTestSummary: [0], export: [0] },
   dropdowns: {
     defaults: [],
     formulas: [],

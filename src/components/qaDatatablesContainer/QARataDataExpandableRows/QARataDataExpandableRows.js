@@ -1,13 +1,10 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { connect } from "react-redux";
 import {
   getRataData,
   createRataData,
   updateRataData,
-  deleteRataData
+  deleteRataData,
 } from "../../../utils/api/qaCertificationsAPI.js";
-import { loadDropdowns } from "../../../store/actions/dropdowns";
-import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
 import { getRataDataRecords } from "../../../utils/selectors/QACert/TestSummary.js";
 import { Button } from "@trussworks/react-uswds";
 import {
@@ -30,11 +27,7 @@ import QARataSummaryExpandableRows from "../QARataSummaryExpandableRows/QARataSu
 import * as dmApi from "../../../utils/api/dataManagementApi";
 // contains RATA data table
 
-const QARataDataExpandableRows = ({
-  user,
-  data,
-  showProtocolGas=true
-}) => {
+const QARataDataExpandableRows = ({ user, data, showProtocolGas = true }) => {
   const locId = data.locationId;
   const testSumId = data.id;
   const [mdmData, setMdmData] = useState(null);
@@ -90,26 +83,33 @@ const QARataDataExpandableRows = ({
     numberOfLoadLevels: ["Number of Load Levels", "dropdown", "", ""],
     relativeAccuracy: ["Relative Accuracy", "input", "", ""],
     rataFrequencyCode: ["RATA Frequency Code", "dropdown", "", ""],
-    overallBiasAdjustmentFactor: ["Overall Bias Adjustment Factor", "input", "", ""],
+    overallBiasAdjustmentFactor: [
+      "Overall Bias Adjustment Factor",
+      "input",
+      "",
+      "",
+    ],
   };
-  const loadDropdownsData = () =>{
+  const loadDropdownsData = () => {
     let dropdowns = {};
-    dmApi.getAllRataFreqCodes()
-      .then((response) => {
-        dropdowns[dropdownArray[0]] = response.data.map((option) => {
-          return {
-            code: option["rataFrequencyCode"],
-            name: option["rataFrequencyCodeDescription"],
-          };
-        });
-        dropdowns[dropdownArray[0]].unshift({ code: "", name: "-- Select a value --" });
-        setMdmData(dropdowns);
+    dmApi.getAllRataFreqCodes().then((response) => {
+      dropdowns[dropdownArray[0]] = response.data.map((option) => {
+        return {
+          code: option["rataFrequencyCode"],
+          name: option["rataFrequencyCodeDescription"],
+        };
       });
+      dropdowns[dropdownArray[0]].unshift({
+        code: "",
+        name: "-- Select a value --",
+      });
+      setMdmData(dropdowns);
+    });
   };
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
     if (!dropdownArrayIsEmpty && mdmData === null) {
-      if(!dropdownsLoading){
+      if (!dropdownsLoading) {
         loadDropdownsData();
         setDropdownsLoading(true);
       }
@@ -117,9 +117,13 @@ const QARataDataExpandableRows = ({
       setDropdownsLoaded(true);
       setDropdownsLoading(false);
       mdmData.numberOfLoadLevels = [
-        { code: "", name: selectText }, { code: 1, name: 1 }, { code: 2, name: 2 }, { code: 3, name: 3 },
+        { code: "", name: selectText },
+        { code: 1, name: 1 },
+        { code: 2, name: 2 },
+        { code: 3, name: 3 },
       ];
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mdmData]);
 
   const controlDatePickerInputs = {};
@@ -145,7 +149,12 @@ const QARataDataExpandableRows = ({
     let selectedData = null;
     setCreateNewData(create);
     if (create) {
-      controlInputs.numberOfLoadLevels = ["Number of Load Levels", "dropdown", "", ""];
+      controlInputs.numberOfLoadLevels = [
+        "Number of Load Levels",
+        "dropdown",
+        "",
+        "",
+      ];
     }
     if (dataPulled.length > 0 && !create) {
       selectedData = dataPulled.filter(
@@ -205,8 +214,10 @@ const QARataDataExpandableRows = ({
   };
 
   const createData = () => {
-    const uiControls = {}
-    Object.keys(controlInputs).forEach((key) => { uiControls[key] = null });
+    const uiControls = {};
+    Object.keys(controlInputs).forEach((key) => {
+      uiControls[key] = null;
+    });
     const userInput = extractUserInput(uiControls, ".modalUserInput");
     createRataData(locId, testSumId, userInput)
       .then((res) => {
@@ -224,10 +235,10 @@ const QARataDataExpandableRows = ({
   };
 
   const saveData = () => {
-    const uiControls = {}
+    const uiControls = {};
     Object.keys(controlInputs).forEach((key) => {
-      if (key === 'numberOfLoadLevels') {
-        uiControls[key] = selectedRow.numberOfLoadLevels
+      if (key === "numberOfLoadLevels") {
+        uiControls[key] = selectedRow.numberOfLoadLevels;
       } else {
         uiControls[key] = null;
       }
@@ -251,11 +262,7 @@ const QARataDataExpandableRows = ({
   const onRemoveHandler = async (row) => {
     const { id: idToRemove, testSumId } = row;
     try {
-      const resp = await deleteRataData(
-        locId,
-        testSumId,
-        idToRemove
-      );
+      const resp = await deleteRataData(locId, testSumId, idToRemove);
       if (resp.status === 200) {
         const dataPostRemove = rataData.filter(
           (rowData) => rowData.id !== idToRemove
@@ -263,7 +270,7 @@ const QARataDataExpandableRows = ({
         setRataData(dataPostRemove);
       }
     } catch (error) {
-      console.log('error deleting rata data', error);
+      console.log("error deleting rata data", error);
     }
   };
 
@@ -277,17 +284,17 @@ const QARataDataExpandableRows = ({
           data={dataRecords}
           openHandler={openModal}
           onRemoveHandler={onRemoveHandler}
-          expandableRowComp={<QARataSummaryExpandableRows
-            user={user}
-            locId={locId}
-            testSumId={testSumId}
-          />}
+          expandableRowComp={
+            <QARataSummaryExpandableRows
+              user={user}
+              locId={locId}
+              testSumId={testSumId}
+            />
+          }
           actionColumnName={
-            user ?
+            user ? (
               <>
-                <span className="padding-right-2">
-                  RATA Data
-                </span>
+                <span className="padding-right-2">RATA Data</span>
                 <Button
                   epa-testid="btnOpen"
                   className="text-white"
@@ -296,47 +303,49 @@ const QARataDataExpandableRows = ({
                   Add
                 </Button>
               </>
-              : "RATA Data"
+            ) : (
+              "RATA Data"
+            )
           }
           actionsBtn={"View"}
           user={user}
           evaluate={false}
           noDataComp={
-            user ?
-              (<QADataTableRender
+            user ? (
+              <QADataTableRender
                 columnNames={columns}
                 columnWidth={15}
                 data={[]}
                 actionColumnName={
-                  (
-                    <>
-                      <span className="padding-right-2">RATA Data</span>
-                      <Button
-                        epa-testid="btnOpen"
-                        className="text-white"
-                        onClick={() => openModal(false, false, true)}
-                      >
-                        Add
-                      </Button>
-                    </>
-                  )
+                  <>
+                    <span className="padding-right-2">RATA Data</span>
+                    <Button
+                      epa-testid="btnOpen"
+                      className="text-white"
+                      onClick={() => openModal(false, false, true)}
+                    >
+                      Add
+                    </Button>
+                  </>
                 }
                 actionsBtn={"View"}
                 user={user}
-              />) : "There're no RATA data records available."
+              />
+            ) : (
+              "There're no RATA data records available."
+            )
           }
         />
       ) : (
         <Preloader />
       )}
-      {
-        showProtocolGas &&
+      {showProtocolGas && (
         <QAProtocolGasExpandableRows
           user={user}
           locId={locId}
           testSumId={testSumId}
         />
-      }
+      )}
 
       {show ? (
         <Modal
@@ -349,8 +358,8 @@ const QARataDataExpandableRows = ({
             createNewData
               ? `Add  ${dataTableName}`
               : user
-                ? ` Edit ${dataTableName}`
-                : ` ${dataTableName}`
+              ? ` Edit ${dataTableName}`
+              : ` ${dataTableName}`
           }
           exitBTN={`Save and Close`}
           children={

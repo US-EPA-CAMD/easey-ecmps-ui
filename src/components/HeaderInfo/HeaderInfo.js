@@ -76,7 +76,7 @@ export const HeaderInfo = ({
   const closeRevertModal = () => setShowRevertModal(false);
   const closeEvalReportModal = () => setShowEvalReport(false);
 
-  const [checkoutState, setCheckoutState] = useState(checkout);
+  // const [checkoutState, setCheckoutState] = useState(checkout);
   const inWorkspace = user;
 
   // refreshing evaluation status
@@ -339,7 +339,7 @@ export const HeaderInfo = ({
   const renderWithNewData = (configs, currentConfig, currentCheckoutStatus) => {
     const intervalId = startRefreshTimer();
 
-    setCheckoutState(currentConfig.checkedOutBy !== "N/A");
+    // setCheckoutState(currentConfig.checkedOutBy !== "N/A");
     setOpenIntervalId(intervalId);
     setUserHasCheckout(
       configs.some((plan) => plan["checkedOutBy"] === user.userId)
@@ -456,10 +456,6 @@ export const HeaderInfo = ({
     return status === "PASS" || status === "INFO" || status === "ERR";
   };
 
-  const showSubmit = (status) => {
-    return status === "PASS" || status === "INFO";
-  };
-
   const showRevert = (status) => {
     return (
       status === "PASS" ||
@@ -480,7 +476,7 @@ export const HeaderInfo = ({
       () => {
         setCheckedOutByUser(direction);
         setLockedFacility(direction);
-        setCheckoutState(direction);
+        // setCheckoutState(direction);
         setDataLoaded(false);
       }
     );
@@ -595,27 +591,6 @@ export const HeaderInfo = ({
 
       {evalStatusLoaded && dataLoaded ? (
         <div>
-          <div>
-            {user && checkedOutByUser &&
-              <div>
-                <div className="grid-row float-right text-right desktop:display-block">
-                  <div className="padding-1">
-                    {showSubmit(evalStatus) &&
-                      <Button
-                        type="button"
-                        className="margin-right-2 float-right margin-bottom-2"
-                        outline={false}
-                        title="Coming Soon"
-                      >
-                        Submit
-                      </Button>
-                    }
-                  </div>
-                </div>
-              </div>
-            }
-          </div>
-
           <div className="display-flex flex-row flex-justify flex-align-center height-2">
             <div className="grid-row">
               <h3 className="margin-y-auto font-body-lg margin-right-2">
@@ -633,7 +608,7 @@ export const HeaderInfo = ({
                   outline={true}
                   onClick={exportHandler}
                 >
-                  Export Monitoring Plan
+                  Export Data
                 </Button>
                 <Button
                   type="button"
@@ -642,7 +617,7 @@ export const HeaderInfo = ({
                   onClick={() => openImportModal()}
                   id="importMonitoringPlanBtn"
                 >
-                  Import Monitoring Plan
+                  Import Data
                 </Button>
               </div>
             }
@@ -707,7 +682,7 @@ export const HeaderInfo = ({
               </div>
 
               {user &&
-                <div className="display-flex flex-align-center">
+                <div className="display-flex flex-align-center margin-top-2">
                   <p className="text-bold margin-right-1">Evaluation Status:</p>
                   {evalStatusContent()}
                   <p className="text-bold margin-x-1">Submission Status: </p>
@@ -765,17 +740,17 @@ export const HeaderInfo = ({
                 </Button>
                 <Button
                   outline
-                  title="Monitor Audit Report"
+                  title="View Audit Report"
                   type="button"
                 >
-                  Monitor Audit Report
+                  View Audit Report
                 </Button>
                 <Button
                   outline
-                  title="Monitor Plan Report"
+                  title="View Printout Report"
                   type="button"
                 >
-                  Monitor Plan Report
+                  View Printout Report
                 </Button>
               </div>
             </div>

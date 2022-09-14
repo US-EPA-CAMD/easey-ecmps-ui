@@ -51,6 +51,8 @@ export const SelectConfigurationBaseModuleHome = ({
         document.title = emissions_mats_module;
         setTitleName(emissions_mats_module);
         break;
+      default:
+        break;
     }
   }, [workspaceSection]);
 
@@ -96,6 +98,9 @@ export const SelectConfigurationBaseModuleHome = ({
         }
         break;
       case EXPORT_STORE_NAME:
+      case EMISSIONS_DAILY_STORE_NAME:
+      case EMISSIONS_HOURLY_STORE_NAME:
+      case EMISSIONS_MATS_STORE_NAME:
         for (const row of openedFacilityTabs) {
           tabArr.push({
             title: row.name,

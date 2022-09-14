@@ -10,23 +10,21 @@ import * as mpApi from "../../utils/api/monitoringPlansApi";
 import {
   convertSectionToStoreName,
   MONITORING_PLAN_STORE_NAME,
-  QA_CERT_TEST_SUMMARY_STORE_NAME,
+  // QA_CERT_TEST_SUMMARY_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 export const Tabs = ({
   children,
   dynamic = false,
   removeTabs,
-  setActive,
   checkedOutLocations,
   user,
   setCheckout,
   workspaceSection,
 }) => {
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const [activeTabIndex, setActiveTabIndex] = useState(children.length-1);
 
   const settingActiveTab = (index) => {
     setActiveTabIndex(index);
-    setActive(false, index - 1, workspaceSection);
   };
   const closeHandler = (event, index, configId) => {
     event.stopPropagation();
@@ -57,7 +55,6 @@ export const Tabs = ({
     }
     if (activeTabIndex === children.length - 1) {
       setActiveTabIndex(index - 1);
-      setActive(false, index - 2, workspaceSection);
     }
   };
 

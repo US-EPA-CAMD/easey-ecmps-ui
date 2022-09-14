@@ -23,11 +23,11 @@ export const getLinearitySummary = (totalData) => {
 };
 
 // year - month - day to  month / day/ year
-const formatStringToDate = (date) => {
-  const parts = date.split("-");
+// const formatStringToDate = (date) => {
+//   const parts = date.split("-");
 
-  return `${parts[1]}/${parts[2]}/${parts[0]}`;
-};
+//   return `${parts[1]}/${parts[2]}/${parts[0]}`;
+// };
 
 export const getQAColsByTestCode = (testCode) => {
   let cols = [
@@ -172,7 +172,7 @@ export const getQAModalDetailsByTestCode = (testCode) => {
   const testNumber = ["Test Number", "input", "", ""]
   const testReasonCode = ["Test Reason Code", "dropdown", "", ""]
   const testResultCode = ["Test Result Code", "dropdown", "", ""]
-  const gasLevelCode = ["Gas Level Code Code", "nonFilteredDropdown", "", ""]
+  // const gasLevelCode = ["Gas Level Code Code", "nonFilteredDropdown", "", ""]
   const testDescription = ["Test Description", "input", "", ""]
   const gracePeriodIndicator = ["Grace Period Indicator", "radio", "", ""]
   const injectionProtocolCode = ["Injection Protocol Code", "nonFilteredDropdown", "", ""]

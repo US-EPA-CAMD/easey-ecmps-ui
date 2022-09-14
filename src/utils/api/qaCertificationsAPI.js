@@ -194,6 +194,7 @@ export const updateQALinearitySummaryTestSecondLevel = async (
   payload
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/linearities/${id}`;
+  console.log("url", url, locId, testSumId, id, payload);
   try {
     return handleResponse(
       await secureAxios({
@@ -337,11 +338,7 @@ export const getProtocolGas = async (locID, testSumId) => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const createProtocolGas = async (
-  locId,
-  testSumId,
-  payload
-) => {
+export const createProtocolGas = async (locId, testSumId, payload) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/protocol-gases`;
   try {
     return handleResponse(
@@ -403,11 +400,7 @@ export const getRataData = async (locID, testSumId) => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const createRataData = async (
-  locId,
-  testSumId,
-  payload
-) => {
+export const createRataData = async (locId, testSumId, payload) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata`;
   try {
     return handleResponse(
@@ -422,12 +415,7 @@ export const createRataData = async (
   }
 };
 
-export const updateRataData = async (
-  id,
-  locId,
-  testSumId,
-  payload
-) => {
+export const updateRataData = async (id, locId, testSumId, payload) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${id}`;
   try {
     return handleResponse(
@@ -454,7 +442,7 @@ export const deleteRataData = async (locId, testSumId, id) => {
   } catch (error) {
     return handleImportError(error);
   }
-}
+};
 
 export const getRataSummary = async (locId, testSumId, rataId) => {
   let url = `${config.services.qaCertification.uri}`;
@@ -468,7 +456,7 @@ export const getRataSummary = async (locId, testSumId, rataId) => {
   url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries`;
 
   return axios.get(url).then(handleResponse).catch(handleError);
-}
+};
 
 export const createRataSummary = async (locId, testSumId, rataId, payload) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries`;
@@ -483,9 +471,15 @@ export const createRataSummary = async (locId, testSumId, rataId, payload) => {
   } catch (error) {
     return handleError(error);
   }
-}
+};
 
-export const updateRataSummary = async (locId, testSumId, rataId, id, payload) => {
+export const updateRataSummary = async (
+  locId,
+  testSumId,
+  rataId,
+  id,
+  payload
+) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${id}`;
   try {
     return handleResponse(
@@ -498,7 +492,7 @@ export const updateRataSummary = async (locId, testSumId, rataId, id, payload) =
   } catch (error) {
     return handleImportError(error);
   }
-}
+};
 
 export const deleteRataSummary = async (locId, testSumId, rataId, id) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${id}`;
@@ -512,7 +506,7 @@ export const deleteRataSummary = async (locId, testSumId, rataId, id) => {
   } catch (error) {
     return handleImportError(error);
   }
-}
+};
 
 export const getRataRunData = async (locId, testSumId, rataId, rataSumId) => {
   let url = `${config.services.qaCertification.uri}`;
@@ -525,9 +519,15 @@ export const getRataRunData = async (locId, testSumId, rataId, rataSumId) => {
   // *** attach the rest of the url
   url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/`;
   return axios.get(url).then(handleResponse).catch(handleError);
-}
+};
 
-export const createRataRunData = async (locId, testSumId, rataId, rataSumId, payload) => {
+export const createRataRunData = async (
+  locId,
+  testSumId,
+  rataId,
+  rataSumId,
+  payload
+) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs`;
 
   try {
@@ -541,9 +541,16 @@ export const createRataRunData = async (locId, testSumId, rataId, rataSumId, pay
   } catch (error) {
     return handleError(error);
   }
-}
+};
 
-export const updateRataRunData = async (locId, testSumId, rataId, id, payload, rataSumId) => {
+export const updateRataRunData = async (
+  locId,
+  testSumId,
+  rataId,
+  id,
+  payload,
+  rataSumId
+) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${id}`;
   try {
     return handleResponse(
@@ -556,9 +563,15 @@ export const updateRataRunData = async (locId, testSumId, rataId, id, payload, r
   } catch (error) {
     return handleImportError(error);
   }
-}
+};
 
-export const deleteRataRunData = async (locId, testSumId, rataId, id, rataSumId) => {
+export const deleteRataRunData = async (
+  locId,
+  testSumId,
+  rataId,
+  id,
+  rataSumId
+) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${id}`;
   try {
     return handleResponse(
@@ -570,4 +583,4 @@ export const deleteRataRunData = async (locId, testSumId, rataId, id, rataSumId)
   } catch (error) {
     return handleImportError(error);
   }
-}
+};
