@@ -8,10 +8,10 @@ activityEvents.push("keydown");
 const getConfigValue = (key, defaultValue = '') => {
   let returnValue;
 
-  if (window._env_) {
+  if (window._env_ && window._env_[key]) {
     returnValue = window._env_[key];
   }
-  else if (!returnValue && process.env) {
+  else if (!returnValue && process.env[key]) {
     returnValue = process.env[key];
   }
   return returnValue || defaultValue;
@@ -83,43 +83,43 @@ export const config = {
     mdm: {
       uri: getConfigValue(
         'REACT_APP_EASEY_MDM_API',
-        "https://api-easey-dev.app.cloud.gov/master-data-mgmt",
+        "https://api.epa.gov/easey/dev/master-data-mgmt",
       ),
     },
     facilities: {
       uri: getConfigValue(
         'REACT_APP_EASEY_FACILITIES_API',
-        "https://api-easey-dev.app.cloud.gov/facilities-mgmt",
+        "https://api.epa.gov/easey/dev/facilities-mgmt"
       ),
     },
     emissions: {
       uri: getConfigValue(
         'REACT_APP_EASEY_EMISSIONS_API',
-        "https://api-easey-dev.app.cloud.gov/emissions-mgmt",
+        "https://api.epa.gov/easey/dev/emissions-mgmt",
       ),
     },
     monitorPlans: {
       uri: getConfigValue(
         'REACT_APP_EASEY_MONITOR_PLAN_API',
-        "https://api-easey-dev.app.cloud.gov/monitor-plan-mgmt",
+        "https://api.epa.gov/easey/dev/monitor-plan-mgmt"
       ),
     },
     qaCertification: {
       uri: getConfigValue(
         'REACT_APP_EASEY_QA_CERTIFICATION_API',
-        "https://api-easey-dev.app.cloud.gov/qa-certification-mgmt",
+        "https://api.epa.gov/easey/dev/qa-certification-mgmt",
       ),
     },
     authApi: {
       uri: getConfigValue(
         'REACT_APP_EASEY_AUTH_API',
-        "https://api-easey-dev.app.cloud.gov/auth-mgmt",
+        "https://api.epa.gov/easey/dev/auth-mgmt",
       ),
     },
     quartz: {
       uri: getConfigValue(
         'REACT_APP_EASEY_QUARTZ_API',
-        "https://api-easey-dev.app.cloud.gov/quartz-mgmt",
+        "https://api.epa.gov/easey/dev/quartz-mgmt",
       ),
     },
     content: {
@@ -131,7 +131,7 @@ export const config = {
     camd: {
       uri: getConfigValue(
         'REACT_APP_EASEY_CAMD_SERVICES',
-        "https://api-easey-dev.app.cloud.gov/camd-services",
+        "https://api.epa.gov/easey/dev/camd-services",
       ),
     },
   },
