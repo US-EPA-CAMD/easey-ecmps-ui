@@ -452,14 +452,18 @@ const QAExpandableRowsRender = ({
   };
 
   const onRemoveHandler = async (row) => {
-    assertSelector
-      .removeDataSwitch(row, dataTableName, locationId, id, extraIDs)
-      .then((res) => {
-        console.log("res", res.data);
-        finishedLoadingData(res.data);
-        setUpdateTable(true);
-        executeOnClose();
-      });
+    try {
+      const resp = await assertSelector.removeDataSwitch(row, dataTableName, locationId, id, extraIDs)
+      if (resp.status === 200) {
+        const dataPostRemove = dataPulled.filter(
+          (rowData) => rowData.id !== row.id
+        );
+        setDisplayedRecords(dataPostRemove)
+        executeOnClose()
+      }
+    } catch (error) {
+      console.log("error deleting data", error);
+    }
   };
 
   return (
@@ -541,8 +545,8 @@ const QAExpandableRowsRender = ({
             createNewData
               ? `Add  ${dataTableName}`
               : user
-              ? ` Edit ${dataTableName}`
-              : ` ${dataTableName}`
+                ? ` Edit ${dataTableName}`
+                : ` ${dataTableName}`
           }
           exitBTN={`Save and Close`}
           children={
