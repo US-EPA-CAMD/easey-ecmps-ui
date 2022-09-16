@@ -36,7 +36,7 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       });
 
     case rataRunData:
-      console.log("name, location, id, extraIdsArr", name, location, id, extraIdsArr);
+      console.log("name, location, id, extraIdsArr", name, location, id, extraIdsArr)
       return qaApi
         .getRataRunData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], id)
         .catch((error) => {
@@ -119,9 +119,10 @@ export const removeDataSwitch = async (
         });
 
     case rataRunData:
-      return qaApi.deleteRataRunData(locationId, id).catch((error) => {
-        console.log("error", error);
-      });
+      return qaApi.deleteRataRunData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[3], id, row.id)
+        .catch((error) => {
+          console.log("error", error);
+        });
 
     case rataSummary:
       return qaApi
@@ -239,7 +240,7 @@ export const createDataSwitch = (
 
     case rataRunData:
       return qaApi
-        .createRataRunData(extraIdsArr[0], extraIdsArr[1], id, userInput)
+        .createRataRunData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[3], id, userInput)
         .catch((error) => {
           console.log("error", error);
         });
