@@ -10,6 +10,7 @@ const lineInjection = "Linearity Injection";
 const rataData = "RATA Data";
 const rataRunData = "RATA Run Data";
 const rataSummary = "RATA Summary";
+const airEmissions = "Air Emissions";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -35,11 +36,7 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       });
 
     case rataRunData:
-      console
-        .log("name, location, id, extraIdsArr", name, location, id, extraIdsArr)
-        .catch((error) => {
-          console.log("error", error);
-        });
+      console.log("name, location, id, extraIdsArr", name, location, id, extraIdsArr);
       return qaApi
         .getRataRunData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], id)
         .catch((error) => {
@@ -49,6 +46,12 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
     case rataSummary:
       return qaApi
         .getRataSummary(extraIdsArr[0], extraIdsArr[1], id)
+        .catch((error) => {
+          console.log("error", error);
+        });
+    case airEmissions:
+      return qaApi
+        .getAirEmissions(location, id)
         .catch((error) => {
           console.log("error", error);
         });
@@ -73,6 +76,8 @@ export const getDataTableRecords = (dataIn, name) => {
 
     case rataSummary:
       return selector.mapRataSummaryToRows(dataIn);
+    case airEmissions:
+      return selector.getAirEmissionsRecords(dataIn)
     default:
       break;
   }
@@ -242,6 +247,13 @@ export const createDataSwitch = (
     case rataSummary:
       return qaApi
         .createRataSummary(extraIdsArr[0], extraIdsArr[1], id, userInput)
+        .catch((error) => {
+          console.log("error", error);
+        });
+    
+    case airEmissions:
+      return qaApi
+        .createAirEmissions(location, id, userInput)
         .catch((error) => {
           console.log("error", error);
         });

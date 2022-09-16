@@ -213,3 +213,45 @@ export const qaRataSummaryProps = () => {
     radioBtnPayload: ["apsIndicator"],
   };
 };
+
+export const qaAirEmissionsProps = (selectedRow) => {
+  return {
+    dataTableName: "Air Emissions",
+    payload: {
+      qiLastName: null,
+      qiFirstName: null,
+      qiMiddleInitial: null,
+      AETBName : null,
+      AETBPhoneNumber: null,
+      AETBEmail : null,
+      examDate: null,
+      providerName: null,
+      providerEmail: null,
+    },
+    dropdownArray: [],
+    columnNames: [
+      "QI Last Name",
+      "QI First Name",
+      "QI Middle Initial",
+      "AETB Name",
+      "AETB Phone Number",
+      "AETB Email",
+      "Exam Date",
+      "Provider Name",
+      "Provider Email",
+    ],
+    controlInputs: {
+      qiLastName: ["QI Last Name", "input", "", ""],
+      qiFirstName: ["QI First Name", "input", "", ""],
+      qiMiddleInitial: ["QI Middle Initial", "input", "", ""],
+      AETBName: ["AETB Name", "input", "", ""],
+      AETBPhoneNumber: ["AETB Phone Number", "input", "", ""],
+      AETBEmail: ["AETB Email", "input", "", ""],
+      examDate: ["Exam Date", "date", "", ""],
+      providerName: ["Provider Name", "input", "", ""],
+      providerEmail: ["Provider Email", "input", "", ""],
+    },
+    controlDatePickerInputs: {},
+    extraControls: {},
+  };
+};

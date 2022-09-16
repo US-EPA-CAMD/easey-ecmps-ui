@@ -584,3 +584,58 @@ export const deleteRataRunData = async (
     return handleImportError(error);
   }
 };
+
+export const getAirEmissions = async (locID, testSumId) => {
+  let url = `${config.services.qaCertification.uri}`;
+
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+
+  // *** attach the rest of the url
+  url = `${url}/locations/${locID}/test-summary/${testSumId}/air-emission-testings`;
+
+  //return axios.get(url).then(handleResponse).catch(handleError);
+  return {
+    data: [
+      {
+        "qiLastName": "string",
+        "qiFirstName": "string",
+        "qiMiddleInitial": "string",
+        "aetbName": "string",
+        "aetbPhoneNumber": "string",
+        "aetbEmail": "string",
+        "examDate": "2022-09-15T20:50:21.858Z",
+        "providerName": "string",
+        "providerEmail": "string"
+      },
+      {
+        "qiLastName": "string",
+        "qiFirstName": "string",
+        "qiMiddleInitial": "string",
+        "aetbName": "string",
+        "aetbPhoneNumber": "string",
+        "aetbEmail": "string",
+        "examDate": "2022-09-15T20:50:21.858Z",
+        "providerName": "string",
+        "providerEmail": "string"
+      },
+    ]
+  }
+};
+
+export const createAirEmissions = async (locId, testSumId, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/air-emission-testings`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
