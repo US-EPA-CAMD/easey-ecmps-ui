@@ -89,7 +89,7 @@ export const logOut = async () => {
   if (checkedOutLocationResult.data.length > 0) {
     for (const location of checkedOutLocationResult.data) {
       if (location.checkedOutBy === user.userId) {
-        checkoutAPI(false, location.facId, location.monPlanId).then();
+        await checkoutAPI(false, location.facId, location.monPlanId).then();
       }
     }
   }
@@ -99,7 +99,7 @@ export const logOut = async () => {
     token: user.token,
   };
 
-  axios({
+  secureAxios({
     method: "DELETE",
     url: `${config.services.authApi.uri}/authentication/sign-out`,
     withCredentials: true,
