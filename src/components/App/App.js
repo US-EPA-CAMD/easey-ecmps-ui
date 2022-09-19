@@ -108,6 +108,7 @@ const App = () => {
       <Switch>
         <Route
           path="/workspace/monitoring-plans/:id/evaluation-report"
+          // path="/monitor-plan-mgmt/workspace/plans/:id/evaluation-report"
           exact
           component={() => <ReportGenerator user={user} />}
         />
