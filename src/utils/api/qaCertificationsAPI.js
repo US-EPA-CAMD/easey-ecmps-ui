@@ -586,3 +586,7 @@ export const deleteRataRunData = async (
     return handleImportError(error);
   }
 };
+
+export const getRataTraverseData = async () => {
+  return Promise.resolve({ status: 200, data: [] })
+}
