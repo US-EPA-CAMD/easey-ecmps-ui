@@ -530,6 +530,8 @@ export const createRataRunData = async (
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs`;
 
+  console.log('url', url);
+
   try {
     return handleResponse(
       await secureAxios({
@@ -569,10 +571,10 @@ export const deleteRataRunData = async (
   locId,
   testSumId,
   rataId,
-  id,
-  rataSumId
+  rataSumId,
+  id
 ) => {
-  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${id}`;
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${id}`;
   try {
     return handleResponse(
       await secureAxios({

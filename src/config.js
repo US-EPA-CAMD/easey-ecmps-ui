@@ -7,14 +7,16 @@ activityEvents.push("keydown");
 
 const getConfigValue = (key, defaultValue = '') => {
   let returnValue;
-if (window._env_ && window._env_[key]) {
+
+  if (window._env_ && window._env_[key]) {
     returnValue = window._env_[key];
   }
- else if (!returnValue && process.env[key]) {
+  else if (!returnValue && process.env[key]) {
     returnValue = process.env[key];
   }
   return returnValue || defaultValue;
 };
+
 
 export const config = {
   app: {
