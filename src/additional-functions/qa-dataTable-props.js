@@ -160,6 +160,50 @@ export const qaRataRunDataProps = () => {
   };
 };
 
+export const qaRataTraverseProps = () => {
+  return {
+    dataTableName: "RATA Traverse Data",
+    payload: {},
+    dropdownArray: ["runStatusCode"],
+    columnNames: [
+      "Probe ID",
+      "Probe Type Code",
+      "Pressure Measure Code",
+      "Method Traverse Point ID",
+      "Velocity Calibration Coefficient",
+      "Last Probe Date",
+      "Avg Vel Diff Pressure",
+      "Avg Square Vel Diff Pressures",
+      "T Stack Temperature",
+      "Point Used Indicator",
+      "Number of Wall Effects Points",
+      "Yaw Angle",
+      "Pitch Angle",
+      "Calculated Velocity",
+      "Replacement Velocity",
+    ],
+    controlInputs: {
+      runNumber: ["Run Number", "input", "", ""],
+      skip: ["", "skip", "", ""],
+
+    },
+    controlDatePickerInputs: {
+      beginDate: ["Begin Date", "date", "", ""],
+      beginHour: ["Begin Hour", "hourDropdown", "dropdown", ""],
+      beginMinute: ["Begin Minute", "minuteDropdown", "dropdown", ""],
+      endDate: ["End Date", "date", "", ""],
+      endHour: ["End Hour", "hourDropdown", "dropdown", ""],
+      endMinute: ["End Minute", "minuteDropdown", "dropdown", ""],
+    },
+    extraControls: {
+      cemValue: ["CEM Value", "input", "", ""],
+      rataReferenceValue: ["RATA Reference Value", "input", "", ""],
+      grossUnitLoad: ["Gross Unit Load ", "input", "", ""],
+      runStatusCode: ["Run Status Code", "dropdown", "", ""],
+    },
+  };
+}
+
 export const qaRataSummaryProps = () => {
   return {
     dataTableName: "RATA Summary",
