@@ -10,6 +10,7 @@ const lineInjection = "Linearity Injection";
 const rataData = "RATA Data";
 const rataRunData = "RATA Run Data";
 const rataSummary = "RATA Summary";
+const rataTraverseData = "RATA Traverse Data"
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -41,7 +42,10 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
         .catch((error) => {
           console.log("error", error);
         });
-
+    case rataTraverseData:
+      return qaApi
+        .getRataTraverseData()
+        .catch(error => console.log('error fetching rata traverse data', error))
     case rataSummary:
       return qaApi
         .getRataSummary(extraIdsArr[0], extraIdsArr[1], id)
@@ -49,7 +53,7 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
           console.log("error", error);
         });
     default:
-      break;
+      throw new Error(`getDataTableApis undefined for ${name}`)
   }
 };
 // Selectors
