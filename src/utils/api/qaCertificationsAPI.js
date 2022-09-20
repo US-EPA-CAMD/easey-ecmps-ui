@@ -601,7 +601,7 @@ export const getAirEmissions = async (locID, testSumId) => {
   //return axios.get(url).then(handleResponse).catch(handleError);
   return {
     data: [
-      {
+      { "id":"123",
         "qiLastName": "string",
         "qiFirstName": "string",
         "qiMiddleInitial": "string",
@@ -613,6 +613,7 @@ export const getAirEmissions = async (locID, testSumId) => {
         "providerEmail": "string"
       },
       {
+        "id":"321",
         "qiLastName": "string",
         "qiFirstName": "string",
         "qiMiddleInitial": "string",
@@ -639,5 +640,34 @@ export const createAirEmissions = async (locId, testSumId, payload) => {
     );
   } catch (error) {
     return handleImportError(error);
+  }
+};
+
+export const updateAirEmissions = async (locId, testSumId, id, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/air-emission-testings/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const deleteAirEmissions = async (locId, testSumId, id) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/air-emission-testings/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
   }
 };

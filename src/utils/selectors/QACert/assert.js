@@ -98,9 +98,15 @@ export const removeDataSwitch = async (
           console.log("error", error);
         });
     case proGas:
-      return qaApi.deleteProtocolGas(locationId, id, row.id).catch((error) => {
-        console.log("error", error);
-      });
+      return qaApi
+        .deleteProtocolGas(locationId, id, row.id)
+        .catch((error) => console.log("error", error));
+
+    case airEmissions:
+      return qaApi
+        .deleteAirEmissions(locationId, id, row.id)
+        .catch((error) => console.log("error", error));
+        
     case lineInjection:
       return qaApi
         .deleteQALinearityInjection(extraIdsArr[0], extraIdsArr[1], id, row.id)
@@ -143,7 +149,7 @@ export const removeDataSwitch = async (
   return [];
 };
 // Save (PUT) endpoints for API
-export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
+export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {console.log("userInput",userInput, "extraIdsArr",extraIdsArr);
   switch (name) {
     case lineTest:
       console.log("thisone", name);
@@ -159,7 +165,19 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         });
 
     case proGas:
-      return qaApi.updateProtocolGas(location, id, userInput.id, userInput);
+      return qaApi
+        .updateProtocolGas(location, id, userInput.id, userInput)
+        .catch((error) => {
+          console.log("error", error);
+        });
+
+    case airEmissions:
+      return qaApi
+        .updateAirEmissions(location, id, userInput.id, userInput)
+        .catch((error) => {
+          console.log("error", error);
+        });
+
     case lineInjection:
       return qaApi
         .getQALinearityInjection(
