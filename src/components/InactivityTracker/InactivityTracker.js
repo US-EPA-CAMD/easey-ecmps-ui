@@ -24,18 +24,13 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
     return openedFacilityTabs.find((element) => element.checkout === true);
   };
 
-  const checkInactivity = (inactivityDuration) => {
+  const checkInactivity = async (inactivityDuration) => {
     if (inactivityDuration - timeInactive <= config.app.countdownDuration) {
       // display the countdown timer if not already initiated
       if (window.countdownInitiated === false) {
         window.countdownInitiated = true;
         setShowInactiveModal(true);
       }
-    }
-
-    if (timeInactive >= inactivityDuration) {
-      resetUserInactivityTimer();
-      logOut().then();
     }
   };
 
@@ -49,6 +44,7 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
     window.countdownInitiated = false;
     console.log("Started Inactivity Timer");
     config.app.activityEvents.forEach((activityEvent) => {
+      console.log("Added one");
       window.addEventListener(activityEvent, resetUserInactivityTimer);
     });
 
@@ -60,12 +56,12 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
     };
   }, []);
 
-  useInterval(() => {
+  useInterval(async () => {
     // first check if a record is checked out
     if (isFacilityCheckedOut()) {
-      checkInactivity(config.app.inactivityDuration);
+      await checkInactivity(config.app.inactivityDuration);
     } else {
-      checkInactivity(config.app.inactivityLogoutDuration);
+      await checkInactivity(config.app.inactivityLogoutDuration);
     }
 
     setTimeInactive(timeInactive + config.app.activityPollingFrequency);
@@ -114,6 +110,10 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
                     <div>
                       <CountdownTimer
                         duration={config.app.countdownDuration / 1000}
+                        countdownExpired={async () => {
+                          resetUserInactivityTimer();
+                          await logOut();
+                        }}
                       />
                     </div>
                   </div>
