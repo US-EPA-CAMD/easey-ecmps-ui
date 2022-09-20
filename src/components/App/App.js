@@ -39,10 +39,13 @@ const App = () => {
 
   const prepDocument = () => {
     setTimeout(() => {
-      const mainContent = document.querySelector('.mainContent');
-      mainContent.setAttribute('id', 'main-content');
+      const mainContent = document.querySelector(".mainContent");
+
+      if (mainContent !== null) {
+        mainContent.setAttribute("id", "main-content");
+      }
     });
-    // To avoid css sytling conflicts in production build 
+    // To avoid css sytling conflicts in production build
     // position the link tag to external stylesheet as the last element of head section.
     const linkTag = document.querySelector('link[rel="stylesheet"]');
     if (linkTag) {
@@ -52,7 +55,7 @@ const App = () => {
 
   useEffect(() => {
     prepDocument();
-  });
+  }, []);
 
   useEffect(() => {
     if (config.app.googleAnalyticsEnabled === "true") {
@@ -165,15 +168,9 @@ const App = () => {
               )}
             />
             {user ? (
-              <Redirect
-                from="/qa-test"
-                to="/workspace/qa-test"
-              />
+              <Redirect from="/qa-test" to="/workspace/qa-test" />
             ) : (
-              <Redirect
-                from="/workspace/qa-test"
-                to="/qa-test"
-              />
+              <Redirect from="/workspace/qa-test" to="/qa-test" />
             )}
             <Route
               path="/qa-test"

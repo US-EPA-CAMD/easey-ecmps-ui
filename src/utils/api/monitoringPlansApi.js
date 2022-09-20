@@ -1026,6 +1026,7 @@ export const getMonitoringPlansEvaluationReportData = async (monPlanId) => {
   }
   url = `${url}/plans/${monPlanId}/evaluation-report`;
 
+  console.log('url',url)
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
