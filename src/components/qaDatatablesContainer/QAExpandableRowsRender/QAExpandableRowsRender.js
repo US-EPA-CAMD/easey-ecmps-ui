@@ -36,9 +36,14 @@ const QAExpandableRowsRender = ({
   payload,
   expandable,
   radioBtnPayload,
-  extraIDs, // [locid, testsumid, linsumid,   ]
+  extraIDs = [], // [locid, testsumid, linsumid,   ]
   data,
 }) => {
+
+  console.log('dataTableName', dataTableName);
+  console.log('extraIds', extraIDs);
+  console.log('data from props', data);
+
   const { locationId, id } = dataTableName !== "Protocol Gas" ? data : ""; // id / testsumid
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
@@ -142,12 +147,14 @@ const QAExpandableRowsRender = ({
         );
 
       case "RATA Summary": // 3rd level 
-        const rataRunIdArray = [...extraIDs, locationId, id];
-        const rataRunObj = qaRataRunDataProps();
-        const rataTraverseIdArray = [...extraIDs, locationId, id]
-        const rataTraverseObj = qaRataTraverseProps()
-        return (
-          <>
+        const RataSummaryContainer = ({ data: rataSummaryContainerData }) => {
+          console.log('rata summary container data', rataSummaryContainerData);
+          const { id: idOfRataSummaryRow } = rataSummaryContainerData
+          const rataRunIdArray = [...extraIDs, id, idOfRataSummaryRow];
+          const rataRunObj = qaRataRunDataProps();
+          const rataTraverseIdArray = [...extraIDs, id, idOfRataSummaryRow]
+          const rataTraverseObj = qaRataTraverseProps()
+          return <>
             <QAExpandableRowsRender
               payload={rataRunObj["payload"]}
               dropdownArray={rataRunObj["dropdownArray"]}
@@ -159,7 +166,7 @@ const QAExpandableRowsRender = ({
               extraIDs={rataRunIdArray}
               expandable
               user={user}
-              data={data}
+              data={rataSummaryContainerData}
             />
             <QAExpandableRowsRender
               payload={rataTraverseObj["payload"]}
@@ -172,11 +179,11 @@ const QAExpandableRowsRender = ({
               extraIDs={rataTraverseIdArray}
               expandable
               user={user}
-              data={data}
+              data={rataSummaryContainerData}
             />
           </>
-        );
-
+        }
+        return <RataSummaryContainer />
       default:
         break;
     }
@@ -318,7 +325,6 @@ const QAExpandableRowsRender = ({
         });
         break;
       case 'RATA Traverse Data':
-        console.log('Rata traverse data');
         allPromises.push(dmApi.getAllProbeTypeCodes());
         allPromises.push(dmApi.getAllPressureMeasureCodes())
         allPromises.push(dmApi.getAllPointUsedIndicatorCodes())
