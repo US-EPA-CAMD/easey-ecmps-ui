@@ -160,50 +160,6 @@ export const qaRataRunDataProps = () => {
   };
 };
 
-export const qaRataTraverseProps = () => {
-  return {
-    dataTableName: "RATA Traverse Data",
-    payload: {},
-    dropdownArray: ["runStatusCode"],
-    columnNames: [
-      "Probe ID",
-      "Probe Type Code",
-      "Pressure Measure Code",
-      "Method Traverse Point ID",
-      "Velocity Calibration Coefficient",
-      "Last Probe Date",
-      "Avg Vel Diff Pressure",
-      "Avg Square Vel Diff Pressures",
-      "T Stack Temperature",
-      "Point Used Indicator",
-      "Number of Wall Effects Points",
-      "Yaw Angle",
-      "Pitch Angle",
-      "Calculated Velocity",
-      "Replacement Velocity",
-    ],
-    controlInputs: {
-      runNumber: ["Run Number", "input", "", ""],
-      skip: ["", "skip", "", ""],
-
-    },
-    controlDatePickerInputs: {
-      beginDate: ["Begin Date", "date", "", ""],
-      beginHour: ["Begin Hour", "hourDropdown", "dropdown", ""],
-      beginMinute: ["Begin Minute", "minuteDropdown", "dropdown", ""],
-      endDate: ["End Date", "date", "", ""],
-      endHour: ["End Hour", "hourDropdown", "dropdown", ""],
-      endMinute: ["End Minute", "minuteDropdown", "dropdown", ""],
-    },
-    extraControls: {
-      cemValue: ["CEM Value", "input", "", ""],
-      rataReferenceValue: ["RATA Reference Value", "input", "", ""],
-      grossUnitLoad: ["Gross Unit Load ", "input", "", ""],
-      runStatusCode: ["Run Status Code", "dropdown", "", ""],
-    },
-  };
-}
-
 export const qaRataSummaryProps = () => {
   return {
     dataTableName: "RATA Summary",
@@ -257,3 +213,50 @@ export const qaRataSummaryProps = () => {
     radioBtnPayload: ["apsIndicator"],
   };
 };
+
+export const qaRataTraverseProps = () => {
+  return {
+    dataTableName: "RATA Traverse Data",
+    payload: {},
+    dropdownArray: [
+      'probeTypeCode',
+      'pressureMeasureCode',
+      'pointUsedIndicator'
+    ],
+    columnNames: [
+      "Probe ID",
+      "Probe Type Code",
+      "Pressure Measure Code",
+      "Method Traverse Point ID",
+      "Velocity Calibration Coefficient",
+      "Last Probe Date",
+      "Avg Vel Diff Pressure",
+      "Avg Square Vel Diff Pressures",
+      "T Stack Temperature",
+      "Point Used Indicator",
+      "Number of Wall Effects Points",
+      "Yaw Angle",
+      "Pitch Angle",
+      "Calculated Velocity",
+      "Replacement Velocity",
+    ],
+    controlInputs: {
+      probeID: ["Probe ID", "input", "", ""],
+      probeTypeCode: ["Probe Type Code", "dropdown", "", ""],
+      pressureMeasureCode: ["Pressure Measure Code", "dropdown", "", ""],
+      methodTraversePointID: ["Method Traverse Point ID", "input", "", ""],
+      velocityCalibrationCoefficient: ["Velocity Calibration Coefficient", "input", "", ""],
+      // lastProbeDate is text + date picker
+      // lastProbeDate: ["Last Probe Date", "date", "", ""],
+      avgVelDiffPressure: ["Avg Vel Diff Pressure", "input", "", ""],
+      avgSquareVelDiffPressures: ["Avg Square Vel Diff Pressures", "input", "", ""],
+      tStackTemperature: ["T Stack Temperature", "input", "", ""],
+      pointUsedIndicator: ["Point Used Indicator", "dropdown", "", ""],
+      numberOfWallEffectsPoints: ["Number of Wall Effects Points", "input", "", ""],
+      yawAngle: ["Yaw Angle", "input", "", ""],
+      pitchAngle: ["Pitch Angle", "input", "", ""],
+      calculatedVelocity: ["Calculated Velocity", "input", "", ""],
+      replacementVelocity: ["Replacement Velocity", "input", "", ""]
+    },
+  };
+}
