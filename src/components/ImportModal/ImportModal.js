@@ -29,6 +29,7 @@ const ImportModal = ({
       case MONITORING_PLAN_STORE_NAME:
         mpApi.getMPSchema().then((res) => {
           setSchema(res.data);
+          console.log('schema',res.data)
         });
         break;
 
@@ -49,6 +50,7 @@ const ImportModal = ({
     if (fileTypeManual[fileTypeManual.length - 1] !== "json") {
       setHasFormatError(true);
       setDisablePortBtn(true);
+      console.log('.json file incorrect')
     } else {
       setFileName(name);
       readFile(event);

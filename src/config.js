@@ -17,6 +17,7 @@ const getConfigValue = (key, defaultValue = '') => {
   return returnValue || defaultValue;
 };
 
+
 export const config = {
   app: {
     activityEvents,
