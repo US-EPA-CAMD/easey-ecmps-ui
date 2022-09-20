@@ -23,6 +23,7 @@ import {
   qaLinearityInjectionProps,
   qaRataSummaryProps,
   qaRataRunDataProps,
+  qaRataTraverseProps,
 } from "../../../additional-functions/qa-dataTable-props";
 const QAExpandableRowsRender = ({
   user,
@@ -143,19 +144,37 @@ const QAExpandableRowsRender = ({
       case "RATA Summary": // 3rd level 
         const rataRunIdArray = [...extraIDs, locationId, id];
         const rataRunObj = qaRataRunDataProps();
+        const rataTraverseIdArray = [...extraIDs, locationId, id]
+        const rataTraverseObj = qaRataTraverseProps()
         return (
-          <QAExpandableRowsRender
-            payload={rataRunObj["payload"]}
-            dropdownArray={rataRunObj["dropdownArray"]}
-            columns={rataRunObj["columnNames"]}
-            controlInputs={rataRunObj["controlInputs"]}
-            controlDatePickerInputs={rataRunObj["controlDatePickerInputs"]}
-            dataTableName={rataRunObj["dataTableName"]}
-            extraControls={rataRunObj["extraControls"]}
-            extraIDs={rataRunIdArray}
-            expandable
-            user={user}
-          />
+          <>
+            <QAExpandableRowsRender
+              payload={rataRunObj["payload"]}
+              dropdownArray={rataRunObj["dropdownArray"]}
+              columns={rataRunObj["columnNames"]}
+              controlInputs={rataRunObj["controlInputs"]}
+              controlDatePickerInputs={rataRunObj["controlDatePickerInputs"]}
+              dataTableName={rataRunObj["dataTableName"]}
+              extraControls={rataRunObj["extraControls"]}
+              extraIDs={rataRunIdArray}
+              expandable
+              user={user}
+              data={data}
+            />
+            <QAExpandableRowsRender
+              payload={rataTraverseObj["payload"]}
+              dropdownArray={rataTraverseObj["dropdownArray"]}
+              columns={rataTraverseObj["columnNames"]}
+              controlInputs={rataTraverseObj["controlInputs"]}
+              controlDatePickerInputs={rataTraverseObj["controlDatePickerInputs"]}
+              dataTableName={rataTraverseObj["dataTableName"]}
+              extraControls={rataTraverseObj["extraControls"]}
+              extraIDs={rataTraverseIdArray}
+              expandable
+              user={user}
+              data={data}
+            />
+          </>
         );
 
       default:
@@ -298,6 +317,41 @@ const QAExpandableRowsRender = ({
           setMdmData(dropdowns);
         });
         break;
+      case 'RATA Traverse Data':
+        console.log('Rata traverse data');
+        allPromises.push(dmApi.getAllProbeTypeCodes());
+        allPromises.push(dmApi.getAllPressureMeasureCodes())
+        allPromises.push(dmApi.getAllPointUsedIndicatorCodes())
+        Promise.all(allPromises).then(responses => {
+          responses.forEach((curResp, i) => {
+            let codeLabel
+            let descriptionLabel
+            switch (i) {
+              case 0:
+                codeLabel = 'probeTypeCode'
+                descriptionLabel = 'probeTypeCodeDescription'
+                break
+              case 1:
+                codeLabel = 'pressureMeasureCode'
+                descriptionLabel = 'pressureMeasureCodeDescription'
+                break
+              case 2:
+                codeLabel = 'pointUsedIndicatorCode'
+                descriptionLabel = 'pointUsedIndicatorCodeDescription'
+                break
+              default:
+                break
+            }
+            dropdowns[dropdownArray[i]] = curResp.data.map(d => {
+              return { code: d[codeLabel], name: d[descriptionLabel] }
+            })
+          })
+          for (const options of Object.values(dropdowns)) {
+            options.unshift({ code: '', name: '-- Select a value --' })
+          }
+          setMdmData(dropdowns);
+        });
+        break
       default:
         break;
     }
