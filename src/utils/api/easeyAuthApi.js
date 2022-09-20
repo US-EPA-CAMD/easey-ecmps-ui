@@ -50,7 +50,6 @@ export const authenticate = async (payload) => {
     method: "POST",
     url: `${config.services.authApi.uri}/authentication/sign-in`,
     data: payload,
-    withCredentials: true,
   })
     .then((response) => {
       sessionStorage.setItem("cdx_user", JSON.stringify(response.data));
@@ -89,7 +88,7 @@ export const logOut = async () => {
   if (checkedOutLocationResult.data.length > 0) {
     for (const location of checkedOutLocationResult.data) {
       if (location.checkedOutBy === user.userId) {
-        checkoutAPI(false, location.facId, location.monPlanId).then();
+        await checkoutAPI(false, location.facId, location.monPlanId).then();
       }
     }
   }
@@ -99,10 +98,9 @@ export const logOut = async () => {
     token: user.token,
   };
 
-  axios({
+  secureAxios({
     method: "DELETE",
     url: `${config.services.authApi.uri}/authentication/sign-out`,
-    withCredentials: true,
     data: payload,
   })
     .then(() => {
@@ -128,7 +126,6 @@ export const refreshToken = async () => {
       method: "POST",
       url: `${config.services.authApi.uri}/tokens`,
       data: payload,
-      withCredentials: true,
     });
 
     user.token = result.data.token;

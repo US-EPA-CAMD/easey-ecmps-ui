@@ -304,7 +304,9 @@ export const HeaderInfo = ({
         // if status is INQ or WIP:
         if (
           totalTime < config.app.refreshEvalStatusTimeout &&
-          currStatus !== "EVAL"
+          currStatus !== "EVAL" &&
+          currStatus !== "PASS" &&
+          currStatus !== "ERR"
         ) {
           // check database and update status
           mpApi.getRefreshInfo(configID).then((res) => {
@@ -364,9 +366,9 @@ export const HeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-      configs
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id)
+        configs
+          .map((location) => location["monPlanId"])
+          .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -425,17 +427,17 @@ export const HeaderInfo = ({
 
   const evalStatusContent = () => {
     if (evalStatusText(evalStatus) === "Needs Evaluation") {
-      return <Button
-        type="button"
-        outline={false}
-        onClick={evaluate}
-      >
-        Evaluate
-      </Button>
+      return (
+        <Button type="button" outline={false} onClick={evaluate}>
+          Evaluate
+        </Button>
+      );
     }
 
-    const alertStyle = `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(evalStatus)} margin-y-0`
-    const evalStatusHyperlink =
+    const alertStyle = `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
+      evalStatus
+    )} margin-y-0`;
+    const evalStatusHyperlink = (
       <div className={alertStyle}>
         <button
           className={"hyperlink-btn cursor-pointer"}
@@ -444,13 +446,14 @@ export const HeaderInfo = ({
           {evalStatusText(evalStatus)}
         </button>
       </div>
+    );
 
     if (showHyperLink(evalStatus)) {
-      return evalStatusHyperlink
+      return evalStatusHyperlink;
     } else {
-      return <p className={alertStyle}>{evalStatusText(evalStatus)}</p>
+      return <p className={alertStyle}>{evalStatusText(evalStatus)}</p>;
     }
-  }
+  };
 
   const showHyperLink = (status) => {
     return status === "PASS" || status === "INFO" || status === "ERR";
@@ -530,8 +533,9 @@ export const HeaderInfo = ({
     if (inWorkspace) {
       // when config is checked out by someone
       if (checkedOut) {
-        return `Currently checked-out by: ${currentConfig["checkedOutBy"]
-          } ${formatDate(currentConfig["checkedOutOn"])}`;
+        return `Currently checked-out by: ${
+          currentConfig["checkedOutBy"]
+        } ${formatDate(currentConfig["checkedOutOn"])}`;
       }
       // when config is not checked out
       return `Last updated by: ${currentConfig.lastUpdatedBy} ${formatDate(
@@ -551,8 +555,9 @@ export const HeaderInfo = ({
   return (
     <div className="header">
       <div
-        className={`usa-overlay ${showRevertModal || showEvalReport ? "is-visible" : ""
-          } `}
+        className={`usa-overlay ${
+          showRevertModal || showEvalReport ? "is-visible" : ""
+        } `}
       />
 
       {showRevertModal ? (
@@ -596,11 +601,9 @@ export const HeaderInfo = ({
               <h3 className="margin-y-auto font-body-lg margin-right-2">
                 {facilityMainName}
               </h3>
-              <p className="text-bold font-body-xl">
-                {facilityAdditionalName}
-              </p>
+              <p className="text-bold font-body-xl">{facilityAdditionalName}</p>
             </div>
-            {(user && checkedOutByUser) &&
+            {user && checkedOutByUser && (
               <div>
                 <Button
                   type="button"
@@ -620,19 +623,17 @@ export const HeaderInfo = ({
                   Import Data
                 </Button>
               </div>
-            }
+            )}
           </div>
 
-          {dataLoaded &&
-            <p className="text-bold font-body-2xs">
-              {auditInformation}
-            </p>
-          }
+          {dataLoaded && (
+            <p className="text-bold font-body-2xs">{auditInformation}</p>
+          )}
 
           <div className="grid-col float-left">
             <div>
               <div className="grid-row">
-                {user &&
+                {user && (
                   <div>
                     {checkedOutByUser === true ? (
                       <Button
@@ -667,9 +668,9 @@ export const HeaderInfo = ({
                       </Button>
                     ) : null}
                   </div>
-                }
+                )}
 
-                {showRevert(evalStatus) &&
+                {showRevert(evalStatus) && (
                   <Button
                     type="button"
                     id="showRevertModal"
@@ -678,17 +679,23 @@ export const HeaderInfo = ({
                   >
                     Revert to Official Record
                   </Button>
-                }
+                )}
               </div>
 
-              {user &&
+              {user && (
                 <div className="display-flex flex-align-center margin-top-2">
                   <p className="text-bold margin-right-1">Evaluation Status:</p>
                   {evalStatusContent()}
                   <p className="text-bold margin-x-1">Submission Status: </p>
-                  <p className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(evalStatus)} margin-0`}>Resubmission required</p>
+                  <p
+                    className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
+                      evalStatus
+                    )} margin-0`}
+                  >
+                    Resubmission required
+                  </p>
                 </div>
-              }
+              )}
 
               <div className="display-flex flex-row">
                 <DropdownSelection
@@ -724,7 +731,8 @@ export const HeaderInfo = ({
                         [!inactive[0], inactive[1]],
                         facility,
                         MONITORING_PLAN_STORE_NAME
-                      )}
+                      )
+                    }
                   />
                 </div>
               </div>
@@ -738,18 +746,10 @@ export const HeaderInfo = ({
                 >
                   View Comments
                 </Button>
-                <Button
-                  outline
-                  title="View Audit Report"
-                  type="button"
-                >
+                <Button outline title="View Audit Report" type="button">
                   View Audit Report
                 </Button>
-                <Button
-                  outline
-                  title="View Printout Report"
-                  type="button"
-                >
+                <Button outline title="View Printout Report" type="button">
                   View Printout Report
                 </Button>
               </div>
@@ -758,57 +758,53 @@ export const HeaderInfo = ({
         </div>
       ) : (
         <Preloader />
-      )
-      }
+      )}
       <div
-        className={`usa-overlay ${showImportModal || isReverting ? "is-visible" : ""
-          }`}
+        className={`usa-overlay ${
+          showImportModal || isReverting ? "is-visible" : ""
+        }`}
       />
 
-      {
-        showImportModal && !finishedLoading && !isLoading ? (
-          <div>
-            <UploadModal
-              show={showImportModal}
-              close={closeImportModalHandler}
-              showCancel={true}
-              showSave={true}
-              title={"Import a Monitoring Plan to continue"}
-              exitBTN={"Import"}
-              disablePortBtn={disablePortBtn}
-              port={() => {
-                importMPBtn(importedFile);
-              }}
-              hasFormatError={hasFormatError}
-              hasInvalidJsonError={hasInvalidJsonError}
-              children={
-                <ImportModal
-                  setDisablePortBtn={setDisablePortBtn}
-                  disablePortBtn={disablePortBtn}
-                  setFileName={setFileName}
-                  setHasFormatError={setHasFormatError}
-                  setHasInvalidJsonError={setHasInvalidJsonError}
-                  setImportedFile={setImportedFile}
-                  workspaceSection={MONITORING_PLAN_STORE_NAME}
-                />
-              }
-            />
-          </div>
-        ) : null
-      }
-      {
-        isReverting &&
+      {showImportModal && !finishedLoading && !isLoading ? (
+        <div>
+          <UploadModal
+            show={showImportModal}
+            close={closeImportModalHandler}
+            showCancel={true}
+            showSave={true}
+            title={"Import a Monitoring Plan to continue"}
+            exitBTN={"Import"}
+            disablePortBtn={disablePortBtn}
+            port={() => {
+              importMPBtn(importedFile);
+            }}
+            hasFormatError={hasFormatError}
+            hasInvalidJsonError={hasInvalidJsonError}
+            children={
+              <ImportModal
+                setDisablePortBtn={setDisablePortBtn}
+                disablePortBtn={disablePortBtn}
+                setFileName={setFileName}
+                setHasFormatError={setHasFormatError}
+                setHasInvalidJsonError={setHasInvalidJsonError}
+                setImportedFile={setImportedFile}
+                workspaceSection={MONITORING_PLAN_STORE_NAME}
+              />
+            }
+          />
+        </div>
+      ) : null}
+      {isReverting && (
         <UploadModal
           width={"30%"}
           left={"35%"}
           children={<Preloader />}
           preloader
         />
-      }
+      )}
       {/* while uploading, just shows preloader spinner  */}
 
-      {
-        (isLoading && !finishedLoading) &&
+      {isLoading && !finishedLoading && (
         <UploadModal
           width={"30%"}
           left={"35%"}
@@ -823,11 +819,10 @@ export const HeaderInfo = ({
           setImportedFileErrorMsgs={setImportedFileErrorMsgs}
           fileName={fileName}
         />
-      }
+      )}
 
       {/* after it finishes uploading , shows either api errors or success messages */}
-      {
-        (showImportModal && usePortBtn && finishedLoading) &&
+      {showImportModal && usePortBtn && finishedLoading && (
         <UploadModal
           show={showImportModal}
           close={closeImportModalHandler}
@@ -850,11 +845,10 @@ export const HeaderInfo = ({
             />
           }
         />
-      }
+      )}
 
       <div className={`usa-overlay ${showCommentsModal ? "is-visible" : ""}`} />
-      {
-        showCommentsModal &&
+      {showCommentsModal && (
         <div>
           <UploadModal
             show={showCommentsModal}
@@ -876,8 +870,8 @@ export const HeaderInfo = ({
             }
           />
         </div>
-      }
-    </div >
+      )}
+    </div>
   );
 };
 
