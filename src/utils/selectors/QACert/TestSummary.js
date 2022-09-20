@@ -207,3 +207,16 @@ export const getRataRunDataRecords = (data) => {
   });
   return records;
 };
+
+export const mapRataTraverseToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.probeID,
+      col2: el.probeTypeCode,
+    };
+    records.push(row);
+  }
+  return records;
+}
