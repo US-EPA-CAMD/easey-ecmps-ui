@@ -15,7 +15,9 @@ export const CountdownTimerRender = ({ remainingTime, countdownExpired }) => {
 
     // *** do this when the countdown is done
     if (remainingTime === 0) {
-      countdownExpired();
+      if (countdownExpired) {
+        countdownExpired();
+      }
     }
   } else {
     isNewTimeFirstTick.current = false;

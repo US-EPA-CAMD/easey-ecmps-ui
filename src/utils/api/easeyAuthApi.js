@@ -50,7 +50,6 @@ export const authenticate = async (payload) => {
     method: "POST",
     url: `${config.services.authApi.uri}/authentication/sign-in`,
     data: payload,
-    withCredentials: true,
   })
     .then((response) => {
       sessionStorage.setItem("cdx_user", JSON.stringify(response.data));
@@ -102,7 +101,6 @@ export const logOut = async () => {
   secureAxios({
     method: "DELETE",
     url: `${config.services.authApi.uri}/authentication/sign-out`,
-    withCredentials: true,
     data: payload,
   })
     .then(() => {
@@ -128,7 +126,6 @@ export const refreshToken = async () => {
       method: "POST",
       url: `${config.services.authApi.uri}/tokens`,
       data: payload,
-      withCredentials: true,
     });
 
     user.token = result.data.token;
