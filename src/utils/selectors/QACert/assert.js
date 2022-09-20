@@ -73,6 +73,8 @@ export const getDataTableRecords = (dataIn, name) => {
 
     case rataSummary:
       return selector.mapRataSummaryToRows(dataIn);
+    case rataTraverseData:
+      return selector.mapRataTraverseToRows(dataIn)
     default:
       break;
   }
@@ -246,7 +248,8 @@ export const createDataSwitch = (
         .catch((error) => {
           console.log("error", error);
         });
-
+    case rataTraverseData:
+      return Promise.resolve({ status: 200, data: 'created' })
     default:
       break;
   }
