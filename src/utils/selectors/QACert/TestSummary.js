@@ -207,3 +207,23 @@ export const getRataRunDataRecords = (data) => {
   });
   return records;
 };
+
+export const getAirEmissionsRecords = (data) => {
+  const records = [];
+  data.forEach((el) => {
+    records.push({
+      id: el.id,
+      testSumId: el.testSumId,
+      col1: el.qiLastName,
+      col2: el.qiFirstName,
+      col3: el.qiMiddleInitial,
+      col4: el.aetbName,
+      col5: el.aetbPhoneNumber,
+      col6: el.aetbEmail,
+      col7: el.examDate,
+      col8: el.providerName,
+      col9: el.providerEmail,
+    });
+  });
+  return records;
+};
