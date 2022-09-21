@@ -495,8 +495,6 @@ const QAExpandableRowsRender = ({
       default:
         break;
     }
-    console.log("dataTableName",dataTableName);
-    console.log("expandables",expandables);
     return expandables;
   }
 

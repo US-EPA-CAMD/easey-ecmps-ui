@@ -598,34 +598,7 @@ export const getAirEmissions = async (locID, testSumId) => {
   // *** attach the rest of the url
   url = `${url}/locations/${locID}/test-summary/${testSumId}/air-emission-testings`;
 
-  //return axios.get(url).then(handleResponse).catch(handleError);
-  return {
-    data: [
-      { "id":"123",
-        "qiLastName": "string",
-        "qiFirstName": "string",
-        "qiMiddleInitial": "string",
-        "aetbName": "string",
-        "aetbPhoneNumber": "string",
-        "aetbEmail": "string",
-        "examDate": "2022-09-15T20:50:21.858Z",
-        "providerName": "string",
-        "providerEmail": "string"
-      },
-      {
-        "id":"321",
-        "qiLastName": "string",
-        "qiFirstName": "string",
-        "qiMiddleInitial": "string",
-        "aetbName": "string",
-        "aetbPhoneNumber": "string",
-        "aetbEmail": "string",
-        "examDate": "2022-09-15T20:50:21.858Z",
-        "providerName": "string",
-        "providerEmail": "string"
-      },
-    ]
-  }
+  return axios.get(url).then(handleResponse).catch(handleError);
 };
 
 export const createAirEmissions = async (locId, testSumId, payload) => {
@@ -648,7 +621,7 @@ export const updateAirEmissions = async (locId, testSumId, id, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: "PUT",
         url: url,
         data: payload,
       })

@@ -222,7 +222,7 @@ export const getAirEmissionsRecords = (data) => {
       col6: el.aetbEmail,
       col7: el.examDate,
       col8: el.providerName,
-      col8: el.providerEmail,
+      col9: el.providerEmail,
     });
   });
   return records;
