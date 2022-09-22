@@ -266,7 +266,7 @@ export const qaRataTraverseProps = () => {
       methodTraversePointID: ["Method Traverse Point ID", "input", "", ""],
       velocityCalibrationCoefficient: ["Velocity Calibration Coefficient", "input", "", ""],
       // lastProbeDate is text + date picker
-      // lastProbeDate: ["Last Probe Date", "date", "", ""],
+      lastProbeDate: ["Last Probe Date", "date", "", ""],
       avgVelDiffPressure: ["Avg Vel Diff Pressure", "input", "", ""],
       avgSquareVelDiffPressures: ["Avg Square Vel Diff Pressures", "input", "", ""],
       tStackTemperature: ["T Stack Temperature", "input", "", ""],

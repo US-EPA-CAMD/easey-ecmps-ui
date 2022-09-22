@@ -529,9 +529,6 @@ export const createRataRunData = async (
   payload
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs`;
-
-  console.log('url', url);
-
   try {
     return handleResponse(
       await secureAxios({
@@ -594,14 +591,16 @@ export const getRataTraverseData = async () => {
       probeID: 'probeId1',
       probeTypeCode: 'probeTypeCode1',
       methodTraversePointID: 'methodTraversePointID1',
-      velocityCalibrationCoefficient: 'velocityCalibrationCoefficient2'
+      velocityCalibrationCoefficient: 'velocityCalibrationCoefficient2',
+      lastProbeDate: '2022-09-21'
     },
     {
       id: '2',
       probeID: 'probeId2',
       probeTypeCode: 'probeTypeCode2',
       methodTraversePointID: 'methodTraversePointID2',
-      velocityCalibrationCoefficient: 'velocityCalibrationCoefficient2'
+      velocityCalibrationCoefficient: 'velocityCalibrationCoefficient2',
+      lastProbeDate: '2022-09-21'
     },
   ]
   return Promise.resolve({ status: 200, data })
