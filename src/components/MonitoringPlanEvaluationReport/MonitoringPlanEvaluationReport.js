@@ -21,7 +21,7 @@ export const MonitoringPlanEvaluationReport = ({
   const [dataLoaded, setDataLoaded] = useState(dataLoadedState);
   const [reportData, setReportData] = useState(reportDataState);
   // const [displayCloseButton, setDisplayCloseButton] = useState(true);
- const displayCloseButton = true;
+  const displayCloseButton = true;
   const columnNames = [
     "Unit/Stack",
     "Severity",
@@ -36,7 +36,6 @@ export const MonitoringPlanEvaluationReport = ({
     // } else {
     //   setDisplayCloseButton(false);
     // }
-
     if (!dataLoaded) {
       mpApi
         .getMonitoringPlansEvaluationReportData(monitorPlanId)
@@ -49,6 +48,7 @@ export const MonitoringPlanEvaluationReport = ({
           setDataLoaded(true);
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataLoaded, monitorPlanId]);
 
   const displayCurrentDate = () => {

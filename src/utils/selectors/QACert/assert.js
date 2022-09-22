@@ -11,6 +11,7 @@ const rataData = "RATA Data";
 const rataRunData = "RATA Run Data";
 const rataSummary = "RATA Summary";
 const rataTraverseData = "RATA Traverse Data"
+const airEmissions = "Air Emissions";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -52,6 +53,12 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
         .catch((error) => {
           console.log("error", error);
         });
+    case airEmissions:
+      return qaApi
+        .getAirEmissions(location, id)
+        .catch((error) => {
+          console.log("error", error);
+        });
     default:
       throw new Error(`getDataTableApis undefined for ${name}`)
   }
@@ -75,6 +82,8 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.mapRataSummaryToRows(dataIn);
     case rataTraverseData:
       return selector.mapRataTraverseToRows(dataIn)
+    case airEmissions:
+      return selector.getAirEmissionsRecords(dataIn)
     default:
       break;
   }
@@ -95,9 +104,15 @@ export const removeDataSwitch = async (
           console.log("error", error);
         });
     case proGas:
-      return qaApi.deleteProtocolGas(locationId, id, row.id).catch((error) => {
-        console.log("error", error);
-      });
+      return qaApi
+        .deleteProtocolGas(locationId, id, row.id)
+        .catch((error) => console.log("error", error));
+
+    case airEmissions:
+      return qaApi
+        .deleteAirEmissions(locationId, id, row.id)
+        .catch((error) => console.log("error", error));
+        
     case lineInjection:
       return qaApi
         .deleteQALinearityInjection(extraIdsArr[0], extraIdsArr[1], id, row.id)
@@ -140,7 +155,7 @@ export const removeDataSwitch = async (
   return [];
 };
 // Save (PUT) endpoints for API
-export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
+export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {console.log("userInput",userInput, "extraIdsArr",extraIdsArr);
   switch (name) {
     case lineTest:
       console.log("thisone", name);
@@ -156,10 +171,22 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         });
 
     case proGas:
-      return qaApi.updateProtocolGas(location, id, userInput.id, userInput);
+      return qaApi
+        .updateProtocolGas(location, id, userInput.id, userInput)
+        .catch((error) => {
+          console.log("error", error);
+        });
+
+    case airEmissions:
+      return qaApi
+        .updateAirEmissions(location, id, userInput.id, userInput)
+        .catch((error) => {
+          console.log("error", error);
+        });
+
     case lineInjection:
       return qaApi
-        .getQALinearityInjection(
+        .editQALinearityInjection(
           extraIdsArr[0],
           extraIdsArr[1],
           id,
@@ -250,6 +277,14 @@ export const createDataSwitch = (
         });
     case rataTraverseData:
       return Promise.resolve({ status: 200, data: 'created' })
+    
+    case airEmissions:
+      return qaApi
+        .createAirEmissions(location, id, userInput)
+        .catch((error) => {
+          console.log("error", error);
+        });
+
     default:
       break;
   }

@@ -76,7 +76,7 @@ export const DataTableMethod = ({
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
     if (dataLoaded && dropdownsLoaded) {
-      returnFocusToLast();
+      //returnFocusToLast();
       assignFocusEventListeners();
     }
   }, [dataLoaded, dropdownsLoaded]);

@@ -19,6 +19,7 @@ import ModalDetails from "../../ModalDetails/ModalDetails";
 import * as dmApi from "../../../utils/api/dataManagementApi";
 import * as assertSelector from "../../../utils/selectors/QACert/assert";
 import {
+  qaAirEmissionsProps,
   qaProtocalGasProps,
   qaLinearityInjectionProps,
   qaRataSummaryProps,
@@ -39,12 +40,12 @@ const QAExpandableRowsRender = ({
   extraIDs = [], // [locid, testsumid, linsumid,   ]
   data,
 }) => {
+  if(dataTableName === "Protocol Gas" ) {
 
-  console.log('dataTableName', dataTableName);
-  console.log('extraIds', extraIDs);
-  console.log('data from props', data);
-
-  const { locationId, id } = dataTableName !== "Protocol Gas" ? data : ""; // id / testsumid
+    console.log('dat gasa',data)
+  }
+  const { locationId, id } = data;
+  // const { locationId, id } = dataTableName !== "Protocol Gas" ? data : ""; // id / testsumid
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -106,6 +107,21 @@ const QAExpandableRowsRender = ({
             controlDatePickerInputs={objGas["controlDatePickerInputs"]}
             dataTableName={objGas["dataTableName"]}
             extraControls={objGas["extraControls"]}
+            data={data}
+            user={user}
+          />
+        );
+      case "Air Emissions":
+        const objAirEms = qaAirEmissionsProps(data);
+        return (
+          <QAExpandableRowsRender
+            payload={objAirEms["payload"]}
+            dropdownArray={objAirEms["dropdownArray"]}
+            columns={objAirEms["columnNames"]}
+            controlInputs={objAirEms["controlInputs"]}
+            controlDatePickerInputs={objAirEms["controlDatePickerInputs"]}
+            dataTableName={objAirEms["dataTableName"]}
+            extraControls={objAirEms["extraControls"]}
             data={data}
             user={user}
           />
@@ -526,6 +542,22 @@ const QAExpandableRowsRender = ({
     }
   };
 
+  const getFirstLevelExpandables = () =>{
+    const expandables = [];
+    switch(dataTableName){
+      case 'Linearity Test':
+        expandables.push(nextExpandableRow("Protocol Gas"));
+        break;
+      case 'RATA Data':
+        expandables.push(nextExpandableRow("Protocol Gas"));
+        expandables.push(nextExpandableRow("Air Emissions"));
+        break;
+      default:
+        break;
+    }
+    return expandables;
+  }
+
   return (
     <div className="padding-y-3">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -590,10 +622,9 @@ const QAExpandableRowsRender = ({
       ) : (
         <Preloader />
       )}
-
-      {dataTableName === "Linearity Test"
-        ? nextExpandableRow("Protocol Gas")
-        : ""}
+      {
+       [...getFirstLevelExpandables(dataTableName)] 
+      }
       {show ? (
         <Modal
           show={show}

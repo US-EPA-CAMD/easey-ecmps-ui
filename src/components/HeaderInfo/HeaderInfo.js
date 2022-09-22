@@ -158,7 +158,7 @@ export const HeaderInfo = ({
 
   const displayReport = () => {
     window.open(
-      `/ecmps/workspace/monitoring-plans/${selectedConfig.id}/evaluation-report`,
+      `/workspace/monitoring-plans/${selectedConfig.id}/evaluation-report`,
       "ECMPS Monitoring Plan Report",
       reportWindowParams
     );
