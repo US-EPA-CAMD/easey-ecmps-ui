@@ -24,6 +24,7 @@ import {
   qaLinearityInjectionProps,
   qaRataSummaryProps,
   qaRataRunDataProps,
+  qaFlowRataRunProps
 } from "../../../additional-functions/qa-dataTable-props";
 const QAExpandableRowsRender = ({
   user,
@@ -39,6 +40,10 @@ const QAExpandableRowsRender = ({
   extraIDs, // [locid, testsumid, linsumid,   ]
   data,
 }) => {
+  console.log("dataTableName",dataTableName);
+  console.log("expandable",expandable);
+  console.log("extraIDs",extraIDs);
+  console.log("compData",data);
   if(dataTableName === "Protocol Gas" ) {
 
     console.log('dat gasa',data)
@@ -175,6 +180,23 @@ const QAExpandableRowsRender = ({
             extraControls={rataRunObj["extraControls"]}
             extraIDs={rataRunIdArray}
             expandable
+            user={user}
+          />
+        );
+
+      case "Flow":
+        const flowIdArray = [...extraIDs, locationId, id];
+        const flowObj = qaFlowRataRunProps();
+        return (
+          <QAExpandableRowsRender
+            payload={flowObj["payload"]}
+            dropdownArray={flowObj["dropdownArray"]}
+            columns={flowObj["columnNames"]}
+            controlInputs={flowObj["controlInputs"]}
+            controlDatePickerInputs={flowObj["controlDatePickerInputs"]}
+            dataTableName={flowObj["dataTableName"]}
+            extraControls={flowObj["extraControls"]}
+            extraIDs={flowIdArray}
             user={user}
           />
         );
