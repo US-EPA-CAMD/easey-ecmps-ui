@@ -39,7 +39,12 @@ const QAExpandableRowsRender = ({
   extraIDs, // [locid, testsumid, linsumid,   ]
   data,
 }) => {
-  const { locationId, id } = dataTableName !== "Protocol Gas" ? data : ""; // id / testsumid
+  if(dataTableName === "Protocol Gas" ) {
+
+    console.log('dat gasa',data)
+  }
+  const { locationId, id } = data;
+  // const { locationId, id } = dataTableName !== "Protocol Gas" ? data : ""; // id / testsumid
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);

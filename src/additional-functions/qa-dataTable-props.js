@@ -17,7 +17,7 @@ export const qaProtocalGasProps = (selectedRow) => {
       "Expiration Date",
     ],
     controlInputs: {
-      gasLevelCode: ["Summary Type/Gas Level Code", "input", "", "locked"],
+      gasLevelCode: ["Summary Type/Gas Level Code", "dropdown", "", ""],
       gasTypeCode: ["Gas Type Code", "dropdown", "", ""],
       cylinderID: ["Cylinder ID", "input", "", ""],
       vendorID: ["Vendor ID", "input", "", ""],
@@ -141,7 +141,6 @@ export const qaRataRunDataProps = () => {
     controlInputs: {
       runNumber: ["Run Number", "input", "", ""],
       skip: ["", "skip", "", ""],
-
     },
     controlDatePickerInputs: {
       beginDate: ["Begin Date", "date", "", ""],
@@ -163,7 +162,27 @@ export const qaRataRunDataProps = () => {
 export const qaRataSummaryProps = () => {
   return {
     dataTableName: "RATA Summary",
-    payload: {},
+    payload: {
+      operatingLevelCode: "string",
+      averageGrossUnitLoad: 0,
+      referenceMethodCode: "string",
+      meanCEMValue: 0,
+      meanRATAReferenceValue: 0,
+      meanDifference: 0,
+      standardDeviationDifference: 0,
+      confidenceCoefficient: 0,
+      tValue: 0,
+      apsIndicator: 0,
+      apsCode: "string",
+      relativeAccuracy: 0,
+      biasAdjustmentFactor: 0,
+      co2OrO2ReferenceMethodCode: "string",
+      stackDiameter: 0,
+      stackArea: 0,
+      numberOfTraversePoints: 0,
+      calculatedWAF: 0,
+      defaultWAF: 0,
+    },
     dropdownArray: [
       "operatingLevelCode",
       "referenceMethodCode",
@@ -221,9 +240,9 @@ export const qaAirEmissionsProps = (selectedRow) => {
       qiLastName: null,
       qiFirstName: null,
       qiMiddleInitial: null,
-      aetbName : null,
+      aetbName: null,
       aetbPhoneNumber: null,
-      aetbEmail : null,
+      aetbEmail: null,
       examDate: null,
       providerName: null,
       providerEmail: null,
