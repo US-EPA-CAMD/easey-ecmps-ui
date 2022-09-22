@@ -180,7 +180,7 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {c
 
     case lineInjection:
       return qaApi
-        .getQALinearityInjection(
+        .editQALinearityInjection(
           extraIdsArr[0],
           extraIdsArr[1],
           id,
