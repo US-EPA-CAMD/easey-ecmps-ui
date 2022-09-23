@@ -1,9 +1,9 @@
-import config from "../../config";
 import axios from "axios";
+import log from "loglevel";
+import config from "../../config";
 import { checkoutAPI } from "../../additional-functions/checkout";
 import { getCheckedOutLocations } from "./monitoringPlansApi";
 import { displayAppError } from "../../additional-functions/app-error";
-import log from "loglevel";
 
 axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
@@ -14,7 +14,9 @@ export const secureAxios = async (options) => {
     const user = JSON.parse(sessionStorage.getItem("cdx_user"));
 
     if (new Date() > new Date(user.tokenExpiration)) {
+      console.log('Security Token expired...refreshing');
       await refreshToken();
+      console.log('Security Token has been refreshed');
     }
 
     options.headers = {
@@ -29,9 +31,14 @@ export const secureAxios = async (options) => {
 };
 
 export const refreshClientToken = async () => {
-  const url = `${config.services.authApi.uri}/tokens/client`;
-
   try {
+    const url = `${config.services.authApi.uri}/tokens/client`;
+
+    if (!config.app.clientId || !config.app.clientSecret) {
+      displayAppError('Application client id/secret is required and was not configured');
+      return;
+    }
+
     const response = await axios.post(
       url,
       { clientId: config.app.clientId, clientSecret: config.app.clientSecret },
@@ -52,27 +59,14 @@ export const authenticate = async (payload) => {
     data: payload,
   })
     .then((response) => {
+      const officialOnlyPath = ["/", "/home"];
       sessionStorage.setItem("cdx_user", JSON.stringify(response.data));
 
-      //Paths to UI locations in global view
-      const globalOnly = [
-        "/ecmps/monitoring-plans",
-        "/ecmps/qa_certifications",
-        "/ecmps/emission",
-      ];
-
-      // if they're in a global view (exclusive) page
-      if (globalOnly.includes(window.location.pathname)) {
-        // move them to the workspace version of that page (after finding '/ecmps')
-        const newPathname = window.location.pathname.replace(
-          "/ecmps",
-          "/ecmps/workspace"
-        );
-        window.location.assign(newPathname);
-      }
-      // otherwise return them to their current page
-      else {
+      if (officialOnlyPath.includes(window.location.pathname)) {
         window.location.reload();
+      }
+      else {
+        window.location.assign(`/workspace${window.location.pathname}`);
       }
     })
     .catch((e) => {
@@ -119,8 +113,6 @@ export const refreshToken = async () => {
     token: user.token,
   };
 
-  console.log("Refreshing Token");
-
   try {
     const result = await axios({
       method: "POST",
@@ -130,7 +122,7 @@ export const refreshToken = async () => {
 
     user.token = result.data.token;
     user.tokenExpiration = result.data.tokenExpiration;
-    await sessionStorage.setItem("cdx_user", JSON.stringify(user));
+    sessionStorage.setItem("cdx_user", JSON.stringify(user));
   } catch (e) {
     displayAppError(e);
   }

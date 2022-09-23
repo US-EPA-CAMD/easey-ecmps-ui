@@ -44,7 +44,7 @@ export const config = {
     countdownDuration:
       getConfigValue('REACT_APP_EASEY_ECMPS_UI_ACTIVITY_COUNTDOWN_DURATION_SECONDS', 30) * oneSecond,
     paginationPerPage:
-      getConfigValue('REACT_APP_EASEY_ECMPS_UI_PAGINATION_PER_PAGE', 100),
+      Number(getConfigValue('REACT_APP_EASEY_ECMPS_UI_PAGINATION_PER_PAGE', 100)),
     path:
       getConfigValue('REACT_APP_EASEY_ECMPS_UI_PATH', "/"),
     env:
@@ -79,6 +79,8 @@ export const config = {
       getConfigValue('REACT_APP_EASEY_ECMPS_UI_CLIENT_ID'),
     clientSecret:
       getConfigValue('REACT_APP_EASEY_ECMPS_UI_CLIENT_SECRET'),
+    enableDebug:
+      getConfigValue('REACT_APP_ECMPS_ENABLE_DEBUG', false),
   },
   services: {
     mdm: {

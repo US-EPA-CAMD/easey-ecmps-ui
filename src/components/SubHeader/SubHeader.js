@@ -24,7 +24,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
   const [userProfileExpanded, setUserProfileExpanded] = useState(false);
 
   const [userProfileIcon, setUserProfileIcon] = useState(
-    `${process.env.PUBLIC_URL}/images/icons/menu-item-expand.svg`
+    "/images/icons/menu-item-expand.svg"
   );
 
   let profileMenuLinkItems = [
@@ -134,12 +134,12 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     if (userProfileExpanded === true) {
       document.querySelector("#logoutBtn").tabIndex = 0;
       setUserProfileIcon(
-        `${process.env.PUBLIC_URL}/images/icons/menu-item-expand.svg`
+        "/images/icons/menu-item-expand.svg"
       );
     } else {
       document.querySelector("#logoutBtn").tabIndex = -1;
       setUserProfileIcon(
-        `${process.env.PUBLIC_URL}/images/icons/menu-item-collapse.svg`
+        "/images/icons/menu-item-collapse.svg"
       );
       setNavDropdownOpen((prevNavDropdownOpen) => {
         return Array(prevNavDropdownOpen.length).fill(false);
@@ -185,7 +185,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
             className="bg-transparent margin-0 float-right clearfix desktop:display-none padding-0 width-auto margin-top-1 margin-right-2"
           >
             <img
-              src={`${process.env.PUBLIC_URL}/images/icons/mobile-menu-expand.svg`}
+              src={"/images/icons/mobile-menu-expand.svg"}
               alt="Expandable Menu"
             />
           </Button>

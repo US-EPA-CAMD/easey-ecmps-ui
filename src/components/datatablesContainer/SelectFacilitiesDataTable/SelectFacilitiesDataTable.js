@@ -11,6 +11,9 @@ import { getCheckedOutLocations } from "../../../utils/api/monitoringPlansApi";
 import {
   MONITORING_PLAN_STORE_NAME,
   QA_CERT_TEST_SUMMARY_STORE_NAME,
+  EMISSIONS_MATS_STORE_NAME,
+  EMISSIONS_DAILY_STORE_NAME,
+  EMISSIONS_HOURLY_STORE_NAME,
 } from "../../../additional-functions/workspace-section-and-store-names";
 import Export from "../../export/Export/Export";
 
@@ -99,7 +102,11 @@ export const SelectFacilitiesDataTable = ({
                 workspaceSection={workspaceSection}
               />
             </div>
-          ) : workspaceSection === QA_CERT_TEST_SUMMARY_STORE_NAME ? (
+          ) : workspaceSection === QA_CERT_TEST_SUMMARY_STORE_NAME
+            || EMISSIONS_DAILY_STORE_NAME
+            || EMISSIONS_HOURLY_STORE_NAME
+            || EMISSIONS_MATS_STORE_NAME
+            ? (
             <div className="selectedTabsBox">
               <QACertTestSummaryTab
                 orisCode={info[0].col2}

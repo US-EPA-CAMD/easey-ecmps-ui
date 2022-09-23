@@ -47,10 +47,10 @@ const App = () => {
     });
     // To avoid css sytling conflicts in production build
     // position the link tag to external stylesheet as the last element of head section.
-    const linkTag = document.querySelector('link[rel="stylesheet"]');
-    if (linkTag) {
+    const linkTags = document.querySelectorAll('link[rel="stylesheet"]');
+    linkTags.forEach(linkTag => {
       linkTag.parentNode.appendChild(linkTag);
-    }
+    })
   };
 
   useEffect(() => {
@@ -111,7 +111,6 @@ const App = () => {
       <Switch>
         <Route
           path="/workspace/monitoring-plans/:id/evaluation-report"
-          // path="/monitor-plan-mgmt/workspace/plans/:id/evaluation-report"
           exact
           component={() => <ReportGenerator user={user} />}
         />
@@ -129,19 +128,13 @@ const App = () => {
                 <AboutHome user={user} setCurrentLink={setCurrentLink} />
               )}
             />
-
             <Route path={`/faqs`} exact component={() => <FAQ />} />
             <Route path="/login" exact component={Login} />
+
             {user ? (
-              <Redirect
-                from="/monitoring-plans"
-                to="/workspace/monitoring-plans"
-              />
+              <Redirect from="/monitoring-plans" to="/workspace/monitoring-plans" />
             ) : (
-              <Redirect
-                from="/workspace/monitoring-plans"
-                to="/monitoring-plans"
-              />
+              <Redirect from="/workspace/monitoring-plans" to="/monitoring-plans" />
             )}
             <Route
               path="/monitoring-plans"
@@ -167,6 +160,7 @@ const App = () => {
                 />
               )}
             />
+
             {user ? (
               <Redirect from="/qa-test" to="/workspace/qa-test" />
             ) : (
@@ -194,23 +188,9 @@ const App = () => {
             />
 
             {user ? (
-              <Redirect from="/emission" to="/workspace/emission" />
+              <Redirect from="/emissions-daily" to="/workspace/emissions-daily" />
             ) : (
-              <Redirect from="/workspace/emission" to="/emission" />
-            )}
-            <Route path="/emission/" exact component={ComingSoon} />
-            <Route path="/workspace/emission/" exact component={ComingSoon} />
-
-            {user ? (
-              <Redirect
-                from="/emissions-daily"
-                to="/workspace/emissions-daily"
-              />
-            ) : (
-              <Redirect
-                from="/workspace/emissions-daily"
-                to="/emissions-daily"
-              />
+              <Redirect from="/workspace/emissions-daily" to="/emissions-daily" />
             )}
             <Route
               path="/emissions-daily"
@@ -236,15 +216,9 @@ const App = () => {
             />
 
             {user ? (
-              <Redirect
-                from="/emissions-hourly"
-                to="/workspace/emissions-hourly"
-              />
+              <Redirect from="/emissions-hourly" to="/workspace/emissions-hourly" />
             ) : (
-              <Redirect
-                from="/workspace/emissions-hourly"
-                to="/emissions-hourly"
-              />
+              <Redirect from="/workspace/emissions-hourly" to="/emissions-hourly" />
             )}
             <Route
               path="/emissions-hourly"
@@ -264,7 +238,7 @@ const App = () => {
               component={() => (
                 <SelectConfigurationBaseModuleHome
                   user={user}
-                  workspaceSection={EMISSIONS_MATS_STORE_NAME}
+                  workspaceSection={EMISSIONS_HOURLY_STORE_NAME}
                 />
               )}
             />
@@ -292,7 +266,7 @@ const App = () => {
               component={() => (
                 <SelectConfigurationBaseModuleHome
                   user={user}
-                  workspaceSection={EMISSIONS_HOURLY_STORE_NAME}
+                  workspaceSection={EMISSIONS_MATS_STORE_NAME}
                 />
               )}
             />
@@ -322,6 +296,7 @@ const App = () => {
                 />
               )}
             />
+
             <Route path="/tutorials" exact component={ComingSoon} />
             <Route path="/cam-api" exact component={ComingSoon} />
             <Route path="/glossary" exact component={ComingSoon} />

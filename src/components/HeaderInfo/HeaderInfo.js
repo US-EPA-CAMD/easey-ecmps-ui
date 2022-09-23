@@ -304,9 +304,7 @@ export const HeaderInfo = ({
         // if status is INQ or WIP:
         if (
           totalTime < config.app.refreshEvalStatusTimeout &&
-          currStatus !== "EVAL" &&
-          currStatus !== "PASS" &&
-          currStatus !== "ERR"
+          (currStatus === "INQ" || currStatus === "WIP")
         ) {
           // check database and update status
           mpApi.getRefreshInfo(configID).then((res) => {
@@ -426,7 +424,7 @@ export const HeaderInfo = ({
   };
 
   const evalStatusContent = () => {
-    if (evalStatusText(evalStatus) === "Needs Evaluation") {
+    if (checkedOutByUser && evalStatusText(evalStatus) === "Needs Evaluation") {
       return (
         <Button type="button" outline={false} onClick={evaluate}>
           Evaluate
@@ -461,11 +459,12 @@ export const HeaderInfo = ({
 
   const showRevert = (status) => {
     return (
-      status === "PASS" ||
-      status === "INFO" ||
-      status === "ERR" ||
-      status === "EVAL" ||
-      status === "Y"
+      checkedOutByUser && (
+        status === "PASS" ||
+        status === "INFO" ||
+        status === "ERR" ||
+        status === "EVAL"
+      )
     );
   };
 

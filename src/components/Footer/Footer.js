@@ -18,7 +18,7 @@ export const Footer = () => {
                 <img
                   className="usa-footer__logo-img footerLogo"
                   alt="img alt text"
-                  src={`${process.env.PUBLIC_URL}/images/epaSeal.svg`}
+                  src={"/images/epaSeal.svg"}
                 />
               }
               heading={
