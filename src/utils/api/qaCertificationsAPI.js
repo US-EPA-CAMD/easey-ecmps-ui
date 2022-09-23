@@ -606,6 +606,34 @@ export const getRataTraverseData = async () => {
   return Promise.resolve({ status: 200, data })
 }
 
+export const updateRataTraverseData = async (
+  locId,
+  testSumId,
+  rataId,
+  rataSumId,
+  rataRunId,
+  flowRataRunId,
+  id,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses/${id}`;
+
+  console.log('payload update rata traverse', payload)
+  return Promise.resolve({ status: 200, data: 'created' })
+
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+}
+
 export const getAirEmissions = async (locID, testSumId) => {
   let url = `${config.services.qaCertification.uri}`;
 

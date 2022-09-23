@@ -112,7 +112,7 @@ export const removeDataSwitch = async (
       return qaApi
         .deleteAirEmissions(locationId, id, row.id)
         .catch((error) => console.log("error", error));
-        
+
     case lineInjection:
       return qaApi
         .deleteQALinearityInjection(extraIdsArr[0], extraIdsArr[1], id, row.id)
@@ -155,7 +155,8 @@ export const removeDataSwitch = async (
   return [];
 };
 // Save (PUT) endpoints for API
-export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {console.log("userInput",userInput, "extraIdsArr",extraIdsArr);
+export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
+  console.log("userInput", userInput, "extraIdsArr", extraIdsArr);
   switch (name) {
     case lineTest:
       console.log("thisone", name);
@@ -221,6 +222,19 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {c
         .catch((error) => {
           console.log("error", error);
         });
+    case rataTraverseData:
+      return qaApi
+        .updateRataTraverseData(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
+          extraIdsArr[3],
+          extraIdsArr[4],
+          extraIdsArr[5],
+          id,
+          userInput
+        )
+        .catch(error => console.log('error updating rata traverse data', error))
     default:
       break;
   }
@@ -277,7 +291,7 @@ export const createDataSwitch = (
         });
     case rataTraverseData:
       return Promise.resolve({ status: 200, data: 'created' })
-    
+
     case airEmissions:
       return qaApi
         .createAirEmissions(location, id, userInput)
