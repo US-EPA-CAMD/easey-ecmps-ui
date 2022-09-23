@@ -160,7 +160,6 @@ describe("InactivityTracker", () => {
     jest.advanceTimersByTime(3000);
 
     const clickDiv = container.querySelector("div");
-    console.log("div", clickDiv);
     fireEvent.click(clickDiv);
     expect(container).not.toBeUndefined();
   });
