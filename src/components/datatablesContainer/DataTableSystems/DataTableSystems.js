@@ -580,7 +580,7 @@ export const DataTableSystems = ({
           userInput,
           selectedSystem.locationId,
           selectedSystem.id,
-          selectedRangeInFirst.componentRecordId
+          selectedRangeInFirst.id
         )
         .then((result) => {
           console.log(result);
