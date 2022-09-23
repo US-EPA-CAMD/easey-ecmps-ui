@@ -24,7 +24,7 @@ import {
   qaLinearityInjectionProps,
   qaRataSummaryProps,
   qaRataRunDataProps,
-  qaFlowRataRunProps
+  qaFlowRataRunProps,
 } from "../../../additional-functions/qa-dataTable-props";
 const QAExpandableRowsRender = ({
   user,
@@ -40,13 +40,12 @@ const QAExpandableRowsRender = ({
   extraIDs, // [locid, testsumid, linsumid,   ]
   data,
 }) => {
-  console.log("dataTableName",dataTableName);
-  console.log("expandable",expandable);
-  console.log("extraIDs",extraIDs);
-  console.log("compData",data);
-  if(dataTableName === "Protocol Gas" ) {
-
-    console.log('dat gasa',data)
+  console.log("dataTableName", dataTableName);
+  console.log("expandable", expandable);
+  console.log("extraIDs", extraIDs);
+  console.log("compData", data);
+  if (dataTableName === "Protocol Gas") {
+    console.log("dat gasa", data);
   }
   const { locationId, id } = data;
   // const { locationId, id } = dataTableName !== "Protocol Gas" ? data : ""; // id / testsumid
@@ -166,7 +165,7 @@ const QAExpandableRowsRender = ({
           />
         );
 
-      case "RATA Summary": // 3rd level 
+      case "RATA Summary": // 3rd level
         const rataRunIdArray = [...extraIDs, locationId, id];
         const rataRunObj = qaRataRunDataProps();
         return (
@@ -184,7 +183,7 @@ const QAExpandableRowsRender = ({
           />
         );
 
-      case "Flow":
+      case "RATA Run Data":
         const flowIdArray = [...extraIDs, locationId, id];
         const flowObj = qaFlowRataRunProps();
         return (
@@ -496,26 +495,32 @@ const QAExpandableRowsRender = ({
 
   const onRemoveHandler = async (row) => {
     try {
-      const resp = await assertSelector.removeDataSwitch(row, dataTableName, locationId, id, extraIDs)
+      const resp = await assertSelector.removeDataSwitch(
+        row,
+        dataTableName,
+        locationId,
+        id,
+        extraIDs
+      );
       if (resp.status === 200) {
         const dataPostRemove = dataPulled.filter(
           (rowData) => rowData.id !== row.id
         );
-        setDisplayedRecords(dataPostRemove)
-        executeOnClose()
+        setDisplayedRecords(dataPostRemove);
+        executeOnClose();
       }
     } catch (error) {
       console.log("error deleting data", error);
     }
   };
 
-  const getFirstLevelExpandables = () =>{
+  const getFirstLevelExpandables = () => {
     const expandables = [];
-    switch(dataTableName){
-      case 'Linearity Test':
+    switch (dataTableName) {
+      case "Linearity Test":
         expandables.push(nextExpandableRow("Protocol Gas"));
         break;
-      case 'RATA Data':
+      case "RATA Data":
         expandables.push(nextExpandableRow("Protocol Gas"));
         expandables.push(nextExpandableRow("Air Emissions"));
         break;
@@ -523,7 +528,7 @@ const QAExpandableRowsRender = ({
         break;
     }
     return expandables;
-  }
+  };
 
   return (
     <div className="padding-y-3">
@@ -589,9 +594,7 @@ const QAExpandableRowsRender = ({
       ) : (
         <Preloader />
       )}
-      {
-       [...getFirstLevelExpandables(dataTableName)] 
-      }
+      {[...getFirstLevelExpandables(dataTableName)]}
       {show ? (
         <Modal
           show={show}
@@ -603,8 +606,8 @@ const QAExpandableRowsRender = ({
             createNewData
               ? `Add  ${dataTableName}`
               : user
-                ? ` Edit ${dataTableName}`
-                : ` ${dataTableName}`
+              ? ` Edit ${dataTableName}`
+              : ` ${dataTableName}`
           }
           exitBTN={`Save and Close`}
           children={
