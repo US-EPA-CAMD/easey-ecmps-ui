@@ -304,7 +304,7 @@ export const DataTableAssert = ({
     );
     if (
       (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
+      (!userInput.endHour && userInput.endDate && dataTableName !== lAttr && dataTableName !== rDat)
     ) {
       displayAppError(needEndDate);
       setShow(false);
