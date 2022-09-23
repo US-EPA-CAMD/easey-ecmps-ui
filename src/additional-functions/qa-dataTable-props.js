@@ -277,7 +277,7 @@ export const qaAirEmissionsProps = (selectedRow) => {
 
 export const qaFlowRataRunProps = () => {
   return {
-    dataTableName: "Flow Rata Run Data",
+    dataTableName: "Flow Rata Run",
     payload: {
       numberOfTraversePoints: null,
       barometricPressure: null,
