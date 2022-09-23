@@ -11,6 +11,7 @@ const rataData = "RATA Data";
 const rataRunData = "RATA Run Data";
 const rataSummary = "RATA Summary";
 const airEmissions = "Air Emissions";
+const flowRataRun = "Flow Rata Run Data";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -36,7 +37,13 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       });
 
     case rataRunData:
-      console.log("name, location, id, extraIdsArr", name, location, id, extraIdsArr)
+      console.log(
+        "name, location, id, extraIdsArr",
+        name,
+        location,
+        id,
+        extraIdsArr
+      );
       return qaApi
         .getRataRunData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], id)
         .catch((error) => {
@@ -50,8 +57,18 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
           console.log("error", error);
         });
     case airEmissions:
+      return qaApi.getAirEmissions(location, id).catch((error) => {
+        console.log("error", error);
+      });
+    case flowRataRun:
       return qaApi
-        .getAirEmissions(location, id)
+        .getFlowRunData(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
+          extraIdsArr[3],
+          id
+        )
         .catch((error) => {
           console.log("error", error);
         });
@@ -77,7 +94,9 @@ export const getDataTableRecords = (dataIn, name) => {
     case rataSummary:
       return selector.mapRataSummaryToRows(dataIn);
     case airEmissions:
-      return selector.getAirEmissionsRecords(dataIn)
+      return selector.getAirEmissionsRecords(dataIn);
+    case flowRataRun:
+      return selector.getFlowRunRecords(dataIn);
     default:
       break;
   }
@@ -106,7 +125,7 @@ export const removeDataSwitch = async (
       return qaApi
         .deleteAirEmissions(locationId, id, row.id)
         .catch((error) => console.log("error", error));
-        
+
     case lineInjection:
       return qaApi
         .deleteQALinearityInjection(extraIdsArr[0], extraIdsArr[1], id, row.id)
@@ -125,7 +144,14 @@ export const removeDataSwitch = async (
         });
 
     case rataRunData:
-      return qaApi.deleteRataRunData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[3], id, row.id)
+      return qaApi
+        .deleteRataRunData(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[3],
+          id,
+          row.id
+        )
         .catch((error) => {
           console.log("error", error);
         });
@@ -215,11 +241,28 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {c
         .catch((error) => {
           console.log("error", error);
         });
+    case flowRataRun:
+      return qaApi
+        .updateFlowRataRunData(
+          location,
+          id,
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
+          userInput.id,
+          userInput
+        )
+        .catch((error) => {
+          console.log("error", error);
+        });
     default:
       break;
   }
   return [];
 };
+
+
+  
 
 //create endpoints for API
 export const createDataSwitch = (
@@ -258,7 +301,13 @@ export const createDataSwitch = (
 
     case rataRunData:
       return qaApi
-        .createRataRunData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[3], id, userInput)
+        .createRataRunData(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[3],
+          id,
+          userInput
+        )
         .catch((error) => {
           console.log("error", error);
         });
@@ -269,7 +318,7 @@ export const createDataSwitch = (
         .catch((error) => {
           console.log("error", error);
         });
-    
+
     case airEmissions:
       return qaApi
         .createAirEmissions(location, id, userInput)

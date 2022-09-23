@@ -88,25 +88,27 @@ export const ExportTab = ({
   };
 
   const exportClickHandler = async () => {
-    let exportFileName
+    let exportFileName;
     // export monitoring plan
     if (dataTypes.find((e) => e.name === mp).checked) {
-      exportMonitoringPlanDownload(selectedConfig.id)
+      exportMonitoringPlanDownload(selectedConfig.id);
     }
     // export qa
     if (dataTypes.find((e) => e.name === qa).checked) {
       exportFileName = `QA & Certification | Export - ${facility}.json`;
-      const selectedRows = qaTestSummaryData.current
+      const selectedRows = qaTestSummaryData.current;
       const exportJson = {
         orisCode: orisCode,
-        testSummaryData: selectedRows
-      }
+        testSummaryData: selectedRows,
+      };
       download(JSON.stringify(exportJson, null, "\t"), exportFileName);
     }
   };
 
   const isExportDisabled = () => {
-    const isMonitoringPlanChecked = dataTypes.find(e => e.name === mp).checked;
+    const isMonitoringPlanChecked = dataTypes.find(
+      (e) => e.name === mp
+    ).checked;
     const rowHasSelected = exportState?.selectedIds?.testSummary?.length > 0;
     return !isMonitoringPlanChecked && !rowHasSelected;
   };

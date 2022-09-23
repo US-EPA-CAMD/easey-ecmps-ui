@@ -36,19 +36,17 @@ export const MonitoringPlanTab = ({
   mostRecentlyCheckedInMonitorPlanIdForTab,
   workspaceSection,
 }) => {
-  const getCurrentTab = () =>{
-    return tabs.find(tab => tab.selectedConfig.id === selectedConfig.id);
-  }
-  const [ currentTab, setCurrentTab ] = useState(getCurrentTab());
+  const getCurrentTab = () => {
+    return tabs.find((tab) => tab.selectedConfig.id === selectedConfig.id);
+  };
+  const [currentTab, setCurrentTab] = useState(getCurrentTab());
 
-  useEffect(()=>{
-    setCurrentTab(getCurrentTab())
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[selectedConfig]);
+  useEffect(() => {
+    setCurrentTab(getCurrentTab());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedConfig]);
 
-  const [sectionSelect, setSectionSelect] = useState(
-    getCurrentTab().section
-  );
+  const [sectionSelect, setSectionSelect] = useState(getCurrentTab().section);
   useEffect(() => {
     setSection(sectionSelect, title, MONITORING_PLAN_STORE_NAME);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -75,9 +73,9 @@ export const MonitoringPlanTab = ({
           orisCode={orisCode}
           selectedConfig={selectedConfig}
           sectionSelect={sectionSelect}
-          setSectionSelect={(section)=>setSectionSelect(section)}
+          setSectionSelect={(section) => setSectionSelect(section)}
           locationSelect={locationSelect}
-          setLocationSelect={(location)=>setLocationSelect(location)}
+          setLocationSelect={(location) => setLocationSelect(location)}
           locations={selectedConfig.locations}
           user={user}
           configID={currentTab.selectedConfig.id}

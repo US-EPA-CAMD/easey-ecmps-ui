@@ -27,15 +27,13 @@ export const QACertTestSummaryTab = ({
   setSection,
   setLocation,
 }) => {
-  const getCurrentTab = () =>{
-    return tabs.find(tab => tab.selectedConfig.id === selectedConfig.id);
-  }
-  const [sectionSelect, setSectionSelect] = useState(
-    getCurrentTab().section
-  );
+  const getCurrentTab = () => {
+    return tabs.find((tab) => tab.selectedConfig.id === selectedConfig.id);
+  };
+  const [sectionSelect, setSectionSelect] = useState(getCurrentTab().section);
   useEffect(() => {
     setSection(sectionSelect, title);
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionSelect]);
 

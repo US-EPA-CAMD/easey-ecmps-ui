@@ -7,7 +7,7 @@ export const getLinearityInjection = (totalData) => {
       col3: el.injectionMinute ? el.injectionMinute : 0,
       col4: el.measuredValue,
       col5: el.referenceValue,
-      id:el.id,
+      id: el.id,
     });
   });
   return records;

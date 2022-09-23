@@ -3,7 +3,7 @@ import {
   getProtocolGas,
   createProtocolGas,
   updateProtocolGas,
-  deleteProtocolGas
+  deleteProtocolGas,
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { getProtocolGasRecords } from "../../../utils/selectors/QACert/TestSummary.js";
 import { Button } from "@trussworks/react-uswds";
@@ -25,11 +25,7 @@ import ModalDetails from "../../ModalDetails/ModalDetails";
 import * as dmApi from "../../../utils/api/dataManagementApi";
 // contains protocol gas data table
 
-const QAProtocolGasExpandableRows = ({
-  user,
-  locId,
-  testSumId
-}) => {
+const QAProtocolGasExpandableRows = ({ user, locId, testSumId }) => {
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -69,7 +65,6 @@ const QAProtocolGasExpandableRows = ({
   const [createNewData, setCreateNewData] = useState(false);
   // const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
 
-
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
@@ -92,38 +87,41 @@ const QAProtocolGasExpandableRows = ({
     vendorID: ["Vendor ID", "input", "", ""],
     expirationDate: ["Expiration Date", "date", "", ""],
     skip: ["", "skip", "", ""],
-
   };
-  const loadDropdownsData = () =>{
+  const loadDropdownsData = () => {
     let dropdowns = {};
     const allPromises = [];
     allPromises.push(dmApi.getAllGasLevelCodes());
     allPromises.push(dmApi.getAllGasTypeCodes());
     Promise.all(allPromises).then((values) => {
-      values.forEach((val, i) =>{
-        if(i===0){
-          dropdowns[dropdownArray[i]] = 
-          val.data.map(d => {
+      values.forEach((val, i) => {
+        if (i === 0) {
+          dropdowns[dropdownArray[i]] = val.data.map((d) => {
             return {
               code: d["gasLevelCode"],
               name: d["gasLevelDescription"],
             };
           });
-          dropdowns[dropdownArray[i]].unshift({ code: "", name: "-- Select a value --" });
-        }else{
-          dropdowns[dropdownArray[i]] = 
-          val.data.map(d => {
+          dropdowns[dropdownArray[i]].unshift({
+            code: "",
+            name: "-- Select a value --",
+          });
+        } else {
+          dropdowns[dropdownArray[i]] = val.data.map((d) => {
             return {
               code: d["gasTypeCode"],
               name: d["gasTypeDescription"],
             };
           });
-          dropdowns[dropdownArray[i]].unshift({ code: "", name: "-- Select a value --" });
+          dropdowns[dropdownArray[i]].unshift({
+            code: "",
+            name: "-- Select a value --",
+          });
         }
       });
       setMdmData(dropdowns);
     });
-  }
+  };
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
     if (!dropdownArrayIsEmpty && mdmData === null) {
@@ -136,7 +134,7 @@ const QAProtocolGasExpandableRows = ({
       setDropdownsLoading(false);
     }
 
-       // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mdmData]);
 
   const controlDatePickerInputs = {};
@@ -162,7 +160,12 @@ const QAProtocolGasExpandableRows = ({
     let selectedData = null;
     setCreateNewData(create);
     if (create) {
-      controlInputs.gasLevelCode = ["Summary Type/Gas Level Code", "dropdown", "", ""];
+      controlInputs.gasLevelCode = [
+        "Summary Type/Gas Level Code",
+        "dropdown",
+        "",
+        "",
+      ];
     }
     if (dataPulled.length > 0 && !create) {
       selectedData = dataPulled.filter(
@@ -235,12 +238,7 @@ const QAProtocolGasExpandableRows = ({
     };
     const userInput = extractUserInput(payload, ".modalUserInput");
 
-    updateProtocolGas(
-      locId,
-      testSumId,
-      selectedRow.id,
-      userInput
-    )
+    updateProtocolGas(locId, testSumId, selectedRow.id, userInput)
       .then((res) => {
         setUpdateTable(true);
         executeOnClose();
@@ -277,11 +275,7 @@ const QAProtocolGasExpandableRows = ({
   const onRemoveHandler = async (row) => {
     const { id: idToRemove, testSumId } = row;
     try {
-      const resp = await deleteProtocolGas(
-        locId,
-        testSumId,
-        idToRemove
-      );
+      const resp = await deleteProtocolGas(locId, testSumId, idToRemove);
       if (resp.status === 200) {
         const dataPostRemove = protocolGas.filter(
           (rowData) => rowData.id !== idToRemove
@@ -289,7 +283,7 @@ const QAProtocolGasExpandableRows = ({
         setProtocolGas(dataPostRemove);
       }
     } catch (error) {
-      console.log('error deleting protocol gas', error);
+      console.log("error deleting protocol gas", error);
     }
   };
 
@@ -304,11 +298,9 @@ const QAProtocolGasExpandableRows = ({
           openHandler={openModal}
           onRemoveHandler={onRemoveHandler}
           actionColumnName={
-            user ?
+            user ? (
               <>
-                <span className="padding-right-2">
-                  Protocol Gas
-                </span>
+                <span className="padding-right-2">Protocol Gas</span>
                 <Button
                   epa-testid="btnOpen"
                   className="text-white"
@@ -317,34 +309,37 @@ const QAProtocolGasExpandableRows = ({
                   Add
                 </Button>
               </>
-              : "Protocol Gas"
+            ) : (
+              "Protocol Gas"
+            )
           }
           actionsBtn={"View"}
           user={user}
           evaluate={false}
           noDataComp={
-            user ?
-              (<QADataTableRender
+            user ? (
+              <QADataTableRender
                 columnNames={columns}
                 columnWidth={15}
                 data={[]}
                 actionColumnName={
-                  (
-                    <>
-                      <span className="padding-right-2">Protocol Gas</span>
-                      <Button
-                        epa-testid="btnOpen"
-                        className="text-white"
-                        onClick={() => openModal(false, false, true)}
-                      >
-                        Add
-                      </Button>
-                    </>
-                  )
+                  <>
+                    <span className="padding-right-2">Protocol Gas</span>
+                    <Button
+                      epa-testid="btnOpen"
+                      className="text-white"
+                      onClick={() => openModal(false, false, true)}
+                    >
+                      Add
+                    </Button>
+                  </>
                 }
                 actionsBtn={"View"}
                 user={user}
-              />) : "There're no protocol gas records available."
+              />
+            ) : (
+              "There're no protocol gas records available."
+            )
           }
         />
       ) : (
@@ -362,8 +357,8 @@ const QAProtocolGasExpandableRows = ({
             createNewData
               ? `Add  ${dataTableName}`
               : user
-                ? ` Edit ${dataTableName}`
-                : ` ${dataTableName}`
+              ? ` Edit ${dataTableName}`
+              : ` ${dataTableName}`
           }
           exitBTN={`Save and Close`}
           children={

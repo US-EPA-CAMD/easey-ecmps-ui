@@ -3,7 +3,7 @@ import {
   getRataSummary,
   createRataSummary,
   updateRataSummary,
-  deleteRataSummary
+  deleteRataSummary,
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { mapRataSummaryToRows } from "../../../utils/selectors/QACert/TestSummary.js";
 import { Button } from "@trussworks/react-uswds";
@@ -27,35 +27,30 @@ import * as dmApi from "../../../utils/api/dataManagementApi";
 
 import QARataRunDataExpandableRows from "../QARataRunDataExpandableRows/QARataRunDataExpandableRows.js";
 
-const QARataSummaryExpandableRows = ({
-  user,
-  locId,
-  testSumId,
-  data
-}) => {
+const QARataSummaryExpandableRows = ({ user, locId, testSumId, data }) => {
   const rataId = data.id;
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
-  const [rataSummaryData, setRataSummaryData] = useState([])
+  const [rataSummaryData, setRataSummaryData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true)
+      setLoading(true);
       try {
-        const resp = await getRataSummary(locId, testSumId, rataId)
-        finishedLoadingData(resp.data)
-        setRataSummaryData(resp.data)
-        setLoading(false)
+        const resp = await getRataSummary(locId, testSumId, rataId);
+        finishedLoadingData(resp.data);
+        setRataSummaryData(resp.data);
+        setLoading(false);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
       setUpdateTable(false);
-    }
+    };
 
     if (rataSummaryData.length === 0 || updateTable) {
-      fetchData()
+      fetchData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locId, testSumId, updateTable]);
@@ -76,21 +71,25 @@ const QARataSummaryExpandableRows = ({
   const [createNewData, setCreateNewData] = useState(false);
   // const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
 
-
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
-  const dropdownArray = ['operatingLevelCode', 'referenceMethodCode', 'apsCode', 'co2OrO2ReferenceMethodCode'];
+  const dropdownArray = [
+    "operatingLevelCode",
+    "referenceMethodCode",
+    "apsCode",
+    "co2OrO2ReferenceMethodCode",
+  ];
   const dropdownArrayIsEmpty = dropdownArray.length === 0;
 
   const dataTableName = "RATA Summary";
   const columns = [
-    'Operating Level Code',
-    'Reference Method Code',
-    'APS Indicator',
-    'APS Code',
-    'Relative Accuracy',
-    'CO2 or O2 Reference Method Code',
+    "Operating Level Code",
+    "Reference Method Code",
+    "APS Indicator",
+    "APS Code",
+    "Relative Accuracy",
+    "CO2 or O2 Reference Method Code",
   ];
 
   // controls modal detail form inputs
@@ -101,54 +100,70 @@ const QARataSummaryExpandableRows = ({
     meanCEMValue: ["Mean CEM Value", "input", "", ""],
     meanRATAReferenceValue: ["Mean RATA Reference Value", "input", "", ""],
     meanDifference: ["Mean Difference", "input", "", ""],
-    standardDeviationDifference: ["Standard Deviation Difference", "input", "", ""],
+    standardDeviationDifference: [
+      "Standard Deviation Difference",
+      "input",
+      "",
+      "",
+    ],
     confidenceCoefficient: ["Confidence Coefficient", "input", "", ""],
     tValue: ["T-Value", "input", "", ""],
     apsIndicator: ["APS Indicator", "radio", "", ""],
     apsCode: ["APS Code", "dropdown", "", ""],
     relativeAccuracy: ["Relative Accuracy", "input", "", ""],
     biasAdjustmentFactor: ["Bias Adjustment Factor", "input", "", ""],
-    co2OrO2ReferenceMethodCode: ["CO2 or O2 Reference Method Code", "dropdown", "", ""],
+    co2OrO2ReferenceMethodCode: [
+      "CO2 or O2 Reference Method Code",
+      "dropdown",
+      "",
+      "",
+    ],
     stackDiameter: ["Stack Diameter", "input", "", ""],
     stackArea: ["Stack Area", "input", "", ""],
     numberOfTraversePoints: ["Number of Traverse Points", "input", "", ""],
     calculatedWAF: ["Calculated WAF", "input", "", ""],
   };
-  const loadDropdownsData = () =>{
+  const loadDropdownsData = () => {
     let dropdowns = {};
     const allPromises = [];
     allPromises.push(dmApi.getAllOperatingLevelCodes());
     allPromises.push(dmApi.getAllReferenceMethodCodes());
     allPromises.push(dmApi.getAllApsCodes());
     Promise.all(allPromises).then((response) => {
-      dropdownArray.forEach((val, i) =>{
-        if(i===0){
-          dropdowns[dropdownArray[i]] = 
-          response[0].data.map(d => {
+      dropdownArray.forEach((val, i) => {
+        if (i === 0) {
+          dropdowns[dropdownArray[i]] = response[0].data.map((d) => {
             return {
               code: d["operatingLevelCode"],
               name: d["operatingLevelCodeDescription"],
             };
           });
-          dropdowns[dropdownArray[i]].unshift({ code: "", name: "-- Select a value --" });
-        }else if(i===1 || i===3){
-          dropdowns[dropdownArray[i]] = 
-          response[1].data.map(d => {
+          dropdowns[dropdownArray[i]].unshift({
+            code: "",
+            name: "-- Select a value --",
+          });
+        } else if (i === 1 || i === 3) {
+          dropdowns[dropdownArray[i]] = response[1].data.map((d) => {
             return {
               code: d["referenceMethodCode"],
               name: d["referenceMethodCodeDescription"],
             };
           });
-          dropdowns[dropdownArray[i]].unshift({ code: "", name: "-- Select a value --" });
-        }else {
-          dropdowns[dropdownArray[i]] = 
-          response[2].data.map(d => {
+          dropdowns[dropdownArray[i]].unshift({
+            code: "",
+            name: "-- Select a value --",
+          });
+        } else {
+          dropdowns[dropdownArray[i]] = response[2].data.map((d) => {
             return {
               code: d["apsCode"],
               name: d["apsCodeDescription"],
             };
           });
-          dropdowns[dropdownArray[i]].unshift({ code: "", name: "-- Select a value --" });
+          dropdowns[dropdownArray[i]].unshift({
+            code: "",
+            name: "-- Select a value --",
+          });
         }
       });
       setMdmData(dropdowns);
@@ -157,7 +172,7 @@ const QARataSummaryExpandableRows = ({
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
     if (!dropdownArrayIsEmpty && mdmData === null) {
-      if(!dropdownsLoading){
+      if (!dropdownsLoading) {
         loadDropdownsData();
         setDropdownsLoading(true);
       }
@@ -165,7 +180,7 @@ const QARataSummaryExpandableRows = ({
       setDropdownsLoaded(true);
       setDropdownsLoading(false);
     }
-       // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mdmData]);
 
   const controlDatePickerInputs = {};
@@ -252,17 +267,21 @@ const QARataSummaryExpandableRows = ({
   };
 
   const saveData = () => {
-    const uiControls = {}
-    Object.keys(controlInputs).forEach((key) => { uiControls[key] = null });
-    const userInput = extractUserInput( uiControls, ".modalUserInput", ["apsIndicator"]); 
+    const uiControls = {};
+    Object.keys(controlInputs).forEach((key) => {
+      uiControls[key] = null;
+    });
+    const userInput = extractUserInput(uiControls, ".modalUserInput", [
+      "apsIndicator",
+    ]);
     updateRataSummary(locId, testSumId, rataId, selectedRow.id, userInput)
       .then((res) => {
         console.log("res", res);
         if (Object.prototype.toString.call(res) === "[object Array]") {
           alert(res[0]);
         } else {
-        setUpdateTable(true);
-        executeOnClose();
+          setUpdateTable(true);
+          executeOnClose();
         }
       })
       .catch((error) => {
@@ -271,9 +290,13 @@ const QARataSummaryExpandableRows = ({
   };
 
   const createData = async () => {
-    const uiControls = {}
-    Object.keys(controlInputs).forEach((key) => { uiControls[key] = null });
-    const userInput = extractUserInput(uiControls, ".modalUserInput", ["apsIndicator"]);
+    const uiControls = {};
+    Object.keys(controlInputs).forEach((key) => {
+      uiControls[key] = null;
+    });
+    const userInput = extractUserInput(uiControls, ".modalUserInput", [
+      "apsIndicator",
+    ]);
     createRataSummary(locId, testSumId, rataId, userInput)
       .then((res) => {
         if (Object.prototype.toString.call(res) === "[object Array]") {
@@ -298,11 +321,13 @@ const QARataSummaryExpandableRows = ({
         idToRemove
       );
       if (resp.status === 200) {
-        const dataPostRemove = rataSummaryData.filter(curRowData => curRowData.id !== idToRemove);
-        setRataSummaryData(dataPostRemove)
+        const dataPostRemove = rataSummaryData.filter(
+          (curRowData) => curRowData.id !== idToRemove
+        );
+        setRataSummaryData(dataPostRemove);
       }
     } catch (error) {
-      console.log('error deleting rata summary', error);
+      console.log("error deleting rata summary", error);
     }
   };
 
@@ -316,18 +341,18 @@ const QARataSummaryExpandableRows = ({
           data={rowData}
           openHandler={openModal}
           onRemoveHandler={onRemoveHandler}
-          expandableRowComp={<QARataRunDataExpandableRows
-            user={user}
-            locId={locId}
-            rataId={rataId}
-            testSumId={testSumId}
-          />}
+          expandableRowComp={
+            <QARataRunDataExpandableRows
+              user={user}
+              locId={locId}
+              rataId={rataId}
+              testSumId={testSumId}
+            />
+          }
           actionColumnName={
-            user ?
+            user ? (
               <>
-                <span className="padding-right-2">
-                  {dataTableName}
-                </span>
+                <span className="padding-right-2">{dataTableName}</span>
                 <Button
                   epa-testid="btnOpen"
                   className="text-white"
@@ -336,34 +361,37 @@ const QARataSummaryExpandableRows = ({
                   Add
                 </Button>
               </>
-              : dataTableName
+            ) : (
+              dataTableName
+            )
           }
           actionsBtn={"View"}
           user={user}
           evaluate={false}
           noDataComp={
-            user ?
-              (<QADataTableRender
+            user ? (
+              <QADataTableRender
                 columnNames={columns}
                 columnWidth={15}
                 data={[]}
                 actionColumnName={
-                  (
-                    <>
-                      <span className="padding-right-2">{dataTableName}</span>
-                      <Button
-                        epa-testid="btnOpen"
-                        className="text-white"
-                        onClick={() => openModal(false, false, true)}
-                      >
-                        Add
-                      </Button>
-                    </>
-                  )
+                  <>
+                    <span className="padding-right-2">{dataTableName}</span>
+                    <Button
+                      epa-testid="btnOpen"
+                      className="text-white"
+                      onClick={() => openModal(false, false, true)}
+                    >
+                      Add
+                    </Button>
+                  </>
                 }
                 actionsBtn={"View"}
                 user={user}
-              />) : "There're no RATA summary records available."
+              />
+            ) : (
+              "There're no RATA summary records available."
+            )
           }
         />
       ) : (
@@ -381,8 +409,8 @@ const QARataSummaryExpandableRows = ({
             createNewData
               ? `Add  ${dataTableName}`
               : user
-                ? ` Edit ${dataTableName}`
-                : ` ${dataTableName}`
+              ? ` Edit ${dataTableName}`
+              : ` ${dataTableName}`
           }
           exitBTN={`Save and Close`}
           children={

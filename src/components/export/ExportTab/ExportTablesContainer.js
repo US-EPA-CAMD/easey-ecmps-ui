@@ -51,8 +51,8 @@ export const ExportTablesContainer = ({
   }) => {
     dataRef.current = selectedRows;
     const selectedIds = {
-      testSummary: selectedRows.map((row) => row.id)
-    }
+      testSummary: selectedRows.map((row) => row.id),
+    };
     setExportState(
       selectedConfig.id,
       {

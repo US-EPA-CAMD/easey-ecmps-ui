@@ -82,7 +82,6 @@ export const DataTablePCTQualifications = ({
 
   // load dropdowns data (called once)
   useEffect(() => {
-
     if (mdmDataPCT !== undefined && mdmDataPCT.length === 0) {
       loadDropdownsData(PCT_QUALIFICATIONS_SECTION_NAME, dropdownArray);
     } else {

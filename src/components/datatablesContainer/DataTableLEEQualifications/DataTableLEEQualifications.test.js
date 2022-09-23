@@ -5,9 +5,8 @@ import * as axios from "axios";
 import {
   mapStateToProps,
   mapDispatchToProps,
-  DataTableLEEQualifications
+  DataTableLEEQualifications,
 } from "./DataTableLEEQualifications";
-
 
 jest.mock("axios");
 

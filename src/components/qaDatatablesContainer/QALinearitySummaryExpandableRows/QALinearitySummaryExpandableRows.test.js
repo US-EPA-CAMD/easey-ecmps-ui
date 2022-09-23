@@ -1,5 +1,10 @@
 import React from "react";
-import { render, waitForElement, screen, fireEvent } from "@testing-library/react";
+import {
+  render,
+  waitForElement,
+  screen,
+  fireEvent,
+} from "@testing-library/react";
 
 import QALinearitySummaryExpandableRows from "./QALinearitySummaryExpandableRows";
 import configureStore from "../../../store/configureStore.dev";
@@ -11,38 +16,38 @@ import config from "../../../config";
 
 const linearitySummary = [
   {
-    "id": "IT07D0112-4CBC1A08D61B403DBB179D0B78EC51A8",
-    "testSumId": "4f2d07c0-55f9-49b0-8946-ea80c1febb15",
-    "gasLevelCode": "MID",
-    "meanMeasuredValue": 55.3,
-    "calculatedMeanMeasuredValue": 55.3,
-    "meanReferenceValue": 55.9,
-    "calculatedMeanReferenceValue": 55.9,
-    "percentError": 1.1,
-    "calculatedPercentError": 1.1,
-    "apsIndicator": 0,
-    "calculatedAPSIndicator": 0,
-    "userId": "lperez",
-    "addDate": "4/25/2011, 7:30:54 PM",
-    "updateDate": null,
-    "linearityInjectionData": []
+    id: "IT07D0112-4CBC1A08D61B403DBB179D0B78EC51A8",
+    testSumId: "4f2d07c0-55f9-49b0-8946-ea80c1febb15",
+    gasLevelCode: "MID",
+    meanMeasuredValue: 55.3,
+    calculatedMeanMeasuredValue: 55.3,
+    meanReferenceValue: 55.9,
+    calculatedMeanReferenceValue: 55.9,
+    percentError: 1.1,
+    calculatedPercentError: 1.1,
+    apsIndicator: 0,
+    calculatedAPSIndicator: 0,
+    userId: "lperez",
+    addDate: "4/25/2011, 7:30:54 PM",
+    updateDate: null,
+    linearityInjectionData: [],
   },
   {
-    "id": "IT07D0112-7B71D94A53784A5282585A35DDB346C0",
-    "testSumId": "4f2d07c0-55f9-49b0-8946-ea80c1febb15",
-    "gasLevelCode": "LOW",
-    "meanMeasuredValue": 25.233,
-    "calculatedMeanMeasuredValue": 25.233,
-    "meanReferenceValue": 25.2,
-    "calculatedMeanReferenceValue": 25.2,
-    "percentError": 0.1,
-    "calculatedPercentError": 0.1,
-    "apsIndicator": 0,
-    "calculatedAPSIndicator": 0,
-    "userId": "lperez",
-    "addDate": "4/25/2011, 7:30:54 PM",
-    "updateDate": null,
-    "linearityInjectionData": []
+    id: "IT07D0112-7B71D94A53784A5282585A35DDB346C0",
+    testSumId: "4f2d07c0-55f9-49b0-8946-ea80c1febb15",
+    gasLevelCode: "LOW",
+    meanMeasuredValue: 25.233,
+    calculatedMeanMeasuredValue: 25.233,
+    meanReferenceValue: 25.2,
+    calculatedMeanReferenceValue: 25.2,
+    percentError: 0.1,
+    calculatedPercentError: 0.1,
+    apsIndicator: 0,
+    calculatedAPSIndicator: 0,
+    userId: "lperez",
+    addDate: "4/25/2011, 7:30:54 PM",
+    updateDate: null,
+    linearityInjectionData: [],
   },
 ];
 const locId = "1873";
@@ -50,35 +55,35 @@ const testSummaryId = "4f2d07c0-55f9-49b0-8946-ea80c1febb15";
 const gasLevelCodes = [
   {
     code: "",
-    name: " --- select ---"
+    name: " --- select ---",
   },
   {
     code: "HIGH",
-    name: "high"
+    name: "high",
   },
   {
     code: "MID",
-    name: "mid"
+    name: "mid",
   },
   {
     code: "LOW",
-    name: "low"
+    name: "low",
   },
 ];
 
 const gasTypeCode = [
-    {
-      code: '',
-      name: '-- Select a value --'
-    },
-    {
-      code: 'ZERO',
-      name: 'Zero level gas used for the low level calibration of a reference analyzer used in RATA testing'
-    },
-    {
-      code: 'ZAM',
-      name: 'Zero Air Material'
-    },
+  {
+    code: "",
+    name: "-- Select a value --",
+  },
+  {
+    code: "ZERO",
+    name: "Zero level gas used for the low level calibration of a reference analyzer used in RATA testing",
+  },
+  {
+    code: "ZAM",
+    name: "Zero Air Material",
+  },
 ];
 let store = configureStore(initialState);
 //testing redux connected component to mimic props passed as argument
@@ -87,12 +92,12 @@ const componentRenderer = () => {
     user: { firstName: "test" },
     data: {
       locationId: locId,
-      id: testSummaryId
+      id: testSummaryId,
     },
     showProtocolGas: false,
     locationSelectValue: locId,
   };
-  return render(<QALinearitySummaryExpandableRows {...props} /> );
+  return render(<QALinearitySummaryExpandableRows {...props} />);
 };
 
 describe("Testing QAProtocolGasExpandableRows", () => {
@@ -104,43 +109,32 @@ describe("Testing QAProtocolGasExpandableRows", () => {
   const putUrl = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSummaryId}/linearities/${linearitySummary[1].id}`;
 
   const mock = new MockAdapter(axios);
+  mock.onGet(getUrl).reply(200, linearitySummary);
+  mock.onGet(getGasLevelCodes).reply(200, gasLevelCodes);
+  mock.onGet(getGasTypeCodes).reply(200, gasTypeCode);
+  mock.onDelete(deleteUrl).reply(200, "success");
   mock
-    .onGet(getUrl)
-    .reply(200, linearitySummary);
-  mock
-    .onGet(getGasLevelCodes)
-    .reply(200, gasLevelCodes);
-  mock
-    .onGet(getGasTypeCodes)
-    .reply(200, gasTypeCode);
-  mock
-    .onDelete(deleteUrl)
+    .onPost(postUrl, {
+      testSumId: "4f2d07c0-55f9-49b0-8946-ea80c1febb15",
+      gasLevelCode: "LOW",
+      meanMeasuredValue: 25.233,
+      meanReferenceValue: 25.2,
+      percentError: 0.1,
+      apsIndicator: 0,
+    })
     .reply(200, "success");
   mock
-    .onPost(postUrl,
-      {
-        "testSumId": "4f2d07c0-55f9-49b0-8946-ea80c1febb15",
-        "gasLevelCode": "LOW",
-        "meanMeasuredValue": 25.233,
-        "meanReferenceValue": 25.2,
-        "percentError": 0.1,
-        "apsIndicator": 0,
-      }
-    ).reply(200, 'success');
-  mock
-    .onPut(putUrl,
-      {
+    .onPut(putUrl, {
+      testSumId: "4f2d07c0-55f9-49b0-8946-ea80c1febb15",
+      gasLevelCode: "HIGH",
+      meanMeasuredValue: 25.233,
+      meanReferenceValue: 25.2,
+      percentError: 0.1,
+      apsIndicator: 0,
+    })
+    .reply(200, "success");
 
-        "testSumId": "4f2d07c0-55f9-49b0-8946-ea80c1febb15",
-        "gasLevelCode": "HIGH",
-        "meanMeasuredValue": 25.233,
-        "meanReferenceValue": 25.2,
-        "percentError": 0.1,
-        "apsIndicator": 0,
-      }
-    ).reply(200, 'success');
-
-  test('testing component renders properly and functionlity for add/edit/remove', async () => {
+  test("testing component renders properly and functionlity for add/edit/remove", async () => {
     //console.log("START mock.history",mock.history);
     //render
     const utils = await waitForElement(() => componentRenderer());
@@ -156,7 +150,9 @@ describe("Testing QAProtocolGasExpandableRows", () => {
     const remBtns = utils.getAllByRole("button", { name: "Remove" });
     expect(remBtns.length).toBe(2);
     fireEvent.click(remBtns[0]);
-    expect(utils.getByRole("dialog", { name: "Confirmation" })).toBeInTheDocument();
+    expect(
+      utils.getByRole("dialog", { name: "Confirmation" })
+    ).toBeInTheDocument();
     const confirmBtn = utils.getAllByRole("button", { name: "Yes" });
     expect(confirmBtn).toBeDefined();
     fireEvent.click(confirmBtn[0]);
@@ -166,9 +162,11 @@ describe("Testing QAProtocolGasExpandableRows", () => {
     expect(addBtn).toBeDefined();
     fireEvent.click(addBtn);
     expect(utils.getByText("Add Linearity Test")).toBeInTheDocument();
-    const input = utils.getByLabelText('Percent Error');
-    fireEvent.change(input, { target: { value: '23' } });
-    fireEvent.change(utils.getAllByTestId('dropdown')[0], { target: { value: 2 } })
+    const input = utils.getByLabelText("Percent Error");
+    fireEvent.change(input, { target: { value: "23" } });
+    fireEvent.change(utils.getAllByTestId("dropdown")[0], {
+      target: { value: 2 },
+    });
     const saveBtn = utils.getByRole("button", { name: "Click to save" });
     expect(saveBtn).toBeDefined();
     fireEvent.click(saveBtn);
@@ -178,13 +176,12 @@ describe("Testing QAProtocolGasExpandableRows", () => {
     expect(editBtns.length).toBe(2);
     fireEvent.click(editBtns[1]);
     expect(utils.getByText("Edit Linearity Test")).toBeInTheDocument();
-    const inputPE = utils.getByLabelText('Percent Error');
-    fireEvent.change(inputPE, { target: { value: '70' } });
+    const inputPE = utils.getByLabelText("Percent Error");
+    fireEvent.change(inputPE, { target: { value: "70" } });
     const updateBtn = utils.getByRole("button", { name: "Click to save" });
     expect(updateBtn).toBeDefined();
     fireEvent.click(updateBtn);
     expect(mock.history.put[0].url).toEqual(putUrl);
     //console.log("END mock.history",mock.history);
   });
-
 });

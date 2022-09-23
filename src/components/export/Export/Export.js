@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import ExportTab from "../ExportTab/ExportTab";
 import {
   convertSectionToStoreName,
-  EXPORT_STORE_NAME
+  EXPORT_STORE_NAME,
 } from "../../../additional-functions/workspace-section-and-store-names";
 import { setExportState } from "../../../store/actions/dynamicFacilityTab";
 

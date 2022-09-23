@@ -390,8 +390,8 @@ export const getAllTestTypeGroupCodes = async () => {
   return axios
     .get(`${config.services.mdm.uri}/test-type-group-codes`)
     .then(handleResponse)
-    .catch(handleError)
-}
+    .catch(handleError);
+};
 export const getPrefilteredTestSummaries = async () => {
   return axios
     .get(`${config.services.mdm.uri}/relationships/test-summaries`)
@@ -411,18 +411,18 @@ export const getAllApsCodes = async () => {
     .get(`${config.services.mdm.uri}/aps-codes`)
     .then(handleResponse)
     .catch(handleError);
-}
+};
 
 export const getAllReferenceMethodCodes = async () => {
   return axios
     .get(`${config.services.mdm.uri}/reference-method-codes`)
     .then(handleResponse)
     .catch(handleError);
-}
+};
 
 export const getAllRunStatusCodes = async () => {
   return axios
     .get(`${config.services.mdm.uri}/run-status-codes`)
     .then(handleResponse)
     .catch(handleError);
-}
+};

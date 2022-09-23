@@ -580,7 +580,6 @@ export const MonitoringPlanTabRender = ({
 
   return (
     <div className=" padding-top-0">
-      
       <div className="grid-row">
         <HeaderInfo
           facility={title}

@@ -274,3 +274,54 @@ export const qaAirEmissionsProps = (selectedRow) => {
     extraControls: {},
   };
 };
+
+export const qaFlowRataRunProps = () => {
+  return {
+    dataTableName: "Flow Rata Run Data",
+    payload: {
+      numberOfTraversePoints: null,
+      barometricPressure: null,
+      staticStackPressure: null,
+      percentCO2: null,
+      percentO2: null,
+      percentMoisture: null,
+      dryMolecularWeight: null,
+      wetMolecularWeight: null,
+      averageVelocityWithoutWallEffects: null,
+      averageVelocityWithWallEffects: null,
+      calculatedWAF: null,
+      averageStackFlowRate: null,
+    },
+    dropdownArray: [],
+    columnNames: [
+      "Number of Traverse Points",
+      "Barometric Pressure",
+      "Stack Static Pressure",
+      "Percent CO2",
+      "Percent O2",
+      "Percent Moisture",
+      "Dry Molecular Weight",
+      "Wet Molecular Weight",
+      "Average Velocity without Wall Effects",
+      "Average Velocity with Wall Effects",
+      "Calculated WAF",
+      "Average Stack Flow Rate",
+    ],
+    controlInputs: {
+      qiLastName: ["Number of Traverse Points", "input", "", ""],
+      qiFirstName: ["Barometric Pressure", "input", "", ""],
+      qiMiddleInitial: ["Stack Static Pressure", "input", "", ""],
+      aetbName: ["Percent CO2", "input", "", ""],
+      aetbPhoneNumber: ["Percent O2", "input", "", ""],
+      aetbEmail: ["Percent Moisture", "input", "", ""],
+      examDate: ["Dry Molecular Weight", "date", "", ""],
+      providerName: ["Wet Molecular Weight", "input", "", ""],
+      providerEmail: ["Average Velocity without Wall Effects", "input", "", ""],
+      aetbEmail: ["Average Velocity with Wall Effects", "input", "", ""],
+      aetbEmail: ["Calculated WAF", "input", "", ""],
+      aetbEmail: ["Average Stack Flow Rate", "input", "", ""],
+    },
+    controlDatePickerInputs: {},
+    extraControls: {},
+  };
+};

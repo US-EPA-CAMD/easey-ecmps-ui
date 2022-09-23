@@ -50,7 +50,6 @@ describe("create all options for modal input controls", () => {
     for (const isCreate of boolOptions) {
       for (const isMats of boolOptions) {
         for (const hasStaticDropdown of boolOptions) {
-          
           const data = modalViewData(
             selectedData,
             controlInputs,
@@ -64,7 +63,7 @@ describe("create all options for modal input controls", () => {
             prefilteredTotalName,
             extraControlInputs,
             isMats
-          ); 
+          );
 
           // Check that the returned modal data match the control and date picker input arrays
           for (const arr of data) {

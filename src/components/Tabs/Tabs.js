@@ -21,7 +21,7 @@ export const Tabs = ({
   setCheckout,
   workspaceSection,
 }) => {
-  const [activeTabIndex, setActiveTabIndex] = useState(children.length-1);
+  const [activeTabIndex, setActiveTabIndex] = useState(children.length - 1);
 
   const settingActiveTab = (index) => {
     setActiveTabIndex(index);

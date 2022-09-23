@@ -16,8 +16,8 @@ export const getTestSummary = (data, colTitles) => {
           el.stackPipeId !== null
             ? el.stackPipeId
             : el.unitId !== null
-              ? el.unitId
-              : "",
+            ? el.unitId
+            : "",
         col3: el.componentId,
         col4: el.testNumber,
         col5: el.testReasonCode,
@@ -223,6 +223,29 @@ export const getAirEmissionsRecords = (data) => {
       col7: el.examDate,
       col8: el.providerName,
       col9: el.providerEmail,
+    });
+  });
+  return records;
+};
+
+export const getFlowRunRecords = (data) => {
+  const records = [];
+  data.forEach((el) => {
+    records.push({
+      id: el.id,
+      rataRunId: el.rataRunId,
+      col1: el.numberOfTraversePoints,
+      col2: el.barometricPressure,
+      col3: el.staticStackPressure,
+      col4: el.percentCO2,
+      col5: el.percentO2,
+      col6: el.percentMoisture,
+      col7: el.dryMolecularWeight,
+      col8: el.wetMolecularWeight,
+      col9: el.averageVelocityWithoutWallEffects,
+      col10: el.averageVelocityWithWallEffects,
+      col11: el.calculatedWAF,
+      col12: el.averageStackFlowRate,
     });
   });
   return records;

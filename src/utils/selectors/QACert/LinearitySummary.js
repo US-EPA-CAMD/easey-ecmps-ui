@@ -31,165 +31,170 @@ export const getLinearitySummary = (totalData) => {
 
 export const getQAColsByTestCode = (testCode) => {
   let cols = [
-    'Test Type Code',
-    'Unit or Stack Pipe ID',
-    'Component ID',
-    'Test Number',
-    'Test Reason Code',
-    'Test Result Code',
-    'End Date',
-    'End Hour',
-    'End Minute',
-  ]
+    "Test Type Code",
+    "Unit or Stack Pipe ID",
+    "Component ID",
+    "Test Number",
+    "Test Reason Code",
+    "Test Result Code",
+    "End Date",
+    "End Hour",
+    "End Minute",
+  ];
   switch (testCode) {
-    case 'APPESUM': // Appendix E Correlation Test Summary
+    case "APPESUM": // Appendix E Correlation Test Summary
       cols = [
-        'Test Type Code',
-        'Unit or Stack Pipe ID',
-        'Monitoring System ID',
-        'Test Number',
-        'Test Reason Code',
-        'End Date',
-        'End Hour',
-        'End Minute',
-      ]
-      break
-    case 'CALINJ': // Calibration Injection
-    case 'CYCSUM': // Cycle Time Summary
-    case 'FFACC': // Fuel Flowmeter Accuracy
-    case 'HGL3LS': // Hg Linearity and 3-Level Summary
-    case 'LINSUM': // Linearity Summary
-    case 'PEI': // Primary Element Inspection
-    case 'TTACC': // Transmitter Transducer Accuracy
+        "Test Type Code",
+        "Unit or Stack Pipe ID",
+        "Monitoring System ID",
+        "Test Number",
+        "Test Reason Code",
+        "End Date",
+        "End Hour",
+        "End Minute",
+      ];
+      break;
+    case "CALINJ": // Calibration Injection
+    case "CYCSUM": // Cycle Time Summary
+    case "FFACC": // Fuel Flowmeter Accuracy
+    case "HGL3LS": // Hg Linearity and 3-Level Summary
+    case "LINSUM": // Linearity Summary
+    case "PEI": // Primary Element Inspection
+    case "TTACC": // Transmitter Transducer Accuracy
       cols = [
-        'Test Type Code',
-        'Unit or Stack Pipe ID',
-        'Component ID',
-        'Test Number',
-        'Test Reason Code',
-        'Test Result Code',
-        'End Date',
-        'End Hour',
-        'End Minute',
-      ]
-      break
-    case 'FLC': // Flow to Load Check
-    case 'FFL': // Fuel Flow to Load
+        "Test Type Code",
+        "Unit or Stack Pipe ID",
+        "Component ID",
+        "Test Number",
+        "Test Reason Code",
+        "Test Result Code",
+        "End Date",
+        "End Hour",
+        "End Minute",
+      ];
+      break;
+    case "FLC": // Flow to Load Check
+    case "FFL": // Fuel Flow to Load
       cols = [
-        'Test Type Code',
-        'Unit or Stack Pipe ID',
-        'Monitoring System ID',
-        'Test Number',
-        'Test Reason Code',
-        'Test Result Code',
-        'Year',
-        'Quarter',
-      ]
-      break
-    case 'FLR': // Flow to Load Reference
+        "Test Type Code",
+        "Unit or Stack Pipe ID",
+        "Monitoring System ID",
+        "Test Number",
+        "Test Reason Code",
+        "Test Result Code",
+        "Year",
+        "Quarter",
+      ];
+      break;
+    case "FLR": // Flow to Load Reference
       cols = [
-        'Test Type Code',
-        'Unit or Stack Pipe ID',
-        'Monitoring System ID',
-        'Test Number',
-        'End Date',
-        'End Hour',
-        'End Minute',
-      ]
-      break
-    case 'FFLB': // Fuel Flow to Load Baseline
+        "Test Type Code",
+        "Unit or Stack Pipe ID",
+        "Monitoring System ID",
+        "Test Number",
+        "End Date",
+        "End Hour",
+        "End Minute",
+      ];
+      break;
+    case "FFLB": // Fuel Flow to Load Baseline
       cols = [
-        'Test Type Code',
-        'Unit or Stack Pipe ID',
-        'Monitoring System ID',
-        'Test Number',
-        'End Date',
-        'End Hour',
-      ]
-      break
-    case 'OLOLCAL': // Online Offline Calibration
+        "Test Type Code",
+        "Unit or Stack Pipe ID",
+        "Monitoring System ID",
+        "Test Number",
+        "End Date",
+        "End Hour",
+      ];
+      break;
+    case "OLOLCAL": // Online Offline Calibration
       cols = [
-        'Test Type Code',
-        'Unit or Stack Pipe ID',
-        'Component ID',
-        'Test Number',
-        'Test Reason Code',
-        'Test Result Code',
-        'End Date',
-        'End Hour',
-      ]
-      break
-    case 'RELACC': // Relative Accuracy
+        "Test Type Code",
+        "Unit or Stack Pipe ID",
+        "Component ID",
+        "Test Number",
+        "Test Reason Code",
+        "Test Result Code",
+        "End Date",
+        "End Hour",
+      ];
+      break;
+    case "RELACC": // Relative Accuracy
       cols = [
-        'Test Type Code',
-        'Unit or Stack Pipe ID',
-        'Monitoring System ID',
-        'Test Number',
-        'Test Reason Code',
-        'Test Result Code',
-        'End Date',
-        'End Hour',
-        'End Minute',
-      ]
-      break
-    case 'LME': // Unit Default
+        "Test Type Code",
+        "Unit or Stack Pipe ID",
+        "Monitoring System ID",
+        "Test Number",
+        "Test Reason Code",
+        "Test Result Code",
+        "End Date",
+        "End Hour",
+        "End Minute",
+      ];
+      break;
+    case "LME": // Unit Default
       cols = [
-        'Test Type Code',
-        'Unit or Stack Pipe ID',
-        'Test Number',
-        'Test Reason Code',
-        'End Date',
-        'End Hour',
-        'End Minute',
-      ]
-      break
-    case 'MISC': // Miscellaneous
+        "Test Type Code",
+        "Unit or Stack Pipe ID",
+        "Test Number",
+        "Test Reason Code",
+        "End Date",
+        "End Hour",
+        "End Minute",
+      ];
+      break;
+    case "MISC": // Miscellaneous
       cols = [
-        'Test Type Code',
-        'Unit or Stack Pipe ID',
-        'Monitoring System ID',
-        'Component ID',
-        'Test Number',
-        'Test Reason Code',
-        'Test Result Code',
-        'End Date',
-        'End Hour',
-        'End Minute',
-      ]
-      break
+        "Test Type Code",
+        "Unit or Stack Pipe ID",
+        "Monitoring System ID",
+        "Component ID",
+        "Test Number",
+        "Test Reason Code",
+        "Test Result Code",
+        "End Date",
+        "End Hour",
+        "End Minute",
+      ];
+      break;
     default:
     // console.log(`getQAColsByTestCode default case w/ testCode: ${testCode}`);
   }
-  return cols
-}
+  return cols;
+};
 
 export const getQAModalDetailsByTestCode = (testCode) => {
-  const unitId = ["Unit or Stack Pipe ID", "input", "", ""]
-  const testTypeCode = ["Test Type Code", "mainDropdown", "mainDropdown", ""]
-  const monitoringSystemID = ["Monitoring System ID", "input", "", ""]
-  const componentID = ["Component ID", "input", "", ""]
-  const spanScaleCode = ["Span Scale Code", "nonFilteredDropdown", "", ""]
-  const testNumber = ["Test Number", "input", "", ""]
-  const testReasonCode = ["Test Reason Code", "dropdown", "", ""]
-  const testResultCode = ["Test Result Code", "dropdown", "", ""]
+  const unitId = ["Unit or Stack Pipe ID", "input", "", ""];
+  const testTypeCode = ["Test Type Code", "mainDropdown", "mainDropdown", ""];
+  const monitoringSystemID = ["Monitoring System ID", "input", "", ""];
+  const componentID = ["Component ID", "input", "", ""];
+  const spanScaleCode = ["Span Scale Code", "nonFilteredDropdown", "", ""];
+  const testNumber = ["Test Number", "input", "", ""];
+  const testReasonCode = ["Test Reason Code", "dropdown", "", ""];
+  const testResultCode = ["Test Result Code", "dropdown", "", ""];
   // const gasLevelCode = ["Gas Level Code Code", "nonFilteredDropdown", "", ""]
-  const testDescription = ["Test Description", "input", "", ""]
-  const gracePeriodIndicator = ["Grace Period Indicator", "radio", "", ""]
-  const injectionProtocolCode = ["Injection Protocol Code", "nonFilteredDropdown", "", ""]
+  const testDescription = ["Test Description", "input", "", ""];
+  const gracePeriodIndicator = ["Grace Period Indicator", "radio", "", ""];
+  const injectionProtocolCode = [
+    "Injection Protocol Code",
+    "nonFilteredDropdown",
+    "",
+    "",
+  ];
 
   // extra control inputs
-  const testComment = ["Test Comment", "input", "", ""]
+  const testComment = ["Test Comment", "input", "", ""];
 
   // control date picker inputs
-  const beginDate = ["Begin Date", "date", "", ""]
-  const beginHour = ["Begin Hour", "hourDropdown", "dropdown", ""]
-  const beginMinute = ["Begin Minute", "minuteDropdown", "dropdown", ""]
-  const endDate = ["End Date", "date", "", ""]
-  const endHour = ["End Hour", "hourDropdown", "dropdown", ""]
-  const endMinute = ["End Minute", "minuteDropdown", "dropdown", ""]
+  const beginDate = ["Begin Date", "date", "", ""];
+  const beginHour = ["Begin Hour", "hourDropdown", "dropdown", ""];
+  const beginMinute = ["Begin Minute", "minuteDropdown", "dropdown", ""];
+  const endDate = ["End Date", "date", "", ""];
+  const endHour = ["End Hour", "hourDropdown", "dropdown", ""];
+  const endMinute = ["End Minute", "minuteDropdown", "dropdown", ""];
 
-  const year = ["Year", "input", "", ""]
-  const quarter = ["Quarter", "input", "", ""]
+  const year = ["Year", "input", "", ""];
+  const quarter = ["Quarter", "input", "", ""];
 
   let modalDetails = {
     controlInputs: {
@@ -204,7 +209,7 @@ export const getQAModalDetailsByTestCode = (testCode) => {
     },
     extraControlInputs: {
       gracePeriodIndicator,
-      testComment
+      testComment,
     },
     controlDatePickerInputs: {
       beginDate,
@@ -212,12 +217,12 @@ export const getQAModalDetailsByTestCode = (testCode) => {
       beginMinute,
       endDate,
       endHour,
-      endMinute
-    }
-  }
+      endMinute,
+    },
+  };
 
   switch (testCode) {
-    case 'APPESUM': // Appendix E Correlation Test Summary
+    case "APPESUM": // Appendix E Correlation Test Summary
       modalDetails = {
         controlInputs: {
           testTypeCode,
@@ -227,7 +232,7 @@ export const getQAModalDetailsByTestCode = (testCode) => {
           testReasonCode,
         },
         extraControlInputs: {
-          testComment
+          testComment,
         },
         controlDatePickerInputs: {
           beginDate,
@@ -235,12 +240,12 @@ export const getQAModalDetailsByTestCode = (testCode) => {
           beginMinute,
           endDate,
           endHour,
-          endMinute
-        }
-      }
-      break
-    case 'CALINJ': // Calibration Injection
-    case 'CYCSUM': // Cycle Time Summary
+          endMinute,
+        },
+      };
+      break;
+    case "CALINJ": // Calibration Injection
+    case "CYCSUM": // Cycle Time Summary
       modalDetails = {
         controlInputs: {
           testTypeCode,
@@ -249,11 +254,11 @@ export const getQAModalDetailsByTestCode = (testCode) => {
           spanScaleCode,
           testNumber,
           testReasonCode,
-          testResultCode
+          testResultCode,
         },
         extraControlInputs: {
           injectionProtocolCode,
-          testComment
+          testComment,
         },
         controlDatePickerInputs: {
           beginDate,
@@ -261,11 +266,11 @@ export const getQAModalDetailsByTestCode = (testCode) => {
           beginMinute,
           endDate,
           endHour,
-          endMinute
-        }
-      }
-      break
-    case 'FFACC': // Fuel Flowmeter Accuracy
+          endMinute,
+        },
+      };
+      break;
+    case "FFACC": // Fuel Flowmeter Accuracy
       modalDetails = {
         controlInputs: {
           testTypeCode,
@@ -273,20 +278,20 @@ export const getQAModalDetailsByTestCode = (testCode) => {
           componentID,
           testNumber,
           testReasonCode,
-          testResultCode
+          testResultCode,
         },
         extraControlInputs: {
-          testComment
+          testComment,
         },
         controlDatePickerInputs: {
           endDate,
           endHour,
-          endMinute
-        }
-      }
-      break
-    case 'HGL3LS': // Hg Linearity and 3-Level Summary
-    case 'LINSUM': // Linearity Summary
+          endMinute,
+        },
+      };
+      break;
+    case "HGL3LS": // Hg Linearity and 3-Level Summary
+    case "LINSUM": // Linearity Summary
       modalDetails = {
         controlInputs: {
           testTypeCode,
@@ -295,11 +300,11 @@ export const getQAModalDetailsByTestCode = (testCode) => {
           spanScaleCode,
           testNumber,
           testReasonCode,
-          testResultCode
+          testResultCode,
         },
         extraControlInputs: {
           gracePeriodIndicator,
-          testComment
+          testComment,
         },
         controlDatePickerInputs: {
           beginDate,
@@ -307,11 +312,11 @@ export const getQAModalDetailsByTestCode = (testCode) => {
           beginMinute,
           endDate,
           endHour,
-          endMinute
-        }
-      }
-      break
-    case 'PEI': // Primary Element Inspection
+          endMinute,
+        },
+      };
+      break;
+    case "PEI": // Primary Element Inspection
       modalDetails = {
         controlInputs: {
           testTypeCode,
@@ -324,16 +329,16 @@ export const getQAModalDetailsByTestCode = (testCode) => {
         },
         extraControlInputs: {
           gracePeriodIndicator,
-          testComment
+          testComment,
         },
         controlDatePickerInputs: {
           endDate,
           endHour,
-          endMinute
-        }
-      }
-      break
-    case 'TTACC': // Transmitter Transducer Accuracy
+          endMinute,
+        },
+      };
+      break;
+    case "TTACC": // Transmitter Transducer Accuracy
       modalDetails = {
         controlInputs: {
           testTypeCode,
@@ -344,17 +349,17 @@ export const getQAModalDetailsByTestCode = (testCode) => {
           testResultCode,
         },
         extraControlInputs: {
-          testComment
+          testComment,
         },
         controlDatePickerInputs: {
           endDate,
           endHour,
-          endMinute
-        }
-      }
-      break
-    case 'FLC': // Flow to Load Check
-    case 'FFL': // Fuel Flow to Load
+          endMinute,
+        },
+      };
+      break;
+    case "FLC": // Flow to Load Check
+    case "FFL": // Fuel Flow to Load
       modalDetails = {
         controlInputs: {
           testTypeCode,
@@ -364,14 +369,14 @@ export const getQAModalDetailsByTestCode = (testCode) => {
           testReasonCode,
           testResultCode,
           year,
-          quarter
+          quarter,
         },
         extraControlInputs: {
-          testComment
+          testComment,
         },
-      }
-      break
-    case 'FLR': // Flow to Load Reference
+      };
+      break;
+    case "FLR": // Flow to Load Reference
       modalDetails = {
         controlInputs: {
           testTypeCode,
@@ -380,16 +385,16 @@ export const getQAModalDetailsByTestCode = (testCode) => {
           testNumber,
         },
         extraControlInputs: {
-          testComment
+          testComment,
         },
         controlDatePickerInputs: {
           endDate,
           endHour,
-          endMinute
-        }
-      }
-      break
-    case 'FFLB': // Fuel Flow to Load Baseline
+          endMinute,
+        },
+      };
+      break;
+    case "FFLB": // Fuel Flow to Load Baseline
       modalDetails = {
         controlInputs: {
           testTypeCode,
@@ -398,17 +403,17 @@ export const getQAModalDetailsByTestCode = (testCode) => {
           testNumber,
         },
         extraControlInputs: {
-          testComment
+          testComment,
         },
         controlDatePickerInputs: {
           beginDate,
           beginHour,
           endDate,
           endHour,
-        }
-      }
-      break
-    case 'OLOLCAL': // Online Offline Calibration
+        },
+      };
+      break;
+    case "OLOLCAL": // Online Offline Calibration
       modalDetails = {
         controlInputs: {
           testTypeCode,
@@ -420,17 +425,17 @@ export const getQAModalDetailsByTestCode = (testCode) => {
           testResultCode,
         },
         extraControlInputs: {
-          testComment
+          testComment,
         },
         controlDatePickerInputs: {
           beginDate,
           beginHour,
           endDate,
           endHour,
-        }
-      }
-      break
-    case 'RELACC': // Relative Accuracy
+        },
+      };
+      break;
+    case "RELACC": // Relative Accuracy
       modalDetails = {
         controlInputs: {
           testTypeCode,
@@ -442,7 +447,7 @@ export const getQAModalDetailsByTestCode = (testCode) => {
         },
         extraControlInputs: {
           gracePeriodIndicator,
-          testComment
+          testComment,
         },
         controlDatePickerInputs: {
           beginDate,
@@ -450,11 +455,11 @@ export const getQAModalDetailsByTestCode = (testCode) => {
           beginMinute,
           endDate,
           endHour,
-          endMinute
-        }
-      }
-      break
-    case 'LME': // Unit Default
+          endMinute,
+        },
+      };
+      break;
+    case "LME": // Unit Default
       modalDetails = {
         controlInputs: {
           testTypeCode,
@@ -463,7 +468,7 @@ export const getQAModalDetailsByTestCode = (testCode) => {
           testReasonCode,
         },
         extraControlInputs: {
-          testComment
+          testComment,
         },
         controlDatePickerInputs: {
           beginDate,
@@ -471,11 +476,11 @@ export const getQAModalDetailsByTestCode = (testCode) => {
           beginMinute,
           endDate,
           endHour,
-          endMinute
-        }
-      }
-      break
-    case 'MISC': // Miscellaneous
+          endMinute,
+        },
+      };
+      break;
+    case "MISC": // Miscellaneous
       modalDetails = {
         controlInputs: {
           testTypeCode,
@@ -489,18 +494,18 @@ export const getQAModalDetailsByTestCode = (testCode) => {
         },
         extraControlInputs: {
           gracePeriodIndicator,
-          testComment
+          testComment,
         },
         controlDatePickerInputs: {
           endDate,
           endHour,
-          endMinute
-        }
-      }
-      break
+          endMinute,
+        },
+      };
+      break;
     default:
     // console.log(`getQAModalDetailsByTestCode default case w/ testCode: ${testCode}`);
   }
 
-  return modalDetails
-}
+  return modalDetails;
+};

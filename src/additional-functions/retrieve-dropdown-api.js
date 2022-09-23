@@ -829,7 +829,11 @@ const organizeStaticPrefilterMDMData = (response) => {
   setOfCodeNamesArray.push(setOfCodeNames);
   return setOfCodeNamesArray;
 };
-export const organizePrefilterMDMData = (noDupesFormCodes, drivingInput, response) => {
+export const organizePrefilterMDMData = (
+  noDupesFormCodes,
+  drivingInput,
+  response
+) => {
   const prefilteredMdmOptions = [];
   // for each unique main driving input code
   for (const code of noDupesFormCodes) {

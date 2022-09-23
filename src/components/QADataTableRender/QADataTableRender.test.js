@@ -71,8 +71,8 @@ describe("renders datatable with all values ", () => {
         columnNames={columnNames}
         data={[]}
         user={{ firstName: "test" }}
-      // expandableRowComp={<button>{"click me"}</button>}
-      // expandableRows={true}
+        // expandableRowComp={<button>{"click me"}</button>}
+        // expandableRows={true}
       />
     );
     expect(container).toBeDefined();
@@ -115,7 +115,7 @@ describe("renders datatable with all values ", () => {
     expect(container).toBeDefined();
   });
 
-  test('given a user then renders evaluate button for each row in table', () => {
+  test("given a user then renders evaluate button for each row in table", () => {
     // Arrange
     render(
       <QADataTableRender
@@ -128,11 +128,11 @@ describe("renders datatable with all values ", () => {
     );
 
     // Assert
-    const evaluateBtns = screen.getAllByRole('button', { name: /evaluate/i })
-    expect(evaluateBtns).toHaveLength(data.length)
-  })
+    const evaluateBtns = screen.getAllByRole("button", { name: /evaluate/i });
+    expect(evaluateBtns).toHaveLength(data.length);
+  });
 
-  test('given a user then renders edit button for each row in table', () => {
+  test("given a user then renders edit button for each row in table", () => {
     // Arrange
     render(
       <QADataTableRender
@@ -144,9 +144,9 @@ describe("renders datatable with all values ", () => {
     );
 
     // Assert
-    const editBtns = screen.getAllByRole('button', { name: /edit/i })
-    expect(editBtns).toHaveLength(data.length)
-  })
+    const editBtns = screen.getAllByRole("button", { name: /edit/i });
+    expect(editBtns).toHaveLength(data.length);
+  });
 
   test("given a user then renders remove button for each row in table", () => {
     // Arrange
@@ -160,7 +160,7 @@ describe("renders datatable with all values ", () => {
     );
 
     // Assert
-    const removeBtns = screen.getAllByRole('button', { name: /remove/i })
-    expect(removeBtns).toHaveLength(data.length)
+    const removeBtns = screen.getAllByRole("button", { name: /remove/i });
+    expect(removeBtns).toHaveLength(data.length);
   });
 });
