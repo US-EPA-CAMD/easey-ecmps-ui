@@ -11,10 +11,6 @@ import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import {
-  displayAppError,
-  needEndDate,
-} from "../../../additional-functions/app-error";
-import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
   returnFocusToLast,
