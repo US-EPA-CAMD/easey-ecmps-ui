@@ -102,6 +102,8 @@ const reducer = (state, action) => {
 
       break;
     case types.SET_INACTIVE_STATE:
+      console.log('action.workspaceSection',action.workspaceSection,action.inactive,action.title)
+      console.log('current state',currentState)
       returnObject = {
         ...currentState,
         [`${action.workspaceSection}`]: currentState[
@@ -115,8 +117,10 @@ const reducer = (state, action) => {
             : x
         ),
       };
+      console.log('after',returnObject,currentState)
       break;
     default:
+      console.log('this was default hit ')
       returnObject = currentState;
       break;
   }
