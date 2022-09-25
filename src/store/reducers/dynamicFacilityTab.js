@@ -14,7 +14,7 @@ const reducer = (state, action) => {
     "emissionsMats",
   ];
 
-  const workspaceSections = ["monitoringPlans","qaCertTestSummary","export","emissions"];
+  
 
   const fac = {};
   fac[`${action.workspaceSection}`] = action.facility;
