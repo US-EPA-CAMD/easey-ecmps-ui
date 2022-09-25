@@ -36,10 +36,14 @@ export const MonitoringPlanTab = ({
   mostRecentlyCheckedInMonitorPlanIdForTab,
   workspaceSection,
 }) => {
-  const getCurrentTab = () => {
-    return tabs.find((tab) => tab.selectedConfig.id === selectedConfig.id);
-  };
-  const [currentTab, setCurrentTab] = useState(getCurrentTab());
+
+  const getCurrentTab = () =>{
+    console.log('current tab',tabs.find(tab => tab.selectedConfig.id === selectedConfig.id))
+    return tabs.find(tab => tab.selectedConfig.id === selectedConfig.id);
+
+  }
+  const [ currentTab, setCurrentTab ] = useState(getCurrentTab());
+
 
   useEffect(() => {
     setCurrentTab(getCurrentTab());

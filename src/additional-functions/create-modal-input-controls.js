@@ -123,12 +123,16 @@ export const modalViewData = (
           case "dropdown":
             if (!createNew) {
               if (totalOptionsClone) {
+
                 console.log(
                   "testing in dropdown",
                   totalOptionsClone,
                   y,
                   selected
                 );
+
+            
+
                 labels = findValue(
                   totalOptionsClone[y],
                   selected ? selected[y] : null,

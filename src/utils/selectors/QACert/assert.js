@@ -60,6 +60,7 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       return qaApi.getAirEmissions(location, id).catch((error) => {
         console.log("error", error);
       });
+      
     case flowRataRunData:
       return qaApi
         .getFlowRunData(
@@ -72,6 +73,7 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
         .catch((error) => {
           console.log("error", error);
         });
+
     default:
       break;
   }
@@ -93,10 +95,13 @@ export const getDataTableRecords = (dataIn, name) => {
 
     case rataSummary:
       return selector.mapRataSummaryToRows(dataIn);
+      
     case airEmissions:
       return selector.getAirEmissionsRecords(dataIn);
+
     case flowRataRunData:
       return selector.getFlowRunRecords(dataIn);
+      
     default:
       break;
   }
@@ -175,7 +180,8 @@ export const removeDataSwitch = async (
   return [];
 };
 // Save (PUT) endpoints for API
-export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {console.log("userInput",userInput, "extraIdsArr",extraIdsArr);
+export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
+  console.log("userInput", userInput, "extraIdsArr", extraIdsArr);
   switch (name) {
     case lineTest:
       console.log("thisone", name);
@@ -225,15 +231,25 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {c
         });
 
     case rataRunData:
-      return qaApi.updateRataRunData(location, id).catch((error) => {
-        console.log("error", error);
-      });
+      return qaApi
+        .updateRataRunData(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[3],
+          id,
+          userInput.id,
+          userInput
+        )
+        .catch((error) => {
+          console.log("error", error);
+        });
 
     case rataSummary:
       return qaApi
         .updateRataSummary(
           extraIdsArr[0],
           extraIdsArr[1],
+          extraIdsArr[2],
           id,
           userInput.id,
           userInput
