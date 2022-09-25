@@ -139,7 +139,7 @@ export const QACertTestSummaryHeaderInfo = ({
   }, []);
 
   useEffect(() => {
-    if (importTypeSelection != "select" || importedFile.length !== 0) {
+    if (importTypeSelection !== "select" || importedFile.length !== 0) {
       setDisablePortBtn(false);
     } else {
       setDisablePortBtn(true);
