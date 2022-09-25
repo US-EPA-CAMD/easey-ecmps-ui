@@ -70,10 +70,6 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
           console.log("error", error);
         });
 
-      return qaApi.getAirEmissions(location, id).catch((error) => {
-        console.log("error", error);
-      });
-
     default:
       break;
   }
