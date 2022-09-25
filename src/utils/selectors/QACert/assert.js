@@ -11,7 +11,7 @@ const rataData = "RATA Data";
 const rataRunData = "RATA Run Data";
 const rataSummary = "RATA Summary";
 const airEmissions = "Air Emissions";
-const flowRataRun = "Flow Rata Run Data";
+const flowRataRunData = "Flow Rata Run Data";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -60,7 +60,7 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       return qaApi.getAirEmissions(location, id).catch((error) => {
         console.log("error", error);
       });
-    case flowRataRun:
+    case flowRataRunData:
       return qaApi
         .getFlowRunData(
           extraIdsArr[0],
@@ -95,7 +95,7 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.mapRataSummaryToRows(dataIn);
     case airEmissions:
       return selector.getAirEmissionsRecords(dataIn);
-    case flowRataRun:
+    case flowRataRunData:
       return selector.getFlowRunRecords(dataIn);
     default:
       break;
@@ -241,14 +241,15 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {c
         .catch((error) => {
           console.log("error", error);
         });
-    case flowRataRun:
+        
+    case flowRataRunData:
       return qaApi
         .updateFlowRataRunData(
-          location,
-          id,
           extraIdsArr[0],
           extraIdsArr[1],
           extraIdsArr[2],
+          extraIdsArr[3],
+          id,
           userInput.id,
           userInput
         )
@@ -322,6 +323,21 @@ export const createDataSwitch = (
     case airEmissions:
       return qaApi
         .createAirEmissions(location, id, userInput)
+        .catch((error) => {
+          console.log("error", error);
+        });
+
+        case flowRataRunData:
+      return qaApi
+        .createFlowRataRunData(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
+          extraIdsArr[3],
+          id,
+          userInput.id,
+          userInput
+        )
         .catch((error) => {
           console.log("error", error);
         });

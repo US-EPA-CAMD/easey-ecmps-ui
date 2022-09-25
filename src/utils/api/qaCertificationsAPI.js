@@ -665,7 +665,7 @@ export const getFlowRunData = async (
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const createFlowRunData = async (
+export const createFlowRataRunData = async (
   locId,
   testSumId,
   rataId,

@@ -24,6 +24,8 @@ import {
   qaLinearityInjectionProps,
   qaRataSummaryProps,
   qaRataRunDataProps,
+  qaFlowRataRunProps,
+  qaTraverseRataRunProps,
 } from "../../../additional-functions/qa-dataTable-props";
 const QAExpandableRowsRender = ({
   user,
@@ -178,6 +180,38 @@ const QAExpandableRowsRender = ({
             user={user}
           />
         );
+        case "RATA Run Data":
+          const flowIdArray = [...extraIDs, locationId, id];
+          const flowObj = qaFlowRataRunProps();
+          return (
+            <QAExpandableRowsRender
+              payload={flowObj["payload"]}
+              dropdownArray={flowObj["dropdownArray"]}
+              columns={flowObj["columnNames"]}
+              controlInputs={flowObj["controlInputs"]}
+              controlDatePickerInputs={flowObj["controlDatePickerInputs"]}
+              dataTableName={flowObj["dataTableName"]}
+              extraControls={flowObj["extraControls"]}
+              extraIDs={flowIdArray}
+              user={user}
+            />
+          );
+          case "Flow Rata Run Data":
+          const traverseIdArray = [...extraIDs, locationId, id];
+          const traverseObj = qaTraverseRataRunProps();
+          return (
+            <QAExpandableRowsRender
+              payload={traverseObj["payload"]}
+              dropdownArray={traverseObj["dropdownArray"]}
+              columns={flowObj["columnNames"]}
+              controlInputs={flowObj["controlInputs"]}
+              controlDatePickerInputs={flowObj["controlDatePickerInputs"]}
+              dataTableName={flowObj["dataTableName"]}
+              extraControls={flowObj["extraControls"]}
+              extraIDs={traverseIdArray}
+              user={user}
+            />
+          );
 
       default:
         break;

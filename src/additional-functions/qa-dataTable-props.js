@@ -233,7 +233,7 @@ export const qaRataSummaryProps = () => {
   };
 };
 
-export const qaAirEmissionsProps = (selectedRow) => {
+export const qaAirEmissionsProps = () => {
   return {
     dataTableName: "Air Emissions",
     payload: {
@@ -277,20 +277,20 @@ export const qaAirEmissionsProps = (selectedRow) => {
 
 export const qaFlowRataRunProps = () => {
   return {
-    dataTableName: "Flow Rata Run",
+    dataTableName: "Flow Rata Run Data",
     payload: {
-      numberOfTraversePoints: null,
-      barometricPressure: null,
-      staticStackPressure: null,
-      percentCO2: null,
-      percentO2: null,
-      percentMoisture: null,
-      dryMolecularWeight: null,
-      wetMolecularWeight: null,
-      averageVelocityWithoutWallEffects: null,
-      averageVelocityWithWallEffects: null,
-      calculatedWAF: null,
-      averageStackFlowRate: null,
+      numberOfTraversePoints: 0,
+      barometricPressure: 0,
+      staticStackPressure: 0,
+      percentCO2: 0,
+      percentO2: 0,
+      percentMoisture: 0,
+      dryMolecularWeight: 0,
+      wetMolecularWeight: 0,
+      averageVelocityWithoutWallEffects: 0,
+      averageVelocityWithWallEffects: 0,
+      calculatedWAF: 0,
+      averageStackFlowRate: 0,
     },
     dropdownArray: [],
     columnNames: [
@@ -306,6 +306,59 @@ export const qaFlowRataRunProps = () => {
       "Average Velocity with Wall Effects",
       "Calculated WAF",
       "Average Stack Flow Rate",
+    ],
+    controlInputs: {
+      numberOfTraversePoints: ["Number of Traverse Points", "input", "", ""],
+      barometricPressure: ["Barometric Pressure", "input", "", ""],
+      staticStackPressure: ["Stack Static Pressure", "input", "", ""],
+      percentCO2: ["Percent CO2", "input", "", ""],
+      percentO2: ["Percent O2", "input", "", ""],
+      percentMoisture: ["Percent Moisture", "input", "", ""],
+      dryMolecularWeight: ["Dry Molecular Weight", "date", "", ""],
+      wetMolecularWeight: ["Wet Molecular Weight", "input", "", ""],
+      averageVelocityWithoutWallEffects: ["Average Velocity without Wall Effects", "input", "", ""],
+      averageVelocityWithWallEffects: ["Average Velocity with Wall Effects", "input", "", ""],
+      calculatedWAF: ["Calculated WAF", "input", "", ""],
+      averageStackFlowRate: ["Average Stack Flow Rate", "input", "", ""],
+    },
+    controlDatePickerInputs: {},
+    extraControls: {},
+  };
+};
+
+export const qaTraverseRataRunProps = () => {
+  return {
+    dataTableName: "RATA Traverse Data",
+    payload: {
+      numberOfTraversePoints: 0,
+      barometricPressure: null,
+      staticStackPressure: null,
+      percentCO2: null,
+      percentO2: null,
+      percentMoisture: null,
+      dryMolecularWeight: null,
+      wetMolecularWeight: null,
+      averageVelocityWithoutWallEffects: null,
+      averageVelocityWithWallEffects: null,
+      calculatedWAF: null,
+      averageStackFlowRate: null,
+    },
+    dropdownArray: [],
+    columnNames: [
+      "Probe Type Code",
+      "Method Traverse Point Id",
+      "Vel Cal Coeficiant",
+      "Last Probe Date",
+      "Average Vel Diff Pressure",
+      "Average sq vel diff Pressure",
+      "T Stack Temp",
+      "Number of Wall Effects Points",
+      "Yaw Angle",
+      "Pitch Angle",
+      "Calc Vel",
+      "Calc Calc Vel",
+      "Rep Vel",
+      "Pressure Meas Code",
     ],
     controlInputs: {
       qiLastName: ["Number of Traverse Points", "input", "", ""],
@@ -325,3 +378,4 @@ export const qaFlowRataRunProps = () => {
     extraControls: {},
   };
 };
+
