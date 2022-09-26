@@ -585,26 +585,30 @@ export const deleteRataRunData = async (
   }
 };
 
-export const getRataTraverseData = async () => {
-  const data = [
-    {
-      id: '1',
-      probeID: 'probeId1',
-      probeTypeCode: 'probeTypeCode1',
-      methodTraversePointID: 'methodTraversePointID1',
-      velocityCalibrationCoefficient: 'velocityCalibrationCoefficient2',
-      lastProbeDate: '2022-09-21'
-    },
-    {
-      id: '2',
-      probeID: 'probeId2',
-      probeTypeCode: 'probeTypeCode2',
-      methodTraversePointID: 'methodTraversePointID2',
-      velocityCalibrationCoefficient: 'velocityCalibrationCoefficient2',
-      lastProbeDate: '2022-09-21'
-    },
-  ]
-  return Promise.resolve({ status: 200, data })
+export const getRataTraverseData = async (locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId) => {
+  let url = `${config.services.qaCertification.uri}`;
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+  // *** attach the rest of the url
+  url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses`;
+  return axios.get(url).then(handleResponse).catch(handleError);
+}
+
+export const createRataTraverse = async (locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
 }
 
 export const deleteRataTraverseData = async (
@@ -616,7 +620,7 @@ export const deleteRataTraverseData = async (
   flowRataRunId,
   id
 ) => {  
-  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverse/${id}`;
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses/${id}`;
   try {
     return handleResponse(
       await secureAxios({

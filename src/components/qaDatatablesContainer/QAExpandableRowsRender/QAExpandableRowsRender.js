@@ -41,13 +41,6 @@ const QAExpandableRowsRender = ({
   extraIDs = [], // [locid, testsumid, linsumid,   ]
   data,
 }) => {
-  console.log("dataTableName",dataTableName);
-  console.log("expandable",expandable);
-  console.log("extraIDs",extraIDs);
-  console.log("compData",data);
-  if(dataTableName === "Protocol Gas") {
-    console.log('dat gasa', data)
-  }
   const { locationId, id } = data;
   // const { locationId, id } = dataTableName !== "Protocol Gas" ? data : ""; // id / testsumid
   const [mdmData, setMdmData] = useState(null);
@@ -166,7 +159,7 @@ const QAExpandableRowsRender = ({
         );
 
       case "RATA Summary": // 3rd level 
-        const rataRunIdArray = [...extraIDs, locationId, id];
+        const rataRunIdArray = [...extraIDs, id];
         const rataRunObj = qaRataRunDataProps();
         return (
           <QAExpandableRowsRender
@@ -184,7 +177,7 @@ const QAExpandableRowsRender = ({
         );
 
         case "RATA Run Data":
-          const flowIdArray = [...extraIDs, locationId, id];
+          const flowIdArray = [...extraIDs, id];
           const flowObj = qaFlowRataRunProps();
           return (
             <QAExpandableRowsRender
@@ -196,6 +189,7 @@ const QAExpandableRowsRender = ({
               dataTableName={flowObj["dataTableName"]}
               extraControls={flowObj["extraControls"]}
               extraIDs={flowIdArray}
+              expandable
               user={user}
             />
           );
