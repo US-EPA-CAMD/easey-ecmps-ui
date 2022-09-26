@@ -585,7 +585,7 @@ export const deleteRataRunData = async (
   }
 };
 
-export const getRataTraverseData = async () => {
+export const getRataTraverseData = async (locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId) => {
   const data = [
     {
       id: '1',
@@ -605,6 +605,34 @@ export const getRataTraverseData = async () => {
     },
   ]
   return Promise.resolve({ status: 200, data })
+
+  let url = `${config.services.qaCertification.uri}`;
+
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+
+  // *** attach the rest of the url
+  url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses`;
+  return axios.get(url).then(handleResponse).catch(handleError);
+}
+
+export const createRataTraverse = async (locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId, payload) => {
+  return Promise.resolve({ status: 200, data: 'created' })
+
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
 }
 
 export const getAirEmissions = async (locID, testSumId) => {
