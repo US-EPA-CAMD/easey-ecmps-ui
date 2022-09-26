@@ -233,6 +233,52 @@ export const qaRataSummaryProps = () => {
   };
 };
 
+export const qaRataTraverseProps = () => {
+  return {
+    dataTableName: "RATA Traverse Data",
+    payload: {},
+    dropdownArray: [
+      'probeTypeCode',
+      'pressureMeasureCode',
+      'pointUsedIndicator'
+    ],
+    columnNames: [
+      "Probe ID",
+      "Probe Type Code",
+      "Pressure Measure Code",
+      "Method Traverse Point ID",
+      "Velocity Calibration Coefficient",
+      "Last Probe Date",
+      "Avg Vel Diff Pressure",
+      "Avg Square Vel Diff Pressures",
+      "T Stack Temperature",
+      "Point Used Indicator",
+      "Number of Wall Effects Points",
+      "Yaw Angle",
+      "Pitch Angle",
+      "Calculated Velocity",
+      "Replacement Velocity",
+    ],
+    controlInputs: {
+      probeId: ["Probe ID", "input", "", ""],
+      probeTypeCode: ["Probe Type Code", "dropdown", "", ""],
+      pressureMeasureCode: ["Pressure Measure Code", "dropdown", "", ""],
+      methodTraversePointId: ["Method Traverse Point ID", "input", "", ""],
+      velocityCalibrationCoefficient: ["Velocity Calibration Coefficient", "input", "", ""],
+      lastProbeDate: ["Last Probe Date", "date", "", ""],
+      avgVelDiffPressure: ["Avg Vel Diff Pressure", "input", "", ""],
+      avgSquareVelDiffPressure: ["Avg Square Vel Diff Pressures", "input", "", ""],
+      tStackTemperature: ["T Stack Temperature", "input", "", ""],
+      pointUsedIndicator: ["Point Used Indicator", "dropdown", "", ""],
+      numberWallEffectsPoints: ["Number of Wall Effects Points", "input", "", ""],
+      yawAngle: ["Yaw Angle", "input", "", ""],
+      pitchAngle: ["Pitch Angle", "input", "", ""],
+      calculatedVelocity: ["Calculated Velocity", "input", "", ""],
+      replacementVelocity: ["Replacement Velocity", "input", "", ""]
+    },
+  };
+}
+
 export const qaAirEmissionsProps = () => {
   return {
     dataTableName: "Air Emissions",
