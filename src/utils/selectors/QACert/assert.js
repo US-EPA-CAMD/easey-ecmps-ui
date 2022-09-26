@@ -50,10 +50,7 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
         .catch((error) => {
           console.log("error", error);
         });
-    case rataTraverseData:
-      return qaApi
-        .getRataTraverseData()
-        .catch(error => console.log('error fetching rata traverse data', error))
+
     case rataSummary:
       return qaApi
         .getRataSummary(extraIdsArr[0], extraIdsArr[1], id)
@@ -70,6 +67,10 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
         .catch((error) => {
           console.log("error", error);
         });
+    case rataTraverseData:
+      return qaApi
+        .getRataTraverseData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], extraIdsArr[3], extraIdsArr[4], id)
+        .catch(error => console.log('error fetching rata traverse data', error))
     default:
       throw new Error(`getDataTableApis undefined for ${name}`)
   }
@@ -342,7 +343,7 @@ export const createDataSwitch = (
         });
     case rataTraverseData:
       return qaApi
-        .createRataTraverse(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], extraIdsArr[3], extraIdsArr[4], extraIdsArr[5], userInput)
+        .createRataTraverse(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], extraIdsArr[3], extraIdsArr[4], id, userInput)
         .catch(error => console.log('error creating rata traverse data', error))
 
     case airEmissions:
