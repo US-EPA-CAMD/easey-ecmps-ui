@@ -84,22 +84,18 @@ const QALinearityInjectionExpandableRows = ({
 
   const onRemoveHandler = async (row) => {
     const { id: idToRemove } = row;
-    deleteQALinearityInjection(
-      locationId,
-      testSumId,
-      id,
-      idToRemove
-    ).then((resp)=>{
-      if (resp.status === 200) {
-        const dataPostRemove = qaLinearityInjection.filter(
-          (rowData) => rowData.id !== idToRemove
-        );
-        setQaLinearityInjection(dataPostRemove);
-      }
-    })
-    .catch((error) => {
-      console.log("error", error);
-    });
+    deleteQALinearityInjection(locationId, testSumId, id, idToRemove)
+      .then((resp) => {
+        if (resp.status === 200) {
+          const dataPostRemove = qaLinearityInjection.filter(
+            (rowData) => rowData.id !== idToRemove
+          );
+          setQaLinearityInjection(dataPostRemove);
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
   };
   const dataTableName = "Linearity Injection";
   const controlInputs = {};
@@ -262,9 +258,7 @@ const QALinearityInjectionExpandableRows = ({
           actionColumnName={
             user ? (
               <>
-                <span className="padding-right-2">
-                  Linearity Injection
-                </span>
+                <span className="padding-right-2">Linearity Injection</span>
                 <Button
                   epa-testid="btnOpen"
                   className="text-white"
@@ -326,27 +320,25 @@ const QALinearityInjectionExpandableRows = ({
             createNewData
               ? `Add  ${dataTableName}`
               : user
-                ? ` Edit ${dataTableName}`
-                : ` ${dataTableName}`
+              ? ` Edit ${dataTableName}`
+              : ` ${dataTableName}`
           }
           exitBTN={createNewData ? `Create ${dataTableName}` : `Save and Close`}
           children={
-          
-              <div>
-                <ModalDetails
-                  modalData={selectedRow}
-                  data={selectedModalData}
-                  // prefilteredMdmData={prefilteredMdmData}
-                  cols={3}
-                  title={`${dataTableName}`}
-                  viewOnly={!user || nonEditable}
-                  create={createNewData}
+            <div>
+              <ModalDetails
+                modalData={selectedRow}
+                data={selectedModalData}
+                // prefilteredMdmData={prefilteredMdmData}
+                cols={3}
+                title={`${dataTableName}`}
+                viewOnly={!user || nonEditable}
+                create={createNewData}
                 // setMainDropdownChange={setMainDropdownChange}
                 //mainDropdownChange={mainDropdownChange}
                 // onEditUpdateHandler={onEditUpdateHandler}
-                />
-              </div>
-            
+              />
+            </div>
           }
         />
       ) : null}

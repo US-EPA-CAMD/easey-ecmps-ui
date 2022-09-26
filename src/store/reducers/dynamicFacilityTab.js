@@ -4,7 +4,7 @@ import initialState from "./initialState";
 const reducer = (state, action) => {
   const currentState = state ? state : initialState.openedFacilityTabs;
   let returnObject;
-  const workspaceSections = ["monitoringPlans","qaCertTestSummary","export","emissionsDaily","emissionsHourly","emissionsMats"];
+  const workspaceSections = ["monitoringPlans","qaCertTestSummary","export","emissions"];
   const fac = {};
   fac[`${action.workspaceSection}`] = action.facility;
 
@@ -24,14 +24,16 @@ const reducer = (state, action) => {
     case types.REMOVE_FACILITY_TAB:
       returnObject = {
         ...currentState,
-        [`${action.workspaceSection}`]: currentState[
-          `${action.workspaceSection}`
-        ].filter(
-          (facility) =>
-            currentState[`${action.workspaceSection}`].indexOf(facility) !==
-            action.facility - 1
-        ),
       };
+      workspaceSections.forEach(section =>
+        returnObject[`${section}`] = 
+          currentState[section]
+            .filter(
+              (facility) =>
+                currentState[section].indexOf(facility) !==
+                action.facility - 1
+            ),
+      );
       break;
     case types.SET_LOCATION_SELECTION_STATE:
       returnObject = {
@@ -102,6 +104,8 @@ const reducer = (state, action) => {
 
       break;
     case types.SET_INACTIVE_STATE:
+      console.log('action.workspaceSection',action.workspaceSection,action.inactive,action.title)
+      console.log('current state',currentState)
       returnObject = {
         ...currentState,
         [`${action.workspaceSection}`]: currentState[
@@ -115,8 +119,10 @@ const reducer = (state, action) => {
             : x
         ),
       };
+      console.log('after',returnObject,currentState)
       break;
     default:
+      console.log('this was default hit ')
       returnObject = currentState;
       break;
   }
