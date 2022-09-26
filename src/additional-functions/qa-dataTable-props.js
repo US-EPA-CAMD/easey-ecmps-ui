@@ -321,3 +321,54 @@ export const qaAirEmissionsProps = (selectedRow) => {
     extraControls: {},
   };
 };
+
+export const qaFlowRataRunProps = () => {
+  return {
+    dataTableName: "Flow",
+    payload: {
+      numberOfTraversePoints: null,
+      barometricPressure: null,
+      stackStaticPressure: null,
+      percentCO2: null,
+      percentO2: null,
+      percentMoisture: null,
+      dryMolecularWeight: null,
+      wetMolecularWeight: null,
+      averageVelocityWithoutWallEffects: null,
+      averageVelocityWithWallEffects: null,
+      calculatedWAF: null,
+      averageStackFlowRate: null,
+    },
+    dropdownArray: [],
+    columnNames: [
+      "Number of Traverse Points",
+      "Barometric Pressure",
+      "Stack Static Pressure",
+      "Percent CO2",
+      "Percent O2",
+      "Percent Moisture",
+      "Dry Molecular Weight",
+      "Wet Molecular Weight",
+      "Average Velocity without Wall Effects",
+      "Average Velocity with Wall Effects",
+      "Calculated WAF",
+      "Average Stack Flow Rate",
+    ],
+    controlInputs: {
+      numberOfTraversePoints: ["Number of Traverse Points", "input", "", ""],
+      barometricPressure: ["Barometric Pressure", "input", "", ""],
+      stackStaticPressure: ["Stack Static Pressure", "input", "", ""],
+      percentCO2: ["Percent CO2", "input", "", ""],
+      percentO2: ["Percent O2", "input", "", ""],
+      percentMoisture: ["Percent Moisture", "input", "", ""],
+      dryMolecularWeight: ["Dry Molecular Weight", "date", "", ""],
+      wetMolecularWeight: ["Wet Molecular Weight", "input", "", ""],
+      averageVelocityWithoutWallEffects: ["Average Velocity without Wall Effects", "input", "", ""],
+      averageVelocityWithWallEffects: ["Average Velocity with Wall Effects", "input", "", ""],
+      calculatedWAF: ["Calculated WAF", "input", "", ""],
+      averageStackFlowRate: ["Average Stack Flow Rate", "input", "", ""],
+    },
+    controlDatePickerInputs: {},
+    extraControls: {},
+  };
+};

@@ -12,6 +12,7 @@ const rataRunData = "RATA Run Data";
 const rataSummary = "RATA Summary";
 const rataTraverseData = "RATA Traverse Data"
 const airEmissions = "Air Emissions";
+const flowRataRun = "Flow";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -63,6 +64,12 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       return qaApi.getAirEmissions(location, id).catch((error) => {
         console.log("error", error);
       });
+      case flowRataRun:
+        return qaApi
+          .getFlowRunData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], extraIdsArr[3], id)
+          .catch((error) => {
+            console.log("error", error);
+          });
     default:
       throw new Error(`getDataTableApis undefined for ${name}`)
   }
@@ -88,6 +95,8 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.mapRataTraverseToRows(dataIn)
     case airEmissions:
       return selector.getAirEmissionsRecords(dataIn);
+      case flowRataRun:
+        return selector.getFlowRunRecords(dataIn)
     default:
       break;
   }
@@ -160,7 +169,19 @@ export const removeDataSwitch = async (
         .catch((error) => {
           console.log("error", error);
         });
-
+    case flowRataRun:
+      return qaApi
+        .deleteFlowRunData(
+          locationId,
+          id,
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
+          row.id
+        )
+        .catch((error) => {
+          console.log("error", error);
+        });
     case rataTraverseData:
       return qaApi
         .deleteRataTraverseData(
@@ -258,6 +279,21 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         .catch((error) => {
           console.log("error", error);
         });
+        case flowRataRun:
+          return qaApi
+            .updateFlowRunData(
+              location,
+              id,
+              extraIdsArr[0],
+              extraIdsArr[1],
+              extraIdsArr[2],
+              extraIdsArr[3],
+              userInput.id,
+              userInput
+            )
+            .catch((error) => {
+              console.log("error", error);
+            });
     default:
       break;
   }
@@ -325,6 +361,19 @@ export const createDataSwitch = (
     case airEmissions:
       return qaApi
         .createAirEmissions(location, id, userInput)
+        .catch((error) => {
+          console.log("error", error);
+        });
+    case flowRataRun:
+      return qaApi
+        .createFlowRunData(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
+          extraIdsArr[3],
+          id,
+          userInput
+        )
         .catch((error) => {
           console.log("error", error);
         });
