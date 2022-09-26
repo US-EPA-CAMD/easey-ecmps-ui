@@ -24,6 +24,7 @@ import {
   qaLinearityInjectionProps,
   qaRataSummaryProps,
   qaRataRunDataProps,
+  qaFlowRataRunProps,
   qaRataTraverseProps,
 } from "../../../additional-functions/qa-dataTable-props";
 const QAExpandableRowsRender = ({
@@ -40,10 +41,6 @@ const QAExpandableRowsRender = ({
   extraIDs = [], // [locid, testsumid, linsumid,   ]
   data,
 }) => {
-  if(dataTableName === "Protocol Gas" ) {
-
-    console.log('dat gasa',data)
-  }
   const { locationId, id } = data;
   // const { locationId, id } = dataTableName !== "Protocol Gas" ? data : ""; // id / testsumid
   const [mdmData, setMdmData] = useState(null);
@@ -94,7 +91,6 @@ const QAExpandableRowsRender = ({
 
   const dropdownArrayIsEmpty = dropdownArray.length === 0;
   const nextExpandableRow = (name) => {
-    console.log("expanded", name);
     switch (name) {
       case "Protocol Gas":
         const objGas = qaProtocalGasProps(data);
@@ -163,43 +159,56 @@ const QAExpandableRowsRender = ({
         );
 
       case "RATA Summary": // 3rd level 
-        const RataSummaryContainer = ({ data: rataSummaryContainerData }) => {
-          console.log('rata summary container data', rataSummaryContainerData);
-          const { id: idOfRataSummaryRow } = rataSummaryContainerData
-          const rataRunIdArray = [...extraIDs, id, idOfRataSummaryRow];
-          const rataRunObj = qaRataRunDataProps();
-          const rataTraverseIdArray = [...extraIDs, id, idOfRataSummaryRow]
-          const rataTraverseObj = qaRataTraverseProps()
-          return <>
+        const rataRunIdArray = [...extraIDs, id];
+        const rataRunObj = qaRataRunDataProps();
+        return (
+          <QAExpandableRowsRender
+            payload={rataRunObj["payload"]}
+            dropdownArray={rataRunObj["dropdownArray"]}
+            columns={rataRunObj["columnNames"]}
+            controlInputs={rataRunObj["controlInputs"]}
+            controlDatePickerInputs={rataRunObj["controlDatePickerInputs"]}
+            dataTableName={rataRunObj["dataTableName"]}
+            extraControls={rataRunObj["extraControls"]}
+            extraIDs={rataRunIdArray}
+            expandable
+            user={user}
+          />
+        );
+
+        case "RATA Run Data":
+          const flowIdArray = [...extraIDs, id];
+          const flowObj = qaFlowRataRunProps();
+          return (
             <QAExpandableRowsRender
-              payload={rataRunObj["payload"]}
-              dropdownArray={rataRunObj["dropdownArray"]}
-              columns={rataRunObj["columnNames"]}
-              controlInputs={rataRunObj["controlInputs"]}
-              controlDatePickerInputs={rataRunObj["controlDatePickerInputs"]}
-              dataTableName={rataRunObj["dataTableName"]}
-              extraControls={rataRunObj["extraControls"]}
-              extraIDs={rataRunIdArray}
+              payload={flowObj["payload"]}
+              dropdownArray={flowObj["dropdownArray"]}
+              columns={flowObj["columnNames"]}
+              controlInputs={flowObj["controlInputs"]}
+              controlDatePickerInputs={flowObj["controlDatePickerInputs"]}
+              dataTableName={flowObj["dataTableName"]}
+              extraControls={flowObj["extraControls"]}
+              extraIDs={flowIdArray}
               expandable
               user={user}
-              data={rataSummaryContainerData}
             />
+          );
+        case "Flow":
+          const traverseIdArray = [...extraIDs, id]
+          const traverseObj = qaRataTraverseProps();
+          return (
             <QAExpandableRowsRender
-              payload={rataTraverseObj["payload"]}
-              dropdownArray={rataTraverseObj["dropdownArray"]}
-              columns={rataTraverseObj["columnNames"]}
-              controlInputs={rataTraverseObj["controlInputs"]}
-              controlDatePickerInputs={rataTraverseObj["controlDatePickerInputs"]}
-              dataTableName={rataTraverseObj["dataTableName"]}
-              extraControls={rataTraverseObj["extraControls"]}
-              extraIDs={rataTraverseIdArray}
-              expandable
+              payload={traverseObj["payload"]}
+              dropdownArray={traverseObj["dropdownArray"]}
+              columns={traverseObj["columnNames"]}
+              controlInputs={traverseObj["controlInputs"]}
+              controlDatePickerInputs={traverseObj["controlDatePickerInputs"]}
+              dataTableName={traverseObj["dataTableName"]}
+              extraControls={traverseObj["extraControls"]}
+              extraIDs={traverseIdArray}
               user={user}
-              data={rataSummaryContainerData}
             />
-          </>
-        }
-        return <RataSummaryContainer />
+          )
       default:
         break;
     }
@@ -268,7 +277,6 @@ const QAExpandableRowsRender = ({
             { code: 2, name: 2 },
             { code: 3, name: 3 },
           ];
-          console.log(dropdowns, "dropdowns");
           setMdmData(dropdowns);
         });
         break;
@@ -290,7 +298,6 @@ const QAExpandableRowsRender = ({
               });
             }
           });
-          console.log("dropdowns", dropdowns);
           setMdmData(dropdowns);
         });
         break;
@@ -336,7 +343,6 @@ const QAExpandableRowsRender = ({
               });
             }
           });
-          console.log("dropdowns", dropdowns);
           setMdmData(dropdowns);
         });
         break;
@@ -427,7 +433,6 @@ const QAExpandableRowsRender = ({
         controlInputs.gasLevelCode = ["Gas Level Code", "dropdown", "", ""];
       }
       if (dataTableName === "Rata Data") {
-        console.log("control inputs", controlInputs);
         controlInputs.numberOfLoadLevels = [
           "Number of Load Levels",
           "dropdown",

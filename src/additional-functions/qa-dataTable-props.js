@@ -260,18 +260,17 @@ export const qaRataTraverseProps = () => {
       "Replacement Velocity",
     ],
     controlInputs: {
-      probeID: ["Probe ID", "input", "", ""],
+      probeId: ["Probe ID", "input", "", ""],
       probeTypeCode: ["Probe Type Code", "dropdown", "", ""],
       pressureMeasureCode: ["Pressure Measure Code", "dropdown", "", ""],
-      methodTraversePointID: ["Method Traverse Point ID", "input", "", ""],
+      methodTraversePointId: ["Method Traverse Point ID", "input", "", ""],
       velocityCalibrationCoefficient: ["Velocity Calibration Coefficient", "input", "", ""],
-      // lastProbeDate is text + date picker
       lastProbeDate: ["Last Probe Date", "date", "", ""],
       avgVelDiffPressure: ["Avg Vel Diff Pressure", "input", "", ""],
-      avgSquareVelDiffPressures: ["Avg Square Vel Diff Pressures", "input", "", ""],
+      avgSquareVelDiffPressure: ["Avg Square Vel Diff Pressures", "input", "", ""],
       tStackTemperature: ["T Stack Temperature", "input", "", ""],
       pointUsedIndicator: ["Point Used Indicator", "dropdown", "", ""],
-      numberOfWallEffectsPoints: ["Number of Wall Effects Points", "input", "", ""],
+      numberWallEffectsPoints: ["Number of Wall Effects Points", "input", "", ""],
       yawAngle: ["Yaw Angle", "input", "", ""],
       pitchAngle: ["Pitch Angle", "input", "", ""],
       calculatedVelocity: ["Calculated Velocity", "input", "", ""],
@@ -280,7 +279,7 @@ export const qaRataTraverseProps = () => {
   };
 }
 
-export const qaAirEmissionsProps = (selectedRow) => {
+export const qaAirEmissionsProps = () => {
   return {
     dataTableName: "Air Emissions",
     payload: {
@@ -316,6 +315,57 @@ export const qaAirEmissionsProps = (selectedRow) => {
       examDate: ["Exam Date", "date", "", ""],
       providerName: ["Provider Name", "input", "", ""],
       providerEmail: ["Provider Email", "input", "", ""],
+    },
+    controlDatePickerInputs: {},
+    extraControls: {},
+  };
+};
+
+export const qaFlowRataRunProps = () => {
+  return {
+    dataTableName: "Flow",
+    payload: {
+      numberOfTraversePoints: null,
+      barometricPressure: null,
+      stackStaticPressure: null,
+      percentCO2: null,
+      percentO2: null,
+      percentMoisture: null,
+      dryMolecularWeight: null,
+      wetMolecularWeight: null,
+      averageVelocityWithoutWallEffects: null,
+      averageVelocityWithWallEffects: null,
+      calculatedWAF: null,
+      averageStackFlowRate: null,
+    },
+    dropdownArray: [],
+    columnNames: [
+      "Number of Traverse Points",
+      "Barometric Pressure",
+      "Stack Static Pressure",
+      "Percent CO2",
+      "Percent O2",
+      "Percent Moisture",
+      "Dry Molecular Weight",
+      "Wet Molecular Weight",
+      "Average Velocity without Wall Effects",
+      "Average Velocity with Wall Effects",
+      "Calculated WAF",
+      "Average Stack Flow Rate",
+    ],
+    controlInputs: {
+      numberOfTraversePoints: ["Number of Traverse Points", "input", "", ""],
+      barometricPressure: ["Barometric Pressure", "input", "", ""],
+      stackStaticPressure: ["Stack Static Pressure", "input", "", ""],
+      percentCO2: ["Percent CO2", "input", "", ""],
+      percentO2: ["Percent O2", "input", "", ""],
+      percentMoisture: ["Percent Moisture", "input", "", ""],
+      dryMolecularWeight: ["Dry Molecular Weight", "date", "", ""],
+      wetMolecularWeight: ["Wet Molecular Weight", "input", "", ""],
+      averageVelocityWithoutWallEffects: ["Average Velocity without Wall Effects", "input", "", ""],
+      averageVelocityWithWallEffects: ["Average Velocity with Wall Effects", "input", "", ""],
+      calculatedWAF: ["Calculated WAF", "input", "", ""],
+      averageStackFlowRate: ["Average Stack Flow Rate", "input", "", ""],
     },
     controlDatePickerInputs: {},
     extraControls: {},
