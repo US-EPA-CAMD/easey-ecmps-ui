@@ -174,6 +174,19 @@ export const removeDataSwitch = async (
         .catch((error) => {
           console.log("error", error);
         });
+        case flowRataRunData:
+          return qaApi
+            .updateFlowRataRunData(
+              extraIdsArr[0],
+              extraIdsArr[1],
+              extraIdsArr[2],
+              extraIdsArr[3],
+              id,
+              row.id
+            )
+            .catch((error) => {
+              console.log("error", error);
+            });
     default:
       break;
   }

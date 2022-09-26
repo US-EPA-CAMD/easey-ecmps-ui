@@ -716,7 +716,7 @@ export const updateFlowRataRunData = async (
 };
 
 
-export const deleteFlowRunData = async (
+export const deleteFlowRataRunData = async (
   locId,
   testSumId,
   rataId,
