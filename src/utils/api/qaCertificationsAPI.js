@@ -606,6 +606,28 @@ export const getRataTraverseData = async () => {
   return Promise.resolve({ status: 200, data })
 }
 
+export const deleteRataTraverseData = async (
+  locId,
+  testSumId,
+  rataId,
+  rataSumId,
+  rataRunId,
+  flowRataRunId,
+  id
+) => {  
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverse/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const getAirEmissions = async (locID, testSumId) => {
   let url = `${config.services.qaCertification.uri}`;
 
