@@ -547,7 +547,6 @@ export const updateRataRunData = async (
   testSumId,
   rataId,
   rataSumId,
-
   id,
   payload
 ) => {
