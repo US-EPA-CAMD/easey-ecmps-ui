@@ -586,41 +586,17 @@ export const deleteRataRunData = async (
 };
 
 export const getRataTraverseData = async (locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId) => {
-  const data = [
-    {
-      id: '1',
-      probeID: 'probeId1',
-      probeTypeCode: 'probeTypeCode1',
-      methodTraversePointID: 'methodTraversePointID1',
-      velocityCalibrationCoefficient: 'velocityCalibrationCoefficient2',
-      lastProbeDate: '2022-09-21'
-    },
-    {
-      id: '2',
-      probeID: 'probeId2',
-      probeTypeCode: 'probeTypeCode2',
-      methodTraversePointID: 'methodTraversePointID2',
-      velocityCalibrationCoefficient: 'velocityCalibrationCoefficient2',
-      lastProbeDate: '2022-09-21'
-    },
-  ]
-  return Promise.resolve({ status: 200, data })
-
   let url = `${config.services.qaCertification.uri}`;
-
   // *** workspace section url (authenticated)
   if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;
   }
-
   // *** attach the rest of the url
   url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses`;
   return axios.get(url).then(handleResponse).catch(handleError);
 }
 
 export const createRataTraverse = async (locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId, payload) => {
-  return Promise.resolve({ status: 200, data: 'created' })
-
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses`;
   try {
     return handleResponse(
