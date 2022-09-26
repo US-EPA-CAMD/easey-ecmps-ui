@@ -40,10 +40,6 @@ const QAExpandableRowsRender = ({
   extraIDs = [], // [locid, testsumid, linsumid,   ]
   data,
 }) => {
-  if(dataTableName === "Protocol Gas" ) {
-
-    console.log('dat gasa',data)
-  }
   const { locationId, id } = data;
   // const { locationId, id } = dataTableName !== "Protocol Gas" ? data : ""; // id / testsumid
   const [mdmData, setMdmData] = useState(null);
@@ -94,7 +90,6 @@ const QAExpandableRowsRender = ({
 
   const dropdownArrayIsEmpty = dropdownArray.length === 0;
   const nextExpandableRow = (name) => {
-    console.log("expanded", name);
     switch (name) {
       case "Protocol Gas":
         const objGas = qaProtocalGasProps(data);
@@ -268,7 +263,6 @@ const QAExpandableRowsRender = ({
             { code: 2, name: 2 },
             { code: 3, name: 3 },
           ];
-          console.log(dropdowns, "dropdowns");
           setMdmData(dropdowns);
         });
         break;
@@ -290,7 +284,6 @@ const QAExpandableRowsRender = ({
               });
             }
           });
-          console.log("dropdowns", dropdowns);
           setMdmData(dropdowns);
         });
         break;
@@ -336,7 +329,6 @@ const QAExpandableRowsRender = ({
               });
             }
           });
-          console.log("dropdowns", dropdowns);
           setMdmData(dropdowns);
         });
         break;
@@ -427,7 +419,6 @@ const QAExpandableRowsRender = ({
         controlInputs.gasLevelCode = ["Gas Level Code", "dropdown", "", ""];
       }
       if (dataTableName === "Rata Data") {
-        console.log("control inputs", controlInputs);
         controlInputs.numberOfLoadLevels = [
           "Number of Load Levels",
           "dropdown",
