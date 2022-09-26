@@ -199,7 +199,22 @@ const QAExpandableRowsRender = ({
               user={user}
             />
           );
-
+        case "Flow":
+          const traverseIdArray = [...extraIDs, id]
+          const traverseObj = qaRataTraverseProps();
+          return (
+            <QAExpandableRowsRender
+              payload={traverseObj["payload"]}
+              dropdownArray={traverseObj["dropdownArray"]}
+              columns={traverseObj["columnNames"]}
+              controlInputs={traverseObj["controlInputs"]}
+              controlDatePickerInputs={traverseObj["controlDatePickerInputs"]}
+              dataTableName={traverseObj["dataTableName"]}
+              extraControls={traverseObj["extraControls"]}
+              extraIDs={traverseIdArray}
+              user={user}
+            />
+          )
       default:
         break;
     }

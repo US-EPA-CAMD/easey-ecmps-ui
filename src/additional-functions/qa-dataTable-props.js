@@ -280,7 +280,7 @@ export const qaRataTraverseProps = () => {
   };
 }
 
-export const qaAirEmissionsProps = (selectedRow) => {
+export const qaAirEmissionsProps = () => {
   return {
     dataTableName: "Air Emissions",
     payload: {
