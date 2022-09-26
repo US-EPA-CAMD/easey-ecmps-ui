@@ -159,7 +159,7 @@ const QAExpandableRowsRender = ({
         );
 
       case "RATA Summary": // 3rd level 
-        const rataRunIdArray = [...extraIDs, locationId, id];
+        const rataRunIdArray = [...extraIDs, id];
         const rataRunObj = qaRataRunDataProps();
         return (
           <QAExpandableRowsRender
@@ -177,7 +177,7 @@ const QAExpandableRowsRender = ({
         );
 
         case "RATA Run Data":
-          const flowIdArray = [...extraIDs, locationId, id];
+          const flowIdArray = [...extraIDs, id];
           const flowObj = qaFlowRataRunProps();
           return (
             <QAExpandableRowsRender
@@ -189,6 +189,7 @@ const QAExpandableRowsRender = ({
               dataTableName={flowObj["dataTableName"]}
               extraControls={flowObj["extraControls"]}
               extraIDs={flowIdArray}
+              expandable
               user={user}
             />
           );
