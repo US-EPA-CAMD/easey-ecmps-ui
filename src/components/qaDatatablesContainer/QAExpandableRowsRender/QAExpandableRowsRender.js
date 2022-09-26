@@ -25,6 +25,7 @@ import {
   qaRataSummaryProps,
   qaRataRunDataProps,
   qaFlowRataRunProps,
+  qaRataTraverseProps,
 } from "../../../additional-functions/qa-dataTable-props";
 const QAExpandableRowsRender = ({
   user,
@@ -37,16 +38,9 @@ const QAExpandableRowsRender = ({
   payload,
   expandable,
   radioBtnPayload,
-  extraIDs, // [locid, testsumid, linsumid,   ]
+  extraIDs = [], // [locid, testsumid, linsumid,   ]
   data,
 }) => {
-  console.log("dataTableName",dataTableName);
-  console.log("expandable",expandable);
-  console.log("extraIDs",extraIDs);
-  console.log("compData",data);
-  if(dataTableName === "Protocol Gas") {
-    console.log('dat gasa', data)
-  }
   const { locationId, id } = data;
   // const { locationId, id } = dataTableName !== "Protocol Gas" ? data : ""; // id / testsumid
   const [mdmData, setMdmData] = useState(null);
@@ -165,7 +159,7 @@ const QAExpandableRowsRender = ({
         );
 
       case "RATA Summary": // 3rd level 
-        const rataRunIdArray = [...extraIDs, locationId, id];
+        const rataRunIdArray = [...extraIDs, id];
         const rataRunObj = qaRataRunDataProps();
         return (
           <QAExpandableRowsRender
@@ -183,7 +177,7 @@ const QAExpandableRowsRender = ({
         );
 
         case "RATA Run Data":
-          const flowIdArray = [...extraIDs, locationId, id];
+          const flowIdArray = [...extraIDs, id];
           const flowObj = qaFlowRataRunProps();
           return (
             <QAExpandableRowsRender
@@ -195,10 +189,26 @@ const QAExpandableRowsRender = ({
               dataTableName={flowObj["dataTableName"]}
               extraControls={flowObj["extraControls"]}
               extraIDs={flowIdArray}
+              expandable
               user={user}
             />
           );
-
+        case "Flow":
+          const traverseIdArray = [...extraIDs, id]
+          const traverseObj = qaRataTraverseProps();
+          return (
+            <QAExpandableRowsRender
+              payload={traverseObj["payload"]}
+              dropdownArray={traverseObj["dropdownArray"]}
+              columns={traverseObj["columnNames"]}
+              controlInputs={traverseObj["controlInputs"]}
+              controlDatePickerInputs={traverseObj["controlDatePickerInputs"]}
+              dataTableName={traverseObj["dataTableName"]}
+              extraControls={traverseObj["extraControls"]}
+              extraIDs={traverseIdArray}
+              user={user}
+            />
+          )
       default:
         break;
     }
@@ -336,6 +346,40 @@ const QAExpandableRowsRender = ({
           setMdmData(dropdowns);
         });
         break;
+      case 'RATA Traverse Data':
+        allPromises.push(dmApi.getAllProbeTypeCodes());
+        allPromises.push(dmApi.getAllPressureMeasureCodes())
+        allPromises.push(dmApi.getAllPointUsedIndicatorCodes())
+        Promise.all(allPromises).then(responses => {
+          responses.forEach((curResp, i) => {
+            let codeLabel
+            let descriptionLabel
+            switch (i) {
+              case 0:
+                codeLabel = 'probeTypeCode'
+                descriptionLabel = 'probeTypeCodeDescription'
+                break
+              case 1:
+                codeLabel = 'pressureMeasureCode'
+                descriptionLabel = 'pressureMeasureCodeDescription'
+                break
+              case 2:
+                codeLabel = 'pointUsedIndicatorCode'
+                descriptionLabel = 'pointUsedIndicatorCodeDescription'
+                break
+              default:
+                break
+            }
+            dropdowns[dropdownArray[i]] = curResp.data.map(d => {
+              return { code: d[codeLabel], name: d[descriptionLabel] }
+            })
+          })
+          for (const options of Object.values(dropdowns)) {
+            options.unshift({ code: '', name: '-- Select a value --' })
+          }
+          setMdmData(dropdowns);
+        });
+        break
       default:
         break;
     }
