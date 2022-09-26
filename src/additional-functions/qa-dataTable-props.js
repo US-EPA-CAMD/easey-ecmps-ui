@@ -314,7 +314,7 @@ export const qaFlowRataRunProps = () => {
       percentCO2: ["Percent CO2", "input", "", ""],
       percentO2: ["Percent O2", "input", "", ""],
       percentMoisture: ["Percent Moisture", "input", "", ""],
-      dryMolecularWeight: ["Dry Molecular Weight", "date", "", ""],
+      dryMolecularWeight: ["Dry Molecular Weight", "input", "", ""],
       wetMolecularWeight: ["Wet Molecular Weight", "input", "", ""],
       averageVelocityWithoutWallEffects: ["Average Velocity without Wall Effects", "input", "", ""],
       averageVelocityWithWallEffects: ["Average Velocity with Wall Effects", "input", "", ""],
