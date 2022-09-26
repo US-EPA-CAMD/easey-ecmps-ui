@@ -13,9 +13,12 @@ export default {
     monitoringPlans: [],
     qaCertTestSummary: [],
     export: [],
+
     emissionsDaily: [],
     emissionsHourly: [],
     emissionsMats: [],
+    emissions:[]
+
   },
   dropdowns: {
     defaults: [],

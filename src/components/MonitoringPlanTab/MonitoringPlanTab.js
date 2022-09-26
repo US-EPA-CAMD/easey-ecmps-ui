@@ -36,6 +36,7 @@ export const MonitoringPlanTab = ({
   mostRecentlyCheckedInMonitorPlanIdForTab,
   workspaceSection,
 }) => {
+
   const getCurrentTab = () => {
     return tabs.find((tab) => tab.selectedConfig.id === selectedConfig.id);
   };
