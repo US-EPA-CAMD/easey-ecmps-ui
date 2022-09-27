@@ -269,20 +269,25 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           console.log("error", error);
         });
 
-        case flowRataRun:
-          return qaApi
-            .updateFlowRunData(
-              extraIdsArr[0],
-              extraIdsArr[1],
-              extraIdsArr[2],
-              extraIdsArr[3],
-              extraIdsArr[4],
-              userInput.id,
-              userInput
-            )
-            .catch((error) => {
-              console.log("error", error);
-            });
+    case flowRataRun:
+      return qaApi
+        .updateFlowRunData(
+          location,
+          id,
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
+          extraIdsArr[3],
+          userInput.id,
+          userInput
+        )
+        .catch((error) => {
+          console.log("error", error);
+        });
+    case rataTraverseData:
+      return qaApi
+        .updateRataTraverseData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], extraIdsArr[3], extraIdsArr[4], id, userInput.id, userInput)
+        .catch(error => console.log('error updating rata traverse data', error))
 
     default:
       break;
