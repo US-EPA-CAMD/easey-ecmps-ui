@@ -110,13 +110,6 @@ export const removeDataSwitch = async (
   id,
   extraIdsArr
 ) => {
-  console.log(
-    '\nrow ', row,
-    '\nname ', name,
-    '\nlocationId ', locationId,
-    '\nid ', id,
-    '\nextraIdsArr ', extraIdsArr,
-  )
   switch (name) {
     case lineTest:
       return qaApi
