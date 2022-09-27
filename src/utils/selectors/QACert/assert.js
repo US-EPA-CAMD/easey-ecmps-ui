@@ -180,12 +180,12 @@ export const removeDataSwitch = async (
     case flowRataRun:
       return qaApi
         .deleteFlowRunData(
-          locationId,
-          id,
           extraIdsArr[0],
           extraIdsArr[1],
           extraIdsArr[2],
-          row.id
+          extraIdsArr[3],
+          extraIdsArr[4],
+          row.id,
         )
         .catch((error) => {
           console.log("error", error);
@@ -204,6 +204,7 @@ export const removeDataSwitch = async (
         .catch((error) => {
           console.log("error", error);
         });
+
     default:
       break;
   }
@@ -287,6 +288,7 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         .catch((error) => {
           console.log("error", error);
         });
+
     case flowRataRun:
       return qaApi
         .updateFlowRunData(
@@ -302,6 +304,11 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         .catch((error) => {
           console.log("error", error);
         });
+    case rataTraverseData:
+      return qaApi
+        .updateRataTraverseData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], extraIdsArr[3], extraIdsArr[4], id, userInput.id, userInput)
+        .catch(error => console.log('error updating rata traverse data', error))
+
     default:
       break;
   }
