@@ -170,20 +170,33 @@ export const removeDataSwitch = async (
         .catch((error) => {
           console.log("error", error);
         });
-        
-        case flowRataRun:
-          return qaApi
-            .deleteFlowRunData(
-              extraIdsArr[0],
-              extraIdsArr[1],
-              extraIdsArr[2],
-              extraIdsArr[3],
-              extraIdsArr[4],
-              row.id,
-            )
-            .catch((error) => {
-              console.log("error", error);
-            });
+    case flowRataRun:
+      return qaApi
+        .deleteFlowRunData(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
+          extraIdsArr[3],
+          extraIdsArr[4],
+          row.id,
+        )
+        .catch((error) => {
+          console.log("error", error);
+        });
+    case rataTraverseData:
+      return qaApi
+        .deleteRataTraverseData(
+          extraIdsArr[0], 
+          extraIdsArr[1], 
+          extraIdsArr[2], 
+          extraIdsArr[3],
+          extraIdsArr[4], 
+          id,
+          row.id
+        )
+        .catch((error) => {
+          console.log("error", error);
+        });
 
     default:
       break;
