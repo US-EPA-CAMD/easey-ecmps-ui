@@ -245,8 +245,34 @@ export const getFlowRunRecords = (data) => {
       col9: el.averageVelocityWithoutWallEffects,
       col10: el.averageVelocityWithWallEffects,
       col11: el.calculatedWAF,
-      col12: el.averageStackFlowRate 
+      col12: el.averageStackFlowRate
     });
   });
   return records;
 };
+
+export const mapRataTraverseToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.probeId,
+      col2: el.probeTypeCode,
+      col3: el.pressureMeasureCode,
+      col4: el.methodTraversePointId,
+      col5: el.velocityCalibrationCoefficient,
+      col6: el.lastProbeDate,
+      col7: el.avgVelDiffPressure,
+      col8: el.avgSquareVelDiffPressure,
+      col9: el.tStackTemperature,
+      col10: el.pointUsedIndicator,
+      col11: el.numberWallEffectsPoints,
+      col12: el.yawAngle,
+      col13: el.pitchAngle,
+      col14: el.calculatedVelocity,
+      col15: el.replacementVelocity,
+    };
+    records.push(row);
+  }
+  return records;
+}

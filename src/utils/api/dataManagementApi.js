@@ -240,6 +240,13 @@ export const getAllControlEquipmentParameterCodes = async () => {
     .catch(handleError);
 };
 
+export const getAllProbeTypeCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/probe-type-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+}
+
 export const getAllQualificationTypeCodes = async () => {
   return axios
     .get(`${config.services.mdm.uri}/qual-type-codes`)
@@ -425,4 +432,21 @@ export const getAllRunStatusCodes = async () => {
     .get(`${config.services.mdm.uri}/run-status-codes`)
     .then(handleResponse)
     .catch(handleError);
+}
+
+export const getAllPressureMeasureCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/pressure-measure-code`)
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export const getAllPointUsedIndicatorCodes = async () => {
+  const data = [
+    {
+      pointUsedIndicatorCode: '1',
+      pointUsedIndicatorCodeDescription: '1'
+    }
+  ]
+  return Promise.resolve({ status: 200, data })
 }

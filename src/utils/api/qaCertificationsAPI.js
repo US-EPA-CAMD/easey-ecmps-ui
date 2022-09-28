@@ -528,7 +528,6 @@ export const createRataRunData = async (
   payload
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs`;
-
   try {
     return handleResponse(
       await secureAxios({
@@ -574,6 +573,78 @@ export const deleteRataRunData = async (
   id
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const getRataTraverseData = async (locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId) => {
+  let url = `${config.services.qaCertification.uri}`;
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+  // *** attach the rest of the url
+  url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses`;
+  return axios.get(url).then(handleResponse).catch(handleError);
+}
+
+export const createRataTraverse = async (locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
+}
+
+export const updateRataTraverseData = async (
+  locId,
+  testSumId,
+  rataId,
+  rataSumId,
+  rataRunId,
+  flowRataRunId,
+  id,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const deleteRataTraverseData = async (
+  locId,
+  testSumId,
+  rataId,
+  rataSumId,
+  rataRunId,
+  flowRataRunId,
+  id,
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses/${id}`;
   try {
     return handleResponse(
       await secureAxios({
