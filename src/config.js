@@ -33,8 +33,6 @@ export const config = {
       getConfigValue('REACT_APP_GOOGLE_ANALYTICS_PUBLIC_CONTAINER_ID'),
     googleAnalyticsAuthenticatedContainerId:
       getConfigValue('REACT_APP_GOOGLE_ANALYTICS_AUTHENTICATED_CONTAINER_ID'),
-    refreshTokenRate:
-      getConfigValue('REACT_APP_EASEY_ECMPS_UI_REFRESH_TOKEN_RATE_MINUTES', 1) * oneMinute,
     inactivityDuration:
       getConfigValue('REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_CHECKOUT_MINUTES', 1) * oneMinute,
     inactivityLogoutDuration:

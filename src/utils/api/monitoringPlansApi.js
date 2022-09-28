@@ -66,15 +66,13 @@ export const getMonitoringAnalyzerRanges = async (locId, componentRecordId) => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const postCheckoutMonitoringPlanConfiguration = async (id, user) => {
-  const userName = { username: user };
+export const postCheckoutMonitoringPlanConfiguration = async (id) => {
   const url = getApiUrl(`/check-outs/plans/${id}`, true);
   try {
     return (
       await secureAxios({
         method: "POST",
         url: url,
-        data: userName,
       })
     ).data;
   } catch (error) {

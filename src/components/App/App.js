@@ -27,9 +27,7 @@ import {
 import {
   QA_CERT_TEST_SUMMARY_STORE_NAME,
   EXPORT_STORE_NAME,
-  EMISSIONS_DAILY_STORE_NAME,
-  EMISSIONS_HOURLY_STORE_NAME,
-  EMISSIONS_MATS_STORE_NAME,
+  EMISSIONS_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 
 const App = () => {
@@ -199,7 +197,7 @@ const App = () => {
                 return (
                   <SelectConfigurationBaseModuleHome
                     user={false}
-                    workspaceSection={EMISSIONS_DAILY_STORE_NAME}
+                    workspaceSection={EMISSIONS_STORE_NAME}
                   />
                 );
               }}
@@ -210,7 +208,7 @@ const App = () => {
               component={() => (
                 <SelectConfigurationBaseModuleHome
                   user={user}
-                  workspaceSection={EMISSIONS_DAILY_STORE_NAME}
+                  workspaceSection={EMISSIONS_STORE_NAME}
                 />
               )}
             />
@@ -227,7 +225,7 @@ const App = () => {
                 return (
                   <SelectConfigurationBaseModuleHome
                     user={false}
-                    workspaceSection={EMISSIONS_HOURLY_STORE_NAME}
+                    workspaceSection={EMISSIONS_STORE_NAME}
                   />
                 );
               }}
@@ -238,7 +236,7 @@ const App = () => {
               component={() => (
                 <SelectConfigurationBaseModuleHome
                   user={user}
-                  workspaceSection={EMISSIONS_HOURLY_STORE_NAME}
+                  workspaceSection={EMISSIONS_STORE_NAME}
                 />
               )}
             />
@@ -255,7 +253,7 @@ const App = () => {
                 return (
                   <SelectConfigurationBaseModuleHome
                     user={false}
-                    workspaceSection={EMISSIONS_MATS_STORE_NAME}
+                    workspaceSection={EMISSIONS_STORE_NAME}
                   />
                 );
               }}
@@ -266,7 +264,7 @@ const App = () => {
               component={() => (
                 <SelectConfigurationBaseModuleHome
                   user={user}
-                  workspaceSection={EMISSIONS_MATS_STORE_NAME}
+                  workspaceSection={EMISSIONS_STORE_NAME}
                 />
               )}
             />

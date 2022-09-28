@@ -197,7 +197,6 @@ export const updateQALinearitySummaryTestSecondLevel = async (
   payload
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/linearities/${id}`;
-  console.log("url", url, locId, testSumId, id, payload);
   try {
     return handleResponse(
       await secureAxios({
@@ -533,8 +532,6 @@ export const createRataRunData = async (
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs`;
 
-  console.log('url', url);
-
   try {
     return handleResponse(
       await secureAxios({
@@ -552,11 +549,13 @@ export const updateRataRunData = async (
   locId,
   testSumId,
   rataId,
+  rataSumId,
+
   id,
-  payload,
-  rataSumId
+  payload
 ) => {
-  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${id}`;
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${id}`;
+
   try {
     return handleResponse(
       await secureAxios({

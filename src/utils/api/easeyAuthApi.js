@@ -11,16 +11,10 @@ axios.defaults.headers.common = {
 
 export const secureAxios = async (options) => {
   try {
-    const user = JSON.parse(sessionStorage.getItem("cdx_user"));
-
-    if (new Date() > new Date(user.tokenExpiration)) {
-      console.log('Security Token expired...refreshing');
-      await refreshToken();
-      console.log('Security Token has been refreshed');
-    }
+    const token = await refreshToken();
 
     options.headers = {
-      authorization: `Bearer ${user.token}`,
+      authorization: `Bearer ${token}`,
       "x-api-key": config.app.apiKey,
     };
   } catch (e) {
@@ -76,26 +70,19 @@ export const authenticate = async (payload) => {
 
 export const logOut = async () => {
   const user = JSON.parse(sessionStorage.getItem("cdx_user"));
-
   const checkedOutLocationResult = await getCheckedOutLocations();
 
   if (checkedOutLocationResult.data.length > 0) {
     for (const location of checkedOutLocationResult.data) {
       if (location.checkedOutBy === user.userId) {
-        await checkoutAPI(false, location.facId, location.monPlanId).then();
+        await checkoutAPI(false, location.facId, location.monPlanId);
       }
     }
   }
 
-  const payload = {
-    userId: user.userId,
-    token: user.token,
-  };
-
   secureAxios({
     method: "DELETE",
     url: `${config.services.authApi.uri}/authentication/sign-out`,
-    data: payload,
   })
     .then(() => {
       sessionStorage.removeItem("cdx_user");
@@ -107,22 +94,28 @@ export const logOut = async () => {
 };
 
 export const refreshToken = async () => {
-  const user = JSON.parse(sessionStorage.getItem("cdx_user"));
-  const payload = {
-    userId: user.userId,
-    token: user.token,
-  };
-
   try {
-    const result = await axios({
-      method: "POST",
-      url: `${config.services.authApi.uri}/tokens`,
-      data: payload,
-    });
+    const user = JSON.parse(sessionStorage.getItem("cdx_user"));
 
-    user.token = result.data.token;
-    user.tokenExpiration = result.data.tokenExpiration;
-    sessionStorage.setItem("cdx_user", JSON.stringify(user));
+    if (new Date() > new Date(user.tokenExpiration)) {
+      console.log('token has expired...refreshing');
+      const result = await axios({
+        method: "POST",
+        url: `${config.services.authApi.uri}/tokens`,
+        headers: {
+          authorization: `Bearer ${user.token}`,
+          "x-api-key": config.app.apiKey,
+        }
+      });
+
+      console.log('new token:', result.data);
+  
+      user.token = result.data.token;
+      user.tokenExpiration = result.data.expiration;
+      sessionStorage.setItem("cdx_user", JSON.stringify(user));
+    }
+
+    return user.token;
   } catch (e) {
     displayAppError(e);
   }
