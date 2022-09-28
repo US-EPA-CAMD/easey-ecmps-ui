@@ -84,12 +84,12 @@ const reducer = (state, action) => {
 
       break;
     case types.SET_CHECKOUT_STATE:
-      if (currentState[`${action.workspaceSection}`]) {
-        returnObject = {
-          ...currentState,
-          [`${action.workspaceSection}`]: currentState[
-            `${action.workspaceSection}`
-          ].map((x) =>
+      returnObject = {
+        ...currentState,
+      };
+      workspaceSections.filter(s=>s !== 'export').forEach(section => 
+        returnObject[section] = 
+          currentState[section].map((x) =>
             x.selectedConfig.id === action.configID
               ? {
                   ...x,
@@ -97,11 +97,7 @@ const reducer = (state, action) => {
                 }
               : x
           ),
-        };
-      } else {
-        returnObject = currentState;
-      }
-
+      );
       break;
     case types.SET_INACTIVE_STATE:
       console.log('action.workspaceSection',action.workspaceSection,action.inactive,action.title)
