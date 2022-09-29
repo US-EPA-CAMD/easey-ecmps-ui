@@ -62,7 +62,7 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
       await checkInactivity(config.app.inactivityLogoutDuration);
     }
 
-    if (config.app.enableDebug === true) {
+    if (config.app.enableDebug === "true") {
       const rawMinutes = timeInactive / 60000;
       const minutes = Math.floor(rawMinutes);
       const rawSeconds = (timeInactive / 1000);
