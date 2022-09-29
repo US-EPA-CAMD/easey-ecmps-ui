@@ -9,6 +9,7 @@ import {
 import {
   setSectionSelectionState,
   setLocationSelectionState,
+  setCheckoutState
 } from "../../store/actions/dynamicFacilityTab";
 export const QACertTestSummaryTab = ({
   resetTimer,
@@ -26,6 +27,7 @@ export const QACertTestSummaryTab = ({
   activeTab,
   setSection,
   setLocation,
+  setCheckout
 }) => {
   const getCurrentTab = () =>{
     return tabs.find(tab => tab.selectedConfig.id === selectedConfig.id);
@@ -70,6 +72,8 @@ export const QACertTestSummaryTab = ({
           setSelectedTestCode={setSelectedTestCode}
           selectedTestCode={selectedTestCode}
           configID={selectedConfig.id}
+          setCheckout={setCheckout}
+          checkoutState={getCurrentTab().checkout}
         />
       </div>
     </div>
@@ -107,6 +111,14 @@ const mapDispatchToProps = (dispatch) => {
           section,
           title,
           convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
+        )
+      ),
+    setCheckout: (value, configID, workspaceSection) =>
+      dispatch(
+        setCheckoutState(
+          value,
+          configID,
+          convertSectionToStoreName(workspaceSection)
         )
       ),
   };

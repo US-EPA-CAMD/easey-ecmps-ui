@@ -459,12 +459,11 @@ export const HeaderInfo = ({
 
   const showRevert = (status) => {
     return (
-      checkedOutByUser && (
-        status === "PASS" ||
+      checkedOutByUser &&
+      (status === "PASS" ||
         status === "INFO" ||
         status === "ERR" ||
-        status === "EVAL"
-      )
+        status === "EVAL")
     );
   };
 
@@ -516,7 +515,6 @@ export const HeaderInfo = ({
       userEmail: user.email,
     })
       .then(() => {
-        console.log('user email',user)
         // Change front-end to display "In Queue" status after starting eval
         setEvalStatus("INQ");
         setDataLoaded(false);
@@ -551,8 +549,6 @@ export const HeaderInfo = ({
       true
     )}`;
   };
-
-  const [activeBTN, setActiveBTN] = useState(inactive);
 
   const settingReduxInactiveBTN = (inactiveArr, facName, storeName) => {
     setInactive(inactiveArr, facName, storeName);
@@ -730,12 +726,12 @@ export const HeaderInfo = ({
                     id="inactiveCheckBox"
                     name="inactiveCheckBox"
                     label="Show Inactive"
-                    checked={!activeBTN[0]}
-                    disabled={activeBTN[1]}
+                    checked={!inactive[0]}
+                    disabled={inactive[1]}
                     onChange={
                       () =>
                         settingReduxInactiveBTN(
-                          [!activeBTN[0], activeBTN[1]],
+                          [!inactive[0], inactive[1]],
                           facility,
                           MONITORING_PLAN_STORE_NAME
                         )

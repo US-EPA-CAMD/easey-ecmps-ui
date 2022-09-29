@@ -205,10 +205,8 @@ export const removeDataSwitch = async (
 };
 // Save (PUT) endpoints for API
 export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
-  console.log("userInput", userInput, "extraIdsArr", extraIdsArr);
   switch (name) {
     case lineTest:
-      console.log("thisone", name);
       return qaApi
         .updateQALinearitySummaryTestSecondLevel(
           location,
