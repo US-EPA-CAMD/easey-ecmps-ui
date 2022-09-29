@@ -17,6 +17,7 @@ import {
   emissions_mats_module,
 } from "../../utils/constants/moduleTitles";
 import Export from "../export/Export/Export";
+import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 
 export const SelectConfigurationBaseModuleHome = ({
   user,
@@ -27,6 +28,11 @@ export const SelectConfigurationBaseModuleHome = ({
   openedFacilityTabs,
   workspaceSection,
 }) => {
+  useEffect(() => {
+    obtainCheckedOutLocations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openedFacilityTabs]);
+
   useEffect(() => {
     switch (workspaceSection) {
       case QA_CERT_TEST_SUMMARY_STORE_NAME:
@@ -56,6 +62,31 @@ export const SelectConfigurationBaseModuleHome = ({
   }, [workspaceSection]);
 
   const [titleName, setTitleName] = useState(document.title);
+  const [checkedOutLocations, setCheckedOutLocations] = useState([]);
+
+  const obtainCheckedOutLocations = async () => {
+    const checkedOutLocationResult = await getCheckedOutLocations();
+
+    let checkedOutLocationList = [];
+    if (checkedOutLocationResult) {
+      if (checkedOutLocationResult.data) {
+        checkedOutLocationList = checkedOutLocationResult.data;
+      }
+      // *** find locations currently checked out by the user
+      const currentlyCheckedOutMonPlanId = checkedOutLocationList.filter(
+        (element) => element["checkedOutBy"] === user.firstName
+      )[0]
+        ? checkedOutLocationList.filter(
+            (element) => element["checkedOutBy"] === user.firstName
+          )[0]["monPlanId"]
+        : null;
+
+      if (currentlyCheckedOutMonPlanId) {
+        window.currentlyCheckedOutMonPlanId = currentlyCheckedOutMonPlanId;
+      }
+    }
+    setCheckedOutLocations(checkedOutLocationList);
+  };
 
   const handleTabState = () => {
     const tabArr = [
@@ -157,6 +188,7 @@ export const SelectConfigurationBaseModuleHome = ({
       <div>
         <DynamicTabs
           tabsProps={() => handleTabState()}
+          checkedOutLocations={checkedOutLocations}
           user={user}
           workspaceSection={workspaceSection}
         />
