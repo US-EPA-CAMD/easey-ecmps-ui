@@ -384,7 +384,6 @@ const ModalDetails = ({
         break;
 
       case "radio":
-        console.log('data: ', value);
         comp = (
           <Fieldset
             className=" display-inline-flex modalUserInput"
