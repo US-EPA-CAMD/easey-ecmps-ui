@@ -175,13 +175,13 @@ export const SelectFacilitiesDataTable = ({
           ]);
         }}
       />
-      {workspaceSection === MONITORING_PLAN_STORE_NAME ? (
+      {/* {workspaceSection === MONITORING_PLAN_STORE_NAME ? ( */}
         <DataTableRender
           columnNames={columnNames}
           dataLoaded={dataLoaded}
           data={data}
           defaultSort="col2"
-          openedFacilityTabs={openedFacilityTabs[MONITORING_PLAN_STORE_NAME]}
+          openedFacilityTabs={openedFacilityTabs[workspaceSection]}
           user={user}
           pagination={true}
           filter={true}
@@ -215,7 +215,7 @@ export const SelectFacilitiesDataTable = ({
           ariaLabel={"Select Configurations"}
           workspaceSection={workspaceSection}
         />
-      ) : (
+      {/* ) : (
         <DataTableRender
           columnNames={columnNames}
           dataLoaded={dataLoaded}
@@ -243,7 +243,7 @@ export const SelectFacilitiesDataTable = ({
           ariaLabel={"Select Configurationss"}
           workspaceSection={workspaceSection}
         />
-      )}
+      )} */}
     </div>
   );
 };

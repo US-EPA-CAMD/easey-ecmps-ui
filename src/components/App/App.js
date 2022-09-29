@@ -28,7 +28,9 @@ import {
   QA_CERT_TEST_SUMMARY_STORE_NAME,
   EXPORT_STORE_NAME,
   EMISSIONS_STORE_NAME,
+  MONITORING_PLAN_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
+import * as modules from "../../utils/constants/moduleTitles";
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -147,7 +149,7 @@ const App = () => {
               component={() => (
                 <MonitoringPlanHome
                   user={false}
-                  workspaceSection={"monitoringPlans"}
+                  workspaceSection={MONITORING_PLAN_STORE_NAME}
                 />
               )}
             />
@@ -161,7 +163,8 @@ const App = () => {
                   resetTimerFlag={resetTimer}
                   callApiFlag={expired}
                   user={user}
-                  workspaceSection={"monitoringPlans"}
+                  workspaceSection={MONITORING_PLAN_STORE_NAME}
+                  moduleName={modules.monitoring_plans_module}
                 />
               )}
             />
@@ -174,7 +177,7 @@ const App = () => {
               path="/qa-test"
               exact
               component={() => (
-                <SelectConfigurationBaseModuleHome
+                <MonitoringPlanHome
                   user={false}
                   workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
                 />
@@ -184,9 +187,14 @@ const App = () => {
               path="/workspace/qa-test"
               exact
               component={() => (
-                <SelectConfigurationBaseModuleHome
+                <MonitoringPlanHome
+                  resetTimer={setResetTimer}
+                  setExpired={setExpired}
+                  resetTimerFlag={resetTimer}
+                  callApiFlag={expired}
                   user={user}
                   workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
+                  moduleName={modules.qa_Certifications_Test_Summary_Module}
                 />
               )}
             />
