@@ -61,33 +61,7 @@ export const DynamicTabs = ({
   };
   return (
     <div>
-      {workspaceSection === QA_CERT_TEST_SUMMARY_STORE_NAME ? (
-        <Tabs
-          dynamic={true}
-          removeTabs={removeTabsHandler}
-          tabProps={tabs}
-          user={user}
-          workspaceSection={workspaceSection}
-        >
-          {tabs &&
-            tabs.map((tab, i) => (
-              <TabPane
-                key={i}
-                title={tab.title}
-                locationId={
-                  tab.selectedConfig ? tab.selectedConfig.id : "initial"
-                }
-                facId={
-                  tab.selectedConfig ? tab.selectedConfig.facId : "initial"
-                }
-              >
-                {cloneElement(tab.component, {
-                  addtabs: addTabsHandler,
-                })}
-              </TabPane>
-            ))}
-        </Tabs>
-      ) : workspaceSection === EXPORT_STORE_NAME ? (
+      {workspaceSection === EXPORT_STORE_NAME ? (
         <Tabs
           dynamic={true}
           removeTabs={removeTabsHandler}
