@@ -84,7 +84,7 @@ export const MonitoringPlanEvaluationReport = ({
               <img
                 alt="EPA Logo"
                 title="EPA Logo"
-                src={`${process.env.PUBLIC_URL}/images/epa-logo-blue.svg`}
+                src={"/images/epa-logo-blue.svg"}
               />
               {displayCloseButton ? (
                 <Button

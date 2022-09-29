@@ -15,20 +15,11 @@ export const getMonitoringPlansRectangularDuctsTableRecords = (totalData) => {
     const wafDeterminationDate = el.wafDeterminationDate
       ? formatStringToDate(el.wafDeterminationDate.toString())
       : "";
-
-    var wafMethodCode;
-    switch (el.wafMethodCode) {
-      case "select":
-        wafMethodCode = null;
-        break;
-      default:
-        wafMethodCode = el.wafMethodCode;
-    }
+    const wafMethodCode = el.wafMethodCode === "select" ? null : el.wafMethodCode;
 
     records.push({
       col1: wafDeterminationDate,
       col2: wafMethodCode,
-
       col3: `${beginDate} ${beginHour}`,
       col4: `${endDate} ${endHour}`,
       col5: el.id,

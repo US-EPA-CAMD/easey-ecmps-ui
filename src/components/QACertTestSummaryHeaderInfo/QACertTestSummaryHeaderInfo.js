@@ -139,7 +139,7 @@ export const QACertTestSummaryHeaderInfo = ({
   }, []);
 
   useEffect(() => {
-    if (importTypeSelection != "select" || importedFile.length !== 0) {
+    if (importTypeSelection !== "select" || importedFile.length !== 0) {
       setDisablePortBtn(false);
     } else {
       setDisablePortBtn(true);
@@ -262,7 +262,9 @@ export const QACertTestSummaryHeaderInfo = ({
             >
               {checkoutBtnIcon} {checkoutBtnText}
             </Button>
-            <Button outline={true}>Revert to Official Record</Button>
+            {isCheckedOut && (
+              <Button outline={true}>Revert to Official Record</Button>
+            )}
           </div>
         )}
 
@@ -316,7 +318,7 @@ export const QACertTestSummaryHeaderInfo = ({
               className="float-right text-right bottom-0 text-no-wrap "
               type="button"
               id="showRevertModal"
-              outline={false}
+              outline={true}
             >
               {"Evaluation Report"}
             </Button>

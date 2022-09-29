@@ -7,9 +7,7 @@ import DynamicTabs from "../DynamicTabs/DynamicTabs";
 import {
   QA_CERT_TEST_SUMMARY_STORE_NAME,
   EXPORT_STORE_NAME,
-  EMISSIONS_DAILY_STORE_NAME,
-  EMISSIONS_HOURLY_STORE_NAME,
-  EMISSIONS_MATS_STORE_NAME,
+  EMISSIONS_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import {
   qa_Certifications_Test_Summary_Module,
@@ -39,17 +37,18 @@ export const SelectConfigurationBaseModuleHome = ({
         document.title = export_Module;
         setTitleName(export_Module);
         break;
-      case EMISSIONS_DAILY_STORE_NAME:
-        document.title = emissions_daily_module;
-        setTitleName(emissions_daily_module);
-        break;
-      case EMISSIONS_HOURLY_STORE_NAME:
-        document.title = emissions_hourly_module;
-        setTitleName(emissions_hourly_module);
-        break;
-      case EMISSIONS_MATS_STORE_NAME:
-        document.title = emissions_mats_module;
-        setTitleName(emissions_mats_module);
+      case EMISSIONS_STORE_NAME:
+        if (window.location.href.indexOf("emissions-daily") > -1) {
+          document.title = emissions_daily_module;
+          setTitleName(emissions_daily_module);
+        }else if(window.location.href.indexOf("emissions-hourly") > -1){
+          document.title = emissions_hourly_module;
+          setTitleName(emissions_hourly_module);
+        }else if(window.location.href.indexOf("emissions-mats") > -1){
+          document.title = emissions_mats_module;
+          setTitleName(emissions_mats_module);
+        }
+        
         break;
       default:
         break;
@@ -97,10 +96,20 @@ export const SelectConfigurationBaseModuleHome = ({
           });
         }
         break;
+      case EMISSIONS_STORE_NAME:
+        for (const row of openedFacilityTabs) {
+          tabArr.push({
+            title: row.name,
+            component: (
+              <div>EMISSIONS DATA COMING SOON!</div>
+            ),
+            orisCode: row.orisCode,
+            selectedConfig: row.selectedConfig,
+            checkout: row.checkout,
+          });
+        }
+        break;
       case EXPORT_STORE_NAME:
-      case EMISSIONS_DAILY_STORE_NAME:
-      case EMISSIONS_HOURLY_STORE_NAME:
-      case EMISSIONS_MATS_STORE_NAME:
         for (const row of openedFacilityTabs) {
           tabArr.push({
             title: row.name,

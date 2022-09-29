@@ -24,6 +24,8 @@ import {
   qaLinearityInjectionProps,
   qaRataSummaryProps,
   qaRataRunDataProps,
+  qaFlowRataRunProps,
+  qaRataTraverseProps,
 } from "../../../additional-functions/qa-dataTable-props";
 const QAExpandableRowsRender = ({
   user,
@@ -36,13 +38,9 @@ const QAExpandableRowsRender = ({
   payload,
   expandable,
   radioBtnPayload,
-  extraIDs, // [locid, testsumid, linsumid,   ]
+  extraIDs = [], // [locid, testsumid, linsumid,   ]
   data,
 }) => {
-  if(dataTableName === "Protocol Gas" ) {
-
-    console.log('dat gasa',data)
-  }
   const { locationId, id } = data;
   // const { locationId, id } = dataTableName !== "Protocol Gas" ? data : ""; // id / testsumid
   const [mdmData, setMdmData] = useState(null);
@@ -93,7 +91,6 @@ const QAExpandableRowsRender = ({
 
   const dropdownArrayIsEmpty = dropdownArray.length === 0;
   const nextExpandableRow = (name) => {
-    console.log("expanded", name);
     switch (name) {
       case "Protocol Gas":
         const objGas = qaProtocalGasProps(data);
@@ -162,7 +159,7 @@ const QAExpandableRowsRender = ({
         );
 
       case "RATA Summary": // 3rd level 
-        const rataRunIdArray = [...extraIDs, locationId, id];
+        const rataRunIdArray = [...extraIDs, id];
         const rataRunObj = qaRataRunDataProps();
         return (
           <QAExpandableRowsRender
@@ -179,6 +176,39 @@ const QAExpandableRowsRender = ({
           />
         );
 
+        case "RATA Run Data":
+          const flowIdArray = [...extraIDs, id];
+          const flowObj = qaFlowRataRunProps();
+          return (
+            <QAExpandableRowsRender
+              payload={flowObj["payload"]}
+              dropdownArray={flowObj["dropdownArray"]}
+              columns={flowObj["columnNames"]}
+              controlInputs={flowObj["controlInputs"]}
+              controlDatePickerInputs={flowObj["controlDatePickerInputs"]}
+              dataTableName={flowObj["dataTableName"]}
+              extraControls={flowObj["extraControls"]}
+              extraIDs={flowIdArray}
+              expandable
+              user={user}
+            />
+          );
+        case "Flow":
+          const traverseIdArray = [...extraIDs, id]
+          const traverseObj = qaRataTraverseProps();
+          return (
+            <QAExpandableRowsRender
+              payload={traverseObj["payload"]}
+              dropdownArray={traverseObj["dropdownArray"]}
+              columns={traverseObj["columnNames"]}
+              controlInputs={traverseObj["controlInputs"]}
+              controlDatePickerInputs={traverseObj["controlDatePickerInputs"]}
+              dataTableName={traverseObj["dataTableName"]}
+              extraControls={traverseObj["extraControls"]}
+              extraIDs={traverseIdArray}
+              user={user}
+            />
+          )
       default:
         break;
     }
@@ -247,7 +277,6 @@ const QAExpandableRowsRender = ({
             { code: 2, name: 2 },
             { code: 3, name: 3 },
           ];
-          console.log(dropdowns, "dropdowns");
           setMdmData(dropdowns);
         });
         break;
@@ -269,7 +298,6 @@ const QAExpandableRowsRender = ({
               });
             }
           });
-          console.log("dropdowns", dropdowns);
           setMdmData(dropdowns);
         });
         break;
@@ -315,10 +343,43 @@ const QAExpandableRowsRender = ({
               });
             }
           });
-          console.log("dropdowns", dropdowns);
           setMdmData(dropdowns);
         });
         break;
+      case 'RATA Traverse Data':
+        allPromises.push(dmApi.getAllProbeTypeCodes());
+        allPromises.push(dmApi.getAllPressureMeasureCodes())
+        allPromises.push(dmApi.getAllPointUsedIndicatorCodes())
+        Promise.all(allPromises).then(responses => {
+          responses.forEach((curResp, i) => {
+            let codeLabel
+            let descriptionLabel
+            switch (i) {
+              case 0:
+                codeLabel = 'probeTypeCode'
+                descriptionLabel = 'probeTypeCodeDescription'
+                break
+              case 1:
+                codeLabel = 'pressureMeasureCode'
+                descriptionLabel = 'pressureMeasureCodeDescription'
+                break
+              case 2:
+                codeLabel = 'pointUsedIndicatorCode'
+                descriptionLabel = 'pointUsedIndicatorCodeDescription'
+                break
+              default:
+                break
+            }
+            dropdowns[dropdownArray[i]] = curResp.data.map(d => {
+              return { code: d[codeLabel], name: d[descriptionLabel] }
+            })
+          })
+          for (const options of Object.values(dropdowns)) {
+            options.unshift({ code: '', name: '-- Select a value --' })
+          }
+          setMdmData(dropdowns);
+        });
+        break
       default:
         break;
     }
@@ -372,7 +433,6 @@ const QAExpandableRowsRender = ({
         controlInputs.gasLevelCode = ["Gas Level Code", "dropdown", "", ""];
       }
       if (dataTableName === "Rata Data") {
-        console.log("control inputs", controlInputs);
         controlInputs.numberOfLoadLevels = [
           "Number of Load Levels",
           "dropdown",

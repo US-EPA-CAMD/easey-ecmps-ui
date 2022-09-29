@@ -76,8 +76,10 @@ const ModalDetails = ({
     data.hasOwnProperty("endDate") &&
     data.hasOwnProperty("endTime") &&
     data[data.length - 2][4] === "date" &&
-    data[data.length - 2][5] !== null &&
-    data[data.length - 1][4] === "time" &&
+    data[data.length - 2][5] !== null && (
+      data[data.length - 1][4] === "hourDropdown" ||
+      data[data.length - 1][4] === "minuteDropdown"
+    ) &&
     data[data.length - 1][5] === null
   ) {
     data[data.length - 1][2] = "0";
@@ -145,7 +147,19 @@ const ModalDetails = ({
   };
   const makeEditComp = (value, cols) => {
     let comp;
+
+    const hourArr = [{ code: "", name: "-- Select a value --" }];
+    for (let i = 0; i <= 23; i++) {
+      hourArr.push({ code: i, name: i });
+    }
+
+    const minuteArr = [{ code: "", name: "-- Select a value --" }];
+    for (let i = 0; i <= 59; i++) {
+      minuteArr.push({ code: i, name: i });
+    }
+
     switch (value[4]) {
+
       case "mainDropdown":
         comp = (
           <SelectBox
@@ -168,6 +182,7 @@ const ModalDetails = ({
           />
         );
         break;
+
       case "dropdown":
         comp = (
           <SelectBox
@@ -197,6 +212,7 @@ const ModalDetails = ({
           />
         );
         break;
+
       case "nonFilteredDropdown":
         comp = (
           <SelectBox
@@ -222,6 +238,7 @@ const ModalDetails = ({
           />
         );
         break;
+
       case "independentDropdown":
         comp = (
           <SelectBox
@@ -264,24 +281,22 @@ const ModalDetails = ({
           />
         );
         break;
-      case "time":
-        comp = (
-          <TextInput
-            className="modalUserInput width-7"
-            id={value[1]}
-            epa-testid={value[0].split(" ").join("-")}
-            epadataname={value[0]}
-            name={value[0]}
-            type="text"
-            defaultValue={value[2] ? value[2] : ""}
-          />
-        );
-        break;
+
+      // case "time":
+      //   comp = (
+      //     <TextInput
+      //       className="modalUserInput width-7"
+      //       id={value[1]}
+      //       epa-testid={value[0].split(" ").join("-")}
+      //       epadataname={value[0]}
+      //       name={value[0]}
+      //       type="text"
+      //       defaultValue={value[2] ?? ""}
+      //     />
+      //   );
+      //   break;
+
       case "minuteDropdown":
-        const minuteArr = [];
-        for (let i = 0; i <= 59; i++) {
-          minuteArr.push({ code: i, name: i });
-        }
         comp = (
           <SelectBox
             className={`modalUserInput ${
@@ -299,11 +314,8 @@ const ModalDetails = ({
           />
         );
         break;
+
       case "hourDropdown":
-        const hourArr = [];
-        for (let i = 0; i <= 23; i++) {
-          hourArr.push({ code: i, name: i });
-        }
         comp = (
           <SelectBox
             className={`modalUserInput ${
@@ -321,6 +333,40 @@ const ModalDetails = ({
           />
         );
         break;
+
+      // PROPOSE COMBINING HOUR AND MINUTE TOGETHER
+      // case "hourMinuteDropdown":
+      //   comp = (
+      //     <>
+      //       <SelectBox
+      //         className="modalUserInput width-7"
+      //         epadataname={value[0]}
+      //         options={hourArr}
+      //         initialSelection={!create ? value[5] : "select"}
+      //         selectKey="code"
+      //         id={value[1]}
+      //         epa-testid={value[0].split(" ").join("-")}
+      //         name={value[1]}
+      //         secondOption="name"
+      //         disableDropdownFlag={false}
+      //       />
+      //       :
+      //       <SelectBox
+      //         className="modalUserInput width-7"
+      //         epadataname={value[0]}
+      //         options={minuteArr}
+      //         initialSelection={!create ? value[5] : "select"}
+      //         selectKey="code"
+      //         id={value[1]}
+      //         epa-testid={value[0].split(" ").join("-")}
+      //         name={value[1]}
+      //         secondOption="name"
+      //         disableDropdownFlag={false}
+      //       />
+      //     </>
+      //   );
+      //   break;
+
       case "input":
         comp = (
           <TextInput
@@ -338,6 +384,7 @@ const ModalDetails = ({
         break;
 
       case "radio":
+        console.log('data: ', value);
         comp = (
           <Fieldset
             className=" display-inline-flex modalUserInput"
@@ -353,7 +400,11 @@ const ModalDetails = ({
               label="Yes"
               value="Yes"
               className="padding-right-1  "
-              defaultChecked={value[2] && value[2] === 1}
+              defaultChecked={
+                value[2] !== undefined &&
+                value[2] !== null &&
+                value[2] === 1
+              }
             />
             <Radio
               id={`${value[1].split(" ").join("")}-2`}
@@ -362,7 +413,11 @@ const ModalDetails = ({
               value="No"
               className="padding-left-1"
               defaultChecked={
-                value[2] === null || value[2] === false || value[2] === 0
+                value[2] === undefined ||
+                value[2] === false ||
+                value[2] === null ||
+                isNaN(value[2]) ||
+                value[2] === 0
               }
             />
           </Fieldset>
