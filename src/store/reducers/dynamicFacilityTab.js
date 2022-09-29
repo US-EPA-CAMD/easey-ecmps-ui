@@ -122,7 +122,6 @@ const reducer = (state, action) => {
       console.log('after',returnObject,currentState)
       break;
     default:
-      console.log('this was default hit ')
       returnObject = currentState;
       break;
   }

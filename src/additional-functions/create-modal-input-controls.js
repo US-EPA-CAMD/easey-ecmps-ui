@@ -20,18 +20,6 @@ export const modalViewData = (
 ) => {
   const arr = [];
 
-  console.log(
-    "  selected, ",
-    label,
-    time,
-    createNew,
-    totalOptions,
-    prefilteredMdmTotal,
-    mainDropdownName,
-    prefilterMdmMain,
-    hasMainDropdown,
-    prefilteredTotalName
-  );
   const totalOptionsClone = _.cloneDeep(totalOptions);
 
   if (hasMainDropdown) {
