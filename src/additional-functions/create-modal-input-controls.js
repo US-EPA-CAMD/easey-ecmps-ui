@@ -310,23 +310,23 @@ export const modalViewData = (
         ]);
       }
       // text input time
-      if (
-        (y === "endHour" ||
-          y === "beginHour" ||
-          y === "wafEndHour" ||
-          y === "wafBeginHour") &&
-        time[y][2] === ""
-      ) {
-        arr.push([
-          y,
-          time[y][0],
-          createNew ? "" : selected ? selected[y] : "",
-          time[y][2] === "required" ? "required" : false,
-          "time",
-          createNew ? "" : selected ? selected[y] : "",
-        ]);
-        continue;
-      }
+      // if (
+      //   (y === "endHour" ||
+      //     y === "beginHour" ||
+      //     y === "wafEndHour" ||
+      //     y === "wafBeginHour") &&
+      //   time[y][2] === ""
+      // ) {
+      //   arr.push([
+      //     y,
+      //     time[y][0],
+      //     createNew ? "" : selected ? selected[y] : "",
+      //     time[y][2] === "required" ? "required" : false,
+      //     "time",
+      //     createNew ? "" : selected ? selected[y] : "",
+      //   ]);
+      //   continue;
+      // }
       // dropdown time selection
       if (y === "endHour" || y === "beginHour" || y === "injectionHour") {
         arr.push([

@@ -390,7 +390,9 @@ export const QACertTestSummaryHeaderInfo = ({
                   <CreateOutlined color="primary" /> {"Check Out"}
                 </Button>
               ) : null}
+              {isCheckedOut && (
               <Button autoFocus type="button" outline={true}>Revert to Official Record</Button>
+              )}
             </>
           )}
         </div>
@@ -444,7 +446,7 @@ export const QACertTestSummaryHeaderInfo = ({
               className="float-right text-right bottom-0 text-no-wrap "
               type="button"
               id="showRevertModal"
-              outline={false}
+              outline={true}
             >
               {"Evaluation Report"}
             </Button>

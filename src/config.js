@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 export const oneSecond = 1000;
 export const oneMinute = 60 * oneSecond;
 
@@ -14,6 +16,10 @@ const getConfigValue = (key, defaultValue = '') => {
   else if (!returnValue && process.env[key]) {
     returnValue = process.env[key];
   }
+
+  console.log('key: ', key);
+  console.log('value: ', returnValue || defaultValue);
+
   return returnValue || defaultValue;
 };
 
@@ -26,15 +32,13 @@ export const config = {
     apiKey:
       getConfigValue('REACT_APP_ECMPS_API_KEY'),
     host:
-      getConfigValue('REACT_APP_EASEY_ECMPS_UI_HOST', 'easey-dev.app.cloud.gov'),
+      getConfigValue('REACT_APP_EASEY_ECMPS_UI_HOST', 'ecmps-dev.app.cloud.gov'),
     googleAnalyticsEnabled:
       getConfigValue('REACT_APP_GOOGLE_ANALYTICS_ENABLED', "false"),
     googleAnalyticsPublicContainerId:
       getConfigValue('REACT_APP_GOOGLE_ANALYTICS_PUBLIC_CONTAINER_ID'),
     googleAnalyticsAuthenticatedContainerId:
       getConfigValue('REACT_APP_GOOGLE_ANALYTICS_AUTHENTICATED_CONTAINER_ID'),
-    refreshTokenRate:
-      getConfigValue('REACT_APP_EASEY_ECMPS_UI_REFRESH_TOKEN_RATE_MINUTES', 1) * oneMinute,
     inactivityDuration:
       getConfigValue('REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_CHECKOUT_MINUTES', 1) * oneMinute,
     inactivityLogoutDuration:
@@ -44,7 +48,7 @@ export const config = {
     countdownDuration:
       getConfigValue('REACT_APP_EASEY_ECMPS_UI_ACTIVITY_COUNTDOWN_DURATION_SECONDS', 30) * oneSecond,
     paginationPerPage:
-      getConfigValue('REACT_APP_EASEY_ECMPS_UI_PAGINATION_PER_PAGE', 100),
+      Number(getConfigValue('REACT_APP_EASEY_ECMPS_UI_PAGINATION_PER_PAGE', 100)),
     path:
       getConfigValue('REACT_APP_EASEY_ECMPS_UI_PATH', "/"),
     env:
@@ -79,6 +83,8 @@ export const config = {
       getConfigValue('REACT_APP_EASEY_ECMPS_UI_CLIENT_ID'),
     clientSecret:
       getConfigValue('REACT_APP_EASEY_ECMPS_UI_CLIENT_SECRET'),
+    enableDebug:
+      getConfigValue('REACT_APP_ECMPS_ENABLE_DEBUG', "false"),
   },
   services: {
     mdm: {

@@ -91,7 +91,7 @@ export const WideHeader = () => {
           title="Go to the EPA home page"
         >
           <img
-            src={`${process.env.PUBLIC_URL}/images/epa-logo-blue.svg`}
+            src={"/images/epa-logo-blue.svg"}
             className="margin-top-2 margin-left-5 mobile-lg:margin-left-2 padding-bottom-2 height-705 width-15"
             alt="Official EPA Logo"
           />

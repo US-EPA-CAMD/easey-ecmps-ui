@@ -2,7 +2,6 @@ export const defaultsDataTableProps = (location) => {
   return {
     payload: {
       id: null,
-
       parameterCode: "string",
       defaultValue: "0",
       defaultUnitsOfMeasureCode: "string",
@@ -50,9 +49,9 @@ export const defaultsDataTableProps = (location) => {
     },
     controlDatePickerInputs: {
       beginDate: ["Start Date", "date", "", ""],
-      beginHour: ["Start Time", "time", "", ""],
+      beginHour: ["Start Time", "hourDropdown", "", ""],
       endDate: ["End Date", "date", "", ""],
-      endHour: ["End Time", "time", "", ""],
+      endHour: ["End Time", "hourDropdown", "", ""],
     },
   };
 };
@@ -86,9 +85,9 @@ export const formulasDataTableProps = (location) => {
     },
     controlDatePickerInputs: {
       beginDate: ["Start Date", "date", "", ""],
-      beginHour: ["Start Time", "time", "", ""],
+      beginHour: ["Start Time", "hourDropdown", "", ""],
       endDate: ["End Date", "date", "", ""],
-      endHour: ["End Time", "time", "", ""],
+      endHour: ["End Time", "hourDropdown", "", ""],
     },
   };
 };
@@ -148,9 +147,9 @@ export const loadsDataTableProps = (location) => {
     controlDatePickerInputs: {
       loadAnalysisDate: ["Load Analysis Date", "date", "", ""],
       beginDate: ["Start Date", "date", "", ""],
-      beginHour: ["Start Time", "time", "", ""],
+      beginHour: ["Start Time", "hourDropdown", "", ""],
       endDate: ["End Date", "date", "", ""],
-      endHour: ["End Time", "time", "", ""],
+      endHour: ["End Time", "hourDropdown", "", ""],
     },
   };
 };
@@ -207,32 +206,13 @@ export const rectWAFsDataTableProps = (location) => {
       wafDeterminationDate: ["WAF Determination Date", "date", "", ""],
       skip: ["", "skip", "", ""],
       wafBeginDate: ["Start Date", "date", "", ""],
-      wafBeginHour: ["Start Time", "time", "", ""],
+      wafBeginHour: ["Start Time", "hourDropdown", "", ""],
       wafEndDate: ["End Date", "date", "", ""],
-      wafEndHour: ["End Time", "time", "", ""],
+      wafEndHour: ["End Time", "hourDropdown", "", ""],
     },
   };
 };
 
-//   export const DataTableProps = (location) => {
-//     return {
-//       payload: {
-
-//       },
-//       dropdownArray: [
-
-//       ],
-//       columnNames: [
-
-//       ],
-//       controlInputs: {
-
-//       },
-//       controlDatePickerInputs: {
-
-//       },
-//     };
-//   };
 export const spanDataTableProps = (location) => {
   return {
     payload: {
@@ -291,9 +271,9 @@ export const spanDataTableProps = (location) => {
     },
     controlDatePickerInputs: {
       beginDate: ["Start Date", "date", "", ""],
-      beginHour: ["Start Time", "time", "", ""],
+      beginHour: ["Start Time", "hourDropdown", "", ""],
       endDate: ["End Date", "date", "", ""],
-      endHour: ["End Time", "time", "", ""],
+      endHour: ["End Time", "hourDropdown", "", ""],
     },
   };
 };

@@ -9,14 +9,14 @@ export const Preloader = () => {
         <img
           alt="Content loading"
           title="Content loading"
-          src={`${process.env.PUBLIC_URL}/images/preloaders/loading-snake.gif`}
+          src={"/images/preloaders/loading-snake.gif"}
         />
       </p>
       <p>
         <img
           alt="Please wait"
           title="Please wait"
-          src={`${process.env.PUBLIC_URL}/images/preloaders/loading-text.gif`}
+          src={"/images/preloaders/loading-text.gif"}
         />
       </p>
     </div>

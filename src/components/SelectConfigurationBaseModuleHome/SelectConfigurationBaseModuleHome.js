@@ -127,8 +127,20 @@ export const SelectConfigurationBaseModuleHome = ({
           });
         }
         break;
-      case EXPORT_STORE_NAME:
       case EMISSIONS_STORE_NAME:
+        for (const row of openedFacilityTabs) {
+          tabArr.push({
+            title: row.name,
+            component: (
+              <div>EMISSIONS DATA COMING SOON!</div>
+            ),
+            orisCode: row.orisCode,
+            selectedConfig: row.selectedConfig,
+            checkout: row.checkout,
+          });
+        }
+        break;
+      case EXPORT_STORE_NAME:
         for (const row of openedFacilityTabs) {
           tabArr.push({
             title: row.name,

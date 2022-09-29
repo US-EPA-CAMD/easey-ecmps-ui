@@ -40,11 +40,11 @@ export const LeftNavigation = (props) => {
           <USWDSLink
             className={
               noActive
-                ? props.currentLink === `/ecmps${item.url}` ||
+                ? props.currentLink === `/${item.url}` ||
                   props.currentLink === item.url
                   ? "usa-current text-wrap  usa-sidenav usa-current wkspaceMainMenu"
                   : "text-wrap"
-                : props.currentLink === `/ecmps${item.url}` ||
+                : props.currentLink === `/${item.url}` ||
                   props.currentLink === item.url
                 ? "emulateCurrentLink "
                 : "text-wrap "

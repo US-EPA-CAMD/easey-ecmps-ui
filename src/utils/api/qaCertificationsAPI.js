@@ -2,9 +2,20 @@ import axios from "axios";
 import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
+
 axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
 };
+
+const getApiUrl = (path) => {
+  let url = config.services.qaCertification.uri;
+
+  if (window.location.href.includes("/workspace")) {
+    url = `${url}/workspace`;
+  }
+
+  return `${url}${path}`;
+}
 
 export const getQATestSummary = async (
   locID,
@@ -103,7 +114,8 @@ export const exportQA = async (
   beginDate,
   endDate
 ) => {
-  let url = `${config.services.qaCertification.uri}/export?facilityId=${facilityId}`;
+  let url = getApiUrl(`/export?facilityId=${facilityId}`);
+
   if (unitIds?.length > 0) {
     const unitIdsQueryParam = unitIds.join("|");
     url = `${url}&unitIds=${unitIdsQueryParam}`;
@@ -115,16 +127,7 @@ export const exportQA = async (
   if (beginDate && endDate) {
     url = `${url}&beginDate=${beginDate}&endDate=${endDate}`;
   }
-  try {
-    return handleResponse(
-      await secureAxios({
-        method: "GET",
-        url: url,
-      })
-    );
-  } catch (error) {
-    return handleError(error);
-  }
+  return axios.get(url).then(handleResponse).catch(handleError);
 };
 
 export const deleteQATestSummary = async (locId, id) => {
