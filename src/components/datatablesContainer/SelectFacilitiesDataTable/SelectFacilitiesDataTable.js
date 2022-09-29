@@ -70,9 +70,6 @@ export const SelectFacilitiesDataTable = ({
   const selectedRowHandler = (info) => {
     const title = `${info[0].col1} (${info[1].name}) ${info[1].active ? "" : "Inactive"}`;
 
-    console.log('selected config', info);
-    console.log('title', title);    
-
     addtabs([
       {
         title,

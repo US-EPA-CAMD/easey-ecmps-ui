@@ -381,7 +381,6 @@ export const DataTableSystems = ({
       mpApi
         .createSystems(userInput, locationSelectValue)
         .then((result) => {
-          console.log("saving results", result);
           setSecondLevel(false);
           setUpdateSystemTable(true);
         })
