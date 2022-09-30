@@ -87,6 +87,12 @@ const ModalDetails = ({
   }
 
   const makeViewOnlyComp = (value, locked) => {
+    let displayVal
+    if (value[4] === 'radio') {
+      displayVal = value[2] ? 'Yes' : 'No'
+    } else {
+      displayVal = value[2] ?? ''
+    }
     return (
       <div key={`${value[1]}`} className="grid-col">
         {
@@ -105,15 +111,7 @@ const ModalDetails = ({
                 {value[1]}
               </h3>
               <div id={`${value[4] !== "skip" ? value[1] : ""}`}>
-                {value[2]
-                  ? value[4] === "radio"
-                    ? value[2] === "0"
-                      ? "No"
-                      : "Yes"
-                    : value[2]
-                  : value[4] === "radio"
-                  ? "No"
-                  : ""}
+                {displayVal}
               </div>
             </FormGroup>
           )
