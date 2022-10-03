@@ -3,6 +3,10 @@ name: Release Branch Workflow
 on:
   push:
     branches: [ release/* ]
+    paths-ignore:
+    - '**/*.md'
+    - 'LICENSE'
+    - '.gitignore'
 
 jobs:
   Build-Test-Package:
@@ -10,8 +14,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - name: Checkout devops repo
         uses: actions/checkout@v2
         with:
@@ -43,17 +45,16 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.ARTIFACTS_STORAGE_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.ARTIFACTS_STORAGE_SECRET_ACCESS_KEY }}
+  
   Test-Deployment:
     needs: Build-Test-Package
     runs-on: ubuntu-latest
     environment:
       name: Test
-      url: https://easey-tst.app.cloud.gov/ecmps
+      url: https://ecmps-tst.app.cloud.gov
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - name: Checkout devops repo
         uses: actions/checkout@v2
         with:
@@ -78,24 +79,23 @@ jobs:
       - name: Init Application
         run: devops/scripts/cf-app-init.sh
       - name: Configure Env Vars (secrets)
-        run: |
-          cf set-env $APP_NAME REACT_APP_ECMPS_API_KEY $REACT_APP_ECMPS_API_KEY
+        run: scripts/environment-variables-secrets.sh
         env:
-          REACT_APP_ECMPS_API_KEY: ${{ secrets.ECMPS_NON_PROD_API_KEY }}
+          ECMPS_API_KEY: ${{ secrets.API_KEY }}
+          ECMPS_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          ECMPS_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
       - name: Deployment
-        run: |
-          devops/scripts/deploy.sh
+        run: devops/scripts/deploy.sh
+  
   Beta-Deployment:
     needs: Build-Test-Package
     runs-on: ubuntu-latest
     environment:
       name: Beta
-      url: https://easey-beta.app.cloud.gov/ecmps
+      url: https://ecmps-beta.app.cloud.gov
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - name: Checkout devops repo
         uses: actions/checkout@v2
         with:
@@ -120,24 +120,23 @@ jobs:
       - name: Init Application
         run: devops/scripts/cf-app-init.sh
       - name: Configure Env Vars (secrets)
-        run: |
-          cf set-env $APP_NAME REACT_APP_ECMPS_API_KEY $REACT_APP_ECMPS_API_KEY
+        run: scripts/environment-variables-secrets.sh
         env:
-          REACT_APP_ECMPS_API_KEY: ${{ secrets.ECMPS_NON_PROD_API_KEY }}
+          ECMPS_API_KEY: ${{ secrets.API_KEY }}
+          ECMPS_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          ECMPS_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
       - name: Deployment
-        run: |
-          devops/scripts/deploy.sh
+        run: devops/scripts/deploy.sh
+
   Staging-Deployment:
-    needs: Test-Deployment
+    needs: Build-Test-Package
     runs-on: ubuntu-latest
     environment:
       name: Staging
-      url: https://easey-stg.app.cloud.gov/ecmps
+      url: https://ecmps-stg.app.cloud.gov
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - name: Checkout devops repo
         uses: actions/checkout@v2
         with:
@@ -162,10 +161,10 @@ jobs:
       - name: Init Application
         run: devops/scripts/cf-app-init.sh
       - name: Configure Env Vars (secrets)
-        run: |
-          cf set-env $APP_NAME REACT_APP_ECMPS_API_KEY $REACT_APP_ECMPS_API_KEY
+        run: scripts/environment-variables-secrets.sh
         env:
-          REACT_APP_ECMPS_API_KEY: ${{ secrets.ECMPS_NON_PROD_API_KEY }}
+          ECMPS_API_KEY: ${{ secrets.API_KEY }}
+          ECMPS_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          ECMPS_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
       - name: Deployment
-        run: |
-          devops/scripts/deploy.sh
+        run: devops/scripts/deploy.sh

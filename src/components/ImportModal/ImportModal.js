@@ -40,6 +40,7 @@ const ImportModal = ({
       default:
         break;
     }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [schemaErrors, setSchemaErrors] = useState([]);
   const validateJSON = (name, type, event) => {
@@ -48,6 +49,7 @@ const ImportModal = ({
     if (fileTypeManual[fileTypeManual.length - 1] !== "json") {
       setHasFormatError(true);
       setDisablePortBtn(true);
+      console.log('.json file incorrect')
     } else {
       setFileName(name);
       readFile(event);

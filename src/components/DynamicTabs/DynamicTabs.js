@@ -6,7 +6,7 @@ import {
   addFacilityTab,
   removeFacilityTab,
 } from "../../store/actions/dynamicFacilityTab";
-import { setActiveTab } from "../../store/actions/activeTab";
+
 import {
   convertSectionToStoreName,
   EXPORT_STORE_NAME,
@@ -20,7 +20,6 @@ export const DynamicTabs = ({
   user,
   removeFacility,
   addFacility,
-  setActive,
   setMostRecentlyCheckedInMonitorPlanId,
   mostRecentlyCheckedInMonitorPlanId,
   workspaceSection,
@@ -62,38 +61,10 @@ export const DynamicTabs = ({
   };
   return (
     <div>
-      {workspaceSection === QA_CERT_TEST_SUMMARY_STORE_NAME ? (
+      {workspaceSection === EXPORT_STORE_NAME ? (
         <Tabs
           dynamic={true}
           removeTabs={removeTabsHandler}
-          setActive={setActive}
-          tabProps={tabs}
-          user={user}
-          workspaceSection={workspaceSection}
-        >
-          {tabs &&
-            tabs.map((tab, i) => (
-              <TabPane
-                key={i}
-                title={tab.title}
-                locationId={
-                  tab.selectedConfig ? tab.selectedConfig.id : "initial"
-                }
-                facId={
-                  tab.selectedConfig ? tab.selectedConfig.facId : "initial"
-                }
-              >
-                {cloneElement(tab.component, {
-                  addtabs: addTabsHandler,
-                })}
-              </TabPane>
-            ))}
-        </Tabs>
-      ) : workspaceSection === EXPORT_STORE_NAME ? (
-        <Tabs
-          dynamic={true}
-          removeTabs={removeTabsHandler}
-          setActive={setActive}
           tabProps={tabs}
           user={user}
           workspaceSection={workspaceSection}
@@ -120,7 +91,6 @@ export const DynamicTabs = ({
         <Tabs
           dynamic={true}
           removeTabs={removeTabsHandler}
-          setActive={setActive}
           tabProps={tabs}
           checkedOutLocations={checkedOutLocations}
           user={user}
@@ -161,14 +131,6 @@ const mapDispatchToProps = (dispatch) => {
     addFacility: (facility, workspaceSection) =>
       dispatch(
         addFacilityTab(facility, convertSectionToStoreName(workspaceSection))
-      ),
-    setActive: (orisCode, value, workspaceSection) =>
-      dispatch(
-        setActiveTab(
-          orisCode,
-          value,
-          convertSectionToStoreName(workspaceSection)
-        )
       ),
   };
 };

@@ -35,7 +35,7 @@ export const getMonitoringPlansEvalData = (totalData) => {
     records.push({
       col1: el.unitStackInformation,
       col2: el.severityCode,
-      col3: formatCategoryDescription(el.categoryCodeDescription),
+      col3: formatCategoryDescription(el.categoryDescription),
       col4: (
         <span className="text-informational">
           <u>{el.checkCode}</u>

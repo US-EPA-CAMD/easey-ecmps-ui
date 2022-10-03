@@ -30,7 +30,7 @@ import {
   LockSharp,
 } from "@material-ui/icons";
 
-import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
+import { MONITORING_PLAN_STORE_NAME, EXPORT_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 // *** scss
 import "./DataTableRender.scss";
 import { setCheckoutState } from "../../store/actions/dynamicFacilityTab";
@@ -111,7 +111,7 @@ export const DataTableRender = ({
 
   const isAnyLocationCheckedOutByUser = () => {
     let result = false;
-    if (workspaceSection === MONITORING_PLAN_STORE_NAME) {
+    if (workspaceSection !== EXPORT_STORE_NAME) {
       if (checkedOutLocations.length > 0) {
         result =
           checkedOutLocations
@@ -141,7 +141,7 @@ export const DataTableRender = ({
 
   const AddLock = (dataRowObject) => {
     if (
-      workspaceSection === MONITORING_PLAN_STORE_NAME &&
+      workspaceSection !== EXPORT_STORE_NAME &&
       checkedOutLocations &&
       checkedOutLocations.length > 0
     ) {
@@ -164,7 +164,7 @@ export const DataTableRender = ({
 
   const AddPencil = (dataRowObject) => {
     if (
-      workspaceSection === MONITORING_PLAN_STORE_NAME &&
+      workspaceSection !== EXPORT_STORE_NAME &&
       checkedOutLocations &&
       checkedOutLocations.length > 0
     ) {
@@ -260,7 +260,7 @@ export const DataTableRender = ({
 
                     {/* display a checkout option only if no other locations are currently checked out by user */}
 
-                    {workspaceSection === MONITORING_PLAN_STORE_NAME &&
+                    {workspaceSection !== EXPORT_STORE_NAME &&
                     isAnyLocationCheckedOutByUser() === false &&
                     isLocationCheckedOut(row["facId"]) === false &&
                     row["col2"] === "Active" ? (
@@ -285,7 +285,7 @@ export const DataTableRender = ({
                         </Button>
                       </>
                     ) : /* display check in option only if THIS location is currently checked out by user */
-                    workspaceSection === MONITORING_PLAN_STORE_NAME &&
+                    workspaceSection !== EXPORT_STORE_NAME &&
                       isCurrentlyCheckedOutByUser(row.col3) === true ? (
                       <>
                         <span className="margin-x-1">|</span>
@@ -534,7 +534,7 @@ export const DataTableRender = ({
                   <Button
                     type="button"
                     // test-id={tableTitle? `btnAdd${tableTitle.split(" ").join("")}`: `${sectionTitle.split(" ").join("")}`}
-                    className={"float-left clearfix margin-right-3"}
+                    className={"float-left clearfix margin-right-3 margin-y-1"}
                     outline="true"
                     color="black"
                     onClick={(event) => {
@@ -573,7 +573,7 @@ export const DataTableRender = ({
                     <Button
                       type="button"
                       // test-id={tableTitle? `btnAdd${tableTitle.split(" ").join("")}`: `${sectionTitle.split(" ").join("")}`}
-                      className="float-left clearfix margin-right-3"
+                      className="float-left clearfix margin-right-3 margin-y-1"
                       outline="true"
                       color="black"
                       onClick={(event) => {
@@ -602,7 +602,7 @@ export const DataTableRender = ({
 
 const mapStateToProps = (state) => {
   return {
-    openedFacilityTabs: state.openedFacilityTabs[MONITORING_PLAN_STORE_NAME],
+    openedFacilityTabs: state.openedFacilityTabs,
   };
 };
 

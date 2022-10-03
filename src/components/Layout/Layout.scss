@@ -3,29 +3,14 @@
 div.row.column1 {
   float: left;
   min-width: 50vw;
-  /* width:5px; */
-  /* max-width: 1px; */
   position: relative;
 
   height: auto;
 }
 .mainContent {
-  padding-left: 10px;
-  padding-top: 10px;
-
-  height: auto;
-  min-height: 100vh;
-  min-width: 700px;
-  width: 90%;
+  max-height: fit-content;
   max-width: 100%;
-  margin-right: 0;
-  padding-right: 20px;
 }
-/* .row {
-  overflow: auto;
-  min-width: 1400px;
-  max-width: 2000px;
-} */
 .contentrow {
   display: flex;
   flex-direction: row;

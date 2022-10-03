@@ -1,4 +1,3 @@
-// import "../../additional-functions/wdyr";
 import React, { useState, useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import TagManager from "react-gtm-module";
@@ -28,18 +27,38 @@ import {
 import {
   QA_CERT_TEST_SUMMARY_STORE_NAME,
   EXPORT_STORE_NAME,
-  EMISSIONS_DAILY_STORE_NAME,
-  EMISSIONS_HOURLY_STORE_NAME,
-  EMISSIONS_MATS_STORE_NAME,
+  EMISSIONS_STORE_NAME,
+  MONITORING_PLAN_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
+import * as modules from "../../utils/constants/moduleTitles";
 
 const App = () => {
   const [user, setUser] = useState(false);
   const [expired, setExpired] = useState(false);
   const [resetTimer, setResetTimer] = useState(false);
 
+  const prepDocument = () => {
+    setTimeout(() => {
+      const mainContent = document.querySelector(".mainContent");
+
+      if (mainContent !== null) {
+        mainContent.setAttribute("id", "main-content");
+      }
+    });
+    // To avoid css sytling conflicts in production build
+    // position the link tag to external stylesheet as the last element of head section.
+    const linkTags = document.querySelectorAll('link[rel="stylesheet"]');
+    linkTags.forEach(linkTag => {
+      linkTag.parentNode.appendChild(linkTag);
+    })
+  };
+
   useEffect(() => {
-    if (config.app.googleAnalyticsEnabled === "true") {
+    prepDocument();
+  }, []);
+
+  useEffect(() => {
+    if (config.app.googleAnalyticsEnabled) {
       const tagManagerArgs = { gtmId: "" };
       if (window.location.href.search("workspace") === -1) {
         tagManagerArgs.gtmId = config.app.googleAnalyticsPublicContainerId;
@@ -109,19 +128,13 @@ const App = () => {
                 <AboutHome user={user} setCurrentLink={setCurrentLink} />
               )}
             />
-
             <Route path={`/faqs`} exact component={() => <FAQ />} />
             <Route path="/login" exact component={Login} />
+
             {user ? (
-              <Redirect
-                from="/monitoring-plans"
-                to="/workspace/monitoring-plans"
-              />
+              <Redirect from="/monitoring-plans" to="/workspace/monitoring-plans" />
             ) : (
-              <Redirect
-                from="/workspace/monitoring-plans"
-                to="/monitoring-plans"
-              />
+              <Redirect from="/workspace/monitoring-plans" to="/monitoring-plans" />
             )}
             <Route
               path="/monitoring-plans"
@@ -129,7 +142,7 @@ const App = () => {
               component={() => (
                 <MonitoringPlanHome
                   user={false}
-                  workspaceSection={"monitoringPlans"}
+                  workspaceSection={MONITORING_PLAN_STORE_NAME}
                 />
               )}
             />
@@ -143,142 +156,123 @@ const App = () => {
                   resetTimerFlag={resetTimer}
                   callApiFlag={expired}
                   user={user}
-                  workspaceSection={"monitoringPlans"}
+                  workspaceSection={MONITORING_PLAN_STORE_NAME}
+                  moduleName={modules.monitoring_plans_module}
                 />
               )}
             />
+
             {user ? (
-              <Redirect
-                from="/qa_certifications_test_summary_data"
-                to="/workspace/qa_certifications_test_summary_data"
-              />
+              <Redirect from="/qa-test" to="/workspace/qa-test" />
             ) : (
-              <Redirect
-                from="/workspace/qa_certifications_test_summary_data"
-                to="/qa_certifications_test_summary_data"
-              />
+              <Redirect from="/workspace/qa-test" to="/qa-test" />
             )}
             <Route
-              path="/qa_certifications_test_summary_data"
+              path="/qa-test"
               exact
               component={() => (
-                <SelectConfigurationBaseModuleHome
+                <MonitoringPlanHome
                   user={false}
                   workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
                 />
               )}
             />
             <Route
-              path="/workspace/qa_certifications_test_summary_data"
+              path="/workspace/qa-test"
               exact
               component={() => (
-                <SelectConfigurationBaseModuleHome
+                <MonitoringPlanHome
+                  resetTimer={setResetTimer}
+                  setExpired={setExpired}
+                  resetTimerFlag={resetTimer}
+                  callApiFlag={expired}
                   user={user}
                   workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
+                  moduleName={modules.qa_Certifications_Test_Summary_Module}
                 />
               )}
             />
 
             {user ? (
-              <Redirect from="/emission" to="/workspace/emission" />
+              <Redirect from="/emissions-daily" to="/workspace/emissions-daily" />
             ) : (
-              <Redirect from="/workspace/emission" to="/emission" />
-            )}
-            <Route path="/emission/" exact component={ComingSoon} />
-            <Route path="/workspace/emission/" exact component={ComingSoon} />
-
-            {user ? (
-              <Redirect
-                from="/emissions_daily"
-                to="/workspace/emissions_daily"
-              />
-            ) : (
-              <Redirect
-                from="/workspace/emissions_daily"
-                to="/emissions_daily"
-              />
+              <Redirect from="/workspace/emissions-daily" to="/emissions-daily" />
             )}
             <Route
-              path="/emissions_daily"
+              path="/emissions-daily"
               exact
               component={() => {
                 return (
                   <SelectConfigurationBaseModuleHome
                     user={false}
-                    workspaceSection={EMISSIONS_DAILY_STORE_NAME}
+                    workspaceSection={EMISSIONS_STORE_NAME}
                   />
                 );
               }}
             />
             <Route
-              path="/workspace/emissions_daily"
+              path="/workspace/emissions-daily"
               exact
               component={() => (
                 <SelectConfigurationBaseModuleHome
                   user={user}
-                  workspaceSection={EMISSIONS_DAILY_STORE_NAME}
+                  workspaceSection={EMISSIONS_STORE_NAME}
                 />
               )}
             />
 
             {user ? (
-              <Redirect
-                from="/emissions_hourly"
-                to="/workspace/emissions_hourly"
-              />
+              <Redirect from="/emissions-hourly" to="/workspace/emissions-hourly" />
             ) : (
-              <Redirect
-                from="/workspace/emissions_hourly"
-                to="/emissions_hourly"
-              />
+              <Redirect from="/workspace/emissions-hourly" to="/emissions-hourly" />
             )}
             <Route
-              path="/emissions_hourly"
+              path="/emissions-hourly"
               exact
               component={() => {
                 return (
                   <SelectConfigurationBaseModuleHome
                     user={false}
-                    workspaceSection={EMISSIONS_HOURLY_STORE_NAME}
+                    workspaceSection={EMISSIONS_STORE_NAME}
                   />
                 );
               }}
             />
             <Route
-              path="/workspace/emissions_hourly"
+              path="/workspace/emissions-hourly"
               exact
               component={() => (
                 <SelectConfigurationBaseModuleHome
                   user={user}
-                  workspaceSection={EMISSIONS_MATS_STORE_NAME}
+                  workspaceSection={EMISSIONS_STORE_NAME}
                 />
               )}
             />
 
             {user ? (
-              <Redirect from="/emissions_mats" to="/workspace/emissions_mats" />
+              <Redirect from="/emissions-mats" to="/workspace/emissions-mats" />
             ) : (
-              <Redirect from="/workspace/emissions_mats" to="/emissions_mats" />
+              <Redirect from="/workspace/emissions-mats" to="/emissions-mats" />
             )}
             <Route
-              path="/emissions_mats"
+              path="/emissions-mats"
               exact
               component={() => {
                 return (
                   <SelectConfigurationBaseModuleHome
                     user={false}
-                    workspaceSection={EMISSIONS_MATS_STORE_NAME}
+                    workspaceSection={EMISSIONS_STORE_NAME}
                   />
                 );
               }}
             />
             <Route
-              path="/workspace/emissions_mats"
+              path="/workspace/emissions-mats"
               exact
               component={() => (
                 <SelectConfigurationBaseModuleHome
                   user={user}
-                  workspaceSection={EMISSIONS_HOURLY_STORE_NAME}
+                  workspaceSection={EMISSIONS_STORE_NAME}
                 />
               )}
             />
@@ -308,6 +302,7 @@ const App = () => {
                 />
               )}
             />
+
             <Route path="/tutorials" exact component={ComingSoon} />
             <Route path="/cam-api" exact component={ComingSoon} />
             <Route path="/glossary" exact component={ComingSoon} />

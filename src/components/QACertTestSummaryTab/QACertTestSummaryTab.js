@@ -6,10 +6,10 @@ import {
   convertSectionToStoreName,
   QA_CERT_TEST_SUMMARY_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
-import { setActiveTab } from "../../store/actions/activeTab";
 import {
   setSectionSelectionState,
   setLocationSelectionState,
+  setCheckoutState
 } from "../../store/actions/dynamicFacilityTab";
 export const QACertTestSummaryTab = ({
   resetTimer,
@@ -27,9 +27,13 @@ export const QACertTestSummaryTab = ({
   activeTab,
   setSection,
   setLocation,
+  setCheckout
 }) => {
+  const getCurrentTab = () =>{
+    return tabs.find(tab => tab.selectedConfig.id === selectedConfig.id);
+  }
   const [sectionSelect, setSectionSelect] = useState(
-    tabs ? tabs[activeTab].section : ""
+    getCurrentTab().section
   );
   useEffect(() => {
     setSection(sectionSelect, title);
@@ -38,11 +42,11 @@ export const QACertTestSummaryTab = ({
   }, [sectionSelect]);
 
   const [locationSelect, setLocationSelect] = useState(
-    tabs ? tabs[activeTab].location : ""
+    getCurrentTab().location
   );
   const [selectedTestCode, setSelectedTestCode] = useState({
-    testTypeGroupCode: "LINSUM",
-    testTypeCodes: ["LINE"],
+    testTypeGroupCode: null,
+    testTypeCodes: [],
   });
   useEffect(() => {
     setLocation(locationSelect, title);
@@ -59,15 +63,17 @@ export const QACertTestSummaryTab = ({
           title={title}
           orisCode={orisCode}
           selectedConfig={selectedConfig}
-          sectionSelect={tabs ? tabs[activeTab].section : 0}
-          setSectionSelect={setSectionSelect}
-          locationSelect={tabs ? tabs[activeTab].location : 0}
-          setLocationSelect={setLocationSelect}
+          sectionSelect={sectionSelect}
+          setSectionSelect={(section) => setSectionSelect(section)}
+          locationSelect={locationSelect}
+          setLocationSelect={(location) => setLocationSelect(location)}
           locations={selectedConfig.locations}
           user={user}
           setSelectedTestCode={setSelectedTestCode}
           selectedTestCode={selectedTestCode}
-          configID={tabs ? tabs[activeTab].selectedConfig.id : 0}
+          configID={selectedConfig.id}
+          setCheckout={setCheckout}
+          checkoutState={getCurrentTab().checkout}
         />
       </div>
     </div>
@@ -78,10 +84,6 @@ const mapStateToProps = (state) => {
     tabs: state.openedFacilityTabs[
       convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
     ],
-    activeTab:
-      state.activeTab[
-        convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
-      ][0],
   };
 };
 
@@ -111,12 +113,12 @@ const mapDispatchToProps = (dispatch) => {
           convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
         )
       ),
-    setActiveTab: (orisCode, value) =>
+    setCheckout: (value, configID, workspaceSection) =>
       dispatch(
-        setActiveTab(
-          orisCode,
+        setCheckoutState(
           value,
-          convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
+          configID,
+          convertSectionToStoreName(workspaceSection)
         )
       ),
   };

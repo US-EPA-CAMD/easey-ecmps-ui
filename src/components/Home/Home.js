@@ -13,7 +13,7 @@ export const Home = () => {
           <img
             title="Home Screen Coming Soon"
             alt="Home Screen Coming Soon"
-            src={`${process.env.PUBLIC_URL}/images/icons/maintenance.gif`}
+            src={"/images/icons/maintenance.gif"}
           />
         </div>
       </div>

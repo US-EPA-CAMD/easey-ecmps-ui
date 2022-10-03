@@ -7,9 +7,7 @@ import DynamicTabs from "../DynamicTabs/DynamicTabs";
 import {
   QA_CERT_TEST_SUMMARY_STORE_NAME,
   EXPORT_STORE_NAME,
-  EMISSIONS_DAILY_STORE_NAME,
-  EMISSIONS_HOURLY_STORE_NAME,
-  EMISSIONS_MATS_STORE_NAME,
+  EMISSIONS_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import {
   qa_Certifications_Test_Summary_Module,
@@ -19,6 +17,7 @@ import {
   emissions_mats_module,
 } from "../../utils/constants/moduleTitles";
 import Export from "../export/Export/Export";
+import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 
 export const SelectConfigurationBaseModuleHome = ({
   user,
@@ -30,6 +29,11 @@ export const SelectConfigurationBaseModuleHome = ({
   workspaceSection,
 }) => {
   useEffect(() => {
+    obtainCheckedOutLocations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openedFacilityTabs]);
+
+  useEffect(() => {
     switch (workspaceSection) {
       case QA_CERT_TEST_SUMMARY_STORE_NAME:
         document.title = qa_Certifications_Test_Summary_Module;
@@ -39,22 +43,50 @@ export const SelectConfigurationBaseModuleHome = ({
         document.title = export_Module;
         setTitleName(export_Module);
         break;
-      case EMISSIONS_DAILY_STORE_NAME:
-        document.title = emissions_daily_module;
-        setTitleName(emissions_daily_module);
+      case EMISSIONS_STORE_NAME:
+        if (window.location.href.indexOf("emissions-daily") > -1) {
+          document.title = emissions_daily_module;
+          setTitleName(emissions_daily_module);
+        }else if(window.location.href.indexOf("emissions-hourly") > -1){
+          document.title = emissions_hourly_module;
+          setTitleName(emissions_hourly_module);
+        }else if(window.location.href.indexOf("emissions-mats") > -1){
+          document.title = emissions_mats_module;
+          setTitleName(emissions_mats_module);
+        }
+        
         break;
-      case EMISSIONS_HOURLY_STORE_NAME:
-        document.title = emissions_hourly_module;
-        setTitleName(emissions_hourly_module);
-        break;
-      case EMISSIONS_MATS_STORE_NAME:
-        document.title = emissions_mats_module;
-        setTitleName(emissions_mats_module);
+      default:
         break;
     }
   }, [workspaceSection]);
 
   const [titleName, setTitleName] = useState(document.title);
+  const [checkedOutLocations, setCheckedOutLocations] = useState([]);
+
+  const obtainCheckedOutLocations = async () => {
+    const checkedOutLocationResult = await getCheckedOutLocations();
+
+    let checkedOutLocationList = [];
+    if (checkedOutLocationResult) {
+      if (checkedOutLocationResult.data) {
+        checkedOutLocationList = checkedOutLocationResult.data;
+      }
+      // *** find locations currently checked out by the user
+      const currentlyCheckedOutMonPlanId = checkedOutLocationList.filter(
+        (element) => element["checkedOutBy"] === user.firstName
+      )[0]
+        ? checkedOutLocationList.filter(
+            (element) => element["checkedOutBy"] === user.firstName
+          )[0]["monPlanId"]
+        : null;
+
+      if (currentlyCheckedOutMonPlanId) {
+        window.currentlyCheckedOutMonPlanId = currentlyCheckedOutMonPlanId;
+      }
+    }
+    setCheckedOutLocations(checkedOutLocationList);
+  };
 
   const handleTabState = () => {
     const tabArr = [
@@ -88,6 +120,19 @@ export const SelectConfigurationBaseModuleHome = ({
                 user={user}
                 // checkout={row.checkout}
               />
+            ),
+            orisCode: row.orisCode,
+            selectedConfig: row.selectedConfig,
+            checkout: row.checkout,
+          });
+        }
+        break;
+      case EMISSIONS_STORE_NAME:
+        for (const row of openedFacilityTabs) {
+          tabArr.push({
+            title: row.name,
+            component: (
+              <div>EMISSIONS DATA COMING SOON!</div>
             ),
             orisCode: row.orisCode,
             selectedConfig: row.selectedConfig,
@@ -143,6 +188,7 @@ export const SelectConfigurationBaseModuleHome = ({
       <div>
         <DynamicTabs
           tabsProps={() => handleTabState()}
+          checkedOutLocations={checkedOutLocations}
           user={user}
           workspaceSection={workspaceSection}
         />

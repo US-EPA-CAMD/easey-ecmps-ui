@@ -1,19 +1,17 @@
 #THIS FILE SHOULD CONTAIN DEV SETTINGS AND CI/CD WORKFLOW WILL CHANGE SETTINGS BASED ON ENV
 name: ecmps-ui
-path: ecmps
-memory: 2048
+memory: 64
 disk: 2048
 instances: 1
 environment: development
-host: easey-dev.app.cloud.gov
+host: ecmps-dev.app.cloud.gov
 apiHost: api.epa.gov/easey/dev
-inactivityDurationCheckoutMinutes: 2
-activityPollingFrequencySeconds: 1
+inactivityDurationCheckoutMinutes: 5
+activityPollingFrequencySeconds: 5
 activityCountdownDurationSeconds: 30
-refreshTokenRateMinutes: 1
-inactivityDurationLogoutMinutes: 2
+inactivityDurationLogoutMinutes: 5
 paginationPerPage: 100
-googleAnalyticsEnabled: "false"
+googleAnalyticsEnabled: false
 googleAnalyticsPublicContainerId: "GTM-W55ZK7"
 googleAnalyticsAuthenticatedContainerId: "GTM-W55ZK7"
 email: ecmps-beta@camdsupport.com

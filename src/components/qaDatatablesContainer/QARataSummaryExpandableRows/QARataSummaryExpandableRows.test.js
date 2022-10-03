@@ -1,19 +1,16 @@
 import React from "react";
-import { render, waitForElement, screen } from "@testing-library/react";
-import { Provider } from 'react-redux';
-import userEvent from "@testing-library/user-event";
-
-import configureStore from "../../../store/configureStore.dev";
-import initialState from "../../../store/reducers/initialState";
-import * as qaApi from "../../../utils/api/qaCertificationsAPI";
+import { render, waitForElement, screen, fireEvent} from "@testing-library/react";
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
+import config from "../../../config";
 import QARataSummaryExpandableRows from "./QARataSummaryExpandableRows";
 
-const axios = require("axios");
-jest.mock("axios");
-
+const locId = "1873";
+const testSummaryId = "4f2d07c0-55f9-49b0-8946-ea80c1febb15";
+const rataId = "EPA-CC367C89032A4719A7794B951EDCC4EB";
 const rataSummaryApiResponse = [
   {
-    "id": "EPA-56FCDFE610D245BC9AB440F83E98D226",
+    "id": "EPA-656FCDFE610D245BC9AB440F83E98D22",
     "rataId": "EPA-CC367C89032A4719A7794B951EDCC4EB",
     "operatingLevelCode": "M",
     "averageGrossUnitLoad": 33,
@@ -52,8 +49,8 @@ const rataSummaryApiResponse = [
     "rataRunData": []
   },
   {
-    "id": "EPA-id2",
-    "rataId": "EPA-rataId2",
+    "id": "EPA-56FCDFE610D245BC9AB440F83E98D226",
+    "rataId": "EPA-CC367C89032A4719A7794B951EDCC4EB",
     "operatingLevelCode": "M",
     "averageGrossUnitLoad": 33,
     "calculatedAverageGrossUnitLoad": null,
@@ -92,8 +89,7 @@ const rataSummaryApiResponse = [
   }
 ];
 
-initialState.dropdowns.rataSummary = {
-  operatingLevelCode: [
+ const operatingLevelCode = [
     {
       code: '',
       name: '-- Select a value --'
@@ -118,14 +114,16 @@ initialState.dropdowns.rataSummary = {
       code: 'T',
       name: 'Typical Unit Load'
     }
-  ],
-  referenceMethodCode: [
+  ];
+
+const referenceMethodCode = [
     {
       code: '',
       name: '-- Select a value --'
     },
-  ],
-  apsCode: [
+  ];
+
+const apsCode = [
     {
       code: '',
       name: '-- Select a value --'
@@ -134,108 +132,138 @@ initialState.dropdowns.rataSummary = {
       code: 'PS15',
       name: 'Performance Spec 15'
     },
-  ]
-}
+  ];
 
-let store = configureStore(initialState);
-const componentRenderer = (locId, testSummaryId, user) => {
+const componentRenderer = () => {
   const props = {
-    user: user,
-    loadDropdownsData: jest.fn(),
+    user: "user",
+    locId:locId,
+    testSumId:testSummaryId,
     data: {
       locationId: locId,
-      id: testSummaryId
+      id: rataId
     }
   }
-  return render(
-    <Provider store={store}>
-      <QARataSummaryExpandableRows {...props} />
-    </Provider>
-  );
+  return render(<QARataSummaryExpandableRows {...props} />);
 };
 
-test('renders QARataSummaryExpandableRows', async () => {
-  // Arrange
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: rataSummaryApiResponse })
-  );
-  const res = await qaApi.getRataSummary("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15", "rataId");
-  expect(res.data).toEqual(rataSummaryApiResponse);
-  let { container } = await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15", "test_user"));
+describe("Testing QARataRunExpandableRows", () => {
+  const getUrl = `${config.services.qaCertification.uri}/locations/${locId}/test-summary/${testSummaryId}/rata/${rataId}/rata-summaries`;
+  const getOpLevelCodes = `${config.services.mdm.uri}/operating-level-codes`;
+  const getAllReferenceMethodCodes = `${config.services.mdm.uri}/reference-method-codes`;
+  const getAllApsCodes = `${config.services.mdm.uri}/aps-codes`;
+  const deleteUrl = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSummaryId}/rata/${rataId}/rata-summaries/${rataSummaryApiResponse[0].id}`;
+  const postUrl = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSummaryId}/rata/${rataId}/rata-summaries`;
+  const putUrl = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSummaryId}/rata/${rataId}/rata-summaries/${rataSummaryApiResponse[1].id}`;
 
-  // Assert
-  expect(container).toBeDefined();
+  const mock = new MockAdapter(axios);
+  mock
+    .onGet(getUrl)
+    .reply(200, rataSummaryApiResponse);
+  mock
+    .onGet(getOpLevelCodes)
+    .reply(200, operatingLevelCode);
+  mock
+    .onGet(getAllReferenceMethodCodes)
+    .reply(200, referenceMethodCode);
+  mock
+    .onGet(getAllApsCodes)
+    .reply(200, apsCode);
+  mock
+    .onDelete(deleteUrl)
+    .reply(200, "success");
+  mock
+    .onPost(postUrl,
+      {
+        "rataId": "EPA-CC367C89032A4719A7794B951EDCC4EB",
+        "operatingLevelCode": "M",
+        "averageGrossUnitLoad": 33,
+        "calculatedAverageGrossUnitLoad": null,
+        "referenceMethodCode": "3A",
+        "meanCEMValue": 11.056,
+        "calculatedMeanCEMValue": null,
+        "meanRATAReferenceValue": 11.278,
+        "calculatedMeanRATAReferenceValue": null,
+        "meanDifference": 0.222,
+        "calculatedMeanDifference": 0.222,
+        "standardDeviationDifference": 0.172,
+        "calculatedStandardDeviationDifference": null,
+        "confidenceCoefficient": 0.132,
+        "calculatedConfidenceCoefficient": null,
+        "tValue": 2.306,
+        "calculatedTValue": null,
+        "apsIndicator": 0,
+      }
+    ).reply(200, 'success');
+  mock
+    .onPut(putUrl,
+      {
+        "rataSumId": "EPA-CC367C89032A4719A7794B951EDCC4EB",
+        "rataId": "EPA-CC367C89032A4719A7794B951EDCC4EB",
+        "operatingLevelCode": "M",
+        "averageGrossUnitLoad": 33,
+        "calculatedAverageGrossUnitLoad": null,
+        "referenceMethodCode": "3A",
+        "meanCEMValue": 11.056,
+        "calculatedMeanCEMValue": null,
+        "meanRATAReferenceValue": 11.278,
+        "calculatedMeanRATAReferenceValue": null,
+        "meanDifference": 0.222,
+        "calculatedMeanDifference": 0.222,
+        "standardDeviationDifference": 0.172,
+        "calculatedStandardDeviationDifference": null,
+        "confidenceCoefficient": 0.132,
+        "calculatedConfidenceCoefficient": null,
+        "tValue": 2.306,
+        "calculatedTValue": null,
+        "apsIndicator": 0,
+      }
+    ).reply(200, 'success');
+
+  test('testing component renders properly and functionlity for add/edit/remove', async () => {
+    //console.log("START mock.history",mock.history);
+    //render
+    const utils = await waitForElement(() => componentRenderer());
+    expect(utils.container).toBeDefined();
+    expect(mock.history.get[0].url).toEqual(getUrl);
+    const table = utils.getAllByRole("table");
+    expect(table.length).toBe(1);
+    const rowGroup = utils.getAllByRole("rowgroup");
+    expect(rowGroup.length).toBe(2);
+    const row = utils.getAllByRole("row");
+    expect(row.length).toBe(3);
+    //remove record
+    const remBtns = utils.getAllByRole("button", { name: "Remove" });
+    expect(remBtns.length).toBe(2);
+    fireEvent.click(remBtns[0]);
+    expect(utils.getByRole("dialog", { name: "Confirmation" })).toBeInTheDocument();
+    const confirmBtn = utils.getAllByRole("button", { name: "Yes" });
+    expect(confirmBtn).toBeDefined();
+    fireEvent.click(confirmBtn[0]);
+    expect(mock.history.delete[0].url).toEqual(deleteUrl);
+    // //add record
+    const addBtn = utils.getByRole("button", { name: "Add" });
+    expect(addBtn).toBeDefined();
+    fireEvent.click(addBtn);
+    expect(utils.getByText("Add RATA Summary")).toBeInTheDocument();
+    const input = utils.getByLabelText('Mean CEM Value');
+    fireEvent.change(input, { target: { value: '23' } });
+    const saveBtn = utils.getByRole("button", { name: "Click to save" });
+    expect(saveBtn).toBeDefined();
+    fireEvent.click(saveBtn);
+    expect(mock.history.post[0].url).toEqual(postUrl);
+    // //edit record
+    const editBtns = utils.getAllByRole("button", { name: "Edit" });
+    expect(editBtns.length).toBe(2);
+    fireEvent.click(editBtns[1]);
+    expect(utils.getByText("Edit RATA Summary")).toBeInTheDocument();
+    const inputPE = utils.getByLabelText('Mean CEM Value');
+    fireEvent.change(inputPE, { target: { value: '70' } });
+    const updateBtn = utils.getByRole("button", { name: "Click to save" });
+    expect(updateBtn).toBeDefined();
+    fireEvent.click(updateBtn);
+    expect(mock.history.put[0].url).toEqual(putUrl);
+    //console.log("END mock.history",mock.history);
+  });
+
 });
-
-test('renders a "View" button for each row', async () => {
-  // Arrange
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: rataSummaryApiResponse })
-  );
-  const props = {
-    loadDropdownsData: jest.fn(),
-    data: {
-      locationId: 'locId',
-      id: 'testSummaryId'
-    }
-  }
-  waitForElement(() => render(
-    <Provider store={store}>
-      <QARataSummaryExpandableRows {...props} />
-    </Provider>
-  ))
-
-  const viewBtns = await screen.findAllByRole('button', { name: 'View' })
-  expect(viewBtns).toHaveLength(rataSummaryApiResponse.length)
-})
-
-test('given no user when "View" button is clicked then data is displayed in a modal', async () => {
-  // Arrange
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: rataSummaryApiResponse })
-  );
-  const props = {
-    loadDropdownsData: jest.fn(),
-    data: {
-      locationId: 'locId',
-      id: 'testSummaryId'
-    }
-  }
-  waitForElement(() => render(
-    <Provider store={store}>
-      <QARataSummaryExpandableRows {...props} />
-    </Provider>
-  ))
-
-  const viewBtns = await screen.findAllByRole('button', { name: /View/i })
-  const firstViewBtn = viewBtns[0]
-
-  // Act
-  userEvent.click(firstViewBtn)
-
-  // Assert
-  const rataSummaryTitles = screen.getAllByText(/RATA Summary/i)
-  expect(rataSummaryTitles).toHaveLength(rataSummaryApiResponse.length + 1)
-})
-
-test('given a user when "Delete" button is clicked then a row is deleted', async () => {
-  // Arrange
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: rataSummaryApiResponse })
-  );
-  let { getAllByRole } = await waitForElement(() => componentRenderer("1873", "4f2d07c0-55f9-49b0-8946-ea80c1febb15", "test_user"));
-
-  axios.mockResolvedValue({ status: 200, data: 'deleted successfully' })
-  const deleteBtns = getAllByRole('button', { name: /Remove/i })
-  const firstDeleteBtn = deleteBtns[0]
-
-  // Act
-  userEvent.click(firstDeleteBtn)
-
-  const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
-  const firstConfirmBtn = confirmBtns[0]
-  userEvent.click(firstConfirmBtn)
-
-  // Assert
-  expect(axios).toHaveBeenCalled()
-})

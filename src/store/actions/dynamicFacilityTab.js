@@ -46,6 +46,8 @@ export const setCheckoutState = (checkout, configID, workspaceSection) => {
 };
 
 export const setInactiveState = (inactive, title, workspaceSection) => {
+
+  console.log('value in disptach',inactive,title,workspaceSection)
   return {
     type: types.SET_INACTIVE_STATE,
     title,

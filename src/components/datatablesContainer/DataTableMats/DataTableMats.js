@@ -308,9 +308,9 @@ export const DataTableMats = ({
         },
         {
           beginDate: ["Start Date", "date", ""],
-          beginHour: ["Start Time", "time", ""],
+          beginHour: ["Start Time", "hourDropdown", ""],
           endDate: ["End Date", "date", ""],
-          endHour: ["End Time", "time", ""],
+          endHour: ["End Time", "hourDropdown", ""],
         },
         create,
         mdmData,

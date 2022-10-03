@@ -4,17 +4,14 @@ import { Button } from "@trussworks/react-uswds";
 import "./QACertTestSummaryHeaderInfo.scss";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 
-import NotFound from "../NotFound/NotFound";
 import { QA_CERT_TEST_SUMMARY_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
-  returnFocusToCommentButton,
   returnFocusToLast,
 } from "../../additional-functions/manage-focus";
 import {
-  attachChangeEventListeners,
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../additional-functions/prompt-to-save-unsaved-changes";
@@ -24,14 +21,13 @@ import QAImportModalSelect from "./QAImportModalSelect/QAImportModalSelect";
 import QAImportHistoricalDataPreview from "../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
 import Modal from "../Modal/Modal";
 import { importQA } from "../../utils/api/qaCertificationsAPI";
-
-import QALinearitySummaryDataTable from "../qaDatatablesContainer/QALinearitySummaryDataTable/QALinearitySummaryDataTable";
 import {
   getAllTestTypeCodes,
   getAllTestTypeGroupCodes,
 } from "../../utils/api/dataManagementApi";
-import TestSummaryDataTable from "../qaDatatablesContainer/TestSummaryDataTable/TestSummaryDataTable";
-import { getTestSummary } from "../../utils/selectors/QACert/TestSummary";
+import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
+import * as mpApi from "../../utils/api/monitoringPlansApi";
+import { checkoutAPI } from "../../additional-functions/checkout";
 
 export const QACertTestSummaryHeaderInfo = ({
   facility,
@@ -42,13 +38,15 @@ export const QACertTestSummaryHeaderInfo = ({
   //redux sets
   setLocationSelect,
   setSectionSelect,
+  setCheckout,
   // redux store
+  checkoutState,
   sectionSelect,
   locationSelect,
   locations,
   setSelectedTestCode,
 }) => {
-  const importTestTitle = "Import Test Data";
+  const importTestTitle = "Import Data";
   const [showImportModal, setShowImportModal] = useState(false);
 
   const [showSelectionTypeImportModal, setShowSelectionTypeImportModal] =
@@ -57,7 +55,6 @@ export const QACertTestSummaryHeaderInfo = ({
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
-  const [dataLoaded, setDataLoaded] = useState(true);
 
   // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
@@ -71,9 +68,14 @@ export const QACertTestSummaryHeaderInfo = ({
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
-
-  const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
   const [selectedHistoricalData, setSelectedHistoricalData] = useState([]);
+  const [isCheckedOut, setIsCheckedOut] = useState(checkoutState);
+  const [ checkedOutConfigs, setCheckedOutConfigs ] = useState([]);
+  const [ refresherInfo, setRefresherInfo ] = useState(null);
+  const [currentConfig, setCurrentConfig] = useState(false);
+  const [lockedFacility, setLockedFacility] = useState(false);
+  const [userHasCheckout, setUserHasCheckout] = useState(false);
+  const [checkedOutByUser, setCheckedOutByUser] = useState(false);
 
   const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([
     { name: "Loading..." },
@@ -82,10 +84,8 @@ export const QACertTestSummaryHeaderInfo = ({
   const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
 
   useEffect(() => {
-    const fetchTestTypeCodes = async () => {
-      let resp = "";
-
-      await getAllTestTypeCodes()
+    const fetchTestTypeCodes = () => {
+      getAllTestTypeCodes()
         .then((res) => {
           setAllTestTypeCodes(res.data);
         })
@@ -93,12 +93,12 @@ export const QACertTestSummaryHeaderInfo = ({
           console.log(error);
         });
 
-      await getAllTestTypeGroupCodes()
+      getAllTestTypeGroupCodes()
         .then((res) => {
           const options = res.data
             .map((e) => {
               return {
-                name: e.testTypeGroupCodeDescription,
+                name: e.testTypeGroupDescription,
                 code: e.testTypeGroupCode,
               };
             })
@@ -125,10 +125,11 @@ export const QACertTestSummaryHeaderInfo = ({
       });
     const testCodeObj = {
       testTypeGroupCode: selectedTestTypeGroupOptionObj?.code,
-      testTypeCodes: codesForSelectedTestTypeGroup
-    }
+      testTypeCodes: codesForSelectedTestTypeGroup,
+    };
     setSelectedTestCode(testCodeObj);
-  }, [testTypeGroupOptions, sectionSelect]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [testTypeGroupOptions, allTestTypeCodes, sectionSelect]);
 
   // *** Reassign handlers after pop-up modal is closed
   useEffect(() => {
@@ -142,13 +143,51 @@ export const QACertTestSummaryHeaderInfo = ({
 
   // *** Clean up focus event listeners
   useEffect(() => {
+    mpApi.getRefreshInfo(configID)
+      .then((info) => setRefresherInfo({
+        checkedOutBy: "N/A",
+        lastUpdatedBy: info.data.userId,
+        updateDate: info.data.updateDate,
+      }))
+      .catch(err=>console.log(err));
+    mpApi.getCheckedOutLocations()
+      .then((res)=>setCheckedOutConfigs(res.data))
+      .catch(err=>console.log(err));
+
     return () => {
       cleanupFocusEventListeners();
     };
-  }, []);
+  }, [checkoutState]);
+
+  const isCheckedOutByUser = (configs) => {
+    return (
+      configs
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id) > -1 &&
+      configs[
+        configs
+          .map((location) => location["monPlanId"])
+          .indexOf(selectedConfig.id)
+      ]["checkedOutBy"] === user["userId"]
+    );
+  };
+
+  useEffect(()=>{
+    if(checkedOutConfigs){
+      setUserHasCheckout(
+        checkedOutConfigs.some((plan) => plan["checkedOutBy"] === user.userId)
+      );
+      setCheckedOutByUser(isCheckedOutByUser(checkedOutConfigs));
+      const result = checkedOutConfigs[checkedOutConfigs.map((con) => con["monPlanId"]).indexOf(selectedConfig.id)];
+      if(result){
+        setLockedFacility(true);
+        setCurrentConfig(result);
+      }
+    }
+  }, [checkedOutConfigs])
 
   useEffect(() => {
-    if (importTypeSelection != "select" || importedFile.length != 0) {
+    if (importTypeSelection !== "select" || importedFile.length !== 0) {
       setDisablePortBtn(false);
     } else {
       setDisablePortBtn(true);
@@ -156,7 +195,7 @@ export const QACertTestSummaryHeaderInfo = ({
   }, [importTypeSelection, importedFile]);
 
   useEffect(() => {
-    if (importedFile.length != 0) {
+    if (importedFile.length !== 0) {
       setDisablePortBtn(false);
     } else {
       setDisablePortBtn(true);
@@ -180,9 +219,6 @@ export const QACertTestSummaryHeaderInfo = ({
   };
   const openSelectionTypeImportModal = () => {
     setShowSelectionTypeImportModal(true);
-  };
-  const openImportModal = () => {
-    setShowImportModal(true);
   };
 
   const resetImportFlags = () => {
@@ -227,110 +263,208 @@ export const QACertTestSummaryHeaderInfo = ({
     setShowImportDataPreview(false);
   };
 
+  const formatDate = (dateString, isUTC = false) => {
+    const date = new Date(dateString);
+    //HANDLE -1 days from DB dates which are UTC
+    const day = isUTC ? date.getDate() + 1 : date.getDate();
+    return (
+      (date.getMonth() > 8
+        ? date.getMonth() + 1
+        : "0" + (date.getMonth() + 1)) +
+      "/" +
+      (day > 9 ? day : "0" + day) +
+      "/" +
+      date.getFullYear()
+    );
+  };
+
+  // Create audit message for header info
+  const createAuditMessage = () => {
+    if(checkedOutConfigs){
+        // WORKSPACE view
+        if (user) {
+          // when config is checked out by someone
+          if (isCheckedOut) {
+            return `Currently checked-out by: ${
+              currentConfig["checkedOutBy"]
+            } ${formatDate(currentConfig["checkedOutOn"])}`;
+          }
+          // when config is not checked out
+          return `Last updated by: ${refresherInfo?.lastUpdatedBy} ${formatDate(
+            refresherInfo?.updateDate,
+            true
+          )}`;
+        }
+        // GLOBAL view
+        return `Last submitted by: ${selectedConfig.userId} ${formatDate(
+          selectedConfig.updateDate
+            ? selectedConfig.updateDate
+            : selectedConfig.addDate,
+          true
+        )}`;
+    }
+  };
+
+    // direction -> false = check back in
+  // true = check out
+  const checkoutStateHandler = (direction) => {
+    // trigger checkout API
+    //    - POST endpoint if direction is TRUE (adding new record to checkouts table)
+    //    - DELETE endpoint if direction is FALSE (removing record from checkouts table)
+    checkoutAPI(direction, configID, selectedConfig.id, setCheckout).then(
+      () => {
+        setCheckedOutByUser(direction);
+        setLockedFacility(direction);
+        setIsCheckedOut(direction);
+      }
+    );
+  };
+
   return (
     <div className="header QACertHeader ">
-      {dataLoaded ? (
-        // adding display-block here allows buttons to be clickable ( has somesort of hidden overlay without it)
-        <div className="grid-container width-full clearfix position-relative">
+      {/* // adding display-block here allows buttons to be clickable ( has somesort of hidden overlay without it) */}
+      <div className="grid-container width-full clearfix position-relative">
+        <div className="display-flex flex-row flex-justify flex-align-center height-2">
           <div className="grid-row">
-            <h3 className="display-inline-block">
-              <span className="font-body-lg">{facilityMainName}</span>
-            </h3>{" "}
+            <h3 className="margin-y-auto font-body-lg margin-right-2">
+              {facilityMainName}
+            </h3>
+            <p className="text-bold font-body-xl">{facilityAdditionalName}</p>
           </div>
-          <div className=" grid-row text-bold font-body-xl display-block">
-            {facilityAdditionalName}
-          </div>
-
-          <div className="grid-row positon-relative">
-            <div className="grid-col-2">
-              <DropdownSelection
-                caption="Locations"
-                orisCode={orisCode}
-                options={locations}
-                viewKey="name"
-                selectKey="id"
-                initialSelection={locationSelect ? locationSelect[0] : null}
-                selectionHandler={setLocationSelect}
-                workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
-              />
-            </div>
-            <div className="grid-col-4">
-              <DropdownSelection
-                caption="Test Type Group"
-                selectionHandler={setSectionSelect}
-                // options={sections}
-                options={testTypeGroupOptions}
-                viewKey="name"
-                selectKey="name"
-                initialSelection={sectionSelect ? sectionSelect[0] : null}
-                orisCode={orisCode}
-                workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
-              />
-            </div>{" "}
-            <div className="grid-col-3"></div>{" "}
-            <div className="grid-col-3">
-              {user ? (
-                <div className=" float-right right-0 bottom-0 text-no-wrap position-absolute padding-bottom-1">
-                  <Button
-                    className="padding-x-5"
-                    type="button"
-                    outline={false}
-                    onClick={() => openSelectionTypeImportModal()}
-                    id="importSelectionQAModal"
-                  >
-                    {importTestTitle}
-                  </Button>
-                </div>
-              ) : (
-                ""
-              )}
-            </div>
-          </div>
-          <div className="grid-row float-right">
-            <Button
-              className="float-right text-right bottom-0 text-no-wrap "
-              type="button"
-              id="showRevertModal"
-              outline={true}
-            >
-              {"Test Data Report"}
-            </Button>
-            <Button
-              className="float-right text-right bottom-0 text-no-wrap "
-              type="button"
-              id="showRevertModal"
-              outline={true}
-            >
-              {"Test History Report"}
-            </Button>
-            {user ? (
+          {user && (
+            <div>
               <Button
-                className="float-right text-right bottom-0 text-no-wrap "
+                // className="padding-x-5"
+                type="button"
+                outline={false}
+                onClick={() => openSelectionTypeImportModal()}
+                id="importSelectionQAModal"
+              >
+                {importTestTitle}
+              </Button>
+              <Button
+                // className="float-right text-right bottom-0 text-no-wrap"
                 type="button"
                 id="showRevertModal"
                 outline={false}
               >
-                {"Evaluate All"}
+                Evaluate
               </Button>
-            ) : (
-              ""
-            )}
-          </div>
+            </div>
+          )}
         </div>
-      ) : (
-        <Preloader />
-      )}
 
+        <p className="text-bold font-body-2xs">{createAuditMessage()}</p>
+        <div className="grid-row">
+          {user && (
+            <>
+              {checkedOutByUser ? (
+                <Button
+                  type="button"
+                  autoFocus
+                  outline={false}
+                  tabIndex="0"
+                  aria-label={`Check back in the configuration `}
+                  onClick={() => checkoutStateHandler(false)}
+                  id="checkInBTN"
+                  epa-testid="checkInBTN"
+                >
+                  <LockOpenSharp /> {"Check Back In"}
+                </Button>
+              ) : !lockedFacility &&
+                !userHasCheckout &&
+                selectedConfig.active &&
+                checkedOutConfigs
+                  .map((location) => location["monPlanId"])
+                  .indexOf(selectedConfig.id) === -1 ? (
+                <Button
+                  type="button"
+                  autoFocus
+                  outline={true}
+                  tabIndex="0"
+                  aria-label={`Check out the configuration`}
+                  onClick={() => checkoutStateHandler(true)}
+                  id="checkOutBTN"
+                  epa-testid="checkOutBTN"
+                >
+                  <CreateOutlined color="primary" /> {"Check Out"}
+                </Button>
+              ) : null}
+              {isCheckedOut && (
+              <Button autoFocus type="button" outline={true}>Revert to Official Record</Button>
+              )}
+            </>
+          )}
+        </div>
+        <div className="grid-row positon-relative">
+          <div className="grid-col-2">
+            <DropdownSelection
+              caption="Locations"
+              orisCode={orisCode}
+              options={locations}
+              viewKey="name"
+              selectKey="id"
+              initialSelection={locationSelect ? locationSelect[0] : null}
+              selectionHandler={setLocationSelect}
+              workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
+            />
+          </div>
+          <div className="grid-col-4">
+            <DropdownSelection
+              caption="Test Type Group"
+              selectionHandler={setSectionSelect}
+              // options={sections}
+              options={testTypeGroupOptions}
+              viewKey="name"
+              selectKey="name"
+              initialSelection={sectionSelect ? sectionSelect[0] : null}
+              orisCode={orisCode}
+              workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
+            />
+          </div>{" "}
+          <div className="grid-col-3"></div>{" "}
+        </div>
+        <div className="grid-row float-left">
+          <Button
+            className="float-right text-right bottom-0 text-no-wrap "
+            type="button"
+            id="showRevertModal"
+            outline={true}
+          >
+            {"Test Data Report"}
+          </Button>
+          <Button
+            className="float-right text-right bottom-0 text-no-wrap "
+            type="button"
+            id="showRevertModal"
+            outline={true}
+          >
+            {"Test History Report"}
+          </Button>
+          {user ? (
+            <Button
+              className="float-right text-right bottom-0 text-no-wrap "
+              type="button"
+              id="showRevertModal"
+              outline={true}
+            >
+              {"Evaluation Report"}
+            </Button>
+          ) : (
+            ""
+          )}
+        </div>
+      </div>
       <div
-        className={`usa-overlay ${showImportModal ||
+        className={`usa-overlay ${
+          showImportModal ||
           showSelectionTypeImportModal ||
           showImportDataPreview ||
           isLoading
-          ? "is-visible"
-          : ""
-          }`}
+            ? "is-visible"
+            : ""
+        }`}
       />
-
       {/* // selects either historical data or file data */}
       {showSelectionTypeImportModal ? (
         <div>
@@ -353,7 +487,6 @@ export const QACertTestSummaryHeaderInfo = ({
           />
         </div>
       ) : null}
-
       {/* // file data */}
       {showImportModal && !finishedLoading && !isLoading ? (
         <div>
@@ -384,9 +517,7 @@ export const QACertTestSummaryHeaderInfo = ({
           />
         </div>
       ) : null}
-
       {/* while uploading, just shows preloader spinner  */}
-
       {isLoading && !finishedLoading ? (
         <UploadModal
           width={"30%"}
@@ -404,7 +535,6 @@ export const QACertTestSummaryHeaderInfo = ({
       ) : (
         ""
       )}
-
       {/* after it finishes uploading , shows either api errors or success messages */}
       {showImportModal && usePortBtn && finishedLoading ? (
         <UploadModal
@@ -415,7 +545,6 @@ export const QACertTestSummaryHeaderInfo = ({
           exitBtn={"Ok"}
           complete={true}
           importedFileErrorMsgs={importedFileErrorMsgs}
-          setUpdateRelatedTables={setUpdateRelatedTables}
           successMsg={"QA Certification has been Successfully Imported."}
           children={
             <ImportModal

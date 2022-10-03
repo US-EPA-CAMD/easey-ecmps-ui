@@ -10,7 +10,7 @@ describe("testing monitoring plan evaluation data selector", () => {
       {
         unitStackInformation: "Sample U/S 1",
         severityCode: "Severity 1",
-        categoryCodeDescription: "   category 1",
+        categoryDescription: "   category 1",
         checkCode: "Check Code 1",
         resultMessage:
           "Lorem ipsum urna, auctor a tincidunt ut, rutrum et ante.",
@@ -18,14 +18,14 @@ describe("testing monitoring plan evaluation data selector", () => {
       {
         unitStackInformation: "Sample U/S 2",
         severityCode: "Severity 2",
-        categoryCodeDescription: "----- category 2",
+        categoryDescription: "----- category 2",
         checkCode: "Check Code 2",
         resultMessage: "Dolor sit amet, consectetur adipiscing elit.",
       },
       {
         unitStackInformation: "Sample U/S 3",
         severityCode: "Severity 3",
-        categoryCodeDescription: "---category 3",
+        categoryDescription: "---category 3",
         checkCode: "Check Code 3",
         resultMessage:
           "Dolor sit amePhasellus tempus velit at dui convallis, eu egestas neque ultricest, consectetur adipiscing elit.",

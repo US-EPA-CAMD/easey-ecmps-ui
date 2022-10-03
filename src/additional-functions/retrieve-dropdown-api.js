@@ -16,7 +16,7 @@ export const UseRetrieveDropdownApi = async (
   dropDownFields,
   mats = false,
   equipmentControl = false,
-  selectedTestCode = false,
+  selectedTestCode = false
 ) => {
   let totalOptions = {};
 
@@ -45,7 +45,7 @@ export const UseRetrieveDropdownApi = async (
             options = response.data.map((option) => {
               return {
                 code: option["matsMethodParamCode"],
-                name: option["matsMethodParamCodeDescription"],
+                name: option["matsMethodParamDescription"],
               };
             });
 
@@ -69,7 +69,7 @@ export const UseRetrieveDropdownApi = async (
             options = response.data.map((option) => {
               return {
                 code: option["parameterCode"],
-                name: option["parameterCodeDescription"],
+                name: option["parameterDescription"],
               };
             });
 
@@ -84,7 +84,7 @@ export const UseRetrieveDropdownApi = async (
             options = response.data.map((option) => {
               return {
                 code: option["matsMethodCode"],
-                name: option["matsMethodCodeDescription"],
+                name: option["matsMethodDescription"],
               };
             });
 
@@ -95,7 +95,7 @@ export const UseRetrieveDropdownApi = async (
             options = response.data.map((option) => {
               return {
                 code: option["methodCode"],
-                name: option["methodCodeDescription"],
+                name: option["methodDescription"],
               };
             });
 
@@ -108,7 +108,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["subDataCode"],
-              name: option["subDataCodeDescription"],
+              name: option["subDataDescription"],
             };
           });
 
@@ -121,7 +121,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["bypassApproachCode"],
-              name: option["bypassApproachCodeDescription"],
+              name: option["bypassApproachDescription"],
             };
           });
 
@@ -134,7 +134,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["analyzerRangeCode"],
-              name: option["analyzerRangeCodeDescription"],
+              name: option["analyzerRangeDescription"],
             };
           });
 
@@ -147,7 +147,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["maxRateSourceCode"],
-              name: option["maxRateSourceCodeDescription"],
+              name: option["maxRateSourceDescription"],
             };
           });
 
@@ -163,7 +163,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["unitsOfMeasureCode"],
-              name: option["unitsOfMeasureCodeDescription"],
+              name: option["unitsOfMeasureDescription"],
             };
           });
 
@@ -189,7 +189,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["fuelCode"],
-              name: option["fuelCodeDescription"],
+              name: option["fuelDescription"],
             };
           });
 
@@ -201,7 +201,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["fuelIndicatorCode"],
-              name: option["fuelIndicatorCodeDescription"],
+              name: option["fuelIndicatorDescription"],
             };
           });
 
@@ -213,7 +213,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["demMethodCode"],
-              name: option["demMethodCodeDescription"],
+              name: option["demMethodDescription"],
             };
           });
 
@@ -225,7 +225,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["demMethodCode"],
-              name: option["demMethodCodeDescription"],
+              name: option["demMethodDescription"],
             };
           });
 
@@ -237,7 +237,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["systemTypeCode"],
-              name: option["systemTypeCodeDescription"],
+              name: option["systemTypeDescription"],
             };
           });
 
@@ -249,7 +249,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["systemDesignationCode"],
-              name: option["systemDesignationCodeDescription"],
+              name: option["systemDesignationDescription"],
             };
           });
 
@@ -262,7 +262,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["acquisitionMethodCode"],
-              name: option["acquisitionMethodCodeDescription"],
+              name: option["acquisitionMethodDescription"],
             };
           });
 
@@ -274,7 +274,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["componentTypeCode"],
-              name: option["componentTypeCodeDescription"],
+              name: option["componentTypeDescription"],
             };
           });
 
@@ -286,7 +286,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["basisCode"],
-              name: option["basisCodeDescription"],
+              name: option["basisDescription"],
             };
           });
 
@@ -300,7 +300,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["spanScaleCode"],
-              name: option["spanScaleCodeDescription"],
+              name: option["spanScaleDescription"],
             };
           });
 
@@ -312,7 +312,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["spanMethodCode"],
-              name: option["spanMethodCodeDescription"],
+              name: option["spanMethodDescription"],
             };
           });
 
@@ -326,7 +326,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["operatingLevelCode"],
-              name: option["operatingLevelCodeDescription"],
+              name: option["operatingLevelDescription"],
             };
           });
 
@@ -341,7 +341,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["operatingConditionCode"],
-              name: option["operatingConditionCodeDescription"],
+              name: option["operatingConditionDescription"],
             };
           });
 
@@ -353,7 +353,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["defaultSourceCode"],
-              name: option["defaultSourceCodeDescription"],
+              name: option["defaultSourceDescription"],
             };
           });
 
@@ -365,7 +365,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["defaultPurposeCode"],
-              name: option["defaultPurposeCodeDescription"],
+              name: option["defaultPurposeDescription"],
             };
           });
 
@@ -377,7 +377,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["equationCode"],
-              name: option["equationCodeDescription"],
+              name: option["equationDescription"],
             };
           });
 
@@ -390,7 +390,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["wafMethodCode"],
-              name: option["wafMethodCodeDescription"],
+              name: option["wafMethodDescription"],
             };
           });
 
@@ -414,7 +414,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["qualTypeCode"],
-              name: option["qualTypeCodeDescription"],
+              name: option["qualTypeDescription"],
             };
           });
 
@@ -445,7 +445,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["qualDataTypeCode"],
-              name: option["qualDataTypeCodeDescription"],
+              name: option["qualDataTypeDescription"],
             };
           });
 
@@ -470,7 +470,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["materialCode"],
-              name: option["materialCodeDescription"],
+              name: option["materialDescription"],
             };
           });
 
@@ -483,7 +483,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["shapeCode"],
-              name: option["shapeCodeDescription"],
+              name: option["shapeDescription"],
             };
           });
 
@@ -665,128 +665,139 @@ export const UseRetrieveDropdownApi = async (
         break;
       //// QA & cert
 
-      case "testResultCode":
-        await dmApi.getAllTestResultCodes().then((response) => {
-          options = response.data.map((option) => {
-            return {
-              code: option["testResultCode"],
-              name: option["testResultCodeDescription"],
-            };
-          });
+      // case "testResultCode":
+      //   await dmApi.getAllTestResultCodes().then((response) => {
+      //     options = response.data.map((option) => {
+      //       return {
+      //         code: option["testResultCode"],
+      //         name: option["testResultDescription"],
+      //       };
+      //     });
 
-          setDefaultOptions(options, fieldName);
-        });
-        break;
+      //     setDefaultOptions(options, fieldName);
+      //   });
+      //   break;
 
-      case "testReasonCode":
-        await dmApi.getAllTestReasonCodes().then((response) => {
-          options = response.data.map((option) => {
-            return {
-              code: option["testReasonCode"],
-              name: option["testReasonCodeDescription"],
-            };
-          });
+      // case "testReasonCode":
+      //   await dmApi.getAllTestReasonCodes().then((response) => {
+      //     options = response.data.map((option) => {
+      //       return {
+      //         code: option["testReasonCode"],
+      //         name: option["testReasonDescription"],
+      //       };
+      //     });
 
-          setDefaultOptions(options, fieldName);
-        });
-        break;
+      //     setDefaultOptions(options, fieldName);
+      //   });
+      //   break;
 
-      case "testTypeCode":
-        await dmApi.getAllTestTypeCodes().then((response) => {
-          options = response.data.map((option) => {
-            return {
-              code: option["testTypeCode"],
-              name: option["testTypeCodeDescription"],
-            };
-          });
-          options = options.filter(
-            (option) => selectedTestCode.testTypeCodes.includes(option.code)
-          );
-          setDefaultOptions(options, fieldName);
-        });
-        break;
+      // case "testTypeCode":
+      //   await dmApi.getAllTestTypeCodes().then((response) => {
+      //     options = response.data.map((option) => {
+      //       return {
+      //         code: option["testTypeCode"],
+      //         name: option["testTypeDescription"],
+      //       };
+      //     });
+      //     options = options.filter((option) =>
+      //       selectedTestCode.testTypeCodes.includes(option.code)
+      //     );
+      //     setDefaultOptions(options, fieldName);
+      //   });
+      //   break;
 
-      case "gasLevelCode":
-        await dmApi.getAllGasLevelCodes().then((response) => {
-          options = response.data.map((option) => {
-            return {
-              code: option["gasLevelCode"],
-              name: option["gasLevelDescription"],
-            };
-          });
+      // case "gasLevelCode":
+      //   await dmApi.getAllGasLevelCodes().then((response) => {
+      //     options = response.data.map((option) => {
+      //       return {
+      //         code: option["gasLevelCode"],
+      //         name: option["gasLevelDescription"],
+      //       };
+      //     });
 
-          setDefaultOptions(options, fieldName);
-        });
-        break;
-      case "gasTypeCode":
-        await dmApi.getAllGasTypeCodes().then((response) => {
-          options = response.data.map((option) => {
-            return {
-              code: option["gasTypeCode"],
-              name: option["gasTypeDescription"],
-            };
-          });
+      //     setDefaultOptions(options, fieldName);
+      //   });
+      //   break;
+      // case "gasTypeCode":
+      //   await dmApi.getAllGasTypeCodes().then((response) => {
+      //     options = response.data.map((option) => {
+      //       return {
+      //         code: option["gasTypeCode"],
+      //         name: option["gasTypeDescription"],
+      //       };
+      //     });
 
-          setDefaultOptions(options, fieldName);
-        });
-        break;
+      //     setDefaultOptions(options, fieldName);
+      //   });
+      //   break;
 
-      case "prefilteredTestSummaries":
-        let noDupesTestCodes = [];
-        await dmApi.getPrefilteredTestSummaries().then((response) => {
-          noDupesTestCodes = response.data.map((code) => {
-            return code["testTypeCode"];
-          });
+      // case "prefilteredTestSummaries":
+      //   let noDupesTestCodes = [];
+      //   await dmApi.getPrefilteredTestSummaries().then((response) => {
+      //     noDupesTestCodes = response.data.map((code) => {
+      //       return code["testTypeCode"];
+      //     });
 
-          noDupesTestCodes = [...new Set(noDupesTestCodes)];
+      //     noDupesTestCodes = [...new Set(noDupesTestCodes)];
 
-          const prefilteredMdmOptions = organizePrefilterMDMData(
-            noDupesTestCodes,
-            "testTypeCode",
-            response.data
-          );
+      //     const prefilteredMdmOptions = organizePrefilterMDMData(
+      //       noDupesTestCodes,
+      //       "testTypeCode",
+      //       response.data
+      //     );
 
-          setDefaultOptions(prefilteredMdmOptions, fieldName);
-        });
-        break;
+      //     setDefaultOptions(prefilteredMdmOptions, fieldName);
+      //   });
+      //   break;
 
-      case "rataFrequencyCode":
-        await dmApi.getAllRataFreqCodes().then((response) => {
-          options = response.data.map((option) => {
-            return {
-              code: option["rataFrequencyCode"],
-              name: option["rataFrequencyCodeDescription"],
-            };
-          });
+      // case "rataFrequencyCode":
+      //   await dmApi.getAllRataFreqCodes().then((response) => {
+      //     options = response.data.map((option) => {
+      //       return {
+      //         code: option["rataFrequencyCode"],
+      //         name: option["rataFrequencyDescription"],
+      //       };
+      //     });
 
-          setDefaultOptions(options, fieldName);
-        });
-        break;
-      case "apsCode":
-        await dmApi.getAllApsCodes().then((response) => {
-          options = response.data.map((option) => {
-            return {
-              code: option["apsCode"],
-              name: option["apsCodeDescription"],
-            };
-          });
+      //     setDefaultOptions(options, fieldName);
+      //   });
+      //   break;
+      // case "apsCode":
+      //   await dmApi.getAllApsCodes().then((response) => {
+      //     options = response.data.map((option) => {
+      //       return {
+      //         code: option["apsCode"],
+      //         name: option["apsDescription"],
+      //       };
+      //     });
 
-          setDefaultOptions(options, fieldName);
-        });
-        break;
-      case "referenceMethodCode":
-      case "co2OrO2ReferenceMethodCode":
-        await dmApi.getAllReferenceMethodCodes().then((response) => {
-          options = response.data.map((option) => {
-            return {
-              code: option["referenceMethodCode"],
-              name: option["referenceMethodCodeDescription"],
-            };
-          });
+      //     setDefaultOptions(options, fieldName);
+      //   });
+      //   break;
+      // case "runStatusCode":
+      //   await dmApi.getAllRunStatusCodes().then((response) => {
+      //     options = response.data.map((option) => {
+      //       return {
+      //         code: option["runStatusCode"],
+      //         name: option["runStatusDescription"],
+      //       };
+      //     });
+      //     setDefaultOptions(options, fieldName);
+      //   });
+      //   break;
+      // case "referenceMethodCode":
+      // case "co2OrO2ReferenceMethodCode":
+      //   await dmApi.getAllReferenceMethodCodes().then((response) => {
+      //     options = response.data.map((option) => {
+      //       return {
+      //         code: option["referenceMethodCode"],
+      //         name: option["referenceMethodDescription"],
+      //       };
+      //     });
 
-          setDefaultOptions(options, fieldName);
-        });
-        break;
+      //     setDefaultOptions(options, fieldName);
+      //   });
+      //   break;
 
       default:
         break;
@@ -818,7 +829,7 @@ const organizeStaticPrefilterMDMData = (response) => {
   setOfCodeNamesArray.push(setOfCodeNames);
   return setOfCodeNamesArray;
 };
-const organizePrefilterMDMData = (noDupesFormCodes, drivingInput, response) => {
+export const organizePrefilterMDMData = (noDupesFormCodes, drivingInput, response) => {
   const prefilteredMdmOptions = [];
   // for each unique main driving input code
   for (const code of noDupesFormCodes) {

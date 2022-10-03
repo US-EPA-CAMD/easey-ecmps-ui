@@ -37,9 +37,9 @@ const props = {
 
 const testTypeDropdownLabel = /Test Type Group/i
 const testTypeDropdownData = [
-  { testTypeGroupCodeDescription: 'Test Type Group option 1' },
-  { testTypeGroupCodeDescription: 'Test Type Group option 2' },
-  { testTypeGroupCodeDescription: 'Test Type Group option 3' },
+  { testTypeGroupDescription: 'Test Type Group option 1' },
+  { testTypeGroupDescription: 'Test Type Group option 2' },
+  { testTypeGroupDescription: 'Test Type Group option 3' },
 ]
 
 // mocking JavaScript built-in window functions
@@ -85,10 +85,10 @@ test('test type dropdown selection renders with options', async () => {
 test('renders buttons for "Import Test Data", "Test Data Report", "Test History Report", and "Evaluate All"', async () => {
   // Arrange
   await waitForElement(() => render(<QACertTestSummaryHeaderInfo {...props} />))
-  const importTestDataBtn = screen.getByRole('button', { name: /Import Test Data/i })
+  const importTestDataBtn = screen.getByRole('button', { name: /Import Data/i })
   const testDataReportBtn = screen.getByRole('button', { name: /Test Data Report/i })
   const testHistoryReportBtn = screen.getByRole('button', { name: /Test History Report/i })
-  const evalAllBtn = screen.getByRole('button', { name: /Evaluate All/i })
+  const evalAllBtn = screen.getByRole('button', { name: /Evaluation Report/i })
 
   // Assert
   expect(importTestDataBtn).toBeInTheDocument()
@@ -100,7 +100,7 @@ test('renders buttons for "Import Test Data", "Test Data Report", "Test History 
 test('when import test data button is clicked then a modal is rendered', async () => {
   // Arrange
   await waitForElement(() => render(<QACertTestSummaryHeaderInfo {...props} />))
-  const importTestDataBtn = screen.getByRole('button', { name: /Import Test Data/i })
+  const importTestDataBtn = screen.getByRole('button', { name: /Import Data/i })
 
   // Act
   userEvent.click(importTestDataBtn)

@@ -41,7 +41,7 @@ const dropdownOptions = [
   { code: "", name: "" },
 ];
 
-const prefilterReturnedArray = [{ shapeCode: "", shapeCodeDescription: "" }];
+const prefilterReturnedArray = [{ shapeCode: "", shapeDescription: "" }];
 
 beforeAll(() => {
   jest.clearAllMocks();
@@ -116,7 +116,7 @@ const testObjects = [
     name: "parameter Code for non-MATS",
     expectedApiResponse: {
       status: successCode,
-      data: [{ parameterCode: "", parameterCodeDescription: "" }],
+      data: [{ parameterCode: "", parameterDescription: "" }],
     },
     expectedDropdownOptions: {
       parameterCode: dropdownOptions,
@@ -128,7 +128,7 @@ const testObjects = [
     name: "parameter Code for MATS",
     expectedApiResponse: {
       status: successCode,
-      data: [{ matsMethodParamCode: "", matsMethodParamCodeDescription: "" }],
+      data: [{ matsMethodParamCode: "", matsMethodParamDescription: "" }],
     },
     expectedDropdownOptions: {
       supplementalMATSParameterCode: dropdownOptions,
@@ -154,7 +154,7 @@ const testObjects = [
     name: "monitoringMethodCode for non-MATS",
     expectedApiResponse: {
       status: successCode,
-      data: [{ methodCode: "", methodCodeDescription: "" }],
+      data: [{ methodCode: "", methodDescription: "" }],
     },
     expectedDropdownOptions: {
       monitoringMethodCode: dropdownOptions,
@@ -167,7 +167,7 @@ const testObjects = [
     name: "monitoringMethodCode for MATS",
     expectedApiResponse: {
       status: successCode,
-      data: [{ matsMethodCode: "", matsMethodCodeDescription: "" }],
+      data: [{ matsMethodCode: "", matsMethodDescription: "" }],
     },
     expectedDropdownOptions: {
       supplementalMATSMonitoringMethodCode: dropdownOptions,
@@ -181,7 +181,7 @@ const testObjects = [
     name: "substituteDataCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ subDataCode: "", subDataCodeDescription: "" }],
+      data: [{ subDataCode: "", subDataDescription: "" }],
     },
     expectedDropdownOptions: {
       substituteDataCode: dropdownOptions,
@@ -194,7 +194,7 @@ const testObjects = [
     name: "bypassApproachCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ bypassApproachCode: "", bypassApproachCodeDescription: "" }],
+      data: [{ bypassApproachCode: "", bypassApproachDescription: "" }],
     },
     expectedDropdownOptions: {
       bypassApproachCode: dropdownOptions,
@@ -207,7 +207,7 @@ const testObjects = [
     name: "analyzerRangeCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ analyzerRangeCode: "", analyzerRangeCodeDescription: "" }],
+      data: [{ analyzerRangeCode: "", analyzerRangeDescription: "" }],
     },
     expectedDropdownOptions: {
       analyzerRangeCode: dropdownOptions,
@@ -220,7 +220,7 @@ const testObjects = [
     name: "maximumFuelFlowRateSourceCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ maxRateSourceCode: "", maxRateSourceCodeDescription: "" }],
+      data: [{ maxRateSourceCode: "", maxRateSourceDescription: "" }],
     },
     expectedDropdownOptions: {
       maximumFuelFlowRateSourceCode: dropdownOptions,
@@ -233,7 +233,7 @@ const testObjects = [
     name: "defaultUnitsOfMeasureCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ unitsOfMeasureCode: "", unitsOfMeasureCodeDescription: "" }],
+      data: [{ unitsOfMeasureCode: "", unitsOfMeasureDescription: "" }],
     },
     expectedDropdownOptions: {
       defaultUnitsOfMeasureCode: dropdownOptions,
@@ -246,7 +246,7 @@ const testObjects = [
     name: "spanUnitsOfMeasureCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ unitsOfMeasureCode: "", unitsOfMeasureCodeDescription: "" }],
+      data: [{ unitsOfMeasureCode: "", unitsOfMeasureDescription: "" }],
     },
     expectedDropdownOptions: {
       spanUnitsOfMeasureCode: dropdownOptions,
@@ -259,7 +259,7 @@ const testObjects = [
     name: "maximumLoadUnitsOfMeasureCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ unitsOfMeasureCode: "", unitsOfMeasureCodeDescription: "" }],
+      data: [{ unitsOfMeasureCode: "", unitsOfMeasureDescription: "" }],
     },
     expectedDropdownOptions: {
       maximumLoadUnitsOfMeasureCode: dropdownOptions,
@@ -272,7 +272,7 @@ const testObjects = [
     name: "systemFuelFlowUOMCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ unitsOfMeasureCode: "", unitsOfMeasureCodeDescription: "" }],
+      data: [{ unitsOfMeasureCode: "", unitsOfMeasureDescription: "" }],
     },
     expectedDropdownOptions: {
       systemFuelFlowUOMCode: dropdownOptions,
@@ -285,7 +285,7 @@ const testObjects = [
     name: "unitsOfStandard",
     expectedApiResponse: {
       status: successCode,
-      data: [{ unitsOfMeasureCode: "", unitsOfMeasureCodeDescription: "" }],
+      data: [{ unitsOfMeasureCode: "", unitsOfMeasureDescription: "" }],
     },
     expectedDropdownOptions: {
       unitsOfStandard: dropdownOptions,
@@ -311,7 +311,7 @@ const testObjects = [
     name: "fuelCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ fuelCode: "", fuelCodeDescription: "" }],
+      data: [{ fuelCode: "", fuelDescription: "" }],
     },
     expectedDropdownOptions: {
       fuelCode: dropdownOptions,
@@ -324,7 +324,7 @@ const testObjects = [
     name: "indicatorCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ fuelIndicatorCode: "", fuelIndicatorCodeDescription: "" }],
+      data: [{ fuelIndicatorCode: "", fuelIndicatorDescription: "" }],
     },
     expectedDropdownOptions: {
       indicatorCode: dropdownOptions,
@@ -337,7 +337,7 @@ const testObjects = [
     name: "demGCV",
     expectedApiResponse: {
       status: successCode,
-      data: [{ demMethodCode: "", demMethodCodeDescription: "" }],
+      data: [{ demMethodCode: "", demMethodDescription: "" }],
     },
     expectedDropdownOptions: {
       demGCV: dropdownOptions,
@@ -350,7 +350,7 @@ const testObjects = [
     name: "demSO2",
     expectedApiResponse: {
       status: successCode,
-      data: [{ demMethodCode: "", demMethodCodeDescription: "" }],
+      data: [{ demMethodCode: "", demMethodDescription: "" }],
     },
     expectedDropdownOptions: {
       demSO2: dropdownOptions,
@@ -363,7 +363,7 @@ const testObjects = [
     name: "systemTypeCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ systemTypeCode: "", systemTypeCodeDescription: "" }],
+      data: [{ systemTypeCode: "", systemTypeDescription: "" }],
     },
     expectedDropdownOptions: {
       systemTypeCode: dropdownOptions,
@@ -377,7 +377,7 @@ const testObjects = [
     expectedApiResponse: {
       status: successCode,
       data: [
-        { systemDesignationCode: "", systemDesignationCodeDescription: "" },
+        { systemDesignationCode: "", systemDesignationDescription: "" },
       ],
     },
     expectedDropdownOptions: {
@@ -392,7 +392,7 @@ const testObjects = [
     expectedApiResponse: {
       status: successCode,
       data: [
-        { acquisitionMethodCode: "", acquisitionMethodCodeDescription: "" },
+        { acquisitionMethodCode: "", acquisitionMethodDescription: "" },
       ],
     },
     expectedDropdownOptions: {
@@ -406,7 +406,7 @@ const testObjects = [
     name: "componentTypeCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ componentTypeCode: "", componentTypeCodeDescription: "" }],
+      data: [{ componentTypeCode: "", componentTypeDescription: "" }],
     },
     expectedDropdownOptions: {
       componentTypeCode: dropdownOptions,
@@ -419,7 +419,7 @@ const testObjects = [
     name: "basisCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ basisCode: "", basisCodeDescription: "" }],
+      data: [{ basisCode: "", basisDescription: "" }],
     },
     expectedDropdownOptions: {
       basisCode: dropdownOptions,
@@ -432,7 +432,7 @@ const testObjects = [
     name: "spanScaleCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ spanScaleCode: "", spanScaleCodeDescription: "" }],
+      data: [{ spanScaleCode: "", spanScaleDescription: "" }],
     },
     expectedDropdownOptions: {
       spanScaleCode: dropdownOptions,
@@ -445,7 +445,7 @@ const testObjects = [
     name: "spanMethodCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ spanMethodCode: "", spanMethodCodeDescription: "" }],
+      data: [{ spanMethodCode: "", spanMethodDescription: "" }],
     },
     expectedDropdownOptions: {
       spanMethodCode: dropdownOptions,
@@ -458,7 +458,7 @@ const testObjects = [
     name: "normalLevelCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ operatingLevelCode: "", operatingLevelCodeDescription: "" }],
+      data: [{ operatingLevelCode: "", operatingLevelDescription: "" }],
     },
     expectedDropdownOptions: {
       normalLevelCode: dropdownOptions,
@@ -471,7 +471,7 @@ const testObjects = [
     name: "secondLevelCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ operatingLevelCode: "", operatingLevelCodeDescription: "" }],
+      data: [{ operatingLevelCode: "", operatingLevelDescription: "" }],
     },
     expectedDropdownOptions: {
       secondLevelCode: dropdownOptions,
@@ -485,7 +485,7 @@ const testObjects = [
     expectedApiResponse: {
       status: successCode,
       data: [
-        { operatingConditionCode: "", operatingConditionCodeDescription: "" },
+        { operatingConditionCode: "", operatingConditionDescription: "" },
       ],
     },
     expectedDropdownOptions: {
@@ -499,7 +499,7 @@ const testObjects = [
     name: "defaultSourceCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ defaultSourceCode: "", defaultSourceCodeDescription: "" }],
+      data: [{ defaultSourceCode: "", defaultSourceDescription: "" }],
     },
     expectedDropdownOptions: {
       defaultSourceCode: dropdownOptions,
@@ -512,7 +512,7 @@ const testObjects = [
     name: "defaultPurposeCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ defaultPurposeCode: "", defaultPurposeCodeDescription: "" }],
+      data: [{ defaultPurposeCode: "", defaultPurposeDescription: "" }],
     },
     expectedDropdownOptions: {
       defaultPurposeCode: dropdownOptions,
@@ -525,7 +525,7 @@ const testObjects = [
     name: "formulaCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ equationCode: "", equationCodeDescription: "" }],
+      data: [{ equationCode: "", equationDescription: "" }],
     },
     expectedDropdownOptions: {
       formulaCode: dropdownOptions,
@@ -538,7 +538,7 @@ const testObjects = [
     name: "wafMethodCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ wafMethodCode: "", wafMethodCodeDescription: "" }],
+      data: [{ wafMethodCode: "", wafMethodDescription: "" }],
     },
     expectedDropdownOptions: {
       wafMethodCode: dropdownOptions,
@@ -564,7 +564,7 @@ const testObjects = [
     name: "qualificationTypeCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ qualTypeCode: "", qualTypeCodeDescription: "" }],
+      data: [{ qualTypeCode: "", qualTypeDescription: "" }],
     },
     expectedDropdownOptions: {
       qualificationTypeCode: dropdownOptions,
@@ -647,7 +647,7 @@ const testObjects = [
     name: "yr1QualificationDataTypeCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ qualDataTypeCode: "", qualDataTypeCodeDescription: "" }],
+      data: [{ qualDataTypeCode: "", qualDataTypeDescription: "" }],
     },
     expectedDropdownOptions: {
       yr1QualificationDataTypeCode: dropdownOptions,
@@ -660,7 +660,7 @@ const testObjects = [
     name: "yr2QualificationDataTypeCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ qualDataTypeCode: "", qualDataTypeCodeDescription: "" }],
+      data: [{ qualDataTypeCode: "", qualDataTypeDescription: "" }],
     },
     expectedDropdownOptions: {
       yr2QualificationDataTypeCode: dropdownOptions,
@@ -673,7 +673,7 @@ const testObjects = [
     name: "yr3QualificationDataTypeCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ qualDataTypeCode: "", qualDataTypeCodeDescription: "" }],
+      data: [{ qualDataTypeCode: "", qualDataTypeDescription: "" }],
     },
     expectedDropdownOptions: {
       yr3QualificationDataTypeCode: dropdownOptions,
@@ -699,7 +699,7 @@ const testObjects = [
     name: "materialCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ materialCode: "", materialCodeDescription: "" }],
+      data: [{ materialCode: "", materialDescription: "" }],
     },
     expectedDropdownOptions: {
       materialCode: dropdownOptions,
@@ -712,7 +712,7 @@ const testObjects = [
     name: "shapeCode",
     expectedApiResponse: {
       status: successCode,
-      data: [{ shapeCode: "", shapeCodeDescription: "" }],
+      data: [{ shapeCode: "", shapeDescription: "" }],
     },
     expectedDropdownOptions: {
       shapeCode: dropdownOptions,

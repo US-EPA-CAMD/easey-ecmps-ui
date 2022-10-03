@@ -1,12 +1,29 @@
 import React from "react";
-import { render } from "@testing-library/react";
-import QALinearitySummaryDataTable from "./QALinearitySummaryDataTable";
-
-import configureStore from "../../../store/configureStore.dev";
 import { Provider } from "react-redux";
-const axios = require("axios");
+import { render, screen, waitForElement } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
 
-jest.mock("axios");
+import QATestSummaryDataTable from "./QATestSummaryDataTable";
+import configureStore from "../../../store/configureStore.dev";
+import config from "../../../config";
+
+const mock = new MockAdapter(axios)
+
+const idRegex = '[\\w\\-]+'
+const locId = 'locId'
+
+const getUrl = `${config.services.qaCertification.uri}/locations/${locId}/test-summary?testTypeCodes=UNITDEF`
+const postUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary`)
+const putUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary/${idRegex}`)
+const deleteUrl = new RegExp(`${config.services.qaCertification.uri}/workspace/locations/${idRegex}/test-summary/${idRegex}`)
+
+const testTypeCodesUrl = new RegExp(`${config.services.mdm.uri}/test-type-codes`)
+const spanScaleCodesUrl = new RegExp(`${config.services.mdm.uri}/span-scale-codes`)
+const testReasonCodesUrl = new RegExp(`${config.services.mdm.uri}/test-reason-codes`)
+const testResultCodesUrl = new RegExp(`${config.services.mdm.uri}/test-result-codes`)
+const prefilterTestSummariesUrl = new RegExp(`${config.services.mdm.uri}/relationships/test-summaries`)
 
 const testSummary = [
   {
@@ -42,6 +59,17 @@ const testSummary = [
     reportPeriodId: null,
   },
 ];
+
+mock.onGet(getUrl).reply(200, testSummary);
+mock.onPost(postUrl).reply(200, 'created')
+mock.onPut(putUrl).reply(200, 'updated')
+mock.onDelete(deleteUrl).reply(200, 'deleted')
+
+mock.onGet(testTypeCodesUrl).reply(200, [])
+mock.onGet(spanScaleCodesUrl).reply(200, [])
+mock.onGet(testReasonCodesUrl).reply(200, [])
+mock.onGet(testResultCodesUrl).reply(200, [])
+mock.onGet(prefilterTestSummariesUrl).reply(200, [])
 
 const initialState = {
   facilities: [],
@@ -444,89 +472,42 @@ const initialState = {
 const store = configureStore(initialState)
 
 const props = {
-  selectedTestCode: [
-    "UNITDEF"
-  ]
+  user: 'user',
+  selectedTestCode: {
+    testTypeCodes: [
+      "UNITDEF"
+    ],
+    testTypeGroupCode: 'testTypeGroupCode'
+  },
+  locationSelectValue: locId,
 }
 
-//testing redux connected component to mimic props passed as argument
-const componentRenderer = (location) => {
-  const props = {
-    user: { firstName: "test" },
-    locationSelectValue: location,
-    selectedTestCode: "LINE",
-  };
-  return render(<QALinearitySummaryDataTable {...props} />);
-};
-function componentRendererNoData(args) {
-  const defualtProps = {
-    locationSelectValue: "0",
-    selectedTestCode: "LINE",
-  };
-
-  const props = { ...defualtProps, ...args };
-  return render(<QALinearitySummaryDataTable {...props} />);
+const componentRenderer = () => {
+  return render(<Provider store={store}><QATestSummaryDataTable {...props} /></Provider>);
 }
 
-test("tests a test summary", async () => {
-  expect(true).toBe(true);
-  // axios.get.mockImplementation(() =>
-  //   Promise.resolve({ status: 200, data: testSummary })
-  // );
-  // const title = await qaApi.getQATestSummary(3);
-  // expect(title.data).toEqual(testSummary);
-  // let { container } = await waitForElement(() => componentRenderer(3));
-  // expect(container).toBeDefined();
-});
-
-test("tests a test summary NO USER/NO DATA", async () => {
-  expect(true).toBe(true);
-  // axios.get.mockImplementation(() =>
-  //   Promise.resolve({ status: 200, data: [] })
-  // );
-  // const title = await qaApi.getQATestSummary(3);
-  // expect(title.data).toEqual([]);
-  // let { container } = await waitForElement(() => componentRendererNoData(3));
-  // expect(container).toBeDefined();
-});
-
-test("tests updating test summary data", async () => {
-  expect(true).toBe(true);
-  // axios.get.mockResolvedValue({ status: 200, data: testSummary });
-  // const payload = {
-  //   stackPipeId: testSummary.stackPipeId,
-  //   unitId: testSummary.unitId,
-  //   testTypeCode: testSummary.testTypeCode,
-  //   componentID: testSummary.componentID,
-  //   spanScaleCode: testSummary.spanScaleCode,
-  //   testNumber: "A05-Q4-2011-20",
-  //   testReasonCode: testSummary.testReasonCode,
-  //   testResultCode: testSummary.testResultCode,
-  //   beginDate: testSummary.beginDate,
-  //   beginHour: testSummary.beginHour,
-  //   beginMinute: testSummary.beginMinute,
-  //   endDate: testSummary.endDate,
-  //   endHour: testSummary.endHour,
-  //   endMinute: testSummary.endMinute,
-  //   gracePeriodIndicator: testSummary.gracePeriodIndicator,
-  //   testComment: "dev testing",
-  // };
-  // axios.mockResolvedValueOnce(Promise.resolve({ status: 200, data: payload }));
-  // const title = await qaApi.updateQALinearityTestSummary(
-  //   1873,
-  //   "f6e4056f-c779-4a61-b265-2932898a9033",
-  //   payload
-  // );
-  // expect(title.data).toEqual(payload);
-  // let { container } = await waitForElement(() => componentRenderer(1873));
-  // expect(container).toBeDefined();
-});
-
-test('renders QALinearitySummaryDataTable', () => {
-  // Arrange
-  axios.get.mockResolvedValueOnce({ status: 200, data: testSummary })
-  const { container } = render(<Provider store={store}><QALinearitySummaryDataTable {...props} /></Provider>)
-
-  // Assert
+test('testing component renders properly and functionlity for add/edit/remove', async () => {
+  const { container } = await waitForElement(() => componentRenderer())
   expect(container).toBeDefined()
+
+  // Add
+  const addBtn = screen.getAllByRole('button', { name: /Add/i })
+  userEvent.click(addBtn[0])
+  const addSaveBtn = screen.getByRole('button', { name: /Click to Save/i })
+  userEvent.click(addSaveBtn)
+  expect(mock.history.post).toHaveLength(1)
+
+  // Edit
+  const editBtn = screen.getByRole('button', { name: /Edit/i })
+  userEvent.click(editBtn)
+  const editSaveBtn = screen.getByRole('button', { name: /Click to Save/i })
+  userEvent.click(editSaveBtn)
+  expect(mock.history.put).toHaveLength(1)
+
+  // Remove
+  const removeBtn = screen.getByRole('button', { name: /Remove/i })
+  userEvent.click(removeBtn)
+  const confirmBtn = screen.getByRole('button', { name: /Yes/i })
+  userEvent.click(confirmBtn)
+  expect(mock.history.delete).toHaveLength(1)
 })

@@ -73,14 +73,14 @@ const LoadingModal = (props) => {
                 <img
                   alt="Loading...   Please wait..."
                   title="Loading... Please wait..."
-                  src={`${process.env.PUBLIC_URL}/images/preloaders/scanning.gif`}
+                  src={"/images/preloaders/scanning.gif"}
                 />
               </p>
               <p className="margin-0">
                 <img
                   alt="Authenticating...   Please wait..."
                   title="Authenticating... Please wait..."
-                  src={`${process.env.PUBLIC_URL}/images/preloaders/authenticating-message.gif`}
+                  src={"/images/preloaders/authenticating-message.gif"}
                 />
               </p>
             </div>

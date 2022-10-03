@@ -13,9 +13,8 @@ export default {
     monitoringPlans: [],
     qaCertTestSummary: [],
     export: [],
+    emissions:[]
   },
-
-  activeTab: { monitoringPlans: [0], qaCertTestSummary: [0], export: [0] },
   dropdowns: {
     defaults: [],
     formulas: [],
@@ -36,12 +35,6 @@ export default {
     systemComponents: [],
     analyzerRanges: [],
     matsMethods: [],
-    lineTestSummary: [],
-    linearitySummaryTestSecondLevel: [],
-    linearityInjectionTestThirdLevel: [],
-    protocolGas: [],
-    rataData: [],
-    rataSummary: [],
   },
   currentSection: "",
 };
