@@ -147,7 +147,6 @@ const QATestSummaryDataTable = ({
           dropdowns[dropdownArray[0][i]] = response[3].data.map((d) =>
             getOptions(d, "testResultCode", "testResultDescription")
           );
-
           const options = response[0].data.map((d) =>
             getOptions(d, "testTypeCode", "testTypeDescription")
           );

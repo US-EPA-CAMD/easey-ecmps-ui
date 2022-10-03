@@ -12,12 +12,16 @@ export const displayAppError = (error) => {
     document
       .querySelectorAll("svg path")
       .forEach((element) => (element.tabIndex = -1));
-  }
+  
+    window.addEventListener("click", hideAppError);
+  
+    }
 };
 
 export const hideAppError = () => {
   if (document.querySelector("#appErrorMessageText")) {
     document.querySelector("#appErrorMessageText").innerHTML = "";
     document.querySelector("#appErrorMessage").classList.add("display-none");
+    window.removeEventListener("click", hideAppError);
   }
 };

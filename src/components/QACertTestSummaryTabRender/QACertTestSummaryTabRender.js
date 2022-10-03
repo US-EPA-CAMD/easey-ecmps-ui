@@ -16,6 +16,8 @@ export const QACertTestSummaryRender = ({
   locationSelect,
   orisCode,
   configID,
+  setCheckout,
+  checkoutState
 }) => {
   return (
     <div className=" padding-top-0">
@@ -32,6 +34,8 @@ export const QACertTestSummaryRender = ({
           user={user}
           configID={configID}
           setSelectedTestCode={setSelectedTestCode}
+          setCheckout={setCheckout}
+          checkoutState={checkoutState}
         />
       </div>
       <hr />
