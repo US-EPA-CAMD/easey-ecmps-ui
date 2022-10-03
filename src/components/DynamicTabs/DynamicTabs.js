@@ -80,6 +80,7 @@ export const DynamicTabs = ({
                 facId={
                   tab.selectedConfig ? tab.selectedConfig.facId : "initial"
                 }
+                selectedConfigName={tab?.selectedConfig?.name ?? "initial"}
               >
                 {cloneElement(tab.component, {
                   addtabs: addTabsHandler,
@@ -110,6 +111,7 @@ export const DynamicTabs = ({
                 facId={
                   tab.selectedConfig ? tab.selectedConfig.facId : "initial"
                 }
+                selectedConfigName={tab?.selectedConfig?.name ?? "initial"}
               >
                 {cloneElement(tab.component, {
                   addtabs: addTabsHandler,

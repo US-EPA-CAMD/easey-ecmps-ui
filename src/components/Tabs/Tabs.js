@@ -194,7 +194,7 @@ export const Tabs = ({
                       />
                     ) : null}
                     <span className="position-relative top-neg-105">
-                      {el.props.title.split("(")[1].replace(")", "")}
+                      {el.props.selectedConfigName}
                     </span>
                   </div>
 
