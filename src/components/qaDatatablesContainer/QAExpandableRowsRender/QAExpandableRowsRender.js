@@ -261,7 +261,7 @@ const QAExpandableRowsRender = ({
               dropdowns[dropdownArray[i]] = val.data.map((d) => {
                 return {
                   code: d["rataFrequencyCode"],
-                  name: d["rataFrequencyCodeDescription"],
+                  name: d["rataFrequencyDescription"],
                 };
               });
               dropdowns[dropdownArray[i]].unshift({
@@ -289,7 +289,7 @@ const QAExpandableRowsRender = ({
               dropdowns[dropdownArray[i]] = response[0].data.map((d) => {
                 return {
                   code: d["runStatusCode"],
-                  name: d["runStatusCodeDescription"],
+                  name: d["runStatusDescription"],
                 };
               });
               dropdowns[dropdownArray[i]].unshift({
@@ -312,7 +312,7 @@ const QAExpandableRowsRender = ({
               dropdowns[dropdownArray[i]] = response[0].data.map((d) => {
                 return {
                   code: d["operatingLevelCode"],
-                  name: d["operatingLevelCodeDescription"],
+                  name: d["operatingLevelDescription"],
                 };
               });
               dropdowns[dropdownArray[i]].unshift({
@@ -323,7 +323,7 @@ const QAExpandableRowsRender = ({
               dropdowns[dropdownArray[i]] = response[1].data.map((d) => {
                 return {
                   code: d["referenceMethodCode"],
-                  name: d["referenceMethodCodeDescription"],
+                  name: d["referenceMethodDescription"],
                 };
               });
               dropdowns[dropdownArray[i]].unshift({
@@ -334,7 +334,7 @@ const QAExpandableRowsRender = ({
               dropdowns[dropdownArray[i]] = response[2].data.map((d) => {
                 return {
                   code: d["apsCode"],
-                  name: d["apsCodeDescription"],
+                  name: d["apsDescription"],
                 };
               });
               dropdowns[dropdownArray[i]].unshift({
@@ -357,15 +357,15 @@ const QAExpandableRowsRender = ({
             switch (i) {
               case 0:
                 codeLabel = 'probeTypeCode'
-                descriptionLabel = 'probeTypeCodeDescription'
+                descriptionLabel = 'probeTypeDescription'
                 break
               case 1:
                 codeLabel = 'pressureMeasureCode'
-                descriptionLabel = 'pressureMeasureCodeDescription'
+                descriptionLabel = 'pressureMeasureDescription'
                 break
               case 2:
                 codeLabel = 'pointUsedIndicatorCode'
-                descriptionLabel = 'pointUsedIndicatorCodeDescription'
+                descriptionLabel = 'pointUsedIndicatorDescription'
                 break
               default:
                 break

@@ -88,7 +88,7 @@ export const QACertTestSummaryHeaderInfo = ({
           const options = res.data
             .map((e) => {
               return {
-                name: e.testTypeGroupCodeDescription,
+                name: e.testTypeGroupDescription,
                 code: e.testTypeGroupCode,
               };
             })

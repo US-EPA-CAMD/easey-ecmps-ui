@@ -4,6 +4,6 @@ host: ecmps-beta.app.cloud.gov
 apiHost: api.epa.gov/easey/beta
 inactivityDurationCheckoutMinutes: 15
 inactivityDurationLogoutMinutes: 15
-googleAnalyticsEnabled: "true"
+googleAnalyticsEnabled: true
 cdxBaseUrl: test.epacdx.net
 cbsBaseUrl: camd.epa.gov

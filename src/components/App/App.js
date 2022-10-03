@@ -56,7 +56,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (config.app.googleAnalyticsEnabled === "true") {
+    if (config.app.googleAnalyticsEnabled) {
       const tagManagerArgs = { gtmId: "" };
       if (window.location.href.search("workspace") === -1) {
         tagManagerArgs.gtmId = config.app.googleAnalyticsPublicContainerId;

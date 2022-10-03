@@ -96,7 +96,7 @@ const QARataDataExpandableRows = ({ user, data, showProtocolGas = true }) => {
       dropdowns[dropdownArray[0]] = response.data.map((option) => {
         return {
           code: option["rataFrequencyCode"],
-          name: option["rataFrequencyCodeDescription"],
+          name: option["rataFrequencyDescription"],
         };
       });
       dropdowns[dropdownArray[0]].unshift({
