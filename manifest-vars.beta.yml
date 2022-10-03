@@ -2,10 +2,8 @@ instances: 2
 environment: beta
 host: ecmps-beta.app.cloud.gov
 apiHost: api.epa.gov/easey/beta
-inactivityDurationCheckoutMinutes: 20
-refreshTokenRateMinutes: 15
-inactivityDurationLogoutMinutes: 20
-googleAnalyticsEnabled: "true"
+inactivityDurationCheckoutMinutes: 15
+inactivityDurationLogoutMinutes: 15
+googleAnalyticsEnabled: true
 cdxBaseUrl: test.epacdx.net
 cbsBaseUrl: camd.epa.gov
-refreshEvalStatusTimeoutMinutes: 15

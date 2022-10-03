@@ -38,6 +38,7 @@ export const MonitoringPlanTab = ({
 }) => {
   const getCurrentTab = () =>{
     return tabs.find(tab => tab.selectedConfig.id === selectedConfig.id);
+
   }
   const [ currentTab, setCurrentTab ] = useState(getCurrentTab());
 

@@ -49,6 +49,7 @@ const ImportModal = ({
     if (fileTypeManual[fileTypeManual.length - 1] !== "json") {
       setHasFormatError(true);
       setDisablePortBtn(true);
+      console.log('.json file incorrect')
     } else {
       setFileName(name);
       readFile(event);

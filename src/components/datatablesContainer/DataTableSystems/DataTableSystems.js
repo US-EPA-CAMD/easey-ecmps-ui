@@ -169,9 +169,9 @@ export const DataTableSystems = ({
         },
         {
           beginDate: ["Start Date", "date", ""],
-          beginHour: ["Start Time", "time", ""],
+          beginHour: ["Start Time", "hourDropdown", ""],
           endDate: ["End Date", "date", ""],
-          endHour: ["End Time", "time", ""],
+          endHour: ["End Time", "hourDropdown", ""],
         },
         create,
         mdmData
@@ -381,7 +381,6 @@ export const DataTableSystems = ({
       mpApi
         .createSystems(userInput, locationSelectValue)
         .then((result) => {
-          console.log("saving results", result);
           setSecondLevel(false);
           setUpdateSystemTable(true);
         })
@@ -580,7 +579,7 @@ export const DataTableSystems = ({
           userInput,
           selectedSystem.locationId,
           selectedSystem.id,
-          selectedRangeInFirst.componentRecordId
+          selectedRangeInFirst.id
         )
         .then((result) => {
           console.log(result);

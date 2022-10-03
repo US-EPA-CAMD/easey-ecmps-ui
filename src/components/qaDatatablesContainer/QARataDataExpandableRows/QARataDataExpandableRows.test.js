@@ -46,23 +46,23 @@ const testSummaryId = "4f2d07c0-55f9-49b0-8946-ea80c1febb15";
 const rataFrequencyCode = [
   {
     "rataFrequencyCode": "2QTRS",
-    "rataFrequencyCodeDescription": "Two Quarters"
+    "rataFrequencyDescription": "Two Quarters"
   },
   {
     "rataFrequencyCode": "4QTRS",
-    "rataFrequencyCodeDescription": "Four Quarters"
+    "rataFrequencyDescription": "Four Quarters"
   },
   {
     "rataFrequencyCode": "8QTRS",
-    "rataFrequencyCodeDescription": "Eight Quarters"
+    "rataFrequencyDescription": "Eight Quarters"
   },
   {
     "rataFrequencyCode": "ALTSL",
-    "rataFrequencyCodeDescription": "Alt Single-Load Flow"
+    "rataFrequencyDescription": "Alt Single-Load Flow"
   },
   {
     "rataFrequencyCode": "OS",
-    "rataFrequencyCodeDescription": "Ozone Season"
+    "rataFrequencyDescription": "Ozone Season"
   }
 ]
 

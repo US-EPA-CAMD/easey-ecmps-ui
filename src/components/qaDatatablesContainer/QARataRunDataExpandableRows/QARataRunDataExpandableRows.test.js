@@ -54,15 +54,15 @@ const rataDataApiResponse = [
 const rataStatusCode = [
   {
     "runStatusCode": "NOTUSED",
-    "runStatusCodeDescription": "Run Not Used in RATA Calculation"
+    "runStatusDescription": "Run Not Used in RATA Calculation"
   },
   {
     "runStatusCode": "RUNUSED",
-    "runStatusCodeDescription": "Run Used in RATA Calculation"
+    "runStatusDescription": "Run Used in RATA Calculation"
   },
   {
     "runStatusCode": "IGNORED",
-    "runStatusCodeDescription": "Run Not Used in RATA Calculations. Data can be used in hourly emissions reporting but does not meet QA criteria. (Sorbent Trap Systems Only)"
+    "runStatusDescription": "Run Not Used in RATA Calculations. Data can be used in hourly emissions reporting but does not meet QA criteria. (Sorbent Trap Systems Only)"
   }
 ];
 const componentRenderer = () => {
