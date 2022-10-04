@@ -346,7 +346,7 @@ export const getPrefilteredUnitControls = async () => {
 
 export const getPrefilteredSystemFuelFlows = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/relationships/system-fuels`)
+    .get(`${config.services.mdm.uri}/relationships/system-fuel-flows`)
     .then(handleResponse)
     .catch(handleError);
 };
