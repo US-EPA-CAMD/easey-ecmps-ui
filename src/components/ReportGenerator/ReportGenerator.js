@@ -44,9 +44,9 @@ export const ReportGenerator = (user) => {
 
   const Report = () => {
     switch(reportData.templateCode) {
-      case "DETAIL":
+      case "DTLRPT":
         return <DetailReport reportData={reportData} dataLoaded={dataLoaded} />
-      case "SUMMARY":
+      case "SUMRPT":
       default:
         return <SummaryReport reportData={reportData} dataLoaded={dataLoaded} />
     }
