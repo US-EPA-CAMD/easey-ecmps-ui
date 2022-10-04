@@ -37,9 +37,9 @@ const props = {
 
 const testTypeDropdownLabel = /Test Type Group/i
 const testTypeDropdownData = [
-  { testTypeGroupCodeDescription: 'Test Type Group option 1' },
-  { testTypeGroupCodeDescription: 'Test Type Group option 2' },
-  { testTypeGroupCodeDescription: 'Test Type Group option 3' },
+  { testTypeGroupDescription: 'Test Type Group option 1' },
+  { testTypeGroupDescription: 'Test Type Group option 2' },
+  { testTypeGroupDescription: 'Test Type Group option 3' },
 ]
 
 // mocking JavaScript built-in window functions

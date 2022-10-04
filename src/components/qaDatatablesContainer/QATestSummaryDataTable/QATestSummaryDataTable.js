@@ -129,7 +129,7 @@ const QATestSummaryDataTable = ({
       dropdownArray[0].forEach((val, i) => {
         if (i === 0) {
           const options = response[0].data.map((d) =>
-            getOptions(d, "testTypeCode", "testTypeCodeDescription")
+            getOptions(d, "testTypeCode", "testTypeDescription")
           );
           setAllTestTypeCodes(options);
           dropdowns[dropdownArray[0][i]] = options.filter((option) =>
@@ -137,19 +137,18 @@ const QATestSummaryDataTable = ({
           );
         } else if (i === 1) {
           dropdowns[dropdownArray[0][i]] = response[1].data.map((d) =>
-            getOptions(d, "spanScaleCode", "spanScaleCodeDescription")
+            getOptions(d, "spanScaleCode", "spanScaleDescription")
           );
         } else if (i === 2) {
           dropdowns[dropdownArray[0][i]] = response[2].data.map((d) =>
-            getOptions(d, "testReasonCode", "testReasonCodeDescription")
+            getOptions(d, "testReasonCode", "testReasonDescription")
           );
         } else if (i === 3) {
           dropdowns[dropdownArray[0][i]] = response[3].data.map((d) =>
-            getOptions(d, "testResultCode", "testResultCodeDescription")
+            getOptions(d, "testResultCode", "testResultDescription")
           );
-
           const options = response[0].data.map((d) =>
-            getOptions(d, "testTypeCode", "testTypeCodeDescription")
+            getOptions(d, "testTypeCode", "testTypeDescription")
           );
           setAllTestTypeCodes(options);
           dropdowns[dropdownArray[0][i]] = options.filter((option) =>

@@ -11,7 +11,7 @@ activityPollingFrequencySeconds: 5
 activityCountdownDurationSeconds: 30
 inactivityDurationLogoutMinutes: 5
 paginationPerPage: 100
-googleAnalyticsEnabled: "false"
+googleAnalyticsEnabled: false
 googleAnalyticsPublicContainerId: "GTM-W55ZK7"
 googleAnalyticsAuthenticatedContainerId: "GTM-W55ZK7"
 email: ecmps-beta@camdsupport.com
