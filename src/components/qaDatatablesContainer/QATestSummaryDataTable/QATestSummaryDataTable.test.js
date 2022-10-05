@@ -480,6 +480,7 @@ const props = {
     testTypeGroupCode: 'testTypeGroupCode'
   },
   locationSelectValue: locId,
+  isCheckedOut:true
 }
 
 const componentRenderer = () => {
