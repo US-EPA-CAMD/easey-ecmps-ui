@@ -156,10 +156,27 @@ export const HeaderInfo = ({
     //`fullscreen=yes`,
   ].join(",");
 
-  const displayReport = () => {
+  const displayReport = (reportCode) => {
+    let reportType = 'Evaluation';
+
+    switch(reportCode) {
+      case 'MPP':
+        reportType = 'Printout';
+        break;
+      case 'MP_EVAL':
+        reportType = 'Evaluation';
+        break;
+      case 'MP_AUDIT':
+        reportType = 'Audit';
+        break;
+      default:
+        reportType = 'Evaluation';
+        break;
+    }
+
     window.open(
-      `/workspace/reports?reportCode=MP_EVAL&monitorPlanId=${selectedConfig.id}`,
-      "ECMPS Monitoring Plan Report",
+      `/workspace/reports?reportCode=${reportCode}&monitorPlanId=${selectedConfig.id}`,
+      `ECMPS Monitoring Plan ${reportType} Report`,
       reportWindowParams
     );
   };
@@ -439,7 +456,7 @@ export const HeaderInfo = ({
       <div className={alertStyle}>
         <button
           className={"hyperlink-btn cursor-pointer"}
-          onClick={() => displayReport()}
+          onClick={() => displayReport('MP_EVAL')}
         >
           {evalStatusText(evalStatus)}
         </button>
@@ -743,18 +760,27 @@ export const HeaderInfo = ({
               </div>
 
               <div>
-                <Button
+                <Button outline
                   type="button"
-                  outline
                   title="Open Comments"
                   onClick={() => openViewComments()}
                 >
                   View Comments
                 </Button>
-                <Button outline title="View Audit Report" type="button">
+                <Button outline
+                  type="button"
+                  title="View Audit Report"
+                  className={"hyperlink-btn cursor-pointer"}
+                  onClick={() => displayReport('MP_AUDIT')}
+                >
                   View Audit Report
                 </Button>
-                <Button outline title="View Printout Report" type="button">
+                <Button outline
+                  type="button"
+                  title="View Printout Report"
+                  className={"hyperlink-btn cursor-pointer"}
+                  onClick={() => displayReport('MPP')}
+                >
                   View Printout Report
                 </Button>
               </div>
