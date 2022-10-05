@@ -26,6 +26,7 @@ const QADataTableRender = ({
   onRemoveHandler,
   evaluate,
   noDataComp,
+  isCheckedOut
 }) => {
   console.log('data',data)
   const columns = [];
@@ -142,8 +143,8 @@ const QADataTableRender = ({
           const normalizedRow = normalizeRowObjectFormat(row, columnNames);
           return (
             <div>
-              {/* user is logged in  */}
-              {user ? (
+              {/* user is logged in and config is checked out */}
+              {user && isCheckedOut ? (
                 <div className="editViewExpandGroup ">
                   {data.length > 0 && (
                     <>
@@ -204,7 +205,7 @@ const QADataTableRender = ({
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
         className={`data-display-table react-transition fade-in`}
         columns={columns}
-        data={data.length > 0 ? data : user ? getEmptyRows(columns) : []}
+        data={data.length > 0 ? data : user && isCheckedOut ? getEmptyRows(columns) : []}
         expandableRows
         expandableRowsHideExpander
         expandableRowExpanded={(row) => row.expanded}
