@@ -199,6 +199,7 @@ const QAExpandableRowsRender = ({
             extraIDs={flowIdArray}
             expandable
             user={user}
+            isCheckedOut={isCheckedOut}
           />
         );
       case "Flow":
@@ -215,6 +216,7 @@ const QAExpandableRowsRender = ({
             extraControls={traverseObj["extraControls"]}
             extraIDs={traverseIdArray}
             user={user}
+            isCheckedOut={isCheckedOut}
           />
         )
       default:
