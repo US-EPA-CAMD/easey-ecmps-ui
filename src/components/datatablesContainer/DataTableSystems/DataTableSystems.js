@@ -537,7 +537,6 @@ export const DataTableSystems = ({
     componentId: "string",
   };
   const createComponent = () => {
-    console.log("test createComponent");
     const userInput = extractUserInput(componentPayload, ".modalUserInput", [
       "hgConverterIndicator",
     ]);

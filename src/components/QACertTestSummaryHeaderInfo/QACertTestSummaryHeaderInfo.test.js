@@ -33,6 +33,7 @@ const props = {
 
   configID: "testConfigId",
   setSelectedTestCode: jest.fn(),
+  checkoutState:true
 };
 
 const testTypeDropdownLabel = /Test Type Group/i

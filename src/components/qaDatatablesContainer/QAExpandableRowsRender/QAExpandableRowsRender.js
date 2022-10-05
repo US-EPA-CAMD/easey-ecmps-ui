@@ -40,6 +40,7 @@ const QAExpandableRowsRender = ({
   radioBtnPayload,
   extraIDs = [], // [locid, testsumid, linsumid,   ]
   data,
+  isCheckedOut
 }) => {
   const { locationId, id } = data;
   // const { locationId, id } = dataTableName !== "Protocol Gas" ? data : ""; // id / testsumid
@@ -105,6 +106,7 @@ const QAExpandableRowsRender = ({
             extraControls={objGas["extraControls"]}
             data={data}
             user={user}
+            isCheckedOut={isCheckedOut}
           />
         );
       case "Air Emissions":
@@ -122,6 +124,7 @@ const QAExpandableRowsRender = ({
             data={data}
             extraIDs={airEmissionsIds}
             user={user}
+            isCheckedOut={isCheckedOut}
           />
         );
       // test  > injections
@@ -139,6 +142,7 @@ const QAExpandableRowsRender = ({
             extraControls={obj["extraControls"]}
             extraIDs={idArr}
             user={user}
+            isCheckedOut={isCheckedOut}
           />
         );
       // rata data > rata summary > rata run
@@ -157,6 +161,7 @@ const QAExpandableRowsRender = ({
             extraIDs={rataIdArray}
             expandable
             user={user}
+            isCheckedOut={isCheckedOut}
           />
         );
 
@@ -175,6 +180,7 @@ const QAExpandableRowsRender = ({
             extraIDs={rataRunIdArray}
             expandable
             user={user}
+            isCheckedOut={isCheckedOut}
           />
         );
 
@@ -574,8 +580,9 @@ const QAExpandableRowsRender = ({
           onRemoveHandler={onRemoveHandler}
           user={user}
           actionsBtn={"View"}
+          isCheckedOut={isCheckedOut}
           actionColumnName={
-            user ? (
+            user && isCheckedOut ? (
               <>
                 <span className="padding-right-2">{dataTableName}</span>
                 <Button
@@ -596,12 +603,13 @@ const QAExpandableRowsRender = ({
           }
           // shows empty table with add if user is logged in
           noDataComp={
-            user ? (
+            user && isCheckedOut ? (
               <div>
                 <QADataTableRender
                   columnNames={columns}
                   columnWidth={15}
                   data={[]}
+                  isCheckedOut={isCheckedOut}
                   actionColumnName={
                     <>
                       <span className="padding-right-2">{dataTableName}</span>
@@ -634,8 +642,8 @@ const QAExpandableRowsRender = ({
           show={show}
           close={closeModalHandler}
           save={createNewData ? createData : saveData}
-          showCancel={!user ? true : false}
-          showSave={user ? true : false}
+          showCancel={!user || (user && !isCheckedOut)}
+          showSave={user && isCheckedOut}
           title={
             createNewData
               ? `Add  ${dataTableName}`
@@ -652,7 +660,7 @@ const QAExpandableRowsRender = ({
                   data={selectedModalData}
                   cols={2}
                   title={`${dataTableName}`}
-                  viewOnly={!user ? true : false}
+                  viewOnly={!user || (user && !isCheckedOut)}
                   create={createNewData}
                 />
               </div>
