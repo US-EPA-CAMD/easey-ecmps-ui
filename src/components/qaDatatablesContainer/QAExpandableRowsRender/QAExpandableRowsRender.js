@@ -110,6 +110,7 @@ const QAExpandableRowsRender = ({
           />
         );
       case "Air Emissions":
+        const airEmissionsIds = [locationId, id];
         const objAirEms = qaAirEmissionsProps(data);
         return (
           <QAExpandableRowsRender
@@ -121,6 +122,7 @@ const QAExpandableRowsRender = ({
             dataTableName={objAirEms["dataTableName"]}
             extraControls={objAirEms["extraControls"]}
             data={data}
+            extraIDs={airEmissionsIds}
             user={user}
             isCheckedOut={isCheckedOut}
           />
@@ -182,41 +184,41 @@ const QAExpandableRowsRender = ({
           />
         );
 
-        case "RATA Run Data":
-          const flowIdArray = [...extraIDs, id];
-          const flowObj = qaFlowRataRunProps();
-          return (
-            <QAExpandableRowsRender
-              payload={flowObj["payload"]}
-              dropdownArray={flowObj["dropdownArray"]}
-              columns={flowObj["columnNames"]}
-              controlInputs={flowObj["controlInputs"]}
-              controlDatePickerInputs={flowObj["controlDatePickerInputs"]}
-              dataTableName={flowObj["dataTableName"]}
-              extraControls={flowObj["extraControls"]}
-              extraIDs={flowIdArray}
-              expandable
-              user={user}
-              isCheckedOut={isCheckedOut}
-            />
-          );
-        case "Flow":
-          const traverseIdArray = [...extraIDs, id]
-          const traverseObj = qaRataTraverseProps();
-          return (
-            <QAExpandableRowsRender
-              payload={traverseObj["payload"]}
-              dropdownArray={traverseObj["dropdownArray"]}
-              columns={traverseObj["columnNames"]}
-              controlInputs={traverseObj["controlInputs"]}
-              controlDatePickerInputs={traverseObj["controlDatePickerInputs"]}
-              dataTableName={traverseObj["dataTableName"]}
-              extraControls={traverseObj["extraControls"]}
-              extraIDs={traverseIdArray}
-              user={user}
-              isCheckedOut={isCheckedOut}
-            />
-          )
+      case "RATA Run Data":
+        const flowIdArray = [...extraIDs, id];
+        const flowObj = qaFlowRataRunProps();
+        return (
+          <QAExpandableRowsRender
+            payload={flowObj["payload"]}
+            dropdownArray={flowObj["dropdownArray"]}
+            columns={flowObj["columnNames"]}
+            controlInputs={flowObj["controlInputs"]}
+            controlDatePickerInputs={flowObj["controlDatePickerInputs"]}
+            dataTableName={flowObj["dataTableName"]}
+            extraControls={flowObj["extraControls"]}
+            extraIDs={flowIdArray}
+            expandable
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "Flow":
+        const traverseIdArray = [...extraIDs, id]
+        const traverseObj = qaRataTraverseProps();
+        return (
+          <QAExpandableRowsRender
+            payload={traverseObj["payload"]}
+            dropdownArray={traverseObj["dropdownArray"]}
+            columns={traverseObj["columnNames"]}
+            controlInputs={traverseObj["controlInputs"]}
+            controlDatePickerInputs={traverseObj["controlDatePickerInputs"]}
+            dataTableName={traverseObj["dataTableName"]}
+            extraControls={traverseObj["extraControls"]}
+            extraIDs={traverseIdArray}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        )
       default:
         break;
     }
@@ -544,20 +546,17 @@ const QAExpandableRowsRender = ({
     try {
       const resp = await assertSelector.removeDataSwitch(row, dataTableName, locationId, id, extraIDs)
       if (resp.status === 200) {
-        const dataPostRemove = dataPulled.filter(
-          (rowData) => rowData.id !== row.id
-        );
-        setDisplayedRecords(dataPostRemove)
-        executeOnClose()
+        setUpdateTable(true);
+        executeOnClose();
       }
     } catch (error) {
       console.log("error deleting data", error);
     }
   };
 
-  const getFirstLevelExpandables = () =>{
+  const getFirstLevelExpandables = () => {
     const expandables = [];
-    switch(dataTableName){
+    switch (dataTableName) {
       case 'Linearity Test':
         expandables.push(nextExpandableRow("Protocol Gas"));
         break;
@@ -638,7 +637,7 @@ const QAExpandableRowsRender = ({
         <Preloader />
       )}
       {
-       [...getFirstLevelExpandables(dataTableName)] 
+        [...getFirstLevelExpandables(dataTableName)]
       }
       {show ? (
         <Modal
