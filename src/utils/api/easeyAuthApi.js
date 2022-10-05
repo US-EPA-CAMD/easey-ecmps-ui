@@ -53,13 +53,15 @@ export const authenticate = async (payload) => {
     data: payload,
   })
     .then((response) => {
-      const officialOnlyPath = ["/", "/home"];
       sessionStorage.setItem("cdx_user", JSON.stringify(response.data));
 
-      if (officialOnlyPath.includes(window.location.pathname)) {
+      if (
+        window.location.pathname.includes('/workspace') ||
+        window.location.pathname.endsWith('/home') ||
+        window.location.pathname.endsWith('/')
+      ) {
         window.location.reload();
-      }
-      else {
+      } else {
         window.location.assign(`/workspace${window.location.pathname}`);
       }
     })

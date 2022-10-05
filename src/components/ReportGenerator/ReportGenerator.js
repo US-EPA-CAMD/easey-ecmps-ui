@@ -1,66 +1,38 @@
-import React, { useEffect, useState, Suspense, lazy } from "react";
-import { useParams } from "react-router-dom";
-import * as mpApi from "../../utils/api/monitoringPlansApi";
-import * as facApi from "../../utils/api/facilityApi";
+import React, { useState, useEffect, Suspense } from "react";
+import { useLocation } from "react-router-dom";
+
 import { Preloader } from "@us-epa-camd/easey-design-system";
 
-import "./ReportGenerator.scss";
 import Login from "../Login/Login";
+import DetailReport from "./DetailReport/DetailReport";
+import SummaryReport from "./SummaryReport/SummaryReport";
+import * as camdApi from '../../utils/api/camdServices';
+
+import "./ReportGenerator.scss";
 
 export const ReportGenerator = (user) => {
-  // *** determine report type that needs to be generated from the url
-  const reportType = window.location.href.split("/").pop();
+  const search = useLocation().search;
+  const params = new URLSearchParams(search);
 
-  // *** extract id from url params
-  const { id } = useParams();
-  const [facility, setFacility] = useState("");
+  const testId = params.get("testId");
+  const batchView = params.get("batchView");
+  const reportCode = params.get("reportCode");
+  const facilityId = params.get("facilityId");
+  const monitorPlanId = params.get("monitorPlanId");
+
+  const [reportData, setReportData] = useState();
   const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
     if (!dataLoaded) {
-      // *** obtain plan info needed to generate report
-      mpApi.getRefreshInfo(id).then((configRes) => {
-        const plan = configRes.data;
-
-        facApi.getFacilityById(plan.facId).then((facRes) => {
-          const fac = facRes.data;
-          const orisCode = fac.facilityId;
-
-          mpApi.getMonitoringPlans(orisCode).then((plansRes) => {
-            const plans = plansRes.data;
-            const currPlan = plans.find((ele) => ele.id === id);
-            const facName = fac.facilityName + "(" + currPlan.name + ")";
-
-            setFacility(facName);
-            setDataLoaded(true);
-          });
+      camdApi.getReport(reportCode, facilityId, monitorPlanId, testId, batchView)
+        .then(response => response.data)
+        .then(data => {
+          setReportData(data);
+          setDataLoaded(true);
         });
-      });
     }
-  }, [dataLoaded, id]);
-
-  const Report = () => {
-    // *** output reports based on determined type
-    switch (reportType) {
-      case "evaluation-report":
-        // noinspection JSCheckFunctionSignatures
-        const MonitoringPlanEvaluationReport = lazy(() =>
-          import(
-            "../MonitoringPlanEvaluationReport/MonitoringPlanEvaluationReport"
-          )
-        );
-        return (
-          <MonitoringPlanEvaluationReport
-            monitorPlanId={id}
-            facility={facility}
-            showTitle={true}
-          />
-        );
-
-      default:
-        break;
-    }
-  };
+  }, [reportCode, facilityId, monitorPlanId, testId, batchView, dataLoaded]);
 
   const Loading = () => {
     return (
@@ -68,6 +40,16 @@ export const ReportGenerator = (user) => {
         <Preloader />
       </div>
     );
+  };
+
+  const Report = () => {
+    switch(reportData.templateCode) {
+      case "DTLRPT":
+        return <DetailReport reportData={reportData} dataLoaded={dataLoaded} />
+      case "SUMRPT":
+      default:
+        return <SummaryReport reportData={reportData} dataLoaded={dataLoaded} />
+    }
   };
 
   return (
