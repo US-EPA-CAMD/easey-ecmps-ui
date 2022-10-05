@@ -64,6 +64,7 @@ const componentRenderer = () => {
       radioBtnPayload={obj["radioBtnPayload"]}
       expandable
       extraIDs={null}
+      isCheckedOut={true}
     />
   );
 };
