@@ -50,6 +50,7 @@ export const QACertTestSummaryRender = ({
             unitId: locations[locationSelect[0]]["unitId"],
           }}
           selectedTestCode={selectedTestCode}
+          isCheckedOut={checkoutState}
         />
       }
     </div>

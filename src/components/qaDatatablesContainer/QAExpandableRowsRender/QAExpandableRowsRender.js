@@ -40,6 +40,7 @@ const QAExpandableRowsRender = ({
   radioBtnPayload,
   extraIDs = [], // [locid, testsumid, linsumid,   ]
   data,
+  isCheckedOut
 }) => {
   const { locationId, id } = data;
   // const { locationId, id } = dataTableName !== "Protocol Gas" ? data : ""; // id / testsumid
@@ -105,9 +106,11 @@ const QAExpandableRowsRender = ({
             extraControls={objGas["extraControls"]}
             data={data}
             user={user}
+            isCheckedOut={isCheckedOut}
           />
         );
       case "Air Emissions":
+        const airEmissionsIds = [locationId, id];
         const objAirEms = qaAirEmissionsProps(data);
         return (
           <QAExpandableRowsRender
@@ -119,7 +122,9 @@ const QAExpandableRowsRender = ({
             dataTableName={objAirEms["dataTableName"]}
             extraControls={objAirEms["extraControls"]}
             data={data}
+            extraIDs={airEmissionsIds}
             user={user}
+            isCheckedOut={isCheckedOut}
           />
         );
       // test  > injections
@@ -137,6 +142,7 @@ const QAExpandableRowsRender = ({
             extraControls={obj["extraControls"]}
             extraIDs={idArr}
             user={user}
+            isCheckedOut={isCheckedOut}
           />
         );
       // rata data > rata summary > rata run
@@ -155,6 +161,7 @@ const QAExpandableRowsRender = ({
             extraIDs={rataIdArray}
             expandable
             user={user}
+            isCheckedOut={isCheckedOut}
           />
         );
 
@@ -173,42 +180,45 @@ const QAExpandableRowsRender = ({
             extraIDs={rataRunIdArray}
             expandable
             user={user}
+            isCheckedOut={isCheckedOut}
           />
         );
 
-        case "RATA Run Data":
-          const flowIdArray = [...extraIDs, id];
-          const flowObj = qaFlowRataRunProps();
-          return (
-            <QAExpandableRowsRender
-              payload={flowObj["payload"]}
-              dropdownArray={flowObj["dropdownArray"]}
-              columns={flowObj["columnNames"]}
-              controlInputs={flowObj["controlInputs"]}
-              controlDatePickerInputs={flowObj["controlDatePickerInputs"]}
-              dataTableName={flowObj["dataTableName"]}
-              extraControls={flowObj["extraControls"]}
-              extraIDs={flowIdArray}
-              expandable
-              user={user}
-            />
-          );
-        case "Flow":
-          const traverseIdArray = [...extraIDs, id]
-          const traverseObj = qaRataTraverseProps();
-          return (
-            <QAExpandableRowsRender
-              payload={traverseObj["payload"]}
-              dropdownArray={traverseObj["dropdownArray"]}
-              columns={traverseObj["columnNames"]}
-              controlInputs={traverseObj["controlInputs"]}
-              controlDatePickerInputs={traverseObj["controlDatePickerInputs"]}
-              dataTableName={traverseObj["dataTableName"]}
-              extraControls={traverseObj["extraControls"]}
-              extraIDs={traverseIdArray}
-              user={user}
-            />
-          )
+      case "RATA Run Data":
+        const flowIdArray = [...extraIDs, id];
+        const flowObj = qaFlowRataRunProps();
+        return (
+          <QAExpandableRowsRender
+            payload={flowObj["payload"]}
+            dropdownArray={flowObj["dropdownArray"]}
+            columns={flowObj["columnNames"]}
+            controlInputs={flowObj["controlInputs"]}
+            controlDatePickerInputs={flowObj["controlDatePickerInputs"]}
+            dataTableName={flowObj["dataTableName"]}
+            extraControls={flowObj["extraControls"]}
+            extraIDs={flowIdArray}
+            expandable
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "Flow":
+        const traverseIdArray = [...extraIDs, id]
+        const traverseObj = qaRataTraverseProps();
+        return (
+          <QAExpandableRowsRender
+            payload={traverseObj["payload"]}
+            dropdownArray={traverseObj["dropdownArray"]}
+            columns={traverseObj["columnNames"]}
+            controlInputs={traverseObj["controlInputs"]}
+            controlDatePickerInputs={traverseObj["controlDatePickerInputs"]}
+            dataTableName={traverseObj["dataTableName"]}
+            extraControls={traverseObj["extraControls"]}
+            extraIDs={traverseIdArray}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        )
       default:
         break;
     }
@@ -536,20 +546,17 @@ const QAExpandableRowsRender = ({
     try {
       const resp = await assertSelector.removeDataSwitch(row, dataTableName, locationId, id, extraIDs)
       if (resp.status === 200) {
-        const dataPostRemove = dataPulled.filter(
-          (rowData) => rowData.id !== row.id
-        );
-        setDisplayedRecords(dataPostRemove)
-        executeOnClose()
+        setUpdateTable(true);
+        executeOnClose();
       }
     } catch (error) {
       console.log("error deleting data", error);
     }
   };
 
-  const getFirstLevelExpandables = () =>{
+  const getFirstLevelExpandables = () => {
     const expandables = [];
-    switch(dataTableName){
+    switch (dataTableName) {
       case 'Linearity Test':
         expandables.push(nextExpandableRow("Protocol Gas"));
         break;
@@ -575,8 +582,9 @@ const QAExpandableRowsRender = ({
           onRemoveHandler={onRemoveHandler}
           user={user}
           actionsBtn={"View"}
+          isCheckedOut={isCheckedOut}
           actionColumnName={
-            user ? (
+            user && isCheckedOut ? (
               <>
                 <span className="padding-right-2">{dataTableName}</span>
                 <Button
@@ -597,12 +605,13 @@ const QAExpandableRowsRender = ({
           }
           // shows empty table with add if user is logged in
           noDataComp={
-            user ? (
+            user && isCheckedOut ? (
               <div>
                 <QADataTableRender
                   columnNames={columns}
                   columnWidth={15}
                   data={[]}
+                  isCheckedOut={isCheckedOut}
                   actionColumnName={
                     <>
                       <span className="padding-right-2">{dataTableName}</span>
@@ -628,15 +637,15 @@ const QAExpandableRowsRender = ({
         <Preloader />
       )}
       {
-       [...getFirstLevelExpandables(dataTableName)] 
+        [...getFirstLevelExpandables(dataTableName)]
       }
       {show ? (
         <Modal
           show={show}
           close={closeModalHandler}
           save={createNewData ? createData : saveData}
-          showCancel={!user ? true : false}
-          showSave={user ? true : false}
+          showCancel={!user || (user && !isCheckedOut)}
+          showSave={user && isCheckedOut}
           title={
             createNewData
               ? `Add  ${dataTableName}`
@@ -653,7 +662,7 @@ const QAExpandableRowsRender = ({
                   data={selectedModalData}
                   cols={2}
                   title={`${dataTableName}`}
-                  viewOnly={!user ? true : false}
+                  viewOnly={!user || (user && !isCheckedOut)}
                   create={createNewData}
                 />
               </div>

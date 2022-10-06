@@ -71,6 +71,7 @@ describe("renders datatable with all values ", () => {
         columnNames={columnNames}
         data={[]}
         user={{ firstName: "test" }}
+        isCheckedOut={true}
       // expandableRowComp={<button>{"click me"}</button>}
       // expandableRows={true}
       />
@@ -87,6 +88,7 @@ describe("renders datatable with all values ", () => {
         columnNames={columnNames}
         data={[]}
         user={{ username: "test" }}
+        isCheckedOut={true}
       />
     );
     expect(container).toBeDefined();
@@ -124,6 +126,7 @@ describe("renders datatable with all values ", () => {
         data={data}
         user={{ firstName: "test" }}
         evaluate={true}
+        isCheckedOut={true}
       />
     );
 
@@ -140,6 +143,7 @@ describe("renders datatable with all values ", () => {
         columnNames={columnNames}
         data={data}
         user={{ firstName: "test" }}
+        isCheckedOut={true}
       />
     );
 
@@ -156,6 +160,7 @@ describe("renders datatable with all values ", () => {
         columnNames={columnNames}
         data={data}
         user={{ firstName: "test" }}
+        isCheckedOut={true}
       />
     );
 
