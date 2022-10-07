@@ -148,13 +148,6 @@ const QATestSummaryDataTable = ({
           dropdowns[dropdownArray[0][i]] = response[3].data.map((d) =>
             getOptions(d, "testResultCode", "testResultDescription")
           );
-          const options = response[0].data.map((d) =>
-            getOptions(d, "testTypeCode", "testTypeDescription")
-          );
-          setAllTestTypeCodes(options);
-          dropdowns[dropdownArray[0][i]] = options.filter((option) =>
-            selectedTestCode.testTypeCodes.includes(option.code)
-          );
         } else if (i === 4) {
           let noDupesTestCodes = response[4].data.map((code) => {
             return code["testTypeCode"];
