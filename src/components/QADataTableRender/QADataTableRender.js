@@ -28,7 +28,6 @@ const QADataTableRender = ({
   noDataComp,
   isCheckedOut
 }) => {
-  console.log('data',data)
   const columns = [];
   columnNames.forEach((name, index) => {
     switch (name) {
