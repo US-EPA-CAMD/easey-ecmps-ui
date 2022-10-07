@@ -450,3 +450,10 @@ export const getAllPointUsedIndicatorCodes = async () => {
   ]
   return Promise.resolve({ status: 200, data })
 }
+
+export const getMdmDataByCodeTable = async (codeTable) => {
+  return axios
+    .get(`${config.services.mdm.uri}/${codeTable}`)
+    .then(handleResponse)
+    .catch(handleError);
+}

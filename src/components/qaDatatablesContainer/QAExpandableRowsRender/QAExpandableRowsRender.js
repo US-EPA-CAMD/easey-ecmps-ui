@@ -26,6 +26,7 @@ import {
   qaRataRunDataProps,
   qaFlowRataRunProps,
   qaRataTraverseProps,
+  qaTestQualificationProps,
 } from "../../../additional-functions/qa-dataTable-props";
 const QAExpandableRowsRender = ({
   user,
@@ -40,7 +41,8 @@ const QAExpandableRowsRender = ({
   radioBtnPayload,
   extraIDs = [], // [locid, testsumid, linsumid,   ]
   data,
-  isCheckedOut
+  isCheckedOut,
+  mdmProps
 }) => {
   const { locationId, id } = data;
   // const { locationId, id } = dataTableName !== "Protocol Gas" ? data : ""; // id / testsumid
@@ -123,6 +125,23 @@ const QAExpandableRowsRender = ({
             extraControls={objAirEms["extraControls"]}
             data={data}
             extraIDs={airEmissionsIds}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "Test Qualification":
+        const objTestQa = qaTestQualificationProps(data);
+        return (
+          <QAExpandableRowsRender
+            payload={objTestQa["payload"]}
+            dropdownArray={objTestQa["dropdownArray"]}
+            mdmProps={objTestQa["mdmProps"]}
+            columns={objTestQa["columnNames"]}
+            controlInputs={objTestQa["controlInputs"]}
+            controlDatePickerInputs={objTestQa["controlDatePickerInputs"]}
+            dataTableName={objTestQa["dataTableName"]}
+            extraControls={objTestQa["extraControls"]}
+            data={data}
             user={user}
             isCheckedOut={isCheckedOut}
           />
@@ -391,6 +410,24 @@ const QAExpandableRowsRender = ({
         });
         break
       default:
+        mdmProps.forEach((prop) =>{
+          allPromises.push(dmApi.getMdmDataByCodeTable(prop['codeTable']));
+        });
+        Promise.all(allPromises)
+          .then(res =>{
+            res.forEach((val, i) =>{
+              dropdowns[dropdownArray[i]] = val.data.map((d) => {
+                return {
+                  code: d[mdmProps[i].responseProps["code"]],
+                  name: d[mdmProps[i].responseProps["description"]],
+                };
+              });
+            });
+            for (const options of Object.values(dropdowns)) {
+              options.unshift({ code: '', name: '-- Select a value --' })
+            }
+            setMdmData(dropdowns);
+          }).catch(err => console.error(err));
         break;
     }
   };
@@ -561,6 +598,7 @@ const QAExpandableRowsRender = ({
         expandables.push(nextExpandableRow("Protocol Gas"));
         break;
       case 'RATA Data':
+        expandables.push(nextExpandableRow("Test Qualification"));
         expandables.push(nextExpandableRow("Protocol Gas"));
         expandables.push(nextExpandableRow("Air Emissions"));
         break;
