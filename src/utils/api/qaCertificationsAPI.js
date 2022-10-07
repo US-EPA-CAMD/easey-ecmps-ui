@@ -802,3 +802,26 @@ export const deleteFlowRunData = async (locId, testSumId, rataId, rataSumId, rat
     return handleError(error);
   }
 };
+
+export const getTestQualification = async (locId, testSumId) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/test-qualifications`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createTestQualification = async (locId, testSumId, payload) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/test-qualifications`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+

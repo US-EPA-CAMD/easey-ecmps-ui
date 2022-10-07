@@ -371,3 +371,45 @@ export const qaFlowRataRunProps = () => {
     extraControls: {},
   };
 };
+
+export const qaTestQualificationProps = (selectedRow) => {
+  return {
+    dataTableName: "Test Qualification",
+    payload: {
+      testClaimCode: selectedRow.testClaimCode,
+      beginDate: null,
+      endDate: null,
+      highLoadPercentage: null,
+      midLoadPercentage: null,
+      lowLoadPercentage: null
+    },
+    dropdownArray: ["testClaimCode"],
+    mdmProps: [
+      {
+        codeTable: "test-claim-codes",
+        responseProps: {
+          code: "testClaimCode",
+          description: "testClaimDescription"
+        }
+      }
+    ],
+    columnNames: [
+      "Test Claim Code",
+      "Begin Date",
+      "End Date",
+      "High Load Percentage",
+      "Mid Load Percentage",
+      "Low Load Percentage"
+    ],
+    controlInputs: {
+      testClaimCode: ["Test Claim Code", "dropdown", "", ""],
+      beginDate: ["Begin Date", "date", "", ""],
+      endDate: ["End Date", "date", "", ""],
+      highLoadPercentage: ["High Load Percentage", "input", "", ""],
+      midLoadPercentage: ["Mid Load Percentage", "input", "", ""],
+      lowLoadPercentage: ["Low Load Percentage", "input", "", ""],
+    },
+    controlDatePickerInputs: {},
+    extraControls: {},
+  };
+};
