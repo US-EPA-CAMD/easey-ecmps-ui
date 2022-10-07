@@ -522,6 +522,8 @@ export const updateRataSummary = async (
 
 export const deleteRataSummary = async (locId, testSumId, rataId, id) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${id}`;
+
+  console.log('url deleteratasummary', url);
   try {
     return handleResponse(
       await secureAxios({
@@ -759,6 +761,10 @@ export const getFlowRunData = async (locID, testSumId, rataId, rataSumId, rataRu
 export const createFlowRunData = async (locId, testSumId, rataId, rataSumId, rataRunId, payload) => {
   let url = `${config.services.qaCertification.uri}/workspace`;
   url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs`;
+  console.log('createFlowRunData url', url);
+
+  // return axios.post(url, payload).then(handleResponse).catch(handleError)
+
   try {
     return handleResponse(
       await secureAxios({
@@ -768,6 +774,7 @@ export const createFlowRunData = async (locId, testSumId, rataId, rataSumId, rat
       })
     );
   } catch (error) {
+    console.log('handle import error create flow run data');
     return handleImportError(error);
   }
 };
@@ -791,6 +798,9 @@ export const updateFlowRunData = async (locId, testSumId, rataId, rataSumId, rat
 export const deleteFlowRunData = async (locId, testSumId, rataId, rataSumId, rataRunId, id) => {
   let url = `${config.services.qaCertification.uri}/workspace`;
   url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${id}`;
+
+  console.log('url for delete', url);
+
   try {
     return handleResponse(
       await secureAxios({

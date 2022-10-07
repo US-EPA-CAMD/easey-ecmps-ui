@@ -57,9 +57,9 @@ const QAExpandableRowsRender = ({
       assertSelector
         .getDataTableApis(dataTableName, locationId, id, extraIDs)
         .then((res) => {
-          console.log("res", res.data);
           finishedLoadingData(res.data);
-        });
+        })
+        .catch((error => console.log(error)))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataTableName, updateTable]);
@@ -519,7 +519,6 @@ const QAExpandableRowsRender = ({
     assertSelector
       .saveDataSwitch(userInput, dataTableName, locationId, id, extraIDs)
       .then((res) => {
-        console.log(res.data);
         setUpdateTable(true);
         executeOnClose();
       })
@@ -533,7 +532,6 @@ const QAExpandableRowsRender = ({
     assertSelector
       .createDataSwitch(userInput, dataTableName, locationId, id, extraIDs)
       .then((res) => {
-        console.log(res.data, "create");
         setUpdateTable(true);
         executeOnClose();
       })
@@ -543,6 +541,7 @@ const QAExpandableRowsRender = ({
   };
 
   const onRemoveHandler = async (row) => {
+    console.log('onRemoveHandler called: talbename', dataTableName);
     try {
       const resp = await assertSelector.removeDataSwitch(row, dataTableName, locationId, id, extraIDs)
       if (resp.status === 200) {
