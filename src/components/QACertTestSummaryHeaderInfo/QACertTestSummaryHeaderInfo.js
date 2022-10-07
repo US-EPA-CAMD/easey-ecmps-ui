@@ -157,6 +157,7 @@ export const QACertTestSummaryHeaderInfo = ({
     return () => {
       cleanupFocusEventListeners();
     };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkoutState]);
 
   const isCheckedOutByUser = (configs) => {
@@ -184,6 +185,7 @@ export const QACertTestSummaryHeaderInfo = ({
         setCurrentConfig(result);
       }
     }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkedOutConfigs])
 
   useEffect(() => {

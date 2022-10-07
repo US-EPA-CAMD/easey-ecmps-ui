@@ -176,7 +176,7 @@ export const DataTableMats = ({
     // if NO RECORDS are returned
     else {
       // disable the inactive checkbox and set it as un-checked
-      settingInactiveCheckBox(false, true);
+      // settingInactiveCheckBox(false, true);
       return [];
     }
 

@@ -176,7 +176,6 @@ const QATestSummaryDataTable = ({
     });
   };
   useEffect(() => {
-    //console.log("TEST TYPE GROUPE CODE CHANGED");
     const { testTypeCodes, testTypeGroupCode } = selectedTestCode;
     if (mdmData === null) {
       if (testTypeGroupCode) {

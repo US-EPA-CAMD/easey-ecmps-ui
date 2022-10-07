@@ -43,6 +43,7 @@ export const MonitoringPlanTabRender = ({
   setInactive,
   inactive,
   checkedOutLocations,
+  currentTabIndex,
 }) => {
   const settingInactiveCheckBox = (check, disable) => {
     setInactive([check, disable], title, MONITORING_PLAN_STORE_NAME);
@@ -84,6 +85,7 @@ export const MonitoringPlanTabRender = ({
               setRevertedState={setRevertedState}
               setUpdateRelatedTables={setUpdateRelatedTables}
               updateRelatedTables={updateRelatedTables}
+              currentTabIndex={currentTabIndex}
             />,
             "Defaults",
           ],
@@ -116,6 +118,7 @@ export const MonitoringPlanTabRender = ({
               setRevertedState={setRevertedState}
               setUpdateRelatedTables={setUpdateRelatedTables}
               updateRelatedTables={updateRelatedTables}
+              currentTabIndex={currentTabIndex}
             />,
             "Formulas",
           ],
@@ -149,6 +152,7 @@ export const MonitoringPlanTabRender = ({
               setRevertedState={setRevertedState}
               setUpdateRelatedTables={setUpdateRelatedTables}
               updateRelatedTables={updateRelatedTables}
+              currentTabIndex={currentTabIndex}
             />,
             "Loads",
           ],
@@ -190,6 +194,7 @@ export const MonitoringPlanTabRender = ({
               setRevertedState={setRevertedState}
               setUpdateRelatedTables={setUpdateRelatedTables}
               updateRelatedTables={updateRelatedTables}
+              currentTabIndex={currentTabIndex}
             />,
             "Location Attributes",
           ],
@@ -222,6 +227,7 @@ export const MonitoringPlanTabRender = ({
               setRevertedState={setRevertedState}
               setUpdateRelatedTables={setUpdateRelatedTables}
               updateRelatedTables={updateRelatedTables}
+              currentTabIndex={currentTabIndex}
             />,
             "Relationships Data",
           ],
@@ -238,6 +244,7 @@ export const MonitoringPlanTabRender = ({
               setRevertedState={setRevertedState}
               setUpdateRelatedTables={setUpdateRelatedTables}
               updateRelatedTables={updateRelatedTables}
+              currentTabIndex={currentTabIndex}
             />,
             "Methods",
           ],
@@ -252,6 +259,8 @@ export const MonitoringPlanTabRender = ({
               setRevertedState={setRevertedState}
               setUpdateRelatedTables={setUpdateRelatedTables}
               updateRelatedTables={updateRelatedTables}
+              currentTabIndex={currentTabIndex}
+              
             />,
             "Supplemental Methods",
           ],
@@ -268,6 +277,7 @@ export const MonitoringPlanTabRender = ({
               setRevertedState={setRevertedState}
               setUpdateRelatedTables={setUpdateRelatedTables}
               updateRelatedTables={updateRelatedTables}
+              currentTabIndex={currentTabIndex}
             />,
             "Qualifications",
           ],
@@ -300,6 +310,7 @@ export const MonitoringPlanTabRender = ({
               setRevertedState={setRevertedState}
               setUpdateRelatedTables={setUpdateRelatedTables}
               updateRelatedTables={updateRelatedTables}
+              currentTabIndex={currentTabIndex}
             />,
 
             "WAFs Rectangular Duct",
@@ -330,6 +341,7 @@ export const MonitoringPlanTabRender = ({
               setRevertedState={setRevertedState}
               setUpdateRelatedTables={setUpdateRelatedTables}
               updateRelatedTables={updateRelatedTables}
+              currentTabIndex={currentTabIndex}
             />,
             "Spans",
           ],
@@ -347,6 +359,7 @@ export const MonitoringPlanTabRender = ({
               setRevertedState={setRevertedState}
               setUpdateRelatedTables={setUpdateRelatedTables}
               updateRelatedTables={updateRelatedTables}
+              currentTabIndex={currentTabIndex}
             />,
             "Systems",
           ],
@@ -398,6 +411,7 @@ export const MonitoringPlanTabRender = ({
               setRevertedState={setRevertedState}
               setUpdateRelatedTables={setUpdateRelatedTables}
               updateRelatedTables={updateRelatedTables}
+              currentTabIndex={currentTabIndex}
             />,
             "Unit Fuels",
           ],
@@ -453,6 +467,7 @@ export const MonitoringPlanTabRender = ({
               setRevertedState={setRevertedState}
               setUpdateRelatedTables={setUpdateRelatedTables}
               updateRelatedTables={updateRelatedTables}
+              currentTabIndex={currentTabIndex}
             />,
             "Unit Controls",
           ],
@@ -507,6 +522,7 @@ export const MonitoringPlanTabRender = ({
               setRevertedState={setRevertedState}
               setUpdateRelatedTables={setUpdateRelatedTables}
               updateRelatedTables={updateRelatedTables}
+              currentTabIndex={currentTabIndex}
             />,
             "Unit Capacities",
           ],
@@ -520,7 +536,7 @@ export const MonitoringPlanTabRender = ({
       // eslint-disable-next-line react-hooks/exhaustive-deps
       locationSelect[1],
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      inactive[0],
+      // inactive[0],
       checkout,
       revertedState,
       updateRelatedTables,
@@ -546,6 +562,7 @@ export const MonitoringPlanTabRender = ({
           setRevertedState={setRevertedState}
           setUpdateRelatedTables={setUpdateRelatedTables}
           updateRelatedTables={updateRelatedTables}
+          currentTabIndex={currentTabIndex}
         />,
         "Methods",
       ],
@@ -560,6 +577,7 @@ export const MonitoringPlanTabRender = ({
           setRevertedState={setRevertedState}
           setUpdateRelatedTables={setUpdateRelatedTables}
           updateRelatedTables={updateRelatedTables}
+          currentTabIndex={currentTabIndex}
         />,
         "Supplemental Methods",
       ],
@@ -604,7 +622,7 @@ export const MonitoringPlanTabRender = ({
         />
       </div>
       <hr />
-      <div className="grid-row">
+      <div className="grid-row overflow-x-auto">
         <CustomAccordion
           title={sectionSelect[1]}
           table={tableState[sectionSelect[0]]}

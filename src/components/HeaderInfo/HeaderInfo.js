@@ -550,10 +550,6 @@ export const HeaderInfo = ({
     )}`;
   };
 
-  const settingReduxInactiveBTN = (inactiveArr, facName, storeName) => {
-    setInactive(inactiveArr, facName, storeName);
-  };
-
   return (
     <div className="header">
       <div
@@ -726,20 +722,20 @@ export const HeaderInfo = ({
                     id="inactiveCheckBox"
                     name="inactiveCheckBox"
                     label="Show Inactive"
-                    checked={!inactive[0]}
+                    checked={inactive[0]}
                     disabled={inactive[1]}
                     onChange={
                       () =>
-                        settingReduxInactiveBTN(
-                          [!inactive[0], inactive[1]],
-                          facility,
-                          MONITORING_PLAN_STORE_NAME
-                        )
-                      // setInactive(
-                      //   [!inactive[0], inactive[1]],
-                      //   facility,
-                      //   MONITORING_PLAN_STORE_NAME
-                      // )
+                        // settingReduxInactiveBTN(
+                        //   [!inactive[0], inactive[1]],
+                        //   facility,
+                        //   MONITORING_PLAN_STORE_NAME
+                        // )
+                      setInactive(
+                        [!inactive[0], inactive[1]],
+                        facility,
+                        MONITORING_PLAN_STORE_NAME
+                      )
                     }
                   />
                 </div>
