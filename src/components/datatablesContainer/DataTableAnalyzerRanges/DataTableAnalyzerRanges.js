@@ -140,6 +140,7 @@ export const DataTableAnalyzerRanges = ({
 const mapStateToProps = (state) => {
   return {
     mdmData: state.dropdowns[ANALYZER_RANGES_STORE_NAME],
+    
   };
 };
 
