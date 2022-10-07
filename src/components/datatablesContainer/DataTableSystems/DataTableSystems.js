@@ -531,6 +531,7 @@ export const DataTableSystems = ({
     manufacturer: "string",
     modelVersion: "string",
     serialNumber: "string",
+    sampleAcquisitionMethodCode: "string",
     componentTypeCode: "string",
     hgConverterIndicator: 0,
     beginDate: "2021-09-11T06:23:36.289Z",
@@ -540,7 +541,6 @@ export const DataTableSystems = ({
     componentId: "string",
   };
   const createComponent = () => {
-    console.log("test createComponent");
     const userInput = extractUserInput(componentPayload, ".modalUserInput", [
       "hgConverterIndicator",
     ]);
@@ -571,6 +571,12 @@ export const DataTableSystems = ({
     const userInput = extractUserInput(componentPayload, ".modalUserInput", [
       "hgConverterIndicator",
     ]);
+    userInput.componentId = selectedRangeInFirst.componentId;
+    userInput.componentTypeCode = selectedRangeInFirst.componentTypeCode;
+    userInput.basisCode = selectedRangeInFirst.basisCode;
+    userInput.hgConverterIndicator = selectedRangeInFirst.hgConverterIndicator;
+    userInput.sampleAcquisitionMethodCode = selectedRangeInFirst.sampleAcquisitionMethodCode;
+
     if (
       (userInput.endHour && !userInput.endDate) ||
       (!userInput.endHour && userInput.endDate)

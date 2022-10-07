@@ -377,19 +377,19 @@ export const DataTableSystemsComponents = ({
       modalViewData(
         selectComponents,
         {
-          componentId: ["Component ID", "input", "", ""],
+          componentId: ["Component ID", "input", "", "locked"],
           sampleAcquisitionMethodCode: [
             "Sample Acquistion Method",
             "dropdown",
             "",
-            "",
+            "locked",
           ],
-          componentTypeCode: ["Component Type", "mainDropdown", "", ""],
-          basisCode: ["Basis Description", "dropdown", "", ""],
+          componentTypeCode: ["Component Type", "mainDropdown", "", "locked"],
+          basisCode: ["Basis Description", "dropdown", "", "locked"],
           manufacturer: ["Manufacturer", "input", "", ""],
           modelVersion: ["Model or Version", "input", "", ""],
           serialNumber: ["Serial Number", "input", "", ""],
-          hgConverterIndicator: ["Hg Converter Indicator", "radio", "", ""],
+          hgConverterIndicator: ["Hg Converter Indicator", "radio", "", "locked"],
         },
         {
           beginDate: ["Start Date", "date", "", ""],

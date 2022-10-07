@@ -46,6 +46,7 @@ const QATestSummaryDataTable = ({
   nonEditable = false,
   showModal = false,
   selectedTestCode,
+  isCheckedOut,
   sectionSelect,
 }) => {
   const [loading, setLoading] = useState(false);
@@ -433,6 +434,7 @@ const QATestSummaryDataTable = ({
             expandable
             {...props}
             extraIDs={null}
+            isCheckedOut={isCheckedOut}
           />
         );
       // return <QALinearitySummaryExpandableRows {...props} />;
@@ -452,6 +454,7 @@ const QATestSummaryDataTable = ({
             expandable
             {...props}
             extraIDs={null}
+            isCheckedOut={isCheckedOut}
           />
         );
       // return (
@@ -475,8 +478,9 @@ const QATestSummaryDataTable = ({
           data={data}
           openHandler={openModal}
           onRemoveHandler={onRemoveHandler}
+          isCheckedOut={isCheckedOut}
           actionColumnName={
-            user ? (
+            user && isCheckedOut ? (
               <>
                 <span className="padding-right-2">Test Data</span>
                 <Button
@@ -503,11 +507,12 @@ const QATestSummaryDataTable = ({
           )}
           evaluate={true}
           noDataComp={
-            user ? (
+            user && isCheckedOut ? (
               <QADataTableRender
                 columnNames={columns}
                 columnWidth={10}
                 data={[]}
+                isCheckedOut={isCheckedOut}
                 actionColumnName={
                   <>
                     <span className="padding-right-2">Test Data</span>
@@ -536,9 +541,9 @@ const QATestSummaryDataTable = ({
           show={show}
           close={closeModalHandler}
           save={createNewData ? createData : saveData}
-          showCancel={!user || nonEditable}
-          showSave={user && !nonEditable}
-          nonEditable={nonEditable}
+          showCancel={!user || (user && !isCheckedOut)}
+          showSave={user && isCheckedOut}
+          //nonEditable={nonEditable}
           title={createNewData ? `Add ${dataTableName}` : `${dataTableName}`}
           exitBTN={`Save and Close`}
           children={
@@ -550,7 +555,7 @@ const QATestSummaryDataTable = ({
                   // prefilteredMdmData={prefilteredMdmData}
                   cols={3}
                   title={`${dataTableName}`}
-                  viewOnly={!user || nonEditable}
+                  viewOnly={!user || (user && !isCheckedOut)}
                   create={createNewData}
                   setMainDropdownChange={setMainDropdownChange}
                   mainDropdownChange={mainDropdownChange}

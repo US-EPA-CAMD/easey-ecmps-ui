@@ -27,7 +27,6 @@ export const MonitoringPlanHome = ({
   resetTimerFlag,
   callApiFlag,
   openedFacilityTabs,
-  moduleName,
   workspaceSection
 }) => {
   const [titleName, setTitleName] = useState(document.title);
@@ -182,7 +181,7 @@ export const MonitoringPlanHome = ({
                 selectedConfig={row.selectedConfig}
                 title={row.name}
                 user={user}
-                checkout={row.checkout}
+                isCheckedOut={row.checkout}
                 checkedOutLocations={checkedOutLocations}
               />
             ),

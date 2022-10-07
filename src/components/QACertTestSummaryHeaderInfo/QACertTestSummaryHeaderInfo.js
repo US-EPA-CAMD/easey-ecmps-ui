@@ -333,7 +333,7 @@ export const QACertTestSummaryHeaderInfo = ({
             </h3>
             <p className="text-bold font-body-xl">{facilityAdditionalName}</p>
           </div>
-          {user && (
+          {user && isCheckedOut &&(
             <div>
               <Button
                 // className="padding-x-5"

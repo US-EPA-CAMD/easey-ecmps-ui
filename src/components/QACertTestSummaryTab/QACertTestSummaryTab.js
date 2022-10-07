@@ -23,6 +23,7 @@ export const QACertTestSummaryTab = ({
   locations,
   user,
   tabs,
+  isCheckedOut,
 
   activeTab,
   setSection,
