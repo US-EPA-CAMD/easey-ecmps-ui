@@ -10,7 +10,6 @@ import {
 import {
   convertSectionToStoreName,
   EXPORT_STORE_NAME,
-  QA_CERT_TEST_SUMMARY_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import "./DynamicTabs.scss";
 
@@ -80,6 +79,7 @@ export const DynamicTabs = ({
                 facId={
                   tab.selectedConfig ? tab.selectedConfig.facId : "initial"
                 }
+                selectedConfigName={tab?.selectedConfig?.name ?? "initial"}
               >
                 {cloneElement(tab.component, {
                   addtabs: addTabsHandler,
@@ -110,6 +110,7 @@ export const DynamicTabs = ({
                 facId={
                   tab.selectedConfig ? tab.selectedConfig.facId : "initial"
                 }
+                selectedConfigName={tab?.selectedConfig?.name ?? "initial"}
               >
                 {cloneElement(tab.component, {
                   addtabs: addTabsHandler,

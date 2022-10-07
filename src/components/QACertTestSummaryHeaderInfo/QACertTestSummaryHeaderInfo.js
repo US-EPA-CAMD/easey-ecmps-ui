@@ -98,7 +98,7 @@ export const QACertTestSummaryHeaderInfo = ({
           const options = res.data
             .map((e) => {
               return {
-                name: e.testTypeGroupCodeDescription,
+                name: e.testTypeGroupDescription,
                 code: e.testTypeGroupCode,
               };
             })
@@ -157,6 +157,7 @@ export const QACertTestSummaryHeaderInfo = ({
     return () => {
       cleanupFocusEventListeners();
     };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkoutState]);
 
   const isCheckedOutByUser = (configs) => {
@@ -184,6 +185,7 @@ export const QACertTestSummaryHeaderInfo = ({
         setCurrentConfig(result);
       }
     }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkedOutConfigs])
 
   useEffect(() => {
@@ -331,7 +333,7 @@ export const QACertTestSummaryHeaderInfo = ({
             </h3>
             <p className="text-bold font-body-xl">{facilityAdditionalName}</p>
           </div>
-          {user && (
+          {user && isCheckedOut &&(
             <div>
               <Button
                 // className="padding-x-5"

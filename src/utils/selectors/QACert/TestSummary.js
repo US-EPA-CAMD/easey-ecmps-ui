@@ -89,7 +89,7 @@ const colTitleToDtoKeyMap = {
   "Begin Minute": "beginMinute",
   "End Date": "endDate",
   "End Hour": "endHour",
-  "End Minute": "endnMinute",
+  "End Minute": "endMinute",
   "Grace Period Indicator": "gracePeriodIndicator",
   Year: "year",
   Quarter: "quarter",

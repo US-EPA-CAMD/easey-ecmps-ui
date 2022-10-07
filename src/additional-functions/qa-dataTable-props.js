@@ -327,7 +327,7 @@ export const qaFlowRataRunProps = () => {
     payload: {
       numberOfTraversePoints: null,
       barometricPressure: null,
-      stackStaticPressure: null,
+      staticStackPressure: null,
       percentCO2: null,
       percentO2: null,
       percentMoisture: null,
@@ -356,11 +356,11 @@ export const qaFlowRataRunProps = () => {
     controlInputs: {
       numberOfTraversePoints: ["Number of Traverse Points", "input", "", ""],
       barometricPressure: ["Barometric Pressure", "input", "", ""],
-      stackStaticPressure: ["Stack Static Pressure", "input", "", ""],
+      staticStackPressure: ["Stack Static Pressure", "input", "", ""],
       percentCO2: ["Percent CO2", "input", "", ""],
       percentO2: ["Percent O2", "input", "", ""],
       percentMoisture: ["Percent Moisture", "input", "", ""],
-      dryMolecularWeight: ["Dry Molecular Weight", "date", "", ""],
+      dryMolecularWeight: ["Dry Molecular Weight", "input", "", ""],
       wetMolecularWeight: ["Wet Molecular Weight", "input", "", ""],
       averageVelocityWithoutWallEffects: ["Average Velocity without Wall Effects", "input", "", ""],
       averageVelocityWithWallEffects: ["Average Velocity with Wall Effects", "input", "", ""],

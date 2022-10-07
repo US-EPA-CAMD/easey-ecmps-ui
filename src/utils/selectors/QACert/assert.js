@@ -58,7 +58,7 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
           console.log("error", error);
         });
     case airEmissions:
-      return qaApi.getAirEmissions(location, id).catch((error) => {
+      return qaApi.getAirEmissions(extraIdsArr[0], id).catch((error) => {
         console.log("error", error);
       });
     case flowRataRun:
@@ -283,12 +283,11 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
     case flowRataRun:
       return qaApi
         .updateFlowRunData(
-          location,
-          id,
           extraIdsArr[0],
           extraIdsArr[1],
           extraIdsArr[2],
           extraIdsArr[3],
+          id,
           userInput.id,
           userInput
         )
