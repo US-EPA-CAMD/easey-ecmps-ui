@@ -60,6 +60,8 @@ export const DataTableAssert = ({
   showModal = false,
   setUpdateRelatedTables,
   updateRelatedTables,
+  currentTabIndex,
+  tabs
 }) => {
   const [dataPulled, setDataPulled] = useState([]);
   const [show, setShow] = useState(showModal);
@@ -235,11 +237,11 @@ export const DataTableAssert = ({
       // if BOTH ACTIVE & INACTIVE records return
       else {
         // then enable the inactive checkbox (user can mark it as checked/un-checked manually)
-        settingInactiveCheckBox(inactive[0], false);
+        settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
 
         setDisplayedRecords(
           assertSelector.getDataTableRecords(
-            !inactive[0] ? getActiveData(display) : display,
+            !tabs[currentTabIndex].inactive[0] ? getActiveData(display) : display,
             dataTableName
           )
         );
@@ -247,8 +249,7 @@ export const DataTableAssert = ({
     }
     // if NO RECORDS are returned
     else {
-      // disable the inactive checkbox and set it as un-checked
-      settingInactiveCheckBox(false, true);
+      // disable the inactive checkbox and set it as un-checked\
       setDisplayedRecords([]);
     }
   };
@@ -265,7 +266,7 @@ export const DataTableAssert = ({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataLoaded, dataPulled, inactive, updateTable]);
+  }, [dataLoaded, dataPulled,  tabs[currentTabIndex].inactive[0], updateTable]);
 
   const saveData = () => {
     const userInput = extractUserInput(
@@ -503,6 +504,9 @@ const mapStateToProps = (state, ownProps) => {
   const { dataTableName } = ownProps;
   return {
     mdmData: state.dropdowns[convertSectionToStoreName(dataTableName)],
+    tabs: state.openedFacilityTabs[
+      'monitoringPlans'
+     ],
   };
 };
 

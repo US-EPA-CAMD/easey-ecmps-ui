@@ -10,7 +10,6 @@ import {
 import {
   convertSectionToStoreName,
   EXPORT_STORE_NAME,
-  QA_CERT_TEST_SUMMARY_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import "./DynamicTabs.scss";
 

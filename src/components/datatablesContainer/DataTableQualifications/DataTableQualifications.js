@@ -54,6 +54,10 @@ export const DataTableQualifications = ({
   revertedState,
   setRevertedState,
   selectedLocation,
+  currentTabIndex,
+  //
+
+  tabs,
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [qualificationData, setQualificationsData] = useState([]);
@@ -167,18 +171,18 @@ export const DataTableQualifications = ({
       }
       // resets checkbox
       else {
-        settingInactiveCheckBox(inactive[0], false);
+        settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
         return fs.getMonitoringPlansQualifications(
-          !inactive[0] ? getActiveData(qualificationData) : qualificationData
+          tabs[currentTabIndex].inactive[0] === false ? getActiveData(qualificationData) : qualificationData
         );
       }
     } else {
-      settingInactiveCheckBox(false, true);
+
       return [];
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [qualificationData, inactive]);
+  }, [qualificationData, tabs[currentTabIndex].inactive[0]]);
 
   //also tests edge cases for some functions between open PCT/LEE/LME
   const testingSave = () => {
@@ -598,6 +602,9 @@ export const DataTableQualifications = ({
 const mapStateToProps = (state) => {
   return {
     mdmData: state.dropdowns[QUALIFICATIONS_STORE_NAME],
+    tabs: state.openedFacilityTabs[
+      'monitoringPlans'
+     ],
   };
 };
 

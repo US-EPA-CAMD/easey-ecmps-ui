@@ -4,7 +4,6 @@ import ModalDetails from "../../ModalDetails/ModalDetails";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
-import "./DataTableSystemsComponentsRender.scss";
 import { attachChangeEventListeners } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 import DataTableAnalyzerRanges from "../DataTableAnalyzerRanges/DataTableAnalyzerRanges";
 import {

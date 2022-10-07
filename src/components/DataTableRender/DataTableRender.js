@@ -30,7 +30,7 @@ import {
   LockSharp,
 } from "@material-ui/icons";
 
-import { MONITORING_PLAN_STORE_NAME, EXPORT_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
+import { EXPORT_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 // *** scss
 import "./DataTableRender.scss";
 import { setCheckoutState } from "../../store/actions/dynamicFacilityTab";

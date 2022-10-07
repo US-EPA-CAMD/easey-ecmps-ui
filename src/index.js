@@ -1,3 +1,5 @@
+
+// import './wdyr'; // <--- first import
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
@@ -10,13 +12,13 @@ import * as serviceWorker from "./serviceWorker";
 const store = configureStore();
 
 ReactDOM.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter basename={config.app.path}>
         <App />
       </BrowserRouter>
-    </Provider>
-  </React.StrictMode>,
+    </Provider>,
+  // </React.StrictMode>,
   document.getElementById("root")
 );
 

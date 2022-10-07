@@ -36,6 +36,10 @@ export const DataTableRectangularDucts = ({
   settingInactiveCheckBox,
   revertedState,
   setRevertedState,
+  currentTabIndex,
+  //
+
+  tabs,
   showModal = false,
 }) => {
   const [ducts, setDucts] = useState([]);
@@ -104,7 +108,7 @@ export const DataTableRectangularDucts = ({
       setRevertedState(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, updateTable, revertedState]);
+  }, [locationSelectValue, updateTable, revertedState, checkout]);
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -225,14 +229,16 @@ export const DataTableRectangularDucts = ({
         return fs.getMonitoringPlansRectangularDuctsTableRecords(ducts);
       }
       // resets checkbox
-      settingInactiveCheckBox(inactive[0], false);
+      settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
       return fs.getMonitoringPlansRectangularDuctsTableRecords(
-        !inactive[0] ? getActiveData(ducts) : ducts
+        tabs[currentTabIndex].inactive[0] === false
+          ? getActiveData(ducts)
+          : ducts
       );
     }
     return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ducts, inactive]);
+  }, [ducts, tabs[currentTabIndex].inactive[0]]);
 
   const testing = () => {
     openDuctModal(false, false, true);
@@ -367,5 +373,12 @@ export const DataTableRectangularDucts = ({
     </div>
   );
 };
+const mapStateToProps = (state) => {
+  return {
 
-export default DataTableRectangularDucts;
+    tabs: state.openedFacilityTabs["monitoringPlans"],
+  };
+};
+export default connect(mapStateToProps, null)(DataTableRectangularDucts);
+export { mapDispatchToProps };
+export { mapStateToProps };
