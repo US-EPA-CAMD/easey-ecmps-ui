@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { connect } from "react-redux";
 import * as fs from "../../../utils/selectors/facilities";
-import SelectedFacilityTab from "../../MonitoringPlanTab/MonitoringPlanTab";
+import MonitoringPlanTab from "../../MonitoringPlanTab/MonitoringPlanTab";
 import QACertTestSummaryTab from "../../QACertTestSummaryTab/QACertTestSummaryTab";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import "./SelectFacilitiesDataTable.scss";
@@ -76,7 +76,7 @@ export const SelectFacilitiesDataTable = ({
         component:
           workspaceSection === MONITORING_PLAN_STORE_NAME ? (
             <div className="selectedTabsBox">
-              <SelectedFacilityTab
+              <MonitoringPlanTab
                 orisCode={info[0].col2}
                 selectedConfig={info[1]}
                 title={title}
@@ -98,7 +98,7 @@ export const SelectFacilitiesDataTable = ({
                 workspaceSection={workspaceSection}
               />
             </div>
-          ) : workspaceSection === QA_CERT_TEST_SUMMARY_STORE_NAME || EMISSIONS_STORE_NAME ? (
+          ) : workspaceSection === QA_CERT_TEST_SUMMARY_STORE_NAME ? (
             <div className="selectedTabsBox">
               <QACertTestSummaryTab
                 orisCode={info[0].col2}
@@ -107,6 +107,10 @@ export const SelectFacilitiesDataTable = ({
                 user={user}
                 workspaceSection={workspaceSection}
               />
+            </div>
+          ) : workspaceSection === EMISSIONS_STORE_NAME ? (
+            <div className="selectedTabsBox">
+              <div>EMISSIONS DATA COMING SOON!</div>
             </div>
           ) : (
             // handles export
