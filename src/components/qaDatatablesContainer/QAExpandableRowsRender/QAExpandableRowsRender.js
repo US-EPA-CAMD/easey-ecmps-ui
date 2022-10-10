@@ -541,7 +541,6 @@ const QAExpandableRowsRender = ({
   };
 
   const onRemoveHandler = async (row) => {
-    console.log('onRemoveHandler called: talbename', dataTableName);
     try {
       const resp = await assertSelector.removeDataSwitch(row, dataTableName, locationId, id, extraIDs)
       if (resp.status === 200) {

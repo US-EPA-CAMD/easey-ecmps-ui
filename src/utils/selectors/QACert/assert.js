@@ -16,7 +16,6 @@ const flowRataRun = "Flow";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
-  console.log("assert", name, location, id, extraIdsArr);
   switch (name) {
     case lineTest:
       return qaApi.getQALinearitySummary(location, id).catch((error) => {
