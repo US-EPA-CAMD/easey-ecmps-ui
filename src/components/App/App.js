@@ -6,7 +6,6 @@ import NotFound from "../NotFound/NotFound";
 import AboutHome from "../AboutHome/AboutHome";
 import Layout from "../Layout/Layout";
 import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
-import SelectConfigurationBaseModuleHome from "../SelectConfigurationBaseModuleHome/SelectConfigurationBaseModuleHome";
 import RuleEditor from "../RuleEditor/RuleEditor";
 import Login from "../Login/Login";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
@@ -203,7 +202,7 @@ const App = () => {
               exact
               component={() => {
                 return (
-                  <SelectConfigurationBaseModuleHome
+                  <MonitoringPlanHome
                     user={false}
                     workspaceSection={EMISSIONS_STORE_NAME}
                   />
@@ -214,7 +213,7 @@ const App = () => {
               path="/workspace/emissions-daily"
               exact
               component={() => (
-                <SelectConfigurationBaseModuleHome
+                <MonitoringPlanHome
                   user={user}
                   workspaceSection={EMISSIONS_STORE_NAME}
                 />
@@ -231,7 +230,7 @@ const App = () => {
               exact
               component={() => {
                 return (
-                  <SelectConfigurationBaseModuleHome
+                  <MonitoringPlanHome
                     user={false}
                     workspaceSection={EMISSIONS_STORE_NAME}
                   />
@@ -242,7 +241,7 @@ const App = () => {
               path="/workspace/emissions-hourly"
               exact
               component={() => (
-                <SelectConfigurationBaseModuleHome
+                <MonitoringPlanHome
                   user={user}
                   workspaceSection={EMISSIONS_STORE_NAME}
                 />
@@ -259,7 +258,7 @@ const App = () => {
               exact
               component={() => {
                 return (
-                  <SelectConfigurationBaseModuleHome
+                  <MonitoringPlanHome
                     user={false}
                     workspaceSection={EMISSIONS_STORE_NAME}
                   />
@@ -270,7 +269,7 @@ const App = () => {
               path="/workspace/emissions-mats"
               exact
               component={() => (
-                <SelectConfigurationBaseModuleHome
+                <MonitoringPlanHome
                   user={user}
                   workspaceSection={EMISSIONS_STORE_NAME}
                 />
@@ -286,7 +285,7 @@ const App = () => {
               path="/export"
               exact
               component={() => (
-                <SelectConfigurationBaseModuleHome
+                <MonitoringPlanHome
                   user={false}
                   workspaceSection={EXPORT_STORE_NAME}
                 />
@@ -296,7 +295,7 @@ const App = () => {
               path="/workspace/export"
               exact
               component={() => (
-                <SelectConfigurationBaseModuleHome
+                <MonitoringPlanHome
                   user={user}
                   workspaceSection={EXPORT_STORE_NAME}
                 />
