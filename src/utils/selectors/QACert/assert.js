@@ -38,13 +38,6 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       });
 
     case rataRunData:
-      console.log(
-        "name, location, id, extraIdsArr",
-        name,
-        location,
-        id,
-        extraIdsArr
-      );
       return qaApi
         .getRataRunData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], id)
         .catch((error) => {
