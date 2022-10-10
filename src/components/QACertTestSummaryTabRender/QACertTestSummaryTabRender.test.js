@@ -26,7 +26,7 @@ const props = {
   sectionSelect: [3, "Methods"],
   locationSelect: [0, "65"],
   orisCode: "5",
-
+  checkoutState:true,
   configID: selectedConfig.id,
 };
 test("tests QACertTestSummaryTabRender", () => {

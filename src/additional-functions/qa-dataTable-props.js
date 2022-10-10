@@ -327,7 +327,7 @@ export const qaFlowRataRunProps = () => {
     payload: {
       numberOfTraversePoints: null,
       barometricPressure: null,
-      stackStaticPressure: null,
+      staticStackPressure: null,
       percentCO2: null,
       percentO2: null,
       percentMoisture: null,
@@ -356,16 +356,58 @@ export const qaFlowRataRunProps = () => {
     controlInputs: {
       numberOfTraversePoints: ["Number of Traverse Points", "input", "", ""],
       barometricPressure: ["Barometric Pressure", "input", "", ""],
-      stackStaticPressure: ["Stack Static Pressure", "input", "", ""],
+      staticStackPressure: ["Stack Static Pressure", "input", "", ""],
       percentCO2: ["Percent CO2", "input", "", ""],
       percentO2: ["Percent O2", "input", "", ""],
       percentMoisture: ["Percent Moisture", "input", "", ""],
-      dryMolecularWeight: ["Dry Molecular Weight", "date", "", ""],
+      dryMolecularWeight: ["Dry Molecular Weight", "input", "", ""],
       wetMolecularWeight: ["Wet Molecular Weight", "input", "", ""],
       averageVelocityWithoutWallEffects: ["Average Velocity without Wall Effects", "input", "", ""],
       averageVelocityWithWallEffects: ["Average Velocity with Wall Effects", "input", "", ""],
       calculatedWAF: ["Calculated WAF", "input", "", ""],
       averageStackFlowRate: ["Average Stack Flow Rate", "input", "", ""],
+    },
+    controlDatePickerInputs: {},
+    extraControls: {},
+  };
+};
+
+export const qaTestQualificationProps = (selectedRow) => {
+  return {
+    dataTableName: "Test Qualification",
+    payload: {
+      testClaimCode: selectedRow.testClaimCode,
+      beginDate: null,
+      endDate: null,
+      highLoadPercentage: null,
+      midLoadPercentage: null,
+      lowLoadPercentage: null
+    },
+    dropdownArray: ["testClaimCode"],
+    mdmProps: [
+      {
+        codeTable: "test-claim-codes",
+        responseProps: {
+          code: "testClaimCode",
+          description: "testClaimDescription"
+        }
+      }
+    ],
+    columnNames: [
+      "Test Claim Code",
+      "Begin Date",
+      "End Date",
+      "High Load Percentage",
+      "Mid Load Percentage",
+      "Low Load Percentage"
+    ],
+    controlInputs: {
+      testClaimCode: ["Test Claim Code", "dropdown", "", ""],
+      beginDate: ["Begin Date", "date", "", ""],
+      endDate: ["End Date", "date", "", ""],
+      highLoadPercentage: ["High Load Percentage", "input", "", ""],
+      midLoadPercentage: ["Mid Load Percentage", "input", "", ""],
+      lowLoadPercentage: ["Low Load Percentage", "input", "", ""],
     },
     controlDatePickerInputs: {},
     extraControls: {},

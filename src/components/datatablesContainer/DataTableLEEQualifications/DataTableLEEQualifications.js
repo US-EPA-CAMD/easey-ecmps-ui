@@ -107,7 +107,7 @@ export const DataTableLEEQualifications = ({
     return [];
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [qualLeeData, inactive]);
+  }, [qualLeeData]);
 
   const openLeeQualModal = (row, bool, create) => {
     setOpenLEE(true);

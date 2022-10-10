@@ -17,6 +17,30 @@ const getApiUrl = (path) => {
   return `${url}${path}`;
 }
 
+export const getQAEvaluationReportData = async (
+  type,
+  monPlanId,
+  testId,
+  batchId,
+) => {
+  let url = `${config.services.qaCertification.uri}`;
+
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+
+  type = type.replace('_EVAL', '');
+  const test = testId ? `&testId=${testId}` : '';
+  const batch = batchId ? `&batchId=${batchId}` : '';
+
+  url = `${url}/evaluations/results?type=${type}&monitorPlanId=${monPlanId}${test}${batch}`;
+
+  console.log(url);
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
 export const getQATestSummary = async (
   locID,
   selectedTestCode,
@@ -778,3 +802,26 @@ export const deleteFlowRunData = async (locId, testSumId, rataId, rataSumId, rat
     return handleError(error);
   }
 };
+
+export const getTestQualification = async (locId, testSumId) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/test-qualifications`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createTestQualification = async (locId, testSumId, payload) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/test-qualifications`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+

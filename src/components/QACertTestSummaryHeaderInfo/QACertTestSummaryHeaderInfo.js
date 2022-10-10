@@ -25,7 +25,9 @@ import {
   getAllTestTypeCodes,
   getAllTestTypeGroupCodes,
 } from "../../utils/api/dataManagementApi";
-import { LockOpenSharp, LockSharp } from "@material-ui/icons";
+import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
+import * as mpApi from "../../utils/api/monitoringPlansApi";
+import { checkoutAPI } from "../../additional-functions/checkout";
 
 export const QACertTestSummaryHeaderInfo = ({
   facility,
@@ -36,7 +38,9 @@ export const QACertTestSummaryHeaderInfo = ({
   //redux sets
   setLocationSelect,
   setSectionSelect,
+  setCheckout,
   // redux store
+  checkoutState,
   sectionSelect,
   locationSelect,
   locations,
@@ -65,7 +69,13 @@ export const QACertTestSummaryHeaderInfo = ({
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
   const [selectedHistoricalData, setSelectedHistoricalData] = useState([]);
-  const [isCheckedOut, setIsCheckedOut] = useState(false);
+  const [isCheckedOut, setIsCheckedOut] = useState(checkoutState);
+  const [ checkedOutConfigs, setCheckedOutConfigs ] = useState([]);
+  const [ refresherInfo, setRefresherInfo ] = useState(null);
+  const [currentConfig, setCurrentConfig] = useState(false);
+  const [lockedFacility, setLockedFacility] = useState(false);
+  const [userHasCheckout, setUserHasCheckout] = useState(false);
+  const [checkedOutByUser, setCheckedOutByUser] = useState(false);
 
   const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([
     { name: "Loading..." },
@@ -88,7 +98,7 @@ export const QACertTestSummaryHeaderInfo = ({
           const options = res.data
             .map((e) => {
               return {
-                name: e.testTypeGroupCodeDescription,
+                name: e.testTypeGroupDescription,
                 code: e.testTypeGroupCode,
               };
             })
@@ -133,10 +143,50 @@ export const QACertTestSummaryHeaderInfo = ({
 
   // *** Clean up focus event listeners
   useEffect(() => {
+    mpApi.getRefreshInfo(configID)
+      .then((info) => setRefresherInfo({
+        checkedOutBy: "N/A",
+        lastUpdatedBy: info.data.userId,
+        updateDate: info.data.updateDate,
+      }))
+      .catch(err=>console.log(err));
+    mpApi.getCheckedOutLocations()
+      .then((res)=>setCheckedOutConfigs(res.data))
+      .catch(err=>console.log(err));
+
     return () => {
       cleanupFocusEventListeners();
     };
-  }, []);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [checkoutState]);
+
+  const isCheckedOutByUser = (configs) => {
+    return (
+      configs
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id) > -1 &&
+      configs[
+        configs
+          .map((location) => location["monPlanId"])
+          .indexOf(selectedConfig.id)
+      ]["checkedOutBy"] === user["userId"]
+    );
+  };
+
+  useEffect(()=>{
+    if(checkedOutConfigs){
+      setUserHasCheckout(
+        checkedOutConfigs.some((plan) => plan["checkedOutBy"] === user.userId)
+      );
+      setCheckedOutByUser(isCheckedOutByUser(checkedOutConfigs));
+      const result = checkedOutConfigs[checkedOutConfigs.map((con) => con["monPlanId"]).indexOf(selectedConfig.id)];
+      if(result){
+        setLockedFacility(true);
+        setCurrentConfig(result);
+      }
+    }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [checkedOutConfigs])
 
   useEffect(() => {
     if (importTypeSelection !== "select" || importedFile.length !== 0) {
@@ -215,8 +265,62 @@ export const QACertTestSummaryHeaderInfo = ({
     setShowImportDataPreview(false);
   };
 
-  const checkoutBtnText = isCheckedOut ? "Check Back In" : "Check Out";
-  const checkoutBtnIcon = isCheckedOut ? <LockSharp /> : <LockOpenSharp />;
+  const formatDate = (dateString, isUTC = false) => {
+    const date = new Date(dateString);
+    //HANDLE -1 days from DB dates which are UTC
+    const day = isUTC ? date.getDate() + 1 : date.getDate();
+    return (
+      (date.getMonth() > 8
+        ? date.getMonth() + 1
+        : "0" + (date.getMonth() + 1)) +
+      "/" +
+      (day > 9 ? day : "0" + day) +
+      "/" +
+      date.getFullYear()
+    );
+  };
+
+  // Create audit message for header info
+  const createAuditMessage = () => {
+    if(checkedOutConfigs){
+        // WORKSPACE view
+        if (user) {
+          // when config is checked out by someone
+          if (isCheckedOut) {
+            return `Currently checked-out by: ${
+              currentConfig["checkedOutBy"]
+            } ${formatDate(currentConfig["checkedOutOn"])}`;
+          }
+          // when config is not checked out
+          return `Last updated by: ${refresherInfo?.lastUpdatedBy} ${formatDate(
+            refresherInfo?.updateDate,
+            true
+          )}`;
+        }
+        // GLOBAL view
+        return `Last submitted by: ${selectedConfig.userId} ${formatDate(
+          selectedConfig.updateDate
+            ? selectedConfig.updateDate
+            : selectedConfig.addDate,
+          true
+        )}`;
+    }
+  };
+
+    // direction -> false = check back in
+  // true = check out
+  const checkoutStateHandler = (direction) => {
+    // trigger checkout API
+    //    - POST endpoint if direction is TRUE (adding new record to checkouts table)
+    //    - DELETE endpoint if direction is FALSE (removing record from checkouts table)
+    checkoutAPI(direction, configID, selectedConfig.id, setCheckout).then(
+      () => {
+        setCheckedOutByUser(direction);
+        setLockedFacility(direction);
+        setIsCheckedOut(direction);
+      }
+    );
+  };
 
   return (
     <div className="header QACertHeader ">
@@ -229,7 +333,7 @@ export const QACertTestSummaryHeaderInfo = ({
             </h3>
             <p className="text-bold font-body-xl">{facilityAdditionalName}</p>
           </div>
-          {user && (
+          {user && isCheckedOut &&(
             <div>
               <Button
                 // className="padding-x-5"
@@ -252,22 +356,48 @@ export const QACertTestSummaryHeaderInfo = ({
           )}
         </div>
 
-        {user && <p>checked-out by:</p>}
-
-        {user && (
-          <div className="grid-row">
-            <Button
-              outline={!isCheckedOut}
-              onClick={() => setIsCheckedOut((prevState) => !prevState)}
-            >
-              {checkoutBtnIcon} {checkoutBtnText}
-            </Button>
-            {isCheckedOut && (
-              <Button outline={true}>Revert to Official Record</Button>
-            )}
-          </div>
-        )}
-
+        <p className="text-bold font-body-2xs">{createAuditMessage()}</p>
+        <div className="grid-row">
+          {user && (
+            <>
+              {checkedOutByUser ? (
+                <Button
+                  type="button"
+                  autoFocus
+                  outline={false}
+                  tabIndex="0"
+                  aria-label={`Check back in the configuration `}
+                  onClick={() => checkoutStateHandler(false)}
+                  id="checkInBTN"
+                  epa-testid="checkInBTN"
+                >
+                  <LockOpenSharp /> {"Check Back In"}
+                </Button>
+              ) : !lockedFacility &&
+                !userHasCheckout &&
+                selectedConfig.active &&
+                checkedOutConfigs
+                  .map((location) => location["monPlanId"])
+                  .indexOf(selectedConfig.id) === -1 ? (
+                <Button
+                  type="button"
+                  autoFocus
+                  outline={true}
+                  tabIndex="0"
+                  aria-label={`Check out the configuration`}
+                  onClick={() => checkoutStateHandler(true)}
+                  id="checkOutBTN"
+                  epa-testid="checkOutBTN"
+                >
+                  <CreateOutlined color="primary" /> {"Check Out"}
+                </Button>
+              ) : null}
+              {isCheckedOut && (
+              <Button autoFocus type="button" outline={true}>Revert to Official Record</Button>
+              )}
+            </>
+          )}
+        </div>
         <div className="grid-row positon-relative">
           <div className="grid-col-2">
             <DropdownSelection

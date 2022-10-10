@@ -26,6 +26,7 @@ import {
   qaRataRunDataProps,
   qaFlowRataRunProps,
   qaRataTraverseProps,
+  qaTestQualificationProps,
 } from "../../../additional-functions/qa-dataTable-props";
 const QAExpandableRowsRender = ({
   user,
@@ -40,6 +41,8 @@ const QAExpandableRowsRender = ({
   radioBtnPayload,
   extraIDs = [], // [locid, testsumid, linsumid,   ]
   data,
+  isCheckedOut,
+  mdmProps
 }) => {
   const { locationId, id } = data;
   // const { locationId, id } = dataTableName !== "Protocol Gas" ? data : ""; // id / testsumid
@@ -105,9 +108,11 @@ const QAExpandableRowsRender = ({
             extraControls={objGas["extraControls"]}
             data={data}
             user={user}
+            isCheckedOut={isCheckedOut}
           />
         );
       case "Air Emissions":
+        const airEmissionsIds = [locationId, id];
         const objAirEms = qaAirEmissionsProps(data);
         return (
           <QAExpandableRowsRender
@@ -119,7 +124,26 @@ const QAExpandableRowsRender = ({
             dataTableName={objAirEms["dataTableName"]}
             extraControls={objAirEms["extraControls"]}
             data={data}
+            extraIDs={airEmissionsIds}
             user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "Test Qualification":
+        const objTestQa = qaTestQualificationProps(data);
+        return (
+          <QAExpandableRowsRender
+            payload={objTestQa["payload"]}
+            dropdownArray={objTestQa["dropdownArray"]}
+            mdmProps={objTestQa["mdmProps"]}
+            columns={objTestQa["columnNames"]}
+            controlInputs={objTestQa["controlInputs"]}
+            controlDatePickerInputs={objTestQa["controlDatePickerInputs"]}
+            dataTableName={objTestQa["dataTableName"]}
+            extraControls={objTestQa["extraControls"]}
+            data={data}
+            user={user}
+            isCheckedOut={isCheckedOut}
           />
         );
       // test  > injections
@@ -137,6 +161,7 @@ const QAExpandableRowsRender = ({
             extraControls={obj["extraControls"]}
             extraIDs={idArr}
             user={user}
+            isCheckedOut={isCheckedOut}
           />
         );
       // rata data > rata summary > rata run
@@ -155,6 +180,7 @@ const QAExpandableRowsRender = ({
             extraIDs={rataIdArray}
             expandable
             user={user}
+            isCheckedOut={isCheckedOut}
           />
         );
 
@@ -173,42 +199,45 @@ const QAExpandableRowsRender = ({
             extraIDs={rataRunIdArray}
             expandable
             user={user}
+            isCheckedOut={isCheckedOut}
           />
         );
 
-        case "RATA Run Data":
-          const flowIdArray = [...extraIDs, id];
-          const flowObj = qaFlowRataRunProps();
-          return (
-            <QAExpandableRowsRender
-              payload={flowObj["payload"]}
-              dropdownArray={flowObj["dropdownArray"]}
-              columns={flowObj["columnNames"]}
-              controlInputs={flowObj["controlInputs"]}
-              controlDatePickerInputs={flowObj["controlDatePickerInputs"]}
-              dataTableName={flowObj["dataTableName"]}
-              extraControls={flowObj["extraControls"]}
-              extraIDs={flowIdArray}
-              expandable
-              user={user}
-            />
-          );
-        case "Flow":
-          const traverseIdArray = [...extraIDs, id]
-          const traverseObj = qaRataTraverseProps();
-          return (
-            <QAExpandableRowsRender
-              payload={traverseObj["payload"]}
-              dropdownArray={traverseObj["dropdownArray"]}
-              columns={traverseObj["columnNames"]}
-              controlInputs={traverseObj["controlInputs"]}
-              controlDatePickerInputs={traverseObj["controlDatePickerInputs"]}
-              dataTableName={traverseObj["dataTableName"]}
-              extraControls={traverseObj["extraControls"]}
-              extraIDs={traverseIdArray}
-              user={user}
-            />
-          )
+      case "RATA Run Data":
+        const flowIdArray = [...extraIDs, id];
+        const flowObj = qaFlowRataRunProps();
+        return (
+          <QAExpandableRowsRender
+            payload={flowObj["payload"]}
+            dropdownArray={flowObj["dropdownArray"]}
+            columns={flowObj["columnNames"]}
+            controlInputs={flowObj["controlInputs"]}
+            controlDatePickerInputs={flowObj["controlDatePickerInputs"]}
+            dataTableName={flowObj["dataTableName"]}
+            extraControls={flowObj["extraControls"]}
+            extraIDs={flowIdArray}
+            expandable
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "Flow":
+        const traverseIdArray = [...extraIDs, id]
+        const traverseObj = qaRataTraverseProps();
+        return (
+          <QAExpandableRowsRender
+            payload={traverseObj["payload"]}
+            dropdownArray={traverseObj["dropdownArray"]}
+            columns={traverseObj["columnNames"]}
+            controlInputs={traverseObj["controlInputs"]}
+            controlDatePickerInputs={traverseObj["controlDatePickerInputs"]}
+            dataTableName={traverseObj["dataTableName"]}
+            extraControls={traverseObj["extraControls"]}
+            extraIDs={traverseIdArray}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        )
       default:
         break;
     }
@@ -261,7 +290,7 @@ const QAExpandableRowsRender = ({
               dropdowns[dropdownArray[i]] = val.data.map((d) => {
                 return {
                   code: d["rataFrequencyCode"],
-                  name: d["rataFrequencyCodeDescription"],
+                  name: d["rataFrequencyDescription"],
                 };
               });
               dropdowns[dropdownArray[i]].unshift({
@@ -289,7 +318,7 @@ const QAExpandableRowsRender = ({
               dropdowns[dropdownArray[i]] = response[0].data.map((d) => {
                 return {
                   code: d["runStatusCode"],
-                  name: d["runStatusCodeDescription"],
+                  name: d["runStatusDescription"],
                 };
               });
               dropdowns[dropdownArray[i]].unshift({
@@ -312,7 +341,7 @@ const QAExpandableRowsRender = ({
               dropdowns[dropdownArray[i]] = response[0].data.map((d) => {
                 return {
                   code: d["operatingLevelCode"],
-                  name: d["operatingLevelCodeDescription"],
+                  name: d["operatingLevelDescription"],
                 };
               });
               dropdowns[dropdownArray[i]].unshift({
@@ -323,7 +352,7 @@ const QAExpandableRowsRender = ({
               dropdowns[dropdownArray[i]] = response[1].data.map((d) => {
                 return {
                   code: d["referenceMethodCode"],
-                  name: d["referenceMethodCodeDescription"],
+                  name: d["referenceMethodDescription"],
                 };
               });
               dropdowns[dropdownArray[i]].unshift({
@@ -334,7 +363,7 @@ const QAExpandableRowsRender = ({
               dropdowns[dropdownArray[i]] = response[2].data.map((d) => {
                 return {
                   code: d["apsCode"],
-                  name: d["apsCodeDescription"],
+                  name: d["apsDescription"],
                 };
               });
               dropdowns[dropdownArray[i]].unshift({
@@ -357,15 +386,15 @@ const QAExpandableRowsRender = ({
             switch (i) {
               case 0:
                 codeLabel = 'probeTypeCode'
-                descriptionLabel = 'probeTypeCodeDescription'
+                descriptionLabel = 'probeTypeDescription'
                 break
               case 1:
                 codeLabel = 'pressureMeasureCode'
-                descriptionLabel = 'pressureMeasureCodeDescription'
+                descriptionLabel = 'pressureMeasureDescription'
                 break
               case 2:
                 codeLabel = 'pointUsedIndicatorCode'
-                descriptionLabel = 'pointUsedIndicatorCodeDescription'
+                descriptionLabel = 'pointUsedIndicatorDescription'
                 break
               default:
                 break
@@ -381,6 +410,24 @@ const QAExpandableRowsRender = ({
         });
         break
       default:
+        mdmProps.forEach((prop) =>{
+          allPromises.push(dmApi.getMdmDataByCodeTable(prop['codeTable']));
+        });
+        Promise.all(allPromises)
+          .then(res =>{
+            res.forEach((val, i) =>{
+              dropdowns[dropdownArray[i]] = val.data.map((d) => {
+                return {
+                  code: d[mdmProps[i].responseProps["code"]],
+                  name: d[mdmProps[i].responseProps["description"]],
+                };
+              });
+            });
+            for (const options of Object.values(dropdowns)) {
+              options.unshift({ code: '', name: '-- Select a value --' })
+            }
+            setMdmData(dropdowns);
+          }).catch(err => console.error(err));
         break;
     }
   };
@@ -536,24 +583,22 @@ const QAExpandableRowsRender = ({
     try {
       const resp = await assertSelector.removeDataSwitch(row, dataTableName, locationId, id, extraIDs)
       if (resp.status === 200) {
-        const dataPostRemove = dataPulled.filter(
-          (rowData) => rowData.id !== row.id
-        );
-        setDisplayedRecords(dataPostRemove)
-        executeOnClose()
+        setUpdateTable(true);
+        executeOnClose();
       }
     } catch (error) {
       console.log("error deleting data", error);
     }
   };
 
-  const getFirstLevelExpandables = () =>{
+  const getFirstLevelExpandables = () => {
     const expandables = [];
-    switch(dataTableName){
+    switch (dataTableName) {
       case 'Linearity Test':
         expandables.push(nextExpandableRow("Protocol Gas"));
         break;
       case 'RATA Data':
+        expandables.push(nextExpandableRow("Test Qualification"));
         expandables.push(nextExpandableRow("Protocol Gas"));
         expandables.push(nextExpandableRow("Air Emissions"));
         break;
@@ -575,8 +620,9 @@ const QAExpandableRowsRender = ({
           onRemoveHandler={onRemoveHandler}
           user={user}
           actionsBtn={"View"}
+          isCheckedOut={isCheckedOut}
           actionColumnName={
-            user ? (
+            user && isCheckedOut ? (
               <>
                 <span className="padding-right-2">{dataTableName}</span>
                 <Button
@@ -597,12 +643,13 @@ const QAExpandableRowsRender = ({
           }
           // shows empty table with add if user is logged in
           noDataComp={
-            user ? (
+            user && isCheckedOut ? (
               <div>
                 <QADataTableRender
                   columnNames={columns}
                   columnWidth={15}
                   data={[]}
+                  isCheckedOut={isCheckedOut}
                   actionColumnName={
                     <>
                       <span className="padding-right-2">{dataTableName}</span>
@@ -628,15 +675,15 @@ const QAExpandableRowsRender = ({
         <Preloader />
       )}
       {
-       [...getFirstLevelExpandables(dataTableName)] 
+        [...getFirstLevelExpandables(dataTableName)]
       }
       {show ? (
         <Modal
           show={show}
           close={closeModalHandler}
           save={createNewData ? createData : saveData}
-          showCancel={!user ? true : false}
-          showSave={user ? true : false}
+          showCancel={!user || (user && !isCheckedOut)}
+          showSave={user && isCheckedOut}
           title={
             createNewData
               ? `Add  ${dataTableName}`
@@ -653,7 +700,7 @@ const QAExpandableRowsRender = ({
                   data={selectedModalData}
                   cols={2}
                   title={`${dataTableName}`}
-                  viewOnly={!user ? true : false}
+                  viewOnly={!user || (user && !isCheckedOut)}
                   create={createNewData}
                 />
               </div>

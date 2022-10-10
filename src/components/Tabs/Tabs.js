@@ -9,8 +9,8 @@ import { connect } from "react-redux";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import {
   convertSectionToStoreName,
-  MONITORING_PLAN_STORE_NAME,
   // QA_CERT_TEST_SUMMARY_STORE_NAME,
+  EXPORT_STORE_NAME
 } from "../../additional-functions/workspace-section-and-store-names";
 export const Tabs = ({
   children,
@@ -30,7 +30,7 @@ export const Tabs = ({
     event.stopPropagation();
     removeTabs(index);
 
-    if (workspaceSection === MONITORING_PLAN_STORE_NAME) {
+    if (workspaceSection !== EXPORT_STORE_NAME) {
       mpApi.getCheckedOutLocations().then((resOne) => {
         const configs = resOne.data;
         if (
@@ -59,7 +59,7 @@ export const Tabs = ({
   };
 
   const isCheckedOut = (locationId) => {
-    if (workspaceSection === MONITORING_PLAN_STORE_NAME) {
+    if (workspaceSection !== EXPORT_STORE_NAME) {
       return (
         checkedOutLocations
           .map((location) => location["monPlanId"])
@@ -69,7 +69,7 @@ export const Tabs = ({
   };
 
   const isCheckedOutByUser = (locationId) => {
-    if (workspaceSection === MONITORING_PLAN_STORE_NAME) {
+    if (workspaceSection !== EXPORT_STORE_NAME) {
       return (
         checkedOutLocations
           .map((location) => location["monPlanId"])
@@ -135,7 +135,7 @@ export const Tabs = ({
                     user &&
                     el.props.locationId &&
                     el.props.facId &&
-                    workspaceSection === MONITORING_PLAN_STORE_NAME &&
+                    workspaceSection !== EXPORT_STORE_NAME &&
                     (isCheckedOut(el.props.locationId) ||
                       checkedOutLocations.some(
                         (loc) => loc.facId === parseInt(el.props.facId)
@@ -161,7 +161,7 @@ export const Tabs = ({
                 >
                   <div className="text-center tab-button-text-container ellipsis-text padding-2px position-relative top-neg-05">
                     {user &&
-                    workspaceSection === MONITORING_PLAN_STORE_NAME &&
+                    workspaceSection !== EXPORT_STORE_NAME &&
                     el.props.locationId &&
                     el.props.facId &&
                     (isCheckedOut(el.props.locationId) ||
@@ -180,7 +180,7 @@ export const Tabs = ({
                     {el.props.title.split("(")[0]}
                   </div>
                   <div className="text-center">
-                    {workspaceSection === MONITORING_PLAN_STORE_NAME &&
+                    {workspaceSection !== EXPORT_STORE_NAME &&
                     el.props.locationId &&
                     isCheckedOutByUser(el.props.locationId) ? (
                       <CreateSharp
@@ -193,7 +193,7 @@ export const Tabs = ({
                       />
                     ) : null}
                     <span className="position-relative top-neg-105">
-                      {el.props.title.split("(")[1].replace(")", "")}
+                      {el.props.selectedConfigName}
                     </span>
                   </div>
 

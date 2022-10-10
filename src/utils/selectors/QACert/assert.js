@@ -13,6 +13,7 @@ const rataSummary = "RATA Summary";
 const rataTraverseData = "RATA Traverse Data"
 const airEmissions = "Air Emissions";
 const flowRataRun = "Flow";
+const testQualification = "Test Qualification";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -58,7 +59,7 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
           console.log("error", error);
         });
     case airEmissions:
-      return qaApi.getAirEmissions(location, id).catch((error) => {
+      return qaApi.getAirEmissions(extraIdsArr[0], id).catch((error) => {
         console.log("error", error);
       });
     case flowRataRun:
@@ -71,6 +72,10 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       return qaApi
         .getRataTraverseData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], extraIdsArr[3], extraIdsArr[4], id)
         .catch(error => console.log('error fetching rata traverse data', error))
+    case testQualification:
+      return qaApi.getTestQualification(location, id).catch((error) => {
+        console.log("error", error);
+      });
     default:
       throw new Error(`getDataTableApis undefined for ${name}`)
   }
@@ -97,7 +102,9 @@ export const getDataTableRecords = (dataIn, name) => {
     case airEmissions:
       return selector.getAirEmissionsRecords(dataIn);
     case flowRataRun:
-      return selector.getFlowRunRecords(dataIn)
+      return selector.getFlowRunRecords(dataIn);
+    case testQualification:
+      return selector.mapTestQualificationToRows(dataIn);
     default:
       break;
   }
@@ -205,10 +212,8 @@ export const removeDataSwitch = async (
 };
 // Save (PUT) endpoints for API
 export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
-  console.log("userInput", userInput, "extraIdsArr", extraIdsArr);
   switch (name) {
     case lineTest:
-      console.log("thisone", name);
       return qaApi
         .updateQALinearitySummaryTestSecondLevel(
           location,
@@ -285,12 +290,11 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
     case flowRataRun:
       return qaApi
         .updateFlowRunData(
-          location,
-          id,
           extraIdsArr[0],
           extraIdsArr[1],
           extraIdsArr[2],
           extraIdsArr[3],
+          id,
           userInput.id,
           userInput
         )
@@ -386,7 +390,8 @@ export const createDataSwitch = (
         .catch((error) => {
           console.log("error", error);
         });
-
+    case testQualification:
+      return qaApi.createTestQualification(location, id, userInput);
     default:
       break;
   }

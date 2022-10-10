@@ -45,7 +45,7 @@ export const UseRetrieveDropdownApi = async (
             options = response.data.map((option) => {
               return {
                 code: option["matsMethodParamCode"],
-                name: option["matsMethodParamCodeDescription"],
+                name: option["matsMethodParamDescription"],
               };
             });
 
@@ -69,7 +69,7 @@ export const UseRetrieveDropdownApi = async (
             options = response.data.map((option) => {
               return {
                 code: option["parameterCode"],
-                name: option["parameterCodeDescription"],
+                name: option["parameterDescription"],
               };
             });
 
@@ -84,7 +84,7 @@ export const UseRetrieveDropdownApi = async (
             options = response.data.map((option) => {
               return {
                 code: option["matsMethodCode"],
-                name: option["matsMethodCodeDescription"],
+                name: option["matsMethodDescription"],
               };
             });
 
@@ -95,7 +95,7 @@ export const UseRetrieveDropdownApi = async (
             options = response.data.map((option) => {
               return {
                 code: option["methodCode"],
-                name: option["methodCodeDescription"],
+                name: option["methodDescription"],
               };
             });
 
@@ -108,7 +108,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["subDataCode"],
-              name: option["subDataCodeDescription"],
+              name: option["subDataDescription"],
             };
           });
 
@@ -121,7 +121,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["bypassApproachCode"],
-              name: option["bypassApproachCodeDescription"],
+              name: option["bypassApproachDescription"],
             };
           });
 
@@ -134,7 +134,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["analyzerRangeCode"],
-              name: option["analyzerRangeCodeDescription"],
+              name: option["analyzerRangeDescription"],
             };
           });
 
@@ -147,7 +147,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["maxRateSourceCode"],
-              name: option["maxRateSourceCodeDescription"],
+              name: option["maxRateSourceDescription"],
             };
           });
 
@@ -163,7 +163,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["unitsOfMeasureCode"],
-              name: option["unitsOfMeasureCodeDescription"],
+              name: option["unitsOfMeasureDescription"],
             };
           });
 
@@ -189,7 +189,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["fuelCode"],
-              name: option["fuelCodeDescription"],
+              name: option["fuelDescription"],
             };
           });
 
@@ -201,7 +201,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["fuelIndicatorCode"],
-              name: option["fuelIndicatorCodeDescription"],
+              name: option["fuelIndicatorDescription"],
             };
           });
 
@@ -213,7 +213,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["demMethodCode"],
-              name: option["demMethodCodeDescription"],
+              name: option["demMethodDescription"],
             };
           });
 
@@ -225,7 +225,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["demMethodCode"],
-              name: option["demMethodCodeDescription"],
+              name: option["demMethodDescription"],
             };
           });
 
@@ -237,7 +237,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["systemTypeCode"],
-              name: option["systemTypeCodeDescription"],
+              name: option["systemTypeDescription"],
             };
           });
 
@@ -249,7 +249,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["systemDesignationCode"],
-              name: option["systemDesignationCodeDescription"],
+              name: option["systemDesignationDescription"],
             };
           });
 
@@ -262,7 +262,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["acquisitionMethodCode"],
-              name: option["acquisitionMethodCodeDescription"],
+              name: option["acquisitionMethodDescription"],
             };
           });
 
@@ -274,7 +274,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["componentTypeCode"],
-              name: option["componentTypeCodeDescription"],
+              name: option["componentTypeDescription"],
             };
           });
 
@@ -286,7 +286,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["basisCode"],
-              name: option["basisCodeDescription"],
+              name: option["basisDescription"],
             };
           });
 
@@ -300,7 +300,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["spanScaleCode"],
-              name: option["spanScaleCodeDescription"],
+              name: option["spanScaleDescription"],
             };
           });
 
@@ -312,7 +312,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["spanMethodCode"],
-              name: option["spanMethodCodeDescription"],
+              name: option["spanMethodDescription"],
             };
           });
 
@@ -326,7 +326,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["operatingLevelCode"],
-              name: option["operatingLevelCodeDescription"],
+              name: option["operatingLevelDescription"],
             };
           });
 
@@ -341,7 +341,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["operatingConditionCode"],
-              name: option["operatingConditionCodeDescription"],
+              name: option["operatingConditionDescription"],
             };
           });
 
@@ -353,7 +353,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["defaultSourceCode"],
-              name: option["defaultSourceCodeDescription"],
+              name: option["defaultSourceDescription"],
             };
           });
 
@@ -365,7 +365,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["defaultPurposeCode"],
-              name: option["defaultPurposeCodeDescription"],
+              name: option["defaultPurposeDescription"],
             };
           });
 
@@ -377,7 +377,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["equationCode"],
-              name: option["equationCodeDescription"],
+              name: option["equationDescription"],
             };
           });
 
@@ -390,7 +390,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["wafMethodCode"],
-              name: option["wafMethodCodeDescription"],
+              name: option["wafMethodDescription"],
             };
           });
 
@@ -414,7 +414,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["qualTypeCode"],
-              name: option["qualTypeCodeDescription"],
+              name: option["qualTypeDescription"],
             };
           });
 
@@ -445,7 +445,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["qualDataTypeCode"],
-              name: option["qualDataTypeCodeDescription"],
+              name: option["qualDataTypeDescription"],
             };
           });
 
@@ -470,7 +470,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["materialCode"],
-              name: option["materialCodeDescription"],
+              name: option["materialDescription"],
             };
           });
 
@@ -483,7 +483,7 @@ export const UseRetrieveDropdownApi = async (
           options = response.data.map((option) => {
             return {
               code: option["shapeCode"],
-              name: option["shapeCodeDescription"],
+              name: option["shapeDescription"],
             };
           });
 
@@ -670,7 +670,7 @@ export const UseRetrieveDropdownApi = async (
       //     options = response.data.map((option) => {
       //       return {
       //         code: option["testResultCode"],
-      //         name: option["testResultCodeDescription"],
+      //         name: option["testResultDescription"],
       //       };
       //     });
 
@@ -683,7 +683,7 @@ export const UseRetrieveDropdownApi = async (
       //     options = response.data.map((option) => {
       //       return {
       //         code: option["testReasonCode"],
-      //         name: option["testReasonCodeDescription"],
+      //         name: option["testReasonDescription"],
       //       };
       //     });
 
@@ -696,7 +696,7 @@ export const UseRetrieveDropdownApi = async (
       //     options = response.data.map((option) => {
       //       return {
       //         code: option["testTypeCode"],
-      //         name: option["testTypeCodeDescription"],
+      //         name: option["testTypeDescription"],
       //       };
       //     });
       //     options = options.filter((option) =>
@@ -755,7 +755,7 @@ export const UseRetrieveDropdownApi = async (
       //     options = response.data.map((option) => {
       //       return {
       //         code: option["rataFrequencyCode"],
-      //         name: option["rataFrequencyCodeDescription"],
+      //         name: option["rataFrequencyDescription"],
       //       };
       //     });
 
@@ -767,7 +767,7 @@ export const UseRetrieveDropdownApi = async (
       //     options = response.data.map((option) => {
       //       return {
       //         code: option["apsCode"],
-      //         name: option["apsCodeDescription"],
+      //         name: option["apsDescription"],
       //       };
       //     });
 
@@ -779,7 +779,7 @@ export const UseRetrieveDropdownApi = async (
       //     options = response.data.map((option) => {
       //       return {
       //         code: option["runStatusCode"],
-      //         name: option["runStatusCodeDescription"],
+      //         name: option["runStatusDescription"],
       //       };
       //     });
       //     setDefaultOptions(options, fieldName);
@@ -791,7 +791,7 @@ export const UseRetrieveDropdownApi = async (
       //     options = response.data.map((option) => {
       //       return {
       //         code: option["referenceMethodCode"],
-      //         name: option["referenceMethodCodeDescription"],
+      //         name: option["referenceMethodDescription"],
       //       };
       //     });
 

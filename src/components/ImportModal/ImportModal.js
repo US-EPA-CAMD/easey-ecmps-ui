@@ -29,7 +29,6 @@ const ImportModal = ({
       case MONITORING_PLAN_STORE_NAME:
         mpApi.getMPSchema().then((res) => {
           setSchema(res.data);
-          console.log('schema',res.data)
         });
         break;
 

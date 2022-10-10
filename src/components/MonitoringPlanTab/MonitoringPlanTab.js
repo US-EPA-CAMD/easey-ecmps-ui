@@ -37,16 +37,21 @@ export const MonitoringPlanTab = ({
   workspaceSection,
 }) => {
   const getCurrentTab = () =>{
-    console.log('current tab',tabs.find(tab => tab.selectedConfig.id === selectedConfig.id))
     return tabs.find(tab => tab.selectedConfig.id === selectedConfig.id);
 
   }
-  const [ currentTab, setCurrentTab ] = useState(getCurrentTab());
+  const getCurrentTabIndex = () =>{
+    return tabs.findIndex(tab => tab.selectedConfig.id === selectedConfig.id);
+
+  }
+  const [ currentTabIndex, setCurrentTabIndex ] = useState(getCurrentTabIndex());
 
   useEffect(()=>{
-    setCurrentTab(getCurrentTab())
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[selectedConfig]);
+    // setCurrentTab(getCurrentTab())
+    setCurrentTabIndex(getCurrentTabIndex())
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[selectedConfig,checkout,currentTabIndex]);
 
   const [sectionSelect, setSectionSelect] = useState(
     getCurrentTab().section
@@ -65,6 +70,7 @@ export const MonitoringPlanTab = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect]);
 
+
   return (
     <div>
       <div>
@@ -82,11 +88,12 @@ export const MonitoringPlanTab = ({
           setLocationSelect={(location)=>setLocationSelect(location)}
           locations={selectedConfig.locations}
           user={user}
-          configID={currentTab.selectedConfig.id}
-          checkout={currentTab.checkout}
+          configID={tabs[currentTabIndex].selectedConfig.id}
+          checkout={tabs[currentTabIndex].checkout}
+
           setCheckout={setCheckout}
           setInactive={setInactive}
-          inactive={currentTab.inactive}
+          inactive={tabs[currentTabIndex].inactive}
           checkedOutLocations={checkedOutLocations}
           setMostRecentlyCheckedInMonitorPlanId={
             setMostRecentlyCheckedInMonitorPlanId
@@ -94,6 +101,7 @@ export const MonitoringPlanTab = ({
           setMostRecentlyCheckedInMonitorPlanIdForTab={
             setMostRecentlyCheckedInMonitorPlanIdForTab
           }
+          currentTabIndex={currentTabIndex}
         />
       </div>
     </div>

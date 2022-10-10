@@ -8,42 +8,42 @@ axios.defaults.headers.common = {
 
 export const getAllControlTechnologies = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/control-technologies`)
+    .get(`${config.services.mdm.uri}/control-codes`)
     .then(handleResponse)
     .catch(handleError);
 };
 
 export const getAllFuelTypes = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/fuel-types`)
+    .get(`${config.services.mdm.uri}/fuel-type-codes`)
     .then(handleResponse)
     .catch(handleError);
 };
 
 export const getAllUnitTypes = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/unit-types`)
+    .get(`${config.services.mdm.uri}/unit-type-codes`)
     .then(handleResponse)
     .catch(handleError);
 };
 
 export const getAllPrograms = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/programs`)
+    .get(`${config.services.mdm.uri}/program-codes`)
     .then(handleResponse)
     .catch(handleError);
 };
 
 export const getAllAccountTypes = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/account-types`)
+    .get(`${config.services.mdm.uri}/account-type-codes`)
     .then(handleResponse)
     .catch(handleError);
 };
 
 export const getAllStates = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/states`)
+    .get(`${config.services.mdm.uri}/state-codes`)
     .then(handleResponse)
     .catch(handleError);
 };
@@ -57,7 +57,7 @@ export const getAllBypassApproachCodes = async () => {
 
 export const getAllSubstituteDataCodes = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/sub-data-codes`)
+    .get(`${config.services.mdm.uri}/substitute-data-codes`)
     .then(handleResponse)
     .catch(handleError);
 };
@@ -134,7 +134,7 @@ export const getAllSystemDesignationCodes = async () => {
 // system components
 export const getAllAcquisitionMethodCodes = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/acquisiton-method-codes`)
+    .get(`${config.services.mdm.uri}/acquisition-method-codes`)
     .then(handleResponse)
     .catch(handleError);
 };
@@ -214,7 +214,7 @@ export const getAllFuelIndicatorCodes = async () => {
 
 export const getAllDemonstrationMethodCodes = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/dem-method-codes`)
+    .get(`${config.services.mdm.uri}/demonstration-method-codes`)
     .then(handleResponse)
     .catch(handleError);
 };
@@ -249,20 +249,20 @@ export const getAllProbeTypeCodes = async () => {
 
 export const getAllQualificationTypeCodes = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/qual-type-codes`)
+    .get(`${config.services.mdm.uri}/qualification-type-codes`)
     .then(handleResponse)
     .catch(handleError);
 };
 
 export const getAllQualificationDataTypeCodes = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/qual-data-type-codes`)
+    .get(`${config.services.mdm.uri}/qualification-data-type-codes`)
     .then(handleResponse)
     .catch(handleError);
 };
 export const getAllQualificationLEETestTypeCodes = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/qual-lee-test-type-codes`)
+    .get(`${config.services.mdm.uri}/qualification-lee-test-type-codes`)
     .then(handleResponse)
     .catch(handleError);
 };
@@ -346,7 +346,7 @@ export const getPrefilteredUnitControls = async () => {
 
 export const getPrefilteredSystemFuelFlows = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/relationships/system-fuels`)
+    .get(`${config.services.mdm.uri}/relationships/system-fuel-flows`)
     .then(handleResponse)
     .catch(handleError);
 };
@@ -436,7 +436,7 @@ export const getAllRunStatusCodes = async () => {
 
 export const getAllPressureMeasureCodes = async () => {
   return axios
-    .get(`${config.services.mdm.uri}/pressure-measure-code`)
+    .get(`${config.services.mdm.uri}/pressure-measure-codes`)
     .then(handleResponse)
     .catch(handleError);
 }
@@ -445,8 +445,15 @@ export const getAllPointUsedIndicatorCodes = async () => {
   const data = [
     {
       pointUsedIndicatorCode: '1',
-      pointUsedIndicatorCodeDescription: '1'
+      pointUsedIndicatorDescription: '1'
     }
   ]
   return Promise.resolve({ status: 200, data })
+}
+
+export const getMdmDataByCodeTable = async (codeTable) => {
+  return axios
+    .get(`${config.services.mdm.uri}/${codeTable}`)
+    .then(handleResponse)
+    .catch(handleError);
 }

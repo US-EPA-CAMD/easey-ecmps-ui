@@ -127,7 +127,7 @@ const QARataSummaryExpandableRows = ({
           response[0].data.map(d => {
             return {
               code: d["operatingLevelCode"],
-              name: d["operatingLevelCodeDescription"],
+              name: d["operatingLevelDescription"],
             };
           });
           dropdowns[dropdownArray[i]].unshift({ code: "", name: "-- Select a value --" });
@@ -136,7 +136,7 @@ const QARataSummaryExpandableRows = ({
           response[1].data.map(d => {
             return {
               code: d["referenceMethodCode"],
-              name: d["referenceMethodCodeDescription"],
+              name: d["referenceMethodDescription"],
             };
           });
           dropdowns[dropdownArray[i]].unshift({ code: "", name: "-- Select a value --" });
@@ -145,7 +145,7 @@ const QARataSummaryExpandableRows = ({
           response[2].data.map(d => {
             return {
               code: d["apsCode"],
-              name: d["apsCodeDescription"],
+              name: d["apsDescription"],
             };
           });
           dropdowns[dropdownArray[i]].unshift({ code: "", name: "-- Select a value --" });

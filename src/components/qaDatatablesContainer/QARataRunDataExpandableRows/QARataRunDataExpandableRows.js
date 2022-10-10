@@ -112,7 +112,7 @@ const QARataRunDataExpandableRows = ({ user, testSumId, rataId, data }) => {
         dropdowns[dropdownArray[0][0]] = res.data.map((d) => {
           return {
             code: d["runStatusCode"],
-            name: d["runStatusCodeDescription"],
+            name: d["runStatusDescription"],
           };
         });
         dropdowns[dropdownArray[0][0]].unshift({

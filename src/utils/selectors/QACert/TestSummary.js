@@ -89,7 +89,7 @@ const colTitleToDtoKeyMap = {
   "Begin Minute": "beginMinute",
   "End Date": "endDate",
   "End Hour": "endHour",
-  "End Minute": "endnMinute",
+  "End Minute": "endMinute",
   "Grace Period Indicator": "gracePeriodIndicator",
   Year: "year",
   Quarter: "quarter",
@@ -276,3 +276,20 @@ export const mapRataTraverseToRows = (data) => {
   }
   return records;
 }
+
+export const mapTestQualificationToRows = (data) => {
+  const records = [];
+  data.forEach((el) => {
+    records.push({
+      id: el.id,
+      testSumId: el.testSumId,
+      col1: el.testClaimCode,
+      col2: el.beginDate ? formatStringToDate(el.beginDate) : "",
+      col3: el.endDate ? formatStringToDate(el.endDate) : "",
+      col4: el.highLoadPercentage,
+      col5: el.midLoadPercentage,
+      col6: el.lowLoadPercentage,
+    });
+  });
+  return records;
+};

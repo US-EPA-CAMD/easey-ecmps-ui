@@ -15,6 +15,7 @@ import {
   METHODS_SECTION_NAME,
   METHODS_STORE_NAME,
 } from "../../../additional-functions/data-table-section-and-store-names";
+
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
@@ -41,13 +42,17 @@ export const DataTableMethod = ({
   locationSelectValue,
   user,
   checkout,
-  inactive,
+  inactive, // redux state management
   settingInactiveCheckBox,
   revertedState,
   setRevertedState,
   showModal = false,
   setUpdateRelatedTables,
   updateRelatedTables,
+  currentTabIndex,
+  //
+
+  tabs,
 }) => {
   const [methods, setMethods] = useState([]);
   const [matsMethods, setMatsMethods] = useState([]);
@@ -118,7 +123,13 @@ export const DataTableMethod = ({
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, updateTable, revertedState, updateRelatedTables]);
+  }, [
+    locationSelectValue,
+    updateTable,
+    revertedState,
+    updateRelatedTables,
+    checkout,
+  ]);
 
   // load dropdowns data (called when mdmData changes)
   useEffect(() => {
@@ -289,6 +300,7 @@ export const DataTableMethod = ({
 
   const data = useMemo(() => {
     const matsAndMethods = matsMethods.concat(methods);
+    console.log('tabs[currentTabIndex].inactive[0]',tabs,currentTabIndex)
     if (matsAndMethods.length > 0) {
       const activeOnly = getActiveData(matsAndMethods);
       const inactiveOnly = getInactiveData(matsAndMethods);
@@ -309,18 +321,20 @@ export const DataTableMethod = ({
       }
       // resets checkbox
       else {
-        settingInactiveCheckBox(inactive[0], false);
+        console.log("false,false");
+        settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
         return fs.getMonitoringPlansMethodsTableRecords(
-          !inactive[0] ? getActiveData(methods) : methods
+          tabs[currentTabIndex].inactive[0] === false ? getActiveData(methods) : methods
         );
       }
     } else {
-      settingInactiveCheckBox(false, true);
+      console.log("false,true");
+      // settingInactiveCheckBox(false, true);
       return [];
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [methods, matsMethods, inactive, updateTable]);
+  }, [methods, matsMethods, tabs[currentTabIndex].inactive[0], updateTable]);
 
   // *** Reassign handlers when inactive checkbox is toggled
   useEffect(() => {
@@ -450,6 +464,10 @@ export const DataTableMethod = ({
 const mapStateToProps = (state) => {
   return {
     mdmData: state.dropdowns[METHODS_STORE_NAME],
+
+    tabs: state.openedFacilityTabs[
+     'monitoringPlans'
+    ],
   };
 };
 

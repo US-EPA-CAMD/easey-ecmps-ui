@@ -54,6 +54,10 @@ export const DataTableSystems = ({
   revertedState,
   setRevertedState,
   selectedRangeInFirstTest,
+  currentTabIndex,
+  //
+
+  tabs,
   selectedSysIdTest = false,
 
   showModal = false,
@@ -117,7 +121,7 @@ export const DataTableSystems = ({
       setRevertedState(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, revertedState, updateSystemTable]);
+  }, [locationSelectValue, revertedState,checkout, updateSystemTable]);
 
   // load dropdowns data (called once)
   useEffect(() => {
@@ -381,7 +385,6 @@ export const DataTableSystems = ({
       mpApi
         .createSystems(userInput, locationSelectValue)
         .then((result) => {
-          console.log("saving results", result);
           setSecondLevel(false);
           setUpdateSystemTable(true);
         })
@@ -528,6 +531,7 @@ export const DataTableSystems = ({
     manufacturer: "string",
     modelVersion: "string",
     serialNumber: "string",
+    sampleAcquisitionMethodCode: "string",
     componentTypeCode: "string",
     hgConverterIndicator: 0,
     beginDate: "2021-09-11T06:23:36.289Z",
@@ -537,7 +541,6 @@ export const DataTableSystems = ({
     componentId: "string",
   };
   const createComponent = () => {
-    console.log("test createComponent");
     const userInput = extractUserInput(componentPayload, ".modalUserInput", [
       "hgConverterIndicator",
     ]);
@@ -568,6 +571,12 @@ export const DataTableSystems = ({
     const userInput = extractUserInput(componentPayload, ".modalUserInput", [
       "hgConverterIndicator",
     ]);
+    userInput.componentId = selectedRangeInFirst.componentId;
+    userInput.componentTypeCode = selectedRangeInFirst.componentTypeCode;
+    userInput.basisCode = selectedRangeInFirst.basisCode;
+    userInput.hgConverterIndicator = selectedRangeInFirst.hgConverterIndicator;
+    userInput.sampleAcquisitionMethodCode = selectedRangeInFirst.sampleAcquisitionMethodCode;
+
     if (
       (userInput.endHour && !userInput.endDate) ||
       (!userInput.endHour && userInput.endDate)
@@ -621,21 +630,21 @@ export const DataTableSystems = ({
 
       // both active & inactive records
       else {
-        settingInactiveCheckBox(inactive[0], false);
+        settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
         return fs.getMonitoringPlansSystemsTableRecords(
-          !inactive[0] ? getActiveData(monitoringSystems) : monitoringSystems
+          !tabs[currentTabIndex].inactive[0] ? getActiveData(monitoringSystems) : monitoringSystems
         );
       }
     }
 
     // no records
     else {
-      settingInactiveCheckBox(false, true);
+
       return [];
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [monitoringSystems, inactive]);
+  }, [monitoringSystems, tabs[currentTabIndex].inactive[0]]);
 
   // *** Reassign handlers when inactive checkbox is toggled
   useEffect(() => {
@@ -882,6 +891,9 @@ export const DataTableSystems = ({
 const mapStateToProps = (state) => {
   return {
     mdmData: state.dropdowns[SYSTEMS_STORE_NAME],
+    tabs: state.openedFacilityTabs[
+      'monitoringPlans'
+     ],
   };
 };
 
