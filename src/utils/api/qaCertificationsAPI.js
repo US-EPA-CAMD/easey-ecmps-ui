@@ -36,8 +36,6 @@ export const getQAEvaluationReportData = async (
 
   url = `${url}/evaluations/results?type=${type}&monitorPlanId=${monPlanId}${test}${batch}`;
 
-  console.log(url);
-
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
@@ -543,7 +541,7 @@ export const getRataRunData = async (locId, testSumId, rataId, rataSumId) => {
   }
 
   // *** attach the rest of the url
-  url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/`;
+  url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs`;
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
@@ -791,6 +789,7 @@ export const updateFlowRunData = async (locId, testSumId, rataId, rataSumId, rat
 export const deleteFlowRunData = async (locId, testSumId, rataId, rataSumId, rataRunId, id) => {
   let url = `${config.services.qaCertification.uri}/workspace`;
   url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${id}`;
+
   try {
     return handleResponse(
       await secureAxios({

@@ -17,7 +17,6 @@ const testQualification = "Test Qualification";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
-  console.log("assert", name, location, id, extraIdsArr);
   switch (name) {
     case lineTest:
       return qaApi.getQALinearitySummary(location, id).catch((error) => {
@@ -39,13 +38,6 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       });
 
     case rataRunData:
-      console.log(
-        "name, location, id, extraIdsArr",
-        name,
-        location,
-        id,
-        extraIdsArr
-      );
       return qaApi
         .getRataRunData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], id)
         .catch((error) => {
