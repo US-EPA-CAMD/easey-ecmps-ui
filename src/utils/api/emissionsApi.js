@@ -32,6 +32,7 @@ export const exportEmissionsDataDownload = async (
   quarter
 ) => {
   const fileName = `Emissions | Export - ${facility}.json`;
-  const data = await exportEmissionsData(monitorPlanId, year, quarter);
-  download(JSON.stringify(data, null, "\t"), fileName);
+  const response = await exportEmissionsData(monitorPlanId, year, quarter);
+
+  download(JSON.stringify(response.data, null, "\t"), fileName);
 };

@@ -4,7 +4,7 @@ export const parseBool = (value, defaultValue = false) => {
   }
 
   if (typeof value == "boolean" || value instanceof Boolean) {
-    return value;
+    return Boolean(value);
   }
 
   if (typeof value == "string" || value instanceof String) {
