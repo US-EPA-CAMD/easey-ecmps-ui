@@ -13,10 +13,10 @@ const rataSummary = "RATA Summary";
 const rataTraverseData = "RATA Traverse Data"
 const airEmissions = "Air Emissions";
 const flowRataRun = "Flow";
+const testQualification = "Test Qualification";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
-  console.log("assert", name, location, id, extraIdsArr);
   switch (name) {
     case lineTest:
       return qaApi.getQALinearitySummary(location, id).catch((error) => {
@@ -38,13 +38,6 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       });
 
     case rataRunData:
-      console.log(
-        "name, location, id, extraIdsArr",
-        name,
-        location,
-        id,
-        extraIdsArr
-      );
       return qaApi
         .getRataRunData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], id)
         .catch((error) => {
@@ -71,6 +64,10 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       return qaApi
         .getRataTraverseData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], extraIdsArr[3], extraIdsArr[4], id)
         .catch(error => console.log('error fetching rata traverse data', error))
+    case testQualification:
+      return qaApi.getTestQualification(location, id).catch((error) => {
+        console.log("error", error);
+      });
     default:
       throw new Error(`getDataTableApis undefined for ${name}`)
   }
@@ -97,7 +94,9 @@ export const getDataTableRecords = (dataIn, name) => {
     case airEmissions:
       return selector.getAirEmissionsRecords(dataIn);
     case flowRataRun:
-      return selector.getFlowRunRecords(dataIn)
+      return selector.getFlowRunRecords(dataIn);
+    case testQualification:
+      return selector.mapTestQualificationToRows(dataIn);
     default:
       break;
   }
@@ -383,7 +382,8 @@ export const createDataSwitch = (
         .catch((error) => {
           console.log("error", error);
         });
-
+    case testQualification:
+      return qaApi.createTestQualification(location, id, userInput);
     default:
       break;
   }
