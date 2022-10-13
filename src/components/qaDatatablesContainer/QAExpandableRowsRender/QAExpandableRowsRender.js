@@ -673,7 +673,7 @@ const QAExpandableRowsRender = ({
         <Preloader />
       )}
       {
-        [...getFirstLevelExpandables(dataTableName)]
+        [...getFirstLevelExpandables()]
       }
       {show ? (
         <Modal
