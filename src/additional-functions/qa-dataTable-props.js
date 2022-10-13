@@ -426,7 +426,7 @@ export const qaFuelFlowToLoadProps = () => {
         codeTable: "test-basis-codes",
         responseProps: {
           code: "testBasisCode",
-          description: "testBasisCodeDescription"
+          description: "testBasisDescription"
         }
       }
     ],
