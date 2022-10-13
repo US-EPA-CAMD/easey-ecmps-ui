@@ -824,3 +824,19 @@ export const createTestQualification = async (locId, testSumId, payload) => {
   }
 };
 
+export const updateTestQualification = async (locId, testSumId, id, payload) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/test-qualifications/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
