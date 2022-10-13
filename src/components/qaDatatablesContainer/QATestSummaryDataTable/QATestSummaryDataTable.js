@@ -13,6 +13,7 @@ import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import {
+  qaFuelFlowToLoadProps,
   qaLinearitySummaryProps,
   qaRataDataProps,
 } from "../../../additional-functions/qa-dataTable-props";
@@ -430,8 +431,6 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
-      // return <QALinearitySummaryExpandableRows {...props} />;
-
       case "RELACC":
         const rataObj = qaRataDataProps();
         return (
@@ -450,9 +449,25 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
-      // return (
-      //    <QARataDataExpandableRows {...props} />
-      // );
+      case "FFL": // Fuel Flow to Load
+        const fflProps = qaFuelFlowToLoadProps();
+        return (
+          <QAExpandableRowsRender
+            payload={fflProps["payload"]}
+            dropdownArray={fflProps["dropdownArray"]}
+            mdmProps={fflProps["mdmProps"]}
+            columns={fflProps["columnNames"]}
+            controlInputs={fflProps["controlInputs"]}
+            controlDatePickerInputs={fflProps["controlDatePickerInputs"]}
+            dataTableName={fflProps["dataTableName"]}
+            extraControls={fflProps["extraControls"]}
+            radioBtnPayload={fflProps["radioBtnPayload"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            isCheckedOut={isCheckedOut}
+          />
+        );
       default:
         return null;
     }
