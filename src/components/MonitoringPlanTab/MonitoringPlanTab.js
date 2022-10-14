@@ -102,6 +102,7 @@ export const MonitoringPlanTab = ({
             setMostRecentlyCheckedInMonitorPlanIdForTab
           }
           currentTabIndex={currentTabIndex}
+          workspaceSection={workspaceSection}
         />
       </div>
     </div>
