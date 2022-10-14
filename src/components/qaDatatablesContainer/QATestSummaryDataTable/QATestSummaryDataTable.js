@@ -374,6 +374,7 @@ const QATestSummaryDataTable = ({
     const userInput = extractUserInput(uiControls, ".modalUserInput", [
       "gracePeriodIndicator",
     ]);
+    console.log('uicontrols',uiControls)
     updateQALinearityTestSummary(locationSelectValue, userInput.id, userInput)
       .then((res) => {
         if (Object.prototype.toString.call(res) === "[object Array]") {
