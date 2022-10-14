@@ -429,6 +429,7 @@ export const UseRetrieveDropdownApi = async (
       case "yr3QualificationDataYear":
       case "qualificationDataYear":
         dataYearOptions().then((years) => {
+          console.log('years',years)
           options = years.map((year) => {
             return {
               code: year.toString(),
