@@ -619,6 +619,7 @@ export const MonitoringPlanTabRender = ({
           setRevertedState={setRevertedState}
           configID={configID}
           setUpdateRelatedTables={setUpdateRelatedTables}
+          updateRelatedTables={updateRelatedTables}
         />
       </div>
       <hr />
