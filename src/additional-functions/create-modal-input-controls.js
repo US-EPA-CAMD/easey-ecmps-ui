@@ -316,7 +316,8 @@ export const modalViewData = (
       //   continue;
       // }
       // dropdown time selection
-      if (y === "endHour" || y === "beginHour" || y === "injectionHour") {
+      if (y === "endHour" || y === "beginHour" || y === "injectionHour" || y === "wafEndHour" ||
+          y === "wafBeginHour") {
         arr.push([
           y,
           time[y][0],
