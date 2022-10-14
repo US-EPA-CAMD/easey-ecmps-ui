@@ -66,6 +66,7 @@ export const SelectFacilitiesDataTable = ({
       info[1].active ? "" : "Inactive"
     }`;
 
+    console.log("info[0]", info, checkedOutLocations);
     addtabs([
       {
         title,
@@ -77,13 +78,7 @@ export const SelectFacilitiesDataTable = ({
                 selectedConfig={info[1]}
                 title={title}
                 user={user}
-                checkout={
-                  checkedOutLocations.length > 0
-                    ? checkedOutLocations[0].monPlanId === info[1].id
-                      ? true
-                      : info[2]
-                    : info[2]
-                }
+                checkout={false}
                 checkedOutLocations={checkedOutLocations}
                 setMostRecentlyCheckedInMonitorPlanId={
                   setMostRecentlyCheckedInMonitorPlanId
@@ -123,12 +118,7 @@ export const SelectFacilitiesDataTable = ({
 
         orisCode: info[0].col2,
         selectedConfig: info[1],
-        checkout:
-          checkedOutLocations.length > 0
-            ? checkedOutLocations[0].monPlanId === info[1].id
-              ? true
-              : info[2]
-            : info[2],
+        checkout: false,
       },
     ]);
   };

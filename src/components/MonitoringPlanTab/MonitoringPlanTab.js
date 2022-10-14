@@ -89,7 +89,7 @@ export const MonitoringPlanTab = ({
           locations={selectedConfig.locations}
           user={user}
           configID={tabs[currentTabIndex].selectedConfig.id}
-          checkout={tabs[currentTabIndex].checkout}
+          // checkout={tabs[currentTabIndex].checkout}
 
           setCheckout={setCheckout}
           setInactive={setInactive}
