@@ -213,24 +213,7 @@ export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
 // *** obtain a list of all checked out locations (by all users)
 export const getCheckedOutLocations = async () => {
   const url = getApiUrl(`/check-outs/plans`, true);
-  // console.log("called once");
-  // return axios.get(url).then(handleResponse).catch(handleError);
-
-  // setTimeout(() => {
-    return axios.get(url).then(handleResponse).catch(handleError);
-
-
-    // try {
-    //   return (
-    //     await secureAxios({
-    //       method: "GET",
-    //       url: url,
-    //     })
-    //   );
-    // } catch (error) {
-    //   handleError(error);
-    // }
-  // });
+  return axios.get(url).then(handleResponse).catch(handleError);
 };
 
 export const getRefreshInfo = async (planId) => {

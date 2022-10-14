@@ -106,7 +106,6 @@ export const UseRetrieveDropdownApi = async (
       case "substituteDataCode":
         await dmApi.getAllSubstituteDataCodes().then((response) => {
           options = response.data.map((option) => {
-            console.log('options',options)
             return {
               code: option["substituteDataCode"],
               name: option["substituteDataDescription"],
