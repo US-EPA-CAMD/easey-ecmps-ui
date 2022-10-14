@@ -48,7 +48,9 @@ const QATestSummaryDataTable = ({
   selectedTestCode,
   isCheckedOut,
   sectionSelect,
-}) => {
+  selectedLocation,
+  locations
+}) => {console.log("locations",locations);console.log("selectedLocation",selectedLocation);
   const [loading, setLoading] = useState(false);
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
@@ -77,6 +79,7 @@ const QATestSummaryDataTable = ({
       "testReasonCode",
       "testResultCode",
       "prefilteredTestSummaries",
+      "unitId"
     ],
   ];
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
@@ -158,12 +161,26 @@ const QATestSummaryDataTable = ({
             "testTypeCode",
             response[4].data
           );
+        }else if (i === 5) {
+          dropdowns[dropdownArray[0][i]] = locations.map(l =>{
+            if(l.type === "unit"){
+              return {
+                code:l.unitId,
+                name:l.unitId
+              }
+            }else{
+              return {
+                code: l.stackPipeId,
+                name: l.stackPipeId
+              }
+            }
+          })
         }
         dropdowns[dropdownArray[0][i]].unshift({
           code: "",
           name: "-- Select a value --",
         });
-      });
+      });console.log("dropdowns",dropdowns);
       setMdmData(dropdowns);
       setDropdownsLoaded(true);
       setDropdownsLoading(false);
@@ -393,21 +410,27 @@ const QATestSummaryDataTable = ({
     const userInput = extractUserInput(uiControls, ".modalUserInput", [
       "gracePeriodIndicator",
     ]);
-    userInput.unitId
-      ? (userInput.unitId = String(userInput.unitId))
-      : (userInput.stackPipeId = String(userInput.stackPipeId));
-    createQATestData(locationSelectValue, userInput)
-      .then((res) => {
-        if (Object.prototype.toString.call(res) === "[object Array]") {
-          alert(res[0]);
-        } else {
-          setUpdateTable(true);
-          executeOnClose();
-        }
-      })
-      .catch((error) => {
-        console.error("error", error);
-      });
+    locations.forEach(l =>{
+      if(l.stackPipeId === userInput.unitId){
+        userInput.stackPipeId = userInput.unitId;
+        userInput.unitId = null;
+      }else{
+        userInput.stackPipeId = null;
+      }
+    });
+    console.log("userINput",userInput);
+    // createQATestData(locationSelectValue, userInput)
+    //   .then((res) => {
+    //     if (Object.prototype.toString.call(res) === "[object Array]") {
+    //       alert(res[0]);
+    //     } else {
+    //       setUpdateTable(true);
+    //       executeOnClose();
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error("error", error);
+    //   });
   };
 
   // add here for future test type code selection dts
@@ -529,7 +552,7 @@ const QATestSummaryDataTable = ({
         />
       ) : (
         <Preloader />
-      )}
+      )}{console.log("selectedModalData",selectedModalData)}
       {show ? (
         <Modal
           show={show}

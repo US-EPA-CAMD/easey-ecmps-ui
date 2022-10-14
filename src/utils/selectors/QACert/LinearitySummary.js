@@ -164,7 +164,7 @@ export const getQAColsByTestCode = (testCode) => {
 }
 
 export const getQAModalDetailsByTestCode = (testCode) => {
-  const unitId = ["Unit or Stack Pipe ID", "input", "", ""]
+  const unitId = ["Unit or Stack Pipe ID", "nonFilteredDropdown", "", ""]
   const testTypeCode = ["Test Type Code", "mainDropdown", "mainDropdown", ""]
   const monitoringSystemID = ["Monitoring System ID", "input", "", ""]
   const componentID = ["Component ID", "input", "", ""]
