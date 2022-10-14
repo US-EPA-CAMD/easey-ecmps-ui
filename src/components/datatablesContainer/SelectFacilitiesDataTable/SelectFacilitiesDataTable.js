@@ -53,6 +53,7 @@ export const SelectFacilitiesDataTable = ({
         checkedOutLocationsList = checkedOutLocationResult.data;
       }
     }
+
     setCheckedOutLocations(checkedOutLocationsList);
   };
 
@@ -66,6 +67,19 @@ export const SelectFacilitiesDataTable = ({
       info[1].active ? "" : "Inactive"
     }`;
 
+    // if user has THIS plan checkedout
+    const isCheckedOutByUser = (configs) => {
+      return (
+        configs.map((location) => location["monPlanId"]).indexOf(info[1].id) >
+          -1 &&
+        configs[
+          configs.map((location) => location["monPlanId"]).indexOf(info[1].id)
+        ]["checkedOutBy"] === user["userId"]
+      );
+    };
+
+    const checkedOutValue = isCheckedOutByUser(checkedOutLocations);
+
     addtabs([
       {
         title,
@@ -77,13 +91,7 @@ export const SelectFacilitiesDataTable = ({
                 selectedConfig={info[1]}
                 title={title}
                 user={user}
-                checkout={
-                  checkedOutLocations.length > 0
-                    ? checkedOutLocations[0].monPlanId === info[1].id
-                      ? true
-                      : info[2]
-                    : info[2]
-                }
+                checkout={info[2] || checkedOutValue}
                 checkedOutLocations={checkedOutLocations}
                 setMostRecentlyCheckedInMonitorPlanId={
                   setMostRecentlyCheckedInMonitorPlanId
@@ -123,12 +131,9 @@ export const SelectFacilitiesDataTable = ({
 
         orisCode: info[0].col2,
         selectedConfig: info[1],
-        checkout:
-          checkedOutLocations.length > 0
-            ? checkedOutLocations[0].monPlanId === info[1].id
-              ? true
-              : info[2]
-            : info[2],
+        // info[2] shows true if "open and checkout" was click first time
+        // checkedoutvalue shows true if user already had it checked out but navigates away
+        checkout: info[2] || checkedOutValue,
       },
     ]);
   };
