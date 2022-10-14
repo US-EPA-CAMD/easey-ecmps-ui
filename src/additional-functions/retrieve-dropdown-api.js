@@ -162,8 +162,8 @@ export const UseRetrieveDropdownApi = async (
         await dmApi.getAllUnitsOfMeasureCodes().then((response) => {
           options = response.data.map((option) => {
             return {
-              code: option["unitsOfMeasureCode"],
-              name: option["unitsOfMeasureDescription"],
+              code: option["unitOfMeasureCode"],
+              name: option["unitOfMeasureDescription"],
             };
           });
 
