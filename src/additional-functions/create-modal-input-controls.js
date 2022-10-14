@@ -17,7 +17,7 @@ export const modalViewData = (
   prefilteredTotalName,
   extraControlInputs = false,
   mats = false
-) => {
+) => {console.log("totalOptions",totalOptions); console.log("label",label);
   const arr = [];
 
   const totalOptionsClone = _.cloneDeep(totalOptions);

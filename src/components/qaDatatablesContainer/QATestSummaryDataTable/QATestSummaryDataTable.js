@@ -72,19 +72,38 @@ const QATestSummaryDataTable = ({
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
-  const dropdownArray = [
+  const [dropdownArray , setDropdownArray] = useState([
     [
       "testTypeCode",
       "spanScaleCode",
       "testReasonCode",
       "testResultCode",
+      selectedLocation.unitId ? "unitId" : "stackPipeId",
       "prefilteredTestSummaries",
-      "unitId"
     ],
-  ];
+  ]);
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
   const dataTableName = "Test Summary Data";
+
+  useEffect(()=>{
+    setDropdownArray(
+      [
+        [
+          "testTypeCode",
+          "spanScaleCode",
+          "testReasonCode",
+          "testResultCode",
+          selectedLocation.unitId ? "unitId" : "stackPipeId",
+          "prefilteredTestSummaries",
+        ],
+      ]
+    );
+  }, [selectedLocation.name]);
+
+  useEffect(()=>{
+    loadDropdownsData();
+  }, [dropdownArray]);
 
   //**** */
   useEffect(() => {
@@ -151,7 +170,7 @@ const QATestSummaryDataTable = ({
           dropdowns[dropdownArray[0][i]] = response[3].data.map((d) =>
             getOptions(d, "testResultCode", "testResultDescription")
           );
-        } else if (i === 4) {
+        } else if (i === 5) {
           let noDupesTestCodes = response[4].data.map((code) => {
             return code["testTypeCode"];
           });
@@ -161,7 +180,8 @@ const QATestSummaryDataTable = ({
             "testTypeCode",
             response[4].data
           );
-        }else if (i === 5) {
+        }
+        else if (i === 4) {
           dropdowns[dropdownArray[0][i]] = locations.map(l =>{
             if(l.type === "unit"){
               return {
@@ -180,7 +200,9 @@ const QATestSummaryDataTable = ({
           code: "",
           name: "-- Select a value --",
         });
-      });console.log("dropdowns",dropdowns);
+      });
+      console.log("dropdownArray",dropdownArray);
+      console.log("dropdowns",dropdowns);
       setMdmData(dropdowns);
       setDropdownsLoaded(true);
       setDropdownsLoading(false);
@@ -241,7 +263,7 @@ const QATestSummaryDataTable = ({
 
   const columns = getQAColsByTestCode(selectedTestCode.testTypeGroupCode);
   const { controlInputs, extraControlInputs, controlDatePickerInputs } =
-    getQAModalDetailsByTestCode(selectedTestCode.testTypeGroupCode);
+    getQAModalDetailsByTestCode(selectedTestCode.testTypeGroupCode, selectedLocation);
 
   // prefilters the test type code dropdown based on group selection
   useEffect(() => {
@@ -391,8 +413,19 @@ const QATestSummaryDataTable = ({
     const userInput = extractUserInput(uiControls, ".modalUserInput", [
       "gracePeriodIndicator",
     ]);
-    console.log('uicontrols',uiControls)
-    updateQALinearityTestSummary(locationSelectValue, userInput.id, userInput)
+    let selectedLocationId = locationSelectValue;
+    locations.forEach((l,i) =>{
+      if(l.stackPipeId === String(userInput.unitId)){
+        userInput.stackPipeId = String(userInput.unitId);
+        userInput.unitId = null;
+        selectedLocationId = l.id;
+      }else if(l.unitId === String(userInput.unitId)){
+        userInput.unitId = String(userInput.unitId);
+        userInput.stackPipeId = null;
+        selectedLocationId = l.id;
+      }
+    });
+    updateQALinearityTestSummary(selectedLocationId, userInput.id, userInput)
       .then((res) => {
         if (Object.prototype.toString.call(res) === "[object Array]") {
           alert(res[0]);
@@ -410,27 +443,32 @@ const QATestSummaryDataTable = ({
     const userInput = extractUserInput(uiControls, ".modalUserInput", [
       "gracePeriodIndicator",
     ]);
-    locations.forEach(l =>{
-      if(l.stackPipeId === userInput.unitId){
-        userInput.stackPipeId = userInput.unitId;
-        userInput.unitId = null;
-      }else{
+    console.log("userINput BEFORE",userInput);
+    let selectedLocationId = locationSelectValue;
+    locations.forEach((l,i) =>{debugger;
+      if (l.unitId === userInput.stackPipeId) {
+        userInput["unitId"] = l.unitId;
         userInput.stackPipeId = null;
+        selectedLocationId = l.id
+      } else if (l.stackPipeId === userInput.unitId) {
+        userInput["stackPipeId"] = l.stackPipeId;
+        userInput.unitId = null;
+        selectedLocationId = l.id
       }
     });
     console.log("userINput",userInput);
-    // createQATestData(locationSelectValue, userInput)
-    //   .then((res) => {
-    //     if (Object.prototype.toString.call(res) === "[object Array]") {
-    //       alert(res[0]);
-    //     } else {
-    //       setUpdateTable(true);
-    //       executeOnClose();
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error("error", error);
-    //   });
+    createQATestData(selectedLocationId, userInput)
+      .then((res) => {
+        if (Object.prototype.toString.call(res) === "[object Array]") {
+          alert(res[0]);
+        } else {
+          setUpdateTable(true);
+          executeOnClose();
+        }
+      })
+      .catch((error) => {
+        console.error("error", error);
+      });
   };
 
   // add here for future test type code selection dts
