@@ -447,8 +447,8 @@ export const UseRetrieveDropdownApi = async (
         await dmApi.getAllQualificationDataTypeCodes().then((response) => {
           options = response.data.map((option) => {
             return {
-              code: option["qualificationTypeCode"],
-              name: option["qualificationTypeDescription"],
+              code: option["qualificationDataTypeCode"],
+              name: option["qualificationDataTypeDescription"],
             };
           });
 
