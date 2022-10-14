@@ -17,7 +17,6 @@ const testQualification = "Test Qualification";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
-  console.log("assert", name, location, id, extraIdsArr);
   switch (name) {
     case lineTest:
       return qaApi.getQALinearitySummary(location, id).catch((error) => {
@@ -39,13 +38,6 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       });
 
     case rataRunData:
-      console.log(
-        "name, location, id, extraIdsArr",
-        name,
-        location,
-        id,
-        extraIdsArr
-      );
       return qaApi
         .getRataRunData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], id)
         .catch((error) => {
@@ -305,7 +297,8 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
       return qaApi
         .updateRataTraverseData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], extraIdsArr[3], extraIdsArr[4], id, userInput.id, userInput)
         .catch(error => console.log('error updating rata traverse data', error))
-
+    case testQualification:
+      return qaApi.updateTestQualification(location, id, userInput.id, userInput);
     default:
       break;
   }

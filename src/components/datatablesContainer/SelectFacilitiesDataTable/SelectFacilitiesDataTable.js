@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { connect } from "react-redux";
 import * as fs from "../../../utils/selectors/facilities";
-import SelectedFacilityTab from "../../MonitoringPlanTab/MonitoringPlanTab";
+import MonitoringPlanTab from "../../MonitoringPlanTab/MonitoringPlanTab";
 import QACertTestSummaryTab from "../../QACertTestSummaryTab/QACertTestSummaryTab";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import "./SelectFacilitiesDataTable.scss";
@@ -24,7 +24,6 @@ export const SelectFacilitiesDataTable = ({
 }) => {
   const [facilities, setFacilities] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
-
   const [checkedOutLocations, setCheckedOutLocations] = useState([]);
   const [
     mostRecentlyCheckedInMonitorPlanId,
@@ -42,14 +41,9 @@ export const SelectFacilitiesDataTable = ({
 
   useEffect(() => {
     obtainCheckedOutLocations().then();
-    return () => {
-      setCheckedOutLocations([]);
-    };
   }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanId]);
-
   const obtainCheckedOutLocations = async () => {
-    const checkedOutLocationResult = await getCheckedOutLocations();
-
+    const checkedOutLocationResult = await getCheckedOutLocations().then();
     let checkedOutLocationsList = [];
     if (checkedOutLocationResult) {
       if (
@@ -68,7 +62,9 @@ export const SelectFacilitiesDataTable = ({
 
   // handles the actual component that appears after clicking on the dynamic tabs
   const selectedRowHandler = (info) => {
-    const title = `${info[0].col1} (${info[1].name}) ${info[1].active ? "" : "Inactive"}`;
+    const title = `${info[0].col1} (${info[1].name}) ${
+      info[1].active ? "" : "Inactive"
+    }`;
 
     addtabs([
       {
@@ -76,7 +72,7 @@ export const SelectFacilitiesDataTable = ({
         component:
           workspaceSection === MONITORING_PLAN_STORE_NAME ? (
             <div className="selectedTabsBox">
-              <SelectedFacilityTab
+              <MonitoringPlanTab
                 orisCode={info[0].col2}
                 selectedConfig={info[1]}
                 title={title}
@@ -98,7 +94,7 @@ export const SelectFacilitiesDataTable = ({
                 workspaceSection={workspaceSection}
               />
             </div>
-          ) : workspaceSection === QA_CERT_TEST_SUMMARY_STORE_NAME || EMISSIONS_STORE_NAME ? (
+          ) : workspaceSection === QA_CERT_TEST_SUMMARY_STORE_NAME ? (
             <div className="selectedTabsBox">
               <QACertTestSummaryTab
                 orisCode={info[0].col2}
@@ -107,6 +103,10 @@ export const SelectFacilitiesDataTable = ({
                 user={user}
                 workspaceSection={workspaceSection}
               />
+            </div>
+          ) : workspaceSection === EMISSIONS_STORE_NAME ? (
+            <div className="selectedTabsBox">
+              <div>EMISSIONS DATA COMING SOON!</div>
             </div>
           ) : (
             // handles export
@@ -171,45 +171,47 @@ export const SelectFacilitiesDataTable = ({
         }}
       />
       {/* {workspaceSection === MONITORING_PLAN_STORE_NAME ? ( */}
-        <DataTableRender
-          columnNames={columnNames}
-          dataLoaded={dataLoaded}
-          data={data}
-          defaultSort="col2"
-          openedFacilityTabs={openedFacilityTabs[workspaceSection]}
-          user={user}
-          pagination={true}
-          filter={true}
-          sectionTitle="Select Configurations"
-          checkedOutLocations={checkedOutLocations}
-          expandableRows={true}
-          expandableRowComp={
-            <DataTableConfigurations
-              selectedRowHandler={selectedRowHandler}
-              user={user}
-              className="expand-row-data-table"
-              checkedOutLocations={checkedOutLocations}
-              actionsBtn={"Open"}
-              setMostRecentlyCheckedInMonitorPlanId={
-                setMostRecentlyCheckedInMonitorPlanId
-              }
-              setMostRecentlyCheckedInMonitorPlanIdForTab={
-                setMostRecentlyCheckedInMonitorPlanIdForTab
-              }
-              workspaceSection={workspaceSection}
-            />
-          }
-          headerStyling="padding-top-0 padding-left-2"
-          setShowInactive={() => {}}
-          setMostRecentlyCheckedInMonitorPlanId={
-            setMostRecentlyCheckedInMonitorPlanId
-          }
-          setMostRecentlyCheckedInMonitorPlanIdForTab={
-            setMostRecentlyCheckedInMonitorPlanIdForTab
-          }
-          ariaLabel={"Select Configurations"}
-          workspaceSection={workspaceSection}
-        />
+
+      <DataTableRender
+        columnNames={columnNames}
+        dataLoaded={dataLoaded}
+        data={data}
+        defaultSort="col2"
+        openedFacilityTabs={openedFacilityTabs[workspaceSection]}
+        user={user}
+        pagination={true}
+        filter={true}
+        sectionTitle="Select Configurations"
+        checkedOutLocations={checkedOutLocations}
+        expandableRows={true}
+        expandableRowComp={
+          <DataTableConfigurations
+            selectedRowHandler={selectedRowHandler}
+            user={user}
+            className="expand-row-data-table"
+            checkedOutLocations={checkedOutLocations}
+            actionsBtn={"Open"}
+            setMostRecentlyCheckedInMonitorPlanId={
+              setMostRecentlyCheckedInMonitorPlanId
+            }
+            setMostRecentlyCheckedInMonitorPlanIdForTab={
+              setMostRecentlyCheckedInMonitorPlanIdForTab
+            }
+            workspaceSection={workspaceSection}
+          />
+        }
+        headerStyling="padding-top-0 padding-left-2"
+        setShowInactive={() => {}}
+        setMostRecentlyCheckedInMonitorPlanId={
+          setMostRecentlyCheckedInMonitorPlanId
+        }
+        setMostRecentlyCheckedInMonitorPlanIdForTab={
+          setMostRecentlyCheckedInMonitorPlanIdForTab
+        }
+        ariaLabel={"Select Configurations"}
+        workspaceSection={workspaceSection}
+      />
+      {/* )} */}
       {/* ) : (
         <DataTableRender
           columnNames={columnNames}
@@ -243,9 +245,9 @@ export const SelectFacilitiesDataTable = ({
   );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   return {
-    openedFacilityTabs: state.openedFacilityTabs,
+    openedFacilityTabs: state.openedFacilityTabs[ownProps.workspaceSection],
   };
 };
 

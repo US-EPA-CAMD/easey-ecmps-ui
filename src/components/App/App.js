@@ -6,7 +6,6 @@ import NotFound from "../NotFound/NotFound";
 import AboutHome from "../AboutHome/AboutHome";
 import Layout from "../Layout/Layout";
 import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
-import SelectConfigurationBaseModuleHome from "../SelectConfigurationBaseModuleHome/SelectConfigurationBaseModuleHome";
 import RuleEditor from "../RuleEditor/RuleEditor";
 import Login from "../Login/Login";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
@@ -194,16 +193,16 @@ const App = () => {
             />
 
             {user ? (
-              <Redirect from="/emissions-daily" to="/workspace/emissions-daily" />
+              <Redirect from="/emissions" to="/workspace/emissions" />
             ) : (
-              <Redirect from="/workspace/emissions-daily" to="/emissions-daily" />
+              <Redirect from="/workspace/emissions" to="/emissions" />
             )}
             <Route
-              path="/emissions-daily"
+              path="/emissions"
               exact
               component={() => {
                 return (
-                  <SelectConfigurationBaseModuleHome
+                  <MonitoringPlanHome
                     user={false}
                     workspaceSection={EMISSIONS_STORE_NAME}
                   />
@@ -211,66 +210,10 @@ const App = () => {
               }}
             />
             <Route
-              path="/workspace/emissions-daily"
+              path="/workspace/emissions"
               exact
               component={() => (
-                <SelectConfigurationBaseModuleHome
-                  user={user}
-                  workspaceSection={EMISSIONS_STORE_NAME}
-                />
-              )}
-            />
-
-            {user ? (
-              <Redirect from="/emissions-hourly" to="/workspace/emissions-hourly" />
-            ) : (
-              <Redirect from="/workspace/emissions-hourly" to="/emissions-hourly" />
-            )}
-            <Route
-              path="/emissions-hourly"
-              exact
-              component={() => {
-                return (
-                  <SelectConfigurationBaseModuleHome
-                    user={false}
-                    workspaceSection={EMISSIONS_STORE_NAME}
-                  />
-                );
-              }}
-            />
-            <Route
-              path="/workspace/emissions-hourly"
-              exact
-              component={() => (
-                <SelectConfigurationBaseModuleHome
-                  user={user}
-                  workspaceSection={EMISSIONS_STORE_NAME}
-                />
-              )}
-            />
-
-            {user ? (
-              <Redirect from="/emissions-mats" to="/workspace/emissions-mats" />
-            ) : (
-              <Redirect from="/workspace/emissions-mats" to="/emissions-mats" />
-            )}
-            <Route
-              path="/emissions-mats"
-              exact
-              component={() => {
-                return (
-                  <SelectConfigurationBaseModuleHome
-                    user={false}
-                    workspaceSection={EMISSIONS_STORE_NAME}
-                  />
-                );
-              }}
-            />
-            <Route
-              path="/workspace/emissions-mats"
-              exact
-              component={() => (
-                <SelectConfigurationBaseModuleHome
+                <MonitoringPlanHome
                   user={user}
                   workspaceSection={EMISSIONS_STORE_NAME}
                 />
@@ -286,7 +229,7 @@ const App = () => {
               path="/export"
               exact
               component={() => (
-                <SelectConfigurationBaseModuleHome
+                <MonitoringPlanHome
                   user={false}
                   workspaceSection={EXPORT_STORE_NAME}
                 />
@@ -296,7 +239,7 @@ const App = () => {
               path="/workspace/export"
               exact
               component={() => (
-                <SelectConfigurationBaseModuleHome
+                <MonitoringPlanHome
                   user={user}
                   workspaceSection={EXPORT_STORE_NAME}
                 />

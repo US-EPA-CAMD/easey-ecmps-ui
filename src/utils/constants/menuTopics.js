@@ -168,21 +168,7 @@ export const globalView = [
   },
   {
     name: "Emissions",
-    url: "/workspace/emission",
-    children: [
-      {
-        name: "Daily",
-        url: "/emissions-daily",
-      },
-      {
-        name: "Hourly",
-        url: "/emissions-hourly",
-      },
-      {
-        name: "MATS",
-        url: "/emissions-mats",
-      },
-    ],
+    url: "/workspace/emissions",
   },
   { name: "Export", url: "/export" },
 ];
@@ -211,21 +197,7 @@ export const workSpace = [
   },
   {
     name: "Emissions",
-    url: "/workspace/emission",
-    children: [
-      {
-        name: "Daily",
-        url: "/workspace/emissions-daily",
-      },
-      {
-        name: "Hourly",
-        url: "/workspace/emissions-hourly",
-      },
-      {
-        name: "MATS",
-        url: "/workspace/emissions-mats",
-      },
-    ],
+    url: "/workspace/emissions",
   },
   { name: "Export", url: "/workspace/export" },
 ];

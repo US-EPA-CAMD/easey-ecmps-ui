@@ -59,9 +59,9 @@ const QAExpandableRowsRender = ({
       assertSelector
         .getDataTableApis(dataTableName, locationId, id, extraIDs)
         .then((res) => {
-          console.log("res", res.data);
           finishedLoadingData(res.data);
-        });
+        })
+        .catch((error => console.log(error)))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataTableName, updateTable]);
@@ -340,8 +340,8 @@ const QAExpandableRowsRender = ({
             if (i === 0) {
               dropdowns[dropdownArray[i]] = response[0].data.map((d) => {
                 return {
-                  code: d["operatingLevelCode"],
-                  name: d["operatingLevelDescription"],
+                  code: d["opLevelCode"],
+                  name: d["opLevelDescription"],
                 };
               });
               dropdowns[dropdownArray[i]].unshift({
@@ -556,7 +556,6 @@ const QAExpandableRowsRender = ({
     assertSelector
       .saveDataSwitch(userInput, dataTableName, locationId, id, extraIDs)
       .then((res) => {
-        console.log(res.data);
         setUpdateTable(true);
         executeOnClose();
       })
@@ -570,7 +569,6 @@ const QAExpandableRowsRender = ({
     assertSelector
       .createDataSwitch(userInput, dataTableName, locationId, id, extraIDs)
       .then((res) => {
-        console.log(res.data, "create");
         setUpdateTable(true);
         executeOnClose();
       })
@@ -675,7 +673,7 @@ const QAExpandableRowsRender = ({
         <Preloader />
       )}
       {
-        [...getFirstLevelExpandables(dataTableName)]
+        [...getFirstLevelExpandables()]
       }
       {show ? (
         <Modal
@@ -695,6 +693,8 @@ const QAExpandableRowsRender = ({
           children={
             dropdownsLoaded ? (
               <div>
+                {console.log("selectedRow",selectedRow)}
+                {console.log("selectedModalData",selectedModalData)}
                 <ModalDetails
                   modalData={selectedRow}
                   data={selectedModalData}

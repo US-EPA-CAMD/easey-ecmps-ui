@@ -12,11 +12,11 @@ import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 
 import "./MonitoringPlanHome.scss";
-import { 
+import {
   MONITORING_PLAN_STORE_NAME,
   QA_CERT_TEST_SUMMARY_STORE_NAME,
   EMISSIONS_STORE_NAME,
-  EXPORT_STORE_NAME 
+  EXPORT_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import * as modules from "../../utils/constants/moduleTitles";
 
@@ -27,7 +27,7 @@ export const MonitoringPlanHome = ({
   resetTimerFlag,
   callApiFlag,
   openedFacilityTabs,
-  workspaceSection
+  workspaceSection,
 }) => {
   const [titleName, setTitleName] = useState(document.title);
   const [checkedOutLocations, setCheckedOutLocations] = useState([]);
@@ -56,16 +56,8 @@ export const MonitoringPlanHome = ({
         setTitleName(modules.export_Module);
         break;
       case EMISSIONS_STORE_NAME:
-        if (window.location.href.indexOf("emissions-daily") > -1) {
-          document.title = modules.emissions_daily_module;
-          setTitleName(modules.emissions_daily_module);
-        }else if(window.location.href.indexOf("emissions-hourly") > -1){
-          document.title = modules.emissions_hourly_module;
-          setTitleName(modules.emissions_hourly_module);
-        }else if(window.location.href.indexOf("emissions-mats") > -1){
-          document.title = modules.emissions_mats_module;
-          setTitleName(modules.emissions_mats_module);
-        }
+        document.title = modules.emissions_module;
+        setTitleName(modules.emissions_module);
         break;
       default:
         break;
@@ -191,8 +183,18 @@ export const MonitoringPlanHome = ({
           });
         }
         break;
-      case EXPORT_STORE_NAME:
       case EMISSIONS_STORE_NAME:
+        for (const row of openedFacilityTabs) {
+          tabArr.push({
+            title: row.name,
+            component: <div>EMISSIONS DATA COMING SOON!</div>,
+            orisCode: row.orisCode,
+            selectedConfig: row.selectedConfig,
+            checkout: row.checkout,
+          });
+        }
+        break;
+      case EXPORT_STORE_NAME:
         for (const row of openedFacilityTabs) {
           tabArr.push({
             title: row.name,
