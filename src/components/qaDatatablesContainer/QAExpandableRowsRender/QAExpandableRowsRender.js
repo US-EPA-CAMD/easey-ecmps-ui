@@ -487,6 +487,18 @@ const QAExpandableRowsRender = ({
           "",
         ];
       }
+    } else {
+      if (dataTableName === "Linearity Test") {
+        controlInputs.gasLevelCode = ["Gas Level Code", "dropdown", "", "locked"];
+      }
+      if (dataTableName === "Rata Data") {
+        controlInputs.numberOfLoadLevels = [
+          "Number of Load Levels",
+          "dropdown",
+          "",
+          "locked",
+        ];
+      }
     }
 
     if (dataPulled.length > 0 && !create) {
