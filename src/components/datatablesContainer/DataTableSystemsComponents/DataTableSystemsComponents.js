@@ -389,7 +389,7 @@ export const DataTableSystemsComponents = ({
           manufacturer: ["Manufacturer", "input", "", ""],
           modelVersion: ["Model or Version", "input", "", ""],
           serialNumber: ["Serial Number", "input", "", ""],
-          hgConverterIndicator: ["Hg Converter Indicator", "radio", "", "locked"],
+          hgConverterIndicator: ["Hg Converter Indicator", "radio", "", ""],
         },
         {
           beginDate: ["Start Date", "date", "", ""],

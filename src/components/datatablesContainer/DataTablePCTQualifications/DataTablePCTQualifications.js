@@ -128,18 +128,18 @@ export const DataTablePCTQualifications = ({
       modalViewData(
         pctData,
         {
-          qualificationYear: ["Qualification Year", "dropdown", ""],
+          qualificationYear: ["Qualification Year", "nonFilteredDropdown", ""],
           averagePercentValue: ["Average Percent Value", "input", ""],
           emptyfield: ["", "skip", ""],
-          yr1QualificationDataYear: ["Data Year 1", "dropdown", ""],
+          yr1QualificationDataYear: ["Data Year 1", "nonFilteredDropdown", ""],
           yr1QualificationDataTypeCode: ["Year 1 Type Code", "dropdown", ""],
           yr1PercentageValue: ["Year 1 Percentage Value", "input", ""],
 
-          yr2QualificationDataYear: ["Data Year 2", "dropdown", ""],
+          yr2QualificationDataYear: ["Data Year 2", "nonFilteredDropdown", ""],
           yr2QualificationDataTypeCode: ["Year 2 Type Code", "dropdown", ""],
           yr2PercentageValue: ["Year 2 Percentage Value", "input", ""],
 
-          yr3QualificationDataYear: ["Data Year 3", "dropdown", ""],
+          yr3QualificationDataYear: ["Data Year 3", "nonFilteredDropdown", ""],
           yr3QualificationDataTypeCode: ["Year 3 Type Code", "dropdown", ""],
           yr3PercentageValue: ["Year 3 Percentage Value", "input", ""],
         },

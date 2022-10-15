@@ -111,7 +111,6 @@ export const modalViewData = (
           case "dropdown":
             if (!createNew) {
               if (totalOptionsClone) {
-            
                 labels = findValue(
                   totalOptionsClone[y],
                   selected ? selected[y] : null,
@@ -140,6 +139,7 @@ export const modalViewData = (
                 );
               }
             }
+
             arr.push([
               y,
               inputs[y][0],
@@ -316,8 +316,13 @@ export const modalViewData = (
       //   continue;
       // }
       // dropdown time selection
-      if (y === "endHour" || y === "beginHour" || y === "injectionHour" || y === "wafEndHour" ||
-          y === "wafBeginHour") {
+      if (
+        y === "endHour" ||
+        y === "beginHour" ||
+        y === "injectionHour" ||
+        y === "wafEndHour" ||
+        y === "wafBeginHour"
+      ) {
         arr.push([
           y,
           time[y][0],
