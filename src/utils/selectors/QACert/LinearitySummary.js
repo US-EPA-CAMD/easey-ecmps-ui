@@ -163,8 +163,8 @@ export const getQAColsByTestCode = (testCode) => {
   return cols
 }
 
-export const getQAModalDetailsByTestCode = (testCode) => {
-  const unitId = ["Unit or Stack Pipe ID", "input", "", ""]
+export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
+  // const unitId = ["Unit or Stack Pipe ID", "nonFilteredDropdown", "", ""]
   const testTypeCode = ["Test Type Code", "mainDropdown", "mainDropdown", ""]
   const monitoringSystemID = ["Monitoring System ID", "input", "", ""]
   const componentID = ["Component ID", "input", "", ""]
@@ -193,7 +193,6 @@ export const getQAModalDetailsByTestCode = (testCode) => {
 
   let modalDetails = {
     controlInputs: {
-      unitId,
       testTypeCode,
       monitoringSystemID,
       componentID,
@@ -221,7 +220,6 @@ export const getQAModalDetailsByTestCode = (testCode) => {
       modalDetails = {
         controlInputs: {
           testTypeCode,
-          unitId,
           monitoringSystemID,
           testNumber,
           testReasonCode,
@@ -244,7 +242,6 @@ export const getQAModalDetailsByTestCode = (testCode) => {
       modalDetails = {
         controlInputs: {
           testTypeCode,
-          unitId,
           componentID,
           spanScaleCode,
           testNumber,
@@ -252,7 +249,7 @@ export const getQAModalDetailsByTestCode = (testCode) => {
           testResultCode
         },
         extraControlInputs: {
-          injectionProtocolCode,
+          //injectionProtocolCode,
           testComment
         },
         controlDatePickerInputs: {
@@ -269,7 +266,6 @@ export const getQAModalDetailsByTestCode = (testCode) => {
       modalDetails = {
         controlInputs: {
           testTypeCode,
-          unitId,
           componentID,
           testNumber,
           testReasonCode,
@@ -290,7 +286,6 @@ export const getQAModalDetailsByTestCode = (testCode) => {
       modalDetails = {
         controlInputs: {
           testTypeCode,
-          unitId,
           componentID,
           spanScaleCode,
           testNumber,
@@ -315,7 +310,6 @@ export const getQAModalDetailsByTestCode = (testCode) => {
       modalDetails = {
         controlInputs: {
           testTypeCode,
-          unitId,
           componentID,
           testNumber,
           testReasonCode,
@@ -337,7 +331,6 @@ export const getQAModalDetailsByTestCode = (testCode) => {
       modalDetails = {
         controlInputs: {
           testTypeCode,
-          unitId,
           componentID,
           testNumber,
           testReasonCode,
@@ -358,7 +351,6 @@ export const getQAModalDetailsByTestCode = (testCode) => {
       modalDetails = {
         controlInputs: {
           testTypeCode,
-          unitId,
           monitoringSystemID,
           testNumber,
           testReasonCode,
@@ -375,7 +367,6 @@ export const getQAModalDetailsByTestCode = (testCode) => {
       modalDetails = {
         controlInputs: {
           testTypeCode,
-          unitId,
           monitoringSystemID,
           testNumber,
         },
@@ -393,7 +384,6 @@ export const getQAModalDetailsByTestCode = (testCode) => {
       modalDetails = {
         controlInputs: {
           testTypeCode,
-          unitId,
           monitoringSystemID,
           testNumber,
         },
@@ -412,7 +402,6 @@ export const getQAModalDetailsByTestCode = (testCode) => {
       modalDetails = {
         controlInputs: {
           testTypeCode,
-          unitId,
           componentID,
           spanScaleCode,
           testNumber,
@@ -434,7 +423,6 @@ export const getQAModalDetailsByTestCode = (testCode) => {
       modalDetails = {
         controlInputs: {
           testTypeCode,
-          unitId,
           monitoringSystemID,
           testNumber,
           testReasonCode,
@@ -458,7 +446,6 @@ export const getQAModalDetailsByTestCode = (testCode) => {
       modalDetails = {
         controlInputs: {
           testTypeCode,
-          unitId,
           testNumber,
           testReasonCode,
         },
@@ -479,7 +466,6 @@ export const getQAModalDetailsByTestCode = (testCode) => {
       modalDetails = {
         controlInputs: {
           testTypeCode,
-          unitId,
           monitoringSystemID,
           componentID,
           testNumber,
@@ -501,6 +487,8 @@ export const getQAModalDetailsByTestCode = (testCode) => {
     default:
     // console.log(`getQAModalDetailsByTestCode default case w/ testCode: ${testCode}`);
   }
+
+  selectedLocation.unitId ? modalDetails["controlInputs"]['unitId'] = ["Unit or Stack Pipe ID", "nonFilteredDropdown", "", "locked"] : modalDetails["controlInputs"]['stackPipeId'] = ["Unit or Stack Pipe ID", "nonFilteredDropdown", "", "locked"]
 
   return modalDetails
 }
