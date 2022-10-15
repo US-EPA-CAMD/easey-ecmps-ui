@@ -306,6 +306,13 @@ const QATestSummaryDataTable = ({
       )[0];
       setSelectedRow(selectedData);
     }
+    if(create){
+      if(controlInputs?.unitId){
+        controlInputs.unitId = ["Unit or Stack Pipe ID", "nonFilteredDropdown", "", ""];
+      }else{
+        controlInputs.stackPipeId = ["Unit or Stack Pipe ID", "nonFilteredDropdown", "", ""];
+      }
+    }
     let mainDropdownName = "";
     let hasMainDropdown = false;
     for (const controlProperty in controlInputs) {
@@ -412,20 +419,13 @@ const QATestSummaryDataTable = ({
   const saveData = () => {
     const userInput = extractUserInput(uiControls, ".modalUserInput", [
       "gracePeriodIndicator",
-    ]);
-    let selectedLocationId = locationSelectValue;
-    locations.forEach((l,i) =>{
-      if(l.stackPipeId === String(userInput.unitId)){
-        userInput.stackPipeId = String(userInput.unitId);
-        userInput.unitId = null;
-        selectedLocationId = l.id;
-      }else if(l.unitId === String(userInput.unitId)){
-        userInput.unitId = String(userInput.unitId);
-        userInput.stackPipeId = null;
-        selectedLocationId = l.id;
-      }
-    });
-    updateQALinearityTestSummary(selectedLocationId, userInput.id, userInput)
+    ]); console.log("userInputBEFORE", userInput);
+    if(selectedLocation.unitId){
+      userInput.unitId = selectedLocation.unitId;
+    }else{
+      userInput.stackPipeId = selectedLocation.stackPipeId;
+    }console.log("userInput", userInput);
+    updateQALinearityTestSummary(locationSelectValue, userInput.id, userInput)
       .then((res) => {
         if (Object.prototype.toString.call(res) === "[object Array]") {
           alert(res[0]);
@@ -445,15 +445,27 @@ const QATestSummaryDataTable = ({
     ]);
     console.log("userINput BEFORE",userInput);
     let selectedLocationId = locationSelectValue;
-    locations.forEach((l,i) =>{debugger;
-      if (l.unitId === userInput.stackPipeId) {
-        userInput["unitId"] = l.unitId;
-        userInput.stackPipeId = null;
-        selectedLocationId = l.id
-      } else if (l.stackPipeId === userInput.unitId) {
-        userInput["stackPipeId"] = l.stackPipeId;
-        userInput.unitId = null;
-        selectedLocationId = l.id
+    locations.forEach(loc =>{
+      if(userInput.unitId){
+        if(loc.unitId === String(userInput.unitId)){
+          userInput.unitId = loc.unitId;
+          userInput.stackPipeId = null;
+          selectedLocationId = loc.id
+        }else if(loc.stackPipeId === String(userInput.unitId)){
+          userInput.stackPipeId = loc.stackPipeId;
+          userInput.unitId = null;
+          selectedLocationId = loc.id
+        }
+      }else if(userInput.stackPipeId){
+        if(loc.unitId === String(userInput.stackPipeId)){
+          userInput.unitId = loc.unitId
+          userInput.stackPipeId = null;
+          selectedLocationId = loc.id
+        }else if(loc.stackPipeId === String(userInput.stackPipeId)){
+          userInput.stackPipeId = loc.stackPipeId;
+          userInput.unitId = null;
+          selectedLocationId = loc.id
+        }
       }
     });
     console.log("userINput",userInput);

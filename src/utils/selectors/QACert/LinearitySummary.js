@@ -488,7 +488,7 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
     // console.log(`getQAModalDetailsByTestCode default case w/ testCode: ${testCode}`);
   }
 
-  selectedLocation.unitId ? modalDetails["controlInputs"]['unitId'] = ["Unit or Stack Pipe ID", "nonFilteredDropdown", "", ""] : modalDetails["controlInputs"]['stackPipeId'] = ["Unit or Stack Pipe ID", "nonFilteredDropdown", "", ""]
+  selectedLocation.unitId ? modalDetails["controlInputs"]['unitId'] = ["Unit or Stack Pipe ID", "nonFilteredDropdown", "", "locked"] : modalDetails["controlInputs"]['stackPipeId'] = ["Unit or Stack Pipe ID", "nonFilteredDropdown", "", "locked"]
 
   return modalDetails
 }
