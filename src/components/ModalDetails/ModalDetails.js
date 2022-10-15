@@ -276,7 +276,7 @@ const ModalDetails = ({
             epadataname={value[0]}
             epa-testid={value[0].split(" ").join("-")}
             defaultValue={datePickerValue}
-            maxDate= {`${d.getFullYear()}-${d.getMonth()+1}-${d.getDay()}`} 
+            maxDate={`${d.getFullYear()}-${d.getMonth() + 1}-${d.getDay()}`}
           />
         );
         break;
