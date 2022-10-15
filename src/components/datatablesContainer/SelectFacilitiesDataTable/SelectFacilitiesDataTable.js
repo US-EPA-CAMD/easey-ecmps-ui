@@ -24,7 +24,6 @@ export const SelectFacilitiesDataTable = ({
 }) => {
   const [facilities, setFacilities] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
-
   const [checkedOutLocations, setCheckedOutLocations] = useState([]);
   const [
     mostRecentlyCheckedInMonitorPlanId,
@@ -42,14 +41,9 @@ export const SelectFacilitiesDataTable = ({
 
   useEffect(() => {
     obtainCheckedOutLocations().then();
-    return () => {
-      setCheckedOutLocations([]);
-    };
   }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanId]);
-
   const obtainCheckedOutLocations = async () => {
-    const checkedOutLocationResult = await getCheckedOutLocations();
-
+    const checkedOutLocationResult = await getCheckedOutLocations().then();
     let checkedOutLocationsList = [];
     if (checkedOutLocationResult) {
       if (
@@ -59,6 +53,7 @@ export const SelectFacilitiesDataTable = ({
         checkedOutLocationsList = checkedOutLocationResult.data;
       }
     }
+
     setCheckedOutLocations(checkedOutLocationsList);
   };
 
@@ -68,7 +63,22 @@ export const SelectFacilitiesDataTable = ({
 
   // handles the actual component that appears after clicking on the dynamic tabs
   const selectedRowHandler = (info) => {
-    const title = `${info[0].col1} (${info[1].name}) ${info[1].active ? "" : "Inactive"}`;
+    const title = `${info[0].col1} (${info[1].name}) ${
+      info[1].active ? "" : "Inactive"
+    }`;
+
+    // if user has THIS plan checkedout
+    const isCheckedOutByUser = (configs) => {
+      return (
+        configs.map((location) => location["monPlanId"]).indexOf(info[1].id) >
+          -1 &&
+        configs[
+          configs.map((location) => location["monPlanId"]).indexOf(info[1].id)
+        ]["checkedOutBy"] === user["userId"]
+      );
+    };
+
+    const checkedOutValue = isCheckedOutByUser(checkedOutLocations);
 
     addtabs([
       {
@@ -81,13 +91,7 @@ export const SelectFacilitiesDataTable = ({
                 selectedConfig={info[1]}
                 title={title}
                 user={user}
-                checkout={
-                  checkedOutLocations.length > 0
-                    ? checkedOutLocations[0].monPlanId === info[1].id
-                      ? true
-                      : info[2]
-                    : info[2]
-                }
+                checkout={info[2] || checkedOutValue}
                 checkedOutLocations={checkedOutLocations}
                 setMostRecentlyCheckedInMonitorPlanId={
                   setMostRecentlyCheckedInMonitorPlanId
@@ -127,12 +131,9 @@ export const SelectFacilitiesDataTable = ({
 
         orisCode: info[0].col2,
         selectedConfig: info[1],
-        checkout:
-          checkedOutLocations.length > 0
-            ? checkedOutLocations[0].monPlanId === info[1].id
-              ? true
-              : info[2]
-            : info[2],
+        // info[2] shows true if "open and checkout" was click first time
+        // checkedoutvalue shows true if user already had it checked out but navigates away
+        checkout: info[2] || checkedOutValue,
       },
     ]);
   };
@@ -175,45 +176,47 @@ export const SelectFacilitiesDataTable = ({
         }}
       />
       {/* {workspaceSection === MONITORING_PLAN_STORE_NAME ? ( */}
-        <DataTableRender
-          columnNames={columnNames}
-          dataLoaded={dataLoaded}
-          data={data}
-          defaultSort="col2"
-          openedFacilityTabs={openedFacilityTabs[workspaceSection]}
-          user={user}
-          pagination={true}
-          filter={true}
-          sectionTitle="Select Configurations"
-          checkedOutLocations={checkedOutLocations}
-          expandableRows={true}
-          expandableRowComp={
-            <DataTableConfigurations
-              selectedRowHandler={selectedRowHandler}
-              user={user}
-              className="expand-row-data-table"
-              checkedOutLocations={checkedOutLocations}
-              actionsBtn={"Open"}
-              setMostRecentlyCheckedInMonitorPlanId={
-                setMostRecentlyCheckedInMonitorPlanId
-              }
-              setMostRecentlyCheckedInMonitorPlanIdForTab={
-                setMostRecentlyCheckedInMonitorPlanIdForTab
-              }
-              workspaceSection={workspaceSection}
-            />
-          }
-          headerStyling="padding-top-0 padding-left-2"
-          setShowInactive={() => {}}
-          setMostRecentlyCheckedInMonitorPlanId={
-            setMostRecentlyCheckedInMonitorPlanId
-          }
-          setMostRecentlyCheckedInMonitorPlanIdForTab={
-            setMostRecentlyCheckedInMonitorPlanIdForTab
-          }
-          ariaLabel={"Select Configurations"}
-          workspaceSection={workspaceSection}
-        />
+
+      <DataTableRender
+        columnNames={columnNames}
+        dataLoaded={dataLoaded}
+        data={data}
+        defaultSort="col2"
+        openedFacilityTabs={openedFacilityTabs[workspaceSection]}
+        user={user}
+        pagination={true}
+        filter={true}
+        sectionTitle="Select Configurations"
+        checkedOutLocations={checkedOutLocations}
+        expandableRows={true}
+        expandableRowComp={
+          <DataTableConfigurations
+            selectedRowHandler={selectedRowHandler}
+            user={user}
+            className="expand-row-data-table"
+            checkedOutLocations={checkedOutLocations}
+            actionsBtn={"Open"}
+            setMostRecentlyCheckedInMonitorPlanId={
+              setMostRecentlyCheckedInMonitorPlanId
+            }
+            setMostRecentlyCheckedInMonitorPlanIdForTab={
+              setMostRecentlyCheckedInMonitorPlanIdForTab
+            }
+            workspaceSection={workspaceSection}
+          />
+        }
+        headerStyling="padding-top-0 padding-left-2"
+        setShowInactive={() => {}}
+        setMostRecentlyCheckedInMonitorPlanId={
+          setMostRecentlyCheckedInMonitorPlanId
+        }
+        setMostRecentlyCheckedInMonitorPlanIdForTab={
+          setMostRecentlyCheckedInMonitorPlanIdForTab
+        }
+        ariaLabel={"Select Configurations"}
+        workspaceSection={workspaceSection}
+      />
+      {/* )} */}
       {/* ) : (
         <DataTableRender
           columnNames={columnNames}
@@ -247,9 +250,9 @@ export const SelectFacilitiesDataTable = ({
   );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   return {
-    openedFacilityTabs: state.openedFacilityTabs,
+    openedFacilityTabs: state.openedFacilityTabs[ownProps.workspaceSection],
   };
 };
 

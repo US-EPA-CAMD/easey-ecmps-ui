@@ -193,12 +193,12 @@ const App = () => {
             />
 
             {user ? (
-              <Redirect from="/emissions-daily" to="/workspace/emissions-daily" />
+              <Redirect from="/emissions" to="/workspace/emissions" />
             ) : (
-              <Redirect from="/workspace/emissions-daily" to="/emissions-daily" />
+              <Redirect from="/workspace/emissions" to="/emissions" />
             )}
             <Route
-              path="/emissions-daily"
+              path="/emissions"
               exact
               component={() => {
                 return (
@@ -210,63 +210,7 @@ const App = () => {
               }}
             />
             <Route
-              path="/workspace/emissions-daily"
-              exact
-              component={() => (
-                <MonitoringPlanHome
-                  user={user}
-                  workspaceSection={EMISSIONS_STORE_NAME}
-                />
-              )}
-            />
-
-            {user ? (
-              <Redirect from="/emissions-hourly" to="/workspace/emissions-hourly" />
-            ) : (
-              <Redirect from="/workspace/emissions-hourly" to="/emissions-hourly" />
-            )}
-            <Route
-              path="/emissions-hourly"
-              exact
-              component={() => {
-                return (
-                  <MonitoringPlanHome
-                    user={false}
-                    workspaceSection={EMISSIONS_STORE_NAME}
-                  />
-                );
-              }}
-            />
-            <Route
-              path="/workspace/emissions-hourly"
-              exact
-              component={() => (
-                <MonitoringPlanHome
-                  user={user}
-                  workspaceSection={EMISSIONS_STORE_NAME}
-                />
-              )}
-            />
-
-            {user ? (
-              <Redirect from="/emissions-mats" to="/workspace/emissions-mats" />
-            ) : (
-              <Redirect from="/workspace/emissions-mats" to="/emissions-mats" />
-            )}
-            <Route
-              path="/emissions-mats"
-              exact
-              component={() => {
-                return (
-                  <MonitoringPlanHome
-                    user={false}
-                    workspaceSection={EMISSIONS_STORE_NAME}
-                  />
-                );
-              }}
-            />
-            <Route
-              path="/workspace/emissions-mats"
+              path="/workspace/emissions"
               exact
               component={() => (
                 <MonitoringPlanHome

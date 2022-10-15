@@ -7,6 +7,15 @@ export const findValue = (options, val, parameter) => {
       return x[parameter];
     }
   }
+  // edge case where passed in value is a num but dropdown is not
+  if (!isNaN(val)) {
+    // converts string in dropdown to num
+    for (const x of options) {
+      if (parseInt(x.code) === val) {
+        return x[parameter];
+      }
+    }
+  }
   return options[0][parameter];
 };
 

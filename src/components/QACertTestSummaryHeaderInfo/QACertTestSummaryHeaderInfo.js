@@ -58,7 +58,7 @@ export const QACertTestSummaryHeaderInfo = ({
 
   // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
-  const [importTypeSelection, setImportTypeSelection] = useState(true);
+  const [importTypeSelection, setImportTypeSelection] = useState('');
   const [usePortBtn, setUsePortBtn] = useState(false);
   const [finishedLoading, setFinishedLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

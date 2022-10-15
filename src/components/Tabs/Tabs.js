@@ -26,16 +26,21 @@ export const Tabs = ({
   const settingActiveTab = (index) => {
     setActiveTabIndex(index);
   };
+
+  const removeTab = (index) => {
+    removeTabs(index);
+    if (activeTabIndex === children.length - 1) {
+      setActiveTabIndex(index - 1);
+    }
+  }
+
   const closeHandler = (event, index, configId) => {
     event.stopPropagation();
-    removeTabs(index);
 
     if (workspaceSection !== EXPORT_STORE_NAME) {
       mpApi.getCheckedOutLocations().then((resOne) => {
         const configs = resOne.data;
-        if (
-          configs.some(
-            (plan) =>
+        if (configs.some((plan) =>
               plan.monPlanId === configId &&
               plan.checkedOutBy === user["userId"]
           )
@@ -45,16 +50,18 @@ export const Tabs = ({
             if (setCheckout) {
               setCheckout(false, configId, workspaceSection);
             }
+            removeTab(index);
           });
         } else {
           console.log(
             "X button - cannot check-in configuration that you do not have checked-out"
           );
+          removeTab(index);
         }
       });
     }
-    if (activeTabIndex === children.length - 1) {
-      setActiveTabIndex(index - 1);
+    else {
+      removeTab(index);
     }
   };
 
