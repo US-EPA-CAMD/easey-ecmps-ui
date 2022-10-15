@@ -249,7 +249,7 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
           testResultCode
         },
         extraControlInputs: {
-          injectionProtocolCode,
+          //injectionProtocolCode,
           testComment
         },
         controlDatePickerInputs: {

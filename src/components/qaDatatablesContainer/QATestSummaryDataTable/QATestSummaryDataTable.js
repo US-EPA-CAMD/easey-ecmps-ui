@@ -50,7 +50,7 @@ const QATestSummaryDataTable = ({
   sectionSelect,
   selectedLocation,
   locations
-}) => {console.log("locations",locations);console.log("selectedLocation",selectedLocation);
+}) => {
   const [loading, setLoading] = useState(false);
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
@@ -201,14 +201,12 @@ const QATestSummaryDataTable = ({
           name: "-- Select a value --",
         });
       });
-      console.log("dropdownArray",dropdownArray);
-      console.log("dropdowns",dropdowns);
       setMdmData(dropdowns);
       setDropdownsLoaded(true);
       setDropdownsLoading(false);
     });
   };
-  useEffect(() => {
+  useEffect(() => {debugger;
     const { testTypeCodes, testTypeGroupCode } = selectedTestCode;
     if (mdmData === null) {
       if (testTypeGroupCode) {
@@ -419,12 +417,12 @@ const QATestSummaryDataTable = ({
   const saveData = () => {
     const userInput = extractUserInput(uiControls, ".modalUserInput", [
       "gracePeriodIndicator",
-    ]); console.log("userInputBEFORE", userInput);
+    ]);
     if(selectedLocation.unitId){
       userInput.unitId = selectedLocation.unitId;
     }else{
       userInput.stackPipeId = selectedLocation.stackPipeId;
-    }console.log("userInput", userInput);
+    }
     updateQALinearityTestSummary(locationSelectValue, userInput.id, userInput)
       .then((res) => {
         if (Object.prototype.toString.call(res) === "[object Array]") {
@@ -443,7 +441,6 @@ const QATestSummaryDataTable = ({
     const userInput = extractUserInput(uiControls, ".modalUserInput", [
       "gracePeriodIndicator",
     ]);
-    console.log("userINput BEFORE",userInput);
     let selectedLocationId = locationSelectValue;
     locations.forEach(loc =>{
       if(userInput.unitId){
@@ -468,7 +465,6 @@ const QATestSummaryDataTable = ({
         }
       }
     });
-    console.log("userINput",userInput);
     createQATestData(selectedLocationId, userInput)
       .then((res) => {
         if (Object.prototype.toString.call(res) === "[object Array]") {
@@ -602,7 +598,7 @@ const QATestSummaryDataTable = ({
         />
       ) : (
         <Preloader />
-      )}{console.log("selectedModalData",selectedModalData)}
+      )}
       {show ? (
         <Modal
           show={show}
