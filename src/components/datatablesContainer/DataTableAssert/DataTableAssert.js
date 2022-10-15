@@ -397,6 +397,20 @@ export const DataTableAssert = ({
     if (!dropdownArrayIsEmpty) {
       setPrefilteredMdmData(mdmData[prefilteredDataName]);
     }
+    
+    if (dataTableName === 'Unit Capacity' && create){
+      controlInputs.commercialOperationDate = ["Commercial Operation Date", "date", "", ""];
+      controlInputs.operationDate = ["Operation Date", "date", "", ""];
+      controlInputs.boilerTurbineType = ["Boiler/Turbine Type", "input", "", ""];
+      controlInputs.boilerTurbineBeginDate = ["Boiler/Turbine Begin Date", "date", "", ""]
+      controlInputs.boilerTurbineEndDate = ["Boiler/Turbine End Date", "date", "", ""]
+    } else if (dataTableName === 'Unit Capacity' && !create) {
+      controlInputs.commercialOperationDate = ["Commercial Operation Date", "date", "", "locked"];
+      controlInputs.operationDate = ["Operation Date", "date", "", "locked"];
+      controlInputs.boilerTurbineType = ["Boiler/Turbine Type", "input", "", "locked"];
+      controlInputs.boilerTurbineBeginDate = ["Boiler/Turbine Begin Date", "date", "", "locked"]
+      controlInputs.boilerTurbineEndDate = ["Boiler/Turbine End Date", "date", "", "locked"]
+    }
 
     const prefilteredTotalName = dropdownArray[0][dropdownArray[0].length - 1];
     setSelectedModalData(
