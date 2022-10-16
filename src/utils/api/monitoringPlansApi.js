@@ -289,7 +289,7 @@ export const saveSystemsFuelFlows = async (payload, locId, sysId) => {
 
 export const createSystemsFuelFlows = async (payload, locId, sysId) => {
   const url = getApiUrl(
-    `/workspace/locations/${locId}/systems/${sysId}/fuel-flows`
+    `/locations/${locId}/systems/${sysId}/fuel-flows`
   );
 
   // *** remove attributes not needed by the API
