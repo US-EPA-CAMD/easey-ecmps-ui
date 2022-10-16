@@ -15,7 +15,7 @@ applications:
       REACT_APP_EASEY_AUTH_API: https://((apiHost))/auth-mgmt
       REACT_APP_EASEY_QUARTZ_API: https://((apiHost))/quartz-mgmt
       REACT_APP_EASEY_CONTENT_API: https://((apiHost))/content-mgmt
-      REACT_APP_EASEY_QA_CERTIFICATIONS_API: https://((apiHost))/qa-certification-mgmt
+      REACT_APP_EASEY_QA_CERTIFICATION_API: https://((apiHost))/qa-certification-mgmt
       REACT_APP_EASEY_CAMD_SERVICES: https://((apiHost))/camd-services
       REACT_APP_EASEY_ECMPS_UI_SUPPORT_EMAIL: ((email))
       REACT_APP_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_RATE_SECONDS: ((refreshEvalStatusRateSeconds))
