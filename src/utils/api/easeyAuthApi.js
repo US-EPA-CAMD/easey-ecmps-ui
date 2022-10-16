@@ -86,6 +86,9 @@ export const logOut = async () => {
   secureAxios({
     method: "DELETE",
     url: `${config.services.authApi.uri}/authentication/sign-out`,
+    data: {
+      userId: user.userId
+    }
   })
     .then(() => {
       sessionStorage.removeItem("cdx_user");
@@ -125,6 +128,9 @@ export const refreshToken = async () => {
         headers: {
           authorization: `Bearer ${user.token}`,
           "x-api-key": config.app.apiKey,
+        },
+        data: {
+          userId: user.userId
         }
       });
 
