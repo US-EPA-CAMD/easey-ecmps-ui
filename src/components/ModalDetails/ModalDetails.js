@@ -76,10 +76,9 @@ const ModalDetails = ({
     data.hasOwnProperty("endDate") &&
     data.hasOwnProperty("endTime") &&
     data[data.length - 2][4] === "date" &&
-    data[data.length - 2][5] !== null && (
-      data[data.length - 1][4] === "hourDropdown" ||
-      data[data.length - 1][4] === "minuteDropdown"
-    ) &&
+    data[data.length - 2][5] !== null &&
+    (data[data.length - 1][4] === "hourDropdown" ||
+      data[data.length - 1][4] === "minuteDropdown") &&
     data[data.length - 1][5] === null
   ) {
     data[data.length - 1][2] = "0";
@@ -159,7 +158,6 @@ const ModalDetails = ({
     }
 
     switch (value[4]) {
-
       case "mainDropdown":
         comp = (
           <SelectBox
@@ -268,7 +266,7 @@ const ModalDetails = ({
         if (value[5] || value[5] !== null) {
           [year, month, day] = value[5].split("-");
         }
-
+        const d = new Date();
         const datePickerValue = `${year}-${month}-${day}`;
         comp = (
           <DatePicker
@@ -278,6 +276,7 @@ const ModalDetails = ({
             epadataname={value[0]}
             epa-testid={value[0].split(" ").join("-")}
             defaultValue={datePickerValue}
+            maxDate={`${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`}
           />
         );
         break;
@@ -400,9 +399,7 @@ const ModalDetails = ({
               value="Yes"
               className="padding-right-1  "
               defaultChecked={
-                value[2] !== undefined &&
-                value[2] !== null &&
-                value[2] === 1
+                value[2] !== undefined && value[2] !== null && value[2] === 1
               }
             />
             <Radio
