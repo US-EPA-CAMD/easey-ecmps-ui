@@ -520,9 +520,6 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
-      // return (
-      //    <QARataDataExpandableRows {...props} />
-      // );
       
       case "APPESUM":
         const appESum = qaAppendixECorrelationSummaryTestProps();
