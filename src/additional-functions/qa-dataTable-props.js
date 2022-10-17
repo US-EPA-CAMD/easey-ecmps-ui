@@ -413,3 +413,38 @@ export const qaTestQualificationProps = (selectedRow) => {
     extraControls: {},
   };
 };
+
+export const qaFuelFlowToLoadProps = () => {
+  return {
+    dataTableName: "Fuel Flow to Load",
+    payload: {},
+    dropdownArray: [
+      'testBasisCode',
+    ],
+    mdmProps: [
+      {
+        codeTable: "test-basis-codes",
+        responseProps: {
+          code: "testBasisCode",
+          description: "testBasisDescription"
+        }
+      }
+    ],
+    columnNames: [
+      "Test Basis Code",
+      "Average Difference",
+      "Number of Hours Used",
+      "Number of Hours Excluded Co-firing",
+      "Number of Hours Excluded Ramping",
+      "Number of Hours Excluded Low Range",
+    ],
+    controlInputs: {
+      testBasisCode: ["Test Basis Code", "dropdown", "", ""],
+      averageDifference: ["Average Difference", "input", "", ""],
+      numberOfHoursUsed: ["Number of Hours Used", "input", "", ""],
+      numberOfHoursExcludedCofiring: ["Number of Hours Excluded Co-firing", "input", "", ""],
+      numberOfHoursExcludedRamping: ["Number of Hours Excluded Ramping", "input", "", ""],
+      numberOfHoursExcludedLowRange: ["Number of Hours Excluded Low Range", "input", "", ""],
+    },
+  };
+}
