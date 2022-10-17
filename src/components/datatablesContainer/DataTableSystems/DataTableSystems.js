@@ -571,10 +571,11 @@ export const DataTableSystems = ({
     const userInput = extractUserInput(componentPayload, ".modalUserInput", [
       "hgConverterIndicator",
     ]);
+
     userInput.componentId = selectedRangeInFirst.componentId;
     userInput.componentTypeCode = selectedRangeInFirst.componentTypeCode;
     userInput.basisCode = selectedRangeInFirst.basisCode;
-    userInput.hgConverterIndicator = selectedRangeInFirst.hgConverterIndicator;
+    // userInput.hgConverterIndicator = selectedRangeInFirst.hgConverterIndicator;
     userInput.sampleAcquisitionMethodCode = selectedRangeInFirst.sampleAcquisitionMethodCode;
 
     if (

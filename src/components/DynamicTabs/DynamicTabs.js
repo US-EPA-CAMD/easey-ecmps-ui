@@ -54,9 +54,12 @@ export const DynamicTabs = ({
   };
 
   const removeTabsHandler = (index) => {
+    // setTimeout(()=>{
     tabs.splice(index, 1);
     removeFacility(index, workspaceSection);
     setTabs([...tabs]);
+
+    // },100)
   };
   return (
     <div>

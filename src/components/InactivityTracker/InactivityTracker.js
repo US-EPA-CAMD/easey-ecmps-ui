@@ -62,14 +62,6 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
       await checkInactivity(config.app.inactivityLogoutDuration);
     }
 
-    if (config.app.enableDebug) {
-      const rawMinutes = timeInactive / 60000;
-      const minutes = Math.floor(rawMinutes);
-      const rawSeconds = (timeInactive / 1000);
-      const seconds = Math.floor(rawSeconds - (minutes * 60));
-      console.log(`Idle Time (min:sec): ${minutes < 10 ? "0": ""}${minutes}:${seconds < 10 ? "0": ""}${seconds}`);
-    }
-
     setTimeInactive(timeInactive + config.app.activityPollingFrequency);
   }, config.app.activityPollingFrequency);
 

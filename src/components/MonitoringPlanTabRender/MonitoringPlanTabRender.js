@@ -44,6 +44,8 @@ export const MonitoringPlanTabRender = ({
   inactive,
   checkedOutLocations,
   currentTabIndex,
+
+  workspaceSection
 }) => {
   const settingInactiveCheckBox = (check, disable) => {
     setInactive([check, disable], title, MONITORING_PLAN_STORE_NAME);
@@ -619,6 +621,8 @@ export const MonitoringPlanTabRender = ({
           setRevertedState={setRevertedState}
           configID={configID}
           setUpdateRelatedTables={setUpdateRelatedTables}
+          updateRelatedTables={updateRelatedTables}
+          workspaceSection={workspaceSection}
         />
       </div>
       <hr />

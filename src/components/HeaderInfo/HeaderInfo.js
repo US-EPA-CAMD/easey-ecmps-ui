@@ -46,8 +46,26 @@ export const HeaderInfo = ({
   checkoutAPI,
   configID,
   setUpdateRelatedTables,
+  updateRelatedTables,
+  workspaceSection
 }) => {
+  //MP
   const sections = [
+    { name: "Defaults" },
+    { name: "Formulas" },
+    { name: "Loads" },
+    {
+      name: "Location Attributes and Relationships",
+    },
+    { name: "Methods" },
+    { name: "Qualifications" },
+    { name: "Rectangular Duct WAFs" },
+    { name: "Spans" },
+    { name: "Systems" },
+    { name: "Unit Information" },
+  ];
+//Emissions
+  const viewTemplates = [
     { name: "Defaults" },
     { name: "Formulas" },
     { name: "Loads" },
@@ -245,7 +263,7 @@ export const HeaderInfo = ({
   };
   useEffect(() => {
     // get evaluation status
-    if (!evalStatusLoaded) {
+    if (!evalStatusLoaded || updateRelatedTables) {
       mpApi.getRefreshInfo(configID).then((res) => {
         const status = res.data.evalStatusCode;
         setEvalStatus(status);
@@ -297,7 +315,7 @@ export const HeaderInfo = ({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkout, dataLoaded, evalStatusLoaded]);
+  }, [checkout, dataLoaded, evalStatusLoaded,updateRelatedTables]);
 
   const clearOpenRefreshInterval = () => {
     if (openIntervalId) {
@@ -718,7 +736,7 @@ export const HeaderInfo = ({
                   selectKey="id"
                   initialSelection={locationSelect[0]}
                   selectionHandler={setLocationSelect}
-                  workspaceSection={MONITORING_PLAN_STORE_NAME}
+                  workspaceSection={workspaceSection}
                 />
                 <DropdownSelection
                   caption="Sections"
@@ -728,10 +746,10 @@ export const HeaderInfo = ({
                   selectKey="name"
                   initialSelection={sectionSelect[0]}
                   orisCode={orisCode}
-                  workspaceSection={MONITORING_PLAN_STORE_NAME}
+                  workspaceSection={workspaceSection}
                 />
                 <div className="margin-top-6">
-                  <Checkbox
+                  {workspaceSection === MONITORING_PLAN_STORE_NAME ? <Checkbox
                     epa-testid="inactiveCheckBox"
                     id="inactiveCheckBox"
                     name="inactiveCheckBox"
@@ -751,11 +769,13 @@ export const HeaderInfo = ({
                         MONITORING_PLAN_STORE_NAME
                       )
                     }
-                  />
+                  /> : ''} 
+
                 </div>
               </div>
 
               <div>
+                
                 <Button outline
                   type="button"
                   title="Open Comments"
