@@ -520,7 +520,6 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
-<<<<<<< HEAD
       // return (
       //    <QARataDataExpandableRows {...props} />
       // );
@@ -537,7 +536,13 @@ const QATestSummaryDataTable = ({
             dataTableName={appESum["dataTableName"]}
             extraControls={appESum["extraControls"]}
             radioBtnPayload={appESum["radioBtnPayload"]}
-=======
+            expandable
+            {...props}
+            extraIDs={null}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+
       case "FFL": // Fuel Flow to Load
         const fflProps = qaFuelFlowToLoadProps();
         return (
@@ -551,17 +556,13 @@ const QATestSummaryDataTable = ({
             dataTableName={fflProps["dataTableName"]}
             extraControls={fflProps["extraControls"]}
             radioBtnPayload={fflProps["radioBtnPayload"]}
->>>>>>> ca83238a3542bfa6cf6eb4e1325719ca42de08d1
             expandable
             {...props}
             extraIDs={null}
             isCheckedOut={isCheckedOut}
           />
         );
-<<<<<<< HEAD
 
-=======
->>>>>>> ca83238a3542bfa6cf6eb4e1325719ca42de08d1
       default:
         return null;
     }
