@@ -14,6 +14,7 @@ const rataTraverseData = "RATA Traverse Data"
 const airEmissions = "Air Emissions";
 const flowRataRun = "Flow";
 const testQualification = "Test Qualification";
+const appendixECorrelationSummary= "Appendix E Correlation Summary";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -68,6 +69,10 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       return qaApi.getTestQualification(location, id).catch((error) => {
         console.log("error", error);
       });
+    case appendixECorrelationSummary:
+      return qaApi.getAppendixECorrelationSummaryRecords(location, id).catch((error) => {
+        console.log("error", error);
+      });
     default:
       throw new Error(`getDataTableApis undefined for ${name}`)
   }
@@ -97,6 +102,8 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.getFlowRunRecords(dataIn);
     case testQualification:
       return selector.mapTestQualificationToRows(dataIn);
+    case appendixECorrelationSummary:
+      return selector.getAppendixECorrelationSummaryRecords(dataIn);
     default:
       break;
   }
@@ -385,6 +392,8 @@ export const createDataSwitch = (
         });
     case testQualification:
       return qaApi.createTestQualification(location, id, userInput);
+    case appendixECorrelationSummary:
+      return qaApi.createAppendixECorrelationSummaryRecord(location, id, userInput);
     default:
       break;
   }

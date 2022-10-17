@@ -293,3 +293,18 @@ export const mapTestQualificationToRows = (data) => {
   });
   return records;
 };
+
+export const getAppendixECorrelationSummaryRecords = (data) => {
+  const records = [];
+  data.forEach((el) => {
+    records.push({
+      id: el.id,
+      testSumId: el.testSumId,
+      col1: el.operatingLevelForRun,
+      col2: el.meanReferenceValue,
+      col3: el.averageHourlyHeatInputRate,
+      col4: el.fFactor,
+    });
+  });
+  return records;
+};

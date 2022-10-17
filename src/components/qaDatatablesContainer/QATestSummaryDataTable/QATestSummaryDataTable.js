@@ -15,6 +15,7 @@ import { modalViewData } from "../../../additional-functions/create-modal-input-
 import {
   qaLinearitySummaryProps,
   qaRataDataProps,
+  qaAppendixECorrelationSummaryTestProps,
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
@@ -454,6 +455,26 @@ const QATestSummaryDataTable = ({
       // return (
       //    <QARataDataExpandableRows {...props} />
       // );
+      
+      case "APPESUM":
+        const appESum = qaAppendixECorrelationSummaryTestProps();
+        return (
+          <QAExpandableRowsRender
+            payload={appESum["payload"]}
+            dropdownArray={appESum["dropdownArray"]}
+            columns={appESum["columnNames"]}
+            controlInputs={appESum["controlInputs"]}
+            controlDatePickerInputs={appESum["controlDatePickerInputs"]}
+            dataTableName={appESum["dataTableName"]}
+            extraControls={appESum["extraControls"]}
+            radioBtnPayload={appESum["radioBtnPayload"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+
       default:
         return null;
     }
