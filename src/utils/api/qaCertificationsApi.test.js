@@ -111,3 +111,28 @@ describe('RATA traverse CRUD operations', () => {
 
   })
 })
+
+describe('Appendix E Correlation Summary Test CRUD operations', () => {
+
+  test('getAppendixECorrelationSummary', async () => {
+    const appendixECorrelationSummaryData = [{ appendixECorrelationSummary: 'data' }, { appendixECorrelationSummary: 'data2' }]
+    const getAppendixECorrelationSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
+    mock.onGet(getAppendixECorrelationSummaryUrl).reply(200, appendixECorrelationSummaryData)
+
+    const resp = await qaCert.getAppendixECorrelationSummaryRecords(locId, testSumId)
+
+    expect(mock.history.get.length).toBe(1)
+    expect(resp.data).toStrictEqual(appendixECorrelationSummaryData)
+  })
+
+  test('createAppendixECorrelationSummary', async () => {
+    const payload = { appendixECorrelationSummary: 'data' }
+    const postAppendixECorrelationSummaryUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
+    mock.onPost(postAppendixECorrelationSummaryUrl).reply(200, payload)
+
+    const resp = await qaCert.createAppendixECorrelationSummaryRecord(locId, testSumId, payload)
+
+    expect(mock.history.post.length).toBe(1)
+    expect(resp.data).toStrictEqual(payload)
+  })
+})

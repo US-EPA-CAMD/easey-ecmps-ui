@@ -27,7 +27,6 @@ import {
   qaFlowRataRunProps,
   qaRataTraverseProps,
   qaTestQualificationProps,
-  qaAppendixECorrelationRunTestProps,
 } from "../../../additional-functions/qa-dataTable-props";
 const QAExpandableRowsRender = ({
   user,
@@ -238,24 +237,6 @@ const QAExpandableRowsRender = ({
             isCheckedOut={isCheckedOut}
           />
         )
-      // Functionality for Appendix E Correlation Run expandable rows whenever those get added
-      /*case "Appendix E Correlation Summary":
-        const appendixECorrelationRunArray = [locationId, id]
-        const appendixECorrelationRunArrayObj = qaAppendixECorrelationRunTestProps();
-        return(
-          <QAExpandableRowsRender
-            payload={appendixECorrelationRunArrayObj["payload"]}
-            dropdownArray={appendixECorrelationRunArrayObj["dropdownArray"]}
-            columns={appendixECorrelationRunArrayObj["columnNames"]}
-            controlInputs={appendixECorrelationRunArrayObj["controlInputs"]}
-            controlDatePickerInputs={appendixECorrelationRunArrayObj["controlDatePickerInputs"]}
-            dataTableName={appendixECorrelationRunArrayObj["dataTableName"]}
-            extraControls={appendixECorrelationRunArrayObj["extraControls"]}
-            extraIDs={appendixECorrelationRunArray}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        )*/
       default:
         break;
     }
