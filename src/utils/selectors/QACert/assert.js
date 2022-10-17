@@ -15,6 +15,7 @@ const airEmissions = "Air Emissions";
 const flowRataRun = "Flow";
 const testQualification = "Test Qualification";
 const appendixECorrelationSummary= "Appendix E Correlation Summary";
+const fuelFlowToLoad = "Fuel Flow to Load"
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -73,10 +74,15 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       return qaApi.getAppendixECorrelationSummaryRecords(location, id).catch((error) => {
         console.log("error", error);
       });
+    case fuelFlowToLoad:
+      return qaApi
+        .getFuelFlowToLoadData(location, id)
+        .catch(error => console.log('error fetching fuel flow to load data', error))
     default:
-      throw new Error(`getDataTableApis undefined for ${name}`)
+      throw new Error(`getDataTableApis case not implemented for ${name}`)
   }
 };
+
 // Selectors
 export const getDataTableRecords = (dataIn, name) => {
   switch (name) {
@@ -88,10 +94,8 @@ export const getDataTableRecords = (dataIn, name) => {
       return injectionSelector.getLinearityInjection(dataIn);
     case rataData:
       return selector.getRataDataRecords(dataIn);
-
     case rataRunData:
       return selector.getRataRunDataRecords(dataIn);
-
     case rataSummary:
       return selector.mapRataSummaryToRows(dataIn);
     case rataTraverseData:
@@ -104,8 +108,10 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.mapTestQualificationToRows(dataIn);
     case appendixECorrelationSummary:
       return selector.getAppendixECorrelationSummaryRecords(dataIn);
+    case fuelFlowToLoad:
+      return selector.mapFuelFlowToLoadToRows(dataIn)
     default:
-      break;
+      throw new Error(`getDataTableRecords case not implemented for ${name}`)
   }
 };
 
@@ -192,11 +198,11 @@ export const removeDataSwitch = async (
     case rataTraverseData:
       return qaApi
         .deleteRataTraverseData(
-          extraIdsArr[0], 
-          extraIdsArr[1], 
-          extraIdsArr[2], 
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
           extraIdsArr[3],
-          extraIdsArr[4], 
+          extraIdsArr[4],
           id,
           row.id
         )
@@ -205,10 +211,10 @@ export const removeDataSwitch = async (
         });
 
     default:
-      break;
+      throw new Error(`removeDataSwitch case not implemented for ${name}`)
   }
-  return [];
 };
+
 // Save (PUT) endpoints for API
 export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
   switch (name) {
@@ -394,8 +400,11 @@ export const createDataSwitch = (
       return qaApi.createTestQualification(location, id, userInput);
     case appendixECorrelationSummary:
       return qaApi.createAppendixECorrelationSummaryRecord(location, id, userInput);
+    case fuelFlowToLoad:
+      return qaApi
+        .createFuelFlowToLoad(location, id, userInput)
+        .catch(error => console.log('error creating fuel flow to load data', error))
     default:
-      break;
+      throw new Error(`createDataSwitch case not implemented for ${name}`)
   }
-  return [];
 };

@@ -1,6 +1,7 @@
 import axios from "axios";
 import log from "loglevel";
 import config from "../../config";
+import { debugLog } from "../functions";
 import { checkoutAPI } from "../../additional-functions/checkout";
 import { getCheckedOutLocations } from "./monitoringPlansApi";
 import { displayAppError } from "../../additional-functions/app-error";
@@ -85,6 +86,9 @@ export const logOut = async () => {
   secureAxios({
     method: "DELETE",
     url: `${config.services.authApi.uri}/authentication/sign-out`,
+    data: {
+      userId: user.userId
+    }
   })
     .then(() => {
       sessionStorage.removeItem("cdx_user");
@@ -97,20 +101,40 @@ export const logOut = async () => {
 
 export const refreshToken = async () => {
   try {
+    let refreshToken = false;
     const user = JSON.parse(sessionStorage.getItem("cdx_user"));
+    let tokenExp = new Date(user.tokenExpiration);
+    debugLog('token expiration: ', tokenExp);
 
-    if (new Date() > new Date(user.tokenExpiration)) {
-      console.log('token has expired...refreshing');
+    if (new Date() > tokenExp) {
+      refreshToken = true;
+      debugLog('User security token has expired');
+    }
+    else {
+      tokenExp.setSeconds(tokenExp.getSeconds() - 30);
+      debugLog('token expiration (-30 seconds): ', tokenExp);
+  
+      if (new Date() > tokenExp) {
+        refreshToken = true;
+        debugLog('User security token expires in 30 seconds or less');
+      }
+    }
+
+    if (refreshToken) {
+      debugLog('Refreshing user security token');
       const result = await axios({
         method: "POST",
         url: `${config.services.authApi.uri}/tokens`,
         headers: {
           authorization: `Bearer ${user.token}`,
           "x-api-key": config.app.apiKey,
+        },
+        data: {
+          userId: user.userId
         }
       });
 
-      console.log('new token:', result.data);
+      debugLog('Refreshed token: ', result.data);
   
       user.token = result.data.token;
       user.tokenExpiration = result.data.expiration;

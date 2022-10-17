@@ -46,12 +46,10 @@ export const getQATestSummary = async (
   endDate
 ) => {
   let url = `${config.services.qaCertification.uri}`;
-
   // *** workspace section url (authenticated)
   if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;
   }
-
   // *** attach the rest of the url
   url = `${url}/locations/${locID}/test-summary`;
   if (selectedTestCode) {
@@ -857,6 +855,28 @@ export const getAppendixECorrelationSummaryRecords = async (locId, testSumId) =>
 export const createAppendixECorrelationSummaryRecord = async (locId, testSumId, payload) => {
   let url = `${config.services.qaCertification.uri}/workspace`;
   url = `${url}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const getFuelFlowToLoadData = async (locId, testSumId) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createFuelFlowToLoad = async (locId, testSumId, payload) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests`;
+  const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({

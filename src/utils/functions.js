@@ -1,10 +1,22 @@
+import { config } from "../config";
+
+export const debugLog = (message, object = null) => {
+  if (config.app.enableDebug) {
+    if (object) {
+      console.log(message, object);
+    } else {
+      console.log(message);
+    }
+  }
+};
+
 export const parseBool = (value, defaultValue = false) => {
   if (typeof value == "number" || value instanceof Number) {
     return value > 0;
   }
 
   if (typeof value == "boolean" || value instanceof Boolean) {
-    return value;
+    return Boolean(value);
   }
 
   if (typeof value == "string" || value instanceof String) {
@@ -26,7 +38,7 @@ export const getConfigValue = (key, defaultValue = "") => {
     returnValue = process.env[key];
   }
 
-  return defaultValue || returnValue;
+  return returnValue || defaultValue;
 };
 
 export const getConfigValueNumber = (key, defaultValue = "") => {

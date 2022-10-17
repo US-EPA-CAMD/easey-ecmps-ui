@@ -36,15 +36,15 @@ export const config = {
     ),
     inactivityDuration: getConfigValueNumber(
       'REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_CHECKOUT_MINUTES',
-      1,
+      5,
     ) * oneMinute,
     inactivityLogoutDuration: getConfigValueNumber(
       'REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_LOGOUT_MINUTES',
-      1,
+      5,
     ) * oneMinute,
     activityPollingFrequency: getConfigValueNumber(
       'REACT_APP_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS',
-      1,
+      5,
     ) * oneSecond,
     countdownDuration: getConfigValueNumber(
       'REACT_APP_EASEY_ECMPS_UI_ACTIVITY_COUNTDOWN_DURATION_SECONDS',

@@ -308,3 +308,21 @@ export const getAppendixECorrelationSummaryRecords = (data) => {
   });
   return records;
 };
+
+export const mapFuelFlowToLoadToRows = (data) => {
+  const records = []
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.testBasisCode,
+      col2: el.averageDifference,
+      col3: el.numberOfHoursUsed,
+      col4: el.numberOfHoursExcludedCofiring,
+      col5: el.numberOfHoursExcludedRamping,
+      col6: el.numberOfHoursExcludedLowRange,
+
+    }
+    records.push(row)
+  }
+  return records
+}

@@ -46,7 +46,6 @@ const QAExpandableRowsRender = ({
   mdmProps
 }) => {
   const { locationId, id } = data;
-  // const { locationId, id } = dataTableName !== "Protocol Gas" ? data : ""; // id / testsumid
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -504,6 +503,18 @@ const QAExpandableRowsRender = ({
           "dropdown",
           "",
           "",
+        ];
+      }
+    } else {
+      if (dataTableName === "Linearity Test") {
+        controlInputs.gasLevelCode = ["Gas Level Code", "dropdown", "", "locked"];
+      }
+      if (dataTableName === "Rata Data") {
+        controlInputs.numberOfLoadLevels = [
+          "Number of Load Levels",
+          "dropdown",
+          "",
+          "locked",
         ];
       }
     }
