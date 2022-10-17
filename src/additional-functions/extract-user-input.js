@@ -1,4 +1,5 @@
 export const extractUserInput = (payload, inputSelector, radios) => {
+
   // *** construct payload
   const payloadInputs = document.querySelectorAll(inputSelector);
   const datepickerPayloads = document.querySelectorAll(
@@ -75,5 +76,6 @@ export const extractUserInput = (payload, inputSelector, radios) => {
       }
     }
   });
+
   return payload;
 };

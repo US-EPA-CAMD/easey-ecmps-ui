@@ -1,3 +1,16 @@
+import { config } from "../config";
+
+export const debugLog = (message, object = null) => {
+  if (config.app.enableDebug) {
+    if (object) {
+      console.log(message, object);
+    }
+    else {
+      console.log(message);
+    }
+  }
+}
+
 export const parseBool = (value, defaultValue = false) => {
 
   if (typeof value == 'number' || value instanceof Number) {

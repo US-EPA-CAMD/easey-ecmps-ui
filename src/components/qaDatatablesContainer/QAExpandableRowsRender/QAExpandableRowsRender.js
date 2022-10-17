@@ -339,8 +339,8 @@ const QAExpandableRowsRender = ({
             if (i === 0) {
               dropdowns[dropdownArray[i]] = response[0].data.map((d) => {
                 return {
-                  code: d["operatingLevelCode"],
-                  name: d["operatingLevelDescription"],
+                  code: d["opLevelCode"],
+                  name: d["opLevelDescription"],
                 };
               });
               dropdowns[dropdownArray[i]].unshift({
@@ -484,6 +484,18 @@ const QAExpandableRowsRender = ({
           "dropdown",
           "",
           "",
+        ];
+      }
+    } else {
+      if (dataTableName === "Linearity Test") {
+        controlInputs.gasLevelCode = ["Gas Level Code", "dropdown", "", "locked"];
+      }
+      if (dataTableName === "Rata Data") {
+        controlInputs.numberOfLoadLevels = [
+          "Number of Load Levels",
+          "dropdown",
+          "",
+          "locked",
         ];
       }
     }
@@ -672,7 +684,7 @@ const QAExpandableRowsRender = ({
         <Preloader />
       )}
       {
-        [...getFirstLevelExpandables(dataTableName)]
+        [...getFirstLevelExpandables()]
       }
       {show ? (
         <Modal
@@ -692,6 +704,8 @@ const QAExpandableRowsRender = ({
           children={
             dropdownsLoaded ? (
               <div>
+                {console.log("selectedRow",selectedRow)}
+                {console.log("selectedModalData",selectedModalData)}
                 <ModalDetails
                   modalData={selectedRow}
                   data={selectedModalData}

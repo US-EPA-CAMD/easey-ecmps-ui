@@ -300,7 +300,6 @@ export const DataTableMethod = ({
 
   const data = useMemo(() => {
     const matsAndMethods = matsMethods.concat(methods);
-    console.log('tabs[currentTabIndex].inactive[0]',tabs,currentTabIndex)
     if (matsAndMethods.length > 0) {
       const activeOnly = getActiveData(matsAndMethods);
       const inactiveOnly = getInactiveData(matsAndMethods);
@@ -321,14 +320,12 @@ export const DataTableMethod = ({
       }
       // resets checkbox
       else {
-        console.log("false,false");
         settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
         return fs.getMonitoringPlansMethodsTableRecords(
           tabs[currentTabIndex].inactive[0] === false ? getActiveData(methods) : methods
         );
       }
     } else {
-      console.log("false,true");
       // settingInactiveCheckBox(false, true);
       return [];
     }

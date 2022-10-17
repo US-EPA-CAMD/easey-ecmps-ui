@@ -822,11 +822,27 @@ export const createTestQualification = async (locId, testSumId, payload) => {
   }
 };
 
+export const updateTestQualification = async (locId, testSumId, id, payload) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/test-qualifications/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const getFuelFlowToLoadData = async (locId, testSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests`;
   const url = getApiUrl(path);
   return axios.get(url).then(handleResponse).catch(handleError);
-}
+};
 
 export const createFuelFlowToLoad = async (locId, testSumId, payload) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests`;
@@ -842,4 +858,4 @@ export const createFuelFlowToLoad = async (locId, testSumId, payload) => {
   } catch (error) {
     return handleImportError(error);
   }
-}
+};

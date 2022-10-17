@@ -44,8 +44,8 @@ export const UseRetrieveDropdownApi = async (
           await dmApi.getAllMatsParameterCodes().then((response) => {
             options = response.data.map((option) => {
               return {
-                code: option["matsMethodParamCode"],
-                name: option["matsMethodParamDescription"],
+                code: option["matsMethodParameterCode"],
+                name: option["matsMethodParameterDescription"],
               };
             });
 
@@ -107,8 +107,8 @@ export const UseRetrieveDropdownApi = async (
         await dmApi.getAllSubstituteDataCodes().then((response) => {
           options = response.data.map((option) => {
             return {
-              code: option["subDataCode"],
-              name: option["subDataDescription"],
+              code: option["substituteDataCode"],
+              name: option["substituteDataDescription"],
             };
           });
 
@@ -146,7 +146,7 @@ export const UseRetrieveDropdownApi = async (
         await dmApi.getAllMaxRateSourceCodes().then((response) => {
           options = response.data.map((option) => {
             return {
-              code: option["maxRateSourceCode"],
+              code: option["mMaxRateSourceCode"],
               name: option["maxRateSourceDescription"],
             };
           });
@@ -162,8 +162,8 @@ export const UseRetrieveDropdownApi = async (
         await dmApi.getAllUnitsOfMeasureCodes().then((response) => {
           options = response.data.map((option) => {
             return {
-              code: option["unitsOfMeasureCode"],
-              name: option["unitsOfMeasureDescription"],
+              code: option["unitOfMeasureCode"],
+              name: option["unitOfMeasureDescription"],
             };
           });
 
@@ -208,24 +208,26 @@ export const UseRetrieveDropdownApi = async (
           setDefaultOptions(options, fieldName);
         });
         break;
+        ///
       case "demGCV":
         await dmApi.getAllDemonstrationMethodCodes().then((response) => {
           options = response.data.map((option) => {
             return {
-              code: option["demMethodCode"],
-              name: option["demMethodDescription"],
+              code: option["demonstrationMethodCode"],
+              name: option["demonstrationMethodDescription"],
             };
           });
 
           setDefaultOptions(options, fieldName);
         });
         break;
+        ///  same as above?
       case "demSO2":
         await dmApi.getAllDemonstrationMethodCodes().then((response) => {
           options = response.data.map((option) => {
             return {
-              code: option["demMethodCode"],
-              name: option["demMethodDescription"],
+              code: option["demonstrationMethodCode"],
+              name: option["demonstrationMethodDescription"],
             };
           });
 
@@ -325,8 +327,8 @@ export const UseRetrieveDropdownApi = async (
         await dmApi.getAllOperatingLevelCodes().then((response) => {
           options = response.data.map((option) => {
             return {
-              code: option["operatingLevelCode"],
-              name: option["operatingLevelDescription"],
+              code: option["opLevelCode"],
+              name: option["opLevelDescription"],
             };
           });
 
@@ -413,8 +415,8 @@ export const UseRetrieveDropdownApi = async (
         await dmApi.getAllQualificationTypeCodes().then((response) => {
           options = response.data.map((option) => {
             return {
-              code: option["qualTypeCode"],
-              name: option["qualTypeDescription"],
+              code: option["qualificationTypeCode"],
+              name: option["qualificationTypeDescription"],
             };
           });
 
@@ -427,6 +429,7 @@ export const UseRetrieveDropdownApi = async (
       case "yr3QualificationDataYear":
       case "qualificationDataYear":
         dataYearOptions().then((years) => {
+          console.log('years',years)
           options = years.map((year) => {
             return {
               code: year.toString(),
@@ -444,8 +447,8 @@ export const UseRetrieveDropdownApi = async (
         await dmApi.getAllQualificationDataTypeCodes().then((response) => {
           options = response.data.map((option) => {
             return {
-              code: option["qualDataTypeCode"],
-              name: option["qualDataTypeDescription"],
+              code: option["qualificationDataTypeCode"],
+              name: option["qualificationDataTypeDescription"],
             };
           });
 
@@ -456,8 +459,8 @@ export const UseRetrieveDropdownApi = async (
         await dmApi.getAllQualificationLEETestTypeCodes().then((response) => {
           options = response.data.map((option) => {
             return {
-              code: option["qualLeeTestTypeCode"],
-              name: option["qualLeeTestTypeDescription"],
+              code: option["qualifiationLEETestTypeCode"],
+              name: option["qualifiationLEETestTypeDescription"],
             };
           });
 
