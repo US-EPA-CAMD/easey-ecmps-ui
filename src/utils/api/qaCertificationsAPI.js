@@ -839,22 +839,14 @@ export const updateTestQualification = async (locId, testSumId, id, payload) => 
 };
 
 export const getAppendixECorrelationSummaryRecords = async (locId, testSumId) => {
-  let url = `${config.services.qaCertification.uri}`;
-
-  // *** workspace section url (authenticated)
-  if (window.location.href.indexOf("workspace") > -1) {
-    url = `${url}/workspace`;
-  }
-
-  // *** attach the rest of the url
-  url = `${url}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
-
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
+  const url = getApiUrl(path);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
 export const createAppendixECorrelationSummaryRecord = async (locId, testSumId, payload) => {
-  let url = `${config.services.qaCertification.uri}/workspace`;
-  url = `${url}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
+  const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
