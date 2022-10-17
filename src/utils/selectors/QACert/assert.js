@@ -71,7 +71,7 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       });
     case fuelFlowToLoad:
       return qaApi
-        .getFuelFlowToLoadData()
+        .getFuelFlowToLoadData(location, id)
         .catch(error => console.log('error fetching fuel flow to load data', error))
     default:
       throw new Error(`getDataTableApis case not implemented for ${name}`)
