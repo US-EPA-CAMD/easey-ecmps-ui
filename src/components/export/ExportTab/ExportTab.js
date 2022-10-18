@@ -182,6 +182,7 @@ export const ExportTab = ({
           </div>
           <div className="grid-col-3 padding-left-8 padding-top-3">
             <Button
+              type={"button"}
               className="width-card"
               disabled={
                 dataTypes.filter((e) => e.checked).length === 0 ||
@@ -212,6 +213,7 @@ export const ExportTab = ({
         )}
         <div className="border-top-1px border-base-lighter padding-y-2">
           <Button
+            type={"button"}
             className="float-right margin-top-3"
             disabled={isExportDisabled()}
             onClick={exportClickHandler}
