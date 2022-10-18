@@ -8,6 +8,7 @@ import ExportTablesContainer from "./ExportTablesContainer";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { exportMonitoringPlanDownload } from "../../../utils/api/monitoringPlansApi";
 import { exportEmissionsDataDownload } from "../../../utils/api/emissionsApi";
+import { getUser } from "../../../utils/functions";
 
 export const ExportTab = ({
   facility,
@@ -117,7 +118,8 @@ export const ExportTab = ({
           facility,
           selectedConfig.id,
           reportingPeriod.calendarYear,
-          reportingPeriod.quarter
+          reportingPeriod.quarter,
+          getUser() !== null
         )
       );
     }
