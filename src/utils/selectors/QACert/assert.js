@@ -14,7 +14,8 @@ const rataTraverseData = "RATA Traverse Data"
 const airEmissions = "Air Emissions";
 const flowRataRun = "Flow";
 const testQualification = "Test Qualification";
-const fuelFlowToLoad = "Fuel Flow to Load"
+const fuelFlowToLoad = "Fuel Flow to Load";
+const appendixECorrTestRun = "Run";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -73,6 +74,10 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       return qaApi
         .getFuelFlowToLoadData(location, id)
         .catch(error => console.log('error fetching fuel flow to load data', error))
+    case appendixECorrTestRun:
+      return qaApi
+        .getAppendixERunData(location, id, extraIdsArr[0])
+        .catch(error => console.log('error fetching appendix E test run data', error));
     default:
       throw new Error(`getDataTableApis case not implemented for ${name}`)
   }
@@ -102,7 +107,9 @@ export const getDataTableRecords = (dataIn, name) => {
     case testQualification:
       return selector.mapTestQualificationToRows(dataIn);
     case fuelFlowToLoad:
-      return selector.mapFuelFlowToLoadToRows(dataIn)
+      return selector.mapFuelFlowToLoadToRows(dataIn);
+    case appendixECorrTestRun:
+      return selector.mapAppendixECorrTestRunsToRows(dataIn);
     default:
       throw new Error(`getDataTableRecords case not implemented for ${name}`)
   }
@@ -312,7 +319,7 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
 };
 
 //create endpoints for API
-export const createDataSwitch = (
+export const createDataSwitch = async (
   userInput,
   name,
   location,
@@ -395,6 +402,12 @@ export const createDataSwitch = (
       return qaApi
         .createFuelFlowToLoad(location, id, userInput)
         .catch(error => console.log('error creating fuel flow to load data', error))
+    case appendixECorrTestRun:
+      return qaApi
+        .createAppendixERun(location, id, userInput.id, userInput)
+        .catch((error) => {
+          console.log("error creating appendix e correlation test run", error);
+        });
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`)
   }

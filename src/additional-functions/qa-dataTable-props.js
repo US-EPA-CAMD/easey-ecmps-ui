@@ -448,3 +448,40 @@ export const qaFuelFlowToLoadProps = () => {
     },
   };
 }
+
+export const qaAppendixECorrTestRunProps = () => {
+  return {
+    dataTableName: "Run",
+    payload: {},
+    dropdownArray: [],
+    columnNames: [
+      "Run Number",
+      "Reference Value",
+      "Hourly Heat Input Rate",
+      "Total Heat Input",
+      "Response Time",
+      "Begin Date ",
+      "Begin Hour",
+      "Begin Minute",
+      "End Date",
+      "End Hour ",
+      "End Minute",
+    ],
+    controlInputs: {
+      runNumber: ["Run Number", "input", "", ""],
+      referenceValue: ["RATA Reference Value", "input", "", ""],
+      hourlyHeatInputRate: ["Hourly Heat Input Rate", "input", "", ""],
+      totalHeatInput: ["Total Heat Input", "input", "", ""],
+      responseTime: ["Response Time", "input", "", ""],
+    },
+    controlDatePickerInputs: {
+      beginDate: ["Begin Date", "date", "", ""],
+      beginHour: ["Begin Hour", "hourDropdown", "dropdown", ""],
+      beginMinute: ["Begin Minute", "minuteDropdown", "dropdown", ""],
+      endDate: ["End Date", "date", "", ""],
+      endHour: ["End Hour", "hourDropdown", "dropdown", ""],
+      endMinute: ["End Minute", "minuteDropdown", "dropdown", ""],
+    },
+    extraControls: {},
+  };
+};
