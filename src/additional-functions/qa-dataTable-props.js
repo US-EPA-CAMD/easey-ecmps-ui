@@ -414,6 +414,32 @@ export const qaTestQualificationProps = (selectedRow) => {
   };
 };
 
+export const qaAppendixECorrelationSummaryTestProps = (selectedRow) => {
+  return {
+    dataTableName: "Appendix E Correlation Summary",
+    payload: {
+      operatingLevelForRun: 0,
+      meanReferenceValue: 0,
+      averageHourlyHeatInputRate: 0,
+      fFactor: 0,
+    },
+    dropdownArray: [],
+    columnNames: [
+      "Operating Level For Run",
+      "Mean Reference Value",
+      "Average Hourly Heat Input Rate",
+      "F-Factor",
+    ],
+    controlInputs: {
+      operatingLevelForRun: ["Operating Level For Run", "input", "", ""],
+      meanReferenceValue: ["Mean Reference Value", "input", "", ""],
+      averageHourlyHeatInputRate: ["Average Hourly Heat Input Rate", "input", "", ""],
+      fFactor: ["F-Factor", "input", "", ""],
+    },
+    controlDatePickerInputs: {},
+    extraControls: {},
+  };
+};
 export const qaFuelFlowToLoadProps = () => {
   return {
     dataTableName: "Fuel Flow to Load",
