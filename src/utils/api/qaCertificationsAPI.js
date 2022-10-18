@@ -859,3 +859,18 @@ export const createFuelFlowToLoad = async (locId, testSumId, payload) => {
     return handleImportError(error);
   }
 };
+
+export const deleteFuelFlowToLoadData = async (locId, testSumId, id) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
+};

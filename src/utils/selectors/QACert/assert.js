@@ -202,6 +202,16 @@ export const removeDataSwitch = async (
         .catch((error) => {
           console.log("error", error);
         });
+    case fuelFlowToLoad:
+      return qaApi
+        .deleteFuelFlowToLoadData(
+          locationId,
+          id,
+          row.id
+        )
+        .catch((error) => {
+          console.log("error", error);
+        });
 
     default:
       throw new Error(`removeDataSwitch case not implemented for ${name}`)
