@@ -16,6 +16,7 @@ const flowRataRun = "Flow";
 const testQualification = "Test Qualification";
 const fuelFlowToLoad = "Fuel Flow to Load";
 const appendixECorrTestRun = "Run";
+const appendixECorrelationSummary= "Appendix E Correlation Summary";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -70,6 +71,10 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       return qaApi.getTestQualification(location, id).catch((error) => {
         console.log("error", error);
       });
+    case appendixECorrelationSummary:
+      return qaApi.getAppendixECorrelationSummaryRecords(location, id).catch((error) => {
+        console.log("error", error);
+      });
     case fuelFlowToLoad:
       return qaApi
         .getFuelFlowToLoadData(location, id)
@@ -106,6 +111,8 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.getFlowRunRecords(dataIn);
     case testQualification:
       return selector.mapTestQualificationToRows(dataIn);
+    case appendixECorrelationSummary:
+      return selector.getAppendixECorrelationSummaryRecords(dataIn);
     case fuelFlowToLoad:
       return selector.mapFuelFlowToLoadToRows(dataIn);
     case appendixECorrTestRun:
@@ -398,6 +405,8 @@ export const createDataSwitch = async (
         });
     case testQualification:
       return qaApi.createTestQualification(location, id, userInput);
+    case appendixECorrelationSummary:
+      return qaApi.createAppendixECorrelationSummaryRecord(location, id, userInput);
     case fuelFlowToLoad:
       return qaApi
         .createFuelFlowToLoad(location, id, userInput)
