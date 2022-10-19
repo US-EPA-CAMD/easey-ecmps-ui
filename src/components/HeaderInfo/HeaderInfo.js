@@ -35,7 +35,11 @@ import {
   returnFocusToLast,
 } from "../../additional-functions/manage-focus";
 
-import { getViews } from "../../utils/api/emissionsApi";
+import {
+  exportEmissionsDataDownload,
+  getViews,
+} from "../../utils/api/emissionsApi";
+import { getUser } from "../../utils/functions";
 
 // Helper function that generates an array of years from this year until the year specified in min param
 const generateArrayOfYears = (min) => {
@@ -176,7 +180,7 @@ export const HeaderInfo = ({
       setViewTemplates(data);
       if (data.length > 0) setViewTemplateSelect(data[0]);
     });
-  }, [workspaceSection]);
+  }, [setViewTemplateSelect, workspaceSection]);
 
   const executeOnClose = () => {
     setShowCommentsModal(false);
@@ -253,7 +257,15 @@ export const HeaderInfo = ({
     }
   };
 
-  const exportHandler = () => mpApi.exportMonitoringPlanDownload(configID);
+  const handleEmissionsExport = async () => {
+    await exportEmissionsDataDownload(
+      facility,
+      configID,
+      year,
+      quarter,
+      getUser() !== null
+    );
+  };
 
   const formatCommentsToTable = (data) => {
     const formmatedData = [];
@@ -667,7 +679,7 @@ export const HeaderInfo = ({
                   type="button"
                   className="margin-right-2 float-left margin-bottom-2"
                   outline={true}
-                  onClick={exportHandler}
+                  onClick={handleEmissionsExport}
                 >
                   Export Data
                 </Button>
