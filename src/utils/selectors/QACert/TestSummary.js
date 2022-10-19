@@ -325,4 +325,26 @@ export const mapFuelFlowToLoadToRows = (data) => {
     records.push(row)
   }
   return records
+};
+
+export const mapAppendixECorrTestRunsToRows = (data) => {
+  const records = []
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.runNumber,
+      col2: el.referenceValue,
+      col3: el.hourlyHeatInputRate,
+      col4: el.totalHeatInput,
+      col5: el.responseTime,
+      col6: el.beginDate ? formatStringToDate(el.beginDate) : "",
+      col7: el.beginHour,
+      col8: el.beginMinute,
+      col9: el.endDate ? formatStringToDate(el.endDate) : "",
+      col10: el.endHour,
+      col11: el.endMinute,
+    }
+    records.push(row)
+  }
+  return records
 }
