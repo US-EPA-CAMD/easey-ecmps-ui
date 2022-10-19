@@ -860,6 +860,21 @@ export const createAppendixECorrelationSummaryRecord = async (locId, testSumId, 
   }
 };
 
+export const deleteAppendixECorrelationSummaryRecord = async (locId, testSumId, id) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${id}`;
+  const url = getApiUrl(path);  
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
 export const getFuelFlowToLoadData = async (locId, testSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests`;
   const url = getApiUrl(path);
