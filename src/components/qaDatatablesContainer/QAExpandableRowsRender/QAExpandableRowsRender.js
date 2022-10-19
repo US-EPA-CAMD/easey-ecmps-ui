@@ -723,8 +723,6 @@ const QAExpandableRowsRender = ({
           children={
             dropdownsLoaded ? (
               <div>
-                {console.log("selectedRow",selectedRow)}
-                {console.log("selectedModalData",selectedModalData)}
                 <ModalDetails
                   modalData={selectedRow}
                   data={selectedModalData}

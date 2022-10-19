@@ -335,6 +335,8 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         .catch((error) => {
           console.log("error", error);
         });
+    case fuelFlowToLoad:
+      return qaApi.updateFuelFlowToLoad(location, id, userInput.id, userInput)
     default:
       break;
   }

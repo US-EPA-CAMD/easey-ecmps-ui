@@ -11,7 +11,7 @@ import MockAdapter from "axios-mock-adapter";
 import QAExpandableRowsRender from "./QAExpandableRowsRender";
 import config from "../../../config";
 import {
-  qaFlowRataRunProps,
+  qaFlowRataRunProps, qaFuelFlowToLoadProps,
 } from "../../../additional-functions/qa-dataTable-props";
 
 
@@ -32,10 +32,12 @@ const idRegex = '[\\w\\-]+'
 const probeTypeCodesUrl = `${config.services.mdm.uri}/probe-type-codes`
 const pressureMeasureCodesUrl = `${config.services.mdm.uri}/pressure-measure-codes`
 const runStatusCodesUrl = `${config.services.mdm.uri}/run-status-codes`
+const testBasisCodes = `${config.services.mdm.uri}/test-basis-codes`
 
 mock.onGet(probeTypeCodesUrl).reply(200, [])
 mock.onGet(pressureMeasureCodesUrl).reply(200, [])
 mock.onGet(runStatusCodesUrl).reply(200, [])
+mock.onGet(testBasisCodes).reply(200, [])
 
 const renderComponent = (getProps, rightmostIdInUrl = id) => {
   const props = getProps()
@@ -45,6 +47,7 @@ const renderComponent = (getProps, rightmostIdInUrl = id) => {
     <QAExpandableRowsRender
       payload={props["payload"]}
       dropdownArray={props["dropdownArray"]}
+      mdmProps={props["mdmProps"]}
       columns={props["columnNames"]}
       controlInputs={props["controlInputs"]}
       controlDatePickerInputs={props["controlDatePickerInputs"]}
@@ -59,6 +62,10 @@ const renderComponent = (getProps, rightmostIdInUrl = id) => {
     />
   )
 }
+
+beforeEach(() => {
+  mock.resetHistory()
+})
 
 describe('RATA Flow data', () => {
   const rataFlowData = [
@@ -112,8 +119,8 @@ describe('RATA Flow data', () => {
     },
   ]
 
-  const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${id}/flow-rata-runs`;
-  const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${id}/flow-rata-runs`;
+  const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs`;
+  const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs`;
   const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${idRegex}`)
 
   mock.onGet(getUrl).reply(200, rataFlowData)
@@ -121,11 +128,10 @@ describe('RATA Flow data', () => {
   mock.onDelete(deleteUrl).reply(200, 'deleted')
 
   test('renders RATA Flow data rows and create/save/delete', async () => {
-    await waitForElement(() => renderComponent(qaFlowRataRunProps))
+    await waitForElement(() => renderComponent(qaFlowRataRunProps, rataRunId))
 
     // renders rows
     const rows = await screen.findAllByRole('row')
-
     expect(mock.history.get.length).not.toBe(0)
     expect(rows).not.toHaveLength(0)
 
@@ -134,8 +140,6 @@ describe('RATA Flow data', () => {
     userEvent.click(addBtn)
     let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
     userEvent.click(saveAndCloseBtn)
-    let confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
-    userEvent.click(confirmBtns[1])
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // edit row
@@ -144,8 +148,6 @@ describe('RATA Flow data', () => {
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
     userEvent.click(saveAndCloseBtn)
-    confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
-    userEvent.click(confirmBtns[1])
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
     // remove row
@@ -153,7 +155,90 @@ describe('RATA Flow data', () => {
     expect(deleteBtns).toHaveLength(rataFlowData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
-    confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
     userEvent.click(confirmBtns[1])
+  })
+})
+
+describe('Fuel Flow to Load data', () => {
+  const fuelFlowToLoadData = [
+    {
+      "id": "id1",
+      "testSumId": "testSumId1",
+      "userId": "string",
+      "addDate": "string",
+      "updateDate": "string",
+      "testBasisCode": "string",
+      "averageDifference": 1,
+      "numberOfHoursUsed": 2,
+      "numberOfHoursExcludedCofiring": 3,
+      "numberOfHoursExcludedRamping": 4,
+      "numberOfHoursExcludedLowRange": 5
+    },
+    {
+      "id": "id2",
+      "testSumId": "testSumId2",
+      "userId": "string",
+      "addDate": "string",
+      "updateDate": "string",
+      "testBasisCode": "string",
+      "averageDifference": 10,
+      "numberOfHoursUsed": 20,
+      "numberOfHoursExcludedCofiring": 30,
+      "numberOfHoursExcludedRamping": 40,
+      "numberOfHoursExcludedLowRange": 50
+    }
+  ]
+
+  const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests`;
+  const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests`;
+  const putUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests/${idRegex}`;
+
+  mock.onGet(getUrl).reply(200, fuelFlowToLoadData)
+  mock.onPost(postUrl).reply(200, 'created')
+  mock.onPut(putUrl).reply(200, 'updated')
+
+  test('renders Fuel Flow to Load data rows and create/save/delete', async () => {
+    const props = qaFuelFlowToLoadProps()
+    const idArray = [locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId, id]
+    const data = { locationId: locId, id: testSumId }
+    render(
+      <QAExpandableRowsRender
+        payload={props["payload"]}
+        dropdownArray={props["dropdownArray"]}
+        mdmProps={props["mdmProps"]}
+        columns={props["columnNames"]}
+        controlInputs={props["controlInputs"]}
+        controlDatePickerInputs={props["controlDatePickerInputs"]}
+        dataTableName={props["dataTableName"]}
+        extraControls={props["extraControls"]}
+        radioBtnPayload={props["radioBtnPayload"]}
+        expandable
+        extraIDs={idArray}
+        data={data}
+        user={'user'}
+        isCheckedOut={true}
+      />
+    )
+
+    // renders rows
+    const rows = await screen.findAllByRole('row')
+    expect(mock.history.get.length).not.toBe(0)
+    expect(rows).not.toHaveLength(0)
+
+    // add row
+    const addBtn = screen.getByRole('button', { name: /Add/i })
+    userEvent.click(addBtn)
+    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+
+    // edit row
+    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    expect(editBtns).toHaveLength(fuelFlowToLoadData.length)
+    userEvent.click(editBtns[0])
+    saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
   })
 })
