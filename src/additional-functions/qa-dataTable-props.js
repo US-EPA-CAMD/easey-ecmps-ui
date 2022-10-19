@@ -477,7 +477,7 @@ export const qaFuelFlowToLoadProps = () => {
 
 export const qaAppendixECorrTestRunProps = () => {
   return {
-    dataTableName: "Run",
+    dataTableName: "Appendix E Correlation Run",
     payload: {},
     dropdownArray: [],
     columnNames: [

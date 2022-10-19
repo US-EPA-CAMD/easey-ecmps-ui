@@ -15,7 +15,7 @@ const airEmissions = "Air Emissions";
 const flowRataRun = "Flow";
 const testQualification = "Test Qualification";
 const fuelFlowToLoad = "Fuel Flow to Load";
-const appendixECorrTestRun = "Run";
+const appendixECorrTestRun = "Appendix E Correlation Run";
 const appendixECorrelationSummary= "Appendix E Correlation Summary";
 
 // Getting records from API
@@ -81,7 +81,7 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
         .catch(error => console.log('error fetching fuel flow to load data', error))
     case appendixECorrTestRun:
       return qaApi
-        .getAppendixERunData(location, id, extraIdsArr[0])
+        .getAppendixERunData(extraIdsArr[0], extraIdsArr[1], id)
         .catch(error => console.log('error fetching appendix E test run data', error));
     default:
       throw new Error(`getDataTableApis case not implemented for ${name}`)
@@ -413,7 +413,11 @@ export const createDataSwitch = async (
         .catch(error => console.log('error creating fuel flow to load data', error))
     case appendixECorrTestRun:
       return qaApi
-        .createAppendixERun(location, id, userInput.id, userInput)
+        .createAppendixERun(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          id,
+          userInput)
         .catch((error) => {
           console.log("error creating appendix e correlation test run", error);
         });

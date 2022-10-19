@@ -338,11 +338,11 @@ export const mapAppendixECorrTestRunsToRows = (data) => {
       col4: el.totalHeatInput,
       col5: el.responseTime,
       col6: el.beginDate ? formatStringToDate(el.beginDate) : "",
-      col6: el.beginHour,
-      col6: el.beginMinute,
-      col6: el.endDate ? formatStringToDate(el.endDate) : "",
-      col6: el.endHour,
-      col6: el.endMinute,
+      col7: el.beginHour,
+      col8: el.beginMinute,
+      col9: el.endDate ? formatStringToDate(el.endDate) : "",
+      col10: el.endHour,
+      col11: el.endMinute,
     }
     records.push(row)
   }
