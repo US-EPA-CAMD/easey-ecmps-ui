@@ -216,6 +216,16 @@ export const removeDataSwitch = async (
         .catch((error) => {
           console.log("error", error);
         });
+    case appendixECorrelationSummary:
+      return qaApi
+        .deleteAppendixECorrelationSummaryRecord(
+          locationId,
+          id,
+          row.id
+        )
+        .catch((error) => {
+          console.log("error", error);
+        });
 
     default:
       throw new Error(`removeDataSwitch case not implemented for ${name}`)
