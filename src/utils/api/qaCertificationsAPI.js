@@ -838,6 +838,28 @@ export const updateTestQualification = async (locId, testSumId, id, payload) => 
   }
 };
 
+export const getAppendixECorrelationSummaryRecords = async (locId, testSumId) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createAppendixECorrelationSummaryRecord = async (locId, testSumId, payload) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const getFuelFlowToLoadData = async (locId, testSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests`;
   const url = getApiUrl(path);
