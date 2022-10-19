@@ -329,6 +329,8 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         .catch(error => console.log('error updating rata traverse data', error))
     case testQualification:
       return qaApi.updateTestQualification(location, id, userInput.id, userInput);
+    case fuelFlowToLoad:
+      return qaApi.updateFuelFlowToLoad(location, id, userInput.id, userInput)
     default:
       break;
   }
