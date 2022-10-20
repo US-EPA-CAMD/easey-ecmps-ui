@@ -26,11 +26,18 @@ const MultiSelectCombobox = ({
   const selectedItemsRef = useRef(selectedItems);
   const [stillMounted, setStillMounted] = useState(true);
 
-  useEffect(() => {
-    populateSelectedItems();
-    return () => setStillMounted(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleMultiSelectClick = (e) => {
+    const multiSelectComboboxDiv = document.getElementById(
+      `multi-select-combobox-${entity}`
+    );
+    if (
+      multiSelectComboboxDiv &&
+      !multiSelectComboboxDiv.contains(e.target)
+    ) {
+      setShowListBox(false);
+    }
+  };
+
 
   const onSearchHanlder = (value) => {
     const lowercasedFilter = value.toLowerCase();
@@ -151,6 +158,19 @@ const MultiSelectCombobox = ({
     }
   };
 
+
+  useEffect(() => {
+    populateSelectedItems();
+    return () => setStillMounted(false);
+  }, [populateSelectedItems]);
+
+  useEffect(()=>{
+    window.addEventListener("click", handleMultiSelectClick);
+    return () => {
+      window.removeEventListener('click', handleMultiSelectClick);
+    };
+  })
+
   return (
     <>
       <Label id={`${entity}-label`} htmlFor={`${entity}-searchbox`}>
@@ -238,17 +258,6 @@ const MultiSelectCombobox = ({
           </ul>
         )}
       </div>
-      {window.addEventListener("click", function (e) {
-        const multiSelectComboboxDiv = document.getElementById(
-          `multi-select-combobox-${entity}`
-        );
-        if (
-          multiSelectComboboxDiv &&
-          !multiSelectComboboxDiv.contains(e.target)
-        ) {
-          setShowListBox(false);
-        }
-      })}
     </>
   );
 };
