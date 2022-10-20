@@ -21,7 +21,6 @@ export const EmissionsTab = ({
   selectedConfig,
   title,
   user,
-  checkout,
   tabs,
 
   setLocation,

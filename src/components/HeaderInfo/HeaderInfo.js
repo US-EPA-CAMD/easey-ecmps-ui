@@ -41,10 +41,10 @@ import { getViews } from "../../utils/api/emissionsApi";
 
 // Helper function that generates an array of years from this year until the year specified in min param
 const generateArrayOfYears = (min) => {
-  var max = new Date().getFullYear();
-  var years = [];
+  let max = new Date().getFullYear();
+  let years = [];
 
-  for (var i = max; i >= min; i--) {
+  for (let i = max; i >= min; i--) {
     years.push(i);
   }
   return years;
@@ -227,7 +227,7 @@ export const HeaderInfo = ({
   ].join(",");
 
   const displayReport = (reportCode) => {
-    let reportType = "Evaluation";
+    let reportType;
 
     switch (reportCode) {
       case "MPP":

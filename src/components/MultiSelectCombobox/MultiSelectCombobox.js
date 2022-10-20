@@ -76,9 +76,7 @@ const MultiSelectCombobox = ({
       (d) => d.id.toString() === id.toString()
     );
     if (index > -1) {
-      update === "add"
-        ? (_itemsCopy[index].selected = true)
-        : (_itemsCopy[index].selected = false);
+      _itemsCopy[index].selected = update === "add"
     }
     _setItems([..._itemsCopy]);
     setData([..._itemsCopy]);
