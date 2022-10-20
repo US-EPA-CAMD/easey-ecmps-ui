@@ -16,6 +16,7 @@ import {
   qaFuelFlowToLoadProps,
   qaLinearitySummaryProps,
   qaRataDataProps,
+  qaAppendixECorrelationSummaryTestProps,
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
@@ -519,6 +520,26 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
+      
+      case "APPESUM":
+        const appESum = qaAppendixECorrelationSummaryTestProps();
+        return (
+          <QAExpandableRowsRender
+            payload={appESum["payload"]}
+            dropdownArray={appESum["dropdownArray"]}
+            columns={appESum["columnNames"]}
+            controlInputs={appESum["controlInputs"]}
+            controlDatePickerInputs={appESum["controlDatePickerInputs"]}
+            dataTableName={appESum["dataTableName"]}
+            extraControls={appESum["extraControls"]}
+            radioBtnPayload={appESum["radioBtnPayload"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+
       case "FFL": // Fuel Flow to Load
         const fflProps = qaFuelFlowToLoadProps();
         return (
@@ -538,6 +559,7 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
+
       default:
         return null;
     }

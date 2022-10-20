@@ -312,6 +312,10 @@ const initialState = {
           name: 'Relative Accuracy Test'
         },
         {
+          code: 'APPESUM',
+          name: 'Apendix E Correlation Summary Test'
+        },
+        {
           code: 'F2LREF',
           name: 'Flow-to-Load or GHR Reference Data'
         },
