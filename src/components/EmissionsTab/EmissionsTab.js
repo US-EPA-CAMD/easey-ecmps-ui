@@ -38,14 +38,8 @@ export const EmissionsTab = ({
     return tabs.findIndex(tab => tab.selectedConfig.id === selectedConfig.id);
 
   }
-  const [ currentTabIndex, setCurrentTabIndex ] = useState(getCurrentTabIndex());
+  const currentTabIndex = getCurrentTabIndex();
 
-  useEffect(()=>{
-    // setCurrentTab(getCurrentTab())
-    setCurrentTabIndex(getCurrentTabIndex())
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[selectedConfig,checkout,currentTabIndex]);
 
   const [locationSelect, setLocationSelect] = useState(
     getCurrentTab().location
