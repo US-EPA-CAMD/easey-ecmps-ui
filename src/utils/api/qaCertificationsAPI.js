@@ -838,6 +838,20 @@ export const updateTestQualification = async (locId, testSumId, id, payload) => 
   }
 };
 
+export const deleteTestQualification = async (locId, testSumId, id) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/test-qualifications/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
 export const getAppendixECorrelationSummaryRecords = async (locId, testSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
   const url = getApiUrl(path);

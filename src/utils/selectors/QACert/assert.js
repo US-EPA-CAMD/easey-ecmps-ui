@@ -138,6 +138,11 @@ export const removeDataSwitch = async (
       return qaApi
         .deleteAirEmissions(locationId, id, row.id)
         .catch((error) => console.log("error", error));
+    
+    case testQualification:
+      return qaApi
+        .deleteTestQualification(locationId, id, row.id)
+        .catch((error) => console.log("error", error));
 
     case lineInjection:
       return qaApi
