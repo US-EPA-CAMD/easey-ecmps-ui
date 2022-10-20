@@ -112,6 +112,19 @@ describe('RATA traverse CRUD operations', () => {
   })
 })
 
+describe('Fuel Flow To Load CRUD operations', () => {
+  test('deleteFuelFlowToLoadData', async () => {
+    const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests/${id}`;
+    const deleteRataTraverseUrl = getApiUrl(path);
+    mock.onDelete(deleteRataTraverseUrl).reply(200, 'deleted')
+
+    const resp = await qaCert.deleteRataTraverseData(locId, testSumId, id)
+
+    expect(mock.history.delete.length).toBe(1)
+    expect(resp.data).toStrictEqual('deleted')
+  })
+})
+
 describe('Appendix E Correlation Summary Test CRUD operations', () => {
 
   test('getAppendixECorrelationSummary', async () => {
