@@ -4,6 +4,9 @@ import {
   Checkbox,
   Dropdown,
   FormGroup,
+  Grid,
+  GridContainer,
+  IdentifierIdentity,
   Label,
 } from "@trussworks/react-uswds";
 import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
@@ -34,7 +37,7 @@ import {
   returnFocusToCommentButton,
   returnFocusToLast,
 } from "../../additional-functions/manage-focus";
-
+import MultiSelectCombobox from "../MultiSelectCombobox/MultiSelectCombobox";
 import { getViews } from "../../utils/api/emissionsApi";
 
 // Helper function that generates an array of years from this year until the year specified in min param
@@ -56,10 +59,10 @@ export const HeaderInfo = ({
   setRevertedState,
   viewTemplateSelect,
   setViewTemplateSelect,
-  year,
-  setYear,
-  quarter,
-  setQuarter,
+  selectedYears,
+  setSelectedYears,
+  selectedQuarters,
+  setSelectedQuarters,
   //redux sets
   setCheckout,
   setInactive,
@@ -140,7 +143,27 @@ export const HeaderInfo = ({
   const [isReverting, setIsReverting] = useState(false);
   const [viewTemplates, setViewTemplates] = useState([]);
 
-  const yearsArray = useMemo(() => generateArrayOfYears(2009), []);
+  // The below object structure is needed for MultiSelectComboBox
+  const yearsArray = useMemo(
+    () =>
+      generateArrayOfYears(MIN_YEAR).map((y) => ({
+        id: y,
+        label: y + "",
+        selected: false,
+        enabled: true,
+      })),
+    []
+  );
+  const quartersArray = useMemo(
+    () =>
+      [1, 2, 3, 4].map((y) => ({
+        id: y,
+        label: y + "",
+        selected: false,
+        enabled: true,
+      })),
+    []
+  );
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
@@ -176,7 +199,7 @@ export const HeaderInfo = ({
       setViewTemplates(data);
       if (data.length > 0) setViewTemplateSelect(data[0]);
     });
-  }, [workspaceSection]);
+  }, [workspaceSection, setViewTemplateSelect]);
 
   const executeOnClose = () => {
     setShowCommentsModal(false);
@@ -291,6 +314,7 @@ export const HeaderInfo = ({
       attachChangeEventListeners(".modalUserInput");
     });
   };
+
   useEffect(() => {
     // get evaluation status
     if (!evalStatusLoaded || updateRelatedTables) {
@@ -615,6 +639,24 @@ export const HeaderInfo = ({
     )}`;
   };
 
+  // Multiselect update function for year selection
+  const onChangeUpdateSelectedYears = (id, updateType) => {
+    if (updateType === "add") setSelectedYears([...selectedYears, id]);
+    else if (updateType === "remove"){
+      const selected = yearsArray.filter(y=>y.selected).map(y=>y.id)
+      setSelectedYears(selected);
+    }
+  };
+
+  // Multiselect update function for quarter selection
+  const onChangeUpdateSelectedQuarters = (id, updateType) => {
+    if (updateType === "add") setSelectedQuarters([...selectedQuarters, id]);
+    else if (updateType === "remove"){
+      const selected = quartersArray.filter(q=>q.selected).map(q=>q.id)
+      setSelectedQuarters(selected);
+    }
+  };
+
   return (
     <div className="header">
       <div
@@ -813,11 +855,6 @@ export const HeaderInfo = ({
                       checked={inactive[0]}
                       disabled={inactive[1]}
                       onChange={() =>
-                        // settingReduxInactiveBTN(
-                        //   [!inactive[0], inactive[1]],
-                        //   facility,
-                        //   MONITORING_PLAN_STORE_NAME
-                        // )
                         setInactive(
                           [!inactive[0], inactive[1]],
                           facility,
@@ -861,55 +898,45 @@ export const HeaderInfo = ({
                 </div>
               )}
               {workspaceSection === EMISSIONS_STORE_NAME && (
-                <div>
-                  <div className="display-flex flex-row">
-                    <FormGroup className="margin-right-2 margin-bottom-1">
-                      <Label>Year(s)</Label>
-                      <Dropdown
-                        id={"year"}
-                        name={"year"}
-                        epa-testid={"year"}
-                        data-testid={"year"}
-                        value={year}
-                        onChange={(e) => setYear(e.target.value)}
-                      >
-                        {yearsArray.map((year) => (
-                          <option key={year} value={year}>
-                            {year}
-                          </option>
-                        ))}
-                      </Dropdown>
-                    </FormGroup>
-                    <FormGroup className="margin-right-2 margin-bottom-1">
-                      <Label>Quarter(s)</Label>
-                      <Dropdown
-                        id={"quarter"}
-                        name={"quarter"}
-                        epa-testid={"quarter"}
-                        data-testid={"quarter"}
-                        value={quarter}
-                        onChange={(e) => setQuarter(e.target.value)}
-                      >
-                        {[1, 2, 3, 4].map((quarter) => (
-                          <option key={quarter} value={quarter}>
-                            {quarter}
-                          </option>
-                        ))}
-                      </Dropdown>
-                    </FormGroup>
-                    <FormGroup className="margin-left-10 margin-top-6">
-                      <Label></Label>
+                <GridContainer className="padding-left-0">
+                  <Grid row={true}>
+                    <Grid
+                      col={3}
+                      tablet={{ col: 3 }}
+                      desktop={{ col: 3 }}
+                      className="margin-right-2"
+                    >
+                      <MultiSelectCombobox
+                        items={yearsArray}
+                        label="Year(s)"
+                        entity="year"
+                        onChangeUpdate={onChangeUpdateSelectedYears}
+                        searchBy="label"
+                      />
+                    </Grid>
+                    <Grid col={3} tablet={{ col: 3 }} desktop={{ col: 3 }}>
+                      <MultiSelectCombobox
+                        items={quartersArray}
+                        label="Quarter(s)"
+                        entity="quarter"
+                        onChangeUpdate={onChangeUpdateSelectedQuarters}
+                        searchBy="label"
+                      />
+                    </Grid>
+                    <Grid col={5} tablet={{ col: 5 }} desktop={{ col: 5 }}>
                       <Button
                         type="button"
                         title="Apply Filter(s)"
-                        className={"cursor-pointer"}
+                        className="cursor-pointer text-no-wrap pin-right apply-filter-position"
                         onClick={() => null}
                       >
                         {"Apply Filter(s)"}
                       </Button>
-                    </FormGroup>
-                  </div>
+                    </Grid>
+                  </Grid>
                   <div className="display-flex flex-row">
+                  <button onClick={()=>testfunc()}>test butt</button>
+
                     <Button
                       outline
                       type="button"
@@ -928,7 +955,7 @@ export const HeaderInfo = ({
                       Data Report
                     </Button>
                   </div>
-                </div>
+                </GridContainer>
               )}
             </div>
           </div>

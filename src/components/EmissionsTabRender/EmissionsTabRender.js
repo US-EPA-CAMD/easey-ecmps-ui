@@ -21,9 +21,10 @@ export const EmissionsTabRender = ({
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
 
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
-  const [year, setYear] = useState(new Date().getFullYear());
-  const [quarter, setQuarter] = useState(1);
-
+  const [selectedYears, setSelectedYears] = useState([]);
+  const [selectedQuarters, setSelectedQuarters] = useState([]);
+  console.log(selectedYears)
+  console.log(selectedQuarters)
   return (
     <div className=" padding-top-0">
       <div className="grid-row">
@@ -46,10 +47,10 @@ export const EmissionsTabRender = ({
           workspaceSection={workspaceSection}
           viewTemplateSelect={viewTemplateSelect}
           setViewTemplateSelect={setViewTemplateSelect}
-          year={year}
-          setYear={setYear}
-          quarter={quarter}
-          setQuarter={setQuarter}
+          selectedYears={selectedYears}
+          setSelectedYears={setSelectedYears}
+          selectedQuarters={selectedQuarters}
+          setSelectedQuarters={setSelectedQuarters}
         />
       </div>
       <hr />
