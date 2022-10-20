@@ -27,6 +27,7 @@ import {
   qaFlowRataRunProps,
   qaRataTraverseProps,
   qaTestQualificationProps,
+  qaAppendixECorrTestRunProps
 } from "../../../additional-functions/qa-dataTable-props";
 const QAExpandableRowsRender = ({
   user,
@@ -237,6 +238,24 @@ const QAExpandableRowsRender = ({
             isCheckedOut={isCheckedOut}
           />
         )
+      // appendix E correlation test summary  > run
+      case "Appendix E Correlation Summary":
+        const parentIds = [locationId, id];
+        const propsObj = qaAppendixECorrTestRunProps();
+        return (
+          <QAExpandableRowsRender
+            payload={propsObj["payload"]}
+            dropdownArray={propsObj["dropdownArray"]}
+            columns={propsObj["columnNames"]}
+            controlInputs={propsObj["controlInputs"]}
+            controlDatePickerInputs={propsObj["controlDatePickerInputs"]}
+            dataTableName={propsObj["dataTableName"]}
+            extraControls={propsObj["extraControls"]}
+            extraIDs={parentIds}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
       default:
         break;
     }
@@ -704,8 +723,6 @@ const QAExpandableRowsRender = ({
           children={
             dropdownsLoaded ? (
               <div>
-                {console.log("selectedRow",selectedRow)}
-                {console.log("selectedModalData",selectedModalData)}
                 <ModalDetails
                   modalData={selectedRow}
                   data={selectedModalData}

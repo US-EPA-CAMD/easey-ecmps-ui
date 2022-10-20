@@ -1,0 +1,19 @@
+.multi-select-combobox {
+  ul.list-box {
+    list-style: none;
+    padding-left: 0;
+  }
+  li.item:hover {
+    cursor: pointer;
+    background: #e6e6e6;
+  }
+  input.search {
+    cursor: text;
+  }
+  li.item.selected:hover {
+    cursor: default;
+  }
+  li.item.selected {
+    background: #e6e6e6;
+  }
+}

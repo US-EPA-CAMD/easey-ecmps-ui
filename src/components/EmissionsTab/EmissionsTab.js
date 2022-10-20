@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 
 import { connect } from "react-redux";
 import {
-  setSectionSelectionState,
   setLocationSelectionState,
   setCheckoutState,
   setInactiveState,
@@ -22,7 +21,6 @@ export const EmissionsTab = ({
   selectedConfig,
   title,
   user,
-  checkout,
   tabs,
 
   setLocation,
@@ -39,14 +37,8 @@ export const EmissionsTab = ({
     return tabs.findIndex(tab => tab.selectedConfig.id === selectedConfig.id);
 
   }
-  const [ currentTabIndex, setCurrentTabIndex ] = useState(getCurrentTabIndex());
+  const currentTabIndex = getCurrentTabIndex();
 
-  useEffect(()=>{
-    // setCurrentTab(getCurrentTab())
-    setCurrentTabIndex(getCurrentTabIndex())
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[selectedConfig,checkout,currentTabIndex]);
 
   const [locationSelect, setLocationSelect] = useState(
     getCurrentTab().location
