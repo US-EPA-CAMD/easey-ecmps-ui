@@ -136,3 +136,15 @@ describe('Appendix E Correlation Summary Test CRUD operations', () => {
     expect(resp.data).toStrictEqual(payload)
   })
 })
+
+describe('RATA Test Qualification CRUD operations', () => {
+  test('deleteTestQualification', async () => {
+    const deleteTestQualUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/test-qualifications/${id}`
+    mock.onDelete(deleteTestQualUrl).reply(200, 'deleted')
+
+    const resp = await qaCert.deleteRataSummary(locId, testSumId, id)
+
+    expect(mock.history.delete.length).toBe(1)
+    expect(resp.data).toStrictEqual('deleted')
+  })
+})
