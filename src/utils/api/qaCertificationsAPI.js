@@ -931,6 +931,8 @@ export const updateFuelFlowToLoad = async (locId, testSumId, id, payload) => {
 export const getAppendixERunData = async (locId, testSumId, appECorrTestSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs`;
   const url = getApiUrl(path);
+  
+  console.log('this is url for run',url)
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
@@ -954,6 +956,7 @@ export const createAppendixERun = async (locId, testSumId, appECorrTestSumId, pa
 export const getAppendixEHeatInputGasData = async (locId, testSumId, appECorrTestSumId,appECorrTestrunId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-gases`;
   const url = getApiUrl(path);
+  console.log('this is url for heat',url)
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 

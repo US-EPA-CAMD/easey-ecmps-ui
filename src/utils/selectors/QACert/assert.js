@@ -101,12 +101,14 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
           console.log("error fetching fuel flow to load data", error)
         );
     case appendixECorrTestRun:
+      console.log('extraids for run',extraIdsArr)
       return qaApi
         .getAppendixERunData(extraIdsArr[0], extraIdsArr[1], id)
         .catch((error) =>
           console.log("error fetching appendix E test run data", error)
         );
     case appendixECorrHeatInputGas:
+      console.log('extraids for heat',extraIdsArr)
       return qaApi
         .getAppendixEHeatInputGasData(extraIdsArr[0], extraIdsArr[1],extraIdsArr[2], id)
         .catch((error) =>
