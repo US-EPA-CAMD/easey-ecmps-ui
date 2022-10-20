@@ -148,4 +148,15 @@ describe('Appendix E Correlation Summary Test CRUD operations', () => {
     expect(mock.history.post.length).toBe(1)
     expect(resp.data).toStrictEqual(payload)
   })
+
+  test('updateAppendixECorrelationSummary', async () => {
+    const payload = { appendixECorrelationSummary: 'data' }
+    const postAppendixECorrelationSummaryUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
+    mock.onPost(postAppendixECorrelationSummaryUrl).reply(200, payload)
+
+    const resp = await qaCert.updateAppendixECorrelationSummaryRecord(locId, testSumId, id, payload)
+
+    expect(mock.history.put.length).toBe(1)
+    expect(resp.data).toStrictEqual(payload)
+  })
 })
