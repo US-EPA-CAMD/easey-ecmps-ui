@@ -860,6 +860,22 @@ export const createAppendixECorrelationSummaryRecord = async (locId, testSumId, 
   }
 };
 
+export const updateAppendixECorrelationSummaryRecord = async (locId, testSumId, id, payload) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const deleteAppendixECorrelationSummaryRecord = async (locId, testSumId, id) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${id}`;
   const url = getApiUrl(path);
