@@ -68,15 +68,12 @@ const QAExpandableRowsRender = ({
   }, [dataTableName, updateTable]);
 
   useEffect(() => {
-    if (updateTable || (dataPulled && dataPulled.length > 0)) {
-      setLoading(true);
-      console.log('datapulled',dataPulled)
-      setDisplayedRecords(
-        assertSelector.getDataTableRecords(dataPulled, dataTableName)
-      );
-    }
+    setLoading(true);
+    setDisplayedRecords(
+      assertSelector.getDataTableRecords(dataPulled, dataTableName)
+    );
+    
     setLoading(false);
-
     setUpdateTable(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataPulled, updateTable]);

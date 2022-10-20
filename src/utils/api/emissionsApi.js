@@ -36,3 +36,14 @@ export const exportEmissionsDataDownload = async (
 
   download(JSON.stringify(response.data, null, "\t"), fileName);
 };
+
+export const getViews = async ()=>{
+  
+  try{
+    const response = await axios.get(`${config.services.emissions.uri}/emissions/views`)
+    return handleResponse(response)
+  }catch(error){
+    handleError(error)
+    return [];
+  }
+}

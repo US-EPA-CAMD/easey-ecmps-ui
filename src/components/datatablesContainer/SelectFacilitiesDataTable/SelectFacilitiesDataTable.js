@@ -14,6 +14,7 @@ import {
   EMISSIONS_STORE_NAME,
 } from "../../../additional-functions/workspace-section-and-store-names";
 import Export from "../../export/Export/Export";
+import EmissionsTab from "../../EmissionsTab/EmissionsTab";
 
 export const SelectFacilitiesDataTable = ({
   user,
@@ -114,7 +115,15 @@ export const SelectFacilitiesDataTable = ({
             </div>
           ) : workspaceSection === EMISSIONS_STORE_NAME ? (
             <div className="selectedTabsBox">
-              <div>EMISSIONS DATA COMING SOON!</div>
+              <EmissionsTab
+                orisCode={info[0].col2}
+                selectedConfig={info[1]}
+                title={title}
+                user={user}
+                checkout={info[2] || checkedOutValue}
+                checkedOutLocations={checkedOutLocations}
+                workspaceSection={workspaceSection}
+              />
             </div>
           ) : (
             // handles export

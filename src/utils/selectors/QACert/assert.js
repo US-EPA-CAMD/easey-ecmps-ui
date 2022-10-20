@@ -101,16 +101,21 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
           console.log("error fetching fuel flow to load data", error)
         );
     case appendixECorrTestRun:
-      console.log('extraids for run',extraIdsArr)
+      console.log("extraids for run", extraIdsArr);
       return qaApi
         .getAppendixERunData(extraIdsArr[0], extraIdsArr[1], id)
         .catch((error) =>
           console.log("error fetching appendix E test run data", error)
         );
     case appendixECorrHeatInputGas:
-      console.log('extraids for heat',extraIdsArr)
+      console.log("extraids for heat", extraIdsArr);
       return qaApi
-        .getAppendixEHeatInputGasData(extraIdsArr[0], extraIdsArr[1],extraIdsArr[2], id)
+        .getAppendixEHeatInputGasData(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
+          id
+        )
         .catch((error) =>
           console.log(
             "error fetching appendix E heat input from gas data",
@@ -180,6 +185,11 @@ export const removeDataSwitch = async (
     case airEmissions:
       return qaApi
         .deleteAirEmissions(locationId, id, row.id)
+        .catch((error) => console.log("error", error));
+
+    case testQualification:
+      return qaApi
+        .deleteTestQualification(locationId, id, row.id)
         .catch((error) => console.log("error", error));
 
     case lineInjection:
@@ -389,6 +399,17 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         userInput.id,
         userInput
       );
+    case appendixECorrelationSummary:
+      return qaApi
+        .updateAppendixECorrelationSummaryRecord(
+          location,
+          id,
+          userInput.id,
+          userInput
+        )
+        .catch((error) => {
+          console.log("error", error);
+        });
     case fuelFlowToLoad:
       return qaApi.updateFuelFlowToLoad(location, id, userInput.id, userInput);
     default:
@@ -507,9 +528,18 @@ export const createDataSwitch = async (
         });
     case appendixECorrHeatInputGas:
       return qaApi
-        .createAppendixEHeatInputGas(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2],id, userInput)
+        .createAppendixEHeatInputGas(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
+          id,
+          userInput
+        )
         .catch((error) => {
-          console.log("error creating appendix e correlation heat input from gas", error);
+          console.log(
+            "error creating appendix e correlation heat input from gas",
+            error
+          );
         });
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
