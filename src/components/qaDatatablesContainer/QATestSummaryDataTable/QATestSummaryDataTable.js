@@ -208,7 +208,7 @@ const QATestSummaryDataTable = ({
       setDropdownsLoading(false);
     });
   };
-  useEffect(() => {debugger;
+  useEffect(() => {
     const { testTypeCodes, testTypeGroupCode } = selectedTestCode;
     if (mdmData === null) {
       if (testTypeGroupCode) {
