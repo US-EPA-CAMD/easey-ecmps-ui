@@ -13,10 +13,8 @@ import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import {
-  qaFuelFlowToLoadProps,
   qaLinearitySummaryProps,
   qaRataDataProps,
-  qaAppendixECorrelationSummaryTestProps,
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
@@ -208,7 +206,7 @@ const QATestSummaryDataTable = ({
       setDropdownsLoading(false);
     });
   };
-  useEffect(() => {debugger;
+  useEffect(() => {
     const { testTypeCodes, testTypeGroupCode } = selectedTestCode;
     if (mdmData === null) {
       if (testTypeGroupCode) {
@@ -502,6 +500,8 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
+      // return <QALinearitySummaryExpandableRows {...props} />;
+
       case "RELACC":
         const rataObj = qaRataDataProps();
         return (
@@ -520,46 +520,9 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
-      
-      case "APPESUM":
-        const appESum = qaAppendixECorrelationSummaryTestProps();
-        return (
-          <QAExpandableRowsRender
-            payload={appESum["payload"]}
-            dropdownArray={appESum["dropdownArray"]}
-            columns={appESum["columnNames"]}
-            controlInputs={appESum["controlInputs"]}
-            controlDatePickerInputs={appESum["controlDatePickerInputs"]}
-            dataTableName={appESum["dataTableName"]}
-            extraControls={appESum["extraControls"]}
-            radioBtnPayload={appESum["radioBtnPayload"]}
-            expandable
-            {...props}
-            extraIDs={null}
-            isCheckedOut={isCheckedOut}
-          />
-        );
-
-      case "FFL": // Fuel Flow to Load
-        const fflProps = qaFuelFlowToLoadProps();
-        return (
-          <QAExpandableRowsRender
-            payload={fflProps["payload"]}
-            dropdownArray={fflProps["dropdownArray"]}
-            mdmProps={fflProps["mdmProps"]}
-            columns={fflProps["columnNames"]}
-            controlInputs={fflProps["controlInputs"]}
-            controlDatePickerInputs={fflProps["controlDatePickerInputs"]}
-            dataTableName={fflProps["dataTableName"]}
-            extraControls={fflProps["extraControls"]}
-            radioBtnPayload={fflProps["radioBtnPayload"]}
-            expandable
-            {...props}
-            extraIDs={null}
-            isCheckedOut={isCheckedOut}
-          />
-        );
-
+      // return (
+      //    <QARataDataExpandableRows {...props} />
+      // );
       default:
         return null;
     }

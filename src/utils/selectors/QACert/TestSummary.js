@@ -348,3 +348,17 @@ export const mapAppendixECorrTestRunsToRows = (data) => {
   }
   return records
 }
+
+export const mapAppendixECorrHeatInputGasToRows = (data) => {
+  const records = []
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.gasGCV,
+      col2: el.gasVolume,
+      col3: el.gasHeatInput,
+    }
+    records.push(row)
+  }
+  return records
+}

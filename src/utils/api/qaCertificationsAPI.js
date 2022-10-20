@@ -949,3 +949,26 @@ export const createAppendixERun = async (locId, testSumId, appECorrTestSumId, pa
     return handleImportError(error);
   }
 };
+
+
+export const getAppendixEHeatInputGasData = async (locId, testSumId, appECorrTestSumId,appECorrTestrunId) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-gases`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createAppendixEHeatInputGas = async (locId, testSumId, appECorrTestSumId,appECorrTestrunId, payload) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs${appECorrTestrunId}/appendix-e-heat-input-from-gases`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};

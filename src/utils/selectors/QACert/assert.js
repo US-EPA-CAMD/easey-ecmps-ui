@@ -10,13 +10,15 @@ const lineInjection = "Linearity Injection";
 const rataData = "RATA Data";
 const rataRunData = "RATA Run Data";
 const rataSummary = "RATA Summary";
-const rataTraverseData = "RATA Traverse Data"
+const rataTraverseData = "RATA Traverse Data";
 const airEmissions = "Air Emissions";
 const flowRataRun = "Flow";
 const testQualification = "Test Qualification";
 const fuelFlowToLoad = "Fuel Flow to Load";
 const appendixECorrTestRun = "Appendix E Correlation Run";
-const appendixECorrelationSummary= "Appendix E Correlation Summary";
+const appendixECorrelationSummary = "Appendix E Correlation Summary";
+
+const appendixECorrHeatInputGas = "Appendix E Correlation Heat Input from Gas";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -59,32 +61,62 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       });
     case flowRataRun:
       return qaApi
-        .getFlowRunData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], extraIdsArr[3], id)
+        .getFlowRunData(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
+          extraIdsArr[3],
+          id
+        )
         .catch((error) => {
           console.log("error", error);
         });
     case rataTraverseData:
       return qaApi
-        .getRataTraverseData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], extraIdsArr[3], extraIdsArr[4], id)
-        .catch(error => console.log('error fetching rata traverse data', error))
+        .getRataTraverseData(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
+          extraIdsArr[3],
+          extraIdsArr[4],
+          id
+        )
+        .catch((error) =>
+          console.log("error fetching rata traverse data", error)
+        );
     case testQualification:
       return qaApi.getTestQualification(location, id).catch((error) => {
         console.log("error", error);
       });
     case appendixECorrelationSummary:
-      return qaApi.getAppendixECorrelationSummaryRecords(location, id).catch((error) => {
-        console.log("error", error);
-      });
+      return qaApi
+        .getAppendixECorrelationSummaryRecords(location, id)
+        .catch((error) => {
+          console.log("error", error);
+        });
     case fuelFlowToLoad:
       return qaApi
         .getFuelFlowToLoadData(location, id)
-        .catch(error => console.log('error fetching fuel flow to load data', error))
+        .catch((error) =>
+          console.log("error fetching fuel flow to load data", error)
+        );
     case appendixECorrTestRun:
       return qaApi
         .getAppendixERunData(extraIdsArr[0], extraIdsArr[1], id)
-        .catch(error => console.log('error fetching appendix E test run data', error));
+        .catch((error) =>
+          console.log("error fetching appendix E test run data", error)
+        );
+    case appendixECorrHeatInputGas:
+      return qaApi
+        .getAppendixEHeatInputGasData(extraIdsArr[0], extraIdsArr[1],extraIdsArr[2], id)
+        .catch((error) =>
+          console.log(
+            "error fetching appendix E heat input from gas data",
+            error
+          )
+        );
     default:
-      throw new Error(`getDataTableApis case not implemented for ${name}`)
+      throw new Error(`getDataTableApis case not implemented for ${name}`);
   }
 };
 
@@ -104,7 +136,7 @@ export const getDataTableRecords = (dataIn, name) => {
     case rataSummary:
       return selector.mapRataSummaryToRows(dataIn);
     case rataTraverseData:
-      return selector.mapRataTraverseToRows(dataIn)
+      return selector.mapRataTraverseToRows(dataIn);
     case airEmissions:
       return selector.getAirEmissionsRecords(dataIn);
     case flowRataRun:
@@ -117,8 +149,10 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.mapFuelFlowToLoadToRows(dataIn);
     case appendixECorrTestRun:
       return selector.mapAppendixECorrTestRunsToRows(dataIn);
+    case appendixECorrHeatInputGas:
+      return selector.mapAppendixECorrHeatInputGasToRows(dataIn);
     default:
-      throw new Error(`getDataTableRecords case not implemented for ${name}`)
+      throw new Error(`getDataTableRecords case not implemented for ${name}`);
   }
 };
 
@@ -197,7 +231,7 @@ export const removeDataSwitch = async (
           extraIdsArr[2],
           extraIdsArr[3],
           extraIdsArr[4],
-          row.id,
+          row.id
         )
         .catch((error) => {
           console.log("error", error);
@@ -218,27 +252,25 @@ export const removeDataSwitch = async (
         });
     case fuelFlowToLoad:
       return qaApi
-        .deleteFuelFlowToLoadData(
-          locationId,
-          id,
-          row.id
-        )
+        .deleteFuelFlowToLoadData(locationId, id, row.id)
         .catch((error) => {
           console.log("error", error);
         });
     case appendixECorrelationSummary:
       return qaApi
-        .deleteAppendixECorrelationSummaryRecord(
-          locationId,
-          id,
-          row.id
-        )
+        .deleteAppendixECorrelationSummaryRecord(locationId, id, row.id)
+        .catch((error) => {
+          console.log("error", error);
+        });
+    case appendixECorrHeatInputGas:
+      return qaApi
+        .deleteAppendixECorrelationSummaryRecord(locationId, id, row.id)
         .catch((error) => {
           console.log("error", error);
         });
 
     default:
-      throw new Error(`removeDataSwitch case not implemented for ${name}`)
+      throw new Error(`removeDataSwitch case not implemented for ${name}`);
   }
 };
 
@@ -335,12 +367,28 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         });
     case rataTraverseData:
       return qaApi
-        .updateRataTraverseData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], extraIdsArr[3], extraIdsArr[4], id, userInput.id, userInput)
-        .catch(error => console.log('error updating rata traverse data', error))
+        .updateRataTraverseData(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
+          extraIdsArr[3],
+          extraIdsArr[4],
+          id,
+          userInput.id,
+          userInput
+        )
+        .catch((error) =>
+          console.log("error updating rata traverse data", error)
+        );
     case testQualification:
-      return qaApi.updateTestQualification(location, id, userInput.id, userInput);
+      return qaApi.updateTestQualification(
+        location,
+        id,
+        userInput.id,
+        userInput
+      );
     case fuelFlowToLoad:
-      return qaApi.updateFuelFlowToLoad(location, id, userInput.id, userInput)
+      return qaApi.updateFuelFlowToLoad(location, id, userInput.id, userInput);
     default:
       break;
   }
@@ -403,8 +451,18 @@ export const createDataSwitch = async (
         });
     case rataTraverseData:
       return qaApi
-        .createRataTraverse(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], extraIdsArr[3], extraIdsArr[4], id, userInput)
-        .catch(error => console.log('error creating rata traverse data', error))
+        .createRataTraverse(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
+          extraIdsArr[3],
+          extraIdsArr[4],
+          id,
+          userInput
+        )
+        .catch((error) =>
+          console.log("error creating rata traverse data", error)
+        );
 
     case airEmissions:
       return qaApi
@@ -428,22 +486,30 @@ export const createDataSwitch = async (
     case testQualification:
       return qaApi.createTestQualification(location, id, userInput);
     case appendixECorrelationSummary:
-      return qaApi.createAppendixECorrelationSummaryRecord(location, id, userInput);
+      return qaApi.createAppendixECorrelationSummaryRecord(
+        location,
+        id,
+        userInput
+      );
     case fuelFlowToLoad:
       return qaApi
         .createFuelFlowToLoad(location, id, userInput)
-        .catch(error => console.log('error creating fuel flow to load data', error))
+        .catch((error) =>
+          console.log("error creating fuel flow to load data", error)
+        );
     case appendixECorrTestRun:
       return qaApi
-        .createAppendixERun(
-          extraIdsArr[0],
-          extraIdsArr[1],
-          id,
-          userInput)
+        .createAppendixERun(extraIdsArr[0], extraIdsArr[1], id, userInput)
         .catch((error) => {
           console.log("error creating appendix e correlation test run", error);
         });
+    case appendixECorrHeatInputGas:
+      return qaApi
+        .createAppendixEHeatInputGas(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2],id, userInput)
+        .catch((error) => {
+          console.log("error creating appendix e correlation heat input from gas", error);
+        });
     default:
-      throw new Error(`createDataSwitch case not implemented for ${name}`)
+      throw new Error(`createDataSwitch case not implemented for ${name}`);
   }
 };

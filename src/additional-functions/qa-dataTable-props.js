@@ -440,6 +440,30 @@ export const qaAppendixECorrelationSummaryTestProps = (selectedRow) => {
     extraControls: {},
   };
 };
+
+export const qaAppendixECorrelationSummaryHeatInputGasProps = (selectedRow) => {
+  return {
+    dataTableName: "Appendix E Correlation Heat Input from Gas",
+    payload: {
+      gasGCV: 0,
+      gasVolume: 0,
+      gasHeatInput: 0,
+    },
+    dropdownArray: [],
+    columnNames: [
+      "Gas GCV",
+      "Gas Volume",
+      "Gas Heat Input",
+    ],
+    controlInputs: {
+      gasGCV: ["Gas GCV", "input", "", ""],
+      gasVolume: ["Gas Volume", "input", "", ""],
+      gasHeatInput: ["Gas Heat Input", "input", "", ""],
+    },
+    controlDatePickerInputs: {},
+    extraControls: {},
+  };
+};
 export const qaFuelFlowToLoadProps = () => {
   return {
     dataTableName: "Fuel Flow to Load",

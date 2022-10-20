@@ -27,7 +27,8 @@ import {
   qaFlowRataRunProps,
   qaRataTraverseProps,
   qaTestQualificationProps,
-  qaAppendixECorrTestRunProps
+  qaAppendixECorrTestRunProps,
+  qaAppendixECorrelationSummaryHeatInputGasProps
 } from "../../../additional-functions/qa-dataTable-props";
 const QAExpandableRowsRender = ({
   user,
@@ -252,10 +253,29 @@ const QAExpandableRowsRender = ({
             dataTableName={propsObj["dataTableName"]}
             extraControls={propsObj["extraControls"]}
             extraIDs={parentIds}
+            expandable
             user={user}
             isCheckedOut={isCheckedOut}
           />
         );
+      // run >>> heat input from gas
+      case "Appendix E Correlation Run":
+        const heatInputIdArray = [...extraIDs, id];
+          const heatInputGasObj = qaAppendixECorrelationSummaryHeatInputGasProps();
+          return (
+            <QAExpandableRowsRender
+              payload={heatInputGasObj["payload"]}
+              dropdownArray={heatInputGasObj["dropdownArray"]}
+              columns={heatInputGasObj["columnNames"]}
+              controlInputs={heatInputGasObj["controlInputs"]}
+              controlDatePickerInputs={heatInputGasObj["controlDatePickerInputs"]}
+              dataTableName={heatInputGasObj["dataTableName"]}
+              extraControls={heatInputGasObj["extraControls"]}
+              extraIDs={heatInputIdArray}
+              user={user}
+              isCheckedOut={isCheckedOut}
+            />
+          );
       default:
         break;
     }
@@ -621,6 +641,7 @@ const QAExpandableRowsRender = ({
 
   const getFirstLevelExpandables = () => {
     const expandables = [];
+    console.log('dataTableName',dataTableName)
     switch (dataTableName) {
       case 'Linearity Test':
         expandables.push(nextExpandableRow("Protocol Gas"));
@@ -630,6 +651,10 @@ const QAExpandableRowsRender = ({
         expandables.push(nextExpandableRow("Protocol Gas"));
         expandables.push(nextExpandableRow("Air Emissions"));
         break;
+    
+        case 'Appendix E Correlation Summary':
+          expandables.push(nextExpandableRow("Protocol Gas"));
+          break;
       default:
         break;
     }
