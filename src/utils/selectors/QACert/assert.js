@@ -14,8 +14,9 @@ const rataTraverseData = "RATA Traverse Data"
 const airEmissions = "Air Emissions";
 const flowRataRun = "Flow";
 const testQualification = "Test Qualification";
+const fuelFlowToLoad = "Fuel Flow to Load";
+const appendixECorrTestRun = "Appendix E Correlation Run";
 const appendixECorrelationSummary= "Appendix E Correlation Summary";
-const fuelFlowToLoad = "Fuel Flow to Load"
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -78,6 +79,10 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       return qaApi
         .getFuelFlowToLoadData(location, id)
         .catch(error => console.log('error fetching fuel flow to load data', error))
+    case appendixECorrTestRun:
+      return qaApi
+        .getAppendixERunData(extraIdsArr[0], extraIdsArr[1], id)
+        .catch(error => console.log('error fetching appendix E test run data', error));
     default:
       throw new Error(`getDataTableApis case not implemented for ${name}`)
   }
@@ -109,7 +114,9 @@ export const getDataTableRecords = (dataIn, name) => {
     case appendixECorrelationSummary:
       return selector.getAppendixECorrelationSummaryRecords(dataIn);
     case fuelFlowToLoad:
-      return selector.mapFuelFlowToLoadToRows(dataIn)
+      return selector.mapFuelFlowToLoadToRows(dataIn);
+    case appendixECorrTestRun:
+      return selector.mapAppendixECorrTestRunsToRows(dataIn);
     default:
       throw new Error(`getDataTableRecords case not implemented for ${name}`)
   }
@@ -208,6 +215,16 @@ export const removeDataSwitch = async (
           extraIdsArr[2],
           extraIdsArr[3],
           extraIdsArr[4],
+          id,
+          row.id
+        )
+        .catch((error) => {
+          console.log("error", error);
+        });
+    case fuelFlowToLoad:
+      return qaApi
+        .deleteFuelFlowToLoadData(
+          locationId,
           id,
           row.id
         )
@@ -327,6 +344,14 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         .catch(error => console.log('error updating rata traverse data', error))
     case testQualification:
       return qaApi.updateTestQualification(location, id, userInput.id, userInput);
+    case appendixECorrelationSummary:
+      return qaApi
+        .updateAppendixECorrelationSummaryRecord(location, id, userInput.id, userInput)
+        .catch((error) => {
+          console.log("error", error);
+        });
+    case fuelFlowToLoad:
+      return qaApi.updateFuelFlowToLoad(location, id, userInput.id, userInput)
     default:
       break;
   }
@@ -334,7 +359,7 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
 };
 
 //create endpoints for API
-export const createDataSwitch = (
+export const createDataSwitch = async (
   userInput,
   name,
   location,
@@ -419,6 +444,16 @@ export const createDataSwitch = (
       return qaApi
         .createFuelFlowToLoad(location, id, userInput)
         .catch(error => console.log('error creating fuel flow to load data', error))
+    case appendixECorrTestRun:
+      return qaApi
+        .createAppendixERun(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          id,
+          userInput)
+        .catch((error) => {
+          console.log("error creating appendix e correlation test run", error);
+        });
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`)
   }

@@ -1,11 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { Button, Checkbox } from "@trussworks/react-uswds";
+import React, { useEffect, useState, useMemo } from "react";
+import {
+  Button,
+  Checkbox,
+  Dropdown,
+  FormGroup,
+  Grid,
+  GridContainer,
+  Label,
+} from "@trussworks/react-uswds";
 import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
 import config from "../../config";
 import { triggerEvaluation } from "../../utils/api/quartzApi";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
-import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
+import {
+  EMISSIONS_STORE_NAME,
+  MONITORING_PLAN_STORE_NAME,
+} from "../../additional-functions/workspace-section-and-store-names";
 import Modal from "../Modal/Modal";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 import "./HeaderInfo.scss";
@@ -25,12 +36,32 @@ import {
   returnFocusToCommentButton,
   returnFocusToLast,
 } from "../../additional-functions/manage-focus";
+import MultiSelectCombobox from "../MultiSelectCombobox/MultiSelectCombobox";
+import { getViews } from "../../utils/api/emissionsApi";
+
+// Helper function that generates an array of years from this year until the year specified in min param
+const generateArrayOfYears = (min) => {
+  let max = new Date().getFullYear();
+  let years = [];
+
+  for (let i = max; i >= min; i--) {
+    years.push(i);
+  }
+  return years;
+};
+
 export const HeaderInfo = ({
   facility,
   selectedConfig,
   orisCode,
   user,
   setRevertedState,
+  viewTemplateSelect,
+  setViewTemplateSelect,
+  selectedYears,
+  setSelectedYears,
+  selectedQuarters,
+  setSelectedQuarters,
   //redux sets
   setCheckout,
   setInactive,
@@ -47,7 +78,7 @@ export const HeaderInfo = ({
   configID,
   setUpdateRelatedTables,
   updateRelatedTables,
-  workspaceSection
+  workspaceSection,
 }) => {
   //MP
   const sections = [
@@ -64,21 +95,9 @@ export const HeaderInfo = ({
     { name: "Systems" },
     { name: "Unit Information" },
   ];
-//Emissions
-  const viewTemplates = [
-    { name: "Defaults" },
-    { name: "Formulas" },
-    { name: "Loads" },
-    {
-      name: "Location Attributes and Relationships",
-    },
-    { name: "Methods" },
-    { name: "Qualifications" },
-    { name: "Rectangular Duct WAFs" },
-    { name: "Spans" },
-    { name: "Systems" },
-    { name: "Unit Information" },
-  ];
+
+  // minimum year for emissions data
+  const MIN_YEAR = 2009;
 
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
@@ -121,6 +140,29 @@ export const HeaderInfo = ({
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const [isReverting, setIsReverting] = useState(false);
+  const [viewTemplates, setViewTemplates] = useState([]);
+
+  // The below object structure is needed for MultiSelectComboBox
+  const yearsArray = useMemo(
+    () =>
+      generateArrayOfYears(MIN_YEAR).map((y) => ({
+        id: y,
+        label: y + "",
+        selected: false,
+        enabled: true,
+      })),
+    []
+  );
+  const quartersArray = useMemo(
+    () =>
+      [1, 2, 3, 4].map((y) => ({
+        id: y,
+        label: y + "",
+        selected: false,
+        enabled: true,
+      })),
+    []
+  );
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
@@ -148,6 +190,16 @@ export const HeaderInfo = ({
       cleanupFocusEventListeners();
     };
   }, []);
+
+  useEffect(() => {
+    if (workspaceSection !== EMISSIONS_STORE_NAME) return;
+
+    getViews().then(({ data }) => {
+      setViewTemplates(data);
+      if (data.length > 0) setViewTemplateSelect(data[0]);
+    });
+  }, [workspaceSection, setViewTemplateSelect]);
+
   const executeOnClose = () => {
     setShowCommentsModal(false);
     removeChangeEventListeners(".modalUserInput");
@@ -175,20 +227,20 @@ export const HeaderInfo = ({
   ].join(",");
 
   const displayReport = (reportCode) => {
-    let reportType = 'Evaluation';
+    let reportType;
 
-    switch(reportCode) {
-      case 'MPP':
-        reportType = 'Printout';
+    switch (reportCode) {
+      case "MPP":
+        reportType = "Printout";
         break;
-      case 'MP_EVAL':
-        reportType = 'Evaluation';
+      case "MP_EVAL":
+        reportType = "Evaluation";
         break;
-      case 'MP_AUDIT':
-        reportType = 'Audit';
+      case "MP_AUDIT":
+        reportType = "Audit";
         break;
       default:
-        reportType = 'Evaluation';
+        reportType = "Evaluation";
         break;
     }
 
@@ -261,6 +313,7 @@ export const HeaderInfo = ({
       attachChangeEventListeners(".modalUserInput");
     });
   };
+
   useEffect(() => {
     // get evaluation status
     if (!evalStatusLoaded || updateRelatedTables) {
@@ -315,7 +368,7 @@ export const HeaderInfo = ({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkout, dataLoaded, evalStatusLoaded,updateRelatedTables]);
+  }, [checkout, dataLoaded, evalStatusLoaded, updateRelatedTables]);
 
   const clearOpenRefreshInterval = () => {
     if (openIntervalId) {
@@ -474,7 +527,7 @@ export const HeaderInfo = ({
       <div className={alertStyle}>
         <button
           className={"hyperlink-btn cursor-pointer"}
-          onClick={() => displayReport('MP_EVAL')}
+          onClick={() => displayReport("MP_EVAL")}
         >
           {evalStatusText(evalStatus)}
         </button>
@@ -585,6 +638,24 @@ export const HeaderInfo = ({
     )}`;
   };
 
+  // Multiselect update function for year selection
+  const onChangeUpdateSelectedYears = (id, updateType) => {
+    if (updateType === "add") setSelectedYears([...selectedYears, id]);
+    else if (updateType === "remove"){
+      const selected = yearsArray.filter(y=>y.selected).map(y=>y.id)
+      setSelectedYears(selected);
+    }
+  };
+
+  // Multiselect update function for quarter selection
+  const onChangeUpdateSelectedQuarters = (id, updateType) => {
+    if (updateType === "add") setSelectedQuarters([...selectedQuarters, id]);
+    else if (updateType === "remove"){
+      const selected = quartersArray.filter(q=>q.selected).map(q=>q.id)
+      setSelectedQuarters(selected);
+    }
+  };
+
   return (
     <div className="header">
       <div
@@ -618,9 +689,7 @@ export const HeaderInfo = ({
           close={closeEvalReportModal}
           showSave={false}
           showCancel={true}
-          children={
-            <ReportGenerator user={user} />
-          }
+          children={<ReportGenerator user={user} />}
         />
       ) : null}
 
@@ -738,68 +807,153 @@ export const HeaderInfo = ({
                   selectionHandler={setLocationSelect}
                   workspaceSection={workspaceSection}
                 />
-                <DropdownSelection
-                  caption="Sections"
-                  selectionHandler={setSectionSelect}
-                  options={sections}
-                  viewKey="name"
-                  selectKey="name"
-                  initialSelection={sectionSelect[0]}
-                  orisCode={orisCode}
-                  workspaceSection={workspaceSection}
-                />
-                <div className="margin-top-6">
-                  {workspaceSection === MONITORING_PLAN_STORE_NAME ? <Checkbox
-                    epa-testid="inactiveCheckBox"
-                    id="inactiveCheckBox"
-                    name="inactiveCheckBox"
-                    label="Show Inactive"
-                    checked={inactive[0]}
-                    disabled={inactive[1]}
-                    onChange={
-                      () =>
-                        // settingReduxInactiveBTN(
-                        //   [!inactive[0], inactive[1]],
-                        //   facility,
-                        //   MONITORING_PLAN_STORE_NAME
-                        // )
-                      setInactive(
-                        [!inactive[0], inactive[1]],
-                        facility,
-                        MONITORING_PLAN_STORE_NAME
-                      )
-                    }
-                  /> : ''} 
+                {workspaceSection === EMISSIONS_STORE_NAME ? (
+                  <FormGroup className="margin-right-2 margin-bottom-1">
+                    <Label test-id={"viewtemplate"} htmlFor={"viewtemplate"}>
+                      {"View Template"}
+                    </Label>
+                    <Dropdown
+                      id={"viewtemplate"}
+                      name={"viewtemplate"}
+                      epa-testid={"viewtemplate"}
+                      data-testid={"viewtemplate"}
+                      value={viewTemplateSelect}
+                      onChange={(e) => setViewTemplateSelect(e.target.value)}
+                    >
+                      {viewTemplates.map((view) => (
+                        <option
+                          data-testid={view.name}
+                          key={view.name}
+                          value={view.name}
+                        >
+                          {view.name}
+                        </option>
+                      ))}
+                    </Dropdown>
+                  </FormGroup>
+                ) : (
+                  <DropdownSelection
+                    caption="Sections"
+                    selectionHandler={setSectionSelect}
+                    options={sections}
+                    viewKey="name"
+                    selectKey="name"
+                    initialSelection={sectionSelect[0]}
+                    orisCode={orisCode}
+                    workspaceSection={workspaceSection}
+                  />
+                )}
 
+                <div className="margin-top-6">
+                  {workspaceSection === MONITORING_PLAN_STORE_NAME ? (
+                    <Checkbox
+                      epa-testid="inactiveCheckBox"
+                      id="inactiveCheckBox"
+                      name="inactiveCheckBox"
+                      label="Show Inactive"
+                      checked={inactive[0]}
+                      disabled={inactive[1]}
+                      onChange={() =>
+                        setInactive(
+                          [!inactive[0], inactive[1]],
+                          facility,
+                          MONITORING_PLAN_STORE_NAME
+                        )
+                      }
+                    />
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
-
-              <div>
-                
-                <Button outline
-                  type="button"
-                  title="Open Comments"
-                  onClick={() => openViewComments()}
-                >
-                  View Comments
-                </Button>
-                <Button outline
-                  type="button"
-                  title="View Audit Report"
-                  className={"hyperlink-btn cursor-pointer"}
-                  onClick={() => displayReport('MP_AUDIT')}
-                >
-                  View Audit Report
-                </Button>
-                <Button outline
-                  type="button"
-                  title="View Printout Report"
-                  className={"hyperlink-btn cursor-pointer"}
-                  onClick={() => displayReport('MPP')}
-                >
-                  View Printout Report
-                </Button>
-              </div>
+              {workspaceSection === MONITORING_PLAN_STORE_NAME && (
+                <div>
+                  <Button
+                    outline
+                    type="button"
+                    title="Open Comments"
+                    onClick={() => openViewComments()}
+                  >
+                    View Comments
+                  </Button>
+                  <Button
+                    outline
+                    type="button"
+                    title="View Audit Report"
+                    className={"hyperlink-btn cursor-pointer"}
+                    onClick={() => displayReport("MP_AUDIT")}
+                  >
+                    View Audit Report
+                  </Button>
+                  <Button
+                    outline
+                    type="button"
+                    title="View Printout Report"
+                    className={"hyperlink-btn cursor-pointer"}
+                    onClick={() => displayReport("MPP")}
+                  >
+                    View Printout Report
+                  </Button>
+                </div>
+              )}
+              {workspaceSection === EMISSIONS_STORE_NAME && (
+                <GridContainer className="padding-left-0">
+                  <Grid row={true}>
+                    <Grid
+                      col={3}
+                      tablet={{ col: 3 }}
+                      desktop={{ col: 3 }}
+                      className="margin-right-2"
+                    >
+                      <MultiSelectCombobox
+                        items={yearsArray}
+                        label="Year(s)"
+                        entity="year"
+                        onChangeUpdate={onChangeUpdateSelectedYears}
+                        searchBy="label"
+                      />
+                    </Grid>
+                    <Grid col={3} tablet={{ col: 3 }} desktop={{ col: 3 }}>
+                      <MultiSelectCombobox
+                        items={quartersArray}
+                        label="Quarter(s)"
+                        entity="quarter"
+                        onChangeUpdate={onChangeUpdateSelectedQuarters}
+                        searchBy="label"
+                      />
+                    </Grid>
+                    <Grid col={5} tablet={{ col: 5 }} desktop={{ col: 5 }}>
+                      <Button
+                        type="button"
+                        title="Apply Filter(s)"
+                        className="cursor-pointer text-no-wrap pin-right apply-filter-position"
+                        onClick={() => null}
+                      >
+                        {"Apply Filter(s)"}
+                      </Button>
+                    </Grid>
+                  </Grid>
+                  <div className="display-flex flex-row">
+                    <Button
+                      outline
+                      type="button"
+                      title="Summary Report"
+                      onClick={() => null}
+                    >
+                      Summary Report
+                    </Button>
+                    <Button
+                      outline
+                      type="button"
+                      title="Data Report"
+                      className={"hyperlink-btn cursor-pointer margin-left-2"}
+                      onClick={() => null}
+                    >
+                      Data Report
+                    </Button>
+                  </div>
+                </GridContainer>
+              )}
             </div>
           </div>
         </div>

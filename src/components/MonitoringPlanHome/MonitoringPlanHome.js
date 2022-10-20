@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
 import MonitoringPlanTab from "../MonitoringPlanTab/MonitoringPlanTab";
 import QACertTestSummaryTab from "../QACertTestSummaryTab/QACertTestSummaryTab";
+import EmissionsTab from "../EmissionsTab/EmissionsTab";
 import Export from "../export/Export/Export";
 import DynamicTabs from "../DynamicTabs/DynamicTabs";
 
@@ -187,7 +188,21 @@ export const MonitoringPlanHome = ({
         for (const row of openedFacilityTabs) {
           tabArr.push({
             title: row.name,
-            component: <div>EMISSIONS DATA COMING SOON!</div>,
+            component: (
+            <EmissionsTab
+              resetTimer={resetTimer}
+              setExpired={setExpired}
+              resetTimerFlag={resetTimerFlag}
+              callApiFlag={callApiFlag}
+              orisCode={row.orisCode}
+              selectedConfig={row.selectedConfig}
+              title={row.name}
+              user={user}
+              checkout={row.checkout}
+              checkedOutLocations={checkedOutLocations}
+              workspaceSection={workspaceSection}
+            />
+            ),
             orisCode: row.orisCode,
             selectedConfig: row.selectedConfig,
             checkout: row.checkout,
