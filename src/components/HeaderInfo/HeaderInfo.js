@@ -37,11 +37,9 @@ import {
   returnFocusToLast,
 } from "../../additional-functions/manage-focus";
 import MultiSelectCombobox from "../MultiSelectCombobox/MultiSelectCombobox";
-import { getViews } from "../../utils/api/emissionsApi";
-
 import {
-  exportEmissionsDataDownload,
   getViews,
+  exportEmissionsDataDownload,
 } from "../../utils/api/emissionsApi";
 import { getUser } from "../../utils/functions";
 
@@ -282,13 +280,21 @@ export const HeaderInfo = ({
   };
 
   const handleEmissionsExport = async () => {
-    await exportEmissionsDataDownload(
-      facility,
-      configID,
-      year,
-      quarter,
-      getUser() !== null
-    );
+    const promises = [];
+    for (const selectedYear of selectedYears) {
+      for (const selectedQuarter of selectedQuarters) {
+        promises.push(
+          exportEmissionsDataDownload(
+            facility,
+            configID,
+            selectedYear,
+            selectedQuarter,
+            getUser() !== null
+          )
+        );
+      }
+    }
+    await Promise.allSettled(promises);
   };
 
   const formatCommentsToTable = (data) => {
@@ -655,8 +661,8 @@ export const HeaderInfo = ({
   // Multiselect update function for year selection
   const onChangeUpdateSelectedYears = (id, updateType) => {
     if (updateType === "add") setSelectedYears([...selectedYears, id]);
-    else if (updateType === "remove"){
-      const selected = yearsArray.filter(y=>y.selected).map(y=>y.id)
+    else if (updateType === "remove") {
+      const selected = yearsArray.filter((y) => y.selected).map((y) => y.id);
       setSelectedYears(selected);
     }
   };
@@ -664,8 +670,8 @@ export const HeaderInfo = ({
   // Multiselect update function for quarter selection
   const onChangeUpdateSelectedQuarters = (id, updateType) => {
     if (updateType === "add") setSelectedQuarters([...selectedQuarters, id]);
-    else if (updateType === "remove"){
-      const selected = quartersArray.filter(q=>q.selected).map(q=>q.id)
+    else if (updateType === "remove") {
+      const selected = quartersArray.filter((q) => q.selected).map((q) => q.id);
       setSelectedQuarters(selected);
     }
   };
