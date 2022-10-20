@@ -6,7 +6,6 @@ import {
   FormGroup,
   Grid,
   GridContainer,
-  IdentifierIdentity,
   Label,
 } from "@trussworks/react-uswds";
 import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
@@ -935,8 +934,6 @@ export const HeaderInfo = ({
                     </Grid>
                   </Grid>
                   <div className="display-flex flex-row">
-                  <button onClick={()=>testfunc()}>test butt</button>
-
                     <Button
                       outline
                       type="button"

@@ -23,8 +23,6 @@ export const EmissionsTabRender = ({
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
   const [selectedYears, setSelectedYears] = useState([]);
   const [selectedQuarters, setSelectedQuarters] = useState([]);
-  console.log(selectedYears)
-  console.log(selectedQuarters)
   return (
     <div className=" padding-top-0">
       <div className="grid-row">
