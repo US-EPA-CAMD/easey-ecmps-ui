@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import HeaderInfo from "../HeaderInfo/HeaderInfo";
 import "../MonitoringPlanTab/MonitoringPlanTab.scss";
 import { checkoutAPI } from "../../additional-functions/checkout";
+import CustomAccordion from "../CustomAccordion/CustomAccordion";
+import { getEmissionsTabTableRenders } from "./EmissionsTabTable";
 
 export const EmissionsTabRender = ({
   title,
@@ -23,6 +25,7 @@ export const EmissionsTabRender = ({
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
   const [selectedYears, setSelectedYears] = useState([]);
   const [selectedQuarters, setSelectedQuarters] = useState([]);
+
   return (
     <div className=" padding-top-0">
       <div className="grid-row">
@@ -53,7 +56,21 @@ export const EmissionsTabRender = ({
       </div>
       <hr />
       <div className="grid-row overflow-x-auto">
-        {/* INSERT TABLE/COMPONENT HERE. */}
+        <CustomAccordion
+          title={"Daily Calibration Tests"}
+          table={getEmissionsTabTableRenders(
+            viewTemplateSelect,
+            configID,
+            selectedYears,
+            selectedQuarters,
+            selectedConfig?.unitStackConfigurations.map(
+              (config) => config.unitId
+            ),
+            selectedConfig?.unitStackConfigurations.map(
+              (config) => config.stackPipeId
+            )
+          )}
+        ></CustomAccordion>
       </div>
     </div>
   );

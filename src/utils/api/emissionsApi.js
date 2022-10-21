@@ -37,13 +37,46 @@ export const exportEmissionsDataDownload = async (
   download(JSON.stringify(response.data, null, "\t"), fileName);
 };
 
-export const getViews = async ()=>{
-  
-  try{
-    const response = await axios.get(`${config.services.emissions.uri}/emissions/views`)
-    return handleResponse(response)
-  }catch(error){
-    handleError(error)
+export const getEmissionViewData = async (
+  viewCode,
+  monitorPlanId,
+  year,
+  quarter,
+  unitIds,
+  stackPipeIds
+) => {
+  const url = new URL(
+    `${config.services.emissions.uri}/emissions/views/${viewCode}`
+  );
+
+  const searchParams = new URLSearchParams({
+    monitorPlanId,
+    quarter: Array.isArray(quarter) ? quarter.join("|") : quarter,
+    year: Array.isArray(year) ? year.join("|") : year,
+    unitIds: Array.isArray(unitIds) ? unitIds.join("|") : unitIds,
+    stackPipeIds: Array.isArray(stackPipeIds)
+      ? stackPipeIds.join("|")
+      : stackPipeIds,
+  });
+
+  try {
+    const response = await axios.get(
+      `${url.toString()}?${searchParams.toString()}`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const getViews = async () => {
+  try {
+    const response = await axios.get(
+      `${config.services.emissions.uri}/emissions/views`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
     return [];
   }
-}
+};
