@@ -25,9 +25,48 @@ describe("Emissions API", function () {
           `${config.services.emissions.uri}/emissions/export?monitorPlanId=monPlanId&year=2019&quarter=1`
         )
         .reply(200, mockResponse);
+    const url = new URL(`${config.services.emissions.uri}/emissions/export`);
+    const workspaceUrl = new URL(
+      `${config.services.emissions.uri}/workspace/emissions/export`
+    );
+    const searchParams = new URLSearchParams({
+      monitorPlanId: mockResponse.monitorPlanId,
+      year: mockResponse.year,
+      quarter: mockResponse.quarter,
+    });
+    mock
+      .onGet(`${url.toString()}?${searchParams.toString()}`)
+      .reply(200, mockResponse);
+    mock
+      .onGet(`${workspaceUrl.toString()}?${searchParams.toString()}`)
+      .reply(200, {
+        ...mockResponse,
+        orisCode: 9999,
+      });
+  });
 
       const result = await exportEmissionsData("monPlanId", 2019, 1);
+  describe("exportEmissionsData", function () {
+    it("should get emissions data given year, quarter and monitoringPlanId", async function () {
+      const result = await exportEmissionsData(
+        mockResponse.monitorPlanId,
+        mockResponse.year,
+        mockResponse.quarter
+      );
       expect(result["data"]).toEqual(mockResponse);
+    });
+
+    it("should get emissions data given year, quarter and monitoringPlanId", async function () {
+      const result = await exportEmissionsData(
+        mockResponse.monitorPlanId,
+        mockResponse.year,
+        mockResponse.quarter,
+        true
+      );
+      expect(result["data"]).toEqual({
+        ...mockResponse,
+        orisCode: 9999,
+      });
     });
   });
 

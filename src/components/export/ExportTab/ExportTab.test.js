@@ -1,8 +1,9 @@
 import React from "react";
 import ExportTab from "./ExportTab";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import { getReportingPeriod, selectedConfig } from "./ExportTab.test.mocks";
+import userEvent from "@testing-library/user-event";
 
 describe("ExportTab", function () {
   let emissionsApi;
@@ -44,10 +45,10 @@ describe("ExportTab", function () {
         name: "Export",
       });
 
-      fireEvent.click(emissionsCheckbox);
+      userEvent.click(emissionsCheckbox);
       expect(exportButton).toBeEnabled();
 
-      fireEvent.click(exportButton);
+      userEvent.click(exportButton);
       await act(async () =>
         expect(emissionsApi.exportEmissionsDataDownload).toHaveBeenCalledTimes(
           1

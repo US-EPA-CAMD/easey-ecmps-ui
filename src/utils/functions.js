@@ -10,6 +10,14 @@ export const debugLog = (message, object = null) => {
   }
 };
 
+export const getUser = () => {
+  const cdxUser = sessionStorage.getItem("cdx_user")
+    ? JSON.parse(sessionStorage.getItem("cdx_user"))
+    : null;
+
+  return cdxUser && cdxUser.firstName ? cdxUser : null;
+};
+
 export const parseBool = (value, defaultValue = false) => {
   if (typeof value == "number" || value instanceof Number) {
     return value > 0;
