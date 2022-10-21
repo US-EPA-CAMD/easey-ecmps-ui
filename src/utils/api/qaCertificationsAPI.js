@@ -949,3 +949,32 @@ export const createAppendixERun = async (locId, testSumId, appECorrTestSumId, pa
     return handleImportError(error);
   }
 };
+export const updateAppendixERun = async (locId, testSumId, appECorrTestSumId, id, payload) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+}
+export const deleteAppendixERun = async (locId, testSumId, appECorrTestSumId, id) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
+};

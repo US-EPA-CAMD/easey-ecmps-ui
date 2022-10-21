@@ -236,7 +236,12 @@ export const removeDataSwitch = async (
         .catch((error) => {
           console.log("error", error);
         });
-
+    case appendixECorrTestRun:
+      return qaApi
+        .deleteAppendixERun(extraIdsArr[0], extraIdsArr[1], id, row.id)
+        .catch((error) => {
+          console.log("error", error);
+        });    
     default:
       throw new Error(`removeDataSwitch case not implemented for ${name}`)
   }
@@ -340,7 +345,16 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
     case testQualification:
       return qaApi.updateTestQualification(location, id, userInput.id, userInput);
     case fuelFlowToLoad:
-      return qaApi.updateFuelFlowToLoad(location, id, userInput.id, userInput)
+      return qaApi.updateFuelFlowToLoad(location, id, userInput.id, userInput);
+    case appendixECorrTestRun:
+      return qaApi
+        .updateAppendixERun(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          id,
+          userInput.id,
+          userInput
+        );
     default:
       break;
   }
