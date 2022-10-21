@@ -25,6 +25,11 @@ export const EmissionsTabRender = ({
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
   const [selectedYears, setSelectedYears] = useState([]);
   const [selectedQuarters, setSelectedQuarters] = useState([]);
+  const showTable = Boolean(
+    selectedYears.length > 0 &&
+      selectedQuarters.length > 0 &&
+      viewTemplateSelect !== null
+  );
 
   return (
     <div className=" padding-top-0">
@@ -56,21 +61,23 @@ export const EmissionsTabRender = ({
       </div>
       <hr />
       <div className="grid-row overflow-x-auto">
-        <CustomAccordion
-          title={"Daily Calibration Tests"}
-          table={getEmissionsTabTableRenders(
-            viewTemplateSelect,
-            configID,
-            selectedYears,
-            selectedQuarters,
-            selectedConfig?.unitStackConfigurations.map(
-              (config) => config.unitId
-            ),
-            selectedConfig?.unitStackConfigurations.map(
-              (config) => config.stackPipeId
-            )
-          )}
-        ></CustomAccordion>
+        {showTable && (
+          <CustomAccordion
+            title={"Daily Calibration Tests"}
+            table={getEmissionsTabTableRenders(
+              viewTemplateSelect,
+              configID,
+              selectedYears,
+              selectedQuarters,
+              selectedConfig?.unitStackConfigurations.map(
+                (config) => config.unitId
+              ),
+              selectedConfig?.unitStackConfigurations.map(
+                (config) => config.stackPipeId
+              )
+            )}
+          ></CustomAccordion>
+        )}
       </div>
     </div>
   );

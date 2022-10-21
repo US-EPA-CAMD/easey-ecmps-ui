@@ -11,10 +11,11 @@ describe("Emissions Tab Table", function () {
   let params;
   let url;
   let searchParams;
+  let apiUtilModule;
 
   beforeAll(async () => {
     mock = new MockAdapter(axios);
-    const apiUtilModule = await import("../../utils/api/apiUtils");
+    apiUtilModule = await import("../../utils/api/apiUtils");
     jest.spyOn(apiUtilModule, "handleError").mockResolvedValue(undefined);
   });
 
@@ -64,14 +65,10 @@ describe("Emissions Tab Table", function () {
       );
     });
 
-    const columnOne = screen.getByText("Column One");
-    const columnTwo = screen.getByText("Column Two");
-    const hello = screen.getByText("hello");
-    const hi = screen.getByText("hi");
-    expect(columnOne).toBeDefined();
-    expect(columnTwo).toBeDefined();
-    expect(hello).toBeDefined();
-    expect(hi).toBeDefined();
+    expect(screen.getByText("Column One")).toBeDefined();
+    expect(screen.getByText("Column Two")).toBeDefined();
+    expect(screen.getByText("hello")).toBeDefined();
+    expect(screen.getByText("hi")).toBeDefined();
   });
 
   it("should display nothing if there is no data", async function () {
@@ -92,9 +89,8 @@ describe("Emissions Tab Table", function () {
       );
     });
 
-    const columnOne = screen.queryByText("Column One");
-    const columnTwo = screen.queryByText("Column Two");
-    expect(columnOne).toBeNull();
-    expect(columnTwo).toBeNull();
+    expect(apiUtilModule.handleError).toHaveBeenCalledTimes(1);
+    expect(screen.queryByText("Column One")).toBeNull();
+    expect(screen.queryByText("Column Two")).toBeNull();
   });
 });

@@ -36,10 +36,6 @@ export const getEmissionsTabTableRenders = (
   unitIds,
   stackPipeIds
 ) => {
-  if (!viewCode || year.length <= 0 || quarter.length <= 0) {
-    return [[null, ""]];
-  }
-
   return [
     [
       <EmissionsTabTable
