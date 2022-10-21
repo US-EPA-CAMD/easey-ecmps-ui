@@ -37,7 +37,11 @@ import {
   returnFocusToLast,
 } from "../../additional-functions/manage-focus";
 import MultiSelectCombobox from "../MultiSelectCombobox/MultiSelectCombobox";
-import { getViews } from "../../utils/api/emissionsApi";
+import {
+  getViews,
+  exportEmissionsDataDownload,
+} from "../../utils/api/emissionsApi";
+import { getUser } from "../../utils/functions";
 
 // Helper function that generates an array of years from this year until the year specified in min param
 const generateArrayOfYears = (min) => {
@@ -275,7 +279,23 @@ export const HeaderInfo = ({
     }
   };
 
-  const exportHandler = () => mpApi.exportMonitoringPlanDownload(configID);
+  const handleEmissionsExport = async () => {
+    const promises = [];
+    for (const selectedYear of selectedYears) {
+      for (const selectedQuarter of selectedQuarters) {
+        promises.push(
+          exportEmissionsDataDownload(
+            facility,
+            configID,
+            selectedYear,
+            selectedQuarter,
+            getUser() !== null
+          )
+        );
+      }
+    }
+    await Promise.allSettled(promises);
+  };
 
   const formatCommentsToTable = (data) => {
     const formmatedData = [];
@@ -641,8 +661,8 @@ export const HeaderInfo = ({
   // Multiselect update function for year selection
   const onChangeUpdateSelectedYears = (id, updateType) => {
     if (updateType === "add") setSelectedYears([...selectedYears, id]);
-    else if (updateType === "remove"){
-      const selected = yearsArray.filter(y=>y.selected).map(y=>y.id)
+    else if (updateType === "remove") {
+      const selected = yearsArray.filter((y) => y.selected).map((y) => y.id);
       setSelectedYears(selected);
     }
   };
@@ -650,8 +670,8 @@ export const HeaderInfo = ({
   // Multiselect update function for quarter selection
   const onChangeUpdateSelectedQuarters = (id, updateType) => {
     if (updateType === "add") setSelectedQuarters([...selectedQuarters, id]);
-    else if (updateType === "remove"){
-      const selected = quartersArray.filter(q=>q.selected).map(q=>q.id)
+    else if (updateType === "remove") {
+      const selected = quartersArray.filter((q) => q.selected).map((q) => q.id);
       setSelectedQuarters(selected);
     }
   };
@@ -708,7 +728,7 @@ export const HeaderInfo = ({
                   type="button"
                   className="margin-right-2 float-left margin-bottom-2"
                   outline={true}
-                  onClick={exportHandler}
+                  onClick={handleEmissionsExport}
                 >
                   Export Data
                 </Button>
