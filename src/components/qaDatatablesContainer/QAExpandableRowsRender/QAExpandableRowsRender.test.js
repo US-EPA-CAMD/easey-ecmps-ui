@@ -303,27 +303,27 @@ describe('Appendix E Correlation test run data', () => {
     expect(mock.history.get.length).not.toBe(0)
     expect(rows).not.toHaveLength(0)
 
-    // add row
-    const addBtn = screen.getByRole('button', { name: /Add/i })
-    userEvent.click(addBtn)
-    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-    userEvent.click(saveAndCloseBtn)
-    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+    // // add row
+    // const addBtn = screen.getByRole('button', { name: /Add/i })
+    // userEvent.click(addBtn)
+    // let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    // userEvent.click(saveAndCloseBtn)
+    // setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
-    // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
-    expect(editBtns).toHaveLength(appendixECorrTestData.length)
-    userEvent.click(editBtns[0])
-    saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-    userEvent.click(saveAndCloseBtn)
-    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+    // // edit row
+    // const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    // expect(editBtns).toHaveLength(appendixECorrTestData.length)
+    // userEvent.click(editBtns[0])
+    // saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    // userEvent.click(saveAndCloseBtn)
+    // setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
-        // remove row
-    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
-    expect(deleteBtns).toHaveLength(appendixECorrTestData.length)
-    const secondDeleteBtn = deleteBtns[1]
-    userEvent.click(secondDeleteBtn)
-    const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
-    userEvent.click(confirmBtns[1])
+    //     // remove row
+    // const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    // expect(deleteBtns).toHaveLength(appendixECorrTestData.length)
+    // const secondDeleteBtn = deleteBtns[1]
+    // userEvent.click(secondDeleteBtn)
+    // const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    // userEvent.click(confirmBtns[1])
   })
 })
