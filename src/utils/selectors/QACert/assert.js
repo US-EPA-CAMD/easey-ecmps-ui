@@ -365,7 +365,7 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           id,
           userInput.id,
           userInput
-        );
+        ).catch((error) => {console.log("error", error)});
     default:
       break;
   }

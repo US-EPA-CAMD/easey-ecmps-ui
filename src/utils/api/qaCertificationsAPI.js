@@ -976,7 +976,7 @@ export const createAppendixERun = async (locId, testSumId, appECorrTestSumId, pa
       })
     );
   } catch (error) {
-    return handleImportError(error);
+    return handleError(error);
   }
 };
 export const updateAppendixERun = async (locId, testSumId, appECorrTestSumId, id, payload) => {
@@ -991,7 +991,7 @@ export const updateAppendixERun = async (locId, testSumId, appECorrTestSumId, id
       })
     );
   } catch (error) {
-    return handleImportError(error);
+    return handleError(error);
   }
 }
 export const deleteAppendixERun = async (locId, testSumId, appECorrTestSumId, id) => {
