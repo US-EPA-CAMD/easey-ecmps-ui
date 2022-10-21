@@ -30,12 +30,13 @@ export const useGetEmissionViewData = (
       if (
         response &&
         response.status === 200 &&
-        response.data.columns &&
-        response.data.results
+        response.headers["x-field-mappings"] &&
+        response.data
       ) {
-        const { columns, results } = response.data;
+        const columns = JSON.parse(response.headers["x-field-mappings"]);
+        const results = response.data;
 
-        const names = columns.map((column) => column.displayName);
+        const names = columns.map((column) => column.label);
 
         const formattedResults = [];
         for (const result of results) {
