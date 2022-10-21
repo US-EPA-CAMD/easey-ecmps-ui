@@ -33,24 +33,27 @@ describe("Emissions Tab Table", function () {
   });
 
   it("should show table when there is valid data", async function () {
-    mock.onGet(`${url.toString()}?${searchParams.toString()}`).reply(200, {
-      columns: [
-        {
-          name: "Column1",
-          displayName: "Column One",
-        },
-        {
-          name: "Column2",
-          displayName: "Column Two",
-        },
-      ],
-      results: [
+    mock.onGet(`${url.toString()}?${searchParams.toString()}`).reply(
+      200,
+      [
         {
           Column1: "hello",
           Column2: "hi",
         },
       ],
-    });
+      {
+        "x-field-mappings": JSON.stringify([
+          {
+            value: "Column1",
+            label: "Column One",
+          },
+          {
+            value: "Column2",
+            label: "Column Two",
+          },
+        ]),
+      }
+    );
 
     await act(async () => {
       render(
