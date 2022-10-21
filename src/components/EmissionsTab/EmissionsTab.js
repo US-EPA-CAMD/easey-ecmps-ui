@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
 
 import { connect } from "react-redux";
-import MonitoringPlanTabRender from "../MonitoringPlanTabRender/MonitoringPlanTabRender";
 import {
-  setSectionSelectionState,
   setLocationSelectionState,
   setCheckoutState,
   setInactiveState,
 } from "../../store/actions/dynamicFacilityTab";
 import {
   convertSectionToStoreName,
-  MONITORING_PLAN_STORE_NAME,
+  EMISSIONS_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
-export const MonitoringPlanTab = ({
+import EmissionsTabRender from "../EmissionsTabRender/EmissionsTabRender";
+export const EmissionsTab = ({
   resetTimer,
   setExpired,
   resetTimerFlag,
@@ -21,41 +20,25 @@ export const MonitoringPlanTab = ({
   orisCode,
   selectedConfig,
   title,
-  locations,
   user,
-  checkout,
   tabs,
 
-  setSection,
   setLocation,
   setCheckout,
   setInactive,
   checkedOutLocations,
-  setMostRecentlyCheckedInMonitorPlanId,
-  setMostRecentlyCheckedInMonitorPlanIdForTab,
-  mostRecentlyCheckedInMonitorPlanIdForTab,
   workspaceSection,
 }) => {
-  const getCurrentTab = () => {
-    return tabs.find((tab) => tab.selectedConfig.id === selectedConfig.id);
-  };
-  const getCurrentTabIndex = () => {
-    return tabs.findIndex((tab) => tab.selectedConfig.id === selectedConfig.id);
-  };
-  const [currentTabIndex, setCurrentTabIndex] = useState(getCurrentTabIndex());
+  const getCurrentTab = () =>{
+    return tabs.find(tab => tab.selectedConfig.id === selectedConfig.id);
 
-  useEffect(() => {
-    // setCurrentTab(getCurrentTab())
-    setCurrentTabIndex(getCurrentTabIndex());
+  }
+  const getCurrentTabIndex = () =>{
+    return tabs.findIndex(tab => tab.selectedConfig.id === selectedConfig.id);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedConfig, checkout, currentTabIndex]);
+  }
+  const currentTabIndex = getCurrentTabIndex();
 
-  const [sectionSelect, setSectionSelect] = useState(getCurrentTab().section);
-  useEffect(() => {
-    setSection(sectionSelect, title, MONITORING_PLAN_STORE_NAME);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sectionSelect]);
 
   const [locationSelect, setLocationSelect] = useState(
     getCurrentTab().location
@@ -66,10 +49,11 @@ export const MonitoringPlanTab = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect]);
 
+
   return (
     <div>
       <div>
-        <MonitoringPlanTabRender
+        <EmissionsTabRender
           resetTimer={resetTimer}
           setExpired={setExpired}
           resetTimerFlag={resetTimerFlag}
@@ -77,10 +61,8 @@ export const MonitoringPlanTab = ({
           title={title}
           orisCode={orisCode}
           selectedConfig={selectedConfig}
-          sectionSelect={sectionSelect}
-          setSectionSelect={(section) => setSectionSelect(section)}
           locationSelect={locationSelect}
-          setLocationSelect={(location) => setLocationSelect(location)}
+          setLocationSelect={(location)=>setLocationSelect(location)}
           locations={selectedConfig.locations}
           user={user}
           configID={tabs[currentTabIndex].selectedConfig.id}
@@ -89,15 +71,9 @@ export const MonitoringPlanTab = ({
           setInactive={setInactive}
           inactive={tabs[currentTabIndex].inactive}
           checkedOutLocations={checkedOutLocations}
-          setMostRecentlyCheckedInMonitorPlanId={
-            setMostRecentlyCheckedInMonitorPlanId
-          }
-          setMostRecentlyCheckedInMonitorPlanIdForTab={
-            setMostRecentlyCheckedInMonitorPlanIdForTab
-          }
           currentTabIndex={currentTabIndex}
           workspaceSection={workspaceSection}
-        />
+        /> 
       </div>
     </div>
   );
@@ -105,7 +81,7 @@ export const MonitoringPlanTab = ({
 const mapStateToProps = (state) => {
   return {
     tabs: state.openedFacilityTabs[
-      convertSectionToStoreName(MONITORING_PLAN_STORE_NAME)
+      convertSectionToStoreName(EMISSIONS_STORE_NAME)
     ],
   };
 };
@@ -116,14 +92,6 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(
         setLocationSelectionState(
           location,
-          title,
-          convertSectionToStoreName(workspaceSection)
-        )
-      ),
-    setSection: (section, title, workspaceSection) =>
-      dispatch(
-        setSectionSelectionState(
-          section,
           title,
           convertSectionToStoreName(workspaceSection)
         )
@@ -146,6 +114,6 @@ const mapDispatchToProps = (dispatch) => {
       ),
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(MonitoringPlanTab);
+export default connect(mapStateToProps, mapDispatchToProps)(EmissionsTab);
 export { mapStateToProps };
 export { mapDispatchToProps };

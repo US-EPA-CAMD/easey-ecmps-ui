@@ -8,6 +8,7 @@ import ExportTablesContainer from "./ExportTablesContainer";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { exportMonitoringPlanDownload } from "../../../utils/api/monitoringPlansApi";
 import { exportEmissionsDataDownload } from "../../../utils/api/emissionsApi";
+import { getUser } from "../../../utils/functions";
 
 export const ExportTab = ({
   facility,
@@ -117,7 +118,8 @@ export const ExportTab = ({
           facility,
           selectedConfig.id,
           reportingPeriod.calendarYear,
-          reportingPeriod.quarter
+          reportingPeriod.quarter,
+          getUser() !== null
         )
       );
     }
@@ -180,6 +182,7 @@ export const ExportTab = ({
           </div>
           <div className="grid-col-3 padding-left-8 padding-top-3">
             <Button
+              type={"button"}
               className="width-card"
               disabled={
                 dataTypes.filter((e) => e.checked).length === 0 ||
@@ -210,6 +213,7 @@ export const ExportTab = ({
         )}
         <div className="border-top-1px border-base-lighter padding-y-2">
           <Button
+            type={"button"}
             className="float-right margin-top-3"
             disabled={isExportDisabled()}
             onClick={exportClickHandler}

@@ -145,6 +145,11 @@ export const removeDataSwitch = async (
       return qaApi
         .deleteAirEmissions(locationId, id, row.id)
         .catch((error) => console.log("error", error));
+    
+    case testQualification:
+      return qaApi
+        .deleteTestQualification(locationId, id, row.id)
+        .catch((error) => console.log("error", error));
 
     case lineInjection:
       return qaApi
@@ -344,6 +349,12 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         .catch(error => console.log('error updating rata traverse data', error))
     case testQualification:
       return qaApi.updateTestQualification(location, id, userInput.id, userInput);
+    case appendixECorrelationSummary:
+      return qaApi
+        .updateAppendixECorrelationSummaryRecord(location, id, userInput.id, userInput)
+        .catch((error) => {
+          console.log("error", error);
+        });
     case fuelFlowToLoad:
       return qaApi.updateFuelFlowToLoad(location, id, userInput.id, userInput);
     case appendixECorrTestRun:
