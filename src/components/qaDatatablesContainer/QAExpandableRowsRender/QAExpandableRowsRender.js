@@ -296,7 +296,7 @@ const QAExpandableRowsRender = ({
           });
 
           setMdmData(dropdowns);
-        });
+        }).catch((error => console.log(error)));
         break;
       case "RATA Data":
         allPromises.push(dmApi.getAllRataFreqCodes());
@@ -323,7 +323,7 @@ const QAExpandableRowsRender = ({
             { code: 3, name: 3 },
           ];
           setMdmData(dropdowns);
-        });
+        }).catch((error => console.log(error)));
         break;
 
       case "RATA Run Data":
@@ -344,7 +344,7 @@ const QAExpandableRowsRender = ({
             }
           });
           setMdmData(dropdowns);
-        });
+        }).catch((error => console.log(error)));
         break;
 
       case "RATA Summary":
@@ -389,7 +389,7 @@ const QAExpandableRowsRender = ({
             }
           });
           setMdmData(dropdowns);
-        });
+        }).catch((error => console.log(error)))
         break;
       case 'RATA Traverse Data':
         allPromises.push(dmApi.getAllProbeTypeCodes());
@@ -423,7 +423,7 @@ const QAExpandableRowsRender = ({
             options.unshift({ code: '', name: '-- Select a value --' })
           }
           setMdmData(dropdowns);
-        });
+        }).catch((error => console.log(error)))
         break
       default:
         mdmProps.forEach((prop) =>{
