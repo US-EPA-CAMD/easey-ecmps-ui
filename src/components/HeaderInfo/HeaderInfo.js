@@ -816,77 +816,51 @@ export const HeaderInfo = ({
                 </div>
               )}
 
-              <div className="display-flex flex-row">
-                <DropdownSelection
-                  caption="Locations"
-                  orisCode={orisCode}
-                  options={locations}
-                  viewKey="name"
-                  selectKey="id"
-                  initialSelection={locationSelect[0]}
-                  selectionHandler={setLocationSelect}
-                  workspaceSection={workspaceSection}
-                />
-                {workspaceSection === EMISSIONS_STORE_NAME ? (
-                  <FormGroup className="margin-right-2 margin-bottom-1">
-                    <Label test-id={"viewtemplate"} htmlFor={"viewtemplate"}>
-                      {"View Template"}
-                    </Label>
-                    <Dropdown
-                      id={"viewtemplate"}
-                      name={"viewtemplate"}
-                      epa-testid={"viewtemplate"}
-                      data-testid={"viewtemplate"}
-                      value={viewTemplateSelect}
-                      onChange={(e) => setViewTemplateSelect(e.target.value)}
-                    >
-                      {viewTemplates.map((view) => (
-                        <option
-                          data-testid={view.name}
-                          key={view.name}
-                          value={view.name}
-                        >
-                          {view.name}
-                        </option>
-                      ))}
-                    </Dropdown>
-                  </FormGroup>
-                ) : (
+              {workspaceSection === MONITORING_PLAN_STORE_NAME && (
+              <div>
+                <div className="display-flex flex-row">
                   <DropdownSelection
-                    caption="Sections"
-                    selectionHandler={setSectionSelect}
-                    options={sections}
-                    viewKey="name"
-                    selectKey="name"
-                    initialSelection={sectionSelect[0]}
+                    caption="Locations"
                     orisCode={orisCode}
+                    options={locations}
+                    viewKey="name"
+                    selectKey="id"
+                    initialSelection={locationSelect[0]}
+                    selectionHandler={setLocationSelect}
                     workspaceSection={workspaceSection}
                   />
-                )}
-
-                <div className="margin-top-6">
-                  {workspaceSection === MONITORING_PLAN_STORE_NAME ? (
-                    <Checkbox
-                      epa-testid="inactiveCheckBox"
-                      id="inactiveCheckBox"
-                      name="inactiveCheckBox"
-                      label="Show Inactive"
-                      checked={inactive[0]}
-                      disabled={inactive[1]}
-                      onChange={() =>
-                        setInactive(
-                          [!inactive[0], inactive[1]],
-                          facility,
-                          MONITORING_PLAN_STORE_NAME
-                        )
-                      }
+                    <DropdownSelection
+                      caption="Sections"
+                      selectionHandler={setSectionSelect}
+                      options={sections}
+                      viewKey="name"
+                      selectKey="name"
+                      initialSelection={sectionSelect[0]}
+                      orisCode={orisCode}
+                      workspaceSection={workspaceSection}
                     />
-                  ) : (
-                    ""
-                  )}
+                  <div className="margin-top-6">
+                    {workspaceSection === MONITORING_PLAN_STORE_NAME ? (
+                      <Checkbox
+                        epa-testid="inactiveCheckBox"
+                        id="inactiveCheckBox"
+                        name="inactiveCheckBox"
+                        label="Show Inactive"
+                        checked={inactive[0]}
+                        disabled={inactive[1]}
+                        onChange={() =>
+                          setInactive(
+                            [!inactive[0], inactive[1]],
+                            facility,
+                            MONITORING_PLAN_STORE_NAME
+                          )
+                        }
+                      />
+                    ) : (
+                      ""
+                    )}
+                  </div>
                 </div>
-              </div>
-              {workspaceSection === MONITORING_PLAN_STORE_NAME && (
                 <div>
                   <Button
                     outline
@@ -915,15 +889,61 @@ export const HeaderInfo = ({
                     View Printout Report
                   </Button>
                 </div>
+              </div>
               )}
               {workspaceSection === EMISSIONS_STORE_NAME && (
                 <GridContainer className="padding-left-0">
                   <Grid row={true}>
+                    <Grid                      
+                      col={2}
+                      widescreen={{ col: 2 }}
+                    >
+                      <DropdownSelection
+                        caption="Locations"
+                        orisCode={orisCode}
+                        options={locations}
+                        viewKey="name"
+                        selectKey="id"
+                        initialSelection={locationSelect[0]}
+                        selectionHandler={setLocationSelect}
+                        workspaceSection={workspaceSection}
+                      />
+                    </Grid>
+                    <Grid                      
+                      col={2}
+                      widescreen={{ col: 2 }}
+                      desktopLg={{col: 10}}
+                    >
+                      <FormGroup className="margin-right-2 margin-bottom-1">
+                        <Label test-id={"viewtemplate"} htmlFor={"viewtemplate"}>
+                          {"View Template"}
+                        </Label>
+                        <Dropdown
+                          id={"viewtemplate"}
+                          name={"viewtemplate"}
+                          epa-testid={"viewtemplate"}
+                          data-testid={"viewtemplate"}
+                          value={viewTemplateSelect}
+                          onChange={(e) => setViewTemplateSelect(e.target.value)}
+                          className="maxw-mobile"
+                        >
+                          {viewTemplates.map((view) => (
+                            <option
+                              data-testid={view.name}
+                              key={view.name}
+                              value={view.name}
+                            >
+                              {view.name}
+                            </option>
+                          ))}
+                        </Dropdown>
+                      </FormGroup>
+                    </Grid>
+
                     <Grid
-                      col={3}
-                      tablet={{ col: 3 }}
-                      desktop={{ col: 3 }}
-                      className="margin-right-2"
+                      col={2}
+                      widescreen={{ col: 2 }}
+                      className="margin-right-2 margin-top-3"
                     >
                       <MultiSelectCombobox
                         items={yearsArray}
@@ -933,7 +953,7 @@ export const HeaderInfo = ({
                         searchBy="label"
                       />
                     </Grid>
-                    <Grid col={3} tablet={{ col: 3 }} desktop={{ col: 3 }}>
+                    <Grid col={2} widescreen={{ col: 2 }} className="margin-right-2 margin-top-3">
                       <MultiSelectCombobox
                         items={quartersArray}
                         label="Quarter(s)"
@@ -942,36 +962,43 @@ export const HeaderInfo = ({
                         searchBy="label"
                       />
                     </Grid>
-                    <Grid col={5} tablet={{ col: 5 }} desktop={{ col: 5 }}>
+                    <Grid col={2} widescreen={{ col: 3 }}>
                       <Button
                         type="button"
                         title="Apply Filter(s)"
-                        className="cursor-pointer text-no-wrap pin-right apply-filter-position"
+                        className="cursor-pointer text-no-wrap apply-filter-position margin-top-3"
                         onClick={() => null}
                       >
                         {"Apply Filter(s)"}
                       </Button>
+                      {/* <div>abc</div> */}
                     </Grid>
                   </Grid>
-                  <div className="display-flex flex-row">
-                    <Button
-                      outline
-                      type="button"
-                      title="Summary Report"
-                      onClick={() => null}
-                    >
-                      Summary Report
-                    </Button>
-                    <Button
-                      outline
-                      type="button"
-                      title="Data Report"
-                      className={"hyperlink-btn cursor-pointer margin-left-2"}
-                      onClick={() => null}
-                    >
-                      Data Report
-                    </Button>
-                  </div>
+                  <Grid row>
+
+                    <Grid col={3} widescreen={{ col: 2 }}>
+                      <Button
+                        outline
+                        type="button"
+                        title="Summary Report"
+                        onClick={() => null}
+                        className={"hyperlink-btn cursor-pointer text-no-wrap"}
+                      >
+                        Summary Report
+                      </Button>
+                    </Grid>
+                    <Grid col={3} widescreen={{ col: 2 }}>
+                      <Button
+                        outline
+                        type="button"
+                        title="Data Report"
+                        className={"hyperlink-btn cursor-pointer margin-left-2"}
+                        onClick={() => null}
+                      >
+                        Data Report
+                      </Button>
+                    </Grid>
+                  </Grid>
                 </GridContainer>
               )}
             </div>
