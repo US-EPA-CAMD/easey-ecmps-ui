@@ -646,7 +646,7 @@ describe('Appendix E Correlation test Summary data', () => {
   const appendixECorrTestSumData = [
     {
       "id": "id1",
-      "testSumId": "testSumId1",
+      "testSumId": "stri g",
       "userId": "string",
       "addDate": "string",
       "updateDate": "string",
@@ -654,10 +654,12 @@ describe('Appendix E Correlation test Summary data', () => {
       "Mean Reference Value": 2,
       "Average Hourly Heat Input Rate": 3,
       "F-Factor": 4,
+      "calculatedMeanReferenceValue": 5,
+      "calculatedAverageHourlyHeatInputRate": 6,
     },
     {
       "id": "id2",
-      "testSumId": "testSumId2",
+      "testSumId": "string",
       "userId": "string",
       "addDate": "string",
       "updateDate": "string",
@@ -665,13 +667,15 @@ describe('Appendix E Correlation test Summary data', () => {
       "Mean Reference Value": 3,
       "Average Hourly Heat Input Rate": 4,
       "F-Factor": 5,
+      "calculatedMeanReferenceValue": 6,
+      "calculatedAverageHourlyHeatInputRate": 7,
     }
   ]
   
   const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
   const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
-  const putUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${idRegex}`;
-  const deleteUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${idRegex}`;
+  const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${idRegex}`);
+  const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${idRegex}`);
 
   mock.onGet(getUrl).reply(200, appendixECorrTestSumData)
   mock.onPost(postUrl).reply(200, 'created')
