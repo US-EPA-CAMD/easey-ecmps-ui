@@ -17,6 +17,9 @@ const rataSumId = 'rataSumId'
 const rataRunId = 'rataRunId'
 const flowRataRunId = 'flowRataRunId'
 const id = 'id'
+const appECorrTestSumId = 'appECorrTestSumId'
+const appECorrTestrunId = 'appECorrTestrunId'
+
 
 describe("QA Cert API", function () {
 
@@ -181,7 +184,29 @@ describe("QA Cert API", function () {
     })
 
   })
-});
+})
 
+describe('Appendix E Correlation Heat Input from Gas CRUD operations', () => {
 
+  test('getAppendixEHeatInputGasData', async () => {
+    const appendixECorrelationHeatInputGas = [{ appendixECorrelationHeatInputGas: 'data' }]
+    const postAppendixEHeatInputGasUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-gases`;
+    mock.onGet(postAppendixEHeatInputGasUrl).reply(200, appendixECorrelationHeatInputGas)
 
+    const resp = await qaCert.getAppendixEHeatInputGasData(locId, testSumId, appECorrTestSumId,appECorrTestrunId)
+
+    expect(mock.history.get.length).toBe(1)
+    expect(resp.data).toStrictEqual(appendixECorrelationSummaryData)
+  })
+
+  test('createAppendixECorrelationSummaryRecord', async () => {
+    const payload = { appendixECorrelationHeatInputGas: 'data' }
+    const postAppendixEHeatInputGasUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-gases`;
+    mock.onPost(postAppendixEHeatInputGasUrl).reply(200, payload)
+
+    const resp = await qaCert.createAppendixECorrelationSummaryRecord(locId, testSumId,appECorrTestSumId,appECorrTestrunId, payload)
+
+    expect(mock.history.post.length).toBe(1)
+    expect(resp.data).toStrictEqual(payload)
+  })
+})
