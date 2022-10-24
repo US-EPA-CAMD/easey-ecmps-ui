@@ -640,6 +640,98 @@ describe('Fuel Flow to Load data', () => {
   })
 })
 
+describe('Appendix E Correlation test Summary data', () => {
+  const id = "appECorrTestSumId";
+  const appendixECorrTestData = [
+    {
+      "id":"1f734d01-2513-4a91-8763-9a18fc8ffd2d",
+      "testSumId":"L3FY866-950F544520244336B5ED7E3824642F9E",
+      "operatingLevelForRun":1,
+      "meanReferenceValue":2,
+      "calculatedMeanReferenceValue":3,
+      "averageHourlyHeatInputRate":4,
+      "fFactor":9190,
+      "calculatedAverageHourlyHeatInputRate":5,
+      "userId":"string",
+      "addDate":"string",
+      "updateDate":"string",
+    },
+    {
+      "id":"1f734d01-2513-4a91-8763-9a18fc8ffd2d",
+      "testSumId":"L3FY866-950F544520244336B5ED7E3824642F9E",
+      "operatingLevelForRun":1,
+      "meanReferenceValue":2,
+      "calculatedMeanReferenceValue":3,
+      "averageHourlyHeatInputRate":4,
+      "fFactor":9190,
+      "calculatedAverageHourlyHeatInputRate":5,
+      "userId":"string",
+      "addDate":"string",
+      "updateDate":"string",
+    }
+  ]
+  
+  const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
+  const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
+  const putUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${id}`;
+  const deleteUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${id}`;
+
+  mock.onGet(getUrl).reply(200, appendixECorrTestData)
+  mock.onPost(postUrl).reply(200, 'created')
+  mock.onPut(putUrl).reply(200, 'updated')
+  mock.onPut(deleteUrl).reply(200, 'deleted')
+  test('renders Appendix E Correlation test summary rows and create/save/delete', async () => {
+    const props = qaAppendixECorrTestRunProps()
+    const idArray = [locId, testSumId]
+    const data = { id: appECorrTestSumId }
+    render(
+      <QAExpandableRowsRender
+        payload={props["payload"]}
+        dropdownArray={props["dropdownArray"]}
+        mdmProps={props["mdmProps"]}
+        columns={props["columnNames"]}
+        controlInputs={props["controlInputs"]}
+        controlDatePickerInputs={props["controlDatePickerInputs"]}
+        dataTableName={props["dataTableName"]}
+        extraControls={props["extraControls"]}
+        radioBtnPayload={props["radioBtnPayload"]}
+        expandable
+        extraIDs={idArray}
+        data={data}
+        user={'user'}
+        isCheckedOut={true}
+      />
+    )
+
+    // renders rows
+    const rows = await screen.findAllByRole('row')
+    expect(mock.history.get.length).not.toBe(0)
+    expect(rows).not.toHaveLength(0)
+    // add row
+    const addBtn = screen.getByRole('button', { name: /Add/i })
+    userEvent.click(addBtn)
+    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+
+    // edit row
+    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    expect(editBtns).toHaveLength(appendixECorrTestData.length)
+    userEvent.click(editBtns[0])
+    saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+
+    // remove row
+    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    expect(deleteBtns).toHaveLength(appendixECorrTestData.length)
+    const secondDeleteBtn = deleteBtns[1]
+    userEvent.click(secondDeleteBtn)
+    const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    userEvent.click(confirmBtns[1])
+  })
+})
+
 // describe('Appendix E Correlation test run data', () => {
 //   const appECorrTestSumId = "appECorrTestSumId";
 //   const id ="appECorrTestRunId"
