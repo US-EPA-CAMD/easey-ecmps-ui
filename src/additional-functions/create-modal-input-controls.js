@@ -172,10 +172,11 @@ export const modalViewData = (
             ]);
             break;
           case "input":
+            console.log(inputs[y][0],selected[y])
             arr.push([
               y,
               inputs[y][0],
-              createNew ? "" : selected ? selected[y] : "",
+              createNew ? "" : selected ?( selected[y] === 0 ? "0": selected[y]) : "",
               inputs[y][2] === "required" ? "required" : false,
               "input",
             ]);
