@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Label } from "@trussworks/react-uswds";
 import PillButton from "../PillButton/PillButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -58,19 +58,7 @@ const MultiSelectCombobox = ({
     setShowListBox(true);
   };
 
-  const onRemoveHanlder = (id) => {
-    const itemsCopy = [...selectedItemsRef.current];
-    const index = itemsCopy.findIndex((i) => i.id.toString() === id.toString());
-    if (index > -1) {
-      itemsCopy.splice(index, 1);
-      selectedItemsRef.current = itemsCopy;
-      setSelectedItems(itemsCopy);
-      updateListDataOnChange(id, "remove");
-      onChangeUpdate(id, "remove");
-    }
-  };
-
-  const updateListDataOnChange = (id, update) => {
+  const updateListDataOnChange = useCallback((id, update) => {
     const _itemsCopy = [..._items];
     const index = _itemsCopy.findIndex(
       (d) => d.id.toString() === id.toString()
@@ -80,7 +68,21 @@ const MultiSelectCombobox = ({
     }
     _setItems([..._itemsCopy]);
     setData([..._itemsCopy]);
-  };
+  }, [_items]);
+
+
+  const onRemoveHanlder = useCallback((id) => {
+    const itemsCopy = [...selectedItemsRef.current];
+    const index = itemsCopy.findIndex((i) => i.id.toString() === id.toString());
+    if (index > -1) {
+      itemsCopy.splice(index, 1);
+      selectedItemsRef.current = itemsCopy;
+      setSelectedItems(itemsCopy);
+      updateListDataOnChange(id, "remove");
+      onChangeUpdate(id, "remove");
+    }
+  }, [selectedItemsRef, onChangeUpdate, updateListDataOnChange]);
+
 
   const optionClickHandler = (e) => {
     if (e.target.getAttribute("data-id") === null) {
@@ -112,7 +114,7 @@ const MultiSelectCombobox = ({
     }
   };
 
-  const populateSelectedItems = () => {
+  const populateSelectedItems = useCallback(() => {
     const selection = items.filter((i) => i.selected);
     const _selectedItems = [];
     for (const s of selection) {
@@ -138,7 +140,7 @@ const MultiSelectCombobox = ({
     }
     selectedItemsRef.current = _selectedItems;
     setSelectedItems(_selectedItems);
-  };
+  }, [items, stillMounted, onRemoveHanlder]);
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
