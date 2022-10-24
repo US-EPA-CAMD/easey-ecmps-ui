@@ -642,7 +642,7 @@ describe('Fuel Flow to Load data', () => {
 
 describe('Appendix E Correlation test Summary data', () => {
   const id = "appECorrTestSumId";
-  const appendixECorrTestData = [
+  const appendixECorrTestSumData = [
     {
       "id":"1f734d01-2513-4a91-8763-9a18fc8ffd2d",
       "testSumId":"L3FY866-950F544520244336B5ED7E3824642F9E",
@@ -676,7 +676,7 @@ describe('Appendix E Correlation test Summary data', () => {
   const putUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${id}`;
   const deleteUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${id}`;
 
-  mock.onGet(getUrl).reply(200, appendixECorrTestData)
+  mock.onGet(getUrl).reply(200, appendixECorrTestSumData)
   mock.onPost(postUrl).reply(200, 'created')
   mock.onPut(putUrl).reply(200, 'updated')
   mock.onPut(deleteUrl).reply(200, 'deleted')
@@ -716,7 +716,7 @@ describe('Appendix E Correlation test Summary data', () => {
 
     // edit row
     const editBtns = screen.getAllByRole('button', { name: /Edit/i })
-    expect(editBtns).toHaveLength(appendixECorrTestData.length)
+    expect(editBtns).toHaveLength(appendixECorrTestSumData.length)
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
     userEvent.click(saveAndCloseBtn)
@@ -724,7 +724,7 @@ describe('Appendix E Correlation test Summary data', () => {
 
     // remove row
     const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
-    expect(deleteBtns).toHaveLength(appendixECorrTestData.length)
+    expect(deleteBtns).toHaveLength(appendixECorrTestSumData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
     const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
