@@ -978,7 +978,7 @@ export const createAppendixERun = async (locId, testSumId, appECorrTestSumId, pa
       })
     );
   } catch (error) {
-    return handleImportError(error);
+    return handleError(error);
   }
 };
 
@@ -992,16 +992,32 @@ export const getAppendixEHeatInputGasData = async (locId, testSumId, appECorrTes
 
 export const createAppendixEHeatInputGas = async (locId, testSumId, appECorrTestSumId,appECorrTestrunId, payload) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs${appECorrTestrunId}/appendix-e-heat-input-from-gases`;
+export const updateAppendixERun = async (locId, testSumId, appECorrTestSumId, id, payload) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: "PUT",
         url: url,
         data: payload,
       })
     );
   } catch (error) {
-    return handleImportError(error);
+    return handleError(error);
+  }
+}
+export const deleteAppendixERun = async (locId, testSumId, appECorrTestSumId, id) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
   }
 };
