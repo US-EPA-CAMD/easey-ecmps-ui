@@ -659,15 +659,15 @@ describe('Appendix E Correlation test Summary data', () => {
     {
       "id":"1f734d01-2513-4a91-8763-9a18fc8ffd2d",
       "testSumId":"L3FY866-950F544520244336B5ED7E3824642F9E",
-      "operatingLevelForRun":1,
-      "meanReferenceValue":2,
-      "calculatedMeanReferenceValue":3,
-      "averageHourlyHeatInputRate":4,
+      "operatingLevelForRun":2,
+      "meanReferenceValue":3,
+      "calculatedMeanReferenceValue":4,
+      "averageHourlyHeatInputRate":5,
       "fFactor":9190,
-      "calculatedAverageHourlyHeatInputRate":5,
+      "calculatedAverageHourlyHeatInputRate":6,
       "userId":"string",
-      "addDate":"string",
-      "updateDate":"string",
+      "addDate":"string2",
+      "updateDate":"string2",
     }
   ]
   
