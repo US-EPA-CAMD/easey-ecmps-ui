@@ -15,13 +15,13 @@ const getApiUrl = (path) => {
   }
 
   return `${url}${path}`;
-}
+};
 
 export const getQAEvaluationReportData = async (
   type,
   monPlanId,
   testId,
-  batchId,
+  batchId
 ) => {
   let url = `${config.services.qaCertification.uri}`;
 
@@ -30,9 +30,9 @@ export const getQAEvaluationReportData = async (
     url = `${url}/workspace`;
   }
 
-  type = type.replace('_EVAL', '');
-  const test = testId ? `&testId=${testId}` : '';
-  const batch = batchId ? `&batchId=${batchId}` : '';
+  type = type.replace("_EVAL", "");
+  const test = testId ? `&testId=${testId}` : "";
+  const batch = batchId ? `&batchId=${batchId}` : "";
 
   url = `${url}/evaluations/results?type=${type}&monitorPlanId=${monPlanId}${test}${batch}`;
 
@@ -608,7 +608,14 @@ export const deleteRataRunData = async (
   }
 };
 
-export const getRataTraverseData = async (locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId) => {
+export const getRataTraverseData = async (
+  locId,
+  testSumId,
+  rataId,
+  rataSumId,
+  rataRunId,
+  flowRataRunId
+) => {
   let url = `${config.services.qaCertification.uri}`;
   // *** workspace section url (authenticated)
   if (window.location.href.indexOf("workspace") > -1) {
@@ -617,9 +624,17 @@ export const getRataTraverseData = async (locId, testSumId, rataId, rataSumId, r
   // *** attach the rest of the url
   url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses`;
   return axios.get(url).then(handleResponse).catch(handleError);
-}
+};
 
-export const createRataTraverse = async (locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId, payload) => {
+export const createRataTraverse = async (
+  locId,
+  testSumId,
+  rataId,
+  rataSumId,
+  rataRunId,
+  flowRataRunId,
+  payload
+) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses`;
   try {
     return handleResponse(
@@ -632,7 +647,7 @@ export const createRataTraverse = async (locId, testSumId, rataId, rataSumId, ra
   } catch (error) {
     return handleError(error);
   }
-}
+};
 
 export const updateRataTraverseData = async (
   locId,
@@ -665,7 +680,7 @@ export const deleteRataTraverseData = async (
   rataSumId,
   rataRunId,
   flowRataRunId,
-  id,
+  id
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses/${id}`;
   try {
@@ -738,7 +753,13 @@ export const deleteAirEmissions = async (locId, testSumId, id) => {
   }
 };
 
-export const getFlowRunData = async (locID, testSumId, rataId, rataSumId, rataRunId) => {
+export const getFlowRunData = async (
+  locID,
+  testSumId,
+  rataId,
+  rataSumId,
+  rataRunId
+) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
@@ -752,7 +773,14 @@ export const getFlowRunData = async (locID, testSumId, rataId, rataSumId, rataRu
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const createFlowRunData = async (locId, testSumId, rataId, rataSumId, rataRunId, payload) => {
+export const createFlowRunData = async (
+  locId,
+  testSumId,
+  rataId,
+  rataSumId,
+  rataRunId,
+  payload
+) => {
   let url = `${config.services.qaCertification.uri}/workspace`;
   url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs`;
   try {
@@ -768,7 +796,15 @@ export const createFlowRunData = async (locId, testSumId, rataId, rataSumId, rat
   }
 };
 
-export const updateFlowRunData = async (locId, testSumId, rataId, rataSumId, rataRunId, id, payload) => {
+export const updateFlowRunData = async (
+  locId,
+  testSumId,
+  rataId,
+  rataSumId,
+  rataRunId,
+  id,
+  payload
+) => {
   let url = `${config.services.qaCertification.uri}/workspace`;
   url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${id}`;
   try {
@@ -784,7 +820,14 @@ export const updateFlowRunData = async (locId, testSumId, rataId, rataSumId, rat
   }
 };
 
-export const deleteFlowRunData = async (locId, testSumId, rataId, rataSumId, rataRunId, id) => {
+export const deleteFlowRunData = async (
+  locId,
+  testSumId,
+  rataId,
+  rataSumId,
+  rataRunId,
+  id
+) => {
   let url = `${config.services.qaCertification.uri}/workspace`;
   url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${id}`;
 
@@ -822,7 +865,12 @@ export const createTestQualification = async (locId, testSumId, payload) => {
   }
 };
 
-export const updateTestQualification = async (locId, testSumId, id, payload) => {
+export const updateTestQualification = async (
+  locId,
+  testSumId,
+  id,
+  payload
+) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/test-qualifications/${id}`;
   const url = getApiUrl(path);
   try {
@@ -852,13 +900,20 @@ export const deleteTestQualification = async (locId, testSumId, id) => {
   }
 };
 
-export const getAppendixECorrelationSummaryRecords = async (locId, testSumId) => {
+export const getAppendixECorrelationSummaryRecords = async (
+  locId,
+  testSumId
+) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
   const url = getApiUrl(path);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const createAppendixECorrelationSummaryRecord = async (locId, testSumId, payload) => {
+export const createAppendixECorrelationSummaryRecord = async (
+  locId,
+  testSumId,
+  payload
+) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
   const url = getApiUrl(path);
   try {
@@ -874,7 +929,12 @@ export const createAppendixECorrelationSummaryRecord = async (locId, testSumId, 
   }
 };
 
-export const updateAppendixECorrelationSummaryRecord = async (locId, testSumId, id, payload) => {
+export const updateAppendixECorrelationSummaryRecord = async (
+  locId,
+  testSumId,
+  id,
+  payload
+) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${id}`;
   const url = getApiUrl(path);
   try {
@@ -890,7 +950,11 @@ export const updateAppendixECorrelationSummaryRecord = async (locId, testSumId, 
   }
 };
 
-export const deleteAppendixECorrelationSummaryRecord = async (locId, testSumId, id) => {
+export const deleteAppendixECorrelationSummaryRecord = async (
+  locId,
+  testSumId,
+  id
+) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${id}`;
   const url = getApiUrl(path);
   try {
@@ -956,17 +1020,26 @@ export const updateFuelFlowToLoad = async (locId, testSumId, id, payload) => {
   } catch (error) {
     return handleImportError(error);
   }
-}
+};
 
-export const getAppendixERunData = async (locId, testSumId, appECorrTestSumId) => {
+export const getAppendixERunData = async (
+  locId,
+  testSumId,
+  appECorrTestSumId
+) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs`;
   const url = getApiUrl(path);
-  
-  console.log('this is url for run',url)
+
+  console.log("this is url for run", url);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const createAppendixERun = async (locId, testSumId, appECorrTestSumId, payload) => {
+export const createAppendixERun = async (
+  locId,
+  testSumId,
+  appECorrTestSumId,
+  payload
+) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs`;
   const url = getApiUrl(path);
   try {
@@ -982,17 +1055,34 @@ export const createAppendixERun = async (locId, testSumId, appECorrTestSumId, pa
   }
 };
 
-
-export const getAppendixEHeatInputGasData = async (locId, testSumId, appECorrTestSumId,appECorrTestrunId) => {
+export const getAppendixEHeatInputGasData = async (
+  locId,
+  testSumId,
+  appECorrTestSumId,
+  appECorrTestrunId
+) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-gases`;
   const url = getApiUrl(path);
-  console.log('this is url for heat',url)
+  console.log("this is url for heat", url);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const createAppendixEHeatInputGas = async (locId, testSumId, appECorrTestSumId,appECorrTestrunId, payload) => {
+export const createAppendixEHeatInputGas = async (
+  locId,
+  testSumId,
+  appECorrTestSumId,
+  appECorrTestrunId,
+  payload
+) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs${appECorrTestrunId}/appendix-e-heat-input-from-gases`;
-export const updateAppendixERun = async (locId, testSumId, appECorrTestSumId, id, payload) => {
+};
+export const updateAppendixERun = async (
+  locId,
+  testSumId,
+  appECorrTestSumId,
+  id,
+  payload
+) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${id}`;
   const url = getApiUrl(path);
   try {
@@ -1006,8 +1096,13 @@ export const updateAppendixERun = async (locId, testSumId, appECorrTestSumId, id
   } catch (error) {
     return handleError(error);
   }
-}
-export const deleteAppendixERun = async (locId, testSumId, appECorrTestSumId, id) => {
+};
+export const deleteAppendixERun = async (
+  locId,
+  testSumId,
+  appECorrTestSumId,
+  id
+) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${id}`;
   const url = getApiUrl(path);
   try {
