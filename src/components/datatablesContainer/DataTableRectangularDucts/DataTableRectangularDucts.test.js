@@ -1,12 +1,13 @@
 import React from "react";
 import { render, waitForElement, fireEvent } from "@testing-library/react";
-import { DataTableRectangularDucts } from "./DataTableRectangularDucts";
+import { DataTableRectangularDucts,mapStateToProps, } from "./DataTableRectangularDucts";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 // import { handleResponse, handleError } from "../../../utils/api/apiUtils";
 // import { secureAxios } from "../../../utils/api/easeyAuthApi";
 import * as axios from "axios";
 jest.mock("axios");
+
 
 const selectedDucts = [{}];
 const returnedDucts = {};
@@ -53,6 +54,9 @@ const componentRenderer = (
     settingInactiveCheckBox: jest.fn(),
     revertedState: false,
     setRevertedState: jest.fn(),
+
+    currentTabIndex:0,
+    tabs:[]
   };
   return render(<DataTableRectangularDucts {...props} />);
 };
@@ -79,3 +83,10 @@ test("test create/save Ducts functions", async () => {
   // fireEvent.click(container.querySelector("#testingBtn2"));
   // fireEvent.click(container.querySelector("#testingBtn3"));
 });
+test("mapStateToProps calls the appropriate state", async () => {
+  // mock the 'dispatch' object
+  const dispatch = jest.fn();
+  const state = { monitoringPlan: [1] };
+  const stateProps = mapStateToProps(state, true);
+});
+
