@@ -444,13 +444,8 @@ const QAExpandableRowsRender = ({
             options.unshift({ code: "", name: "-- Select a value --" });
           }
           setMdmData(dropdowns);
-<<<<<<< HEAD
-        });
-        break;
-=======
         }).catch((error => console.log(error)))
         break
->>>>>>> 2bbea5579d1576b8e1e33f7073142ce445a81a82
       default:
         mdmProps.forEach((prop) => {
           allPromises.push(dmApi.getMdmDataByCodeTable(prop["codeTable"]));
