@@ -676,6 +676,11 @@ export const HeaderInfo = ({
     }
   };
 
+  const handleExport = ()=>{
+    if( workspaceSection === EMISSIONS_STORE_NAME )
+      handleEmissionsExport()
+  }
+
   return (
     <div className="header">
       <div
@@ -722,27 +727,27 @@ export const HeaderInfo = ({
               </h3>
               <p className="text-bold font-body-xl">{facilityAdditionalName}</p>
             </div>
-            {user && checkedOutByUser && (
               <div>
                 <Button
                   type="button"
                   className="margin-right-2 float-left margin-bottom-2"
                   outline={true}
-                  onClick={handleEmissionsExport}
-                >
+                  onClick={handleExport}
+                  >
                   Export Data
                 </Button>
-                <Button
-                  type="button"
-                  className="margin-right-2 float-right"
-                  outline={false}
-                  onClick={() => openImportModal()}
-                  id="importMonitoringPlanBtn"
-                >
-                  Import Data
-                </Button>
+                {user && checkedOutByUser &&(
+                  <Button
+                    type="button"
+                    className="margin-right-2 float-right"
+                    outline={false}
+                    onClick={() => openImportModal()}
+                    id="importMonitoringPlanBtn"
+                  >
+                    Import Data
+                  </Button>
+                )}
               </div>
-            )}
           </div>
 
           {dataLoaded && (
