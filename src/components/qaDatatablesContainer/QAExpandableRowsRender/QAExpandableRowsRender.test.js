@@ -191,8 +191,6 @@ describe('RATA Summary data', () => {
     expect(mock.history.get.length).not.toBe(0)
     expect(rows).not.toHaveLength(0)
 
-    console.log('rows length', rows.length);
-
     // add row
     const addBtn = screen.getByRole('button', { name: /Add/i })
     userEvent.click(addBtn)
@@ -494,8 +492,8 @@ describe('RATA Traverse data', () => {
 
   const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses`;
   const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/flow-rata-runs/${flowRataRunId}/rata-traverses`;
-  const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses${idRegex}`)
-  const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses${idRegex}`)
+  const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses/${idRegex}`)
+  const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses/${idRegex}`)
 
   mock.onGet(getUrl).reply(200, rataTraverseData)
   mock.onPost(postUrl).reply(200, 'created')
