@@ -641,7 +641,7 @@ describe('Fuel Flow to Load data', () => {
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
   })
 })
-
+/*
 describe('Appendix E Correlation test Summary data', () => {
   const appendixECorrTestSumData = [
     {
@@ -733,5 +733,5 @@ describe('Appendix E Correlation test Summary data', () => {
     const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
     userEvent.click(confirmBtns[1])
   })
-})
+})*/
 
