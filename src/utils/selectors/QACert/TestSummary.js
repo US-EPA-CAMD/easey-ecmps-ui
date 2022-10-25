@@ -1,5 +1,4 @@
 export const getTestSummary = (data, colTitles) => {
-  console.log("ine getTestSummary,", data, colTitles);
   const records = [];
   if (!colTitles) {
     data.forEach((el) => {
@@ -103,7 +102,6 @@ const mapTestSummaryColTitleToDTOKey = (columnTitle) => {
 };
 
 export const getLinearitySummaryRecords = (data) => {
-  console.log("line sum", data);
   const records = [];
   data.forEach((el) => {
     records.push({
@@ -116,23 +114,18 @@ export const getLinearitySummaryRecords = (data) => {
       col5: el.apsIndicator === 1 ? "Yes" : "No",
     });
   });
-  console.log("records", records);
   return records;
 };
 
 export const getEmptyRows = (columns) => {
-  console.log("columns empty", columns);
   let obj = {};
   columns.forEach((c, i) => {
     obj[`col${i + 1}`] = "";
   });
-
-  console.log("obj", [obj]);
   return [obj];
 };
 
 export const getProtocolGasRecords = (data) => {
-  console.log("columns getProtocolGasRecords", data);
   const records = [];
   data.forEach((el) => {
     records.push({
@@ -145,13 +138,11 @@ export const getProtocolGasRecords = (data) => {
       col5: el.expirationDate ? formatStringToDate(el.expirationDate) : "",
     });
   });
-  console.log("records", records);
   return records;
 };
 
 //2nd level
 export const getRataDataRecords = (data) => {
-  console.log("columns getRataDataRecords", data);
   const records = [];
   data.forEach((el) => {
     records.push({
@@ -163,13 +154,11 @@ export const getRataDataRecords = (data) => {
       col4: el.overallBiasAdjustmentFactor,
     });
   });
-  console.log("records", records);
   return records;
 };
 // 3rd level
 export const mapRataSummaryToRows = (data) => {
   const records = [];
-  console.log("columns mapRataSummaryToRows", data);
   for (const el of data) {
     const row = {
       id: el.id,
@@ -184,7 +173,6 @@ export const mapRataSummaryToRows = (data) => {
     records.push(row);
   }
 
-  console.log("records", records);
   return records;
 };
 //4th level
