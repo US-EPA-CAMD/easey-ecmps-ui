@@ -17,6 +17,7 @@ import {
   qaRataRunDataProps,
   qaRataSummaryProps,
   qaRataTraverseProps,
+  qaAppendixECorrelationSummaryTestProps,
 } from "../../../additional-functions/qa-dataTable-props";
 
 const mock = new MockAdapter(axios);
@@ -28,6 +29,7 @@ const rataId = 'rataId'
 const rataSumId = 'rataSumId'
 const rataRunId = 'rataRunId'
 const flowRataRunId = 'flowRataRunId'
+const appECorrTestSumId = 'appECorrTestSumId'
 const id = 'id'
 
 const idRegex = '[\\w\\-]+'
@@ -640,87 +642,96 @@ describe('Fuel Flow to Load data', () => {
   })
 })
 
-// describe('Appendix E Correlation test run data', () => {
-//   const appECorrTestSumId = "appECorrTestSumId";
-//   const id ="appECorrTestRunId"
-//   const appendixECorrTestData = [
-//     {
-//       "id":"c921213c-072a-4dbc-9688-ffc3cb7d982f",
-//       "appECorrTestSumId":"4e75ad50-cd1e-4d7e-9f08-960f4026d3c3",
-//       "runNumber":10,
-//       "referenceValue":12,
-//       "hourlyHeatInputRate":12,
-//       "calculatedHourlyHeatInputRate":null,
-//       "totalHeatInput":12,
-//       "calculatedTotalHeatInput":null,
-//       "responseTime":12,
-//       "beginDate":"2022-10-04",
-//       "beginHour":3,
-//       "beginMinute":4,
-//       "endDate":"2022-10-05",
-//       "endHour":2,
-//       "endMinute":1,
-//     },{"id":"ff65cf9d-8487-4a61-a87d-8dcaec8a07b6","appECorrTestSumId":"4e75ad50-cd1e-4d7e-9f08-960f4026d3c3","runNumber":11,"referenceValue":11,"hourlyHeatInputRate":11,"calculatedHourlyHeatInputRate":null,"totalHeatInput":11,"calculatedTotalHeatInput":null,"responseTime":11,"beginDate":"2022-10-01","beginHour":1,"beginMinute":1,"endDate":"2022-10-02","endHour":3,"endMinute":3,}]
+describe('Appendix E Correlation test Summary data', () => {
+  const appendixECorrTestSumData = [
+    {
+      "id": "id1",
+      "testSumId": "stri g",
+      "userId": "string",
+      "addDate": "string",
+      "updateDate": "string",
+      "Operating Level For Run": 1,
+      "Mean Reference Value": 2,
+      "Average Hourly Heat Input Rate": 3,
+      "F-Factor": 4,
+      "calculatedMeanReferenceValue": 5,
+      "calculatedAverageHourlyHeatInputRate": 6,
+    },
+    {
+      "id": "id2",
+      "testSumId": "string",
+      "userId": "string",
+      "addDate": "string",
+      "updateDate": "string",
+      "Operating Level For Run": 2,
+      "Mean Reference Value": 3,
+      "Average Hourly Heat Input Rate": 4,
+      "F-Factor": 5,
+      "calculatedMeanReferenceValue": 6,
+      "calculatedAverageHourlyHeatInputRate": 7,
+    }
+  ]
+  
+  const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
+  const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
+  const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${idRegex}`);
+  const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${idRegex}`);
 
-//   const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs`;
-//   const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs`;
-//   const putUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${id}`;
-//   const deleteUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${id}`;
+  mock.onGet(getUrl).reply(200, appendixECorrTestSumData)
+  mock.onPost(postUrl).reply(200, 'created')
+  mock.onPut(putUrl).reply(200, 'updated')
+  mock.onPut(deleteUrl).reply(200, 'deleted')
+  test('renders Appendix E Correlation test summary rows and create/save/delete', async () => {
+    const props = qaAppendixECorrelationSummaryTestProps()
+    const idArray = [locId, testSumId, id]
+    const data = { locationId: locId, id: testSumId }
+    render(
+      <QAExpandableRowsRender
+        payload={props["payload"]}
+        dropdownArray={props["dropdownArray"]}
+        mdmProps={props["mdmProps"]}
+        columns={props["columnNames"]}
+        controlInputs={props["controlInputs"]}
+        controlDatePickerInputs={props["controlDatePickerInputs"]}
+        dataTableName={props["dataTableName"]}
+        extraControls={props["extraControls"]}
+        radioBtnPayload={props["radioBtnPayload"]}
+        expandable
+        extraIDs={idArray}
+        data={data}
+        user={'user'}
+        isCheckedOut={true}
+        locId={locId}
+      />
+    )
 
-//   mock.onGet(getUrl).reply(200, appendixECorrTestData)
-//   mock.onPost(postUrl).reply(200, 'created')
-//   mock.onPut(putUrl).reply(200, 'updated')
-//   mock.onPut(deleteUrl).reply(200, 'deleted')
+    // renders rows
+    const rows = await screen.findAllByRole('row')
+    expect(mock.history.get.length).not.toBe(0)
+    expect(rows).not.toHaveLength(0)
 
-//   test('renders Appendix E Correlation test run rows and create/save/delete', async () => {
-//     const props = qaAppendixECorrTestRunProps()
-//     const idArray = [locId, testSumId]
-//     const data = { id: appECorrTestSumId }
-//     render(
-//       <QAExpandableRowsRender
-//         payload={props["payload"]}
-//         dropdownArray={props["dropdownArray"]}
-//         mdmProps={props["mdmProps"]}
-//         columns={props["columnNames"]}
-//         controlInputs={props["controlInputs"]}
-//         controlDatePickerInputs={props["controlDatePickerInputs"]}
-//         dataTableName={props["dataTableName"]}
-//         extraControls={props["extraControls"]}
-//         radioBtnPayload={props["radioBtnPayload"]}
-//         expandable
-//         extraIDs={idArray}
-//         data={data}
-//         user={'user'}
-//         isCheckedOut={true}
-//       />
-//     )
+    // add row
+    const addBtn = screen.getByRole('button', { name: /Add/i })
+    userEvent.click(addBtn)
+    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
-//     // renders rows
-//     const rows = await screen.findAllByRole('row')
-//     expect(mock.history.get.length).not.toBe(0)
-//     expect(rows).not.toHaveLength(0)
+    // edit row
+    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    expect(editBtns).toHaveLength(appendixECorrTestSumData.length)
+    userEvent.click(editBtns[0])
+    saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
-//     // add row
-//     const addBtn = screen.getByRole('button', { name: /Add/i })
-//     userEvent.click(addBtn)
-//     let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-//     userEvent.click(saveAndCloseBtn)
-//     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+    // remove row
+    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    expect(deleteBtns).toHaveLength(appendixECorrTestSumData.length)
+    const secondDeleteBtn = deleteBtns[1]
+    userEvent.click(secondDeleteBtn)
+    const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    userEvent.click(confirmBtns[1])
+  })
+})
 
-//     // edit row
-//     const editBtns = screen.getAllByRole('button', { name: /Edit/i })
-//     expect(editBtns).toHaveLength(appendixECorrTestData.length)
-//     userEvent.click(editBtns[0])
-//     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-//     userEvent.click(saveAndCloseBtn)
-//     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
-
-//         // remove row
-//     const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
-//     expect(deleteBtns).toHaveLength(appendixECorrTestData.length)
-//     const secondDeleteBtn = deleteBtns[1]
-//     userEvent.click(secondDeleteBtn)
-//     const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
-//     userEvent.click(confirmBtns[1])
-//   })
-// })
