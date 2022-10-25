@@ -1,4 +1,5 @@
 export const getTestSummary = (data, colTitles) => {
+  console.log("ine getTestSummary,", data, colTitles);
   const records = [];
   if (!colTitles) {
     data.forEach((el) => {
@@ -16,8 +17,8 @@ export const getTestSummary = (data, colTitles) => {
           el.stackPipeId !== null
             ? el.stackPipeId
             : el.unitId !== null
-              ? el.unitId
-              : "",
+            ? el.unitId
+            : "",
         col3: el.componentId,
         col4: el.testNumber,
         col5: el.testReasonCode,
@@ -102,6 +103,7 @@ const mapTestSummaryColTitleToDTOKey = (columnTitle) => {
 };
 
 export const getLinearitySummaryRecords = (data) => {
+  console.log("line sum", data);
   const records = [];
   data.forEach((el) => {
     records.push({
@@ -114,18 +116,23 @@ export const getLinearitySummaryRecords = (data) => {
       col5: el.apsIndicator === 1 ? "Yes" : "No",
     });
   });
+  console.log("records", records);
   return records;
 };
 
 export const getEmptyRows = (columns) => {
+  console.log("columns empty", columns);
   let obj = {};
   columns.forEach((c, i) => {
     obj[`col${i + 1}`] = "";
   });
+
+  console.log("obj", [obj]);
   return [obj];
 };
 
 export const getProtocolGasRecords = (data) => {
+  console.log("columns getProtocolGasRecords", data);
   const records = [];
   data.forEach((el) => {
     records.push({
@@ -138,11 +145,13 @@ export const getProtocolGasRecords = (data) => {
       col5: el.expirationDate ? formatStringToDate(el.expirationDate) : "",
     });
   });
+  console.log("records", records);
   return records;
 };
 
 //2nd level
 export const getRataDataRecords = (data) => {
+  console.log("columns getRataDataRecords", data);
   const records = [];
   data.forEach((el) => {
     records.push({
@@ -154,11 +163,13 @@ export const getRataDataRecords = (data) => {
       col4: el.overallBiasAdjustmentFactor,
     });
   });
+  console.log("records", records);
   return records;
 };
 // 3rd level
 export const mapRataSummaryToRows = (data) => {
   const records = [];
+  console.log("columns mapRataSummaryToRows", data);
   for (const el of data) {
     const row = {
       id: el.id,
@@ -172,10 +183,13 @@ export const mapRataSummaryToRows = (data) => {
     };
     records.push(row);
   }
+
+  console.log("records", records);
   return records;
 };
 //4th level
 export const getRataRunDataRecords = (data) => {
+  console.log("getRataRunDataRecords", data);
   const records = [];
   data.forEach((el) => {
     const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
@@ -205,11 +219,14 @@ export const getRataRunDataRecords = (data) => {
       col11: el.runStatusCode,
     });
   });
+
+  console.log("records", records);
   return records;
 };
 
 export const getAirEmissionsRecords = (data) => {
   const records = [];
+  console.log("getAirEmissionsRecords", data);
   data.forEach((el) => {
     records.push({
       id: el.id,
@@ -225,11 +242,14 @@ export const getAirEmissionsRecords = (data) => {
       col9: el.providerEmail,
     });
   });
+  console.log("records", records);
   return records;
 };
 
 export const getFlowRunRecords = (data) => {
   const records = [];
+
+  console.log("getFlowRunRecords", data);
   data.forEach((el) => {
     records.push({
       id: el.id,
@@ -245,13 +265,16 @@ export const getFlowRunRecords = (data) => {
       col9: el.averageVelocityWithoutWallEffects,
       col10: el.averageVelocityWithWallEffects,
       col11: el.calculatedWAF,
-      col12: el.averageStackFlowRate
+      col12: el.averageStackFlowRate,
     });
   });
+
+  console.log("records", records);
   return records;
 };
 
 export const mapRataTraverseToRows = (data) => {
+  console.log("mapRataTraverseToRows", data);
   const records = [];
   for (const el of data) {
     const row = {
@@ -274,10 +297,13 @@ export const mapRataTraverseToRows = (data) => {
     };
     records.push(row);
   }
+  console.log("mapRataTraverseToRows", records);
+
   return records;
-}
+};
 
 export const mapTestQualificationToRows = (data) => {
+  console.log("mapTestQualificationToRows", data);
   const records = [];
   data.forEach((el) => {
     records.push({
@@ -291,10 +317,12 @@ export const mapTestQualificationToRows = (data) => {
       col6: el.lowLoadPercentage,
     });
   });
+  console.log("mapTestQualificationToRows", records);
   return records;
 };
 
 export const getAppendixECorrelationSummaryRecords = (data) => {
+  console.log("getAppendixECorrelationSummaryRecords", data);
   const records = [];
   data.forEach((el) => {
     records.push({
@@ -306,11 +334,13 @@ export const getAppendixECorrelationSummaryRecords = (data) => {
       col4: el.fFactor,
     });
   });
+  console.log("getAppendixECorrelationSummaryRecords", records);
   return records;
 };
 
 export const mapFuelFlowToLoadToRows = (data) => {
-  const records = []
+  console.log("mapFuelFlowToLoadToRows", data);
+  const records = [];
   for (const el of data) {
     const row = {
       id: el.id,
@@ -320,15 +350,16 @@ export const mapFuelFlowToLoadToRows = (data) => {
       col4: el.numberOfHoursExcludedCofiring,
       col5: el.numberOfHoursExcludedRamping,
       col6: el.numberOfHoursExcludedLowRange,
-
-    }
-    records.push(row)
+    };
+    records.push(row);
   }
-  return records
+  console.log("mapFuelFlowToLoadToRows", records);
+  return records;
 };
 
 export const mapAppendixECorrTestRunsToRows = (data) => {
-  const records = []
+  console.log("mapAppendixECorrTestRunsToRows", data);
+  const records = [];
   for (const el of data) {
     const row = {
       id: el.id,
@@ -343,22 +374,25 @@ export const mapAppendixECorrTestRunsToRows = (data) => {
       col9: el.endDate ? formatStringToDate(el.endDate) : "",
       col10: el.endHour,
       col11: el.endMinute,
-    }
-    records.push(row)
+    };
+    records.push(row);
   }
-  return records
-}
+  console.log("mapAppendixECorrTestRunsToRows", records);
+  return records;
+};
 
 export const mapAppendixECorrHeatInputGasToRows = (data) => {
-  const records = []
+  const records = [];
+  console.log("mapAppendixECorrHeatInputGasToRows", data);
   for (const el of data) {
     const row = {
       id: el.id,
       col1: el.gasGCV === 0 ? "0" : el.gasGCV,
       col2: el.gasVolume === 0 ? "0" : el.gasVolume,
-      col3: el.gasHeatInput=== 0 ? "0" : el.gasHeatInput ,
-    }
-    records.push(row)
+      col3: el.gasHeatInput === 0 ? "0" : el.gasHeatInput,
+    };
+    records.push(row);
   }
-  return records
-}
+  console.log("mapAppendixECorrHeatInputGasToRows", records);
+  return records;
+};

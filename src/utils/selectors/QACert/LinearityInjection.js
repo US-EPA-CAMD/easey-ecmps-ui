@@ -1,4 +1,5 @@
 export const getLinearityInjection = (totalData) => {
+  console.log('ine injection,', totalData)
   const records = [];
   totalData.forEach((el) => {
     records.push({
@@ -10,6 +11,7 @@ export const getLinearityInjection = (totalData) => {
       id:el.id,
     });
   });
+  console.log('records',records)
   return records;
 };
 
