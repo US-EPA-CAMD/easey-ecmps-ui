@@ -58,7 +58,7 @@ export const SummaryReport = ({
             group.items.push({ code: columnValue, description: codeDescription })
           }
         }
-        return `"col${index+1}": "${columnValue ?? ''}"`
+        return `"col${index + 1}": "${columnValue ?? ''}"`
       })
       return JSON.parse(`{${columnData.join(',')}}`)
     }));
@@ -66,121 +66,121 @@ export const SummaryReport = ({
 
   return (
     <>
-        <div>
-          <GovBanner className="padding-y-2px bg-base-lighter do-not-print" />
+      <div>
+        <GovBanner className="padding-y-2px bg-base-lighter do-not-print" />
 
-          <div className="">
-            <div className="padding-x-5 padding-y-3 border-bottom-1px border-base-light">
-              <img
-                alt="EPA Logo"
-                title="EPA Logo"
-                src={`${process.env.PUBLIC_URL}/images/epa-logo-blue.svg`}
-              />
-              { displayCloseButton ? (
-                  <Button
-                    type="button"
-                    outline={true}
-                    aria-label={`Close ${reportData.title}`}
-                    className="float-right clearfix do-not-print"
-                    onClick={() => closeReport()}
-                    id="closeBTN"
-                    epa-testid="closeBTN"
-                  >
-                    Close Report
-                  </Button>
-                ) : null
-              }
+        <div className="">
+          <div className="padding-x-5 padding-y-3 border-bottom-1px border-base-light">
+            <img
+              alt="EPA Logo"
+              title="EPA Logo"
+              src={`${process.env.PUBLIC_URL}/images/epa-logo-blue.svg`}
+            />
+            {displayCloseButton ? (
+              <Button
+                type="button"
+                outline={true}
+                aria-label={`Close ${reportData.title}`}
+                className="float-right clearfix do-not-print"
+                onClick={() => closeReport()}
+                id="closeBTN"
+                epa-testid="closeBTN"
+              >
+                Close Report
+              </Button>
+            ) : null
+            }
+          </div>
+
+          <div className="padding-x-5">
+            <h1 className="text-bold">
+              {reportData.title}
+              <Button
+                type="button"
+                outline={false}
+                aria-label={`Print ${reportData.title}`}
+                className="float-right clearfix do-not-print"
+                onClick={() => print()}
+                id="printBTN"
+                epa-testid="printBTN"
+              >
+                Print PDF
+              </Button>
+            </h1>
+
+            <div className="text-bold padding-bottom-2 border-bottom-1px border-base-light">
+              {displayCurrentDate()}
             </div>
 
-            <div className="padding-x-5">
-              <h1 className="text-bold">
-                {reportData.title}
-                <Button
-                  type="button"
-                  outline={false}
-                  aria-label={`Print ${reportData.title}`}
-                  className="float-right clearfix do-not-print"
-                  onClick={() => print()}
-                  id="printBTN"
-                  epa-testid="printBTN"
-                >
-                  Print PDF
-                </Button>
-              </h1>
+            <div className="subheader-wrapper bg-epa-blue-base text-white text-normal padding-left-1">
+              Facility Details
+            </div>
 
-              <div className="text-bold padding-bottom-2 border-bottom-1px border-base-light">
-                {displayCurrentDate()}
-              </div>
+            <table role="presentation" className="width-auto">
+              <tr>
+                <td className="text-right width-auto padding-top-2 text-normal">
+                  Facility Name:
+                </td>
+                <td className="width-auto padding-left-1 padding-top-2 text-bold">
+                  {reportData.facilityName}
+                </td>
+              </tr>
+              <tr>
+                <td className="text-right width-auto text-normal">
+                  Facility ID (ORISPL):
+                </td>
+                <td className="width-auto padding-left-1 text-bold">
+                  {reportData.orisCode}
+                </td>
+              </tr>
+              <tr>
+                <td className="text-right width-auto text-normal">
+                  Unit/Stack Configuration:
+                </td>
+                <td className="width-auto padding-left-1 text-bold">
+                  {reportData.unitStackInfo}
+                </td>
+              </tr>
+              <tr>
+                <td className="text-right width-auto text-normal">State:</td>
+                <td className="width-auto padding-left-1 text-bold">
+                  {reportData.stateCode}
+                </td>
+              </tr>
+              <tr>
+                <td className="text-right width-auto padding-bottom-2 text-normal">County:</td>
+                <td className="width-auto padding-left-1 padding-bottom-2 text-bold">
+                  {reportData.countyName}
+                </td>
+              </tr>
+            </table>
 
-              <div className="subheader-wrapper bg-epa-blue-base text-white text-normal padding-left-1">
-                Facility Details
-              </div>
+            {
+              reportData.details.map((detail, index) => {
+                return (
+                  <div className="margin-top-5">
+                    <div className="subheader-wrapper bg-epa-blue-base text-white text-normal padding-left-1">
+                      {detail.title}
+                    </div>
 
-              <table role="presentation" className="width-auto">
-                <tr>
-                  <td className="text-right width-auto padding-top-2 text-normal">
-                    Facility Name:
-                  </td>
-                  <td className="width-auto padding-left-1 padding-top-2 text-bold">
-                    {reportData.facilityName}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-right width-auto text-normal">
-                    Facility ID (ORISPL):
-                  </td>
-                  <td className="width-auto padding-left-1 text-bold">
-                    {reportData.orisCode}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-right width-auto text-normal">
-                    Unit/Stack Configuration:
-                  </td>
-                  <td className="width-auto padding-left-1 text-bold">
-                    {reportData.unitStackInfo}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-right width-auto text-normal">State:</td>
-                  <td className="width-auto padding-left-1 text-bold">
-                    {reportData.stateCode}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-right width-auto padding-bottom-2 text-normal">County:</td>
-                  <td className="width-auto padding-left-1 padding-bottom-2 text-bold">
-                    {reportData.countyName}
-                  </td>
-                </tr>
-              </table>
+                    <div className="width-auto border-top-1px border-base-light margin-top-3">
+                      <DataTableRender
+                        columnNames={columnNames[index]}
+                        data={results[index]}
+                        dataLoaded={dataLoaded}
+                        pagination={false}
+                        filter={false}
+                        noDataString={detail.noResultsMessage ?? reportData.noResultsMessage}
+                      />
+                    </div>
 
-              {
-                reportData.details.map((detail, index) => {
-                  return (
-                    <div className="margin-top-5">
-                      <div className="subheader-wrapper bg-epa-blue-base text-white text-normal padding-left-1">
-                        {detail.title}
-                      </div>
-
-                      <div className="width-auto border-top-1px border-base-light margin-top-3">
-                        <DataTableRender
-                          columnNames={columnNames[index]}
-                          data={results[index]}
-                          dataLoaded={dataLoaded}
-                          pagination={false}
-                          filter={false}
-                          noDataString={detail.noResultsMessage ?? reportData.noResultsMessage}
-                        />
-                      </div>
-
-                      <div>
-                        {
-                          codeGroups[index].map(group => {
-                            return (
-                              <div className="display-flex grid-col-12">
-                                <div className="grid-col-1 text-bold text-no-wrap padding-right-1">{`${group.name}s:`}</div>
-                                <div className="grid-col-11">
+                    <div>
+                      {
+                        codeGroups[index].map(group => {
+                          return (
+                            <div className="display-flex grid-col-12">
+                              <div className="grid-col-1 text-bold text-no-wrap padding-right-1">{`${group.name}s:`}</div>
+                              <div className="grid-col-11">
                                 {
                                   group.items.map(i => {
                                     return (
@@ -188,26 +188,26 @@ export const SummaryReport = ({
                                     )
                                   })
                                 }
-                                </div>
                               </div>
-                            )
-                          })
-                        }
-                      </div>
+                            </div>
+                          )
+                        })
+                      }
                     </div>
-                  )
-                })
-              }
+                  </div>
+                )
+              })
+            }
 
-              <div className="position-fixed bottom-0 right-0 width-full do-not-print">
-                <AppVersion
-                  version={config.app.version}
-                  publishDate={config.app.published}
-                />
-              </div>
+            <div className="position-fixed bottom-0 right-0 width-full do-not-print">
+              <AppVersion
+                version={config.app.version}
+                publishDate={config.app.published}
+              />
             </div>
           </div>
         </div>
+      </div>
     </>
   );
 };
