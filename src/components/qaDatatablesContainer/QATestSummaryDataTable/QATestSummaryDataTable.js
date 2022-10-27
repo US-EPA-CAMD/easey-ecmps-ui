@@ -16,7 +16,8 @@ import {
   qaLinearitySummaryProps,
   qaRataDataProps,
   qaAppendixECorrelationSummaryTestProps,
-  qaFuelFlowToLoadProps
+  qaFuelFlowToLoadProps,
+  qaFuelFlowToLoadBaselineProps
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
@@ -570,10 +571,27 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
-      // return (
-      //    <QARataDataExpandableRows {...props} />
-      // );
+      case "FFLB":
+        const fflbProps = qaFuelFlowToLoadBaselineProps();
+        return (
+          <QAExpandableRowsRender
+            payload={fflbProps["payload"]}
+            dropdownArray={fflbProps["dropdownArray"]}
+            mdmProps={fflbProps["mdmProps"]}
+            columns={fflbProps["columnNames"]}
+            controlInputs={fflbProps["controlInputs"]}
+            controlDatePickerInputs={fflbProps["controlDatePickerInputs"]}
+            dataTableName={fflbProps["dataTableName"]}
+            extraControls={fflbProps["extraControls"]}
+            radioBtnPayload={fflbProps["radioBtnPayload"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            isCheckedOut={isCheckedOut}
+          />
+        );
       default:
+        console.log(`case testTypeGroupCode of ${testTypeGroupCode} not implemented`)
         return null;
     }
   };
