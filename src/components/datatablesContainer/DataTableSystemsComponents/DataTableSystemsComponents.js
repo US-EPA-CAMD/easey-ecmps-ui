@@ -321,7 +321,17 @@ export const DataTableSystemsComponents = ({
           manufacturer: ["Manufacturer", "input", "", ""],
           modelVersion: ["Model or Version", "input", "", ""],
           serialNumber: ["Serial Number", "input", "", ""],
-          hgConverterIndicator: ["Hg Converter Indicator", "radio", "", ""],
+          hgConverterIndicator: [
+            "Hg Converter Indicator",
+            "customDropdown",
+            "",
+            "",
+            [
+              { code: null, name: "--- Select a Value ---" },
+              { code: 1, name: "Yes" },
+              { code: 0, name: "No" },
+            ],
+          ],
         },
         {
           beginDate: ["Start Date", "date", "", ""],
@@ -389,7 +399,17 @@ export const DataTableSystemsComponents = ({
           manufacturer: ["Manufacturer", "input", "", ""],
           modelVersion: ["Model or Version", "input", "", ""],
           serialNumber: ["Serial Number", "input", "", ""],
-          hgConverterIndicator: ["Hg Converter Indicator", "radio", "", ""],
+          hgConverterIndicator: [
+            "Hg Converter Indicator",
+            "customDropdown",
+            "",
+            "",
+            [
+              { code: null, name: "--- Select a Value ---" },
+              { code: 1, name: "Yes" },
+              { code: 0, name: "No" },
+            ],
+          ],
         },
         {
           beginDate: ["Start Date", "date", "", ""],
