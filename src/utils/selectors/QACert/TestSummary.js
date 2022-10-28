@@ -177,7 +177,6 @@ export const mapRataSummaryToRows = (data) => {
 };
 //4th level
 export const getRataRunDataRecords = (data) => {
-  console.log("getRataRunDataRecords", data);
   const records = [];
   data.forEach((el) => {
     const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
@@ -208,13 +207,11 @@ export const getRataRunDataRecords = (data) => {
     });
   });
 
-  console.log("records", records);
   return records;
 };
 
 export const getAirEmissionsRecords = (data) => {
   const records = [];
-  console.log("getAirEmissionsRecords", data);
   data.forEach((el) => {
     records.push({
       id: el.id,
@@ -230,14 +227,11 @@ export const getAirEmissionsRecords = (data) => {
       col9: el.providerEmail,
     });
   });
-  console.log("records", records);
   return records;
 };
 
 export const getFlowRunRecords = (data) => {
   const records = [];
-
-  console.log("getFlowRunRecords", data);
   data.forEach((el) => {
     records.push({
       id: el.id,
@@ -256,13 +250,10 @@ export const getFlowRunRecords = (data) => {
       col12: el.averageStackFlowRate,
     });
   });
-
-  console.log("records", records);
   return records;
 };
 
 export const mapRataTraverseToRows = (data) => {
-  console.log("mapRataTraverseToRows", data);
   const records = [];
   for (const el of data) {
     const row = {
@@ -285,13 +276,10 @@ export const mapRataTraverseToRows = (data) => {
     };
     records.push(row);
   }
-  console.log("mapRataTraverseToRows", records);
-
   return records;
 };
 
 export const mapTestQualificationToRows = (data) => {
-  console.log("mapTestQualificationToRows", data);
   const records = [];
   data.forEach((el) => {
     records.push({
@@ -305,12 +293,10 @@ export const mapTestQualificationToRows = (data) => {
       col6: el.lowLoadPercentage,
     });
   });
-  console.log("mapTestQualificationToRows", records);
   return records;
 };
 
 export const getAppendixECorrelationSummaryRecords = (data) => {
-  console.log("getAppendixECorrelationSummaryRecords", data);
   const records = [];
   data.forEach((el) => {
     records.push({
@@ -322,12 +308,10 @@ export const getAppendixECorrelationSummaryRecords = (data) => {
       col4: el.fFactor,
     });
   });
-  console.log("getAppendixECorrelationSummaryRecords", records);
   return records;
 };
 
 export const mapFuelFlowToLoadToRows = (data) => {
-  console.log("mapFuelFlowToLoadToRows", data);
   const records = [];
   for (const el of data) {
     const row = {
@@ -341,12 +325,10 @@ export const mapFuelFlowToLoadToRows = (data) => {
     };
     records.push(row);
   }
-  console.log("mapFuelFlowToLoadToRows", records);
   return records;
 };
 
 export const mapAppendixECorrTestRunsToRows = (data) => {
-  console.log("mapAppendixECorrTestRunsToRows", data);
   const records = [];
   for (const el of data) {
     const row = {
@@ -365,13 +347,11 @@ export const mapAppendixECorrTestRunsToRows = (data) => {
     };
     records.push(row);
   }
-  console.log("mapAppendixECorrTestRunsToRows", records);
   return records;
 };
 
 export const mapAppendixECorrHeatInputGasToRows = (data) => {
   const records = [];
-  console.log("mapAppendixECorrHeatInputGasToRows", data);
   for (const el of data) {
     const row = {
       id: el.id,
@@ -381,6 +361,27 @@ export const mapAppendixECorrHeatInputGasToRows = (data) => {
     };
     records.push(row);
   }
-  console.log("mapAppendixECorrHeatInputGasToRows", records);
+  return records;
+};
+
+export const mapFlowToLoadCheckToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.testBasisCode,
+      col2: el.biasAdjustedIndicator,
+      col3: el.averageAbsolutePercentDifference,
+      col4: el.numberOfHours,
+      col5: el.numberOfHoursExcludedForFuel,
+      col6: el.numberOfHoursExcludedForRamping,
+      col7: el.numberOfHoursExcludedForBypass,
+      col8: el.numberOfHoursExcludedPreRata,
+      col9: el.numberOfHoursExcludedTest,
+      col10: el.numberOfHoursExcludedForMainAndBypass,
+      col11: el.operatingLevelCode,
+    };
+    records.push(row);
+  }
   return records;
 };
