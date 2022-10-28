@@ -1022,6 +1022,70 @@ export const updateFuelFlowToLoad = async (locId, testSumId, id, payload) => {
   }
 };
 
+export const getFuelFlowToLoadBaseline = async (locId, testSumId) => {
+  const dummyData = [
+    {
+      "id": "id1",
+      "testSumId": "testSumId",
+      "userId": "string",
+      "addDate": "string",
+      "updateDate": "string",
+      "accuracyTestNumber": 1,
+      "peiTestNumber": 2,
+      "averageFuelFlowRate": 3,
+      "averageLoad": 4,
+      "baselineFuelFlowToLoadRatio": 5,
+      "fuelFlowToLoadUOMCode": "string",
+      "averageHourlyHeatInputRate": 6,
+      "baselineGHR": 7,
+      "ghrUnitsOfMeasureCode": "string",
+      "numberOfHoursExcludedCofiring": 8,
+      "numberOfHoursExcludedRamping": 9,
+      "numberOfHoursExcludedLowRange": 10
+    },
+    {
+      "id": "id2",
+      "testSumId": "testSumId",
+      "userId": "string",
+      "addDate": "string",
+      "updateDate": "string",
+      "accuracyTestNumber": 10,
+      "peiTestNumber": 20,
+      "averageFuelFlowRate": 30,
+      "averageLoad": 40,
+      "baselineFuelFlowToLoadRatio": 50,
+      "fuelFlowToLoadUOMCode": "string",
+      "averageHourlyHeatInputRate": 60,
+      "baselineGHR": 70,
+      "ghrUnitsOfMeasureCode": "string",
+      "numberOfHoursExcludedCofiring": 80,
+      "numberOfHoursExcludedRamping": 90,
+      "numberOfHoursExcludedLowRange": 100
+    }
+  ]
+  // return Promise.resolve({ status: 200, data: dummyData })
+
+  const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baselines`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createFuelFlowToLoadBaseline = async (locId, testSumId, payload) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baselines`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const getAppendixERunData = async (
   locId,
   testSumId,
