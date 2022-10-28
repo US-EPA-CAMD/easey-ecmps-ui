@@ -95,3 +95,9 @@ export const getViews = async () => {
     return [];
   }
 };
+
+export const getEmissionsSchema = async () => {
+  const url = `${config.services.content.uri}/ecmps/reporting-instructions/emissions.schema.json`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};

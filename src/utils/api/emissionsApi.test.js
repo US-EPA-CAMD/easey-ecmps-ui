@@ -1,7 +1,8 @@
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
 import config from "../../config";
-import { exportEmissionsData, getEmissionViewData } from "./emissionsApi";
+import { exportEmissionsData, getEmissionsSchema, getEmissionViewData } from "./emissionsApi";
+import { ExpansionPanelActions } from "@material-ui/core";
 
 describe("Emissions API", function () {
   let mock;
@@ -96,5 +97,14 @@ describe("Emissions API", function () {
         expect(result.data).toEqual({});
       });
     });
+
+    describe("getEmissionsSchema", ()=>{
+      it("should get emissions schema", async ()=>{
+        mock.onGet(`${config.services.content.uri}/ecmps/reporting-instructions/emissions.schema.json`).reply(200, {});
+        const {data} = await getEmissionsSchema();
+
+        expect(data).toEqual({});
+      })
+    })
   });
 });

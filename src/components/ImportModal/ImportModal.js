@@ -9,6 +9,9 @@ import {
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 
 import * as qaApi from "../../utils/api/qaCertificationsAPI";
+
+import * as emissionsApi from "../../utils/api/emissionsApi";
+
 import { successResponses } from "../../utils/api/apiUtils.js";
 import "./ImportModal.scss";
 
@@ -24,6 +27,8 @@ const ImportModal = ({
   workspaceSection,
 }) => {
   const [schema, setSchema] = useState([]);
+  const [schemaErrors, setSchemaErrors] = useState([]);
+  
   useEffect(() => {
     switch (workspaceSection) {
       case MONITORING_PLAN_STORE_NAME:
@@ -42,7 +47,6 @@ const ImportModal = ({
     }
      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const [schemaErrors, setSchemaErrors] = useState([]);
   const validateJSON = (name, type, event) => {
     const fileTypeManual = name.split(".");
 
