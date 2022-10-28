@@ -16,7 +16,8 @@ import {
   qaLinearitySummaryProps,
   qaRataDataProps,
   qaAppendixECorrelationSummaryTestProps,
-  qaFuelFlowToLoadProps
+  qaFuelFlowToLoadProps,
+  qaFlowToLoadCheckProps
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
@@ -52,7 +53,7 @@ const QATestSummaryDataTable = ({
   sectionSelect,
   selectedLocation,
   locations,
-}) => {
+}) => {console.log("selectedTestCode",selectedTestCode);
   const [loading, setLoading] = useState(false);
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
@@ -570,6 +571,22 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
+      case "FLC": // Flow to Load Check
+        const flcProps = qaFlowToLoadCheckProps();
+        return (
+          <QAExpandableRowsRender
+            payload={flcProps["payload"]}
+            dropdownArray={flcProps["dropdownArray"]}
+            mdmProps={flcProps["mdmProps"]}
+            columns={flcProps["columnNames"]}
+            controlInputs={flcProps["controlInputs"]}
+            dataTableName={flcProps["dataTableName"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            isCheckedOut={isCheckedOut}
+          />
+        );  
       // return (
       //    <QARataDataExpandableRows {...props} />
       // );

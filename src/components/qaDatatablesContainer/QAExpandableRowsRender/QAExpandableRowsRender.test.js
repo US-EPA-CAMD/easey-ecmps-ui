@@ -18,6 +18,7 @@ import {
   qaRataSummaryProps,
   qaRataTraverseProps,
   qaAppendixECorrelationSummaryTestProps,
+  qaFlowToLoadCheckProps
 } from "../../../additional-functions/qa-dataTable-props";
 
 const mock = new MockAdapter(axios);
@@ -732,4 +733,71 @@ describe('Appendix E Correlation test Summary data', () => {
     userEvent.click(confirmBtns[1])
   })
 })*/
+
+describe('Flow to load check data', () => {
+  const flowToLoadCheckData = [
+    {"id":"d9b87972-ebe7-46ff-9176-3219778b0bc1","testSumId":"701733a2-2b6e-4896-828e-5accaab929d4","testBasisCode":"H","biasAdjustedIndicator":1,
+    "averageAbsolutePercentDifference":12,"numberOfHours":24,"numberOfHoursExcludedForFuel":25,"numberOfHoursExcludedForRamping":26,"numberOfHoursExcludedForBypass":27,
+    "numberOfHoursExcludedPreRata":28,"numberOfHoursExcludedTest":29,"numberOfHoursExcludedForMainAndBypass":30,"operatingLevelCode":"H","userId":"agebremichael-dp",
+    "addDate":"10/27/2022, 3:55:09 PM","updateDate":"10/27/2022, 3:55:09 PM"}];
+
+  const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks`;
+  const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks`;
+  // const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks/${idRegex}`);
+  // const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks/${idRegex}`);
+
+  mock.onGet(getUrl).reply(200, flowToLoadCheckData)
+  mock.onPost(postUrl).reply(200, 'created')
+  // mock.onPut(putUrl).reply(200, 'updated')
+  // mock.onPut(deleteUrl).reply(200, 'deleted')
+  test('renders Flow to load check data rows and create/save/delete', async () => {
+    const props = qaFlowToLoadCheckProps()
+    const idArray = []
+    const data = { locationId: locId, id: testSumId }
+    render(
+      <QAExpandableRowsRender
+        payload={props["payload"]}
+        dropdownArray={props["dropdownArray"]}
+        mdmProps={props["mdmProps"]}
+        columns={props["columnNames"]}
+        controlInputs={props["controlInputs"]}
+        dataTableName={props["dataTableName"]}
+        expandable
+        extraIDs={idArray}
+        data={data}
+        user={'user'}
+        isCheckedOut={true}
+        locId={locId}
+      />
+    )
+
+    // renders rows
+    const rows = await screen.findAllByRole('row')
+    expect(mock.history.get.length).not.toBe(0)
+    expect(rows).not.toHaveLength(0)
+
+    // add row
+    const addBtn = screen.getByRole('button', { name: /Add/i })
+    userEvent.click(addBtn)
+    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+
+    // edit row
+    // const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    // expect(editBtns).toHaveLength(appendixECorrTestSumData.length)
+    // userEvent.click(editBtns[0])
+    // saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    // userEvent.click(saveAndCloseBtn)
+    // setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+
+    // remove row
+    // const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    // expect(deleteBtns).toHaveLength(appendixECorrTestSumData.length)
+    // const secondDeleteBtn = deleteBtns[1]
+    // userEvent.click(secondDeleteBtn)
+    // const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    // userEvent.click(confirmBtns[1])
+  })
+})
 
