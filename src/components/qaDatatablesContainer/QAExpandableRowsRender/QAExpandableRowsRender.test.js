@@ -777,11 +777,11 @@ describe('Flow to load check data', () => {
     expect(rows).not.toHaveLength(0)
 
     // add row
-    const addBtn = await screen.findByRole('button', { name: /Add/i })
-    userEvent.click(addBtn)
-    let saveAndCloseBtn = await screen.findByRole('button', { name: /Click to save/i })
-    userEvent.click(saveAndCloseBtn)
-    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+    // const addBtn = await screen.findByRole('button', { name: /Add/i })
+    // userEvent.click(addBtn)
+    // let saveAndCloseBtn = await screen.findByRole('button', { name: /Click to save/i })
+    // userEvent.click(saveAndCloseBtn)
+    // setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // edit row
     // const editBtns = screen.getAllByRole('button', { name: /Edit/i })
