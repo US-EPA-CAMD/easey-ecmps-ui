@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { Button } from "@trussworks/react-uswds";
 import HeaderInfo from "../HeaderInfo/HeaderInfo";
 import "../MonitoringPlanTab/MonitoringPlanTab.scss";
 import { checkoutAPI } from "../../additional-functions/checkout";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import { getEmissionsTabTableRenders } from "./EmissionsTabTable";
+import "./EmissionsTabRender.scss";
+import { getEmissionViewData } from "../../utils/api/emissionsApi";
 
 export const EmissionsTabRender = ({
   title,
@@ -30,6 +33,42 @@ export const EmissionsTabRender = ({
       selectedQuarters.length > 0 &&
       viewTemplateSelect !== null
   );
+
+  const handleDownload = async () => {
+    getEmissionViewData(
+      viewTemplateSelect.code,
+      configID,
+      selectedYears,
+      selectedQuarters,
+      selectedConfig?.unitStackConfigurations.map((config) => config.unitId),
+      selectedConfig?.unitStackConfigurations.map(
+        (config) => config.stackPipeId
+      ),
+      true
+    )
+      .then((response) => {
+        const disposition = response.headers["content-disposition"];
+        const parts =
+          disposition !== undefined ? disposition.split("; ") : undefined;
+
+        if (parts !== undefined && parts[0] === "attachment") {
+          const url = window.URL.createObjectURL(
+            new Blob([response.data], { type: "text/csv" })
+          );
+
+          const link = document.createElement("a");
+          let fileName = parts[1].replace("filename=", "").replaceAll('"', "");
+          link.href = url;
+          link.setAttribute("download", fileName);
+          document.body.appendChild(link);
+          link.click();
+          link.parentNode.removeChild(link);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div className=" padding-top-0">
@@ -60,8 +99,18 @@ export const EmissionsTabRender = ({
         />
       </div>
       <hr />
-      <div className="grid-row overflow-x-auto">
-        {showTable && (
+      {showTable && (
+        <Button
+          type="button"
+          title="Download to CSV"
+          className="download-button"
+          onClick={handleDownload}
+        >
+          {"Download to CSV"}
+        </Button>
+      )}
+      {showTable && (
+        <div className="grid-row overflow-x-auto">
           <CustomAccordion
             title={"Daily Calibration Tests"}
             table={getEmissionsTabTableRenders(
@@ -77,8 +126,8 @@ export const EmissionsTabRender = ({
               )
             )}
           ></CustomAccordion>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
