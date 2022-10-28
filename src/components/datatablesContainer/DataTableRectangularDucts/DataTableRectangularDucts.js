@@ -380,5 +380,4 @@ const mapStateToProps = (state) => {
   };
 };
 export default connect(mapStateToProps, null)(DataTableRectangularDucts);
-export { mapDispatchToProps };
 export { mapStateToProps };

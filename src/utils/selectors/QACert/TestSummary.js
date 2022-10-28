@@ -16,8 +16,8 @@ export const getTestSummary = (data, colTitles) => {
           el.stackPipeId !== null
             ? el.stackPipeId
             : el.unitId !== null
-              ? el.unitId
-              : "",
+            ? el.unitId
+            : "",
         col3: el.componentId,
         col4: el.testNumber,
         col5: el.testReasonCode,
@@ -172,6 +172,7 @@ export const mapRataSummaryToRows = (data) => {
     };
     records.push(row);
   }
+
   return records;
 };
 //4th level
@@ -205,6 +206,7 @@ export const getRataRunDataRecords = (data) => {
       col11: el.runStatusCode,
     });
   });
+
   return records;
 };
 
@@ -245,7 +247,7 @@ export const getFlowRunRecords = (data) => {
       col9: el.averageVelocityWithoutWallEffects,
       col10: el.averageVelocityWithWallEffects,
       col11: el.calculatedWAF,
-      col12: el.averageStackFlowRate
+      col12: el.averageStackFlowRate,
     });
   });
   return records;
@@ -275,7 +277,7 @@ export const mapRataTraverseToRows = (data) => {
     records.push(row);
   }
   return records;
-}
+};
 
 export const mapTestQualificationToRows = (data) => {
   const records = [];
@@ -310,7 +312,7 @@ export const getAppendixECorrelationSummaryRecords = (data) => {
 };
 
 export const mapFuelFlowToLoadToRows = (data) => {
-  const records = []
+  const records = [];
   for (const el of data) {
     const row = {
       id: el.id,
@@ -320,15 +322,14 @@ export const mapFuelFlowToLoadToRows = (data) => {
       col4: el.numberOfHoursExcludedCofiring,
       col5: el.numberOfHoursExcludedRamping,
       col6: el.numberOfHoursExcludedLowRange,
-
-    }
-    records.push(row)
+    };
+    records.push(row);
   }
-  return records
+  return records;
 };
 
 export const mapAppendixECorrTestRunsToRows = (data) => {
-  const records = []
+  const records = [];
   for (const el of data) {
     const row = {
       id: el.id,
@@ -343,22 +344,44 @@ export const mapAppendixECorrTestRunsToRows = (data) => {
       col9: el.endDate ? formatStringToDate(el.endDate) : "",
       col10: el.endHour,
       col11: el.endMinute,
-    }
-    records.push(row)
+    };
+    records.push(row);
   }
-  return records
-}
+  return records;
+};
 
 export const mapAppendixECorrHeatInputGasToRows = (data) => {
-  const records = []
+  const records = [];
   for (const el of data) {
     const row = {
       id: el.id,
-      col1: el.gasGCV,
-      col2: el.gasVolume,
-      col3: el.gasHeatInput,
-    }
-    records.push(row)
+      col1: el.gasGCV === 0 ? "0" : el.gasGCV,
+      col2: el.gasVolume === 0 ? "0" : el.gasVolume,
+      col3: el.gasHeatInput === 0 ? "0" : el.gasHeatInput,
+    };
+    records.push(row);
   }
-  return records
-}
+  return records;
+};
+
+export const mapFlowToLoadCheckToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.testBasisCode,
+      col2: el.biasAdjustedIndicator,
+      col3: el.averageAbsolutePercentDifference,
+      col4: el.numberOfHours,
+      col5: el.numberOfHoursExcludedForFuel,
+      col6: el.numberOfHoursExcludedForRamping,
+      col7: el.numberOfHoursExcludedForBypass,
+      col8: el.numberOfHoursExcludedPreRata,
+      col9: el.numberOfHoursExcludedTest,
+      col10: el.numberOfHoursExcludedForMainAndBypass,
+      col11: el.operatingLevelCode,
+    };
+    records.push(row);
+  }
+  return records;
+};
