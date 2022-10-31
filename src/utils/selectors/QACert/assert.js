@@ -47,7 +47,7 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       return qaApi
         .getRataRunData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], id)
         .catch((error) => {
-          console.log("error", error);
+          console.log("error getting rata run", error);
         });
 
     case rataSummary:
@@ -129,7 +129,7 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
         );
     case flowToLoadCheck:
       return qaApi.getFlowToLoadCheckRecords(location, id).catch((error) => {
-        console.log("error", error);
+        console.log("error fetching flow to load check", error);
       });
     default:
       throw new Error(`getDataTableApis case not implemented for ${name}`);
@@ -171,7 +171,7 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.mapAppendixECorrHeatInputGasToRows(dataIn);
     case flowToLoadCheck:
       return selector.mapFlowToLoadCheckToRows(dataIn);
-    
+
     default:
       throw new Error(`getDataTableRecords case not implemented for ${name}`);
   }
@@ -228,26 +228,24 @@ export const removeDataSwitch = async (
         .deleteRataRunData(
           extraIdsArr[0],
           extraIdsArr[1],
+          extraIdsArr[2],
           extraIdsArr[3],
-          id,
           row.id
         )
         .catch((error) => {
-          console.log("error", error);
+          console.log("error deleting rata run", error);
         });
 
     case rataSummary:
       return qaApi
         .deleteRataSummary(
-          locationId,
-          id,
           extraIdsArr[0],
           extraIdsArr[1],
-          id,
+          extraIdsArr[2],
           row.id
         )
         .catch((error) => {
-          console.log("error", error);
+          console.log("error deleting rata summary", error);
         });
     case flowRataRun:
       return qaApi
@@ -274,13 +272,13 @@ export const removeDataSwitch = async (
           row.id
         )
         .catch((error) => {
-          console.log("error", error);
+          console.log("error deleting rata traverse", error);
         });
     case fuelFlowToLoad:
       return qaApi
         .deleteFuelFlowToLoadData(locationId, id, row.id)
         .catch((error) => {
-          console.log("error", error);
+          console.log("error deleting fuel flow to load", error);
         });
     case appendixECorrelationSummary:
       return qaApi
@@ -359,13 +357,13 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         .updateRataRunData(
           extraIdsArr[0],
           extraIdsArr[1],
+          extraIdsArr[2],
           extraIdsArr[3],
-          id,
           userInput.id,
           userInput
         )
         .catch((error) => {
-          console.log("error", error);
+          console.log("error updating rata run", error);
         });
 
     case rataSummary:
@@ -374,12 +372,11 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           extraIdsArr[0],
           extraIdsArr[1],
           extraIdsArr[2],
-          id,
           userInput.id,
           userInput
         )
         .catch((error) => {
-          console.log("error", error);
+          console.log("error updating rata summary", error);
         });
 
     case flowRataRun:
@@ -430,7 +427,9 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           console.log("error", error);
         });
     case fuelFlowToLoad:
-      return qaApi.updateFuelFlowToLoad(location, id, userInput.id, userInput);
+      return qaApi
+        .updateFuelFlowToLoad(location, id, userInput.id, userInput)
+        .catch(error => console.log('error updating fuel flow to load', error))
     case appendixECorrTestRun:
       return qaApi
         .updateAppendixERun(
@@ -486,19 +485,19 @@ export const createDataSwitch = async (
         .createRataRunData(
           extraIdsArr[0],
           extraIdsArr[1],
-          extraIdsArr[3],
+          extraIdsArr[2],
           id,
           userInput
         )
         .catch((error) => {
-          console.log("error", error);
+          console.log("error creating rata run", error);
         });
 
     case rataSummary:
       return qaApi
         .createRataSummary(extraIdsArr[0], extraIdsArr[1], id, userInput)
         .catch((error) => {
-          console.log("error", error);
+          console.log("error creating rata summary", error);
         });
     case rataTraverseData:
       return qaApi
@@ -537,11 +536,13 @@ export const createDataSwitch = async (
     case testQualification:
       return qaApi.createTestQualification(location, id, userInput);
     case appendixECorrelationSummary:
-      return qaApi.createAppendixECorrelationSummaryRecord(
-        location,
-        id,
-        userInput
-      );
+      return qaApi
+        .createAppendixECorrelationSummaryRecord(
+          location,
+          id,
+          userInput
+        )
+        .catch(error => console.log('error creating appendix e correlation summary record', error))
     case fuelFlowToLoad:
       return qaApi
         .createFuelFlowToLoad(location, id, userInput)
@@ -573,8 +574,10 @@ export const createDataSwitch = async (
             error
           );
         });
-      case flowToLoadCheck:
-        return qaApi.createFlowToLoadCheckRecord(location, id, userInput);
+    case flowToLoadCheck:
+      return qaApi
+        .createFlowToLoadCheckRecord(location, id, userInput)
+        .catch(error => console.log('error creating flow to load check'));
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
   }
