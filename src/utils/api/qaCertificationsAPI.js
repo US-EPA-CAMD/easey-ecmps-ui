@@ -976,8 +976,7 @@ export const getFuelFlowToLoadData = async (locId, testSumId) => {
 };
 
 export const createFuelFlowToLoad = async (locId, testSumId, payload) => {
-  const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests`;
-  const url = getApiUrl(path);
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests`;
   try {
     return handleResponse(
       await secureAxios({
@@ -992,8 +991,7 @@ export const createFuelFlowToLoad = async (locId, testSumId, payload) => {
 };
 
 export const deleteFuelFlowToLoadData = async (locId, testSumId, id) => {
-  const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests/${id}`;
-  const url = getApiUrl(path);
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests/${id}`;
   try {
     return handleResponse(
       await secureAxios({
@@ -1007,8 +1005,7 @@ export const deleteFuelFlowToLoadData = async (locId, testSumId, id) => {
 };
 
 export const updateFuelFlowToLoad = async (locId, testSumId, id, payload) => {
-  const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests/${id}`;
-  const url = getApiUrl(path);
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests/${id}`;
   try {
     return handleResponse(
       await secureAxios({
@@ -1029,8 +1026,7 @@ export const getFuelFlowToLoadBaseline = async (locId, testSumId) => {
 };
 
 export const createFuelFlowToLoadBaseline = async (locId, testSumId, payload) => {
-  const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baselines`;
-  const url = getApiUrl(path);
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baselines`;
   try {
     return handleResponse(
       await secureAxios({
