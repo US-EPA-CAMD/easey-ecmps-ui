@@ -655,7 +655,7 @@ const QAExpandableRowsRender = ({
         executeOnClose();
       }
     } catch (error) {
-      console.log("error deleting data", error);
+      console.log(`error deleting data of table: ${dataTableName}, row: ${row}`, error);
     }
   };
 
