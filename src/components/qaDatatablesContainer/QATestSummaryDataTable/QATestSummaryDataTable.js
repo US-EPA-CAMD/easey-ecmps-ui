@@ -17,6 +17,7 @@ import {
   qaRataDataProps,
   qaAppendixECorrelationSummaryTestProps,
   qaFuelFlowToLoadProps,
+  qaFuelFlowToLoadBaselineProps,
   qaFlowToLoadCheckProps
 } from "../../../additional-functions/qa-dataTable-props";
 import {
@@ -53,7 +54,8 @@ const QATestSummaryDataTable = ({
   sectionSelect,
   selectedLocation,
   locations,
-}) => {console.log("selectedTestCode",selectedTestCode);
+}) => {
+  console.log("selectedTestCode", selectedTestCode);
   const [loading, setLoading] = useState(false);
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
@@ -571,6 +573,25 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
+      case "FFLB":
+        const fflbProps = qaFuelFlowToLoadBaselineProps();
+        return (
+          <QAExpandableRowsRender
+            payload={fflbProps["payload"]}
+            dropdownArray={fflbProps["dropdownArray"]}
+            mdmProps={fflbProps["mdmProps"]}
+            columns={fflbProps["columnNames"]}
+            controlInputs={fflbProps["controlInputs"]}
+            controlDatePickerInputs={fflbProps["controlDatePickerInputs"]}
+            dataTableName={fflbProps["dataTableName"]}
+            extraControls={fflbProps["extraControls"]}
+            radioBtnPayload={fflbProps["radioBtnPayload"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            isCheckedOut={isCheckedOut}
+          />
+        );
       case "FLC": // Flow to Load Check
         const flcProps = qaFlowToLoadCheckProps();
         return (
@@ -586,11 +607,9 @@ const QATestSummaryDataTable = ({
             extraIDs={null}
             isCheckedOut={isCheckedOut}
           />
-        );  
-      // return (
-      //    <QARataDataExpandableRows {...props} />
-      // );
+        );
       default:
+        console.log(`case testTypeGroupCode of ${testTypeGroupCode} not implemented`)
         return null;
     }
   };

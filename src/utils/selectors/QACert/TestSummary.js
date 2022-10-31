@@ -16,8 +16,8 @@ export const getTestSummary = (data, colTitles) => {
           el.stackPipeId !== null
             ? el.stackPipeId
             : el.unitId !== null
-            ? el.unitId
-            : "",
+              ? el.unitId
+              : "",
         col3: el.componentId,
         col4: el.testNumber,
         col5: el.testReasonCode,
@@ -206,7 +206,6 @@ export const getRataRunDataRecords = (data) => {
       col11: el.runStatusCode,
     });
   });
-
   return records;
 };
 
@@ -327,6 +326,29 @@ export const mapFuelFlowToLoadToRows = (data) => {
   }
   return records;
 };
+
+export const mapFuelFlowToLoadBaselineToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.accuracyTestNumber,
+      col2: el.peiTestNumber,
+      col3: el.averageFuelFlowRate,
+      col4: el.averageLoad,
+      col5: el.baselineFuelFlowToLoadRatio,
+      col6: el.fuelFlowToLoadUOMCode,
+      col7: el.averageHourlyHeatInputRate,
+      col8: el.baselineGHR,
+      col9: el.ghrUnitsOfMeasureCode,
+      col10: el.numberOfHoursExcludedCofiring,
+      col11: el.numberOfHoursExcludedRamping,
+      col12: el.numberOfHoursExcludedLowRange,
+    };
+    records.push(row);
+  }
+  return records;
+}
 
 export const mapAppendixECorrTestRunsToRows = (data) => {
   const records = [];
