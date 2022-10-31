@@ -17,7 +17,7 @@ import {
   qaRataDataProps,
   qaAppendixECorrelationSummaryTestProps,
   qaFuelFlowToLoadProps,
-  qaFuelFlowToLoadBaselineProps
+  qaFuelFlowToLoadBaselineProps,
   qaFlowToLoadCheckProps
 } from "../../../additional-functions/qa-dataTable-props";
 import {
@@ -586,6 +586,10 @@ const QATestSummaryDataTable = ({
             dataTableName={fflbProps["dataTableName"]}
             extraControls={fflbProps["extraControls"]}
             radioBtnPayload={fflbProps["radioBtnPayload"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            isCheckedOut={isCheckedOut}
           />
         );
       case "FLC": // Flow to Load Check
