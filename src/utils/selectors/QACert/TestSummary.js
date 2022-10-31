@@ -385,3 +385,25 @@ export const mapAppendixECorrHeatInputGasToRows = (data) => {
   }
   return records;
 };
+
+export const mapFlowToLoadCheckToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.testBasisCode,
+      col2: el.biasAdjustedIndicator,
+      col3: el.averageAbsolutePercentDifference,
+      col4: el.numberOfHours,
+      col5: el.numberOfHoursExcludedForFuel,
+      col6: el.numberOfHoursExcludedForRamping,
+      col7: el.numberOfHoursExcludedForBypass,
+      col8: el.numberOfHoursExcludedPreRata,
+      col9: el.numberOfHoursExcludedTest,
+      col10: el.numberOfHoursExcludedForMainAndBypass,
+      col11: el.operatingLevelCode,
+    };
+    records.push(row);
+  }
+  return records;
+};

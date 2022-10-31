@@ -583,3 +583,55 @@ export const qaAppendixECorrTestRunProps = () => {
     extraControls: {},
   };
 };
+
+export const qaFlowToLoadCheckProps = () => {
+  return {
+    dataTableName: "Flow To Load Check",
+    payload: {},
+    dropdownArray: [
+      'testBasisCode','operatingLevelCode', 'biasAdjustedIndicator'
+    ],
+    mdmProps: [
+      {
+        codeTable: "test-basis-codes",
+        responseProps: {
+          code: "testBasisCode",
+          description: "testBasisDescription"
+        }
+      },
+      {
+        codeTable: "operating-level-codes",
+        responseProps: {
+          code: "opLevelCode",
+          description: "opLevelDescription"
+        }
+      }
+    ],
+    columnNames: [
+      "Test Basis Code",
+      "Bias Adjusted Indicator",
+      "Average Absolute Percent Difference",
+      "Number of Hours",
+      "Number of Hours Excluded for Fuel",
+      "Number of Hours Excluded for Ramping",
+      "Number of Hours Excluded for Bypass",
+      "Number of Hours Excluded Pre RATA",
+      "Number of Hours Excluded Test",
+      "Number of Hours Excluded for  Main and Bypass",
+      "Operating Level Code",
+    ],
+    controlInputs: {
+      testBasisCode: ["Test Basis Code", "dropdown", "", ""],
+      biasAdjustedIndicator: ["Bias Adjusted Indicator", "dropdown", "", ""],
+      averageAbsolutePercentDifference: ["Average Absolute Percent Difference","input", "", ""],
+      numberOfHours: ["Number of Hours", "input", "", ""],
+      numberOfHoursExcludedForFuel: ["Number of Hours Excluded for Fuel", "input", "", ""],
+      numberOfHoursExcludedForRamping: ["Number of Hours Excluded for Ramping", "input", "", ""],
+      numberOfHoursExcludedForBypass: ["Number of Hours Excluded for Bypass", "input", "", ""],
+      numberOfHoursExcludedPreRata: ["Number of Hours Excluded Pre RATA", "input", "", ""],
+      numberOfHoursExcludedTest: ["Number of Hours Excluded Test", "input", "", ""],
+      numberOfHoursExcludedForMainAndBypass: ["Number of Hours Excluded for Main and Bypass", "input", "", ""],
+      operatingLevelCode: ["Operating Level Code", "dropdown", "", ""],
+    },
+  };
+}
