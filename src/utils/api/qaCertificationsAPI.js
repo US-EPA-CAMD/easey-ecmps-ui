@@ -1030,7 +1030,6 @@ export const getAppendixERunData = async (
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs`;
   const url = getApiUrl(path);
 
-  console.log("this is url for run", url);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
@@ -1063,7 +1062,6 @@ export const getAppendixEHeatInputGasData = async (
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-gases`;
   const url = getApiUrl(path);
-  console.log("this is url for heat", url);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
