@@ -754,7 +754,7 @@ const QAExpandableRowsRender = ({
           title={
             createNewData
               ? `Add  ${dataTableName}`
-              : user
+              : user && isCheckedOut
               ? ` Edit ${dataTableName}`
               : ` ${dataTableName}`
           }
