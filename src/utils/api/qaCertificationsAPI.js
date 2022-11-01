@@ -132,9 +132,16 @@ export const exportQA = async (
   unitIds,
   stackPipeIds,
   beginDate,
-  endDate
+  endDate,
+  isOfficial
 ) => {
-  let url = getApiUrl(`/export?facilityId=${facilityId}`);
+  let url;
+
+  if (isOfficial) {
+    url = `${config.services.qaCertification.uri}/export?facilityId=${facilityId}`;
+  } else {
+    url = getApiUrl(`/export?facilityId=${facilityId}`);
+  }
 
   if (unitIds?.length > 0) {
     const unitIdsQueryParam = unitIds.join("|");
