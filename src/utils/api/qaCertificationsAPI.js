@@ -1163,3 +1163,43 @@ export const createFlowToLoadCheckRecord = async (
     return handleImportError(error);
   }
 };
+
+export const updateFlowToLoadCheckRecord = async (
+  locId,
+  testSumId,
+  id,
+  payload
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const deleteFlowToLoadCheckRecord = async (
+  locId,
+  testSumId,
+  id,
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
