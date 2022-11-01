@@ -6,6 +6,7 @@ import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { ArrowDownwardSharp } from "@material-ui/icons";
 import { qaTestSummaryCols as columns } from "../../utils/constants/tableColumns";
+import { assignAriaLabelsToDataTable } from "../../additional-functions/ensure-508";
 
 export const getUnitIdAndStackPipeIds = (locs) => {
   const unitIds = [];
@@ -46,12 +47,20 @@ export const QAImportHistoricalDataPreview = ({
           unitIdsAndStackPipeIds.unitIds,
           unitIdsAndStackPipeIds.stackPipeIds,
           reportingPeriodObj.beginDate,
-          reportingPeriodObj.endDate
+          reportingPeriodObj.endDate,
+          true
         );
         if (response) {
           setTestSummaryData(response.data.testSummaryData);
           setPreviewData(true);
           setLoading(false);
+
+          const rowsAriaLabelData = []
+          response.data.testSummaryData.forEach(e => {
+            rowsAriaLabelData.push(e.testNumber)
+          });
+
+          assignAriaLabelsToDataTable('[aria-label="Test-Summary-Data"]', rowsAriaLabelData) 
         }
       } catch (err) {
         console.log(err);
@@ -126,7 +135,7 @@ export const QAImportHistoricalDataPreview = ({
       ) : (
         testSummaryData &&
         previewData && (
-          <div className="margin-x-3 margin-y-4">
+            <div className="margin-x-3 margin-y-4" aria-label={"Test-Summary-Data"}>
             <h3 className="margin-y-1">Test Summary</h3>
             <DataTable
               responsive={true}
