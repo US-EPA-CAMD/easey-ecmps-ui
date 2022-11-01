@@ -279,6 +279,14 @@ const QAExpandableRowsRender = ({
         break;
     }
   };
+
+  const populateStaticDropdowns = (tableName, dropdowns) =>{
+    if(tableName === "Flow To Load Check"){
+      dropdowns['biasAdjustedIndicator'] = [
+        { code: 1, name: 1}, { code: 2, name: 2}
+      ]
+    }
+  };
   const loadDropdownsData = (name) => {
     let dropdowns = {};
     const allPromises = [];
@@ -460,6 +468,7 @@ const QAExpandableRowsRender = ({
                 };
               });
             });
+            populateStaticDropdowns(name, dropdowns);
             for (const options of Object.values(dropdowns)) {
               options.unshift({ code: "", name: "-- Select a value --" });
             }
@@ -646,7 +655,7 @@ const QAExpandableRowsRender = ({
         executeOnClose();
       }
     } catch (error) {
-      console.log("error deleting data", error);
+      console.log(`error deleting data of table: ${dataTableName}, row: ${row}`, error);
     }
   };
 

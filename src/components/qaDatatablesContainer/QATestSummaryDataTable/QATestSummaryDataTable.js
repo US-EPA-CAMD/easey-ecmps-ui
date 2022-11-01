@@ -16,7 +16,9 @@ import {
   qaLinearitySummaryProps,
   qaRataDataProps,
   qaAppendixECorrelationSummaryTestProps,
-  qaFuelFlowToLoadProps
+  qaFuelFlowToLoadProps,
+  qaFuelFlowToLoadBaselineProps,
+  qaFlowToLoadCheckProps
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
@@ -53,6 +55,7 @@ const QATestSummaryDataTable = ({
   selectedLocation,
   locations,
 }) => {
+  console.log("selectedTestCode", selectedTestCode);
   const [loading, setLoading] = useState(false);
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
@@ -570,10 +573,43 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
-      // return (
-      //    <QARataDataExpandableRows {...props} />
-      // );
+      case "FFLB":
+        const fflbProps = qaFuelFlowToLoadBaselineProps();
+        return (
+          <QAExpandableRowsRender
+            payload={fflbProps["payload"]}
+            dropdownArray={fflbProps["dropdownArray"]}
+            mdmProps={fflbProps["mdmProps"]}
+            columns={fflbProps["columnNames"]}
+            controlInputs={fflbProps["controlInputs"]}
+            controlDatePickerInputs={fflbProps["controlDatePickerInputs"]}
+            dataTableName={fflbProps["dataTableName"]}
+            extraControls={fflbProps["extraControls"]}
+            radioBtnPayload={fflbProps["radioBtnPayload"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "FLC": // Flow to Load Check
+        const flcProps = qaFlowToLoadCheckProps();
+        return (
+          <QAExpandableRowsRender
+            payload={flcProps["payload"]}
+            dropdownArray={flcProps["dropdownArray"]}
+            mdmProps={flcProps["mdmProps"]}
+            columns={flcProps["columnNames"]}
+            controlInputs={flcProps["controlInputs"]}
+            dataTableName={flcProps["dataTableName"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            isCheckedOut={isCheckedOut}
+          />
+        );
       default:
+        console.log(`case testTypeGroupCode of ${testTypeGroupCode} not implemented`)
         return null;
     }
   };

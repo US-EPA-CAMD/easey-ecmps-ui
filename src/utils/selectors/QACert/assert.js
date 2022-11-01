@@ -15,10 +15,11 @@ const airEmissions = "Air Emissions";
 const flowRataRun = "Flow";
 const testQualification = "Test Qualification";
 const fuelFlowToLoad = "Fuel Flow to Load";
+const fuelFlowToLoadBaseline = "Fuel Flow to Load Baseline"
 const appendixECorrTestRun = "Appendix E Correlation Run";
 const appendixECorrelationSummary = "Appendix E Correlation Summary";
-
 const appendixECorrHeatInputGas = "Appendix E Correlation Heat Input from Gas";
+const flowToLoadCheck = "Flow To Load Check";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -100,6 +101,10 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
         .catch((error) =>
           console.log("error fetching fuel flow to load data", error)
         );
+    case fuelFlowToLoadBaseline:
+      return qaApi
+        .getFuelFlowToLoadBaseline(location, id)
+        .catch(error => console.log('error fetching fuel flow to load baseline data', error))
     case appendixECorrTestRun:
       console.log("extraids for run", extraIdsArr);
       return qaApi
@@ -122,6 +127,10 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
             error
           )
         );
+    case flowToLoadCheck:
+      return qaApi.getFlowToLoadCheckRecords(location, id).catch((error) => {
+        console.log("error", error);
+      });
     default:
       throw new Error(`getDataTableApis case not implemented for ${name}`);
   }
@@ -154,10 +163,15 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.getAppendixECorrelationSummaryRecords(dataIn);
     case fuelFlowToLoad:
       return selector.mapFuelFlowToLoadToRows(dataIn);
+    case fuelFlowToLoadBaseline:
+      return selector.mapFuelFlowToLoadBaselineToRows(dataIn)
     case appendixECorrTestRun:
       return selector.mapAppendixECorrTestRunsToRows(dataIn);
     case appendixECorrHeatInputGas:
       return selector.mapAppendixECorrHeatInputGasToRows(dataIn);
+    case flowToLoadCheck:
+      return selector.mapFlowToLoadCheckToRows(dataIn);
+    
     default:
       throw new Error(`getDataTableRecords case not implemented for ${name}`);
   }
@@ -285,7 +299,7 @@ export const removeDataSwitch = async (
         .deleteAppendixERun(extraIdsArr[0], extraIdsArr[1], id, row.id)
         .catch((error) => {
           console.log("error", error);
-        });    
+        });
     default:
       throw new Error(`removeDataSwitch case not implemented for ${name}`);
   }
@@ -425,7 +439,7 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           id,
           userInput.id,
           userInput
-        ).catch((error) => {console.log("error", error)});
+        ).catch((error) => { console.log("error", error) });
     default:
       break;
   }
@@ -534,6 +548,10 @@ export const createDataSwitch = async (
         .catch((error) =>
           console.log("error creating fuel flow to load data", error)
         );
+    case fuelFlowToLoadBaseline:
+      return qaApi
+        .createFuelFlowToLoadBaseline(location, id, userInput)
+        .catch(error => console.log('error creating fuel flow to load baseline data', error))
     case appendixECorrTestRun:
       return qaApi
         .createAppendixERun(extraIdsArr[0], extraIdsArr[1], id, userInput)
@@ -555,6 +573,8 @@ export const createDataSwitch = async (
             error
           );
         });
+      case flowToLoadCheck:
+        return qaApi.createFlowToLoadCheckRecord(location, id, userInput);
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
   }
