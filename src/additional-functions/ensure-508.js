@@ -313,3 +313,12 @@ export const assignAriaLabelsToDatePickerButtons = () => {
       "Toggle Calendar for " + element.parentNode.querySelector("input").id;
   });
 };
+
+
+export const assignAriaLabelsToDataTable = (containerSelector, ariaLiveData) => {
+  const tableRows = document.querySelector(containerSelector).querySelectorAll('[role="rowgroup"]')[1].querySelectorAll('[role="row"]')
+
+  tableRows.forEach((row, idx) => {
+    row.querySelector('input[type="checkbox"]').setAttribute('aria-label', `select-row-${ariaLiveData[idx]}`)
+  })
+}
