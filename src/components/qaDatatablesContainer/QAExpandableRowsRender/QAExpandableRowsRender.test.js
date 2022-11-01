@@ -18,7 +18,8 @@ import {
   qaRataSummaryProps,
   qaRataTraverseProps,
   qaAppendixECorrelationSummaryTestProps,
-  qaFlowToLoadCheckProps
+  qaFlowToLoadCheckProps,
+  qaFuelFlowToLoadBaselineProps
 } from "../../../additional-functions/qa-dataTable-props";
 
 const mock = new MockAdapter(axios);
@@ -74,11 +75,11 @@ const renderComponent = (props, idArray, data) => {
 
 describe('Test cases for QAExpandableRowsRender', () => {
   beforeEach(() => {
-    console.log("mock.history BEFORE RESET",mock.history);
+    // console.log("mock.history BEFORE RESET", mock.history);
     mock.resetHistory();
-    console.log("mock.history AFTER RESET",mock.history);
+    // console.log("mock.history AFTER RESET", mock.history);
   });
-  
+
   test('renders RATA Summary data rows and create/save/delete', async () => {
     const rataSummaryData = [
       {
@@ -158,12 +159,12 @@ describe('Test cases for QAExpandableRowsRender', () => {
         "updateDate": "string"
       }
     ]
-  
+
     const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries`;
     const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries`;
     const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${idRegex}`);
     const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${idRegex}`);
-  
+
     mock.onGet(getUrl).reply(200, rataSummaryData)
     mock.onPost(postUrl).reply(200, 'created')
     mock.onPut(putUrl).reply(200, 'updated')
@@ -171,8 +172,8 @@ describe('Test cases for QAExpandableRowsRender', () => {
     const props = qaRataSummaryProps()
     const idArray = [locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId, id]
     const data = { locationId: locId, id: rataId }
-    renderComponent(props,idArray, data);
-    
+    renderComponent(props, idArray, data);
+
 
     // renders rows
     const rows = await screen.findAllByRole('row')
@@ -244,12 +245,12 @@ describe('Test cases for QAExpandableRowsRender', () => {
         "runStatusCode": "string"
       }
     ]
-  
+
     const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs`;
     const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs`;
     const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${idRegex}`)
     const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${idRegex}`)
-  
+
     mock.onGet(getUrl).reply(200, rataRunData)
     mock.onPost(postUrl).reply(200, 'created')
     mock.onPut(putUrl).reply(200, 'updated')
@@ -258,7 +259,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     const props = qaRataRunDataProps()
     const idArray = [locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId, id]
     const data = { locationId: locId, id: rataSumId }
-    renderComponent(props,idArray, data);
+    renderComponent(props, idArray, data);
 
     // renders rows
     const rows = await screen.findAllByRole('row')
@@ -340,12 +341,12 @@ describe('Test cases for QAExpandableRowsRender', () => {
         "averageStackFlowRate": 0
       },
     ]
-  
+
     const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs`;
     const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs`;
     const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${idRegex}`)
     const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${idRegex}`)
-  
+
     mock.onGet(getUrl).reply(200, rataFlowData)
     mock.onPost(postUrl).reply(200, 'created')
     mock.onPut(putUrl).reply(200, 'updated')
@@ -354,7 +355,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     const props = qaFlowRataRunProps()
     const idArray = [locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId, id]
     const data = { locationId: locId, id: rataRunId }
-    renderComponent(props,idArray, data);
+    renderComponent(props, idArray, data);
 
     // renders rows
     const rows = await screen.findAllByRole('row')
@@ -434,12 +435,12 @@ describe('Test cases for QAExpandableRowsRender', () => {
         "replacementVelocity": 0
       }
     ]
-  
+
     const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses`;
     const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses`;
     const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses/${idRegex}`)
     const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses/${idRegex}`)
-  
+
     mock.onGet(getUrl).reply(200, rataTraverseData)
     mock.onPost(postUrl).reply(200, 'created')
     mock.onPut(putUrl).reply(200, 'updated')
@@ -508,11 +509,11 @@ describe('Test cases for QAExpandableRowsRender', () => {
         "numberOfHoursExcludedLowRange": 50
       }
     ]
-  
+
     const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests`;
     const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests`;
     const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests/${idRegex}`);
-  
+
     mock.onGet(getUrl).reply(200, fuelFlowToLoadData)
     mock.onPost(postUrl).reply(200, 'created')
     mock.onPut(putUrl).reply(200, 'updated')
@@ -540,7 +541,132 @@ describe('Test cases for QAExpandableRowsRender', () => {
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
     userEvent.click(saveAndCloseBtn)
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
-  });
+  })
+
+  test('renders Fuel Flow to Load Baseline data rows and create/save/delete', async () => {
+    const fuelFlowToLoadBaselineData = [
+      {
+        "id": "id1",
+        "testSumId": "testSumId",
+        "userId": "string",
+        "addDate": "string",
+        "updateDate": "string",
+        "accuracyTestNumber": 0,
+        "peiTestNumber": 0,
+        "averageFuelFlowRate": 0,
+        "averageLoad": 0,
+        "baselineFuelFlowToLoadRatio": 0,
+        "fuelFlowToLoadUOMCode": "string",
+        "averageHourlyHeatInputRate": 0,
+        "baselineGHR": 0,
+        "ghrUnitsOfMeasureCode": "string",
+        "numberOfHoursExcludedCofiring": 0,
+        "numberOfHoursExcludedRamping": 0,
+        "numberOfHoursExcludedLowRange": 0
+      },
+      {
+        "id": "id2",
+        "testSumId": "testSumId",
+        "userId": "string",
+        "addDate": "string",
+        "updateDate": "string",
+        "accuracyTestNumber": 0,
+        "peiTestNumber": 0,
+        "averageFuelFlowRate": 0,
+        "averageLoad": 0,
+        "baselineFuelFlowToLoadRatio": 0,
+        "fuelFlowToLoadUOMCode": "string",
+        "averageHourlyHeatInputRate": 0,
+        "baselineGHR": 0,
+        "ghrUnitsOfMeasureCode": "string",
+        "numberOfHoursExcludedCofiring": 0,
+        "numberOfHoursExcludedRamping": 0,
+        "numberOfHoursExcludedLowRange": 0
+      }
+    ]
+
+    const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baselines`;
+    const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baslines`;
+    const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baselines/${idRegex}`);
+
+    mock.onGet(getUrl).reply(200, fuelFlowToLoadBaselineData)
+    mock.onPost(postUrl).reply(200, 'created')
+    mock.onPut(putUrl).reply(200, 'updated')
+
+    const props = qaFuelFlowToLoadBaselineProps()
+    const idArray = [locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId, id]
+    const data = { locationId: locId, id: testSumId }
+    render(
+      <QAExpandableRowsRender
+        payload={props["payload"]}
+        dropdownArray={props["dropdownArray"]}
+        mdmProps={props["mdmProps"]}
+        columns={props["columnNames"]}
+        controlInputs={props["controlInputs"]}
+        controlDatePickerInputs={props["controlDatePickerInputs"]}
+        dataTableName={props["dataTableName"]}
+        extraControls={props["extraControls"]}
+        radioBtnPayload={props["radioBtnPayload"]}
+        expandable
+        extraIDs={idArray}
+        data={data}
+        user={'user'}
+        isCheckedOut={true}
+      />
+    )
+
+    // renders rows
+    const rows = await screen.findAllByRole('row')
+    expect(mock.history.get.length).not.toBe(0)
+    expect(rows).not.toHaveLength(0)
+
+    // add row
+    // const addBtn = screen.getByRole('button', { name: /Add/i })
+    // userEvent.click(addBtn)
+    // let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    // userEvent.click(saveAndCloseBtn)
+    // setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+
+    // edit row
+    // const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    // expect(editBtns).toHaveLength(fuelFlowToLoadBaselineData.length)
+    // userEvent.click(editBtns[0])
+    // saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    // userEvent.click(saveAndCloseBtn)
+    // setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+  })
+})
+
+/*
+describe('Appendix E Correlation test Summary data', () => {
+  const appendixECorrTestSumData = [
+    {
+      "id": "id1",
+      "testSumId": "stri g",
+      "userId": "string",
+      "addDate": "string",
+      "updateDate": "string",
+      "Operating Level For Run": 1,
+      "Mean Reference Value": 2,
+      "Average Hourly Heat Input Rate": 3,
+      "F-Factor": 4,
+      "calculatedMeanReferenceValue": 5,
+      "calculatedAverageHourlyHeatInputRate": 6,
+    },
+    {
+      "id": "id2",
+      "testSumId": "string",
+      "userId": "string",
+      "addDate": "string",
+      "updateDate": "string",
+      "Operating Level For Run": 2,
+      "Mean Reference Value": 3,
+      "Average Hourly Heat Input Rate": 4,
+      "F-Factor": 5,
+      "calculatedMeanReferenceValue": 6,
+      "calculatedAverageHourlyHeatInputRate": 7,
+    }
+  ]
   
   test('renders Appendix E Correlation test summary rows and create/save/delete', async () => {
     const appendixECorrTestSumData = [
@@ -674,4 +800,4 @@ describe('Test cases for QAExpandableRowsRender', () => {
   });
 
 });
-
+*/
