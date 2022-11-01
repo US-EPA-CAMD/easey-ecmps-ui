@@ -1047,6 +1047,21 @@ export const createFuelFlowToLoadBaseline = async (locId, testSumId, payload) =>
   }
 };
 
+export const updateFuelFlowToLoadBaseline = async (locId, testSumId, id, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baselines/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const getAppendixERunData = async (
   locId,
   testSumId,

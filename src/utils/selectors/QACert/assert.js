@@ -171,7 +171,7 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.mapAppendixECorrHeatInputGasToRows(dataIn);
     case flowToLoadCheck:
       return selector.mapFlowToLoadCheckToRows(dataIn);
-    
+
     default:
       throw new Error(`getDataTableRecords case not implemented for ${name}`);
   }
@@ -435,6 +435,10 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         });
     case fuelFlowToLoad:
       return qaApi.updateFuelFlowToLoad(location, id, userInput.id, userInput);
+    case fuelFlowToLoadBaseline:
+      return qaApi
+        .updateFuelFlowToLoadBaseline(location, id, userInput.id, userInput)
+        .catch(error => console.log('error updating fuel flow to load baseline', error))
     case appendixECorrTestRun:
       return qaApi
         .updateAppendixERun(
@@ -585,8 +589,8 @@ export const createDataSwitch = async (
             error
           );
         });
-      case flowToLoadCheck:
-        return qaApi.createFlowToLoadCheckRecord(location, id, userInput);
+    case flowToLoadCheck:
+      return qaApi.createFlowToLoadCheckRecord(location, id, userInput);
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
   }
