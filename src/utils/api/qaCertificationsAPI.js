@@ -1076,6 +1076,85 @@ export const createAppendixEHeatInputGas = async (
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs${appECorrTestrunId}/appendix-e-heat-input-from-gases`;
 };
+
+export const getAppendixEHeatInputOilData = async (
+  locId,
+  testSumId,
+  appECorrTestSumId,
+  appECorrTestrunId
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createAppendixEHeatInputOil = async (
+  locId,
+  testSumId,
+  appECorrTestSumId,
+  appECorrTestrunId,
+  payload
+) => {
+  console.log("OVER HERE", payload)
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+export const updateAppendixECorrelationHeatInputOil = async (
+  locId,
+  testSumId,
+  appECorrTestSumId,
+  appECorrTestrunId, 
+  id,
+  payload
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+}
+
+export const deleteAppendixECorrelationHeatInputOil = async (
+  locId,
+  testSumId,
+  appECorrTestSumId,
+  appECorrTestrunId, 
+  id,
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
 export const updateAppendixERun = async (
   locId,
   testSumId,

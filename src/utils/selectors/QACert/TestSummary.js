@@ -362,3 +362,23 @@ export const mapAppendixECorrHeatInputGasToRows = (data) => {
   }
   return records
 }
+
+export const mapAppendixECorrHeatInputOilToRows = (data) => {
+  const records = []
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.monitoringSystemID,
+      col2: el.oilMass,
+      col3: el.oilGCV,
+      col4: el.oilGCVUnitsOfMeasureCode,
+      col5: el.oilHeatInput,
+      col6: el.oilVolume,
+      col7: el.oilVolumeUnitsOfMeasureCode,
+      col8: el.oilDensity,
+      col9: el.oilDensityUnitsOfMeasureCode,
+    }
+    records.push(row)
+  }
+  return records
+}
