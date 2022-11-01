@@ -976,8 +976,7 @@ export const getFuelFlowToLoadData = async (locId, testSumId) => {
 };
 
 export const createFuelFlowToLoad = async (locId, testSumId, payload) => {
-  const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests`;
-  const url = getApiUrl(path);
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests`;
   try {
     return handleResponse(
       await secureAxios({
@@ -992,8 +991,7 @@ export const createFuelFlowToLoad = async (locId, testSumId, payload) => {
 };
 
 export const deleteFuelFlowToLoadData = async (locId, testSumId, id) => {
-  const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests/${id}`;
-  const url = getApiUrl(path);
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests/${id}`;
   try {
     return handleResponse(
       await secureAxios({
@@ -1007,12 +1005,32 @@ export const deleteFuelFlowToLoadData = async (locId, testSumId, id) => {
 };
 
 export const updateFuelFlowToLoad = async (locId, testSumId, id, payload) => {
-  const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests/${id}`;
-  const url = getApiUrl(path);
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests/${id}`;
   try {
     return handleResponse(
       await secureAxios({
         method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const getFuelFlowToLoadBaseline = async (locId, testSumId) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baselines`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createFuelFlowToLoadBaseline = async (locId, testSumId, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baselines`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
         url: url,
         data: payload,
       })
@@ -1030,7 +1048,6 @@ export const getAppendixERunData = async (
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs`;
   const url = getApiUrl(path);
 
-  console.log("this is url for run", url);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
@@ -1063,7 +1080,6 @@ export const getAppendixEHeatInputGasData = async (
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-gases`;
   const url = getApiUrl(path);
-  console.log("this is url for heat", url);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
@@ -1193,5 +1209,34 @@ export const deleteAppendixERun = async (
     );
   } catch (error) {
     return handleError(error);
+  }
+};
+
+export const getFlowToLoadCheckRecords = async (
+  locId,
+  testSumId
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createFlowToLoadCheckRecord = async (
+  locId,
+  testSumId,
+  payload
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
   }
 };

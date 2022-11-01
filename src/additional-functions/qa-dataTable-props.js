@@ -547,6 +547,53 @@ export const qaFuelFlowToLoadProps = () => {
   };
 }
 
+export const qaFuelFlowToLoadBaselineProps = () => {
+  return {
+    dataTableName: "Fuel Flow to Load Baseline",
+    payload: {},
+    dropdownArray: [
+      'fuelFlowToLoadUOMCode',
+    ],
+    mdmProps: [
+      {
+        codeTable: "units-of-measure-codes",
+        responseProps: {
+          code: "unitOfMeasureCode",
+          description: "unitOfMeasureDescription"
+        }
+      }
+    ],
+    columnNames: [
+      "Accuracy Test Number",
+      "PEI Test Number",
+      "Average Fuel Flow Rate",
+      "Average Load",
+      "Baseline Fuel Flow-to-Load Ratio",
+      "Fuel Flow-to-Load UOM Code",
+      "Average Hourly Heat Input Rate",
+      "Baseline GHR",
+      "GHR UOM Code",
+      "Number of Hours Excluded Co-firing",
+      "Number of Hours Excluded Ramping",
+      "Number of Hours Excluded Low Range"
+    ],
+    controlInputs: {
+      accuracyTestNumber: ["Accuracy Test Number", "input", "", ""],
+      peiTestNumber: ["PEI Test Number", "input", "", ""],
+      averageFuelFlowRate: ["Average Fuel Flow Rate", "input", "", ""],
+      averageLoad: ["Average Load", "input", "", ""],
+      baselineFuelFlowToLoadRatio: ["Baseline Fuel Flow-to-Load Ratio", "input", "", ""],
+      fuelFlowToLoadUOMCode: ["Fuel Flow-to-Load UOM Code", "dropdown", "", ""],
+      averageHourlyHeatInputRate: ["Average Hourly Heat Input Rate", "input", "", ""],
+      baselineGHR: ["Baseline GHR", "input", "", ""],
+      ghrUnitsOfMeasureCode: ["GHR UOM Code", "input", "", ""],
+      numberOfHoursExcludedCofiring: ["Number of Hours Excluded Co-firing", "input", "", ""],
+      numberOfHoursExcludedRamping: ["Number of Hours Excluded Ramping", "input", "", ""],
+      numberOfHoursExcludedLowRange: ["Number of Hours Excluded Low Range", "input", "", ""],
+    },
+  };
+}
+
 export const qaAppendixECorrTestRunProps = () => {
   return {
     dataTableName: "Appendix E Correlation Run",
@@ -583,3 +630,55 @@ export const qaAppendixECorrTestRunProps = () => {
     extraControls: {},
   };
 };
+
+export const qaFlowToLoadCheckProps = () => {
+  return {
+    dataTableName: "Flow To Load Check",
+    payload: {},
+    dropdownArray: [
+      'testBasisCode','operatingLevelCode', 'biasAdjustedIndicator'
+    ],
+    mdmProps: [
+      {
+        codeTable: "test-basis-codes",
+        responseProps: {
+          code: "testBasisCode",
+          description: "testBasisDescription"
+        }
+      },
+      {
+        codeTable: "operating-level-codes",
+        responseProps: {
+          code: "opLevelCode",
+          description: "opLevelDescription"
+        }
+      }
+    ],
+    columnNames: [
+      "Test Basis Code",
+      "Bias Adjusted Indicator",
+      "Average Absolute Percent Difference",
+      "Number of Hours",
+      "Number of Hours Excluded for Fuel",
+      "Number of Hours Excluded for Ramping",
+      "Number of Hours Excluded for Bypass",
+      "Number of Hours Excluded Pre RATA",
+      "Number of Hours Excluded Test",
+      "Number of Hours Excluded for  Main and Bypass",
+      "Operating Level Code",
+    ],
+    controlInputs: {
+      testBasisCode: ["Test Basis Code", "dropdown", "", ""],
+      biasAdjustedIndicator: ["Bias Adjusted Indicator", "dropdown", "", ""],
+      averageAbsolutePercentDifference: ["Average Absolute Percent Difference","input", "", ""],
+      numberOfHours: ["Number of Hours", "input", "", ""],
+      numberOfHoursExcludedForFuel: ["Number of Hours Excluded for Fuel", "input", "", ""],
+      numberOfHoursExcludedForRamping: ["Number of Hours Excluded for Ramping", "input", "", ""],
+      numberOfHoursExcludedForBypass: ["Number of Hours Excluded for Bypass", "input", "", ""],
+      numberOfHoursExcludedPreRata: ["Number of Hours Excluded Pre RATA", "input", "", ""],
+      numberOfHoursExcludedTest: ["Number of Hours Excluded Test", "input", "", ""],
+      numberOfHoursExcludedForMainAndBypass: ["Number of Hours Excluded for Main and Bypass", "input", "", ""],
+      operatingLevelCode: ["Operating Level Code", "dropdown", "", ""],
+    },
+  };
+}

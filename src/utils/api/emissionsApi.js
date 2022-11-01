@@ -58,7 +58,8 @@ export const getEmissionViewData = async (
   year,
   quarter,
   unitIds,
-  stackPipeIds
+  stackPipeIds,
+  attachFile = false
 ) => {
   const url = new URL(
     `${config.services.emissions.uri}/emissions/views/${viewCode}`
@@ -72,12 +73,27 @@ export const getEmissionViewData = async (
     stackPipeIds: Array.isArray(stackPipeIds)
       ? stackPipeIds.join("|")
       : stackPipeIds,
+    attachFile,
   });
 
   try {
-    const response = await axios.get(
-      `${url.toString()}?${searchParams.toString()}`
-    );
+    let response;
+    if (attachFile) {
+      response = await axios.get(
+        `${url.toString()}?${searchParams.toString()}`,
+        {
+          headers: {
+            Accept: "text/csv",
+          },
+          responseType: "blob",
+          timeout: Number(config.app.apiTimeout),
+        }
+      );
+    } else {
+      response = await axios.get(
+        `${url.toString()}?${searchParams.toString()}`
+      );
+    }
     return handleResponse(response);
   } catch (error) {
     handleError(error);
