@@ -314,11 +314,34 @@ export const assignAriaLabelsToDatePickerButtons = () => {
   });
 };
 
-
-export const assignAriaLabelsToDataTable = (containerSelector, ariaLiveData) => {
-  const tableRows = document.querySelector(containerSelector).querySelectorAll('[role="rowgroup"]')[1].querySelectorAll('[role="row"]')
+export const assignAriaLabelsToDataTable = (
+  containerSelector,
+  ariaLiveData
+) => {
+  const tableRows = document
+    .querySelector(containerSelector)
+    .querySelectorAll('[role="rowgroup"]')[1]
+    .querySelectorAll('[role="row"]');
 
   tableRows.forEach((row, idx) => {
-    row.querySelector('input[type="checkbox"]').setAttribute('aria-label', `select-row-${ariaLiveData[idx]}`)
-  })
-}
+    row
+      .querySelector('input[type="checkbox"]')
+      .setAttribute("aria-label", `select-row-${ariaLiveData[idx]}`);
+  });
+};
+// returns focus
+export const returnsFocusDatatableExpandBTN = (index, direction) => {
+  console.log("index", index, `.expandRow${index}`);
+  let test = "";
+
+  setTimeout(() => {
+    if (direction) {
+      test = document.querySelector(`.expandRow${index + 1}`);
+    } else {
+      test = document.querySelector(`.collapseRow${index + 1}`);
+    }console.log("test", test);
+    
+    
+  },1000);
+  test.focus();
+};

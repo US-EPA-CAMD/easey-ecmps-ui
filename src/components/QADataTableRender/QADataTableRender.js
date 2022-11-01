@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
 import "./QADataTableRender.scss";
-
+import {returnsFocusDatatableExpandBTN} from "../../additional-functions/ensure-508"
 // *** local
 import { oneSecond } from "../../config";
 /*********** COMPONENTS ***********/
@@ -84,16 +84,23 @@ const QADataTableRender = ({
     setTotalExpand(arr);
   };
 
+
+  useEffect (()=>{
+
+
+  },[totalExpand])
   const createExpandBTNS = (index, row) => {
     return !totalExpand[index] || totalExpand[index] === 0 ? (
       <Add
         className="expandBTN "
         onClick={() => {
           expandRowBTN(index);
+          returnsFocusDatatableExpandBTN(index,false)
           row.expanded = true;
         }}
         onKeyPress={(event) => {
           if (event.key === "Enter") {
+            returnsFocusDatatableExpandBTN(index,false)
             expandRowBTN(index);
             row.expanded = true;
           }
@@ -110,11 +117,13 @@ const QADataTableRender = ({
         className="expandBTN "
         onClick={() => {
           expandRowBTN(index);
+          returnsFocusDatatableExpandBTN(index,true)
           row.expanded = false;
         }}
         onKeyPress={(event) => {
           if (event.key === "Enter") {
             expandRowBTN(index);
+            returnsFocusDatatableExpandBTN(index,true)
             row.expanded = false;
           }
         }}
