@@ -1,11 +1,14 @@
-import React from "react";
-import { SideNav, Link as USWDSLink } from "@trussworks/react-uswds";
+import React, { useState } from "react";
+import { SideNav, Link as USWDSLink, Button } from "@trussworks/react-uswds";
 import "./LeftNavigation.scss";
 import { Link } from "react-router-dom";
 
 import { globalView, workSpace, home } from "../../utils/constants/menuTopics";
+import SubmissionModal from "../SubmissionModal/SubmissionModal";
 
 export const LeftNavigation = (props) => {
+  const [show, setShow] = useState(false);
+
   const handleRouteChange = (event, url) => {
     props.setCurrentLink(url);
   };
@@ -99,6 +102,10 @@ export const LeftNavigation = (props) => {
     ];
   };
 
+  const close = () => {
+    setShow(false);
+  };
+
   return (
     <div className="minh-tablet font-body-sm padding-3 leftNav">
       {props.user ? (
@@ -110,6 +117,14 @@ export const LeftNavigation = (props) => {
         <div>
           <SideNav items={makeHeader(home, true, false)} />
           <SideNav items={makeHeader(globalView, true, false)} />
+          <Button
+            onClick={() => {
+              setShow(!show);
+            }}
+          >
+            Click Me
+          </Button>
+          {show ? <SubmissionModal show={show} close={close} /> : null}
         </div>
       )}
     </div>

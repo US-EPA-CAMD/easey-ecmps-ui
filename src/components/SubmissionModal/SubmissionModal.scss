@@ -1,0 +1,38 @@
+@import "../../additional-scss/variables";
+
+.modal-wrapper {
+  position: absolute;
+  z-index: 500;
+  top: 13%;
+  left: 38%;
+  box-shadow: 0px -2px 22px -6px rgba(60, 55, 61, 0.37),
+    -10px 10px 22px -6px rgba(60, 55, 61, 0.37);
+  border-radius: 1% !important;
+  background: $epa-white;
+
+  h2 {
+    font-size: 32px;
+  }
+}
+
+.modal-color {
+  border-radius: 1% !important;
+}
+
+.break-line {
+  display: block;
+  width: 100%; /*or whatever width you want the effect of <hr>*/
+  border-top: 1px solid #ccc;
+}
+
+li {
+  max-width: 100rem !important;
+}
+
+h5 {
+  display: none;
+}
+
+.challenge-question {
+  font-size: 1.25rem;
+}
