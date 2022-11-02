@@ -282,6 +282,10 @@ export const removeDataSwitch = async (
         .catch((error) => {
           console.log("error", error);
         });
+    case fuelFlowToLoadBaseline:
+      return qaApi
+        .deleteFuelFlowToLoadBaseline(locationId, id, row.id)
+        .catch(error => console.log('error deleting fuel flow to load baseline', error))
     case appendixECorrelationSummary:
       return qaApi
         .deleteAppendixECorrelationSummaryRecord(locationId, id, row.id)
@@ -450,12 +454,12 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         ).catch((error) => { console.log("error", error) });
     case flowToLoadCheck:
       return qaApi
-      .updateFlowToLoadCheckRecord(
-        location,
-        id,
-        userInput.id,
-        userInput
-      ).catch((error) => console.log("error", error));
+        .updateFlowToLoadCheckRecord(
+          location,
+          id,
+          userInput.id,
+          userInput
+        ).catch((error) => console.log("error", error));
     default:
       break;
   }
