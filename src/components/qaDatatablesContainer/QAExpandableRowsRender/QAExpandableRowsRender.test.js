@@ -480,7 +480,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     userEvent.click(confirmBtns[1])
   });
 
-  test.only('renders Fuel Flow to Load data rows and create/save/delete', async () => {
+  test('renders Fuel Flow to Load data rows and create/save/delete', async () => {
     const fuelFlowToLoadData = [
       {
         "id": "id1",
@@ -551,7 +551,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     userEvent.click(confirmBtns[1])
   })
 
-  test.only('renders Fuel Flow to Load Baseline data rows and create/save/delete', async () => {
+  test('renders Fuel Flow to Load Baseline data rows and create/save/delete', async () => {
     const fuelFlowToLoadBaselineData = [
       {
         "id": "id1",
