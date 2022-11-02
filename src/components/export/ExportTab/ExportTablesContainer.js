@@ -43,7 +43,7 @@ export const ExportTablesContainer = ({
             rowsAriaLabelData.push(e.testNumber)
           });
 
-          assignAriaLabelsToDataTable('[aria-label="Test-Summary-Data"]', rowsAriaLabelData)
+          assignAriaLabelsToDataTable('#exportTestSummaryData', rowsAriaLabelData)
         }
       } catch (err) {
         console.log(err);
@@ -76,7 +76,7 @@ export const ExportTablesContainer = ({
   };
 
   const dataTable = (
-    <div className="margin-x-3 margin-y-4" aria-label={"Test-Summary-Data"}>
+    <div className="margin-x-3 margin-y-4" id="exportTestSummaryData">
       <h3 className="margin-y-1">Test Summary</h3>
       <DataTable
         responsive={true}
