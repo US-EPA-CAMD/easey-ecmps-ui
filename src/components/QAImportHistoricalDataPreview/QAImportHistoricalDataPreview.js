@@ -59,8 +59,8 @@ export const QAImportHistoricalDataPreview = ({
           response.data.testSummaryData.forEach(e => {
             rowsAriaLabelData.push(e.testNumber)
           });
-
-          assignAriaLabelsToDataTable('[aria-label="Test-Summary-Data"]', rowsAriaLabelData) 
+          
+          assignAriaLabelsToDataTable('#importTestSummaryData', rowsAriaLabelData) 
         }
       } catch (err) {
         console.log(err);
@@ -135,7 +135,7 @@ export const QAImportHistoricalDataPreview = ({
       ) : (
         testSummaryData &&
         previewData && (
-            <div className="margin-x-3 margin-y-4" aria-label={"Test-Summary-Data"}>
+            <div className="margin-x-3 margin-y-4" id="importTestSummaryData">
             <h3 className="margin-y-1">Test Summary</h3>
             <DataTable
               responsive={true}
