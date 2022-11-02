@@ -132,9 +132,16 @@ export const exportQA = async (
   unitIds,
   stackPipeIds,
   beginDate,
-  endDate
+  endDate,
+  isOfficial
 ) => {
-  let url = getApiUrl(`/export?facilityId=${facilityId}`);
+  let url;
+
+  if (isOfficial) {
+    url = `${config.services.qaCertification.uri}/export?facilityId=${facilityId}`;
+  } else {
+    url = getApiUrl(`/export?facilityId=${facilityId}`);
+  }
 
   if (unitIds?.length > 0) {
     const unitIdsQueryParam = unitIds.join("|");
@@ -1040,6 +1047,21 @@ export const createFuelFlowToLoadBaseline = async (locId, testSumId, payload) =>
   }
 };
 
+export const updateFuelFlowToLoadBaseline = async (locId, testSumId, id, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baselines/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const getAppendixERunData = async (
   locId,
   testSumId,
@@ -1233,6 +1255,46 @@ export const createFlowToLoadCheckRecord = async (
         method: "POST",
         url: url,
         data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const updateFlowToLoadCheckRecord = async (
+  locId,
+  testSumId,
+  id,
+  payload
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const deleteFlowToLoadCheckRecord = async (
+  locId,
+  testSumId,
+  id,
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
       })
     );
   } catch (error) {

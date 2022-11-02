@@ -320,5 +320,9 @@ export const assignAriaLabelsToDataTable = (containerSelector, ariaLiveData) => 
 
   tableRows.forEach((row, idx) => {
     row.querySelector('input[type="checkbox"]').setAttribute('aria-label', `select-row-${ariaLiveData[idx]}`)
+
+    row.querySelectorAll('[role="gridcell"').forEach(cell => {
+      cell.setAttribute('role', `cell`)
+    })
   })
 }

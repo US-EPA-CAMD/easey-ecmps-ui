@@ -188,7 +188,7 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.mapAppendixECorrHeatInputOilToRows(dataIn);
     case flowToLoadCheck:
       return selector.mapFlowToLoadCheckToRows(dataIn);
-    
+
     default:
       throw new Error(`getDataTableRecords case not implemented for ${name}`);
   }
@@ -323,6 +323,10 @@ export const removeDataSwitch = async (
         .catch((error) => {
           console.log("error", error);
         });
+    case flowToLoadCheck:
+      return qaApi
+        .deleteFlowToLoadCheckRecord(locationId, id, row.id)
+        .catch((error) => console.log("error", error));
     default:
       throw new Error(`removeDataSwitch case not implemented for ${name}`);
   }
@@ -454,6 +458,10 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         });
     case fuelFlowToLoad:
       return qaApi.updateFuelFlowToLoad(location, id, userInput.id, userInput);
+    case fuelFlowToLoadBaseline:
+      return qaApi
+        .updateFuelFlowToLoadBaseline(location, id, userInput.id, userInput)
+        .catch(error => console.log('error updating fuel flow to load baseline', error))
     case appendixECorrTestRun:
       return qaApi
         .updateAppendixERun(
@@ -473,6 +481,14 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput.id,
           userInput
         ).catch((error) => {console.log("error", error)});
+    case flowToLoadCheck:
+      return qaApi
+      .updateFlowToLoadCheckRecord(
+        location,
+        id,
+        userInput.id,
+        userInput
+      ).catch((error) => console.log("error", error));
     default:
       break;
   }
@@ -621,8 +637,8 @@ export const createDataSwitch = async (
             error
           );
         });
-      case flowToLoadCheck:
-        return qaApi.createFlowToLoadCheckRecord(location, id, userInput);
+    case flowToLoadCheck:
+      return qaApi.createFlowToLoadCheckRecord(location, id, userInput);
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
   }
