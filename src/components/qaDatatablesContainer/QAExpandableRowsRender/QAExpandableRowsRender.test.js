@@ -18,7 +18,8 @@ import {
   qaRataSummaryProps,
   qaRataTraverseProps,
   qaAppendixECorrelationSummaryTestProps,
-  qaFlowToLoadCheckProps
+  qaFlowToLoadCheckProps,
+  qaAppendixECorrelationSummaryHeatInputOilProps
 } from "../../../additional-functions/qa-dataTable-props";
 
 const mock = new MockAdapter(axios);
@@ -31,6 +32,7 @@ const rataSumId = 'rataSumId'
 const rataRunId = 'rataRunId'
 const flowRataRunId = 'flowRataRunId'
 const appECorrTestSumId = 'appECorrTestSumId'
+const appECorrTestrunId = 'appECorrTestrunId'
 const id = 'id'
 
 const idRegex = '[\\w\\-]+'
@@ -646,6 +648,110 @@ describe('Fuel Flow to Load data', () => {
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
   })
 })
+
+describe('Appendix E Correlation Heat Input from Oil', () => {
+  const appendixECorrelationSummaryHeatInputOilData = [
+    {
+      "id": "id1",
+      "appECorrTestRunId": "appECorrTestRunId",
+      "userId": "string",
+      "addDate": "string",
+      "updateDate": "string",
+      "monitoringSystemID": '100',
+      "oilMass": 1,
+      "calculatedOilMass": 1,
+      "oilGCV": 1,
+      "oilGCVUnitsOfMeasureCode": "string",
+      "oilHeatInput": 1,
+      "calculatedOilHeatInput": 1,
+      "oilVolume": 1,
+      "oilVolumeUnitsOfMeasureCode": "string",
+      "oilDensity": 1,
+      "oilDensityUnitsOfMeasureCode": "string",
+    },
+    {
+      "id": "id2",
+      "appECorrTestRunId": "appECorrTestRunId",
+      "userId": "string",
+      "addDate": "string",
+      "updateDate": "string",
+      "monitoringSystemID": '100',
+      "oilMass": 1,
+      "calculatedOilMass": 1,
+      "oilGCV": 1,
+      "oilGCVUnitsOfMeasureCode": "string",
+      "oilHeatInput": 1,
+      "calculatedOilHeatInput": 1,
+      "oilVolume": 1,
+      "oilVolumeUnitsOfMeasureCode": "string",
+      "oilDensity": 1,
+      "oilDensityUnitsOfMeasureCode": "string",
+    }
+  ]
+
+  const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils`;
+  const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils`;
+  const putUrl = new RegExp(`${qaCertBaseUrl}/workspace//locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils/${idRegex}`);
+  const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace//locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils/${idRegex}`);
+
+  mock.onGet(getUrl).reply(200, appendixECorrelationSummaryHeatInputOilData)
+  mock.onPost(postUrl).reply(200, 'created')
+  mock.onPut(putUrl).reply(200, 'updated')
+  mock.onDelete(deleteUrl).reply(200, 'deleted')
+
+  test('renders Appendix E Correlation Heat Input from Oil rows and create/save/delete', async () => {
+    const props = qaAppendixECorrelationSummaryHeatInputOilProps()
+    const idArray = [locId, testSumId, appECorrTestSumId, appECorrTestrunId, id]
+    const data = { locationId: locId, id: appECorrTestrunId }
+    render(
+      <QAExpandableRowsRender
+        payload={props["payload"]}
+        dropdownArray={props["dropdownArray"]}
+        mdmProps={props["mdmProps"]}
+        columns={props["columnNames"]}
+        controlInputs={props["controlInputs"]}
+        controlDatePickerInputs={props["controlDatePickerInputs"]}
+        dataTableName={props["dataTableName"]}
+        extraControls={props["extraControls"]}
+        radioBtnPayload={props["radioBtnPayload"]}
+        expandable
+        extraIDs={idArray}
+        data={data}
+        user={'user'}
+        isCheckedOut={true}
+      />
+    )
+
+    // renders rows
+    const rows = await screen.findAllByRole('row')
+    expect(mock.history.get.length).not.toBe(0)
+    expect(rows).not.toHaveLength(0)
+
+    // add row
+    const addBtn = screen.getByRole('button', { name: /Add/i })
+    userEvent.click(addBtn)
+    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+
+    // edit row
+    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    expect(editBtns).toHaveLength(appendixECorrelationSummaryHeatInputOilData.length)
+    userEvent.click(editBtns[0])
+    saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+
+    // remove row
+    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    expect(deleteBtns).toHaveLength(appendixECorrelationSummaryHeatInputOilData.length)
+    const secondDeleteBtn = deleteBtns[1]
+    userEvent.click(secondDeleteBtn)
+    const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    userEvent.click(confirmBtns[1])
+  })
+})
+
 /*
 describe('Appendix E Correlation test Summary data', () => {
   const appendixECorrTestSumData = [

@@ -925,7 +925,7 @@ export const createAppendixECorrelationSummaryRecord = async (
       })
     );
   } catch (error) {
-    return handleImportError(error);
+    return handleError(error);
   }
 };
 
@@ -1111,7 +1111,6 @@ export const createAppendixEHeatInputOil = async (
   appECorrTestrunId,
   payload
 ) => {
-  console.log("OVER HERE", payload)
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils`;
   const url = getApiUrl(path);
   try {
