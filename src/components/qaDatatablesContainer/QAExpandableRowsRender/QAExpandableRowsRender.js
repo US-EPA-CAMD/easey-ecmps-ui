@@ -477,9 +477,9 @@ const QAExpandableRowsRender = ({
       case "Appendix E Correlation Heat Input from Oil":
         allPromises.push(dmApi.getAllMonitoringSystemIDCodes(extraIDs[0]));
         allPromises.push(dmApi.getAllUnitsOfMeasureCodes());
-        allPromises.push(dmApi.getAllUnitsOfMeasureCodes());
-        allPromises.push(dmApi.getAllUnitsOfMeasureCodes());
+        console.log("allPromises", allPromises)
         Promise.all(allPromises).then((responses) => {
+          console.log("responses", responses)
           responses.forEach((curResp, i) => {
             let codeLabel;
             let descriptionLabel;
@@ -492,20 +492,20 @@ const QAExpandableRowsRender = ({
                 codeLabel = "unitOfMeasureCode";
                 descriptionLabel = "unitOfMeasureDescription";
                 break;
-              case 2:
-                codeLabel = "unitOfMeasureCode";
-                descriptionLabel = "unitOfMeasureDescription";
-                break;
-              case 3:
-                codeLabel = "unitOfMeasureCode";
-                descriptionLabel = "unitOfMeasureDescription";
-                break;
               default:
                 break;
             }
             dropdowns[dropdownArray[i]] = curResp.data.map((d) => {
               return { code: d[codeLabel], name: d[descriptionLabel] };
             });
+            if(i === 1){
+              dropdowns["oilVolumeUnitsOfMeasureCode"] = curResp.data.map((d) => {
+                return { code: d[codeLabel], name: d[descriptionLabel] };
+              });
+              dropdowns["oilDensityUnitsOfMeasureCode"] = curResp.data.map((d) => {
+                return { code: d[codeLabel], name: d[descriptionLabel] };
+              });
+            }
           });
           for (const options of Object.values(dropdowns)) {
             options.unshift({ code: "", name: "-- Select a value --" });

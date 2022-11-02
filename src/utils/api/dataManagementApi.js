@@ -444,27 +444,27 @@ export const getAllPressureMeasureCodes = async () => {
 export const getAllMonitoringSystemIDCodes = async (locationId) => {
 
   let url = config.services.monitorPlans.uri;
-
+  
   if (window.location.href.includes("/workspace")) {
     url = `${url}/workspace`;
   }
 
   let monitoringSystemUrl = `${url}/locations/${locationId}/systems`;
-  let response = await axios.get(monitoringSystemUrl).then(handleResponse).catch(handleError);
-  let actualResponse = [];
-
-  response.data.map((monitorCode) => {
-    if(monitorCode.systemTypeCode === 'OILV' || monitorCode.systemTypeCode === 'OILM'){
-      actualResponse.push({
-        monitoringSystemIDCode: monitorCode.monitoringSystemId,
-        monitoringSystemIDDescription: monitorCode.systemTypeCode,
-      });
-    }
-  })
-
-  response.data = actualResponse;
-
-  return response;
+  console.log("monitoringSystemUrl", monitoringSystemUrl)
+  return axios.get(monitoringSystemUrl).then((response) => {
+    const actualResponse = response;
+    const dataArray = [];
+    response.data.map((monitorCode) => {
+      if(monitorCode.systemTypeCode === 'OILV' || monitorCode.systemTypeCode === 'OILM'){
+        dataArray.push({
+          monitoringSystemIDCode: monitorCode.monitoringSystemId,
+          monitoringSystemIDDescription: monitorCode.systemTypeCode,
+        });
+      }
+    })
+    actualResponse.data = dataArray;
+    return actualResponse
+  }).catch(handleError);
 }
 
 export const getAllPointUsedIndicatorCodes = async () => {
