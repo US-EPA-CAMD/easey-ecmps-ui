@@ -450,7 +450,6 @@ export const getAllMonitoringSystemIDCodes = async (locationId) => {
   }
 
   let monitoringSystemUrl = `${url}/locations/${locationId}/systems`;
-  console.log("monitoringSystemUrl", monitoringSystemUrl)
   return axios.get(monitoringSystemUrl).then((response) => {
     const actualResponse = response;
     const dataArray = [];
