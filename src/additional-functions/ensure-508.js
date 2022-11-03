@@ -317,7 +317,7 @@ export const assignAriaLabelsToDatePickerButtons = () => {
 
 export const assignAriaLabelsToDataTable = (containerSelector, ariaLiveData) => {
   const table = document.querySelector(containerSelector).querySelector('[role="table"]')
-  table.setAttribute('aria-label', 'Test-Summary-Data')
+  table.setAttribute('aria-label', 'Test Summary Data')
 
   const rowGroups = table.querySelectorAll('[role="rowgroup"]')
 
@@ -325,7 +325,7 @@ export const assignAriaLabelsToDataTable = (containerSelector, ariaLiveData) => 
     const tableRows = rowGroups[1].querySelectorAll('[role="row"]')
 
     tableRows.forEach((row, idx) => {
-      row.querySelector('input[type="checkbox"]').setAttribute('aria-label', `select-row-${ariaLiveData[idx]}`)
+      row.querySelector('input[type="checkbox"]').setAttribute('aria-label', `select row for Test Number ${ariaLiveData[idx]}`)
 
       row.querySelectorAll('[role="gridcell"').forEach(cell => {
         cell.setAttribute('role', `cell`)
