@@ -77,9 +77,11 @@ const QADataTableRender = ({
     // hasnt been touched or had been closed
     if (!totalExpand[index] || totalExpand[index] === 0) {
       arr[index] = 1;
+      
     } else {
       // closes it
-      arr[index] = 0;
+      arr[index] = 0; 
+      
     }
     setTotalExpand(arr);
   };
@@ -95,19 +97,21 @@ const QADataTableRender = ({
         className="expandBTN "
         onClick={() => {
           expandRowBTN(index);
-          returnsFocusDatatableExpandBTN(index,false)
+          returnsFocusDatatableExpandBTN(index,false,row.col1)
+          console.log('row',row)
           row.expanded = true;
         }}
         onKeyPress={(event) => {
           if (event.key === "Enter") {
-            returnsFocusDatatableExpandBTN(index,false)
+            
             expandRowBTN(index);
+            returnsFocusDatatableExpandBTN(index,false,row.col1)
             row.expanded = true;
           }
         }}
         title={`Click to expand row ${index + 1}`}
         name={`expand row ${index + 1}`}
-        id={`expandRow${index + 1}`}
+        id={`expandRow${row.col1}${index + 1}`}
         role="button"
         tabIndex="0"
         aria-hidden="false"
@@ -117,19 +121,19 @@ const QADataTableRender = ({
         className="expandBTN "
         onClick={() => {
           expandRowBTN(index);
-          returnsFocusDatatableExpandBTN(index,true)
+          returnsFocusDatatableExpandBTN(index,true,row.col1)
           row.expanded = false;
         }}
         onKeyPress={(event) => {
           if (event.key === "Enter") {
             expandRowBTN(index);
-            returnsFocusDatatableExpandBTN(index,true)
+            returnsFocusDatatableExpandBTN(index,true,row.col1)
             row.expanded = false;
           }
         }}
         title={`Click to collapse row ${index + 1}`}
         name={`collapse row ${index + 1}`}
-        id={`collapseRow${index + 1}`}
+        id={`collapseRow${row.col1}${index + 1}`}
         role="button"
         tabIndex="0"
         aria-hidden="false"

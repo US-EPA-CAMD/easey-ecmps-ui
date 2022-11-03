@@ -330,18 +330,18 @@ export const assignAriaLabelsToDataTable = (
   });
 };
 // returns focus
-export const returnsFocusDatatableExpandBTN = (index, direction) => {
-  console.log("index", index, `.expandRow${index}`);
-  let test = "";
+export const returnsFocusDatatableExpandBTN = (index, direction, colName) => {
+  let lastBTN = "";
 
   setTimeout(() => {
     if (direction) {
-      test = document.querySelector(`.expandRow${index + 1}`);
+      lastBTN = document
+        .getElementById(`expandRow${colName}${index + 1}`)
+        .focus();
     } else {
-      test = document.querySelector(`.collapseRow${index + 1}`);
-    }console.log("test", test);
-    
-    
-  },1000);
-  test.focus();
+      lastBTN = document
+        .getElementById(`collapseRow${colName}${index + 1}`)
+        .focus();
+    }
+  }, 500);
 };
