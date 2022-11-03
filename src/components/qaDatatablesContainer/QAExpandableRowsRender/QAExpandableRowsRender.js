@@ -690,6 +690,7 @@ const QAExpandableRowsRender = ({
           user={user}
           actionsBtn={"View"}
           isCheckedOut={isCheckedOut}
+          dataTableName={dataTableName}
           actionColumnName={
             user && isCheckedOut ? (
               <>
