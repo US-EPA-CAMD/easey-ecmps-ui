@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
 import "./QADataTableRender.scss";
-
+import { returnsFocusDatatableExpandBTN } from "../../additional-functions/ensure-508";
 // *** local
 import { oneSecond } from "../../config";
 /*********** COMPONENTS ***********/
@@ -26,7 +26,7 @@ const QADataTableRender = ({
   onRemoveHandler,
   evaluate,
   noDataComp,
-  isCheckedOut
+  isCheckedOut,
 }) => {
   const columns = [];
   columnNames.forEach((name, index) => {
@@ -90,17 +90,19 @@ const QADataTableRender = ({
         className="expandBTN "
         onClick={() => {
           expandRowBTN(index);
+          returnsFocusDatatableExpandBTN(index, false, row.col1);
           row.expanded = true;
         }}
         onKeyPress={(event) => {
           if (event.key === "Enter") {
             expandRowBTN(index);
+            returnsFocusDatatableExpandBTN(index, false, row.col1);
             row.expanded = true;
           }
         }}
         title={`Click to expand row ${index + 1}`}
         name={`expand row ${index + 1}`}
-        id={`expandRow${index + 1}`}
+        id={`expandRow${row.col1}${index + 1}`}
         role="button"
         tabIndex="0"
         aria-hidden="false"
@@ -110,17 +112,19 @@ const QADataTableRender = ({
         className="expandBTN "
         onClick={() => {
           expandRowBTN(index);
+          returnsFocusDatatableExpandBTN(index, true, row.col1);
           row.expanded = false;
         }}
         onKeyPress={(event) => {
           if (event.key === "Enter") {
             expandRowBTN(index);
+            returnsFocusDatatableExpandBTN(index, true, row.col1);
             row.expanded = false;
           }
         }}
         title={`Click to collapse row ${index + 1}`}
         name={`collapse row ${index + 1}`}
-        id={`collapseRow${index + 1}`}
+        id={`collapseRow${row.col1}${index + 1}`}
         role="button"
         tabIndex="0"
         aria-hidden="false"
@@ -204,7 +208,13 @@ const QADataTableRender = ({
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
         className={`data-display-table react-transition fade-in`}
         columns={columns}
-        data={data.length > 0 ? data : user && isCheckedOut ? getEmptyRows(columns) : []}
+        data={
+          data.length > 0
+            ? data
+            : user && isCheckedOut
+            ? getEmptyRows(columns)
+            : []
+        }
         expandableRows
         expandableRowsHideExpander
         expandableRowExpanded={(row) => row.expanded}
