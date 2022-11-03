@@ -465,6 +465,53 @@ export const qaAppendixECorrelationSummaryHeatInputGasProps = (selectedRow) => {
   };
 };
 
+export const qaAppendixECorrelationSummaryHeatInputOilProps = (selectedRow) => {
+  return {
+    dataTableName: "Appendix E Correlation Heat Input from Oil",
+    payload: {
+      monitoringSystemID: null,
+      oilMass: null,
+      oilGCV: null,
+      oilGCVUnitsOfMeasureCode: null,
+      oilHeatInput: null,
+      oilVolume: null,
+      oilVolumeUnitsOfMeasureCode: null,
+      oilDensity: null,
+      oilDensityUnitsOfMeasureCode: null,
+    },
+    dropdownArray: [
+      'monitoringSystemID',
+      'oilGCVUnitsOfMeasureCode',
+      'oilVolumeUnitsOfMeasureCode',
+      'oilDensityUnitsOfMeasureCode',
+    ],
+    columnNames: [
+      "Monitoring System ID",
+      "Oil Mass",
+      "Oil GCV",
+      "Oil GCV Units of Measure Code",
+      "Oil Heat Input",
+      "Oil Volume",
+      "Oil Volume Units of Measure Code",
+      "Oil Density",
+      "Oil Density Units of Measure Code",
+    ],
+    controlInputs: {
+      monitoringSystemID: ["Monitoring System ID", "dropdown", "", ""],
+      oilMass: ["Oil Mass", "input", "", ""],
+      oilGCV: ["Oil GCV", "input", "", ""],
+      oilGCVUnitsOfMeasureCode: ["Oil GCV Units of Measure Code", "dropdown", "", ""],
+      oilHeatInput: ["Oil Heat Input", "input", "", ""],
+      oilVolume: ["Oil Volume", "input", "", ""],
+      oilVolumeUnitsOfMeasureCode: ["Oil Volume Units of Measure Code", "dropdown", "", ""],
+      oilDensity: ["Oil Density", "input", "", ""],
+      oilDensityUnitsOfMeasureCode: ["Oil Density Units of Measure Code", "dropdown", "", ""],
+    },
+    controlDatePickerInputs: {},
+    extraControls: {},
+  };
+};
+
 export const qaFuelFlowToLoadProps = () => {
   return {
     dataTableName: "Fuel Flow to Load",
