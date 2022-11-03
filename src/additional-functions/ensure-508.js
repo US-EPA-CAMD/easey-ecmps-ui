@@ -314,21 +314,6 @@ export const assignAriaLabelsToDatePickerButtons = () => {
   });
 };
 
-export const assignAriaLabelsToDataTable = (
-  containerSelector,
-  ariaLiveData
-) => {
-  const tableRows = document
-    .querySelector(containerSelector)
-    .querySelectorAll('[role="rowgroup"]')[1]
-    .querySelectorAll('[role="row"]');
-
-  tableRows.forEach((row, idx) => {
-    row
-      .querySelector('input[type="checkbox"]')
-      .setAttribute("aria-label", `select-row-${ariaLiveData[idx]}`);
-  });
-};
 // returns focus
 export const returnsFocusDatatableExpandBTN = (index, direction, colName) => {
   let lastBTN = "";
@@ -345,3 +330,22 @@ export const returnsFocusDatatableExpandBTN = (index, direction, colName) => {
     }
   }, 500);
 };
+
+export const assignAriaLabelsToDataTable = (containerSelector, ariaLiveData) => {
+  const table = document.querySelector(containerSelector).querySelector('[role="table"]')
+  table.setAttribute('aria-label', 'Test Summary Data')
+
+  const rowGroups = table.querySelectorAll('[role="rowgroup"]')
+
+  if (rowGroups.length > 1) {
+    const tableRows = rowGroups[1].querySelectorAll('[role="row"]')
+
+    tableRows.forEach((row, idx) => {
+      row.querySelector('input[type="checkbox"]').setAttribute('aria-label', `select row for Test Number ${ariaLiveData[idx]}`)
+
+      row.querySelectorAll('[role="gridcell"').forEach(cell => {
+        cell.setAttribute('role', `cell`)
+      })
+    })
+  }
+}
