@@ -15,6 +15,11 @@ import * as yup from "yup";
 
 import LoadingModal from "../LoadingModal/LoadingModal";
 import { SelectableAccordion } from "../SelectableAccordion/SelectableAccordion.js";
+import {
+  credentialsAuth,
+  getCredentials,
+  verifyChallenge,
+} from "../../utils/api/easeyAuthApi";
 
 export const SubmissionModal = ({
   show,
@@ -24,6 +29,9 @@ export const SubmissionModal = ({
   submissionCallback,
 }) => {
   const modalRef = createRef();
+
+  let activityId;
+  let questionId;
 
   const [canCheck, setCanCheck] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -38,6 +46,7 @@ export const SubmissionModal = ({
   );
   const [showError, setShowError] = useState(false);
   const [formErrorMessage, setFormErrorMessage] = useState("");
+  const [statements, setStatements] = useState([]);
 
   // Navigation state variables
   const [stage, setStage] = useState(1); // 1 is Auth, 2 is Challenge question, 3 is Cert Statements
@@ -89,13 +98,25 @@ export const SubmissionModal = ({
       setShowError(true);
       setFormErrorMessage("Please enter your username and password");
     } else {
-      console.log("Submitting Login Request");
       setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
+
+      try {
+        const result = await credentialsAuth({
+          userId: username,
+          password: password,
+        });
+
+        activityId = result.data.activityId;
+        questionId = result.data.questionId;
+        setQuestion(result.data.question);
+
         setStage(2);
         setShowError(false);
-      }, 1000);
+      } catch (e) {
+        setShowError(true);
+        setFormErrorMessage(e.message);
+      }
+      setLoading(false);
     }
   };
 
@@ -114,13 +135,41 @@ export const SubmissionModal = ({
       setShowError(true);
       setFormErrorMessage("Please enter your answer to the challenge question");
     } else {
-      console.log("Submitting Answer Request");
       setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
+
+      try {
+        await verifyChallenge({
+          userId: username,
+          questionId: questionId,
+          answer: answer,
+          activityId: activityId,
+        });
+
+        const result = await getCredentials();
+
+        const list = result.data.map((el) => {
+          return {
+            title: "Certification Statement",
+            content: el.statementText,
+            expanded: false,
+            hasExpanded: false,
+            facData: [
+              { oris: 3, facName: "Barry", unitStackPipe: "CS00AN" },
+              { oris: 3, facName: "Barry", unitStackPipe: "CS00AN" },
+              { oris: 3, facName: "Barry", unitStackPipe: "CS00AN" },
+            ],
+          };
+        });
+
+        setStatements(list);
+
         setStage(3);
         setShowError(false);
-      }, 1000);
+      } catch (e) {
+        setShowError(true);
+        setFormErrorMessage(e.message);
+      }
+      setLoading(false);
     }
   };
 
@@ -296,20 +345,7 @@ export const SubmissionModal = ({
                   <h2>Certification Statement(s)</h2>
                   <SelectableAccordion
                     setCanCheck={setCanCheck}
-                    items={[
-                      {
-                        title: "Statement",
-                        content: "Content",
-                        expanded: false,
-                        hasExpanded: false,
-                      },
-                      {
-                        title: "Statement",
-                        content: "Content",
-                        expanded: false,
-                        hasExpanded: false,
-                      },
-                    ]}
+                    items={statements}
                   />
                 </div>
               )}

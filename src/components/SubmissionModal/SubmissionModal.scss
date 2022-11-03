@@ -19,10 +19,10 @@
   border-radius: 1% !important;
 }
 
-.break-line {
+.break-line-bold {
   display: block;
   width: 100%; /*or whatever width you want the effect of <hr>*/
-  border-top: 1px solid #ccc;
+  border-top: 3px solid #000 !important;
 }
 
 li {

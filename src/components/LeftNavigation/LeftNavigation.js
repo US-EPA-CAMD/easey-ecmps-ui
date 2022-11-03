@@ -112,11 +112,6 @@ export const LeftNavigation = (props) => {
         <div>
           <SideNav items={makeHeader(home, true, true)} />
           <SideNav items={makeWKspaceHeader()} />
-        </div>
-      ) : (
-        <div>
-          <SideNav items={makeHeader(home, true, false)} />
-          <SideNav items={makeHeader(globalView, true, false)} />
           <Button
             onClick={() => {
               setShow(!show);
@@ -125,6 +120,11 @@ export const LeftNavigation = (props) => {
             Click Me
           </Button>
           {show ? <SubmissionModal show={show} close={close} /> : null}
+        </div>
+      ) : (
+        <div>
+          <SideNav items={makeHeader(home, true, false)} />
+          <SideNav items={makeHeader(globalView, true, false)} />
         </div>
       )}
     </div>
