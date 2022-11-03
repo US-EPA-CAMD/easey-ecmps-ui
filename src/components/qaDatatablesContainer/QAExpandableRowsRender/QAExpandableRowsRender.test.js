@@ -545,7 +545,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
   })
 
-  test('renders Appendix E Correlation Heat Input from Oil rows and create/save/delete', async () => {
+  /*test('renders Appendix E Correlation Heat Input from Oil rows and create/save/delete', async () => {
     const appendixECorrelationSummaryHeatInputOilData = [
       {
         "id": "id1",
@@ -632,7 +632,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     userEvent.click(secondDeleteBtn)
     const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
     userEvent.click(confirmBtns[1])
-  })
+  })*/
 
   test.skip('renders Fuel Flow to Load Baseline data rows and create/save/delete', async () => {
     const fuelFlowToLoadBaselineData = [
