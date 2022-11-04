@@ -1062,6 +1062,20 @@ export const updateFuelFlowToLoadBaseline = async (locId, testSumId, id, payload
   }
 };
 
+export const deleteFuelFlowToLoadBaseline = async (locId, testSumId, id) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baselines/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
 export const getAppendixERunData = async (
   locId,
   testSumId,
