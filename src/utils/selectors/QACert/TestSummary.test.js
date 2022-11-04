@@ -372,4 +372,35 @@ describe("testing TestSummary data selectors", () => {
     ];
     expect(fs.mapRataSummaryToRows(data)).toEqual(records);
   });
+  test("mapAppendixECorrHeatInputOilToRows", () => {
+    const data = [
+      {
+        id: "0000120",
+        monitoringSystemID: '100',
+        oilMass: 1,
+        oilGCV: 1,
+        oilGCVUnitsOfMeasureCode: 'BTUBBL',
+        oilHeatInput: 1,
+        oilVolume: 1,
+        oilVolumeUnitsOfMeasureCode: 'BBL',
+        oilDensity: 1,
+        oilDensityUnitsOfMeasureCode: 'LBBBL',
+      },
+    ];
+    const records = [
+      {
+        id: '0000120',
+        col1: '100',
+        col2: 1,
+        col3: 1,
+        col4: 'BTUBBL',
+        col5: 1,
+        col6: 1,
+        col7: 'BBL',
+        col8: 1,
+        col9: 'LBBBL',
+      },
+    ];
+    expect(fs.mapAppendixECorrHeatInputOilToRows(data)).toEqual(records);
+  });
 });
