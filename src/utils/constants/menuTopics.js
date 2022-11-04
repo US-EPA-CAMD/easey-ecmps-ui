@@ -147,6 +147,10 @@ export const collapsableFooterTopics = [
 ];
 
 export const globalView = [
+  {
+    name: "Review & Submit",
+    url: "/review",
+  },
   { name: "Monitoring Plans", url: "/monitoring-plans" },
   {
     name: "QA & Certifications",
@@ -176,6 +180,10 @@ export const globalView = [
 export const home = [{ name: "Home", url: "/" }];
 
 export const workSpace = [
+  {
+    name: "Review & Submit",
+    url: "/review",
+  },
   { name: "Monitoring Plans", url: "/workspace/monitoring-plans" },
   {
     name: "QA & Certifications",

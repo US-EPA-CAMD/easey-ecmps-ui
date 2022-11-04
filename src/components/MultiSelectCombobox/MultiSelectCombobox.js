@@ -15,6 +15,8 @@ const MultiSelectCombobox = ({
   entity,
   onChangeUpdate,
   searchBy,
+  hideInput,
+  styling,
 }) => {
   const [filter, setFilter] = useState("");
   const [_items, _setItems] = useState(getComboboxEnabledItems(items));
@@ -184,12 +186,12 @@ const MultiSelectCombobox = ({
         aria-expanded={showListBox}
         aria-owns="listbox"
         id={`multi-select-combobox-${entity}`}
-        className="margin-top-1 margin-bottom-2 border-1px bg-white multi-select-combobox"
+        className={styling?.combobox || "margin-top-1 margin-bottom-2 border-1px bg-white multi-select-combobox"}
       >
         <div className="margin-x-05 margin-top-05 display-block maxh-card overflow-y-scroll">
           {selectedItems.length > 0 && selectedItems.map((i) => i.component)}
         </div>
-        <input
+        {hideInput? null : <><input
           autoFocus
           id={`${entity}-searchbox`}
           type="text"
@@ -209,8 +211,8 @@ const MultiSelectCombobox = ({
           icon={faCaretDown}
           className="pin-right margin-right-1 padding-top-05"
           onClick={() => setShowListBox(true)}
-        />
-        {showListBox && (
+        /></>}
+        {showListBox || hideInput ? (
           <ul
             aria-multiselectable="true"
             role="listbox"
@@ -218,7 +220,7 @@ const MultiSelectCombobox = ({
             id="listbox"
             data-testid="multi-select-listbox"
             tabIndex="-1"
-            className="list-box bg-white display-block height-15 width-full overflow-y-scroll overflow-x-hidden border-top"
+            className={styling?.listbox || "list-box bg-white display-block height-15 width-full overflow-y-scroll overflow-x-hidden border-top"}
           >
             {data.length > 0 ? (
               data.map((item, i) => (
@@ -256,7 +258,7 @@ const MultiSelectCombobox = ({
               </span>
             )}
           </ul>
-        )}
+        ) : null}
       </div>
     </>
   );
