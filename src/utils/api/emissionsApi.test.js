@@ -1,7 +1,7 @@
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
 import config from "../../config";
-import { exportEmissionsData, getEmissionsSchema, getEmissionViewData } from "./emissionsApi";
+import { exportEmissionsData, getEmissionsSchema, getEmissionViewData, importEmissionsFile } from "./emissionsApi";
 import { ExpansionPanelActions } from "@material-ui/core";
 
 describe("Emissions API", function () {
@@ -106,5 +106,15 @@ describe("Emissions API", function () {
         expect(data).toEqual({});
       })
     })
+
+    describe("importEmissionsFile", ()=>{
+      it("should successfully import emissions json", async ()=>{
+        mock.onPost(`${config.services.emissions.uri}/workspace/emissions/import`, {}).reply(201, {"message":"Success"});
+        const {data} = await importEmissionsFile({});
+
+        expect(data.message).toEqual("Success");
+      })
+    })
+
   });
 });

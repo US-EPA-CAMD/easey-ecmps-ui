@@ -202,7 +202,7 @@ export const UploadModal = ({
                                 File Import Error(s)
                               </h3>
                               <p id="importErrorSubText">
-                                {`The file selected for import has ${importedFileErrorMsgs.length} errors.`}
+                                {`The file selected for import has ${importedFileErrorMsgs.length} error(s).`}
                               </p>
                             </div>
                           ) : (

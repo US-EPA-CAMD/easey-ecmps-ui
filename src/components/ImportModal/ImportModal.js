@@ -5,12 +5,13 @@ import { FormGroup, Label, FileInput, Alert } from "@trussworks/react-uswds";
 import {
   QA_CERT_TEST_SUMMARY_STORE_NAME,
   MONITORING_PLAN_STORE_NAME,
+  EMISSIONS_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 
 import * as qaApi from "../../utils/api/qaCertificationsAPI";
 
-import * as emissionsApi from "../../utils/api/emissionsApi";
+import * as emApi from "../../utils/api/emissionsApi";
 
 import { successResponses } from "../../utils/api/apiUtils.js";
 import "./ImportModal.scss";
@@ -28,20 +29,30 @@ const ImportModal = ({
 }) => {
   const [schema, setSchema] = useState([]);
   const [schemaErrors, setSchemaErrors] = useState([]);
+  const [label, setLabel] = useState("");
   
   useEffect(() => {
     switch (workspaceSection) {
       case MONITORING_PLAN_STORE_NAME:
-        mpApi.getMPSchema().then((res) => {
-          setSchema(res.data);
+        mpApi.getMPSchema().then(({data}) => {
+          setSchema(data);
+          setLabel("Upload MP JSON File");
         });
         break;
 
       case QA_CERT_TEST_SUMMARY_STORE_NAME:
-        qaApi.getQASchema().then((res) => {
-          setSchema(res.data);
+        qaApi.getQASchema().then(({data}) => {
+          setSchema(data);
+          setLabel("Upload QA JSON File");
         });
         break;
+      
+      case EMISSIONS_STORE_NAME:
+        emApi.getEmissionsSchema().then(({data})=>{
+          setSchema(data);
+          setLabel("Upload Emissions JSON File");
+        })
+
       default:
         break;
     }
@@ -148,7 +159,7 @@ const ImportModal = ({
             ""
           )}
           <FormGroup>
-            <Label htmlFor="file-input-single"> Upload MP JSON File</Label>
+            <Label htmlFor="file-input-single">{label}</Label>
             <FileInput
               id="file-input-single"
               name="file-input-single"

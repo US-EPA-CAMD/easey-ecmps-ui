@@ -1,6 +1,7 @@
 import axios from "axios";
 import config from "../../config";
-import { handleError, handleResponse } from "./apiUtils";
+import { handleError, handleResponse, handleImportError } from "./apiUtils";
+import { secureAxios } from "./easeyAuthApi";
 import download from "downloadjs";
 
 axios.defaults.headers.common = {
@@ -114,6 +115,20 @@ export const getViews = async () => {
 
 export const getEmissionsSchema = async () => {
   const url = `${config.services.content.uri}/ecmps/reporting-instructions/emissions.schema.json`;
-
   return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const importEmissionsFile = async (payload) => {
+  const url = `${config.services.emissions.uri}/workspace/emissions/import`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
 };

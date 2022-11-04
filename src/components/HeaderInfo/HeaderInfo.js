@@ -13,6 +13,7 @@ import config from "../../config";
 import { triggerEvaluation } from "../../utils/api/quartzApi";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
+import * as emApi from "../../utils/api/emissionsApi";
 import {
   EMISSIONS_STORE_NAME,
   MONITORING_PLAN_STORE_NAME,
@@ -42,6 +43,7 @@ import {
   exportEmissionsDataDownload,
 } from "../../utils/api/emissionsApi";
 import { getUser } from "../../utils/functions";
+import axios from "axios";
 
 // Helper function that generates an array of years from this year until the year specified in min param
 const generateArrayOfYears = (min) => {
@@ -145,6 +147,10 @@ export const HeaderInfo = ({
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const [isReverting, setIsReverting] = useState(false);
   const [viewTemplates, setViewTemplates] = useState([]);
+
+  const [importedFile, setImportedFile] = useState([]);
+  const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
+
 
   // The below object structure is needed for MultiSelectComboBox
   const yearsArray = useMemo(
@@ -604,10 +610,7 @@ export const HeaderInfo = ({
     setShowRevertModal(false);
   };
 
-  const [importedFile, setImportedFile] = useState([]);
-  const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
-
-  const importMPBtn = (payload) => {
+  const importMPFile = (payload) => {
     mpApi.importMP(payload).then((response) => {
       setUsePortBtn(true);
       setIsLoading(true);
@@ -616,6 +619,31 @@ export const HeaderInfo = ({
       }
     });
   };
+
+  const importEmissionsFile = (payload) =>{
+    emApi.importEmissionsFile(payload).then((response) => {
+
+      console.log("response")
+      console.log(response)
+      setUsePortBtn(true);
+      setIsLoading(true);
+      if (response?.status !== 201) {
+        setImportedFileErrorMsgs(response?.split(","));
+      }
+      else
+        setImportedFileErrorMsgs([])
+    });
+
+  }
+
+  const importFile = (payload) =>{
+    
+    if(workspaceSection === MONITORING_PLAN_STORE_NAME)
+      importMPFile(payload);
+    else if(workspaceSection === EMISSIONS_STORE_NAME)
+      importEmissionsFile(payload);
+  }
+
   const evaluate = () => {
     triggerEvaluation({
       monitorPlanId: configID,
@@ -1036,7 +1064,7 @@ export const HeaderInfo = ({
             exitBTN={"Import"}
             disablePortBtn={disablePortBtn}
             port={() => {
-              importMPBtn(importedFile);
+              importFile(importedFile);
             }}
             hasFormatError={hasFormatError}
             hasInvalidJsonError={hasInvalidJsonError}
@@ -1048,7 +1076,7 @@ export const HeaderInfo = ({
                 setHasFormatError={setHasFormatError}
                 setHasInvalidJsonError={setHasInvalidJsonError}
                 setImportedFile={setImportedFile}
-                workspaceSection={MONITORING_PLAN_STORE_NAME}
+                workspaceSection={workspaceSection}
               />
             }
           />
@@ -1093,7 +1121,7 @@ export const HeaderInfo = ({
           importApiErrors={importApiErrors}
           importedFileErrorMsgs={importedFileErrorMsgs}
           setUpdateRelatedTables={setUpdateRelatedTables}
-          successMsg={"Monitoring Plan has been Successfully Imported."}
+          successMsg={ workspaceSection === MONITORING_PLAN_STORE_NAME ? "Monitoring Plan has been Successfully Imported." : "Test Data from File has been successfully imported."}
           children={
             <ImportModal
               setDisablePortBtn={setDisablePortBtn}
