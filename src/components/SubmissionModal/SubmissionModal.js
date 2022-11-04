@@ -9,6 +9,7 @@ import {
   TextInput,
   Alert,
   Checkbox,
+  Form,
 } from "@trussworks/react-uswds";
 import { ClearSharp } from "@material-ui/icons";
 import * as yup from "yup";
@@ -261,10 +262,10 @@ export const SubmissionModal = ({
                 <div className="desktop:grid-col-5 grid-col-12">
                   <Label htmlFor={usernameText}>Username</Label>
                   <TextInput
-                    data-test="component-login-username"
+                    data-testid="component-login-username"
                     id={usernameText}
                     name={usernameText}
-                    type={username ? "text" : "password"}
+                    type={"text"}
                     value={username}
                     onChange={(event) => setUsername(event.target.value)}
                   />
@@ -276,15 +277,18 @@ export const SubmissionModal = ({
                   <Label className="margin-left-auto" htmlFor={passwordText}>
                     Password
                   </Label>
-                  <TextInput
-                    data-test="component-login-password"
-                    className="margin-left-auto"
-                    id={passwordText}
-                    name={passwordText}
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                  />
+                  <form>
+                    <TextInput
+                      data-testid="component-login-password"
+                      className="margin-left-auto"
+                      id={passwordText}
+                      name={passwordText}
+                      autoComplete="on"
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(event) => setPassword(event.target.value)}
+                    />
+                  </form>
                   <p className="usa-form__note">
                     <Button
                       type="button"
@@ -314,15 +318,18 @@ export const SubmissionModal = ({
                       <Label className="margin-left-auto" htmlFor={answerText}>
                         Answer
                       </Label>
-                      <TextInput
-                        className="margin-left-auto"
-                        data-test="component-answer"
-                        id={answerText}
-                        name={answerText}
-                        type={showAnswer ? "text" : "password"}
-                        value={answer}
-                        onChange={(event) => setAnswer(event.target.value)}
-                      />
+                      <form>
+                        <TextInput
+                          className="margin-left-auto"
+                          data-testid="component-answer"
+                          id={answerText}
+                          autoComplete="on"
+                          name={answerText}
+                          type={showAnswer ? "text" : "password"}
+                          value={answer}
+                          onChange={(event) => setAnswer(event.target.value)}
+                        />
+                      </form>
                       <p className="usa-form__note">
                         <Button
                           type="button"
@@ -357,6 +364,7 @@ export const SubmissionModal = ({
                     className="display-inline-block margin-right-2"
                     id="checkbox"
                     name="checkbox"
+                    data-testid="component-checkbox"
                     onChange={(e) => setChecked(e.target.checked)}
                     disabled={!canCheck}
                     label="I agree to all certification statements"

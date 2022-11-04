@@ -47,12 +47,22 @@ describe("Selectable Accordion", () => {
             content: "Content1",
             expanded: false,
             hasExpanded: false,
+            facData: [
+              { oris: 3, facName: "Barry", unitStackPipe: "CS00AN" },
+              { oris: 3, facName: "Barry", unitStackPipe: "CS00AN" },
+              { oris: 3, facName: "Barry", unitStackPipe: "CS00AN" },
+            ],
           },
           {
             title: "Statement2",
             content: "Content2",
             expanded: false,
             hasExpanded: false,
+            facData: [
+              { oris: 3, facName: "Barry", unitStackPipe: "CS00AN" },
+              { oris: 3, facName: "Barry", unitStackPipe: "CS00AN" },
+              { oris: 3, facName: "Barry", unitStackPipe: "CS00AN" },
+            ],
           },
         ]}
         setCanCheck={func}

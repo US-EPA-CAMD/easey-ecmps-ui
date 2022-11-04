@@ -30,7 +30,7 @@ export const SelectableAccordion = ({ items, setCanCheck }) => {
               className={`data-display-table react-transition fade-in`}
               columns={columnMappings}
               fixedHeader
-              fixedHeaderScrollHeight="100px"
+              fixedHeaderScrollHeight="150px"
               data={element.facData}
             />
             <div className="margin-bottom-3">
@@ -58,10 +58,10 @@ export const SelectableAccordion = ({ items, setCanCheck }) => {
                 </button>
               </h4>
               <div
-                className="usa-accordion__content usa-prose margin-4"
+                className="usa-accordion__content margin-4"
                 hidden={!itemStates[idx].expanded}
               >
-                <p className="">{element.content}</p>
+                <p className="no-max-width">{element.content}</p>
               </div>
             </div>
             {idx < items.length - 1 && (
