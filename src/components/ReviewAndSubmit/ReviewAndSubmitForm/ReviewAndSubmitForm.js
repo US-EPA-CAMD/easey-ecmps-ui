@@ -452,7 +452,7 @@ const ReviewAndSubmitForm = () => {
           <div className="buttons grid-col-6">
             <div className="display-flex flex-row flex-justify-end margin-top-5">
               <Button outline={true}>Apply Filter(s)</Button>
-              <Button>Submit</Button>
+              <Button disabled>Submit</Button>
             </div>
           </div>
         </div>
