@@ -1,14 +1,11 @@
-import React, { useState } from "react";
-import { SideNav, Link as USWDSLink, Button } from "@trussworks/react-uswds";
+import React from "react";
+import { SideNav, Link as USWDSLink } from "@trussworks/react-uswds";
 import "./LeftNavigation.scss";
 import { Link } from "react-router-dom";
 
 import { globalView, workSpace, home } from "../../utils/constants/menuTopics";
-import SubmissionModal from "../SubmissionModal/SubmissionModal";
 
 export const LeftNavigation = (props) => {
-  const [show, setShow] = useState(false);
-
   const handleRouteChange = (event, url) => {
     props.setCurrentLink(url);
   };
@@ -100,10 +97,6 @@ export const LeftNavigation = (props) => {
         />,
       ],
     ];
-  };
-
-  const close = () => {
-    setShow(false);
   };
 
   return (

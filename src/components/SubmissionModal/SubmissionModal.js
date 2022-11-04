@@ -9,7 +9,6 @@ import {
   TextInput,
   Alert,
   Checkbox,
-  Form,
 } from "@trussworks/react-uswds";
 import { ClearSharp } from "@material-ui/icons";
 import * as yup from "yup";
