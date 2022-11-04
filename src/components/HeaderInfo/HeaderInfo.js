@@ -956,7 +956,7 @@ export const HeaderInfo = ({
                       onChange={(e) => setViewTemplateSelect(e.target.value)}
                       className="maxw-mobile"
                     >
-                      {viewTemplates.map((view) => (
+                      {viewTemplates?.map((view) => (
                         <option
                           data-testid={view.name}
                           key={view.name}
