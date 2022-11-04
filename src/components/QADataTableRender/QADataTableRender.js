@@ -27,6 +27,7 @@ const QADataTableRender = ({
   evaluate,
   noDataComp,
   isCheckedOut,
+  dataTableName
 }) => {
   const columns = [];
   columnNames.forEach((name, index) => {
@@ -54,7 +55,7 @@ const QADataTableRender = ({
       }
     });
     setTimeout(() => {
-      ensure508();
+      ensure508(dataTableName);
     }, oneSecond);
 
     return () => {
@@ -203,7 +204,7 @@ const QADataTableRender = ({
   }
 
   return (
-    <div aria-live="polite" className="padding-3">
+    <div aria-live="polite" className="padding-3" id={dataTableName.replaceAll(" ", "-")}>
       <DataTable
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
         className={`data-display-table react-transition fade-in`}
