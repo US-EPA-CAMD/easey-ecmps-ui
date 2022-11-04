@@ -18,6 +18,7 @@ const fuelFlowToLoad = "Fuel Flow to Load";
 const fuelFlowToLoadBaseline = "Fuel Flow to Load Baseline"
 const appendixECorrTestRun = "Appendix E Correlation Run";
 const appendixECorrelationSummary = "Appendix E Correlation Summary";
+const appendixECorrHeatInputOil = "Appendix E Correlation Heat Input from Oil";
 const appendixECorrHeatInputGas = "Appendix E Correlation Heat Input from Gas";
 const flowToLoadCheck = "Flow To Load Check";
 
@@ -127,6 +128,20 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
             error
           )
         );
+    case appendixECorrHeatInputOil:
+      return qaApi
+        .getAppendixEHeatInputOilData(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
+          id
+        )
+        .catch((error) =>
+          console.log(
+            "error fetching appendix E heat input from oil data",
+            error
+          )
+        );
     case flowToLoadCheck:
       return qaApi.getFlowToLoadCheckRecords(location, id).catch((error) => {
         console.log("error", error);
@@ -169,9 +184,11 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.mapAppendixECorrTestRunsToRows(dataIn);
     case appendixECorrHeatInputGas:
       return selector.mapAppendixECorrHeatInputGasToRows(dataIn);
+    case appendixECorrHeatInputOil:
+      return selector.mapAppendixECorrHeatInputOilToRows(dataIn);
     case flowToLoadCheck:
       return selector.mapFlowToLoadCheckToRows(dataIn);
-    
+
     default:
       throw new Error(`getDataTableRecords case not implemented for ${name}`);
   }
@@ -294,12 +311,22 @@ export const removeDataSwitch = async (
         .catch((error) => {
           console.log("error", error);
         });
+    case appendixECorrHeatInputOil:
+      return qaApi
+        .deleteAppendixECorrelationHeatInputOil(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], id, row.id)
+        .catch((error) => {
+          console.log("error", error);
+        });
     case appendixECorrTestRun:
       return qaApi
         .deleteAppendixERun(extraIdsArr[0], extraIdsArr[1], id, row.id)
         .catch((error) => {
           console.log("error", error);
         });
+    case flowToLoadCheck:
+      return qaApi
+        .deleteFlowToLoadCheckRecord(locationId, id, row.id)
+        .catch((error) => console.log("error", error));
     default:
       throw new Error(`removeDataSwitch case not implemented for ${name}`);
   }
@@ -431,6 +458,10 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         });
     case fuelFlowToLoad:
       return qaApi.updateFuelFlowToLoad(location, id, userInput.id, userInput);
+    case fuelFlowToLoadBaseline:
+      return qaApi
+        .updateFuelFlowToLoadBaseline(location, id, userInput.id, userInput)
+        .catch(error => console.log('error updating fuel flow to load baseline', error))
     case appendixECorrTestRun:
       return qaApi
         .updateAppendixERun(
@@ -439,7 +470,25 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           id,
           userInput.id,
           userInput
-        ).catch((error) => { console.log("error", error) });
+        ).catch((error) => {console.log("error", error)});
+    case appendixECorrHeatInputOil:
+      return qaApi
+        .updateAppendixECorrelationHeatInputOil(
+          extraIdsArr[0], 
+          extraIdsArr[1], 
+          extraIdsArr[2], 
+          id, 
+          userInput.id,
+          userInput
+        ).catch((error) => {console.log("error", error)});
+    case flowToLoadCheck:
+      return qaApi
+      .updateFlowToLoadCheckRecord(
+        location,
+        id,
+        userInput.id,
+        userInput
+      ).catch((error) => console.log("error", error));
     default:
       break;
   }
@@ -573,8 +622,23 @@ export const createDataSwitch = async (
             error
           );
         });
-      case flowToLoadCheck:
-        return qaApi.createFlowToLoadCheckRecord(location, id, userInput);
+    case appendixECorrHeatInputOil:
+      return qaApi
+        .createAppendixEHeatInputOil(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
+          id,
+          userInput
+        )
+        .catch((error) => {
+          console.log(
+            "error creating appendix e correlation heat input from oil",
+            error
+          );
+        });
+    case flowToLoadCheck:
+      return qaApi.createFlowToLoadCheckRecord(location, id, userInput);
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
   }

@@ -314,11 +314,38 @@ export const assignAriaLabelsToDatePickerButtons = () => {
   });
 };
 
+// returns focus
+export const returnsFocusDatatableExpandBTN = (index, direction, colName) => {
+  let lastBTN = "";
+
+  setTimeout(() => {
+    if (direction) {
+      lastBTN = document
+        .getElementById(`expandRow${colName}${index + 1}`)
+        .focus();
+    } else {
+      lastBTN = document
+        .getElementById(`collapseRow${colName}${index + 1}`)
+        .focus();
+    }
+  }, 500);
+};
 
 export const assignAriaLabelsToDataTable = (containerSelector, ariaLiveData) => {
-  const tableRows = document.querySelector(containerSelector).querySelectorAll('[role="rowgroup"]')[1].querySelectorAll('[role="row"]')
+  const table = document.querySelector(containerSelector).querySelector('[role="table"]')
+  table.setAttribute('aria-label', 'Test Summary Data')
 
-  tableRows.forEach((row, idx) => {
-    row.querySelector('input[type="checkbox"]').setAttribute('aria-label', `select-row-${ariaLiveData[idx]}`)
-  })
+  const rowGroups = table.querySelectorAll('[role="rowgroup"]')
+
+  if (rowGroups.length > 1) {
+    const tableRows = rowGroups[1].querySelectorAll('[role="row"]')
+
+    tableRows.forEach((row, idx) => {
+      row.querySelector('input[type="checkbox"]').setAttribute('aria-label', `select row for Test Number ${ariaLiveData[idx]}`)
+
+      row.querySelectorAll('[role="gridcell"').forEach(cell => {
+        cell.setAttribute('role', `cell`)
+      })
+    })
+  }
 }

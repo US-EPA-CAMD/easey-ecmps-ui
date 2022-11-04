@@ -132,9 +132,16 @@ export const exportQA = async (
   unitIds,
   stackPipeIds,
   beginDate,
-  endDate
+  endDate,
+  isOfficial
 ) => {
-  let url = getApiUrl(`/export?facilityId=${facilityId}`);
+  let url;
+
+  if (isOfficial) {
+    url = `${config.services.qaCertification.uri}/export?facilityId=${facilityId}`;
+  } else {
+    url = getApiUrl(`/export?facilityId=${facilityId}`);
+  }
 
   if (unitIds?.length > 0) {
     const unitIdsQueryParam = unitIds.join("|");
@@ -925,7 +932,7 @@ export const createAppendixECorrelationSummaryRecord = async (
       })
     );
   } catch (error) {
-    return handleImportError(error);
+    return handleError(error);
   }
 };
 
@@ -1040,6 +1047,21 @@ export const createFuelFlowToLoadBaseline = async (locId, testSumId, payload) =>
   }
 };
 
+export const updateFuelFlowToLoadBaseline = async (locId, testSumId, id, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baselines/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const getAppendixERunData = async (
   locId,
   testSumId,
@@ -1048,7 +1070,6 @@ export const getAppendixERunData = async (
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs`;
   const url = getApiUrl(path);
 
-  console.log("this is url for run", url);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
@@ -1081,7 +1102,6 @@ export const getAppendixEHeatInputGasData = async (
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-gases`;
   const url = getApiUrl(path);
-  console.log("this is url for heat", url);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
@@ -1094,6 +1114,84 @@ export const createAppendixEHeatInputGas = async (
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs${appECorrTestrunId}/appendix-e-heat-input-from-gases`;
 };
+
+export const getAppendixEHeatInputOilData = async (
+  locId,
+  testSumId,
+  appECorrTestSumId,
+  appECorrTestrunId
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createAppendixEHeatInputOil = async (
+  locId,
+  testSumId,
+  appECorrTestSumId,
+  appECorrTestrunId,
+  payload
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+export const updateAppendixECorrelationHeatInputOil = async (
+  locId,
+  testSumId,
+  appECorrTestSumId,
+  appECorrTestrunId, 
+  id,
+  payload
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+}
+
+export const deleteAppendixECorrelationHeatInputOil = async (
+  locId,
+  testSumId,
+  appECorrTestSumId,
+  appECorrTestrunId, 
+  id,
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
 export const updateAppendixERun = async (
   locId,
   testSumId,
@@ -1157,6 +1255,46 @@ export const createFlowToLoadCheckRecord = async (
         method: "POST",
         url: url,
         data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const updateFlowToLoadCheckRecord = async (
+  locId,
+  testSumId,
+  id,
+  payload
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const deleteFlowToLoadCheckRecord = async (
+  locId,
+  testSumId,
+  id,
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
       })
     );
   } catch (error) {
