@@ -44,6 +44,7 @@ import {
 } from "../../utils/api/emissionsApi";
 import { getUser } from "../../utils/functions";
 import axios from "axios";
+import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
 
 // Helper function that generates an array of years from this year until the year specified in min param
 const generateArrayOfYears = (min) => {
@@ -151,6 +152,8 @@ export const HeaderInfo = ({
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
 
+  const [showEmissionsImportTypeModal, setShowEmissionsImportTypeModal] = useState(false);
+
 
   // The below object structure is needed for MultiSelectComboBox
   const yearsArray = useMemo(
@@ -218,6 +221,7 @@ export const HeaderInfo = ({
 
   const resetImportFlags = () => {
     setShowImportModal(false);
+    setShowEmissionsImportTypeModal(false);
     setDisablePortBtn(true);
     setUsePortBtn(false);
     setFinishedLoading(false);
@@ -262,16 +266,27 @@ export const HeaderInfo = ({
   };
 
   const openImportModal = () => {
-    setShowImportModal(true);
 
-    setTimeout(() => {
-      attachChangeEventListeners(".modalUserInput");
-    });
+      setShowImportModal(true);
+
+      setTimeout(() => {
+        attachChangeEventListeners(".modalUserInput");
+      });  
   };
 
-  const closeImportModalHandler = () => {
-    const importBtn = document.querySelector("#importMonitoringPlanBtn");
+  const openModal = () => {
+    if( workspaceSection === MONITORING_PLAN_STORE_NAME){
+      openImportModal();
+    }
+    else{
+      setShowEmissionsImportTypeModal(true);
+    }
+  }
+  
 
+  const closeImportModalHandler = () => {
+    const importBtn = document.querySelector("#importBtn");
+    console.log("window.isDataChanged", window.isDataChanged)
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
         resetImportFlags();
@@ -709,6 +724,10 @@ export const HeaderInfo = ({
       handleEmissionsExport()
   }
 
+  const onChangeOfEmissionsImportType = ()=>{
+
+  }
+
   return (
     <div className="header">
       <div
@@ -769,8 +788,8 @@ export const HeaderInfo = ({
                     type="button"
                     className="margin-right-2 float-right"
                     outline={false}
-                    onClick={() => openImportModal()}
-                    id="importMonitoringPlanBtn"
+                    onClick={() => openModal()}
+                    id="importBtn"
                   >
                     Import Data
                   </Button>
@@ -1012,7 +1031,6 @@ export const HeaderInfo = ({
                   >
                     {"Apply Filter(s)"}
                   </Button>
-                  {/* <div>abc</div> */}
                 </Grid>
               </Grid>
               <Grid row>
@@ -1047,11 +1065,6 @@ export const HeaderInfo = ({
       ) : (
         <Preloader />
       )}
-      <div
-        className={`usa-overlay ${
-          showImportModal || isReverting ? "is-visible" : ""
-        }`}
-      />
 
       {showImportModal && !finishedLoading && !isLoading ? (
         <div>
@@ -1135,7 +1148,17 @@ export const HeaderInfo = ({
         />
       )}
 
-      <div className={`usa-overlay ${showCommentsModal ? "is-visible" : ""}`} />
+      {showEmissionsImportTypeModal && (
+        <UploadModal
+          show={showEmissionsImportTypeModal}
+          close={closeImportModalHandler}
+          showCancel={true}
+          children={
+            <EmissionsImportTypeModalContent onChange={onChangeOfEmissionsImportType} />
+          }
+        />
+      )}
+
       {showCommentsModal && (
         <div>
           <UploadModal

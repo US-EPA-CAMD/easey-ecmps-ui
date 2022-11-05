@@ -123,6 +123,7 @@ export const UploadModal = ({
 
   return ReactDom.createPortal(
     <div role="dialog" aria-modal="true" className="upload-modal-container">
+      <div className="usa-overlay is-visible"></div>
       <div
         data-test="component-loading"
         className="loading-modal"
@@ -301,9 +302,9 @@ export const UploadModal = ({
               </div>
             </modalContext.Provider>
           </div>
-        </div>{" "}
+        </div>
       </div>
-      <div style={styles.modalTintScreen} />
+      {/* <div style={styles.modalTintScreen} /> */}
     </div>,
     modalRoot
   );
