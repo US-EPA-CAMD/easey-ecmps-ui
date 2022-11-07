@@ -587,10 +587,13 @@ describe('Test cases for QAExpandableRowsRender', () => {
     const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests`;
     const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests`;
     const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests/${idRegex}`);
+    const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests/${idRegex}`);
 
     mock.onGet(getUrl).reply(200, fuelFlowToLoadData)
     mock.onPost(postUrl).reply(200, 'created')
     mock.onPut(putUrl).reply(200, 'updated')
+    mock.onDelete(deleteUrl).reply(200, 'deleted')
+
     const props = qaFuelFlowToLoadProps()
     const idArray = [locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId, id]
     const data = { locationId: locId, id: testSumId }
