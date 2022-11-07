@@ -12,8 +12,8 @@ const columnMappings = [
   },
 
   {
-    name: "Unit/Stack/Pipe ID",
-    selector: (row) => row.unitStackPipe,
+    name: "Unit Info",
+    selector: (row) => row.unitInfo,
   },
 ];
 

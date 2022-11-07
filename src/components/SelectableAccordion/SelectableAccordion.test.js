@@ -48,9 +48,9 @@ describe("Selectable Accordion", () => {
             expanded: false,
             hasExpanded: false,
             facData: [
-              { oris: 3, facName: "Barry", unitStackPipe: "CS00AN" },
-              { oris: 3, facName: "Barry", unitStackPipe: "CS00AN" },
-              { oris: 3, facName: "Barry", unitStackPipe: "CS00AN" },
+              { oris: 3, facName: "Barry", unitInfo: "CS00AN" },
+              { oris: 3, facName: "Barry", unitInfo: "CS00AN" },
+              { oris: 3, facName: "Barry", unitInfo: "CS00AN" },
             ],
           },
           {
@@ -59,9 +59,9 @@ describe("Selectable Accordion", () => {
             expanded: false,
             hasExpanded: false,
             facData: [
-              { oris: 3, facName: "Barry", unitStackPipe: "CS00AN" },
-              { oris: 3, facName: "Barry", unitStackPipe: "CS00AN" },
-              { oris: 3, facName: "Barry", unitStackPipe: "CS00AN" },
+              { oris: 3, facName: "Barry", unitInfo: "CS00AN" },
+              { oris: 3, facName: "Barry", unitInfo: "CS00AN" },
+              { oris: 3, facName: "Barry", unitInfo: "CS00AN" },
             ],
           },
         ]}

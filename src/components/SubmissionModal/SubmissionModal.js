@@ -27,6 +27,7 @@ export const SubmissionModal = ({
   width = "50%",
   left = "25%",
   submissionCallback,
+  monitorPlanIds,
 }) => {
   const modalRef = createRef();
 
@@ -145,7 +146,7 @@ export const SubmissionModal = ({
           activityId: activityId,
         });
 
-        const result = await getCredentials();
+        const result = await getCredentials(monitorPlanIds);
 
         const list = result.data.map((el) => {
           return {
@@ -153,11 +154,7 @@ export const SubmissionModal = ({
             content: el.statementText,
             expanded: false,
             hasExpanded: false,
-            facData: [
-              { oris: 3, facName: "Barry", unitStackPipe: "CS00AN" },
-              { oris: 3, facName: "Barry", unitStackPipe: "CS00AN" },
-              { oris: 3, facName: "Barry", unitStackPipe: "CS00AN" },
-            ],
+            facData: el.facData,
           };
         });
 

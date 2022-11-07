@@ -164,9 +164,11 @@ export const verifyChallenge = async (payload) => {
   });
 };
 
-export const getCredentials = async () => {
+export const getCredentials = async (monitorPlans) => {
   return secureAxios({
     method: "GET",
-    url: `${config.services.authApi.uri}/certifications/statements`,
+    url: `${
+      config.services.authApi.uri
+    }/certifications/statements?monitorPlanIds=${monitorPlans.join("|")}`,
   });
 };
