@@ -43,11 +43,12 @@ import {
   exportEmissionsDataDownload,
 } from "../../utils/api/emissionsApi";
 import { getUser } from "../../utils/functions";
-import axios from "axios";
 import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
+import ReportingPeriodSelector from "../ReportingPeriodSelector/ReportingPeriodSelector";
+import { ImportHistoricalDataModalContent } from "./ImportHistoricalDataModalContent";
 
 // Helper function that generates an array of years from this year until the year specified in min param
-const generateArrayOfYears = (min) => {
+export const generateArrayOfYears = (min) => {
   let max = new Date().getFullYear();
   let years = [];
 
@@ -153,7 +154,7 @@ export const HeaderInfo = ({
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
 
   const [showEmissionsImportTypeModal, setShowEmissionsImportTypeModal] = useState(false);
-
+  const [showHistoricalDataImportModal, setShowHistoricalDataImportModal] = useState(true);
 
   // The below object structure is needed for MultiSelectComboBox
   const yearsArray = useMemo(
@@ -283,23 +284,6 @@ export const HeaderInfo = ({
     }
   }
   
-
-  const closeImportModalHandler = () => {
-    const importBtn = document.querySelector("#importBtn");
-    console.log("window.isDataChanged", window.isDataChanged)
-    if (window.isDataChanged === true) {
-      if (window.confirm(unsavedDataMessage) === true) {
-        resetImportFlags();
-        removeChangeEventListeners(".modalUserInput");
-        importBtn.focus();
-      }
-    } else {
-      resetImportFlags();
-      removeChangeEventListeners(".modalUserInput");
-      importBtn.focus();
-    }
-  };
-
   const handleEmissionsExport = async () => {
     const promises = [];
     for (const selectedYear of selectedYears) {
@@ -637,9 +621,6 @@ export const HeaderInfo = ({
 
   const importEmissionsFile = (payload) =>{
     emApi.importEmissionsFile(payload).then((response) => {
-
-      console.log("response")
-      console.log(response)
       setUsePortBtn(true);
       setIsLoading(true);
       if (response?.status !== 201) {
@@ -650,6 +631,21 @@ export const HeaderInfo = ({
     });
 
   }
+
+  const closeImportModalHandler = () => {
+    const importBtn = document.querySelector("#importBtn");
+    if (window.isDataChanged === true) {
+      if (window.confirm(unsavedDataMessage) === true) {
+        resetImportFlags();
+        removeChangeEventListeners(".modalUserInput");
+        importBtn.focus();
+      }
+    } else {
+      resetImportFlags();
+      removeChangeEventListeners(".modalUserInput");
+      importBtn.focus();
+    }
+  };
 
   const importFile = (payload) =>{
     
@@ -724,8 +720,18 @@ export const HeaderInfo = ({
       handleEmissionsExport()
   }
 
-  const onChangeOfEmissionsImportType = ()=>{
+  const onChangeOfEmissionsImportType = (e)=>{
+    const {value} = e.target
+    console.log("value", value)
+    if(value === "file"){
+      setShowImportModal(true)
+      setShowEmissionsImportTypeModal(false)
+    }
 
+    if(value === "historical"){
+      setShowHistoricalDataImportModal(true);
+      setShowEmissionsImportTypeModal(false)
+    }
   }
 
   return (
@@ -1150,17 +1156,24 @@ export const HeaderInfo = ({
 
       {showEmissionsImportTypeModal && (
         <UploadModal
+          title="Import Data"
           show={showEmissionsImportTypeModal}
           close={closeImportModalHandler}
           showCancel={true}
+          showImport={false}
           children={
             <EmissionsImportTypeModalContent onChange={onChangeOfEmissionsImportType} />
           }
         />
       )}
 
+      {showHistoricalDataImportModal && (
+        <ImportHistoricalDataModalContent 
+          closeModalHandler={()=>setShowHistoricalDataImportModal(false)}
+        />
+      )}
+
       {showCommentsModal && (
-        <div>
           <UploadModal
             show={showCommentsModal}
             width={"50%"}
@@ -1180,7 +1193,6 @@ export const HeaderInfo = ({
               />
             }
           />
-        </div>
       )}
     </div>
   );
