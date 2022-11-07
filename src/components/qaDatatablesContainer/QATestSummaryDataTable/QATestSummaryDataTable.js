@@ -26,8 +26,6 @@ import {
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
-import { addAriaLabelToDatatable } from "../../../additional-functions/ensure-508";
-
 /*********** COMPONENTS ***********/
 
 import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
@@ -297,7 +295,6 @@ const QATestSummaryDataTable = ({
   const finishedLoadingData = (loadedData) => {
     setDataPulled(loadedData);
     // setDataLoaded(true);
-    addAriaLabelToDatatable();
   };
   // Executed when "View" action is clicked
   const openModal = (row, bool, create) => {
@@ -628,6 +625,7 @@ const QATestSummaryDataTable = ({
           openHandler={openModal}
           onRemoveHandler={onRemoveHandler}
           isCheckedOut={isCheckedOut}
+          dataTableName="Test Summary Data"
           actionColumnName={
             user && isCheckedOut ? (
               <>

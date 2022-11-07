@@ -184,6 +184,52 @@ describe("QA Cert API", function () {
     })
 
   })
+
+  describe('Appendix E Correlation Heat Input from Oil CRUD operations', () => {
+
+    test('getAppendixEHeatInputOilData', async () => {
+      const appendixECorrelationHeatInputOil = [{ appendixECorrelationHeatInputOil: 'data' }]
+      const postAppendixEHeatInputOilUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils`;
+      mock.onGet(postAppendixEHeatInputOilUrl).reply(200, appendixECorrelationHeatInputOil)
+  
+      const resp = await qaCert.getAppendixEHeatInputOilData(locId, testSumId, appECorrTestSumId,appECorrTestrunId)
+  
+      expect(mock.history.get.length).toBe(1)
+      expect(resp.data).toStrictEqual(appendixECorrelationHeatInputOil)
+    })
+  
+    test('createAppendixEHeatInputOil', async () => {
+      const payload = { appendixECorrelationHeatInputOil: 'data' }
+      const postAppendixEHeatInputOilUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils`;
+      mock.onPost(postAppendixEHeatInputOilUrl).reply(200, payload)
+  
+      const resp = await qaCert.createAppendixEHeatInputOil(locId, testSumId,appECorrTestSumId,appECorrTestrunId, payload)
+  
+      expect(mock.history.post.length).toBe(1)
+      expect(resp.data).toStrictEqual(payload)
+    })
+  
+    test('updateAppendixECorrelationHeatInputOil', async () => {
+      const payload = { appendixECorrelationHeatInputOil: 'data' }
+      const putAppendixEHeatInputOilUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils/${id}`;
+      mock.onPost(putAppendixEHeatInputOilUrl).reply(200, payload)
+  
+      const resp = await qaCert.updateAppendixECorrelationHeatInputOil(locId, testSumId,appECorrTestSumId,appECorrTestrunId, id, payload)
+  
+      expect(mock.history.put.length).toBe(1)
+      expect(resp.data).toStrictEqual(payload)
+    })
+  
+    test('deleteAppendixECorrelationHeatInputOil', async () => {
+      const deleteAppendixEHeatInputOilUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils/${id}`;
+      mock.onDelete(deleteAppendixEHeatInputOilUrl).reply(200, 'deleted')
+  
+      const resp = await qaCert.deleteAppendixECorrelationHeatInputOil(locId, testSumId, id)
+  
+      expect(mock.history.delete.length).toBe(1)
+      expect(resp.data).toStrictEqual('deleted')
+    })
+  })
 })
 
 describe('Appendix E Correlation Heat Input from Gas CRUD operations', () => {

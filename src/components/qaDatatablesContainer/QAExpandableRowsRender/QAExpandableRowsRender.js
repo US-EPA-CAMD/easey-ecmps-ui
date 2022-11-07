@@ -29,6 +29,7 @@ import {
   qaTestQualificationProps,
   qaAppendixECorrTestRunProps,
   qaAppendixECorrelationSummaryHeatInputGasProps,
+  qaAppendixECorrelationSummaryHeatInputOilProps,
 } from "../../../additional-functions/qa-dataTable-props";
 const QAExpandableRowsRender = ({
   user,
@@ -275,6 +276,25 @@ const QAExpandableRowsRender = ({
             isCheckedOut={isCheckedOut}
           />
         );
+      case "Appendix E Correlation Heat Input from Oil":
+        const heatInputOilIdArray = [...extraIDs, id];
+        const heatInputOilObj = qaAppendixECorrelationSummaryHeatInputOilProps(data);
+        return (
+          <QAExpandableRowsRender
+            payload={heatInputOilObj["payload"]}
+            dropdownArray={heatInputOilObj["dropdownArray"]}
+            mdmProps={heatInputOilObj["mdmProps"]}
+            columns={heatInputOilObj["columnNames"]}
+            controlInputs={heatInputOilObj["controlInputs"]}
+            controlDatePickerInputs={heatInputOilObj["controlDatePickerInputs"]}
+            dataTableName={heatInputOilObj["dataTableName"]}
+            extraControls={heatInputOilObj["extraControls"]}
+            extraIDs={heatInputOilIdArray}
+            data={data}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
       default:
         break;
     }
@@ -454,6 +474,45 @@ const QAExpandableRowsRender = ({
           setMdmData(dropdowns);
         }).catch((error => console.log(error)))
         break
+      case "Appendix E Correlation Heat Input from Oil":
+        allPromises.push(dmApi.getAllMonitoringSystemIDCodes(extraIDs[0]));
+        allPromises.push(dmApi.getAllUnitsOfMeasureCodes());
+        console.log("allPromises", allPromises)
+        Promise.all(allPromises).then((responses) => {
+          console.log("responses", responses)
+          responses.forEach((curResp, i) => {
+            let codeLabel;
+            let descriptionLabel;
+            switch (i) {
+              case 0:
+                codeLabel = "monitoringSystemIDCode";
+                descriptionLabel = "monitoringSystemIDDescription";
+                break;
+              case 1:
+                codeLabel = "unitOfMeasureCode";
+                descriptionLabel = "unitOfMeasureDescription";
+                break;
+              default:
+                break;
+            }
+            dropdowns[dropdownArray[i]] = curResp.data.map((d) => {
+              return { code: d[codeLabel], name: d[descriptionLabel] };
+            });
+            if(i === 1){
+              dropdowns["oilVolumeUnitsOfMeasureCode"] = curResp.data.map((d) => {
+                return { code: d[codeLabel], name: d[descriptionLabel] };
+              });
+              dropdowns["oilDensityUnitsOfMeasureCode"] = curResp.data.map((d) => {
+                return { code: d[codeLabel], name: d[descriptionLabel] };
+              });
+            }
+          });
+          for (const options of Object.values(dropdowns)) {
+            options.unshift({ code: "", name: "-- Select a value --" });
+          }
+          setMdmData(dropdowns);
+        }).catch((error => console.log(error)))
+        break;
       default:
         mdmProps.forEach((prop) => {
           allPromises.push(dmApi.getMdmDataByCodeTable(prop["codeTable"]));
@@ -534,6 +593,14 @@ const QAExpandableRowsRender = ({
           "",
         ];
       }
+      if(dataTableName === "Appendix E Correlation Heat Input from Oil") {
+        controlInputs.monitoringSystemID = [
+          "Monitoring System ID",
+          "dropdown",
+          "", 
+          "",
+        ]
+      }
     } else {
       if (dataTableName === "Linearity Test") {
         controlInputs.gasLevelCode = [
@@ -550,6 +617,14 @@ const QAExpandableRowsRender = ({
           "",
           "locked",
         ];
+      }
+      if(dataTableName === "Appendix E Correlation Heat Input from Oil") {
+        controlInputs.monitoringSystemID = [
+          "Monitoring System ID",
+          "dropdown",
+          "", 
+          "locked",
+        ]
       }
     }
 
@@ -670,6 +745,9 @@ const QAExpandableRowsRender = ({
         expandables.push(nextExpandableRow("Protocol Gas"));
         expandables.push(nextExpandableRow("Air Emissions"));
         break;
+      case "Appendix E Correlation Heat Input from Gas":
+        expandables.push(nextExpandableRow("Appendix E Correlation Heat Input from Oil"))
+        break;
 
       default:
         break;
@@ -690,6 +768,7 @@ const QAExpandableRowsRender = ({
           user={user}
           actionsBtn={"View"}
           isCheckedOut={isCheckedOut}
+          dataTableName={dataTableName}
           actionColumnName={
             user && isCheckedOut ? (
               <>
