@@ -32,42 +32,38 @@ export const EmissionsTabRender = ({
   );
 
   const handleDownload = async () => {
-    for (const selectedReportingPeriod of selectedReportingPeriods) {
-      getEmissionViewData(
-        viewTemplateSelect.code,
-        configID,
-        selectedReportingPeriod,
-        selectedConfig?.unitStackConfigurations.map((config) => config.unitId),
-        selectedConfig?.unitStackConfigurations.map(
-          (config) => config.stackPipeId
-        ),
-        true
-      )
-        .then((response) => {
-          const disposition = response.headers["content-disposition"];
-          const parts =
-            disposition !== undefined ? disposition.split("; ") : undefined;
+    getEmissionViewData(
+      viewTemplateSelect.code,
+      configID,
+      selectedReportingPeriods,
+      selectedConfig?.unitStackConfigurations.map((config) => config.unitId),
+      selectedConfig?.unitStackConfigurations.map(
+        (config) => config.stackPipeId
+      ),
+      true
+    )
+      .then((response) => {
+        const disposition = response.headers["content-disposition"];
+        const parts =
+          disposition !== undefined ? disposition.split("; ") : undefined;
 
-          if (parts !== undefined && parts[0] === "attachment") {
-            const url = window.URL.createObjectURL(
-              new Blob([response.data], { type: "text/csv" })
-            );
+        if (parts !== undefined && parts[0] === "attachment") {
+          const url = window.URL.createObjectURL(
+            new Blob([response.data], { type: "text/csv" })
+          );
 
-            const link = document.createElement("a");
-            let fileName = parts[1]
-              .replace("filename=", "")
-              .replaceAll('"', "");
-            link.href = url;
-            link.setAttribute("download", fileName);
-            document.body.appendChild(link);
-            link.click();
-            link.parentNode.removeChild(link);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+          const link = document.createElement("a");
+          let fileName = parts[1].replace("filename=", "").replaceAll('"', "");
+          link.href = url;
+          link.setAttribute("download", fileName);
+          document.body.appendChild(link);
+          link.click();
+          link.parentNode.removeChild(link);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
