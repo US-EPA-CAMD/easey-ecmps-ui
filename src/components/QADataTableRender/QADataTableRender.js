@@ -104,6 +104,7 @@ const QADataTableRender = ({
         title={`Click to expand row ${index + 1}`}
         name={`expand row ${index + 1}`}
         id={`expandRow${row.col1}${index + 1}`}
+        aria-expanded = {false}
         role="button"
         tabIndex="0"
         aria-hidden="false"
@@ -128,6 +129,7 @@ const QADataTableRender = ({
         id={`collapseRow${row.col1}${index + 1}`}
         role="button"
         tabIndex="0"
+        aria-expanded = {true}
         aria-hidden="false"
       />
     );
