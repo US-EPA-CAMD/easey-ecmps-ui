@@ -71,7 +71,8 @@ export const DataTableLEEQualifications = ({
           setUpdateTable(false);
           setRevertedState(false);
           setUpdateLEE(false);
-        });
+        })
+        .catch(error => console.log('getLEEQualifications failed', error))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState, updateLEE]);
