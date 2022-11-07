@@ -55,8 +55,7 @@ export const exportEmissionsDataDownload = async (
 export const getEmissionViewData = async (
   viewCode,
   monitorPlanId,
-  year,
-  quarter,
+  reportingPeriod,
   unitIds,
   stackPipeIds,
   attachFile = false
@@ -67,8 +66,9 @@ export const getEmissionViewData = async (
 
   const searchParams = new URLSearchParams({
     monitorPlanId,
-    quarter: Array.isArray(quarter) ? quarter.join("|") : quarter,
-    year: Array.isArray(year) ? year.join("|") : year,
+    reportingPeriod: Array.isArray(reportingPeriod)
+      ? reportingPeriod.join("|")
+      : reportingPeriod,
     unitIds: Array.isArray(unitIds) ? unitIds.join("|") : unitIds,
     stackPipeIds: Array.isArray(stackPipeIds)
       ? stackPipeIds.join("|")

@@ -26,48 +26,48 @@ export const EmissionsTabRender = ({
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
 
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
-  const [selectedYears, setSelectedYears] = useState([]);
-  const [selectedQuarters, setSelectedQuarters] = useState([]);
+  const [selectedReportingPeriods, setSelectedReportingPeriods] = useState([]);
   const showTable = Boolean(
-    selectedYears.length > 0 &&
-      selectedQuarters.length > 0 &&
-      viewTemplateSelect !== null
+    selectedReportingPeriods.length > 0 && viewTemplateSelect !== null
   );
 
   const handleDownload = async () => {
-    getEmissionViewData(
-      viewTemplateSelect.code,
-      configID,
-      selectedYears,
-      selectedQuarters,
-      selectedConfig?.unitStackConfigurations.map((config) => config.unitId),
-      selectedConfig?.unitStackConfigurations.map(
-        (config) => config.stackPipeId
-      ),
-      true
-    )
-      .then((response) => {
-        const disposition = response.headers["content-disposition"];
-        const parts =
-          disposition !== undefined ? disposition.split("; ") : undefined;
+    for (const selectedReportingPeriod of selectedReportingPeriods) {
+      getEmissionViewData(
+        viewTemplateSelect.code,
+        configID,
+        selectedReportingPeriod,
+        selectedConfig?.unitStackConfigurations.map((config) => config.unitId),
+        selectedConfig?.unitStackConfigurations.map(
+          (config) => config.stackPipeId
+        ),
+        true
+      )
+        .then((response) => {
+          const disposition = response.headers["content-disposition"];
+          const parts =
+            disposition !== undefined ? disposition.split("; ") : undefined;
 
-        if (parts !== undefined && parts[0] === "attachment") {
-          const url = window.URL.createObjectURL(
-            new Blob([response.data], { type: "text/csv" })
-          );
+          if (parts !== undefined && parts[0] === "attachment") {
+            const url = window.URL.createObjectURL(
+              new Blob([response.data], { type: "text/csv" })
+            );
 
-          const link = document.createElement("a");
-          let fileName = parts[1].replace("filename=", "").replaceAll('"', "");
-          link.href = url;
-          link.setAttribute("download", fileName);
-          document.body.appendChild(link);
-          link.click();
-          link.parentNode.removeChild(link);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+            const link = document.createElement("a");
+            let fileName = parts[1]
+              .replace("filename=", "")
+              .replaceAll('"', "");
+            link.href = url;
+            link.setAttribute("download", fileName);
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   return (
@@ -92,10 +92,8 @@ export const EmissionsTabRender = ({
           workspaceSection={workspaceSection}
           viewTemplateSelect={viewTemplateSelect}
           setViewTemplateSelect={setViewTemplateSelect}
-          selectedYears={selectedYears}
-          setSelectedYears={setSelectedYears}
-          selectedQuarters={selectedQuarters}
-          setSelectedQuarters={setSelectedQuarters}
+          selectedReportingPeriods={selectedReportingPeriods}
+          setSelectedReportingPeriods={setSelectedReportingPeriods}
         />
       </div>
       <hr />
@@ -116,8 +114,7 @@ export const EmissionsTabRender = ({
             table={getEmissionsTabTableRenders(
               viewTemplateSelect,
               configID,
-              selectedYears,
-              selectedQuarters,
+              selectedReportingPeriods,
               selectedConfig?.unitStackConfigurations.map(
                 (config) => config.unitId
               ),

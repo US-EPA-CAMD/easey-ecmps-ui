@@ -5,16 +5,14 @@ import { useGetEmissionViewData } from "./useGetEmissionViewData";
 export const EmissionsTabTable = ({
   viewCode,
   monitorPlanId,
-  year,
-  quarter,
+  reportingPeriods,
   unitIds,
   stackPipeIds,
 }) => {
   const { columnNames, data, isDataLoaded } = useGetEmissionViewData(
     viewCode,
     monitorPlanId,
-    year,
-    quarter,
+    reportingPeriods,
     unitIds,
     stackPipeIds
   );
@@ -31,8 +29,7 @@ export const EmissionsTabTable = ({
 export const getEmissionsTabTableRenders = (
   viewCode,
   monitorPlanId,
-  year,
-  quarter,
+  reportingPeriods,
   unitIds,
   stackPipeIds
 ) => {
@@ -41,8 +38,7 @@ export const getEmissionsTabTableRenders = (
       <EmissionsTabTable
         viewCode={viewCode.code}
         monitorPlanId={monitorPlanId}
-        year={year}
-        quarter={quarter}
+        reportingPeriods={reportingPeriods}
         unitIds={unitIds}
         stackPipeIds={stackPipeIds}
       />,
