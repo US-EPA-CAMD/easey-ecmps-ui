@@ -30,6 +30,7 @@ import {
   MONITORING_PLAN_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import * as modules from "../../utils/constants/moduleTitles";
+import ReviewAndSubmit from "../ReviewAndSubmit/ReviewAndSubmit";
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -129,6 +130,7 @@ const App = () => {
             />
             <Route path={`/faqs`} exact component={() => <FAQ />} />
             <Route path="/login" exact component={Login} />
+            <Route path="/review" exact component={() => <ReviewAndSubmit />} />
 
             {user ? (
               <Redirect from="/monitoring-plans" to="/workspace/monitoring-plans" />
