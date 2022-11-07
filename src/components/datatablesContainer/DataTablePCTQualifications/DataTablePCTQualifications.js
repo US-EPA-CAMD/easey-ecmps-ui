@@ -69,20 +69,19 @@ export const DataTablePCTQualifications = ({
       mpApi
         .getPCTQualifications(locationSelectValue, qualSelectValue)
         .then((res) => {
-          console.log("res.data", res.data);
           setQualPctData(res.data);
           setDataLoaded(true);
           setUpdateTable(false);
           setRevertedState(false);
           setUpdatePCT(false);
-        });
+        })
+        .catch(error => console.log('getPCTQualifications failed', error))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState, updatePCT]);
 
   // load dropdowns data (called once)
   useEffect(() => {
-
     if (mdmDataPCT !== undefined && mdmDataPCT.length === 0) {
       loadDropdownsData(PCT_QUALIFICATIONS_SECTION_NAME, dropdownArray);
     } else {
@@ -123,7 +122,6 @@ export const DataTablePCTQualifications = ({
       )[0];
       setSelectedQualPct(pctData);
     }
-
     setSelectedModalData(
       modalViewData(
         pctData,
