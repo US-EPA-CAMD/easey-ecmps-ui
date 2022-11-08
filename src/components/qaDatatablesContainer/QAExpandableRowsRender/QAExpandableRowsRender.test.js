@@ -543,6 +543,14 @@ describe('Test cases for QAExpandableRowsRender', () => {
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
     userEvent.click(saveAndCloseBtn)
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+
+    // remove row
+    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    expect(deleteBtns).toHaveLength(fuelFlowToLoadData.length)
+    const secondDeleteBtn = deleteBtns[1]
+    userEvent.click(secondDeleteBtn)
+    const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    userEvent.click(confirmBtns[1])
   })
 
   /*test('renders Appendix E Correlation Heat Input from Oil rows and create/save/delete', async () => {
@@ -634,7 +642,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     userEvent.click(confirmBtns[1])
   })*/
 
-  test.skip('renders Fuel Flow to Load Baseline data rows and create/save/delete', async () => {
+  test('renders Fuel Flow to Load Baseline data rows and create/save/delete', async () => {
     const fuelFlowToLoadBaselineData = [
       {
         "id": "id1",
@@ -677,7 +685,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     ]
 
     const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baselines`;
-    const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baslines`;
+    const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baselines`;
     const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baselines/${idRegex}`);
 
     mock.onGet(getUrl).reply(200, fuelFlowToLoadBaselineData)
@@ -687,24 +695,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     const props = qaFuelFlowToLoadBaselineProps()
     const idArray = [locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId, id]
     const data = { locationId: locId, id: testSumId }
-    render(
-      <QAExpandableRowsRender
-        payload={props["payload"]}
-        dropdownArray={props["dropdownArray"]}
-        mdmProps={props["mdmProps"]}
-        columns={props["columnNames"]}
-        controlInputs={props["controlInputs"]}
-        controlDatePickerInputs={props["controlDatePickerInputs"]}
-        dataTableName={props["dataTableName"]}
-        extraControls={props["extraControls"]}
-        radioBtnPayload={props["radioBtnPayload"]}
-        expandable
-        extraIDs={idArray}
-        data={data}
-        user={'user'}
-        isCheckedOut={true}
-      />
-    )
+    renderComponent(props, idArray, data);
 
     // renders rows
     const rows = await screen.findAllByRole('row')
@@ -712,19 +703,26 @@ describe('Test cases for QAExpandableRowsRender', () => {
     expect(rows).not.toHaveLength(0)
 
     // add row
-    // const addBtn = screen.getByRole('button', { name: /Add/i })
-    // userEvent.click(addBtn)
-    // let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-    // userEvent.click(saveAndCloseBtn)
-    // setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+    const addBtn = screen.getByRole('button', { name: /Add/i })
+    userEvent.click(addBtn)
+    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // edit row
-    // const editBtns = screen.getAllByRole('button', { name: /Edit/i })
-    // expect(editBtns).toHaveLength(fuelFlowToLoadBaselineData.length)
-    // userEvent.click(editBtns[0])
-    // saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-    // userEvent.click(saveAndCloseBtn)
-    // setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    expect(editBtns).toHaveLength(fuelFlowToLoadBaselineData.length)
+    userEvent.click(editBtns[0])
+    saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+
+    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    expect(deleteBtns).toHaveLength(fuelFlowToLoadBaselineData.length)
+    const secondDeleteBtn = deleteBtns[1]
+    userEvent.click(secondDeleteBtn)
+    const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    userEvent.click(confirmBtns[1])
   })
 })
 

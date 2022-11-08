@@ -5,8 +5,7 @@ import { handleError } from "../../utils/api/apiUtils";
 export const useGetEmissionViewData = (
   viewCode,
   monitorPlanId,
-  year,
-  quarter,
+  reportingPeriods,
   unitIds,
   stackPipeIds
 ) => {
@@ -21,8 +20,7 @@ export const useGetEmissionViewData = (
       const response = await getEmissionViewData(
         viewCode,
         monitorPlanId,
-        year,
-        quarter,
+        reportingPeriods,
         unitIds,
         stackPipeIds
       );
@@ -60,7 +58,7 @@ export const useGetEmissionViewData = (
     handleGetData().catch((error) => {
       handleError(error);
     });
-  }, [monitorPlanId, quarter, stackPipeIds, unitIds, viewCode, year]);
+  }, [monitorPlanId, reportingPeriods, stackPipeIds, unitIds, viewCode]);
 
   return { columnNames, data, isDataLoaded };
 };

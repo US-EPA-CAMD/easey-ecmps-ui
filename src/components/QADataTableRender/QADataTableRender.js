@@ -27,6 +27,7 @@ const QADataTableRender = ({
   evaluate,
   noDataComp,
   isCheckedOut,
+  dataTableName
 }) => {
   const columns = [];
   columnNames.forEach((name, index) => {
@@ -54,7 +55,7 @@ const QADataTableRender = ({
       }
     });
     setTimeout(() => {
-      ensure508();
+      ensure508(dataTableName);
     }, oneSecond);
 
     return () => {
@@ -103,6 +104,7 @@ const QADataTableRender = ({
         title={`Click to expand row ${index + 1}`}
         name={`expand row ${index + 1}`}
         id={`expandRow${row.col1}${index + 1}`}
+        aria-expanded = {false}
         role="button"
         tabIndex="0"
         aria-hidden="false"
@@ -127,6 +129,7 @@ const QADataTableRender = ({
         id={`collapseRow${row.col1}${index + 1}`}
         role="button"
         tabIndex="0"
+        aria-expanded = {true}
         aria-hidden="false"
       />
     );
@@ -203,7 +206,7 @@ const QADataTableRender = ({
   }
 
   return (
-    <div aria-live="polite" className="padding-3">
+    <div aria-live="polite" className="padding-3" id={dataTableName.replaceAll(" ", "-")}>
       <DataTable
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
         className={`data-display-table react-transition fade-in`}

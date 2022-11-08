@@ -176,6 +176,10 @@ export const globalView = [
 export const home = [{ name: "Home", url: "/" }];
 
 export const workSpace = [
+  {
+    name: "Review & Submit",
+    url: "/review",
+  },
   { name: "Monitoring Plans", url: "/workspace/monitoring-plans" },
   {
     name: "QA & Certifications",

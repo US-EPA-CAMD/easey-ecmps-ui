@@ -57,6 +57,20 @@ export const generateArrayOfYears = (min) => {
   return years;
 };
 
+const getReportingPeriods = (minYear = 2009) => {
+  const quarters = [4, 3, 2, 1];
+  const maxYear = new Date().getFullYear();
+  const reportingPeriods = [];
+
+  for (let year = maxYear; year >= minYear; year--) {
+    for (const quarter of quarters) {
+      reportingPeriods.push(`${year} Q${quarter}`);
+    }
+  }
+
+  return reportingPeriods;
+};
+
 export const HeaderInfo = ({
   facility,
   selectedConfig,
@@ -65,10 +79,8 @@ export const HeaderInfo = ({
   setRevertedState,
   viewTemplateSelect,
   setViewTemplateSelect,
-  selectedYears,
-  setSelectedYears,
-  selectedQuarters,
-  setSelectedQuarters,
+  selectedReportingPeriods,
+  setSelectedReportingPeriods,
   //redux sets
   setCheckout,
   setInactive,
@@ -156,25 +168,16 @@ export const HeaderInfo = ({
   const [showEmissionsImportTypeModal, setShowEmissionsImportTypeModal] = useState(false);
   const [showHistoricalDataImportModal, setShowHistoricalDataImportModal] = useState(false);
 
-  // The below object structure is needed for MultiSelectComboBox
-  const yearsArray = useMemo(
+  const reportingPeriods = useMemo(
     () =>
-      generateArrayOfYears(MIN_YEAR).map((y) => ({
-        id: y,
-        label: y + "",
-        selected: false,
-        enabled: true,
-      })),
-    []
-  );
-  const quartersArray = useMemo(
-    () =>
-      [1, 2, 3, 4].map((y) => ({
-        id: y,
-        label: y + "",
-        selected: false,
-        enabled: true,
-      })),
+      getReportingPeriods().map((reportingPeriod) => {
+        return {
+          id: reportingPeriod,
+          label: reportingPeriod,
+          selected: false,
+          enabled: true,
+        };
+      }),
     []
   );
 
@@ -287,19 +290,19 @@ export const HeaderInfo = ({
   
   const handleEmissionsExport = async () => {
     const promises = [];
-    for (const selectedYear of selectedYears) {
-      for (const selectedQuarter of selectedQuarters) {
-        promises.push(
-          exportEmissionsDataDownload(
-            facility,
-            configID,
-            selectedYear,
-            selectedQuarter,
-            getUser() !== null
-          )
-        );
-      }
+    for (const selectedReportingPeriod of selectedReportingPeriods) {
+      // reportingPeriod: '2022 Q1' -> year: 2022, quarter: 1
+      promises.push(
+        exportEmissionsDataDownload(
+          facility,
+          configID,
+          selectedReportingPeriod.slice(0, 4),
+          selectedReportingPeriod.charAt(selectedReportingPeriod.length - 1),
+          getUser() !== null
+        )
+      );
     }
+
     await Promise.allSettled(promises);
   };
 
@@ -540,7 +543,12 @@ export const HeaderInfo = ({
   const evalStatusContent = () => {
     if (checkedOutByUser && evalStatusText(evalStatus) === "Needs Evaluation") {
       return (
-        <Button type="button" outline={false} onClick={evaluate} className="height-6">
+        <Button
+          type="button"
+          outline={false}
+          onClick={evaluate}
+          className="height-6"
+        >
           Evaluate
         </Button>
       );
@@ -705,21 +713,19 @@ export const HeaderInfo = ({
     )}`;
   };
 
-  // Multiselect update function for year selection
-  const onChangeUpdateSelectedYears = (id, updateType) => {
-    if (updateType === "add") setSelectedYears([...selectedYears, id]);
-    else if (updateType === "remove") {
-      const selected = yearsArray.filter((y) => y.selected).map((y) => y.id);
-      setSelectedYears(selected);
-    }
-  };
+  const handleSelectReportingPeriod = (id, updateType) => {
+    if (updateType === "add") {
+      setSelectedReportingPeriods([...selectedReportingPeriods, id]);
+    } else if (updateType === "remove") {
+      const selected = reportingPeriods
+        .filter((reportingPeriod) => {
+          return reportingPeriod.selected;
+        })
+        .map((reportingPeriod) => {
+          return reportingPeriod.id;
+        });
 
-  // Multiselect update function for quarter selection
-  const onChangeUpdateSelectedQuarters = (id, updateType) => {
-    if (updateType === "add") setSelectedQuarters([...selectedQuarters, id]);
-    else if (updateType === "remove") {
-      const selected = quartersArray.filter((q) => q.selected).map((q) => q.id);
-      setSelectedQuarters(selected);
+      setSelectedReportingPeriods(selected);
     }
   };
 
@@ -787,15 +793,15 @@ export const HeaderInfo = ({
               </h3>
               <p className="text-bold font-body-xl">{facilityAdditionalName}</p>
             </div>
-              <div>
-                <Button
-                  type="button"
-                  className="margin-right-2 float-left margin-bottom-2"
-                  outline={true}
-                  onClick={handleExport}
-                  >
-                  Export Data
-                </Button>
+            <div>
+              <Button
+                type="button"
+                className="margin-right-2 float-left margin-bottom-2"
+                outline={true}
+                onClick={handleExport}
+              >
+                Export Data
+              </Button>
                 {user && checkedOutByUser &&(
                   <Button
                     type="button"
@@ -814,75 +820,92 @@ export const HeaderInfo = ({
             <p className="text-bold font-body-2xs">{auditInformation}</p>
           )}
 
-          <GridContainer className="padding-left-0 margin-left-0 padding-right-0" containerSize="widescreen">
-              <Grid row>
-                {user && (
-                  <Grid col={5} widescreen={{col:5}} desktopLg={{col:5}} desktop={{col:5}}>
-                    {checkedOutByUser === true ? (
-                      <Button
-                        type="button"
-                        autoFocus
-                        outline={false}
-                        tabIndex="0"
-                        aria-label={`Check back in the configuration `}
-                        onClick={() => checkoutStateHandler(false)}
-                        id="checkInBTN"
-                        epa-testid="checkInBTN"
-                        className="text-no-wrap height-6"
-                      >
-                        <LockOpenSharp /> {"Check Back In"}
-                      </Button>
-                    ) : !lockedFacility &&
-                      !userHasCheckout &&
-                      selectedConfig.active &&
-                      checkedOutConfigs
-                        .map((location) => location["monPlanId"])
-                        .indexOf(selectedConfig.id) === -1 ? (
-                      <Button
-                        type="button"
-                        autoFocus
-                        outline={true}
-                        tabIndex="0"
-                        aria-label={`Check out the configuration`}
-                        onClick={() => checkoutStateHandler(true)}
-                        id="checkOutBTN"
-                        epa-testid="checkOutBTN"
-                      >
-                        <CreateOutlined color="primary" /> {"Check Out"}
-                      </Button>
-                    ) : null}
-                    {showRevert(evalStatus) && (
-                      <Button
-                        type="button"
-                        id="showRevertModal"
-                        tabIndex="1"
-                        onClick={() => setShowRevertModal(true)}
-                        outline={true}
-                        className="text-no-wrap height-6 position-relative bottom-1"
-                      >
-                        Revert to Official Record
-                      </Button>
-                    )}
-                  </Grid>
-                )}
+          <GridContainer
+            className="padding-left-0 margin-left-0 padding-right-0"
+            containerSize="widescreen"
+          >
+            <Grid row>
+              {user && (
+                <Grid
+                  col={5}
+                  widescreen={{ col: 5 }}
+                  desktopLg={{ col: 5 }}
+                  desktop={{ col: 5 }}
+                >
+                  {checkedOutByUser === true ? (
+                    <Button
+                      type="button"
+                      autoFocus
+                      outline={false}
+                      tabIndex="0"
+                      aria-label={`Check back in the configuration `}
+                      onClick={() => checkoutStateHandler(false)}
+                      id="checkInBTN"
+                      epa-testid="checkInBTN"
+                      className="text-no-wrap height-6"
+                    >
+                      <LockOpenSharp /> {"Check Back In"}
+                    </Button>
+                  ) : !lockedFacility &&
+                    !userHasCheckout &&
+                    selectedConfig.active &&
+                    checkedOutConfigs
+                      .map((location) => location["monPlanId"])
+                      .indexOf(selectedConfig.id) === -1 ? (
+                    <Button
+                      type="button"
+                      autoFocus
+                      outline={true}
+                      tabIndex="0"
+                      aria-label={`Check out the configuration`}
+                      onClick={() => checkoutStateHandler(true)}
+                      id="checkOutBTN"
+                      epa-testid="checkOutBTN"
+                    >
+                      <CreateOutlined color="primary" /> {"Check Out"}
+                    </Button>
+                  ) : null}
+                  {showRevert(evalStatus) && (
+                    <Button
+                      type="button"
+                      id="showRevertModal"
+                      tabIndex="1"
+                      onClick={() => setShowRevertModal(true)}
+                      outline={true}
+                      className="text-no-wrap height-6 position-relative bottom-1"
+                    >
+                      Revert to Official Record
+                    </Button>
+                  )}
+                </Grid>
+              )}
 
-                
-                {user && (
-                  <Grid col={7} widescreen={{col:7}} desktopLg={{col:7}} desktop={{col:8}}>
-                        <div className="display-flex desktop:margin-top-1 desktop-lg:margin-top-0">
-                          <label className="text-bold width-card desktop:width-10 desktop-lg:width-10 widescreen:width-card widescreen:margin-right-neg-4 widescreen:margin-top-2">Evaluation Status:</label>
-                            {evalStatusContent()}
-                          <label className="text-bold margin-right-1 desktop:width-10 desktop:margin-left-5 desktop-lg:width-10 widescreen:width-card widescreen:margin-right-neg-3 widescreen:margin-top-2">Submission Status: </label>
-                          <p
-                            className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
-                              evalStatus
-                            )} margin-0`}
-                          >
-                            Resubmission required
-                          </p>
-                        </div>
-                  </Grid> )}
-              </Grid>
+              {user && (
+                <Grid
+                  col={7}
+                  widescreen={{ col: 7 }}
+                  desktopLg={{ col: 7 }}
+                  desktop={{ col: 8 }}
+                >
+                  <div className="display-flex desktop:margin-top-1 desktop-lg:margin-top-0">
+                    <label className="text-bold width-card desktop:width-10 desktop-lg:width-10 widescreen:width-card widescreen:margin-right-neg-4 widescreen:margin-top-2">
+                      Evaluation Status:
+                    </label>
+                    {evalStatusContent()}
+                    <label className="text-bold margin-right-1 desktop:width-10 desktop:margin-left-5 desktop-lg:width-10 widescreen:width-card widescreen:margin-right-neg-3 widescreen:margin-top-2">
+                      Submission Status:{" "}
+                    </label>
+                    <p
+                      className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
+                        evalStatus
+                      )} margin-0`}
+                    >
+                      Resubmission required
+                    </p>
+                  </div>
+                </Grid>
+              )}
+            </Grid>
           </GridContainer>
           {workspaceSection === MONITORING_PLAN_STORE_NAME && (
             <GridContainer className="padding-left-0 margin-left-0">
@@ -898,78 +921,74 @@ export const HeaderInfo = ({
                     selectionHandler={setLocationSelect}
                     workspaceSection={workspaceSection}
                   />
-                  </Grid>
-                  <Grid col={2}>
-                    <DropdownSelection
-                      caption="Sections"
-                      selectionHandler={setSectionSelect}
-                      options={sections}
-                      viewKey="name"
-                      selectKey="name"
-                      initialSelection={sectionSelect[0]}
-                      orisCode={orisCode}
-                      workspaceSection={workspaceSection}
+                </Grid>
+                <Grid col={2}>
+                  <DropdownSelection
+                    caption="Sections"
+                    selectionHandler={setSectionSelect}
+                    options={sections}
+                    viewKey="name"
+                    selectKey="name"
+                    initialSelection={sectionSelect[0]}
+                    orisCode={orisCode}
+                    workspaceSection={workspaceSection}
+                  />
+                </Grid>
+                <Grid col={2}>
+                  <div className="margin-top-8">
+                    <Checkbox
+                      epa-testid="inactiveCheckBox"
+                      id="inactiveCheckBox"
+                      name="inactiveCheckBox"
+                      label="Show Inactive"
+                      checked={inactive[0]}
+                      disabled={inactive[1]}
+                      onChange={() =>
+                        setInactive(
+                          [!inactive[0], inactive[1]],
+                          facility,
+                          MONITORING_PLAN_STORE_NAME
+                        )
+                      }
                     />
-                  </Grid>
-                  <Grid col={2}>
-                    <div className="margin-top-8">
-                        <Checkbox
-                          epa-testid="inactiveCheckBox"
-                          id="inactiveCheckBox"
-                          name="inactiveCheckBox"
-                          label="Show Inactive"
-                          checked={inactive[0]}
-                          disabled={inactive[1]}
-                          onChange={() =>
-                            setInactive(
-                              [!inactive[0], inactive[1]],
-                              facility,
-                              MONITORING_PLAN_STORE_NAME
-                            )
-                          }
-                        />
-                    </div>
-                  </Grid>
+                  </div>
                 </Grid>
-                <Grid>
-                  <Button
-                    outline
-                    type="button"
-                    title="Open Comments"
-                    onClick={() => openViewComments()}
-                  >
-                    View Comments
-                  </Button>
-                  <Button
-                    outline
-                    type="button"
-                    title="View Audit Report"
-                    className={"hyperlink-btn cursor-pointer"}
-                    onClick={() => displayReport("MP_AUDIT")}
-                  >
-                    View Audit Report
-                  </Button>
-                  <Button
-                    outline
-                    type="button"
-                    title="View Printout Report"
-                    className={"hyperlink-btn cursor-pointer"}
-                    onClick={() => displayReport("MPP")}
-                  >
-                    View Printout Report
-                  </Button>
-                </Grid>
-              </GridContainer>
-              )}
-
+              </Grid>
+              <Grid>
+                <Button
+                  outline
+                  type="button"
+                  title="Open Comments"
+                  onClick={() => openViewComments()}
+                >
+                  View Comments
+                </Button>
+                <Button
+                  outline
+                  type="button"
+                  title="View Audit Report"
+                  className={"hyperlink-btn cursor-pointer"}
+                  onClick={() => displayReport("MP_AUDIT")}
+                >
+                  View Audit Report
+                </Button>
+                <Button
+                  outline
+                  type="button"
+                  title="View Printout Report"
+                  className={"hyperlink-btn cursor-pointer"}
+                  onClick={() => displayReport("MPP")}
+                >
+                  View Printout Report
+                </Button>
+              </Grid>
+            </GridContainer>
+          )}
 
           {workspaceSection === EMISSIONS_STORE_NAME && (
             <GridContainer className="padding-left-0 margin-left-0">
               <Grid row={true}>
-                <Grid                      
-                  col={2}
-                  widescreen={{ col: 2 }}
-                >
+                <Grid col={2} widescreen={{ col: 2 }}>
                   <DropdownSelection
                     caption="Locations"
                     orisCode={orisCode}
@@ -981,11 +1000,11 @@ export const HeaderInfo = ({
                     workspaceSection={workspaceSection}
                   />
                 </Grid>
-                <Grid                      
+                <Grid
                   col={2}
                   widescreen={{ col: 2 }}
-                  desktopLg={{col: 10}}
-                  desktop={{col:10}}
+                  desktopLg={{ col: 10 }}
+                  desktop={{ col: 10 }}
                 >
                   <FormGroup className="margin-right-2 margin-bottom-1">
                     <Label test-id={"viewtemplate"} htmlFor={"viewtemplate"}>
@@ -1000,7 +1019,7 @@ export const HeaderInfo = ({
                       onChange={(e) => setViewTemplateSelect(e.target.value)}
                       className="maxw-mobile"
                     >
-                      {viewTemplates.map((view) => (
+                      {viewTemplates?.map((view) => (
                         <option
                           data-testid={view.name}
                           key={view.name}
@@ -1012,34 +1031,22 @@ export const HeaderInfo = ({
                     </Dropdown>
                   </FormGroup>
                 </Grid>
-
-                <Grid
-                  col={2}
-                  widescreen={{ col: 2 }}
-                  className="margin-right-2 margin-top-3"
-                >
+              </Grid>
+              <Grid row style={{ gap: "16px" }}>
+                <Grid col={2} widescreen={{ col: 2 }}>
                   <MultiSelectCombobox
-                    items={yearsArray}
-                    label="Year(s)"
-                    entity="year"
-                    onChangeUpdate={onChangeUpdateSelectedYears}
+                    items={reportingPeriods}
+                    label="Reporting Period(s)"
+                    entity="reportingPeriod"
                     searchBy="label"
-                  />
-                </Grid>
-                <Grid col={2} widescreen={{ col: 2 }} className="margin-right-2 margin-top-3">
-                  <MultiSelectCombobox
-                    items={quartersArray}
-                    label="Quarter(s)"
-                    entity="quarter"
-                    onChangeUpdate={onChangeUpdateSelectedQuarters}
-                    searchBy="label"
+                    onChangeUpdate={handleSelectReportingPeriod}
                   />
                 </Grid>
                 <Grid col={2} widescreen={{ col: 3 }}>
                   <Button
                     type="button"
                     title="Apply Filter(s)"
-                    className="cursor-pointer text-no-wrap apply-filter-position margin-top-3"
+                    className="cursor-pointer text-no-wrap apply-filter-position"
                     onClick={() => null}
                   >
                     {"Apply Filter(s)"}
@@ -1047,7 +1054,6 @@ export const HeaderInfo = ({
                 </Grid>
               </Grid>
               <Grid row>
-
                 <Grid col={3} widescreen={{ col: 2 }}>
                   <Button
                     outline
@@ -1073,7 +1079,6 @@ export const HeaderInfo = ({
               </Grid>
             </GridContainer>
           )}
-
         </div>
       ) : (
         <Preloader />

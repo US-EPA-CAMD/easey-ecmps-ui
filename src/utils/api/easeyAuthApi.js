@@ -30,7 +30,9 @@ export const refreshClientToken = async () => {
     const url = `${config.services.authApi.uri}/tokens/client`;
 
     if (!config.app.clientId || !config.app.clientSecret) {
-      displayAppError('Application client id/secret is required and was not configured');
+      displayAppError(
+        "Application client id/secret is required and was not configured"
+      );
       return;
     }
 
@@ -57,9 +59,9 @@ export const authenticate = async (payload) => {
       sessionStorage.setItem("cdx_user", JSON.stringify(response.data));
 
       if (
-        window.location.pathname.includes('/workspace') ||
-        window.location.pathname.endsWith('/home') ||
-        window.location.pathname.endsWith('/')
+        window.location.pathname.includes("/workspace") ||
+        window.location.pathname.endsWith("/home") ||
+        window.location.pathname.endsWith("/")
       ) {
         window.location.reload();
       } else {
@@ -87,8 +89,8 @@ export const logOut = async () => {
     method: "DELETE",
     url: `${config.services.authApi.uri}/authentication/sign-out`,
     data: {
-      userId: user.userId
-    }
+      userId: user.userId,
+    },
   })
     .then(() => {
       sessionStorage.removeItem("cdx_user");
@@ -104,24 +106,23 @@ export const refreshToken = async () => {
     let refreshToken = false;
     const user = JSON.parse(sessionStorage.getItem("cdx_user"));
     let tokenExp = new Date(user.tokenExpiration);
-    debugLog('token expiration: ', tokenExp);
+    debugLog("token expiration: ", tokenExp);
 
     if (new Date() > tokenExp) {
       refreshToken = true;
-      debugLog('User security token has expired');
-    }
-    else {
+      debugLog("User security token has expired");
+    } else {
       tokenExp.setSeconds(tokenExp.getSeconds() - 30);
-      debugLog('token expiration (-30 seconds): ', tokenExp);
-  
+      debugLog("token expiration (-30 seconds): ", tokenExp);
+
       if (new Date() > tokenExp) {
         refreshToken = true;
-        debugLog('User security token expires in 30 seconds or less');
+        debugLog("User security token expires in 30 seconds or less");
       }
     }
 
     if (refreshToken) {
-      debugLog('Refreshing user security token');
+      debugLog("Refreshing user security token");
       const result = await axios({
         method: "POST",
         url: `${config.services.authApi.uri}/tokens`,
@@ -130,12 +131,12 @@ export const refreshToken = async () => {
           "x-api-key": config.app.apiKey,
         },
         data: {
-          userId: user.userId
-        }
+          userId: user.userId,
+        },
       });
 
-      debugLog('Refreshed token: ', result.data);
-  
+      debugLog("Refreshed token: ", result.data);
+
       user.token = result.data.token;
       user.tokenExpiration = result.data.expiration;
       sessionStorage.setItem("cdx_user", JSON.stringify(user));
@@ -145,4 +146,29 @@ export const refreshToken = async () => {
   } catch (e) {
     displayAppError(e);
   }
+};
+
+export const credentialsAuth = async (payload) => {
+  return secureAxios({
+    method: "POST",
+    url: `${config.services.authApi.uri}/certifications/verify-credentials`,
+    data: payload,
+  });
+};
+
+export const verifyChallenge = async (payload) => {
+  return secureAxios({
+    method: "POST",
+    url: `${config.services.authApi.uri}/certifications/verify-challenge`,
+    data: payload,
+  });
+};
+
+export const getCredentials = async (monitorPlans) => {
+  return secureAxios({
+    method: "GET",
+    url: `${
+      config.services.authApi.uri
+    }/certifications/statements?monitorPlanIds=${monitorPlans.join("|")}`,
+  });
 };

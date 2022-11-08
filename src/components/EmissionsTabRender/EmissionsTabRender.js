@@ -26,20 +26,16 @@ export const EmissionsTabRender = ({
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
 
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
-  const [selectedYears, setSelectedYears] = useState([]);
-  const [selectedQuarters, setSelectedQuarters] = useState([]);
+  const [selectedReportingPeriods, setSelectedReportingPeriods] = useState([]);
   const showTable = Boolean(
-    selectedYears.length > 0 &&
-      selectedQuarters.length > 0 &&
-      viewTemplateSelect !== null
+    selectedReportingPeriods.length > 0 && viewTemplateSelect !== null
   );
 
   const handleDownload = async () => {
     getEmissionViewData(
       viewTemplateSelect.code,
       configID,
-      selectedYears,
-      selectedQuarters,
+      selectedReportingPeriods,
       selectedConfig?.unitStackConfigurations.map((config) => config.unitId),
       selectedConfig?.unitStackConfigurations.map(
         (config) => config.stackPipeId
@@ -92,10 +88,8 @@ export const EmissionsTabRender = ({
           workspaceSection={workspaceSection}
           viewTemplateSelect={viewTemplateSelect}
           setViewTemplateSelect={setViewTemplateSelect}
-          selectedYears={selectedYears}
-          setSelectedYears={setSelectedYears}
-          selectedQuarters={selectedQuarters}
-          setSelectedQuarters={setSelectedQuarters}
+          selectedReportingPeriods={selectedReportingPeriods}
+          setSelectedReportingPeriods={setSelectedReportingPeriods}
         />
       </div>
       <hr />
@@ -116,8 +110,7 @@ export const EmissionsTabRender = ({
             table={getEmissionsTabTableRenders(
               viewTemplateSelect,
               configID,
-              selectedYears,
-              selectedQuarters,
+              selectedReportingPeriods,
               selectedConfig?.unitStackConfigurations.map(
                 (config) => config.unitId
               ),
