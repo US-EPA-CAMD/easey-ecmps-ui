@@ -18,16 +18,22 @@
     padding-top: 1rem;
     padding-left: 3rem;
     padding-right: 3rem;
+    pointer-events: auto;
   }
 
   .upload-modal-footer--complete {
     padding-top: 1rem;
     padding-bottom: 3.5rem;
     padding-right: 1.5rem;
+    pointer-events: auto;
   }
 
   #importBtn {
     width: 75%;
+  }
+
+  #closeModalBtn{
+    pointer-events: auto;
   }
 
   .usa-button:disabled {
