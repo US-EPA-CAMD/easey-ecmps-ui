@@ -32,7 +32,11 @@ export const ImportHistoricalDataModal = ({
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedQuarter, setSelectedQuarter] = useState(null);
 
-  const selectedConfig =123
+  const selectedConfig = useSelector(
+    (state) =>
+      state.openedFacilityTabs.emissions.find((em) => em.checkout === true)
+        ?.selectedConfig
+  );
 
   const historicalImport = () => {
     if (selectedYear === null || selectedQuarter === null || !selectedConfig)
