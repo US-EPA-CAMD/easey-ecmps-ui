@@ -20,7 +20,8 @@ import {
   qaAppendixECorrelationSummaryTestProps,
   qaFlowToLoadCheckProps,
   qaFuelFlowToLoadBaselineProps,
-  qaAppendixECorrelationSummaryHeatInputOilProps
+  qaAppendixECorrelationSummaryHeatInputOilProps,
+  qaProtocalGasProps
 } from "../../../additional-functions/qa-dataTable-props";
 
 const mock = new MockAdapter(axios);
@@ -80,6 +81,77 @@ describe('Test cases for QAExpandableRowsRender', () => {
     // console.log("mock.history BEFORE RESET", mock.history);
     mock.resetHistory();
     // console.log("mock.history AFTER RESET", mock.history);
+  });
+
+  test('renders Protocol Gas data rows and create/save/delete', async () => {
+    const protocolGasData = [
+      {
+        "id": "id1",
+        "testSumId": "testSumId",
+        "userId": "string",
+        "addDate": "string",
+        "updateDate": "string",
+        "gasLevelCode": "string",
+        "gasTypeCode": "string",
+        "vendorID": "string",
+        "cylinderID": "string",
+        "expirationDate": "2022-11-07"
+      },
+      {
+        "id": "id2",
+        "testSumId": "testSumId",
+        "userId": "string",
+        "addDate": "string",
+        "updateDate": "string",
+        "gasLevelCode": "string",
+        "gasTypeCode": "string",
+        "vendorID": "string",
+        "cylinderID": "string",
+        "expirationDate": "2022-11-07"
+      }
+    ]
+
+    const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/protocol-gases`;
+    const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/protocol-gases`;
+    const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/protocol-gases/${idRegex}`);
+    const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/protocol-gases/${idRegex}`);
+
+    mock.onGet(getUrl).reply(200, protocolGasData)
+    mock.onPost(postUrl).reply(200, 'created')
+    mock.onPut(putUrl).reply(200, 'updated')
+    mock.onDelete(deleteUrl).reply(200, 'deleted')
+    const props = qaProtocalGasProps({ gasLevelCode: 'gasLevelCode' })
+    const idArray = [locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId, id]
+    const data = { locationId: locId, id: testSumId }
+    renderComponent(props, idArray, data);
+
+    // renders rows
+    const rows = await screen.findAllByRole('row')
+    expect(mock.history.get.length).not.toBe(0)
+    expect(rows).toHaveLength(protocolGasData.length)
+
+    // add row
+    const addBtn = screen.getByRole('button', { name: /Add/i })
+    userEvent.click(addBtn)
+    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+
+    // edit row
+    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    expect(editBtns).toHaveLength(protocolGasData.length)
+    userEvent.click(editBtns[0])
+    saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+
+    // remove row
+    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    expect(deleteBtns).toHaveLength(protocolGasData.length)
+    const secondDeleteBtn = deleteBtns[1]
+    userEvent.click(secondDeleteBtn)
+    const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    userEvent.click(confirmBtns[1])
   });
 
   test('renders RATA Summary data rows and create/save/delete', async () => {
@@ -180,7 +252,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     // renders rows
     const rows = await screen.findAllByRole('row')
     expect(mock.history.get.length).not.toBe(0)
-    expect(rows).not.toHaveLength(0)
+    expect(rows).toHaveLength(rataSummaryData.length)
 
     // add row
     const addBtn = screen.getByRole('button', { name: /Add/i })
@@ -266,7 +338,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     // renders rows
     const rows = await screen.findAllByRole('row')
     expect(mock.history.get.length).not.toBe(0)
-    expect(rows).not.toHaveLength(0)
+    expect(rows).toHaveLength(rataRunData.length)
 
     // add row
     const addBtn = screen.getByRole('button', { name: /Add/i })
@@ -362,7 +434,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     // renders rows
     const rows = await screen.findAllByRole('row')
     expect(mock.history.get.length).not.toBe(0)
-    expect(rows).not.toHaveLength(0)
+    expect(rows).toHaveLength(rataFlowData.length)
 
     // add row
     const addBtn = screen.getByRole('button', { name: /Add/i })
@@ -456,7 +528,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     // renders rows
     const rows = await screen.findAllByRole('row')
     expect(mock.history.get.length).not.toBe(0)
-    expect(rows).not.toHaveLength(0)
+    expect(rows).toHaveLength(rataTraverseData.length)
 
     // add row
     const addBtn = screen.getByRole('button', { name: /Add/i })
@@ -515,10 +587,13 @@ describe('Test cases for QAExpandableRowsRender', () => {
     const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests`;
     const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests`;
     const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests/${idRegex}`);
+    const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests/${idRegex}`);
 
     mock.onGet(getUrl).reply(200, fuelFlowToLoadData)
     mock.onPost(postUrl).reply(200, 'created')
     mock.onPut(putUrl).reply(200, 'updated')
+    mock.onDelete(deleteUrl).reply(200, 'deleted')
+
     const props = qaFuelFlowToLoadProps()
     const idArray = [locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId, id]
     const data = { locationId: locId, id: testSumId }
@@ -527,7 +602,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     // renders rows
     const rows = await screen.findAllByRole('row')
     expect(mock.history.get.length).not.toBe(0)
-    expect(rows).not.toHaveLength(0)
+    expect(rows).toHaveLength(fuelFlowToLoadData.length)
 
     // add row
     const addBtn = screen.getByRole('button', { name: /Add/i })
@@ -700,7 +775,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     // renders rows
     const rows = await screen.findAllByRole('row')
     expect(mock.history.get.length).not.toBe(0)
-    expect(rows).not.toHaveLength(0)
+    expect(rows).toHaveLength(fuelFlowToLoadBaselineData.length)
 
     // add row
     const addBtn = screen.getByRole('button', { name: /Add/i })

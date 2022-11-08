@@ -311,7 +311,7 @@ export const DataTableQualifications = ({
     if (!creating) {
       userInput["qualId"] = selectedQualificationData["id"];
     }
-    
+
     // PCT qual
     if (openPCT) {
       return handleRequest(
@@ -368,8 +368,8 @@ export const DataTableQualifications = ({
               {openPCT
                 ? "Qualification Percent"
                 : openLEE
-                ? "Qualification LEE"
-                : "Qualification LME"}
+                  ? "Qualification LEE"
+                  : "Qualification LME"}
             </span>
           </Breadcrumb>
         </BreadcrumbBar>
@@ -502,12 +502,12 @@ export const DataTableQualifications = ({
             createNewQualificationData
               ? "Create Qualification"
               : user && checkout && openPCT && creatingChild
-              ? "Create Qualification Percent"
-              : user && checkout && openLEE && creatingChild
-              ? "Create Qualification LEE"
-              : user && checkout && openLME && creatingChild
-              ? "Create Qualification LME"
-              : "Save and Close"
+                ? "Create Qualification Percent"
+                : user && checkout && openLEE && creatingChild
+                  ? "Create Qualification LEE"
+                  : user && checkout && openLME && creatingChild
+                    ? "Create Qualification LME"
+                    : "Save and Close"
           }
           children={
             <div>
@@ -604,7 +604,7 @@ const mapStateToProps = (state) => {
     mdmData: state.dropdowns[QUALIFICATIONS_STORE_NAME],
     tabs: state.openedFacilityTabs[
       'monitoringPlans'
-     ],
+    ],
   };
 };
 
