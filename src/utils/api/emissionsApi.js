@@ -58,12 +58,17 @@ export const getEmissionViewData = async (
   reportingPeriod,
   unitIds,
   stackPipeIds,
-  attachFile = false
+  attachFile = false,
+  isWorkspace=true
 ) => {
   const url = new URL(
-    `${config.services.emissions.uri}/emissions/views/${viewCode}`
-  );
+    // `${config.services.emissions.uri}/emissions/views/${viewCode}`
+    isWorkspace
+    ? `${config.services.emissions.uri}/workspace/emissions/views/${viewCode}`:
+      `${config.services.emissions.uri}/emissions/views/${viewCode}`
 
+  );
+  console.log(url)
   const searchParams = new URLSearchParams({
     monitorPlanId,
     reportingPeriod: Array.isArray(reportingPeriod)
@@ -100,10 +105,10 @@ export const getEmissionViewData = async (
   }
 };
 
-export const getViews = async () => {
+export const getViews = async (isWorkspace=true) => {
   try {
     const response = await axios.get(
-      `${config.services.emissions.uri}/emissions/views`
+      isWorkspace ? `${config.services.emissions.uri}/workspace/emissions/views` : `${config.services.emissions.uri}/emissions/views`
     );
     return handleResponse(response);
   } catch (error) {
