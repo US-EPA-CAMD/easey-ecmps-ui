@@ -115,9 +115,6 @@ export const HeaderInfo = ({
     { name: "Unit Information" },
   ];
 
-  // minimum year for emissions data
-  const MIN_YEAR = 2009;
-
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");

@@ -52,7 +52,7 @@ const ImportModal = ({
           setSchema(data);
           setLabel("Upload Emissions JSON File");
         })
-
+        break;
       default:
         break;
     }
