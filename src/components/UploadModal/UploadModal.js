@@ -20,12 +20,8 @@ export const UploadModal = ({
   left,
   title,
   disablePortBtn,
-  timer,
-  setFinishedLoading,
-  setShowImportModal,
   preloader,
   complete,
-  setIsLoading,
   hasFormatError,
   hasInvalidJsonError,
   mainBTN,
@@ -38,19 +34,7 @@ export const UploadModal = ({
   showSeparators=false,
 }) => {
   const hasErrors = importedFileErrorMsgs && importedFileErrorMsgs.length > 0;
-  const milisecondsToLoad = 4000;
-  // Monitoring Plan has been Successfully Imported.
-  const onLoadEffect = () => {
-    if (timer) {
-      setTimeout(() => {
-        setFinishedLoading(true);
-        setIsLoading(false);
-        setShowImportModal(true);
-      }, milisecondsToLoad);
-    }
-  };
 
-  useEffect(onLoadEffect, []);
   const modalRef = createRef();
   const styles = {
     loadingWrapper: {

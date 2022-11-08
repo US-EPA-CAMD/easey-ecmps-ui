@@ -43,6 +43,9 @@ const ReportingPeriodSelector = ({
           );
         }
         setLoading && setLoading(false);
+      }).catch(err=>{
+        console.log("error happened")
+        console.log(error)
       });
     } else if (years.length === 0 && quarters.length === 0) {
       setYears(

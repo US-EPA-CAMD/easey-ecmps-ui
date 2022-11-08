@@ -129,7 +129,7 @@ const ImportModal = ({
       importedFileErrorMsgs !== null &&
       successResponses.includes(importedFileErrorMsgs.status) ? (
         <span id="fileName">{fileName}</span>
-      ) : complete && importedFileErrorMsgs.length > 0 ? (
+      ) : complete && importedFileErrorMsgs?.length > 0 ? (
         <div className="overflow-y-auto maxh-mobile">
           <div className="padding-right-2 padding-left-3 " aria-live="polite">
             {" "}

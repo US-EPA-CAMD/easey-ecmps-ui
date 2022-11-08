@@ -44,8 +44,7 @@ import {
 } from "../../utils/api/emissionsApi";
 import { getUser } from "../../utils/functions";
 import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
-import ReportingPeriodSelector from "../ReportingPeriodSelector/ReportingPeriodSelector";
-import { ImportHistoricalDataModalContent } from "./ImportHistoricalDataModalContent";
+import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
 
 // Helper function that generates an array of years from this year until the year specified in min param
 export const generateArrayOfYears = (min) => {
@@ -138,8 +137,9 @@ export const HeaderInfo = ({
 
   // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
-  const [usePortBtn, setUsePortBtn] = useState(false);
+  // Upload has finished when finishedLoading=true (this is my educated guess, someone correct if wrong)
   const [finishedLoading, setFinishedLoading] = useState(false);
+  // Upload has started but is not finished when isLoading=true (this is my educated guess, someone correct if wrong)
   const [isLoading, setIsLoading] = useState(false);
   const [fileName, setFileName] = useState("");
   const [hasFormatError, setHasFormatError] = useState(false);
@@ -151,10 +151,10 @@ export const HeaderInfo = ({
   const [viewTemplates, setViewTemplates] = useState([]);
 
   const [importedFile, setImportedFile] = useState([]);
-  const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
+  const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState([]);
 
   const [showEmissionsImportTypeModal, setShowEmissionsImportTypeModal] = useState(false);
-  const [showHistoricalDataImportModal, setShowHistoricalDataImportModal] = useState(true);
+  const [showHistoricalDataImportModal, setShowHistoricalDataImportModal] = useState(false);
 
   // The below object structure is needed for MultiSelectComboBox
   const yearsArray = useMemo(
@@ -223,14 +223,15 @@ export const HeaderInfo = ({
   const resetImportFlags = () => {
     setShowImportModal(false);
     setShowEmissionsImportTypeModal(false);
+    setShowHistoricalDataImportModal(false)
     setDisablePortBtn(true);
-    setUsePortBtn(false);
     setFinishedLoading(false);
     setIsLoading(false);
     setFileName("");
     setHasFormatError(false);
     setHasInvalidJsonError(false);
     setImportApiErrors([]);
+    setImportedFileErrorMsgs([])
   };
 
   const reportWindowParams = [
@@ -611,7 +612,6 @@ export const HeaderInfo = ({
 
   const importMPFile = (payload) => {
     mpApi.importMP(payload).then((response) => {
-      setUsePortBtn(true);
       setIsLoading(true);
       if (response) {
         setImportedFileErrorMsgs(response);
@@ -620,14 +620,22 @@ export const HeaderInfo = ({
   };
 
   const importEmissionsFile = (payload) =>{
-    emApi.importEmissionsFile(payload).then((response) => {
-      setUsePortBtn(true);
-      setIsLoading(true);
-      if (response?.status !== 201) {
-        setImportedFileErrorMsgs(response?.split(","));
+    setIsLoading(true);
+    setFinishedLoading(false);
+    emApi.importEmissionsData(payload).then(({data, status}) => {
+      if (status === 201) {
+        setImportedFileErrorMsgs([]);
       }
-      else
-        setImportedFileErrorMsgs([])
+      else if( status === 400)
+        setImportedFileErrorMsgs(data?.message?.split(",") || ["HTTP 400 Error"])
+      else{
+        setImportedFileErrorMsgs(`HTTP ${status} Error`)
+      }
+    }).catch(err=>{
+      console.log(err)
+    }).finally(()=>{
+      setIsLoading(false);
+      setFinishedLoading(true)
     });
 
   }
@@ -722,16 +730,15 @@ export const HeaderInfo = ({
 
   const onChangeOfEmissionsImportType = (e)=>{
     const {value} = e.target
-    console.log("value", value)
     if(value === "file"){
       setShowImportModal(true)
-      setShowEmissionsImportTypeModal(false)
     }
 
     if(value === "historical"){
       setShowHistoricalDataImportModal(true);
-      setShowEmissionsImportTypeModal(false)
     }
+
+    setShowEmissionsImportTypeModal(false)
   }
 
   return (
@@ -1079,7 +1086,7 @@ export const HeaderInfo = ({
             close={closeImportModalHandler}
             showCancel={true}
             showSave={true}
-            title={"Import a Monitoring Plan to continue"}
+            title={ workspaceSection === MONITORING_PLAN_STORE_NAME ? "Import a Monitoring Plan to continue" : "Import Data"}
             exitBTN={"Import"}
             disablePortBtn={disablePortBtn}
             port={() => {
@@ -1128,8 +1135,9 @@ export const HeaderInfo = ({
         />
       )}
 
-      {/* after it finishes uploading , shows either api errors or success messages */}
-      {showImportModal && usePortBtn && finishedLoading && (
+      {/* For file imports, after it finishes uploading , shows either api errors or success messages */}
+      {/* For importing historical data, this is ONLY used to display errors */}
+      {(showImportModal || showHistoricalDataImportModal) && finishedLoading && (
         <UploadModal
           show={showImportModal}
           close={closeImportModalHandler}
@@ -1158,7 +1166,7 @@ export const HeaderInfo = ({
         <UploadModal
           title="Import Data"
           show={showEmissionsImportTypeModal}
-          close={closeImportModalHandler}
+          close={()=>setShowEmissionsImportTypeModal(false)}
           showCancel={true}
           showImport={false}
           children={
@@ -1167,9 +1175,14 @@ export const HeaderInfo = ({
         />
       )}
 
-      {showHistoricalDataImportModal && (
-        <ImportHistoricalDataModalContent 
-          closeModalHandler={()=>setShowHistoricalDataImportModal(false)}
+      {showHistoricalDataImportModal && !finishedLoading && !isLoading && (
+        <ImportHistoricalDataModal
+          closeModalHandler={closeImportModalHandler}
+          setIsLoading={setIsLoading}
+          setFinishedLoading={setFinishedLoading}
+          finishedLoading={finishedLoading}
+          importedFileErrorMsgs={importedFileErrorMsgs}
+          setImportedFileErrorMsgs={setImportedFileErrorMsgs}
         />
       )}
 

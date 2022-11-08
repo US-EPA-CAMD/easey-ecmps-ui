@@ -118,7 +118,7 @@ export const getEmissionsSchema = async () => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const importEmissionsFile = async (payload) => {
+export const importEmissionsData = async (payload) => {
   const url = `${config.services.emissions.uri}/workspace/emissions/import`;
   try {
     return handleResponse(
@@ -129,6 +129,8 @@ export const importEmissionsFile = async (payload) => {
       })
     );
   } catch (error) {
-    return handleImportError(error);
+    // get errors logged
+    handleImportError(error);
+    return error.response;
   }
 };
