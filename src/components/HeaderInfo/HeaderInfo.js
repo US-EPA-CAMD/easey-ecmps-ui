@@ -13,6 +13,7 @@ import config from "../../config";
 import { triggerEvaluation } from "../../utils/api/quartzApi";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
+import * as emApi from "../../utils/api/emissionsApi";
 import {
   EMISSIONS_STORE_NAME,
   MONITORING_PLAN_STORE_NAME,
@@ -42,9 +43,11 @@ import {
   exportEmissionsDataDownload,
 } from "../../utils/api/emissionsApi";
 import { getUser } from "../../utils/functions";
+import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
+import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
 
 // Helper function that generates an array of years from this year until the year specified in min param
-const generateArrayOfYears = (min) => {
+export const generateArrayOfYears = (min) => {
   let max = new Date().getFullYear();
   let years = [];
 
@@ -112,9 +115,6 @@ export const HeaderInfo = ({
     { name: "Unit Information" },
   ];
 
-  // minimum year for emissions data
-  const MIN_YEAR = 2009;
-
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
@@ -146,8 +146,9 @@ export const HeaderInfo = ({
 
   // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
-  const [usePortBtn, setUsePortBtn] = useState(false);
+  // Upload has finished when finishedLoading=true (this is my educated guess, someone correct if wrong)
   const [finishedLoading, setFinishedLoading] = useState(false);
+  // Upload has started but is not finished when isLoading=true (this is my educated guess, someone correct if wrong)
   const [isLoading, setIsLoading] = useState(false);
   const [fileName, setFileName] = useState("");
   const [hasFormatError, setHasFormatError] = useState(false);
@@ -157,6 +158,12 @@ export const HeaderInfo = ({
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const [isReverting, setIsReverting] = useState(false);
   const [viewTemplates, setViewTemplates] = useState([]);
+
+  const [importedFile, setImportedFile] = useState([]);
+  const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState([]);
+
+  const [showEmissionsImportTypeModal, setShowEmissionsImportTypeModal] = useState(false);
+  const [showHistoricalDataImportModal, setShowHistoricalDataImportModal] = useState(false);
 
   const reportingPeriods = useMemo(
     () =>
@@ -215,14 +222,16 @@ export const HeaderInfo = ({
 
   const resetImportFlags = () => {
     setShowImportModal(false);
+    setShowEmissionsImportTypeModal(false);
+    setShowHistoricalDataImportModal(false)
     setDisablePortBtn(true);
-    setUsePortBtn(false);
     setFinishedLoading(false);
     setIsLoading(false);
     setFileName("");
     setHasFormatError(false);
     setHasInvalidJsonError(false);
     setImportApiErrors([]);
+    setImportedFileErrorMsgs([])
   };
 
   const reportWindowParams = [
@@ -259,29 +268,23 @@ export const HeaderInfo = ({
   };
 
   const openImportModal = () => {
-    setShowImportModal(true);
 
-    setTimeout(() => {
-      attachChangeEventListeners(".modalUserInput");
-    });
+      setShowImportModal(true);
+
+      setTimeout(() => {
+        attachChangeEventListeners(".modalUserInput");
+      });  
   };
 
-  const closeImportModalHandler = () => {
-    const importBtn = document.querySelector("#importMonitoringPlanBtn");
-
-    if (window.isDataChanged === true) {
-      if (window.confirm(unsavedDataMessage) === true) {
-        resetImportFlags();
-        removeChangeEventListeners(".modalUserInput");
-        importBtn.focus();
-      }
-    } else {
-      resetImportFlags();
-      removeChangeEventListeners(".modalUserInput");
-      importBtn.focus();
+  const openModal = () => {
+    if( workspaceSection === MONITORING_PLAN_STORE_NAME){
+      openImportModal();
     }
-  };
-
+    else{
+      setShowEmissionsImportTypeModal(true);
+    }
+  }
+  
   const handleEmissionsExport = async () => {
     const promises = [];
     for (const selectedReportingPeriod of selectedReportingPeriods) {
@@ -612,18 +615,59 @@ export const HeaderInfo = ({
     setShowRevertModal(false);
   };
 
-  const [importedFile, setImportedFile] = useState([]);
-  const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
-
-  const importMPBtn = (payload) => {
+  const importMPFile = (payload) => {
     mpApi.importMP(payload).then((response) => {
-      setUsePortBtn(true);
       setIsLoading(true);
       if (response) {
         setImportedFileErrorMsgs(response);
       }
     });
   };
+
+  const importEmissionsFile = (payload) =>{
+    setIsLoading(true);
+    setFinishedLoading(false);
+    emApi.importEmissionsData(payload).then(({data, status}) => {
+      if (status === 201) {
+        setImportedFileErrorMsgs([]);
+      }
+      else if( status === 400)
+        setImportedFileErrorMsgs(data?.message?.split(",") || ["HTTP 400 Error"])
+      else{
+        setImportedFileErrorMsgs(`HTTP ${status} Error`)
+      }
+    }).catch(err=>{
+      console.log(err)
+    }).finally(()=>{
+      setIsLoading(false);
+      setFinishedLoading(true)
+    });
+
+  }
+
+  const closeImportModalHandler = () => {
+    const importBtn = document.querySelector("#importBtn");
+    if (window.isDataChanged === true) {
+      if (window.confirm(unsavedDataMessage) === true) {
+        resetImportFlags();
+        removeChangeEventListeners(".modalUserInput");
+        importBtn.focus();
+      }
+    } else {
+      resetImportFlags();
+      removeChangeEventListeners(".modalUserInput");
+      importBtn.focus();
+    }
+  };
+
+  const importFile = (payload) =>{
+    
+    if(workspaceSection === MONITORING_PLAN_STORE_NAME)
+      importMPFile(payload);
+    else if(workspaceSection === EMISSIONS_STORE_NAME)
+      importEmissionsFile(payload);
+  }
+
   const evaluate = () => {
     triggerEvaluation({
       monitorPlanId: configID,
@@ -682,9 +726,23 @@ export const HeaderInfo = ({
     }
   };
 
-  const handleExport = () => {
-    if (workspaceSection === EMISSIONS_STORE_NAME) handleEmissionsExport();
-  };
+  const handleExport = ()=>{
+    if( workspaceSection === EMISSIONS_STORE_NAME )
+      handleEmissionsExport()
+  }
+
+  const onChangeOfEmissionsImportType = (e)=>{
+    const {value} = e.target
+    if(value === "file"){
+      setShowImportModal(true)
+    }
+
+    if(value === "historical"){
+      setShowHistoricalDataImportModal(true);
+    }
+
+    setShowEmissionsImportTypeModal(false)
+  }
 
   return (
     <div className="header">
@@ -741,18 +799,18 @@ export const HeaderInfo = ({
               >
                 Export Data
               </Button>
-              {user && checkedOutByUser && (
-                <Button
-                  type="button"
-                  className="margin-right-2 float-right"
-                  outline={false}
-                  onClick={() => openImportModal()}
-                  id="importMonitoringPlanBtn"
-                >
-                  Import Data
-                </Button>
-              )}
-            </div>
+                {user && checkedOutByUser &&(
+                  <Button
+                    type="button"
+                    className="margin-right-2 float-right"
+                    outline={false}
+                    onClick={() => openModal()}
+                    id="importBtn"
+                  >
+                    Import Data
+                  </Button>
+                )}
+              </div>
           </div>
 
           {dataLoaded && (
@@ -990,7 +1048,6 @@ export const HeaderInfo = ({
                   >
                     {"Apply Filter(s)"}
                   </Button>
-                  {/* <div>abc</div> */}
                 </Grid>
               </Grid>
               <Grid row>
@@ -1023,11 +1080,6 @@ export const HeaderInfo = ({
       ) : (
         <Preloader />
       )}
-      <div
-        className={`usa-overlay ${
-          showImportModal || isReverting ? "is-visible" : ""
-        }`}
-      />
 
       {showImportModal && !finishedLoading && !isLoading ? (
         <div>
@@ -1036,11 +1088,11 @@ export const HeaderInfo = ({
             close={closeImportModalHandler}
             showCancel={true}
             showSave={true}
-            title={"Import a Monitoring Plan to continue"}
+            title={ workspaceSection === MONITORING_PLAN_STORE_NAME ? "Import a Monitoring Plan to continue" : "Import Data"}
             exitBTN={"Import"}
             disablePortBtn={disablePortBtn}
             port={() => {
-              importMPBtn(importedFile);
+              importFile(importedFile);
             }}
             hasFormatError={hasFormatError}
             hasInvalidJsonError={hasInvalidJsonError}
@@ -1052,7 +1104,7 @@ export const HeaderInfo = ({
                 setHasFormatError={setHasFormatError}
                 setHasInvalidJsonError={setHasInvalidJsonError}
                 setImportedFile={setImportedFile}
-                workspaceSection={MONITORING_PLAN_STORE_NAME}
+                workspaceSection={workspaceSection}
               />
             }
           />
@@ -1085,8 +1137,9 @@ export const HeaderInfo = ({
         />
       )}
 
-      {/* after it finishes uploading , shows either api errors or success messages */}
-      {showImportModal && usePortBtn && finishedLoading && (
+      {/* For file imports, after it finishes uploading , shows either api errors or success messages */}
+      {/* For importing historical data, this is ONLY used to display errors */}
+      {(showImportModal || showHistoricalDataImportModal) && finishedLoading && (
         <UploadModal
           show={showImportModal}
           close={closeImportModalHandler}
@@ -1097,7 +1150,7 @@ export const HeaderInfo = ({
           importApiErrors={importApiErrors}
           importedFileErrorMsgs={importedFileErrorMsgs}
           setUpdateRelatedTables={setUpdateRelatedTables}
-          successMsg={"Monitoring Plan has been Successfully Imported."}
+          successMsg={ workspaceSection === MONITORING_PLAN_STORE_NAME ? "Monitoring Plan has been Successfully Imported." : "Test Data from File has been successfully imported."}
           children={
             <ImportModal
               setDisablePortBtn={setDisablePortBtn}
@@ -1111,9 +1164,31 @@ export const HeaderInfo = ({
         />
       )}
 
-      <div className={`usa-overlay ${showCommentsModal ? "is-visible" : ""}`} />
+      {showEmissionsImportTypeModal && (
+        <UploadModal
+          title="Import Data"
+          show={showEmissionsImportTypeModal}
+          close={()=>setShowEmissionsImportTypeModal(false)}
+          showCancel={true}
+          showImport={false}
+          children={
+            <EmissionsImportTypeModalContent onChange={onChangeOfEmissionsImportType} />
+          }
+        />
+      )}
+
+      {showHistoricalDataImportModal && !finishedLoading && !isLoading && (
+        <ImportHistoricalDataModal
+          closeModalHandler={closeImportModalHandler}
+          setIsLoading={setIsLoading}
+          setFinishedLoading={setFinishedLoading}
+          finishedLoading={finishedLoading}
+          importedFileErrorMsgs={importedFileErrorMsgs}
+          setImportedFileErrorMsgs={setImportedFileErrorMsgs}
+        />
+      )}
+
       {showCommentsModal && (
-        <div>
           <UploadModal
             show={showCommentsModal}
             width={"50%"}
@@ -1133,7 +1208,6 @@ export const HeaderInfo = ({
               />
             }
           />
-        </div>
       )}
     </div>
   );
