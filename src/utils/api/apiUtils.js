@@ -42,7 +42,7 @@ export function handleError(error) {
       status: error.response.status,
       headers: error.response.headers,
     });
-    errorMessage = `${error.response.data.error} ${error.response.data.message}`;
+    errorMessage = `${error.response.data?.error} ${error.response.data?.message}`;
   } else if (error.request) {
     // client never received a response, or request never left
     log.error({ error: error.request });

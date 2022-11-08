@@ -17,7 +17,7 @@ const ReportingPeriodSelector = ({
 
   useEffect(() => {
     if (reportingPeriod === null) {
-      setLoading(true);
+      setLoading && setLoading(true);
       getReportingPeriod().then((res) => {
         if (exportState && exportState.reportingPeriodId) {
           // retain state as tab is opened back
@@ -42,8 +42,8 @@ const ReportingPeriodSelector = ({
             })
           );
         }
-        setLoading(false);
-      });
+        setLoading && setLoading(false);
+      })
     } else if (years.length === 0 && quarters.length === 0) {
       setYears(
         new Set(
