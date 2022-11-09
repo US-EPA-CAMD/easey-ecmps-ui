@@ -682,3 +682,35 @@ export const qaFlowToLoadCheckProps = () => {
     },
   };
 }
+
+export const qaFlowToLoadReferenceProps = () => {
+  return {
+    dataTableName: 'Flow To Load Reference',
+    payload: {},
+
+    dropdownArray: [
+      'operatingLevelCode',
+    ],
+    columnNames: [
+      "Rata Test Number",
+      "Operating Level Code",
+      "Average Gross Unit Load",
+      "Average Reference Method Flow",
+      "Reference Flow To Load Ratio",
+      "Average Hourly Heat Input Rate",
+      "Reference Gross Heat Rate",
+      "Calculated Separate Reference Indicator",
+    ],
+
+    controlInputs: {
+      rataTestNumber: ["Rata Test Number", "input", "", ""],
+      operatingLevelCode: ["Operating Level Code", "dropdown", "", ""],
+      averageGrossUnitLoad: ["Average Gross Unit Load", "input", "", ""],
+      averageReferenceMethodFlow:  ["Average Reference Method Flow", "input", "", ""],
+      referenceFlowToLoadRatio:  ["Reference Flow To Load Ratio", "input", "", ""],
+      averageHourlyHeatInputRate:  ["Average Hourly Heat Input Rate", "input", "", ""],
+      referenceGrossHeatRate:  ["Reference Gross Heat Rate", "input", "", ""],
+      calculatedSeparateReferenceIndicator:  ["Calculated Separate Reference Indicator", "input", "", ""],
+    }
+  }
+}

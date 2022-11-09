@@ -230,7 +230,7 @@ describe("QA Cert API", function () {
       expect(resp.data).toStrictEqual('deleted')
     })
   })
-})
+
 
 describe('Appendix E Correlation Heat Input from Gas CRUD operations', () => {
 
@@ -256,3 +256,30 @@ describe('Appendix E Correlation Heat Input from Gas CRUD operations', () => {
     expect(resp.data).toStrictEqual(payload)
   })
 })
+
+describe('Flow To Load Reference CRUD Operations', () => {
+
+  test('getFlowToLoadReferenceRecords', async () => {
+    const flowToLoadReferenceData = [{ flowToLoadReference: 'data' }]
+    const getFlowToLoadReferenceUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/flow-to-load-references`;
+    mock.onGet(getFlowToLoadReferenceUrl).reply(200, flowToLoadReferenceData)
+
+    const resp = await qaCert.getFlowToLoadReferenceRecords(locId, testSumId)
+
+    expect(mock.history.get.length).toBe(1)
+    expect(resp.data).toStrictEqual(flowToLoadReferenceData)
+})
+
+test('createFlowToLoadReferenceRecord', async () => {
+  const payload = { flowToLoadReference: 'data' }
+  const postFlowToLoadReferenceUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/flow-to-load-references`;
+  mock.onPost(postFlowToLoadReferenceUrl).reply(200, payload)
+
+  const resp = await qaCert.createFlowToLoadReferenceRecord(locId, testSumId, payload)
+
+  expect(mock.history.post.length).toBe(1)
+  expect(resp.data).toStrictEqual(payload)
+})
+})
+})
+

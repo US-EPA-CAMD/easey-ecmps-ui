@@ -427,3 +427,22 @@ export const mapFlowToLoadCheckToRows = (data) => {
   }
   return records;
 };
+
+export const mapFlowToLoadReferenceToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.rataTestNumber,
+      col2: el.operatingLevelCode,
+      col3: el.averageGrossUnitLoad,
+      col4: el.averageReferenceMethodFlow,
+      col5: el.referenceFlowToLoadRatio,
+      col6: el.averageHourlyHeatInputRate,
+      col7: el.referenceGrossHeatRate,
+      col8: el.calculatedSeparateReferenceIndicator,
+    };
+    records.push(row);
+  }
+  return records;
+};

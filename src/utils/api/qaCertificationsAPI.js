@@ -1315,3 +1315,38 @@ export const deleteFlowToLoadCheckRecord = async (
     return handleImportError(error);
   }
 };
+
+export const getFlowToLoadReferenceRecords = async (
+  locId,
+  testSumId,
+) => {
+  let url = `${config.services.qaCertification.uri}`;
+  
+  // *** workspace section url (authenticated)
+  if (window.location.href.indexOf("workspace") > -1) {
+    url = `${url}/workspace`;
+  }
+  // *** attach the rest of the url
+  url = `${url}/locations/${locId}/test-summary/${testSumId}/flow-to-load-references`;
+  
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createFlowToLoadReferenceRecord = async (
+  locId,
+  testSumId,
+  payload
+) => {
+ const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/flow-to-load-references`;
+    try {
+      return handleResponse(
+        await secureAxios({
+          method: "POST",
+          url: url,
+          data: payload,
+        })
+      );
+    } catch (error) {
+      return handleImportError(error);
+    }
+};
