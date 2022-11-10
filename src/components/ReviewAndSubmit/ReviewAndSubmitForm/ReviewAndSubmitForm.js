@@ -453,7 +453,11 @@ const ReviewAndSubmitForm = () => {
                       hideInput={true}
                       entity={name}
                       searchBy="label"
-                      onChangeUpdate={(args) => console.log(args)}
+                      onChangeUpdate={(id, action) => {
+                        console.log(id);
+                        console.log(action);
+                        console.log(items.find((val) => val.id === id).label);
+                      }}
                     />
                   )}
                 </div>
