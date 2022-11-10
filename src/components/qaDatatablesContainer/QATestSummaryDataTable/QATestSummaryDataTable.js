@@ -18,7 +18,8 @@ import {
   qaAppendixECorrelationSummaryTestProps,
   qaFuelFlowToLoadProps,
   qaFuelFlowToLoadBaselineProps,
-  qaFlowToLoadCheckProps
+  qaFlowToLoadCheckProps,
+  qaOnOffCalibrationProps
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
@@ -599,6 +600,23 @@ const QATestSummaryDataTable = ({
             columns={flcProps["columnNames"]}
             controlInputs={flcProps["controlInputs"]}
             dataTableName={flcProps["dataTableName"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "OLOLCAL": // Online Offline Calibration
+        const onOffCalProps = qaOnOffCalibrationProps();
+        return (
+          <QAExpandableRowsRender
+            payload={onOffCalProps["payload"]}
+            dropdownArray={onOffCalProps["dropdownArray"]}
+            mdmProps={onOffCalProps["mdmProps"]}
+            columns={onOffCalProps["columnNames"]}
+            controlInputs={onOffCalProps["controlInputs"]}
+            controlDatePickerInputs={onOffCalProps["controlDatePickerInputs"]}
+            dataTableName={onOffCalProps["dataTableName"]}
             expandable
             {...props}
             extraIDs={null}
