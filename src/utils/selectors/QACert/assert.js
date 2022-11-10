@@ -21,6 +21,7 @@ const appendixECorrelationSummary = "Appendix E Correlation Summary";
 const appendixECorrHeatInputOil = "Appendix E Correlation Heat Input from Oil";
 const appendixECorrHeatInputGas = "Appendix E Correlation Heat Input from Gas";
 const flowToLoadCheck = "Flow To Load Check";
+const onlineOfflineCalibration = "Online Offline Calibration"
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -146,6 +147,10 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       return qaApi.getFlowToLoadCheckRecords(location, id).catch((error) => {
         console.log("error", error);
       });
+    case onlineOfflineCalibration:
+      return qaApi
+        .getOnlineOfflineCalibration(location, id)
+        .catch(error => console.log("error fetching online offline calibration", error))
     default:
       throw new Error(`getDataTableApis case not implemented for ${name}`);
   }
@@ -179,7 +184,7 @@ export const getDataTableRecords = (dataIn, name) => {
     case fuelFlowToLoad:
       return selector.mapFuelFlowToLoadToRows(dataIn);
     case fuelFlowToLoadBaseline:
-      return selector.mapFuelFlowToLoadBaselineToRows(dataIn)
+      return selector.mapFuelFlowToLoadBaselineToRows(dataIn);
     case appendixECorrTestRun:
       return selector.mapAppendixECorrTestRunsToRows(dataIn);
     case appendixECorrHeatInputGas:
@@ -188,7 +193,8 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.mapAppendixECorrHeatInputOilToRows(dataIn);
     case flowToLoadCheck:
       return selector.mapFlowToLoadCheckToRows(dataIn);
-
+    case onlineOfflineCalibration:
+      return selector.mapOnOffCalToRows(dataIn);
     default:
       throw new Error(`getDataTableRecords case not implemented for ${name}`);
   }
@@ -474,17 +480,17 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           id,
           userInput.id,
           userInput
-        ).catch((error) => {console.log("error", error)});
+        ).catch((error) => { console.log("error", error) });
     case appendixECorrHeatInputOil:
       return qaApi
         .updateAppendixECorrelationHeatInputOil(
-          extraIdsArr[0], 
-          extraIdsArr[1], 
-          extraIdsArr[2], 
-          id, 
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
+          id,
           userInput.id,
           userInput
-        ).catch((error) => {console.log("error", error)});
+        ).catch((error) => { console.log("error", error) });
     case flowToLoadCheck:
       return qaApi
         .updateFlowToLoadCheckRecord(
