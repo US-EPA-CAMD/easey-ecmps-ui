@@ -107,14 +107,12 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
         .getFuelFlowToLoadBaseline(location, id)
         .catch(error => console.log('error fetching fuel flow to load baseline data', error))
     case appendixECorrTestRun:
-      console.log("extraids for run", extraIdsArr);
       return qaApi
         .getAppendixERunData(extraIdsArr[0], extraIdsArr[1], id)
         .catch((error) =>
           console.log("error fetching appendix E test run data", error)
         );
     case appendixECorrHeatInputGas:
-      console.log("extraids for heat", extraIdsArr);
       return qaApi
         .getAppendixEHeatInputGasData(
           extraIdsArr[0],
@@ -311,7 +309,7 @@ export const removeDataSwitch = async (
         });
     case appendixECorrHeatInputGas:
       return qaApi
-        .deleteAppendixECorrelationSummaryRecord(locationId, id, row.id)
+        .deleteAppendixECorrelationHeatInputGas(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], id, row.id)
         .catch((error) => {
           console.log("error", error);
         });
@@ -472,6 +470,16 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           extraIdsArr[0],
           extraIdsArr[1],
           id,
+          userInput.id,
+          userInput
+        ).catch((error) => {console.log("error", error)});
+    case appendixECorrHeatInputGas:
+      return qaApi
+        .updateAppendixECorrelationHeatInputGas(
+          extraIdsArr[0], 
+          extraIdsArr[1], 
+          extraIdsArr[2], 
+          id, 
           userInput.id,
           userInput
         ).catch((error) => {console.log("error", error)});
