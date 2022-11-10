@@ -427,3 +427,39 @@ export const mapFlowToLoadCheckToRows = (data) => {
   }
   return records;
 };
+
+export const mapOnOffCalToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.onlineZeroReferenceValue,
+      col2: el.onlineUpscaleReferenceValue,
+      col3: el.offlineZeroReferenceValue,
+      col4: el.offlineUpscaleReferenceValue,
+      col5: el.onlineZeroMeasuredValue,
+      col6: el.onlineUpscaleMeasuredValue,
+      col7: el.offlineZeroMeasuredValue,
+      col8: el.offlineUpscaleMeasuredValue,
+      col9: el.onlineZeroCalibrationError,
+      col10: el.onlineUpscaleCalibrationError,
+      col11: el.offlineZeroCalibrationError,
+      col12: el.offlineUpscaleCalibrationError,
+      col13: el.opscaleGasLevelCode,
+      col14: el.onlineZeroAPSIndicator,
+      col15: el.onlineUpscaleAPSIndicator,
+      col16: el.offlineZeroAPSIndicator,
+      col17: el.offlineUpscaleAPSIndicator,
+      col18: el.onlineZeroInjectionDate,
+      col19: el.onlineUpscaleInjectionDate,
+      col20: el.offlineZeroInjectionDate,
+      col21: el.offlineUpscaleInjectionDate,
+      col22: el.onlineZeroInjectionHour,
+      col23: el.onlineUpscaleInjectionHour,
+      col24: el.offlineZeroInjectionHour,
+      col25: el.offlineUpscaleInjectionHour,
+    };
+    records.push(row);
+  }
+  return records;
+}
