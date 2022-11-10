@@ -636,7 +636,7 @@ export const qaFlowToLoadCheckProps = () => {
     dataTableName: "Flow To Load Check",
     payload: {},
     dropdownArray: [
-      'testBasisCode','operatingLevelCode', 'biasAdjustedIndicator'
+      'testBasisCode', 'operatingLevelCode', 'biasAdjustedIndicator'
     ],
     mdmProps: [
       {
@@ -670,7 +670,7 @@ export const qaFlowToLoadCheckProps = () => {
     controlInputs: {
       testBasisCode: ["Test Basis Code", "dropdown", "", ""],
       biasAdjustedIndicator: ["Bias Adjusted Indicator", "dropdown", "", ""],
-      averageAbsolutePercentDifference: ["Average Absolute Percent Difference","input", "", ""],
+      averageAbsolutePercentDifference: ["Average Absolute Percent Difference", "input", "", ""],
       numberOfHours: ["Number of Hours", "input", "", ""],
       numberOfHoursExcludedForFuel: ["Number of Hours Excluded for Fuel", "input", "", ""],
       numberOfHoursExcludedForRamping: ["Number of Hours Excluded for Ramping", "input", "", ""],
@@ -679,6 +679,139 @@ export const qaFlowToLoadCheckProps = () => {
       numberOfHoursExcludedTest: ["Number of Hours Excluded Test", "input", "", ""],
       numberOfHoursExcludedForMainAndBypass: ["Number of Hours Excluded for Main and Bypass", "input", "", ""],
       operatingLevelCode: ["Operating Level Code", "dropdown", "", ""],
+    },
+  };
+}
+
+export const qaOnOffCalibrationProps = () => {
+  return {
+    dataTableName: "Online Offline Calibration",
+    payload: {},
+    dropdownArray: [
+      "upscaleGasLevelCode",
+      "onlineZeroAPSIndicator",
+      "onlineUpscaleAPSIndicator",
+      "offlineZeroAPSIndicator",
+      "offlineUpscaleAPSIndicator",
+    ],
+    mdmProps: [
+      {
+        codeTable: "gas-level-codes",
+        responseProps: {
+          code: "gasLevelCode",
+          description: "gasLevelDescription"
+        }
+      },
+      // Online Zero APS Indicator
+      {
+        codeTable: "aps-codes",
+        responseProps: {
+          code: "apsCode",
+          description: "apsDescription"
+        }
+      },
+      // Online Upscale APS Indicator
+      {
+        codeTable: "aps-codes",
+        responseProps: {
+          code: "apsCode",
+          description: "apsDescription"
+        }
+      },
+      // Offline Zero APS Indicator 
+      {
+        codeTable: "aps-codes",
+        responseProps: {
+          code: "apsCode",
+          description: "apsDescription"
+        }
+      },
+      // Offline Upscale APS Indicator
+      {
+        codeTable: "aps-codes",
+        responseProps: {
+          code: "apsCode",
+          description: "apsDescription"
+        }
+      }
+    ],
+    columnNames: [
+      "Online Zero Reference Value",
+      "Online Upscale Reference Value",
+      "Offline Zero Reference Value",
+      "Offline Upscale Reference Value",
+      "Online Zero Measured Value",
+      "Online Upscale Measured Value",
+      "Offline Zero Measured Value",
+      "Offline Upscale Measured Value",
+      "Online Zero Calibration Error",
+      "Online Upscale Calibration Error",
+      "Offline Zero Calibration Error",
+      "Offline Upscale Calibration Error",
+      "Upscale Gas Level Code",
+      "Online Zero APS Indicator",
+      "Online Upscale APS Indicator",
+      "Offline Zero APS Indicator",
+      "Offline Upscale APS Indicator",
+      "Online Zero Injection Date",
+      "Online Upscale Injection Date",
+      "Offline Zero Injection Date",
+      "Offline Upscale Injection Date",
+      "Online Zero Injection Hour",
+      "Online Upscale Injection Hour",
+      "Offline Zero Injection Hour",
+      "Offline Upscale Injection Hour",
+    ],
+    controlInputs: {
+      // --- Input ---
+      // onlineZeroReferenceValue: ["Online Zero Reference Value", "input", "", ""],
+      // onlineUpscaleReferenceValue: ["Online Upscale Reference Value", "input", "", ""],
+      // offlineZeroReferenceValue: ["Offline Zero Reference Value", "input", "", ""],
+      // offlineUpscaleReferenceValue: ["Offline Upscale Reference Value", "input", "", ""],
+      // onlineZeroMeasuredValue: ["Online Zero Measured Value", "input", "", ""],
+      // onlineUpscaleMeasuredValue: ["Online Upscale Measured Value", "input", "", ""],
+      // offlineZeroMeasuredValue: ["Offline Zero Measured Value", "input", "", ""],
+      // offlineUpscaleMeasuredValue: ["Offline Upscale Measured Value", "input", "", ""],
+      // onlineZeroCalibrationError: ["Online Zero Calibration Error", "input", "", ""],
+      // onlineUpscaleCalibrationError: ["Online Upscale Calibration Error", "input", "", ""],
+      // offlineZeroCalibrationError: ["Offline Zero Calibration Error", "input", "", ""],
+      // offlineUpscaleCalibrationError: ["Offline Upscale Calibration Error", "input", "", ""],
+
+      // --- Dropdowns ---
+      // upscaleGasLevelCode: ["Upscale Gas Level Code", "dropdown", "", ""],
+      // onlineZeroAPSIndicator: ["Online Zero APS Indicator", "dropdown", "", ""],
+      // onlineUpscaleAPSIndicator: ["Online Upscale APS Indicator", "dropdown", "", ""],
+      // offlineZeroAPSIndicator: ["Offline Zero APS Indicator", "dropdown", "", ""],
+      // offlineUpscaleAPSIndicator: ["Offline Upscale APS Indicator", "dropdown", "", ""],
+
+      // --- Date/Time ---
+      onlineZeroInjectionDate: ["Online Zero Injection Date", "date", "", ""],
+      onlineUpscaleInjectionDate: ["Online Upscale Injection Date", "date", "", ""],
+      offlineZeroInjectionDate: ["Offline Zero Injection Date", "date", "", ""],
+      offlineUpscaleInjectionDate: ["Offline Upscale Injection Date", "date", "", ""],
+      onlineZeroInjectionHour: ["Online Zero Injection Hour", "dropdown", "hourDropdown", ""],
+      onlineUpscaleInjectionHour: ["Online Upscale Injection Hour", "dropdown", "hourDropdown", ""],
+      offlineZeroInjectionHour: ["Offline Zero Injection Hour", "dropdown", "hourDropdown", ""],
+      offlineUpscaleInjectionHour: ["Offline Upscale Injection Hour", "dropdown", "hourDropdown", ""],
+    },
+    controlDatePickerInputs: {
+      // beginDate: ["Begin Date", "date", "", ""],
+      // beginHour: ["Begin Hour", "hourDropdown", "dropdown", ""],
+      // beginMinute: ["Begin Minute", "minuteDropdown", "dropdown", ""],
+      // endDate: ["End Date", "date", "", ""],
+      // endHour: ["End Hour", "hourDropdown", "dropdown", ""],
+      // endMinute: ["End Minute", "minuteDropdown", "dropdown", ""],
+
+      // ---
+
+      // onlineZeroInjectionDate: ["Online Zero Injection Date", "date", "", ""],
+      // onlineUpscaleInjectionDate: ["Online Upscale Injection Date", "date", "", ""],
+      // offlineZeroInjectionDate: ["Offline Zero Injection Date", "date", "", ""],
+      // offlineUpscaleInjectionDate: ["Offline Upscale Injection Date", "date", "", ""],
+      // onlineZeroInjectionHour: ["Online Zero Injection Hour", "hourDropdown", "dropdown", ""],
+      // onlineUpscaleInjectionHour: ["Online Upscale Injection Hour", "hourDropdown", "dropdown", ""],
+      // offlineZeroInjectionHour: ["Offline Zero Injection Hour", "hourDropdown", "dropdown", ""],
+      // offlineUpscaleInjectionHour: ["Offline Upscale Injection Hour", "hourDropdown", "dropdown", ""],
     },
   };
 }
