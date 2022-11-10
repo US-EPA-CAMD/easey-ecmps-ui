@@ -1166,7 +1166,7 @@ export const updateAppendixECorrelationHeatInputOil = async (
   locId,
   testSumId,
   appECorrTestSumId,
-  appECorrTestrunId, 
+  appECorrTestrunId,
   id,
   payload
 ) => {
@@ -1189,7 +1189,7 @@ export const deleteAppendixECorrelationHeatInputOil = async (
   locId,
   testSumId,
   appECorrTestSumId,
-  appECorrTestrunId, 
+  appECorrTestrunId,
   id,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils/${id}`;
@@ -1314,4 +1314,83 @@ export const deleteFlowToLoadCheckRecord = async (
   } catch (error) {
     return handleImportError(error);
   }
+};
+
+export const getOnlineOfflineCalibration = async (
+  locId,
+  testSumId
+) => {
+  // dummy data
+  const dummyData = [
+    {
+      "id": "id1",
+      "testSumId": "string",
+      "userId": "string",
+      "addDate": "string",
+      "updateDate": "string",
+      "onlineZeroInjectionDate": "string",
+      "onlineZeroInjectionHour": 1,
+      "onlineZeroCalibrationError": 1,
+      "onlineZeroAPSIndicator": 1,
+      "onlineZeroMeasuredValue": 1,
+      "onlineZeroReferenceValue": 1,
+      "onlineUpscaleCalibrationError": 1,
+      "onlineUpscaleAPSIndicator": 1,
+      "onlineUpscaleInjectionDate": "string",
+      "onlineUpscaleInjectionHour": 1,
+      "onlineUpscaleMeasuredValue": 1,
+      "onlineUpscaleReferenceValue": 1,
+      "offlineZeroCalibrationError": 1,
+      "offlineZeroAPSIndicator": 1,
+      "offlineZeroInjectionDate": "string",
+      "offlineZeroInjectionHour": 1,
+      "offlineZeroMeasuredValue": 1,
+      "offlineZeroReferenceValue": 1,
+      "offlineUpscaleCalibrationError": 1,
+      "offlineUpscaleAPSIndicator": 1,
+      "offlineUpscaleInjectionDate": "string",
+      "offlineUpscaleInjectionHour": 1,
+      "offlineUpscaleMeasuredValue": 1,
+      "offlineUpscaleReferenceValue": 1,
+      "upscaleGasLevelCode": "string"
+    },
+    {
+      "id": "id2",
+      "testSumId": "string",
+      "userId": "string",
+      "addDate": "string",
+      "updateDate": "string",
+      "onlineZeroInjectionDate": "string",
+      "onlineZeroInjectionHour": 1,
+      "onlineZeroCalibrationError": 1,
+      "onlineZeroAPSIndicator": 1,
+      "onlineZeroMeasuredValue": 1,
+      "onlineZeroReferenceValue": 1,
+      "onlineUpscaleCalibrationError": 1,
+      "onlineUpscaleAPSIndicator": 1,
+      "onlineUpscaleInjectionDate": "string",
+      "onlineUpscaleInjectionHour": 1,
+      "onlineUpscaleMeasuredValue": 1,
+      "onlineUpscaleReferenceValue": 1,
+      "offlineZeroCalibrationError": 1,
+      "offlineZeroAPSIndicator": 1,
+      "offlineZeroInjectionDate": "string",
+      "offlineZeroInjectionHour": 1,
+      "offlineZeroMeasuredValue": 1,
+      "offlineZeroReferenceValue": 1,
+      "offlineUpscaleCalibrationError": 1,
+      "offlineUpscaleAPSIndicator": 1,
+      "offlineUpscaleInjectionDate": "string",
+      "offlineUpscaleInjectionHour": 1,
+      "offlineUpscaleMeasuredValue": 1,
+      "offlineUpscaleReferenceValue": 1,
+      "upscaleGasLevelCode": "string"
+    }
+  ]
+
+  return Promise.resolve({ status: 200, data: dummyData })
+
+  const path = `/locations/${locId}/test-summary/${testSumId}/online-offline-calibration`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
 };
