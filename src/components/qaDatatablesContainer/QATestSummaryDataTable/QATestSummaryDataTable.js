@@ -18,7 +18,8 @@ import {
   qaAppendixECorrelationSummaryTestProps,
   qaFuelFlowToLoadProps,
   qaFuelFlowToLoadBaselineProps,
-  qaFlowToLoadCheckProps
+  qaFlowToLoadCheckProps,
+  qaCalibrationInjectionProps
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
@@ -602,6 +603,23 @@ const QATestSummaryDataTable = ({
             expandable
             {...props}
             extraIDs={null}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "CALINJ":
+        const cjProps = qaCalibrationInjectionProps();
+        return (
+          <QAExpandableRowsRender
+            payload={cjProps["payload"]}
+            dropdownArray={cjProps["dropdownArray"]}
+            mdmProps={cjProps["mdmProps"]}
+            columns={cjProps["columnNames"]}
+            controlInputs={cjProps["controlInputs"]}
+            controlDatePickerInputs={cjProps["controlDatePickerInputs"]}
+            dataTableName={cjProps["dataTableName"]}
+            extraControls={cjProps["extraControls"]}
+            extraIDs={null}
+            user={user}
             isCheckedOut={isCheckedOut}
           />
         );
