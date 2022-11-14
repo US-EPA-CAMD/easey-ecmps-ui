@@ -178,10 +178,10 @@ export const modalViewData = (
               createNew
                 ? ""
                 : selected
-                ? selected[y] === 0
-                  ? "0"
-                  : selected[y]
-                : "",
+                  ? selected[y] === 0
+                    ? "0"
+                    : selected[y]
+                  : "",
               inputs[y][2] === "required" ? "required" : false,
               "input",
             ]);
@@ -322,13 +322,18 @@ export const modalViewData = (
       //   continue;
       // }
       // dropdown time selection
-      if (
-        y === "endHour" ||
-        y === "beginHour" ||
-        y === "injectionHour" ||
-        y === "wafEndHour" ||
-        y === "wafBeginHour"
-      ) {
+      const dropdownTimeSelectionOptions = [
+        "endHour",
+        "beginHour",
+        "injectionHour",
+        "wafEndHour",
+        "wafBeginHour",
+        "onlineUpscaleInjectionHour",
+        "onlineUpscaleInjectionHour",
+        "offlineZeroInjectionHour",
+        "offlineUpscaleInjectionHour",
+      ]
+      if (dropdownTimeSelectionOptions.includes(y)) {
         arr.push([
           y,
           time[y][0],
