@@ -16,6 +16,7 @@ const MultiSelectCombobox = ({
   onChangeUpdate,
   searchBy,
   hideInput,
+  hideListBox,
   styling,
 }) => {
   const [filter, setFilter] = useState("");
@@ -212,7 +213,7 @@ const MultiSelectCombobox = ({
           className="pin-right margin-right-1 padding-top-05"
           onClick={() => setShowListBox(true)}
         /></>}
-        {showListBox || hideInput ? (
+        {showListBox || (hideInput && !hideListBox) ? (
           <ul
             aria-multiselectable="true"
             role="listbox"
