@@ -25,8 +25,19 @@ export const getMonitoringPlanById = async (id) => {
 };
 
 // *** obtain monitoring plans
-export const getMonitoringPlans = async (orisCode) => {
-  const url = getApiUrl(`/plans/${orisCode}/configurations`);
+export const getMonitoringPlans = async (orisCodes, monPlanIds = []) => {
+  let queryString;
+  if (typeof orisCodes == "number") {
+    queryString = "orisCodes=" + orisCodes;
+  } else {
+    queryString = `orisCodes=${orisCodes.join("|")}`;
+  }
+
+  if (monPlanIds.length > 0) {
+    queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
+  }
+
+  const url = getApiUrl(`/configurations?${queryString}`);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
@@ -288,9 +299,7 @@ export const saveSystemsFuelFlows = async (payload, locId, sysId) => {
 };
 
 export const createSystemsFuelFlows = async (payload, locId, sysId) => {
-  const url = getApiUrl(
-    `/locations/${locId}/systems/${sysId}/fuel-flows`
-  );
+  const url = getApiUrl(`/locations/${locId}/systems/${sysId}/fuel-flows`);
 
   // *** remove attributes not needed by the API
   delete payload["id"];

@@ -7,21 +7,6 @@ import {
 } from "../../utils/api/emissionsApi";
 import { useSelector } from "react-redux";
 
-// This is a very temporary bandaid fix for a problem in the API where the export sends back null for some of the 
-// child data lists and when you try to import that, it throws an error because 
-const deepRemoveVal = (obj, val = null) => {
-  for (const k in obj) {
-    if (obj[k] === val) {
-      delete obj[k];
-    }
-    if (Array.isArray(obj[k])) {
-      for (const i of obj[k]) deepRemoveVal(i);
-    }
-  }
-
-  return obj;
-};
-
 export const ImportHistoricalDataModal = ({
   closeModalHandler,
   setIsLoading,
@@ -47,7 +32,6 @@ export const ImportHistoricalDataModal = ({
 
     exportEmissionsData(selectedConfig.id, selectedYear, selectedQuarter, false)
       .then(({ data: exportResponse }) => {
-        deepRemoveVal(exportResponse);
         return importEmissionsData(exportResponse);
       })
       .then(({ data: importResponse, status }) => {

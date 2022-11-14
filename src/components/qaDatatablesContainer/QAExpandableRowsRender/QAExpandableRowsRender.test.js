@@ -21,7 +21,8 @@ import {
   qaFlowToLoadCheckProps,
   qaFuelFlowToLoadBaselineProps,
   qaAppendixECorrelationSummaryHeatInputOilProps,
-  qaProtocalGasProps
+  qaProtocalGasProps,
+  qaAppendixECorrelationSummaryHeatInputGasProps
 } from "../../../additional-functions/qa-dataTable-props";
 
 const mock = new MockAdapter(axios);
@@ -873,6 +874,82 @@ describe('Test cases for QAExpandableRowsRender', () => {
     // remove row
     const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
     expect(deleteBtns).toHaveLength(appendixECorrTestRunData.length)
+    const secondDeleteBtn = deleteBtns[1]
+    userEvent.click(secondDeleteBtn)
+    const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    userEvent.click(confirmBtns[1])
+  })
+
+  test('renders Appendix E Correlation Heat Input Gas data rows and create/save/delete', async () => {
+    const appendixECorrelationSummaryHeatInputGasData = [
+      {
+        "id": "id1",
+        "appECorrTestRunId": "appECorrTestRunId",
+        "monitoringSystemId": "monitoringSystemId",
+        "gasVolume": 1,
+        "gasGCV": 1,
+        "gasHeatInput": 1,
+        "calculatedGasHeatInput": 1,
+        "userId": "string",
+        "addDate": "string",
+        "updateDate": "string"
+      },
+      {
+        "id": "id2",
+        "appECorrTestRunId": "appECorrTestRunId",
+        "monitoringSystemId": "monitoringSystemId",
+        "gasVolume": 1,
+        "gasGCV": 1,
+        "gasHeatInput": 1,
+        "calculatedGasHeatInput": 1,
+        "userId": "string",
+        "addDate": "string",
+        "updateDate": "string"
+      },
+    ]
+
+    const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases`;
+    const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases`;
+    const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases/${idRegex}`);
+    const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases/${idRegex}`);
+  
+    mock.onGet(getUrl).reply(200, appendixECorrelationSummaryHeatInputGasData)
+    mock.onPost(postUrl).reply(200, 'created')
+    mock.onPut(putUrl).reply(200, 'updated')
+    mock.onDelete(deleteUrl).reply(200, 'deleted')
+
+    mock.onGet(`https://api.epa.gov/easey/dev/qa-certification-mgmt/locations/${locId}/test-summary/${testSumId}`)
+    .reply(200,[{"id":"L3FY866-950F544520244336B5ED7E3824642F9E","locationId":"2286","stackPipeId":null,"unitId":"1","testTypeCode":"APPE","monitoringSystemID":"400","componentID":null,"spanScaleCode":null,"testNumber":"01NOX2021-2","testReasonCode":"QA","testDescription":null,"testResultCode":null,"calculatedTestResultCode":null,"beginDate":"2021-02-05","beginHour":8,"beginMinute":0,"endDate":"2021-02-05","endHour":15,"endMinute":26,"gracePeriodIndicator":null,"calculatedGracePeriodIndicator":null,"year":null,"quarter":null,"testComment":null,"injectionProtocolCode":null,"calculatedSpanValue":null,"evalStatusCode":"EVAL","userId":"rboehme-dp","addDate":"4/7/2021, 7:34:01 AM","updateDate":"11/9/2022, 3:05:01 PM","reportPeriodId":null}]);
+    
+
+    const props = qaAppendixECorrelationSummaryHeatInputGasProps()
+    const idArray = [locId, testSumId, appECorrTestSumId, appECorrTestRunId, id]
+    const data = { locationId: locId, id: appECorrTestRunId }
+    renderComponent(props, idArray, data);
+
+    // renders rows
+    const rows = await screen.findAllByRole('row')
+    expect(mock.history.get.length).not.toBe(0)
+    expect(rows).not.toHaveLength(0)
+
+    // add row
+    /*const addBtn = screen.getAllByRole('button', { name: /Add/i })
+    userEvent.click(addBtn[0])
+    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+*/
+    // edit row
+    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    expect(editBtns).toHaveLength(appendixECorrelationSummaryHeatInputGasData.length)
+    userEvent.click(editBtns[0])
+    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+
+    // remove row
+    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    expect(deleteBtns).toHaveLength(appendixECorrelationSummaryHeatInputGasData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
     const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
