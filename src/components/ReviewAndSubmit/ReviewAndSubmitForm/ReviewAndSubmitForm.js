@@ -3,7 +3,11 @@ import React, { useState, useRef, useEffect } from "react";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
 
-const ReviewAndSubmitForm = ({ queryCallback, showModal }) => {
+const ReviewAndSubmitForm = ({
+  queryCallback,
+  showModal,
+  setExcludeErrors,
+}) => {
   const [availableFacilities, setAvailableFacilities] = useState([]);
   const [availableConfigState, setAvailableConfigState] = useState([]);
 
@@ -66,6 +70,19 @@ const ReviewAndSubmitForm = ({ queryCallback, showModal }) => {
     queryCallback(selectedOrisCodes.current, monPlanIds, "");
   };
 
+  async function configurationFilterChange(id, action) {
+    const objectEntry = availableConfigurations.current.find(
+      (item) => item.id === id
+    );
+    if (objectEntry) {
+      if (action === "add") {
+        objectEntry.selected = true;
+      } else {
+        objectEntry.selected = false;
+      }
+    }
+  }
+
   async function facilityFilterChange(id, action) {
     let newState;
     if (action === "add") {
@@ -84,9 +101,11 @@ const ReviewAndSubmitForm = ({ queryCallback, showModal }) => {
 
     const configNamesToMonPlan = [];
     for (const cd of configurationData) {
-      const key = cd.name.trim();
-      if (!configNamesToMonPlan[key]) {
-        configNamesToMonPlan[key] = cd.id;
+      if (cd.active) {
+        const key = `${cd.facilityName} - ${cd.name}`;
+        if (!configNamesToMonPlan[key]) {
+          configNamesToMonPlan[key] = cd.id;
+        }
       }
     }
 
@@ -113,11 +132,6 @@ const ReviewAndSubmitForm = ({ queryCallback, showModal }) => {
     setAvailableConfigState(availableConfigurations.current);
   }
 
-  const radioButtons = [
-    "Exclude Files with Critical Errors",
-    "Include Files with Critical Errors",
-  ];
-
   const comboboxStyling = {
     combobox: "margin-bottom-2 bg-white multi-select-combobox",
     listbox:
@@ -133,15 +147,28 @@ const ReviewAndSubmitForm = ({ queryCallback, showModal }) => {
       </div>
       <div className="container border-y-1px border-base-lighter padding-y-1">
         <Fieldset className="grid-row margin-y-2">
-          {radioButtons.map((radio, i) => (
-            <Radio
-              className="grid-col-6 desktop:grid-col-12 margin-bottom-1"
-              id={`${radio}-radio-button`}
-              name="critical-errors-radio"
-              label={radio}
-              key={i}
-            />
-          ))}
+          <Radio
+            className="grid-col-6 desktop:grid-col-12 margin-bottom-1"
+            id={`0-radio-button`}
+            defaultChecked
+            name="critical-errors-radio"
+            label={"Exclude Files with Critical Errors"}
+            key={0}
+            onClick={() => {
+              setExcludeErrors(true);
+            }}
+          />
+
+          <Radio
+            className="grid-col-6 desktop:grid-col-12 margin-bottom-1"
+            id={`1-radio-button`}
+            name="critical-errors-radio"
+            label={"Include Files with Critical Errors"}
+            key={1}
+            onClick={() => {
+              setExcludeErrors(false);
+            }}
+          />
         </Fieldset>
         <div className="dropdowns grid-row">
           <div className="grid-col-6 desktop:grid-col-3 margin-top-2">
@@ -162,13 +189,13 @@ const ReviewAndSubmitForm = ({ queryCallback, showModal }) => {
             <div className="margin-right-2">
               <MultiSelectCombobox
                 key={`configs-${availableConfigState.length}`}
-                items={availableConfigState}
+                items={availableConfigurations.current}
                 styling={comboboxStyling}
                 hideInput={true}
                 entity={"Configurations"}
                 label={"Configurations"}
                 searchBy="label"
-                onChangeUpdate={() => {}}
+                onChangeUpdate={configurationFilterChange}
               />
             </div>
           </div>
@@ -185,16 +212,23 @@ const ReviewAndSubmitForm = ({ queryCallback, showModal }) => {
               />
             </div>
           </div>
-          <div className="buttons grid-col-9 desktop:grid-col-4">
-            <div className="display-flex flex-row flex-justify-end desktop:flex-justify-center margin-top-5 margin-right-1">
-              <Button onClick={applyFilters} outline={true}>
+          <div className="buttons grid-col-9 desktop:grid-col-4 padding-top-1">
+            <div
+              id="submit-button-group"
+              className="display-flex flex-row flex-justify-end desktop:flex-justify-center margin-top-5 margin-right-1"
+            >
+              <Button
+                disabled={availableConfigState.length === 0}
+                onClick={applyFilters}
+                outline={true}
+              >
                 Apply Filter(s)
               </Button>
               <Button
                 onClick={() => {
                   showModal(true);
                 }}
-                disabled={false}
+                disabled={true}
               >
                 Submit
               </Button>

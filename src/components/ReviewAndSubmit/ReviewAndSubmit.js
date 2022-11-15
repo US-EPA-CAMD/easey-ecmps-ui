@@ -4,6 +4,7 @@ import ReviewAndSubmitForm from "./ReviewAndSubmitForm/ReviewAndSubmitForm";
 import SubmissionModal from "../SubmissionModal/SubmissionModal";
 
 const ReviewAndSubmit = () => {
+  const [excludeErrors, setExcludeErrors] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [monPlans, setMonPlans] = useState([]);
 
@@ -16,7 +17,13 @@ const ReviewAndSubmit = () => {
   };
 
   const applyFilter = async (orisCodes, monPlanIds, submissionPeriods) => {
-    const monPlanData = (await getMonitoringPlans(orisCodes, monPlanIds)).data;
+    let monPlanData = (await getMonitoringPlans(orisCodes, monPlanIds)).data;
+    monPlanData = monPlanData.filter((mpd) => mpd.active);
+
+    if (excludeErrors) {
+      monPlanData = monPlanData.filter((mpd) => mpd.evalStatusCd !== "ERR");
+    }
+
     setMonPlans(monPlanData);
   };
 
@@ -25,6 +32,7 @@ const ReviewAndSubmit = () => {
       <ReviewAndSubmitForm
         showModal={setShowModal}
         queryCallback={applyFilter}
+        setExcludeErrors={setExcludeErrors}
       />
       {showModal && (
         <SubmissionModal

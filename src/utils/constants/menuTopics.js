@@ -178,7 +178,7 @@ export const home = [{ name: "Home", url: "/" }];
 export const workSpace = [
   {
     name: "Review & Submit",
-    url: "/review",
+    url: "/workspace/review",
   },
   { name: "Monitoring Plans", url: "/workspace/monitoring-plans" },
   {
