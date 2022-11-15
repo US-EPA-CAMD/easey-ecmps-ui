@@ -253,19 +253,7 @@ export const modalViewData = (
 
   const createTimeInputControls = () => {
     for (const y in time) {
-      if (
-        (y === "endDate" ||
-          y === "beginDate" ||
-          y === "injectionDate" ||
-          y === "loadAnalysisDate" ||
-          y === "wafEndDate" ||
-          y === "wafBeginDate" ||
-          y === "wafDeterminationDate" ||
-          y === "installDate" ||
-          y === "optimizationDate" ||
-          y === "retireDate") &&
-        time[y][1] !== "dateTime"
-      ) {
+      if (y.endsWith("Date") && time[y][1] !== "dateTime") {
         let formattedDate = "";
         if (!createNew) {
           formattedDate = adjustDate(
@@ -322,18 +310,7 @@ export const modalViewData = (
       //   continue;
       // }
       // dropdown time selection
-      const dropdownTimeSelectionOptions = [
-        "endHour",
-        "beginHour",
-        "injectionHour",
-        "wafEndHour",
-        "wafBeginHour",
-        "onlineUpscaleInjectionHour",
-        "onlineUpscaleInjectionHour",
-        "offlineZeroInjectionHour",
-        "offlineUpscaleInjectionHour",
-      ]
-      if (dropdownTimeSelectionOptions.includes(y)) {
+      if( y.endsWith("Hour")){
         arr.push([
           y,
           time[y][0],
@@ -343,7 +320,7 @@ export const modalViewData = (
           createNew ? "" : selected ? selected[y] : "",
         ]);
       }
-      if (y === "endMinute" || y === "beginMinute" || y === "injectionMinute") {
+      if( y.endsWith("Minute")){
         arr.push([
           y,
           time[y][0],

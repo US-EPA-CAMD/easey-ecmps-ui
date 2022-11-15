@@ -1452,3 +1452,32 @@ export const getOnlineOfflineCalibration = async (
   const url = getApiUrl(path);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
+
+export const getCalibrationInjectionRecords = async (
+  locId,
+  testSumId
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/calibration-injections`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createCalibrationInjectionRecord = async (
+  locId,
+  testSumId,
+  payload
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/calibration-injections`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
