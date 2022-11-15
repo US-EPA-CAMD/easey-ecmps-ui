@@ -13,6 +13,7 @@ import config from "../../config";
 import { triggerEvaluation } from "../../utils/api/quartzApi";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
+import * as emApi from "../../utils/api/emissionsApi";
 import {
   EMISSIONS_STORE_NAME,
   MONITORING_PLAN_STORE_NAME,
@@ -42,9 +43,11 @@ import {
   exportEmissionsDataDownload,
 } from "../../utils/api/emissionsApi";
 import { getUser } from "../../utils/functions";
+import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
+import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
 
 // Helper function that generates an array of years from this year until the year specified in min param
-const generateArrayOfYears = (min) => {
+export const generateArrayOfYears = (min) => {
   let max = new Date().getFullYear();
   let years = [];
 
@@ -52,6 +55,20 @@ const generateArrayOfYears = (min) => {
     years.push(i);
   }
   return years;
+};
+
+const getReportingPeriods = (minYear = 2009) => {
+  const quarters = [4, 3, 2, 1];
+  const maxYear = new Date().getFullYear();
+  const reportingPeriods = [];
+
+  for (let year = maxYear; year >= minYear; year--) {
+    for (const quarter of quarters) {
+      reportingPeriods.push(`${year} Q${quarter}`);
+    }
+  }
+
+  return reportingPeriods;
 };
 
 export const HeaderInfo = ({
@@ -62,10 +79,8 @@ export const HeaderInfo = ({
   setRevertedState,
   viewTemplateSelect,
   setViewTemplateSelect,
-  selectedYears,
-  setSelectedYears,
-  selectedQuarters,
-  setSelectedQuarters,
+  selectedReportingPeriods,
+  setSelectedReportingPeriods,
   //redux sets
   setCheckout,
   setInactive,
@@ -100,9 +115,6 @@ export const HeaderInfo = ({
     { name: "Unit Information" },
   ];
 
-  // minimum year for emissions data
-  const MIN_YEAR = 2009;
-
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
@@ -134,8 +146,9 @@ export const HeaderInfo = ({
 
   // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
-  const [usePortBtn, setUsePortBtn] = useState(false);
+  // Upload has finished when finishedLoading=true (this is my educated guess, someone correct if wrong)
   const [finishedLoading, setFinishedLoading] = useState(false);
+  // Upload has started but is not finished when isLoading=true (this is my educated guess, someone correct if wrong)
   const [isLoading, setIsLoading] = useState(false);
   const [fileName, setFileName] = useState("");
   const [hasFormatError, setHasFormatError] = useState(false);
@@ -146,25 +159,22 @@ export const HeaderInfo = ({
   const [isReverting, setIsReverting] = useState(false);
   const [viewTemplates, setViewTemplates] = useState([]);
 
-  // The below object structure is needed for MultiSelectComboBox
-  const yearsArray = useMemo(
+  const [importedFile, setImportedFile] = useState([]);
+  const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState([]);
+
+  const [showEmissionsImportTypeModal, setShowEmissionsImportTypeModal] = useState(false);
+  const [showHistoricalDataImportModal, setShowHistoricalDataImportModal] = useState(false);
+
+  const reportingPeriods = useMemo(
     () =>
-      generateArrayOfYears(MIN_YEAR).map((y) => ({
-        id: y,
-        label: y + "",
-        selected: false,
-        enabled: true,
-      })),
-    []
-  );
-  const quartersArray = useMemo(
-    () =>
-      [1, 2, 3, 4].map((y) => ({
-        id: y,
-        label: y + "",
-        selected: false,
-        enabled: true,
-      })),
+      getReportingPeriods().map((reportingPeriod) => {
+        return {
+          id: reportingPeriod,
+          label: reportingPeriod,
+          selected: false,
+          enabled: true,
+        };
+      }),
     []
   );
 
@@ -212,14 +222,16 @@ export const HeaderInfo = ({
 
   const resetImportFlags = () => {
     setShowImportModal(false);
+    setShowEmissionsImportTypeModal(false);
+    setShowHistoricalDataImportModal(false)
     setDisablePortBtn(true);
-    setUsePortBtn(false);
     setFinishedLoading(false);
     setIsLoading(false);
     setFileName("");
     setHasFormatError(false);
     setHasInvalidJsonError(false);
     setImportApiErrors([]);
+    setImportedFileErrorMsgs([])
   };
 
   const reportWindowParams = [
@@ -256,44 +268,38 @@ export const HeaderInfo = ({
   };
 
   const openImportModal = () => {
-    setShowImportModal(true);
 
-    setTimeout(() => {
-      attachChangeEventListeners(".modalUserInput");
-    });
+      setShowImportModal(true);
+
+      setTimeout(() => {
+        attachChangeEventListeners(".modalUserInput");
+      });  
   };
 
-  const closeImportModalHandler = () => {
-    const importBtn = document.querySelector("#importMonitoringPlanBtn");
-
-    if (window.isDataChanged === true) {
-      if (window.confirm(unsavedDataMessage) === true) {
-        resetImportFlags();
-        removeChangeEventListeners(".modalUserInput");
-        importBtn.focus();
-      }
-    } else {
-      resetImportFlags();
-      removeChangeEventListeners(".modalUserInput");
-      importBtn.focus();
+  const openModal = () => {
+    if( workspaceSection === MONITORING_PLAN_STORE_NAME){
+      openImportModal();
     }
-  };
-
+    else{
+      setShowEmissionsImportTypeModal(true);
+    }
+  }
+  
   const handleEmissionsExport = async () => {
     const promises = [];
-    for (const selectedYear of selectedYears) {
-      for (const selectedQuarter of selectedQuarters) {
-        promises.push(
-          exportEmissionsDataDownload(
-            facility,
-            configID,
-            selectedYear,
-            selectedQuarter,
-            getUser() !== null
-          )
-        );
-      }
+    for (const selectedReportingPeriod of selectedReportingPeriods) {
+      // reportingPeriod: '2022 Q1' -> year: 2022, quarter: 1
+      promises.push(
+        exportEmissionsDataDownload(
+          facility,
+          configID,
+          selectedReportingPeriod.slice(0, 4),
+          selectedReportingPeriod.charAt(selectedReportingPeriod.length - 1),
+          getUser() !== null
+        )
+      );
     }
+
     await Promise.allSettled(promises);
   };
 
@@ -534,7 +540,12 @@ export const HeaderInfo = ({
   const evalStatusContent = () => {
     if (checkedOutByUser && evalStatusText(evalStatus) === "Needs Evaluation") {
       return (
-        <Button type="button" outline={false} onClick={evaluate} className="height-6">
+        <Button
+          type="button"
+          outline={false}
+          onClick={evaluate}
+          className="height-6"
+        >
           Evaluate
         </Button>
       );
@@ -604,18 +615,59 @@ export const HeaderInfo = ({
     setShowRevertModal(false);
   };
 
-  const [importedFile, setImportedFile] = useState([]);
-  const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
-
-  const importMPBtn = (payload) => {
+  const importMPFile = (payload) => {
     mpApi.importMP(payload).then((response) => {
-      setUsePortBtn(true);
       setIsLoading(true);
       if (response) {
         setImportedFileErrorMsgs(response);
       }
     });
   };
+
+  const importEmissionsFile = (payload) =>{
+    setIsLoading(true);
+    setFinishedLoading(false);
+    emApi.importEmissionsData(payload).then(({data, status}) => {
+      if (status === 201) {
+        setImportedFileErrorMsgs([]);
+      }
+      else if( status === 400)
+        setImportedFileErrorMsgs(data?.message?.split(",") || ["HTTP 400 Error"])
+      else{
+        setImportedFileErrorMsgs(`HTTP ${status} Error`)
+      }
+    }).catch(err=>{
+      console.log(err)
+    }).finally(()=>{
+      setIsLoading(false);
+      setFinishedLoading(true)
+    });
+
+  }
+
+  const closeImportModalHandler = () => {
+    const importBtn = document.querySelector("#importBtn");
+    if (window.isDataChanged === true) {
+      if (window.confirm(unsavedDataMessage) === true) {
+        resetImportFlags();
+        removeChangeEventListeners(".modalUserInput");
+        importBtn.focus();
+      }
+    } else {
+      resetImportFlags();
+      removeChangeEventListeners(".modalUserInput");
+      importBtn.focus();
+    }
+  };
+
+  const importFile = (payload) =>{
+    
+    if(workspaceSection === MONITORING_PLAN_STORE_NAME)
+      importMPFile(payload);
+    else if(workspaceSection === EMISSIONS_STORE_NAME)
+      importEmissionsFile(payload);
+  }
+
   const evaluate = () => {
     triggerEvaluation({
       monitorPlanId: configID,
@@ -658,27 +710,38 @@ export const HeaderInfo = ({
     )}`;
   };
 
-  // Multiselect update function for year selection
-  const onChangeUpdateSelectedYears = (id, updateType) => {
-    if (updateType === "add") setSelectedYears([...selectedYears, id]);
-    else if (updateType === "remove") {
-      const selected = yearsArray.filter((y) => y.selected).map((y) => y.id);
-      setSelectedYears(selected);
-    }
-  };
+  const handleSelectReportingPeriod = (id, updateType) => {
+    if (updateType === "add") {
+      setSelectedReportingPeriods([...selectedReportingPeriods, id]);
+    } else if (updateType === "remove") {
+      const selected = reportingPeriods
+        .filter((reportingPeriod) => {
+          return reportingPeriod.selected;
+        })
+        .map((reportingPeriod) => {
+          return reportingPeriod.id;
+        });
 
-  // Multiselect update function for quarter selection
-  const onChangeUpdateSelectedQuarters = (id, updateType) => {
-    if (updateType === "add") setSelectedQuarters([...selectedQuarters, id]);
-    else if (updateType === "remove") {
-      const selected = quartersArray.filter((q) => q.selected).map((q) => q.id);
-      setSelectedQuarters(selected);
+      setSelectedReportingPeriods(selected);
     }
   };
 
   const handleExport = ()=>{
     if( workspaceSection === EMISSIONS_STORE_NAME )
       handleEmissionsExport()
+  }
+
+  const onChangeOfEmissionsImportType = (e)=>{
+    const {value} = e.target
+    if(value === "file"){
+      setShowImportModal(true)
+    }
+
+    if(value === "historical"){
+      setShowHistoricalDataImportModal(true);
+    }
+
+    setShowEmissionsImportTypeModal(false)
   }
 
   return (
@@ -727,22 +790,22 @@ export const HeaderInfo = ({
               </h3>
               <p className="text-bold font-body-xl">{facilityAdditionalName}</p>
             </div>
-              <div>
-                <Button
-                  type="button"
-                  className="margin-right-2 float-left margin-bottom-2"
-                  outline={true}
-                  onClick={handleExport}
-                  >
-                  Export Data
-                </Button>
+            <div>
+              <Button
+                type="button"
+                className="margin-right-2 float-left margin-bottom-2"
+                outline={true}
+                onClick={handleExport}
+              >
+                Export Data
+              </Button>
                 {user && checkedOutByUser &&(
                   <Button
                     type="button"
                     className="margin-right-2 float-right"
                     outline={false}
-                    onClick={() => openImportModal()}
-                    id="importMonitoringPlanBtn"
+                    onClick={() => openModal()}
+                    id="importBtn"
                   >
                     Import Data
                   </Button>
@@ -754,75 +817,92 @@ export const HeaderInfo = ({
             <p className="text-bold font-body-2xs">{auditInformation}</p>
           )}
 
-          <GridContainer className="padding-left-0 margin-left-0 padding-right-0" containerSize="widescreen">
-              <Grid row>
-                {user && (
-                  <Grid col={5} widescreen={{col:5}} desktopLg={{col:5}} desktop={{col:5}}>
-                    {checkedOutByUser === true ? (
-                      <Button
-                        type="button"
-                        autoFocus
-                        outline={false}
-                        tabIndex="0"
-                        aria-label={`Check back in the configuration `}
-                        onClick={() => checkoutStateHandler(false)}
-                        id="checkInBTN"
-                        epa-testid="checkInBTN"
-                        className="text-no-wrap height-6"
-                      >
-                        <LockOpenSharp /> {"Check Back In"}
-                      </Button>
-                    ) : !lockedFacility &&
-                      !userHasCheckout &&
-                      selectedConfig.active &&
-                      checkedOutConfigs
-                        .map((location) => location["monPlanId"])
-                        .indexOf(selectedConfig.id) === -1 ? (
-                      <Button
-                        type="button"
-                        autoFocus
-                        outline={true}
-                        tabIndex="0"
-                        aria-label={`Check out the configuration`}
-                        onClick={() => checkoutStateHandler(true)}
-                        id="checkOutBTN"
-                        epa-testid="checkOutBTN"
-                      >
-                        <CreateOutlined color="primary" /> {"Check Out"}
-                      </Button>
-                    ) : null}
-                    {showRevert(evalStatus) && (
-                      <Button
-                        type="button"
-                        id="showRevertModal"
-                        tabIndex="1"
-                        onClick={() => setShowRevertModal(true)}
-                        outline={true}
-                        className="text-no-wrap height-6 position-relative bottom-1"
-                      >
-                        Revert to Official Record
-                      </Button>
-                    )}
-                  </Grid>
-                )}
+          <GridContainer
+            className="padding-left-0 margin-left-0 padding-right-0"
+            containerSize="widescreen"
+          >
+            <Grid row>
+              {user && (
+                <Grid
+                  col={5}
+                  widescreen={{ col: 5 }}
+                  desktopLg={{ col: 5 }}
+                  desktop={{ col: 5 }}
+                >
+                  {checkedOutByUser === true ? (
+                    <Button
+                      type="button"
+                      autoFocus
+                      outline={false}
+                      tabIndex="0"
+                      aria-label={`Check back in the configuration `}
+                      onClick={() => checkoutStateHandler(false)}
+                      id="checkInBTN"
+                      epa-testid="checkInBTN"
+                      className="text-no-wrap height-6"
+                    >
+                      <LockOpenSharp /> {"Check Back In"}
+                    </Button>
+                  ) : !lockedFacility &&
+                    !userHasCheckout &&
+                    selectedConfig.active &&
+                    checkedOutConfigs
+                      .map((location) => location["monPlanId"])
+                      .indexOf(selectedConfig.id) === -1 ? (
+                    <Button
+                      type="button"
+                      autoFocus
+                      outline={true}
+                      tabIndex="0"
+                      aria-label={`Check out the configuration`}
+                      onClick={() => checkoutStateHandler(true)}
+                      id="checkOutBTN"
+                      epa-testid="checkOutBTN"
+                    >
+                      <CreateOutlined color="primary" /> {"Check Out"}
+                    </Button>
+                  ) : null}
+                  {showRevert(evalStatus) && (
+                    <Button
+                      type="button"
+                      id="showRevertModal"
+                      tabIndex="1"
+                      onClick={() => setShowRevertModal(true)}
+                      outline={true}
+                      className="text-no-wrap height-6 position-relative bottom-1"
+                    >
+                      Revert to Official Record
+                    </Button>
+                  )}
+                </Grid>
+              )}
 
-                
-                {user && (
-                  <Grid col={7} widescreen={{col:7}} desktopLg={{col:7}} desktop={{col:8}}>
-                        <div className="display-flex desktop:margin-top-1 desktop-lg:margin-top-0">
-                          <label className="text-bold width-card desktop:width-10 desktop-lg:width-10 widescreen:width-card widescreen:margin-right-neg-4 widescreen:margin-top-2">Evaluation Status:</label>
-                            {evalStatusContent()}
-                          <label className="text-bold margin-right-1 desktop:width-10 desktop:margin-left-5 desktop-lg:width-10 widescreen:width-card widescreen:margin-right-neg-3 widescreen:margin-top-2">Submission Status: </label>
-                          <p
-                            className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
-                              evalStatus
-                            )} margin-0`}
-                          >
-                            Resubmission required
-                          </p>
-                        </div>
-                  </Grid> )}
-              </Grid>
+              {user && (
+                <Grid
+                  col={7}
+                  widescreen={{ col: 7 }}
+                  desktopLg={{ col: 7 }}
+                  desktop={{ col: 8 }}
+                >
+                  <div className="display-flex desktop:margin-top-1 desktop-lg:margin-top-0">
+                    <label className="text-bold width-card desktop:width-10 desktop-lg:width-10 widescreen:width-card widescreen:margin-right-neg-4 widescreen:margin-top-2">
+                      Evaluation Status:
+                    </label>
+                    {evalStatusContent()}
+                    <label className="text-bold margin-right-1 desktop:width-10 desktop:margin-left-5 desktop-lg:width-10 widescreen:width-card widescreen:margin-right-neg-3 widescreen:margin-top-2">
+                      Submission Status:{" "}
+                    </label>
+                    <p
+                      className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
+                        evalStatus
+                      )} margin-0`}
+                    >
+                      Resubmission required
+                    </p>
+                  </div>
+                </Grid>
+              )}
+            </Grid>
           </GridContainer>
           {workspaceSection === MONITORING_PLAN_STORE_NAME && (
             <GridContainer className="padding-left-0 margin-left-0">
@@ -838,78 +918,74 @@ export const HeaderInfo = ({
                     selectionHandler={setLocationSelect}
                     workspaceSection={workspaceSection}
                   />
-                  </Grid>
-                  <Grid col={2}>
-                    <DropdownSelection
-                      caption="Sections"
-                      selectionHandler={setSectionSelect}
-                      options={sections}
-                      viewKey="name"
-                      selectKey="name"
-                      initialSelection={sectionSelect[0]}
-                      orisCode={orisCode}
-                      workspaceSection={workspaceSection}
+                </Grid>
+                <Grid col={2}>
+                  <DropdownSelection
+                    caption="Sections"
+                    selectionHandler={setSectionSelect}
+                    options={sections}
+                    viewKey="name"
+                    selectKey="name"
+                    initialSelection={sectionSelect[0]}
+                    orisCode={orisCode}
+                    workspaceSection={workspaceSection}
+                  />
+                </Grid>
+                <Grid col={2}>
+                  <div className="margin-top-8">
+                    <Checkbox
+                      epa-testid="inactiveCheckBox"
+                      id="inactiveCheckBox"
+                      name="inactiveCheckBox"
+                      label="Show Inactive"
+                      checked={inactive[0]}
+                      disabled={inactive[1]}
+                      onChange={() =>
+                        setInactive(
+                          [!inactive[0], inactive[1]],
+                          facility,
+                          MONITORING_PLAN_STORE_NAME
+                        )
+                      }
                     />
-                  </Grid>
-                  <Grid col={2}>
-                    <div className="margin-top-8">
-                        <Checkbox
-                          epa-testid="inactiveCheckBox"
-                          id="inactiveCheckBox"
-                          name="inactiveCheckBox"
-                          label="Show Inactive"
-                          checked={inactive[0]}
-                          disabled={inactive[1]}
-                          onChange={() =>
-                            setInactive(
-                              [!inactive[0], inactive[1]],
-                              facility,
-                              MONITORING_PLAN_STORE_NAME
-                            )
-                          }
-                        />
-                    </div>
-                  </Grid>
+                  </div>
                 </Grid>
-                <Grid>
-                  <Button
-                    outline
-                    type="button"
-                    title="Open Comments"
-                    onClick={() => openViewComments()}
-                  >
-                    View Comments
-                  </Button>
-                  <Button
-                    outline
-                    type="button"
-                    title="View Audit Report"
-                    className={"hyperlink-btn cursor-pointer"}
-                    onClick={() => displayReport("MP_AUDIT")}
-                  >
-                    View Audit Report
-                  </Button>
-                  <Button
-                    outline
-                    type="button"
-                    title="View Printout Report"
-                    className={"hyperlink-btn cursor-pointer"}
-                    onClick={() => displayReport("MPP")}
-                  >
-                    View Printout Report
-                  </Button>
-                </Grid>
-              </GridContainer>
-              )}
-
+              </Grid>
+              <Grid>
+                <Button
+                  outline
+                  type="button"
+                  title="Open Comments"
+                  onClick={() => openViewComments()}
+                >
+                  View Comments
+                </Button>
+                <Button
+                  outline
+                  type="button"
+                  title="View Audit Report"
+                  className={"hyperlink-btn cursor-pointer"}
+                  onClick={() => displayReport("MP_AUDIT")}
+                >
+                  View Audit Report
+                </Button>
+                <Button
+                  outline
+                  type="button"
+                  title="View Printout Report"
+                  className={"hyperlink-btn cursor-pointer"}
+                  onClick={() => displayReport("MPP")}
+                >
+                  View Printout Report
+                </Button>
+              </Grid>
+            </GridContainer>
+          )}
 
           {workspaceSection === EMISSIONS_STORE_NAME && (
             <GridContainer className="padding-left-0 margin-left-0">
               <Grid row={true}>
-                <Grid                      
-                  col={2}
-                  widescreen={{ col: 2 }}
-                >
+                <Grid col={2} widescreen={{ col: 2 }}>
                   <DropdownSelection
                     caption="Locations"
                     orisCode={orisCode}
@@ -921,11 +997,11 @@ export const HeaderInfo = ({
                     workspaceSection={workspaceSection}
                   />
                 </Grid>
-                <Grid                      
+                <Grid
                   col={2}
                   widescreen={{ col: 2 }}
-                  desktopLg={{col: 10}}
-                  desktop={{col:10}}
+                  desktopLg={{ col: 10 }}
+                  desktop={{ col: 10 }}
                 >
                   <FormGroup className="margin-right-2 margin-bottom-1">
                     <Label test-id={"viewtemplate"} htmlFor={"viewtemplate"}>
@@ -940,7 +1016,7 @@ export const HeaderInfo = ({
                       onChange={(e) => setViewTemplateSelect(e.target.value)}
                       className="maxw-mobile"
                     >
-                      {viewTemplates.map((view) => (
+                      {viewTemplates?.map((view) => (
                         <option
                           data-testid={view.name}
                           key={view.name}
@@ -952,43 +1028,29 @@ export const HeaderInfo = ({
                     </Dropdown>
                   </FormGroup>
                 </Grid>
-
-                <Grid
-                  col={2}
-                  widescreen={{ col: 2 }}
-                  className="margin-right-2 margin-top-3"
-                >
+              </Grid>
+              <Grid row style={{ gap: "16px" }}>
+                <Grid col={2} widescreen={{ col: 2 }}>
                   <MultiSelectCombobox
-                    items={yearsArray}
-                    label="Year(s)"
-                    entity="year"
-                    onChangeUpdate={onChangeUpdateSelectedYears}
+                    items={reportingPeriods}
+                    label="Reporting Period(s)"
+                    entity="reportingPeriod"
                     searchBy="label"
-                  />
-                </Grid>
-                <Grid col={2} widescreen={{ col: 2 }} className="margin-right-2 margin-top-3">
-                  <MultiSelectCombobox
-                    items={quartersArray}
-                    label="Quarter(s)"
-                    entity="quarter"
-                    onChangeUpdate={onChangeUpdateSelectedQuarters}
-                    searchBy="label"
+                    onChangeUpdate={handleSelectReportingPeriod}
                   />
                 </Grid>
                 <Grid col={2} widescreen={{ col: 3 }}>
                   <Button
                     type="button"
                     title="Apply Filter(s)"
-                    className="cursor-pointer text-no-wrap apply-filter-position margin-top-3"
+                    className="cursor-pointer text-no-wrap apply-filter-position"
                     onClick={() => null}
                   >
                     {"Apply Filter(s)"}
                   </Button>
-                  {/* <div>abc</div> */}
                 </Grid>
               </Grid>
               <Grid row>
-
                 <Grid col={3} widescreen={{ col: 2 }}>
                   <Button
                     outline
@@ -1014,16 +1076,10 @@ export const HeaderInfo = ({
               </Grid>
             </GridContainer>
           )}
-
         </div>
       ) : (
         <Preloader />
       )}
-      <div
-        className={`usa-overlay ${
-          showImportModal || isReverting ? "is-visible" : ""
-        }`}
-      />
 
       {showImportModal && !finishedLoading && !isLoading ? (
         <div>
@@ -1032,11 +1088,11 @@ export const HeaderInfo = ({
             close={closeImportModalHandler}
             showCancel={true}
             showSave={true}
-            title={"Import a Monitoring Plan to continue"}
+            title={ workspaceSection === MONITORING_PLAN_STORE_NAME ? "Import a Monitoring Plan to continue" : "Import Data"}
             exitBTN={"Import"}
             disablePortBtn={disablePortBtn}
             port={() => {
-              importMPBtn(importedFile);
+              importFile(importedFile);
             }}
             hasFormatError={hasFormatError}
             hasInvalidJsonError={hasInvalidJsonError}
@@ -1048,7 +1104,7 @@ export const HeaderInfo = ({
                 setHasFormatError={setHasFormatError}
                 setHasInvalidJsonError={setHasInvalidJsonError}
                 setImportedFile={setImportedFile}
-                workspaceSection={MONITORING_PLAN_STORE_NAME}
+                workspaceSection={workspaceSection}
               />
             }
           />
@@ -1081,8 +1137,9 @@ export const HeaderInfo = ({
         />
       )}
 
-      {/* after it finishes uploading , shows either api errors or success messages */}
-      {showImportModal && usePortBtn && finishedLoading && (
+      {/* For file imports, after it finishes uploading , shows either api errors or success messages */}
+      {/* For importing historical data, this is ONLY used to display errors */}
+      {(showImportModal || showHistoricalDataImportModal) && finishedLoading && (
         <UploadModal
           show={showImportModal}
           close={closeImportModalHandler}
@@ -1093,7 +1150,7 @@ export const HeaderInfo = ({
           importApiErrors={importApiErrors}
           importedFileErrorMsgs={importedFileErrorMsgs}
           setUpdateRelatedTables={setUpdateRelatedTables}
-          successMsg={"Monitoring Plan has been Successfully Imported."}
+          successMsg={ workspaceSection === MONITORING_PLAN_STORE_NAME ? "Monitoring Plan has been Successfully Imported." : "Test Data from File has been successfully imported."}
           children={
             <ImportModal
               setDisablePortBtn={setDisablePortBtn}
@@ -1107,9 +1164,31 @@ export const HeaderInfo = ({
         />
       )}
 
-      <div className={`usa-overlay ${showCommentsModal ? "is-visible" : ""}`} />
+      {showEmissionsImportTypeModal && (
+        <UploadModal
+          title="Import Data"
+          show={showEmissionsImportTypeModal}
+          close={()=>setShowEmissionsImportTypeModal(false)}
+          showCancel={true}
+          showImport={false}
+          children={
+            <EmissionsImportTypeModalContent onChange={onChangeOfEmissionsImportType} />
+          }
+        />
+      )}
+
+      {showHistoricalDataImportModal && !finishedLoading && !isLoading && (
+        <ImportHistoricalDataModal
+          closeModalHandler={closeImportModalHandler}
+          setIsLoading={setIsLoading}
+          setFinishedLoading={setFinishedLoading}
+          finishedLoading={finishedLoading}
+          importedFileErrorMsgs={importedFileErrorMsgs}
+          setImportedFileErrorMsgs={setImportedFileErrorMsgs}
+        />
+      )}
+
       {showCommentsModal && (
-        <div>
           <UploadModal
             show={showCommentsModal}
             width={"50%"}
@@ -1129,7 +1208,6 @@ export const HeaderInfo = ({
               />
             }
           />
-        </div>
       )}
     </div>
   );

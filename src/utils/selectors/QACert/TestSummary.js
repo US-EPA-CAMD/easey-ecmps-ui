@@ -427,3 +427,41 @@ export const mapFlowToLoadCheckToRows = (data) => {
   }
   return records;
 };
+
+export const mapCalibrationInjectionsToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.onLineOffLineIndicator,
+      col2: el.upscaleGasLevelCode,
+      col3: el.zeroInjectionDate,
+      col4: el.zeroInjectionHour,
+      col5: el.zeroInjectionMinute,
+      col6: el.upscaleInjectionDate,
+      col7: el.upscaleInjectionHour,
+      col8: el.upscaleInjectionMinute,
+      col9: el.zeroMeasuredValue,
+      col10: el.upscaleMeasuredValue,
+      col11: el.zeroAPSIndicator,
+      col12: el.upscaleAPSIndicator,
+      col13: el.zeroCalibrationError,
+      col14: el.upscaleCalibrationError,
+      col15: el.zeroReferenceValue,
+      col16: el.upscaleReferenceValue,
+    };
+    records.push(row);
+  }
+  return records;
+};
+
+export const getListOfRadioContorls = (controlInputs) =>{
+  const result = [];
+  const keys = Object.keys(controlInputs);
+  keys.forEach(key =>{
+    if(controlInputs[key][1] === "radio"){
+      result.push(key)
+    }
+  });
+  return result;
+};

@@ -448,6 +448,7 @@ export const qaAppendixECorrelationSummaryHeatInputGasProps = (selectedRow) => {
       gasGCV: 0,
       gasVolume: 0,
       gasHeatInput: 0,
+      monitoringSystemID: "string",
     },
     dropdownArray: [],
     columnNames: [
@@ -680,5 +681,63 @@ export const qaFlowToLoadCheckProps = () => {
       numberOfHoursExcludedForMainAndBypass: ["Number of Hours Excluded for Main and Bypass", "input", "", ""],
       operatingLevelCode: ["Operating Level Code", "dropdown", "", ""],
     },
+  };
+}
+
+export const qaCalibrationInjectionProps = () => {
+  return {
+    dataTableName: "Calibration Injection",
+    payload: {},
+    dropdownArray: [
+      'upscaleGasLevelCode'
+    ],
+    mdmProps: [
+      {
+        codeTable: "gas-level-codes",
+        responseProps: {
+          code: "gasLevelCode",
+          description: "gasLevelDescription"
+        }
+      }
+    ],
+    columnNames: [
+      "Online Offline Indicator",
+      "Upscale Gas Level Code",
+      "Zero Injection Date",
+      "Zero Injection Hour",
+      "Zero Injection Minute",
+      "Upscale Injection Date",
+      "Upscale Injection Hour",
+      "Upscale Injection Minute",
+      "Zero Measured Value",
+      "Upscale Measured Value",
+      "Zero APS Indicator",
+      "Upscale APS Indicator",
+      "Zero Calibration Error",
+      "Upscale Calibration Error",
+      "Zero Reference Value",
+      "Upscale Reference Value"
+    ],
+    controlInputs: {
+      onLineOffLineIndicator: ["Online Offline Indicator", "radio", "", ""],
+      upscaleGasLevelCode: ["Upscale Gas Level Code", "dropdown", "", ""],
+      zeroMeasuredValue: ["Zero Measured Value", "input", "", ""],
+      upscaleMeasuredValue: ["Upscale Measured Value", "input", "", ""],
+      zeroAPSIndicator: ["Zero APS Indicator", "radio", "", ""],
+      upscaleAPSIndicator: ["Upscale APS Indicator", "radio", "", ""],
+      zeroCalibrationError: ["Zero Calibration Error", "input", "", ""],
+      upscaleCalibrationError: ["Upscale Calibration Error", "input", "", ""],
+      zeroReferenceValue: ["Zero Reference Value", "input", "", ""],
+      upscaleReferenceValue: ["Upscale Reference Value", "input", "", ""],
+    },
+    controlDatePickerInputs: {
+      zeroInjectionDate: ["Zero Injection Date","date", "", ""],
+      zeroInjectionHour: ["Zero Injection Hour", "hourDropdown", "dropdown", ""],
+      zeroInjectionMinute: ["Zero Injection Minute", "minuteDropdown", "dropdown", ""],
+      upscaleInjectionDate: ["Upscale Injection Date", "date", "", ""],
+      upscaleInjectionHour: ["Upscale Injection Hour", "hourDropdown", "dropdown", ""],
+      upscaleInjectionMinute: ["Upscale Injection Minute", "minuteDropdown", "dropdown", ""],
+    },
+    extraControls: {},
   };
 }

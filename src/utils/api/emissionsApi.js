@@ -1,6 +1,7 @@
 import axios from "axios";
 import config from "../../config";
-import { handleError, handleResponse } from "./apiUtils";
+import { handleError, handleResponse, handleImportError } from "./apiUtils";
+import { secureAxios } from "./easeyAuthApi";
 import download from "downloadjs";
 
 axios.defaults.headers.common = {
@@ -55,20 +56,25 @@ export const exportEmissionsDataDownload = async (
 export const getEmissionViewData = async (
   viewCode,
   monitorPlanId,
-  year,
-  quarter,
+  reportingPeriod,
   unitIds,
   stackPipeIds,
-  attachFile = false
+  attachFile = false,
+  isWorkspace=true
 ) => {
   const url = new URL(
-    `${config.services.emissions.uri}/emissions/views/${viewCode}`
-  );
+    // `${config.services.emissions.uri}/emissions/views/${viewCode}`
+    isWorkspace
+    ? `${config.services.emissions.uri}/workspace/emissions/views/${viewCode}`:
+      `${config.services.emissions.uri}/emissions/views/${viewCode}`
 
+  );
+  console.log(url)
   const searchParams = new URLSearchParams({
     monitorPlanId,
-    quarter: Array.isArray(quarter) ? quarter.join("|") : quarter,
-    year: Array.isArray(year) ? year.join("|") : year,
+    reportingPeriod: Array.isArray(reportingPeriod)
+      ? reportingPeriod.join("|")
+      : reportingPeriod,
     unitIds: Array.isArray(unitIds) ? unitIds.join("|") : unitIds,
     stackPipeIds: Array.isArray(stackPipeIds)
       ? stackPipeIds.join("|")
@@ -100,14 +106,36 @@ export const getEmissionViewData = async (
   }
 };
 
-export const getViews = async () => {
+export const getViews = async (isWorkspace=true) => {
   try {
     const response = await axios.get(
-      `${config.services.emissions.uri}/emissions/views`
+      isWorkspace ? `${config.services.emissions.uri}/workspace/emissions/views` : `${config.services.emissions.uri}/emissions/views`
     );
     return handleResponse(response);
   } catch (error) {
     handleError(error);
     return [];
+  }
+};
+
+export const getEmissionsSchema = async () => {
+  const url = `${config.services.content.uri}/ecmps/reporting-instructions/emissions.schema.json`;
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const importEmissionsData = async (payload) => {
+  const url = `${config.services.emissions.uri}/workspace/emissions/import`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    // get errors logged
+    handleImportError(error);
+    return error.response;
   }
 };
