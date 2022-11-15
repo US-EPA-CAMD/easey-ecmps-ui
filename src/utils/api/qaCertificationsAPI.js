@@ -1147,7 +1147,7 @@ export const updateAppendixECorrelationHeatInputGas = async (
   locId,
   testSumId,
   appECorrTestSumId,
-  appECorrTestRunId, 
+  appECorrTestRunId,
   id,
   payload
 ) => {
@@ -1170,7 +1170,7 @@ export const deleteAppendixECorrelationHeatInputGas = async (
   locId,
   testSumId,
   appECorrTestSumId,
-  appECorrTestRunId, 
+  appECorrTestRunId,
   id,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases/${id}`;
@@ -1446,11 +1446,26 @@ export const getOnlineOfflineCalibration = async (
     }
   ]
 
-  return Promise.resolve({ status: 200, data: dummyData })
+  // return Promise.resolve({ status: 200, data: dummyData })
 
   const path = `/locations/${locId}/test-summary/${testSumId}/online-offline-calibration`;
   const url = getApiUrl(path);
   return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createOnlineOfflineCalibration = async (locId, testSumId, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/online-offline-calibration`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
 };
 
 export const getCalibrationInjectionRecords = async (
