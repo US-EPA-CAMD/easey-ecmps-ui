@@ -703,38 +703,6 @@ export const qaOnOffCalibrationProps = () => {
           description: "gasLevelDescription"
         }
       },
-      // Online Zero APS Indicator
-      {
-        codeTable: "aps-codes",
-        responseProps: {
-          code: "apsCode",
-          description: "apsDescription"
-        }
-      },
-      // Online Upscale APS Indicator
-      {
-        codeTable: "aps-codes",
-        responseProps: {
-          code: "apsCode",
-          description: "apsDescription"
-        }
-      },
-      // Offline Zero APS Indicator 
-      {
-        codeTable: "aps-codes",
-        responseProps: {
-          code: "apsCode",
-          description: "apsDescription"
-        }
-      },
-      // Offline Upscale APS Indicator
-      {
-        codeTable: "aps-codes",
-        responseProps: {
-          code: "apsCode",
-          description: "apsDescription"
-        }
-      }
     ],
     columnNames: [
       "Online Zero Reference Value",
