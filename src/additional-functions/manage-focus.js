@@ -17,10 +17,6 @@ export const storeInFocusedArray = (event) => {
     if (window["lastFocusedArray"].length > elementAmountToKeep) {
       window["lastFocusedArray"].shift();
     }
-
-    console.log("stored:");
-
-    console.log(window["lastFocusedArray"]);
     // }
   }
 };
@@ -73,22 +69,19 @@ export const returnFocusToLast = () => {
   if (!_.isNil(window["lastFocusedArray"])) {
     const lastFocus =
       window["lastFocusedArray"][window["lastFocusedArray"].length - 1];
-
-    console.log("found: ", lastFocus);
     let counter = 0;
     if (lastFocus && lastFocus.id) {
       const selectedFocus = document.querySelector(`#${lastFocus.id}`);
-      console.log("set", selectedFocus);
 
       // counter is trivial number, can be 1.
       while (document.activeElement !== selectedFocus && counter < 5) {
         selectedFocus
           ? console.log("selectedFocus.focus()", selectedFocus.focus())
           : // might need to check for an edge case when the array is empty
-            console.log(
-              "did not find lastfocus id element",
-              window["lastFocusedArray"][0].focus()
-            );
+          console.log(
+            "did not find lastfocus id element",
+            window["lastFocusedArray"][0].focus()
+          );
         counter++;
       }
     }
@@ -99,8 +92,6 @@ export const returnFocusToCommentButton = () => {
   if (!_.isNil(window["lastFocusedArray"])) {
     const lastFocus =
       window["lastFocusedArray"][window["lastFocusedArray"].length - 1];
-
-    console.log("found: ", lastFocus);
     if (lastFocus) {
       lastFocus.focus();
     }
@@ -115,7 +106,6 @@ export const returnFocusToModalButton = () => {
         const element = document.querySelector(`#${button.id}`);
         if (element) {
           element.focus();
-          console.log("element", element);
           window["lastModalButton"] = [];
         } else {
         }

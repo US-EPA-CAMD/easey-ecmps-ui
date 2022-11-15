@@ -75,7 +75,7 @@ export const getQATestSummaryByID = async (locID, id) => {
 
   // *** workspace section url (authenticated)
   if (window.location.href.indexOf("workspace") > -1) {
-    url = `${url}/workspace`;
+    url = `${url}workspace`;
   }
 
   // *** attach the rest of the url
@@ -1112,9 +1112,9 @@ export const getAppendixEHeatInputGasData = async (
   locId,
   testSumId,
   appECorrTestSumId,
-  appECorrTestrunId
+  appECorrTestRunId
 ) => {
-  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-gases`;
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases`;
   const url = getApiUrl(path);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
@@ -1123,10 +1123,68 @@ export const createAppendixEHeatInputGas = async (
   locId,
   testSumId,
   appECorrTestSumId,
-  appECorrTestrunId,
+  appECorrTestRunId,
   payload
 ) => {
-  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs${appECorrTestrunId}/appendix-e-heat-input-from-gases`;
+  const testSummary = await getQATestSummaryByID(locId, testSumId);
+  payload.monitoringSystemID = testSummary.data.monitoringSystemID;
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+export const updateAppendixECorrelationHeatInputGas = async (
+  locId,
+  testSumId,
+  appECorrTestSumId,
+  appECorrTestRunId, 
+  id,
+  payload
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+}
+
+export const deleteAppendixECorrelationHeatInputGas = async (
+  locId,
+  testSumId,
+  appECorrTestSumId,
+  appECorrTestRunId, 
+  id,
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
 };
 
 export const getAppendixEHeatInputOilData = async (
@@ -1309,6 +1367,35 @@ export const deleteFlowToLoadCheckRecord = async (
       await secureAxios({
         method: "DELETE",
         url: url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const getCalibrationInjectionRecords = async (
+  locId,
+  testSumId
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/calibration-injections`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createCalibrationInjectionRecord = async (
+  locId,
+  testSumId,
+  payload
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/calibration-injections`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
       })
     );
   } catch (error) {

@@ -63,7 +63,8 @@ export const DataTableLMEQualifications = ({
           setUpdateTable(false);
           setRevertedState(false);
           setUpdateLME(false);
-        });
+        })
+        .catch(error => console.log('getLMEQualifications failed', error))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState, updateLME]);

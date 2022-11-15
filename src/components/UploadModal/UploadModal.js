@@ -20,42 +20,21 @@ export const UploadModal = ({
   left,
   title,
   disablePortBtn,
-  timer,
-  setFinishedLoading,
-  setShowImportModal,
   preloader,
   complete,
-  setIsLoading,
   hasFormatError,
   hasInvalidJsonError,
   mainBTN,
-  // importApiErrors,
-  // setImportApiErrors,
   importedFileErrorMsgs,
-  // setImportedFileErrorMsgs,
-  // fileName,
   notUploadVersion,
   setUpdateRelatedTables,
   successMsg,
+  showTintedBg=true,
+  showImport=true,
+  showSeparators=false,
 }) => {
   const hasErrors = importedFileErrorMsgs && importedFileErrorMsgs.length > 0;
-  const milisecondsToLoad = 4000;
-  // Monitoring Plan has been Successfully Imported.
-  const onLoadEffect = () => {
-    if (timer) {
-      setTimeout(() => {
-        setFinishedLoading(true);
-        setIsLoading(false);
-        setShowImportModal(true);
-        // if (fileName !== "valid.json") {
-        //   setImportApiErrors(apiErrors);
-        // }
-      }, milisecondsToLoad);
-      // console.log('timer')
-    }
-  };
 
-  useEffect(onLoadEffect, []);
   const modalRef = createRef();
   const styles = {
     loadingWrapper: {
@@ -81,17 +60,6 @@ export const UploadModal = ({
       margin: "0 auto",
       padding: 0,
       zIndex: 17,
-    },
-    modalTintScreen: {
-      position: "absolute",
-      top: 0,
-      bottom: 0,
-      width: "100%",
-      height: "100%",
-      opacity: "0.9",
-      zIndex: "0",
-      textIndent: "-9999px",
-      backgroundColor: "grey",
     },
   };
 
@@ -123,6 +91,7 @@ export const UploadModal = ({
 
   return ReactDom.createPortal(
     <div role="dialog" aria-modal="true" className="upload-modal-container">
+      {showTintedBg && <div className="usa-overlay is-visible"></div>}
       <div
         data-test="component-loading"
         className="loading-modal"
@@ -189,10 +158,12 @@ export const UploadModal = ({
                               </Alert>
                             </div>
                           ) : (
-                            <div className="left-2 bottom-0 padding-x-4 padding-top-2">
+                            <div className="left-2 bottom-0 padding-x-5 padding-top-2">
                               <h2 className="text-bold">{title}</h2>
+                              {showSeparators && (<hr/>)}
                             </div>
                           )}
+
                         </div>
                       ) : (
                         <div>
@@ -202,7 +173,7 @@ export const UploadModal = ({
                                 File Import Error(s)
                               </h3>
                               <p id="importErrorSubText">
-                                {`The file selected for import has ${importedFileErrorMsgs.length} errors.`}
+                                {`The file selected for import has ${importedFileErrorMsgs.length} error(s).`}
                               </p>
                             </div>
                           ) : (
@@ -228,6 +199,7 @@ export const UploadModal = ({
                     } `}
                   >
                     {children}
+                    {showSeparators && <hr/>}
                   </div>
                   {complete && hasErrors ? (
                     <div className="padding-x-8">
@@ -238,6 +210,7 @@ export const UploadModal = ({
                   ) : (
                     ""
                   )}
+
                   {notUploadVersion ? (
                     ""
                   ) : !preloader ? (
@@ -265,7 +238,7 @@ export const UploadModal = ({
                         >
                           Ok
                         </Button>
-                      ) : (
+                      ) :   (
                         <Button
                           type="button"
                           onClick={port}
@@ -273,7 +246,7 @@ export const UploadModal = ({
                           epa-testid="importBtn"
                           id="importBtn"
                           data-testid="importBtn"
-                          className="margin-right-2"
+                          className={`margin-right-2 ${!showImport && "visibility-hidden"}`}
                           disabled={disablePortBtn}
                         >
                           {mainBTN ? mainBTN : "Import"}
@@ -301,9 +274,8 @@ export const UploadModal = ({
               </div>
             </modalContext.Provider>
           </div>
-        </div>{" "}
+        </div>
       </div>
-      <div style={styles.modalTintScreen} />
     </div>,
     modalRoot
   );

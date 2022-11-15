@@ -9,8 +9,8 @@ import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace
 jest.mock("../../store/actions/dynamicFacilityTab");
 import * as actions from "../../store/actions/dynamicFacilityTab";
 
-jest.mock("../../store/actions/activeTab");
-import * as activeTabCall from "../../store/actions/activeTab";
+// jest.mock("../../store/actions/activeTab");
+// import * as activeTabCall from "../../store/actions/activeTab";
 //testing redux connected component to mimic props passed as argument
 import { Provider } from "react-redux";
 import configureStore from "../../store/configureStore.dev";
@@ -126,8 +126,8 @@ test("mapDispatchToProps calls the appropriate action", async () => {
   expect(actions.setLocationSelectionState).toHaveBeenCalled();
   actionProps.setSection();
   expect(actions.setSectionSelectionState).toHaveBeenCalled();
-  actionProps.setActiveTab();
-  expect(activeTabCall.setActiveTab).toHaveBeenCalled();
+  // actionProps.setActiveTab();
+  // expect(activeTabCall.setActiveTab).toHaveBeenCalled();
   actionProps.setInactive();
   expect(actions.setInactiveState).toHaveBeenCalled();
   actionProps.setCheckout();
