@@ -535,7 +535,6 @@ export const createDataSwitch = async (
         .catch((error) => {
           console.log("error", error);
         });
-
     case proGas:
       return qaApi.createProtocolGas(location, id, userInput);
     case lineInjection:
@@ -664,6 +663,8 @@ export const createDataSwitch = async (
         });
     case flowToLoadCheck:
       return qaApi.createFlowToLoadCheckRecord(location, id, userInput);
+    case onlineOfflineCalibration:
+      return qaApi.createOnlineOfflineCalibration(location, id, userInput);
     case calibrationInjections:
       return qaApi.createCalibrationInjectionRecord(location, id, userInput);
     default:
