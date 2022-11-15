@@ -820,6 +820,7 @@ export const qaCalibrationInjectionProps = () => {
       upscaleInjectionHour: ["Upscale Injection Hour", "hourDropdown", "dropdown", ""],
       upscaleInjectionMinute: ["Upscale Injection Minute", "minuteDropdown", "dropdown", ""],
     },
+    radioBtnPayload: ["onLineOffLineIndicator","zeroAPSIndicator","upscaleAPSIndicator"],
     extraControls: {},
   };
 }

@@ -514,6 +514,9 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput.id,
           userInput
         ).catch((error) => console.log("error", error));
+    case calibrationInjections:
+      return qaApi.updateCalibrationInjectionRecord(location, id, userInput.id, userInput)
+          .catch((err)=> console.error(err));
     default:
       break;
   }
