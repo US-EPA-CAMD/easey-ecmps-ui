@@ -433,7 +433,7 @@ export const mapCalibrationInjectionsToRows = (data) => {
   for (const el of data) {
     const row = {
       id: el.id,
-      col1: el.onLineOffLineIndicator,
+      col1: el.onLineOffLineIndicator === 1 ? "Yes" : "No",
       col2: el.upscaleGasLevelCode,
       col3: el.zeroInjectionDate,
       col4: el.zeroInjectionHour,
@@ -443,8 +443,8 @@ export const mapCalibrationInjectionsToRows = (data) => {
       col8: el.upscaleInjectionMinute,
       col9: el.zeroMeasuredValue,
       col10: el.upscaleMeasuredValue,
-      col11: el.zeroAPSIndicator,
-      col12: el.upscaleAPSIndicator,
+      col11: el.zeroAPSIndicator === 1 ? "Yes" : "No",
+      col12: el.upscaleAPSIndicator === 1 ? "Yes" : "No",
       col13: el.zeroCalibrationError,
       col14: el.upscaleCalibrationError,
       col15: el.zeroReferenceValue,
