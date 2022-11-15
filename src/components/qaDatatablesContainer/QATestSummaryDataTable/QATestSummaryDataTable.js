@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+
 import {
   getQATestSummary,
   updateQALinearityTestSummary,
@@ -6,8 +7,6 @@ import {
   createQATestData,
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { getTestSummary } from "../../../utils/selectors/QACert/TestSummary.js";
-// import QARataDataExpandableRows from "../QARataDataExpandableRows/QARataDataExpandableRows.js";
-// import QALinearitySummaryExpandableRows from "../QALinearitySummaryExpandableRows/QALinearitySummaryExpandableRows.js";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
@@ -19,7 +18,7 @@ import {
   qaFuelFlowToLoadProps,
   qaFuelFlowToLoadBaselineProps,
   qaFlowToLoadCheckProps,
-  qaOnOffCalibrationProps
+  qaOnOffCalibrationProps,
   qaCalibrationInjectionProps
 } from "../../../additional-functions/qa-dataTable-props";
 import {
