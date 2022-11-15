@@ -106,10 +106,10 @@ export const getEmissionViewData = async (
   }
 };
 
-export const getViews = async (isWorkspace=true) => {
+export const getViews = async () => {
   try {
     const response = await axios.get(
-      isWorkspace ? `${config.services.emissions.uri}/workspace/emissions/views` : `${config.services.emissions.uri}/emissions/views`
+      `${config.services.emissions.uri}/emissions/views`
     );
     return handleResponse(response);
   } catch (error) {
