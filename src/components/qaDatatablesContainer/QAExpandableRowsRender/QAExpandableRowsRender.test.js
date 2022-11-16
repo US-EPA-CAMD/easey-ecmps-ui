@@ -1040,7 +1040,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     userEvent.click(confirmBtns[1])
   })
 
-  test('renders cycle injection data rows and create/save/delete', async () => {
+  test('renders calibration injection data rows and create/save/delete', async () => {
     const cycleInjectionData = [
       {
         "id": "string",
@@ -1101,19 +1101,19 @@ describe('Test cases for QAExpandableRowsRender', () => {
     expect(rows).toHaveLength(cycleInjectionData.length);
 
     // add row
-    // const addBtn = screen.getByRole('button', { name: /Add/i })
-    // userEvent.click(addBtn)
-    // let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-    // userEvent.click(saveAndCloseBtn)
-    // setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+    const addBtn = screen.getByRole('button', { name: /Add/i })
+    userEvent.click(addBtn)
+    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // // edit row
-    // const editBtns = screen.getAllByRole('button', { name: /Edit/i })
-    // expect(editBtns).toHaveLength(fuelFlowToLoadBaselineData.length)
-    // userEvent.click(editBtns[0])
-    // saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-    // userEvent.click(saveAndCloseBtn)
-    // setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    expect(editBtns).toHaveLength(cycleInjectionData.length)
+    userEvent.click(editBtns[0])
+    saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
     // const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
     // expect(deleteBtns).toHaveLength(fuelFlowToLoadBaselineData.length)

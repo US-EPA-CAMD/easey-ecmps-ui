@@ -633,6 +633,7 @@ const QATestSummaryDataTable = ({
             columns={cjProps["columnNames"]}
             controlInputs={cjProps["controlInputs"]}
             controlDatePickerInputs={cjProps["controlDatePickerInputs"]}
+            radioBtnPayload={cjProps["radioBtnPayload"]}
             dataTableName={cjProps["dataTableName"]}
             extraControls={cjProps["extraControls"]}
             extraIDs={null}

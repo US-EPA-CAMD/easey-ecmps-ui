@@ -1447,3 +1447,24 @@ export const createCalibrationInjectionRecord = async (
     return handleImportError(error);
   }
 };
+
+export const updateCalibrationInjectionRecord = async (
+  locId,
+  testSumId,
+  id,
+  payload
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/calibration-injections/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
