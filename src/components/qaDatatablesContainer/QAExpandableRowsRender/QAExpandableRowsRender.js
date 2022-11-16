@@ -690,7 +690,7 @@ const QAExpandableRowsRender = ({
     const userInput = extractUserInput(
       payload,
       ".modalUserInput",
-      radioBtnPayload
+      getListOfRadioContorls(controlInputs)
     );
 
     assertSelector
