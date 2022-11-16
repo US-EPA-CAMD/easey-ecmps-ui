@@ -688,13 +688,7 @@ export const qaOnOffCalibrationProps = () => {
   return {
     dataTableName: "Online Offline Calibration",
     payload: {},
-    dropdownArray: [
-      "upscaleGasLevelCode",
-      "onlineZeroAPSIndicator",
-      "onlineUpscaleAPSIndicator",
-      "offlineZeroAPSIndicator",
-      "offlineUpscaleAPSIndicator",
-    ],
+    dropdownArray: ["upscaleGasLevelCode"],
     mdmProps: [
       {
         codeTable: "gas-level-codes",
@@ -748,10 +742,10 @@ export const qaOnOffCalibrationProps = () => {
 
       // --- Dropdowns ---
       upscaleGasLevelCode: ["Upscale Gas Level Code", "dropdown", "", ""],
-      onlineZeroAPSIndicator: ["Online Zero APS Indicator", "radio", "", "", { initialValue: 1 }],
-      onlineUpscaleAPSIndicator: ["Online Upscale APS Indicator", "radio", "", "", { initialValue: 1 }],
-      offlineZeroAPSIndicator: ["Offline Zero APS Indicator", "radio", "", "", { initialValue: 1 }],
-      offlineUpscaleAPSIndicator: ["Offline Upscale APS Indicator", "radio", "", "", { initialValue: 1 }],
+      onlineZeroAPSIndicator: ["Online Zero APS Indicator", "radio", "", "", { defaultValue: 1 }],
+      onlineUpscaleAPSIndicator: ["Online Upscale APS Indicator", "radio", "", "", { defaultValue: 1 }],
+      offlineZeroAPSIndicator: ["Offline Zero APS Indicator", "radio", "", "", { defaultValue: 1 }],
+      offlineUpscaleAPSIndicator: ["Offline Upscale APS Indicator", "radio", "", "", { defaultValue: 1 }],
     },
     controlDatePickerInputs: {
       onlineZeroInjectionDate: ["Online Zero Injection Date", "date", "", ""],

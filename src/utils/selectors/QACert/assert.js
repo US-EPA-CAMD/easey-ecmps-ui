@@ -485,17 +485,17 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           id,
           userInput.id,
           userInput
-        ).catch((error) => {console.log("error", error)});
+        ).catch((error) => { console.log("error", error) });
     case appendixECorrHeatInputGas:
       return qaApi
         .updateAppendixECorrelationHeatInputGas(
-          extraIdsArr[0], 
-          extraIdsArr[1], 
-          extraIdsArr[2], 
-          id, 
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
+          id,
           userInput.id,
           userInput
-        ).catch((error) => {console.log("error", error)});
+        ).catch((error) => { console.log("error", error) });
     case appendixECorrHeatInputOil:
       return qaApi
         .updateAppendixECorrelationHeatInputOil(
@@ -514,6 +514,13 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput.id,
           userInput
         ).catch((error) => console.log("error", error));
+    case onlineOfflineCalibration:
+      return qaApi.updateOnlineOfflineCalibration(
+        location,
+        id,
+        userInput.id,
+        userInput
+      ).catch(error => console.log("error updating online offline calibration", error))
     default:
       break;
   }

@@ -209,16 +209,6 @@ export const modalViewData = (
             break;
           case "radio":
             const curInputOptions = inputs[y][4]
-            if (curInputOptions) {
-              arr.push([
-                y,
-                inputs[y][0],
-                parseInt(curInputOptions.initialValue),
-                inputs[y][2] === "required" ? "required" : false,
-                "radio",
-              ])
-              break;
-            }
             if (selected) {
               arr.push([
                 y,
@@ -227,6 +217,14 @@ export const modalViewData = (
                 inputs[y][2] === "required" ? "required" : false,
                 "radio",
               ]);
+            } else if (curInputOptions) {
+              arr.push([
+                y,
+                inputs[y][0],
+                parseInt(curInputOptions.defaultValue),
+                inputs[y][2] === "required" ? "required" : false,
+                "radio",
+              ])
             } else {
               arr.push([
                 y,
