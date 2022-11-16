@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { getMonitoringPlans } from "../../utils/api/monitoringPlansApi";
 import ReviewAndSubmitForm from "./ReviewAndSubmitForm/ReviewAndSubmitForm";
 import SubmissionModal from "../SubmissionModal/SubmissionModal";
 import MockPermissions from "./MockPermissions";
-import { useEffect } from "react";
 
 const ReviewAndSubmit = () => {
   const [excludeErrors, setExcludeErrors] = useState(true);

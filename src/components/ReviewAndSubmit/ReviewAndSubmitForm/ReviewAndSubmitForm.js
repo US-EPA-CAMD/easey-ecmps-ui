@@ -122,6 +122,7 @@ const ReviewAndSubmitForm = ({
             name="critical-errors-radio"
             label={"Exclude Files with Critical Errors"}
             key={0}
+            data-testid="radio-exclude"
             onClick={() => {
               setExcludeErrors(true);
             }}
@@ -133,6 +134,7 @@ const ReviewAndSubmitForm = ({
             name="critical-errors-radio"
             label={"Include Files with Critical Errors"}
             key={1}
+            data-testid="radio-include"
             onClick={() => {
               setExcludeErrors(false);
             }}
@@ -196,7 +198,7 @@ const ReviewAndSubmitForm = ({
                 onClick={() => {
                   showModal(true);
                 }}
-                disabled={true}
+                disabled={false}
               >
                 Submit
               </Button>
