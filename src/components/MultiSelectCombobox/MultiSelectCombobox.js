@@ -76,7 +76,6 @@ const MultiSelectCombobox = ({
   };
 
   const optionClickHandler = (e) => {
-    console.log(e.target.getAttribute("data-id"));
     if (e.target.getAttribute("data-id") === null) {
       return;
     }

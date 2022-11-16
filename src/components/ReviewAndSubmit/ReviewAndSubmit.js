@@ -1,11 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { getMonitoringPlans } from "../../utils/api/monitoringPlansApi";
 import ReviewAndSubmitForm from "./ReviewAndSubmitForm/ReviewAndSubmitForm";
 import SubmissionModal from "../SubmissionModal/SubmissionModal";
+import MockPermissions from "./MockPermissions";
 
 const ReviewAndSubmit = () => {
+  const [excludeErrors, setExcludeErrors] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [monPlans, setMonPlans] = useState([]);
+
+  const idToPermissionsMap = [];
+  useEffect(() => {
+    // Get permissions from user object here
+    const permissions = MockPermissions;
+    for (const p of permissions) {
+      idToPermissionsMap[p.id] = p.permissions;
+    }
+  }, []);
 
   const closeModal = () => {
     setShowModal(false);
@@ -16,7 +27,13 @@ const ReviewAndSubmit = () => {
   };
 
   const applyFilter = async (orisCodes, monPlanIds, submissionPeriods) => {
-    const monPlanData = (await getMonitoringPlans(orisCodes, monPlanIds)).data;
+    let monPlanData = (await getMonitoringPlans(orisCodes, monPlanIds)).data;
+    monPlanData = monPlanData.filter((mpd) => mpd.active);
+
+    if (excludeErrors) {
+      monPlanData = monPlanData.filter((mpd) => mpd.evalStatusCd !== "ERR");
+    }
+
     setMonPlans(monPlanData);
   };
 
@@ -25,6 +42,8 @@ const ReviewAndSubmit = () => {
       <ReviewAndSubmitForm
         showModal={setShowModal}
         queryCallback={applyFilter}
+        setExcludeErrors={setExcludeErrors}
+        facilities={MockPermissions}
       />
       {showModal && (
         <SubmissionModal
