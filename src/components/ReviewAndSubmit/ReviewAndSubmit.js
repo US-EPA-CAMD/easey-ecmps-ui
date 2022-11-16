@@ -2,11 +2,22 @@ import React, { useState } from "react";
 import { getMonitoringPlans } from "../../utils/api/monitoringPlansApi";
 import ReviewAndSubmitForm from "./ReviewAndSubmitForm/ReviewAndSubmitForm";
 import SubmissionModal from "../SubmissionModal/SubmissionModal";
+import MockPermissions from "./MockPermissions";
+import { useEffect } from "react";
 
 const ReviewAndSubmit = () => {
   const [excludeErrors, setExcludeErrors] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [monPlans, setMonPlans] = useState([]);
+
+  const idToPermissionsMap = [];
+  useEffect(() => {
+    // Get permissions from user object here
+    const permissions = MockPermissions;
+    for (const p of permissions) {
+      idToPermissionsMap[p.id] = p.permissions;
+    }
+  }, []);
 
   const closeModal = () => {
     setShowModal(false);
@@ -33,6 +44,7 @@ const ReviewAndSubmit = () => {
         showModal={setShowModal}
         queryCallback={applyFilter}
         setExcludeErrors={setExcludeErrors}
+        facilities={MockPermissions}
       />
       {showModal && (
         <SubmissionModal

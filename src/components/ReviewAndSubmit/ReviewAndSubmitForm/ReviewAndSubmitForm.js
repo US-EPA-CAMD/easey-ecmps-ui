@@ -4,6 +4,7 @@ import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
 
 const ReviewAndSubmitForm = ({
+  facilities,
   queryCallback,
   showModal,
   setExcludeErrors,
@@ -14,43 +15,10 @@ const ReviewAndSubmitForm = ({
   const availableConfigurations = useRef([]);
   const selectedOrisCodes = useRef([]);
 
-  const facilities = [
-    {
-      id: 3,
-      facilityId: "3",
-      facilityName: "Barry",
-      stateCode: "AL",
-    },
-    {
-      id: 5,
-      facilityId: "5",
-      facilityName: "Chickasaw",
-      stateCode: "AL",
-    },
-    {
-      id: 7,
-      facilityId: "7",
-      facilityName: "Gadsden",
-      stateCode: "AL",
-    },
-    {
-      id: 8,
-      facilityId: "8",
-      facilityName: "Gorgas",
-      stateCode: "AL",
-    },
-    {
-      id: 10,
-      facilityId: "10",
-      facilityName: "Greene County",
-      stateCode: "AL",
-    },
-  ];
-
   useEffect(() => {
     const availFac = facilities.map((f) => ({
-      id: f.facilityId,
-      label: `${f.facilityName} (${f.facilityId})`,
+      id: f.id,
+      label: `${f.facilityName} (${f.id})`,
       selected: false,
       enabled: true,
     }));
@@ -205,8 +173,8 @@ const ReviewAndSubmitForm = ({
                 items={[]}
                 styling={comboboxStyling}
                 hideInput={true}
-                entity={"Reporting Period(s)"}
-                label={"Reporting Period(s)"}
+                entity={"Reporting Periods"}
+                label={"Reporting Periods"}
                 searchBy="label"
                 onChangeUpdate={(id, action) => {}}
               />
