@@ -2,6 +2,7 @@ import { Button, Fieldset, Radio } from "@trussworks/react-uswds";
 import React, { useState, useRef, useEffect } from "react";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
+import { getReportingPeriods } from "../../../utils/api/mdmApi";
 
 const ReviewAndSubmitForm = ({
   facilities,
@@ -9,11 +10,40 @@ const ReviewAndSubmitForm = ({
   showModal,
   setExcludeErrors,
 }) => {
+  const [availableReportingPeriods, setAvailableReportingPeriods] = useState(
+    []
+  );
   const [availableFacilities, setAvailableFacilities] = useState([]);
   const [availableConfigState, setAvailableConfigState] = useState([]);
 
   const availableConfigurations = useRef([]);
   const selectedOrisCodes = useRef([]);
+  const selectedReportingPeriods = useRef([]);
+
+  async function fetchReportingPeriods() {
+    const reportingPeriodList = (await getReportingPeriods()).data;
+
+    const availReportingPeriods = [];
+
+    for (let i = reportingPeriodList.length - 1; i >= 0; i--) {
+      const period = reportingPeriodList[i];
+      const objectMapping = {
+        id: period.periodAbbreviation,
+        label: period.periodAbbreviation,
+        selected: false,
+        enabled: true,
+      };
+
+      if (i === reportingPeriodList.length - 1) {
+        objectMapping.selected = true;
+        selectedReportingPeriods.current = [period.periodAbbreviation]; //Default selected reporting period
+      }
+
+      availReportingPeriods.push(objectMapping);
+    }
+
+    setAvailableReportingPeriods(availReportingPeriods);
+  }
 
   useEffect(() => {
     const availFac = facilities.map((f) => ({
@@ -23,6 +53,8 @@ const ReviewAndSubmitForm = ({
       enabled: true,
     }));
     setAvailableFacilities([...availFac]);
+
+    fetchReportingPeriods();
   }, []);
 
   const applyFilters = () => {
@@ -35,8 +67,27 @@ const ReviewAndSubmitForm = ({
       monPlanIds = selectedEntries.map((entry) => entry.monPlanId);
     }
 
-    queryCallback(selectedOrisCodes.current, monPlanIds, "");
+    queryCallback(
+      selectedOrisCodes.current,
+      monPlanIds,
+      selectedReportingPeriods.current
+    );
   };
+
+  async function reportingPeriodFilterChange(id, action) {
+    let newState;
+    if (action === "add") {
+      newState = [...selectedReportingPeriods.current, id];
+    } else {
+      newState = [];
+      selectedReportingPeriods.current.forEach((item) => {
+        if (item !== id) {
+          newState.push(item);
+        }
+      });
+    }
+    selectedReportingPeriods.current = newState;
+  }
 
   async function configurationFilterChange(id, action) {
     const objectEntry = availableConfigurations.current.find(
@@ -172,13 +223,14 @@ const ReviewAndSubmitForm = ({
           <div className="grid-col-3 desktop:grid-col-2 margin-top-2">
             <div className="margin-right-2">
               <MultiSelectCombobox
-                items={[]}
+                key={`periods-${availableReportingPeriods.length}`}
+                items={availableReportingPeriods}
                 styling={comboboxStyling}
                 hideInput={true}
-                entity={"Reporting Periods"}
+                entity={"Reporting-Periods"}
                 label={"Reporting Periods"}
                 searchBy="label"
-                onChangeUpdate={(id, action) => {}}
+                onChangeUpdate={reportingPeriodFilterChange}
               />
             </div>
           </div>
