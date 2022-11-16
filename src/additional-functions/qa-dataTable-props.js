@@ -688,13 +688,7 @@ export const qaOnOffCalibrationProps = () => {
   return {
     dataTableName: "Online Offline Calibration",
     payload: {},
-    dropdownArray: [
-      "upscaleGasLevelCode",
-      "onlineZeroAPSIndicator",
-      "onlineUpscaleAPSIndicator",
-      "offlineZeroAPSIndicator",
-      "offlineUpscaleAPSIndicator",
-    ],
+    dropdownArray: ["upscaleGasLevelCode"],
     mdmProps: [
       {
         codeTable: "gas-level-codes",
