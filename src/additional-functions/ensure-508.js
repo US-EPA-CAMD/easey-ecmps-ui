@@ -330,11 +330,26 @@ export const returnsFocusDatatableExpandBTN = (index, direction, colName) => {
     if (direction) {
       lastBTN = document
         .getElementById(`expandRow${colName}${index + 1}`)
-        .focus();
+      if (lastBTN) {
+        lastBTN.focus();
+      }
     } else {
       lastBTN = document
         .getElementById(`collapseRow${colName}${index + 1}`)
-        .focus();
+      if (lastBTN) {
+        lastBTN.focus();
+      }
+    }
+  }, 500);
+};
+
+// returns focus to View Button
+export const returnsFocusDatatableViewBTN = (row, index) => {
+  setTimeout(() => {
+    let lastBTN = document
+      .getElementById(`btnEditView${row.col1}${index + 1}`);
+    if (lastBTN) {
+      lastBTN.focus();
     }
   }, 500);
 };

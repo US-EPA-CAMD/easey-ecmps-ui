@@ -40,6 +40,7 @@ import * as dmApi from "../../../utils/api/dataManagementApi";
 import { organizePrefilterMDMData } from "../../../additional-functions/retrieve-dropdown-api";
 
 import QAExpandableRowsRender from "../QAExpandableRowsRender/QAExpandableRowsRender";
+import { returnsFocusDatatableViewBTN } from "../../../additional-functions/ensure-508.js";
 
 // contains test summary data table
 
@@ -62,6 +63,8 @@ const QATestSummaryDataTable = ({
   const [dataPulled, setDataPulled] = useState([]);
   const [show, setShow] = useState(showModal);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [clickedRow, setClickedRow] = useState(null);
+  const [clickedIndex, setClickedIndex] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
@@ -298,7 +301,7 @@ const QATestSummaryDataTable = ({
     // setDataLoaded(true);
   };
   // Executed when "View" action is clicked
-  const openModal = (row, bool, create) => {
+  const openModal = (row, bool, create, index) => {
     let selectedData = null;
     setCreateNewData(create);
     if (dataPulled.length > 0 && !create) {
@@ -374,6 +377,9 @@ const QATestSummaryDataTable = ({
     );
     setSelectedModalData(modalData);
 
+    setClickedRow(row)
+    setClickedIndex(index)
+
     setShow(true);
     setTimeout(() => {
       attachChangeEventListeners(".modalUserInput");
@@ -394,6 +400,7 @@ const QATestSummaryDataTable = ({
     // setReturnedFocusToLast(false);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
+    returnsFocusDatatableViewBTN(clickedRow, clickedIndex)
   };
 
   const onRemoveHandler = async (row) => {
