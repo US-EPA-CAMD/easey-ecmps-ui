@@ -21,6 +21,8 @@ const appendixECorrelationSummary = "Appendix E Correlation Summary";
 const appendixECorrHeatInputOil = "Appendix E Correlation Heat Input from Oil";
 const appendixECorrHeatInputGas = "Appendix E Correlation Heat Input from Gas";
 const flowToLoadCheck = "Flow To Load Check";
+const onlineOfflineCalibration = "Online Offline Calibration"
+const calibrationInjections = "Calibration Injection";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -144,6 +146,14 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       return qaApi.getFlowToLoadCheckRecords(location, id).catch((error) => {
         console.log("error", error);
       });
+    case onlineOfflineCalibration:
+      return qaApi
+        .getOnlineOfflineCalibration(location, id)
+        .catch(error => console.log("error fetching online offline calibration", error))
+    case calibrationInjections:
+      return qaApi.getCalibrationInjectionRecords(location, id).catch((error) => {
+        console.log("error", error);
+      });
     default:
       throw new Error(`getDataTableApis case not implemented for ${name}`);
   }
@@ -177,7 +187,7 @@ export const getDataTableRecords = (dataIn, name) => {
     case fuelFlowToLoad:
       return selector.mapFuelFlowToLoadToRows(dataIn);
     case fuelFlowToLoadBaseline:
-      return selector.mapFuelFlowToLoadBaselineToRows(dataIn)
+      return selector.mapFuelFlowToLoadBaselineToRows(dataIn);
     case appendixECorrTestRun:
       return selector.mapAppendixECorrTestRunsToRows(dataIn);
     case appendixECorrHeatInputGas:
@@ -186,7 +196,10 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.mapAppendixECorrHeatInputOilToRows(dataIn);
     case flowToLoadCheck:
       return selector.mapFlowToLoadCheckToRows(dataIn);
-
+    case onlineOfflineCalibration:
+      return selector.mapOnOffCalToRows(dataIn);
+    case calibrationInjections:
+      return selector.mapCalibrationInjectionsToRows(dataIn);
     default:
       throw new Error(`getDataTableRecords case not implemented for ${name}`);
   }
@@ -472,27 +485,27 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           id,
           userInput.id,
           userInput
-        ).catch((error) => {console.log("error", error)});
+        ).catch((error) => { console.log("error", error) });
     case appendixECorrHeatInputGas:
       return qaApi
         .updateAppendixECorrelationHeatInputGas(
-          extraIdsArr[0], 
-          extraIdsArr[1], 
-          extraIdsArr[2], 
-          id, 
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
+          id,
           userInput.id,
           userInput
-        ).catch((error) => {console.log("error", error)});
+        ).catch((error) => { console.log("error", error) });
     case appendixECorrHeatInputOil:
       return qaApi
         .updateAppendixECorrelationHeatInputOil(
-          extraIdsArr[0], 
-          extraIdsArr[1], 
-          extraIdsArr[2], 
-          id, 
+          extraIdsArr[0],
+          extraIdsArr[1],
+          extraIdsArr[2],
+          id,
           userInput.id,
           userInput
-        ).catch((error) => {console.log("error", error)});
+        ).catch((error) => { console.log("error", error) });
     case flowToLoadCheck:
       return qaApi
         .updateFlowToLoadCheckRecord(
@@ -501,6 +514,16 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput.id,
           userInput
         ).catch((error) => console.log("error", error));
+    case calibrationInjections:
+      return qaApi.updateCalibrationInjectionRecord(location, id, userInput.id, userInput)
+          .catch((err)=> console.error(err));
+    case onlineOfflineCalibration:
+      return qaApi.updateOnlineOfflineCalibration(
+        location,
+        id,
+        userInput.id,
+        userInput
+      ).catch(error => console.log("error updating online offline calibration", error))
     default:
       break;
   }
@@ -522,7 +545,6 @@ export const createDataSwitch = async (
         .catch((error) => {
           console.log("error", error);
         });
-
     case proGas:
       return qaApi.createProtocolGas(location, id, userInput);
     case lineInjection:
@@ -651,6 +673,10 @@ export const createDataSwitch = async (
         });
     case flowToLoadCheck:
       return qaApi.createFlowToLoadCheckRecord(location, id, userInput);
+    case onlineOfflineCalibration:
+      return qaApi.createOnlineOfflineCalibration(location, id, userInput);
+    case calibrationInjections:
+      return qaApi.createCalibrationInjectionRecord(location, id, userInput);
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
   }

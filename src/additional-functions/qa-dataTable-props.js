@@ -637,7 +637,7 @@ export const qaFlowToLoadCheckProps = () => {
     dataTableName: "Flow To Load Check",
     payload: {},
     dropdownArray: [
-      'testBasisCode','operatingLevelCode', 'biasAdjustedIndicator'
+      'testBasisCode', 'operatingLevelCode', 'biasAdjustedIndicator'
     ],
     mdmProps: [
       {
@@ -671,7 +671,7 @@ export const qaFlowToLoadCheckProps = () => {
     controlInputs: {
       testBasisCode: ["Test Basis Code", "dropdown", "", ""],
       biasAdjustedIndicator: ["Bias Adjusted Indicator", "dropdown", "", ""],
-      averageAbsolutePercentDifference: ["Average Absolute Percent Difference","input", "", ""],
+      averageAbsolutePercentDifference: ["Average Absolute Percent Difference", "input", "", ""],
       numberOfHours: ["Number of Hours", "input", "", ""],
       numberOfHoursExcludedForFuel: ["Number of Hours Excluded for Fuel", "input", "", ""],
       numberOfHoursExcludedForRamping: ["Number of Hours Excluded for Ramping", "input", "", ""],
@@ -681,5 +681,140 @@ export const qaFlowToLoadCheckProps = () => {
       numberOfHoursExcludedForMainAndBypass: ["Number of Hours Excluded for Main and Bypass", "input", "", ""],
       operatingLevelCode: ["Operating Level Code", "dropdown", "", ""],
     },
+  };
+}
+
+export const qaOnOffCalibrationProps = () => {
+  return {
+    dataTableName: "Online Offline Calibration",
+    payload: {},
+    dropdownArray: ["upscaleGasLevelCode"],
+    mdmProps: [
+      {
+        codeTable: "gas-level-codes",
+        responseProps: {
+          code: "gasLevelCode",
+          description: "gasLevelDescription"
+        }
+      },
+    ],
+    columnNames: [
+      "Online Zero Reference Value",
+      "Online Upscale Reference Value",
+      "Offline Zero Reference Value",
+      "Offline Upscale Reference Value",
+      "Online Zero Measured Value",
+      "Online Upscale Measured Value",
+      "Offline Zero Measured Value",
+      "Offline Upscale Measured Value",
+      "Online Zero Calibration Error",
+      "Online Upscale Calibration Error",
+      "Offline Zero Calibration Error",
+      "Offline Upscale Calibration Error",
+      "Upscale Gas Level Code",
+      "Online Zero APS Indicator",
+      "Online Upscale APS Indicator",
+      "Offline Zero APS Indicator",
+      "Offline Upscale APS Indicator",
+      "Online Zero Injection Date",
+      "Online Upscale Injection Date",
+      "Offline Zero Injection Date",
+      "Offline Upscale Injection Date",
+      "Online Zero Injection Hour",
+      "Online Upscale Injection Hour",
+      "Offline Zero Injection Hour",
+      "Offline Upscale Injection Hour",
+    ],
+    controlInputs: {
+      // --- Input ---
+      onlineZeroReferenceValue: ["Online Zero Reference Value", "input", "", ""],
+      onlineUpscaleReferenceValue: ["Online Upscale Reference Value", "input", "", ""],
+      offlineZeroReferenceValue: ["Offline Zero Reference Value", "input", "", ""],
+      offlineUpscaleReferenceValue: ["Offline Upscale Reference Value", "input", "", ""],
+      onlineZeroMeasuredValue: ["Online Zero Measured Value", "input", "", ""],
+      onlineUpscaleMeasuredValue: ["Online Upscale Measured Value", "input", "", ""],
+      offlineZeroMeasuredValue: ["Offline Zero Measured Value", "input", "", ""],
+      offlineUpscaleMeasuredValue: ["Offline Upscale Measured Value", "input", "", ""],
+      onlineZeroCalibrationError: ["Online Zero Calibration Error", "input", "", ""],
+      onlineUpscaleCalibrationError: ["Online Upscale Calibration Error", "input", "", ""],
+      offlineZeroCalibrationError: ["Offline Zero Calibration Error", "input", "", ""],
+      offlineUpscaleCalibrationError: ["Offline Upscale Calibration Error", "input", "", ""],
+
+      // --- Dropdowns ---
+      upscaleGasLevelCode: ["Upscale Gas Level Code", "dropdown", "", ""],
+      onlineZeroAPSIndicator: ["Online Zero APS Indicator", "radio", "", "", { defaultValue: 1 }],
+      onlineUpscaleAPSIndicator: ["Online Upscale APS Indicator", "radio", "", "", { defaultValue: 1 }],
+      offlineZeroAPSIndicator: ["Offline Zero APS Indicator", "radio", "", "", { defaultValue: 1 }],
+      offlineUpscaleAPSIndicator: ["Offline Upscale APS Indicator", "radio", "", "", { defaultValue: 1 }],
+    },
+    controlDatePickerInputs: {
+      onlineZeroInjectionDate: ["Online Zero Injection Date", "date", "", ""],
+      onlineUpscaleInjectionDate: ["Online Upscale Injection Date", "date", "", ""],
+      offlineZeroInjectionDate: ["Offline Zero Injection Date", "date", "", ""],
+      offlineUpscaleInjectionDate: ["Offline Upscale Injection Date", "date", "", ""],
+      onlineZeroInjectionHour: ["Online Zero Injection Hour", "hourDropdown", "dropdown", ""],
+      onlineUpscaleInjectionHour: ["Online Upscale Injection Hour", "hourDropdown", "dropdown", ""],
+      offlineZeroInjectionHour: ["Offline Zero Injection Hour", "hourDropdown", "dropdown", ""],
+      offlineUpscaleInjectionHour: ["Offline Upscale Injection Hour", "hourDropdown", "dropdown", ""],
+    },
+  };
+}
+
+export const qaCalibrationInjectionProps = () => {
+  return {
+    dataTableName: "Calibration Injection",
+    payload: {},
+    dropdownArray: [
+      'upscaleGasLevelCode'
+    ],
+    mdmProps: [
+      {
+        codeTable: "gas-level-codes",
+        responseProps: {
+          code: "gasLevelCode",
+          description: "gasLevelDescription"
+        }
+      }
+    ],
+    columnNames: [
+      "Online Offline Indicator",
+      "Upscale Gas Level Code",
+      "Zero Injection Date",
+      "Zero Injection Hour",
+      "Zero Injection Minute",
+      "Upscale Injection Date",
+      "Upscale Injection Hour",
+      "Upscale Injection Minute",
+      "Zero Measured Value",
+      "Upscale Measured Value",
+      "Zero APS Indicator",
+      "Upscale APS Indicator",
+      "Zero Calibration Error",
+      "Upscale Calibration Error",
+      "Zero Reference Value",
+      "Upscale Reference Value"
+    ],
+    controlInputs: {
+      onLineOffLineIndicator: ["Online Offline Indicator", "radio", "", ""],
+      upscaleGasLevelCode: ["Upscale Gas Level Code", "dropdown", "", ""],
+      zeroMeasuredValue: ["Zero Measured Value", "input", "", ""],
+      upscaleMeasuredValue: ["Upscale Measured Value", "input", "", ""],
+      zeroAPSIndicator: ["Zero APS Indicator", "radio", "", ""],
+      upscaleAPSIndicator: ["Upscale APS Indicator", "radio", "", ""],
+      zeroCalibrationError: ["Zero Calibration Error", "input", "", ""],
+      upscaleCalibrationError: ["Upscale Calibration Error", "input", "", ""],
+      zeroReferenceValue: ["Zero Reference Value", "input", "", ""],
+      upscaleReferenceValue: ["Upscale Reference Value", "input", "", ""],
+    },
+    controlDatePickerInputs: {
+      zeroInjectionDate: ["Zero Injection Date", "date", "", ""],
+      zeroInjectionHour: ["Zero Injection Hour", "hourDropdown", "dropdown", ""],
+      zeroInjectionMinute: ["Zero Injection Minute", "minuteDropdown", "dropdown", ""],
+      upscaleInjectionDate: ["Upscale Injection Date", "date", "", ""],
+      upscaleInjectionHour: ["Upscale Injection Hour", "hourDropdown", "dropdown", ""],
+      upscaleInjectionMinute: ["Upscale Injection Minute", "minuteDropdown", "dropdown", ""],
+    },
+    radioBtnPayload: ["onLineOffLineIndicator","zeroAPSIndicator","upscaleAPSIndicator"],
+    extraControls: {},
   };
 }

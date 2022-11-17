@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+
 import {
   getQATestSummary,
   updateQALinearityTestSummary,
@@ -6,8 +7,6 @@ import {
   createQATestData,
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { getTestSummary } from "../../../utils/selectors/QACert/TestSummary.js";
-// import QARataDataExpandableRows from "../QARataDataExpandableRows/QARataDataExpandableRows.js";
-// import QALinearitySummaryExpandableRows from "../QALinearitySummaryExpandableRows/QALinearitySummaryExpandableRows.js";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
@@ -18,7 +17,9 @@ import {
   qaAppendixECorrelationSummaryTestProps,
   qaFuelFlowToLoadProps,
   qaFuelFlowToLoadBaselineProps,
-  qaFlowToLoadCheckProps
+  qaFlowToLoadCheckProps,
+  qaOnOffCalibrationProps,
+  qaCalibrationInjectionProps
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
@@ -602,6 +603,41 @@ const QATestSummaryDataTable = ({
             expandable
             {...props}
             extraIDs={null}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "OLOLCAL": // Online Offline Calibration
+        const onOffCalProps = qaOnOffCalibrationProps();
+        return (
+          <QAExpandableRowsRender
+            payload={onOffCalProps["payload"]}
+            dropdownArray={onOffCalProps["dropdownArray"]}
+            mdmProps={onOffCalProps["mdmProps"]}
+            columns={onOffCalProps["columnNames"]}
+            controlInputs={onOffCalProps["controlInputs"]}
+            controlDatePickerInputs={onOffCalProps["controlDatePickerInputs"]}
+            dataTableName={onOffCalProps["dataTableName"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "CALINJ":
+        const cjProps = qaCalibrationInjectionProps();
+        return (
+          <QAExpandableRowsRender
+            payload={cjProps["payload"]}
+            dropdownArray={cjProps["dropdownArray"]}
+            mdmProps={cjProps["mdmProps"]}
+            columns={cjProps["columnNames"]}
+            controlInputs={cjProps["controlInputs"]}
+            controlDatePickerInputs={cjProps["controlDatePickerInputs"]}
+            radioBtnPayload={cjProps["radioBtnPayload"]}
+            dataTableName={cjProps["dataTableName"]}
+            extraControls={cjProps["extraControls"]}
+            extraIDs={null}
+            user={user}
             isCheckedOut={isCheckedOut}
           />
         );

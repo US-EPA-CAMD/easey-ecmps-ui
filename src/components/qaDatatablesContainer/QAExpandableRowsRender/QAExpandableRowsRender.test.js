@@ -22,7 +22,8 @@ import {
   qaFuelFlowToLoadBaselineProps,
   qaAppendixECorrelationSummaryHeatInputOilProps,
   qaProtocalGasProps,
-  qaAppendixECorrelationSummaryHeatInputGasProps
+  qaAppendixECorrelationSummaryHeatInputGasProps,
+  qaCalibrationInjectionProps
 } from "../../../additional-functions/qa-dataTable-props";
 
 const mock = new MockAdapter(axios);
@@ -1037,6 +1038,89 @@ describe('Test cases for QAExpandableRowsRender', () => {
     userEvent.click(secondDeleteBtn)
     const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
     userEvent.click(confirmBtns[1])
+  })
+
+  test('renders calibration injection data rows and create/save/delete', async () => {
+    const cycleInjectionData = [
+      {
+        "id": "string",
+        "onLineOffLineIndicator": 0,
+        "upscaleGasLevelCode": "string",
+        "zeroInjectionDate": "2022-11-10T21:03:31.847Z",
+        "zeroInjectionHour": 0,
+        "zeroInjectionMinute": 0,
+        "upscaleInjectionDate": "2022-11-10T21:03:31.847Z",
+        "upscaleInjectionHour": 0,
+        "upscaleInjectionMinute": 0,
+        "zeroMeasuredValue": 0,
+        "upscaleMeasuredValue": 0,
+        "zeroAPSIndicator": 0,
+        "upscaleAPSIndicator": 0,
+        "zeroCalibrationError": 0,
+        "upscaleCalibrationError": 0,
+        "zeroReferenceValue": 0,
+        "upscaleReferenceValue": 0
+      },
+      {
+        "id": "string2",
+        "onLineOffLineIndicator": 0,
+        "upscaleGasLevelCode": "string",
+        "zeroInjectionDate": "2022-11-10T21:03:31.847Z",
+        "zeroInjectionHour": 0,
+        "zeroInjectionMinute": 0,
+        "upscaleInjectionDate": "2022-11-10T21:03:31.847Z",
+        "upscaleInjectionHour": 0,
+        "upscaleInjectionMinute": 0,
+        "zeroMeasuredValue": 0,
+        "upscaleMeasuredValue": 0,
+        "zeroAPSIndicator": 0,
+        "upscaleAPSIndicator": 0,
+        "zeroCalibrationError": 0,
+        "upscaleCalibrationError": 0,
+        "zeroReferenceValue": 0,
+        "upscaleReferenceValue": 0
+      }
+    ]
+
+    const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/calibration-injections`;
+    const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/calibration-injections`;
+    const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/calibration-injections/${idRegex}`);
+
+    mock.onGet(getUrl).reply(200, cycleInjectionData)
+    mock.onPost(postUrl).reply(200, 'created')
+    mock.onPut(putUrl).reply(200, 'updated')
+
+    const props = qaCalibrationInjectionProps()
+    const idArray = null;
+    const data = { locationId: locId, id: testSumId }
+    renderComponent(props, idArray, data);
+
+    // renders rows
+    const rows = await screen.findAllByRole('row')
+    expect(mock.history.get.length).not.toBe(0)
+    expect(rows).toHaveLength(cycleInjectionData.length);
+
+    // add row
+    const addBtn = screen.getByRole('button', { name: /Add/i })
+    userEvent.click(addBtn)
+    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+
+    // // edit row
+    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    expect(editBtns).toHaveLength(cycleInjectionData.length)
+    userEvent.click(editBtns[0])
+    saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+
+    // const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    // expect(deleteBtns).toHaveLength(fuelFlowToLoadBaselineData.length)
+    // const secondDeleteBtn = deleteBtns[1]
+    // userEvent.click(secondDeleteBtn)
+    // const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    // userEvent.click(confirmBtns[1])
   })
 })
 

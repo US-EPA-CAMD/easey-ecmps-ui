@@ -427,3 +427,77 @@ export const mapFlowToLoadCheckToRows = (data) => {
   }
   return records;
 };
+
+export const mapCalibrationInjectionsToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.onLineOffLineIndicator === 1 ? "Yes" : "No",
+      col2: el.upscaleGasLevelCode,
+      col3: el.zeroInjectionDate,
+      col4: el.zeroInjectionHour,
+      col5: el.zeroInjectionMinute,
+      col6: el.upscaleInjectionDate,
+      col7: el.upscaleInjectionHour,
+      col8: el.upscaleInjectionMinute,
+      col9: el.zeroMeasuredValue,
+      col10: el.upscaleMeasuredValue,
+      col11: el.zeroAPSIndicator === 1 ? "Yes" : "No",
+      col12: el.upscaleAPSIndicator === 1 ? "Yes" : "No",
+      col13: el.zeroCalibrationError,
+      col14: el.upscaleCalibrationError,
+      col15: el.zeroReferenceValue,
+      col16: el.upscaleReferenceValue,
+    };
+    records.push(row);
+  }
+  return records;
+};
+
+export const mapOnOffCalToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.onlineZeroReferenceValue,
+      col2: el.onlineUpscaleReferenceValue,
+      col3: el.offlineZeroReferenceValue,
+      col4: el.offlineUpscaleReferenceValue,
+      col5: el.onlineZeroMeasuredValue,
+      col6: el.onlineUpscaleMeasuredValue,
+      col7: el.offlineZeroMeasuredValue,
+      col8: el.offlineUpscaleMeasuredValue,
+      col9: el.onlineZeroCalibrationError,
+      col10: el.onlineUpscaleCalibrationError,
+      col11: el.offlineZeroCalibrationError,
+      col12: el.offlineUpscaleCalibrationError,
+      col13: el.upscaleGasLevelCode,
+      col14: el.onlineZeroAPSIndicator === 1 ? 'Yes' : 'No',
+      col15: el.onlineUpscaleAPSIndicator === 1 ? 'Yes' : 'No',
+      col16: el.offlineZeroAPSIndicator === 1 ? 'Yes' : 'No',
+      col17: el.offlineUpscaleAPSIndicator === 1 ? 'Yes' : 'No',
+      col18: el.onlineZeroInjectionDate,
+      col19: el.onlineUpscaleInjectionDate,
+      col20: el.offlineZeroInjectionDate,
+      col21: el.offlineUpscaleInjectionDate,
+      col22: el.onlineZeroInjectionHour,
+      col23: el.onlineUpscaleInjectionHour,
+      col24: el.offlineZeroInjectionHour,
+      col25: el.offlineUpscaleInjectionHour,
+    };
+    records.push(row);
+  }
+  return records;
+};
+
+export const getListOfRadioContorls = (controlInputs) => {
+  const result = [];
+  const keys = Object.keys(controlInputs);
+  keys.forEach(key => {
+    if (controlInputs[key][1] === "radio") {
+      result.push(key)
+    }
+  });
+  return result;
+};
