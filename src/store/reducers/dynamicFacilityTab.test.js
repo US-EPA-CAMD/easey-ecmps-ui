@@ -1,6 +1,6 @@
 import dynamicFacilityTabReducer from "./dynamicFacilityTab";
 import * as actions from "../actions/dynamicFacilityTab";
-import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
+import { EMISSIONS_STORE_NAME, MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 let initialState = {};
 beforeAll(() => {
   initialState = {
@@ -49,8 +49,10 @@ beforeAll(() => {
         },
         inactive: [false, false],
       },
-    ]}
+    ],},
   };
+
+  initialState.openedFacilityTabs.emissions=initialState.openedFacilityTabs.monitoringPlans;
 });
 describe("dynamicFacilityTab Reducer State Update", () => {
   it("should update state related to dynamicFacilityTab when passed addFacilityTab and removeFacilityTab", () => {
@@ -200,4 +202,32 @@ describe("dynamicFacilityTab Reducer State checking false conditional", () => {
     const emptyState = dynamicFacilityTabReducer(initialState.openedFacilityTabs, setCheckoutState);
     expect(emptyState).toBeDefined();
   });
+
+  describe("dynamicFacilityTab Reducer State for emissions", ()=>{
+    it("tests action IS_VIEW_DATA_LOADED", ()=>{
+      const action = actions.setIsViewDataLoaded(false, "Barry (1, 2, CS0AAN) ", EMISSIONS_STORE_NAME);
+      const openedFacilityTabsState = dynamicFacilityTabReducer(initialState.openedFacilityTabs, action);
+      expect(openedFacilityTabsState[EMISSIONS_STORE_NAME][0].isViewDataLoaded).toBe(false);
+    })
+
+    it("tests action SET_VIEW_DATA", ()=>{
+      const action = actions.setViewData([], "Barry (1, 2, CS0AAN) ", EMISSIONS_STORE_NAME);
+      const openedFacilityTabsState = dynamicFacilityTabReducer(initialState.openedFacilityTabs, action);
+      expect(openedFacilityTabsState[EMISSIONS_STORE_NAME][0].viewData).toStrictEqual([]);
+    })
+
+    it("tests action SET_VIEW_DATA_COLUMNS", ()=>{
+      const action = actions.setViewDataColumns([], "Barry (1, 2, CS0AAN) ", EMISSIONS_STORE_NAME);
+      const openedFacilityTabsState = dynamicFacilityTabReducer(initialState.openedFacilityTabs, action);
+      expect(openedFacilityTabsState[EMISSIONS_STORE_NAME][0].viewColumns).toStrictEqual([]);
+    })
+
+    it("tests action SET_REPORTING_PERIODS", ()=>{
+      const action = actions.setReportingPeriods([], "Barry (1, 2, CS0AAN) ", EMISSIONS_STORE_NAME);
+      const openedFacilityTabsState = dynamicFacilityTabReducer(initialState.openedFacilityTabs, action);
+      console.log("openedFacilityTabsState", openedFacilityTabsState)
+      expect(openedFacilityTabsState[EMISSIONS_STORE_NAME][0].reportingPeriods).toStrictEqual([]);
+    })
+
+  })
 });

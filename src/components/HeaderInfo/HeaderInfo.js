@@ -45,6 +45,9 @@ import {
 import { getUser } from "../../utils/functions";
 import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
 import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
+import { useDispatch } from "react-redux";
+import { setIsViewDataLoaded, setReportingPeriods, setViewData, setViewDataColumns } from "../../store/actions/dynamicFacilityTab";
+import { handleError } from "../../utils/api/apiUtils";
 
 // Helper function that generates an array of years from this year until the year specified in min param
 export const generateArrayOfYears = (min) => {
@@ -79,8 +82,6 @@ export const HeaderInfo = ({
   setRevertedState,
   viewTemplateSelect,
   setViewTemplateSelect,
-  selectedReportingPeriods,
-  setSelectedReportingPeriods,
   //redux sets
   setCheckout,
   setInactive,
@@ -98,6 +99,7 @@ export const HeaderInfo = ({
   setUpdateRelatedTables,
   updateRelatedTables,
   workspaceSection,
+  currentTab,
 }) => {
   //MP
   const sections = [
@@ -118,6 +120,11 @@ export const HeaderInfo = ({
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
+  const unitIds  = selectedConfig?.unitStackConfigurations.map(config => config.unitId);
+  const stackPipeIds = selectedConfig?.unitStackConfigurations.map(config => config.stackPipeId);
+
+  const dispatch = useDispatch();
+
   const [checkedOutConfigs, setCheckedOutConfigs] = useState([]);
   const [auditInformation, setAuditInformation] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -164,6 +171,9 @@ export const HeaderInfo = ({
 
   const [showEmissionsImportTypeModal, setShowEmissionsImportTypeModal] = useState(false);
   const [showHistoricalDataImportModal, setShowHistoricalDataImportModal] = useState(false);
+
+  const [selectedReportingPeriods, setSelectedReportingPeriods] = useState(currentTab?.reportingPeriods || []);
+
 
   const reportingPeriods = useMemo(
     () =>
@@ -712,7 +722,8 @@ export const HeaderInfo = ({
 
   const handleSelectReportingPeriod = (id, updateType) => {
     if (updateType === "add") {
-      setSelectedReportingPeriods([...selectedReportingPeriods, id]);
+      setSelectedReportingPeriods([...new Set([...selectedReportingPeriods, id])]);
+      dispatch(setReportingPeriods([...new Set([...selectedReportingPeriods, id])], currentTab.name, workspaceSection));
     } else if (updateType === "remove") {
       const selected = reportingPeriods
         .filter((reportingPeriod) => {
@@ -723,6 +734,7 @@ export const HeaderInfo = ({
         });
 
       setSelectedReportingPeriods(selected);
+      dispatch(setReportingPeriods(selected, currentTab.name, workspaceSection));
     }
   };
 
@@ -743,6 +755,52 @@ export const HeaderInfo = ({
 
     setShowEmissionsImportTypeModal(false)
   }
+
+  const applyFilters = async (viewCode, monitorPlanId, reportingPeriods, unitIds, stackPipeIds
+  ) => {
+    dispatch(setIsViewDataLoaded(false, currentTab.name, workspaceSection))
+
+      const response = await emApi.getEmissionViewData(
+        viewCode.code,
+        monitorPlanId,
+        reportingPeriods,
+        unitIds,
+        stackPipeIds
+      );
+  
+      if (
+        response &&
+        response.status === 200 &&
+        response.headers["x-field-mappings"] &&
+        response.data
+      ) {
+        const columns = JSON.parse(response.headers["x-field-mappings"]);
+        const results = response.data;
+  
+        const names = columns.map((column) => column.label);
+  
+        const formattedResults = [];
+        for (const result of results) {
+          let id = 1;
+          const formattedObject = {};
+          for (const resultKey in result) {
+            formattedObject[`col${id}`] = result[resultKey];
+            id += 1;
+          }
+          formattedResults.push(formattedObject);
+        }
+  
+        dispatch(setViewDataColumns(names, currentTab.name, workspaceSection))
+        dispatch(setViewData(formattedResults, currentTab.name, workspaceSection))
+        dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection))
+  
+      } else {
+        dispatch(setViewDataColumns([], currentTab.name, workspaceSection))
+        dispatch(setViewData([], currentTab.name, workspaceSection))
+        dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection))
+      }
+  };
+
 
   return (
     <div className="header">
@@ -1013,7 +1071,7 @@ export const HeaderInfo = ({
                       epa-testid={"viewtemplate"}
                       data-testid={"viewtemplate"}
                       value={viewTemplateSelect}
-                      onChange={(e) => setViewTemplateSelect(e.target.value)}
+                      onChange={(e) => setViewTemplateSelect(viewTemplates.find(v=>v.name === e.target.value))}
                       className="maxw-mobile"
                     >
                       {viewTemplates?.map((view) => (
@@ -1044,7 +1102,7 @@ export const HeaderInfo = ({
                     type="button"
                     title="Apply Filter(s)"
                     className="cursor-pointer text-no-wrap apply-filter-position"
-                    onClick={() => null}
+                    onClick={()=>applyFilters(viewTemplateSelect, configID, selectedReportingPeriods, unitIds, stackPipeIds).catch(handleError)}
                   >
                     {"Apply Filter(s)"}
                   </Button>
