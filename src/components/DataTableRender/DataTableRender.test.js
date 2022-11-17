@@ -404,7 +404,7 @@ describe("renders datatable with all values ", () => {
     );
 
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(12);
+    expect(rows.length).toEqual(6);
   });
 
   test("user is  logged in and at a config data table with  nothing checked out  no tableTitle nothing checked out ", async () => {
@@ -439,7 +439,7 @@ describe("renders datatable with all values ", () => {
     );
 
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(12);
+    expect(rows.length).toEqual(6);
   });
 
   test("user is  logged in and at a config data table with  nothing checked out  no tableTitle nothing checked out ", async () => {
@@ -474,7 +474,7 @@ describe("renders datatable with all values ", () => {
     );
 
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(12);
+    expect(rows.length).toEqual(6);
   });
 
   test("user is  logged in and at a config data table with  nothing checked out WITH  tableTitle nothing checked out ", async () => {
@@ -666,7 +666,7 @@ describe("renders datatable with all values ", () => {
     // const addBtn = container.querySelector("#addBtn");
     // fireEvent.click(addBtn);
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(18);
+    expect(rows.length).toEqual(12);
   });
 
   test("mapDispatchToProps calls the appropriate action", async () => {
