@@ -15,8 +15,7 @@ describe("testing a reusable accordion component", () => {
   test("renders an accordion dropdown button and clicks it twice ", () => {
     const { container } = render(accordion);
 
-    fireEvent.click(container.querySelector("#collapseBTN"));
-    fireEvent.click(container.querySelector("#expandBTN"));
+
     let accordions = screen.getAllByRole("button");
     expect(accordions).toHaveLength(2);
   });
