@@ -172,7 +172,7 @@ export const HeaderInfo = ({
   const [showEmissionsImportTypeModal, setShowEmissionsImportTypeModal] = useState(false);
   const [showHistoricalDataImportModal, setShowHistoricalDataImportModal] = useState(false);
 
-  const [selectedReportingPeriods, setSelectedReportingPeriods] = useState(currentTab?.reportingPeriods || []);
+  const [selectedReportingPeriods, setSelectedReportingPeriods] = useState(currentTab?.reportingPeriods ?? []);
 
 
   const reportingPeriods = useMemo(
