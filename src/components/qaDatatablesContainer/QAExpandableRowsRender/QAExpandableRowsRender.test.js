@@ -1125,7 +1125,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.delete.length).toBe(1), 1000)
   })
 
-  test('renders Online Offline Calibration data rows and create/save/delete', async () => {
+  test.skip('renders Online Offline Calibration data rows and create/save/delete', async () => {
     const onlineOfflineCalibrationData = [
       {
         "id": "id1",
