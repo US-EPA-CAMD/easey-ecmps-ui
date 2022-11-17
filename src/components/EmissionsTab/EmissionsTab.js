@@ -32,15 +32,12 @@ export const EmissionsTab = ({
   const getCurrentTab = () => {
     return tabs.find(tab => tab.selectedConfig.id === selectedConfig.id);
   }
-  const getCurrentTabIndex = () => {
-    return tabs.findIndex(tab => tab.selectedConfig.id === selectedConfig.id);
-  }
-  const currentTabIndex = getCurrentTabIndex();
-
+  
+  const currentTab = getCurrentTab();
   const [locationSelect, setLocationSelect] = useState(
-    getCurrentTab().location
+    currentTab.location
   );
-
+  
   useEffect(() => {
     setLocation(locationSelect, title, workspaceSection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -61,14 +58,14 @@ export const EmissionsTab = ({
           setLocationSelect={(location) => setLocationSelect(location)}
           locations={selectedConfig.locations}
           user={user}
-          configID={tabs[currentTabIndex].selectedConfig.id}
-          checkout={tabs[currentTabIndex].checkout}
+          configID={currentTab.selectedConfig.id}
+          checkout={currentTab.checkout}
           setCheckout={setCheckout}
           setInactive={setInactive}
-          inactive={tabs[currentTabIndex].inactive}
+          inactive={currentTab.inactive}
           checkedOutLocations={checkedOutLocations}
-          currentTabIndex={currentTabIndex}
           workspaceSection={workspaceSection}
+          currentTab={currentTab}
         />
       </div>
     </div>
