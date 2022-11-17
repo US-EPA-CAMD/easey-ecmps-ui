@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import { getMonitoringPlans } from "../../utils/api/monitoringPlansApi";
 import ReviewAndSubmitForm from "./ReviewAndSubmitForm/ReviewAndSubmitForm";
 import SubmissionModal from "../SubmissionModal/SubmissionModal";
+import ReviewAndSubmitTables from "./ReviewAndSubmitTables/ReviewAndSubmitTables";
 import MockPermissions from "./MockPermissions";
+
 
 const ReviewAndSubmit = () => {
   const [excludeErrors, setExcludeErrors] = useState(true);
+
   const [showModal, setShowModal] = useState(false);
   const [monPlans, setMonPlans] = useState([]);
 
@@ -34,17 +37,20 @@ const ReviewAndSubmit = () => {
       monPlanData = monPlanData.filter((mpd) => mpd.evalStatusCd !== "ERR");
     }
 
+    console.log({monPlanData});
     setMonPlans(monPlanData);
   };
 
   return (
-    <div>
+    <div className="react-transition fade-in padding-x-3">
       <ReviewAndSubmitForm
         showModal={setShowModal}
         queryCallback={applyFilter}
         setExcludeErrors={setExcludeErrors}
         facilities={MockPermissions}
       />
+      {monPlans.length > 0 && <ReviewAndSubmitTables monPlans={monPlans} />}
+
       {showModal && (
         <SubmissionModal
           show={showModal}
