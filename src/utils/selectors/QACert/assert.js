@@ -346,6 +346,10 @@ export const removeDataSwitch = async (
       return qaApi
         .deleteCalibrationInjectionRecord(locationId, id, row.id)
         .catch((error) => console.log("error", error));
+    case onlineOfflineCalibration:
+      return qaApi
+        .deleteOnlineOfflineCalibration(locationId, id, row.id)
+        .catch(error => console.log('error deleting online offline calibration', error))
     default:
       throw new Error(`removeDataSwitch case not implemented for ${name}`);
   }
@@ -520,7 +524,7 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         ).catch((error) => console.log("error", error));
     case calibrationInjections:
       return qaApi.updateCalibrationInjectionRecord(location, id, userInput.id, userInput)
-          .catch((err)=> console.error(err));
+        .catch((err) => console.error(err));
     case onlineOfflineCalibration:
       return qaApi.updateOnlineOfflineCalibration(
         location,
