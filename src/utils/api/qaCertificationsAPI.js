@@ -1468,3 +1468,22 @@ export const updateCalibrationInjectionRecord = async (
     return handleImportError(error);
   }
 };
+
+export const deleteCalibrationInjectionRecord = async (
+  locId,
+  testSumId,
+  id,
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/calibration-injections/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};

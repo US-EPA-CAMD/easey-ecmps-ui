@@ -342,6 +342,10 @@ export const removeDataSwitch = async (
       return qaApi
         .deleteFlowToLoadCheckRecord(locationId, id, row.id)
         .catch((error) => console.log("error", error));
+    case calibrationInjections:
+      return qaApi
+        .deleteCalibrationInjectionRecord(locationId, id, row.id)
+        .catch((error) => console.log("error", error));
     default:
       throw new Error(`removeDataSwitch case not implemented for ${name}`);
   }
