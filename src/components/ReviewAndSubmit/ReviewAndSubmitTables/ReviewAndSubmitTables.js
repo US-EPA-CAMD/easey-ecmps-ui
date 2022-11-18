@@ -11,6 +11,7 @@ import {
 } from '../../../additional-functions/ensure-508';
 import { oneSecond } from '../../../config';
 import { formatDate } from '../../../utils/functions';
+import ReviewAndSubmitTableRender from '../ReviewAndSubmitTableRender/ReviewAndSubmitTableRender';
 
 const monPlanColumns = [
   { name: 'ORIS Code', selector: 'orisCode', sortable: true },
@@ -62,6 +63,7 @@ const ReviewAndSubmitTables = ({ monPlans }) => {
       addScreenReaderLabelForCollapses();
     };
   }, []);
+  const dataTableProps = {noHeader: true, highlightOnHover: true, responsive: false, striped: true, sortIcon: <ArrowDownwardSharp />}
   return (
     <div>
       {tables.map((table, i) => {
@@ -95,7 +97,9 @@ const ReviewAndSubmitTables = ({ monPlans }) => {
                   : 'display-none'
               }
             >
-              <DataTable
+              <ReviewAndSubmitTableRender columns={columns}
+                data={data} dataTableName={'Monitoring Plan'} dataTableProps={dataTableProps}/>
+              {/* <DataTable
                 columns={columns}
                 data={data}
                 noHeader={true}
@@ -111,7 +115,7 @@ const ReviewAndSubmitTables = ({ monPlans }) => {
                   />
                 }
                 onSelectedRowsChange={handleSelectedFiles}
-              />
+              /> */}
             </div>
           </div>
         );

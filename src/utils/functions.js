@@ -42,8 +42,6 @@ export const formatDate = (dateString) => {
   const year = date.getUTCFullYear();
   const month = date.getUTCMonth() + 1;
   const day = date.getUTCDate();
-  if (month.length < 2) month = '0' + month;
-  if (day.length < 2) day = '0' + day;
   const fullDateString = `${month}-${day}-${year}`;
   return fullDateString;
 };
