@@ -1,7 +1,5 @@
-import { config } from "../config";
-
 export const debugLog = (message, object = null) => {
-  if (config.app.enableDebug) {
+  if (getConfigValueBoolean("REACT_APP_EASEY_ECMPS_UI_ENABLE_DEBUG")) {
     if (object) {
       console.log(message, object);
     } else {
