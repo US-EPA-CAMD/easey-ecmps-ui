@@ -112,5 +112,6 @@ test("mapDispatchToProps calls the appropriate action", async () => {
   // mock the 'dispatch' object
   const dispatch = jest.fn();
   const state = jest.fn();
-  const stateProps = mapStateToProps(state);
+  state.openedFacilityTabs = [];
+  const stateProps = mapStateToProps(state, true);
 });

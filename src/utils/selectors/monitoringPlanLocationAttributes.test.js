@@ -50,8 +50,8 @@ describe("testing monitoring plan data selectors", () => {
 
     monitoringDataTableRecodsLocation = [
       {
-        col1: "Yes",
-        col2: "Yes",
+        col1: "No",
+        col2: "No",
         col3: "21",
         col4: "600",
         col5: "OTHER",
@@ -105,14 +105,14 @@ describe("testing monitoring plan data selectors", () => {
     ];
     monitoringDataTableRecodsRelationship = [
       {
-        col1: "test",
+        col1: "MDC-CCB8D6D0D4E34D24A99C01DCD14078DF",
         col2: "1",
         col3: "01/01/1995",
         col4: "01/01/1995",
         col5: "CAMD-18DD175CE7EF4256B78469865D84F576",
       },
       {
-        col1: "test",
+        col1: "MDC-CCB8D6D0D4E34D24A99C01DCD14078DF",
         col2: "1",
         col3: "",
         col4: "",
