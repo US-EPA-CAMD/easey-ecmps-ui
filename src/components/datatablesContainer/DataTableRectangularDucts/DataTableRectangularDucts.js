@@ -241,6 +241,11 @@ export const DataTableRectangularDucts = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ducts, tabs[currentTabIndex].inactive[0]]);
 
+      // *** Reassign handlers when inactive checkbox is toggled
+      useEffect(() => {
+        assignFocusEventListeners();
+      }, [inactive, data]);
+
   const testing = () => {
     openDuctModal(false, false, true);
     saveDuct();
