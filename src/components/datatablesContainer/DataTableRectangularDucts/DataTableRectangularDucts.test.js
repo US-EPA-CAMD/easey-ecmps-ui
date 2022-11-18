@@ -86,7 +86,11 @@ test("test create/save Ducts functions", async () => {
 test("mapStateToProps calls the appropriate state", async () => {
   // mock the 'dispatch' object
   const dispatch = jest.fn();
-  const state = { monitoringPlan: [1] };
+  const state = { monitoringPlans: [0] };
   const stateProps = mapStateToProps(state, true);
 });
+
+jest.mock('react-redux', () => ({
+  connect: () => jest.fn(),
+}));
 

@@ -1,3 +1,4 @@
+import { connect } from 'react-redux';
 import React, { useEffect, useMemo, useState } from "react";
 import * as fs from "../../../utils/selectors/monitoringPlanRectangularDucts";
 import Modal from "../../Modal/Modal";
@@ -375,9 +376,16 @@ export const DataTableRectangularDucts = ({
 };
 const mapStateToProps = (state) => {
   return {
-
     tabs: state.openedFacilityTabs["monitoringPlans"],
   };
 };
-export default connect(mapStateToProps, null)(DataTableRectangularDucts);
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: bindActionCreators({
+      openDuctModal
+  }, dispatch)
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(DataTableRectangularDucts);
 export { mapStateToProps };
