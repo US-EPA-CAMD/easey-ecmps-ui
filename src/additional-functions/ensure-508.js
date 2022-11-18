@@ -323,19 +323,19 @@ export const assignAriaLabelsToDatePickerButtons = () => {
 };
 
 // returns focus
-export const returnsFocusDatatableExpandBTN = (index, direction, colName) => {
+export const returnsFocusDatatableExpandBTN = (datatableName, index, direction, colName) => {
   let lastBTN = "";
 
   setTimeout(() => {
     if (direction) {
       lastBTN = document
-        .getElementById(`expandRow${colName}${index + 1}`)
+        .getElementById(`expandRow${datatableName}${colName}${index + 1}`)
       if (lastBTN) {
         lastBTN.focus();
       }
     } else {
       lastBTN = document
-        .getElementById(`collapseRow${colName}${index + 1}`)
+        .getElementById(`collapseRow${datatableName}${colName}${index + 1}`)
       if (lastBTN) {
         lastBTN.focus();
       }
@@ -344,10 +344,11 @@ export const returnsFocusDatatableExpandBTN = (index, direction, colName) => {
 };
 
 // returns focus to View Button
-export const returnsFocusDatatableViewBTN = (row, index) => {
+export const returnsFocusDatatableViewBTN = (datatableName, row, index) => {
+  console.log('returnsFocusDatatableViewBTN', row)
   setTimeout(() => {
     let lastBTN = document
-      .getElementById(`btnEditView${row.col1}${index + 1}`);
+      .getElementById(`btnEditView${datatableName}${row.col1}${index + 1}`);
     if (lastBTN) {
       lastBTN.focus();
     }

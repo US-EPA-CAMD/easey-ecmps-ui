@@ -400,7 +400,7 @@ const QATestSummaryDataTable = ({
     // setReturnedFocusToLast(false);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
-    returnsFocusDatatableViewBTN(clickedRow, clickedIndex)
+    returnsFocusDatatableViewBTN(dataTableName, clickedRow, clickedIndex)
   };
 
   const onRemoveHandler = async (row) => {

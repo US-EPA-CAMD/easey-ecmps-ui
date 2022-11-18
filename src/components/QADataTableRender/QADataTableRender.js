@@ -91,19 +91,19 @@ const QADataTableRender = ({
         className="expandBTN "
         onClick={() => {
           expandRowBTN(index);
-          returnsFocusDatatableExpandBTN(index, false, row.col1);
+          returnsFocusDatatableExpandBTN(dataTableName,index, false, row.col1);
           row.expanded = true;
         }}
         onKeyPress={(event) => {
           if (event.key === "Enter") {
             expandRowBTN(index);
-            returnsFocusDatatableExpandBTN(index, false, row.col1);
+            returnsFocusDatatableExpandBTN(dataTableName,index, false, row.col1);
             row.expanded = true;
           }
         }}
         title={`Click to expand row ${index + 1}`}
         name={`expand row ${index + 1}`}
-        id={`expandRow${row.col1}${index + 1}`}
+        id={`expandRow${dataTableName}${row.col1}${index + 1}`}
         aria-expanded={false}
         role="button"
         tabIndex="0"
@@ -114,19 +114,19 @@ const QADataTableRender = ({
         className="expandBTN "
         onClick={() => {
           expandRowBTN(index);
-          returnsFocusDatatableExpandBTN(index, true, row.col1);
+          returnsFocusDatatableExpandBTN(dataTableName,index, true, row.col1);
           row.expanded = false;
         }}
         onKeyPress={(event) => {
           if (event.key === "Enter") {
             expandRowBTN(index);
-            returnsFocusDatatableExpandBTN(index, true, row.col1);
+            returnsFocusDatatableExpandBTN(dataTableName,index, true, row.col1);
             row.expanded = false;
           }
         }}
         title={`Click to collapse row ${index + 1}`}
         name={`collapse row ${index + 1}`}
-        id={`collapseRow${row.col1}${index + 1}`}
+        id={`collapseRow${dataTableName}${row.col1}${index + 1}`}
         role="button"
         tabIndex="0"
         aria-expanded={true}
@@ -159,7 +159,7 @@ const QADataTableRender = ({
                         type="button"
                         epa-testid="btnOpen"
                         className="cursor-pointer open-modal-button"
-                        id={`btnEditView${row.col1}${index + 1}`}
+                        id={`btnEditView${dataTableName}${row.col1}${index + 1}`}
                         onClick={() => {
                           openHandler(normalizedRow, false, null, index);
                         }}
@@ -186,7 +186,7 @@ const QADataTableRender = ({
                       // tableTitle
                       //   ? `btnOpen${tableTitle.split(" ").join("")}`
                       // :
-                      `btnEditView${row.col1}${index + 1}`
+                      `btnEditView${dataTableName}${row.col1}${index + 1}`
                     }
                     onClick={() => {
                       openHandler(normalizedRow, false, null, index);
