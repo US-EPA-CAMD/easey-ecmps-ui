@@ -114,6 +114,66 @@ const reducer = (state, action) => {
         ),
       };
       break;
+    case types.IS_VIEW_DATA_LOADED:
+      returnObject = {
+        ...currentState,
+        [`${action.workspaceSection}`]: currentState[
+          `${action.workspaceSection}`
+        ].map((x) =>
+          x.name === action.title
+            ? {
+                ...x,
+                isViewDataLoaded: action.isViewDataLoaded,
+              }
+            : x
+        ),
+      };
+      break;
+    case types.SET_VIEW_DATA_COLUMNS:
+      returnObject = {
+        ...currentState,
+        [`${action.workspaceSection}`]: currentState[
+          `${action.workspaceSection}`
+        ].map((x) =>
+          x.name === action.title
+            ? {
+                ...x,
+                viewColumns: action.viewColumns,
+              }
+            : x
+        ),
+      };
+      break;  
+    case types.SET_VIEW_DATA:
+      returnObject = {
+        ...currentState,
+        [`${action.workspaceSection}`]: currentState[
+          `${action.workspaceSection}`
+        ].map((x) =>
+          x.name === action.title
+            ? {
+                ...x,
+                viewData: action.viewData,
+              }
+            : x
+        ),
+      };
+      break;  
+    case types.SET_REPORTING_PERIODS:
+      returnObject = {
+        ...currentState,
+        [`${action.workspaceSection}`]: currentState[
+          `${action.workspaceSection}`
+        ].map((x) =>
+          x.name === action.title
+            ? {
+                ...x,
+                reportingPeriods: action.reportingPeriods,
+              }
+            : x
+        ),
+      };
+      break;  
     default:
       returnObject = currentState;
       break;
