@@ -198,7 +198,8 @@ export const HeaderInfo = ({
   }
 
   useEffect(()=>{
-    setViewTemplateSelect(currentTab?.viewTemplateSelect)
+    if(currentTab?.viewTemplateSelect)
+      setViewTemplateSelect(currentTab.viewTemplateSelect)
   }, [currentTab])
 
   // *** Assign initial event listeners after loading data/dropdowns
@@ -787,7 +788,6 @@ export const HeaderInfo = ({
   const applyFilters = async ( monitorPlanId, unitIds, stackPipeIds) => {
    
       dispatch(setIsViewDataLoaded(false, currentTab.name, workspaceSection));
-
       const response = await emApi.getEmissionViewData(
         viewTemplateSelect?.code,
         monitorPlanId,
