@@ -21,7 +21,7 @@ export const findValue = (options, val, parameter) => {
 
 // date from api is always in yyyy-mm-dd
 export const adjustDate = (format, date) => {
-  let date = "";
+  date = "";
   if (date === null) {
     return "";
   }
