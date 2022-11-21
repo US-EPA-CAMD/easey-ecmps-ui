@@ -4,52 +4,192 @@ import { EMISSIONS_STORE_NAME, MONITORING_PLAN_STORE_NAME } from "../../addition
 let initialState = {};
 beforeAll(() => {
   initialState = {
-    openedFacilityTabs: { monitoringPlans :[
-      {
-        orisCode: "3",
-        checkout: false,
-        name: "Barry (1, 2, CS0AAN) ",
-        location: [0, "6"],
-        section: [3, "Methods"],
-        selectedConfig: {
-          id: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
-          name: "1, 2, CS0AAN",
-          locations: [
-            {
-              id: "6",
-              name: "1",
-              type: "Unit",
-              active: true,
-              retireDate: null,
-            },
-            {
-              id: "7",
-              name: "2",
-              type: "Unit",
-              active: true,
-              retireDate: null,
-            },
-            {
-              id: "5",
-              name: "CS0AAN",
-              type: "Stack",
-              active: true,
-              retireDate: null,
+    openedFacilityTabs: { 
+      monitoringPlans :[
+        {
+          orisCode: "3",
+          checkout: false,
+          name: "Barry (1, 2, CS0AAN) ",
+          location: [0, "6"],
+          section: [3, "Methods"],
+          selectedConfig: {
+            id: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
+            name: "1, 2, CS0AAN",
+            locations: [
+              {
+                id: "6",
+                name: "1",
+                type: "Unit",
+                active: true,
+                retireDate: null,
+              },
+              {
+                id: "7",
+                name: "2",
+                type: "Unit",
+                active: true,
+                retireDate: null,
+              },
+              {
+                id: "5",
+                name: "CS0AAN",
+                type: "Stack",
+                active: true,
+                retireDate: null,
 
-            },
-          ],
-          endReportPeriodId: null,
-          active: true,
-          links: [
-            {
-              rel: "self",
-              href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-plans/TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
-            },
-          ],
+              },
+            ],
+            endReportPeriodId: null,
+            active: true,
+            links: [
+              {
+                rel: "self",
+                href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-plans/TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
+              },
+            ],
+          },
+          inactive: [false, false],
         },
-        inactive: [false, false],
-      },
-    ],},
+      ],
+      qaCertTestSummary :[
+        {
+          orisCode: "3",
+          checkout: false,
+          name: "Barry (1, 2, CS0AAN) ",
+          location: [0, "6"],
+          section: [3, "Methods"],
+          selectedConfig: {
+            id: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
+            name: "1, 2, CS0AAN",
+            locations: [
+              {
+                id: "6",
+                name: "1",
+                type: "Unit",
+                active: true,
+                retireDate: null,
+              },
+              {
+                id: "7",
+                name: "2",
+                type: "Unit",
+                active: true,
+                retireDate: null,
+              },
+              {
+                id: "5",
+                name: "CS0AAN",
+                type: "Stack",
+                active: true,
+                retireDate: null,
+
+              },
+            ],
+            endReportPeriodId: null,
+            active: true,
+            links: [
+              {
+                rel: "self",
+                href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-plans/TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
+              },
+            ],
+          },
+          inactive: [false, false],
+        },
+      ],
+      export :[
+        {
+          orisCode: "3",
+          checkout: false,
+          name: "Barry (1, 2, CS0AAN) ",
+          location: [0, "6"],
+          section: [3, "Methods"],
+          selectedConfig: {
+            id: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
+            name: "1, 2, CS0AAN",
+            locations: [
+              {
+                id: "6",
+                name: "1",
+                type: "Unit",
+                active: true,
+                retireDate: null,
+              },
+              {
+                id: "7",
+                name: "2",
+                type: "Unit",
+                active: true,
+                retireDate: null,
+              },
+              {
+                id: "5",
+                name: "CS0AAN",
+                type: "Stack",
+                active: true,
+                retireDate: null,
+
+              },
+            ],
+            endReportPeriodId: null,
+            active: true,
+            links: [
+              {
+                rel: "self",
+                href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-plans/TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
+              },
+            ],
+          },
+          inactive: [false, false],
+        },
+      ],
+      emissions :[
+        {
+          orisCode: "3",
+          checkout: false,
+          name: "Barry (1, 2, CS0AAN) ",
+          location: [0, "6"],
+          section: [3, "Methods"],
+          selectedConfig: {
+            id: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
+            name: "1, 2, CS0AAN",
+            locations: [
+              {
+                id: "6",
+                name: "1",
+                type: "Unit",
+                active: true,
+                retireDate: null,
+              },
+              {
+                id: "7",
+                name: "2",
+                type: "Unit",
+                active: true,
+                retireDate: null,
+              },
+              {
+                id: "5",
+                name: "CS0AAN",
+                type: "Stack",
+                active: true,
+                retireDate: null,
+
+              },
+            ],
+            endReportPeriodId: null,
+            active: true,
+            links: [
+              {
+                rel: "self",
+                href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-plans/TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
+              },
+            ],
+          },
+          inactive: [false, false],
+        },
+      ],
+  },
   };
 
   initialState.openedFacilityTabs.emissions=initialState.openedFacilityTabs.monitoringPlans;
@@ -59,7 +199,7 @@ describe("dynamicFacilityTab Reducer State Update", () => {
     const selectedFacility = "Berry";
     const selectedFacilityTabIndex = 1;
 
-    let action = actions.addFacilityTab(selectedFacility,'monitoringPlans');
+    let action = actions.addFacilityTab(selectedFacility, MONITORING_PLAN_STORE_NAME);
     const newState = dynamicFacilityTabReducer(
       initialState.openedFacilityTabs,
       action
@@ -225,9 +365,14 @@ describe("dynamicFacilityTab Reducer State checking false conditional", () => {
     it("tests action SET_REPORTING_PERIODS", ()=>{
       const action = actions.setReportingPeriods([], "Barry (1, 2, CS0AAN) ", EMISSIONS_STORE_NAME);
       const openedFacilityTabsState = dynamicFacilityTabReducer(initialState.openedFacilityTabs, action);
-      console.log("openedFacilityTabsState", openedFacilityTabsState)
       expect(openedFacilityTabsState[EMISSIONS_STORE_NAME][0].reportingPeriods).toStrictEqual([]);
     })
 
+    it("tests action SET_VIEW_TEMPLATE_SELECTION", ()=>{
+      const action = actions.setViewTemplateSelectionAction(null, "Barry (1, 2, CS0AAN) ", EMISSIONS_STORE_NAME);
+      const openedFacilityTabsState = dynamicFacilityTabReducer(initialState.openedFacilityTabs, action);
+      console.log(openedFacilityTabsState[EMISSIONS_STORE_NAME][0].viewTemplateSelect)
+      expect(openedFacilityTabsState[EMISSIONS_STORE_NAME][0].viewTemplateSelect).toEqual(null);
+    })
   })
 });

@@ -99,3 +99,13 @@ export const setViewDataColumns = (viewColumns, title, workspaceSection) => {
   };
 };
 
+export const setViewTemplateSelectionAction = (viewTemplateSelect, title, workspaceSection) => {
+  return {
+    type: types.SET_VIEW_TEMPLATE_SELECTION,
+    title,
+    workspaceSection,
+    viewTemplateSelect,
+  };
+};
+
+

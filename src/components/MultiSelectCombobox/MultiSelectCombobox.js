@@ -25,8 +25,8 @@ const MultiSelectCombobox = ({
   );
   const [showListBox, setShowListBox] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
+
   const selectedItemsRef = useRef(selectedItems);
-  const [stillMounted, setStillMounted] = useState(true);
 
   const handleMultiSelectClick = (e) => {
     const multiSelectComboboxDiv = document.getElementById(
@@ -122,29 +122,22 @@ const MultiSelectCombobox = ({
     const selection = items.filter((i) => i.selected);
     const _selectedItems = [];
     for (const s of selection) {
-      if (stillMounted) {
-        _selectedItems.push({
-          id: s.id,
-          component: (
-            <PillButton
-              key={s.id}
-              index={s.id}
-              label={s.label}
-              onRemove={onRemoveHanlder}
-              disableButton={true}
-            />
-          ),
-        });
-      } else {
-        break;
-      }
-    }
-    if (!stillMounted) {
-      return;
+      _selectedItems.push({
+        id: s.id,
+        component: (
+          <PillButton
+            key={s.id}
+            index={s.id}
+            label={s.label}
+            onRemove={onRemoveHanlder}
+            disableButton={true}
+          />
+        ),
+      });
     }
     selectedItemsRef.current = _selectedItems;
     setSelectedItems(_selectedItems);
-  }, [items, stillMounted, onRemoveHanlder]);
+  }, [items, onRemoveHanlder]);
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -164,7 +157,6 @@ const MultiSelectCombobox = ({
 
   useEffect(() => {
     populateSelectedItems();
-    return () => setStillMounted(false);
   }, [populateSelectedItems]);
 
   useEffect(() => {

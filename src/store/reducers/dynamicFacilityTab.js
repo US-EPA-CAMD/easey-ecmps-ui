@@ -173,7 +173,22 @@ const reducer = (state, action) => {
             : x
         ),
       };
-      break;  
+      break;
+    case types.SET_VIEW_TEMPLATE_SELECTION:
+      returnObject = {
+        ...currentState,
+        [`${action.workspaceSection}`]: currentState[
+          `${action.workspaceSection}`
+        ].map((x) =>
+          x.name === action.title
+            ? {
+                ...x,
+                viewTemplateSelect: action.viewTemplateSelect,
+              }
+            : x
+        ),
+      };
+      break;
     default:
       returnObject = currentState;
       break;

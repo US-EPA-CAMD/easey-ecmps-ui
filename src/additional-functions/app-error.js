@@ -13,8 +13,7 @@ export const displayAppError = (error) => {
       .querySelectorAll("svg path")
       .forEach((element) => (element.tabIndex = -1));
   
-    window.addEventListener("click", hideAppError);
-  
+      document.querySelector("#appErrorMessage").addEventListener("click", hideAppError);
     }
 };
 

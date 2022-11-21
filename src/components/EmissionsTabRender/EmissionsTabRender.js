@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@trussworks/react-uswds";
 import HeaderInfo from "../HeaderInfo/HeaderInfo";
 import "../MonitoringPlanTab/MonitoringPlanTab.scss";
@@ -25,18 +25,25 @@ export const EmissionsTabRender = ({
   inactive,
   workspaceSection,
 }) => {
+  const currentTab = useSelector(state=>state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(t=>t.selectedConfig.id===configID));
+  
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
 
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
-
-  const currentTab = useSelector(state=>state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(t=>t.selectedConfig.id===configID));
-
+  const [viewColumns, setViewColumns] = useState();
+  const [viewData, setViewData] = useState();
+  const [isDataLoaded, setIsDataLoaded] = useState();
+  
   // Determines if a user has just navigated to the page without applying any filters yet
   const isInitialLoadOfPage = currentTab?.isViewDataLoaded === undefined;
 
-  const viewColumns = currentTab?.viewColumns || [];
-  const viewData = currentTab?.viewData || [];
-  const isDataLoaded = isInitialLoadOfPage ? true : currentTab?.isViewDataLoaded;
+  useEffect(()=>{
+
+    setViewColumns(currentTab?.viewColumns || []);
+    setViewData(currentTab?.viewData || []);
+    setIsDataLoaded(isInitialLoadOfPage ? true : currentTab?.isViewDataLoaded);
+    setViewTemplateSelect(currentTab?.viewTemplateSelect ?? null)
+  }, [currentTab])
   
   const handleDownload = async () => {
     getEmissionViewData(
