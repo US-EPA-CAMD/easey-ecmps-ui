@@ -13,6 +13,15 @@ jest.mock("../../../utils/api/monitoringPlansApi", () => ({
   }),
 }));
 
+jest.mock("../../../utils/api/mdmApi", () => ({
+  getReportingPeriods: jest.fn().mockResolvedValue({
+    data: [
+      { periodAbbreviation: "2022 Q3" },
+      { periodAbbreviation: "2022 Q4" },
+    ],
+  }),
+}));
+
 const mockFacilities = [
   {
     id: 3,
@@ -36,30 +45,35 @@ describe("Review and submit form", () => {
     jest.clearAllMocks();
   });
 
-  test("Render Review and Submit Form with no errors", () => {
-    const { container } = render(
-      <ReviewAndSubmitForm
-        facilities={mockFacilities}
-        queryCallback={jest.fn()}
-        showModal={jest.fn()}
-        setExcludeErrors={jest.fn()}
-      />
-    );
+  test("Render Review and Submit Form with no errors", async () => {
+    let container;
+
+    await act(async () => {
+      container = render(
+        <ReviewAndSubmitForm
+          facilities={mockFacilities}
+          queryCallback={jest.fn()}
+          showModal={jest.fn()}
+          setExcludeErrors={jest.fn()}
+        />
+      );
+    });
 
     expect(container).toBeDefined();
   });
 
   test("Render Review and Submit Form with no errors", async () => {
     const mockErrorCall = jest.fn();
-
-    render(
-      <ReviewAndSubmitForm
-        facilities={mockFacilities}
-        queryCallback={jest.fn()}
-        showModal={jest.fn()}
-        setExcludeErrors={mockErrorCall}
-      />
-    );
+    await act(async () => {
+      render(
+        <ReviewAndSubmitForm
+          facilities={mockFacilities}
+          queryCallback={jest.fn()}
+          showModal={jest.fn()}
+          setExcludeErrors={mockErrorCall}
+        />
+      );
+    });
 
     await act(async () => {
       screen.getByTestId("radio-exclude").click();
@@ -70,19 +84,25 @@ describe("Review and submit form", () => {
   });
 
   test("Render drop box of facilities and click a facility to load a configuration", async () => {
-    const { getByText } = render(
-      <ReviewAndSubmitForm
-        facilities={mockFacilities}
-        queryCallback={jest.fn()}
-        showModal={jest.fn()}
-        setExcludeErrors={jest.fn()}
-      />
-    );
+    let byText;
+
+    await act(async () => {
+      const { getByText } = render(
+        <ReviewAndSubmitForm
+          facilities={mockFacilities}
+          queryCallback={jest.fn()}
+          showModal={jest.fn()}
+          setExcludeErrors={jest.fn()}
+        />
+      );
+
+      byText = getByText;
+    });
 
     await act(async () => {
       const facilityInput = screen.getByTestId("Facilities-input-search");
       await userEvent.click(facilityInput);
-      await getByText("Barry (3)").click();
+      await byText("Barry (3)").click();
     });
 
     await act(async () => {
@@ -92,7 +112,7 @@ describe("Review and submit form", () => {
       await userEvent.click(configurationInput);
     });
 
-    expect(getByText("Barry - 1")).toBeInTheDocument();
+    expect(byText("Barry - 1")).toBeInTheDocument();
   });
 
   test("Click a configuration from returned configurations", async () => {
@@ -103,19 +123,24 @@ describe("Review and submit form", () => {
       monPlanTable = monPlan;
     });
 
-    const { getByText } = render(
-      <ReviewAndSubmitForm
-        facilities={mockFacilities}
-        queryCallback={mockCallback}
-        showModal={jest.fn()}
-        setExcludeErrors={jest.fn()}
-      />
-    );
+    let byText;
+
+    await act(async () => {
+      const { getByText } = render(
+        <ReviewAndSubmitForm
+          facilities={mockFacilities}
+          queryCallback={mockCallback}
+          showModal={jest.fn()}
+          setExcludeErrors={jest.fn()}
+        />
+      );
+      byText = getByText;
+    });
 
     await act(async () => {
       const facilityInput = screen.getByTestId("Facilities-input-search");
       await userEvent.click(facilityInput);
-      await getByText("Barry (3)").click();
+      await byText("Barry (3)").click();
     });
 
     await act(async () => {
@@ -126,11 +151,75 @@ describe("Review and submit form", () => {
     });
 
     await act(async () => {
-      getByText("Barry - 1").click();
-      getByText("Apply Filter(s)").click();
+      byText("Barry - 1").click();
+      byText("Apply Filter(s)").click();
     });
 
     expect(orisTable).toEqual(["3"]);
     expect(monPlanTable).toEqual(["MOCK-1"]);
+  });
+
+  test("Default reporting period loaded", async () => {
+    let byText;
+
+    await act(async () => {
+      const { getByText } = render(
+        <ReviewAndSubmitForm
+          facilities={mockFacilities}
+          queryCallback={jest.fn()}
+          showModal={jest.fn()}
+          setExcludeErrors={jest.fn()}
+        />
+      );
+      byText = getByText;
+    });
+
+    expect(byText("2022 Q4")).toBeInTheDocument();
+  });
+
+  test("Click a reporting period", async () => {
+    let reportingPeriods;
+    const mockCallback = jest.fn((oris, monPlan, rps) => {
+      reportingPeriods = rps;
+    });
+
+    let byText;
+    await act(async () => {
+      const { getByText } = render(
+        <ReviewAndSubmitForm
+          facilities={mockFacilities}
+          queryCallback={mockCallback}
+          showModal={jest.fn()}
+          setExcludeErrors={jest.fn()}
+        />
+      );
+      byText = getByText;
+    });
+
+    await act(async () => {
+      const reportInput = screen.getByTestId("Reporting-Periods-input-search");
+      await userEvent.click(reportInput);
+      byText("2022 Q3").click();
+    });
+
+    await act(async () => {
+      const facilityInput = screen.getByTestId("Facilities-input-search");
+      await userEvent.click(facilityInput);
+      await byText("Barry (3)").click();
+    });
+
+    await act(async () => {
+      const configurationInput = screen.getByTestId(
+        "Configurations-input-search"
+      );
+      await userEvent.click(configurationInput);
+    });
+
+    await act(async () => {
+      byText("Barry - 1").click();
+      byText("Apply Filter(s)").click();
+    });
+
+    expect(reportingPeriods).toEqual(["2022 Q4", "2022 Q3"]);
   });
 });
