@@ -71,3 +71,40 @@ export const setExportState = (configId, exportState, workspaceSection) => {
     workspaceSection,
   };
 };
+
+export const setReportingPeriods = (reportingPeriods, title, workspaceSection) =>{
+  return {
+    type: types.SET_REPORTING_PERIODS,
+    title,
+    workspaceSection,
+    reportingPeriods,
+  }
+}
+
+export const setIsViewDataLoaded = (isViewDataLoaded, title, workspaceSection) => {
+  return {
+    type: types.IS_VIEW_DATA_LOADED,
+    title,
+    workspaceSection,
+    isViewDataLoaded,
+  };
+};
+
+export const setViewData = (viewData, title, workspaceSection) => {
+  return {
+    type: types.SET_VIEW_DATA,
+    title,
+    workspaceSection,
+    viewData,
+  };
+};
+
+export const setViewDataColumns = (viewColumns, title, workspaceSection) => {
+  return {
+    type: types.SET_VIEW_DATA_COLUMNS,
+    title,
+    workspaceSection,
+    viewColumns,
+  };
+};
+

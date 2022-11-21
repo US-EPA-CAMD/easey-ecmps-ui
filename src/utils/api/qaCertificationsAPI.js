@@ -1419,6 +1419,25 @@ export const updateOnlineOfflineCalibration = async (
   }
 };
 
+export const deleteOnlineOfflineCalibration = async (
+  locId,
+  testSumId,
+  id,
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/online-offline-calibration/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const getCalibrationInjectionRecords = async (
   locId,
   testSumId
@@ -1462,6 +1481,25 @@ export const updateCalibrationInjectionRecord = async (
         method: "PUT",
         url: url,
         data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const deleteCalibrationInjectionRecord = async (
+  locId,
+  testSumId,
+  id,
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/calibration-injections/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
       })
     );
   } catch (error) {
