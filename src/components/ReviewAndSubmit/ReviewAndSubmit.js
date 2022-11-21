@@ -18,7 +18,7 @@ const ReviewAndSubmit = () => {
     const permissions = MockPermissions;
     for (const p of permissions) {
       idToPermissionsMap[p.id] = p.permissions;
-    }
+    }//eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const closeModal = () => {

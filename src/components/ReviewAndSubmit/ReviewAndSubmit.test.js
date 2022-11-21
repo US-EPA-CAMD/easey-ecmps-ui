@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, act, fireEvent, screen } from '@testing-library/react';
 
 import ReviewAndSubmit from './ReviewAndSubmit';
 
@@ -38,20 +38,24 @@ describe('Review and Submit component', () => {
     fireEvent.click(facility1);
   });
 
-  it('table is not rendered until filters are applied', async() =>{
+  it.only('table is not rendered until filters are applied', async() =>{
     const { getByRole, getByText } = query;
     const dataTableWrapper = query.container.querySelector('.data-display-table');
     const applyButton = getByRole('button', {name: /apply filter\(s\)/i});
     expect(dataTableWrapper).not.toBeInTheDocument();
     const facilitiesCombobox = getByRole('textbox', {name: 'Facilities'});
-    fireEvent.click(facilitiesCombobox);
+    // fireEvent.click(facilitiesCombobox);
+    await act(async() => {await fireEvent.click(facilitiesCombobox);});
+
     const facility1 =  getByText('Barry (3)');
-    fireEvent.click(facility1);
-    await fireEvent.click(applyButton);
+    // fireEvent.click(facility1);
+    await act(async() => {await fireEvent.click(facility1);});
+
+    await act(async() => {await fireEvent.click(applyButton)});
+    screen.debug(undefined, 30000);
     const updatedDataTableWrapper = await query.container.querySelector('.data-display-table');
-    console.log({updatedDataTableWrapper});
-    // expect(updatedDataTableWrapper).toBeInTheDocument()
-    // screen.debug();
+    console.log({updatedDataTableWrapper}, query.container.querySelector('.data-display-table'));
+    expect(updatedDataTableWrapper).toBeInTheDocument()
   })
 
   it('modal appears after submit button is clicked', () => {
@@ -69,13 +73,9 @@ describe('Review and Submit component', () => {
     const submitButton = getByRole('button', {name: /submit/i});
     fireEvent.click(submitButton);
     const modal = queryByTestId('step-indicator');
+    expect(modal).toBeInTheDocument()
     const closeModalButton = queryByTestId('closeModalBtn')
     fireEvent.click(closeModalButton);
-    const updatedModal = queryByTestId('step-indicator');
-    expect(updatedModal).not.toBeInTheDocument();
-    expect(modal).toBeInTheDocument()
-
+    expect(modal).not.toBeInTheDocument();
   })
-
-  //closeModalBtn
 });
