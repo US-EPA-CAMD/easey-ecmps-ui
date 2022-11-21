@@ -3,18 +3,26 @@ export const MockPermissions = [
     id: 3,
     facilityName: "Barry",
     permissions: ["DSMP", "DSQA", "DSEM"],
+    active: true,
+    name: "Test",
   },
   {
     id: 7,
     facilityName: "Gadsden",
     permissions: [],
+    active: true,
+    name: "Test",
   },
   {
     id: 10,
     facilityName: "Greene County",
     permissions: ["MPDS", "QADS", "EMDS"],
+    active: true,
+    name: "Test",
   },
 ];
+
+/*
 
 export const isLocationCheckedOut = () => {
   //check if item is checked out
@@ -45,5 +53,6 @@ export const isUserDataSubmitter = (row, dataTableName) => {
       return false;
   }
 };
+*/
 
 export default MockPermissions;

@@ -5,7 +5,6 @@ import SubmissionModal from "../SubmissionModal/SubmissionModal";
 import ReviewAndSubmitTables from "./ReviewAndSubmitTables/ReviewAndSubmitTables";
 import MockPermissions from "./MockPermissions";
 
-
 const ReviewAndSubmit = () => {
   const [excludeErrors, setExcludeErrors] = useState(true);
 
@@ -18,7 +17,7 @@ const ReviewAndSubmit = () => {
     const permissions = MockPermissions;
     for (const p of permissions) {
       idToPermissionsMap[p.id] = p.permissions;
-    }//eslint-disable-next-line react-hooks/exhaustive-deps
+    } //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const closeModal = () => {
@@ -30,6 +29,7 @@ const ReviewAndSubmit = () => {
   };
 
   const applyFilter = async (orisCodes, monPlanIds, submissionPeriods) => {
+    console.log("Hello World");
     let monPlanData = (await getMonitoringPlans(orisCodes, monPlanIds)).data;
     monPlanData = monPlanData.filter((mpd) => mpd.active);
 
@@ -64,7 +64,6 @@ const ReviewAndSubmit = () => {
           selectedMonPlansRef={selectedMonPlansRef}
         />
       )}
-
       {showModal && (
         <SubmissionModal
           show={showModal}
