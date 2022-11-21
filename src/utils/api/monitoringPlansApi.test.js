@@ -2,7 +2,7 @@ import * as mpApi from "./monitoringPlansApi";
 const axios = require("axios");
 jest.mock("axios");
 
-const selectedFacilityOrisCode = "3";
+const selectedFacilityOrisCode = 3;
 const mockData = [{}];
 
 const monitoringLocationId = 56;

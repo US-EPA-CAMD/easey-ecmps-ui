@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+
 import {
   getQATestSummary,
   updateQALinearityTestSummary,
@@ -6,8 +7,6 @@ import {
   createQATestData,
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { getTestSummary } from "../../../utils/selectors/QACert/TestSummary.js";
-// import QARataDataExpandableRows from "../QARataDataExpandableRows/QARataDataExpandableRows.js";
-// import QALinearitySummaryExpandableRows from "../QALinearitySummaryExpandableRows/QALinearitySummaryExpandableRows.js";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
@@ -19,6 +18,7 @@ import {
   qaFuelFlowToLoadProps,
   qaFuelFlowToLoadBaselineProps,
   qaFlowToLoadCheckProps,
+  qaOnOffCalibrationProps,
   qaCalibrationInjectionProps
 } from "../../../additional-functions/qa-dataTable-props";
 import {
@@ -40,6 +40,7 @@ import * as dmApi from "../../../utils/api/dataManagementApi";
 import { organizePrefilterMDMData } from "../../../additional-functions/retrieve-dropdown-api";
 
 import QAExpandableRowsRender from "../QAExpandableRowsRender/QAExpandableRowsRender";
+import { returnsFocusDatatableViewBTN } from "../../../additional-functions/ensure-508.js";
 
 // contains test summary data table
 
@@ -62,6 +63,8 @@ const QATestSummaryDataTable = ({
   const [dataPulled, setDataPulled] = useState([]);
   const [show, setShow] = useState(showModal);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [clickedRow, setClickedRow] = useState(null);
+  const [clickedIndex, setClickedIndex] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
@@ -298,7 +301,7 @@ const QATestSummaryDataTable = ({
     // setDataLoaded(true);
   };
   // Executed when "View" action is clicked
-  const openModal = (row, bool, create) => {
+  const openModal = (row, bool, create, index) => {
     let selectedData = null;
     setCreateNewData(create);
     if (dataPulled.length > 0 && !create) {
@@ -374,6 +377,9 @@ const QATestSummaryDataTable = ({
     );
     setSelectedModalData(modalData);
 
+    setClickedRow(row)
+    setClickedIndex(index)
+
     setShow(true);
     setTimeout(() => {
       attachChangeEventListeners(".modalUserInput");
@@ -394,6 +400,7 @@ const QATestSummaryDataTable = ({
     // setReturnedFocusToLast(false);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
+    returnsFocusDatatableViewBTN(dataTableName, clickedRow, clickedIndex)
   };
 
   const onRemoveHandler = async (row) => {
@@ -606,6 +613,23 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
+      case "OLOLCAL": // Online Offline Calibration
+        const onOffCalProps = qaOnOffCalibrationProps();
+        return (
+          <QAExpandableRowsRender
+            payload={onOffCalProps["payload"]}
+            dropdownArray={onOffCalProps["dropdownArray"]}
+            mdmProps={onOffCalProps["mdmProps"]}
+            columns={onOffCalProps["columnNames"]}
+            controlInputs={onOffCalProps["controlInputs"]}
+            controlDatePickerInputs={onOffCalProps["controlDatePickerInputs"]}
+            dataTableName={onOffCalProps["dataTableName"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            isCheckedOut={isCheckedOut}
+          />
+        );
       case "CALINJ":
         const cjProps = qaCalibrationInjectionProps();
         return (
@@ -616,6 +640,7 @@ const QATestSummaryDataTable = ({
             columns={cjProps["columnNames"]}
             controlInputs={cjProps["controlInputs"]}
             controlDatePickerInputs={cjProps["controlDatePickerInputs"]}
+            radioBtnPayload={cjProps["radioBtnPayload"]}
             dataTableName={cjProps["dataTableName"]}
             extraControls={cjProps["extraControls"]}
             extraIDs={null}

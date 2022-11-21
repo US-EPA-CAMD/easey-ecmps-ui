@@ -23,7 +23,8 @@ import {
   qaAppendixECorrelationSummaryHeatInputOilProps,
   qaProtocalGasProps,
   qaAppendixECorrelationSummaryHeatInputGasProps,
-  qaCalibrationInjectionProps
+  qaCalibrationInjectionProps,
+  qaOnOffCalibrationProps
 } from "../../../additional-functions/qa-dataTable-props";
 
 const mock = new MockAdapter(axios);
@@ -753,7 +754,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
     const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${idRegex}`);
     const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${idRegex}`);
-  
+
     mock.onGet(getUrl).reply(200, appendixECorrTestSumData)
     mock.onPost(postUrl).reply(200, 'created')
     mock.onPut(putUrl).reply(200, 'updated')
@@ -841,7 +842,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs`;
     const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${idRegex}`);
     const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${idRegex}`);
-  
+
     mock.onGet(getUrl).reply(200, appendixECorrTestRunData)
     mock.onPost(postUrl).reply(200, 'created')
     mock.onPut(putUrl).reply(200, 'updated')
@@ -913,15 +914,15 @@ describe('Test cases for QAExpandableRowsRender', () => {
     const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases`;
     const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases/${idRegex}`);
     const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases/${idRegex}`);
-  
+
     mock.onGet(getUrl).reply(200, appendixECorrelationSummaryHeatInputGasData)
     mock.onPost(postUrl).reply(200, 'created')
     mock.onPut(putUrl).reply(200, 'updated')
     mock.onDelete(deleteUrl).reply(200, 'deleted')
 
     mock.onGet(`https://api.epa.gov/easey/dev/qa-certification-mgmt/locations/${locId}/test-summary/${testSumId}`)
-    .reply(200,[{"id":"L3FY866-950F544520244336B5ED7E3824642F9E","locationId":"2286","stackPipeId":null,"unitId":"1","testTypeCode":"APPE","monitoringSystemID":"400","componentID":null,"spanScaleCode":null,"testNumber":"01NOX2021-2","testReasonCode":"QA","testDescription":null,"testResultCode":null,"calculatedTestResultCode":null,"beginDate":"2021-02-05","beginHour":8,"beginMinute":0,"endDate":"2021-02-05","endHour":15,"endMinute":26,"gracePeriodIndicator":null,"calculatedGracePeriodIndicator":null,"year":null,"quarter":null,"testComment":null,"injectionProtocolCode":null,"calculatedSpanValue":null,"evalStatusCode":"EVAL","userId":"rboehme-dp","addDate":"4/7/2021, 7:34:01 AM","updateDate":"11/9/2022, 3:05:01 PM","reportPeriodId":null}]);
-    
+      .reply(200, [{ "id": "L3FY866-950F544520244336B5ED7E3824642F9E", "locationId": "2286", "stackPipeId": null, "unitId": "1", "testTypeCode": "APPE", "monitoringSystemID": "400", "componentID": null, "spanScaleCode": null, "testNumber": "01NOX2021-2", "testReasonCode": "QA", "testDescription": null, "testResultCode": null, "calculatedTestResultCode": null, "beginDate": "2021-02-05", "beginHour": 8, "beginMinute": 0, "endDate": "2021-02-05", "endHour": 15, "endMinute": 26, "gracePeriodIndicator": null, "calculatedGracePeriodIndicator": null, "year": null, "quarter": null, "testComment": null, "injectionProtocolCode": null, "calculatedSpanValue": null, "evalStatusCode": "EVAL", "userId": "rboehme-dp", "addDate": "4/7/2021, 7:34:01 AM", "updateDate": "11/9/2022, 3:05:01 PM", "reportPeriodId": null }]);
+
 
     const props = qaAppendixECorrelationSummaryHeatInputGasProps()
     const idArray = [locId, testSumId, appECorrTestSumId, appECorrTestRunId, id]
@@ -1040,7 +1041,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     userEvent.click(confirmBtns[1])
   })
 
-  test('renders cycle injection data rows and create/save/delete', async () => {
+  test('renders calibration injection data rows and create/save/delete', async () => {
     const cycleInjectionData = [
       {
         "id": "string",
@@ -1101,26 +1102,137 @@ describe('Test cases for QAExpandableRowsRender', () => {
     expect(rows).toHaveLength(cycleInjectionData.length);
 
     // add row
-    // const addBtn = screen.getByRole('button', { name: /Add/i })
-    // userEvent.click(addBtn)
-    // let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-    // userEvent.click(saveAndCloseBtn)
-    // setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+    const addBtn = screen.getByRole('button', { name: /Add/i })
+    userEvent.click(addBtn)
+    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // // edit row
-    // const editBtns = screen.getAllByRole('button', { name: /Edit/i })
-    // expect(editBtns).toHaveLength(fuelFlowToLoadBaselineData.length)
-    // userEvent.click(editBtns[0])
-    // saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-    // userEvent.click(saveAndCloseBtn)
-    // setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    expect(editBtns).toHaveLength(cycleInjectionData.length)
+    userEvent.click(editBtns[0])
+    saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
-    // const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
-    // expect(deleteBtns).toHaveLength(fuelFlowToLoadBaselineData.length)
-    // const secondDeleteBtn = deleteBtns[1]
-    // userEvent.click(secondDeleteBtn)
-    // const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
-    // userEvent.click(confirmBtns[1])
+    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    expect(deleteBtns).toHaveLength(cycleInjectionData.length)
+    const secondDeleteBtn = deleteBtns[1]
+    userEvent.click(secondDeleteBtn)
+    const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    userEvent.click(confirmBtns[1])
+  })
+
+  test('renders Online Offline Calibration data rows and create/save/delete', async () => {
+    const onlineOfflineCalibrationData = [
+      {
+        "id": "id1",
+        "testSumId": "testSumId",
+        "userId": "string",
+        "addDate": "string",
+        "updateDate": "string",
+        "onlineZeroInjectionDate": "string",
+        "onlineZeroInjectionHour": 0,
+        "onlineZeroCalibrationError": 0,
+        "onlineZeroAPSIndicator": 0,
+        "onlineZeroMeasuredValue": 0,
+        "onlineZeroReferenceValue": 0,
+        "onlineUpscaleCalibrationError": 0,
+        "onlineUpscaleAPSIndicator": 0,
+        "onlineUpscaleInjectionDate": "string",
+        "onlineUpscaleInjectionHour": 0,
+        "onlineUpscaleMeasuredValue": 0,
+        "onlineUpscaleReferenceValue": 0,
+        "offlineZeroCalibrationError": 0,
+        "offlineZeroAPSIndicator": 0,
+        "offlineZeroInjectionDate": "string",
+        "offlineZeroInjectionHour": 0,
+        "offlineZeroMeasuredValue": 0,
+        "offlineZeroReferenceValue": 0,
+        "offlineUpscaleCalibrationError": 0,
+        "offlineUpscaleAPSIndicator": 0,
+        "offlineUpscaleInjectionDate": "string",
+        "offlineUpscaleInjectionHour": 0,
+        "offlineUpscaleMeasuredValue": 0,
+        "offlineUpscaleReferenceValue": 0,
+        "upscaleGasLevelCode": "string"
+      },
+      {
+        "id": "id2",
+        "testSumId": "testSumId",
+        "userId": "string",
+        "addDate": "string",
+        "updateDate": "string",
+        "onlineZeroInjectionDate": "string",
+        "onlineZeroInjectionHour": 0,
+        "onlineZeroCalibrationError": 0,
+        "onlineZeroAPSIndicator": 0,
+        "onlineZeroMeasuredValue": 0,
+        "onlineZeroReferenceValue": 0,
+        "onlineUpscaleCalibrationError": 0,
+        "onlineUpscaleAPSIndicator": 0,
+        "onlineUpscaleInjectionDate": "string",
+        "onlineUpscaleInjectionHour": 0,
+        "onlineUpscaleMeasuredValue": 0,
+        "onlineUpscaleReferenceValue": 0,
+        "offlineZeroCalibrationError": 0,
+        "offlineZeroAPSIndicator": 0,
+        "offlineZeroInjectionDate": "string",
+        "offlineZeroInjectionHour": 0,
+        "offlineZeroMeasuredValue": 0,
+        "offlineZeroReferenceValue": 0,
+        "offlineUpscaleCalibrationError": 0,
+        "offlineUpscaleAPSIndicator": 0,
+        "offlineUpscaleInjectionDate": "string",
+        "offlineUpscaleInjectionHour": 0,
+        "offlineUpscaleMeasuredValue": 0,
+        "offlineUpscaleReferenceValue": 0,
+        "upscaleGasLevelCode": "string"
+      }
+    ]
+
+    const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/online-offline-calibration`;
+    const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/online-offline-calibration`;
+    const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/online-offline-calibration/${idRegex}`);
+    const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/online-offline-calibration/${idRegex}`);
+
+    mock.onGet(getUrl).reply(200, onlineOfflineCalibrationData)
+    mock.onPost(postUrl).reply(200, 'created')
+    mock.onPut(putUrl).reply(200, 'updated')
+    mock.onDelete(deleteUrl).reply(200, 'deleted')
+
+    const props = qaOnOffCalibrationProps()
+    const idArray = [locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId, id]
+    const data = { locationId: locId, id: testSumId }
+    renderComponent(props, idArray, data);
+
+    // renders rows
+    const rows = await screen.findAllByRole('row')
+    expect(mock.history.get.length).not.toBe(0)
+    expect(rows).toHaveLength(onlineOfflineCalibrationData.length)
+
+    // add row
+    const addBtn = screen.getByRole('button', { name: /Add/i })
+    userEvent.click(addBtn)
+    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+
+    // edit row
+    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    expect(editBtns).toHaveLength(onlineOfflineCalibrationData.length)
+    userEvent.click(editBtns[0])
+    saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+
+    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    expect(deleteBtns).toHaveLength(onlineOfflineCalibrationData.length)
+    const secondDeleteBtn = deleteBtns[1]
+    userEvent.click(secondDeleteBtn)
+    const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    userEvent.click(confirmBtns[1])
   })
 })
 

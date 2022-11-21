@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   Checkbox,
@@ -45,6 +46,9 @@ import {
 import { getUser } from "../../utils/functions";
 import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
 import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
+import { setIsViewDataLoaded, setReportingPeriods, setViewData, setViewDataColumns, setViewTemplateSelection, setViewTemplateSelectionAction } from "../../store/actions/dynamicFacilityTab";
+import { handleError } from "../../utils/api/apiUtils";
+import { displayAppError, hideAppError } from "../../additional-functions/app-error";
 
 // Helper function that generates an array of years from this year until the year specified in min param
 export const generateArrayOfYears = (min) => {
@@ -77,10 +81,6 @@ export const HeaderInfo = ({
   orisCode,
   user,
   setRevertedState,
-  viewTemplateSelect,
-  setViewTemplateSelect,
-  selectedReportingPeriods,
-  setSelectedReportingPeriods,
   //redux sets
   setCheckout,
   setInactive,
@@ -118,6 +118,12 @@ export const HeaderInfo = ({
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
+  const unitIds  = selectedConfig?.unitStackConfigurations.map(config => config.unitId);
+  const stackPipeIds = selectedConfig?.unitStackConfigurations.map(config => config.stackPipeId);
+
+  const dispatch = useDispatch();
+  const currentTab = useSelector(state=>state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(t=>t.selectedConfig.id===configID));
+
   const [checkedOutConfigs, setCheckedOutConfigs] = useState([]);
   const [auditInformation, setAuditInformation] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -165,7 +171,15 @@ export const HeaderInfo = ({
   const [showEmissionsImportTypeModal, setShowEmissionsImportTypeModal] = useState(false);
   const [showHistoricalDataImportModal, setShowHistoricalDataImportModal] = useState(false);
 
-  const reportingPeriods = useMemo(
+  const [selectedReportingPeriods, setSelectedReportingPeriods] = useState(currentTab?.reportingPeriods ?? []);
+
+  const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
+
+  const MAX_REPORTING_PERIODS = 4;
+  const MAX_REPORTING_PERIODS_ERROR_MSG = "You can only select a maximum of four reporting periods";
+
+  
+  let reportingPeriods = useMemo(
     () =>
       getReportingPeriods().map((reportingPeriod) => {
         return {
@@ -177,6 +191,16 @@ export const HeaderInfo = ({
       }),
     []
   );
+
+  // Sets the value in redux
+  const dispatchViewTemplateSelect = (selectedViewTemplate)=>{
+    dispatch(setViewTemplateSelectionAction(selectedViewTemplate, currentTab.name, EMISSIONS_STORE_NAME));
+  }
+
+  useEffect(()=>{
+    if(currentTab?.viewTemplateSelect)
+      setViewTemplateSelect(currentTab.viewTemplateSelect)
+  }, [currentTab])
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
@@ -210,9 +234,13 @@ export const HeaderInfo = ({
 
     getViews().then(({ data }) => {
       setViewTemplates(data);
-      if (data?.length > 0) setViewTemplateSelect(data[0]);
+      if (!currentTab?.viewTemplateSelect && data?.length > 0){
+
+        setViewTemplateSelect(data[0]);
+      } 
     });
   }, [workspaceSection, setViewTemplateSelect]);
+
 
   const executeOnClose = () => {
     setShowCommentsModal(false);
@@ -711,8 +739,20 @@ export const HeaderInfo = ({
   };
 
   const handleSelectReportingPeriod = (id, updateType) => {
+    const uniqueReportingPeriods = [...new Set([...selectedReportingPeriods, id])];
+    
+    hideAppError();
+    if(uniqueReportingPeriods.length > MAX_REPORTING_PERIODS){
+      displayAppError(MAX_REPORTING_PERIODS_ERROR_MSG)
+      const addedRp = reportingPeriods.find(rp=> rp.id === id);
+      addedRp.selected=false;
+      reportingPeriods = [...reportingPeriods]
+      return;
+    }
+
     if (updateType === "add") {
-      setSelectedReportingPeriods([...selectedReportingPeriods, id]);
+      setSelectedReportingPeriods(uniqueReportingPeriods);
+      dispatch(setReportingPeriods(uniqueReportingPeriods, currentTab.name, workspaceSection));
     } else if (updateType === "remove") {
       const selected = reportingPeriods
         .filter((reportingPeriod) => {
@@ -723,6 +763,7 @@ export const HeaderInfo = ({
         });
 
       setSelectedReportingPeriods(selected);
+      dispatch(setReportingPeriods(selected, currentTab.name, workspaceSection));
     }
   };
 
@@ -743,6 +784,54 @@ export const HeaderInfo = ({
 
     setShowEmissionsImportTypeModal(false)
   }
+
+  const applyFilters = async ( monitorPlanId, unitIds, stackPipeIds) => {
+   
+      dispatch(setIsViewDataLoaded(false, currentTab.name, workspaceSection));
+      const response = await emApi.getEmissionViewData(
+        viewTemplateSelect?.code,
+        monitorPlanId,
+        selectedReportingPeriods,
+        unitIds,
+        stackPipeIds
+      );
+  
+      if (
+        response &&
+        response.status === 200 &&
+        response.headers["x-field-mappings"] &&
+        response.data
+      ) {
+        const columns = JSON.parse(response.headers["x-field-mappings"]);
+        const results = response.data;
+  
+        const names = columns.map((column) => column.label);
+  
+        const formattedResults = [];
+        for (const result of results) {
+          let id = 1;
+          const formattedObject = {};
+          for (const resultKey in result) {
+            formattedObject[`col${id}`] = result[resultKey];
+            id += 1;
+          }
+          formattedResults.push(formattedObject);
+        }
+  
+        dispatch(setViewTemplateSelectionAction(viewTemplateSelect, currentTab.name, EMISSIONS_STORE_NAME));
+        dispatch(setViewDataColumns(names, currentTab.name, workspaceSection))
+        dispatch(setViewData(formattedResults, currentTab.name, workspaceSection))
+        dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection))
+
+  
+      } else {
+        dispatch(setViewTemplateSelectionAction(viewTemplateSelect, currentTab.name, EMISSIONS_STORE_NAME));
+        dispatch(setViewDataColumns([], currentTab.name, workspaceSection))
+        dispatch(setViewData([], currentTab.name, workspaceSection))
+        dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection))
+      }
+  };
+
 
   return (
     <div className="header">
@@ -1012,8 +1101,10 @@ export const HeaderInfo = ({
                       name={"viewtemplate"}
                       epa-testid={"viewtemplate"}
                       data-testid={"viewtemplate"}
-                      value={viewTemplateSelect}
-                      onChange={(e) => setViewTemplateSelect(e.target.value)}
+                      value={viewTemplateSelect?.name}
+                      onChange={(e) =>{
+                        setViewTemplateSelect(viewTemplates.find(v=>v.name === e.target.value))}
+                      } 
                       className="maxw-mobile"
                     >
                       {viewTemplates?.map((view) => (
@@ -1044,7 +1135,7 @@ export const HeaderInfo = ({
                     type="button"
                     title="Apply Filter(s)"
                     className="cursor-pointer text-no-wrap apply-filter-position"
-                    onClick={() => null}
+                    onClick={()=>applyFilters(configID, unitIds, stackPipeIds).catch(handleError)}
                   >
                     {"Apply Filter(s)"}
                   </Button>

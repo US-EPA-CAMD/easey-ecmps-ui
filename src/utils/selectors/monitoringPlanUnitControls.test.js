@@ -44,7 +44,7 @@ describe("testing unit controls data selectors", () => {
         col3: "Yes",
         col4: "05/01/2006",
         col5: "05/01/2006",
-        col6: "Yes",
+        col6: "No",
         col7: "05/01/2006",
         col8: "15829",
       },

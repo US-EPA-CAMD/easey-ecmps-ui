@@ -1,12 +1,6 @@
 import React from "react";
-import {
-  cleanup,
-  fireEvent,
-  render,
-  within,
-  screen,
-} from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { cleanup, fireEvent, render, within } from "@testing-library/react";
+
 import MultiSelectCombobox from "./MultiSelectCombobox";
 
 const facilities = [
@@ -315,8 +309,8 @@ describe("MultiSelectCombobox Component", () => {
   afterEach(cleanup);
 
   it("renders all roles that make up the multi-select-combobox and populates items in drowpdown list", () => {
-    const { getByTestId } = query;
-    const searchbox = getByTestId("Facility-input-search");
+    const { getByTestId, getAllByTestId } = query;
+    const searchbox = getByTestId("input-search");
     expect(searchbox).toBeInTheDocument();
     searchbox.focus();
     searchbox.click();
@@ -329,20 +323,30 @@ describe("MultiSelectCombobox Component", () => {
 
   it("handles click event of listbox option", () => {
     const { getByTestId, getAllByTestId } = query;
-    getByTestId("Facility-input-search").click();
+    getByTestId("input-search").click();
     const options = getAllByTestId("multi-select-option");
     fireEvent.click(options[0]);
     fireEvent.click(options[1]);
     expect(getAllByTestId("button").length).toBe(2);
   });
 
-  test("It should search using input box for facilities in listbox", async () => {
-    const { getByTestId } = query;
-    const searchbox = getByTestId("Facility-input-search");
-    await userEvent.type(searchbox, "Barry");
+  test("It should search using input box for facilities in listboxt", () => {
+    const { getByTestId, getAllByTestId, getByRole } = query;
+    const searchbox = getByTestId("input-search");
+    searchbox.click();
+    fireEvent.change(searchbox, { target: { value: "Barry" } });
+    expect(searchbox.value).toBe("Barry");
+    expect(
+      within(getByTestId("multi-select-listbox")).getAllByTestId(
+        "multi-select-option"
+      ).length
+    ).toBe(1);
     fireEvent.keyDown(searchbox, { key: "Tab", code: 9 });
     fireEvent.keyDown(searchbox, { key: "Enter", code: "Enter" });
-
-    expect(screen.getAllByText("Barry (3)").length).toBe(2);
+    expect(searchbox.value).toBe("Barry");
+    expect(getAllByTestId("multi-select-option").length).toBe(1);
+    fireEvent.click(getByTestId("multi-select-option"));
+    expect(getByRole("button", { name: "Barry (3)" })).toBeDefined();
+    //expect(getAllByTestId("multi-select-option").length).toBe(facilities.length);
   });
 });

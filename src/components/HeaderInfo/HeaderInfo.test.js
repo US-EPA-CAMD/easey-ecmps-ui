@@ -121,6 +121,7 @@ const selectedConfig = {
   updateDate: dateString,
   addDate: dateString,
   active: true,
+  unitStackConfigurations:[{unitId:1}]
 };
 
 const props = {

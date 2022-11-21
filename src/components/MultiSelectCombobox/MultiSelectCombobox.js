@@ -1,9 +1,13 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Alert, Label } from "@trussworks/react-uswds";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { Label } from "@trussworks/react-uswds";
 import PillButton from "../PillButton/PillButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faCheck } from "@fortawesome/free-solid-svg-icons";
 import "./MultiSelectCombobox.scss";
+
+const getComboboxEnabledItems = (arr) => {
+  return arr.filter((e) => e.enabled);
+};
 
 const MultiSelectCombobox = ({
   items,
@@ -11,26 +15,31 @@ const MultiSelectCombobox = ({
   entity,
   onChangeUpdate,
   searchBy,
+  hideInput,
+  styling,
+  autoFocus,
+  iconAlignRight = 1,
 }) => {
   const [filter, setFilter] = useState("");
-  const [_items, _setItems] = useState(items.filter((e) => e.enabled));
+  const [_items, _setItems] = useState(getComboboxEnabledItems(items));
   const [data, setData] = useState(
-    JSON.parse(JSON.stringify(items.filter((e) => e.enabled)))
+    JSON.parse(JSON.stringify(getComboboxEnabledItems(items)))
   );
   const [showListBox, setShowListBox] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
-  const [validationError, setValidationError] = useState(null);
+
   const selectedItemsRef = useRef(selectedItems);
-  const inputRef = useRef(null);
-  const [stillMounted, setStillMounted] = useState(true);
 
-  useEffect(() => {
-    populateSelectedItems();
-    return () => setStillMounted(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleMultiSelectClick = (e) => {
+    const multiSelectComboboxDiv = document.getElementById(
+      `multi-select-combobox-${entity}`
+    );
+    if (multiSelectComboboxDiv && !multiSelectComboboxDiv.contains(e.target)) {
+      setShowListBox(false);
+    }
+  };
 
-  const onSearchHandler = (value) => {
+  const onSearchHanlder = (value) => {
     const lowercasedFilter = value.toLowerCase();
     let filteredData = _items;
     if (value.length > 0) {
@@ -49,37 +58,42 @@ const MultiSelectCombobox = ({
     setShowListBox(true);
   };
 
-  const onRemoveHanlder = (id) => {
-    const itemsCopy = [...selectedItemsRef.current];
-    const index = itemsCopy.findIndex((i) => i.id.toString() === id.toString());
-    if (index > -1) {
-      itemsCopy.splice(index, 1);
-      selectedItemsRef.current = itemsCopy;
-      setSelectedItems(itemsCopy);
-      updateListDataOnChange(id, "remove");
-      onChangeUpdate(id, "remove");
-    }
-  };
+  const updateListDataOnChange = useCallback(
+    (id, update) => {
+      const _itemsCopy = [..._items];
+      const index = _itemsCopy.findIndex(
+        (d) => d.id.toString() === id.toString()
+      );
+      if (index > -1) {
+        _itemsCopy[index].selected = update === "add";
+      }
+      _setItems([..._itemsCopy]);
+      setData([..._itemsCopy]);
+    },
+    [_items]
+  );
 
-  const updateListDataOnChange = (id, update) => {
-    const _itemsCopy = [..._items];
-    const index = _itemsCopy.findIndex(
-      (d) => d.id.toString() === id.toString()
-    );
-    if (index > -1) {
-      update === "add"
-        ? (_itemsCopy[index].selected = true)
-        : (_itemsCopy[index].selected = false);
-    }
-    _setItems([..._itemsCopy]);
-    setData([..._itemsCopy]);
-  };
+  const onRemoveHanlder = useCallback(
+    (id) => {
+      const itemsCopy = [...selectedItemsRef.current];
+      const index = itemsCopy.findIndex(
+        (i) => i.id.toString() === id.toString()
+      );
+      if (index > -1) {
+        itemsCopy.splice(index, 1);
+        selectedItemsRef.current = itemsCopy;
+        setSelectedItems(itemsCopy);
+        updateListDataOnChange(id, "remove");
+        onChangeUpdate(id, "remove");
+      }
+    },
+    [selectedItemsRef, onChangeUpdate, updateListDataOnChange]
+  );
 
   const optionClickHandler = (e) => {
     if (e.target.getAttribute("data-id") === null) {
       return;
     }
-    validationError && setValidationError(null);
     const id = e.target.getAttribute("data-id");
     const optionLabel = e.target.getAttribute("data-label");
     if (!selectedItems.find((s) => s.id.toString() === id.toString())) {
@@ -99,46 +113,36 @@ const MultiSelectCombobox = ({
         },
       ];
       selectedItemsRef.current = _selectedItems;
-      onSearchHandler("");
+      onSearchHanlder("");
       setSelectedItems(_selectedItems);
       updateListDataOnChange(id, "add");
       onChangeUpdate(id, "add");
     }
   };
 
-  const populateSelectedItems = () => {
+  const populateSelectedItems = useCallback(() => {
     const selection = items.filter((i) => i.selected);
     const _selectedItems = [];
     for (const s of selection) {
-      if (stillMounted) {
-        _selectedItems.push({
-          id: s.id,
-          component: (
-            <PillButton
-              key={s.id}
-              index={s.id}
-              label={s.label}
-              onRemove={onRemoveHanlder}
-              disableButton={true}
-            />
-          ),
-        });
-      } else {
-        break;
-      }
-    }
-    if (!stillMounted) {
-      return;
+      _selectedItems.push({
+        id: s.id,
+        component: (
+          <PillButton
+            key={s.id}
+            index={s.id}
+            label={s.label}
+            onRemove={onRemoveHanlder}
+            disableButton={true}
+          />
+        ),
+      });
     }
     selectedItemsRef.current = _selectedItems;
     setSelectedItems(_selectedItems);
-  };
+  }, [items, onRemoveHanlder]);
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      //** allows pipe delimited list */
-      selectItemsFromPipeSeparatedList();
-
       if (!showListBox) {
         setShowListBox(true);
       } else {
@@ -152,144 +156,65 @@ const MultiSelectCombobox = ({
       }
     }
   };
-  const selectItemsFromPipeSeparatedList = () => {
-    validationError && setValidationError(null);
-    const searchValueArray = inputRef.current.value
-        .toLowerCase()
-        .split("|")
-        .map((el) => el.trim())
-        .filter((el) => el !== "" && el !== " "),
-      searchValueObj = searchValueArray.reduce(
-        (acc, curr) => ({ ...acc, [curr]: true }),
-        {}
-      ),
-      filteredItems = [],
-      itemsCopy = [..._items],
-      invalidEntries = [];
-    itemsCopy.forEach((item) => {
-      const { label, id } = item;
-      const name = label.split("(")[0].slice(0, -1).toLowerCase();
-      if (searchValueObj[id] || searchValueObj[name]) {
-        item.selected = true;
-        filteredItems.push(item);
-        if (searchValueObj[id]) {
-          searchValueObj[id] = "valid";
-        }
-        if (searchValueObj[label.toLowerCase()]) {
-          searchValueObj[label.toLowerCase()] = "valid";
-        }
-        if (searchValueObj[name]) {
-          searchValueObj[name] = "valid";
-        }
-      }
-    });
-    if (searchValueArray.length !== filteredItems.length) {
-      searchValueArray.forEach((el) => {
-        if (searchValueObj[el] !== "valid") {
-          invalidEntries.push(el);
-        }
-      });
-    }
-    if (searchValueArray.length > 1 || filteredItems.length) {
-      _setItems([...itemsCopy]);
-      if (!filteredItems.length) {
-        setValidationError("No Items Matched your search. Please try again");
-        return;
-      }
-      setData([...itemsCopy]);
-      const _selectedItems = [];
-      filteredItems.forEach((item) => {
-        const { label, id } = item;
-        const itemComponent = {
-          id,
-          component: (
-            <PillButton
-              key={id}
-              index={id}
-              label={label}
-              onRemove={onRemoveHanlder}
-              disableButton={true}
-            />
-          ),
-        };
-        if (!selectedItems.find((s) => s.id.toString() === id.toString())) {
-          _selectedItems.push(itemComponent);
-        }
-        updateListDataOnChange(id, "add");
-        onChangeUpdate(id, "add");
-      });
-      const updatedSelectedItems = [...selectedItems, ..._selectedItems];
-      onSearchHandler("");
-      if (_selectedItems.length) {
-        selectedItemsRef.current = updatedSelectedItems;
-        setSelectedItems(updatedSelectedItems);
-      }
-      if (invalidEntries.length) {
-        let entries = "";
-        invalidEntries.forEach((entry, i) => {
-          if (i === 0) {
-            entries += `"${entry}"`;
-          } else if (i !== invalidEntries.length - 1) {
-            entries += `, "${entry}"`;
-          } else {
-            entries += `, and "${entry}"`;
-          }
-        });
-        setValidationError(
-          `Your search for ${entries} returned no results. Please try again.`
-        );
-      }
-    }
-  };
+
+  useEffect(() => {
+    populateSelectedItems();
+  }, [populateSelectedItems]);
+
+  useEffect(() => {
+    window.addEventListener("click", handleMultiSelectClick);
+    return () => {
+      window.removeEventListener("click", handleMultiSelectClick);
+    };
+  });
 
   return (
     <>
-      {validationError ? (
-        <Alert role="alert" type="info">
-          {validationError}
-        </Alert>
-      ) : null}
       <Label id={`${entity}-label`} htmlFor={`${entity}-searchbox`}>
         {label}
       </Label>
       <div
         role="combobox"
         name={entity}
-        aria-haspopup="listbox"
+        aria-haspopup={`listbox`}
         aria-controls={`${entity}-searchbox`}
         aria-expanded={showListBox}
         aria-owns={`${entity}-listbox`}
-        id={`${entity}-multi-select-combobox`}
-        className="margin-top-1 margin-bottom-2 border-1px bg-white"
+        id={`multi-select-combobox-${entity}`}
+        className={
+          styling?.combobox ||
+          "margin-top-1 margin-bottom-2 border-1px bg-white multi-select-combobox"
+        }
       >
         <div className="margin-x-05 margin-top-05 display-block maxh-card overflow-y-scroll">
           {selectedItems.length > 0 && selectedItems.map((i) => i.component)}
         </div>
-        <input
-          id={`${entity}-searchbox`}
-          ref={inputRef}
-          type="text"
-          aria-labelledby={`${entity}-label`}
-          autoComplete="off"
-          aria-autocomplete="list"
-          aria-controls={`${entity}-listbox`}
-          aria-activedescendant={`${entity}-listbox`}
-          className="search position-static bg-white border-0 width-full height-4 padding-x-1"
-          data-testid={`${entity}-input-search`}
-          value={filter}
-          onChange={(e) => onSearchHandler(e.target.value)}
-          onClick={() => setShowListBox(true)}
-          onKeyDown={(e) => handleKeyDown(e)}
-          onBlur={selectItemsFromPipeSeparatedList}
-        />
-
-        <FontAwesomeIcon
-          icon={faCaretDown}
-          className="pin-right margin-right-4 padding-top-05"
-          onClick={() => setShowListBox(true)}
-        />
-
-        {showListBox && (
+        {hideInput ? null : (
+          <>
+            <input
+              autoFocus={autoFocus}
+              id={`${entity}-searchbox`}
+              type="text"
+              aria-labelledby={`${entity}-label`}
+              autoComplete="off"
+              aria-autocomplete="list"
+              aria-controls={`${entity}-listbox`}
+              aria-activedescendant={`${entity}-listbox`}
+              className="search position-static bg-white border-0 width-full height-4 padding-x-1"
+              data-testid="input-search"
+              value={filter}
+              onChange={(e) => onSearchHanlder(e.target.value)}
+              onClick={() => setShowListBox(true)}
+              onKeyDown={(e) => handleKeyDown(e)}
+            />
+            <FontAwesomeIcon
+              icon={faCaretDown}
+              className={`pin-right margin-right-${iconAlignRight} padding-top-05`}
+              onClick={() => setShowListBox(true)}
+            />
+          </>
+        )}
+        {showListBox || hideInput ? (
           <ul
             aria-multiselectable="true"
             role="listbox"
@@ -297,7 +222,10 @@ const MultiSelectCombobox = ({
             id={`${entity}-listbox`}
             data-testid="multi-select-listbox"
             tabIndex="-1"
-            className="list-box bg-white display-block height-mobile width-full overflow-y-scroll overflow-x-hidden border-top padding-x-0"
+            className={
+              styling?.listbox ||
+              "list-box bg-white display-block height-15 width-full overflow-y-scroll overflow-x-hidden border-top"
+            }
           >
             {data.length > 0 ? (
               data.map((item, i) => (
@@ -335,19 +263,8 @@ const MultiSelectCombobox = ({
               </span>
             )}
           </ul>
-        )}
+        ) : null}
       </div>
-      {window.addEventListener("click", function (e) {
-        const multiSelectComboboxDiv = document.getElementById(
-          `${entity}-multi-select-combobox`
-        );
-        if (
-          multiSelectComboboxDiv &&
-          !multiSelectComboboxDiv.contains(e.target)
-        ) {
-          setShowListBox(false);
-        }
-      })}
     </>
   );
 };

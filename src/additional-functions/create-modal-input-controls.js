@@ -178,10 +178,10 @@ export const modalViewData = (
               createNew
                 ? ""
                 : selected
-                ? selected[y] === 0
-                  ? "0"
-                  : selected[y]
-                : "",
+                  ? selected[y] === 0
+                    ? "0"
+                    : selected[y]
+                  : "",
               inputs[y][2] === "required" ? "required" : false,
               "input",
             ]);
@@ -208,6 +208,7 @@ export const modalViewData = (
             arr.push(["", "", "", "", "skip"]);
             break;
           case "radio":
+            const curInputOptions = inputs[y][4]
             if (selected) {
               arr.push([
                 y,
@@ -216,6 +217,14 @@ export const modalViewData = (
                 inputs[y][2] === "required" ? "required" : false,
                 "radio",
               ]);
+            } else if (curInputOptions) {
+              arr.push([
+                y,
+                inputs[y][0],
+                parseInt(curInputOptions.defaultValue),
+                inputs[y][2] === "required" ? "required" : false,
+                "radio",
+              ])
             } else {
               arr.push([
                 y,
@@ -310,7 +319,7 @@ export const modalViewData = (
       //   continue;
       // }
       // dropdown time selection
-      if( y.endsWith("Hour")){
+      if (y.endsWith("Hour")) {
         arr.push([
           y,
           time[y][0],
@@ -320,7 +329,7 @@ export const modalViewData = (
           createNew ? "" : selected ? selected[y] : "",
         ]);
       }
-      if( y.endsWith("Minute")){
+      if (y.endsWith("Minute")) {
         arr.push([
           y,
           time[y][0],
