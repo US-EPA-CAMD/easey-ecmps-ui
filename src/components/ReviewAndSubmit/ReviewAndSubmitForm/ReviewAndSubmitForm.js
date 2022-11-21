@@ -103,6 +103,8 @@ const ReviewAndSubmitForm = ({
   }
 
   async function facilityFilterChange(id, action) {
+    id = id.toString();
+
     let newState;
     if (action === "add") {
       newState = [...selectedOrisCodes.current, id];
@@ -151,12 +153,6 @@ const ReviewAndSubmitForm = ({
     setAvailableConfigState(availableConfigurations.current);
   }
 
-  const comboboxStyling = {
-    combobox: 'margin-bottom-2 bg-white multi-select-combobox',
-    listbox:
-      'list-box bg-white display-block height-15 width-full overflow-y-scroll overflow-x-hidden',
-  };
-
   return (
     <div className="">
       <div className="text-black margin-top-1 display-none tablet:display-block">
@@ -197,12 +193,12 @@ const ReviewAndSubmitForm = ({
               <MultiSelectCombobox
                 key={`facilities-${availableFacilities.length}`}
                 items={availableFacilities}
-                styling={comboboxStyling}
-                hideInput={true}
                 entity={"Facilities"}
                 label={"Facilities"}
                 searchBy="label"
                 onChangeUpdate={facilityFilterChange}
+                autoFocus={false}
+                iconAlignRight={3}
               />
             </div>
           </div>
@@ -211,12 +207,12 @@ const ReviewAndSubmitForm = ({
               <MultiSelectCombobox
                 key={`configs-${availableConfigState.length}`}
                 items={availableConfigurations.current}
-                styling={comboboxStyling}
-                hideInput={true}
                 entity={"Configurations"}
                 label={"Configurations"}
                 searchBy="label"
                 onChangeUpdate={configurationFilterChange}
+                autoFocus={false}
+                iconAlignRight={3}
               />
             </div>
           </div>
@@ -225,12 +221,12 @@ const ReviewAndSubmitForm = ({
               <MultiSelectCombobox
                 key={`periods-${availableReportingPeriods.length}`}
                 items={availableReportingPeriods}
-                styling={comboboxStyling}
-                hideInput={true}
                 entity={"Reporting-Periods"}
                 label={"Reporting Periods"}
                 searchBy="label"
                 onChangeUpdate={reportingPeriodFilterChange}
+                autoFocus={false}
+                iconAlignRight={3}
               />
             </div>
           </div>

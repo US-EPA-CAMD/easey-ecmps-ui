@@ -1147,7 +1147,7 @@ export const updateAppendixECorrelationHeatInputGas = async (
   locId,
   testSumId,
   appECorrTestSumId,
-  appECorrTestRunId, 
+  appECorrTestRunId,
   id,
   payload
 ) => {
@@ -1170,7 +1170,7 @@ export const deleteAppendixECorrelationHeatInputGas = async (
   locId,
   testSumId,
   appECorrTestSumId,
-  appECorrTestRunId, 
+  appECorrTestRunId,
   id,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases/${id}`;
@@ -1224,7 +1224,7 @@ export const updateAppendixECorrelationHeatInputOil = async (
   locId,
   testSumId,
   appECorrTestSumId,
-  appECorrTestrunId, 
+  appECorrTestrunId,
   id,
   payload
 ) => {
@@ -1247,7 +1247,7 @@ export const deleteAppendixECorrelationHeatInputOil = async (
   locId,
   testSumId,
   appECorrTestSumId,
-  appECorrTestrunId, 
+  appECorrTestrunId,
   id,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils/${id}`;
@@ -1374,6 +1374,70 @@ export const deleteFlowToLoadCheckRecord = async (
   }
 };
 
+export const getOnlineOfflineCalibration = async (
+  locId,
+  testSumId
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/online-offline-calibration`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createOnlineOfflineCalibration = async (locId, testSumId, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/online-offline-calibration`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const updateOnlineOfflineCalibration = async (
+  locId,
+  testSumId,
+  id,
+  payload
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/online-offline-calibration/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const deleteOnlineOfflineCalibration = async (
+  locId,
+  testSumId,
+  id,
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/online-offline-calibration/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const getCalibrationInjectionRecords = async (
   locId,
   testSumId
@@ -1396,6 +1460,46 @@ export const createCalibrationInjectionRecord = async (
         method: "POST",
         url: url,
         data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const updateCalibrationInjectionRecord = async (
+  locId,
+  testSumId,
+  id,
+  payload
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/calibration-injections/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const deleteCalibrationInjectionRecord = async (
+  locId,
+  testSumId,
+  id,
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/calibration-injections/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
       })
     );
   } catch (error) {

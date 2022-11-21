@@ -54,7 +54,7 @@ describe("testing TestSummary data selectors", () => {
       {
         id: "3ee84634-7dc4-45c8-8eee-ca79e699893a",
         locationId: "1873",
-        stackPipeId: null,
+        stackPipeId: "",
         unitId: null,
         testTypeCode: "LINE",
 

@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@trussworks/react-uswds";
 import HeaderInfo from "../HeaderInfo/HeaderInfo";
 import "../MonitoringPlanTab/MonitoringPlanTab.scss";
 import { checkoutAPI } from "../../additional-functions/checkout";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
-import { getEmissionsTabTableRenders } from "./EmissionsTabTable";
 import "./EmissionsTabRender.scss";
 import { getEmissionViewData } from "../../utils/api/emissionsApi";
+import { DataTableRender } from "../DataTableRender/DataTableRender";
+import { useSelector } from "react-redux";
+import { EMISSIONS_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 
 export const EmissionsTabRender = ({
   title,
@@ -23,19 +25,31 @@ export const EmissionsTabRender = ({
   inactive,
   workspaceSection,
 }) => {
+  const currentTab = useSelector(state=>state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(t=>t.selectedConfig.id===configID));
+  
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
 
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
-  const [selectedReportingPeriods, setSelectedReportingPeriods] = useState([]);
-  const showTable = Boolean(
-    selectedReportingPeriods.length > 0 && viewTemplateSelect !== null
-  );
+  const [viewColumns, setViewColumns] = useState();
+  const [viewData, setViewData] = useState();
+  const [isDataLoaded, setIsDataLoaded] = useState();
+  
+  // Determines if a user has just navigated to the page without applying any filters yet
+  const isInitialLoadOfPage = currentTab?.isViewDataLoaded === undefined;
 
+  useEffect(()=>{
+
+    setViewColumns(currentTab?.viewColumns || []);
+    setViewData(currentTab?.viewData || []);
+    setIsDataLoaded(isInitialLoadOfPage ? true : currentTab?.isViewDataLoaded);
+    setViewTemplateSelect(currentTab?.viewTemplateSelect ?? null)
+  }, [currentTab])
+  
   const handleDownload = async () => {
     getEmissionViewData(
       viewTemplateSelect.code,
       configID,
-      selectedReportingPeriods,
+      currentTab.reportingPeriods,
       selectedConfig?.unitStackConfigurations.map((config) => config.unitId),
       selectedConfig?.unitStackConfigurations.map(
         (config) => config.stackPipeId
@@ -67,7 +81,7 @@ export const EmissionsTabRender = ({
   };
 
   return (
-    <div className=" padding-top-0">
+    <div className="padding-top-0">
       <div className="grid-row">
         <HeaderInfo
           facility={title}
@@ -88,39 +102,38 @@ export const EmissionsTabRender = ({
           workspaceSection={workspaceSection}
           viewTemplateSelect={viewTemplateSelect}
           setViewTemplateSelect={setViewTemplateSelect}
-          selectedReportingPeriods={selectedReportingPeriods}
-          setSelectedReportingPeriods={setSelectedReportingPeriods}
+          currentTab={currentTab}
         />
       </div>
       <hr />
-      {showTable && (
-        <Button
-          type="button"
-          title="Download to CSV"
-          className="download-button"
-          onClick={handleDownload}
-        >
-          {"Download to CSV"}
-        </Button>
-      )}
-      {showTable && (
-        <div className="grid-row overflow-x-auto">
-          <CustomAccordion
-            title={"Daily Calibration Tests"}
-            table={getEmissionsTabTableRenders(
-              viewTemplateSelect,
-              configID,
-              selectedReportingPeriods,
-              selectedConfig?.unitStackConfigurations.map(
-                (config) => config.unitId
-              ),
-              selectedConfig?.unitStackConfigurations.map(
-                (config) => config.stackPipeId
-              )
-            )}
-          ></CustomAccordion>
+      {!isInitialLoadOfPage && (
+        <div>
+          <Button
+            type="button"
+            title="Download to CSV"
+            className="download-button"
+            onClick={handleDownload}
+          >
+            {"Download to CSV"}
+          </Button>
+          <div className="grid-row overflow-x-auto">
+            <CustomAccordion
+              title={viewTemplateSelect?.name}
+              table={[
+                [
+                  <DataTableRender
+                    dataLoaded={isDataLoaded}
+                    columnNames={viewColumns}
+                    data={viewData}
+                  />,
+                  viewTemplateSelect?.name ?? "",
+                ]
+              ]
+          }
+            ></CustomAccordion>
+          </div>
         </div>
-      )}
+    )}
     </div>
   );
 };
