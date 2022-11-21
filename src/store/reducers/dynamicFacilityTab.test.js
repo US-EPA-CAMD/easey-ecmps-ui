@@ -365,9 +365,14 @@ describe("dynamicFacilityTab Reducer State checking false conditional", () => {
     it("tests action SET_REPORTING_PERIODS", ()=>{
       const action = actions.setReportingPeriods([], "Barry (1, 2, CS0AAN) ", EMISSIONS_STORE_NAME);
       const openedFacilityTabsState = dynamicFacilityTabReducer(initialState.openedFacilityTabs, action);
-      console.log("openedFacilityTabsState", openedFacilityTabsState)
       expect(openedFacilityTabsState[EMISSIONS_STORE_NAME][0].reportingPeriods).toStrictEqual([]);
     })
 
+    it("tests action SET_VIEW_TEMPLATE_SELECTION", ()=>{
+      const action = actions.setViewTemplateSelectionAction(null, "Barry (1, 2, CS0AAN) ", EMISSIONS_STORE_NAME);
+      const openedFacilityTabsState = dynamicFacilityTabReducer(initialState.openedFacilityTabs, action);
+      console.log(openedFacilityTabsState[EMISSIONS_STORE_NAME][0].viewTemplateSelect)
+      expect(openedFacilityTabsState[EMISSIONS_STORE_NAME][0].viewTemplateSelect).toEqual(null);
+    })
   })
 });
