@@ -201,7 +201,7 @@ const MultiSelectCombobox = ({
               aria-controls={`${entity}-listbox`}
               aria-activedescendant={`${entity}-listbox`}
               className="search position-static bg-white border-0 width-full height-4 padding-x-1"
-              data-testid="input-search"
+              data-testid={`${entity}-input-search`}
               value={filter}
               onChange={(e) => onSearchHanlder(e.target.value)}
               onClick={() => setShowListBox(true)}
