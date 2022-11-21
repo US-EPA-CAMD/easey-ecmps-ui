@@ -3,7 +3,7 @@ import { render, fireEvent } from '@testing-library/react';
 
 import ReviewAndSubmitTables from './ReviewAndSubmitTables';
 
-const monPlansData = [
+export const monPlansData = [
     {
         "id": "MDC-0046E2E41EE8478DA4F57A4760C3AF97",
         "facId": 3,
@@ -135,13 +135,13 @@ const monPlansData = [
         "submissionAvailabilityCode": "UPDATED",
         "lastEvaluatedDate": "2022-04-25T13:59:00.000Z"
     },]
-describe('Data preview component', () => {
+describe('Review and Submit Tables component', () => {
   let query;
   beforeEach(() => {
     query = render(<ReviewAndSubmitTables monPlans={monPlansData} />);
   });
 
-  it('renders review and submit component properly', () => {
+  it('renders tables properly', () => {
     const dataTableWrapper = query.container.querySelector('.data-display-table');
     const checkboxes = query.getAllByRole('checkbox');
     const hideTableButton = query.container.querySelector('[data-icon="chevron-up"]')

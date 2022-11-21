@@ -6,10 +6,10 @@ import './ReviewAndSubmitTables.scss';
 import { formatDate } from '../../../utils/functions';
 import ReviewAndSubmitTableRender from '../ReviewAndSubmitTableRender/ReviewAndSubmitTableRender';
 
-const monPlanColumns = [
+export const monPlanColumns = [
   { name: 'ORIS Code', selector: 'orisCode', sortable: true },
   { name: 'Facility Name', selector: 'facilityName', sortable: true },
-  { name: 'Configuration', selector: 'id', sortable: true },
+  { name: 'Configuration', selector: 'name', sortable: true },
   { name: 'Last Modified By', selector: 'userId', sortable: true },
   {
     name: 'Last Modified Date',

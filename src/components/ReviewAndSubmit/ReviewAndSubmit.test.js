@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 
 import ReviewAndSubmit from './ReviewAndSubmit';
 
-describe('Data preview component', () => {
+describe('Review and Submit component', () => {
 
   jest.mock("../../utils/api/monitoringPlansApi.js", () => ({
     getMonitoringPlans: jest.fn().mockResolvedValue({
@@ -28,7 +28,7 @@ describe('Data preview component', () => {
     expect(getByRole('textbox', {name:'Reporting Periods'})).toBeInTheDocument();
   });
 
-  it('apply button is disabled if no facilities are selected', () => {
+  it('apply button is disabled until facilities are selected', () => {
     const { getByRole, getByText } = query;
     const applyButton = getByRole('button', {name: /apply filter\(s\)/i});
     expect(applyButton).not.toBeEnabled();
@@ -38,7 +38,7 @@ describe('Data preview component', () => {
     fireEvent.click(facility1);
   });
 
-  it.only('table is not rendered until filters are applied', () =>{
+  it('table is not rendered until filters are applied', async() =>{
     const { getByRole, getByText } = query;
     const dataTableWrapper = query.container.querySelector('.data-display-table');
     const applyButton = getByRole('button', {name: /apply filter\(s\)/i});
@@ -47,10 +47,11 @@ describe('Data preview component', () => {
     fireEvent.click(facilitiesCombobox);
     const facility1 =  getByText('Barry (3)');
     fireEvent.click(facility1);
-    fireEvent.click(applyButton);
-    // const updatedDataTableWrapper = query.container.querySelector('.data-display-table');
+    await fireEvent.click(applyButton);
+    const updatedDataTableWrapper = await query.container.querySelector('.data-display-table');
+    console.log({updatedDataTableWrapper});
     // expect(updatedDataTableWrapper).toBeInTheDocument()
-    screen.debug();
+    // screen.debug();
   })
 
   it('modal appears after submit button is clicked', () => {
@@ -60,6 +61,21 @@ describe('Data preview component', () => {
     const submitButton = getByRole('button', {name: /submit/i});
     fireEvent.click(submitButton);
     const updatedModal = queryByTestId('step-indicator');
-    expect(updatedModal).toBeInTheDocument()
+    expect(updatedModal).toBeInTheDocument();
   })
+
+  it('modal closes when close button is clicked', () => {
+    const { getByRole, queryByTestId } = query;
+    const submitButton = getByRole('button', {name: /submit/i});
+    fireEvent.click(submitButton);
+    const modal = queryByTestId('step-indicator');
+    const closeModalButton = queryByTestId('closeModalBtn')
+    fireEvent.click(closeModalButton);
+    const updatedModal = queryByTestId('step-indicator');
+    expect(updatedModal).not.toBeInTheDocument();
+    expect(modal).toBeInTheDocument()
+
+  })
+
+  //closeModalBtn
 });
