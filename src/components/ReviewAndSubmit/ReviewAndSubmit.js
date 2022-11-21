@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { getMonitoringPlans } from "../../utils/api/monitoringPlansApi";
 import ReviewAndSubmitForm from "./ReviewAndSubmitForm/ReviewAndSubmitForm";
 import SubmissionModal from "../SubmissionModal/SubmissionModal";
@@ -11,7 +11,7 @@ const ReviewAndSubmit = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [monPlans, setMonPlans] = useState([]);
-
+  const selectedMonPlansRef = useRef();
   const idToPermissionsMap = [];
   useEffect(() => {
     // Get permissions from user object here
@@ -37,8 +37,17 @@ const ReviewAndSubmit = () => {
       monPlanData = monPlanData.filter((mpd) => mpd.evalStatusCd !== "ERR");
     }
 
-    console.log({monPlanData});
     setMonPlans(monPlanData);
+  };
+
+  const getSelectedMPIds = () => {
+    if (!selectedMonPlansRef.current) {
+      return [];
+    } else {
+      return selectedMonPlansRef.current.selectedRows.map(
+        (monPlan) => monPlan.id
+      );
+    }
   };
 
   return (
@@ -49,17 +58,19 @@ const ReviewAndSubmit = () => {
         setExcludeErrors={setExcludeErrors}
         facilities={MockPermissions}
       />
-      {monPlans.length > 0 && <ReviewAndSubmitTables monPlans={monPlans} />}
+      {monPlans.length > 0 && (
+        <ReviewAndSubmitTables
+          monPlans={monPlans}
+          selectedMonPlansRef={selectedMonPlansRef}
+        />
+      )}
 
       {showModal && (
         <SubmissionModal
           show={showModal}
           close={closeModal}
           submissionCallback={submission}
-          monitorPlanIds={[
-            "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
-            "02183-7RSS-09C865120F7C4FD6AFB801E02773AEDB",
-          ]}
+          monitorPlanIds={getSelectedMPIds()}
         />
       )}
     </div>

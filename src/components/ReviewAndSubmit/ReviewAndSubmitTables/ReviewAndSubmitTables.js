@@ -1,15 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import DataTable from 'react-data-table-component';
-import { ArrowDownwardSharp } from '@material-ui/icons';
+import React, { useCallback, useState } from 'react';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './ReviewAndSubmitTables.scss';
-import {
-  addScreenReaderLabelForCollapses,
-  cleanUp508,
-  ensure508,
-} from '../../../additional-functions/ensure-508';
-import { oneSecond } from '../../../config';
+
 import { formatDate } from '../../../utils/functions';
 import ReviewAndSubmitTableRender from '../ReviewAndSubmitTableRender/ReviewAndSubmitTableRender';
 
@@ -31,10 +24,9 @@ const monPlanColumns = [
   },
 ];
 
-const ReviewAndSubmitTables = ({ monPlans }) => {
-  const [selectedFiles, setSelectedFiles] = useState({});
-  const handleSelectedFiles = useCallback(
-    (files) => setSelectedFiles(files),
+const ReviewAndSubmitTables = ({ monPlans, selectedMonPlansRef }) => {
+  const handleSelectedMonPlanFiles = useCallback(
+    (files) => selectedMonPlansRef.current = files,// eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -44,7 +36,7 @@ const ReviewAndSubmitTables = ({ monPlans }) => {
     name: 'Monitoring Plan',
   };
   const tables = [monPlanTable];
-  console.log({ monPlanTable, selectedFiles });
+  // console.log({ monPlanTable, selectedMPFiles });
   const [activeTables, setActiveTables] = useState(
     tables.reduce((acc, curr) => ({ ...acc, [curr.name]: true }), {})
   );
@@ -53,17 +45,12 @@ const ReviewAndSubmitTables = ({ monPlans }) => {
       ...activeTables,
       [name]: !activeTables[name],
     });
-  useEffect(() => {
-    setTimeout(() => {
-      ensure508();
-    }, oneSecond);
 
-    return () => {
-      cleanUp508();
-      addScreenReaderLabelForCollapses();
-    };
-  }, []);
-  const dataTableProps = {noHeader: true, highlightOnHover: true, responsive: false, striped: true, sortIcon: <ArrowDownwardSharp />}
+  const dataTableProps = {
+    'Monitoring Plan': {
+      onSelectedRowsChange: handleSelectedMonPlanFiles
+    },
+  };
   return (
     <div>
       {tables.map((table, i) => {
@@ -97,25 +84,12 @@ const ReviewAndSubmitTables = ({ monPlans }) => {
                   : 'display-none'
               }
             >
-              <ReviewAndSubmitTableRender columns={columns}
-                data={data} dataTableName={'Monitoring Plan'} dataTableProps={dataTableProps}/>
-              {/* <DataTable
+              <ReviewAndSubmitTableRender
                 columns={columns}
                 data={data}
-                noHeader={true}
-                highlightOnHover={true}
-                selectableRows={true}
-                responsive={false}
-                striped={true}
-                persistTableHead={false}
-                sortIcon={
-                  <ArrowDownwardSharp
-                    className="margin-left-2 text-primary"
-                    id="bdfSortIcon"
-                  />
-                }
-                onSelectedRowsChange={handleSelectedFiles}
-              /> */}
+                dataTableName={'Monitoring Plan'}
+                dataTableProps={dataTableProps[name]}
+              />
             </div>
           </div>
         );
