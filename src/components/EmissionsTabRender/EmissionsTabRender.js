@@ -123,8 +123,8 @@ export const EmissionsTabRender = ({
                 [
                   <DataTableRender
                     dataLoaded={isDataLoaded}
-                    columnNames={viewColumns}
-                    data={viewData}
+                    columnNames={viewColumns ?? []}
+                    data={viewData ?? []}
                   />,
                   viewTemplateSelect?.name ?? "",
                 ]
