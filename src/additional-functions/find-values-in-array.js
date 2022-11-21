@@ -21,9 +21,10 @@ export const findValue = (options, val, parameter) => {
 
 // date from api is always in yyyy-mm-dd
 export const adjustDate = (format, date) => {
-  date = "";
   if (date === null) {
     return "";
+  }else {
+    date = "";
   }
   const [year, month, day] = date.split("-");
 
