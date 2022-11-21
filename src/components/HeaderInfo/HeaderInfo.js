@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   Checkbox,
@@ -45,9 +46,9 @@ import {
 import { getUser } from "../../utils/functions";
 import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
 import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
-import { useDispatch } from "react-redux";
-import { setIsViewDataLoaded, setReportingPeriods, setViewData, setViewDataColumns } from "../../store/actions/dynamicFacilityTab";
+import { setIsViewDataLoaded, setReportingPeriods, setViewData, setViewDataColumns, setViewTemplateSelection, setViewTemplateSelectionAction } from "../../store/actions/dynamicFacilityTab";
 import { handleError } from "../../utils/api/apiUtils";
+import { displayAppError, hideAppError } from "../../additional-functions/app-error";
 
 // Helper function that generates an array of years from this year until the year specified in min param
 export const generateArrayOfYears = (min) => {
@@ -80,8 +81,6 @@ export const HeaderInfo = ({
   orisCode,
   user,
   setRevertedState,
-  viewTemplateSelect,
-  setViewTemplateSelect,
   //redux sets
   setCheckout,
   setInactive,
@@ -99,7 +98,6 @@ export const HeaderInfo = ({
   setUpdateRelatedTables,
   updateRelatedTables,
   workspaceSection,
-  currentTab,
 }) => {
   //MP
   const sections = [
@@ -124,6 +122,7 @@ export const HeaderInfo = ({
   const stackPipeIds = selectedConfig?.unitStackConfigurations.map(config => config.stackPipeId);
 
   const dispatch = useDispatch();
+  const currentTab = useSelector(state=>state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(t=>t.selectedConfig.id===configID));
 
   const [checkedOutConfigs, setCheckedOutConfigs] = useState([]);
   const [auditInformation, setAuditInformation] = useState("");
@@ -174,8 +173,13 @@ export const HeaderInfo = ({
 
   const [selectedReportingPeriods, setSelectedReportingPeriods] = useState(currentTab?.reportingPeriods ?? []);
 
+  const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
 
-  const reportingPeriods = useMemo(
+  const MAX_REPORTING_PERIODS = 4;
+  const MAX_REPORTING_PERIODS_ERROR_MSG = "You can only select a maximum of four reporting periods";
+
+  
+  let reportingPeriods = useMemo(
     () =>
       getReportingPeriods().map((reportingPeriod) => {
         return {
@@ -187,6 +191,15 @@ export const HeaderInfo = ({
       }),
     []
   );
+
+  // Sets the value in redux
+  const dispatchViewTemplateSelect = (selectedViewTemplate)=>{
+    dispatch(setViewTemplateSelectionAction(selectedViewTemplate, currentTab.name, EMISSIONS_STORE_NAME));
+  }
+
+  useEffect(()=>{
+    setViewTemplateSelect(currentTab?.viewTemplateSelect)
+  }, [currentTab])
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
@@ -220,9 +233,13 @@ export const HeaderInfo = ({
 
     getViews().then(({ data }) => {
       setViewTemplates(data);
-      if (data?.length > 0) setViewTemplateSelect(data[0]);
+      if (!currentTab?.viewTemplateSelect && data?.length > 0){
+
+        setViewTemplateSelect(data[0]);
+      } 
     });
   }, [workspaceSection, setViewTemplateSelect]);
+
 
   const executeOnClose = () => {
     setShowCommentsModal(false);
@@ -721,9 +738,20 @@ export const HeaderInfo = ({
   };
 
   const handleSelectReportingPeriod = (id, updateType) => {
+    const uniqueReportingPeriods = [...new Set([...selectedReportingPeriods, id])];
+    
+    hideAppError();
+    if(uniqueReportingPeriods.length > MAX_REPORTING_PERIODS){
+      displayAppError(MAX_REPORTING_PERIODS_ERROR_MSG)
+      const addedRp = reportingPeriods.find(rp=> rp.id === id);
+      addedRp.selected=false;
+      reportingPeriods = [...reportingPeriods]
+      return;
+    }
+
     if (updateType === "add") {
-      setSelectedReportingPeriods([...new Set([...selectedReportingPeriods, id])]);
-      dispatch(setReportingPeriods([...new Set([...selectedReportingPeriods, id])], currentTab.name, workspaceSection));
+      setSelectedReportingPeriods(uniqueReportingPeriods);
+      dispatch(setReportingPeriods(uniqueReportingPeriods, currentTab.name, workspaceSection));
     } else if (updateType === "remove") {
       const selected = reportingPeriods
         .filter((reportingPeriod) => {
@@ -756,14 +784,14 @@ export const HeaderInfo = ({
     setShowEmissionsImportTypeModal(false)
   }
 
-  const applyFilters = async (viewCode, monitorPlanId, reportingPeriods, unitIds, stackPipeIds
-  ) => {
-    dispatch(setIsViewDataLoaded(false, currentTab.name, workspaceSection))
+  const applyFilters = async ( monitorPlanId, unitIds, stackPipeIds) => {
+   
+      dispatch(setIsViewDataLoaded(false, currentTab.name, workspaceSection));
 
       const response = await emApi.getEmissionViewData(
-        viewCode.code,
+        viewTemplateSelect?.code,
         monitorPlanId,
-        reportingPeriods,
+        selectedReportingPeriods,
         unitIds,
         stackPipeIds
       );
@@ -790,11 +818,14 @@ export const HeaderInfo = ({
           formattedResults.push(formattedObject);
         }
   
+        dispatch(setViewTemplateSelectionAction(viewTemplateSelect, currentTab.name, EMISSIONS_STORE_NAME));
         dispatch(setViewDataColumns(names, currentTab.name, workspaceSection))
         dispatch(setViewData(formattedResults, currentTab.name, workspaceSection))
         dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection))
+
   
       } else {
+        dispatch(setViewTemplateSelectionAction(viewTemplateSelect, currentTab.name, EMISSIONS_STORE_NAME));
         dispatch(setViewDataColumns([], currentTab.name, workspaceSection))
         dispatch(setViewData([], currentTab.name, workspaceSection))
         dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection))
@@ -1070,8 +1101,10 @@ export const HeaderInfo = ({
                       name={"viewtemplate"}
                       epa-testid={"viewtemplate"}
                       data-testid={"viewtemplate"}
-                      value={viewTemplateSelect}
-                      onChange={(e) => setViewTemplateSelect(viewTemplates.find(v=>v.name === e.target.value))}
+                      value={viewTemplateSelect?.name}
+                      onChange={(e) =>{
+                        setViewTemplateSelect(viewTemplates.find(v=>v.name === e.target.value))}
+                      } 
                       className="maxw-mobile"
                     >
                       {viewTemplates?.map((view) => (
@@ -1102,7 +1135,7 @@ export const HeaderInfo = ({
                     type="button"
                     title="Apply Filter(s)"
                     className="cursor-pointer text-no-wrap apply-filter-position"
-                    onClick={()=>applyFilters(viewTemplateSelect, configID, selectedReportingPeriods, unitIds, stackPipeIds).catch(handleError)}
+                    onClick={()=>applyFilters(configID, unitIds, stackPipeIds).catch(handleError)}
                   >
                     {"Apply Filter(s)"}
                   </Button>
