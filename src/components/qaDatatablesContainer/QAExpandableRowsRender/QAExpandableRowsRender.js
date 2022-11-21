@@ -6,7 +6,7 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
-import { addAriaLabelToDatatable } from "../../../additional-functions/ensure-508";
+import { addAriaLabelToDatatable, returnsFocusDatatableViewBTN } from "../../../additional-functions/ensure-508";
 /*********** COMPONENTS ***********/
 
 import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
@@ -54,6 +54,8 @@ const QAExpandableRowsRender = ({
   const [loading, setLoading] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
   const [dataPulled, setDataPulled] = useState([]);
+  const [clickedRow, setClickedRow] = useState(null);
+  const [clickedIndex, setClickedIndex] = useState(null);
 
   const [displayedRecords, setDisplayedRecords] = useState([]);
   useEffect(() => {
@@ -573,13 +575,14 @@ const QAExpandableRowsRender = ({
     // setReturnedFocusToLast(false);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
+    returnsFocusDatatableViewBTN(dataTableName, clickedRow, clickedIndex)
   };
   const finishedLoadingData = (loadedData) => {
     setDataPulled(loadedData);
     addAriaLabelToDatatable();
   };
   // Executed when "View" action is clicked
-  const openModal = (row, bool, create) => {
+  const openModal = (row, bool, create, index) => {
     let selectedData = null;
     setCreateNewData(create);
     if (create) {
@@ -679,6 +682,9 @@ const QAExpandableRowsRender = ({
         extraControls
       )
     );
+
+    setClickedRow(row)
+    setClickedIndex(index)
 
     setShow(true);
     setTimeout(() => {
