@@ -126,10 +126,10 @@ describe("QA Cert API", function () {
 
   describe('Fuel Flow To Load CRUD operations', () => {
     test('deleteFuelFlowToLoadData', async () => {
-      const deleteRataTraverseUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests/${id}`;
-      mock.onDelete(deleteRataTraverseUrl).reply(200, 'deleted')
+      const deleteFuelFlowToLoadDataUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests/${id}`;
+      mock.onDelete(deleteFuelFlowToLoadDataUrl).reply(200, 'deleted')
 
-      const resp = await qaCert.deleteRataTraverseData(locId, testSumId, id)
+      const resp = await qaCert.deleteFuelFlowToLoadData(locId, testSumId, id)
 
       expect(mock.history.delete.length).toBe(1)
       expect(resp.data).toStrictEqual('deleted')
@@ -162,8 +162,8 @@ describe("QA Cert API", function () {
 
     test('updateAppendixECorrelationSummary', async () => {
       const payload = { appendixECorrelationSummary: 'data' }
-      const postAppendixECorrelationSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
-      mock.onPost(postAppendixECorrelationSummaryUrl).reply(200, payload)
+      const updateAppendixECorrelationSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${id}`;
+      mock.onPut(updateAppendixECorrelationSummaryUrl).reply(200, payload)
 
       const resp = await qaCert.updateAppendixECorrelationSummaryRecord(locId, testSumId, id, payload)
 
@@ -174,10 +174,10 @@ describe("QA Cert API", function () {
 
   describe('RATA Test Qualification CRUD operations', () => {
     test('deleteTestQualification', async () => {
-      const deleteTestQualUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/test-qualifications/${id}`
+      const deleteTestQualUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/test-qualifications/${id}`
       mock.onDelete(deleteTestQualUrl).reply(200, 'deleted')
 
-      const resp = await qaCert.deleteRataSummary(locId, testSumId, id)
+      const resp = await qaCert.deleteTestQualification(locId, testSumId, id)
 
       expect(mock.history.delete.length).toBe(1)
       expect(resp.data).toStrictEqual('deleted')
@@ -212,7 +212,7 @@ describe("QA Cert API", function () {
     test('updateAppendixECorrelationHeatInputOil', async () => {
       const payload = { appendixECorrelationHeatInputOil: 'data' }
       const putAppendixEHeatInputOilUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-oils/${id}`;
-      mock.onPost(putAppendixEHeatInputOilUrl).reply(200, payload)
+      mock.onPut(putAppendixEHeatInputOilUrl).reply(200, payload)
   
       const resp = await qaCert.updateAppendixECorrelationHeatInputOil(locId, testSumId,appECorrTestSumId,appECorrTestRunId, id, payload)
   
@@ -224,7 +224,7 @@ describe("QA Cert API", function () {
       const deleteAppendixEHeatInputOilUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-oils/${id}`;
       mock.onDelete(deleteAppendixEHeatInputOilUrl).reply(200, 'deleted')
   
-      const resp = await qaCert.deleteAppendixECorrelationHeatInputOil(locId, testSumId, id)
+      const resp = await qaCert.deleteAppendixECorrelationHeatInputOil(locId, testSumId,appECorrTestSumId,appECorrTestRunId, id)
   
       expect(mock.history.delete.length).toBe(1)
       expect(resp.data).toStrictEqual('deleted')
@@ -245,16 +245,16 @@ describe("QA Cert API", function () {
     })
 
     test('createAppendixEHeatInputGas', async () => {
-      const payload = { appendixECorrelationHeatInputGas: 'data' }
+      const payload = { appendixECorrelationHeatInputGas: 'data',  "monitoringSystemID": undefined, }
+      const testSummaryData = {data: {"id":"L3FY866-950F544520244336B5ED7E3824642F9E","locationId":"2286","stackPipeId":null,"unitId":"1","testTypeCode":"APPE","monitoringSystemID":"400","componentID":null,"spanScaleCode":null,"testNumber":"01NOX2021-2","testReasonCode":"QA","testDescription":null,"testResultCode":null,"calculatedTestResultCode":null,"beginDate":"2021-02-05","beginHour":8,"beginMinute":0,"endDate":"2021-02-05","endHour":15,"endMinute":26,"gracePeriodIndicator":null,"calculatedGracePeriodIndicator":null,"year":null,"quarter":null,"testComment":null,"injectionProtocolCode":null,"calculatedSpanValue":null,"evalStatusCode":"EVAL","userId":"rboehme-dp","addDate":"4/7/2021, 7:34:01 AM","updateDate":"11/9/2022, 3:05:01 PM","reportPeriodId":null}}
       const postAppendixEHeatInputGasDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases`;
       mock.onPost(postAppendixEHeatInputGasDataUrl).reply(200, payload)
-      mock.onGet(`https://api.epa.gov/easey/dev/qa-certification-mgmt/locations/${locId}/test-summary/${testSumId}`)
-      .reply(200,[{"id":"L3FY866-950F544520244336B5ED7E3824642F9E","locationId":"2286","stackPipeId":null,"unitId":"1","testTypeCode":"APPE","monitoringSystemID":"400","componentID":null,"spanScaleCode":null,"testNumber":"01NOX2021-2","testReasonCode":"QA","testDescription":null,"testResultCode":null,"calculatedTestResultCode":null,"beginDate":"2021-02-05","beginHour":8,"beginMinute":0,"endDate":"2021-02-05","endHour":15,"endMinute":26,"gracePeriodIndicator":null,"calculatedGracePeriodIndicator":null,"year":null,"quarter":null,"testComment":null,"injectionProtocolCode":null,"calculatedSpanValue":null,"evalStatusCode":"EVAL","userId":"rboehme-dp","addDate":"4/7/2021, 7:34:01 AM","updateDate":"11/9/2022, 3:05:01 PM","reportPeriodId":null}]);
-
+      mock.onGet(`https://api.epa.gov/easey/dev/qa-certification-mgmt//locations/${locId}/test-summary/${testSumId}`)
+      .reply(200,testSummaryData);
       const resp = await qaCert.createAppendixEHeatInputGas(locId, testSumId, appECorrTestSumId, appECorrTestRunId, payload)
-
+      expect(mock.history.get.length).toBe(1)
       expect(mock.history.post.length).toBe(1)
-      expect(resp.data).toStrictEqual(payload)
+      expect(resp.data).toEqual(payload)
     })
 
     test('updateAppendixECorrelationHeatInputGas', async () => {
