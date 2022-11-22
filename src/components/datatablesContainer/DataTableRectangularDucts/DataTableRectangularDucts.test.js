@@ -17,7 +17,6 @@ const locationSelectValue = 6;
 const payload = {
   locationId: locationSelectValue,
   id: 1111,
-
   userId: "string",
   addDate: "2021-10-18T07:24:08.777Z",
   updateDate: "2021-10-18T07:24:08.777Z",
@@ -39,47 +38,42 @@ const payload = {
 const userInput = extractUserInput(payload, ".modalUserInput");
 
 //testing redux connected component to mimic props passed as argument
-const componentRenderer = (
-  checkout,
-  secondLevel,
-  addComponentFlag,
-  openComponentViewTest,
-  openAddComponentTest
-) => {
+const componentRenderer = (location, showModal) => {
   const props = {
-    locationSelectValue: "1111",
-    user: "testuser",
-    checkout: false,
+    locationSelectValue: location,
+    user: { firstName: "test" },
+    checkout: true,
     inactive: true,
     settingInactiveCheckBox: jest.fn(),
-    revertedState: false,
     setRevertedState: jest.fn(),
-
     currentTabIndex:0,
     tabs:[]
   };
   return render(<DataTableRectangularDucts {...props} />);
 };
 
+function componentRendererNoData(args) {
+  const defualtProps = {
+    locationSelectValue: "0",
+    matsTableHandler: jest.fn(),
+    showActiveOnly: true,
+    user: { username: "test" },
+    checkout: true,
+    setRevertedState: jest.fn(),
+  };
+
+  const props = { ...defualtProps, ...args };
+  return render(<DataTableRectangularDucts {...props} />);
+}
+
 test("tests getMonitoringRectangularDucts", async () => {
   axios.get.mockImplementation(() =>
     Promise.resolve({ status: 200, data: payload })
   );
-  const title = await mpApi.getMonitoringRectangularDucts(checkout,
-    secondLevel,
-    addComponentFlag,
-    openComponentViewTest,
-    openAddComponentTest);
+  const title = await mpApi.getMonitoringRectangularDucts(6);
   expect(title.data).toEqual(payload);
 
-  let { container } = await waitForElement(() =>
-    componentRenderer(  checkout,
-      secondLevel,
-      addComponentFlag,
-      openComponentViewTest,
-      openAddComponentTest)
-  );
-  expect(container).toBeDefined();
+
 });
 
 
