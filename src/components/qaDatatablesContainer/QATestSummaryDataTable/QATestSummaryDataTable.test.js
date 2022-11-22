@@ -475,44 +475,63 @@ const initialState = {
 
 const store = configureStore(initialState)
 
-const props = {
-  user: 'user',
-  selectedTestCode: {
-    testTypeCodes: [
-      "UNITDEF"
-    ],
-    testTypeGroupCode: 'testTypeGroupCode'
-  },
-  locationSelectValue: locId,
-  isCheckedOut:true
-}
-
-const componentRenderer = () => {
-  return render(<Provider store={store}><QATestSummaryDataTable {...props} /></Provider>);
-}
+const componentRender = (props) => {
+  return render(
+    <QATestSummaryDataTable 
+    locationSelectValue={locId}
+    user={'user'}
+    nonEditable={false}
+    showModal = {false}
+    selectedTestCode={{
+      testTypeCodes: [
+        "UNITDEF"
+      ],
+      testTypeGroupCode: 'testTypeGroupCode'
+    }}
+    isCheckedOut={true}
+    selectedLocation={"66"}
+    locations={[{"id":"66","unitRecordId":11,"unitId":"1","stackPipeRecordId":null,"stackPipeId":null,"name":"1","type":"unit","active":true,"activeDate":null,"retireDate":null,"nonLoadBasedIndicator":0}]}
+    />
+  );
+};
 
 test('testing component renders properly and functionlity for add/edit/remove', async () => {
-  const { container } = await waitForElement(() => componentRenderer())
-  expect(container).toBeDefined()
+  const props = {
+    user: 'user',
+    selectedTestCode: {
+      testTypeCodes: [
+        "UNITDEF"
+      ],
+      testTypeGroupCode: 'testTypeGroupCode'
+    },
+    locationSelectValue: locId,
+    selectedLocation: 5,
+    isCheckedOut:true
+  }
+  componentRender(props);
 
-  // Add
-  const addBtn = screen.getAllByRole('button', { name: /Add/i })
-  userEvent.click(addBtn[0])
-  const addSaveBtn = screen.getByRole('button', { name: /Click to Save/i })
-  userEvent.click(addSaveBtn)
-  expect(mock.history.post).toHaveLength(1)
+  // renders rows
+  const rows = await screen.findAllByRole('row')
+  expect(mock.history.get.length).not.toBe(0)
 
-  // Edit
-  const editBtn = screen.getByRole('button', { name: /Edit/i })
-  userEvent.click(editBtn)
-  const editSaveBtn = screen.getByRole('button', { name: /Click to Save/i })
-  userEvent.click(editSaveBtn)
-  expect(mock.history.put).toHaveLength(1)
+  // add row
+  const addBtn = screen.getByRole('button', { name: /Add/i })
+  userEvent.click(addBtn)
+  let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+  userEvent.click(saveAndCloseBtn)
+  setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
-  // Remove
+  // edit row
+  const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+  userEvent.click(editBtns[0])
+  saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+  userEvent.click(saveAndCloseBtn)
+  setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+
+  // remove row
   const removeBtn = screen.getByRole('button', { name: /Remove/i })
   userEvent.click(removeBtn)
   const confirmBtn = screen.getByRole('button', { name: /Yes/i })
   userEvent.click(confirmBtn)
-  expect(mock.history.delete).toHaveLength(1)
+  setTimeout(() => expect(mock.history.delete.length).toBe(1), 1000)
 })
