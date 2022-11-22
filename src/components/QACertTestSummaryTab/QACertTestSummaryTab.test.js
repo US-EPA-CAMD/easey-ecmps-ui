@@ -11,6 +11,15 @@ const store = configureStore();
 const axios = require("axios");
 jest.mock("axios");
 
+jest.mock("../QACertTestSummaryTabRender/QACertTestSummaryTabRender", () => {
+  return {
+    __esModule: true,
+    default: () => {
+      return <div />;
+    },
+  };
+});
+
 const selectedConfig = {
   id: "MDC",
   name: "1",
@@ -65,7 +74,16 @@ test("tests QACertTestSummaryTab with conditionals ", async () => {
     activeTab: 0,
     setSection: jest.fn(),
     setLocation: jest.fn(),
+    tabs: {
+      find: jest
+        .fn()
+        .mockResolvedValue({
+          section: "SECTION",
+          location: selectedConfig.locations[0],
+        }),
+    },
   };
+
   const { container } = render(
     <Provider store={store}>
       <QACertTestSummaryTab {...condProps} />{" "}
@@ -85,6 +103,6 @@ test("mapDispatchToProps calls the appropriate action", async () => {
   // verify the appropriate action was called
   actionProps.setLocation();
   actionProps.setSection();
-  actionProps.setActiveTab();
+  actionProps.updateTestTypeCodes();
   expect(state).toBeDefined();
 });
