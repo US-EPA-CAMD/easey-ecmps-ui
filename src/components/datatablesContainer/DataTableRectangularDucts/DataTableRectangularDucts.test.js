@@ -50,7 +50,7 @@ const componentRenderer = (
     locationSelectValue: "1111",
     user: "testuser",
     checkout: false,
-    inactive: [false],
+    inactive: true,
     settingInactiveCheckBox: jest.fn(),
     revertedState: false,
     setRevertedState: jest.fn(),
@@ -63,34 +63,23 @@ const componentRenderer = (
 
 test("tests getMonitoringRectangularDucts", async () => {
   axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: selectedDucts })
+    Promise.resolve({ status: 200, data: payload })
   );
-  const title = await mpApi.getMonitoringRectangularDucts(6);
-  expect(title.data).toEqual(selectedDucts);
+  const title = await mpApi.getMonitoringRectangularDucts(checkout,
+    secondLevel,
+    addComponentFlag,
+    openComponentViewTest,
+    openAddComponentTest);
+  expect(title.data).toEqual(payload);
 
   let { container } = await waitForElement(() =>
-    componentRenderer(false, false, false, true, false)
+    componentRenderer(  checkout,
+      secondLevel,
+      addComponentFlag,
+      openComponentViewTest,
+      openAddComponentTest)
   );
   expect(container).toBeDefined();
 });
 
-test("test create/save Ducts functions", async () => {
-  let { container } = await waitForElement(() =>
-    componentRenderer(false, false, false, true, false)
-  );
-
-  // fireEvent.click(container.querySelector("#testingBtn"));
-  // fireEvent.click(container.querySelector("#testingBtn2"));
-  // fireEvent.click(container.querySelector("#testingBtn3"));
-});
-test("mapStateToProps calls the appropriate state", async () => {
-  // mock the 'dispatch' object
-  const dispatch = jest.fn();
-  const state = { monitoringPlans: [0] };
-  const stateProps = mapStateToProps(state, true);
-});
-
-jest.mock('react-redux', () => ({
-  connect: () => jest.fn(),
-}));
 

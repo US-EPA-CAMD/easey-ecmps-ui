@@ -28,6 +28,7 @@ import {
   cleanupFocusEventListeners,
   returnFocusToLast,
 } from "../../../additional-functions/manage-focus";
+import { MONITORING_PLAN_STORE_NAME } from '../../../additional-functions/workspace-section-and-store-names';
 //
 export const DataTableRectangularDucts = ({
   locationSelectValue,
@@ -239,7 +240,7 @@ export const DataTableRectangularDucts = ({
     }
     return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ducts, tabs[currentTabIndex].inactive[0]]);
+  }, [ducts, inactive, tabs[currentTabIndex].inactive[0]]);
 
       // *** Reassign handlers when inactive checkbox is toggled
       useEffect(() => {
@@ -381,16 +382,9 @@ export const DataTableRectangularDucts = ({
 };
 const mapStateToProps = (state) => {
   return {
-    tabs: state.openedFacilityTabs["monitoringPlans"],
+
+    tabs: state.openedFacilityTabs[MONITORING_PLAN_STORE_NAME],
   };
 };
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    actions: bindActionCreators({
-      openDuctModal
-  }, dispatch)
-  }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(DataTableRectangularDucts);
+export default connect(mapStateToProps, null)(DataTableRectangularDucts);
 export { mapStateToProps };
