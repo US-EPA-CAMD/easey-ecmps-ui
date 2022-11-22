@@ -1,7 +1,6 @@
 import * as axios from "axios";
 
-import { deleteCheckInMonitoringPlanConfiguration } from "./monitoringPlansApi";
-import { authenticate, refreshToken, logOut } from "./easeyAuthApi";
+import { authenticate, logOut, refreshToken } from "./easeyAuthApi";
 import { getCheckedOutLocations } from "./monitoringPlansApi";
 // Mock out all top level functions, such as get, put, delete and post:
 
@@ -21,21 +20,24 @@ describe("Easey Auth API", () => {
     expect(sessionStorage.getItem("cdx_user")).toBe("{}");
   });
 
-  // test("Can we authenticate with error ", async () => {
-  //   axios.mockImplementationOnce(() => {
-  //     return Promise.reject( Error("some error"));
-  //   });
+  test("Can we authenticate with error ", async () => {
+    axios.mockImplementationOnce(() => {
+      return Promise.reject(new Error("some error"));
+    });
 
-  //   await authenticate({});
-  //   expect(sessionStorage.getItem("cdx_user")).toBe("{}");
-  // });
+    try {
+      const auth = await authenticate({});
+      console.log(auth)
+    } catch (e) {}
+    expect(sessionStorage.getItem("cdx_user")).toBe("{}");
+  });
 
   test("Can we refreshToken", async () => {
-    sessionStorage.setItem("cdx_user", '{"token":"xyz", "userId1": "jeff"}');
+    sessionStorage.setItem("cdx_user", JSON.stringify({ "token": "xyz", "userId": "jeff", "tokenExpiration": "11-21-2022" }));
 
     try {
       axios.mockImplementationOnce(() => {
-        return Promise.resolve({ data: "token" });
+        return Promise.resolve({ data: { "token": "token" } });
       });
     } catch (e) {
       expect(e).toEqual({
@@ -47,8 +49,8 @@ describe("Easey Auth API", () => {
     expect(JSON.parse(sessionStorage.getItem("cdx_user")).token).toBe("token");
   });
 
-  test("Can we refreshToken with erro r", async () => {
-    sessionStorage.setItem("cdx_user", '{"token":"xyz", "userId": "jeff"}');
+  test("Can we refreshToken with error", async () => {
+    sessionStorage.setItem("cdx_user", JSON.stringify({ "token": "xyz", "userId": "jeff", "tokenExpiration": "11-21-2022" }));
 
     axios.mockImplementationOnce(() => {
       return Promise.reject(new Error("some error"));
@@ -59,7 +61,7 @@ describe("Easey Auth API", () => {
   });
 
   test("Can we logOut", async () => {
-    sessionStorage.setItem("cdx_user", '{"token":"xyz", "userId": "test"}');
+    sessionStorage.setItem("cdx_user", JSON.stringify({ "token": "xyz", "userId": "test", "tokenExpiration": "11-21-2022" }));
 
     const checkedData = [
       {
@@ -87,14 +89,8 @@ describe("Easey Auth API", () => {
         data: {},
       });
     });
-    await deleteCheckInMonitoringPlanConfiguration(1);
     //-------
     // mocks the return secure Axios
-    axios.mockImplementationOnce(() => {
-      return Promise.resolve({
-        data: {},
-      });
-    });
     axios.mockImplementationOnce(() => {
       return Promise.resolve({
         data: {},
@@ -106,7 +102,7 @@ describe("Easey Auth API", () => {
   });
 
   test("Can we logOut with error ", async () => {
-    sessionStorage.setItem("cdx_user", '{"token":"xyz", "userId": "test"}');
+    sessionStorage.setItem("cdx_user", JSON.stringify({ "token": "xyz", "userId": "test", "tokenExpiration": "11-21-2022" }));
 
     const checkedData = [
       {
@@ -134,7 +130,6 @@ describe("Easey Auth API", () => {
         data: {},
       });
     });
-    await deleteCheckInMonitoringPlanConfiguration(1);
     //-------
     // mocks the return secure Axios
     axios.mockImplementationOnce(() => {
