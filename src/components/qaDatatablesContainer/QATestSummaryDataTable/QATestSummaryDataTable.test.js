@@ -475,7 +475,7 @@ const initialState = {
 
 const store = configureStore(initialState)
 
-const componentRender = (props) => {
+const componentRender = () => {
   return render(
     <QATestSummaryDataTable 
     locationSelectValue={locId}
@@ -496,39 +496,24 @@ const componentRender = (props) => {
 };
 
 test('testing component renders properly and functionlity for add/edit/remove', async () => {
-  const props = {
-    user: 'user',
-    selectedTestCode: {
-      testTypeCodes: [
-        "UNITDEF"
-      ],
-      testTypeGroupCode: 'testTypeGroupCode'
-    },
-    locationSelectValue: locId,
-    selectedLocation: 5,
-    isCheckedOut:true
-  }
-  componentRender(props);
+  const { container } = await waitForElement(() => componentRender())
+  expect(container).toBeDefined()
 
-  // renders rows
-  const rows = await screen.findAllByRole('row')
-  expect(mock.history.get.length).not.toBe(0)
-
-  // add row
-  const addBtn = screen.getByRole('button', { name: /Add/i })
-  userEvent.click(addBtn)
-  let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-  userEvent.click(saveAndCloseBtn)
+  // Add
+  const addBtn = screen.getAllByRole('button', { name: /Add/i })
+  userEvent.click(addBtn[0])
+  const addSaveBtn = screen.getByRole('button', { name: /Click to Save/i })
+  userEvent.click(addSaveBtn)
   setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
-  // edit row
-  const editBtns = screen.getAllByRole('button', { name: /Edit/i })
-  userEvent.click(editBtns[0])
-  saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-  userEvent.click(saveAndCloseBtn)
+  // Edit
+  const editBtn = screen.getByRole('button', { name: /Edit/i })
+  userEvent.click(editBtn)
+  const editSaveBtn = screen.getByRole('button', { name: /Click to Save/i })
+  userEvent.click(editSaveBtn)
   setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
-  // remove row
+  // Remove
   const removeBtn = screen.getByRole('button', { name: /Remove/i })
   userEvent.click(removeBtn)
   const confirmBtn = screen.getByRole('button', { name: /Yes/i })
