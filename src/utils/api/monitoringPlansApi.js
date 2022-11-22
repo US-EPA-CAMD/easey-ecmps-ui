@@ -30,7 +30,7 @@ export const getMonitoringPlans = async (orisCodes, monPlanIds = []) => {
   if (typeof orisCodes == "number") {
     queryString = "orisCodes=" + orisCodes;
   } else {
-    queryString = `orisCodes=${orisCodes.split("").join("|")}`;
+    queryString = `orisCodes=${orisCodes.join("|")}`;
   }
 
   if (monPlanIds.length > 0) {
