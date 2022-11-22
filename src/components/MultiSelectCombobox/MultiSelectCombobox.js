@@ -17,6 +17,8 @@ const MultiSelectCombobox = ({
   searchBy,
   hideInput,
   styling,
+  autoFocus,
+  iconAlignRight = 1,
 }) => {
   const [filter, setFilter] = useState("");
   const [_items, _setItems] = useState(getComboboxEnabledItems(items));
@@ -25,8 +27,8 @@ const MultiSelectCombobox = ({
   );
   const [showListBox, setShowListBox] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
+
   const selectedItemsRef = useRef(selectedItems);
-  const [stillMounted, setStillMounted] = useState(true);
 
   const handleMultiSelectClick = (e) => {
     const multiSelectComboboxDiv = document.getElementById(
@@ -122,29 +124,22 @@ const MultiSelectCombobox = ({
     const selection = items.filter((i) => i.selected);
     const _selectedItems = [];
     for (const s of selection) {
-      if (stillMounted) {
-        _selectedItems.push({
-          id: s.id,
-          component: (
-            <PillButton
-              key={s.id}
-              index={s.id}
-              label={s.label}
-              onRemove={onRemoveHanlder}
-              disableButton={true}
-            />
-          ),
-        });
-      } else {
-        break;
-      }
-    }
-    if (!stillMounted) {
-      return;
+      _selectedItems.push({
+        id: s.id,
+        component: (
+          <PillButton
+            key={s.id}
+            index={s.id}
+            label={s.label}
+            onRemove={onRemoveHanlder}
+            disableButton={true}
+          />
+        ),
+      });
     }
     selectedItemsRef.current = _selectedItems;
     setSelectedItems(_selectedItems);
-  }, [items, stillMounted, onRemoveHanlder]);
+  }, [items, onRemoveHanlder]);
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -164,7 +159,6 @@ const MultiSelectCombobox = ({
 
   useEffect(() => {
     populateSelectedItems();
-    return () => setStillMounted(false);
   }, [populateSelectedItems]);
 
   useEffect(() => {
@@ -182,10 +176,10 @@ const MultiSelectCombobox = ({
       <div
         role="combobox"
         name={entity}
-        aria-haspopup="listbox"
+        aria-haspopup={`listbox`}
         aria-controls={`${entity}-searchbox`}
         aria-expanded={showListBox}
-        aria-owns="listbox"
+        aria-owns={`${entity}-listbox`}
         id={`multi-select-combobox-${entity}`}
         className={
           styling?.combobox ||
@@ -198,16 +192,16 @@ const MultiSelectCombobox = ({
         {hideInput ? null : (
           <>
             <input
-              autoFocus
+              autoFocus={autoFocus}
               id={`${entity}-searchbox`}
               type="text"
               aria-labelledby={`${entity}-label`}
               autoComplete="off"
               aria-autocomplete="list"
-              aria-controls="listbox"
-              aria-activedescendant="listbox"
+              aria-controls={`${entity}-listbox`}
+              aria-activedescendant={`${entity}-listbox`}
               className="search position-static bg-white border-0 width-full height-4 padding-x-1"
-              data-testid="input-search"
+              data-testid={`${entity}-input-search`}
               value={filter}
               onChange={(e) => onSearchHanlder(e.target.value)}
               onClick={() => setShowListBox(true)}
@@ -215,7 +209,7 @@ const MultiSelectCombobox = ({
             />
             <FontAwesomeIcon
               icon={faCaretDown}
-              className="pin-right margin-right-1 padding-top-05"
+              className={`pin-right margin-right-${iconAlignRight} padding-top-05`}
               onClick={() => setShowListBox(true)}
             />
           </>
@@ -225,7 +219,7 @@ const MultiSelectCombobox = ({
             aria-multiselectable="true"
             role="listbox"
             aria-labelledby={`${entity}-label`}
-            id="listbox"
+            id={`${entity}-listbox`}
             data-testid="multi-select-listbox"
             tabIndex="-1"
             className={
