@@ -129,6 +129,13 @@ const componentRenderer = (location) => {
     setRevertedState: jest.fn(),
     selectedSysIdTest: "testId",
     selectedRangeInFirstTest: { locationId: 1, componentRecordId: 1 },
+    tabs: [
+      {
+        openedFacilityTabs: [],
+        inactive: [true]
+      }
+    ],
+    currentTabIndex: 0,
     mdmData: {
       systemDesignationCode: [
         {
