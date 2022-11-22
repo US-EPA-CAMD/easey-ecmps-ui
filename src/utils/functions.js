@@ -35,6 +35,15 @@ export const parseBool = (value, defaultValue = false) => {
   return defaultValue;
 };
 
+export const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const year = date.getUTCFullYear();
+  const month = date.getUTCMonth() + 1;
+  const day = date.getUTCDate();
+  const fullDateString = `${month}-${day}-${year}`;
+  return fullDateString;
+};
+
 export const getConfigValue = (key, defaultValue = "") => {
   let returnValue;
 

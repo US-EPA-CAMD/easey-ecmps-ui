@@ -1,475 +1,250 @@
-import { Tune } from "@material-ui/icons";
-import {
-  Button,
-  Checkbox,
-  Fieldset,
-  Label,
-  Radio,
-} from "@trussworks/react-uswds";
-import React, { useState } from "react";
+import { Button, Fieldset, Radio } from "@trussworks/react-uswds";
+import React, { useState, useRef, useEffect } from "react";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
-import SubmissionModal from "../../SubmissionModal/SubmissionModal";
+import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
+import { getReportingPeriods } from "../../../utils/api/mdmApi";
 
-const ReviewAndSubmitForm = () => {
-  const [showModal, setShowModal] = useState(false);
-
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
-  const submission = () => {
-    closeModal();
-  };
-
-  const checkboxes = ["Monitoring Plan", "QA & Certification", "Emissions"];
-  const radioButtons = [
-    "Exclude Files with Critical Errors",
-    "Include Files with Critical Errors",
-  ];
-  const reportingPeriods = [
-      {
-        id: 1,
-        calendarYear: 1993,
-        quarter: 1,
-        beginDate: "1993-01-01",
-        endDate: "1993-03-31",
-        periodDescription: "1993 QTR 1",
-        periodAbbreviation: "1993 Q1",
-        archiveInd: 0,
-        selected: false,
-      },
-      {
-        id: 5,
-        calendarYear: 1994,
-        quarter: 1,
-        beginDate: "1994-01-01",
-        endDate: "1994-03-31",
-        periodDescription: "1994 QTR 1",
-        periodAbbreviation: "1994 Q1",
-        archiveInd: 0,
-        selected: false,
-      },
-      {
-        id: 6,
-        calendarYear: 1994,
-        quarter: 2,
-        beginDate: "1994-04-01",
-        endDate: "1994-06-30",
-        periodDescription: "1994 QTR 2",
-        periodAbbreviation: "1994 Q2",
-        archiveInd: 0,
-        selected: false,
-      },
-    ],
-    configurations = [
-      {
-        col1: "110",
-        col2: "Inactive",
-        col3: "MDC-7C15B3D1B20542C3B54DD57F03A516E5",
-        facId: 1,
-        monPlanId: "MDC-7C15B3D1B20542C3B54DD57F03A516E5",
-      },
-      {
-        col1: "110",
-        col2: "Active",
-        col3: "MDC-7C15B3D1B20542C3B54DD57F03A516E5",
-        facId: 2,
-        monPlanId: "MDC-7C15B3D1B20542C3B54DD57F03A516E5",
-      },
-    ];
-  const facilities = [
-    {
-      id: "1",
-      facilityId: "3",
-      facilityName: "Barry",
-      stateCode: "AL",
-      links: [
-        {
-          rel: "self",
-          href: "/api/facility-mgmt/facilities/1",
-        },
-        {
-          rel: "units",
-          href: "/api/facility-mgmt/facilities/1/units",
-        },
-        {
-          rel: "stacks",
-          href: "/api/facility-mgmt/facilities/1/stacks",
-        },
-        {
-          rel: "owners",
-          href: "/api/facility-mgmt/facilities/1/owners",
-        },
-        {
-          rel: "contacts",
-          href: "/api/facility-mgmt/facilities/1/contacts",
-        },
-      ],
-    },
-    {
-      id: "2",
-      facilityId: "5",
-      facilityName: "Chickasaw",
-      stateCode: "AL",
-      links: [
-        {
-          rel: "self",
-          href: "/api/facility-mgmt/facilities/2",
-        },
-        {
-          rel: "units",
-          href: "/api/facility-mgmt/facilities/2/units",
-        },
-        {
-          rel: "stacks",
-          href: "/api/facility-mgmt/facilities/2/stacks",
-        },
-        {
-          rel: "owners",
-          href: "/api/facility-mgmt/facilities/2/owners",
-        },
-        {
-          rel: "contacts",
-          href: "/api/facility-mgmt/facilities/2/contacts",
-        },
-      ],
-    },
-    {
-      id: "3",
-      facilityId: "7",
-      facilityName: "Gadsden",
-      stateCode: "AL",
-      links: [
-        {
-          rel: "self",
-          href: "/api/facility-mgmt/facilities/3",
-        },
-        {
-          rel: "units",
-          href: "/api/facility-mgmt/facilities/3/units",
-        },
-        {
-          rel: "stacks",
-          href: "/api/facility-mgmt/facilities/3/stacks",
-        },
-        {
-          rel: "owners",
-          href: "/api/facility-mgmt/facilities/3/owners",
-        },
-        {
-          rel: "contacts",
-          href: "/api/facility-mgmt/facilities/3/contacts",
-        },
-      ],
-    },
-    {
-      id: "4",
-      facilityId: "8",
-      facilityName: "Gorgas",
-      stateCode: "AL",
-      links: [
-        {
-          rel: "self",
-          href: "/api/facility-mgmt/facilities/4",
-        },
-        {
-          rel: "units",
-          href: "/api/facility-mgmt/facilities/4/units",
-        },
-        {
-          rel: "stacks",
-          href: "/api/facility-mgmt/facilities/4/stacks",
-        },
-        {
-          rel: "owners",
-          href: "/api/facility-mgmt/facilities/4/owners",
-        },
-        {
-          rel: "contacts",
-          href: "/api/facility-mgmt/facilities/4/contacts",
-        },
-      ],
-    },
-    {
-      id: "5",
-      facilityId: "10",
-      facilityName: "Greene County",
-      stateCode: "AL",
-      links: [
-        {
-          rel: "self",
-          href: "/api/facility-mgmt/facilities/5",
-        },
-        {
-          rel: "units",
-          href: "/api/facility-mgmt/facilities/5/units",
-        },
-        {
-          rel: "stacks",
-          href: "/api/facility-mgmt/facilities/5/stacks",
-        },
-        {
-          rel: "owners",
-          href: "/api/facility-mgmt/facilities/5/owners",
-        },
-        {
-          rel: "contacts",
-          href: "/api/facility-mgmt/facilities/5/contacts",
-        },
-      ],
-    },
-    {
-      id: "6",
-      facilityId: "26",
-      facilityName: "E C Gaston",
-      stateCode: "AL",
-      links: [
-        {
-          rel: "self",
-          href: "/api/facility-mgmt/facilities/6",
-        },
-        {
-          rel: "units",
-          href: "/api/facility-mgmt/facilities/6/units",
-        },
-        {
-          rel: "stacks",
-          href: "/api/facility-mgmt/facilities/6/stacks",
-        },
-        {
-          rel: "owners",
-          href: "/api/facility-mgmt/facilities/6/owners",
-        },
-        {
-          rel: "contacts",
-          href: "/api/facility-mgmt/facilities/6/contacts",
-        },
-      ],
-    },
-    {
-      id: "7",
-      facilityId: "47",
-      facilityName: "Colbert",
-      stateCode: "AL",
-      links: [
-        {
-          rel: "self",
-          href: "/api/facility-mgmt/facilities/7",
-        },
-        {
-          rel: "units",
-          href: "/api/facility-mgmt/facilities/7/units",
-        },
-        {
-          rel: "stacks",
-          href: "/api/facility-mgmt/facilities/7/stacks",
-        },
-        {
-          rel: "owners",
-          href: "/api/facility-mgmt/facilities/7/owners",
-        },
-        {
-          rel: "contacts",
-          href: "/api/facility-mgmt/facilities/7/contacts",
-        },
-      ],
-    },
-    {
-      id: "8",
-      facilityId: "50",
-      facilityName: "Widows Creek",
-      stateCode: "AL",
-      links: [
-        {
-          rel: "self",
-          href: "/api/facility-mgmt/facilities/8",
-        },
-        {
-          rel: "units",
-          href: "/api/facility-mgmt/facilities/8/units",
-        },
-        {
-          rel: "stacks",
-          href: "/api/facility-mgmt/facilities/8/stacks",
-        },
-        {
-          rel: "owners",
-          href: "/api/facility-mgmt/facilities/8/owners",
-        },
-        {
-          rel: "contacts",
-          href: "/api/facility-mgmt/facilities/8/contacts",
-        },
-      ],
-    },
-    {
-      id: "9",
-      facilityId: "51",
-      facilityName: "Dolet Hills Power Station",
-      stateCode: "LA",
-      links: [
-        {
-          rel: "self",
-          href: "/api/facility-mgmt/facilities/9",
-        },
-        {
-          rel: "units",
-          href: "/api/facility-mgmt/facilities/9/units",
-        },
-        {
-          rel: "stacks",
-          href: "/api/facility-mgmt/facilities/9/stacks",
-        },
-        {
-          rel: "owners",
-          href: "/api/facility-mgmt/facilities/9/owners",
-        },
-        {
-          rel: "contacts",
-          href: "/api/facility-mgmt/facilities/9/contacts",
-        },
-      ],
-    },
-    {
-      id: "10",
-      facilityId: "54",
-      facilityName: "Smith Generating Facility",
-      stateCode: "KY",
-      links: [
-        {
-          rel: "self",
-          href: "/api/facility-mgmt/facilities/10",
-        },
-        {
-          rel: "units",
-          href: "/api/facility-mgmt/facilities/10/units",
-        },
-        {
-          rel: "stacks",
-          href: "/api/facility-mgmt/facilities/10/stacks",
-        },
-        {
-          rel: "owners",
-          href: "/api/facility-mgmt/facilities/10/owners",
-        },
-        {
-          rel: "contacts",
-          href: "/api/facility-mgmt/facilities/10/contacts",
-        },
-      ],
-    },
-  ];
-  const dropdowns = [
-    {
-      name: "Facility ID(s)",
-      items: facilities.map((f) => ({
-        id: f.facilityId,
-        label: `${f.facilityName} (${f.facilityId})`,
-        selected: false,
-        enabled: true,
-      })),
-    },
-    {
-      name: "Configuration(s)",
-      items: configurations.map((config) => ({
-        id: config.facId,
-        label: `${config.monPlanId}`,
-        selected: false,
-        enabled: true,
-      })),
-    },
-    {
-      name: "Reporting Period(s)",
-      items: reportingPeriods.map((period) => ({
-        id: period.id,
-        label: `${period.calendarYear} Q${period.quarter}`,
-        selected: false,
-        enabled: true,
-      })),
-    },
-  ];
-  const [activeComboboxes, setActiveComboboxes] = useState(
-    dropdowns.reduce((acc, curr) => ({ ...acc, [curr.name]: false }), {})
+const ReviewAndSubmitForm = ({
+  facilities,
+  queryCallback,
+  showModal,
+  setExcludeErrors,
+}) => {
+  const [availableReportingPeriods, setAvailableReportingPeriods] = useState(
+    []
   );
-  const comboboxStyling = {
-    combobox: "margin-bottom-2 bg-white multi-select-combobox",
-    listbox:
-      "list-box bg-white display-block height-15 width-full overflow-y-scroll overflow-x-hidden",
+  const [availableFacilities, setAvailableFacilities] = useState([]);
+  const [availableConfigState, setAvailableConfigState] = useState([]);
+
+  const availableConfigurations = useRef([]);
+  const selectedOrisCodes = useRef([]);
+  const selectedReportingPeriods = useRef([]);
+
+  async function fetchReportingPeriods() {
+    const reportingPeriodList = (await getReportingPeriods()).data;
+
+    const availReportingPeriods = [];
+
+    for (let i = reportingPeriodList.length - 1; i >= 0; i--) {
+      const period = reportingPeriodList[i];
+      const objectMapping = {
+        id: period.periodAbbreviation,
+        label: period.periodAbbreviation,
+        selected: false,
+        enabled: true,
+      };
+
+      if (i === reportingPeriodList.length - 1) {
+        objectMapping.selected = true;
+        selectedReportingPeriods.current = [period.periodAbbreviation]; //Default selected reporting period
+      }
+
+      availReportingPeriods.push(objectMapping);
+    }
+
+    setAvailableReportingPeriods(availReportingPeriods);
+  }
+
+  useEffect(() => {
+    const availFac = facilities.map((f) => ({
+      id: f.id,
+      label: `${f.facilityName} (${f.id})`,
+      selected: false,
+      enabled: true,
+    }));
+    setAvailableFacilities([...availFac]);
+
+    fetchReportingPeriods();
+  }, []);
+
+  const applyFilters = () => {
+    const selectedEntries = availableConfigurations.current.filter((item) => {
+      return item.selected;
+    });
+
+    let monPlanIds = [];
+    if (selectedEntries) {
+      monPlanIds = selectedEntries.map((entry) => entry.monPlanId);
+    }
+
+    queryCallback(
+      selectedOrisCodes.current,
+      monPlanIds,
+      selectedReportingPeriods.current
+    );
   };
+
+  async function reportingPeriodFilterChange(id, action) {
+    let newState;
+    if (action === "add") {
+      newState = [...selectedReportingPeriods.current, id];
+    } else {
+      newState = [];
+      selectedReportingPeriods.current.forEach((item) => {
+        if (item !== id) {
+          newState.push(item);
+        }
+      });
+    }
+    selectedReportingPeriods.current = newState;
+  }
+
+  async function configurationFilterChange(id, action) {
+    const objectEntry = availableConfigurations.current.find(
+      (item) => item.id === id
+    );
+    if (objectEntry) {
+      if (action === "add") {
+        objectEntry.selected = true;
+      } else {
+        objectEntry.selected = false;
+      }
+    }
+  }
+
+  async function facilityFilterChange(id, action) {
+    id = id.toString();
+
+    let newState;
+    if (action === "add") {
+      newState = [...selectedOrisCodes.current, id];
+    } else {
+      newState = [];
+      selectedOrisCodes.current.forEach((item) => {
+        if (item !== id) {
+          newState.push(item);
+        }
+      });
+    }
+    selectedOrisCodes.current = newState;
+
+    const configurationData = (await getMonitoringPlans(newState)).data;
+
+    const configNamesToMonPlan = [];
+    for (const cd of configurationData) {
+      if (cd.active) {
+        const key = `${cd.facilityName} - ${cd.name}`;
+        if (!configNamesToMonPlan[key]) {
+          configNamesToMonPlan[key] = cd.id;
+        }
+      }
+    }
+
+    const availConfigs = [];
+    for (const [name, monPlanId] of Object.entries(configNamesToMonPlan)) {
+      //Remove existing configurations that not longer have a monitor plan associated, or keep current ones selected
+      const existingEntry = availableConfigurations.current.filter((item) => {
+        return item.selected && item.label === name;
+      });
+      let selected = false;
+      if (existingEntry.length > 0) {
+        selected = true;
+      }
+
+      availConfigs.push({
+        id: name,
+        label: name,
+        selected: selected,
+        enabled: true,
+        monPlanId: monPlanId,
+      });
+    }
+    availableConfigurations.current = availConfigs;
+    setAvailableConfigState(availableConfigurations.current);
+  }
 
   return (
-    <div className="react-transition fade-in padding-x-3">
+    <div className="">
       <div className="text-black margin-top-1 display-none tablet:display-block">
         <h2 className="display-inline-block page-header margin-top-2">
           Review And Submit
         </h2>
       </div>
-      <div className="container border-y-1px border-base-lighter padding-y-2">
-        <div className="checkboxes-radio grid-row">
-          <div className="checkboxes grid-col-5">
-            <Fieldset>
-              {checkboxes.map((checkbox, i) => (
-                <Checkbox
-                  id={`${checkbox}-checkbox`}
-                  name={checkbox}
-                  label={checkbox}
-                  key={i}
-                />
-              ))}
-            </Fieldset>
-          </div>
-          <div className="radio grid-col-5 margin-top-3">
-            <Fieldset>
-              {radioButtons.map((radio, i) => (
-                <Radio
-                  id={`${radio}-radio-button`}
-                  name="critical-errors-radio"
-                  label={radio}
-                  key={i}
-                />
-              ))}
-            </Fieldset>
-          </div>
-        </div>
+      <div className="container border-y-1px border-base-lighter padding-y-1">
+        <Fieldset className="grid-row margin-y-2">
+          <Radio
+            className="grid-col-6 desktop:grid-col-12 margin-bottom-1"
+            id={`0-radio-button`}
+            defaultChecked
+            name="critical-errors-radio"
+            label={"Exclude Files with Critical Errors"}
+            key={0}
+            data-testid="radio-exclude"
+            onClick={() => {
+              setExcludeErrors(true);
+            }}
+          />
+
+          <Radio
+            className="grid-col-6 desktop:grid-col-12 margin-bottom-1"
+            id={`1-radio-button`}
+            name="critical-errors-radio"
+            label={"Include Files with Critical Errors"}
+            key={1}
+            data-testid="radio-include"
+            onClick={() => {
+              setExcludeErrors(false);
+            }}
+          />
+        </Fieldset>
         <div className="dropdowns grid-row">
-          {dropdowns.map((dropdown, i) => {
-            const { name, items } = dropdown;
-            return (
-              <div className="grid-col-5 margin-top-2" key={i}>
-                <div className="margin-right-2">
-                  <ComboboxButton
-                    label={name}
-                    onClickHandler={() =>
-                      setActiveComboboxes({
-                        ...activeComboboxes,
-                        [name]: !activeComboboxes[name],
-                      })
-                    }
-                  />
-                  {activeComboboxes[name] && (
-                    <MultiSelectCombobox
-                      items={items}
-                      styling={comboboxStyling}
-                      hideInput={true}
-                      entity={name}
-                      searchBy="label"
-                      onChangeUpdate={(id, action) => {
-                        console.log(id);
-                        console.log(action);
-                        console.log(items.find((val) => val.id === id).label);
-                      }}
-                    />
-                  )}
-                </div>
-              </div>
-            );
-          })}
-          <div className="buttons grid-col-6">
-            <div className="display-flex flex-row flex-justify-end margin-top-5">
-              <Button outline={true}>Apply Filter(s)</Button>
+          <div className="grid-col-6 desktop:grid-col-3 margin-top-2">
+            <div className="margin-right-2">
+              <MultiSelectCombobox
+                key={`facilities-${availableFacilities.length}`}
+                items={availableFacilities}
+                entity={"Facilities"}
+                label={"Facilities"}
+                searchBy="label"
+                onChangeUpdate={facilityFilterChange}
+                autoFocus={false}
+                iconAlignRight={3}
+              />
+            </div>
+          </div>
+          <div className="grid-col-6 desktop:grid-col-3 margin-top-2">
+            <div className="margin-right-2">
+              <MultiSelectCombobox
+                key={`configs-${availableConfigState.length}`}
+                items={availableConfigurations.current}
+                entity={"Configurations"}
+                label={"Configurations"}
+                searchBy="label"
+                onChangeUpdate={configurationFilterChange}
+                autoFocus={false}
+                iconAlignRight={3}
+              />
+            </div>
+          </div>
+          <div className="grid-col-3 desktop:grid-col-2 margin-top-2">
+            <div className="margin-right-2">
+              <MultiSelectCombobox
+                key={`periods-${availableReportingPeriods.length}`}
+                items={availableReportingPeriods}
+                entity={"Reporting-Periods"}
+                label={"Reporting Periods"}
+                searchBy="label"
+                onChangeUpdate={reportingPeriodFilterChange}
+                autoFocus={false}
+                iconAlignRight={3}
+              />
+            </div>
+          </div>
+          <div className="buttons grid-col-9 desktop:grid-col-4 padding-top-1">
+            <div
+              id="submit-button-group"
+              className="display-flex flex-row flex-justify-end desktop:flex-justify-center margin-top-5 margin-right-1"
+            >
+              <Button
+                disabled={availableConfigState.length === 0}
+                onClick={applyFilters}
+                outline={true}
+              >
+                Apply Filter(s)
+              </Button>
               <Button
                 onClick={() => {
-                  setShowModal(true);
+                  showModal(true);
                 }}
                 disabled={false}
               >
@@ -479,40 +254,8 @@ const ReviewAndSubmitForm = () => {
           </div>
         </div>
       </div>
-      {showModal && (
-        <SubmissionModal
-          show={showModal}
-          close={closeModal}
-          submissionCallback={submission}
-          monitorPlanIds={[
-            "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
-            "02183-7RSS-09C865120F7C4FD6AFB801E02773AEDB",
-          ]}
-        />
-      )}
     </div>
   );
 };
-
-const ComboboxButton = ({ label, onClickHandler }) => (
-  <>
-    <Label id={`${label}-label`} htmlFor={`${label}-button`}>
-      {label}
-    </Label>
-    <button
-      name={label}
-      id={`${label}-button`}
-      className="margin-top-1 margin-bottom-0 border-1px bg-white multi-select-combobox width-full height-5 padding-x-1"
-      onClick={onClickHandler}
-    >
-      <span className="search position-static border-0 float-left">select</span>
-      <Tune
-        fontSize="small"
-        className="pin-right margin-right-3 padding-top-05"
-        tabIndex={-1}
-      />
-    </button>
-  </>
-);
 
 export default ReviewAndSubmitForm;
