@@ -69,9 +69,10 @@ describe("create all options for modal input controls", () => {
           // Check that the returned modal data match the control and date picker input arrays
           for (const arr of data) {
             if (!Array.isArray(arr[0])) {
+              let target =  controlInputs[arr[0]] || controlDatePickerInputs[arr[0]]
               expect(
-                controlInputs[arr[0]] || controlDatePickerInputs[arr[0]]
-              ).toBeTruthy();
+                target
+              ).toEqual(target);
             }
           }
         }

@@ -9,7 +9,7 @@ axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
 };
 
-const getApiUrl = (path, workspaceOnly = false) => {
+export const getApiUrl = (path, workspaceOnly = false) => {
   let url = config.services.monitorPlans.uri;
 
   if (workspaceOnly || window.location.href.includes("/workspace")) {

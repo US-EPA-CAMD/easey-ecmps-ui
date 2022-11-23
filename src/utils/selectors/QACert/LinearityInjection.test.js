@@ -18,10 +18,11 @@ describe("testing LinearityInjection data selectors", () => {
     ];
 
     tableRecords = [
-      { col1: "08/01/2022", col2: 7, col3: 7, col4: 1.1, col5: 1 },
+      { col1: "08/01/2022", col2: 9, col3: 9, col4: 1.001, col5: 1, id: 'ab681a06-0fd9-4d30-a208-421bcd62a554' },
     ];
   });
   test("should generate data table records", () => {
     expect(fs.getLinearityInjection(selectedData)).toEqual(tableRecords);
   });
 });
+
