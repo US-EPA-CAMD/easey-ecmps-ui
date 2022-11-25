@@ -72,6 +72,7 @@ describe("renders datatable with all values ", () => {
         data={[]}
         user={{ firstName: "test" }}
         isCheckedOut={true}
+        dataTableName="Test Summary Data"
       // expandableRowComp={<button>{"click me"}</button>}
       // expandableRows={true}
       />
@@ -89,32 +90,26 @@ describe("renders datatable with all values ", () => {
         data={[]}
         user={{ username: "test" }}
         isCheckedOut={true}
+        dataTableName="Test Summary Data"
       />
     );
     expect(container).toBeDefined();
   });
-  test("no user logged in  ", () => {
-    const { container } = render(
+  test("no user logged in - should not render edit/remove buttons and only renders view", () => {
+    render(
       <QADataTableRender
         columnNames={columnNames}
         data={data}
         actionsBtn={"View"}
+        dataTableName="Test Summary Data"
       />
     );
-    const expandBTN = container.querySelector("#expandRow1");
-    fireEvent.click(expandBTN);
-    const collapseBTN = container.querySelector("#collapseRow1");
-    fireEvent.click(collapseBTN);
-
-    const expandBTN1 = container.querySelector("#expandRow1");
-
-    fireEvent.keyDown(expandBTN1, {
-      key: "Enter",
-      code: 13,
-      charCode: 13,
-    });
-
-    expect(container).toBeDefined();
+    const editBtns = screen.queryAllByRole('button', { name: /Edit/i })
+    expect(editBtns).toHaveLength(0);
+    const deleteBtns = screen.queryAllByRole('button', { name: /Remove/i })
+    expect(deleteBtns).toHaveLength(0);
+    const viewBtns = screen.queryAllByRole('button', { name: /View/i })
+    expect(viewBtns).toHaveLength(1);
   });
 
   test('given a user then renders evaluate button for each row in table', () => {
@@ -127,6 +122,7 @@ describe("renders datatable with all values ", () => {
         user={{ firstName: "test" }}
         evaluate={true}
         isCheckedOut={true}
+        dataTableName="Test Summary Data"
       />
     );
 
@@ -144,6 +140,7 @@ describe("renders datatable with all values ", () => {
         data={data}
         user={{ firstName: "test" }}
         isCheckedOut={true}
+        dataTableName="Test Summary Data"
       />
     );
 
@@ -161,6 +158,7 @@ describe("renders datatable with all values ", () => {
         data={data}
         user={{ firstName: "test" }}
         isCheckedOut={true}
+        dataTableName="Test Summary Data"
       />
     );
 

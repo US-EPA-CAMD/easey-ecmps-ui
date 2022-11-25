@@ -132,5 +132,6 @@ describe("testing a reusable Dynamic Tabs component", () => {
     expect(actions.removeFacilityTab).toHaveBeenCalled();
 
     actionProps.setActive();
+    expect(actions.setActiveTab).toHaveBeenCalled();
   });
 });
