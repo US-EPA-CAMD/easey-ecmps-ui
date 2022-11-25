@@ -392,7 +392,7 @@ export const QACertTestSummaryHeaderInfo = ({
                   <CreateOutlined color="primary" /> {"Check Out"}
                 </Button>
               ) : null}
-              {isCheckedOut && (
+              {isCheckedOut && false /* REMOVE && false to Re-Enable this Button */ && (
               <Button autoFocus type="button" outline={true}>Revert to Official Record</Button>
               )}
             </>
