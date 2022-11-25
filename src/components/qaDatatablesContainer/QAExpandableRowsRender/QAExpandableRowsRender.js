@@ -6,7 +6,7 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
-import { addAriaLabelToDatatable, returnsFocusDatatableViewBTN } from "../../../additional-functions/ensure-508";
+import { addAriaLabelToDatatable, returnsFocusDatatableViewBTN, returnsFocusOnCancel } from "../../../additional-functions/ensure-508";
 /*********** COMPONENTS ***********/
 
 import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
@@ -18,7 +18,7 @@ import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import * as dmApi from "../../../utils/api/dataManagementApi";
 import * as assertSelector from "../../../utils/selectors/QACert/assert";
-import {getListOfRadioContorls} from "../../../utils/selectors/QACert/TestSummary";
+import { getListOfRadioContorls } from "../../../utils/selectors/QACert/TestSummary";
 import {
   qaAirEmissionsProps,
   qaProtocalGasProps,
@@ -54,8 +54,8 @@ const QAExpandableRowsRender = ({
   const [loading, setLoading] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
   const [dataPulled, setDataPulled] = useState([]);
-  const [clickedRow, setClickedRow] = useState(null);
   const [clickedIndex, setClickedIndex] = useState(null);
+  const [createdTestNumber, setCreatedTestNumber] = useState(null);
 
   const [displayedRecords, setDisplayedRecords] = useState([]);
   useEffect(() => {
@@ -76,7 +76,7 @@ const QAExpandableRowsRender = ({
     setDisplayedRecords(
       assertSelector.getDataTableRecords(dataPulled, dataTableName)
     );
-    
+
     setLoading(false);
     setUpdateTable(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -303,10 +303,10 @@ const QAExpandableRowsRender = ({
     }
   };
 
-  const populateStaticDropdowns = (tableName, dropdowns) =>{
-    if(tableName === "Flow To Load Check"){
+  const populateStaticDropdowns = (tableName, dropdowns) => {
+    if (tableName === "Flow To Load Check") {
       dropdowns['biasAdjustedIndicator'] = [
-        { code: 1, name: 1}, { code: 2, name: 2}
+        { code: 1, name: 1 }, { code: 2, name: 2 }
       ]
     }
   };
@@ -501,7 +501,7 @@ const QAExpandableRowsRender = ({
             dropdowns[dropdownArray[i]] = curResp.data.map((d) => {
               return { code: d[codeLabel], name: d[descriptionLabel] };
             });
-            if(i === 1){
+            if (i === 1) {
               dropdowns["oilVolumeUnitsOfMeasureCode"] = curResp.data.map((d) => {
                 return { code: d[codeLabel], name: d[descriptionLabel] };
               });
@@ -575,7 +575,15 @@ const QAExpandableRowsRender = ({
     // setReturnedFocusToLast(false);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
-    returnsFocusDatatableViewBTN(dataTableName, clickedRow, clickedIndex)
+    if (createNewData && createdTestNumber) {
+      const idx = data.findIndex(d => d.testNumber === createdTestNumber)
+      returnsFocusDatatableViewBTN(dataTableName, idx)
+      setCreatedTestNumber(null)
+    } else if (createNewData) {
+      returnsFocusOnCancel(dataTableName)
+    } else {
+      returnsFocusDatatableViewBTN(dataTableName, clickedIndex)
+    }
   };
   const finishedLoadingData = (loadedData) => {
     setDataPulled(loadedData);
@@ -597,11 +605,11 @@ const QAExpandableRowsRender = ({
           "",
         ];
       }
-      if(dataTableName === "Appendix E Correlation Heat Input from Oil") {
+      if (dataTableName === "Appendix E Correlation Heat Input from Oil") {
         controlInputs.monitoringSystemID = [
           "Monitoring System ID",
           "dropdown",
-          "", 
+          "",
           "",
         ]
       }
@@ -622,11 +630,11 @@ const QAExpandableRowsRender = ({
           "locked",
         ];
       }
-      if(dataTableName === "Appendix E Correlation Heat Input from Oil") {
+      if (dataTableName === "Appendix E Correlation Heat Input from Oil") {
         controlInputs.monitoringSystemID = [
           "Monitoring System ID",
           "dropdown",
-          "", 
+          "",
           "locked",
         ]
       }
@@ -683,7 +691,6 @@ const QAExpandableRowsRender = ({
       )
     );
 
-    setClickedRow(row)
     setClickedIndex(index)
 
     setShow(true);
@@ -715,6 +722,7 @@ const QAExpandableRowsRender = ({
     assertSelector
       .createDataSwitch(userInput, dataTableName, locationId, id, extraIDs)
       .then((res) => {
+        setCreatedTestNumber(userInput.testNumber);
         setUpdateTable(true);
         executeOnClose();
       })
@@ -781,6 +789,7 @@ const QAExpandableRowsRender = ({
               <>
                 <span className="padding-right-2">{dataTableName}</span>
                 <Button
+                  id={`btnAdd${dataTableName}`}
                   epa-testid="btnOpen"
                   className="text-white"
                   onClick={() => openModal(false, false, true)}
@@ -809,6 +818,7 @@ const QAExpandableRowsRender = ({
                     <>
                       <span className="padding-right-2">{dataTableName}</span>
                       <Button
+                        id={`btnAdd${dataTableName}`}
                         epa-testid="btnOpen"
                         className="text-white"
                         onClick={() => openModal(false, false, true)}
@@ -841,8 +851,8 @@ const QAExpandableRowsRender = ({
             createNewData
               ? `Add  ${dataTableName}`
               : user && isCheckedOut
-              ? ` Edit ${dataTableName}`
-              : ` ${dataTableName}`
+                ? ` Edit ${dataTableName}`
+                : ` ${dataTableName}`
           }
           exitBTN={`Save and Close`}
           children={

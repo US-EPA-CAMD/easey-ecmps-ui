@@ -105,13 +105,13 @@ export const addScreenReaderLabelForCollapses = () => {
  *              none
  *****************************************************/
 export const addAriaLabelToDatatable = (tableName) => {
-  if(tableName){
-    const tableWrapper = document.getElementById(tableName.replaceAll(" ","-"));
-    if(tableWrapper){
+  if (tableName) {
+    const tableWrapper = document.getElementById(tableName.replaceAll(" ", "-"));
+    if (tableWrapper) {
       const dataTable = tableWrapper.querySelector('[role="table"]');
-      dataTable? dataTable.setAttribute("aria-label", tableName) : dataTable.setAttribute("aria-label", "Data table");
+      dataTable ? dataTable.setAttribute("aria-label", tableName) : dataTable.setAttribute("aria-label", "Data table");
     }
-  }else{
+  } else {
     document.querySelectorAll(`.rdt_Table`).forEach((element) => {
       let label;
       let ariaLabelElement;
@@ -344,11 +344,20 @@ export const returnsFocusDatatableExpandBTN = (datatableName, index, direction, 
 };
 
 // returns focus to View Button
-export const returnsFocusDatatableViewBTN = (datatableName, row, index) => {
-  console.log('returnsFocusDatatableViewBTN', row)
+export const returnsFocusDatatableViewBTN = (datatableName, index) => {
   setTimeout(() => {
     let lastBTN = document
-      .getElementById(`btnEditView${datatableName}${row.col1}${index + 1}`);
+      .getElementById(`btnEditView${datatableName}${index + 1}`);
+    if (lastBTN) {
+      lastBTN.focus();
+    }
+  }, 500);
+};
+
+export const returnsFocusOnCancel = (dataTableName) => {
+  setTimeout(() => {
+    let lastBTN = document
+      .getElementById(`btnAdd${dataTableName}`);
     if (lastBTN) {
       lastBTN.focus();
     }
