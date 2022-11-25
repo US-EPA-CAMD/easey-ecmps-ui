@@ -36,26 +36,23 @@ export const MonitoringPlanTab = ({
   mostRecentlyCheckedInMonitorPlanIdForTab,
   workspaceSection,
 }) => {
-  const getCurrentTab = () =>{
-    return tabs.find(tab => tab.selectedConfig.id === selectedConfig.id);
+  const getCurrentTab = () => {
+    console.log('tab',tabs,'selected',selectedConfig)
+    return tabs.find((tab) => tab.selectedConfig.id === selectedConfig.id);
+  };
+  const getCurrentTabIndex = () => {
+    return tabs.findIndex((tab) => tab.selectedConfig.id === selectedConfig.id);
+  };
+  const [currentTabIndex, setCurrentTabIndex] = useState(getCurrentTabIndex());
 
-  }
-  const getCurrentTabIndex = () =>{
-    return tabs.findIndex(tab => tab.selectedConfig.id === selectedConfig.id);
-
-  }
-  const [ currentTabIndex, setCurrentTabIndex ] = useState(getCurrentTabIndex());
-
-  useEffect(()=>{
+  useEffect(() => {
     // setCurrentTab(getCurrentTab())
-    setCurrentTabIndex(getCurrentTabIndex())
+    setCurrentTabIndex(getCurrentTabIndex());
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[selectedConfig,checkout,currentTabIndex]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedConfig, checkout, currentTabIndex]);
 
-  const [sectionSelect, setSectionSelect] = useState(
-    getCurrentTab().section
-  );
+  const [sectionSelect, setSectionSelect] = useState(getCurrentTab().section);
   useEffect(() => {
     setSection(sectionSelect, title, MONITORING_PLAN_STORE_NAME);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,7 +67,6 @@ export const MonitoringPlanTab = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect]);
 
-
   return (
     <div>
       <div>
@@ -83,14 +79,13 @@ export const MonitoringPlanTab = ({
           orisCode={orisCode}
           selectedConfig={selectedConfig}
           sectionSelect={sectionSelect}
-          setSectionSelect={(section)=>setSectionSelect(section)}
+          setSectionSelect={(section) => setSectionSelect(section)}
           locationSelect={locationSelect}
-          setLocationSelect={(location)=>setLocationSelect(location)}
+          setLocationSelect={(location) => setLocationSelect(location)}
           locations={selectedConfig.locations}
           user={user}
           configID={tabs[currentTabIndex].selectedConfig.id}
           checkout={tabs[currentTabIndex].checkout}
-
           setCheckout={setCheckout}
           setInactive={setInactive}
           inactive={tabs[currentTabIndex].inactive}

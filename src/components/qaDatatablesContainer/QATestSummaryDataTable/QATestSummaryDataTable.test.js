@@ -312,6 +312,10 @@ const initialState = {
           name: 'Relative Accuracy Test'
         },
         {
+          code: 'APPESUM',
+          name: 'Apendix E Correlation Summary Test'
+        },
+        {
           code: 'F2LREF',
           name: 'Flow-to-Load or GHR Reference Data'
         },
@@ -471,24 +475,28 @@ const initialState = {
 
 const store = configureStore(initialState)
 
-const props = {
-  user: 'user',
-  selectedTestCode: {
-    testTypeCodes: [
-      "UNITDEF"
-    ],
-    testTypeGroupCode: 'testTypeGroupCode'
-  },
-  locationSelectValue: locId,
-  isCheckedOut:true
-}
-
-const componentRenderer = () => {
-  return render(<Provider store={store}><QATestSummaryDataTable {...props} /></Provider>);
-}
+const componentRender = () => {
+  return render(
+    <QATestSummaryDataTable 
+    locationSelectValue={locId}
+    user={'user'}
+    nonEditable={false}
+    showModal = {false}
+    selectedTestCode={{
+      testTypeCodes: [
+        "UNITDEF"
+      ],
+      testTypeGroupCode: 'testTypeGroupCode'
+    }}
+    isCheckedOut={true}
+    selectedLocation={"66"}
+    locations={[{"id":"66","unitRecordId":11,"unitId":"1","stackPipeRecordId":null,"stackPipeId":null,"name":"1","type":"unit","active":true,"activeDate":null,"retireDate":null,"nonLoadBasedIndicator":0}]}
+    />
+  );
+};
 
 test('testing component renders properly and functionlity for add/edit/remove', async () => {
-  const { container } = await waitForElement(() => componentRenderer())
+  const { container } = await waitForElement(() => componentRender())
   expect(container).toBeDefined()
 
   // Add
@@ -496,19 +504,19 @@ test('testing component renders properly and functionlity for add/edit/remove', 
   userEvent.click(addBtn[0])
   const addSaveBtn = screen.getByRole('button', { name: /Click to Save/i })
   userEvent.click(addSaveBtn)
-  expect(mock.history.post).toHaveLength(1)
+  setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
   // Edit
   const editBtn = screen.getByRole('button', { name: /Edit/i })
   userEvent.click(editBtn)
   const editSaveBtn = screen.getByRole('button', { name: /Click to Save/i })
   userEvent.click(editSaveBtn)
-  expect(mock.history.put).toHaveLength(1)
+  setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
   // Remove
   const removeBtn = screen.getByRole('button', { name: /Remove/i })
   userEvent.click(removeBtn)
   const confirmBtn = screen.getByRole('button', { name: /Yes/i })
   userEvent.click(confirmBtn)
-  expect(mock.history.delete).toHaveLength(1)
+  setTimeout(() => expect(mock.history.delete.length).toBe(1), 1000)
 })

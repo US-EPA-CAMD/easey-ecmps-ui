@@ -2,7 +2,7 @@ import * as mpApi from "./monitoringPlansApi";
 const axios = require("axios");
 jest.mock("axios");
 
-const selectedFacilityOrisCode = "3";
+const selectedFacilityOrisCode = 3;
 const mockData = [{}];
 
 const monitoringLocationId = 56;
@@ -37,7 +37,7 @@ describe("testing monitoring plans data fetching APIs", () => {
     axios.get.mockImplementation(() =>
       Promise.resolve({ status: 200, data: mockData })
     );
-    const apiCall = await mpApi.getMonitoringPlans(selectedFacilityOrisCode);
+    const apiCall = await mpApi.getMonitoringPlans(3);
     expect(apiCall.data).toEqual(mockData);
   });
 
@@ -47,7 +47,7 @@ describe("testing monitoring plans data fetching APIs", () => {
     axios.get.mockImplementation(() =>
       Promise.resolve({ status: 200, data: mockData })
     );
-    const apiCall = await mpApi.getMonitoringPlans(selectedFacilityOrisCode);
+    const apiCall = await mpApi.getMonitoringPlans(3);
     expect(apiCall.data).toEqual(mockData);
   });
 

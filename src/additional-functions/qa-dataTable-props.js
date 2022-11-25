@@ -413,3 +413,408 @@ export const qaTestQualificationProps = (selectedRow) => {
     extraControls: {},
   };
 };
+
+export const qaAppendixECorrelationSummaryTestProps = (selectedRow) => {
+  return {
+    dataTableName: "Appendix E Correlation Summary",
+    payload: {
+      operatingLevelForRun: 0,
+      meanReferenceValue: 0,
+      averageHourlyHeatInputRate: 0,
+      fFactor: 0,
+    },
+    dropdownArray: [],
+    columnNames: [
+      "Operating Level For Run",
+      "Mean Reference Value",
+      "Average Hourly Heat Input Rate",
+      "F-Factor",
+    ],
+    controlInputs: {
+      operatingLevelForRun: ["Operating Level For Run", "input", "", ""],
+      meanReferenceValue: ["Mean Reference Value", "input", "", ""],
+      averageHourlyHeatInputRate: ["Average Hourly Heat Input Rate", "input", "", ""],
+      fFactor: ["F-Factor", "input", "", ""],
+    },
+    controlDatePickerInputs: {},
+    extraControls: {},
+  };
+};
+
+export const qaAppendixECorrelationSummaryHeatInputGasProps = (selectedRow) => {
+  return {
+    dataTableName: "Appendix E Correlation Heat Input from Gas",
+    payload: {
+      gasGCV: 0,
+      gasVolume: 0,
+      gasHeatInput: 0,
+      monitoringSystemID: "string",
+    },
+    dropdownArray: [],
+    columnNames: [
+      "Gas GCV",
+      "Gas Volume",
+      "Gas Heat Input",
+    ],
+    controlInputs: {
+      gasGCV: ["Gas GCV", "input", "", ""],
+      gasVolume: ["Gas Volume", "input", "", ""],
+      gasHeatInput: ["Gas Heat Input", "input", "", ""],
+    },
+    controlDatePickerInputs: {},
+    extraControls: {},
+  };
+};
+
+export const qaAppendixECorrelationSummaryHeatInputOilProps = (selectedRow) => {
+  return {
+    dataTableName: "Appendix E Correlation Heat Input from Oil",
+    payload: {
+      monitoringSystemID: null,
+      oilMass: null,
+      oilGCV: null,
+      oilGCVUnitsOfMeasureCode: null,
+      oilHeatInput: null,
+      oilVolume: null,
+      oilVolumeUnitsOfMeasureCode: null,
+      oilDensity: null,
+      oilDensityUnitsOfMeasureCode: null,
+    },
+    dropdownArray: [
+      'monitoringSystemID',
+      'oilGCVUnitsOfMeasureCode',
+      'oilVolumeUnitsOfMeasureCode',
+      'oilDensityUnitsOfMeasureCode',
+    ],
+    columnNames: [
+      "Monitoring System ID",
+      "Oil Mass",
+      "Oil GCV",
+      "Oil GCV Units of Measure Code",
+      "Oil Heat Input",
+      "Oil Volume",
+      "Oil Volume Units of Measure Code",
+      "Oil Density",
+      "Oil Density Units of Measure Code",
+    ],
+    controlInputs: {
+      monitoringSystemID: ["Monitoring System ID", "dropdown", "", ""],
+      oilMass: ["Oil Mass", "input", "", ""],
+      oilGCV: ["Oil GCV", "input", "", ""],
+      oilGCVUnitsOfMeasureCode: ["Oil GCV Units of Measure Code", "dropdown", "", ""],
+      oilHeatInput: ["Oil Heat Input", "input", "", ""],
+      oilVolume: ["Oil Volume", "input", "", ""],
+      oilVolumeUnitsOfMeasureCode: ["Oil Volume Units of Measure Code", "dropdown", "", ""],
+      oilDensity: ["Oil Density", "input", "", ""],
+      oilDensityUnitsOfMeasureCode: ["Oil Density Units of Measure Code", "dropdown", "", ""],
+    },
+    controlDatePickerInputs: {},
+    extraControls: {},
+  };
+};
+
+export const qaFuelFlowToLoadProps = () => {
+  return {
+    dataTableName: "Fuel Flow to Load",
+    payload: {},
+    dropdownArray: [
+      'testBasisCode',
+    ],
+    mdmProps: [
+      {
+        codeTable: "test-basis-codes",
+        responseProps: {
+          code: "testBasisCode",
+          description: "testBasisDescription"
+        }
+      }
+    ],
+    columnNames: [
+      "Test Basis Code",
+      "Average Difference",
+      "Number of Hours Used",
+      "Number of Hours Excluded Co-firing",
+      "Number of Hours Excluded Ramping",
+      "Number of Hours Excluded Low Range",
+    ],
+    controlInputs: {
+      testBasisCode: ["Test Basis Code", "dropdown", "", ""],
+      averageDifference: ["Average Difference", "input", "", ""],
+      numberOfHoursUsed: ["Number of Hours Used", "input", "", ""],
+      numberOfHoursExcludedCofiring: ["Number of Hours Excluded Co-firing", "input", "", ""],
+      numberOfHoursExcludedRamping: ["Number of Hours Excluded Ramping", "input", "", ""],
+      numberOfHoursExcludedLowRange: ["Number of Hours Excluded Low Range", "input", "", ""],
+    },
+  };
+}
+
+export const qaFuelFlowToLoadBaselineProps = () => {
+  return {
+    dataTableName: "Fuel Flow to Load Baseline",
+    payload: {},
+    dropdownArray: [
+      'fuelFlowToLoadUOMCode',
+    ],
+    mdmProps: [
+      {
+        codeTable: "units-of-measure-codes",
+        responseProps: {
+          code: "unitOfMeasureCode",
+          description: "unitOfMeasureDescription"
+        }
+      }
+    ],
+    columnNames: [
+      "Accuracy Test Number",
+      "PEI Test Number",
+      "Average Fuel Flow Rate",
+      "Average Load",
+      "Baseline Fuel Flow-to-Load Ratio",
+      "Fuel Flow-to-Load UOM Code",
+      "Average Hourly Heat Input Rate",
+      "Baseline GHR",
+      "GHR UOM Code",
+      "Number of Hours Excluded Co-firing",
+      "Number of Hours Excluded Ramping",
+      "Number of Hours Excluded Low Range"
+    ],
+    controlInputs: {
+      accuracyTestNumber: ["Accuracy Test Number", "input", "", ""],
+      peiTestNumber: ["PEI Test Number", "input", "", ""],
+      averageFuelFlowRate: ["Average Fuel Flow Rate", "input", "", ""],
+      averageLoad: ["Average Load", "input", "", ""],
+      baselineFuelFlowToLoadRatio: ["Baseline Fuel Flow-to-Load Ratio", "input", "", ""],
+      fuelFlowToLoadUOMCode: ["Fuel Flow-to-Load UOM Code", "dropdown", "", ""],
+      averageHourlyHeatInputRate: ["Average Hourly Heat Input Rate", "input", "", ""],
+      baselineGHR: ["Baseline GHR", "input", "", ""],
+      ghrUnitsOfMeasureCode: ["GHR UOM Code", "input", "", ""],
+      numberOfHoursExcludedCofiring: ["Number of Hours Excluded Co-firing", "input", "", ""],
+      numberOfHoursExcludedRamping: ["Number of Hours Excluded Ramping", "input", "", ""],
+      numberOfHoursExcludedLowRange: ["Number of Hours Excluded Low Range", "input", "", ""],
+    },
+  };
+}
+
+export const qaAppendixECorrTestRunProps = () => {
+  return {
+    dataTableName: "Appendix E Correlation Run",
+    payload: {},
+    dropdownArray: [],
+    columnNames: [
+      "Run Number",
+      "Reference Value",
+      "Hourly Heat Input Rate",
+      "Total Heat Input",
+      "Response Time",
+      "Begin Date ",
+      "Begin Hour",
+      "Begin Minute",
+      "End Date",
+      "End Hour ",
+      "End Minute",
+    ],
+    controlInputs: {
+      runNumber: ["Run Number", "input", "", ""],
+      referenceValue: ["RATA Reference Value", "input", "", ""],
+      hourlyHeatInputRate: ["Hourly Heat Input Rate", "input", "", ""],
+      totalHeatInput: ["Total Heat Input", "input", "", ""],
+      responseTime: ["Response Time", "input", "", ""],
+    },
+    controlDatePickerInputs: {
+      beginDate: ["Begin Date", "date", "", ""],
+      beginHour: ["Begin Hour", "hourDropdown", "dropdown", ""],
+      beginMinute: ["Begin Minute", "minuteDropdown", "dropdown", ""],
+      endDate: ["End Date", "date", "", ""],
+      endHour: ["End Hour", "hourDropdown", "dropdown", ""],
+      endMinute: ["End Minute", "minuteDropdown", "dropdown", ""],
+    },
+    extraControls: {},
+  };
+};
+
+export const qaFlowToLoadCheckProps = () => {
+  return {
+    dataTableName: "Flow To Load Check",
+    payload: {},
+    dropdownArray: [
+      'testBasisCode', 'operatingLevelCode', 'biasAdjustedIndicator'
+    ],
+    mdmProps: [
+      {
+        codeTable: "test-basis-codes",
+        responseProps: {
+          code: "testBasisCode",
+          description: "testBasisDescription"
+        }
+      },
+      {
+        codeTable: "operating-level-codes",
+        responseProps: {
+          code: "opLevelCode",
+          description: "opLevelDescription"
+        }
+      }
+    ],
+    columnNames: [
+      "Test Basis Code",
+      "Bias Adjusted Indicator",
+      "Average Absolute Percent Difference",
+      "Number of Hours",
+      "Number of Hours Excluded for Fuel",
+      "Number of Hours Excluded for Ramping",
+      "Number of Hours Excluded for Bypass",
+      "Number of Hours Excluded Pre RATA",
+      "Number of Hours Excluded Test",
+      "Number of Hours Excluded for  Main and Bypass",
+      "Operating Level Code",
+    ],
+    controlInputs: {
+      testBasisCode: ["Test Basis Code", "dropdown", "", ""],
+      biasAdjustedIndicator: ["Bias Adjusted Indicator", "dropdown", "", ""],
+      averageAbsolutePercentDifference: ["Average Absolute Percent Difference", "input", "", ""],
+      numberOfHours: ["Number of Hours", "input", "", ""],
+      numberOfHoursExcludedForFuel: ["Number of Hours Excluded for Fuel", "input", "", ""],
+      numberOfHoursExcludedForRamping: ["Number of Hours Excluded for Ramping", "input", "", ""],
+      numberOfHoursExcludedForBypass: ["Number of Hours Excluded for Bypass", "input", "", ""],
+      numberOfHoursExcludedPreRata: ["Number of Hours Excluded Pre RATA", "input", "", ""],
+      numberOfHoursExcludedTest: ["Number of Hours Excluded Test", "input", "", ""],
+      numberOfHoursExcludedForMainAndBypass: ["Number of Hours Excluded for Main and Bypass", "input", "", ""],
+      operatingLevelCode: ["Operating Level Code", "dropdown", "", ""],
+    },
+  };
+}
+
+export const qaOnOffCalibrationProps = () => {
+  return {
+    dataTableName: "Online Offline Calibration",
+    payload: {},
+    dropdownArray: ["upscaleGasLevelCode"],
+    mdmProps: [
+      {
+        codeTable: "gas-level-codes",
+        responseProps: {
+          code: "gasLevelCode",
+          description: "gasLevelDescription"
+        }
+      },
+    ],
+    columnNames: [
+      "Online Zero Reference Value",
+      "Online Upscale Reference Value",
+      "Offline Zero Reference Value",
+      "Offline Upscale Reference Value",
+      "Online Zero Measured Value",
+      "Online Upscale Measured Value",
+      "Offline Zero Measured Value",
+      "Offline Upscale Measured Value",
+      "Online Zero Calibration Error",
+      "Online Upscale Calibration Error",
+      "Offline Zero Calibration Error",
+      "Offline Upscale Calibration Error",
+      "Upscale Gas Level Code",
+      "Online Zero APS Indicator",
+      "Online Upscale APS Indicator",
+      "Offline Zero APS Indicator",
+      "Offline Upscale APS Indicator",
+      "Online Zero Injection Date",
+      "Online Upscale Injection Date",
+      "Offline Zero Injection Date",
+      "Offline Upscale Injection Date",
+      "Online Zero Injection Hour",
+      "Online Upscale Injection Hour",
+      "Offline Zero Injection Hour",
+      "Offline Upscale Injection Hour",
+    ],
+    controlInputs: {
+      // --- Input ---
+      onlineZeroReferenceValue: ["Online Zero Reference Value", "input", "", ""],
+      onlineUpscaleReferenceValue: ["Online Upscale Reference Value", "input", "", ""],
+      offlineZeroReferenceValue: ["Offline Zero Reference Value", "input", "", ""],
+      offlineUpscaleReferenceValue: ["Offline Upscale Reference Value", "input", "", ""],
+      onlineZeroMeasuredValue: ["Online Zero Measured Value", "input", "", ""],
+      onlineUpscaleMeasuredValue: ["Online Upscale Measured Value", "input", "", ""],
+      offlineZeroMeasuredValue: ["Offline Zero Measured Value", "input", "", ""],
+      offlineUpscaleMeasuredValue: ["Offline Upscale Measured Value", "input", "", ""],
+      onlineZeroCalibrationError: ["Online Zero Calibration Error", "input", "", ""],
+      onlineUpscaleCalibrationError: ["Online Upscale Calibration Error", "input", "", ""],
+      offlineZeroCalibrationError: ["Offline Zero Calibration Error", "input", "", ""],
+      offlineUpscaleCalibrationError: ["Offline Upscale Calibration Error", "input", "", ""],
+
+      // --- Dropdowns ---
+      upscaleGasLevelCode: ["Upscale Gas Level Code", "dropdown", "", ""],
+      onlineZeroAPSIndicator: ["Online Zero APS Indicator", "radio", "", "", { defaultValue: 1 }],
+      onlineUpscaleAPSIndicator: ["Online Upscale APS Indicator", "radio", "", "", { defaultValue: 1 }],
+      offlineZeroAPSIndicator: ["Offline Zero APS Indicator", "radio", "", "", { defaultValue: 1 }],
+      offlineUpscaleAPSIndicator: ["Offline Upscale APS Indicator", "radio", "", "", { defaultValue: 1 }],
+    },
+    controlDatePickerInputs: {
+      onlineZeroInjectionDate: ["Online Zero Injection Date", "date", "", ""],
+      onlineUpscaleInjectionDate: ["Online Upscale Injection Date", "date", "", ""],
+      offlineZeroInjectionDate: ["Offline Zero Injection Date", "date", "", ""],
+      offlineUpscaleInjectionDate: ["Offline Upscale Injection Date", "date", "", ""],
+      onlineZeroInjectionHour: ["Online Zero Injection Hour", "hourDropdown", "dropdown", ""],
+      onlineUpscaleInjectionHour: ["Online Upscale Injection Hour", "hourDropdown", "dropdown", ""],
+      offlineZeroInjectionHour: ["Offline Zero Injection Hour", "hourDropdown", "dropdown", ""],
+      offlineUpscaleInjectionHour: ["Offline Upscale Injection Hour", "hourDropdown", "dropdown", ""],
+    },
+  };
+}
+
+export const qaCalibrationInjectionProps = () => {
+  return {
+    dataTableName: "Calibration Injection",
+    payload: {},
+    dropdownArray: [
+      'upscaleGasLevelCode'
+    ],
+    mdmProps: [
+      {
+        codeTable: "gas-level-codes",
+        responseProps: {
+          code: "gasLevelCode",
+          description: "gasLevelDescription"
+        }
+      }
+    ],
+    columnNames: [
+      "Online Offline Indicator",
+      "Upscale Gas Level Code",
+      "Zero Injection Date",
+      "Zero Injection Hour",
+      "Zero Injection Minute",
+      "Upscale Injection Date",
+      "Upscale Injection Hour",
+      "Upscale Injection Minute",
+      "Zero Measured Value",
+      "Upscale Measured Value",
+      "Zero APS Indicator",
+      "Upscale APS Indicator",
+      "Zero Calibration Error",
+      "Upscale Calibration Error",
+      "Zero Reference Value",
+      "Upscale Reference Value"
+    ],
+    controlInputs: {
+      onLineOffLineIndicator: ["Online Offline Indicator", "radio", "", ""],
+      upscaleGasLevelCode: ["Upscale Gas Level Code", "dropdown", "", ""],
+      zeroMeasuredValue: ["Zero Measured Value", "input", "", ""],
+      upscaleMeasuredValue: ["Upscale Measured Value", "input", "", ""],
+      zeroAPSIndicator: ["Zero APS Indicator", "radio", "", ""],
+      upscaleAPSIndicator: ["Upscale APS Indicator", "radio", "", ""],
+      zeroCalibrationError: ["Zero Calibration Error", "input", "", ""],
+      upscaleCalibrationError: ["Upscale Calibration Error", "input", "", ""],
+      zeroReferenceValue: ["Zero Reference Value", "input", "", ""],
+      upscaleReferenceValue: ["Upscale Reference Value", "input", "", ""],
+    },
+    controlDatePickerInputs: {
+      zeroInjectionDate: ["Zero Injection Date", "date", "", ""],
+      zeroInjectionHour: ["Zero Injection Hour", "hourDropdown", "dropdown", ""],
+      zeroInjectionMinute: ["Zero Injection Minute", "minuteDropdown", "dropdown", ""],
+      upscaleInjectionDate: ["Upscale Injection Date", "date", "", ""],
+      upscaleInjectionHour: ["Upscale Injection Hour", "hourDropdown", "dropdown", ""],
+      upscaleInjectionMinute: ["Upscale Injection Minute", "minuteDropdown", "dropdown", ""],
+    },
+    radioBtnPayload: ["onLineOffLineIndicator","zeroAPSIndicator","upscaleAPSIndicator"],
+    extraControls: {},
+  };
+}

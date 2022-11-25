@@ -1,12 +1,13 @@
 import React from "react";
 import { render, waitForElement, fireEvent } from "@testing-library/react";
-import { DataTableRectangularDucts } from "./DataTableRectangularDucts";
+import { DataTableRectangularDucts,mapStateToProps, } from "./DataTableRectangularDucts";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 // import { handleResponse, handleError } from "../../../utils/api/apiUtils";
 // import { secureAxios } from "../../../utils/api/easeyAuthApi";
 import * as axios from "axios";
 jest.mock("axios");
+
 
 const selectedDucts = [{}];
 const returnedDucts = {};
@@ -16,7 +17,6 @@ const locationSelectValue = 6;
 const payload = {
   locationId: locationSelectValue,
   id: 1111,
-
   userId: "string",
   addDate: "2021-10-18T07:24:08.777Z",
   updateDate: "2021-10-18T07:24:08.777Z",
@@ -38,44 +38,42 @@ const payload = {
 const userInput = extractUserInput(payload, ".modalUserInput");
 
 //testing redux connected component to mimic props passed as argument
-const componentRenderer = (
-  checkout,
-  secondLevel,
-  addComponentFlag,
-  openComponentViewTest,
-  openAddComponentTest
-) => {
+const componentRenderer = (location, showModal) => {
   const props = {
-    locationSelectValue: "1111",
-    user: "testuser",
-    checkout: false,
-    inactive: [false],
+    locationSelectValue: location,
+    user: { firstName: "test" },
+    checkout: true,
+    inactive: true,
     settingInactiveCheckBox: jest.fn(),
-    revertedState: false,
     setRevertedState: jest.fn(),
+    currentTabIndex:0,
+    tabs:[]
   };
   return render(<DataTableRectangularDucts {...props} />);
 };
 
+function componentRendererNoData(args) {
+  const defualtProps = {
+    locationSelectValue: "0",
+    matsTableHandler: jest.fn(),
+    showActiveOnly: true,
+    user: { username: "test" },
+    checkout: true,
+    setRevertedState: jest.fn(),
+  };
+
+  const props = { ...defualtProps, ...args };
+  return render(<DataTableRectangularDucts {...props} />);
+}
+
 test("tests getMonitoringRectangularDucts", async () => {
   axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: selectedDucts })
+    Promise.resolve({ status: 200, data: payload })
   );
   const title = await mpApi.getMonitoringRectangularDucts(6);
-  expect(title.data).toEqual(selectedDucts);
+  expect(title.data).toEqual(payload);
 
-  let { container } = await waitForElement(() =>
-    componentRenderer(false, false, false, true, false)
-  );
-  expect(container).toBeDefined();
+
 });
 
-test("test create/save Ducts functions", async () => {
-  let { container } = await waitForElement(() =>
-    componentRenderer(false, false, false, true, false)
-  );
 
-  // fireEvent.click(container.querySelector("#testingBtn"));
-  // fireEvent.click(container.querySelector("#testingBtn2"));
-  // fireEvent.click(container.querySelector("#testingBtn3"));
-});

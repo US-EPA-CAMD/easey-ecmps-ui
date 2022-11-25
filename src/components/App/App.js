@@ -30,6 +30,7 @@ import {
   MONITORING_PLAN_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import * as modules from "../../utils/constants/moduleTitles";
+import ReviewAndSubmit from "../ReviewAndSubmit/ReviewAndSubmit";
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -47,9 +48,9 @@ const App = () => {
     // To avoid css sytling conflicts in production build
     // position the link tag to external stylesheet as the last element of head section.
     const linkTags = document.querySelectorAll('link[rel="stylesheet"]');
-    linkTags.forEach(linkTag => {
+    linkTags.forEach((linkTag) => {
       linkTag.parentNode.appendChild(linkTag);
-    })
+    });
   };
 
   useEffect(() => {
@@ -129,11 +130,22 @@ const App = () => {
             />
             <Route path={`/faqs`} exact component={() => <FAQ />} />
             <Route path="/login" exact component={Login} />
+            <Route
+              path="/workspace/review"
+              exact
+              component={() => <ReviewAndSubmit />}
+            />
 
             {user ? (
-              <Redirect from="/monitoring-plans" to="/workspace/monitoring-plans" />
+              <Redirect
+                from="/monitoring-plans"
+                to="/workspace/monitoring-plans"
+              />
             ) : (
-              <Redirect from="/workspace/monitoring-plans" to="/monitoring-plans" />
+              <Redirect
+                from="/workspace/monitoring-plans"
+                to="/monitoring-plans"
+              />
             )}
             <Route
               path="/monitoring-plans"

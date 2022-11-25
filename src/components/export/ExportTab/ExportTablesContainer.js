@@ -6,6 +6,7 @@ import { ArrowDownwardSharp } from "@material-ui/icons";
 import { exportQA } from "../../../utils/api/qaCertificationsAPI";
 import { qaTestSummaryCols } from "../../../utils/constants/tableColumns";
 import { getUnitIdAndStackPipeIds } from "../../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
+import { assignAriaLabelsToDataTable } from "../../../additional-functions/ensure-508";
 
 export const ExportTablesContainer = ({
   selectionData,
@@ -36,6 +37,13 @@ export const ExportTablesContainer = ({
         if (response) {
           setQATestSummaryData(response.data.testSummaryData);
           setLoading(false);
+
+          const rowsAriaLabelData = []
+          response.data.testSummaryData.forEach(e => {
+            rowsAriaLabelData.push(e.testNumber)
+          });
+
+          assignAriaLabelsToDataTable('#exportTestSummaryData', rowsAriaLabelData)
         }
       } catch (err) {
         console.log(err);
@@ -68,7 +76,7 @@ export const ExportTablesContainer = ({
   };
 
   const dataTable = (
-    <div className="margin-x-3 margin-y-4">
+    <div className="margin-x-3 margin-y-4" id="exportTestSummaryData">
       <h3 className="margin-y-1">Test Summary</h3>
       <DataTable
         responsive={true}

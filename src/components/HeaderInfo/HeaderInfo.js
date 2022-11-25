@@ -1,11 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { Button, Checkbox } from "@trussworks/react-uswds";
+import React, { useEffect, useState, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  Button,
+  Checkbox,
+  Dropdown,
+  FormGroup,
+  Grid,
+  GridContainer,
+  Label,
+} from "@trussworks/react-uswds";
 import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
 import config from "../../config";
 import { triggerEvaluation } from "../../utils/api/quartzApi";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
-import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
+import * as emApi from "../../utils/api/emissionsApi";
+import {
+  EMISSIONS_STORE_NAME,
+  MONITORING_PLAN_STORE_NAME,
+} from "../../additional-functions/workspace-section-and-store-names";
 import Modal from "../Modal/Modal";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 import "./HeaderInfo.scss";
@@ -25,6 +38,43 @@ import {
   returnFocusToCommentButton,
   returnFocusToLast,
 } from "../../additional-functions/manage-focus";
+import MultiSelectCombobox from "../MultiSelectCombobox/MultiSelectCombobox";
+import {
+  getViews,
+  exportEmissionsDataDownload,
+} from "../../utils/api/emissionsApi";
+import { getUser } from "../../utils/functions";
+import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
+import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
+import { setIsViewDataLoaded, setReportingPeriods, setViewData, setViewDataColumns, setViewTemplateSelection, setViewTemplateSelectionAction } from "../../store/actions/dynamicFacilityTab";
+import { handleError } from "../../utils/api/apiUtils";
+import { displayAppError, hideAppError } from "../../additional-functions/app-error";
+
+// Helper function that generates an array of years from this year until the year specified in min param
+export const generateArrayOfYears = (min) => {
+  let max = new Date().getFullYear();
+  let years = [];
+
+  for (let i = max; i >= min; i--) {
+    years.push(i);
+  }
+  return years;
+};
+
+const getReportingPeriods = (minYear = 2009) => {
+  const quarters = [4, 3, 2, 1];
+  const maxYear = new Date().getFullYear();
+  const reportingPeriods = [];
+
+  for (let year = maxYear; year >= minYear; year--) {
+    for (const quarter of quarters) {
+      reportingPeriods.push(`${year} Q${quarter}`);
+    }
+  }
+
+  return reportingPeriods;
+};
+
 export const HeaderInfo = ({
   facility,
   selectedConfig,
@@ -47,25 +97,10 @@ export const HeaderInfo = ({
   configID,
   setUpdateRelatedTables,
   updateRelatedTables,
-  workspaceSection
+  workspaceSection,
 }) => {
   //MP
   const sections = [
-    { name: "Defaults" },
-    { name: "Formulas" },
-    { name: "Loads" },
-    {
-      name: "Location Attributes and Relationships",
-    },
-    { name: "Methods" },
-    { name: "Qualifications" },
-    { name: "Rectangular Duct WAFs" },
-    { name: "Spans" },
-    { name: "Systems" },
-    { name: "Unit Information" },
-  ];
-//Emissions
-  const viewTemplates = [
     { name: "Defaults" },
     { name: "Formulas" },
     { name: "Loads" },
@@ -83,6 +118,12 @@ export const HeaderInfo = ({
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
+  const unitIds  = selectedConfig?.unitStackConfigurations.map(config => config.unitId);
+  const stackPipeIds = selectedConfig?.unitStackConfigurations.map(config => config.stackPipeId);
+
+  const dispatch = useDispatch();
+  const currentTab = useSelector(state=>state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(t=>t.selectedConfig.id===configID));
+
   const [checkedOutConfigs, setCheckedOutConfigs] = useState([]);
   const [auditInformation, setAuditInformation] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -111,8 +152,9 @@ export const HeaderInfo = ({
 
   // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
-  const [usePortBtn, setUsePortBtn] = useState(false);
+  // Upload has finished when finishedLoading=true (this is my educated guess, someone correct if wrong)
   const [finishedLoading, setFinishedLoading] = useState(false);
+  // Upload has started but is not finished when isLoading=true (this is my educated guess, someone correct if wrong)
   const [isLoading, setIsLoading] = useState(false);
   const [fileName, setFileName] = useState("");
   const [hasFormatError, setHasFormatError] = useState(false);
@@ -121,6 +163,44 @@ export const HeaderInfo = ({
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const [isReverting, setIsReverting] = useState(false);
+  const [viewTemplates, setViewTemplates] = useState([]);
+
+  const [importedFile, setImportedFile] = useState([]);
+  const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState([]);
+
+  const [showEmissionsImportTypeModal, setShowEmissionsImportTypeModal] = useState(false);
+  const [showHistoricalDataImportModal, setShowHistoricalDataImportModal] = useState(false);
+
+  const [selectedReportingPeriods, setSelectedReportingPeriods] = useState(currentTab?.reportingPeriods ?? []);
+
+  const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
+
+  const MAX_REPORTING_PERIODS = 4;
+  const MAX_REPORTING_PERIODS_ERROR_MSG = "You can only select a maximum of four reporting periods";
+
+  
+  let reportingPeriods = useMemo(
+    () =>
+      getReportingPeriods().map((reportingPeriod) => {
+        return {
+          id: reportingPeriod,
+          label: reportingPeriod,
+          selected: false,
+          enabled: true,
+        };
+      }),
+    []
+  );
+
+  // Sets the value in redux
+  const dispatchViewTemplateSelect = (selectedViewTemplate)=>{
+    dispatch(setViewTemplateSelectionAction(selectedViewTemplate, currentTab.name, EMISSIONS_STORE_NAME));
+  }
+
+  useEffect(()=>{
+    if(currentTab?.viewTemplateSelect)
+      setViewTemplateSelect(currentTab.viewTemplateSelect)
+  }, [currentTab])
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
@@ -148,6 +228,20 @@ export const HeaderInfo = ({
       cleanupFocusEventListeners();
     };
   }, []);
+
+  useEffect(() => {
+    if (workspaceSection !== EMISSIONS_STORE_NAME) return;
+
+    getViews().then(({ data }) => {
+      setViewTemplates(data);
+      if (!currentTab?.viewTemplateSelect && data?.length > 0){
+
+        setViewTemplateSelect(data[0]);
+      } 
+    });
+  }, [workspaceSection, setViewTemplateSelect]);
+
+
   const executeOnClose = () => {
     setShowCommentsModal(false);
     removeChangeEventListeners(".modalUserInput");
@@ -156,14 +250,16 @@ export const HeaderInfo = ({
 
   const resetImportFlags = () => {
     setShowImportModal(false);
+    setShowEmissionsImportTypeModal(false);
+    setShowHistoricalDataImportModal(false)
     setDisablePortBtn(true);
-    setUsePortBtn(false);
     setFinishedLoading(false);
     setIsLoading(false);
     setFileName("");
     setHasFormatError(false);
     setHasInvalidJsonError(false);
     setImportApiErrors([]);
+    setImportedFileErrorMsgs([])
   };
 
   const reportWindowParams = [
@@ -175,20 +271,20 @@ export const HeaderInfo = ({
   ].join(",");
 
   const displayReport = (reportCode) => {
-    let reportType = 'Evaluation';
+    let reportType;
 
-    switch(reportCode) {
-      case 'MPP':
-        reportType = 'Printout';
+    switch (reportCode) {
+      case "MPP":
+        reportType = "Printout";
         break;
-      case 'MP_EVAL':
-        reportType = 'Evaluation';
+      case "MP_EVAL":
+        reportType = "Evaluation";
         break;
-      case 'MP_AUDIT':
-        reportType = 'Audit';
+      case "MP_AUDIT":
+        reportType = "Audit";
         break;
       default:
-        reportType = 'Evaluation';
+        reportType = "Evaluation";
         break;
     }
 
@@ -200,30 +296,40 @@ export const HeaderInfo = ({
   };
 
   const openImportModal = () => {
-    setShowImportModal(true);
 
-    setTimeout(() => {
-      attachChangeEventListeners(".modalUserInput");
-    });
+      setShowImportModal(true);
+
+      setTimeout(() => {
+        attachChangeEventListeners(".modalUserInput");
+      });  
   };
 
-  const closeImportModalHandler = () => {
-    const importBtn = document.querySelector("#importMonitoringPlanBtn");
-
-    if (window.isDataChanged === true) {
-      if (window.confirm(unsavedDataMessage) === true) {
-        resetImportFlags();
-        removeChangeEventListeners(".modalUserInput");
-        importBtn.focus();
-      }
-    } else {
-      resetImportFlags();
-      removeChangeEventListeners(".modalUserInput");
-      importBtn.focus();
+  const openModal = () => {
+    if( workspaceSection === MONITORING_PLAN_STORE_NAME){
+      openImportModal();
     }
-  };
+    else{
+      setShowEmissionsImportTypeModal(true);
+    }
+  }
+  
+  const handleEmissionsExport = async () => {
+    const promises = [];
+    for (const selectedReportingPeriod of selectedReportingPeriods) {
+      // reportingPeriod: '2022 Q1' -> year: 2022, quarter: 1
+      promises.push(
+        exportEmissionsDataDownload(
+          facility,
+          configID,
+          selectedReportingPeriod.slice(0, 4),
+          selectedReportingPeriod.charAt(selectedReportingPeriod.length - 1),
+          getUser() !== null
+        )
+      );
+    }
 
-  const exportHandler = () => mpApi.exportMonitoringPlanDownload(configID);
+    await Promise.allSettled(promises);
+  };
 
   const formatCommentsToTable = (data) => {
     const formmatedData = [];
@@ -261,6 +367,7 @@ export const HeaderInfo = ({
       attachChangeEventListeners(".modalUserInput");
     });
   };
+
   useEffect(() => {
     // get evaluation status
     if (!evalStatusLoaded || updateRelatedTables) {
@@ -315,7 +422,7 @@ export const HeaderInfo = ({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkout, dataLoaded, evalStatusLoaded,updateRelatedTables]);
+  }, [checkout, dataLoaded, evalStatusLoaded, updateRelatedTables]);
 
   const clearOpenRefreshInterval = () => {
     if (openIntervalId) {
@@ -461,7 +568,12 @@ export const HeaderInfo = ({
   const evalStatusContent = () => {
     if (checkedOutByUser && evalStatusText(evalStatus) === "Needs Evaluation") {
       return (
-        <Button type="button" outline={false} onClick={evaluate}>
+        <Button
+          type="button"
+          outline={false}
+          onClick={evaluate}
+          className="height-6"
+        >
           Evaluate
         </Button>
       );
@@ -474,7 +586,7 @@ export const HeaderInfo = ({
       <div className={alertStyle}>
         <button
           className={"hyperlink-btn cursor-pointer"}
-          onClick={() => displayReport('MP_EVAL')}
+          onClick={() => displayReport("MP_EVAL")}
         >
           {evalStatusText(evalStatus)}
         </button>
@@ -531,18 +643,59 @@ export const HeaderInfo = ({
     setShowRevertModal(false);
   };
 
-  const [importedFile, setImportedFile] = useState([]);
-  const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
-
-  const importMPBtn = (payload) => {
+  const importMPFile = (payload) => {
     mpApi.importMP(payload).then((response) => {
-      setUsePortBtn(true);
       setIsLoading(true);
       if (response) {
         setImportedFileErrorMsgs(response);
       }
     });
   };
+
+  const importEmissionsFile = (payload) =>{
+    setIsLoading(true);
+    setFinishedLoading(false);
+    emApi.importEmissionsData(payload).then(({data, status}) => {
+      if (status === 201) {
+        setImportedFileErrorMsgs([]);
+      }
+      else if( status === 400)
+        setImportedFileErrorMsgs(data?.message?.split(",") || ["HTTP 400 Error"])
+      else{
+        setImportedFileErrorMsgs(`HTTP ${status} Error`)
+      }
+    }).catch(err=>{
+      console.log(err)
+    }).finally(()=>{
+      setIsLoading(false);
+      setFinishedLoading(true)
+    });
+
+  }
+
+  const closeImportModalHandler = () => {
+    const importBtn = document.querySelector("#importBtn");
+    if (window.isDataChanged === true) {
+      if (window.confirm(unsavedDataMessage) === true) {
+        resetImportFlags();
+        removeChangeEventListeners(".modalUserInput");
+        importBtn.focus();
+      }
+    } else {
+      resetImportFlags();
+      removeChangeEventListeners(".modalUserInput");
+      importBtn.focus();
+    }
+  };
+
+  const importFile = (payload) =>{
+    
+    if(workspaceSection === MONITORING_PLAN_STORE_NAME)
+      importMPFile(payload);
+    else if(workspaceSection === EMISSIONS_STORE_NAME)
+      importEmissionsFile(payload);
+  }
+
   const evaluate = () => {
     triggerEvaluation({
       monitorPlanId: configID,
@@ -585,6 +738,101 @@ export const HeaderInfo = ({
     )}`;
   };
 
+  const handleSelectReportingPeriod = (id, updateType) => {
+    const uniqueReportingPeriods = [...new Set([...selectedReportingPeriods, id])];
+    
+    hideAppError();
+    if(uniqueReportingPeriods.length > MAX_REPORTING_PERIODS){
+      displayAppError(MAX_REPORTING_PERIODS_ERROR_MSG)
+      const addedRp = reportingPeriods.find(rp=> rp.id === id);
+      addedRp.selected=false;
+      reportingPeriods = [...reportingPeriods]
+      return;
+    }
+
+    if (updateType === "add") {
+      setSelectedReportingPeriods(uniqueReportingPeriods);
+      dispatch(setReportingPeriods(uniqueReportingPeriods, currentTab.name, workspaceSection));
+    } else if (updateType === "remove") {
+      const selected = reportingPeriods
+        .filter((reportingPeriod) => {
+          return reportingPeriod.selected;
+        })
+        .map((reportingPeriod) => {
+          return reportingPeriod.id;
+        });
+
+      setSelectedReportingPeriods(selected);
+      dispatch(setReportingPeriods(selected, currentTab.name, workspaceSection));
+    }
+  };
+
+  const handleExport = ()=>{
+    if( workspaceSection === EMISSIONS_STORE_NAME )
+      handleEmissionsExport()
+  }
+
+  const onChangeOfEmissionsImportType = (e)=>{
+    const {value} = e.target
+    if(value === "file"){
+      setShowImportModal(true)
+    }
+
+    if(value === "historical"){
+      setShowHistoricalDataImportModal(true);
+    }
+
+    setShowEmissionsImportTypeModal(false)
+  }
+
+  const applyFilters = async ( monitorPlanId, unitIds, stackPipeIds) => {
+   
+      dispatch(setIsViewDataLoaded(false, currentTab.name, workspaceSection));
+      const response = await emApi.getEmissionViewData(
+        viewTemplateSelect?.code,
+        monitorPlanId,
+        selectedReportingPeriods,
+        unitIds,
+        stackPipeIds
+      );
+  
+      if (
+        response &&
+        response.status === 200 &&
+        response.headers["x-field-mappings"] &&
+        response.data
+      ) {
+        const columns = JSON.parse(response.headers["x-field-mappings"]);
+        const results = response.data;
+  
+        const names = columns.map((column) => column.label);
+  
+        const formattedResults = [];
+        for (const result of results) {
+          let id = 1;
+          const formattedObject = {};
+          for (const resultKey in result) {
+            formattedObject[`col${id}`] = result[resultKey];
+            id += 1;
+          }
+          formattedResults.push(formattedObject);
+        }
+  
+        dispatch(setViewTemplateSelectionAction(viewTemplateSelect, currentTab.name, EMISSIONS_STORE_NAME));
+        dispatch(setViewDataColumns(names, currentTab.name, workspaceSection))
+        dispatch(setViewData(formattedResults, currentTab.name, workspaceSection))
+        dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection))
+
+  
+      } else {
+        dispatch(setViewTemplateSelectionAction(viewTemplateSelect, currentTab.name, EMISSIONS_STORE_NAME));
+        dispatch(setViewDataColumns([], currentTab.name, workspaceSection))
+        dispatch(setViewData([], currentTab.name, workspaceSection))
+        dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection))
+      }
+  };
+
+
   return (
     <div className="header">
       <div
@@ -618,9 +866,7 @@ export const HeaderInfo = ({
           close={closeEvalReportModal}
           showSave={false}
           showCancel={true}
-          children={
-            <ReportGenerator user={user} />
-          }
+          children={<ReportGenerator user={user} />}
         />
       ) : null}
 
@@ -633,184 +879,298 @@ export const HeaderInfo = ({
               </h3>
               <p className="text-bold font-body-xl">{facilityAdditionalName}</p>
             </div>
-            {user && checkedOutByUser && (
-              <div>
-                <Button
-                  type="button"
-                  className="margin-right-2 float-left margin-bottom-2"
-                  outline={true}
-                  onClick={exportHandler}
-                >
-                  Export Data
-                </Button>
-                <Button
-                  type="button"
-                  className="margin-right-2 float-right"
-                  outline={false}
-                  onClick={() => openImportModal()}
-                  id="importMonitoringPlanBtn"
-                >
-                  Import Data
-                </Button>
+            <div>
+              <Button
+                type="button"
+                className="margin-right-2 float-left margin-bottom-2"
+                outline={true}
+                onClick={handleExport}
+              >
+                Export Data
+              </Button>
+                {user && checkedOutByUser &&(
+                  <Button
+                    type="button"
+                    className="margin-right-2 float-right"
+                    outline={false}
+                    onClick={() => openModal()}
+                    id="importBtn"
+                  >
+                    Import Data
+                  </Button>
+                )}
               </div>
-            )}
           </div>
 
           {dataLoaded && (
             <p className="text-bold font-body-2xs">{auditInformation}</p>
           )}
 
-          <div className="grid-col float-left">
-            <div>
-              <div className="grid-row">
-                {user && (
-                  <div>
-                    {checkedOutByUser === true ? (
-                      <Button
-                        type="button"
-                        autoFocus
-                        outline={false}
-                        tabIndex="0"
-                        aria-label={`Check back in the configuration `}
-                        onClick={() => checkoutStateHandler(false)}
-                        id="checkInBTN"
-                        epa-testid="checkInBTN"
-                      >
-                        <LockOpenSharp /> {"Check Back In"}
-                      </Button>
-                    ) : !lockedFacility &&
-                      !userHasCheckout &&
-                      selectedConfig.active &&
-                      checkedOutConfigs
-                        .map((location) => location["monPlanId"])
-                        .indexOf(selectedConfig.id) === -1 ? (
-                      <Button
-                        type="button"
-                        autoFocus
-                        outline={true}
-                        tabIndex="0"
-                        aria-label={`Check out the configuration`}
-                        onClick={() => checkoutStateHandler(true)}
-                        id="checkOutBTN"
-                        epa-testid="checkOutBTN"
-                      >
-                        <CreateOutlined color="primary" /> {"Check Out"}
-                      </Button>
-                    ) : null}
-                  </div>
-                )}
-
-                {showRevert(evalStatus) && (
-                  <Button
-                    type="button"
-                    id="showRevertModal"
-                    onClick={() => setShowRevertModal(true)}
-                    outline={true}
-                  >
-                    Revert to Official Record
-                  </Button>
-                )}
-              </div>
-
+          <GridContainer
+            className="padding-left-0 margin-left-0 padding-right-0"
+            containerSize="widescreen"
+          >
+            <Grid row>
               {user && (
-                <div className="display-flex flex-align-center margin-top-2">
-                  <p className="text-bold margin-right-1">Evaluation Status:</p>
-                  {evalStatusContent()}
-                  <p className="text-bold margin-x-1">Submission Status: </p>
-                  <p
-                    className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
-                      evalStatus
-                    )} margin-0`}
-                  >
-                    Resubmission required
-                  </p>
-                </div>
+                <Grid
+                  col={5}
+                  widescreen={{ col: 5 }}
+                  desktopLg={{ col: 5 }}
+                  desktop={{ col: 5 }}
+                >
+                  {checkedOutByUser === true ? (
+                    <Button
+                      type="button"
+                      autoFocus
+                      outline={false}
+                      tabIndex="0"
+                      aria-label={`Check back in the configuration `}
+                      onClick={() => checkoutStateHandler(false)}
+                      id="checkInBTN"
+                      epa-testid="checkInBTN"
+                      className="text-no-wrap height-6"
+                    >
+                      <LockOpenSharp /> {"Check Back In"}
+                    </Button>
+                  ) : !lockedFacility &&
+                    !userHasCheckout &&
+                    selectedConfig.active &&
+                    checkedOutConfigs
+                      .map((location) => location["monPlanId"])
+                      .indexOf(selectedConfig.id) === -1 ? (
+                    <Button
+                      type="button"
+                      autoFocus
+                      outline={true}
+                      tabIndex="0"
+                      aria-label={`Check out the configuration`}
+                      onClick={() => checkoutStateHandler(true)}
+                      id="checkOutBTN"
+                      epa-testid="checkOutBTN"
+                    >
+                      <CreateOutlined color="primary" /> {"Check Out"}
+                    </Button>
+                  ) : null}
+                  {showRevert(evalStatus) && (
+                    <Button
+                      type="button"
+                      id="showRevertModal"
+                      tabIndex="1"
+                      onClick={() => setShowRevertModal(true)}
+                      outline={true}
+                      className="text-no-wrap height-6 position-relative bottom-1"
+                    >
+                      Revert to Official Record
+                    </Button>
+                  )}
+                </Grid>
               )}
 
-              <div className="display-flex flex-row">
-                <DropdownSelection
-                  caption="Locations"
-                  orisCode={orisCode}
-                  options={locations}
-                  viewKey="name"
-                  selectKey="id"
-                  initialSelection={locationSelect[0]}
-                  selectionHandler={setLocationSelect}
-                  workspaceSection={workspaceSection}
-                />
-                <DropdownSelection
-                  caption="Sections"
-                  selectionHandler={setSectionSelect}
-                  options={sections}
-                  viewKey="name"
-                  selectKey="name"
-                  initialSelection={sectionSelect[0]}
-                  orisCode={orisCode}
-                  workspaceSection={workspaceSection}
-                />
-                <div className="margin-top-6">
-                  {workspaceSection === MONITORING_PLAN_STORE_NAME ? <Checkbox
-                    epa-testid="inactiveCheckBox"
-                    id="inactiveCheckBox"
-                    name="inactiveCheckBox"
-                    label="Show Inactive"
-                    checked={inactive[0]}
-                    disabled={inactive[1]}
-                    onChange={
-                      () =>
-                        // settingReduxInactiveBTN(
-                        //   [!inactive[0], inactive[1]],
-                        //   facility,
-                        //   MONITORING_PLAN_STORE_NAME
-                        // )
-                      setInactive(
-                        [!inactive[0], inactive[1]],
-                        facility,
-                        MONITORING_PLAN_STORE_NAME
-                      )
-                    }
-                  /> : ''} 
-
-                </div>
-              </div>
-
-              <div>
-                
-                <Button outline
+              {user && (
+                <Grid
+                  col={7}
+                  widescreen={{ col: 7 }}
+                  desktopLg={{ col: 7 }}
+                  desktop={{ col: 8 }}
+                >
+                  <div className="display-flex desktop:margin-top-1 desktop-lg:margin-top-0">
+                    <label className="text-bold width-card desktop:width-10 desktop-lg:width-10 widescreen:width-card widescreen:margin-right-neg-4 widescreen:margin-top-2">
+                      Evaluation Status:
+                    </label>
+                    {evalStatusContent()}
+                    <label className="text-bold margin-right-1 desktop:width-10 desktop:margin-left-5 desktop-lg:width-10 widescreen:width-card widescreen:margin-right-neg-3 widescreen:margin-top-2">
+                      Submission Status:{" "}
+                    </label>
+                    <p
+                      className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
+                        evalStatus
+                      )} margin-0`}
+                    >
+                      Resubmission required
+                    </p>
+                  </div>
+                </Grid>
+              )}
+            </Grid>
+          </GridContainer>
+          {workspaceSection === MONITORING_PLAN_STORE_NAME && (
+            <GridContainer className="padding-left-0 margin-left-0">
+              <Grid row>
+                <Grid col={2}>
+                  <DropdownSelection
+                    caption="Locations"
+                    orisCode={orisCode}
+                    options={locations}
+                    viewKey="name"
+                    selectKey="id"
+                    initialSelection={locationSelect[0]}
+                    selectionHandler={setLocationSelect}
+                    workspaceSection={workspaceSection}
+                  />
+                </Grid>
+                <Grid col={2}>
+                  <DropdownSelection
+                    caption="Sections"
+                    selectionHandler={setSectionSelect}
+                    options={sections}
+                    viewKey="name"
+                    selectKey="name"
+                    initialSelection={sectionSelect[0]}
+                    orisCode={orisCode}
+                    workspaceSection={workspaceSection}
+                  />
+                </Grid>
+                <Grid col={2}>
+                  <div className="margin-top-8">
+                    <Checkbox
+                      epa-testid="inactiveCheckBox"
+                      id="inactiveCheckBox"
+                      name="inactiveCheckBox"
+                      label="Show Inactive"
+                      checked={inactive[0]}
+                      disabled={inactive[1]}
+                      onChange={() =>
+                        setInactive(
+                          [!inactive[0], inactive[1]],
+                          facility,
+                          MONITORING_PLAN_STORE_NAME
+                        )
+                      }
+                    />
+                  </div>
+                </Grid>
+              </Grid>
+              <Grid>
+                <Button
+                  outline
                   type="button"
                   title="Open Comments"
                   onClick={() => openViewComments()}
                 >
                   View Comments
                 </Button>
-                <Button outline
+                <Button
+                  outline
                   type="button"
                   title="View Audit Report"
                   className={"hyperlink-btn cursor-pointer"}
-                  onClick={() => displayReport('MP_AUDIT')}
+                  onClick={() => displayReport("MP_AUDIT")}
                 >
                   View Audit Report
                 </Button>
-                <Button outline
+                <Button
+                  outline
                   type="button"
                   title="View Printout Report"
                   className={"hyperlink-btn cursor-pointer"}
-                  onClick={() => displayReport('MPP')}
+                  onClick={() => displayReport("MPP")}
                 >
                   View Printout Report
                 </Button>
-              </div>
-            </div>
-          </div>
+              </Grid>
+            </GridContainer>
+          )}
+
+          {workspaceSection === EMISSIONS_STORE_NAME && (
+            <GridContainer className="padding-left-0 margin-left-0">
+              <Grid row={true}>
+                <Grid col={2} widescreen={{ col: 2 }}>
+                  <DropdownSelection
+                    caption="Locations"
+                    orisCode={orisCode}
+                    options={locations}
+                    viewKey="name"
+                    selectKey="id"
+                    initialSelection={locationSelect[0]}
+                    selectionHandler={setLocationSelect}
+                    workspaceSection={workspaceSection}
+                  />
+                </Grid>
+                <Grid
+                  col={2}
+                  widescreen={{ col: 2 }}
+                  desktopLg={{ col: 10 }}
+                  desktop={{ col: 10 }}
+                >
+                  <FormGroup className="margin-right-2 margin-bottom-1">
+                    <Label test-id={"viewtemplate"} htmlFor={"viewtemplate"}>
+                      {"View Template"}
+                    </Label>
+                    <Dropdown
+                      id={"viewtemplate"}
+                      name={"viewtemplate"}
+                      epa-testid={"viewtemplate"}
+                      data-testid={"viewtemplate"}
+                      value={viewTemplateSelect?.name}
+                      onChange={(e) =>{
+                        setViewTemplateSelect(viewTemplates.find(v=>v.name === e.target.value))}
+                      } 
+                      className="maxw-mobile"
+                    >
+                      {viewTemplates?.map((view) => (
+                        <option
+                          data-testid={view.name}
+                          key={view.name}
+                          value={view.name}
+                        >
+                          {view.name}
+                        </option>
+                      ))}
+                    </Dropdown>
+                  </FormGroup>
+                </Grid>
+              </Grid>
+              <Grid row style={{ gap: "16px" }}>
+                <Grid col={2} widescreen={{ col: 2 }}>
+                  <MultiSelectCombobox
+                    items={reportingPeriods}
+                    label="Reporting Period(s)"
+                    entity="reportingPeriod"
+                    searchBy="label"
+                    onChangeUpdate={handleSelectReportingPeriod}
+                  />
+                </Grid>
+                <Grid col={2} widescreen={{ col: 3 }}>
+                  <Button
+                    type="button"
+                    title="Apply Filter(s)"
+                    className="cursor-pointer text-no-wrap apply-filter-position"
+                    onClick={()=>applyFilters(configID, unitIds, stackPipeIds).catch(handleError)}
+                  >
+                    {"Apply Filter(s)"}
+                  </Button>
+                </Grid>
+              </Grid>
+              <Grid row>
+                <Grid col={3} widescreen={{ col: 2 }}>
+                  <Button
+                    outline
+                    type="button"
+                    title="Summary Report"
+                    onClick={() => null}
+                    className={"hyperlink-btn cursor-pointer text-no-wrap"}
+                  >
+                    Summary Report
+                  </Button>
+                </Grid>
+                <Grid col={3} widescreen={{ col: 2 }}>
+                  <Button
+                    outline
+                    type="button"
+                    title="Data Report"
+                    className={"hyperlink-btn cursor-pointer margin-left-2"}
+                    onClick={() => null}
+                  >
+                    Data Report
+                  </Button>
+                </Grid>
+              </Grid>
+            </GridContainer>
+          )}
         </div>
       ) : (
         <Preloader />
       )}
-      <div
-        className={`usa-overlay ${
-          showImportModal || isReverting ? "is-visible" : ""
-        }`}
-      />
 
       {showImportModal && !finishedLoading && !isLoading ? (
         <div>
@@ -819,11 +1179,11 @@ export const HeaderInfo = ({
             close={closeImportModalHandler}
             showCancel={true}
             showSave={true}
-            title={"Import a Monitoring Plan to continue"}
+            title={ workspaceSection === MONITORING_PLAN_STORE_NAME ? "Import a Monitoring Plan to continue" : "Import Data"}
             exitBTN={"Import"}
             disablePortBtn={disablePortBtn}
             port={() => {
-              importMPBtn(importedFile);
+              importFile(importedFile);
             }}
             hasFormatError={hasFormatError}
             hasInvalidJsonError={hasInvalidJsonError}
@@ -835,7 +1195,7 @@ export const HeaderInfo = ({
                 setHasFormatError={setHasFormatError}
                 setHasInvalidJsonError={setHasInvalidJsonError}
                 setImportedFile={setImportedFile}
-                workspaceSection={MONITORING_PLAN_STORE_NAME}
+                workspaceSection={workspaceSection}
               />
             }
           />
@@ -868,8 +1228,9 @@ export const HeaderInfo = ({
         />
       )}
 
-      {/* after it finishes uploading , shows either api errors or success messages */}
-      {showImportModal && usePortBtn && finishedLoading && (
+      {/* For file imports, after it finishes uploading , shows either api errors or success messages */}
+      {/* For importing historical data, this is ONLY used to display errors */}
+      {(showImportModal || showHistoricalDataImportModal) && finishedLoading && (
         <UploadModal
           show={showImportModal}
           close={closeImportModalHandler}
@@ -880,7 +1241,7 @@ export const HeaderInfo = ({
           importApiErrors={importApiErrors}
           importedFileErrorMsgs={importedFileErrorMsgs}
           setUpdateRelatedTables={setUpdateRelatedTables}
-          successMsg={"Monitoring Plan has been Successfully Imported."}
+          successMsg={ workspaceSection === MONITORING_PLAN_STORE_NAME ? "Monitoring Plan has been Successfully Imported." : "Test Data from File has been successfully imported."}
           children={
             <ImportModal
               setDisablePortBtn={setDisablePortBtn}
@@ -894,9 +1255,31 @@ export const HeaderInfo = ({
         />
       )}
 
-      <div className={`usa-overlay ${showCommentsModal ? "is-visible" : ""}`} />
+      {showEmissionsImportTypeModal && (
+        <UploadModal
+          title="Import Data"
+          show={showEmissionsImportTypeModal}
+          close={()=>setShowEmissionsImportTypeModal(false)}
+          showCancel={true}
+          showImport={false}
+          children={
+            <EmissionsImportTypeModalContent onChange={onChangeOfEmissionsImportType} />
+          }
+        />
+      )}
+
+      {showHistoricalDataImportModal && !finishedLoading && !isLoading && (
+        <ImportHistoricalDataModal
+          closeModalHandler={closeImportModalHandler}
+          setIsLoading={setIsLoading}
+          setFinishedLoading={setFinishedLoading}
+          finishedLoading={finishedLoading}
+          importedFileErrorMsgs={importedFileErrorMsgs}
+          setImportedFileErrorMsgs={setImportedFileErrorMsgs}
+        />
+      )}
+
       {showCommentsModal && (
-        <div>
           <UploadModal
             show={showCommentsModal}
             width={"50%"}
@@ -916,7 +1299,6 @@ export const HeaderInfo = ({
               />
             }
           />
-        </div>
       )}
     </div>
   );

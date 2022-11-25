@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
 import "./QADataTableRender.scss";
-
+import { returnsFocusDatatableExpandBTN } from "../../additional-functions/ensure-508";
 // *** local
 import { oneSecond } from "../../config";
 /*********** COMPONENTS ***********/
@@ -26,7 +26,8 @@ const QADataTableRender = ({
   onRemoveHandler,
   evaluate,
   noDataComp,
-  isCheckedOut
+  isCheckedOut,
+  dataTableName
 }) => {
   const columns = [];
   columnNames.forEach((name, index) => {
@@ -54,7 +55,7 @@ const QADataTableRender = ({
       }
     });
     setTimeout(() => {
-      ensure508();
+      ensure508(dataTableName);
     }, oneSecond);
 
     return () => {
@@ -90,17 +91,20 @@ const QADataTableRender = ({
         className="expandBTN "
         onClick={() => {
           expandRowBTN(index);
+          returnsFocusDatatableExpandBTN(dataTableName,index, false, row.col1);
           row.expanded = true;
         }}
         onKeyPress={(event) => {
           if (event.key === "Enter") {
             expandRowBTN(index);
+            returnsFocusDatatableExpandBTN(dataTableName,index, false, row.col1);
             row.expanded = true;
           }
         }}
         title={`Click to expand row ${index + 1}`}
         name={`expand row ${index + 1}`}
-        id={`expandRow${index + 1}`}
+        id={`expandRow${dataTableName}${row.col1}${index + 1}`}
+        aria-expanded={false}
         role="button"
         tabIndex="0"
         aria-hidden="false"
@@ -110,19 +114,22 @@ const QADataTableRender = ({
         className="expandBTN "
         onClick={() => {
           expandRowBTN(index);
+          returnsFocusDatatableExpandBTN(dataTableName,index, true, row.col1);
           row.expanded = false;
         }}
         onKeyPress={(event) => {
           if (event.key === "Enter") {
             expandRowBTN(index);
+            returnsFocusDatatableExpandBTN(dataTableName,index, true, row.col1);
             row.expanded = false;
           }
         }}
         title={`Click to collapse row ${index + 1}`}
         name={`collapse row ${index + 1}`}
-        id={`collapseRow${index + 1}`}
+        id={`collapseRow${dataTableName}${row.col1}${index + 1}`}
         role="button"
         tabIndex="0"
+        aria-expanded={true}
         aria-hidden="false"
       />
     );
@@ -152,12 +159,11 @@ const QADataTableRender = ({
                         type="button"
                         epa-testid="btnOpen"
                         className="cursor-pointer open-modal-button"
-                        id={`btnOpen${
-                          row[`col${Object.keys(row).length - 1}`]
-                        }`}
+                        id={`btnEditView${dataTableName}${row.col1}${index + 1}`}
                         onClick={() => {
-                          openHandler(normalizedRow, false);
+                          openHandler(normalizedRow, false, null, index);
                         }}
+                        role="button"
                       >
                         {"Edit"}
                       </Button>
@@ -174,17 +180,18 @@ const QADataTableRender = ({
                   <Button
                     type="button"
                     epa-testid="btnOpen"
-                    className="cursor-pointer open-modal-button"
+                      className="cursor-pointer open-modal-button"
                     outline={true}
                     id={
                       // tableTitle
                       //   ? `btnOpen${tableTitle.split(" ").join("")}`
                       // :
-                      `btnOpen${row[`col${Object.keys(row).length - 1}`]}`
+                      `btnEditView${dataTableName}${row.col1}${index + 1}`
                     }
                     onClick={() => {
-                      openHandler(normalizedRow, false);
+                      openHandler(normalizedRow, false, null, index);
                     }}
+                    role="button"
                   >
                     {"View"}
                   </Button>
@@ -199,12 +206,18 @@ const QADataTableRender = ({
   }
 
   return (
-    <div aria-live="polite" className="padding-3">
+    <div aria-live="polite" className="padding-3" id={dataTableName.replaceAll(" ", "-")}>
       <DataTable
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
         className={`data-display-table react-transition fade-in`}
         columns={columns}
-        data={data.length > 0 ? data : user && isCheckedOut ? getEmptyRows(columns) : []}
+        data={
+          data.length > 0
+            ? data
+            : user && isCheckedOut
+              ? getEmptyRows(columns)
+              : []
+        }
         expandableRows
         expandableRowsHideExpander
         expandableRowExpanded={(row) => row.expanded}

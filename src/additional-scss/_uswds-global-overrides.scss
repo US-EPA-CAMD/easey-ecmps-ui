@@ -390,7 +390,16 @@ button.usa-nav__close {
   cursor: pointer;
 }
 
+.modal-content {
+  pointer-events: none;
+}
+
+.modal-header {
+  pointer-events: all;
+}
+
 .modal-footer {
+  pointer-events: all;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -399,6 +408,7 @@ button.usa-nav__close {
 }
 
 .modal-body {
+  pointer-events: all;
   position: relative;
   flex: 1 1 auto;
   padding: 1rem;
@@ -430,4 +440,8 @@ button.usa-nav__close {
     background-color: $eds-accent-cool-active;
     color: $epa-white;
   }
+}
+
+.bg-primary {
+  background-color: #005ea2 !important;
 }

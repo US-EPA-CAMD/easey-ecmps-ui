@@ -172,6 +172,7 @@ export const mapRataSummaryToRows = (data) => {
     };
     records.push(row);
   }
+
   return records;
 };
 //4th level
@@ -245,7 +246,7 @@ export const getFlowRunRecords = (data) => {
       col9: el.averageVelocityWithoutWallEffects,
       col10: el.averageVelocityWithWallEffects,
       col11: el.calculatedWAF,
-      col12: el.averageStackFlowRate
+      col12: el.averageStackFlowRate,
     });
   });
   return records;
@@ -275,7 +276,7 @@ export const mapRataTraverseToRows = (data) => {
     records.push(row);
   }
   return records;
-}
+};
 
 export const mapTestQualificationToRows = (data) => {
   const records = [];
@@ -292,4 +293,211 @@ export const mapTestQualificationToRows = (data) => {
     });
   });
   return records;
+};
+
+export const getAppendixECorrelationSummaryRecords = (data) => {
+  const records = [];
+  data.forEach((el) => {
+    records.push({
+      id: el.id,
+      testSumId: el.testSumId,
+      col1: el.operatingLevelForRun,
+      col2: el.meanReferenceValue,
+      col3: el.averageHourlyHeatInputRate,
+      col4: el.fFactor,
+    });
+  });
+  return records;
+};
+
+export const mapFuelFlowToLoadToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.testBasisCode,
+      col2: el.averageDifference,
+      col3: el.numberOfHoursUsed,
+      col4: el.numberOfHoursExcludedCofiring,
+      col5: el.numberOfHoursExcludedRamping,
+      col6: el.numberOfHoursExcludedLowRange,
+    };
+    records.push(row);
+  }
+  return records;
+};
+
+export const mapFuelFlowToLoadBaselineToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.accuracyTestNumber,
+      col2: el.peiTestNumber,
+      col3: el.averageFuelFlowRate,
+      col4: el.averageLoad,
+      col5: el.baselineFuelFlowToLoadRatio,
+      col6: el.fuelFlowToLoadUOMCode,
+      col7: el.averageHourlyHeatInputRate,
+      col8: el.baselineGHR,
+      col9: el.ghrUnitsOfMeasureCode,
+      col10: el.numberOfHoursExcludedCofiring,
+      col11: el.numberOfHoursExcludedRamping,
+      col12: el.numberOfHoursExcludedLowRange,
+    };
+    records.push(row);
+  }
+  return records;
+}
+
+export const mapAppendixECorrTestRunsToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.runNumber,
+      col2: el.referenceValue,
+      col3: el.hourlyHeatInputRate,
+      col4: el.totalHeatInput,
+      col5: el.responseTime,
+      col6: el.beginDate ? formatStringToDate(el.beginDate) : "",
+      col7: el.beginHour,
+      col8: el.beginMinute,
+      col9: el.endDate ? formatStringToDate(el.endDate) : "",
+      col10: el.endHour,
+      col11: el.endMinute,
+    };
+    records.push(row);
+  }
+  return records;
+};
+
+export const mapAppendixECorrHeatInputGasToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.gasGCV === 0 ? "0" : el.gasGCV,
+      col2: el.gasVolume === 0 ? "0" : el.gasVolume,
+      col3: el.gasHeatInput === 0 ? "0" : el.gasHeatInput,
+    };
+    records.push(row);
+  }
+  return records
+}
+
+export const mapAppendixECorrHeatInputOilToRows = (data) => {
+  const records = []
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.monitoringSystemID,
+      col2: el.oilMass,
+      col3: el.oilGCV,
+      col4: el.oilGCVUnitsOfMeasureCode,
+      col5: el.oilHeatInput,
+      col6: el.oilVolume,
+      col7: el.oilVolumeUnitsOfMeasureCode,
+      col8: el.oilDensity,
+      col9: el.oilDensityUnitsOfMeasureCode,
+    }
+    records.push(row)
+  }
+  return records
+}
+
+export const mapFlowToLoadCheckToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.testBasisCode,
+      col2: el.biasAdjustedIndicator,
+      col3: el.averageAbsolutePercentDifference,
+      col4: el.numberOfHours,
+      col5: el.numberOfHoursExcludedForFuel,
+      col6: el.numberOfHoursExcludedForRamping,
+      col7: el.numberOfHoursExcludedForBypass,
+      col8: el.numberOfHoursExcludedPreRata,
+      col9: el.numberOfHoursExcludedTest,
+      col10: el.numberOfHoursExcludedForMainAndBypass,
+      col11: el.operatingLevelCode,
+    };
+    records.push(row);
+  }
+  return records;
+};
+
+export const mapCalibrationInjectionsToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.onLineOffLineIndicator === 1 ? "Yes" : "No",
+      col2: el.upscaleGasLevelCode,
+      col3: el.zeroInjectionDate,
+      col4: el.zeroInjectionHour,
+      col5: el.zeroInjectionMinute,
+      col6: el.upscaleInjectionDate,
+      col7: el.upscaleInjectionHour,
+      col8: el.upscaleInjectionMinute,
+      col9: el.zeroMeasuredValue,
+      col10: el.upscaleMeasuredValue,
+      col11: el.zeroAPSIndicator === 1 ? "Yes" : "No",
+      col12: el.upscaleAPSIndicator === 1 ? "Yes" : "No",
+      col13: el.zeroCalibrationError,
+      col14: el.upscaleCalibrationError,
+      col15: el.zeroReferenceValue,
+      col16: el.upscaleReferenceValue,
+    };
+    records.push(row);
+  }
+  return records;
+};
+
+export const mapOnOffCalToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.onlineZeroReferenceValue,
+      col2: el.onlineUpscaleReferenceValue,
+      col3: el.offlineZeroReferenceValue,
+      col4: el.offlineUpscaleReferenceValue,
+      col5: el.onlineZeroMeasuredValue,
+      col6: el.onlineUpscaleMeasuredValue,
+      col7: el.offlineZeroMeasuredValue,
+      col8: el.offlineUpscaleMeasuredValue,
+      col9: el.onlineZeroCalibrationError,
+      col10: el.onlineUpscaleCalibrationError,
+      col11: el.offlineZeroCalibrationError,
+      col12: el.offlineUpscaleCalibrationError,
+      col13: el.upscaleGasLevelCode,
+      col14: el.onlineZeroAPSIndicator === 1 ? 'Yes' : 'No',
+      col15: el.onlineUpscaleAPSIndicator === 1 ? 'Yes' : 'No',
+      col16: el.offlineZeroAPSIndicator === 1 ? 'Yes' : 'No',
+      col17: el.offlineUpscaleAPSIndicator === 1 ? 'Yes' : 'No',
+      col18: el.onlineZeroInjectionDate,
+      col19: el.onlineUpscaleInjectionDate,
+      col20: el.offlineZeroInjectionDate,
+      col21: el.offlineUpscaleInjectionDate,
+      col22: el.onlineZeroInjectionHour,
+      col23: el.onlineUpscaleInjectionHour,
+      col24: el.offlineZeroInjectionHour,
+      col25: el.offlineUpscaleInjectionHour,
+    };
+    records.push(row);
+  }
+  return records;
+};
+
+export const getListOfRadioContorls = (controlInputs) => {
+  const result = [];
+  const keys = Object.keys(controlInputs);
+  keys.forEach(key => {
+    if (controlInputs[key][1] === "radio") {
+      result.push(key)
+    }
+  });
+  return result;
 };

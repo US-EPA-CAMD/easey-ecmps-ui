@@ -9,9 +9,9 @@
  *       Outputs:
  *              none
  *****************************************************/
-export const ensure508 = () => {
+export const ensure508 = (tableName) => {
   // *** add aria label to all data tables
-  addAriaLabelToDatatable();
+  addAriaLabelToDatatable(tableName);
 
   // *** move filter that may be present in datatable out of aria-live region
   moveDataTableSearchOutOfAriaLive();
@@ -104,45 +104,53 @@ export const addScreenReaderLabelForCollapses = () => {
  *       Outputs:
  *              none
  *****************************************************/
-export const addAriaLabelToDatatable = () => {
-  document.querySelectorAll(`.rdt_Table`).forEach((element) => {
-    let label;
-    let ariaLabelElement;
-
-    const dataTableText = "DataTable for";
-    const siblings = getAllSiblings(element.parentElement.parentElement);
-
-    siblings.forEach((sib) => {
-      if (
-        sib.attributes &&
-        sib.attributes[0] &&
-        sib.attributes[0].name === "data-aria-label"
-      ) {
-        ariaLabelElement = sib;
-      }
-    });
-
-    if (
-      ariaLabelElement &&
-      ariaLabelElement.tagName &&
-      ariaLabelElement.tagName.toLowerCase() === "span"
-    ) {
-      let ariaLabel = ariaLabelElement.attributes[0].value;
-
-      // Fixing spelling
-      if (ariaLabel === "Unit Capacitys") {
-        ariaLabel = "Unit Capacities";
-      }
-
-      label = `${dataTableText} ${ariaLabel}`;
-    } else {
-      // NOTE: if this aria-label text shows, we need to refactor the code to assign the correct label
-      //       if this occurs, most likely the ariaLabel property is not assigned in the DataTableRender element
-      label = "DataTable Aria Label Missing";
+export const addAriaLabelToDatatable = (tableName) => {
+  if(tableName){
+    const tableWrapper = document.getElementById(tableName.replaceAll(" ","-"));
+    if(tableWrapper){
+      const dataTable = tableWrapper.querySelector('[role="table"]');
+      dataTable? dataTable.setAttribute("aria-label", tableName) : dataTable.setAttribute("aria-label", "Data table");
     }
+  }else{
+    document.querySelectorAll(`.rdt_Table`).forEach((element) => {
+      let label;
+      let ariaLabelElement;
 
-    element.setAttribute("aria-label", label);
-  });
+      const dataTableText = "DataTable for";
+      const siblings = getAllSiblings(element.parentElement.parentElement);
+
+      siblings.forEach((sib) => {
+        if (
+          sib.attributes &&
+          sib.attributes[0] &&
+          sib.attributes[0].name === "data-aria-label"
+        ) {
+          ariaLabelElement = sib;
+        }
+      });
+
+      if (
+        ariaLabelElement &&
+        ariaLabelElement.tagName &&
+        ariaLabelElement.tagName.toLowerCase() === "span"
+      ) {
+        let ariaLabel = ariaLabelElement.attributes[0].value;
+
+        // Fixing spelling
+        if (ariaLabel === "Unit Capacitys") {
+          ariaLabel = "Unit Capacities";
+        }
+
+        label = `${dataTableText} ${ariaLabel}`;
+      } else {
+        // NOTE: if this aria-label text shows, we need to refactor the code to assign the correct label
+        //       if this occurs, most likely the ariaLabel property is not assigned in the DataTableRender element
+        label = "DataTable Aria Label Missing";
+      }
+
+      element.setAttribute("aria-label", label);
+    });
+  }
 };
 
 /*****************************************************
@@ -313,3 +321,55 @@ export const assignAriaLabelsToDatePickerButtons = () => {
       "Toggle Calendar for " + element.parentNode.querySelector("input").id;
   });
 };
+
+// returns focus
+export const returnsFocusDatatableExpandBTN = (datatableName, index, direction, colName) => {
+  let lastBTN = "";
+
+  setTimeout(() => {
+    if (direction) {
+      lastBTN = document
+        .getElementById(`expandRow${datatableName}${colName}${index + 1}`)
+      if (lastBTN) {
+        lastBTN.focus();
+      }
+    } else {
+      lastBTN = document
+        .getElementById(`collapseRow${datatableName}${colName}${index + 1}`)
+      if (lastBTN) {
+        lastBTN.focus();
+      }
+    }
+  }, 500);
+};
+
+// returns focus to View Button
+export const returnsFocusDatatableViewBTN = (datatableName, row, index) => {
+  console.log('returnsFocusDatatableViewBTN', row)
+  setTimeout(() => {
+    let lastBTN = document
+      .getElementById(`btnEditView${datatableName}${row.col1}${index + 1}`);
+    if (lastBTN) {
+      lastBTN.focus();
+    }
+  }, 500);
+};
+
+export const assignAriaLabelsToDataTable = (containerSelector, ariaLiveData) => {
+  const table = document.querySelector(containerSelector).querySelector('[role="table"]')
+  table.setAttribute('aria-label', 'Test Summary Data')
+
+  const rowGroups = table.querySelectorAll('[role="rowgroup"]')
+
+  if (rowGroups.length > 1) {
+    const tableRows = rowGroups[1].querySelectorAll('[role="row"]')
+
+    tableRows.forEach((row, idx) => {
+      row.querySelector('input[type="checkbox"]').setAttribute('aria-label', `select row for Test Number ${ariaLiveData[idx]}`)
+
+      row.querySelectorAll('[role="gridcell"').forEach(cell => {
+        cell.setAttribute('role', `cell`)
+      })
+    })
+  }
+}

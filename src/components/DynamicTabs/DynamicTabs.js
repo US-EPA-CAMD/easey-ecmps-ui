@@ -5,6 +5,7 @@ import TabPane from "../TabPane/TabPane";
 import {
   addFacilityTab,
   removeFacilityTab,
+  setActiveTab,
 } from "../../store/actions/dynamicFacilityTab";
 
 import {
@@ -135,6 +136,10 @@ const mapDispatchToProps = (dispatch) => {
     addFacility: (facility, workspaceSection) =>
       dispatch(
         addFacilityTab(facility, convertSectionToStoreName(workspaceSection))
+      ),
+      setActive: (facility, workspaceSection) =>
+      dispatch(
+        setActiveTab(facility, convertSectionToStoreName(workspaceSection))
       ),
   };
 };

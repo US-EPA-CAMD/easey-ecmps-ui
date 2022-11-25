@@ -7,6 +7,8 @@ import ReportingPeriodSelector from "../../ReportingPeriodSelector/ReportingPeri
 import ExportTablesContainer from "./ExportTablesContainer";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { exportMonitoringPlanDownload } from "../../../utils/api/monitoringPlansApi";
+import { exportEmissionsDataDownload } from "../../../utils/api/emissionsApi";
+import { getUser } from "../../../utils/functions";
 
 export const ExportTab = ({
   facility,
@@ -16,6 +18,7 @@ export const ExportTab = ({
   setExportState,
   workspaceSection,
 }) => {
+  const [isExporting, setIsExporting] = useState(false);
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
 
@@ -66,8 +69,8 @@ export const ExportTab = ({
   };
 
   const reportingPeriodSelectionHandler = (selectedObj) => {
-    const { id, beginDate, endDate } = selectedObj;
-    setReportingPeriod({ id, beginDate, endDate });
+    const { id, beginDate, calendarYear, endDate, quarter } = selectedObj;
+    setReportingPeriod({ id, beginDate, calendarYear, endDate, quarter });
     setExportState(
       selectedConfig.id,
       {
@@ -80,35 +83,64 @@ export const ExportTab = ({
   };
 
   const getInitSelection = (reportingPeriodObj) => {
-    const { id, beginDate, endDate } = reportingPeriodObj;
-    setReportingPeriod({ id, beginDate, endDate });
+    const { id, beginDate, calendarYear, endDate, quarter } =
+      reportingPeriodObj;
+    setReportingPeriod({ id, beginDate, calendarYear, endDate, quarter });
     if (exportState) {
       setPreviewOptions({ beginDate, endDate });
     }
   };
 
   const exportClickHandler = async () => {
-    let exportFileName
+    setIsExporting(true);
+    let exportFileName;
+    const promises = [];
+
     // export monitoring plan
     if (dataTypes.find((e) => e.name === mp).checked) {
-      exportMonitoringPlanDownload(selectedConfig.id)
+      promises.push(exportMonitoringPlanDownload(selectedConfig.id));
     }
     // export qa
     if (dataTypes.find((e) => e.name === qa).checked) {
       exportFileName = `QA & Certification | Export - ${facility}.json`;
-      const selectedRows = qaTestSummaryData.current
+      const selectedRows = qaTestSummaryData.current;
       const exportJson = {
         orisCode: orisCode,
-        testSummaryData: selectedRows
-      }
+        testSummaryData: selectedRows,
+      };
       download(JSON.stringify(exportJson, null, "\t"), exportFileName);
     }
+
+    // export emissions
+    if (dataTypes.find((e) => e.name === em).checked) {
+      promises.push(
+        exportEmissionsDataDownload(
+          facility,
+          selectedConfig.id,
+          reportingPeriod.calendarYear,
+          reportingPeriod.quarter,
+          getUser() !== null
+        )
+      );
+    }
+
+    await Promise.all(promises);
+    setIsExporting(false);
   };
 
   const isExportDisabled = () => {
-    const isMonitoringPlanChecked = dataTypes.find(e => e.name === mp).checked;
+    const isMonitoringPlanChecked = dataTypes.find(
+      (e) => e.name === mp
+    ).checked;
+    const isEmissionsChecked = dataTypes.find((dataType) => {
+      return dataType.name === em;
+    }).checked;
     const rowHasSelected = exportState?.selectedIds?.testSummary?.length > 0;
-    return !isMonitoringPlanChecked && !rowHasSelected;
+
+    return (
+      isExporting ||
+      (!isMonitoringPlanChecked && !isEmissionsChecked && !rowHasSelected)
+    );
   };
 
   return (
@@ -150,6 +182,7 @@ export const ExportTab = ({
           </div>
           <div className="grid-col-3 padding-left-8 padding-top-3">
             <Button
+              type={"button"}
               className="width-card"
               disabled={
                 dataTypes.filter((e) => e.checked).length === 0 ||
@@ -180,6 +213,7 @@ export const ExportTab = ({
         )}
         <div className="border-top-1px border-base-lighter padding-y-2">
           <Button
+            type={"button"}
             className="float-right margin-top-3"
             disabled={isExportDisabled()}
             onClick={exportClickHandler}

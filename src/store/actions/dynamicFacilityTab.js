@@ -54,6 +54,15 @@ export const setInactiveState = (inactive, title, workspaceSection) => {
   };
 };
 
+export const setActiveTab = (active, title, workspaceSection) => {
+  return {
+    type: types.SET_ACTIVE_TAB,
+    title,
+    active,
+    workspaceSection,
+  };
+};
+
 export const setExportState = (configId, exportState, workspaceSection) => {
   return {
     type: types.SET_EXPORT_STATE,
@@ -62,3 +71,50 @@ export const setExportState = (configId, exportState, workspaceSection) => {
     workspaceSection,
   };
 };
+
+export const setReportingPeriods = (reportingPeriods, title, workspaceSection) =>{
+  return {
+    type: types.SET_REPORTING_PERIODS,
+    title,
+    workspaceSection,
+    reportingPeriods,
+  }
+}
+
+export const setIsViewDataLoaded = (isViewDataLoaded, title, workspaceSection) => {
+  return {
+    type: types.IS_VIEW_DATA_LOADED,
+    title,
+    workspaceSection,
+    isViewDataLoaded,
+  };
+};
+
+export const setViewData = (viewData, title, workspaceSection) => {
+  return {
+    type: types.SET_VIEW_DATA,
+    title,
+    workspaceSection,
+    viewData,
+  };
+};
+
+export const setViewDataColumns = (viewColumns, title, workspaceSection) => {
+  return {
+    type: types.SET_VIEW_DATA_COLUMNS,
+    title,
+    workspaceSection,
+    viewColumns,
+  };
+};
+
+export const setViewTemplateSelectionAction = (viewTemplateSelect, title, workspaceSection) => {
+  return {
+    type: types.SET_VIEW_TEMPLATE_SELECTION,
+    title,
+    workspaceSection,
+    viewTemplateSelect,
+  };
+};
+
+

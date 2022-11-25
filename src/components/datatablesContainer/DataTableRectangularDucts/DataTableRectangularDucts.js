@@ -1,3 +1,4 @@
+import { connect } from 'react-redux';
 import React, { useEffect, useMemo, useState } from "react";
 import * as fs from "../../../utils/selectors/monitoringPlanRectangularDucts";
 import Modal from "../../Modal/Modal";
@@ -37,8 +38,6 @@ export const DataTableRectangularDucts = ({
   revertedState,
   setRevertedState,
   currentTabIndex,
-  //
-
   tabs,
   showModal = false,
 }) => {
@@ -223,20 +222,24 @@ export const DataTableRectangularDucts = ({
       }
 
       // only inactive data > disables checkbox and checks it
-      if (inactiveOnly.length === ducts.length) {
+      else if (inactiveOnly.length === ducts.length) {
         //check it and disable checkbox
         settingInactiveCheckBox(true, true);
         return fs.getMonitoringPlansRectangularDuctsTableRecords(ducts);
       }
       // resets checkbox
+      else {
       settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
       return fs.getMonitoringPlansRectangularDuctsTableRecords(
         tabs[currentTabIndex].inactive[0] === false
           ? getActiveData(ducts)
           : ducts
       );
-    }
+      }
+    } else {
     return [];
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ducts, tabs[currentTabIndex].inactive[0]]);
 
@@ -373,12 +376,13 @@ export const DataTableRectangularDucts = ({
     </div>
   );
 };
+
 const mapStateToProps = (state) => {
   return {
 
-    tabs: state.openedFacilityTabs["monitoringPlans"],
+    tabs: state.openedFacilityTabs['monitoringPlans'],
   };
 };
+
 export default connect(mapStateToProps, null)(DataTableRectangularDucts);
-export { mapDispatchToProps };
 export { mapStateToProps };

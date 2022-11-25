@@ -204,6 +204,13 @@ const props = {
   setRevertedState: jest.fn(),
   pagination: false,
   filter: false,
+  tabs: [
+    {
+      openedFacilityTabs: [],
+      inactive: [true]
+    }
+  ],
+  currentTabIndex: 0,
   controlInputs: {
     mecValue: ["MEC Value", "input", "", ""],
     mpcValue: ["MPC Value", "input", "", ""],
@@ -338,7 +345,7 @@ describe("DataTableAssert", () => {
   test("mapStateToProps calls the appropriate state", async () => {
     // mock the 'dispatch' object
     const dispatch = jest.fn();
-    const state = { dropdowns: [1] };
+    const state = { dropdowns: [1], openedFacilityTabs: ['monitoringPlans'] };
     const stateProps = mapStateToProps(state, true);
   });
 

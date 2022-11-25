@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+
 import {
   getQATestSummary,
   updateQALinearityTestSummary,
@@ -6,8 +7,6 @@ import {
   createQATestData,
 } from "../../../utils/api/qaCertificationsAPI.js";
 import { getTestSummary } from "../../../utils/selectors/QACert/TestSummary.js";
-// import QARataDataExpandableRows from "../QARataDataExpandableRows/QARataDataExpandableRows.js";
-// import QALinearitySummaryExpandableRows from "../QALinearitySummaryExpandableRows/QALinearitySummaryExpandableRows.js";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
@@ -15,14 +14,18 @@ import { modalViewData } from "../../../additional-functions/create-modal-input-
 import {
   qaLinearitySummaryProps,
   qaRataDataProps,
+  qaAppendixECorrelationSummaryTestProps,
+  qaFuelFlowToLoadProps,
+  qaFuelFlowToLoadBaselineProps,
+  qaFlowToLoadCheckProps,
+  qaOnOffCalibrationProps,
+  qaCalibrationInjectionProps
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
-
-import { addAriaLabelToDatatable } from "../../../additional-functions/ensure-508";
 
 /*********** COMPONENTS ***********/
 
@@ -37,6 +40,7 @@ import * as dmApi from "../../../utils/api/dataManagementApi";
 import { organizePrefilterMDMData } from "../../../additional-functions/retrieve-dropdown-api";
 
 import QAExpandableRowsRender from "../QAExpandableRowsRender/QAExpandableRowsRender";
+import { returnsFocusDatatableViewBTN } from "../../../additional-functions/ensure-508.js";
 
 // contains test summary data table
 
@@ -49,8 +53,9 @@ const QATestSummaryDataTable = ({
   isCheckedOut,
   sectionSelect,
   selectedLocation,
-  locations
+  locations,
 }) => {
+  console.log("selectedTestCode", selectedTestCode);
   const [loading, setLoading] = useState(false);
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
@@ -58,6 +63,8 @@ const QATestSummaryDataTable = ({
   const [dataPulled, setDataPulled] = useState([]);
   const [show, setShow] = useState(showModal);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [clickedRow, setClickedRow] = useState(null);
+  const [clickedIndex, setClickedIndex] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
@@ -72,7 +79,7 @@ const QATestSummaryDataTable = ({
   const selectText = "-- Select a value --";
   //*****
   // pull these out and make components reuseable like monitoring plan
-  const [dropdownArray , setDropdownArray] = useState([
+  const [dropdownArray, setDropdownArray] = useState([
     [
       "testTypeCode",
       "spanScaleCode",
@@ -86,22 +93,20 @@ const QATestSummaryDataTable = ({
 
   const dataTableName = "Test Summary Data";
 
-  useEffect(()=>{
-    setDropdownArray(
+  useEffect(() => {
+    setDropdownArray([
       [
-        [
-          "testTypeCode",
-          "spanScaleCode",
-          "testReasonCode",
-          "testResultCode",
-          selectedLocation.unitId ? "unitId" : "stackPipeId",
-          "prefilteredTestSummaries",
-        ],
-      ]
-    );
+        "testTypeCode",
+        "spanScaleCode",
+        "testReasonCode",
+        "testResultCode",
+        selectedLocation.unitId ? "unitId" : "stackPipeId",
+        "prefilteredTestSummaries",
+      ],
+    ]);
   }, [selectedLocation.name]);
 
-  useEffect(()=>{
+  useEffect(() => {
     loadDropdownsData();
   }, [dropdownArray]);
 
@@ -180,21 +185,20 @@ const QATestSummaryDataTable = ({
             "testTypeCode",
             response[4].data
           );
-        }
-        else if (i === 4) {
-          dropdowns[dropdownArray[0][i]] = locations.map(l =>{
-            if(l.type === "unit"){
+        } else if (i === 4) {
+          dropdowns[dropdownArray[0][i]] = locations.map((l) => {
+            if (l.type === "unit") {
               return {
-                code:l.unitId,
-                name:l.unitId
-              }
-            }else{
+                code: l.unitId,
+                name: l.unitId,
+              };
+            } else {
               return {
                 code: l.stackPipeId,
-                name: l.stackPipeId
-              }
+                name: l.stackPipeId,
+              };
             }
-          })
+          });
         }
         dropdowns[dropdownArray[0][i]].unshift({
           code: "",
@@ -206,7 +210,7 @@ const QATestSummaryDataTable = ({
       setDropdownsLoading(false);
     });
   };
-  useEffect(() => {debugger;
+  useEffect(() => {
     const { testTypeCodes, testTypeGroupCode } = selectedTestCode;
     if (mdmData === null) {
       if (testTypeGroupCode) {
@@ -261,7 +265,10 @@ const QATestSummaryDataTable = ({
 
   const columns = getQAColsByTestCode(selectedTestCode.testTypeGroupCode);
   const { controlInputs, extraControlInputs, controlDatePickerInputs } =
-    getQAModalDetailsByTestCode(selectedTestCode.testTypeGroupCode, selectedLocation);
+    getQAModalDetailsByTestCode(
+      selectedTestCode.testTypeGroupCode,
+      selectedLocation
+    );
 
   // prefilters the test type code dropdown based on group selection
   useEffect(() => {
@@ -292,10 +299,9 @@ const QATestSummaryDataTable = ({
   const finishedLoadingData = (loadedData) => {
     setDataPulled(loadedData);
     // setDataLoaded(true);
-    addAriaLabelToDatatable();
   };
   // Executed when "View" action is clicked
-  const openModal = (row, bool, create) => {
+  const openModal = (row, bool, create, index) => {
     let selectedData = null;
     setCreateNewData(create);
     if (dataPulled.length > 0 && !create) {
@@ -304,11 +310,21 @@ const QATestSummaryDataTable = ({
       )[0];
       setSelectedRow(selectedData);
     }
-    if(create){
-      if(controlInputs?.unitId){
-        controlInputs.unitId = ["Unit or Stack Pipe ID", "nonFilteredDropdown", "", ""];
-      }else{
-        controlInputs.stackPipeId = ["Unit or Stack Pipe ID", "nonFilteredDropdown", "", ""];
+    if (create) {
+      if (controlInputs?.unitId) {
+        controlInputs.unitId = [
+          "Unit or Stack Pipe ID",
+          "nonFilteredDropdown",
+          "",
+          "",
+        ];
+      } else {
+        controlInputs.stackPipeId = [
+          "Unit or Stack Pipe ID",
+          "nonFilteredDropdown",
+          "",
+          "",
+        ];
       }
     }
     let mainDropdownName = "";
@@ -361,6 +377,9 @@ const QATestSummaryDataTable = ({
     );
     setSelectedModalData(modalData);
 
+    setClickedRow(row)
+    setClickedIndex(index)
+
     setShow(true);
     setTimeout(() => {
       attachChangeEventListeners(".modalUserInput");
@@ -381,6 +400,7 @@ const QATestSummaryDataTable = ({
     // setReturnedFocusToLast(false);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
+    returnsFocusDatatableViewBTN(dataTableName, clickedRow, clickedIndex)
   };
 
   const onRemoveHandler = async (row) => {
@@ -418,9 +438,9 @@ const QATestSummaryDataTable = ({
     const userInput = extractUserInput(uiControls, ".modalUserInput", [
       "gracePeriodIndicator",
     ]);
-    if(selectedLocation.unitId){
+    if (selectedLocation.unitId) {
       userInput.unitId = selectedLocation.unitId;
-    }else{
+    } else {
       userInput.stackPipeId = selectedLocation.stackPipeId;
     }
     updateQALinearityTestSummary(locationSelectValue, userInput.id, userInput)
@@ -442,26 +462,26 @@ const QATestSummaryDataTable = ({
       "gracePeriodIndicator",
     ]);
     let selectedLocationId = locationSelectValue;
-    locations.forEach(loc =>{
-      if(userInput.unitId){
-        if(loc.unitId === String(userInput.unitId)){
+    locations.forEach((loc) => {
+      if (userInput.unitId) {
+        if (loc.unitId === String(userInput.unitId)) {
           userInput.unitId = loc.unitId;
           userInput.stackPipeId = null;
-          selectedLocationId = loc.id
-        }else if(loc.stackPipeId === String(userInput.unitId)){
+          selectedLocationId = loc.id;
+        } else if (loc.stackPipeId === String(userInput.unitId)) {
           userInput.stackPipeId = loc.stackPipeId;
           userInput.unitId = null;
-          selectedLocationId = loc.id
+          selectedLocationId = loc.id;
         }
-      }else if(userInput.stackPipeId){
-        if(loc.unitId === String(userInput.stackPipeId)){
-          userInput.unitId = loc.unitId
+      } else if (userInput.stackPipeId) {
+        if (loc.unitId === String(userInput.stackPipeId)) {
+          userInput.unitId = loc.unitId;
           userInput.stackPipeId = null;
-          selectedLocationId = loc.id
-        }else if(loc.stackPipeId === String(userInput.stackPipeId)){
+          selectedLocationId = loc.id;
+        } else if (loc.stackPipeId === String(userInput.stackPipeId)) {
           userInput.stackPipeId = loc.stackPipeId;
           userInput.unitId = null;
-          selectedLocationId = loc.id
+          selectedLocationId = loc.id;
         }
       }
     });
@@ -520,10 +540,116 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
-      // return (
-      //    <QARataDataExpandableRows {...props} />
-      // );
+      case "APPESUM":
+        const appESum = qaAppendixECorrelationSummaryTestProps();
+        return (
+          <QAExpandableRowsRender
+            payload={appESum["payload"]}
+            dropdownArray={appESum["dropdownArray"]}
+            columns={appESum["columnNames"]}
+            controlInputs={appESum["controlInputs"]}
+            controlDatePickerInputs={appESum["controlDatePickerInputs"]}
+            dataTableName={appESum["dataTableName"]}
+            extraControls={appESum["extraControls"]}
+            radioBtnPayload={appESum["radioBtnPayload"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+
+      case "FFL": // Fuel Flow to Load
+        const fflProps = qaFuelFlowToLoadProps();
+        return (
+          <QAExpandableRowsRender
+            payload={fflProps["payload"]}
+            dropdownArray={fflProps["dropdownArray"]}
+            mdmProps={fflProps["mdmProps"]}
+            columns={fflProps["columnNames"]}
+            controlInputs={fflProps["controlInputs"]}
+            controlDatePickerInputs={fflProps["controlDatePickerInputs"]}
+            dataTableName={fflProps["dataTableName"]}
+            extraControls={fflProps["extraControls"]}
+            radioBtnPayload={fflProps["radioBtnPayload"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "FFLB":
+        const fflbProps = qaFuelFlowToLoadBaselineProps();
+        return (
+          <QAExpandableRowsRender
+            payload={fflbProps["payload"]}
+            dropdownArray={fflbProps["dropdownArray"]}
+            mdmProps={fflbProps["mdmProps"]}
+            columns={fflbProps["columnNames"]}
+            controlInputs={fflbProps["controlInputs"]}
+            controlDatePickerInputs={fflbProps["controlDatePickerInputs"]}
+            dataTableName={fflbProps["dataTableName"]}
+            extraControls={fflbProps["extraControls"]}
+            radioBtnPayload={fflbProps["radioBtnPayload"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "FLC": // Flow to Load Check
+        const flcProps = qaFlowToLoadCheckProps();
+        return (
+          <QAExpandableRowsRender
+            payload={flcProps["payload"]}
+            dropdownArray={flcProps["dropdownArray"]}
+            mdmProps={flcProps["mdmProps"]}
+            columns={flcProps["columnNames"]}
+            controlInputs={flcProps["controlInputs"]}
+            dataTableName={flcProps["dataTableName"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "OLOLCAL": // Online Offline Calibration
+        const onOffCalProps = qaOnOffCalibrationProps();
+        return (
+          <QAExpandableRowsRender
+            payload={onOffCalProps["payload"]}
+            dropdownArray={onOffCalProps["dropdownArray"]}
+            mdmProps={onOffCalProps["mdmProps"]}
+            columns={onOffCalProps["columnNames"]}
+            controlInputs={onOffCalProps["controlInputs"]}
+            controlDatePickerInputs={onOffCalProps["controlDatePickerInputs"]}
+            dataTableName={onOffCalProps["dataTableName"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "CALINJ":
+        const cjProps = qaCalibrationInjectionProps();
+        return (
+          <QAExpandableRowsRender
+            payload={cjProps["payload"]}
+            dropdownArray={cjProps["dropdownArray"]}
+            mdmProps={cjProps["mdmProps"]}
+            columns={cjProps["columnNames"]}
+            controlInputs={cjProps["controlInputs"]}
+            controlDatePickerInputs={cjProps["controlDatePickerInputs"]}
+            radioBtnPayload={cjProps["radioBtnPayload"]}
+            dataTableName={cjProps["dataTableName"]}
+            extraControls={cjProps["extraControls"]}
+            extraIDs={null}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
       default:
+        console.log(`case testTypeGroupCode of ${testTypeGroupCode} not implemented`)
         return null;
     }
   };
@@ -542,6 +668,7 @@ const QATestSummaryDataTable = ({
           openHandler={openModal}
           onRemoveHandler={onRemoveHandler}
           isCheckedOut={isCheckedOut}
+          dataTableName="Test Summary Data"
           actionColumnName={
             user && isCheckedOut ? (
               <>

@@ -6,7 +6,7 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
-import { addAriaLabelToDatatable } from "../../../additional-functions/ensure-508";
+import { addAriaLabelToDatatable, returnsFocusDatatableViewBTN } from "../../../additional-functions/ensure-508";
 /*********** COMPONENTS ***********/
 
 import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
@@ -18,6 +18,7 @@ import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import * as dmApi from "../../../utils/api/dataManagementApi";
 import * as assertSelector from "../../../utils/selectors/QACert/assert";
+import {getListOfRadioContorls} from "../../../utils/selectors/QACert/TestSummary";
 import {
   qaAirEmissionsProps,
   qaProtocalGasProps,
@@ -27,6 +28,9 @@ import {
   qaFlowRataRunProps,
   qaRataTraverseProps,
   qaTestQualificationProps,
+  qaAppendixECorrTestRunProps,
+  qaAppendixECorrelationSummaryHeatInputGasProps,
+  qaAppendixECorrelationSummaryHeatInputOilProps,
 } from "../../../additional-functions/qa-dataTable-props";
 const QAExpandableRowsRender = ({
   user,
@@ -42,15 +46,16 @@ const QAExpandableRowsRender = ({
   extraIDs = [], // [locid, testsumid, linsumid,   ]
   data,
   isCheckedOut,
-  mdmProps
+  mdmProps,
 }) => {
   const { locationId, id } = data;
-  // const { locationId, id } = dataTableName !== "Protocol Gas" ? data : ""; // id / testsumid
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
   const [dataPulled, setDataPulled] = useState([]);
+  const [clickedRow, setClickedRow] = useState(null);
+  const [clickedIndex, setClickedIndex] = useState(null);
 
   const [displayedRecords, setDisplayedRecords] = useState([]);
   useEffect(() => {
@@ -61,20 +66,18 @@ const QAExpandableRowsRender = ({
         .then((res) => {
           finishedLoadingData(res.data);
         })
-        .catch((error => console.log(error)))
+        .catch((error) => console.log(error));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataTableName, updateTable]);
 
   useEffect(() => {
-    if (updateTable || (dataPulled && dataPulled.length > 0)) {
-      setLoading(true);
-      setDisplayedRecords(
-        assertSelector.getDataTableRecords(dataPulled, dataTableName)
-      );
-    }
+    setLoading(true);
+    setDisplayedRecords(
+      assertSelector.getDataTableRecords(dataPulled, dataTableName)
+    );
+    
     setLoading(false);
-
     setUpdateTable(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataPulled, updateTable]);
@@ -184,7 +187,7 @@ const QAExpandableRowsRender = ({
           />
         );
 
-      case "RATA Summary": // 3rd level 
+      case "RATA Summary": // 3rd level
         const rataRunIdArray = [...extraIDs, id];
         const rataRunObj = qaRataRunDataProps();
         return (
@@ -222,7 +225,7 @@ const QAExpandableRowsRender = ({
           />
         );
       case "Flow":
-        const traverseIdArray = [...extraIDs, id]
+        const traverseIdArray = [...extraIDs, id];
         const traverseObj = qaRataTraverseProps();
         return (
           <QAExpandableRowsRender
@@ -237,9 +240,74 @@ const QAExpandableRowsRender = ({
             user={user}
             isCheckedOut={isCheckedOut}
           />
-        )
+        );
+      // appendix E correlation test summary  > run
+      case "Appendix E Correlation Summary":
+        const parentIds = [locationId, id];
+        const propsObj = qaAppendixECorrTestRunProps();
+        return (
+          <QAExpandableRowsRender
+            payload={propsObj["payload"]}
+            dropdownArray={propsObj["dropdownArray"]}
+            columns={propsObj["columnNames"]}
+            controlInputs={propsObj["controlInputs"]}
+            controlDatePickerInputs={propsObj["controlDatePickerInputs"]}
+            dataTableName={propsObj["dataTableName"]}
+            extraControls={propsObj["extraControls"]}
+            extraIDs={parentIds}
+            expandable
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      // run >>> heat input from gas
+      case "Appendix E Correlation Run":
+        const heatInputIdArray = [...extraIDs, id];
+        const heatInputGasObj =
+          qaAppendixECorrelationSummaryHeatInputGasProps();
+        return (
+          <QAExpandableRowsRender
+            payload={heatInputGasObj["payload"]}
+            dropdownArray={heatInputGasObj["dropdownArray"]}
+            columns={heatInputGasObj["columnNames"]}
+            controlInputs={heatInputGasObj["controlInputs"]}
+            controlDatePickerInputs={heatInputGasObj["controlDatePickerInputs"]}
+            dataTableName={heatInputGasObj["dataTableName"]}
+            extraControls={heatInputGasObj["extraControls"]}
+            extraIDs={heatInputIdArray}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "Appendix E Correlation Heat Input from Oil":
+        const heatInputOilIdArray = [...extraIDs, id];
+        const heatInputOilObj = qaAppendixECorrelationSummaryHeatInputOilProps(data);
+        return (
+          <QAExpandableRowsRender
+            payload={heatInputOilObj["payload"]}
+            dropdownArray={heatInputOilObj["dropdownArray"]}
+            mdmProps={heatInputOilObj["mdmProps"]}
+            columns={heatInputOilObj["columnNames"]}
+            controlInputs={heatInputOilObj["controlInputs"]}
+            controlDatePickerInputs={heatInputOilObj["controlDatePickerInputs"]}
+            dataTableName={heatInputOilObj["dataTableName"]}
+            extraControls={heatInputOilObj["extraControls"]}
+            extraIDs={heatInputOilIdArray}
+            data={data}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
       default:
         break;
+    }
+  };
+
+  const populateStaticDropdowns = (tableName, dropdowns) =>{
+    if(tableName === "Flow To Load Check"){
+      dropdowns['biasAdjustedIndicator'] = [
+        { code: 1, name: 1}, { code: 2, name: 2}
+      ]
     }
   };
   const loadDropdownsData = (name) => {
@@ -280,7 +348,7 @@ const QAExpandableRowsRender = ({
           });
 
           setMdmData(dropdowns);
-        });
+        }).catch((error => console.log(error)));
         break;
       case "RATA Data":
         allPromises.push(dmApi.getAllRataFreqCodes());
@@ -307,7 +375,7 @@ const QAExpandableRowsRender = ({
             { code: 3, name: 3 },
           ];
           setMdmData(dropdowns);
-        });
+        }).catch((error => console.log(error)));
         break;
 
       case "RATA Run Data":
@@ -328,7 +396,7 @@ const QAExpandableRowsRender = ({
             }
           });
           setMdmData(dropdowns);
-        });
+        }).catch((error => console.log(error)));
         break;
 
       case "RATA Summary":
@@ -373,49 +441,88 @@ const QAExpandableRowsRender = ({
             }
           });
           setMdmData(dropdowns);
-        });
+        }).catch((error => console.log(error)))
         break;
-      case 'RATA Traverse Data':
+      case "RATA Traverse Data":
         allPromises.push(dmApi.getAllProbeTypeCodes());
-        allPromises.push(dmApi.getAllPressureMeasureCodes())
-        allPromises.push(dmApi.getAllPointUsedIndicatorCodes())
-        Promise.all(allPromises).then(responses => {
+        allPromises.push(dmApi.getAllPressureMeasureCodes());
+        allPromises.push(dmApi.getAllPointUsedIndicatorCodes());
+        Promise.all(allPromises).then((responses) => {
           responses.forEach((curResp, i) => {
-            let codeLabel
-            let descriptionLabel
+            let codeLabel;
+            let descriptionLabel;
             switch (i) {
               case 0:
-                codeLabel = 'probeTypeCode'
-                descriptionLabel = 'probeTypeDescription'
-                break
+                codeLabel = "probeTypeCode";
+                descriptionLabel = "probeTypeDescription";
+                break;
               case 1:
-                codeLabel = 'pressureMeasureCode'
-                descriptionLabel = 'pressureMeasureDescription'
-                break
+                codeLabel = "pressureMeasureCode";
+                descriptionLabel = "pressureMeasureDescription";
+                break;
               case 2:
-                codeLabel = 'pointUsedIndicatorCode'
-                descriptionLabel = 'pointUsedIndicatorDescription'
-                break
+                codeLabel = "pointUsedIndicatorCode";
+                descriptionLabel = "pointUsedIndicatorDescription";
+                break;
               default:
-                break
+                break;
             }
-            dropdowns[dropdownArray[i]] = curResp.data.map(d => {
-              return { code: d[codeLabel], name: d[descriptionLabel] }
-            })
-          })
+            dropdowns[dropdownArray[i]] = curResp.data.map((d) => {
+              return { code: d[codeLabel], name: d[descriptionLabel] };
+            });
+          });
           for (const options of Object.values(dropdowns)) {
-            options.unshift({ code: '', name: '-- Select a value --' })
+            options.unshift({ code: "", name: "-- Select a value --" });
           }
           setMdmData(dropdowns);
-        });
+        }).catch((error => console.log(error)))
         break
+      case "Appendix E Correlation Heat Input from Oil":
+        allPromises.push(dmApi.getAllMonitoringSystemIDCodes(extraIDs[0]));
+        allPromises.push(dmApi.getAllUnitsOfMeasureCodes());
+        console.log("allPromises", allPromises)
+        Promise.all(allPromises).then((responses) => {
+          console.log("responses", responses)
+          responses.forEach((curResp, i) => {
+            let codeLabel;
+            let descriptionLabel;
+            switch (i) {
+              case 0:
+                codeLabel = "monitoringSystemIDCode";
+                descriptionLabel = "monitoringSystemIDDescription";
+                break;
+              case 1:
+                codeLabel = "unitOfMeasureCode";
+                descriptionLabel = "unitOfMeasureDescription";
+                break;
+              default:
+                break;
+            }
+            dropdowns[dropdownArray[i]] = curResp.data.map((d) => {
+              return { code: d[codeLabel], name: d[descriptionLabel] };
+            });
+            if(i === 1){
+              dropdowns["oilVolumeUnitsOfMeasureCode"] = curResp.data.map((d) => {
+                return { code: d[codeLabel], name: d[descriptionLabel] };
+              });
+              dropdowns["oilDensityUnitsOfMeasureCode"] = curResp.data.map((d) => {
+                return { code: d[codeLabel], name: d[descriptionLabel] };
+              });
+            }
+          });
+          for (const options of Object.values(dropdowns)) {
+            options.unshift({ code: "", name: "-- Select a value --" });
+          }
+          setMdmData(dropdowns);
+        }).catch((error => console.log(error)))
+        break;
       default:
-        mdmProps.forEach((prop) =>{
-          allPromises.push(dmApi.getMdmDataByCodeTable(prop['codeTable']));
+        mdmProps.forEach((prop) => {
+          allPromises.push(dmApi.getMdmDataByCodeTable(prop["codeTable"]));
         });
         Promise.all(allPromises)
-          .then(res =>{
-            res.forEach((val, i) =>{
+          .then((res) => {
+            res.forEach((val, i) => {
               dropdowns[dropdownArray[i]] = val.data.map((d) => {
                 return {
                   code: d[mdmProps[i].responseProps["code"]],
@@ -423,11 +530,13 @@ const QAExpandableRowsRender = ({
                 };
               });
             });
+            populateStaticDropdowns(name, dropdowns);
             for (const options of Object.values(dropdowns)) {
-              options.unshift({ code: '', name: '-- Select a value --' })
+              options.unshift({ code: "", name: "-- Select a value --" });
             }
             setMdmData(dropdowns);
-          }).catch(err => console.error(err));
+          })
+          .catch((err) => console.error(err));
         break;
     }
   };
@@ -466,13 +575,14 @@ const QAExpandableRowsRender = ({
     // setReturnedFocusToLast(false);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
+    returnsFocusDatatableViewBTN(dataTableName, clickedRow, clickedIndex)
   };
   const finishedLoadingData = (loadedData) => {
     setDataPulled(loadedData);
     addAriaLabelToDatatable();
   };
   // Executed when "View" action is clicked
-  const openModal = (row, bool, create) => {
+  const openModal = (row, bool, create, index) => {
     let selectedData = null;
     setCreateNewData(create);
     if (create) {
@@ -487,9 +597,22 @@ const QAExpandableRowsRender = ({
           "",
         ];
       }
+      if(dataTableName === "Appendix E Correlation Heat Input from Oil") {
+        controlInputs.monitoringSystemID = [
+          "Monitoring System ID",
+          "dropdown",
+          "", 
+          "",
+        ]
+      }
     } else {
       if (dataTableName === "Linearity Test") {
-        controlInputs.gasLevelCode = ["Gas Level Code", "dropdown", "", "locked"];
+        controlInputs.gasLevelCode = [
+          "Gas Level Code",
+          "dropdown",
+          "",
+          "locked",
+        ];
       }
       if (dataTableName === "Rata Data") {
         controlInputs.numberOfLoadLevels = [
@@ -498,6 +621,14 @@ const QAExpandableRowsRender = ({
           "",
           "locked",
         ];
+      }
+      if(dataTableName === "Appendix E Correlation Heat Input from Oil") {
+        controlInputs.monitoringSystemID = [
+          "Monitoring System ID",
+          "dropdown",
+          "", 
+          "locked",
+        ]
       }
     }
 
@@ -552,6 +683,9 @@ const QAExpandableRowsRender = ({
       )
     );
 
+    setClickedRow(row)
+    setClickedIndex(index)
+
     setShow(true);
     setTimeout(() => {
       attachChangeEventListeners(".modalUserInput");
@@ -562,7 +696,7 @@ const QAExpandableRowsRender = ({
     const userInput = extractUserInput(
       payload,
       ".modalUserInput",
-      radioBtnPayload
+      getListOfRadioContorls(controlInputs)
     );
 
     assertSelector
@@ -577,7 +711,7 @@ const QAExpandableRowsRender = ({
   };
 
   const createData = () => {
-    const userInput = extractUserInput(payload, ".modalUserInput");
+    const userInput = extractUserInput(payload, ".modalUserInput", getListOfRadioContorls(controlInputs));
     assertSelector
       .createDataSwitch(userInput, dataTableName, locationId, id, extraIDs)
       .then((res) => {
@@ -591,32 +725,42 @@ const QAExpandableRowsRender = ({
 
   const onRemoveHandler = async (row) => {
     try {
-      const resp = await assertSelector.removeDataSwitch(row, dataTableName, locationId, id, extraIDs)
+      const resp = await assertSelector.removeDataSwitch(
+        row,
+        dataTableName,
+        locationId,
+        id,
+        extraIDs
+      );
       if (resp.status === 200) {
         setUpdateTable(true);
         executeOnClose();
       }
     } catch (error) {
-      console.log("error deleting data", error);
+      console.log(`error deleting data of table: ${dataTableName}, row: ${row}`, error);
     }
   };
 
   const getFirstLevelExpandables = () => {
     const expandables = [];
     switch (dataTableName) {
-      case 'Linearity Test':
+      case "Linearity Test":
         expandables.push(nextExpandableRow("Protocol Gas"));
         break;
-      case 'RATA Data':
+      case "RATA Data":
         expandables.push(nextExpandableRow("Test Qualification"));
         expandables.push(nextExpandableRow("Protocol Gas"));
         expandables.push(nextExpandableRow("Air Emissions"));
         break;
+      case "Appendix E Correlation Heat Input from Gas":
+        expandables.push(nextExpandableRow("Appendix E Correlation Heat Input from Oil"))
+        break;
+
       default:
         break;
     }
     return expandables;
-  }
+  };
 
   return (
     <div className="padding-y-3">
@@ -624,13 +768,14 @@ const QAExpandableRowsRender = ({
       {!loading ? (
         <QADataTableRender
           columnNames={columns}
-          columnWidth={15}
+          columnWidth={10}
           data={displayedRecords}
           openHandler={openModal}
           onRemoveHandler={onRemoveHandler}
           user={user}
           actionsBtn={"View"}
           isCheckedOut={isCheckedOut}
+          dataTableName={dataTableName}
           actionColumnName={
             user && isCheckedOut ? (
               <>
@@ -657,7 +802,7 @@ const QAExpandableRowsRender = ({
               <div>
                 <QADataTableRender
                   columnNames={columns}
-                  columnWidth={15}
+                  columnWidth={10}
                   data={[]}
                   isCheckedOut={isCheckedOut}
                   actionColumnName={
@@ -684,9 +829,7 @@ const QAExpandableRowsRender = ({
       ) : (
         <Preloader />
       )}
-      {
-        [...getFirstLevelExpandables()]
-      }
+      {[...getFirstLevelExpandables()]}
       {show ? (
         <Modal
           show={show}
@@ -697,16 +840,14 @@ const QAExpandableRowsRender = ({
           title={
             createNewData
               ? `Add  ${dataTableName}`
-              : user
-                ? ` Edit ${dataTableName}`
-                : ` ${dataTableName}`
+              : user && isCheckedOut
+              ? ` Edit ${dataTableName}`
+              : ` ${dataTableName}`
           }
           exitBTN={`Save and Close`}
           children={
             dropdownsLoaded ? (
               <div>
-                {console.log("selectedRow",selectedRow)}
-                {console.log("selectedModalData",selectedModalData)}
                 <ModalDetails
                   modalData={selectedRow}
                   data={selectedModalData}
