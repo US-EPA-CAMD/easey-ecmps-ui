@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent, waitForElement } from "@testing-library/react";
-import { MonitoringPlanHome, mapStateToProps } from "./MonitoringPlanHome";
+import MonitoringPlanHome, { mapStateToProps } from "./MonitoringPlanHome";
 import { Provider } from "react-redux";
 import configureStore from "../../store/configureStore.dev";
 import {
@@ -9,8 +9,9 @@ import {
   EMISSIONS_STORE_NAME,
   EXPORT_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
-jest.mock("../MonitoringPlanTab/MonitoringPlanTab");
-const openFac = [
+import initialState from "../../store/reducers/initialState";
+
+initialState.openedFacilityTabs.monitoringPlans = [
   {
     orisCode: "3",
     checkout: false,
@@ -20,6 +21,11 @@ const openFac = [
     selectedConfig: {
       id: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
       name: "1, 2, CS0AAN",
+      unitStackConfigurations: [
+        {
+          unitId: "1"
+        }
+      ],
       locations: [
         {
           id: "6",
@@ -51,11 +57,8 @@ const openFac = [
     inactive: [false, false],
   },
 ];
-
-const store = configureStore();
+const store = configureStore(initialState);
 test("renders monitoring plan home with redux", async () => {
-  // const state = { monitoringPlans: openFac };
-  // const stateProps = mapStateToProps(state);
 
   jest.mock("../../utils/api/monitoringPlansApi", () => {
     const data = {
@@ -84,12 +87,11 @@ test("renders monitoring plan home with redux", async () => {
   window.currentlyCheckedOutMonPlanId = 123;
 
 
-  const { container, getAllByText, getByText } = await waitForElement(() =>
+  const { container } = 
     render(
       <Provider store={store}>
         <MonitoringPlanHome
           user={{ firstName: "test" }}
-          openedFacilityTabs={openFac}
           resetTimer={jest.fn()}
           setExpired={jest.fn()}
           resetTimerFlag={jest.fn()}
@@ -98,7 +100,7 @@ test("renders monitoring plan home with redux", async () => {
         />
       </Provider>
     )
-  );
+  ;
 
   fireEvent.click(container.querySelector("#testingBtn2"));
   const renderedComponent = container.querySelector(".home-container");
@@ -106,8 +108,6 @@ test("renders monitoring plan home with redux", async () => {
 });
 
 test("renders monitoring plan home with QA_CERT_TEST_SUMMARY_STORE_NAME", async () => {
-  const state = { monitoringPlans: openFac };
-  const stateProps = mapStateToProps(state);
 
   jest.mock("../../utils/api/monitoringPlansApi", () => {
     const data = {
@@ -136,20 +136,17 @@ test("renders monitoring plan home with QA_CERT_TEST_SUMMARY_STORE_NAME", async 
   window.currentlyCheckedOutMonPlanId = 123;
 
 
-  const { container, getAllByText, getByText } = await waitForElement(() =>
-    render(
-      <Provider store={store}>
-        <MonitoringPlanHome
-          user={{ firstName: "test" }}
-          openedFacilityTabs={openFac}
-          resetTimer={jest.fn()}
-          setExpired={jest.fn()}
-          resetTimerFlag={jest.fn()}
-          callApiFlag={jest.fn()}
-          workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
-        />
-      </Provider>
-    )
+  const { container } = render(
+    <Provider store={store}>
+      <MonitoringPlanHome
+        user={{ firstName: "test" }}
+        resetTimer={jest.fn()}
+        setExpired={jest.fn()}
+        resetTimerFlag={jest.fn()}
+        callApiFlag={jest.fn()}
+        workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
+      />
+    </Provider>
   );
 
   fireEvent.click(container.querySelector("#testingBtn2"));
@@ -158,8 +155,6 @@ test("renders monitoring plan home with QA_CERT_TEST_SUMMARY_STORE_NAME", async 
 });
 
 test("renders monitoring plan home with EMISSIONS_STORE_NAME", async () => {
-  const state = { monitoringPlans: openFac };
-  const stateProps = mapStateToProps(state);
 
   jest.mock("../../utils/api/monitoringPlansApi", () => {
     const data = {
@@ -188,20 +183,17 @@ test("renders monitoring plan home with EMISSIONS_STORE_NAME", async () => {
   window.currentlyCheckedOutMonPlanId = 123;
 
 
-  const { container, getAllByText, getByText } = await waitForElement(() =>
-    render(
-      <Provider store={store}>
-        <MonitoringPlanHome
-          user={{ firstName: "test" }}
-          openedFacilityTabs={openFac}
-          resetTimer={jest.fn()}
-          setExpired={jest.fn()}
-          resetTimerFlag={jest.fn()}
-          callApiFlag={jest.fn()}
-          workspaceSection={EMISSIONS_STORE_NAME}
-        />
-      </Provider>
-    )
+  const { container } = render(
+    <Provider store={store}>
+      <MonitoringPlanHome
+        user={{ firstName: "test" }}
+        resetTimer={jest.fn()}
+        setExpired={jest.fn()}
+        resetTimerFlag={jest.fn()}
+        callApiFlag={jest.fn()}
+        workspaceSection={EMISSIONS_STORE_NAME}
+      />
+    </Provider>
   );
 
   fireEvent.click(container.querySelector("#testingBtn2"));
@@ -210,8 +202,6 @@ test("renders monitoring plan home with EMISSIONS_STORE_NAME", async () => {
 });
 
 test("renders monitoring plan home with EXPORT_STORE_NAME", async () => {
-  const state = { monitoringPlans: openFac };
-  const stateProps = mapStateToProps(state);
 
   jest.mock("../../utils/api/monitoringPlansApi", () => {
     const data = {
@@ -240,20 +230,17 @@ test("renders monitoring plan home with EXPORT_STORE_NAME", async () => {
   window.currentlyCheckedOutMonPlanId = 123;
 
 
-  const { container, getAllByText, getByText } = await waitForElement(() =>
-    render(
-      <Provider store={store}>
-        <MonitoringPlanHome
-          user={{ firstName: "test" }}
-          openedFacilityTabs={openFac}
-          resetTimer={jest.fn()}
-          setExpired={jest.fn()}
-          resetTimerFlag={jest.fn()}
-          callApiFlag={jest.fn()}
-          workspaceSection={EXPORT_STORE_NAME}
-        />
-      </Provider>
-    )
+  const { container } = render(
+    <Provider store={store}>
+      <MonitoringPlanHome
+        user={{ firstName: "test" }}
+        resetTimer={jest.fn()}
+        setExpired={jest.fn()}
+        resetTimerFlag={jest.fn()}
+        callApiFlag={jest.fn()}
+        workspaceSection={EXPORT_STORE_NAME}
+      />
+    </Provider>
   );
 
   fireEvent.click(container.querySelector("#testingBtn2"));
@@ -261,12 +248,10 @@ test("renders monitoring plan home with EXPORT_STORE_NAME", async () => {
   expect(renderedComponent).not.toBeUndefined();
 });
 
-test("mapStateToProps", async () => {
+test("mapStateToProps calls the appropriate action", async () => {
   // mock the 'dispatch' object
   const state = store.getState();
-  const stateProps = mapStateToProps(state);
-  // verify the appropriate action was called
-  actionProps.setCheckout();
+  const stateProps = mapStateToProps(state, true);
 
-  expect(state).toBeDefined();
+  expect(stateProps).toBeDefined();
 });

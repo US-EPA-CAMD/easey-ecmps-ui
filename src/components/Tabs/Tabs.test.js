@@ -103,7 +103,7 @@ describe("testing a reusable Tabs component", () => {
   });
   test("renders the specified initial tabpane content ", () => {
     render(<TabsUsage />);
-    const initTabContent = screen.getByText("Tab1 Content");
+    const initTabContent = screen.getByText("Tab4 Content 1");
     expect(initTabContent).not.toBeUndefined();
   });
   test("renders the user selected tab", async () => {
