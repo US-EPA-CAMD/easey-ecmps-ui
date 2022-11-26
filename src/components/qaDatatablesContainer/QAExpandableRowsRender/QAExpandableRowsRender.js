@@ -55,7 +55,7 @@ const QAExpandableRowsRender = ({
   const [updateTable, setUpdateTable] = useState(false);
   const [dataPulled, setDataPulled] = useState([]);
   const [clickedIndex, setClickedIndex] = useState(null);
-  const [createdTestNumber, setCreatedTestNumber] = useState(null);
+  const [createdDataId, setCreatedDataId] = useState(null);
 
   const [displayedRecords, setDisplayedRecords] = useState([]);
   useEffect(() => {
@@ -65,6 +65,7 @@ const QAExpandableRowsRender = ({
         .getDataTableApis(dataTableName, locationId, id, extraIDs)
         .then((res) => {
           finishedLoadingData(res.data);
+          executeOnClose(res.data);
         })
         .catch((error) => console.log(error));
     }
@@ -570,19 +571,24 @@ const QAExpandableRowsRender = ({
     } else {
       executeOnClose();
     }
+    if (createNewData) {
+      returnsFocusOnCancel(dataTableName.replaceAll(" ", "-"))
+    }
   };
-  const executeOnClose = () => {
+  const executeOnClose = (data) => {
     // setReturnedFocusToLast(false);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
-    if (createNewData && createdTestNumber) {
-      const idx = data.findIndex(d => d.testNumber === createdTestNumber)
-      returnsFocusDatatableViewBTN(dataTableName, idx)
-      setCreatedTestNumber(null)
-    } else if (createNewData) {
-      returnsFocusOnCancel(dataTableName)
+
+    const updatedData = assertSelector.getDataTableRecords(data ? data : [], dataTableName)
+    const idx = updatedData.findIndex(d => d.id === createdDataId)
+
+    if (idx > 0) {
+      returnsFocusDatatableViewBTN(dataTableName.replaceAll(" ", "-"), idx)
+      setCreatedDataId(null)
+      setCreateNewData(false)
     } else {
-      returnsFocusDatatableViewBTN(dataTableName, clickedIndex)
+      returnsFocusDatatableViewBTN(dataTableName.replaceAll(" ", "-"), clickedIndex)
     }
   };
   const finishedLoadingData = (loadedData) => {
@@ -722,9 +728,8 @@ const QAExpandableRowsRender = ({
     assertSelector
       .createDataSwitch(userInput, dataTableName, locationId, id, extraIDs)
       .then((res) => {
-        setCreatedTestNumber(userInput.testNumber);
+        setCreatedDataId(res.data.id);
         setUpdateTable(true);
-        executeOnClose();
       })
       .catch((error) => {
         console.log(error);
@@ -742,7 +747,7 @@ const QAExpandableRowsRender = ({
       );
       if (resp.status === 200) {
         setUpdateTable(true);
-        executeOnClose();
+        returnsFocusOnCancel(dataTableName.replaceAll(" ", "-"))
       }
     } catch (error) {
       console.log(`error deleting data of table: ${dataTableName}, row: ${row}`, error);
@@ -789,7 +794,7 @@ const QAExpandableRowsRender = ({
               <>
                 <span className="padding-right-2">{dataTableName}</span>
                 <Button
-                  id={`btnAdd${dataTableName}`}
+                  id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
                   epa-testid="btnOpen"
                   className="text-white"
                   onClick={() => openModal(false, false, true)}
@@ -818,7 +823,7 @@ const QAExpandableRowsRender = ({
                     <>
                       <span className="padding-right-2">{dataTableName}</span>
                       <Button
-                        id={`btnAdd${dataTableName}`}
+                        id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
                         epa-testid="btnOpen"
                         className="text-white"
                         onClick={() => openModal(false, false, true)}

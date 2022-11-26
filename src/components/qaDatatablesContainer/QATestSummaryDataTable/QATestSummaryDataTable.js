@@ -66,7 +66,7 @@ const QATestSummaryDataTable = ({
   const [clickedIndex, setClickedIndex] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
-  const [createdTestNumber, setCreatedTestNumber] = useState(null);
+  const [createdId, setCreatedId] = useState(null);
 
   const [mainDropdownChange, setMainDropdownChange] = useState("");
 
@@ -404,12 +404,11 @@ const QATestSummaryDataTable = ({
     removeChangeEventListeners(".modalUserInput");
 
     const updatedData = getTestSummary(data ? data : [], columns)
-    const idx = updatedData.findIndex(d => d.col4 === createdTestNumber)
+    const idx = updatedData.findIndex(d => d.id === createdId)
 
     if (idx > 0) {
       returnsFocusDatatableViewBTN(dataTableName.replaceAll(" ", "-"), idx)
-      setCreatedTestNumber(null)
-      setUpdateTable(false)
+      setCreatedId(null)
       setCreateNewData(false)
     } else {
       returnsFocusDatatableViewBTN(dataTableName.replaceAll(" ", "-"), clickedIndex)
@@ -499,12 +498,12 @@ const QATestSummaryDataTable = ({
         }
       }
     });
-    setCreatedTestNumber(userInput.testNumber);
     createQATestData(selectedLocationId, userInput)
       .then((res) => {
         if (Object.prototype.toString.call(res) === "[object Array]") {
           alert(res[0]);
         } else {
+          setCreatedId(res.data.id);
           setUpdateTable(true);
         }
       })
