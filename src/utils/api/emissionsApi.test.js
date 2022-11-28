@@ -1,7 +1,7 @@
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
 import config from "../../config";
-import { exportEmissionsData, getEmissionsSchema, getEmissionViewData, importEmissionsFile } from "./emissionsApi";
+import { exportEmissionsData, getEmissionsSchema, getEmissionViewData, importEmissionsData } from "./emissionsApi";
 import { ExpansionPanelActions } from "@material-ui/core";
 
 describe("Emissions API", function () {
@@ -75,10 +75,10 @@ describe("Emissions API", function () {
         const viewCode = "DAILYCAL";
         const params = {
           monitorPlanId: "123",
-          quarter: "123",
-          year: "123",
+          reportingPeriod: "123",
           unitIds: "123",
           stackPipeIds: "123",
+          attachFile: false,
         };
         const url = `${config.services.emissions.uri}/emissions/views/${viewCode}`;
         const searchParams = new URLSearchParams(params);
@@ -89,10 +89,11 @@ describe("Emissions API", function () {
         const result = await getEmissionViewData(
           viewCode,
           params.monitorPlanId,
-          params.year,
-          params.quarter,
+          params.reportingPeriod,
           params.unitIds,
-          params.stackPipeIds
+          params.stackPipeIds,
+          false,
+          false
         );
         expect(result.data).toEqual({});
       });
@@ -107,10 +108,10 @@ describe("Emissions API", function () {
       })
     })
 
-    describe("importEmissionsFile", ()=>{
+    describe("importEmissionsData", ()=>{
       it("should successfully import emissions json", async ()=>{
         mock.onPost(`${config.services.emissions.uri}/workspace/emissions/import`, {}).reply(201, {"message":"Success"});
-        const {data} = await importEmissionsFile({});
+        const {data} = await importEmissionsData({});
 
         expect(data.message).toEqual("Success");
       })

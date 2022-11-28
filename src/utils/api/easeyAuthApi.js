@@ -85,7 +85,7 @@ export const logOut = async () => {
     }
   }
 
-  secureAxios({
+  await secureAxios({
     method: "DELETE",
     url: `${config.services.authApi.uri}/authentication/sign-out`,
     data: {
@@ -167,8 +167,7 @@ export const verifyChallenge = async (payload) => {
 export const getCredentials = async (monitorPlans) => {
   return secureAxios({
     method: "GET",
-    url: `${
-      config.services.authApi.uri
-    }/certifications/statements?monitorPlanIds=${monitorPlans.join("|")}`,
+    url: `${config.services.authApi.uri
+      }/certifications/statements?monitorPlanIds=${monitorPlans.join("|")}`,
   });
 };
