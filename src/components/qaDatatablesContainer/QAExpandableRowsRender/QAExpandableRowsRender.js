@@ -6,7 +6,7 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
-import { addAriaLabelToDatatable, returnsFocusDatatableViewBTN, returnsFocusOnCancel } from "../../../additional-functions/ensure-508";
+import { addAriaLabelToDatatable, returnsFocusDatatableViewBTN, returnsFocusToAddBtn } from "../../../additional-functions/ensure-508";
 /*********** COMPONENTS ***********/
 
 import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
@@ -572,7 +572,7 @@ const QAExpandableRowsRender = ({
       executeOnClose();
     }
     if (createNewData) {
-      returnsFocusOnCancel(dataTableName.replaceAll(" ", "-"))
+      returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"))
     }
   };
   const executeOnClose = (data) => {
@@ -747,7 +747,7 @@ const QAExpandableRowsRender = ({
       );
       if (resp.status === 200) {
         setUpdateTable(true);
-        returnsFocusOnCancel(dataTableName.replaceAll(" ", "-"))
+        returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"))
       }
     } catch (error) {
       console.log(`error deleting data of table: ${dataTableName}, row: ${row}`, error);

@@ -354,7 +354,7 @@ export const returnsFocusDatatableViewBTN = (datatableName, index) => {
   }, 500);
 };
 
-export const returnsFocusOnCancel = (dataTableName) => {
+export const returnsFocusToAddBtn = (dataTableName) => {
   setTimeout(() => {
     let lastBTN = document
       .getElementById(`btnAdd${dataTableName}`);

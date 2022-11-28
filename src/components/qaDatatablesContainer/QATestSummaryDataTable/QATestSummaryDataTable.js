@@ -40,7 +40,7 @@ import * as dmApi from "../../../utils/api/dataManagementApi";
 import { organizePrefilterMDMData } from "../../../additional-functions/retrieve-dropdown-api";
 
 import QAExpandableRowsRender from "../QAExpandableRowsRender/QAExpandableRowsRender";
-import { returnsFocusDatatableViewBTN, returnsFocusOnCancel } from "../../../additional-functions/ensure-508.js";
+import { returnsFocusDatatableViewBTN, returnsFocusToAddBtn } from "../../../additional-functions/ensure-508.js";
 
 // contains test summary data table
 
@@ -395,7 +395,7 @@ const QATestSummaryDataTable = ({
       executeOnClose();
     }
     if (createNewData) {
-      returnsFocusOnCancel(dataTableName.replaceAll(" ", "-"))
+      returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"))
     }
   };
 
@@ -419,7 +419,7 @@ const QATestSummaryDataTable = ({
     const { id, locationId } = row;
     const resp = await deleteQATestSummary(locationId, id);
     if (resp.status === 200) {
-      returnsFocusOnCancel(dataTableName.replaceAll(" ", "-"))
+      returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"))
       const dataPostRemove = qaTestSummary.filter(
         (rowData) => rowData.id !== id
       );
@@ -509,7 +509,7 @@ const QATestSummaryDataTable = ({
       })
       .catch((error) => {
         console.error("error", error);
-        returnsFocusOnCancel(dataTableName.replaceAll(" ", "-"))
+        returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"))
       });
   };
 
