@@ -10,6 +10,7 @@ import thunk from "redux-thunk";
 import MockAdapter from "axios-mock-adapter";
 import configureMockStore from "redux-mock-store";
 import config from "../../config";
+import { beginMonitoringPlansApiCall } from "./apiStatusActions";
 
 // Test an async action
 const middleware = [thunk];
@@ -40,30 +41,11 @@ const monitoringPlans = [
   },
 ];
 
-describe("Async Actions", () => {
-  const mock = new MockAdapter(axios);
-  afterEach(() => {
-    mock.restore();
-  });
-  let orisCode = "3";
-  mock
-    .onGet(
-      `${config.services.monitorPlans.uri}/plans/${orisCode}/configurations`
-    )
-    .reply(200, monitoringPlans);
-  const store = mockStore({ monitoringPlans: [] });
-  it("should create BEGIN_MONITORING_PLANS_API_CALL and LOAD_MONITORING_PLANS_SUCCESS when loading monitoring plans", () => {
-    const expectedActions = [
-      { type: types.BEGIN_MONITORING_PLANS_API_CALL },
-      { type: types.LOAD_MONITORING_PLANS_SUCCESS, monitoringPlans },
-    ];
 
-    return store.dispatch(loadMonitoringPlans(orisCode)).then(() => {
-      expect(store).toBeDefined();
-    });
-  });
 
-  it("should create a LOAD_MONITORING_PLANS_SUCCESS action", () => {
+
+describe("LOAD_MONITORING_PLANS_SUCCESS ", () => {
+   it("should create a LOAD_MONITORING_PLANS_SUCCESS action", () => {
     const expectedAction = {
       type: types.LOAD_MONITORING_PLANS_SUCCESS,
       monitoringPlans,
@@ -73,7 +55,10 @@ describe("Async Actions", () => {
 
     expect(action).toEqual(expectedAction);
   });
+  });
 
+  describe("LOAD_MONITORING_PLANS_array_SUCCESS", () => {
+    let orisCode = 3;
   it("should create BEGIN_MONITORING_PLANS_array_API_CALL and LOAD_MONITORING_PLANS_array_SUCCESS when loading monitoring plans", () => {
     const expectedActions = [
       { type: types.BEGIN_MONITORING_PLANS_API_CALL },
@@ -84,24 +69,12 @@ describe("Async Actions", () => {
       },
     ];
 
-    return store.dispatch(loadMonitoringPlansArray(orisCode)).then(() => {
-      expect(store).toBeDefined();
-    });
+    const action = [beginMonitoringPlansApiCall(), loadMonitoringPlansArraySuccess(monitoringPlans, orisCode)]
+
+    expect(action).toEqual(expectedActions)
+  });
   });
 
-  it("should create a LOAD_MONITORING_PLANS__array_SUCCESS action", () => {
-    orisCode = undefined;
-    const expectedAction = {
-      type: types.LOAD_MONITORING_PLANS_ARRAY_SUCCESS,
-      monitoringPlans,
-      orisCode,
-    };
-
-    const action = loadMonitoringPlansArraySuccess(monitoringPlans);
-
-    expect(action).toEqual(expectedAction);
-  });
-});
 
 test("test file", () => {
   const val = 1;
