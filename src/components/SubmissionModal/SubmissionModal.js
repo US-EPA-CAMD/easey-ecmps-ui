@@ -1,5 +1,5 @@
 import "./SubmissionModal.scss";
-import React, { useEffect, createRef, useState } from "react";
+import React, { useEffect, createRef, useState, useCallback } from "react";
 import ReactDom from "react-dom";
 import {
   Button,
@@ -28,12 +28,12 @@ export const SubmissionModal = ({
   left = "25%",
   submissionCallback,
   monitorPlanIds,
+  activityId,
+  setActivityId,
 }) => {
   const modalRef = createRef();
 
-  let activityId;
-  let questionId;
-
+  const [questionId, setQuestionId] = useState(false);
   const [canCheck, setCanCheck] = useState(false);
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -74,6 +74,22 @@ export const SubmissionModal = ({
   const passwordText = "password";
   const answerText = "answer";
 
+  const handleUserKeyPress = useCallback((event) => {
+    const { key } = event;
+    if (key === "Enter") {
+      event.preventDefault();
+      document.getElementById("saveBtn").focus();
+      document.getElementById("saveBtn").click();
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleUserKeyPress);
+    return () => {
+      window.removeEventListener("keydown", handleUserKeyPress);
+    };
+  }, [handleUserKeyPress]);
+
   const verifyClicked = (event) => {
     if (stage === 1) {
       submitAuth(event);
@@ -102,13 +118,17 @@ export const SubmissionModal = ({
       setLoading(true);
 
       try {
+        const user = JSON.parse(sessionStorage.getItem("cdx_user"));
+
         const result = await credentialsAuth({
           userId: username,
           password: password,
+          firstName: user.firstName,
+          lastName: user.lastName,
         });
 
-        activityId = result.data.activityId;
-        questionId = result.data.questionId;
+        setActivityId(result.data.activityId);
+        setQuestionId(result.data.questionId);
         setQuestion(result.data.question);
 
         setStage(2);
@@ -164,7 +184,7 @@ export const SubmissionModal = ({
         setShowError(false);
       } catch (e) {
         setShowError(true);
-        setFormErrorMessage(e.message);
+        setFormErrorMessage("Error Authenticating Answer");
       }
       setLoading(false);
     }

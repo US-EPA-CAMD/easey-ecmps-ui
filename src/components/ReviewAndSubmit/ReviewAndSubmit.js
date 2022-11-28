@@ -6,8 +6,8 @@ import ReviewAndSubmitTables from "./ReviewAndSubmitTables/ReviewAndSubmitTables
 import MockPermissions from "./MockPermissions";
 
 const ReviewAndSubmit = () => {
+  const [activityId, setActivityId] = useState("");
   const [excludeErrors, setExcludeErrors] = useState(true);
-
   const [showModal, setShowModal] = useState(false);
   const [monPlans, setMonPlans] = useState([]);
   const selectedMonPlansRef = useRef();
@@ -29,7 +29,6 @@ const ReviewAndSubmit = () => {
   };
 
   const applyFilter = async (orisCodes, monPlanIds, submissionPeriods) => {
-    console.log("Hello World");
     let monPlanData = (await getMonitoringPlans(orisCodes, monPlanIds)).data;
     monPlanData = monPlanData.filter((mpd) => mpd.active);
 
@@ -70,6 +69,8 @@ const ReviewAndSubmit = () => {
           close={closeModal}
           submissionCallback={submission}
           monitorPlanIds={getSelectedMPIds()}
+          activityId={activityId}
+          setActivityId={setActivityId}
         />
       )}
     </div>
