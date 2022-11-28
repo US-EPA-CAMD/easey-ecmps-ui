@@ -51,6 +51,7 @@ test("should render without throwing an error", async () => {
           retireDate: null,
         },
       ],
+      unitStackConfigurations: [],
       endReportPeriodId: "24",
       active: false,
     },
