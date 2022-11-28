@@ -10,6 +10,7 @@ import thunk from "redux-thunk";
 import MockAdapter from "axios-mock-adapter";
 import configureMockStore from "redux-mock-store";
 import config from "../../config";
+import { beginMonitoringPlansApiCall } from "./apiStatusActions";
 
 // Test an async action
 const middleware = [thunk];
@@ -45,7 +46,7 @@ describe("Async Actions", () => {
   afterEach(() => {
     mock.restore();
   });
-  let orisCode = "3";
+  let orisCode = 3;
   mock
     .onGet(
       `${config.services.monitorPlans.uri}/plans/${orisCode}/configurations`
@@ -58,10 +59,11 @@ describe("Async Actions", () => {
       { type: types.LOAD_MONITORING_PLANS_SUCCESS, monitoringPlans },
     ];
 
-    return store.dispatch(loadMonitoringPlans(orisCode)).then(() => {
-      expect(store).toBeDefined();
+    const action = [beginMonitoringPlansApiCall(), loadMonitoringPlansSuccess(monitoringPlans)]
+
+    expect(action).toEqual(expectedActions)
     });
-  });
+ 
 
   it("should create a LOAD_MONITORING_PLANS_SUCCESS action", () => {
     const expectedAction = {
@@ -84,10 +86,11 @@ describe("Async Actions", () => {
       },
     ];
 
-    return store.dispatch(loadMonitoringPlansArray(orisCode)).then(() => {
-      expect(store).toBeDefined();
+    const action = [beginMonitoringPlansApiCall(), loadMonitoringPlansArraySuccess(monitoringPlans, orisCode)]
+
+    expect(action).toEqual(expectedActions)
     });
-  });
+ 
 
   it("should create a LOAD_MONITORING_PLANS__array_SUCCESS action", () => {
     orisCode = undefined;
@@ -102,6 +105,7 @@ describe("Async Actions", () => {
     expect(action).toEqual(expectedAction);
   });
 });
+
 
 test("test file", () => {
   const val = 1;
