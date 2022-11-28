@@ -18,7 +18,7 @@ import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import * as dmApi from "../../../utils/api/dataManagementApi";
 import * as assertSelector from "../../../utils/selectors/QACert/assert";
-import { getListOfRadioContorls } from "../../../utils/selectors/QACert/TestSummary";
+import { getListOfRadioControls } from "../../../utils/selectors/QACert/TestSummary";
 import {
   qaAirEmissionsProps,
   qaProtocalGasProps,
@@ -709,7 +709,7 @@ const QAExpandableRowsRender = ({
     const userInput = extractUserInput(
       payload,
       ".modalUserInput",
-      getListOfRadioContorls(controlInputs)
+      getListOfRadioControls(controlInputs)
     );
 
     assertSelector
@@ -724,7 +724,7 @@ const QAExpandableRowsRender = ({
   };
 
   const createData = () => {
-    const userInput = extractUserInput(payload, ".modalUserInput", getListOfRadioContorls(controlInputs));
+    const userInput = extractUserInput(payload, ".modalUserInput", getListOfRadioControls(controlInputs));
     assertSelector
       .createDataSwitch(userInput, dataTableName, locationId, id, extraIDs)
       .then((res) => {
