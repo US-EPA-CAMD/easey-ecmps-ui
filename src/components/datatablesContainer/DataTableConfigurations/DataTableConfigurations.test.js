@@ -7,12 +7,9 @@ import {
 } from "./DataTableConfigurations";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import { Provider } from "react-redux";
-
 import configureMockStore from "redux-mock-store";
-
 const axios = require("axios");
 
-import * as actions from "../../../store/actions/monitoringPlans";
 jest.mock("axios");
 //testing redux connected component to mimic props passed as argument
 const data = [
@@ -76,7 +73,7 @@ function componentRenderer() {
     data: dataProp,
     selectedRowHandler: jest.fn(),
     className: "test",
-    loadMonitoringPlansData: jest.fn(),
+    loadMonitoringPlansData: jest.fn(() => Promise.resolve()),
   };
   return render(
     <Provider store={store}>
@@ -104,6 +101,7 @@ function componentRendererNoData(args) {
 afterAll(() => {
   jest.restoreAllMocks();
 });
+
 test("tests a configuration with only active systems", async () => {
   axios.get.mockImplementation(() =>
     Promise.resolve({ status: 200, data: data })
