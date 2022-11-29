@@ -23,8 +23,6 @@ export const findValue = (options, val, parameter) => {
 export const adjustDate = (format, date) => {
   if (date === null) {
     return "";
-  }else {
-    date = "";
   }
   const [year, month, day] = date.split("-");
 

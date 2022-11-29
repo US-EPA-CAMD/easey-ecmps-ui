@@ -45,7 +45,7 @@ describe("Async Actions", () => {
   afterEach(() => {
     mock.restore();
   });
-  let orisCode = "3";
+  let orisCode = 3;
   mock
     .onGet(
       `${config.services.monitorPlans.uri}/plans/${orisCode}/configurations`
