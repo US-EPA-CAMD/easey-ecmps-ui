@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
 import "./QADataTableRender.scss";
-import { returnsFocusDatatableExpandBTN } from "../../additional-functions/ensure-508";
+import { changeGridCellAttributeValue, returnsFocusDatatableExpandBTN } from "../../additional-functions/ensure-508";
 // *** local
 import { oneSecond } from "../../config";
 /*********** COMPONENTS ***********/
@@ -71,6 +71,7 @@ const QADataTableRender = ({
       emptyArr.push(0);
     }
     setTotalExpand(emptyArr);
+    changeGridCellAttributeValue();
   }, [data]);
 
   const expandRowBTN = (index) => {
