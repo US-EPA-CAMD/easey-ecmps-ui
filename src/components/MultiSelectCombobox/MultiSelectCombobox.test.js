@@ -323,7 +323,7 @@ describe("MultiSelectCombobox Component", () => {
 
   it("handles click event of listbox option", () => {
     const { getByTestId, getAllByTestId } = query;
-    getByTestId("input-search").click();
+    getByTestId("Facility-input-search").click();
     const options = getAllByTestId("multi-select-option");
     fireEvent.click(options[0]);
     fireEvent.click(options[1]);
