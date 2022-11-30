@@ -211,49 +211,40 @@ describe("testing HeaderInfo component", () => {
 
     expect(screen.getByText("In Queue")).toBeInTheDocument();
 
-   // // check statuses while evaluation process executes
-   // await wait(async () => {
-   //   await timeout(config.app.refreshEvalStatusRate);
-   //   expect(screen.getByText("In Queue")).toBeInTheDocument();
-//
-   //   await timeout(config.app.refreshEvalStatusRate);
-   //   expect(screen.getByText("In Progress")).toBeInTheDocument();
-//
-   //   await timeout(config.app.refreshEvalStatusRate);
-   //   expect(screen.getByText("Critical Errors")).toBeInTheDocument();
-//
-   //   await timeout(config.app.refreshEvalStatusRate);
-   //   expect(screen.getByText("Informational Message")).toBeInTheDocument();
-//
-   //   await timeout(config.app.refreshEvalStatusRate);
-   //   expect(screen.getByText("Passed")).toBeInTheDocument();
-   // });
+    // check statuses while evaluation process executes
+    await wait(async () => {
+      await timeout(config.app.refreshEvalStatusRate);
+      expect(screen.getByText("In Queue")).toBeInTheDocument();
 
-    // click on evaluation status hyperlink
+      await timeout(config.app.refreshEvalStatusRate);
+      expect(screen.getByText("In Progress")).toBeInTheDocument();
 
+    await timeout(config.app.refreshEvalStatusRate);
+    expect(screen.getByText("Critical Errors")).toBeInTheDocument();
   });
+});
 
 
 
   /*** TESTING EXPORT FUNCTIONALITY ***/
-  /* it("should test the export modal", async () => {
-    expect(screen.getByText("Export Monitoring Plan")).toBeInTheDocument();
+   it("should test the export modal", async () => {
+    expect(screen.getByText("Export Data")).toBeInTheDocument();
 
     // export config
     await wait(() => {
-      const exportBtn = screen.getByText("Export Monitoring Plan");
+      const exportBtn = screen.getByText("Export Data");
       userEvent.click(exportBtn);
     });
-  }); */
+  }); 
 
-  // /*** TESTING IMPORT FUNCTIONALITY ***/
-  // it("should test the import modal", async () => {
-  //   // open import modal
-  //   await wait(() => {
-  //     const importBtn = screen.getByText("Import Monitoring Plan");
-  //     userEvent.click(importBtn);
-  //   });
-  // });
+   /*** TESTING IMPORT FUNCTIONALITY ***/
+   it("should test the import modal", async () => {
+    expect(screen.getByText("Import Data")).toBeInTheDocument();
 
-  /*** TESTING LEFT-SIDE FUNCTIONALITY***/
+    // import config
+     await wait(() => {
+       const importBtn = screen.getByText("Import Data");
+       userEvent.click(importBtn);
+     });
+   });
 });
