@@ -40,7 +40,7 @@ import * as dmApi from "../../../utils/api/dataManagementApi";
 import { organizePrefilterMDMData } from "../../../additional-functions/retrieve-dropdown-api";
 
 import QAExpandableRowsRender from "../QAExpandableRowsRender/QAExpandableRowsRender";
-import { returnsFocusDatatableViewBTN } from "../../../additional-functions/ensure-508.js";
+import { returnsFocusDatatableViewBTN, returnsFocusToAddBtn } from "../../../additional-functions/ensure-508.js";
 
 // contains test summary data table
 
@@ -63,10 +63,10 @@ const QATestSummaryDataTable = ({
   const [dataPulled, setDataPulled] = useState([]);
   const [show, setShow] = useState(showModal);
   const [selectedRow, setSelectedRow] = useState(null);
-  const [clickedRow, setClickedRow] = useState(null);
   const [clickedIndex, setClickedIndex] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
+  const [createdId, setCreatedId] = useState(null);
 
   const [mainDropdownChange, setMainDropdownChange] = useState("");
 
@@ -121,6 +121,7 @@ const QATestSummaryDataTable = ({
             if (res !== undefined && res.data.length > 0) {
               finishedLoadingData(res.data);
               setQATestSummary(res.data);
+              executeOnClose(res.data);
             } else {
               finishedLoadingData([]);
               setQATestSummary([]);
@@ -377,7 +378,6 @@ const QATestSummaryDataTable = ({
     );
     setSelectedModalData(modalData);
 
-    setClickedRow(row)
     setClickedIndex(index)
 
     setShow(true);
@@ -394,19 +394,32 @@ const QATestSummaryDataTable = ({
     } else {
       executeOnClose();
     }
+    if (createNewData) {
+      returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"))
+    }
   };
 
-  const executeOnClose = () => {
-    // setReturnedFocusToLast(false);
+  const executeOnClose = (data) => {
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
-    returnsFocusDatatableViewBTN(dataTableName, clickedRow, clickedIndex)
+
+    const updatedData = getTestSummary(data ? data : [], columns)
+    const idx = updatedData.findIndex(d => d.id === createdId)
+
+    if (idx > 0) {
+      returnsFocusDatatableViewBTN(dataTableName.replaceAll(" ", "-"), idx)
+      setCreatedId(null)
+      setCreateNewData(false)
+    } else {
+      returnsFocusDatatableViewBTN(dataTableName.replaceAll(" ", "-"), clickedIndex)
+    }
   };
 
   const onRemoveHandler = async (row) => {
     const { id, locationId } = row;
     const resp = await deleteQATestSummary(locationId, id);
     if (resp.status === 200) {
+      returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"))
       const dataPostRemove = qaTestSummary.filter(
         (rowData) => rowData.id !== id
       );
@@ -490,12 +503,13 @@ const QATestSummaryDataTable = ({
         if (Object.prototype.toString.call(res) === "[object Array]") {
           alert(res[0]);
         } else {
+          setCreatedId(res.data.id);
           setUpdateTable(true);
-          executeOnClose();
         }
       })
       .catch((error) => {
         console.error("error", error);
+        returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"))
       });
   };
 
@@ -674,6 +688,7 @@ const QATestSummaryDataTable = ({
               <>
                 <span className="padding-right-2">Test Data</span>
                 <Button
+                  id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
                   epa-testid="btnOpen"
                   className="text-white"
                   onClick={() => openModal(false, false, true)}
@@ -707,6 +722,7 @@ const QATestSummaryDataTable = ({
                   <>
                     <span className="padding-right-2">Test Data</span>
                     <Button
+                      id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
                       epa-testid="btnOpen"
                       className="text-white"
                       onClick={() => openModal(false, false, true)}

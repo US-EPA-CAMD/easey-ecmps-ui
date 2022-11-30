@@ -94,7 +94,9 @@ describe("Easey Auth API", () => {
   });
 
   it("Can we refresh client Token", async () => {
-    const data = { token: "token", expiration: "11-22-2022" };
+    config.app.clientId = "123";
+    config.app.clientSecret = "secret";
+    const data = { "token": "token", "expiration": "11-22-2022" }
 
     mock
       .onPost(`${config.services.authApi.uri}/tokens/client`)

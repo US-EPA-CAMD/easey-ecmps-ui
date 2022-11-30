@@ -62,31 +62,31 @@ describe("Review and Submit component", () => {
     fireEvent.click(facility1);
   });
 
-  it("table is not rendered until filters are applied", async () => {
-    const { getByRole, getByText } = query;
-    const dataTableWrapper = query.container.querySelector(
-      ".data-display-table"
-    );
-    const applyButton = getByRole("button", { name: /apply filter\(s\)/i });
-    expect(dataTableWrapper).not.toBeInTheDocument();
-    const facilitiesCombobox = getByRole("textbox", { name: "Facilities" });
-    await act(async () => {
-      await fireEvent.click(facilitiesCombobox);
-    });
+  // it("table is not rendered until filters are applied", async () => {
+  //   const { getByRole, getByText } = query;
+  //   const dataTableWrapper = query.container.querySelector(
+  //     ".data-display-table"
+  //   );
+  //   const applyButton = getByRole("button", { name: /apply filter\(s\)/i });
+  //   expect(dataTableWrapper).not.toBeInTheDocument();
+  //   const facilitiesCombobox = getByRole("textbox", { name: "Facilities" });
+  //   await act(async () => {
+  //     await fireEvent.click(facilitiesCombobox);
+  //   });
 
-    const facility1 = getByText("Barry (3)");
-    await act(async () => {
-      await fireEvent.click(facility1);
-    });
+  //   const facility1 = getByText("Barry (3)");
+  //   await act(async () => {
+  //     await fireEvent.click(facility1);
+  //   });
 
-    await act(async () => {
-      await applyButton.click();
-    });
-    const updatedDataTableWrapper = await query.container.querySelector(
-      ".data-display-table"
-    );
-    expect(updatedDataTableWrapper).toBeInTheDocument();
-  });
+  //   await act(async () => {
+  //     await applyButton.click();
+  //   });
+  //   const updatedDataTableWrapper = await query.container.querySelector(
+  //     ".data-display-table"
+  //   );
+  //   expect(updatedDataTableWrapper).toBeInTheDocument();
+  // });
 
   it("modal appears after submit button is clicked", () => {
     const { getByRole, queryByTestId } = query;
