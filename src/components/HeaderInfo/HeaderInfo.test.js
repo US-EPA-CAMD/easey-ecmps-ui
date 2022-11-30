@@ -210,18 +210,6 @@ describe("testing HeaderInfo component", () => {
     });
 
     expect(screen.getByText("In Queue")).toBeInTheDocument();
-
-    // check statuses while evaluation process executes
-    await wait(async () => {
-      await timeout(config.app.refreshEvalStatusRate);
-      expect(screen.getByText("In Queue")).toBeInTheDocument();
-
-      await timeout(config.app.refreshEvalStatusRate);
-      expect(screen.getByText("In Progress")).toBeInTheDocument();
-
-    await timeout(config.app.refreshEvalStatusRate);
-    expect(screen.getByText("Critical Errors")).toBeInTheDocument();
-  });
 });
 
 
@@ -247,4 +235,25 @@ describe("testing HeaderInfo component", () => {
        userEvent.click(importBtn);
      });
    });
+
+   /*** TESTING REVERT FUNCTIONALITY ***/
+   it('should test the revert modal' , async () => {
+    expect(screen.getByText("Revert to Official Record")).toBeInTheDocument();
+
+    // open revert modal
+    await wait(() => {
+      const revertBtn = screen.getByText("Revert to Official Record");
+      userEvent.click(revertBtn);
+    });
+   });
+
+  // /** TESTING VIEW COMMENTS FUNCTIONALITY **/
+  // it('should test the view comments button', async () => {
+  //  expect(screen.getByText("View Comments")).toBeInTheDocument();
+//
+  //  await wait(() => {
+  //    const commentsBtn = screen.getByText("View Comments")
+  //    userEvent.click(commentsBtn).toBeInTheDocument();
+  //  });
+  // });
 });

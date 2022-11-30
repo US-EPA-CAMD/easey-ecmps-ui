@@ -310,7 +310,7 @@ describe("MultiSelectCombobox Component", () => {
 
   it("renders all roles that make up the multi-select-combobox and populates items in drowpdown list", () => {
     const { getByTestId, getAllByTestId } = query;
-    const searchbox = getByTestId("input-search");
+    const searchbox = getByTestId("Facility-input-search");
     expect(searchbox).toBeInTheDocument();
     searchbox.focus();
     searchbox.click();
@@ -323,7 +323,7 @@ describe("MultiSelectCombobox Component", () => {
 
   it("handles click event of listbox option", () => {
     const { getByTestId, getAllByTestId } = query;
-    getByTestId("input-search").click();
+    getByTestId("Facility-input-search").click();
     const options = getAllByTestId("multi-select-option");
     fireEvent.click(options[0]);
     fireEvent.click(options[1]);
@@ -331,8 +331,8 @@ describe("MultiSelectCombobox Component", () => {
   });
 
   test("It should search using input box for facilities in listboxt", () => {
-    const { getByTestId, getAllByTestId, getByRole } = query;
-    const searchbox = getByTestId("input-search");
+    const { getByTestId, getAllByTestId, getByRole, getByLabelText } = query;
+    const searchbox = getByTestId("Facility-input-search");
     searchbox.click();
     fireEvent.change(searchbox, { target: { value: "Barry" } });
     expect(searchbox.value).toBe("Barry");
@@ -346,7 +346,7 @@ describe("MultiSelectCombobox Component", () => {
     expect(searchbox.value).toBe("Barry");
     expect(getAllByTestId("multi-select-option").length).toBe(1);
     fireEvent.click(getByTestId("multi-select-option"));
-    expect(getByRole("button", { name: "Barry (3)" })).toBeDefined();
+    expect(getAllByTestId("button", { name: "Barry (3)" })).toBeDefined();
     //expect(getAllByTestId("multi-select-option").length).toBe(facilities.length);
   });
 });
