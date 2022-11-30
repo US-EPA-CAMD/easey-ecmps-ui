@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
+import { addScreenReaderLabelForCollapses, cleanUp508, ensure508 } from "../../additional-functions/ensure-508";
+import { oneSecond } from "../../config";
 
 const columnMappings = [
   {
@@ -19,6 +21,17 @@ const columnMappings = [
 
 export const SelectableAccordion = ({ items, setCanCheck }) => {
   const [itemStates, setItemStates] = useState(items);
+
+  useEffect(() => {
+    setTimeout(() => {
+      ensure508();
+    }, oneSecond);
+
+    return () => {
+      cleanUp508();
+      addScreenReaderLabelForCollapses();
+    };
+  }, []);
 
   return (
     <div className="usa-accordion">

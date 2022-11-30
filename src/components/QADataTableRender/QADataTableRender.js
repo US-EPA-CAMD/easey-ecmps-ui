@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
 import "./QADataTableRender.scss";
-import { returnsFocusDatatableExpandBTN } from "../../additional-functions/ensure-508";
+import { changeGridCellAttributeValue, returnsFocusDatatableExpandBTN } from "../../additional-functions/ensure-508";
 // *** local
 import { oneSecond } from "../../config";
 /*********** COMPONENTS ***********/
@@ -71,6 +71,7 @@ const QADataTableRender = ({
       emptyArr.push(0);
     }
     setTotalExpand(emptyArr);
+    changeGridCellAttributeValue();
   }, [data]);
 
   const expandRowBTN = (index) => {
@@ -91,19 +92,19 @@ const QADataTableRender = ({
         className="expandBTN "
         onClick={() => {
           expandRowBTN(index);
-          returnsFocusDatatableExpandBTN(dataTableName,index, false, row.col1);
+          returnsFocusDatatableExpandBTN(dataTableName.replaceAll(" ", "-"), index, false, row.col1);
           row.expanded = true;
         }}
         onKeyPress={(event) => {
           if (event.key === "Enter") {
             expandRowBTN(index);
-            returnsFocusDatatableExpandBTN(dataTableName,index, false, row.col1);
+            returnsFocusDatatableExpandBTN(dataTableName.replaceAll(" ", "-"), index, false, row.col1);
             row.expanded = true;
           }
         }}
         title={`Click to expand row ${index + 1}`}
         name={`expand row ${index + 1}`}
-        id={`expandRow${dataTableName}${row.col1}${index + 1}`}
+        id={`expandRow${dataTableName.replaceAll(" ", "-")}${row.col1}${index + 1}`}
         aria-expanded={false}
         role="button"
         tabIndex="0"
@@ -114,19 +115,19 @@ const QADataTableRender = ({
         className="expandBTN "
         onClick={() => {
           expandRowBTN(index);
-          returnsFocusDatatableExpandBTN(dataTableName,index, true, row.col1);
+          returnsFocusDatatableExpandBTN(dataTableName.replaceAll(" ", "-"), index, true, row.col1);
           row.expanded = false;
         }}
         onKeyPress={(event) => {
           if (event.key === "Enter") {
             expandRowBTN(index);
-            returnsFocusDatatableExpandBTN(dataTableName,index, true, row.col1);
+            returnsFocusDatatableExpandBTN(dataTableName.replaceAll(" ", "-"), index, true, row.col1);
             row.expanded = false;
           }
         }}
         title={`Click to collapse row ${index + 1}`}
         name={`collapse row ${index + 1}`}
-        id={`collapseRow${dataTableName}${row.col1}${index + 1}`}
+        id={`collapseRow${dataTableName.replaceAll(" ", "-")}${row.col1}${index + 1}`}
         role="button"
         tabIndex="0"
         aria-expanded={true}
@@ -159,7 +160,7 @@ const QADataTableRender = ({
                         type="button"
                         epa-testid="btnOpen"
                         className="cursor-pointer open-modal-button"
-                        id={`btnEditView${dataTableName}${row.col1}${index + 1}`}
+                        id={`btnEditView${dataTableName.replaceAll(" ", "-")}${index + 1}`}
                         onClick={() => {
                           openHandler(normalizedRow, false, null, index);
                         }}
@@ -180,13 +181,10 @@ const QADataTableRender = ({
                   <Button
                     type="button"
                     epa-testid="btnOpen"
-                      className="cursor-pointer open-modal-button"
+                    className="cursor-pointer open-modal-button"
                     outline={true}
                     id={
-                      // tableTitle
-                      //   ? `btnOpen${tableTitle.split(" ").join("")}`
-                      // :
-                      `btnEditView${dataTableName}${row.col1}${index + 1}`
+                      `btnEditView${dataTableName.replaceAll(" ", "-")}${index + 1}`
                     }
                     onClick={() => {
                       openHandler(normalizedRow, false, null, index);

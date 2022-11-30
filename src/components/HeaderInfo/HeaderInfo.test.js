@@ -3,8 +3,11 @@ import { render, screen, wait } from "@testing-library/react";
 import config from "../../config";
 
 import userEvent from "@testing-library/user-event";
+import configureStore from "../../store/configureStore.dev";
+const store = configureStore();
 
 import HeaderInfo from "./HeaderInfo";
+import { Provider } from "react-redux";
 
 jest.mock("downloadjs", () => {
   return {
@@ -164,7 +167,11 @@ beforeEach(async () => {
   jest.clearAllMocks();
 
   await wait(() => {
-    header = render(<HeaderInfo {...props} />);
+    header = render(
+    <Provider store={store}>
+    <HeaderInfo {...props} />
+    </Provider>
+    );
   });
 });
 
@@ -203,76 +210,40 @@ describe("testing HeaderInfo component", () => {
     });
 
     expect(screen.getByText("In Queue")).toBeInTheDocument();
+});
 
-    // check statuses while evaluation process executes
-    await wait(async () => {
-      await timeout(config.app.refreshEvalStatusRate);
-      expect(screen.getByText("In Queue")).toBeInTheDocument();
 
-      await timeout(config.app.refreshEvalStatusRate);
-      expect(screen.getByText("In Progress")).toBeInTheDocument();
-
-      await timeout(config.app.refreshEvalStatusRate);
-      expect(screen.getByText("Critical Errors")).toBeInTheDocument();
-
-      await timeout(config.app.refreshEvalStatusRate);
-      expect(screen.getByText("Informational Message")).toBeInTheDocument();
-
-      await timeout(config.app.refreshEvalStatusRate);
-      expect(screen.getByText("Passed")).toBeInTheDocument();
-    });
-
-    // click on evaluation status hyperlink
-    await wait(() => {
-      const statusLink = screen.getByText("Passed");
-      userEvent.click(statusLink);
-    });
-  });
-
-  /*** TESTING REVERT FUNCTIONALITY ***/
-  it("should revert the current configuration", async () => {
-    expect(
-      header.container.querySelector("#showRevertModal")
-    ).toBeInTheDocument();
-
-    // open revert modal
-    await wait(() => {
-      const revertBtn = header.container.querySelector("#showRevertModal");
-      userEvent.click(revertBtn);
-    });
-
-    expect(
-      screen.getByText(
-        "Reverting to Official Record will undo all saved and unsaved changes. This is not recoverable. Do you want to continue?"
-      )
-    ).toBeInTheDocument();
-
-    // revert configuration
-    await wait(() => {
-      const yesBtn = screen.getByText("Yes");
-      userEvent.click(yesBtn);
-    });
-  });
 
   /*** TESTING EXPORT FUNCTIONALITY ***/
-  /* it("should test the export modal", async () => {
-    expect(screen.getByText("Export Monitoring Plan")).toBeInTheDocument();
+   it("should test the export modal", async () => {
+    expect(screen.getByText("Export Data")).toBeInTheDocument();
 
     // export config
     await wait(() => {
-      const exportBtn = screen.getByText("Export Monitoring Plan");
+      const exportBtn = screen.getByText("Export Data");
       userEvent.click(exportBtn);
     });
-  }); */
+  }); 
 
-  // /*** TESTING IMPORT FUNCTIONALITY ***/
-  // it("should test the import modal", async () => {
-  //   // open import modal
-  //   await wait(() => {
-  //     const importBtn = screen.getByText("Import Monitoring Plan");
-  //     userEvent.click(importBtn);
-  //   });
-  // });
+   /*** TESTING IMPORT FUNCTIONALITY ***/
+   it("should test the import modal", async () => {
+    expect(screen.getByText("Import Data")).toBeInTheDocument();
 
-  /*** TESTING LEFT-SIDE FUNCTIONALITY***/
+    // import config
+     await wait(() => {
+       const importBtn = screen.getByText("Import Data");
+       userEvent.click(importBtn);
+     });
+   });
+
+   /*** TESTING REVERT FUNCTIONALITY ***/
+   it('should test the revert modal' , async () => {
+    expect(screen.getByText("Revert to Official Record")).toBeInTheDocument();
+
+    // open revert modal
+    await wait(() => {
+      const revertBtn = screen.getByText("Revert to Official Record");
+      userEvent.click(revertBtn);
+    });
+   });
 });

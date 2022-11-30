@@ -8,6 +8,7 @@ import {
   cleanUp508,
   ensure508,
   addScreenReaderLabelForCollapses,
+  changeGridCellAttributeValue,
 } from "../../additional-functions/ensure-508";
 import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
 
@@ -447,6 +448,7 @@ export const DataTableRender = ({
     const handleSearch = () => {
       resetExpandedRows();
       setSearchText(document.querySelector("#txtSearchData").value);
+      changeGridCellAttributeValue();
     };
 
     let title = tableTitle ? tableTitle : "";

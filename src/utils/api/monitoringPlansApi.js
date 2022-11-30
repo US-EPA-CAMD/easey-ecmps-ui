@@ -981,14 +981,14 @@ export const getMPSchema = async () => {
 export const exportMonitoringPlanDownload = async (configID) => {
   try {
     const mpRes = await getMonitoringPlanById(configID);
-    const facId = mpRes.data["facId"];
+    const orisCode = mpRes.data["orisCode"];
     const mpName = mpRes.data["name"];
     const date = new Date();
     const year = date.getUTCFullYear();
     const month = date.getUTCMonth() + 1;
     const day = date.getUTCDate();
     const fullDateString = `${month}-${day}-${year}`;
-    const facRes = await getFacilityById(facId);
+    const facRes = await getFacilityById(orisCode);
     const facName = facRes.data["facilityName"];
     const exportFileName = `MP Export - ${facName}, ${mpName} (${fullDateString}).json`;
     download(JSON.stringify(mpRes.data, null, "\t"), exportFileName);
