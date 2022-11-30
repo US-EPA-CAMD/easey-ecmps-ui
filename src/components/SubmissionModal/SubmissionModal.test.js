@@ -3,6 +3,11 @@ import { render, act, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import SubmissionModal from "./SubmissionModal";
 
+sessionStorage.setItem(
+  "cdx_user",
+  '{ "firstName": "mock", "lastName": "mock" }'
+);
+
 jest.mock("../../utils/api/easeyAuthApi", () => ({
   credentialsAuth: jest.fn().mockResolvedValue({
     data: { activityId: "", questionId: "", question: "Mock Question" },
@@ -32,6 +37,8 @@ describe("Submission Modal", () => {
         show={true}
         close={jest.fn()}
         submissionCallback={jest.fn()}
+        activityId=""
+        setActivityId={jest.fn()}
       />
     );
 
@@ -44,6 +51,8 @@ describe("Submission Modal", () => {
         show={true}
         close={jest.fn()}
         submissionCallback={jest.fn()}
+        activityId=""
+        setActivityId={jest.fn()}
       />
     );
 
@@ -62,6 +71,8 @@ describe("Submission Modal", () => {
         show={true}
         close={jest.fn()}
         submissionCallback={jest.fn()}
+        activityId=""
+        setActivityId={jest.fn()}
       />
     );
 
@@ -84,6 +95,8 @@ describe("Submission Modal", () => {
         show={true}
         close={jest.fn()}
         submissionCallback={jest.fn()}
+        activityId=""
+        setActivityId={jest.fn()}
       />
     );
 
@@ -114,6 +127,8 @@ describe("Submission Modal", () => {
         show={true}
         close={jest.fn()}
         submissionCallback={jest.fn()}
+        activityId=""
+        setActivityId={jest.fn()}
       />
     );
 
@@ -147,6 +162,8 @@ describe("Submission Modal", () => {
         show={true}
         close={jest.fn()}
         submissionCallback={callback}
+        activityId=""
+        setActivityId={jest.fn()}
       />
     );
 

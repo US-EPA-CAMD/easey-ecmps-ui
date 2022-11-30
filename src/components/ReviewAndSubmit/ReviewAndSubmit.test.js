@@ -13,6 +13,16 @@ jest.mock("../../utils/api/monitoringPlansApi", () => ({
   }),
 }));
 
+jest.mock("../../utils/api/qaCertificationsAPI", () => ({
+  getQATestSummaryReviewSubmit: jest.fn().mockResolvedValue({
+    data: [
+      { id: "MOCK-1", facilityName: "Barry", name: "1" },
+      { id: "MOCK-2", facilityName: "Barry", name: "2" },
+      { id: "MOCK-3", facilityName: "Barry", name: "3" },
+    ],
+  }),
+}));
+
 describe("Review and Submit component", () => {
   let query;
   beforeEach(async () => {
