@@ -885,7 +885,6 @@ export const HeaderInfo = ({
                 className="margin-right-2 float-left margin-bottom-2"
                 outline={true}
                 onClick={handleExport}
-                id='exportBtn'
               >
                 Export Data
               </Button>
@@ -1050,7 +1049,6 @@ export const HeaderInfo = ({
                 >
                   View Comments
                 </Button>
-                {/* Hide this button until click behavior is implemented
                 <Button
                   outline
                   type="button"
@@ -1060,7 +1058,6 @@ export const HeaderInfo = ({
                 >
                   View Audit Report
                 </Button>
-                */}
                 <Button
                   outline
                   type="button"
