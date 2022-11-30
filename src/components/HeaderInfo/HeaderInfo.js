@@ -649,7 +649,13 @@ export const HeaderInfo = ({
       if (response) {
         setImportedFileErrorMsgs(response);
       }
-    });
+    }).catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      setIsLoading(false);
+      setFinishedLoading(true);
+    });;
   };
 
   const importEmissionsFile = (payload) =>{
