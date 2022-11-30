@@ -1050,6 +1050,7 @@ export const HeaderInfo = ({
                 >
                   View Comments
                 </Button>
+                {/* Hide this button until click behavior is implemented
                 <Button
                   outline
                   type="button"
@@ -1059,6 +1060,7 @@ export const HeaderInfo = ({
                 >
                   View Audit Report
                 </Button>
+                */}
                 <Button
                   outline
                   type="button"
