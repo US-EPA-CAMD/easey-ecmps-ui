@@ -246,14 +246,4 @@ describe("testing HeaderInfo component", () => {
       userEvent.click(revertBtn);
     });
    });
-
-  // /** TESTING VIEW COMMENTS FUNCTIONALITY **/
-  // it('should test the view comments button', async () => {
-  //  expect(screen.getByText("View Comments")).toBeInTheDocument();
-//
-  //  await wait(() => {
-  //    const commentsBtn = screen.getByText("View Comments")
-  //    userEvent.click(commentsBtn).toBeInTheDocument();
-  //  });
-  // });
 });
