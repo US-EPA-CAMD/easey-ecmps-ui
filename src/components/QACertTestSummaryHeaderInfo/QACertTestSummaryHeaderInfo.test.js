@@ -1,11 +1,27 @@
 import React from "react";
 import { render, screen, fireEvent, waitForElement, within } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import axios from "axios";
-
 import QACertTestSummaryHeaderInfo from "./QACertTestSummaryHeaderInfo";
 
 jest.mock("axios");
+
+jest.mock('../../utils/api/dataManagementApi', () => ({
+  getAllTestTypeCodes: jest.fn(() => Promise.resolve({data: [{
+    "testTypeCode": "DAYCAL",
+    "testTypeDescription": "Daily Calibration",
+    "testTypeGroupCode": null
+  }]})),
+  getAllTestTypeGroupCodes: jest.fn(() => Promise.resolve({data: [{
+    "testTypeGroupCode": "PEI",
+    "testTypeGroupDescription": "Primary Element Inspection",
+    "childDepth": "1"
+  }]}))
+}));
+
+jest.mock('../../utils/api/monitoringPlansApi', () => ({
+  getCheckedOutLocations: jest.fn(() => Promise.resolve({data: []})),
+  getRefreshInfo: jest.fn(() => Promise.resolve({data:[]}))
+}));
 
 const date = new Date();
 const dateString = date.toString();

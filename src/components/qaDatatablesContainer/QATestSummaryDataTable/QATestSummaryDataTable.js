@@ -406,7 +406,7 @@ const QATestSummaryDataTable = ({
     const updatedData = getTestSummary(data ? data : [], columns)
     const idx = updatedData.findIndex(d => d.id === createdId)
 
-    if (idx > 0) {
+    if (idx >= 0) {
       returnsFocusDatatableViewBTN(dataTableName.replaceAll(" ", "-"), idx)
       setCreatedId(null)
       setCreateNewData(false)
