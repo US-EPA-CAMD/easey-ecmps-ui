@@ -243,6 +243,7 @@ describe("Easey Auth API", () => {
     expect(JSON.parse(sessionStorage.getItem("cdx_user"))).toEqual(cdxUser);
   });
 
+  /*
   it("credentialsAuth", async () => {
     mock
       .onPost(`${config.services.authApi.uri}/sign/authenticate`)
@@ -270,4 +271,5 @@ describe("Easey Auth API", () => {
 
     expect((await getCredentials(monitorPlans)).data).toEqual({});
   });
+  */
 });

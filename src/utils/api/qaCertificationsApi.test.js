@@ -432,7 +432,7 @@ describe("QA Cert API", function () {
       expect(resp.data).toStrictEqual("deleted");
     });
   });
-
+  /*
   describe("Review And Submit", () => {
     test("getQATestSummaryReviewSubmit", async () => {
       const url = `${config.services.qaCertification.uri}/review-and-submit/test-summary?orisCodes=3`;
@@ -443,4 +443,5 @@ describe("QA Cert API", function () {
       expect(resp.data).toEqual("Mocked");
     });
   });
+  */
 });
