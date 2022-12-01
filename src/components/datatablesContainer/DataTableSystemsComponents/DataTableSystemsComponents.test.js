@@ -324,6 +324,7 @@ test("tests getMonitoringSystems", async () => {
   );
   expect(container).toBeDefined();
 });
+
 test("tests a getMonitoringSystemsComponents", async () => {
   axios.get.mockImplementation(() =>
     Promise.resolve({ status: 200, data: apiComp })
@@ -356,8 +357,6 @@ test("tests a getMonitoringSystemsComponents", async () => {
   let { container } = await waitForElement(() =>
     componentRenderer(false, false, false, false, false)
   );
-  const fuelBtn = container.querySelector("#btnOpenSystemComponents");
-  fireEvent.click(fuelBtn);
   expect(container.querySelector("#backBtn")).toBeDefined();
 });
 

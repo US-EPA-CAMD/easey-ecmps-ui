@@ -491,7 +491,7 @@ export const mapOnOffCalToRows = (data) => {
   return records;
 };
 
-export const getListOfRadioContorls = (controlInputs) => {
+export const getListOfRadioControls = (controlInputs) => {
   const result = [];
   const keys = Object.keys(controlInputs);
   keys.forEach(key => {
