@@ -583,7 +583,7 @@ const QAExpandableRowsRender = ({
     const updatedData = assertSelector.getDataTableRecords(data ? data : [], dataTableName)
     const idx = updatedData.findIndex(d => d.id === createdDataId)
 
-    if (idx > 0) {
+    if (idx >= 0) {
       returnsFocusDatatableViewBTN(dataTableName.replaceAll(" ", "-"), idx)
       setCreatedDataId(null)
       setCreateNewData(false)
