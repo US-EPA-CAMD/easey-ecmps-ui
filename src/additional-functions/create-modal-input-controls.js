@@ -105,7 +105,6 @@ export const modalViewData = (
               inputs[y][2] === "required" ? "required" : false,
               inputs[y][1] === "mainDropdown" ? "mainDropdown" : "dropdown",
               createNew ? "select" : selected ? selected[y] : "",
-              // selected?.[y] ?? "select",
               totalOptionsClone ? totalOptionsClone[y] : [],
             ]);
             break;
