@@ -55,7 +55,6 @@ const QATestSummaryDataTable = ({
   selectedLocation,
   locations,
 }) => {
-  console.log("selectedTestCode", selectedTestCode);
   const [loading, setLoading] = useState(false);
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
