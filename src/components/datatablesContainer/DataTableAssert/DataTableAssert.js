@@ -12,7 +12,7 @@ import { connect } from "react-redux";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
 import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
 
-import { addAriaLabelToDatatable } from "../../../additional-functions/ensure-508";
+import { addAriaLabelToDatatable, changeGridCellAttributeValue } from "../../../additional-functions/ensure-508";
 import {
   displayAppError,
   needEndDate,
@@ -448,6 +448,7 @@ export const DataTableAssert = ({
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
   };
+  changeGridCellAttributeValue();
   return (
     <div className="methodTable">
       {/* tests saving functionality */}
