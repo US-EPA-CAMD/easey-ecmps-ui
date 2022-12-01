@@ -327,6 +327,12 @@ const QATestSummaryDataTable = ({
           "",
         ];
       }
+      // set testTypeCode option if only one option
+      const testTypeCodeStr = "testTypeCode"
+      if (mdmData[testTypeCodeStr]?.length === 1) {
+        const singleTestTypeCodeSelection = mdmData[testTypeCodeStr][0].code
+        selectedData = { ...selectedData, testTypeCode: singleTestTypeCodeSelection }
+      }
     }
     let mainDropdownName = "";
     let hasMainDropdown = false;
@@ -349,7 +355,7 @@ const QATestSummaryDataTable = ({
           (element, index, arr) => o.code === element[mainDropdownName]
         )
       );
-      if (!mainDropdownResult.includes({ code: "", name: selectText })) {
+      if (mainDropdownResult.length > 1 || !mainDropdownResult.includes({ code: "", name: selectText })) {
         mainDropdownResult.unshift({ code: "", name: selectText });
       }
     } else {
