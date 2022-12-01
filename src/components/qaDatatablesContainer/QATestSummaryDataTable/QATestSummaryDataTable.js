@@ -37,6 +37,7 @@ import {
   getQAModalDetailsByTestCode,
 } from "../../../utils/selectors/QACert/LinearitySummary.js";
 import * as dmApi from "../../../utils/api/dataManagementApi";
+import * as mpApi from "../../../utils/api/monitoringPlansApi.js";
 import { organizePrefilterMDMData } from "../../../additional-functions/retrieve-dropdown-api";
 
 import QAExpandableRowsRender from "../QAExpandableRowsRender/QAExpandableRowsRender";
@@ -87,6 +88,7 @@ const QATestSummaryDataTable = ({
       "testResultCode",
       selectedLocation.unitId ? "unitId" : "stackPipeId",
       "prefilteredTestSummaries",
+      "componentID"
     ],
   ]);
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
@@ -102,6 +104,7 @@ const QATestSummaryDataTable = ({
         "testResultCode",
         selectedLocation.unitId ? "unitId" : "stackPipeId",
         "prefilteredTestSummaries",
+        "componentID",
       ],
     ]);
   }, [selectedLocation.name]);
@@ -154,6 +157,7 @@ const QATestSummaryDataTable = ({
     allPromises.push(dmApi.getAllTestReasonCodes());
     allPromises.push(dmApi.getAllTestResultCodes());
     allPromises.push(dmApi.getPrefilteredTestSummaries());
+    allPromises.push(mpApi.getMonitoringComponents(locationSelectValue));
     Promise.all(allPromises).then((response) => {
       dropdownArray[0].forEach((val, i) => {
         if (i === 0) {
@@ -185,6 +189,10 @@ const QATestSummaryDataTable = ({
             noDupesTestCodes,
             "testTypeCode",
             response[4].data
+          );
+        } else if (i === 6) {
+          dropdowns[dropdownArray[0][i]] = response[5].data.map((d) =>
+            getOptions(d, "componentId", "componentId")
           );
         } else if (i === 4) {
           dropdowns[dropdownArray[0][i]] = locations.map((l) => {
