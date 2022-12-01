@@ -70,6 +70,20 @@ export const getQATestSummary = async (
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
+export const getQATestSummaryReviewSubmit = async (
+  orisCodes,
+  monPlanIds = []
+) => {
+  let queryString = `orisCodes=${orisCodes.join("|")}`;
+
+  if (monPlanIds.length > 0) {
+    queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
+  }
+
+  let url = `${config.services.qaCertification.uri}/review-and-submit/test-summary?${queryString}`;
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
 export const getQATestSummaryByID = async (locID, id) => {
   let url = `${config.services.qaCertification.uri}/`;
 
@@ -1032,7 +1046,11 @@ export const getFuelFlowToLoadBaseline = async (locId, testSumId) => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const createFuelFlowToLoadBaseline = async (locId, testSumId, payload) => {
+export const createFuelFlowToLoadBaseline = async (
+  locId,
+  testSumId,
+  payload
+) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baselines`;
   try {
     return handleResponse(
@@ -1047,7 +1065,12 @@ export const createFuelFlowToLoadBaseline = async (locId, testSumId, payload) =>
   }
 };
 
-export const updateFuelFlowToLoadBaseline = async (locId, testSumId, id, payload) => {
+export const updateFuelFlowToLoadBaseline = async (
+  locId,
+  testSumId,
+  id,
+  payload
+) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baselines/${id}`;
   try {
     return handleResponse(
@@ -1164,14 +1187,14 @@ export const updateAppendixECorrelationHeatInputGas = async (
   } catch (error) {
     return handleImportError(error);
   }
-}
+};
 
 export const deleteAppendixECorrelationHeatInputGas = async (
   locId,
   testSumId,
   appECorrTestSumId,
   appECorrTestRunId,
-  id,
+  id
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases/${id}`;
   const url = getApiUrl(path);
@@ -1241,14 +1264,14 @@ export const updateAppendixECorrelationHeatInputOil = async (
   } catch (error) {
     return handleImportError(error);
   }
-}
+};
 
 export const deleteAppendixECorrelationHeatInputOil = async (
   locId,
   testSumId,
   appECorrTestSumId,
   appECorrTestrunId,
-  id,
+  id
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils/${id}`;
   const url = getApiUrl(path);
@@ -1305,10 +1328,7 @@ export const deleteAppendixERun = async (
   }
 };
 
-export const getFlowToLoadCheckRecords = async (
-  locId,
-  testSumId
-) => {
+export const getFlowToLoadCheckRecords = async (locId, testSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks`;
   const url = getApiUrl(path);
   return axios.get(url).then(handleResponse).catch(handleError);
@@ -1355,11 +1375,7 @@ export const updateFlowToLoadCheckRecord = async (
   }
 };
 
-export const deleteFlowToLoadCheckRecord = async (
-  locId,
-  testSumId,
-  id,
-) => {
+export const deleteFlowToLoadCheckRecord = async (locId, testSumId, id) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks/${id}`;
   const url = getApiUrl(path);
   try {
@@ -1374,16 +1390,17 @@ export const deleteFlowToLoadCheckRecord = async (
   }
 };
 
-export const getOnlineOfflineCalibration = async (
-  locId,
-  testSumId
-) => {
+export const getOnlineOfflineCalibration = async (locId, testSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/online-offline-calibration`;
   const url = getApiUrl(path);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const createOnlineOfflineCalibration = async (locId, testSumId, payload) => {
+export const createOnlineOfflineCalibration = async (
+  locId,
+  testSumId,
+  payload
+) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/online-offline-calibration`;
   try {
     return handleResponse(
@@ -1419,11 +1436,7 @@ export const updateOnlineOfflineCalibration = async (
   }
 };
 
-export const deleteOnlineOfflineCalibration = async (
-  locId,
-  testSumId,
-  id,
-) => {
+export const deleteOnlineOfflineCalibration = async (locId, testSumId, id) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/online-offline-calibration/${id}`;
   const url = getApiUrl(path);
   try {
@@ -1438,10 +1451,7 @@ export const deleteOnlineOfflineCalibration = async (
   }
 };
 
-export const getCalibrationInjectionRecords = async (
-  locId,
-  testSumId
-) => {
+export const getCalibrationInjectionRecords = async (locId, testSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/calibration-injections`;
   const url = getApiUrl(path);
   return axios.get(url).then(handleResponse).catch(handleError);
@@ -1491,7 +1501,7 @@ export const updateCalibrationInjectionRecord = async (
 export const deleteCalibrationInjectionRecord = async (
   locId,
   testSumId,
-  id,
+  id
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/calibration-injections/${id}`;
   const url = getApiUrl(path);
