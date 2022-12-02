@@ -77,7 +77,7 @@ export const ExportTablesContainer = ({
 
   const dataTable = (
     <div className="margin-x-3 margin-y-4" id="exportTestSummaryData">
-      <h3 className="margin-y-1">Test Summary</h3>
+      <h4 className="margin-y-1">Test Summary</h4>
       <DataTable
         responsive={true}
         fixedHeader={true}
