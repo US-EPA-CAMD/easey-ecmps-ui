@@ -54,7 +54,6 @@ export const QACertTestSummaryHeaderInfo = ({
   const [showImportDataPreview, setShowImportDataPreview] = useState(false);
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
-  const facilityAdditionalName = facility.split("(")[1].replace(")", "");
 
   // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
