@@ -501,3 +501,17 @@ export const getListOfRadioControls = (controlInputs) => {
   });
   return result;
 };
+
+// Show aria-label for any action (View, Edit, Remove) in any table provided a unique Id based on table type
+export const getTableRowActionAriaLabel = (dataTableName, row, action) =>{
+  let result;
+  switch(dataTableName){
+    case 'Test Summary Data'://unique ID is test number, i.e. col4
+      result= `${action} for ${row.col4}`;
+      break;
+    default:
+      result =  `not implemented yet`;
+      break; 
+  }
+  return result;
+}
