@@ -54,7 +54,6 @@ export const QACertTestSummaryHeaderInfo = ({
   const [showImportDataPreview, setShowImportDataPreview] = useState(false);
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
-  const facilityAdditionalName = facility.split("(")[1].replace(")", "");
 
   // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
@@ -331,7 +330,6 @@ export const QACertTestSummaryHeaderInfo = ({
             <h3 className="margin-y-auto font-body-lg margin-right-2">
               {facilityMainName}
             </h3>
-            <p className="text-bold font-body-xl">{facilityAdditionalName}</p>
           </div>
           {user && isCheckedOut &&(
             <div>
