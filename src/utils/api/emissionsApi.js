@@ -8,6 +8,25 @@ axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
 };
 
+export const getEmissionsReviewSubmit = async (
+  orisCodes,
+  monPlanIds = [],
+  quarters = []
+) => {
+  let queryString = `orisCodes=${orisCodes.join("|")}`;
+
+  if (monPlanIds.length > 0) {
+    queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
+  }
+
+  if (quarters.length > 0) {
+    queryString = queryString + `&quarters=${quarters.join("|")}`;
+  }
+
+  let url = `${config.services.emissions.uri}/review-submit?${queryString}`;
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
 export const exportEmissionsData = async (
   monitorPlanId,
   year,
@@ -60,16 +79,15 @@ export const getEmissionViewData = async (
   unitIds,
   stackPipeIds,
   attachFile = false,
-  isWorkspace=true
+  isWorkspace = true
 ) => {
   const url = new URL(
     // `${config.services.emissions.uri}/emissions/views/${viewCode}`
     isWorkspace
-    ? `${config.services.emissions.uri}/workspace/emissions/views/${viewCode}`:
-      `${config.services.emissions.uri}/emissions/views/${viewCode}`
-
+      ? `${config.services.emissions.uri}/workspace/emissions/views/${viewCode}`
+      : `${config.services.emissions.uri}/emissions/views/${viewCode}`
   );
-  console.log(url)
+  console.log(url);
   const searchParams = new URLSearchParams({
     monitorPlanId,
     reportingPeriod: Array.isArray(reportingPeriod)
