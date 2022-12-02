@@ -331,7 +331,6 @@ export const QACertTestSummaryHeaderInfo = ({
             <h3 className="margin-y-auto font-body-lg margin-right-2">
               {facilityMainName}
             </h3>
-            <p className="text-bold font-body-xl">{facilityAdditionalName}</p>
           </div>
           {user && isCheckedOut &&(
             <div>
