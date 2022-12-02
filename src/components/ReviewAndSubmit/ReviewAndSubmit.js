@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { getMonitoringPlans } from "../../utils/api/monitoringPlansApi";
 import { getQATestSummaryReviewSubmit } from "../../utils/api/qaCertificationsAPI";
+import { getEmissionsReviewSubmit } from "../../utils/api/emissionsApi";
 import ReviewAndSubmitForm from "./ReviewAndSubmitForm/ReviewAndSubmitForm";
 import SubmissionModal from "../SubmissionModal/SubmissionModal";
 import ReviewAndSubmitTables from "./ReviewAndSubmitTables/ReviewAndSubmitTables";
@@ -12,6 +13,7 @@ const ReviewAndSubmit = () => {
   const [showModal, setShowModal] = useState(false);
 
   const [qaTestSummary, setQaTestSummarry] = useState([]);
+  const [emissions, setEmissions] = useState([]);
   const [monPlans, setMonPlans] = useState([]);
 
   const selectedMonPlansRef = useRef();
@@ -36,10 +38,17 @@ const ReviewAndSubmit = () => {
     const dataToSetMap = {
       MP: [getMonitoringPlans, setMonPlans],
       QA_TEST_SUMMARY: [getQATestSummaryReviewSubmit, setQaTestSummarry],
+      EMISSIONS: [getEmissionsReviewSubmit, setEmissions],
     };
 
     for (const [key, value] of Object.entries(dataToSetMap)) {
-      let data = (await value[0](orisCodes, monPlanIds)).data;
+      let data;
+
+      if (key === "EMISSIONS") {
+        data = (await value[0](orisCodes, monPlanIds, submissionPeriods)).data;
+      } else {
+        data = (await value[0](orisCodes, monPlanIds)).data;
+      }
 
       if (key === "MP") {
         data = data.filter((mpd) => mpd.active);
