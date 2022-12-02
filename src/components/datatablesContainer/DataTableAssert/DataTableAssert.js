@@ -448,7 +448,9 @@ export const DataTableAssert = ({
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
   };
-  changeGridCellAttributeValue();
+  if(document){
+    changeGridCellAttributeValue();
+  }
   return (
     <div className="methodTable">
       {/* tests saving functionality */}
