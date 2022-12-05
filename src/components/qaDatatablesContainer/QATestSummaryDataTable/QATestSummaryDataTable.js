@@ -56,7 +56,6 @@ const QATestSummaryDataTable = ({
   selectedLocation,
   locations,
 }) => {
-  console.log("selectedTestCode", selectedTestCode);
   const [loading, setLoading] = useState(false);
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
@@ -357,7 +356,7 @@ const QATestSummaryDataTable = ({
           (element, index, arr) => o.code === element[mainDropdownName]
         )
       );
-      if (!mainDropdownResult.includes({ code: "", name: selectText })) {
+      if (mainDropdownResult.length > 1 && !mainDropdownResult.includes({ code: "", name: selectText })) {
         mainDropdownResult.unshift({ code: "", name: selectText });
       }
     } else {

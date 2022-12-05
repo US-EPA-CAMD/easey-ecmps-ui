@@ -883,7 +883,6 @@ export const HeaderInfo = ({
               <h3 className="margin-y-auto font-body-lg margin-right-2">
                 {facilityMainName}
               </h3>
-              <p className="text-bold font-body-xl">{facilityAdditionalName}</p>
             </div>
             <div>
               <Button
@@ -961,7 +960,7 @@ export const HeaderInfo = ({
                     <Button
                       type="button"
                       id="showRevertModal"
-                      tabIndex="1"
+                      tabIndex="0"
                       onClick={() => setShowRevertModal(true)}
                       outline={true}
                       className="text-no-wrap height-6 position-relative bottom-1"
