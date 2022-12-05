@@ -87,8 +87,8 @@ const QATestSummaryDataTable = ({
       "testReasonCode",
       "testResultCode",
       selectedLocation.unitId ? "unitId" : "stackPipeId",
+      "componentID",
       "prefilteredTestSummaries",
-      "componentID"
     ],
   ]);
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
@@ -103,8 +103,8 @@ const QATestSummaryDataTable = ({
         "testReasonCode",
         "testResultCode",
         selectedLocation.unitId ? "unitId" : "stackPipeId",
-        "prefilteredTestSummaries",
         "componentID",
+        "prefilteredTestSummaries",
       ],
     ]);
   }, [selectedLocation.name]);
@@ -181,6 +181,10 @@ const QATestSummaryDataTable = ({
             getOptions(d, "testResultCode", "testResultDescription")
           );
         } else if (i === 5) {
+          dropdowns[dropdownArray[0][i]] = response[5].data.map((d) =>
+            getOptions(d, "componentId", "componentId")
+          );
+        } else if (i === 6) {
           let noDupesTestCodes = response[4].data.map((code) => {
             return code["testTypeCode"];
           });
@@ -189,10 +193,6 @@ const QATestSummaryDataTable = ({
             noDupesTestCodes,
             "testTypeCode",
             response[4].data
-          );
-        } else if (i === 6) {
-          dropdowns[dropdownArray[0][i]] = response[5].data.map((d) =>
-            getOptions(d, "componentId", "componentId")
           );
         } else if (i === 4) {
           dropdowns[dropdownArray[0][i]] = locations.map((l) => {
