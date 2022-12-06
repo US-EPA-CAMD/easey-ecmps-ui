@@ -19,7 +19,7 @@ import {
   qaFuelFlowToLoadBaselineProps,
   qaFlowToLoadCheckProps,
   qaOnOffCalibrationProps,
-  qaCalibrationInjectionProps
+  qaCalibrationInjectionProps,
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
@@ -37,10 +37,14 @@ import {
   getQAModalDetailsByTestCode,
 } from "../../../utils/selectors/QACert/LinearitySummary.js";
 import * as dmApi from "../../../utils/api/dataManagementApi";
+import * as mpApi from "../../../utils/api/monitoringPlansApi.js";
 import { organizePrefilterMDMData } from "../../../additional-functions/retrieve-dropdown-api";
 
 import QAExpandableRowsRender from "../QAExpandableRowsRender/QAExpandableRowsRender";
-import { returnsFocusDatatableViewBTN, returnsFocusToAddBtn } from "../../../additional-functions/ensure-508.js";
+import {
+  returnsFocusDatatableViewBTN,
+  returnsFocusToAddBtn,
+} from "../../../additional-functions/ensure-508.js";
 
 // contains test summary data table
 
@@ -55,7 +59,6 @@ const QATestSummaryDataTable = ({
   selectedLocation,
   locations,
 }) => {
-  console.log("selectedTestCode", selectedTestCode);
   const [loading, setLoading] = useState(false);
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
@@ -86,6 +89,7 @@ const QATestSummaryDataTable = ({
       "testReasonCode",
       "testResultCode",
       selectedLocation.unitId ? "unitId" : "stackPipeId",
+      "componentID",
       "prefilteredTestSummaries",
     ],
   ]);
@@ -101,6 +105,7 @@ const QATestSummaryDataTable = ({
         "testReasonCode",
         "testResultCode",
         selectedLocation.unitId ? "unitId" : "stackPipeId",
+        "componentID",
         "prefilteredTestSummaries",
       ],
     ]);
@@ -154,6 +159,7 @@ const QATestSummaryDataTable = ({
     allPromises.push(dmApi.getAllTestReasonCodes());
     allPromises.push(dmApi.getAllTestResultCodes());
     allPromises.push(dmApi.getPrefilteredTestSummaries());
+    allPromises.push(mpApi.getMonitoringComponents(locationSelectValue));
     Promise.all(allPromises).then((response) => {
       dropdownArray[0].forEach((val, i) => {
         if (i === 0) {
@@ -177,6 +183,10 @@ const QATestSummaryDataTable = ({
             getOptions(d, "testResultCode", "testResultDescription")
           );
         } else if (i === 5) {
+          dropdowns[dropdownArray[0][i]] = response[5].data.map((d) =>
+            getOptions(d, "componentId", "componentId")
+          );
+        } else if (i === 6) {
           let noDupesTestCodes = response[4].data.map((code) => {
             return code["testTypeCode"];
           });
@@ -303,7 +313,7 @@ const QATestSummaryDataTable = ({
   };
   // Executed when "View" action is clicked
   const openModal = (row, bool, create, index) => {
-    let selectedData = null;
+    let selectedData = {};
     setCreateNewData(create);
     if (dataPulled.length > 0 && !create) {
       selectedData = dataPulled.filter(
@@ -316,17 +326,19 @@ const QATestSummaryDataTable = ({
         controlInputs.unitId = [
           "Unit or Stack Pipe ID",
           "nonFilteredDropdown",
-          "",
+          selectedLocation.name,
           "",
         ];
       } else {
         controlInputs.stackPipeId = [
           "Unit or Stack Pipe ID",
           "nonFilteredDropdown",
-          "",
+          selectedLocation.name,
           "",
         ];
       }
+
+      selectedData.locationName = selectedLocation.name;
     }
     let mainDropdownName = "";
     let hasMainDropdown = false;
@@ -349,7 +361,10 @@ const QATestSummaryDataTable = ({
           (element, index, arr) => o.code === element[mainDropdownName]
         )
       );
-      if (mainDropdownResult.length > 1 && !mainDropdownResult.includes({ code: "", name: selectText })) {
+      if (
+        mainDropdownResult.length > 1 &&
+        !mainDropdownResult.includes({ code: "", name: selectText })
+      ) {
         mainDropdownResult.unshift({ code: "", name: selectText });
       }
     } else {
@@ -378,7 +393,7 @@ const QATestSummaryDataTable = ({
     );
     setSelectedModalData(modalData);
 
-    setClickedIndex(index)
+    setClickedIndex(index);
 
     setShow(true);
     setTimeout(() => {
@@ -395,7 +410,7 @@ const QATestSummaryDataTable = ({
       executeOnClose();
     }
     if (createNewData) {
-      returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"))
+      returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"));
     }
   };
 
@@ -403,15 +418,18 @@ const QATestSummaryDataTable = ({
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
 
-    const updatedData = getTestSummary(data ? data : [], columns)
-    const idx = updatedData.findIndex(d => d.id === createdId)
+    const updatedData = getTestSummary(data ? data : [], columns);
+    const idx = updatedData.findIndex((d) => d.id === createdId);
 
     if (idx >= 0) {
-      returnsFocusDatatableViewBTN(dataTableName.replaceAll(" ", "-"), idx)
-      setCreatedId(null)
-      setCreateNewData(false)
+      returnsFocusDatatableViewBTN(dataTableName.replaceAll(" ", "-"), idx);
+      setCreatedId(null);
+      setCreateNewData(false);
     } else {
-      returnsFocusDatatableViewBTN(dataTableName.replaceAll(" ", "-"), clickedIndex)
+      returnsFocusDatatableViewBTN(
+        dataTableName.replaceAll(" ", "-"),
+        clickedIndex
+      );
     }
   };
 
@@ -419,7 +437,7 @@ const QATestSummaryDataTable = ({
     const { id, locationId } = row;
     const resp = await deleteQATestSummary(locationId, id);
     if (resp.status === 200) {
-      returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"))
+      returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"));
       const dataPostRemove = qaTestSummary.filter(
         (rowData) => rowData.id !== id
       );
@@ -509,7 +527,7 @@ const QATestSummaryDataTable = ({
       })
       .catch((error) => {
         console.error("error", error);
-        returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"))
+        returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"));
       });
   };
 
@@ -663,7 +681,9 @@ const QATestSummaryDataTable = ({
           />
         );
       default:
-        console.log(`case testTypeGroupCode of ${testTypeGroupCode} not implemented`)
+        console.log(
+          `case testTypeGroupCode of ${testTypeGroupCode} not implemented`
+        );
         return null;
     }
   };

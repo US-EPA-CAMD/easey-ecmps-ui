@@ -23,6 +23,16 @@ jest.mock("../../utils/api/qaCertificationsAPI", () => ({
   }),
 }));
 
+jest.mock("../../utils/api/emissionsApi", () => ({
+  getEmissionsReviewSubmit: jest.fn().mockResolvedValue({
+    data: [
+      { orisCode: "MOCK-1", facilityName: "Barry", configuration: "1" },
+      { orisCode: "MOCK-2", facilityName: "Barry", configuration: "2" },
+      { orisCode: "MOCK-3", facilityName: "Barry", configuration: "3" },
+    ],
+  }),
+}));
+
 describe("Review and Submit component", () => {
   let query;
   beforeEach(async () => {

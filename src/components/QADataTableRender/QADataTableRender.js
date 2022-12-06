@@ -9,7 +9,7 @@ import { oneSecond } from "../../config";
 import { Add, Remove, ArrowDownwardSharp } from "@material-ui/icons";
 import { Button } from "@trussworks/react-uswds";
 import DataTable from "react-data-table-component";
-import { getEmptyRows } from "../../utils/selectors/QACert/TestSummary";
+import { getEmptyRows, getTableRowActionAriaLabel } from "../../utils/selectors/QACert/TestSummary";
 
 import { cleanUp508, ensure508 } from "../../additional-functions/ensure-508";
 import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
@@ -135,6 +135,7 @@ const QADataTableRender = ({
       />
     );
   };
+
   if (actionsBtn) {
     if (actionsBtn === "View") {
       columns.unshift({
@@ -182,6 +183,7 @@ const QADataTableRender = ({
                     type="button"
                     epa-testid="btnOpen"
                     className="cursor-pointer open-modal-button"
+                    aria-label={getTableRowActionAriaLabel(dataTableName, row, 'View')}
                     outline={true}
                     id={
                       `btnEditView${dataTableName.replaceAll(" ", "-")}${index + 1}`

@@ -1,5 +1,4 @@
 import React from "react";
-import { Provider } from "react-redux";
 import { render, screen, waitForElement } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axios from "axios";
@@ -24,6 +23,7 @@ const spanScaleCodesUrl = new RegExp(`${config.services.mdm.uri}/span-scale-code
 const testReasonCodesUrl = new RegExp(`${config.services.mdm.uri}/test-reason-codes`)
 const testResultCodesUrl = new RegExp(`${config.services.mdm.uri}/test-result-codes`)
 const prefilterTestSummariesUrl = new RegExp(`${config.services.mdm.uri}/relationships/test-summaries`)
+const getMonitoringComponentsUrl = new RegExp(`${config.services.monitorPlans.uri}/locations/${locId}/components`)
 
 const testSummary = [
   {
@@ -70,6 +70,7 @@ mock.onGet(spanScaleCodesUrl).reply(200, [])
 mock.onGet(testReasonCodesUrl).reply(200, [])
 mock.onGet(testResultCodesUrl).reply(200, [])
 mock.onGet(prefilterTestSummariesUrl).reply(200, [])
+mock.onGet(getMonitoringComponentsUrl).reply(200, [])
 
 const initialState = {
   facilities: [],
@@ -477,20 +478,20 @@ const store = configureStore(initialState)
 
 const componentRender = () => {
   return render(
-    <QATestSummaryDataTable 
-    locationSelectValue={locId}
-    user={'user'}
-    nonEditable={false}
-    showModal = {false}
-    selectedTestCode={{
-      testTypeCodes: [
-        "UNITDEF"
-      ],
-      testTypeGroupCode: 'testTypeGroupCode'
-    }}
-    isCheckedOut={true}
-    selectedLocation={"66"}
-    locations={[{"id":"66","unitRecordId":11,"unitId":"1","stackPipeRecordId":null,"stackPipeId":null,"name":"1","type":"unit","active":true,"activeDate":null,"retireDate":null,"nonLoadBasedIndicator":0}]}
+    <QATestSummaryDataTable
+      locationSelectValue={locId}
+      user={'user'}
+      nonEditable={false}
+      showModal={false}
+      selectedTestCode={{
+        testTypeCodes: [
+          "UNITDEF"
+        ],
+        testTypeGroupCode: 'testTypeGroupCode'
+      }}
+      isCheckedOut={true}
+      selectedLocation={"66"}
+      locations={[{ "id": "66", "unitRecordId": 11, "unitId": "1", "stackPipeRecordId": null, "stackPipeId": null, "name": "1", "type": "unit", "active": true, "activeDate": null, "retireDate": null, "nonLoadBasedIndicator": 0 }]}
     />
   );
 };
