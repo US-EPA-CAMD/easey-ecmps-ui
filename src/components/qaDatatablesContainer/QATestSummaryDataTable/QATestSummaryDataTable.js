@@ -90,6 +90,7 @@ const QATestSummaryDataTable = ({
       "testResultCode",
       selectedLocation.unitId ? "unitId" : "stackPipeId",
       "componentID",
+      "monitoringSystemID",
       "prefilteredTestSummaries",
     ],
   ]);
@@ -106,6 +107,7 @@ const QATestSummaryDataTable = ({
         "testResultCode",
         selectedLocation.unitId ? "unitId" : "stackPipeId",
         "componentID",
+        "monitoringSystemID",
         "prefilteredTestSummaries",
       ],
     ]);
@@ -160,6 +162,7 @@ const QATestSummaryDataTable = ({
     allPromises.push(dmApi.getAllTestResultCodes());
     allPromises.push(dmApi.getPrefilteredTestSummaries());
     allPromises.push(mpApi.getMonitoringComponents(locationSelectValue));
+    allPromises.push(mpApi.getMonitoringSystems(selectedLocation.id));
     Promise.all(allPromises).then((response) => {
       dropdownArray[0].forEach((val, i) => {
         if (i === 0) {
@@ -187,6 +190,10 @@ const QATestSummaryDataTable = ({
             getOptions(d, "componentId", "componentId")
           );
         } else if (i === 6) {
+          dropdowns[dropdownArray[0][i]] = response[6].data.map((d) =>
+              getOptions(d, "id", "monitoringSystemId")
+          );
+        } else if (i === 7) {
           let noDupesTestCodes = response[4].data.map((code) => {
             return code["testTypeCode"];
           });
