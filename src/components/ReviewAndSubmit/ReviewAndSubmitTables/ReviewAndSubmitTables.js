@@ -75,7 +75,7 @@ const ReviewAndSubmitTables = ({ monPlans, selectedMonPlansRef }) => {
                   />
                 )}
               </span>
-              <h3 className="padding-x-3">{name}</h3>
+              <h4 className="padding-x-3">{name}</h4>
             </div>
             <div
               className={
