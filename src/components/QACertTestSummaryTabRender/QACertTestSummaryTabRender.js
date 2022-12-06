@@ -45,7 +45,6 @@ export const QACertTestSummaryRender = ({
           user={user}
           sectionSelect={sectionSelect}
           selectedLocation={{
-            id: locations[locationSelect[0]]["id"],
             name: locations[locationSelect[0]]["name"],
             stackPipeId: locations[locationSelect[0]]["stackPipeId"],
             unitId: locations[locationSelect[0]]["unitId"],
