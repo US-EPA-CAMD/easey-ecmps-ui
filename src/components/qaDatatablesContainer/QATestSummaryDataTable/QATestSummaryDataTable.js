@@ -162,7 +162,7 @@ const QATestSummaryDataTable = ({
     allPromises.push(dmApi.getAllTestResultCodes());
     allPromises.push(dmApi.getPrefilteredTestSummaries());
     allPromises.push(mpApi.getMonitoringComponents(locationSelectValue));
-    allPromises.push(mpApi.getMonitoringSystems(selectedLocation.id));
+    allPromises.push(mpApi.getMonitoringSystems(locationSelectValue));
     Promise.all(allPromises).then((response) => {
       dropdownArray[0].forEach((val, i) => {
         if (i === 0) {
@@ -191,7 +191,7 @@ const QATestSummaryDataTable = ({
           );
         } else if (i === 6) {
           dropdowns[dropdownArray[0][i]] = response[6].data.map((d) =>
-              getOptions(d, "id", "monitoringSystemId")
+            getOptions(d, "id", "monitoringSystemId")
           );
         } else if (i === 7) {
           let noDupesTestCodes = response[4].data.map((code) => {
