@@ -38,13 +38,13 @@ const CustomAccordion = ({ title, table, section }) => {
               >
                 <KeyboardArrowUpSharp />
               </Button>
-              <h3
+              <h4
                 className="display-inline"
                 epa-testid={`${item[1].split(" ").join("")}`}
               >
                 {" "}
                 {item[1]}
-              </h3>
+              </h4>
             </div>
           ) : (
             <div className="text-bold font-body-xl display-block height-auto ">
@@ -57,13 +57,13 @@ const CustomAccordion = ({ title, table, section }) => {
               >
                 <KeyboardArrowDownSharp />
               </Button>
-              <h3
+              <h4
                 className="display-inline"
                 epa-testid={`${item[1].split(" ").join("")}`}
               >
                 {" "}
                 {item[1]}
-              </h3>
+              </h4>
             </div>
           )}
           {open[index] ? <div className=" ">{item[0]} </div> : ""}
