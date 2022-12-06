@@ -191,7 +191,7 @@ const QATestSummaryDataTable = ({
           );
         } else if (i === 6) {
           dropdowns[dropdownArray[0][i]] = response[6].data.map((d) =>
-            getOptions(d, "id", "monitoringSystemId")
+            getOptions(d, "monitoringSystemId", "monitoringSystemId")
           );
         } else if (i === 7) {
           let noDupesTestCodes = response[4].data.map((code) => {
