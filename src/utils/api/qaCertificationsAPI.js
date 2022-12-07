@@ -1562,3 +1562,22 @@ export const updateCycleTimeSummary = async (
     return handleImportError(error);
   }
 };
+
+export const deleteCycleTimeSummary = async (
+  locId,
+  testSumId,
+  id
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};

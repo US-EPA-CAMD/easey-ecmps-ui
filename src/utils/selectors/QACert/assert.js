@@ -358,7 +358,11 @@ export const removeDataSwitch = async (
     case onlineOfflineCalibration:
       return qaApi
         .deleteOnlineOfflineCalibration(locationId, id, row.id)
-        .catch(error => console.log('error deleting online offline calibration', error))
+        .catch(error => console.log('error deleting online offline calibration', error));
+    case cycleTimeSummary:
+      return qaApi
+        .deleteCycleTimeSummary(locationId, id, row.id)
+        .catch((error) => console.log('error deleting Cycle Time Summary', error));
     default:
       throw new Error(`removeDataSwitch case not implemented for ${name}`);
   }
@@ -542,7 +546,7 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         userInput
       ).catch(error => console.log("error updating online offline calibration", error));
     case cycleTimeSummary:
-      return qaApi.updateCycleTimeSummaryRecord(
+      return qaApi.updateCycleTimeSummary(
         location, 
         id, 
         userInput.id, 
