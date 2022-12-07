@@ -695,9 +695,7 @@ export const createDataSwitch = async (
     case calibrationInjections:
       return qaApi.createCalibrationInjectionRecord(location, id, userInput);
     case cycleTimeSummary:
-      return qaApi
-      .createCycleTimeSummary(location, id, userInput)
-      .catch(error => console.log('error creating Cycle Time Summary', error))
+      return qaApi.createCycleTimeSummary(location, id, userInput)
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
   }
