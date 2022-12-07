@@ -403,4 +403,21 @@ describe("testing TestSummary data selectors", () => {
     ];
     expect(fs.mapAppendixECorrHeatInputOilToRows(data)).toEqual(records);
   });
+  test("mapCycleTimeSummariesToRows", () => {
+    const data = [
+      {
+        id: "c2b71699-bdcb-47a6-832e-9fea2fd068a1",
+        testSumId: "TWCORNEL5-B1523F032896481898FFEC62FADD6196",
+        totalTime: "1",
+      },
+    ];
+    const records = [
+      {
+        id: "c2b71699-bdcb-47a6-832e-9fea2fd068a1",
+        testSumId: "TWCORNEL5-B1523F032896481898FFEC62FADD6196",
+        col1: "1",
+      }
+    ];
+    expect(fs.mapCycleTimeSummariesToRows(data)).toEqual(records);
+  })
 });
