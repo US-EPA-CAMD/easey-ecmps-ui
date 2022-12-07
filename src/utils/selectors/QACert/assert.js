@@ -542,7 +542,7 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         userInput
       ).catch(error => console.log("error updating online offline calibration", error));
     case cycleTimeSummary:
-      return qaApi.updateCycleTimeSummaryRecord(
+      return qaApi.updateCycleTimeSummary(
         location, 
         id, 
         userInput.id, 
