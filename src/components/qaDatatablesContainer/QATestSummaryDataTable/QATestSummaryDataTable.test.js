@@ -24,6 +24,7 @@ const testReasonCodesUrl = new RegExp(`${config.services.mdm.uri}/test-reason-co
 const testResultCodesUrl = new RegExp(`${config.services.mdm.uri}/test-result-codes`)
 const prefilterTestSummariesUrl = new RegExp(`${config.services.mdm.uri}/relationships/test-summaries`)
 const getMonitoringComponentsUrl = new RegExp(`${config.services.monitorPlans.uri}/locations/${locId}/components`)
+const getMonitoringSystemssUrl = new RegExp(`${config.services.monitorPlans.uri}/locations/${locId}/systems`)
 
 const testSummary = [
   {
@@ -71,6 +72,7 @@ mock.onGet(testReasonCodesUrl).reply(200, [])
 mock.onGet(testResultCodesUrl).reply(200, [])
 mock.onGet(prefilterTestSummariesUrl).reply(200, [])
 mock.onGet(getMonitoringComponentsUrl).reply(200, [])
+mock.onGet(getMonitoringSystemssUrl).reply(200, [])
 
 const initialState = {
   facilities: [],
