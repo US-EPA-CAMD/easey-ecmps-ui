@@ -818,3 +818,18 @@ export const qaCalibrationInjectionProps = () => {
     extraControls: {},
   };
 }
+
+export const qaCycleTimeSummaryProps = () => {
+  return {
+    dataTableName: "Cycle Time Summary",
+    payload: {},
+    dropdownArray: [],
+    columnNames: [
+      "Total Time"
+    ],
+    controlInputs: {
+      totalTime: ["Total Time", "input", "", ""],
+    },
+    extraControls: {},
+  }
+}
