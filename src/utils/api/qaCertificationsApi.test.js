@@ -433,6 +433,69 @@ describe("QA Cert API", function () {
     });
   });
 
+  describe("Fuel Flowmeter Accuracy Data CRUD operations", () => {
+    test("getFuelFlowmeterAccuracyDataRecords", async () => {
+      const fuelFlowmeterAccuracyDataResp = [
+        { fuelFlowmeterAccuracyData: "data" },
+        { fuelFlowmeterAccuracyData: "data2" },
+      ];
+      const getFuelFlowmeterAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/fuel-flowmeter-accuracies`;
+      mock.onGet(getFuelFlowmeterAccuracyDataUrl).reply(200, fuelFlowmeterAccuracyDataResp);
+
+      const resp = await qaCert.getFuelFlowmeterAccuracyDataRecords(
+        locId,
+        testSumId,
+      );
+
+      expect(mock.history.get.length).toBe(1);
+      expect(resp.data).toStrictEqual(fuelFlowmeterAccuracyDataResp);
+    });
+
+    test("createFuelFlowmeterAccuracyDataRecord", async () => {
+      const payload = { fuelFlowmeterAccuracyData: "data" };
+      const postFuelFlowmeterAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/fuel-flowmeter-accuracies`;
+      mock.onPost(postFuelFlowmeterAccuracyDataUrl).reply(200, payload);
+
+      const resp = await qaCert.createFuelFlowmeterAccuracyDataRecord(
+        locId,
+        testSumId,
+        payload
+      );
+
+      expect(mock.history.post.length).toBe(1);
+      expect(resp.data).toStrictEqual(payload);
+    });
+
+    test("updateFuelFlowmeterAccuracyDataRecord", async () => {
+      const payload = { fuelFlowmeterAccuracyData: "data" };
+      const putFuelFlowmeterAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/fuel-flowmeter-accuracies/${id}`;
+      mock.onPut(putFuelFlowmeterAccuracyDataUrl).reply(200, payload);
+
+      const resp = await qaCert.updateFuelFlowmeterAccuracyDataRecord(
+        locId,
+        testSumId,
+        id,
+        payload
+      );
+
+      expect(mock.history.put.length).toBe(1);
+      expect(resp.data).toStrictEqual(payload);
+    });
+
+    test("deleteFuelFlowmeterAccuracyDataRecord", async () => {
+      const deleteFuelFlowmeterAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/fuel-flowmeter-accuracies/${id}`;
+      mock.onDelete(deleteFuelFlowmeterAccuracyDataUrl).reply(200, "deleted");
+
+      const resp = await qaCert.deleteFuelFlowmeterAccuracyDataRecord(
+        locId,
+        testSumId,
+        id
+      );
+
+      expect(mock.history.delete.length).toBe(1);
+      expect(resp.data).toStrictEqual("deleted");
+    });
+  });
 
   describe('Cycle Time Summary CRUD Operations', () => {
 
@@ -445,18 +508,18 @@ describe("QA Cert API", function () {
   
       expect(mock.history.get.length).toBe(1)
       expect(resp.data).toStrictEqual(cycleTimeSummaryData)
-  })
+    })
   
-  test('createCycleTimeSummary', async () => {
-    const payload = { cycleTimeSummary: 'data' }
-    const postCycleTimeSummaryUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries`;
-    mock.onPost(postCycleTimeSummaryUrl).reply(200, payload)
+    test('createCycleTimeSummary', async () => {
+      const payload = { cycleTimeSummary: 'data' }
+      const postCycleTimeSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries`;
+      mock.onPost(postCycleTimeSummaryUrl).reply(200, payload)
   
-    const resp = await qaCert.createCycleTimeSummary(locId, testSumId, payload)
+      const resp = await qaCert.createCycleTimeSummary(locId, testSumId, payload)
   
-    expect(mock.history.post.length).toBe(1)
-    expect(resp.data).toStrictEqual(payload)
-  })
+      expect(mock.history.post.length).toBe(1)
+      expect(resp.data).toStrictEqual(payload)
+    })
   })
  
 

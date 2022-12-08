@@ -19,6 +19,7 @@ const appECorrTestRunId ="appECorrTestRunId";
 const lineTest = "Linearity Test";
 const testQualification = "Test Qualification";
 const appendixECorrHeatInputOil = "Appendix E Correlation Heat Input from Oil";
+const fuelFlowmeterAccuracyData = "Fuel Flowmeter Accuracy Data";
 // below types don't have coverage if needed more
 const flowToLoadCheck = "Flow To Load Check";
 const lineInjection = "Linearity Injection";
@@ -227,6 +228,83 @@ describe("Linearity Test CRUD operations", () => {
       lineTest,
       locId,
       testSumId,
+    )
+
+    expect(mock.history.delete.length).toBe(1);
+    expect(resp.data).toStrictEqual("deleted");
+  });
+});
+
+describe("Fuel Flowmeter Accuracy Data CRUD operations", () => {
+  beforeEach(() => {
+    mock.resetHistory();
+  });
+  test("getFuelFlowmeterAccuracyDataRecords", async () => {
+    const fuelFlowmeterAccuracyDataRecord = [
+      { fuelFlowmeterAccuracyData: "data" },
+    ];
+    const getFuelFlowmeterAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/fuel-flowmeter-accuracies`;
+    mock
+      .onGet(getFuelFlowmeterAccuracyDataUrl)
+      .reply(200, fuelFlowmeterAccuracyDataRecord);
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.getDataTableApis(
+      fuelFlowmeterAccuracyData,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.get.length).toBe(1);
+    expect(resp.data).toStrictEqual(fuelFlowmeterAccuracyDataRecord);
+  });
+
+  test("createFuelFlowmeterAccuracyDataRecord", async () => {
+    const payload = { fuelFlowmeterAccuracyData: "data" };
+    const postFuelFlowmeterAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/fuel-flowmeter-accuracies`;
+    mock.onPost(postFuelFlowmeterAccuracyDataUrl).reply(200, "success");
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.createDataSwitch(
+      payload,
+      fuelFlowmeterAccuracyData,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.post.length).toBe(1);
+    expect(resp.data).toStrictEqual("success");
+  });
+
+  test("updateFuelFlowmeterAccuracyDataRecord", async () => {
+    const payload = { id:id, fuelFlowmeterAccuracyData: "data" };
+    const putFuelFlowmeterAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/fuel-flowmeter-accuracies/${id}`;
+    mock.onPut(putFuelFlowmeterAccuracyDataUrl).reply(200, "success");
+
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.saveDataSwitch(
+      payload,
+      fuelFlowmeterAccuracyData,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.put.length).toBe(1);
+    expect(resp.data).toStrictEqual("success");
+  });
+
+  test("deleteFuelFlowmeterAccuracyDataRecord", async () => {
+    const deleteFuelFlowmeterAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/fuel-flowmeter-accuracies/${id}`;
+    mock.onDelete(deleteFuelFlowmeterAccuracyDataUrl).reply(200, "deleted");
+
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.removeDataSwitch(
+      {id: id},
+      fuelFlowmeterAccuracyData,
+      locId,
+      testSumId,
+      extraIDs
     )
 
     expect(mock.history.delete.length).toBe(1);
