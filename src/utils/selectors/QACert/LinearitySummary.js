@@ -27,14 +27,6 @@ export const getQAColsByTestCode = (testCode) => {
     case 'CALINJ': // Calibration Injection
     case 'CYCSUM': // Cycle Time Summary
     case 'FFACC': // Fuel Flowmeter Accuracy
-      cols = [
-        'Accuracy Test Method Code',
-        'Low Fuel Accuracy',
-        'Mid Fuel Accuracy',
-        'High Fuel Accuracy',
-        'Reinstallation Date',
-        'Reinstallation Hour',
-      ]
     case 'HGL3LS': // Hg Linearity and 3-Level Summary
     case 'LINSUM': // Linearity Summary
     case 'PEI': // Primary Element Inspection

@@ -20,6 +20,7 @@ import {
   qaFlowToLoadCheckProps,
   qaOnOffCalibrationProps,
   qaCalibrationInjectionProps,
+  qaFuelFlowmeterAccuracyDataProps,
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
@@ -638,6 +639,7 @@ const QATestSummaryDataTable = ({
         );
       case "FLC": // Flow to Load Check
         const flcProps = qaFlowToLoadCheckProps();
+        console.log("Hello")
         return (
           <QAExpandableRowsRender
             payload={flcProps["payload"]}
@@ -682,6 +684,24 @@ const QATestSummaryDataTable = ({
             radioBtnPayload={cjProps["radioBtnPayload"]}
             dataTableName={cjProps["dataTableName"]}
             extraControls={cjProps["extraControls"]}
+            extraIDs={null}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "FFACC": // Fuel Flowmeter Accuracy
+        const fuelFlowmeterAccuracyDataProps = qaFuelFlowmeterAccuracyDataProps();
+        return (
+          <QAExpandableRowsRender
+            payload={fuelFlowmeterAccuracyDataProps["payload"]}
+            dropdownArray={fuelFlowmeterAccuracyDataProps["dropdownArray"]}
+            mdmProps={fuelFlowmeterAccuracyDataProps["mdmProps"]}
+            columns={fuelFlowmeterAccuracyDataProps["columnNames"]}
+            controlInputs={fuelFlowmeterAccuracyDataProps["controlInputs"]}
+            controlDatePickerInputs={fuelFlowmeterAccuracyDataProps["controlDatePickerInputs"]}
+            radioBtnPayload={fuelFlowmeterAccuracyDataProps["radioBtnPayload"]}
+            dataTableName={fuelFlowmeterAccuracyDataProps["dataTableName"]}
+            extraControls={fuelFlowmeterAccuracyDataProps["extraControls"]}
             extraIDs={null}
             user={user}
             isCheckedOut={isCheckedOut}
