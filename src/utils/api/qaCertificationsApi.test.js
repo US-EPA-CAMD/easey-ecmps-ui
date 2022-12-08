@@ -512,7 +512,7 @@ describe("QA Cert API", function () {
   
     test('createCycleTimeSummary', async () => {
       const payload = { cycleTimeSummary: 'data' }
-      const postCycleTimeSummaryUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries`;
+      const postCycleTimeSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries`;
       mock.onPost(postCycleTimeSummaryUrl).reply(200, payload)
   
       const resp = await qaCert.createCycleTimeSummary(locId, testSumId, payload)
