@@ -1528,7 +1528,8 @@ export const createCycleTimeSummary = async (
   testSumId,
   payload
 ) => {
- const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries`;
+  const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries`;
+  const url = getApiUrl(path);
     try {
       return handleResponse(
         await secureAxios({
