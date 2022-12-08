@@ -509,6 +509,19 @@ export const mapOnOffCalToRows = (data) => {
   return records;
 };
 
+export const mapCycleTimeSummariesToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      testSumId: el.testSumId,
+      col1: el.totalTime,
+    };
+    records.push(row)
+  }
+  return records;
+};
+
 export const getListOfRadioControls = (controlInputs) => {
   const result = [];
   const keys = Object.keys(controlInputs);

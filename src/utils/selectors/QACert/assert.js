@@ -24,6 +24,7 @@ const flowToLoadCheck = "Flow To Load Check";
 const onlineOfflineCalibration = "Online Offline Calibration";
 const calibrationInjections = "Calibration Injection";
 const fuelFlowmeterAccuracyData = "Fuel Flowmeter Accuracy Data";
+const cycleTimeSummary = "Cycle Time Summary"
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -159,6 +160,12 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       return qaApi.getFuelFlowmeterAccuracyDataRecords(location, id).catch((error) => {
         console.log("error", error);
       })
+    case cycleTimeSummary:
+      return qaApi
+      .getCycleTimeSummary(location, id)
+      .catch((error) => {
+        console.log("error", error);
+      })  
     default:
       throw new Error(`getDataTableApis case not implemented for ${name}`);
   }
@@ -207,6 +214,8 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.mapCalibrationInjectionsToRows(dataIn);
     case fuelFlowmeterAccuracyData:
       return selector.mapFuelFlowmeterAccuracyDataToRows(dataIn);
+    case cycleTimeSummary:
+      return selector.mapCycleTimeSummariesToRows(dataIn);
     default:
       throw new Error(`getDataTableRecords case not implemented for ${name}`);
   }
@@ -701,6 +710,8 @@ export const createDataSwitch = async (
       return qaApi.createCalibrationInjectionRecord(location, id, userInput);
     case fuelFlowmeterAccuracyData:
       return qaApi.createFuelFlowmeterAccuracyDataRecord(location, id, userInput)
+    case cycleTimeSummary:
+      return qaApi.createCycleTimeSummary(location, id, userInput)
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
   }

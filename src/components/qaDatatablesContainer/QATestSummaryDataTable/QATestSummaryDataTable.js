@@ -21,6 +21,7 @@ import {
   qaOnOffCalibrationProps,
   qaCalibrationInjectionProps,
   qaFuelFlowmeterAccuracyDataProps,
+  qaCycleTimeSummaryProps,
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
@@ -702,6 +703,24 @@ const QATestSummaryDataTable = ({
             radioBtnPayload={fuelFlowmeterAccuracyDataProps["radioBtnPayload"]}
             dataTableName={fuelFlowmeterAccuracyDataProps["dataTableName"]}
             extraControls={fuelFlowmeterAccuracyDataProps["extraControls"]}
+            extraIDs={null}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "CYCLE":
+        const cycleTimeSum = qaCycleTimeSummaryProps();
+        return (
+          <QAExpandableRowsRender
+            payload={cycleTimeSum["payload"]}
+            dropdownArray={cycleTimeSum["dropdownArray"]}
+            mdmProps={cycleTimeSum["mdmProps"]}
+            columns={cycleTimeSum["columnNames"]}
+            controlInputs={cycleTimeSum["controlInputs"]}
+            controlDatePickerInputs={cycleTimeSum["controlDatePickerInputs"]}
+            radioBtnPayload={cycleTimeSum["radioBtnPayload"]}
+            dataTableName={cycleTimeSum["dataTableName"]}
+            extraControls={cycleTimeSum["extraControls"]}
             extraIDs={null}
             user={user}
             isCheckedOut={isCheckedOut}
