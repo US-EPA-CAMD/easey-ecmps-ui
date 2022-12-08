@@ -72,12 +72,17 @@ export const getQATestSummary = async (
 
 export const getQATestSummaryReviewSubmit = async (
   orisCodes,
-  monPlanIds = []
+  monPlanIds = [],
+  quarters = []
 ) => {
   let queryString = `orisCodes=${orisCodes.join("|")}`;
 
   if (monPlanIds.length > 0) {
     queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
+  }
+
+  if (quarters.length > 0) {
+    queryString = queryString + `&quarters=${quarters.join("|")}`;
   }
 
   let url = `${config.services.qaCertification.uri}/review-and-submit/test-summary?${queryString}`;

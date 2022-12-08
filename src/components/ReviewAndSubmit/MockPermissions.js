@@ -16,43 +16,24 @@ export const MockPermissions = [
   {
     id: 10,
     facilityName: "Greene County",
-    permissions: ["MPDS", "QADS", "EMDS"],
+    permissions: ["DSMP", "DSQA", "DSEM"],
+    active: true,
+    name: "Test",
+  },
+  {
+    id: 130,
+    facilityName: "Cross",
+    permissions: ["DSMP", "DSQA", "DSEM"],
+    active: true,
+    name: "Test",
+  },
+  {
+    id: 2385,
+    facilityName: "Werner",
+    permissions: ["DSMP", "DSQA", "DSEM"],
     active: true,
     name: "Test",
   },
 ];
-
-/*
-
-export const isLocationCheckedOut = () => {
-  //check if item is checked out
-  return false;
-};
-export const isUserDataSubmitter = (row, dataTableName) => {
-  const { facId } = row;
-  const facility = MockPermissions.find((fac) => fac.id === facId);
-  console.log({facility, facId});
-  if (!facility) return false;
-  switch (dataTableName) {
-    case 'Monitoring Plan':
-      return (
-        facility.permissions.includes('DSMP') ||
-        facility.permissions.includes('MPDS')
-      );
-    case 'Emissions':
-      return (
-        facility.permissions.includes('DSEM') ||
-        facility.permissions.includes('EMDS')
-      );
-    case 'QA':
-      return (
-        facility.permissions.includes('DSQA') ||
-        facility.permissions.includes('QADS')
-      );
-    default:
-      return false;
-  }
-};
-*/
 
 export default MockPermissions;
