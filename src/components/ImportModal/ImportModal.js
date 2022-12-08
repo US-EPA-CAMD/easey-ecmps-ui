@@ -137,7 +137,7 @@ const ImportModal = ({
           <div className="padding-right-2 padding-left-3 " aria-live="polite">
             {" "}
             {importedFileErrorMsgs.map((error, i) => (
-              <Alert type="error" slim noIcon key={i} role="alert">
+              <Alert type="error" slim noIcon key={`${i}-${error}`} role="alert">
                 {error}
               </Alert>
             ))}
@@ -152,7 +152,7 @@ const ImportModal = ({
                 aria-live="polite"
               >
                 {schemaErrors.map((error, i) => (
-                  <Alert type="error" slim noIcon key={i} role="alert">
+                  <Alert type="error" slim noIcon key={`${i}-${error}`} role="alert">
                     {error}
                   </Alert>
                 ))}
@@ -166,9 +166,7 @@ const ImportModal = ({
             <FileInput
               id="file-input-single"
               name="file-input-single"
-              onChange={(e) => {
-                onChangeHandler(e);
-              }}
+              onChange={onChangeHandler}
             />
           </FormGroup>
         </div>
