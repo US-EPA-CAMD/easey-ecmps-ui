@@ -34,24 +34,27 @@ const ImportModal = ({
   useEffect(() => {
     switch (workspaceSection) {
       case MONITORING_PLAN_STORE_NAME:
-        mpApi.getMPSchema().then(({data}) => {
+        mpApi.getMPSchema()
+        .then(({data}) => {
           setSchema(data);
           setLabel("Upload MP JSON File");
-        });
+        }).catch(err=> console.log(err));
         break;
 
       case QA_CERT_TEST_SUMMARY_STORE_NAME:
-        qaApi.getQASchema().then(({data}) => {
+        qaApi.getQASchema()
+        .then(({data}) => {
           setSchema(data);
           setLabel("Upload QA JSON File");
-        });
+        }).catch(err=> console.log(err));
         break;
       
       case EMISSIONS_STORE_NAME:
-        emApi.getEmissionsSchema().then(({data})=>{
+        emApi.getEmissionsSchema()
+        .then(({data})=>{
           setSchema(data);
           setLabel("Upload Emissions JSON File");
-        })
+        }).catch(err=> console.log(err));
         break;
       default:
         break;
