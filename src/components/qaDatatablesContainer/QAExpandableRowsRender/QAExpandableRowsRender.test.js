@@ -576,9 +576,12 @@ describe('Test cases for QAExpandableRowsRender', () => {
 
     const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries`;
     const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries`;
+    const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${idRegex}`)
+
 
     mock.onGet(getUrl).reply(200, qaCycleTimeSummaryData)
     mock.onPost(postUrl).reply(200, 'created')
+    mock.onPut(putUrl).reply(200, 'updated')
 
     const props = qaCycleTimeSummaryProps()
     const idArray = [locId, testSumId, id]
@@ -596,6 +599,14 @@ describe('Test cases for QAExpandableRowsRender', () => {
     let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
     userEvent.click(saveAndCloseBtn)
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+
+    // edit row
+    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    expect(editBtns).toHaveLength(qaCycleTimeSummaryData.length)
+    userEvent.click(editBtns[0])
+    saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
   })
 
   test('renders Fuel Flow to Load data rows and create/save/delete', async () => {
