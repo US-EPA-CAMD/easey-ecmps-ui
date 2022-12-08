@@ -472,6 +472,19 @@ describe("QA Cert API", function () {
     expect(mock.history.put.length).toBe(1);
     expect(resp.data).toStrictEqual(payload);
   });
+  test("deleteCycleTimeSummary", async () => {
+    const updateCycleTimeSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${id}`;
+    mock.onDelete(updateCycleTimeSummaryUrl).reply(200, 'Deleted');
+
+    const resp = await qaCert.deleteCycleTimeSummary(
+      locId,
+      testSumId,
+      id,
+    );
+
+    expect(mock.history.delete.length).toBe(1);
+    expect(resp.data).toStrictEqual('Deleted');
+  });
   })
   /*
   describe("Review And Submit", () => {
