@@ -4,12 +4,14 @@ import monitoringPlansReducer from "./monitoringPlans";
 import apiStatusReducer from "./apiStatusReducer";
 import dynamicFacilityTabReducer from "./dynamicFacilityTab";
 import dropdownsReducer from "./dropdowns";
+import checkedOutLocationsReducer from "./checkedOutLocations";
 const rootReducer = combineReducers({
   facilities: facilitiesReducer,
   apiCallsInProgress: apiStatusReducer,
   monitoringPlans: monitoringPlansReducer,
   openedFacilityTabs: dynamicFacilityTabReducer,
   dropdowns: dropdownsReducer,
+  checkedOutLocations: checkedOutLocationsReducer,
 });
 
 export default rootReducer;
