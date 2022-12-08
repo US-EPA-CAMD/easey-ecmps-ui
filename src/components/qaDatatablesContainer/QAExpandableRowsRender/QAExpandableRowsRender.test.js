@@ -577,11 +577,13 @@ describe('Test cases for QAExpandableRowsRender', () => {
     const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries`;
     const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries`;
     const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${idRegex}`)
+    const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${idRegex}`)
 
 
     mock.onGet(getUrl).reply(200, qaCycleTimeSummaryData)
     mock.onPost(postUrl).reply(200, 'created')
     mock.onPut(putUrl).reply(200, 'updated')
+    mock.onDelete(deleteUrl).reply(200, 'deleted')
 
     const props = qaCycleTimeSummaryProps()
     const idArray = [locId, testSumId, id]
@@ -607,6 +609,14 @@ describe('Test cases for QAExpandableRowsRender', () => {
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
     userEvent.click(saveAndCloseBtn)
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+
+    // remove row
+    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    expect(deleteBtns).toHaveLength(qaCycleTimeSummaryData.length)
+    const secondDeleteBtn = deleteBtns[1]
+    userEvent.click(secondDeleteBtn)
+    const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    userEvent.click(confirmBtns[1])
   })
 
   test('renders Fuel Flow to Load data rows and create/save/delete', async () => {
