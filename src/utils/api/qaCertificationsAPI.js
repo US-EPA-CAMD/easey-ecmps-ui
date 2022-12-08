@@ -1516,3 +1516,29 @@ export const deleteCalibrationInjectionRecord = async (
     return handleImportError(error);
   }
 };
+
+export const getCycleTimeSummary = async (locId, testSumId) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createCycleTimeSummary = async (
+  locId,
+  testSumId,
+  payload
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries`;
+  const url = getApiUrl(path);
+    try {
+      return handleResponse(
+        await secureAxios({
+          method: "POST",
+          url: url,
+          data: payload,
+        })
+      );
+    } catch (error) {
+      return handleImportError(error);
+    }
+};

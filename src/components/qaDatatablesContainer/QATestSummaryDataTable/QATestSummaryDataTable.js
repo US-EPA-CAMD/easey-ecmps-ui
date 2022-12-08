@@ -20,6 +20,7 @@ import {
   qaFlowToLoadCheckProps,
   qaOnOffCalibrationProps,
   qaCalibrationInjectionProps,
+  qaCycleTimeSummaryProps,
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
@@ -687,6 +688,24 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
+        case "CYCLE":
+          const cycleTimeSum = qaCycleTimeSummaryProps();
+          return (
+            <QAExpandableRowsRender
+              payload={cycleTimeSum["payload"]}
+              dropdownArray={cycleTimeSum["dropdownArray"]}
+              mdmProps={cycleTimeSum["mdmProps"]}
+              columns={cycleTimeSum["columnNames"]}
+              controlInputs={cycleTimeSum["controlInputs"]}
+              controlDatePickerInputs={cycleTimeSum["controlDatePickerInputs"]}
+              radioBtnPayload={cycleTimeSum["radioBtnPayload"]}
+              dataTableName={cycleTimeSum["dataTableName"]}
+              extraControls={cycleTimeSum["extraControls"]}
+              extraIDs={null}
+              user={user}
+              isCheckedOut={isCheckedOut}
+            />
+          );
       default:
         console.log(
           `case testTypeGroupCode of ${testTypeGroupCode} not implemented`
