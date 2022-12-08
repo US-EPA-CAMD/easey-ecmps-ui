@@ -432,6 +432,37 @@ describe("QA Cert API", function () {
       expect(resp.data).toStrictEqual("deleted");
     });
   });
+
+
+  describe('Cycle Time Summary CRUD Operations', () => {
+
+    test('getCycleTimeSummary', async () => {
+      const cycleTimeSummaryData = [{ cycleTimeSummary: 'data' }]
+      const getCycleTimeSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries`;
+      mock.onGet(getCycleTimeSummaryUrl).reply(200, cycleTimeSummaryData)
+  
+      const resp = await qaCert.getCycleTimeSummary(locId, testSumId)
+  
+      expect(mock.history.get.length).toBe(1)
+      expect(resp.data).toStrictEqual(cycleTimeSummaryData)
+  })
+  
+  test('createCycleTimeSummary', async () => {
+    const payload = { cycleTimeSummary: 'data' }
+    const postCycleTimeSummaryUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries`;
+    mock.onPost(postCycleTimeSummaryUrl).reply(200, payload)
+  
+    const resp = await qaCert.createCycleTimeSummary(locId, testSumId, payload)
+  
+    expect(mock.history.post.length).toBe(1)
+    expect(resp.data).toStrictEqual(payload)
+  })
+  })
+ 
+
+
+
+  
   /*
   describe("Review And Submit", () => {
     test("getQATestSummaryReviewSubmit", async () => {
