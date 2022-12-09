@@ -330,20 +330,22 @@ const QATestSummaryDataTable = ({
       )[0];
       setSelectedRow(selectedData);
     }
+
     if (create) {
       if (controlInputs?.unitId) {
         controlInputs.unitId = [
           "Unit or Stack Pipe ID",
-          "nonFilteredDropdown",
+          "input",
           selectedLocation.name,
-          "",
+          "fixed",
         ];
+        selectedData.unitId = selectedLocation.name;
       } else {
         controlInputs.stackPipeId = [
           "Unit or Stack Pipe ID",
-          "nonFilteredDropdown",
+          "input",
           selectedLocation.name,
-          "",
+          "fixed",
         ];
       }
       selectedData.locationName = selectedLocation.name;
@@ -403,7 +405,6 @@ const QATestSummaryDataTable = ({
       extraControlInputs
     );
     setSelectedModalData(modalData);
-
     setClickedIndex(index);
 
     setShow(true);

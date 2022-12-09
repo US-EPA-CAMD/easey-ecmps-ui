@@ -8,12 +8,16 @@ import userEvent from "@testing-library/user-event";
 describe("ExportTab", function () {
   let emissionsApi;
   let qaCertificationsApi;
+  let monitoringPlansApi;
 
   beforeAll(async () => {
     qaCertificationsApi = await import(
       "../../../utils/api/qaCertificationsAPI"
     );
     emissionsApi = await import("../../../utils/api/emissionsApi");
+    monitoringPlansApi = await import(
+        "../../../utils/api/monitoringPlansApi"
+        )
   });
 
   describe("Emissions Export", function () {
@@ -24,6 +28,8 @@ describe("ExportTab", function () {
       jest
         .spyOn(emissionsApi, "exportEmissionsDataDownload")
         .mockResolvedValue({});
+      jest.spyOn(monitoringPlansApi, "exportMonitoringPlanDownload")
+          .mockResolvedValue({});
 
       await act(async () => {
         return render(
