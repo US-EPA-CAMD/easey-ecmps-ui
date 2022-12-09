@@ -175,7 +175,7 @@ export const modalViewData = (
             arr.push([
               y,
               inputs[y][0],
-              createNew
+              createNew && inputs[y][3] !== "fixed"
                 ? ""
                 : selected
                   ? selected[y] === 0
