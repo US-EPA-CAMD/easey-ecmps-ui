@@ -458,14 +458,13 @@ export const mapCalibrationInjectionsToRows = (data) => {
 export const mapFuelFlowmeterAccuracyDataToRows = (data) => {
   const records = [];
   for (const el of data) {
-    console.log(el.reinstallationDate)
     const row = {
       id: el.id,
       col1: el.accuracyTestMethodCode,
       col2: el.lowFuelAccuracy,
       col3: el.midFuelAccuracy,
       col4: el.highFuelAccuracy,
-      col5: el.reinstallationDate,
+      col5: el.reinstallationDate ? new Date(el.reinstallationDate).toISOString().slice(0,10) : el.reinstallationDate,
       col6: el.reinstallationHour,
     };
     records.push(row);
