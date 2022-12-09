@@ -346,8 +346,13 @@ const QATestSummaryDataTable = ({
           "",
         ];
       }
-
       selectedData.locationName = selectedLocation.name;
+      // default selection to single test type code if it exists
+      const testTypeCodeKey = "testTypeCode"
+      if (mdmData[testTypeCodeKey]?.length === 1) {
+        const singleTestTypeCodeSelection = mdmData[testTypeCodeKey][0].code
+        selectedData = { ...selectedData, testTypeCode: singleTestTypeCodeSelection }
+      }
     }
     let mainDropdownName = "";
     let hasMainDropdown = false;
@@ -370,10 +375,7 @@ const QATestSummaryDataTable = ({
           (element, index, arr) => o.code === element[mainDropdownName]
         )
       );
-      if (
-        mainDropdownResult.length > 1 &&
-        !mainDropdownResult.includes({ code: "", name: selectText })
-      ) {
+      if (!mainDropdownResult.includes({ code: "", name: selectText })) {
         mainDropdownResult.unshift({ code: "", name: selectText });
       }
     } else {
@@ -708,7 +710,7 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
-      case "CYCLE":
+      case "CYCLE": // Cycle Time Summary Nested Below Test Data
         const cycleTimeSum = qaCycleTimeSummaryProps();
         return (
           <QAExpandableRowsRender
@@ -721,6 +723,8 @@ const QATestSummaryDataTable = ({
             radioBtnPayload={cycleTimeSum["radioBtnPayload"]}
             dataTableName={cycleTimeSum["dataTableName"]}
             extraControls={cycleTimeSum["extraControls"]}
+            expandable
+            {...props}
             extraIDs={null}
             user={user}
             isCheckedOut={isCheckedOut}

@@ -513,7 +513,6 @@ export const mapCycleTimeSummariesToRows = (data) => {
   for (const el of data) {
     const row = {
       id: el.id,
-      testSumId: el.testSumId,
       col1: el.totalTime,
     };
     records.push(row)
