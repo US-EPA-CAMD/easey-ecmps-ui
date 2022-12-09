@@ -9,15 +9,14 @@ const useGetCheckedOutLocations = () => {
   const checkedOutLocationsRef = useRef(null);
   const dispatch = useDispatch();
   useEffect(() => {
+    obtainCheckedOutLocations().then();
     const interval = setInterval(
       () => obtainCheckedOutLocations().then(),
       fiveSeconds
     );
     return () => clearInterval(interval);//eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  useEffect(() => {
-    console.log({ checkedOutLocationsRef });
-  }, [checkedOutLocationsRef]);
+
   const obtainCheckedOutLocations = async () => {
     const checkedOutLocationResult = await getCheckedOutLocations().then();
     let checkedOutLocationsList = [];
@@ -41,7 +40,7 @@ const useGetCheckedOutLocations = () => {
   };
 };
 
-const mockCheckedOutLocation = {
+export const mockCheckedOutLocation = {
     "facId": 946,
     "monPlanId": "MDC-A176443524F0445CA3FDB90DB059D5A5",
     "checkedOutOn": "2022-12-08T14:54:31.881Z",

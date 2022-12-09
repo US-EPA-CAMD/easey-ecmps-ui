@@ -7,11 +7,15 @@ import SubmissionModal from "../SubmissionModal/SubmissionModal";
 import ReviewAndSubmitTables from "./ReviewAndSubmitTables/ReviewAndSubmitTables";
 import MockPermissions from "./MockPermissions";
 import { Button } from "@trussworks/react-uswds";
+import { connect } from "react-redux";
+import { updateCheckedOutLocationsOnTable } from "../../utils/functions";
 
-const ReviewAndSubmit = () => {
+const ReviewAndSubmit = ({checkedOutLocations}) => {
   const [activityId, setActivityId] = useState("");
   const [excludeErrors, setExcludeErrors] = useState(true);
   const [showModal, setShowModal] = useState(false);
+
+  const [checkedOutLocationsMap, setCheckedOutLocationsMap] = useState(new Map());
 
   const [qaTestSummary, setQaTestSummary] = useState([]);
   const qaTestSumRef = useRef([]);
@@ -23,6 +27,19 @@ const ReviewAndSubmit = () => {
   const monPlanRef = useRef([]);
 
   const [finalSubmitStage, setFinalSubmitStage] = useState(false);
+
+  useEffect(() => {
+    const checkedOutLocationsMPIdsArray = checkedOutLocations.map(el => el.monPlanId);
+    const checkedOutLocationsMPIdsMap = new Set(checkedOutLocationsMPIdsArray);
+    console.log({checkedOutLocationsMPIdsArray, checkedOutLocationsMPIdsMap});
+    setCheckedOutLocationsMap(checkedOutLocationsMPIdsMap);
+    updateCheckedOutLocationsOnTables(checkedOutLocationsMPIdsMap)//eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [checkedOutLocations]);
+
+  const updateCheckedOutLocationsOnTables = (checkedOutLocationsMPIdsMap) => {
+    updateCheckedOutLocationsOnTable(monPlanRef, setMonPlans, checkedOutLocationsMPIdsMap);
+    updateCheckedOutLocationsOnTable(qaTestSumRef, setQaTestSummary, checkedOutLocationsMPIdsMap);
+  }
 
   const dataList = {
     monPlan: { ref: monPlanRef, state: monPlans, setState: setMonPlans },
@@ -89,7 +106,7 @@ const ReviewAndSubmit = () => {
         //Add selector state variables
         return {
           selected: false,
-          checkedOut: false,
+          checkedOut: checkedOutLocationsMap.has(chunk.monPlanId),
           userCheckedOut: false,
           viewOnly: false,
           ...chunk,
@@ -185,4 +202,6 @@ const ReviewAndSubmit = () => {
   );
 };
 
-export default ReviewAndSubmit;
+const mapStateToProps = (state) => ({checkedOutLocations: state.checkedOutLocations});
+
+export default connect(mapStateToProps, null)(ReviewAndSubmit);

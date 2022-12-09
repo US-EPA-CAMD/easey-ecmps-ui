@@ -63,3 +63,18 @@ export const getConfigValueNumber = (key, defaultValue = "") => {
 export const getConfigValueBoolean = (key, defaultValue = "") => {
   return parseBool(getConfigValue(key, defaultValue));
 };
+
+//** review and submit utility functions
+export const updateCheckedOutLocationsOnTable = (tableRef, updateState, checkedOutLocationsMPIdsMap) => {
+  let changeInCheckedOutLocations = 0;
+  tableRef.current.forEach((tableRow) => {
+    const isLocationCheckedOut = checkedOutLocationsMPIdsMap.has(tableRow.monPlanId);
+    if (tableRow.isCheckedOut !== isLocationCheckedOut) {
+      changeInCheckedOutLocations+=1;
+    }
+    tableRow.isCheckedOut = checkedOutLocationsMPIdsMap.has(tableRow.monPlanId);
+  })
+  if (changeInCheckedOutLocations){
+    updateState([...tableRef.current]);
+  }
+}
