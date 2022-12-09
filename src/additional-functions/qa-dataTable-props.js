@@ -868,3 +868,53 @@ export const qaCycleTimeSummaryProps = () => {
     extraControls: {},
   }
 }
+
+export const qaCycleTimeInjectionProps = () => {
+  return {
+    dataTableName: "Cycle Time Injection",
+    payload: {},
+    dropdownArray: [
+      "Gas Level Code"
+    ],
+    mdmProps: [
+      {
+        codeTable: "gas-level-codes",
+        responseProps: {
+          code: "gasLevelCode",
+          description: "gasLevelDescription"
+        }
+      },
+    ],
+    columnNames: [
+      "Gas Level Code",
+      "Calibration Gas Value",
+      "Begin Date",
+      "Begin Hour",
+      "Begin Minute",
+      "End Date",
+      "End Hour",
+      "End Minute",
+      "Injection Cycle Time",
+      "Begin Monitor Value",
+      "End Monitor Value"
+    ],
+    controlInputs: {
+      gasLevelCode: ["Gas Level Code", "input", "", "locked"],
+      calibrationGasValue: ["Calibration Gas Value", "input", "", ""],
+      injectionCycleTime: ["Injection Cycle Time", "input", "", ""],
+      beginMonitorValue: ["Begin Monitor Value", "input", "", ""],
+      endMonitorValue: ["End Monitor Value", "input", "", ""],
+    },
+
+    controlDatePickerInputs: {
+      beginDate:["Begin Date", "date", "", ""],
+      beginHour:["Begin Hour", "hourDropdown", "dropdown", ""],
+      beginMinute:["Begin Minute", "minuteDropdown", "", ""],
+      endDate:["End Date", "date", "", ""],
+      endHour:["End Hour", "hourDropdown", "dropdown", ""],
+      endMinute:["End Minute", "minuteDropdown", "dropdown", ""],
+    },
+
+    extraControls: {},
+  }
+}

@@ -24,7 +24,8 @@ const flowToLoadCheck = "Flow To Load Check";
 const onlineOfflineCalibration = "Online Offline Calibration";
 const calibrationInjections = "Calibration Injection";
 const fuelFlowmeterAccuracyData = "Fuel Flowmeter Accuracy Data";
-const cycleTimeSummary = "Cycle Time Summary"
+const cycleTimeSummary = "Cycle Time Summary";
+const cycleTimeInjection = "Cycle Time Injection";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {

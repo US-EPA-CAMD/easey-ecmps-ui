@@ -31,6 +31,7 @@ import {
   qaAppendixECorrTestRunProps,
   qaAppendixECorrelationSummaryHeatInputGasProps,
   qaAppendixECorrelationSummaryHeatInputOilProps,
+  qaCycleTimeInjectionProps,
 } from "../../../additional-functions/qa-dataTable-props";
 const QAExpandableRowsRender = ({
   user,
@@ -295,6 +296,25 @@ const QAExpandableRowsRender = ({
             extraControls={heatInputOilObj["extraControls"]}
             extraIDs={heatInputOilIdArray}
             data={data}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      // Test Data --> Cycle Time Summary --> Cycle Time Injection
+      case "Cycle Time Summary":
+        const cycleTimeInjec = qaCycleTimeInjectionProps();
+        return (
+          <QAExpandableRowsRender
+            payload={cycleTimeInjec["payload"]}
+            dropdownArray={cycleTimeInjec["dropdownArray"]}
+            mdmProps={cycleTimeInjec["mdmProps"]}
+            columns={cycleTimeInjec["columnNames"]}
+            controlInputs={cycleTimeInjec["controlInputs"]}
+            controlDatePickerInputs={cycleTimeInjec["controlDatePickerInputs"]}
+            radioBtnPayload={cycleTimeInjec["radioBtnPayload"]}
+            dataTableName={cycleTimeInjec["dataTableName"]}
+            extraControls={cycleTimeInjec["extraControls"]}
+            extraIDs={null}
             user={user}
             isCheckedOut={isCheckedOut}
           />
