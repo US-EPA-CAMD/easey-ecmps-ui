@@ -22,6 +22,7 @@ import {
   qaCalibrationInjectionProps,
   qaFuelFlowmeterAccuracyDataProps,
   qaCycleTimeSummaryProps,
+  qaTransmitterTransducerAccuracyDataProps,
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
@@ -724,6 +725,26 @@ const QATestSummaryDataTable = ({
             radioBtnPayload={cycleTimeSum["radioBtnPayload"]}
             dataTableName={cycleTimeSum["dataTableName"]}
             extraControls={cycleTimeSum["extraControls"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "TTACC":
+        const transmitterTransducerAccuracyDataProps = qaTransmitterTransducerAccuracyDataProps();
+        return (
+          <QAExpandableRowsRender
+            payload={transmitterTransducerAccuracyDataProps["payload"]}
+            dropdownArray={transmitterTransducerAccuracyDataProps["dropdownArray"]}
+            mdmProps={transmitterTransducerAccuracyDataProps["mdmProps"]}
+            columns={transmitterTransducerAccuracyDataProps["columnNames"]}
+            controlInputs={transmitterTransducerAccuracyDataProps["controlInputs"]}
+            controlDatePickerInputs={transmitterTransducerAccuracyDataProps["controlDatePickerInputs"]}
+            radioBtnPayload={transmitterTransducerAccuracyDataProps["radioBtnPayload"]}
+            dataTableName={transmitterTransducerAccuracyDataProps["dataTableName"]}
+            extraControls={transmitterTransducerAccuracyDataProps["extraControls"]}
             expandable
             {...props}
             extraIDs={null}
