@@ -295,10 +295,10 @@ describe("Cycle Time Summary CRUD Operations", () => {
     expect(resp.data).toStrictEqual("success");
   });
 
-  test("updateCycleTimeSummary", async () => {
+  test("deleteCycleTimeSummary", async () => {
     const payload = { id:id, cycleTimeSummary: "data" };
-    const putCycleTimeSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${id}`;
-    mock.onPut(putCycleTimeSummaryUrl).reply(200, "deleted");
+    const deleteCycleTimeSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${id}`;
+    mock.onDelete(deleteCycleTimeSummaryUrl).reply(200, "deleted");
     const extraIDs = [locId,testSumId];
     const resp = await qaAssert.saveDataSwitch(
       payload,
@@ -375,7 +375,7 @@ describe("Fuel Flowmeter Accuracy Data CRUD operations", () => {
   test("deleteFuelFlowmeterAccuracyDataRecord", async () => {
     const deleteFuelFlowmeterAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/fuel-flowmeter-accuracies/${id}`;
     mock.onDelete(deleteFuelFlowmeterAccuracyDataUrl).reply(200, "deleted");
-
+    
     const extraIDs = [locId,testSumId];
     const resp = await qaAssert.removeDataSwitch(
       {id: id},

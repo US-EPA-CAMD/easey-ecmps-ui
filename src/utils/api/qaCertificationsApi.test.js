@@ -537,8 +537,8 @@ describe("QA Cert API", function () {
       expect(resp.data).toStrictEqual(payload);
     });
     test("deleteCycleTimeSummary", async () => {
-      const updateCycleTimeSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${id}`;
-      mock.onDelete(updateCycleTimeSummaryUrl).reply(200, 'Deleted');
+      const deleteCycleTimeSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${id}`;
+      mock.onDelete(deleteCycleTimeSummaryUrl).reply(200, 'Deleted');
   
       const resp = await qaCert.deleteCycleTimeSummary(
         locId,
