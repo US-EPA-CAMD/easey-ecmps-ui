@@ -348,6 +348,7 @@ const QATestSummaryDataTable = ({
           selectedLocation.name,
           "fixed",
         ];
+        selectedData.stackPipeId = selectedLocation.name;
       }
       selectedData.locationName = selectedLocation.name;
       // default selection to single test type code if it exists
