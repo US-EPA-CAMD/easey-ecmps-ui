@@ -23,13 +23,12 @@ const useGetCheckedOutLocations = () => {
     if (checkedOutLocationResult) {
       if (
         checkedOutLocationResult.data &&
-        checkedOutLocationResult.data.length > 0 &&
         !_.isEqual(
           checkedOutLocationsRef.current,
           checkedOutLocationResult.data
         )
       ) {
-        checkedOutLocationsList = checkedOutLocationResult.data;
+        checkedOutLocationsList = checkedOutLocationResult.data || [];
         dispatch({
           type: types.SET_CHECKED_OUT_LOCATIONS,
           checkedOutLocations: checkedOutLocationsList,

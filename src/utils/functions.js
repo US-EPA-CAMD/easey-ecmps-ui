@@ -69,10 +69,13 @@ export const updateCheckedOutLocationsOnTable = (tableRef, updateState, checkedO
   let changeInCheckedOutLocations = 0;
   tableRef.current.forEach((tableRow) => {
     const isLocationCheckedOut = checkedOutLocationsMPIdsMap.has(tableRow.monPlanId);
-    if (tableRow.isCheckedOut !== isLocationCheckedOut) {
+    if (tableRow.checkedOut !== isLocationCheckedOut) {
       changeInCheckedOutLocations+=1;
     }
-    tableRow.isCheckedOut = checkedOutLocationsMPIdsMap.has(tableRow.monPlanId);
+    tableRow.checkedOut = checkedOutLocationsMPIdsMap.has(tableRow.monPlanId);
+    if (isLocationCheckedOut && !tableRow.userCheckedOut) {
+      tableRow.selected = false;
+    }
   })
   if (changeInCheckedOutLocations){
     updateState([...tableRef.current]);

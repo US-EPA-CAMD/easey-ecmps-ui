@@ -37,8 +37,10 @@ const ReviewAndSubmit = ({checkedOutLocations}) => {
   }, [checkedOutLocations]);
 
   const updateCheckedOutLocationsOnTables = (checkedOutLocationsMPIdsMap) => {
-    updateCheckedOutLocationsOnTable(monPlanRef, setMonPlans, checkedOutLocationsMPIdsMap);
-    updateCheckedOutLocationsOnTable(qaTestSumRef, setQaTestSummary, checkedOutLocationsMPIdsMap);
+    for (const table in dataList) {
+      const {ref, setState} = dataList[table];
+      updateCheckedOutLocationsOnTable(ref, setState, checkedOutLocationsMPIdsMap)
+    }
   }
 
   const dataList = {
@@ -102,16 +104,6 @@ const ReviewAndSubmit = ({checkedOutLocations}) => {
         data = (await value[0](orisCodes, monPlanIds)).data;
       }
 
-      data = data.map((chunk) => {
-        //Add selector state variables
-        return {
-          selected: false,
-          checkedOut: checkedOutLocationsMap.has(chunk.monPlanId),
-          userCheckedOut: false,
-          viewOnly: false,
-          ...chunk,
-        };
-      });
 
       // Extra formatting to make all data sets uniform
       for (const r of data) {
@@ -123,6 +115,17 @@ const ReviewAndSubmit = ({checkedOutLocations}) => {
           r.submissionAvailabilityCode = r["submissionCode"];
         }
       }
+
+      data = data.map((chunk) => {
+        //Add selector state variables
+        return {
+          selected: false,
+          checkedOut: checkedOutLocationsMap.has(chunk.monPlanId),
+          userCheckedOut: false,
+          viewOnly: false,
+          ...chunk,
+        };
+      });
 
       if (key === "MP") {
         data = data.filter((mpd) => mpd.active);
