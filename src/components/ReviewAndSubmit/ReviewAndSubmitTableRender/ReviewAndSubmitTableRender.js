@@ -43,6 +43,7 @@ const ReviewAndSubmitTableRender = forwardRef(
           <Checkbox
             className="margin-bottom-5 margin-left-4"
             id={`${uuidv4()}`}
+            data-testid="SelectAll"
             onClick={(e) => {
               selectAll(!selectAllState);
               setSelectAllState(!selectAllState);
