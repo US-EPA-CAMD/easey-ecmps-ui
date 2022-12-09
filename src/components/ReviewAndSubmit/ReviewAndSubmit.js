@@ -59,6 +59,7 @@ const ReviewAndSubmit = ({checkedOutLocations}) => {
     for (const p of permissions) {
       idToPermissionsMap.current[p.id] = p.permissions;
     } //eslint-disable-next-line react-hooks/exhaustive-deps
+    console.log(idToPermissionsMap);
   }, []);
 
   const closeModal = () => {
@@ -103,10 +104,6 @@ const ReviewAndSubmit = ({checkedOutLocations}) => {
         data = (await value[0](orisCodes, monPlanIds)).data;
       }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 051fb07ef75af181930a2201401741a462756753
       // Extra formatting to make all data sets uniform
       for (const r of data) {
         if (r["id"]) {
@@ -122,11 +119,29 @@ const ReviewAndSubmit = ({checkedOutLocations}) => {
         //Add selector state variables
         return {
           selected: false,
-<<<<<<< HEAD
-          checkedOut: checkedOutLocationsMap.has(chunk.monPlanId),
-=======
           checkedOut: false,
->>>>>>> 051fb07ef75af181930a2201401741a462756753
+          userCheckedOut: false,
+          viewOnly: false,
+          ...chunk,
+        };
+      });
+
+      // Extra formatting to make all data sets uniform
+      for (const r of data) {
+        if (r["id"]) {
+          r.monPlanId = r["id"];
+        }
+
+        if (r["submissionCode"]) {
+          r.submissionAvailabilityCode = r["submissionCode"];
+        }
+      }
+
+      data = data.map((chunk) => {
+        //Add selector state variables
+        return {
+          selected: false,
+          checkedOut: checkedOutLocationsMap.has(chunk.monPlanId),
           userCheckedOut: false,
           viewOnly: false,
           ...chunk,
