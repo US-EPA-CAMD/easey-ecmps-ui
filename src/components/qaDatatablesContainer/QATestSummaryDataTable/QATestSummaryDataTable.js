@@ -710,7 +710,7 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
-      case "CYCLE": // Cycle Time Summary Nested Below Test Data
+      case "CYCSUM": // Cycle Time Summary Nested Below Test Data
         const cycleTimeSum = qaCycleTimeSummaryProps();
         return (
           <QAExpandableRowsRender
