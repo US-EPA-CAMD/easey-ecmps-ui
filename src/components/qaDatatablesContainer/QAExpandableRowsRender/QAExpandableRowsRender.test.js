@@ -25,7 +25,6 @@ import {
   qaAppendixECorrelationSummaryHeatInputGasProps,
   qaCalibrationInjectionProps,
   qaOnOffCalibrationProps,
-  qaCycleTimeSummaryProps,
 } from "../../../additional-functions/qa-dataTable-props";
 
 const mock = new MockAdapter(axios);
@@ -557,46 +556,6 @@ describe('Test cases for QAExpandableRowsRender', () => {
     const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
     userEvent.click(confirmBtns[1])
   });
-
-  test('renders Cycle Time Summary rows and crud funtionality', async () => {
-    const qaCycleTimeSummaryData = [
-      {
-        "id": "id1",
-        "testSumId": "testSumId",
-        "userId": "string",
-        "totalTime": "string"
-      },
-      {
-        "id": "id2",
-        "testSumId": "testSumId",
-        "userId": "string",
-        "totalTime": "string"
-      }
-    ]
-
-    const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries`;
-    const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries`;
-
-    mock.onGet(getUrl).reply(200, qaCycleTimeSummaryData)
-    mock.onPost(postUrl).reply(200, 'created')
-
-    const props = qaCycleTimeSummaryProps()
-    const idArray = [locId, testSumId, id]
-    const data = { locationId: locId, id: testSumId }
-    renderComponent(props, idArray, data);
-
-    // renders rows
-    const rows = await screen.findAllByRole('row')
-    expect(mock.history.get.length).not.toBe(0)
-    expect(rows).toHaveLength(qaCycleTimeSummaryData.length);
-
-    // add row
-    const addBtn = screen.getByRole('button', { name: /Add/i })
-    userEvent.click(addBtn)
-    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-    userEvent.click(saveAndCloseBtn)
-    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
-  })
 
   test('renders Fuel Flow to Load data rows and create/save/delete', async () => {
     const fuelFlowToLoadData = [
