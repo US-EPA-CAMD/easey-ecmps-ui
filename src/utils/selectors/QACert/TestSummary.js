@@ -455,6 +455,24 @@ export const mapCalibrationInjectionsToRows = (data) => {
   return records;
 };
 
+export const mapFuelFlowmeterAccuracyDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    console.log(el.reinstallationDate)
+    const row = {
+      id: el.id,
+      col1: el.accuracyTestMethodCode,
+      col2: el.lowFuelAccuracy,
+      col3: el.midFuelAccuracy,
+      col4: el.highFuelAccuracy,
+      col5: el.reinstallationDate,
+      col6: el.reinstallationHour,
+    };
+    records.push(row);
+  }
+  return records;
+};
+
 export const mapOnOffCalToRows = (data) => {
   const records = [];
   for (const el of data) {
@@ -487,6 +505,19 @@ export const mapOnOffCalToRows = (data) => {
       col25: el.offlineUpscaleInjectionHour,
     };
     records.push(row);
+  }
+  return records;
+};
+
+export const mapCycleTimeSummariesToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      testSumId: el.testSumId,
+      col1: el.totalTime,
+    };
+    records.push(row)
   }
   return records;
 };

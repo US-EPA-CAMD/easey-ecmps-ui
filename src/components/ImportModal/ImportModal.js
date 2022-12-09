@@ -34,24 +34,27 @@ const ImportModal = ({
   useEffect(() => {
     switch (workspaceSection) {
       case MONITORING_PLAN_STORE_NAME:
-        mpApi.getMPSchema().then(({data}) => {
+        mpApi.getMPSchema()
+        .then(({data}) => {
           setSchema(data);
           setLabel("Upload MP JSON File");
-        });
+        }).catch(err=> console.log(err));
         break;
 
       case QA_CERT_TEST_SUMMARY_STORE_NAME:
-        qaApi.getQASchema().then(({data}) => {
+        qaApi.getQASchema()
+        .then(({data}) => {
           setSchema(data);
           setLabel("Upload QA JSON File");
-        });
+        }).catch(err=> console.log(err));
         break;
       
       case EMISSIONS_STORE_NAME:
-        emApi.getEmissionsSchema().then(({data})=>{
+        emApi.getEmissionsSchema()
+        .then(({data})=>{
           setSchema(data);
           setLabel("Upload Emissions JSON File");
-        })
+        }).catch(err=> console.log(err));
         break;
       default:
         break;
@@ -134,7 +137,7 @@ const ImportModal = ({
           <div className="padding-right-2 padding-left-3 " aria-live="polite">
             {" "}
             {importedFileErrorMsgs.map((error, i) => (
-              <Alert type="error" slim noIcon key={i} role="alert">
+              <Alert type="error" slim noIcon key={`${i}-${error}`} role="alert">
                 {error}
               </Alert>
             ))}
@@ -149,7 +152,7 @@ const ImportModal = ({
                 aria-live="polite"
               >
                 {schemaErrors.map((error, i) => (
-                  <Alert type="error" slim noIcon key={i} role="alert">
+                  <Alert type="error" slim noIcon key={`${i}-${error}`} role="alert">
                     {error}
                   </Alert>
                 ))}
@@ -163,9 +166,7 @@ const ImportModal = ({
             <FileInput
               id="file-input-single"
               name="file-input-single"
-              onChange={(e) => {
-                onChangeHandler(e);
-              }}
+              onChange={onChangeHandler}
             />
           </FormGroup>
         </div>

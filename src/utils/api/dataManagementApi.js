@@ -482,3 +482,10 @@ export const getMdmDataByCodeTable = async (codeTable) => {
     .then(handleResponse)
     .catch(handleError);
 }
+
+export const getAllAccuracyTestMethodCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/accuracy-test-method-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+}

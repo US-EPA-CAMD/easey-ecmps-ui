@@ -684,6 +684,41 @@ export const qaFlowToLoadCheckProps = () => {
   };
 }
 
+export const qaFuelFlowmeterAccuracyDataProps = () => {
+  return {
+    dataTableName: "Fuel Flowmeter Accuracy Data",
+    payload: {},
+    dropdownArray: ["accuracyTestMethodCode"],
+    mdmProps: [
+      {
+        codeTable: "accuracy-test-method-codes",
+        responseProps: {
+          code: "accuracyTestMethodCode",
+          description: "accuracyTestMethodDescription"
+        }
+      },
+    ],
+    columnNames: [
+      "Accuracy Test Method Code",
+      "Low Fuel Accuracy",
+      "Mid Fuel Accuracy",
+      "High Fuel Accuracy",
+      "Reinstallation Date",
+      "Reinstallation Hour",
+    ],
+    controlInputs: {
+      accuracyTestMethodCode: ["Accuracy Test Method Code", "dropdown", "", ""],
+      lowFuelAccuracy: ["Low Fuel Accuracy", "input", "", ""],
+      midFuelAccuracy: ["Mid Fuel Accuracy", "input", "", ""],
+      highFuelAccuracy: ["High Fuel Accuracy", "input", "", ""],
+    },
+    controlDatePickerInputs: {
+      reinstallationDate: ["Reinstallation Date", "date", "", ""],
+      reinstallationHour: ["Reinstallation Hour", "hourDropdown", "", ""],
+    }
+  }
+}
+
 export const qaOnOffCalibrationProps = () => {
   return {
     dataTableName: "Online Offline Calibration",
@@ -817,4 +852,19 @@ export const qaCalibrationInjectionProps = () => {
     radioBtnPayload: ["onLineOffLineIndicator","zeroAPSIndicator","upscaleAPSIndicator"],
     extraControls: {},
   };
+}
+
+export const qaCycleTimeSummaryProps = () => {
+  return {
+    dataTableName: "Cycle Time Summary",
+    payload: {},
+    dropdownArray: [],
+    columnNames: [
+      "Total Time"
+    ],
+    controlInputs: {
+      totalTime: ["Total Time", "input", "", ""],
+    },
+    extraControls: {},
+  }
 }
