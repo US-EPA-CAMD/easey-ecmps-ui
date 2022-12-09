@@ -21,6 +21,7 @@ const testQualification = "Test Qualification";
 const appendixECorrHeatInputOil = "Appendix E Correlation Heat Input from Oil";
 const fuelFlowmeterAccuracyData = "Fuel Flowmeter Accuracy Data";
 const cycleTimeSummary = "Cycle Time Summary";
+const transmitterTransducerAccuracyData = "Transmitter Transducer Accuracy Data";
 // below types don't have coverage if needed more
 const flowToLoadCheck = "Flow To Load Check";
 const lineInjection = "Linearity Injection";
@@ -379,6 +380,83 @@ describe("Fuel Flowmeter Accuracy Data CRUD operations", () => {
     const resp = await qaAssert.removeDataSwitch(
       {id: id},
       fuelFlowmeterAccuracyData,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.delete.length).toBe(1);
+    expect(resp.data).toStrictEqual("deleted");
+  });
+});
+
+describe("Transmitter Transducer Accuracy Data CRUD operations", () => {
+  beforeEach(() => {
+    mock.resetHistory();
+  });
+  test("getTransmitterTransducerAccuracyDataRecords", async () => {
+    const transmitterTransducerAccuracyDataRecord = [
+      { transmitterTransducerAccuracyData: "data" },
+    ];
+    const getTransmitterTransducerAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/transmitter-transducer-accuracy`;
+    mock
+      .onGet(getTransmitterTransducerAccuracyDataUrl)
+      .reply(200, transmitterTransducerAccuracyDataRecord);
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.getDataTableApis(
+      transmitterTransducerAccuracyData,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.get.length).toBe(1);
+    expect(resp.data).toStrictEqual(transmitterTransducerAccuracyDataRecord);
+  });
+
+  test("createTransmitterTransducerAccuracyDataRecord", async () => {
+    const payload = { transmitterTransducerAccuracyData: "data" };
+    const postTransmitterTransducerAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/transmitter-transducer-accuracy`;
+    mock.onPost(postTransmitterTransducerAccuracyDataUrl).reply(200, "success");
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.createDataSwitch(
+      payload,
+      transmitterTransducerAccuracyData,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.post.length).toBe(1);
+    expect(resp.data).toStrictEqual("success");
+  });
+
+  test("updateTransmitterTransducerAccuracyDataRecord", async () => {
+    const payload = { id:id, transmitterTransducerAccuracyData: "data" };
+    const putTransmitterTransducerAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/transmitter-transducer-accuracy/${id}`;
+    mock.onPut(putTransmitterTransducerAccuracyDataUrl).reply(200, "success");
+
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.saveDataSwitch(
+      payload,
+      transmitterTransducerAccuracyData,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.put.length).toBe(1);
+    expect(resp.data).toStrictEqual("success");
+  });
+
+  test("deleteTransmitterTransducerAccuracyDataRecord", async () => {
+    const deleteTransmitterTransducerAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/transmitter-transducer-accuracy/${id}`;
+    mock.onDelete(deleteTransmitterTransducerAccuracyDataUrl).reply(200, "deleted");
+    
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.removeDataSwitch(
+      {id: id},
+      transmitterTransducerAccuracyData,
       locId,
       testSumId,
       extraIDs

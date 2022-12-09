@@ -428,4 +428,29 @@ describe("testing TestSummary data selectors", () => {
     ];
     expect(fs.mapFuelFlowmeterAccuracyDataToRows(data)).toEqual(records);
   });
+  test("mapTransmitterTransducerAccuracyDataToRows", () => {
+    const data = [
+      {
+        id: "0000120",
+        lowLevelAccuracy: 1,
+        lowLevelAccuracySpecCode: "ACT",
+        midLevelAccuracy: 1,
+        midLevelAccuracySpecCode: "ACT",
+        highLevelAccuracy: 1,
+        highLevelAccuracySpecCode: "ACT",
+      },
+    ];
+    const records = [
+      {
+        id: '0000120',
+        col1: 1,
+        col2: "ACT",
+        col3: 1,
+        col4: "ACT",
+        col5: 1,
+        col6: "ACT",
+      },
+    ];
+    expect(fs.mapTransmitterTransducerAccuracyDataToRows(data)).toEqual(records);
+  });
 });

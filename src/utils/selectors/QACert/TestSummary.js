@@ -472,6 +472,23 @@ export const mapFuelFlowmeterAccuracyDataToRows = (data) => {
   return records;
 };
 
+export const mapTransmitterTransducerAccuracyDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.lowLevelAccuracy,
+      col2: el.lowLevelAccuracySpecCode,
+      col3: el.midLevelAccuracy,
+      col4: el.midLevelAccuracySpecCode,
+      col5: el.highLevelAccuracy,
+      col6: el.highLevelAccuracySpecCode,
+    };
+    records.push(row);
+  }
+  return records;
+};
+
 export const mapOnOffCalToRows = (data) => {
   const records = [];
   for (const el of data) {

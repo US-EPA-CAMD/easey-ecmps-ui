@@ -489,3 +489,10 @@ export const getAllAccuracyTestMethodCodes = async () => {
     .then(handleResponse)
     .catch(handleError);
 }
+
+export const getAllAccuracySpecCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/accuracy-spec-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+}

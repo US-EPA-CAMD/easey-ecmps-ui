@@ -719,6 +719,40 @@ export const qaFuelFlowmeterAccuracyDataProps = () => {
   }
 }
 
+export const qaTransmitterTransducerAccuracyDataProps = () => {
+  return {
+    dataTableName: "Transmitter Transducer Accuracy Data",
+    payload: {},
+    dropdownArray: ["lowLevelAccuracySpecCode", "midLevelAccuracySpecCode", "highLevelAccuracySpecCode"],
+    mdmProps: [
+      {
+        codeTable: "accuracy-spec-codes",
+        responseProps: {
+          code: "accuracySpecCode",
+          description: "accuracySpecDescription"
+        }
+      },
+    ],
+    columnNames: [
+      "Low Level Accuracy",
+      "Low Level Accuracy Spec Code",
+      "Mid Level Accuracy",
+      "Mid Level Accuracy Spec Code",
+      "High Level Accuracy",
+      "High Level Accuracy Spec Code",
+    ],
+    controlInputs: {
+      lowLevelAccuracy: ["Low Level Accuracy", "input", "", ""],
+      lowLevelAccuracySpecCode: ["Low Level Accuracy Spec Code", "dropdown", "", ""],
+      midLevelAccuracy: ["Mid Level Accuracy", "input", "", ""],
+      midLevelAccuracySpecCode: ["Mid Level Accuracy Spec Code", "dropdown", "", ""],
+      highLevelAccuracy: ["High Level Accuracy", "input", "", ""],
+      highLevelAccuracySpecCode: ["High Level Accuracy Spec Code", "dropdown", "", ""],
+    },
+    controlDatePickerInputs: {},
+  }
+}
+
 export const qaOnOffCalibrationProps = () => {
   return {
     dataTableName: "Online Offline Calibration",
