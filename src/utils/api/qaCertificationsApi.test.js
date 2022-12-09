@@ -520,6 +520,35 @@ describe("QA Cert API", function () {
       expect(mock.history.post.length).toBe(1)
       expect(resp.data).toStrictEqual(payload)
     })
+
+    test("updateCycleTimeSummary", async () => {
+      const payload = { cycleTimeSummary: "data" };
+      const updateCycleTimeSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${id}`;
+      mock.onPut(updateCycleTimeSummaryUrl).reply(200, payload);
+  
+      const resp = await qaCert.updateCycleTimeSummary(
+        locId,
+        testSumId,
+        id,
+        payload
+      );
+  
+      expect(mock.history.put.length).toBe(1);
+      expect(resp.data).toStrictEqual(payload);
+    });
+    test("deleteCycleTimeSummary", async () => {
+      const deleteCycleTimeSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${id}`;
+      mock.onDelete(deleteCycleTimeSummaryUrl).reply(200, 'Deleted');
+  
+      const resp = await qaCert.deleteCycleTimeSummary(
+        locId,
+        testSumId,
+        id,
+      );
+  
+      expect(mock.history.delete.length).toBe(1);
+      expect(resp.data).toStrictEqual('Deleted');
+    });
   })
  
 

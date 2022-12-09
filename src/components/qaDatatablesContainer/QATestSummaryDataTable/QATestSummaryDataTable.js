@@ -710,7 +710,7 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
-      case "CYCLE":
+      case "CYCLE": // Cycle Time Summary Nested Below Test Data
         const cycleTimeSum = qaCycleTimeSummaryProps();
         return (
           <QAExpandableRowsRender
@@ -723,6 +723,8 @@ const QATestSummaryDataTable = ({
             radioBtnPayload={cycleTimeSum["radioBtnPayload"]}
             dataTableName={cycleTimeSum["dataTableName"]}
             extraControls={cycleTimeSum["extraControls"]}
+            expandable
+            {...props}
             extraIDs={null}
             user={user}
             isCheckedOut={isCheckedOut}

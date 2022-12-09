@@ -370,6 +370,10 @@ export const removeDataSwitch = async (
       return qaApi
         .deleteFuelFlowmeterAccuracyDataRecord(locationId, id, row.id)
         .catch((error) => console.log("error", error));
+    case cycleTimeSummary:
+      return qaApi
+        .deleteCycleTimeSummary(locationId, id, row.id)
+        .catch((error) => console.log("error", error));
     default:
       throw new Error(`removeDataSwitch case not implemented for ${name}`);
   }
@@ -555,6 +559,13 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
     case fuelFlowmeterAccuracyData:
       return qaApi.updateFuelFlowmeterAccuracyDataRecord(location, id, userInput.id, userInput)
         .catch((err) => console.error(err));
+    case cycleTimeSummary:
+      return qaApi.updateCycleTimeSummary(
+        location, 
+        id, 
+        userInput.id, 
+        userInput
+        ).catch((err) => console.error(err));
     default:
       break;
   }
