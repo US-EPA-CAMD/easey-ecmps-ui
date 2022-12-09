@@ -296,19 +296,18 @@ describe("Cycle Time Summary CRUD Operations", () => {
   });
 
   test("deleteCycleTimeSummary", async () => {
-    const payload = { id:id, cycleTimeSummary: "data" };
     const deleteCycleTimeSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${id}`;
     mock.onDelete(deleteCycleTimeSummaryUrl).reply(200, "deleted");
     const extraIDs = [locId,testSumId];
-    const resp = await qaAssert.saveDataSwitch(
-      payload,
+    const resp = await qaAssert.removeDataSwitch(
+      {id: id},
       cycleTimeSummary,
       locId,
       testSumId,
       extraIDs
     )
 
-    expect(mock.history.put.length).toBe(1);
+    expect(mock.history.put.length).toBe(0);
     expect(resp.data).toStrictEqual("deleted");
   });
 })
