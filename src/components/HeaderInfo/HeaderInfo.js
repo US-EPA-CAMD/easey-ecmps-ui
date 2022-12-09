@@ -118,9 +118,7 @@ export const HeaderInfo = ({
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
-  // const unitIds  = selectedConfig?.unitStackConfigurations?.map(config => config.unitId);
   const selectedUnitId  = selectedConfig?.locations?.filter(l=> l.id === locationSelect[1]).map(l => l.unitId)
-  // const stackPipeId = selectedConfig?.unitStackConfigurations.map(config => config.stackPipeId);
   const selectedStackPipeId  = selectedConfig?.locations?.filter(l=> l.id === locationSelect[1]).map(l => l.stackPipeId)
 
 
