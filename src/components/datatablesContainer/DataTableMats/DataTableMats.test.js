@@ -1,10 +1,14 @@
 import React from "react";
-import { render, waitForElement, fireEvent } from "@testing-library/react";
-import { DataTableMats } from "./DataTableMats";
-import * as mpApi from "../../../utils/api/monitoringPlansApi";
-const axios = require("axios");
+import { render, waitForElement, screen } from "@testing-library/react";
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
 
-jest.mock("axios");
+import { DataTableMats, mapDispatchToProps, mapStateToProps } from "./DataTableMats";
+import * as mpApi from "../../../utils/api/monitoringPlansApi";
+import config from "../../../config";
+import userEvent from "@testing-library/user-event";
+
+const mock = new MockAdapter(axios);
 
 const monitoringMatsMethods = [
   {
@@ -28,6 +32,55 @@ const monitoringMatsMethods = [
     active: true,
   },
 ];
+
+const monitoringMethods = [
+  {
+    parameterCode: "SO2",
+    monitoringMethodCode: "CEM",
+    substituteDataCode: "SPTS",
+    bypassApproachCode: "BYMAX",
+    beginDate: "2007-11-27",
+    beginHour: 17,
+    endDate: null,
+    endHour: null,
+    id: "MELISSAMAT-7BA7D94FDB4F4D4A8E1161E4B46150F6",
+    locationId: "5770",
+    userId: "abcde",
+    addDate: "2009-02-20",
+    updateDate: "2009-02-20",
+    active: true
+  },
+  {
+    parameterCode: "SO2",
+    monitoringMethodCode: "CEM",
+    substituteDataCode: "SPTS",
+    bypassApproachCode: "BYMAX",
+    beginDate: "2007-11-27",
+    beginHour: 17,
+    endDate: null,
+    endHour: null,
+    id: "MELISSAMAT-7BA7D94FDB4F4D4A8E1161E4B46150F6",
+    locationId: "5770",
+    userId: "abcde",
+    addDate: "2009-02-20",
+    updateDate: "2009-02-20",
+    active: true
+  }
+]
+
+const idRegex = '[\\w\\-]+'
+const locationId = '5770'
+
+const getMonitoringMatsMethodsUrl = new RegExp(`${config.services.monitorPlans.uri}/locations/${locationId}/mats-methods`)
+const getMonitoringMethodsUrl = new RegExp(`${config.services.monitorPlans.uri}/locations/${locationId}/methods`)
+const postUrl = new RegExp(`${config.services.monitorPlans.uri}/locations/${idRegex}/mats-methods`)
+const putUrl = new RegExp(`${config.services.monitorPlans.uri}/locations/${idRegex}/mats-methods/${idRegex}`)
+
+mock.onGet(getMonitoringMatsMethodsUrl).reply(200, monitoringMatsMethods)
+mock.onGet(getMonitoringMethodsUrl).reply(200, monitoringMethods)
+mock.onPost(postUrl).reply(200, 'created')
+mock.onPut(putUrl).reply(200, 'updated')
+
 //testing redux connected component to mimic props passed as argument
 const componentRenderer = (location) => {
   const props = {
@@ -116,6 +169,7 @@ const componentRenderer = (location) => {
           name: "Quarterly Stack Testing",
         },
       ],
+      prefilteredMatsMethods: []
     },
     loadDropdownsData: jest.fn(),
     settingInactiveCheckBox: jest.fn(),
@@ -124,74 +178,44 @@ const componentRenderer = (location) => {
   };
   return render(<DataTableMats {...props} />);
 };
-function componentRendererNoData(args) {
-  const defaultProps = {
-    user: { firstName: "test" },
-    checkout: true,
-    inactive: true,
-    settingInactiveCheckBox: jest.fn(),
-    locationSelectValue: 1,
-  };
 
-  const props = { ...defaultProps, ...args };
-  return render(<DataTableMats {...props} />);
-}
-
-test("tests a configuration with only inactive methods", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: monitoringMatsMethods })
-  );
-  const title = await mpApi.getMonitoringMethods(5770);
-  expect(title.data).toEqual(monitoringMatsMethods);
-  let { container } = await waitForElement(() => componentRenderer(5770));
-  // componentRenderer(6);
+test("renders DataTableMats", async () => {
+  let { container } = await waitForElement(() => componentRenderer(locationId));
   expect(container).toBeDefined();
 });
 
-test("tests a create/save methods", async () => {
-  // axios.get.mockImplementation(() =>
-  //   Promise.resolve({ status: 200, data: methodsInactiveOnly })
-  // );
+test('DataTableMats create', async () => {
+  await waitForElement(() => componentRenderer(locationId))
+  const addBtn = screen.getAllByRole('button', { name: /Create MATS/i })
+  userEvent.click(addBtn[0])
+  const saveAndCloseBtn = screen.getAllByRole('button', { name: /Create MATS/i })
+  userEvent.click(saveAndCloseBtn[0])
+  expect(addBtn[0]).toBeDefined()
 
-  // axios.put.mockImplementation((url) => {
-  //   switch (url) {
-  //     case `https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/workspace/locations/3844/methods/WPC07008-24F0C0E2B4DD4AFC927FC2DEDC67B859`:
-  //       return Promise.resolve({ data: [{ name: "Bob", items: [] }] });
-  //     case "/items.json":
-  //       return Promise.resolve({ data: [{ id: 1 }, { id: 2 }] });
-  //     default:
-  //       return Promise.reject(new Error("not found"));
-  //   }
-  // });
-  // axios.put.mockImplementation(() =>
-  //   Promise.resolve({ status: 200, data: data })
-  // );
 
-  // const title = await mpApi.getMonitoringMethods(69);
-  // expect(title.data).toEqual(methodsInactiveOnly);
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: monitoringMatsMethods })
-  );
+})
 
-  axios.put.mockImplementation((url) => {
-    switch (url) {
-      case `https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/workspace/locations/5770/mats-methods/MELISSARHO-CDF765BC7BF849EE9C23608B95540200`:
-        return Promise.resolve({ data: [{ name: "Bob", items: [] }] });
-      case "/items.json":
-        return Promise.resolve({ data: [{ id: 1 }, { id: 2 }] });
-      default:
-        return Promise.reject(new Error("not found"));
-    }
-  });
-  axios.put.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: monitoringMatsMethods })
-  );
+test('DataTableMats edit', async () => {
+  await waitForElement(() => componentRenderer(locationId))
+  const editBtn = screen.getAllByRole('button', { name: 'view and/or edit TNHGM' })
+  userEvent.click(editBtn[0])
+  const saveAndCloseBtn = screen.getAllByRole('button', { name: /Click to save/i })
+  userEvent.click(saveAndCloseBtn[0])
+  expect(editBtn).toBeDefined()
+})
 
-  let { container } = await waitForElement(() => componentRenderer(5770));
+test("mapStateToProps calls the appropriate state", async () => {
+  // mock the 'dispatch' object
+  const dispatch = jest.fn();
+  const state = { dropdowns: [1] };
+  const stateProps = mapStateToProps(state, true);
+});
 
-  // fireEvent.click(container.querySelector("#testingBtn"));
-  // fireEvent.click(container.querySelector("#testingBtn2"));
-  // fireEvent.click(container.querySelector("#testingBtn3"));
-  // componentRenderer(6);
-  expect(container).toBeDefined();
+test("mapDispatchToProps calls the appropriate action", async () => {
+  // mock the 'dispatch' object
+  const dispatch = jest.fn();
+  const actionProps = mapDispatchToProps(dispatch);
+  const formData = [];
+  // verify the appropriate action was called
+  actionProps.loadDropdownsData();
 });
