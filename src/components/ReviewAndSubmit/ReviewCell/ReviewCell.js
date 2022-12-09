@@ -25,9 +25,10 @@ const ReviewCell = ({
 
   return (
     <div>
-      {cellState === "Lock" && <LockSharp />}
+      {cellState === "Lock" && <LockSharp data-testid="Lock" />}
       {cellState === "Checkbox" && (
         <Checkbox
+          data-testid="Checkbox"
           className="margin-bottom-5"
           id={`${uuidv4()}`}
           onChange={(e) => {
@@ -38,6 +39,7 @@ const ReviewCell = ({
       )}
       {cellState === "View" && (
         <Button
+          data-testid="ViewButton"
           onClick={() => {
             handleRowView(row);
           }}

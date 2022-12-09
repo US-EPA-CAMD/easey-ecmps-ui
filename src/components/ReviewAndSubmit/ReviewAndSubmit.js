@@ -40,7 +40,6 @@ const ReviewAndSubmit = () => {
     for (const p of permissions) {
       idToPermissionsMap.current[p.id] = p.permissions;
     } //eslint-disable-next-line react-hooks/exhaustive-deps
-    console.log(idToPermissionsMap);
   }, []);
 
   const closeModal = () => {
@@ -85,17 +84,6 @@ const ReviewAndSubmit = () => {
         data = (await value[0](orisCodes, monPlanIds)).data;
       }
 
-      data = data.map((chunk) => {
-        //Add selector state variables
-        return {
-          selected: false,
-          checkedOut: false,
-          userCheckedOut: false,
-          viewOnly: false,
-          ...chunk,
-        };
-      });
-
       // Extra formatting to make all data sets uniform
       for (const r of data) {
         if (r["id"]) {
@@ -106,6 +94,17 @@ const ReviewAndSubmit = () => {
           r.submissionAvailabilityCode = r["submissionCode"];
         }
       }
+
+      data = data.map((chunk) => {
+        //Add selector state variables
+        return {
+          selected: false,
+          checkedOut: false,
+          userCheckedOut: false,
+          viewOnly: false,
+          ...chunk,
+        };
+      });
 
       if (key === "MP") {
         data = data.filter((mpd) => mpd.active);

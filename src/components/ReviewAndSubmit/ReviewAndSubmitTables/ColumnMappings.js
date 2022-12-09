@@ -1,10 +1,10 @@
 import { formatDate } from "../../../utils/functions";
 
-const sortByUpdateDate = (a, b) => {
+export const sortByUpdateDate = (a, b) => {
   return new Date(a.updateDate) - new Date(b.updateDate);
 };
 
-const sortByEndDate = (a, b) => {
+export const sortByEndDate = (a, b) => {
   if (a.endDate === "N/A") {
     return -1;
   }
@@ -14,7 +14,7 @@ const sortByEndDate = (a, b) => {
   return new Date(a.endDate) - new Date(b.endDate);
 };
 
-const sortByBeginDate = (a, b) => {
+export const sortByBeginDate = (a, b) => {
   if (a.beginDate === "N/A") {
     return -1;
   }
