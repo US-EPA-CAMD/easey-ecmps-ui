@@ -163,9 +163,9 @@ describe("testing getLinearitySummary data selectors", () => {
     ];
     const unitId = [
       "Unit or Stack Pipe ID",
-      "nonFilteredDropdown",
+      "input",
       "",
-      "locked",
+      "",
     ];
     // extra control inputs
     const testComment = ["Test Comment", "input", "", ""];
@@ -207,11 +207,11 @@ describe("testing getLinearitySummary data selectors", () => {
 
     expect(fs.getQAModalDetailsByTestCode("APPESUM", { unitId: 1 })).toEqual({
       controlInputs: {
+        unitId,
         testTypeCode,
         monitoringSystemID,
         testNumber,
         testReasonCode,
-        unitId
       },
       extraControlInputs: {
         testComment,
@@ -519,7 +519,7 @@ describe("testing getLinearitySummary data selectors", () => {
           spanScaleCode,
           testNumber,
           testReasonCode,
-          testResultCode,unitId
+          testResultCode,
         },
         extraControlInputs: {
           gracePeriodIndicator,

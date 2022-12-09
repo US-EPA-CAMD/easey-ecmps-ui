@@ -711,6 +711,12 @@ const QAExpandableRowsRender = ({
       mainDropdownResult = [];
     }
 
+    if (dataTableName === "Fuel Flowmeter Accuracy Data") {
+      if(selectedData.reinstallationDate){
+        selectedData.reinstallationDate = new Date(selectedData.reinstallationDate).toISOString().slice(0,10)
+      }
+    }
+
     const prefilteredTotalName = dropdownArray[dropdownArray.length - 1];
     setSelectedModalData(
       modalViewData(
