@@ -537,8 +537,8 @@ describe("QA Cert API", function () {
       expect(resp.data).toStrictEqual(payload);
     });
     test("deleteCycleTimeSummary", async () => {
-      const updateCycleTimeSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${id}`;
-      mock.onDelete(updateCycleTimeSummaryUrl).reply(200, 'Deleted');
+      const deleteCycleTimeSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${id}`;
+      mock.onDelete(deleteCycleTimeSummaryUrl).reply(200, 'Deleted');
   
       const resp = await qaCert.deleteCycleTimeSummary(
         locId,
@@ -551,7 +551,69 @@ describe("QA Cert API", function () {
     });
   })
  
+  describe("Transmitter Transducer Accuracy Data CRUD operations", () => {
+    test("getTransmitterTransducerAccuracyDataRecords", async () => {
+      const transmitterTransducerAccuracyDataResp = [
+        { transmitterTransducerAccuracyData: "data" },
+        { transmitterTransducerAccuracyData: "data2" },
+      ];
+      const getTransmitterTransducerAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/transmitter-transducer-accuracy`;
+      mock.onGet(getTransmitterTransducerAccuracyDataUrl).reply(200, transmitterTransducerAccuracyDataResp);
 
+      const resp = await qaCert.getTransmitterTransducerAccuracyDataRecords(
+        locId,
+        testSumId,
+      );
+
+      expect(mock.history.get.length).toBe(1);
+      expect(resp.data).toStrictEqual(transmitterTransducerAccuracyDataResp);
+    });
+
+    test("createTransmitterTransducerAccuracyDataRecord", async () => {
+      const payload = { transmitterTransducerAccuracyData: "data" };
+      const postTransmitterTransducerAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/transmitter-transducer-accuracy`;
+      mock.onPost(postTransmitterTransducerAccuracyDataUrl).reply(200, payload);
+
+      const resp = await qaCert.createTransmitterTransducerAccuracyDataRecord(
+        locId,
+        testSumId,
+        payload
+      );
+
+      expect(mock.history.post.length).toBe(1);
+      expect(resp.data).toStrictEqual(payload);
+    });
+
+    test("updateTransmitterTransducerAccuracyDataRecord", async () => {
+      const payload = { transmitterTransducerAccuracyData: "data" };
+      const putTransmitterTransducerAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/transmitter-transducer-accuracy/${id}`;
+      mock.onPut(putTransmitterTransducerAccuracyDataUrl).reply(200, payload);
+
+      const resp = await qaCert.updateTransmitterTransducerAccuracyDataRecord(
+        locId,
+        testSumId,
+        id,
+        payload
+      );
+
+      expect(mock.history.put.length).toBe(1);
+      expect(resp.data).toStrictEqual(payload);
+    });
+
+    test("deleteTransmitterTransducerAccuracyDataRecord", async () => {
+      const deleteTransmitterTransducerAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/transmitter-transducer-accuracy/${id}`;
+      mock.onDelete(deleteTransmitterTransducerAccuracyDataUrl).reply(200, "deleted");
+
+      const resp = await qaCert.deleteTransmitterTransducerAccuracyDataRecord(
+        locId,
+        testSumId,
+        id
+      );
+
+      expect(mock.history.delete.length).toBe(1);
+      expect(resp.data).toStrictEqual("deleted");
+    });
+  });
 
 
   

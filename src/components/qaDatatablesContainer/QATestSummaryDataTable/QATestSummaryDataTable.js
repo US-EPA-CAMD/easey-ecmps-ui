@@ -22,6 +22,7 @@ import {
   qaCalibrationInjectionProps,
   qaFuelFlowmeterAccuracyDataProps,
   qaCycleTimeSummaryProps,
+  qaTransmitterTransducerAccuracyDataProps,
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
@@ -330,21 +331,24 @@ const QATestSummaryDataTable = ({
       )[0];
       setSelectedRow(selectedData);
     }
+
     if (create) {
       if (controlInputs?.unitId) {
         controlInputs.unitId = [
           "Unit or Stack Pipe ID",
-          "nonFilteredDropdown",
+          "input",
           selectedLocation.name,
-          "",
+          "fixed",
         ];
+        selectedData.unitId = selectedLocation.name;
       } else {
         controlInputs.stackPipeId = [
           "Unit or Stack Pipe ID",
-          "nonFilteredDropdown",
+          "input",
           selectedLocation.name,
-          "",
+          "fixed",
         ];
+        selectedData.stackPipeId = selectedLocation.name;
       }
       selectedData.locationName = selectedLocation.name;
       // default selection to single test type code if it exists
@@ -403,7 +407,6 @@ const QATestSummaryDataTable = ({
       extraControlInputs
     );
     setSelectedModalData(modalData);
-
     setClickedIndex(index);
 
     setShow(true);
@@ -710,7 +713,7 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
-      case "CYCLE": // Cycle Time Summary Nested Below Test Data
+      case "CYCSUM": // Cycle Time Summary Nested Below Test Data
         const cycleTimeSum = qaCycleTimeSummaryProps();
         return (
           <QAExpandableRowsRender
@@ -723,6 +726,26 @@ const QATestSummaryDataTable = ({
             radioBtnPayload={cycleTimeSum["radioBtnPayload"]}
             dataTableName={cycleTimeSum["dataTableName"]}
             extraControls={cycleTimeSum["extraControls"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "TTACC":
+        const transmitterTransducerAccuracyDataProps = qaTransmitterTransducerAccuracyDataProps();
+        return (
+          <QAExpandableRowsRender
+            payload={transmitterTransducerAccuracyDataProps["payload"]}
+            dropdownArray={transmitterTransducerAccuracyDataProps["dropdownArray"]}
+            mdmProps={transmitterTransducerAccuracyDataProps["mdmProps"]}
+            columns={transmitterTransducerAccuracyDataProps["columnNames"]}
+            controlInputs={transmitterTransducerAccuracyDataProps["controlInputs"]}
+            controlDatePickerInputs={transmitterTransducerAccuracyDataProps["controlDatePickerInputs"]}
+            radioBtnPayload={transmitterTransducerAccuracyDataProps["radioBtnPayload"]}
+            dataTableName={transmitterTransducerAccuracyDataProps["dataTableName"]}
+            extraControls={transmitterTransducerAccuracyDataProps["extraControls"]}
             expandable
             {...props}
             extraIDs={null}

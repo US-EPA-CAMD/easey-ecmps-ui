@@ -376,6 +376,7 @@ const ModalDetails = ({
             name={value[0]}
             type="text"
             defaultValue={value[2] ? value[2] : ""}
+            disabled={value[0] === "unitId" || value[0] === "stackPipeId" ? "disabled" : undefined}
           />
         );
         break;

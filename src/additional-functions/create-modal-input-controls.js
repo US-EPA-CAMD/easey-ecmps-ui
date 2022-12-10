@@ -146,7 +146,7 @@ export const modalViewData = (
               labels,
               inputs[y][2] === "required" ? "required" : false,
               "nonFilteredDropdown",
-              createNew ? (selected === {} ? "select" : selected.locationName) : (selected ? selected[y] : ""),
+              createNew ? (!selected || selected === {} ? "select" : selected.locationName) : (selected ? selected[y] : ""),
               totalOptionsClone ? totalOptionsClone[y] : [],
             ]);
             break;
@@ -175,7 +175,7 @@ export const modalViewData = (
             arr.push([
               y,
               inputs[y][0],
-              createNew
+              createNew && inputs[y][3] !== "fixed"
                 ? ""
                 : selected
                   ? selected[y] === 0
