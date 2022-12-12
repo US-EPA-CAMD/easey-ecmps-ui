@@ -33,6 +33,8 @@ export const SubmissionModal = ({
 }) => {
   const modalRef = createRef();
 
+  const [submissionActionLog, setSubmissionActionLog] = useState({});
+
   const [questionId, setQuestionId] = useState(false);
   const [canCheck, setCanCheck] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -96,7 +98,11 @@ export const SubmissionModal = ({
     } else if (stage === 2) {
       submitAnswer(event);
     } else if (stage === 3) {
-      submissionCallback();
+      setSubmissionActionLog({
+        ...submissionActionLog,
+        verified: new Date(),
+      });
+      submissionCallback(submissionActionLog);
     }
   };
 
@@ -369,6 +375,8 @@ export const SubmissionModal = ({
                   <SelectableAccordion
                     setCanCheck={setCanCheck}
                     items={statements}
+                    submissionActionLog={submissionActionLog}
+                    setSubmissionActionLog={setSubmissionActionLog}
                   />
                 </div>
               )}
@@ -381,7 +389,16 @@ export const SubmissionModal = ({
                     id="checkbox"
                     name="checkbox"
                     data-testid="component-checkbox"
-                    onChange={(e) => setChecked(e.target.checked)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSubmissionActionLog({
+                          ...submissionActionLog,
+                          agreeAll: new Date(),
+                        });
+                      }
+
+                      setChecked(e.target.checked);
+                    }}
                     disabled={!canCheck}
                     label="I agree to all certification statements"
                   />
