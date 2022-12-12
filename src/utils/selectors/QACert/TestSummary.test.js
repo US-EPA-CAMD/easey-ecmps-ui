@@ -403,4 +403,54 @@ describe("testing TestSummary data selectors", () => {
     ];
     expect(fs.mapAppendixECorrHeatInputOilToRows(data)).toEqual(records);
   });
+  test("mapFuelFlowmeterAccuracyDataToRows", () => {
+    const data = [
+      {
+        id: "0000120",
+        accuracyTestMethodCode: 'API',
+        lowFuelAccuracy: 1,
+        midFuelAccuracy: 1,
+        highFuelAccuracy: 1,
+        reinstallationDate: "2022-10-01",
+        reinstallationHour: 1,
+      },
+    ];
+    const records = [
+      {
+        id: '0000120',
+        col1: 'API',
+        col2: 1,
+        col3: 1,
+        col4: 1,
+        col5: "2022-10-01",
+        col6: 1,
+      },
+    ];
+    expect(fs.mapFuelFlowmeterAccuracyDataToRows(data)).toEqual(records);
+  });
+  test("mapTransmitterTransducerAccuracyDataToRows", () => {
+    const data = [
+      {
+        id: "0000120",
+        lowLevelAccuracy: 1,
+        lowLevelAccuracySpecCode: "ACT",
+        midLevelAccuracy: 1,
+        midLevelAccuracySpecCode: "ACT",
+        highLevelAccuracy: 1,
+        highLevelAccuracySpecCode: "ACT",
+      },
+    ];
+    const records = [
+      {
+        id: '0000120',
+        col1: 1,
+        col2: "ACT",
+        col3: 1,
+        col4: "ACT",
+        col5: 1,
+        col6: "ACT",
+      },
+    ];
+    expect(fs.mapTransmitterTransducerAccuracyDataToRows(data)).toEqual(records);
+  });
 });

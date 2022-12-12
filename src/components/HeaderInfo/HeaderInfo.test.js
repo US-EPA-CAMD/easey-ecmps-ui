@@ -1,13 +1,13 @@
 import React from "react";
 import { render, screen, wait } from "@testing-library/react";
-import config from "../../config";
 
 import userEvent from "@testing-library/user-event";
 import configureStore from "../../store/configureStore.dev";
-const store = configureStore();
-
 import HeaderInfo from "./HeaderInfo";
 import { Provider } from "react-redux";
+import { EMISSIONS_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
+
+import {storeForEmissionsModule} from "./jsonsForTests";
 
 jest.mock("downloadjs", () => {
   return {
@@ -106,6 +106,17 @@ jest.mock("../../utils/api/monitoringPlansApi", () => {
       }),
   };
 });
+jest.mock("../../utils/api/emissionsApi", () => {
+  return {
+    getEmissionsReviewSubmit: jest.fn(null),
+    exportEmissionsData: jest.fn().mockResolvedValue([]),
+    exportEmissionsDataDownload: jest.fn().mockResolvedValue([]),
+    getEmissionViewData: jest.fn().mockResolvedValue([]),
+    getViews: jest.fn().mockResolvedValue([]),
+    getEmissionsSchema: jest.fn().mockResolvedValue([]),
+    importEmissionsData: jest.fn().mockResolvedValue([]),
+  }
+})
 jest.mock("../../utils/api/facilityApi", () => {
   return {
     getFacilityById: jest
@@ -163,23 +174,26 @@ const jsonFile = new File(["{}"], "test.json");
 
 let header;
 
-beforeEach(async () => {
-  jest.clearAllMocks();
-
-  await wait(() => {
-    header = render(
-    <Provider store={store}>
-    <HeaderInfo {...props} />
-    </Provider>
-    );
-  });
-});
-
-afterEach(() => {
-  header = null;
-});
 
 describe("testing HeaderInfo component", () => {
+  const store = configureStore();
+
+  beforeEach(async () => {
+    jest.clearAllMocks();
+  
+    await wait(() => {
+      header = render(
+      <Provider store={store}>
+      <HeaderInfo {...props} />
+      </Provider>
+      );
+    });
+  });
+  
+  afterEach(() => {
+    header = null;
+  });
+  
   // ------------------------------- //
 
   /*** TESTING EVALUATION PROCESS ***/
@@ -247,3 +261,43 @@ describe("testing HeaderInfo component", () => {
     });
    });
 });
+
+describe("testing HeaderInfo Emissions Module", ()=>{
+
+  console.log("was here 1")
+  const store = configureStore(storeForEmissionsModule);
+  console.log(store)
+
+  beforeEach(async () => {
+    jest.clearAllMocks();
+  
+    await wait(() => {
+      header = render(
+      <Provider store={store}>
+      <HeaderInfo {...props } workspaceSection={EMISSIONS_STORE_NAME} />
+      </Provider>
+      );
+    });
+  });
+  
+  afterEach(() => {
+    header = null;
+  });
+
+  it("should render view template dropdown", ()=>{
+    expect(screen.getByLabelText("View Template")).toBeInTheDocument();
+  })
+
+  it("should render Apply Filter button", ()=>{
+    expect(screen.getByText("Apply Filter(s)")).toBeInTheDocument();
+  })
+
+  it("should render Reporting Periods dropdown", ()=>{
+    expect(screen.getByLabelText("Reporting Period(s)")).toBeInTheDocument();
+  })
+
+  it("should render Locations dropdown", ()=>{
+    expect(screen.getByLabelText("Locations")).toBeInTheDocument();
+  })
+
+})

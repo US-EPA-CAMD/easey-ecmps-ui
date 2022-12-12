@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitForElement } from "@testing-library/react";
 
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
@@ -302,6 +302,23 @@ test('given a user then they can view data', async () => {
   const viewBtn = await screen.findByRole('button', { name: /View LMES/i })
   expect(viewBtn).toBeInTheDocument()
   userEvent.click(viewBtn)
+})
+
+test('DataTableQualifications create', async () => {
+  const customProps = { ...props, checkout: true }
+  await waitForElement(() => render(
+    <Provider store={store}>
+      <DataTableQualifications {...customProps} />
+    </Provider>
+  ))
+
+  const createBtn = screen.getAllByRole('button', { name: /Create Qualification/i })
+  expect(createBtn[0]).toBeInTheDocument()
+  userEvent.click(createBtn[0])
+
+  const saveBtn = screen.getByRole('button', { name: /Click to save/i })
+  expect(saveBtn).toBeInTheDocument()
+  userEvent.click(saveBtn)
 })
 
 test("mapStateToProps calls the appropriate state", async () => {

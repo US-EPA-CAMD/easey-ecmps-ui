@@ -128,12 +128,12 @@ export const HeaderInfo = ({
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
-  const unitIds = selectedConfig?.unitStackConfigurations?.map(
-    (config) => config.unitId
-  );
-  const stackPipeIds = selectedConfig?.unitStackConfigurations.map(
-    (config) => config.stackPipeId
-  );
+  const selectedUnitId = selectedConfig?.locations
+    ?.filter((l) => l.id === locationSelect[1])
+    .map((l) => l.unitId);
+  const selectedStackPipeId = selectedConfig?.locations
+    ?.filter((l) => l.id === locationSelect[1])
+    .map((l) => l.stackPipeId);
 
   const dispatch = useDispatch();
   const currentTab = useSelector((state) =>
@@ -1193,9 +1193,11 @@ export const HeaderInfo = ({
                     title="Apply Filter(s)"
                     className="cursor-pointer text-no-wrap apply-filter-position"
                     onClick={() =>
-                      applyFilters(configID, unitIds, stackPipeIds).catch(
-                        handleError
-                      )
+                      applyFilters(
+                        configID,
+                        selectedUnitId,
+                        selectedStackPipeId
+                      ).catch(handleError)
                     }
                   >
                     {"Apply Filter(s)"}
