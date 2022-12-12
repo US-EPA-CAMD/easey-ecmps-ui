@@ -314,7 +314,6 @@ const QAExpandableRowsRender = ({
   const loadDropdownsData = (name) => {
     let dropdowns = {};
     const allPromises = [];
-
     switch (name) {
       case "Protocol Gas":
       case "Linearity Test":
@@ -517,6 +516,38 @@ const QAExpandableRowsRender = ({
           setMdmData(dropdowns);
         }).catch((error => console.log(error)))
         break;
+      case "Transmitter Transducer Accuracy Data":
+        allPromises.push(dmApi.getAllAccuracySpecCodes());
+        Promise.all(allPromises).then((responses) => {
+          responses.forEach((curResp, i) => {
+            let codeLabel;
+            let descriptionLabel;
+            switch (i) {
+              case 0:
+                codeLabel = "accuracySpecCode";
+                descriptionLabel = "accuracySpecDescription";
+                break;
+              default:
+                break;
+            }
+            dropdowns[dropdownArray[i]] = curResp.data.map((d) => {
+              return { code: d[codeLabel], name: d[descriptionLabel] };
+            });
+            if (i === 0) {
+              dropdowns["midLevelAccuracySpecCode"] = curResp.data.map((d) => {
+                return { code: d[codeLabel], name: d[descriptionLabel] };
+              });
+              dropdowns["highLevelAccuracySpecCode"] = curResp.data.map((d) => {
+                return { code: d[codeLabel], name: d[descriptionLabel] };
+              });
+            }
+          });
+          for (const options of Object.values(dropdowns)) {
+            options.unshift({ code: "", name: "-- Select a value --" });
+          }
+          setMdmData(dropdowns);
+        }).catch((error => console.log(error)))
+        break;
       default:
         mdmProps.forEach((prop) => {
           allPromises.push(dmApi.getMdmDataByCodeTable(prop["codeTable"]));
@@ -678,6 +709,12 @@ const QAExpandableRowsRender = ({
       }
     } else {
       mainDropdownResult = [];
+    }
+
+    if (dataTableName === "Fuel Flowmeter Accuracy Data") {
+      if(selectedData.reinstallationDate){
+        selectedData.reinstallationDate = new Date(selectedData.reinstallationDate).toISOString().slice(0,10)
+      }
     }
 
     const prefilteredTotalName = dropdownArray[dropdownArray.length - 1];

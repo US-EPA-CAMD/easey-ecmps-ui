@@ -46,8 +46,7 @@ export const DataTableRectangularDucts = ({
   const [selectedDuct, setSelectedDuct] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
-
-  const totalOptions = UseRetrieveDropdownApi(["wafMethodCode"]);
+  const [totalOptions, setTotalOptions] = useState({})
   const [updateTable, setUpdateTable] = useState(false);
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
@@ -104,6 +103,12 @@ export const DataTableRectangularDucts = ({
         setUpdateTable(false);
       });
 
+      UseRetrieveDropdownApi(["wafMethodCode"]).then(resp => {
+        setTotalOptions(resp);
+        setDataLoaded(true);
+        setUpdateTable(false);
+      })
+
       setRevertedState(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -152,7 +157,6 @@ export const DataTableRectangularDucts = ({
       )[0];
       setSelectedDuct(duct);
     }
-
     setSelectedModalData(
       modalViewData(
         duct,
@@ -229,15 +233,15 @@ export const DataTableRectangularDucts = ({
       }
       // resets checkbox
       else {
-      settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
-      return fs.getMonitoringPlansRectangularDuctsTableRecords(
-        tabs[currentTabIndex].inactive[0] === false
-          ? getActiveData(ducts)
-          : ducts
-      );
+        settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
+        return fs.getMonitoringPlansRectangularDuctsTableRecords(
+          tabs[currentTabIndex].inactive[0] === false
+            ? getActiveData(ducts)
+            : ducts
+        );
       }
     } else {
-    return [];
+      return [];
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

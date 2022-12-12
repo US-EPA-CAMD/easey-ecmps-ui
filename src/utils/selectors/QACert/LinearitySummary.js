@@ -135,6 +135,8 @@ export const getQAColsByTestCode = (testCode) => {
 
 export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
   // const unitId = ["Unit or Stack Pipe ID", "nonFilteredDropdown", "", ""]
+  const unitId = ["Unit or Stack Pipe ID", "input", "", ""]
+  const stackPipeId = ["Unit or Stack Pipe ID", "input", "", ""]
   const testTypeCode = ["Test Type Code", "mainDropdown", "mainDropdown", ""]
   const monitoringSystemID = ["Monitoring System ID", "nonFilteredDropdown", "", ""]
   const componentID = ["Component ID", "nonFilteredDropdown", "", ""]
@@ -189,6 +191,8 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
     case 'APPESUM': // Appendix E Correlation Test Summary
       modalDetails = {
         controlInputs: {
+          unitId,
+          stackPipeId,
           testTypeCode,
           monitoringSystemID,
           testNumber,
@@ -211,6 +215,8 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
     case 'CYCSUM': // Cycle Time Summary
       modalDetails = {
         controlInputs: {
+          unitId,
+          stackPipeId,
           testTypeCode,
           componentID,
           spanScaleCode,
@@ -235,6 +241,8 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
     case 'FFACC': // Fuel Flowmeter Accuracy
       modalDetails = {
         controlInputs: {
+          unitId,
+          stackPipeId,
           testTypeCode,
           componentID,
           testNumber,
@@ -255,6 +263,8 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
     case 'LINSUM': // Linearity Summary
       modalDetails = {
         controlInputs: {
+          unitId,
+          stackPipeId,
           testTypeCode,
           componentID,
           spanScaleCode,
@@ -279,6 +289,8 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
     case 'PEI': // Primary Element Inspection
       modalDetails = {
         controlInputs: {
+          unitId,
+          stackPipeId,
           testTypeCode,
           componentID,
           testNumber,
@@ -300,6 +312,8 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
     case 'TTACC': // Transmitter Transducer Accuracy
       modalDetails = {
         controlInputs: {
+          unitId,
+          stackPipeId,
           testTypeCode,
           componentID,
           testNumber,
@@ -320,6 +334,8 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
     case 'FFL': // Fuel Flow to Load
       modalDetails = {
         controlInputs: {
+          unitId,
+          stackPipeId,
           testTypeCode,
           monitoringSystemID,
           testNumber,
@@ -336,6 +352,8 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
     case 'FLR': // Flow to Load Reference
       modalDetails = {
         controlInputs: {
+          unitId,
+          stackPipeId,
           testTypeCode,
           monitoringSystemID,
           testNumber,
@@ -353,6 +371,8 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
     case 'FFLB': // Fuel Flow to Load Baseline
       modalDetails = {
         controlInputs: {
+          unitId,
+          stackPipeId,
           testTypeCode,
           monitoringSystemID,
           testNumber,
@@ -371,6 +391,8 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
     case 'OLOLCAL': // Online Offline Calibration
       modalDetails = {
         controlInputs: {
+          unitId,
+          stackPipeId,
           testTypeCode,
           componentID,
           spanScaleCode,
@@ -392,6 +414,8 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
     case 'RELACC': // Relative Accuracy
       modalDetails = {
         controlInputs: {
+          unitId,
+          stackPipeId,
           testTypeCode,
           monitoringSystemID,
           testNumber,
@@ -415,6 +439,8 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
     case 'LME': // Unit Default
       modalDetails = {
         controlInputs: {
+          unitId,
+          stackPipeId,
           testTypeCode,
           testNumber,
           testReasonCode,
@@ -435,6 +461,8 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
     case 'MISC': // Miscellaneous
       modalDetails = {
         controlInputs: {
+          unitId,
+          stackPipeId,
           testTypeCode,
           monitoringSystemID,
           componentID,
@@ -458,7 +486,11 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
     // console.log(`getQAModalDetailsByTestCode default case w/ testCode: ${testCode}`);
   }
 
-  selectedLocation.unitId ? modalDetails["controlInputs"]['unitId'] = ["Unit or Stack Pipe ID", "nonFilteredDropdown", "", "locked"] : modalDetails["controlInputs"]['stackPipeId'] = ["Unit or Stack Pipe ID", "nonFilteredDropdown", "", "locked"]
+  if(selectedLocation.unitId) {
+    delete modalDetails["controlInputs"]['stackPipeId'];
+  } else {
+    delete modalDetails["controlInputs"]['unitId'];
+  }
 
   return modalDetails
 }
