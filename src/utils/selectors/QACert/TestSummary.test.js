@@ -422,7 +422,7 @@ describe("testing TestSummary data selectors", () => {
         col2: 1,
         col3: 1,
         col4: 1,
-        col5: "2022-10-01",
+        col5: "10/1/2022",
         col6: 1,
       },
     ];
