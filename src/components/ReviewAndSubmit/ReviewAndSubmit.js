@@ -119,7 +119,7 @@ const ReviewAndSubmit = ({checkedOutLocations}) => {
         //Add selector state variables
         return {
           selected: false,
-          checkedOut: false,
+          checkedOut: checkedOutLocationsMap.has(chunk.monPlanId),
           userCheckedOut: false,
           viewOnly: false,
           ...chunk,

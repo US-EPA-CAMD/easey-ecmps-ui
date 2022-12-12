@@ -2,6 +2,8 @@ import React from "react";
 import { render, act } from "@testing-library/react";
 import MockPermissions from "./MockPermissions";
 import ReviewAndSubmit from "./ReviewAndSubmit";
+import configureStore from "../../store/configureStore.dev";
+import { Provider } from "react-redux";
 
 window.scrollTo = jest.fn();
 
@@ -106,12 +108,16 @@ jest.mock(
       );
     }
 );
-
+const store = configureStore();
 describe("Review and Submit component", () => {
   let query;
   beforeEach(async () => {
     await act(async () => {
-      query = render(<ReviewAndSubmit />);
+      query = render(
+        <Provider store={store}>
+          <ReviewAndSubmit />
+        </Provider>
+      );
     });
   });
 
