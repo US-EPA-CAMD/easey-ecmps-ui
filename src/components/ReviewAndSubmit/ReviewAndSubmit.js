@@ -8,7 +8,7 @@ import ReviewAndSubmitTables from "./ReviewAndSubmitTables/ReviewAndSubmitTables
 import MockPermissions from "./MockPermissions";
 import { Button } from "@trussworks/react-uswds";
 import { connect } from "react-redux";
-import { updateCheckedOutLocationsOnTable } from "../../utils/functions";
+import { updateCheckedOutLocationsOnTables } from "../../utils/functions";
 
 const ReviewAndSubmit = ({checkedOutLocations}) => {
   const [activityId, setActivityId] = useState("");
@@ -33,15 +33,8 @@ const ReviewAndSubmit = ({checkedOutLocations}) => {
     const checkedOutLocationsMPIdsMap = new Set(checkedOutLocationsMPIdsArray);
     console.log({checkedOutLocationsMPIdsArray, checkedOutLocationsMPIdsMap});
     setCheckedOutLocationsMap(checkedOutLocationsMPIdsMap);
-    updateCheckedOutLocationsOnTables(checkedOutLocationsMPIdsMap)//eslint-disable-next-line react-hooks/exhaustive-deps
+    updateCheckedOutLocationsOnTables(checkedOutLocationsMPIdsMap, dataList);//eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkedOutLocations]);
-
-  const updateCheckedOutLocationsOnTables = (checkedOutLocationsMPIdsMap) => {
-    for (const table in dataList) {
-      const {ref, setState} = dataList[table];
-      updateCheckedOutLocationsOnTable(ref, setState, checkedOutLocationsMPIdsMap)
-    }
-  }
 
   const dataList = {
     monPlan: { ref: monPlanRef, state: monPlans, setState: setMonPlans },
