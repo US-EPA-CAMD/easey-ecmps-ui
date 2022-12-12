@@ -25,6 +25,7 @@ const ReviewAndSubmitTableRender = forwardRef(
     ].join(",");
 
     const [selectAllState, setSelectAllState] = useState(false);
+    const [selectAllVisible, setSelectAllVisible] = useState(true);
 
     useEffect(() => {
       setTimeout(() => {
@@ -40,16 +41,20 @@ const ReviewAndSubmitTableRender = forwardRef(
     const mappings = [
       {
         name: (
-          <Checkbox
-            className="margin-bottom-5 margin-left-4"
-            id={`${uuidv4()}`}
-            data-testid="SelectAll"
-            onClick={(e) => {
-              selectAll(!selectAllState);
-              setSelectAllState(!selectAllState);
-            }}
-            defaultChecked={selectAllState}
-          />
+          <div className="margin-bottom-5">
+            {selectAllVisible && (
+              <Checkbox
+                className=" margin-left-4"
+                id={`${uuidv4()}`}
+                data-testid="SelectAll"
+                onClick={(e) => {
+                  selectAll(!selectAllState);
+                  setSelectAllState(!selectAllState);
+                }}
+                defaultChecked={selectAllState}
+              />
+            )}
+          </div>
         ),
         cell: (row) => (
           <ReviewCell
@@ -59,6 +64,7 @@ const ReviewAndSubmitTableRender = forwardRef(
             type={type}
             getRowState={getRowState}
             setSelectAllState={setSelectAllState}
+            setSelectAllVisible={setSelectAllVisible}
           />
         ),
         width: "100px",
@@ -103,6 +109,8 @@ const ReviewAndSubmitTableRender = forwardRef(
       let filterId = "monPlanId"; //Different data types have different uids
       if (type === "QA") {
         filterId = "testSumId";
+      } else if (type === "EM") {
+        filterId = "periodAbbreviation";
       }
 
       for (const r of ref.current) {
@@ -120,21 +128,23 @@ const ReviewAndSubmitTableRender = forwardRef(
 
     return (
       <div>
-        <DataTable
-          defaultSortField="orisCode"
-          columns={mappings}
-          data={state}
-          noHeader={true}
-          highlightOnHover={true}
-          responsive={false}
-          persistTableHead={false}
-          sortIcon={
-            <ArrowDownwardSharp
-              className="margin-left-2 text-primary"
-              id="bdfSortIcon"
-            />
-          }
-        />
+        {state.length > 0 && (
+          <DataTable
+            defaultSortField="orisCode"
+            columns={mappings}
+            data={state}
+            noHeader={true}
+            highlightOnHover={true}
+            responsive={false}
+            persistTableHead={false}
+            sortIcon={
+              <ArrowDownwardSharp
+                className="margin-left-2 text-primary"
+                id="bdfSortIcon"
+              />
+            }
+          />
+        )}
       </div>
     );
   }

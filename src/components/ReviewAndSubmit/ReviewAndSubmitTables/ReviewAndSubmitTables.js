@@ -3,7 +3,11 @@ import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./ReviewAndSubmitTables.scss";
 import ReviewAndSubmitTableRender from "../ReviewAndSubmitTableRender/ReviewAndSubmitTableRender";
-import { monPlanColumns, qaTestSummaryColumns } from "./ColumnMappings";
+import {
+  monPlanColumns,
+  qaTestSummaryColumns,
+  emissionsColumns,
+} from "./ColumnMappings";
 
 const ReviewAndSubmitTables = ({
   monPlanState,
@@ -12,11 +16,14 @@ const ReviewAndSubmitTables = ({
   qaTestSumState,
   setQaTestSumState,
   qaTestSumRef,
+  emissionsState,
+  setEmissionsState,
+  emissionsRef,
   permissions,
 }) => {
   const selectMonPlanRow = (id) => {
     for (const mpR of monPlanRef.current) {
-      if (mpR.monPlanId === id) {
+      if (mpR.monPlanId === id && getRowState(mpR, "MP") === "Checkbox") {
         mpR.selected = true;
         mpR.userCheckedOut = true;
       }
@@ -44,6 +51,14 @@ const ReviewAndSubmitTables = ({
       rowSubmissionAllowed &&
       permissions.current[row.orisCode].includes(`DS${type}`)
     ) {
+      if (
+        type === "EM" &&
+        row.windowStatus !== "REQUIRE" &&
+        row.windowStatus !== "GRANTED"
+      ) {
+        return "View";
+      }
+
       return "Checkbox"; //True checkbox
     } else {
       return "View";
@@ -66,6 +81,14 @@ const ReviewAndSubmitTables = ({
       ref: qaTestSumRef,
       name: "Test Data",
       type: "QA",
+    },
+    {
+      columns: emissionsColumns,
+      state: emissionsState,
+      setState: setEmissionsState,
+      ref: emissionsRef,
+      name: "Emissions",
+      type: "EM",
     },
   ];
 
