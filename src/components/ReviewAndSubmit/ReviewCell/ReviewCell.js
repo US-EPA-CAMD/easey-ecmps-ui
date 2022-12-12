@@ -10,6 +10,7 @@ const ReviewCell = ({
   type,
   getRowState,
   setSelectAllState,
+  setSelectAllVisible,
 }) => {
   const [cellState, setCellState] = useState("Lock");
 
@@ -20,6 +21,9 @@ const ReviewCell = ({
   useEffect(() => {
     if (cellState === "Checkbox" && !row.selected) {
       setSelectAllState(false);
+    }
+    if (row.viewOnly) {
+      setSelectAllVisible(false);
     }
   }, [cellState]);
 

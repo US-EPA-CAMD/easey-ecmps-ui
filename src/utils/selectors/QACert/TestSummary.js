@@ -455,6 +455,40 @@ export const mapCalibrationInjectionsToRows = (data) => {
   return records;
 };
 
+export const mapFuelFlowmeterAccuracyDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.accuracyTestMethodCode,
+      col2: el.lowFuelAccuracy,
+      col3: el.midFuelAccuracy,
+      col4: el.highFuelAccuracy,
+      col5: el.reinstallationDate ? new Date(el.reinstallationDate).toLocaleDateString('en-US', {timeZone: 'UTC'}) : el.reinstallationDate,
+      col6: el.reinstallationHour,
+    };
+    records.push(row);
+  }
+  return records;
+};
+
+export const mapTransmitterTransducerAccuracyDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.lowLevelAccuracy,
+      col2: el.lowLevelAccuracySpecCode,
+      col3: el.midLevelAccuracy,
+      col4: el.midLevelAccuracySpecCode,
+      col5: el.highLevelAccuracy,
+      col6: el.highLevelAccuracySpecCode,
+    };
+    records.push(row);
+  }
+  return records;
+};
+
 export const mapOnOffCalToRows = (data) => {
   const records = [];
   for (const el of data) {
@@ -496,7 +530,6 @@ export const mapCycleTimeSummariesToRows = (data) => {
   for (const el of data) {
     const row = {
       id: el.id,
-      testSumId: el.testSumId,
       col1: el.totalTime,
     };
     records.push(row)

@@ -20,7 +20,9 @@ import {
   qaFlowToLoadCheckProps,
   qaOnOffCalibrationProps,
   qaCalibrationInjectionProps,
+  qaFuelFlowmeterAccuracyDataProps,
   qaCycleTimeSummaryProps,
+  qaTransmitterTransducerAccuracyDataProps,
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
@@ -329,24 +331,32 @@ const QATestSummaryDataTable = ({
       )[0];
       setSelectedRow(selectedData);
     }
+
     if (create) {
       if (controlInputs?.unitId) {
         controlInputs.unitId = [
           "Unit or Stack Pipe ID",
-          "nonFilteredDropdown",
+          "input",
           selectedLocation.name,
-          "",
+          "fixed",
         ];
+        selectedData.unitId = selectedLocation.name;
       } else {
         controlInputs.stackPipeId = [
           "Unit or Stack Pipe ID",
-          "nonFilteredDropdown",
+          "input",
           selectedLocation.name,
-          "",
+          "fixed",
         ];
+        selectedData.stackPipeId = selectedLocation.name;
       }
-
       selectedData.locationName = selectedLocation.name;
+      // default selection to single test type code if it exists
+      const testTypeCodeKey = "testTypeCode"
+      if (mdmData[testTypeCodeKey]?.length === 1) {
+        const singleTestTypeCodeSelection = mdmData[testTypeCodeKey][0].code
+        selectedData = { ...selectedData, testTypeCode: singleTestTypeCodeSelection }
+      }
     }
     let mainDropdownName = "";
     let hasMainDropdown = false;
@@ -369,10 +379,7 @@ const QATestSummaryDataTable = ({
           (element, index, arr) => o.code === element[mainDropdownName]
         )
       );
-      if (
-        mainDropdownResult.length > 1 &&
-        !mainDropdownResult.includes({ code: "", name: selectText })
-      ) {
+      if (!mainDropdownResult.includes({ code: "", name: selectText })) {
         mainDropdownResult.unshift({ code: "", name: selectText });
       }
     } else {
@@ -400,7 +407,6 @@ const QATestSummaryDataTable = ({
       extraControlInputs
     );
     setSelectedModalData(modalData);
-
     setClickedIndex(index);
 
     setShow(true);
@@ -639,6 +645,7 @@ const QATestSummaryDataTable = ({
         );
       case "FLC": // Flow to Load Check
         const flcProps = qaFlowToLoadCheckProps();
+        console.log("Hello")
         return (
           <QAExpandableRowsRender
             payload={flcProps["payload"]}
@@ -688,24 +695,64 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
-        case "CYCLE":
-          const cycleTimeSum = qaCycleTimeSummaryProps();
-          return (
-            <QAExpandableRowsRender
-              payload={cycleTimeSum["payload"]}
-              dropdownArray={cycleTimeSum["dropdownArray"]}
-              mdmProps={cycleTimeSum["mdmProps"]}
-              columns={cycleTimeSum["columnNames"]}
-              controlInputs={cycleTimeSum["controlInputs"]}
-              controlDatePickerInputs={cycleTimeSum["controlDatePickerInputs"]}
-              radioBtnPayload={cycleTimeSum["radioBtnPayload"]}
-              dataTableName={cycleTimeSum["dataTableName"]}
-              extraControls={cycleTimeSum["extraControls"]}
-              extraIDs={null}
-              user={user}
-              isCheckedOut={isCheckedOut}
-            />
-          );
+      case "FFACC": // Fuel Flowmeter Accuracy
+        const fuelFlowmeterAccuracyDataProps = qaFuelFlowmeterAccuracyDataProps();
+        return (
+          <QAExpandableRowsRender
+            payload={fuelFlowmeterAccuracyDataProps["payload"]}
+            dropdownArray={fuelFlowmeterAccuracyDataProps["dropdownArray"]}
+            mdmProps={fuelFlowmeterAccuracyDataProps["mdmProps"]}
+            columns={fuelFlowmeterAccuracyDataProps["columnNames"]}
+            controlInputs={fuelFlowmeterAccuracyDataProps["controlInputs"]}
+            controlDatePickerInputs={fuelFlowmeterAccuracyDataProps["controlDatePickerInputs"]}
+            radioBtnPayload={fuelFlowmeterAccuracyDataProps["radioBtnPayload"]}
+            dataTableName={fuelFlowmeterAccuracyDataProps["dataTableName"]}
+            extraControls={fuelFlowmeterAccuracyDataProps["extraControls"]}
+            extraIDs={null}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "CYCSUM": // Cycle Time Summary Nested Below Test Data
+        const cycleTimeSum = qaCycleTimeSummaryProps();
+        return (
+          <QAExpandableRowsRender
+            payload={cycleTimeSum["payload"]}
+            dropdownArray={cycleTimeSum["dropdownArray"]}
+            mdmProps={cycleTimeSum["mdmProps"]}
+            columns={cycleTimeSum["columnNames"]}
+            controlInputs={cycleTimeSum["controlInputs"]}
+            controlDatePickerInputs={cycleTimeSum["controlDatePickerInputs"]}
+            radioBtnPayload={cycleTimeSum["radioBtnPayload"]}
+            dataTableName={cycleTimeSum["dataTableName"]}
+            extraControls={cycleTimeSum["extraControls"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "TTACC":
+        const transmitterTransducerAccuracyDataProps = qaTransmitterTransducerAccuracyDataProps();
+        return (
+          <QAExpandableRowsRender
+            payload={transmitterTransducerAccuracyDataProps["payload"]}
+            dropdownArray={transmitterTransducerAccuracyDataProps["dropdownArray"]}
+            mdmProps={transmitterTransducerAccuracyDataProps["mdmProps"]}
+            columns={transmitterTransducerAccuracyDataProps["columnNames"]}
+            controlInputs={transmitterTransducerAccuracyDataProps["controlInputs"]}
+            controlDatePickerInputs={transmitterTransducerAccuracyDataProps["controlDatePickerInputs"]}
+            radioBtnPayload={transmitterTransducerAccuracyDataProps["radioBtnPayload"]}
+            dataTableName={transmitterTransducerAccuracyDataProps["dataTableName"]}
+            extraControls={transmitterTransducerAccuracyDataProps["extraControls"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
       default:
         console.log(
           `case testTypeGroupCode of ${testTypeGroupCode} not implemented`

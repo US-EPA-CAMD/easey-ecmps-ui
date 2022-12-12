@@ -10,12 +10,14 @@ import { Button } from "@trussworks/react-uswds";
 import { connect } from "react-redux";
 import { updateCheckedOutLocationsOnTables } from "../../utils/functions";
 
-const ReviewAndSubmit = ({checkedOutLocations}) => {
+const ReviewAndSubmit = ({ checkedOutLocations }) => {
   const [activityId, setActivityId] = useState("");
   const [excludeErrors, setExcludeErrors] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
-  const [checkedOutLocationsMap, setCheckedOutLocationsMap] = useState(new Map());
+  const [checkedOutLocationsMap, setCheckedOutLocationsMap] = useState(
+    new Map()
+  );
 
   const [qaTestSummary, setQaTestSummary] = useState([]);
   const qaTestSumRef = useRef([]);
@@ -29,9 +31,11 @@ const ReviewAndSubmit = ({checkedOutLocations}) => {
   const [finalSubmitStage, setFinalSubmitStage] = useState(false);
 
   useEffect(() => {
-    const checkedOutLocationsMPIdsArray = checkedOutLocations.map(el => el.monPlanId);
+    const checkedOutLocationsMPIdsArray = checkedOutLocations.map(
+      (el) => el.monPlanId
+    );
     const checkedOutLocationsMPIdsMap = new Set(checkedOutLocationsMPIdsArray);
-    console.log({checkedOutLocationsMPIdsArray, checkedOutLocationsMPIdsMap});
+    console.log({ checkedOutLocationsMPIdsArray, checkedOutLocationsMPIdsMap });
     setCheckedOutLocationsMap(checkedOutLocationsMPIdsMap);
     updateCheckedOutLocationsOnTables(checkedOutLocationsMPIdsMap, dataList);//eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkedOutLocations]);
@@ -42,6 +46,11 @@ const ReviewAndSubmit = ({checkedOutLocations}) => {
       ref: qaTestSumRef,
       state: qaTestSummary,
       setState: setQaTestSummary,
+    },
+    emissions: {
+      ref: emissionsRef,
+      state: emissions,
+      setState: setEmissions,
     },
   };
 
@@ -83,7 +92,7 @@ const ReviewAndSubmit = ({checkedOutLocations}) => {
         setQaTestSummary,
         qaTestSumRef,
       ],
-      //EMISSIONS: [getEmissionsReviewSubmit, setEmissions, emissionsRef], TODO: Update with correct data
+      EMISSIONS: [getEmissionsReviewSubmit, setEmissions, emissionsRef],
     };
 
     let activePlans = new Set();
@@ -96,28 +105,6 @@ const ReviewAndSubmit = ({checkedOutLocations}) => {
       } else {
         data = (await value[0](orisCodes, monPlanIds)).data;
       }
-
-      // Extra formatting to make all data sets uniform
-      for (const r of data) {
-        if (r["id"]) {
-          r.monPlanId = r["id"];
-        }
-
-        if (r["submissionCode"]) {
-          r.submissionAvailabilityCode = r["submissionCode"];
-        }
-      }
-
-      data = data.map((chunk) => {
-        //Add selector state variables
-        return {
-          selected: false,
-          checkedOut: checkedOutLocationsMap.has(chunk.monPlanId),
-          userCheckedOut: false,
-          viewOnly: false,
-          ...chunk,
-        };
-      });
 
       // Extra formatting to make all data sets uniform
       for (const r of data) {
@@ -202,6 +189,9 @@ const ReviewAndSubmit = ({checkedOutLocations}) => {
         qaTestSumState={qaTestSummary}
         setQaTestSumState={setQaTestSummary}
         qaTestSumRef={qaTestSumRef}
+        emissionsState={emissions}
+        setEmissionsState={setEmissions}
+        emissionsRef={emissionsRef}
         permissions={idToPermissionsMap} //Map of oris codes to user permissions
       />
 
@@ -219,6 +209,8 @@ const ReviewAndSubmit = ({checkedOutLocations}) => {
   );
 };
 
-const mapStateToProps = (state) => ({checkedOutLocations: state.checkedOutLocations});
+const mapStateToProps = (state) => ({
+  checkedOutLocations: state.checkedOutLocations,
+});
 
 export default connect(mapStateToProps, null)(ReviewAndSubmit);

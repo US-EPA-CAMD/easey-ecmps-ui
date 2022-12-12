@@ -684,6 +684,75 @@ export const qaFlowToLoadCheckProps = () => {
   };
 }
 
+export const qaFuelFlowmeterAccuracyDataProps = () => {
+  return {
+    dataTableName: "Fuel Flowmeter Accuracy Data",
+    payload: {},
+    dropdownArray: ["accuracyTestMethodCode"],
+    mdmProps: [
+      {
+        codeTable: "accuracy-test-method-codes",
+        responseProps: {
+          code: "accuracyTestMethodCode",
+          description: "accuracyTestMethodDescription"
+        }
+      },
+    ],
+    columnNames: [
+      "Accuracy Test Method Code",
+      "Low Fuel Accuracy",
+      "Mid Fuel Accuracy",
+      "High Fuel Accuracy",
+      "Reinstallation Date",
+      "Reinstallation Hour",
+    ],
+    controlInputs: {
+      accuracyTestMethodCode: ["Accuracy Test Method Code", "dropdown", "", ""],
+      lowFuelAccuracy: ["Low Fuel Accuracy", "input", "", ""],
+      midFuelAccuracy: ["Mid Fuel Accuracy", "input", "", ""],
+      highFuelAccuracy: ["High Fuel Accuracy", "input", "", ""],
+    },
+    controlDatePickerInputs: {
+      reinstallationDate: ["Reinstallation Date", "date", "", ""],
+      reinstallationHour: ["Reinstallation Hour", "hourDropdown", "", ""],
+    }
+  }
+}
+
+export const qaTransmitterTransducerAccuracyDataProps = () => {
+  return {
+    dataTableName: "Transmitter Transducer Accuracy Data",
+    payload: {},
+    dropdownArray: ["lowLevelAccuracySpecCode", "midLevelAccuracySpecCode", "highLevelAccuracySpecCode"],
+    mdmProps: [
+      {
+        codeTable: "accuracy-spec-codes",
+        responseProps: {
+          code: "accuracySpecCode",
+          description: "accuracySpecDescription"
+        }
+      },
+    ],
+    columnNames: [
+      "Low Level Accuracy",
+      "Low Level Accuracy Spec Code",
+      "Mid Level Accuracy",
+      "Mid Level Accuracy Spec Code",
+      "High Level Accuracy",
+      "High Level Accuracy Spec Code",
+    ],
+    controlInputs: {
+      lowLevelAccuracy: ["Low Level Accuracy", "input", "", ""],
+      lowLevelAccuracySpecCode: ["Low Level Accuracy Spec Code", "dropdown", "", ""],
+      midLevelAccuracy: ["Mid Level Accuracy", "input", "", ""],
+      midLevelAccuracySpecCode: ["Mid Level Accuracy Spec Code", "dropdown", "", ""],
+      highLevelAccuracy: ["High Level Accuracy", "input", "", ""],
+      highLevelAccuracySpecCode: ["High Level Accuracy Spec Code", "dropdown", "", ""],
+    },
+    controlDatePickerInputs: {},
+  }
+}
+
 export const qaOnOffCalibrationProps = () => {
   return {
     dataTableName: "Online Offline Calibration",
