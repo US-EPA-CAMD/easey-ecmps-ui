@@ -1,24 +1,171 @@
-import React from 'react';
-import { render } from '@testing-library/react';
+import React from "react";
+import { render, act, screen, fireEvent } from "@testing-library/react";
+import ReviewAndSubmitTableRender from "./ReviewAndSubmitTableRender";
 
-import ReviewAndSubmitTableRender from './ReviewAndSubmitTableRender';
-import { monPlansData } from '../ReviewAndSubmitTables/ReviewAndSubmitTables.test';
-import { monPlanColumns } from '../ReviewAndSubmitTables/ReviewAndSubmitTables';
+const mockFunc = jest.fn();
+window.open = mockFunc;
 
-describe('Review and Submit Table Renderer component', () => {
-  let query;
-  beforeEach(() => {
-    query = render(
+let mockRowState = {
+  submissionAvailabilityCode: "REQUIRE",
+  checkedOut: false,
+  userCheckedOut: false,
+  evalStatusCode: "PASS",
+  orisCode: 1,
+  monPlanId: "testId",
+};
+
+jest.mock(
+  "../ReviewCell/ReviewCell",
+  () =>
+    ({
+      row,
+      handleRowSelection,
+      handleRowView,
+      type,
+      getRowState,
+      setSelectAllState,
+    }) => {
+      return (
+        <div>
+          <button
+            onClick={() => {
+              handleRowSelection(mockRowState, "MP", true);
+            }}
+          >
+            SELECT ROW
+          </button>
+          <button
+            onClick={() => {
+              handleRowView(mockRowState);
+            }}
+          >
+            VIEW ROW
+          </button>
+        </div>
+      );
+    }
+);
+
+describe("Review and Submit Tables component", () => {
+  it("expect row selection to select row in current ref", async () => {
+    const currentRows = {
+      current: [
+        {
+          selected: false,
+          userCheckedOut: false,
+          monPlanId: "testId",
+          orisCode: 1,
+        },
+      ],
+    };
+
+    let query = render(
       <ReviewAndSubmitTableRender
-        data={monPlansData}
-        columns={monPlanColumns}
+        columns={[
+          {
+            name: "ORIS Code",
+            selector: "orisCode",
+          },
+        ]}
+        state={[{ orisCode: 1 }]}
+        setState={jest.fn()}
+        name={"Monitor Plans"}
+        type="MP"
+        selectMonPlanRow={jest.fn()}
+        getRowState={jest.fn()}
+        ref={currentRows}
       />
     );
+
+    const { getByText } = query;
+
+    await act(async () => {
+      getByText("SELECT ROW").click();
+    });
+    expect(currentRows.current[0].selected).toBe(true);
   });
 
-  test.each(monPlanColumns)('renders columns properly', (column) => {
+  it("expect monitor plan to open on view button click", async () => {
+    const currentRows = {
+      current: [
+        {
+          selected: false,
+          userCheckedOut: false,
+          monPlanId: "testId",
+          orisCode: 1,
+        },
+      ],
+    };
+
+    let query = render(
+      <ReviewAndSubmitTableRender
+        columns={[
+          {
+            name: "ORIS Code",
+            selector: "orisCode",
+          },
+        ]}
+        state={[{ orisCode: 1 }]}
+        setState={jest.fn()}
+        name={"Monitor Plans"}
+        type="MP"
+        selectMonPlanRow={jest.fn()}
+        getRowState={jest.fn()}
+        ref={currentRows}
+      />
+    );
+
     const { getByText } = query;
-    const columnTitle = getByText(column.name);
-    expect(columnTitle).toBeInTheDocument();
+
+    await act(async () => {
+      getByText("VIEW ROW").click();
+    });
+    expect(mockFunc).toHaveBeenCalled();
+  });
+
+  it("expect select all to select all of the current rows", async () => {
+    const currentRows = {
+      current: [
+        {
+          selected: false,
+          userCheckedOut: false,
+          monPlanId: "testId",
+          orisCode: 1,
+        },
+        {
+          selected: false,
+          userCheckedOut: false,
+          monPlanId: "testId2",
+          orisCode: 2,
+        },
+      ],
+    };
+
+    let query = render(
+      <ReviewAndSubmitTableRender
+        columns={[
+          {
+            name: "ORIS Code",
+            selector: "orisCode",
+          },
+        ]}
+        state={[{ orisCode: 1 }]}
+        setState={jest.fn()}
+        name={"Monitor Plans"}
+        type="MP"
+        selectMonPlanRow={jest.fn()}
+        getRowState={jest.fn().mockReturnValue("Checkbox")}
+        ref={currentRows}
+      />
+    );
+
+    const checkbox = screen.getByTestId("SelectAll");
+
+    await act(async () => {
+      fireEvent.click(checkbox);
+    });
+
+    expect(currentRows.current[0].selected).toBe(true);
+    expect(currentRows.current[1].selected).toBe(true);
   });
 });

@@ -1,42 +1,97 @@
-import React, { useCallback, useState } from 'react';
-import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './ReviewAndSubmitTables.scss';
+import React, { useState } from "react";
+import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "./ReviewAndSubmitTables.scss";
+import ReviewAndSubmitTableRender from "../ReviewAndSubmitTableRender/ReviewAndSubmitTableRender";
+import {
+  monPlanColumns,
+  qaTestSummaryColumns,
+  emissionsColumns,
+} from "./ColumnMappings";
 
-import { formatDate } from '../../../utils/functions';
-import ReviewAndSubmitTableRender from '../ReviewAndSubmitTableRender/ReviewAndSubmitTableRender';
+const ReviewAndSubmitTables = ({
+  monPlanState,
+  setMonPlanState,
+  monPlanRef,
+  qaTestSumState,
+  setQaTestSumState,
+  qaTestSumRef,
+  emissionsState,
+  setEmissionsState,
+  emissionsRef,
+  permissions,
+}) => {
+  const selectMonPlanRow = (id) => {
+    for (const mpR of monPlanRef.current) {
+      if (mpR.monPlanId === id && getRowState(mpR, "MP") === "Checkbox") {
+        mpR.selected = true;
+        mpR.userCheckedOut = true;
+      }
+    }
 
-export const monPlanColumns = [
-  { name: 'ORIS Code', selector: 'orisCode', sortable: true },
-  { name: 'Facility Name', selector: 'facilityName', sortable: true },
-  { name: 'Configuration', selector: 'name', sortable: true },
-  { name: 'Last Modified By', selector: 'userId', sortable: true },
-  {
-    name: 'Last Modified Date',
-    selector: (row) => formatDate(row.updateDate),
-    sortable: true,
-  },
-  { name: 'Eval Status', selector: 'evalStatusCode', sortable: true },
-  {
-    name: 'Submission Status',
-    selector: 'submissionAvailabilityCode',
-    sortable: true,
-  },
-];
-
-const ReviewAndSubmitTables = ({ monPlans, selectedMonPlansRef }) => {
-  const handleSelectedMonPlanFiles = useCallback(
-    (files) => selectedMonPlansRef.current = files,// eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  const monPlanTable = {
-    columns: monPlanColumns,
-    data: monPlans,
-    name: 'Monitoring Plan',
+    setMonPlanState([...monPlanRef.current]); //Update monitor plan state
   };
-  const tables = [monPlanTable];
-  // console.log({ monPlanTable, selectedMPFiles });
+
+  const getRowState = (row, type) => {
+    if (row.viewOnly) {
+      return "View";
+    }
+
+    const rowSubmissionAllowed =
+      row.submissionAvailabilityCode === "REQUIRE" ||
+      row.submissionAvailabilityCode === null ||
+      row.submissionAvailabilityCode === undefined ||
+      row.submissionAvailabilityCode === "";
+
+    if (row.checkedOut && !row.userCheckedOut) {
+      return "Lock";
+    } else if (
+      //Can only submit records if not ERR eval code, submissionStatus is REQUIRE or blank, and they have permissions
+      row.evalStatusCode !== "ERR" &&
+      rowSubmissionAllowed &&
+      permissions.current[row.orisCode].includes(`DS${type}`)
+    ) {
+      if (
+        type === "EM" &&
+        row.windowStatus !== "REQUIRE" &&
+        row.windowStatus !== "GRANTED"
+      ) {
+        return "View";
+      }
+
+      return "Checkbox"; //True checkbox
+    } else {
+      return "View";
+    }
+  };
+
+  const tables = [
+    {
+      columns: monPlanColumns,
+      state: monPlanState,
+      setState: setMonPlanState,
+      ref: monPlanRef,
+      name: "Monitoring Plan",
+      type: "MP",
+    },
+    {
+      columns: qaTestSummaryColumns,
+      state: qaTestSumState,
+      setState: setQaTestSumState,
+      ref: qaTestSumRef,
+      name: "Test Data",
+      type: "QA",
+    },
+    {
+      columns: emissionsColumns,
+      state: emissionsState,
+      setState: setEmissionsState,
+      ref: emissionsRef,
+      name: "Emissions",
+      type: "EM",
+    },
+  ];
+
   const [activeTables, setActiveTables] = useState(
     tables.reduce((acc, curr) => ({ ...acc, [curr.name]: true }), {})
   );
@@ -46,15 +101,10 @@ const ReviewAndSubmitTables = ({ monPlans, selectedMonPlansRef }) => {
       [name]: !activeTables[name],
     });
 
-  const dataTableProps = {
-    'Monitoring Plan': {
-      onSelectedRowsChange: handleSelectedMonPlanFiles
-    },
-  };
   return (
     <div>
       {tables.map((table, i) => {
-        const { name, columns, data } = table;
+        const { name, columns, state, setState, ref, type } = table;
         return (
           <div className="" key={i}>
             <div className="padding-y-5 display-flex">
@@ -80,15 +130,19 @@ const ReviewAndSubmitTables = ({ monPlans, selectedMonPlansRef }) => {
             <div
               className={
                 activeTables[name]
-                  ? 'data-display-table maxh-mobile overflow-y-auto overflow-x-auto'
-                  : 'display-none'
+                  ? "data-display-table maxh-mobile overflow-y-auto overflow-x-auto"
+                  : "display-none"
               }
             >
               <ReviewAndSubmitTableRender
                 columns={columns}
-                data={data}
-                dataTableName={'Monitoring Plan'}
-                dataTableProps={dataTableProps[name]}
+                state={state}
+                setState={setState}
+                ref={ref}
+                dataTableName={name}
+                type={type}
+                selectMonPlanRow={selectMonPlanRow}
+                getRowState={getRowState}
               />
             </div>
           </div>
