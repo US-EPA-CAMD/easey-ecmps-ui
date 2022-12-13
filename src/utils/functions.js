@@ -81,3 +81,10 @@ export const updateCheckedOutLocationsOnTable = (tableRef, updateState, checkedO
     updateState([...tableRef.current]);
   }
 }
+
+export const updateCheckedOutLocationsOnTables = (checkedOutLocationsMPIdsMap, tablesObj) => {
+  for (const table in tablesObj) {
+    const {ref, setState} = tablesObj[table];
+    updateCheckedOutLocationsOnTable(ref, setState, checkedOutLocationsMPIdsMap)
+  }
+}
