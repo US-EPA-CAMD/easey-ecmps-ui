@@ -464,7 +464,7 @@ export const mapFuelFlowmeterAccuracyDataToRows = (data) => {
       col2: el.lowFuelAccuracy,
       col3: el.midFuelAccuracy,
       col4: el.highFuelAccuracy,
-      col5: el.reinstallationDate ? new Date(el.reinstallationDate).toLocaleDateString('en-US', {timeZone: 'UTC'}) : el.reinstallationDate,
+      col5: el.reinstallationDate ? new Date(el.reinstallationDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) : el.reinstallationDate,
       col6: el.reinstallationHour,
     };
     records.push(row);
@@ -537,6 +537,25 @@ export const mapCycleTimeSummariesToRows = (data) => {
   return records;
 };
 
+export const mapFlowToLoadReferenceToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.rataTestNumber,
+      col2: el.operatingLevelCode,
+      col3: el.averageGrossUnitLoad,
+      col4: el.averageReferenceMethodFlow,
+      col5: el.referenceFlowToLoadRatio,
+      col6: el.averageHourlyHeatInputRate,
+      col7: el.referenceGrossHeatRate,
+      col8: el.calculatedSeparateReferenceIndicator,
+    };
+    records.push(row)
+  }
+  return records;
+}
+
 export const getListOfRadioControls = (controlInputs) => {
   const result = [];
   const keys = Object.keys(controlInputs);
@@ -549,15 +568,15 @@ export const getListOfRadioControls = (controlInputs) => {
 };
 
 // Show aria-label for any action (View, Edit, Remove) in any table provided a unique Id based on table type
-export const getTableRowActionAriaLabel = (dataTableName, row, action) =>{
+export const getTableRowActionAriaLabel = (dataTableName, row, action) => {
   let result;
-  switch(dataTableName){
+  switch (dataTableName) {
     case 'Test Summary Data'://unique ID is test number, i.e. col4
-      result= `${action} for ${row.col4}`;
+      result = `${action} for ${row.col4}`;
       break;
     default:
-      result =  `not implemented yet`;
-      break; 
+      result = `not implemented yet`;
+      break;
   }
   return result;
 }
