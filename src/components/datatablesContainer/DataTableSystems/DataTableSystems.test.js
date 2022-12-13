@@ -1,5 +1,5 @@
 import React from "react";
-import { render, fireEvent, waitForElement, screen} from "@testing-library/react";
+import { render, fireEvent, waitForElement, screen, cleanup} from "@testing-library/react";
 import { DataTableSystems } from "./DataTableSystems";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 const axios = require("axios");
@@ -427,6 +427,8 @@ const componentRenderer = (location) => {
 beforeAll(() => {
   // jest.spyOn(DataTableSystems.prototype, 'selectedRowHandler').mockImplementation(() => 'Hello');
 });
+
+afterEach(cleanup);
 
 afterAll(() => {
   jest.restoreAllMocks();

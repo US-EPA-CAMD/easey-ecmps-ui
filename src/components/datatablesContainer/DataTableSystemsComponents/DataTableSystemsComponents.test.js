@@ -1,5 +1,5 @@
 import React from "react";
-import { render, waitForElement, fireEvent, screen} from "@testing-library/react";
+import { render, waitForElement, fireEvent, screen, cleanup} from "@testing-library/react";
 import {
   DataTableSystemsComponents,
   mapDispatchToProps,
@@ -312,6 +312,8 @@ const componentRenderer = (
   };
   return render(<DataTableSystemsComponents {...props} />);
 };
+
+afterEach(cleanup);
 
 test("tests getMonitoringSystems view/edit functionality", async () => {
   axios.get.mockImplementation(() =>

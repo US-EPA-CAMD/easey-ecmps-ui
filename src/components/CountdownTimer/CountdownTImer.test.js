@@ -3,7 +3,7 @@ import { CountdownTimer, CountdownTimerRender } from "./CountdownTimer";
 import { ReactWrapper, shallow } from "enzyme";
 
 describe("CountdownTimer test suit", () => {
-  let wrapper: ReactWrapper;
+  let wrapper;
 
   test("shallow renders CountdownTimer component to display inactivity message", () => {
     const useRefSpy = jest
