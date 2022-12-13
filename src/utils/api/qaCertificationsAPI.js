@@ -1575,6 +1575,61 @@ export const deleteCycleTimeSummary = async (locId, testSumId, id) => {
   }
 };
 
+
+
+export const getCycleTimeInjection = async (locId, testSumId, cycleTimeSumId) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${cycleTimeSumId}/cycle-time-injections`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createCycleTimeInjection = async (locId, testSumId, cycleTimeSumId, payload) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${cycleTimeSumId}/cycle-time-injections`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const updateCycleTimeInjection = async (locId, testSumId, cycleTimeSumId, id, payload) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${cycleTimeSumId}/cycle-time-injections/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const deleteCycleTimeInjection = async (locId, testSumId, cycleTimeSumId, id) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${cycleTimeSumId}/cycle-time-injections/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const getFuelFlowmeterAccuracyDataRecords = async (locId, testSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flowmeter-accuracies`;
   const url = getApiUrl(path);

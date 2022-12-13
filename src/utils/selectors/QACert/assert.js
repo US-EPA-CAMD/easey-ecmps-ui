@@ -167,7 +167,13 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       .getCycleTimeSummary(location, id)
       .catch((error) => {
         console.log("error", error);
-      })  
+      });
+      case cycleTimeInjection:
+        return qaApi
+          .getCycleTimeInjection(extraIdsArr[0], extraIdsArr[1], id)
+          .catch((error) => {
+            console.log("error", error);
+          });  
     case transmitterTransducerAccuracyData:
       return qaApi
       .getTransmitterTransducerAccuracyDataRecords(location, id)
@@ -224,6 +230,8 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.mapFuelFlowmeterAccuracyDataToRows(dataIn);
     case cycleTimeSummary:
       return selector.mapCycleTimeSummariesToRows(dataIn);
+    case cycleTimeInjection:
+      return selector.mapCycleTimeInjectionsToRows(dataIn);
     case transmitterTransducerAccuracyData:
       return selector.mapTransmitterTransducerAccuracyDataToRows(dataIn);
     default:
@@ -384,6 +392,12 @@ export const removeDataSwitch = async (
       return qaApi
         .deleteCycleTimeSummary(locationId, id, row.id)
         .catch((error) => console.log("error", error));
+    case cycleTimeInjection:
+      return qaApi
+        .deleteCycleTimeInjection(extraIdsArr[0], extraIdsArr[1], id, row.id)
+        .catch((error) => {
+          console.log("error", error);
+        });
     case transmitterTransducerAccuracyData:
       return qaApi
         .deleteTransmitterTransducerAccuracyDataRecord(locationId, id, row.id)
@@ -580,6 +594,16 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         userInput.id, 
         userInput
         ).catch((err) => console.error(err));
+    case cycleTimeInjection:
+      return qaApi.updateCycleTimeInjection(
+        extraIdsArr[0],
+        extraIdsArr[1],
+        id,
+        userInput.id,
+        userInput
+        ).catch((error) => {
+        console.log("error", error);
+        });        
     case transmitterTransducerAccuracyData:
       return qaApi.updateTransmitterTransducerAccuracyDataRecord(
         location,
@@ -746,6 +770,17 @@ export const createDataSwitch = async (
       return qaApi.createCycleTimeSummary(location, id, userInput);
     case transmitterTransducerAccuracyData:
       return qaApi.createTransmitterTransducerAccuracyDataRecord(location, id, userInput);
+    case cycleTimeInjection:
+      return qaApi
+        .createCycleTimeInjection(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          id,
+          userInput
+        )
+        .catch((error) => {
+          console.log("error", error);
+        });
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
   }
