@@ -424,87 +424,90 @@ const componentRenderer = (location) => {
   return render(<DataTableSystems {...props} />);
 };
 
+describe("DatatableSystems test suit", () => {
+
 beforeAll(() => {
   // jest.spyOn(DataTableSystems.prototype, 'selectedRowHandler').mockImplementation(() => 'Hello');
 });
 
-afterEach(cleanup);
+  beforeEach(cleanup);
 
-afterAll(() => {
-  jest.restoreAllMocks();
-});
-test("tests a configuration with only active systems and ability to create system data", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: systemsDataActiveOnly })
-  );
-  const title = await mpApi.getMonitoringSystems(6);
-  expect(title.data).toEqual(systemsDataActiveOnly);
-  let { container } = await waitForElement(() => componentRenderer(6));
-  expect(container).toBeDefined();
-  const systemsTable = screen.getByRole('table');
-  expect(systemsTable).toBeDefined();
-  let createSystemsBtn = screen.getByRole('button', {name:"Create System"});
-  expect(createSystemsBtn).toBeDefined();
-  fireEvent.click(createSystemsBtn);
-  const addDialog = screen.getByRole('dialog');
-  expect(addDialog).toBeDefined();
-  expect(screen.getAllByText("Create System").length).toBe(3);
-  createSystemsBtn = screen.getByRole('button', {name:"Create System"});
-  fireEvent.click(createSystemsBtn);
-  expect(container.querySelector("#appErrorMessageText")).toBeDefined();
-  // const endDate = container.querySelector("#End Date");
-  // expect(endDate).toBeDefined();
-  // fireEvent.change(endDate, {target: {value: '01/01/2022'}})
-  // const endTime = container.querySelector("#End Time");
-  // expect(endTime).toBeDefined();
-  // fireEvent.change(endTime, {target: {value: '10'}})
-  
-});
-test("tests a configuration with both inactive and active systems", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: systemData })
-  );
-  const title = await mpApi.getMonitoringSystems(5);
-  expect(title.data).toEqual(systemData);
-  let { container } = await waitForElement(() => componentRenderer(5));
-  expect(container).toBeDefined();
-  const systemsTables = screen.getAllByRole('table');
-  expect(systemsTables.length).toBe(2);
-  //screen.debug();
-  const viewEditBtns = screen.getAllByText("View / Edit");
-  expect(viewEditBtns.length).toBe(10);
-  //fireEvent.click(viewEditBtns[0]);
-});
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
+  test("tests a configuration with only active systems and ability to create system data", async () => {
+    axios.get.mockImplementation(() =>
+      Promise.resolve({ status: 200, data: systemsDataActiveOnly })
+    );
+    const title = await mpApi.getMonitoringSystems(6);
+    expect(title.data).toEqual(systemsDataActiveOnly);
+    let { container } = await waitForElement(() => componentRenderer(6));
+    expect(container).toBeDefined();
+    const systemsTable = screen.getByRole('table');
+    expect(systemsTable).toBeDefined();
+    let createSystemsBtn = screen.getByRole('button', {name:"Create System"});
+    expect(createSystemsBtn).toBeDefined();
+    fireEvent.click(createSystemsBtn);
+    const addDialog = screen.getByRole('dialog');
+    expect(addDialog).toBeDefined();
+    expect(screen.getAllByText("Create System").length).toBe(3);
+    createSystemsBtn = screen.getByRole('button', {name:"Create System"});
+    fireEvent.click(createSystemsBtn);
+    expect(container.querySelector("#appErrorMessageText")).toBeDefined();
+    // const endDate = container.querySelector("#End Date");
+    // expect(endDate).toBeDefined();
+    // fireEvent.change(endDate, {target: {value: '01/01/2022'}})
+    // const endTime = container.querySelector("#End Time");
+    // expect(endTime).toBeDefined();
+    // fireEvent.change(endTime, {target: {value: '10'}})
+    
+  });
+  test("tests a configuration with both inactive and active systems", async () => {
+    axios.get.mockImplementation(() =>
+      Promise.resolve({ status: 200, data: systemData })
+    );
+    const title = await mpApi.getMonitoringSystems(5);
+    expect(title.data).toEqual(systemData);
+    let { container } = await waitForElement(() => componentRenderer(5));
+    expect(container).toBeDefined();
+    const systemsTables = screen.getAllByRole('table');
+    expect(systemsTables.length).toBe(2);
+    //screen.debug();
+    const viewEditBtns = screen.getAllByText("View / Edit");
+    expect(viewEditBtns.length).toBe(10);
+    //fireEvent.click(viewEditBtns[0]);
+  });
 
-test("tests a configuration with inactive only", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: systemsInactiveOnly })
-  );
-  const title = await mpApi.getMonitoringSystems(76);
+  test("tests a configuration with inactive only", async () => {
+    axios.get.mockImplementation(() =>
+      Promise.resolve({ status: 200, data: systemsInactiveOnly })
+    );
+    const title = await mpApi.getMonitoringSystems(76);
 
-  expect(title.data).toEqual(systemsInactiveOnly);
-  let { container } = await waitForElement(() => componentRenderer(76));
-  // fireEvent.click(container.querySelector("#testingBtn"));
-  // fireEvent.click(container.querySelector("#testingBtn2"));
-  expect(container).toBeDefined();
-});
-test("tests a getMonitoringSystemsFuelFlows", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: apiFuel })
-  );
-  const title = await mpApi.getMonitoringSystemsFuelFlows(
-    6,
-    "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D"
-  );
-  expect(title.data).toEqual(apiFuel);
+    expect(title.data).toEqual(systemsInactiveOnly);
+    let { container } = await waitForElement(() => componentRenderer(76));
+    // fireEvent.click(container.querySelector("#testingBtn"));
+    // fireEvent.click(container.querySelector("#testingBtn2"));
+    expect(container).toBeDefined();
+  });
+  test("tests a getMonitoringSystemsFuelFlows", async () => {
+    axios.get.mockImplementation(() =>
+      Promise.resolve({ status: 200, data: apiFuel })
+    );
+    const title = await mpApi.getMonitoringSystemsFuelFlows(
+      6,
+      "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D"
+    );
+    expect(title.data).toEqual(apiFuel);
 
-  let { container } = await waitForElement(() =>
-  componentRenderer(6)
-  );
+    let { container } = await waitForElement(() =>
+    componentRenderer(6)
+    );
 
-  const fuelBtn = container.querySelectorAll("#btnOpenFuelFlows");
-  for (const x of fuelBtn) {
-    fireEvent.click(x);
-  }
-  expect(container.querySelector("#backBtn")).toBeDefined();
+    const fuelBtn = container.querySelectorAll("#btnOpenFuelFlows");
+    for (const x of fuelBtn) {
+      fireEvent.click(x);
+    }
+    expect(container.querySelector("#backBtn")).toBeDefined();
+  });
 });

@@ -6,9 +6,9 @@ describe("CountdownTimer test suit", () => {
   let wrapper;
 
   test("shallow renders CountdownTimer component to display inactivity message", () => {
-    const useRefSpy = jest
-      .spyOn(React, "useRef")
-      .mockReturnValueOnce({ current: 0 });
+    // const useRefSpy = jest
+    //   .spyOn(React, "useRef")
+    //   .mockReturnValueOnce({ current: 0 });
     wrapper = shallow(
       <CountdownTimer duration={0} countdownExpired={jest.fn()} />
     );
@@ -19,9 +19,9 @@ describe("CountdownTimer test suit", () => {
   });
 
   test("shallow renders CountdownTimerRender to display Logging out due to inactivity message", () => {
-    const useRefSpy = jest
-      .spyOn(React, "useRef")
-      .mockReturnValueOnce({ current: 1000 });
+    // const useRefSpy = jest
+    //   .spyOn(React, "useRef")
+    //   .mockReturnValueOnce({ current: 1000 });
     wrapper = shallow(
       <CountdownTimerRender remainingTime={0} countdownExpired={jest.fn()} />
     );
