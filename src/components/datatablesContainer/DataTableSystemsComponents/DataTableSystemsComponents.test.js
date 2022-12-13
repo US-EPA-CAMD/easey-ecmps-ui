@@ -1,5 +1,5 @@
 import React from "react";
-import { render, waitForElement, fireEvent } from "@testing-library/react";
+import { render, waitForElement, fireEvent, screen} from "@testing-library/react";
 import {
   DataTableSystemsComponents,
   mapDispatchToProps,
@@ -313,16 +313,38 @@ const componentRenderer = (
   return render(<DataTableSystemsComponents {...props} />);
 };
 
-test("tests getMonitoringSystems", async () => {
+test("tests getMonitoringSystems view/edit functionality", async () => {
   axios.get.mockImplementation(() =>
     Promise.resolve({ status: 200, data: selectedSystem })
   );
   const title = await mpApi.getMonitoringSystems(6);
   expect(title.data).toEqual(selectedSystem);
   let { container } = await waitForElement(() =>
-    componentRenderer(false, false, false, true, false)
+    componentRenderer(true, false, true, true, true)
   );
   expect(container).toBeDefined();
+  const systemsComponentsTables = screen.getAllByRole('table');
+  expect(systemsComponentsTables.length).toBe(2);
+  const viewEditBtns = screen.getAllByText("View / Edit");
+  expect(viewEditBtns.length).toBe(4);
+  fireEvent.click(viewEditBtns[0]);
+   //screen.debug();
+});
+test("tests getMonitoringSystems add component functionality", async () => {
+  axios.get.mockImplementation(() =>
+    Promise.resolve({ status: 200, data: selectedSystem })
+  );
+  const title = await mpApi.getMonitoringSystems(6);
+  expect(title.data).toEqual(selectedSystem);
+  let { container } = await waitForElement(() =>
+    componentRenderer(true, false, true, true, true)
+  );
+  expect(container).toBeDefined();
+  const systemsComponentsTables = screen.getAllByRole('table');
+  expect(systemsComponentsTables.length).toBe(4);
+  const addComponentBtn = screen.getAllByRole('button', {name:"Add Component"});
+  expect(addComponentBtn.length).toBe(2);
+  fireEvent.click(addComponentBtn[0]);
 });
 
 test("tests a getMonitoringSystemsComponents", async () => {
