@@ -1,6 +1,7 @@
 import axios from "axios";
 import { handleResponse, handleError } from "./apiUtils";
 import config from "../../config";
+import { getQATestSummary } from "./qaCertificationsAPI";
 
 axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
@@ -444,7 +445,7 @@ export const getAllPressureMeasureCodes = async () => {
 export const getAllMonitoringSystemIDCodes = async (locationId) => {
 
   let url = config.services.monitorPlans.uri;
-  
+
   if (window.location.href.includes("/workspace")) {
     url = `${url}/workspace`;
   }
@@ -454,7 +455,7 @@ export const getAllMonitoringSystemIDCodes = async (locationId) => {
     const actualResponse = response;
     const dataArray = [];
     response.data.map((monitorCode) => {
-      if(monitorCode.systemTypeCode === 'OILV' || monitorCode.systemTypeCode === 'OILM'){
+      if (monitorCode.systemTypeCode === 'OILV' || monitorCode.systemTypeCode === 'OILM') {
         dataArray.push({
           monitoringSystemIDCode: monitorCode.monitoringSystemId,
           monitoringSystemIDDescription: monitorCode.systemTypeCode,
@@ -495,4 +496,31 @@ export const getAllAccuracySpecCodes = async () => {
     .get(`${config.services.mdm.uri}/accuracy-spec-codes`)
     .then(handleResponse)
     .catch(handleError);
+}
+
+export const getAllCalculatedSeparateReferenceIndicatorCodes = async () => {
+  const data = [
+    {
+      calculatedSeparateReferenceIndicatorCode: '0',
+      calculatedSeparateReferenceIndicatorDescription: '0'
+    },
+    {
+      calculatedSeparateReferenceIndicatorCode: '1',
+      calculatedSeparateReferenceIndicatorDescription: '1'
+    }
+  ]
+  return Promise.resolve({ status: 200, data })
+}
+
+export const getRataTestNumber = async (locationId) => {
+  // const testSummaries = await getQATestSummary(locationId, ["RATA"], null, null, ["FLOW"])
+
+  const testSummaryUrl = 'https://api.epa.gov/easey/dev/qa-certification-mgmt/locations/1873/test-summary?testTypeCodes=RATA&systemTypeCodes=FLOW'
+  const testSummaries = await axios.get(testSummaryUrl).then(handleResponse).catch(handleError);
+
+  const rataTestNumbers = testSummaries.data.map(testSummary => {
+    const testNumber = testSummary.testNumber
+    return { rataTestNumberCode: testNumber, rataTestNumberDescription: testNumber }
+  })
+  return Promise.resolve({ status: 200, data: rataTestNumbers })
 }
