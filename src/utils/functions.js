@@ -88,3 +88,19 @@ export const updateCheckedOutLocationsOnTables = (checkedOutLocationsMPIdsMap, t
     updateCheckedOutLocationsOnTable(ref, setState, checkedOutLocationsMPIdsMap)
   }
 }
+
+export const isLocationCheckedOutByUser = ({
+  userId,
+  checkedOutLocationsMap,
+  chunk,
+  isLocationCheckedOut,
+}) => {
+  if (!isLocationCheckedOut) {
+    return false;
+  }
+  const { monPlanId } = chunk;  
+  if (checkedOutLocationsMap.get(monPlanId)?.checkedOutBy === userId) {
+    return true;
+  }
+  return false;
+};
