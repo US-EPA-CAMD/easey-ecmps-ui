@@ -26,6 +26,7 @@ const calibrationInjections = "Calibration Injection";
 const fuelFlowmeterAccuracyData = "Fuel Flowmeter Accuracy Data";
 const cycleTimeSummary = "Cycle Time Summary";
 const transmitterTransducerAccuracyData = "Transmitter Transducer Accuracy Data";
+const flowToLoadReference = "Flow To Load Reference";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -163,16 +164,20 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       })
     case cycleTimeSummary:
       return qaApi
-      .getCycleTimeSummary(location, id)
-      .catch((error) => {
-        console.log("error", error);
-      })  
+        .getCycleTimeSummary(location, id)
+        .catch((error) => {
+          console.log("error", error);
+        })
     case transmitterTransducerAccuracyData:
       return qaApi
-      .getTransmitterTransducerAccuracyDataRecords(location, id)
-      .catch((error) => {
-        console.log("error", error);
-      })  
+        .getTransmitterTransducerAccuracyDataRecords(location, id)
+        .catch((error) => {
+          console.log("error", error);
+        })
+    case flowToLoadReference:
+      return qaApi
+        .getFlowToLoadReference(location, id)
+        .catch(error => console.log("error fetching flow to load reference", error))
     default:
       throw new Error(`getDataTableApis case not implemented for ${name}`);
   }
@@ -225,6 +230,8 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.mapCycleTimeSummariesToRows(dataIn);
     case transmitterTransducerAccuracyData:
       return selector.mapTransmitterTransducerAccuracyDataToRows(dataIn);
+    case flowToLoadReference:
+      return selector.mapFlowToLoadReferenceToRows(dataIn);
     default:
       throw new Error(`getDataTableRecords case not implemented for ${name}`);
   }
@@ -574,11 +581,11 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         .catch((err) => console.error(err));
     case cycleTimeSummary:
       return qaApi.updateCycleTimeSummary(
-        location, 
-        id, 
-        userInput.id, 
+        location,
+        id,
+        userInput.id,
         userInput
-        ).catch((err) => console.error(err));
+      ).catch((err) => console.error(err));
     case transmitterTransducerAccuracyData:
       return qaApi.updateTransmitterTransducerAccuracyDataRecord(
         location,
@@ -745,6 +752,8 @@ export const createDataSwitch = async (
       return qaApi.createCycleTimeSummary(location, id, userInput);
     case transmitterTransducerAccuracyData:
       return qaApi.createTransmitterTransducerAccuracyDataRecord(location, id, userInput);
+    case flowToLoadReference:
+      return qaApi.createFlowToLoadReference(location, id, userInput)
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
   }
