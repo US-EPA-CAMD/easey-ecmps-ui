@@ -933,7 +933,7 @@ export const qaCycleTimeInjectionProps = () => {
       "End Monitor Value"
     ],
     controlInputs: {
-      gasLevelCode: ["Gas Level Code", "input", "", "locked"],
+      gasLevelCode: ["Gas Level Code", "dropdown", "", "locked"],
       calibrationGasValue: ["Calibration Gas Value", "input", "", ""],
       injectionCycleTime: ["Injection Cycle Time", "input", "", ""],
       beginMonitorValue: ["Begin Monitor Value", "input", "", ""],

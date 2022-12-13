@@ -338,6 +338,7 @@ const QAExpandableRowsRender = ({
       case "Protocol Gas":
       case "Linearity Test":
       case "Linearity Injection":
+      case "Cycle Time Injection":
         allPromises.push(dmApi.getAllGasLevelCodes());
         allPromises.push(dmApi.getAllGasTypeCodes());
         Promise.all(allPromises).then((values) => {
