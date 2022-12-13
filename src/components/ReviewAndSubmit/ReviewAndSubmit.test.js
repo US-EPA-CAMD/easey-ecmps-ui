@@ -5,6 +5,11 @@ import ReviewAndSubmit from "./ReviewAndSubmit";
 import configureStore from "../../store/configureStore.dev";
 import { Provider } from "react-redux";
 
+sessionStorage.setItem(
+  "cdx_user",
+  '{ "firstName": "mock", "lastName": "mock" }'
+);
+
 window.scrollTo = jest.fn();
 
 jest.mock("../../utils/api/monitoringPlansApi", () => ({
