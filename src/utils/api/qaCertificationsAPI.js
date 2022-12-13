@@ -44,7 +44,6 @@ export const getQATestSummary = async (
   selectedTestCode,
   beginDate,
   endDate,
-  systemTypeCodes,
 ) => {
   let url = `${config.services.qaCertification.uri}`;
   // *** workspace section url (authenticated)
@@ -63,10 +62,6 @@ export const getQATestSummary = async (
       }
       url = `${url}?testTypeCodes=${additionalUrl}`;
     }
-  }
-  if (systemTypeCodes) {
-    const systemTypeCodesQueryParam = systemTypeCodes.join('|')
-    url = `${url}&systemTypeCodes=${systemTypeCodesQueryParam}`
   }
   // *** attach query params
   if (beginDate && endDate) {
