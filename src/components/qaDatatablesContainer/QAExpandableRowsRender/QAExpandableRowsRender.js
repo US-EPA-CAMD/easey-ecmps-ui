@@ -732,8 +732,10 @@ const QAExpandableRowsRender = ({
     }
 
     if (dataTableName === "Fuel Flowmeter Accuracy Data") {
-      if(selectedData.reinstallationDate){
-        selectedData.reinstallationDate = new Date(selectedData.reinstallationDate).toISOString().slice(0,10)
+      if(selectedData){
+        if(selectedData.reinstallationDate){
+          selectedData.reinstallationDate = new Date(selectedData.reinstallationDate).toISOString().slice(0,10)
+        }
       }
     }
 

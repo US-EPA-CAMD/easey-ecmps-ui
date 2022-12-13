@@ -31,11 +31,13 @@ import {
 } from "../../additional-functions/workspace-section-and-store-names";
 import * as modules from "../../utils/constants/moduleTitles";
 import ReviewAndSubmit from "../ReviewAndSubmit/ReviewAndSubmit";
+import useGetCheckedOutLocations from "../../additional-functions/useGetCheckedOutLocations";
 
 const App = () => {
   const [user, setUser] = useState(false);
   const [expired, setExpired] = useState(false);
   const [resetTimer, setResetTimer] = useState(false);
+  useGetCheckedOutLocations();
 
   const prepDocument = () => {
     setTimeout(() => {

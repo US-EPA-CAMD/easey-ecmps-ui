@@ -464,7 +464,7 @@ export const mapFuelFlowmeterAccuracyDataToRows = (data) => {
       col2: el.lowFuelAccuracy,
       col3: el.midFuelAccuracy,
       col4: el.highFuelAccuracy,
-      col5: el.reinstallationDate ? new Date(el.reinstallationDate).toISOString().slice(0,10) : el.reinstallationDate,
+      col5: el.reinstallationDate ? new Date(el.reinstallationDate).toLocaleDateString('en-US', {timeZone: 'UTC'}) : el.reinstallationDate,
       col6: el.reinstallationHour,
     };
     records.push(row);

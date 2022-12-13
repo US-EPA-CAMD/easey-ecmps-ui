@@ -6,24 +6,73 @@ import ReviewAndSubmitForm from "./ReviewAndSubmitForm/ReviewAndSubmitForm";
 import SubmissionModal from "../SubmissionModal/SubmissionModal";
 import ReviewAndSubmitTables from "./ReviewAndSubmitTables/ReviewAndSubmitTables";
 import MockPermissions from "./MockPermissions";
+import { Button } from "@trussworks/react-uswds";
+import { connect } from "react-redux";
+import { updateCheckedOutLocationsOnTable } from "../../utils/functions";
 
-const ReviewAndSubmit = () => {
+const ReviewAndSubmit = ({ checkedOutLocations }) => {
   const [activityId, setActivityId] = useState("");
   const [excludeErrors, setExcludeErrors] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
-  const [qaTestSummary, setQaTestSummarry] = useState([]);
-  const [emissions, setEmissions] = useState([]);
-  const [monPlans, setMonPlans] = useState([]);
+  const [checkedOutLocationsMap, setCheckedOutLocationsMap] = useState(
+    new Map()
+  );
 
-  const selectedMonPlansRef = useRef();
-  const idToPermissionsMap = [];
+  const [qaTestSummary, setQaTestSummary] = useState([]);
+  const qaTestSumRef = useRef([]);
+
+  const [emissions, setEmissions] = useState([]);
+  const emissionsRef = useRef([]);
+
+  const [monPlans, setMonPlans] = useState([]);
+  const monPlanRef = useRef([]);
+
+  const [finalSubmitStage, setFinalSubmitStage] = useState(false);
+
+  useEffect(() => {
+    const checkedOutLocationsMPIdsArray = checkedOutLocations.map(
+      (el) => el.monPlanId
+    );
+    const checkedOutLocationsMPIdsMap = new Set(checkedOutLocationsMPIdsArray);
+    console.log({ checkedOutLocationsMPIdsArray, checkedOutLocationsMPIdsMap });
+    setCheckedOutLocationsMap(checkedOutLocationsMPIdsMap);
+    updateCheckedOutLocationsOnTables(checkedOutLocationsMPIdsMap); //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [checkedOutLocations]);
+
+  const updateCheckedOutLocationsOnTables = (checkedOutLocationsMPIdsMap) => {
+    for (const table in dataList) {
+      const { ref, setState } = dataList[table];
+      updateCheckedOutLocationsOnTable(
+        ref,
+        setState,
+        checkedOutLocationsMPIdsMap
+      );
+    }
+  };
+
+  const dataList = {
+    monPlan: { ref: monPlanRef, state: monPlans, setState: setMonPlans },
+    qaTest: {
+      ref: qaTestSumRef,
+      state: qaTestSummary,
+      setState: setQaTestSummary,
+    },
+    emissions: {
+      ref: emissionsRef,
+      state: emissions,
+      setState: setEmissions,
+    },
+  };
+
+  const idToPermissionsMap = useRef([]);
   useEffect(() => {
     // Get permissions from user object here
     const permissions = MockPermissions;
     for (const p of permissions) {
-      idToPermissionsMap[p.id] = p.permissions;
+      idToPermissionsMap.current[p.id] = p.permissions;
     } //eslint-disable-next-line react-hooks/exhaustive-deps
+    console.log(idToPermissionsMap);
   }, []);
 
   const closeModal = () => {
@@ -32,60 +81,131 @@ const ReviewAndSubmit = () => {
 
   const submission = () => {
     closeModal();
+
+    setFinalSubmitStage(true);
+
+    for (const [key, value] of Object.entries(dataList)) {
+      const { ref, setState } = value;
+      ref.current = ref.current.filter((d) => d.selected);
+      for (const item of ref.current) {
+        item.viewOnly = true;
+      }
+      setState(ref.current);
+    }
   };
 
   const applyFilter = async (orisCodes, monPlanIds, submissionPeriods) => {
     const dataToSetMap = {
-      MP: [getMonitoringPlans, setMonPlans],
-      QA_TEST_SUMMARY: [getQATestSummaryReviewSubmit, setQaTestSummarry],
-      EMISSIONS: [getEmissionsReviewSubmit, setEmissions],
+      //Contains data fetch, state setter, and ref for each of the 5 categories
+      MP: [getMonitoringPlans, setMonPlans, monPlanRef],
+      QA_TEST_SUMMARY: [
+        getQATestSummaryReviewSubmit,
+        setQaTestSummary,
+        qaTestSumRef,
+      ],
+      EMISSIONS: [getEmissionsReviewSubmit, setEmissions, emissionsRef],
     };
 
+    let activePlans = new Set();
     for (const [key, value] of Object.entries(dataToSetMap)) {
       let data;
 
-      if (key === "EMISSIONS") {
+      if (key !== "MP") {
+        //Filter emissions by quarter as well
         data = (await value[0](orisCodes, monPlanIds, submissionPeriods)).data;
       } else {
         data = (await value[0](orisCodes, monPlanIds)).data;
       }
 
+      // Extra formatting to make all data sets uniform
+      for (const r of data) {
+        if (r["id"]) {
+          r.monPlanId = r["id"];
+        }
+
+        if (r["submissionCode"]) {
+          r.submissionAvailabilityCode = r["submissionCode"];
+        }
+      }
+
+      data = data.map((chunk) => {
+        //Add selector state variables
+        return {
+          selected: false,
+          checkedOut: checkedOutLocationsMap.has(chunk.monPlanId),
+          userCheckedOut: false,
+          viewOnly: false,
+          ...chunk,
+        };
+      });
+
       if (key === "MP") {
         data = data.filter((mpd) => mpd.active);
+        activePlans = new Set(data.map((d) => d.monPlanId));
+      } else {
+        data = data.filter((d) => activePlans.has(d.monPlanId));
       }
 
       if (excludeErrors) {
-        data = data.filter((mpd) => mpd.evalStatusCd !== "ERR");
+        data = data.filter((mpd) => mpd.evalStatusCode !== "ERR");
       }
 
+      value[2].current = data; //Set ref and state [ref drives logic, state drives ui updates]
       value[1](data);
     }
   };
 
   const getSelectedMPIds = () => {
-    if (!selectedMonPlansRef.current) {
-      return [];
-    } else {
-      return selectedMonPlansRef.current.selectedRows.map(
-        (monPlan) => monPlan.id
-      );
+    const monPlanIds = new Set();
+    for (const [key, value] of Object.entries(dataList)) {
+      const { ref } = value;
+      for (const chunk of ref.current) {
+        if (chunk.selected) {
+          monPlanIds.add(chunk.monPlanId);
+        }
+      }
     }
+
+    return Array.from(monPlanIds);
   };
 
   return (
     <div className="react-transition fade-in padding-x-3">
-      <ReviewAndSubmitForm
-        showModal={setShowModal}
-        queryCallback={applyFilter}
-        setExcludeErrors={setExcludeErrors}
-        facilities={MockPermissions}
-      />
-      {monPlans.length > 0 && (
-        <ReviewAndSubmitTables
-          monPlans={monPlans}
-          selectedMonPlansRef={selectedMonPlansRef}
+      <div className="text-black margin-top-1 display-flex flex-row">
+        <h2 className="flex-4 page-header margin-top-2">Review And Submit</h2>
+
+        <div className=""></div>
+
+        {finalSubmitStage && (
+          <Button
+            className="flex-align-self-end flex-align-self-center flex-1 margin-right-5 maxw-mobile"
+            size="big"
+          >
+            Submit
+          </Button>
+        )}
+      </div>
+      {!finalSubmitStage && (
+        <ReviewAndSubmitForm
+          showModal={setShowModal}
+          queryCallback={applyFilter}
+          setExcludeErrors={setExcludeErrors}
+          facilities={MockPermissions}
         />
       )}
+      <ReviewAndSubmitTables
+        monPlanState={monPlans}
+        setMonPlanState={setMonPlans}
+        monPlanRef={monPlanRef}
+        qaTestSumState={qaTestSummary}
+        setQaTestSumState={setQaTestSummary}
+        qaTestSumRef={qaTestSumRef}
+        emissionsState={emissions}
+        setEmissionsState={setEmissions}
+        emissionsRef={emissionsRef}
+        permissions={idToPermissionsMap} //Map of oris codes to user permissions
+      />
+
       {showModal && (
         <SubmissionModal
           show={showModal}
@@ -100,4 +220,8 @@ const ReviewAndSubmit = () => {
   );
 };
 
-export default ReviewAndSubmit;
+const mapStateToProps = (state) => ({
+  checkedOutLocations: state.checkedOutLocations,
+});
+
+export default connect(mapStateToProps, null)(ReviewAndSubmit);
