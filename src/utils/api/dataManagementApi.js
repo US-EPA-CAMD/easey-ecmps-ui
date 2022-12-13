@@ -513,12 +513,11 @@ export const getAllCalculatedSeparateReferenceIndicatorCodes = async () => {
 }
 
 export const getRataTestNumber = async (locationId) => {
-  // const testSummaries = await getQATestSummary(locationId, ["RATA"], null, null, ["FLOW"])
-
-  const testSummaryUrl = 'https://api.epa.gov/easey/dev/qa-certification-mgmt/locations/1873/test-summary?testTypeCodes=RATA&systemTypeCodes=FLOW'
-  const testSummaries = await axios.get(testSummaryUrl).then(handleResponse).catch(handleError);
-
-  const rataTestNumbers = testSummaries.data.map(testSummary => {
+  const testSummaryUrl = `https://api.epa.gov/easey/dev/qa-certification-mgmt/locations/${locationId}/test-summary?testTypeCodes=RATA&systemTypeCodes=FLOW`
+  const testSummaryWorkspaceUrl = `https://api.epa.gov/easey/dev/qa-certification-mgmt/workspace/locations/${locationId}/test-summary?testTypeCodes=RATA&systemTypeCodes=FLOW`
+  const testSummaries = await Promise.all([axios.get(testSummaryUrl), axios.get(testSummaryWorkspaceUrl)])
+  const allTestSummaries = [...testSummaries[0].data, ...testSummaries[1].data]
+  const rataTestNumbers = allTestSummaries.map(testSummary => {
     const testNumber = testSummary.testNumber
     return { rataTestNumberCode: testNumber, rataTestNumberDescription: testNumber }
   })
