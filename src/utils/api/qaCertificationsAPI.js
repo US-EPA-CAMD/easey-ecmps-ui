@@ -1788,3 +1788,23 @@ export const createFlowToLoadReference = async (
     return handleImportError(error);
   }
 };
+
+export const updateFlowToLoadReference = async (
+  locId,
+  testSumId,
+  id,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/flow-to-load-references/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
