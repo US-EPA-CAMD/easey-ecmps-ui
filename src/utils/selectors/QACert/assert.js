@@ -601,6 +601,12 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         userInput.id,
         userInput
         ).catch((err) => console.error(err));
+    case cycleTimeInjection:
+      return qaApi
+        .updateCycleTimeInjection(extraIdsArr[0], extraIdsArr[1], id, userInput.id, userInput)
+        .catch((error) => {
+          console.log("error", error);
+          });
     case transmitterTransducerAccuracyData:
       return qaApi.updateTransmitterTransducerAccuracyDataRecord(
         location,
@@ -755,6 +761,9 @@ export const createDataSwitch = async (
             error
           );
         });
+    case cycleTimeInjection:
+      return qaApi
+        .createCycleTimeInjection(extraIdsArr[0], extraIdsArr[1], id, userInput);
     case flowToLoadCheck:
       return qaApi.createFlowToLoadCheckRecord(location, id, userInput);
     case onlineOfflineCalibration:

@@ -43,7 +43,7 @@ export const getQATestSummary = async (
   locID,
   selectedTestCode,
   beginDate,
-  endDate,
+  endDate
 ) => {
   let url = `${config.services.qaCertification.uri}`;
   // *** workspace section url (authenticated)
@@ -99,6 +99,23 @@ export const getQATestSummaryByID = async (locID, id) => {
 
   // *** attach the rest of the url
   url = `${url}/locations/${locID}/test-summary/${id}`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const getQATestSummaryByCode = async (
+  locId,
+  { _beginDate, _endDate, testTypeCodes = [] }
+) => {
+  let url = `${config.services.qaCertification.uri}`;
+
+  // *** attach the rest of the url
+  url = `${url}/locations/${locId}/test-summary`;
+
+  if (testTypeCodes.length > 0) {
+    const param = testTypeCodes.join("|");
+    url = `${url}?testTypeCode=${param}`;
+  }
 
   return axios.get(url).then(handleResponse).catch(handleError);
 };
@@ -1559,7 +1576,6 @@ export const deleteCycleTimeSummary = async (locId, testSumId, id) => {
 };
 
 
-
 export const getCycleTimeInjection = async (locId, testSumId, cycleTimeSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${cycleTimeSumId}/cycle-time-injections`;
   const url = getApiUrl(path);
@@ -1741,31 +1757,6 @@ export const deleteTransmitterTransducerAccuracyDataRecord = async (
       await secureAxios({
         method: "DELETE",
         url: url,
-      })
-    );
-  } catch (error) {
-    return handleImportError(error);
-  }
-};
-
-export const getFlowToLoadReference = async (locId, testSumId) => {
-  const path = `/locations/${locId}/test-summary/${testSumId}/flow-to-load-references`;
-  const url = getApiUrl(path);
-  return axios.get(url).then(handleResponse).catch(handleError);
-};
-
-export const createFlowToLoadReference = async (
-  locId,
-  testSumId,
-  payload
-) => {
-  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/flow-to-load-references`;
-  try {
-    return handleResponse(
-      await secureAxios({
-        method: "POST",
-        url: url,
-        data: payload,
       })
     );
   } catch (error) {

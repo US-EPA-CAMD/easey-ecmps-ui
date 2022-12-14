@@ -303,6 +303,7 @@ const QAExpandableRowsRender = ({
         );
       // Test Data --> Cycle Time Summary --> Cycle Time Injection
       case "Cycle Time Summary":
+        const cycleTimeInjectionIdArray = [locationId, id];
         const cycleTimeInjec = qaCycleTimeInjectionProps();
         return (
           <QAExpandableRowsRender
@@ -315,7 +316,7 @@ const QAExpandableRowsRender = ({
             radioBtnPayload={cycleTimeInjec["radioBtnPayload"]}
             dataTableName={cycleTimeInjec["dataTableName"]}
             extraControls={cycleTimeInjec["extraControls"]}
-            extraIDs={null}
+            extraIDs={cycleTimeInjectionIdArray}
             user={user}
             isCheckedOut={isCheckedOut}
           />
@@ -339,7 +340,6 @@ const QAExpandableRowsRender = ({
       case "Protocol Gas":
       case "Linearity Test":
       case "Linearity Injection":
-      case "Cycle Time Injection":
         allPromises.push(dmApi.getAllGasLevelCodes());
         allPromises.push(dmApi.getAllGasTypeCodes());
         Promise.all(allPromises).then((values) => {
@@ -372,6 +372,29 @@ const QAExpandableRowsRender = ({
           setMdmData(dropdowns);
         }).catch((error => console.log(error)));
         break;
+      case "Cycle Time Injection":
+        allPromises.push(dmApi.getAllGasLevelCodes());
+        allPromises.push(dmApi.getAllGasTypeCodes());
+        Promise.all(allPromises).then((values) => {
+          values.forEach((val, i) => {
+            if (i === 0) {
+              dropdowns[dropdownArray[i]] = val.data.map((d) => {
+                return {
+                  code: d["gasLevelCode"],
+                  name: d["gasLevelDescription"],
+                };
+              });
+              dropdowns[dropdownArray[i]].unshift({
+                code: "",
+                name: "-- Select a value --",
+              });
+            } 
+          });
+
+          setMdmData(dropdowns);
+        }).catch((error => console.log(error)));
+          break;
+
       case "RATA Data":
         allPromises.push(dmApi.getAllRataFreqCodes());
         Promise.all(allPromises).then((values) => {
