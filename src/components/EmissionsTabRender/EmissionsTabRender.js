@@ -54,6 +54,7 @@ export const EmissionsTabRender = ({
       selectedConfig?.unitStackConfigurations.map(
         (config) => config.stackPipeId
       ),
+      user,
       true
     )
       .then((response) => {
