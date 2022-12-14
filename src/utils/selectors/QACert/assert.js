@@ -614,6 +614,12 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         userInput.id,
         userInput
       ).catch((err) => console.error(err));
+    case flowToLoadReference:
+      return qaApi.updateFlowToLoadReference(location,
+        id,
+        userInput.id,
+        userInput
+      ).catch(error => console.log("error updating flow to load reference", error))
     default:
       break;
   }
