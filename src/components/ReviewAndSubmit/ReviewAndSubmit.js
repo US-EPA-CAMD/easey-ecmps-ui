@@ -8,7 +8,7 @@ import ReviewAndSubmitTables from "./ReviewAndSubmitTables/ReviewAndSubmitTables
 import MockPermissions from "./MockPermissions";
 import { Button } from "@trussworks/react-uswds";
 import { connect } from "react-redux";
-import { updateCheckedOutLocationsOnTable } from "../../utils/functions";
+import { isLocationCheckedOutByUser, updateCheckedOutLocationsOnTables } from "../../utils/functions";
 
 const ReviewAndSubmit = ({ checkedOutLocations }) => {
   const [activityId, setActivityId] = useState("");
@@ -29,27 +29,16 @@ const ReviewAndSubmit = ({ checkedOutLocations }) => {
   const monPlanRef = useRef([]);
 
   const [finalSubmitStage, setFinalSubmitStage] = useState(false);
-
+  const user = JSON.parse(sessionStorage.getItem("cdx_user"));
+  const { userId } = user;
   useEffect(() => {
-    const checkedOutLocationsMPIdsArray = checkedOutLocations.map(
-      (el) => el.monPlanId
-    );
-    const checkedOutLocationsMPIdsMap = new Set(checkedOutLocationsMPIdsArray);
-    console.log({ checkedOutLocationsMPIdsArray, checkedOutLocationsMPIdsMap });
+    const checkedOutLocationsMPIdsMap = new Map();
+    checkedOutLocations.forEach((el) => {
+      checkedOutLocationsMPIdsMap.set(el.monPlanId, el);
+    });
     setCheckedOutLocationsMap(checkedOutLocationsMPIdsMap);
-    updateCheckedOutLocationsOnTables(checkedOutLocationsMPIdsMap); //eslint-disable-next-line react-hooks/exhaustive-deps
+    updateCheckedOutLocationsOnTables(checkedOutLocationsMPIdsMap, dataList);//eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkedOutLocations]);
-
-  const updateCheckedOutLocationsOnTables = (checkedOutLocationsMPIdsMap) => {
-    for (const table in dataList) {
-      const { ref, setState } = dataList[table];
-      updateCheckedOutLocationsOnTable(
-        ref,
-        setState,
-        checkedOutLocationsMPIdsMap
-      );
-    }
-  };
 
   const dataList = {
     monPlan: { ref: monPlanRef, state: monPlans, setState: setMonPlans },
@@ -130,10 +119,11 @@ const ReviewAndSubmit = ({ checkedOutLocations }) => {
 
       data = data.map((chunk) => {
         //Add selector state variables
+        const isLocationCheckedOut = checkedOutLocationsMap.has(chunk.monPlanId);
         return {
           selected: false,
-          checkedOut: checkedOutLocationsMap.has(chunk.monPlanId),
-          userCheckedOut: false,
+          checkedOut: isLocationCheckedOut,
+          userCheckedOut: isLocationCheckedOutByUser({userId, checkedOutLocationsMap, chunk, isLocationCheckedOut}),
           viewOnly: false,
           ...chunk,
         };

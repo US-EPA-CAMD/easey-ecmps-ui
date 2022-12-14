@@ -81,3 +81,26 @@ export const updateCheckedOutLocationsOnTable = (tableRef, updateState, checkedO
     updateState([...tableRef.current]);
   }
 }
+
+export const updateCheckedOutLocationsOnTables = (checkedOutLocationsMPIdsMap, tablesObj) => {
+  for (const table in tablesObj) {
+    const {ref, setState} = tablesObj[table];
+    updateCheckedOutLocationsOnTable(ref, setState, checkedOutLocationsMPIdsMap)
+  }
+}
+
+export const isLocationCheckedOutByUser = ({
+  userId,
+  checkedOutLocationsMap,
+  chunk,
+  isLocationCheckedOut,
+}) => {
+  if (!isLocationCheckedOut) {
+    return false;
+  }
+  const { monPlanId } = chunk;  
+  if (checkedOutLocationsMap.get(monPlanId)?.checkedOutBy === userId) {
+    return true;
+  }
+  return false;
+};

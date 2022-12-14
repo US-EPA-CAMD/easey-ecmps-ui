@@ -28,7 +28,7 @@ const useGetCheckedOutLocations = () => {
           checkedOutLocationResult.data
         )
       ) {
-        checkedOutLocationsList = checkedOutLocationResult.data || [];
+        checkedOutLocationsList = checkedOutLocationResult.data;
         dispatch({
           type: types.SET_CHECKED_OUT_LOCATIONS,
           checkedOutLocations: checkedOutLocationsList,
@@ -39,12 +39,5 @@ const useGetCheckedOutLocations = () => {
   };
 };
 
-export const mockCheckedOutLocation = {
-    "facId": 946,
-    "monPlanId": "MDC-A176443524F0445CA3FDB90DB059D5A5",
-    "checkedOutOn": "2022-12-08T14:54:31.881Z",
-    "checkedOutBy": "rboehme-dp",
-    "lastActivity": "2022-12-08T14:54:31.881Z"
-};
 
 export default useGetCheckedOutLocations;
