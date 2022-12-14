@@ -776,6 +776,8 @@ export const createDataSwitch = async (
       return qaApi.createCycleTimeSummary(location, id, userInput);
     case transmitterTransducerAccuracyData:
       return qaApi.createTransmitterTransducerAccuracyDataRecord(location, id, userInput);
+      case flowToLoadReference:
+        return qaApi.createFlowToLoadReference(location, id, userInput)
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
   }
