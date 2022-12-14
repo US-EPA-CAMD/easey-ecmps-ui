@@ -1763,3 +1763,28 @@ export const deleteTransmitterTransducerAccuracyDataRecord = async (
     return handleImportError(error);
   }
 };
+
+export const getFlowToLoadReference = async (locId, testSumId) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/flow-to-load-references`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createFlowToLoadReference = async (
+  locId,
+  testSumId,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/flow-to-load-references`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
