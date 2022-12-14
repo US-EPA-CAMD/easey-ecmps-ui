@@ -26,6 +26,7 @@ import {
   qaCalibrationInjectionProps,
   qaOnOffCalibrationProps,
   qaCycleTimeSummaryProps,
+  qaCycleTimeInjectionProps,
 } from "../../../additional-functions/qa-dataTable-props";
 
 const mock = new MockAdapter(axios);
@@ -39,6 +40,7 @@ const rataRunId = 'rataRunId'
 const flowRataRunId = 'flowRataRunId'
 const appECorrTestSumId = 'appECorrTestSumId'
 const appECorrTestRunId = 'appECorrTestRunId'
+const cycleTimeSumId = 'cycleTimeSumId'
 const id = 'id'
 
 const idRegex = '[\\w\\-]+'

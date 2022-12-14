@@ -31,7 +31,9 @@ import {
   qaAppendixECorrTestRunProps,
   qaAppendixECorrelationSummaryHeatInputGasProps,
   qaAppendixECorrelationSummaryHeatInputOilProps,
+  qaCycleTimeInjectionProps,
 } from "../../../additional-functions/qa-dataTable-props";
+import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
 const QAExpandableRowsRender = ({
   user,
   controlInputs,
@@ -299,6 +301,26 @@ const QAExpandableRowsRender = ({
             isCheckedOut={isCheckedOut}
           />
         );
+      // Test Data --> Cycle Time Summary --> Cycle Time Injection
+      case "Cycle Time Summary":
+        const cycleTimeInjectionIdArray = [...extraIDs, id];
+        const cycleTimeInjec = qaCycleTimeInjectionProps();
+        return (
+          <QAExpandableRowsRender
+            payload={cycleTimeInjec["payload"]}
+            dropdownArray={cycleTimeInjec["dropdownArray"]}
+            mdmProps={cycleTimeInjec["mdmProps"]}
+            columns={cycleTimeInjec["columnNames"]}
+            controlInputs={cycleTimeInjec["controlInputs"]}
+            controlDatePickerInputs={cycleTimeInjec["controlDatePickerInputs"]}
+            radioBtnPayload={cycleTimeInjec["radioBtnPayload"]}
+            dataTableName={cycleTimeInjec["dataTableName"]}
+            extraControls={cycleTimeInjec["extraControls"]}
+            extraIDs={cycleTimeInjectionIdArray}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
       default:
         break;
     }
@@ -350,6 +372,29 @@ const QAExpandableRowsRender = ({
           setMdmData(dropdowns);
         }).catch((error => console.log(error)));
         break;
+      case "Cycle Time Injection":
+        allPromises.push(dmApi.getAllGasLevelCodes());
+        allPromises.push(dmApi.getAllGasTypeCodes());
+        Promise.all(allPromises).then((values) => {
+          values.forEach((val, i) => {
+            if (i === 0) {
+              dropdowns[dropdownArray[i]] = val.data.map((d) => {
+                return {
+                  code: d["gasLevelCode"],
+                  name: d["gasLevelDescription"],
+                };
+              });
+              dropdowns[dropdownArray[i]].unshift({
+                code: "",
+                name: "-- Select a value --",
+              });
+            } 
+          });
+
+          setMdmData(dropdowns);
+        }).catch((error => console.log(error)));
+          break;
+
       case "RATA Data":
         allPromises.push(dmApi.getAllRataFreqCodes());
         Promise.all(allPromises).then((values) => {
@@ -548,6 +593,40 @@ const QAExpandableRowsRender = ({
           setMdmData(dropdowns);
         }).catch((error => console.log(error)))
         break;
+      case "Flow To Load Reference":
+        allPromises.push(dmApi.getRataTestNumber(locationId))
+        allPromises.push(dmApi.getAllOperatingLevelCodes());
+        allPromises.push(dmApi.getAllCalculatedSeparateReferenceIndicatorCodes());
+        Promise.all(allPromises).then((responses) => {
+          responses.forEach((curResp, i) => {
+            let codeLabel;
+            let descriptionLabel;
+            switch (i) {
+              case 0:
+                codeLabel = "rataTestNumberCode";
+                descriptionLabel = "rataTestNumberDescription";
+                break;
+              case 1:
+                codeLabel = "opLevelCode";
+                descriptionLabel = "opLevelDescription";
+                break;
+              case 2:
+                codeLabel = "calculatedSeparateReferenceIndicatorCode";
+                descriptionLabel = "calculatedSeparateReferenceIndicatorDescription";
+                break;
+              default:
+                break;
+            }
+            dropdowns[dropdownArray[i]] = curResp.data.map((d) => {
+              return { code: d[codeLabel], name: d[descriptionLabel] };
+            });
+          });
+          for (const options of Object.values(dropdowns)) {
+            options.unshift({ code: "", name: "-- Select a value --" });
+          }
+          setMdmData(dropdowns);
+        }).catch((error => console.log(error)))
+        break
       default:
         mdmProps.forEach((prop) => {
           allPromises.push(dmApi.getMdmDataByCodeTable(prop["codeTable"]));

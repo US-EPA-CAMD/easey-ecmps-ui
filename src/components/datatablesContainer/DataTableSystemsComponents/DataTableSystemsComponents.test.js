@@ -1,5 +1,5 @@
 import React from "react";
-import { render, waitForElement, fireEvent } from "@testing-library/react";
+import { render, waitForElement, fireEvent, screen, cleanup} from "@testing-library/react";
 import {
   DataTableSystemsComponents,
   mapDispatchToProps,
@@ -312,103 +312,129 @@ const componentRenderer = (
   };
   return render(<DataTableSystemsComponents {...props} />);
 };
+describe("DatatableSystemsComponents test suit", () => {
 
-test("tests getMonitoringSystems", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: selectedSystem })
-  );
-  const title = await mpApi.getMonitoringSystems(6);
-  expect(title.data).toEqual(selectedSystem);
-  let { container } = await waitForElement(() =>
-    componentRenderer(false, false, false, true, false)
-  );
-  expect(container).toBeDefined();
-});
+  beforeEach(cleanup);
 
-test("tests a getMonitoringSystemsComponents", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: apiComp })
-  );
-  const title = await mpApi.getMonitoringSystemsComponents(
-    6,
-    "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D"
-  );
+  test("tests getMonitoringSystems view/edit functionality", async () => {
+    axios.get.mockImplementation(() =>
+      Promise.resolve({ status: 200, data: selectedSystem })
+    );
+    const title = await mpApi.getMonitoringSystems(6);
+    expect(title.data).toEqual(selectedSystem);
+    let { container } = await waitForElement(() =>
+      componentRenderer(true, false, true, true, true)
+    );
+    expect(container).toBeDefined();
+    const systemsComponentsTables = screen.getAllByRole('table');
+    expect(systemsComponentsTables.length).toBe(2);
+    const viewEditBtns = screen.getAllByText("View / Edit");
+    expect(viewEditBtns.length).toBe(4);
+    fireEvent.click(viewEditBtns[0]);
+    //screen.debug();
+  });
+  test("tests getMonitoringSystems add component functionality", async () => {
+    axios.get.mockImplementation(() =>
+      Promise.resolve({ status: 200, data: selectedSystem })
+    );
+    const title = await mpApi.getMonitoringSystems(6);
+    expect(title.data).toEqual(selectedSystem);
+    let { container } = await waitForElement(() =>
+      componentRenderer(true, false, true, true, true)
+    );
+    expect(container).toBeDefined();
+    const systemsComponentsTables = screen.getAllByRole('table');
+    expect(systemsComponentsTables.length).toBe(4);
+    const addComponentBtn = screen.getAllByRole('button', {name:"Add Component"});
+    expect(addComponentBtn.length).toBe(2);
+    fireEvent.click(addComponentBtn[0]);
+  });
 
-  expect(title.data).toEqual(apiComp);
-  // React.useState = jest
-  //   .fn()
-  // .mockReturnValueOnce([apiComp, {}])
-  // .mockReturnValueOnce([true, {}])
-  // .mockReturnValueOnce([false, {}])
-  // .mockReturnValueOnce([false, {}])
-  // .mockReturnValueOnce([
-  //   { locationId: 6, id: "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D" },
-  //   {},
-  // ])
-  // .mockReturnValueOnce(["", {}])
+  test("tests a getMonitoringSystemsComponents", async () => {
+    axios.get.mockImplementation(() =>
+      Promise.resolve({ status: 200, data: apiComp })
+    );
+    const title = await mpApi.getMonitoringSystemsComponents(
+      6,
+      "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D"
+    );
 
-  // .mockReturnValueOnce([false, {}])
-  // .mockReturnValueOnce([false, {}])
-  // .mockReturnValueOnce([true, {}])
+    expect(title.data).toEqual(apiComp);
+    // React.useState = jest
+    //   .fn()
+    // .mockReturnValueOnce([apiComp, {}])
+    // .mockReturnValueOnce([true, {}])
+    // .mockReturnValueOnce([false, {}])
+    // .mockReturnValueOnce([false, {}])
+    // .mockReturnValueOnce([
+    //   { locationId: 6, id: "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D" },
+    //   {},
+    // ])
+    // .mockReturnValueOnce(["", {}])
 
-  // .mockReturnValueOnce([true, {}])
-  // .mockReturnValueOnce([false, {}]);
+    // .mockReturnValueOnce([false, {}])
+    // .mockReturnValueOnce([false, {}])
+    // .mockReturnValueOnce([true, {}])
 
-  let { container } = await waitForElement(() =>
-    componentRenderer(false, false, false, false, false)
-  );
-  expect(container.querySelector("#backBtn")).toBeDefined();
-});
+    // .mockReturnValueOnce([true, {}])
+    // .mockReturnValueOnce([false, {}]);
 
-test("tests a getMonitoringSystemsFuelFlows", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: apiFuel })
-  );
-  const title = await mpApi.getMonitoringSystemsFuelFlows(
-    6,
-    "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D"
-  );
-  expect(title.data).toEqual(apiFuel);
+    let { container } = await waitForElement(() =>
+      componentRenderer(false, false, false, false, false)
+    );
+    expect(container.querySelector("#backBtn")).toBeDefined();
+  });
 
-  let { container } = await waitForElement(() =>
-    componentRenderer(false, true, true, false, false)
-  );
+  test("tests a getMonitoringSystemsFuelFlows", async () => {
+    axios.get.mockImplementation(() =>
+      Promise.resolve({ status: 200, data: apiFuel })
+    );
+    const title = await mpApi.getMonitoringSystemsFuelFlows(
+      6,
+      "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D"
+    );
+    expect(title.data).toEqual(apiFuel);
 
-  const fuelBtn = container.querySelectorAll("#btnOpenFuelFlows");
-  for (const x of fuelBtn) {
-    fireEvent.click(x);
-  }
-  expect(container.querySelector("#backBtn")).toBeDefined();
-});
+    let { container } = await waitForElement(() =>
+      componentRenderer(false, true, true, false, false)
+    );
 
-test("tests opening the add modal page ", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: apiFuel })
-  );
-  const title = await mpApi.getMonitoringSystemsFuelFlows(
-    6,
-    "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D"
-  );
-  expect(title.data).toEqual(apiFuel);
+    const fuelBtn = container.querySelectorAll("#btnOpenFuelFlows");
+    for (const x of fuelBtn) {
+      fireEvent.click(x);
+    }
+    expect(container.querySelector("#backBtn")).toBeDefined();
+  });
 
-  let { container } = await waitForElement(() =>
-    componentRenderer(true, false, true, true, false)
-  );
+  test("tests opening the add modal page ", async () => {
+    axios.get.mockImplementation(() =>
+      Promise.resolve({ status: 200, data: apiFuel })
+    );
+    const title = await mpApi.getMonitoringSystemsFuelFlows(
+      6,
+      "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D"
+    );
+    expect(title.data).toEqual(apiFuel);
 
-  const fuelBtn = container.querySelectorAll("#btnOpenFuelFlows");
-  for (const x of fuelBtn) {
-    fireEvent.click(x);
-  }
-  expect(container.querySelector("#backBtn")).toBeDefined();
-});
-test("mapDispatchToProps calls the appropriate action", async () => {
-  // mock the 'dispatch' object
-  const dispatch = jest.fn();
-  const actionProps = mapDispatchToProps(dispatch);
-  const state = { dropdowns: { fuelFlows: "" } };
-  const stateProps = mapStateToProps(state);
+    let { container } = await waitForElement(() =>
+      componentRenderer(true, false, true, true, false)
+    );
 
-  const formData = [];
-  // verify the appropriate action was called
-  actionProps.loadDropdownsData();
+    const fuelBtn = container.querySelectorAll("#btnOpenFuelFlows");
+    for (const x of fuelBtn) {
+      fireEvent.click(x);
+    }
+    expect(container.querySelector("#backBtn")).toBeDefined();
+  });
+  test("mapDispatchToProps calls the appropriate action", async () => {
+    // mock the 'dispatch' object
+    const dispatch = jest.fn();
+    const actionProps = mapDispatchToProps(dispatch);
+    const state = { dropdowns: { fuelFlows: "" } };
+    const stateProps = mapStateToProps(state);
+
+    const formData = [];
+    // verify the appropriate action was called
+    actionProps.loadDropdownsData();
+  });
 });
