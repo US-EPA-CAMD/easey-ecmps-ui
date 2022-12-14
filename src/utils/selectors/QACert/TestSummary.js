@@ -537,11 +537,33 @@ export const mapCycleTimeSummariesToRows = (data) => {
   return records;
 };
 
-export const mapFlowToLoadReferenceToRows = (data) => {
+export const mapCycleTimeInjectionsToRows = (data) => {
   const records = [];
   for (const el of data) {
     const row = {
       id: el.id,
+      col1: el.gasLevelCode,
+      col2: el.calibrationGasValue,
+      col3: el.beginDate,
+      col4: el.beginHour,
+      col5: el.endDate,
+      col6: el.beginMinute,
+      col7: el.endDate,
+      col8: el.endHour,
+      col9: el.endMinute,
+      col10: el.injectionCycleTime,
+      col11: el.beginMonitorValue,
+      col12: el.endMonitorValue,
+
+    };
+    records.push(row);
+  }
+  return records;
+};
+export const mapFlowToLoadReferenceToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
       col1: el.rataTestNumber,
       col2: el.operatingLevelCode,
       col3: el.averageGrossUnitLoad,
@@ -555,6 +577,7 @@ export const mapFlowToLoadReferenceToRows = (data) => {
   }
   return records;
 }
+
 
 export const getListOfRadioControls = (controlInputs) => {
   const result = [];

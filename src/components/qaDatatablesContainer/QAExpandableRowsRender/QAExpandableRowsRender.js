@@ -31,6 +31,7 @@ import {
   qaAppendixECorrTestRunProps,
   qaAppendixECorrelationSummaryHeatInputGasProps,
   qaAppendixECorrelationSummaryHeatInputOilProps,
+  qaCycleTimeInjectionProps,
 } from "../../../additional-functions/qa-dataTable-props";
 import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
 const QAExpandableRowsRender = ({
@@ -300,6 +301,26 @@ const QAExpandableRowsRender = ({
             isCheckedOut={isCheckedOut}
           />
         );
+      // Test Data --> Cycle Time Summary --> Cycle Time Injection
+      case "Cycle Time Summary":
+        const cycleTimeInjectionIdArray = [locationId, id];
+        const cycleTimeInjec = qaCycleTimeInjectionProps();
+        return (
+          <QAExpandableRowsRender
+            payload={cycleTimeInjec["payload"]}
+            dropdownArray={cycleTimeInjec["dropdownArray"]}
+            mdmProps={cycleTimeInjec["mdmProps"]}
+            columns={cycleTimeInjec["columnNames"]}
+            controlInputs={cycleTimeInjec["controlInputs"]}
+            controlDatePickerInputs={cycleTimeInjec["controlDatePickerInputs"]}
+            radioBtnPayload={cycleTimeInjec["radioBtnPayload"]}
+            dataTableName={cycleTimeInjec["dataTableName"]}
+            extraControls={cycleTimeInjec["extraControls"]}
+            extraIDs={cycleTimeInjectionIdArray}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
       default:
         break;
     }
@@ -351,6 +372,29 @@ const QAExpandableRowsRender = ({
           setMdmData(dropdowns);
         }).catch((error => console.log(error)));
         break;
+      case "Cycle Time Injection":
+        allPromises.push(dmApi.getAllGasLevelCodes());
+        allPromises.push(dmApi.getAllGasTypeCodes());
+        Promise.all(allPromises).then((values) => {
+          values.forEach((val, i) => {
+            if (i === 0) {
+              dropdowns[dropdownArray[i]] = val.data.map((d) => {
+                return {
+                  code: d["gasLevelCode"],
+                  name: d["gasLevelDescription"],
+                };
+              });
+              dropdowns[dropdownArray[i]].unshift({
+                code: "",
+                name: "-- Select a value --",
+              });
+            } 
+          });
+
+          setMdmData(dropdowns);
+        }).catch((error => console.log(error)));
+          break;
+
       case "RATA Data":
         allPromises.push(dmApi.getAllRataFreqCodes());
         Promise.all(allPromises).then((values) => {

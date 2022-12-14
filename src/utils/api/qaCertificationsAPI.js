@@ -43,7 +43,7 @@ export const getQATestSummary = async (
   locID,
   selectedTestCode,
   beginDate,
-  endDate,
+  endDate
 ) => {
   let url = `${config.services.qaCertification.uri}`;
   // *** workspace section url (authenticated)
@@ -99,6 +99,23 @@ export const getQATestSummaryByID = async (locID, id) => {
 
   // *** attach the rest of the url
   url = `${url}/locations/${locID}/test-summary/${id}`;
+
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const getQATestSummaryByCode = async (
+  locId,
+  { _beginDate, _endDate, testTypeCodes = [] }
+) => {
+  let url = `${config.services.qaCertification.uri}`;
+
+  // *** attach the rest of the url
+  url = `${url}/locations/${locId}/test-summary`;
+
+  if (testTypeCodes.length > 0) {
+    const param = testTypeCodes.join("|");
+    url = `${url}?testTypeCode=${param}`;
+  }
 
   return axios.get(url).then(handleResponse).catch(handleError);
 };
@@ -1545,6 +1562,60 @@ export const updateCycleTimeSummary = async (locId, testSumId, id, payload) => {
 
 export const deleteCycleTimeSummary = async (locId, testSumId, id) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+
+export const getCycleTimeInjection = async (locId, testSumId, cycleTimeSumId) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${cycleTimeSumId}/cycle-time-injections`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createCycleTimeInjection = async (locId, testSumId, cycleTimeSumId, payload) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${cycleTimeSumId}/cycle-time-injections`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const updateCycleTimeInjection = async (locId, testSumId, cycleTimeSumId, id, payload) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${cycleTimeSumId}/cycle-time-injections/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const deleteCycleTimeInjection = async (locId, testSumId, cycleTimeSumId, id) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${cycleTimeSumId}/cycle-time-injections/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
