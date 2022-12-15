@@ -305,7 +305,6 @@ const QAExpandableRowsRender = ({
       case "Cycle Time Summary":
         const cycleTimeInjectionIdArray = [locationId, id];
         const cycleTimeInjec = qaCycleTimeInjectionProps();
-        console.log(cycleTimeInjec)
         return (
           <QAExpandableRowsRender
             payload={cycleTimeInjec["payload"]}

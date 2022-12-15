@@ -784,7 +784,6 @@ export const createDataSwitch = async (
     case fuelFlowmeterAccuracyData:
       return qaApi.createFuelFlowmeterAccuracyDataRecord(location, id, userInput);
     case cycleTimeSummary:
-      console.log("JORDAN", extraIdsArr, id, userInput)
       return qaApi.createCycleTimeSummary(location, id, userInput);
     case transmitterTransducerAccuracyData:
       return qaApi.createTransmitterTransducerAccuracyDataRecord(location, id, userInput);
