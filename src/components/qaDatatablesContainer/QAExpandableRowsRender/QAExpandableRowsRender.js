@@ -303,7 +303,7 @@ const QAExpandableRowsRender = ({
         );
       // Test Data --> Cycle Time Summary --> Cycle Time Injection
       case "Cycle Time Summary":
-        const cycleTimeInjectionIdArray = [...extraIDs, id];
+        const cycleTimeInjectionIdArray = [locationId, id];
         const cycleTimeInjec = qaCycleTimeInjectionProps();
         return (
           <QAExpandableRowsRender

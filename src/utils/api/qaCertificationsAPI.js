@@ -1585,6 +1585,7 @@ export const getCycleTimeInjection = async (locId, testSumId, cycleTimeSumId) =>
 export const createCycleTimeInjection = async (locId, testSumId, cycleTimeSumId, payload) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${cycleTimeSumId}/cycle-time-injections`;
   const url = getApiUrl(path);
+  delete payload["id"];
   try {
     return handleResponse(
       await secureAxios({
@@ -1780,6 +1781,26 @@ export const createFlowToLoadReference = async (
     return handleResponse(
       await secureAxios({
         method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const updateFlowToLoadReference = async (
+  locId,
+  testSumId,
+  id,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/flow-to-load-references/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
         url: url,
         data: payload,
       })

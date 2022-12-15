@@ -530,6 +530,7 @@ export const mapCycleTimeSummariesToRows = (data) => {
   for (const el of data) {
     const row = {
       id: el.id,
+      testSumId: el.testSumId,
       col1: el.totalTime,
     };
     records.push(row)
@@ -542,6 +543,7 @@ export const mapCycleTimeInjectionsToRows = (data) => {
   for (const el of data) {
     const row = {
       id: el.id,
+      cycleTimeSumId: el.cycleTimeSumId,
       col1: el.gasLevelCode,
       col2: el.calibrationGasValue,
       col3: el.beginDate,
