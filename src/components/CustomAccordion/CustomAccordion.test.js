@@ -33,9 +33,14 @@ describe("testing a reusable accordion component", () => {
     })
     
     it("renders right side component when headerButtonText prop truthy", ()=>{
-      const clonedAccordion = React.cloneElement(accordion, {headerButtonText: "Download To CSV", headerButtonClickHandler: jest.fn()})
+      const headerButtonClickHandler = jest.fn()
+      const clonedAccordion = React.cloneElement(accordion, {headerButtonText: "Download To CSV", headerButtonClickHandler})
       render(clonedAccordion);
-      expect(screen.queryByTestId("rightside-accordion-button-0")).toBeInTheDocument();
+      const downloadBtn = screen.queryByTestId("rightside-accordion-button-0");
+
+      expect(downloadBtn).toBeInTheDocument();
+      userEvent.click(downloadBtn);
+      expect(headerButtonClickHandler).toHaveBeenCalled();
     })
   })
 });

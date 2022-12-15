@@ -26,8 +26,6 @@ export const EmissionsTabRender = ({
   workspaceSection,
 }) => {
   const currentTab = useSelector(state=>state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(t=>t.selectedConfig.id===configID));
-  console.log("currentTab")
-  console.log(currentTab)
   
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
 

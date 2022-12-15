@@ -7,7 +7,7 @@ import HeaderInfo from "./HeaderInfo";
 import { Provider } from "react-redux";
 import { EMISSIONS_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 
-import {storeForEmissionsModule} from "./jsonsForTests";
+import {storeForEmissionsModule} from "./HeaderInfo.test.mocks";
 
 jest.mock("downloadjs", () => {
   return {
