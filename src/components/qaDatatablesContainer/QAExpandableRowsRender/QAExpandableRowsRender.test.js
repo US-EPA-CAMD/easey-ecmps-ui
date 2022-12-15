@@ -28,6 +28,7 @@ import {
   qaCycleTimeSummaryProps,
   qaCycleTimeInjectionProps,
   qaFlowToLoadReferenceProps,
+  qaUnitDefaultTestDataProps
 } from "../../../additional-functions/qa-dataTable-props";
 
 const mock = new MockAdapter(axios);
@@ -1379,6 +1380,70 @@ describe('Test cases for QAExpandableRowsRender', () => {
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
     userEvent.click(saveAndCloseBtn)
+
+  })
+
+  test('renders Unit default test data rows and add functionality', async () => {
+    const unitDefaultTestData = [
+      {
+        "id": "id1",
+        "testSumId": "testSumId1",
+        "fuelCode": "string",
+        "NOxDefaultRate": 0,
+        "operatingConditionCode": "string",
+        "groupID": "string",
+        "numberOfUnitsInGroup": 0,
+        "numberOfTestsForGroup": 0
+      },
+      {
+        "id": "id2",
+        "testSumId": "testSumId2",
+        "fuelCode": "string2",
+        "NOxDefaultRate": 2,
+        "operatingConditionCode": "string2",
+        "groupID": "string2",
+        "numberOfUnitsInGroup": 2,
+        "numberOfTestsForGroup": 2
+      },
+    ]
+
+    const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/unit-default-tests`;
+    const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/unit-default-tests`;
+    //const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/flow-to-load-references/${idRegex}`);
+
+    const fuelCodesURl = 'https://api.epa.gov/easey/dev/master-data-mgmt/fuel-codes'
+    const operatingCondCodesUrl = 'https://api.epa.gov/easey/dev/master-data-mgmt/operating-condition-codes'
+
+    mock.onGet(getUrl).reply(200, unitDefaultTestData)
+    mock.onPost(postUrl).reply(200, 'created')
+    //mock.onPut(putUrl).reply(200, 'updated')
+
+    mock.onGet(fuelCodesURl).reply(200, [])
+    mock.onGet(operatingCondCodesUrl).reply(200, [])
+
+    const props = qaUnitDefaultTestDataProps()
+    const idArray = [locId, testSumId]
+    const data = { locationId: locId, id: testSumId }
+    renderComponent(props, idArray, data);
+
+    // renders rows
+    const rows = await screen.findAllByRole('row')
+    expect(mock.history.get.length).not.toBe(0)
+    expect(rows).toHaveLength(unitDefaultTestData.length)
+
+    // add row
+    const addBtn = screen.getByRole('button', { name: /Add/i })
+    userEvent.click(addBtn)
+    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+
+    // edit row
+    // const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    // expect(editBtns).toHaveLength(flowToLoadReferenceData.length)
+    // userEvent.click(editBtns[0])
+    // saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    // userEvent.click(saveAndCloseBtn)
 
   })
 })

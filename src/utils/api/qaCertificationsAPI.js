@@ -1808,3 +1808,28 @@ export const updateFlowToLoadReference = async (
     return handleImportError(error);
   }
 };
+
+export const getUnitDefaultTest = async (locId, testSumId) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/unit-default-tests`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createUnitDefaultTest = async (
+  locId,
+  testSumId,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/unit-default-tests`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};

@@ -579,6 +579,23 @@ export const mapFlowToLoadReferenceToRows = (data) => {
   return records;
 }
 
+export const mapUnitDefaultTestDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.fuelCode,
+      col2: el.NOxDefaultRate,
+      col3: el.operatingConditionCode,
+      col4: el.groupID,
+      col5: el.numberOfUnitsInGroup,
+      col6: el.numberOfTestsForGroup,
+    };
+    records.push(row)
+  }
+  return records;
+}
+
 
 export const getListOfRadioControls = (controlInputs) => {
   const result = [];
