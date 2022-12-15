@@ -5,7 +5,7 @@ import {
   KeyboardArrowDownSharp,
   KeyboardArrowUpSharp,
 } from "@material-ui/icons";
-const CustomAccordion = ({ title, table, section }) => {
+const CustomAccordion = ({ title, table, section, headerButtonText, headerButtonClickHandler }) => {
   const [open, setOpen] = useState(table.map((item, index) => true));
 
   useEffect(() => {
@@ -61,15 +61,18 @@ const CustomAccordion = ({ title, table, section }) => {
                   {item[1]}
                 </h4>
               </div>
-              <div className="margin-left-2">
-                <Button
-                  type="button"
-                  title="Download to CSV"
-                  // onClick={handleDownload}
-                >
-                  {"Download to CSV"}
-                </Button>
-              </div>
+              { headerButtonText && headerButtonText !== "" ? (
+                <div className="margin-left-2">
+                  <Button
+                    type="button"
+                    title={headerButtonText}
+                    onClick={headerButtonClickHandler}
+                  >
+                    {headerButtonText}
+                  </Button>
+                </div>
+                ) : null 
+              }
             </div>
           {open[index] ? <div className=" ">{item[0]} </div> : ""}
           <br />
