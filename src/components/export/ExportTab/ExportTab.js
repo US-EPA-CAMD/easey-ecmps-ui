@@ -143,6 +143,19 @@ export const ExportTab = ({
     );
   };
 
+  const isPreviewDisabled = ()=>{
+
+    const checkedDataTypes = dataTypes.filter(e=>e.checked);
+
+    // if only qa is checked
+    if( checkedDataTypes.length === 1 && checkedDataTypes[0].name === qa){
+
+      return false;
+    }
+    
+    return true;
+  }
+
   return (
     <>
       {loading ? <Preloader /> : null}
@@ -184,11 +197,7 @@ export const ExportTab = ({
             <Button
               type={"button"}
               className="width-card"
-              disabled={
-                dataTypes.filter((e) => e.checked).length === 0 ||
-                (dataTypes.filter((e) => e.checked).length === 1 &&
-                  dataTypes.find((e) => e.name === mp).checked)
-              }
+              disabled={isPreviewDisabled()}
               onClick={() =>
                 setPreviewOptions({
                   beginDate: reportingPeriod.beginDate,

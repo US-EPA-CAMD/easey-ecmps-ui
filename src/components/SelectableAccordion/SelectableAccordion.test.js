@@ -5,7 +5,12 @@ import { SelectableAccordion } from "./SelectableAccordion";
 describe("Selectable Accordion", () => {
   test("Render selectable accordion with no errors", () => {
     const { container } = render(
-      <SelectableAccordion items={[]} setCanCheck={jest.fn()} />
+      <SelectableAccordion
+        items={[]}
+        setCanCheck={jest.fn()}
+        submissionActionLog={{}}
+        setSubmissionActionLog={jest.fn()}
+      />
     );
 
     expect(container).toBeDefined();
@@ -28,6 +33,8 @@ describe("Selectable Accordion", () => {
             hasExpanded: false,
           },
         ]}
+        submissionActionLog={{}}
+        setSubmissionActionLog={jest.fn()}
         setCanCheck={jest.fn()}
       />
     );
@@ -65,6 +72,8 @@ describe("Selectable Accordion", () => {
             ],
           },
         ]}
+        submissionActionLog={{}}
+        setSubmissionActionLog={jest.fn()}
         setCanCheck={func}
       />
     );

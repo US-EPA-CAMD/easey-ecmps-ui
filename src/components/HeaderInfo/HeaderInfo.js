@@ -46,9 +46,19 @@ import {
 import { getUser } from "../../utils/functions";
 import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
 import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
-import { setIsViewDataLoaded, setReportingPeriods, setViewData, setViewDataColumns, setViewTemplateSelection, setViewTemplateSelectionAction } from "../../store/actions/dynamicFacilityTab";
+import {
+  setIsViewDataLoaded,
+  setReportingPeriods,
+  setViewData,
+  setViewDataColumns,
+  setViewTemplateSelection,
+  setViewTemplateSelectionAction,
+} from "../../store/actions/dynamicFacilityTab";
 import { handleError } from "../../utils/api/apiUtils";
-import { displayAppError, hideAppError } from "../../additional-functions/app-error";
+import {
+  displayAppError,
+  hideAppError,
+} from "../../additional-functions/app-error";
 
 // Helper function that generates an array of years from this year until the year specified in min param
 export const generateArrayOfYears = (min) => {
@@ -118,12 +128,19 @@ export const HeaderInfo = ({
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
-  const selectedUnitId  = selectedConfig?.locations?.filter(l=> l.id === locationSelect[1]).map(l => l.unitId)
-  const selectedStackPipeId  = selectedConfig?.locations?.filter(l=> l.id === locationSelect[1]).map(l => l.stackPipeId)
-
+  const selectedUnitId = selectedConfig?.locations
+    ?.filter((l) => l.id === locationSelect[1])
+    .map((l) => l.unitId);
+  const selectedStackPipeId = selectedConfig?.locations
+    ?.filter((l) => l.id === locationSelect[1])
+    .map((l) => l.stackPipeId);
 
   const dispatch = useDispatch();
-  const currentTab = useSelector(state=>state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(t=>t.selectedConfig.id===configID));
+  const currentTab = useSelector((state) =>
+    state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(
+      (t) => t.selectedConfig.id === configID
+    )
+  );
 
   const [checkedOutConfigs, setCheckedOutConfigs] = useState([]);
   const [auditInformation, setAuditInformation] = useState("");
@@ -169,17 +186,21 @@ export const HeaderInfo = ({
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState([]);
 
-  const [showEmissionsImportTypeModal, setShowEmissionsImportTypeModal] = useState(false);
-  const [showHistoricalDataImportModal, setShowHistoricalDataImportModal] = useState(false);
+  const [showEmissionsImportTypeModal, setShowEmissionsImportTypeModal] =
+    useState(false);
+  const [showHistoricalDataImportModal, setShowHistoricalDataImportModal] =
+    useState(false);
 
-  const [selectedReportingPeriods, setSelectedReportingPeriods] = useState(currentTab?.reportingPeriods ?? []);
+  const [selectedReportingPeriods, setSelectedReportingPeriods] = useState(
+    currentTab?.reportingPeriods ?? []
+  );
 
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
 
   const MAX_REPORTING_PERIODS = 4;
-  const MAX_REPORTING_PERIODS_ERROR_MSG = "You can only select a maximum of four reporting periods";
+  const MAX_REPORTING_PERIODS_ERROR_MSG =
+    "You can only select a maximum of four reporting periods";
 
-  
   let reportingPeriods = useMemo(
     () =>
       getReportingPeriods().map((reportingPeriod) => {
@@ -194,14 +215,20 @@ export const HeaderInfo = ({
   );
 
   // Sets the value in redux
-  const dispatchViewTemplateSelect = (selectedViewTemplate)=>{
-    dispatch(setViewTemplateSelectionAction(selectedViewTemplate, currentTab.name, EMISSIONS_STORE_NAME));
-  }
+  const dispatchViewTemplateSelect = (selectedViewTemplate) => {
+    dispatch(
+      setViewTemplateSelectionAction(
+        selectedViewTemplate,
+        currentTab.name,
+        EMISSIONS_STORE_NAME
+      )
+    );
+  };
 
-  useEffect(()=>{
-    if(currentTab?.viewTemplateSelect)
-      setViewTemplateSelect(currentTab.viewTemplateSelect)
-  }, [currentTab])
+  useEffect(() => {
+    if (currentTab?.viewTemplateSelect)
+      setViewTemplateSelect(currentTab.viewTemplateSelect);
+  }, [currentTab]);
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
@@ -235,13 +262,11 @@ export const HeaderInfo = ({
 
     getViews().then(({ data }) => {
       setViewTemplates(data);
-      if (!currentTab?.viewTemplateSelect && data?.length > 0){
-
+      if (!currentTab?.viewTemplateSelect && data?.length > 0) {
         setViewTemplateSelect(data[0]);
-      } 
+      }
     });
   }, [workspaceSection, setViewTemplateSelect]);
-
 
   const executeOnClose = () => {
     setShowCommentsModal(false);
@@ -252,7 +277,7 @@ export const HeaderInfo = ({
   const resetImportFlags = () => {
     setShowImportModal(false);
     setShowEmissionsImportTypeModal(false);
-    setShowHistoricalDataImportModal(false)
+    setShowHistoricalDataImportModal(false);
     setDisablePortBtn(true);
     setFinishedLoading(false);
     setIsLoading(false);
@@ -260,7 +285,7 @@ export const HeaderInfo = ({
     setHasFormatError(false);
     setHasInvalidJsonError(false);
     setImportApiErrors([]);
-    setImportedFileErrorMsgs([])
+    setImportedFileErrorMsgs([]);
   };
 
   const reportWindowParams = [
@@ -297,23 +322,21 @@ export const HeaderInfo = ({
   };
 
   const openImportModal = () => {
+    setShowImportModal(true);
 
-      setShowImportModal(true);
-
-      setTimeout(() => {
-        attachChangeEventListeners(".modalUserInput");
-      });  
+    setTimeout(() => {
+      attachChangeEventListeners(".modalUserInput");
+    });
   };
 
   const openModal = () => {
-    if( workspaceSection === MONITORING_PLAN_STORE_NAME){
+    if (workspaceSection === MONITORING_PLAN_STORE_NAME) {
       openImportModal();
-    }
-    else{
+    } else {
       setShowEmissionsImportTypeModal(true);
     }
-  }
-  
+  };
+
   const handleEmissionsExport = async () => {
     const promises = [];
     for (const selectedReportingPeriod of selectedReportingPeriods) {
@@ -645,40 +668,47 @@ export const HeaderInfo = ({
   };
 
   const importMPFile = (payload) => {
-    mpApi.importMP(payload).then((response) => {
-      setIsLoading(true);
-      if (response) {
-        setImportedFileErrorMsgs(response);
-      }
-    }).catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      setIsLoading(false);
-      setFinishedLoading(true);
-    });;
+    mpApi
+      .importMP(payload)
+      .then((response) => {
+        setIsLoading(true);
+        if (response) {
+          setImportedFileErrorMsgs(response);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setFinishedLoading(true);
+      });
   };
 
-  const importEmissionsFile = (payload) =>{
+  const importEmissionsFile = (payload) => {
     setIsLoading(true);
     setFinishedLoading(false);
-    emApi.importEmissionsData(payload).then(({data, status}) => {
-      if (status === 201) {
-        setImportedFileErrorMsgs([]);
-      }
-      else if( status === 400)
-        setImportedFileErrorMsgs(data?.message?.split(",") || ["HTTP 400 Error"])
-      else{
-        setImportedFileErrorMsgs(`HTTP ${status} Error`)
-      }
-    }).catch(err=>{
-      console.log(err)
-    }).finally(()=>{
-      setIsLoading(false);
-      setFinishedLoading(true)
-    });
-
-  }
+    emApi
+      .importEmissionsData(payload)
+      .then(({ data, status }) => {
+        if (status === 201) {
+          setImportedFileErrorMsgs([]);
+        } else if (status === 400)
+          setImportedFileErrorMsgs(
+            data?.message?.split(",") || ["HTTP 400 Error"]
+          );
+        else {
+          setImportedFileErrorMsgs(`HTTP ${status} Error`);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setFinishedLoading(true);
+      });
+  };
 
   const closeImportModalHandler = () => {
     const importBtn = document.querySelector("#importBtn");
@@ -695,13 +725,11 @@ export const HeaderInfo = ({
     }
   };
 
-  const importFile = (payload) =>{
-    
-    if(workspaceSection === MONITORING_PLAN_STORE_NAME)
-      importMPFile(payload);
-    else if(workspaceSection === EMISSIONS_STORE_NAME)
+  const importFile = (payload) => {
+    if (workspaceSection === MONITORING_PLAN_STORE_NAME) importMPFile(payload);
+    else if (workspaceSection === EMISSIONS_STORE_NAME)
       importEmissionsFile(payload);
-  }
+  };
 
   const evaluate = () => {
     triggerEvaluation({
@@ -746,20 +774,28 @@ export const HeaderInfo = ({
   };
 
   const handleSelectReportingPeriod = (id, updateType) => {
-    const uniqueReportingPeriods = [...new Set([...selectedReportingPeriods, id])];
-    
+    const uniqueReportingPeriods = [
+      ...new Set([...selectedReportingPeriods, id]),
+    ];
+
     hideAppError();
-    if(uniqueReportingPeriods.length > MAX_REPORTING_PERIODS){
-      displayAppError(MAX_REPORTING_PERIODS_ERROR_MSG)
-      const addedRp = reportingPeriods.find(rp=> rp.id === id);
-      addedRp.selected=false;
-      reportingPeriods = [...reportingPeriods]
+    if (uniqueReportingPeriods.length > MAX_REPORTING_PERIODS) {
+      displayAppError(MAX_REPORTING_PERIODS_ERROR_MSG);
+      const addedRp = reportingPeriods.find((rp) => rp.id === id);
+      addedRp.selected = false;
+      reportingPeriods = [...reportingPeriods];
       return;
     }
 
     if (updateType === "add") {
       setSelectedReportingPeriods(uniqueReportingPeriods);
-      dispatch(setReportingPeriods(uniqueReportingPeriods, currentTab.name, workspaceSection));
+      dispatch(
+        setReportingPeriods(
+          uniqueReportingPeriods,
+          currentTab.name,
+          workspaceSection
+        )
+      );
     } else if (updateType === "remove") {
       const selected = reportingPeriods
         .filter((reportingPeriod) => {
@@ -770,75 +806,87 @@ export const HeaderInfo = ({
         });
 
       setSelectedReportingPeriods(selected);
-      dispatch(setReportingPeriods(selected, currentTab.name, workspaceSection));
+      dispatch(
+        setReportingPeriods(selected, currentTab.name, workspaceSection)
+      );
     }
   };
 
-  const handleExport = ()=>{
-    if( workspaceSection === EMISSIONS_STORE_NAME )
-      handleEmissionsExport()
-  }
+  const handleExport = () => {
+    if (workspaceSection === EMISSIONS_STORE_NAME) handleEmissionsExport();
+  };
 
-  const onChangeOfEmissionsImportType = (e)=>{
-    const {value} = e.target
-    if(value === "file"){
-      setShowImportModal(true)
+  const onChangeOfEmissionsImportType = (e) => {
+    const { value } = e.target;
+    if (value === "file") {
+      setShowImportModal(true);
     }
 
-    if(value === "historical"){
+    if (value === "historical") {
       setShowHistoricalDataImportModal(true);
     }
 
-    setShowEmissionsImportTypeModal(false)
-  }
-
-  const applyFilters = async ( monitorPlanId, unitIds, stackPipeIds) => {
-   
-      dispatch(setIsViewDataLoaded(false, currentTab.name, workspaceSection));
-      const response = await emApi.getEmissionViewData(
-        viewTemplateSelect?.code,
-        monitorPlanId,
-        selectedReportingPeriods,
-        unitIds,
-        stackPipeIds
-      );
-  
-      if (
-        response &&
-        response.status === 200 &&
-        response.headers["x-field-mappings"] &&
-        response.data
-      ) {
-        const columns = JSON.parse(response.headers["x-field-mappings"]);
-        const results = response.data;
-  
-        const names = columns.map((column) => column.label);
-  
-        const formattedResults = [];
-        for (const result of results) {
-          let id = 1;
-          const formattedObject = {};
-          for (const resultKey in result) {
-            formattedObject[`col${id}`] = result[resultKey];
-            id += 1;
-          }
-          formattedResults.push(formattedObject);
-        }
-  
-        dispatch(setViewTemplateSelectionAction(viewTemplateSelect, currentTab.name, EMISSIONS_STORE_NAME));
-        dispatch(setViewDataColumns(names, currentTab.name, workspaceSection))
-        dispatch(setViewData(formattedResults, currentTab.name, workspaceSection))
-        dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection))
-
-  
-      } else {
-        dispatch(setViewTemplateSelectionAction(viewTemplateSelect, currentTab.name, EMISSIONS_STORE_NAME));
-        dispatch(setViewDataColumns([], currentTab.name, workspaceSection))
-        dispatch(setViewData([], currentTab.name, workspaceSection))
-        dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection))
-      }
+    setShowEmissionsImportTypeModal(false);
   };
 
+  const applyFilters = async (monitorPlanId, unitIds, stackPipeIds) => {
+    dispatch(setIsViewDataLoaded(false, currentTab.name, workspaceSection));
+    const response = await emApi.getEmissionViewData(
+      viewTemplateSelect?.code,
+      monitorPlanId,
+      selectedReportingPeriods,
+      unitIds,
+      stackPipeIds,
+      inWorkspace
+    );
+
+    if (
+      response &&
+      response.status === 200 &&
+      response.headers["x-field-mappings"] &&
+      response.data
+    ) {
+      const columns = JSON.parse(response.headers["x-field-mappings"]);
+      const results = response.data;
+
+      const names = columns.map((column) => column.label);
+
+      const formattedResults = [];
+      for (const result of results) {
+        let id = 1;
+        const formattedObject = {};
+        for (const resultKey in result) {
+          formattedObject[`col${id}`] = result[resultKey];
+          id += 1;
+        }
+        formattedResults.push(formattedObject);
+      }
+
+      dispatch(
+        setViewTemplateSelectionAction(
+          viewTemplateSelect,
+          currentTab.name,
+          EMISSIONS_STORE_NAME
+        )
+      );
+      dispatch(setViewDataColumns(names, currentTab.name, workspaceSection));
+      dispatch(
+        setViewData(formattedResults, currentTab.name, workspaceSection)
+      );
+      dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection));
+    } else {
+      dispatch(
+        setViewTemplateSelectionAction(
+          viewTemplateSelect,
+          currentTab.name,
+          EMISSIONS_STORE_NAME
+        )
+      );
+      dispatch(setViewDataColumns([], currentTab.name, workspaceSection));
+      dispatch(setViewData([], currentTab.name, workspaceSection));
+      dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection));
+    }
+  };
 
   return (
     <div className="header">
@@ -894,18 +942,18 @@ export const HeaderInfo = ({
               >
                 Export Data
               </Button>
-                {user && checkedOutByUser &&(
-                  <Button
-                    type="button"
-                    className="margin-right-2 float-right"
-                    outline={false}
-                    onClick={() => openModal()}
-                    id="importBtn"
-                  >
-                    Import Data
-                  </Button>
-                )}
-              </div>
+              {user && checkedOutByUser && (
+                <Button
+                  type="button"
+                  className="margin-right-2 float-right"
+                  outline={false}
+                  onClick={() => openModal()}
+                  id="importBtn"
+                >
+                  Import Data
+                </Button>
+              )}
+            </div>
           </div>
 
           {dataLoaded && (
@@ -1110,9 +1158,11 @@ export const HeaderInfo = ({
                       epa-testid={"viewtemplate"}
                       data-testid={"viewtemplate"}
                       value={viewTemplateSelect?.name}
-                      onChange={(e) =>{
-                        setViewTemplateSelect(viewTemplates.find(v=>v.name === e.target.value))}
-                      } 
+                      onChange={(e) => {
+                        setViewTemplateSelect(
+                          viewTemplates.find((v) => v.name === e.target.value)
+                        );
+                      }}
                       className="maxw-mobile"
                     >
                       {viewTemplates?.map((view) => (
@@ -1143,7 +1193,13 @@ export const HeaderInfo = ({
                     type="button"
                     title="Apply Filter(s)"
                     className="cursor-pointer text-no-wrap apply-filter-position"
-                    onClick={()=>applyFilters(configID, selectedUnitId, selectedStackPipeId).catch(handleError)}
+                    onClick={() =>
+                      applyFilters(
+                        configID,
+                        selectedUnitId,
+                        selectedStackPipeId
+                      ).catch(handleError)
+                    }
                   >
                     {"Apply Filter(s)"}
                   </Button>
@@ -1187,7 +1243,11 @@ export const HeaderInfo = ({
             close={closeImportModalHandler}
             showCancel={true}
             showSave={true}
-            title={ workspaceSection === MONITORING_PLAN_STORE_NAME ? "Import a Monitoring Plan to continue" : "Import Data"}
+            title={
+              workspaceSection === MONITORING_PLAN_STORE_NAME
+                ? "Import a Monitoring Plan to continue"
+                : "Import Data"
+            }
             exitBTN={"Import"}
             disablePortBtn={disablePortBtn}
             port={() => {
@@ -1238,40 +1298,47 @@ export const HeaderInfo = ({
 
       {/* For file imports, after it finishes uploading , shows either api errors or success messages */}
       {/* For importing historical data, this is ONLY used to display errors */}
-      {(showImportModal || showHistoricalDataImportModal) && finishedLoading && (
-        <UploadModal
-          show={showImportModal}
-          close={closeImportModalHandler}
-          showCancel={false}
-          showSave={true}
-          exitBtn={"Ok"}
-          complete={true}
-          importApiErrors={importApiErrors}
-          importedFileErrorMsgs={importedFileErrorMsgs}
-          setUpdateRelatedTables={setUpdateRelatedTables}
-          successMsg={ workspaceSection === MONITORING_PLAN_STORE_NAME ? "Monitoring Plan has been Successfully Imported." : "Test Data from File has been successfully imported."}
-          children={
-            <ImportModal
-              setDisablePortBtn={setDisablePortBtn}
-              disablePortBtn={disablePortBtn}
-              complete={true}
-              fileName={fileName}
-              importApiErrors={importApiErrors}
-              importedFileErrorMsgs={importedFileErrorMsgs}
-            />
-          }
-        />
-      )}
+      {(showImportModal || showHistoricalDataImportModal) &&
+        finishedLoading && (
+          <UploadModal
+            show={showImportModal}
+            close={closeImportModalHandler}
+            showCancel={false}
+            showSave={true}
+            exitBtn={"Ok"}
+            complete={true}
+            importApiErrors={importApiErrors}
+            importedFileErrorMsgs={importedFileErrorMsgs}
+            setUpdateRelatedTables={setUpdateRelatedTables}
+            successMsg={
+              workspaceSection === MONITORING_PLAN_STORE_NAME
+                ? "Monitoring Plan has been Successfully Imported."
+                : "Test Data from File has been successfully imported."
+            }
+            children={
+              <ImportModal
+                setDisablePortBtn={setDisablePortBtn}
+                disablePortBtn={disablePortBtn}
+                complete={true}
+                fileName={fileName}
+                importApiErrors={importApiErrors}
+                importedFileErrorMsgs={importedFileErrorMsgs}
+              />
+            }
+          />
+        )}
 
       {showEmissionsImportTypeModal && (
         <UploadModal
           title="Import Data"
           show={showEmissionsImportTypeModal}
-          close={()=>setShowEmissionsImportTypeModal(false)}
+          close={() => setShowEmissionsImportTypeModal(false)}
           showCancel={true}
           showImport={false}
           children={
-            <EmissionsImportTypeModalContent onChange={onChangeOfEmissionsImportType} />
+            <EmissionsImportTypeModalContent
+              onChange={onChangeOfEmissionsImportType}
+            />
           }
         />
       )}
@@ -1288,25 +1355,25 @@ export const HeaderInfo = ({
       )}
 
       {showCommentsModal && (
-          <UploadModal
-            show={showCommentsModal}
-            width={"50%"}
-            left={"25%"}
-            close={() => executeOnClose()}
-            showCancel={false}
-            showSave={false}
-            complete={true}
-            xBtn
-            notUploadVersion
-            children={
-              <GenericTable
-                data1={commentsData}
-                title={"Monitoring Plan - Comments"}
-                expandable={true}
-                additionalTitle={facilityAdditionalName}
-              />
-            }
-          />
+        <UploadModal
+          show={showCommentsModal}
+          width={"50%"}
+          left={"25%"}
+          close={() => executeOnClose()}
+          showCancel={false}
+          showSave={false}
+          complete={true}
+          xBtn
+          notUploadVersion
+          children={
+            <GenericTable
+              data1={commentsData}
+              title={"Monitoring Plan - Comments"}
+              expandable={true}
+              additionalTitle={facilityAdditionalName}
+            />
+          }
+        />
       )}
     </div>
   );

@@ -15,6 +15,7 @@ export default {
     export: [],
     emissions:[]
   },
+  checkedOutLocations: [],
   dropdowns: {
     defaults: [],
     formulas: [],

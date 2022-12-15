@@ -23,6 +23,7 @@ import {
   qaFuelFlowmeterAccuracyDataProps,
   qaCycleTimeSummaryProps,
   qaTransmitterTransducerAccuracyDataProps,
+  qaFlowToLoadReferenceProps,
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
@@ -746,6 +747,26 @@ const QATestSummaryDataTable = ({
             radioBtnPayload={transmitterTransducerAccuracyDataProps["radioBtnPayload"]}
             dataTableName={transmitterTransducerAccuracyDataProps["dataTableName"]}
             extraControls={transmitterTransducerAccuracyDataProps["extraControls"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "FLR":
+        const flowToLoadReferenceProps = qaFlowToLoadReferenceProps();
+        return (
+          <QAExpandableRowsRender
+            payload={flowToLoadReferenceProps["payload"]}
+            dropdownArray={flowToLoadReferenceProps["dropdownArray"]}
+            mdmProps={flowToLoadReferenceProps["mdmProps"]}
+            columns={flowToLoadReferenceProps["columnNames"]}
+            controlInputs={flowToLoadReferenceProps["controlInputs"]}
+            controlDatePickerInputs={flowToLoadReferenceProps["controlDatePickerInputs"]}
+            radioBtnPayload={flowToLoadReferenceProps["radioBtnPayload"]}
+            dataTableName={flowToLoadReferenceProps["dataTableName"]}
+            extraControls={flowToLoadReferenceProps["extraControls"]}
             expandable
             {...props}
             extraIDs={null}
