@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./ReviewAndSubmitTables.scss";
@@ -21,7 +21,7 @@ const ReviewAndSubmitTables = ({
   emissionsRef,
   permissions,
 }) => {
-  const selectMonPlanRow = (id) => {
+  const selectMonPlanRow = useCallback((id) => {
     for (const mpR of monPlanRef.current) {
       if (mpR.monPlanId === id && getRowState(mpR, "MP") === "Checkbox") {
         mpR.selected = true;
@@ -29,10 +29,11 @@ const ReviewAndSubmitTables = ({
       }
     }
 
-    setMonPlanState([...monPlanRef.current]); //Update monitor plan state
-  };
+    setMonPlanState([...monPlanRef.current]); //Update monitor plan state 
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const getRowState = (row, type) => {
+  const getRowState = useCallback((row, type) => {
     if (row.viewOnly) {
       return "View";
     }
@@ -62,10 +63,10 @@ const ReviewAndSubmitTables = ({
       return "Checkbox"; //True checkbox
     } else {
       return "View";
-    }
-  };
+    }//eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const tables = [
+  const tables = useMemo(() => [
     {
       columns: monPlanColumns,
       state: monPlanState,
@@ -89,8 +90,8 @@ const ReviewAndSubmitTables = ({
       ref: emissionsRef,
       name: "Emissions",
       type: "EM",
-    },
-  ];
+    },//eslint-disable-next-line react-hooks/exhaustive-deps
+  ], [monPlanState, qaTestSumState, emissionsState]);
 
   const [activeTables, setActiveTables] = useState(
     tables.reduce((acc, curr) => ({ ...acc, [curr.name]: true }), {})

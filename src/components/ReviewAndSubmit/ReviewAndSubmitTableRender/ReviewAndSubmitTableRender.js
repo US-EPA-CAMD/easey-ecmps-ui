@@ -1,5 +1,5 @@
 import { ArrowDownwardSharp } from "@material-ui/icons";
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useState, useCallback } from "react";
 import DataTable from "react-data-table-component";
 import {
   addScreenReaderLabelForCollapses,
@@ -73,7 +73,7 @@ const ReviewAndSubmitTableRender = forwardRef(
       ...columns,
     ];
 
-    const selectAll = (bool) => {
+    const selectAll = useCallback((bool) => {
       for (const r of ref.current) {
         if (getRowState(r, type) === "Checkbox") {
           //Logic to see if row can actually be checked out
@@ -85,10 +85,10 @@ const ReviewAndSubmitTableRender = forwardRef(
             selectMonPlanRow(r.monPlanId);
           }
         }
-      }
-    };
+      }//eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-    const handleRowView = (row) => {
+    const handleRowView = useCallback((row) => {
       let reportTitle;
       let reportCode;
       let url;
@@ -98,10 +98,10 @@ const ReviewAndSubmitTableRender = forwardRef(
       reportTitle = "ECMPS Monitoring Plan Printout Report";
       url = `/workspace/reports?reportCode=${reportCode}&monitorPlanId=${row.monPlanId}`;
 
-      window.open(url, reportTitle, reportWindowParams);
-    };
+      window.open(url, reportTitle, reportWindowParams);//eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-    const handleRowSelection = (row, type, selection) => {
+    const handleRowSelection = useCallback((row, type, selection) => {
       if (selection === false) {
         setSelectAllState(false);
       }
@@ -123,8 +123,8 @@ const ReviewAndSubmitTableRender = forwardRef(
             selectMonPlanRow(row.monPlanId);
           }
         }
-      }
-    };
+      }//eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
       <div>
