@@ -15,6 +15,7 @@ const locId ="locId";
 const testSumId = "testSumId";
 const appECorrTestSumId="appECorrTestSumId";
 const appECorrTestRunId ="appECorrTestRunId";
+const linSumId = "linSumId";
 
 const lineTest = "Linearity Test";
 const testQualification = "Test Qualification";
@@ -457,6 +458,314 @@ describe("Transmitter Transducer Accuracy Data CRUD operations", () => {
     const resp = await qaAssert.removeDataSwitch(
       {id: id},
       transmitterTransducerAccuracyData,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.delete.length).toBe(1);
+    expect(resp.data).toStrictEqual("deleted");
+  });
+});
+
+describe("Flow to Load Check CRUD operations", () => {
+  beforeEach(() => {
+    mock.resetHistory();
+  });
+  test("getFlowToLoadCheckRecords", async () => {
+    const flowToLoadCheckData = [
+      { flowToLoadCheck: "data" },
+    ];
+    const postFlowToLoadCheckUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks`;
+    mock
+      .onGet(postFlowToLoadCheckUrl)
+      .reply(200, flowToLoadCheckData);
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.getDataTableApis(
+      flowToLoadCheck,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.get.length).toBe(1);
+    expect(resp.data).toStrictEqual(flowToLoadCheckData);
+  });
+
+  test("createFlowToLoadCheckRecord", async () => {
+    const payload = { flowToLoadCheck: "data" };
+    const postFlowToLoadCheckUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks`;
+    mock.onPost(postFlowToLoadCheckUrl).reply(200, "success");
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.createDataSwitch(
+      payload,
+      flowToLoadCheck,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.post.length).toBe(1);
+    expect(resp.data).toStrictEqual("success");
+  });
+
+  test("updateFlowToLoadCheckRecord", async () => {
+    const payload = { id:id, flowToLoadCheck: "data" };
+    const putFlowToLoadCheckUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks/${id}`;
+    mock.onPut(putFlowToLoadCheckUrl).reply(200, "success");
+
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.saveDataSwitch(
+      payload,
+      flowToLoadCheck,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.put.length).toBe(1);
+    expect(resp.data).toStrictEqual("success");
+  });
+
+  test("deleteFlowToLoadCheckRecord", async () => {
+    const deleteFlowToLoadCheckUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks/${id}`;
+    mock.onDelete(deleteFlowToLoadCheckUrl).reply(200, "deleted");
+
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.removeDataSwitch(
+      {id: id},
+      flowToLoadCheck,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.delete.length).toBe(1);
+    expect(resp.data).toStrictEqual("deleted");
+  });
+});
+
+describe("Linear Injection CRUD operations", () => {
+  beforeEach(() => {
+    mock.resetHistory();
+  });
+  test("getQALinearityInjection", async () => {
+    const qaLinearityInjectionData = [
+      { qaLinearityInjection: "data" },
+    ];
+    const postQALinearityInjectionUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/linearities/${linSumId}/injections`;
+    mock
+      .onGet(postQALinearityInjectionUrl)
+      .reply(200, qaLinearityInjectionData);
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.getDataTableApis(
+      lineInjection,
+      locId,
+      linSumId,
+      extraIDs
+    )
+
+    expect(mock.history.get.length).toBe(1);
+    expect(resp.data).toStrictEqual(qaLinearityInjectionData);
+  });
+
+  test("createQALinearityInjection", async () => {
+    const payload = { qaLinearityInjection: "data" };
+    const postQALinearityInjectionUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/linearities/${linSumId}/injections/`;
+    mock.onPost(postQALinearityInjectionUrl).reply(200, "success");
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.createDataSwitch(
+      payload,
+      lineInjection,
+      locId,
+      linSumId,
+      extraIDs
+    )
+
+    expect(mock.history.post.length).toBe(1);
+    expect(resp.data).toStrictEqual("success");
+  });
+
+  test("editQALinearityInjection", async () => {
+    const payload = { id:id, qaLinearityInjection: "data" };
+    const putQALinearityInjectionUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/linearities/${linSumId}/injections/${id}`;
+    mock.onPut(putQALinearityInjectionUrl).reply(200, "success");
+
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.saveDataSwitch(
+      payload,
+      lineInjection,
+      locId,
+      linSumId,
+      extraIDs
+    )
+
+    expect(mock.history.put.length).toBe(1);
+    expect(resp.data).toStrictEqual("success");
+  });
+
+  test("deleteQALinearityInjection", async () => {
+    const deleteQALinearityInjectionUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/linearities/${linSumId}/injections/${id}`;
+    mock.onDelete(deleteQALinearityInjectionUrl).reply(200, "deleted");
+
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.removeDataSwitch(
+      {id: id},
+      lineInjection,
+      locId,
+      linSumId,
+      extraIDs
+    )
+
+    expect(mock.history.delete.length).toBe(1);
+    expect(resp.data).toStrictEqual("deleted");
+  });
+});
+
+describe("Rata Data CRUD operations", () => {
+  beforeEach(() => {
+    mock.resetHistory();
+  });
+  test("getRataData", async () => {
+    const rataDataObject = [
+      { rataData: "data" },
+    ];
+    const postRataDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/rata`;
+    mock
+      .onGet(postRataDataUrl)
+      .reply(200, rataDataObject);
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.getDataTableApis(
+      rataData,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.get.length).toBe(1);
+    expect(resp.data).toStrictEqual(rataDataObject);
+  });
+
+  test("createRataData", async () => {
+    const payload = { rataData: "data" };
+    const postRataDataUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata`;
+    mock.onPost(postRataDataUrl).reply(200, "success");
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.createDataSwitch(
+      payload,
+      rataData,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.post.length).toBe(1);
+    expect(resp.data).toStrictEqual("success");
+  });
+
+  test("updateRataData", async () => {
+    const payload = { id:id, rataData: "data" };
+    const putRataDataUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${id}`;
+    mock.onPut(putRataDataUrl).reply(200, "success");
+
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.saveDataSwitch(
+      payload,
+      rataData,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.put.length).toBe(1);
+    expect(resp.data).toStrictEqual("success");
+  });
+
+  test("deleteRataData", async () => {
+    const deleteRataDataUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${id}`;
+    mock.onDelete(deleteRataDataUrl).reply(200, "deleted");
+
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.removeDataSwitch(
+      {id: id},
+      rataData,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.delete.length).toBe(1);
+    expect(resp.data).toStrictEqual("deleted");
+  });
+});
+
+describe("Air Emissions CRUD operations", () => {
+  beforeEach(() => {
+    mock.resetHistory();
+  });
+  test("getAirEmissions", async () => {
+    const airEmissionsObject = [
+      { airEmissions: "data" },
+    ];
+    const postAirEmissionsUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/air-emission-testings`;
+    mock
+      .onGet(postAirEmissionsUrl)
+      .reply(200, airEmissionsObject);
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.getDataTableApis(
+      airEmissions,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.get.length).toBe(1);
+    expect(resp.data).toStrictEqual(airEmissionsObject);
+  });
+
+  test("createAirEmissions", async () => {
+    const payload = { airEmissions: "data" };
+    const postAirEmissionsUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/air-emission-testings`;
+    mock.onPost(postAirEmissionsUrl).reply(200, "success");
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.createDataSwitch(
+      payload,
+      airEmissions,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.post.length).toBe(1);
+    expect(resp.data).toStrictEqual("success");
+  });
+
+  test("updateAirEmissions", async () => {
+    const payload = { id:id, airEmissions: "data" };
+    const putAirEmissionsUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/air-emission-testings/${id}`;
+    mock.onPut(putAirEmissionsUrl).reply(200, "success");
+
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.saveDataSwitch(
+      payload,
+      airEmissions,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.put.length).toBe(1);
+    expect(resp.data).toStrictEqual("success");
+  });
+
+  test("deleteAirEmissions", async () => {
+    const deleteAirEmissionsUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/air-emission-testings/${id}`;
+    mock.onDelete(deleteAirEmissionsUrl).reply(200, "deleted");
+
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.removeDataSwitch(
+      {id: id},
+      airEmissions,
       locId,
       testSumId,
       extraIDs
