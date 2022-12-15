@@ -46,14 +46,15 @@ export const EmissionsTabRender = ({
   }, [currentTab])
   
   const handleDownload = async () => {
+    const selectedUnitId  = selectedConfig?.locations?.filter(l=> l.id === locationSelect[1]).map(l => l.unitId)
+    const selectedStackPipeId  = selectedConfig?.locations?.filter(l=> l.id === locationSelect[1]).map(l => l.stackPipeId)
+  
     getEmissionViewData(
       viewTemplateSelect.code,
       configID,
       currentTab.reportingPeriods,
-      selectedConfig?.unitStackConfigurations.map((config) => config.unitId),
-      selectedConfig?.unitStackConfigurations.map(
-        (config) => config.stackPipeId
-      ),
+      selectedUnitId,
+      selectedStackPipeId,
       true
     )
       .then((response) => {
@@ -108,23 +109,18 @@ export const EmissionsTabRender = ({
       <hr />
       {!isInitialLoadOfPage && (
         <div>
-          <Button
-            type="button"
-            title="Download to CSV"
-            className="download-button"
-            onClick={handleDownload}
-          >
-            {"Download to CSV"}
-          </Button>
           <div className="grid-row overflow-x-auto">
             <CustomAccordion
               title={viewTemplateSelect?.name}
+              headerButtonText="Download To CSV"
+              headerButtonClickHandler={handleDownload}
               table={[
                 [
                   <DataTableRender
                     dataLoaded={isDataLoaded}
                     columnNames={viewColumns ?? []}
                     data={viewData ?? []}
+                    headerButtonText
                   />,
                   viewTemplateSelect?.name ?? "",
                 ]
