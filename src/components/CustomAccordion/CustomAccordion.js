@@ -27,45 +27,50 @@ const CustomAccordion = ({ title, table, section }) => {
     <div className="">
       {table.map((item, index) => (
         <div key={index} className={"clearfix"}>
-          {open[index] ? (
-            <div className="text-bold font-body-xl display-block height-auto">
-              <Button
-                aria-label={`Collapse ${item[1]}`}
-                className="bg-base-lighter text-black"
-                onClick={() => tableState(index, false)}
-                epa-testid="collapseBTN"
-                id="collapseBTN"
-              >
-                <KeyboardArrowUpSharp />
-              </Button>
-              <h4
-                className="display-inline"
-                epa-testid={`${item[1].split(" ").join("")}`}
-              >
-                {" "}
-                {item[1]}
-              </h4>
+            <div className="text-bold font-body-xl display-block height-auto display-flex">
+              <div>
+                { open[index] ? (
+                    <Button
+                      aria-label={`Collapse ${item[1]}`}
+                      className="bg-base-lighter text-black"
+                      onClick={() => tableState(index, false)}
+                      epa-testid="collapseBTN"
+                      id="collapseBTN"
+                    >
+                      <KeyboardArrowUpSharp />
+                    </Button>
+                  ) : (
+                    <Button
+                      aria-label={`Expand ${item[1]}`}
+                      epa-testid="expandBTN"
+                      id="expandBTN"
+                      className="bg-base-lighter text-black"
+                      onClick={() => tableState(index, true)}
+                    >
+                      <KeyboardArrowDownSharp />
+                    </Button>
+                  )
+                }
+              </div>
+              <div className="margin-top-1">
+                <h4
+                  className="display-inline"
+                  epa-testid={`${item[1].split(" ").join("")}`}
+                >
+                  {" "}
+                  {item[1]}
+                </h4>
+              </div>
+              <div className="margin-left-2">
+                <Button
+                  type="button"
+                  title="Download to CSV"
+                  // onClick={handleDownload}
+                >
+                  {"Download to CSV"}
+                </Button>
+              </div>
             </div>
-          ) : (
-            <div className="text-bold font-body-xl display-block height-auto ">
-              <Button
-                aria-label={`Expand ${item[1]}`}
-                epa-testid="expandBTN"
-                id="expandBTN"
-                className="bg-base-lighter text-black"
-                onClick={() => tableState(index, true)}
-              >
-                <KeyboardArrowDownSharp />
-              </Button>
-              <h4
-                className="display-inline"
-                epa-testid={`${item[1].split(" ").join("")}`}
-              >
-                {" "}
-                {item[1]}
-              </h4>
-            </div>
-          )}
           {open[index] ? <div className=" ">{item[0]} </div> : ""}
           <br />
         </div>
