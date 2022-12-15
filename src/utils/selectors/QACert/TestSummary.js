@@ -565,6 +565,7 @@ export const mapFlowToLoadReferenceToRows = (data) => {
   const records = [];
   for (const el of data) {
     const row = {
+      id: el.id,
       col1: el.rataTestNumber,
       col2: el.operatingLevelCode,
       col3: el.averageGrossUnitLoad,

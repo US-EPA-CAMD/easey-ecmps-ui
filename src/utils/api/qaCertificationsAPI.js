@@ -1809,6 +1809,24 @@ export const updateFlowToLoadReference = async (
   }
 };
 
+export const deleteFlowToLoadReference = async (
+  locId,
+  testSumId,
+  id
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/flow-to-load-references/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const getUnitDefaultTest = async (locId, testSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/unit-default-tests`;
   const url = getApiUrl(path);
@@ -1828,8 +1846,10 @@ export const createUnitDefaultTest = async (
         url: url,
         data: payload,
       })
-    );
-  } catch (error) {
-    return handleImportError(error);
-  }
+      );
+    } catch (error) {
+      return handleImportError(error);
+    }
 };
+
+
