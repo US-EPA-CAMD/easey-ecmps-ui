@@ -1585,7 +1585,6 @@ export const getCycleTimeInjection = async (locId, testSumId, cycleTimeSumId) =>
 export const createCycleTimeInjection = async (locId, testSumId, cycleTimeSumId, payload) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${cycleTimeSumId}/cycle-time-injections`;
   const url = getApiUrl(path);
-  delete payload["id"];
   try {
     return handleResponse(
       await secureAxios({

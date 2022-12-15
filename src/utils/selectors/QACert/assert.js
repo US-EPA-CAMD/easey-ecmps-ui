@@ -769,7 +769,12 @@ export const createDataSwitch = async (
         });
     case cycleTimeInjection:
       return qaApi
-        .createCycleTimeInjection(extraIdsArr[0], extraIdsArr[1], id, userInput);
+        .createCycleTimeInjection(
+          extraIdsArr[0], 
+          extraIdsArr[1], 
+          id, 
+          userInput
+          );
     case flowToLoadCheck:
       return qaApi.createFlowToLoadCheckRecord(location, id, userInput);
     case onlineOfflineCalibration:
