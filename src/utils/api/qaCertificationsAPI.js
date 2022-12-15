@@ -1808,3 +1808,21 @@ export const updateFlowToLoadReference = async (
     return handleImportError(error);
   }
 };
+
+export const deleteFlowToLoadReference = async (
+  locId,
+  testSumId,
+  id
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/flow-to-load-references/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
