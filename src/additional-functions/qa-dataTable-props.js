@@ -907,9 +907,7 @@ export const qaCycleTimeInjectionProps = () => {
   return {
     dataTableName: "Cycle Time Injection",
     payload: {},
-    dropdownArray: [
-      "Gas Level Code"
-    ],
+    dropdownArray: ["gasLevelCode", "gasTypeCode"],
     mdmProps: [
       {
         codeTable: "gas-level-codes",
@@ -933,7 +931,7 @@ export const qaCycleTimeInjectionProps = () => {
       "End Monitor Value"
     ],
     controlInputs: {
-      gasLevelCode: ["Gas Level Code", "dropdown", "", "locked"],
+      gasLevelCode: ["Gas Level Code", "dropdown", "", ""],
       calibrationGasValue: ["Calibration Gas Value", "input", "", ""],
       injectionCycleTime: ["Injection Cycle Time", "input", "", ""],
       beginMonitorValue: ["Begin Monitor Value", "input", "", ""],

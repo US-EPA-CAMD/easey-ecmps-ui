@@ -768,8 +768,14 @@ export const createDataSwitch = async (
           );
         });
     case cycleTimeInjection:
+      console.log("JORDAN", extraIdsArr, id, userInput)
       return qaApi
-        .createCycleTimeInjection(extraIdsArr[0], extraIdsArr[1], id, userInput);
+        .createCycleTimeInjection(
+          extraIdsArr[0], 
+          extraIdsArr[1], 
+          id, 
+          userInput
+          );
     case flowToLoadCheck:
       return qaApi.createFlowToLoadCheckRecord(location, id, userInput);
     case onlineOfflineCalibration:
@@ -779,6 +785,7 @@ export const createDataSwitch = async (
     case fuelFlowmeterAccuracyData:
       return qaApi.createFuelFlowmeterAccuracyDataRecord(location, id, userInput);
     case cycleTimeSummary:
+      console.log("JORDAN", extraIdsArr, id, userInput)
       return qaApi.createCycleTimeSummary(location, id, userInput);
     case transmitterTransducerAccuracyData:
       return qaApi.createTransmitterTransducerAccuracyDataRecord(location, id, userInput);
