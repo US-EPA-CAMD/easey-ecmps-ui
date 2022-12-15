@@ -55,6 +55,7 @@ export const EmissionsTabRender = ({
       currentTab.reportingPeriods,
       selectedUnitId,
       selectedStackPipeId,
+      user,
       true
     )
       .then((response) => {

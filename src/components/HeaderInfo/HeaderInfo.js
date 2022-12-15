@@ -836,7 +836,8 @@ export const HeaderInfo = ({
       monitorPlanId,
       selectedReportingPeriods,
       unitIds,
-      stackPipeIds
+      stackPipeIds,
+      inWorkspace
     );
 
     if (
