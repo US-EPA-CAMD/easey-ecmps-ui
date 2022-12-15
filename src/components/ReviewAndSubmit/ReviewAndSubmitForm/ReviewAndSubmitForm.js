@@ -154,103 +154,96 @@ const ReviewAndSubmitForm = ({
   }
 
   return (
-    <div className="">
-      <div className="text-black margin-top-1 display-none tablet:display-block">
-        <h2 className="display-inline-block page-header margin-top-2">
-          Review And Submit
-        </h2>
-      </div>
-      <div className="container border-y-1px border-base-lighter padding-y-1">
-        <Fieldset className="grid-row margin-y-2">
-          <Radio
-            className="grid-col-6 desktop:grid-col-12 margin-bottom-1"
-            id={`0-radio-button`}
-            defaultChecked
-            name="critical-errors-radio"
-            label={"Exclude Files with Critical Errors"}
-            key={0}
-            data-testid="radio-exclude"
-            onClick={() => {
-              setExcludeErrors(true);
-            }}
-          />
+    <div className="container border-y-1px border-base-lighter padding-y-1">
+      <Fieldset className="grid-row margin-y-2">
+        <Radio
+          className="grid-col-6 desktop:grid-col-12 margin-bottom-1"
+          id={`0-radio-button`}
+          defaultChecked
+          name="critical-errors-radio"
+          label={"Exclude Files with Critical Errors"}
+          key={0}
+          data-testid="radio-exclude"
+          onClick={() => {
+            setExcludeErrors(true);
+          }}
+        />
 
-          <Radio
-            className="grid-col-6 desktop:grid-col-12 margin-bottom-1"
-            id={`1-radio-button`}
-            name="critical-errors-radio"
-            label={"Include Files with Critical Errors"}
-            key={1}
-            data-testid="radio-include"
-            onClick={() => {
-              setExcludeErrors(false);
-            }}
-          />
-        </Fieldset>
-        <div className="dropdowns grid-row">
-          <div className="grid-col-6 desktop:grid-col-3 margin-top-2">
-            <div className="margin-right-2">
-              <MultiSelectCombobox
-                key={`facilities-${availableFacilities.length}`}
-                items={availableFacilities}
-                entity={"Facilities"}
-                label={"Facilities"}
-                searchBy="label"
-                onChangeUpdate={facilityFilterChange}
-                autoFocus={false}
-                iconAlignRight={3}
-              />
-            </div>
+        <Radio
+          className="grid-col-6 desktop:grid-col-12 margin-bottom-1"
+          id={`1-radio-button`}
+          name="critical-errors-radio"
+          label={"Include Files with Critical Errors"}
+          key={1}
+          data-testid="radio-include"
+          onClick={() => {
+            setExcludeErrors(false);
+          }}
+        />
+      </Fieldset>
+      <div className="dropdowns grid-row">
+        <div className="grid-col-6 desktop:grid-col-3 margin-top-2">
+          <div className="margin-right-2">
+            <MultiSelectCombobox
+              key={`facilities-${availableFacilities.length}`}
+              items={availableFacilities}
+              entity={"Facilities"}
+              label={"Facilities"}
+              searchBy="label"
+              onChangeUpdate={facilityFilterChange}
+              autoFocus={false}
+              iconAlignRight={3}
+            />
           </div>
-          <div className="grid-col-6 desktop:grid-col-3 margin-top-2">
-            <div className="margin-right-2">
-              <MultiSelectCombobox
-                key={`configs-${availableConfigState.length}`}
-                items={availableConfigurations.current}
-                entity={"Configurations"}
-                label={"Configurations"}
-                searchBy="label"
-                onChangeUpdate={configurationFilterChange}
-                autoFocus={false}
-                iconAlignRight={3}
-              />
-            </div>
+        </div>
+        <div className="grid-col-6 desktop:grid-col-3 margin-top-2">
+          <div className="margin-right-2">
+            <MultiSelectCombobox
+              key={`configs-${availableConfigState.length}`}
+              items={availableConfigurations.current}
+              entity={"Configurations"}
+              label={"Configurations"}
+              searchBy="label"
+              onChangeUpdate={configurationFilterChange}
+              autoFocus={false}
+              iconAlignRight={3}
+            />
           </div>
-          <div className="grid-col-3 desktop:grid-col-2 margin-top-2">
-            <div className="margin-right-2">
-              <MultiSelectCombobox
-                key={`periods-${availableReportingPeriods.length}`}
-                items={availableReportingPeriods}
-                entity={"Reporting-Periods"}
-                label={"Reporting Periods"}
-                searchBy="label"
-                onChangeUpdate={reportingPeriodFilterChange}
-                autoFocus={false}
-                iconAlignRight={3}
-              />
-            </div>
+        </div>
+        <div className="grid-col-3 desktop:grid-col-2 margin-top-2">
+          <div className="margin-right-2">
+            <MultiSelectCombobox
+              key={`periods-${availableReportingPeriods.length}`}
+              items={availableReportingPeriods}
+              entity={"Reporting-Periods"}
+              label={"Reporting Periods"}
+              searchBy="label"
+              onChangeUpdate={reportingPeriodFilterChange}
+              autoFocus={false}
+              iconAlignRight={3}
+            />
           </div>
-          <div className="buttons grid-col-9 desktop:grid-col-4 padding-top-1">
-            <div
-              id="submit-button-group"
-              className="display-flex flex-row flex-justify-end desktop:flex-justify-center margin-top-5 margin-right-1"
+        </div>
+        <div className="buttons grid-col-9 desktop:grid-col-4 padding-top-1">
+          <div
+            id="submit-button-group"
+            className="display-flex flex-row flex-justify-end desktop:flex-justify-center margin-top-5 margin-right-1"
+          >
+            <Button
+              disabled={availableConfigState.length === 0}
+              onClick={applyFilters}
+              outline={true}
             >
-              <Button
-                disabled={availableConfigState.length === 0}
-                onClick={applyFilters}
-                outline={true}
-              >
-                Apply Filter(s)
-              </Button>
-              <Button
-                onClick={() => {
-                  showModal(true);
-                }}
-                disabled={false}
-              >
-                Submit
-              </Button>
-            </div>
+              Apply Filter(s)
+            </Button>
+            <Button
+              onClick={() => {
+                showModal(true);
+              }}
+              disabled={false}
+            >
+              Submit
+            </Button>
           </div>
         </div>
       </div>
