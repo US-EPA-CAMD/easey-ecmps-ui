@@ -1,6 +1,7 @@
 import React from "react";
-import { render, fireEvent, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import CustomAccordion from "./CustomAccordion";
+import userEvent from "@testing-library/user-event";
 
 describe("testing a reusable accordion component", () => {
   const accordion = (
@@ -12,11 +13,29 @@ describe("testing a reusable accordion component", () => {
       ]}
     />
   );
-  test("renders an accordion dropdown button and clicks it twice ", () => {
+  it("renders an accordion dropdown button and clicks it twice ", () => {
     const { container } = render(accordion);
-
 
     let accordions = screen.getAllByRole("button");
     expect(accordions).toHaveLength(2);
+
+    userEvent.click(accordions[0]);
+    expect(container.querySelector('#collapseBTN')).toBeInTheDocument();
+    userEvent.click(accordions[0]);
+    expect(container.querySelector('#expandBTN')).toBeInTheDocument();
   });
+
+  describe("tests the rigth side button next to title", ()=>{
+  
+    it("does not render right side component when headerButtonText prop falsy", ()=>{
+      render(accordion);
+      expect(screen.queryByTestId("rightside-accordion-button-0")).not.toBeInTheDocument();
+    })
+    
+    it("renders right side component when headerButtonText prop truthy", ()=>{
+      const clonedAccordion = React.cloneElement(accordion, {headerButtonText: "Download To CSV", headerButtonClickHandler: jest.fn()})
+      render(clonedAccordion);
+      expect(screen.queryByTestId("rightside-accordion-button-0")).toBeInTheDocument();
+    })
+  })
 });

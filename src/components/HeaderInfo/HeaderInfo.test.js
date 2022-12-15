@@ -264,9 +264,7 @@ describe("testing HeaderInfo component", () => {
 
 describe("testing HeaderInfo Emissions Module", ()=>{
 
-  console.log("was here 1")
   const store = configureStore(storeForEmissionsModule);
-  console.log(store)
 
   beforeEach(async () => {
     jest.clearAllMocks();

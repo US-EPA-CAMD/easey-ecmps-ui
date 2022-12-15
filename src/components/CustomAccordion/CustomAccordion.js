@@ -65,6 +65,7 @@ const CustomAccordion = ({ title, table, section, headerButtonText, headerButton
                 <div className="margin-left-2">
                   <Button
                     type="button"
+                    data-testid={`rightside-accordion-button-${index}`}
                     title={headerButtonText}
                     onClick={headerButtonClickHandler}
                   >
