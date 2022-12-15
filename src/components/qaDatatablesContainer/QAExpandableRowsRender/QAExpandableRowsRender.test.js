@@ -1379,7 +1379,15 @@ describe('Test cases for QAExpandableRowsRender', () => {
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
     userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
+    // remove row
+    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    expect(deleteBtns).toHaveLength(flowToLoadReferenceData.length)
+    const secondDeleteBtn = deleteBtns[1]
+    userEvent.click(secondDeleteBtn)
+    const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    userEvent.click(confirmBtns[1])
   })
 })
 
