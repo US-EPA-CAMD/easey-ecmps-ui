@@ -768,7 +768,6 @@ export const createDataSwitch = async (
           );
         });
     case cycleTimeInjection:
-      console.log("JORDAN", extraIdsArr, id, userInput)
       return qaApi
         .createCycleTimeInjection(
           extraIdsArr[0], 

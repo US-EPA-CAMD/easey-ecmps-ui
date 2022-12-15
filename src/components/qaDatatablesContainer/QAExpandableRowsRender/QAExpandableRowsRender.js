@@ -822,7 +822,6 @@ const QAExpandableRowsRender = ({
 
   const createData = () => {
     const userInput = extractUserInput(payload, ".modalUserInput", getListOfRadioControls(controlInputs));
-    console.log("JORDAN", userInput, payload)
     assertSelector
       .createDataSwitch(userInput, dataTableName, locationId, id, extraIDs)
       .then((res) => {
