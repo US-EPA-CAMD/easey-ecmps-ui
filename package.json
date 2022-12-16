@@ -140,7 +140,7 @@
       "!src/store/reducers/initialState.js",
       "!src/utils/api/axiosSetup.js",
       "!src/utils/api/setupTests.js",
-      "src/**/*.{js,jsx,ts,tsx}",
+      "src/**/*.{js,jsx,ts,tsx}"
     ],
     "moduleNameMapper": {
       "^lodash-es$": "lodash"
