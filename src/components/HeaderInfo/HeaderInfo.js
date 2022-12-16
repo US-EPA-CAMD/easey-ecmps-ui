@@ -207,24 +207,47 @@ export const HeaderInfo = ({
           id: reportingPeriod,
           label: reportingPeriod,
           //  This will select current Quarter,Year for logged in view
-          selected: user && index === 0,
+          selected: inWorkspace && index === 0,
           enabled: true,
         };
       }),
-    []
+    [user]
   );
-  
-  // For global view (non-logged in), the reporting period drop-down will be populated with the previously full submitted quarter
+
+  // This useeffect controls which reporting periods are selectected by default 
   useEffect(()=>{
-    if( user ){
+
+    // this would mean reporting peruiods were already selected and users are probably just switching back to the tab, so their selctions should remain.
+    if( currentTab?.reportingPeriods ){
       return
     }
-    const rptPeriod = getPreviouslyFullSubmitedQuarter(new Date().toDateString())
-    const foundRptPeriod = reportingPeriods.find(rp => rp.label === rptPeriod)
-    foundRptPeriod.selected=true;
+    
+    let  selectedRptPeriods; 
+    if( inWorkspace  ){
+      selectedRptPeriods = reportingPeriods.filter(rp => rp.selected).map(rp => rp.id);
+    }
+    else{
+      const rptPeriod = getPreviouslyFullSubmitedQuarter(new Date().toDateString())
+      const foundRptPeriod = reportingPeriods.find(rp => rp.label === rptPeriod)
+      if( !foundRptPeriod ) return;
+      foundRptPeriod.selected=true;
+      selectedRptPeriods = [foundRptPeriod.id];
+    }
 
-  }, [reportingPeriods, getPreviouslyFullSubmitedQuarter])
+    setSelectedReportingPeriods(selectedRptPeriods)
+    dispatch(
+      setReportingPeriods(
+        selectedRptPeriods,
+        currentTab.name,
+        workspaceSection
+      )
+    );
 
+  // Adding dispatch to below dep array causes an inifinte rerender problem
+  // hence why the linter warning is being suppressed.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reportingPeriods, currentTab.name, workspaceSection])
+  
   useEffect(() => {
     if (currentTab?.viewTemplateSelect)
       setViewTemplateSelect(currentTab.viewTemplateSelect);
