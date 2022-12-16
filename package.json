@@ -13,7 +13,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "export NODE_OPTIONS=--max_old_space_size=8192 && react-scripts build",
     "up": "yarn --ignore-engines && yarn start",
     "test": "react-scripts test --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter",
     "test:dev": "react-scripts test",
@@ -128,18 +128,19 @@
       "\\.js$": "babel-jest"
     },
     "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
+      
       "!node_modules/",
       "!src/config.js",
-      "!src/App.js",
       "!src/serviceWorker.js",
       "!src/index.js",
+      "!src/App.js",
       "!src/store/configureStore.dev.js",
       "!src/store/actions/actionTypes.js",
       "!src/store/reducers/index.js",
       "!src/store/reducers/initialState.js",
       "!src/utils/api/axiosSetup.js",
-      "!src/utils/api/setupTests.js"
+      "!src/utils/api/setupTests.js",
+      "src/**/*.{js,jsx,ts,tsx}",
     ],
     "moduleNameMapper": {
       "^lodash-es$": "lodash"
