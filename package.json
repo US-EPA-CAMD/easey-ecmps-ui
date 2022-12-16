@@ -13,7 +13,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "export NODE_OPTIONS=--max_old_space_size=8192 && react-scripts build",
+    "build": "react-scripts build",
     "up": "yarn --ignore-engines && yarn start",
     "test": "react-scripts test --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter",
     "test:dev": "react-scripts test",
@@ -131,6 +131,7 @@
       "src/**/*.{js,jsx,ts,tsx}",
       "!node_modules/",
       "!src/config.js",
+      "!src/App.js",
       "!src/serviceWorker.js",
       "!src/index.js",
       "!src/store/configureStore.dev.js",
