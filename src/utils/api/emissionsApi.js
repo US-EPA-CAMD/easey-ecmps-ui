@@ -19,9 +19,7 @@ export const getEmissionsReviewSubmit = async (
     queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
   }
 
-  if (quarters.length > 0) {
-    queryString = queryString + `&quarters=${quarters.join("|")}`;
-  }
+  queryString = queryString + `&quarters=${quarters.join("|")}`;
 
   let url = `${config.services.emissions.uri}/review-submit?${queryString}`;
   return axios.get(url).then(handleResponse).catch(handleError);
@@ -78,8 +76,8 @@ export const getEmissionViewData = async (
   reportingPeriod,
   unitIds,
   stackPipeIds,
+  isWorkspace,
   attachFile = false,
-  isWorkspace = true
 ) => {
   const url = new URL(
     // `${config.services.emissions.uri}/emissions/views/${viewCode}`

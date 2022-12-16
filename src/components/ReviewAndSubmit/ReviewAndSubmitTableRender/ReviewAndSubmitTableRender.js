@@ -1,45 +1,153 @@
-import { ArrowDownwardSharp } from '@material-ui/icons';
-import React, { useEffect } from 'react';
-import DataTable from 'react-data-table-component';
+import { ArrowDownwardSharp } from "@material-ui/icons";
+import React, { forwardRef, useEffect, useState } from "react";
+import DataTable from "react-data-table-component";
 import {
   addScreenReaderLabelForCollapses,
   cleanUp508,
   ensure508,
-} from '../../../additional-functions/ensure-508';
-import { oneSecond } from '../../../config';
+} from "../../../additional-functions/ensure-508";
+import { oneSecond } from "../../../config";
+import ReviewCell from "../ReviewCell/ReviewCell";
+import { Checkbox } from "@trussworks/react-uswds";
+import { v4 as uuidv4 } from "uuid";
 
-const ReviewAndSubmitTableRender = ({ columns, data, dataTableProps }) => {
-  useEffect(() => {
-    setTimeout(() => {
-      ensure508();
-    }, oneSecond);
+const ReviewAndSubmitTableRender = forwardRef(
+  (
+    { columns, state, setState, name, type, selectMonPlanRow, getRowState },
+    ref
+  ) => {
+    const reportWindowParams = [
+      // eslint-disable-next-line no-restricted-globals
+      `height=${screen.height}`,
+      // eslint-disable-next-line no-restricted-globals
+      `width=${screen.width}`,
+      //`fullscreen=yes`,
+    ].join(",");
 
-    return () => {
-      cleanUp508();
-      addScreenReaderLabelForCollapses();
-    };
-  }, []);
+    const [selectAllState, setSelectAllState] = useState(false);
+    const [selectAllVisible, setSelectAllVisible] = useState(true);
 
-  return (
-    <div>
-      <DataTable
-        columns={columns}
-        data={data}
-        noHeader={true}
-        highlightOnHover={true}
-        responsive={false}
-        persistTableHead={false}
-        selectableRows={true}
-        sortIcon={
-          <ArrowDownwardSharp
-            className="margin-left-2 text-primary"
-            id="bdfSortIcon"
+    useEffect(() => {
+      setTimeout(() => {
+        ensure508();
+      }, oneSecond);
+
+      return () => {
+        cleanUp508();
+        addScreenReaderLabelForCollapses();
+      };
+    }, []);
+
+    const mappings = [
+      {
+        name: (
+          <div className="margin-bottom-5">
+            {selectAllVisible && (
+              <Checkbox
+                className=" margin-left-4"
+                id={`${uuidv4()}`}
+                data-testid="SelectAll"
+                onClick={(e) => {
+                  selectAll(!selectAllState);
+                  setSelectAllState(!selectAllState);
+                }}
+                defaultChecked={selectAllState}
+              />
+            )}
+          </div>
+        ),
+        cell: (row) => (
+          <ReviewCell
+            row={row}
+            handleRowSelection={handleRowSelection}
+            handleRowView={handleRowView}
+            type={type}
+            getRowState={getRowState}
+            setSelectAllState={setSelectAllState}
+            setSelectAllVisible={setSelectAllVisible}
           />
+        ),
+        width: "100px",
+        button: true,
+      },
+      ...columns,
+    ];
+
+    const selectAll = (bool) => {
+      for (const r of ref.current) {
+        if (getRowState(r, type) === "Checkbox") {
+          //Logic to see if row can actually be checked out
+          r.selected = bool;
+          r.userCheckedOut = bool;
+
+          if (r.selected && type !== "MP") {
+            // Need to activate mp for subsequent child records
+            selectMonPlanRow(r.monPlanId);
+          }
         }
-        {...dataTableProps}
-      />
-    </div>
-  );
-};
+      }
+    };
+
+    const handleRowView = (row) => {
+      let reportTitle;
+      let reportCode;
+      let url;
+
+      //TODO: Filter by type
+      reportCode = "MPP";
+      reportTitle = "ECMPS Monitoring Plan Printout Report";
+      url = `/workspace/reports?reportCode=${reportCode}&monitorPlanId=${row.monPlanId}`;
+
+      window.open(url, reportTitle, reportWindowParams);
+    };
+
+    const handleRowSelection = (row, type, selection) => {
+      if (selection === false) {
+        setSelectAllState(false);
+      }
+
+      let filterId = "monPlanId"; //Different data types have different uids
+      if (type === "QA") {
+        filterId = "testSumId";
+      } else if (type === "EM") {
+        filterId = "periodAbbreviation";
+      }
+
+      for (const r of ref.current) {
+        if (r[filterId] === row[filterId] && r.monPlanId === row.monPlanId) {
+          r.selected = selection;
+          r.userCheckedOut = r.selected;
+
+          if (r.selected && type !== "MP") {
+            // Need to activate mp for subsequent child records
+            selectMonPlanRow(row.monPlanId);
+          }
+        }
+      }
+    };
+
+    return (
+      <div>
+        {state.length > 0 && (
+          <DataTable
+            defaultSortField="orisCode"
+            columns={mappings}
+            data={state}
+            noHeader={true}
+            highlightOnHover={true}
+            responsive={false}
+            persistTableHead={false}
+            sortIcon={
+              <ArrowDownwardSharp
+                className="margin-left-2 text-primary"
+                id="bdfSortIcon"
+              />
+            }
+          />
+        )}
+      </div>
+    );
+  }
+);
 
 export default ReviewAndSubmitTableRender;

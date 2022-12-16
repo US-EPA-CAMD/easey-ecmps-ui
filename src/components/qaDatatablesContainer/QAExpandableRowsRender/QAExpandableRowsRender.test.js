@@ -26,6 +26,8 @@ import {
   qaCalibrationInjectionProps,
   qaOnOffCalibrationProps,
   qaCycleTimeSummaryProps,
+  qaCycleTimeInjectionProps,
+  qaFlowToLoadReferenceProps,
 } from "../../../additional-functions/qa-dataTable-props";
 
 const mock = new MockAdapter(axios);
@@ -39,6 +41,7 @@ const rataRunId = 'rataRunId'
 const flowRataRunId = 'flowRataRunId'
 const appECorrTestSumId = 'appECorrTestSumId'
 const appECorrTestRunId = 'appECorrTestRunId'
+const cycleTimeSumId = 'cycleTimeSumId'
 const id = 'id'
 
 const idRegex = '[\\w\\-]+'
@@ -1291,6 +1294,96 @@ describe('Test cases for QAExpandableRowsRender', () => {
 
     const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
     expect(deleteBtns).toHaveLength(onlineOfflineCalibrationData.length)
+    const secondDeleteBtn = deleteBtns[1]
+    userEvent.click(secondDeleteBtn)
+    const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    userEvent.click(confirmBtns[1])
+  })
+
+  test('renders Flow to Load Reference data rows and create/save/delete', async () => {
+    const flowToLoadReferenceData = [
+      {
+        "id": "id1",
+        "testSumId": "testSumId1",
+        "calculatedAverageGrossUnitLoad": 0,
+        "calculatedAverageReferenceMethodFlow": 0,
+        "calculatedReferenceFlowToLoadRatio": 0,
+        "calculatedReferenceGrossHeatRate": 0,
+        "userId": "string",
+        "addDate": "string",
+        "updateDate": "string",
+        "rataTestNumber": "string",
+        "operatingLevelCode": "string",
+        "averageGrossUnitLoad": 0,
+        "averageReferenceMethodFlow": 0,
+        "referenceFlowToLoadRatio": 0,
+        "averageHourlyHeatInputRate": 0,
+        "referenceGrossHeatRate": 0,
+        "calculatedSeparateReferenceIndicator": 0
+      },
+      {
+        "id": "id2",
+        "testSumId": "testSumId2",
+        "calculatedAverageGrossUnitLoad": 0,
+        "calculatedAverageReferenceMethodFlow": 0,
+        "calculatedReferenceFlowToLoadRatio": 0,
+        "calculatedReferenceGrossHeatRate": 0,
+        "userId": "string",
+        "addDate": "string",
+        "updateDate": "string",
+        "rataTestNumber": "string",
+        "operatingLevelCode": "string",
+        "averageGrossUnitLoad": 0,
+        "averageReferenceMethodFlow": 0,
+        "referenceFlowToLoadRatio": 0,
+        "averageHourlyHeatInputRate": 0,
+        "referenceGrossHeatRate": 0,
+        "calculatedSeparateReferenceIndicator": 0
+      }
+    ]
+
+    const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/flow-to-load-references`;
+    const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/flow-to-load-references`;
+    const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/flow-to-load-references/${idRegex}`);
+
+    const rataTestNumberUrl = 'https://api.epa.gov/easey/dev/qa-certification-mgmt/locations/locId/test-summary?testTypeCodes=RATA&systemTypeCodes=FLOW'
+    const rataTestNumberWorkspaceUrl = 'https://api.epa.gov/easey/dev/qa-certification-mgmt/workspace/locations/locId/test-summary?testTypeCodes=RATA&systemTypeCodes=FLOW'
+
+    mock.onGet(getUrl).reply(200, flowToLoadReferenceData)
+    mock.onPost(postUrl).reply(200, 'created')
+    mock.onPut(putUrl).reply(200, 'updated')
+
+    mock.onGet(rataTestNumberUrl).reply(200, [])
+    mock.onGet(rataTestNumberWorkspaceUrl).reply(200, [])
+
+    const props = qaFlowToLoadReferenceProps()
+    const idArray = [locId, testSumId, rataId, rataSumId, rataRunId, flowRataRunId, id]
+    const data = { locationId: locId, id: testSumId }
+    renderComponent(props, idArray, data);
+
+    // renders rows
+    const rows = await screen.findAllByRole('row')
+    expect(mock.history.get.length).not.toBe(0)
+    expect(rows).toHaveLength(flowToLoadReferenceData.length)
+
+    // add row
+    const addBtn = screen.getByRole('button', { name: /Add/i })
+    userEvent.click(addBtn)
+    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+
+    // edit row
+    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    expect(editBtns).toHaveLength(flowToLoadReferenceData.length)
+    userEvent.click(editBtns[0])
+    saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+
+    // remove row
+    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    expect(deleteBtns).toHaveLength(flowToLoadReferenceData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
     const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })

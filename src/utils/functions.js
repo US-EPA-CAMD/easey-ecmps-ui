@@ -63,3 +63,44 @@ export const getConfigValueNumber = (key, defaultValue = "") => {
 export const getConfigValueBoolean = (key, defaultValue = "") => {
   return parseBool(getConfigValue(key, defaultValue));
 };
+
+//** review and submit utility functions
+export const updateCheckedOutLocationsOnTable = (tableRef, updateState, checkedOutLocationsMPIdsMap) => {
+  let changeInCheckedOutLocations = 0;
+  tableRef.current.forEach((tableRow) => {
+    const isLocationCheckedOut = checkedOutLocationsMPIdsMap.has(tableRow.monPlanId);
+    if (tableRow.checkedOut !== isLocationCheckedOut) {
+      changeInCheckedOutLocations+=1;
+    }
+    tableRow.checkedOut = checkedOutLocationsMPIdsMap.has(tableRow.monPlanId);
+    if (isLocationCheckedOut && !tableRow.userCheckedOut) {
+      tableRow.selected = false;
+    }
+  })
+  if (changeInCheckedOutLocations){
+    updateState([...tableRef.current]);
+  }
+}
+
+export const updateCheckedOutLocationsOnTables = (checkedOutLocationsMPIdsMap, tablesObj) => {
+  for (const table in tablesObj) {
+    const {ref, setState} = tablesObj[table];
+    updateCheckedOutLocationsOnTable(ref, setState, checkedOutLocationsMPIdsMap)
+  }
+}
+
+export const isLocationCheckedOutByUser = ({
+  userId,
+  checkedOutLocationsMap,
+  chunk,
+  isLocationCheckedOut,
+}) => {
+  if (!isLocationCheckedOut) {
+    return false;
+  }
+  const { monPlanId } = chunk;  
+  if (checkedOutLocationsMap.get(monPlanId)?.checkedOutBy === userId) {
+    return true;
+  }
+  return false;
+};

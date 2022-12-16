@@ -105,7 +105,7 @@ const props = {
   },
   title: "Barry (1, 2, CS0AAN) ",
   user: false,
-  tabs: [
+  locationSelect: [
     {
       "orisCode": 3,
       "checkout": false,
