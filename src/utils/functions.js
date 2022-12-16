@@ -65,14 +65,24 @@ export const getConfigValueBoolean = (key, defaultValue = "") => {
 };
 
 //** review and submit utility functions
-export const updateCheckedOutLocationsOnTable = (tableRef, updateState, checkedOutLocationsMPIdsMap) => {
+export const isLocationUserCheckedOut = (checkedOutLocationsMap, monPlanId, userId) => {
+  if (checkedOutLocationsMap.get(monPlanId)?.checkedOutBy === userId) {
+    return true;
+  }
+  return false;
+}
+
+export const updateCheckedOutLocationsOnTable = (tableRef, updateState, checkedOutLocationsMPIdsMap, userId) => {
   let changeInCheckedOutLocations = 0;
   tableRef.current.forEach((tableRow) => {
     const isLocationCheckedOut = checkedOutLocationsMPIdsMap.has(tableRow.monPlanId);
     if (tableRow.checkedOut !== isLocationCheckedOut) {
       changeInCheckedOutLocations+=1;
     }
-    tableRow.checkedOut = checkedOutLocationsMPIdsMap.has(tableRow.monPlanId);
+    tableRow.checkedOut = isLocationCheckedOut;
+    if (isLocationCheckedOut) {
+      tableRow.userCheckedOut = isLocationUserCheckedOut(checkedOutLocationsMPIdsMap, tableRow.monPlanId, userId);
+    }
     if (isLocationCheckedOut && !tableRow.userCheckedOut) {
       tableRow.selected = false;
     }
@@ -82,10 +92,10 @@ export const updateCheckedOutLocationsOnTable = (tableRef, updateState, checkedO
   }
 }
 
-export const updateCheckedOutLocationsOnTables = (checkedOutLocationsMPIdsMap, tablesObj) => {
+export const updateCheckedOutLocationsOnTables = (checkedOutLocationsMPIdsMap, tablesObj, userId) => {
   for (const table in tablesObj) {
     const {ref, setState} = tablesObj[table];
-    updateCheckedOutLocationsOnTable(ref, setState, checkedOutLocationsMPIdsMap)
+    updateCheckedOutLocationsOnTable(ref, setState, checkedOutLocationsMPIdsMap, userId)
   }
 }
 
@@ -98,9 +108,6 @@ export const isLocationCheckedOutByUser = ({
   if (!isLocationCheckedOut) {
     return false;
   }
-  const { monPlanId } = chunk;  
-  if (checkedOutLocationsMap.get(monPlanId)?.checkedOutBy === userId) {
-    return true;
-  }
-  return false;
+  const { monPlanId } = chunk; 
+  return isLocationUserCheckedOut(checkedOutLocationsMap, monPlanId, userId)
 };

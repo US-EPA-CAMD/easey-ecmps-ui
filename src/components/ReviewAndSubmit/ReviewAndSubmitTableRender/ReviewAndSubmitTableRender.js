@@ -10,6 +10,7 @@ import { oneSecond } from "../../../config";
 import ReviewCell from "../ReviewCell/ReviewCell";
 import { Checkbox } from "@trussworks/react-uswds";
 import { v4 as uuidv4 } from "uuid";
+import { checkoutAPI } from "../../../additional-functions/checkout";
 
 const ReviewAndSubmitTableRender = forwardRef(
   (
@@ -84,6 +85,7 @@ const ReviewAndSubmitTableRender = forwardRef(
             // Need to activate mp for subsequent child records
             selectMonPlanRow(r.monPlanId);
           }
+          checkoutAPI(bool, r.facId, r.monPlanId).then()
         }
       }//eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -117,6 +119,7 @@ const ReviewAndSubmitTableRender = forwardRef(
         if (r[filterId] === row[filterId] && r.monPlanId === row.monPlanId) {
           r.selected = selection;
           r.userCheckedOut = r.selected;
+          checkoutAPI(selection, r.facId, r.monPlanId).then()
 
           if (r.selected && type !== "MP") {
             // Need to activate mp for subsequent child records

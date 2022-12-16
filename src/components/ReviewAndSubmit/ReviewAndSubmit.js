@@ -36,7 +36,7 @@ const ReviewAndSubmit = ({ checkedOutLocations, user }) => {
       checkedOutLocationsMPIdsMap.set(el.monPlanId, el);
     });
     setCheckedOutLocationsMap(checkedOutLocationsMPIdsMap);
-    updateCheckedOutLocationsOnTables(checkedOutLocationsMPIdsMap, dataList);//eslint-disable-next-line react-hooks/exhaustive-deps
+    updateCheckedOutLocationsOnTables(checkedOutLocationsMPIdsMap, dataList, userId);//eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkedOutLocations]);
 
   const dataList = {
