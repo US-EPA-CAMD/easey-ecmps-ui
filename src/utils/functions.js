@@ -75,9 +75,11 @@ export const isLocationUserCheckedOut = (checkedOutLocationsMap, monPlanId, user
 export const updateCheckedOutLocationsOnTable = (tableRef, updateState, checkedOutLocationsMPIdsMap, userId) => {
   let changeInCheckedOutLocations = 0;
   tableRef.current.forEach((tableRow) => {
-    const isLocationCheckedOut = checkedOutLocationsMPIdsMap.has(tableRow.monPlanId);
+    const isLocationCheckedOut = checkedOutLocationsMPIdsMap.has(
+      tableRow.monPlanId
+    );
     if (tableRow.checkedOut !== isLocationCheckedOut) {
-      changeInCheckedOutLocations+=1;
+      changeInCheckedOutLocations += 1;
     }
     tableRow.checkedOut = isLocationCheckedOut;
     if (isLocationCheckedOut) {
@@ -89,18 +91,18 @@ export const updateCheckedOutLocationsOnTable = (tableRef, updateState, checkedO
     if (isLocationCheckedOut && !tableRow.userCheckedOut) {
       tableRow.selected = false;
     }
-  })
-  if (changeInCheckedOutLocations){
+  });
+  if (changeInCheckedOutLocations) {
     updateState([...tableRef.current]);
   }
-}
+};
 
 export const updateCheckedOutLocationsOnTables = (checkedOutLocationsMPIdsMap, tablesObj, userId) => {
   for (const table in tablesObj) {
     const {ref, setState} = tablesObj[table];
     updateCheckedOutLocationsOnTable(ref, setState, checkedOutLocationsMPIdsMap, userId)
   }
-}
+};
 
 export const isLocationCheckedOutByUser = ({
   userId,
@@ -113,4 +115,38 @@ export const isLocationCheckedOutByUser = ({
   }
   const { monPlanId } = chunk; 
   return isLocationUserCheckedOut(checkedOutLocationsMap, monPlanId, userId)
+};
+
+// Returns the previously fully submitted quarter (reporting period). 
+// For the first month of every quarter, the previusly submitted reporting period is actually two quarters ago.
+// For every month in between it is the previous quarter. 
+// The following function implements this logic
+export const getPreviouslyFullSubmitedQuarter = (dateString = null) => {
+// WARNING - be weary of the date string and the wonkiness of JS dates. 
+// If you pass in a date that is in format yyyy-mm-dd, javascript creates it in the previous day. For example,
+// new Date('2020-01-01') is created as '2019-12-31 11:59PM'. However, a date string of dd/mm/yyyy creates 
+// the date object as expected
+
+  let date;
+
+  if (date === null) date = new Date();
+  else date = new Date(dateString);
+
+  const month = date.getMonth();
+  let previouslyCompletedQuarter = "";
+  let year = date.getFullYear();
+
+  if (month >= 1 && month <= 3) {
+    year = date.getFullYear() - 1;
+    previouslyCompletedQuarter = "Q4";
+  } else if (month >= 4 && month <= 6) previouslyCompletedQuarter = "Q1";
+  else if (month >= 7 && month <= 9) previouslyCompletedQuarter = "Q2";
+  else if (month >= 10 && month <= 11) previouslyCompletedQuarter = "Q3";
+  else {
+    // if month === 0 aka january
+    previouslyCompletedQuarter = "Q3";
+    year = date.getFullYear() - 1;
+  }
+
+  return `${year} ${previouslyCompletedQuarter}`;
 };

@@ -7,7 +7,7 @@ import HeaderInfo from "./HeaderInfo";
 import { Provider } from "react-redux";
 import { EMISSIONS_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 
-import {storeForEmissionsModule} from "./jsonsForTests";
+import {storeForEmissionsModule} from "./HeaderInfo.test.mocks";
 
 jest.mock("downloadjs", () => {
   return {
@@ -264,9 +264,7 @@ describe("testing HeaderInfo component", () => {
 
 describe("testing HeaderInfo Emissions Module", ()=>{
 
-  console.log("was here 1")
   const store = configureStore(storeForEmissionsModule);
-  console.log(store)
 
   beforeEach(async () => {
     jest.clearAllMocks();

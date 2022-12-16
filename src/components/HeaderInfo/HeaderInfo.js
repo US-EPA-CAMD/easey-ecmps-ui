@@ -43,7 +43,7 @@ import {
   getViews,
   exportEmissionsDataDownload,
 } from "../../utils/api/emissionsApi";
-import { getUser } from "../../utils/functions";
+import { getUser, getPreviouslyFullSubmitedQuarter } from "../../utils/functions";
 import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
 import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
 import {
@@ -51,7 +51,6 @@ import {
   setReportingPeriods,
   setViewData,
   setViewDataColumns,
-  setViewTemplateSelection,
   setViewTemplateSelectionAction,
 } from "../../store/actions/dynamicFacilityTab";
 import { handleError } from "../../utils/api/apiUtils";
@@ -154,7 +153,7 @@ export const HeaderInfo = ({
   const closeEvalReportModal = () => setShowEvalReport(false);
 
   // const [checkoutState, setCheckoutState] = useState(checkout);
-  const inWorkspace = user;
+  const inWorkspace = !!user;
 
   // refreshing evaluation status
   const delayInSeconds = config.app.refreshEvalStatusRate;
@@ -203,28 +202,52 @@ export const HeaderInfo = ({
 
   let reportingPeriods = useMemo(
     () =>
-      getReportingPeriods().map((reportingPeriod) => {
+      getReportingPeriods().map((reportingPeriod, index) => {
         return {
           id: reportingPeriod,
           label: reportingPeriod,
-          selected: false,
+          //  This will select current Quarter,Year for logged in view
+          selected: inWorkspace && index === 0,
           enabled: true,
         };
       }),
-    []
+    [user]
   );
 
-  // Sets the value in redux
-  const dispatchViewTemplateSelect = (selectedViewTemplate) => {
+  // This useeffect controls which reporting periods are selectected by default 
+  useEffect(()=>{
+
+    // this would mean reporting peruiods were already selected and users are probably just switching back to the tab, so their selctions should remain.
+    if( currentTab?.reportingPeriods ){
+      return
+    }
+    
+    let  selectedRptPeriods; 
+    if( inWorkspace  ){
+      selectedRptPeriods = reportingPeriods.filter(rp => rp.selected).map(rp => rp.id);
+    }
+    else{
+      const rptPeriod = getPreviouslyFullSubmitedQuarter(new Date().toDateString())
+      const foundRptPeriod = reportingPeriods.find(rp => rp.label === rptPeriod)
+      if( !foundRptPeriod ) return;
+      foundRptPeriod.selected=true;
+      selectedRptPeriods = [foundRptPeriod.id];
+    }
+
+    setSelectedReportingPeriods(selectedRptPeriods)
     dispatch(
-      setViewTemplateSelectionAction(
-        selectedViewTemplate,
+      setReportingPeriods(
+        selectedRptPeriods,
         currentTab.name,
-        EMISSIONS_STORE_NAME
+        workspaceSection
       )
     );
-  };
 
+  // Adding dispatch to below dep array causes an inifinte rerender problem
+  // hence why the linter warning is being suppressed.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reportingPeriods, currentTab.name, workspaceSection])
+  
   useEffect(() => {
     if (currentTab?.viewTemplateSelect)
       setViewTemplateSelect(currentTab.viewTemplateSelect);
@@ -836,7 +859,8 @@ export const HeaderInfo = ({
       monitorPlanId,
       selectedReportingPeriods,
       unitIds,
-      stackPipeIds
+      stackPipeIds,
+      inWorkspace
     );
 
     if (

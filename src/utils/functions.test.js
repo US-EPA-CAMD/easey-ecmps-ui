@@ -8,6 +8,7 @@ import {
   parseBool,
   updateCheckedOutLocationsOnTable,
   updateCheckedOutLocationsOnTables,
+  getPreviouslyFullSubmitedQuarter,
 } from "./functions";
 
 describe("functions.js", function () {
@@ -280,4 +281,26 @@ describe("functions.js", function () {
       })
     });
   });
+
+  describe("getPreviouslyFullSubmitedQuarter tests", ()=>{
+    it("returns 2021 Q3 for input date 2022-01-01 (beginning of Q1)", ()=>{
+       const yearQuarter =  getPreviouslyFullSubmitedQuarter("01/01/2022")
+       expect(yearQuarter).toBe("2021 Q3")
+    })
+
+    it("returns 2021 Q4 for input date 04/01/2022 (beginning of Q2)", ()=>{
+        const yearQuarter =  getPreviouslyFullSubmitedQuarter("04/01/2022")
+        expect(yearQuarter).toBe("2021 Q4")
+    })
+
+    it("returns 2022 Q1 for input date 07/01/2022 (beginning of Q3)", ()=>{
+        const yearQuarter =  getPreviouslyFullSubmitedQuarter("07/01/2022")
+        expect(yearQuarter).toBe("2022 Q1")
+    })
+    
+    it("returns 2022 Q2 for input date 10/01/2022 (beginning of Q3)", ()=>{
+        const yearQuarter =  getPreviouslyFullSubmitedQuarter("10/01/2022")
+        expect(yearQuarter).toBe("2022 Q2")
+    })
+})
 });
