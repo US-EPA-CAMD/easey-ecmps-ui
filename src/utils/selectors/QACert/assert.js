@@ -3,6 +3,7 @@ import * as qaApi from "../../api/qaCertificationsAPI";
 // Selectors that normalize api data to fit the columns in UI datatable
 import * as selector from "./TestSummary";
 import * as injectionSelector from "./LinearityInjection";
+import * as cycleTimeInjections from "./CycleTimeInjection";
 // Table Names
 const proGas = "Protocol Gas";
 const lineTest = "Linearity Test";
@@ -28,6 +29,7 @@ const cycleTimeSummary = "Cycle Time Summary";
 const cycleTimeInjection = "Cycle Time Injection";
 const transmitterTransducerAccuracyData = "Transmitter Transducer Accuracy Data";
 const flowToLoadReference = "Flow To Load Reference";
+const unitDefualtTest = "Unit Default Test";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -185,6 +187,10 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       return qaApi
         .getFlowToLoadReference(location, id)
         .catch(error => console.log("error fetching flow to load reference", error))
+    case unitDefualtTest:
+      return qaApi.getUnitDefaultTest(location, id).catch((error) => {
+        console.log("error fetching unit default test data", error);
+      });
     default:
       throw new Error(`getDataTableApis case not implemented for ${name}`);
   }
@@ -236,11 +242,13 @@ export const getDataTableRecords = (dataIn, name) => {
     case cycleTimeSummary:
       return selector.mapCycleTimeSummariesToRows(dataIn);
     case cycleTimeInjection:
-      return selector.mapCycleTimeInjectionsToRows(dataIn);
+      return cycleTimeInjections.mapCycleTimeInjectionsToRows(dataIn);
     case transmitterTransducerAccuracyData:
       return selector.mapTransmitterTransducerAccuracyDataToRows(dataIn);
     case flowToLoadReference:
       return selector.mapFlowToLoadReferenceToRows(dataIn);
+    case unitDefualtTest:
+      return selector.mapUnitDefaultTestDataToRows(dataIn);
     default:
       throw new Error(`getDataTableRecords case not implemented for ${name}`);
   }
@@ -793,6 +801,8 @@ export const createDataSwitch = async (
       return qaApi.createTransmitterTransducerAccuracyDataRecord(location, id, userInput);
     case flowToLoadReference:
       return qaApi.createFlowToLoadReference(location, id, userInput)
+    case unitDefualtTest:
+      return qaApi.createUnitDefaultTest(location, id, userInput)
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
   }
