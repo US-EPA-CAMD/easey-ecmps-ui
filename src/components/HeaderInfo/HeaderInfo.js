@@ -43,7 +43,7 @@ import {
   getViews,
   exportEmissionsDataDownload,
 } from "../../utils/api/emissionsApi";
-import { getUser } from "../../utils/functions";
+import { getUser, getPreviouslyFullSubmitedQuarter } from "../../utils/functions";
 import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
 import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
 import {
@@ -51,7 +51,6 @@ import {
   setReportingPeriods,
   setViewData,
   setViewDataColumns,
-  setViewTemplateSelection,
   setViewTemplateSelectionAction,
 } from "../../store/actions/dynamicFacilityTab";
 import { handleError } from "../../utils/api/apiUtils";
@@ -154,7 +153,7 @@ export const HeaderInfo = ({
   const closeEvalReportModal = () => setShowEvalReport(false);
 
   // const [checkoutState, setCheckoutState] = useState(checkout);
-  const inWorkspace = user;
+  const inWorkspace = !!user;
 
   // refreshing evaluation status
   const delayInSeconds = config.app.refreshEvalStatusRate;
@@ -203,27 +202,28 @@ export const HeaderInfo = ({
 
   let reportingPeriods = useMemo(
     () =>
-      getReportingPeriods().map((reportingPeriod) => {
+      getReportingPeriods().map((reportingPeriod, index) => {
         return {
           id: reportingPeriod,
           label: reportingPeriod,
-          selected: false,
+          //  This will select current Quarter,Year for logged in view
+          selected: user && index === 0,
           enabled: true,
         };
       }),
     []
   );
+  
+  // For global view (non-logged in), the reporting period drop-down will be populated with the previously full submitted quarter
+  useEffect(()=>{
+    if( user ){
+      return
+    }
+    const rptPeriod = getPreviouslyFullSubmitedQuarter(new Date().toDateString())
+    const foundRptPeriod = reportingPeriods.find(rp => rp.label === rptPeriod)
+    foundRptPeriod.selected=true;
 
-  // Sets the value in redux
-  const dispatchViewTemplateSelect = (selectedViewTemplate) => {
-    dispatch(
-      setViewTemplateSelectionAction(
-        selectedViewTemplate,
-        currentTab.name,
-        EMISSIONS_STORE_NAME
-      )
-    );
-  };
+  }, [reportingPeriods, getPreviouslyFullSubmitedQuarter])
 
   useEffect(() => {
     if (currentTab?.viewTemplateSelect)
