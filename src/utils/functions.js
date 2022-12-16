@@ -83,6 +83,9 @@ export const updateCheckedOutLocationsOnTable = (tableRef, updateState, checkedO
     if (isLocationCheckedOut) {
       tableRow.userCheckedOut = isLocationUserCheckedOut(checkedOutLocationsMPIdsMap, tableRow.monPlanId, userId);
     }
+    if (!isLocationUserCheckedOut) {
+      tableRow.userCheckedOut = false;
+    }
     if (isLocationCheckedOut && !tableRow.userCheckedOut) {
       tableRow.selected = false;
     }

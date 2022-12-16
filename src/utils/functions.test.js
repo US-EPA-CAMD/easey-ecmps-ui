@@ -215,6 +215,18 @@ describe("functions.js", function () {
           expect(monPlansStateSetter).not.toHaveBeenCalled();
           expect(qaStateSetter).not.toHaveBeenCalled();
         });
+        it('should set user checked out status to true if location is checked out by user', () => {
+          const checkedOutLocationTableRow = tables.monPlan.ref.current[0];
+          userId = 'rboehme-dp';
+          updateCheckedOutLocationsOnTables(checkedOutLocationsMap, tables, userId);
+          expect(checkedOutLocationTableRow.userCheckedOut).toBe(true);
+        })
+        it('should set user checked out status to false if location is checked out by different user', () => {
+          const checkedOutLocationTableRow = tables.monPlan.ref.current[0];
+          userId = 'another user';
+          updateCheckedOutLocationsOnTables(checkedOutLocationsMap, tables, userId);
+          expect(checkedOutLocationTableRow.userCheckedOut).toBe(false);
+        })
       })
 
       describe('updateCheckedOutLocationsOnTable', () => {
