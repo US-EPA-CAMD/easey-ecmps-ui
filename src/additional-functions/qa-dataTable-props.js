@@ -907,9 +907,7 @@ export const qaCycleTimeInjectionProps = () => {
   return {
     dataTableName: "Cycle Time Injection",
     payload: {},
-    dropdownArray: [
-      "Gas Level Code"
-    ],
+    dropdownArray: ["gasLevelCode", "gasTypeCode"],
     mdmProps: [
       {
         codeTable: "gas-level-codes",
@@ -933,7 +931,7 @@ export const qaCycleTimeInjectionProps = () => {
       "End Monitor Value"
     ],
     controlInputs: {
-      gasLevelCode: ["Gas Level Code", "dropdown", "", "locked"],
+      gasLevelCode: ["Gas Level Code", "dropdown", "", ""],
       calibrationGasValue: ["Calibration Gas Value", "input", "", ""],
       injectionCycleTime: ["Injection Cycle Time", "input", "", ""],
       beginMonitorValue: ["Begin Monitor Value", "input", "", ""],
@@ -992,4 +990,45 @@ export const qaFlowToLoadReferenceProps = () => {
       calculatedSeparateReferenceIndicator: ["Calculated Separate Reference Indicator", "dropdown", "", ""],
     },
   };
+}
+
+export const qaUnitDefaultTestDataProps = () => {
+  return {
+    dataTableName: "Unit Default Test",
+    payload: {},
+    dropdownArray: ["fuelCode", "operatingConditionCode"],
+    mdmProps: [
+      {
+        codeTable: "fuel-codes",
+        responseProps: {
+          code: "fuelCode",
+          description: "fuelDescription"
+        }
+      },
+      {
+        codeTable: "operating-condition-codes",
+        responseProps: {
+          code: "operatingConditionCode",
+          description: "operatingConditionDescription"
+        }
+      }
+    ],
+    columnNames: [
+      "Fuel Code",
+      "NOX Default Rate",
+      "Operating Condition Code",
+      "Group ID",
+      "Number of Units in Group",
+      "Number of Tests for Group",
+    ],
+    controlInputs: {
+      fuelCode: ["Fuel Code", "dropdown", "", ""],
+      NOxDefaultRate: ["NOX Default Rate", "input", "", ""],
+      operatingConditionCode: ["Operating Condition Code", "dropdown", "", ""],
+      groupID: ["Group ID", "input", "", ""],
+      numberOfUnitsInGroup: ["Number of Units in Group", "input", "", ""],
+      numberOfTestsForGroup: ["Number of Tests for Group", "input", "", ""],
+    },
+    controlDatePickerInputs: {},
+  }
 }

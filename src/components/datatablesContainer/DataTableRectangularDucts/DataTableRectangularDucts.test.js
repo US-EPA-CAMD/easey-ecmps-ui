@@ -93,9 +93,9 @@ test('DataTableRectangularDucts create', async () => {
   expect(createBtn[0]).toBeInTheDocument()
   userEvent.click(createBtn[0])
 
-  const saveBtn = screen.getByRole('button', { name: /Create Rectangular Duct WAF/i })
-  expect(saveBtn).toBeInTheDocument()
-  userEvent.click(saveBtn)
+  const saveBtn = screen.getAllByRole('button', { name: /Create Rectangular Duct WAF/i })
+  expect(saveBtn[0]).toBeInTheDocument()
+  userEvent.click(saveBtn[0])
 })
 
 test("mapStateToProps calls the appropriate state", async () => {

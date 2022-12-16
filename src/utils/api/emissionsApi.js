@@ -76,8 +76,8 @@ export const getEmissionViewData = async (
   reportingPeriod,
   unitIds,
   stackPipeIds,
+  isWorkspace,
   attachFile = false,
-  isWorkspace = true
 ) => {
   const url = new URL(
     // `${config.services.emissions.uri}/emissions/views/${viewCode}`
