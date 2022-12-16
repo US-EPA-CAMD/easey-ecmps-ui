@@ -991,3 +991,44 @@ export const qaFlowToLoadReferenceProps = () => {
     },
   };
 }
+
+export const qaUnitDefaultTestDataProps = () => {
+  return {
+    dataTableName: "Unit Default Test",
+    payload: {},
+    dropdownArray: ["fuelCode", "operatingConditionCode"],
+    mdmProps: [
+      {
+        codeTable: "fuel-codes",
+        responseProps: {
+          code: "fuelCode",
+          description: "fuelDescription"
+        }
+      },
+      {
+        codeTable: "operating-condition-codes",
+        responseProps: {
+          code: "operatingConditionCode",
+          description: "operatingConditionDescription"
+        }
+      }
+    ],
+    columnNames: [
+      "Fuel Code",
+      "NOX Default Rate",
+      "Operating Condition Code",
+      "Group ID",
+      "Number of Units in Group",
+      "Number of Tests for Group",
+    ],
+    controlInputs: {
+      fuelCode: ["Fuel Code", "dropdown", "", ""],
+      NOxDefaultRate: ["NOX Default Rate", "input", "", ""],
+      operatingConditionCode: ["Operating Condition Code", "dropdown", "", ""],
+      groupID: ["Group ID", "input", "", ""],
+      numberOfUnitsInGroup: ["Number of Units in Group", "input", "", ""],
+      numberOfTestsForGroup: ["Number of Tests for Group", "input", "", ""],
+    },
+    controlDatePickerInputs: {},
+  }
+}

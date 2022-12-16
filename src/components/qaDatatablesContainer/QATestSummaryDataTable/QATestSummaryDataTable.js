@@ -24,6 +24,7 @@ import {
   qaCycleTimeSummaryProps,
   qaTransmitterTransducerAccuracyDataProps,
   qaFlowToLoadReferenceProps,
+  qaUnitDefaultTestDataProps
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
@@ -62,7 +63,7 @@ const QATestSummaryDataTable = ({
   sectionSelect,
   selectedLocation,
   locations,
-}) => {
+}) => {console.log("selectedTestCode",selectedTestCode); console.log("locations",locations);
   const [loading, setLoading] = useState(false);
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
@@ -767,6 +768,23 @@ const QATestSummaryDataTable = ({
             radioBtnPayload={flowToLoadReferenceProps["radioBtnPayload"]}
             dataTableName={flowToLoadReferenceProps["dataTableName"]}
             extraControls={flowToLoadReferenceProps["extraControls"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "LME": //unit default test 
+        const unitDefaultTestDataProps = qaUnitDefaultTestDataProps();
+        return (
+          <QAExpandableRowsRender
+            payload={unitDefaultTestDataProps["payload"]}
+            dropdownArray={unitDefaultTestDataProps["dropdownArray"]}
+            mdmProps={unitDefaultTestDataProps["mdmProps"]}
+            columns={unitDefaultTestDataProps["columnNames"]}
+            controlInputs={unitDefaultTestDataProps["controlInputs"]}
+            dataTableName={unitDefaultTestDataProps["dataTableName"]}
             expandable
             {...props}
             extraIDs={null}
