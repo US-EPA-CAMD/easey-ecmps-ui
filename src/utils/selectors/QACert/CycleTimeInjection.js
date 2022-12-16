@@ -13,7 +13,7 @@ export const mapCycleTimeInjectionsToRows = (data) => {
         col8: el.endMinute,
         col9: el.injectionCycleTime,
         col10: el.beginMonitorValue,
-        col12: el.endMonitorValue,
+        col11: el.endMonitorValue,
       };
       records.push(row);
     }
