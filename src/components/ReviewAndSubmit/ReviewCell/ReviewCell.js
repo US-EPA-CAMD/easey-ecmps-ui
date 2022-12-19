@@ -12,11 +12,7 @@ const ReviewCell = ({
   setSelectAllState,
   setSelectAllVisible,
 }) => {
-  const [cellState, setCellState] = useState("Lock");
-
-  useEffect(() => {
-    setCellState(getRowState(row, type));
-  }, []);
+  const [cellState, setCellState] = useState(getRowState(row, type));
 
   useEffect(() => {
     if (cellState === "Checkbox" && !row.selected) {
@@ -28,7 +24,7 @@ const ReviewCell = ({
   }, [cellState]);
 
   return (
-    <div>
+    cellState && <div>
       {cellState === "Lock" && <LockSharp data-testid="Lock" />}
       {cellState === "Checkbox" && (
         <Checkbox
