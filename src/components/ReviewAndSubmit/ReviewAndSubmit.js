@@ -51,6 +51,11 @@ const ReviewAndSubmit = ({ checkedOutLocations }) => {
     }
   };
 
+  const submitData = () => {
+    const payload = [];
+    const monPlanIds = new Set();
+  };
+
   const dataList = {
     monPlan: { ref: monPlanRef, state: monPlans, setState: setMonPlans },
     qaTest: {
@@ -180,6 +185,7 @@ const ReviewAndSubmit = ({ checkedOutLocations }) => {
           <Button
             className="flex-align-self-end flex-align-self-center flex-1 margin-right-5 maxw-mobile"
             size="big"
+            onClick={submitData}
           >
             Submit
           </Button>
