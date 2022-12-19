@@ -131,6 +131,7 @@ describe("Review and Submit Tables component", () => {
           userCheckedOut: false,
           monPlanId: "testId",
           orisCode: 1,
+          evalStatusCode: "PASS",
         },
       ],
     };

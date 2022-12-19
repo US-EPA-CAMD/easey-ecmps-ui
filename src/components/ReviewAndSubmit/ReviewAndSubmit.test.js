@@ -11,6 +11,13 @@ sessionStorage.setItem(
 );
 
 window.scrollTo = jest.fn();
+window.location.reload = jest.fn();
+
+jest.mock("../../utils/api/camdServices", () => ({
+  submitData: jest.fn().mockReturnValue({
+    then: jest.fn().mockReturnValue({ catch: jest.fn() }),
+  }),
+}));
 
 jest.mock("../../utils/api/monitoringPlansApi", () => ({
   getMonitoringPlans: jest.fn().mockResolvedValue({
@@ -117,7 +124,7 @@ const store = configureStore();
 describe("Review and Submit component", () => {
   let query, user;
   beforeEach(async () => {
-    user = {userId: 'mock', firstName: 'mock', lastName: 'mock'}
+    user = { userId: "mock", firstName: "mock", lastName: "mock" };
     await act(async () => {
       query = render(
         <Provider store={store}>
@@ -153,5 +160,22 @@ describe("Review and Submit component", () => {
     });
 
     expect(queryByText("SUBMIT")).not.toBeInTheDocument();
+  });
+
+  it("mock the final submission process", async () => {
+    const { getByText, queryByText } = query;
+
+    await act(async () => {
+      getByText("SUBMIT").click();
+    });
+
+    await act(async () => {
+      getByText("SUBMIT MODAL").click();
+    });
+
+    await act(async () => {
+      getByText("Submit").click();
+    });
+    expect(getByText("Submit")).toBeInTheDocument();
   });
 });

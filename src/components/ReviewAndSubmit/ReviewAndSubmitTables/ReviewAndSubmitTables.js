@@ -48,7 +48,7 @@ const ReviewAndSubmitTables = ({
       return "Lock";
     } else if (
       //Can only submit records if not ERR eval code, submissionStatus is REQUIRE or blank, and they have permissions
-      row.evalStatusCode !== "ERR" &&
+      ["PASS", "INFO"].includes(row.evalStatusCode) &&
       rowSubmissionAllowed &&
       permissions.current[row.orisCode].includes(`DS${type}`)
     ) {

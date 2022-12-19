@@ -4,6 +4,26 @@ export const sortByUpdateDate = (a, b) => {
   return new Date(a.updateDate) - new Date(b.updateDate);
 };
 
+const quarterToValue = {
+  Q1: 1,
+  Q2: 2,
+  Q3: 3,
+  Q4: 4,
+};
+
+export const sortByPeriodAbbreviation = (a, b) => {
+  const periodAbrA = a.periodAbbreviation.split(" ");
+  const periodAbrB = b.periodAbbreviation.split(" ");
+
+  if (parseInt(periodAbrA[0]) > parseInt(periodAbrB[0])) {
+    return 1;
+  } else if (parseInt(periodAbrA[0]) < parseInt(periodAbrB[0])) {
+    return -1;
+  } else {
+    return quarterToValue[periodAbrA[1]] - quarterToValue[periodAbrB[1]];
+  }
+};
+
 export const sortByEndDate = (a, b) => {
   if (a.endDate === "N/A") {
     return -1;
@@ -161,6 +181,7 @@ export const emissionsColumns = [
   {
     name: "Year / Quarter",
     selector: "periodAbbreviation",
+    sortFunction: sortByPeriodAbbreviation,
     sortable: true,
   },
   {

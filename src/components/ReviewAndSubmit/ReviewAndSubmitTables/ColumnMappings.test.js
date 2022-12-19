@@ -4,6 +4,7 @@ import {
   sortByEndDate,
   monPlanColumns,
   qaTestSummaryColumns,
+  sortByPeriodAbbreviation,
 } from "./ColumnMappings";
 
 describe("Test the sort functions of Column Mappings", () => {
@@ -58,5 +59,23 @@ describe("Test the sort functions of Column Mappings", () => {
     let b = { beginDate: "N/A" };
     let a = { beginDate: "2021-01-01" };
     expect(sortByBeginDate(a, b) < 0).toBe(false);
+  });
+
+  it("sortByPeriodAbbreviation", () => {
+    let b = { periodAbbreviation: "2021 Q1" };
+    let a = { periodAbbreviation: "2022 Q2" };
+    expect(sortByPeriodAbbreviation(a, b) > 0).toBe(true);
+  });
+
+  it("sortByPeriodAbbreviation", () => {
+    let b = { periodAbbreviation: "2021 Q2" };
+    let a = { periodAbbreviation: "2020 Q1" };
+    expect(sortByPeriodAbbreviation(a, b) > 0).toBe(false);
+  });
+
+  it("sortByPeriodAbbreviation", () => {
+    let b = { periodAbbreviation: "2021 Q2" };
+    let a = { periodAbbreviation: "2021 Q3" };
+    expect(sortByPeriodAbbreviation(a, b) > 0).toBe(true);
   });
 });
