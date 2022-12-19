@@ -23,7 +23,6 @@ const appendixECorrHeatInputOil = "Appendix E Correlation Heat Input from Oil";
 const fuelFlowmeterAccuracyData = "Fuel Flowmeter Accuracy Data";
 const cycleTimeSummary = "Cycle Time Summary";
 const transmitterTransducerAccuracyData = "Transmitter Transducer Accuracy Data";
-// below types don't have coverage if needed more
 const flowToLoadCheck = "Flow To Load Check";
 const lineInjection = "Linearity Injection";
 const rataData = "RATA Data";
