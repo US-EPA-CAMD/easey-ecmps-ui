@@ -45,7 +45,12 @@ jest.mock(
       );
     }
 );
-
+const mockApiCall = jest.fn().mockResolvedValue({
+  data: [],
+});
+jest.mock("../../../additional-functions/checkout", () => ({
+  checkoutAPI: () => mockApiCall(),
+}));
 describe("Review and Submit Tables component", () => {
   it("expect row selection to select row in current ref", async () => {
     const currentRows = {
@@ -83,6 +88,43 @@ describe("Review and Submit Tables component", () => {
       getByText("SELECT ROW").click();
     });
     expect(currentRows.current[0].selected).toBe(true);
+  });
+  it("checks out row when it is selected", async () => {
+    const currentRows = {
+      current: [
+        {
+          selected: false,
+          userCheckedOut: false,
+          monPlanId: "testId",
+          orisCode: 1,
+        },
+      ],
+    };
+
+    let query = render(
+      <ReviewAndSubmitTableRender
+        columns={[
+          {
+            name: "ORIS Code",
+            selector: "orisCode",
+          },
+        ]}
+        state={[{ orisCode: 1 }]}
+        setState={jest.fn()}
+        name={"Monitor Plans"}
+        type="MP"
+        selectMonPlanRow={jest.fn()}
+        getRowState={jest.fn()}
+        ref={currentRows}
+      />
+    );
+
+    const { getByText } = query;
+
+    await act(async () => {
+      getByText("SELECT ROW").click();
+    });
+    expect(mockApiCall).toHaveBeenCalled();
   });
 
   it("expect monitor plan to open on view button click", async () => {
@@ -167,5 +209,50 @@ describe("Review and Submit Tables component", () => {
 
     expect(currentRows.current[0].selected).toBe(true);
     expect(currentRows.current[1].selected).toBe(true);
+  });
+
+  it("select all checks out selected rows", async () => {
+    const currentRows = {
+      current: [
+        {
+          selected: false,
+          userCheckedOut: false,
+          monPlanId: "testId",
+          orisCode: 1,
+        },
+        {
+          selected: false,
+          userCheckedOut: false,
+          monPlanId: "testId2",
+          orisCode: 2,
+        },
+      ],
+    };
+
+    let query = render(
+      <ReviewAndSubmitTableRender
+        columns={[
+          {
+            name: "ORIS Code",
+            selector: "orisCode",
+          },
+        ]}
+        state={[{ orisCode: 1 }]}
+        setState={jest.fn()}
+        name={"Monitor Plans"}
+        type="MP"
+        selectMonPlanRow={jest.fn()}
+        getRowState={jest.fn().mockReturnValue("Checkbox")}
+        ref={currentRows}
+      />
+    );
+
+    const checkbox = screen.getByTestId("SelectAll");
+
+    await act(async () => {
+      fireEvent.click(checkbox);
+    });
+
+    expect(mockApiCall).toHaveBeenCalled();
   });
 });

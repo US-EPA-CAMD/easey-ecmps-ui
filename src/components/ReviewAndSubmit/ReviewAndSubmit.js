@@ -8,12 +8,19 @@ import ReviewAndSubmitTables from "./ReviewAndSubmitTables/ReviewAndSubmitTables
 import MockPermissions from "./MockPermissions";
 import { Button } from "@trussworks/react-uswds";
 import { connect } from "react-redux";
-import { updateCheckedOutLocationsOnTable } from "../../utils/functions";
+import {
+  isLocationCheckedOutByUser,
+  updateCheckedOutLocationsOnTables,
+} from "../../utils/functions";
+import { submitData } from "../../utils/api/camdServices";
+import { handleError } from "../../utils/api/apiUtils";
+import LoadingModal from "../LoadingModal/LoadingModal";
 
-const ReviewAndSubmit = ({ checkedOutLocations }) => {
+const ReviewAndSubmit = ({ checkedOutLocations, user }) => {
   const [activityId, setActivityId] = useState("");
   const [excludeErrors, setExcludeErrors] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const [checkedOutLocationsMap, setCheckedOutLocationsMap] = useState(
     new Map()
@@ -29,32 +36,19 @@ const ReviewAndSubmit = ({ checkedOutLocations }) => {
   const monPlanRef = useRef([]);
 
   const [finalSubmitStage, setFinalSubmitStage] = useState(false);
-
+  const { userId } = user;
   useEffect(() => {
-    const checkedOutLocationsMPIdsArray = checkedOutLocations.map(
-      (el) => el.monPlanId
-    );
-    const checkedOutLocationsMPIdsMap = new Set(checkedOutLocationsMPIdsArray);
-    console.log({ checkedOutLocationsMPIdsArray, checkedOutLocationsMPIdsMap });
+    const checkedOutLocationsMPIdsMap = new Map();
+    checkedOutLocations.forEach((el) => {
+      checkedOutLocationsMPIdsMap.set(el.monPlanId, el);
+    });
     setCheckedOutLocationsMap(checkedOutLocationsMPIdsMap);
-    updateCheckedOutLocationsOnTables(checkedOutLocationsMPIdsMap); //eslint-disable-next-line react-hooks/exhaustive-deps
+    updateCheckedOutLocationsOnTables(
+      checkedOutLocationsMPIdsMap,
+      dataList,
+      userId
+    ); //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkedOutLocations]);
-
-  const updateCheckedOutLocationsOnTables = (checkedOutLocationsMPIdsMap) => {
-    for (const table in dataList) {
-      const { ref, setState } = dataList[table];
-      updateCheckedOutLocationsOnTable(
-        ref,
-        setState,
-        checkedOutLocationsMPIdsMap
-      );
-    }
-  };
-
-  const submitData = () => {
-    const payload = [];
-    const monPlanIds = new Set();
-  };
 
   const dataList = {
     monPlan: { ref: monPlanRef, state: monPlans, setState: setMonPlans },
@@ -99,6 +93,65 @@ const ReviewAndSubmit = ({ checkedOutLocations }) => {
     }
   };
 
+  const finalSubmission = () => {
+    setSubmitting(true);
+    const activeMPSet = new Set();
+    // Compile one master set of monitor plan ids that are being submitted
+    for (const [key, value] of Object.entries(dataList)) {
+      const { ref } = value;
+      for (const chunk of ref.current) {
+        activeMPSet.add(chunk.monPlanId);
+      }
+    }
+
+    const payload = {};
+    payload.activityId = activityId;
+    payload.items = [];
+
+    for (const monPlanId of activeMPSet) {
+      const newItem = {};
+      newItem.monPlanId = monPlanId;
+      //First check the monitor plan to see if we should be submitting it
+      if (
+        monPlanRef.current.filter((f) => f.monPlanId === monPlanId).length > 0
+      ) {
+        newItem.submitMonPlan = true;
+      } else {
+        newItem.submitMonPlan = false;
+      }
+
+      //Build QA datasets for payload
+      newItem.testSumIds = qaTestSumRef.current
+        .filter((f) => f.monPlanId === monPlanId)
+        .map((m) => {
+          return {
+            id: m.testSumId,
+            quarter: m.periodAbbreviation,
+          };
+        });
+      newItem.qceIds = [];
+      newItem.teeIds = [];
+
+      //Final step to add emissions data for specific monPlan
+      newItem.emissionsReportingPeriods = emissionsRef.current
+        .filter((f) => f.monPlanId === monPlanId)
+        .map((m) => m.periodAbbreviation);
+
+      // Add it to the result set of data sent to the back-end
+      payload.items.push(newItem);
+    }
+
+    submitData(payload)
+      .then(() => {
+        setSubmitting(false);
+        window.location.reload(false);
+      })
+      .catch((e) => {
+        handleError(e);
+        setSubmitting(false);
+      });
+  };
+
   const applyFilter = async (orisCodes, monPlanIds, submissionPeriods) => {
     const dataToSetMap = {
       //Contains data fetch, state setter, and ref for each of the 5 categories
@@ -135,10 +188,18 @@ const ReviewAndSubmit = ({ checkedOutLocations }) => {
 
       data = data.map((chunk) => {
         //Add selector state variables
+        const isLocationCheckedOut = checkedOutLocationsMap.has(
+          chunk.monPlanId
+        );
         return {
           selected: false,
-          checkedOut: checkedOutLocationsMap.has(chunk.monPlanId),
-          userCheckedOut: false,
+          checkedOut: isLocationCheckedOut,
+          userCheckedOut: isLocationCheckedOutByUser({
+            userId,
+            checkedOutLocationsMap,
+            chunk,
+            isLocationCheckedOut,
+          }),
           viewOnly: false,
           ...chunk,
         };
@@ -185,7 +246,7 @@ const ReviewAndSubmit = ({ checkedOutLocations }) => {
           <Button
             className="flex-align-self-end flex-align-self-center flex-1 margin-right-5 maxw-mobile"
             size="big"
-            onClick={submitData}
+            onClick={finalSubmission}
           >
             Submit
           </Button>
@@ -199,6 +260,7 @@ const ReviewAndSubmit = ({ checkedOutLocations }) => {
           facilities={MockPermissions}
         />
       )}
+
       <ReviewAndSubmitTables
         monPlanState={monPlans}
         setMonPlanState={setMonPlans}
@@ -211,6 +273,8 @@ const ReviewAndSubmit = ({ checkedOutLocations }) => {
         emissionsRef={emissionsRef}
         permissions={idToPermissionsMap} //Map of oris codes to user permissions
       />
+
+      <LoadingModal loading={submitting} />
 
       {showModal && (
         <SubmissionModal

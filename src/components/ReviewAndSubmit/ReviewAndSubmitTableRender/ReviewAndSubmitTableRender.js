@@ -1,5 +1,5 @@
 import { ArrowDownwardSharp } from "@material-ui/icons";
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useState, useCallback } from "react";
 import DataTable from "react-data-table-component";
 import {
   addScreenReaderLabelForCollapses,
@@ -10,6 +10,7 @@ import { oneSecond } from "../../../config";
 import ReviewCell from "../ReviewCell/ReviewCell";
 import { Checkbox } from "@trussworks/react-uswds";
 import { v4 as uuidv4 } from "uuid";
+import { checkoutAPI } from "../../../additional-functions/checkout";
 
 const ReviewAndSubmitTableRender = forwardRef(
   (
@@ -73,7 +74,7 @@ const ReviewAndSubmitTableRender = forwardRef(
       ...columns,
     ];
 
-    const selectAll = (bool) => {
+    const selectAll = useCallback((bool) => {
       for (const r of ref.current) {
         if (getRowState(r, type) === "Checkbox") {
           //Logic to see if row can actually be checked out
@@ -84,11 +85,12 @@ const ReviewAndSubmitTableRender = forwardRef(
             // Need to activate mp for subsequent child records
             selectMonPlanRow(r.monPlanId);
           }
+          checkoutAPI(bool, r.facId, r.monPlanId).then()
         }
-      }
-    };
+      }//eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-    const handleRowView = (row) => {
+    const handleRowView = useCallback((row) => {
       let reportTitle;
       let reportCode;
       let url;
@@ -98,10 +100,10 @@ const ReviewAndSubmitTableRender = forwardRef(
       reportTitle = "ECMPS Monitoring Plan Printout Report";
       url = `/workspace/reports?reportCode=${reportCode}&monitorPlanId=${row.monPlanId}`;
 
-      window.open(url, reportTitle, reportWindowParams);
-    };
+      window.open(url, reportTitle, reportWindowParams);//eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-    const handleRowSelection = (row, type, selection) => {
+    const handleRowSelection = useCallback((row, type, selection) => {
       if (selection === false) {
         setSelectAllState(false);
       }
@@ -117,14 +119,15 @@ const ReviewAndSubmitTableRender = forwardRef(
         if (r[filterId] === row[filterId] && r.monPlanId === row.monPlanId) {
           r.selected = selection;
           r.userCheckedOut = r.selected;
+          checkoutAPI(selection, r.facId, r.monPlanId).then()
 
           if (r.selected && type !== "MP") {
             // Need to activate mp for subsequent child records
             selectMonPlanRow(row.monPlanId);
           }
         }
-      }
-    };
+      }//eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
       <div>

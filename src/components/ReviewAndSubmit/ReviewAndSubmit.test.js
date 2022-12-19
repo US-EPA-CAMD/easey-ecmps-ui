@@ -5,7 +5,19 @@ import ReviewAndSubmit from "./ReviewAndSubmit";
 import configureStore from "../../store/configureStore.dev";
 import { Provider } from "react-redux";
 
+sessionStorage.setItem(
+  "cdx_user",
+  '{ "firstName": "mock", "lastName": "mock" }'
+);
+
 window.scrollTo = jest.fn();
+window.location.reload = jest.fn();
+
+jest.mock("../../utils/api/camdServices", () => ({
+  submitData: jest.fn().mockReturnValue({
+    then: jest.fn().mockReturnValue({ catch: jest.fn() }),
+  }),
+}));
 
 jest.mock("../../utils/api/monitoringPlansApi", () => ({
   getMonitoringPlans: jest.fn().mockResolvedValue({
@@ -110,12 +122,13 @@ jest.mock(
 );
 const store = configureStore();
 describe("Review and Submit component", () => {
-  let query;
+  let query, user;
   beforeEach(async () => {
+    user = { userId: "mock", firstName: "mock", lastName: "mock" };
     await act(async () => {
       query = render(
         <Provider store={store}>
-          <ReviewAndSubmit />
+          <ReviewAndSubmit user={user} />
         </Provider>
       );
     });
@@ -147,5 +160,22 @@ describe("Review and Submit component", () => {
     });
 
     expect(queryByText("SUBMIT")).not.toBeInTheDocument();
+  });
+
+  it("mock the final submission process", async () => {
+    const { getByText, queryByText } = query;
+
+    await act(async () => {
+      getByText("SUBMIT").click();
+    });
+
+    await act(async () => {
+      getByText("SUBMIT MODAL").click();
+    });
+
+    await act(async () => {
+      getByText("Submit").click();
+    });
+    expect(getByText("Submit")).toBeInTheDocument();
   });
 });

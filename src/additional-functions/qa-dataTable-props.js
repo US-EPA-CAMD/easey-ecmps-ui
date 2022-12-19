@@ -883,7 +883,7 @@ export const qaCalibrationInjectionProps = () => {
       upscaleInjectionHour: ["Upscale Injection Hour", "hourDropdown", "dropdown", ""],
       upscaleInjectionMinute: ["Upscale Injection Minute", "minuteDropdown", "dropdown", ""],
     },
-    radioBtnPayload: ["onLineOffLineIndicator","zeroAPSIndicator","upscaleAPSIndicator"],
+    radioBtnPayload: ["onLineOffLineIndicator", "zeroAPSIndicator", "upscaleAPSIndicator"],
     extraControls: {},
   };
 }
@@ -900,5 +900,135 @@ export const qaCycleTimeSummaryProps = () => {
       totalTime: ["Total Time", "input", "", ""],
     },
     extraControls: {},
+  }
+}
+
+export const qaCycleTimeInjectionProps = () => {
+  return {
+    dataTableName: "Cycle Time Injection",
+    payload: {},
+    dropdownArray: ["gasLevelCode", "gasTypeCode"],
+    mdmProps: [
+      {
+        codeTable: "gas-level-codes",
+        responseProps: {
+          code: "gasLevelCode",
+          description: "gasLevelDescription"
+        }
+      },
+    ],
+    columnNames: [
+      "Gas Level Code",
+      "Calibration Gas Value",
+      "Begin Date",
+      "Begin Hour",
+      "Begin Minute",
+      "End Date",
+      "End Hour",
+      "End Minute",
+      "Injection Cycle Time",
+      "Begin Monitor Value",
+      "End Monitor Value"
+    ],
+    controlInputs: {
+      gasLevelCode: ["Gas Level Code", "dropdown", "", ""],
+      calibrationGasValue: ["Calibration Gas Value", "input", "", ""],
+      injectionCycleTime: ["Injection Cycle Time", "input", "", ""],
+      beginMonitorValue: ["Begin Monitor Value", "input", "", ""],
+      endMonitorValue: ["End Monitor Value", "input", "", ""],
+    },
+
+    controlDatePickerInputs: {
+      beginDate:["Begin Date", "date", "", ""],
+      beginHour:["Begin Hour", "hourDropdown", "dropdown", ""],
+      beginMinute:["Begin Minute", "minuteDropdown", "", ""],
+      endDate:["End Date", "date", "", ""],
+      endHour:["End Hour", "hourDropdown", "dropdown", ""],
+      endMinute:["End Minute", "minuteDropdown", "dropdown", ""],
+    },
+
+    extraControls: {},
+  }
+}
+
+export const qaFlowToLoadReferenceProps = () => {
+  return {
+    dataTableName: "Flow To Load Reference",
+    payload: {},
+    dropdownArray: [
+      'rataTestNumber',
+      'operatingLevelCode',
+      'calculatedSeparateReferenceIndicator',
+    ],
+    // mdmProps: [
+    //   {
+    //     codeTable: "operating-level-codes",
+    //     responseProps: {
+    //       code: "opLevelCode",
+    //       description: "opLevelDescription"
+    //     }
+    //   }
+    // ],
+    columnNames: [
+      "RATA Test Number",
+      "Operating Level Code",
+      "Average Gross Unit Load",
+      "Average Reference Method Flow",
+      "Reference Flow Load Ratio",
+      "Average Hourly Heat Input Rate",
+      "Reference Gross Heat Rate",
+      "Calculated Separate Reference Indicator",
+    ],
+    controlInputs: {
+      rataTestNumber: ["RATA Test Number", "dropdown", "", ""],
+      operatingLevelCode: ["Operating Level Code", "dropdown", "", ""],
+      averageGrossUnitLoad: ["Average Gross Unit Load", "input", "", ""],
+      averageReferenceMethodFlow: ["Average Reference Method Flow", "input", "", ""],
+      referenceFlowToLoadRatio: ["Reference Flow Load Ratio", "input", "", ""],
+      averageHourlyHeatInputRate: ["Average Hourly Heat Input Rate", "input", "", ""],
+      referenceGrossHeatRate: ["Reference Gross Heat Rate", "input", "", ""],
+      calculatedSeparateReferenceIndicator: ["Calculated Separate Reference Indicator", "dropdown", "", ""],
+    },
+  };
+}
+
+export const qaUnitDefaultTestDataProps = () => {
+  return {
+    dataTableName: "Unit Default Test",
+    payload: {},
+    dropdownArray: ["fuelCode", "operatingConditionCode"],
+    mdmProps: [
+      {
+        codeTable: "fuel-codes",
+        responseProps: {
+          code: "fuelCode",
+          description: "fuelDescription"
+        }
+      },
+      {
+        codeTable: "operating-condition-codes",
+        responseProps: {
+          code: "operatingConditionCode",
+          description: "operatingConditionDescription"
+        }
+      }
+    ],
+    columnNames: [
+      "Fuel Code",
+      "NOX Default Rate",
+      "Operating Condition Code",
+      "Group ID",
+      "Number of Units in Group",
+      "Number of Tests for Group",
+    ],
+    controlInputs: {
+      fuelCode: ["Fuel Code", "dropdown", "", ""],
+      NOxDefaultRate: ["NOX Default Rate", "input", "", ""],
+      operatingConditionCode: ["Operating Condition Code", "dropdown", "", ""],
+      groupID: ["Group ID", "input", "", ""],
+      numberOfUnitsInGroup: ["Number of Units in Group", "input", "", ""],
+      numberOfTestsForGroup: ["Number of Tests for Group", "input", "", ""],
+    },
+    controlDatePickerInputs: {},
   }
 }
