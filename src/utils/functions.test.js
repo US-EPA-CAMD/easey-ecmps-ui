@@ -4,9 +4,11 @@ import {
   getConfigValueBoolean,
   getConfigValueNumber,
   isLocationCheckedOutByUser,
+  isLocationUserCheckedOut,
   parseBool,
   updateCheckedOutLocationsOnTable,
   updateCheckedOutLocationsOnTables,
+  getPreviouslyFullSubmitedQuarter,
 } from "./functions";
 
 describe("functions.js", function () {
@@ -67,6 +69,7 @@ describe("functions.js", function () {
     describe('checked out location functions', () => {
     let checkedOutLocationsMap = new Map(),
       tables,
+      userId,
       monPlansStateSetter,
       qaStateSetter,
       checkedOutLocationsArray = [
@@ -106,6 +109,7 @@ describe("functions.js", function () {
         })
         monPlansStateSetter = jest.fn();
         qaStateSetter = jest.fn();
+        userId = 'test-user';
         tables = {
           monPlan: {
             ref: {
@@ -175,61 +179,87 @@ describe("functions.js", function () {
           },
         };
       });
+      describe('isLocationUserCheckedOut', () => {
+        it('should return true if location is checked out by user', () => {
+          const relevantLocation = checkedOutLocationsArray[0];
+          const monPlanId = relevantLocation.monPlanId, userId = relevantLocation.checkedOutBy;
+          const result = isLocationUserCheckedOut(checkedOutLocationsMap, monPlanId, userId);
+          expect(result).toBe(true);
+        });
+        it('should return false if location is not checked out by user', () => {
+          const relevantLocation = checkedOutLocationsArray[0];
+          const monPlanId = relevantLocation.monPlanId, differentUserId = 'different user';
+          const result = isLocationUserCheckedOut(checkedOutLocationsMap, monPlanId, differentUserId);
+          expect(result).toBe(false);
+        })
+      })
 
       describe("updateCheckedOutLocationsOnTables", () => {
         it('should update checked out locations on tables', () => {
           const checkedOutLocationTableRow = tables.monPlan.ref.current[0];
-          updateCheckedOutLocationsOnTables(checkedOutLocationsMap, tables);
+          updateCheckedOutLocationsOnTables(checkedOutLocationsMap, tables, userId);
           expect(checkedOutLocationTableRow.checkedOut).toBe(true);
         });
         it('should not change rows whose location is not checked out', () => {
           const notCheckedOutLocationTableRow = tables.monPlan.ref.current[1];
-          updateCheckedOutLocationsOnTables(checkedOutLocationsMap, tables);
+          updateCheckedOutLocationsOnTables(checkedOutLocationsMap, tables, userId);
           expect(notCheckedOutLocationTableRow.checkedOut).toBe(false);
         });
         it('updates state if there is change in checkedOut locations', () => {
-          updateCheckedOutLocationsOnTables(checkedOutLocationsMap, tables);
+          updateCheckedOutLocationsOnTables(checkedOutLocationsMap, tables, userId);
           expect(monPlansStateSetter).toHaveBeenCalled();
           expect(qaStateSetter).toHaveBeenCalled();
         });
         it('does not update state if there is no change in checkedOut locations', () => {
           checkedOutLocationsMap = new Map();
-          updateCheckedOutLocationsOnTables(checkedOutLocationsMap, tables);
+          updateCheckedOutLocationsOnTables(checkedOutLocationsMap, tables, userId);
           expect(monPlansStateSetter).not.toHaveBeenCalled();
           expect(qaStateSetter).not.toHaveBeenCalled();
         });
+        it('should set user checked out status to true if location is checked out by user', () => {
+          const checkedOutLocationTableRow = tables.monPlan.ref.current[0];
+          userId = 'rboehme-dp';
+          updateCheckedOutLocationsOnTables(checkedOutLocationsMap, tables, userId);
+          expect(checkedOutLocationTableRow.userCheckedOut).toBe(true);
+        })
+        it('should set user checked out status to false if location is checked out by different user', () => {
+          const checkedOutLocationTableRow = tables.monPlan.ref.current[0];
+          userId = 'another user';
+          updateCheckedOutLocationsOnTables(checkedOutLocationsMap, tables, userId);
+          expect(checkedOutLocationTableRow.userCheckedOut).toBe(false);
+        })
       })
 
       describe('updateCheckedOutLocationsOnTable', () => {
         it('should update ref if there is a change in checked out locations', () => {
           const {monPlan} = tables;
           const {ref} = monPlan, checkedOutTableRow = ref.current[0];
-          updateCheckedOutLocationsOnTable(ref, monPlan.setState, checkedOutLocationsMap);
+          updateCheckedOutLocationsOnTable(ref, monPlan.setState, checkedOutLocationsMap, userId);
           expect(checkedOutTableRow.checkedOut).toBe(true);
         });
         it('should call state setter if there is a change in checked out locations', () => {
           const {monPlan} = tables;
-          updateCheckedOutLocationsOnTable(monPlan.ref, monPlan.setState, checkedOutLocationsMap);
+          updateCheckedOutLocationsOnTable(monPlan.ref, monPlan.setState, checkedOutLocationsMap, userId);
           expect(monPlansStateSetter).toHaveBeenCalled();
         });
         it('should not update ref if there is no change in checked out locations', () => {
           checkedOutLocationsMap = new Map();
           const {monPlan} = tables;
           const {ref} = monPlan, notCheckedOutTableRow = ref.current[0];
-          updateCheckedOutLocationsOnTable(ref, monPlan.setState, checkedOutLocationsMap);
+          updateCheckedOutLocationsOnTable(ref, monPlan.setState, checkedOutLocationsMap, userId);
           expect(notCheckedOutTableRow.checkedOut).toBe(false);
         });
         it('should not call state setter if there is no change in checked out locations', () => {
           checkedOutLocationsMap = new Map();
           const {monPlan} = tables;
           const {ref} = monPlan;
-          updateCheckedOutLocationsOnTable(ref, monPlan.setState, checkedOutLocationsMap);
+          updateCheckedOutLocationsOnTable(ref, monPlan.setState, checkedOutLocationsMap, userId);
           expect(monPlansStateSetter).not.toHaveBeenCalled();
         });
       });
 
       describe('isLocationCheckedOutByUser', () => {
-        let userId, chunk;
+        let chunk;
         beforeEach(() => {
           userId = 'test-user';
           chunk = {monPlanId: '123'};
@@ -251,4 +281,26 @@ describe("functions.js", function () {
       })
     });
   });
+
+  describe("getPreviouslyFullSubmitedQuarter tests", ()=>{
+    it("returns 2021 Q3 for input date 2022-01-01 (beginning of Q1)", ()=>{
+       const yearQuarter =  getPreviouslyFullSubmitedQuarter("01/01/2022")
+       expect(yearQuarter).toBe("2021 Q3")
+    })
+
+    it("returns 2021 Q4 for input date 04/01/2022 (beginning of Q2)", ()=>{
+        const yearQuarter =  getPreviouslyFullSubmitedQuarter("04/01/2022")
+        expect(yearQuarter).toBe("2021 Q4")
+    })
+
+    it("returns 2022 Q1 for input date 07/01/2022 (beginning of Q3)", ()=>{
+        const yearQuarter =  getPreviouslyFullSubmitedQuarter("07/01/2022")
+        expect(yearQuarter).toBe("2022 Q1")
+    })
+    
+    it("returns 2022 Q2 for input date 10/01/2022 (beginning of Q3)", ()=>{
+        const yearQuarter =  getPreviouslyFullSubmitedQuarter("10/01/2022")
+        expect(yearQuarter).toBe("2022 Q2")
+    })
+})
 });

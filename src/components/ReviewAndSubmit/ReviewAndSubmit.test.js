@@ -115,12 +115,13 @@ jest.mock(
 );
 const store = configureStore();
 describe("Review and Submit component", () => {
-  let query;
+  let query, user;
   beforeEach(async () => {
+    user = {userId: 'mock', firstName: 'mock', lastName: 'mock'}
     await act(async () => {
       query = render(
         <Provider store={store}>
-          <ReviewAndSubmit />
+          <ReviewAndSubmit user={user} />
         </Provider>
       );
     });

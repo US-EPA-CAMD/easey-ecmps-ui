@@ -132,10 +132,16 @@ const App = () => {
             />
             <Route path={`/faqs`} exact component={() => <FAQ />} />
             <Route path="/login" exact component={Login} />
+            {!user &&  (
+              <Redirect
+                from="/workspace/review"
+                to="/home"
+              />
+            )}
             <Route
               path="/workspace/review"
               exact
-              component={() => <ReviewAndSubmit />}
+              component={() => <ReviewAndSubmit user={user}/>}
             />
 
             {user ? (

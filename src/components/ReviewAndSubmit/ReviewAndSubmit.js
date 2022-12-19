@@ -10,7 +10,7 @@ import { Button } from "@trussworks/react-uswds";
 import { connect } from "react-redux";
 import { isLocationCheckedOutByUser, updateCheckedOutLocationsOnTables } from "../../utils/functions";
 
-const ReviewAndSubmit = ({ checkedOutLocations }) => {
+const ReviewAndSubmit = ({ checkedOutLocations, user }) => {
   const [activityId, setActivityId] = useState("");
   const [excludeErrors, setExcludeErrors] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -29,7 +29,6 @@ const ReviewAndSubmit = ({ checkedOutLocations }) => {
   const monPlanRef = useRef([]);
 
   const [finalSubmitStage, setFinalSubmitStage] = useState(false);
-  const user = JSON.parse(sessionStorage.getItem("cdx_user"));
   const { userId } = user;
   useEffect(() => {
     const checkedOutLocationsMPIdsMap = new Map();
@@ -37,7 +36,7 @@ const ReviewAndSubmit = ({ checkedOutLocations }) => {
       checkedOutLocationsMPIdsMap.set(el.monPlanId, el);
     });
     setCheckedOutLocationsMap(checkedOutLocationsMPIdsMap);
-    updateCheckedOutLocationsOnTables(checkedOutLocationsMPIdsMap, dataList);//eslint-disable-next-line react-hooks/exhaustive-deps
+    updateCheckedOutLocationsOnTables(checkedOutLocationsMPIdsMap, dataList, userId);//eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkedOutLocations]);
 
   const dataList = {
