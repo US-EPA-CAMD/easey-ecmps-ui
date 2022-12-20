@@ -9,6 +9,9 @@ import {
   updateCheckedOutLocationsOnTable,
   updateCheckedOutLocationsOnTables,
   getPreviouslyFullSubmitedQuarter,
+  evalStatusStyle,
+  alertStyle,
+  displayReport,
 } from "./functions";
 
 describe("functions.js", function () {
@@ -280,6 +283,55 @@ describe("functions.js", function () {
         })
       })
     });
+    describe('evalStatusStyle', () => {
+      it('returns empty string if no status is given', () => {
+        const result = evalStatusStyle();
+        expect(result).toBe('');
+      })
+      it('returns "usa-alert--warning" if "ERR" is the status', () => {
+        const result = evalStatusStyle("ERR");
+        expect(result).toBe('usa-alert--warning');
+      })
+      it('returns "usa-alert--warning" if "EVAL" is the status', () => {
+        const result = evalStatusStyle("EVAL");
+        expect(result).toBe('usa-alert--warning');
+      })
+      it('returns "usa-alert--success" if "INFO" is the status', () => {
+        const result = evalStatusStyle("INFO");
+        expect(result).toBe("usa-alert--success");
+      })
+      it('returns "usa-alert--success" if "PASS" is the status', () => {
+        const result = evalStatusStyle("PASS");
+        expect(result).toBe("usa-alert--success");
+      })
+      it('returns "usa-alert--info" if "INQ" is the status', () => {
+        const result = evalStatusStyle("INQ");
+        expect(result).toBe("usa-alert--info");
+      })
+      it('returns "usa-alert--info" if "WIP" is the status', () => {
+        const result = evalStatusStyle("WIP");
+        expect(result).toBe("usa-alert--info");
+      })
+    })
+    describe('alertStyle', () => {
+      it('returns returns correct string with eval status', () => {
+        const evalStatus = "PASS";
+        const result = alertStyle(evalStatus);
+        const expectedResult = `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
+          evalStatus
+        )} margin-y-0 maintainBorder`;
+        expect(result).toBe(expectedResult);
+      })
+    });
+    describe('displayReport', () => {
+      it('returns returns correct string with eval status', () => {
+        const windowOpenMock = jest.fn()
+        global.open = () => windowOpenMock();
+        const monPlanId = "123", reportCodes = ["MP_EVAL", "MPP", "MP_AUDIT", "Evaluation"];
+        reportCodes.forEach(code => displayReport(monPlanId, code))
+        expect(windowOpenMock).toHaveBeenCalledTimes(4);
+      })
+    })
   });
 
   describe("getPreviouslyFullSubmitedQuarter tests", ()=>{

@@ -21,6 +21,7 @@ const ReviewAndSubmitTables = ({
   emissionsRef,
   permissions,
   updateFilesSelected,
+  checkedOutLocationsMap,
 }) => {
   const selectMonPlanRow = useCallback((id) => {
     for (const mpR of monPlanRef.current) {
@@ -150,6 +151,7 @@ const ReviewAndSubmitTables = ({
                 selectMonPlanRow={selectMonPlanRow}
                 getRowState={getRowState}
                 updateFilesSelected={updateFilesSelected}
+                checkedOutLocationsMap={checkedOutLocationsMap}
               />
             </div>
           </div>
