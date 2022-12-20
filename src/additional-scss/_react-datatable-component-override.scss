@@ -5,7 +5,7 @@
     width: 99%;
     margin: 0.5% 0.5%;
 
-    .epa-active-element {
+    .epa-active-element:not(.maintainBorder) {
       border: none !important;
     }
   }

@@ -10,11 +10,12 @@ import { oneSecond } from "../../../config";
 import ReviewCell from "../ReviewCell/ReviewCell";
 import { Checkbox } from "@trussworks/react-uswds";
 import { v4 as uuidv4 } from "uuid";
-import { checkoutAPI } from "../../../additional-functions/checkout";
-
+import { addEvalStatusCell } from "../../../utils/functions";
+import { checkInOutLocation } from "../../../utils/api/monitoringPlansApi";
+import './ReviewAndSubmitTableRender.scss';
 const ReviewAndSubmitTableRender = forwardRef(
   (
-    { columns, state, setState, name, type, selectMonPlanRow, getRowState },
+    { columns, state, setState, name, type, selectMonPlanRow, getRowState, checkedOutLocationsMap },
     ref
   ) => {
     const reportWindowParams = [
@@ -74,6 +75,8 @@ const ReviewAndSubmitTableRender = forwardRef(
       ...columns,
     ];
 
+    addEvalStatusCell(mappings);
+
     const selectAll = useCallback((bool) => {
       for (const r of ref.current) {
         if (getRowState(r, type) === "Checkbox") {
@@ -85,7 +88,7 @@ const ReviewAndSubmitTableRender = forwardRef(
             // Need to activate mp for subsequent child records
             selectMonPlanRow(r.monPlanId);
           }
-          checkoutAPI(bool, r.facId, r.monPlanId).then()
+          checkInOutLocation(bool, r, checkedOutLocationsMap);
         }
       }//eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -119,8 +122,7 @@ const ReviewAndSubmitTableRender = forwardRef(
         if (r[filterId] === row[filterId] && r.monPlanId === row.monPlanId) {
           r.selected = selection;
           r.userCheckedOut = r.selected;
-          checkoutAPI(selection, r.facId, r.monPlanId).then()
-
+          checkInOutLocation(selection, r, checkedOutLocationsMap);
           if (r.selected && type !== "MP") {
             // Need to activate mp for subsequent child records
             selectMonPlanRow(row.monPlanId);

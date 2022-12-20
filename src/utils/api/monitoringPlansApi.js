@@ -4,6 +4,7 @@ import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
 import { getFacilityById } from "./facilityApi";
 import download from "downloadjs";
+import { checkoutAPI } from "../../additional-functions/checkout";
 
 axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
@@ -994,5 +995,14 @@ export const exportMonitoringPlanDownload = async (configID) => {
     download(JSON.stringify(mpRes.data, null, "\t"), exportFileName);
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const checkInOutLocation = (bool, row, checkedOutLocationsMap) => {
+  const { monPlanId } = row;
+  if (checkedOutLocationsMap?.has(monPlanId) && !bool) {
+    console.log('item is already checked out');
+  } else {
+    checkoutAPI(bool, row.facId, monPlanId).then();
   }
 };
