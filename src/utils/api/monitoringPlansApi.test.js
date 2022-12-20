@@ -949,7 +949,7 @@ describe("testing monitoring plans data fetching APIs", () => {
     expect(apiCall["data"]).toEqual(mockData);
   });
 
-  describe.only('checkInOutLocation', () => {
+  describe('checkInOutLocation', () => {
     it('calls api location if monPlanId is not in checked out locations map', () => {
       const row = {monPlanId:'123'}, checkedOutLocationsMap = new Map();
       mpApi.checkInOutLocation(false, row, checkedOutLocationsMap);
