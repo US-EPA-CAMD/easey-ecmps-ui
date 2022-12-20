@@ -167,7 +167,7 @@ describe("Submission Modal", () => {
       />
     );
 
-    const submissionButton = getByText("Verify");
+    let submissionButton = getByText("Verify");
 
     await act(async () => {
       const usernameInput = screen.getByTestId("component-login-username");
@@ -189,6 +189,8 @@ describe("Submission Modal", () => {
     await act(async () => {
       await getByText("Certification Statement").click();
     });
+
+    submissionButton = getByText("Certify");
 
     await act(async () => {
       const checkBox = await screen.getByTestId("component-checkbox");

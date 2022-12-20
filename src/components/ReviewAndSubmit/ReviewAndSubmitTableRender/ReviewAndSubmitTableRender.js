@@ -14,7 +14,16 @@ import { checkoutAPI } from "../../../additional-functions/checkout";
 
 const ReviewAndSubmitTableRender = forwardRef(
   (
-    { columns, state, setState, name, type, selectMonPlanRow, getRowState },
+    {
+      columns,
+      state,
+      setState,
+      name,
+      type,
+      selectMonPlanRow,
+      getRowState,
+      updateFilesSelected,
+    },
     ref
   ) => {
     const reportWindowParams = [
@@ -80,14 +89,15 @@ const ReviewAndSubmitTableRender = forwardRef(
           //Logic to see if row can actually be checked out
           r.selected = bool;
           r.userCheckedOut = bool;
+          updateFilesSelected(bool);
 
           if (r.selected && type !== "MP") {
             // Need to activate mp for subsequent child records
             selectMonPlanRow(r.monPlanId);
           }
-          checkoutAPI(bool, r.facId, r.monPlanId).then()
+          checkoutAPI(bool, r.facId, r.monPlanId).then();
         }
-      }//eslint-disable-next-line react-hooks/exhaustive-deps
+      } //eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleRowView = useCallback((row) => {
@@ -100,7 +110,7 @@ const ReviewAndSubmitTableRender = forwardRef(
       reportTitle = "ECMPS Monitoring Plan Printout Report";
       url = `/workspace/reports?reportCode=${reportCode}&monitorPlanId=${row.monPlanId}`;
 
-      window.open(url, reportTitle, reportWindowParams);//eslint-disable-next-line react-hooks/exhaustive-deps
+      window.open(url, reportTitle, reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleRowSelection = useCallback((row, type, selection) => {
@@ -119,14 +129,16 @@ const ReviewAndSubmitTableRender = forwardRef(
         if (r[filterId] === row[filterId] && r.monPlanId === row.monPlanId) {
           r.selected = selection;
           r.userCheckedOut = r.selected;
-          checkoutAPI(selection, r.facId, r.monPlanId).then()
+          updateFilesSelected(selection);
+
+          checkoutAPI(selection, r.facId, r.monPlanId).then();
 
           if (r.selected && type !== "MP") {
             // Need to activate mp for subsequent child records
             selectMonPlanRow(row.monPlanId);
           }
         }
-      }//eslint-disable-next-line react-hooks/exhaustive-deps
+      } //eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

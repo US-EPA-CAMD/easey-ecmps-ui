@@ -9,6 +9,7 @@ const ReviewAndSubmitForm = ({
   queryCallback,
   showModal,
   setExcludeErrors,
+  filesSelected,
 }) => {
   const [availableReportingPeriods, setAvailableReportingPeriods] = useState(
     []
@@ -240,9 +241,9 @@ const ReviewAndSubmitForm = ({
               onClick={() => {
                 showModal(true);
               }}
-              disabled={false}
+              disabled={filesSelected === 0}
             >
-              Submit
+              Sign & Submit
             </Button>
           </div>
         </div>

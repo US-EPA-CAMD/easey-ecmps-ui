@@ -20,16 +20,18 @@ const ReviewAndSubmitTables = ({
   setEmissionsState,
   emissionsRef,
   permissions,
+  updateFilesSelected,
 }) => {
   const selectMonPlanRow = useCallback((id) => {
     for (const mpR of monPlanRef.current) {
       if (mpR.monPlanId === id && getRowState(mpR, "MP") === "Checkbox") {
         mpR.selected = true;
         mpR.userCheckedOut = true;
+        updateFilesSelected(true);
       }
     }
 
-    setMonPlanState([...monPlanRef.current]); //Update monitor plan state 
+    setMonPlanState([...monPlanRef.current]); //Update monitor plan state
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -63,35 +65,38 @@ const ReviewAndSubmitTables = ({
       return "Checkbox"; //True checkbox
     } else {
       return "View";
-    }//eslint-disable-next-line react-hooks/exhaustive-deps
+    } //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const tables = useMemo(() => [
-    {
-      columns: monPlanColumns,
-      state: monPlanState,
-      setState: setMonPlanState,
-      ref: monPlanRef,
-      name: "Monitoring Plan",
-      type: "MP",
-    },
-    {
-      columns: qaTestSummaryColumns,
-      state: qaTestSumState,
-      setState: setQaTestSumState,
-      ref: qaTestSumRef,
-      name: "Test Data",
-      type: "QA",
-    },
-    {
-      columns: emissionsColumns,
-      state: emissionsState,
-      setState: setEmissionsState,
-      ref: emissionsRef,
-      name: "Emissions",
-      type: "EM",
-    },//eslint-disable-next-line react-hooks/exhaustive-deps
-  ], [monPlanState, qaTestSumState, emissionsState]);
+  const tables = useMemo(
+    () => [
+      {
+        columns: monPlanColumns,
+        state: monPlanState,
+        setState: setMonPlanState,
+        ref: monPlanRef,
+        name: "Monitoring Plan",
+        type: "MP",
+      },
+      {
+        columns: qaTestSummaryColumns,
+        state: qaTestSumState,
+        setState: setQaTestSumState,
+        ref: qaTestSumRef,
+        name: "Test Data",
+        type: "QA",
+      },
+      {
+        columns: emissionsColumns,
+        state: emissionsState,
+        setState: setEmissionsState,
+        ref: emissionsRef,
+        name: "Emissions",
+        type: "EM",
+      }, //eslint-disable-next-line react-hooks/exhaustive-deps
+    ],
+    [monPlanState, qaTestSumState, emissionsState]
+  );
 
   const [activeTables, setActiveTables] = useState(
     tables.reduce((acc, curr) => ({ ...acc, [curr.name]: true }), {})
@@ -144,6 +149,7 @@ const ReviewAndSubmitTables = ({
                 type={type}
                 selectMonPlanRow={selectMonPlanRow}
                 getRowState={getRowState}
+                updateFilesSelected={updateFilesSelected}
               />
             </div>
           </div>
