@@ -55,6 +55,7 @@ describe("Review and submit form", () => {
           queryCallback={jest.fn()}
           showModal={jest.fn()}
           setExcludeErrors={jest.fn()}
+          filesSelected={1}
         />
       );
     });
@@ -71,6 +72,7 @@ describe("Review and submit form", () => {
           queryCallback={jest.fn()}
           showModal={jest.fn()}
           setExcludeErrors={mockErrorCall}
+          filesSelected={1}
         />
       );
     });
@@ -93,6 +95,7 @@ describe("Review and submit form", () => {
           queryCallback={jest.fn()}
           showModal={jest.fn()}
           setExcludeErrors={jest.fn()}
+          filesSelected={1}
         />
       );
 
@@ -132,6 +135,7 @@ describe("Review and submit form", () => {
           queryCallback={mockCallback}
           showModal={jest.fn()}
           setExcludeErrors={jest.fn()}
+          filesSelected={1}
         />
       );
       byText = getByText;
@@ -169,6 +173,7 @@ describe("Review and submit form", () => {
           queryCallback={jest.fn()}
           showModal={jest.fn()}
           setExcludeErrors={jest.fn()}
+          filesSelected={1}
         />
       );
       byText = getByText;
@@ -191,6 +196,7 @@ describe("Review and submit form", () => {
           queryCallback={mockCallback}
           showModal={jest.fn()}
           setExcludeErrors={jest.fn()}
+          filesSelected={1}
         />
       );
       byText = getByText;

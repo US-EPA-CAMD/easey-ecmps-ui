@@ -12,10 +12,20 @@ import { Checkbox } from "@trussworks/react-uswds";
 import { v4 as uuidv4 } from "uuid";
 import { addEvalStatusCell } from "../../../utils/functions";
 import { checkInOutLocation } from "../../../utils/api/monitoringPlansApi";
-import './ReviewAndSubmitTableRender.scss';
+import "./ReviewAndSubmitTableRender.scss";
 const ReviewAndSubmitTableRender = forwardRef(
   (
-    { columns, state, setState, name, type, selectMonPlanRow, getRowState, checkedOutLocationsMap },
+    {
+      columns,
+      state,
+      setState,
+      name,
+      type,
+      selectMonPlanRow,
+      getRowState,
+      checkedOutLocationsMap,
+      updateFilesSelected,
+    },
     ref
   ) => {
     const reportWindowParams = [
@@ -83,6 +93,7 @@ const ReviewAndSubmitTableRender = forwardRef(
           //Logic to see if row can actually be checked out
           r.selected = bool;
           r.userCheckedOut = bool;
+          updateFilesSelected(bool);
 
           if (r.selected && type !== "MP") {
             // Need to activate mp for subsequent child records
@@ -90,7 +101,7 @@ const ReviewAndSubmitTableRender = forwardRef(
           }
           checkInOutLocation(bool, r, checkedOutLocationsMap);
         }
-      }//eslint-disable-next-line react-hooks/exhaustive-deps
+      } //eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleRowView = useCallback((row) => {
@@ -103,7 +114,7 @@ const ReviewAndSubmitTableRender = forwardRef(
       reportTitle = "ECMPS Monitoring Plan Printout Report";
       url = `/workspace/reports?reportCode=${reportCode}&monitorPlanId=${row.monPlanId}`;
 
-      window.open(url, reportTitle, reportWindowParams);//eslint-disable-next-line react-hooks/exhaustive-deps
+      window.open(url, reportTitle, reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleRowSelection = useCallback((row, type, selection) => {
@@ -122,13 +133,15 @@ const ReviewAndSubmitTableRender = forwardRef(
         if (r[filterId] === row[filterId] && r.monPlanId === row.monPlanId) {
           r.selected = selection;
           r.userCheckedOut = r.selected;
+          updateFilesSelected(selection);
+
           checkInOutLocation(selection, r, checkedOutLocationsMap);
           if (r.selected && type !== "MP") {
             // Need to activate mp for subsequent child records
             selectMonPlanRow(row.monPlanId);
           }
         }
-      }//eslint-disable-next-line react-hooks/exhaustive-deps
+      } //eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

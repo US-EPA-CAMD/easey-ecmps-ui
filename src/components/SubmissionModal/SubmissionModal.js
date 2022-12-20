@@ -404,18 +404,34 @@ export const SubmissionModal = ({
                   />
                 )}
 
-                <Button
-                  type="button"
-                  title="Click to save"
-                  epa-testid="saveBtn"
-                  id="saveBtn"
-                  data-testid="saveBtn"
-                  disabled={stage !== 3 ? false : checked ? false : true}
-                  className="margin-right-2 display-inline-block"
-                  onClick={verifyClicked}
-                >
-                  Verify
-                </Button>
+                {stage === 3 && (
+                  <Button
+                    type="button"
+                    title="Click to save"
+                    epa-testid="saveBtn"
+                    id="saveBtn"
+                    data-testid="saveBtn"
+                    disabled={checked ? false : true}
+                    className="margin-right-2 display-inline-block"
+                    onClick={verifyClicked}
+                  >
+                    Certify
+                  </Button>
+                )}
+                {stage !== 3 && (
+                  <Button
+                    type="button"
+                    title="Click to save"
+                    epa-testid="saveBtn"
+                    id="saveBtn"
+                    data-testid="saveBtn"
+                    className="margin-right-2 display-inline-block"
+                    onClick={verifyClicked}
+                  >
+                    Verify
+                  </Button>
+                )}
+
                 <Button
                   type="button"
                   title="Click to cancel"

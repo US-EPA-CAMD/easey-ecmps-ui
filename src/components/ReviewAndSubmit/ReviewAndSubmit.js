@@ -22,6 +22,9 @@ const ReviewAndSubmit = ({ checkedOutLocations, user }) => {
   const [showModal, setShowModal] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
+  const [numFilesSelected, setNumFilesSelected] = useState(0);
+  const filesSelected = useRef(0);
+
   const [checkedOutLocationsMap, setCheckedOutLocationsMap] = useState(
     new Map()
   );
@@ -73,6 +76,15 @@ const ReviewAndSubmit = ({ checkedOutLocations, user }) => {
     } //eslint-disable-next-line react-hooks/exhaustive-deps
     console.log(idToPermissionsMap);
   }, []);
+
+  const updateFilesSelected = (bool) => {
+    if (bool) {
+      filesSelected.current = filesSelected.current + 1;
+    } else {
+      filesSelected.current = filesSelected.current - 1;
+    }
+    setNumFilesSelected(filesSelected.current);
+  };
 
   const closeModal = () => {
     setShowModal(false);
@@ -238,10 +250,12 @@ const ReviewAndSubmit = ({ checkedOutLocations, user }) => {
   return (
     <div className="react-transition fade-in padding-x-3">
       <div className="text-black margin-top-1 display-flex flex-row">
-        <h2 className="flex-4 page-header margin-top-2">Review And Submit</h2>
-
-        <div className=""></div>
-
+        {!finalSubmitStage && (
+          <h2 className="flex-4 page-header margin-top-2">Submit</h2>
+        )}
+        {finalSubmitStage && (
+          <h2 className="flex-4 page-header margin-top-2">Review And Submit</h2>
+        )}
         {finalSubmitStage && (
           <Button
             className="flex-align-self-end flex-align-self-center flex-1 margin-right-5 maxw-mobile"
@@ -258,6 +272,7 @@ const ReviewAndSubmit = ({ checkedOutLocations, user }) => {
           queryCallback={applyFilter}
           setExcludeErrors={setExcludeErrors}
           facilities={MockPermissions}
+          filesSelected={numFilesSelected}
         />
       )}
 
@@ -272,6 +287,7 @@ const ReviewAndSubmit = ({ checkedOutLocations, user }) => {
         setEmissionsState={setEmissions}
         emissionsRef={emissionsRef}
         permissions={idToPermissionsMap} //Map of oris codes to user permissions
+        updateFilesSelected={updateFilesSelected}
       />
 
       <LoadingModal loading={submitting} />

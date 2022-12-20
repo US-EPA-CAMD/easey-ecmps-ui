@@ -47,6 +47,7 @@ describe("Review and Submit Tables component", () => {
           ],
         }}
         permissions={{ current: { 1: ["DSMP"] } }}
+        updateFilesSelected={jest.fn()}
       />
     );
 
@@ -79,6 +80,7 @@ describe("Review and Submit Tables component", () => {
           ],
         }}
         permissions={{ current: { 1: ["DSMP"] } }}
+        updateFilesSelected={jest.fn()}
       />
     );
 
@@ -109,6 +111,7 @@ describe("Review and Submit Tables component", () => {
           ],
         }}
         permissions={{ current: { 1: ["DSMP"] } }}
+        updateFilesSelected={jest.fn()}
       />
     );
 
@@ -142,6 +145,7 @@ describe("Review and Submit Tables component", () => {
         setMonPlanState={jest.fn()}
         monPlanRef={currentRef}
         permissions={{ current: { 1: ["DSMP"] } }}
+        updateFilesSelected={jest.fn()}
       />
     );
 

@@ -79,6 +79,7 @@ describe("Review and Submit Tables component", () => {
         selectMonPlanRow={jest.fn()}
         getRowState={jest.fn()}
         ref={currentRows}
+        updateFilesSelected={jest.fn()}
       />
     );
 
@@ -116,6 +117,7 @@ describe("Review and Submit Tables component", () => {
         selectMonPlanRow={jest.fn()}
         getRowState={jest.fn()}
         ref={currentRows}
+        updateFilesSelected={jest.fn()}
       />
     );
 
@@ -154,6 +156,7 @@ describe("Review and Submit Tables component", () => {
         selectMonPlanRow={jest.fn()}
         getRowState={jest.fn()}
         ref={currentRows}
+        updateFilesSelected={jest.fn()}
       />
     );
 
@@ -198,6 +201,7 @@ describe("Review and Submit Tables component", () => {
         selectMonPlanRow={jest.fn()}
         getRowState={jest.fn().mockReturnValue("Checkbox")}
         ref={currentRows}
+        updateFilesSelected={jest.fn()}
       />
     );
 
@@ -244,6 +248,7 @@ describe("Review and Submit Tables component", () => {
         selectMonPlanRow={jest.fn()}
         getRowState={jest.fn().mockReturnValue("Checkbox")}
         ref={currentRows}
+        updateFilesSelected={jest.fn()}
       />
     );
 
