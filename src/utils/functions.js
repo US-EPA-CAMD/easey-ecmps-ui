@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const debugLog = (message, object = null) => {
   if (getConfigValueBoolean("REACT_APP_EASEY_ECMPS_UI_ENABLE_DEBUG")) {
     if (object) {
@@ -116,6 +118,75 @@ export const isLocationCheckedOutByUser = ({
   const { monPlanId } = chunk; 
   return isLocationUserCheckedOut(checkedOutLocationsMap, monPlanId, userId)
 };
+
+export const evalStatusStyle = (status) => {
+  switch (status) {
+    case "ERR":
+    case "EVAL":
+      return "usa-alert--warning";
+    case "INFO":
+    case "PASS":
+      return "usa-alert--success";
+    case "INQ":
+    case "WIP":
+      return "usa-alert--info";
+    default:
+      break;
+  }
+  return "";
+};
+
+export const alertStyle = (evalStatus) => `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
+  evalStatus
+)} margin-y-0 maintainBorder`;
+export const reportWindowParams = [
+  // eslint-disable-next-line no-restricted-globals
+  `height=${screen.height}`,
+  // eslint-disable-next-line no-restricted-globals
+  `width=${screen.width}`,
+  //`fullscreen=yes`,
+].join(",");
+export const displayReport = (monPlanId, reportCode = "MP_EVAL") => {
+  let reportType;
+
+  switch (reportCode) {
+    case "MPP":
+      reportType = "Printout";
+      break;
+    case "MP_EVAL":
+      reportType = "Evaluation";
+      break;
+    case "MP_AUDIT":
+      reportType = "Audit";
+      break;
+    default:
+      reportType = "Evaluation";
+      break;
+  }
+
+  window.open(
+    `/workspace/reports?reportCode=${reportCode}&monitorPlanId=${monPlanId}`,
+    `ECMPS Monitoring Plan ${reportType} Report`,
+    reportWindowParams
+  );
+};
+
+export const addEvalStatusCell = (columns) =>
+  columns.map((col) => {
+    if (col.name === 'Eval Status') {
+      col.cell = (row) => (
+        <div className={alertStyle(row.evalStatusCode)}>
+          <button
+            className={'hyperlink-btn cursor-pointer'}
+            onClick={() => displayReport(row.monPlanId,'MP_EVAL')}
+          >
+            {row.evalStatusCode}
+          </button>
+        </div>
+      );
+    }
+    return col;
+  });
 
 // Returns the previously fully submitted quarter (reporting period). 
 // For the first month of every quarter, the previusly submitted reporting period is actually two quarters ago.

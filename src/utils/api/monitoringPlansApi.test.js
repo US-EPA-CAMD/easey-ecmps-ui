@@ -4,6 +4,12 @@ jest.mock("axios");
 
 const selectedFacilityOrisCode = 3;
 const mockData = [{}];
+const mockCheckoutApiCall = jest.fn().mockResolvedValue({
+  data: [],
+});
+jest.mock("../../additional-functions/checkout", () => ({
+  checkoutAPI: () => mockCheckoutApiCall(),
+}));
 
 const monitoringLocationId = 56;
 describe("testing monitoring plans data fetching APIs", () => {
@@ -942,6 +948,19 @@ describe("testing monitoring plans data fetching APIs", () => {
     const apiCall = await mpApi.getRefreshInfo(monitoringLocationId);
     expect(apiCall["data"]).toEqual(mockData);
   });
+
+  describe.only('checkInOutLocation', () => {
+    it('calls api location if monPlanId is not in checked out locations map', () => {
+      const row = {monPlanId:'123'}, checkedOutLocationsMap = new Map();
+      mpApi.checkInOutLocation(false, row, checkedOutLocationsMap);
+      expect(mockCheckoutApiCall).toHaveBeenCalled()
+    })
+    it('does not call api to check out location if monPlanId is already checked out', () => {
+      const row = {monPlanId:'123'}, checkedOutLocationsMap = new Set(['123']);
+      mpApi.checkInOutLocation(false, row, checkedOutLocationsMap);
+      expect(mockCheckoutApiCall).not.toHaveBeenCalled()
+    })
+  })
 
   // test("Should fetch list of monitoring methods for a selected monitoring location", async () => {
   //   const mock = new MockAdapter(axios);
