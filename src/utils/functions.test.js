@@ -343,8 +343,8 @@ describe("functions.js", function () {
       });
       it('does not add cell with alert style to non eval status columns', () => {
         const columns = addEvalStatusCell(_.clone(monPlanColumns));
-        const evalStatusColumn = columns.find(column => column.name !== 'Eval Status')
-        expect(evalStatusColumn.cell).not.toBeDefined();
+        const nonEvalStatusColumn = columns.find(column => column.name !== 'Eval Status')
+        expect(nonEvalStatusColumn.cell).not.toBeDefined();
       });
      })
   });
