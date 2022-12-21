@@ -681,6 +681,69 @@ describe("QA Cert API", function () {
     });
   });
 
+  describe("Unit Default Test Data CRUD operations", () => {
+    test("getUnitDefaultTest", async () => {
+      const unitDefaultTestResp = [
+        { unitDefaultTest: "data" },
+        { unitDefaultTest: "data2" },
+      ];
+      const getUnitDefaultTestUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/unit-default-tests`;
+      mock.onGet(getUnitDefaultTestUrl).reply(200, unitDefaultTestResp);
+
+      const resp = await qaCert.getUnitDefaultTest(
+        locId,
+        testSumId,
+      );
+
+      expect(mock.history.get.length).toBe(1);
+      expect(resp.data).toStrictEqual(unitDefaultTestResp);
+    });
+
+    test("createUnitDefaultTest", async () => {
+      const payload = { unitDefaultTest: "data" };
+      const postUnitDefaultTestUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/unit-default-tests`;
+      mock.onPost(postUnitDefaultTestUrl).reply(200, payload);
+
+      const resp = await qaCert.createUnitDefaultTest(
+        locId,
+        testSumId,
+        payload
+      );
+
+      expect(mock.history.post.length).toBe(1);
+      expect(resp.data).toStrictEqual(payload);
+    });
+
+    test("updateUnitDefaultTest", async () => {
+      const payload = { unitDefaultTest: "data" };
+      const putUnitDefaultTestUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${id}`;
+      mock.onPut(putUnitDefaultTestUrl).reply(200, payload);
+
+      const resp = await qaCert.updateUnitDefaultTest(
+        locId,
+        testSumId,
+        id,
+        payload
+      );
+
+      expect(mock.history.put.length).toBe(1);
+      expect(resp.data).toStrictEqual(payload);
+    });
+
+    test("deleteUnitDefaultTest", async () => {
+      const deleteUnitDefaultTestUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${id}`;
+      mock.onDelete(deleteUnitDefaultTestUrl).reply(200, "deleted");
+
+      const resp = await qaCert.deleteUnitDefaultTest(
+        locId,
+        testSumId,
+        id
+      );
+
+      expect(mock.history.delete.length).toBe(1);
+      expect(resp.data).toStrictEqual("deleted");
+    });
+  });
 
   
   /*

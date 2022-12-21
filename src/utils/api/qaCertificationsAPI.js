@@ -1838,7 +1838,8 @@ export const createUnitDefaultTest = async (
   testSumId,
   payload
 ) => {
-  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/unit-default-tests`;
+  const path = `/locations/${locId}/test-summary/${testSumId}/unit-default-tests`;
+  const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
@@ -1852,4 +1853,42 @@ export const createUnitDefaultTest = async (
     }
 };
 
+export const updateUnitDefaultTest = async (
+  locId,
+  testSumId,
+  id,
+  payload
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
 
+export const deleteUnitDefaultTest = async (
+  locId,
+  testSumId,
+  id
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
