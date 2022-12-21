@@ -1001,8 +1001,8 @@ export const exportMonitoringPlanDownload = async (configID) => {
 export const checkInOutLocation = (bool, row, checkedOutLocationsMap) => {
   const { monPlanId } = row;
   if (checkedOutLocationsMap?.has(monPlanId) && !bool) {
-    console.log('item is already checked out');
-  } else {
+    console.log('item is already checked out', monPlanId);
+  } else if(row.selected !== bool){
     checkoutAPI(bool, row.facId, monPlanId).then();
   }
 };

@@ -91,6 +91,7 @@ const ReviewAndSubmitTableRender = forwardRef(
       for (const r of ref.current) {
         if (getRowState(r, type) === "Checkbox") {
           //Logic to see if row can actually be checked out
+          checkInOutLocation(bool, r, checkedOutLocationsMap);
           r.selected = bool;
           r.userCheckedOut = bool;
           updateFilesSelected(bool);
@@ -99,7 +100,6 @@ const ReviewAndSubmitTableRender = forwardRef(
             // Need to activate mp for subsequent child records
             selectMonPlanRow(r.monPlanId);
           }
-          checkInOutLocation(bool, r, checkedOutLocationsMap);
         }
       } //eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -131,11 +131,11 @@ const ReviewAndSubmitTableRender = forwardRef(
 
       for (const r of ref.current) {
         if (r[filterId] === row[filterId] && r.monPlanId === row.monPlanId) {
+          checkInOutLocation(selection, r, checkedOutLocationsMap);
           r.selected = selection;
           r.userCheckedOut = r.selected;
           updateFilesSelected(selection);
 
-          checkInOutLocation(selection, r, checkedOutLocationsMap);
           if (r.selected && type !== "MP") {
             // Need to activate mp for subsequent child records
             selectMonPlanRow(row.monPlanId);

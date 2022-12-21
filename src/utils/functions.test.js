@@ -1,3 +1,5 @@
+import _ from "lodash";
+import { monPlanColumns } from "../components/ReviewAndSubmit/ReviewAndSubmitTables/ColumnMappings";
 import {
   formatDate,
   getConfigValue,
@@ -12,6 +14,7 @@ import {
   evalStatusStyle,
   alertStyle,
   displayReport,
+  addEvalStatusCell,
 } from "./functions";
 
 describe("functions.js", function () {
@@ -332,6 +335,18 @@ describe("functions.js", function () {
         expect(windowOpenMock).toHaveBeenCalledTimes(4);
       })
     })
+    describe('addEvalStatusCell', () => { 
+      it('adds cell with alert style to eval status columns', () => {
+        const columns = addEvalStatusCell(_.clone(monPlanColumns));
+        const evalStatusColumn = columns.find(column => column.name === 'Eval Status')
+        expect(evalStatusColumn.cell).toBeDefined();
+      });
+      it('does not add cell with alert style to non eval status columns', () => {
+        const columns = addEvalStatusCell(_.clone(monPlanColumns));
+        const nonEvalStatusColumn = columns.find(column => column.name !== 'Eval Status')
+        expect(nonEvalStatusColumn.cell).not.toBeDefined();
+      });
+     })
   });
 
   describe("getPreviouslyFullSubmitedQuarter tests", ()=>{
