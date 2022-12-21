@@ -4,9 +4,9 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 jest.mock('react-markdown', () => ({ children }) => <>{children}</>);
 jest.mock('remark-gfm', () => () => {});
-// jest.useFakeTimers();
-// jest.spyOn(global, 'setInterval');
-// jest.spyOn(global, 'setTimeout');
+jest.useFakeTimers();
+jest.spyOn(global, 'setInterval');
+jest.spyOn(global, 'setTimeout');
 const mockDispatch = jest.fn();
 jest.mock('react-redux', () => ({
   useSelector: jest.fn(),
@@ -29,5 +29,6 @@ it('renders without crashing', () => {
       <App />
     </MemoryRouter>
   );
+  jest.advanceTimersByTime(10000);
   screen.debug();
 });
