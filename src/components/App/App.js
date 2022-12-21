@@ -33,6 +33,8 @@ import * as modules from "../../utils/constants/moduleTitles";
 import ReviewAndSubmit from "../ReviewAndSubmit/ReviewAndSubmit";
 import useGetCheckedOutLocations from "../../additional-functions/useGetCheckedOutLocations";
 
+const cdx_user = sessionStorage.getItem("cdx_user");
+
 const App = () => {
   const [user, setUser] = useState(false);
   const [expired, setExpired] = useState(false);
@@ -73,7 +75,6 @@ const App = () => {
     }
   });
 
-  const cdx_user = sessionStorage.getItem("cdx_user");
   useEffect(() => {
     const cdxUser = sessionStorage.getItem("cdx_user")
       ? JSON.parse(sessionStorage.getItem("cdx_user"))
