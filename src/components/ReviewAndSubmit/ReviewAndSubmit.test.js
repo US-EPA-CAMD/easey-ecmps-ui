@@ -149,10 +149,10 @@ describe("Review and Submit component", () => {
   });
 
   it("execute mocks to call submission function, and determine if UI changes as a result", async () => {
-    const { getByText, queryByText } = query;
+    const { getByText, queryByText, getAllByText } = query;
 
     await act(async () => {
-      getByText("SUBMIT").click();
+      getAllByText("SUBMIT")[0].click();
     });
 
     await act(async () => {
@@ -163,10 +163,10 @@ describe("Review and Submit component", () => {
   });
 
   it("mock the final submission process", async () => {
-    const { getByText, queryByText } = query;
+    const { getByText, getAllByText } = query;
 
     await act(async () => {
-      getByText("SUBMIT").click();
+      getAllByText("SUBMIT")[0].click();
     });
 
     await act(async () => {
@@ -174,8 +174,8 @@ describe("Review and Submit component", () => {
     });
 
     await act(async () => {
-      getByText("Submit").click();
+      getAllByText("Submit")[0].click();
     });
-    expect(getByText("Submit")).toBeInTheDocument();
+    expect(getAllByText("Submit")[0]).toBeInTheDocument();
   });
 });

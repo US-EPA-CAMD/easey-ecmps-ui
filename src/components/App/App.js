@@ -73,6 +73,7 @@ const App = () => {
     }
   });
 
+  const cdx_user = sessionStorage.getItem("cdx_user");
   useEffect(() => {
     const cdxUser = sessionStorage.getItem("cdx_user")
       ? JSON.parse(sessionStorage.getItem("cdx_user"))
@@ -132,7 +133,7 @@ const App = () => {
             />
             <Route path={`/faqs`} exact component={() => <FAQ />} />
             <Route path="/login" exact component={Login} />
-            {!user &&  (
+            {!cdx_user && (
               <Redirect
                 from="/workspace/review"
                 to="/home"
