@@ -27,6 +27,7 @@ const flowToLoadCheck = "Flow To Load Check";
 const lineInjection = "Linearity Injection";
 const rataData = "RATA Data";
 const airEmissions = "Air Emissions";
+const unitDefualtTest = "Unit Default Test";
 
 describe("Test Qualification CRUD operations", () => {
   beforeEach(() => {
@@ -765,6 +766,84 @@ describe("Air Emissions CRUD operations", () => {
     const resp = await qaAssert.removeDataSwitch(
       {id: id},
       airEmissions,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.delete.length).toBe(1);
+    expect(resp.data).toStrictEqual("deleted");
+  });
+});
+
+
+describe("Unit Default CRUD operations", () => {
+  beforeEach(() => {
+    mock.resetHistory();
+  });
+  test("getUnitDefaultTest", async () => {
+    const unitDefaultTestObject = [
+      { unitDefaultTest: "data" },
+    ];
+    const getUnitDefaultTestUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/unit-default-tests`;
+    mock
+      .onGet(getUnitDefaultTestUrl)
+      .reply(200, unitDefaultTestObject);
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.getDataTableApis(
+      unitDefualtTest,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.get.length).toBe(1);
+    expect(resp.data).toStrictEqual(unitDefaultTestObject);
+  });
+
+  test("createUnitDefaultTest", async () => {
+    const payload = { unitDefaultTest: "data" };
+    const postUnitDefaultTestUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/unit-default-tests`;
+    mock.onPost(postUnitDefaultTestUrl).reply(200, "success");
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.createDataSwitch(
+      payload,
+      unitDefualtTest,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.post.length).toBe(1);
+    expect(resp.data).toStrictEqual("success");
+  });
+
+  test("updateUnitDefaultTest", async () => {
+    const payload = { id:id, unitDefaultTest: "data" };
+    const putUnitDefaultTestUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${id}`;
+    mock.onPut(putUnitDefaultTestUrl).reply(200, "success");
+
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.saveDataSwitch(
+      payload,
+      unitDefualtTest,
+      locId,
+      testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.put.length).toBe(1);
+    expect(resp.data).toStrictEqual("success");
+  });
+
+  test("deleteUnitDefaultTest", async () => {
+    const deleteUnitDefaultTestUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${id}`;
+    mock.onDelete(deleteUnitDefaultTestUrl).reply(200, "deleted");
+
+    const extraIDs = [locId,testSumId];
+    const resp = await qaAssert.removeDataSwitch(
+      {id: id},
+      unitDefualtTest,
       locId,
       testSumId,
       extraIDs
