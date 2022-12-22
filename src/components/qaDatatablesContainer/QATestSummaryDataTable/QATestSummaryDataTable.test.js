@@ -564,10 +564,12 @@ test("testing component renders properly with FFLB ", async () => {
   expect(container).toBeDefined();
 });
 test("testing component renders properly with FLC ", async () => {
+  jest.setTimeout(10000)
   const { container } = await waitForElement(() =>
     componentRender(true, "FLC")
   );
   expect(container).toBeDefined();
+  jest.setTimeout(5000)
 });
 test("testing component renders properly with OLOLCAL ", async () => {
   const { container } = await waitForElement(() =>
@@ -582,10 +584,12 @@ test("testing component renders properly with CALINJ ", async () => {
   expect(container).toBeDefined();
 });
 test("testing component renders properly with FFACC ", async () => {
+  jest.setTimeout(10000)
   const { container } = await waitForElement(() =>
     componentRender(true, "FFACC")
   );
   expect(container).toBeDefined();
+  jest.setTimeout(5000)
 });
 test("testing component renders properly with CYCSUM ", async () => {
   const { container } = await waitForElement(() =>
