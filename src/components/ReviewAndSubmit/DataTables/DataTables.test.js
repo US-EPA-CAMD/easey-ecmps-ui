@@ -1,7 +1,7 @@
 import React from "react";
 import { render, act } from "@testing-library/react";
 
-import ReviewAndSubmitTables from "./ReviewAndSubmitTables";
+import DataTables from "./DataTables";
 
 let mockRowState = {
   submissionAvailabilityCode: "REQUIRE",
@@ -11,7 +11,7 @@ let mockRowState = {
   orisCode: 1,
 };
 
-jest.mock("../ReviewAndSubmitTableRender/ReviewAndSubmitTableRender", () => {
+jest.mock("../TableRender/TableRender", () => {
   const { forwardRef } = jest.requireActual("react"); //Need this to mock a forwardRef
   return {
     __esModule: true,
@@ -33,7 +33,7 @@ jest.mock("../ReviewAndSubmitTableRender/ReviewAndSubmitTableRender", () => {
 describe("Review and Submit Tables component", () => {
   it("expect initial loading state to be correct", async () => {
     let query = render(
-      <ReviewAndSubmitTables
+      <DataTables
         monPlanState={[]}
         setMonPlanState={jest.fn()}
         monPlanRef={{
@@ -66,7 +66,7 @@ describe("Review and Submit Tables component", () => {
     };
 
     let { getByText } = render(
-      <ReviewAndSubmitTables
+      <DataTables
         monPlanState={[]}
         setMonPlanState={jest.fn()}
         monPlanRef={{
@@ -97,7 +97,7 @@ describe("Review and Submit Tables component", () => {
     };
 
     let { getByText } = render(
-      <ReviewAndSubmitTables
+      <DataTables
         monPlanState={[]}
         setMonPlanState={jest.fn()}
         monPlanRef={{
@@ -140,7 +140,7 @@ describe("Review and Submit Tables component", () => {
     };
 
     let { getByText } = render(
-      <ReviewAndSubmitTables
+      <DataTables
         monPlanState={[]}
         setMonPlanState={jest.fn()}
         monPlanRef={currentRef}

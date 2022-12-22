@@ -1,15 +1,15 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./ReviewAndSubmitTables.scss";
-import ReviewAndSubmitTableRender from "../ReviewAndSubmitTableRender/ReviewAndSubmitTableRender";
+import "./DataTables.scss";
+import TableRender from "../TableRender/TableRender";
 import {
   monPlanColumns,
   qaTestSummaryColumns,
   emissionsColumns,
 } from "./ColumnMappings";
 
-const ReviewAndSubmitTables = ({
+const DataTables = ({
   monPlanState,
   setMonPlanState,
   monPlanRef,
@@ -141,7 +141,7 @@ const ReviewAndSubmitTables = ({
                   : "display-none"
               }
             >
-              <ReviewAndSubmitTableRender
+              <TableRender
                 columns={columns}
                 state={state}
                 setState={setState}
@@ -161,4 +161,4 @@ const ReviewAndSubmitTables = ({
   );
 };
 
-export default ReviewAndSubmitTables;
+export default DataTables;

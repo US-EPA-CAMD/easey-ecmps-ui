@@ -12,8 +12,8 @@ import { Checkbox } from "@trussworks/react-uswds";
 import { v4 as uuidv4 } from "uuid";
 import { addEvalStatusCell } from "../../../utils/functions";
 import { checkInOutLocation } from "../../../utils/api/monitoringPlansApi";
-import "./ReviewAndSubmitTableRender.scss";
-const ReviewAndSubmitTableRender = forwardRef(
+import "./TableRender.scss";
+const TableRender = forwardRef(
   (
     {
       columns,
@@ -95,6 +95,7 @@ const ReviewAndSubmitTableRender = forwardRef(
           r.selected = bool;
           r.userCheckedOut = bool;
           updateFilesSelected(bool);
+          r.checkedOut = bool;
 
           if (r.selected && type !== "MP") {
             // Need to activate mp for subsequent child records
@@ -134,6 +135,7 @@ const ReviewAndSubmitTableRender = forwardRef(
           checkInOutLocation(selection, r, checkedOutLocationsMap);
           r.selected = selection;
           r.userCheckedOut = r.selected;
+          r.checkedOut = selection;
           updateFilesSelected(selection);
 
           if (r.selected && type !== "MP") {
@@ -168,4 +170,4 @@ const ReviewAndSubmitTableRender = forwardRef(
   }
 );
 
-export default ReviewAndSubmitTableRender;
+export default TableRender;

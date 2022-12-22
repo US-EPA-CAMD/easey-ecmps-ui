@@ -1,6 +1,6 @@
 import React from "react";
 import { render, act, screen, fireEvent } from "@testing-library/react";
-import ReviewAndSubmitTableRender from "./ReviewAndSubmitTableRender";
+import TableRender from "./TableRender";
 
 const mockFunc = jest.fn();
 window.open = mockFunc;
@@ -65,7 +65,7 @@ describe("Review and Submit Tables component", () => {
     };
 
     let query = render(
-      <ReviewAndSubmitTableRender
+      <TableRender
         columns={[
           {
             name: "ORIS Code",
@@ -103,7 +103,7 @@ describe("Review and Submit Tables component", () => {
     };
 
     let query = render(
-      <ReviewAndSubmitTableRender
+      <TableRender
         columns={[
           {
             name: "ORIS Code",
@@ -142,7 +142,7 @@ describe("Review and Submit Tables component", () => {
     };
 
     let query = render(
-      <ReviewAndSubmitTableRender
+      <TableRender
         columns={[
           {
             name: "ORIS Code",
@@ -187,7 +187,7 @@ describe("Review and Submit Tables component", () => {
     };
 
     let query = render(
-      <ReviewAndSubmitTableRender
+      <TableRender
         columns={[
           {
             name: "ORIS Code",
@@ -234,7 +234,7 @@ describe("Review and Submit Tables component", () => {
     };
 
     let query = render(
-      <ReviewAndSubmitTableRender
+      <TableRender
         columns={[
           {
             name: "ORIS Code",
