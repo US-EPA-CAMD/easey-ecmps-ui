@@ -421,6 +421,10 @@ export const removeDataSwitch = async (
       return qaApi
         .deleteFlowToLoadReference(locationId, id, row.id)
         .catch(error => console.log("error deleting flow to load reference", error))
+    case unitDefualtTest:
+      return qaApi
+        .deleteUnitDefaultTest(locationId, id, row.id)
+        .catch((error) => console.log("error", error));
     default:
       throw new Error(`removeDataSwitch case not implemented for ${name}`);
   }
@@ -632,6 +636,9 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         userInput.id,
         userInput
       ).catch(error => console.log("error updating flow to load reference", error))
+    case unitDefualtTest:
+      return qaApi.updateUnitDefaultTest(location, id, userInput.id, userInput)
+        .catch((err) => console.error(err));
     default:
       break;
   }

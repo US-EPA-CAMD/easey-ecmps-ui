@@ -302,6 +302,32 @@ const ReviewAndSubmit = ({ checkedOutLocations, user }) => {
           setActivityId={setActivityId}
         />
       )}
+      <div className=" grid-row">
+        <div className="grid-col-10"></div>
+        <div className="grid-col-2">
+          <div className="display-flex flex-row flex-justify-end desktop:flex-justify-center margin-y-5 margin-right-2 float-left">
+            <Button
+              onClick={() => {
+                showModal(true);
+              }}
+              disabled={numFilesSelected === 0}
+            >
+              Sign & Submit
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div className="text-black margin-top-1 display-flex flex-row margin-bottom-5">
+        {finalSubmitStage && (
+          <Button
+            className="flex-align-self-end flex-align-self-center flex-1 margin-right-5 maxw-mobile"
+            size="big"
+            onClick={finalSubmission}
+          >
+            Submit
+          </Button>
+        )}
+      </div>
     </div>
   );
 };

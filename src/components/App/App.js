@@ -33,6 +33,8 @@ import * as modules from "../../utils/constants/moduleTitles";
 import ReviewAndSubmit from "../ReviewAndSubmit/ReviewAndSubmit";
 import useGetCheckedOutLocations from "../../additional-functions/useGetCheckedOutLocations";
 
+const cdx_user = sessionStorage.getItem("cdx_user");
+
 const App = () => {
   const [user, setUser] = useState(false);
   const [expired, setExpired] = useState(false);
@@ -132,7 +134,7 @@ const App = () => {
             />
             <Route path={`/faqs`} exact component={() => <FAQ />} />
             <Route path="/login" exact component={Login} />
-            {!user &&  (
+            {!cdx_user && (
               <Redirect
                 from="/workspace/review"
                 to="/home"

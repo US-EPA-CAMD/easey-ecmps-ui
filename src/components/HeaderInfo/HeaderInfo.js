@@ -218,7 +218,7 @@ export const HeaderInfo = ({
   useEffect(()=>{
 
     // this would mean reporting peruiods were already selected and users are probably just switching back to the tab, so their selctions should remain.
-    if( currentTab?.reportingPeriods ){
+    if( currentTab === undefined || currentTab?.reportingPeriods ){
       return
     }
     
@@ -246,7 +246,7 @@ export const HeaderInfo = ({
   // Adding dispatch to below dep array causes an inifinte rerender problem
   // hence why the linter warning is being suppressed.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reportingPeriods, currentTab.name, workspaceSection])
+  }, [reportingPeriods, currentTab, workspaceSection])
   
   useEffect(() => {
     if (currentTab?.viewTemplateSelect)
