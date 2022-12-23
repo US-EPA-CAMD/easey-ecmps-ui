@@ -22,10 +22,19 @@ const DataTables = ({
   permissions,
   updateFilesSelected,
   checkedOutLocationsMap,
+  componentType,
 }) => {
   const selectMonPlanRow = useCallback((id) => {
+    let rowStateFunc;
+
+    if (componentType === "Submission") {
+      rowStateFunc = getRowStateSubmission;
+    } else {
+      rowStateFunc = getRowStateEvaluate;
+    }
+
     for (const mpR of monPlanRef.current) {
-      if (mpR.monPlanId === id && getRowState(mpR, "MP") === "Checkbox") {
+      if (mpR.monPlanId === id && rowStateFunc(mpR, "MP") === "Checkbox") {
         mpR.selected = true;
         mpR.userCheckedOut = true;
         updateFilesSelected(true);
@@ -36,7 +45,7 @@ const DataTables = ({
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getRowState = useCallback((row, type) => {
+  const getRowStateSubmission = useCallback((row, type) => {
     if (row.viewOnly) {
       return "View";
     }
@@ -54,6 +63,29 @@ const DataTables = ({
       ["PASS", "INFO"].includes(row.evalStatusCode) &&
       rowSubmissionAllowed &&
       permissions.current[row.orisCode].includes(`DS${type}`)
+    ) {
+      if (
+        type === "EM" &&
+        row.windowStatus !== "REQUIRE" &&
+        row.windowStatus !== "GRANTED"
+      ) {
+        return "View";
+      }
+
+      return "Checkbox"; //True checkbox
+    } else {
+      return "View";
+    } //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getRowStateEvaluate = useCallback((row, type) => {
+    if (row.checkedOut && !row.userCheckedOut) {
+      return "Lock";
+    } else if (
+      //Can only submit records if not ERR eval code, submissionStatus is REQUIRE or blank, and they have permissions
+      ["EVAL"].includes(row.evalStatusCode) &&
+      (permissions.current[row.orisCode].includes(`DS${type}`) ||
+        permissions.current[row.orisCode].includes(`DP${type}`))
     ) {
       if (
         type === "EM" &&
@@ -149,7 +181,11 @@ const DataTables = ({
                 dataTableName={name}
                 type={type}
                 selectMonPlanRow={selectMonPlanRow}
-                getRowState={getRowState}
+                getRowState={
+                  componentType === "Submission"
+                    ? getRowStateSubmission
+                    : getRowStateEvaluate
+                }
                 updateFilesSelected={updateFilesSelected}
                 checkedOutLocationsMap={checkedOutLocationsMap}
               />

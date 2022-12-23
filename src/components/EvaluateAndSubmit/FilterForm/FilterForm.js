@@ -10,6 +10,8 @@ const FilterForm = ({
   showModal,
   setExcludeErrors,
   filesSelected,
+  buttonText,
+  filterClick,
 }) => {
   const [availableReportingPeriods, setAvailableReportingPeriods] = useState(
     []
@@ -237,13 +239,8 @@ const FilterForm = ({
             >
               Apply Filter(s)
             </Button>
-            <Button
-              onClick={() => {
-                showModal(true);
-              }}
-              disabled={filesSelected === 0}
-            >
-              Sign & Submit
+            <Button onClick={filterClick} disabled={filesSelected === 0}>
+              {buttonText}
             </Button>
           </div>
         </div>
