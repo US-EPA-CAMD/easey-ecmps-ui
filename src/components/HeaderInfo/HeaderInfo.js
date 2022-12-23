@@ -952,8 +952,9 @@ export const HeaderInfo = ({
         <div>
           <div className="display-flex flex-row flex-justify flex-align-center height-2">
             <div className="grid-row">
-              <h3 className="margin-y-auto font-body-lg margin-right-2">
+              <h3 className="margin-y-auto font-body-md margin-right-2">
                 {facilityMainName}
+                <span className=" font-body-lg margin-left-1 ">{facilityAdditionalName}</span>
               </h3>
             </div>
             <div>
