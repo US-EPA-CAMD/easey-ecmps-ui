@@ -1150,10 +1150,10 @@ export const HeaderInfo = ({
             </GridContainer>
           )}
 
-          {workspaceSection === EMISSIONS_STORE_NAME && (
-            <GridContainer className="padding-left-0 margin-left-0">
+          {workspaceSection === EMISSIONS_STORE_NAME ? (
+            <GridContainer className="padding-left-0 margin-left-0 maxw-desktop">
               <Grid row={true}>
-                <Grid col={2} widescreen={{ col: 2 }}>
+                <Grid col={2}>
                   <DropdownSelection
                     caption="Locations"
                     orisCode={orisCode}
@@ -1166,10 +1166,9 @@ export const HeaderInfo = ({
                   />
                 </Grid>
                 <Grid
-                  col={2}
-                  widescreen={{ col: 2 }}
-                  desktopLg={{ col: 10 }}
-                  desktop={{ col: 10 }}
+                  col={8}
+                  desktopLg={{ col: 5}}
+                  widescreen={{ col: 5}}
                 >
                   <FormGroup className="margin-right-2 margin-bottom-1">
                     <Label test-id={"viewtemplate"} htmlFor={"viewtemplate"}>
@@ -1186,7 +1185,7 @@ export const HeaderInfo = ({
                           viewTemplates.find((v) => v.name === e.target.value)
                         );
                       }}
-                      className="maxw-mobile"
+                      // className="mobile-lg:view-template-dropdown-maxw"
                     >
                       {viewTemplates?.map((view) => (
                         <option
@@ -1200,9 +1199,7 @@ export const HeaderInfo = ({
                     </Dropdown>
                   </FormGroup>
                 </Grid>
-              </Grid>
-              <Grid row style={{ gap: "16px" }}>
-                <Grid col={2} widescreen={{ col: 2 }}>
+                <Grid col={2} className="margin-top-3 margin-right-2">
                   <MultiSelectCombobox
                     items={reportingPeriods}
                     label="Reporting Period(s)"
@@ -1211,7 +1208,7 @@ export const HeaderInfo = ({
                     onChangeUpdate={handleSelectReportingPeriod}
                   />
                 </Grid>
-                <Grid col={2} widescreen={{ col: 3 }}>
+                <Grid col={2} className="margin-top-3">
                   <Button
                     type="button"
                     title="Apply Filter(s)"
@@ -1228,8 +1225,9 @@ export const HeaderInfo = ({
                   </Button>
                 </Grid>
               </Grid>
+              {/* ------------------------------------------------------------------------------- */}
               <Grid row>
-                <Grid col={3} widescreen={{ col: 2 }}>
+                <Grid col={2}>
                   <Button
                     outline
                     type="button"
@@ -1240,7 +1238,7 @@ export const HeaderInfo = ({
                     Summary Report
                   </Button>
                 </Grid>
-                <Grid col={3} widescreen={{ col: 2 }}>
+                <Grid col={2}>
                   <Button
                     outline
                     type="button"
@@ -1253,7 +1251,7 @@ export const HeaderInfo = ({
                 </Grid>
               </Grid>
             </GridContainer>
-          )}
+          ) : null}
         </div>
       ) : (
         <Preloader />
