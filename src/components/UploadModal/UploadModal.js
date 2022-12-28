@@ -29,9 +29,9 @@ export const UploadModal = ({
   notUploadVersion,
   setUpdateRelatedTables,
   successMsg,
-  showTintedBg=true,
-  showImport=true,
-  showSeparators=false,
+  showTintedBg = true,
+  showImport = true,
+  showSeparators = false,
 }) => {
   const hasErrors = importedFileErrorMsgs && importedFileErrorMsgs.length > 0;
 
@@ -77,6 +77,7 @@ export const UploadModal = ({
     // * clean up
     return () => {
       document.removeEventListener("keydown", handleKeyPress);
+      document.getElementById("importBtn").focus();
     };
   }, [close]);
 
@@ -160,10 +161,9 @@ export const UploadModal = ({
                           ) : (
                             <div className="left-2 bottom-0 padding-x-5 padding-top-2">
                               <h2 className="text-bold">{title}</h2>
-                              {showSeparators && (<hr/>)}
+                              {showSeparators && <hr />}
                             </div>
                           )}
-
                         </div>
                       ) : (
                         <div>
@@ -199,7 +199,7 @@ export const UploadModal = ({
                     } `}
                   >
                     {children}
-                    {showSeparators && <hr/>}
+                    {showSeparators && <hr />}
                   </div>
                   {complete && hasErrors ? (
                     <div className="padding-x-8">
@@ -238,7 +238,7 @@ export const UploadModal = ({
                         >
                           Ok
                         </Button>
-                      ) :   (
+                      ) : (
                         <Button
                           type="button"
                           onClick={port}
@@ -246,7 +246,9 @@ export const UploadModal = ({
                           epa-testid="importBtn"
                           id="importBtn"
                           data-testid="importBtn"
-                          className={`margin-right-2 ${!showImport && "visibility-hidden"}`}
+                          className={`margin-right-2 ${
+                            !showImport && "visibility-hidden"
+                          }`}
                           disabled={disablePortBtn}
                         >
                           {mainBTN ? mainBTN : "Import"}
