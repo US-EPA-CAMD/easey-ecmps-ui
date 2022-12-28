@@ -16,10 +16,13 @@ import { handleError } from "../../utils/api/apiUtils";
 import LoadingModal from "../LoadingModal/LoadingModal";
 import FilterForm from "./FilterForm/FilterForm";
 import { triggerBulkEvaluation } from "../../utils/api/quartzApi";
+import { EvaluateRefresh } from "./EvaluationRefresh";
 
 const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
   const [title, setTitle] = useState("Submit");
   const [buttonText, setButtonText] = useState("Sign & Submit");
+
+  const storedFilters = useRef(null);
 
   const [activityId, setActivityId] = useState("");
   const [excludeErrors, setExcludeErrors] = useState(true);
@@ -70,16 +73,26 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
   }, [finalSubmitStage, componentType]);
 
   const dataList = {
-    monPlan: { ref: monPlanRef, state: monPlans, setState: setMonPlans },
+    monPlan: {
+      ref: monPlanRef,
+      state: monPlans,
+      setState: setMonPlans,
+      call: getMonitoringPlans,
+      rowId: "monPlanId",
+    },
     qaTest: {
       ref: qaTestSumRef,
       state: qaTestSummary,
       setState: setQaTestSummary,
+      call: getQATestSummaryReviewSubmit,
+      rowId: "testSumId",
     },
     emissions: {
       ref: emissionsRef,
       state: emissions,
       setState: setEmissions,
+      call: getEmissionsReviewSubmit,
+      rowId: "periodAbbreviation",
     },
   };
 
@@ -207,6 +220,13 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
     filesSelected.current = 0;
     setNumFilesSelected(filesSelected.current);
 
+    storedFilters.current = {
+      orisCodes: orisCodes,
+      monPlanIds: monPlanIds,
+      submissionPeriods: submissionPeriods,
+    };
+
+    //TODO: Refactor this to use DataList
     const dataToSetMap = {
       //Contains data fetch, state setter, and ref for each of the 5 categories
       MP: [getMonitoringPlans, setMonPlans, monPlanRef],
@@ -305,6 +325,11 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
           </Button>
         )}
       </div>
+
+      {componentType !== "Submission" && (
+        <EvaluateRefresh dataList={dataList} storedFilters={storedFilters} />
+      )}
+
       {!finalSubmitStage && (
         <FilterForm
           showModal={setShowModal}
