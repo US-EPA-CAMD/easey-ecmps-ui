@@ -1,13 +1,19 @@
 import React from "react";
-import { render, screen, wait } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 
 import userEvent from "@testing-library/user-event";
 import configureStore from "../../store/configureStore.dev";
 import HeaderInfo from "./HeaderInfo";
 import { Provider } from "react-redux";
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
+
 import { EMISSIONS_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 
-import {storeForEmissionsModule} from "./HeaderInfo.test.mocks";
+import { storeForEmissionsModule } from "./HeaderInfo.test.mocks";
+import config from "../../config";
+
+const mock = new MockAdapter(axios);
 
 jest.mock("downloadjs", () => {
   return {
@@ -15,116 +21,37 @@ jest.mock("downloadjs", () => {
   };
 });
 
-jest.mock("../../utils/api/quartzApi", () => {
-  return {
-    triggerEvaluation: jest.fn().mockResolvedValue({}),
-  };
-});
-jest.mock("../../utils/api/monitoringPlansApi", () => {
-  return {
-    getMonitoringPlanById: jest
-      .fn()
-      .mockResolvedValue({ data: { facId: "testFacId", name: "testName" } }),
-    revertOfficialRecord: jest.fn().mockResolvedValue({}),
-    getRefreshInfo: jest
-      .fn()
-      .mockResolvedValueOnce({
-        data: {
-          userid: "testUserId",
-          updateDate: "1/1/1111",
-          facId: "testFacId",
-          evalStatusCode: "EVAL",
-        },
-      })
-      .mockResolvedValueOnce({
-        data: {
-          userid: "testUserId",
-          updateDate: "1/1/1111",
-          facId: "testFacId",
-          evalStatusCode: "EVAL",
-        },
-      })
-      .mockResolvedValueOnce({
-        data: {
-          userid: "testUserId",
-          updateDate: "1/1/1111",
-          facId: "testFacId",
-          evalStatusCode: "INQ",
-        },
-      })
-      .mockResolvedValueOnce({
-        data: {
-          userid: "testUserId",
-          updateDate: "1/1/1111",
-          facId: "testFacId",
-          evalStatusCode: "WIP",
-        },
-      })
-      .mockResolvedValueOnce({
-        data: {
-          userid: "testUserId",
-          updateDate: "1/1/1111",
-          facId: "testFacId",
-          evalStatusCode: "ERR",
-        },
-      })
-      .mockResolvedValueOnce({
-        data: {
-          userid: "testUserId",
-          updateDate: "1/1/1111",
-          facId: "testFacId",
-          evalStatusCode: "INFO",
-        },
-      })
-      .mockResolvedValueOnce({
-        data: {
-          userid: "testUserId",
-          updateDate: "1/1/1111",
-          facId: "testFacId",
-          evalStatusCode: "PASS",
-        },
-      })
-      .mockResolvedValue({
-        data: {
-          userid: "testUserId",
-          updateDate: "1/1/1111",
-          facId: "testFacId",
-          evalStatusCode: "EVAL",
-        },
-      }),
+const idRegex = '[\\w\\-]+'
+const mpUrl = config.services.monitorPlans.uri;
+const emissionsUrl = config.services.emissions.uri
 
-    getCheckedOutLocations: jest
-      .fn()
-      .mockResolvedValueOnce({
-        data: [{ monPlanId: "testConfigId", facId: "testFacId" }],
-      })
-      .mockResolvedValueOnce({
-        data: [],
-      })
-      .mockResolvedValue({
-        data: [{ monPlanId: "testConfigId", facId: "testFacId" }],
-      }),
-  };
-});
-jest.mock("../../utils/api/emissionsApi", () => {
-  return {
-    getEmissionsReviewSubmit: jest.fn(null),
-    exportEmissionsData: jest.fn().mockResolvedValue([]),
-    exportEmissionsDataDownload: jest.fn().mockResolvedValue([]),
-    getEmissionViewData: jest.fn().mockResolvedValue([]),
-    getViews: jest.fn().mockResolvedValue([]),
-    getEmissionsSchema: jest.fn().mockResolvedValue([]),
-    importEmissionsData: jest.fn().mockResolvedValue([]),
-  }
-})
-jest.mock("../../utils/api/facilityApi", () => {
-  return {
-    getFacilityById: jest
-      .fn()
-      .mockResolvedValue({ data: { facilityName: "testFacName" } }),
-  };
-});
-jest.mock("axios");
+const getRefreshInfoResp = {
+  userid: "testUserId",
+  updateDate: "1/1/1111",
+  facId: "testFacId",
+  evalStatusCode: "EVAL",
+}
+
+const triggerEvaluationUrl = `${config.services.quartz.uri}/triggers/evaluations/monitor-plans`
+const getMonitoringPlanByIdUrl = new RegExp(`${mpUrl}/plans/export?planId=${idRegex}`)
+const revertOfficialRecordUrl = new RegExp(`${mpUrl}/workspace/plans/${idRegex}/revert`)
+const getRefreshInfoUrl = new RegExp(`${mpUrl}/workspace/plans/${idRegex}`)
+const getCheckedOutLocationsUrl = new RegExp(`${mpUrl}/workspace/check-outs/plans`)
+const emissionsExportUrl = new RegExp(`${emissionsUrl}/emissions/export?monitorPlanId=MDC-613AD75BF31C4B9EA561E42E38A458DE&year=2022&quarter=4`)
+const emissionsExportUrlFull = "https://api.epa.gov/easey/dev/emissions-mgmt/emissions/export?monitorPlanId=MDC-613AD75BF31C4B9EA561E42E38A458DE&year=2022&quarter=4"
+const getFacilityByIdUrl = new RegExp(`${config.services.facilities.uri}/facilities/${idRegex}`)
+
+const getViewTemplatesUrl = `${config.services.emissions.uri}/emissions/views`
+
+mock.onPost(triggerEvaluationUrl).reply(200, {})
+mock.onGet(getMonitoringPlanByIdUrl).reply(200, { facId: "testFacId", name: "testName" })
+mock.onDelete(revertOfficialRecordUrl).reply(200, 'reverted')
+mock.onGet(getRefreshInfoUrl).reply(200, getRefreshInfoResp)
+mock.onGet(getCheckedOutLocationsUrl).reply(200, [{ monPlanId: "testConfigId", facId: "testFacId" }])
+mock.onGet(emissionsExportUrl).reply(200, [])
+mock.onGet(emissionsExportUrlFull).reply(200, [])
+mock.onGet(getFacilityByIdUrl).reply(200, { facilityName: "testFacName" })
+mock.onGet(getViewTemplatesUrl).reply(200, [])
 
 const date = new Date();
 const dateString = date.toString();
@@ -135,7 +62,7 @@ const selectedConfig = {
   updateDate: dateString,
   addDate: dateString,
   active: true,
-  unitStackConfigurations:[{unitId:1}]
+  unitStackConfigurations: [{ unitId: 1 }]
 };
 
 const props = {
@@ -156,7 +83,7 @@ const props = {
   setInactive: jest.fn(),
   inactive: false,
   setRevertedState: jest.fn(),
-  configID: "testConfigId",
+  configID: "MDC-613AD75BF31C4B9EA561E42E38A458DE",
 };
 
 // mocking JavaScript built-in window functions
@@ -172,130 +99,90 @@ function timeout(ms) {
 
 const jsonFile = new File(["{}"], "test.json");
 
-let header;
+const store = configureStore(storeForEmissionsModule);
+
+const renderComponent = () => {
+  return render(
+    <Provider store={store}>
+      <HeaderInfo {...props} workspaceSection={EMISSIONS_STORE_NAME} />
+    </Provider>
+  );
+}
 
 
 describe("testing HeaderInfo component", () => {
-  const store = configureStore();
-
-  beforeEach(async () => {
-    jest.clearAllMocks();
-  
-    await wait(() => {
-      header = render(
-      <Provider store={store}>
-      <HeaderInfo {...props} />
-      </Provider>
-      );
-    });
-  });
-  
-  afterEach(() => {
-    header = null;
-  });
-  
-  // ------------------------------- //
-
   /*** TESTING EVALUATION PROCESS ***/
   it("should go through evaluation process", async () => {
-    expect(screen.getByText("Check Back In")).toBeInTheDocument();
-
-    // check-in config
-    await wait(() => {
-      const checkInBtn = screen.getByText("Check Back In");
-      userEvent.click(checkInBtn);
-    });
-
-    expect(screen.getByText("Check Out")).toBeInTheDocument();
-
-    // check-out config
-    await wait(() => {
-      const checkOutBtn = screen.getByText("Check Out");
-      userEvent.click(checkOutBtn);
-    });
-
-    expect(screen.getByText("Check Back In")).toBeInTheDocument();
-    expect(screen.getByText("Evaluate")).toBeInTheDocument();
+    renderComponent();
+    const checkBackInText = await screen.findByText(/Check Back In/i);
+    expect(checkBackInText).toBeInTheDocument()
 
     // click on evaluation button
-    await wait(() => {
-      const evalBtn = screen.getByText("Evaluate");
-      userEvent.click(evalBtn);
-    });
+    const evalBtn = screen.getByRole('button', { name: /Evaluate/i })
+    userEvent.click(evalBtn);
 
-    expect(screen.getByText("In Queue")).toBeInTheDocument();
-});
-
-
+    const inQueueText = await screen.findByText(/In Queue/i)
+    expect(inQueueText).toBeInTheDocument();
+  });
 
   /*** TESTING EXPORT FUNCTIONALITY ***/
-   it("should test the export modal", async () => {
-    expect(screen.getByText("Export Data")).toBeInTheDocument();
+  it("should test the export modal", async () => {
+    renderComponent();
+    const exportDataText = await screen.findByText(/Export Data/i);
+    expect(exportDataText).toBeInTheDocument();
 
     // export config
-    await wait(() => {
-      const exportBtn = screen.getByText("Export Data");
-      userEvent.click(exportBtn);
-    });
-  }); 
+    const exportBtn = screen.getByRole('button', { name: /Export Data/i })
+    userEvent.click(exportBtn)
+  });
 
-   /*** TESTING IMPORT FUNCTIONALITY ***/
-   it("should test the import modal", async () => {
-    expect(screen.getByText("Import Data")).toBeInTheDocument();
+  /*** TESTING IMPORT FUNCTIONALITY ***/
+  it("should test the import modal", async () => {
+    renderComponent()
+    const importDataText = await screen.findByText(/Import Data/i);
+    expect(importDataText).toBeInTheDocument();
 
     // import config
-     await wait(() => {
-       const importBtn = screen.getByText("Import Data");
-       userEvent.click(importBtn);
-     });
-   });
+    const importBtn = screen.getByRole('button', { name: /Import Data/i });
+    userEvent.click(importBtn);
+  });
 
-   /*** TESTING REVERT FUNCTIONALITY ***/
-   it('should test the revert modal' , async () => {
-    expect(screen.getByText("Revert to Official Record")).toBeInTheDocument();
+  /*** TESTING REVERT FUNCTIONALITY ***/
+  it('should test the revert modal', async () => {
+    renderComponent();
+    const revertText = await screen.findByText(/Revert to Official Record/i)
+    expect(revertText).toBeInTheDocument();
 
     // open revert modal
-    await wait(() => {
-      const revertBtn = screen.getByText("Revert to Official Record");
-      userEvent.click(revertBtn);
-    });
-   });
+    const revertBtn = screen.getByRole('button', { name: /Revert to Official Record/i })
+    userEvent.click(revertBtn);
+  });
 });
 
-describe("testing HeaderInfo Emissions Module", ()=>{
+describe("testing HeaderInfo Emissions Module", () => {
 
-  const store = configureStore(storeForEmissionsModule);
-
-  beforeEach(async () => {
-    jest.clearAllMocks();
-  
-    await wait(() => {
-      header = render(
-      <Provider store={store}>
-      <HeaderInfo {...props } workspaceSection={EMISSIONS_STORE_NAME} />
-      </Provider>
-      );
-    });
-  });
-  
-  afterEach(() => {
-    header = null;
-  });
-
-  it("should render view template dropdown", ()=>{
-    expect(screen.getByLabelText("View Template")).toBeInTheDocument();
+  it("should render view template dropdown", async () => {
+    renderComponent();
+    const viewTemplateBtn = await screen.findByLabelText("View Template");
+    expect(viewTemplateBtn).toBeInTheDocument();
   })
 
-  it("should render Apply Filter button", ()=>{
-    expect(screen.getByText("Apply Filter(s)")).toBeInTheDocument();
+  it("should render Apply Filter button", async () => {
+    renderComponent();
+    const applyFilterBtn = await screen.findByText("Apply Filter(s)");
+    expect(applyFilterBtn).toBeInTheDocument();
   })
 
-  it("should render Reporting Periods dropdown", ()=>{
-    expect(screen.getByLabelText("Reporting Period(s)")).toBeInTheDocument();
+  it("should render Reporting Periods dropdown", async () => {
+    renderComponent();
+    const reportingPeriodsDropdown = await screen.findByLabelText("Reporting Period(s)");
+    expect(reportingPeriodsDropdown).toBeInTheDocument();
   })
 
-  it("should render Locations dropdown", ()=>{
-    expect(screen.getByLabelText("Locations")).toBeInTheDocument();
+  it("should render Locations dropdown", async () => {
+    renderComponent();
+    const locationsDropdown = await screen.findByLabelText("Locations");
+    expect(locationsDropdown).toBeInTheDocument();
   })
 
 })
