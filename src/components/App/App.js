@@ -31,7 +31,7 @@ import {
 } from "../../additional-functions/workspace-section-and-store-names";
 import * as modules from "../../utils/constants/moduleTitles";
 import useGetCheckedOutLocations from "../../additional-functions/useGetCheckedOutLocations";
-import EvaluateAndSubmit from "../ReviewAndSubmit/EvaluateAndSubmit";
+import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
 
 const cdx_user = sessionStorage.getItem("cdx_user");
 

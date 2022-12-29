@@ -22,6 +22,7 @@ const DataTables = ({
   permissions,
   updateFilesSelected,
   checkedOutLocationsMap,
+  checkedOutLocationsInCurrentSessionRef,
 }) => {
   const selectMonPlanRow = useCallback((id) => {
     for (const mpR of monPlanRef.current) {
@@ -152,6 +153,7 @@ const DataTables = ({
                 getRowState={getRowState}
                 updateFilesSelected={updateFilesSelected}
                 checkedOutLocationsMap={checkedOutLocationsMap}
+                checkedOutLocationsInCurrentSessionRef={checkedOutLocationsInCurrentSessionRef}
               />
             </div>
           </div>

@@ -10,9 +10,10 @@ import { oneSecond } from "../../../config";
 import ReviewCell from "../ReviewCell/ReviewCell";
 import { Checkbox } from "@trussworks/react-uswds";
 import { v4 as uuidv4 } from "uuid";
-import { addEvalStatusCell } from "../../../utils/functions";
-import { checkInOutLocation } from "../../../utils/api/monitoringPlansApi";
+import { addEvalStatusCell, updateCheckedOutLocationsRef } from "../../../utils/functions";
+import { checkInOutLocation, getUpdatedCheckedOutLocations } from "../../../utils/api/monitoringPlansApi";
 import "./TableRender.scss";
+import { useDispatch } from "react-redux";
 const TableRender = forwardRef(
   (
     {
@@ -25,6 +26,7 @@ const TableRender = forwardRef(
       getRowState,
       checkedOutLocationsMap,
       updateFilesSelected,
+      checkedOutLocationsInCurrentSessionRef,
     },
     ref
   ) => {
@@ -38,6 +40,7 @@ const TableRender = forwardRef(
 
     const [selectAllState, setSelectAllState] = useState(false);
     const [selectAllVisible, setSelectAllVisible] = useState(true);
+    const dispatch = useDispatch();
 
     useEffect(() => {
       setTimeout(() => {
@@ -50,6 +53,11 @@ const TableRender = forwardRef(
       };
     }, []);
 
+    const handleSelectAll = useCallback(async () => {
+      const updatedCheckedOutLocationsMap = await getUpdatedCheckedOutLocations(dispatch);
+      selectAll(!selectAllState, updatedCheckedOutLocationsMap);
+      setSelectAllState(!selectAllState); //eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectAllState]);
     const mappings = [
       {
         name: (
@@ -59,10 +67,7 @@ const TableRender = forwardRef(
                 className=" margin-left-4"
                 id={`${uuidv4()}`}
                 data-testid="SelectAll"
-                onClick={(e) => {
-                  selectAll(!selectAllState);
-                  setSelectAllState(!selectAllState);
-                }}
+                onClick={handleSelectAll}
                 defaultChecked={selectAllState}
               />
             )}
@@ -87,17 +92,21 @@ const TableRender = forwardRef(
 
     addEvalStatusCell(mappings);
 
-    const selectAll = useCallback((bool) => {
+    const selectAll = useCallback((bool, map) => {
       for (const r of ref.current) {
-        if (getRowState(r, type) === "Checkbox") {
+        if (getRowState(r, type) === 'Checkbox') {
           //Logic to see if row can actually be checked out
-          checkInOutLocation(bool, r, checkedOutLocationsMap);
+          checkInOutLocation(bool, r, map);
+          updateCheckedOutLocationsRef(bool,
+            r,
+            checkedOutLocationsInCurrentSessionRef
+          );
           r.selected = bool;
           r.userCheckedOut = bool;
           updateFilesSelected(bool);
           r.checkedOut = bool;
 
-          if (r.selected && type !== "MP") {
+          if (r.selected && type !== 'MP') {
             // Need to activate mp for subsequent child records
             selectMonPlanRow(r.monPlanId);
           }
@@ -118,7 +127,8 @@ const TableRender = forwardRef(
       window.open(url, reportTitle, reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleRowSelection = useCallback((row, type, selection) => {
+    const handleRowSelection = useCallback(async(row, type, selection) => {
+      const updatedCheckedOutLocationsMap = await getUpdatedCheckedOutLocations(dispatch);
       if (selection === false) {
         setSelectAllState(false);
       }
@@ -132,7 +142,8 @@ const TableRender = forwardRef(
 
       for (const r of ref.current) {
         if (r[filterId] === row[filterId] && r.monPlanId === row.monPlanId) {
-          checkInOutLocation(selection, r, checkedOutLocationsMap);
+          checkInOutLocation(selection, r, updatedCheckedOutLocationsMap);
+          updateCheckedOutLocationsRef(selection, r, checkedOutLocationsInCurrentSessionRef);
           r.selected = selection;
           r.userCheckedOut = r.selected;
           r.checkedOut = selection;

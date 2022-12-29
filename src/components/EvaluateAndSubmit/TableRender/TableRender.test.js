@@ -51,6 +51,14 @@ const mockApiCall = jest.fn().mockResolvedValue({
 jest.mock("../../../additional-functions/checkout", () => ({
   checkoutAPI: () => mockApiCall(),
 }));
+jest.mock('react-redux', () => ({
+  useSelector: jest.fn(),
+  useDispatch: jest.fn(),
+}));
+jest.mock("../../../utils/api/monitoringPlansApi", () => ({
+  getUpdatedCheckedOutLocations: jest.fn().mockResolvedValue(new Map()),
+  checkInOutLocation: () => mockApiCall(),
+}))
 describe("Review and Submit Tables component", () => {
   it("expect row selection to select row in current ref", async () => {
     const currentRows = {
@@ -80,6 +88,7 @@ describe("Review and Submit Tables component", () => {
         getRowState={jest.fn()}
         ref={currentRows}
         updateFilesSelected={jest.fn()}
+        checkedOutLocationsInCurrentSessionRef={{current: []}}
       />
     );
 
@@ -118,6 +127,7 @@ describe("Review and Submit Tables component", () => {
         getRowState={jest.fn()}
         ref={currentRows}
         updateFilesSelected={jest.fn()}
+        checkedOutLocationsInCurrentSessionRef={{current: []}}
       />
     );
 
@@ -157,6 +167,7 @@ describe("Review and Submit Tables component", () => {
         getRowState={jest.fn()}
         ref={currentRows}
         updateFilesSelected={jest.fn()}
+        checkedOutLocationsInCurrentSessionRef={{current: []}}
       />
     );
 
@@ -202,6 +213,7 @@ describe("Review and Submit Tables component", () => {
         getRowState={jest.fn().mockReturnValue("Checkbox")}
         ref={currentRows}
         updateFilesSelected={jest.fn()}
+        checkedOutLocationsInCurrentSessionRef={{current: []}}
       />
     );
 
@@ -249,6 +261,7 @@ describe("Review and Submit Tables component", () => {
         getRowState={jest.fn().mockReturnValue("Checkbox")}
         ref={currentRows}
         updateFilesSelected={jest.fn()}
+        checkedOutLocationsInCurrentSessionRef={{current: []}}
       />
     );
 

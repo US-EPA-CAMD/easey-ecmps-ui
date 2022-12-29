@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { getMonitoringPlans } from "../../utils/api/monitoringPlansApi";
+import { checkInAllLocations, getMonitoringPlans } from "../../utils/api/monitoringPlansApi";
 import { getQATestSummaryReviewSubmit } from "../../utils/api/qaCertificationsAPI";
 import { getEmissionsReviewSubmit } from "../../utils/api/emissionsApi";
 import DataTables from "./DataTables/DataTables";
@@ -39,6 +39,7 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user }) => {
   const monPlanRef = useRef([]);
 
   const [finalSubmitStage, setFinalSubmitStage] = useState(false);
+  const checkedOutLocationsInCurrentSessionRef = useRef([]);
   const { userId } = user;
   useEffect(() => {
     const checkedOutLocationsMPIdsMap = new Map();
@@ -73,8 +74,9 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user }) => {
     const permissions = MockPermissions;
     for (const p of permissions) {
       idToPermissionsMap.current[p.id] = p.permissions;
-    } //eslint-disable-next-line react-hooks/exhaustive-deps
-    console.log(idToPermissionsMap);
+    } 
+    console.log(idToPermissionsMap);//eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => checkInAllLocations(checkedOutLocationsInCurrentSessionRef.current);
   }, []);
 
   const updateFilesSelected = (bool) => {
@@ -165,6 +167,7 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user }) => {
   };
 
   const applyFilter = async (orisCodes, monPlanIds, submissionPeriods) => {
+    checkInAllLocations(checkedOutLocationsInCurrentSessionRef.current);
     const dataToSetMap = {
       //Contains data fetch, state setter, and ref for each of the 5 categories
       MP: [getMonitoringPlans, setMonPlans, monPlanRef],
@@ -288,6 +291,7 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user }) => {
         emissionsRef={emissionsRef}
         permissions={idToPermissionsMap} //Map of oris codes to user permissions
         updateFilesSelected={updateFilesSelected}
+        checkedOutLocationsInCurrentSessionRef={checkedOutLocationsInCurrentSessionRef}
       />
 
       <LoadingModal loading={submitting} />
