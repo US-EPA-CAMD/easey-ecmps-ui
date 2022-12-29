@@ -24,7 +24,7 @@ import {
   qaCycleTimeSummaryProps,
   qaTransmitterTransducerAccuracyDataProps,
   qaFlowToLoadReferenceProps,
-  qaUnitDefaultTestDataProps
+  qaUnitDefaultTestDataProps,
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
@@ -63,7 +63,7 @@ const QATestSummaryDataTable = ({
   sectionSelect,
   selectedLocation,
   locations,
-}) => {console.log("selectedTestCode",selectedTestCode); console.log("locations",locations);
+}) => {
   const [loading, setLoading] = useState(false);
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
@@ -354,10 +354,13 @@ const QATestSummaryDataTable = ({
       }
       selectedData.locationName = selectedLocation.name;
       // default selection to single test type code if it exists
-      const testTypeCodeKey = "testTypeCode"
+      const testTypeCodeKey = "testTypeCode";
       if (mdmData[testTypeCodeKey]?.length === 1) {
-        const singleTestTypeCodeSelection = mdmData[testTypeCodeKey][0].code
-        selectedData = { ...selectedData, testTypeCode: singleTestTypeCodeSelection }
+        const singleTestTypeCodeSelection = mdmData[testTypeCodeKey][0].code;
+        selectedData = {
+          ...selectedData,
+          testTypeCode: singleTestTypeCodeSelection,
+        };
       }
     }
     let mainDropdownName = "";
@@ -647,7 +650,7 @@ const QATestSummaryDataTable = ({
         );
       case "FLC": // Flow to Load Check
         const flcProps = qaFlowToLoadCheckProps();
-        console.log("Hello")
+        console.log("Hello");
         return (
           <QAExpandableRowsRender
             payload={flcProps["payload"]}
@@ -698,7 +701,8 @@ const QATestSummaryDataTable = ({
           />
         );
       case "FFACC": // Fuel Flowmeter Accuracy
-        const fuelFlowmeterAccuracyDataProps = qaFuelFlowmeterAccuracyDataProps();
+        const fuelFlowmeterAccuracyDataProps =
+          qaFuelFlowmeterAccuracyDataProps();
         return (
           <QAExpandableRowsRender
             payload={fuelFlowmeterAccuracyDataProps["payload"]}
@@ -706,7 +710,9 @@ const QATestSummaryDataTable = ({
             mdmProps={fuelFlowmeterAccuracyDataProps["mdmProps"]}
             columns={fuelFlowmeterAccuracyDataProps["columnNames"]}
             controlInputs={fuelFlowmeterAccuracyDataProps["controlInputs"]}
-            controlDatePickerInputs={fuelFlowmeterAccuracyDataProps["controlDatePickerInputs"]}
+            controlDatePickerInputs={
+              fuelFlowmeterAccuracyDataProps["controlDatePickerInputs"]
+            }
             radioBtnPayload={fuelFlowmeterAccuracyDataProps["radioBtnPayload"]}
             dataTableName={fuelFlowmeterAccuracyDataProps["dataTableName"]}
             extraControls={fuelFlowmeterAccuracyDataProps["extraControls"]}
@@ -736,18 +742,31 @@ const QATestSummaryDataTable = ({
           />
         );
       case "TTACC":
-        const transmitterTransducerAccuracyDataProps = qaTransmitterTransducerAccuracyDataProps();
+        const transmitterTransducerAccuracyDataProps =
+          qaTransmitterTransducerAccuracyDataProps();
         return (
           <QAExpandableRowsRender
             payload={transmitterTransducerAccuracyDataProps["payload"]}
-            dropdownArray={transmitterTransducerAccuracyDataProps["dropdownArray"]}
+            dropdownArray={
+              transmitterTransducerAccuracyDataProps["dropdownArray"]
+            }
             mdmProps={transmitterTransducerAccuracyDataProps["mdmProps"]}
             columns={transmitterTransducerAccuracyDataProps["columnNames"]}
-            controlInputs={transmitterTransducerAccuracyDataProps["controlInputs"]}
-            controlDatePickerInputs={transmitterTransducerAccuracyDataProps["controlDatePickerInputs"]}
-            radioBtnPayload={transmitterTransducerAccuracyDataProps["radioBtnPayload"]}
-            dataTableName={transmitterTransducerAccuracyDataProps["dataTableName"]}
-            extraControls={transmitterTransducerAccuracyDataProps["extraControls"]}
+            controlInputs={
+              transmitterTransducerAccuracyDataProps["controlInputs"]
+            }
+            controlDatePickerInputs={
+              transmitterTransducerAccuracyDataProps["controlDatePickerInputs"]
+            }
+            radioBtnPayload={
+              transmitterTransducerAccuracyDataProps["radioBtnPayload"]
+            }
+            dataTableName={
+              transmitterTransducerAccuracyDataProps["dataTableName"]
+            }
+            extraControls={
+              transmitterTransducerAccuracyDataProps["extraControls"]
+            }
             expandable
             {...props}
             extraIDs={null}
@@ -764,7 +783,9 @@ const QATestSummaryDataTable = ({
             mdmProps={flowToLoadReferenceProps["mdmProps"]}
             columns={flowToLoadReferenceProps["columnNames"]}
             controlInputs={flowToLoadReferenceProps["controlInputs"]}
-            controlDatePickerInputs={flowToLoadReferenceProps["controlDatePickerInputs"]}
+            controlDatePickerInputs={
+              flowToLoadReferenceProps["controlDatePickerInputs"]
+            }
             radioBtnPayload={flowToLoadReferenceProps["radioBtnPayload"]}
             dataTableName={flowToLoadReferenceProps["dataTableName"]}
             extraControls={flowToLoadReferenceProps["extraControls"]}
@@ -775,7 +796,7 @@ const QATestSummaryDataTable = ({
             isCheckedOut={isCheckedOut}
           />
         );
-      case "LME": //unit default test 
+      case "LME": //unit default test
         const unitDefaultTestDataProps = qaUnitDefaultTestDataProps();
         return (
           <QAExpandableRowsRender
