@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { monPlanColumns } from "../components/ReviewAndSubmit/ReviewAndSubmitTables/ColumnMappings";
+import { monPlanColumns } from "../components/EvaluateAndSubmit/DataTables/ColumnMappings";
 import {
   formatDate,
   getConfigValue,
@@ -15,6 +15,7 @@ import {
   alertStyle,
   displayReport,
   addEvalStatusCell,
+  updateCheckedOutLocationsRef,
 } from "./functions";
 
 describe("functions.js", function () {
@@ -334,7 +335,7 @@ describe("functions.js", function () {
         reportCodes.forEach(code => displayReport(monPlanId, code))
         expect(windowOpenMock).toHaveBeenCalledTimes(4);
       })
-    })
+    });
     describe('addEvalStatusCell', () => { 
       it('adds cell with alert style to eval status columns', () => {
         const columns = addEvalStatusCell(_.clone(monPlanColumns));
@@ -345,6 +346,23 @@ describe("functions.js", function () {
         const columns = addEvalStatusCell(_.clone(monPlanColumns));
         const nonEvalStatusColumn = columns.find(column => column.name !== 'Eval Status')
         expect(nonEvalStatusColumn.cell).not.toBeDefined();
+      });
+     });
+    describe('updateCheckedOutLocationsRef', () => {
+      const ref = {current: []};
+      beforeEach(() => {
+        ref.current = [];
+      })
+      it('adds checked out locations to ref', () => {
+        const row = {};
+        updateCheckedOutLocationsRef(true, row, ref);
+        expect(ref.current.length).toBe(1);
+      });
+      it('removes checked in locations from ref', () => {
+        const row = {monPlanId: '123'};
+        ref.current.push(row);
+        updateCheckedOutLocationsRef(false, row, ref);
+        expect(ref.current.length).toBe(0);
       });
      })
   });

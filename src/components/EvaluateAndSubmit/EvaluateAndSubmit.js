@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
-import { getMonitoringPlans } from "../../utils/api/monitoringPlansApi";
+import { checkInAllLocations, getMonitoringPlans } from "../../utils/api/monitoringPlansApi";
 import { getQATestSummaryReviewSubmit } from "../../utils/api/qaCertificationsAPI";
 import { getEmissionsReviewSubmit } from "../../utils/api/emissionsApi";
-import ReviewAndSubmitForm from "./ReviewAndSubmitForm/ReviewAndSubmitForm";
+import DataTables from "./DataTables/DataTables";
 import SubmissionModal from "../SubmissionModal/SubmissionModal";
-import ReviewAndSubmitTables from "./ReviewAndSubmitTables/ReviewAndSubmitTables";
 import MockPermissions from "./MockPermissions";
 import { Button } from "@trussworks/react-uswds";
 import { connect } from "react-redux";
@@ -15,8 +14,9 @@ import {
 import { submitData } from "../../utils/api/camdServices";
 import { handleError } from "../../utils/api/apiUtils";
 import LoadingModal from "../LoadingModal/LoadingModal";
+import FilterForm from "./FilterForm/FilterForm";
 
-const ReviewAndSubmit = ({ checkedOutLocations, user }) => {
+const EvaluateAndSubmit = ({ checkedOutLocations, user }) => {
   const [activityId, setActivityId] = useState("");
   const [excludeErrors, setExcludeErrors] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -39,6 +39,7 @@ const ReviewAndSubmit = ({ checkedOutLocations, user }) => {
   const monPlanRef = useRef([]);
 
   const [finalSubmitStage, setFinalSubmitStage] = useState(false);
+  const checkedOutLocationsInCurrentSessionRef = useRef([]);
   const { userId } = user;
   useEffect(() => {
     const checkedOutLocationsMPIdsMap = new Map();
@@ -73,8 +74,9 @@ const ReviewAndSubmit = ({ checkedOutLocations, user }) => {
     const permissions = MockPermissions;
     for (const p of permissions) {
       idToPermissionsMap.current[p.id] = p.permissions;
-    } //eslint-disable-next-line react-hooks/exhaustive-deps
-    console.log(idToPermissionsMap);
+    } 
+    console.log(idToPermissionsMap);//eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => checkInAllLocations(checkedOutLocationsInCurrentSessionRef.current);
   }, []);
 
   const updateFilesSelected = (bool) => {
@@ -165,6 +167,7 @@ const ReviewAndSubmit = ({ checkedOutLocations, user }) => {
   };
 
   const applyFilter = async (orisCodes, monPlanIds, submissionPeriods) => {
+    checkInAllLocations(checkedOutLocationsInCurrentSessionRef.current);
     const dataToSetMap = {
       //Contains data fetch, state setter, and ref for each of the 5 categories
       MP: [getMonitoringPlans, setMonPlans, monPlanRef],
@@ -267,7 +270,7 @@ const ReviewAndSubmit = ({ checkedOutLocations, user }) => {
         )}
       </div>
       {!finalSubmitStage && (
-        <ReviewAndSubmitForm
+        <FilterForm
           showModal={setShowModal}
           queryCallback={applyFilter}
           setExcludeErrors={setExcludeErrors}
@@ -276,7 +279,7 @@ const ReviewAndSubmit = ({ checkedOutLocations, user }) => {
         />
       )}
 
-      <ReviewAndSubmitTables
+      <DataTables
         monPlanState={monPlans}
         setMonPlanState={setMonPlans}
         monPlanRef={monPlanRef}
@@ -288,6 +291,7 @@ const ReviewAndSubmit = ({ checkedOutLocations, user }) => {
         emissionsRef={emissionsRef}
         permissions={idToPermissionsMap} //Map of oris codes to user permissions
         updateFilesSelected={updateFilesSelected}
+        checkedOutLocationsInCurrentSessionRef={checkedOutLocationsInCurrentSessionRef}
       />
 
       <LoadingModal loading={submitting} />
@@ -336,4 +340,4 @@ const mapStateToProps = (state) => ({
   checkedOutLocations: state.checkedOutLocations,
 });
 
-export default connect(mapStateToProps, null)(ReviewAndSubmit);
+export default connect(mapStateToProps, null)(EvaluateAndSubmit);

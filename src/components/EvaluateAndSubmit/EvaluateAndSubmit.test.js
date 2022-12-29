@@ -1,7 +1,7 @@
 import React from "react";
 import { render, act } from "@testing-library/react";
 import MockPermissions from "./MockPermissions";
-import ReviewAndSubmit from "./ReviewAndSubmit";
+import EvaluateAndSubmit from "./EvaluateAndSubmit";
 import configureStore from "../../store/configureStore.dev";
 import { Provider } from "react-redux";
 
@@ -45,6 +45,7 @@ jest.mock("../../utils/api/monitoringPlansApi", () => ({
       },
     ],
   }),
+  checkInAllLocations: jest.fn(),
 }));
 
 jest.mock("../../utils/api/qaCertificationsAPI", () => ({
@@ -68,7 +69,7 @@ jest.mock("../../utils/api/emissionsApi", () => ({
 }));
 
 jest.mock(
-  "./ReviewAndSubmitForm/ReviewAndSubmitForm",
+  "./FilterForm/FilterForm",
   () =>
     ({ showModal, queryCallback, setExcludeErrors, facilities }) => {
       return (
@@ -87,7 +88,7 @@ jest.mock(
 );
 
 jest.mock(
-  "./ReviewAndSubmitTables/ReviewAndSubmitTables",
+  "./DataTables/DataTables",
   () =>
     ({
       monPlanState,
@@ -101,6 +102,8 @@ jest.mock(
       return <div>{`MON PLAN LENGTH: ${monPlanState.length}`}</div>;
     }
 );
+
+
 
 jest.mock(
   "../SubmissionModal/SubmissionModal",
@@ -128,7 +131,7 @@ describe("Review and Submit component", () => {
     await act(async () => {
       query = render(
         <Provider store={store}>
-          <ReviewAndSubmit user={user} />
+          <EvaluateAndSubmit user={user} />
         </Provider>
       );
     });
