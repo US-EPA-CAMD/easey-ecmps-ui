@@ -4,7 +4,7 @@ import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
 import { getReportingPeriods } from "../../../utils/api/mdmApi";
 
-const ReviewAndSubmitForm = ({
+const FilterForm = ({
   facilities,
   queryCallback,
   showModal,
@@ -252,4 +252,4 @@ const ReviewAndSubmitForm = ({
   );
 };
 
-export default ReviewAndSubmitForm;
+export default FilterForm;

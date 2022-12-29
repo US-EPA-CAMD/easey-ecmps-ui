@@ -30,8 +30,8 @@ import {
   MONITORING_PLAN_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import * as modules from "../../utils/constants/moduleTitles";
-import ReviewAndSubmit from "../ReviewAndSubmit/ReviewAndSubmit";
 import useGetCheckedOutLocations from "../../additional-functions/useGetCheckedOutLocations";
+import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
 
 const cdx_user = sessionStorage.getItem("cdx_user");
 
@@ -134,16 +134,11 @@ const App = () => {
             />
             <Route path={`/faqs`} exact component={() => <FAQ />} />
             <Route path="/login" exact component={Login} />
-            {!cdx_user && (
-              <Redirect
-                from="/workspace/review"
-                to="/home"
-              />
-            )}
+            {!cdx_user && <Redirect from="/workspace/review" to="/home" />}
             <Route
               path="/workspace/review"
               exact
-              component={() => <ReviewAndSubmit user={user}/>}
+              component={() => <EvaluateAndSubmit user={user} />}
             />
 
             {user ? (
