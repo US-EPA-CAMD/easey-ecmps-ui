@@ -30,36 +30,42 @@ const ImportModal = ({
   const [schema, setSchema] = useState([]);
   const [schemaErrors, setSchemaErrors] = useState([]);
   const [label, setLabel] = useState("");
-  
+
   useEffect(() => {
     switch (workspaceSection) {
       case MONITORING_PLAN_STORE_NAME:
-        mpApi.getMPSchema()
-        .then(({data}) => {
-          setSchema(data);
-          setLabel("Upload MP JSON File");
-        }).catch(err=> console.log(err));
+        mpApi
+          .getMPSchema()
+          .then(({ data }) => {
+            setSchema(data);
+            setLabel("Upload MP JSON File");
+          })
+          .catch((err) => console.log(err));
         break;
 
       case QA_CERT_TEST_SUMMARY_STORE_NAME:
-        qaApi.getQASchema()
-        .then(({data}) => {
-          setSchema(data);
-          setLabel("Upload QA JSON File");
-        }).catch(err=> console.log(err));
+        qaApi
+          .getQASchema()
+          .then(({ data }) => {
+            setSchema(data);
+            setLabel("Upload QA JSON File");
+          })
+          .catch((err) => console.log(err));
         break;
-      
+
       case EMISSIONS_STORE_NAME:
-        emApi.getEmissionsSchema()
-        .then(({data})=>{
-          setSchema(data);
-          setLabel("Upload Emissions JSON File");
-        }).catch(err=> console.log(err));
+        emApi
+          .getEmissionsSchema()
+          .then(({ data }) => {
+            setSchema(data);
+            setLabel("Upload Emissions JSON File");
+          })
+          .catch((err) => console.log(err));
         break;
       default:
         break;
     }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const validateJSON = (name, type, event) => {
     const fileTypeManual = name.split(".");
@@ -67,7 +73,7 @@ const ImportModal = ({
     if (fileTypeManual[fileTypeManual.length - 1] !== "json") {
       setHasFormatError(true);
       setDisablePortBtn(true);
-      console.log('.json file incorrect')
+      console.log(".json file incorrect");
     } else {
       setFileName(name);
       readFile(event);
@@ -75,20 +81,22 @@ const ImportModal = ({
   };
 
   const formatSchemaErrors = (errors) => {
+    setDisablePortBtn(true);
     const formattedErrors = errors.errors.map((error) => {
       console.log(error, "file errors");
+
       return error.stack;
     });
 
     setSchemaErrors(formattedErrors);
   };
-  function readFile(event) {
+  const readFile = (event) => {
     var reader = new FileReader();
     reader.onload = onReaderLoad;
     reader.readAsText(event.target.files[0]);
-  }
+  };
 
-  function onReaderLoad(event) {
+  const onReaderLoad = (event) => {
     try {
       setSchemaErrors([]);
       const fileLoaded = JSON.parse(event.target.result);
@@ -102,6 +110,7 @@ const ImportModal = ({
         setHasInvalidJsonError(false);
         setDisablePortBtn(false);
       } else {
+        setDisablePortBtn(true);
         formatSchemaErrors(v.validate(fileLoaded, schema));
       }
     } catch (e) {
@@ -110,7 +119,7 @@ const ImportModal = ({
       setHasFormatError(false);
       setDisablePortBtn(true);
     }
-  }
+  };
 
   const onChangeHandler = (e) => {
     setSchemaErrors([]);
@@ -137,7 +146,13 @@ const ImportModal = ({
           <div className="padding-right-2 padding-left-3 " aria-live="polite">
             {" "}
             {importedFileErrorMsgs.map((error, i) => (
-              <Alert type="error" slim noIcon key={`${i}-${error}`} role="alert">
+              <Alert
+                type="error"
+                slim
+                noIcon
+                key={`${i}-${error}`}
+                role="alert"
+              >
                 {error}
               </Alert>
             ))}
@@ -152,7 +167,13 @@ const ImportModal = ({
                 aria-live="polite"
               >
                 {schemaErrors.map((error, i) => (
-                  <Alert type="error" slim noIcon key={`${i}-${error}`} role="alert">
+                  <Alert
+                    type="error"
+                    slim
+                    noIcon
+                    key={`${i}-${error}`}
+                    role="alert"
+                  >
                     {error}
                   </Alert>
                 ))}
