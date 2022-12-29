@@ -20,7 +20,7 @@ const PillButton = (props) => {
         type="button"
         aria-label={`Remove selection for ${props.label}`}
         className="padding-y-0 padding-left-1 padding-right-1 radius-0 radius-right-lg bg-primary"
-        data-testid="remove"
+        data-testid={`${props.index}-remove`}
         onClick={() => props.onRemove(props.index, props.label)}
       >
         <FontAwesomeIcon icon={faWindowClose} />
