@@ -216,7 +216,62 @@ describe("testing TestSummary data selectors", () => {
     ];
     expect(fs.getProtocolGasRecords(data)).toEqual(records);
   });
-
+  test("getRataDataRecords", () => {
+    const data = [
+      {
+        id: "2b2adedb-24eb-4325-8ad4-37c342f67a37",
+        testSumId: "325f65f7-b056-4b74-97d7-0040a1b44dbd",
+        numberOfLoadLevels: "string",
+        relativeAccuracy: "string",
+        rataFrequencyCode: "string",
+        overallBiasAdjustmentFactor: "string",
+      },
+    ];
+    const records = [
+      {
+        col1: "string",
+        col2: "string",
+        col3: "string",
+        col4: "string",
+        id: "2b2adedb-24eb-4325-8ad4-37c342f67a37",
+        testSumId: "325f65f7-b056-4b74-97d7-0040a1b44dbd",
+      },
+    ];
+    expect(fs.getRataDataRecords(data)).toEqual(records);
+  });
+  test("getAirEmissionsRecords", () => {
+    const data = [
+      {
+        id: "2b2adedb-24eb-4325-8ad4-37c342f67a37",
+        testSumId: "325f65f7-b056-4b74-97d7-0040a1b44dbd",
+        qiLastName: "string",
+        qiFirstName: "string",
+        qiMiddleInitial: "string",
+        aetbName: "string",
+        aetbPhoneNumber: "string",
+        aetbEmail: "string",
+        examDate: "10/01/2022",
+        providerName: "testName",
+        providerEmail: "string",
+      },
+    ];
+    const records = [
+      {
+        col1: "string",
+        col2: "string",
+        col3: "string",
+        col4: "string",
+        col5: "string",
+        col6: "string",
+        col7: "10/01/2022",
+        col8: "testName",
+        col9: "string",
+        id: "2b2adedb-24eb-4325-8ad4-37c342f67a37",
+        testSumId: "325f65f7-b056-4b74-97d7-0040a1b44dbd",
+      },
+    ];
+    expect(fs.getAirEmissionsRecords(data)).toEqual(records);
+  });
   test("mapTestQualificationToRows", () => {
     const data = [
       {
@@ -371,6 +426,41 @@ describe("testing TestSummary data selectors", () => {
       },
     ];
     expect(fs.mapRataSummaryToRows(data)).toEqual(records);
+  });
+  test("mapFlowToLoadCheckToRows", () => {
+    const data = [
+      {
+        id: "0000120",
+        testBasisCode: '100',
+        biasAdjustedIndicator: 1,
+        averageAbsolutePercentDifference: 1,
+        numberOfHours: 1,
+        numberOfHoursExcludedForFuel: 1,
+        numberOfHoursExcludedForRamping: 1,
+        numberOfHoursExcludedForBypass: 1,
+        numberOfHoursExcludedPreRata: 1,
+        numberOfHoursExcludedTest: 1,
+        numberOfHoursExcludedForMainAndBypass: 1,
+        operatingLevelCode: "test",
+      },
+    ];
+    const records = [
+      {
+        id: '0000120',
+        col1: '100',
+        col2: 1,
+        col3: 1,
+        col4: 1,
+        col5: 1,
+        col6: 1,
+        col7: 1,
+        col8: 1,
+        col9: 1,
+        col10: 1,
+        col11: "test",
+      },
+    ];
+    expect(fs.mapFlowToLoadCheckToRows(data)).toEqual(records);
   });
   test("mapAppendixECorrHeatInputOilToRows", () => {
     const data = [
