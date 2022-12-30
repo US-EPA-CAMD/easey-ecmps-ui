@@ -1,15 +1,15 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./ReviewAndSubmitTables.scss";
-import ReviewAndSubmitTableRender from "../ReviewAndSubmitTableRender/ReviewAndSubmitTableRender";
+import "./DataTables.scss";
+import TableRender from "../TableRender/TableRender";
 import {
   monPlanColumns,
   qaTestSummaryColumns,
   emissionsColumns,
 } from "./ColumnMappings";
 
-const ReviewAndSubmitTables = ({
+const DataTables = ({
   monPlanState,
   setMonPlanState,
   monPlanRef,
@@ -22,6 +22,7 @@ const ReviewAndSubmitTables = ({
   permissions,
   updateFilesSelected,
   checkedOutLocationsMap,
+  checkedOutLocationsInCurrentSessionRef,
 }) => {
   const selectMonPlanRow = useCallback((id) => {
     for (const mpR of monPlanRef.current) {
@@ -141,7 +142,7 @@ const ReviewAndSubmitTables = ({
                   : "display-none"
               }
             >
-              <ReviewAndSubmitTableRender
+              <TableRender
                 columns={columns}
                 state={state}
                 setState={setState}
@@ -152,6 +153,7 @@ const ReviewAndSubmitTables = ({
                 getRowState={getRowState}
                 updateFilesSelected={updateFilesSelected}
                 checkedOutLocationsMap={checkedOutLocationsMap}
+                checkedOutLocationsInCurrentSessionRef={checkedOutLocationsInCurrentSessionRef}
               />
             </div>
           </div>
@@ -161,4 +163,4 @@ const ReviewAndSubmitTables = ({
   );
 };
 
-export default ReviewAndSubmitTables;
+export default DataTables;

@@ -4,8 +4,8 @@ export const qaProtocalGasProps = (selectedRow) => {
     payload: {
       gasLevelCode: selectedRow.gasLevelCode,
       gasTypeCode: null,
-      cylinderID: null,
-      vendorID: null,
+      cylinderIdentifier: null,
+      vendorIdentifier: null,
       expirationDate: null,
     },
     dropdownArray: ["gasLevelCode", "gasTypeCode"],
@@ -19,8 +19,8 @@ export const qaProtocalGasProps = (selectedRow) => {
     controlInputs: {
       gasLevelCode: ["Summary Type/Gas Level Code", "dropdown", "", ""],
       gasTypeCode: ["Gas Type Code", "dropdown", "", ""],
-      cylinderID: ["Cylinder Identification", "input", "", ""],
-      vendorID: ["Vendor Identification", "input", "", ""],
+      cylinderIdentifier: ["Cylinder Identification", "input", "", ""],
+      vendorIdentifier: ["Vendor Identification", "input", "", ""],
       expirationDate: ["Expiration Date", "date", "", ""],
       skip: ["", "skip", "", ""],
     },

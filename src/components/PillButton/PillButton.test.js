@@ -38,7 +38,7 @@ describe('<PillButton/>', () => {
 
   it('handles remove events', () => {
     const { getByTestId } = query;
-    fireEvent.click(getByTestId('remove'));
+    fireEvent.click(getByTestId('index-remove'));
     expect(mockHandler.onRemove).toHaveBeenCalledTimes(1);
   });
 });

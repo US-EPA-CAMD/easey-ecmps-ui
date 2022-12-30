@@ -133,8 +133,8 @@ export const getProtocolGasRecords = (data) => {
       testSumId: el.testSumId,
       col1: el.gasLevelCode,
       col2: el.gasTypeCode,
-      col3: el.cylinderID,
-      col4: el.vendorID,
+      col3: el.cylinderIdentifier,
+      col4: el.vendorIdentifier,
       col5: el.expirationDate ? formatStringToDate(el.expirationDate) : "",
     });
   });

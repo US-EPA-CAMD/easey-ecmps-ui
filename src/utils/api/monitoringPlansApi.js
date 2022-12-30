@@ -5,6 +5,7 @@ import { secureAxios } from "./easeyAuthApi";
 import { getFacilityById } from "./facilityApi";
 import download from "downloadjs";
 import { checkoutAPI } from "../../additional-functions/checkout";
+import { obtainCheckedOutLocations } from "../../additional-functions/useGetCheckedOutLocations";
 
 axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
@@ -998,11 +999,24 @@ export const exportMonitoringPlanDownload = async (configID) => {
   }
 };
 
-export const checkInOutLocation = (bool, row, checkedOutLocationsMap) => {
-  const { monPlanId } = row;
-  if (checkedOutLocationsMap?.has(monPlanId) && !bool) {
-    console.log('item is already checked out', monPlanId);
-  } else if(row.selected !== bool){
-    checkoutAPI(bool, row.facId, monPlanId).then();
-  }
+export const checkInOutLocation = (isCheckingOutRow, row, checkedOutLocationsMap) => {
+  const { monPlanId, checkedOut } = row;
+  if(isCheckingOutRow) {
+    if(checkedOutLocationsMap?.has(monPlanId) || checkedOut){
+      return console.log('item is already checked out', monPlanId);
+    } else return checkoutAPI(isCheckingOutRow, row.facId, monPlanId).then();
+  } else return checkoutAPI(isCheckingOutRow, row.facId, monPlanId).then();
+};
+
+export const checkInAllLocations = (locations) => {
+  locations.forEach((location) => checkoutAPI(false, location.facId, location.monPlanId));
+};
+
+export const getUpdatedCheckedOutLocations = async(dispatch) => {
+  const checkedOutLocations = await obtainCheckedOutLocations({dispatch}),
+    updatedCheckedOutLocationsMap = new Map();
+  checkedOutLocations.forEach((el) => {
+    updatedCheckedOutLocationsMap.set(el.monPlanId, el);
+  });
+  return updatedCheckedOutLocationsMap;
 };
