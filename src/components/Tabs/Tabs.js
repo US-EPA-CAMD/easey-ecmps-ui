@@ -117,6 +117,7 @@ export const Tabs = ({
                     type="button"
                     outline={activeTabIndex !== i}
                     tabIndex="0"
+                    id="select-config"
                     aria-label={`open ${el.props.title} tab`}
                     className={
                       activeTabIndex === i
