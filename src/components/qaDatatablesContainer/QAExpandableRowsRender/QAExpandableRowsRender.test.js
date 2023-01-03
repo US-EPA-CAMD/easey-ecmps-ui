@@ -101,8 +101,8 @@ describe('Test cases for QAExpandableRowsRender', () => {
         "updateDate": "string",
         "gasLevelCode": "string",
         "gasTypeCode": "string",
-        "vendorID": "string",
-        "cylinderID": "string",
+        "vendorIdentifier": "string",
+        "cylinderIdentifier": "string",
         "expirationDate": "2022-11-07"
       },
       {
@@ -113,8 +113,8 @@ describe('Test cases for QAExpandableRowsRender', () => {
         "updateDate": "string",
         "gasLevelCode": "string",
         "gasTypeCode": "string",
-        "vendorID": "string",
-        "cylinderID": "string",
+        "vendorIdentifier": "string",
+        "cylinderIdentifier": "string",
         "expirationDate": "2022-11-07"
       }
     ]

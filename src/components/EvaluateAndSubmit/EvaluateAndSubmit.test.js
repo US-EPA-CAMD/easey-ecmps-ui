@@ -45,6 +45,7 @@ jest.mock("../../utils/api/monitoringPlansApi", () => ({
       },
     ],
   }),
+  checkInAllLocations: jest.fn(),
 }));
 
 jest.mock("../../utils/api/qaCertificationsAPI", () => ({
@@ -101,6 +102,8 @@ jest.mock(
       return <div>{`MON PLAN LENGTH: ${monPlanState.length}`}</div>;
     }
 );
+
+
 
 jest.mock(
   "../SubmissionModal/SubmissionModal",

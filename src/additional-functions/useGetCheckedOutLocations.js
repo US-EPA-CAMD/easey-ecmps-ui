@@ -9,35 +9,47 @@ const useGetCheckedOutLocations = () => {
   const checkedOutLocationsRef = useRef(null);
   const dispatch = useDispatch();
   useEffect(() => {
-    obtainCheckedOutLocations().then();
+    obtainCheckedOutLocations({ checkedOutLocationsRef, dispatch }).then();
     const interval = setInterval(
-      () => obtainCheckedOutLocations().then(),
+      () =>
+        obtainCheckedOutLocations({ checkedOutLocationsRef, dispatch }).then(),
       fiveSeconds
     );
-    return () => clearInterval(interval);//eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => clearInterval(interval); //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const obtainCheckedOutLocations = async () => {
-    const checkedOutLocationResult = await getCheckedOutLocations().then();
-    let checkedOutLocationsList = [];
-    if (checkedOutLocationResult) {
-      if (
-        checkedOutLocationResult.data &&
-        !_.isEqual(
-          checkedOutLocationsRef.current,
-          checkedOutLocationResult.data
-        )
-      ) {
-        checkedOutLocationsList = checkedOutLocationResult.data;
-        dispatch({
-          type: types.SET_CHECKED_OUT_LOCATIONS,
-          checkedOutLocations: checkedOutLocationsList,
-        });
-        checkedOutLocationsRef.current = checkedOutLocationResult.data;
-      }
-    }
-  };
 };
 
+export const obtainCheckedOutLocations = async ({
+  checkedOutLocationsRef,
+  dispatch,
+}) => {
+  const checkedOutLocationResult = await getCheckedOutLocations().then();
+  let checkedOutLocationsList = [];
+  if (checkedOutLocationResult) {
+    const checkedOutLocationResultData = checkedOutLocationResult.data;
+    if (!dispatch) {
+      return checkedOutLocationResultData;
+    }
+    if (!checkedOutLocationsRef) {
+      dispatch({
+        type: types.SET_CHECKED_OUT_LOCATIONS,
+        checkedOutLocations: checkedOutLocationResultData,
+      });
+      return checkedOutLocationResultData;
+    }
+    if (
+      checkedOutLocationResultData &&
+      !_.isEqual(checkedOutLocationsRef.current, checkedOutLocationResultData)
+    ) {
+      checkedOutLocationsList = checkedOutLocationResultData;
+      dispatch({
+        type: types.SET_CHECKED_OUT_LOCATIONS,
+        checkedOutLocations: checkedOutLocationsList,
+      });
+      checkedOutLocationsRef.current = checkedOutLocationResultData;
+    }
+      return checkedOutLocationResultData;
+  }
+};
 
 export default useGetCheckedOutLocations;

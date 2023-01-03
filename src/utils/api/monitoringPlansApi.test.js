@@ -952,15 +952,40 @@ describe("testing monitoring plans data fetching APIs", () => {
   describe('checkInOutLocation', () => {
     it('calls api location if monPlanId is not in checked out locations map', () => {
       const row = {monPlanId:'123'}, checkedOutLocationsMap = new Map();
+      mpApi.checkInOutLocation(true, row, checkedOutLocationsMap);
+      expect(mockCheckoutApiCall).toHaveBeenCalled();
+    })
+    it('calls api location if location is getting checked in', () => {
+      const row = {monPlanId:'123'}, checkedOutLocationsMap = new Map();
       mpApi.checkInOutLocation(false, row, checkedOutLocationsMap);
-      expect(mockCheckoutApiCall).toHaveBeenCalled()
+      expect(mockCheckoutApiCall).toHaveBeenCalled();
     })
     it('does not call api to check out location if monPlanId is already checked out', () => {
       const row = {monPlanId:'123'}, checkedOutLocationsMap = new Set(['123']);
-      mpApi.checkInOutLocation(false, row, checkedOutLocationsMap);
-      expect(mockCheckoutApiCall).not.toHaveBeenCalled()
+      mpApi.checkInOutLocation(true, row, checkedOutLocationsMap);
+      expect(mockCheckoutApiCall).not.toHaveBeenCalled();
     })
   })
+
+  describe('checkInAllLocations', () => {
+    it('calls checkout api on locations', () => {
+      const locations = [{monPlanId: '123', facId: '123'}];
+      mpApi.checkInAllLocations(locations);
+      expect(mockCheckoutApiCall).toHaveBeenCalledTimes(1);
+    });
+    it('does not call checkout api if there are no locations', () => {
+      const locations = [];
+      mpApi.checkInAllLocations(locations);
+      expect(mockCheckoutApiCall).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('getUpdatedCheckedOutLocations', () => {
+    it('returns map of checked out locations', async() => {
+      const results = await mpApi.getUpdatedCheckedOutLocations();
+      expect(results).toBeDefined();
+    });
+  });
 
   // test("Should fetch list of monitoring methods for a selected monitoring location", async () => {
   //   const mock = new MockAdapter(axios);

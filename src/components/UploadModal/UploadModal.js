@@ -29,9 +29,9 @@ export const UploadModal = ({
   notUploadVersion,
   setUpdateRelatedTables,
   successMsg,
-  showTintedBg=true,
-  showImport=true,
-  showSeparators=false,
+  showTintedBg = true,
+  showImport = true,
+  showSeparators = false,
 }) => {
   const hasErrors = importedFileErrorMsgs && importedFileErrorMsgs.length > 0;
 
@@ -77,6 +77,7 @@ export const UploadModal = ({
     // * clean up
     return () => {
       document.removeEventListener("keydown", handleKeyPress);
+      document.getElementById("importBtn").focus();
     };
   }, [close]);
 
@@ -163,7 +164,6 @@ export const UploadModal = ({
                               {showSeparators && (<hr/>)}
                             </div>
                           )}
-
                         </div>
                       ) : (
                         <div>
@@ -238,7 +238,7 @@ export const UploadModal = ({
                         >
                           Ok
                         </Button>
-                      ) :   (
+                      ) : (
                         <Button
                           type="button"
                           onClick={port}

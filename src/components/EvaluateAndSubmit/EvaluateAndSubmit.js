@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { getMonitoringPlans } from "../../utils/api/monitoringPlansApi";
+import { checkInAllLocations, getMonitoringPlans } from "../../utils/api/monitoringPlansApi";
 import { getQATestSummaryReviewSubmit } from "../../utils/api/qaCertificationsAPI";
 import { getEmissionsReviewSubmit } from "../../utils/api/emissionsApi";
 import DataTables from "./DataTables/DataTables";
@@ -46,6 +46,7 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
   const monPlanRef = useRef([]);
 
   const [finalSubmitStage, setFinalSubmitStage] = useState(false);
+  const checkedOutLocationsInCurrentSessionRef = useRef([]);
   const { userId } = user;
   useEffect(() => {
     const checkedOutLocationsMPIdsMap = new Map();
@@ -102,8 +103,9 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
     const permissions = MockPermissions;
     for (const p of permissions) {
       idToPermissionsMap.current[p.id] = p.permissions;
-    } //eslint-disable-next-line react-hooks/exhaustive-deps
-    console.log(idToPermissionsMap);
+    } 
+    console.log(idToPermissionsMap);//eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => checkInAllLocations(checkedOutLocationsInCurrentSessionRef.current);
   }, []);
 
   const filterClick = () => {
@@ -217,6 +219,7 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
   };
 
   const applyFilter = async (orisCodes, monPlanIds, submissionPeriods) => {
+<<<<<<< HEAD
     filesSelected.current = 0;
     setNumFilesSelected(filesSelected.current);
 
@@ -227,6 +230,9 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
     };
 
     //TODO: Refactor this to use DataList
+=======
+    checkInAllLocations(checkedOutLocationsInCurrentSessionRef.current);
+>>>>>>> 07abdaf0ff384bd17d0e6b353227e0f4677d9e13
     const dataToSetMap = {
       //Contains data fetch, state setter, and ref for each of the 5 categories
       MP: [getMonitoringPlans, setMonPlans, monPlanRef],
@@ -354,7 +360,11 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
         emissionsRef={emissionsRef}
         permissions={idToPermissionsMap} //Map of oris codes to user permissions
         updateFilesSelected={updateFilesSelected}
+<<<<<<< HEAD
         componentType={componentType}
+=======
+        checkedOutLocationsInCurrentSessionRef={checkedOutLocationsInCurrentSessionRef}
+>>>>>>> 07abdaf0ff384bd17d0e6b353227e0f4677d9e13
       />
 
       <LoadingModal loading={submitting} />

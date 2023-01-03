@@ -188,6 +188,13 @@ export const addEvalStatusCell = (columns) =>
     return col;
   });
 
+  export const updateCheckedOutLocationsRef = (isCheckedOut, row, ref) => {
+    if(isCheckedOut){
+      ref.current.push(row);
+    } else {
+      ref.current = ref.current.filter(el => el.monPlanId !== row.monPlanId);
+    }
+  }
 // Returns the previously fully submitted quarter (reporting period). 
 // For the first month of every quarter, the previusly submitted reporting period is actually two quarters ago.
 // For every month in between it is the previous quarter. 
