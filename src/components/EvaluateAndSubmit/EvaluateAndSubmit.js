@@ -16,7 +16,7 @@ import { handleError } from "../../utils/api/apiUtils";
 import LoadingModal from "../LoadingModal/LoadingModal";
 import FilterForm from "./FilterForm/FilterForm";
 import { triggerBulkEvaluation } from "../../utils/api/quartzApi";
-import { EvaluateRefresh } from "./EvaluationRefresh";
+import { EvaluateRefresh } from "./EvaluateRefresh";
 
 const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
   const [title, setTitle] = useState("Submit");

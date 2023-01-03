@@ -178,4 +178,21 @@ describe("Review and Submit component", () => {
     });
     expect(getAllByText("Submit")[0]).toBeInTheDocument();
   });
+
+  it("mock an evaluation component instead of submission", async () => {
+    let query;
+
+    user = { userId: "mock", firstName: "mock", lastName: "mock" };
+    await act(async () => {
+      query = render(
+        <Provider store={store}>
+          <EvaluateAndSubmit user={user} componentType="Evaluate" />
+        </Provider>
+      );
+    });
+
+    const { getByText, getAllByText } = query;
+
+    expect(getAllByText("Evaluate")[0]).toBeInTheDocument();
+  });
 });
