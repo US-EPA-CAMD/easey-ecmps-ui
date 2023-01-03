@@ -105,7 +105,7 @@
 // import { logOut } from "../../utils/api/easeyAuthApi";
 // import { checkoutAPI } from "../../additional-functions/checkout";
 import React from "react";
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, screen, act, waitForElement } from "@testing-library/react";
 import {
   InactivityTracker,
   mapStateToProps,
@@ -113,9 +113,15 @@ import {
 } from "./InactivityTracker";
 import { Provider } from "react-redux";
 import configureStore from "../../store/configureStore.dev";
+import config from "../../config";
+import { logOut } from "../../utils/api/easeyAuthApi";
+import userEvent from "@testing-library/user-event";
 const store = configureStore();
 const axios = require("axios");
 jest.mock("axios");
+
+jest.mock("../../utils/api/easeyAuthApi");
+logOut.mockImplementation(() => Promise.resolve(""));
 
 const props = {
   openedFacilityTabs: [{ checkout: true }],
@@ -174,6 +180,47 @@ describe("InactivityTracker", () => {
     jest.advanceTimersByTime(100000);
     expect(container).not.toBeUndefined();
   });
+
+  test("tests InactivityTracker modal popup and close", async () => {
+    render(
+      <Provider store={store}>
+        <InactivityTracker {...noCheckoutProps} />{" "}
+      </Provider>
+    )
+
+    act(() => {
+      jest.advanceTimersByTime(config.app.inactivityLogoutDuration);
+    });
+
+    const inactivityMsg = await screen.findByText(/Logging out due to inactivity/i)
+    expect(inactivityMsg).toBeInTheDocument()
+
+    const closeBtn = screen.getByRole('button', { name: /Click to close/i })
+    userEvent.click(closeBtn)
+
+    expect(logOut).not.toHaveBeenCalled()
+    expect(inactivityMsg).not.toBeInTheDocument()
+  });
+
+  test("when logout modal timer counts down then user is logged out", () => {
+    config.countdownDuration = 0
+    render(
+      <Provider store={store}>
+        <InactivityTracker {...noCheckoutProps} />{" "}
+      </Provider>
+    )
+
+    act(() => {
+      jest.advanceTimersByTime(config.app.inactivityLogoutDuration);
+    });
+
+    act(() => {
+      jest.advanceTimersByTime(60000)
+    })
+
+    expect(logOut).toHaveBeenCalled()
+  })
+
   test("mapDispatchToProps calls the appropriate action", async () => {
     // mock the 'dispatch' object
     const dispatch = jest.fn();
