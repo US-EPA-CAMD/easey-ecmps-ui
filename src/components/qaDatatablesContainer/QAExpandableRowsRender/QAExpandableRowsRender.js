@@ -334,6 +334,7 @@ const QAExpandableRowsRender = ({
       ]
     }
   };
+  
   const loadDropdownsData = (name) => {
     let dropdowns = {};
     const allPromises = [];
@@ -503,9 +504,7 @@ const QAExpandableRowsRender = ({
       case "Appendix E Correlation Heat Input from Oil":
         allPromises.push(dmApi.getAllMonitoringSystemIDCodes(extraIDs[0]));
         allPromises.push(dmApi.getAllUnitsOfMeasureCodes());
-        console.log("allPromises", allPromises)
         Promise.all(allPromises).then((responses) => {
-          console.log("responses", responses)
           responses.forEach((curResp, i) => {
             let codeLabel;
             let descriptionLabel;
