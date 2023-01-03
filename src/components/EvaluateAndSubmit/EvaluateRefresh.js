@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import config from "../../config";
+import _ from "lodash";
 
 export const EvaluateRefresh = ({ dataList, storedFilters }) => {
   const refreshPage = async () => {
@@ -45,7 +46,7 @@ export const EvaluateRefresh = ({ dataList, storedFilters }) => {
         }
 
         if (changes > 0) {
-          setState(ref.current);
+          setState(_.cloneDeep(ref.current));
         }
       }
     }

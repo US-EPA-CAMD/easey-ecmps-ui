@@ -22,11 +22,8 @@ const DataTables = ({
   permissions,
   updateFilesSelected,
   checkedOutLocationsMap,
-<<<<<<< HEAD
   componentType,
-=======
   checkedOutLocationsInCurrentSessionRef,
->>>>>>> 07abdaf0ff384bd17d0e6b353227e0f4677d9e13
 }) => {
   const selectMonPlanRow = useCallback((id) => {
     let rowStateFunc;
@@ -192,7 +189,9 @@ const DataTables = ({
                 }
                 updateFilesSelected={updateFilesSelected}
                 checkedOutLocationsMap={checkedOutLocationsMap}
-                checkedOutLocationsInCurrentSessionRef={checkedOutLocationsInCurrentSessionRef}
+                checkedOutLocationsInCurrentSessionRef={
+                  checkedOutLocationsInCurrentSessionRef
+                }
               />
             </div>
           </div>

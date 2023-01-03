@@ -103,8 +103,6 @@ jest.mock(
     }
 );
 
-
-
 jest.mock(
   "../SubmissionModal/SubmissionModal",
   () =>
@@ -131,7 +129,7 @@ describe("Review and Submit component", () => {
     await act(async () => {
       query = render(
         <Provider store={store}>
-          <EvaluateAndSubmit user={user} />
+          <EvaluateAndSubmit checkedOutLocations={[]} user={user} />
         </Provider>
       );
     });
@@ -189,7 +187,11 @@ describe("Review and Submit component", () => {
     await act(async () => {
       query = render(
         <Provider store={store}>
-          <EvaluateAndSubmit user={user} componentType="Evaluate" />
+          <EvaluateAndSubmit
+            checkedOutLocations={[]}
+            user={user}
+            componentType="Evaluate"
+          />
         </Provider>
       );
     });
