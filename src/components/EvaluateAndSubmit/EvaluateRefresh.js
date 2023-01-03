@@ -46,7 +46,7 @@ export const EvaluateRefresh = ({ dataList, storedFilters }) => {
         }
 
         if (changes > 0) {
-          setState(_.cloneDeep(ref.current));
+          setState(_.clone(ref.current));
         }
       }
     }

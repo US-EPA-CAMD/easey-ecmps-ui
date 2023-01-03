@@ -293,7 +293,8 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
         data = data.filter((d) => activePlans.has(d.monPlanId));
       }
 
-      if (excludeErrors) {
+      if (excludeErrors && componentType === "Submission") {
+        //We don't care about errors on evaluations page
         data = data.filter((mpd) => mpd.evalStatusCode !== "ERR");
       }
 
@@ -346,6 +347,7 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
           filesSelected={numFilesSelected}
           buttonText={buttonText}
           filterClick={filterClick}
+          componentType={componentType}
         />
       )}
 

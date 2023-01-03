@@ -129,7 +129,11 @@ describe("Review and Submit component", () => {
     await act(async () => {
       query = render(
         <Provider store={store}>
-          <EvaluateAndSubmit checkedOutLocations={[]} user={user} />
+          <EvaluateAndSubmit
+            componentType="Submission"
+            checkedOutLocations={[]}
+            user={user}
+          />
         </Provider>
       );
     });

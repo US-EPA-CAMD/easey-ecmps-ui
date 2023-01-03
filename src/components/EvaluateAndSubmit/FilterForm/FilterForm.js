@@ -12,6 +12,7 @@ const FilterForm = ({
   filesSelected,
   buttonText,
   filterClick,
+  componentType,
 }) => {
   const [availableReportingPeriods, setAvailableReportingPeriods] = useState(
     []
@@ -158,32 +159,34 @@ const FilterForm = ({
 
   return (
     <div className="container border-y-1px border-base-lighter padding-y-1">
-      <Fieldset className="grid-row margin-y-2">
-        <Radio
-          className="grid-col-6 desktop:grid-col-12 margin-bottom-1"
-          id={`0-radio-button`}
-          defaultChecked
-          name="critical-errors-radio"
-          label={"Exclude Files with Critical Errors"}
-          key={0}
-          data-testid="radio-exclude"
-          onClick={() => {
-            setExcludeErrors(true);
-          }}
-        />
+      {componentType === "Submission" && (
+        <Fieldset className="grid-row margin-y-2">
+          <Radio
+            className="grid-col-6 desktop:grid-col-12 margin-bottom-1"
+            id={`0-radio-button`}
+            defaultChecked
+            name="critical-errors-radio"
+            label={"Exclude Files with Critical Errors"}
+            key={0}
+            data-testid="radio-exclude"
+            onClick={() => {
+              setExcludeErrors(true);
+            }}
+          />
 
-        <Radio
-          className="grid-col-6 desktop:grid-col-12 margin-bottom-1"
-          id={`1-radio-button`}
-          name="critical-errors-radio"
-          label={"Include Files with Critical Errors"}
-          key={1}
-          data-testid="radio-include"
-          onClick={() => {
-            setExcludeErrors(false);
-          }}
-        />
-      </Fieldset>
+          <Radio
+            className="grid-col-6 desktop:grid-col-12 margin-bottom-1"
+            id={`1-radio-button`}
+            name="critical-errors-radio"
+            label={"Include Files with Critical Errors"}
+            key={1}
+            data-testid="radio-include"
+            onClick={() => {
+              setExcludeErrors(false);
+            }}
+          />
+        </Fieldset>
+      )}
       <div className="dropdowns grid-row">
         <div className="grid-col-6 desktop:grid-col-3 margin-top-2">
           <div className="margin-right-2">
