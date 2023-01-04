@@ -863,7 +863,8 @@ const QAExpandableRowsRender = ({
       case "Appendix E Correlation Heat Input from Gas":
         expandables.push(nextExpandableRow("Appendix E Correlation Heat Input from Oil"))
         break;
-
+      case "Unit Default Test":
+        expandables.push(nextExpandableRow("Protocol Gas"));
       default:
         break;
     }
