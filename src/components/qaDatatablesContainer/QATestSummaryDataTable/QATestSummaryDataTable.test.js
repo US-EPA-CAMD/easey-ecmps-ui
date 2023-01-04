@@ -621,6 +621,12 @@ test("testing component renders properly with FFL ", async () => {
   );
   expect(container).toBeDefined();
 });
+test("testing component renders properly with HGL3LS ", async () => {
+  const { container } = await waitForElement(() =>
+    componentRender(true, "HGL3LS")
+  );
+  expect(container).toBeDefined();
+});
 test("testing component renders properly with default ", async () => {
   const { container } = await waitForElement(() =>
     componentRender(true, "default")
