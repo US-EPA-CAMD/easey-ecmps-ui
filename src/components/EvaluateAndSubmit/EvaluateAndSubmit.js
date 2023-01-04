@@ -20,6 +20,7 @@ import LoadingModal from "../LoadingModal/LoadingModal";
 import FilterForm from "./FilterForm/FilterForm";
 import { triggerBulkEvaluation } from "../../utils/api/quartzApi";
 import { EvaluateRefresh } from "./EvaluateRefresh";
+import _ from "lodash";
 
 const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
   const [title, setTitle] = useState("Submit");
@@ -153,11 +154,17 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
     const activeMPSet = new Set();
     // Compile one master set of monitor plan ids that are being submitted
     for (const [key, value] of Object.entries(dataList)) {
-      const { ref } = value;
+      const { ref, setState } = value;
       for (const chunk of ref.current) {
         if (chunk.selected) {
+          if (componentType === "Evaluate") {
+            chunk.evalStatusCode = "INQ";
+          }
           activeMPSet.add(chunk.monPlanId);
         }
+      }
+      if (componentType === "Evaluate") {
+        setState(_.clone(ref.current));
       }
     }
 
@@ -214,7 +221,9 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
     callback(payload)
       .then(() => {
         setSubmitting(false);
-        window.location.reload(false);
+        if (componentType === "Submission") {
+          window.location.reload(false);
+        }
       })
       .catch((e) => {
         handleError(e);
@@ -319,11 +328,11 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
 
   return (
     <div className="react-transition fade-in padding-x-3">
-      <div className="text-black margin-top-1 display-flex flex-row">
-        <h2 className="flex-4 page-header margin-top-2">{title}</h2>
+      <div className="text-black flex-justify margin-top-1 grid-row">
+        <h2 className="grid-col-9 page-header margin-top-2">{title}</h2>
         {finalSubmitStage && (
           <Button
-            className="flex-align-self-end flex-align-self-center flex-1 margin-right-5 maxw-mobile"
+            className="grid-col-3 flex-align-self-center maxw-mobile margin-0"
             size="big"
             onClick={() => {
               finalSubmission(submitData);
@@ -381,20 +390,24 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
           setActivityId={setActivityId}
         />
       )}
-      <div className=" grid-row">
-        <div className="grid-col-10"></div>
-        <div className="grid-col-2">
-          <div className="display-flex flex-row flex-justify-end desktop:flex-justify-center margin-y-5 margin-right-2 float-left">
-            <Button onClick={filterClick} disabled={numFilesSelected === 0}>
-              {buttonText}
-            </Button>
+
+      {!finalSubmitStage && (
+        <div className=" grid-row">
+          <div className="grid-col-10"></div>
+          <div className="grid-col-2">
+            <div className="display-flex flex-row flex-justify-end desktop:flex-justify-center margin-y-5 margin-right-2 float-left">
+              <Button onClick={filterClick} disabled={numFilesSelected === 0}>
+                {buttonText}
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="text-black margin-top-1 display-flex flex-row margin-bottom-5">
+      )}
+
+      <div className="text-black flex-justify-end margin-top-1 grid-row">
         {finalSubmitStage && (
           <Button
-            className="flex-align-self-end flex-align-self-center flex-1 margin-right-5 maxw-mobile"
+            className="grid-col-3 flex-align-self-center maxw-mobile margin-0"
             size="big"
             onClick={() => {
               finalSubmission(submitData);
