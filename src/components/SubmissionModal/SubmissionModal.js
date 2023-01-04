@@ -448,7 +448,7 @@ export const SubmissionModal = ({
           </div>
         </div>
       </div>
-      <LoadingModal loading={loading} />
+      <LoadingModal type="Auth" loading={loading} />
     </div>,
     modalRoot
   );

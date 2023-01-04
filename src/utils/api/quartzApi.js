@@ -37,3 +37,19 @@ export const triggerEvaluation = async (payload) => {
     handleError(error);
   }
 };
+
+export const triggerBulkEvaluation = async (payload) => {
+  let url = `${config.services.quartz.uri}`;
+  url = `${url}/triggers/evaluations/bulk`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
+};

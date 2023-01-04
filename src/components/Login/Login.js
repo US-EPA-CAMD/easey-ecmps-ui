@@ -193,7 +193,7 @@ const Login = ({ isModal, source }) => {
           </Fieldset>
         </Form>
       </div>
-      <LoadingModal loading={loading} />
+      <LoadingModal type="Auth" loading={loading} />
     </div>
   );
 };

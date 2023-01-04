@@ -176,10 +176,6 @@ export const globalView = [
 export const home = [{ name: "Home", url: "/" }];
 
 export const workSpace = [
-  {
-    name: "Review & Submit",
-    url: "/workspace/review",
-  },
   { name: "Monitoring Plans", url: "/workspace/monitoring-plans" },
   {
     name: "QA & Certifications",
@@ -204,6 +200,14 @@ export const workSpace = [
     url: "/workspace/emissions",
   },
   { name: "Export", url: "/workspace/export" },
+  {
+    name: "Evaluate",
+    url: "/workspace/evaluate",
+  },
+  {
+    name: "Submit",
+    url: "/workspace/submit",
+  },
 ];
 
 export const appNavItems = [

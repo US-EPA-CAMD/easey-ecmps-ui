@@ -31,7 +31,7 @@ jest.mock("../TableRender/TableRender", () => {
 });
 
 describe("Review and Submit Tables component", () => {
-  it("expect initial loading state to be correct", async () => {
+  it("expect initial loading state to be correct for submission", async () => {
     let query = render(
       <DataTables
         monPlanState={[]}
@@ -48,6 +48,8 @@ describe("Review and Submit Tables component", () => {
         }}
         permissions={{ current: { 1: ["DSMP"] } }}
         updateFilesSelected={jest.fn()}
+        componentType="Submission"
+        checkedOutLocationsMap={[]}
       />
     );
 
@@ -81,6 +83,8 @@ describe("Review and Submit Tables component", () => {
         }}
         permissions={{ current: { 1: ["DSMP"] } }}
         updateFilesSelected={jest.fn()}
+        componentType="Submission"
+        checkedOutLocationsMap={[]}
       />
     );
 
@@ -112,6 +116,8 @@ describe("Review and Submit Tables component", () => {
         }}
         permissions={{ current: { 1: ["DSMP"] } }}
         updateFilesSelected={jest.fn()}
+        componentType="Submission"
+        checkedOutLocationsMap={[]}
       />
     );
 
@@ -146,6 +152,8 @@ describe("Review and Submit Tables component", () => {
         monPlanRef={currentRef}
         permissions={{ current: { 1: ["DSMP"] } }}
         updateFilesSelected={jest.fn()}
+        componentType="Submission"
+        checkedOutLocationsMap={[]}
       />
     );
 
@@ -154,5 +162,110 @@ describe("Review and Submit Tables component", () => {
     });
 
     expect(currentRef.current[0].selected).toBe(true);
+  });
+
+  it("expect initial loading state to be correct for evaluate checkbox", async () => {
+    mockRowState = {
+      submissionAvailabilityCode: "REQUIRE",
+      checkedOut: false,
+      userCheckedOut: false,
+      evalStatusCode: "EVAL",
+      orisCode: 1,
+    };
+
+    let query = render(
+      <DataTables
+        monPlanState={[]}
+        setMonPlanState={jest.fn()}
+        monPlanRef={{
+          current: [
+            {
+              selected: false,
+              userCheckedOut: false,
+              monPlanId: "testId",
+              orisCode: 1,
+            },
+          ],
+        }}
+        permissions={{ current: { 1: ["DSMP"] } }}
+        updateFilesSelected={jest.fn()}
+        componentType="Evaluate"
+        checkedOutLocationsMap={[]}
+      />
+    );
+
+    const { getByText } = query;
+    expect(getByText("MP:Checkbox")).toBeInTheDocument();
+    expect(getByText("MP:SELECT MON PLAN ROW")).toBeInTheDocument();
+  });
+
+  it("expect initial loading state to be correct for evaluate lock", async () => {
+    mockRowState = {
+      submissionAvailabilityCode: "REQUIRE",
+      checkedOut: true,
+      userCheckedOut: false,
+      evalStatusCode: "EVAL",
+      orisCode: 1,
+    };
+
+    let query = render(
+      <DataTables
+        monPlanState={[]}
+        setMonPlanState={jest.fn()}
+        monPlanRef={{
+          current: [
+            {
+              selected: false,
+              userCheckedOut: false,
+              monPlanId: "testId",
+              orisCode: 1,
+            },
+          ],
+        }}
+        permissions={{ current: { 1: ["DSMP"] } }}
+        updateFilesSelected={jest.fn()}
+        componentType="Evaluate"
+        checkedOutLocationsMap={[]}
+      />
+    );
+
+    const { getByText } = query;
+    expect(getByText("MP:Lock")).toBeInTheDocument();
+    expect(getByText("MP:SELECT MON PLAN ROW")).toBeInTheDocument();
+  });
+
+  it("expect initial loading state to be correct for evaluate view button", async () => {
+    mockRowState = {
+      submissionAvailabilityCode: "REQUIRE",
+      checkedOut: false,
+      userCheckedOut: false,
+      evalStatusCode: "PASS",
+      orisCode: 1,
+    };
+
+    let query = render(
+      <DataTables
+        monPlanState={[]}
+        setMonPlanState={jest.fn()}
+        monPlanRef={{
+          current: [
+            {
+              selected: false,
+              userCheckedOut: false,
+              monPlanId: "testId",
+              orisCode: 1,
+            },
+          ],
+        }}
+        permissions={{ current: { 1: ["DSMP"] } }}
+        updateFilesSelected={jest.fn()}
+        componentType="Evaluate"
+        checkedOutLocationsMap={[]}
+      />
+    );
+
+    const { getByText } = query;
+    expect(getByText("MP:View")).toBeInTheDocument();
+    expect(getByText("MP:SELECT MON PLAN ROW")).toBeInTheDocument();
   });
 });

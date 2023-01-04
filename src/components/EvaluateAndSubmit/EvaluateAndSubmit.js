@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import { checkInAllLocations, getMonitoringPlans } from "../../utils/api/monitoringPlansApi";
+import {
+  checkInAllLocations,
+  getMonitoringPlans,
+} from "../../utils/api/monitoringPlansApi";
 import { getQATestSummaryReviewSubmit } from "../../utils/api/qaCertificationsAPI";
 import { getEmissionsReviewSubmit } from "../../utils/api/emissionsApi";
 import DataTables from "./DataTables/DataTables";
@@ -15,8 +18,16 @@ import { submitData } from "../../utils/api/camdServices";
 import { handleError } from "../../utils/api/apiUtils";
 import LoadingModal from "../LoadingModal/LoadingModal";
 import FilterForm from "./FilterForm/FilterForm";
+import { triggerBulkEvaluation } from "../../utils/api/quartzApi";
+import { EvaluateRefresh } from "./EvaluateRefresh";
+import _ from "lodash";
 
-const EvaluateAndSubmit = ({ checkedOutLocations, user }) => {
+const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
+  const [title, setTitle] = useState("Submit");
+  const [buttonText, setButtonText] = useState("Sign & Submit");
+
+  const storedFilters = useRef(null);
+
   const [activityId, setActivityId] = useState("");
   const [excludeErrors, setExcludeErrors] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -54,17 +65,39 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user }) => {
     ); //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkedOutLocations]);
 
+  useEffect(() => {
+    if (finalSubmitStage && componentType === "Submission") {
+      setTitle("Review & Submit");
+    } else if (!finalSubmitStage && componentType === "Submission") {
+      setTitle("Submit");
+      setButtonText("Sign & Submit");
+    } else {
+      setTitle("Evaluate");
+      setButtonText("Evaluate");
+    }
+  }, [finalSubmitStage, componentType]);
+
   const dataList = {
-    monPlan: { ref: monPlanRef, state: monPlans, setState: setMonPlans },
+    monPlan: {
+      ref: monPlanRef,
+      state: monPlans,
+      setState: setMonPlans,
+      call: getMonitoringPlans,
+      rowId: "monPlanId",
+    },
     qaTest: {
       ref: qaTestSumRef,
       state: qaTestSummary,
       setState: setQaTestSummary,
+      call: getQATestSummaryReviewSubmit,
+      rowId: "testSumId",
     },
     emissions: {
       ref: emissionsRef,
       state: emissions,
       setState: setEmissions,
+      call: getEmissionsReviewSubmit,
+      rowId: "periodAbbreviation",
     },
   };
 
@@ -74,10 +107,19 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user }) => {
     const permissions = MockPermissions;
     for (const p of permissions) {
       idToPermissionsMap.current[p.id] = p.permissions;
-    } 
-    console.log(idToPermissionsMap);//eslint-disable-next-line react-hooks/exhaustive-deps
-    return () => checkInAllLocations(checkedOutLocationsInCurrentSessionRef.current);
+    }
+    console.log(idToPermissionsMap); //eslint-disable-next-line react-hooks/exhaustive-deps
+    return () =>
+      checkInAllLocations(checkedOutLocationsInCurrentSessionRef.current);
   }, []);
+
+  const filterClick = () => {
+    if (componentType === "Submission") {
+      setShowModal(true);
+    } else {
+      finalSubmission(triggerBulkEvaluation);
+    }
+  };
 
   const updateFilesSelected = (bool) => {
     if (bool) {
@@ -107,19 +149,35 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user }) => {
     }
   };
 
-  const finalSubmission = () => {
+  const finalSubmission = (callback) => {
     setSubmitting(true);
     const activeMPSet = new Set();
     // Compile one master set of monitor plan ids that are being submitted
     for (const [key, value] of Object.entries(dataList)) {
-      const { ref } = value;
+      const { ref, setState } = value;
       for (const chunk of ref.current) {
-        activeMPSet.add(chunk.monPlanId);
+        if (chunk.selected) {
+          if (componentType === "Evaluate") {
+            chunk.evalStatusCode = "INQ";
+          }
+          activeMPSet.add(chunk.monPlanId);
+        }
+      }
+      if (componentType === "Evaluate") {
+        setState(_.clone(ref.current));
       }
     }
 
     const payload = {};
-    payload.activityId = activityId;
+    if (componentType === "Submission") {
+      // Build submission payload
+      payload.activityId = activityId;
+    } else {
+      // Build base evaluate payload
+      payload.userId = user.userId;
+      payload.userEmail = user.email;
+    }
+
     payload.items = [];
 
     for (const monPlanId of activeMPSet) {
@@ -127,7 +185,9 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user }) => {
       newItem.monPlanId = monPlanId;
       //First check the monitor plan to see if we should be submitting it
       if (
-        monPlanRef.current.filter((f) => f.monPlanId === monPlanId).length > 0
+        monPlanRef.current.filter(
+          (f) => f.monPlanId === monPlanId && f.selected
+        ).length > 0
       ) {
         newItem.submitMonPlan = true;
       } else {
@@ -136,29 +196,34 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user }) => {
 
       //Build QA datasets for payload
       newItem.testSumIds = qaTestSumRef.current
-        .filter((f) => f.monPlanId === monPlanId)
+        .filter((f) => f.monPlanId === monPlanId && f.selected)
         .map((m) => {
-          return {
-            id: m.testSumId,
-            quarter: m.periodAbbreviation,
-          };
+          if (componentType === "Submission") {
+            return {
+              id: m.testSumId,
+              quarter: m.periodAbbreviation,
+            };
+          }
+          return m.testSumId;
         });
       newItem.qceIds = [];
       newItem.teeIds = [];
 
       //Final step to add emissions data for specific monPlan
       newItem.emissionsReportingPeriods = emissionsRef.current
-        .filter((f) => f.monPlanId === monPlanId)
+        .filter((f) => f.monPlanId === monPlanId && f.selected)
         .map((m) => m.periodAbbreviation);
 
       // Add it to the result set of data sent to the back-end
       payload.items.push(newItem);
     }
 
-    submitData(payload)
+    callback(payload)
       .then(() => {
         setSubmitting(false);
-        window.location.reload(false);
+        if (componentType === "Submission") {
+          window.location.reload(false);
+        }
       })
       .catch((e) => {
         handleError(e);
@@ -167,6 +232,16 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user }) => {
   };
 
   const applyFilter = async (orisCodes, monPlanIds, submissionPeriods) => {
+    filesSelected.current = 0;
+    setNumFilesSelected(filesSelected.current);
+
+    storedFilters.current = {
+      orisCodes: orisCodes,
+      monPlanIds: monPlanIds,
+      submissionPeriods: submissionPeriods,
+    };
+
+    //TODO: Refactor this to use DataList
     checkInAllLocations(checkedOutLocationsInCurrentSessionRef.current);
     const dataToSetMap = {
       //Contains data fetch, state setter, and ref for each of the 5 categories
@@ -227,7 +302,8 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user }) => {
         data = data.filter((d) => activePlans.has(d.monPlanId));
       }
 
-      if (excludeErrors) {
+      if (excludeErrors && componentType === "Submission") {
+        //We don't care about errors on evaluations page
         data = data.filter((mpd) => mpd.evalStatusCode !== "ERR");
       }
 
@@ -252,23 +328,25 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user }) => {
 
   return (
     <div className="react-transition fade-in padding-x-3">
-      <div className="text-black margin-top-1 display-flex flex-row">
-        {!finalSubmitStage && (
-          <h2 className="flex-4 page-header margin-top-2">Submit</h2>
-        )}
-        {finalSubmitStage && (
-          <h2 className="flex-4 page-header margin-top-2">Review And Submit</h2>
-        )}
+      <div className="text-black flex-justify margin-top-1 grid-row">
+        <h2 className="grid-col-9 page-header margin-top-2">{title}</h2>
         {finalSubmitStage && (
           <Button
-            className="flex-align-self-end flex-align-self-center flex-1 margin-right-5 maxw-mobile"
+            className="grid-col-3 flex-align-self-center maxw-mobile margin-0"
             size="big"
-            onClick={finalSubmission}
+            onClick={() => {
+              finalSubmission(submitData);
+            }}
           >
             Submit
           </Button>
         )}
       </div>
+
+      {componentType !== "Submission" && (
+        <EvaluateRefresh dataList={dataList} storedFilters={storedFilters} />
+      )}
+
       {!finalSubmitStage && (
         <FilterForm
           showModal={setShowModal}
@@ -276,6 +354,9 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user }) => {
           setExcludeErrors={setExcludeErrors}
           facilities={MockPermissions}
           filesSelected={numFilesSelected}
+          buttonText={buttonText}
+          filterClick={filterClick}
+          componentType={componentType}
         />
       )}
 
@@ -291,10 +372,13 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user }) => {
         emissionsRef={emissionsRef}
         permissions={idToPermissionsMap} //Map of oris codes to user permissions
         updateFilesSelected={updateFilesSelected}
-        checkedOutLocationsInCurrentSessionRef={checkedOutLocationsInCurrentSessionRef}
+        componentType={componentType}
+        checkedOutLocationsInCurrentSessionRef={
+          checkedOutLocationsInCurrentSessionRef
+        }
       />
 
-      <LoadingModal loading={submitting} />
+      <LoadingModal type="Loading" loading={submitting} />
 
       {showModal && (
         <SubmissionModal
@@ -306,27 +390,28 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user }) => {
           setActivityId={setActivityId}
         />
       )}
-      <div className=" grid-row">
-        <div className="grid-col-10"></div>
-        <div className="grid-col-2">
-          <div className="display-flex flex-row flex-justify-end desktop:flex-justify-center margin-y-5 margin-right-2 float-left">
-            <Button
-              onClick={() => {
-                showModal(true);
-              }}
-              disabled={numFilesSelected === 0}
-            >
-              Sign & Submit
-            </Button>
+
+      {!finalSubmitStage && (
+        <div className=" grid-row">
+          <div className="grid-col-10"></div>
+          <div className="grid-col-2">
+            <div className="display-flex flex-row flex-justify-end desktop:flex-justify-center margin-y-5 margin-right-2 float-left">
+              <Button onClick={filterClick} disabled={numFilesSelected === 0}>
+                {buttonText}
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="text-black margin-top-1 display-flex flex-row margin-bottom-5">
+      )}
+
+      <div className="text-black flex-justify-end margin-top-1 grid-row">
         {finalSubmitStage && (
           <Button
-            className="flex-align-self-end flex-align-self-center flex-1 margin-right-5 maxw-mobile"
+            className="grid-col-3 flex-align-self-center maxw-mobile margin-0"
             size="big"
-            onClick={finalSubmission}
+            onClick={() => {
+              finalSubmission(submitData);
+            }}
           >
             Submit
           </Button>
