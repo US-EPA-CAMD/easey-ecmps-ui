@@ -103,8 +103,6 @@ jest.mock(
     }
 );
 
-
-
 jest.mock(
   "../SubmissionModal/SubmissionModal",
   () =>
@@ -131,7 +129,11 @@ describe("Review and Submit component", () => {
     await act(async () => {
       query = render(
         <Provider store={store}>
-          <EvaluateAndSubmit user={user} />
+          <EvaluateAndSubmit
+            componentType="Submission"
+            checkedOutLocations={[]}
+            user={user}
+          />
         </Provider>
       );
     });
@@ -180,5 +182,26 @@ describe("Review and Submit component", () => {
       getAllByText("Submit")[0].click();
     });
     expect(getAllByText("Submit")[0]).toBeInTheDocument();
+  });
+
+  it("mock an evaluation component instead of submission", async () => {
+    let query;
+
+    user = { userId: "mock", firstName: "mock", lastName: "mock" };
+    await act(async () => {
+      query = render(
+        <Provider store={store}>
+          <EvaluateAndSubmit
+            checkedOutLocations={[]}
+            user={user}
+            componentType="Evaluate"
+          />
+        </Provider>
+      );
+    });
+
+    const { getByText, getAllByText } = query;
+
+    expect(getAllByText("Evaluate")[0]).toBeInTheDocument();
   });
 });

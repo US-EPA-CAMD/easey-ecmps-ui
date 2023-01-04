@@ -56,6 +56,7 @@ describe("Review and submit form", () => {
           showModal={jest.fn()}
           setExcludeErrors={jest.fn()}
           filesSelected={1}
+          componentType="Submission"
         />
       );
     });
@@ -73,6 +74,7 @@ describe("Review and submit form", () => {
           showModal={jest.fn()}
           setExcludeErrors={mockErrorCall}
           filesSelected={1}
+          componentType="Submission"
         />
       );
     });
@@ -96,6 +98,7 @@ describe("Review and submit form", () => {
           showModal={jest.fn()}
           setExcludeErrors={jest.fn()}
           filesSelected={1}
+          componentType="Submission"
         />
       );
 
@@ -136,6 +139,7 @@ describe("Review and submit form", () => {
           showModal={jest.fn()}
           setExcludeErrors={jest.fn()}
           filesSelected={1}
+          componentType="Submission"
         />
       );
       byText = getByText;
@@ -174,6 +178,7 @@ describe("Review and submit form", () => {
           showModal={jest.fn()}
           setExcludeErrors={jest.fn()}
           filesSelected={1}
+          componentType="Submission"
         />
       );
       byText = getByText;
@@ -197,6 +202,7 @@ describe("Review and submit form", () => {
           showModal={jest.fn()}
           setExcludeErrors={jest.fn()}
           filesSelected={1}
+          componentType="Submission"
         />
       );
       byText = getByText;

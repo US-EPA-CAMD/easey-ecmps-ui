@@ -3,7 +3,7 @@ import React from "react";
 import "./LoadingModal.scss";
 
 const LoadingModal = (props) => {
-  const { loading } = props;
+  const { loading, type } = props;
 
   const styles = {
     loadingWrapper: {
@@ -69,20 +69,42 @@ const LoadingModal = (props) => {
         >
           <div style={styles.innerWrapper}>
             <div className="text-center margin-top-9 padding-top-9">
-              <p className="margin-0">
-                <img
-                  alt="Loading...   Please wait..."
-                  title="Loading... Please wait..."
-                  src={"/images/preloaders/scanning.gif"}
-                />
-              </p>
-              <p className="margin-0">
-                <img
-                  alt="Authenticating...   Please wait..."
-                  title="Authenticating... Please wait..."
-                  src={"/images/preloaders/authenticating-message.gif"}
-                />
-              </p>
+              {type === "Auth" && (
+                <div>
+                  <p className="margin-0">
+                    <img
+                      alt="Loading...   Please wait..."
+                      title="Loading... Please wait..."
+                      src={"/images/preloaders/scanning.gif"}
+                    />
+                  </p>
+                  <p className="margin-0">
+                    <img
+                      alt="Authenticating...   Please wait..."
+                      title="Authenticating... Please wait..."
+                      src={"/images/preloaders/authenticating-message.gif"}
+                    />
+                  </p>
+                </div>
+              )}
+              {type === "Loading" && (
+                <div>
+                  <p className="margin-0">
+                    <img
+                      alt="Loading...   Please wait..."
+                      title="Loading... Please wait..."
+                      src={"/images/preloaders/loading-snake.gif"}
+                    />
+                  </p>
+                  <p className="margin-0">
+                    <img
+                      alt="Loading Text...   Please wait..."
+                      title="Loading Text... Please wait..."
+                      src={"/images/preloaders/loading-text.gif"}
+                    />
+                  </p>
+                </div>
+              )}
             </div>
           </div>
           <div style={styles.modalTintScreen} />

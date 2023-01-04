@@ -136,9 +136,19 @@ const App = () => {
             <Route path="/login" exact component={Login} />
             {!cdx_user && <Redirect from="/workspace/review" to="/home" />}
             <Route
-              path="/workspace/review"
+              path="/workspace/submit"
               exact
-              component={() => <EvaluateAndSubmit user={user} />}
+              component={() => (
+                <EvaluateAndSubmit user={user} componentType="Submission" />
+              )}
+            />
+
+            <Route
+              path="/workspace/evaluate"
+              exact
+              component={() => (
+                <EvaluateAndSubmit user={user} componentType="Evaluate" />
+              )}
             />
 
             {user ? (
