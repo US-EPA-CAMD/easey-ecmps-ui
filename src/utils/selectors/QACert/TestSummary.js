@@ -574,6 +574,22 @@ export const mapUnitDefaultTestDataToRows = (data) => {
   return records;
 }
 
+export const mapHgSummaryDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.gasLevelCode,
+      col2: el.meanMeasuredValue,
+      col3: el.meanReferenceValue,
+      col4: el.percentError,
+      col5: el.apsIndicator,
+    };
+    records.push(row)
+  }
+  return records;
+}
+
 
 export const getListOfRadioControls = (controlInputs) => {
   const result = [];
