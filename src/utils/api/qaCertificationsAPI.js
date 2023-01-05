@@ -1892,3 +1892,69 @@ export const deleteUnitDefaultTest = async (
     return handleImportError(error);
   }
 };
+
+export const getHgSummary = async (locId, testSumId) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createHgSummary = async (
+  locId,
+  testSumId,
+  payload
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+      );
+    } catch (error) {
+      return handleImportError(error);
+    }
+};
+
+export const updateHgSummary = async (
+  locId,
+  testSumId,
+  id,
+  payload
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const deleteHgSummary = async (
+  locId,
+  testSumId,
+  id
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};

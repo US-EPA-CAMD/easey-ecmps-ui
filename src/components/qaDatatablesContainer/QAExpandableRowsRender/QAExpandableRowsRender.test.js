@@ -28,7 +28,8 @@ import {
   qaCycleTimeSummaryProps,
   qaCycleTimeInjectionProps,
   qaFlowToLoadReferenceProps,
-  qaUnitDefaultTestDataProps
+  qaUnitDefaultTestDataProps,
+  qaHgSummaryDataProps
 } from "../../../additional-functions/qa-dataTable-props";
 
 const mock = new MockAdapter(axios);
@@ -1457,6 +1458,74 @@ describe('Test cases for QAExpandableRowsRender', () => {
     // saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
     // userEvent.click(saveAndCloseBtn)
 
+  })
+
+  test('renders Hg Summary data rows and create/save/delete', async () => {
+    const hgSummaryData = [
+      {
+        "id": "id1",
+        "testSumId": "testSumId1",
+        "gasLevelCode": "Mid",
+        "meanMeasuredValue": 1,
+        "meanReferenceValue": 1,
+        "percentError": 1,
+        "apsIndicator": 1,
+      },
+      {
+        "id": "id2",
+        "testSumId": "testSumId2",
+        "gasLevelCode": "High",
+        "meanMeasuredValue": 2,
+        "meanReferenceValue": 2,
+        "percentError": 2,
+        "apsIndicator": 2,
+      },
+    ]
+  
+    const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/hg-summaries`;
+    const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/hg-summaries`;
+    const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/hg-summaries/${idRegex}`);
+    const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/hg-summaries/${idRegex}`);
+  
+    const gasLevelCodesURl = 'https://api.epa.gov/easey/dev/master-data-mgmt/gas-level-codes'
+    mock.onGet(gasLevelCodesURl).reply(200, [])
+  
+    mock.onGet(getUrl).reply(200, hgSummaryData)
+    mock.onPost(postUrl).reply(200, 'created')
+    mock.onPut(putUrl).reply(200, 'updated')
+    mock.onDelete(deleteUrl).reply(200, 'deleted')
+
+    const props = qaHgSummaryDataProps()
+    const idArray = [locId, testSumId]
+    const data = { locationId: locId, id: testSumId }
+    renderComponent(props, idArray, data);
+
+    // renders rows
+    const rows = await screen.findAllByRole('row')
+    expect(mock.history.get.length).not.toBe(0)
+    expect(rows).toHaveLength(hgSummaryData.length)
+
+    // add row
+    const addBtn = screen.getByRole('button', { name: /Add/i })
+    userEvent.click(addBtn)
+    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+
+    // edit row
+    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    expect(editBtns).toHaveLength(hgSummaryData.length)
+    userEvent.click(editBtns[0])
+    saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+
+    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    expect(deleteBtns).toHaveLength(hgSummaryData.length)
+    const secondDeleteBtn = deleteBtns[1]
+    userEvent.click(secondDeleteBtn)
+    const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    userEvent.click(confirmBtns[1])
   })
 
   test('renders Appendix E Correlation Heat Input from Oil rows and create/save/delete', async () => {

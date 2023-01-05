@@ -1032,3 +1032,35 @@ export const qaUnitDefaultTestDataProps = () => {
     controlDatePickerInputs: {},
   }
 }
+
+export const qaHgSummaryDataProps = () => {
+  return {
+    dataTableName: "Hg Summary",
+    payload: {},
+    dropdownArray: ["gasLevelCode"],
+    mdmProps: [
+      {
+        codeTable: "gas-level-codes",
+        responseProps: {
+          code: "gasLevelCode",
+          description: "gasLevelDescription"
+        }
+      },
+    ],
+    columnNames: [
+      "Gas Level Code",
+      "Mean Measured Value",
+      "Mean Reference Value",
+      "Percent Error",
+      "APS Indicator",
+    ],
+    controlInputs: {
+      gasLevelCode: ["Gas Level Code", "dropdown", "", ""],
+      meanMeasuredValue: ["Mean Measured Value", "input", "", ""],
+      meanReferenceValue: ["Mean Reference Value", "input", "", ""],
+      percentError: ["Percent Error", "input", "", ""],
+      apsIndicator: ["APS Indicator", "radio", "", ""],
+    },
+    controlDatePickerInputs: {},
+  }
+}

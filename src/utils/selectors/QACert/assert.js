@@ -30,6 +30,7 @@ const cycleTimeInjection = "Cycle Time Injection";
 const transmitterTransducerAccuracyData = "Transmitter Transducer Accuracy Data";
 const flowToLoadReference = "Flow To Load Reference";
 const unitDefualtTest = "Unit Default Test";
+const hgSummary = "Hg Summary";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -191,6 +192,10 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       return qaApi.getUnitDefaultTest(location, id).catch((error) => {
         console.log("error fetching unit default test data", error);
       });
+    case hgSummary:
+      return qaApi.getHgSummary(location, id).catch((error) => {
+        console.log("error", error);
+      });
     default:
       throw new Error(`getDataTableApis case not implemented for ${name}`);
   }
@@ -249,6 +254,8 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.mapFlowToLoadReferenceToRows(dataIn);
     case unitDefualtTest:
       return selector.mapUnitDefaultTestDataToRows(dataIn);
+    case hgSummary:
+      return selector.mapHgSummaryDataToRows(dataIn);
     default:
       throw new Error(`getDataTableRecords case not implemented for ${name}`);
   }
@@ -424,6 +431,10 @@ export const removeDataSwitch = async (
     case unitDefualtTest:
       return qaApi
         .deleteUnitDefaultTest(locationId, id, row.id)
+        .catch((error) => console.log("error", error));
+    case hgSummary:
+      return qaApi
+        .deleteHgSummary(locationId, id, row.id)
         .catch((error) => console.log("error", error));
     default:
       throw new Error(`removeDataSwitch case not implemented for ${name}`);
@@ -639,6 +650,9 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
     case unitDefualtTest:
       return qaApi.updateUnitDefaultTest(location, id, userInput.id, userInput)
         .catch((err) => console.error(err));
+    case hgSummary:
+      return qaApi.updateHgSummary(location, id, userInput.id, userInput)
+        .catch((err) => console.error(err));
     default:
       break;
   }
@@ -810,6 +824,8 @@ export const createDataSwitch = async (
       return qaApi.createFlowToLoadReference(location, id, userInput)
     case unitDefualtTest:
       return qaApi.createUnitDefaultTest(location, id, userInput)
+    case hgSummary:
+      return qaApi.createHgSummary(location, id, userInput)
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
   }

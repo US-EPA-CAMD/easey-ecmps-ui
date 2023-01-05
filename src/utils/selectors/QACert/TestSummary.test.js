@@ -543,4 +543,27 @@ describe("testing TestSummary data selectors", () => {
     ];
     expect(fs.mapTransmitterTransducerAccuracyDataToRows(data)).toEqual(records);
   });
+  test("mapHgSummaryDataToRows", () => {
+    const data = [
+      {
+        id: "0000120",
+        gasLevelCode: "Mid",
+        meanMeasuredValue: 1,
+        meanReferenceValue: 1,
+        percentError: .1,
+        apsIndicator: 1,
+      },
+    ];
+    const records = [
+      {
+        id: '0000120',
+        col1: "Mid",
+        col2: 1,
+        col3: 1,
+        col4: .1,
+        col5: 1,
+      },
+    ];
+    expect(fs.mapHgSummaryDataToRows(data)).toEqual(records);
+  });
 });
