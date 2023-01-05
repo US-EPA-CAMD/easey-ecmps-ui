@@ -865,6 +865,7 @@ const QAExpandableRowsRender = ({
         break;
       case "Unit Default Test":
         expandables.push(nextExpandableRow("Protocol Gas"));
+        break;
       default:
         break;
     }
