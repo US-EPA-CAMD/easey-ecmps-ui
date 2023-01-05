@@ -6,7 +6,6 @@ import {
 } from "./MonitoringPlanTab";
 import { render } from "@testing-library/react";
 import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
-jest.mock("../../store/actions/dynamicFacilityTab");
 import * as actions from "../../store/actions/dynamicFacilityTab";
 
 // jest.mock("../../store/actions/activeTab");
@@ -16,6 +15,8 @@ import { Provider } from "react-redux";
 import configureStore from "../../store/configureStore.dev";
 const store = configureStore();
 const axios = require("axios");
+
+jest.mock("../../store/actions/dynamicFacilityTab");
 jest.mock("axios");
 
 test("should render without throwing an error", async () => {
@@ -51,7 +52,6 @@ test("should render without throwing an error", async () => {
           retireDate: null,
         },
       ],
-      unitStackConfigurations: [],
       endReportPeriodId: "24",
       active: false,
       unitStackConfigurations: [

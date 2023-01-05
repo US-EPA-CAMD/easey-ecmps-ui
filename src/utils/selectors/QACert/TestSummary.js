@@ -133,8 +133,8 @@ export const getProtocolGasRecords = (data) => {
       testSumId: el.testSumId,
       col1: el.gasLevelCode,
       col2: el.gasTypeCode,
-      col3: el.cylinderID,
-      col4: el.vendorID,
+      col3: el.cylinderIdentifier,
+      col4: el.vendorIdentifier,
       col5: el.expirationDate ? formatStringToDate(el.expirationDate) : "",
     });
   });
@@ -455,6 +455,40 @@ export const mapCalibrationInjectionsToRows = (data) => {
   return records;
 };
 
+export const mapFuelFlowmeterAccuracyDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.accuracyTestMethodCode,
+      col2: el.lowFuelAccuracy,
+      col3: el.midFuelAccuracy,
+      col4: el.highFuelAccuracy,
+      col5: el.reinstallationDate ? new Date(el.reinstallationDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) : el.reinstallationDate,
+      col6: el.reinstallationHour,
+    };
+    records.push(row);
+  }
+  return records;
+};
+
+export const mapTransmitterTransducerAccuracyDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.lowLevelAccuracy,
+      col2: el.lowLevelAccuracySpecCode,
+      col3: el.midLevelAccuracy,
+      col4: el.midLevelAccuracySpecCode,
+      col5: el.highLevelAccuracy,
+      col6: el.highLevelAccuracySpecCode,
+    };
+    records.push(row);
+  }
+  return records;
+};
+
 export const mapOnOffCalToRows = (data) => {
   const records = [];
   for (const el of data) {
@@ -491,6 +525,72 @@ export const mapOnOffCalToRows = (data) => {
   return records;
 };
 
+export const mapCycleTimeSummariesToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      testSumId: el.testSumId,
+      col1: el.totalTime,
+    };
+    records.push(row)
+  }
+  return records;
+};
+
+export const mapFlowToLoadReferenceToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.rataTestNumber,
+      col2: el.operatingLevelCode,
+      col3: el.averageGrossUnitLoad,
+      col4: el.averageReferenceMethodFlow,
+      col5: el.referenceFlowToLoadRatio,
+      col6: el.averageHourlyHeatInputRate,
+      col7: el.referenceGrossHeatRate,
+      col8: el.calculatedSeparateReferenceIndicator,
+    };
+    records.push(row)
+  }
+  return records;
+}
+
+export const mapUnitDefaultTestDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.fuelCode,
+      col2: el.NOxDefaultRate,
+      col3: el.operatingConditionCode,
+      col4: el.groupID,
+      col5: el.numberOfUnitsInGroup,
+      col6: el.numberOfTestsForGroup,
+    };
+    records.push(row)
+  }
+  return records;
+}
+
+export const mapHgSummaryDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.gasLevelCode,
+      col2: el.meanMeasuredValue,
+      col3: el.meanReferenceValue,
+      col4: el.percentError,
+      col5: el.apsIndicator,
+    };
+    records.push(row)
+  }
+  return records;
+}
+
+
 export const getListOfRadioControls = (controlInputs) => {
   const result = [];
   const keys = Object.keys(controlInputs);
@@ -503,15 +603,15 @@ export const getListOfRadioControls = (controlInputs) => {
 };
 
 // Show aria-label for any action (View, Edit, Remove) in any table provided a unique Id based on table type
-export const getTableRowActionAriaLabel = (dataTableName, row, action) =>{
+export const getTableRowActionAriaLabel = (dataTableName, row, action) => {
   let result;
-  switch(dataTableName){
+  switch (dataTableName) {
     case 'Test Summary Data'://unique ID is test number, i.e. col4
-      result= `${action} for ${row.col4}`;
+      result = `${action} for ${row.col4}`;
       break;
     default:
-      result =  `not implemented yet`;
-      break; 
+      result = `not implemented yet`;
+      break;
   }
   return result;
 }

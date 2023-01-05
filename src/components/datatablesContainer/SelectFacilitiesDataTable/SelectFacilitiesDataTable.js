@@ -35,10 +35,14 @@ export const SelectFacilitiesDataTable = ({
     facilitiesApi.getAllFacilities().then((res) => {
       setDataLoaded(true);
       setFacilities(res.data);
+      let selectConfigButton = document.getElementById("select-config");
+      if (selectConfigButton) {
+        selectConfigButton.focus();
+      }
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanId]);
+  }, []);
 
   useEffect(() => {
     obtainCheckedOutLocations().then();

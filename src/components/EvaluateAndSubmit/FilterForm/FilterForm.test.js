@@ -1,7 +1,7 @@
 import React from "react";
 import { render, act, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import ReviewAndSubmitForm from "./ReviewAndSubmitForm";
+import FilterForm from "./FilterForm";
 
 jest.mock("../../../utils/api/monitoringPlansApi", () => ({
   getMonitoringPlans: jest.fn().mockResolvedValue({
@@ -50,11 +50,13 @@ describe("Review and submit form", () => {
 
     await act(async () => {
       container = render(
-        <ReviewAndSubmitForm
+        <FilterForm
           facilities={mockFacilities}
           queryCallback={jest.fn()}
           showModal={jest.fn()}
           setExcludeErrors={jest.fn()}
+          filesSelected={1}
+          componentType="Submission"
         />
       );
     });
@@ -66,11 +68,13 @@ describe("Review and submit form", () => {
     const mockErrorCall = jest.fn();
     await act(async () => {
       render(
-        <ReviewAndSubmitForm
+        <FilterForm
           facilities={mockFacilities}
           queryCallback={jest.fn()}
           showModal={jest.fn()}
           setExcludeErrors={mockErrorCall}
+          filesSelected={1}
+          componentType="Submission"
         />
       );
     });
@@ -88,11 +92,13 @@ describe("Review and submit form", () => {
 
     await act(async () => {
       const { getByText } = render(
-        <ReviewAndSubmitForm
+        <FilterForm
           facilities={mockFacilities}
           queryCallback={jest.fn()}
           showModal={jest.fn()}
           setExcludeErrors={jest.fn()}
+          filesSelected={1}
+          componentType="Submission"
         />
       );
 
@@ -127,11 +133,13 @@ describe("Review and submit form", () => {
 
     await act(async () => {
       const { getByText } = render(
-        <ReviewAndSubmitForm
+        <FilterForm
           facilities={mockFacilities}
           queryCallback={mockCallback}
           showModal={jest.fn()}
           setExcludeErrors={jest.fn()}
+          filesSelected={1}
+          componentType="Submission"
         />
       );
       byText = getByText;
@@ -164,11 +172,13 @@ describe("Review and submit form", () => {
 
     await act(async () => {
       const { getByText } = render(
-        <ReviewAndSubmitForm
+        <FilterForm
           facilities={mockFacilities}
           queryCallback={jest.fn()}
           showModal={jest.fn()}
           setExcludeErrors={jest.fn()}
+          filesSelected={1}
+          componentType="Submission"
         />
       );
       byText = getByText;
@@ -186,11 +196,13 @@ describe("Review and submit form", () => {
     let byText;
     await act(async () => {
       const { getByText } = render(
-        <ReviewAndSubmitForm
+        <FilterForm
           facilities={mockFacilities}
           queryCallback={mockCallback}
           showModal={jest.fn()}
           setExcludeErrors={jest.fn()}
+          filesSelected={1}
+          componentType="Submission"
         />
       );
       byText = getByText;

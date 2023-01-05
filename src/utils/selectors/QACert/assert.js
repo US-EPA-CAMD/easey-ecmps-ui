@@ -3,6 +3,7 @@ import * as qaApi from "../../api/qaCertificationsAPI";
 // Selectors that normalize api data to fit the columns in UI datatable
 import * as selector from "./TestSummary";
 import * as injectionSelector from "./LinearityInjection";
+import * as cycleTimeInjections from "./CycleTimeInjection";
 // Table Names
 const proGas = "Protocol Gas";
 const lineTest = "Linearity Test";
@@ -15,14 +16,21 @@ const airEmissions = "Air Emissions";
 const flowRataRun = "Flow";
 const testQualification = "Test Qualification";
 const fuelFlowToLoad = "Fuel Flow to Load";
-const fuelFlowToLoadBaseline = "Fuel Flow to Load Baseline"
+const fuelFlowToLoadBaseline = "Fuel Flow to Load Baseline";
 const appendixECorrTestRun = "Appendix E Correlation Run";
 const appendixECorrelationSummary = "Appendix E Correlation Summary";
 const appendixECorrHeatInputOil = "Appendix E Correlation Heat Input from Oil";
 const appendixECorrHeatInputGas = "Appendix E Correlation Heat Input from Gas";
 const flowToLoadCheck = "Flow To Load Check";
-const onlineOfflineCalibration = "Online Offline Calibration"
+const onlineOfflineCalibration = "Online Offline Calibration";
 const calibrationInjections = "Calibration Injection";
+const fuelFlowmeterAccuracyData = "Fuel Flowmeter Accuracy Data";
+const cycleTimeSummary = "Cycle Time Summary";
+const cycleTimeInjection = "Cycle Time Injection";
+const transmitterTransducerAccuracyData = "Transmitter Transducer Accuracy Data";
+const flowToLoadReference = "Flow To Load Reference";
+const unitDefualtTest = "Unit Default Test";
+const hgSummary = "Hg Summary";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -154,6 +162,40 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       return qaApi.getCalibrationInjectionRecords(location, id).catch((error) => {
         console.log("error", error);
       });
+    case fuelFlowmeterAccuracyData:
+      return qaApi.getFuelFlowmeterAccuracyDataRecords(location, id).catch((error) => {
+        console.log("error", error);
+      })
+    case cycleTimeSummary:
+      return qaApi
+        .getCycleTimeSummary(location, id)
+        .catch((error) => {
+          console.log("error", error);
+        });
+    case cycleTimeInjection:
+      return qaApi
+        .getCycleTimeInjection(extraIdsArr[0], extraIdsArr[1], id)
+        .catch((error) => {
+          console.log("error", error);
+        });
+    case transmitterTransducerAccuracyData:
+      return qaApi
+        .getTransmitterTransducerAccuracyDataRecords(location, id)
+        .catch((error) => {
+          console.log("error", error);
+        })
+    case flowToLoadReference:
+      return qaApi
+        .getFlowToLoadReference(location, id)
+        .catch(error => console.log("error fetching flow to load reference", error))
+    case unitDefualtTest:
+      return qaApi.getUnitDefaultTest(location, id).catch((error) => {
+        console.log("error fetching unit default test data", error);
+      });
+    case hgSummary:
+      return qaApi.getHgSummary(location, id).catch((error) => {
+        console.log("error", error);
+      });
     default:
       throw new Error(`getDataTableApis case not implemented for ${name}`);
   }
@@ -200,6 +242,20 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.mapOnOffCalToRows(dataIn);
     case calibrationInjections:
       return selector.mapCalibrationInjectionsToRows(dataIn);
+    case fuelFlowmeterAccuracyData:
+      return selector.mapFuelFlowmeterAccuracyDataToRows(dataIn);
+    case cycleTimeSummary:
+      return selector.mapCycleTimeSummariesToRows(dataIn);
+    case cycleTimeInjection:
+      return cycleTimeInjections.mapCycleTimeInjectionsToRows(dataIn);
+    case transmitterTransducerAccuracyData:
+      return selector.mapTransmitterTransducerAccuracyDataToRows(dataIn);
+    case flowToLoadReference:
+      return selector.mapFlowToLoadReferenceToRows(dataIn);
+    case unitDefualtTest:
+      return selector.mapUnitDefaultTestDataToRows(dataIn);
+    case hgSummary:
+      return selector.mapHgSummaryDataToRows(dataIn);
     default:
       throw new Error(`getDataTableRecords case not implemented for ${name}`);
   }
@@ -350,6 +406,36 @@ export const removeDataSwitch = async (
       return qaApi
         .deleteOnlineOfflineCalibration(locationId, id, row.id)
         .catch(error => console.log('error deleting online offline calibration', error))
+    case fuelFlowmeterAccuracyData:
+      return qaApi
+        .deleteFuelFlowmeterAccuracyDataRecord(locationId, id, row.id)
+        .catch((error) => console.log("error", error));
+    case cycleTimeSummary:
+      return qaApi
+        .deleteCycleTimeSummary(locationId, id, row.id)
+        .catch((error) => console.log("error", error));
+    case cycleTimeInjection:
+      return qaApi
+        .deleteCycleTimeInjection(extraIdsArr[0], extraIdsArr[1], id, row.id)
+        .catch((error) => {
+          console.log("error", error);
+        });
+    case transmitterTransducerAccuracyData:
+      return qaApi
+        .deleteTransmitterTransducerAccuracyDataRecord(locationId, id, row.id)
+        .catch((error) => console.log("error", error));
+    case flowToLoadReference:
+      return qaApi
+        .deleteFlowToLoadReference(locationId, id, row.id)
+        .catch(error => console.log("error deleting flow to load reference", error))
+    case unitDefualtTest:
+      return qaApi
+        .deleteUnitDefaultTest(locationId, id, row.id)
+        .catch((error) => console.log("error", error));
+    case hgSummary:
+      return qaApi
+        .deleteHgSummary(locationId, id, row.id)
+        .catch((error) => console.log("error", error));
     default:
       throw new Error(`removeDataSwitch case not implemented for ${name}`);
   }
@@ -532,6 +618,41 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         userInput.id,
         userInput
       ).catch(error => console.log("error updating online offline calibration", error))
+    case fuelFlowmeterAccuracyData:
+      return qaApi.updateFuelFlowmeterAccuracyDataRecord(location, id, userInput.id, userInput)
+        .catch((err) => console.error(err));
+    case cycleTimeSummary:
+      return qaApi.updateCycleTimeSummary(
+        location,
+        id,
+        userInput.id,
+        userInput
+      ).catch((err) => console.error(err));
+    case cycleTimeInjection:
+      return qaApi
+        .updateCycleTimeInjection(extraIdsArr[0], extraIdsArr[1], id, userInput.id, userInput)
+        .catch((error) => {
+          console.log("error", error);
+        });
+    case transmitterTransducerAccuracyData:
+      return qaApi.updateTransmitterTransducerAccuracyDataRecord(
+        location,
+        id,
+        userInput.id,
+        userInput
+      ).catch((err) => console.error(err));
+    case flowToLoadReference:
+      return qaApi.updateFlowToLoadReference(location,
+        id,
+        userInput.id,
+        userInput
+      ).catch(error => console.log("error updating flow to load reference", error))
+    case unitDefualtTest:
+      return qaApi.updateUnitDefaultTest(location, id, userInput.id, userInput)
+        .catch((err) => console.error(err));
+    case hgSummary:
+      return qaApi.updateHgSummary(location, id, userInput.id, userInput)
+        .catch((err) => console.error(err));
     default:
       break;
   }
@@ -679,12 +800,32 @@ export const createDataSwitch = async (
             error
           );
         });
+    case cycleTimeInjection:
+      return qaApi
+        .createCycleTimeInjection(
+          extraIdsArr[0],
+          extraIdsArr[1],
+          id,
+          userInput
+        );
     case flowToLoadCheck:
       return qaApi.createFlowToLoadCheckRecord(location, id, userInput);
     case onlineOfflineCalibration:
       return qaApi.createOnlineOfflineCalibration(location, id, userInput);
     case calibrationInjections:
       return qaApi.createCalibrationInjectionRecord(location, id, userInput);
+    case fuelFlowmeterAccuracyData:
+      return qaApi.createFuelFlowmeterAccuracyDataRecord(location, id, userInput);
+    case cycleTimeSummary:
+      return qaApi.createCycleTimeSummary(location, id, userInput);
+    case transmitterTransducerAccuracyData:
+      return qaApi.createTransmitterTransducerAccuracyDataRecord(location, id, userInput);
+    case flowToLoadReference:
+      return qaApi.createFlowToLoadReference(location, id, userInput)
+    case unitDefualtTest:
+      return qaApi.createUnitDefaultTest(location, id, userInput)
+    case hgSummary:
+      return qaApi.createHgSummary(location, id, userInput)
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
   }

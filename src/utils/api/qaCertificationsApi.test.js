@@ -19,6 +19,7 @@ const flowRataRunId = "flowRataRunId";
 const id = "id";
 const appECorrTestSumId = "appECorrTestSumId";
 const appECorrTestRunId = "appECorrTestRunId";
+const cycleTimeSumId = "cycleTimeSumId";
 
 describe("QA Cert API", function () {
   beforeEach(() => {
@@ -432,6 +433,383 @@ describe("QA Cert API", function () {
       expect(resp.data).toStrictEqual("deleted");
     });
   });
+
+  describe("Fuel Flowmeter Accuracy Data CRUD operations", () => {
+    test("getFuelFlowmeterAccuracyDataRecords", async () => {
+      const fuelFlowmeterAccuracyDataResp = [
+        { fuelFlowmeterAccuracyData: "data" },
+        { fuelFlowmeterAccuracyData: "data2" },
+      ];
+      const getFuelFlowmeterAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/fuel-flowmeter-accuracies`;
+      mock.onGet(getFuelFlowmeterAccuracyDataUrl).reply(200, fuelFlowmeterAccuracyDataResp);
+
+      const resp = await qaCert.getFuelFlowmeterAccuracyDataRecords(
+        locId,
+        testSumId,
+      );
+
+      expect(mock.history.get.length).toBe(1);
+      expect(resp.data).toStrictEqual(fuelFlowmeterAccuracyDataResp);
+    });
+
+    test("createFuelFlowmeterAccuracyDataRecord", async () => {
+      const payload = { fuelFlowmeterAccuracyData: "data" };
+      const postFuelFlowmeterAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/fuel-flowmeter-accuracies`;
+      mock.onPost(postFuelFlowmeterAccuracyDataUrl).reply(200, payload);
+
+      const resp = await qaCert.createFuelFlowmeterAccuracyDataRecord(
+        locId,
+        testSumId,
+        payload
+      );
+
+      expect(mock.history.post.length).toBe(1);
+      expect(resp.data).toStrictEqual(payload);
+    });
+
+    test("updateFuelFlowmeterAccuracyDataRecord", async () => {
+      const payload = { fuelFlowmeterAccuracyData: "data" };
+      const putFuelFlowmeterAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/fuel-flowmeter-accuracies/${id}`;
+      mock.onPut(putFuelFlowmeterAccuracyDataUrl).reply(200, payload);
+
+      const resp = await qaCert.updateFuelFlowmeterAccuracyDataRecord(
+        locId,
+        testSumId,
+        id,
+        payload
+      );
+
+      expect(mock.history.put.length).toBe(1);
+      expect(resp.data).toStrictEqual(payload);
+    });
+
+    test("deleteFuelFlowmeterAccuracyDataRecord", async () => {
+      const deleteFuelFlowmeterAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/fuel-flowmeter-accuracies/${id}`;
+      mock.onDelete(deleteFuelFlowmeterAccuracyDataUrl).reply(200, "deleted");
+
+      const resp = await qaCert.deleteFuelFlowmeterAccuracyDataRecord(
+        locId,
+        testSumId,
+        id
+      );
+
+      expect(mock.history.delete.length).toBe(1);
+      expect(resp.data).toStrictEqual("deleted");
+    });
+  });
+
+  describe('Cycle Time Summary CRUD Operations', () => {
+
+    test('getCycleTimeSummary', async () => {
+      const cycleTimeSummaryData = [{ cycleTimeSummary: 'data' }]
+      const getCycleTimeSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries`;
+      mock.onGet(getCycleTimeSummaryUrl).reply(200, cycleTimeSummaryData)
+  
+      const resp = await qaCert.getCycleTimeSummary(locId, testSumId)
+  
+      expect(mock.history.get.length).toBe(1)
+      expect(resp.data).toStrictEqual(cycleTimeSummaryData)
+    })
+  
+    test('createCycleTimeSummary', async () => {
+      const payload = { cycleTimeSummary: 'data' }
+      const postCycleTimeSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries`;
+      mock.onPost(postCycleTimeSummaryUrl).reply(200, payload)
+  
+      const resp = await qaCert.createCycleTimeSummary(locId, testSumId, payload)
+  
+      expect(mock.history.post.length).toBe(1)
+      expect(resp.data).toStrictEqual(payload)
+    })
+
+    test("updateCycleTimeSummary", async () => {
+      const payload = { cycleTimeSummary: "data" };
+      const updateCycleTimeSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${id}`;
+      mock.onPut(updateCycleTimeSummaryUrl).reply(200, payload);
+  
+      const resp = await qaCert.updateCycleTimeSummary(
+        locId,
+        testSumId,
+        id,
+        payload
+      );
+  
+      expect(mock.history.put.length).toBe(1);
+      expect(resp.data).toStrictEqual(payload);
+    });
+    test("deleteCycleTimeSummary", async () => {
+      const deleteCycleTimeSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${id}`;
+      mock.onDelete(deleteCycleTimeSummaryUrl).reply(200, 'Deleted');
+  
+      const resp = await qaCert.deleteCycleTimeSummary(
+        locId,
+        testSumId,
+        id,
+      );
+  
+      expect(mock.history.delete.length).toBe(1);
+      expect(resp.data).toStrictEqual('Deleted');
+    });
+  })
+ 
+  describe('Cycle Time Injection CRUD Operations', () => {
+
+    test('getCycleTimeInjection', async () => {
+      const cycleTimeInjectionData = [
+        { cycleTimeInjection: 'data' },
+        { cycleTimeInjection: 'data2' }
+      ]
+      const getCycleTimeInjectionUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${cycleTimeSumId}/cycle-time-injections`;
+      mock
+      .onGet(getCycleTimeInjectionUrl)
+      .reply(200, cycleTimeInjectionData);
+
+      const resp = await qaCert.getCycleTimeInjection(
+        locId, 
+        testSumId, 
+        cycleTimeSumId
+      );
+        
+      expect(mock.history.get.length).toBe(1)
+      expect(resp.data).toStrictEqual(cycleTimeInjectionData)
+    });
+  
+    test('createCycleTimeInjection', async () => {
+      const payload = { cycleTimeInjection: 'data' }
+      const postCycleTimeInjectionUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${cycleTimeSumId}/cycle-time-injections`;
+      mock.onPost(postCycleTimeInjectionUrl).reply(200, payload)
+  
+      const resp = await qaCert.createCycleTimeInjection(locId, testSumId, cycleTimeSumId, payload)
+  
+      expect(mock.history.post.length).toBe(1)
+      expect(resp.data).toStrictEqual(payload)
+    })
+
+    test("updateCycleTimeInjection", async () => {
+      const payload = { cycleTimeInjection: "data" };
+      const updateCycleTimeInjectionUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${cycleTimeSumId}/cycle-time-injections/${id}`;
+      mock.onPut(updateCycleTimeInjectionUrl).reply(200, payload);
+  
+      const resp = await qaCert.updateCycleTimeInjection(
+        locId,
+        testSumId,
+        cycleTimeSumId,
+        id,
+        payload
+      );
+  
+      expect(mock.history.put.length).toBe(1);
+      expect(resp.data).toStrictEqual(payload);
+    });
+    test("deleteCycleTimeInjection", async () => {
+      const deleteCycleTimeInjectionUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${cycleTimeSumId}/cycle-time-injections/${id}`;
+      mock.onDelete(deleteCycleTimeInjectionUrl).reply(200, 'Deleted');
+  
+      const resp = await qaCert.deleteCycleTimeInjection(
+        locId,
+        testSumId,
+        cycleTimeSumId,
+        id,
+      );
+  
+      expect(mock.history.delete.length).toBe(1);
+      expect(resp.data).toStrictEqual('Deleted');
+    });
+  })
+
+  describe("Transmitter Transducer Accuracy Data CRUD operations", () => {
+    test("getTransmitterTransducerAccuracyDataRecords", async () => {
+      const transmitterTransducerAccuracyDataResp = [
+        { transmitterTransducerAccuracyData: "data" },
+        { transmitterTransducerAccuracyData: "data2" },
+      ];
+      const getTransmitterTransducerAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/transmitter-transducer-accuracy`;
+      mock.onGet(getTransmitterTransducerAccuracyDataUrl).reply(200, transmitterTransducerAccuracyDataResp);
+
+      const resp = await qaCert.getTransmitterTransducerAccuracyDataRecords(
+        locId,
+        testSumId,
+      );
+
+      expect(mock.history.get.length).toBe(1);
+      expect(resp.data).toStrictEqual(transmitterTransducerAccuracyDataResp);
+    });
+
+    test("createTransmitterTransducerAccuracyDataRecord", async () => {
+      const payload = { transmitterTransducerAccuracyData: "data" };
+      const postTransmitterTransducerAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/transmitter-transducer-accuracy`;
+      mock.onPost(postTransmitterTransducerAccuracyDataUrl).reply(200, payload);
+
+      const resp = await qaCert.createTransmitterTransducerAccuracyDataRecord(
+        locId,
+        testSumId,
+        payload
+      );
+
+      expect(mock.history.post.length).toBe(1);
+      expect(resp.data).toStrictEqual(payload);
+    });
+
+    test("updateTransmitterTransducerAccuracyDataRecord", async () => {
+      const payload = { transmitterTransducerAccuracyData: "data" };
+      const putTransmitterTransducerAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/transmitter-transducer-accuracy/${id}`;
+      mock.onPut(putTransmitterTransducerAccuracyDataUrl).reply(200, payload);
+
+      const resp = await qaCert.updateTransmitterTransducerAccuracyDataRecord(
+        locId,
+        testSumId,
+        id,
+        payload
+      );
+
+      expect(mock.history.put.length).toBe(1);
+      expect(resp.data).toStrictEqual(payload);
+    });
+
+    test("deleteTransmitterTransducerAccuracyDataRecord", async () => {
+      const deleteTransmitterTransducerAccuracyDataUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/transmitter-transducer-accuracy/${id}`;
+      mock.onDelete(deleteTransmitterTransducerAccuracyDataUrl).reply(200, "deleted");
+
+      const resp = await qaCert.deleteTransmitterTransducerAccuracyDataRecord(
+        locId,
+        testSumId,
+        id
+      );
+
+      expect(mock.history.delete.length).toBe(1);
+      expect(resp.data).toStrictEqual("deleted");
+    });
+  });
+
+  describe("Unit Default Test Data CRUD operations", () => {
+    test("getUnitDefaultTest", async () => {
+      const unitDefaultTestResp = [
+        { unitDefaultTest: "data" },
+        { unitDefaultTest: "data2" },
+      ];
+      const getUnitDefaultTestUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/unit-default-tests`;
+      mock.onGet(getUnitDefaultTestUrl).reply(200, unitDefaultTestResp);
+
+      const resp = await qaCert.getUnitDefaultTest(
+        locId,
+        testSumId,
+      );
+
+      expect(mock.history.get.length).toBe(1);
+      expect(resp.data).toStrictEqual(unitDefaultTestResp);
+    });
+
+    test("createUnitDefaultTest", async () => {
+      const payload = { unitDefaultTest: "data" };
+      const postUnitDefaultTestUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/unit-default-tests`;
+      mock.onPost(postUnitDefaultTestUrl).reply(200, payload);
+
+      const resp = await qaCert.createUnitDefaultTest(
+        locId,
+        testSumId,
+        payload
+      );
+
+      expect(mock.history.post.length).toBe(1);
+      expect(resp.data).toStrictEqual(payload);
+    });
+
+    test("updateUnitDefaultTest", async () => {
+      const payload = { unitDefaultTest: "data" };
+      const putUnitDefaultTestUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${id}`;
+      mock.onPut(putUnitDefaultTestUrl).reply(200, payload);
+
+      const resp = await qaCert.updateUnitDefaultTest(
+        locId,
+        testSumId,
+        id,
+        payload
+      );
+
+      expect(mock.history.put.length).toBe(1);
+      expect(resp.data).toStrictEqual(payload);
+    });
+
+    test("deleteUnitDefaultTest", async () => {
+      const deleteUnitDefaultTestUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${id}`;
+      mock.onDelete(deleteUnitDefaultTestUrl).reply(200, "deleted");
+
+      const resp = await qaCert.deleteUnitDefaultTest(
+        locId,
+        testSumId,
+        id
+      );
+
+      expect(mock.history.delete.length).toBe(1);
+      expect(resp.data).toStrictEqual("deleted");
+    });
+  });
+
+  describe("Hg Summary Data CRUD operations", () => {
+    test("getHgSummary", async () => {
+      const hgSummaryResp = [
+        { hgSummary: "data" },
+        { hgSummary: "data2" },
+      ];
+      const getHgSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/hg-summaries`;
+      mock.onGet(getHgSummaryUrl).reply(200, hgSummaryResp);
+
+      const resp = await qaCert.getHgSummary(
+        locId,
+        testSumId,
+      );
+
+      expect(mock.history.get.length).toBe(1);
+      expect(resp.data).toStrictEqual(hgSummaryResp);
+    });
+
+    test("createHgSummary", async () => {
+      const payload = { hgSummary: "data" };
+      const postHgSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/hg-summaries`;
+      mock.onPost(postHgSummaryUrl).reply(200, payload);
+
+      const resp = await qaCert.createHgSummary(
+        locId,
+        testSumId,
+        payload
+      );
+
+      expect(mock.history.post.length).toBe(1);
+      expect(resp.data).toStrictEqual(payload);
+    });
+
+    test("updateHgSummary", async () => {
+      const payload = { hgSummary: "data" };
+      const putHgSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/hg-summaries/${id}`;
+      mock.onPut(putHgSummaryUrl).reply(200, payload);
+
+      const resp = await qaCert.updateHgSummary(
+        locId,
+        testSumId,
+        id,
+        payload
+      );
+
+      expect(mock.history.put.length).toBe(1);
+      expect(resp.data).toStrictEqual(payload);
+    });
+
+    test("deleteHgSummary", async () => {
+      const deleteHgSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/hg-summaries/${id}`;
+      mock.onDelete(deleteHgSummaryUrl).reply(200, "deleted");
+
+      const resp = await qaCert.deleteHgSummary(
+        locId,
+        testSumId,
+        id
+      );
+
+      expect(mock.history.delete.length).toBe(1);
+      expect(resp.data).toStrictEqual("deleted");
+    });
+  });
+
+  
   /*
   describe("Review And Submit", () => {
     test("getQATestSummaryReviewSubmit", async () => {

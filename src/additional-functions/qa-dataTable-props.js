@@ -4,23 +4,23 @@ export const qaProtocalGasProps = (selectedRow) => {
     payload: {
       gasLevelCode: selectedRow.gasLevelCode,
       gasTypeCode: null,
-      cylinderID: null,
-      vendorID: null,
+      cylinderIdentifier: null,
+      vendorIdentifier: null,
       expirationDate: null,
     },
     dropdownArray: ["gasLevelCode", "gasTypeCode"],
     columnNames: [
       "Gas Level Code",
       "Gas Type Code",
-      "Cylinder ID",
-      "Vendor ID",
+      "Cylinder Identification",
+      "Vendor Identification",
       "Expiration Date",
     ],
     controlInputs: {
-      gasLevelCode: ["Summary Type/Gas Level Code", "dropdown", "", ""],
+      gasLevelCode: ["Gas Level Code", "dropdown", "", ""],
       gasTypeCode: ["Gas Type Code", "dropdown", "", ""],
-      cylinderID: ["Cylinder ID", "input", "", ""],
-      vendorID: ["Vendor ID", "input", "", ""],
+      cylinderIdentifier: ["Cylinder Identification", "input", "", ""],
+      vendorIdentifier: ["Vendor Identification", "input", "", ""],
       expirationDate: ["Expiration Date", "date", "", ""],
       skip: ["", "skip", "", ""],
     },
@@ -684,6 +684,75 @@ export const qaFlowToLoadCheckProps = () => {
   };
 }
 
+export const qaFuelFlowmeterAccuracyDataProps = () => {
+  return {
+    dataTableName: "Fuel Flowmeter Accuracy Data",
+    payload: {},
+    dropdownArray: ["accuracyTestMethodCode"],
+    mdmProps: [
+      {
+        codeTable: "accuracy-test-method-codes",
+        responseProps: {
+          code: "accuracyTestMethodCode",
+          description: "accuracyTestMethodDescription"
+        }
+      },
+    ],
+    columnNames: [
+      "Accuracy Test Method Code",
+      "Low Fuel Accuracy",
+      "Mid Fuel Accuracy",
+      "High Fuel Accuracy",
+      "Reinstallation Date",
+      "Reinstallation Hour",
+    ],
+    controlInputs: {
+      accuracyTestMethodCode: ["Accuracy Test Method Code", "dropdown", "", ""],
+      lowFuelAccuracy: ["Low Fuel Accuracy", "input", "", ""],
+      midFuelAccuracy: ["Mid Fuel Accuracy", "input", "", ""],
+      highFuelAccuracy: ["High Fuel Accuracy", "input", "", ""],
+    },
+    controlDatePickerInputs: {
+      reinstallationDate: ["Reinstallation Date", "date", "", ""],
+      reinstallationHour: ["Reinstallation Hour", "hourDropdown", "", ""],
+    }
+  }
+}
+
+export const qaTransmitterTransducerAccuracyDataProps = () => {
+  return {
+    dataTableName: "Transmitter Transducer Accuracy Data",
+    payload: {},
+    dropdownArray: ["lowLevelAccuracySpecCode", "midLevelAccuracySpecCode", "highLevelAccuracySpecCode"],
+    mdmProps: [
+      {
+        codeTable: "accuracy-spec-codes",
+        responseProps: {
+          code: "accuracySpecCode",
+          description: "accuracySpecDescription"
+        }
+      },
+    ],
+    columnNames: [
+      "Low Level Accuracy",
+      "Low Level Accuracy Spec Code",
+      "Mid Level Accuracy",
+      "Mid Level Accuracy Spec Code",
+      "High Level Accuracy",
+      "High Level Accuracy Spec Code",
+    ],
+    controlInputs: {
+      lowLevelAccuracy: ["Low Level Accuracy", "input", "", ""],
+      lowLevelAccuracySpecCode: ["Low Level Accuracy Spec Code", "dropdown", "", ""],
+      midLevelAccuracy: ["Mid Level Accuracy", "input", "", ""],
+      midLevelAccuracySpecCode: ["Mid Level Accuracy Spec Code", "dropdown", "", ""],
+      highLevelAccuracy: ["High Level Accuracy", "input", "", ""],
+      highLevelAccuracySpecCode: ["High Level Accuracy Spec Code", "dropdown", "", ""],
+    },
+    controlDatePickerInputs: {},
+  }
+}
+
 export const qaOnOffCalibrationProps = () => {
   return {
     dataTableName: "Online Offline Calibration",
@@ -814,7 +883,184 @@ export const qaCalibrationInjectionProps = () => {
       upscaleInjectionHour: ["Upscale Injection Hour", "hourDropdown", "dropdown", ""],
       upscaleInjectionMinute: ["Upscale Injection Minute", "minuteDropdown", "dropdown", ""],
     },
-    radioBtnPayload: ["onLineOffLineIndicator","zeroAPSIndicator","upscaleAPSIndicator"],
+    radioBtnPayload: ["onLineOffLineIndicator", "zeroAPSIndicator", "upscaleAPSIndicator"],
     extraControls: {},
   };
+}
+
+export const qaCycleTimeSummaryProps = () => {
+  return {
+    dataTableName: "Cycle Time Summary",
+    payload: {},
+    dropdownArray: [],
+    columnNames: [
+      "Total Time"
+    ],
+    controlInputs: {
+      totalTime: ["Total Time", "input", "", ""],
+    },
+    extraControls: {},
+  }
+}
+
+export const qaCycleTimeInjectionProps = () => {
+  return {
+    dataTableName: "Cycle Time Injection",
+    payload: {},
+    dropdownArray: ["gasLevelCode", "gasTypeCode"],
+    mdmProps: [
+      {
+        codeTable: "gas-level-codes",
+        responseProps: {
+          code: "gasLevelCode",
+          description: "gasLevelDescription"
+        }
+      },
+    ],
+    columnNames: [
+      "Gas Level Code",
+      "Calibration Gas Value",
+      "Begin Date",
+      "Begin Hour",
+      "Begin Minute",
+      "End Date",
+      "End Hour",
+      "End Minute",
+      "Injection Cycle Time",
+      "Begin Monitor Value",
+      "End Monitor Value"
+    ],
+    controlInputs: {
+      gasLevelCode: ["Gas Level Code", "dropdown", "", ""],
+      calibrationGasValue: ["Calibration Gas Value", "input", "", ""],
+      injectionCycleTime: ["Injection Cycle Time", "input", "", ""],
+      beginMonitorValue: ["Begin Monitor Value", "input", "", ""],
+      endMonitorValue: ["End Monitor Value", "input", "", ""],
+    },
+
+    controlDatePickerInputs: {
+      beginDate:["Begin Date", "date", "", ""],
+      beginHour:["Begin Hour", "hourDropdown", "dropdown", ""],
+      beginMinute:["Begin Minute", "minuteDropdown", "", ""],
+      endDate:["End Date", "date", "", ""],
+      endHour:["End Hour", "hourDropdown", "dropdown", ""],
+      endMinute:["End Minute", "minuteDropdown", "dropdown", ""],
+    },
+
+    extraControls: {},
+  }
+}
+
+export const qaFlowToLoadReferenceProps = () => {
+  return {
+    dataTableName: "Flow To Load Reference",
+    payload: {},
+    dropdownArray: [
+      'rataTestNumber',
+      'operatingLevelCode',
+      'calculatedSeparateReferenceIndicator',
+    ],
+    // mdmProps: [
+    //   {
+    //     codeTable: "operating-level-codes",
+    //     responseProps: {
+    //       code: "opLevelCode",
+    //       description: "opLevelDescription"
+    //     }
+    //   }
+    // ],
+    columnNames: [
+      "RATA Test Number",
+      "Operating Level Code",
+      "Average Gross Unit Load",
+      "Average Reference Method Flow",
+      "Reference Flow Load Ratio",
+      "Average Hourly Heat Input Rate",
+      "Reference Gross Heat Rate",
+      "Calculated Separate Reference Indicator",
+    ],
+    controlInputs: {
+      rataTestNumber: ["RATA Test Number", "dropdown", "", ""],
+      operatingLevelCode: ["Operating Level Code", "dropdown", "", ""],
+      averageGrossUnitLoad: ["Average Gross Unit Load", "input", "", ""],
+      averageReferenceMethodFlow: ["Average Reference Method Flow", "input", "", ""],
+      referenceFlowToLoadRatio: ["Reference Flow Load Ratio", "input", "", ""],
+      averageHourlyHeatInputRate: ["Average Hourly Heat Input Rate", "input", "", ""],
+      referenceGrossHeatRate: ["Reference Gross Heat Rate", "input", "", ""],
+      calculatedSeparateReferenceIndicator: ["Calculated Separate Reference Indicator", "dropdown", "", ""],
+    },
+  };
+}
+
+export const qaUnitDefaultTestDataProps = () => {
+  return {
+    dataTableName: "Unit Default Test",
+    payload: {},
+    dropdownArray: ["fuelCode", "operatingConditionCode"],
+    mdmProps: [
+      {
+        codeTable: "fuel-codes",
+        responseProps: {
+          code: "fuelCode",
+          description: "fuelDescription"
+        }
+      },
+      {
+        codeTable: "operating-condition-codes",
+        responseProps: {
+          code: "operatingConditionCode",
+          description: "operatingConditionDescription"
+        }
+      }
+    ],
+    columnNames: [
+      "Fuel Code",
+      "NOX Default Rate",
+      "Operating Condition Code",
+      "Group ID",
+      "Number of Units in Group",
+      "Number of Tests for Group",
+    ],
+    controlInputs: {
+      fuelCode: ["Fuel Code", "dropdown", "", ""],
+      NOxDefaultRate: ["NOX Default Rate", "input", "", ""],
+      operatingConditionCode: ["Operating Condition Code", "dropdown", "", ""],
+      groupID: ["Group ID", "input", "", ""],
+      numberOfUnitsInGroup: ["Number of Units in Group", "input", "", ""],
+      numberOfTestsForGroup: ["Number of Tests for Group", "input", "", ""],
+    },
+    controlDatePickerInputs: {},
+  }
+}
+
+export const qaHgSummaryDataProps = () => {
+  return {
+    dataTableName: "Hg Summary",
+    payload: {},
+    dropdownArray: ["gasLevelCode"],
+    mdmProps: [
+      {
+        codeTable: "gas-level-codes",
+        responseProps: {
+          code: "gasLevelCode",
+          description: "gasLevelDescription"
+        }
+      },
+    ],
+    columnNames: [
+      "Gas Level Code",
+      "Mean Measured Value",
+      "Mean Reference Value",
+      "Percent Error",
+      "APS Indicator",
+    ],
+    controlInputs: {
+      gasLevelCode: ["Gas Level Code", "dropdown", "", ""],
+      meanMeasuredValue: ["Mean Measured Value", "input", "", ""],
+      meanReferenceValue: ["Mean Reference Value", "input", "", ""],
+      percentError: ["Percent Error", "input", "", ""],
+      apsIndicator: ["APS Indicator", "radio", "", ""],
+    },
+    controlDatePickerInputs: {},
+  }
 }

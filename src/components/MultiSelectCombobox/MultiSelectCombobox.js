@@ -29,6 +29,7 @@ const MultiSelectCombobox = ({
   const [selectedItems, setSelectedItems] = useState([]);
 
   const selectedItemsRef = useRef(selectedItems);
+  const inputRef = useRef(null);
 
   const handleMultiSelectClick = (e) => {
     const multiSelectComboboxDiv = document.getElementById(
@@ -85,7 +86,9 @@ const MultiSelectCombobox = ({
         setSelectedItems(itemsCopy);
         updateListDataOnChange(id, "remove");
         onChangeUpdate(id, "remove");
+        inputRef.current.focus()
       }
+
     },
     [selectedItemsRef, onChangeUpdate, updateListDataOnChange]
   );
@@ -108,6 +111,7 @@ const MultiSelectCombobox = ({
               label={optionLabel}
               onRemove={onRemoveHanlder}
               disableButton={true}
+              
             />
           ),
         },
@@ -133,6 +137,7 @@ const MultiSelectCombobox = ({
             label={s.label}
             onRemove={onRemoveHanlder}
             disableButton={true}
+            data-testid={`${entity}-${s.id}-selected-pill`}
           />
         ),
       });
@@ -203,6 +208,7 @@ const MultiSelectCombobox = ({
               className="search position-static bg-white border-0 width-full height-4 padding-x-1"
               data-testid={`${entity}-input-search`}
               value={filter}
+              ref={inputRef}
               onChange={(e) => onSearchHanlder(e.target.value)}
               onClick={() => setShowListBox(true)}
               onKeyDown={(e) => handleKeyDown(e)}

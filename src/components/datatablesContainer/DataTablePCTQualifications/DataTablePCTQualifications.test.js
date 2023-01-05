@@ -20,16 +20,16 @@ const componentRenderer = (
   addComponentFlag,
   openComponentViewTest,
   openAddComponentTest,
-  mdmData
+  mdmDataPCT
 ) => {
   let currentData = [];
 
-  if (mdmData) {
-    currentData = mdmData;
+  if (mdmDataPCT) {
+    currentData = mdmDataPCT;
   }
 
   const props = {
-    mdmData: currentData,
+    mdmDataPCT: currentData,
     loadDropdownsData: jest.fn(),
     locationSelectValue: "60",
     qualSelectValue: "60",
@@ -75,7 +75,7 @@ test("tests getMonitoringQualifications", async () => {
   expect(title.data).toEqual(selectedQualifications);
 
   let { container } = await waitForElement(() =>
-    componentRenderer(false, false, false, true, false, false)
+    componentRenderer(false, false, false, true, false, undefined)
   );
 
   let backBtns = container.querySelectorAll("#testBtn");

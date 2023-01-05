@@ -57,7 +57,7 @@ export const QACertTestSummaryHeaderInfo = ({
 
   // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
-  const [importTypeSelection, setImportTypeSelection] = useState('');
+  const [importTypeSelection, setImportTypeSelection] = useState("");
   const [usePortBtn, setUsePortBtn] = useState(false);
   const [finishedLoading, setFinishedLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -69,8 +69,8 @@ export const QACertTestSummaryHeaderInfo = ({
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
   const [selectedHistoricalData, setSelectedHistoricalData] = useState([]);
   const [isCheckedOut, setIsCheckedOut] = useState(checkoutState);
-  const [ checkedOutConfigs, setCheckedOutConfigs ] = useState([]);
-  const [ refresherInfo, setRefresherInfo ] = useState(null);
+  const [checkedOutConfigs, setCheckedOutConfigs] = useState([]);
+  const [refresherInfo, setRefresherInfo] = useState(null);
   const [currentConfig, setCurrentConfig] = useState(false);
   const [lockedFacility, setLockedFacility] = useState(false);
   const [userHasCheckout, setUserHasCheckout] = useState(false);
@@ -142,21 +142,25 @@ export const QACertTestSummaryHeaderInfo = ({
 
   // *** Clean up focus event listeners
   useEffect(() => {
-    mpApi.getRefreshInfo(configID)
-      .then((info) => setRefresherInfo({
-        checkedOutBy: "N/A",
-        lastUpdatedBy: info.data.userId,
-        updateDate: info.data.updateDate,
-      }))
-      .catch(err=>console.log(err));
-    mpApi.getCheckedOutLocations()
-      .then((res)=>setCheckedOutConfigs(res.data))
-      .catch(err=>console.log(err));
+    mpApi
+      .getRefreshInfo(configID)
+      .then((info) =>
+        setRefresherInfo({
+          checkedOutBy: "N/A",
+          lastUpdatedBy: info.data.userId,
+          updateDate: info.data.updateDate,
+        })
+      )
+      .catch((err) => console.log(err));
+    mpApi
+      .getCheckedOutLocations()
+      .then((res) => setCheckedOutConfigs(res.data))
+      .catch((err) => console.log(err));
 
     return () => {
       cleanupFocusEventListeners();
     };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkoutState]);
 
   const isCheckedOutByUser = (configs) => {
@@ -172,20 +176,25 @@ export const QACertTestSummaryHeaderInfo = ({
     );
   };
 
-  useEffect(()=>{
-    if(checkedOutConfigs){
+  useEffect(() => {
+    if (checkedOutConfigs) {
       setUserHasCheckout(
         checkedOutConfigs.some((plan) => plan["checkedOutBy"] === user.userId)
       );
       setCheckedOutByUser(isCheckedOutByUser(checkedOutConfigs));
-      const result = checkedOutConfigs[checkedOutConfigs.map((con) => con["monPlanId"]).indexOf(selectedConfig.id)];
-      if(result){
+      const result =
+        checkedOutConfigs[
+          checkedOutConfigs
+            .map((con) => con["monPlanId"])
+            .indexOf(selectedConfig.id)
+        ];
+      if (result) {
         setLockedFacility(true);
         setCurrentConfig(result);
       }
     }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkedOutConfigs])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [checkedOutConfigs]);
 
   useEffect(() => {
     if (importTypeSelection !== "select" || importedFile.length !== 0) {
@@ -246,13 +255,21 @@ export const QACertTestSummaryHeaderInfo = ({
   };
 
   const importQABtn = (payload) => {
-    importQA(payload).then((response) => {
-      setUsePortBtn(true);
-      setIsLoading(true);
-      if (response) {
-        setImportedFileErrorMsgs(response);
-      }
-    });
+    importQA(payload)
+      .then((response) => {
+        setUsePortBtn(true);
+        setIsLoading(true);
+        if (response) {
+          setImportedFileErrorMsgs(response);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setFinishedLoading(true);
+      });
   };
 
   const importHistoricalData = () => {
@@ -281,32 +298,32 @@ export const QACertTestSummaryHeaderInfo = ({
 
   // Create audit message for header info
   const createAuditMessage = () => {
-    if(checkedOutConfigs){
-        // WORKSPACE view
-        if (user) {
-          // when config is checked out by someone
-          if (isCheckedOut) {
-            return `Currently checked-out by: ${
-              currentConfig["checkedOutBy"]
-            } ${formatDate(currentConfig["checkedOutOn"])}`;
-          }
-          // when config is not checked out
-          return `Last updated by: ${refresherInfo?.lastUpdatedBy} ${formatDate(
-            refresherInfo?.updateDate,
-            true
-          )}`;
+    if (checkedOutConfigs) {
+      // WORKSPACE view
+      if (user) {
+        // when config is checked out by someone
+        if (isCheckedOut) {
+          return `Currently checked-out by: ${
+            currentConfig["checkedOutBy"]
+          } ${formatDate(currentConfig["checkedOutOn"])}`;
         }
-        // GLOBAL view
-        return `Last submitted by: ${selectedConfig.userId} ${formatDate(
-          selectedConfig.updateDate
-            ? selectedConfig.updateDate
-            : selectedConfig.addDate,
+        // when config is not checked out
+        return `Last updated by: ${refresherInfo?.lastUpdatedBy} ${formatDate(
+          refresherInfo?.updateDate,
           true
         )}`;
+      }
+      // GLOBAL view
+      return `Last submitted by: ${selectedConfig.userId} ${formatDate(
+        selectedConfig.updateDate
+          ? selectedConfig.updateDate
+          : selectedConfig.addDate,
+        true
+      )}`;
     }
   };
 
-    // direction -> false = check back in
+  // direction -> false = check back in
   // true = check out
   const checkoutStateHandler = (direction) => {
     // trigger checkout API
@@ -331,7 +348,7 @@ export const QACertTestSummaryHeaderInfo = ({
               {facilityMainName}
             </h3>
           </div>
-          {user && isCheckedOut &&(
+          {user && isCheckedOut && (
             <div>
               <Button
                 // className="padding-x-5"

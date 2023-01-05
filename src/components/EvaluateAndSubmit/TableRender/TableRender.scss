@@ -1,0 +1,26 @@
+  .unstyled-btn {
+    color: black;
+    text-decoration: none;
+    outline: none;
+    border: none;
+    background-color: transparent;
+    pointer-events: none;
+  }
+  
+  .unstyled-btn:focus {
+    outline: none !important;
+  }
+  
+  .hyperlink-btn {
+    color: #005ea2;
+    text-decoration: underline;
+    outline: none;
+    border: none;
+    background-color: transparent;
+  }
+  
+  .apply-filter-position{
+    position: absolute;
+    top: 1.8rem;
+  }
+  

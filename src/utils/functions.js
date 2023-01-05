@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const debugLog = (message, object = null) => {
   if (getConfigValueBoolean("REACT_APP_EASEY_ECMPS_UI_ENABLE_DEBUG")) {
     if (object) {
@@ -62,4 +64,167 @@ export const getConfigValueNumber = (key, defaultValue = "") => {
 
 export const getConfigValueBoolean = (key, defaultValue = "") => {
   return parseBool(getConfigValue(key, defaultValue));
+};
+
+//** review and submit utility functions
+export const isLocationUserCheckedOut = (checkedOutLocationsMap, monPlanId, userId) => {
+  if (checkedOutLocationsMap.get(monPlanId)?.checkedOutBy === userId) {
+    return true;
+  }
+  return false;
+}
+
+export const updateCheckedOutLocationsOnTable = (tableRef, updateState, checkedOutLocationsMPIdsMap, userId) => {
+  let changeInCheckedOutLocations = 0;
+  tableRef.current.forEach((tableRow) => {
+    const isLocationCheckedOut = checkedOutLocationsMPIdsMap.has(
+      tableRow.monPlanId
+    );
+    if (tableRow.checkedOut !== isLocationCheckedOut) {
+      changeInCheckedOutLocations += 1;
+    }
+    tableRow.checkedOut = isLocationCheckedOut;
+    if (isLocationCheckedOut) {
+      tableRow.userCheckedOut = isLocationUserCheckedOut(checkedOutLocationsMPIdsMap, tableRow.monPlanId, userId);
+    }
+    if (!isLocationUserCheckedOut) {
+      tableRow.userCheckedOut = false;
+    }
+    if (isLocationCheckedOut && !tableRow.userCheckedOut) {
+      tableRow.selected = false;
+    }
+  });
+  if (changeInCheckedOutLocations) {
+    updateState([...tableRef.current]);
+  }
+};
+
+export const updateCheckedOutLocationsOnTables = (checkedOutLocationsMPIdsMap, tablesObj, userId) => {
+  for (const table in tablesObj) {
+    const {ref, setState} = tablesObj[table];
+    updateCheckedOutLocationsOnTable(ref, setState, checkedOutLocationsMPIdsMap, userId)
+  }
+};
+
+export const isLocationCheckedOutByUser = ({
+  userId,
+  checkedOutLocationsMap,
+  chunk,
+  isLocationCheckedOut,
+}) => {
+  if (!isLocationCheckedOut) {
+    return false;
+  }
+  const { monPlanId } = chunk; 
+  return isLocationUserCheckedOut(checkedOutLocationsMap, monPlanId, userId)
+};
+
+export const evalStatusStyle = (status) => {
+  switch (status) {
+    case "ERR":
+    case "EVAL":
+      return "usa-alert--warning";
+    case "INFO":
+    case "PASS":
+      return "usa-alert--success";
+    case "INQ":
+    case "WIP":
+      return "usa-alert--info";
+    default:
+      break;
+  }
+  return "";
+};
+
+export const alertStyle = (evalStatus) => `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
+  evalStatus
+)} margin-y-0 maintainBorder`;
+export const reportWindowParams = [
+  // eslint-disable-next-line no-restricted-globals
+  `height=${screen.height}`,
+  // eslint-disable-next-line no-restricted-globals
+  `width=${screen.width}`,
+  //`fullscreen=yes`,
+].join(",");
+export const displayReport = (monPlanId, reportCode = "MP_EVAL") => {
+  let reportType;
+
+  switch (reportCode) {
+    case "MPP":
+      reportType = "Printout";
+      break;
+    case "MP_EVAL":
+      reportType = "Evaluation";
+      break;
+    case "MP_AUDIT":
+      reportType = "Audit";
+      break;
+    default:
+      reportType = "Evaluation";
+      break;
+  }
+
+  window.open(
+    `/workspace/reports?reportCode=${reportCode}&monitorPlanId=${monPlanId}`,
+    `ECMPS Monitoring Plan ${reportType} Report`,
+    reportWindowParams
+  );
+};
+
+export const addEvalStatusCell = (columns) =>
+  columns.map((col) => {
+    if (col.name === 'Eval Status') {
+      col.cell = (row) => (
+        <div className={alertStyle(row.evalStatusCode)}>
+          <button
+            className={'hyperlink-btn cursor-pointer'}
+            onClick={() => displayReport(row.monPlanId,'MP_EVAL')}
+          >
+            {row.evalStatusCode}
+          </button>
+        </div>
+      );
+    }
+    return col;
+  });
+
+  export const updateCheckedOutLocationsRef = (isCheckedOut, row, ref) => {
+    if(isCheckedOut){
+      ref.current.push(row);
+    } else {
+      ref.current = ref.current.filter(el => el.monPlanId !== row.monPlanId);
+    }
+  }
+// Returns the previously fully submitted quarter (reporting period). 
+// For the first month of every quarter, the previusly submitted reporting period is actually two quarters ago.
+// For every month in between it is the previous quarter. 
+// The following function implements this logic
+export const getPreviouslyFullSubmitedQuarter = (dateString = null) => {
+// WARNING - be weary of the date string and the wonkiness of JS dates. 
+// If you pass in a date that is in format yyyy-mm-dd, javascript creates it in the previous day. For example,
+// new Date('2020-01-01') is created as '2019-12-31 11:59PM'. However, a date string of dd/mm/yyyy creates 
+// the date object as expected
+
+  let date;
+
+  if (date === null) date = new Date();
+  else date = new Date(dateString);
+
+  const month = date.getMonth();
+  let previouslyCompletedQuarter = "";
+  let year = date.getFullYear();
+
+  if (month >= 1 && month <= 3) {
+    year = date.getFullYear() - 1;
+    previouslyCompletedQuarter = "Q4";
+  } else if (month >= 4 && month <= 6) previouslyCompletedQuarter = "Q1";
+  else if (month >= 7 && month <= 9) previouslyCompletedQuarter = "Q2";
+  else if (month >= 10 && month <= 11) previouslyCompletedQuarter = "Q3";
+  else {
+    // if month === 0 aka january
+    previouslyCompletedQuarter = "Q3";
+    year = date.getFullYear() - 1;
+  }
+
+  return `${year} ${previouslyCompletedQuarter}`;
 };
