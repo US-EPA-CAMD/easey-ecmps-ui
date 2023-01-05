@@ -1529,6 +1529,77 @@ describe('Test cases for QAExpandableRowsRender', () => {
   })
 
   test('renders Appendix E Correlation Heat Input from Oil rows and create/save/delete', async () => {
+    const hgInjectionData = [
+      {
+        "id": "id1",
+        "hgTestSumId": "hgTestSumId1",
+        "userId": "userId1",
+        "addDate": "string",
+        "updateDate": "string",
+        "injectionDate": "2023-01-05T19:30:16.230Z",
+        "injectionHour": 1,
+        "injectionMinute": 2,
+        "measuredValue": 3,
+        "referenceValue": 4
+      },
+      {
+        "id": "id2",
+        "hgTestSumId": "hgTestSumId2",
+        "userId": "userId2",
+        "addDate": "string",
+        "updateDate": "string",
+        "injectionDate": "2023-01-05T19:30:16.230Z",
+        "injectionHour": 9,
+        "injectionMinute": 8,
+        "measuredValue": 7,
+        "referenceValue": 6
+      }
+    ]
+
+    const getUrl = new RegExp(`${qaCertBaseUrl}/locations/${idRegex}/test-summary/${idRegex}/hg-summaries/${idRegex}/hg-injections`);
+    const postUrl = new RegExp(`${qaCertBaseUrl}/locations/${idRegex}/test-summary/${idRegex}/hg-summaries/${idRegex}/hg-injections`);
+    const putUrl = new RegExp(`${qaCertBaseUrl}/locations/${idRegex}/test-summary/${idRegex}/hg-summaries/${idRegex}/hg-injections/${idRegex}`);
+    const deleteUrl = new RegExp(`${qaCertBaseUrl}/locations/${idRegex}/test-summary/${idRegex}/hg-summaries/${idRegex}/hg-injections/${idRegex}`);
+
+    mock.onGet(getUrl).reply(200, hgInjectionData)
+    mock.onPost(postUrl).reply(200, 'created')
+    mock.onPut(putUrl).reply(200, 'updated')
+    mock.onDelete(deleteUrl).reply(200, 'deleted')
+
+    const props = qaAppendixECorrelationSummaryHeatInputOilProps()
+    const idArray = [locId, testSumId]
+    const data = { locationId: locId, id: appECorrTestSumId }
+    renderComponent(props, idArray, data);
+
+    // renders rows
+    const rows = await screen.findAllByRole('row')
+    expect(mock.history.get.length).not.toBe(0)
+    expect(rows).toHaveLength(hgInjectionData.length)
+
+    // add row
+    const addBtn = screen.getByRole('button', { name: /Add/i })
+    userEvent.click(addBtn)
+    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+
+    // edit row
+    // const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    // expect(editBtns).toHaveLength(hgInjectionData.length)
+    // userEvent.click(editBtns[0])
+    // saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    // userEvent.click(saveAndCloseBtn)
+    // setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+
+    // remove row
+    // const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    // expect(deleteBtns).toHaveLength(hgInjectionData.length)
+    // const secondDeleteBtn = deleteBtns[1]
+    // userEvent.click(secondDeleteBtn)
+    // const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    // userEvent.click(confirmBtns[1])
+  })
+
+  test('renders Appendix E Correlation Heat Input from Oil rows and create/save/delete', async () => {
     const appECorrHeatInputOilData = [
       {
         "id": "id1",
