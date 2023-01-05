@@ -55,11 +55,15 @@ const runStatusCodesUrl = `${config.services.mdm.uri}/run-status-codes`
 const testBasisCodes = `${config.services.mdm.uri}/test-basis-codes`
 const mdmCodes = new RegExp(`${config.services.mdm.uri}/${idRegex}`)
 
+const monitorPlanSystems = new RegExp(`${config.services.monitorPlans.uri}/locations/${idRegex}/systems`)
+
 mock.onGet(probeTypeCodesUrl).reply(200, [])
 mock.onGet(pressureMeasureCodesUrl).reply(200, [])
 mock.onGet(runStatusCodesUrl).reply(200, [])
 mock.onGet(testBasisCodes).reply(200, [])
 mock.onGet(mdmCodes).reply(200, [])
+
+mock.onGet(monitorPlanSystems).reply(200, [])
 
 const renderComponent = (props, idArray, data) => {
   return render(
@@ -1523,73 +1527,66 @@ describe('Test cases for QAExpandableRowsRender', () => {
     const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
     userEvent.click(confirmBtns[1])
   })
-})
 
-/*
-test('renders Appendix E Correlation Heat Input from Oil rows and create/save/delete', async () => {
-    const appendixECorrelationSummaryHeatInputOilData = [
+  test('renders Appendix E Correlation Heat Input from Oil rows and create/save/delete', async () => {
+    const appECorrHeatInputOilData = [
       {
         "id": "id1",
-        "appECorrTestRunId": "appECorrTestRunId",
+        "appECorrTestRunId": "appECorrTestRunId1",
+        "calculatedOilMass": 0,
+        "calculatedOilHeatInput": 0,
         "userId": "string",
         "addDate": "string",
         "updateDate": "string",
-        "monitoringSystemID": '100',
-        "oilMass": 1,
-        "calculatedOilMass": 1,
-        "oilGCV": 1,
+        "monitoringSystemID": "string",
+        "oilMass": 0,
+        "oilGCV": 0,
         "oilGCVUnitsOfMeasureCode": "string",
-        "oilHeatInput": 1,
-        "calculatedOilHeatInput": 1,
-        "oilVolume": 1,
+        "oilHeatInput": 0,
+        "oilVolume": 0,
         "oilVolumeUnitsOfMeasureCode": "string",
-        "oilDensity": 1,
-        "oilDensityUnitsOfMeasureCode": "string",
+        "oilDensity": 0,
+        "oilDensityUnitsOfMeasureCode": "string"
       },
       {
         "id": "id2",
-        "appECorrTestRunId": "appECorrTestRunId",
+        "appECorrTestRunId": "appECorrTestRunId2",
+        "calculatedOilMass": 0,
+        "calculatedOilHeatInput": 0,
         "userId": "string",
         "addDate": "string",
         "updateDate": "string",
-        "monitoringSystemID": '100',
-        "oilMass": 1,
-        "calculatedOilMass": 1,
-        "oilGCV": 1,
+        "monitoringSystemID": "string",
+        "oilMass": 0,
+        "oilGCV": 0,
         "oilGCVUnitsOfMeasureCode": "string",
-        "oilHeatInput": 1,
-        "calculatedOilHeatInput": 1,
-        "oilVolume": 1,
+        "oilHeatInput": 0,
+        "oilVolume": 0,
         "oilVolumeUnitsOfMeasureCode": "string",
-        "oilDensity": 1,
-        "oilDensityUnitsOfMeasureCode": "string",
+        "oilDensity": 0,
+        "oilDensityUnitsOfMeasureCode": "string"
       }
     ]
 
-    const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils`;
-    const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils`;
-    const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils/${idRegex}`);
-    const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils/${idRegex}`);
+    const getUrl = new RegExp(`${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${idRegex}/appendix-e-correlation-test-runs/${idRegex}/appendix-e-heat-input-from-oils`);
+    const postUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${idRegex}/appendix-e-correlation-test-runs/${idRegex}/appendix-e-heat-input-from-oils`);
+    const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${idRegex}/appendix-e-correlation-test-runs/${idRegex}/appendix-e-heat-input-from-oils/${idRegex}`);
+    const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${idRegex}/appendix-e-correlation-test-runs/${idRegex}/appendix-e-heat-input-from-oils/${idRegex}`);
 
-    mock.onGet(getUrl).reply(200, appendixECorrelationSummaryHeatInputOilData)
+    mock.onGet(getUrl).reply(200, appECorrHeatInputOilData)
     mock.onPost(postUrl).reply(200, 'created')
     mock.onPut(putUrl).reply(200, 'updated')
     mock.onDelete(deleteUrl).reply(200, 'deleted')
-    //api calls
-    mock.onGet(`https://api.epa.gov/easey/dev/monitor-plan-mgmt/locations/${locId}/systems`)
-    .reply(200,[{"id":"CAMD-01B98E68BA934DFC8340212E46B63D76","locationId":"2286","monitoringSystemId":"100","systemTypeCode":"OILM","systemDesignationCode":"P","fuelCode":"DSL","beginDate":"1995-05-05","endDate":null,"beginHour":0,"endHour":null,"userId":"crandle","addDate":"2008-08-13","updateDate":"2008-09-18","active":true,"components":[],"fuelFlows":[]},{"id":"CAMD-DB89ED70AC4A43EE9D75A2E2FCDDCD82","locationId":"2286","monitoringSystemId":"200","systemTypeCode":"GAS","systemDesignationCode":"P","fuelCode":"PNG","beginDate":"1995-05-05","endDate":"2021-09-30","beginHour":0,"endHour":23,"userId":"CRandle","addDate":"2008-08-13","updateDate":"2022-01-18","active":false,"components":[],"fuelFlows":[]},{"id":"L3FY866-170A61A64EA64BF8A604D440BA34E0B3","locationId":"2286","monitoringSystemId":"201","systemTypeCode":"GAS","systemDesignationCode":"P","fuelCode":"NNG","beginDate":"2021-10-01","endDate":null,"beginHour":0,"endHour":null,"userId":"CRandle","addDate":"2022-01-18","updateDate":null,"active":true,"components":[],"fuelFlows":[]},{"id":"CAMD-07BEC0123C004B979E23A3F694B29FD9","locationId":"2286","monitoringSystemId":"400","systemTypeCode":"NOX","systemDesignationCode":"P","fuelCode":"DSL","beginDate":"1995-05-05","endDate":null,"beginHour":0,"endHour":null,"userId":"crandle","addDate":"2008-08-13","updateDate":"2008-09-18","active":true,"components":[],"fuelFlows":[]},{"id":"CAMD-C9EE74334D134F3C815277E67C71D4FA","locationId":"2286","monitoringSystemId":"410","systemTypeCode":"NOXE","systemDesignationCode":"P","fuelCode":"PNG","beginDate":"1995-05-05","endDate":"2021-09-30","beginHour":0,"endHour":23,"userId":"CRandle","addDate":"2008-08-13","updateDate":"2022-01-18","active":false,"components":[],"fuelFlows":[]},{"id":"L3FY866-30135E185FB147CD932A888D4261929E","locationId":"2286","monitoringSystemId":"411","systemTypeCode":"NOXE","systemDesignationCode":"P","fuelCode":"NNG","beginDate":"2021-10-01","endDate":null,"beginHour":0,"endHour":null,"userId":"CRandle","addDate":"2022-01-18","updateDate":null,"active":true,"components":[],"fuelFlows":[]}]);
-    mock.onGet("https://api.epa.gov/easey/dev/master-data-mgmt/units-of-measure-codes")
-    .reply(200,[{"unitOfMeasureCode":"1","unitOfMeasureDescription":"100 Standard Cubic Feet / Hour per Megawatt"},{"unitOfMeasureCode":"2","unitOfMeasureDescription":"100 Standard Cubic Feet / Hour per 1000 Pounds / Hour of Steam Load"}])
-    
+
     const props = qaAppendixECorrelationSummaryHeatInputOilProps()
-    const idArray = [locId, testSumId, appECorrTestSumId, appECorrTestrunId, id]
-    const data = { locationId: locId, id: appECorrTestrunId }
+    const idArray = [locId, testSumId]
+    const data = { locationId: locId, id: appECorrTestSumId }
     renderComponent(props, idArray, data);
-  
+
     // renders rows
     const rows = await screen.findAllByRole('row')
     expect(mock.history.get.length).not.toBe(0)
-    expect(rows).not.toHaveLength(0)
+    expect(rows).toHaveLength(appECorrHeatInputOilData.length)
 
     // add row
     const addBtn = screen.getByRole('button', { name: /Add/i })
@@ -1600,7 +1597,7 @@ test('renders Appendix E Correlation Heat Input from Oil rows and create/save/de
 
     // edit row
     const editBtns = screen.getAllByRole('button', { name: /Edit/i })
-    expect(editBtns).toHaveLength(appendixECorrelationSummaryHeatInputOilData.length)
+    expect(editBtns).toHaveLength(appECorrHeatInputOilData.length)
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
     userEvent.click(saveAndCloseBtn)
@@ -1608,11 +1605,97 @@ test('renders Appendix E Correlation Heat Input from Oil rows and create/save/de
 
     // remove row
     const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
-    expect(deleteBtns).toHaveLength(appendixECorrelationSummaryHeatInputOilData.length)
+    expect(deleteBtns).toHaveLength(appECorrHeatInputOilData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
     const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
-    userEvent.click(confirmBtns[1])*/
+    userEvent.click(confirmBtns[1])
+  })
+
+  // test.only('renders Flow to load check data rows and create/save/delete', async () => {
+  //   const flowToLoadCheckData = [
+  //     {
+  //       "id": "id1",
+  //       "testSumId": "string",
+  //       "userId": "string",
+  //       "addDate": "string",
+  //       "updateDate": "string",
+  //       "testBasisCode": "string",
+  //       "biasAdjustedIndicator": 0,
+  //       "averageAbsolutePercentDifference": 0,
+  //       "numberOfHours": 0,
+  //       "numberOfHoursExcludedForFuel": 0,
+  //       "numberOfHoursExcludedForRamping": 0,
+  //       "numberOfHoursExcludedForBypass": 0,
+  //       "numberOfHoursExcludedPreRata": 0,
+  //       "numberOfHoursExcludedTest": 0,
+  //       "numberOfHoursExcludedForMainAndBypass": 0,
+  //       "operatingLevelCode": "string"
+  //     },
+  //     {
+  //       "id": "id2",
+  //       "testSumId": "string",
+  //       "userId": "string",
+  //       "addDate": "string",
+  //       "updateDate": "string",
+  //       "testBasisCode": "string",
+  //       "biasAdjustedIndicator": 0,
+  //       "averageAbsolutePercentDifference": 0,
+  //       "numberOfHours": 0,
+  //       "numberOfHoursExcludedForFuel": 0,
+  //       "numberOfHoursExcludedForRamping": 0,
+  //       "numberOfHoursExcludedForBypass": 0,
+  //       "numberOfHoursExcludedPreRata": 0,
+  //       "numberOfHoursExcludedTest": 0,
+  //       "numberOfHoursExcludedForMainAndBypass": 0,
+  //       "operatingLevelCode": "string"
+  //     }
+  //   ];
+
+  //   const getUrl = new RegExp(`${qaCertBaseUrl}/locations/${idRegex}/test-summary/${idRegex}/flow-to-load-checks`);
+  //   const postUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${idRegex}/test-summary/${idRegex}/flow-to-load-checks`);
+  //   const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${idRegex}/test-summary/${idRegex}/flow-to-load-checks/${idRegex}`);
+  //   const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${idRegex}/test-summary/${idRegex}/flow-to-load-checks/${idRegex}`);
+
+  //   mock.onGet(getUrl).reply(200, flowToLoadCheckData);
+  //   mock.onPost(postUrl).reply(200, 'created');
+  //   mock.onPut(putUrl).reply(200, 'updated');
+  //   mock.onPut(deleteUrl).reply(200, 'deleted');
+
+  //   const props = qaFlowToLoadCheckProps()
+  //   const idArray = []
+  //   const data = { locationId: locId, id: testSumId }
+  //   renderComponent(props, idArray, data);
+
+  //   // renders rows
+  //   const rows = screen.getAllByRole('row')
+  //   expect(mock.history.get.length).not.toBe(0)
+  //   expect(rows).not.toHaveLength(0)
+
+  //   // add row
+  //   const addBtn = screen.getByRole('button', { name: /Add/i })
+  //   userEvent.click(addBtn)
+  //   let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+  //   userEvent.click(saveAndCloseBtn)
+  //   setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+
+  //   // edit row
+  //   const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+  //   expect(editBtns).toHaveLength(flowToLoadCheckData.length)
+  //   userEvent.click(editBtns[0])
+  //   saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+  //   userEvent.click(saveAndCloseBtn)
+  //   setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+
+  //   // remove row
+  //   const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+  //   expect(deleteBtns).toHaveLength(flowToLoadCheckData.length)
+  //   const secondDeleteBtn = deleteBtns[1]
+  //   userEvent.click(secondDeleteBtn)
+  //   const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+  //   userEvent.click(confirmBtns[1])
+  // });
+})
 
 /*
 describe('Appendix E Correlation test Summary data', () => {
