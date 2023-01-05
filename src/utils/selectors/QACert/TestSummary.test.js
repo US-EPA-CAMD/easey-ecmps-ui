@@ -548,9 +548,9 @@ describe("testing TestSummary data selectors", () => {
       {
         id: "0000120",
         gasLevelCode: "Mid",
-        meanMeasuredValue: "string",
-        meanReferenceValue: "string",
-        percentError: "string",
+        meanMeasuredValue: 1,
+        meanReferenceValue: 1,
+        percentError: .1,
         apsIndicator: 1,
       },
     ];
@@ -558,9 +558,9 @@ describe("testing TestSummary data selectors", () => {
       {
         id: '0000120',
         col1: "Mid",
-        col2: "string",
-        col3: "string",
-        col4: "string",
+        col2: 1,
+        col3: 1,
+        col4: .1,
         col5: 1,
       },
     ];
