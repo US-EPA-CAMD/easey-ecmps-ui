@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import { config } from "../../config";
 import { CountdownTimer } from "../CountdownTimer/CountdownTimer";
 import { useInterval } from "../../additional-functions/use-interval";
