@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { Label } from "@trussworks/react-uswds";
 import PillButton from "../PillButton/PillButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faCheck } from "@fortawesome/free-solid-svg-icons";
 import "./MultiSelectCombobox.scss";
+import { debounce } from "lodash";
 
 const getComboboxEnabledItems = (arr) => {
   return arr.filter((e) => e.enabled);
@@ -40,7 +41,7 @@ const MultiSelectCombobox = ({
     }
   };
 
-  const onSearchHanlder = (value) => {
+  const onSearchHandler = (value) => {
     const lowercasedFilter = value.toLowerCase();
     let filteredData = _items;
     if (value.length > 0) {
@@ -54,10 +55,14 @@ const MultiSelectCombobox = ({
         );
       }
     }
-    setFilter(value);
+
     setData([...filteredData]);
     setShowListBox(true);
   };
+
+  // using useMemo here instead of useCallback will make this faster since useCallback will cause lodash's debounce() 
+  // to run every time MultiSelectComboBox rerenders
+  const debouncedOnSearchHandler = useMemo(() => debounce(onSearchHandler, 200), [_items]);
 
   const updateListDataOnChange = useCallback(
     (id, update) => {
@@ -111,13 +116,13 @@ const MultiSelectCombobox = ({
               label={optionLabel}
               onRemove={onRemoveHanlder}
               disableButton={true}
-              
+
             />
           ),
         },
       ];
       selectedItemsRef.current = _selectedItems;
-      onSearchHanlder("");
+      onSearchHandler("");
       setSelectedItems(_selectedItems);
       updateListDataOnChange(id, "add");
       onChangeUpdate(id, "add");
@@ -209,7 +214,10 @@ const MultiSelectCombobox = ({
               data-testid={`${entity}-input-search`}
               value={filter}
               ref={inputRef}
-              onChange={(e) => onSearchHanlder(e.target.value)}
+              onChange={(e) => {
+                setFilter(e.target.value);
+                debouncedOnSearchHandler(e.target.value);
+              }}
               onClick={() => setShowListBox(true)}
               onKeyDown={(e) => handleKeyDown(e)}
             />
