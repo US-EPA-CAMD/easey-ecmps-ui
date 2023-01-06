@@ -31,6 +31,7 @@ const transmitterTransducerAccuracyData = "Transmitter Transducer Accuracy Data"
 const flowToLoadReference = "Flow To Load Reference";
 const unitDefualtTest = "Unit Default Test";
 const hgSummary = "Hg Summary";
+const hgInjection = "Hg Injection";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -196,6 +197,9 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       return qaApi.getHgSummary(location, id).catch((error) => {
         console.log("error", error);
       });
+    case hgInjection:
+      return qaApi.getHgInjection(extraIdsArr[0], extraIdsArr[1], id)
+        .catch(error => console.log("error fetching hg injection data", error))
     default:
       throw new Error(`getDataTableApis case not implemented for ${name}`);
   }
@@ -256,6 +260,8 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.mapUnitDefaultTestDataToRows(dataIn);
     case hgSummary:
       return selector.mapHgSummaryDataToRows(dataIn);
+    case hgInjection:
+      return selector.mapHgInjectionDataToRows(dataIn);
     default:
       throw new Error(`getDataTableRecords case not implemented for ${name}`);
   }
@@ -826,6 +832,8 @@ export const createDataSwitch = async (
       return qaApi.createUnitDefaultTest(location, id, userInput)
     case hgSummary:
       return qaApi.createHgSummary(location, id, userInput)
+    case hgInjection:
+      return qaApi.createHgInjection(extraIdsArr[0], extraIdsArr[1], id, userInput)
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
   }
