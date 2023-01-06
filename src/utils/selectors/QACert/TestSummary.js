@@ -583,13 +583,28 @@ export const mapHgSummaryDataToRows = (data) => {
       col2: el.meanMeasuredValue,
       col3: el.meanReferenceValue,
       col4: el.percentError,
-      col5: el.apsIndicator,
+      col5: el.apsIndicator === 1 ? "Yes" : "No",
     };
     records.push(row)
   }
   return records;
 }
 
+export const mapHgInjectionDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.injectionDate ? new Date(el.injectionDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) : el.injectionDate,
+      col2: el.injectionHour,
+      col3: el.injectionMinute,
+      col4: el.measuredValue,
+      col5: el.referenceValue,
+    };
+    records.push(row)
+  }
+  return records;
+}
 
 export const getListOfRadioControls = (controlInputs) => {
   const result = [];

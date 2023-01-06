@@ -32,6 +32,7 @@ import {
   qaAppendixECorrelationSummaryHeatInputGasProps,
   qaAppendixECorrelationSummaryHeatInputOilProps,
   qaCycleTimeInjectionProps,
+  qaHgInjectionDataProps,
 } from "../../../additional-functions/qa-dataTable-props";
 import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
 const QAExpandableRowsRender = ({
@@ -322,6 +323,25 @@ const QAExpandableRowsRender = ({
             isCheckedOut={isCheckedOut}
           />
         );
+        case "Hg Summary": // Hg Test Data => Hg Summary => Hg Injection
+          const hgInjectionIdArr = [locationId, id];
+          const hgInjectionProps = qaHgInjectionDataProps();
+          return (
+            <QAExpandableRowsRender
+              payload={hgInjectionProps["payload"]}
+              dropdownArray={hgInjectionProps["dropdownArray"]}
+              mdmProps={hgInjectionProps["mdmProps"]}
+              columns={hgInjectionProps["columnNames"]}
+              controlInputs={hgInjectionProps["controlInputs"]}
+              controlDatePickerInputs={hgInjectionProps["controlDatePickerInputs"]}
+              radioBtnPayload={hgInjectionProps["radioBtnPayload"]}
+              dataTableName={hgInjectionProps["dataTableName"]}
+              extraControls={hgInjectionProps["extraControls"]}
+              extraIDs={hgInjectionIdArr}
+              user={user}
+              isCheckedOut={isCheckedOut}
+            />
+          );
       default:
         break;
     }

@@ -1847,10 +1847,10 @@ export const createUnitDefaultTest = async (
         url: url,
         data: payload,
       })
-      );
-    } catch (error) {
-      return handleImportError(error);
-    }
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
 };
 
 export const updateUnitDefaultTest = async (
@@ -1913,10 +1913,10 @@ export const createHgSummary = async (
         url: url,
         data: payload,
       })
-      );
-    } catch (error) {
-      return handleImportError(error);
-    }
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
 };
 
 export const updateHgSummary = async (
@@ -1952,6 +1952,32 @@ export const deleteHgSummary = async (
       await secureAxios({
         method: "DELETE",
         url: url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const getHgInjection = async (locId, testSumId, hgTestSumId) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createHgInjection = async (
+  locId,
+  testSumId,
+  hgTestSumId,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
       })
     );
   } catch (error) {
