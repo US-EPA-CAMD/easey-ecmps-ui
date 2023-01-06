@@ -10,6 +10,8 @@ const getComboboxEnabledItems = (arr) => {
   return arr.filter((e) => e.enabled);
 };
 
+export const DEBOUNCE_MILLISECONDS = 200;
+
 const MultiSelectCombobox = ({
   items,
   label,
@@ -62,7 +64,7 @@ const MultiSelectCombobox = ({
 
   // using useMemo here instead of useCallback will make this faster since useCallback will cause lodash's debounce() 
   // to run every time MultiSelectComboBox rerenders
-  const debouncedOnSearchHandler = useMemo(() => debounce(onSearchHandler, 200), [_items]);
+  const debouncedOnSearchHandler = useMemo(() => debounce(onSearchHandler, DEBOUNCE_MILLISECONDS), [_items]);
 
   const updateListDataOnChange = useCallback(
     (id, update) => {
