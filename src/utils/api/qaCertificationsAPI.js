@@ -1984,3 +1984,23 @@ export const createHgInjection = async (
     return handleImportError(error);
   }
 };
+
+export const deleteHgInjection = async (
+  locId,
+  testSumId,
+  hgTestSumId,
+  id
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};

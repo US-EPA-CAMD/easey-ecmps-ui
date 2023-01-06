@@ -442,6 +442,10 @@ export const removeDataSwitch = async (
       return qaApi
         .deleteHgSummary(locationId, id, row.id)
         .catch((error) => console.log("error", error));
+    case hgInjection:
+      return qaApi
+        .deleteHgInjection(extraIdsArr[0], extraIdsArr[1], id, row.id)
+        .catch((error) => console.log("error", error));
     default:
       throw new Error(`removeDataSwitch case not implemented for ${name}`);
   }
