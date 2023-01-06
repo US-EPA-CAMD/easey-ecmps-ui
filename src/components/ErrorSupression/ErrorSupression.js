@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import * as modules from "../../utils/constants/moduleTitles";
 
-export const ErrorSuppression = ({}) => {
+export const ErrorSuppression = () => {
   useEffect(() => {
     document.title = "Error Suppression";
   }, []);
