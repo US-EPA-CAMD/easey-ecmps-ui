@@ -561,7 +561,7 @@ describe("testing TestSummary data selectors", () => {
         col2: 1,
         col3: 1,
         col4: .1,
-        col5: 1,
+        col5: "Yes",
       },
     ];
     expect(fs.mapHgSummaryDataToRows(data)).toEqual(records);
