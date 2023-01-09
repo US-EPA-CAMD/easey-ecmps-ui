@@ -1795,7 +1795,6 @@ describe("testing ImportModal component ", () => {
       ".import-modal-container"
     );
 
-
     expect(renderedComponent).not.toBeUndefined();
     const label = await findByText("Upload QA JSON File");
     expect(label).toBeDefined();
@@ -1945,5 +1944,26 @@ describe("testing ImportModal component ", () => {
         files: [new File(["(⌐□_□)"], "chucknorris.png", { type: "image/png" })],
       },
     });
+  });
+
+  test("renders the content of ImportModal component with no workspace name - conditional check", async () => {
+    const { container, findByText, getByText } = render(
+      <ImportModal
+        setDisablePortBtn={jest.fn()}
+        complete={false}
+        setFileName={jest.fn()}
+        fileName={"test"}
+        setHasFormatError={jest.fn()}
+        setHasInvalidJsonError={jest.fn()}
+        importApiErrors={[]}
+        importedFileErrorMsgs={[]}
+        setImportedFile={jest.fn()}
+        workspaceSection={"null"}
+      />
+    );
+    const renderedComponent = container.querySelector(
+      ".import-modal-container"
+    );
+    expect(renderedComponent).not.toBeUndefined();
   });
 });

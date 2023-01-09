@@ -27,7 +27,6 @@ const ImportModal = ({
   setImportedFile,
   workspaceSection,
 }) => {
-  const [schema, setSchema] = useState([]);
   const [mpSchema, setMpSchema] = useState([]);
   const [qaSchema, setQaSchema] = useState([]);
   const [emSchema, setEmSchema] = useState([]);
@@ -201,8 +200,6 @@ const ImportModal = ({
 
   const onChangeHandler = (e) => {
     setSchemaErrors([]);
-    console.log('e',e.target.files,)
-    console.log('etarget',e.target)
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       validateJSON(file.name, file.type, e);
@@ -212,7 +209,6 @@ const ImportModal = ({
       setHasInvalidJsonError(false);
     }
   };
-  // && typeof importedFileErrorMsgs.data.message === "string"
 
   return (
     <div className="import-modal-container">
