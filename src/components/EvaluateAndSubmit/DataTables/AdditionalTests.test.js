@@ -415,7 +415,7 @@ jest.mock('react-redux', () => ({
 }));
 
 describe('Additional DataTables Tests', () => {
-  it('shows and hide properly', () => {
+  it('shows and hides tables properly', () => {
     let query = render(
       <Wrapper rows={_.cloneDeep(mockRows)} componentType="Submission" />
     );
