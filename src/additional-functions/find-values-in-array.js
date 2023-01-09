@@ -29,7 +29,7 @@ export const adjustDate = (format, date) => {
   let formattedDate = "";
   switch (format) {
     case "mm/dd/yyyy":
-      formattedDate = `${month}/${day}/${year}`;
+      formattedDate = new Date(date).toLocaleDateString('en-US', { timeZone: 'UTC' }) ?? `${month}/${day}/${year}`;
       break;
     case "dd/mm/yyyy":
       formattedDate = `${day}/${month}/${year}`;

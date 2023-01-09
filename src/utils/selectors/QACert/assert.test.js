@@ -16,6 +16,7 @@ const testSumId = "testSumId";
 const appECorrTestSumId="appECorrTestSumId";
 const appECorrTestRunId ="appECorrTestRunId";
 const linSumId = "linSumId";
+const hgTestSumId = "hgTestSumId";
 
 const lineTest = "Linearity Test";
 const testQualification = "Test Qualification";
@@ -29,6 +30,7 @@ const rataData = "RATA Data";
 const airEmissions = "Air Emissions";
 const unitDefualtTest = "Unit Default Test";
 const hgSummary = "Hg Summary";
+const hgInjection = "Hg Injection";
 
 describe("Test Qualification CRUD operations", () => {
   beforeEach(() => {
@@ -924,6 +926,65 @@ describe("Hg Summary CRUD operations", () => {
       hgSummary,
       locId,
       testSumId,
+      extraIDs
+    )
+
+    expect(mock.history.delete.length).toBe(1);
+    expect(resp.data).toStrictEqual("deleted");
+  });
+});
+
+describe("Hg Injection CRUD operations", () => {
+  beforeEach(() => {
+    mock.resetHistory();
+  });
+  test("getHgInjection", async () => {
+    const hgInjectionObject = [
+      { hgInjection: "data" },
+    ];
+    const getHgInjectionUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections`;
+    mock
+      .onGet(getHgInjectionUrl)
+      .reply(200, hgInjectionObject);
+    const extraIDs = [locId,testSumId,hgTestSumId];
+    const resp = await qaAssert.getDataTableApis(
+      hgInjection,
+      locId,
+      hgTestSumId,
+      extraIDs
+    )
+    
+    expect(mock.history.get.length).toBe(1);
+    expect(resp.data).toStrictEqual(hgInjectionObject);
+  });
+
+  test("createHgInjection", async () => {
+    const payload = { hgInjection: "data" };
+    const postHgInjectionUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections`;
+    mock.onPost(postHgInjectionUrl).reply(200, "success");
+    const extraIDs = [locId,testSumId,hgTestSumId];
+    const resp = await qaAssert.createDataSwitch(
+      payload,
+      hgInjection,
+      locId,
+      hgTestSumId,
+      extraIDs
+    )
+
+    expect(mock.history.post.length).toBe(1);
+    expect(resp.data).toStrictEqual("success");
+  });
+
+  test("deleteHgInjection", async () => {
+    const deleteHgInjectionUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections/${id}`;
+    mock.onDelete(deleteHgInjectionUrl).reply(200, "deleted");
+
+    const extraIDs = [locId,testSumId,hgTestSumId];
+    const resp = await qaAssert.removeDataSwitch(
+      {id: id},
+      hgInjection,
+      locId,
+      hgTestSumId,
       extraIDs
     )
 
