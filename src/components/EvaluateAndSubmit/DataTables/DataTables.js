@@ -91,7 +91,7 @@ const DataTables = ({
       //Can only submit records if not ERR eval code, submissionStatus is REQUIRE or blank, and they have permissions
       ["PASS", "INFO"].includes(row.evalStatusCode) &&
       rowSubmissionAllowed &&
-      permissions.current[row.orisCode].includes(`DS${type}`)
+      permissions.current[row.orisCode]?.includes(`DS${type}`)
     ) {
       if (
         type === "EM" &&
@@ -160,8 +160,8 @@ const DataTables = ({
         ref: emissionsRef,
         name: "Emissions",
         type: "EM",
-      }, //eslint-disable-next-line react-hooks/exhaustive-deps
-    ],
+      }, 
+    ],//eslint-disable-next-line react-hooks/exhaustive-deps
     [monPlanState, qaTestSumState, emissionsState]
   );
 
