@@ -20,6 +20,7 @@ const id = "id";
 const appECorrTestSumId = "appECorrTestSumId";
 const appECorrTestRunId = "appECorrTestRunId";
 const cycleTimeSumId = "cycleTimeSumId";
+const hgTestSumId = "hgTestSumId";
 
 describe("QA Cert API", function () {
   beforeEach(() => {
@@ -809,6 +810,56 @@ describe("QA Cert API", function () {
     });
   });
 
+  describe("Hg Injection Data CRUD operations", () => {
+    test("getHgInjection", async () => {
+      const hgInjectionResp = [
+        { hgInjection: "data" },
+        { hgInjection: "data2" },
+      ];
+      const getHgInjectionUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections`;
+      mock.onGet(getHgInjectionUrl).reply(200, hgInjectionResp);
+
+      const resp = await qaCert.getHgInjection(
+        locId,
+        testSumId,
+        hgTestSumId,
+      );
+
+      expect(mock.history.get.length).toBe(1);
+      expect(resp.data).toStrictEqual(hgInjectionResp);
+    });
+
+    test("createHgInjection", async () => {
+      const payload = { hgInjection: "data" };
+      const postHgInjectionUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections`;
+      mock.onPost(postHgInjectionUrl).reply(200, payload);
+
+      const resp = await qaCert.createHgInjection(
+        locId,
+        testSumId,
+        hgTestSumId,
+        payload
+      );
+
+      expect(mock.history.post.length).toBe(1);
+      expect(resp.data).toStrictEqual(payload);
+    });
+
+    test("deleteHgInjection", async () => {
+      const deleteHgInjectionUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections/${id}`;
+      mock.onDelete(deleteHgInjectionUrl).reply(200, "deleted");
+
+      const resp = await qaCert.deleteHgInjection(
+        locId,
+        testSumId,
+        hgTestSumId,
+        id
+      );
+
+      expect(mock.history.delete.length).toBe(1);
+      expect(resp.data).toStrictEqual("deleted");
+    });
+  });
   
   /*
   describe("Review And Submit", () => {

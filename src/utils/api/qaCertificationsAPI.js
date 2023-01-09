@@ -1971,7 +1971,8 @@ export const createHgInjection = async (
   hgTestSumId,
   payload
 ) => {
-  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections`;
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections`;
+  const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
