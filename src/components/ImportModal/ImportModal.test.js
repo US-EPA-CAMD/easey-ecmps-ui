@@ -10,306 +10,240 @@ import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
 const mock = new MockAdapter(axios);
 const schema = {
-  "$schema": "http://json-schema.org/draft-06/schema#",
-  "title": "QACertification",
-  "type": "object",
-  "additionalProperties": true,
-  "properties": {
-    "orisCode": {
-      "type": "number"
+  $schema: "http://json-schema.org/draft-06/schema#",
+  title: "QACertification",
+  type: "object",
+  additionalProperties: true,
+  properties: {
+    orisCode: {
+      type: "number",
     },
-    "version": {
-      "type": [
-        "string",
-        "null"
-      ]
+    version: {
+      type: ["string", "null"],
     },
-    "testSummaryData": {
-      "type": "array",
-      "minItems": 0,
-      "items": {
-        "$ref": "#/definitions/TestSummary"
-      }
-    },
-    "qaCertificationEventData": {
-      "type": "array",
-      "minItems": 0,
-      "items": {
-        "$ref": "#/definitions/QACertificationEvent"
-      }
-    },
-    "testExtensionExemptionData": {
-      "type": "array",
-      "minItems": 0,
-      "items": {
-        "$ref": "#/definitions/TestExtensionExemption"
-      }
-    }
-  },
-  "required": [
-    "orisCode"
-  ],
-  "definitions": {
-    "TestSummary": {
-      "title": "TestSummary",
-      "type": "object",
-      "anyOf": [
-        {
-          "required": [
-            "stackPipeId"
-          ]
-        },
-        {
-          "required": [
-            "unitId"
-          ]
-        }
-      ],
-      "additionalProperties": true,
-      "properties": {
-        "stackPipeId": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "unitId": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "testTypeCode": {
-          "type": "string"
-        },
-        "monitoringSystemID": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "componentID": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "spanScaleCode": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "testNumber": {
-          "type": "string"
-        },
-        "testReasonCode": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "testDescription": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "testResultCode": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "beginDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
-        },
-        "beginHour": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "beginMinute": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "endDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
-        },
-        "endHour": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "endMinute": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "gracePeriodIndicator": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "year": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "quarter": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "testComment": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "injectionProtocolCode": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "calibrationInjectionData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/CalibrationInjection"
-          }
-        },
-        "linearitySummaryData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/LinearitySummary"
-          }
-        },
-        "rataData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/Rata"
-          }
-        },
-        "flowToLoadReferenceData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/FlowToLoadReference"
-          }
-        },
-        "flowToLoadCheckData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/FlowToLoadCheck"
-          }
-        },
-        "cycleTimeSummaryData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/CycleTimeSummary"
-          }
-        },
-        "onlineOfflineCalibrationData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/OnlineOfflineCalibration"
-          }
-        },
-        "fuelFlowmeterAccuracyData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/FuelFlowmeterAccuracy"
-          }
-        },
-        "transmitterTransducerData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/TransmitterTransducer"
-          }
-        },
-        "fuelFlowToLoadBaselineData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/FuelFlowToLoadBaseline"
-          }
-        },
-        "fuelFlowToLoadTestData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/FuelFlowToLoadCheck"
-          }
-        },
-        "appECorrelationTestSummaryData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/AppECorrelationTestSummary"
-          }
-        },
-        "unitDefaultTestData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/UnitDefaultTest"
-          }
-        },
-        "hgSummaryData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/HgSummary"
-          }
-        },
-        "testQualificationData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/TestQualification"
-          }
-        },
-        "protocolGasData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/ProtocolGas"
-          }
-        },
-        "airEmissionTestData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/AirEmissionTest"
-          }
-        }
+    testSummaryData: {
+      type: "array",
+      minItems: 0,
+      items: {
+        $ref: "#/definitions/TestSummary",
       },
-      "required": [
+    },
+    qaCertificationEventData: {
+      type: "array",
+      minItems: 0,
+      items: {
+        $ref: "#/definitions/QACertificationEvent",
+      },
+    },
+    testExtensionExemptionData: {
+      type: "array",
+      minItems: 0,
+      items: {
+        $ref: "#/definitions/TestExtensionExemption",
+      },
+    },
+  },
+  required: ["orisCode"],
+  definitions: {
+    TestSummary: {
+      title: "TestSummary",
+      type: "object",
+      anyOf: [
+        {
+          required: ["stackPipeId"],
+        },
+        {
+          required: ["unitId"],
+        },
+      ],
+      additionalProperties: true,
+      properties: {
+        stackPipeId: {
+          type: ["string", "null"],
+        },
+        unitId: {
+          type: ["string", "null"],
+        },
+        testTypeCode: {
+          type: "string",
+        },
+        monitoringSystemID: {
+          type: ["string", "null"],
+        },
+        componentID: {
+          type: ["string", "null"],
+        },
+        spanScaleCode: {
+          type: ["string", "null"],
+        },
+        testNumber: {
+          type: "string",
+        },
+        testReasonCode: {
+          type: ["string", "null"],
+        },
+        testDescription: {
+          type: ["string", "null"],
+        },
+        testResultCode: {
+          type: ["string", "null"],
+        },
+        beginDate: {
+          type: ["string", "null"],
+          format: "date",
+        },
+        beginHour: {
+          type: ["number", "null"],
+        },
+        beginMinute: {
+          type: ["number", "null"],
+        },
+        endDate: {
+          type: ["string", "null"],
+          format: "date",
+        },
+        endHour: {
+          type: ["number", "null"],
+        },
+        endMinute: {
+          type: ["number", "null"],
+        },
+        gracePeriodIndicator: {
+          type: ["number", "null"],
+        },
+        year: {
+          type: ["number", "null"],
+        },
+        quarter: {
+          type: ["number", "null"],
+        },
+        testComment: {
+          type: ["string", "null"],
+        },
+        injectionProtocolCode: {
+          type: ["string", "null"],
+        },
+        calibrationInjectionData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/CalibrationInjection",
+          },
+        },
+        linearitySummaryData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/LinearitySummary",
+          },
+        },
+        rataData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/Rata",
+          },
+        },
+        flowToLoadReferenceData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/FlowToLoadReference",
+          },
+        },
+        flowToLoadCheckData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/FlowToLoadCheck",
+          },
+        },
+        cycleTimeSummaryData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/CycleTimeSummary",
+          },
+        },
+        onlineOfflineCalibrationData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/OnlineOfflineCalibration",
+          },
+        },
+        fuelFlowmeterAccuracyData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/FuelFlowmeterAccuracy",
+          },
+        },
+        transmitterTransducerData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/TransmitterTransducer",
+          },
+        },
+        fuelFlowToLoadBaselineData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/FuelFlowToLoadBaseline",
+          },
+        },
+        fuelFlowToLoadTestData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/FuelFlowToLoadCheck",
+          },
+        },
+        appECorrelationTestSummaryData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/AppECorrelationTestSummary",
+          },
+        },
+        unitDefaultTestData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/UnitDefaultTest",
+          },
+        },
+        hgSummaryData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/HgSummary",
+          },
+        },
+        testQualificationData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/TestQualification",
+          },
+        },
+        protocolGasData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/ProtocolGas",
+          },
+        },
+        airEmissionTestData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/AirEmissionTest",
+          },
+        },
+      },
+      required: [
         "testTypeCode",
         "monitoringSystemID",
         "componentID",
@@ -328,97 +262,63 @@ const schema = {
         "year",
         "quarter",
         "testComment",
-        "injectionProtocolCode"
-      ]
-    },
-    "QACertificationEvent": {
-      "title": "QACertificationEvent",
-      "type": "object",
-      "anyOf": [
-        {
-          "required": [
-            "stackPipeId"
-          ]
-        },
-        {
-          "required": [
-            "unitId"
-          ]
-        }
+        "injectionProtocolCode",
       ],
-      "additionalProperties": true,
-      "properties": {
-        "stackPipeId": {
-          "type": [
-            "string",
-            "null"
-          ]
+    },
+    QACertificationEvent: {
+      title: "QACertificationEvent",
+      type: "object",
+      anyOf: [
+        {
+          required: ["stackPipeId"],
         },
-        "unitId": {
-          "type": [
-            "string",
-            "null"
-          ]
+        {
+          required: ["unitId"],
         },
-        "monitoringSystemID": {
-          "type": [
-            "string",
-            "null"
-          ]
+      ],
+      additionalProperties: true,
+      properties: {
+        stackPipeId: {
+          type: ["string", "null"],
         },
-        "componentID": {
-          "type": [
-            "string",
-            "null"
-          ]
+        unitId: {
+          type: ["string", "null"],
         },
-        "qaCertEventCode": {
-          "type": "string"
+        monitoringSystemID: {
+          type: ["string", "null"],
         },
-        "qaCertEventDate": {
-          "type": "string",
-          "format": "date"
+        componentID: {
+          type: ["string", "null"],
         },
-        "qaCertEventHour": {
-          "type": [
-            "number",
-            "null"
-          ]
+        qaCertEventCode: {
+          type: "string",
         },
-        "requiredTestCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+        qaCertEventDate: {
+          type: "string",
+          format: "date",
         },
-        "conditionalBeginDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
+        qaCertEventHour: {
+          type: ["number", "null"],
         },
-        "conditionalBeginHour": {
-          "type": [
-            "number",
-            "null"
-          ]
+        requiredTestCode: {
+          type: ["string", "null"],
         },
-        "completionTestDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
+        conditionalBeginDate: {
+          type: ["string", "null"],
+          format: "date",
         },
-        "completionTestHour": {
-          "type": [
-            "number",
-            "null"
-          ]
-        }
+        conditionalBeginHour: {
+          type: ["number", "null"],
+        },
+        completionTestDate: {
+          type: ["string", "null"],
+          format: "date",
+        },
+        completionTestHour: {
+          type: ["number", "null"],
+        },
       },
-      "required": [
+      required: [
         "monitoringSystemID",
         "componentID",
         "qaCertEventCode",
@@ -428,79 +328,54 @@ const schema = {
         "conditionalBeginDate",
         "conditionalBeginHour",
         "completionTestDate",
-        "completionTestHour"
-      ]
-    },
-    "TestExtensionExemption": {
-      "title": "TestExtensionExemption",
-      "type": "object",
-      "anyOf": [
-        {
-          "required": [
-            "stackPipeId"
-          ]
-        },
-        {
-          "required": [
-            "unitId"
-          ]
-        }
+        "completionTestHour",
       ],
-      "additionalProperties": true,
-      "properties": {
-        "stackPipeId": {
-          "type": [
-            "string",
-            "null"
-          ]
+    },
+    TestExtensionExemption: {
+      title: "TestExtensionExemption",
+      type: "object",
+      anyOf: [
+        {
+          required: ["stackPipeId"],
         },
-        "unitId": {
-          "type": [
-            "string",
-            "null"
-          ]
+        {
+          required: ["unitId"],
         },
-        "year": {
-          "type": "number"
+      ],
+      additionalProperties: true,
+      properties: {
+        stackPipeId: {
+          type: ["string", "null"],
         },
-        "quarter": {
-          "type": "number"
+        unitId: {
+          type: ["string", "null"],
         },
-        "monitoringSystemID": {
-          "type": [
-            "string",
-            "null"
-          ]
+        year: {
+          type: "number",
         },
-        "componentID": {
-          "type": [
-            "string",
-            "null"
-          ]
+        quarter: {
+          type: "number",
         },
-        "hoursUsed": {
-          "type": [
-            "number",
-            "null"
-          ]
+        monitoringSystemID: {
+          type: ["string", "null"],
         },
-        "spanScaleCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+        componentID: {
+          type: ["string", "null"],
         },
-        "fuelCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+        hoursUsed: {
+          type: ["number", "null"],
         },
-        "extensionOrExemptionCode": {
-          "type": "string"
-        }
+        spanScaleCode: {
+          type: ["string", "null"],
+        },
+        fuelCode: {
+          type: ["string", "null"],
+        },
+        extensionOrExemptionCode: {
+          type: "string",
+        },
       },
-      "required": [
+      required: [
         "year",
         "quarter",
         "monitoringSystemID",
@@ -508,114 +383,66 @@ const schema = {
         "hoursUsed",
         "spanScaleCode",
         "fuelCode",
-        "extensionOrExemptionCode"
-      ]
+        "extensionOrExemptionCode",
+      ],
     },
-    "CalibrationInjection": {
-      "title": "CalibrationInjection",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "onlineOfflineIndicator": {
-          "type": [
-            "number",
-            "null"
-          ]
+    CalibrationInjection: {
+      title: "CalibrationInjection",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        onlineOfflineIndicator: {
+          type: ["number", "null"],
         },
-        "upscaleGasLevelCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+        upscaleGasLevelCode: {
+          type: ["string", "null"],
         },
-        "zeroInjectionDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
+        zeroInjectionDate: {
+          type: ["string", "null"],
+          format: "date",
         },
-        "zeroInjectionHour": {
-          "type": [
-            "number",
-            "null"
-          ]
+        zeroInjectionHour: {
+          type: ["number", "null"],
         },
-        "zeroInjectionMinute": {
-          "type": [
-            "number",
-            "null"
-          ]
+        zeroInjectionMinute: {
+          type: ["number", "null"],
         },
-        "upscaleInjectionDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
+        upscaleInjectionDate: {
+          type: ["string", "null"],
+          format: "date",
         },
-        "upscaleInjectionHour": {
-          "type": [
-            "number",
-            "null"
-          ]
+        upscaleInjectionHour: {
+          type: ["number", "null"],
         },
-        "upscaleInjectionMinute": {
-          "type": [
-            "number",
-            "null"
-          ]
+        upscaleInjectionMinute: {
+          type: ["number", "null"],
         },
-        "zeroMeasuredValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        zeroMeasuredValue: {
+          type: ["number", "null"],
         },
-        "upscaleMeasuredValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        upscaleMeasuredValue: {
+          type: ["number", "null"],
         },
-        "zeroAPSIndicator": {
-          "type": [
-            "number",
-            "null"
-          ]
+        zeroAPSIndicator: {
+          type: ["number", "null"],
         },
-        "upscaleAPSIndicator": {
-          "type": [
-            "number",
-            "null"
-          ]
+        upscaleAPSIndicator: {
+          type: ["number", "null"],
         },
-        "zeroCalibrationError": {
-          "type": [
-            "number",
-            "null"
-          ]
+        zeroCalibrationError: {
+          type: ["number", "null"],
         },
-        "upscaleCalibrationError": {
-          "type": [
-            "number",
-            "null"
-          ]
+        upscaleCalibrationError: {
+          type: ["number", "null"],
         },
-        "zeroReferenceValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        zeroReferenceValue: {
+          type: ["number", "null"],
         },
-        "upscaleReferenceValue": {
-          "type": [
-            "number",
-            "null"
-          ]
-        }
+        upscaleReferenceValue: {
+          type: ["number", "null"],
+        },
       },
-      "required": [
+      required: [
         "onlineOfflineIndicator",
         "upscaleGasLevelCode",
         "zeroInjectionDate",
@@ -631,265 +458,178 @@ const schema = {
         "zeroCalibrationError",
         "upscaleCalibrationError",
         "zeroReferenceValue",
-        "upscaleReferenceValue"
-      ]
+        "upscaleReferenceValue",
+      ],
     },
-    "LinearitySummary": {
-      "title": "LinearitySummary",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "gasLevelCode": {
-          "type": "string"
+    LinearitySummary: {
+      title: "LinearitySummary",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        gasLevelCode: {
+          type: "string",
         },
-        "meanMeasuredValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        meanMeasuredValue: {
+          type: ["number", "null"],
         },
-        "meanReferenceValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        meanReferenceValue: {
+          type: ["number", "null"],
         },
-        "percentError": {
-          "type": [
-            "number",
-            "null"
-          ]
+        percentError: {
+          type: ["number", "null"],
         },
-        "apsIndicator": {
-          "type": [
-            "number",
-            "null"
-          ]
+        apsIndicator: {
+          type: ["number", "null"],
         },
-        "linearityInjectionData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/LinearityInjection"
-          }
-        }
+        linearityInjectionData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/LinearityInjection",
+          },
+        },
       },
-      "required": [
+      required: [
         "gasLevelCode",
         "meanMeasuredValue",
         "meanReferenceValue",
         "percentError",
-        "apsIndicator"
-      ]
+        "apsIndicator",
+      ],
     },
-    "LinearityInjection": {
-      "title": "LinearityInjection",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "injectionDate": {
-          "type": "string",
-          "format": "date"
+    LinearityInjection: {
+      title: "LinearityInjection",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        injectionDate: {
+          type: "string",
+          format: "date",
         },
-        "injectionHour": {
-          "type": [
-            "number",
-            "null"
-          ]
+        injectionHour: {
+          type: ["number", "null"],
         },
-        "injectionMinute": {
-          "type": "number"
+        injectionMinute: {
+          type: "number",
         },
-        "measuredValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        measuredValue: {
+          type: ["number", "null"],
         },
-        "referenceValue": {
-          "type": [
-            "number",
-            "null"
-          ]
-        }
+        referenceValue: {
+          type: ["number", "null"],
+        },
       },
-      "required": [
+      required: [
         "injectionDate",
         "injectionHour",
         "injectionMinute",
         "measuredValue",
-        "referenceValue"
-      ]
+        "referenceValue",
+      ],
     },
-    "Rata": {
-      "title": "Rata",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "numberOfLoadLevels": {
-          "type": [
-            "number",
-            "null"
-          ]
+    Rata: {
+      title: "Rata",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        numberOfLoadLevels: {
+          type: ["number", "null"],
         },
-        "relativeAccuracy": {
-          "type": [
-            "number",
-            "null"
-          ]
+        relativeAccuracy: {
+          type: ["number", "null"],
         },
-        "rataFrequencyCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+        rataFrequencyCode: {
+          type: ["string", "null"],
         },
-        "overallBiasAdjustmentFactor": {
-          "type": [
-            "number",
-            "null"
-          ]
+        overallBiasAdjustmentFactor: {
+          type: ["number", "null"],
         },
-        "rataSummaryData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/RATASummary"
-          }
-        }
+        rataSummaryData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/RATASummary",
+          },
+        },
       },
-      "required": [
+      required: [
         "numberOfLoadLevels",
         "relativeAccuracy",
         "rataFrequencyCode",
-        "overallBiasAdjustmentFactor"
-      ]
+        "overallBiasAdjustmentFactor",
+      ],
     },
-    "RATASummary": {
-      "title": "RATASummary",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "operatingLevelCode": {
-          "type": "string"
+    RATASummary: {
+      title: "RATASummary",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        operatingLevelCode: {
+          type: "string",
         },
-        "averageGrossUnitLoad": {
-          "type": [
-            "number",
-            "null"
-          ]
+        averageGrossUnitLoad: {
+          type: ["number", "null"],
         },
-        "referenceMethodCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+        referenceMethodCode: {
+          type: ["string", "null"],
         },
-        "meanCEMValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        meanCEMValue: {
+          type: ["number", "null"],
         },
-        "meanRATAReferenceValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        meanRATAReferenceValue: {
+          type: ["number", "null"],
         },
-        "meanDifference": {
-          "type": [
-            "number",
-            "null"
-          ]
+        meanDifference: {
+          type: ["number", "null"],
         },
-        "standardDeviationDifference": {
-          "type": [
-            "number",
-            "null"
-          ]
+        standardDeviationDifference: {
+          type: ["number", "null"],
         },
-        "confidenceCoefficient": {
-          "type": [
-            "number",
-            "null"
-          ]
+        confidenceCoefficient: {
+          type: ["number", "null"],
         },
-        "tvalue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        tvalue: {
+          type: ["number", "null"],
         },
-        "apsIndicator": {
-          "type": [
-            "number",
-            "null"
-          ]
+        apsIndicator: {
+          type: ["number", "null"],
         },
-        "apsCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+        apsCode: {
+          type: ["string", "null"],
         },
-        "relativeAccuracy": {
-          "type": [
-            "number",
-            "null"
-          ]
+        relativeAccuracy: {
+          type: ["number", "null"],
         },
-        "biasAdjustmentFactor": {
-          "type": [
-            "number",
-            "null"
-          ]
+        biasAdjustmentFactor: {
+          type: ["number", "null"],
         },
-        "co2OrO2ReferenceMethodCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+        co2OrO2ReferenceMethodCode: {
+          type: ["string", "null"],
         },
-        "stackDiameter": {
-          "type": [
-            "number",
-            "null"
-          ]
+        stackDiameter: {
+          type: ["number", "null"],
         },
-        "stackArea": {
-          "type": [
-            "number",
-            "null"
-          ]
+        stackArea: {
+          type: ["number", "null"],
         },
-        "nmberOfTraversePoints": {
-          "type": [
-            "number",
-            "null"
-          ]
+        nmberOfTraversePoints: {
+          type: ["number", "null"],
         },
-        "calculatedWAF": {
-          "type": [
-            "number",
-            "null"
-          ]
+        calculatedWAF: {
+          type: ["number", "null"],
         },
-        "defaultWAF": {
-          "type": [
-            "number",
-            "null"
-          ]
+        defaultWAF: {
+          type: ["number", "null"],
         },
-        "rataRunData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/RATARun"
-          }
-        }
+        rataRunData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/RATARun",
+          },
+        },
       },
-      "required": [
+      required: [
         "operatingLevelCode",
         "averageGrossUnitLoad",
         "referenceMethodCode",
@@ -908,82 +648,58 @@ const schema = {
         "stackArea",
         "numberOfTraversePoints",
         "calculatedWAF",
-        "defaultWAF"
-      ]
+        "defaultWAF",
+      ],
     },
-    "RATARun": {
-      "title": "RATARun",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "runNumber": {
-          "type": "number"
+    RATARun: {
+      title: "RATARun",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        runNumber: {
+          type: "number",
         },
-        "beginDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
+        beginDate: {
+          type: ["string", "null"],
+          format: "date",
         },
-        "beginHour": {
-          "type": [
-            "number",
-            "null"
-          ]
+        beginHour: {
+          type: ["number", "null"],
         },
-        "beginMinute": {
-          "type": "number"
+        beginMinute: {
+          type: "number",
         },
-        "endDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
+        endDate: {
+          type: ["string", "null"],
+          format: "date",
         },
-        "endHour": {
-          "type": [
-            "number",
-            "null"
-          ]
+        endHour: {
+          type: ["number", "null"],
         },
-        "endMinute": {
-          "type": "number"
+        endMinute: {
+          type: "number",
         },
-        "cemValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        cemValue: {
+          type: ["number", "null"],
         },
-        "rataReferenceValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        rataReferenceValue: {
+          type: ["number", "null"],
         },
-        "grossUnitLoad": {
-          "type": [
-            "number",
-            "null"
-          ]
+        grossUnitLoad: {
+          type: ["number", "null"],
         },
-        "runStatusCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+        runStatusCode: {
+          type: ["string", "null"],
         },
-        "flowRataRunData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/FlowRATARun"
-          }
-        }
+        flowRataRunData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/FlowRATARun",
+          },
+        },
       },
-      "required": [
+      required: [
         "runNumber",
         "beginDate",
         "beginHour",
@@ -994,95 +710,59 @@ const schema = {
         "cemValue",
         "rataReferenceValue",
         "grossUnitLoad",
-        "runStatusCode"
-      ]
+        "runStatusCode",
+      ],
     },
-    "FlowRATARun": {
-      "title": "FlowRATARun",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "numberOfTraversePoints": {
-          "type": [
-            "number",
-            "null"
-          ]
+    FlowRATARun: {
+      title: "FlowRATARun",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        numberOfTraversePoints: {
+          type: ["number", "null"],
         },
-        "barometricPressure": {
-          "type": [
-            "number",
-            "null"
-          ]
+        barometricPressure: {
+          type: ["number", "null"],
         },
-        "staticStackPressure": {
-          "type": [
-            "number",
-            "null"
-          ]
+        staticStackPressure: {
+          type: ["number", "null"],
         },
-        "percentCO2": {
-          "type": [
-            "number",
-            "null"
-          ]
+        percentCO2: {
+          type: ["number", "null"],
         },
-        "percentO2": {
-          "type": [
-            "number",
-            "null"
-          ]
+        percentO2: {
+          type: ["number", "null"],
         },
-        "percentMoisture": {
-          "type": [
-            "number",
-            "null"
-          ]
+        percentMoisture: {
+          type: ["number", "null"],
         },
-        "dryMolecularWeight": {
-          "type": [
-            "number",
-            "null"
-          ]
+        dryMolecularWeight: {
+          type: ["number", "null"],
         },
-        "wetMolecularWeight": {
-          "type": [
-            "number",
-            "null"
-          ]
+        wetMolecularWeight: {
+          type: ["number", "null"],
         },
-        "avgVelocityWithoutWallEffects": {
-          "type": [
-            "number",
-            "null"
-          ]
+        avgVelocityWithoutWallEffects: {
+          type: ["number", "null"],
         },
-        "averageVelocityWithWallEffects": {
-          "type": [
-            "number",
-            "null"
-          ]
+        averageVelocityWithWallEffects: {
+          type: ["number", "null"],
         },
-        "calculatedWAF": {
-          "type": [
-            "number",
-            "null"
-          ]
+        calculatedWAF: {
+          type: ["number", "null"],
         },
-        "averageStackFlowRate": {
-          "type": [
-            "number",
-            "null"
-          ]
+        averageStackFlowRate: {
+          type: ["number", "null"],
         },
-        "rataTraverseData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/RATATraverse"
-          }
-        }
+        rataTraverseData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/RATATraverse",
+          },
+        },
       },
-      "required": [
+      required: [
         "numberOfTraversePoints",
         "barometricPressure",
         "staticStackPressure",
@@ -1094,104 +774,62 @@ const schema = {
         "avgVelocityWithoutWallEffects",
         "averageVelocityWithWallEffects",
         "calculatedWAF",
-        "averageStackFlowRate"
-      ]
+        "averageStackFlowRate",
+      ],
     },
-    "RATATraverse": {
-      "title": "RATATraverse",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "probeID": {
-          "type": [
-            "string",
-            "null"
-          ]
+    RATATraverse: {
+      title: "RATATraverse",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        probeID: {
+          type: ["string", "null"],
         },
-        "probeTypeCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+        probeTypeCode: {
+          type: ["string", "null"],
         },
-        "pressureMeasureCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+        pressureMeasureCode: {
+          type: ["string", "null"],
         },
-        "methodTraversePointID": {
-          "type": "string"
+        methodTraversePointID: {
+          type: "string",
         },
-        "velocityCalibrationCoefficient": {
-          "type": [
-            "number",
-            "null"
-          ]
+        velocityCalibrationCoefficient: {
+          type: ["number", "null"],
         },
-        "lastProbeDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
+        lastProbeDate: {
+          type: ["string", "null"],
+          format: "date",
         },
-        "avgVelDiffPressure": {
-          "type": [
-            "number",
-            "null"
-          ]
+        avgVelDiffPressure: {
+          type: ["number", "null"],
         },
-        "avgSquareVelDiffPressure": {
-          "type": [
-            "number",
-            "null"
-          ]
+        avgSquareVelDiffPressure: {
+          type: ["number", "null"],
         },
-        "tstackTemperature": {
-          "type": [
-            "number",
-            "null"
-          ]
+        tstackTemperature: {
+          type: ["number", "null"],
         },
-        "pointUsedIndicator": {
-          "type": [
-            "number",
-            "null"
-          ]
+        pointUsedIndicator: {
+          type: ["number", "null"],
         },
-        "numberWallEffectsPoints": {
-          "type": [
-            "number",
-            "null"
-          ]
+        numberWallEffectsPoints: {
+          type: ["number", "null"],
         },
-        "yawAngle": {
-          "type": [
-            "number",
-            "null"
-          ]
+        yawAngle: {
+          type: ["number", "null"],
         },
-        "pitchAngle": {
-          "type": [
-            "number",
-            "null"
-          ]
+        pitchAngle: {
+          type: ["number", "null"],
         },
-        "calculatedVelocity": {
-          "type": [
-            "number",
-            "null"
-          ]
+        calculatedVelocity: {
+          type: ["number", "null"],
         },
-        "replacementVelocity": {
-          "type": [
-            "number",
-            "null"
-          ]
-        }
+        replacementVelocity: {
+          type: ["number", "null"],
+        },
       },
-      "required": [
+      required: [
         "probeID",
         "probeTypeCode",
         "pressureMeasureCode",
@@ -1206,61 +844,40 @@ const schema = {
         "yawAngle",
         "pitchAngle",
         "calculatedVelocity",
-        "replacementVelocity"
-      ]
+        "replacementVelocity",
+      ],
     },
-    "FlowToLoadReference": {
-      "title": "FlowToLoadReference",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "rataTestNumber": {
-          "type": [
-            "string",
-            "null"
-          ]
+    FlowToLoadReference: {
+      title: "FlowToLoadReference",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        rataTestNumber: {
+          type: ["string", "null"],
         },
-        "operatingLevelCode": {
-          "type": "string"
+        operatingLevelCode: {
+          type: "string",
         },
-        "averageGrossUnitLoad": {
-          "type": [
-            "number",
-            "null"
-          ]
+        averageGrossUnitLoad: {
+          type: ["number", "null"],
         },
-        "averageReferenceMethodFlow": {
-          "type": [
-            "number",
-            "null"
-          ]
+        averageReferenceMethodFlow: {
+          type: ["number", "null"],
         },
-        "referenceFlowLoadRatio": {
-          "type": [
-            "number",
-            "null"
-          ]
+        referenceFlowLoadRatio: {
+          type: ["number", "null"],
         },
-        "averageHourlyHeatInputRate": {
-          "type": [
-            "number",
-            "null"
-          ]
+        averageHourlyHeatInputRate: {
+          type: ["number", "null"],
         },
-        "referenceGrossHeatRate": {
-          "type": [
-            "number",
-            "null"
-          ]
+        referenceGrossHeatRate: {
+          type: ["number", "null"],
         },
-        "calcSeparateReferenceIndicator": {
-          "type": [
-            "number",
-            "null"
-          ]
-        }
+        calcSeparateReferenceIndicator: {
+          type: ["number", "null"],
+        },
       },
-      "required": [
+      required: [
         "rataTestNumber",
         "operatingLevelCode",
         "averageGrossUnitLoad",
@@ -1268,82 +885,49 @@ const schema = {
         "referenceFlowLoadRatio",
         "averageHourlyHeatInputRate",
         "referenceGrossHeatRate",
-        "calcSeparateReferenceIndicator"
-      ]
+        "calcSeparateReferenceIndicator",
+      ],
     },
-    "FlowToLoadCheck": {
-      "title": "FlowToLoadCheck",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "testBasisCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+    FlowToLoadCheck: {
+      title: "FlowToLoadCheck",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        testBasisCode: {
+          type: ["string", "null"],
         },
-        "biasAdjustedIndicator": {
-          "type": [
-            "number",
-            "null"
-          ]
+        biasAdjustedIndicator: {
+          type: ["number", "null"],
         },
-        "avgAbsolutePercentDiff": {
-          "type": [
-            "number",
-            "null"
-          ]
+        avgAbsolutePercentDiff: {
+          type: ["number", "null"],
         },
-        "numberOfHours": {
-          "type": [
-            "number",
-            "null"
-          ]
+        numberOfHours: {
+          type: ["number", "null"],
         },
-        "numberOfHoursExcludedForFuel": {
-          "type": [
-            "number",
-            "null"
-          ]
+        numberOfHoursExcludedForFuel: {
+          type: ["number", "null"],
         },
-        "numberOfHoursExcludedRamping": {
-          "type": [
-            "number",
-            "null"
-          ]
+        numberOfHoursExcludedRamping: {
+          type: ["number", "null"],
         },
-        "numberOfHoursExcludedBypass": {
-          "type": [
-            "number",
-            "null"
-          ]
+        numberOfHoursExcludedBypass: {
+          type: ["number", "null"],
         },
-        "numberOfHoursExcludedPreRATA": {
-          "type": [
-            "number",
-            "null"
-          ]
+        numberOfHoursExcludedPreRATA: {
+          type: ["number", "null"],
         },
-        "numberOfHoursExcludedTest": {
-          "type": [
-            "number",
-            "null"
-          ]
+        numberOfHoursExcludedTest: {
+          type: ["number", "null"],
         },
-        "numberOfHoursExcMainBypass": {
-          "type": [
-            "number",
-            "null"
-          ]
+        numberOfHoursExcMainBypass: {
+          type: ["number", "null"],
         },
-        "operatingLevelCode": {
-          "type": [
-            "string",
-            "null"
-          ]
-        }
+        operatingLevelCode: {
+          type: ["string", "null"],
+        },
       },
-      "required": [
+      required: [
         "testBasisCode",
         "biasAdjustedIndicator",
         "avgAbsolutePercentDiff",
@@ -1354,98 +938,69 @@ const schema = {
         "numberOfHoursExcludedPreRATA",
         "numberOfHoursExcludedTest",
         "numberOfHoursExcMainBypass",
-        "operatingLevelCode"
-      ]
+        "operatingLevelCode",
+      ],
     },
-    "CycleTimeSummary": {
-      "title": "CycleTimeSummary",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "totalTime": {
-          "type": [
-            "number",
-            "null"
-          ]
+    CycleTimeSummary: {
+      title: "CycleTimeSummary",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        totalTime: {
+          type: ["number", "null"],
         },
-        "cycleTimeInjectionData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/CycleTimeInjection"
-          }
-        }
+        cycleTimeInjectionData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/CycleTimeInjection",
+          },
+        },
       },
-      "required": [
-        "totalTime"
-      ]
+      required: ["totalTime"],
     },
-    "CycleTimeInjection": {
-      "title": "CycleTimeInjection",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "gasLevelCode": {
-          "type": "string"
+    CycleTimeInjection: {
+      title: "CycleTimeInjection",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        gasLevelCode: {
+          type: "string",
         },
-        "calibrationGasValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        calibrationGasValue: {
+          type: ["number", "null"],
         },
-        "beginDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
+        beginDate: {
+          type: ["string", "null"],
+          format: "date",
         },
-        "beginHour": {
-          "type": [
-            "number",
-            "null"
-          ]
+        beginHour: {
+          type: ["number", "null"],
         },
-        "beginMinute": {
-          "type": "number"
+        beginMinute: {
+          type: "number",
         },
-        "endDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
+        endDate: {
+          type: ["string", "null"],
+          format: "date",
         },
-        "endHour": {
-          "type": [
-            "number",
-            "null"
-          ]
+        endHour: {
+          type: ["number", "null"],
         },
-        "endMinute": {
-          "type": "number"
+        endMinute: {
+          type: "number",
         },
-        "injectionCycleTime": {
-          "type": [
-            "number",
-            "null"
-          ]
+        injectionCycleTime: {
+          type: ["number", "null"],
         },
-        "beginMonitorValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        beginMonitorValue: {
+          type: ["number", "null"],
         },
-        "endMonitorValue": {
-          "type": [
-            "number",
-            "null"
-          ]
-        }
+        endMonitorValue: {
+          type: ["number", "null"],
+        },
       },
-      "required": [
+      required: [
         "gasLevelCode",
         "calibrationGasValue",
         "beginDate",
@@ -1456,170 +1011,95 @@ const schema = {
         "endMinute",
         "injectionCycleTime",
         "beginMonitorValue",
-        "endMonitorValue"
-      ]
+        "endMonitorValue",
+      ],
     },
-    "OnlineOfflineCalibration": {
-      "title": "OnlineOfflineCalibration",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "onlineZeroReferenceValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+    OnlineOfflineCalibration: {
+      title: "OnlineOfflineCalibration",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        onlineZeroReferenceValue: {
+          type: ["number", "null"],
         },
-        "onlineUpscaleReferenceValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        onlineUpscaleReferenceValue: {
+          type: ["number", "null"],
         },
-        "offlineZeroReferenceValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        offlineZeroReferenceValue: {
+          type: ["number", "null"],
         },
-        "offlineUpscaleReferenceValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        offlineUpscaleReferenceValue: {
+          type: ["number", "null"],
         },
-        "onlineZeroMeasuredValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        onlineZeroMeasuredValue: {
+          type: ["number", "null"],
         },
-        "onlineUpscaleMeasuredValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        onlineUpscaleMeasuredValue: {
+          type: ["number", "null"],
         },
-        "offlineZeroMeasuredValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        offlineZeroMeasuredValue: {
+          type: ["number", "null"],
         },
-        "offlineUpscaleMeasuredValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        offlineUpscaleMeasuredValue: {
+          type: ["number", "null"],
         },
-        "onlineZeroCalibrationError": {
-          "type": [
-            "number",
-            "null"
-          ]
+        onlineZeroCalibrationError: {
+          type: ["number", "null"],
         },
-        "onlineUpscaleCalibrationError": {
-          "type": [
-            "number",
-            "null"
-          ]
+        onlineUpscaleCalibrationError: {
+          type: ["number", "null"],
         },
-        "offlineZeroCalibrationError": {
-          "type": [
-            "number",
-            "null"
-          ]
+        offlineZeroCalibrationError: {
+          type: ["number", "null"],
         },
-        "offlineUpscaleCalibrationError": {
-          "type": [
-            "number",
-            "null"
-          ]
+        offlineUpscaleCalibrationError: {
+          type: ["number", "null"],
         },
-        "UpscaleGasLevelCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+        UpscaleGasLevelCode: {
+          type: ["string", "null"],
         },
-        "onlineZeroAPSIndicator": {
-          "type": [
-            "number",
-            "null"
-          ]
+        onlineZeroAPSIndicator: {
+          type: ["number", "null"],
         },
-        "onlineUpscaleAPSIndicator": {
-          "type": [
-            "number",
-            "null"
-          ]
+        onlineUpscaleAPSIndicator: {
+          type: ["number", "null"],
         },
-        "offlineZeroAPSIndicator": {
-          "type": [
-            "number",
-            "null"
-          ]
+        offlineZeroAPSIndicator: {
+          type: ["number", "null"],
         },
-        "offlineUpscaleAPSIndicator": {
-          "type": [
-            "number",
-            "null"
-          ]
+        offlineUpscaleAPSIndicator: {
+          type: ["number", "null"],
         },
-        "onlineZeroInjectionDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
+        onlineZeroInjectionDate: {
+          type: ["string", "null"],
+          format: "date",
         },
-        "onlineUpscaleInjectionDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
+        onlineUpscaleInjectionDate: {
+          type: ["string", "null"],
+          format: "date",
         },
-        "offlineZeroInjectionDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
+        offlineZeroInjectionDate: {
+          type: ["string", "null"],
+          format: "date",
         },
-        "offlineUpscaleInjectionDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
+        offlineUpscaleInjectionDate: {
+          type: ["string", "null"],
+          format: "date",
         },
-        "onlineZeroInjectionHour": {
-          "type": [
-            "number",
-            "null"
-          ]
+        onlineZeroInjectionHour: {
+          type: ["number", "null"],
         },
-        "onlineUpscaleInjectionHour": {
-          "type": [
-            "number",
-            "null"
-          ]
+        onlineUpscaleInjectionHour: {
+          type: ["number", "null"],
         },
-        "offlineZeroInjectionHour": {
-          "type": [
-            "number",
-            "null"
-          ]
+        offlineZeroInjectionHour: {
+          type: ["number", "null"],
         },
-        "offlineUpscaleInjectionHour": {
-          "type": [
-            "number",
-            "null"
-          ]
-        }
+        offlineUpscaleInjectionHour: {
+          type: ["number", "null"],
+        },
       },
-      "required": [
+      required: [
         "onlineZeroReferenceValue",
         "onlineUpscaleReferenceValue",
         "offlineZeroReferenceValue",
@@ -1644,191 +1124,119 @@ const schema = {
         "onlineZeroInjectionHour",
         "onlineUpscaleInjectionHour",
         "offlineZeroInjectionHour",
-        "offlineUpscaleInjectionHour"
-      ]
+        "offlineUpscaleInjectionHour",
+      ],
     },
-    "FuelFlowmeterAccuracy": {
-      "title": "FuelFlowmeterAccuracy",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "accuracyTestMethodCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+    FuelFlowmeterAccuracy: {
+      title: "FuelFlowmeterAccuracy",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        accuracyTestMethodCode: {
+          type: ["string", "null"],
         },
-        "lowFuelAccuracy": {
-          "type": [
-            "number",
-            "null"
-          ]
+        lowFuelAccuracy: {
+          type: ["number", "null"],
         },
-        "midFuelAccuracy": {
-          "type": [
-            "number",
-            "null"
-          ]
+        midFuelAccuracy: {
+          type: ["number", "null"],
         },
-        "highFuelAccuracy": {
-          "type": [
-            "number",
-            "null"
-          ]
+        highFuelAccuracy: {
+          type: ["number", "null"],
         },
-        "reinstallationDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
+        reinstallationDate: {
+          type: ["string", "null"],
+          format: "date",
         },
-        "reinstallationHour": {
-          "type": [
-            "number",
-            "null"
-          ]
-        }
+        reinstallationHour: {
+          type: ["number", "null"],
+        },
       },
-      "required": [
+      required: [
         "accuracyTestMethodCode",
         "lowFuelAccuracy",
         "midFuelAccuracy",
         "highFuelAccuracy",
         "reinstallationDate",
-        "reinstallationHour"
-      ]
+        "reinstallationHour",
+      ],
     },
-    "TransmitterTransducer": {
-      "title": "TransmitterTransducer",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "lowLevelAccuracy": {
-          "type": [
-            "number",
-            "null"
-          ]
+    TransmitterTransducer: {
+      title: "TransmitterTransducer",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        lowLevelAccuracy: {
+          type: ["number", "null"],
         },
-        "lowLevelAccuracySpecCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+        lowLevelAccuracySpecCode: {
+          type: ["string", "null"],
         },
-        "midLevelAccuracy": {
-          "type": [
-            "number",
-            "null"
-          ]
+        midLevelAccuracy: {
+          type: ["number", "null"],
         },
-        "midLevelAccuracySpecCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+        midLevelAccuracySpecCode: {
+          type: ["string", "null"],
         },
-        "highLevelAccuracy": {
-          "type": [
-            "number",
-            "null"
-          ]
+        highLevelAccuracy: {
+          type: ["number", "null"],
         },
-        "highLevelAccuracySpecCode": {
-          "type": [
-            "string",
-            "null"
-          ]
-        }
+        highLevelAccuracySpecCode: {
+          type: ["string", "null"],
+        },
       },
-      "required": [
+      required: [
         "lowLevelAccuracy",
         "lowLevelAccuracySpecCode",
         "midLevelAccuracy",
         "midLevelAccuracySpecCode",
         "highLevelAccuracy",
-        "highLevelAccuracySpecCode"
-      ]
+        "highLevelAccuracySpecCode",
+      ],
     },
-    "FuelFlowToLoadBaseline": {
-      "title": "FuelFlowToLoadBaseline",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "accuracyTestNumber": {
-          "type": [
-            "string",
-            "null"
-          ]
+    FuelFlowToLoadBaseline: {
+      title: "FuelFlowToLoadBaseline",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        accuracyTestNumber: {
+          type: ["string", "null"],
         },
-        "peiTestNumber": {
-          "type": [
-            "string",
-            "null"
-          ]
+        peiTestNumber: {
+          type: ["string", "null"],
         },
-        "averageFuelFlowRate": {
-          "type": [
-            "number",
-            "null"
-          ]
+        averageFuelFlowRate: {
+          type: ["number", "null"],
         },
-        "averageLoad": {
-          "type": [
-            "number",
-            "null"
-          ]
+        averageLoad: {
+          type: ["number", "null"],
         },
-        "baselineFuelFlowToLoadRatio": {
-          "type": [
-            "number",
-            "null"
-          ]
+        baselineFuelFlowToLoadRatio: {
+          type: ["number", "null"],
         },
-        "fuelFlowToLoadUOMCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+        fuelFlowToLoadUOMCode: {
+          type: ["string", "null"],
         },
-        "averageHourlyHeatInputRate": {
-          "type": [
-            "number",
-            "null"
-          ]
+        averageHourlyHeatInputRate: {
+          type: ["number", "null"],
         },
-        "baselineGHR": {
-          "type": [
-            "number",
-            "null"
-          ]
+        baselineGHR: {
+          type: ["number", "null"],
         },
-        "ghrUnitsOfMeasureCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+        ghrUnitsOfMeasureCode: {
+          type: ["string", "null"],
         },
-        "numberOfHoursExcludedCofiring": {
-          "type": [
-            "number",
-            "null"
-          ]
+        numberOfHoursExcludedCofiring: {
+          type: ["number", "null"],
         },
-        "numberOfHoursExcludedRamping": {
-          "type": [
-            "number",
-            "null"
-          ]
+        numberOfHoursExcludedRamping: {
+          type: ["number", "null"],
         },
-        "numberOfHoursExcludedLowRange": {
-          "type": [
-            "number",
-            "null"
-          ]
-        }
+        numberOfHoursExcludedLowRange: {
+          type: ["number", "null"],
+        },
       },
-      "required": [
+      required: [
         "accuracyTestNumber",
         "peiTestNumber",
         "averageFuelFlowRate",
@@ -1840,187 +1248,130 @@ const schema = {
         "ghrUnitsOfMeasureCode",
         "numberOfHoursExcludedCofiring",
         "numberOfHoursExcludedRamping",
-        "numberOfHoursExcludedLowRange"
-      ]
+        "numberOfHoursExcludedLowRange",
+      ],
     },
-    "FuelFlowToLoadCheck": {
-      "title": "FuelFlowToLoadCheck",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "testBasisCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+    FuelFlowToLoadCheck: {
+      title: "FuelFlowToLoadCheck",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        testBasisCode: {
+          type: ["string", "null"],
         },
-        "averageDifference": {
-          "type": [
-            "number",
-            "null"
-          ]
+        averageDifference: {
+          type: ["number", "null"],
         },
-        "numberOfHoursUsed": {
-          "type": [
-            "number",
-            "null"
-          ]
+        numberOfHoursUsed: {
+          type: ["number", "null"],
         },
-        "numberOfHoursExcludedCofiring": {
-          "type": [
-            "number",
-            "null"
-          ]
+        numberOfHoursExcludedCofiring: {
+          type: ["number", "null"],
         },
-        "numberOfHoursExcludedRamping": {
-          "type": [
-            "number",
-            "null"
-          ]
+        numberOfHoursExcludedRamping: {
+          type: ["number", "null"],
         },
-        "numberOfHoursExcludedLowRange": {
-          "type": [
-            "number",
-            "null"
-          ]
-        }
+        numberOfHoursExcludedLowRange: {
+          type: ["number", "null"],
+        },
       },
-      "required": [
+      required: [
         "testBasisCode",
         "averageDifference",
         "numberOfHoursUsed",
         "numberOfHoursExcludedCofiring",
         "numberOfHoursExcludedRamping",
-        "numberOfHoursExcludedLowRange"
-      ]
+        "numberOfHoursExcludedLowRange",
+      ],
     },
-    "AppECorrelationTestSummary": {
-      "title": "AppECorrelationTestSummary",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "operatingLevelForRun": {
-          "type": "number"
+    AppECorrelationTestSummary: {
+      title: "AppECorrelationTestSummary",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        operatingLevelForRun: {
+          type: "number",
         },
-        "meanReferenceValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        meanReferenceValue: {
+          type: ["number", "null"],
         },
-        "averageHourlyHeatInputRate": {
-          "type": [
-            "number",
-            "null"
-          ]
+        averageHourlyHeatInputRate: {
+          type: ["number", "null"],
         },
-        "fFactor": {
-          "type": [
-            "number",
-            "null"
-          ]
+        fFactor: {
+          type: ["number", "null"],
         },
-        "appECorrelationTestRunData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/AppECorrelationTestRun"
-          }
-        }
+        appECorrelationTestRunData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/AppECorrelationTestRun",
+          },
+        },
       },
-      "required": [
+      required: [
         "operatingLevelForRun",
         "meanReferenceValue",
         "averageHourlyHeatInputRate",
-        "fFactor"
-      ]
+        "fFactor",
+      ],
     },
-    "AppECorrelationTestRun": {
-      "title": "AppECorrelationTestRun",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "runNumber": {
-          "type": "number"
+    AppECorrelationTestRun: {
+      title: "AppECorrelationTestRun",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        runNumber: {
+          type: "number",
         },
-        "referenceValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        referenceValue: {
+          type: ["number", "null"],
         },
-        "hourlyHeatInputRate": {
-          "type": [
-            "number",
-            "null"
-          ]
+        hourlyHeatInputRate: {
+          type: ["number", "null"],
         },
-        "totalHeatInput": {
-          "type": [
-            "number",
-            "null"
-          ]
+        totalHeatInput: {
+          type: ["number", "null"],
         },
-        "responseTime": {
-          "type": [
-            "number",
-            "null"
-          ]
+        responseTime: {
+          type: ["number", "null"],
         },
-        "beginDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
+        beginDate: {
+          type: ["string", "null"],
+          format: "date",
         },
-        "beginHour": {
-          "type": [
-            "number",
-            "null"
-          ]
+        beginHour: {
+          type: ["number", "null"],
         },
-        "beginMinute": {
-          "type": [
-            "number",
-            "null"
-          ]
+        beginMinute: {
+          type: ["number", "null"],
         },
-        "endDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
+        endDate: {
+          type: ["string", "null"],
+          format: "date",
         },
-        "endHour": {
-          "type": [
-            "number",
-            "null"
-          ]
+        endHour: {
+          type: ["number", "null"],
         },
-        "endMinute": {
-          "type": [
-            "number",
-            "null"
-          ]
+        endMinute: {
+          type: ["number", "null"],
         },
-        "appendixEHeatInputFromOilData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/AppendixEHeatInputFromOil"
-          }
+        appendixEHeatInputFromOilData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/AppendixEHeatInputFromOil",
+          },
         },
-        "appendixEHeatInputFromGasData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/AppendixEHeatInputFromGas"
-          }
-        }
+        appendixEHeatInputFromGasData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/AppendixEHeatInputFromGas",
+          },
+        },
       },
-      "required": [
+      required: [
         "runNumber",
         "referenceValue",
         "hourlyHeatInputRate",
@@ -2031,67 +1382,43 @@ const schema = {
         "beginMinute",
         "endDate",
         "endHour",
-        "endMinute"
-      ]
+        "endMinute",
+      ],
     },
-    "AppendixEHeatInputFromOil": {
-      "title": "AppendixEHeatInputFromOil",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "monitoringSystemID": {
-          "type": "string"
+    AppendixEHeatInputFromOil: {
+      title: "AppendixEHeatInputFromOil",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        monitoringSystemID: {
+          type: "string",
         },
-        "oilMass": {
-          "type": [
-            "number",
-            "null"
-          ]
+        oilMass: {
+          type: ["number", "null"],
         },
-        "oilGCV": {
-          "type": [
-            "number",
-            "null"
-          ]
+        oilGCV: {
+          type: ["number", "null"],
         },
-        "oilGCVUnitsOfMeasureCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+        oilGCVUnitsOfMeasureCode: {
+          type: ["string", "null"],
         },
-        "oilHeatInput": {
-          "type": [
-            "number",
-            "null"
-          ]
+        oilHeatInput: {
+          type: ["number", "null"],
         },
-        "oilVolume": {
-          "type": [
-            "number",
-            "null"
-          ]
+        oilVolume: {
+          type: ["number", "null"],
         },
-        "oilVolumeUnitsOfMeasureCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+        oilVolumeUnitsOfMeasureCode: {
+          type: ["string", "null"],
         },
-        "oilDensity": {
-          "type": [
-            "number",
-            "null"
-          ]
+        oilDensity: {
+          type: ["number", "null"],
         },
-        "oilDensityUnitsOfMeasureCode": {
-          "type": [
-            "string",
-            "null"
-          ]
-        }
+        oilDensityUnitsOfMeasureCode: {
+          type: ["string", "null"],
+        },
       },
-      "required": [
+      required: [
         "monitoringSystemID",
         "oilMass",
         "oilGCV",
@@ -2100,167 +1427,111 @@ const schema = {
         "oilVolume",
         "oilVolumeUnitsOfMeasureCode",
         "oilDensity",
-        "oilDensityUnitsOfMeasureCode"
-      ]
+        "oilDensityUnitsOfMeasureCode",
+      ],
     },
-    "AppendixEHeatInputFromGas": {
-      "title": "AppendixEHeatInputFromGas",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "monitoringSystemID": {
-          "type": "string"
+    AppendixEHeatInputFromGas: {
+      title: "AppendixEHeatInputFromGas",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        monitoringSystemID: {
+          type: "string",
         },
-        "gasGCV": {
-          "type": [
-            "number",
-            "null"
-          ]
+        gasGCV: {
+          type: ["number", "null"],
         },
-        "gasVolume": {
-          "type": [
-            "number",
-            "null"
-          ]
+        gasVolume: {
+          type: ["number", "null"],
         },
-        "gasHeatInput": {
-          "type": [
-            "number",
-            "null"
-          ]
-        }
+        gasHeatInput: {
+          type: ["number", "null"],
+        },
       },
-      "required": [
-        "monitoringSystemID",
-        "gasGCV",
-        "gasVolume",
-        "gasHeatInput"
-      ]
+      required: ["monitoringSystemID", "gasGCV", "gasVolume", "gasHeatInput"],
     },
-    "UnitDefaultTest": {
-      "title": "UnitDefaultTest",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "fuelCode": {
-          "type": "string"
+    UnitDefaultTest: {
+      title: "UnitDefaultTest",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        fuelCode: {
+          type: "string",
         },
-        "noxDefaultRate": {
-          "type": [
-            "number",
-            "null"
-          ]
+        noxDefaultRate: {
+          type: ["number", "null"],
         },
-        "operatingConditionCode": {
-          "type": [
-            "string",
-            "null"
-          ]
+        operatingConditionCode: {
+          type: ["string", "null"],
         },
-        "groupID": {
-          "type": [
-            "string",
-            "null"
-          ]
+        groupID: {
+          type: ["string", "null"],
         },
-        "numberOfUnitsInGroup": {
-          "type": [
-            "number",
-            "null"
-          ]
+        numberOfUnitsInGroup: {
+          type: ["number", "null"],
         },
-        "numberOfTestsForGroup": {
-          "type": [
-            "number",
-            "null"
-          ]
+        numberOfTestsForGroup: {
+          type: ["number", "null"],
         },
-        "unitDefaultTestRunData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/UnitDefaultTestRun"
-          }
-        }
+        unitDefaultTestRunData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/UnitDefaultTestRun",
+          },
+        },
       },
-      "required": [
+      required: [
         "fuelCode",
         "noxDefaultRate",
         "operatingConditionCode",
         "groupID",
         "numberOfUnitsInGroup",
-        "numberOfTestsForGroup"
-      ]
+        "numberOfTestsForGroup",
+      ],
     },
-    "UnitDefaultTestRun": {
-      "title": "UnitDefaultTestRun",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "operatingLevelForRun": {
-          "type": "number"
+    UnitDefaultTestRun: {
+      title: "UnitDefaultTestRun",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        operatingLevelForRun: {
+          type: "number",
         },
-        "runNumber": {
-          "type": "number"
+        runNumber: {
+          type: "number",
         },
-        "beginDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
+        beginDate: {
+          type: ["string", "null"],
+          format: "date",
         },
-        "beginHour": {
-          "type": [
-            "number",
-            "null"
-          ]
+        beginHour: {
+          type: ["number", "null"],
         },
-        "beginMinute": {
-          "type": [
-            "number",
-            "null"
-          ]
+        beginMinute: {
+          type: ["number", "null"],
         },
-        "endDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
+        endDate: {
+          type: ["string", "null"],
+          format: "date",
         },
-        "endHour": {
-          "type": [
-            "number",
-            "null"
-          ]
+        endHour: {
+          type: ["number", "null"],
         },
-        "endMinute": {
-          "type": [
-            "number",
-            "null"
-          ]
+        endMinute: {
+          type: ["number", "null"],
         },
-        "responseTime": {
-          "type": [
-            "number",
-            "null"
-          ]
+        responseTime: {
+          type: ["number", "null"],
         },
-        "referenceValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        referenceValue: {
+          type: ["number", "null"],
         },
-        "runUsedIndicator": {
-          "type": [
-            "number",
-            "null"
-          ]
-        }
+        runUsedIndicator: {
+          type: ["number", "null"],
+        },
       },
-      "required": [
+      required: [
         "operatingLevelForRun",
         "runNumber",
         "beginDate",
@@ -2271,135 +1542,108 @@ const schema = {
         "endMinute",
         "responseTime",
         "referenceValue",
-        "runUsedIndicator"
-      ]
+        "runUsedIndicator",
+      ],
     },
-    "TestQualification": {
-      "title": "TestQualification",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "testClaimCode": {
-          "type": "string"
+    TestQualification: {
+      title: "TestQualification",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        testClaimCode: {
+          type: "string",
         },
-        "beginDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
+        beginDate: {
+          type: ["string", "null"],
+          format: "date",
         },
-        "endDate": {
-          "type": [
-            "number",
-            "null"
-          ]
+        endDate: {
+          type: ["number", "null"],
         },
-        "highLoadPercentage": {
-          "type": [
-            "number",
-            "null"
-          ]
+        highLoadPercentage: {
+          type: ["number", "null"],
         },
-        "midLoadPercentage": {
-          "type": [
-            "number",
-            "null"
-          ]
+        midLoadPercentage: {
+          type: ["number", "null"],
         },
-        "lowLoadPercentage": {
-          "type": [
-            "number",
-            "null"
-          ]
-        }
+        lowLoadPercentage: {
+          type: ["number", "null"],
+        },
       },
-      "required": [
+      required: [
         "testClaimCode",
         "beginDate",
         "endDate",
         "highLoadPercentage",
         "midLoadPercentage",
-        "lowLoadPercentage"
-      ]
+        "lowLoadPercentage",
+      ],
     },
-    "ProtocolGas": {
-      "title": "ProtocolGas",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "gasLevelCode": {
-          "type": "string"
+    ProtocolGas: {
+      title: "ProtocolGas",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        gasLevelCode: {
+          type: "string",
         },
-        "gasTypeCode": {
-          "type": "string"
+        gasTypeCode: {
+          type: "string",
         },
-        "cylinderIdentifier": {
-          "type": [
-            "string",
-            "null"
-          ]
+        cylinderIdentifier: {
+          type: ["string", "null"],
         },
-        "vendorIdentifier": {
-          "type": [
-            "string",
-            "null"
-          ]
+        vendorIdentifier: {
+          type: ["string", "null"],
         },
-        "expirationDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
-        }
+        expirationDate: {
+          type: ["string", "null"],
+          format: "date",
+        },
       },
-      "required": [
+      required: [
         "gasLevelCode",
         "gasTypeCode",
         "cylinderIdentifier",
         "vendorIdentifier",
-        "expirationDate"
-      ]
+        "expirationDate",
+      ],
     },
-    "AirEmissionTest": {
-      "title": "AirEmissionTest",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "qiLastName": {
-          "type": "string"
+    AirEmissionTest: {
+      title: "AirEmissionTest",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        qiLastName: {
+          type: "string",
         },
-        "qiFirstName": {
-          "type": "string"
+        qiFirstName: {
+          type: "string",
         },
-        "qiMiddleInitial": {
-          "type": [
-            "string",
-            "null"
-          ]
+        qiMiddleInitial: {
+          type: ["string", "null"],
         },
-        "aetbName": {
-          "type": "string"
+        aetbName: {
+          type: "string",
         },
-        "aetbPhoneNumber": {
-          "type": "string"
+        aetbPhoneNumber: {
+          type: "string",
         },
-        "aetbEmail": {
-          "type": "string"
+        aetbEmail: {
+          type: "string",
         },
-        "examDate": {
-          "type": "string",
-          "format": "date"
+        examDate: {
+          type: "string",
+          format: "date",
         },
-        "providerName": {
-          "type": "string"
+        providerName: {
+          type: "string",
         },
-        "providerEmail": {
-          "type": "string"
-        }
+        providerEmail: {
+          type: "string",
+        },
       },
-      "required": [
+      required: [
         "qiLastName",
         "qiFirstName",
         "qiMiddleInitial",
@@ -2408,99 +1652,85 @@ const schema = {
         "aetbEmail",
         "examDate",
         "providerName",
-        "providerEmail"
-      ]
+        "providerEmail",
+      ],
     },
-    "HgSummary": {
-      "title": "HgSummary",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "gasLevelCode": {
-          "type": "string"
+    HgSummary: {
+      title: "HgSummary",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        gasLevelCode: {
+          type: "string",
         },
-        "meanMeasuredValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        meanMeasuredValue: {
+          type: ["number", "null"],
         },
-        "meanReferenceValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        meanReferenceValue: {
+          type: ["number", "null"],
         },
-        "percentError": {
-          "type": [
-            "number",
-            "null"
-          ]
+        percentError: {
+          type: ["number", "null"],
         },
-        "apsIndicator": {
-          "type": [
-            "number",
-            "null"
-          ]
+        apsIndicator: {
+          type: ["number", "null"],
         },
-        "hgInjectionData": {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "#/definitions/HgInjection"
-          }
-        }
+        hgInjectionData: {
+          type: "array",
+          minItems: 0,
+          items: {
+            $ref: "#/definitions/HgInjection",
+          },
+        },
       },
-      "required": [
+      required: [
         "gasLevelCode",
         "meanMeasuredValue",
         "meanReferenceValue",
         "percentError",
-        "apsIndicator"
-      ]
+        "apsIndicator",
+      ],
     },
-    "HgInjection": {
-      "title": "HgInjection",
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "injectionDate": {
-          "type": "string",
-          "format": "date"
+    HgInjection: {
+      title: "HgInjection",
+      type: "object",
+      additionalProperties: true,
+      properties: {
+        injectionDate: {
+          type: "string",
+          format: "date",
         },
-        "injectionHour": {
-          "type": "number"
+        injectionHour: {
+          type: "number",
         },
-        "injectionMinute": {
-          "type": "number"
+        injectionMinute: {
+          type: "number",
         },
-        "measuredValue": {
-          "type": [
-            "number",
-            "null"
-          ]
+        measuredValue: {
+          type: ["number", "null"],
         },
-        "referenceValue": {
-          "type": [
-            "number",
-            "null"
-          ]
-        }
+        referenceValue: {
+          type: ["number", "null"],
+        },
       },
-      "required": [
+      required: [
         "injectionDate",
         "injectionHour",
         "injectionMinute",
         "measuredValue",
-        "referenceValue"
-      ]
-    }
-  }
-}
+        "referenceValue",
+      ],
+    },
+  },
+};
 
 describe("testing ImportModal component ", () => {
-  test("renders the content of ImportModal component with MONITORING_PLAN_STORE_NAME", async() => {
-    mock.onGet("https://api.epa.gov/easey/dev/content-mgmt/ecmps/reporting-instructions/monitor-plan.schema.json").reply(200, schema);
+  test("renders the content of ImportModal component with MONITORING_PLAN_STORE_NAME", async () => {
+    mock
+      .onGet(
+        "https://api.epa.gov/easey/dev/content-mgmt/ecmps/reporting-instructions/monitor-plan.schema.json"
+      )
+      .reply(200, schema);
     const { container, findByText, getByText } = render(
       <ImportModal
         setDisablePortBtn={jest.fn()}
@@ -2521,23 +1751,31 @@ describe("testing ImportModal component ", () => {
 
     expect(renderedComponent).not.toBeUndefined();
     const label = await findByText("Upload MP JSON File");
-    expect(label).toBeDefined()
+    expect(label).toBeDefined();
     const fileInputLabel = await findByText("Drag file here or");
-    expect(fileInputLabel).toBeDefined()
+    expect(fileInputLabel).toBeDefined();
     const fileInputLabel2 = await findByText("choose from folder");
-    expect(fileInputLabel2).toBeDefined()
+    expect(fileInputLabel2).toBeDefined();
     const fileInput = container.querySelector("#file-input-single");
     expect(fileInput).not.toBeUndefined();
-    fireEvent.change(fileInput,{
+    fireEvent.change(fileInput, {
       dataTransfer: {
-        files: [new File(['(⌐□_□)'], 'chucknorris.png', {type: 'image/png'})],
-      }
+        files: [new File(["(⌐□_□)"], "chucknorris.png", { type: "image/png" })],
+      },
     });
   });
 
-  test("renders the content of ImportModal component with QA_CERT_TEST_SUMMARY_STORE_NAME", async() => {
-    const fakeFile = new File(['(⌐□_□)'], {item:'chucknorris.png'}, {type: 'image/png'});
-    mock.onGet("https://api.epa.gov/easey/dev/content-mgmt/ecmps/reporting-instructions/qa-certification.schema.json").reply(200, schema);
+  test("renders the content of ImportModal component with QA_CERT_TEST_SUMMARY_STORE_NAME", async () => {
+    const fakeFile = new File(
+      ["(⌐□_□)"],
+      { item: "chucknorris.png" },
+      { type: "image/png" }
+    );
+    mock
+      .onGet(
+        "https://api.epa.gov/easey/dev/content-mgmt/ecmps/reporting-instructions/qa-certification.schema.json"
+      )
+      .reply(200, schema);
 
     const { container, findByText, getByText } = render(
       <ImportModal
@@ -2557,29 +1795,125 @@ describe("testing ImportModal component ", () => {
       ".import-modal-container"
     );
 
+
     expect(renderedComponent).not.toBeUndefined();
     const label = await findByText("Upload QA JSON File");
-    expect(label).toBeDefined()
+    expect(label).toBeDefined();
     const fileInputLabel = await findByText("Drag file here or");
-    expect(fileInputLabel).toBeDefined()
+    expect(fileInputLabel).toBeDefined();
     const fileInputLabel2 = await findByText("choose from folder");
-    expect(fileInputLabel2).toBeDefined()
+    expect(fileInputLabel2).toBeDefined();
     const fileInput = container.querySelector("#file-input-single");
     expect(fileInput).not.toBeUndefined();
-    fireEvent.change(fileInput,{
+    fireEvent.change(fileInput, {
       dataTransfer: {
-        files: [new File(['(⌐□_□)'], 'chucknorris.png', {type: 'image/png'})],
-      }
+        files: [new File(["(⌐□_□)"], "chucknorris.png", { type: "image/png" })],
+      },
     });
+
     // Object.defineProperty(fileInput, 'files', { value: [fakeFile] });
     // fireEvent.input(fileInput)
     //fireEvent.change(fileInput, { target: { files: [fakeFile] }})
     // fireEvent.input(fileInput)
     //screen.debug();
   });
+  test("the fetch fails with an error for MONITORING_PLAN", () => {
+    mock
+      .onGet(
+        "https://api.epa.gov/easey/dev/content-mgmt/ecmps/reporting-instructions/monitor-plan.schema.json"
+      )
+      .reply(() =>
+        Promise.reject({
+          customAttributes: { httpErrorStatus: 404 },
+        })
+      );
+    let { container } = render(
+      <ImportModal
+        setDisablePortBtn={jest.fn()}
+        complete={true}
+        setFileName={jest.fn()}
+        fileName={"test"}
+        setHasFormatError={jest.fn()}
+        setHasInvalidJsonError={jest.fn()}
+        importApiErrors={["error"]}
+        importedFileErrorMsgs={["error"]}
+        setImportedFile={jest.fn()}
+        workspaceSection={MONITORING_PLAN_STORE_NAME}
+      />
+    );
+    const renderedComponent1 = container.querySelector(
+      ".import-modal-container"
+    );
 
-  test("renders the content of ImportModal component with EMISSIONS_STORE_NAME", async() => {
-    mock.onGet("https://api.epa.gov/easey/dev/content-mgmt/ecmps/reporting-instructions/emissions.schema.json").reply(200, schema);
+    expect(renderedComponent1).not.toBeUndefined();
+  });
+  test("the fetch fails with an error for QA_CERT_TEST_SUMMARY", () => {
+    mock
+      .onGet(
+        "https://api.epa.gov/easey/dev/content-mgmt/ecmps/reporting-instructions/qa-certification.schema.json"
+      )
+      .reply(() =>
+        Promise.reject({
+          customAttributes: { httpErrorStatus: 404 },
+        })
+      );
+    let { container } = render(
+      <ImportModal
+        setDisablePortBtn={jest.fn()}
+        complete={false}
+        setFileName={jest.fn()}
+        fileName={"test"}
+        setHasFormatError={jest.fn()}
+        setHasInvalidJsonError={jest.fn()}
+        importApiErrors={["error"]}
+        importedFileErrorMsgs={["error"]}
+        setImportedFile={jest.fn()}
+        workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
+      />
+    );
+    const renderedComponent = container.querySelector(
+      ".import-modal-container"
+    );
+
+    expect(renderedComponent).not.toBeUndefined();
+  });
+  test("the fetch fails with an error for EMISSIONS_STORE_NAME", () => {
+    mock
+      .onGet(
+        "https://api.epa.gov/easey/dev/content-mgmt/ecmps/reporting-instructions/emissions.schema.json"
+      )
+      .reply(() =>
+        Promise.reject({
+          customAttributes: { httpErrorStatus: 404 },
+        })
+      );
+    let { container } = render(
+      <ImportModal
+        setDisablePortBtn={jest.fn()}
+        complete={false}
+        setFileName={jest.fn()}
+        fileName={"test"}
+        setHasFormatError={jest.fn()}
+        setHasInvalidJsonError={jest.fn()}
+        importApiErrors={[]}
+        importedFileErrorMsgs={[]}
+        setImportedFile={jest.fn()}
+        workspaceSection={EMISSIONS_STORE_NAME}
+      />
+    );
+    const renderedComponent2 = container.querySelector(
+      ".import-modal-container"
+    );
+
+    expect(renderedComponent2).not.toBeUndefined();
+  });
+
+  test("renders the content of ImportModal component with EMISSIONS_STORE_NAME", async () => {
+    mock
+      .onGet(
+        "https://api.epa.gov/easey/dev/content-mgmt/ecmps/reporting-instructions/emissions.schema.json"
+      )
+      .reply(200, schema);
     const { container, findByText, getByText } = render(
       <ImportModal
         setDisablePortBtn={jest.fn()}
@@ -2599,19 +1933,17 @@ describe("testing ImportModal component ", () => {
     );
     expect(renderedComponent).not.toBeUndefined();
     const label = await findByText("Upload Emissions JSON File");
-    expect(label).toBeDefined()
+    expect(label).toBeDefined();
     const fileInputLabel = await findByText("Drag file here or");
-    expect(fileInputLabel).toBeDefined()
+    expect(fileInputLabel).toBeDefined();
     const fileInputLabel2 = await findByText("choose from folder");
-    expect(fileInputLabel2).toBeDefined()
+    expect(fileInputLabel2).toBeDefined();
     const fileInput = container.querySelector("#file-input-single");
     expect(fileInput).not.toBeUndefined();
-    fireEvent.change(fileInput,{
+    fireEvent.change(fileInput, {
       dataTransfer: {
-        files: [new File(['(⌐□_□)'], 'chucknorris.png', {type: 'image/png'})],
-      }
+        files: [new File(["(⌐□_□)"], "chucknorris.png", { type: "image/png" })],
+      },
     });
-    
   });
-
 });
