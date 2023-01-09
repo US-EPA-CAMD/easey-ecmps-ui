@@ -121,6 +121,49 @@ describe("Review and submit form", () => {
     expect(byText("Barry - 1")).toBeInTheDocument();
   });
 
+  test("Removes selections properly", async () => {
+    let byText, query;
+
+    await act(async () => {
+      const actQuery = render(
+        <FilterForm
+          facilities={mockFacilities}
+          queryCallback={jest.fn()}
+          showModal={jest.fn()}
+          setExcludeErrors={jest.fn()}
+          filesSelected={1}
+          componentType="Submission"
+        />
+      );
+
+      byText = actQuery.getByText;
+      query = actQuery;
+    });
+
+    await act(async () => {
+      const facilityInput = screen.getByTestId("Facilities-input-search");
+      await userEvent.click(facilityInput);
+      await byText("Barry (3)").click();
+    });
+
+    await act(async () => {
+      const configurationInput = screen.getByTestId(
+        "Configurations-input-search"
+      );
+      await userEvent.click(configurationInput);
+    });
+    await act(async () => {
+      const facilityRemoveButton = query.getByTestId('3-remove');
+      await userEvent.click(facilityRemoveButton);
+    });
+    await act(async () => {
+      const reportingPeriodRemoveButton = query.getByTestId('2022 Q4-remove');
+      await userEvent.click(reportingPeriodRemoveButton);
+    });
+    query.debug()
+    expect(query.queryByText("Barry - 1")).not.toBeInTheDocument();
+  });
+
   test("Click a configuration from returned configurations", async () => {
     let orisTable;
     let monPlanTable;
