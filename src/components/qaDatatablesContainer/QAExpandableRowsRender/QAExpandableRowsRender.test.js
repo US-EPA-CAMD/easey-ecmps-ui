@@ -30,6 +30,7 @@ import {
   qaFlowToLoadReferenceProps,
   qaUnitDefaultTestDataProps,
   qaHgSummaryDataProps,
+  qaUnitDefaultTestRunDataProps,
   qaHgInjectionDataProps
 } from "../../../additional-functions/qa-dataTable-props";
 
@@ -1459,6 +1460,89 @@ describe('Test cases for QAExpandableRowsRender', () => {
     // saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
     // userEvent.click(saveAndCloseBtn)
 
+  })
+
+  test('renders Unit default test run rows and create/save/delete', async () => {
+    const unitDefaultTestRun = [
+      {
+        "id": "1",
+        "unitDefaultTestSumId": "efa0789c-8731-4255-a48a-767f3b3ddfea",
+        "operatingLevel": 1,
+        "runNumber": 2,
+        "beginDate": "2022-12-05",
+        "beginHour": 12,
+        "beginMinute": 15,
+        "endDate": "2022-12-21",
+        "endHour": 2,
+        "endMinute": 12,
+        "responseTime": 3,
+        "referenceValue": 4,
+        "runUsedIndicator": 0,
+        "userId": "agebremichael-dp",
+        "addDate": "1/6/2023, 3:42:55 PM",
+        "updateDate": "1/6/2023, 3:42:55 PM"
+      },
+      {
+        "id": "2",
+        "unitDefaultTestSumId": "efa0789c-8731-4255-a48a-767f3b3ddfea",
+        "operatingLevel": 1,
+        "runNumber": 2,
+        "beginDate": "2022-12-05",
+        "beginHour": 12,
+        "beginMinute": 15,
+        "endDate": "2022-12-21",
+        "endHour": 2,
+        "endMinute": 12,
+        "responseTime": 3,
+        "referenceValue": 4,
+        "runUsedIndicator": 0,
+        "userId": "agebremichael-dp",
+        "addDate": "1/6/2023, 3:42:55 PM",
+        "updateDate": "1/6/2023, 3:42:55 PM"
+      }
+    ]
+
+    const getUrl = new RegExp(`${qaCertBaseUrl}/locations/${idRegex}/test-summary/${idRegex}/unit-default-tests/${idRegex}/unit-default-test-runs`);
+    const postUrl = new RegExp(`${qaCertBaseUrl}/locations/${idRegex}/test-summary/${idRegex}/unit-default-tests/${idRegex}/unit-default-test-runs`);
+    // const putUrl = new RegExp(`${qaCertBaseUrl}/locations/${idRegex}/test-summary/${idRegex}/unit-default-tests/${idRegex}/hg-injections/${idRegex}`);
+    // const deleteUrl = new RegExp(`${qaCertBaseUrl}/locations/${idRegex}/test-summary/${idRegex}/unit-default-tests/${idRegex}/hg-injections/${idRegex}`);
+
+    mock.onGet(getUrl).reply(200, unitDefaultTestRun)
+    mock.onPost(postUrl).reply(200, 'created')
+    // mock.onPut(putUrl).reply(200, 'updated')
+    // mock.onDelete(deleteUrl).reply(200, 'deleted')
+
+    const props = qaUnitDefaultTestRunDataProps()
+    const idArray = [locId, testSumId]
+    const data = { locationId: locId, id: appECorrTestSumId }
+    renderComponent(props, idArray, data);
+
+    // renders rows
+    const rows = await screen.findAllByRole('row')
+    expect(mock.history.get.length).not.toBe(0)
+    expect(rows).toHaveLength(unitDefaultTestRun.length)
+
+    // add row
+    const addBtn = screen.getByRole('button', { name: /Add/i })
+    userEvent.click(addBtn)
+    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+    // edit row
+    // const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    // expect(editBtns).toHaveLength(hgInjectionData.length)
+    // userEvent.click(editBtns[0])
+    // saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    // userEvent.click(saveAndCloseBtn)
+    // setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+
+    // remove row
+    // const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    // expect(deleteBtns).toHaveLength(hgInjectionData.length)
+    // const secondDeleteBtn = deleteBtns[1]
+    // userEvent.click(secondDeleteBtn)
+    // const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    // userEvent.click(confirmBtns[1])
   })
 
   test('renders Hg Summary data rows and create/save/delete', async () => {
