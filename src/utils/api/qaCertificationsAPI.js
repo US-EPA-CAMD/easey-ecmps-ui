@@ -1847,10 +1847,10 @@ export const createUnitDefaultTest = async (
         url: url,
         data: payload,
       })
-      );
-    } catch (error) {
-      return handleImportError(error);
-    }
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
 };
 
 export const updateUnitDefaultTest = async (
@@ -1886,6 +1886,98 @@ export const deleteUnitDefaultTest = async (
       await secureAxios({
         method: "DELETE",
         url: url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const getHgSummary = async (locId, testSumId) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createHgSummary = async (
+  locId,
+  testSumId,
+  payload
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const updateHgSummary = async (
+  locId,
+  testSumId,
+  id,
+  payload
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const deleteHgSummary = async (
+  locId,
+  testSumId,
+  id
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const getHgInjection = async (locId, testSumId, hgTestSumId) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createHgInjection = async (
+  locId,
+  testSumId,
+  hgTestSumId,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
       })
     );
   } catch (error) {

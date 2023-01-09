@@ -208,6 +208,16 @@ export const workSpace = [
     name: "Submit",
     url: "/workspace/submit",
   },
+  {
+    name: "System Administration",
+    url: "/workspace/error-suppression",
+    children: [
+      {
+        name: "Error Suppression",
+        url: "/workspace/error-suppression",
+      },
+    ],
+  },
 ];
 
 export const appNavItems = [
@@ -225,6 +235,10 @@ export const appNavItems = [
   },
   {
     label: "Emissions",
+    items: [],
+  },
+  {
+    label: "Error Suppression",
     items: [],
   },
   {

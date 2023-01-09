@@ -1205,7 +1205,7 @@ export const HeaderInfo = ({
                     items={reportingPeriods}
                     label="Reporting Period(s)"
                     entity="reportingPeriod"
-                    searchBy="label"
+                    searchBy="contains"
                     onChangeUpdate={handleSelectReportingPeriod}
                   />
                 </Grid>

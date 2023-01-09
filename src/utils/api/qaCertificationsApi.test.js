@@ -745,6 +745,70 @@ describe("QA Cert API", function () {
     });
   });
 
+  describe("Hg Summary Data CRUD operations", () => {
+    test("getHgSummary", async () => {
+      const hgSummaryResp = [
+        { hgSummary: "data" },
+        { hgSummary: "data2" },
+      ];
+      const getHgSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/hg-summaries`;
+      mock.onGet(getHgSummaryUrl).reply(200, hgSummaryResp);
+
+      const resp = await qaCert.getHgSummary(
+        locId,
+        testSumId,
+      );
+
+      expect(mock.history.get.length).toBe(1);
+      expect(resp.data).toStrictEqual(hgSummaryResp);
+    });
+
+    test("createHgSummary", async () => {
+      const payload = { hgSummary: "data" };
+      const postHgSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/hg-summaries`;
+      mock.onPost(postHgSummaryUrl).reply(200, payload);
+
+      const resp = await qaCert.createHgSummary(
+        locId,
+        testSumId,
+        payload
+      );
+
+      expect(mock.history.post.length).toBe(1);
+      expect(resp.data).toStrictEqual(payload);
+    });
+
+    test("updateHgSummary", async () => {
+      const payload = { hgSummary: "data" };
+      const putHgSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/hg-summaries/${id}`;
+      mock.onPut(putHgSummaryUrl).reply(200, payload);
+
+      const resp = await qaCert.updateHgSummary(
+        locId,
+        testSumId,
+        id,
+        payload
+      );
+
+      expect(mock.history.put.length).toBe(1);
+      expect(resp.data).toStrictEqual(payload);
+    });
+
+    test("deleteHgSummary", async () => {
+      const deleteHgSummaryUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/hg-summaries/${id}`;
+      mock.onDelete(deleteHgSummaryUrl).reply(200, "deleted");
+
+      const resp = await qaCert.deleteHgSummary(
+        locId,
+        testSumId,
+        id
+      );
+
+      expect(mock.history.delete.length).toBe(1);
+      expect(resp.data).toStrictEqual("deleted");
+    });
+  });
+
   
   /*
   describe("Review And Submit", () => {

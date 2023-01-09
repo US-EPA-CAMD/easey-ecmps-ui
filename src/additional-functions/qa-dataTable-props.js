@@ -17,7 +17,7 @@ export const qaProtocalGasProps = (selectedRow) => {
       "Expiration Date",
     ],
     controlInputs: {
-      gasLevelCode: ["Summary Type/Gas Level Code", "dropdown", "", ""],
+      gasLevelCode: ["Gas Level Code", "dropdown", "", ""],
       gasTypeCode: ["Gas Type Code", "dropdown", "", ""],
       cylinderIdentifier: ["Cylinder Identification", "input", "", ""],
       vendorIdentifier: ["Vendor Identification", "input", "", ""],
@@ -1032,3 +1032,62 @@ export const qaUnitDefaultTestDataProps = () => {
     controlDatePickerInputs: {},
   }
 }
+
+export const qaHgSummaryDataProps = () => {
+  return {
+    dataTableName: "Hg Summary",
+    payload: {},
+    dropdownArray: ["gasLevelCode"],
+    mdmProps: [
+      {
+        codeTable: "gas-level-codes",
+        responseProps: {
+          code: "gasLevelCode",
+          description: "gasLevelDescription"
+        }
+      },
+    ],
+    columnNames: [
+      "Gas Level Code",
+      "Mean Measured Value",
+      "Mean Reference Value",
+      "Percent Error",
+      "APS Indicator",
+    ],
+    controlInputs: {
+      gasLevelCode: ["Gas Level Code", "dropdown", "", ""],
+      meanMeasuredValue: ["Mean Measured Value", "input", "", ""],
+      meanReferenceValue: ["Mean Reference Value", "input", "", ""],
+      percentError: ["Percent Error", "input", "", ""],
+      apsIndicator: ["APS Indicator", "radio", "", ""],
+    },
+    controlDatePickerInputs: {},
+  }
+}
+
+export const qaHgInjectionDataProps = () => {
+  return {
+    dataTableName: "Hg Injection",
+    payload: {},
+    dropdownArray: [],
+    mdmProps: [],
+    columnNames: [
+      "Injection Date",
+      "Injection Hour",
+      "Injection Minute",
+      "Measured Value",
+      "Reference Value",
+    ],
+    controlInputs: {},
+    controlDatePickerInputs: {
+      injectionDate: ["Injection Date", "date", "", ""],
+      injectionHour: ["Injection Hour", "hourDropdown", "dropdown", ""],
+      injectionMinute: ["Injection Minute", "minuteDropdown", "dropdown", ""],
+    },
+    extraControls: {
+      measuredValue: ["Measured Value", "input", "", ""],
+      referenceValue: ["Reference Value", "input", "", ""],
+      skip: ["", "skip", "", ""],
+    },
+  };
+};
