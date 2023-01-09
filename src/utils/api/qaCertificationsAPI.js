@@ -126,8 +126,8 @@ export const getQASchema = async () => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const getReportingPeriod = async () => {
-  const url = `${config.services.mdm.uri}/reporting-periods`;
+export const getReportingPeriod = async (isExport) => {
+  const url = `${config.services.mdm.uri}/reporting-periods${isExport ? '?export=true' : ''}`;
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
