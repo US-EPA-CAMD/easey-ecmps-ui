@@ -1986,6 +1986,27 @@ export const createHgInjection = async (
   }
 };
 
+export const updateHgInjection = async (
+  locId,
+  testSumId,
+  hgTestSumId,
+  id,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const deleteHgInjection = async (
   locId,
   testSumId,
