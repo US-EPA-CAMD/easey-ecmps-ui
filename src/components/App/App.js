@@ -6,6 +6,7 @@ import NotFound from "../NotFound/NotFound";
 import AboutHome from "../AboutHome/AboutHome";
 import Layout from "../Layout/Layout";
 import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
+import { ErrorSuppression } from "../ErrorSupression/ErrorSupression";
 import RuleEditor from "../RuleEditor/RuleEditor";
 import Login from "../Login/Login";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
@@ -271,6 +272,15 @@ const App = () => {
                   workspaceSection={EXPORT_STORE_NAME}
                 />
               )}
+            />
+
+            {!cdx_user && (
+              <Redirect from="/workspace/error-suppression" to="/home" />
+            )}
+            <Route
+              path="/workspace/error-suppression"
+              exact
+              component={() => <ErrorSuppression />}
             />
 
             <Route path="/tutorials" exact component={ComingSoon} />

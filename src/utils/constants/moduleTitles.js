@@ -3,3 +3,4 @@ export const qa_Certifications_Test_Summary_Module =
   "QA Certifications Test Data ";
 export const export_Module = "Export Data";
 export const emissions_module = "Emissions";
+export const error_supression_module = "Error Suppression"

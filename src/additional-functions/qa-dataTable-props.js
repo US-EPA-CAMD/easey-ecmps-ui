@@ -1064,3 +1064,30 @@ export const qaHgSummaryDataProps = () => {
     controlDatePickerInputs: {},
   }
 }
+
+export const qaHgInjectionDataProps = () => {
+  return {
+    dataTableName: "Hg Injection",
+    payload: {},
+    dropdownArray: [],
+    mdmProps: [],
+    columnNames: [
+      "Injection Date",
+      "Injection Hour",
+      "Injection Minute",
+      "Measured Value",
+      "Reference Value",
+    ],
+    controlInputs: {},
+    controlDatePickerInputs: {
+      injectionDate: ["Injection Date", "date", "", ""],
+      injectionHour: ["Injection Hour", "hourDropdown", "dropdown", ""],
+      injectionMinute: ["Injection Minute", "minuteDropdown", "dropdown", ""],
+    },
+    extraControls: {
+      measuredValue: ["Measured Value", "input", "", ""],
+      referenceValue: ["Reference Value", "input", "", ""],
+      skip: ["", "skip", "", ""],
+    },
+  };
+};
