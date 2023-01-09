@@ -574,6 +574,27 @@ export const mapUnitDefaultTestDataToRows = (data) => {
   return records;
 }
 
+export const mapUnitDefaultTestRunDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.operatingLevel,
+      col2: el.runNumber,
+      col3: el.beginDate,
+      col4: el.beginHour,
+      col5: el.beginMinute,
+      col6: el.endDate,
+      col7: el.endMinute,
+      col8: el.responseTime,
+      col9: el.referenceValue,
+      col10: el.runUsedIndicator
+    };
+    records.push(row)
+  }
+  return records;
+}
+
 export const mapHgSummaryDataToRows = (data) => {
   const records = [];
   for (const el of data) {
