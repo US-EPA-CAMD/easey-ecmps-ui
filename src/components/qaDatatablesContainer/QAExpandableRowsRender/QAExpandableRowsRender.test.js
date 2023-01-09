@@ -29,7 +29,8 @@ import {
   qaCycleTimeInjectionProps,
   qaFlowToLoadReferenceProps,
   qaUnitDefaultTestDataProps,
-  qaHgSummaryDataProps
+  qaHgSummaryDataProps,
+  qaHgInjectionDataProps
 } from "../../../additional-functions/qa-dataTable-props";
 
 const mock = new MockAdapter(axios);
@@ -1566,7 +1567,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     mock.onPut(putUrl).reply(200, 'updated')
     mock.onDelete(deleteUrl).reply(200, 'deleted')
 
-    const props = qaAppendixECorrelationSummaryHeatInputOilProps()
+    const props = qaHgInjectionDataProps()
     const idArray = [locId, testSumId]
     const data = { locationId: locId, id: appECorrTestSumId }
     renderComponent(props, idArray, data);
