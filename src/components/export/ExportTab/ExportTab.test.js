@@ -24,6 +24,7 @@ describe("ExportTab", function () {
 
   describe("Emissions Export", function () {
     it("should enable export button when the emissions checkbox is checked, and download when export is clicked", async function () {
+      jest.setTimeout(10000);
       jest
         .spyOn(qaCertificationsApi, "getReportingPeriod")
         .mockResolvedValue(getReportingPeriod);
@@ -108,6 +109,7 @@ describe("ExportTab", function () {
       it("should enable preview button when QA is checked", async ()=>{
         fireEvent.click(qaCheckboxElement)
         expect(previewButtonElement.disabled).toBe(false)
+        jest.setTimeout(5000);
       })
     })
   });

@@ -25,6 +25,7 @@ import {
   qaTransmitterTransducerAccuracyDataProps,
   qaFlowToLoadReferenceProps,
   qaUnitDefaultTestDataProps,
+  qaHgSummaryDataProps,
 } from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
@@ -806,6 +807,23 @@ const QATestSummaryDataTable = ({
             columns={unitDefaultTestDataProps["columnNames"]}
             controlInputs={unitDefaultTestDataProps["controlInputs"]}
             dataTableName={unitDefaultTestDataProps["dataTableName"]}
+            expandable
+            {...props}
+            extraIDs={null}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "HGL3LS": //Hg Linearity and 3-Level Summary
+        const hgSummaryDataProps = qaHgSummaryDataProps();
+        return (
+          <QAExpandableRowsRender
+            payload={hgSummaryDataProps["payload"]}
+            dropdownArray={hgSummaryDataProps["dropdownArray"]}
+            mdmProps={hgSummaryDataProps["mdmProps"]}
+            columns={hgSummaryDataProps["columnNames"]}
+            controlInputs={hgSummaryDataProps["controlInputs"]}
+            dataTableName={hgSummaryDataProps["dataTableName"]}
             expandable
             {...props}
             extraIDs={null}
