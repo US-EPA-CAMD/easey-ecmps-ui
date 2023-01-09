@@ -415,51 +415,51 @@ jest.mock('react-redux', () => ({
 }));
 
 describe('Additional DataTables Tests', () => {
-  it('shows and hides tables properly', () => {
+  it('shows and hides tables properly', async () => {
     let query = render(
       <Wrapper rows={_.cloneDeep(mockRows)} componentType="Submission" />
     );
     const showOrHideTableIcon =
       query.container.querySelectorAll(`.fa-chevron-up`)[0];
-    act(() => userEvent.click(showOrHideTableIcon));
-    act(() => userEvent.click(showOrHideTableIcon));
+    await act(async () => await userEvent.click(showOrHideTableIcon));
+    await act(async () => await userEvent.click(showOrHideTableIcon));
   });
-  it('selects and unselects evaluation rows properly', () => {
+  it('selects and unselects evaluation rows properly', async () => {
     let query = render(
       <Wrapper rows={_.cloneDeep(mockRows)} componentType="Evaluation" />
     );
     const checkboxes = query.getAllByTestId('Checkbox');
-    act(() => userEvent.click(checkboxes[0]));
-    expect(checkboxes[0].checked).toBe(true)
-    act(() => userEvent.click(checkboxes[0]));
-    expect(checkboxes[0].checked).toBe(false)
-    act(() => userEvent.click(checkboxes[0]));
-    act(() => userEvent.click(checkboxes[1]));
-    act(() => userEvent.click(checkboxes[2]));
-    act(() => userEvent.click(checkboxes[3]));
-    act(() => userEvent.click(checkboxes[1]));
-    act(() => userEvent.click(checkboxes[2]));
-    act(() => userEvent.click(checkboxes[3]));
-    expect(checkboxes[3].checked).toBe(false)
+    await act(async () => await userEvent.click(checkboxes[0]));
+    expect(checkboxes[0].checked).toBe(true);
+    await act(async () => await userEvent.click(checkboxes[0]));
+    expect(checkboxes[0].checked).toBe(false);
+    await act(async () => await userEvent.click(checkboxes[0]));
+    await act(async () => await userEvent.click(checkboxes[1]));
+    await act(async () => await userEvent.click(checkboxes[2]));
+    await act(async () => await userEvent.click(checkboxes[3]));
+    await act(async () => await userEvent.click(checkboxes[1]));
+    await act(async () => await userEvent.click(checkboxes[2]));
+    await act(async () => await userEvent.click(checkboxes[3]));
+    expect(checkboxes[3].checked).toBe(false);
   });
 
-  it('selects and unselects submission rows properly', () => {
+  it('selects and unselects submission rows properly', async () => {
     let query = render(
       <Wrapper rows={_.cloneDeep(mockRows)} componentType="Submission" />
     );
     const checkboxes = query.getAllByTestId('Checkbox');
-    act(() => userEvent.click(checkboxes[0]));
-    expect(checkboxes[0].checked).toBe(true)
-    act(() => userEvent.click(checkboxes[0]));
-    expect(checkboxes[0].checked).toBe(false)
-    act(() => userEvent.click(checkboxes[0]));
-    act(() => userEvent.click(checkboxes[1]));
-    act(() => userEvent.click(checkboxes[2]));
-    act(() => userEvent.click(checkboxes[3]));
-    act(() => userEvent.click(checkboxes[1]));
-    act(() => userEvent.click(checkboxes[2]));
-    act(() => userEvent.click(checkboxes[3]));
-    expect(checkboxes[3].checked).toBe(false)
+    await act(async () => await userEvent.click(checkboxes[0]));
+    expect(checkboxes[0].checked).toBe(true);
+    await act(async () => await userEvent.click(checkboxes[0]));
+    expect(checkboxes[0].checked).toBe(false);
+    await act(async () => await userEvent.click(checkboxes[0]));
+    await act(async () => await userEvent.click(checkboxes[1]));
+    await act(async () => await userEvent.click(checkboxes[2]));
+    await act(async () => await userEvent.click(checkboxes[3]));
+    await act(async () => await userEvent.click(checkboxes[1]));
+    await act(async () => await userEvent.click(checkboxes[2]));
+    await act(async () => await userEvent.click(checkboxes[3]));
+    expect(checkboxes[3].checked).toBe(false);
     // query.debug(undefined, 30000);
   });
 });
