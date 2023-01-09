@@ -18,7 +18,7 @@ const ReportingPeriodSelector = ({
   useEffect(() => {
     if (reportingPeriod === null) {
       setLoading && setLoading(true);
-      getReportingPeriod().then((res) => {
+      getReportingPeriod(true).then((res) => {
         if (exportState && exportState.reportingPeriodId) {
           // retain state as tab is opened back
           setReportingPeriod(

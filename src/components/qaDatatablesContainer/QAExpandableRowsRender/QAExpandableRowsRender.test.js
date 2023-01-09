@@ -30,7 +30,8 @@ import {
   qaFlowToLoadReferenceProps,
   qaUnitDefaultTestDataProps,
   qaHgSummaryDataProps,
-  qaUnitDefaultTestRunDataProps
+  qaUnitDefaultTestRunDataProps,
+  qaHgInjectionDataProps
 } from "../../../additional-functions/qa-dataTable-props";
 
 const mock = new MockAdapter(axios);
@@ -1612,7 +1613,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     userEvent.click(confirmBtns[1])
   })
 
-  test('renders Appendix E Correlation Heat Input from Oil rows and create/save/delete', async () => {
+  test('renders Hg Injection rows and create/save/delete', async () => {
     const hgInjectionData = [
       {
         "id": "id1",
@@ -1650,7 +1651,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     mock.onPut(putUrl).reply(200, 'updated')
     mock.onDelete(deleteUrl).reply(200, 'deleted')
 
-    const props = qaAppendixECorrelationSummaryHeatInputOilProps()
+    const props = qaHgInjectionDataProps()
     const idArray = [locId, testSumId]
     const data = { locationId: locId, id: appECorrTestSumId }
     renderComponent(props, idArray, data);
@@ -1665,22 +1666,23 @@ describe('Test cases for QAExpandableRowsRender', () => {
     userEvent.click(addBtn)
     let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
     userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // edit row
-    // const editBtns = screen.getAllByRole('button', { name: /Edit/i })
-    // expect(editBtns).toHaveLength(hgInjectionData.length)
-    // userEvent.click(editBtns[0])
-    // saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-    // userEvent.click(saveAndCloseBtn)
-    // setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    expect(editBtns).toHaveLength(hgInjectionData.length)
+    userEvent.click(editBtns[0])
+    saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
     // remove row
-    // const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
-    // expect(deleteBtns).toHaveLength(hgInjectionData.length)
-    // const secondDeleteBtn = deleteBtns[1]
-    // userEvent.click(secondDeleteBtn)
-    // const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
-    // userEvent.click(confirmBtns[1])
+    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    expect(deleteBtns).toHaveLength(hgInjectionData.length)
+    const secondDeleteBtn = deleteBtns[1]
+    userEvent.click(secondDeleteBtn)
+    const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    userEvent.click(confirmBtns[1])
   })
 
   test('renders Appendix E Correlation Heat Input from Oil rows and create/save/delete', async () => {

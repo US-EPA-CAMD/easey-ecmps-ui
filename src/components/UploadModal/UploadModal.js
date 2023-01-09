@@ -77,7 +77,10 @@ export const UploadModal = ({
     // * clean up
     return () => {
       document.removeEventListener("keydown", handleKeyPress);
-      document.getElementById("importBtn").focus();
+      const importBtn = document.getElementById("importBtn")
+      if (importBtn) {
+        importBtn.focus();
+      }
     };
   }, [close]);
 
