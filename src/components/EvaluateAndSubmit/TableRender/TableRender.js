@@ -1,5 +1,6 @@
 import { ArrowDownwardSharp } from "@material-ui/icons";
 import React, { forwardRef, useEffect, useState, useCallback } from "react";
+import { useDispatch } from "react-redux";
 import DataTable from "react-data-table-component";
 import {
   addScreenReaderLabelForCollapses,
@@ -13,13 +14,15 @@ import { v4 as uuidv4 } from "uuid";
 import {
   addEvalStatusCell,
   updateCheckedOutLocationsRef,
+  updateCorrespondingMPAndQARow,
+  updateCurrentRow,
 } from "../../../utils/functions";
 import {
   checkInOutLocation,
   getUpdatedCheckedOutLocations,
 } from "../../../utils/api/monitoringPlansApi";
 import "./TableRender.scss";
-import { useDispatch } from "react-redux";
+
 const TableRender = forwardRef(
   (
     {
@@ -111,19 +114,9 @@ const TableRender = forwardRef(
             r,
             checkedOutLocationsInCurrentSessionRef
           );
-          r.selected = bool;
-          r.userCheckedOut = bool;
+          updateCurrentRow(bool, r)
           updateFilesSelected(bool);
-          r.checkedOut = bool;
-
-          if (r.selected && type !== "MP") {
-            // Need to activate mp for subsequent child records
-            selectMonPlanRow(r.monPlanId);
-
-            if (type === "EM") {
-              selectQARow(r.monPlanId, r.periodAbbreviation);
-            }
-          }
+          updateCorrespondingMPAndQARow({r, type, selectMonPlanRow, selectQARow});
         }
       } //eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -164,19 +157,9 @@ const TableRender = forwardRef(
             r,
             checkedOutLocationsInCurrentSessionRef
           );
-          r.selected = selection;
-          r.userCheckedOut = r.selected;
-          r.checkedOut = selection;
+          updateCurrentRow(selection, r);
           updateFilesSelected(selection);
-
-          if (r.selected && type !== "MP") {
-            // Need to activate mp for subsequent child records
-            selectMonPlanRow(row.monPlanId);
-
-            if (type === "EM") {
-              selectQARow(r.monPlanId, r.periodAbbreviation);
-            }
-          }
+          updateCorrespondingMPAndQARow({r, type, selectMonPlanRow, selectQARow});
         }
       } //eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

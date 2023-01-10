@@ -194,7 +194,24 @@ export const addEvalStatusCell = (columns) =>
     } else {
       ref.current = ref.current.filter(el => el.monPlanId !== row.monPlanId);
     }
-  }
+  };
+
+  export const updateCorrespondingMPAndQARow = ({r, type, selectMonPlanRow, selectQARow}) => {
+    if (r.selected && type !== 'MP') {
+      // Need to activate mp for subsequent child records
+      selectMonPlanRow(r.monPlanId);
+
+      if (type === 'EM') {
+        selectQARow(r.monPlanId, r.periodAbbreviation);
+      }
+    }
+  };
+
+  export const updateCurrentRow = (bool, row) => {
+    row.selected = bool;
+    row.userCheckedOut = bool;
+    row.checkedOut = bool;
+  };
 // Returns the previously fully submitted quarter (reporting period). 
 // For the first month of every quarter, the previusly submitted reporting period is actually two quarters ago.
 // For every month in between it is the previous quarter. 
