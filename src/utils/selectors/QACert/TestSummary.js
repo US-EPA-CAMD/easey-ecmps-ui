@@ -585,10 +585,11 @@ export const mapUnitDefaultTestRunDataToRows = (data) => {
       col4: el.beginHour,
       col5: el.beginMinute,
       col6: el.endDate,
-      col7: el.endMinute,
-      col8: el.responseTime,
-      col9: el.referenceValue,
-      col10: el.runUsedIndicator
+      col7: el.endHour,
+      col8: el.endMinute,
+      col9: el.responseTime,
+      col10: el.referenceValue,
+      col11: el.runUsedIndicator
     };
     records.push(row)
   }
