@@ -200,6 +200,7 @@ const ImportModal = ({
 
   const onChangeHandler = (e) => {
     setSchemaErrors([]);
+    console.log('e',e.target.files)
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       validateJSON(file.name, file.type, e);
