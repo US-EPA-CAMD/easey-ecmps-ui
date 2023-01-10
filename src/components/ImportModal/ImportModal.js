@@ -27,7 +27,9 @@ const ImportModal = ({
   setImportedFile,
   workspaceSection,
 }) => {
-  const [schema, setSchema] = useState([]);
+  const [mpSchema, setMpSchema] = useState([]);
+  const [qaSchema, setQaSchema] = useState([]);
+  const [emSchema, setEmSchema] = useState([]);
   const [schemaErrors, setSchemaErrors] = useState([]);
   const [label, setLabel] = useState("");
 
@@ -37,7 +39,7 @@ const ImportModal = ({
         mpApi
           .getMPSchema()
           .then(({ data }) => {
-            setSchema(data);
+            setMpSchema(data);
             setLabel("Upload MP JSON File");
           })
           .catch((err) => console.log(err));
@@ -47,7 +49,7 @@ const ImportModal = ({
         qaApi
           .getQASchema()
           .then(({ data }) => {
-            setSchema(data);
+            setQaSchema(data);
             setLabel("Upload QA JSON File");
           })
           .catch((err) => console.log(err));
@@ -57,10 +59,48 @@ const ImportModal = ({
         emApi
           .getEmissionsSchema()
           .then(({ data }) => {
-            setSchema(data);
+            setEmSchema(data);
             setLabel("Upload Emissions JSON File");
           })
           .catch((err) => console.log(err));
+        break;
+      default:
+        break;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    mpApi
+      .getMPSchema()
+      .then(({ data }) => {
+        setMpSchema(data);
+      })
+      .catch((err) => console.log(err));
+
+    qaApi
+      .getQASchema()
+      .then(({ data }) => {
+        setQaSchema(data);
+      })
+      .catch((err) => console.log(err));
+    emApi
+      .getEmissionsSchema()
+      .then(({ data }) => {
+        setEmSchema(data);
+      })
+      .catch((err) => console.log(err));
+    switch (workspaceSection) {
+      case MONITORING_PLAN_STORE_NAME:
+        setLabel("Upload MP JSON File");
+        break;
+
+      case QA_CERT_TEST_SUMMARY_STORE_NAME:
+        setLabel("Upload QA JSON File");
+        break;
+
+      case EMISSIONS_STORE_NAME:
+        setLabel("Upload Emissions JSON File");
         break;
       default:
         break;
@@ -80,6 +120,52 @@ const ImportModal = ({
     }
   };
 
+  const errorChecks = (flag) => {
+    if (flag) {
+      setDisablePortBtn(true);
+    } else {
+      setHasFormatError(false);
+      setHasInvalidJsonError(false);
+      setDisablePortBtn(false);
+    }
+  };
+  const checkingCorrectSchema = (file) => {
+    var Validator = require("jsonschema").Validator;
+    var v = new Validator();
+
+    switch (workspaceSection) {
+      case MONITORING_PLAN_STORE_NAME:
+        // correct schema
+        if (v.validate(file, mpSchema).valid) {
+          errorChecks(false);
+          // correct schema, just errors
+        } else {
+          errorChecks(true);
+          formatSchemaErrors(v.validate(file, mpSchema));
+        } // incorrect schema with section
+        if (!file.unitStackConfigurations) {
+          errorChecks(true);
+          setSchemaErrors(["Only Monitoring Plan (MP) files may be imported"]);
+        }
+        break;
+      case QA_CERT_TEST_SUMMARY_STORE_NAME:
+        // correct schema
+        if (v.validate(file, qaSchema).valid) {
+          errorChecks(false);
+          // correct schema, just errors
+        } else {
+          errorChecks(true);
+          formatSchemaErrors(v.validate(file, qaSchema));
+        } // incorrect schema with section
+        if (!file.testSummaryData) {
+          errorChecks(true);
+          setSchemaErrors(["Only QA Test Data files may be imported"]);
+        }
+        break;
+      default:
+        break;
+    }
+  };
   const formatSchemaErrors = (errors) => {
     setDisablePortBtn(true);
     const formattedErrors = errors.errors.map((error) => {
@@ -90,6 +176,7 @@ const ImportModal = ({
 
     setSchemaErrors(formattedErrors);
   };
+
   const readFile = (event) => {
     var reader = new FileReader();
     reader.onload = onReaderLoad;
@@ -102,17 +189,7 @@ const ImportModal = ({
       const fileLoaded = JSON.parse(event.target.result);
       setImportedFile(fileLoaded);
 
-      var Validator = require("jsonschema").Validator;
-      var v = new Validator();
-
-      if (v.validate(fileLoaded, schema).valid) {
-        setHasFormatError(false);
-        setHasInvalidJsonError(false);
-        setDisablePortBtn(false);
-      } else {
-        setDisablePortBtn(true);
-        formatSchemaErrors(v.validate(fileLoaded, schema));
-      }
+      checkingCorrectSchema(fileLoaded);
     } catch (e) {
       console.log("invalid json file error: ", e);
       setHasInvalidJsonError(true);
@@ -132,7 +209,6 @@ const ImportModal = ({
       setHasInvalidJsonError(false);
     }
   };
-  // && typeof importedFileErrorMsgs.data.message === "string"
 
   return (
     <div className="import-modal-container">
