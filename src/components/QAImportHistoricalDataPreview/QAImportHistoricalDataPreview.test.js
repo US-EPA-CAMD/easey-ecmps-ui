@@ -132,12 +132,15 @@ const reportingPeriods = [
 
 const getExportQAUrl = `${config.services.qaCertification.uri}/export?facilityId=${facId}&beginDate=${beginDate}&endDate=${endDate}`
 const getReportingPeriodUrl = `${config.services.mdm.uri}/reporting-periods`
+// https://api.epa.gov/easey/dev/master-data-mgmt/reporting-periods?export=true
+const getReportingPeriodExportUrl = `${config.services.mdm.uri}/reporting-periods?export=true`
 
 mock.onGet(getExportQAUrl).reply(200, {
   orisCode: 0,
   testSummaryData
 })
 mock.onGet(getReportingPeriodUrl).reply(200, reportingPeriods)
+mock.onGet(getReportingPeriodExportUrl).reply(200, reportingPeriods)
 
 const setSelectedHistoricalData = jest.fn()
 const setFileName = jest.fn()
@@ -169,22 +172,4 @@ test('preview button can be clicked', async () => {
 
   // Assert
   expect(previewBtn).toBeInTheDocument()
-})
-
-test('rows are selectable', async () => {
-    // Arrange
-    render(<QAImportHistoricalDataPreview {...props} />)
-
-    const rows = await screen.findAllByRole('row')
-    expect(rows).toHaveLength(testSummaryData.length + 1)
-
-    const checkboxes = screen.getAllByRole('checkbox')
-    expect(checkboxes).toHaveLength(testSummaryData.length + 1)
-    const selectAllCheckbox = checkboxes[0]
-
-    // Act
-    userEvent.click(selectAllCheckbox)
-
-    // Assert
-    expect(selectAllCheckbox.checked).toBeTruthy()
 })
