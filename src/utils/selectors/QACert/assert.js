@@ -667,6 +667,9 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
     case unitDefualtTest:
       return qaApi.updateUnitDefaultTest(location, id, userInput.id, userInput)
         .catch((err) => console.error(err));
+    case unitDefaultTestRun:
+      return qaApi.updateUnitDefaultTestRun(extraIdsArr[0], extraIdsArr[1], id, userInput.id, userInput)
+        .catch(error => console.log("error updating unit default test run data", error))
     case hgSummary:
       return qaApi.updateHgSummary(location, id, userInput.id, userInput)
         .catch((err) => console.error(err));
