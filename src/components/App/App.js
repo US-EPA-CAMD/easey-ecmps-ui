@@ -6,7 +6,7 @@ import NotFound from "../NotFound/NotFound";
 import AboutHome from "../AboutHome/AboutHome";
 import Layout from "../Layout/Layout";
 import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
-import { ErrorSuppression } from "../ErrorSupression/ErrorSupression";
+import { ErrorSuppression } from "../ErrorSuppression/ErrorSuppression";
 import RuleEditor from "../RuleEditor/RuleEditor";
 import Login from "../Login/Login";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
