@@ -2613,5 +2613,115 @@ describe("testing ImportModal component ", () => {
     });
     
   });
+  test("renders the content of ImportModal component with QA_CERT_TEST_SUMMARY_STORE_NAME with file change", async () => {
+    mock
+      .onGet(
+        "https://api.epa.gov/easey/dev/content-mgmt/ecmps/reporting-instructions/qa-certification.schema.json"
+      )
+      .reply(200, schema);
 
+    const { container, findByText, getByText } = render(
+      <ImportModal
+        setDisablePortBtn={jest.fn()}
+        complete={false}
+        setFileName={jest.fn()}
+        fileName={"test"}
+        setHasFormatError={jest.fn()}
+        setHasInvalidJsonError={jest.fn()}
+        importApiErrors={null}
+        importedFileErrorMsgs={[]}
+        setImportedFile={jest.fn()}
+        workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
+      />
+    );
+    const renderedComponent = container.querySelector(
+      ".import-modal-container"
+    );
+
+    expect(renderedComponent).not.toBeUndefined();
+    const fakeSchema = {
+      test: [
+        {
+          locationId: "113",
+        },
+      ],
+    };
+
+    const fakeSchemaJson = JSON.stringify(fakeSchema);
+    const fakeSchemaFile = new File([fakeSchemaJson], "fileSchema.json");
+
+    const fileInput = container.querySelector("#file-input-single");
+
+    const str = JSON.stringify(fakeSchema);
+    const blob = new Blob([str]);
+    const file = new File([blob], "values.json", {
+      type: "application/JSON",
+    });
+
+    File.prototype.text = jest.fn().mockResolvedValueOnce(str);
+    const files = [file];
+
+    Object.defineProperty(fileInput, "files", { value: [file] });
+    fireEvent.input(fileInput);
+    expect(fileInput.files.length).toBe(1);
+  });
+  test("the fetch fails with an error for MONITORING_PLAN", () => {
+    mock
+      .onGet(
+        "https://api.epa.gov/easey/dev/content-mgmt/ecmps/reporting-instructions/monitor-plan.schema.json"
+      )
+      .reply(() =>
+        Promise.reject({
+          customAttributes: { httpErrorStatus: 404 },
+        })
+      );
+    let { container } = render(
+      <ImportModal
+        setDisablePortBtn={jest.fn()}
+        complete={true}
+        setFileName={jest.fn()}
+        fileName={"test"}
+        setHasFormatError={jest.fn()}
+        setHasInvalidJsonError={jest.fn()}
+        importApiErrors={["error"]}
+        importedFileErrorMsgs={["error"]}
+        setImportedFile={jest.fn()}
+        workspaceSection={MONITORING_PLAN_STORE_NAME}
+      />
+    );
+    const renderedComponent1 = container.querySelector(
+      ".import-modal-container"
+    );
+    expect(renderedComponent1).not.toBeUndefined();
+  });
+  test("the fetch fails with an error for QA_CERT_TEST_SUMMARY", () => {
+    mock
+      .onGet(
+        "https://api.epa.gov/easey/dev/content-mgmt/ecmps/reporting-instructions/qa-certification.schema.json"
+      )
+      .reply(() =>
+        Promise.reject({
+          customAttributes: { httpErrorStatus: 404 },
+        })
+      );
+    let { container } = render(
+      <ImportModal
+        setDisablePortBtn={jest.fn()}
+        complete={false}
+        setFileName={jest.fn()}
+        fileName={"test"}
+        setHasFormatError={jest.fn()}
+        setHasInvalidJsonError={jest.fn()}
+        importApiErrors={["error"]}
+        importedFileErrorMsgs={["error"]}
+        setImportedFile={jest.fn()}
+        workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
+      />
+    );
+    const renderedComponent = container.querySelector(
+      ".import-modal-container"
+    );
+
+    expect(renderedComponent).not.toBeUndefined();
+  });
 });
