@@ -1990,7 +1990,7 @@ export const updateUnitDefaultTestRun = async (
         method: "PUT",
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
