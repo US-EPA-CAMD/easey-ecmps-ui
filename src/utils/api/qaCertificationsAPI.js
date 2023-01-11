@@ -1985,6 +1985,27 @@ export const createUnitDefaultTestRun = async (
   }
 };
 
+export const updateUnitDefaultTestRun = async (
+  locId,
+  testSumId,
+  unitDefaultTestId,
+  id,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${unitDefaultTestId}/unit-default-test-runs/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const getHgInjection = async (locId, testSumId, hgTestSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections`;
   const url = getApiUrl(path);
