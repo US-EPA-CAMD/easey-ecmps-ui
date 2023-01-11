@@ -196,13 +196,13 @@ export const addEvalStatusCell = (columns) =>
     }
   };
 
-  export const updateCorrespondingMPAndQARow = ({r, type, selectMonPlanRow, selectQARow}) => {
-    if (r.selected && type !== 'MP') {
+  export const updateCorrespondingMPAndQARow = ({r, type, updateMonPlanRow, updateQARow, selection}) => {
+    if (r && type !== 'MP') {
       // Need to activate mp for subsequent child records
-      selectMonPlanRow(r.monPlanId);
+      updateMonPlanRow(r.monPlanId, selection);
 
       if (type === 'EM') {
-        selectQARow(r.monPlanId, r.periodAbbreviation);
+        updateQARow(r.monPlanId, r.periodAbbreviation, selection);
       }
     }
   };
