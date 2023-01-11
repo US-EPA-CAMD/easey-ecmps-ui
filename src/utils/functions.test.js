@@ -369,8 +369,8 @@ describe("functions.js", function () {
      })
      describe('updateCorrespondingMPAndQARow', () => {
        const r = { selected: true, monPlanId: 'id', periodAbbreviation: 'PA' },
-         selectMonPlanRow = jest.fn(),
-         selectQARow = jest.fn();
+         updateMonPlanRow = jest.fn(),
+         updateQARow = jest.fn();
        afterEach(() => {
          r.selected = true;
          jest.clearAllMocks();
@@ -379,42 +379,34 @@ describe("functions.js", function () {
          updateCorrespondingMPAndQARow({
            r,
            type: 'EM',
-           selectMonPlanRow,
-           selectQARow,
+           updateMonPlanRow,
+           updateQARow,
+           selection: true
          });
-         expect(selectMonPlanRow).toHaveBeenCalled();
-         expect(selectQARow).toHaveBeenCalled();
+         expect(updateMonPlanRow).toHaveBeenCalled();
+         expect(updateQARow).toHaveBeenCalled();
        });
        it('only updates corresponding MP row if row is selected and type is "QA"', () => {
          updateCorrespondingMPAndQARow({
            r,
            type: 'QA',
-           selectMonPlanRow,
-           selectQARow,
+           updateMonPlanRow,
+           updateQARow,
+           selection: true
          });
-         expect(selectMonPlanRow).toHaveBeenCalled();
-         expect(selectQARow).not.toHaveBeenCalled();
+         expect(updateMonPlanRow).toHaveBeenCalled();
+         expect(updateQARow).not.toHaveBeenCalled();
        });
        it('does not update any row if type is MP', () => {
          updateCorrespondingMPAndQARow({
            r,
            type: 'MP',
-           selectMonPlanRow,
-           selectQARow,
+           updateMonPlanRow,
+           updateQARow,
+           selection: true
          });
-         expect(selectMonPlanRow).not.toHaveBeenCalled();
-         expect(selectQARow).not.toHaveBeenCalled();
-       });
-       it('does not update any row if row is not selected', () => {
-         r.selected = false;
-         updateCorrespondingMPAndQARow({
-           r,
-           type: 'EM',
-           selectMonPlanRow,
-           selectQARow,
-         });
-         expect(selectMonPlanRow).not.toHaveBeenCalled();
-         expect(selectQARow).not.toHaveBeenCalled();
+         expect(updateMonPlanRow).not.toHaveBeenCalled();
+         expect(updateQARow).not.toHaveBeenCalled();
        });
      });
 

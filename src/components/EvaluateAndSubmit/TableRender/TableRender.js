@@ -31,8 +31,8 @@ const TableRender = forwardRef(
       setState,
       name,
       type,
-      selectMonPlanRow,
-      selectQARow,
+      updateMonPlanRow,
+      updateQARow,
       getRowState,
       checkedOutLocationsMap,
       updateFilesSelected,
@@ -116,7 +116,7 @@ const TableRender = forwardRef(
           );
           updateCurrentRow(bool, r)
           updateFilesSelected(bool);
-          updateCorrespondingMPAndQARow({r, type, selectMonPlanRow, selectQARow});
+          updateCorrespondingMPAndQARow({r, type, updateMonPlanRow, updateQARow, selection: bool,});
         }
       } //eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -159,7 +159,7 @@ const TableRender = forwardRef(
           );
           updateCurrentRow(selection, r);
           updateFilesSelected(selection);
-          updateCorrespondingMPAndQARow({r, type, selectMonPlanRow, selectQARow});
+          updateCorrespondingMPAndQARow({r, type, updateMonPlanRow, updateQARow, selection});
         }
       } //eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
