@@ -2724,4 +2724,33 @@ describe("testing ImportModal component ", () => {
 
     expect(renderedComponent).not.toBeUndefined();
   });
+  test("the fetch fails with an error for EMISSIONS_STORE_NAME", () => {
+    mock
+      .onGet(
+        "https://api.epa.gov/easey/dev/content-mgmt/ecmps/reporting-instructions/emissions.schema.json"
+      )
+      .reply(() =>
+        Promise.reject({
+          customAttributes: { httpErrorStatus: 404 },
+        })
+      );
+    let { container } = render(
+      <ImportModal
+        setDisablePortBtn={jest.fn()}
+        complete={false}
+        setFileName={jest.fn()}
+        fileName={"test"}
+        setHasFormatError={jest.fn()}
+        setHasInvalidJsonError={jest.fn()}
+        importApiErrors={[]}
+        importedFileErrorMsgs={[]}
+        setImportedFile={jest.fn()}
+        workspaceSection={EMISSIONS_STORE_NAME}
+      />
+    );
+    const renderedComponent2 = container.querySelector(
+      ".import-modal-container"
+    );
+    expect(renderedComponent2).not.toBeUndefined();
+  });
 });
