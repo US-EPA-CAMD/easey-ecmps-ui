@@ -30,6 +30,7 @@ const cycleTimeInjection = "Cycle Time Injection";
 const transmitterTransducerAccuracyData = "Transmitter Transducer Accuracy Data";
 const flowToLoadReference = "Flow To Load Reference";
 const unitDefualtTest = "Unit Default Test";
+const unitDefaultTestRun = "Unit Default Test Run";
 const hgSummary = "Hg Summary";
 const hgInjection = "Hg Injection";
 
@@ -193,6 +194,10 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       return qaApi.getUnitDefaultTest(location, id).catch((error) => {
         console.log("error fetching unit default test data", error);
       });
+    case unitDefaultTestRun:
+      return qaApi.getUnitDefaultTestRun(extraIdsArr[0], extraIdsArr[1], id).catch((error) => {
+        console.log("error fetching unit default test run data", error);
+      });
     case hgSummary:
       return qaApi.getHgSummary(location, id).catch((error) => {
         console.log("error", error);
@@ -258,6 +263,8 @@ export const getDataTableRecords = (dataIn, name) => {
       return selector.mapFlowToLoadReferenceToRows(dataIn);
     case unitDefualtTest:
       return selector.mapUnitDefaultTestDataToRows(dataIn);
+    case unitDefaultTestRun:
+      return selector.mapUnitDefaultTestRunDataToRows(dataIn);
     case hgSummary:
       return selector.mapHgSummaryDataToRows(dataIn);
     case hgInjection:
@@ -441,6 +448,10 @@ export const removeDataSwitch = async (
     case hgSummary:
       return qaApi
         .deleteHgSummary(locationId, id, row.id)
+        .catch((error) => console.log("error", error));
+    case hgInjection:
+      return qaApi
+        .deleteHgInjection(extraIdsArr[0], extraIdsArr[1], id, row.id)
         .catch((error) => console.log("error", error));
     default:
       throw new Error(`removeDataSwitch case not implemented for ${name}`);
@@ -656,9 +667,15 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
     case unitDefualtTest:
       return qaApi.updateUnitDefaultTest(location, id, userInput.id, userInput)
         .catch((err) => console.error(err));
+    case unitDefaultTestRun:
+      return qaApi.updateUnitDefaultTestRun(extraIdsArr[0], extraIdsArr[1], id, userInput.id, userInput)
+        .catch(error => console.log("error updating unit default test run data", error))
     case hgSummary:
       return qaApi.updateHgSummary(location, id, userInput.id, userInput)
         .catch((err) => console.error(err));
+    case hgInjection:
+      return qaApi.updateHgInjection(extraIdsArr[0], extraIdsArr[1], id, userInput.id, userInput)
+        .catch(error => console.log("error updating hg injection", error))
     default:
       break;
   }
@@ -829,7 +846,9 @@ export const createDataSwitch = async (
     case flowToLoadReference:
       return qaApi.createFlowToLoadReference(location, id, userInput)
     case unitDefualtTest:
-      return qaApi.createUnitDefaultTest(location, id, userInput)
+      return qaApi.createUnitDefaultTest(location, id, userInput);
+    case unitDefaultTestRun:
+      return qaApi.createUnitDefaultTestRun(extraIdsArr[0], extraIdsArr[1], id, userInput);
     case hgSummary:
       return qaApi.createHgSummary(location, id, userInput)
     case hgInjection:

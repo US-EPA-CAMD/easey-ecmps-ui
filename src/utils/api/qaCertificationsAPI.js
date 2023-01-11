@@ -126,8 +126,8 @@ export const getQASchema = async () => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const getReportingPeriod = async () => {
-  const url = `${config.services.mdm.uri}/reporting-periods`;
+export const getReportingPeriod = async (isExport) => {
+  const url = `${config.services.mdm.uri}/reporting-periods${isExport ? '?export=true' : ''}`;
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
@@ -1959,6 +1959,53 @@ export const deleteHgSummary = async (
   }
 };
 
+export const getUnitDefaultTestRun = async (locId, testSumId, unitDefaultTestId) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${unitDefaultTestId}/unit-default-test-runs`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createUnitDefaultTestRun = async (
+  locId,
+  testSumId,
+  unitDefaultTestId,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${unitDefaultTestId}/unit-default-test-runs`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const updateUnitDefaultTestRun = async (
+  locId,
+  testSumId,
+  unitDefaultTestId,
+  id,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${unitDefaultTestId}/unit-default-test-runs/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const getHgInjection = async (locId, testSumId, hgTestSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections`;
   const url = getApiUrl(path);
@@ -1971,13 +2018,55 @@ export const createHgInjection = async (
   hgTestSumId,
   payload
 ) => {
-  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections`;
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections`;
+  const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
         method: "POST",
         url: url,
         data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const updateHgInjection = async (
+  locId,
+  testSumId,
+  hgTestSumId,
+  id,
+  payload
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const deleteHgInjection = async (
+  locId,
+  testSumId,
+  hgTestSumId,
+  id
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url: url,
       })
     );
   } catch (error) {

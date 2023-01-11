@@ -25,7 +25,7 @@ const DataTables = ({
   componentType,
   checkedOutLocationsInCurrentSessionRef,
 }) => {
-  const selectMonPlanRow = useCallback((id) => {
+  const updateMonPlanRow = useCallback((id, selection) => {
     let rowStateFunc;
 
     if (componentType === "Submission") {
@@ -36,9 +36,9 @@ const DataTables = ({
 
     for (const mpR of monPlanRef.current) {
       if (mpR.monPlanId === id && rowStateFunc(mpR, "MP") === "Checkbox") {
-        mpR.selected = true;
-        mpR.userCheckedOut = true;
-        updateFilesSelected(true);
+        mpR.selected = selection;
+        mpR.userCheckedOut = selection;
+        updateFilesSelected(selection);
       }
     }
 
@@ -46,7 +46,7 @@ const DataTables = ({
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const selectQARow = useCallback((id, periodAbr) => {
+  const updateQARow = useCallback((id, periodAbr, selection) => {
     let rowStateFunc;
 
     if (componentType === "Submission") {
@@ -62,9 +62,9 @@ const DataTables = ({
         qaR.periodAbbreviation === periodAbr &&
         rowStateFunc(qaR, "QA") === "Checkbox"
       ) {
-        qaR.selected = true;
-        qaR.userCheckedOut = true;
-        updateFilesSelected(true);
+        qaR.selected = selection;
+        qaR.userCheckedOut = selection;
+        updateFilesSelected(selection);
       }
     }
 
@@ -91,7 +91,7 @@ const DataTables = ({
       //Can only submit records if not ERR eval code, submissionStatus is REQUIRE or blank, and they have permissions
       ["PASS", "INFO"].includes(row.evalStatusCode) &&
       rowSubmissionAllowed &&
-      permissions.current[row.orisCode].includes(`DS${type}`)
+      permissions.current[row.orisCode]?.includes(`DS${type}`)
     ) {
       if (
         type === "EM" &&
@@ -160,8 +160,8 @@ const DataTables = ({
         ref: emissionsRef,
         name: "Emissions",
         type: "EM",
-      }, //eslint-disable-next-line react-hooks/exhaustive-deps
-    ],
+      }, 
+    ],//eslint-disable-next-line react-hooks/exhaustive-deps
     [monPlanState, qaTestSumState, emissionsState]
   );
 
@@ -214,8 +214,8 @@ const DataTables = ({
                 ref={ref}
                 dataTableName={name}
                 type={type}
-                selectMonPlanRow={selectMonPlanRow}
-                selectQARow={selectQARow}
+                updateMonPlanRow={updateMonPlanRow}
+                updateQARow={updateQARow}
                 getRowState={
                   componentType === "Submission"
                     ? getRowStateSubmission
