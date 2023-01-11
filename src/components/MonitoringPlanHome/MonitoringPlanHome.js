@@ -1,25 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 
-import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
-import MonitoringPlanTab from "../MonitoringPlanTab/MonitoringPlanTab";
-import QACertTestSummaryTab from "../QACertTestSummaryTab/QACertTestSummaryTab";
-import EmissionsTab from "../EmissionsTab/EmissionsTab";
-import Export from "../export/Export/Export";
-import DynamicTabs from "../DynamicTabs/DynamicTabs";
+import DataTable from '../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable';
+import MonitoringPlanTab from '../MonitoringPlanTab/MonitoringPlanTab';
+import QACertTestSummaryTab from '../QACertTestSummaryTab/QACertTestSummaryTab';
+import EmissionsTab from '../EmissionsTab/EmissionsTab';
+import Export from '../export/Export/Export';
+import DynamicTabs from '../DynamicTabs/DynamicTabs';
 
-import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
+import { getCheckedOutLocations } from '../../utils/api/monitoringPlansApi';
 
-import * as mpApi from "../../utils/api/monitoringPlansApi";
+import * as mpApi from '../../utils/api/monitoringPlansApi';
 
-import "./MonitoringPlanHome.scss";
+import './MonitoringPlanHome.scss';
 import {
   MONITORING_PLAN_STORE_NAME,
   QA_CERT_TEST_SUMMARY_STORE_NAME,
   EMISSIONS_STORE_NAME,
   EXPORT_STORE_NAME,
-} from "../../additional-functions/workspace-section-and-store-names";
-import * as modules from "../../utils/constants/moduleTitles";
+  QA_CERT_EVENT_STORE_NAME,
+} from '../../additional-functions/workspace-section-and-store-names';
+import * as modules from '../../utils/constants/moduleTitles';
+import QACertEventTab from '../QACertEventTab/QACertEventTab';
 
 export const MonitoringPlanHome = ({
   user,
@@ -35,7 +37,7 @@ export const MonitoringPlanHome = ({
   const [
     mostRecentlyCheckedInMonitorPlanIdForTab,
     setMostRecentlyCheckedInMonitorPlanIdForTab,
-  ] = useState("");
+  ] = useState('');
 
   useEffect(() => {
     obtainCheckedOutLocations().then();
@@ -60,6 +62,10 @@ export const MonitoringPlanHome = ({
         document.title = modules.emissions_module;
         setTitleName(modules.emissions_module);
         break;
+      case QA_CERT_EVENT_STORE_NAME:
+        document.title = modules.qa_Certifications_Event_Module;
+        setTitleName(modules.qa_Certifications_Event_Module);
+        break;
       default:
         break;
     }
@@ -75,11 +81,11 @@ export const MonitoringPlanHome = ({
       }
       // *** find locations currently checked out by the user
       const currentlyCheckedOutMonPlanId = checkedOutLocationList.filter(
-        (element) => element["checkedOutBy"] === user.firstName
+        (element) => element['checkedOutBy'] === user.firstName
       )[0]
         ? checkedOutLocationList.filter(
-            (element) => element["checkedOutBy"] === user.firstName
-          )[0]["monPlanId"]
+            (element) => element['checkedOutBy'] === user.firstName
+          )[0]['monPlanId']
         : null;
 
       if (currentlyCheckedOutMonPlanId) {
@@ -100,17 +106,17 @@ export const MonitoringPlanHome = ({
   };
 
   useEffect(() => {
-    window.addEventListener("beforeunload", checkInAll);
+    window.addEventListener('beforeunload', checkInAll);
 
     return () => {
-      window.removeEventListener("beforeunload", checkInAll);
+      window.removeEventListener('beforeunload', checkInAll);
     };
   }, []);
 
   const handleTabState = () => {
     const tabArr = [
       {
-        title: "Select Configurations",
+        title: 'Select Configurations',
         component: (
           <DataTable
             user={user}
@@ -184,24 +190,48 @@ export const MonitoringPlanHome = ({
           });
         }
         break;
+      case QA_CERT_EVENT_STORE_NAME:
+        for (const row of openedFacilityTabs) {
+          tabArr.push({
+            title: row.name,
+            component: (
+              <QACertEventTab
+                resetTimer={resetTimer}
+                setExpired={setExpired}
+                resetTimerFlag={resetTimerFlag}
+                callApiFlag={callApiFlag}
+                orisCode={row.orisCode}
+                selectedConfig={row.selectedConfig}
+                title={row.name}
+                user={user}
+                isCheckedOut={row.checkout}
+                checkedOutLocations={checkedOutLocations}
+              />
+            ),
+            orisCode: row.orisCode,
+            selectedConfig: row.selectedConfig,
+            checkout: row.checkout,
+          });
+        }
+        break;
       case EMISSIONS_STORE_NAME:
         for (const row of openedFacilityTabs) {
           tabArr.push({
             title: row.name,
             component: (
-            <EmissionsTab
-              resetTimer={resetTimer}
-              setExpired={setExpired}
-              resetTimerFlag={resetTimerFlag}
-              callApiFlag={callApiFlag}
-              orisCode={row.orisCode}
-              selectedConfig={row.selectedConfig}
-              title={row.name}
-              user={user}
-              checkout={row.checkout}
-              checkedOutLocations={checkedOutLocations}
-              workspaceSection={workspaceSection}
-            />
+              <EmissionsTab
+                resetTimer={resetTimer}
+                setExpired={setExpired}
+                resetTimerFlag={resetTimerFlag}
+                callApiFlag={callApiFlag}
+                orisCode={row.orisCode}
+                selectedConfig={row.selectedConfig}
+                title={row.name}
+                user={user}
+                checkout={row.checkout}
+                checkedOutLocations={checkedOutLocations}
+                workspaceSection={workspaceSection}
+              />
             ),
             orisCode: row.orisCode,
             selectedConfig: row.selectedConfig,
@@ -239,7 +269,7 @@ export const MonitoringPlanHome = ({
       <div className="text-black margin-top-1 display-none tablet:display-block">
         <h2
           className="display-inline-block page-header margin-top-2"
-          epa-testid={`${titleName.split(" ").join("")}Title`}
+          epa-testid={`${titleName.split(' ').join('')}Title`}
         >
           {titleName}
         </h2>
@@ -258,7 +288,7 @@ export const MonitoringPlanHome = ({
       <div className="display-none mobile:display-block tablet:display-none">
         <h1
           className="display-inline-block font-body-xl text-bold margin-left-neg-2"
-          epa-testid={`${titleName.split(" ").join("")}Title`}
+          epa-testid={`${titleName.split(' ').join('')}Title`}
         >
           {titleName}
         </h1>
