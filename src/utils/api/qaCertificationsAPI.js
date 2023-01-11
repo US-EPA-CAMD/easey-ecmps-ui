@@ -1981,13 +1981,13 @@ export const updateUnitDefaultTestRun = async (
   testSumId,
   unitDefaultTestId,
   id,
-  payload
+  payload,
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${unitDefaultTestId}/unit-default-test-runs/${id}`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
       }),
