@@ -45,6 +45,8 @@ export const QACertTestSummaryHeaderInfo = ({
   locationSelect,
   locations,
   setSelectedTestCode,
+  ///
+  setUpdateRelatedTables,
 }) => {
   const importTestTitle = "Import Data";
   const [showImportModal, setShowImportModal] = useState(false);
@@ -517,9 +519,7 @@ export const QACertTestSummaryHeaderInfo = ({
             title={importTestTitle}
             exitBTN={"Import"}
             disablePortBtn={disablePortBtn}
-            port={() => {
-              importQABtn(importedFile);
-            }}
+            port={() => importQABtn(importedFile)}
             hasFormatError={hasFormatError}
             hasInvalidJsonError={hasInvalidJsonError}
             children={
@@ -565,6 +565,7 @@ export const QACertTestSummaryHeaderInfo = ({
           complete={true}
           importedFileErrorMsgs={importedFileErrorMsgs}
           successMsg={"QA Certification has been Successfully Imported."}
+          setUpdateRelatedTables={setUpdateRelatedTables}
           children={
             <ImportModal
               setDisablePortBtn={setDisablePortBtn}
