@@ -131,6 +131,7 @@ export const UploadModal = ({
                     onKeyPress={(event) => {
                       if (event.key === "Enter") {
                         close();
+                        setUpdateRelatedTables(true);
                       }
                     }}
                     id="closeModalBtn"

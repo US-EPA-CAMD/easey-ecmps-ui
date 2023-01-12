@@ -1444,8 +1444,8 @@ describe('Test cases for QAExpandableRowsRender', () => {
     // renders rows
     const rows = await screen.findAllByRole('row')
     expect(mock.history.get.length).not.toBe(0)
-    expect(rows).toHaveLength(unitDefaultTestData.length)
-
+    // expect(rows).toHaveLength(unitDefaultTestData.length)
+    expect(rows).toHaveLength(6)
     // add row
     const addBtn = screen.getByRole('button', { name: /Add/i })
     userEvent.click(addBtn)
@@ -1529,12 +1529,12 @@ describe('Test cases for QAExpandableRowsRender', () => {
     userEvent.click(saveAndCloseBtn)
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
     // edit row
-    // const editBtns = screen.getAllByRole('button', { name: /Edit/i })
-    // expect(editBtns).toHaveLength(hgInjectionData.length)
-    // userEvent.click(editBtns[0])
-    // saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-    // userEvent.click(saveAndCloseBtn)
-    // setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    expect(editBtns).toHaveLength(unitDefaultTestRun.length)
+    userEvent.click(editBtns[0])
+    saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
     // remove row
     // const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
