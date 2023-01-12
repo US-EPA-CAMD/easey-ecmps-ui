@@ -28,7 +28,7 @@ const DataTables = ({
   componentType,
   checkedOutLocationsInCurrentSessionRef,
 }) => {
-  const selectMonPlanRow = useCallback((id) => {
+  const updateMonPlanRow = useCallback((id, selection) => {
     let rowStateFunc;
 
     if (componentType === 'Submission') {
@@ -39,9 +39,9 @@ const DataTables = ({
 
     for (const mpR of monPlanRef.current) {
       if (mpR.monPlanId === id && rowStateFunc(mpR, 'MP') === 'Checkbox') {
-        mpR.selected = true;
-        mpR.userCheckedOut = true;
-        updateFilesSelected(true);
+        mpR.selected = selection;
+        mpR.userCheckedOut = selection;
+        updateFilesSelected(selection);
       }
     }
 
@@ -49,7 +49,7 @@ const DataTables = ({
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const selectQARow = useCallback((id, periodAbr) => {
+  const updateQARow = useCallback((id, periodAbr, selection) => {
     let rowStateFunc;
 
     if (componentType === 'Submission') {
@@ -65,9 +65,9 @@ const DataTables = ({
         qaR.periodAbbreviation === periodAbr &&
         rowStateFunc(qaR, 'QA') === 'Checkbox'
       ) {
-        qaR.selected = true;
-        qaR.userCheckedOut = true;
-        updateFilesSelected(true);
+        qaR.selected = selection;
+        qaR.userCheckedOut = selection;
+        updateFilesSelected(selection);
       }
     }
 
@@ -225,8 +225,8 @@ const DataTables = ({
                 ref={ref}
                 dataTableName={name}
                 type={type}
-                selectMonPlanRow={selectMonPlanRow}
-                selectQARow={selectQARow}
+                updateMonPlanRow={updateMonPlanRow}
+                updateQARow={updateQARow}
                 getRowState={
                   componentType === 'Submission'
                     ? getRowStateSubmission
