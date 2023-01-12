@@ -1,10 +1,16 @@
-import * as types from "../actions/actionTypes";
-import initialState from "./initialState";
+import * as types from '../actions/actionTypes';
+import initialState from './initialState';
 
 const reducer = (state, action) => {
   const currentState = state ? state : initialState.openedFacilityTabs;
   let returnObject;
-  const workspaceSections = ["monitoringPlans","qaCertTestSummary","export","emissions"];
+  const workspaceSections = [
+    'monitoringPlans',
+    'qaCertTestSummary',
+    'qaCertEvent',
+    'export',
+    'emissions',
+  ];
   const fac = {};
   fac[`${action.workspaceSection}`] = action.facility;
 
@@ -14,25 +20,24 @@ const reducer = (state, action) => {
       returnObject = {
         ...currentState,
       };
-      workspaceSections.forEach(section =>
-        returnObject[`${section}`] = [
-          ...currentState[`${section}`],
-          action.facility,
-        ],
+      workspaceSections.forEach(
+        (section) =>
+          (returnObject[`${section}`] = [
+            ...currentState[`${section}`],
+            action.facility,
+          ])
       );
       break;
     case types.REMOVE_FACILITY_TAB:
       returnObject = {
         ...currentState,
       };
-      workspaceSections.forEach(section =>
-        returnObject[`${section}`] = 
-          currentState[section]
-            .filter(
-              (facility) =>
-                currentState[section].indexOf(facility) !==
-                action.facility - 1
-            ),
+      workspaceSections.forEach(
+        (section) =>
+          (returnObject[`${section}`] = currentState[section].filter(
+            (facility) =>
+              currentState[section].indexOf(facility) !== action.facility - 1
+          ))
       );
       break;
     case types.SET_LOCATION_SELECTION_STATE:
@@ -87,17 +92,19 @@ const reducer = (state, action) => {
       returnObject = {
         ...currentState,
       };
-      workspaceSections.filter(s=>s !== 'export').forEach(section => 
-        returnObject[section] = 
-          currentState[section].map((x) =>
-            x.selectedConfig.id === action.configID
-              ? {
-                  ...x,
-                  checkout: action.checkout,
-                }
-              : x
-          ),
-      );
+      workspaceSections
+        .filter((s) => s !== 'export')
+        .forEach(
+          (section) =>
+            (returnObject[section] = currentState[section].map((x) =>
+              x.selectedConfig.id === action.configID
+                ? {
+                    ...x,
+                    checkout: action.checkout,
+                  }
+                : x
+            ))
+        );
       break;
     case types.SET_INACTIVE_STATE:
       returnObject = {
@@ -143,7 +150,7 @@ const reducer = (state, action) => {
             : x
         ),
       };
-      break;  
+      break;
     case types.SET_VIEW_DATA:
       returnObject = {
         ...currentState,
@@ -158,7 +165,7 @@ const reducer = (state, action) => {
             : x
         ),
       };
-      break;  
+      break;
     case types.SET_REPORTING_PERIODS:
       returnObject = {
         ...currentState,

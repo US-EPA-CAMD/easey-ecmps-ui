@@ -241,36 +241,6 @@ export const SelectFacilitiesDataTable = ({
         ariaLabel={'Select Configurations'}
         workspaceSection={workspaceSection}
       />
-      {/* )} */}
-      {/* ) : (
-        <DataTableRender
-          columnNames={columnNames}
-          dataLoaded={dataLoaded}
-          data={data}
-          defaultSort="col2"
-          openedFacilityTabs={
-            openedFacilityTabs[QA_CERT_TEST_SUMMARY_STORE_NAME]
-          }
-          user={user}
-          pagination={true}
-          filter={true}
-          sectionTitle="Select Configurations"
-          expandableRows={true}
-          expandableRowComp={
-            <DataTableConfigurations
-              selectedRowHandler={selectedRowHandler}
-              user={user}
-              className="expand-row-data-table"
-              actionsBtn={"Open"}
-              workspaceSection={workspaceSection}
-            />
-          }
-          headerStyling="padding-top-0 padding-left-2"
-          setShowInactive={() => {}}
-          ariaLabel={"Select Configurationss"}
-          workspaceSection={workspaceSection}
-        />
-      )} */}
     </div>
   );
 };
