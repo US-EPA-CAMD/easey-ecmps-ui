@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { normalizeRowObjectFormat } from '../../additional-functions/react-data-table-component';
-
 import {
   changeGridCellAttributeValue,
   returnsFocusDatatableExpandBTN,
+  cleanUp508,
+  ensure508,
 } from '../../additional-functions/ensure-508';
 // *** local
 import { oneSecond } from '../../config';
@@ -16,8 +17,6 @@ import {
   getEmptyRows,
   getTableRowActionAriaLabel,
 } from '../../utils/selectors/QACert/TestSummary';
-
-import { cleanUp508, ensure508 } from '../../additional-functions/ensure-508';
 import ConfirmActionModal from '../ConfirmActionModal/ConfirmActionModal';
 
 const QACertEventDatatableRender = ({
