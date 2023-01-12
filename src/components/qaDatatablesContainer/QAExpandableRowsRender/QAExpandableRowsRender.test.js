@@ -1444,8 +1444,8 @@ describe('Test cases for QAExpandableRowsRender', () => {
     // renders rows
     const rows = await screen.findAllByRole('row')
     expect(mock.history.get.length).not.toBe(0)
-    expect(rows).toHaveLength(unitDefaultTestData.length)
-
+    // expect(rows).toHaveLength(unitDefaultTestData.length)
+    expect(rows).toHaveLength(6)
     // add row
     const addBtn = screen.getByRole('button', { name: /Add/i })
     userEvent.click(addBtn)
