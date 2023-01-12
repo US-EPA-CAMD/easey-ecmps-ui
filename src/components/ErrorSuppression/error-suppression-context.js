@@ -5,7 +5,7 @@ export const useSuppressionFiltersStore = () => {
     const [checkNumber, setCheckNumber] = useState();
     const [checkResult, setCheckResult] = useState();
     const [facility, setFacility] = useState();
-    const [location, setLocation] = useState();
+    const [locations, setLocations] = useState();
     const [active, setActive] = useState();
     const [reason, setReason] = useState();
     const [addDateAfter, setAddDateAfter] = useState();
@@ -20,8 +20,8 @@ export const useSuppressionFiltersStore = () => {
         setCheckResult,
         facility,
         setFacility,
-        location,
-        setLocation,
+        locations,
+        setLocations,
         active,
         setActive,
         reason,

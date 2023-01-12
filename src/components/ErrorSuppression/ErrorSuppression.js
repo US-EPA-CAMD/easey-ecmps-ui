@@ -18,6 +18,7 @@ export const ErrorSuppression = () => {
           >
             {modules.error_supression_module}
           </h2>
+          <hr/>
           <ErrorSuppressionFilters/>
           <hr/>
           <ErrorSuppressionDataContainer />
