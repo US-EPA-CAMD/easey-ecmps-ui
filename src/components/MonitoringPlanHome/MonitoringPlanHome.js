@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import DataTable from '../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable';
 import MonitoringPlanTab from '../MonitoringPlanTab/MonitoringPlanTab';
 import QACertTestSummaryTab from '../QACertTestSummaryTab/QACertTestSummaryTab';
+import QACertEventTab from '../QACertEventTab/QACertEventTab';
 import EmissionsTab from '../EmissionsTab/EmissionsTab';
 import Export from '../export/Export/Export';
 import DynamicTabs from '../DynamicTabs/DynamicTabs';
@@ -21,7 +22,6 @@ import {
   QA_CERT_EVENT_STORE_NAME,
 } from '../../additional-functions/workspace-section-and-store-names';
 import * as modules from '../../utils/constants/moduleTitles';
-import QACertEventTab from '../QACertEventTab/QACertEventTab';
 
 export const MonitoringPlanHome = ({
   user,
@@ -54,6 +54,10 @@ export const MonitoringPlanHome = ({
         document.title = modules.qa_Certifications_Test_Summary_Module;
         setTitleName(modules.qa_Certifications_Test_Summary_Module);
         break;
+      case QA_CERT_EVENT_STORE_NAME:
+        document.title = modules.qa_Certifications_Event_Module;
+        setTitleName(modules.qa_Certifications_Event_Module);
+        break;
       case EXPORT_STORE_NAME:
         document.title = modules.export_Module;
         setTitleName(modules.export_Module);
@@ -61,10 +65,6 @@ export const MonitoringPlanHome = ({
       case EMISSIONS_STORE_NAME:
         document.title = modules.emissions_module;
         setTitleName(modules.emissions_module);
-        break;
-      case QA_CERT_EVENT_STORE_NAME:
-        document.title = modules.qa_Certifications_Event_Module;
-        setTitleName(modules.qa_Certifications_Event_Module);
         break;
       default:
         break;
