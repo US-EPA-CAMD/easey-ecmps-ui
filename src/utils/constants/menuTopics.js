@@ -157,8 +157,8 @@ export const globalView = [
         url: '/qa-test',
       },
       {
-        name: 'QCE/TEE',
-        url: '/qa-qce-tee',
+        name: 'Cert Events, Extensions & Exemptions',
+        url: '/qa-cert-event',
       },
     ],
   },
@@ -182,8 +182,8 @@ export const workSpace = [
         url: '/workspace/qa-test',
       },
       {
-        name: 'QCE/TEE',
-        url: '/workspace/qa-qce-tee',
+        name: 'Cert Events, Extensions & Exemptions',
+        url: '/workspace/qa-cert-event',
       },
     ],
   },
