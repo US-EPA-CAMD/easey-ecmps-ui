@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Button,
   Checkbox,
@@ -8,56 +8,60 @@ import {
   Grid,
   GridContainer,
   Label,
-} from "@trussworks/react-uswds";
-import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
-import config from "../../config";
-import { triggerEvaluation } from "../../utils/api/quartzApi";
+} from '@trussworks/react-uswds';
+import { CreateOutlined, LockOpenSharp } from '@material-ui/icons';
+import config from '../../config';
+import { triggerEvaluation } from '../../utils/api/quartzApi';
 
-import * as mpApi from "../../utils/api/monitoringPlansApi";
-import * as emApi from "../../utils/api/emissionsApi";
+import * as mpApi from '../../utils/api/monitoringPlansApi';
+import * as emApi from '../../utils/api/emissionsApi';
 import {
   EMISSIONS_STORE_NAME,
   MONITORING_PLAN_STORE_NAME,
-} from "../../additional-functions/workspace-section-and-store-names";
-import Modal from "../Modal/Modal";
-import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
-import "./HeaderInfo.scss";
-import ReportGenerator from "../ReportGenerator/ReportGenerator";
-import { Preloader } from "@us-epa-camd/easey-design-system";
-import ImportModal from "../ImportModal/ImportModal";
-import UploadModal from "../UploadModal/UploadModal";
+  QA_CERT_EVENT_STORE_NAME,
+} from '../../additional-functions/workspace-section-and-store-names';
+import Modal from '../Modal/Modal';
+import { DropdownSelection } from '../DropdownSelection/DropdownSelection';
+import './HeaderInfo.scss';
+import ReportGenerator from '../ReportGenerator/ReportGenerator';
+import { Preloader } from '@us-epa-camd/easey-design-system';
+import ImportModal from '../ImportModal/ImportModal';
+import UploadModal from '../UploadModal/UploadModal';
 import {
   attachChangeEventListeners,
   removeChangeEventListeners,
   unsavedDataMessage,
-} from "../../additional-functions/prompt-to-save-unsaved-changes";
-import GenericTable from "../GenericTable/GenericTable";
+} from '../../additional-functions/prompt-to-save-unsaved-changes';
+import GenericTable from '../GenericTable/GenericTable';
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
   returnFocusToCommentButton,
   returnFocusToLast,
-} from "../../additional-functions/manage-focus";
-import MultiSelectCombobox from "../MultiSelectCombobox/MultiSelectCombobox";
+} from '../../additional-functions/manage-focus';
+import MultiSelectCombobox from '../MultiSelectCombobox/MultiSelectCombobox';
 import {
   getViews,
   exportEmissionsDataDownload,
-} from "../../utils/api/emissionsApi";
-import { getUser, getPreviouslyFullSubmitedQuarter } from "../../utils/functions";
-import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
-import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
+} from '../../utils/api/emissionsApi';
+import {
+  getUser,
+  getPreviouslyFullSubmitedQuarter,
+} from '../../utils/functions';
+import { EmissionsImportTypeModalContent } from './EmissionsImportTypeModalContent';
+import { ImportHistoricalDataModal } from './ImportHistoricalDataModal';
 import {
   setIsViewDataLoaded,
   setReportingPeriods,
   setViewData,
   setViewDataColumns,
   setViewTemplateSelectionAction,
-} from "../../store/actions/dynamicFacilityTab";
-import { handleError } from "../../utils/api/apiUtils";
+} from '../../store/actions/dynamicFacilityTab';
+import { handleError } from '../../utils/api/apiUtils';
 import {
   displayAppError,
   hideAppError,
-} from "../../additional-functions/app-error";
+} from '../../additional-functions/app-error';
 
 // Helper function that generates an array of years from this year until the year specified in min param
 export const generateArrayOfYears = (min) => {
@@ -110,23 +114,29 @@ export const HeaderInfo = ({
 }) => {
   //MP
   const sections = [
-    { name: "Defaults" },
-    { name: "Formulas" },
-    { name: "Loads" },
+    { name: 'Defaults' },
+    { name: 'Formulas' },
+    { name: 'Loads' },
     {
-      name: "Location Attributes and Relationships",
+      name: 'Location Attributes and Relationships',
     },
-    { name: "Methods" },
-    { name: "Qualifications" },
-    { name: "Rectangular Duct WAFs" },
-    { name: "Spans" },
-    { name: "Systems" },
-    { name: "Unit Information" },
+    { name: 'Methods' },
+    { name: 'Qualifications' },
+    { name: 'Rectangular Duct WAFs' },
+    { name: 'Spans' },
+    { name: 'Systems' },
+    { name: 'Unit Information' },
+  ];
+
+  const testData = [
+    { name: '-- Select --' },
+    { name: 'QA Certification Event' },
+    { name: 'Test Extension Exemption' },
   ];
 
   // *** parse apart facility name
-  const facilityMainName = facility.split("(")[0];
-  const facilityAdditionalName = facility.split("(")[1].replace(")", "");
+  const facilityMainName = facility.split('(')[0];
+  const facilityAdditionalName = facility.split('(')[1].replace(')', '');
   const selectedUnitId = selectedConfig?.locations
     ?.filter((l) => l.id === locationSelect[1])
     .map((l) => l.unitId);
@@ -142,7 +152,7 @@ export const HeaderInfo = ({
   );
 
   const [checkedOutConfigs, setCheckedOutConfigs] = useState([]);
-  const [auditInformation, setAuditInformation] = useState("");
+  const [auditInformation, setAuditInformation] = useState('');
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const [checkedOutByUser, setCheckedOutByUser] = useState(false);
@@ -158,7 +168,7 @@ export const HeaderInfo = ({
   // refreshing evaluation status
   const delayInSeconds = config.app.refreshEvalStatusRate;
   const [openIntervalId, setOpenIntervalId] = useState(null);
-  const [evalStatus, setEvalStatus] = useState("");
+  const [evalStatus, setEvalStatus] = useState('');
   const [evalStatusLoaded, setEvalStatusLoaded] = useState(false);
   const [showCommentsModal, setShowCommentsModal] = useState(false);
   const [commentsData, setCommentsData] = useState([]);
@@ -173,7 +183,7 @@ export const HeaderInfo = ({
   const [finishedLoading, setFinishedLoading] = useState(false);
   // Upload has started but is not finished when isLoading=true (this is my educated guess, someone correct if wrong)
   const [isLoading, setIsLoading] = useState(false);
-  const [fileName, setFileName] = useState("");
+  const [fileName, setFileName] = useState('');
   const [hasFormatError, setHasFormatError] = useState(false);
   const [hasInvalidJsonError, setHasInvalidJsonError] = useState(false);
   const [importApiErrors, setImportApiErrors] = useState([]);
@@ -181,6 +191,7 @@ export const HeaderInfo = ({
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const [isReverting, setIsReverting] = useState(false);
   const [viewTemplates, setViewTemplates] = useState([]);
+  const [testDataOptions, setTestDataOptions] = useState([]);
 
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState([]);
@@ -195,10 +206,11 @@ export const HeaderInfo = ({
   );
 
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
+  const [testDataOptionSelect, setTestDataOptionSelect] = useState(null);
 
   const MAX_REPORTING_PERIODS = 4;
   const MAX_REPORTING_PERIODS_ERROR_MSG =
-    "You can only select a maximum of four reporting periods";
+    'You can only select a maximum of four reporting periods';
 
   let reportingPeriods = useMemo(
     () =>
@@ -214,43 +226,48 @@ export const HeaderInfo = ({
     [user]
   );
 
-  // This useeffect controls which reporting periods are selectected by default 
-  useEffect(()=>{
-
+  // This useeffect controls which reporting periods are selectected by default
+  useEffect(() => {
     // this would mean reporting peruiods were already selected and users are probably just switching back to the tab, so their selctions should remain.
-    if( currentTab === undefined || currentTab?.reportingPeriods ){
-      return
+    if (currentTab === undefined || currentTab?.reportingPeriods) {
+      return;
     }
-    
-    let  selectedRptPeriods; 
-    if( inWorkspace  ){
-      selectedRptPeriods = reportingPeriods.filter(rp => rp.selected).map(rp => rp.id);
-    }
-    else{
-      const rptPeriod = getPreviouslyFullSubmitedQuarter(new Date().toDateString())
-      const foundRptPeriod = reportingPeriods.find(rp => rp.label === rptPeriod)
-      if( !foundRptPeriod ) return;
-      foundRptPeriod.selected=true;
+
+    let selectedRptPeriods;
+    if (inWorkspace) {
+      selectedRptPeriods = reportingPeriods
+        .filter((rp) => rp.selected)
+        .map((rp) => rp.id);
+    } else {
+      const rptPeriod = getPreviouslyFullSubmitedQuarter(
+        new Date().toDateString()
+      );
+      const foundRptPeriod = reportingPeriods.find(
+        (rp) => rp.label === rptPeriod
+      );
+      if (!foundRptPeriod) return;
+      foundRptPeriod.selected = true;
       selectedRptPeriods = [foundRptPeriod.id];
     }
 
-    setSelectedReportingPeriods(selectedRptPeriods)
+    setSelectedReportingPeriods(selectedRptPeriods);
     dispatch(
-      setReportingPeriods(
-        selectedRptPeriods,
-        currentTab.name,
-        workspaceSection
-      )
+      setReportingPeriods(selectedRptPeriods, currentTab.name, workspaceSection)
     );
 
-  // Adding dispatch to below dep array causes an inifinte rerender problem
-  // hence why the linter warning is being suppressed.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reportingPeriods, currentTab, workspaceSection])
-  
+    // Adding dispatch to below dep array causes an inifinte rerender problem
+    // hence why the linter warning is being suppressed.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reportingPeriods, currentTab, workspaceSection]);
+
   useEffect(() => {
     if (currentTab?.viewTemplateSelect)
       setViewTemplateSelect(currentTab.viewTemplateSelect);
+  }, [currentTab]);
+
+  useEffect(() => {
+    if (currentTab?.testDataOptionSelect)
+      setTestDataOptionSelect(currentTab.testDataOptionSelect);
   }, [currentTab]);
 
   // *** Assign initial event listeners after loading data/dropdowns
@@ -291,9 +308,17 @@ export const HeaderInfo = ({
     });
   }, [workspaceSection, setViewTemplateSelect]);
 
+  useEffect(() => {
+    if (workspaceSection !== QA_CERT_EVENT_STORE_NAME) return;
+    setTestDataOptions(testData);
+    if (!currentTab?.TestDataOptionSelect && testData?.length > 0) {
+      setTestDataOptionSelect(testData[0]);
+    }
+  }, [workspaceSection, setTestDataOptionSelect]);
+
   const executeOnClose = () => {
     setShowCommentsModal(false);
-    removeChangeEventListeners(".modalUserInput");
+    removeChangeEventListeners('.modalUserInput');
     setReturnedFocusToLast(false);
   };
 
@@ -304,7 +329,7 @@ export const HeaderInfo = ({
     setDisablePortBtn(true);
     setFinishedLoading(false);
     setIsLoading(false);
-    setFileName("");
+    setFileName('');
     setHasFormatError(false);
     setHasInvalidJsonError(false);
     setImportApiErrors([]);
@@ -317,23 +342,23 @@ export const HeaderInfo = ({
     // eslint-disable-next-line no-restricted-globals
     `width=${screen.width}`,
     //`fullscreen=yes`,
-  ].join(",");
+  ].join(',');
 
   const displayReport = (reportCode) => {
     let reportType;
 
     switch (reportCode) {
-      case "MPP":
-        reportType = "Printout";
+      case 'MPP':
+        reportType = 'Printout';
         break;
-      case "MP_EVAL":
-        reportType = "Evaluation";
+      case 'MP_EVAL':
+        reportType = 'Evaluation';
         break;
-      case "MP_AUDIT":
-        reportType = "Audit";
+      case 'MP_AUDIT':
+        reportType = 'Audit';
         break;
       default:
-        reportType = "Evaluation";
+        reportType = 'Evaluation';
         break;
     }
 
@@ -348,7 +373,7 @@ export const HeaderInfo = ({
     setShowImportModal(true);
 
     setTimeout(() => {
-      attachChangeEventListeners(".modalUserInput");
+      attachChangeEventListeners('.modalUserInput');
     });
   };
 
@@ -383,12 +408,12 @@ export const HeaderInfo = ({
     if (data.length >= 1) {
       data.forEach((element) => {
         formmatedData.push({
-          "Date, Time": new Date(element.addDate).toLocaleString("en-US", {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
+          'Date, Time': new Date(element.addDate).toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
             hour12: false,
           }),
           Comment: element.monitoringPlanComment,
@@ -399,8 +424,8 @@ export const HeaderInfo = ({
     return [
       {
         // "Monitoring Plan": "",
-        "Date, Time": " ",
-        Comment: " ",
+        'Date, Time': ' ',
+        Comment: ' ',
       },
     ];
   };
@@ -411,7 +436,7 @@ export const HeaderInfo = ({
     });
 
     setTimeout(() => {
-      attachChangeEventListeners(".modalUserInput");
+      attachChangeEventListeners('.modalUserInput');
     });
   };
 
@@ -447,7 +472,7 @@ export const HeaderInfo = ({
         else {
           mpApi.getRefreshInfo(configID).then((info) => {
             currentConfig = {
-              checkedOutBy: "N/A",
+              checkedOutBy: 'N/A',
               lastUpdatedBy: info.data.userId,
               updateDate: info.data.updateDate,
             };
@@ -478,7 +503,7 @@ export const HeaderInfo = ({
   };
 
   const startRefreshTimer = () => {
-    if (inWorkspace && evalStatus !== "EVAL") {
+    if (inWorkspace && evalStatus !== 'EVAL') {
       // if we already have a refresh interval open (this shouldn't happen, but just in case)
       if (openIntervalId) {
         // get rid of it and clear the id state
@@ -493,11 +518,11 @@ export const HeaderInfo = ({
         // if status is INQ or WIP:
         if (
           totalTime < config.app.refreshEvalStatusTimeout &&
-          (currStatus === "INQ" || currStatus === "WIP")
+          (currStatus === 'INQ' || currStatus === 'WIP')
         ) {
           // check database and update status
           mpApi.getRefreshInfo(configID).then((res) => {
-            let databaseStatus = "";
+            let databaseStatus = '';
             if (res) {
               databaseStatus = res.data.evalStatusCode;
             }
@@ -515,7 +540,7 @@ export const HeaderInfo = ({
         // then refresh the header (will automatically clear the open interval)
         if (totalTime >= config.app.refreshEvalStatusTimeout) {
           console.log(
-            "Evaluation status refresh timeout reached.\nRefreshing header and stopping interval..."
+            'Evaluation status refresh timeout reached.\nRefreshing header and stopping interval...'
           );
           setEvalStatusLoaded(false);
           setDataLoaded(false);
@@ -531,11 +556,11 @@ export const HeaderInfo = ({
     // setCheckoutState(currentConfig.checkedOutBy !== "N/A");
     setOpenIntervalId(intervalId);
     setUserHasCheckout(
-      configs.some((plan) => plan["checkedOutBy"] === user.userId)
+      configs.some((plan) => plan['checkedOutBy'] === user.userId)
     );
     setCheckedOutByUser(isCheckedOutByUser(configs));
     setAuditInformation(
-      createAuditMessage(currentConfig.checkedOutBy !== "N/A", currentConfig)
+      createAuditMessage(currentConfig.checkedOutBy !== 'N/A', currentConfig)
     );
     setCheckout(currentCheckoutStatus);
     setDataLoaded(true);
@@ -543,20 +568,20 @@ export const HeaderInfo = ({
 
   const findCurrentlyCheckedOutByInfo = (configs) => {
     return configs[
-      configs.map((con) => con["monPlanId"]).indexOf(selectedConfig.id)
+      configs.map((con) => con['monPlanId']).indexOf(selectedConfig.id)
     ];
   };
 
   const isCheckedOutByUser = (configs) => {
     return (
       configs
-        .map((location) => location["monPlanId"])
+        .map((location) => location['monPlanId'])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
         configs
-          .map((location) => location["monPlanId"])
+          .map((location) => location['monPlanId'])
           .indexOf(selectedConfig.id)
-      ]["checkedOutBy"] === user["userId"]
+      ]['checkedOutBy'] === user['userId']
     );
   };
 
@@ -567,10 +592,10 @@ export const HeaderInfo = ({
     return (
       (date.getMonth() > 8
         ? date.getMonth() + 1
-        : "0" + (date.getMonth() + 1)) +
-      "/" +
-      (day > 9 ? day : "0" + day) +
-      "/" +
+        : '0' + (date.getMonth() + 1)) +
+      '/' +
+      (day > 9 ? day : '0' + day) +
+      '/' +
       date.getFullYear()
     );
   };
@@ -578,42 +603,42 @@ export const HeaderInfo = ({
   // chooses correctly styling for evaluation status label
   const evalStatusStyle = (status) => {
     switch (status) {
-      case "ERR":
-      case "EVAL":
-        return "usa-alert--warning";
-      case "INFO":
-      case "PASS":
-        return "usa-alert--success";
-      case "INQ":
-      case "WIP":
-        return "usa-alert--info";
+      case 'ERR':
+      case 'EVAL':
+        return 'usa-alert--warning';
+      case 'INFO':
+      case 'PASS':
+        return 'usa-alert--success';
+      case 'INQ':
+      case 'WIP':
+        return 'usa-alert--info';
       default:
         break;
     }
-    return "";
+    return '';
   };
 
   // returns evaluation status (full text) from code
   const evalStatusText = (status) => {
     switch (status) {
-      case "ERR":
-        return "Critical Errors";
-      case "INFO":
-        return "Informational Message";
-      case "PASS":
-        return "Passed";
-      case "INQ":
-        return "In Queue";
-      case "WIP":
-        return "In Progress";
+      case 'ERR':
+        return 'Critical Errors';
+      case 'INFO':
+        return 'Informational Message';
+      case 'PASS':
+        return 'Passed';
+      case 'INQ':
+        return 'In Queue';
+      case 'WIP':
+        return 'In Progress';
       default:
         break;
     }
-    return "Needs Evaluation";
+    return 'Needs Evaluation';
   };
 
   const evalStatusContent = () => {
-    if (checkedOutByUser && evalStatusText(evalStatus) === "Needs Evaluation") {
+    if (checkedOutByUser && evalStatusText(evalStatus) === 'Needs Evaluation') {
       return (
         <Button
           type="button"
@@ -632,8 +657,8 @@ export const HeaderInfo = ({
     const evalStatusHyperlink = (
       <div className={alertStyle}>
         <button
-          className={"hyperlink-btn cursor-pointer"}
-          onClick={() => displayReport("MP_EVAL")}
+          className={'hyperlink-btn cursor-pointer'}
+          onClick={() => displayReport('MP_EVAL')}
         >
           {evalStatusText(evalStatus)}
         </button>
@@ -648,16 +673,16 @@ export const HeaderInfo = ({
   };
 
   const showHyperLink = (status) => {
-    return status === "PASS" || status === "INFO" || status === "ERR";
+    return status === 'PASS' || status === 'INFO' || status === 'ERR';
   };
 
   const showRevert = (status) => {
     return (
       checkedOutByUser &&
-      (status === "PASS" ||
-        status === "INFO" ||
-        status === "ERR" ||
-        status === "EVAL")
+      (status === 'PASS' ||
+        status === 'INFO' ||
+        status === 'ERR' ||
+        status === 'EVAL')
     );
   };
 
@@ -718,7 +743,7 @@ export const HeaderInfo = ({
           setImportedFileErrorMsgs([]);
         } else if (status === 400)
           setImportedFileErrorMsgs(
-            data?.message?.split(",") || ["HTTP 400 Error"]
+            data?.message?.split(',') || ['HTTP 400 Error']
           );
         else {
           setImportedFileErrorMsgs(`HTTP ${status} Error`);
@@ -734,16 +759,16 @@ export const HeaderInfo = ({
   };
 
   const closeImportModalHandler = () => {
-    const importBtn = document.querySelector("#importBtn");
+    const importBtn = document.querySelector('#importBtn');
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
         resetImportFlags();
-        removeChangeEventListeners(".modalUserInput");
+        removeChangeEventListeners('.modalUserInput');
         importBtn.focus();
       }
     } else {
       resetImportFlags();
-      removeChangeEventListeners(".modalUserInput");
+      removeChangeEventListeners('.modalUserInput');
       importBtn.focus();
     }
   };
@@ -762,12 +787,12 @@ export const HeaderInfo = ({
     })
       .then(() => {
         // Change front-end to display "In Queue" status after starting eval
-        setEvalStatus("INQ");
+        setEvalStatus('INQ');
         setDataLoaded(false);
         setEvalStatusLoaded(true);
       })
       .catch((error) => {
-        console.log("Error occurred: ", error);
+        console.log('Error occurred: ', error);
       });
   };
 
@@ -778,8 +803,8 @@ export const HeaderInfo = ({
       // when config is checked out by someone
       if (checkedOut) {
         return `Currently checked-out by: ${
-          currentConfig["checkedOutBy"]
-        } ${formatDate(currentConfig["checkedOutOn"])}`;
+          currentConfig['checkedOutBy']
+        } ${formatDate(currentConfig['checkedOutOn'])}`;
       }
       // when config is not checked out
       return `Last updated by: ${currentConfig.lastUpdatedBy} ${formatDate(
@@ -810,7 +835,7 @@ export const HeaderInfo = ({
       return;
     }
 
-    if (updateType === "add") {
+    if (updateType === 'add') {
       setSelectedReportingPeriods(uniqueReportingPeriods);
       dispatch(
         setReportingPeriods(
@@ -819,7 +844,7 @@ export const HeaderInfo = ({
           workspaceSection
         )
       );
-    } else if (updateType === "remove") {
+    } else if (updateType === 'remove') {
       const selected = reportingPeriods
         .filter((reportingPeriod) => {
           return reportingPeriod.selected;
@@ -841,11 +866,11 @@ export const HeaderInfo = ({
 
   const onChangeOfEmissionsImportType = (e) => {
     const { value } = e.target;
-    if (value === "file") {
+    if (value === 'file') {
       setShowImportModal(true);
     }
 
-    if (value === "historical") {
+    if (value === 'historical') {
       setShowHistoricalDataImportModal(true);
     }
 
@@ -866,10 +891,10 @@ export const HeaderInfo = ({
     if (
       response &&
       response.status === 200 &&
-      response.headers["x-field-mappings"] &&
+      response.headers['x-field-mappings'] &&
       response.data
     ) {
-      const columns = JSON.parse(response.headers["x-field-mappings"]);
+      const columns = JSON.parse(response.headers['x-field-mappings']);
       const results = response.data;
 
       const names = columns.map((column) => column.label);
@@ -915,7 +940,7 @@ export const HeaderInfo = ({
     <div className="header">
       <div
         className={`usa-overlay ${
-          showRevertModal || showEvalReport ? "is-visible" : ""
+          showRevertModal || showEvalReport ? 'is-visible' : ''
         } `}
       />
 
@@ -924,12 +949,12 @@ export const HeaderInfo = ({
           show={showRevertModal}
           close={closeRevertModal}
           showSave={true}
-          exitBTN={"Yes"}
+          exitBTN={'Yes'}
           save={revert}
           children={
             <div>
               {
-                "Reverting to Official Record will undo all saved and unsaved changes. This is not recoverable. Do you want to continue?"
+                'Reverting to Official Record will undo all saved and unsaved changes. This is not recoverable. Do you want to continue?'
               }
             </div>
           }
@@ -954,7 +979,9 @@ export const HeaderInfo = ({
             <div className="grid-row">
               <h3 className="margin-y-auto font-body-md margin-right-2">
                 {facilityMainName}
-                <span className=" font-body-lg margin-left-1 ">{facilityAdditionalName}</span>
+                <span className=" font-body-lg margin-left-1 ">
+                  {facilityAdditionalName}
+                </span>
               </h3>
             </div>
             <div>
@@ -1008,13 +1035,13 @@ export const HeaderInfo = ({
                       epa-testid="checkInBTN"
                       className="text-no-wrap height-6"
                     >
-                      <LockOpenSharp /> {"Check Back In"}
+                      <LockOpenSharp /> {'Check Back In'}
                     </Button>
                   ) : !lockedFacility &&
                     !userHasCheckout &&
                     selectedConfig.active &&
                     checkedOutConfigs
-                      .map((location) => location["monPlanId"])
+                      .map((location) => location['monPlanId'])
                       .indexOf(selectedConfig.id) === -1 ? (
                     <Button
                       type="button"
@@ -1026,7 +1053,7 @@ export const HeaderInfo = ({
                       id="checkOutBTN"
                       epa-testid="checkOutBTN"
                     >
-                      <CreateOutlined color="primary" /> {"Check Out"}
+                      <CreateOutlined color="primary" /> {'Check Out'}
                     </Button>
                   ) : null}
                   {showRevert(evalStatus) && (
@@ -1057,7 +1084,7 @@ export const HeaderInfo = ({
                     </label>
                     {evalStatusContent()}
                     <label className="text-bold margin-right-1 desktop:width-10 desktop:margin-left-5 desktop-lg:width-10 widescreen:width-card widescreen:margin-right-neg-3 widescreen:margin-top-2">
-                      Submission Status:{" "}
+                      Submission Status:{' '}
                     </label>
                     <p
                       className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
@@ -1142,14 +1169,63 @@ export const HeaderInfo = ({
                   outline
                   type="button"
                   title="View Printout Report"
-                  className={"hyperlink-btn cursor-pointer"}
-                  onClick={() => displayReport("MPP")}
+                  className={'hyperlink-btn cursor-pointer'}
+                  onClick={() => displayReport('MPP')}
                 >
                   View Printout Report
                 </Button>
               </Grid>
             </GridContainer>
           )}
+
+          {workspaceSection === QA_CERT_EVENT_STORE_NAME ? (
+            <GridContainer className="padding-left-0 margin-left-0 maxw-desktop">
+              <Grid row={true}>
+                <Grid col={2}>
+                  <DropdownSelection
+                    caption="Locations"
+                    orisCode={orisCode}
+                    options={locations}
+                    viewKey="name"
+                    selectKey="id"
+                    initialSelection={locationSelect[0]}
+                    selectionHandler={setLocationSelect}
+                    workspaceSection={workspaceSection}
+                  />
+                </Grid>
+                <Grid col={8} desktopLg={{ col: 5 }} widescreen={{ col: 5 }}>
+                  <FormGroup className="margin-right-2 margin-bottom-1">
+                    <Label test-id={'testData'} htmlFor={'testData'}>
+                      {'Test Data'}
+                    </Label>
+                    <Dropdown
+                      id={'testData'}
+                      name={'testData'}
+                      epa-testid={'testData'}
+                      data-testid={'testData'}
+                      value={testDataOptionSelect?.name}
+                      onChange={(e) => {
+                        setTestDataOptionSelect(
+                          testDataOptions.find((v) => v.name === e.target.value)
+                        );
+                      }}
+                      // className="mobile-lg:view-template-dropdown-maxw"
+                    >
+                      {testDataOptions?.map((data) => (
+                        <option
+                          data-testid={data.name}
+                          key={data.name}
+                          value={data.name}
+                        >
+                          {data.name}
+                        </option>
+                      ))}
+                    </Dropdown>
+                  </FormGroup>
+                </Grid>
+              </Grid>
+            </GridContainer>
+          ) : null}
 
           {workspaceSection === EMISSIONS_STORE_NAME ? (
             <GridContainer className="padding-left-0 margin-left-0 maxw-desktop">
@@ -1166,20 +1242,16 @@ export const HeaderInfo = ({
                     workspaceSection={workspaceSection}
                   />
                 </Grid>
-                <Grid
-                  col={8}
-                  desktopLg={{ col: 5}}
-                  widescreen={{ col: 5}}
-                >
+                <Grid col={8} desktopLg={{ col: 5 }} widescreen={{ col: 5 }}>
                   <FormGroup className="margin-right-2 margin-bottom-1">
-                    <Label test-id={"viewtemplate"} htmlFor={"viewtemplate"}>
-                      {"View Template"}
+                    <Label test-id={'viewtemplate'} htmlFor={'viewtemplate'}>
+                      {'View Template'}
                     </Label>
                     <Dropdown
-                      id={"viewtemplate"}
-                      name={"viewtemplate"}
-                      epa-testid={"viewtemplate"}
-                      data-testid={"viewtemplate"}
+                      id={'viewtemplate'}
+                      name={'viewtemplate'}
+                      epa-testid={'viewtemplate'}
+                      data-testid={'viewtemplate'}
                       value={viewTemplateSelect?.name}
                       onChange={(e) => {
                         setViewTemplateSelect(
@@ -1222,7 +1294,7 @@ export const HeaderInfo = ({
                       ).catch(handleError)
                     }
                   >
-                    {"Apply Filter(s)"}
+                    {'Apply Filter(s)'}
                   </Button>
                 </Grid>
               </Grid>
@@ -1234,7 +1306,7 @@ export const HeaderInfo = ({
                     type="button"
                     title="Summary Report"
                     onClick={() => null}
-                    className={"hyperlink-btn cursor-pointer text-no-wrap"}
+                    className={'hyperlink-btn cursor-pointer text-no-wrap'}
                   >
                     Summary Report
                   </Button>
@@ -1244,7 +1316,7 @@ export const HeaderInfo = ({
                     outline
                     type="button"
                     title="Data Report"
-                    className={"hyperlink-btn cursor-pointer margin-left-2"}
+                    className={'hyperlink-btn cursor-pointer margin-left-2'}
                     onClick={() => null}
                   >
                     Data Report
@@ -1267,10 +1339,10 @@ export const HeaderInfo = ({
             showSave={true}
             title={
               workspaceSection === MONITORING_PLAN_STORE_NAME
-                ? "Import a Monitoring Plan to continue"
-                : "Import Data"
+                ? 'Import a Monitoring Plan to continue'
+                : 'Import Data'
             }
-            exitBTN={"Import"}
+            exitBTN={'Import'}
             disablePortBtn={disablePortBtn}
             port={() => {
               importFile(importedFile);
@@ -1293,8 +1365,8 @@ export const HeaderInfo = ({
       ) : null}
       {isReverting && (
         <UploadModal
-          width={"30%"}
-          left={"35%"}
+          width={'30%'}
+          left={'35%'}
           children={<Preloader />}
           preloader
         />
@@ -1303,8 +1375,8 @@ export const HeaderInfo = ({
 
       {isLoading && !finishedLoading && (
         <UploadModal
-          width={"30%"}
-          left={"35%"}
+          width={'30%'}
+          left={'35%'}
           setFinishedLoading={setFinishedLoading}
           setShowImportModal={setShowImportModal}
           setIsLoading={setIsLoading}
@@ -1327,15 +1399,15 @@ export const HeaderInfo = ({
             close={closeImportModalHandler}
             showCancel={false}
             showSave={true}
-            exitBtn={"Ok"}
+            exitBtn={'Ok'}
             complete={true}
             importApiErrors={importApiErrors}
             importedFileErrorMsgs={importedFileErrorMsgs}
             setUpdateRelatedTables={setUpdateRelatedTables}
             successMsg={
               workspaceSection === MONITORING_PLAN_STORE_NAME
-                ? "Monitoring Plan has been Successfully Imported."
-                : "Test Data from File has been successfully imported."
+                ? 'Monitoring Plan has been Successfully Imported.'
+                : 'Test Data from File has been successfully imported.'
             }
             children={
               <ImportModal
@@ -1379,8 +1451,8 @@ export const HeaderInfo = ({
       {showCommentsModal && (
         <UploadModal
           show={showCommentsModal}
-          width={"50%"}
-          left={"25%"}
+          width={'50%'}
+          left={'25%'}
           close={() => executeOnClose()}
           showCancel={false}
           showSave={false}
@@ -1390,7 +1462,7 @@ export const HeaderInfo = ({
           children={
             <GenericTable
               data1={commentsData}
-              title={"Monitoring Plan - Comments"}
+              title={'Monitoring Plan - Comments'}
               expandable={true}
               additionalTitle={facilityAdditionalName}
             />

@@ -206,6 +206,7 @@ export const MonitoringPlanHome = ({
                 user={user}
                 isCheckedOut={row.checkout}
                 checkedOutLocations={checkedOutLocations}
+                workspaceSection={workspaceSection}
               />
             ),
             orisCode: row.orisCode,

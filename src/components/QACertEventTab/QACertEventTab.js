@@ -15,27 +15,24 @@ export const QACertEventTab = ({
   setExpired,
   resetTimerFlag,
   callApiFlag,
-
   orisCode,
   selectedConfig,
   title,
   locations,
   user,
   tabs,
-  isCheckedOut,
-
-  activeTab,
   setSection,
   setLocation,
   setCheckout,
+  checkedOutLocations,
+  workspaceSection,
 }) => {
   const getCurrentTab = () => {
     return tabs.find((tab) => tab.selectedConfig.id === selectedConfig.id);
   };
   const [sectionSelect, setSectionSelect] = useState(getCurrentTab().section);
   useEffect(() => {
-    setSection(sectionSelect, title);
-
+    setSection(sectionSelect, title, workspaceSection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionSelect]);
 
@@ -71,6 +68,8 @@ export const QACertEventTab = ({
           selectedTestCode={selectedTestCode}
           configID={selectedConfig.id}
           setCheckout={setCheckout}
+          checkedOutLocations={checkedOutLocations}
+          workspaceSection={workspaceSection}
           checkoutState={getCurrentTab().checkout}
         />
       </div>
