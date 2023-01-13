@@ -19,7 +19,6 @@ describe("useSuppressionFiltersStore hook", ()=>{
 
     it("has the correct number of fields", ()=>{
         const filters = getHookValue();
-        console.log(filters)
         expect(Object.keys(filters).length).toBe(18)
     })
 
@@ -29,11 +28,11 @@ describe("useSuppressionFiltersStore hook", ()=>{
         expect(filters.hasOwnProperty("checkNumber")).toBe(true)
         expect(filters.hasOwnProperty("checkResult")).toBe(true)
         expect(filters.hasOwnProperty("facility")).toBe(true)
-        expect(filters.hasOwnProperty("location")).toBe(true)
+        expect(filters.hasOwnProperty("locations")).toBe(true)
         expect(filters.hasOwnProperty("active")).toBe(true)
         expect(filters.hasOwnProperty("reason")).toBe(true)
         expect(filters.hasOwnProperty("addDateAfter")).toBe(true)
         expect(filters.hasOwnProperty("addDateBefore")).toBe(true)
 
     })
-})
+})  

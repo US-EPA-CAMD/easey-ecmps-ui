@@ -24,16 +24,21 @@ const MultiSelectCombobox = ({
   iconAlignRight = 1,
 }) => {
   const [filter, setFilter] = useState("");
-  const [_items, _setItems] = useState(getComboboxEnabledItems(items));
+  const [_items, _setItems] = useState(items.filter((e) => e.enabled));
   const [data, setData] = useState(
-    JSON.parse(JSON.stringify(getComboboxEnabledItems(items)))
-  );
+    JSON.parse(JSON.stringify(getComboboxEnabledItems(items))));
   const [showListBox, setShowListBox] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
 
   const selectedItemsRef = useRef(selectedItems);
   const inputRef = useRef(null);
-
+  
+  useEffect(()=>{
+    const enabledItems = getComboboxEnabledItems(items);
+    setData([...enabledItems]);
+    _setItems(enabledItems);
+  }, [items]);
+  
   const handleMultiSelectClick = (e) => {
     const multiSelectComboboxDiv = document.getElementById(
       `multi-select-combobox-${entity}`
@@ -125,7 +130,7 @@ const MultiSelectCombobox = ({
       ];
       selectedItemsRef.current = _selectedItems;
       onSearchHandler("");
-      setSelectedItems(_selectedItems);
+      setSelectedItems([..._selectedItems]);
       updateListDataOnChange(id, "add");
       onChangeUpdate(id, "add");
     }
@@ -183,7 +188,7 @@ const MultiSelectCombobox = ({
   return (
     <>
       <Label id={`${entity}-label`} htmlFor={`${entity}-searchbox`}>
-        {label}
+        {label} 
       </Label>
       <div
         role="combobox"

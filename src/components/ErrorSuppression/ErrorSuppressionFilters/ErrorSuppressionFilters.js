@@ -1,7 +1,8 @@
-import React, { useContext, useState, } from "react";
+import React, { useContext, useEffect, useState, } from "react";
 import { GridContainer, Grid, Label, Dropdown, Checkbox, DatePicker, ButtonGroup, Button } from "@trussworks/react-uswds";
 import { ErrorSuppressionFiltersContext } from "../error-suppression-context";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
+import { LocationSearching } from "@material-ui/icons";
 
 export const ErrorSuppressionFilters = () => {
 
@@ -11,34 +12,36 @@ export const ErrorSuppressionFilters = () => {
     const [selectedCheckNumber, setSelectedCheckNumber] = useState();
     const [selectedCheckResult, setSelectedCheckResult] = useState();
     const [selectedFacility, setSelectedFacility] = useState();
-    const [selectedLocations, setSelectedLocations] = useState();
+    const [selectedLocations, setSelectedLocations] = useState([]);
     const [selectedIsActive, setSelectedActive] = useState();
     const [selectedReason, setSelectedReason] = useState();
     const [selectedAddDateAfter, setSelectedAddDateAfter] = useState();
     const [selectedAddDateBefore, setSelectedAddDateBefore] = useState();
 
-    const locationNames = [
-        {
-            id: "comingSoon",
-            label: "Location 1",
-            selected: false,
-            enabled: true,
-        },
-        {
-            id: "comingSoon2",
-            label: "Location 2",
-            selected: false,
-            enabled: true,
-        }
+    const [locationData, setLocationData] = useState([]);
+    useEffect(()=>{
 
-    ];
+        setLocationData([
+            {
+                id: "Coming Soon...",
+                label: "Coming Soon...",
+                selected: false,
+                enabled: true,
+            }
+        ])
+    }, []);    
 
     const onChangeOfLocationMultiSelect = (id, changeType)=>{
+        const uniqueLocations = [
+            ...new Set([...selectedLocations, id]),
+        ];
+      
         if( changeType === "add"){
-
+            setSelectedLocations(uniqueLocations);
         }
         else if( changeType === "remove"){
-
+            const selected = locationData.filter((l)=>l.selected).map(l=>l.id);
+            setSelectedLocations(selected);
         }
         else 
             return;
@@ -118,7 +121,7 @@ export const ErrorSuppressionFilters = () => {
                 <Grid col={4}>
                     <div className="margin-left-2">
                         <MultiSelectCombobox
-                            items={locationNames}
+                            items={locationData}
                             label="Location Name"
                             entity="locationName"
                             searchBy="contains"
