@@ -18,7 +18,7 @@ export const qaProtocalGasProps = (selectedRow) => {
     ],
     controlInputs: {
       gasLevelCode: ["Gas Level Code", "dropdown", "", ""],
-      gasTypeCode: ["Gas Type Code", "dropdown", "", ""],
+      gasTypeCode: ["Gas Type Code", "multiSelectDropdown", "", ""],
       cylinderIdentifier: ["Cylinder Identification", "input", "", ""],
       vendorIdentifier: ["Vendor Identification", "input", "", ""],
       expirationDate: ["Expiration Date", "date", "", ""],
