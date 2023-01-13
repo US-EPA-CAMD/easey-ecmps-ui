@@ -742,9 +742,7 @@ export const HeaderInfo = ({
         if (status === 201) {
           setImportedFileErrorMsgs([]);
         } else if (status === 400)
-          setImportedFileErrorMsgs(
-            data?.message?.split(',') || ['HTTP 400 Error']
-          );
+          setImportedFileErrorMsgs(data?.message || ['HTTP 400 Error']);
         else {
           setImportedFileErrorMsgs(`HTTP ${status} Error`);
         }
