@@ -5,7 +5,9 @@ import '../MonitoringPlanTab/MonitoringPlanTab.scss';
 import { checkoutAPI } from '../../additional-functions/checkout';
 import { useSelector } from 'react-redux';
 import { QA_CERT_EVENT_STORE_NAME } from '../../additional-functions/workspace-section-and-store-names';
+import QACertEventHeaderInfo from "../QACertEventHeaderInfo/QACertEventHeaderInfo";
 
+import QATestSummaryDataTable from "../qaDatatablesContainer/QATestSummaryDataTable/QATestSummaryDataTable";
 export const QACertEventTabRender = ({
   title,
   user,
@@ -29,26 +31,40 @@ export const QACertEventTabRender = ({
   return (
     <div className=" padding-top-0">
       <div className="grid-row">
-        <HeaderInfo
+        <QACertEventHeaderInfo
           facility={title}
           selectedConfig={selectedConfig}
+          orisCode={orisCode}
           sectionSelect={sectionSelect}
           setSectionSelect={setSectionSelect}
-          orisCode={orisCode}
           setLocationSelect={setLocationSelect}
           locationSelect={locationSelect}
           locations={locations}
-          checkout={checkout}
           user={user}
-          checkoutAPI={checkoutAPI}
-          setCheckout={setCheckout}
           configID={configID}
+          setSelectedTestCode={setSelectedTestCode}
+          setCheckout={setCheckout}
+          checkoutState={checkoutState}
           setUpdateRelatedTables={setUpdateRelatedTables}
           updateRelatedTables={updateRelatedTables}
-          workspaceSection={workspaceSection}
         />
       </div>
       <hr />
+      {
+        <QATestSummaryDataTable
+          locationSelectValue={locationSelect ? locationSelect[1] : 0}
+          user={user}
+          sectionSelect={sectionSelect}
+          selectedLocation={{
+            name: locations[locationSelect[0]]["name"],
+            stackPipeId: locations[locationSelect[0]]["stackPipeId"],
+            unitId: locations[locationSelect[0]]["unitId"],
+          }}
+          locations={locations}
+          selectedTestCode={selectedTestCode}
+          isCheckedOut={checkoutState}
+        />
+      }
     </div>
   );
 };
