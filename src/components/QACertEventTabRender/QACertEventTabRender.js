@@ -18,26 +18,13 @@ export const QACertEventTabRender = ({
   checkout,
   setCheckout,
   workspaceSection,
+  setSectionSelect,
+  setSelectedTestCode,
+  selectedTestCode,
+  sectionSelect,
+  checkoutState,
 }) => {
-  const currentTab = useSelector((state) =>
-    state.openedFacilityTabs[QA_CERT_EVENT_STORE_NAME].find(
-      (t) => t.selectedConfig.id === configID
-    )
-  );
-
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
-  const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
-  const [viewColumns, setViewColumns] = useState();
-  const [viewData, setViewData] = useState();
-  const [isDataLoaded, setIsDataLoaded] = useState();
-  const isInitialLoadOfPage = currentTab?.isViewDataLoaded === undefined;
-
-  useEffect(() => {
-    setViewColumns(currentTab?.viewColumns || []);
-    setViewData(currentTab?.viewData || []);
-    setIsDataLoaded(isInitialLoadOfPage ? true : currentTab?.isViewDataLoaded);
-    setViewTemplateSelect(currentTab?.viewTemplateSelect ?? null);
-  }, [currentTab]);
 
   return (
     <div className=" padding-top-0">
@@ -45,6 +32,8 @@ export const QACertEventTabRender = ({
         <HeaderInfo
           facility={title}
           selectedConfig={selectedConfig}
+          sectionSelect={sectionSelect}
+          setSectionSelect={setSectionSelect}
           orisCode={orisCode}
           setLocationSelect={setLocationSelect}
           locationSelect={locationSelect}
@@ -54,9 +43,9 @@ export const QACertEventTabRender = ({
           checkoutAPI={checkoutAPI}
           setCheckout={setCheckout}
           configID={configID}
+          setUpdateRelatedTables={setUpdateRelatedTables}
           updateRelatedTables={updateRelatedTables}
           workspaceSection={workspaceSection}
-          currentTab={currentTab}
         />
       </div>
       <hr />

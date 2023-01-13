@@ -161,7 +161,7 @@ const DataTables = ({
         state: qaCertEventState,
         setState: setQaCertEventState,
         ref: qaCertEventRef,
-        name: 'QAC TEE', // TODO: Find correct name
+        name: 'Test Data', // TODO: Find correct name
         type: 'QT',
       },
       {
