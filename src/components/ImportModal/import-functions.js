@@ -66,10 +66,10 @@ export const checkingCorrectSchema = (
           setDisablePortBtn
         );
       } // incorrect schema with section
-      // if (!file.testSummaryData) {
-      //   errorChecks(true);
-      //   setSchemaErrors(["Only QA Test Data files may be imported"]);
-      // }
+      if (!file.dailyTestSummaryData) {
+        errorChecks(true);
+        setSchemaErrors(["Only Emissions files may be imported"]);
+      }
       break;
 
     default:
