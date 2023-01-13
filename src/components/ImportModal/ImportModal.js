@@ -175,7 +175,7 @@ const ImportModal = ({
       setSchemaErrors([]);
       const fileLoaded = JSON.parse(event.target.result);
       setImportedFile(fileLoaded);
-      checkingCorrectSchema(fileLoaded,workspaceSection,errorChecks,setSchemaErrors,qaSchema,mpSchema,setDisablePortBtn);
+      checkingCorrectSchema(fileLoaded,workspaceSection,errorChecks,setSchemaErrors,qaSchema,mpSchema,emSchema,setDisablePortBtn);
     } catch (e) {
       console.log("invalid json file error: ", e);
       setHasInvalidJsonError(true);

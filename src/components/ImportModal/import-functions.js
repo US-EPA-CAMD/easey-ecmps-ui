@@ -4,7 +4,16 @@ import {
   EMISSIONS_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 
-export const checkingCorrectSchema = (file, workspace,errorChecks,setSchemaErrors,qaSchema,mpSchema,setDisablePortBtn) => {
+export const checkingCorrectSchema = (
+  file,
+  workspace,
+  errorChecks,
+  setSchemaErrors,
+  qaSchema,
+  mpSchema,
+  emissionsSchema,
+  setDisablePortBtn
+) => {
   var Validator = require("jsonschema").Validator;
   var v = new Validator();
   switch (workspace) {
@@ -15,7 +24,11 @@ export const checkingCorrectSchema = (file, workspace,errorChecks,setSchemaError
         // correct schema, just errors
       } else {
         errorChecks(true);
-        formatSchemaErrors(v.validate(file, mpSchema),setSchemaErrors,setDisablePortBtn);
+        formatSchemaErrors(
+          v.validate(file, mpSchema),
+          setSchemaErrors,
+          setDisablePortBtn
+        );
       } // incorrect schema with section
       if (!file.unitStackConfigurations) {
         errorChecks(true);
@@ -29,18 +42,45 @@ export const checkingCorrectSchema = (file, workspace,errorChecks,setSchemaError
         // correct schema, just errors
       } else {
         errorChecks(true);
-        formatSchemaErrors(v.validate(file, qaSchema),setSchemaErrors,setDisablePortBtn);
+        formatSchemaErrors(
+          v.validate(file, qaSchema),
+          setSchemaErrors,
+          setDisablePortBtn
+        );
       } // incorrect schema with section
       if (!file.testSummaryData) {
         errorChecks(true);
         setSchemaErrors(["Only QA Test Data files may be imported"]);
       }
       break;
+    case EMISSIONS_STORE_NAME:
+      // correct schema
+      if (v.validate(file, emissionsSchema).valid) {
+        errorChecks(false);
+        // correct schema, just errors
+      } else {
+        errorChecks(true);
+        formatSchemaErrors(
+          v.validate(file, emissionsSchema),
+          setSchemaErrors,
+          setDisablePortBtn
+        );
+      } // incorrect schema with section
+      if (!file.quarter) {
+        errorChecks(true);
+        setSchemaErrors(["Only Emissions files may be imported"]);
+      }
+      break;
+
     default:
       break;
   }
 };
-export const formatSchemaErrors = (errors,setSchemaErrors,setDisablePortBtn) => {
+export const formatSchemaErrors = (
+  errors,
+  setSchemaErrors,
+  setDisablePortBtn
+) => {
   setDisablePortBtn(true);
   const formattedErrors = errors.errors.map((error) => {
     console.log(error, "file errors");
