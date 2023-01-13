@@ -7,7 +7,6 @@ import { ErrorSuppressionFiltersContextProvider } from "./error-suppression-cont
 export const ErrorSuppression = () => {
 
   return (
-    <ErrorSuppressionFiltersContextProvider>
       <div className="react-transition fade-in padding-x-3">
         <div className="text-black margin-top-1 display-none tablet:display-block">
           <h2
@@ -19,11 +18,12 @@ export const ErrorSuppression = () => {
             {modules.error_supression_module}
           </h2>
           <hr/>
-          <ErrorSuppressionFilters/>
-          <hr/>
-          <ErrorSuppressionDataContainer />
+          <ErrorSuppressionFiltersContextProvider>
+            <ErrorSuppressionFilters/>
+            <hr/>
+            <ErrorSuppressionDataContainer />
+          </ErrorSuppressionFiltersContextProvider>
         </div>
       </div>
-    </ErrorSuppressionFiltersContextProvider>
   );
 };
