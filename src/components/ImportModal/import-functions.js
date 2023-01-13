@@ -66,7 +66,7 @@ export const checkingCorrectSchema = (
           setDisablePortBtn
         );
       } // incorrect schema with section
-      if (!file.dailyTestSummaryData) {
+      if (!file.quarter) {
         errorChecks(true);
         setSchemaErrors(["Only Emissions files may be imported"]);
       }
