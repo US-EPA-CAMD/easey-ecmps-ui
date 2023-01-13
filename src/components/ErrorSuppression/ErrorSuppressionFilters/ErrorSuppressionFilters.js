@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState, } from "react";
 import { GridContainer, Grid, Label, Dropdown, Checkbox, DatePicker, ButtonGroup, Button } from "@trussworks/react-uswds";
 import { ErrorSuppressionFiltersContext } from "../error-suppression-context";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
-import { LocationSearching } from "@material-ui/icons";
 
 export const ErrorSuppressionFilters = () => {
 
