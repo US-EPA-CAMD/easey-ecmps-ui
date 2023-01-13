@@ -129,6 +129,23 @@ export const modalViewData = (
             ]);
             break;
 
+          case "multiSelectDropdown":
+            if (!createNew) {
+              if (totalOptionsClone) {
+                labels = selected[y]
+              }
+            }
+            arr.push([
+              y,
+              inputs[y][0],
+              labels,
+              inputs[y][2] === "required" ? "required" : false,
+              inputs[y][1] === "mainDropdown" ? "mainDropdown" : "multiSelectDropdown",
+              createNew ? "select" : selected ? selected[y] : "",
+              totalOptionsClone ? totalOptionsClone[y] : [],
+            ]);
+            break;
+
           case "nonFilteredDropdown":
             if (!createNew) {
               if (totalOptionsClone) {

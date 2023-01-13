@@ -103,6 +103,7 @@ describe("create all options for modal input controls", () => {
           staticDropdown: ["Static Dropdown", "independentDropdown", "", ""],
           mainDropdown: ["Main Dropdown", "mainDropdown", "", ""],
           dropdown: ["Dropdown", "dropdown", "", ""],
+          multiSelectDropdown: ["Multi Select Dropdown", "multiSelectDropdown", "", ""],
         },
         {},
         isCreate,

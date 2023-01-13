@@ -18,6 +18,7 @@ import * as emApi from "../../utils/api/emissionsApi";
 import {
   EMISSIONS_STORE_NAME,
   MONITORING_PLAN_STORE_NAME,
+  QA_CERT_EVENT_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import Modal from "../Modal/Modal";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
@@ -43,7 +44,10 @@ import {
   getViews,
   exportEmissionsDataDownload,
 } from "../../utils/api/emissionsApi";
-import { getUser, getPreviouslyFullSubmitedQuarter } from "../../utils/functions";
+import {
+  getUser,
+  getPreviouslyFullSubmitedQuarter,
+} from "../../utils/functions";
 import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
 import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
 import {
@@ -124,6 +128,12 @@ export const HeaderInfo = ({
     { name: "Unit Information" },
   ];
 
+  const testData = [
+    { name: "-- Select --" },
+    { name: "QA Certification Event" },
+    { name: "Test Extension Exemption" },
+  ];
+
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
@@ -181,6 +191,7 @@ export const HeaderInfo = ({
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const [isReverting, setIsReverting] = useState(false);
   const [viewTemplates, setViewTemplates] = useState([]);
+  const [testDataOptions, setTestDataOptions] = useState([]);
 
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState([]);
@@ -195,6 +206,7 @@ export const HeaderInfo = ({
   );
 
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
+  const [testDataOptionSelect, setTestDataOptionSelect] = useState(null);
 
   const MAX_REPORTING_PERIODS = 4;
   const MAX_REPORTING_PERIODS_ERROR_MSG =
@@ -214,43 +226,48 @@ export const HeaderInfo = ({
     [user]
   );
 
-  // This useeffect controls which reporting periods are selectected by default 
-  useEffect(()=>{
-
+  // This useeffect controls which reporting periods are selectected by default
+  useEffect(() => {
     // this would mean reporting peruiods were already selected and users are probably just switching back to the tab, so their selctions should remain.
-    if( currentTab === undefined || currentTab?.reportingPeriods ){
-      return
+    if (currentTab === undefined || currentTab?.reportingPeriods) {
+      return;
     }
-    
-    let  selectedRptPeriods; 
-    if( inWorkspace  ){
-      selectedRptPeriods = reportingPeriods.filter(rp => rp.selected).map(rp => rp.id);
-    }
-    else{
-      const rptPeriod = getPreviouslyFullSubmitedQuarter(new Date().toDateString())
-      const foundRptPeriod = reportingPeriods.find(rp => rp.label === rptPeriod)
-      if( !foundRptPeriod ) return;
-      foundRptPeriod.selected=true;
+
+    let selectedRptPeriods;
+    if (inWorkspace) {
+      selectedRptPeriods = reportingPeriods
+        .filter((rp) => rp.selected)
+        .map((rp) => rp.id);
+    } else {
+      const rptPeriod = getPreviouslyFullSubmitedQuarter(
+        new Date().toDateString()
+      );
+      const foundRptPeriod = reportingPeriods.find(
+        (rp) => rp.label === rptPeriod
+      );
+      if (!foundRptPeriod) return;
+      foundRptPeriod.selected = true;
       selectedRptPeriods = [foundRptPeriod.id];
     }
 
-    setSelectedReportingPeriods(selectedRptPeriods)
+    setSelectedReportingPeriods(selectedRptPeriods);
     dispatch(
-      setReportingPeriods(
-        selectedRptPeriods,
-        currentTab.name,
-        workspaceSection
-      )
+      setReportingPeriods(selectedRptPeriods, currentTab.name, workspaceSection)
     );
 
-  // Adding dispatch to below dep array causes an inifinte rerender problem
-  // hence why the linter warning is being suppressed.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reportingPeriods, currentTab, workspaceSection])
-  
+    // Adding dispatch to below dep array causes an inifinte rerender problem
+    // hence why the linter warning is being suppressed.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reportingPeriods, currentTab, workspaceSection]);
+
   useEffect(() => {
     if (currentTab?.viewTemplateSelect)
       setViewTemplateSelect(currentTab.viewTemplateSelect);
+  }, [currentTab]);
+
+  useEffect(() => {
+    if (currentTab?.testDataOptionSelect)
+      setTestDataOptionSelect(currentTab.testDataOptionSelect);
   }, [currentTab]);
 
   // *** Assign initial event listeners after loading data/dropdowns
@@ -290,6 +307,14 @@ export const HeaderInfo = ({
       }
     });
   }, [workspaceSection, setViewTemplateSelect]);
+
+  useEffect(() => {
+    if (workspaceSection !== QA_CERT_EVENT_STORE_NAME) return;
+    setTestDataOptions(testData);
+    if (!currentTab?.TestDataOptionSelect && testData?.length > 0) {
+      setTestDataOptionSelect(testData[0]);
+    }
+  }, [workspaceSection, setTestDataOptionSelect]);
 
   const executeOnClose = () => {
     setShowCommentsModal(false);
@@ -717,9 +742,7 @@ export const HeaderInfo = ({
         if (status === 201) {
           setImportedFileErrorMsgs([]);
         } else if (status === 400)
-          setImportedFileErrorMsgs(
-            data?.message|| ["HTTP 400 Error"]
-          );
+          setImportedFileErrorMsgs(data?.message || ["HTTP 400 Error"]);
         else {
           setImportedFileErrorMsgs(`HTTP ${status} Error`);
         }
@@ -756,7 +779,16 @@ export const HeaderInfo = ({
 
   const evaluate = () => {
     triggerEvaluation({
-      monitorPlanId: configID,
+      items: [
+        {
+          monitorPlanId: configID,
+          submitMonPlan: true,
+          testSumIds: [],
+          qceIds: [],
+          teeIds: [],
+          emissionsReportingPeriods: [],
+        },
+      ],
       userId: user.userId,
       userEmail: user.email,
     })
@@ -954,7 +986,9 @@ export const HeaderInfo = ({
             <div className="grid-row">
               <h3 className="margin-y-auto font-body-md margin-right-2">
                 {facilityMainName}
-                <span className=" font-body-lg margin-left-1 ">{facilityAdditionalName}</span>
+                <span className=" font-body-lg margin-left-1 ">
+                  {facilityAdditionalName}
+                </span>
               </h3>
             </div>
             <div>
@@ -1151,6 +1185,55 @@ export const HeaderInfo = ({
             </GridContainer>
           )}
 
+          {workspaceSection === QA_CERT_EVENT_STORE_NAME ? (
+            <GridContainer className="padding-left-0 margin-left-0 maxw-desktop">
+              <Grid row={true}>
+                <Grid col={2}>
+                  <DropdownSelection
+                    caption="Locations"
+                    orisCode={orisCode}
+                    options={locations}
+                    viewKey="name"
+                    selectKey="id"
+                    initialSelection={locationSelect[0]}
+                    selectionHandler={setLocationSelect}
+                    workspaceSection={workspaceSection}
+                  />
+                </Grid>
+                <Grid col={8} desktopLg={{ col: 5 }} widescreen={{ col: 5 }}>
+                  <FormGroup className="margin-right-2 margin-bottom-1">
+                    <Label test-id={"testData"} htmlFor={"testData"}>
+                      {"Test Data"}
+                    </Label>
+                    <Dropdown
+                      id={"testData"}
+                      name={"testData"}
+                      epa-testid={"testData"}
+                      data-testid={"testData"}
+                      value={testDataOptionSelect?.name}
+                      onChange={(e) => {
+                        setTestDataOptionSelect(
+                          testDataOptions.find((v) => v.name === e.target.value)
+                        );
+                      }}
+                      // className="mobile-lg:view-template-dropdown-maxw"
+                    >
+                      {testDataOptions?.map((data) => (
+                        <option
+                          data-testid={data.name}
+                          key={data.name}
+                          value={data.name}
+                        >
+                          {data.name}
+                        </option>
+                      ))}
+                    </Dropdown>
+                  </FormGroup>
+                </Grid>
+              </Grid>
+            </GridContainer>
+          ) : null}
+
           {workspaceSection === EMISSIONS_STORE_NAME ? (
             <GridContainer className="padding-left-0 margin-left-0 maxw-desktop">
               <Grid row={true}>
@@ -1166,11 +1249,7 @@ export const HeaderInfo = ({
                     workspaceSection={workspaceSection}
                   />
                 </Grid>
-                <Grid
-                  col={8}
-                  desktopLg={{ col: 5}}
-                  widescreen={{ col: 5}}
-                >
+                <Grid col={8} desktopLg={{ col: 5 }} widescreen={{ col: 5 }}>
                   <FormGroup className="margin-right-2 margin-bottom-1">
                     <Label test-id={"viewtemplate"} htmlFor={"viewtemplate"}>
                       {"View Template"}

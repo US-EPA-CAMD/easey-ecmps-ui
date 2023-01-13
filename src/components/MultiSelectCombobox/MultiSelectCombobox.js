@@ -22,6 +22,7 @@ const MultiSelectCombobox = ({
   styling,
   autoFocus,
   iconAlignRight = 1,
+  favicon = true,
 }) => {
   const [filter, setFilter] = useState("");
   const [_items, _setItems] = useState(items.filter((e) => e.enabled));
@@ -228,11 +229,14 @@ const MultiSelectCombobox = ({
               onClick={() => setShowListBox(true)}
               onKeyDown={(e) => handleKeyDown(e)}
             />
-            <FontAwesomeIcon
-              icon={faCaretDown}
-              className={`pin-right margin-right-${iconAlignRight} padding-top-05`}
-              onClick={() => setShowListBox(true)}
-            />
+            {favicon ? 
+              <FontAwesomeIcon
+                icon={faCaretDown}
+                className={`pin-right margin-right-${iconAlignRight} padding-top-05`}
+                onClick={() => setShowListBox(true)}
+              /> : 
+              <></>
+            }
           </>
         )}
         {showListBox || hideInput ? (

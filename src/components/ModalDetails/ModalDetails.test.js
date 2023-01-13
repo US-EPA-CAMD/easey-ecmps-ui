@@ -28,6 +28,7 @@ beforeAll(() => {
     addDate: "2009-02-20",
     updateDate: null,
     active: true,
+    monitoringMethodCode: "ZAM,AIR"
   };
   data = [
     [
@@ -54,6 +55,20 @@ beforeAll(() => {
       "622.0",
       false,
       "input",
+    ],
+    [
+      "monitoringMethodCode",
+      "Methodology",
+      "Appendix D",
+      false,
+      "multiSelectDropdown",
+      "AD",
+      [
+        {
+          code: "",
+          name: "-- Select a value --",
+        },
+      ],
     ],
     ["ozoneSeasonIndicator", "Ozone Season Indicator", null, false, "radio"],
     ["ozoneSeasonIndicator", "Ozone Season Indicator", null, false, "time"],
@@ -139,7 +154,7 @@ describe("rendering a modal pop up detail ", () => {
     const labels = container.querySelectorAll(".grid-col");
 
     fireEvent.click(container.querySelector("#backBtn"));
-    expect(labels.length).toEqual(16);
+    expect(labels.length).toEqual(17);
   });
   test("renders create only", () => {
     const { container } = render(
@@ -155,7 +170,7 @@ describe("rendering a modal pop up detail ", () => {
     );
     const labels = container.querySelectorAll(".grid-col");
 
-    expect(labels.length).toEqual(16);
+    expect(labels.length).toEqual(17);
   });
 
   test("renders view and create false", () => {
@@ -172,6 +187,6 @@ describe("rendering a modal pop up detail ", () => {
     );
     const labels = container.querySelectorAll(".grid-col");
 
-    expect(labels.length).toEqual(16);
+    expect(labels.length).toEqual(17);
   });
 });
