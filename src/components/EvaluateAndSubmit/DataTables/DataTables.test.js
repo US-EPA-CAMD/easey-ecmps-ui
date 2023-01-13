@@ -15,12 +15,12 @@ jest.mock("../TableRender/TableRender", () => {
   const { forwardRef } = jest.requireActual("react"); //Need this to mock a forwardRef
   return {
     __esModule: true,
-    default: forwardRef(({ getRowState, selectMonPlanRow, type }, mockRef) => (
+    default: forwardRef(({ getRowState, updateMonPlanRow, type }, mockRef) => (
       <div>
         <button>{`${type}:${getRowState(mockRowState, "MP")}`}</button>
         <button
           onClick={() => {
-            selectMonPlanRow("testId");
+            updateMonPlanRow("testId", true);
           }}
         >
           {`${type}:SELECT MON PLAN ROW`}

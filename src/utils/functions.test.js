@@ -16,6 +16,8 @@ import {
   displayReport,
   addEvalStatusCell,
   updateCheckedOutLocationsRef,
+  updateCorrespondingMPAndQARow,
+  updateCurrentRow,
 } from "./functions";
 
 describe("functions.js", function () {
@@ -365,6 +367,68 @@ describe("functions.js", function () {
         expect(ref.current.length).toBe(0);
       });
      })
+     describe('updateCorrespondingMPAndQARow', () => {
+       const r = { selected: true, monPlanId: 'id', periodAbbreviation: 'PA' },
+         updateMonPlanRow = jest.fn(),
+         updateQARow = jest.fn();
+       afterEach(() => {
+         r.selected = true;
+         jest.clearAllMocks();
+       });
+       it('updates corresponding MP and QA rows if row is selected and type is "MP"', () => {
+         updateCorrespondingMPAndQARow({
+           r,
+           type: 'EM',
+           updateMonPlanRow,
+           updateQARow,
+           selection: true
+         });
+         expect(updateMonPlanRow).toHaveBeenCalled();
+         expect(updateQARow).toHaveBeenCalled();
+       });
+       it('only updates corresponding MP row if row is selected and type is "QA"', () => {
+         updateCorrespondingMPAndQARow({
+           r,
+           type: 'QA',
+           updateMonPlanRow,
+           updateQARow,
+           selection: true
+         });
+         expect(updateMonPlanRow).toHaveBeenCalled();
+         expect(updateQARow).not.toHaveBeenCalled();
+       });
+       it('does not update any row if type is MP', () => {
+         updateCorrespondingMPAndQARow({
+           r,
+           type: 'MP',
+           updateMonPlanRow,
+           updateQARow,
+           selection: true
+         });
+         expect(updateMonPlanRow).not.toHaveBeenCalled();
+         expect(updateQARow).not.toHaveBeenCalled();
+       });
+     });
+
+     describe('updateCurrentRow', () => {
+       const row = {
+         selected: false,
+         checkedOut: false,
+         userCheckedOut: false,
+       };
+       it('updates row properly', () => {
+         updateCurrentRow(true, row);
+         expect(row.selected).toBe(true);
+         expect(row.checkedOut).toBe(true);
+         expect(row.userCheckedOut).toBe(true);
+       });
+       it('updates row properly', () => {
+         updateCurrentRow(false, row);
+         expect(row.selected).toBe(false);
+         expect(row.checkedOut).toBe(false);
+         expect(row.userCheckedOut).toBe(false);
+       });
+     });
   });
 
   describe("getPreviouslyFullSubmitedQuarter tests", ()=>{

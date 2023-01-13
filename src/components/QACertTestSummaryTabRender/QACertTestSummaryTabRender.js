@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import QACertTestSummaryHeaderInfo from "../QACertTestSummaryHeaderInfo/QACertTestSummaryHeaderInfo";
 
 import QATestSummaryDataTable from "../qaDatatablesContainer/QATestSummaryDataTable/QATestSummaryDataTable";
@@ -19,6 +19,7 @@ export const QACertTestSummaryRender = ({
   setCheckout,
   checkoutState
 }) => {
+  const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
   return (
     <div className=" padding-top-0">
       <div className="grid-row">
@@ -36,6 +37,8 @@ export const QACertTestSummaryRender = ({
           setSelectedTestCode={setSelectedTestCode}
           setCheckout={setCheckout}
           checkoutState={checkoutState}
+          setUpdateRelatedTables={setUpdateRelatedTables}
+          updateRelatedTables={updateRelatedTables}
         />
       </div>
       <hr />

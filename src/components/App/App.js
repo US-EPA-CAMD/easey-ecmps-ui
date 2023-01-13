@@ -135,7 +135,7 @@ const App = () => {
             />
             <Route path={`/faqs`} exact component={() => <FAQ />} />
             <Route path="/login" exact component={Login} />
-            {!cdx_user && <Redirect from="/workspace/review" to="/home" />}
+            {!cdx_user && <Redirect from="/workspace/submit" to="/home" />}
             <Route
               path="/workspace/submit"
               exact
@@ -144,6 +144,7 @@ const App = () => {
               )}
             />
 
+            {!cdx_user && <Redirect from="/workspace/evaluate" to="/home" />}
             <Route
               path="/workspace/evaluate"
               exact
