@@ -11,6 +11,7 @@ import ReviewCell from "../ReviewCell/ReviewCell";
 import { Checkbox } from "@trussworks/react-uswds";
 import { v4 as uuidv4 } from "uuid";
 import {
+  displayReport,
   addEvalStatusCell,
   updateCheckedOutLocationsRef,
 } from "../../../utils/functions";
@@ -37,14 +38,6 @@ const TableRender = forwardRef(
     },
     ref
   ) => {
-    const reportWindowParams = [
-      // eslint-disable-next-line no-restricted-globals
-      `height=${screen.height}`,
-      // eslint-disable-next-line no-restricted-globals
-      `width=${screen.width}`,
-      //`fullscreen=yes`,
-    ].join(",");
-
     const [selectAllState, setSelectAllState] = useState(false);
     const [selectAllVisible, setSelectAllVisible] = useState(true);
     const dispatch = useDispatch();
@@ -129,16 +122,7 @@ const TableRender = forwardRef(
     }, []);
 
     const handleRowView = useCallback((row) => {
-      let reportTitle;
-      let reportCode;
-      let url;
-
-      //TODO: Filter by type
-      reportCode = "MPP";
-      reportTitle = "ECMPS Monitoring Plan Printout Report";
-      url = `/workspace/reports?reportCode=${reportCode}&monitorPlanId=${row.monPlanId}`;
-
-      window.open(url, reportTitle, reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
+      displayReport("MPP", null, row.monPlanId, null);
     }, []);
 
     const handleRowSelection = useCallback(async (row, type, selection) => {

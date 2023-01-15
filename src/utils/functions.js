@@ -139,6 +139,7 @@ export const evalStatusStyle = (status) => {
 export const alertStyle = (evalStatus) => `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
   evalStatus
 )} margin-y-0 maintainBorder`;
+
 export const reportWindowParams = [
   // eslint-disable-next-line no-restricted-globals
   `height=${screen.height}`,
@@ -146,29 +147,40 @@ export const reportWindowParams = [
   `width=${screen.width}`,
   //`fullscreen=yes`,
 ].join(",");
-export const displayReport = (monPlanId, reportCode = "MP_EVAL") => {
-  let reportType;
+
+export const formatReportUrl = (reportCode, facilityId, monPlanId, testId) => {
+  const test = testId ? `&testId=${testId}` : "";
+  const facility = facilityId ? `&facilityId=${facilityId}` : "";
+  const monitorPlan = monPlanId ? `&monitorPlanId=${monPlanId}` : "";
+  let url = `/reports?reportCode=${reportCode}${facility}${monitorPlan}${test}`;
+
+  if (window.location.href.includes('/workspace')) {
+    return url.replace('/reports', '/workspace/reports');
+  }
+
+  return url;
+}
+
+export const displayReport = (reportCode, facilityId, monPlanId, testId) => {
+  let reportTitle;
 
   switch (reportCode) {
     case "MPP":
-      reportType = "Printout";
+      reportTitle = "Monitoring Plan Printout";
       break;
     case "MP_EVAL":
-      reportType = "Evaluation";
+      reportTitle = "Monitoring Plan Evaluation";
       break;
     case "MP_AUDIT":
-      reportType = "Audit";
+      reportTitle = "Monitoring Plan Audit";
       break;
     default:
-      reportType = "Evaluation";
+      reportTitle = "Not a valid Report";
       break;
   }
 
-  window.open(
-    `/workspace/reports?reportCode=${reportCode}&monitorPlanId=${monPlanId}`,
-    `ECMPS Monitoring Plan ${reportType} Report`,
-    reportWindowParams
-  );
+  const url = formatReportUrl(reportCode, facilityId, monPlanId, testId);
+  window.open(url, `ECMPS ${reportTitle} Report`, reportWindowParams);
 };
 
 export const addEvalStatusCell = (columns) =>
