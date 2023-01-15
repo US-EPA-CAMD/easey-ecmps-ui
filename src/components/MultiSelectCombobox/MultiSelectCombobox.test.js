@@ -1,7 +1,7 @@
 import React from "react";
 import { cleanup, fireEvent, render, within, screen } from "@testing-library/react";
 
-import MultiSelectCombobox from "./MultiSelectCombobox";
+import MultiSelectCombobox, { DEBOUNCE_MILLISECONDS } from "./MultiSelectCombobox";
 
 const facilities = [
   {
@@ -335,18 +335,20 @@ describe("MultiSelectCombobox Component", () => {
     const searchbox = getByTestId("Facility-input-search");
     searchbox.click();
     fireEvent.change(searchbox, { target: { value: "Barry" } });
-    expect(searchbox.value).toBe("Barry");
-    expect(
-      within(getByTestId("multi-select-listbox")).getAllByTestId(
-        "multi-select-option"
-      ).length
-    ).toBe(1);
-    fireEvent.keyDown(searchbox, { key: "Tab", code: 9 });
-    fireEvent.keyDown(searchbox, { key: "Enter", code: "Enter" });
-    expect(searchbox.value).toBe("Barry");
-    expect(getAllByTestId("multi-select-option").length).toBe(1);
-    fireEvent.click(getByTestId("multi-select-option"));
-    expect(getAllByTestId("button", { name: "Barry (3)" })).toBeDefined();
+    setTimeout(()=>{
+      expect(searchbox.value).toBe("Barry");
+      expect(
+        within(getByTestId("multi-select-listbox")).getAllByTestId(
+          "multi-select-option"
+        ).length
+      ).toBe(1);
+      fireEvent.keyDown(searchbox, { key: "Tab", code: 9 });
+      fireEvent.keyDown(searchbox, { key: "Enter", code: "Enter" });
+      expect(searchbox.value).toBe("Barry");
+      expect(getAllByTestId("multi-select-option").length).toBe(1);
+      fireEvent.click(getByTestId("multi-select-option"));
+      expect(getAllByTestId("button", { name: "Barry (3)" })).toBeDefined();  
+    }, DEBOUNCE_MILLISECONDS)
   });
 
   it("should remove an already selected item that has been clicked for removal and keep focus on the search input element", ()=>{

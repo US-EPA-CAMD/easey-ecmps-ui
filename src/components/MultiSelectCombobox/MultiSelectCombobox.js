@@ -1,13 +1,16 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { Label } from "@trussworks/react-uswds";
 import PillButton from "../PillButton/PillButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faCheck } from "@fortawesome/free-solid-svg-icons";
 import "./MultiSelectCombobox.scss";
+import { debounce } from "lodash";
 
 const getComboboxEnabledItems = (arr) => {
   return arr.filter((e) => e.enabled);
 };
+
+export const DEBOUNCE_MILLISECONDS = 200;
 
 const MultiSelectCombobox = ({
   items,
@@ -19,18 +22,24 @@ const MultiSelectCombobox = ({
   styling,
   autoFocus,
   iconAlignRight = 1,
+  favicon = true,
 }) => {
   const [filter, setFilter] = useState("");
-  const [_items, _setItems] = useState(getComboboxEnabledItems(items));
+  const [_items, _setItems] = useState(items.filter((e) => e.enabled));
   const [data, setData] = useState(
-    JSON.parse(JSON.stringify(getComboboxEnabledItems(items)))
-  );
+    JSON.parse(JSON.stringify(getComboboxEnabledItems(items))));
   const [showListBox, setShowListBox] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
 
   const selectedItemsRef = useRef(selectedItems);
   const inputRef = useRef(null);
-
+  
+  useEffect(()=>{
+    const enabledItems = getComboboxEnabledItems(items);
+    setData([...enabledItems]);
+    _setItems(enabledItems);
+  }, [items]);
+  
   const handleMultiSelectClick = (e) => {
     const multiSelectComboboxDiv = document.getElementById(
       `multi-select-combobox-${entity}`
@@ -40,7 +49,7 @@ const MultiSelectCombobox = ({
     }
   };
 
-  const onSearchHanlder = (value) => {
+  const onSearchHandler = (value) => {
     const lowercasedFilter = value.toLowerCase();
     let filteredData = _items;
     if (value.length > 0) {
@@ -54,10 +63,14 @@ const MultiSelectCombobox = ({
         );
       }
     }
-    setFilter(value);
+
     setData([...filteredData]);
     setShowListBox(true);
   };
+
+  // using useMemo here instead of useCallback will make this faster since useCallback will cause lodash's debounce() 
+  // to run every time MultiSelectComboBox rerenders
+  const debouncedOnSearchHandler = useMemo(() => debounce(onSearchHandler, DEBOUNCE_MILLISECONDS), [_items]);
 
   const updateListDataOnChange = useCallback(
     (id, update) => {
@@ -111,14 +124,14 @@ const MultiSelectCombobox = ({
               label={optionLabel}
               onRemove={onRemoveHanlder}
               disableButton={true}
-              
+
             />
           ),
         },
       ];
       selectedItemsRef.current = _selectedItems;
-      onSearchHanlder("");
-      setSelectedItems(_selectedItems);
+      onSearchHandler("");
+      setSelectedItems([..._selectedItems]);
       updateListDataOnChange(id, "add");
       onChangeUpdate(id, "add");
     }
@@ -176,7 +189,7 @@ const MultiSelectCombobox = ({
   return (
     <>
       <Label id={`${entity}-label`} htmlFor={`${entity}-searchbox`}>
-        {label}
+        {label} 
       </Label>
       <div
         role="combobox"
@@ -209,15 +222,21 @@ const MultiSelectCombobox = ({
               data-testid={`${entity}-input-search`}
               value={filter}
               ref={inputRef}
-              onChange={(e) => onSearchHanlder(e.target.value)}
+              onChange={(e) => {
+                setFilter(e.target.value);
+                debouncedOnSearchHandler(e.target.value);
+              }}
               onClick={() => setShowListBox(true)}
               onKeyDown={(e) => handleKeyDown(e)}
             />
-            <FontAwesomeIcon
-              icon={faCaretDown}
-              className={`pin-right margin-right-${iconAlignRight} padding-top-05`}
-              onClick={() => setShowListBox(true)}
-            />
+            {favicon ? 
+              <FontAwesomeIcon
+                icon={faCaretDown}
+                className={`pin-right margin-right-${iconAlignRight} padding-top-05`}
+                onClick={() => setShowListBox(true)}
+              /> : 
+              <></>
+            }
           </>
         )}
         {showListBox || hideInput ? (

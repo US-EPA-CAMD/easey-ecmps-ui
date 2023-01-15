@@ -12,8 +12,9 @@ export default {
   openedFacilityTabs: {
     monitoringPlans: [],
     qaCertTestSummary: [],
+    qaCertEvent: [],
     export: [],
-    emissions:[]
+    emissions: [],
   },
   checkedOutLocations: [],
   dropdowns: {
@@ -37,5 +38,5 @@ export default {
     analyzerRanges: [],
     matsMethods: [],
   },
-  currentSection: "",
+  currentSection: '',
 };

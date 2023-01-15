@@ -18,7 +18,7 @@ export const qaProtocalGasProps = (selectedRow) => {
     ],
     controlInputs: {
       gasLevelCode: ["Gas Level Code", "dropdown", "", ""],
-      gasTypeCode: ["Gas Type Code", "dropdown", "", ""],
+      gasTypeCode: ["Gas Type Code", "multiSelectDropdown", "", ""],
       cylinderIdentifier: ["Cylinder Identification", "input", "", ""],
       vendorIdentifier: ["Vendor Identification", "input", "", ""],
       expirationDate: ["Expiration Date", "date", "", ""],
@@ -1030,6 +1030,43 @@ export const qaUnitDefaultTestDataProps = () => {
       numberOfTestsForGroup: ["Number of Tests for Group", "input", "", ""],
     },
     controlDatePickerInputs: {},
+  }
+}
+
+export const qaUnitDefaultTestRunDataProps = () => {
+  return {
+    dataTableName: "Unit Default Test Run",
+    payload: {},
+    dropdownArray: ["runUsedIndicator"],
+    mdmProps: [],
+    columnNames: [
+      "Operating Level for Run",
+      "Run Number",
+      "Begin Date",
+      "Begin Hour",
+      "Begin Minute",
+      "End Date",
+      "End Hour",
+      "End Minute",
+      "Response Time",
+      "Reference Value",
+      "Run Used Indicator"
+    ],
+    controlInputs: {
+      operatingLevel: ["Operating Level for Run", "input", "", ""],
+      runNumber: ["Run Number", "input", "", ""],
+      responseTime: ["Response Time", "input", "", ""],
+      referenceValue: ["Reference Value", "input", "", ""],
+      runUsedIndicator: ["Run Used Indicator", "dropdown", "", ""],
+    },
+    controlDatePickerInputs: {
+      beginDate:["Begin Date", "date", "", ""],
+      beginHour:["Begin Hour", "hourDropdown", "dropdown", ""],
+      beginMinute:["Begin Minute", "minuteDropdown", "", ""],
+      endDate:["End Date", "date", "", ""],
+      endHour:["End Hour", "hourDropdown", "dropdown", ""],
+      endMinute:["End Minute", "minuteDropdown", "dropdown", ""],
+    },
   }
 }
 

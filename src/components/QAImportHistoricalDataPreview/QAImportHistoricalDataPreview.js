@@ -70,9 +70,10 @@ export const QAImportHistoricalDataPreview = ({
 
   useEffect(() => {
     setDisablePortBtn(true);
-    if (testSummaryData === null) {
-      fetchDataPreviewRecords();
-    }
+    // // Loads Test summary data
+    // if (testSummaryData === null) {
+    //   fetchDataPreviewRecords();
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reportingPeriodObj]);
 
