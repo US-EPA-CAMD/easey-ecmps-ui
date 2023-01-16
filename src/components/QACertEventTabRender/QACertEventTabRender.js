@@ -1,12 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Button } from '@trussworks/react-uswds';
-import HeaderInfo from '../HeaderInfo/HeaderInfo';
+import React, { useState } from 'react';
 import '../MonitoringPlanTab/MonitoringPlanTab.scss';
-import { checkoutAPI } from '../../additional-functions/checkout';
-import { useSelector } from 'react-redux';
-import { QA_CERT_EVENT_STORE_NAME } from '../../additional-functions/workspace-section-and-store-names';
-import QACertTestSummaryHeaderInfo from '../QACertTestSummaryHeaderInfo/QACertTestSummaryHeaderInfo';
-import QATestSummaryDataTable from '../qaDatatablesContainer/QATestSummaryDataTable/QATestSummaryDataTable';
 import QACertEventHeaderInfo from '../QACertEventHeaderInfo/QACertEventHeaderInfo';
 
 export const QACertEventTabRender = ({
