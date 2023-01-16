@@ -94,8 +94,8 @@ test('when a user selects a year from the dropdown then that element\'s selected
   // Arrange
   await waitForElement(() => render(<ReportingPeriodSelector {...props} />))
   const yearDropdown = screen.getByLabelText(yearLabelText)
-  const selectedOption = screen.getByRole('option', { name: /1994/i })
-  const unselectedOption = screen.getByRole('option', { name: /1994/i })
+  const selectedOption = within(yearDropdown).getByRole('option', { name: /1994/i })
+  const unselectedOption = within(yearDropdown).getByRole('option', { name: /1994/i })
 
   // Act
   // select earlier year, year option defaults to most recent year
