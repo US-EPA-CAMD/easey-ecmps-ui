@@ -1,13 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Button } from '@trussworks/react-uswds';
-import HeaderInfo from '../HeaderInfo/HeaderInfo';
+import React, { useState } from 'react';
 import '../MonitoringPlanTab/MonitoringPlanTab.scss';
-import { checkoutAPI } from '../../additional-functions/checkout';
-import { useSelector } from 'react-redux';
-import { QA_CERT_EVENT_STORE_NAME } from '../../additional-functions/workspace-section-and-store-names';
-import QACertEventHeaderInfo from "../QACertEventHeaderInfo/QACertEventHeaderInfo";
+import QACertEventHeaderInfo from '../QACertEventHeaderInfo/QACertEventHeaderInfo';
 
-import QATestSummaryDataTable from "../qaDatatablesContainer/QATestSummaryDataTable/QATestSummaryDataTable";
 export const QACertEventTabRender = ({
   title,
   user,
@@ -27,7 +21,6 @@ export const QACertEventTabRender = ({
   checkoutState,
 }) => {
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
-
   return (
     <div className=" padding-top-0">
       <div className="grid-row">
@@ -50,21 +43,6 @@ export const QACertEventTabRender = ({
         />
       </div>
       <hr />
-      {
-        <QATestSummaryDataTable
-          locationSelectValue={locationSelect ? locationSelect[1] : 0}
-          user={user}
-          sectionSelect={sectionSelect}
-          selectedLocation={{
-            name: locations[locationSelect[0]]["name"],
-            stackPipeId: locations[locationSelect[0]]["stackPipeId"],
-            unitId: locations[locationSelect[0]]["unitId"],
-          }}
-          locations={locations}
-          selectedTestCode={selectedTestCode}
-          isCheckedOut={checkoutState}
-        />
-      }
     </div>
   );
 };
