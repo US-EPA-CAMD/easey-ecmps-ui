@@ -1,10 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Button } from '@trussworks/react-uswds';
-import HeaderInfo from '../HeaderInfo/HeaderInfo';
+import React, { useState } from 'react';
 import '../MonitoringPlanTab/MonitoringPlanTab.scss';
-import { checkoutAPI } from '../../additional-functions/checkout';
-import { useSelector } from 'react-redux';
-import { QA_CERT_EVENT_STORE_NAME } from '../../additional-functions/workspace-section-and-store-names';
+import QACertEventHeaderInfo from '../QACertEventHeaderInfo/QACertEventHeaderInfo';
 
 export const QACertEventTabRender = ({
   title,
@@ -18,45 +14,32 @@ export const QACertEventTabRender = ({
   checkout,
   setCheckout,
   workspaceSection,
+  setSectionSelect,
+  setSelectedTestCode,
+  selectedTestCode,
+  sectionSelect,
+  checkoutState,
 }) => {
-  const currentTab = useSelector((state) =>
-    state.openedFacilityTabs[QA_CERT_EVENT_STORE_NAME].find(
-      (t) => t.selectedConfig.id === configID
-    )
-  );
-
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
-  const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
-  const [viewColumns, setViewColumns] = useState();
-  const [viewData, setViewData] = useState();
-  const [isDataLoaded, setIsDataLoaded] = useState();
-  const isInitialLoadOfPage = currentTab?.isViewDataLoaded === undefined;
-
-  useEffect(() => {
-    setViewColumns(currentTab?.viewColumns || []);
-    setViewData(currentTab?.viewData || []);
-    setIsDataLoaded(isInitialLoadOfPage ? true : currentTab?.isViewDataLoaded);
-    setViewTemplateSelect(currentTab?.viewTemplateSelect ?? null);
-  }, [currentTab]);
-
   return (
     <div className=" padding-top-0">
       <div className="grid-row">
-        <HeaderInfo
+        <QACertEventHeaderInfo
           facility={title}
           selectedConfig={selectedConfig}
           orisCode={orisCode}
+          sectionSelect={sectionSelect}
+          setSectionSelect={setSectionSelect}
           setLocationSelect={setLocationSelect}
           locationSelect={locationSelect}
           locations={locations}
-          checkout={checkout}
           user={user}
-          checkoutAPI={checkoutAPI}
-          setCheckout={setCheckout}
           configID={configID}
+          setSelectedTestCode={setSelectedTestCode}
+          setCheckout={setCheckout}
+          checkoutState={checkoutState}
+          setUpdateRelatedTables={setUpdateRelatedTables}
           updateRelatedTables={updateRelatedTables}
-          workspaceSection={workspaceSection}
-          currentTab={currentTab}
         />
       </div>
       <hr />
