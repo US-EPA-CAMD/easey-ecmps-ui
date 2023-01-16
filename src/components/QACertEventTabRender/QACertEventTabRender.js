@@ -43,21 +43,6 @@ export const QACertEventTabRender = ({
         />
       </div>
       <hr />
-      {/* {
-        <QATestSummaryDataTable
-          locationSelectValue={locationSelect ? locationSelect[1] : 0}
-          user={user}
-          sectionSelect={sectionSelect}
-          selectedLocation={{
-            name: locations[locationSelect[0]]['name'],
-            stackPipeId: locations[locationSelect[0]]['stackPipeId'],
-            unitId: locations[locationSelect[0]]['unitId'],
-          }}
-          locations={locations}
-          selectedTestCode={selectedTestCode}
-          isCheckedOut={checkoutState}
-        />
-      } */}
     </div>
   );
 };
