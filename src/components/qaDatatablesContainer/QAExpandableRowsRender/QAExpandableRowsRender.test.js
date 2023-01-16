@@ -1447,8 +1447,9 @@ describe('Test cases for QAExpandableRowsRender', () => {
     // expect(rows).toHaveLength(unitDefaultTestData.length)
     expect(rows).toHaveLength(6)
     // add row
-    const addBtn = screen.getByRole('button', { name: /Add/i })
-    userEvent.click(addBtn)
+    const addBtn = screen.getAllByRole('button', { name: /Add/i });
+    expect(addBtn.length).not.toBe(0);
+    userEvent.click(addBtn[0])
     let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
     userEvent.click(saveAndCloseBtn)
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)

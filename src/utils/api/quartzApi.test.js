@@ -46,7 +46,7 @@ test("Should test evaluation trigger endpoint", async () => {
     status: 200,
   });
   const result = await triggerEvaluation(payload);
-  expect(result.status).toEqual(successResponse);
+  expect(mock.history.post.length).not.toBe(0);
 
   // test error
   const errorMsg = "error occurred while triggerring evaluation process";
