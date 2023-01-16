@@ -75,7 +75,9 @@ export const QACertEventHeaderInfo = ({
   const [checkedOutByUser, setCheckedOutByUser] = useState(false);
 
   const [qaCertEventOptions, setQACertEventOptions] = useState([
-    { name: 'Loading...' },
+    { name: '-- Select --' },
+    { name: 'QA Certification Event' },
+    { name: 'Test Extension Exemption' },
   ]);
 
   const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([]);
@@ -131,14 +133,6 @@ export const QACertEventHeaderInfo = ({
   }, [testTypeGroupOptions, allTestTypeCodes, sectionSelect]);
 
   // *** Reassign handlers after pop-up modal is closed
-  useEffect(() => {
-    if (!returnedFocusToLast) {
-      setReturnedFocusToLast(true);
-    } else {
-      returnFocusToLast();
-      assignFocusEventListeners();
-    }
-  }, [returnedFocusToLast]);
 
   // *** Clean up focus event listeners
   useEffect(() => {
