@@ -43,7 +43,10 @@ import {
   getViews,
   exportEmissionsDataDownload,
 } from "../../utils/api/emissionsApi";
-import { getUser, getPreviouslyFullSubmitedQuarter } from "../../utils/functions";
+import {
+  getUser,
+  getPreviouslyFullSubmitedQuarter,
+} from "../../utils/functions";
 import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
 import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
 import {
@@ -214,40 +217,40 @@ export const HeaderInfo = ({
     [user]
   );
 
-  // This useeffect controls which reporting periods are selectected by default 
-  useEffect(()=>{
-
+  // This useeffect controls which reporting periods are selectected by default
+  useEffect(() => {
     // this would mean reporting peruiods were already selected and users are probably just switching back to the tab, so their selctions should remain.
-    if( currentTab === undefined || currentTab?.reportingPeriods ){
-      return
+    if (currentTab === undefined || currentTab?.reportingPeriods) {
+      return;
     }
-    
-    let  selectedRptPeriods; 
-    if( inWorkspace  ){
-      selectedRptPeriods = reportingPeriods.filter(rp => rp.selected).map(rp => rp.id);
-    }
-    else{
-      const rptPeriod = getPreviouslyFullSubmitedQuarter(new Date().toDateString())
-      const foundRptPeriod = reportingPeriods.find(rp => rp.label === rptPeriod)
-      if( !foundRptPeriod ) return;
-      foundRptPeriod.selected=true;
+
+    let selectedRptPeriods;
+    if (inWorkspace) {
+      selectedRptPeriods = reportingPeriods
+        .filter((rp) => rp.selected)
+        .map((rp) => rp.id);
+    } else {
+      const rptPeriod = getPreviouslyFullSubmitedQuarter(
+        new Date().toDateString()
+      );
+      const foundRptPeriod = reportingPeriods.find(
+        (rp) => rp.label === rptPeriod
+      );
+      if (!foundRptPeriod) return;
+      foundRptPeriod.selected = true;
       selectedRptPeriods = [foundRptPeriod.id];
     }
 
-    setSelectedReportingPeriods(selectedRptPeriods)
+    setSelectedReportingPeriods(selectedRptPeriods);
     dispatch(
-      setReportingPeriods(
-        selectedRptPeriods,
-        currentTab.name,
-        workspaceSection
-      )
+      setReportingPeriods(selectedRptPeriods, currentTab.name, workspaceSection)
     );
 
-  // Adding dispatch to below dep array causes an inifinte rerender problem
-  // hence why the linter warning is being suppressed.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reportingPeriods, currentTab, workspaceSection])
-  
+    // Adding dispatch to below dep array causes an inifinte rerender problem
+    // hence why the linter warning is being suppressed.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reportingPeriods, currentTab, workspaceSection]);
+
   useEffect(() => {
     if (currentTab?.viewTemplateSelect)
       setViewTemplateSelect(currentTab.viewTemplateSelect);
@@ -954,7 +957,9 @@ export const HeaderInfo = ({
             <div className="grid-row">
               <h3 className="margin-y-auto font-body-md margin-right-2">
                 {facilityMainName}
-                <span className=" font-body-lg margin-left-1 ">{facilityAdditionalName}</span>
+                <span className=" font-body-lg margin-left-1 ">
+                  {facilityAdditionalName}
+                </span>
               </h3>
             </div>
             <div>
@@ -1166,11 +1171,7 @@ export const HeaderInfo = ({
                     workspaceSection={workspaceSection}
                   />
                 </Grid>
-                <Grid
-                  col={8}
-                  desktopLg={{ col: 5}}
-                  widescreen={{ col: 5}}
-                >
+                <Grid col={8} desktopLg={{ col: 5 }} widescreen={{ col: 5 }}>
                   <FormGroup className="margin-right-2 margin-bottom-1">
                     <Label test-id={"viewtemplate"} htmlFor={"viewtemplate"}>
                       {"View Template"}

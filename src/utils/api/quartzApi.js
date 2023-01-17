@@ -40,7 +40,7 @@ export const triggerEvaluation = async (payload) => {
 
 export const triggerBulkEvaluation = async (payload) => {
   let url = `${config.services.quartz.uri}`;
-  url = `${url}/triggers/evaluations/bulk`;
+  url = `${url}/triggers/evaluations`;
   try {
     return handleResponse(
       await secureAxios({
