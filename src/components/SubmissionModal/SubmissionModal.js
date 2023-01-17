@@ -24,7 +24,6 @@ import {
   sendPin,
   verifyChallenge,
 } from "../../utils/api/easeyAuthApi";
-import { noop } from "lodash";
 import { useRef } from "react";
 
 export const SubmissionModal = ({
@@ -111,6 +110,7 @@ export const SubmissionModal = ({
   }, [handleUserKeyPress]);
 
   const sendPinToNumber = async () => {
+    /*
     if (
       selectedNumber.current !== null &&
       selectedNumber.current !== undefined
@@ -125,6 +125,7 @@ export const SubmissionModal = ({
         number: numberFull,
       });
     }
+    */
   };
 
   const verifyClicked = (event) => {
@@ -171,6 +172,10 @@ export const SubmissionModal = ({
         setActivityId(result.data.activityId);
         setQuestionId(result.data.questionId);
         setQuestion(result.data.question);
+
+        setNumbers([]);
+
+        /*
         setNumbers(
           result.data.mobileNumbers.map((n, idx) => {
             return {
@@ -180,6 +185,7 @@ export const SubmissionModal = ({
             };
           })
         );
+        */
 
         setStage(2);
         setShowError(false);
@@ -229,7 +235,6 @@ export const SubmissionModal = ({
       setLoading(true);
 
       try {
-        console.log(payload);
         await verifyChallenge(payload);
 
         const result = await getCredentials(monitorPlanIds);
