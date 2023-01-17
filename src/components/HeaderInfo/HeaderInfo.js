@@ -781,7 +781,7 @@ export const HeaderInfo = ({
     triggerEvaluation({
       items: [
         {
-          monitorPlanId: configID,
+          monPlanId: configID,
           submitMonPlan: true,
           testSumIds: [],
           qceIds: [],
