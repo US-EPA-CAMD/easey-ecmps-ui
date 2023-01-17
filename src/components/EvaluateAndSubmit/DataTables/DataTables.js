@@ -1,13 +1,13 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import TableRender from '../TableRender/TableRender';
+import React, { useState, useCallback, useMemo } from "react";
+import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import TableRender from "../TableRender/TableRender";
 import {
   monPlanColumns,
   qaTestSummaryColumns,
   emissionsColumns,
   qaCertEventColumns,
-} from './ColumnMappings';
+} from "./ColumnMappings";
 
 const DataTables = ({
   monPlanState,
@@ -31,14 +31,14 @@ const DataTables = ({
   const updateMonPlanRow = useCallback((id, selection) => {
     let rowStateFunc;
 
-    if (componentType === 'Submission') {
+    if (componentType === "Submission") {
       rowStateFunc = getRowStateSubmission;
     } else {
       rowStateFunc = getRowStateEvaluate;
     }
 
     for (const mpR of monPlanRef.current) {
-      if (mpR.monPlanId === id && rowStateFunc(mpR, 'MP') === 'Checkbox') {
+      if (mpR.monPlanId === id && rowStateFunc(mpR, "MP") === "Checkbox") {
         mpR.selected = selection;
         mpR.userCheckedOut = selection;
         updateFilesSelected(selection);
@@ -52,7 +52,7 @@ const DataTables = ({
   const updateQARow = useCallback((id, periodAbr, selection) => {
     let rowStateFunc;
 
-    if (componentType === 'Submission') {
+    if (componentType === "Submission") {
       rowStateFunc = getRowStateSubmission;
     } else {
       rowStateFunc = getRowStateEvaluate;
@@ -63,7 +63,7 @@ const DataTables = ({
       if (
         qaR.monPlanId === id &&
         qaR.periodAbbreviation === periodAbr &&
-        rowStateFunc(qaR, 'QA') === 'Checkbox'
+        rowStateFunc(qaR, "QA") === "Checkbox"
       ) {
         qaR.selected = selection;
         qaR.userCheckedOut = selection;
@@ -78,63 +78,63 @@ const DataTables = ({
   const getRowStateSubmission = useCallback((row, type) => {
     if (row.viewOnly) {
       row.selected = false;
-      return 'View';
+      return "View";
     }
 
     const rowSubmissionAllowed =
-      row.submissionAvailabilityCode === 'REQUIRE' ||
+      row.submissionAvailabilityCode === "REQUIRE" ||
       row.submissionAvailabilityCode === null ||
       row.submissionAvailabilityCode === undefined ||
-      row.submissionAvailabilityCode === '';
+      row.submissionAvailabilityCode === "";
 
     if (row.checkedOut && !row.userCheckedOut) {
       row.selected = false;
-      return 'Lock';
+      return "Lock";
     } else if (
       //Can only submit records if not ERR eval code, submissionStatus is REQUIRE or blank, and they have permissions
-      ['PASS', 'INFO'].includes(row.evalStatusCode) &&
+      ["PASS", "INFO"].includes(row.evalStatusCode) &&
       rowSubmissionAllowed &&
       permissions.current[row.orisCode]?.includes(`DS${type}`)
     ) {
       if (
-        type === 'EM' &&
-        row.windowStatus !== 'REQUIRE' &&
-        row.windowStatus !== 'GRANTED'
+        type === "EM" &&
+        row.windowStatus !== "REQUIRE" &&
+        row.windowStatus !== "GRANTED"
       ) {
         row.selected = false;
-        return 'View';
+        return "View";
       }
 
-      return 'Checkbox'; //True checkbox
+      return "Checkbox"; //True checkbox
     } else {
       row.selected = false;
-      return 'View';
+      return "View";
     } //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getRowStateEvaluate = useCallback((row, type) => {
     if (row.checkedOut && !row.userCheckedOut) {
       row.selected = false;
-      return 'Lock';
+      return "Lock";
     } else if (
       //Can only submit records if not ERR eval code, submissionStatus is REQUIRE or blank, and they have permissions
-      ['EVAL'].includes(row.evalStatusCode) &&
+      ["EVAL"].includes(row.evalStatusCode) &&
       (permissions.current[row.orisCode].includes(`DS${type}`) ||
         permissions.current[row.orisCode].includes(`DP${type}`))
     ) {
       if (
-        type === 'EM' &&
-        row.windowStatus !== 'REQUIRE' &&
-        row.windowStatus !== 'GRANTED'
+        type === "EM" &&
+        row.windowStatus !== "REQUIRE" &&
+        row.windowStatus !== "GRANTED"
       ) {
         row.selected = false;
-        return 'View';
+        return "View";
       }
 
-      return 'Checkbox'; //True checkbox
+      return "Checkbox"; //True checkbox
     } else {
       row.selected = false;
-      return 'View';
+      return "View";
     } //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -145,32 +145,32 @@ const DataTables = ({
         state: monPlanState,
         setState: setMonPlanState,
         ref: monPlanRef,
-        name: 'Monitoring Plan',
-        type: 'MP',
+        name: "Monitoring Plan",
+        type: "MP",
       },
       {
         columns: qaTestSummaryColumns,
         state: qaTestSumState,
         setState: setQaTestSumState,
         ref: qaTestSumRef,
-        name: 'Test Data',
-        type: 'QA',
+        name: "Test Data",
+        type: "QA",
       },
       {
         columns: qaCertEventColumns,
         state: qaCertEventState,
         setState: setQaCertEventState,
         ref: qaCertEventRef,
-        name: 'Test Data',
-        type: 'QA',
+        name: "Cert Event",
+        type: "QA",
       },
       {
         columns: emissionsColumns,
         state: emissionsState,
         setState: setEmissionsState,
         ref: emissionsRef,
-        name: 'Emissions',
-        type: 'EM',
+        name: "Emissions",
+        type: "EM",
       },
     ], //eslint-disable-next-line react-hooks/exhaustive-deps
     [monPlanState, qaTestSumState, emissionsState, qaCertEventState]
@@ -214,8 +214,8 @@ const DataTables = ({
             <div
               className={
                 activeTables[name]
-                  ? 'data-display-table maxh-mobile overflow-y-auto overflow-x-auto'
-                  : 'display-none'
+                  ? "data-display-table maxh-mobile overflow-y-auto overflow-x-auto"
+                  : "display-none"
               }
             >
               <TableRender
@@ -228,7 +228,7 @@ const DataTables = ({
                 updateMonPlanRow={updateMonPlanRow}
                 updateQARow={updateQARow}
                 getRowState={
-                  componentType === 'Submission'
+                  componentType === "Submission"
                     ? getRowStateSubmission
                     : getRowStateEvaluate
                 }

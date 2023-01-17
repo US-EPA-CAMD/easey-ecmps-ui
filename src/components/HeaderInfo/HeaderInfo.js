@@ -11,7 +11,7 @@ import {
 } from "@trussworks/react-uswds";
 import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
 import config from "../../config";
-import { triggerEvaluation } from "../../utils/api/quartzApi";
+import { triggerBulkEvaluation } from "../../utils/api/quartzApi";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import * as emApi from "../../utils/api/emissionsApi";
@@ -778,10 +778,10 @@ export const HeaderInfo = ({
   };
 
   const evaluate = () => {
-    triggerEvaluation({
+    triggerBulkEvaluation({
       items: [
         {
-          monitorPlanId: configID,
+          monPlanId: configID,
           submitMonPlan: true,
           testSumIds: [],
           qceIds: [],
