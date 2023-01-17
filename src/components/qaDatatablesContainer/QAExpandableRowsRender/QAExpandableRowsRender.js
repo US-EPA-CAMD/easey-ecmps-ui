@@ -32,6 +32,8 @@ import {
   qaAppendixECorrelationSummaryHeatInputGasProps,
   qaAppendixECorrelationSummaryHeatInputOilProps,
   qaCycleTimeInjectionProps,
+  qaHgInjectionDataProps,
+  qaUnitDefaultTestRunDataProps
 } from "../../../additional-functions/qa-dataTable-props";
 import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
 const QAExpandableRowsRender = ({
@@ -322,6 +324,42 @@ const QAExpandableRowsRender = ({
             isCheckedOut={isCheckedOut}
           />
         );
+        case "Unit Default Test": //Unit Default Test Data => Unit Default Test Run
+          const extraIDs = [locationId, id];
+          const unitDefaultTestRunProps = qaUnitDefaultTestRunDataProps();
+          return (
+            <QAExpandableRowsRender
+              payload={unitDefaultTestRunProps["payload"]}
+              dropdownArray={unitDefaultTestRunProps["dropdownArray"]}
+              mdmProps={unitDefaultTestRunProps["mdmProps"]}
+              columns={unitDefaultTestRunProps["columnNames"]}
+              controlInputs={unitDefaultTestRunProps["controlInputs"]}
+              controlDatePickerInputs={unitDefaultTestRunProps["controlDatePickerInputs"]}
+              dataTableName={unitDefaultTestRunProps["dataTableName"]}
+              extraIDs={extraIDs}
+              user={user}
+              isCheckedOut={isCheckedOut}
+            />
+          );
+        case "Hg Summary": // Hg Test Data => Hg Summary => Hg Injection
+          const hgInjectionIdArr = [locationId, id];
+          const hgInjectionProps = qaHgInjectionDataProps();
+          return (
+            <QAExpandableRowsRender
+              payload={hgInjectionProps["payload"]}
+              dropdownArray={hgInjectionProps["dropdownArray"]}
+              mdmProps={hgInjectionProps["mdmProps"]}
+              columns={hgInjectionProps["columnNames"]}
+              controlInputs={hgInjectionProps["controlInputs"]}
+              controlDatePickerInputs={hgInjectionProps["controlDatePickerInputs"]}
+              radioBtnPayload={hgInjectionProps["radioBtnPayload"]}
+              dataTableName={hgInjectionProps["dataTableName"]}
+              extraControls={hgInjectionProps["extraControls"]}
+              extraIDs={hgInjectionIdArr}
+              user={user}
+              isCheckedOut={isCheckedOut}
+            />
+          );
       default:
         break;
     }
@@ -332,8 +370,13 @@ const QAExpandableRowsRender = ({
       dropdowns['biasAdjustedIndicator'] = [
         { code: 1, name: 1 }, { code: 2, name: 2 }
       ]
+    }else if (tableName === "Unit Default Test Run") {
+      dropdowns['runUsedIndicator'] = [
+        { code: "", name: "-- Select a value --" },{ code: 0, name: 0 }, { code: 1, name: 1 }
+      ]
     }
   };
+  
   const loadDropdownsData = (name) => {
     let dropdowns = {};
     const allPromises = [];
@@ -503,9 +546,7 @@ const QAExpandableRowsRender = ({
       case "Appendix E Correlation Heat Input from Oil":
         allPromises.push(dmApi.getAllMonitoringSystemIDCodes(extraIDs[0]));
         allPromises.push(dmApi.getAllUnitsOfMeasureCodes());
-        console.log("allPromises", allPromises)
         Promise.all(allPromises).then((responses) => {
-          console.log("responses", responses)
           responses.forEach((curResp, i) => {
             let codeLabel;
             let descriptionLabel;
@@ -605,6 +646,10 @@ const QAExpandableRowsRender = ({
           setMdmData(dropdowns);
         }).catch((error => console.log(error)))
         break
+      case "Unit Default Test Run":
+        populateStaticDropdowns(name, dropdowns);
+        setMdmData(dropdowns);
+        break;
       default:
         mdmProps.forEach((prop) => {
           allPromises.push(dmApi.getMdmDataByCodeTable(prop["codeTable"]));
@@ -864,7 +909,10 @@ const QAExpandableRowsRender = ({
       case "Appendix E Correlation Heat Input from Gas":
         expandables.push(nextExpandableRow("Appendix E Correlation Heat Input from Oil"))
         break;
-
+      case "Unit Default Test":
+        expandables.push(nextExpandableRow("Protocol Gas"));
+        expandables.push(nextExpandableRow("Air Emissions"));
+        break;
       default:
         break;
     }

@@ -1,16 +1,16 @@
-import axios from "axios";
-import { handleResponse, handleError, handleImportError } from "./apiUtils";
-import config from "../../config";
-import { secureAxios } from "./easeyAuthApi";
+import axios from 'axios';
+import { handleResponse, handleError, handleImportError } from './apiUtils';
+import config from '../../config';
+import { secureAxios } from './easeyAuthApi';
 
 axios.defaults.headers.common = {
-  "x-api-key": config.app.apiKey,
+  'x-api-key': config.app.apiKey,
 };
 
-const getApiUrl = (path) => {
+const getApiUrl = path => {
   let url = config.services.qaCertification.uri;
 
-  if (window.location.href.includes("/workspace")) {
+  if (window.location.href.includes('/workspace')) {
     url = `${url}/workspace`;
   }
 
@@ -21,18 +21,18 @@ export const getQAEvaluationReportData = async (
   type,
   monPlanId,
   testId,
-  batchId
+  batchId,
 ) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf("workspace") > -1) {
+  if (window.location.href.indexOf('workspace') > -1) {
     url = `${url}/workspace`;
   }
 
-  type = type.replace("_EVAL", "");
-  const test = testId ? `&testId=${testId}` : "";
-  const batch = batchId ? `&batchId=${batchId}` : "";
+  type = type.replace('_EVAL', '');
+  const test = testId ? `&testId=${testId}` : '';
+  const batch = batchId ? `&batchId=${batchId}` : '';
 
   url = `${url}/evaluations/results?type=${type}&monitorPlanId=${monPlanId}${test}${batch}`;
 
@@ -43,11 +43,11 @@ export const getQATestSummary = async (
   locID,
   selectedTestCode,
   beginDate,
-  endDate
+  endDate,
 ) => {
   let url = `${config.services.qaCertification.uri}`;
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf("workspace") > -1) {
+  if (window.location.href.indexOf('workspace') > -1) {
     url = `${url}/workspace`;
   }
   // *** attach the rest of the url
@@ -56,7 +56,7 @@ export const getQATestSummary = async (
     if (selectedTestCode.length === 1) {
       url = `${url}?testTypeCodes=${selectedTestCode}`;
     } else {
-      let additionalUrl = "";
+      let additionalUrl = '';
       for (const x of selectedTestCode) {
         additionalUrl = `${additionalUrl} ${x} |`;
       }
@@ -73,16 +73,16 @@ export const getQATestSummary = async (
 export const getQATestSummaryReviewSubmit = async (
   orisCodes,
   monPlanIds = [],
-  quarters = []
+  quarters = [],
 ) => {
-  let queryString = `orisCodes=${orisCodes.join("|")}`;
+  let queryString = `orisCodes=${orisCodes.join('|')}`;
 
   if (monPlanIds.length > 0) {
-    queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
+    queryString = queryString + `&monPlanIds=${monPlanIds.join('|')}`;
   }
 
   if (quarters.length > 0) {
-    queryString = queryString + `&quarters=${quarters.join("|")}`;
+    queryString = queryString + `&quarters=${quarters.join('|')}`;
   }
 
   let url = `${config.services.qaCertification.uri}/review-and-submit/test-summary?${queryString}`;
@@ -93,7 +93,7 @@ export const getQATestSummaryByID = async (locID, id) => {
   let url = `${config.services.qaCertification.uri}/`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf("workspace") > -1) {
+  if (window.location.href.indexOf('workspace') > -1) {
     url = `${url}workspace`;
   }
 
@@ -105,7 +105,7 @@ export const getQATestSummaryByID = async (locID, id) => {
 
 export const getQATestSummaryByCode = async (
   locId,
-  { _beginDate, _endDate, testTypeCodes = [] }
+  { _beginDate, _endDate, testTypeCodes = [] },
 ) => {
   let url = `${config.services.qaCertification.uri}`;
 
@@ -113,7 +113,7 @@ export const getQATestSummaryByCode = async (
   url = `${url}/locations/${locId}/test-summary`;
 
   if (testTypeCodes.length > 0) {
-    const param = testTypeCodes.join("|");
+    const param = testTypeCodes.join('|');
     url = `${url}?testTypeCode=${param}`;
   }
 
@@ -126,20 +126,22 @@ export const getQASchema = async () => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const getReportingPeriod = async () => {
-  const url = `${config.services.mdm.uri}/reporting-periods`;
+export const getReportingPeriod = async isExport => {
+  const url = `${config.services.mdm.uri}/reporting-periods${
+    isExport ? '?export=true' : ''
+  }`;
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const importQA = async (payload) => {
+export const importQA = async payload => {
   const url = `${config.services.qaCertification.uri}/workspace/import/`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -152,7 +154,7 @@ export const exportQA = async (
   stackPipeIds,
   beginDate,
   endDate,
-  isOfficial
+  isOfficial,
 ) => {
   let url;
 
@@ -163,11 +165,11 @@ export const exportQA = async (
   }
 
   if (unitIds?.length > 0) {
-    const unitIdsQueryParam = unitIds.join("|");
+    const unitIdsQueryParam = unitIds.join('|');
     url = `${url}&unitIds=${unitIdsQueryParam}`;
   }
   if (stackPipeIds?.length > 0) {
-    const stackPipeIdsQueryParam = stackPipeIds.join("|");
+    const stackPipeIdsQueryParam = stackPipeIds.join('|');
     url = `${url}&stackPipeIds=${stackPipeIdsQueryParam}`;
   }
   if (beginDate && endDate) {
@@ -181,9 +183,9 @@ export const deleteQATestSummary = async (locId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -194,7 +196,7 @@ export const getQALinearitySummary = async (locID, testSumId) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf("workspace") > -1) {
+  if (window.location.href.indexOf('workspace') > -1) {
     url = `${url}/workspace`;
   }
 
@@ -209,9 +211,9 @@ export const deleteQALinearitySummary = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -220,16 +222,16 @@ export const deleteQALinearitySummary = async (locId, testSumId, id) => {
 export const updateQALinearityTestSummary = async (
   locId,
   testSumId,
-  payload
+  payload,
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -240,16 +242,16 @@ export const updateQALinearitySummaryTestSecondLevel = async (
   locId,
   testSumId,
   id,
-  payload
+  payload,
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/linearities/${id}`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -260,10 +262,10 @@ export const createQATestData = async (locId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -273,16 +275,16 @@ export const createQATestData = async (locId, payload) => {
 export const createQALinearitySummaryTestSecondLevel = async (
   locId,
   testSumId,
-  payload
+  payload,
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/linearities`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -293,7 +295,7 @@ export const getQALinearityInjection = async (locID, testSumId, linSumId) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf("workspace") > -1) {
+  if (window.location.href.indexOf('workspace') > -1) {
     url = `${url}/workspace`;
   }
   // *** attach the rest of the url
@@ -307,12 +309,12 @@ export const editQALinearityInjection = async (
   testSumId,
   linSumId,
   id,
-  payload
+  payload,
 ) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf("workspace") > -1) {
+  if (window.location.href.indexOf('workspace') > -1) {
     url = `${url}/workspace`;
   }
 
@@ -321,10 +323,10 @@ export const editQALinearityInjection = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -335,18 +337,18 @@ export const createQALinearityInjection = async (
   locID,
   testSumId,
   linSumId,
-  payload
+  payload,
 ) => {
   let url = `${config.services.qaCertification.uri}`;
   url = `${url}/workspace/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections/`;
-  delete payload["id"];
+  delete payload['id'];
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -357,15 +359,15 @@ export const deleteQALinearityInjection = async (
   locID,
   testSumId,
   linSumId,
-  id
+  id,
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections/${id}`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -376,7 +378,7 @@ export const getProtocolGas = async (locID, testSumId) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf("workspace") > -1) {
+  if (window.location.href.indexOf('workspace') > -1) {
     url = `${url}/workspace`;
   }
 
@@ -391,10 +393,10 @@ export const createProtocolGas = async (locId, testSumId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -405,16 +407,16 @@ export const updateProtocolGas = async (
   locId,
   testSumId,
   protocolGasId,
-  payload
+  payload,
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/protocol-gases/${protocolGasId}`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -425,9 +427,9 @@ export const deleteProtocolGas = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -438,7 +440,7 @@ export const getRataData = async (locID, testSumId) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf("workspace") > -1) {
+  if (window.location.href.indexOf('workspace') > -1) {
     url = `${url}/workspace`;
   }
 
@@ -453,10 +455,10 @@ export const createRataData = async (locId, testSumId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -468,10 +470,10 @@ export const updateRataData = async (id, locId, testSumId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -483,9 +485,9 @@ export const deleteRataData = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url: url,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -496,7 +498,7 @@ export const getRataSummary = async (locId, testSumId, rataId) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf("workspace") > -1) {
+  if (window.location.href.indexOf('workspace') > -1) {
     url = `${url}/workspace`;
   }
 
@@ -511,10 +513,10 @@ export const createRataSummary = async (locId, testSumId, rataId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -526,16 +528,16 @@ export const updateRataSummary = async (
   testSumId,
   rataId,
   id,
-  payload
+  payload,
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${id}`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -547,9 +549,9 @@ export const deleteRataSummary = async (locId, testSumId, rataId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url: url,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -560,7 +562,7 @@ export const getRataRunData = async (locId, testSumId, rataId, rataSumId) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf("workspace") > -1) {
+  if (window.location.href.indexOf('workspace') > -1) {
     url = `${url}/workspace`;
   }
 
@@ -574,16 +576,16 @@ export const createRataRunData = async (
   testSumId,
   rataId,
   rataSumId,
-  payload
+  payload,
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -597,17 +599,17 @@ export const updateRataRunData = async (
   rataSumId,
 
   id,
-  payload
+  payload,
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${id}`;
 
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -619,15 +621,15 @@ export const deleteRataRunData = async (
   testSumId,
   rataId,
   rataSumId,
-  id
+  id,
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${id}`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url: url,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -640,11 +642,11 @@ export const getRataTraverseData = async (
   rataId,
   rataSumId,
   rataRunId,
-  flowRataRunId
+  flowRataRunId,
 ) => {
   let url = `${config.services.qaCertification.uri}`;
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf("workspace") > -1) {
+  if (window.location.href.indexOf('workspace') > -1) {
     url = `${url}/workspace`;
   }
   // *** attach the rest of the url
@@ -659,16 +661,16 @@ export const createRataTraverse = async (
   rataSumId,
   rataRunId,
   flowRataRunId,
-  payload
+  payload,
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -683,16 +685,16 @@ export const updateRataTraverseData = async (
   rataRunId,
   flowRataRunId,
   id,
-  payload
+  payload,
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses/${id}`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -706,15 +708,15 @@ export const deleteRataTraverseData = async (
   rataSumId,
   rataRunId,
   flowRataRunId,
-  id
+  id,
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses/${id}`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url: url,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -725,7 +727,7 @@ export const getAirEmissions = async (locID, testSumId) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf("workspace") > -1) {
+  if (window.location.href.indexOf('workspace') > -1) {
     url = `${url}/workspace`;
   }
 
@@ -740,10 +742,10 @@ export const createAirEmissions = async (locId, testSumId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -755,10 +757,10 @@ export const updateAirEmissions = async (locId, testSumId, id, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -770,9 +772,9 @@ export const deleteAirEmissions = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -784,12 +786,12 @@ export const getFlowRunData = async (
   testSumId,
   rataId,
   rataSumId,
-  rataRunId
+  rataRunId,
 ) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf("workspace") > -1) {
+  if (window.location.href.indexOf('workspace') > -1) {
     url = `${url}/workspace`;
   }
 
@@ -805,17 +807,17 @@ export const createFlowRunData = async (
   rataId,
   rataSumId,
   rataRunId,
-  payload
+  payload,
 ) => {
   let url = `${config.services.qaCertification.uri}/workspace`;
   url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -829,17 +831,17 @@ export const updateFlowRunData = async (
   rataSumId,
   rataRunId,
   id,
-  payload
+  payload,
 ) => {
   let url = `${config.services.qaCertification.uri}/workspace`;
   url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${id}`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -852,7 +854,7 @@ export const deleteFlowRunData = async (
   rataId,
   rataSumId,
   rataRunId,
-  id
+  id,
 ) => {
   let url = `${config.services.qaCertification.uri}/workspace`;
   url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${id}`;
@@ -860,9 +862,9 @@ export const deleteFlowRunData = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -881,10 +883,10 @@ export const createTestQualification = async (locId, testSumId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -895,17 +897,17 @@ export const updateTestQualification = async (
   locId,
   testSumId,
   id,
-  payload
+  payload,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/test-qualifications/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -917,9 +919,9 @@ export const deleteTestQualification = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -928,7 +930,7 @@ export const deleteTestQualification = async (locId, testSumId, id) => {
 
 export const getAppendixECorrelationSummaryRecords = async (
   locId,
-  testSumId
+  testSumId,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
   const url = getApiUrl(path);
@@ -938,17 +940,17 @@ export const getAppendixECorrelationSummaryRecords = async (
 export const createAppendixECorrelationSummaryRecord = async (
   locId,
   testSumId,
-  payload
+  payload,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -959,17 +961,17 @@ export const updateAppendixECorrelationSummaryRecord = async (
   locId,
   testSumId,
   id,
-  payload
+  payload,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -979,16 +981,16 @@ export const updateAppendixECorrelationSummaryRecord = async (
 export const deleteAppendixECorrelationSummaryRecord = async (
   locId,
   testSumId,
-  id
+  id,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -1006,10 +1008,10 @@ export const createFuelFlowToLoad = async (locId, testSumId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1021,9 +1023,9 @@ export const deleteFuelFlowToLoadData = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -1035,10 +1037,10 @@ export const updateFuelFlowToLoad = async (locId, testSumId, id, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1054,16 +1056,16 @@ export const getFuelFlowToLoadBaseline = async (locId, testSumId) => {
 export const createFuelFlowToLoadBaseline = async (
   locId,
   testSumId,
-  payload
+  payload,
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baselines`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1074,16 +1076,16 @@ export const updateFuelFlowToLoadBaseline = async (
   locId,
   testSumId,
   id,
-  payload
+  payload,
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baselines/${id}`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1095,9 +1097,9 @@ export const deleteFuelFlowToLoadBaseline = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -1107,7 +1109,7 @@ export const deleteFuelFlowToLoadBaseline = async (locId, testSumId, id) => {
 export const getAppendixERunData = async (
   locId,
   testSumId,
-  appECorrTestSumId
+  appECorrTestSumId,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs`;
   const url = getApiUrl(path);
@@ -1119,17 +1121,17 @@ export const createAppendixERun = async (
   locId,
   testSumId,
   appECorrTestSumId,
-  payload
+  payload,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -1140,7 +1142,7 @@ export const getAppendixEHeatInputGasData = async (
   locId,
   testSumId,
   appECorrTestSumId,
-  appECorrTestRunId
+  appECorrTestRunId,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases`;
   const url = getApiUrl(path);
@@ -1152,7 +1154,7 @@ export const createAppendixEHeatInputGas = async (
   testSumId,
   appECorrTestSumId,
   appECorrTestRunId,
-  payload
+  payload,
 ) => {
   const testSummary = await getQATestSummaryByID(locId, testSumId);
   payload.monitoringSystemID = testSummary.data.monitoringSystemID;
@@ -1161,10 +1163,10 @@ export const createAppendixEHeatInputGas = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -1177,17 +1179,17 @@ export const updateAppendixECorrelationHeatInputGas = async (
   appECorrTestSumId,
   appECorrTestRunId,
   id,
-  payload
+  payload,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1199,16 +1201,16 @@ export const deleteAppendixECorrelationHeatInputGas = async (
   testSumId,
   appECorrTestSumId,
   appECorrTestRunId,
-  id
+  id,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -1219,7 +1221,7 @@ export const getAppendixEHeatInputOilData = async (
   locId,
   testSumId,
   appECorrTestSumId,
-  appECorrTestrunId
+  appECorrTestrunId,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils`;
   const url = getApiUrl(path);
@@ -1231,17 +1233,17 @@ export const createAppendixEHeatInputOil = async (
   testSumId,
   appECorrTestSumId,
   appECorrTestrunId,
-  payload
+  payload,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -1254,17 +1256,17 @@ export const updateAppendixECorrelationHeatInputOil = async (
   appECorrTestSumId,
   appECorrTestrunId,
   id,
-  payload
+  payload,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1276,16 +1278,16 @@ export const deleteAppendixECorrelationHeatInputOil = async (
   testSumId,
   appECorrTestSumId,
   appECorrTestrunId,
-  id
+  id,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -1297,17 +1299,17 @@ export const updateAppendixERun = async (
   testSumId,
   appECorrTestSumId,
   id,
-  payload
+  payload,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -1317,16 +1319,16 @@ export const deleteAppendixERun = async (
   locId,
   testSumId,
   appECorrTestSumId,
-  id
+  id,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url,
-      })
+      }),
     );
   } catch (error) {
     return handleError(error);
@@ -1342,17 +1344,17 @@ export const getFlowToLoadCheckRecords = async (locId, testSumId) => {
 export const createFlowToLoadCheckRecord = async (
   locId,
   testSumId,
-  payload
+  payload,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1363,17 +1365,17 @@ export const updateFlowToLoadCheckRecord = async (
   locId,
   testSumId,
   id,
-  payload
+  payload,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1386,9 +1388,9 @@ export const deleteFlowToLoadCheckRecord = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url: url,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1404,16 +1406,16 @@ export const getOnlineOfflineCalibration = async (locId, testSumId) => {
 export const createOnlineOfflineCalibration = async (
   locId,
   testSumId,
-  payload
+  payload,
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/online-offline-calibration`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1424,17 +1426,17 @@ export const updateOnlineOfflineCalibration = async (
   locId,
   testSumId,
   id,
-  payload
+  payload,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/online-offline-calibration/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1447,9 +1449,9 @@ export const deleteOnlineOfflineCalibration = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url: url,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1465,17 +1467,17 @@ export const getCalibrationInjectionRecords = async (locId, testSumId) => {
 export const createCalibrationInjectionRecord = async (
   locId,
   testSumId,
-  payload
+  payload,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/calibration-injections`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1486,17 +1488,17 @@ export const updateCalibrationInjectionRecord = async (
   locId,
   testSumId,
   id,
-  payload
+  payload,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/calibration-injections/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1506,16 +1508,16 @@ export const updateCalibrationInjectionRecord = async (
 export const deleteCalibrationInjectionRecord = async (
   locId,
   testSumId,
-  id
+  id,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/calibration-injections/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url: url,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1534,10 +1536,10 @@ export const createCycleTimeSummary = async (locId, testSumId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1550,10 +1552,10 @@ export const updateCycleTimeSummary = async (locId, testSumId, id, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1566,63 +1568,82 @@ export const deleteCycleTimeSummary = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url: url,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
   }
 };
 
-
-export const getCycleTimeInjection = async (locId, testSumId, cycleTimeSumId) => {
+export const getCycleTimeInjection = async (
+  locId,
+  testSumId,
+  cycleTimeSumId,
+) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${cycleTimeSumId}/cycle-time-injections`;
   const url = getApiUrl(path);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const createCycleTimeInjection = async (locId, testSumId, cycleTimeSumId, payload) => {
+export const createCycleTimeInjection = async (
+  locId,
+  testSumId,
+  cycleTimeSumId,
+  payload,
+) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${cycleTimeSumId}/cycle-time-injections`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
   }
 };
 
-export const updateCycleTimeInjection = async (locId, testSumId, cycleTimeSumId, id, payload) => {
+export const updateCycleTimeInjection = async (
+  locId,
+  testSumId,
+  cycleTimeSumId,
+  id,
+  payload,
+) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${cycleTimeSumId}/cycle-time-injections/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
   }
 };
 
-export const deleteCycleTimeInjection = async (locId, testSumId, cycleTimeSumId, id) => {
+export const deleteCycleTimeInjection = async (
+  locId,
+  testSumId,
+  cycleTimeSumId,
+  id,
+) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${cycleTimeSumId}/cycle-time-injections/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url: url,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1638,17 +1659,17 @@ export const getFuelFlowmeterAccuracyDataRecords = async (locId, testSumId) => {
 export const createFuelFlowmeterAccuracyDataRecord = async (
   locId,
   testSumId,
-  payload
+  payload,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flowmeter-accuracies`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1659,17 +1680,17 @@ export const updateFuelFlowmeterAccuracyDataRecord = async (
   locId,
   testSumId,
   id,
-  payload
+  payload,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flowmeter-accuracies/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1679,16 +1700,16 @@ export const updateFuelFlowmeterAccuracyDataRecord = async (
 export const deleteFuelFlowmeterAccuracyDataRecord = async (
   locId,
   testSumId,
-  id
+  id,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flowmeter-accuracies/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url: url,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1697,7 +1718,7 @@ export const deleteFuelFlowmeterAccuracyDataRecord = async (
 
 export const getTransmitterTransducerAccuracyDataRecords = async (
   locId,
-  testSumId
+  testSumId,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/transmitter-transducer-accuracy`;
   const url = getApiUrl(path);
@@ -1707,17 +1728,17 @@ export const getTransmitterTransducerAccuracyDataRecords = async (
 export const createTransmitterTransducerAccuracyDataRecord = async (
   locId,
   testSumId,
-  payload
+  payload,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/transmitter-transducer-accuracy`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1728,17 +1749,17 @@ export const updateTransmitterTransducerAccuracyDataRecord = async (
   locId,
   testSumId,
   id,
-  payload
+  payload,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/transmitter-transducer-accuracy/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1748,16 +1769,16 @@ export const updateTransmitterTransducerAccuracyDataRecord = async (
 export const deleteTransmitterTransducerAccuracyDataRecord = async (
   locId,
   testSumId,
-  id
+  id,
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/transmitter-transducer-accuracy/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url: url,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1770,19 +1791,15 @@ export const getFlowToLoadReference = async (locId, testSumId) => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const createFlowToLoadReference = async (
-  locId,
-  testSumId,
-  payload
-) => {
+export const createFlowToLoadReference = async (locId, testSumId, payload) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/flow-to-load-references`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1793,34 +1810,30 @@ export const updateFlowToLoadReference = async (
   locId,
   testSumId,
   id,
-  payload
+  payload,
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/flow-to-load-references/${id}`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "PUT",
+        method: 'PUT',
         url: url,
         data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
   }
 };
 
-export const deleteFlowToLoadReference = async (
-  locId,
-  testSumId,
-  id
-) => {
+export const deleteFlowToLoadReference = async (locId, testSumId, id) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/flow-to-load-references/${id}`;
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'DELETE',
         url: url,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
@@ -1833,60 +1846,235 @@ export const getUnitDefaultTest = async (locId, testSumId) => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-export const createUnitDefaultTest = async (
-  locId,
-  testSumId,
-  payload
-) => {
+export const createUnitDefaultTest = async (locId, testSumId, payload) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/unit-default-tests`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: payload,
-      })
-      );
-    } catch (error) {
-      return handleImportError(error);
-    }
-};
-
-export const updateUnitDefaultTest = async (
-  locId,
-  testSumId,
-  id,
-  payload
-) => {
-  const path = `/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${id}`;
-  const url = getApiUrl(path);
-  try {
-    return handleResponse(
-      await secureAxios({
-        method: "PUT",
-        url: url,
-        data: payload,
-      })
+      }),
     );
   } catch (error) {
     return handleImportError(error);
   }
 };
 
-export const deleteUnitDefaultTest = async (
-  locId,
-  testSumId,
-  id
-) => {
+export const updateUnitDefaultTest = async (locId, testSumId, id, payload) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${id}`;
   const url = getApiUrl(path);
   try {
     return handleResponse(
       await secureAxios({
-        method: "DELETE",
+        method: 'PUT',
         url: url,
-      })
+        data: payload,
+      }),
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const deleteUnitDefaultTest = async (locId, testSumId, id) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: 'DELETE',
+        url: url,
+      }),
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const getHgSummary = async (locId, testSumId) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createHgSummary = async (locId, testSumId, payload) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: 'POST',
+        url: url,
+        data: payload,
+      }),
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const updateHgSummary = async (locId, testSumId, id, payload) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: 'PUT',
+        url: url,
+        data: payload,
+      }),
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const deleteHgSummary = async (locId, testSumId, id) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: 'DELETE',
+        url: url,
+      }),
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const getUnitDefaultTestRun = async (
+  locId,
+  testSumId,
+  unitDefaultTestId,
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${unitDefaultTestId}/unit-default-test-runs`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createUnitDefaultTestRun = async (
+  locId,
+  testSumId,
+  unitDefaultTestId,
+  payload,
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${unitDefaultTestId}/unit-default-test-runs`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: 'POST',
+        url: url,
+        data: payload,
+      }),
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const updateUnitDefaultTestRun = async (
+  locId,
+  testSumId,
+  unitDefaultTestId,
+  id,
+  payload,
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${unitDefaultTestId}/unit-default-test-runs/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: 'PUT',
+        url: url,
+        data: payload,
+      }),
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const getHgInjection = async (locId, testSumId, hgTestSumId) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createHgInjection = async (
+  locId,
+  testSumId,
+  hgTestSumId,
+  payload,
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: 'POST',
+        url: url,
+        data: payload,
+      }),
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const updateHgInjection = async (
+  locId,
+  testSumId,
+  hgTestSumId,
+  id,
+  payload,
+) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: 'PUT',
+        url: url,
+        data: payload,
+      }),
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const deleteHgInjection = async (locId, testSumId, hgTestSumId, id) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections/${id}`;
+  const url = getApiUrl(path);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: 'DELETE',
+        url: url,
+      }),
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const deleteUnitDefaultTestRun = async (
+  locId,
+  testSumId,
+  unitDefaultTestId,
+  id,
+) => {
+  const path = `/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${unitDefaultTestId}/unit-default-test-runs/${id}`;
+  const url = getApiUrl(path);
+
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: 'DELETE',
+        url,
+      }),
     );
   } catch (error) {
     return handleImportError(error);

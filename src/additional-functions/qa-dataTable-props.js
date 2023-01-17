@@ -17,8 +17,8 @@ export const qaProtocalGasProps = (selectedRow) => {
       "Expiration Date",
     ],
     controlInputs: {
-      gasLevelCode: ["Summary Type/Gas Level Code", "dropdown", "", ""],
-      gasTypeCode: ["Gas Type Code", "dropdown", "", ""],
+      gasLevelCode: ["Gas Level Code", "dropdown", "", ""],
+      gasTypeCode: ["Gas Type Code", "multiSelectDropdown", "", ""],
       cylinderIdentifier: ["Cylinder Identification", "input", "", ""],
       vendorIdentifier: ["Vendor Identification", "input", "", ""],
       expirationDate: ["Expiration Date", "date", "", ""],
@@ -1032,3 +1032,99 @@ export const qaUnitDefaultTestDataProps = () => {
     controlDatePickerInputs: {},
   }
 }
+
+export const qaUnitDefaultTestRunDataProps = () => {
+  return {
+    dataTableName: "Unit Default Test Run",
+    payload: {},
+    dropdownArray: ["runUsedIndicator"],
+    mdmProps: [],
+    columnNames: [
+      "Operating Level for Run",
+      "Run Number",
+      "Begin Date",
+      "Begin Hour",
+      "Begin Minute",
+      "End Date",
+      "End Hour",
+      "End Minute",
+      "Response Time",
+      "Reference Value",
+      "Run Used Indicator"
+    ],
+    controlInputs: {
+      operatingLevel: ["Operating Level for Run", "input", "", ""],
+      runNumber: ["Run Number", "input", "", ""],
+      responseTime: ["Response Time", "input", "", ""],
+      referenceValue: ["Reference Value", "input", "", ""],
+      runUsedIndicator: ["Run Used Indicator", "dropdown", "", ""],
+    },
+    controlDatePickerInputs: {
+      beginDate:["Begin Date", "date", "", ""],
+      beginHour:["Begin Hour", "hourDropdown", "dropdown", ""],
+      beginMinute:["Begin Minute", "minuteDropdown", "", ""],
+      endDate:["End Date", "date", "", ""],
+      endHour:["End Hour", "hourDropdown", "dropdown", ""],
+      endMinute:["End Minute", "minuteDropdown", "dropdown", ""],
+    },
+  }
+}
+
+export const qaHgSummaryDataProps = () => {
+  return {
+    dataTableName: "Hg Summary",
+    payload: {},
+    dropdownArray: ["gasLevelCode"],
+    mdmProps: [
+      {
+        codeTable: "gas-level-codes",
+        responseProps: {
+          code: "gasLevelCode",
+          description: "gasLevelDescription"
+        }
+      },
+    ],
+    columnNames: [
+      "Gas Level Code",
+      "Mean Measured Value",
+      "Mean Reference Value",
+      "Percent Error",
+      "APS Indicator",
+    ],
+    controlInputs: {
+      gasLevelCode: ["Gas Level Code", "dropdown", "", ""],
+      meanMeasuredValue: ["Mean Measured Value", "input", "", ""],
+      meanReferenceValue: ["Mean Reference Value", "input", "", ""],
+      percentError: ["Percent Error", "input", "", ""],
+      apsIndicator: ["APS Indicator", "radio", "", ""],
+    },
+    controlDatePickerInputs: {},
+  }
+}
+
+export const qaHgInjectionDataProps = () => {
+  return {
+    dataTableName: "Hg Injection",
+    payload: {},
+    dropdownArray: [],
+    mdmProps: [],
+    columnNames: [
+      "Injection Date",
+      "Injection Hour",
+      "Injection Minute",
+      "Measured Value",
+      "Reference Value",
+    ],
+    controlInputs: {},
+    controlDatePickerInputs: {
+      injectionDate: ["Injection Date", "date", "", ""],
+      injectionHour: ["Injection Hour", "hourDropdown", "dropdown", ""],
+      injectionMinute: ["Injection Minute", "minuteDropdown", "dropdown", ""],
+    },
+    extraControls: {
+      measuredValue: ["Measured Value", "input", "", ""],
+      referenceValue: ["Reference Value", "input", "", ""],
+      skip: ["", "skip", "", ""],
+    },
+  };
+};

@@ -6,34 +6,36 @@ import NotFound from "../NotFound/NotFound";
 import AboutHome from "../AboutHome/AboutHome";
 import Layout from "../Layout/Layout";
 import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
+import { ErrorSuppression } from "../ErrorSuppression/ErrorSuppression";
 import RuleEditor from "../RuleEditor/RuleEditor";
 import Login from "../Login/Login";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
 import ReportGenerator from "../ReportGenerator/ReportGenerator";
 
-import { handleActiveElementFocus } from "../../additional-functions/add-active-class";
-import FAQ from "../FAQ/FAQ";
-import Resources from "../Resources/Resources";
+import { handleActiveElementFocus } from '../../additional-functions/add-active-class';
+import FAQ from '../FAQ/FAQ';
+import Resources from '../Resources/Resources';
 
-import HelpSupport from "../HelpSupport/HelpSupport";
-import "./App.scss";
-import InactivityTracker from "../InactivityTracker/InactivityTracker";
-import config from "../../config";
+import HelpSupport from '../HelpSupport/HelpSupport';
+import './App.scss';
+import InactivityTracker from '../InactivityTracker/InactivityTracker';
+import config from '../../config';
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
-} from "../../additional-functions/manage-focus";
+} from '../../additional-functions/manage-focus';
 import {
   QA_CERT_TEST_SUMMARY_STORE_NAME,
   EXPORT_STORE_NAME,
   EMISSIONS_STORE_NAME,
   MONITORING_PLAN_STORE_NAME,
-} from "../../additional-functions/workspace-section-and-store-names";
-import * as modules from "../../utils/constants/moduleTitles";
-import useGetCheckedOutLocations from "../../additional-functions/useGetCheckedOutLocations";
-import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
+  QA_CERT_EVENT_STORE_NAME,
+} from '../../additional-functions/workspace-section-and-store-names';
+import * as modules from '../../utils/constants/moduleTitles';
+import useGetCheckedOutLocations from '../../additional-functions/useGetCheckedOutLocations';
+import EvaluateAndSubmit from '../EvaluateAndSubmit/EvaluateAndSubmit';
 
-const cdx_user = sessionStorage.getItem("cdx_user");
+const cdx_user = sessionStorage.getItem('cdx_user');
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -43,10 +45,10 @@ const App = () => {
 
   const prepDocument = () => {
     setTimeout(() => {
-      const mainContent = document.querySelector(".mainContent");
+      const mainContent = document.querySelector('.mainContent');
 
       if (mainContent !== null) {
-        mainContent.setAttribute("id", "main-content");
+        mainContent.setAttribute('id', 'main-content');
       }
     });
     // To avoid css sytling conflicts in production build
@@ -63,8 +65,8 @@ const App = () => {
 
   useEffect(() => {
     if (config.app.googleAnalyticsEnabled) {
-      const tagManagerArgs = { gtmId: "" };
-      if (window.location.href.search("workspace") === -1) {
+      const tagManagerArgs = { gtmId: '' };
+      if (window.location.href.search('workspace') === -1) {
         tagManagerArgs.gtmId = config.app.googleAnalyticsPublicContainerId;
       } else {
         tagManagerArgs.gtmId =
@@ -76,8 +78,8 @@ const App = () => {
   });
 
   useEffect(() => {
-    const cdxUser = sessionStorage.getItem("cdx_user")
-      ? JSON.parse(sessionStorage.getItem("cdx_user"))
+    const cdxUser = sessionStorage.getItem('cdx_user')
+      ? JSON.parse(sessionStorage.getItem('cdx_user'))
       : false;
 
     setUser(cdxUser && cdxUser.firstName ? cdxUser : false);
@@ -95,22 +97,22 @@ const App = () => {
   // *** assign / un-assign activity event listeners
   useEffect(() => {
     if (user) {
-      if (document.querySelector(".usa-banner__content")) {
+      if (document.querySelector('.usa-banner__content')) {
         document
-          .querySelector(".usa-banner__content")
-          .classList.add("react-transition");
-        document.querySelector(".usa-banner__content").classList.add("fade-in");
+          .querySelector('.usa-banner__content')
+          .classList.add('react-transition');
+        document.querySelector('.usa-banner__content').classList.add('fade-in');
       }
     }
   }, [user]);
 
   const [currentLink, setCurrentLink] = useState(
-    window.location.href.replace(`${window.location.origin}`, "")
+    window.location.href.replace(`${window.location.origin}`, '')
   );
   return (
     <div>
       <div aria-live="polite" role="status" aria-atomic="true">
-        <div>{user ? <InactivityTracker /> : ""}</div>
+        <div>{user ? <InactivityTracker /> : ''}</div>
       </div>
       <Switch>
         <Route
@@ -134,7 +136,7 @@ const App = () => {
             />
             <Route path={`/faqs`} exact component={() => <FAQ />} />
             <Route path="/login" exact component={Login} />
-            {!cdx_user && <Redirect from="/workspace/review" to="/home" />}
+            {!cdx_user && <Redirect from="/workspace/submit" to="/home" />}
             <Route
               path="/workspace/submit"
               exact
@@ -143,6 +145,7 @@ const App = () => {
               )}
             />
 
+            {!cdx_user && <Redirect from="/workspace/evaluate" to="/home" />}
             <Route
               path="/workspace/evaluate"
               exact
@@ -220,6 +223,37 @@ const App = () => {
             />
 
             {user ? (
+              <Redirect from="/qa-qce-tee" to="/workspace/qa-qce-tee" />
+            ) : (
+              <Redirect from="/workspace/qa-qce-tee" to="/qa-qce-tee" />
+            )}
+            <Route
+              path="/qa-cert-event"
+              exact
+              component={() => (
+                <MonitoringPlanHome
+                  user={false}
+                  workspaceSection={QA_CERT_EVENT_STORE_NAME}
+                />
+              )}
+            />
+            <Route
+              path="/workspace/qa-cert-event"
+              exact
+              component={() => (
+                <MonitoringPlanHome
+                  resetTimer={setResetTimer}
+                  setExpired={setExpired}
+                  resetTimerFlag={resetTimer}
+                  callApiFlag={expired}
+                  user={user}
+                  workspaceSection={QA_CERT_EVENT_STORE_NAME}
+                  moduleName={modules.qa_Certifications_Event_Module}
+                />
+              )}
+            />
+
+            {user ? (
               <Redirect from="/emissions" to="/workspace/emissions" />
             ) : (
               <Redirect from="/workspace/emissions" to="/emissions" />
@@ -271,6 +305,15 @@ const App = () => {
                   workspaceSection={EXPORT_STORE_NAME}
                 />
               )}
+            />
+
+            {!cdx_user && (
+              <Redirect from="/workspace/error-suppression" to="/home" />
+            )}
+            <Route
+              path="/workspace/error-suppression"
+              exact
+              component={() => <ErrorSuppression />}
             />
 
             <Route path="/tutorials" exact component={ComingSoon} />

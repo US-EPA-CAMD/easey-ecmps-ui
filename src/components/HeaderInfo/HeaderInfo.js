@@ -18,6 +18,7 @@ import * as emApi from "../../utils/api/emissionsApi";
 import {
   EMISSIONS_STORE_NAME,
   MONITORING_PLAN_STORE_NAME,
+  QA_CERT_EVENT_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import Modal from "../Modal/Modal";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
@@ -127,6 +128,12 @@ export const HeaderInfo = ({
     { name: "Unit Information" },
   ];
 
+  const testData = [
+    { name: "-- Select --" },
+    { name: "QA Certification Event" },
+    { name: "Test Extension Exemption" },
+  ];
+
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
@@ -184,6 +191,7 @@ export const HeaderInfo = ({
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const [isReverting, setIsReverting] = useState(false);
   const [viewTemplates, setViewTemplates] = useState([]);
+  const [testDataOptions, setTestDataOptions] = useState([]);
 
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState([]);
@@ -198,6 +206,7 @@ export const HeaderInfo = ({
   );
 
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
+  const [testDataOptionSelect, setTestDataOptionSelect] = useState(null);
 
   const MAX_REPORTING_PERIODS = 4;
   const MAX_REPORTING_PERIODS_ERROR_MSG =
@@ -256,6 +265,11 @@ export const HeaderInfo = ({
       setViewTemplateSelect(currentTab.viewTemplateSelect);
   }, [currentTab]);
 
+  useEffect(() => {
+    if (currentTab?.testDataOptionSelect)
+      setTestDataOptionSelect(currentTab.testDataOptionSelect);
+  }, [currentTab]);
+
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
     if (showCommentsModal) {
@@ -293,6 +307,14 @@ export const HeaderInfo = ({
       }
     });
   }, [workspaceSection, setViewTemplateSelect]);
+
+  useEffect(() => {
+    if (workspaceSection !== QA_CERT_EVENT_STORE_NAME) return;
+    setTestDataOptions(testData);
+    if (!currentTab?.TestDataOptionSelect && testData?.length > 0) {
+      setTestDataOptionSelect(testData[0]);
+    }
+  }, [workspaceSection, setTestDataOptionSelect]);
 
   const executeOnClose = () => {
     setShowCommentsModal(false);
@@ -720,9 +742,7 @@ export const HeaderInfo = ({
         if (status === 201) {
           setImportedFileErrorMsgs([]);
         } else if (status === 400)
-          setImportedFileErrorMsgs(
-            data?.message?.split(",") || ["HTTP 400 Error"]
-          );
+          setImportedFileErrorMsgs(data?.message || ["HTTP 400 Error"]);
         else {
           setImportedFileErrorMsgs(`HTTP ${status} Error`);
         }
@@ -759,7 +779,16 @@ export const HeaderInfo = ({
 
   const evaluate = () => {
     triggerEvaluation({
-      monitorPlanId: configID,
+      items: [
+        {
+          monitorPlanId: configID,
+          submitMonPlan: true,
+          testSumIds: [],
+          qceIds: [],
+          teeIds: [],
+          emissionsReportingPeriods: [],
+        },
+      ],
       userId: user.userId,
       userEmail: user.email,
     })
@@ -1156,6 +1185,55 @@ export const HeaderInfo = ({
             </GridContainer>
           )}
 
+          {workspaceSection === QA_CERT_EVENT_STORE_NAME ? (
+            <GridContainer className="padding-left-0 margin-left-0 maxw-desktop">
+              <Grid row={true}>
+                <Grid col={2}>
+                  <DropdownSelection
+                    caption="Locations"
+                    orisCode={orisCode}
+                    options={locations}
+                    viewKey="name"
+                    selectKey="id"
+                    initialSelection={locationSelect[0]}
+                    selectionHandler={setLocationSelect}
+                    workspaceSection={workspaceSection}
+                  />
+                </Grid>
+                <Grid col={8} desktopLg={{ col: 5 }} widescreen={{ col: 5 }}>
+                  <FormGroup className="margin-right-2 margin-bottom-1">
+                    <Label test-id={"testData"} htmlFor={"testData"}>
+                      {"Test Data"}
+                    </Label>
+                    <Dropdown
+                      id={"testData"}
+                      name={"testData"}
+                      epa-testid={"testData"}
+                      data-testid={"testData"}
+                      value={testDataOptionSelect?.name}
+                      onChange={(e) => {
+                        setTestDataOptionSelect(
+                          testDataOptions.find((v) => v.name === e.target.value)
+                        );
+                      }}
+                      // className="mobile-lg:view-template-dropdown-maxw"
+                    >
+                      {testDataOptions?.map((data) => (
+                        <option
+                          data-testid={data.name}
+                          key={data.name}
+                          value={data.name}
+                        >
+                          {data.name}
+                        </option>
+                      ))}
+                    </Dropdown>
+                  </FormGroup>
+                </Grid>
+              </Grid>
+            </GridContainer>
+          ) : null}
+
           {workspaceSection === EMISSIONS_STORE_NAME ? (
             <GridContainer className="padding-left-0 margin-left-0 maxw-desktop">
               <Grid row={true}>
@@ -1206,7 +1284,7 @@ export const HeaderInfo = ({
                     items={reportingPeriods}
                     label="Reporting Period(s)"
                     entity="reportingPeriod"
-                    searchBy="label"
+                    searchBy="contains"
                     onChangeUpdate={handleSelectReportingPeriod}
                   />
                 </Grid>
