@@ -75,13 +75,13 @@ export const returnFocusToLast = () => {
 
       // counter is trivial number, can be 1.
       while (document.activeElement !== selectedFocus && counter < 5) {
-        selectedFocus
-          ? console.log("selectedFocus.focus()", selectedFocus.focus())
-          : // might need to check for an edge case when the array is empty
-          console.log(
-            "did not find lastfocus id element",
-            window["lastFocusedArray"][0].focus()
-          );
+        if(selectedFocus){
+          selectedFocus.focus();
+          console.log("selectedFocus.focus()")
+        } else {// might need to check for an edge case when the array is empty
+          window["lastFocusedArray"][0].focus()
+          console.log("did not find lastfocus id element");
+        }
         counter++;
       }
     }
@@ -111,5 +111,12 @@ export const returnFocusToModalButton = () => {
         }
       }
     }
+  }
+};
+
+export const addElementToLastFocusedArray = (querySelector) => {
+  const element = document.querySelector(querySelector), { lastFocusedArray } = window;
+  if (lastFocusedArray && element &&!lastFocusedArray.find((el) => el === element)) {
+    lastFocusedArray.push(element);
   }
 };
