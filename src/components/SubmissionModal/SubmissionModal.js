@@ -473,13 +473,13 @@ export const SubmissionModal = ({
                               defaultValue={"0"}
                               options={numbers}
                               onChange={(value) => {
-                                console.log(value);
                                 selectedNumber.current = value;
                               }}
                             />
                             <Button
                               onClick={sendPinToNumber}
                               className="grid-col-3"
+                              data-testid="phone-send"
                             >
                               {!pinVisible ? "Send" : "Resend"}
                             </Button>

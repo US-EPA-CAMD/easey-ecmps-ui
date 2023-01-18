@@ -141,8 +141,7 @@ export const config = {
     authApi: {
       uri: getConfigValue(
         "REACT_APP_EASEY_AUTH_API",
-        //"https://api.epa.gov/easey/dev/auth-mgmt"
-        "http://localhost:8000/auth-mgmt"
+        "https://api.epa.gov/easey/dev/auth-mgmt"
       ),
     },
     quartz: {
