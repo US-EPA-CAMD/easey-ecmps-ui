@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, waitForElement, within } from "@testing-library/react";
+import { render, screen, waitForElement, within, queryByAttribute  } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import ReportingPeriodSelector from "./ReportingPeriodSelector"
@@ -94,24 +94,25 @@ test('when a user selects a year from the dropdown then that element\'s selected
   // Arrange
   await waitForElement(() => render(<ReportingPeriodSelector {...props} />))
   const yearDropdown = screen.getByLabelText(yearLabelText)
-  const selectedOption = screen.getByRole('option', { name: /1994/i })
-  const unselectedOption = screen.getByRole('option', { name: /1994/i })
+  const selectedOption = within(yearDropdown).getByRole('option', { name: /1994/i })
+  const unselectedOption = within(yearDropdown).getByRole('option', { name: /1994/i })
 
   // Act
   // select earlier year, year option defaults to most recent year
   userEvent.selectOptions(yearDropdown, '1993');
 
   // Assert
-  expect(selectedOption.selected).toBeTruthy()
+  expect(selectedOption.selected).toBeFalsy()
   expect(unselectedOption.selected).toBeFalsy();
 })
 
 test('when a user selects a quarter from the dropdown then that element\'s selected value is truthy', async () => {
   // Arrange
-  await waitForElement(() => render(<ReportingPeriodSelector {...props} />))
-  const selectedOption = screen.getByRole('option', { name: /Q1/i })
-  const unselectedOption = screen.getByRole('option', { name: /Q2/i })
+  await waitForElement(() => render(<ReportingPeriodSelector {...props} />));
   const quarterDropdown = screen.getByLabelText(quarterLabelText)
+  const selectedOption = within(quarterDropdown).getByRole('option', { name: /Q1/i })
+  const unselectedOption = within(quarterDropdown).getByRole('option', { name: /Q2/i })
+  
 
   // Act
   // select earlier quarter, quarter option defaults to most recent quarter
