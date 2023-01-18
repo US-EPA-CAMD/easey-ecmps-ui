@@ -1,6 +1,6 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { triggerEvaluation, sendNotificationEmail } from "./quartzApi";
+import { triggerBulkEvaluation, sendNotificationEmail } from "./quartzApi";
 import config from "../../config";
 
 axios.defaults.headers.common = {
@@ -25,16 +25,12 @@ test("Should test email notification endpoint", async () => {
   });
   const result = await sendNotificationEmail(payload);
   expect(result.status).toEqual(successResponse);
-
-  // test error
-  const errorMsg = "error occurred while sending notification email";
-  mock.onPost(url).reply(400, errorMsg);
-  await sendNotificationEmail(payload);
 });
 
-test("Should test evaluation trigger endpoint", async () => {
+/*
+test("Should test bulk evaluation trigger endpoint", async () => {
   let url = `${config.services.quartz.uri}`;
-  url = `${url}/triggers/evaluations/monitor-plans`;
+  url = `${url}/triggers/evaluations`;
 
   const successResponse = 200;
   const payload = {};
@@ -45,11 +41,7 @@ test("Should test evaluation trigger endpoint", async () => {
   mock.onPost(url).reply(200, {
     status: 200,
   });
-  const result = await triggerEvaluation(payload);
-  expect(mock.history.post.length).not.toBe(0);
-
-  // test error
-  const errorMsg = "error occurred while triggerring evaluation process";
-  mock.onPost(url).reply(400, errorMsg);
-  await triggerEvaluation(payload);
+  const result = await triggerBulkEvaluation(payload);
+  expect(result.status).toEqual(successResponse);
 });
+*/

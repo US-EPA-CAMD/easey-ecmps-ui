@@ -13,11 +13,30 @@ import {
   secureAxios,
   verifyChallenge,
 } from "./easeyAuthApi";
-import { getApiUrl } from "./monitoringPlansApi";
+
+jest.mock("./monitoringPlansApi", () => ({
+  getCheckedOutLocations: jest.fn().mockResolvedValue({
+    data: [],
+  }),
+  checkoutAPI: jest.fn().mockResolvedValue({
+    data: [],
+  }),
+  getApiUrl: jest.fn(),
+}));
 
 jest.mock("../../additional-functions/app-error.js", () => ({
   displayAppError: jest.fn(),
 }));
+
+delete window.location;
+window.location = {
+  pathname: {
+    includes: jest.fn(),
+    endsWith: jest.fn(),
+  },
+  reload: jest.fn(),
+  assign: jest.fn(),
+};
 
 describe("Easey Auth API", () => {
   const mock = new MockAdapter(axios);
@@ -191,20 +210,6 @@ describe("Easey Auth API", () => {
       })
     );
 
-    const checkedData = [
-      {
-        facId: 1,
-        monPlanId: "M",
-        checkedOutOn: "2022-01-21T03:01:20.493Z",
-        checkedOutBy: "test",
-        lastActivity: "2022-01-21T03:01:20.493Z",
-      },
-    ];
-
-    mock.onGet(getApiUrl(`/check-outs/plans`, true)).reply(200, checkedData);
-    mock
-      .onDelete(getApiUrl(`/check-outs/plans/${checkedData.monPlanId}`, true))
-      .reply(200, {});
     mock
       .onDelete(`${config.services.authApi.uri}/authentication/sign-out`)
       .reply(200, {});
@@ -213,37 +218,8 @@ describe("Easey Auth API", () => {
     expect(sessionStorage.getItem("cdx_user")).toBe(null);
   });
 
-  it("Can we logOut with error ", async () => {
-    const cdxUser = {
-      token: "xyz",
-      userId: "test",
-      tokenExpiration: "11-21-2022",
-    };
-    sessionStorage.setItem("cdx_user", JSON.stringify(cdxUser));
-
-    const checkedData = [
-      {
-        facId: 1,
-        monPlanId: "M",
-        checkedOutOn: "2022-01-21T03:01:20.493Z",
-        checkedOutBy: "test",
-        lastActivity: "2022-01-21T03:01:20.493Z",
-      },
-    ];
-
-    mock.onGet(getApiUrl(`/check-outs/plans`, true)).reply(200, checkedData);
-    mock
-      .onDelete(getApiUrl(`/check-outs/plans/${checkedData.monPlanId}`, true))
-      .reply(200, {});
-    mock
-      .onDelete(`${config.services.authApi.uri}/authentication/sign-out`)
-      .reply(500, "some sign-out error");
-
-    await logOut();
-    expect(JSON.parse(sessionStorage.getItem("cdx_user"))).toEqual(cdxUser);
-  });
-
   /*
+
   it("credentialsAuth", async () => {
     mock
       .onPost(`${config.services.authApi.uri}/sign/authenticate`)

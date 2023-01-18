@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import config from "../../config";
 import _ from "lodash";
 
-export const EvaluateRefresh = ({ dataList, storedFilters }) => {
+export const EvaluateRefresh = ({ dataList, storedFilters, lastEvalTime }) => {
   const refreshPage = async () => {
     if (storedFilters.current !== null) {
       for (const [key, value] of Object.entries(dataList)) {
@@ -39,7 +39,12 @@ export const EvaluateRefresh = ({ dataList, storedFilters }) => {
             (v) => v["monPlanId"] === r["monPlanId"] && v[rowId] === r[rowId]
           );
 
-          if (rowEntry && rowEntry.evalStatusCode !== r.evalStatusCode) {
+          if (
+            rowEntry &&
+            rowEntry.evalStatusCode !== r.evalStatusCode &&
+            (new Date().getTime() - lastEvalTime.current) / 1000 >
+              config.app.refreshEvalStatusRate / 1000 + 1
+          ) {
             changes++;
             rowEntry.evalStatusCode = r.evalStatusCode;
           }
