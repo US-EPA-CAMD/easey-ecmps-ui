@@ -156,8 +156,16 @@ export const credentialsAuth = async (payload) => {
   });
 };
 
+export const sendPin = async (payload) => {
+  return secureAxios({
+    method: "POST",
+    url: `${config.services.authApi.uri}/sign/send-mobile-code`,
+    data: payload,
+  });
+};
+
 export const verifyChallenge = async (payload) => {
-  return axios({
+  return secureAxios({
     method: "POST",
     url: `${config.services.authApi.uri}/sign/validate`,
     data: payload,

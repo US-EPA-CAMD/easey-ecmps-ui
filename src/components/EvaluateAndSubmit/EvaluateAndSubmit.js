@@ -28,6 +28,8 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
 
   const storedFilters = useRef(null);
 
+  const evalClickedAtTime = useRef(0);
+
   const [activityId, setActivityId] = useState("");
   const [excludeErrors, setExcludeErrors] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -150,6 +152,7 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
   };
 
   const finalSubmission = (callback) => {
+    evalClickedAtTime.current = new Date().getTime();
     setSubmitting(true);
     const activeMPSet = new Set();
     // Compile one master set of monitor plan ids that are being submitted
@@ -344,7 +347,11 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
       </div>
 
       {componentType !== "Submission" && (
-        <EvaluateRefresh dataList={dataList} storedFilters={storedFilters} />
+        <EvaluateRefresh
+          dataList={dataList}
+          storedFilters={storedFilters}
+          lastEvalTime={evalClickedAtTime}
+        />
       )}
 
       {!finalSubmitStage && (

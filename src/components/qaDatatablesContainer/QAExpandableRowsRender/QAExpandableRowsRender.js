@@ -325,7 +325,7 @@ const QAExpandableRowsRender = ({
           />
         );
         case "Unit Default Test": //Unit Default Test Data => Unit Default Test Run
-          const extraIDs = [locationId, id];
+          const extraIds = [locationId, id];
           const unitDefaultTestRunProps = qaUnitDefaultTestRunDataProps();
           return (
             <QAExpandableRowsRender
@@ -336,7 +336,7 @@ const QAExpandableRowsRender = ({
               controlInputs={unitDefaultTestRunProps["controlInputs"]}
               controlDatePickerInputs={unitDefaultTestRunProps["controlDatePickerInputs"]}
               dataTableName={unitDefaultTestRunProps["dataTableName"]}
-              extraIDs={extraIDs}
+              extraIDs={extraIds}
               user={user}
               isCheckedOut={isCheckedOut}
             />
