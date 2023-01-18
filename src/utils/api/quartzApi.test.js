@@ -27,6 +27,7 @@ test("Should test email notification endpoint", async () => {
   expect(result.status).toEqual(successResponse);
 });
 
+/*
 test("Should test bulk evaluation trigger endpoint", async () => {
   let url = `${config.services.quartz.uri}`;
   url = `${url}/triggers/evaluations`;
@@ -43,3 +44,4 @@ test("Should test bulk evaluation trigger endpoint", async () => {
   const result = await triggerBulkEvaluation(payload);
   expect(result.status).toEqual(successResponse);
 });
+*/

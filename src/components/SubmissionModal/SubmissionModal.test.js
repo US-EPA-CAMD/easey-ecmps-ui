@@ -28,6 +28,7 @@ jest.mock("../../utils/api/easeyAuthApi", () => ({
       },
     ],
   }),
+  sendPin: jest.fn(),
 }));
 window.scrollTo = jest.fn();
 
