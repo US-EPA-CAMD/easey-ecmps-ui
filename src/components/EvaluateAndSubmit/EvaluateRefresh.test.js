@@ -36,6 +36,7 @@ describe("EvaluateRefresh Component", () => {
               submissionPeriods: [],
             },
           }}
+          lastEvalTime={{ current: 0 }}
         />
       );
     });
@@ -43,7 +44,7 @@ describe("EvaluateRefresh Component", () => {
 
   it("Fast forward timer and expect mock calls to have been made", async () => {
     await act(async () => {
-      jest.advanceTimersByTime(config.app.refreshEvalStatusRate);
+      await jest.advanceTimersByTime(config.app.refreshEvalStatusRate);
     });
     expect(callFunc).toHaveBeenCalled();
     expect(setState).toHaveBeenCalled();
