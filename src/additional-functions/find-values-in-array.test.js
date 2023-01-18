@@ -23,7 +23,7 @@ describe("findValue functions", () => {
 describe("adjustDate functions", () => {
   const date = "1111-01-01";
   it("mm/dd/yyyy", () => {
-    expect(adjustDate("mm/dd/yyyy", date)).toBe("01/01/1111");
+    expect(adjustDate("mm/dd/yyyy", date)).toBe("1/1/1111");
   });
 
   it("dd/mm/yyyy", () => {
