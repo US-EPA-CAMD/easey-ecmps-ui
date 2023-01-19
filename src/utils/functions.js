@@ -171,17 +171,22 @@ export const displayReport = (monPlanId, reportCode = "MP_EVAL") => {
   );
 };
 
+export const evalStatusesWithLinks = new Set(['PASS', 'INFO', 'ERR']);
 export const addEvalStatusCell = (columns) =>
   columns.map((col) => {
     if (col.name === 'Eval Status') {
-      col.cell = (row) => (
-        <div className={alertStyle(row.evalStatusCode)}>
-          <button
-            className={'hyperlink-btn cursor-pointer'}
-            onClick={() => displayReport(row.monPlanId,'MP_EVAL')}
-          >
-            {row.evalStatusCode}
-          </button>
+      col.cell = ({ evalStatusCode, monPlanId }) => (
+        <div className={alertStyle(evalStatusCode)}>
+          {evalStatusesWithLinks.has(evalStatusCode) ? (
+            <button
+              className={'hyperlink-btn cursor-pointer'}
+              onClick={() => displayReport(monPlanId, 'MP_EVAL')}
+            >
+              {evalStatusCode}
+            </button>
+          ) : (
+            <button className={'unstyled-btn'}>{evalStatusCode}</button>
+          )}
         </div>
       );
     }
