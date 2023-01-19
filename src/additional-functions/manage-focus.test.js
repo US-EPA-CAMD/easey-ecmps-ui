@@ -89,12 +89,19 @@ afterEach(() => {
       removeLastElementFromLastFocusedArray('btn123');
       expect(window.lastFocusedArray.length).toBe(1);
     });
-    it('removes last element if it has the passed in id', () => {
+    it('does not remove last element if it is the only element in the array', () => {
       const buttonElement = document.createElement('button');
       buttonElement.id = 'btn';
       window.lastFocusedArray = [buttonElement];
       removeLastElementFromLastFocusedArray('btn');
-      expect(window.lastFocusedArray.length).toBe(0);
+      expect(window.lastFocusedArray.length).toBe(1);
     });
+    it('removes last element if it is the only element in the array', () => {
+        const buttonElement = document.createElement('button');
+        buttonElement.id = 'btn';
+        window.lastFocusedArray = [buttonElement, buttonElement];
+        removeLastElementFromLastFocusedArray('btn');
+        expect(window.lastFocusedArray.length).toBe(1);
+      });
   });
 });

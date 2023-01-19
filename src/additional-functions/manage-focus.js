@@ -124,7 +124,8 @@ export const addElementToLastFocusedArray = (querySelector) => {
 };
 export const removeLastElementFromLastFocusedArray = (id) => {
   const {lastFocusedArray} = window;
-  if (lastFocusedArray){
+  //keeps last element if it's the only element in array
+  if (lastFocusedArray && lastFocusedArray.length > 1){
     const lastElementInArray = lastFocusedArray[lastFocusedArray.length - 1];
     if (lastElementInArray.id === id){
       lastFocusedArray.pop();
