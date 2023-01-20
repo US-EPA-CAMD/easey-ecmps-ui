@@ -39,6 +39,10 @@ const triggerEvaluationUrl = `${config.services.quartz.uri}/triggers/evaluations
 const getMonitoringPlanByIdUrl = new RegExp(
   `${mpUrl}/plans/export?planId=${idRegex}`
 );
+
+const getMonitoringPlanComments = new RegExp(
+  `${mpUrl}/plans/${idRegex}/comments`
+);
 const revertOfficialRecordUrl = new RegExp(
   `${mpUrl}/workspace/plans/${idRegex}/revert`
 );
@@ -62,6 +66,7 @@ mock
   .onGet(getMonitoringPlanByIdUrl)
   .reply(200, { facId: "testFacId", name: "testName" });
 mock.onDelete(revertOfficialRecordUrl).reply(200, "reverted");
+mock.onGet(getMonitoringPlanComments).reply(200, [{data:'test'}]);
 mock.onGet(getRefreshInfoUrl).reply(200, getRefreshInfoResp);
 mock
   .onGet(getCheckedOutLocationsUrl)
@@ -207,26 +212,16 @@ describe("testing HeaderInfo Emissions Module", () => {
 });
 
 describe("testing HeaderInfo Monitoring Plan Module", () => {
-  // it("should test the view comments button", async () => {
-  //   renderComponent(MONITORING_PLAN_STORE_NAME);
-
-  //   const viewCommentsBtn = await screen.getByRole("button", { name: /View Comments/ });
-  //   expect(viewCommentsBtn).toBeInTheDocument();
-  //   // // open view comments
-    
-  //   // const commentsBtn = await screen.getByRole("button", { name: /View Comments/ });
-  //   // userEvent.click(commentsBtn);
-
-
-  //   //view printout report
-
-  //   const reportBTN = screen.getByRole("button", { name: /View Printout Report/ });
-  //   userEvent.click(reportBTN);
-  // });
-
-  it("should render Locations dropdown", async () => {
+  it("should test the view comments button", async () => {
     renderComponent(MONITORING_PLAN_STORE_NAME);
-    const locationsDropdown = await screen.findByLabelText("Locations");
-    expect(locationsDropdown).toBeInTheDocument();
+
+    const viewCommentsBtn = await screen.findByText(/View Comments/ );
+    expect(viewCommentsBtn).toBeInTheDocument();
+    // // open view comments
+    
+    // const commentsBtn = await screen.getByRole("button", { name: /View Comments/ });
+    userEvent.click(viewCommentsBtn);
+
   });
+
 });
