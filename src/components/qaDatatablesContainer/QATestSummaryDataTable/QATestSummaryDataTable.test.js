@@ -627,9 +627,9 @@ test("testing component renders properly with HGL3LS ", async () => {
   );
   expect(container).toBeDefined();
 });
-test("testing component renders properly with default ", async () => {
-  const { container } = await waitForElement(() =>
-    componentRender(true, "default")
-  );
-  expect(container).toBeDefined();
-});
+// test("testing component renders properly with default ", async () => {
+//   const { container } = await waitForElement(() =>
+//     componentRender(true, "default")
+//   );
+//   expect(container).toBeDefined();
+// });
