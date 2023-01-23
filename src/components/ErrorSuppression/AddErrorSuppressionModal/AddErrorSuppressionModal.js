@@ -18,6 +18,14 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
     const [selectedType, setType] = useState();
     const [selectedFuelType, setSelectedFuelType] = useState([]);
 
+    // Time Criteria
+    const [selectedBeginDate, setSelectedBeginDate] = useState();
+    const [selectedBeginHour, setSelectedBeginHour] = useState();
+    const [selectedEndDate, setSelectedEndDate] = useState();
+    const [selectedEndHour, setSelectedEndHour] = useState();
+
+
+
     const [locationData, setLocationData] = useState([]);
 
     useEffect(() => {
@@ -56,7 +64,7 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
         <div>
             <div className="usa-overlay is-visible"></div>
             <Modal show={showModal} save={saveFunc} exitBTN={"Save and Close"} showSave title={"Add Error Suppression"} close={close}>
-                <GridContainer className='padding-left-0 padding-right-0'>
+                <GridContainer className='margin-left-1'>
                     <Grid row gap={2}>
                         <h3>Check Result</h3>
                     </Grid>
@@ -182,6 +190,34 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
                             >
                                 <option>Coming Soon...</option>
                             </Dropdown>
+                        </Grid>
+                    </Grid>
+                    <Grid row gap={2}>
+                        <h3>Time Criteria</h3>
+                    </Grid>
+                    {/* These time criteria rows will be swapable later on */}
+                    <Grid row gap={2}>
+                        <Grid col={3} >
+                            <div className="margin-left-4">
+                                <Label
+                                    htmlFor="add-begin-date"
+                                    id="add-begin-date"
+                                >
+                                    Begin Date
+                                </Label>
+                                <DatePicker
+                                    aria-labelledby="add-begin-date"
+                                    id="add-begin-date"
+                                    name="add-begin-date"
+                                    value={selectedBeginDate}
+                                />
+                            </div>
+                        </Grid>
+                    </Grid>
+                    <Grid row gap={2}>
+                        <Grid col={10}>
+                            <Label htmlFor="add-notes" id="add-notes-label">Notes</Label>
+                            <TextInput id="add-notes" name="add-notes" type="text" />
                         </Grid>
                     </Grid>
                 </GridContainer>
