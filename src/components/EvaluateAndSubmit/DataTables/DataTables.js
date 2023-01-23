@@ -2,26 +2,9 @@ import React, { useState, useCallback, useMemo } from "react";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TableRender from "../TableRender/TableRender";
-import {
-  monPlanColumns,
-  qaTestSummaryColumns,
-  emissionsColumns,
-  qaCertEventColumns,
-} from "./ColumnMappings";
 
 const DataTables = ({
-  monPlanState,
-  setMonPlanState,
-  monPlanRef,
-  qaTestSumState,
-  setQaTestSumState,
-  qaTestSumRef,
-  qaCertEventState,
-  setQaCertEventState,
-  qaCertEventRef,
-  emissionsState,
-  setEmissionsState,
-  emissionsRef,
+  dataList,
   permissions,
   updateFilesSelected,
   checkedOutLocationsMap,
@@ -37,7 +20,7 @@ const DataTables = ({
       rowStateFunc = getRowStateEvaluate;
     }
 
-    for (const mpR of monPlanRef.current) {
+    for (const mpR of dataList[0].ref.current) {
       if (mpR.monPlanId === id && rowStateFunc(mpR, "MP") === "Checkbox") {
         mpR.selected = selection;
         mpR.userCheckedOut = selection;
@@ -45,7 +28,8 @@ const DataTables = ({
       }
     }
 
-    setMonPlanState([...monPlanRef.current]); //Update monitor plan state
+    dataList[0].setState([...dataList[0].ref.current]);
+
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -58,21 +42,24 @@ const DataTables = ({
       rowStateFunc = getRowStateEvaluate;
     }
 
-    //TODO: Iterate all possible qa tables and select the desired ones
-    for (const qaR of qaTestSumRef.current) {
-      if (
-        qaR.monPlanId === id &&
-        qaR.periodAbbreviation === periodAbr &&
-        rowStateFunc(qaR, "QA") === "Checkbox"
-      ) {
-        qaR.selected = selection;
-        qaR.userCheckedOut = selection;
-        updateFilesSelected(selection);
-      }
-    }
+    const qaData = [dataList[1], dataList[2], dataList[3]];
 
-    setQaTestSumState([...qaTestSumRef.current]); //Update monitor plan state
-    //eslint-disable-next-line react-hooks/exhaustive-deps
+    for (const dataChunk of qaData) {
+      //TODO: Iterate all possible qa tables and select the desired ones
+      for (const qaR of dataChunk.ref.current) {
+        if (
+          qaR.monPlanId === id &&
+          qaR.periodAbbreviation === periodAbr &&
+          rowStateFunc(qaR, "QA") === "Checkbox"
+        ) {
+          qaR.selected = selection;
+          qaR.userCheckedOut = selection;
+          updateFilesSelected(selection);
+        }
+      }
+
+      dataChunk.setState([...dataChunk.ref.current]);
+    }
   }, []);
 
   const getRowStateSubmission = useCallback((row, type) => {
@@ -138,46 +125,8 @@ const DataTables = ({
     } //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const tables = useMemo(
-    () => [
-      {
-        columns: monPlanColumns,
-        state: monPlanState,
-        setState: setMonPlanState,
-        ref: monPlanRef,
-        name: "Monitoring Plan",
-        type: "MP",
-      },
-      {
-        columns: qaTestSummaryColumns,
-        state: qaTestSumState,
-        setState: setQaTestSumState,
-        ref: qaTestSumRef,
-        name: "Test Data",
-        type: "QA",
-      },
-      {
-        columns: qaCertEventColumns,
-        state: qaCertEventState,
-        setState: setQaCertEventState,
-        ref: qaCertEventRef,
-        name: "Cert Event",
-        type: "QA",
-      },
-      {
-        columns: emissionsColumns,
-        state: emissionsState,
-        setState: setEmissionsState,
-        ref: emissionsRef,
-        name: "Emissions",
-        type: "EM",
-      },
-    ], //eslint-disable-next-line react-hooks/exhaustive-deps
-    [monPlanState, qaTestSumState, emissionsState, qaCertEventState]
-  );
-
   const [activeTables, setActiveTables] = useState(
-    tables.reduce((acc, curr) => ({ ...acc, [curr.name]: true }), {})
+    dataList.reduce((acc, curr) => ({ ...acc, [curr.name]: true }), {})
   );
   const showOrHideTable = (name) =>
     setActiveTables({
@@ -187,8 +136,8 @@ const DataTables = ({
 
   return (
     <div>
-      {tables.map((table, i) => {
-        const { name, columns, state, setState, ref, type } = table;
+      {dataList.map((table, i) => {
+        const { name, columns, state, setState, ref, type, rowId } = table;
         return (
           <div className="" key={i}>
             <div className="padding-y-5 display-flex">
@@ -227,6 +176,7 @@ const DataTables = ({
                 type={type}
                 updateMonPlanRow={updateMonPlanRow}
                 updateQARow={updateQARow}
+                rowId={rowId}
                 getRowState={
                   componentType === "Submission"
                     ? getRowStateSubmission

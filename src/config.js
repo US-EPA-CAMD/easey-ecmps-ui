@@ -136,6 +136,7 @@ export const config = {
       uri: getConfigValue(
         "REACT_APP_EASEY_QA_CERTIFICATION_API",
         "https://api.epa.gov/easey/dev/qa-certification-mgmt"
+        //"http://localhost:8070/qa-certification-mgmt"
       ),
     },
     authApi: {

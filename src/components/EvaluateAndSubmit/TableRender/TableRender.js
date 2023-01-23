@@ -22,6 +22,7 @@ import {
   getUpdatedCheckedOutLocations,
 } from "../../../utils/api/monitoringPlansApi";
 import "./TableRender.scss";
+import { el } from "date-fns/locale";
 
 const TableRender = forwardRef(
   (
@@ -37,6 +38,7 @@ const TableRender = forwardRef(
       checkedOutLocationsMap,
       updateFilesSelected,
       checkedOutLocationsInCurrentSessionRef,
+      rowId,
     },
     ref
   ) => {
@@ -137,6 +139,15 @@ const TableRender = forwardRef(
       reportTitle = "ECMPS Monitoring Plan Printout Report";
       url = `/workspace/reports?reportCode=${reportCode}&monitorPlanId=${row.monPlanId}`;
 
+      if (type === "MP") {
+        //Load MP Report
+      } else if (type === "QA") {
+        if (rowId === "testSumId") {
+          // Load Test Summary Report
+        }
+        //etc
+      }
+
       window.open(url, reportTitle, reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -147,16 +158,8 @@ const TableRender = forwardRef(
       if (selection === false) {
         setSelectAllState(false);
       }
-
-      let filterId = "monPlanId"; //Different data types have different uids
-      if (type === "QA") {
-        filterId = "testSumId";
-      } else if (type === "EM") {
-        filterId = "periodAbbreviation";
-      }
-
       for (const r of ref.current) {
-        if (r[filterId] === row[filterId] && r.monPlanId === row.monPlanId) {
+        if (r[rowId] === row[rowId] && r.monPlanId === row.monPlanId) {
           checkInOutLocation(selection, r, updatedCheckedOutLocationsMap);
           updateCheckedOutLocationsRef(
             selection,

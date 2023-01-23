@@ -3,7 +3,11 @@ import {
   checkInAllLocations,
   getMonitoringPlans,
 } from "../../utils/api/monitoringPlansApi";
-import { getQATestSummaryReviewSubmit } from "../../utils/api/qaCertificationsAPI";
+import {
+  getQATestSummaryReviewSubmit,
+  getQACertEventReviewSubmit,
+  getQATeeReviewSubmit,
+} from "../../utils/api/qaCertificationsAPI";
 import { getEmissionsReviewSubmit } from "../../utils/api/emissionsApi";
 import DataTables from "./DataTables/DataTables";
 import SubmissionModal from "../SubmissionModal/SubmissionModal";
@@ -21,6 +25,13 @@ import FilterForm from "./FilterForm/FilterForm";
 import { triggerBulkEvaluation } from "../../utils/api/quartzApi";
 import { EvaluateRefresh } from "./EvaluateRefresh";
 import _ from "lodash";
+import {
+  monPlanColumns,
+  qaTestSummaryColumns,
+  emissionsColumns,
+  qaCertEventColumns,
+  qaTeeColumns,
+} from "./ColumnMappings";
 
 const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
   const [title, setTitle] = useState("Submit");
@@ -44,6 +55,12 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
 
   const [qaTestSummary, setQaTestSummary] = useState([]);
   const qaTestSumRef = useRef([]);
+
+  const [qaCertEvent, setQaCertEvent] = useState([]);
+  const qaCertEventRef = useRef([]);
+
+  const [qaTee, setQaTee] = useState([]);
+  const qaTeeRef = useRef([]);
 
   const [emissions, setEmissions] = useState([]);
   const emissionsRef = useRef([]);
@@ -79,29 +96,58 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
     }
   }, [finalSubmitStage, componentType]);
 
-  const dataList = {
-    monPlan: {
+  const dataList = [
+    {
+      columns: monPlanColumns,
       ref: monPlanRef,
       state: monPlans,
       setState: setMonPlans,
       call: getMonitoringPlans,
       rowId: "monPlanId",
+      name: "Monitoring Plan",
+      type: "MP",
     },
-    qaTest: {
+    {
+      columns: qaTestSummaryColumns,
       ref: qaTestSumRef,
       state: qaTestSummary,
       setState: setQaTestSummary,
       call: getQATestSummaryReviewSubmit,
       rowId: "testSumId",
+      name: "Test Data",
+      type: "QA",
     },
-    emissions: {
+    {
+      columns: qaCertEventColumns,
+      ref: qaCertEventRef,
+      state: qaCertEvent,
+      setState: setQaCertEvent,
+      call: getQACertEventReviewSubmit,
+      rowId: "qaCertEventIdentifier",
+      name: "QA Certification Events",
+      type: "QA",
+    },
+    {
+      columns: qaTeeColumns,
+      ref: qaTeeRef,
+      state: qaTee,
+      setState: setQaTee,
+      call: getQATeeReviewSubmit,
+      rowId: "testExtensionExemptionIdentifier",
+      name: "Test Extension Exemptions Data",
+      type: "QA",
+    },
+    {
+      columns: emissionsColumns,
       ref: emissionsRef,
       state: emissions,
       setState: setEmissions,
       call: getEmissionsReviewSubmit,
       rowId: "periodAbbreviation",
+      name: "Emissions",
+      type: "EM",
     },
-  };
+  ];
 
   const idToPermissionsMap = useRef([]);
   useEffect(() => {
@@ -141,7 +187,7 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
 
     setFinalSubmitStage(true);
 
-    for (const [key, value] of Object.entries(dataList)) {
+    for (const value of dataList) {
       const { ref, setState } = value;
       ref.current = ref.current.filter((d) => d.selected);
       for (const item of ref.current) {
@@ -156,7 +202,7 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
     setSubmitting(true);
     const activeMPSet = new Set();
     // Compile one master set of monitor plan ids that are being submitted
-    for (const [key, value] of Object.entries(dataList)) {
+    for (const value of dataList) {
       const { ref, setState } = value;
       for (const chunk of ref.current) {
         if (chunk.selected) {
@@ -246,26 +292,18 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
 
     //TODO: Refactor this to use DataList
     checkInAllLocations(checkedOutLocationsInCurrentSessionRef.current);
-    const dataToSetMap = {
-      //Contains data fetch, state setter, and ref for each of the 5 categories
-      MP: [getMonitoringPlans, setMonPlans, monPlanRef],
-      QA_TEST_SUMMARY: [
-        getQATestSummaryReviewSubmit,
-        setQaTestSummary,
-        qaTestSumRef,
-      ],
-      EMISSIONS: [getEmissionsReviewSubmit, setEmissions, emissionsRef],
-    };
 
     let activePlans = new Set();
-    for (const [key, value] of Object.entries(dataToSetMap)) {
+    for (const value of dataList) {
+      const { ref, setState, call, type } = value;
+
       let data;
 
-      if (key !== "MP") {
+      if (type !== "MP") {
         //Filter emissions by quarter as well
-        data = (await value[0](orisCodes, monPlanIds, submissionPeriods)).data;
+        data = (await call(orisCodes, monPlanIds, submissionPeriods)).data;
       } else {
-        data = (await value[0](orisCodes, monPlanIds)).data;
+        data = (await call(orisCodes, monPlanIds)).data;
       }
 
       // Extra formatting to make all data sets uniform
@@ -278,6 +316,8 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
           r.submissionAvailabilityCode = r["submissionCode"];
         }
       }
+
+      console.log(data);
 
       data = data.map((chunk) => {
         //Add selector state variables
@@ -298,7 +338,7 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
         };
       });
 
-      if (key === "MP") {
+      if (type === "MP") {
         data = data.filter((mpd) => mpd.active);
         activePlans = new Set(data.map((d) => d.monPlanId));
       } else {
@@ -310,14 +350,14 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
         data = data.filter((mpd) => mpd.evalStatusCode !== "ERR");
       }
 
-      value[2].current = data; //Set ref and state [ref drives logic, state drives ui updates]
-      value[1](data);
+      ref.current = data; //Set ref and state [ref drives logic, state drives ui updates]
+      setState(data);
     }
   };
 
   const getSelectedMPIds = () => {
     const monPlanIds = new Set();
-    for (const [key, value] of Object.entries(dataList)) {
+    for (const value of dataList) {
       const { ref } = value;
       for (const chunk of ref.current) {
         if (chunk.selected) {
@@ -368,15 +408,7 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
       )}
 
       <DataTables
-        monPlanState={monPlans}
-        setMonPlanState={setMonPlans}
-        monPlanRef={monPlanRef}
-        qaTestSumState={qaTestSummary}
-        setQaTestSumState={setQaTestSummary}
-        qaTestSumRef={qaTestSumRef}
-        emissionsState={emissions}
-        setEmissionsState={setEmissions}
-        emissionsRef={emissionsRef}
+        dataList={dataList}
         permissions={idToPermissionsMap} //Map of oris codes to user permissions
         updateFilesSelected={updateFilesSelected}
         componentType={componentType}
