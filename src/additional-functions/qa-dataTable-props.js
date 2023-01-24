@@ -1,3 +1,5 @@
+import { Restaurant } from "@material-ui/icons";
+
 export const qaProtocalGasProps = (selectedRow) => {
   return {
     dataTableName: "Protocol Gas",
@@ -1126,5 +1128,66 @@ export const qaHgInjectionDataProps = () => {
       referenceValue: ["Reference Value", "input", "", ""],
       skip: ["", "skip", "", ""],
     },
+  };
+};
+
+export const qaCertEventsProps = (selectedLocation) => {
+  const result = {
+    dataTableName: "QA Certification Event",
+    payload: {},
+    dropdownArray: [
+      [
+        'componentID',
+        'monitoringSystemID',
+        'qaCertEventCode',
+        'requiredTestCode',
+      ],
+    ],
+    columns: [
+      "Unit or Stack Pipe ID",
+      "Component ID",
+      "Monitoring System ID",
+      "QA Cert Event Code",
+      "QA Cert Event Date",
+      "QA Cert Event Hour",
+      "Required Test Code",
+      "Conditional Begin Date",
+      "Conditional Begin Hour",
+      "Completion Test Date",
+      "Completion Test Hour",
+    ],
+    controlInputs: {
+      //locId:["Unit or Stack Pipe ID", "input", "", ""],
+      monitoringSystemID : ["Monitoring System ID", "nonFilteredDropdown", "", ""],
+      componentID : ["Component ID", "nonFilteredDropdown", "", ""],
+      qaCertEventCode: ["QA Cert Event Code", "dropdown","",""],
+      requiredTestCode: ["Required Test Code", "dropdown","",""],
+
+    },
+    controlDatePickerInputs: {
+      qaCertEventDate: ["QA Cert Event Date", "date", "", ""],
+      qaCertEventHour: ["QA Cert Event Hour", "hourDropdown", "dropdown", ""],
+      conditionalBeginDate: ["Conditional Begin Date", "date", "", ""],
+      conditionalBeginHour: ["Conditional Begin Hour", "hourDropdown", "dropdown", ""],
+      completionTestDate: ["Completion Test Date", "date", "", ""],
+      completionTestHour: ["Completion Test Hour", "hourDropdown", "dropdown", ""],
+      skip: ["", "skip", "", ""],
+    },
+    extraControlInputs:{}
+  };
+  const locId = selectedLocation.unitId ? 'unitId' : 'stackPipeId';
+  result.controlInputs[locId] = ["Unit or Stack Pipe ID", "input", "", ""];
+  return result;
+};
+
+export const qaTestExemptionProps = (selectedLocation) => {
+  return {
+    dataTableName: "QA Test Exemption",
+    payload: {},
+    dropdownArray: [],
+    columns: [ ],
+    controlInputs: {},
+    controlDatePickerInputs: {},
+    extraControlInputs:{}
   };
 };
