@@ -232,8 +232,8 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
                                 value={selectedBeginHour}
                                 className="width-10"
                             >
-                                {hoursInADay.map((h) =>
-                                    <option>{h}</option>
+                                {hoursInADay.map((h, i) =>
+                                    <option key={i}>{h}</option>
                                 )}
                             </Dropdown>
 
@@ -264,8 +264,8 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
                                 value={selectedEndHour}
                                 className="width-10"
                             >
-                                {hoursInADay.map((h) =>
-                                    <option>{h}</option>
+                                {hoursInADay.map((h, i) =>
+                                    <option key={i}>{h}</option>
                                 )}
                             </Dropdown>
                         </Grid>
@@ -317,8 +317,8 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
                                 data-testid={"add-begin-quarter"}
                                 value={selectedBeginQuarter}
                             >
-                                {yearQuarters.map((yearquarter) =>
-                                    <option>{yearquarter}</option>
+                                {yearQuarters.map((yearquarter, i) =>
+                                    <option key={i}>{yearquarter}</option>
                                 )}
                             </Dropdown>
                         </Grid>
@@ -333,8 +333,8 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
                                 data-testid={"add-end-quarter"}
                                 value={selectedEndQuarter}
                             >
-                                {yearQuarters.map((yearquarter) =>
-                                    <option>{yearquarter}</option>
+                                {yearQuarters.map((yearquarter, i) =>
+                                    <option key={i}>{yearquarter}</option>
                                 )}
                             </Dropdown>
                         </Grid>
