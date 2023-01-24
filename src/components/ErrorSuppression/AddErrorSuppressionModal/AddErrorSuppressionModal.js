@@ -177,7 +177,7 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
                         <Grid col={5}>
                             <MultiSelectCombobox
                                 items={locationData}
-                                label="Location Name"
+                                label="Locations"
                                 entity="locationName"
                                 searchBy="contains"
                                 onChangeUpdate={onChangeOfLocationMultiSelect}
