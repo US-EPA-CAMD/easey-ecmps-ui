@@ -909,8 +909,7 @@ export const getLocationAttributes = async (locationId) => {
 };
 
 export const getRelationshipData = async (locationId) => {
-  // the non workspace api get endpoint is wrongly labeled in swagger, only the workspace is working but it is uneditable
-  const url = getApiUrl(`/locations/${locationId}/relationships`, true);
+  const url = getApiUrl(`/locations/${locationId}/relationships`);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 

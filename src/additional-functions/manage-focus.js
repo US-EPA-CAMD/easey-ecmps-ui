@@ -67,11 +67,13 @@ export const cleanupFocusEventListeners = () => {
 
 export const returnFocusToLast = () => {
   if (!_.isNil(window["lastFocusedArray"])) {
+    removeStopSpinnerButtonFromLastFocusedArray();
     const lastFocus =
       window["lastFocusedArray"][window["lastFocusedArray"].length - 1];
     let counter = 0;
     if (lastFocus && lastFocus.id) {
-      const selectedFocus = document.querySelector(`#${lastFocus.id}`);
+      //using the last focus element instead of re-selecting it because there are sometimes multiple tab buttons with the same id
+      const selectedFocus = lastFocus.id === 'tabBtn'? lastFocus :  document.querySelector(`#${lastFocus.id}`);
 
       // counter is trivial number, can be 1.
       while (document.activeElement !== selectedFocus && counter < 5) {
@@ -120,3 +122,15 @@ export const addElementToLastFocusedArray = (querySelector) => {
     lastFocusedArray.push(element);
   }
 };
+export const removeLastElementFromLastFocusedArray = (id) => {
+  const {lastFocusedArray} = window;
+  //keeps last element if it's the only element in array
+  if (lastFocusedArray && lastFocusedArray.length > 1){
+    const lastElementInArray = lastFocusedArray[lastFocusedArray.length - 1];
+    if (lastElementInArray.id === id){
+      lastFocusedArray.pop();
+    }
+  }
+};
+
+export const removeStopSpinnerButtonFromLastFocusedArray = () => removeLastElementFromLastFocusedArray('btnStopAnimation');

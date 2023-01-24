@@ -869,6 +869,8 @@ export const HeaderInfo = ({
 
   const handleExport = () => {
     if (workspaceSection === EMISSIONS_STORE_NAME) handleEmissionsExport();
+    if (workspaceSection === MONITORING_PLAN_STORE_NAME)
+      mpApi.exportMonitoringPlanDownload(configID);
   };
 
   const onChangeOfEmissionsImportType = (e) => {
