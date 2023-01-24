@@ -1,16 +1,62 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TableRender from "../TableRender/TableRender";
+import { checkoutAPI } from "../../../additional-functions/checkout";
 
 const DataTables = ({
   dataList,
   permissions,
   updateFilesSelected,
-  checkedOutLocationsMap,
   componentType,
-  checkedOutLocationsInCurrentSessionRef,
+  monitorPlanIdToSelectedMap,
+  userCheckedOutPlans,
 }) => {
+  const selectRow = (row, bool, tableType) => {
+    //TODO: Flip QA and MP Records if possible
+    updateFilesSelected(bool);
+    row.selected = bool;
+    row.userCheckedOut = bool;
+    row.checkedOut = bool;
+
+    // Change the amount of the stored monitor plan selections
+    if (bool) {
+      if (monitorPlanIdToSelectedMap.current.has(row.monPlanId)) {
+        //The map associated monPlanIds to {facId, count} facId is needed in checkout process that uses the map to check records back in
+        monitorPlanIdToSelectedMap.current.set(row.monPlanId, [
+          monitorPlanIdToSelectedMap.current.get(row.monPlanId)[0],
+          monitorPlanIdToSelectedMap.current.get(row.monPlanId)[1] + 1,
+        ]);
+      } else {
+        monitorPlanIdToSelectedMap.current.set(row.monPlanId, [
+          row.facilityId,
+          1,
+        ]);
+      }
+      if (
+        monitorPlanIdToSelectedMap.current.get(row.monPlanId)[1] === 1 &&
+        !userCheckedOutPlans.current.has(row.monPlanId)
+      ) {
+        checkoutAPI(true, row.facilityId, row.monPlanId);
+      }
+
+      if (tableType === "QA") {
+        updateMonPlanRow(row.monPlanId, bool);
+      } else if (tableType === "EM") {
+        updateMonPlanRow(row.monPlanId, bool);
+        updateQARow(row.monPlanId, row.periodAbbreviation, bool);
+      }
+    } else {
+      monitorPlanIdToSelectedMap.current.set(row.monPlanId, [
+        monitorPlanIdToSelectedMap.current.get(row.monPlanId)[0],
+        monitorPlanIdToSelectedMap.current.get(row.monPlanId)[1] - 1,
+      ]);
+      if (monitorPlanIdToSelectedMap.current.get(row.monPlanId)[1] === 0) {
+        checkoutAPI(false, row.facilityId, row.monPlanId);
+      }
+    }
+  };
+
   const updateMonPlanRow = useCallback((id, selection) => {
     let rowStateFunc;
 
@@ -21,10 +67,12 @@ const DataTables = ({
     }
 
     for (const mpR of dataList[0].ref.current) {
-      if (mpR.monPlanId === id && rowStateFunc(mpR, "MP") === "Checkbox") {
-        mpR.selected = selection;
-        mpR.userCheckedOut = selection;
-        updateFilesSelected(selection);
+      if (
+        mpR.monPlanId === id &&
+        rowStateFunc(mpR, "MP") === "Checkbox" &&
+        mpR.selected !== selection
+      ) {
+        selectRow(mpR, selection, "MP");
       }
     }
 
@@ -50,11 +98,10 @@ const DataTables = ({
         if (
           qaR.monPlanId === id &&
           qaR.periodAbbreviation === periodAbr &&
-          rowStateFunc(qaR, "QA") === "Checkbox"
+          rowStateFunc(qaR, "QA") === "Checkbox" &&
+          qaR.selected !== selection
         ) {
-          qaR.selected = selection;
-          qaR.userCheckedOut = selection;
-          updateFilesSelected(selection);
+          selectRow(qaR, selection, "NONRECUR"); //Set to nonrecur so we don't iterate monitor plans for every qa record change
         }
       }
 
@@ -182,11 +229,8 @@ const DataTables = ({
                     ? getRowStateSubmission
                     : getRowStateEvaluate
                 }
+                selectRow={selectRow}
                 updateFilesSelected={updateFilesSelected}
-                checkedOutLocationsMap={checkedOutLocationsMap}
-                checkedOutLocationsInCurrentSessionRef={
-                  checkedOutLocationsInCurrentSessionRef
-                }
               />
             </div>
           </div>

@@ -1,6 +1,5 @@
 import { ArrowDownwardSharp } from "@material-ui/icons";
 import React, { forwardRef, useEffect, useState, useCallback } from "react";
-import { useDispatch } from "react-redux";
 import DataTable from "react-data-table-component";
 import {
   addScreenReaderLabelForCollapses,
@@ -21,27 +20,11 @@ import {
   checkInOutLocation,
   getUpdatedCheckedOutLocations,
 } from "../../../utils/api/monitoringPlansApi";
+
 import "./TableRender.scss";
-import { el } from "date-fns/locale";
 
 const TableRender = forwardRef(
-  (
-    {
-      columns,
-      state,
-      setState,
-      name,
-      type,
-      updateMonPlanRow,
-      updateQARow,
-      getRowState,
-      checkedOutLocationsMap,
-      updateFilesSelected,
-      checkedOutLocationsInCurrentSessionRef,
-      rowId,
-    },
-    ref
-  ) => {
+  ({ columns, state, type, getRowState, rowId, selectRow }, ref) => {
     const reportWindowParams = [
       // eslint-disable-next-line no-restricted-globals
       `height=${screen.height}`,
@@ -52,7 +35,6 @@ const TableRender = forwardRef(
 
     const [selectAllState, setSelectAllState] = useState(false);
     const [selectAllVisible, setSelectAllVisible] = useState(true);
-    const dispatch = useDispatch();
 
     useEffect(() => {
       setTimeout(() => {
@@ -65,69 +47,29 @@ const TableRender = forwardRef(
       };
     }, []);
 
-    const handleSelectAll = useCallback(async () => {
-      const updatedCheckedOutLocationsMap = await getUpdatedCheckedOutLocations(
-        dispatch
-      );
-      selectAll(!selectAllState, updatedCheckedOutLocationsMap);
-      setSelectAllState(!selectAllState); //eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectAllState]);
-    const mappings = [
-      {
-        name: (
-          <div className="margin-bottom-5">
-            {selectAllVisible && (
-              <Checkbox
-                className=" margin-left-4"
-                id={`${uuidv4()}`}
-                data-testid="SelectAll"
-                onClick={handleSelectAll}
-                defaultChecked={selectAllState}
-              />
-            )}
-          </div>
-        ),
-        cell: (row) => (
-          <ReviewCell
-            row={row}
-            handleRowSelection={handleRowSelection}
-            handleRowView={handleRowView}
-            type={type}
-            getRowState={getRowState}
-            setSelectAllState={setSelectAllState}
-            setSelectAllVisible={setSelectAllVisible}
-          />
-        ),
-        width: "100px",
-        button: true,
-      },
-      ...columns,
-    ];
+    const selectAll = () => {
+      const bool = !selectAllState;
+      setSelectAllState(bool);
 
-    addEvalStatusCell(mappings);
-
-    const selectAll = useCallback((bool, map) => {
       for (const r of ref.current) {
-        if (getRowState(r, type) === "Checkbox") {
-          //Logic to see if row can actually be checked out
-          checkInOutLocation(bool, r, map);
-          updateCheckedOutLocationsRef(
-            bool,
-            r,
-            checkedOutLocationsInCurrentSessionRef
-          );
-          updateCurrentRow(bool, r);
-          updateFilesSelected(bool);
-          updateCorrespondingMPAndQARow({
-            r,
-            type,
-            updateMonPlanRow,
-            updateQARow,
-            selection: bool,
-          });
+        if (getRowState(r, type) === "Checkbox" && r.selected !== bool) {
+          //Multithread this portion out
+          selectRow(r, bool, type);
         }
-      } //eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+      }
+    };
+
+    const selectIndividual = (row, type, selection) => {
+      if (selection === false) {
+        setSelectAllState(false);
+      }
+
+      for (const r of ref.current) {
+        if (r[rowId] === row[rowId] && r.monPlanId === row.monPlanId) {
+          selectRow(r, selection, type);
+        }
+      }
+    };
 
     const handleRowView = useCallback((row) => {
       let reportTitle;
@@ -151,33 +93,38 @@ const TableRender = forwardRef(
       window.open(url, reportTitle, reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleRowSelection = useCallback(async (row, type, selection) => {
-      const updatedCheckedOutLocationsMap = await getUpdatedCheckedOutLocations(
-        dispatch
-      );
-      if (selection === false) {
-        setSelectAllState(false);
-      }
-      for (const r of ref.current) {
-        if (r[rowId] === row[rowId] && r.monPlanId === row.monPlanId) {
-          checkInOutLocation(selection, r, updatedCheckedOutLocationsMap);
-          updateCheckedOutLocationsRef(
-            selection,
-            r,
-            checkedOutLocationsInCurrentSessionRef
-          );
-          updateCurrentRow(selection, r);
-          updateFilesSelected(selection);
-          updateCorrespondingMPAndQARow({
-            r,
-            type,
-            updateMonPlanRow,
-            updateQARow,
-            selection,
-          });
-        }
-      } //eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const mappings = [
+      {
+        name: (
+          <div className="margin-bottom-5">
+            {selectAllVisible && (
+              <Checkbox
+                className=" margin-left-4"
+                id={`${uuidv4()}`}
+                data-testid="SelectAll"
+                onClick={selectAll}
+                defaultChecked={selectAllState}
+              />
+            )}
+          </div>
+        ),
+        cell: (row) => (
+          <ReviewCell
+            row={row}
+            handleRowSelection={selectIndividual}
+            handleRowView={handleRowView}
+            type={type}
+            getRowState={getRowState}
+            setSelectAllState={setSelectAllState}
+            setSelectAllVisible={setSelectAllVisible}
+          />
+        ),
+        width: "100px",
+        button: true,
+      },
+      ...columns,
+    ];
+    addEvalStatusCell(mappings);
 
     return (
       <div>

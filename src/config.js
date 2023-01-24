@@ -123,7 +123,8 @@ export const config = {
     emissions: {
       uri: getConfigValue(
         "REACT_APP_EASEY_EMISSIONS_API",
-        "https://api.epa.gov/easey/dev/emissions-mgmt"
+        //"https://api.epa.gov/easey/dev/emissions-mgmt",
+        "http://localhost:8040/emissions-mgmt"
       ),
     },
     monitorPlans: {
@@ -135,8 +136,8 @@ export const config = {
     qaCertification: {
       uri: getConfigValue(
         "REACT_APP_EASEY_QA_CERTIFICATION_API",
-        "https://api.epa.gov/easey/dev/qa-certification-mgmt"
-        //"http://localhost:8070/qa-certification-mgmt"
+        //"https://api.epa.gov/easey/dev/qa-certification-mgmt"
+        "http://localhost:8070/qa-certification-mgmt"
       ),
     },
     authApi: {
