@@ -74,7 +74,7 @@ export const generateArrayOfYears = (min) => {
   return years;
 };
 
-const getReportingPeriods = (minYear = 2009) => {
+export const getReportingPeriods = (minYear = 2009) => {
   const quarters = [4, 3, 2, 1];
   const maxYear = new Date().getFullYear();
   const reportingPeriods = [];
@@ -869,6 +869,8 @@ export const HeaderInfo = ({
 
   const handleExport = () => {
     if (workspaceSection === EMISSIONS_STORE_NAME) handleEmissionsExport();
+    if (workspaceSection === MONITORING_PLAN_STORE_NAME)
+      mpApi.exportMonitoringPlanDownload(configID);
   };
 
   const onChangeOfEmissionsImportType = (e) => {
