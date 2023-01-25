@@ -2101,3 +2101,9 @@ export const createQaCertEvents = async (locId, payload) => {
     return handleImportError(error);
   }
 };
+
+export const getTestExtension = async (locId) => {
+  const path = `/locations/${locId}/test-extension-exemptions`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
