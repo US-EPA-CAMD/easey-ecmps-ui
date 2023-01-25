@@ -149,7 +149,9 @@ const QACertEventTestExmpDataTable = ({
           setMdmData(dropdowns);
           setDropdownsLoaded(true);
           setDropdownsLoading(false);
-        });  
+        }).catch((error) => {
+          console.log(`error fetching dropdown items for ${dataTableName} `, error);
+        }); 
         break;
       default:
         setMdmData(null);
