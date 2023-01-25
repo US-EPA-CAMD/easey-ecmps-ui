@@ -1176,7 +1176,8 @@ export const qaCertEventsProps = (selectedLocation) => {
     extraControlInputs:{}
   };
   const locId = selectedLocation.unitId ? 'unitId' : 'stackPipeId';
-  result.controlInputs[locId] = ["Unit or Stack Pipe ID", "input", "", ""];
+  result.controlInputs = {[locId] :["Unit or Stack Pipe ID", "input", "", ""], ...result.controlInputs };
+  //result.controlInputs[locId] = ["Unit or Stack Pipe ID", "input", "", ""];
   return result;
 };
 
