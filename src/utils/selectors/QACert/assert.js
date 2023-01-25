@@ -34,6 +34,7 @@ const unitDefualtTest = "Unit Default Test";
 const unitDefaultTestRun = "Unit Default Test Run";
 const hgSummary = "Hg Summary";
 const hgInjection = "Hg Injection";
+const qaCertEvent = "QA Certification Event";
 
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
@@ -216,6 +217,12 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
     case hgInjection:
       return qaApi
         .getHgInjection(extraIdsArr[0], extraIdsArr[1], id)
+        .catch((error) =>
+          console.log("error fetching hg injection data", error)
+        );
+    case qaCertEvent:
+      return qaApi
+        .getQaCertEvents(location)
         .catch((error) =>
           console.log("error fetching hg injection data", error)
         );
@@ -944,6 +951,8 @@ export const createDataSwitch = async (
         id,
         userInput
       );
+    case qaCertEvent:
+      return qaApi.createQaCertEvents(location, userInput)
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
   }
