@@ -2,13 +2,34 @@ import React, { useContext, useEffect, useState, } from "react";
 import { GridContainer, Grid, Label, Dropdown, Checkbox, DatePicker, ButtonGroup, Button } from "@trussworks/react-uswds";
 import { ErrorSuppressionFiltersContext } from "../error-suppression-context";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
+import { getCheckCatalogResults } from "../../../utils/api/mdmApi";
+
+export const transformCheckResultData = (data)=>{
+    return data.reduce((acc, cv)=>{
+        if( !acc[cv.checkTypeCode] ){
+            acc[cv.checkTypeCode]={};
+        }
+
+        if(!acc[cv.checkTypeCode][cv.checkNumber]){
+            acc[cv.checkTypeCode][cv.checkNumber] = [cv];
+        } else{
+            acc[cv.checkTypeCode][cv.checkNumber]
+            .push(cv)
+        }
+
+        return acc;
+    }, {});
+}
 
 export const ErrorSuppressionFilters = () => {
 
     const ctxFilters = useContext(ErrorSuppressionFiltersContext);
 
+    const [checkTypeList, setCheckTypeList] = useState([]);
     const [selectedCheckType, setSelectedCheckType] = useState();
+    const [checkNumberList, setCheckNumberList] = useState([]);
     const [selectedCheckNumber, setSelectedCheckNumber] = useState();
+    const [checkResultList, setCheckResultList] = useState([]);
     const [selectedCheckResult, setSelectedCheckResult] = useState();
     const [selectedFacility, setSelectedFacility] = useState();
     const [selectedLocations, setSelectedLocations] = useState([]);
@@ -16,9 +37,20 @@ export const ErrorSuppressionFilters = () => {
     const [selectedReason, setSelectedReason] = useState();
     const [selectedAddDateAfter, setSelectedAddDateAfter] = useState();
     const [selectedAddDateBefore, setSelectedAddDateBefore] = useState();
-
     const [locationData, setLocationData] = useState([]);
+
+    const [transformedData, setTransformedData] = useState([])
+
+
+    const defaultDropdownText = "-- Select a value --";
+
     useEffect(()=>{
+
+        getCheckCatalogResults().then(({data})=>{
+            const _transformedData = transformCheckResultData(data);
+            setCheckTypeList(Object.keys(_transformedData));
+            setTransformedData(_transformedData);
+        })
 
         setLocationData([
             {
@@ -27,7 +59,12 @@ export const ErrorSuppressionFilters = () => {
                 selected: false,
                 enabled: true,
             }
-        ])
+        ]);
+
+        return ()=>{
+            setCheckTypeList([])
+            setTransformedData([])
+        }
     }, []);    
 
     const onChangeOfLocationMultiSelect = (id, changeType)=>{
@@ -46,6 +83,29 @@ export const ErrorSuppressionFilters = () => {
             return;
     }
 
+    const onCheckTypeChange = (e)=>{
+        const {value} = e.target;
+        setSelectedCheckType(value);
+        setSelectedCheckNumber(false);
+        setSelectedCheckResult(false);
+
+        if( value === false )
+            return;
+
+        setCheckNumberList(Object.keys(transformedData[value]))
+    }
+
+    const onCheckNumberChange = (e) =>{
+        const {value} = e.target;
+        setSelectedCheckNumber(value);
+        setSelectedCheckResult(false);
+
+        if( value=== false )
+            return;
+
+        setCheckResultList(transformedData[selectedCheckType][value].map(d=>d.checkResult))
+    }
+
     return (
         <GridContainer className='padding-left-0 margin-left-0 padding-right-0'>
             <Grid row>
@@ -62,8 +122,10 @@ export const ErrorSuppressionFilters = () => {
                         epa-testid={"check-type"}
                         data-testid={"check-type"}
                         value={selectedCheckType}
+                        onChange={onCheckTypeChange} 
                     >
-                        <option>Coming Soon...</option>
+                        <option value={false}>{defaultDropdownText}</option>
+                        {checkTypeList.map((d)=> <option key={d} value={d} data-testid={d}>{d}</option>)}
                     </Dropdown>
                 </Grid>
                 <Grid col={2}>
@@ -77,8 +139,10 @@ export const ErrorSuppressionFilters = () => {
                             epa-testid={"check-number"}
                             data-testid={"check-number"}
                             value={selectedCheckNumber}
+                            onChange={onCheckNumberChange}
                         >
-                            <option>Coming Soon...</option>
+                            <option value={false}>{defaultDropdownText}</option>
+                            {checkNumberList.map((d)=> <option key={d} value={d} data-testid={d}>{d}</option>)}
                         </Dropdown>
                     </div>
                 </Grid>
@@ -94,8 +158,10 @@ export const ErrorSuppressionFilters = () => {
                         epa-testid={"check-result"}
                         data-testid={"check-result"}
                         value={selectedCheckResult}
+                        onChange={(e)=>setSelectedCheckResult(e.target.value)}
                     >
-                        <option>Coming Soon...</option>
+                        <option value={false}>{defaultDropdownText}</option>
+                        {checkResultList.map((d)=> <option key={d} value={d} data-testid={d}>{d}</option>)}
                     </Dropdown>
                 </Grid>
             </Grid>
