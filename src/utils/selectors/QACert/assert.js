@@ -226,6 +226,13 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
         .catch((error) =>
           console.log("error fetching hg injection data", error)
         );
+
+    case qaExeptions:
+      return qaApi
+        .getQaCertEvents(location)
+        .catch((error) =>
+          console.log("error fetching hg injection data", error)
+        );
     default:
       throw new Error(`getDataTableApis case not implemented for ${name}`);
   }
@@ -952,7 +959,7 @@ export const createDataSwitch = async (
         userInput
       );
     case qaCertEvent:
-      return qaApi.createQaCertEvents(location, userInput)
+      return qaApi.createQaCertEvents(location, userInput);
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
   }
