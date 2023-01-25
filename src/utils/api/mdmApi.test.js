@@ -1,17 +1,47 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { getReportingPeriods } from "./mdmApi";
+import { getReportingPeriods, getCheckCatalogResults } from "./mdmApi";
 import config from "../../config";
 
-test("Should fetch reporting periods from mdm API", async () => {
-  const mock = new MockAdapter(axios);
 
-  mock.onGet(`${config.services.mdm.uri}/reporting-periods`).reply(200, [
-    {
-      id: 1,
-    },
-  ]);
+describe("MDM Api Test", ()=>{
 
-  const result = await getReportingPeriods();
-  expect(result["data"][0].id).toEqual(1);
-});
+  let mock;
+
+  beforeAll(()=>{
+    mock = new MockAdapter(axios);
+  })
+
+  test("Should fetch reporting periods from mdm API", async () => {
+
+    mock.onGet(`${config.services.mdm.uri}/reporting-periods`).reply(200, [
+      {
+        id: 1,
+      },
+    ]);
+  
+    const result = await getReportingPeriods();
+    expect(result["data"][0].id).toEqual(1);
+  });
+  
+  test("Should get the mdm es catalog results", async () => {
+    mock.onGet(`${config.services.mdm.uri}/es-check-catalog-results`).reply(200, [
+      {
+        "id": "5003",
+        "checkTypeCode": "ADESTAT",
+        "checkTypeDescription": "Appendix D and E Status",
+        "checkNumber": "6",
+        "checkResult": "Accuracy Test Not Yet Evaluated",
+        "locationTypeCode": "LOC",
+        "timeTypeCode": "HOUR",
+        "dataTypeCode": "FUELTYP",
+        "dataTypeLabel": "Fuel Type",
+        "dataTypeUrl": "/master-data-mgmt/fuel-type-codes"
+      },
+    ]);
+  
+    const result = await getCheckCatalogResults();
+    expect(result.data[0].id).toEqual("5003")
+  })
+  
+})
