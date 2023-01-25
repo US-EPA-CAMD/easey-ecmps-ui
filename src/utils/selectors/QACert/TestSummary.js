@@ -650,6 +650,7 @@ export const mapQaCertEventsDataToRows = (data) => {
   return records;
 }
 
+
 export const getListOfRadioControls = (controlInputs) => {
   const result = [];
   const keys = Object.keys(controlInputs);
