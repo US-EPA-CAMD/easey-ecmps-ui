@@ -1,35 +1,41 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from "react";
 
+import { createQaCertEvents } from "../../../utils/api/qaCertificationsAPI.js";
 import {
-  createQaCertEvents,
-} from '../../../utils/api/qaCertificationsAPI.js';
-import { mapQaCertEventsDataToRows } from '../../../utils/selectors/QACert/TestSummary.js';
-import Modal from '../../Modal/Modal';
-import ModalDetails from '../../ModalDetails/ModalDetails';
-import { extractUserInput } from '../../../additional-functions/extract-user-input';
-import { modalViewData } from '../../../additional-functions/create-modal-input-controls';
+  mapQaCertEventsDataToRows,
+  mapQaExtensionsExemptionsDataToRows,
+} from "../../../utils/selectors/QACert/TestSummary.js";
+import Modal from "../../Modal/Modal";
+import ModalDetails from "../../ModalDetails/ModalDetails";
+import { extractUserInput } from "../../../additional-functions/extract-user-input";
+import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
+import {
+  generateArrayOfYears,
+  getReportingPeriods,
+} from "../../HeaderInfo/HeaderInfo";
 import {
   qaCertEventsProps,
-  qaTestExemptionProps
-} from '../../../additional-functions/qa-dataTable-props';
+  qaTestExemptionProps,
+} from "../../../additional-functions/qa-dataTable-props";
 import {
   attachChangeEventListeners,
   removeChangeEventListeners,
   unsavedDataMessage,
-} from '../../../additional-functions/prompt-to-save-unsaved-changes';
+} from "../../../additional-functions/prompt-to-save-unsaved-changes";
 
 /*********** COMPONENTS ***********/
 
-import QADataTableRender from '../../QADataTableRender/QADataTableRender.js';
-import { Button } from '@trussworks/react-uswds';
-import { Preloader } from '@us-epa-camd/easey-design-system';
-import * as dmApi from '../../../utils/api/dataManagementApi';
-import * as mpApi from '../../../utils/api/monitoringPlansApi.js';
+import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
+import { Button } from "@trussworks/react-uswds";
+import { Preloader } from "@us-epa-camd/easey-design-system";
+import * as dmApi from "../../../utils/api/dataManagementApi";
+import * as mpApi from "../../../utils/api/monitoringPlansApi.js";
 import * as assertSelector from "../../../utils/selectors/QACert/assert";
+
 import {
   returnsFocusDatatableViewBTN,
   returnsFocusToAddBtn,
-} from '../../../additional-functions/ensure-508.js';
+} from "../../../additional-functions/ensure-508.js";
 
 // contains test summary data table
 
@@ -54,19 +60,34 @@ const QACertEventTestExmpDataTable = ({
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
   const [createdId, setCreatedId] = useState(null);
-  const [mainDropdownChange, setMainDropdownChange] = useState('');
+  const [mainDropdownChange, setMainDropdownChange] = useState("");
   const [createNewData, setCreateNewData] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
+  const yearQuarters = getReportingPeriods().map((reportingPeriod, index) => {
+    return {
+      code: reportingPeriod,
+      name: reportingPeriod,
+    };
+  });
 
-  const props = sectionSelect[1] === "QA Certification Event" ? qaCertEventsProps(selectedLocation) : qaTestExemptionProps(selectedLocation);
+  const years = generateArrayOfYears(2000).map((year, index) => {
+    return {
+      code: year,
+      name: year,
+    };
+  });
+  const props =
+    sectionSelect[1] === "QA Certification Event"
+      ? qaCertEventsProps(selectedLocation)
+      : qaTestExemptionProps(selectedLocation);
 
   const {
-    dataTableName, 
-    dropdownArray, 
-    columns, 
-    controlInputs, 
-    controlDatePickerInputs, 
-    extraControlInputs
+    dataTableName,
+    dropdownArray,
+    columns,
+    controlInputs,
+    controlDatePickerInputs,
+    extraControlInputs,
   } = props;
 
   useEffect(() => {
@@ -76,8 +97,8 @@ const QACertEventTestExmpDataTable = ({
     setMdmData(null);
   }, [sectionSelect, locationSelectValue]);
 
-  useEffect(()=>{
-    if(mdmData === null && !dropdownsLoaded){
+  useEffect(() => {
+    if (mdmData === null && !dropdownsLoaded) {
       loadDropdownsData(dataTableName);
     }
   }, [dropdownsLoaded, mdmData]);
@@ -98,7 +119,10 @@ const QACertEventTestExmpDataTable = ({
           setLoading(false);
         })
         .catch((error) => {
-          console.log(`error fetching table records for ${dataTableName} `, error);
+          console.log(
+            `error fetching table records for ${dataTableName} `,
+            error
+          );
         });
       setUpdateTable(false);
     }
@@ -116,8 +140,8 @@ const QACertEventTestExmpDataTable = ({
     setDropdownsLoading(true);
     let dropdowns = {};
     const allPromises = [];
-    switch(name){
-      case 'QA Certification Event':
+    switch (name) {
+      case "QA Certification Event":
         allPromises.push(mpApi.getMonitoringComponents(locationSelectValue));
         allPromises.push(mpApi.getMonitoringSystems(locationSelectValue));
         allPromises.push(dmApi.getMdmDataByCodeTable("qa-cert-event-codes"));
@@ -126,30 +150,83 @@ const QACertEventTestExmpDataTable = ({
           dropdownArray[0].forEach((val, i) => {
             if (i === 0) {
               dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
-                getOptions(d, 'componentId', 'componentId')
+                getOptions(d, "componentId", "componentId")
               );
             } else if (i === 1) {
               dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
-                getOptions(d, 'monitoringSystemId', 'monitoringSystemId')
+                getOptions(d, "monitoringSystemId", "monitoringSystemId")
               );
             } else if (i === 2) {
               dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
-                getOptions(d, 'qaCertEventCode', 'qaCertEventDescription')
+                getOptions(d, "qaCertEventCode", "qaCertEventDescription")
               );
             } else if (i === 3) {
               dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
-                getOptions(d, 'requiredTestCode', 'requiredTestDescription')
+                getOptions(d, "requiredTestCode", "requiredTestDescription")
               );
             }
             dropdowns[dropdownArray[0][i]].unshift({
-              code: '',
-              name: '-- Select a value --',
+              code: "",
+              name: "-- Select a value --",
             });
           });
           setMdmData(dropdowns);
           setDropdownsLoaded(true);
           setDropdownsLoading(false);
-        });  
+        });
+        break;
+      case "Test Extension Exemption":
+        const quarters = [
+          { code: "1", name: "1" },
+          { code: "2", name: "2" },
+          { code: "3", name: "3" },
+          { code: "4", name: "4" },
+        ];
+        allPromises.push([]);
+        allPromises.push([]);
+        allPromises.push(mpApi.getMonitoringComponents(locationSelectValue));
+        allPromises.push(mpApi.getMonitoringSystems(locationSelectValue));
+        allPromises.push(dmApi.getAllSpanScaleCodes());
+        allPromises.push(dmApi.getAllFuelCodes());
+        allPromises.push(dmApi.getMdmDataByCodeTable("required-test-codes"));
+
+        Promise.all(allPromises).then((response) => {
+          dropdownArray[0].forEach((val, i) => {
+            if (i === 0) {
+              dropdowns[dropdownArray[0][i]] = years;
+            } else if (i === 1) {
+              dropdowns[dropdownArray[0][i]] = quarters;
+            } else if (i === 2) {
+              dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                getOptions(d, "componentId", "componentId")
+              );
+            } else if (i === 3) {
+              dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                getOptions(d, "monitoringSystemId", "monitoringSystemId")
+              );
+            } else if (i === 4) {
+              dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                getOptions(d, "spanScaleCode", "spanScaleDescription")
+              );
+            } else if (i === 5) {
+              dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                getOptions(d, "fuelCode", "fuelDescription")
+              );
+            } else if (i === 6) {
+              dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                getOptions(d, "requiredTestCode", "requiredTestDescription")
+              );
+            }
+
+            dropdowns[dropdownArray[0][i]].unshift({
+              code: "",
+              name: "-- Select a value --",
+            });
+          });
+          setMdmData(dropdowns);
+          setDropdownsLoaded(true);
+          setDropdownsLoading(false);
+        });
         break;
       default:
         setMdmData(null);
@@ -157,12 +234,17 @@ const QACertEventTestExmpDataTable = ({
         setDropdownsLoading(false);
         break;
     }
-    
   };
 
   const data = useMemo(() => {
-    return mapQaCertEventsDataToRows(qaTestSummary);
-
+    switch (sectionSelect[1]) {
+      case "QA Certification Event":
+        return mapQaCertEventsDataToRows(qaTestSummary);
+      case "Test Extension Exemption":
+        return mapQaExtensionsExemptionsDataToRows(qaTestSummary);
+      default:
+        return [];
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qaTestSummary]);
 
@@ -179,18 +261,18 @@ const QACertEventTestExmpDataTable = ({
     if (create) {
       if (controlInputs?.unitId) {
         controlInputs.unitId = [
-          'Unit or Stack Pipe ID',
-          'input',
+          "Unit or Stack Pipe ID",
+          "input",
           selectedLocation.name,
-          'fixed',
+          "fixed",
         ];
         selectedData.unitId = selectedLocation.name;
       } else {
         controlInputs.stackPipeId = [
-          'Unit or Stack Pipe ID',
-          'input',
+          "Unit or Stack Pipe ID",
+          "input",
           selectedLocation.name,
-          'fixed',
+          "fixed",
         ];
         selectedData.stackPipeId = selectedLocation.name;
       }
@@ -215,7 +297,7 @@ const QACertEventTestExmpDataTable = ({
 
     setShow(true);
     setTimeout(() => {
-      attachChangeEventListeners('.modalUserInput');
+      attachChangeEventListeners(".modalUserInput");
     });
   };
 
@@ -228,24 +310,34 @@ const QACertEventTestExmpDataTable = ({
       executeOnClose();
     }
     if (createNewData) {
-      returnsFocusToAddBtn(dataTableName.replaceAll(' ', '-'));
+      returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"));
     }
   };
 
   const executeOnClose = (data) => {
     setShow(false);
-    removeChangeEventListeners('.modalUserInput');
+    removeChangeEventListeners(".modalUserInput");
 
-    const updatedData = mapQaCertEventsDataToRows(data ? data : []);
+    let updatedData = [];
+
+    switch (sectionSelect[1]) {
+      case "QA Certification Event":
+        updatedData = mapQaCertEventsDataToRows(data ? data : []);
+      case "Test Exemptions and Exeptions":
+        updatedData = mapQaExtensionsExemptionsDataToRows(data ? data : []);
+      default:
+        break;
+    }
+
     const idx = updatedData.findIndex((d) => d.id === createdId);
 
     if (idx >= 0) {
-      returnsFocusDatatableViewBTN(dataTableName.replaceAll(' ', '-'), idx);
+      returnsFocusDatatableViewBTN(dataTableName.replaceAll(" ", "-"), idx);
       setCreatedId(null);
       setCreateNewData(false);
     } else {
       returnsFocusDatatableViewBTN(
-        dataTableName.replaceAll(' ', '-'),
+        dataTableName.replaceAll(" ", "-"),
         clickedIndex
       );
     }
@@ -262,18 +354,18 @@ const QACertEventTestExmpDataTable = ({
   };
 
   const createData = () => {
-    const userInput = extractUserInput({}, '.modalUserInput');
-    if(userInput.unitId){
+    const userInput = extractUserInput({}, ".modalUserInput");
+    if (userInput.unitId) {
       userInput.unitId = String(userInput.unitId);
       userInput.stackPipeId = null;
-    }else if(userInput.stackPipeId){
+    } else if (userInput.stackPipeId) {
       userInput.stackPipeId = String(userInput.stackPipeId);
       userInput.unitId = null;
     }
     assertSelector
       .createDataSwitch(userInput, dataTableName, locationSelectValue)
       .then((res) => {
-        if (Object.prototype.toString.call(res) === '[object Array]') {
+        if (Object.prototype.toString.call(res) === "[object Array]") {
           alert(res[0]);
         } else {
           setCreatedId(res.data.id);
@@ -281,15 +373,14 @@ const QACertEventTestExmpDataTable = ({
         }
       })
       .catch((error) => {
-        console.error('error', error);
-        returnsFocusToAddBtn(dataTableName.replaceAll(' ', '-'));
+        console.error("error", error);
+        returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"));
       });
   };
 
-
   return (
     <div>
-      <div className={`usa-overlay ${show ? 'is-visible' : ''}`} />
+      <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       {!loading || !dropdownsLoading ? (
         <QADataTableRender
           columnNames={columns}
@@ -304,7 +395,7 @@ const QACertEventTestExmpDataTable = ({
               <>
                 <span className="padding-right-2">{dataTableName}</span>
                 <Button
-                  id={`btnAdd${dataTableName.replaceAll(' ', '-')}`}
+                  id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
                   epa-testid="btnOpen"
                   className="text-white"
                   onClick={() => openModal(false, false, true)}
@@ -316,7 +407,7 @@ const QACertEventTestExmpDataTable = ({
               dataTableName
             )
           }
-          actionsBtn={'View'}
+          actionsBtn={"View"}
           user={user}
           evaluate={false}
           noDataComp={
@@ -330,7 +421,7 @@ const QACertEventTestExmpDataTable = ({
                   <>
                     <span className="padding-right-2">Test Data</span>
                     <Button
-                      id={`btnAdd${dataTableName.replaceAll(' ', '-')}`}
+                      id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
                       epa-testid="btnOpen"
                       className="text-white"
                       onClick={() => openModal(false, false, true)}
@@ -339,7 +430,7 @@ const QACertEventTestExmpDataTable = ({
                     </Button>
                   </>
                 }
-                actionsBtn={'View'}
+                actionsBtn={"View"}
                 user={user}
               />
             ) : (

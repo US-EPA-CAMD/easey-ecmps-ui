@@ -35,7 +35,7 @@ const unitDefaultTestRun = "Unit Default Test Run";
 const hgSummary = "Hg Summary";
 const hgInjection = "Hg Injection";
 const qaCertEvent = "QA Certification Event";
-
+const qaExeptions = "Test Extension Exemption"
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
   switch (name) {
@@ -229,7 +229,7 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
 
     case qaExeptions:
       return qaApi
-        .getQaCertEvents(location)
+        .getTestExtension(location)
         .catch((error) =>
           console.log("error fetching hg injection data", error)
         );

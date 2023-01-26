@@ -1472,17 +1472,17 @@ export const qaCertEventsProps = (selectedLocation) => {
 };
 
 export const qaTestExemptionProps = (selectedLocation) => {
-  return {
-    dataTableName: "QA Test Exemption",
+  const result =  {
+    dataTableName: "Test Extension Exemption",
     payload: {},
-    dropdownArray: [
+    dropdownArray: [[
       'year',
       'quarter',
       "componentID",
       "monitoringSystemID",
       "spanScaleCode",
       "fuelCode",
-      'extensionExemptionCode'
+      'extensionOrExemptionCode']
     ],
     columns: [
       "Unit or Stack Pipe ID",
@@ -1497,8 +1497,6 @@ export const qaTestExemptionProps = (selectedLocation) => {
       "Extension or Exemption Code",
     ],
     controlInputs: {
-      unitId: ["Unit or Stack Pipe ID", "input", "", ""],
-      stackPipeId: ["Unit or Stack Pipe ID", "input", "", ""],
       monitoringSystemID: [
         "Monitoring System ID",
         "nonFilteredDropdown",
