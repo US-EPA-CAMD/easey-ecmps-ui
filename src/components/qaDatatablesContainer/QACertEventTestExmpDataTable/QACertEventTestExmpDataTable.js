@@ -76,10 +76,19 @@ const QACertEventTestExmpDataTable = ({
       name: year,
     };
   });
-  const props =
-    sectionSelect[1] === "QA Certification Event"
-      ? qaCertEventsProps(selectedLocation)
-      : qaTestExemptionProps(selectedLocation);
+  let props = {};
+  switch (sectionSelect[1]) {
+    case "QA Certification Event":
+      props = qaCertEventsProps(selectedLocation);
+      break;
+
+    case "Test Extension Exemption":
+      props = qaTestExemptionProps(selectedLocation);
+      break;
+    default:
+      props = qaCertEventsProps(selectedLocation);
+      break;
+  }
 
   const {
     dataTableName,
@@ -141,6 +150,7 @@ const QACertEventTestExmpDataTable = ({
     setDropdownsLoading(true);
     let dropdowns = {};
     const allPromises = [];
+    
     switch (name) {
       case "QA Certification Event":
         allPromises.push(mpApi.getMonitoringComponents(locationSelectValue));
@@ -286,6 +296,7 @@ const QACertEventTestExmpDataTable = ({
       selectedData.locationName = selectedLocation.name;
     }
     const prefilteredTotalName = dropdownArray[0][dropdownArray[0].length - 1];
+
     const modalData = modalViewData(
       selectedData,
       controlInputs,
@@ -299,6 +310,7 @@ const QACertEventTestExmpDataTable = ({
       prefilteredTotalName,
       extraControlInputs
     );
+
     setSelectedModalData(modalData);
     setClickedIndex(index);
 
@@ -351,8 +363,22 @@ const QACertEventTestExmpDataTable = ({
   };
 
   const onRemoveHandler = async (row) => {
-    //TODO
-    return null;
+    try {
+      const resp = await assertSelector.removeDataSwitch(
+        row,
+        dataTableName,
+        locationSelectValue
+      );
+      if (resp.status === 200) {
+        setUpdateTable(true);
+        returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"));
+      }
+    } catch (error) {
+      console.log(
+        `error deleting data of table: ${dataTableName}, row: ${row}`,
+        error
+      );
+    }
   };
 
   const saveData = async (row) => {

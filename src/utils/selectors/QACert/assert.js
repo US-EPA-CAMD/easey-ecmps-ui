@@ -503,6 +503,17 @@ export const removeDataSwitch = async (
       return qaApi
         .deleteUnitDefaultTestRun(extraIdsArr[0], extraIdsArr[1], id, row.id)
         .catch((error) => console.log("error", error));
+
+    case qaCertEvent:
+      return qaApi
+        .deleteQaCertEvents(locationId, row.id)
+        .catch((error) => console.log("error updating QA cert events", error));
+    case qaExeptions:
+      return qaApi
+        .deleteTestExtension(locationId, row.id)
+        .catch((error) =>
+          console.log("error updating QA TEST EXCEPTIONS", error)
+        );
     default:
       throw new Error(`removeDataSwitch case not implemented for ${name}`);
   }
@@ -763,16 +774,14 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         )
         .catch((error) => console.log("error updating hg injection", error));
 
-        // for some reason, id and userinput. id are identical in the url 
+    // for some reason, id and userinput. id are identical in the url
     case qaCertEvent:
-      console.log('id, userInput.id',id, userInput.id)
+      console.log("id, userInput.id", id, userInput.id);
       return qaApi
         .updateQaCertEvents(id, userInput.id, userInput)
-        .catch((error) =>
-          console.log("error updating QA cert events", error)
-        );
+        .catch((error) => console.log("error updating QA cert events", error));
     case qaExeptions:
-      console.log('id, userInput.id trest',id, userInput.id)
+      console.log("id, userInput.id trest", id, userInput.id);
       return qaApi
         .updateTestExtension(id, userInput.id, userInput)
         .catch((error) =>

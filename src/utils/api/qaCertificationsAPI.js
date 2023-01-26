@@ -2115,6 +2115,21 @@ export const updateQaCertEvents = async (locId, id, payload) => {
     return handleImportError(error);
   }
 };
+
+export const deleteQaCertEvents = async (locId, id, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/qa-certification-events/${id}`;
+
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
 export const getTestExtension = async (locId) => {
   console.log("loc", locId);
   const path = `/locations/${locId}/test-extension-exemptions`;
@@ -2145,6 +2160,20 @@ export const updateTestExtension = async (locId, id, payload) => {
         method: "PUT",
         url: url,
         data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+export const deleteTestExtension = async (locId, id, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-extension-exemptions/${id}`;
+
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
       })
     );
   } catch (error) {
