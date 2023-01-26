@@ -150,7 +150,7 @@ const QACertEventTestExmpDataTable = ({
     setDropdownsLoading(true);
     let dropdowns = {};
     const allPromises = [];
-    
+
     switch (name) {
       case "QA Certification Event":
         allPromises.push(mpApi.getMonitoringComponents(locationSelectValue));
@@ -199,8 +199,9 @@ const QACertEventTestExmpDataTable = ({
         allPromises.push(mpApi.getMonitoringSystems(locationSelectValue));
         allPromises.push(dmApi.getAllSpanScaleCodes());
         allPromises.push(dmApi.getAllFuelCodes());
-        // allPromises.push(dmApi.getMdmDataByCodeTable("required-test-codes"));
-        allPromises.push([]);
+        allPromises.push(
+          dmApi.getMdmDataByCodeTable("extension-exemption-codes")
+        );
         Promise.all(allPromises)
           .then((response) => {
             dropdownArray[0].forEach((val, i) => {
@@ -225,9 +226,13 @@ const QACertEventTestExmpDataTable = ({
                   getOptions(d, "fuelCode", "fuelDescription")
                 );
               } else if (i === 6) {
-                dropdowns[dropdownArray[0][i]] = [
-                  { code: "LOWSYTD", name: "LOWSYTD" },
-                ];
+                dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                  getOptions(
+                    d,
+                    "extensionExemptionCode",
+                    "extensionExemptionDescription"
+                  )
+                );
               }
               dropdowns[dropdownArray[0][i]].unshift({
                 code: "",
