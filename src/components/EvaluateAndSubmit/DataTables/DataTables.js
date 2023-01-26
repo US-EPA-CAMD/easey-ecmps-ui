@@ -13,47 +13,51 @@ const DataTables = ({
   userCheckedOutPlans,
 }) => {
   const selectRow = (row, bool, tableType) => {
-    //TODO: Flip QA and MP Records if possible
-    updateFilesSelected(bool);
-    row.selected = bool;
-    row.userCheckedOut = bool;
-    row.checkedOut = bool;
+    try {
+      //TODO: Flip QA and MP Records if possible
+      updateFilesSelected(bool);
+      row.selected = bool;
+      row.userCheckedOut = bool;
+      row.checkedOut = bool;
 
-    // Change the amount of the stored monitor plan selections
-    if (bool) {
-      if (monitorPlanIdToSelectedMap.current.has(row.monPlanId)) {
-        //The map associated monPlanIds to {facId, count} facId is needed in checkout process that uses the map to check records back in
-        monitorPlanIdToSelectedMap.current.set(row.monPlanId, [
-          monitorPlanIdToSelectedMap.current.get(row.monPlanId)[0],
-          monitorPlanIdToSelectedMap.current.get(row.monPlanId)[1] + 1,
-        ]);
+      // Change the amount of the stored monitor plan selections
+      if (bool) {
+        if (monitorPlanIdToSelectedMap.current.has(row.monPlanId)) {
+          //The map associated monPlanIds to {facId, count} facId is needed in checkout process that uses the map to check records back in
+          monitorPlanIdToSelectedMap.current.set(row.monPlanId, [
+            monitorPlanIdToSelectedMap.current.get(row.monPlanId)[0],
+            monitorPlanIdToSelectedMap.current.get(row.monPlanId)[1] + 1,
+          ]);
+        } else {
+          monitorPlanIdToSelectedMap.current.set(row.monPlanId, [
+            row.facilityId,
+            1,
+          ]);
+        }
+        if (
+          monitorPlanIdToSelectedMap.current.get(row.monPlanId)[1] === 1 &&
+          !userCheckedOutPlans.current.has(row.monPlanId)
+        ) {
+          checkoutAPI(true, row.facilityId, row.monPlanId);
+        }
+
+        if (tableType === "QA") {
+          updateMonPlanRow(row.monPlanId, bool);
+        } else if (tableType === "EM") {
+          updateMonPlanRow(row.monPlanId, bool);
+          updateQARow(row.monPlanId, row.periodAbbreviation, bool);
+        }
       } else {
         monitorPlanIdToSelectedMap.current.set(row.monPlanId, [
-          row.facilityId,
-          1,
+          monitorPlanIdToSelectedMap.current.get(row.monPlanId)[0],
+          monitorPlanIdToSelectedMap.current.get(row.monPlanId)[1] - 1,
         ]);
+        if (monitorPlanIdToSelectedMap.current.get(row.monPlanId)[1] === 0) {
+          checkoutAPI(false, row.facilityId, row.monPlanId);
+        }
       }
-      if (
-        monitorPlanIdToSelectedMap.current.get(row.monPlanId)[1] === 1 &&
-        !userCheckedOutPlans.current.has(row.monPlanId)
-      ) {
-        checkoutAPI(true, row.facilityId, row.monPlanId);
-      }
-
-      if (tableType === "QA") {
-        updateMonPlanRow(row.monPlanId, bool);
-      } else if (tableType === "EM") {
-        updateMonPlanRow(row.monPlanId, bool);
-        updateQARow(row.monPlanId, row.periodAbbreviation, bool);
-      }
-    } else {
-      monitorPlanIdToSelectedMap.current.set(row.monPlanId, [
-        monitorPlanIdToSelectedMap.current.get(row.monPlanId)[0],
-        monitorPlanIdToSelectedMap.current.get(row.monPlanId)[1] - 1,
-      ]);
-      if (monitorPlanIdToSelectedMap.current.get(row.monPlanId)[1] === 0) {
-        checkoutAPI(false, row.facilityId, row.monPlanId);
-      }
+    } catch (e) {
+      console.log(e);
     }
   };
 

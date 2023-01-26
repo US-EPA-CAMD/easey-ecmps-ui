@@ -9,6 +9,10 @@ import {
   emissionsColumns,
   sortByPeriodAbbreviation,
   formatSubmissionWindow,
+  qaTeeColumns,
+  sortByEventDate,
+  sortByConditionDateHour,
+  sortByCompletionDateHour,
 } from "./ColumnMappings";
 
 describe("Test the sort functions of Column Mappings", () => {
@@ -16,6 +20,7 @@ describe("Test the sort functions of Column Mappings", () => {
     expect(monPlanColumns).toBeDefined();
     expect(qaTestSummaryColumns).toBeDefined();
     expect(qaCertEventColumns).toBeDefined();
+    expect(qaTeeColumns).toBeDefined();
     expect(emissionsColumns).toBeDefined();
   });
 
@@ -83,6 +88,60 @@ describe("Test the sort functions of Column Mappings", () => {
     let b = { periodAbbreviation: "2021 Q2" };
     let a = { periodAbbreviation: "2021 Q3" };
     expect(sortByPeriodAbbreviation(a, b) > 0).toBe(true);
+  });
+
+  it("sortByEventDate", () => {
+    let b = { eventDate: "2022-01-01 10" };
+    let a = { eventDate: "2021-01-01 00" };
+    expect(sortByEventDate(a, b) > 0).toBe(false);
+  });
+
+  it("sortByEventDate", () => {
+    let b = { eventDate: "2021-01-01 10" };
+    let a = { eventDate: "2022-01-01 00" };
+    expect(sortByEventDate(a, b) > 0).toBe(true);
+  });
+
+  it("sortByEventDate", () => {
+    let b = { eventDate: "2022-01-01 10" };
+    let a = { eventDate: "2022-01-01 00" };
+    expect(sortByEventDate(a, b) > 0).toBe(false);
+  });
+
+  it("sortByConditionDateHour", () => {
+    let b = { conditionDate: "2022-01-01 10" };
+    let a = { conditionDate: "2021-01-01 00" };
+    expect(sortByConditionDateHour(a, b) > 0).toBe(false);
+  });
+
+  it("sortByConditionDateHour", () => {
+    let b = { conditionDate: "2021-01-01 10" };
+    let a = { conditionDate: "2022-01-01 00" };
+    expect(sortByConditionDateHour(a, b) > 0).toBe(true);
+  });
+
+  it("sortByConditionDateHour", () => {
+    let b = { conditionDate: "2022-01-01 10" };
+    let a = { conditionDate: "2022-01-01 00" };
+    expect(sortByConditionDateHour(a, b) > 0).toBe(false);
+  });
+
+  it("sortByLastCompletionHour", () => {
+    let b = { lastCompletion: "2022-01-01 10" };
+    let a = { lastCompletion: "2021-01-01 00" };
+    expect(sortByCompletionDateHour(a, b) > 0).toBe(false);
+  });
+
+  it("sortByConditionDateHour", () => {
+    let b = { lastCompletion: "2021-01-01 10" };
+    let a = { lastCompletion: "2022-01-01 00" };
+    expect(sortByCompletionDateHour(a, b) > 0).toBe(true);
+  });
+
+  it("sortByConditionDateHour", () => {
+    let b = { lastCompletion: "2022-01-01 10" };
+    let a = { lastCompletion: "2022-01-01 00" };
+    expect(sortByCompletionDateHour(a, b) > 0).toBe(false);
   });
 });
 

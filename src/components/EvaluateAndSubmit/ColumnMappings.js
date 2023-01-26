@@ -44,6 +44,60 @@ export const sortByBeginDate = (a, b) => {
   return new Date(a.beginDate) - new Date(b.beginDate);
 };
 
+export const sortByEventDate = (a, b) => {
+  if (a.eventDate === "N/A") {
+    return -1;
+  }
+  if (b.eventDate === "N/A") {
+    return 1;
+  }
+
+  const splitA = a.eventDate.split(" ");
+  const splitB = b.eventDate.split(" ");
+
+  if (new Date(splitA[0]) === new Date(splitB[0])) {
+    return parseInt(splitA[1]) - parseInt(splitB[1]);
+  } else {
+    return new Date(splitA[0]) - new Date(splitB[0]);
+  }
+};
+
+export const sortByConditionDateHour = (a, b) => {
+  if (a.conditionDate === "N/A") {
+    return -1;
+  }
+  if (b.conditionDate === "N/A") {
+    return 1;
+  }
+
+  const splitA = a.conditionDate.split(" ");
+  const splitB = b.conditionDate.split(" ");
+
+  if (new Date(splitA[0]) === new Date(splitB[0])) {
+    return parseInt(splitA[1]) - parseInt(splitB[1]);
+  } else {
+    return new Date(splitA[0]) - new Date(splitB[0]);
+  }
+};
+
+export const sortByCompletionDateHour = (a, b) => {
+  if (a.lastCompletion === "N/A") {
+    return -1;
+  }
+  if (b.lastCompletion === "N/A") {
+    return 1;
+  }
+
+  const splitA = a.lastCompletion.split(" ");
+  const splitB = b.lastCompletion.split(" ");
+
+  if (new Date(splitA[0]) === new Date(splitB[0])) {
+    return parseInt(splitA[1]) - parseInt(splitB[1]);
+  } else {
+    return new Date(splitA[0]) - new Date(splitB[0]);
+  }
+};
+
 export const formatSubmissionWindow = (window) => {
   if (window === "REQUIRE" || window === "GRANTED") {
     return "Open";
@@ -193,19 +247,20 @@ export const qaCertEventColumns = [
     name: "QA Cert Event Date/HR",
     selector: "eventDate",
     sortable: true,
+    sortFunction: sortByEventDate,
     width: "200px",
   },
   {
     name: "Conditional Date/HR",
     selector: "conditionDate",
     sortable: true,
-    sortFunction: sortByBeginDate,
+    sortFunction: sortByConditionDateHour,
   },
   {
     name: "Completion Date/HR",
     selector: "lastCompletion",
     sortable: true,
-    sortFunction: sortByEndDate,
+    sortFunction: sortByCompletionDateHour,
   },
   {
     name: "Last Modified By",

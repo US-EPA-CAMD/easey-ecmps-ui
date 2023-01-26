@@ -112,36 +112,6 @@ export const updateCheckedOutLocationsOnTable = (
   }
 };
 
-export const updateCheckedOutLocationsOnTables = (
-  checkedOutLocationsMPIdsMap,
-  tablesObj,
-  userId
-) => {
-  for (const table of tablesObj) {
-    const { ref, setState } = table;
-
-    updateCheckedOutLocationsOnTable(
-      ref,
-      setState,
-      checkedOutLocationsMPIdsMap,
-      userId
-    );
-  }
-};
-
-export const isLocationCheckedOutByUser = ({
-  userId,
-  checkedOutLocationsMap,
-  chunk,
-  isLocationCheckedOut,
-}) => {
-  if (!isLocationCheckedOut) {
-    return false;
-  }
-  const { monPlanId } = chunk;
-  return isLocationUserCheckedOut(checkedOutLocationsMap, monPlanId, userId);
-};
-
 export const evalStatusStyle = (status) => {
   switch (status) {
     case "ERR":
@@ -216,31 +186,6 @@ export const addEvalStatusCell = (columns) =>
     }
     return col;
   });
-
-export const updateCheckedOutLocationsRef = (isCheckedOut, row, ref) => {
-  if (isCheckedOut) {
-    ref.current.push(row);
-  } else {
-    ref.current = ref.current.filter((el) => el.monPlanId !== row.monPlanId);
-  }
-};
-
-export const updateCorrespondingMPAndQARow = ({
-  r,
-  type,
-  updateMonPlanRow,
-  updateQARow,
-  selection,
-}) => {
-  if (r && type !== "MP") {
-    // Need to activate mp for subsequent child records
-    updateMonPlanRow(r.monPlanId, selection);
-
-    if (type === "EM") {
-      updateQARow(r.monPlanId, r.periodAbbreviation, selection);
-    }
-  }
-};
 
 // Returns the previously fully submitted quarter (reporting period).
 // For the first month of every quarter, the previusly submitted reporting period is actually two quarters ago.

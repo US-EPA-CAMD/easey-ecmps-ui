@@ -997,22 +997,3 @@ export const exportMonitoringPlanDownload = async (configID) => {
     console.log(error);
   }
 };
-
-export const checkInOutLocation = (
-  isCheckingOutRow,
-  row,
-  checkedOutLocationsMap
-) => {
-  const { monPlanId, checkedOut } = row;
-  if (isCheckingOutRow) {
-    if (checkedOutLocationsMap?.has(monPlanId) || checkedOut) {
-      return console.log("item is already checked out", monPlanId);
-    } else return checkoutAPI(isCheckingOutRow, row.facId, monPlanId).then();
-  } else return checkoutAPI(isCheckingOutRow, row.facId, monPlanId).then();
-};
-
-export const checkInAllLocations = (locations) => {
-  locations.forEach((location) =>
-    checkoutAPI(false, location.facId, location.monPlanId)
-  );
-};

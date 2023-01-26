@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import {
-  checkInAllLocations,
   getMonitoringPlans,
   getCheckedOutLocations,
 } from "../../utils/api/monitoringPlansApi";
@@ -15,10 +14,6 @@ import SubmissionModal from "../SubmissionModal/SubmissionModal";
 import MockPermissions from "./MockPermissions";
 import { Button } from "@trussworks/react-uswds";
 import { connect } from "react-redux";
-import {
-  isLocationCheckedOutByUser,
-  updateCheckedOutLocationsOnTables,
-} from "../../utils/functions";
 import { submitData } from "../../utils/api/camdServices";
 import { handleError } from "../../utils/api/apiUtils";
 import LoadingModal from "../LoadingModal/LoadingModal";
@@ -35,7 +30,11 @@ import {
 } from "./ColumnMappings";
 import { checkoutAPI } from "../../additional-functions/checkout";
 
-const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
+export const EvaluateAndSubmit = ({
+  checkedOutLocations,
+  user,
+  componentType,
+}) => {
   const [title, setTitle] = useState("Submit");
   const [buttonText, setButtonText] = useState("Sign & Submit");
 
@@ -71,10 +70,6 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
 
   const monitorPlanIdToSelectedMap = useRef(new Map()); // Map each monitor plan to a count of how many times it has been selected
   const userCheckedOutPlans = useRef(new Set());
-
-  useEffect(() => {
-    //TODO: Update Tables Checked Out
-  }, [checkedOutLocations]);
 
   useEffect(() => {
     if (finalSubmitStage && componentType === "Submission") {
@@ -141,7 +136,16 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
     },
   ];
 
+  const getUserPlans = async () => {
+    const data = (await getCheckedOutLocations()).data;
+
+    userCheckedOutPlans.current = new Set(
+      data.filter((l) => l.checkedOutBy === userId).map((m) => m.monPlanId)
+    );
+  };
+
   const idToPermissionsMap = useRef([]);
+
   useEffect(() => {
     // Get permissions from user object here
     const permissions = MockPermissions;
@@ -160,13 +164,7 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
       planToOwnerCheckouts.set(loc.monPlanId, loc.checkedOutBy);
     }
 
-    const data = getCheckedOutLocations().then((result) => {
-      userCheckedOutPlans.current = new Set(
-        result.data
-          .filter((l) => l.checkedOutBy === userId)
-          .map((m) => m.monPlanId)
-      );
-    });
+    getUserPlans();
 
     for (const cat of dataList) {
       for (const chunk of cat.ref.current) {
@@ -278,8 +276,28 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
           }
           return m.testSumId;
         });
-      newItem.qceIds = [];
-      newItem.teeIds = [];
+      newItem.qceIds = qaCertEventRef.current
+        .filter((f) => f.monPlanId === monPlanId && f.selected)
+        .map((m) => {
+          if (componentType === "Submission") {
+            return {
+              id: m.qaCertEventIdentifier,
+              quarter: m.periodAbbreviation,
+            };
+          }
+          return m.qaCertEventIdentifier;
+        });
+      newItem.teeIds = qaTeeRef.current
+        .filter((f) => f.monPlanId === monPlanId && f.selected)
+        .map((m) => {
+          if (componentType === "Submission") {
+            return {
+              id: m.testExtensionExemptionIdentifier,
+              quarter: m.periodAbbreviation,
+            };
+          }
+          return m.testExtensionExemptionIdentifier;
+        });
 
       //Final step to add emissions data for specific monPlan
       newItem.emissionsReportingPeriods = emissionsRef.current
@@ -307,7 +325,7 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
   const checkInAllCheckedOutLocations = () => {
     for (let [key, value] of monitorPlanIdToSelectedMap.current) {
       if (value[1] > 0) {
-        checkoutAPI(false, value[0], key); //TODO: Reflect this to be the actual facility ID
+        checkoutAPI(false, value[0], key);
       }
     }
   };
@@ -415,12 +433,11 @@ const EvaluateAndSubmit = ({ checkedOutLocations, user, componentType }) => {
       </div>
 
       {componentType !== "Submission" && (
-        /*<EvaluateRefresh
+        <EvaluateRefresh
           dataList={dataList}
           storedFilters={storedFilters}
           lastEvalTime={evalClickedAtTime}
-        />*/
-        <div />
+        />
       )}
 
       {!finalSubmitStage && (

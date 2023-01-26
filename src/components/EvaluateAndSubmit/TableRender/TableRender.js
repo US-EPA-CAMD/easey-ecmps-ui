@@ -10,16 +10,7 @@ import { oneSecond } from "../../../config";
 import ReviewCell from "../ReviewCell/ReviewCell";
 import { Checkbox } from "@trussworks/react-uswds";
 import { v4 as uuidv4 } from "uuid";
-import {
-  addEvalStatusCell,
-  updateCheckedOutLocationsRef,
-  updateCorrespondingMPAndQARow,
-  updateCurrentRow,
-} from "../../../utils/functions";
-import {
-  checkInOutLocation,
-  getUpdatedCheckedOutLocations,
-} from "../../../utils/api/monitoringPlansApi";
+import { addEvalStatusCell } from "../../../utils/functions";
 
 import "./TableRender.scss";
 
