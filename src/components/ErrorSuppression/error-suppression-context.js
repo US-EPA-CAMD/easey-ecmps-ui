@@ -11,6 +11,11 @@ export const useSuppressionFiltersStore = () => {
     const [addDateAfter, setAddDateAfter] = useState();
     const [addDateBefore, setAddDateBefore] = useState();
 
+    // These states maintain shared values from api calls
+    const [transformedData, setTransformedData] = useState([])
+    const [facilityList, setFacilityList] = useState([]);
+    const [reasonCodeList, setReasonCodeList] = useState([]);
+
     return {
         checkType,
         setCheckType,
@@ -30,6 +35,12 @@ export const useSuppressionFiltersStore = () => {
         setAddDateAfter,
         addDateBefore,
         setAddDateBefore,
+        facilityList, 
+        setFacilityList,
+        reasonCodeList, 
+        setReasonCodeList,
+        transformedData,
+        setTransformedData,
     }
 }
 

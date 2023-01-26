@@ -4,6 +4,8 @@ import { ErrorSuppressionFilters } from "./ErrorSuppressionFilters/ErrorSuppress
 import { ErrorSuppressionDataContainer } from "./ErrorSuppressionDataContainer/ErrorSuppressionDataContainer";
 import { ErrorSuppressionFiltersContextProvider } from "./error-suppression-context";
 
+export const defaultDropdownText = "-- Select a value --";
+
 export const ErrorSuppression = () => {
 
   return (
