@@ -53,7 +53,7 @@ export const getMonitoringPlansRelationshipsDataRecords = (totalData) => {
       col1: el.stackPipeRecordId,
       col2: el.unitRecordId,
       col3: `${beginDate}`,
-      col4: el.endDate,
+      col4: `${endDate}`,
       col5: el.id,
     });
   });
