@@ -157,34 +157,41 @@ const QACertEventTestExmpDataTable = ({
         allPromises.push(mpApi.getMonitoringSystems(locationSelectValue));
         allPromises.push(dmApi.getMdmDataByCodeTable("qa-cert-event-codes"));
         allPromises.push(dmApi.getMdmDataByCodeTable("required-test-codes"));
-        Promise.all(allPromises).then((response) => {
-          dropdownArray[0].forEach((val, i) => {
-            if (i === 0) {
-              dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
-                getOptions(d, "componentId", "componentId")
-              );
-            } else if (i === 1) {
-              dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
-                getOptions(d, "monitoringSystemId", "monitoringSystemId")
-              );
-            } else if (i === 2) {
-              dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
-                getOptions(d, "qaCertEventCode", "qaCertEventDescription")
-              );
-            } else if (i === 3) {
-              dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
-                getOptions(d, "requiredTestCode", "requiredTestDescription")
-              );
-            }
-            dropdowns[dropdownArray[0][i]].unshift({
-              code: "",
-              name: "-- Select a value --",
+        Promise.all(allPromises)
+          .then((response) => {
+            dropdownArray[0].forEach((val, i) => {
+              if (i === 0) {
+                dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                  getOptions(d, "componentId", "componentId")
+                );
+              } else if (i === 1) {
+                dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                  getOptions(d, "monitoringSystemId", "monitoringSystemId")
+                );
+              } else if (i === 2) {
+                dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                  getOptions(d, "qaCertEventCode", "qaCertEventDescription")
+                );
+              } else if (i === 3) {
+                dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                  getOptions(d, "requiredTestCode", "requiredTestDescription")
+                );
+              }
+              dropdowns[dropdownArray[0][i]].unshift({
+                code: "",
+                name: "-- Select a value --",
+              });
             });
+            setMdmData(dropdowns);
+            setDropdownsLoaded(true);
+            setDropdownsLoading(false);
+          })
+          .catch((error) => {
+            console.log(
+              `error fetching dropdown items for ${dataTableName} `,
+              error
+            );
           });
-          setMdmData(dropdowns);
-          setDropdownsLoaded(true);
-          setDropdownsLoading(false);
-        });
         break;
       case "Test Extension Exemption":
         const quarters = [

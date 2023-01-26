@@ -507,12 +507,12 @@ export const removeDataSwitch = async (
     case qaCertEvent:
       return qaApi
         .deleteQaCertEvents(locationId, row.id)
-        .catch((error) => console.log("error updating QA cert events", error));
+        .catch((error) => console.log("error deleting QA cert events", error));
     case qaExeptions:
       return qaApi
         .deleteTestExtension(locationId, row.id)
         .catch((error) =>
-          console.log("error updating QA TEST EXCEPTIONS", error)
+          console.log("error deleting QA TEST EXCEPTIONS", error)
         );
     default:
       throw new Error(`removeDataSwitch case not implemented for ${name}`);

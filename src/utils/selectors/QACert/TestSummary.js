@@ -653,7 +653,6 @@ export const mapQaCertEventsDataToRows = (data) => {
 export const mapQaExtensionsExemptionsDataToRows  = (data) => {
   const records = [];
 
-  console.log('data',data)
   data.forEach((el) => {
     const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
     const endHour = el.endHour ? el.endHour.toString() : "";
