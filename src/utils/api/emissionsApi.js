@@ -21,7 +21,7 @@ export const getEmissionsReviewSubmit = async (
 
   queryString = queryString + `&quarters=${quarters.join("|")}`;
 
-  let url = `${config.services.emissions.uri}/review-submit?${queryString}`;
+  let url = `${config.services.emissions.uri}/workspace/emissions?${queryString}`;
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
@@ -77,7 +77,7 @@ export const getEmissionViewData = async (
   unitIds,
   stackPipeIds,
   isWorkspace,
-  attachFile = false,
+  attachFile = false
 ) => {
   const url = new URL(
     // `${config.services.emissions.uri}/emissions/views/${viewCode}`
