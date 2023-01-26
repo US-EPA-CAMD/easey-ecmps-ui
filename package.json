@@ -121,7 +121,7 @@
       "last 1 safari version"
     ]
   },
-  "jest": {   
+  "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
       "!node_modules/",
@@ -136,7 +136,5 @@
       "!src/utils/api/axiosSetup.js",
       "!src/utils/api/setupTests.js"
     ]
-
-
   }
 }
