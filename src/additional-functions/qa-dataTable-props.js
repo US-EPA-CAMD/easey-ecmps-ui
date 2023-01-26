@@ -1466,8 +1466,9 @@ export const qaCertEventsProps = (selectedLocation) => {
     },
     extraControlInputs: {},
   };
-  const locId = selectedLocation.unitId ? "unitId" : "stackPipeId";
-  result.controlInputs[locId] = ["Unit or Stack Pipe ID", "input", "", ""];
+  const locId = selectedLocation.unitId ? 'unitId' : 'stackPipeId';
+  result.controlInputs = {[locId] :["Unit or Stack Pipe ID", "input", "", ""], ...result.controlInputs };
+  //result.controlInputs[locId] = ["Unit or Stack Pipe ID", "input", "", ""];
   return result;
 };
 
@@ -1521,7 +1522,7 @@ export const qaTestExemptionProps = (selectedLocation) => {
     extraControlInputs: {},
   };
 
-  const locId = selectedLocation.unitId ? "unitId" : "stackPipeId";
-  result.controlInputs[locId] = ["Unit or Stack Pipe ID", "input", "", ""];
+  const locId = selectedLocation.unitId ? 'unitId' : 'stackPipeId';
+  result.controlInputs = {[locId] :["Unit or Stack Pipe ID", "input", "", ""], ...result.controlInputs };
   return result;
 };
