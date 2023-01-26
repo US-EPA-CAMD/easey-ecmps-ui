@@ -6,6 +6,16 @@ import { getCheckCatalogResults, getReasonCodes } from "../../../utils/api/mdmAp
 import { getAllFacilities } from "../../../utils/api/facilityApi";
 import { defaultDropdownText } from "../ErrorSuppression";
 
+/**'
+ * Transforms data from the api in the format of:
+ * {
+ *   checkTypeCode: {
+ *      checkNumber: [objects from the api array with that exact checkTypeCode and checkTypeNumber]
+ *  }
+ * }
+ * 
+ * This is done so that we can access the check results by their check type code and check type number.
+ */
 export const transformCheckResultData = (data) => {
     return data.reduce((acc, cv) => {
         if (!acc[cv.checkTypeCode]) {
@@ -21,6 +31,20 @@ export const transformCheckResultData = (data) => {
 
         return acc;
     }, {});
+}
+
+// Takes a transformedData like in the shape described above and returns an array of objects with unique
+// check types and descriptions. We need this to build the checkType dropdown.
+export const getUniqueCheckTypeDescription = (transformedData) => {
+    return Object.keys(transformedData)
+        .map(ctCode => {
+            const checkNumbers = Object.keys(transformedData[ctCode]);
+            const { checkTypeDescription } = transformedData[ctCode][checkNumbers[0]][0];
+            return {
+                checkTypeDescription,
+                checkTypeCode: ctCode
+            }
+        });
 }
 
 export const ErrorSuppressionFilters = () => {
@@ -54,7 +78,9 @@ export const ErrorSuppressionFilters = () => {
 
         getCheckCatalogResults().then(({ data }) => {
             const _transformedData = transformCheckResultData(data);
-            setCheckTypeList(Object.keys(_transformedData));
+            const uniqueTypeCodeAndDesc = getUniqueCheckTypeDescription(_transformedData);
+
+            setCheckTypeList(uniqueTypeCodeAndDesc);
             setTransformedData(_transformedData);
         })
 
@@ -139,7 +165,7 @@ export const ErrorSuppressionFilters = () => {
                         onChange={onCheckTypeChange}
                     >
                         <option value={false}>{defaultDropdownText}</option>
-                        {checkTypeList.map((d) => <option key={d} value={d} data-testid={d}>{d}</option>)}
+                        {checkTypeList.map((d) => <option key={d.checkTypeCode} value={d.checkTypeCode} data-testid={d.checkTypeCode}>{`${d.checkTypeDescription} (${d.checkTypeCode})`}</option>)}
                     </Dropdown>
                 </Grid>
                 <Grid col={2}>
@@ -232,7 +258,7 @@ export const ErrorSuppressionFilters = () => {
                         epa-testid={"reason"}
                         data-testid={"reason"}
                         value={selectedReason}
-                        onChange={(e)=>setSelectedReason(e.target.value)}
+                        onChange={(e) => setSelectedReason(e.target.value)}
                     >
                         <option value={false}>{defaultDropdownText}</option>
                         {reasonCodeList.map((d) => (
