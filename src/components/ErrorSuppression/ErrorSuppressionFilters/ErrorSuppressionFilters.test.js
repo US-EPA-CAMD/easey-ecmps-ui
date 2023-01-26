@@ -1,13 +1,16 @@
 import React from "react";
 import { render, screen, } from "@testing-library/react";
 import { ErrorSuppressionFilters } from "./ErrorSuppressionFilters";
+import { ErrorSuppressionFiltersContextProvider } from "../error-suppression-context";
 
 describe("ErrorSuppressionFilters component", () => {
 
     let component;
 
     beforeEach(() => {
-        component = render(<ErrorSuppressionFilters />);
+        component = render(<ErrorSuppressionFiltersContextProvider>
+                                <ErrorSuppressionFilters />
+                            </ErrorSuppressionFiltersContextProvider>);
     })
 
     it("Renders ErrorSuppressionFilters component", () => {
