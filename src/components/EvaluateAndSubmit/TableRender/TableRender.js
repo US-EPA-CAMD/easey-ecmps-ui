@@ -62,7 +62,7 @@ const TableRender = forwardRef(
       }
     };
 
-    const handleRowView = useCallback((row) => {
+    const handleRowView = useCallback((row, printout) => {
       let reportTitle;
       let reportCode;
       let url;
@@ -70,16 +70,30 @@ const TableRender = forwardRef(
       //TODO: Filter by type
       reportCode = "MPP";
       reportTitle = "ECMPS Monitoring Plan Printout Report";
-      url = `/workspace/reports?reportCode=${reportCode}&monitorPlanId=${row.monPlanId}`;
+
+      let additionalParams = "";
 
       if (type === "MP") {
-        //Load MP Report
+        reportCode = printout ? "MPP" : "MP_EVAL";
+        additionalParams = "&monitorPlanId=" + row.monPlanId;
       } else if (type === "QA") {
         if (rowId === "testSumId") {
-          // Load Test Summary Report
+          reportCode = printout ? "TEST_DETAIL" : "QA_EVAL";
+          additionalParams = "testId=" + row.testSumId;
         }
-        //etc
+        if (rowId === "qaCertEventIdentifier") {
+          reportCode = printout ? "QCE" : "QA_EVAL";
+          additionalParams = "qceId=" + row.qaCertEventIdentifier;
+        }
+        if (rowId === "testExtensionExemptionIdentifier") {
+          reportCode = printout ? "TEE" : "QA_EVAL";
+          additionalParams = "teeId=" + row.testExtensionExemptionIdentifier;
+        }
       }
+
+      url =
+        `/workspace/reports?reportCode=${reportCode}&facilityId=${1}` +
+        additionalParams;
 
       window.open(url, reportTitle, reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -115,7 +129,7 @@ const TableRender = forwardRef(
       },
       ...columns,
     ];
-    addEvalStatusCell(mappings);
+    addEvalStatusCell(mappings, handleRowView);
 
     return (
       <div>
