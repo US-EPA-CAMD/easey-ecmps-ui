@@ -50,13 +50,15 @@ export const getUniqueCheckTypeDescription = (transformedData) => {
 export const ErrorSuppressionFilters = () => {
 
     const ctxFilters = useContext(ErrorSuppressionFiltersContext);
+    const {
+        transformedData, setTransformedData,
+        facilityList, setFacilityList,
+        reasonCodeList, setReasonCodeList } = ctxFilters;
 
     // Dropdowns
     const [checkTypeList, setCheckTypeList] = useState([]);
     const [checkNumberList, setCheckNumberList] = useState([]);
     const [checkResultList, setCheckResultList] = useState([]);
-    const [facilityList, setFacilityList] = useState([]);
-    const [reasonCodeList, setReasonCodeList] = useState([])
 
     // Selection values
     const [selectedCheckType, setSelectedCheckType] = useState();
@@ -71,7 +73,7 @@ export const ErrorSuppressionFilters = () => {
     const [locationData, setLocationData] = useState([]);
 
     // API check result data transformed
-    const [transformedData, setTransformedData] = useState([])
+    // const [transformedData, setTransformedData] = useState([])
 
     // Make all api calls that only need to happen once on page load here
     useEffect(() => {
@@ -132,7 +134,8 @@ export const ErrorSuppressionFilters = () => {
         if (value === false)
             return;
 
-        setCheckNumberList(Object.keys(transformedData[value]))
+        const checkNumbers = Object.keys(transformedData[value]);
+        setCheckNumberList(checkNumbers);
     }
 
     const onCheckNumberChange = (e) => {
@@ -143,7 +146,8 @@ export const ErrorSuppressionFilters = () => {
         if (value === false)
             return;
 
-        setCheckResultList(transformedData[selectedCheckType][value].map(d => d.checkResult))
+        const checkResults = transformedData[selectedCheckType][value].map(d => d.checkResult);
+        setCheckResultList(checkResults)
     }
 
     return (
