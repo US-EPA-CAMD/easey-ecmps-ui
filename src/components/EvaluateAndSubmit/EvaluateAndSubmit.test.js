@@ -1,14 +1,9 @@
 import React from "react";
 import { render, act } from "@testing-library/react";
 import MockPermissions from "./MockPermissions";
-import EvaluateAndSubmit from "./EvaluateAndSubmit";
+import { EvaluateAndSubmit } from "./EvaluateAndSubmit";
 import configureStore from "../../store/configureStore.dev";
 import { Provider } from "react-redux";
-
-sessionStorage.setItem(
-  "cdx_user",
-  '{ "firstName": "mock", "lastName": "mock" }'
-);
 
 window.scrollTo = jest.fn();
 window.location.reload = jest.fn();
@@ -18,6 +13,17 @@ jest.mock("../../utils/api/camdServices", () => ({
     then: jest.fn().mockReturnValue({ catch: jest.fn() }),
   }),
 }));
+
+jest.mock("react-redux", () => {
+  return {
+    connect: (mapStateToProps, mapDispatchToProps) => (ReactComponent) => ({
+      mapStateToProps,
+      mapDispatchToProps,
+      ReactComponent,
+    }),
+    Provider: ({ children }) => children,
+  };
+});
 
 jest.mock("../../utils/api/monitoringPlansApi", () => ({
   getMonitoringPlans: jest.fn().mockResolvedValue({
@@ -45,25 +51,100 @@ jest.mock("../../utils/api/monitoringPlansApi", () => ({
       },
     ],
   }),
-  checkInAllLocations: jest.fn(),
-}));
 
+  getCheckedOutLocations: jest
+    .fn()
+    .mockImplementation(() => Promise.resolve({ data: [] })),
+}));
 jest.mock("../../utils/api/qaCertificationsAPI", () => ({
   getQATestSummaryReviewSubmit: jest.fn().mockResolvedValue({
     data: [
-      { id: "MOCK-1", facilityName: "Barry", name: "1" },
-      { id: "MOCK-2", facilityName: "Barry", name: "2" },
-      { id: "MOCK-3", facilityName: "Barry", name: "3" },
+      {
+        id: "MOCK-1",
+        facilityName: "Barry",
+        name: "1",
+        evalStatusCode: "PASS",
+      },
+      {
+        id: "MOCK-2",
+        facilityName: "Barry",
+        name: "2",
+        evalStatusCode: "PASS",
+      },
+      {
+        id: "MOCK-3",
+        facilityName: "Barry",
+        name: "3",
+        evalStatusCode: "PASS",
+      },
+    ],
+  }),
+  getQACertEventReviewSubmit: jest.fn().mockResolvedValue({
+    data: [
+      {
+        id: "MOCK-1",
+        facilityName: "Barry",
+        name: "1",
+        evalStatusCode: "PASS",
+      },
+      {
+        id: "MOCK-2",
+        facilityName: "Barry",
+        name: "2",
+        evalStatusCode: "PASS",
+      },
+      {
+        id: "MOCK-3",
+        facilityName: "Barry",
+        name: "3",
+        evalStatusCode: "PASS",
+      },
+    ],
+  }),
+  getQATeeReviewSubmit: jest.fn().mockResolvedValue({
+    data: [
+      {
+        id: "MOCK-1",
+        facilityName: "Barry",
+        name: "1",
+        evalStatusCode: "PASS",
+      },
+      {
+        id: "MOCK-2",
+        facilityName: "Barry",
+        name: "2",
+        evalStatusCode: "PASS",
+      },
+      {
+        id: "MOCK-3",
+        facilityName: "Barry",
+        name: "3",
+        evalStatusCode: "PASS",
+      },
     ],
   }),
 }));
-
 jest.mock("../../utils/api/emissionsApi", () => ({
   getEmissionsReviewSubmit: jest.fn().mockResolvedValue({
     data: [
-      { orisCode: "MOCK-1", facilityName: "Barry", configuration: "1" },
-      { orisCode: "MOCK-2", facilityName: "Barry", configuration: "2" },
-      { orisCode: "MOCK-3", facilityName: "Barry", configuration: "3" },
+      {
+        orisCode: "MOCK-1",
+        facilityName: "Barry",
+        configuration: "1",
+        evalStatusCode: "PASS",
+      },
+      {
+        orisCode: "MOCK-2",
+        facilityName: "Barry",
+        configuration: "2",
+        evalStatusCode: "PASS",
+      },
+      {
+        orisCode: "MOCK-3",
+        facilityName: "Barry",
+        configuration: "3",
+        evalStatusCode: "PASS",
+      },
     ],
   }),
 }));
@@ -87,21 +168,13 @@ jest.mock(
     }
 );
 
-jest.mock(
-  "./DataTables/DataTables",
-  () =>
-    ({
-      monPlanState,
-      setMonPlanState,
-      monPlanRef,
-      qaTestSumState,
-      setQaTestSumState,
-      qaTestSumRef,
-      permissions,
-    }) => {
-      return <div>{`MON PLAN LENGTH: ${monPlanState.length}`}</div>;
-    }
-);
+jest.mock("./DataTables/DataTables", () => ({ dataList, permissions }) => {
+  return <div>{`MON PLAN LENGTH: ${dataList[0].state.length}`}</div>;
+});
+
+jest.mock("../../additional-functions/checkout", () => ({
+  checkoutAPI: jest.fn(),
+}));
 
 jest.mock(
   "../SubmissionModal/SubmissionModal",
@@ -128,13 +201,11 @@ describe("Review and Submit component", () => {
     user = { userId: "mock", firstName: "mock", lastName: "mock" };
     await act(async () => {
       query = render(
-        <Provider store={store}>
-          <EvaluateAndSubmit
-            componentType="Submission"
-            checkedOutLocations={[]}
-            user={user}
-          />
-        </Provider>
+        <EvaluateAndSubmit
+          componentType="Submission"
+          checkedOutLocations={[]}
+          user={user}
+        />
       );
     });
   });
@@ -147,7 +218,7 @@ describe("Review and Submit component", () => {
     const { getByText } = query;
 
     await act(async () => {
-      getByText("FILTER").click();
+      await getByText("FILTER").click();
     });
 
     expect(getByText("MON PLAN LENGTH: 1")).toBeInTheDocument();

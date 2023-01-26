@@ -85,7 +85,45 @@ export const getQATestSummaryReviewSubmit = async (
     queryString = queryString + `&quarters=${quarters.join("|")}`;
   }
 
-  let url = `${config.services.qaCertification.uri}/review-and-submit/test-summary?${queryString}`;
+  let url = `${config.services.qaCertification.uri}/workspace/test-summary?${queryString}`;
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const getQACertEventReviewSubmit = async (
+  orisCodes,
+  monPlanIds = [],
+  quarters = []
+) => {
+  let queryString = `orisCodes=${orisCodes.join("|")}`;
+
+  if (monPlanIds.length > 0) {
+    queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
+  }
+
+  if (quarters.length > 0) {
+    queryString = queryString + `&quarters=${quarters.join("|")}`;
+  }
+
+  let url = `${config.services.qaCertification.uri}/workspace/cert-events?${queryString}`;
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const getQATeeReviewSubmit = async (
+  orisCodes,
+  monPlanIds = [],
+  quarters = []
+) => {
+  let queryString = `orisCodes=${orisCodes.join("|")}`;
+
+  if (monPlanIds.length > 0) {
+    queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
+  }
+
+  if (quarters.length > 0) {
+    queryString = queryString + `&quarters=${quarters.join("|")}`;
+  }
+
+  let url = `${config.services.qaCertification.uri}/workspace/test-extension-exemption?${queryString}`;
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 

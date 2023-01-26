@@ -26,8 +26,8 @@ describe("Emissions API", function () {
   });
 
   describe("Review And Submit", () => {
-    test("getQATestSummaryReviewSubmit", async () => {
-      const url = `${config.services.emissions.uri}/review-submit?orisCodes=3&monPlanIds=3&quarters=1`;
+    test("getEmissionsReviewSubmit", async () => {
+      const url = `${config.services.emissions.uri}/workspace/emissions?orisCodes=3&monPlanIds=3&quarters=1`;
       mock.onGet(url).reply(200, "Mocked");
 
       const resp = await getEmissionsReviewSubmit([3], [3], [1]);
