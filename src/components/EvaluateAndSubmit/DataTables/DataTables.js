@@ -1,33 +1,66 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TableRender from "../TableRender/TableRender";
-import {
-  monPlanColumns,
-  qaTestSummaryColumns,
-  emissionsColumns,
-  qaCertEventColumns,
-} from "./ColumnMappings";
+import { checkoutAPI } from "../../../additional-functions/checkout";
 
 const DataTables = ({
-  monPlanState,
-  setMonPlanState,
-  monPlanRef,
-  qaTestSumState,
-  setQaTestSumState,
-  qaTestSumRef,
-  qaCertEventState,
-  setQaCertEventState,
-  qaCertEventRef,
-  emissionsState,
-  setEmissionsState,
-  emissionsRef,
+  dataList,
   permissions,
   updateFilesSelected,
-  checkedOutLocationsMap,
   componentType,
-  checkedOutLocationsInCurrentSessionRef,
+  monitorPlanIdToSelectedMap,
+  userCheckedOutPlans,
 }) => {
+  const selectRow = (row, bool, tableType) => {
+    try {
+      //TODO: Flip QA and MP Records if possible
+      updateFilesSelected(bool);
+      row.selected = bool;
+      row.userCheckedOut = bool;
+      row.checkedOut = bool;
+
+      // Change the amount of the stored monitor plan selections
+      if (bool) {
+        if (monitorPlanIdToSelectedMap.current.has(row.monPlanId)) {
+          //The map associated monPlanIds to {facId, count} facId is needed in checkout process that uses the map to check records back in
+          monitorPlanIdToSelectedMap.current.set(row.monPlanId, [
+            monitorPlanIdToSelectedMap.current.get(row.monPlanId)[0],
+            monitorPlanIdToSelectedMap.current.get(row.monPlanId)[1] + 1,
+          ]);
+        } else {
+          monitorPlanIdToSelectedMap.current.set(row.monPlanId, [
+            row.facilityId,
+            1,
+          ]);
+        }
+        if (
+          monitorPlanIdToSelectedMap.current.get(row.monPlanId)[1] === 1 &&
+          !userCheckedOutPlans.current.has(row.monPlanId)
+        ) {
+          checkoutAPI(true, row.facilityId, row.monPlanId);
+        }
+
+        if (tableType === "QA") {
+          updateMonPlanRow(row.monPlanId, bool);
+        } else if (tableType === "EM") {
+          updateMonPlanRow(row.monPlanId, bool);
+          updateQARow(row.monPlanId, row.periodAbbreviation, bool);
+        }
+      } else {
+        monitorPlanIdToSelectedMap.current.set(row.monPlanId, [
+          monitorPlanIdToSelectedMap.current.get(row.monPlanId)[0],
+          monitorPlanIdToSelectedMap.current.get(row.monPlanId)[1] - 1,
+        ]);
+        if (monitorPlanIdToSelectedMap.current.get(row.monPlanId)[1] === 0) {
+          checkoutAPI(false, row.facilityId, row.monPlanId);
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const updateMonPlanRow = useCallback((id, selection) => {
     let rowStateFunc;
 
@@ -37,15 +70,18 @@ const DataTables = ({
       rowStateFunc = getRowStateEvaluate;
     }
 
-    for (const mpR of monPlanRef.current) {
-      if (mpR.monPlanId === id && rowStateFunc(mpR, "MP") === "Checkbox") {
-        mpR.selected = selection;
-        mpR.userCheckedOut = selection;
-        updateFilesSelected(selection);
+    for (const mpR of dataList[0].ref.current) {
+      if (
+        mpR.monPlanId === id &&
+        rowStateFunc(mpR, "MP") === "Checkbox" &&
+        mpR.selected !== selection
+      ) {
+        selectRow(mpR, selection, "MP");
       }
     }
 
-    setMonPlanState([...monPlanRef.current]); //Update monitor plan state
+    dataList[0].setState([...dataList[0].ref.current]);
+
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -58,21 +94,23 @@ const DataTables = ({
       rowStateFunc = getRowStateEvaluate;
     }
 
-    //TODO: Iterate all possible qa tables and select the desired ones
-    for (const qaR of qaTestSumRef.current) {
-      if (
-        qaR.monPlanId === id &&
-        qaR.periodAbbreviation === periodAbr &&
-        rowStateFunc(qaR, "QA") === "Checkbox"
-      ) {
-        qaR.selected = selection;
-        qaR.userCheckedOut = selection;
-        updateFilesSelected(selection);
-      }
-    }
+    const qaData = [dataList[1], dataList[2], dataList[3]];
 
-    setQaTestSumState([...qaTestSumRef.current]); //Update monitor plan state
-    //eslint-disable-next-line react-hooks/exhaustive-deps
+    for (const dataChunk of qaData) {
+      //TODO: Iterate all possible qa tables and select the desired ones
+      for (const qaR of dataChunk.ref.current) {
+        if (
+          qaR.monPlanId === id &&
+          qaR.periodAbbreviation === periodAbr &&
+          rowStateFunc(qaR, "QA") === "Checkbox" &&
+          qaR.selected !== selection
+        ) {
+          selectRow(qaR, selection, "NONRECUR"); //Set to nonrecur so we don't iterate monitor plans for every qa record change
+        }
+      }
+
+      dataChunk.setState([...dataChunk.ref.current]);
+    }
   }, []);
 
   const getRowStateSubmission = useCallback((row, type) => {
@@ -138,46 +176,8 @@ const DataTables = ({
     } //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const tables = useMemo(
-    () => [
-      {
-        columns: monPlanColumns,
-        state: monPlanState,
-        setState: setMonPlanState,
-        ref: monPlanRef,
-        name: "Monitoring Plan",
-        type: "MP",
-      },
-      {
-        columns: qaTestSummaryColumns,
-        state: qaTestSumState,
-        setState: setQaTestSumState,
-        ref: qaTestSumRef,
-        name: "Test Data",
-        type: "QA",
-      },
-      {
-        columns: qaCertEventColumns,
-        state: qaCertEventState,
-        setState: setQaCertEventState,
-        ref: qaCertEventRef,
-        name: "Cert Event",
-        type: "QA",
-      },
-      {
-        columns: emissionsColumns,
-        state: emissionsState,
-        setState: setEmissionsState,
-        ref: emissionsRef,
-        name: "Emissions",
-        type: "EM",
-      },
-    ], //eslint-disable-next-line react-hooks/exhaustive-deps
-    [monPlanState, qaTestSumState, emissionsState, qaCertEventState]
-  );
-
   const [activeTables, setActiveTables] = useState(
-    tables.reduce((acc, curr) => ({ ...acc, [curr.name]: true }), {})
+    dataList.reduce((acc, curr) => ({ ...acc, [curr.name]: true }), {})
   );
   const showOrHideTable = (name) =>
     setActiveTables({
@@ -187,8 +187,8 @@ const DataTables = ({
 
   return (
     <div>
-      {tables.map((table, i) => {
-        const { name, columns, state, setState, ref, type } = table;
+      {dataList.map((table, i) => {
+        const { name, columns, state, setState, ref, type, rowId } = table;
         return (
           <div className="" key={i}>
             <div className="padding-y-5 display-flex">
@@ -227,16 +227,14 @@ const DataTables = ({
                 type={type}
                 updateMonPlanRow={updateMonPlanRow}
                 updateQARow={updateQARow}
+                rowId={rowId}
                 getRowState={
                   componentType === "Submission"
                     ? getRowStateSubmission
                     : getRowStateEvaluate
                 }
+                selectRow={selectRow}
                 updateFilesSelected={updateFilesSelected}
-                checkedOutLocationsMap={checkedOutLocationsMap}
-                checkedOutLocationsInCurrentSessionRef={
-                  checkedOutLocationsInCurrentSessionRef
-                }
               />
             </div>
           </div>

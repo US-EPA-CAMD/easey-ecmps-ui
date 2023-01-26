@@ -24,16 +24,10 @@ jest.mock(
       type,
       getRowState,
       setSelectAllState,
+      setSelectAllVisible,
     }) => {
       return (
         <div>
-          <button
-            onClick={() => {
-              handleRowSelection(mockRowState, "MP", true);
-            }}
-          >
-            SELECT ROW
-          </button>
           <button
             onClick={() => {
               handleRowView(mockRowState);
@@ -41,145 +35,22 @@ jest.mock(
           >
             VIEW ROW
           </button>
+          <button
+            onClick={() => {
+              handleRowSelection(mockRowState, type, true);
+            }}
+          >
+            SELECT INDIVIDUAL
+          </button>
         </div>
       );
     }
 );
-const mockApiCall = jest.fn().mockResolvedValue({
-  data: [],
-});
-jest.mock("../../../additional-functions/checkout", () => ({
-  checkoutAPI: () => mockApiCall(),
-}));
-jest.mock('react-redux', () => ({
-  useSelector: jest.fn(),
-  useDispatch: jest.fn(),
-}));
-jest.mock("../../../utils/api/monitoringPlansApi", () => ({
-  getUpdatedCheckedOutLocations: jest.fn().mockResolvedValue(new Map()),
-  checkInOutLocation: () => mockApiCall(),
-}))
+
 describe("Review and Submit Tables component", () => {
-  it("expect row selection to select row in current ref", async () => {
-    const currentRows = {
-      current: [
-        {
-          selected: false,
-          userCheckedOut: false,
-          monPlanId: "testId",
-          orisCode: 1,
-        },
-      ],
-    };
-
-    let query = render(
-      <TableRender
-        columns={[
-          {
-            name: "ORIS Code",
-            selector: "orisCode",
-          },
-        ]}
-        state={[{ orisCode: 1 }]}
-        setState={jest.fn()}
-        name={"Monitor Plans"}
-        type="MP"
-        updateMonPlanRow={jest.fn()}
-        getRowState={jest.fn()}
-        ref={currentRows}
-        updateFilesSelected={jest.fn()}
-        checkedOutLocationsInCurrentSessionRef={{current: []}}
-      />
-    );
-
-    const { getByText } = query;
-
-    await act(async () => {
-      getByText("SELECT ROW").click();
-    });
-    expect(currentRows.current[0].selected).toBe(true);
-  });
-  it("checks out row when it is selected", async () => {
-    const currentRows = {
-      current: [
-        {
-          selected: false,
-          userCheckedOut: false,
-          monPlanId: "testId",
-          orisCode: 1,
-        },
-      ],
-    };
-
-    let query = render(
-      <TableRender
-        columns={[
-          {
-            name: "ORIS Code",
-            selector: "orisCode",
-          },
-        ]}
-        state={[{ orisCode: 1 }]}
-        setState={jest.fn()}
-        name={"Monitor Plans"}
-        type="MP"
-        updateMonPlanRow={jest.fn()}
-        getRowState={jest.fn()}
-        ref={currentRows}
-        updateFilesSelected={jest.fn()}
-        checkedOutLocationsInCurrentSessionRef={{current: []}}
-      />
-    );
-
-    const { getByText } = query;
-
-    await act(async () => {
-      getByText("SELECT ROW").click();
-    });
-    expect(mockApiCall).toHaveBeenCalled();
-  });
-
-  it("expect monitor plan to open on view button click", async () => {
-    const currentRows = {
-      current: [
-        {
-          selected: false,
-          userCheckedOut: false,
-          monPlanId: "testId",
-          orisCode: 1,
-        },
-      ],
-    };
-
-    let query = render(
-      <TableRender
-        columns={[
-          {
-            name: "ORIS Code",
-            selector: "orisCode",
-          },
-        ]}
-        state={[{ orisCode: 1 }]}
-        setState={jest.fn()}
-        name={"Monitor Plans"}
-        type="MP"
-        updateMonPlanRow={jest.fn()}
-        getRowState={jest.fn()}
-        ref={currentRows}
-        updateFilesSelected={jest.fn()}
-        checkedOutLocationsInCurrentSessionRef={{current: []}}
-      />
-    );
-
-    const { getByText } = query;
-
-    await act(async () => {
-      getByText("VIEW ROW").click();
-    });
-    expect(mockFunc).toHaveBeenCalled();
-  });
-
   it("expect select all to select all of the current rows", async () => {
+    const selectRowMock = jest.fn();
+
     const currentRows = {
       current: [
         {
@@ -206,14 +77,11 @@ describe("Review and Submit Tables component", () => {
           },
         ]}
         state={[{ orisCode: 1 }]}
-        setState={jest.fn()}
-        name={"Monitor Plans"}
         type="MP"
-        updateMonPlanRow={jest.fn()}
         getRowState={jest.fn().mockReturnValue("Checkbox")}
+        rowId={"monPlanId"}
         ref={currentRows}
-        updateFilesSelected={jest.fn()}
-        checkedOutLocationsInCurrentSessionRef={{current: []}}
+        selectRow={selectRowMock}
       />
     );
 
@@ -223,11 +91,12 @@ describe("Review and Submit Tables component", () => {
       fireEvent.click(checkbox);
     });
 
-    expect(currentRows.current[0].selected).toBe(true);
-    expect(currentRows.current[1].selected).toBe(true);
+    expect(selectRowMock).toHaveBeenCalledTimes(2);
   });
 
-  it("select all checks out selected rows", async () => {
+  it("expect select individual to select an individual row", async () => {
+    const selectRowMock = jest.fn();
+
     const currentRows = {
       current: [
         {
@@ -245,7 +114,7 @@ describe("Review and Submit Tables component", () => {
       ],
     };
 
-    let query = render(
+    let { getByText } = render(
       <TableRender
         columns={[
           {
@@ -254,23 +123,18 @@ describe("Review and Submit Tables component", () => {
           },
         ]}
         state={[{ orisCode: 1 }]}
-        setState={jest.fn()}
-        name={"Monitor Plans"}
         type="MP"
-        updateMonPlanRow={jest.fn()}
         getRowState={jest.fn().mockReturnValue("Checkbox")}
+        rowId={"monPlanId"}
         ref={currentRows}
-        updateFilesSelected={jest.fn()}
-        checkedOutLocationsInCurrentSessionRef={{current: []}}
+        selectRow={selectRowMock}
       />
     );
 
-    const checkbox = screen.getByTestId("SelectAll");
-
     await act(async () => {
-      fireEvent.click(checkbox);
+      await getByText("SELECT INDIVIDUAL").click();
     });
 
-    expect(mockApiCall).toHaveBeenCalled();
+    expect(selectRowMock).toHaveBeenCalledTimes(1);
   });
 });

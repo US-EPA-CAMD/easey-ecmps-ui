@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export const debugLog = (message, object = null) => {
   if (getConfigValueBoolean("REACT_APP_EASEY_ECMPS_UI_ENABLE_DEBUG")) {
@@ -67,14 +67,23 @@ export const getConfigValueBoolean = (key, defaultValue = "") => {
 };
 
 //** review and submit utility functions
-export const isLocationUserCheckedOut = (checkedOutLocationsMap, monPlanId, userId) => {
+export const isLocationUserCheckedOut = (
+  checkedOutLocationsMap,
+  monPlanId,
+  userId
+) => {
   if (checkedOutLocationsMap.get(monPlanId)?.checkedOutBy === userId) {
     return true;
   }
   return false;
-}
+};
 
-export const updateCheckedOutLocationsOnTable = (tableRef, updateState, checkedOutLocationsMPIdsMap, userId) => {
+export const updateCheckedOutLocationsOnTable = (
+  tableRef,
+  updateState,
+  checkedOutLocationsMPIdsMap,
+  userId
+) => {
   let changeInCheckedOutLocations = 0;
   tableRef.current.forEach((tableRow) => {
     const isLocationCheckedOut = checkedOutLocationsMPIdsMap.has(
@@ -85,7 +94,11 @@ export const updateCheckedOutLocationsOnTable = (tableRef, updateState, checkedO
     }
     tableRow.checkedOut = isLocationCheckedOut;
     if (isLocationCheckedOut) {
-      tableRow.userCheckedOut = isLocationUserCheckedOut(checkedOutLocationsMPIdsMap, tableRow.monPlanId, userId);
+      tableRow.userCheckedOut = isLocationUserCheckedOut(
+        checkedOutLocationsMPIdsMap,
+        tableRow.monPlanId,
+        userId
+      );
     }
     if (!isLocationUserCheckedOut) {
       tableRow.userCheckedOut = false;
@@ -97,26 +110,6 @@ export const updateCheckedOutLocationsOnTable = (tableRef, updateState, checkedO
   if (changeInCheckedOutLocations) {
     updateState([...tableRef.current]);
   }
-};
-
-export const updateCheckedOutLocationsOnTables = (checkedOutLocationsMPIdsMap, tablesObj, userId) => {
-  for (const table in tablesObj) {
-    const {ref, setState} = tablesObj[table];
-    updateCheckedOutLocationsOnTable(ref, setState, checkedOutLocationsMPIdsMap, userId)
-  }
-};
-
-export const isLocationCheckedOutByUser = ({
-  userId,
-  checkedOutLocationsMap,
-  chunk,
-  isLocationCheckedOut,
-}) => {
-  if (!isLocationCheckedOut) {
-    return false;
-  }
-  const { monPlanId } = chunk; 
-  return isLocationUserCheckedOut(checkedOutLocationsMap, monPlanId, userId)
 };
 
 export const evalStatusStyle = (status) => {
@@ -136,9 +129,10 @@ export const evalStatusStyle = (status) => {
   return "";
 };
 
-export const alertStyle = (evalStatus) => `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
-  evalStatus
-)} margin-y-0 maintainBorder`;
+export const alertStyle = (evalStatus) =>
+  `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
+    evalStatus
+  )} margin-y-0 maintainBorder`;
 export const reportWindowParams = [
   // eslint-disable-next-line no-restricted-globals
   `height=${screen.height}`,
@@ -171,21 +165,21 @@ export const displayReport = (monPlanId, reportCode = "MP_EVAL") => {
   );
 };
 
-export const evalStatusesWithLinks = new Set(['PASS', 'INFO', 'ERR']);
+export const evalStatusesWithLinks = new Set(["PASS", "INFO", "ERR"]);
 export const addEvalStatusCell = (columns) =>
   columns.map((col) => {
-    if (col.name === 'Eval Status') {
+    if (col.name === "Eval Status") {
       col.cell = ({ evalStatusCode, monPlanId }) => (
         <div className={alertStyle(evalStatusCode)}>
           {evalStatusesWithLinks.has(evalStatusCode) ? (
             <button
-              className={'hyperlink-btn cursor-pointer'}
-              onClick={() => displayReport(monPlanId, 'MP_EVAL')}
+              className={"hyperlink-btn cursor-pointer"}
+              onClick={() => displayReport(monPlanId, "MP_EVAL")}
             >
               {evalStatusCode}
             </button>
           ) : (
-            <button className={'unstyled-btn'}>{evalStatusCode}</button>
+            <button className={"unstyled-btn"}>{evalStatusCode}</button>
           )}
         </div>
       );
@@ -193,39 +187,15 @@ export const addEvalStatusCell = (columns) =>
     return col;
   });
 
-  export const updateCheckedOutLocationsRef = (isCheckedOut, row, ref) => {
-    if(isCheckedOut){
-      ref.current.push(row);
-    } else {
-      ref.current = ref.current.filter(el => el.monPlanId !== row.monPlanId);
-    }
-  };
-
-  export const updateCorrespondingMPAndQARow = ({r, type, updateMonPlanRow, updateQARow, selection}) => {
-    if (r && type !== 'MP') {
-      // Need to activate mp for subsequent child records
-      updateMonPlanRow(r.monPlanId, selection);
-
-      if (type === 'EM') {
-        updateQARow(r.monPlanId, r.periodAbbreviation, selection);
-      }
-    }
-  };
-
-  export const updateCurrentRow = (bool, row) => {
-    row.selected = bool;
-    row.userCheckedOut = bool;
-    row.checkedOut = bool;
-  };
-// Returns the previously fully submitted quarter (reporting period). 
+// Returns the previously fully submitted quarter (reporting period).
 // For the first month of every quarter, the previusly submitted reporting period is actually two quarters ago.
-// For every month in between it is the previous quarter. 
+// For every month in between it is the previous quarter.
 // The following function implements this logic
 export const getPreviouslyFullSubmitedQuarter = (dateString = null) => {
-// WARNING - be weary of the date string and the wonkiness of JS dates. 
-// If you pass in a date that is in format yyyy-mm-dd, javascript creates it in the previous day. For example,
-// new Date('2020-01-01') is created as '2019-12-31 11:59PM'. However, a date string of dd/mm/yyyy creates 
-// the date object as expected
+  // WARNING - be weary of the date string and the wonkiness of JS dates.
+  // If you pass in a date that is in format yyyy-mm-dd, javascript creates it in the previous day. For example,
+  // new Date('2020-01-01') is created as '2019-12-31 11:59PM'. However, a date string of dd/mm/yyyy creates
+  // the date object as expected
 
   let date;
 
