@@ -3,6 +3,7 @@ import { GridContainer, Grid, Label, Dropdown, Checkbox, DatePicker, ButtonGroup
 import { ErrorSuppressionFiltersContext } from "../error-suppression-context";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getCheckCatalogResults } from "../../../utils/api/mdmApi";
+import { getAllFacilities } from "../../../utils/api/facilityApi";
 
 export const transformCheckResultData = (data)=>{
     return data.reduce((acc, cv)=>{
@@ -25,11 +26,15 @@ export const ErrorSuppressionFilters = () => {
 
     const ctxFilters = useContext(ErrorSuppressionFiltersContext);
 
+    // Dropdowns
     const [checkTypeList, setCheckTypeList] = useState([]);
-    const [selectedCheckType, setSelectedCheckType] = useState();
     const [checkNumberList, setCheckNumberList] = useState([]);
-    const [selectedCheckNumber, setSelectedCheckNumber] = useState();
     const [checkResultList, setCheckResultList] = useState([]);
+    const [facilityList, setFacilityList] = useState([]);
+    
+    // Selection values
+    const [selectedCheckType, setSelectedCheckType] = useState();
+    const [selectedCheckNumber, setSelectedCheckNumber] = useState();
     const [selectedCheckResult, setSelectedCheckResult] = useState();
     const [selectedFacility, setSelectedFacility] = useState();
     const [selectedLocations, setSelectedLocations] = useState([]);
@@ -39,17 +44,23 @@ export const ErrorSuppressionFilters = () => {
     const [selectedAddDateBefore, setSelectedAddDateBefore] = useState();
     const [locationData, setLocationData] = useState([]);
 
+    // API check result data transformed
     const [transformedData, setTransformedData] = useState([])
 
 
     const defaultDropdownText = "-- Select a value --";
 
+    // Make all api calls that only need to happen once on page load here
     useEffect(()=>{
 
         getCheckCatalogResults().then(({data})=>{
             const _transformedData = transformCheckResultData(data);
             setCheckTypeList(Object.keys(_transformedData));
             setTransformedData(_transformedData);
+        })
+
+        getAllFacilities().then(({data})=>{
+            setFacilityList(data.map(f => ({orisCode: f.facilityId, facilityName: f.facilityName})));
         })
 
         setLocationData([
@@ -179,8 +190,10 @@ export const ErrorSuppressionFilters = () => {
                         epa-testid={"facility-name"}
                         data-testid={"facility-name"}
                         value={selectedFacility}
+                        onChange={(e)=>setSelectedFacility(e.target.value)}
                     >
-                        <option>Coming Soon...</option>
+                        <option value={false}>{defaultDropdownText}</option>
+                        {facilityList.map((d)=> <option key={d.orisCode} value={d.orisCode} data-testid={d.orisCode}>{`${d.facilityName} (${d.orisCode})`}</option>)}
                     </Dropdown>
                 </Grid>
                 <Grid col={4}>
