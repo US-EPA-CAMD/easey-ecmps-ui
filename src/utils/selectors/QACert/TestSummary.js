@@ -628,6 +628,28 @@ export const mapHgInjectionDataToRows = (data) => {
   return records;
 }
 
+export const mapQaCertEventsDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.unitId? el.unitId : el.stackPipeId,
+      col2: el.componentID,
+      col3: el.monitoringSystemID,
+      col4: el.qaCertEventCode,
+      col5: el.qaCertEventDate,
+      col6: el.qaCertEventHour,
+      col7: el.requiredTestCode,
+      col8: el.conditionalBeginDate,
+      col9: el.conditionalBeginHour,
+      col10: el.completionTestDate,
+      col11: el.completionTestHour
+    };
+    records.push(row)
+  }
+  return records;
+}
+
 export const getListOfRadioControls = (controlInputs) => {
   const result = [];
   const keys = Object.keys(controlInputs);
