@@ -83,6 +83,7 @@ const QACertEventTestExmpDataTable = ({
 
   const {
     dataTableName,
+    payload,
     dropdownArray,
     columns,
     controlInputs,
@@ -188,47 +189,51 @@ const QACertEventTestExmpDataTable = ({
         allPromises.push(mpApi.getMonitoringSystems(locationSelectValue));
         allPromises.push(dmApi.getAllSpanScaleCodes());
         allPromises.push(dmApi.getAllFuelCodes());
-        allPromises.push(dmApi.getMdmDataByCodeTable("required-test-codes"));
-
-        Promise.all(allPromises).then((response) => {
-          dropdownArray[0].forEach((val, i) => {
-            if (i === 0) {
-              dropdowns[dropdownArray[0][i]] = years;
-            } else if (i === 1) {
-              dropdowns[dropdownArray[0][i]] = quarters;
-            } else if (i === 2) {
-              dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
-                getOptions(d, "componentId", "componentId")
-              );
-            } else if (i === 3) {
-              dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
-                getOptions(d, "monitoringSystemId", "monitoringSystemId")
-              );
-            } else if (i === 4) {
-              dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
-                getOptions(d, "spanScaleCode", "spanScaleDescription")
-              );
-            } else if (i === 5) {
-              dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
-                getOptions(d, "fuelCode", "fuelDescription")
-              );
-            } else if (i === 6) {
-              dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
-                getOptions(d, "requiredTestCode", "requiredTestDescription")
-              );
-            }
-
-            dropdowns[dropdownArray[0][i]].unshift({
-              code: "",
-              name: "-- Select a value --",
+        // allPromises.push(dmApi.getMdmDataByCodeTable("required-test-codes"));
+        allPromises.push([]);
+        Promise.all(allPromises)
+          .then((response) => {
+            dropdownArray[0].forEach((val, i) => {
+              if (i === 0) {
+                dropdowns[dropdownArray[0][i]] = years;
+              } else if (i === 1) {
+                dropdowns[dropdownArray[0][i]] = quarters;
+              } else if (i === 2) {
+                dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                  getOptions(d, "componentId", "componentId")
+                );
+              } else if (i === 3) {
+                dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                  getOptions(d, "monitoringSystemId", "monitoringSystemId")
+                );
+              } else if (i === 4) {
+                dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                  getOptions(d, "spanScaleCode", "spanScaleDescription")
+                );
+              } else if (i === 5) {
+                dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                  getOptions(d, "fuelCode", "fuelDescription")
+                );
+              } else if (i === 6) {
+                dropdowns[dropdownArray[0][i]] = [
+                  { code: "LOWSYTD", name: "LOWSYTD" },
+                ];
+              }
+              dropdowns[dropdownArray[0][i]].unshift({
+                code: "",
+                name: "-- Select a value --",
+              });
             });
+            setMdmData(dropdowns);
+            setDropdownsLoaded(true);
+            setDropdownsLoading(false);
+          })
+          .catch((error) => {
+            console.log(
+              `error fetching dropdown items for ${dataTableName} `,
+              error
+            );
           });
-          setMdmData(dropdowns);
-          setDropdownsLoaded(true);
-          setDropdownsLoading(false);
-        }).catch((error) => {
-          console.log(`error fetching dropdown items for ${dataTableName} `, error);
-        }); 
         break;
       default:
         setMdmData(null);
@@ -350,9 +355,24 @@ const QACertEventTestExmpDataTable = ({
     return null;
   };
 
-  const saveData = () => {
-    //TODO
-    return null;
+  const saveData = async (row) => {
+    let selectedData = {};
+    const userInput = extractUserInput(payload, ".modalUserInput");
+
+    assertSelector
+      .saveDataSwitch(
+        userInput,
+        dataTableName,
+        locationSelectValue,
+        selectedRow.id
+      )
+      .then((res) => {
+        setUpdateTable(true);
+        executeOnClose();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const createData = () => {

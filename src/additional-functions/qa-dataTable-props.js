@@ -1411,7 +1411,20 @@ export const qaHgInjectionDataProps = () => {
 export const qaCertEventsProps = (selectedLocation) => {
   const result = {
     dataTableName: "QA Certification Event",
-    payload: {},
+    payload: {
+      id: null,
+      unitId: null,
+      monitoringSystemID: null,
+      componentID: null,
+      qaCertEventCode: null,
+      requiredTestCode: null,
+      qaCertEventHour: null,
+      conditionalBeginHour: null,
+      completionTestHour: null,
+      qaCertEventDate: null,
+      conditionalBeginDate: null,
+      completionTestDate: null,
+    },
     dropdownArray: [
       [
         "componentID",
@@ -1466,24 +1479,40 @@ export const qaCertEventsProps = (selectedLocation) => {
     },
     extraControlInputs: {},
   };
-  const locId = selectedLocation.unitId ? 'unitId' : 'stackPipeId';
-  result.controlInputs = {[locId] :["Unit or Stack Pipe ID", "input", "", ""], ...result.controlInputs };
+  const locId = selectedLocation.unitId ? "unitId" : "stackPipeId";
+  result.controlInputs = {
+    [locId]: ["Unit or Stack Pipe ID", "input", "", ""],
+    ...result.controlInputs,
+  };
   //result.controlInputs[locId] = ["Unit or Stack Pipe ID", "input", "", ""];
   return result;
 };
 
 export const qaTestExemptionProps = (selectedLocation) => {
-  const result =  {
+  const result = {
     dataTableName: "Test Extension Exemption",
-    payload: {},
-    dropdownArray: [[
-      'year',
-      'quarter',
-      "componentID",
-      "monitoringSystemID",
-      "spanScaleCode",
-      "fuelCode",
-      'extensionOrExemptionCode']
+    payload: {
+      id: null,
+      unitId: null,
+      monitoringSystemID: null,
+      componentID: null,
+      year: null,
+      quarter: null,
+      hoursUsed: null,
+      spanScaleCode: null,
+      fuelCode: null,
+      extensionOrExemptionCode: "LOWSYTD",
+    },
+    dropdownArray: [
+      [
+        "year",
+        "quarter",
+        "componentID",
+        "monitoringSystemID",
+        "spanScaleCode",
+        "fuelCode",
+        "extensionOrExemptionCode",
+      ],
     ],
     columns: [
       "Unit or Stack Pipe ID",
@@ -1522,7 +1551,10 @@ export const qaTestExemptionProps = (selectedLocation) => {
     extraControlInputs: {},
   };
 
-  const locId = selectedLocation.unitId ? 'unitId' : 'stackPipeId';
-  result.controlInputs = {[locId] :["Unit or Stack Pipe ID", "input", "", ""], ...result.controlInputs };
+  const locId = selectedLocation.unitId ? "unitId" : "stackPipeId";
+  result.controlInputs = {
+    [locId]: ["Unit or Stack Pipe ID", "input", "", ""],
+    ...result.controlInputs,
+  };
   return result;
 };

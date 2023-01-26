@@ -35,7 +35,7 @@ const unitDefaultTestRun = "Unit Default Test Run";
 const hgSummary = "Hg Summary";
 const hgInjection = "Hg Injection";
 const qaCertEvent = "QA Certification Event";
-const qaExeptions = "Test Extension Exemption"
+const qaExeptions = "Test Extension Exemption";
 // Getting records from API
 export const getDataTableApis = async (name, location, id, extraIdsArr) => {
   switch (name) {
@@ -762,6 +762,23 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput
         )
         .catch((error) => console.log("error updating hg injection", error));
+
+        // for some reason, id and userinput. id are identical in the url 
+    case qaCertEvent:
+      console.log('id, userInput.id',id, userInput.id)
+      return qaApi
+        .updateQaCertEvents(id, userInput.id, userInput)
+        .catch((error) =>
+          console.log("error updating QA cert events", error)
+        );
+    case qaExeptions:
+      console.log('id, userInput.id trest',id, userInput.id)
+      return qaApi
+        .updateTestExtension(id, userInput.id, userInput)
+        .catch((error) =>
+          console.log("error updating QA TEST EXCEPTIONS", error)
+        );
+
     default:
       break;
   }
@@ -960,6 +977,8 @@ export const createDataSwitch = async (
       );
     case qaCertEvent:
       return qaApi.createQaCertEvents(location, userInput);
+    case qaExeptions:
+      return qaApi.createTestExtension(location, userInput);
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
   }
