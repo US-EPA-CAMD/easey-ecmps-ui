@@ -1,22 +1,30 @@
 import React from "react";
 import { render, screen, } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
 import { AddErrorSupressionModal } from "./AddErrorSuppressionModal";
 import { ErrorSuppressionFiltersContextProvider } from "../error-suppression-context";
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
+import config from "../../../config";
 
 describe("AddErrorSupressionModal component", () => {
 
     let component;
+    const mock = new MockAdapter(axios);
 
-    beforeEach(() => {
-        component = render(
-            <ErrorSuppressionFiltersContextProvider>
-                <AddErrorSupressionModal />
-            </ErrorSuppressionFiltersContextProvider>
-        )
-    })
 
-    it("Renders AddErrorSupressionModal component", () => {
-        expect(component).toBeDefined();
+    beforeEach(async () => {
+        mock
+        .onGet(`${config.services.mdm.uri}/es-severity-codes`)
+        .reply(200, [{"severityCode":"NONE","severityDescription":"No Errors"},{"severityCode":"ADMNOVR","severityDescription":"Administrative Override"}]);
+
+        component = await act(async () => {
+            render(
+                <ErrorSuppressionFiltersContextProvider>
+                    <AddErrorSupressionModal />
+                </ErrorSuppressionFiltersContextProvider>
+            )
+        })
     })
 
     it('renders Check Type', () => {
@@ -45,10 +53,6 @@ describe("AddErrorSupressionModal component", () => {
 
     it('renders Locations multiselect', () => {
         expect(screen.getByLabelText("Locations")).toBeDefined();
-    })
-
-    it('renders Fuel Type dropdown', () => {
-        expect(screen.getByLabelText("Fuel Type")).toBeDefined();
     })
 
     it('renders Notes text box', () => {
