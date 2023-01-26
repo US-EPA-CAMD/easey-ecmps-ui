@@ -154,6 +154,7 @@ export const ErrorSuppressionFilters = () => {
                             data-testid={"check-number"}
                             value={selectedCheckNumber}
                             onChange={onCheckNumberChange}
+                            disabled={!selectedCheckType}
                         >
                             <option value={false}>{defaultDropdownText}</option>
                             {checkNumberList.map((d) => <option key={d} value={d} data-testid={d}>{d}</option>)}
@@ -173,6 +174,7 @@ export const ErrorSuppressionFilters = () => {
                         data-testid={"check-result"}
                         value={selectedCheckResult}
                         onChange={(e) => setSelectedCheckResult(e.target.value)}
+                        disabled={!selectedCheckType || !selectedCheckNumber}
                     >
                         <option value={false}>{defaultDropdownText}</option>
                         {checkResultList.map((d) => <option key={d} value={d} data-testid={d}>{d}</option>)}
