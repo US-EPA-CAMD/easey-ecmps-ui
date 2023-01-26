@@ -1,6 +1,6 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { getReportingPeriods, getCheckCatalogResults } from "./mdmApi";
+import { getReportingPeriods, getCheckCatalogResults, getReasonCodes } from "./mdmApi";
 import config from "../../config";
 
 
@@ -42,6 +42,18 @@ describe("MDM Api Test", ()=>{
   
     const result = await getCheckCatalogResults();
     expect(result.data[0].id).toEqual("5003")
+  })
+
+  test("Should get the md es reason codes", async ()=>{
+    mock.onGet(`${config.services.mdm.uri}/es-reason-codes`).reply(200, [
+      {
+        "errorSuppressionReasonCode": "BUG",
+        "errorSuppressionReasonDescription": "Application Bug",
+      },
+    ]);
+  
+    const result = await getReasonCodes();
+    expect(result.data[0].errorSuppressionReasonCode).toEqual("BUG")
   })
   
 })
