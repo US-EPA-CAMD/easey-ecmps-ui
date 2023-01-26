@@ -70,7 +70,6 @@ export const QACertEventHeaderInfo = ({
   const [checkedOutByUser, setCheckedOutByUser] = useState(false);
 
   const [qaCertEventOptions, setQACertEventOptions] = useState([
-    { name: '-- Select --' },
     { name: 'QA Certification Event' },
     { name: 'Test Extension Exemption' },
   ]);
