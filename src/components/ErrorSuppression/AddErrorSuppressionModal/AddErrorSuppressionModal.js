@@ -4,20 +4,21 @@ import { GridContainer, Grid, Dropdown, Label, DatePicker, TextInput, Checkbox }
 import Modal from "../../Modal/Modal";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getReportingPeriods } from "../../HeaderInfo/HeaderInfo";
+import { getSeverityCodes } from "../../../utils/api/mdmApi";
+import { defaultDropdownText } from "../ErrorSuppression";
 
 export const AddErrorSupressionModal = ({ showModal, close }) => {
+
+    const [severityCodeList, setSeverityCodeList] = useState([]);
 
     const [selectedCheckType, setSelectedCheckType] = useState();
     const [selectedCheckNumber, setSelectedCheckNumber] = useState();
     const [selectedCheckResult, setSelectedCheckResult] = useState();
     const [selectedFacility, setSelectedFacility] = useState();
-    const [selectedLocations, setSelectedLocations] = useState([]);
-    const [selectedIsActive, setSelectedActive] = useState();
+    const [selectedLocations, setSelectedLocations] = useState();
     const [selectedReason, setSelectedReason] = useState();
-    const [selectedAddDateAfter, setSelectedAddDateAfter] = useState();
-    const [selectedAddDateBefore, setSelectedAddDateBefore] = useState();
-    const [selectedType, setType] = useState();
-    const [selectedFuelType, setSelectedFuelType] = useState([]);
+    const [selectedFuelType, setSelectedFuelType] = useState();
+    const [selectedSeverityCode, setSelectedSeverityCode] = useState();
 
     // Time Criteria
     const [selectedBeginDate, setSelectedBeginDate] = useState();
@@ -36,7 +37,13 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
 
     const yearQuarters = useMemo(getReportingPeriods, [])
 
+    // API Calls
     useEffect(() => {
+
+        getSeverityCodes().then(({ data }) => {
+            setSeverityCodeList(data);
+        });
+
         setLocationData([
             {
                 id: "Coming Soon...",
@@ -44,7 +51,7 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
                 selected: false,
                 enabled: true,
             }
-        ])
+        ]);
     }, []);
 
 
@@ -128,17 +135,27 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
                     </Grid>
                     <Grid row gap={2}>
                         <Grid col={5}>
-                            <Label test-id={"add-type"} htmlFor={"add-type"}>
+                            <Label test-id={"add-severity-code"} htmlFor={"add-severity-code"}>
                                 Type
                             </Label>
                             <Dropdown
-                                id={"add-type"}
-                                name={"add-type"}
-                                epa-testid={"add-type"}
-                                data-testid={"add-type"}
-                                value={selectedType}
+                                id={"add-severity-code"}
+                                name={"add-severity-code"}
+                                epa-testid={"add-severity-code"}
+                                data-testid={"add-severity-code"}
+                                value={selectedSeverityCode}
+                                onChange={(e)=>setSelectedSeverityCode(e.target.value)}
                             >
-                                <option>Coming Soon...</option>
+                                <option value={false}>{defaultDropdownText}</option>
+                                {severityCodeList.map((d) => (
+                                    <option 
+                                        key={d.severityCode} 
+                                        value={d.severityCode} 
+                                        data-testid={d.severityCode}
+                                    >
+                                        {d.severityCode}
+                                    </option>
+                                ))}
                             </Dropdown>
                         </Grid>
                         <Grid col={5}>

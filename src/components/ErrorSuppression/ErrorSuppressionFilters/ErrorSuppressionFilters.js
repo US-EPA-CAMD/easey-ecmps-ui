@@ -4,6 +4,7 @@ import { ErrorSuppressionFiltersContext } from "../error-suppression-context";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getCheckCatalogResults, getReasonCodes } from "../../../utils/api/mdmApi";
 import { getAllFacilities } from "../../../utils/api/facilityApi";
+import { defaultDropdownText } from "../ErrorSuppression";
 
 export const transformCheckResultData = (data) => {
     return data.reduce((acc, cv) => {
@@ -47,8 +48,6 @@ export const ErrorSuppressionFilters = () => {
 
     // API check result data transformed
     const [transformedData, setTransformedData] = useState([])
-
-    const defaultDropdownText = "-- Select a value --";
 
     // Make all api calls that only need to happen once on page load here
     useEffect(() => {
