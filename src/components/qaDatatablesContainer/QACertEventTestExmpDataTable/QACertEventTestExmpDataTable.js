@@ -153,10 +153,38 @@ const QACertEventTestExmpDataTable = ({
 
     switch (name) {
       case "QA Certification Event":
-        allPromises.push(mpApi.getMonitoringComponents(locationSelectValue));
-        allPromises.push(mpApi.getMonitoringSystems(locationSelectValue));
-        allPromises.push(dmApi.getMdmDataByCodeTable("qa-cert-event-codes"));
-        allPromises.push(dmApi.getMdmDataByCodeTable("required-test-codes"));
+        allPromises.push(
+          mpApi.getMonitoringComponents(locationSelectValue).catch((error) => {
+            console.log(
+              `error fetching dropdown items for ${dataTableName} `,
+              error
+            );
+          })
+        );
+        allPromises.push(
+          mpApi.getMonitoringSystems(locationSelectValue).catch((error) => {
+            console.log(
+              `error fetching dropdown items for ${dataTableName} `,
+              error
+            );
+          })
+        );
+        allPromises.push(
+          dmApi.getMdmDataByCodeTable("qa-cert-event-codes").catch((error) => {
+            console.log(
+              `error fetching dropdown items for ${dataTableName} `,
+              error
+            );
+          })
+        );
+        allPromises.push(
+          dmApi.getMdmDataByCodeTable("required-test-codes").catch((error) => {
+            console.log(
+              `error fetching dropdown items for ${dataTableName} `,
+              error
+            );
+          })
+        );
         Promise.all(allPromises)
           .then((response) => {
             dropdownArray[0].forEach((val, i) => {
@@ -202,12 +230,47 @@ const QACertEventTestExmpDataTable = ({
         ];
         allPromises.push([]);
         allPromises.push([]);
-        allPromises.push(mpApi.getMonitoringComponents(locationSelectValue));
-        allPromises.push(mpApi.getMonitoringSystems(locationSelectValue));
-        allPromises.push(dmApi.getAllSpanScaleCodes());
-        allPromises.push(dmApi.getAllFuelCodes());
         allPromises.push(
-          dmApi.getMdmDataByCodeTable("extension-exemption-codes")
+          mpApi.getMonitoringComponents(locationSelectValue).catch((error) => {
+            console.log(
+              `error fetching dropdown items for ${dataTableName} `,
+              error
+            );
+          })
+        );
+        allPromises.push(
+          mpApi.getMonitoringSystems(locationSelectValue).catch((error) => {
+            console.log(
+              `error fetching dropdown items for ${dataTableName} `,
+              error
+            );
+          })
+        );
+        allPromises.push(
+          dmApi.getAllSpanScaleCodes().catch((error) => {
+            console.log(
+              `error fetching dropdown items for ${dataTableName} `,
+              error
+            );
+          })
+        );
+        allPromises.push(
+          dmApi.getAllFuelCodes().catch((error) => {
+            console.log(
+              `error fetching dropdown items for ${dataTableName} `,
+              error
+            );
+          })
+        );
+        allPromises.push(
+          dmApi
+            .getMdmDataByCodeTable("extension-exemption-codes")
+            .catch((error) => {
+              console.log(
+                `error fetching dropdown items for ${dataTableName} `,
+                error
+              );
+            })
         );
         Promise.all(allPromises)
           .then((response) => {
