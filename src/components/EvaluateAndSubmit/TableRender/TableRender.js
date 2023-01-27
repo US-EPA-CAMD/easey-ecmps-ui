@@ -66,10 +66,10 @@ const TableRender = forwardRef(
       let reportTitle;
       let reportCode;
       let url;
-
+      const reportType = printout? 'Printout' : 'Evaluation';
       //TODO: Filter by type
       reportCode = "MPP";
-      reportTitle = "ECMPS Monitoring Plan Printout Report";
+      reportTitle = `ECMPS Monitoring Plan ${reportType} Report`;
 
       let additionalParams = "";
 
