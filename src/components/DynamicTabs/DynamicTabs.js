@@ -36,7 +36,7 @@ export const DynamicTabs = ({
             checkout: t.checkout,
             name: t.title,
             location: [0, t.selectedConfig.locations[0].id],
-            section: [4, "Methods"],
+            section: [4, "Methods"], // watch out for this outside MP
             selectedConfig: t.selectedConfig,
             facId: t.selectedConfig.locations[0].facId,
             inactive: [false, false],
