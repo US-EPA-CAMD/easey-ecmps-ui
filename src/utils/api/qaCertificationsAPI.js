@@ -2130,10 +2130,89 @@ export const createQaCertEvents = async (locId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
-      }),
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+export const updateQaCertEvents = async (locId, id, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/qa-certification-events/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const deleteQaCertEvents = async (locId, id, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/qa-certification-events/${id}`;
+
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+export const getTestExtension = async (locId) => {
+  console.log("loc", locId);
+  const path = `/locations/${locId}/test-extension-exemptions`;
+  const url = getApiUrl(path);
+  return axios.get(url).then(handleResponse).catch(handleError);
+};
+
+export const createTestExtension = async (locId, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-extension-exemptions`;
+  console.log("loc", locId);
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+export const updateTestExtension = async (locId, id, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-extension-exemptions/${id}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+export const deleteTestExtension = async (locId, id, payload) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-extension-exemptions/${id}`;
+
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "DELETE",
+        url,
+      })
     );
   } catch (error) {
     return handleImportError(error);
