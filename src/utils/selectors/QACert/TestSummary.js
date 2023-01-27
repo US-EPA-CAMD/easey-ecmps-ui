@@ -650,6 +650,39 @@ export const mapQaCertEventsDataToRows = (data) => {
   return records;
 }
 
+export const mapQaExtensionsExemptionsDataToRows  = (data) => {
+  const records = [];
+
+  data.forEach((el) => {
+    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
+    const endHour = el.endHour ? el.endHour.toString() : "";
+
+    const endMinute = el.endMinute ? el.endMinute.toString() : "";
+    records.push({
+      id: el.id,
+      locationId: el.locationId,
+
+      col1:
+        el.stackPipeId !== null
+          ? el.stackPipeId
+          : el.unitId !== null
+          ? el.unitId
+          : "",
+      col2: el.year,
+      col3: el.quarter,
+      col4: el.componentID, 
+      col5: el.monitoringSystemID,
+      col6: el.hoursUsed,
+      col7: el.spanScaleCode,
+      col8: el.fuelCode,
+      col9: el.extensionOrExemptionCode,
+    });
+  });
+
+  return records;
+};
+
+
 export const getListOfRadioControls = (controlInputs) => {
   const result = [];
   const keys = Object.keys(controlInputs);
