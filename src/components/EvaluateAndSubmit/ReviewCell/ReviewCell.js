@@ -24,30 +24,32 @@ const ReviewCell = ({
   }, [cellState]);
 
   return (
-    cellState && <div>
-      {cellState === "Lock" && <LockSharp data-testid="Lock" />}
-      {cellState === "Checkbox" && (
-        <Checkbox
-          data-testid="Checkbox"
-          className="margin-bottom-5"
-          id={`${uuidv4()}`}
-          onChange={(e) => {
-            handleRowSelection(row, type, e.target.checked);
-          }}
-          defaultChecked={row.selected}
-        />
-      )}
-      {cellState === "View" && (
-        <Button
-          data-testid="ViewButton"
-          onClick={() => {
-            handleRowView(row);
-          }}
-        >
-          View
-        </Button>
-      )}
-    </div>
+    cellState && (
+      <div>
+        {cellState === "Lock" && <LockSharp data-testid="Lock" />}
+        {cellState === "Checkbox" && (
+          <Checkbox
+            data-testid="Checkbox"
+            className="margin-bottom-5"
+            id={`${uuidv4()}`}
+            onChange={(e) => {
+              handleRowSelection(row, type, e.target.checked);
+            }}
+            defaultChecked={row.selected}
+          />
+        )}
+        {cellState === "View" && (
+          <Button
+            data-testid="ViewButton"
+            onClick={() => {
+              handleRowView(row, true);
+            }}
+          >
+            View
+          </Button>
+        )}
+      </div>
+    )
   );
 };
 
