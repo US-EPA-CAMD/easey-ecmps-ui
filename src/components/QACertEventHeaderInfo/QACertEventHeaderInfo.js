@@ -4,11 +4,7 @@ import { Button } from '@trussworks/react-uswds';
 import { DropdownSelection } from '../DropdownSelection/DropdownSelection';
 
 import { Preloader } from '@us-epa-camd/easey-design-system';
-import {
-  assignFocusEventListeners,
-  cleanupFocusEventListeners,
-  returnFocusToLast,
-} from '../../additional-functions/manage-focus';
+import { cleanupFocusEventListeners } from '../../additional-functions/manage-focus';
 import {
   removeChangeEventListeners,
   unsavedDataMessage,
@@ -62,7 +58,6 @@ export const QACertEventHeaderInfo = ({
   const [fileName, setFileName] = useState('');
   const [hasFormatError, setHasFormatError] = useState(false);
   const [hasInvalidJsonError, setHasInvalidJsonError] = useState(false);
-  const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
   const [selectedHistoricalData, setSelectedHistoricalData] = useState([]);
@@ -75,7 +70,8 @@ export const QACertEventHeaderInfo = ({
   const [checkedOutByUser, setCheckedOutByUser] = useState(false);
 
   const [qaCertEventOptions, setQACertEventOptions] = useState([
-    { name: 'Loading...' },
+    { name: 'QA Certification Event' },
+    { name: 'Test Extension Exemption' },
   ]);
 
   const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([]);
@@ -131,14 +127,6 @@ export const QACertEventHeaderInfo = ({
   }, [testTypeGroupOptions, allTestTypeCodes, sectionSelect]);
 
   // *** Reassign handlers after pop-up modal is closed
-  useEffect(() => {
-    if (!returnedFocusToLast) {
-      setReturnedFocusToLast(true);
-    } else {
-      returnFocusToLast();
-      assignFocusEventListeners();
-    }
-  }, [returnedFocusToLast]);
 
   // *** Clean up focus event listeners
   useEffect(() => {

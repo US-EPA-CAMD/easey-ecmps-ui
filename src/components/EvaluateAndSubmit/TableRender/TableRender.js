@@ -1,6 +1,5 @@
 import { ArrowDownwardSharp } from "@material-ui/icons";
 import React, { forwardRef, useEffect, useState, useCallback } from "react";
-import { useDispatch } from "react-redux";
 import DataTable from "react-data-table-component";
 import {
   addScreenReaderLabelForCollapses,
@@ -11,39 +10,22 @@ import { oneSecond } from "../../../config";
 import ReviewCell from "../ReviewCell/ReviewCell";
 import { Checkbox } from "@trussworks/react-uswds";
 import { v4 as uuidv4 } from "uuid";
-import {
-  displayReport,
-  addEvalStatusCell,
-  updateCheckedOutLocationsRef,
-  updateCorrespondingMPAndQARow,
-  updateCurrentRow,
-} from "../../../utils/functions";
-import {
-  checkInOutLocation,
-  getUpdatedCheckedOutLocations,
-} from "../../../utils/api/monitoringPlansApi";
+import { addEvalStatusCell } from "../../../utils/functions";
+
 import "./TableRender.scss";
 
 const TableRender = forwardRef(
-  (
-    {
-      columns,
-      state,
-      setState,
-      name,
-      type,
-      updateMonPlanRow,
-      updateQARow,
-      getRowState,
-      checkedOutLocationsMap,
-      updateFilesSelected,
-      checkedOutLocationsInCurrentSessionRef,
-    },
-    ref
-  ) => {
+  ({ columns, state, type, getRowState, rowId, selectRow }, ref) => {
+    const reportWindowParams = [
+      // eslint-disable-next-line no-restricted-globals
+      `height=${screen.height}`,
+      // eslint-disable-next-line no-restricted-globals
+      `width=${screen.width}`,
+      //`fullscreen=yes`,
+    ].join(",");
+
     const [selectAllState, setSelectAllState] = useState(false);
     const [selectAllVisible, setSelectAllVisible] = useState(true);
-    const dispatch = useDispatch();
 
     useEffect(() => {
       setTimeout(() => {
@@ -56,13 +38,66 @@ const TableRender = forwardRef(
       };
     }, []);
 
-    const handleSelectAll = useCallback(async () => {
-      const updatedCheckedOutLocationsMap = await getUpdatedCheckedOutLocations(
-        dispatch
-      );
-      selectAll(!selectAllState, updatedCheckedOutLocationsMap);
-      setSelectAllState(!selectAllState); //eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectAllState]);
+    const selectAll = () => {
+      const bool = !selectAllState;
+      setSelectAllState(bool);
+
+      for (const r of ref.current) {
+        if (getRowState(r, type) === "Checkbox" && r.selected !== bool) {
+          //Multithread this portion out
+          selectRow(r, bool, type);
+        }
+      }
+    };
+
+    const selectIndividual = (row, type, selection) => {
+      if (selection === false) {
+        setSelectAllState(false);
+      }
+
+      for (const r of ref.current) {
+        if (r[rowId] === row[rowId] && r.monPlanId === row.monPlanId) {
+          selectRow(r, selection, type);
+        }
+      }
+    };
+
+    const handleRowView = useCallback((row, printout) => {
+      let reportTitle;
+      let reportCode;
+      let url;
+      const reportType = printout? 'Printout' : 'Evaluation';
+      //TODO: Filter by type
+      reportCode = "MPP";
+      reportTitle = `ECMPS Monitoring Plan ${reportType} Report`;
+
+      let additionalParams = "";
+
+      if (type === "MP") {
+        reportCode = printout ? "MPP" : "MP_EVAL";
+        additionalParams = "&monitorPlanId=" + row.monPlanId;
+      } else if (type === "QA") {
+        if (rowId === "testSumId") {
+          reportCode = printout ? "TEST_DETAIL" : "QA_EVAL";
+          additionalParams = "testId=" + row.testSumId;
+        }
+        if (rowId === "qaCertEventIdentifier") {
+          reportCode = printout ? "QCE" : "QA_EVAL";
+          additionalParams = "qceId=" + row.qaCertEventIdentifier;
+        }
+        if (rowId === "testExtensionExemptionIdentifier") {
+          reportCode = printout ? "TEE" : "QA_EVAL";
+          additionalParams = "teeId=" + row.testExtensionExemptionIdentifier;
+        }
+      }
+
+      url =
+        `/workspace/reports?reportCode=${reportCode}&facilityId=${1}` +
+        additionalParams;
+
+      window.open(url, reportTitle, reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const mappings = [
       {
         name: (
@@ -72,7 +107,7 @@ const TableRender = forwardRef(
                 className=" margin-left-4"
                 id={`${uuidv4()}`}
                 data-testid="SelectAll"
-                onClick={handleSelectAll}
+                onClick={selectAll}
                 defaultChecked={selectAllState}
               />
             )}
@@ -81,7 +116,7 @@ const TableRender = forwardRef(
         cell: (row) => (
           <ReviewCell
             row={row}
-            handleRowSelection={handleRowSelection}
+            handleRowSelection={selectIndividual}
             handleRowView={handleRowView}
             type={type}
             getRowState={getRowState}
@@ -94,63 +129,11 @@ const TableRender = forwardRef(
       },
       ...columns,
     ];
-
-    addEvalStatusCell(mappings);
-
-    const selectAll = useCallback((bool, map) => {
-      for (const r of ref.current) {
-        if (getRowState(r, type) === "Checkbox") {
-          //Logic to see if row can actually be checked out
-          checkInOutLocation(bool, r, map);
-          updateCheckedOutLocationsRef(
-            bool,
-            r,
-            checkedOutLocationsInCurrentSessionRef
-          );
-          updateCurrentRow(bool, r)
-          updateFilesSelected(bool);
-          updateCorrespondingMPAndQARow({r, type, updateMonPlanRow, updateQARow, selection: bool,});
-        }
-      } //eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const handleRowView = useCallback((row) => {
-      displayReport("MPP", row.facilityId, row.monPlanId, null);
-    }, []);
-
-    const handleRowSelection = useCallback(async (row, type, selection) => {
-      const updatedCheckedOutLocationsMap = await getUpdatedCheckedOutLocations(
-        dispatch
-      );
-      if (selection === false) {
-        setSelectAllState(false);
-      }
-
-      let filterId = "monPlanId"; //Different data types have different uids
-      if (type === "QA") {
-        filterId = "testSumId";
-      } else if (type === "EM") {
-        filterId = "periodAbbreviation";
-      }
-
-      for (const r of ref.current) {
-        if (r[filterId] === row[filterId] && r.monPlanId === row.monPlanId) {
-          checkInOutLocation(selection, r, updatedCheckedOutLocationsMap);
-          updateCheckedOutLocationsRef(
-            selection,
-            r,
-            checkedOutLocationsInCurrentSessionRef
-          );
-          updateCurrentRow(selection, r);
-          updateFilesSelected(selection);
-          updateCorrespondingMPAndQARow({r, type, updateMonPlanRow, updateQARow, selection});
-        }
-      } //eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    addEvalStatusCell(mappings, handleRowView);
 
     return (
       <div>
-        {state.length > 0 && (
+        {state && state.length > 0 && (
           <DataTable
             defaultSortField="orisCode"
             columns={mappings}

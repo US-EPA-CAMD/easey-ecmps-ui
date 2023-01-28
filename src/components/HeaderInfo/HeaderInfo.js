@@ -11,7 +11,7 @@ import {
 } from "@trussworks/react-uswds";
 import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
 import config from "../../config";
-import { triggerEvaluation } from "../../utils/api/quartzApi";
+import { triggerBulkEvaluation } from "../../utils/api/quartzApi";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import * as emApi from "../../utils/api/emissionsApi";
@@ -75,7 +75,7 @@ export const generateArrayOfYears = (min) => {
   return years;
 };
 
-const getReportingPeriods = (minYear = 2009) => {
+export const getReportingPeriods = (minYear = 2009) => {
   const quarters = [4, 3, 2, 1];
   const maxYear = new Date().getFullYear();
   const reportingPeriods = [];
@@ -747,10 +747,10 @@ export const HeaderInfo = ({
   };
 
   const evaluate = () => {
-    triggerEvaluation({
+    triggerBulkEvaluation({
       items: [
         {
-          monitorPlanId: configID,
+          monPlanId: configID,
           submitMonPlan: true,
           testSumIds: [],
           qceIds: [],
@@ -838,6 +838,8 @@ export const HeaderInfo = ({
 
   const handleExport = () => {
     if (workspaceSection === EMISSIONS_STORE_NAME) handleEmissionsExport();
+    if (workspaceSection === MONITORING_PLAN_STORE_NAME)
+      mpApi.exportMonitoringPlanDownload(configID);
   };
 
   const onChangeOfEmissionsImportType = (e) => {

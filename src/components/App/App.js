@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import TagManager from "react-gtm-module";
 import ComingSoon from "../ComingSoon/ComingSoon";
 import NotFound from "../NotFound/NotFound";
@@ -12,43 +13,46 @@ import Login from "../Login/Login";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
 import ReportGenerator from "../ReportGenerator/ReportGenerator";
 
-import { handleActiveElementFocus } from '../../additional-functions/add-active-class';
-import FAQ from '../FAQ/FAQ';
-import Resources from '../Resources/Resources';
+import { handleActiveElementFocus } from "../../additional-functions/add-active-class";
+import FAQ from "../FAQ/FAQ";
+import Resources from "../Resources/Resources";
 
-import HelpSupport from '../HelpSupport/HelpSupport';
-import './App.scss';
-import InactivityTracker from '../InactivityTracker/InactivityTracker';
-import config from '../../config';
+import HelpSupport from "../HelpSupport/HelpSupport";
+import "./App.scss";
+import InactivityTracker from "../InactivityTracker/InactivityTracker";
+import config from "../../config";
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
-} from '../../additional-functions/manage-focus';
+} from "../../additional-functions/manage-focus";
 import {
   QA_CERT_TEST_SUMMARY_STORE_NAME,
   EXPORT_STORE_NAME,
   EMISSIONS_STORE_NAME,
   MONITORING_PLAN_STORE_NAME,
   QA_CERT_EVENT_STORE_NAME,
-} from '../../additional-functions/workspace-section-and-store-names';
-import * as modules from '../../utils/constants/moduleTitles';
-import useGetCheckedOutLocations from '../../additional-functions/useGetCheckedOutLocations';
-import EvaluateAndSubmit from '../EvaluateAndSubmit/EvaluateAndSubmit';
+} from "../../additional-functions/workspace-section-and-store-names";
+import * as modules from "../../utils/constants/moduleTitles";
+import * as types from "../../store/actions/actionTypes";
+import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
+import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
 
-const cdx_user = sessionStorage.getItem('cdx_user');
+const cdx_user = sessionStorage.getItem("cdx_user");
 
 const App = () => {
   const [user, setUser] = useState(false);
   const [expired, setExpired] = useState(false);
   const [resetTimer, setResetTimer] = useState(false);
-  useGetCheckedOutLocations();
+  const dispatch = useDispatch();
+
+  //useGetCheckedOutLocations();
 
   const prepDocument = () => {
     setTimeout(() => {
-      const mainContent = document.querySelector('.mainContent');
+      const mainContent = document.querySelector(".mainContent");
 
       if (mainContent !== null) {
-        mainContent.setAttribute('id', 'main-content');
+        mainContent.setAttribute("id", "main-content");
       }
     });
     // To avoid css sytling conflicts in production build
@@ -59,14 +63,31 @@ const App = () => {
     });
   };
 
+  const refreshCheckoutInterval = () => {
+    return setInterval(async () => {
+      const checkedOutLocationResult = (await getCheckedOutLocations()).data;
+      if (checkedOutLocationResult) {
+        dispatch({
+          type: types.SET_CHECKED_OUT_LOCATIONS,
+          checkedOutLocations: checkedOutLocationResult,
+        });
+      }
+    }, 10000);
+  };
+
+  useEffect(() => {
+    const interval = refreshCheckoutInterval();
+    return () => clearInterval(interval);
+  }, []);
+
   useEffect(() => {
     prepDocument();
   }, []);
 
   useEffect(() => {
     if (config.app.googleAnalyticsEnabled) {
-      const tagManagerArgs = { gtmId: '' };
-      if (window.location.href.search('workspace') === -1) {
+      const tagManagerArgs = { gtmId: "" };
+      if (window.location.href.search("workspace") === -1) {
         tagManagerArgs.gtmId = config.app.googleAnalyticsPublicContainerId;
       } else {
         tagManagerArgs.gtmId =
@@ -78,8 +99,8 @@ const App = () => {
   });
 
   useEffect(() => {
-    const cdxUser = sessionStorage.getItem('cdx_user')
-      ? JSON.parse(sessionStorage.getItem('cdx_user'))
+    const cdxUser = sessionStorage.getItem("cdx_user")
+      ? JSON.parse(sessionStorage.getItem("cdx_user"))
       : false;
 
     setUser(cdxUser && cdxUser.firstName ? cdxUser : false);
@@ -97,22 +118,22 @@ const App = () => {
   // *** assign / un-assign activity event listeners
   useEffect(() => {
     if (user) {
-      if (document.querySelector('.usa-banner__content')) {
+      if (document.querySelector(".usa-banner__content")) {
         document
-          .querySelector('.usa-banner__content')
-          .classList.add('react-transition');
-        document.querySelector('.usa-banner__content').classList.add('fade-in');
+          .querySelector(".usa-banner__content")
+          .classList.add("react-transition");
+        document.querySelector(".usa-banner__content").classList.add("fade-in");
       }
     }
   }, [user]);
 
   const [currentLink, setCurrentLink] = useState(
-    window.location.href.replace(`${window.location.origin}`, '')
+    window.location.href.replace(`${window.location.origin}`, "")
   );
   return (
     <div>
       <div aria-live="polite" role="status" aria-atomic="true">
-        <div>{user ? <InactivityTracker /> : ''}</div>
+        <div>{user ? <InactivityTracker /> : ""}</div>
       </div>
       <Switch>
       <Route

@@ -628,6 +628,61 @@ export const mapHgInjectionDataToRows = (data) => {
   return records;
 }
 
+export const mapQaCertEventsDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.unitId? el.unitId : el.stackPipeId,
+      col2: el.componentID,
+      col3: el.monitoringSystemID,
+      col4: el.qaCertEventCode,
+      col5: el.qaCertEventDate,
+      col6: el.qaCertEventHour,
+      col7: el.requiredTestCode,
+      col8: el.conditionalBeginDate,
+      col9: el.conditionalBeginHour,
+      col10: el.completionTestDate,
+      col11: el.completionTestHour
+    };
+    records.push(row)
+  }
+  return records;
+}
+
+export const mapQaExtensionsExemptionsDataToRows  = (data) => {
+  const records = [];
+
+  data.forEach((el) => {
+    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
+    const endHour = el.endHour ? el.endHour.toString() : "";
+
+    const endMinute = el.endMinute ? el.endMinute.toString() : "";
+    records.push({
+      id: el.id,
+      locationId: el.locationId,
+
+      col1:
+        el.stackPipeId !== null
+          ? el.stackPipeId
+          : el.unitId !== null
+          ? el.unitId
+          : "",
+      col2: el.year,
+      col3: el.quarter,
+      col4: el.componentID, 
+      col5: el.monitoringSystemID,
+      col6: el.hoursUsed,
+      col7: el.spanScaleCode,
+      col8: el.fuelCode,
+      col9: el.extensionOrExemptionCode,
+    });
+  });
+
+  return records;
+};
+
+
 export const getListOfRadioControls = (controlInputs) => {
   const result = [];
   const keys = Object.keys(controlInputs);

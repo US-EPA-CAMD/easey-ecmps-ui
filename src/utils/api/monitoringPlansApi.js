@@ -909,8 +909,7 @@ export const getLocationAttributes = async (locationId) => {
 };
 
 export const getRelationshipData = async (locationId) => {
-  // the non workspace api get endpoint is wrongly labeled in swagger, only the workspace is working but it is uneditable
-  const url = getApiUrl(`/locations/${locationId}/relationships`, true);
+  const url = getApiUrl(`/locations/${locationId}/relationships`);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
@@ -997,26 +996,4 @@ export const exportMonitoringPlanDownload = async (configID) => {
   } catch (error) {
     console.log(error);
   }
-};
-
-export const checkInOutLocation = (isCheckingOutRow, row, checkedOutLocationsMap) => {
-  const { monPlanId, checkedOut } = row;
-  if(isCheckingOutRow) {
-    if(checkedOutLocationsMap?.has(monPlanId) || checkedOut){
-      return console.log('item is already checked out', monPlanId);
-    } else return checkoutAPI(isCheckingOutRow, row.facId, monPlanId).then();
-  } else return checkoutAPI(isCheckingOutRow, row.facId, monPlanId).then();
-};
-
-export const checkInAllLocations = (locations) => {
-  locations.forEach((location) => checkoutAPI(false, location.facId, location.monPlanId));
-};
-
-export const getUpdatedCheckedOutLocations = async(dispatch) => {
-  const checkedOutLocations = await obtainCheckedOutLocations({dispatch}),
-    updatedCheckedOutLocationsMap = new Map();
-  checkedOutLocations.forEach((el) => {
-    updatedCheckedOutLocationsMap.set(el.monPlanId, el);
-  });
-  return updatedCheckedOutLocationsMap;
 };

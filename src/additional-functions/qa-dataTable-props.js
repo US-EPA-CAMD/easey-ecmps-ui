@@ -1,3 +1,5 @@
+import { Restaurant } from "@material-ui/icons";
+
 export const qaProtocalGasProps = (selectedRow) => {
   return {
     dataTableName: "Protocol Gas",
@@ -238,9 +240,9 @@ export const qaRataTraverseProps = () => {
     dataTableName: "RATA Traverse Data",
     payload: {},
     dropdownArray: [
-      'probeTypeCode',
-      'pressureMeasureCode',
-      'pointUsedIndicator'
+      "probeTypeCode",
+      "pressureMeasureCode",
+      "pointUsedIndicator",
     ],
     columnNames: [
       "Probe ID",
@@ -264,20 +266,35 @@ export const qaRataTraverseProps = () => {
       probeTypeCode: ["Probe Type Code", "dropdown", "", ""],
       pressureMeasureCode: ["Pressure Measure Code", "dropdown", "", ""],
       methodTraversePointId: ["Method Traverse Point ID", "input", "", ""],
-      velocityCalibrationCoefficient: ["Velocity Calibration Coefficient", "input", "", ""],
+      velocityCalibrationCoefficient: [
+        "Velocity Calibration Coefficient",
+        "input",
+        "",
+        "",
+      ],
       lastProbeDate: ["Last Probe Date", "date", "", ""],
       avgVelDiffPressure: ["Avg Vel Diff Pressure", "input", "", ""],
-      avgSquareVelDiffPressure: ["Avg Square Vel Diff Pressures", "input", "", ""],
+      avgSquareVelDiffPressure: [
+        "Avg Square Vel Diff Pressures",
+        "input",
+        "",
+        "",
+      ],
       tStackTemperature: ["T Stack Temperature", "input", "", ""],
       pointUsedIndicator: ["Point Used Indicator", "dropdown", "", ""],
-      numberWallEffectsPoints: ["Number of Wall Effects Points", "input", "", ""],
+      numberWallEffectsPoints: [
+        "Number of Wall Effects Points",
+        "input",
+        "",
+        "",
+      ],
       yawAngle: ["Yaw Angle", "input", "", ""],
       pitchAngle: ["Pitch Angle", "input", "", ""],
       calculatedVelocity: ["Calculated Velocity", "input", "", ""],
-      replacementVelocity: ["Replacement Velocity", "input", "", ""]
+      replacementVelocity: ["Replacement Velocity", "input", "", ""],
     },
   };
-}
+};
 
 export const qaAirEmissionsProps = () => {
   return {
@@ -362,8 +379,18 @@ export const qaFlowRataRunProps = () => {
       percentMoisture: ["Percent Moisture", "input", "", ""],
       dryMolecularWeight: ["Dry Molecular Weight", "input", "", ""],
       wetMolecularWeight: ["Wet Molecular Weight", "input", "", ""],
-      averageVelocityWithoutWallEffects: ["Average Velocity without Wall Effects", "input", "", ""],
-      averageVelocityWithWallEffects: ["Average Velocity with Wall Effects", "input", "", ""],
+      averageVelocityWithoutWallEffects: [
+        "Average Velocity without Wall Effects",
+        "input",
+        "",
+        "",
+      ],
+      averageVelocityWithWallEffects: [
+        "Average Velocity with Wall Effects",
+        "input",
+        "",
+        "",
+      ],
       calculatedWAF: ["Calculated WAF", "input", "", ""],
       averageStackFlowRate: ["Average Stack Flow Rate", "input", "", ""],
     },
@@ -381,7 +408,7 @@ export const qaTestQualificationProps = (selectedRow) => {
       endDate: null,
       highLoadPercentage: null,
       midLoadPercentage: null,
-      lowLoadPercentage: null
+      lowLoadPercentage: null,
     },
     dropdownArray: ["testClaimCode"],
     mdmProps: [
@@ -389,9 +416,9 @@ export const qaTestQualificationProps = (selectedRow) => {
         codeTable: "test-claim-codes",
         responseProps: {
           code: "testClaimCode",
-          description: "testClaimDescription"
-        }
-      }
+          description: "testClaimDescription",
+        },
+      },
     ],
     columnNames: [
       "Test Claim Code",
@@ -399,7 +426,7 @@ export const qaTestQualificationProps = (selectedRow) => {
       "End Date",
       "High Load Percentage",
       "Mid Load Percentage",
-      "Low Load Percentage"
+      "Low Load Percentage",
     ],
     controlInputs: {
       testClaimCode: ["Test Claim Code", "dropdown", "", ""],
@@ -433,7 +460,12 @@ export const qaAppendixECorrelationSummaryTestProps = (selectedRow) => {
     controlInputs: {
       operatingLevelForRun: ["Operating Level For Run", "input", "", ""],
       meanReferenceValue: ["Mean Reference Value", "input", "", ""],
-      averageHourlyHeatInputRate: ["Average Hourly Heat Input Rate", "input", "", ""],
+      averageHourlyHeatInputRate: [
+        "Average Hourly Heat Input Rate",
+        "input",
+        "",
+        "",
+      ],
       fFactor: ["F-Factor", "input", "", ""],
     },
     controlDatePickerInputs: {},
@@ -451,11 +483,7 @@ export const qaAppendixECorrelationSummaryHeatInputGasProps = (selectedRow) => {
       monitoringSystemID: "string",
     },
     dropdownArray: [],
-    columnNames: [
-      "Gas GCV",
-      "Gas Volume",
-      "Gas Heat Input",
-    ],
+    columnNames: ["Gas GCV", "Gas Volume", "Gas Heat Input"],
     controlInputs: {
       gasGCV: ["Gas GCV", "input", "", ""],
       gasVolume: ["Gas Volume", "input", "", ""],
@@ -481,10 +509,10 @@ export const qaAppendixECorrelationSummaryHeatInputOilProps = (selectedRow) => {
       oilDensityUnitsOfMeasureCode: null,
     },
     dropdownArray: [
-      'monitoringSystemID',
-      'oilGCVUnitsOfMeasureCode',
-      'oilVolumeUnitsOfMeasureCode',
-      'oilDensityUnitsOfMeasureCode',
+      "monitoringSystemID",
+      "oilGCVUnitsOfMeasureCode",
+      "oilVolumeUnitsOfMeasureCode",
+      "oilDensityUnitsOfMeasureCode",
     ],
     columnNames: [
       "Monitoring System ID",
@@ -501,12 +529,27 @@ export const qaAppendixECorrelationSummaryHeatInputOilProps = (selectedRow) => {
       monitoringSystemID: ["Monitoring System ID", "dropdown", "", ""],
       oilMass: ["Oil Mass", "input", "", ""],
       oilGCV: ["Oil GCV", "input", "", ""],
-      oilGCVUnitsOfMeasureCode: ["Oil GCV Units of Measure Code", "dropdown", "", ""],
+      oilGCVUnitsOfMeasureCode: [
+        "Oil GCV Units of Measure Code",
+        "dropdown",
+        "",
+        "",
+      ],
       oilHeatInput: ["Oil Heat Input", "input", "", ""],
       oilVolume: ["Oil Volume", "input", "", ""],
-      oilVolumeUnitsOfMeasureCode: ["Oil Volume Units of Measure Code", "dropdown", "", ""],
+      oilVolumeUnitsOfMeasureCode: [
+        "Oil Volume Units of Measure Code",
+        "dropdown",
+        "",
+        "",
+      ],
       oilDensity: ["Oil Density", "input", "", ""],
-      oilDensityUnitsOfMeasureCode: ["Oil Density Units of Measure Code", "dropdown", "", ""],
+      oilDensityUnitsOfMeasureCode: [
+        "Oil Density Units of Measure Code",
+        "dropdown",
+        "",
+        "",
+      ],
     },
     controlDatePickerInputs: {},
     extraControls: {},
@@ -517,17 +560,15 @@ export const qaFuelFlowToLoadProps = () => {
   return {
     dataTableName: "Fuel Flow to Load",
     payload: {},
-    dropdownArray: [
-      'testBasisCode',
-    ],
+    dropdownArray: ["testBasisCode"],
     mdmProps: [
       {
         codeTable: "test-basis-codes",
         responseProps: {
           code: "testBasisCode",
-          description: "testBasisDescription"
-        }
-      }
+          description: "testBasisDescription",
+        },
+      },
     ],
     columnNames: [
       "Test Basis Code",
@@ -541,28 +582,41 @@ export const qaFuelFlowToLoadProps = () => {
       testBasisCode: ["Test Basis Code", "dropdown", "", ""],
       averageDifference: ["Average Difference", "input", "", ""],
       numberOfHoursUsed: ["Number of Hours Used", "input", "", ""],
-      numberOfHoursExcludedCofiring: ["Number of Hours Excluded Co-firing", "input", "", ""],
-      numberOfHoursExcludedRamping: ["Number of Hours Excluded Ramping", "input", "", ""],
-      numberOfHoursExcludedLowRange: ["Number of Hours Excluded Low Range", "input", "", ""],
+      numberOfHoursExcludedCofiring: [
+        "Number of Hours Excluded Co-firing",
+        "input",
+        "",
+        "",
+      ],
+      numberOfHoursExcludedRamping: [
+        "Number of Hours Excluded Ramping",
+        "input",
+        "",
+        "",
+      ],
+      numberOfHoursExcludedLowRange: [
+        "Number of Hours Excluded Low Range",
+        "input",
+        "",
+        "",
+      ],
     },
   };
-}
+};
 
 export const qaFuelFlowToLoadBaselineProps = () => {
   return {
     dataTableName: "Fuel Flow to Load Baseline",
     payload: {},
-    dropdownArray: [
-      'fuelFlowToLoadUOMCode',
-    ],
+    dropdownArray: ["fuelFlowToLoadUOMCode"],
     mdmProps: [
       {
         codeTable: "units-of-measure-codes",
         responseProps: {
           code: "unitOfMeasureCode",
-          description: "unitOfMeasureDescription"
-        }
-      }
+          description: "unitOfMeasureDescription",
+        },
+      },
     ],
     columnNames: [
       "Accuracy Test Number",
@@ -576,24 +630,49 @@ export const qaFuelFlowToLoadBaselineProps = () => {
       "GHR UOM Code",
       "Number of Hours Excluded Co-firing",
       "Number of Hours Excluded Ramping",
-      "Number of Hours Excluded Low Range"
+      "Number of Hours Excluded Low Range",
     ],
     controlInputs: {
       accuracyTestNumber: ["Accuracy Test Number", "input", "", ""],
       peiTestNumber: ["PEI Test Number", "input", "", ""],
       averageFuelFlowRate: ["Average Fuel Flow Rate", "input", "", ""],
       averageLoad: ["Average Load", "input", "", ""],
-      baselineFuelFlowToLoadRatio: ["Baseline Fuel Flow-to-Load Ratio", "input", "", ""],
+      baselineFuelFlowToLoadRatio: [
+        "Baseline Fuel Flow-to-Load Ratio",
+        "input",
+        "",
+        "",
+      ],
       fuelFlowToLoadUOMCode: ["Fuel Flow-to-Load UOM Code", "dropdown", "", ""],
-      averageHourlyHeatInputRate: ["Average Hourly Heat Input Rate", "input", "", ""],
+      averageHourlyHeatInputRate: [
+        "Average Hourly Heat Input Rate",
+        "input",
+        "",
+        "",
+      ],
       baselineGHR: ["Baseline GHR", "input", "", ""],
       ghrUnitsOfMeasureCode: ["GHR UOM Code", "input", "", ""],
-      numberOfHoursExcludedCofiring: ["Number of Hours Excluded Co-firing", "input", "", ""],
-      numberOfHoursExcludedRamping: ["Number of Hours Excluded Ramping", "input", "", ""],
-      numberOfHoursExcludedLowRange: ["Number of Hours Excluded Low Range", "input", "", ""],
+      numberOfHoursExcludedCofiring: [
+        "Number of Hours Excluded Co-firing",
+        "input",
+        "",
+        "",
+      ],
+      numberOfHoursExcludedRamping: [
+        "Number of Hours Excluded Ramping",
+        "input",
+        "",
+        "",
+      ],
+      numberOfHoursExcludedLowRange: [
+        "Number of Hours Excluded Low Range",
+        "input",
+        "",
+        "",
+      ],
     },
   };
-}
+};
 
 export const qaAppendixECorrTestRunProps = () => {
   return {
@@ -637,23 +716,25 @@ export const qaFlowToLoadCheckProps = () => {
     dataTableName: "Flow To Load Check",
     payload: {},
     dropdownArray: [
-      'testBasisCode', 'operatingLevelCode', 'biasAdjustedIndicator'
+      "testBasisCode",
+      "operatingLevelCode",
+      "biasAdjustedIndicator",
     ],
     mdmProps: [
       {
         codeTable: "test-basis-codes",
         responseProps: {
           code: "testBasisCode",
-          description: "testBasisDescription"
-        }
+          description: "testBasisDescription",
+        },
       },
       {
         codeTable: "operating-level-codes",
         responseProps: {
           code: "opLevelCode",
-          description: "opLevelDescription"
-        }
-      }
+          description: "opLevelDescription",
+        },
+      },
     ],
     columnNames: [
       "Test Basis Code",
@@ -671,18 +752,53 @@ export const qaFlowToLoadCheckProps = () => {
     controlInputs: {
       testBasisCode: ["Test Basis Code", "dropdown", "", ""],
       biasAdjustedIndicator: ["Bias Adjusted Indicator", "dropdown", "", ""],
-      averageAbsolutePercentDifference: ["Average Absolute Percent Difference", "input", "", ""],
+      averageAbsolutePercentDifference: [
+        "Average Absolute Percent Difference",
+        "input",
+        "",
+        "",
+      ],
       numberOfHours: ["Number of Hours", "input", "", ""],
-      numberOfHoursExcludedForFuel: ["Number of Hours Excluded for Fuel", "input", "", ""],
-      numberOfHoursExcludedForRamping: ["Number of Hours Excluded for Ramping", "input", "", ""],
-      numberOfHoursExcludedForBypass: ["Number of Hours Excluded for Bypass", "input", "", ""],
-      numberOfHoursExcludedPreRata: ["Number of Hours Excluded Pre RATA", "input", "", ""],
-      numberOfHoursExcludedTest: ["Number of Hours Excluded Test", "input", "", ""],
-      numberOfHoursExcludedForMainAndBypass: ["Number of Hours Excluded for Main and Bypass", "input", "", ""],
+      numberOfHoursExcludedForFuel: [
+        "Number of Hours Excluded for Fuel",
+        "input",
+        "",
+        "",
+      ],
+      numberOfHoursExcludedForRamping: [
+        "Number of Hours Excluded for Ramping",
+        "input",
+        "",
+        "",
+      ],
+      numberOfHoursExcludedForBypass: [
+        "Number of Hours Excluded for Bypass",
+        "input",
+        "",
+        "",
+      ],
+      numberOfHoursExcludedPreRata: [
+        "Number of Hours Excluded Pre RATA",
+        "input",
+        "",
+        "",
+      ],
+      numberOfHoursExcludedTest: [
+        "Number of Hours Excluded Test",
+        "input",
+        "",
+        "",
+      ],
+      numberOfHoursExcludedForMainAndBypass: [
+        "Number of Hours Excluded for Main and Bypass",
+        "input",
+        "",
+        "",
+      ],
       operatingLevelCode: ["Operating Level Code", "dropdown", "", ""],
     },
   };
-}
+};
 
 export const qaFuelFlowmeterAccuracyDataProps = () => {
   return {
@@ -694,8 +810,8 @@ export const qaFuelFlowmeterAccuracyDataProps = () => {
         codeTable: "accuracy-test-method-codes",
         responseProps: {
           code: "accuracyTestMethodCode",
-          description: "accuracyTestMethodDescription"
-        }
+          description: "accuracyTestMethodDescription",
+        },
       },
     ],
     columnNames: [
@@ -715,22 +831,26 @@ export const qaFuelFlowmeterAccuracyDataProps = () => {
     controlDatePickerInputs: {
       reinstallationDate: ["Reinstallation Date", "date", "", ""],
       reinstallationHour: ["Reinstallation Hour", "hourDropdown", "", ""],
-    }
-  }
-}
+    },
+  };
+};
 
 export const qaTransmitterTransducerAccuracyDataProps = () => {
   return {
     dataTableName: "Transmitter Transducer Accuracy Data",
     payload: {},
-    dropdownArray: ["lowLevelAccuracySpecCode", "midLevelAccuracySpecCode", "highLevelAccuracySpecCode"],
+    dropdownArray: [
+      "lowLevelAccuracySpecCode",
+      "midLevelAccuracySpecCode",
+      "highLevelAccuracySpecCode",
+    ],
     mdmProps: [
       {
         codeTable: "accuracy-spec-codes",
         responseProps: {
           code: "accuracySpecCode",
-          description: "accuracySpecDescription"
-        }
+          description: "accuracySpecDescription",
+        },
       },
     ],
     columnNames: [
@@ -743,15 +863,30 @@ export const qaTransmitterTransducerAccuracyDataProps = () => {
     ],
     controlInputs: {
       lowLevelAccuracy: ["Low Level Accuracy", "input", "", ""],
-      lowLevelAccuracySpecCode: ["Low Level Accuracy Spec Code", "dropdown", "", ""],
+      lowLevelAccuracySpecCode: [
+        "Low Level Accuracy Spec Code",
+        "dropdown",
+        "",
+        "",
+      ],
       midLevelAccuracy: ["Mid Level Accuracy", "input", "", ""],
-      midLevelAccuracySpecCode: ["Mid Level Accuracy Spec Code", "dropdown", "", ""],
+      midLevelAccuracySpecCode: [
+        "Mid Level Accuracy Spec Code",
+        "dropdown",
+        "",
+        "",
+      ],
       highLevelAccuracy: ["High Level Accuracy", "input", "", ""],
-      highLevelAccuracySpecCode: ["High Level Accuracy Spec Code", "dropdown", "", ""],
+      highLevelAccuracySpecCode: [
+        "High Level Accuracy Spec Code",
+        "dropdown",
+        "",
+        "",
+      ],
     },
     controlDatePickerInputs: {},
-  }
-}
+  };
+};
 
 export const qaOnOffCalibrationProps = () => {
   return {
@@ -763,8 +898,8 @@ export const qaOnOffCalibrationProps = () => {
         codeTable: "gas-level-codes",
         responseProps: {
           code: "gasLevelCode",
-          description: "gasLevelDescription"
-        }
+          description: "gasLevelDescription",
+        },
       },
     ],
     columnNames: [
@@ -796,54 +931,161 @@ export const qaOnOffCalibrationProps = () => {
     ],
     controlInputs: {
       // --- Input ---
-      onlineZeroReferenceValue: ["Online Zero Reference Value", "input", "", ""],
-      onlineUpscaleReferenceValue: ["Online Upscale Reference Value", "input", "", ""],
-      offlineZeroReferenceValue: ["Offline Zero Reference Value", "input", "", ""],
-      offlineUpscaleReferenceValue: ["Offline Upscale Reference Value", "input", "", ""],
+      onlineZeroReferenceValue: [
+        "Online Zero Reference Value",
+        "input",
+        "",
+        "",
+      ],
+      onlineUpscaleReferenceValue: [
+        "Online Upscale Reference Value",
+        "input",
+        "",
+        "",
+      ],
+      offlineZeroReferenceValue: [
+        "Offline Zero Reference Value",
+        "input",
+        "",
+        "",
+      ],
+      offlineUpscaleReferenceValue: [
+        "Offline Upscale Reference Value",
+        "input",
+        "",
+        "",
+      ],
       onlineZeroMeasuredValue: ["Online Zero Measured Value", "input", "", ""],
-      onlineUpscaleMeasuredValue: ["Online Upscale Measured Value", "input", "", ""],
-      offlineZeroMeasuredValue: ["Offline Zero Measured Value", "input", "", ""],
-      offlineUpscaleMeasuredValue: ["Offline Upscale Measured Value", "input", "", ""],
-      onlineZeroCalibrationError: ["Online Zero Calibration Error", "input", "", ""],
-      onlineUpscaleCalibrationError: ["Online Upscale Calibration Error", "input", "", ""],
-      offlineZeroCalibrationError: ["Offline Zero Calibration Error", "input", "", ""],
-      offlineUpscaleCalibrationError: ["Offline Upscale Calibration Error", "input", "", ""],
+      onlineUpscaleMeasuredValue: [
+        "Online Upscale Measured Value",
+        "input",
+        "",
+        "",
+      ],
+      offlineZeroMeasuredValue: [
+        "Offline Zero Measured Value",
+        "input",
+        "",
+        "",
+      ],
+      offlineUpscaleMeasuredValue: [
+        "Offline Upscale Measured Value",
+        "input",
+        "",
+        "",
+      ],
+      onlineZeroCalibrationError: [
+        "Online Zero Calibration Error",
+        "input",
+        "",
+        "",
+      ],
+      onlineUpscaleCalibrationError: [
+        "Online Upscale Calibration Error",
+        "input",
+        "",
+        "",
+      ],
+      offlineZeroCalibrationError: [
+        "Offline Zero Calibration Error",
+        "input",
+        "",
+        "",
+      ],
+      offlineUpscaleCalibrationError: [
+        "Offline Upscale Calibration Error",
+        "input",
+        "",
+        "",
+      ],
 
       // --- Dropdowns ---
       upscaleGasLevelCode: ["Upscale Gas Level Code", "dropdown", "", ""],
-      onlineZeroAPSIndicator: ["Online Zero APS Indicator", "radio", "", "", { defaultValue: 1 }],
-      onlineUpscaleAPSIndicator: ["Online Upscale APS Indicator", "radio", "", "", { defaultValue: 1 }],
-      offlineZeroAPSIndicator: ["Offline Zero APS Indicator", "radio", "", "", { defaultValue: 1 }],
-      offlineUpscaleAPSIndicator: ["Offline Upscale APS Indicator", "radio", "", "", { defaultValue: 1 }],
+      onlineZeroAPSIndicator: [
+        "Online Zero APS Indicator",
+        "radio",
+        "",
+        "",
+        { defaultValue: 1 },
+      ],
+      onlineUpscaleAPSIndicator: [
+        "Online Upscale APS Indicator",
+        "radio",
+        "",
+        "",
+        { defaultValue: 1 },
+      ],
+      offlineZeroAPSIndicator: [
+        "Offline Zero APS Indicator",
+        "radio",
+        "",
+        "",
+        { defaultValue: 1 },
+      ],
+      offlineUpscaleAPSIndicator: [
+        "Offline Upscale APS Indicator",
+        "radio",
+        "",
+        "",
+        { defaultValue: 1 },
+      ],
     },
     controlDatePickerInputs: {
       onlineZeroInjectionDate: ["Online Zero Injection Date", "date", "", ""],
-      onlineUpscaleInjectionDate: ["Online Upscale Injection Date", "date", "", ""],
+      onlineUpscaleInjectionDate: [
+        "Online Upscale Injection Date",
+        "date",
+        "",
+        "",
+      ],
       offlineZeroInjectionDate: ["Offline Zero Injection Date", "date", "", ""],
-      offlineUpscaleInjectionDate: ["Offline Upscale Injection Date", "date", "", ""],
-      onlineZeroInjectionHour: ["Online Zero Injection Hour", "hourDropdown", "dropdown", ""],
-      onlineUpscaleInjectionHour: ["Online Upscale Injection Hour", "hourDropdown", "dropdown", ""],
-      offlineZeroInjectionHour: ["Offline Zero Injection Hour", "hourDropdown", "dropdown", ""],
-      offlineUpscaleInjectionHour: ["Offline Upscale Injection Hour", "hourDropdown", "dropdown", ""],
+      offlineUpscaleInjectionDate: [
+        "Offline Upscale Injection Date",
+        "date",
+        "",
+        "",
+      ],
+      onlineZeroInjectionHour: [
+        "Online Zero Injection Hour",
+        "hourDropdown",
+        "dropdown",
+        "",
+      ],
+      onlineUpscaleInjectionHour: [
+        "Online Upscale Injection Hour",
+        "hourDropdown",
+        "dropdown",
+        "",
+      ],
+      offlineZeroInjectionHour: [
+        "Offline Zero Injection Hour",
+        "hourDropdown",
+        "dropdown",
+        "",
+      ],
+      offlineUpscaleInjectionHour: [
+        "Offline Upscale Injection Hour",
+        "hourDropdown",
+        "dropdown",
+        "",
+      ],
     },
   };
-}
+};
 
 export const qaCalibrationInjectionProps = () => {
   return {
     dataTableName: "Calibration Injection",
     payload: {},
-    dropdownArray: [
-      'upscaleGasLevelCode'
-    ],
+    dropdownArray: ["upscaleGasLevelCode"],
     mdmProps: [
       {
         codeTable: "gas-level-codes",
         responseProps: {
           code: "gasLevelCode",
-          description: "gasLevelDescription"
-        }
-      }
+          description: "gasLevelDescription",
+        },
+      },
     ],
     columnNames: [
       "Online Offline Indicator",
@@ -861,7 +1103,7 @@ export const qaCalibrationInjectionProps = () => {
       "Zero Calibration Error",
       "Upscale Calibration Error",
       "Zero Reference Value",
-      "Upscale Reference Value"
+      "Upscale Reference Value",
     ],
     controlInputs: {
       onLineOffLineIndicator: ["Online Offline Indicator", "radio", "", ""],
@@ -877,31 +1119,53 @@ export const qaCalibrationInjectionProps = () => {
     },
     controlDatePickerInputs: {
       zeroInjectionDate: ["Zero Injection Date", "date", "", ""],
-      zeroInjectionHour: ["Zero Injection Hour", "hourDropdown", "dropdown", ""],
-      zeroInjectionMinute: ["Zero Injection Minute", "minuteDropdown", "dropdown", ""],
+      zeroInjectionHour: [
+        "Zero Injection Hour",
+        "hourDropdown",
+        "dropdown",
+        "",
+      ],
+      zeroInjectionMinute: [
+        "Zero Injection Minute",
+        "minuteDropdown",
+        "dropdown",
+        "",
+      ],
       upscaleInjectionDate: ["Upscale Injection Date", "date", "", ""],
-      upscaleInjectionHour: ["Upscale Injection Hour", "hourDropdown", "dropdown", ""],
-      upscaleInjectionMinute: ["Upscale Injection Minute", "minuteDropdown", "dropdown", ""],
+      upscaleInjectionHour: [
+        "Upscale Injection Hour",
+        "hourDropdown",
+        "dropdown",
+        "",
+      ],
+      upscaleInjectionMinute: [
+        "Upscale Injection Minute",
+        "minuteDropdown",
+        "dropdown",
+        "",
+      ],
     },
-    radioBtnPayload: ["onLineOffLineIndicator", "zeroAPSIndicator", "upscaleAPSIndicator"],
+    radioBtnPayload: [
+      "onLineOffLineIndicator",
+      "zeroAPSIndicator",
+      "upscaleAPSIndicator",
+    ],
     extraControls: {},
   };
-}
+};
 
 export const qaCycleTimeSummaryProps = () => {
   return {
     dataTableName: "Cycle Time Summary",
     payload: {},
     dropdownArray: [],
-    columnNames: [
-      "Total Time"
-    ],
+    columnNames: ["Total Time"],
     controlInputs: {
       totalTime: ["Total Time", "input", "", ""],
     },
     extraControls: {},
-  }
-}
+  };
+};
 
 export const qaCycleTimeInjectionProps = () => {
   return {
@@ -913,8 +1177,8 @@ export const qaCycleTimeInjectionProps = () => {
         codeTable: "gas-level-codes",
         responseProps: {
           code: "gasLevelCode",
-          description: "gasLevelDescription"
-        }
+          description: "gasLevelDescription",
+        },
       },
     ],
     columnNames: [
@@ -928,7 +1192,7 @@ export const qaCycleTimeInjectionProps = () => {
       "End Minute",
       "Injection Cycle Time",
       "Begin Monitor Value",
-      "End Monitor Value"
+      "End Monitor Value",
     ],
     controlInputs: {
       gasLevelCode: ["Gas Level Code", "dropdown", "", ""],
@@ -939,26 +1203,26 @@ export const qaCycleTimeInjectionProps = () => {
     },
 
     controlDatePickerInputs: {
-      beginDate:["Begin Date", "date", "", ""],
-      beginHour:["Begin Hour", "hourDropdown", "dropdown", ""],
-      beginMinute:["Begin Minute", "minuteDropdown", "", ""],
-      endDate:["End Date", "date", "", ""],
-      endHour:["End Hour", "hourDropdown", "dropdown", ""],
-      endMinute:["End Minute", "minuteDropdown", "dropdown", ""],
+      beginDate: ["Begin Date", "date", "", ""],
+      beginHour: ["Begin Hour", "hourDropdown", "dropdown", ""],
+      beginMinute: ["Begin Minute", "minuteDropdown", "", ""],
+      endDate: ["End Date", "date", "", ""],
+      endHour: ["End Hour", "hourDropdown", "dropdown", ""],
+      endMinute: ["End Minute", "minuteDropdown", "dropdown", ""],
     },
 
     extraControls: {},
-  }
-}
+  };
+};
 
 export const qaFlowToLoadReferenceProps = () => {
   return {
     dataTableName: "Flow To Load Reference",
     payload: {},
     dropdownArray: [
-      'rataTestNumber',
-      'operatingLevelCode',
-      'calculatedSeparateReferenceIndicator',
+      "rataTestNumber",
+      "operatingLevelCode",
+      "calculatedSeparateReferenceIndicator",
     ],
     // mdmProps: [
     //   {
@@ -983,14 +1247,29 @@ export const qaFlowToLoadReferenceProps = () => {
       rataTestNumber: ["RATA Test Number", "dropdown", "", ""],
       operatingLevelCode: ["Operating Level Code", "dropdown", "", ""],
       averageGrossUnitLoad: ["Average Gross Unit Load", "input", "", ""],
-      averageReferenceMethodFlow: ["Average Reference Method Flow", "input", "", ""],
+      averageReferenceMethodFlow: [
+        "Average Reference Method Flow",
+        "input",
+        "",
+        "",
+      ],
       referenceFlowToLoadRatio: ["Reference Flow Load Ratio", "input", "", ""],
-      averageHourlyHeatInputRate: ["Average Hourly Heat Input Rate", "input", "", ""],
+      averageHourlyHeatInputRate: [
+        "Average Hourly Heat Input Rate",
+        "input",
+        "",
+        "",
+      ],
       referenceGrossHeatRate: ["Reference Gross Heat Rate", "input", "", ""],
-      calculatedSeparateReferenceIndicator: ["Calculated Separate Reference Indicator", "dropdown", "", ""],
+      calculatedSeparateReferenceIndicator: [
+        "Calculated Separate Reference Indicator",
+        "dropdown",
+        "",
+        "",
+      ],
     },
   };
-}
+};
 
 export const qaUnitDefaultTestDataProps = () => {
   return {
@@ -1002,16 +1281,16 @@ export const qaUnitDefaultTestDataProps = () => {
         codeTable: "fuel-codes",
         responseProps: {
           code: "fuelCode",
-          description: "fuelDescription"
-        }
+          description: "fuelDescription",
+        },
       },
       {
         codeTable: "operating-condition-codes",
         responseProps: {
           code: "operatingConditionCode",
-          description: "operatingConditionDescription"
-        }
-      }
+          description: "operatingConditionDescription",
+        },
+      },
     ],
     columnNames: [
       "Fuel Code",
@@ -1030,8 +1309,8 @@ export const qaUnitDefaultTestDataProps = () => {
       numberOfTestsForGroup: ["Number of Tests for Group", "input", "", ""],
     },
     controlDatePickerInputs: {},
-  }
-}
+  };
+};
 
 export const qaUnitDefaultTestRunDataProps = () => {
   return {
@@ -1050,7 +1329,7 @@ export const qaUnitDefaultTestRunDataProps = () => {
       "End Minute",
       "Response Time",
       "Reference Value",
-      "Run Used Indicator"
+      "Run Used Indicator",
     ],
     controlInputs: {
       operatingLevel: ["Operating Level for Run", "input", "", ""],
@@ -1060,15 +1339,15 @@ export const qaUnitDefaultTestRunDataProps = () => {
       runUsedIndicator: ["Run Used Indicator", "dropdown", "", ""],
     },
     controlDatePickerInputs: {
-      beginDate:["Begin Date", "date", "", ""],
-      beginHour:["Begin Hour", "hourDropdown", "dropdown", ""],
-      beginMinute:["Begin Minute", "minuteDropdown", "", ""],
-      endDate:["End Date", "date", "", ""],
-      endHour:["End Hour", "hourDropdown", "dropdown", ""],
-      endMinute:["End Minute", "minuteDropdown", "dropdown", ""],
+      beginDate: ["Begin Date", "date", "", ""],
+      beginHour: ["Begin Hour", "hourDropdown", "dropdown", ""],
+      beginMinute: ["Begin Minute", "minuteDropdown", "", ""],
+      endDate: ["End Date", "date", "", ""],
+      endHour: ["End Hour", "hourDropdown", "dropdown", ""],
+      endMinute: ["End Minute", "minuteDropdown", "dropdown", ""],
     },
-  }
-}
+  };
+};
 
 export const qaHgSummaryDataProps = () => {
   return {
@@ -1080,8 +1359,8 @@ export const qaHgSummaryDataProps = () => {
         codeTable: "gas-level-codes",
         responseProps: {
           code: "gasLevelCode",
-          description: "gasLevelDescription"
-        }
+          description: "gasLevelDescription",
+        },
       },
     ],
     columnNames: [
@@ -1099,8 +1378,8 @@ export const qaHgSummaryDataProps = () => {
       apsIndicator: ["APS Indicator", "radio", "", ""],
     },
     controlDatePickerInputs: {},
-  }
-}
+  };
+};
 
 export const qaHgInjectionDataProps = () => {
   return {
@@ -1127,4 +1406,155 @@ export const qaHgInjectionDataProps = () => {
       skip: ["", "skip", "", ""],
     },
   };
+};
+
+export const qaCertEventsProps = (selectedLocation) => {
+  const result = {
+    dataTableName: "QA Certification Event",
+    payload: {
+      id: null,
+      unitId: null,
+      monitoringSystemID: null,
+      componentID: null,
+      qaCertEventCode: null,
+      requiredTestCode: null,
+      qaCertEventHour: null,
+      conditionalBeginHour: null,
+      completionTestHour: null,
+      qaCertEventDate: null,
+      conditionalBeginDate: null,
+      completionTestDate: null,
+    },
+    dropdownArray: [
+      [
+        "componentID",
+        "monitoringSystemID",
+        "qaCertEventCode",
+        "requiredTestCode",
+      ],
+    ],
+    columns: [
+      "Unit or Stack Pipe ID",
+      "Component ID",
+      "Monitoring System ID",
+      "QA Cert Event Code",
+      "QA Cert Event Date",
+      "QA Cert Event Hour",
+      "Required Test Code",
+      "Conditional Begin Date",
+      "Conditional Begin Hour",
+      "Completion Test Date",
+      "Completion Test Hour",
+    ],
+    controlInputs: {
+      //locId:["Unit or Stack Pipe ID", "input", "", ""],
+      monitoringSystemID: [
+        "Monitoring System ID",
+        "nonFilteredDropdown",
+        "",
+        "",
+      ],
+      componentID: ["Component ID", "nonFilteredDropdown", "", ""],
+      qaCertEventCode: ["QA Cert Event Code", "dropdown", "", ""],
+      requiredTestCode: ["Required Test Code", "dropdown", "", ""],
+    },
+    controlDatePickerInputs: {
+      qaCertEventDate: ["QA Cert Event Date", "date", "", ""],
+      qaCertEventHour: ["QA Cert Event Hour", "hourDropdown", "dropdown", ""],
+      conditionalBeginDate: ["Conditional Begin Date", "date", "", ""],
+      conditionalBeginHour: [
+        "Conditional Begin Hour",
+        "hourDropdown",
+        "dropdown",
+        "",
+      ],
+      completionTestDate: ["Completion Test Date", "date", "", ""],
+      completionTestHour: [
+        "Completion Test Hour",
+        "hourDropdown",
+        "dropdown",
+        "",
+      ],
+      skip: ["", "skip", "", ""],
+    },
+    extraControlInputs: {},
+  };
+  const locId = selectedLocation.unitId ? "unitId" : "stackPipeId";
+  result.controlInputs = {
+    [locId]: ["Unit or Stack Pipe ID", "input", "", ""],
+    ...result.controlInputs,
+  };
+  //result.controlInputs[locId] = ["Unit or Stack Pipe ID", "input", "", ""];
+  return result;
+};
+
+export const qaTestExemptionProps = (selectedLocation) => {
+  const result = {
+    dataTableName: "Test Extension Exemption",
+    payload: {
+      id: null,
+      unitId: null,
+      monitoringSystemID: null,
+      componentID: null,
+      year: null,
+      quarter: null,
+      hoursUsed: null,
+      spanScaleCode: null,
+      fuelCode: null,
+      extensionOrExemptionCode: "LOWSYTD",
+    },
+    dropdownArray: [
+      [
+        "year",
+        "quarter",
+        "componentID",
+        "monitoringSystemID",
+        "spanScaleCode",
+        "fuelCode",
+        "extensionOrExemptionCode",
+      ],
+    ],
+    columns: [
+      "Unit or Stack Pipe ID",
+
+      "Year",
+      "Quarter",
+      "Component ID",
+      "Monitoring System ID",
+      "Hours Used",
+      "Span Scale Code",
+      "Fuel Code",
+      "Extension or Exemption Code",
+    ],
+    controlInputs: {
+      monitoringSystemID: [
+        "Monitoring System ID",
+        "nonFilteredDropdown",
+        "",
+        "",
+      ],
+      componentID: ["Component ID", "nonFilteredDropdown", "", ""],
+      year: ["Year", "nonFilteredDropdown", "", ""],
+
+      quarter: ["Quarter", "nonFilteredDropdown", "", ""],
+      hoursUsed: ["Hours Used", "input", "", ""],
+      spanScaleCode: ["Span Scale Code", "nonFilteredDropdown", "", ""],
+      fuelCode: ["Fuel Code", "nonFilteredDropdown", "", ""],
+      extensionOrExemptionCode: [
+        "Extension or Exemption Code",
+        "nonFilteredDropdown",
+        "",
+        "",
+      ],
+    },
+    controlDatePickerInputs: {},
+    extraControlInputs: {},
+  };
+
+  const locId = selectedLocation.unitId ? "unitId" : "stackPipeId";
+  result.controlInputs = {
+    [locId]: ["Unit or Stack Pipe ID", "input", "", ""],
+    ...result.controlInputs,
+  };
+  return result;
 };

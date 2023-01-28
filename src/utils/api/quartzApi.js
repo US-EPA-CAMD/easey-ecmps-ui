@@ -22,25 +22,9 @@ export const sendNotificationEmail = async (payload) => {
     });
 };
 
-export const triggerEvaluation = async (payload) => {
-  let url = `${config.services.quartz.uri}`;
-  url = `${url}/triggers/evaluations`;
-  try {
-    return handleResponse(
-      await secureAxios({
-        method: "POST",
-        url: url,
-        data: payload,
-      })
-    );
-  } catch (error) {
-    handleError(error);
-  }
-};
-
 export const triggerBulkEvaluation = async (payload) => {
   let url = `${config.services.quartz.uri}`;
-  url = `${url}/triggers/evaluations/bulk`;
+  url = `${url}/triggers/evaluations`;
   try {
     return handleResponse(
       await secureAxios({
