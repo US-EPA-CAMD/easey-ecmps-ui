@@ -11,10 +11,14 @@ axios.defaults.headers.common = {
 export async function getReport(
   reportCode,
   facilityId,
-  monPlanId,
-  testId,
+  monPlanId = null,
+  testId = null,
+  qceId = null,
+  teeId = null,
 ) {
-  const url = `${config.services.camd.uri}${formatReportUrl(reportCode, facilityId, monPlanId, testId)}`
+  const url = `${config.services.camd.uri}${formatReportUrl(
+    reportCode, facilityId, monPlanId, testId, qceId, teeId
+  )}`
 
   if (window.location.href.includes("workspace")) {
     return secureAxios({

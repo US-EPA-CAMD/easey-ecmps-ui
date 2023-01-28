@@ -148,11 +148,20 @@ export const reportWindowParams = [
   //`fullscreen=yes`,
 ].join(",");
 
-export const formatReportUrl = (reportCode, facilityId, monPlanId, testId) => {
+export const formatReportUrl = (
+  reportCode,
+  facilityId,
+  monPlanId = null,
+  testId = null,
+  qceId = null,
+  teeId = null,
+) => {
+  const tee = teeId ? `&teeId=${teeId}` : "";
+  const qce = qceId ? `&qceId=${qceId}` : "";  
   const test = testId ? `&testId=${testId}` : "";
   const facility = facilityId ? `&facilityId=${facilityId}` : "";
   const monitorPlan = monPlanId ? `&monitorPlanId=${monPlanId}` : "";
-  let url = `/reports?reportCode=${reportCode}${facility}${monitorPlan}${test}`;
+  let url = `/reports?reportCode=${reportCode}${facility}${monitorPlan}${test}${qce}${tee}`;
 
   if (window.location.href.includes('/workspace')) {
     return url.replace('/reports', '/workspace/reports');
@@ -161,25 +170,40 @@ export const formatReportUrl = (reportCode, facilityId, monPlanId, testId) => {
   return url;
 }
 
-export const displayReport = (reportCode, facilityId, monPlanId, testId) => {
+export const displayReport = (
+  reportCode,
+  facilityId,
+  monPlanId = null,
+  testId = null,
+  qceId = null,
+  teeId = null,
+) => {
   let reportTitle;
 
   switch (reportCode) {
+    case "QCE":
+      reportTitle = "QA/Cert Events Printout";
+      break;
+    case "TEE":
+      reportTitle = "Test Extensions and Exemptions Printout";
+      break;
     case "MPP":
       reportTitle = "Monitoring Plan Printout";
       break;
     case "MP_EVAL":
       reportTitle = "Monitoring Plan Evaluation";
       break;
-    case "MP_AUDIT":
-      reportTitle = "Monitoring Plan Audit";
+    case "TEST_DETAIL":
+      reportTitle = "QA/Cert Test Detail";
       break;
     default:
       reportTitle = "Not a valid Report";
       break;
   }
 
-  const url = formatReportUrl(reportCode, facilityId, monPlanId, testId);
+  const url = formatReportUrl(
+    reportCode, facilityId, monPlanId, testId, qceId, teeId
+  );
   window.open(url, `ECMPS ${reportTitle} Report`, reportWindowParams);
 };
 
@@ -190,7 +214,7 @@ export const addEvalStatusCell = (columns) =>
         <div className={alertStyle(row.evalStatusCode)}>
           <button
             className={'hyperlink-btn cursor-pointer'}
-            onClick={() => displayReport(row.monPlanId,'MP_EVAL')}
+            onClick={() => displayReport(row.facilityId , row.monPlanId, 'MP_EVAL')}
           >
             {row.evalStatusCode}
           </button>

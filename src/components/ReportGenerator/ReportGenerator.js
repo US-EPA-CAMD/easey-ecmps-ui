@@ -13,9 +13,11 @@ export const ReportGenerator = ({user, requireAuth = false}) => {
   const search = useLocation().search;
   const params = new URLSearchParams(search);
 
+  const teeId = params.get("teeId");
+  const qceId = params.get("qceId");
   const testId = params.get("testId");
-  const reportCode = params.get("reportCode");
   const facilityId = params.get("facilityId");
+  const reportCode = params.get("reportCode");
   const monitorPlanId = params.get("monitorPlanId");
 
   const [reportData, setReportData] = useState();
@@ -23,14 +25,14 @@ export const ReportGenerator = ({user, requireAuth = false}) => {
 
   useEffect(() => {
     if (!dataLoaded) {
-      camdApi.getReport(reportCode, facilityId, monitorPlanId, testId)
+      camdApi.getReport(reportCode, facilityId, monitorPlanId, testId, qceId, teeId)
         .then(response => response.data)
         .then(data => {
           setReportData(data);
           setDataLoaded(true);
         });
     }
-  }, [reportCode, facilityId, monitorPlanId, testId, dataLoaded]);
+  }, [reportCode, facilityId, monitorPlanId, testId, qceId, teeId, dataLoaded]);
 
   const Loading = () => {
     return (

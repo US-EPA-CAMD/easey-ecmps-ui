@@ -115,7 +115,7 @@ const TableRender = forwardRef(
     }, []);
 
     const handleRowView = useCallback((row) => {
-      displayReport("MPP", null, row.monPlanId, null);
+      displayReport("MPP", row.facilityId, row.monPlanId, null);
     }, []);
 
     const handleRowSelection = useCallback(async (row, type, selection) => {

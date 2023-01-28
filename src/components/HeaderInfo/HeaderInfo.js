@@ -627,7 +627,7 @@ export const HeaderInfo = ({
       <div className={alertStyle}>
         <button
           className={"hyperlink-btn cursor-pointer"}
-          onClick={() => displayReport("MP_EVAL", null, selectedConfig.id, null)}
+          onClick={() => displayReport("MP_EVAL", orisCode, selectedConfig.id)}
         >
           {evalStatusText(evalStatus)}
         </button>
@@ -1136,7 +1136,7 @@ export const HeaderInfo = ({
                   type="button"
                   title="View Audit Report"
                   className={"hyperlink-btn cursor-pointer"}
-                  onClick={() => displayReport("MP_AUDIT", null, selectedConfig.id, null)}
+                  onClick={() => displayReport("MP_AUDIT", orisCode, selectedConfig.id)}
                 >
                   View Audit Report
                 </Button>
@@ -1146,7 +1146,7 @@ export const HeaderInfo = ({
                   type="button"
                   title="View Printout Report"
                   className={"hyperlink-btn cursor-pointer"}
-                  onClick={() => displayReport("MPP", null, selectedConfig.id, null)}
+                  onClick={() => displayReport("MPP", orisCode, selectedConfig.id)}
                 >
                   View Printout Report
                 </Button>
