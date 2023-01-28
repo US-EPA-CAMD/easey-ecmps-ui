@@ -140,29 +140,64 @@ export const reportWindowParams = [
   `width=${screen.width}`,
   //`fullscreen=yes`,
 ].join(",");
-export const displayReport = (monPlanId, reportCode = "MP_EVAL") => {
-  let reportType;
+
+export const formatReportUrl = (
+  reportCode,
+  facilityId,
+  monPlanId = null,
+  testId = null,
+  qceId = null,
+  teeId = null,
+) => {
+  const tee = teeId ? `&teeId=${teeId}` : "";
+  const qce = qceId ? `&qceId=${qceId}` : "";  
+  const test = testId ? `&testId=${testId}` : "";
+  const facility = facilityId ? `&facilityId=${facilityId}` : "";
+  const monitorPlan = monPlanId ? `&monitorPlanId=${monPlanId}` : "";
+  let url = `/reports?reportCode=${reportCode}${facility}${monitorPlan}${test}${qce}${tee}`;
+
+  if (window.location.href.includes('/workspace')) {
+    return url.replace('/reports', '/workspace/reports');
+  }
+
+  return url;
+}
+
+export const displayReport = (
+  reportCode,
+  facilityId,
+  monPlanId = null,
+  testId = null,
+  qceId = null,
+  teeId = null,
+) => {
+  let reportTitle;
 
   switch (reportCode) {
+    case "QCE":
+      reportTitle = "QA/Cert Events Printout";
+      break;
+    case "TEE":
+      reportTitle = "Test Extensions and Exemptions Printout";
+      break;
     case "MPP":
-      reportType = "Printout";
+      reportTitle = "Monitoring Plan Printout";
       break;
     case "MP_EVAL":
-      reportType = "Evaluation";
+      reportTitle = "Monitoring Plan Evaluation";
       break;
-    case "MP_AUDIT":
-      reportType = "Audit";
+    case "TEST_DETAIL":
+      reportTitle = "QA/Cert Test Detail";
       break;
     default:
-      reportType = "Evaluation";
+      reportTitle = "Not a valid Report";
       break;
   }
 
-  window.open(
-    `/workspace/reports?reportCode=${reportCode}&monitorPlanId=${monPlanId}`,
-    `ECMPS Monitoring Plan ${reportType} Report`,
-    reportWindowParams
+  const url = formatReportUrl(
+    reportCode, facilityId, monPlanId, testId, qceId, teeId
   );
+  window.open(url, `ECMPS ${reportTitle} Report`, reportWindowParams);
 };
 
 export const evalStatusesWithLinks = new Set(["PASS", "INFO", "ERR"]);

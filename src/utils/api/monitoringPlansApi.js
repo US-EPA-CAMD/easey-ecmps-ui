@@ -947,9 +947,9 @@ export const createLocationAttribute = async (payload, locationSelectValue) => {
   }
 };
 
-export const getMonitoringPlansEvaluationReportData = async (monPlanId) => {
+export const getMonitoringPlansEvaluationReportData = async (facilityId, monPlanId) => {
   const url = getApiUrl(
-    `/reports?reportCode=MP_EVAL&monitorPlanId${monPlanId}`
+    `/reports?reportCode=MP_EVAL&facilityId=${facilityId}&monitorPlanId${monPlanId}`
   );
   return axios.get(url).then(handleResponse).catch(handleError);
 };

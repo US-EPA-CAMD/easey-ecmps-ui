@@ -4,20 +4,20 @@ import { useLocation } from "react-router-dom";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 
 import Login from "../Login/Login";
-import DetailReport from "./DetailReport/DetailReport";
-import SummaryReport from "./SummaryReport/SummaryReport";
+import Report from "./Report/Report";
 import * as camdApi from '../../utils/api/camdServices';
 
 import "./ReportGenerator.scss";
 
-export const ReportGenerator = (user) => {
+export const ReportGenerator = ({user, requireAuth = false}) => {
   const search = useLocation().search;
   const params = new URLSearchParams(search);
 
+  const teeId = params.get("teeId");
+  const qceId = params.get("qceId");
   const testId = params.get("testId");
-  const batchView = params.get("batchView");
-  const reportCode = params.get("reportCode");
   const facilityId = params.get("facilityId");
+  const reportCode = params.get("reportCode");
   const monitorPlanId = params.get("monitorPlanId");
 
   const [reportData, setReportData] = useState();
@@ -25,14 +25,14 @@ export const ReportGenerator = (user) => {
 
   useEffect(() => {
     if (!dataLoaded) {
-      camdApi.getReport(reportCode, facilityId, monitorPlanId, testId, batchView)
+      camdApi.getReport(reportCode, facilityId, monitorPlanId, testId, qceId, teeId)
         .then(response => response.data)
         .then(data => {
           setReportData(data);
           setDataLoaded(true);
         });
     }
-  }, [reportCode, facilityId, monitorPlanId, testId, batchView, dataLoaded]);
+  }, [reportCode, facilityId, monitorPlanId, testId, qceId, teeId, dataLoaded]);
 
   const Loading = () => {
     return (
@@ -42,19 +42,9 @@ export const ReportGenerator = (user) => {
     );
   };
 
-  const Report = () => {
-    switch(reportData.templateCode) {
-      case "DTLRPT":
-        return <DetailReport reportData={reportData} dataLoaded={dataLoaded} />
-      case "SUMRPT":
-      default:
-        return <SummaryReport reportData={reportData} dataLoaded={dataLoaded} />
-    }
-  };
-
   return (
     <div className="ReportGenerator">
-      {!user.user ? (
+      {requireAuth && !user ? (
         <div className="loginPanel react-transition delayed-fade-in">
           <Login isModal={false} source="ReportGenerator" />
         </div>
@@ -66,7 +56,7 @@ export const ReportGenerator = (user) => {
             <div>
               <Suspense fallback={Loading}>
                 <div className="react-transition scale-in">
-                  <Report />
+                  <Report reportData={reportData} dataLoaded={dataLoaded} />
                 </div>
               </Suspense>
             </div>
