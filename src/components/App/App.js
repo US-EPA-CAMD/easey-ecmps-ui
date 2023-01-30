@@ -136,10 +136,15 @@ const App = () => {
         <div>{user ? <InactivityTracker /> : ""}</div>
       </div>
       <Switch>
+      <Route
+          path="/reports"
+          exact
+          component={() => <ReportGenerator />}
+        />
         <Route
           path="/workspace/reports"
           exact
-          component={() => <ReportGenerator user={user} />}
+          component={() => <ReportGenerator requireAuth={true} user={user} />}
         />
         <Layout
           user={user}
