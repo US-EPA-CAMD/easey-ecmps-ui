@@ -46,6 +46,7 @@ import {
 } from "../../utils/api/emissionsApi";
 import {
   getUser,
+  displayReport,
   getPreviouslyFullSubmitedQuarter,
 } from "../../utils/functions";
 import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
@@ -336,39 +337,6 @@ export const HeaderInfo = ({
     setImportedFileErrorMsgs([]);
   };
 
-  const reportWindowParams = [
-    // eslint-disable-next-line no-restricted-globals
-    `height=${screen.height}`,
-    // eslint-disable-next-line no-restricted-globals
-    `width=${screen.width}`,
-    //`fullscreen=yes`,
-  ].join(",");
-
-  const displayReport = (reportCode) => {
-    let reportType;
-
-    switch (reportCode) {
-      case "MPP":
-        reportType = "Printout";
-        break;
-      case "MP_EVAL":
-        reportType = "Evaluation";
-        break;
-      case "MP_AUDIT":
-        reportType = "Audit";
-        break;
-      default:
-        reportType = "Evaluation";
-        break;
-    }
-
-    window.open(
-      `/workspace/reports?reportCode=${reportCode}&monitorPlanId=${selectedConfig.id}`,
-      `ECMPS Monitoring Plan ${reportType} Report`,
-      reportWindowParams
-    );
-  };
-
   const openImportModal = () => {
     setShowImportModal(true);
 
@@ -654,11 +622,12 @@ export const HeaderInfo = ({
     const alertStyle = `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
       evalStatus
     )} margin-y-0`;
+
     const evalStatusHyperlink = (
       <div className={alertStyle}>
         <button
           className={"hyperlink-btn cursor-pointer"}
-          onClick={() => displayReport("MP_EVAL")}
+          onClick={() => displayReport("MP_EVAL", orisCode, selectedConfig.id)}
         >
           {evalStatusText(evalStatus)}
         </button>
@@ -1169,7 +1138,7 @@ export const HeaderInfo = ({
                   type="button"
                   title="View Audit Report"
                   className={"hyperlink-btn cursor-pointer"}
-                  onClick={() => displayReport("MP_AUDIT")}
+                  onClick={() => displayReport("MP_AUDIT", orisCode, selectedConfig.id)}
                 >
                   View Audit Report
                 </Button>
@@ -1179,7 +1148,7 @@ export const HeaderInfo = ({
                   type="button"
                   title="View Printout Report"
                   className={"hyperlink-btn cursor-pointer"}
-                  onClick={() => displayReport("MPP")}
+                  onClick={() => displayReport("MPP", orisCode, selectedConfig.id)}
                 >
                   View Printout Report
                 </Button>
