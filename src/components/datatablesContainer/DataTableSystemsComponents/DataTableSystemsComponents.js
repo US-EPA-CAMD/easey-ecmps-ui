@@ -231,17 +231,16 @@ export const DataTableSystemsComponents = ({
             const selectedCodes = result[0];
             const filteredOutSubDropdownOptions = systemComponentsMdmData[
               modalDetailData[0]
-            ]?.filter((option) =>
+            ] || [];
+            filteredOutSubDropdownOptions.filter((option) =>
               selectedCodes[modalDetailData[0]].includes(option.code)
             );
 
-            if(filteredOutSubDropdownOptions) {
               filteredOutSubDropdownOptions.unshift({
                 code: "",
                 name: selectText,
               });
               modalDetailData[6] = filteredOutSubDropdownOptions;
-            }
           }
         }
       }
