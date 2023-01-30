@@ -78,21 +78,21 @@ const TableRender = forwardRef(
         additionalParams = "&monitorPlanId=" + row.monPlanId;
       } else if (type === "QA") {
         if (rowId === "testSumId") {
-          reportCode = printout ? "TEST_DETAIL" : "QA_EVAL";
-          additionalParams = "testId=" + row.testSumId;
+          reportCode = printout ? "TEST_DETAIL" : "TEST_EVAL";
+          additionalParams = "&testId=" + row.testSumId;
         }
         if (rowId === "qaCertEventIdentifier") {
-          reportCode = printout ? "QCE" : "QA_EVAL";
-          additionalParams = "qceId=" + row.qaCertEventIdentifier;
+          reportCode = printout ? "QCE" : "QCE_EVAL";
+          additionalParams = "&qceId=" + row.qaCertEventIdentifier;
         }
         if (rowId === "testExtensionExemptionIdentifier") {
-          reportCode = printout ? "TEE" : "QA_EVAL";
-          additionalParams = "teeId=" + row.testExtensionExemptionIdentifier;
+          reportCode = printout ? "TEE" : "TEE_EVAL";
+          additionalParams = "&teeId=" + row.testExtensionExemptionIdentifier;
         }
       }
 
       url =
-        `/workspace/reports?reportCode=${reportCode}&facilityId=${1}` +
+        `/workspace/reports?reportCode=${reportCode}&facilityId=${row.orisCode}` +
         additionalParams;
 
       window.open(url, reportTitle, reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
