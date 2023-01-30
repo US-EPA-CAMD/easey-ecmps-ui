@@ -84,16 +84,18 @@ describe('Test cases for QACertEventTestExmpDataTable', () => {
     const createQaCertEventsUrl = new RegExp(
       `${qaCertBaseUrl}/workspace/locations/${locId}/qa-certification-events`
     );
-
-    mock.onGet(getMonitoringComponentsUrl).reply(200, []);
-    mock.onGet(getMonitoringSystemssUrl).reply(200, []);
-    mock.onGet(getQaCertEventCodesUrl).reply(200, []);
-    mock.onGet(getQaRequiredTestCodesUrl).reply(200, []);
-    mock.onGet(getQaCertEventsUrl).reply(200, qaCertsEventsData);
-    mock.onPost(createQaCertEventsUrl).reply(200, 'created');
+    const requestHeaders = {
+      "x-api-key": "PXPWlQGB3wKXotkWN1PbSwbSoM7CoWW0ZMPWYtfc"
+    }
+    mock.onGet(getMonitoringComponentsUrl, requestHeaders).reply(200, []);
+    mock.onGet(getMonitoringSystemssUrl,requestHeaders).reply(200, []);
+    mock.onGet(getQaCertEventCodesUrl, requestHeaders).reply(200, []);
+    mock.onGet(getQaRequiredTestCodesUrl, requestHeaders).reply(200, []);
+    mock.onGet(getQaCertEventsUrl, requestHeaders).reply(200, qaCertsEventsData);
+    mock.onPost(createQaCertEventsUrl, requestHeaders).reply(200, 'created');
 
     renderComponent({
-      locationSelectValue: "6",
+      locationSelectValue: locId,
       isCheckedOut: true,
       sectionSelect:[0, 'QA Certification Event'],
       selectedLocation:{
@@ -106,13 +108,30 @@ describe('Test cases for QACertEventTestExmpDataTable', () => {
     // renders rows
     const rows = await screen.findAllByRole('row')
     expect(mock.history.get.length).not.toBe(0)
-    expect(rows).toHaveLength(qaCertsEventsData.length)
+    expect(rows).toHaveLength(qaCertsEventsData.length +1)
 
     // add row
     const addBtn = screen.getByRole('button', { name: /Add/i })
     userEvent.click(addBtn)
     let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
     userEvent.click(saveAndCloseBtn)
-    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
+    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000);
+    //screen.debug();
+    // edit row
+    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    expect(editBtns).toHaveLength(qaCertsEventsData.length);
+    userEvent.click(editBtns[0])
+    saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn)
+    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
+
+    // remove row
+    const deleteBtns = screen.getAllByRole('button', { name: /Remove/i })
+    expect(deleteBtns).toHaveLength(qaCertsEventsData.length)
+    const secondDeleteBtn = deleteBtns[1]
+    userEvent.click(secondDeleteBtn)
+    const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
+    userEvent.click(confirmBtns[1]);
+    setTimeout(() => expect(mock.history.delete.length).toBe(1), 1000);
   });
 });
