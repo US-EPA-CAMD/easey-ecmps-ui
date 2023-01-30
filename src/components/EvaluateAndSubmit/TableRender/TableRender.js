@@ -92,7 +92,7 @@ const TableRender = forwardRef(
       }
 
       url =
-        `/workspace/reports?reportCode=${reportCode}&facilityId=${1}` +
+        `/workspace/reports?reportCode=${reportCode}&facilityId=${row.orisCode}` +
         additionalParams;
 
       window.open(url, reportTitle, reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
