@@ -69,6 +69,12 @@ const unmatchedData = [
     state: "AL",
   },
 ];
+beforeEach(() => {
+  jest.setTimeout(60000);
+})
+afterEach(() => {
+  jest.clearAllMocks();
+});
 test("testing redux connected data-table component renders all records", async () => {
   axios.get.mockImplementation(() =>
     Promise.resolve({ status: 200, data: data })

@@ -133,8 +133,8 @@ export const getProtocolGasRecords = (data) => {
       testSumId: el.testSumId,
       col1: el.gasLevelCode,
       col2: el.gasTypeCode,
-      col3: el.cylinderID,
-      col4: el.vendorID,
+      col3: el.cylinderIdentifier,
+      col4: el.vendorIdentifier,
       col5: el.expirationDate ? formatStringToDate(el.expirationDate) : "",
     });
   });
@@ -455,6 +455,40 @@ export const mapCalibrationInjectionsToRows = (data) => {
   return records;
 };
 
+export const mapFuelFlowmeterAccuracyDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.accuracyTestMethodCode,
+      col2: el.lowFuelAccuracy,
+      col3: el.midFuelAccuracy,
+      col4: el.highFuelAccuracy,
+      col5: el.reinstallationDate ? new Date(el.reinstallationDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) : el.reinstallationDate,
+      col6: el.reinstallationHour,
+    };
+    records.push(row);
+  }
+  return records;
+};
+
+export const mapTransmitterTransducerAccuracyDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.lowLevelAccuracy,
+      col2: el.lowLevelAccuracySpecCode,
+      col3: el.midLevelAccuracy,
+      col4: el.midLevelAccuracySpecCode,
+      col5: el.highLevelAccuracy,
+      col6: el.highLevelAccuracySpecCode,
+    };
+    records.push(row);
+  }
+  return records;
+};
+
 export const mapOnOffCalToRows = (data) => {
   const records = [];
   for (const el of data) {
@@ -491,7 +525,165 @@ export const mapOnOffCalToRows = (data) => {
   return records;
 };
 
-export const getListOfRadioContorls = (controlInputs) => {
+export const mapCycleTimeSummariesToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      testSumId: el.testSumId,
+      col1: el.totalTime,
+    };
+    records.push(row)
+  }
+  return records;
+};
+
+export const mapFlowToLoadReferenceToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.rataTestNumber,
+      col2: el.operatingLevelCode,
+      col3: el.averageGrossUnitLoad,
+      col4: el.averageReferenceMethodFlow,
+      col5: el.referenceFlowToLoadRatio,
+      col6: el.averageHourlyHeatInputRate,
+      col7: el.referenceGrossHeatRate,
+      col8: el.calculatedSeparateReferenceIndicator,
+    };
+    records.push(row)
+  }
+  return records;
+}
+
+export const mapUnitDefaultTestDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.fuelCode,
+      col2: el.NOxDefaultRate,
+      col3: el.operatingConditionCode,
+      col4: el.groupID,
+      col5: el.numberOfUnitsInGroup,
+      col6: el.numberOfTestsForGroup,
+    };
+    records.push(row)
+  }
+  return records;
+}
+
+export const mapUnitDefaultTestRunDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.operatingLevel,
+      col2: el.runNumber,
+      col3: el.beginDate,
+      col4: el.beginHour,
+      col5: el.beginMinute,
+      col6: el.endDate,
+      col7: el.endHour,
+      col8: el.endMinute,
+      col9: el.responseTime,
+      col10: el.referenceValue,
+      col11: el.runUsedIndicator
+    };
+    records.push(row)
+  }
+  return records;
+}
+
+export const mapHgSummaryDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.gasLevelCode,
+      col2: el.meanMeasuredValue,
+      col3: el.meanReferenceValue,
+      col4: el.percentError,
+      col5: el.apsIndicator === 1 ? "Yes" : "No",
+    };
+    records.push(row)
+  }
+  return records;
+}
+
+export const mapHgInjectionDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.injectionDate ? new Date(el.injectionDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) : el.injectionDate,
+      col2: el.injectionHour,
+      col3: el.injectionMinute,
+      col4: el.measuredValue,
+      col5: el.referenceValue,
+    };
+    records.push(row)
+  }
+  return records;
+}
+
+export const mapQaCertEventsDataToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.unitId? el.unitId : el.stackPipeId,
+      col2: el.componentID,
+      col3: el.monitoringSystemID,
+      col4: el.qaCertEventCode,
+      col5: el.qaCertEventDate,
+      col6: el.qaCertEventHour,
+      col7: el.requiredTestCode,
+      col8: el.conditionalBeginDate,
+      col9: el.conditionalBeginHour,
+      col10: el.completionTestDate,
+      col11: el.completionTestHour
+    };
+    records.push(row)
+  }
+  return records;
+}
+
+export const mapQaExtensionsExemptionsDataToRows  = (data) => {
+  const records = [];
+
+  data.forEach((el) => {
+    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
+    const endHour = el.endHour ? el.endHour.toString() : "";
+
+    const endMinute = el.endMinute ? el.endMinute.toString() : "";
+    records.push({
+      id: el.id,
+      locationId: el.locationId,
+
+      col1:
+        el.stackPipeId !== null
+          ? el.stackPipeId
+          : el.unitId !== null
+          ? el.unitId
+          : "",
+      col2: el.year,
+      col3: el.quarter,
+      col4: el.componentID, 
+      col5: el.monitoringSystemID,
+      col6: el.hoursUsed,
+      col7: el.spanScaleCode,
+      col8: el.fuelCode,
+      col9: el.extensionOrExemptionCode,
+    });
+  });
+
+  return records;
+};
+
+
+export const getListOfRadioControls = (controlInputs) => {
   const result = [];
   const keys = Object.keys(controlInputs);
   keys.forEach(key => {
@@ -501,3 +693,17 @@ export const getListOfRadioContorls = (controlInputs) => {
   });
   return result;
 };
+
+// Show aria-label for any action (View, Edit, Remove) in any table provided a unique Id based on table type
+export const getTableRowActionAriaLabel = (dataTableName, row, action) => {
+  let result;
+  switch (dataTableName) {
+    case 'Test Summary Data'://unique ID is test number, i.e. col4
+      result = `${action} for ${row.col4}`;
+      break;
+    default:
+      result = `not implemented yet`;
+      break;
+  }
+  return result;
+}

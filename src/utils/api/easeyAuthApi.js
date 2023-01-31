@@ -149,9 +149,17 @@ export const refreshToken = async () => {
 };
 
 export const credentialsAuth = async (payload) => {
+  return axios({
+    method: "POST",
+    url: `${config.services.authApi.uri}/sign/authenticate`,
+    data: payload,
+  });
+};
+
+export const sendPin = async (payload) => {
   return secureAxios({
     method: "POST",
-    url: `${config.services.authApi.uri}/certifications/verify-credentials`,
+    url: `${config.services.authApi.uri}/sign/send-mobile-code`,
     data: payload,
   });
 };
@@ -159,7 +167,7 @@ export const credentialsAuth = async (payload) => {
 export const verifyChallenge = async (payload) => {
   return secureAxios({
     method: "POST",
-    url: `${config.services.authApi.uri}/certifications/verify-challenge`,
+    url: `${config.services.authApi.uri}/sign/validate`,
     data: payload,
   });
 };
@@ -167,7 +175,8 @@ export const verifyChallenge = async (payload) => {
 export const getCredentials = async (monitorPlans) => {
   return secureAxios({
     method: "GET",
-    url: `${config.services.authApi.uri
-      }/certifications/statements?monitorPlanIds=${monitorPlans.join("|")}`,
+    url: `${
+      config.services.authApi.uri
+    }/certifications/statements?monitorPlanIds=${monitorPlans.join("|")}`,
   });
 };

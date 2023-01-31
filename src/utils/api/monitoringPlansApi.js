@@ -4,6 +4,8 @@ import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
 import { getFacilityById } from "./facilityApi";
 import download from "downloadjs";
+import { checkoutAPI } from "../../additional-functions/checkout";
+import { obtainCheckedOutLocations } from "../../additional-functions/useGetCheckedOutLocations";
 
 axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
@@ -907,8 +909,7 @@ export const getLocationAttributes = async (locationId) => {
 };
 
 export const getRelationshipData = async (locationId) => {
-  // the non workspace api get endpoint is wrongly labeled in swagger, only the workspace is working but it is uneditable
-  const url = getApiUrl(`/locations/${locationId}/relationships`, true);
+  const url = getApiUrl(`/locations/${locationId}/relationships`);
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
@@ -946,9 +947,9 @@ export const createLocationAttribute = async (payload, locationSelectValue) => {
   }
 };
 
-export const getMonitoringPlansEvaluationReportData = async (monPlanId) => {
+export const getMonitoringPlansEvaluationReportData = async (facilityId, monPlanId) => {
   const url = getApiUrl(
-    `/reports?reportCode=MP_EVAL&monitorPlanId${monPlanId}`
+    `/reports?reportCode=MP_EVAL&facilityId=${facilityId}&monitorPlanId${monPlanId}`
   );
   return axios.get(url).then(handleResponse).catch(handleError);
 };
@@ -981,14 +982,14 @@ export const getMPSchema = async () => {
 export const exportMonitoringPlanDownload = async (configID) => {
   try {
     const mpRes = await getMonitoringPlanById(configID);
-    const facId = mpRes.data["facId"];
+    const orisCode = mpRes.data["orisCode"];
     const mpName = mpRes.data["name"];
     const date = new Date();
     const year = date.getUTCFullYear();
     const month = date.getUTCMonth() + 1;
     const day = date.getUTCDate();
     const fullDateString = `${month}-${day}-${year}`;
-    const facRes = await getFacilityById(facId);
+    const facRes = await getFacilityById(orisCode);
     const facName = facRes.data["facilityName"];
     const exportFileName = `MP Export - ${facName}, ${mpName} (${fullDateString}).json`;
     download(JSON.stringify(mpRes.data, null, "\t"), exportFileName);

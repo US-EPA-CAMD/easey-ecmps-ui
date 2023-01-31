@@ -444,7 +444,7 @@ export const getAllPressureMeasureCodes = async () => {
 export const getAllMonitoringSystemIDCodes = async (locationId) => {
 
   let url = config.services.monitorPlans.uri;
-  
+
   if (window.location.href.includes("/workspace")) {
     url = `${url}/workspace`;
   }
@@ -454,7 +454,7 @@ export const getAllMonitoringSystemIDCodes = async (locationId) => {
     const actualResponse = response;
     const dataArray = [];
     response.data.map((monitorCode) => {
-      if(monitorCode.systemTypeCode === 'OILV' || monitorCode.systemTypeCode === 'OILM'){
+      if (monitorCode.systemTypeCode === 'OILV' || monitorCode.systemTypeCode === 'OILM') {
         dataArray.push({
           monitoringSystemIDCode: monitorCode.monitoringSystemId,
           monitoringSystemIDDescription: monitorCode.systemTypeCode,
@@ -481,4 +481,44 @@ export const getMdmDataByCodeTable = async (codeTable) => {
     .get(`${config.services.mdm.uri}/${codeTable}`)
     .then(handleResponse)
     .catch(handleError);
+}
+
+export const getAllAccuracyTestMethodCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/accuracy-test-method-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export const getAllAccuracySpecCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/accuracy-spec-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export const getAllCalculatedSeparateReferenceIndicatorCodes = async () => {
+  const data = [
+    {
+      calculatedSeparateReferenceIndicatorCode: '0',
+      calculatedSeparateReferenceIndicatorDescription: '0'
+    },
+    {
+      calculatedSeparateReferenceIndicatorCode: '1',
+      calculatedSeparateReferenceIndicatorDescription: '1'
+    }
+  ]
+  return Promise.resolve({ status: 200, data })
+}
+
+export const getRataTestNumber = async (locationId) => {
+  const testSummaryUrl = `https://api.epa.gov/easey/dev/qa-certification-mgmt/locations/${locationId}/test-summary?testTypeCodes=RATA&systemTypeCodes=FLOW`
+  const testSummaryWorkspaceUrl = `https://api.epa.gov/easey/dev/qa-certification-mgmt/workspace/locations/${locationId}/test-summary?testTypeCodes=RATA&systemTypeCodes=FLOW`
+  const testSummaries = await Promise.all([axios.get(testSummaryUrl), axios.get(testSummaryWorkspaceUrl)])
+  const allTestSummaries = [...testSummaries[0].data, ...testSummaries[1].data]
+  const rataTestNumbers = allTestSummaries.map(testSummary => {
+    const testNumber = testSummary.testNumber
+    return { rataTestNumberCode: testNumber, rataTestNumberDescription: testNumber }
+  })
+  return Promise.resolve({ status: 200, data: rataTestNumbers })
 }

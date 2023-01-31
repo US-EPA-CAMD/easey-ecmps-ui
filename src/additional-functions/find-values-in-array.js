@@ -21,17 +21,15 @@ export const findValue = (options, val, parameter) => {
 
 // date from api is always in yyyy-mm-dd
 export const adjustDate = (format, date) => {
-  if (date === null) {
+  if (!date) {
     return "";
-  }else {
-    date = "";
   }
   const [year, month, day] = date.split("-");
 
   let formattedDate = "";
   switch (format) {
     case "mm/dd/yyyy":
-      formattedDate = `${month}/${day}/${year}`;
+      formattedDate = new Date(date).toLocaleDateString('en-US', { timeZone: 'UTC' }) ?? `${month}/${day}/${year}`;
       break;
     case "dd/mm/yyyy":
       formattedDate = `${day}/${month}/${year}`;

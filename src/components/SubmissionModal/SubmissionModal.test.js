@@ -3,9 +3,19 @@ import { render, act, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import SubmissionModal from "./SubmissionModal";
 
+sessionStorage.setItem(
+  "cdx_user",
+  '{ "firstName": "mock", "lastName": "mock" }'
+);
+
 jest.mock("../../utils/api/easeyAuthApi", () => ({
   credentialsAuth: jest.fn().mockResolvedValue({
-    data: { activityId: "", questionId: "", question: "Mock Question" },
+    data: {
+      activityId: "",
+      questionId: "",
+      question: "Mock Question",
+      mobileNumbers: [],
+    },
   }),
   verifyChallenge: jest.fn().mockResolvedValue({
     data: true,
@@ -18,6 +28,7 @@ jest.mock("../../utils/api/easeyAuthApi", () => ({
       },
     ],
   }),
+  sendPin: jest.fn(),
 }));
 window.scrollTo = jest.fn();
 
@@ -26,29 +37,33 @@ describe("Submission Modal", () => {
     jest.clearAllMocks();
   });
 
-  test("Render Submission Modal with no errors", () => {
+  it("Render Submission Modal with no errors", () => {
     const { container } = render(
       <SubmissionModal
         show={true}
         close={jest.fn()}
         submissionCallback={jest.fn()}
+        activityId=""
+        setActivityId={jest.fn()}
       />
     );
 
     expect(container).toBeDefined();
   });
 
-  test("Submit Auth With Errors", async () => {
+  it("Submit Auth With Errors", async () => {
     const { getByText } = render(
       <SubmissionModal
         show={true}
         close={jest.fn()}
         submissionCallback={jest.fn()}
+        activityId=""
+        setActivityId={jest.fn()}
       />
     );
 
     await act(async () => {
-      getByText("Verify").click();
+      getByText("Authenticate").click();
     });
 
     expect(
@@ -56,12 +71,14 @@ describe("Submission Modal", () => {
     ).toBeInTheDocument();
   });
 
-  test("Submit Auth With No Errors", async () => {
+  it("Submit Auth With No Errors", async () => {
     const { getByText } = render(
       <SubmissionModal
         show={true}
         close={jest.fn()}
         submissionCallback={jest.fn()}
+        activityId=""
+        setActivityId={jest.fn()}
       />
     );
 
@@ -72,22 +89,24 @@ describe("Submission Modal", () => {
       const passwordInput = screen.getByTestId("component-login-password");
       await userEvent.type(passwordInput, "mypassword");
 
-      await getByText("Verify").click();
+      await getByText("Authenticate").click();
     });
 
     expect(getByText("Mock Question")).toBeInTheDocument();
   });
 
-  test("Submit Question With Errors", async () => {
+  it("Submit Question With Errors", async () => {
     const { getByText } = render(
       <SubmissionModal
         show={true}
         close={jest.fn()}
         submissionCallback={jest.fn()}
+        activityId=""
+        setActivityId={jest.fn()}
       />
     );
 
-    const submissionButton = getByText("Verify");
+    const submissionButton = getByText("Authenticate");
 
     await act(async () => {
       const usernameInput = screen.getByTestId("component-login-username");
@@ -104,20 +123,22 @@ describe("Submission Modal", () => {
     });
 
     expect(
-      getByText("Please enter your answer to the challenge question")
+      getByText("Please enter an answer to the challenge / pin verification")
     ).toBeInTheDocument();
   });
 
-  test("Submit Question With No Errors", async () => {
+  it("Submit Question With No Errors", async () => {
     const { getByText } = render(
       <SubmissionModal
         show={true}
         close={jest.fn()}
         submissionCallback={jest.fn()}
+        activityId=""
+        setActivityId={jest.fn()}
       />
     );
 
-    const submissionButton = getByText("Verify");
+    const submissionButton = getByText("Authenticate");
 
     await act(async () => {
       const usernameInput = screen.getByTestId("component-login-username");
@@ -139,7 +160,37 @@ describe("Submission Modal", () => {
     expect(getByText("Certification Statement(s)")).toBeInTheDocument();
   });
 
-  test("Submit Final Modal After Cert Clicks", async () => {
+  it("Display Pin", async () => {
+    const { getByText } = render(
+      <SubmissionModal
+        show={true}
+        close={jest.fn()}
+        submissionCallback={jest.fn()}
+        activityId=""
+        setActivityId={jest.fn()}
+      />
+    );
+
+    const submissionButton = getByText("Authenticate");
+
+    await act(async () => {
+      const usernameInput = screen.getByTestId("component-login-username");
+      await userEvent.type(usernameInput, "myusername");
+
+      const passwordInput = screen.getByTestId("component-login-password");
+      await userEvent.type(passwordInput, "mypassword");
+
+      await submissionButton.click();
+    });
+
+    await act(async () => {
+      await screen.getByTestId("radio-text").click();
+    });
+
+    expect(getByText("Text message will be sent to:")).toBeInTheDocument();
+  });
+
+  it("Submit Final Modal After Cert Clicks", async () => {
     const callback = jest.fn();
 
     const { getByText } = render(
@@ -147,10 +198,12 @@ describe("Submission Modal", () => {
         show={true}
         close={jest.fn()}
         submissionCallback={callback}
+        activityId=""
+        setActivityId={jest.fn()}
       />
     );
 
-    const submissionButton = getByText("Verify");
+    let submissionButton = getByText("Authenticate");
 
     await act(async () => {
       const usernameInput = screen.getByTestId("component-login-username");
@@ -172,6 +225,8 @@ describe("Submission Modal", () => {
     await act(async () => {
       await getByText("Certification Statement").click();
     });
+
+    submissionButton = getByText("Certify");
 
     await act(async () => {
       const checkBox = await screen.getByTestId("component-checkbox");

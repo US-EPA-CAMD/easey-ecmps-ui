@@ -4,35 +4,41 @@ import { useLocation } from "react-router-dom";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 
 import Login from "../Login/Login";
-import DetailReport from "./DetailReport/DetailReport";
-import SummaryReport from "./SummaryReport/SummaryReport";
+import Report from "./Report/Report";
 import * as camdApi from '../../utils/api/camdServices';
 
 import "./ReportGenerator.scss";
+import { Button, GovBanner } from "@trussworks/react-uswds";
 
-export const ReportGenerator = (user) => {
+export const ReportGenerator = ({user, requireAuth = false}) => {
   const search = useLocation().search;
   const params = new URLSearchParams(search);
 
+  const teeId = params.get("teeId");
+  const qceId = params.get("qceId");
   const testId = params.get("testId");
-  const batchView = params.get("batchView");
-  const reportCode = params.get("reportCode");
   const facilityId = params.get("facilityId");
+  const reportCode = params.get("reportCode");
   const monitorPlanId = params.get("monitorPlanId");
 
   const [reportData, setReportData] = useState();
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (!dataLoaded) {
-      camdApi.getReport(reportCode, facilityId, monitorPlanId, testId, batchView)
+      camdApi.getReport(reportCode, facilityId, monitorPlanId, testId, qceId, teeId)
         .then(response => response.data)
         .then(data => {
           setReportData(data);
           setDataLoaded(true);
+        })
+        .catch((err) =>{
+          setError(true);
+          console.error(err);
         });
     }
-  }, [reportCode, facilityId, monitorPlanId, testId, batchView, dataLoaded]);
+  }, [reportCode, facilityId, monitorPlanId, testId, qceId, teeId, dataLoaded]);
 
   const Loading = () => {
     return (
@@ -41,20 +47,12 @@ export const ReportGenerator = (user) => {
       </div>
     );
   };
-
-  const Report = () => {
-    switch(reportData.templateCode) {
-      case "DTLRPT":
-        return <DetailReport reportData={reportData} dataLoaded={dataLoaded} />
-      case "SUMRPT":
-      default:
-        return <SummaryReport reportData={reportData} dataLoaded={dataLoaded} />
-    }
-  };
-
+  if (error) {
+    return <ErrorMessage />
+  }
   return (
     <div className="ReportGenerator">
-      {!user.user ? (
+      {requireAuth && !user ? (
         <div className="loginPanel react-transition delayed-fade-in">
           <Login isModal={false} source="ReportGenerator" />
         </div>
@@ -66,7 +64,7 @@ export const ReportGenerator = (user) => {
             <div>
               <Suspense fallback={Loading}>
                 <div className="react-transition scale-in">
-                  <Report />
+                  <Report reportData={reportData} dataLoaded={dataLoaded} />
                 </div>
               </Suspense>
             </div>
@@ -78,3 +76,34 @@ export const ReportGenerator = (user) => {
 };
 
 export default ReportGenerator;
+
+export const ErrorMessage = () => (
+  <div>
+    <GovBanner className="padding-y-2px bg-base-lighter do-not-print" />
+
+    <div className="">
+      <div className="padding-x-5 padding-y-3 border-bottom-1px border-base-light">
+        <img
+          alt="EPA Logo"
+          title="EPA Logo"
+          src={`${process.env.PUBLIC_URL}/images/epa-logo-blue.svg`}
+        />
+        <Button
+          type="button"
+          outline={true}
+          aria-label={`Close Window`}
+          className="float-right clearfix do-not-print"
+          onClick={() => window.close()}
+          id="closeBTN"
+          epa-testid="closeBTN"
+        >
+          Close Report
+        </Button>
+      </div>
+
+      <div className="padding-x-5">
+        <h1 className="text-bold">Report could not be generated</h1>
+      </div>
+    </div>
+  </div>
+);

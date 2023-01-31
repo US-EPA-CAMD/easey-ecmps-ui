@@ -8,6 +8,7 @@ import {
   cleanUp508,
   ensure508,
   addScreenReaderLabelForCollapses,
+  changeGridCellAttributeValue,
 } from "../../additional-functions/ensure-508";
 import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
 
@@ -447,6 +448,7 @@ export const DataTableRender = ({
     const handleSearch = () => {
       resetExpandedRows();
       setSearchText(document.querySelector("#txtSearchData").value);
+      changeGridCellAttributeValue();
     };
 
     let title = tableTitle ? tableTitle : "";
@@ -475,7 +477,7 @@ export const DataTableRender = ({
         {dataLoaded && data.length > 0 ? (
           <div>
             {tableTitle ? (
-              <h3
+              <h4
                 className={`margin-top-5 text-bold ${
                   tableStyling
                     ? "mobile:font-body-md mobile:text-bold"
@@ -483,7 +485,7 @@ export const DataTableRender = ({
                 }`}
               >
                 {tableTitle}
-              </h3>
+              </h4>
             ) : (
               ""
             )}
@@ -554,7 +556,7 @@ export const DataTableRender = ({
           </div>
         ) : dataLoaded && data.length === 0 ? (
           <div>
-            <h3
+            <h4
               className={`margin-top-5 text-bold ${
                 tableStyling
                   ? "mobile:font-body-md mobile:text-bold"
@@ -562,7 +564,7 @@ export const DataTableRender = ({
               }`}
             >
               {tableTitle}
-            </h3>
+            </h4>
             <div className="text-center">
               <p>{noDataString}</p>
             </div>

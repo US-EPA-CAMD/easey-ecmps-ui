@@ -70,9 +70,10 @@ export const QAImportHistoricalDataPreview = ({
 
   useEffect(() => {
     setDisablePortBtn(true);
-    if (testSummaryData === null) {
-      fetchDataPreviewRecords();
-    }
+    // // Loads Test summary data
+    // if (testSummaryData === null) {
+    //   fetchDataPreviewRecords();
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reportingPeriodObj]);
 
@@ -136,7 +137,7 @@ export const QAImportHistoricalDataPreview = ({
         testSummaryData &&
         previewData && (
             <div className="margin-x-3 margin-y-4" id="importTestSummaryData">
-            <h3 className="margin-y-1">Test Summary</h3>
+            <h4 className="margin-y-1">Test Summary</h4>
             <DataTable
               responsive={true}
               fixedHeader={true}

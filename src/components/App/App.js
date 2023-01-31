@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import TagManager from "react-gtm-module";
 import ComingSoon from "../ComingSoon/ComingSoon";
 import NotFound from "../NotFound/NotFound";
 import AboutHome from "../AboutHome/AboutHome";
 import Layout from "../Layout/Layout";
 import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
+import { ErrorSuppression } from "../ErrorSuppression/ErrorSuppression";
 import RuleEditor from "../RuleEditor/RuleEditor";
 import Login from "../Login/Login";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
@@ -28,14 +30,22 @@ import {
   EXPORT_STORE_NAME,
   EMISSIONS_STORE_NAME,
   MONITORING_PLAN_STORE_NAME,
+  QA_CERT_EVENT_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import * as modules from "../../utils/constants/moduleTitles";
-import ReviewAndSubmit from "../ReviewAndSubmit/ReviewAndSubmit";
+import * as types from "../../store/actions/actionTypes";
+import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
+import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
+
+const cdx_user = sessionStorage.getItem("cdx_user");
 
 const App = () => {
   const [user, setUser] = useState(false);
   const [expired, setExpired] = useState(false);
   const [resetTimer, setResetTimer] = useState(false);
+  const dispatch = useDispatch();
+
+  //useGetCheckedOutLocations();
 
   const prepDocument = () => {
     setTimeout(() => {
@@ -52,6 +62,23 @@ const App = () => {
       linkTag.parentNode.appendChild(linkTag);
     });
   };
+
+  const refreshCheckoutInterval = () => {
+    return setInterval(async () => {
+      const checkedOutLocationResult = (await getCheckedOutLocations()).data;
+      if (checkedOutLocationResult) {
+        dispatch({
+          type: types.SET_CHECKED_OUT_LOCATIONS,
+          checkedOutLocations: checkedOutLocationResult,
+        });
+      }
+    }, 10000);
+  };
+
+  useEffect(() => {
+    const interval = refreshCheckoutInterval();
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     prepDocument();
@@ -109,10 +136,15 @@ const App = () => {
         <div>{user ? <InactivityTracker /> : ""}</div>
       </div>
       <Switch>
+      <Route
+          path="/reports"
+          exact
+          component={() => <ReportGenerator />}
+        />
         <Route
           path="/workspace/reports"
           exact
-          component={() => <ReportGenerator user={user} />}
+          component={() => <ReportGenerator requireAuth={true} user={user} />}
         />
         <Layout
           user={user}
@@ -130,10 +162,22 @@ const App = () => {
             />
             <Route path={`/faqs`} exact component={() => <FAQ />} />
             <Route path="/login" exact component={Login} />
+            {!cdx_user && <Redirect from="/workspace/submit" to="/home" />}
             <Route
-              path="/workspace/review"
+              path="/workspace/submit"
               exact
-              component={() => <ReviewAndSubmit />}
+              component={() => (
+                <EvaluateAndSubmit user={user} componentType="Submission" />
+              )}
+            />
+
+            {!cdx_user && <Redirect from="/workspace/evaluate" to="/home" />}
+            <Route
+              path="/workspace/evaluate"
+              exact
+              component={() => (
+                <EvaluateAndSubmit user={user} componentType="Evaluate" />
+              )}
             />
 
             {user ? (
@@ -205,6 +249,37 @@ const App = () => {
             />
 
             {user ? (
+              <Redirect from="/qa-qce-tee" to="/workspace/qa-qce-tee" />
+            ) : (
+              <Redirect from="/workspace/qa-qce-tee" to="/qa-qce-tee" />
+            )}
+            <Route
+              path="/qa-cert-event"
+              exact
+              component={() => (
+                <MonitoringPlanHome
+                  user={false}
+                  workspaceSection={QA_CERT_EVENT_STORE_NAME}
+                />
+              )}
+            />
+            <Route
+              path="/workspace/qa-cert-event"
+              exact
+              component={() => (
+                <MonitoringPlanHome
+                  resetTimer={setResetTimer}
+                  setExpired={setExpired}
+                  resetTimerFlag={resetTimer}
+                  callApiFlag={expired}
+                  user={user}
+                  workspaceSection={QA_CERT_EVENT_STORE_NAME}
+                  moduleName={modules.qa_Certifications_Event_Module}
+                />
+              )}
+            />
+
+            {user ? (
               <Redirect from="/emissions" to="/workspace/emissions" />
             ) : (
               <Redirect from="/workspace/emissions" to="/emissions" />
@@ -256,6 +331,15 @@ const App = () => {
                   workspaceSection={EXPORT_STORE_NAME}
                 />
               )}
+            />
+
+            {!cdx_user && (
+              <Redirect from="/workspace/error-suppression" to="/home" />
+            )}
+            <Route
+              path="/workspace/error-suppression"
+              exact
+              component={() => <ErrorSuppression />}
             />
 
             <Route path="/tutorials" exact component={ComingSoon} />

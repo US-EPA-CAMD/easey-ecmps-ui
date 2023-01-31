@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import { config } from "../../config";
 import { CountdownTimer } from "../CountdownTimer/CountdownTimer";
 import { useInterval } from "../../additional-functions/use-interval";
@@ -11,6 +10,7 @@ import { Button } from "@trussworks/react-uswds";
 import { ClearSharp } from "@material-ui/icons";
 import "../Modal/Modal.scss";
 import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
+import { useCallback } from "react";
 const modalClassName = "modal-wrapper bg-base-lightest radius-md";
 const modalContext = createContext(null);
 const widthPercent = 50;
@@ -20,19 +20,9 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
   const [timeInactive, setTimeInactive] = useState(0);
   const [showInactiveModal, setShowInactiveModal] = useState(false);
 
-  const isFacilityCheckedOut = () => {
+  const isFacilityCheckedOut = useCallback(() => {
     return openedFacilityTabs.find((element) => element.checkout === true);
-  };
-
-  const checkInactivity = async (inactivityDuration) => {
-    if (inactivityDuration - timeInactive <= config.app.countdownDuration) {
-      // display the countdown timer if not already initiated
-      if (window.countdownInitiated === false) {
-        window.countdownInitiated = true;
-        setShowInactiveModal(true);
-      }
-    }
-  };
+  }, [openedFacilityTabs]);
 
   const resetUserInactivityTimer = () => {
     setTimeInactive(0);
@@ -54,16 +44,21 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
     };
   }, []);
 
-  useInterval(async () => {
-    // first check if a record is checked out
-    if (isFacilityCheckedOut()) {
-      await checkInactivity(config.app.inactivityDuration);
-    } else {
-      await checkInactivity(config.app.inactivityLogoutDuration);
+  const handleInterval = useCallback(async () => {
+    const inactiveDuration = isFacilityCheckedOut() ? config.app.inactivityDuration : config.app.inactivityLogoutDuration
+
+    // checkInactivity
+    if (inactiveDuration - timeInactive <= config.app.countdownDuration && window.countdownInitiated === false) {
+      // display the countdown timer if not already initiated
+      window.countdownInitiated = true;
+      console.log('setshowInactiveModal called');
+      setShowInactiveModal(true);
     }
 
-    setTimeInactive(timeInactive + config.app.activityPollingFrequency);
-  }, config.app.activityPollingFrequency);
+    setTimeInactive(prevTimeInactive => prevTimeInactive + config.app.activityPollingFrequency)
+  }, [isFacilityCheckedOut, timeInactive])
+
+  useInterval(handleInterval, config.app.activityPollingFrequency)
 
   return (
     // in order to allow screen reader accessibility, the "Modal" component had to be copied
@@ -71,7 +66,7 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
     // the shared modal file places the component inside portal using ReactDom.createPortal()
     <div>
       <div className={`usa-overlay ${showInactiveModal ? "is-visible" : ""}`} />
-      {showInactiveModal ? (
+      {showInactiveModal &&
         <div role="dialog" aria-modal="true">
           <div>
             <modalContext.Provider value={{ resetUserInactivityTimer }}>
@@ -135,7 +130,7 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
             </modalContext.Provider>
           </div>
         </div>
-      ) : null}
+      }
     </div>
   );
 };

@@ -1,7 +1,13 @@
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
 import config from "../../config";
-import { exportEmissionsData, getEmissionsSchema, getEmissionViewData, importEmissionsData } from "./emissionsApi";
+import {
+  exportEmissionsData,
+  getEmissionsSchema,
+  getEmissionViewData,
+  importEmissionsData,
+  getEmissionsReviewSubmit,
+} from "./emissionsApi";
 import { ExpansionPanelActions } from "@material-ui/core";
 
 describe("Emissions API", function () {
@@ -17,6 +23,17 @@ describe("Emissions API", function () {
       year: 2019,
       quarter: 1,
     };
+  });
+
+  describe("Review And Submit", () => {
+    test("getEmissionsReviewSubmit", async () => {
+      const url = `${config.services.emissions.uri}/workspace/emissions?orisCodes=3&monPlanIds=3&quarters=1`;
+      mock.onGet(url).reply(200, "Mocked");
+
+      const resp = await getEmissionsReviewSubmit([3], [3], [1]);
+
+      expect(resp.data).toEqual("Mocked");
+    });
   });
 
   describe("exportEmissionsData", function () {
@@ -99,23 +116,31 @@ describe("Emissions API", function () {
       });
     });
 
-    describe("getEmissionsSchema", ()=>{
-      it("should get emissions schema", async ()=>{
-        mock.onGet(`${config.services.content.uri}/ecmps/reporting-instructions/emissions.schema.json`).reply(200, {});
-        const {data} = await getEmissionsSchema();
+    describe("getEmissionsSchema", () => {
+      it("should get emissions schema", async () => {
+        mock
+          .onGet(
+            `${config.services.content.uri}/ecmps/reporting-instructions/emissions.schema.json`
+          )
+          .reply(200, {});
+        const { data } = await getEmissionsSchema();
 
         expect(data).toEqual({});
-      })
-    })
+      });
+    });
 
-    describe("importEmissionsData", ()=>{
-      it("should successfully import emissions json", async ()=>{
-        mock.onPost(`${config.services.emissions.uri}/workspace/emissions/import`, {}).reply(201, {"message":"Success"});
-        const {data} = await importEmissionsData({});
+    describe("importEmissionsData", () => {
+      it("should successfully import emissions json", async () => {
+        mock
+          .onPost(
+            `${config.services.emissions.uri}/workspace/emissions/import`,
+            {}
+          )
+          .reply(201, { message: "Success" });
+        const { data } = await importEmissionsData({});
 
         expect(data.message).toEqual("Success");
-      })
-    })
-
+      });
+    });
   });
 });

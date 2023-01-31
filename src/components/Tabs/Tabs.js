@@ -12,6 +12,7 @@ import {
   // QA_CERT_TEST_SUMMARY_STORE_NAME,
   EXPORT_STORE_NAME
 } from "../../additional-functions/workspace-section-and-store-names";
+import { addElementToLastFocusedArray } from "../../additional-functions/manage-focus";
 export const Tabs = ({
   children,
   dynamic = false,
@@ -98,7 +99,11 @@ export const Tabs = ({
       .trim()
       .replaceAll(" ", "-");
   };
-
+  let tabBtnSelector;
+  const updateTabBtnSelectorAndReturnAriaLabel = (arg) => {
+    tabBtnSelector = `[aria-label="${arg}"]`;
+    return arg;
+  }
   return (
     <div>
       <div className="tab-buttons mobile-lg:margin-left-7 mobile-lg:padding-left-5 tablet:margin-left-0 tablet:padding-left-0">
@@ -117,6 +122,7 @@ export const Tabs = ({
                     type="button"
                     outline={activeTabIndex !== i}
                     tabIndex="0"
+                    id="select-config"
                     aria-label={`open ${el.props.title} tab`}
                     className={
                       activeTabIndex === i
@@ -138,7 +144,7 @@ export const Tabs = ({
                       : "tab-button react-transition flip-in-y"
                   }
                   tabIndex="0"
-                  aria-label={`open ${el.props.title.split("(")[0]}${
+                  aria-label={updateTabBtnSelectorAndReturnAriaLabel(`open ${el.props.title.split("(")[0]}${
                     user &&
                     el.props.locationId &&
                     el.props.facId &&
@@ -158,10 +164,13 @@ export const Tabs = ({
                     isCheckedOutByUser(el.props.locationId)
                       ? "(checked-out)"
                       : ""
-                  } tab`}
-                  onClick={() => settingActiveTab(i)}
+                  } tab`)}
+                  onClick={() => {
+                    addElementToLastFocusedArray(tabBtnSelector);
+                    settingActiveTab(i)}}
                   onKeyPress={(event) => {
                     if (event.key === "Enter") {
+                      addElementToLastFocusedArray(tabBtnSelector);
                       settingActiveTab(i);
                     }
                   }}

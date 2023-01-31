@@ -1,6 +1,7 @@
 import React from "react";
-import { render } from "@testing-library/react";
-import ReportGenerator from "./ReportGenerator";
+import { render,waitForElement } from "@testing-library/react";
+import ReportGenerator, { ErrorMessage } from "./ReportGenerator";
+import * as camdApi from '../../utils/api/camdServices';
 
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
@@ -52,11 +53,42 @@ const reportData = {
 const mock = new MockAdapter(axios);
 const getReportUrl = `${config.services.camd.uri}/reports?reportCode=null`
 mock.onGet(getReportUrl).reply(200, reportData)
-
+jest.mock('../../utils/api/camdServices', () => {
+  return {
+    getReport: jest.fn().mockResolvedValue({
+      data: {
+        report: {}
+      },
+    }),
+  };
+});
 const userProp = { user: true }
 
-test('renders ReportGenerator', () => {
-  render(<ReportGenerator user={userProp} />)
+describe('ReportGenerator', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-  expect(mock.history.get.length).toBe(1)
-})
+  test('renders login component when auth is required and user is not provided', async () => {
+    const { getAllByText } = render(<ReportGenerator requireAuth={true} />);
+    const login = await waitForElement(() => getAllByText('Log In')[0]);
+    expect(login).toBeInTheDocument();
+  });
+
+  test('renders component if auth is not required', async () => {
+    render(<ReportGenerator requireAuth={false} />);
+    expect(camdApi.getReport).toHaveBeenCalled();
+  });  
+  test('renders component if user is logged in', async () => {
+    render(<ReportGenerator requireAuth={true} user={userProp} />);
+    expect(camdApi.getReport).toHaveBeenCalled();
+  });
+
+});
+
+describe('ErrorMessage', () => {
+  it('renders component', () => {
+    const { getByText } = render(<ErrorMessage />);
+    expect(getByText(/report could not be generated/i)).toBeInTheDocument();
+  });
+});

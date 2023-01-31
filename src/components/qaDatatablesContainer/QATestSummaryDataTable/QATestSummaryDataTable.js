@@ -1,16 +1,16 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from 'react';
 
 import {
   getQATestSummary,
   updateQALinearityTestSummary,
   deleteQATestSummary,
   createQATestData,
-} from "../../../utils/api/qaCertificationsAPI.js";
-import { getTestSummary } from "../../../utils/selectors/QACert/TestSummary.js";
-import Modal from "../../Modal/Modal";
-import ModalDetails from "../../ModalDetails/ModalDetails";
-import { extractUserInput } from "../../../additional-functions/extract-user-input";
-import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
+} from '../../../utils/api/qaCertificationsAPI.js';
+import { getTestSummary } from '../../../utils/selectors/QACert/TestSummary.js';
+import Modal from '../../Modal/Modal';
+import ModalDetails from '../../ModalDetails/ModalDetails';
+import { extractUserInput } from '../../../additional-functions/extract-user-input';
+import { modalViewData } from '../../../additional-functions/create-modal-input-controls';
 import {
   qaLinearitySummaryProps,
   qaRataDataProps,
@@ -19,28 +19,38 @@ import {
   qaFuelFlowToLoadBaselineProps,
   qaFlowToLoadCheckProps,
   qaOnOffCalibrationProps,
-  qaCalibrationInjectionProps
-} from "../../../additional-functions/qa-dataTable-props";
+  qaCalibrationInjectionProps,
+  qaFuelFlowmeterAccuracyDataProps,
+  qaCycleTimeSummaryProps,
+  qaTransmitterTransducerAccuracyDataProps,
+  qaFlowToLoadReferenceProps,
+  qaUnitDefaultTestDataProps,
+  qaHgSummaryDataProps,
+} from '../../../additional-functions/qa-dataTable-props';
 import {
   attachChangeEventListeners,
   removeChangeEventListeners,
   unsavedDataMessage,
-} from "../../../additional-functions/prompt-to-save-unsaved-changes";
+} from '../../../additional-functions/prompt-to-save-unsaved-changes';
 
 /*********** COMPONENTS ***********/
 
-import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
-import { Button } from "@trussworks/react-uswds";
-import { Preloader } from "@us-epa-camd/easey-design-system";
+import QADataTableRender from '../../QADataTableRender/QADataTableRender.js';
+import { Button } from '@trussworks/react-uswds';
+import { Preloader } from '@us-epa-camd/easey-design-system';
 import {
   getQAColsByTestCode,
   getQAModalDetailsByTestCode,
-} from "../../../utils/selectors/QACert/LinearitySummary.js";
-import * as dmApi from "../../../utils/api/dataManagementApi";
-import { organizePrefilterMDMData } from "../../../additional-functions/retrieve-dropdown-api";
+} from '../../../utils/selectors/QACert/LinearitySummary.js';
+import * as dmApi from '../../../utils/api/dataManagementApi';
+import * as mpApi from '../../../utils/api/monitoringPlansApi.js';
+import { organizePrefilterMDMData } from '../../../additional-functions/retrieve-dropdown-api';
 
-import QAExpandableRowsRender from "../QAExpandableRowsRender/QAExpandableRowsRender";
-import { returnsFocusDatatableViewBTN } from "../../../additional-functions/ensure-508.js";
+import QAExpandableRowsRender from '../QAExpandableRowsRender/QAExpandableRowsRender';
+import {
+  returnsFocusDatatableViewBTN,
+  returnsFocusToAddBtn,
+} from '../../../additional-functions/ensure-508.js';
 
 // contains test summary data table
 
@@ -55,7 +65,6 @@ const QATestSummaryDataTable = ({
   selectedLocation,
   locations,
 }) => {
-  console.log("selectedTestCode", selectedTestCode);
   const [loading, setLoading] = useState(false);
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
@@ -63,12 +72,12 @@ const QATestSummaryDataTable = ({
   const [dataPulled, setDataPulled] = useState([]);
   const [show, setShow] = useState(showModal);
   const [selectedRow, setSelectedRow] = useState(null);
-  const [clickedRow, setClickedRow] = useState(null);
   const [clickedIndex, setClickedIndex] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
+  const [createdId, setCreatedId] = useState(null);
 
-  const [mainDropdownChange, setMainDropdownChange] = useState("");
+  const [mainDropdownChange, setMainDropdownChange] = useState('');
 
   const [createNewData, setCreateNewData] = useState(false);
   const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
@@ -76,32 +85,36 @@ const QATestSummaryDataTable = ({
   const [updateTable, setUpdateTable] = useState(false);
 
   const [allTestTypeCodes, setAllTestTypeCodes] = useState(null);
-  const selectText = "-- Select a value --";
+  const selectText = '-- Select a value --';
   //*****
   // pull these out and make components reuseable like monitoring plan
   const [dropdownArray, setDropdownArray] = useState([
     [
-      "testTypeCode",
-      "spanScaleCode",
-      "testReasonCode",
-      "testResultCode",
-      selectedLocation.unitId ? "unitId" : "stackPipeId",
-      "prefilteredTestSummaries",
+      'testTypeCode',
+      'spanScaleCode',
+      'testReasonCode',
+      'testResultCode',
+      selectedLocation.unitId ? 'unitId' : 'stackPipeId',
+      'componentID',
+      'monitoringSystemID',
+      'prefilteredTestSummaries',
     ],
   ]);
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
-  const dataTableName = "Test Summary Data";
+  const dataTableName = 'Test Summary Data';
 
   useEffect(() => {
     setDropdownArray([
       [
-        "testTypeCode",
-        "spanScaleCode",
-        "testReasonCode",
-        "testResultCode",
-        selectedLocation.unitId ? "unitId" : "stackPipeId",
-        "prefilteredTestSummaries",
+        'testTypeCode',
+        'spanScaleCode',
+        'testReasonCode',
+        'testResultCode',
+        selectedLocation.unitId ? 'unitId' : 'stackPipeId',
+        'componentID',
+        'monitoringSystemID',
+        'prefilteredTestSummaries',
       ],
     ]);
   }, [selectedLocation.name]);
@@ -121,6 +134,7 @@ const QATestSummaryDataTable = ({
             if (res !== undefined && res.data.length > 0) {
               finishedLoadingData(res.data);
               setQATestSummary(res.data);
+              executeOnClose(res.data);
             } else {
               finishedLoadingData([]);
               setQATestSummary([]);
@@ -128,7 +142,7 @@ const QATestSummaryDataTable = ({
             setLoading(false);
           })
           .catch((error) => {
-            console.log("error fetching test summary", error);
+            console.log('error fetching test summary', error);
           });
         setUpdateTable(false);
       }
@@ -153,11 +167,13 @@ const QATestSummaryDataTable = ({
     allPromises.push(dmApi.getAllTestReasonCodes());
     allPromises.push(dmApi.getAllTestResultCodes());
     allPromises.push(dmApi.getPrefilteredTestSummaries());
+    allPromises.push(mpApi.getMonitoringComponents(locationSelectValue));
+    allPromises.push(mpApi.getMonitoringSystems(locationSelectValue));
     Promise.all(allPromises).then((response) => {
       dropdownArray[0].forEach((val, i) => {
         if (i === 0) {
           const options = response[0].data.map((d) =>
-            getOptions(d, "testTypeCode", "testTypeDescription")
+            getOptions(d, 'testTypeCode', 'testTypeDescription')
           );
           setAllTestTypeCodes(options);
           dropdowns[dropdownArray[0][i]] = options.filter((option) =>
@@ -165,29 +181,37 @@ const QATestSummaryDataTable = ({
           );
         } else if (i === 1) {
           dropdowns[dropdownArray[0][i]] = response[1].data.map((d) =>
-            getOptions(d, "spanScaleCode", "spanScaleDescription")
+            getOptions(d, 'spanScaleCode', 'spanScaleDescription')
           );
         } else if (i === 2) {
           dropdowns[dropdownArray[0][i]] = response[2].data.map((d) =>
-            getOptions(d, "testReasonCode", "testReasonDescription")
+            getOptions(d, 'testReasonCode', 'testReasonDescription')
           );
         } else if (i === 3) {
           dropdowns[dropdownArray[0][i]] = response[3].data.map((d) =>
-            getOptions(d, "testResultCode", "testResultDescription")
+            getOptions(d, 'testResultCode', 'testResultDescription')
           );
         } else if (i === 5) {
+          dropdowns[dropdownArray[0][i]] = response[5].data.map((d) =>
+            getOptions(d, 'componentId', 'componentId')
+          );
+        } else if (i === 6) {
+          dropdowns[dropdownArray[0][i]] = response[6].data.map((d) =>
+            getOptions(d, 'monitoringSystemId', 'monitoringSystemId')
+          );
+        } else if (i === 7) {
           let noDupesTestCodes = response[4].data.map((code) => {
-            return code["testTypeCode"];
+            return code['testTypeCode'];
           });
           noDupesTestCodes = [...new Set(noDupesTestCodes)];
           dropdowns[dropdownArray[0][i]] = organizePrefilterMDMData(
             noDupesTestCodes,
-            "testTypeCode",
+            'testTypeCode',
             response[4].data
           );
         } else if (i === 4) {
           dropdowns[dropdownArray[0][i]] = locations.map((l) => {
-            if (l.type === "unit") {
+            if (l.type === 'unit') {
               return {
                 code: l.unitId,
                 name: l.unitId,
@@ -201,8 +225,8 @@ const QATestSummaryDataTable = ({
           });
         }
         dropdowns[dropdownArray[0][i]].unshift({
-          code: "",
-          name: "-- Select a value --",
+          code: '',
+          name: '-- Select a value --',
         });
       });
       setMdmData(dropdowns);
@@ -219,7 +243,7 @@ const QATestSummaryDataTable = ({
     } else {
       const mdmDataClone = { ...mdmData };
 
-      mdmDataClone["testTypeCode"] = allTestTypeCodes.filter((option) =>
+      mdmDataClone['testTypeCode'] = allTestTypeCodes.filter((option) =>
         testTypeCodes.includes(option.code)
       );
 
@@ -240,7 +264,7 @@ const QATestSummaryDataTable = ({
         // Go through the inputs in the modal
         for (const modalDetailData of selectedModalData) {
           // For each dropdown
-          if (modalDetailData[4] === "dropdown") {
+          if (modalDetailData[4] === 'dropdown') {
             const selectedCodes = result[0];
             // Filter their options (based on the value of the driving dropdown)
             const filteredOutSubDropdownOptions = mdmData[
@@ -251,7 +275,7 @@ const QATestSummaryDataTable = ({
 
             // Add select option
             filteredOutSubDropdownOptions.unshift({
-              code: "",
+              code: '',
               name: selectText,
             });
             // Load the filtered data into the dropdown
@@ -274,14 +298,14 @@ const QATestSummaryDataTable = ({
   useEffect(() => {
     if (dropdownsLoaded) {
       // Go through the inputs in the modal
-      if (controlInputs["testTypeCode"][1] === "mainDropdown") {
-        const filteredOutSubDropdownOptions = mdmData["testTypeCode"].filter(
+      if (controlInputs['testTypeCode'][1] === 'mainDropdown') {
+        const filteredOutSubDropdownOptions = mdmData['testTypeCode'].filter(
           (option) => selectedTestCode.testTypeCodes.includes(option.code)
         );
 
         // Add select option
         filteredOutSubDropdownOptions.unshift({
-          code: "",
+          code: '',
           name: selectText,
         });
         setPrefilteredMdmData(filteredOutSubDropdownOptions);
@@ -302,7 +326,7 @@ const QATestSummaryDataTable = ({
   };
   // Executed when "View" action is clicked
   const openModal = (row, bool, create, index) => {
-    let selectedData = null;
+    let selectedData = {};
     setCreateNewData(create);
     if (dataPulled.length > 0 && !create) {
       selectedData = dataPulled.filter(
@@ -310,27 +334,40 @@ const QATestSummaryDataTable = ({
       )[0];
       setSelectedRow(selectedData);
     }
+
     if (create) {
       if (controlInputs?.unitId) {
         controlInputs.unitId = [
-          "Unit or Stack Pipe ID",
-          "nonFilteredDropdown",
-          "",
-          "",
+          'Unit or Stack Pipe ID',
+          'input',
+          selectedLocation.name,
+          'fixed',
         ];
+        selectedData.unitId = selectedLocation.name;
       } else {
         controlInputs.stackPipeId = [
-          "Unit or Stack Pipe ID",
-          "nonFilteredDropdown",
-          "",
-          "",
+          'Unit or Stack Pipe ID',
+          'input',
+          selectedLocation.name,
+          'fixed',
         ];
+        selectedData.stackPipeId = selectedLocation.name;
+      }
+      selectedData.locationName = selectedLocation.name;
+      // default selection to single test type code if it exists
+      const testTypeCodeKey = 'testTypeCode';
+      if (mdmData[testTypeCodeKey]?.length === 1) {
+        const singleTestTypeCodeSelection = mdmData[testTypeCodeKey][0].code;
+        selectedData = {
+          ...selectedData,
+          testTypeCode: singleTestTypeCodeSelection,
+        };
       }
     }
-    let mainDropdownName = "";
+    let mainDropdownName = '';
     let hasMainDropdown = false;
     for (const controlProperty in controlInputs) {
-      if (controlInputs[controlProperty][1] === "mainDropdown") {
+      if (controlInputs[controlProperty][1] === 'mainDropdown') {
         mainDropdownName = controlProperty;
         hasMainDropdown = true;
         break;
@@ -342,14 +379,14 @@ const QATestSummaryDataTable = ({
     }
     let mainDropdownResult;
     // only applies if there is prefiltering based on a primary driver dropdown
-    if (mainDropdownName !== "" && hasMainDropdown === true) {
+    if (mainDropdownName !== '' && hasMainDropdown === true) {
       mainDropdownResult = mdmData[mainDropdownName].filter((o) =>
         mdmData[prefilteredDataName].some(
           (element, index, arr) => o.code === element[mainDropdownName]
         )
       );
-      if (!mainDropdownResult.includes({ code: "", name: selectText })) {
-        mainDropdownResult.unshift({ code: "", name: selectText });
+      if (!mainDropdownResult.includes({ code: '', name: selectText })) {
+        mainDropdownResult.unshift({ code: '', name: selectText });
       }
     } else {
       mainDropdownResult = [];
@@ -368,7 +405,7 @@ const QATestSummaryDataTable = ({
       mdmData,
       prefilteredDataName
         ? mdmData[prefilteredDataName]
-        : "defaultPrefilteredDataName",
+        : 'defaultPrefilteredDataName',
       mainDropdownName,
       mainDropdownResult,
       hasMainDropdown,
@@ -376,13 +413,11 @@ const QATestSummaryDataTable = ({
       extraControlInputs
     );
     setSelectedModalData(modalData);
-
-    setClickedRow(row)
-    setClickedIndex(index)
+    setClickedIndex(index);
 
     setShow(true);
     setTimeout(() => {
-      attachChangeEventListeners(".modalUserInput");
+      attachChangeEventListeners('.modalUserInput');
     });
   };
 
@@ -394,19 +429,35 @@ const QATestSummaryDataTable = ({
     } else {
       executeOnClose();
     }
+    if (createNewData) {
+      returnsFocusToAddBtn(dataTableName.replaceAll(' ', '-'));
+    }
   };
 
-  const executeOnClose = () => {
-    // setReturnedFocusToLast(false);
+  const executeOnClose = (data) => {
     setShow(false);
-    removeChangeEventListeners(".modalUserInput");
-    returnsFocusDatatableViewBTN(dataTableName, clickedRow, clickedIndex)
+    removeChangeEventListeners('.modalUserInput');
+
+    const updatedData = getTestSummary(data ? data : [], columns);
+    const idx = updatedData.findIndex((d) => d.id === createdId);
+
+    if (idx >= 0) {
+      returnsFocusDatatableViewBTN(dataTableName.replaceAll(' ', '-'), idx);
+      setCreatedId(null);
+      setCreateNewData(false);
+    } else {
+      returnsFocusDatatableViewBTN(
+        dataTableName.replaceAll(' ', '-'),
+        clickedIndex
+      );
+    }
   };
 
   const onRemoveHandler = async (row) => {
     const { id, locationId } = row;
     const resp = await deleteQATestSummary(locationId, id);
     if (resp.status === 200) {
+      returnsFocusToAddBtn(dataTableName.replaceAll(' ', '-'));
       const dataPostRemove = qaTestSummary.filter(
         (rowData) => rowData.id !== id
       );
@@ -435,8 +486,8 @@ const QATestSummaryDataTable = ({
   };
 
   const saveData = () => {
-    const userInput = extractUserInput(uiControls, ".modalUserInput", [
-      "gracePeriodIndicator",
+    const userInput = extractUserInput(uiControls, '.modalUserInput', [
+      'gracePeriodIndicator',
     ]);
     if (selectedLocation.unitId) {
       userInput.unitId = selectedLocation.unitId;
@@ -445,7 +496,7 @@ const QATestSummaryDataTable = ({
     }
     updateQALinearityTestSummary(locationSelectValue, userInput.id, userInput)
       .then((res) => {
-        if (Object.prototype.toString.call(res) === "[object Array]") {
+        if (Object.prototype.toString.call(res) === '[object Array]') {
           alert(res[0]);
         } else {
           setUpdateTable(true);
@@ -453,13 +504,13 @@ const QATestSummaryDataTable = ({
         }
       })
       .catch((error) => {
-        console.error("error", error);
+        console.error('error', error);
       });
   };
 
   const createData = () => {
-    const userInput = extractUserInput(uiControls, ".modalUserInput", [
-      "gracePeriodIndicator",
+    const userInput = extractUserInput(uiControls, '.modalUserInput', [
+      'gracePeriodIndicator',
     ]);
     let selectedLocationId = locationSelectValue;
     locations.forEach((loc) => {
@@ -487,33 +538,34 @@ const QATestSummaryDataTable = ({
     });
     createQATestData(selectedLocationId, userInput)
       .then((res) => {
-        if (Object.prototype.toString.call(res) === "[object Array]") {
+        if (Object.prototype.toString.call(res) === '[object Array]') {
           alert(res[0]);
         } else {
+          setCreatedId(res.data.id);
           setUpdateTable(true);
-          executeOnClose();
         }
       })
       .catch((error) => {
-        console.error("error", error);
+        console.error('error', error);
+        returnsFocusToAddBtn(dataTableName.replaceAll(' ', '-'));
       });
   };
 
   // add here for future test type code selection dts
   const getExpandableComponent = (testTypeGroupCode, props) => {
     switch (testTypeGroupCode) {
-      case "LINSUM":
+      case 'LINSUM':
         const obj = qaLinearitySummaryProps();
         return (
           <QAExpandableRowsRender
-            payload={obj["payload"]}
-            dropdownArray={obj["dropdownArray"]}
-            columns={obj["columnNames"]}
-            controlInputs={obj["controlInputs"]}
-            controlDatePickerInputs={obj["controlDatePickerInputs"]}
-            dataTableName={obj["dataTableName"]}
-            extraControls={obj["extraControls"]}
-            radioBtnPayload={obj["radioBtnPayload"]}
+            payload={obj['payload']}
+            dropdownArray={obj['dropdownArray']}
+            columns={obj['columnNames']}
+            controlInputs={obj['controlInputs']}
+            controlDatePickerInputs={obj['controlDatePickerInputs']}
+            dataTableName={obj['dataTableName']}
+            extraControls={obj['extraControls']}
+            radioBtnPayload={obj['radioBtnPayload']}
             expandable
             {...props}
             extraIDs={null}
@@ -522,36 +574,36 @@ const QATestSummaryDataTable = ({
         );
       // return <QALinearitySummaryExpandableRows {...props} />;
 
-      case "RELACC":
+      case 'RELACC':
         const rataObj = qaRataDataProps();
         return (
           <QAExpandableRowsRender
-            payload={rataObj["payload"]}
-            dropdownArray={rataObj["dropdownArray"]}
-            columns={rataObj["columnNames"]}
-            controlInputs={rataObj["controlInputs"]}
-            controlDatePickerInputs={rataObj["controlDatePickerInputs"]}
-            dataTableName={rataObj["dataTableName"]}
-            extraControls={rataObj["extraControls"]}
-            radioBtnPayload={rataObj["radioBtnPayload"]}
+            payload={rataObj['payload']}
+            dropdownArray={rataObj['dropdownArray']}
+            columns={rataObj['columnNames']}
+            controlInputs={rataObj['controlInputs']}
+            controlDatePickerInputs={rataObj['controlDatePickerInputs']}
+            dataTableName={rataObj['dataTableName']}
+            extraControls={rataObj['extraControls']}
+            radioBtnPayload={rataObj['radioBtnPayload']}
             expandable
             {...props}
             extraIDs={null}
             isCheckedOut={isCheckedOut}
           />
         );
-      case "APPESUM":
+      case 'APPESUM':
         const appESum = qaAppendixECorrelationSummaryTestProps();
         return (
           <QAExpandableRowsRender
-            payload={appESum["payload"]}
-            dropdownArray={appESum["dropdownArray"]}
-            columns={appESum["columnNames"]}
-            controlInputs={appESum["controlInputs"]}
-            controlDatePickerInputs={appESum["controlDatePickerInputs"]}
-            dataTableName={appESum["dataTableName"]}
-            extraControls={appESum["extraControls"]}
-            radioBtnPayload={appESum["radioBtnPayload"]}
+            payload={appESum['payload']}
+            dropdownArray={appESum['dropdownArray']}
+            columns={appESum['columnNames']}
+            controlInputs={appESum['controlInputs']}
+            controlDatePickerInputs={appESum['controlDatePickerInputs']}
+            dataTableName={appESum['dataTableName']}
+            extraControls={appESum['extraControls']}
+            radioBtnPayload={appESum['radioBtnPayload']}
             expandable
             {...props}
             extraIDs={null}
@@ -559,107 +611,237 @@ const QATestSummaryDataTable = ({
           />
         );
 
-      case "FFL": // Fuel Flow to Load
+      case 'FFL': // Fuel Flow to Load
         const fflProps = qaFuelFlowToLoadProps();
         return (
           <QAExpandableRowsRender
-            payload={fflProps["payload"]}
-            dropdownArray={fflProps["dropdownArray"]}
-            mdmProps={fflProps["mdmProps"]}
-            columns={fflProps["columnNames"]}
-            controlInputs={fflProps["controlInputs"]}
-            controlDatePickerInputs={fflProps["controlDatePickerInputs"]}
-            dataTableName={fflProps["dataTableName"]}
-            extraControls={fflProps["extraControls"]}
-            radioBtnPayload={fflProps["radioBtnPayload"]}
+            payload={fflProps['payload']}
+            dropdownArray={fflProps['dropdownArray']}
+            mdmProps={fflProps['mdmProps']}
+            columns={fflProps['columnNames']}
+            controlInputs={fflProps['controlInputs']}
+            controlDatePickerInputs={fflProps['controlDatePickerInputs']}
+            dataTableName={fflProps['dataTableName']}
+            extraControls={fflProps['extraControls']}
+            radioBtnPayload={fflProps['radioBtnPayload']}
             expandable
             {...props}
             extraIDs={null}
             isCheckedOut={isCheckedOut}
           />
         );
-      case "FFLB":
+      case 'FFLB':
         const fflbProps = qaFuelFlowToLoadBaselineProps();
         return (
           <QAExpandableRowsRender
-            payload={fflbProps["payload"]}
-            dropdownArray={fflbProps["dropdownArray"]}
-            mdmProps={fflbProps["mdmProps"]}
-            columns={fflbProps["columnNames"]}
-            controlInputs={fflbProps["controlInputs"]}
-            controlDatePickerInputs={fflbProps["controlDatePickerInputs"]}
-            dataTableName={fflbProps["dataTableName"]}
-            extraControls={fflbProps["extraControls"]}
-            radioBtnPayload={fflbProps["radioBtnPayload"]}
+            payload={fflbProps['payload']}
+            dropdownArray={fflbProps['dropdownArray']}
+            mdmProps={fflbProps['mdmProps']}
+            columns={fflbProps['columnNames']}
+            controlInputs={fflbProps['controlInputs']}
+            controlDatePickerInputs={fflbProps['controlDatePickerInputs']}
+            dataTableName={fflbProps['dataTableName']}
+            extraControls={fflbProps['extraControls']}
+            radioBtnPayload={fflbProps['radioBtnPayload']}
             expandable
             {...props}
             extraIDs={null}
             isCheckedOut={isCheckedOut}
           />
         );
-      case "FLC": // Flow to Load Check
+      case 'FLC': // Flow to Load Check
         const flcProps = qaFlowToLoadCheckProps();
+        console.log('Hello');
         return (
           <QAExpandableRowsRender
-            payload={flcProps["payload"]}
-            dropdownArray={flcProps["dropdownArray"]}
-            mdmProps={flcProps["mdmProps"]}
-            columns={flcProps["columnNames"]}
-            controlInputs={flcProps["controlInputs"]}
-            dataTableName={flcProps["dataTableName"]}
+            payload={flcProps['payload']}
+            dropdownArray={flcProps['dropdownArray']}
+            mdmProps={flcProps['mdmProps']}
+            columns={flcProps['columnNames']}
+            controlInputs={flcProps['controlInputs']}
+            dataTableName={flcProps['dataTableName']}
             expandable
             {...props}
             extraIDs={null}
             isCheckedOut={isCheckedOut}
           />
         );
-      case "OLOLCAL": // Online Offline Calibration
+      case 'OLOLCAL': // Online Offline Calibration
         const onOffCalProps = qaOnOffCalibrationProps();
         return (
           <QAExpandableRowsRender
-            payload={onOffCalProps["payload"]}
-            dropdownArray={onOffCalProps["dropdownArray"]}
-            mdmProps={onOffCalProps["mdmProps"]}
-            columns={onOffCalProps["columnNames"]}
-            controlInputs={onOffCalProps["controlInputs"]}
-            controlDatePickerInputs={onOffCalProps["controlDatePickerInputs"]}
-            dataTableName={onOffCalProps["dataTableName"]}
+            payload={onOffCalProps['payload']}
+            dropdownArray={onOffCalProps['dropdownArray']}
+            mdmProps={onOffCalProps['mdmProps']}
+            columns={onOffCalProps['columnNames']}
+            controlInputs={onOffCalProps['controlInputs']}
+            controlDatePickerInputs={onOffCalProps['controlDatePickerInputs']}
+            dataTableName={onOffCalProps['dataTableName']}
             expandable
             {...props}
             extraIDs={null}
             isCheckedOut={isCheckedOut}
           />
         );
-      case "CALINJ":
+      case 'CALINJ':
         const cjProps = qaCalibrationInjectionProps();
         return (
           <QAExpandableRowsRender
-            payload={cjProps["payload"]}
-            dropdownArray={cjProps["dropdownArray"]}
-            mdmProps={cjProps["mdmProps"]}
-            columns={cjProps["columnNames"]}
-            controlInputs={cjProps["controlInputs"]}
-            controlDatePickerInputs={cjProps["controlDatePickerInputs"]}
-            radioBtnPayload={cjProps["radioBtnPayload"]}
-            dataTableName={cjProps["dataTableName"]}
-            extraControls={cjProps["extraControls"]}
+            payload={cjProps['payload']}
+            dropdownArray={cjProps['dropdownArray']}
+            mdmProps={cjProps['mdmProps']}
+            columns={cjProps['columnNames']}
+            controlInputs={cjProps['controlInputs']}
+            controlDatePickerInputs={cjProps['controlDatePickerInputs']}
+            radioBtnPayload={cjProps['radioBtnPayload']}
+            dataTableName={cjProps['dataTableName']}
+            extraControls={cjProps['extraControls']}
+            extraIDs={null}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case 'FFACC': // Fuel Flowmeter Accuracy
+        const fuelFlowmeterAccuracyDataProps =
+          qaFuelFlowmeterAccuracyDataProps();
+        return (
+          <QAExpandableRowsRender
+            payload={fuelFlowmeterAccuracyDataProps['payload']}
+            dropdownArray={fuelFlowmeterAccuracyDataProps['dropdownArray']}
+            mdmProps={fuelFlowmeterAccuracyDataProps['mdmProps']}
+            columns={fuelFlowmeterAccuracyDataProps['columnNames']}
+            controlInputs={fuelFlowmeterAccuracyDataProps['controlInputs']}
+            controlDatePickerInputs={
+              fuelFlowmeterAccuracyDataProps['controlDatePickerInputs']
+            }
+            radioBtnPayload={fuelFlowmeterAccuracyDataProps['radioBtnPayload']}
+            dataTableName={fuelFlowmeterAccuracyDataProps['dataTableName']}
+            extraControls={fuelFlowmeterAccuracyDataProps['extraControls']}
+            extraIDs={null}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case 'CYCSUM': // Cycle Time Summary Nested Below Test Data
+        const cycleTimeSum = qaCycleTimeSummaryProps();
+        return (
+          <QAExpandableRowsRender
+            payload={cycleTimeSum['payload']}
+            dropdownArray={cycleTimeSum['dropdownArray']}
+            mdmProps={cycleTimeSum['mdmProps']}
+            columns={cycleTimeSum['columnNames']}
+            controlInputs={cycleTimeSum['controlInputs']}
+            controlDatePickerInputs={cycleTimeSum['controlDatePickerInputs']}
+            radioBtnPayload={cycleTimeSum['radioBtnPayload']}
+            dataTableName={cycleTimeSum['dataTableName']}
+            extraControls={cycleTimeSum['extraControls']}
+            expandable
+            {...props}
+            extraIDs={null}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case 'TTACC':
+        const transmitterTransducerAccuracyDataProps =
+          qaTransmitterTransducerAccuracyDataProps();
+        return (
+          <QAExpandableRowsRender
+            payload={transmitterTransducerAccuracyDataProps['payload']}
+            dropdownArray={
+              transmitterTransducerAccuracyDataProps['dropdownArray']
+            }
+            mdmProps={transmitterTransducerAccuracyDataProps['mdmProps']}
+            columns={transmitterTransducerAccuracyDataProps['columnNames']}
+            controlInputs={
+              transmitterTransducerAccuracyDataProps['controlInputs']
+            }
+            controlDatePickerInputs={
+              transmitterTransducerAccuracyDataProps['controlDatePickerInputs']
+            }
+            radioBtnPayload={
+              transmitterTransducerAccuracyDataProps['radioBtnPayload']
+            }
+            dataTableName={
+              transmitterTransducerAccuracyDataProps['dataTableName']
+            }
+            extraControls={
+              transmitterTransducerAccuracyDataProps['extraControls']
+            }
+            expandable
+            {...props}
+            extraIDs={null}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case 'FLR':
+        const flowToLoadReferenceProps = qaFlowToLoadReferenceProps();
+        return (
+          <QAExpandableRowsRender
+            payload={flowToLoadReferenceProps['payload']}
+            dropdownArray={flowToLoadReferenceProps['dropdownArray']}
+            mdmProps={flowToLoadReferenceProps['mdmProps']}
+            columns={flowToLoadReferenceProps['columnNames']}
+            controlInputs={flowToLoadReferenceProps['controlInputs']}
+            controlDatePickerInputs={
+              flowToLoadReferenceProps['controlDatePickerInputs']
+            }
+            radioBtnPayload={flowToLoadReferenceProps['radioBtnPayload']}
+            dataTableName={flowToLoadReferenceProps['dataTableName']}
+            extraControls={flowToLoadReferenceProps['extraControls']}
+            expandable
+            {...props}
+            extraIDs={null}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case 'LME': //unit default test
+        const unitDefaultTestDataProps = qaUnitDefaultTestDataProps();
+        return (
+          <QAExpandableRowsRender
+            payload={unitDefaultTestDataProps['payload']}
+            dropdownArray={unitDefaultTestDataProps['dropdownArray']}
+            mdmProps={unitDefaultTestDataProps['mdmProps']}
+            columns={unitDefaultTestDataProps['columnNames']}
+            controlInputs={unitDefaultTestDataProps['controlInputs']}
+            dataTableName={unitDefaultTestDataProps['dataTableName']}
+            expandable
+            {...props}
+            extraIDs={null}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case 'HGL3LS': //Hg Linearity and 3-Level Summary
+        const hgSummaryDataProps = qaHgSummaryDataProps();
+        return (
+          <QAExpandableRowsRender
+            payload={hgSummaryDataProps['payload']}
+            dropdownArray={hgSummaryDataProps['dropdownArray']}
+            mdmProps={hgSummaryDataProps['mdmProps']}
+            columns={hgSummaryDataProps['columnNames']}
+            controlInputs={hgSummaryDataProps['controlInputs']}
+            dataTableName={hgSummaryDataProps['dataTableName']}
+            expandable
+            {...props}
             extraIDs={null}
             user={user}
             isCheckedOut={isCheckedOut}
           />
         );
       default:
-        console.log(`case testTypeGroupCode of ${testTypeGroupCode} not implemented`)
+        console.log(
+          `case testTypeGroupCode of ${testTypeGroupCode} not implemented`
+        );
         return null;
     }
   };
 
   return (
     <div>
-      <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
-      <div className=" padding-3">
-        <h3 className="display-inline padding-right-3">Test Summary Data</h3>
-      </div>
+      <div className={`usa-overlay ${show ? 'is-visible' : ''}`} />
       {!loading || !dropdownsLoading ? (
         <QADataTableRender
           columnNames={columns}
@@ -674,6 +856,7 @@ const QATestSummaryDataTable = ({
               <>
                 <span className="padding-right-2">Test Data</span>
                 <Button
+                  id={`btnAdd${dataTableName.replaceAll(' ', '-')}`}
                   epa-testid="btnOpen"
                   className="text-white"
                   onClick={() => openModal(false, false, true)}
@@ -682,10 +865,10 @@ const QATestSummaryDataTable = ({
                 </Button>
               </>
             ) : (
-              "Test Data"
+              'Test Data'
             )
           }
-          actionsBtn={"View"}
+          actionsBtn={'View'}
           user={user}
           expandableRowComp={getExpandableComponent(
             selectedTestCode.testTypeGroupCode,
@@ -707,6 +890,7 @@ const QATestSummaryDataTable = ({
                   <>
                     <span className="padding-right-2">Test Data</span>
                     <Button
+                      id={`btnAdd${dataTableName.replaceAll(' ', '-')}`}
                       epa-testid="btnOpen"
                       className="text-white"
                       onClick={() => openModal(false, false, true)}
@@ -715,7 +899,7 @@ const QATestSummaryDataTable = ({
                     </Button>
                   </>
                 }
-                actionsBtn={"View"}
+                actionsBtn={'View'}
                 user={user}
               />
             ) : (

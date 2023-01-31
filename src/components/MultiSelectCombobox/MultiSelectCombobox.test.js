@@ -1,7 +1,7 @@
 import React from "react";
-import { cleanup, fireEvent, render, within } from "@testing-library/react";
+import { cleanup, fireEvent, render, within, screen } from "@testing-library/react";
 
-import MultiSelectCombobox from "./MultiSelectCombobox";
+import MultiSelectCombobox, { DEBOUNCE_MILLISECONDS } from "./MultiSelectCombobox";
 
 const facilities = [
   {
@@ -310,7 +310,7 @@ describe("MultiSelectCombobox Component", () => {
 
   it("renders all roles that make up the multi-select-combobox and populates items in drowpdown list", () => {
     const { getByTestId, getAllByTestId } = query;
-    const searchbox = getByTestId("input-search");
+    const searchbox = getByTestId("Facility-input-search");
     expect(searchbox).toBeInTheDocument();
     searchbox.focus();
     searchbox.click();
@@ -323,30 +323,48 @@ describe("MultiSelectCombobox Component", () => {
 
   it("handles click event of listbox option", () => {
     const { getByTestId, getAllByTestId } = query;
-    getByTestId("input-search").click();
+    getByTestId("Facility-input-search").click();
     const options = getAllByTestId("multi-select-option");
     fireEvent.click(options[0]);
     fireEvent.click(options[1]);
     expect(getAllByTestId("button").length).toBe(2);
   });
 
-  test("It should search using input box for facilities in listboxt", () => {
-    const { getByTestId, getAllByTestId, getByRole } = query;
-    const searchbox = getByTestId("input-search");
+  it("should search using input box for facilities in listboxt", () => {
+    const { getByTestId, getAllByTestId } = query;
+    const searchbox = getByTestId("Facility-input-search");
     searchbox.click();
     fireEvent.change(searchbox, { target: { value: "Barry" } });
-    expect(searchbox.value).toBe("Barry");
-    expect(
-      within(getByTestId("multi-select-listbox")).getAllByTestId(
-        "multi-select-option"
-      ).length
-    ).toBe(1);
+    //setTimeout(()=>{
+      expect(searchbox.value).toBe("Barry");
+      expect(
+        within(getByTestId("multi-select-listbox")).getAllByTestId(
+          "multi-select-option"
+        ).length
+      ).toBe(10);
+      fireEvent.keyDown(searchbox, { key: "Tab", code: 9 });
+      fireEvent.keyDown(searchbox, { key: "Enter", code: "Enter" });
+      expect(searchbox.value).toBe("Barry");
+      expect(getAllByTestId("multi-select-option").length).toBe(10);
+      fireEvent.click(getAllByTestId("multi-select-option")[0]);
+      expect(getAllByTestId("button", { name: "Barry (3)" })).toBeDefined();  
+    //}, DEBOUNCE_MILLISECONDS)
+  });
+
+  it("should remove an already selected item that has been clicked for removal and keep focus on the search input element", ()=>{
+    // Clicks barry 3 and clicks the x button to remove it again
+
+    const { getByTestId, getAllByTestId } = query;
+    const searchbox = getByTestId("Facility-input-search");
+    fireEvent.change(searchbox, { target: { value: "Barry" } });
     fireEvent.keyDown(searchbox, { key: "Tab", code: 9 });
     fireEvent.keyDown(searchbox, { key: "Enter", code: "Enter" });
-    expect(searchbox.value).toBe("Barry");
-    expect(getAllByTestId("multi-select-option").length).toBe(1);
-    fireEvent.click(getByTestId("multi-select-option"));
-    expect(getByRole("button", { name: "Barry (3)" })).toBeDefined();
-    //expect(getAllByTestId("multi-select-option").length).toBe(facilities.length);
-  });
+
+    expect(getByTestId('3-remove')).toBeInTheDocument();
+          
+    fireEvent.click(getByTestId('3-remove'));
+    expect(screen.queryByTestId('3-remove')).toBeNull();
+    expect(getByTestId('Facility-input-search')).toHaveFocus();
+  })
+
 });

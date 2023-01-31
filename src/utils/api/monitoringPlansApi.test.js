@@ -4,6 +4,12 @@ jest.mock("axios");
 
 const selectedFacilityOrisCode = 3;
 const mockData = [{}];
+const mockCheckoutApiCall = jest.fn().mockResolvedValue({
+  data: [],
+});
+jest.mock("../../additional-functions/checkout", () => ({
+  checkoutAPI: () => mockCheckoutApiCall(),
+}));
 
 const monitoringLocationId = 56;
 describe("testing monitoring plans data fetching APIs", () => {

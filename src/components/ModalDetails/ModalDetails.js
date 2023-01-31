@@ -14,6 +14,7 @@ import { assignAriaLabelsToDatePickerButtons } from "../../additional-functions/
 
 import { ArrowBackSharp } from "@material-ui/icons";
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
+import MultiSelectCombobox from "../MultiSelectCombobox/MultiSelectCombobox";
 
 // value in data => [0] api label, [1] our UI label, [2] value,[3], required or not for editing, [4] control form type
 const ModalDetails = ({
@@ -86,6 +87,12 @@ const ModalDetails = ({
   }
 
   const makeViewOnlyComp = (value, locked) => {
+    let displayVal
+    if (value[4] === "radio") {
+      displayVal = value[2] ? "Yes" : "No"
+    } else {
+      displayVal = value[2] ?? ''
+    }
     return (
       <div key={`${value[1]}`} className="grid-col">
         {
@@ -104,15 +111,7 @@ const ModalDetails = ({
                 {value[1]}
               </h3>
               <div id={`${value[4] !== "skip" ? value[1] : ""}`}>
-                {value[2]
-                  ? value[4] === "radio"
-                    ? value[2] === "0"
-                      ? "No"
-                      : "Yes"
-                    : value[2]
-                  : value[4] === "radio"
-                  ? "No"
-                  : ""}
+                {displayVal}
               </div>
             </FormGroup>
           )
@@ -208,6 +207,73 @@ const ModalDetails = ({
               disableDropdownFlag || (create && mainDropdownUntouched)
             }
           />
+        );
+        break;
+
+      case "multiSelectDropdown":
+        const items = [];
+        for (let valueItem of value[6]){
+          if(valueItem.code != ""){
+            let item = {
+              id: "",
+              label: "",
+              selected: "",
+              enabled: ""
+            };
+            item.id = valueItem.code;
+            item.label = valueItem.name;
+            item.selected = (modalData?.[value[0]].split(',').includes(item.id) && !create) ? modalData?.[value[0]].split(',').includes(item.id) : false;
+            item.enabled = true;
+            items.push(item);
+          }
+        }
+        let selectedOptions = (modalData?.[value[0]].split(',') && !create) ? modalData?.[value[0]].split(',') : [];
+        const handleCodes = (id, updateType) => {
+          const uniqueOptions = [
+            ...new Set([...selectedOptions, id]),
+          ];
+          let item;
+          for(let i = 0; i < items.length; i++){
+            if(items[i].id === id){
+              item = i;
+            }
+          }
+          if (updateType === "add") {
+            items[item].selected = true;
+            selectedOptions = uniqueOptions;
+          } else if (updateType === "remove") {
+            items[item].selected = false;
+            const selected = items
+              .filter((item) => {
+                return item.selected;
+              })
+              .map((item) => {
+                return item.id;
+              });
+            selectedOptions = selected;
+          }
+          document.getElementById(value[1]).value = selectedOptions.toString();
+        };
+        let styles={
+          listbox:"list-box bg-white display-block height-15 width-card-lg overflow-y-scroll overflow-x-hidden border-top",
+          combobox:"margin-top-1 margin-bottom-2 border-1px width-card-lg bg-white multi-select-combobox"
+        }
+        comp = (
+          <div 
+            className="modalUserInput"
+            value={selectedOptions.toString()}
+            id={value[1]}
+            epadataname={value[0]}
+          >
+            <MultiSelectCombobox
+              items={items}
+              entity={value[0]}
+              searchBy="contains"
+              onChangeUpdate={handleCodes}
+              styling={styles}
+              favicon={false}
+            />
+          </div>
         );
         break;
 
@@ -378,6 +444,7 @@ const ModalDetails = ({
             name={value[0]}
             type="text"
             defaultValue={value[2] ? value[2] : ""}
+            disabled={value[0] === "unitId" || value[0] === "stackPipeId" ? "disabled" : undefined}
           />
         );
         break;

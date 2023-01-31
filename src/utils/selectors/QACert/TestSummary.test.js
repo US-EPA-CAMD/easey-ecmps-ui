@@ -174,8 +174,8 @@ describe("testing TestSummary data selectors", () => {
         testSumId: "3ee84634-7dc4-45c8-8eee-ca79e699893a",
         gasLevelCode: "HIGH",
         gasTypeCode: "ZERO",
-        vendorID: "Ven",
-        cylinderID: "Cy",
+        vendorIdentifier: "Ven",
+        cylinderIdentifier: "Cy",
         expirationDate: "2022-10-01",
         userId: "mddee-dp",
         addDate: "2022-10-19T00:00:00.000Z",
@@ -186,8 +186,8 @@ describe("testing TestSummary data selectors", () => {
         testSumId: "3ee84634-7dc4-45c8-8eee-ca79e699893a",
         gasLevelCode: "HIGH",
         gasTypeCode: "ZERO",
-        vendorID: "Ven",
-        cylinderID: "Cy",
+        vendorIdentifier: "Ven",
+        cylinderIdentifier: "Cy",
         expirationDate: null,
         userId: "mddee-dp",
         addDate: "2022-10-19T00:00:00.000Z",
@@ -216,7 +216,62 @@ describe("testing TestSummary data selectors", () => {
     ];
     expect(fs.getProtocolGasRecords(data)).toEqual(records);
   });
-
+  test("getRataDataRecords", () => {
+    const data = [
+      {
+        id: "2b2adedb-24eb-4325-8ad4-37c342f67a37",
+        testSumId: "325f65f7-b056-4b74-97d7-0040a1b44dbd",
+        numberOfLoadLevels: "string",
+        relativeAccuracy: "string",
+        rataFrequencyCode: "string",
+        overallBiasAdjustmentFactor: "string",
+      },
+    ];
+    const records = [
+      {
+        col1: "string",
+        col2: "string",
+        col3: "string",
+        col4: "string",
+        id: "2b2adedb-24eb-4325-8ad4-37c342f67a37",
+        testSumId: "325f65f7-b056-4b74-97d7-0040a1b44dbd",
+      },
+    ];
+    expect(fs.getRataDataRecords(data)).toEqual(records);
+  });
+  test("getAirEmissionsRecords", () => {
+    const data = [
+      {
+        id: "2b2adedb-24eb-4325-8ad4-37c342f67a37",
+        testSumId: "325f65f7-b056-4b74-97d7-0040a1b44dbd",
+        qiLastName: "string",
+        qiFirstName: "string",
+        qiMiddleInitial: "string",
+        aetbName: "string",
+        aetbPhoneNumber: "string",
+        aetbEmail: "string",
+        examDate: "10/01/2022",
+        providerName: "testName",
+        providerEmail: "string",
+      },
+    ];
+    const records = [
+      {
+        col1: "string",
+        col2: "string",
+        col3: "string",
+        col4: "string",
+        col5: "string",
+        col6: "string",
+        col7: "10/01/2022",
+        col8: "testName",
+        col9: "string",
+        id: "2b2adedb-24eb-4325-8ad4-37c342f67a37",
+        testSumId: "325f65f7-b056-4b74-97d7-0040a1b44dbd",
+      },
+    ];
+    expect(fs.getAirEmissionsRecords(data)).toEqual(records);
+  });
   test("mapTestQualificationToRows", () => {
     const data = [
       {
@@ -372,6 +427,41 @@ describe("testing TestSummary data selectors", () => {
     ];
     expect(fs.mapRataSummaryToRows(data)).toEqual(records);
   });
+  test("mapFlowToLoadCheckToRows", () => {
+    const data = [
+      {
+        id: "0000120",
+        testBasisCode: '100',
+        biasAdjustedIndicator: 1,
+        averageAbsolutePercentDifference: 1,
+        numberOfHours: 1,
+        numberOfHoursExcludedForFuel: 1,
+        numberOfHoursExcludedForRamping: 1,
+        numberOfHoursExcludedForBypass: 1,
+        numberOfHoursExcludedPreRata: 1,
+        numberOfHoursExcludedTest: 1,
+        numberOfHoursExcludedForMainAndBypass: 1,
+        operatingLevelCode: "test",
+      },
+    ];
+    const records = [
+      {
+        id: '0000120',
+        col1: '100',
+        col2: 1,
+        col3: 1,
+        col4: 1,
+        col5: 1,
+        col6: 1,
+        col7: 1,
+        col8: 1,
+        col9: 1,
+        col10: 1,
+        col11: "test",
+      },
+    ];
+    expect(fs.mapFlowToLoadCheckToRows(data)).toEqual(records);
+  });
   test("mapAppendixECorrHeatInputOilToRows", () => {
     const data = [
       {
@@ -402,5 +492,78 @@ describe("testing TestSummary data selectors", () => {
       },
     ];
     expect(fs.mapAppendixECorrHeatInputOilToRows(data)).toEqual(records);
+  });
+  test("mapFuelFlowmeterAccuracyDataToRows", () => {
+    const data = [
+      {
+        id: "0000120",
+        accuracyTestMethodCode: 'API',
+        lowFuelAccuracy: 1,
+        midFuelAccuracy: 1,
+        highFuelAccuracy: 1,
+        reinstallationDate: "2022-10-01",
+        reinstallationHour: 1,
+      },
+    ];
+    const records = [
+      {
+        id: '0000120',
+        col1: 'API',
+        col2: 1,
+        col3: 1,
+        col4: 1,
+        col5: "10/1/2022",
+        col6: 1,
+      },
+    ];
+    expect(fs.mapFuelFlowmeterAccuracyDataToRows(data)).toEqual(records);
+  });
+  test("mapTransmitterTransducerAccuracyDataToRows", () => {
+    const data = [
+      {
+        id: "0000120",
+        lowLevelAccuracy: 1,
+        lowLevelAccuracySpecCode: "ACT",
+        midLevelAccuracy: 1,
+        midLevelAccuracySpecCode: "ACT",
+        highLevelAccuracy: 1,
+        highLevelAccuracySpecCode: "ACT",
+      },
+    ];
+    const records = [
+      {
+        id: '0000120',
+        col1: 1,
+        col2: "ACT",
+        col3: 1,
+        col4: "ACT",
+        col5: 1,
+        col6: "ACT",
+      },
+    ];
+    expect(fs.mapTransmitterTransducerAccuracyDataToRows(data)).toEqual(records);
+  });
+  test("mapHgSummaryDataToRows", () => {
+    const data = [
+      {
+        id: "0000120",
+        gasLevelCode: "Mid",
+        meanMeasuredValue: 1,
+        meanReferenceValue: 1,
+        percentError: .1,
+        apsIndicator: 1,
+      },
+    ];
+    const records = [
+      {
+        id: '0000120',
+        col1: "Mid",
+        col2: 1,
+        col3: 1,
+        col4: .1,
+        col5: "Yes",
+      },
+    ];
+    expect(fs.mapHgSummaryDataToRows(data)).toEqual(records);
   });
 });

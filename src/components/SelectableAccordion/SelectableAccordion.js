@@ -1,5 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
+import {
+  addScreenReaderLabelForCollapses,
+  cleanUp508,
+  ensure508,
+} from "../../additional-functions/ensure-508";
+import { oneSecond } from "../../config";
 
 const columnMappings = [
   {
@@ -17,8 +23,24 @@ const columnMappings = [
   },
 ];
 
-export const SelectableAccordion = ({ items, setCanCheck }) => {
+export const SelectableAccordion = ({
+  items,
+  setCanCheck,
+  submissionActionLog,
+  setSubmissionActionLog,
+}) => {
   const [itemStates, setItemStates] = useState(items);
+
+  useEffect(() => {
+    setTimeout(() => {
+      ensure508();
+    }, oneSecond);
+
+    return () => {
+      cleanUp508();
+      addScreenReaderLabelForCollapses();
+    };
+  }, []);
 
   return (
     <div className="usa-accordion">
@@ -40,6 +62,11 @@ export const SelectableAccordion = ({ items, setCanCheck }) => {
                   className="usa-accordion__button"
                   aria-expanded={itemStates[idx].expanded}
                   onClick={() => {
+                    setSubmissionActionLog({
+                      ...submissionActionLog,
+                      [`certStatement${idx}`]: new Date(),
+                    });
+
                     itemStates[idx].expanded = !itemStates[idx].expanded;
                     itemStates[idx].hasExpanded = true;
 
