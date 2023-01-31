@@ -178,7 +178,7 @@ export const EvaluateAndSubmit = ({
           chunk.userCheckedOut = false;
         }
       }
-      cat.setState([...cat.ref.current]);
+      cat.setState(_.cloneDeep(cat.ref.current));
     }
   }, [checkedOutLocations, userId]);
 
@@ -214,7 +214,7 @@ export const EvaluateAndSubmit = ({
       for (const item of ref.current) {
         item.viewOnly = true;
       }
-      setState(ref.current);
+      setState(_.cloneDeep(ref.current));
     }
   };
 
@@ -234,7 +234,7 @@ export const EvaluateAndSubmit = ({
         }
       }
       if (componentType === "Evaluate") {
-        setState(_.clone(ref.current));
+        setState(_.cloneDeep(ref.current));
       }
     }
 
