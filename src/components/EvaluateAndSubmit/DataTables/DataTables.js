@@ -234,6 +234,7 @@ const DataTables = ({
                     : getRowStateEvaluate
                 }
                 selectRow={selectRow}
+                componentType={componentType}
                 updateFilesSelected={updateFilesSelected}
               />
             </div>
