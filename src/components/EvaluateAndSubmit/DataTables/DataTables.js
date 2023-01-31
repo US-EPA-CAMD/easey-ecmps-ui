@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TableRender from "../TableRender/TableRender";
 import { checkoutAPI } from "../../../additional-functions/checkout";
+import _ from "lodash";
 
 const DataTables = ({
   dataList,
@@ -61,7 +62,7 @@ const DataTables = ({
     }
   };
 
-  const updateMonPlanRow = useCallback((id, selection) => {
+  const updateMonPlanRow = (id, selection) => {
     let rowStateFunc;
 
     if (componentType === "Submission") {
@@ -80,12 +81,12 @@ const DataTables = ({
       }
     }
 
-    dataList[0].setState([...dataList[0].ref.current]);
+    dataList[0].setState(_.cloneDeep(dataList[0].ref.current));
 
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
 
-  const updateQARow = useCallback((id, periodAbr, selection) => {
+  const updateQARow = (id, periodAbr, selection) => {
     let rowStateFunc;
 
     if (componentType === "Submission") {
@@ -109,11 +110,11 @@ const DataTables = ({
         }
       }
 
-      dataChunk.setState([...dataChunk.ref.current]);
+      dataChunk.setState(_.cloneDeep(dataChunk.ref.current));
     }
-  }, []);
+  };
 
-  const getRowStateSubmission = useCallback((row, type) => {
+  const getRowStateSubmission = (row, type) => {
     if (row.viewOnly) {
       row.selected = false;
       return "View";
@@ -148,9 +149,9 @@ const DataTables = ({
       row.selected = false;
       return "View";
     } //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
 
-  const getRowStateEvaluate = useCallback((row, type) => {
+  const getRowStateEvaluate = (row, type) => {
     if (row.checkedOut && !row.userCheckedOut) {
       row.selected = false;
       return "Lock";
@@ -174,7 +175,7 @@ const DataTables = ({
       row.selected = false;
       return "View";
     } //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
 
   const [activeTables, setActiveTables] = useState(
     dataList.reduce((acc, curr) => ({ ...acc, [curr.name]: true }), {})
@@ -234,6 +235,7 @@ const DataTables = ({
                     : getRowStateEvaluate
                 }
                 selectRow={selectRow}
+                componentType={componentType}
                 updateFilesSelected={updateFilesSelected}
               />
             </div>
