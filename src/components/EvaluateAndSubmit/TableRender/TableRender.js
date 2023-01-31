@@ -11,12 +11,22 @@ import ReviewCell from "../ReviewCell/ReviewCell";
 import { Checkbox } from "@trussworks/react-uswds";
 import { v4 as uuidv4 } from "uuid";
 import { addEvalStatusCell } from "../../../utils/functions";
+import _ from "lodash";
 
 import "./TableRender.scss";
 
 const TableRender = forwardRef(
   (
-    { columns, state, type, getRowState, rowId, selectRow, componentType },
+    {
+      columns,
+      state,
+      setState,
+      type,
+      getRowState,
+      rowId,
+      selectRow,
+      componentType,
+    },
     ref
   ) => {
     const reportWindowParams = [
@@ -30,60 +40,10 @@ const TableRender = forwardRef(
     const [selectAllState, setSelectAllState] = useState(false);
     const [selectAllVisible, setSelectAllVisible] = useState(true);
 
-    const [mappings, setMappings] = useState([]);
-
     useEffect(() => {
       setTimeout(() => {
         ensure508();
       }, oneSecond);
-
-      const mapStruct = [
-        {
-          name: (
-            <div className="margin-bottom-5">
-              {selectAllVisible && (
-                <Checkbox
-                  className=" margin-left-4"
-                  id={`${uuidv4()}`}
-                  data-testid="SelectAll"
-                  onClick={selectAll}
-                  defaultChecked={selectAllState}
-                />
-              )}
-            </div>
-          ),
-          cell: (row) => (
-            <ReviewCell
-              row={row}
-              handleRowSelection={selectIndividual}
-              handleRowView={handleRowView}
-              type={type}
-              getRowState={getRowState}
-              setSelectAllState={setSelectAllState}
-              setSelectAllVisible={setSelectAllVisible}
-            />
-          ),
-          width: "100px",
-          button: true,
-        },
-        ...columns,
-      ];
-
-      if (componentType === "Submission") {
-        mapStruct.push({
-          name: "Submission Status",
-          selector: "submissionAvailabilityCode",
-          sortable: true,
-        });
-      } else if (componentType === "Evaluate") {
-        mapStruct.push({
-          name: "Eval Status",
-          selector: "evalStatusCode",
-          sortable: true,
-        });
-      }
-
-      setMappings(mapStruct);
 
       return () => {
         cleanUp508();
@@ -101,6 +61,8 @@ const TableRender = forwardRef(
           selectRow(r, bool, type);
         }
       }
+
+      setState(_.cloneDeep(ref.current));
     };
 
     const selectIndividual = (row, type, selection) => {
@@ -113,6 +75,8 @@ const TableRender = forwardRef(
           selectRow(r, selection, type);
         }
       }
+
+      setState(_.cloneDeep(ref.current));
     };
 
     const handleRowView = useCallback((row, printout) => {
@@ -150,6 +114,48 @@ const TableRender = forwardRef(
 
       window.open(url, reportTitle, reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const mappings = [
+      {
+        name: (
+          <div className="margin-bottom-5">
+            {selectAllVisible && (
+              <Checkbox
+                className=" margin-left-4"
+                id={`${uuidv4()}`}
+                data-testid="SelectAll"
+                onClick={selectAll}
+                defaultChecked={selectAllState}
+              />
+            )}
+          </div>
+        ),
+        cell: (row) => (
+          <ReviewCell
+            row={row}
+            handleRowSelection={selectIndividual}
+            handleRowView={handleRowView}
+            type={type}
+            getRowState={getRowState}
+            setSelectAllState={setSelectAllState}
+            setSelectAllVisible={setSelectAllVisible}
+          />
+        ),
+        width: "100px",
+        button: true,
+      },
+      ...columns,
+      {
+        name: "Submission Status",
+        selector: "submissionAvailabilityCode",
+        sortable: true,
+      },
+      {
+        name: "Eval Status",
+        selector: "evalStatusCode",
+        sortable: true,
+      },
+    ];
 
     addEvalStatusCell(mappings, handleRowView);
 
