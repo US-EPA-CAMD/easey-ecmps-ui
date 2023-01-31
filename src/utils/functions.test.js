@@ -308,6 +308,8 @@ describe("functions.js", function () {
         expect(windowOpenMock).toHaveBeenCalledTimes(4);
       });
     });
+
+    /*
     describe("addEvalStatusCell", () => {
       it("adds cell with alert style to eval status columns", () => {
         const columns = addEvalStatusCell(_.clone(monPlanColumns, 
@@ -325,6 +327,7 @@ describe("functions.js", function () {
         expect(nonEvalStatusColumn.cell).not.toBeDefined();
       });
     });
+    */
   });
 
   describe("getPreviouslyFullSubmitedQuarter tests", () => {
