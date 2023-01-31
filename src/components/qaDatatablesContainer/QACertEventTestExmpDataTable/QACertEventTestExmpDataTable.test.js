@@ -85,7 +85,7 @@ describe('Test cases for QACertEventTestExmpDataTable', () => {
       `${qaCertBaseUrl}/workspace/locations/${locId}/qa-certification-events`
     );
     const requestHeaders = {
-      "x-api-key": "PXPWlQGB3wKXotkWN1PbSwbSoM7CoWW0ZMPWYtfc"
+      "x-api-key": config.app.apiKey
     }
     mock.onGet(getMonitoringComponentsUrl, requestHeaders).reply(200, []);
     mock.onGet(getMonitoringSystemssUrl,requestHeaders).reply(200, []);
