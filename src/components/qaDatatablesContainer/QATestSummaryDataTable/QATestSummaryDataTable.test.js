@@ -537,8 +537,9 @@ test("testing component renders properly and functionlity for add/edit/remove", 
   setTimeout(() => expect(mock.history.put.length).toBe(1), 1000);
 
   // Remove
-  const removeBtn = screen.getByRole("button", { name: /Remove/i });
-  userEvent.click(removeBtn);
+  const removeBtn = screen.getAllByRole("button", { name: /Remove/i });
+  expect(removeBtn.length).not.toBe(0);
+  userEvent.click(removeBtn[0]);
   const confirmBtn = screen.getByRole("button", { name: /Yes/i });
   userEvent.click(confirmBtn);
   setTimeout(() => expect(mock.history.delete.length).toBe(1), 1000);
