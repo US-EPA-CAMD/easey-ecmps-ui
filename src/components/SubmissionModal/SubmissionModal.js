@@ -401,18 +401,19 @@ export const SubmissionModal = ({
                             setVerifyMethod("Question");
                           }}
                         />
-
-                        <Radio
-                          className="grid-col-12 margin-bottom-1"
-                          id={`text-radio-button`}
-                          name="verify-method"
-                          label={"Send Text Message"}
-                          key={3}
-                          data-testid="radio-text"
-                          onClick={() => {
-                            setVerifyMethod("Text");
-                          }}
-                        />
+                        {false && (
+                          <Radio
+                            className="grid-col-12 margin-bottom-1"
+                            id={`text-radio-button`}
+                            name="verify-method"
+                            label={"Send Text Message"}
+                            key={3}
+                            data-testid="radio-text"
+                            onClick={() => {
+                              setVerifyMethod("Text");
+                            }}
+                          />
+                        )}
                       </Fieldset>
                     </div>
 
