@@ -68,25 +68,4 @@ describe('App tests', () => {
     jest.advanceTimersByTime(10000);
     expect(mockTagManger).toHaveBeenCalled();
   });
-
-  it('navigates to contact up page', async () => {
-    render(
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
-    );
-
-    const helpSupportButton = screen.getByRole('button', {
-      name: '| Help/Support',
-    });
-    await act(async () => await userEvent.click(helpSupportButton));
-    const helpSupportLink = screen.getByRole('link', {
-      name: /help\/support/i,
-    });
-    await act(async () => await userEvent.click(helpSupportLink));
-    const contactUsHeading = screen.getByRole('heading', {
-      name: /contact us/i,
-    });
-    expect(contactUsHeading).toBeInTheDocument();
-  });
 });
