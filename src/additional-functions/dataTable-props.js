@@ -470,16 +470,16 @@ export const locationAttributesDataTableProps = (location) => {
 export const relationshipDataTableProps = (location) => {
   return {
     payload: {
-      unitRecordId: '1',
-      stackPipeRecordId: 'MDC-CCB8D6D0D4E34D24A99C01DCD14078DF',
+      unitId: '1',
+      stackPipeId: 'MDC-CCB8D6D0D4E34D24A99C01DCD14078DF',
       beginDate: '1995-01-01T00:00:00.000Z',
       endDate: null,
     },
     dropdownArray: [[]],
     columnNames: ['Stack Pipe Name', 'Unit Name', 'Start Date', 'End Date'],
     controlInputs: {
-      stackPipeRecordId: ['Stack Pipe Name', 'input', '', ''],
-      unitRecordId: ['Unit Name', 'input', '', ''],
+      stackPipeId: ['Stack Pipe Name', 'input', '', ''],
+      unitId: ['Unit Name', 'input', '', ''],
     },
     controlDatePickerInputs: {
       beginDate: ['Start Date', 'dateTime', '', ''],
