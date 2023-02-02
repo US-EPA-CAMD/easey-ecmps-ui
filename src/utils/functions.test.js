@@ -1,5 +1,4 @@
 import _ from "lodash";
-import { monPlanColumns } from "../components/EvaluateAndSubmit/ColumnMappings";
 import {
   formatDate,
   getConfigValue,
@@ -309,6 +308,46 @@ describe("functions.js", function () {
       });
     });
     describe("addEvalStatusCell", () => {
+      const monPlanColumns = [
+        {
+          name: "ORIS Code",
+          selector: "orisCode",
+          sortable: true,
+          maxWidth: "100px",
+        },
+        {
+          name: "Facility Name",
+          selector: "facilityName",
+          sortable: true,
+        },
+        {
+          name: "Configuration",
+          selector: "name",
+          sortable: true,
+        },
+        {
+          name: "Last Modified By",
+          selector: "userId",
+          sortable: true,
+        },
+        {
+          name: "Last Modified Date",
+          selector: (row) => formatDate(row.updateDate),
+          sortable: true,
+          sortFunction: () => {},
+        },
+        {
+          name: "Eval Status",
+          selector: "evalStatusCode",
+          sortable: true,
+        },
+        {
+          name: "Submission Status",
+          selector: "submissionAvailabilityCode",
+          sortable: true,
+        },
+      ];
+      
       it("adds cell with alert style to eval status columns", () => {
         const columns = addEvalStatusCell(_.clone(monPlanColumns, 
           () => {}));
@@ -322,7 +361,7 @@ describe("functions.js", function () {
         const nonEvalStatusColumn = columns.find(
           (column) => column.name !== "Eval Status"
         );
-        expect(nonEvalStatusColumn.cell).not.toBeDefined();
+        expect(nonEvalStatusColumn?.cell).not.toBeDefined();
       });
     });
   });
