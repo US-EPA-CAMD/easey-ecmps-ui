@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, waitForElement } from "@testing-library/react";
+import { act, render, screen, waitForElement } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
@@ -523,23 +523,23 @@ test("testing component renders properly and functionlity for add/edit/remove", 
 
   // Add
   const addBtn = screen.getAllByRole("button", { name: /Add/i });
-  userEvent.click(addBtn[0]);
+  await act(async() => await userEvent.click(addBtn[0]));
   const addSaveBtn = screen.getByRole("button", { name: /Click to Save/i });
-  userEvent.click(addSaveBtn);
+  await act(async() => await userEvent.click(addSaveBtn));
   setTimeout(() => expect(mock.history.post.length).toBe(1), 1000);
 
   // Edit
   const editBtn = screen.getAllByRole("button", { name: /Edit/i })[0];
-  userEvent.click(editBtn);
+  await act(async() => await userEvent.click(editBtn));
   const editSaveBtn = screen.getByRole("button", { name: /Click to Save/i });
   userEvent.click(editSaveBtn);
   setTimeout(() => expect(mock.history.put.length).toBe(1), 1000);
 
   // Remove
   const removeBtn = screen.getByRole("button", { name: /Remove/i });
-  userEvent.click(removeBtn);
+  await act(async() => await userEvent.click(removeBtn));
   const confirmBtn = screen.getByRole("button", { name: /Yes/i });
-  userEvent.click(confirmBtn);
+  await act(async() => await userEvent.click(confirmBtn));
   setTimeout(() => expect(mock.history.delete.length).toBe(1), 1000);
 
 
