@@ -529,7 +529,7 @@ test("testing component renders properly and functionlity for add/edit/remove", 
   setTimeout(() => expect(mock.history.post.length).toBe(1), 1000);
 
   // Edit
-  const editBtn = screen.getByRole("button", { name: /Edit/i });
+  const editBtn = screen.getAllByRole("button", { name: /Edit/i })[0];
   userEvent.click(editBtn);
   const editSaveBtn = screen.getByRole("button", { name: /Click to Save/i });
   userEvent.click(editSaveBtn);
