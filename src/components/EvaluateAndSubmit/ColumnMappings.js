@@ -134,16 +134,6 @@ export const monPlanColumns = [
     sortable: true,
     sortFunction: sortByUpdateDate,
   },
-  {
-    name: "Eval Status",
-    selector: "evalStatusCode",
-    sortable: true,
-  },
-  {
-    name: "Submission Status",
-    selector: "submissionAvailabilityCode",
-    sortable: true,
-  },
 ];
 
 export const qaTestSummaryColumns = [
@@ -165,9 +155,9 @@ export const qaTestSummaryColumns = [
   },
   {
     name: "System / Component ID",
-    selector: "testInfo",
+    selector: "systemComponentIdentifier",
     sortable: true,
-    width: "400px",
+    width: "100px",
   },
   {
     name: "Test Type",
@@ -203,16 +193,6 @@ export const qaTestSummaryColumns = [
     sortable: true,
     sortFunction: sortByUpdateDate,
   },
-  {
-    name: "Eval Status",
-    selector: "evalStatusCode",
-    sortable: true,
-  },
-  {
-    name: "Submission Status",
-    selector: "submissionCode",
-    sortable: true,
-  },
 ];
 
 export const qaCertEventColumns = [
@@ -234,9 +214,9 @@ export const qaCertEventColumns = [
   },
   {
     name: "System / Component ID",
-    selector: "testInfo",
+    selector: "systemComponentIdentifier",
     sortable: true,
-    width: "400px",
+    width: "100px",
   },
   {
     name: "QA Cert Event Code",
@@ -249,6 +229,11 @@ export const qaCertEventColumns = [
     sortable: true,
     sortFunction: sortByEventDate,
     width: "200px",
+  },
+  {
+    name: "Required Test Code",
+    selector: "requiredTestCode",
+    sortable: true,
   },
   {
     name: "Conditional Date/HR",
@@ -273,16 +258,6 @@ export const qaCertEventColumns = [
     sortable: true,
     sortFunction: sortByUpdateDate,
   },
-  {
-    name: "Eval Status",
-    selector: "evalStatusCode",
-    sortable: true,
-  },
-  {
-    name: "Submission Status",
-    selector: "submissionAvailabilityCode",
-    sortable: true,
-  },
 ];
 
 export const qaTeeColumns = [
@@ -304,14 +279,34 @@ export const qaTeeColumns = [
   },
   {
     name: "System / Component ID",
-    selector: "testInfo",
+    selector: "systemComponentIdentifier",
     sortable: true,
-    width: "400px",
+    width: "100px",
   },
   {
     name: "Year / Quarter",
     selector: "periodAbbreviation",
     sortFunction: sortByPeriodAbbreviation,
+    sortable: true,
+  },
+  {
+    name: "Fuel Code",
+    selector: "fuelCd",
+    sortable: true,
+  },
+  {
+    name: "Extension / Exemption Code",
+    selector: "extensExemptCode",
+    sortable: true,
+  },
+  {
+    name: "Hours Used",
+    selector: "hoursUsed",
+    sortable: true,
+  },
+  {
+    name: "Span Scale Code",
+    selector: "spanScaleCode",
     sortable: true,
   },
   {
@@ -324,16 +319,6 @@ export const qaTeeColumns = [
     selector: (row) => formatDate(row.updateDate),
     sortable: true,
     sortFunction: sortByUpdateDate,
-  },
-  {
-    name: "Eval Status",
-    selector: "evalStatusCode",
-    sortable: true,
-  },
-  {
-    name: "Submission Status",
-    selector: "submissionAvailabilityCode",
-    sortable: true,
   },
 ];
 
@@ -370,16 +355,6 @@ export const emissionsColumns = [
     selector: (row) => formatDate(row.updateDate),
     sortable: true,
     sortFunction: sortByUpdateDate,
-  },
-  {
-    name: "Eval Status",
-    selector: "evalStatusCode",
-    sortable: true,
-  },
-  {
-    name: "Submission Status",
-    selector: "submissionAvailabilityCode",
-    sortable: true,
   },
   {
     name: "Submission Window",

@@ -76,6 +76,7 @@ describe("Review and Submit Tables component", () => {
             selector: "orisCode",
           },
         ]}
+        setState={jest.fn()}
         state={[{ orisCode: 1 }]}
         type="MP"
         getRowState={jest.fn().mockReturnValue("Checkbox")}
@@ -122,6 +123,7 @@ describe("Review and Submit Tables component", () => {
             selector: "orisCode",
           },
         ]}
+        setState={jest.fn()}
         state={[{ orisCode: 1 }]}
         type="MP"
         getRowState={jest.fn().mockReturnValue("Checkbox")}
