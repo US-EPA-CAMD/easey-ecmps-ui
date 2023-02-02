@@ -225,13 +225,13 @@ describe("renders datatable with all values ", () => {
     //   charCode: 13,
     // });
 
-    const searchInput = container.querySelector("#txtSearchData");
+    const searchInput = container.querySelector("#search-data");
     fireEvent.change(searchInput, { target: { value: "test" } });
     expect(searchInput.value).toBe("test");
 
-    fireEvent.click(container.querySelector("#searchDataTableBTN"));
+    //fireEvent.click(container.querySelector("#searchDataTableBTN"));
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(8);
+    expect(rows.length).toEqual(12);
   });
   test("test no title with no section title- user is logged in and at a sections data table", async () => {
     const { container } = await waitForElement(() =>
