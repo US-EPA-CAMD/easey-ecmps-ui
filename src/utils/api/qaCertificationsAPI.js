@@ -192,7 +192,8 @@ export const exportQA = async (
   stackPipeIds,
   beginDate,
   endDate,
-  isOfficial
+  testTypeCodes,
+  isOfficial,
 ) => {
   let url;
 
@@ -202,6 +203,10 @@ export const exportQA = async (
     url = getApiUrl(`/export?facilityId=${facilityId}`);
   }
 
+  if (testTypeCodes?.length > 0) {
+    const testTypeCodesQueryParam = testTypeCodes.join("|");
+    url = `${url}&testTypeCodes=${testTypeCodesQueryParam}`;
+  }
   if (unitIds?.length > 0) {
     const unitIdsQueryParam = unitIds.join("|");
     url = `${url}&unitIds=${unitIdsQueryParam}`;

@@ -34,6 +34,7 @@ export const QACertTestSummaryRender = ({
           locations={locations}
           user={user}
           configID={configID}
+          selectedTestCode={selectedTestCode}
           setSelectedTestCode={setSelectedTestCode}
           setCheckout={setCheckout}
           checkoutState={checkoutState}
