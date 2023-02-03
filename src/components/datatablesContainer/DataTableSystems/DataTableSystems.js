@@ -365,7 +365,6 @@ export const DataTableSystems = ({
       mpApi
         .saveSystems(userInput, locationSelectValue, selectedSystem.id)
         .then((result) => {
-          console.log("saving results", result);
           setUpdateSystemTable(true);
         })
         .catch((error) => {
@@ -419,7 +418,6 @@ export const DataTableSystems = ({
       mpApi
         .saveAnalyzerRanges(userInput)
         .then((result) => {
-          console.log(result);
           setUpdateAnalyzerRangeTable(true);
         })
         .catch((error) => {
@@ -454,7 +452,6 @@ export const DataTableSystems = ({
       mpApi
         .createAnalyzerRanges(userInput)
         .then((result) => {
-          console.log(result, " was created");
           setUpdateAnalyzerRangeTable(true);
         })
         .catch((error) => {
@@ -491,7 +488,6 @@ export const DataTableSystems = ({
           selectedSystem.id
         )
         .then((result) => {
-          console.log(result);
           setUpdateFuelFlowTable(true);
         })
         .catch((error) => {
@@ -516,7 +512,6 @@ export const DataTableSystems = ({
           selectedSystem.id
         )
         .then((result) => {
-          console.log(result, " was created");
           setUpdateFuelFlowTable(true);
         })
         .catch((error) => {
@@ -556,7 +551,6 @@ export const DataTableSystems = ({
           selectedSystem.id
         )
         .then((result) => {
-          console.log(result, " was created");
           setupdateComponentTable(true);
         })
         .catch((error) => {
@@ -589,7 +583,6 @@ export const DataTableSystems = ({
           selectedRangeInFirst.id
         )
         .then((result) => {
-          console.log(result);
           setupdateComponentTable(true);
         })
         .catch((error) => {
