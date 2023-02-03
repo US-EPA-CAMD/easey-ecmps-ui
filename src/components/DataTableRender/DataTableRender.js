@@ -1,6 +1,6 @@
 /*********** FUNCTIONS / HOOKS / PLUGINS ***********/
 // *** 3rd party
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 
 // *** local
 import { config, oneSecond } from "../../config";
@@ -445,9 +445,10 @@ export const DataTableRender = ({
 
   const subHeaderComponentMemo = useMemo(() => {
     //cannot unit test properly
-    const handleSearch = () => {
+    const handleSearch = (e) => {
+      e.preventDefault();
       resetExpandedRows();
-      setSearchText(document.querySelector("#txtSearchData").value);
+      setSearchText(document.querySelector("#search-data").value);
       changeGridCellAttributeValue();
     };
 
