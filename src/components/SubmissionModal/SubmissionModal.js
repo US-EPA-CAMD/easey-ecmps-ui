@@ -142,6 +142,7 @@ export const SubmissionModal = ({
 
   const submitAuth = async (event) => {
     event.preventDefault();
+    const enablePhoneVerification = false;
 
     const isFormValid = await authFormSchema.isValid(
       { username, password },
@@ -401,7 +402,7 @@ export const SubmissionModal = ({
                             setVerifyMethod("Question");
                           }}
                         />
-                        {false && (
+                        {enablePhoneVerification && (
                           <Radio
                             className="grid-col-12 margin-bottom-1"
                             id={`text-radio-button`}
