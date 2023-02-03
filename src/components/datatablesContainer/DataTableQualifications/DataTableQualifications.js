@@ -299,7 +299,6 @@ export const DataTableQualifications = ({
         }
       })
       .catch((error) => {
-        console.log(error);
         setShow(false);
       });
   };

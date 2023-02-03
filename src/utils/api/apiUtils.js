@@ -31,7 +31,6 @@ export async function logServerError(message, metadata = {}) {
 }
 
 export function handleError(error) {
-  console.log("this is error", error);
   let errorMessage = "";
 
   if (error.response) {
