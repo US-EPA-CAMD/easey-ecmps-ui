@@ -331,7 +331,6 @@ describe("DatatableSystemsComponents test suit", () => {
     const viewEditBtns = screen.getAllByText("View / Edit");
     expect(viewEditBtns.length).not.toBe(0);
     fireEvent.click(viewEditBtns[0]);
-    //screen.debug();
   });
   test("tests getMonitoringSystems add component functionality", async () => {
     axios.get.mockImplementation(() =>
