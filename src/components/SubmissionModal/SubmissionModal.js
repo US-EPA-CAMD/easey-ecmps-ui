@@ -38,13 +38,11 @@ export const SubmissionModal = ({
 }) => {
   const modalRef = createRef();
   const selectedNumber = useRef(null);
-
+  const enablePhoneVerification = false;
   const [submissionActionLog, setSubmissionActionLog] = useState({});
-
   const [verifyMethod, setVerifyMethod] = useState("Question");
   const [numbers, setNumbers] = useState([]);
   const [pinVisible, setPinVisible] = useState(false);
-
   const [questionId, setQuestionId] = useState(false);
   const [canCheck, setCanCheck] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -142,7 +140,6 @@ export const SubmissionModal = ({
 
   const submitAuth = async (event) => {
     event.preventDefault();
-    const enablePhoneVerification = false;
 
     const isFormValid = await authFormSchema.isValid(
       { username, password },
