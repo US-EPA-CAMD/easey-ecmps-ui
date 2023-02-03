@@ -651,7 +651,6 @@ const QATestSummaryDataTable = ({
         );
       case 'FLC': // Flow to Load Check
         const flcProps = qaFlowToLoadCheckProps();
-        console.log('Hello');
         return (
           <QAExpandableRowsRender
             payload={flcProps['payload']}
@@ -832,9 +831,6 @@ const QATestSummaryDataTable = ({
           />
         );
       default:
-        console.log(
-          `case testTypeGroupCode of ${testTypeGroupCode} not implemented`
-        );
         return null;
     }
   };

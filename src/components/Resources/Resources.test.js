@@ -61,7 +61,6 @@ describe("Resources: ", () => {
       ];
 
       topics.forEach((topic) => {
-        console.log(topic);
         const button = resources.getByText(topic);
         expect(button).toBeTruthy();
       });
