@@ -83,7 +83,6 @@ export const formatSchemaErrors = (
 ) => {
   setDisablePortBtn(true);
   const formattedErrors = errors.errors.map((error) => {
-    console.log(error, "file errors");
     return error.stack;
   });
   setSchemaErrors(formattedErrors);

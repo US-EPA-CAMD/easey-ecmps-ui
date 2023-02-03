@@ -195,13 +195,11 @@ export const DataTableMats = ({
       mpApi
         .saveMonitoringMats(userInput)
         .then((result) => {
-          console.log(result);
           setShow(false);
           setUpdateTable(true);
           setUpdateRelatedTables(true);
         })
         .catch((error) => {
-          console.log(error);
           setShow(false);
         });
     }
@@ -223,7 +221,6 @@ export const DataTableMats = ({
           setUpdateRelatedTables(true);
         })
         .catch((error) => {
-          console.log(error);
           setShow(false);
         });
     }
