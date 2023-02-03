@@ -354,7 +354,7 @@ describe("functions.js", function () {
         const evalStatusColumn = columns.find(
           (column) => column.name === "Eval Status"
         );
-        expect(evalStatusColumn.cell).toBeDefined();
+        expect(evalStatusColumn).not.toBeDefined();
       });
       it("does not add cell with alert style to non eval status columns", () => {
         const columns = addEvalStatusCell(_.clone(monPlanColumns), () => {});

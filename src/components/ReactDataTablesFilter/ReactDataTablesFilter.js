@@ -1,12 +1,19 @@
-import { Button, TextInput } from "@trussworks/react-uswds";
-import React from "react";
+import { Search } from "@trussworks/react-uswds";
+import React, { useEffect } from "react";
 
-export const FilterComponent = ({ filterText, onSearch, title }) => (
-  <div className="width-full">
+export const FilterComponent = ({ onSearch, title }) => {
+useEffect(()=>{
+  const searchButtons = document.querySelector("#filter-component-wrapper").getElementsByClassName("usa-search__submit-text");
+  for (let i = 0; i < searchButtons.length; i++) {
+    searchButtons[i].textContent = "Filter";
+  }
+},[]);
+
+return(
+  <div id="filter-component-wrapper" className="width-full">
     <h3 className="margin-top-5 text-bold mobile:font-body-xl mobile:text-bold mobile:padding-bottom-1">
       {title}
     </h3>
-    
     <table
       className="float-right clearfix display-none tablet-lg:display-block"
       role="presentation"
@@ -17,30 +24,14 @@ export const FilterComponent = ({ filterText, onSearch, title }) => (
             Filter by keyword:
           </td>
           <td>
-            <TextInput
-              id="txtSearchData"
-              name="txtSearchData"
-              type="text"
+            <Search
+              inputId="search-data"
+              label="Search Data Table"
+              size="big"
               placeholder="Keyword"
               aria-label="Search Input"
-              value={filterText}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  onSearch();
-                }
-              }}
+              onSubmit={onSearch}
             />
-          </td>
-          <td>
-            <Button
-              type="button"
-              onClick={onSearch}
-              id="searchDataTableBTN"
-              epa-testid="searchDataTableBTN"
-              className="position-relative top-05 left-neg-2px radius-left-0 "
-            >
-              Filter
-            </Button>
           </td>
         </tr>
       </tbody>
@@ -56,30 +47,14 @@ export const FilterComponent = ({ filterText, onSearch, title }) => (
         </tr>
         <tr>
           <td>
-            <TextInput
-              id="txtSearchData"
-              name="txtSearchData"
-              type="text"
+            <Search
+              inputId="search-data"
+              label="Search Data Table"
+              size="big"
               placeholder="Keyword"
               aria-label="Search Input"
-              value={filterText}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  onSearch();
-                }
-              }}
+              onSubmit={onSearch}
             />
-          </td>
-          <td>
-            <Button
-              type="button"
-              onClick={onSearch}
-              id="searchDataTableBTN"
-              epa-testid="searchDataTableBTN"
-              className="position-relative top-05 left-neg-1px"
-            >
-              Filter
-            </Button>
           </td>
         </tr>
       </tbody>
@@ -97,34 +72,18 @@ export const FilterComponent = ({ filterText, onSearch, title }) => (
         </tr>
         <tr>
           <td>
-            <TextInput
-              id="txtSearchData"
-              name="txtSearchData"
-              type="text"
+            <Search
+              inputId="search-data"
+              label="Search Data Table"
+              size="small"
               placeholder="Keyword"
               aria-label="Search Input"
-              value={filterText}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  onSearch();
-                }
-              }}
+              onSubmit={onSearch}
             />
-          </td>
-          <td>
-            <Button
-              type="button"
-              onClick={onSearch}
-              id="searchDataTableBTN"
-              epa-testid="searchDataTableBTN"
-              className="position-relative top-05 left-neg-1px"
-            >
-              Filter
-            </Button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-);
+)};
 export default FilterComponent;
