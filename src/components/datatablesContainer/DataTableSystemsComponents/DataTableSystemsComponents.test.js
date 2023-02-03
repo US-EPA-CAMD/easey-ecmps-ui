@@ -327,10 +327,7 @@ describe("DatatableSystemsComponents test suit", () => {
     );
     expect(container).toBeDefined();
     const systemsComponentsTables = screen.getAllByRole('table');
-    //THIS WAS THE ORIGINAL TEST
-    //expect(systemsComponentsTables.length).toBe(4);
-    //ONLY GETTING 2 BACK SO NEED TO LOOK AT WHY
-    expect(systemsComponentsTables.length).toBe(2);
+    expect(systemsComponentsTables.length).toBe(4);
     const viewEditBtns = screen.getAllByText("View / Edit");
     expect(viewEditBtns.length).not.toBe(0);
     fireEvent.click(viewEditBtns[0]);
