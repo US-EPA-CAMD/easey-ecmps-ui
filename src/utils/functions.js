@@ -37,12 +37,12 @@ export const parseBool = (value, defaultValue = false) => {
   return defaultValue;
 };
 
-export const formatDate = (dateString) => {
+export const formatDate = (dateString, delim="-") => {
   const date = new Date(dateString);
   const year = date.getUTCFullYear();
   const month = date.getUTCMonth() + 1;
   const day = date.getUTCDate();
-  const fullDateString = `${month}-${day}-${year}`;
+  const fullDateString = `${month}${delim}${day}${delim}${year}`;
   return fullDateString;
 };
 

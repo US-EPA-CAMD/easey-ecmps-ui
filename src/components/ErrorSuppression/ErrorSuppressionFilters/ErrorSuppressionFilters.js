@@ -79,10 +79,12 @@ export const ErrorSuppressionFilters = () => {
     useEffect(() => {
 
         getCheckCatalogResults().then(({ data }) => {
+            console.log(JSON.stringify(data[0]))
             const _transformedData = transformCheckResultData(data);
             const uniqueTypeCodeAndDesc = getUniqueCheckTypeDescription(_transformedData);
 
             setCheckTypeList(uniqueTypeCodeAndDesc);
+            console.log(_transformedData)
             setTransformedData(_transformedData);
         }).catch(error=>{
             console.error("Error getting Check Catalog Results", error);
