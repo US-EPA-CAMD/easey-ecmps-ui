@@ -776,12 +776,10 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
 
     // for some reason, id and userinput. id are identical in the url
     case qaCertEvent:
-      console.log("id, userInput.id", id, userInput.id);
       return qaApi
         .updateQaCertEvents(id, userInput.id, userInput)
         .catch((error) => console.log("error updating QA cert events", error));
     case qaExeptions:
-      console.log("id, userInput.id trest", id, userInput.id);
       return qaApi
         .updateTestExtension(id, userInput.id, userInput)
         .catch((error) =>

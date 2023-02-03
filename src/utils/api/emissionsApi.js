@@ -85,7 +85,6 @@ export const getEmissionViewData = async (
       ? `${config.services.emissions.uri}/workspace/emissions/views/${viewCode}`
       : `${config.services.emissions.uri}/emissions/views/${viewCode}`
   );
-  console.log(url);
   const searchParams = new URLSearchParams({
     monitorPlanId,
     reportingPeriod: Array.isArray(reportingPeriod)
