@@ -38,6 +38,7 @@ export const SubmissionModal = ({
 }) => {
   const modalRef = createRef();
   const selectedNumber = useRef(null);
+  const enablePhoneVerification = false;
 
   const [submissionActionLog, setSubmissionActionLog] = useState({});
 
@@ -402,17 +403,19 @@ export const SubmissionModal = ({
                           }}
                         />
 
-                        <Radio
-                          className="grid-col-12 margin-bottom-1"
-                          id={`text-radio-button`}
-                          name="verify-method"
-                          label={"Send Text Message"}
-                          key={3}
-                          data-testid="radio-text"
-                          onClick={() => {
-                            setVerifyMethod("Text");
-                          }}
-                        />
+                        { enablePhoneVerification && (
+                          <Radio
+                            className="grid-col-12 margin-bottom-1"
+                            id={`text-radio-button`}
+                            name="verify-method"
+                            label={"Send Text Message"}
+                            key={3}
+                            data-testid="radio-text"
+                            onClick={() => {
+                              setVerifyMethod("Text");
+                            }}
+                          />
+                        )}
                       </Fieldset>
                     </div>
 
