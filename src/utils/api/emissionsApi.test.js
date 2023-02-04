@@ -8,7 +8,6 @@ import {
   importEmissionsData,
   getEmissionsReviewSubmit,
 } from "./emissionsApi";
-import { ExpansionPanelActions } from "@material-ui/core";
 
 describe("Emissions API", function () {
   let mock;
