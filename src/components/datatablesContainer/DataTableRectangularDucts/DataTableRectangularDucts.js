@@ -279,7 +279,6 @@ export const DataTableRectangularDucts = ({
           setShow(false);
         })
         .catch((error) => {
-          console.log("error is", error);
           setShow(false);
         });
       setUpdateTable(true);
@@ -301,7 +300,6 @@ export const DataTableRectangularDucts = ({
           setShow(false);
         })
         .catch((error) => {
-          console.log("error is", error);
           setShow(false);
         });
       setUpdateTable(true);

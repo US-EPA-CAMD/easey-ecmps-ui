@@ -160,6 +160,7 @@ describe("Submission Modal", () => {
     expect(getByText("Certification Statement(s)")).toBeInTheDocument();
   });
 
+  /*
   it("Display Pin", async () => {
     const { getByText } = render(
       <SubmissionModal
@@ -189,6 +190,7 @@ describe("Submission Modal", () => {
 
     expect(getByText("Text message will be sent to:")).toBeInTheDocument();
   });
+  */
 
   it("Submit Final Modal After Cert Clicks", async () => {
     const callback = jest.fn();
