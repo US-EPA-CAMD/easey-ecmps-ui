@@ -399,7 +399,8 @@ export const SubmissionModal = ({
                             setVerifyMethod("Question");
                           }}
                         />
-                        {enablePhoneVerification && (
+
+                        { enablePhoneVerification && (
                           <Radio
                             className="grid-col-12 margin-bottom-1"
                             id={`text-radio-button`}
