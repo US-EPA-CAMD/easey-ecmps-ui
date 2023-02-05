@@ -161,13 +161,13 @@ describe("ErrorSuppressionDataContainer component", () => {
 
     it("Has the correctly formatted data for Match Time Criteria", ()=>{
         // when matchTimeTypeCode=QUARTER
-        expect(screen.queryByText("2011 Q1 - 2011 Q4"));
+        expect(screen.queryByText("2011 Q1 - 2011 Q4")).toBeDefined();
         // when matchTimeTypeCode=DATE
-        expect(screen.queryByText("10/25/2011 - 11/25/2011"));
+        expect(screen.queryByText("10/25/2011 - 11/25/2011")).toBeDefined();
         // when matchTimeTypeCode=HOUR
-        expect(screen.queryByText("10/25/2011 11:26:32 - 11/25/2011 11:26:32"));
+        expect(screen.queryByText("10/25/2011 11:26:32 - 11/25/2011 11:26:32")).toBeDefined();
         // when matchTimeTypeCode=HISTIND
-        expect(screen.queryByText("Historical"));
+        expect(screen.queryByText("Historical")).toBeDefined();
     })
 
 })

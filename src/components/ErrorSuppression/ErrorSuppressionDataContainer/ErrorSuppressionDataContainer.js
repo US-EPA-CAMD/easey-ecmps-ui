@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import { Button } from "@trussworks/react-uswds";
 import { AddErrorSupressionModal } from "../AddErrorSuppressionModal/AddErrorSuppressionModal";
 import DataTable from "react-data-table-component";
@@ -6,7 +6,6 @@ import { getErrorSuppressionRecords } from "../../../utils/api/errorSuppressionA
 import { ErrorSuppressionFiltersContext } from "../error-suppression-context";
 import "./ErrorSuppressionDataContainer.scss"
 import { formatDate, getQuarter } from "../../../utils/functions";
-import { ContactsOutlined } from "@material-ui/icons";
 
 export const ErrorSuppressionDataContainer = () => {
     const { checkType, checkNumber, checkResult, } = useContext(ErrorSuppressionFiltersContext);
@@ -77,8 +76,13 @@ export const ErrorSuppressionDataContainer = () => {
         return `${formatDate(dateString, "/")} ${date.getHours()}:${date.getMinutes()}:${date.getMinutes()}`
     }
 
+    const getCheckbox = useCallback((row, idx, )=>{
+
+        return <input checked={row.selected} key={idx} data-testid={`select-cb-${idx}`} type="checkbox" className="usa-checkbox" aria-label="Select" onChange={(e) => onRowSelection(row, e.target.checked)} />
+    }, [])
+
     const columns = [
-        { name: "Select", maxWidth:"100px", cell: (row, idx) => <input checked={row.selected} key={idx} data-testid={`select-cb-${idx}`} type="checkbox" className="usa-checkbox" aria-label="Select" onChange={(e) => onRowSelection(row, e.target.checked)} /> },
+        { name: "Select", maxWidth:"100px", cell: (row, idx) => getCheckbox(row, idx) },
         { name: "Severity", maxWidth:"150px", selector: (row) => row.severityCode },
         { name: "Facility Name/ID", selector: (row) => row.orisCode },
         { name: "Locations", selector: (row) => row.locations },
@@ -113,7 +117,7 @@ export const ErrorSuppressionDataContainer = () => {
                 We may be able to remove this once we implement the table */}
             {showModal ? <AddErrorSupressionModal showModal={showModal} close={() => setShowModal(false)} /> : null}
             <div className="padding-left-0 margin-left-0 padding-right-0">
-                <div className="grid-row row-width">
+                <div className="grid-row row-width">    
                     <div className="grid-col-5">
                         <span className="data-container-header">Add Suppression</span>
                     </div>

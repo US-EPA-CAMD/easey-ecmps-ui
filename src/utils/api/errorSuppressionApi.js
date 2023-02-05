@@ -1,8 +1,7 @@
 import axios from "axios";
 import config from "../../config";
-import { handleError, handleResponse, handleImportError } from "./apiUtils";
+import { handleError, handleResponse } from "./apiUtils";
 import { secureAxios } from "./easeyAuthApi";
-import download from "downloadjs";
 
 axios.defaults.headers.common = {
     "x-api-key": config.app.apiKey,

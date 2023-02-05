@@ -79,7 +79,6 @@ export const ErrorSuppressionFilters = () => {
     useEffect(() => {
 
         getCheckCatalogResults().then(({ data }) => {
-            console.log(JSON.stringify(data[0]))
             const _transformedData = transformCheckResultData(data);
             const uniqueTypeCodeAndDesc = getUniqueCheckTypeDescription(_transformedData);
 
