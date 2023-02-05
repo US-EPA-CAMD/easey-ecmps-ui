@@ -7,12 +7,11 @@ describe("renders datatable search ", () => {
   test("clicks search btn", () => {
     const { container } = render(
       <FilterComponent
-        filterText={"test"}
         onSearch={jest.fn()}
         title={"test"}
       />
     );
-    const input = container.querySelectorAll("#txtSearchData");
+    const input = container.querySelectorAll("#search-data");
 
     input.forEach((element) => {
       fireEvent.keyDown(element, { keyCode: 13, key: "Enter" });
