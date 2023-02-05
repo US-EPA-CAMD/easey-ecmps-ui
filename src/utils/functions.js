@@ -255,3 +255,13 @@ export const getPreviouslyFullSubmitedQuarter = (dateString = null) => {
 
   return `${year} ${previouslyCompletedQuarter}`;
 };
+
+/**
+ * January 1st - March 31st  = First Quarter
+ * April 1st - June 30th = Second Quarter
+ * July 1st - September 30th = Third Quarter
+ * October 1st - December 31st = Fourth Quarter
+ */
+export const getQuarter = (date = new Date()) => {
+  return Math.floor(date.getMonth() / 3 + 1);
+}

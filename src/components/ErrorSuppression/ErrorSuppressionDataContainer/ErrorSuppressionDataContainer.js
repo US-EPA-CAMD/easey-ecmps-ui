@@ -18,7 +18,7 @@ export const ErrorSuppressionDataContainer = () => {
         { name: "Severity", selector: (row) => row.severityCode },
         { name: "Facility Name/ID", selector: (row, idx) => row.orisCode },
         { name: "Locations", selector: (row) => row.locations },
-        { name: "Criteria", selector: (row) => row.id }, // ??
+        { name: "Match Data Criteria", selector: (row) => "" + row.matchDataTypeCode + (row.matchDataValue ?  ":"+row.matchDataValue : "") }, // ??
         { name: "Reason", selector: (row) => row.reasonCode },
         { name: "Status", selector: (row) => row.active ? "Active" : "Inactive" },
         { name: "Note", selector: (row) => row.note },
@@ -56,18 +56,24 @@ export const ErrorSuppressionDataContainer = () => {
                 We may be able to remove this once we implement the table */}
             {showModal ? <AddErrorSupressionModal showModal={showModal} close={() => setShowModal(false)} /> : null}
             <div className="padding-left-0 margin-left-0 padding-right-0">
-                <div className="grid-row grid-gap width-tablet">
-                    <div className="grid-col-5"><span className="data-container-header">Add Suppression</span></div>
-                    <div className="grid-col-2"><Button className="margin-left-1" onClick={() => setShowModal(true)}>Add</Button></div>
-                    <div className="grid-col-2"><Button disabled={selectedRows.length > 1}>Clone</Button></div>
-                    <div className="grid-col-2"><Button>Deactivate</Button></div>
+                <div className="grid-row row-width">
+                    <div className="grid-col-5">
+                        <span className="data-container-header">Add Suppression</span>
+                    </div>
+                    <div className="grid-col-2">
+                        <Button aria-label="Add" data-testid="es-add" className="margin-left-1" onClick={() => setShowModal(true)}>Add</Button>
+                    </div>
+                    <div className="grid-col-2">
+                        <Button aria-label="Clone" data-testid="es-clone" disabled={selectedRows.length > 1}>Clone</Button>
+                    </div>
+                    <div className="grid-col-2">
+                        <Button aria-label="Deactivate" data-testid="es-deactivate">Deactivate</Button>
+                    </div>
                 </div>
                 <DataTable
-                    id="es-table"
                     columns={columns}
                     data={tableData}
                     className={`data-display-table react-transition fade-in overflow-x-scroll`}
-
                 />
             </div>
         </div>
