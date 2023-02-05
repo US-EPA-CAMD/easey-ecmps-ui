@@ -1,0 +1,9 @@
+instances: 2
+environment: performance
+host: ecmps-perf.app.cloud.gov
+apiHost: api.epa.gov/easey/perf
+inactivityDurationCheckoutMinutes: 15
+inactivityDurationLogoutMinutes: 15
+cdxBaseUrl: test.epacdx.net
+cbsBaseUrl: camd.epa.gov
+
