@@ -82,7 +82,7 @@ describe("testing monitoring plan data selectors", () => {
         id: "CAMD-18DD175CE7EF4256B78469865D84F576",
         unitId: "1",
         stackName: "test",
-        stackPipeId: "MDC-CCB8D6D0D4E34D24A99C01DCD14078DF",
+        stackPipeId: "CS0AAN",
         beginDate: "1995-01-01T00:00:00.000Z",
         endDate: "1995-01-01T00:00:00.000Z",
         userId: "PQA09Q1",
@@ -94,7 +94,7 @@ describe("testing monitoring plan data selectors", () => {
         id: "CAMD-18DD175CE7EF4256B78469865D84F576",
         unitId: "1",
         stackName: "test",
-        stackPipeId: "MDC-CCB8D6D0D4E34D24A99C01DCD14078DF",
+        stackPipeId: "CS0AAN",
         beginDate: null,
         endDate: null,
         userId: "PQA09Q1",
@@ -105,14 +105,14 @@ describe("testing monitoring plan data selectors", () => {
     ];
     monitoringDataTableRecodsRelationship = [
       {
-        col1: "MDC-CCB8D6D0D4E34D24A99C01DCD14078DF",
+        col1: "CS0AAN",
         col2: "1",
         col3: "01/01/1995",
         col4: "01/01/1995",
         col5: "CAMD-18DD175CE7EF4256B78469865D84F576",
       },
       {
-        col1: "MDC-CCB8D6D0D4E34D24A99C01DCD14078DF",
+        col1: "CS0AAN",
         col2: "1",
         col3: "",
         col4: "",
