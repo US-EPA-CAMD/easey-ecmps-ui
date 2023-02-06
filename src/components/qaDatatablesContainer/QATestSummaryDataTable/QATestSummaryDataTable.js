@@ -64,6 +64,8 @@ const QATestSummaryDataTable = ({
   sectionSelect,
   selectedLocation,
   locations,
+  updateTable,
+  setUpdateTable
 }) => {
   const [loading, setLoading] = useState(false);
   const [mdmData, setMdmData] = useState(null);
@@ -82,7 +84,7 @@ const QATestSummaryDataTable = ({
   const [createNewData, setCreateNewData] = useState(false);
   const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
 
-  const [updateTable, setUpdateTable] = useState(false);
+  // setUpdateTable(updateTable ? updateTable : false)
 
   const [allTestTypeCodes, setAllTestTypeCodes] = useState(null);
   const selectText = '-- Select a value --';

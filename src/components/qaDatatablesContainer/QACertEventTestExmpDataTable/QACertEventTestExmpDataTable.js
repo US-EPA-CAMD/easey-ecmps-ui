@@ -457,7 +457,6 @@ const QACertEventTestExmpDataTable = ({
   };
 
   const saveData = async (row) => {
-    let selectedData = {};
     const userInput = extractUserInput(payload, ".modalUserInput");
 
     assertSelector
@@ -485,6 +484,7 @@ const QACertEventTestExmpDataTable = ({
       userInput.stackPipeId = String(userInput.stackPipeId);
       userInput.unitId = null;
     }
+    
     assertSelector
       .createDataSwitch(userInput, dataTableName, locationSelectValue)
       .then((res) => {
