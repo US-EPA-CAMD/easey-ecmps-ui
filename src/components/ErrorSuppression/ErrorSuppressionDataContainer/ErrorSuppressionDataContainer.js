@@ -3,7 +3,7 @@ import { Button } from "@trussworks/react-uswds";
 import { AddErrorSupressionModal } from "../AddErrorSuppressionModal/AddErrorSuppressionModal";
 import DataTable from "react-data-table-component";
 import { getErrorSuppressionRecords } from "../../../utils/api/errorSuppressionApi";
-import { ErrorSuppressionFiltersContext } from "../error-suppression-context";
+import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import "./ErrorSuppressionDataContainer.scss"
 import { formatDate, getQuarter } from "../../../utils/functions";
 

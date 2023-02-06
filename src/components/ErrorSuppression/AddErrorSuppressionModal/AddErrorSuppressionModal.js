@@ -6,7 +6,7 @@ import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getReportingPeriods } from "../../HeaderInfo/HeaderInfo";
 import { getSeverityCodes } from "../../../utils/api/mdmApi";
 import { defaultDropdownText } from "../ErrorSuppression";
-import { ErrorSuppressionFiltersContext } from "../error-suppression-context";
+import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import { getUniqueCheckTypeDescription } from "../ErrorSuppressionFilters/ErrorSuppressionFilters";
 
 export const AddErrorSupressionModal = ({ showModal, close }) => {
