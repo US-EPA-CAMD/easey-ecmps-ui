@@ -3,14 +3,14 @@ export const getMonitoringPlansLocationAttributeRecords = (totalData) => {
   const records = [];
 
   data.forEach((el) => {
-    var ductIndicator;
+    let ductIndicator;
     if (el.ductIndicator && el.ductIndicator === 1) {
       ductIndicator = "Yes";
     } else {
       ductIndicator = "No";
     }
 
-    var bypassIndicator;
+    let bypassIndicator;
     if (el.bypassIndicator && el.bypassIndicator === 1) {
       bypassIndicator = "Yes";
     } else {
