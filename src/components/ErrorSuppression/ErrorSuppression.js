@@ -22,7 +22,7 @@ export const ErrorSuppression = () => {
           <hr/>
           <ErrorSuppressionFiltersContextProvider>
             <ErrorSuppressionFilters/>
-            <hr/>
+            <hr className="margin-top-4 margin-bottom-4"/>
             <ErrorSuppressionDataContainer />
           </ErrorSuppressionFiltersContextProvider>
         </div>

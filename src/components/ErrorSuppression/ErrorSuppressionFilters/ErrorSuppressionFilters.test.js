@@ -11,36 +11,36 @@ describe("ErrorSuppressionFilters component", () => {
 
     const mock = new MockAdapter(axios);
 
-    beforeEach( async() => {
+    beforeEach(async () => {
         mock
-        .onGet(`${config.services.mdm.uri}/es-reason-codes`)
-        .reply(200, [{"errorSuppressionReasonCode":"BUG","errorSuppressionReasonDescription":"Application Bug"}]);
+            .onGet(`${config.services.mdm.uri}/es-reason-codes`)
+            .reply(200, [{ "errorSuppressionReasonCode": "BUG", "errorSuppressionReasonDescription": "Application Bug" }]);
 
         mock
-        .onGet(`${config.services.facilities.uri}/facilities`)
-        .reply(200, [{"facilityRecordId":1,"facilityId":3,"facilityName":"Barry","stateCode":"AL"}]);
+            .onGet(`${config.services.facilities.uri}/facilities`)
+            .reply(200, [{ "facilityRecordId": 1, "facilityId": 3, "facilityName": "Barry", "stateCode": "AL" }]);
 
         mock
-        .onGet(`${config.services.mdm.uri}/es-check-catalog-results`)
-        .reply(200, [
-            {
-                "id": "5003",
-                "checkTypeCode": "ADESTAT",
-                "checkTypeDescription": "Appendix D and E Status",
-                "checkNumber": "6",
-                "checkResult": "Accuracy Test Not Yet Evaluated",
-                "locationTypeCode": "LOC",
-                "timeTypeCode": "HOUR",
-                "dataTypeCode": "FUELTYP",
-                "dataTypeLabel": "Fuel Type",
-                "dataTypeUrl": "/master-data-mgmt/fuel-type-codes"
-            }]);
+            .onGet(`${config.services.mdm.uri}/es-check-catalog-results`)
+            .reply(200, [
+                {
+                    "id": "5003",
+                    "checkTypeCode": "ADESTAT",
+                    "checkTypeDescription": "Appendix D and E Status",
+                    "checkNumber": "6",
+                    "checkResult": "Accuracy Test Not Yet Evaluated",
+                    "locationTypeCode": "LOC",
+                    "timeTypeCode": "HOUR",
+                    "dataTypeCode": "FUELTYP",
+                    "dataTypeLabel": "Fuel Type",
+                    "dataTypeUrl": "/master-data-mgmt/fuel-type-codes"
+                }]);
 
-            await act(async () => {
-                render(<ErrorSuppressionFiltersContextProvider>
-                                <ErrorSuppressionFilters />
-                            </ErrorSuppressionFiltersContextProvider>)
-            });
+        await act(async () => {
+            render(<ErrorSuppressionFiltersContextProvider>
+                <ErrorSuppressionFilters />
+            </ErrorSuppressionFiltersContextProvider>)
+        });
     })
 
     it('renders Check Type', () => {

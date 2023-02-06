@@ -37,12 +37,12 @@ export const parseBool = (value, defaultValue = false) => {
   return defaultValue;
 };
 
-export const formatDate = (dateString) => {
+export const formatDate = (dateString, delim="-") => {
   const date = new Date(dateString);
   const year = date.getUTCFullYear();
   const month = date.getUTCMonth() + 1;
   const day = date.getUTCDate();
-  const fullDateString = `${month}-${day}-${year}`;
+  const fullDateString = `${month}${delim}${day}${delim}${year}`;
   return fullDateString;
 };
 
@@ -255,3 +255,13 @@ export const getPreviouslyFullSubmitedQuarter = (dateString = null) => {
 
   return `${year} ${previouslyCompletedQuarter}`;
 };
+
+/**
+ * January 1st - March 31st  = First Quarter
+ * April 1st - June 30th = Second Quarter
+ * July 1st - September 30th = Third Quarter
+ * October 1st - December 31st = Fourth Quarter
+ */
+export const getQuarter = (date = new Date()) => {
+  return Math.floor(date.getMonth() / 3 + 1);
+}
