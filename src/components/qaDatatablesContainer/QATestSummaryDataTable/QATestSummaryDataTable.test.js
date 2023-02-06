@@ -484,6 +484,12 @@ const initialState = {
 const store = configureStore(initialState);
 
 const componentRender = (show, testTypeGroupCodeValue) => {
+  let updateRelatedTables = false;
+
+  function setUpdateRelatedTables(update) {
+    updateRelatedTables = update; 
+  };
+
   return render(
     <QATestSummaryDataTable
       locationSelectValue={locId}
@@ -511,6 +517,8 @@ const componentRender = (show, testTypeGroupCodeValue) => {
           nonLoadBasedIndicator: 0,
         },
       ]}
+      updateTable={updateRelatedTables}
+      setUpdateTable={setUpdateRelatedTables}
     />
   );
 };
