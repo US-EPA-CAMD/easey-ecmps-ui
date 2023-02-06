@@ -58,6 +58,8 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
 
         getSeverityCodes().then(({ data }) => {
             setSeverityCodeList(data);
+        }).catch(error=>{
+            console.log("Error getting Severity Codes", error);
         });
 
         setLocationData([
