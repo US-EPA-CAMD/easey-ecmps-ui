@@ -5,22 +5,22 @@ export const getMonitoringPlansLocationAttributeRecords = (totalData) => {
   data.forEach((el) => {
     var ductIndicator;
     if (el.ductIndicator && el.ductIndicator === 1) {
-      ductIndicator = 'Yes';
+      ductIndicator = "Yes";
     } else {
-      ductIndicator = 'No';
+      ductIndicator = "No";
     }
 
     var bypassIndicator;
     if (el.bypassIndicator && el.bypassIndicator === 1) {
-      bypassIndicator = 'Yes';
+      bypassIndicator = "Yes";
     } else {
-      bypassIndicator = 'No';
+      bypassIndicator = "No";
     }
 
     const beginDate = el.beginDate
       ? formatStringToDate(el.beginDate.toString())
-      : '';
-    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : '';
+      : "";
+    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
     records.push({
       col1: ductIndicator,
       col2: bypassIndicator,
@@ -46,12 +46,12 @@ export const getMonitoringPlansRelationshipsDataRecords = (totalData) => {
   data.forEach((el) => {
     const beginDate = el.beginDate
       ? formatStringToDate(el.beginDate.toString())
-      : '';
-    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : '';
+      : "";
+    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
 
     records.push({
-      col1: el.stackPipeRecordId,
-      col2: el.unitRecordId,
+      col1: el.stackPipeId,
+      col2: el.unitId,
       col3: `${beginDate}`,
       col4: `${endDate}`,
       col5: el.id,
@@ -62,8 +62,8 @@ export const getMonitoringPlansRelationshipsDataRecords = (totalData) => {
 
 // year - month - day to  month / day/ year
 const formatStringToDate = (date) => {
-  const splitDate = date.split('T');
-  const parts = splitDate[0].split('-');
+  const splitDate = date.split("T");
+  const parts = splitDate[0].split("-");
   //Removes the time component from the Day part
   return `${parts[1]}/${parts[2].substring(0, 2)}/${parts[0]}`;
 };

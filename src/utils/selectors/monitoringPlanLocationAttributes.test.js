@@ -80,9 +80,9 @@ describe("testing monitoring plan data selectors", () => {
     selectedDataRelationship = [
       {
         id: "CAMD-18DD175CE7EF4256B78469865D84F576",
-        unitRecordId: "1",
+        unitId: "1",
         stackName: "test",
-        stackPipeRecordId: "MDC-CCB8D6D0D4E34D24A99C01DCD14078DF",
+        stackPipeId: "MDC-CCB8D6D0D4E34D24A99C01DCD14078DF",
         beginDate: "1995-01-01T00:00:00.000Z",
         endDate: "1995-01-01T00:00:00.000Z",
         userId: "PQA09Q1",
@@ -92,9 +92,9 @@ describe("testing monitoring plan data selectors", () => {
       },
       {
         id: "CAMD-18DD175CE7EF4256B78469865D84F576",
-        unitRecordId: "1",
+        unitId: "1",
         stackName: "test",
-        stackPipeRecordId: "MDC-CCB8D6D0D4E34D24A99C01DCD14078DF",
+        stackPipeId: "MDC-CCB8D6D0D4E34D24A99C01DCD14078DF",
         beginDate: null,
         endDate: null,
         userId: "PQA09Q1",
