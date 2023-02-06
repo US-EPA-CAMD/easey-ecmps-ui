@@ -70,7 +70,7 @@ const QACertEventTestExmpDataTable = ({
     };
   });
 
-  const years = generateArrayOfYears(2000).map((year, index) => {
+  const years = generateArrayOfYears(2009).map((year, index) => {
     return {
       code: year,
       name: year,

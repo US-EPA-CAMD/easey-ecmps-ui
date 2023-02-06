@@ -106,7 +106,6 @@ const ImportModal = ({
     if (fileTypeManual[fileTypeManual.length - 1] !== "json") {
       setHasFormatError(true);
       setDisablePortBtn(true);
-      console.log(".json file incorrect");
     } else {
       setFileName(name);
       readFile(event);
@@ -177,7 +176,6 @@ const ImportModal = ({
       setImportedFile(fileLoaded);
       checkingCorrectSchema(fileLoaded,workspaceSection,errorChecks,setSchemaErrors,qaSchema,mpSchema,emSchema,setDisablePortBtn);
     } catch (e) {
-      console.log("invalid json file error: ", e);
       setHasInvalidJsonError(true);
       setHasFormatError(false);
       setDisablePortBtn(true);
