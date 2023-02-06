@@ -51,6 +51,7 @@ export const QAImportHistoricalDataPreview = ({
           reportingPeriodObj.endDate,
           selectedTestCode.testTypeCodes,
           true,
+          true,
         );
         if (response) {
           setTestSummaryData(response.data.testSummaryData);
