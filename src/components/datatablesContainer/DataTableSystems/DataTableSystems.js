@@ -81,6 +81,10 @@ export const DataTableSystems = ({
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
 
+  // modal add component selection
+  const [selectedUnlinkedComponent, setSelectedUnlinkedComponent] = useState(
+  []
+  );
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
     if (dataLoaded && dropdownsLoaded) {
@@ -640,7 +644,6 @@ export const DataTableSystems = ({
   useEffect(() => {
     assignFocusEventListeners();
   }, [inactive, data]);
-
   const [openFuelFlowsView, setOpenFuelFlowsView] = React.useState(false);
   return (
     <>
@@ -804,6 +807,7 @@ export const DataTableSystems = ({
                 ? "Create New Component"
                 : null
             }
+            disableExitBtn=  {selectedUnlinkedComponent.length === 0 ? true: false}
             breadCrumbBar={currentBar}
             title={`System: ${selected[0]["value"]}`}
             // exitBTN={createBTN}
@@ -864,6 +868,8 @@ export const DataTableSystems = ({
                   setAddCompThirdLevelCreateTrigger={
                     setAddCompThirdLevelCreateTrigger
                   }
+                  setSelectedUnlinkedComponent = {setSelectedUnlinkedComponent}
+                  selectedUnlinkedComponent = {selectedUnlinkedComponent}
                   backToFirstLevelLevelBTN={backToFirstLevelLevelBTN}
                   setCurrentBar={setCurrentBar}
                   openFuelFlowsView={openFuelFlowsView}

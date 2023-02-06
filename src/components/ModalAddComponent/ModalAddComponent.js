@@ -26,20 +26,33 @@ const ModalAddComponent = ({
     if (comps.length < 1) {
       mpApi.getMonitoringComponents(locationId).then((res) => {
         setComps(res.data);
+        console.log("sys", res.data);
       });
       mpApi
         .getMonitoringSystemsComponents(locationId, systemId)
         .then((ress) => {
           setSysComps(ress.data);
+          console.log("syscomps", ress.data);
         });
     } else {
       main = comps;
 
-      sysComps.forEach((x) => {
-        main = main.filter((y) => y.id !== x.componentRecordId);
-      });
-      setFilteredComps(main);
+      if (sysComps.length >= 1) {
+        sysComps.forEach((x) => {
+          main = main.filter((y) => y.id !== x.componentRecordId);
+        });
+        console.log("filtered out", main);
+        console.log("sysComps in else", sysComps);
+        setFilteredComps(main);
+      }
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [comps, sysComps]);
+  useEffect(() => {
+
+    let options = [];
+
 
     if (filteredComps.length >= 1 && unlinkedComponentsOptions.length < 1) {
       options = filteredComps.map((option) => {
@@ -53,10 +66,11 @@ const ModalAddComponent = ({
       setUnlinkedComponentsOptions(options);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [comps, sysComps]);
+  }, [filteredComps]);
 
   const selectingCompHandler = (val) => {
     selectionHandler(filteredComps.filter((x) => x.id === val));
+    console.log("val", val, filteredComps);
   };
 
   const hyphenatedCaption = caption
