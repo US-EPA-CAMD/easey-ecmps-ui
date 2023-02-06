@@ -30,8 +30,8 @@ describe("testing monitoring plan data selectors", () => {
       {
         id: "MDC-B8C0FC059D434C1FB0878FF68505C406",
         locationId: "5",
-        ductIndicator: null,
-        bypassIndicator: null,
+        ductIndicator: "1",
+        bypassIndicator: "1",
         groundElevation: "21",
         stackHeight: "600",
         materialCode: "OTHER",
