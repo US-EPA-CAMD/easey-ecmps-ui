@@ -37,7 +37,6 @@ export const MonitoringPlanTab = ({
   workspaceSection,
 }) => {
   const getCurrentTab = () => {
-    console.log('tab',tabs,'selected',selectedConfig)
     return tabs.find((tab) => tab.selectedConfig.id === selectedConfig.id);
   };
   const getCurrentTabIndex = () => {

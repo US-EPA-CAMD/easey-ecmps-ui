@@ -92,14 +92,12 @@ export const HelpSupport = () => {
       sendNotificationEmail(payload)
         // Successful submission
         .then((res) => {
-          console.log(res);
           setSubmitStatus(true);
           setSubmitted(true);
         })
 
         // Error returned
         .catch((error) => {
-          console.log(error);
           setSubmitStatus(false);
           setSubmitted(true);
           setEmailErrorMsg(
