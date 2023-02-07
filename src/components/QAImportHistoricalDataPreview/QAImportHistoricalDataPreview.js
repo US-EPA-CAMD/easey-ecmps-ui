@@ -50,7 +50,10 @@ export const QAImportHistoricalDataPreview = ({
           reportingPeriodObj.beginDate,
           reportingPeriodObj.endDate,
           selectedTestCode.testTypeCodes,
-          true,
+          {
+            isOfficial: true,
+            isHistoricalImport: true
+          }
         );
         if (response) {
           setTestSummaryData(response.data.testSummaryData);
