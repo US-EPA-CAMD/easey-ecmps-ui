@@ -192,16 +192,28 @@ export const exportQA = async (
   stackPipeIds,
   beginDate,
   endDate,
-  isOfficial
+  testTypeCodes,
+  options={
+    isOfficial: Boolean,
+    isHistoricalImport: Boolean
+  }
 ) => {
   let url;
 
-  if (isOfficial) {
+  if (options.isOfficial) {
     url = `${config.services.qaCertification.uri}/export?facilityId=${facilityId}`;
   } else {
     url = getApiUrl(`/export?facilityId=${facilityId}`);
   }
 
+  if (options.isHistoricalImport) {
+    url = `${url}&qaTestExtensionExemptionIds=null&qaCertificationEventIds=null`
+  }
+
+  if (testTypeCodes?.length > 0) {
+    const testTypeCodesQueryParam = testTypeCodes.join("|");
+    url = `${url}&testTypeCodes=${testTypeCodesQueryParam}`;
+  }
   if (unitIds?.length > 0) {
     const unitIdsQueryParam = unitIds.join("|");
     url = `${url}&unitIds=${unitIdsQueryParam}`;
