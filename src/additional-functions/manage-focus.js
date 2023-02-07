@@ -79,10 +79,8 @@ export const returnFocusToLast = () => {
       while (document.activeElement !== selectedFocus && counter < 5) {
         if(selectedFocus){
           selectedFocus.focus();
-          console.log("selectedFocus.focus()")
         } else {// might need to check for an edge case when the array is empty
           window["lastFocusedArray"][0].focus()
-          console.log("did not find lastfocus id element");
         }
         counter++;
       }

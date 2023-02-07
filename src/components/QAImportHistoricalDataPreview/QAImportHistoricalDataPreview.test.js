@@ -130,7 +130,7 @@ const reportingPeriods = [
   }
 ]
 
-const getExportQAUrl = `${config.services.qaCertification.uri}/export?facilityId=${facId}&beginDate=${beginDate}&endDate=${endDate}`
+const getExportQAUrl = `${config.services.qaCertification.uri}/export?testTypeCodes=${testSummaryData[0].testTypeCode, testSummaryData[1].testTypeCode}facilityId=${facId}&beginDate=${beginDate}&endDate=${endDate}`
 const getReportingPeriodUrl = `${config.services.mdm.uri}/reporting-periods`
 // https://api.epa.gov/easey/dev/master-data-mgmt/reporting-periods?export=true
 const getReportingPeriodExportUrl = `${config.services.mdm.uri}/reporting-periods?export=true`

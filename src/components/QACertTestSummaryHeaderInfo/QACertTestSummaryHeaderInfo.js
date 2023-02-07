@@ -45,6 +45,7 @@ export const QACertTestSummaryHeaderInfo = ({
   locationSelect,
   locations,
   setSelectedTestCode,
+  selectedTestCode,
   ///
   setUpdateRelatedTables,
 }) => {
@@ -257,10 +258,12 @@ export const QACertTestSummaryHeaderInfo = ({
   };
 
   const importQABtn = (payload) => {
+    setIsLoading(true);
+    setFinishedLoading(false);
     importQA(payload)
       .then((response) => {
+        setShowImportModal(true)
         setUsePortBtn(true);
-        setIsLoading(true);
         if (response) {
           setImportedFileErrorMsgs(response);
         }
@@ -598,6 +601,7 @@ export const QACertTestSummaryHeaderInfo = ({
               setFileName={setFileName}
               setDisablePortBtn={setDisablePortBtn}
               orisCode={orisCode}
+              selectedTestCode={selectedTestCode}
             />
           }
         />

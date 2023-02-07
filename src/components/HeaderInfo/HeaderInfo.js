@@ -507,9 +507,6 @@ export const HeaderInfo = ({
         // if refresh timeout is reached,
         // then refresh the header (will automatically clear the open interval)
         if (totalTime >= config.app.refreshEvalStatusTimeout) {
-          console.log(
-            "Evaluation status refresh timeout reached.\nRefreshing header and stopping interval..."
-          );
           setEvalStatusLoaded(false);
           setDataLoaded(false);
         }

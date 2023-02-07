@@ -47,16 +47,12 @@ export const Tabs = ({
           )
         ) {
           mpApi.deleteCheckInMonitoringPlanConfiguration(configId).then(() => {
-            console.log("X button - checked-in configuration: " + configId);
             if (setCheckout) {
               setCheckout(false, configId, workspaceSection);
             }
             removeTab(index);
           });
         } else {
-          console.log(
-            "X button - cannot check-in configuration that you do not have checked-out"
-          );
           removeTab(index);
         }
       });

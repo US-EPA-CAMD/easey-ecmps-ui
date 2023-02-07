@@ -84,15 +84,22 @@ export const ErrorSuppressionFilters = () => {
             const uniqueTypeCodeAndDesc = getUniqueCheckTypeDescription(_transformedData);
 
             setCheckTypeList(uniqueTypeCodeAndDesc);
+            console.log(_transformedData)
             setTransformedData(_transformedData);
+        }).catch(error=>{
+            console.error("Error getting Check Catalog Results", error);
         })
 
         getAllFacilities().then(({ data }) => {
             setFacilityList(data.map(f => ({ orisCode: f.facilityId, facilityName: f.facilityName })));
+        }).catch(error=>{
+            console.error("Error getting facilities", error)
         })
 
         getReasonCodes().then(({ data }) => {
             setReasonCodeList(data)
+        }).catch(error=>{
+            console.log("Error getting reason codes", error)
         })
 
         return () => {

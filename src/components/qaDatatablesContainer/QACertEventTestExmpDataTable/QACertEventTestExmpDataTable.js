@@ -70,7 +70,7 @@ const QACertEventTestExmpDataTable = ({
     };
   });
 
-  const years = generateArrayOfYears(2000).map((year, index) => {
+  const years = generateArrayOfYears(2009).map((year, index) => {
     return {
       code: year,
       name: year,
@@ -457,7 +457,6 @@ const QACertEventTestExmpDataTable = ({
   };
 
   const saveData = async (row) => {
-    let selectedData = {};
     const userInput = extractUserInput(payload, ".modalUserInput");
 
     assertSelector
@@ -477,7 +476,7 @@ const QACertEventTestExmpDataTable = ({
   };
 
   const createData = () => {
-    const userInput = extractUserInput({}, ".modalUserInput");
+    const userInput = extractUserInput(payload, ".modalUserInput");
     if (userInput.unitId) {
       userInput.unitId = String(userInput.unitId);
       userInput.stackPipeId = null;
@@ -485,6 +484,7 @@ const QACertEventTestExmpDataTable = ({
       userInput.stackPipeId = String(userInput.stackPipeId);
       userInput.unitId = null;
     }
+    
     assertSelector
       .createDataSwitch(userInput, dataTableName, locationSelectValue)
       .then((res) => {
