@@ -30,6 +30,7 @@ const configurations = [
       ],
     },
   ];
+  const orisCode = [1,3];
 
 describe("ErrorSuppressionFilters component", () => {
 
@@ -59,6 +60,10 @@ describe("ErrorSuppressionFilters component", () => {
                     "dataTypeLabel": "Fuel Type",
                     "dataTypeUrl": "/master-data-mgmt/fuel-type-codes"
                 }]);
+
+        mock
+          .onGet(`${config.services.monitorPlans.uri}/configurations?orisCodes=${orisCode.join("|")}`)
+          .reply(200, configurations);
 
         await act(async () => {
             render(<ErrorSuppressionFiltersContextProvider>
