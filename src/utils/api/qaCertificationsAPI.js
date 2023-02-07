@@ -193,18 +193,20 @@ export const exportQA = async (
   beginDate,
   endDate,
   testTypeCodes,
-  isOfficial,
-  isHistoricalImport,
+  options={
+    isOfficial: Boolean,
+    isHistoricalImport: Boolean
+  }
 ) => {
   let url;
 
-  if (isOfficial) {
+  if (options.isOfficial) {
     url = `${config.services.qaCertification.uri}/export?facilityId=${facilityId}`;
   } else {
     url = getApiUrl(`/export?facilityId=${facilityId}`);
   }
 
-  if (isHistoricalImport) {
+  if (options.isHistoricalImport) {
     url = `${url}&qaTestExtensionExemptionIds=null&qaCertificationEventIds=null`
   }
 
