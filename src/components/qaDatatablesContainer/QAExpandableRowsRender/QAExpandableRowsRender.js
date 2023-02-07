@@ -712,6 +712,7 @@ const QAExpandableRowsRender = ({
   const executeOnClose = (data) => {
     // setReturnedFocusToLast(false);
     setShow(false);
+    setErrorMsgs([]);
     removeChangeEventListeners(".modalUserInput");
 
     const updatedData = assertSelector.getDataTableRecords(data ? data : [], dataTableName)
@@ -730,6 +731,7 @@ const QAExpandableRowsRender = ({
     setDataPulled(loadedData);
     addAriaLabelToDatatable();
   };
+
   // Executed when "View" action is clicked
   const openModal = (row, bool, create, index) => {
     let selectedData = null;
@@ -860,7 +862,8 @@ const QAExpandableRowsRender = ({
         setUpdateTable(true);
         executeOnClose();
       } else {
-        setErrorMsgs(resp)
+        const errorResp = Array.isArray(resp) ? resp : [resp]
+        setErrorMsgs(errorResp)
       }
     } catch (error) {
       console.log('error saving data', error);
@@ -875,7 +878,8 @@ const QAExpandableRowsRender = ({
         setCreatedDataId(resp.data.id);
         setUpdateTable(true)
       } else {
-        setErrorMsgs(resp)
+        const errorResp = Array.isArray(resp) ? resp : [resp]
+        setErrorMsgs(errorResp)
       }
     } catch (error) {
       console.log('error creating data', error);
