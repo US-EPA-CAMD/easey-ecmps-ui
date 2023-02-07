@@ -24,7 +24,7 @@ export const Modal = ({
   extraBtn,
   extraBtnText,
   disableExitBtn,
-  errorMsgs,
+  errorMsgs = [],
 }) => {
   const modalRef = createRef();
   useEffect(() => {
