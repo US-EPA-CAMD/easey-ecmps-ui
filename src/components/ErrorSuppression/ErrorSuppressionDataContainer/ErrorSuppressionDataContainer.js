@@ -2,12 +2,11 @@ import React, { useEffect, useState, useContext, useCallback } from "react";
 import { Button } from "@trussworks/react-uswds";
 import { AddErrorSupressionModal } from "../AddErrorSuppressionModal/AddErrorSuppressionModal";
 import DataTable from "react-data-table-component";
-import { getErrorSuppressionRecords, deactivateErrorSuppression } from "../../../utils/api/errorSuppressionApi";
+import { getErrorSuppressionRecords } from "../../../utils/api/errorSuppressionApi";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import "./ErrorSuppressionDataContainer.scss"
 import { formatDate, getQuarter } from "../../../utils/functions";
 import { DeactivateNotificationModal } from "../DeactivateNotificationModal/DeactivateNotificationModal";
-import { error } from "loglevel";
 
 export const ErrorSuppressionDataContainer = () => {
     const { checkType, checkNumber, checkResult, } = useContext(ErrorSuppressionFiltersContext);
@@ -22,6 +21,7 @@ export const ErrorSuppressionDataContainer = () => {
             // getErrorSuppressionRecords('HOURGEN', '7', 'C').then(({ data }) => {
             data.forEach(d => d.selected = false)
             setTableData(data)
+            setSelectedRows([]);
         }).catch(err => {
             console.log("error", err)
         })
@@ -105,23 +105,6 @@ export const ErrorSuppressionDataContainer = () => {
         return `${formatDate(dateString, "/")} ${date.getHours()}:${date.getMinutes()}:${date.getMinutes()}`
     }
 
-
-    const deactivateErrorSuppressionRecords = () => {
-        const promises = []
-        selectedRows.forEach(r => {
-            promises.push(deactivateErrorSuppression(r.id))
-        });
-
-        Promise.allSettled(promises).then(results=>{
-            // refresh the data in the table once all promises have settled
-            getTableData();
-
-            setSelectedRows([]);
-        }).catch(e=>{
-            console.error(e)
-        })
-    }
-
     const columns = [
         { name: "Select", maxWidth: "100px", cell: (row, idx) => getCheckbox(row, idx) },
         { name: "Severity", maxWidth: "150px", selector: (row) => row.severityCode },
@@ -143,8 +126,9 @@ export const ErrorSuppressionDataContainer = () => {
             {showDeactivateModal ? 
                 <DeactivateNotificationModal 
                     showDeactivateModal={showDeactivateModal} 
-                    close={() => setShowDeactivateModal(false)} 
-                    deactivate={deactivateErrorSuppressionRecords}
+                    close={() => setShowDeactivateModal(false)}
+                    selectedRowIds={selectedRows.map(r=>r.id)}
+                    refreshTable={getTableData}
                 /> 
             : null}
 

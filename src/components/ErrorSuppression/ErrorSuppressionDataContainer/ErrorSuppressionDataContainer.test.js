@@ -5,7 +5,7 @@ import { ErrorSuppressionDataContainer } from "./ErrorSuppressionDataContainer";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import config from "../../../config";
-import { ErrorSuppressionFiltersContextProvider } from "../error-suppression-context";
+import { ErrorSuppressionFiltersContextProvider } from "../context/error-suppression-context";
 import userEvent from "@testing-library/user-event";
 
 describe("ErrorSuppressionDataContainer component", () => {
@@ -108,7 +108,7 @@ describe("ErrorSuppressionDataContainer component", () => {
                 "updateDate": "2011-12-21T15:15:40.000Z"
             },
 
-        ]);
+            ]);
 
         await act(async () => {
             return render(
@@ -131,22 +131,22 @@ describe("ErrorSuppressionDataContainer component", () => {
         expect(cb3).toBeDefined();
     })
 
-    it("disables clone button when two checkboxes are selected", async()=>{
+    it("disables clone button when two checkboxes are selected", async () => {
         const cb0 = screen.getByTestId("select-cb-0");
         const cb1 = screen.getByTestId("select-cb-1");
         const cloneButton = screen.getByTestId("es-clone")
 
         // Should be enabled after single checkbox clicked
-        await act(async()=>{
+        await act(async () => {
             userEvent.click(cb0);
-            userEvent.click(cb1)    
+            userEvent.click(cb1)
         })
 
         // expect(cloneButton).toBeDisabled();
         expect(cloneButton).toBeDisabled();
     })
 
-    it("Reenables clone button when two checkboxes are selected and then one of them is deselected again", async()=>{
+    it("Reenables clone button when two checkboxes are selected and then one of them is deselected again", async () => {
         const cb0 = screen.getByTestId("select-cb-0");
         const cb1 = screen.getByTestId("select-cb-1");
         const cloneButton = screen.getByTestId("es-clone")
@@ -158,7 +158,7 @@ describe("ErrorSuppressionDataContainer component", () => {
         expect(cloneButton).not.toBeDisabled();
     })
 
-    it("Has the correctly formatted data for Match Time Criteria", ()=>{
+    it("Has the correctly formatted data for Match Time Criteria", () => {
         // when matchTimeTypeCode=QUARTER
         expect(screen.queryByText("2011 Q1 - 2011 Q4")).toBeDefined();
         // when matchTimeTypeCode=DATE
@@ -169,4 +169,16 @@ describe("ErrorSuppressionDataContainer component", () => {
         expect(screen.queryByText("Historical")).toBeDefined();
     })
 
+    it("Disables deactivate button when no checkboxes are selected and enabled when at least one chceckbox is selected", async () => {
+        const deactivateButton = screen.getByTestId("es-deactivate");
+        expect(deactivateButton).toBeDisabled();
+
+        const cb0 = screen.getByTestId("select-cb-0");
+
+        await act(async () => {
+            userEvent.click(cb0);
+        })
+
+        expect(deactivateButton).not.toBeDisabled();
+    })
 })
