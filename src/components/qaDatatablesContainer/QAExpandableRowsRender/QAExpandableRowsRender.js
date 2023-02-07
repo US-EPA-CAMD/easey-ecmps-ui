@@ -62,6 +62,7 @@ const QAExpandableRowsRender = ({
   const [createdDataId, setCreatedDataId] = useState(null);
 
   const [displayedRecords, setDisplayedRecords] = useState([]);
+  const [errorMsgs, setErrorMsgs] = useState([])
   useEffect(() => {
     if (updateTable || (dataPulled && dataPulled.length === 0)) {
       setLoading(true);
@@ -319,47 +320,47 @@ const QAExpandableRowsRender = ({
             dataTableName={cycleTimeInjec["dataTableName"]}
             extraControls={cycleTimeInjec["extraControls"]}
             extraIDs={cycleTimeInjectionIdArray}
-            
+
             user={user}
             isCheckedOut={isCheckedOut}
           />
         );
-        case "Unit Default Test": //Unit Default Test Data => Unit Default Test Run
-          const extraIds = [locationId, id];
-          const unitDefaultTestRunProps = qaUnitDefaultTestRunDataProps();
-          return (
-            <QAExpandableRowsRender
-              payload={unitDefaultTestRunProps["payload"]}
-              dropdownArray={unitDefaultTestRunProps["dropdownArray"]}
-              mdmProps={unitDefaultTestRunProps["mdmProps"]}
-              columns={unitDefaultTestRunProps["columnNames"]}
-              controlInputs={unitDefaultTestRunProps["controlInputs"]}
-              controlDatePickerInputs={unitDefaultTestRunProps["controlDatePickerInputs"]}
-              dataTableName={unitDefaultTestRunProps["dataTableName"]}
-              extraIDs={extraIds}
-              user={user}
-              isCheckedOut={isCheckedOut}
-            />
-          );
-        case "Hg Summary": // Hg Test Data => Hg Summary => Hg Injection
-          const hgInjectionIdArr = [locationId, id];
-          const hgInjectionProps = qaHgInjectionDataProps();
-          return (
-            <QAExpandableRowsRender
-              payload={hgInjectionProps["payload"]}
-              dropdownArray={hgInjectionProps["dropdownArray"]}
-              mdmProps={hgInjectionProps["mdmProps"]}
-              columns={hgInjectionProps["columnNames"]}
-              controlInputs={hgInjectionProps["controlInputs"]}
-              controlDatePickerInputs={hgInjectionProps["controlDatePickerInputs"]}
-              radioBtnPayload={hgInjectionProps["radioBtnPayload"]}
-              dataTableName={hgInjectionProps["dataTableName"]}
-              extraControls={hgInjectionProps["extraControls"]}
-              extraIDs={hgInjectionIdArr}
-              user={user}
-              isCheckedOut={isCheckedOut}
-            />
-          );
+      case "Unit Default Test": //Unit Default Test Data => Unit Default Test Run
+        const extraIds = [locationId, id];
+        const unitDefaultTestRunProps = qaUnitDefaultTestRunDataProps();
+        return (
+          <QAExpandableRowsRender
+            payload={unitDefaultTestRunProps["payload"]}
+            dropdownArray={unitDefaultTestRunProps["dropdownArray"]}
+            mdmProps={unitDefaultTestRunProps["mdmProps"]}
+            columns={unitDefaultTestRunProps["columnNames"]}
+            controlInputs={unitDefaultTestRunProps["controlInputs"]}
+            controlDatePickerInputs={unitDefaultTestRunProps["controlDatePickerInputs"]}
+            dataTableName={unitDefaultTestRunProps["dataTableName"]}
+            extraIDs={extraIds}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "Hg Summary": // Hg Test Data => Hg Summary => Hg Injection
+        const hgInjectionIdArr = [locationId, id];
+        const hgInjectionProps = qaHgInjectionDataProps();
+        return (
+          <QAExpandableRowsRender
+            payload={hgInjectionProps["payload"]}
+            dropdownArray={hgInjectionProps["dropdownArray"]}
+            mdmProps={hgInjectionProps["mdmProps"]}
+            columns={hgInjectionProps["columnNames"]}
+            controlInputs={hgInjectionProps["controlInputs"]}
+            controlDatePickerInputs={hgInjectionProps["controlDatePickerInputs"]}
+            radioBtnPayload={hgInjectionProps["radioBtnPayload"]}
+            dataTableName={hgInjectionProps["dataTableName"]}
+            extraControls={hgInjectionProps["extraControls"]}
+            extraIDs={hgInjectionIdArr}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
       default:
         break;
     }
@@ -370,13 +371,13 @@ const QAExpandableRowsRender = ({
       dropdowns['biasAdjustedIndicator'] = [
         { code: 1, name: 1 }, { code: 2, name: 2 }
       ]
-    }else if (tableName === "Unit Default Test Run") {
+    } else if (tableName === "Unit Default Test Run") {
       dropdowns['runUsedIndicator'] = [
-        { code: "", name: "-- Select a value --" },{ code: 0, name: 0 }, { code: 1, name: 1 }
+        { code: "", name: "-- Select a value --" }, { code: 0, name: 0 }, { code: 1, name: 1 }
       ]
     }
   };
-  
+
   const loadDropdownsData = (name) => {
     let dropdowns = {};
     const allPromises = [];
@@ -724,6 +725,7 @@ const QAExpandableRowsRender = ({
       returnsFocusDatatableViewBTN(dataTableName.replaceAll(" ", "-"), clickedIndex)
     }
   };
+
   const finishedLoadingData = (loadedData) => {
     setDataPulled(loadedData);
     addAriaLabelToDatatable();
@@ -814,9 +816,9 @@ const QAExpandableRowsRender = ({
     }
 
     if (dataTableName === "Fuel Flowmeter Accuracy Data") {
-      if(selectedData){
-        if(selectedData.reinstallationDate){
-          selectedData.reinstallationDate = new Date(selectedData.reinstallationDate).toISOString().slice(0,10)
+      if (selectedData) {
+        if (selectedData.reinstallationDate) {
+          selectedData.reinstallationDate = new Date(selectedData.reinstallationDate).toISOString().slice(0, 10)
         }
       }
     }
@@ -853,28 +855,33 @@ const QAExpandableRowsRender = ({
       getListOfRadioControls(controlInputs)
     );
 
-    assertSelector
-      .saveDataSwitch(userInput, dataTableName, locationId, id, extraIDs)
-      .then((res) => {
+    try {
+      const resp = await assertSelector.saveDataSwitch(userInput, dataTableName, locationId, id, extraIDs);
+      if (resp.status === 200) {
         setUpdateTable(true);
         executeOnClose();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      } else {
+        setErrorMsgs(resp)
+      }
+    } catch (error) {
+      console.log('error saving data', error);
+    }
   };
 
-  const createData = () => {
+  const createData = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput", getListOfRadioControls(controlInputs));
-    assertSelector
-      .createDataSwitch(userInput, dataTableName, locationId, id, extraIDs)
-      .then((res) => {
-        setCreatedDataId(res.data.id);
-        setUpdateTable(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    try {
+      const resp = await assertSelector.createDataSwitch(userInput, dataTableName, locationId, id, extraIDs);
+      console.log('resp', resp);
+      if (resp.status === 201) {
+        setCreatedDataId(resp.data.id);
+        setUpdateTable(true)
+      } else {
+        setErrorMsgs(resp)
+      }
+    } catch (error) {
+      console.log('error creating data', error);
+    }
   };
 
   const onRemoveHandler = async (row) => {
@@ -1004,6 +1011,7 @@ const QAExpandableRowsRender = ({
                 : ` ${dataTableName}`
           }
           exitBTN={`Save and Close`}
+          errorMsgs={errorMsgs}
           children={
             dropdownsLoaded ? (
               <div>
