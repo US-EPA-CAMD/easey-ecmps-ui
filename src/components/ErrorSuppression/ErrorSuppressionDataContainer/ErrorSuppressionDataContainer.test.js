@@ -10,7 +10,6 @@ import userEvent from "@testing-library/user-event";
 
 describe("ErrorSuppressionDataContainer component", () => {
 
-    let component;
     const mock = new MockAdapter(axios);
 
     beforeEach(async () => {
