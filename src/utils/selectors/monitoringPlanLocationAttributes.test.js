@@ -11,8 +11,8 @@ describe("testing monitoring plan data selectors", () => {
       {
         id: "MDC-B8C0FC059D434C1FB0878FF68505C406",
         locationId: "5",
-        ductIndicator: "1",
-        bypassIndicator: "1",
+        ductIndicator: 1,
+        bypassIndicator: 1,
         groundElevation: "21",
         stackHeight: "600",
         materialCode: "OTHER",
@@ -30,8 +30,8 @@ describe("testing monitoring plan data selectors", () => {
       {
         id: "MDC-B8C0FC059D434C1FB0878FF68505C406",
         locationId: "5",
-        ductIndicator: "1",
-        bypassIndicator: "1",
+        ductIndicator: 1,
+        bypassIndicator: 1,
         groundElevation: "21",
         stackHeight: "600",
         materialCode: "OTHER",
@@ -50,8 +50,8 @@ describe("testing monitoring plan data selectors", () => {
 
     monitoringDataTableRecodsLocation = [
       {
-        col1: "No",
-        col2: "No",
+        col1: "Yes",
+        col2: "Yes",
         col3: "21",
         col4: "600",
         col5: "OTHER",
@@ -63,8 +63,8 @@ describe("testing monitoring plan data selectors", () => {
         col11: "MDC-B8C0FC059D434C1FB0878FF68505C406",
       },
       {
-        col1: "No",
-        col2: "No",
+        col1: "Yes",
+        col2: "Yes",
         col3: "21",
         col4: "600",
         col5: "OTHER",
