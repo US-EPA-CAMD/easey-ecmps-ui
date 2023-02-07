@@ -854,7 +854,6 @@ const QAExpandableRowsRender = ({
       ".modalUserInput",
       getListOfRadioControls(controlInputs)
     );
-
     try {
       const resp = await assertSelector.saveDataSwitch(userInput, dataTableName, locationId, id, extraIDs);
       if (resp.status === 200) {
@@ -872,7 +871,6 @@ const QAExpandableRowsRender = ({
     const userInput = extractUserInput(payload, ".modalUserInput", getListOfRadioControls(controlInputs));
     try {
       const resp = await assertSelector.createDataSwitch(userInput, dataTableName, locationId, id, extraIDs);
-      console.log('resp', resp);
       if (resp.status === 201) {
         setCreatedDataId(resp.data.id);
         setUpdateTable(true)
