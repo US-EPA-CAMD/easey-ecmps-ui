@@ -50,7 +50,7 @@ export const QAImportHistoricalDataPreview = ({
           reportingPeriodObj.endDate,
           {
             isOfficial: true,
-            isHistoricalImport: true
+            isHistoricalImport: true,
           }
         );
         if (response) {
@@ -58,12 +58,15 @@ export const QAImportHistoricalDataPreview = ({
           setPreviewData(true);
           setLoading(false);
 
-          const rowsAriaLabelData = []
-          response.data.testSummaryData.forEach(e => {
-            rowsAriaLabelData.push(e.testNumber)
+          const rowsAriaLabelData = [];
+          response.data.testSummaryData.forEach((e) => {
+            rowsAriaLabelData.push(e.testNumber);
           });
-          
-          assignAriaLabelsToDataTable('#importTestSummaryData', rowsAriaLabelData) 
+
+          assignAriaLabelsToDataTable(
+            "#importTestSummaryData",
+            rowsAriaLabelData
+          );
         }
       } catch (err) {
         console.log(err);
@@ -139,7 +142,7 @@ export const QAImportHistoricalDataPreview = ({
       ) : (
         testSummaryData &&
         previewData && (
-            <div className="margin-x-3 margin-y-4" id="importTestSummaryData">
+          <div className="margin-x-3 margin-y-4" id="importTestSummaryData">
             <h4 className="margin-y-1">Test Summary</h4>
             <DataTable
               responsive={true}
@@ -153,6 +156,7 @@ export const QAImportHistoricalDataPreview = ({
               columns={columns}
               data={testSummaryData}
               onSelectedRowsChange={handleHistoricalDataSelection}
+              style={{ overflowX: "visible", overflowY: "visible" }}
               selectableRows
             />
           </div>
