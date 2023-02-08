@@ -45,7 +45,6 @@ export const QACertTestSummaryHeaderInfo = ({
   locationSelect,
   locations,
   setSelectedTestCode,
-  selectedTestCode,
   ///
   setUpdateRelatedTables,
 }) => {
@@ -601,7 +600,6 @@ export const QACertTestSummaryHeaderInfo = ({
               setFileName={setFileName}
               setDisablePortBtn={setDisablePortBtn}
               orisCode={orisCode}
-              selectedTestCode={selectedTestCode}
             />
           }
         />

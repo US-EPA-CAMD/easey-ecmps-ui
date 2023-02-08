@@ -66,6 +66,7 @@ const QAExpandableRowsRender = ({
   const [createdDataId, setCreatedDataId] = useState(null);
 
   const [displayedRecords, setDisplayedRecords] = useState([]);
+  const [errorMsgs, setErrorMsgs] = useState([]);
   useEffect(() => {
     if (updateTable || (dataPulled && dataPulled.length === 0)) {
       setLoading(true);
@@ -749,6 +750,7 @@ const QAExpandableRowsRender = ({
   const executeOnClose = (data) => {
     // setReturnedFocusToLast(false);
     setShow(false);
+    setErrorMsgs([]);
     removeChangeEventListeners(".modalUserInput");
 
     const updatedData = assertSelector.getDataTableRecords(
@@ -768,10 +770,12 @@ const QAExpandableRowsRender = ({
       );
     }
   };
+
   const finishedLoadingData = (loadedData) => {
     setDataPulled(loadedData);
     addAriaLabelToDatatable();
   };
+
   // Executed when "View" action is clicked
   const openModal = (row, bool, create, index) => {
     let selectedData = null;
@@ -900,33 +904,50 @@ const QAExpandableRowsRender = ({
       ".modalUserInput",
       getListOfRadioControls(controlInputs)
     );
-
-    assertSelector
-      .saveDataSwitch(userInput, dataTableName, locationId, id, extraIDs)
-      .then((res) => {
+    try {
+      const resp = await assertSelector.saveDataSwitch(
+        userInput,
+        dataTableName,
+        locationId,
+        id,
+        extraIDs
+      );
+      if (resp.status === 200) {
         setUpdateTable(true);
         executeOnClose();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      console.log("error saving data", error);
+    }
   };
 
-  const createData = () => {
+  const createData = async () => {
     const userInput = extractUserInput(
       payload,
       ".modalUserInput",
       getListOfRadioControls(controlInputs)
     );
-    assertSelector
-      .createDataSwitch(userInput, dataTableName, locationId, id, extraIDs)
-      .then((res) => {
-        setCreatedDataId(res.data.id);
+    try {
+      const resp = await assertSelector.createDataSwitch(
+        userInput,
+        dataTableName,
+        locationId,
+        id,
+        extraIDs
+      );
+      if (resp.status === 201) {
+        setCreatedDataId(resp.data.id);
         setUpdateTable(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      console.log("error creating data", error);
+    }
   };
 
   const onRemoveHandler = async (row) => {
@@ -1061,6 +1082,7 @@ const QAExpandableRowsRender = ({
               : ` ${dataTableName}`
           }
           exitBTN={`Save and Close`}
+          errorMsgs={errorMsgs}
           children={
             dropdownsLoaded ? (
               <div>

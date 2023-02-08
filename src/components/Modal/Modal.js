@@ -1,12 +1,9 @@
 import React, { createContext, useEffect, createRef } from "react";
 import ReactDom from "react-dom";
-
-import { Button } from "@trussworks/react-uswds";
-
+import { Alert, Button } from "@trussworks/react-uswds";
 import { ClearSharp } from "@material-ui/icons";
 
 import "./Modal.scss";
-
 import { focusTrap } from "../../additional-functions/focus-trap";
 
 const modalContext = createContext(null, null);
@@ -27,6 +24,8 @@ export const Modal = ({
   extraBtn,
   extraBtnText,
   disableExitBtn,
+  showDarkBg,
+  errorMsgs = [],
 }) => {
   const modalRef = createRef();
   useEffect(() => {
@@ -63,6 +62,7 @@ export const Modal = ({
 
   return ReactDom.createPortal(
     <div role="dialog" aria-modal="true">
+      {showDarkBg ? <div className="usa-overlay is-visible"></div> : null}
       <div ref={modalRef}>
         <modalContext.Provider value={{ close }}>
           <div
@@ -98,6 +98,18 @@ export const Modal = ({
                   <h2 className="text-bold">{title}</h2>
 
                   {breadCrumbBar ? breadCrumbBar : ""}
+
+                  {errorMsgs.map(error => (
+                    <Alert
+                      type="error"
+                      slim
+                      noIcon
+                      key={error}
+                      role="alert"
+                    >
+                      {error}
+                    </Alert>
+                  ))}
                 </div>
               </div>
 
@@ -119,9 +131,6 @@ export const Modal = ({
                       disabled={disableExitBtn}
                     >
                       {exitBTN ? exitBTN : "Save and Go Back"}
-
-                      {/* // ? createNew
-                        // : saveButtonText} */}
                     </Button>
 
                     {extraBtn ? (

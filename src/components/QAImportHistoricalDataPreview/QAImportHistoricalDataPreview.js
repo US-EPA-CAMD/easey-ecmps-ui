@@ -31,7 +31,6 @@ export const QAImportHistoricalDataPreview = ({
   setFileName,
   setDisablePortBtn,
   orisCode,
-  selectedTestCode
 }) => {
   const [reportingPeriodObj, setReportingPeriodObj] = useState(null);
   const [testSummaryData, setTestSummaryData] = useState(null);
@@ -49,7 +48,6 @@ export const QAImportHistoricalDataPreview = ({
           unitIdsAndStackPipeIds.stackPipeIds,
           reportingPeriodObj.beginDate,
           reportingPeriodObj.endDate,
-          selectedTestCode.testTypeCodes,
           {
             isOfficial: true,
             isHistoricalImport: true
