@@ -226,7 +226,12 @@ export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
 // *** obtain a list of all checked out locations (by all users)
 export const getCheckedOutLocations = async () => {
   const url = getApiUrl(`/check-outs/plans`, true);
-  return axios.get(url).then(handleResponse).catch(handleError);
+
+  return axios({ url: url, method: "GET" })
+    .then(handleResponse)
+    .catch(handleError);
+
+  //return axios.get(url).then(handleResponse).catch(handleError);
 };
 
 export const getRefreshInfo = async (planId) => {
@@ -947,7 +952,10 @@ export const createLocationAttribute = async (payload, locationSelectValue) => {
   }
 };
 
-export const getMonitoringPlansEvaluationReportData = async (facilityId, monPlanId) => {
+export const getMonitoringPlansEvaluationReportData = async (
+  facilityId,
+  monPlanId
+) => {
   const url = getApiUrl(
     `/reports?reportCode=MP_EVAL&facilityId=${facilityId}&monitorPlanId${monPlanId}`
   );

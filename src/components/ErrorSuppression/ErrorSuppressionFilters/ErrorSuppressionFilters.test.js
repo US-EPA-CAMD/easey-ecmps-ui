@@ -7,6 +7,31 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import config from "../../../config";
 
+const configurations = [
+    {
+      id: "MDC-DSF87364AD9879A8FDS7G",
+      name: "1, 2, CS0AAN",
+      locations: [
+        {
+          id: "BZ5461",
+          name: "1",
+          type: "Unit",
+        },
+        {
+          id: "CZ5461",
+          name: "2",
+          type: "Unit",
+        },
+        {
+          id: "DA5461",
+          name: "CS0AAN",
+          type: "StackPipe",
+        },
+      ],
+    },
+  ];
+  const orisCode = [1,3];
+
 describe("ErrorSuppressionFilters component", () => {
 
     const mock = new MockAdapter(axios);
@@ -35,6 +60,10 @@ describe("ErrorSuppressionFilters component", () => {
                     "dataTypeLabel": "Fuel Type",
                     "dataTypeUrl": "/master-data-mgmt/fuel-type-codes"
                 }]);
+
+        mock
+          .onGet(`${config.services.monitorPlans.uri}/configurations?orisCodes=${orisCode.join("|")}`)
+          .reply(200, configurations);
 
         await act(async () => {
             render(<ErrorSuppressionFiltersContextProvider>
