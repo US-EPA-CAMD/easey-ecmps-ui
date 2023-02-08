@@ -71,14 +71,15 @@ const unmatchedData = [
 ];
 beforeEach(() => {
   jest.setTimeout(60000);
-})
+  jest.mock("axios");
+});
 afterEach(() => {
   jest.clearAllMocks();
 });
+
 test("testing redux connected data-table component renders all records", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: data })
-  );
+  axios.mockImplementation(() => Promise.resolve({ status: 200, data: data }));
+
   const title = await facilitiesApi.getAllFacilities();
   expect(title.data).toEqual(data);
 
@@ -90,10 +91,12 @@ test("testing redux connected data-table component renders all records", async (
 
   expect(headerColumns.length).toEqual(5);
 });
+
 test("testing edge cases in add tabs function-  unmatched id ", async () => {
-  axios.get.mockImplementation(() =>
+  axios.mockImplementation(() =>
     Promise.resolve({ status: 200, data: unmatchedData })
   );
+
   const title = await facilitiesApi.getAllFacilities();
   expect(title.data).toEqual(unmatchedData);
 
@@ -104,20 +107,10 @@ test("testing edge cases in add tabs function-  unmatched id ", async () => {
 });
 
 test("testing edge cases in add tabs function-  no checkedout locations ", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: [] })
-  );
+  axios.mockImplementation(() => Promise.resolve({ status: 200, data: [] }));
 
   let { container } = await waitForElement(() => componentRenderer());
   let backBtns = container.querySelector("#testingBtn");
   fireEvent.click(backBtns);
   expect(container).toBeDefined();
-});
-
-test("mapDispatchToProps calls the appropriate action", async () => {
-  // mock the 'dispatch' object
-  const dispatch = jest.fn();
-  const state = jest.fn();
-  state.openedFacilityTabs = [];
-  const stateProps = mapStateToProps(state, true);
 });
