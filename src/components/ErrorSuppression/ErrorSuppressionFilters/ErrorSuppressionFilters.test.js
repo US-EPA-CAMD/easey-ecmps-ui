@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import { ErrorSuppressionFilters } from "./ErrorSuppressionFilters";
-import { ErrorSuppressionFiltersContextProvider } from "../error-suppression-context";
+import { ErrorSuppressionFiltersContextProvider } from "../context/error-suppression-context";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import config from "../../../config";
