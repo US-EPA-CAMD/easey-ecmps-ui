@@ -23,6 +23,7 @@ const MultiSelectCombobox = ({
   autoFocus,
   iconAlignRight = 1,
   favicon = true,
+  disabled = false,
 }) => {
   const [filter, setFilter] = useState("");
   const [_items, _setItems] = useState(items.filter((e) => e.enabled));
@@ -210,6 +211,7 @@ const MultiSelectCombobox = ({
         {hideInput ? null : (
           <>
             <input
+              disabled = {disabled}
               autoFocus={autoFocus}
               id={`${entity}-searchbox`}
               type="text"
@@ -233,7 +235,7 @@ const MultiSelectCombobox = ({
               <FontAwesomeIcon
                 icon={faCaretDown}
                 className={`pin-right margin-right-${iconAlignRight} padding-top-05`}
-                onClick={() => setShowListBox(true)}
+                onClick={() => !disabled && setShowListBox(true)}
               /> : 
               <></>
             }
