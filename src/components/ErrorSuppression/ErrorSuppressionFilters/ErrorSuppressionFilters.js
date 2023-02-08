@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState, } from "react";
 import { GridContainer, Grid, Label, Dropdown, Checkbox, DatePicker, ButtonGroup, Button } from "@trussworks/react-uswds";
-import { ErrorSuppressionFiltersContext } from "../error-suppression-context";
+import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getCheckCatalogResults, getReasonCodes } from "../../../utils/api/mdmApi";
 import { getAllFacilities } from "../../../utils/api/facilityApi";
 import { defaultDropdownText } from "../ErrorSuppression";
+import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
 
 /**'
  * Transforms data from the api in the format of:
@@ -111,15 +112,6 @@ export const ErrorSuppressionFilters = () => {
             console.log("Error getting reason codes", error)
         })
 
-        setLocationData([
-            {
-                id: "Coming Soon...",
-                label: "Coming Soon...",
-                selected: false,
-                enabled: true,
-            }
-        ]);
-
         return () => {
             setCheckTypeList([])
             setTransformedData([])
@@ -141,6 +133,45 @@ export const ErrorSuppressionFilters = () => {
         else
             return;
     }
+   
+    const onFacilityChange = (e) => {
+      const { value } = e.target;
+      setSelectedFacility(value);
+      if (value === false) return;
+
+      if (selectedCheckResult && selectedCheckNumber && selectedCheckResult) {
+        const locationTypeCode = transformedData[selectedCheckType][
+          selectedCheckNumber
+        ]
+          .filter((r) => r.checkResult === selectedCheckResult)
+          .map((d) => d.locationTypeCode);
+
+        getMonitoringPlans(Number(value)).then(({ data }) => {
+          const locations = data.map((f) => f.locations).flat(1);
+          let availLoc = locations?.map((l) => ({
+            id: l.id,
+            label: l.unitId,
+            selected: false,
+            enabled: true,
+          }));
+          if (locationTypeCode.includes("LOC")) {
+            const availStackPipe = locations?.map((l) => ({
+              id: l.id,
+              label: l.stackPipeId,
+              selected: false,
+              enabled: true,
+            }));
+            availLoc = [...availLoc, ...availStackPipe];
+          }
+          const locName = availLoc.map((l) => l.label);
+          availLoc = availLoc
+            .filter(({ label }, index) => !locName.includes(label, index + 1))
+            .filter(({ label }) => label !== null)
+            .sort((a, b) => a.label - b.label);
+          setLocationData([...availLoc]);
+        });
+      }
+    };
 
     const onCheckTypeChange = (e) => {
         const { value } = e.target;
@@ -260,34 +291,49 @@ export const ErrorSuppressionFilters = () => {
                 <h3>Facility Location</h3>
             </Grid>
             <Grid row>
-                <Grid col={4}>
-                    <Label test-id={"facility-name-label"} htmlFor={"facility-name"}>
-                        Facility Name/ID
-                    </Label>
-                    <Dropdown
-                        id={"facility-name"}
-                        name={"facility-name"}
-                        epa-testid={"facility-name"}
-                        data-testid={"facility-name"}
-                        value={selectedFacility}
-                        onChange={(e) => setSelectedFacility(e.target.value)}
-                    >
-                        <option>{defaultDropdownText}</option>
-                        {facilityList.map((d) => <option key={d.orisCode} value={d.orisCode} data-testid={d.orisCode}>{`${d.facilityName} (${d.orisCode})`}</option>)}
-                    </Dropdown>
-                </Grid>
-                <Grid col={4}>
-                    <div className="margin-left-2">
-                        <MultiSelectCombobox
-                            items={locationData}
-                            label="Location Name"
-                            entity="locationName"
-                            searchBy="contains"
-                            onChangeUpdate={onChangeOfLocationMultiSelect}
-                        />
-                    </div>
-                </Grid>
-            </Grid>
+          <Grid col={4}>
+            <Label test-id={"facility-name-label"} htmlFor={"facility-name"}>
+              Facility Name/ID
+            </Label>
+            <Dropdown
+              id={"facility-name"}
+              name={"facility-name"}
+              epa-testid={"facility-name"}
+              data-testid={"facility-name"}
+              value={selectedFacility}
+              onChange={onFacilityChange}
+            >
+              <option value={false}>{defaultDropdownText}</option>
+              {facilityList.map((d) => (
+                <option
+                  key={d.orisCode}
+                  value={d.orisCode}
+                  data-testid={d.orisCode}
+                >{`${d.facilityName} (${d.orisCode})`}</option>
+              ))}
+            </Dropdown>
+          </Grid>
+          <Grid col={4}>
+            <div className="margin-left-2">
+              <MultiSelectCombobox
+                items={locationData}
+                label="Location Name"
+                entity="locationName"
+                searchBy="contains"
+                value={selectedLocations}
+                onChangeUpdate={onChangeOfLocationMultiSelect}
+                disabled={
+                  !(
+                    selectedCheckType &&
+                    selectedCheckNumber &&
+                    selectedCheckResult &&
+                    selectedFacility
+                  )
+                }
+              ></MultiSelectCombobox>
+            </div>
+          </Grid>
+        </Grid>
             <Grid row className="margin-top-4">
                 <Grid col={3}>
                     <h3>Active, Reason & Add Date</h3>

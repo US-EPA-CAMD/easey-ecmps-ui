@@ -2,7 +2,7 @@ import React from "react";
 import * as modules from "../../utils/constants/moduleTitles";
 import { ErrorSuppressionFilters } from "./ErrorSuppressionFilters/ErrorSuppressionFilters";
 import { ErrorSuppressionDataContainer } from "./ErrorSuppressionDataContainer/ErrorSuppressionDataContainer";
-import { ErrorSuppressionFiltersContextProvider } from "./error-suppression-context";
+import { ErrorSuppressionFiltersContextProvider } from "./context/error-suppression-context";
 
 export const defaultDropdownText = "-- Select a value --";
 

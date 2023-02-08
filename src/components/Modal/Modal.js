@@ -24,6 +24,7 @@ export const Modal = ({
   extraBtn,
   extraBtnText,
   disableExitBtn,
+  showDarkBg,
   errorMsgs = [],
 }) => {
   const modalRef = createRef();
@@ -61,6 +62,7 @@ export const Modal = ({
 
   return ReactDom.createPortal(
     <div role="dialog" aria-modal="true">
+      {showDarkBg ? <div className="usa-overlay is-visible"></div> : null}
       <div ref={modalRef}>
         <modalContext.Provider value={{ close }}>
           <div

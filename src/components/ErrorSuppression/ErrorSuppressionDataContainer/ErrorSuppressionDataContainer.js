@@ -3,9 +3,10 @@ import { Button } from "@trussworks/react-uswds";
 import { AddErrorSupressionModal } from "../AddErrorSuppressionModal/AddErrorSuppressionModal";
 import DataTable from "react-data-table-component";
 import { getErrorSuppressionRecords } from "../../../utils/api/errorSuppressionApi";
-import { ErrorSuppressionFiltersContext } from "../error-suppression-context";
+import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import "./ErrorSuppressionDataContainer.scss"
 import { formatDate, getQuarter } from "../../../utils/functions";
+import { DeactivateNotificationModal } from "../DeactivateNotificationModal/DeactivateNotificationModal";
 
 export const ErrorSuppressionDataContainer = () => {
     const {
@@ -19,9 +20,40 @@ export const ErrorSuppressionDataContainer = () => {
         addDateAfter,
         addDateBefore,
     } = useContext(ErrorSuppressionFiltersContext);
-    const [showModal, setShowModal] = useState(false);
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [showDeactivateModal, setShowDeactivateModal] = useState(false);
     const [tableData, setTableData] = useState([]);
     const [selectedRows, setSelectedRows] = useState([]);
+
+    const getTableData = ()=>{
+        if (!checkType || !checkNumber || !checkResult)
+            return;
+        const params = { checkType, checkNumber, checkResult, facility, locations, active, reason, addDateAfter, addDateBefore, }
+        console.log(params);
+        getErrorSuppressionRecords(params).then(({ data }) => {
+            // getErrorSuppressionRecords('QUAL', '23', 'D').then(({ data }) => {
+            // getErrorSuppressionRecords('LINEAR', '12', 'A').then(({ data }) => {
+            // getErrorSuppressionRecords('DAYCAL', '19', 'E').then(({ data }) => {
+            // getErrorSuppressionRecords('HOURGEN', '7', 'C').then(({ data }) => {
+            data.forEach(d => d.selected = false)
+            setTableData(data)
+            setSelectedRows([]);
+            }).catch(err => {
+            console.log("error", err)
+        })
+    }
+    useEffect(() => {
+        getTableData()
+        return ()=>{
+            setTableData([])
+        }
+    }, [checkType, checkNumber, checkResult, facility, locations, active, reason, addDateAfter, addDateBefore]);
+
+    const getCheckbox = useCallback((row, idx,) => {
+
+        return <input checked={row.selected} key={idx} data-testid={`select-cb-${idx}`} type="checkbox" className="usa-checkbox" aria-label="Select" onChange={(e) => onRowSelection(row, e.target.checked)} />
+    }, []);
+
 
     const onRowSelection = (row, checked) => {
         row.selected = checked;
@@ -86,11 +118,6 @@ export const ErrorSuppressionDataContainer = () => {
         return `${formatDate(dateString, "/")} ${date.getHours()}:${date.getMinutes()}:${date.getMinutes()}`
     }
 
-    const getCheckbox = useCallback((row, idx,) => {
-
-        return <input checked={row.selected} key={idx} data-testid={`select-cb-${idx}`} type="checkbox" className="usa-checkbox" aria-label="Select" onChange={(e) => onRowSelection(row, e.target.checked)} />
-    }, [])
-
     const columns = [
         { name: "Select", maxWidth: "100px", cell: (row, idx) => getCheckbox(row, idx) },
         { name: "Severity", maxWidth: "150px", selector: (row) => row.severityCode },
@@ -106,41 +133,51 @@ export const ErrorSuppressionDataContainer = () => {
         { name: "Update Date", selector: (row) => formatDateWithHoursMinutesSeconds(row.updateDate) },
     ];
 
-    useEffect(() => {
-        if (!checkType || !checkNumber || !checkResult)
-            return;
-        const params = { checkType, checkNumber, checkResult, facility, locations, active, reason, addDateAfter, addDateBefore, }
-        console.log(params);
-        getErrorSuppressionRecords(params).then(({ data }) => {
-            // getErrorSuppressionRecords('QUAL', '23', 'D').then(({ data }) => {
-            // getErrorSuppressionRecords('LINEAR', '12', 'A').then(({ data }) => {
-            // getErrorSuppressionRecords('DAYCAL', '19', 'E').then(({ data }) => {
-            // getErrorSuppressionRecords('HOURGEN', '7', 'C').then(({ data }) => {
-            data.forEach(d => d.selected = false)
-            setTableData(data)
-        }).catch(err => {
-            console.log("error", err)
-        })
-    }, [checkType, checkNumber, checkResult, facility, locations, active, reason, addDateAfter, addDateBefore,]);
-
     return (
         <div>
-            {/* This height class is here due to a strange bug where the left nav is too short without it.
-                We may be able to remove this once we implement the table */}
-            {showModal ? <AddErrorSupressionModal showModal={showModal} close={() => setShowModal(false)} /> : null}
+            {showAddModal ? <AddErrorSupressionModal showAddModal={showAddModal} close={() => setShowAddModal(false)} /> : null}
+            {showDeactivateModal ? 
+                <DeactivateNotificationModal 
+                    showDeactivateModal={showDeactivateModal} 
+                    close={() => setShowDeactivateModal(false)}
+                    selectedRowIds={selectedRows.map(r=>r.id)}
+                    refreshTable={getTableData}
+                /> 
+            : null}
+
             <div className="padding-left-0 margin-left-0 padding-right-0">
                 <div className="grid-row row-width">
                     <div className="grid-col-5">
-                        <span className="data-container-header">Add Suppression</span>
+                        <span className="data-container-header">Add Suppression </span>
+
                     </div>
                     <div className="grid-col-2">
-                        <Button aria-label="Add" data-testid="es-add" className="margin-left-1" onClick={() => setShowModal(true)}>Add</Button>
+                        <Button 
+                            aria-label="Add"
+                            data-testid="es-add"
+                            className="margin-left-1" 
+                            onClick={() => setShowAddModal(true)}
+                        >
+                            Add
+                        </Button>
                     </div>
                     <div className="grid-col-2">
-                        <Button aria-label="Clone" data-testid="es-clone" disabled={selectedRows.length > 1}>Clone</Button>
+                        <Button aria-label="Clone" 
+                            data-testid="es-clone" 
+                            disabled={selectedRows.length > 1}
+                        >
+                            Clone
+                        </Button>
                     </div>
                     <div className="grid-col-2">
-                        <Button aria-label="Deactivate" data-testid="es-deactivate">Deactivate</Button>
+                        <Button 
+                            aria-label="Deactivate" 
+                            data-testid="es-deactivate" 
+                            onClick={() =>setShowDeactivateModal(true)}
+                            disabled={selectedRows.length === 0}
+                        >
+                            Deactivate
+                        </Button>
                     </div>
                 </div>
                 <div className=" ">

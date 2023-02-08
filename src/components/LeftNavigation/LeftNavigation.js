@@ -69,7 +69,7 @@ export const LeftNavigation = (props) => {
                 : "Go to Home page"
             }
             key={item.url}
-            id={`${item.name.split(" ").join("")}${workspaceText}`}
+            id={`${item.name.split(" ").join("").replace("&","And")}${workspaceText}`}
             onClick={(event) => handleRouteChange(event, item.url)}
           >
             {item.name}

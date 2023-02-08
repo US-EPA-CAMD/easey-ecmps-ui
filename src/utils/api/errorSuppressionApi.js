@@ -26,12 +26,27 @@ export const getErrorSuppressionRecords = ({
             checkTypeCode:checkType, 
             checkNumber, 
             checkResult, 
+            active,
             orisCode: facility, 
             locations:pipeDelimitedLocations, 
             reasonCode: reason, 
             beginDateHrQtr:addDateAfter,
-            endDateHrQtr:addDateBefore}
+            endDateHrQtr:addDateBefore,
+        }
     })
         .then(handleResponse).catch(handleError)
 }
 
+export const deactivateErrorSuppression = async (id) => {
+
+    try {
+        return handleResponse(
+            await secureAxios({
+                method: "PUT",
+                url: `${url}/${id}`,
+            })
+        );
+    } catch (error) {
+        return handleError(error);
+    }
+}
