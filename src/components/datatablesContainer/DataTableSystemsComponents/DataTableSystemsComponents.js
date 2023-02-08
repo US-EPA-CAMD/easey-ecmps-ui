@@ -70,14 +70,14 @@ export const DataTableSystemsComponents = ({
   setCurrentBar,
   openFuelFlowsView,
   setOpenFuelFlowsView,
+  setSelectedUnlinkedComponent ,
+  selectedUnlinkedComponent ,
   openComponentViewTest = false,
   openAddComponentTest = false,
 }) => {
   const [monitoringSystemsFuelFlows, setMonitoringSystemsFuelFlows] =
     useState("");
-  const [selectedUnlinkedComponent, setSelectedUnlinkedComponent] = useState(
-    {}
-  );
+
   const selectText = "-- Select a value --";
   const [dataLoaded, setDataLoaded] = useState(false);
   const [dataFuelLoaded, setFuelDataLoaded] = useState(false);
