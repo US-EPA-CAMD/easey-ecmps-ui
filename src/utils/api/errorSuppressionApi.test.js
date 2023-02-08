@@ -15,7 +15,7 @@ describe("ErrorSuppression API", function () {
     const url = `${config.services.camd.uri}/error-suppressions`;
     mock.onGet(url).reply(200, "Mocked");
 
-    const resp = await esApi.getErrorSuppressionRecords("", "", "");
+    const resp = await esApi.getErrorSuppressionRecords({checkTypeCode:"", checkNumber:"", checkResult:"", severityCode:"", orisCode:"", locationsList:[""], reasonCode:"", beginDateHrQtr:"", endDateHrQtr:""});
 
     expect(resp.data).toEqual("Mocked");
   });

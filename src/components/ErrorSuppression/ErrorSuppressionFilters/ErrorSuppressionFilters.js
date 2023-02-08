@@ -53,7 +53,17 @@ export const ErrorSuppressionFilters = () => {
     const {
         transformedData, setTransformedData,
         facilityList, setFacilityList,
-        reasonCodeList, setReasonCodeList } = ctxFilters;
+        reasonCodeList, setReasonCodeList,
+        setCheckType,
+        setCheckNumber,
+        setCheckResult,
+        setFacility,
+        setLocations,
+        setActive,
+        setReason,
+        setAddDateAfter,
+        setAddDateBefore,
+    } = ctxFilters;
 
     // Dropdowns
     const [checkTypeList, setCheckTypeList] = useState([]);
@@ -66,7 +76,7 @@ export const ErrorSuppressionFilters = () => {
     const [selectedCheckResult, setSelectedCheckResult] = useState();
     const [selectedFacility, setSelectedFacility] = useState();
     const [selectedLocations, setSelectedLocations] = useState([]);
-    const [selectedIsActive, setSelectedActive] = useState();
+    const [selectedIsActive, setSelectedIsActive] = useState(false);
     const [selectedReason, setSelectedReason] = useState();
     const [selectedAddDateAfter, setSelectedAddDateAfter] = useState();
     const [selectedAddDateBefore, setSelectedAddDateBefore] = useState();
@@ -85,19 +95,19 @@ export const ErrorSuppressionFilters = () => {
             setCheckTypeList(uniqueTypeCodeAndDesc);
             console.log(_transformedData)
             setTransformedData(_transformedData);
-        }).catch(error=>{
+        }).catch(error => {
             console.error("Error getting Check Catalog Results", error);
         })
 
         getAllFacilities().then(({ data }) => {
             setFacilityList(data.map(f => ({ orisCode: f.facilityId, facilityName: f.facilityName })));
-        }).catch(error=>{
+        }).catch(error => {
             console.error("Error getting facilities", error)
         })
 
         getReasonCodes().then(({ data }) => {
             setReasonCodeList(data)
-        }).catch(error=>{
+        }).catch(error => {
             console.log("Error getting reason codes", error)
         })
 
@@ -157,6 +167,34 @@ export const ErrorSuppressionFilters = () => {
         setCheckResultList(checkResults)
     }
 
+    const applyFilters = () => {
+        let apiFormattedDateAfter;
+        let apiFormattedDateBefore;
+
+        // Keep in the the below will convert the dates to UTC
+        if (selectedAddDateAfter) {
+            apiFormattedDateAfter = new Date(selectedAddDateAfter).toISOString().split('T')[0]
+        }
+
+        if (selectedAddDateBefore) {
+            apiFormattedDateBefore = new Date(selectedAddDateBefore).toISOString().split('T')[0];
+        }
+
+        //Apply the states from the form to the Context so that the table in ErrorSuppressionDataContainer will automatically update
+        setCheckType(selectedCheckType !== defaultDropdownText ? selectedCheckType : null)
+        setCheckNumber(selectedCheckNumber !== defaultDropdownText ? selectedCheckNumber : null)
+        setCheckResult(selectedCheckResult !== defaultDropdownText ? selectedCheckResult : null)
+        setFacility(selectedFacility !== defaultDropdownText ? selectedFacility : null)
+        setLocations(selectedLocations)
+        setActive(selectedIsActive)
+        setReason(selectedReason !== defaultDropdownText ? selectedReason : null)
+        setAddDateAfter(selectedAddDateAfter)
+        setAddDateBefore(selectedAddDateBefore)
+
+        console.log(selectedFacility)
+        console.log(selectedFacility ? selectedFacility : null)
+    }
+
     return (
         <GridContainer className='padding-left-0 margin-left-0 padding-right-0'>
             <Grid row>
@@ -175,7 +213,7 @@ export const ErrorSuppressionFilters = () => {
                         value={selectedCheckType}
                         onChange={onCheckTypeChange}
                     >
-                        <option value={false}>{defaultDropdownText}</option>
+                        <option>{defaultDropdownText}</option>
                         {checkTypeList.map((d) => <option key={d.checkTypeCode} value={d.checkTypeCode} data-testid={d.checkTypeCode}>{`${d.checkTypeDescription} (${d.checkTypeCode})`}</option>)}
                     </Dropdown>
                 </Grid>
@@ -193,7 +231,7 @@ export const ErrorSuppressionFilters = () => {
                             onChange={onCheckNumberChange}
                             disabled={!selectedCheckType}
                         >
-                            <option value={false}>{defaultDropdownText}</option>
+                            <option>{defaultDropdownText}</option>
                             {checkNumberList.map((d) => <option key={d} value={d} data-testid={d}>{d}</option>)}
                         </Dropdown>
                     </div>
@@ -213,7 +251,7 @@ export const ErrorSuppressionFilters = () => {
                         onChange={(e) => setSelectedCheckResult(e.target.value)}
                         disabled={!selectedCheckType || !selectedCheckNumber}
                     >
-                        <option value={false}>{defaultDropdownText}</option>
+                        <option>{defaultDropdownText}</option>
                         {checkResultList.map((d) => <option key={d} value={d} data-testid={d}>{d}</option>)}
                     </Dropdown>
                 </Grid>
@@ -234,7 +272,7 @@ export const ErrorSuppressionFilters = () => {
                         value={selectedFacility}
                         onChange={(e) => setSelectedFacility(e.target.value)}
                     >
-                        <option value={false}>{defaultDropdownText}</option>
+                        <option>{defaultDropdownText}</option>
                         {facilityList.map((d) => <option key={d.orisCode} value={d.orisCode} data-testid={d.orisCode}>{`${d.facilityName} (${d.orisCode})`}</option>)}
                     </Dropdown>
                 </Grid>
@@ -255,7 +293,15 @@ export const ErrorSuppressionFilters = () => {
                     <h3>Active, Reason & Add Date</h3>
                 </Grid>
                 <Grid col={3}>
-                    <Checkbox id="is-active" name="is-active" label="Active" className="margin-top-2" value={selectedIsActive} />
+                    <Checkbox
+                        id="is-active"
+                        data-testid="is-active"
+                        name="is-active"
+                        label="Active"
+                        className="margin-top-2"
+                        value={selectedIsActive}
+                        onChange={() => setSelectedIsActive(previousVal => !previousVal)}
+                    />
                 </Grid>
             </Grid>
             <Grid row>
@@ -271,7 +317,7 @@ export const ErrorSuppressionFilters = () => {
                         value={selectedReason}
                         onChange={(e) => setSelectedReason(e.target.value)}
                     >
-                        <option value={false}>{defaultDropdownText}</option>
+                        <option>{defaultDropdownText}</option>
                         {reasonCodeList.map((d) => (
                             <option
                                 key={d.errorSuppressionReasonCode}
@@ -296,6 +342,7 @@ export const ErrorSuppressionFilters = () => {
                         id="add-date-after"
                         name="add-date-after"
                         value={selectedAddDateAfter}
+                        onChange={(date) => setSelectedAddDateAfter(date)}
                     />
                 </Grid>
                 <Grid col={3} >
@@ -311,6 +358,7 @@ export const ErrorSuppressionFilters = () => {
                             id="add-date-before"
                             name="add-date-before"
                             value={selectedAddDateBefore}
+                            onChange={(date) => setSelectedAddDateBefore(date)}
                         />
                     </div>
                 </Grid>
@@ -319,7 +367,13 @@ export const ErrorSuppressionFilters = () => {
                         <Button type="button" className="usa-button usa-button--outline">
                             Clear
                         </Button>
-                        <Button type="button">Apply Filters</Button>
+                        <Button
+                            type="button"
+                            data-testid={"apply-filters"}
+                            onClick={applyFilters}
+                        >
+                            Apply Filters
+                        </Button>
                     </ButtonGroup>
                 </Grid>
 
