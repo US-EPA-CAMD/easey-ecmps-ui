@@ -23,9 +23,9 @@ const fireApiGetRequest = async (path, workspaceOnly = false) => {
   };
 
   if (isWorkspace) {
-    return secureAxios(payload).then(handleResponse).catch(handleError);
+    return await secureAxios(payload).then(handleResponse).catch(handleError);
   } else {
-    return axios(payload).then(handleResponse).catch(handleError);
+    return await axios(payload).then(handleResponse).catch(handleError);
   }
 };
 
