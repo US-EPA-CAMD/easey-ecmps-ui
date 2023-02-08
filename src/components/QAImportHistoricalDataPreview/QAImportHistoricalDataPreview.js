@@ -48,7 +48,10 @@ export const QAImportHistoricalDataPreview = ({
           unitIdsAndStackPipeIds.stackPipeIds,
           reportingPeriodObj.beginDate,
           reportingPeriodObj.endDate,
-          true
+          {
+            isOfficial: true,
+            isHistoricalImport: true
+          }
         );
         if (response) {
           setTestSummaryData(response.data.testSummaryData);

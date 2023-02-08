@@ -55,6 +55,8 @@ export const QACertTestSummaryRender = ({
           locations={locations}
           selectedTestCode={selectedTestCode}
           isCheckedOut={checkoutState}
+          updateTable={updateRelatedTables}
+          setUpdateTable={setUpdateRelatedTables}
         />
       }
     </div>

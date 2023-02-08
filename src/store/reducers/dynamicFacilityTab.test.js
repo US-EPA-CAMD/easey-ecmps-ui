@@ -476,9 +476,6 @@ describe('dynamicFacilityTab Reducer State checking false conditional', () => {
         initialState.openedFacilityTabs,
         action
       );
-      console.log(
-        openedFacilityTabsState[EMISSIONS_STORE_NAME][0].viewTemplateSelect
-      );
       expect(
         openedFacilityTabsState[EMISSIONS_STORE_NAME][0].viewTemplateSelect
       ).toEqual(null);

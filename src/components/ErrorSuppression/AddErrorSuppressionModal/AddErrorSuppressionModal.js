@@ -6,7 +6,7 @@ import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getReportingPeriods } from "../../HeaderInfo/HeaderInfo";
 import { getSeverityCodes } from "../../../utils/api/mdmApi";
 import { defaultDropdownText } from "../ErrorSuppression";
-import { ErrorSuppressionFiltersContext } from "../error-suppression-context";
+import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import { getUniqueCheckTypeDescription } from "../ErrorSuppressionFilters/ErrorSuppressionFilters";
 
 export const AddErrorSupressionModal = ({ showModal, close }) => {
@@ -58,6 +58,8 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
 
         getSeverityCodes().then(({ data }) => {
             setSeverityCodeList(data);
+        }).catch(error=>{
+            console.log("Error getting Severity Codes", error);
         });
 
         setLocationData([
@@ -118,8 +120,7 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
 
     return (
         <div>
-            <div className="usa-overlay is-visible"></div>
-            <Modal show={showModal} save={saveFunc} exitBTN={"Save and Close"} showSave title={"Add Error Suppression"} close={close} width={"1024px"}>
+            <Modal showDarkBg show={showModal} save={saveFunc} exitBTN={"Save and Close"} showSave title={"Add Error Suppression"} close={close} width={"1024px"}>
                 <GridContainer className='margin-left-1'>
                     <Grid row gap={2}>
                         <h3>Check Result</h3>

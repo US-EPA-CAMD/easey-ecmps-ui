@@ -257,10 +257,12 @@ export const QACertTestSummaryHeaderInfo = ({
   };
 
   const importQABtn = (payload) => {
+    setIsLoading(true);
+    setFinishedLoading(false);
     importQA(payload)
       .then((response) => {
+        setShowImportModal(true)
         setUsePortBtn(true);
-        setIsLoading(true);
         if (response) {
           setImportedFileErrorMsgs(response);
         }

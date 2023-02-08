@@ -192,14 +192,21 @@ export const exportQA = async (
   stackPipeIds,
   beginDate,
   endDate,
-  isOfficial
+  options={
+    isOfficial: Boolean,
+    isHistoricalImport: Boolean
+  }
 ) => {
   let url;
 
-  if (isOfficial) {
+  if (options.isOfficial) {
     url = `${config.services.qaCertification.uri}/export?facilityId=${facilityId}`;
   } else {
     url = getApiUrl(`/export?facilityId=${facilityId}`);
+  }
+
+  if (options.isHistoricalImport) {
+    url = `${url}&qaTestExtensionExemptionIds=null&qaCertificationEventIds=null`
   }
 
   if (unitIds?.length > 0) {
@@ -2169,7 +2176,6 @@ export const deleteQaCertEvents = async (locId, id, payload) => {
   }
 };
 export const getTestExtension = async (locId) => {
-  console.log("loc", locId);
   const path = `/locations/${locId}/test-extension-exemptions`;
   const url = getApiUrl(path);
   return axios.get(url).then(handleResponse).catch(handleError);
@@ -2177,7 +2183,6 @@ export const getTestExtension = async (locId) => {
 
 export const createTestExtension = async (locId, payload) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-extension-exemptions`;
-  console.log("loc", locId);
   try {
     return handleResponse(
       await secureAxios({

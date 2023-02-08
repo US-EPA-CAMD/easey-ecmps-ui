@@ -1,7 +1,6 @@
 import React from "react";
 import Modal from "./Modal";
 import "@testing-library/jest-dom/extend-expect";
-import userEvent from "@testing-library/user-event";
 import { render, fireEvent, screen } from "@testing-library/react";
 
 beforeAll(() => {
@@ -103,31 +102,22 @@ describe("testing the creation of a modal", () => {
         breadCrumbBar={true}
       />
     );
-    // const cancelBTN = getByText(/Cancel/i);
-    // let closeBTN = getByText(/save and go back/i);
-
-    // const nodeList = getAllByRole("button");
-    // nodeList[0].focus();
-    // fireEvent.keyPress(nodeList[0], {
-    //   key: "Enter",
-    //   code: "Enter",
-    //   keyCode: 13,
-    //   charCode: 13,
-    // });
-
-    // fireEvent.click(cancelBTN);
-    // cancelBTN.focus();
-
-    //   const newCLose = container.querySelector("#closeModalBtn");
-    // const newCLose= screen.getByTestId("closeModalBtn");
-    //   newCLose.focus();
-    //   fireEvent.keyPress(newCLose, {
-    //     key: "Enter",
-    //     code: "Enter",
-    //     keyCode: 13,
-    //     charCode: 13,
-    //   });
-    //   fireEvent.keyDown(newCLose, { key: "Enter", code: "Enter" });
-    // fireEvent.click(screen.getByTestId("closeModalBtn"));
   });
+
+  test("renders error messages", () => {
+    const errorMsg = "This is a test error message";
+    render(
+      <Modal
+        createNew={"save and close"}
+        close={null}
+        show={false}
+        showCancel={false}
+        showSave={false}
+        breadCrumbBar={true}
+        errorMsgs={[errorMsg]}
+      />
+    );
+    const errorMsgDisplay = screen.getByText(errorMsg);
+    expect(errorMsgDisplay).toBeInTheDocument();
+  })
 });

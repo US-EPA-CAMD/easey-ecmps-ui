@@ -8,7 +8,6 @@ export const clientTokenAxios = async (options) => {
       Date.now() > new Date(sessionStorage.getItem("client_token_expiration"))
     ) {
       await refreshClientToken();
-      console.log('sessionStorage.getItem("client_token_expiration")',sessionStorage.getItem("client_token_expiration"),Date.now())
     }
   } else {
     await refreshClientToken();
