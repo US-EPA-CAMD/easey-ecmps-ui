@@ -257,7 +257,7 @@ const QATestSummaryDataTable = ({
     const prefilteredDataName = dropdownArray[0][0];
     if (prefilteredMdmData) {
       const result = prefilteredMdmData.filter(
-        (prefiltered) => prefiltered[prefilteredDataName] === mainDropdownChange
+        (prefiltered) => prefiltered[prefilteredDataName] === selectedTestCode.testTypeCodes[0]
       );
 
       if (result.length > 0) {
