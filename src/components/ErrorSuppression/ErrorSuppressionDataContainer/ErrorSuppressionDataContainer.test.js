@@ -5,23 +5,14 @@ import { ErrorSuppressionDataContainer } from "./ErrorSuppressionDataContainer";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import config from "../../../config";
-// import { ErrorSuppressionFiltersContextProvider } from "../context/error-suppression-context";
 import userEvent from "@testing-library/user-event";
 import * as context from '../context/error-suppression-context';
 import { ErrorSuppressionFiltersContext, useSuppressionFiltersStore } from "../context/error-suppression-context";
-// jest.mock("../context/error-suppression-context", () => ({
-//     useTest: () => ({ state: 'mocked_value' }),
-//   }));
 
 const ProviderForTest = ({ children }) => {
-    const initVals = {
-        checkType: 1,
-        checkNumber: 2,
-        checkResult: 3
-    }
 
     return (
-        <ErrorSuppressionFiltersContext.Provider value={useSuppressionFiltersStore(initVals)}>
+        <ErrorSuppressionFiltersContext.Provider value={useSuppressionFiltersStore()}>
             {children}
         </ErrorSuppressionFiltersContext.Provider>
     )
@@ -30,6 +21,11 @@ const ProviderForTest = ({ children }) => {
 describe("ErrorSuppressionDataContainer component", () => {
 
     const mock = new MockAdapter(axios);
+    jest.spyOn(context, 'useSuppressionFiltersStore').mockReturnValue({
+        checkType: 1,
+        checkNumber: 2,
+        checkResult: 3
+    })
 
     mock
         .onGet(`${config.services.camd.uri}/error-suppressions`)
