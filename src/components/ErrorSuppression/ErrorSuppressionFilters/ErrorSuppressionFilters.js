@@ -77,7 +77,7 @@ export const ErrorSuppressionFilters = () => {
     const [selectedCheckResult, setSelectedCheckResult] = useState();
     const [selectedFacility, setSelectedFacility] = useState();
     const [selectedLocations, setSelectedLocations] = useState([]);
-    const [selectedIsActive, setSelectedIsActive] = useState(false);
+    const [selectedIsActive, setSelectedIsActive] = useState(true);
     const [selectedReason, setSelectedReason] = useState();
     const [selectedAddDateAfter, setSelectedAddDateAfter] = useState();
     const [selectedAddDateBefore, setSelectedAddDateBefore] = useState();
@@ -147,16 +147,17 @@ export const ErrorSuppressionFilters = () => {
           .map((d) => d.locationTypeCode);
 
         getMonitoringPlans(Number(value)).then(({ data }) => {
+            console.log(data)
           const locations = data.map((f) => f.locations).flat(1);
           let availLoc = locations?.map((l) => ({
-            id: l.id,
+            id: l.unitId,
             label: l.unitId,
             selected: false,
             enabled: true,
           }));
           if (locationTypeCode.includes("LOC")) {
             const availStackPipe = locations?.map((l) => ({
-              id: l.id,
+              id: l.stackPipeId,
               label: l.stackPipeId,
               selected: false,
               enabled: true,
@@ -345,6 +346,7 @@ export const ErrorSuppressionFilters = () => {
                         name="is-active"
                         label="Active"
                         className="margin-top-2"
+                        checked={selectedIsActive}
                         value={selectedIsActive}
                         onChange={() => setSelectedIsActive(previousVal => !previousVal)}
                     />
