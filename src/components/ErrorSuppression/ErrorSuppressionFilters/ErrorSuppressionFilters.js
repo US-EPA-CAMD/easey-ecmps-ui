@@ -188,6 +188,21 @@ export const ErrorSuppressionFilters = () => {
         setCheckResultList(checkResults)
     }
 
+      const clearClick = () => {
+        setCheckNumberList([]);
+        setCheckResultList([]);
+        setSelectedCheckType("");
+        setSelectedCheckNumber("");
+        setSelectedCheckResult("");
+        setSelectedFacility("");
+        setSelectedLocations([]);
+        setSelectedActive("");
+        setSelectedReason("");
+        setSelectedAddDateAfter("");
+        setSelectedAddDateBefore("");
+        setLocationData([]);
+      };
+
     return (
       <GridContainer className="padding-left-0 margin-left-0 padding-right-0">
         <Grid row>
@@ -380,7 +395,13 @@ export const ErrorSuppressionFilters = () => {
           </Grid>
           <Grid col={4}>
             <ButtonGroup type="default" className="float-right margin-top-3">
-              <Button type="button" className="usa-button usa-button--outline">
+              <Button
+                type="button"
+                aria-label="Clear"
+                data-testid="es-clear"
+                className="usa-button usa-button--outline"
+                onClick={clearClick}
+              >
                 Clear
               </Button>
               <Button type="button">Apply Filters</Button>

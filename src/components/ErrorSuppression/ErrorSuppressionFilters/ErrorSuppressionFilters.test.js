@@ -6,6 +6,7 @@ import { ErrorSuppressionFiltersContextProvider } from "../context/error-suppres
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import config from "../../../config";
+import userEvent from "@testing-library/user-event";
 
 const configurations = [
     {
@@ -108,5 +109,18 @@ describe("ErrorSuppressionFilters component", () => {
     it('renders Clear and Apply Filter buttons', () => {
         expect(screen.queryByText("Clear")).toBeDefined();
         expect(screen.queryByText("Apply Filters")).toBeDefined();
+    })
+
+    it ('clears all filters when clear button is selected', async () => {
+        const clearButton = screen.getByTestId("es-clear");
+        await userEvent.click(clearButton);
+        expect(screen.getByTestId("check-number")).toHaveValue('false');
+        expect(screen.getByTestId("check-type")).toHaveValue('false');
+        expect(screen.getByTestId("check-result")).toHaveValue('false');
+        expect(screen.getByTestId("facility-name")).toHaveValue('false');
+        expect(screen.getByTestId("reason")).toHaveValue('false');
+        expect(screen.getByLabelText("Location Name")).toHaveValue('');
+
+
     })
 })
