@@ -6,6 +6,7 @@ import { ErrorSuppressionFiltersContextProvider } from "../context/error-suppres
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import config from "../../../config";
+import userEvent from "@testing-library/user-event";
 
 const configurations = [
     {
@@ -31,10 +32,11 @@ const configurations = [
     },
   ];
   const orisCode = [1,3];
-
-describe("ErrorSuppressionFilters component", () => {
-
-    const mock = new MockAdapter(axios);
+  
+  describe("ErrorSuppressionFilters component", () => {
+      
+      const mock = new MockAdapter(axios);
+      let component;
 
     beforeEach(async () => {
         mock
@@ -66,7 +68,7 @@ describe("ErrorSuppressionFilters component", () => {
           .reply(200, configurations);
 
         await act(async () => {
-            render(<ErrorSuppressionFiltersContextProvider>
+            component = render(<ErrorSuppressionFiltersContextProvider>
                 <ErrorSuppressionFilters />
             </ErrorSuppressionFiltersContextProvider>)
         });
@@ -108,5 +110,11 @@ describe("ErrorSuppressionFilters component", () => {
     it('renders Clear and Apply Filter buttons', () => {
         expect(screen.queryByText("Clear")).toBeDefined();
         expect(screen.queryByText("Apply Filters")).toBeDefined();
+    })
+
+    it('clicks the apply filters button', async ()=>{
+        const applyFiltersButton = screen.queryByText("Apply Filters");
+        userEvent.click(applyFiltersButton);
+        expect(component)
     })
 })

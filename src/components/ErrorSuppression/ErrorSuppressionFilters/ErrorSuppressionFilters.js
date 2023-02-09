@@ -147,7 +147,6 @@ export const ErrorSuppressionFilters = () => {
           .map((d) => d.locationTypeCode);
 
         getMonitoringPlans(Number(value)).then(({ data }) => {
-            console.log(data)
           const locations = data.map((f) => f.locations).flat(1);
           let availLoc = locations?.map((l) => ({
             id: l.unitId,
@@ -222,9 +221,6 @@ export const ErrorSuppressionFilters = () => {
         setReason(selectedReason !== defaultDropdownText ? selectedReason : null)
         setAddDateAfter(selectedAddDateAfter)
         setAddDateBefore(selectedAddDateBefore)
-
-        console.log(selectedFacility)
-        console.log(selectedFacility ? selectedFacility : null)
     }
 
     return (
