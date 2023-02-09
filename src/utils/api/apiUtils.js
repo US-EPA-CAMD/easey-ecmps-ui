@@ -56,6 +56,10 @@ export function handleError(error) {
   if (errorMessage !== "") {
     displayAppError(errorMessage);
   }
+
+  if (error.response) {
+    return error.response.data.message;
+  }
 }
 export function handleImportError(error) {
   if (error.response) {
