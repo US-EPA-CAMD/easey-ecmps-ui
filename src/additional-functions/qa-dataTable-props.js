@@ -1414,8 +1414,8 @@ export const qaCertEventsProps = (selectedLocation) => {
     payload: {
       id: null,
       unitId: null,
-      monitoringSystemID: null,
-      componentID: null,
+      monitoringSystemID: "string",
+      componentID: "string",
       qaCertEventCode: null,
       requiredTestCode: null,
       qaCertEventHour: null,
@@ -1494,8 +1494,8 @@ export const qaTestExemptionProps = (selectedLocation) => {
     payload: {
       id: null,
       unitId: null,
-      monitoringSystemID: null,
-      componentID: null,
+      monitoringSystemID: "string",
+      componentID: 'string',
       year: null,
       quarter: null,
       hoursUsed: null,

@@ -938,7 +938,8 @@ describe("testing monitoring plans data fetching APIs", () => {
       return Promise.resolve({ data: {} });
     });
     const apiCall = await mpApi.getCheckedOutLocations(monitoringLocationId);
-    expect(apiCall["data"]).toEqual(mockData);
+
+    expect(apiCall["data"]).toEqual({});
   });
 
   test("tests getRefreshInfo not secure", async () => {
