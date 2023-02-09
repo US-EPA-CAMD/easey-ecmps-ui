@@ -1,5 +1,6 @@
 import React, { useState, createContext } from "react";
 
+// initVals is only necessary atm for testing purposes (see ErrorSuppressionDataContainer.test)
 export const useSuppressionFiltersStore = () => {
     const [checkType, setCheckType] = useState();
     const [checkNumber, setCheckNumber] = useState();

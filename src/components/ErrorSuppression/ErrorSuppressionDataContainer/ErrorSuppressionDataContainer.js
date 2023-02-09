@@ -9,32 +9,45 @@ import { formatDate, getQuarter } from "../../../utils/functions";
 import { DeactivateNotificationModal } from "../DeactivateNotificationModal/DeactivateNotificationModal";
 
 export const ErrorSuppressionDataContainer = () => {
-    const { checkType, checkNumber, checkResult, } = useContext(ErrorSuppressionFiltersContext);
+    const {
+        checkType,
+        checkNumber,
+        checkResult,
+        facility,
+        locations,
+        active,
+        reason,
+        addDateAfter,
+        addDateBefore,
+    } = useContext(ErrorSuppressionFiltersContext);
     const [showAddModal, setShowAddModal] = useState(false);
     const [showDeactivateModal, setShowDeactivateModal] = useState(false);
     const [tableData, setTableData] = useState([]);
     const [selectedRows, setSelectedRows] = useState([]);
 
     const getTableData = ()=>{
-        getErrorSuppressionRecords('LINEAR', '12', 'A').then(({ data }) => {
+        if (!checkType || !checkNumber || !checkResult)
+            return;
+        const params = { checkType, checkNumber, checkResult, facility, locations, active, reason, addDateAfter, addDateBefore, }
+        console.log(params);
+        getErrorSuppressionRecords(params).then(({ data }) => {
+            // getErrorSuppressionRecords('QUAL', '23', 'D').then(({ data }) => {
+            // getErrorSuppressionRecords('LINEAR', '12', 'A').then(({ data }) => {
             // getErrorSuppressionRecords('DAYCAL', '19', 'E').then(({ data }) => {
             // getErrorSuppressionRecords('HOURGEN', '7', 'C').then(({ data }) => {
             data.forEach(d => d.selected = false)
             setTableData(data)
             setSelectedRows([]);
-        }).catch(err => {
+            }).catch(err => {
             console.log("error", err)
         })
     }
     useEffect(() => {
-        // if( !checkType || !checkNumber || !checkResult)
-        //     return; 
-        // getErrorSuppressionRecords('QUAL', '23', 'D').then(({ data }) => {
         getTableData()
         return ()=>{
             setTableData([])
         }
-    }, [checkType, checkNumber, checkResult]);
+    }, [checkType, checkNumber, checkResult, facility, locations, active, reason, addDateAfter, addDateBefore]);
 
     const getCheckbox = useCallback((row, idx,) => {
 
