@@ -64,6 +64,7 @@ export const DataTableMethod = ({
 
   const [updateTable, setUpdateTable] = useState(false);
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
+  const [errorMsgs, setErrorMsgs] = useState([])
   const dropdownArray = [
     [
       "parameterCode",
@@ -293,6 +294,7 @@ export const DataTableMethod = ({
   };
 
   const executeOnClose = () => {
+    setErrorMsgs([])
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
     setReturnedFocusToLast(false);
@@ -338,52 +340,54 @@ export const DataTableMethod = ({
     assignFocusEventListeners();
   }, [inactive, data]);
 
-  const saveMethods = () => {
-    const userInput = extractUserInput(payload, ".modalUserInput");
-
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      displayAppError(needEndDate);
-      setShow(false);
-    } else {
-      mpApi
-        .saveMonitoringMethods(userInput)
-        .then((result) => {
-          // openModal(false);
-          setShow(false);
-          setUpdateTable(true);
-          setUpdateRelatedTables(true);
-        })
-        .catch((error) => {
-          // openModal(false);
-          setShow(false);
-        });
-    }
-  };
-
-  const createMethods = () => {
+  const saveMethods = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
     if (
       (userInput.endHour && !userInput.endDate) ||
       (!userInput.endHour && userInput.endDate)
     ) {
-      displayAppError(needEndDate);
-      setShow(false);
-    } else {
-      mpApi
-        .createMethods(userInput)
-        .then((result) => {
-          setShow(false);
-          setUpdateTable(true);
-          setUpdateRelatedTables(true);
-        })
-        .catch((error) => {
-          setShow(false);
-        });
+      setErrorMsgs([needEndDate])
+      return;
+    }
+    try {
+      const resp = await mpApi.saveMonitoringMethods(userInput);
+      if (resp.status === 200) {
+        setShow(false);
+        setUpdateTable(true);
+        setUpdateRelatedTables(true);
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      setErrorMsgs([JSON.stringify(error)])
     }
   };
+
+  const createMethods = async () => {
+    const userInput = extractUserInput(payload, ".modalUserInput");
+    if (
+      (userInput.endHour && !userInput.endDate) ||
+      (!userInput.endHour && userInput.endDate)
+    ) {
+      setErrorMsgs([needEndDate])
+      return;
+    }
+    try {
+      const resp = await mpApi.createMethods(userInput);
+      if (resp.status === 201) {
+        setShow(false);
+        setUpdateTable(true);
+        setUpdateRelatedTables(true);
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      setErrorMsgs([JSON.stringify(error)])
+    }
+  };
+
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -433,6 +437,7 @@ export const DataTableMethod = ({
           showSave={user && checkout}
           title={createNewMethod ? "Create Method" : "Method"}
           exitBTN={createNewMethod ? "Create Method" : `Save and Close`}
+          errorMsgs={errorMsgs}
           children={
             dropdownsLoaded ? (
               <div>
@@ -463,7 +468,7 @@ const mapStateToProps = (state) => {
     mdmData: state.dropdowns[METHODS_STORE_NAME],
 
     tabs: state.openedFacilityTabs[
-     'monitoringPlans'
+      'monitoringPlans'
     ],
   };
 };
