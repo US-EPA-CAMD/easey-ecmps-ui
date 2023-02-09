@@ -119,7 +119,7 @@ const configurations = [
 })
 
     it ('clears all filters when clear button is selected', async () => {
-        const clearButton = screen.getByTestId("es-clear");
+        const clearButton = screen.getByTestId("clear-filters");
         await userEvent.click(clearButton);
         expect(screen.getByTestId("check-number")).toHaveValue('false');
         expect(screen.getByTestId("check-type")).toHaveValue('false');
@@ -130,3 +130,4 @@ const configurations = [
 
 
     })
+})
