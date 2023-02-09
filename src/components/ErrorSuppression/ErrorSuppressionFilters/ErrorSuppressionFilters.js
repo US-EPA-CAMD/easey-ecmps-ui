@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GridContainer, Grid, Label, Dropdown, Checkbox, DatePicker, ButtonGroup, Button } from "@trussworks/react-uswds";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
@@ -50,8 +50,6 @@ export const getUniqueCheckTypeDescription = (transformedData) => {
 
 export const ErrorSuppressionFilters = () => {
 
-
-  const dateRef = useRef();
     const ctxFilters = useContext(ErrorSuppressionFiltersContext);
     const {
         transformedData, setTransformedData,
@@ -84,6 +82,10 @@ export const ErrorSuppressionFilters = () => {
     const [selectedAddDateAfter, setSelectedAddDateAfter] = useState();
     const [selectedAddDateBefore, setSelectedAddDateBefore] = useState();
     const [locationData, setLocationData] = useState([]);
+
+    const [dateAfterKey, setDateAfterKey] = useState(false);
+    const [dateBeforeKey, setDateBeforeKey] = useState(false);
+
 
     // API check result data transformed
     // const [transformedData, setTransformedData] = useState([])
@@ -234,11 +236,9 @@ export const ErrorSuppressionFilters = () => {
       setSelectedCheckResult("");
       setSelectedFacility("");
       setSelectedLocations([]);
+      setLocationData([]);
       setSelectedIsActive(true);
       setSelectedReason("");
-      setSelectedAddDateAfter("2019-01-01");
-      setSelectedAddDateBefore("2019-01-01");
-     // dateRef.current.value = ""
       setCheckType(null);
       setCheckNumber(null);
       setCheckResult(null);
@@ -246,10 +246,12 @@ export const ErrorSuppressionFilters = () => {
       setLocations(null);
       setActive(true);
       setReason(null);
-      setAddDateAfter(null);
       setAddDateBefore(null);
+      setSelectedAddDateAfter(null);
+      setSelectedAddDateBefore(null);
+      setDateAfterKey(k=>!k)
+      setDateBeforeKey(k=>!k)
 
-      console.log(dateRef);
     };
 
     return (
@@ -425,12 +427,12 @@ export const ErrorSuppressionFilters = () => {
               Add Date After
             </Label>
             <DatePicker
+              key={`after-${dateAfterKey}`}
               aria-labelledby="add-date-after-label"
               id="add-date-after"
               name="add-date-after"
               value={selectedAddDateAfter}
               onChange={(date) => setSelectedAddDateAfter(date)}
-              itemRef={dateRef}
             />
           </Grid>
           <Grid col={3}>
@@ -439,11 +441,13 @@ export const ErrorSuppressionFilters = () => {
                 Add Date Before
               </Label>
               <DatePicker
+                key={`before-${dateBeforeKey}`}
                 aria-labelledby="add-date-before-label"
                 id="add-date-before"
                 name="add-date-before"
                 value={selectedAddDateBefore}
                 onChange={(date) => setSelectedAddDateBefore(date)}
+
               />
             </div>
           </Grid>
