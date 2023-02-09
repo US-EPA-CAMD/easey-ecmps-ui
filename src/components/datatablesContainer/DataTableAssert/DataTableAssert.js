@@ -281,15 +281,19 @@ export const DataTableAssert = ({
     ) {
       setErrorMsgs([needEndDate])
     } else {
-      const resp = await assertSelector.saveDataSwitch(userInput, dataTableName, locationSelectValue, urlParameters);
-      if (resp.status === 200) {
-        setShow(false);
-        setDataLoaded(false);
-        setUpdateTable(true);
-        setUpdateRelatedTables(true);
-      } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
-        setErrorMsgs(errorResp);
+      try {
+        const resp = await assertSelector.saveDataSwitch(userInput, dataTableName, locationSelectValue, urlParameters);
+        if (resp.status === 200) {
+          setShow(false);
+          setDataLoaded(false);
+          setUpdateTable(true);
+          setUpdateRelatedTables(true);
+        } else {
+          const errorResp = Array.isArray(resp) ? resp : [resp];
+          setErrorMsgs(errorResp);
+        }
+      } catch (error) {
+        setErrorMsgs([JSON.stringify(error)])
       }
     }
   };
@@ -305,7 +309,9 @@ export const DataTableAssert = ({
       (!userInput.endHour && userInput.endDate && dataTableName !== lAttr && dataTableName !== rDat)
     ) {
       setErrorMsgs([needEndDate])
-    } else {
+      return;
+    }
+    try {
       const resp = await assertSelector.createDataSwitch(userInput, dataTableName, locationSelectValue, urlParameters);
       if (resp.status === 201) {
         setShow(false);
@@ -316,10 +322,12 @@ export const DataTableAssert = ({
         const errorResp = Array.isArray(resp) ? resp : [resp];
         setErrorMsgs(errorResp);
       }
+    } catch (error) {
+      setErrorMsgs([JSON.stringify(error)]);
     }
   };
-  const [mainDropdownChange, setMainDropdownChange] = useState("");
 
+  const [mainDropdownChange, setMainDropdownChange] = useState("");
   const [createNewData, setCreateNewData] = useState(false);
   const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
 
