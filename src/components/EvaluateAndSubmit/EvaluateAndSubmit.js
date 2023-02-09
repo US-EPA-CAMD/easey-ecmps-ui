@@ -14,11 +14,13 @@ import SubmissionModal from "../SubmissionModal/SubmissionModal";
 import MockPermissions from "./MockPermissions";
 import { Button } from "@trussworks/react-uswds";
 import { connect } from "react-redux";
-import { submitData } from "../../utils/api/camdServices";
+import {
+  submitData,
+  triggerBulkEvaluation,
+} from "../../utils/api/camdServices";
 import { handleError } from "../../utils/api/apiUtils";
 import LoadingModal from "../LoadingModal/LoadingModal";
 import FilterForm from "./FilterForm/FilterForm";
-import { triggerBulkEvaluation } from "../../utils/api/quartzApi";
 import { EvaluateRefresh } from "./EvaluateRefresh";
 import _ from "lodash";
 import {

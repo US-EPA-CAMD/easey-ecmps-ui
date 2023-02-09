@@ -14,33 +14,57 @@ export async function getReport(
   monPlanId = null,
   testId = null,
   qceId = null,
-  teeId = null,
+  teeId = null
 ) {
   const url = `${config.services.camd.uri}${formatReportUrl(
-    reportCode, facilityId, monPlanId, testId, qceId, teeId
-  )}`
+    reportCode,
+    facilityId,
+    monPlanId,
+    testId,
+    qceId,
+    teeId
+  )}`;
 
   if (window.location.href.includes("workspace")) {
     return secureAxios({
       method: "GET",
       url,
     })
-    .then(handleResponse)
-    .catch(handleError);
+      .then(handleResponse)
+      .catch(handleError);
   }
 
-  return axios
-    .get(url)
-    .then(handleResponse)
-    .catch(handleError);
+  return axios.get(url).then(handleResponse).catch(handleError);
 }
 
 export async function submitData(payload) {
+  /*
   return secureAxios({
     method: "POST",
     url: `${config.services.camd.uri}/submit`,
     data: payload,
   })
-  .then(handleResponse)
-  .catch(handleError);
+    .then(handleResponse)
+    .catch(handleError);
+    */
+  return true;
 }
+
+export const triggerBulkEvaluation = async (payload) => {
+  let url = `${config.services.camd.uri}`;
+  url = `${url}/evaluate`;
+
+  console.log(url);
+
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    handleError(error);
+  }
+};
