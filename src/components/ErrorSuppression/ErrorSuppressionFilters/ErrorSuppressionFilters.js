@@ -255,84 +255,70 @@ export const ErrorSuppressionFilters = () => {
     };
 
     return (
-      <GridContainer className="padding-left-0 margin-left-0 padding-right-0">
-        <Grid row>
+      <GridContainer className='padding-left-0 margin-left-0 padding-right-0'>
+      <Grid row>
           <h3>Check Result</h3>
-        </Grid>
-        <Grid row>
+      </Grid>
+      <Grid row>
           <Grid col={4}>
-            <Label test-id={"check-type-label"} htmlFor={"check-type"}>
-              Check Type
-            </Label>
-            <Dropdown
-              id={"check-type"}
-              name={"check-type"}
-              epa-testid={"check-type"}
-              data-testid={"check-type"}
-              value={selectedCheckType}
-              onChange={onCheckTypeChange}
-            >
-              <option>{defaultDropdownText}</option>
-              {checkTypeList.map((d) => (
-                <option
-                  key={d.checkTypeCode}
-                  value={d.checkTypeCode}
-                  data-testid={d.checkTypeCode}
-                >{`${d.checkTypeDescription} (${d.checkTypeCode})`}</option>
-              ))}
-            </Dropdown>
-          </Grid>
-          <Grid col={2}>
-            <div className="margin-left-2">
-              <Label test-id={"check-number-label"} htmlFor={"check-number"}>
-                Check Number
+              <Label test-id={"check-type-label"} htmlFor={"check-type"}>
+                  Check Type
               </Label>
               <Dropdown
-                id={"check-number"}
-                name={"check-number"}
-                epa-testid={"check-number"}
-                data-testid={"check-number"}
-                value={selectedCheckNumber}
-                onChange={onCheckNumberChange}
-                disabled={!selectedCheckType}
+                  id={"check-type"}
+                  name={"check-type"}
+                  epa-testid={"check-type"}
+                  data-testid={"check-type"}
+                  value={selectedCheckType}
+                  onChange={onCheckTypeChange}
               >
-                <option>{defaultDropdownText}</option>
-                {checkNumberList.map((d) => (
-                  <option key={d} value={d} data-testid={d}>
-                    {d}
-                  </option>
-                ))}
+                  <option>{defaultDropdownText}</option>
+                  {checkTypeList.map((d) => <option key={d.checkTypeCode} value={d.checkTypeCode} data-testid={d.checkTypeCode}>{`${d.checkTypeDescription} (${d.checkTypeCode})`}</option>)}
               </Dropdown>
-            </div>
           </Grid>
-        </Grid>
-        <Grid row className="margin-top-2">
+          <Grid col={2}>
+              <div className="margin-left-2">
+                  <Label test-id={"check-number-label"} htmlFor={"check-number"}>
+                      Check Number
+                  </Label>
+                  <Dropdown
+                      id={"check-number"}
+                      name={"check-number"}
+                      epa-testid={"check-number"}
+                      data-testid={"check-number"}
+                      value={selectedCheckNumber}
+                      onChange={onCheckNumberChange}
+                      disabled={!selectedCheckType}
+                  >
+                      <option>{defaultDropdownText}</option>
+                      {checkNumberList.map((d) => <option key={d} value={d} data-testid={d}>{d}</option>)}
+                  </Dropdown>
+              </div>
+          </Grid>
+      </Grid>
+      <Grid row className="margin-top-2">
           <Grid col={4}>
-            <Label test-id={"check-result-label"} htmlFor={"check-result"}>
-              Check Result
-            </Label>
-            <Dropdown
-              id={"check-result"}
-              name={"check-result"}
-              epa-testid={"check-result"}
-              data-testid={"check-result"}
-              value={selectedCheckResult}
-              onChange={(e) => setSelectedCheckResult(e.target.value)}
-              disabled={!selectedCheckType || !selectedCheckNumber}
-            >
-              <option>{defaultDropdownText}</option>
-              {checkResultList.map((d) => (
-                <option key={d} value={d} data-testid={d}>
-                  {d}
-                </option>
-              ))}
-            </Dropdown>
+              <Label test-id={"check-result-label"} htmlFor={"check-result"}>
+                  Check Result
+              </Label>
+              <Dropdown
+                  id={"check-result"}
+                  name={"check-result"}
+                  epa-testid={"check-result"}
+                  data-testid={"check-result"}
+                  value={selectedCheckResult}
+                  onChange={(e) => setSelectedCheckResult(e.target.value)}
+                  disabled={!selectedCheckType || !selectedCheckNumber}
+              >
+                  <option>{defaultDropdownText}</option>
+                  {checkResultList.map((d) => <option key={d} value={d} data-testid={d}>{d}</option>)}
+              </Dropdown>
           </Grid>
-        </Grid>
-        <Grid row className="margin-top-4">
+      </Grid>
+      <Grid row className="margin-top-4">
           <h3>Facility Location</h3>
-        </Grid>
-        <Grid row>
+      </Grid>
+      <Grid row>
           <Grid col={4}>
             <Label test-id={"facility-name-label"} htmlFor={"facility-name"}>
               Facility Name/ID
@@ -473,4 +459,4 @@ export const ErrorSuppressionFilters = () => {
         </Grid>
       </GridContainer>
     );
-  }
+}
