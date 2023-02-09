@@ -115,6 +115,6 @@ const configurations = [
     it('clicks the apply filters button', async ()=>{
         const applyFiltersButton = screen.queryByText("Apply Filters");
         userEvent.click(applyFiltersButton);
-        expect(component)
+        expect(component).toBeDefined();
     })
 })

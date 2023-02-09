@@ -30,11 +30,6 @@ const ProviderForTest = ({ children }) => {
 describe("ErrorSuppressionDataContainer component", () => {
 
     const mock = new MockAdapter(axios);
-    jest.spyOn(context, 'useSuppressionFiltersStore').mockReturnValue({
-        checkType: 1,
-        checkNumber: 2,
-        checkResult: 3
-    })
 
     mock
         .onGet(`${config.services.camd.uri}/error-suppressions`)
