@@ -5,116 +5,132 @@ import { ErrorSuppressionDataContainer } from "./ErrorSuppressionDataContainer";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import config from "../../../config";
-import { ErrorSuppressionFiltersContextProvider } from "../context/error-suppression-context";
 import userEvent from "@testing-library/user-event";
+import * as context from '../context/error-suppression-context';
+import { ErrorSuppressionFiltersContext, useSuppressionFiltersStore } from "../context/error-suppression-context";
 
+const ProviderForTest = ({ children }) => {
+
+    return (
+        <ErrorSuppressionFiltersContext.Provider value={useSuppressionFiltersStore()}>
+            {children}
+        </ErrorSuppressionFiltersContext.Provider>
+    )
+
+}
 describe("ErrorSuppressionDataContainer component", () => {
 
     const mock = new MockAdapter(axios);
+    jest.spyOn(context, 'useSuppressionFiltersStore').mockReturnValue({
+        checkType: 1,
+        checkNumber: 2,
+        checkResult: 3
+    })
+
+    mock
+        .onGet(`${config.services.camd.uri}/error-suppressions`)
+        .reply(200, [{
+            "id": 1031,
+            "checkCatalogResultId": 3540,
+            "checkTypeCode": "QUAL",
+            "checkNumber": 23,
+            "checkResultCode": "D",
+            "severityCode": "NONE",
+            "facilityId": 8331,
+            "orisCode": 2271,
+            "locations": "1A,1B",
+            "matchDataTypeCode": "QUALTYP",
+            "matchDataValue": "abc",
+            "matchTimeTypeCode": "HISTIND",
+            "matchTimeBeginValue": "",
+            "matchTimeEndValue": null,
+            "matchHistoricalIndicator": false,
+            "reasonCode": "BUG",
+            "note": "This error suppression is to allow newly affected TR LME units to submit their MP data. BZ 10246  cjw 10-25-2011.",
+            "active": false,
+            "userId": "WorleyC",
+            "addDate": "2011-01-25T11:26:32.000Z",
+            "updateDate": "2011-12-21T15:15:06.000Z"
+        },
+        {
+            "id": 1033,
+            "checkCatalogResultId": 3540,
+            "checkTypeCode": "QUAL",
+            "checkNumber": 23,
+            "checkResultCode": "D",
+            "severityCode": "NONE",
+            "facilityId": 262,
+            "orisCode": 1305,
+            "locations": "GT1,GT2,GT3",
+            "matchDataTypeCode": "QUALTYP",
+            "matchDataValue": null,
+            "matchTimeTypeCode": "QUARTER",
+            "matchTimeBeginValue": "2011-03-25T11:26:32.000Z",
+            "matchTimeEndValue": "2011-11-25T11:26:32.000Z",
+            "matchHistoricalIndicator": false,
+            "reasonCode": "BUG",
+            "note": "This error suppression is to allow newly affected TR LME units to submit their MP data. BZ 10246  cjw 10-25-2011.",
+            "active": false,
+            "userId": "WorleyC",
+            "addDate": "2011-01-25T11:46:37.000Z",
+            "updateDate": "2011-12-21T15:15:40.000Z"
+        },
+        {
+            "id": 1034,
+            "checkCatalogResultId": 3540,
+            "checkTypeCode": "QUAL",
+            "checkNumber": 23,
+            "checkResultCode": "D",
+            "severityCode": "NONE",
+            "facilityId": 262,
+            "orisCode": 1305,
+            "locations": "GT1,GT2,GT3",
+            "matchDataTypeCode": "QUALTYP",
+            "matchDataValue": null,
+            "matchTimeTypeCode": "DATE",
+            "matchTimeBeginValue": "2011-10-25T11:26:32.000Z",
+            "matchTimeEndValue": "2011-11-25T11:26:32.000Z",
+            "matchHistoricalIndicator": false,
+            "reasonCode": "BUG",
+            "note": "This error suppression is to allow newly affected TR LME units to submit their MP data. BZ 10246  cjw 10-25-2011.",
+            "active": false,
+            "userId": "WorleyC",
+            "addDate": "2011-01-25T11:46:37.000Z",
+            "updateDate": "2011-12-21T15:15:40.000Z"
+        },
+        {
+            "id": 1035,
+            "checkCatalogResultId": 3540,
+            "checkTypeCode": "QUAL",
+            "checkNumber": 23,
+            "checkResultCode": "D",
+            "severityCode": "NONE",
+            "facilityId": 262,
+            "orisCode": 1305,
+            "locations": "GT1,GT2,GT3",
+            "matchDataTypeCode": "QUALTYP",
+            "matchDataValue": null,
+            "matchTimeTypeCode": "HOUR",
+            "matchTimeBeginValue": "2011-10-25T11:26:32.000Z",
+            "matchTimeEndValue": "2011-11-25T11:26:32.000Z",
+            "matchHistoricalIndicator": false,
+            "reasonCode": "BUG",
+            "note": "This error suppression is to allow newly affected TR LME units to submit their MP data. BZ 10246  cjw 10-25-2011.",
+            "active": false,
+            "userId": "WorleyC",
+            "addDate": "2011-01-25T11:46:37.000Z",
+            "updateDate": "2011-12-21T15:15:40.000Z"
+        },
+
+        ]);
 
     beforeEach(async () => {
-        mock
-            .onGet(`${config.services.camd.uri}/error-suppressions`)
-            .reply(200, [{
-                "id": 1031,
-                "checkCatalogResultId": 3540,
-                "checkTypeCode": "QUAL",
-                "checkNumber": 23,
-                "checkResultCode": "D",
-                "severityCode": "NONE",
-                "facilityId": 8331,
-                "orisCode": 2271,
-                "locations": "1A,1B",
-                "matchDataTypeCode": "QUALTYP",
-                "matchDataValue": "abc",
-                "matchTimeTypeCode": "HISTIND",
-                "matchTimeBeginValue": "",
-                "matchTimeEndValue": null,
-                "matchHistoricalIndicator": false,
-                "reasonCode": "BUG",
-                "note": "This error suppression is to allow newly affected TR LME units to submit their MP data. BZ 10246  cjw 10-25-2011.",
-                "active": false,
-                "userId": "WorleyC",
-                "addDate": "2011-01-25T11:26:32.000Z",
-                "updateDate": "2011-12-21T15:15:06.000Z"
-            },
-            {
-                "id": 1033,
-                "checkCatalogResultId": 3540,
-                "checkTypeCode": "QUAL",
-                "checkNumber": 23,
-                "checkResultCode": "D",
-                "severityCode": "NONE",
-                "facilityId": 262,
-                "orisCode": 1305,
-                "locations": "GT1,GT2,GT3",
-                "matchDataTypeCode": "QUALTYP",
-                "matchDataValue": null,
-                "matchTimeTypeCode": "QUARTER",
-                "matchTimeBeginValue": "2011-03-25T11:26:32.000Z",
-                "matchTimeEndValue": "2011-11-25T11:26:32.000Z",
-                "matchHistoricalIndicator": false,
-                "reasonCode": "BUG",
-                "note": "This error suppression is to allow newly affected TR LME units to submit their MP data. BZ 10246  cjw 10-25-2011.",
-                "active": false,
-                "userId": "WorleyC",
-                "addDate": "2011-01-25T11:46:37.000Z",
-                "updateDate": "2011-12-21T15:15:40.000Z"
-            },
-            {
-                "id": 1034,
-                "checkCatalogResultId": 3540,
-                "checkTypeCode": "QUAL",
-                "checkNumber": 23,
-                "checkResultCode": "D",
-                "severityCode": "NONE",
-                "facilityId": 262,
-                "orisCode": 1305,
-                "locations": "GT1,GT2,GT3",
-                "matchDataTypeCode": "QUALTYP",
-                "matchDataValue": null,
-                "matchTimeTypeCode": "DATE",
-                "matchTimeBeginValue": "2011-10-25T11:26:32.000Z",
-                "matchTimeEndValue": "2011-11-25T11:26:32.000Z",
-                "matchHistoricalIndicator": false,
-                "reasonCode": "BUG",
-                "note": "This error suppression is to allow newly affected TR LME units to submit their MP data. BZ 10246  cjw 10-25-2011.",
-                "active": false,
-                "userId": "WorleyC",
-                "addDate": "2011-01-25T11:46:37.000Z",
-                "updateDate": "2011-12-21T15:15:40.000Z"
-            },
-            {
-                "id": 1035,
-                "checkCatalogResultId": 3540,
-                "checkTypeCode": "QUAL",
-                "checkNumber": 23,
-                "checkResultCode": "D",
-                "severityCode": "NONE",
-                "facilityId": 262,
-                "orisCode": 1305,
-                "locations": "GT1,GT2,GT3",
-                "matchDataTypeCode": "QUALTYP",
-                "matchDataValue": null,
-                "matchTimeTypeCode": "HOUR",
-                "matchTimeBeginValue": "2011-10-25T11:26:32.000Z",
-                "matchTimeEndValue": "2011-11-25T11:26:32.000Z",
-                "matchHistoricalIndicator": false,
-                "reasonCode": "BUG",
-                "note": "This error suppression is to allow newly affected TR LME units to submit their MP data. BZ 10246  cjw 10-25-2011.",
-                "active": false,
-                "userId": "WorleyC",
-                "addDate": "2011-01-25T11:46:37.000Z",
-                "updateDate": "2011-12-21T15:15:40.000Z"
-            },
-
-            ]);
 
         await act(async () => {
             return render(
-                (<ErrorSuppressionFiltersContextProvider>
+                (<ProviderForTest>
                     <ErrorSuppressionDataContainer />
-                </ErrorSuppressionFiltersContextProvider>)
+                </ProviderForTest>)
             );
         })
     })

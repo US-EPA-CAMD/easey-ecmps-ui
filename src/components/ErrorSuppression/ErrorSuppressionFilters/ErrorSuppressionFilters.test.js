@@ -32,10 +32,11 @@ const configurations = [
     },
   ];
   const orisCode = [1,3];
-
-describe("ErrorSuppressionFilters component", () => {
-
-    const mock = new MockAdapter(axios);
+  
+  describe("ErrorSuppressionFilters component", () => {
+      
+      const mock = new MockAdapter(axios);
+      let component;
 
     beforeEach(async () => {
         mock
@@ -67,7 +68,7 @@ describe("ErrorSuppressionFilters component", () => {
           .reply(200, configurations);
 
         await act(async () => {
-            render(<ErrorSuppressionFiltersContextProvider>
+            component = render(<ErrorSuppressionFiltersContextProvider>
                 <ErrorSuppressionFilters />
             </ErrorSuppressionFiltersContextProvider>)
         });
@@ -111,6 +112,12 @@ describe("ErrorSuppressionFilters component", () => {
         expect(screen.queryByText("Apply Filters")).toBeDefined();
     })
 
+    it('clicks the apply filters button', async ()=>{
+        const applyFiltersButton = screen.queryByText("Apply Filters");
+        userEvent.click(applyFiltersButton);
+        expect(component).toBeDefined();
+})
+
     it ('clears all filters when clear button is selected', async () => {
         const clearButton = screen.getByTestId("es-clear");
         await userEvent.click(clearButton);
@@ -123,4 +130,3 @@ describe("ErrorSuppressionFilters component", () => {
 
 
     })
-})

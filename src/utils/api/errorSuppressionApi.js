@@ -9,9 +9,31 @@ axios.defaults.headers.common = {
 
 const url = `${config.services.camd.uri}/error-suppressions`;
 
-export const getErrorSuppressionRecords = (checkTypeCode, checkNumber, checkResult) => {
-
-    return axios.get(url, { params: { checkTypeCode, checkNumber, checkResult } })
+export const getErrorSuppressionRecords = ({             
+    checkType, 
+    checkNumber, 
+    checkResult,
+    facility,
+    locations,
+    active,
+    reason,
+    addDateAfter,
+    addDateBefore,
+}) => {
+    const pipeDelimitedLocations = locations && locations.length > 0 ? locations.join("|") : undefined;
+    return axios.get(url, {
+        params: {
+            checkTypeCode:checkType, 
+            checkNumber, 
+            checkResult, 
+            active,
+            facilityId: facility, 
+            locations:pipeDelimitedLocations, 
+            reasonCode: reason, 
+            beginDateHrQtr:addDateAfter,
+            endDateHrQtr:addDateBefore,
+        }
+    })
         .then(handleResponse).catch(handleError)
 }
 

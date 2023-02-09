@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { FormGroup, Label, FileInput, Alert } from "@trussworks/react-uswds";
-import { checkingCorrectSchema,formatSchemaErrors } from "./import-functions";
+import { checkingCorrectSchema, formatSchemaErrors } from "./import-functions";
 import {
   QA_CERT_TEST_SUMMARY_STORE_NAME,
   MONITORING_PLAN_STORE_NAME,
@@ -43,6 +43,7 @@ const ImportModal = ({
             setLabel("Upload MP JSON File");
           })
           .catch((err) => console.log(err));
+        setLabel("Upload MP JSON File");
         break;
       case QA_CERT_TEST_SUMMARY_STORE_NAME:
         qaApi
@@ -52,6 +53,7 @@ const ImportModal = ({
             setLabel("Upload QA JSON File");
           })
           .catch((err) => console.log(err));
+        setLabel("Upload QA JSON File");
         break;
       case EMISSIONS_STORE_NAME:
         emApi
@@ -61,39 +63,6 @@ const ImportModal = ({
             setLabel("Upload Emissions JSON File");
           })
           .catch((err) => console.log(err));
-        break;
-      default:
-        break;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  useEffect(() => {
-    mpApi
-      .getMPSchema()
-      .then(({ data }) => {
-        setMpSchema(data);
-      })
-      .catch((err) => console.log(err));
-    qaApi
-      .getQASchema()
-      .then(({ data }) => {
-        setQaSchema(data);
-      })
-      .catch((err) => console.log(err));
-    emApi
-      .getEmissionsSchema()
-      .then(({ data }) => {
-        setEmSchema(data);
-      })
-      .catch((err) => console.log(err));
-    switch (workspaceSection) {
-      case MONITORING_PLAN_STORE_NAME:
-        setLabel("Upload MP JSON File");
-        break;
-      case QA_CERT_TEST_SUMMARY_STORE_NAME:
-        setLabel("Upload QA JSON File");
-        break;
-      case EMISSIONS_STORE_NAME:
         setLabel("Upload Emissions JSON File");
         break;
       default:
@@ -101,6 +70,7 @@ const ImportModal = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const validateJSON = (name, type, event) => {
     const fileTypeManual = name.split(".");
     if (fileTypeManual[fileTypeManual.length - 1] !== "json") {
@@ -174,7 +144,16 @@ const ImportModal = ({
       setSchemaErrors([]);
       const fileLoaded = JSON.parse(event.target.result);
       setImportedFile(fileLoaded);
-      checkingCorrectSchema(fileLoaded,workspaceSection,errorChecks,setSchemaErrors,qaSchema,mpSchema,emSchema,setDisablePortBtn);
+      checkingCorrectSchema(
+        fileLoaded,
+        workspaceSection,
+        errorChecks,
+        setSchemaErrors,
+        qaSchema,
+        mpSchema,
+        emSchema,
+        setDisablePortBtn
+      );
     } catch (e) {
       setHasInvalidJsonError(true);
       setHasFormatError(false);
