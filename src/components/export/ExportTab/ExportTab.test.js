@@ -18,8 +18,8 @@ describe("ExportTab", function () {
     );
     emissionsApi = await import("../../../utils/api/emissionsApi");
     monitoringPlansApi = await import(
-        "../../../utils/api/monitoringPlansApi"
-        )
+      "../../../utils/api/monitoringPlansApi"
+    )
   });
 
   describe("Emissions Export", function () {
@@ -32,7 +32,7 @@ describe("ExportTab", function () {
         .spyOn(emissionsApi, "exportEmissionsDataDownload")
         .mockResolvedValue({});
       jest.spyOn(monitoringPlansApi, "exportMonitoringPlanDownload")
-          .mockResolvedValue({});
+        .mockResolvedValue({});
 
       await act(async () => {
         return render(
@@ -65,14 +65,14 @@ describe("ExportTab", function () {
       );
     });
 
-    describe("Testing Preview Button", ()=>{
-      
+    describe("Testing Preview Button", () => {
+
       let mpCheckboxElement;
       let emissionsCheckboxElement;
       let qaCheckboxElement;
       let previewButtonElement;
 
-      beforeEach(async ()=>{
+      beforeEach(async () => {
         await act(async () => {
           return render(
             <ExportTab
@@ -88,25 +88,25 @@ describe("ExportTab", function () {
 
         mpCheckboxElement = screen.getByLabelText("Monitoring Plan");
         emissionsCheckboxElement = screen.getByLabelText("Emissions");
-        qaCheckboxElement = screen.getByLabelText("QA & Certification");                  
-        previewButtonElement = screen.getByRole("button", {name: "Preview"});
+        qaCheckboxElement = screen.getByLabelText("QA & Certification");
+        previewButtonElement = screen.getByRole("button", { name: "Preview" });
       })
 
-      it("should render the component with the preview button disabled", ()=>{
+      it("should render the component with the preview button disabled", () => {
         expect(previewButtonElement.disabled).toBe(true)
       })
 
-      it("should disable preview button when MP is checked", ()=>{  
+      it("should disable preview button when MP is checked", () => {
         fireEvent.click(mpCheckboxElement)
         expect(previewButtonElement.disabled).toBe(true)
       })
-      
-      it("should disable preview button when Emissions is checked", ()=>{
+
+      it("should disable preview button when Emissions is checked", () => {
         fireEvent.click(emissionsCheckboxElement)
         expect(previewButtonElement.disabled).toBe(true)
       })
 
-      it("should enable preview button when QA is checked", async ()=>{
+      it("should enable preview button when QA is checked", async () => {
         fireEvent.click(qaCheckboxElement)
         expect(previewButtonElement.disabled).toBe(false)
         jest.setTimeout(5000);

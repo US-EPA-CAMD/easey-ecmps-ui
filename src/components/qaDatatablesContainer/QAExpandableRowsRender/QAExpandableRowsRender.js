@@ -6,7 +6,11 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
-import { addAriaLabelToDatatable, returnsFocusDatatableViewBTN, returnsFocusToAddBtn } from "../../../additional-functions/ensure-508";
+import {
+  addAriaLabelToDatatable,
+  returnsFocusDatatableViewBTN,
+  returnsFocusToAddBtn,
+} from "../../../additional-functions/ensure-508";
 /*********** COMPONENTS ***********/
 
 import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
@@ -33,7 +37,7 @@ import {
   qaAppendixECorrelationSummaryHeatInputOilProps,
   qaCycleTimeInjectionProps,
   qaHgInjectionDataProps,
-  qaUnitDefaultTestRunDataProps
+  qaUnitDefaultTestRunDataProps,
 } from "../../../additional-functions/qa-dataTable-props";
 import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
 const QAExpandableRowsRender = ({
@@ -62,6 +66,7 @@ const QAExpandableRowsRender = ({
   const [createdDataId, setCreatedDataId] = useState(null);
 
   const [displayedRecords, setDisplayedRecords] = useState([]);
+  const [errorMsgs, setErrorMsgs] = useState([]);
   useEffect(() => {
     if (updateTable || (dataPulled && dataPulled.length === 0)) {
       setLoading(true);
@@ -286,7 +291,8 @@ const QAExpandableRowsRender = ({
         );
       case "Appendix E Correlation Heat Input from Oil":
         const heatInputOilIdArray = [...extraIDs, id];
-        const heatInputOilObj = qaAppendixECorrelationSummaryHeatInputOilProps(data);
+        const heatInputOilObj =
+          qaAppendixECorrelationSummaryHeatInputOilProps(data);
         return (
           <QAExpandableRowsRender
             payload={heatInputOilObj["payload"]}
@@ -319,47 +325,50 @@ const QAExpandableRowsRender = ({
             dataTableName={cycleTimeInjec["dataTableName"]}
             extraControls={cycleTimeInjec["extraControls"]}
             extraIDs={cycleTimeInjectionIdArray}
-            
             user={user}
             isCheckedOut={isCheckedOut}
           />
         );
-        case "Unit Default Test": //Unit Default Test Data => Unit Default Test Run
-          const extraIds = [locationId, id];
-          const unitDefaultTestRunProps = qaUnitDefaultTestRunDataProps();
-          return (
-            <QAExpandableRowsRender
-              payload={unitDefaultTestRunProps["payload"]}
-              dropdownArray={unitDefaultTestRunProps["dropdownArray"]}
-              mdmProps={unitDefaultTestRunProps["mdmProps"]}
-              columns={unitDefaultTestRunProps["columnNames"]}
-              controlInputs={unitDefaultTestRunProps["controlInputs"]}
-              controlDatePickerInputs={unitDefaultTestRunProps["controlDatePickerInputs"]}
-              dataTableName={unitDefaultTestRunProps["dataTableName"]}
-              extraIDs={extraIds}
-              user={user}
-              isCheckedOut={isCheckedOut}
-            />
-          );
-        case "Hg Summary": // Hg Test Data => Hg Summary => Hg Injection
-          const hgInjectionIdArr = [locationId, id];
-          const hgInjectionProps = qaHgInjectionDataProps();
-          return (
-            <QAExpandableRowsRender
-              payload={hgInjectionProps["payload"]}
-              dropdownArray={hgInjectionProps["dropdownArray"]}
-              mdmProps={hgInjectionProps["mdmProps"]}
-              columns={hgInjectionProps["columnNames"]}
-              controlInputs={hgInjectionProps["controlInputs"]}
-              controlDatePickerInputs={hgInjectionProps["controlDatePickerInputs"]}
-              radioBtnPayload={hgInjectionProps["radioBtnPayload"]}
-              dataTableName={hgInjectionProps["dataTableName"]}
-              extraControls={hgInjectionProps["extraControls"]}
-              extraIDs={hgInjectionIdArr}
-              user={user}
-              isCheckedOut={isCheckedOut}
-            />
-          );
+      case "Unit Default Test": //Unit Default Test Data => Unit Default Test Run
+        const extraIds = [locationId, id];
+        const unitDefaultTestRunProps = qaUnitDefaultTestRunDataProps();
+        return (
+          <QAExpandableRowsRender
+            payload={unitDefaultTestRunProps["payload"]}
+            dropdownArray={unitDefaultTestRunProps["dropdownArray"]}
+            mdmProps={unitDefaultTestRunProps["mdmProps"]}
+            columns={unitDefaultTestRunProps["columnNames"]}
+            controlInputs={unitDefaultTestRunProps["controlInputs"]}
+            controlDatePickerInputs={
+              unitDefaultTestRunProps["controlDatePickerInputs"]
+            }
+            dataTableName={unitDefaultTestRunProps["dataTableName"]}
+            extraIDs={extraIds}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
+      case "Hg Summary": // Hg Test Data => Hg Summary => Hg Injection
+        const hgInjectionIdArr = [locationId, id];
+        const hgInjectionProps = qaHgInjectionDataProps();
+        return (
+          <QAExpandableRowsRender
+            payload={hgInjectionProps["payload"]}
+            dropdownArray={hgInjectionProps["dropdownArray"]}
+            mdmProps={hgInjectionProps["mdmProps"]}
+            columns={hgInjectionProps["columnNames"]}
+            controlInputs={hgInjectionProps["controlInputs"]}
+            controlDatePickerInputs={
+              hgInjectionProps["controlDatePickerInputs"]
+            }
+            radioBtnPayload={hgInjectionProps["radioBtnPayload"]}
+            dataTableName={hgInjectionProps["dataTableName"]}
+            extraControls={hgInjectionProps["extraControls"]}
+            extraIDs={hgInjectionIdArr}
+            user={user}
+            isCheckedOut={isCheckedOut}
+          />
+        );
       default:
         break;
     }
@@ -367,16 +376,19 @@ const QAExpandableRowsRender = ({
 
   const populateStaticDropdowns = (tableName, dropdowns) => {
     if (tableName === "Flow To Load Check") {
-      dropdowns['biasAdjustedIndicator'] = [
-        { code: 1, name: 1 }, { code: 2, name: 2 }
-      ]
-    }else if (tableName === "Unit Default Test Run") {
-      dropdowns['runUsedIndicator'] = [
-        { code: "", name: "-- Select a value --" },{ code: 0, name: 0 }, { code: 1, name: 1 }
-      ]
+      dropdowns["biasAdjustedIndicator"] = [
+        { code: 0, name: 0 },
+        { code: 1, name: 1 },
+      ];
+    } else if (tableName === "Unit Default Test Run") {
+      dropdowns["runUsedIndicator"] = [
+        { code: "", name: "-- Select a value --" },
+        { code: 0, name: 0 },
+        { code: 1, name: 1 },
+      ];
     }
   };
-  
+
   const loadDropdownsData = (name) => {
     let dropdowns = {};
     const allPromises = [];
@@ -386,266 +398,293 @@ const QAExpandableRowsRender = ({
       case "Linearity Injection":
         allPromises.push(dmApi.getAllGasLevelCodes());
         allPromises.push(dmApi.getAllGasTypeCodes());
-        Promise.all(allPromises).then((values) => {
-          values.forEach((val, i) => {
-            if (i === 0) {
-              dropdowns[dropdownArray[i]] = val.data.map((d) => {
-                return {
-                  code: d["gasLevelCode"],
-                  name: d["gasLevelDescription"],
-                };
-              });
-              dropdowns[dropdownArray[i]].unshift({
-                code: "",
-                name: "-- Select a value --",
-              });
-            } else {
-              dropdowns[dropdownArray[i]] = val.data.map((d) => {
-                return {
-                  code: d["gasTypeCode"],
-                  name: d["gasTypeDescription"],
-                };
-              });
-              dropdowns[dropdownArray[i]].unshift({
-                code: "",
-                name: "-- Select a value --",
-              });
-            }
-          });
+        Promise.all(allPromises)
+          .then((values) => {
+            values.forEach((val, i) => {
+              if (i === 0) {
+                dropdowns[dropdownArray[i]] = val.data.map((d) => {
+                  return {
+                    code: d["gasLevelCode"],
+                    name: d["gasLevelDescription"],
+                  };
+                });
+                dropdowns[dropdownArray[i]].unshift({
+                  code: "",
+                  name: "-- Select a value --",
+                });
+              } else {
+                dropdowns[dropdownArray[i]] = val.data.map((d) => {
+                  return {
+                    code: d["gasTypeCode"],
+                    name: d["gasTypeDescription"],
+                  };
+                });
+                dropdowns[dropdownArray[i]].unshift({
+                  code: "",
+                  name: "-- Select a value --",
+                });
+              }
+            });
 
-          setMdmData(dropdowns);
-        }).catch((error => console.log(error)));
+            setMdmData(dropdowns);
+          })
+          .catch((error) => console.log(error));
         break;
       case "RATA Data":
         allPromises.push(dmApi.getAllRataFreqCodes());
-        Promise.all(allPromises).then((values) => {
-          values.forEach((val, i) => {
-            if (i === 0) {
-              dropdowns[dropdownArray[i]] = val.data.map((d) => {
-                return {
-                  code: d["rataFrequencyCode"],
-                  name: d["rataFrequencyDescription"],
-                };
-              });
-              dropdowns[dropdownArray[i]].unshift({
-                code: "",
-                name: "-- Select a value --",
-              });
-            }
-          });
+        Promise.all(allPromises)
+          .then((values) => {
+            values.forEach((val, i) => {
+              if (i === 0) {
+                dropdowns[dropdownArray[i]] = val.data.map((d) => {
+                  return {
+                    code: d["rataFrequencyCode"],
+                    name: d["rataFrequencyDescription"],
+                  };
+                });
+                dropdowns[dropdownArray[i]].unshift({
+                  code: "",
+                  name: "-- Select a value --",
+                });
+              }
+            });
 
-          dropdowns.numberOfLoadLevels = [
-            { code: "", name: selectText },
-            { code: 1, name: 1 },
-            { code: 2, name: 2 },
-            { code: 3, name: 3 },
-          ];
-          setMdmData(dropdowns);
-        }).catch((error => console.log(error)));
+            dropdowns.numberOfLoadLevels = [
+              { code: "", name: selectText },
+              { code: 1, name: 1 },
+              { code: 2, name: 2 },
+              { code: 3, name: 3 },
+            ];
+            setMdmData(dropdowns);
+          })
+          .catch((error) => console.log(error));
         break;
 
       case "RATA Run Data":
         allPromises.push(dmApi.getAllRunStatusCodes());
-        Promise.all(allPromises).then((response) => {
-          dropdownArray.forEach((val, i) => {
-            if (i === 0) {
-              dropdowns[dropdownArray[i]] = response[0].data.map((d) => {
-                return {
-                  code: d["runStatusCode"],
-                  name: d["runStatusDescription"],
-                };
-              });
-              dropdowns[dropdownArray[i]].unshift({
-                code: "",
-                name: "-- Select a value --",
-              });
-            }
-          });
-          setMdmData(dropdowns);
-        }).catch((error => console.log(error)));
+        Promise.all(allPromises)
+          .then((response) => {
+            dropdownArray.forEach((val, i) => {
+              if (i === 0) {
+                dropdowns[dropdownArray[i]] = response[0].data.map((d) => {
+                  return {
+                    code: d["runStatusCode"],
+                    name: d["runStatusDescription"],
+                  };
+                });
+                dropdowns[dropdownArray[i]].unshift({
+                  code: "",
+                  name: "-- Select a value --",
+                });
+              }
+            });
+            setMdmData(dropdowns);
+          })
+          .catch((error) => console.log(error));
         break;
 
       case "RATA Summary":
         allPromises.push(dmApi.getAllOperatingLevelCodes());
         allPromises.push(dmApi.getAllReferenceMethodCodes());
         allPromises.push(dmApi.getAllApsCodes());
-        Promise.all(allPromises).then((response) => {
-          dropdownArray.forEach((val, i) => {
-            if (i === 0) {
-              dropdowns[dropdownArray[i]] = response[0].data.map((d) => {
-                return {
-                  code: d["opLevelCode"],
-                  name: d["opLevelDescription"],
-                };
-              });
-              dropdowns[dropdownArray[i]].unshift({
-                code: "",
-                name: "-- Select a value --",
-              });
-            } else if (i === 1 || i === 3) {
-              dropdowns[dropdownArray[i]] = response[1].data.map((d) => {
-                return {
-                  code: d["referenceMethodCode"],
-                  name: d["referenceMethodDescription"],
-                };
-              });
-              dropdowns[dropdownArray[i]].unshift({
-                code: "",
-                name: "-- Select a value --",
-              });
-            } else {
-              dropdowns[dropdownArray[i]] = response[2].data.map((d) => {
-                return {
-                  code: d["apsCode"],
-                  name: d["apsDescription"],
-                };
-              });
-              dropdowns[dropdownArray[i]].unshift({
-                code: "",
-                name: "-- Select a value --",
-              });
-            }
-          });
-          setMdmData(dropdowns);
-        }).catch((error => console.log(error)))
+        Promise.all(allPromises)
+          .then((response) => {
+            dropdownArray.forEach((val, i) => {
+              if (i === 0) {
+                dropdowns[dropdownArray[i]] = response[0].data.map((d) => {
+                  return {
+                    code: d["opLevelCode"],
+                    name: d["opLevelDescription"],
+                  };
+                });
+                dropdowns[dropdownArray[i]].unshift({
+                  code: "",
+                  name: "-- Select a value --",
+                });
+              } else if (i === 1 || i === 3) {
+                dropdowns[dropdownArray[i]] = response[1].data.map((d) => {
+                  return {
+                    code: d["referenceMethodCode"],
+                    name: d["referenceMethodDescription"],
+                  };
+                });
+                dropdowns[dropdownArray[i]].unshift({
+                  code: "",
+                  name: "-- Select a value --",
+                });
+              } else {
+                dropdowns[dropdownArray[i]] = response[2].data.map((d) => {
+                  return {
+                    code: d["apsCode"],
+                    name: d["apsDescription"],
+                  };
+                });
+                dropdowns[dropdownArray[i]].unshift({
+                  code: "",
+                  name: "-- Select a value --",
+                });
+              }
+            });
+            setMdmData(dropdowns);
+          })
+          .catch((error) => console.log(error));
         break;
       case "RATA Traverse Data":
         allPromises.push(dmApi.getAllProbeTypeCodes());
         allPromises.push(dmApi.getAllPressureMeasureCodes());
         allPromises.push(dmApi.getAllPointUsedIndicatorCodes());
-        Promise.all(allPromises).then((responses) => {
-          responses.forEach((curResp, i) => {
-            let codeLabel;
-            let descriptionLabel;
-            switch (i) {
-              case 0:
-                codeLabel = "probeTypeCode";
-                descriptionLabel = "probeTypeDescription";
-                break;
-              case 1:
-                codeLabel = "pressureMeasureCode";
-                descriptionLabel = "pressureMeasureDescription";
-                break;
-              case 2:
-                codeLabel = "pointUsedIndicatorCode";
-                descriptionLabel = "pointUsedIndicatorDescription";
-                break;
-              default:
-                break;
-            }
-            dropdowns[dropdownArray[i]] = curResp.data.map((d) => {
-              return { code: d[codeLabel], name: d[descriptionLabel] };
+        Promise.all(allPromises)
+          .then((responses) => {
+            responses.forEach((curResp, i) => {
+              let codeLabel;
+              let descriptionLabel;
+              switch (i) {
+                case 0:
+                  codeLabel = "probeTypeCode";
+                  descriptionLabel = "probeTypeDescription";
+                  break;
+                case 1:
+                  codeLabel = "pressureMeasureCode";
+                  descriptionLabel = "pressureMeasureDescription";
+                  break;
+                case 2:
+                  codeLabel = "pointUsedIndicatorCode";
+                  descriptionLabel = "pointUsedIndicatorDescription";
+                  break;
+                default:
+                  break;
+              }
+              dropdowns[dropdownArray[i]] = curResp.data.map((d) => {
+                return { code: d[codeLabel], name: d[descriptionLabel] };
+              });
             });
-          });
-          for (const options of Object.values(dropdowns)) {
-            options.unshift({ code: "", name: "-- Select a value --" });
-          }
-          setMdmData(dropdowns);
-        }).catch((error => console.log(error)))
-        break
+            for (const options of Object.values(dropdowns)) {
+              options.unshift({ code: "", name: "-- Select a value --" });
+            }
+            setMdmData(dropdowns);
+          })
+          .catch((error) => console.log(error));
+        break;
       case "Appendix E Correlation Heat Input from Oil":
         allPromises.push(dmApi.getAllMonitoringSystemIDCodes(extraIDs[0]));
         allPromises.push(dmApi.getAllUnitsOfMeasureCodes());
-        Promise.all(allPromises).then((responses) => {
-          responses.forEach((curResp, i) => {
-            let codeLabel;
-            let descriptionLabel;
-            switch (i) {
-              case 0:
-                codeLabel = "monitoringSystemIDCode";
-                descriptionLabel = "monitoringSystemIDDescription";
-                break;
-              case 1:
-                codeLabel = "unitOfMeasureCode";
-                descriptionLabel = "unitOfMeasureDescription";
-                break;
-              default:
-                break;
-            }
-            dropdowns[dropdownArray[i]] = curResp.data.map((d) => {
-              return { code: d[codeLabel], name: d[descriptionLabel] };
+        Promise.all(allPromises)
+          .then((responses) => {
+            responses.forEach((curResp, i) => {
+              let codeLabel;
+              let descriptionLabel;
+              switch (i) {
+                case 0:
+                  codeLabel = "monitoringSystemIDCode";
+                  descriptionLabel = "monitoringSystemIDDescription";
+                  break;
+                case 1:
+                  codeLabel = "unitOfMeasureCode";
+                  descriptionLabel = "unitOfMeasureDescription";
+                  break;
+                default:
+                  break;
+              }
+              dropdowns[dropdownArray[i]] = curResp.data.map((d) => {
+                return { code: d[codeLabel], name: d[descriptionLabel] };
+              });
+              if (i === 1) {
+                dropdowns["oilVolumeUnitsOfMeasureCode"] = curResp.data.map(
+                  (d) => {
+                    return { code: d[codeLabel], name: d[descriptionLabel] };
+                  }
+                );
+                dropdowns["oilDensityUnitsOfMeasureCode"] = curResp.data.map(
+                  (d) => {
+                    return { code: d[codeLabel], name: d[descriptionLabel] };
+                  }
+                );
+              }
             });
-            if (i === 1) {
-              dropdowns["oilVolumeUnitsOfMeasureCode"] = curResp.data.map((d) => {
-                return { code: d[codeLabel], name: d[descriptionLabel] };
-              });
-              dropdowns["oilDensityUnitsOfMeasureCode"] = curResp.data.map((d) => {
-                return { code: d[codeLabel], name: d[descriptionLabel] };
-              });
+            for (const options of Object.values(dropdowns)) {
+              options.unshift({ code: "", name: "-- Select a value --" });
             }
-          });
-          for (const options of Object.values(dropdowns)) {
-            options.unshift({ code: "", name: "-- Select a value --" });
-          }
-          setMdmData(dropdowns);
-        }).catch((error => console.log(error)))
+            setMdmData(dropdowns);
+          })
+          .catch((error) => console.log(error));
         break;
       case "Transmitter Transducer Accuracy Data":
         allPromises.push(dmApi.getAllAccuracySpecCodes());
-        Promise.all(allPromises).then((responses) => {
-          responses.forEach((curResp, i) => {
-            let codeLabel;
-            let descriptionLabel;
-            switch (i) {
-              case 0:
-                codeLabel = "accuracySpecCode";
-                descriptionLabel = "accuracySpecDescription";
-                break;
-              default:
-                break;
-            }
-            dropdowns[dropdownArray[i]] = curResp.data.map((d) => {
-              return { code: d[codeLabel], name: d[descriptionLabel] };
+        Promise.all(allPromises)
+          .then((responses) => {
+            responses.forEach((curResp, i) => {
+              let codeLabel;
+              let descriptionLabel;
+              switch (i) {
+                case 0:
+                  codeLabel = "accuracySpecCode";
+                  descriptionLabel = "accuracySpecDescription";
+                  break;
+                default:
+                  break;
+              }
+              dropdowns[dropdownArray[i]] = curResp.data.map((d) => {
+                return { code: d[codeLabel], name: d[descriptionLabel] };
+              });
+              if (i === 0) {
+                dropdowns["midLevelAccuracySpecCode"] = curResp.data.map(
+                  (d) => {
+                    return { code: d[codeLabel], name: d[descriptionLabel] };
+                  }
+                );
+                dropdowns["highLevelAccuracySpecCode"] = curResp.data.map(
+                  (d) => {
+                    return { code: d[codeLabel], name: d[descriptionLabel] };
+                  }
+                );
+              }
             });
-            if (i === 0) {
-              dropdowns["midLevelAccuracySpecCode"] = curResp.data.map((d) => {
-                return { code: d[codeLabel], name: d[descriptionLabel] };
-              });
-              dropdowns["highLevelAccuracySpecCode"] = curResp.data.map((d) => {
-                return { code: d[codeLabel], name: d[descriptionLabel] };
-              });
+            for (const options of Object.values(dropdowns)) {
+              options.unshift({ code: "", name: "-- Select a value --" });
             }
-          });
-          for (const options of Object.values(dropdowns)) {
-            options.unshift({ code: "", name: "-- Select a value --" });
-          }
-          setMdmData(dropdowns);
-        }).catch((error => console.log(error)))
+            setMdmData(dropdowns);
+          })
+          .catch((error) => console.log(error));
         break;
       case "Flow To Load Reference":
-        allPromises.push(dmApi.getRataTestNumber(locationId))
+        allPromises.push(dmApi.getRataTestNumber(locationId));
         allPromises.push(dmApi.getAllOperatingLevelCodes());
-        allPromises.push(dmApi.getAllCalculatedSeparateReferenceIndicatorCodes());
-        Promise.all(allPromises).then((responses) => {
-          responses.forEach((curResp, i) => {
-            let codeLabel;
-            let descriptionLabel;
-            switch (i) {
-              case 0:
-                codeLabel = "rataTestNumberCode";
-                descriptionLabel = "rataTestNumberDescription";
-                break;
-              case 1:
-                codeLabel = "opLevelCode";
-                descriptionLabel = "opLevelDescription";
-                break;
-              case 2:
-                codeLabel = "calculatedSeparateReferenceIndicatorCode";
-                descriptionLabel = "calculatedSeparateReferenceIndicatorDescription";
-                break;
-              default:
-                break;
-            }
-            dropdowns[dropdownArray[i]] = curResp.data.map((d) => {
-              return { code: d[codeLabel], name: d[descriptionLabel] };
+        allPromises.push(
+          dmApi.getAllCalculatedSeparateReferenceIndicatorCodes()
+        );
+        Promise.all(allPromises)
+          .then((responses) => {
+            responses.forEach((curResp, i) => {
+              let codeLabel;
+              let descriptionLabel;
+              switch (i) {
+                case 0:
+                  codeLabel = "rataTestNumberCode";
+                  descriptionLabel = "rataTestNumberDescription";
+                  break;
+                case 1:
+                  codeLabel = "opLevelCode";
+                  descriptionLabel = "opLevelDescription";
+                  break;
+                case 2:
+                  codeLabel = "calculatedSeparateReferenceIndicatorCode";
+                  descriptionLabel =
+                    "calculatedSeparateReferenceIndicatorDescription";
+                  break;
+                default:
+                  break;
+              }
+              dropdowns[dropdownArray[i]] = curResp.data.map((d) => {
+                return { code: d[codeLabel], name: d[descriptionLabel] };
+              });
             });
-          });
-          for (const options of Object.values(dropdowns)) {
-            options.unshift({ code: "", name: "-- Select a value --" });
-          }
-          setMdmData(dropdowns);
-        }).catch((error => console.log(error)))
-        break
+            for (const options of Object.values(dropdowns)) {
+              options.unshift({ code: "", name: "-- Select a value --" });
+            }
+            setMdmData(dropdowns);
+          })
+          .catch((error) => console.log(error));
+        break;
       case "Unit Default Test Run":
         populateStaticDropdowns(name, dropdowns);
         setMdmData(dropdowns);
@@ -705,29 +744,38 @@ const QAExpandableRowsRender = ({
       executeOnClose();
     }
     if (createNewData) {
-      returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"))
+      returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"));
     }
   };
   const executeOnClose = (data) => {
     // setReturnedFocusToLast(false);
     setShow(false);
+    setErrorMsgs([]);
     removeChangeEventListeners(".modalUserInput");
 
-    const updatedData = assertSelector.getDataTableRecords(data ? data : [], dataTableName)
-    const idx = updatedData.findIndex(d => d.id === createdDataId)
+    const updatedData = assertSelector.getDataTableRecords(
+      data ? data : [],
+      dataTableName
+    );
+    const idx = updatedData.findIndex((d) => d.id === createdDataId);
 
     if (idx >= 0) {
-      returnsFocusDatatableViewBTN(dataTableName.replaceAll(" ", "-"), idx)
-      setCreatedDataId(null)
-      setCreateNewData(false)
+      returnsFocusDatatableViewBTN(dataTableName.replaceAll(" ", "-"), idx);
+      setCreatedDataId(null);
+      setCreateNewData(false);
     } else {
-      returnsFocusDatatableViewBTN(dataTableName.replaceAll(" ", "-"), clickedIndex)
+      returnsFocusDatatableViewBTN(
+        dataTableName.replaceAll(" ", "-"),
+        clickedIndex
+      );
     }
   };
+
   const finishedLoadingData = (loadedData) => {
     setDataPulled(loadedData);
     addAriaLabelToDatatable();
   };
+
   // Executed when "View" action is clicked
   const openModal = (row, bool, create, index) => {
     let selectedData = null;
@@ -750,7 +798,7 @@ const QAExpandableRowsRender = ({
           "dropdown",
           "",
           "",
-        ]
+        ];
       }
     } else {
       if (dataTableName === "Linearity Test") {
@@ -775,7 +823,7 @@ const QAExpandableRowsRender = ({
           "dropdown",
           "",
           "locked",
-        ]
+        ];
       }
     }
 
@@ -814,9 +862,13 @@ const QAExpandableRowsRender = ({
     }
 
     if (dataTableName === "Fuel Flowmeter Accuracy Data") {
-      if(selectedData){
-        if(selectedData.reinstallationDate){
-          selectedData.reinstallationDate = new Date(selectedData.reinstallationDate).toISOString().slice(0,10)
+      if (selectedData) {
+        if (selectedData.reinstallationDate) {
+          selectedData.reinstallationDate = new Date(
+            selectedData.reinstallationDate
+          )
+            .toISOString()
+            .slice(0, 10);
         }
       }
     }
@@ -838,7 +890,7 @@ const QAExpandableRowsRender = ({
       )
     );
 
-    setClickedIndex(index)
+    setClickedIndex(index);
 
     setShow(true);
     setTimeout(() => {
@@ -852,29 +904,50 @@ const QAExpandableRowsRender = ({
       ".modalUserInput",
       getListOfRadioControls(controlInputs)
     );
-
-    assertSelector
-      .saveDataSwitch(userInput, dataTableName, locationId, id, extraIDs)
-      .then((res) => {
+    try {
+      const resp = await assertSelector.saveDataSwitch(
+        userInput,
+        dataTableName,
+        locationId,
+        id,
+        extraIDs
+      );
+      if (resp.status === 200) {
         setUpdateTable(true);
         executeOnClose();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      console.log("error saving data", error);
+    }
   };
 
-  const createData = () => {
-    const userInput = extractUserInput(payload, ".modalUserInput", getListOfRadioControls(controlInputs));
-    assertSelector
-      .createDataSwitch(userInput, dataTableName, locationId, id, extraIDs)
-      .then((res) => {
-        setCreatedDataId(res.data.id);
+  const createData = async () => {
+    const userInput = extractUserInput(
+      payload,
+      ".modalUserInput",
+      getListOfRadioControls(controlInputs)
+    );
+    try {
+      const resp = await assertSelector.createDataSwitch(
+        userInput,
+        dataTableName,
+        locationId,
+        id,
+        extraIDs
+      );
+      if (resp.status === 201) {
+        setCreatedDataId(resp.data.id);
         setUpdateTable(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      console.log("error creating data", error);
+    }
   };
 
   const onRemoveHandler = async (row) => {
@@ -888,10 +961,13 @@ const QAExpandableRowsRender = ({
       );
       if (resp.status === 200) {
         setUpdateTable(true);
-        returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"))
+        returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"));
       }
     } catch (error) {
-      console.log(`error deleting data of table: ${dataTableName}, row: ${row}`, error);
+      console.log(
+        `error deleting data of table: ${dataTableName}, row: ${row}`,
+        error
+      );
     }
   };
 
@@ -907,7 +983,9 @@ const QAExpandableRowsRender = ({
         expandables.push(nextExpandableRow("Air Emissions"));
         break;
       case "Appendix E Correlation Heat Input from Gas":
-        expandables.push(nextExpandableRow("Appendix E Correlation Heat Input from Oil"))
+        expandables.push(
+          nextExpandableRow("Appendix E Correlation Heat Input from Oil")
+        );
         break;
       case "Unit Default Test":
         expandables.push(nextExpandableRow("Protocol Gas"));
@@ -1000,10 +1078,11 @@ const QAExpandableRowsRender = ({
             createNewData
               ? `Add  ${dataTableName}`
               : user && isCheckedOut
-                ? ` Edit ${dataTableName}`
-                : ` ${dataTableName}`
+              ? ` Edit ${dataTableName}`
+              : ` ${dataTableName}`
           }
           exitBTN={`Save and Close`}
+          errorMsgs={errorMsgs}
           children={
             dropdownsLoaded ? (
               <div>
