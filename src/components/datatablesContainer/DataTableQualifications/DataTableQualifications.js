@@ -80,6 +80,7 @@ export const DataTableQualifications = ({
   const dropdownArray = [["qualificationTypeCode"]];
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
+  const [errorMsgs, setErrorMsgs] = useState([])
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
@@ -267,6 +268,7 @@ export const DataTableQualifications = ({
   };
 
   const executeOnClose = () => {
+    setErrorMsgs([]);
     removeChangeEventListeners(".modalUserInput");
     setReturnedFocusToLast(false);
   };
@@ -276,9 +278,10 @@ export const DataTableQualifications = ({
   //    - dataType: type of qualification record
   //    - apiFunc: API function from imported utility
   //    - userInput: user-entered values (payload)
-  const handleRequest = (dataType, apiFunc, userInput) => {
-    apiFunc(userInput)
-      .then(() => {
+  const handleRequest = async (dataType, apiFunc, userInput) => {
+    try {
+      const resp = await apiFunc(userInput);
+      if (resp.status >= 200 && resp.status < 300) {
         if (dataType === "qual") {
           // update qual table, then close qual modal
           setDataLoaded(false);
@@ -297,10 +300,13 @@ export const DataTableQualifications = ({
           setUpdateLME(true);
           setOpenLME(false);
         }
-      })
-      .catch((error) => {
-        setShow(false);
-      });
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      setErrorMsgs([JSON.stringify(error)])
+    }
   };
 
   // Manages SAVE button (either Parent, PCT, LME, or LEE)
@@ -508,6 +514,7 @@ export const DataTableQualifications = ({
                     ? "Create Qualification LME"
                     : "Save and Close"
           }
+          errorMsgs={errorMsgs}
           children={
             <div>
               {openPCT || openLEE || openLME ? (
