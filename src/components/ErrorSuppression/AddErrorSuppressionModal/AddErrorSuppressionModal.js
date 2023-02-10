@@ -8,6 +8,7 @@ import { getSeverityCodes } from "../../../utils/api/mdmApi";
 import { defaultDropdownText } from "../ErrorSuppression";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import { getUniqueCheckTypeDescription } from "../ErrorSuppressionFilters/ErrorSuppressionFilters";
+import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
 
 export const AddErrorSupressionModal = ({ showModal, close }) => {
 
@@ -61,15 +62,6 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
         }).catch(error=>{
             console.log("Error getting Severity Codes", error);
         });
-
-        setLocationData([
-            {
-                id: "Coming Soon...",
-                label: "Coming Soon...",
-                selected: false,
-                enabled: true,
-            }
-        ]);
     }, []);
 
 
@@ -116,6 +108,57 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
 
         setCheckResultList(transformedData[selectedCheckType][value].map(d => d.checkResult))
     }
+
+    const onCheckResultChange = (e) => {
+      const { value } = e.target;
+      setSelectedCheckResult(value);
+      if (value === false) return;
+      if (selectedCheckType && selectedCheckNumber && selectedFacility) {
+        getLocations(selectedFacility, value);
+      }
+    };
+
+    const onFacilityChange = (e) => {
+      const { value } = e.target;
+      setSelectedFacility(value);
+      if (!value) return;
+
+      if (selectedCheckType && selectedCheckNumber && selectedCheckResult) {
+        getLocations(value, selectedCheckResult);
+      }
+    };
+
+    const getLocations = (facilityValue, checkResultValue) => {
+      const locationTypeCode = transformedData[selectedCheckType][
+        selectedCheckNumber
+      ]
+        .filter((r) => r.checkResult === checkResultValue)
+        .map((d) => d.locationTypeCode);
+      getMonitoringPlans(Number(facilityValue)).then(({ data }) => {
+        const locations = data.map((f) => f.locations).flat(1);
+        let availLoc = locations?.map((l) => ({
+          id: l.unitId,
+          label: l.unitId,
+          selected: false,
+          enabled: true,
+        }));
+        if (locationTypeCode.includes("LOC")) {
+          const availStackPipe = locations?.map((l) => ({
+            id: l.stackPipeId,
+            label: l.stackPipeId,
+            selected: false,
+            enabled: true,
+          }));
+          availLoc = [...availLoc, ...availStackPipe];
+        }
+        const locName = availLoc.map((l) => l.label);
+        availLoc = availLoc
+          .filter(({ label }, index) => !locName.includes(label, index + 1))
+          .filter(({ label }) => label !== null)
+          .sort((a, b) => a.label - b.label);
+        setLocationData([...availLoc]);
+      });
+    };
 
 
     return (
@@ -171,7 +214,7 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
                                 epa-testid={"add-check-result"}
                                 data-testid={"add-check-result"}
                                 value={selectedCheckResult}
-                                onChange={(e) => setSelectedCheckResult(e.target.value)}
+                                onChange={onCheckResultChange}
                                 disabled={!selectedCheckType || !selectedCheckNumber}
                             >
                                 <option value={false}>{defaultDropdownText}</option>
@@ -245,7 +288,7 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
                                 epa-testid={"add-facility-name"}
                                 data-testid={"add-facility-name"}
                                 value={selectedFacility}
-                                onChange={(e) => setSelectedFacility(e.target.value)}
+                                onChange={onFacilityChange}
                             >
                                 <option value={false}>{defaultDropdownText}</option>
                                 {facilityList.map((d) => <option key={d.orisCode} value={d.orisCode} data-testid={d.orisCode}>{`${d.facilityName} (${d.orisCode})`}</option>)}
@@ -257,9 +300,19 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
                                 label="Locations"
                                 entity="locationName"
                                 searchBy="contains"
+                                value={selectedLocations}
                                 onChangeUpdate={onChangeOfLocationMultiSelect}
                                 iconAlignRight={2}
-                            />
+                                disabled={
+                                    !(
+                                      selectedCheckType &&
+                                      selectedCheckNumber &&
+                                      selectedCheckResult &&
+                                      selectedFacility
+                                    )
+                                  }
+                                  ></MultiSelectCombobox>
+
                         </Grid>
                     </Grid>
                     <Grid row gap={2}>
