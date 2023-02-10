@@ -58,7 +58,7 @@ export function handleError(error) {
   }
 
   if (error.response) {
-    return error.response.data.message;
+    return error.response?.data?.message;
   }
 }
 export function handleImportError(error) {
