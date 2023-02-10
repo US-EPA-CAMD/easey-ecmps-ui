@@ -73,6 +73,7 @@ export const DataTableAssert = ({
 
   const [updateTable, setUpdateTable] = useState(false);
   const [complimentaryData, setComplimentaryData] = useState([]);
+  const [errorMsgs, setErrorMsgs] = useState([])
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
   // Unit Information variables
@@ -271,7 +272,7 @@ export const DataTableAssert = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataLoaded, dataPulled, tabs[currentTabIndex].inactive[0], updateTable]);
 
-  const saveData = () => {
+  const saveData = async () => {
     const userInput = extractUserInput(
       payload,
       ".modalUserInput",
@@ -284,26 +285,26 @@ export const DataTableAssert = ({
         dataTableName !== lAttr &&
         dataTableName !== rDat)
     ) {
-      displayAppError(needEndDate);
-      setShow(false);
+      setErrorMsgs([needEndDate])
     } else {
-      assertSelector
-        .saveDataSwitch(
-          userInput,
-          dataTableName,
-          locationSelectValue,
-          urlParameters
-        )
-        .then(() => {
+      try {
+        const resp = await assertSelector.saveDataSwitch(userInput, dataTableName, locationSelectValue, urlParameters);
+        if (resp.status === 200) {
           setShow(false);
           setDataLoaded(false);
           setUpdateTable(true);
           setUpdateRelatedTables(true);
-        });
+        } else {
+          const errorResp = Array.isArray(resp) ? resp : [resp];
+          setErrorMsgs(errorResp);
+        }
+      } catch (error) {
+        setErrorMsgs([JSON.stringify(error)])
+      }
     }
   };
 
-  const createData = () => {
+  const createData = async () => {
     const userInput = extractUserInput(
       payload,
       ".modalUserInput",
@@ -316,26 +317,26 @@ export const DataTableAssert = ({
         dataTableName !== lAttr &&
         dataTableName !== rDat)
     ) {
-      displayAppError(needEndDate);
-      setShow(false);
-    } else {
-      assertSelector
-        .createDataSwitch(
-          userInput,
-          dataTableName,
-          locationSelectValue,
-          urlParameters
-        )
-        .then(() => {
-          setShow(false);
-          setDataLoaded(false);
-          setUpdateTable(true);
-          setUpdateRelatedTables(true);
-        });
+      setErrorMsgs([needEndDate])
+      return;
+    }
+    try {
+      const resp = await assertSelector.createDataSwitch(userInput, dataTableName, locationSelectValue, urlParameters);
+      if (resp.status === 201) {
+        setShow(false);
+        setDataLoaded(false);
+        setUpdateTable(true);
+        setUpdateRelatedTables(true);
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      setErrorMsgs([JSON.stringify(error)]);
     }
   };
+
   const [mainDropdownChange, setMainDropdownChange] = useState("");
-
   const [createNewData, setCreateNewData] = useState(false);
   const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
 
@@ -407,13 +408,8 @@ export const DataTableAssert = ({
       setPrefilteredMdmData(mdmData[prefilteredDataName]);
     }
 
-    if (dataTableName === "Unit Capacity" && create) {
-      controlInputs.commercialOperationDate = [
-        "Commercial Operation Date",
-        "date",
-        "",
-        "",
-      ];
+    if (dataTableName === 'Unit Capacity' && create) {
+      controlInputs.commercialOperationDate = ["Commercial Operation Date", "date", "", ""];
       controlInputs.operationDate = ["Operation Date", "date", "", ""];
       controlInputs.boilerTurbineType = [
         "Boiler/Turbine Type",
@@ -494,6 +490,7 @@ export const DataTableAssert = ({
   };
   const executeOnClose = () => {
     setReturnedFocusToLast(false);
+    setErrorMsgs([])
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
   };
@@ -551,6 +548,7 @@ export const DataTableAssert = ({
           nonEditable={nonEditable}
           title={createNewData ? `Create ${dataTableName}` : `${dataTableName}`}
           exitBTN={createNewData ? `Create ${dataTableName}` : `Save and Close`}
+          errorMsgs={errorMsgs}
           children={
             dropdownsLoaded ? (
               <div>
@@ -580,7 +578,9 @@ const mapStateToProps = (state, ownProps) => {
   const { dataTableName } = ownProps;
   return {
     mdmData: state.dropdowns[convertSectionToStoreName(dataTableName)],
-    tabs: state.openedFacilityTabs["monitoringPlans"],
+    tabs: state.openedFacilityTabs[
+      'monitoringPlans'
+    ],
   };
 };
 

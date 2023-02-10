@@ -137,43 +137,46 @@ export const ErrorSuppressionFilters = () => {
         else
             return;
     }
+
+    const getLocations = (facilityValue, checkResultValue) => {
+      const locationTypeCode = transformedData[selectedCheckType][
+        selectedCheckNumber
+      ]
+        .filter((r) => r.checkResult === checkResultValue)
+        .map((d) => d.locationTypeCode);
+      getMonitoringPlans(Number(facilityValue)).then(({ data }) => {
+        const locations = data.map((f) => f.locations).flat(1);
+        let availLoc = locations?.map((l) => ({
+          id: l.unitId,
+          label: l.unitId,
+          selected: false,
+          enabled: true,
+        }));
+        if (locationTypeCode.includes("LOC")) {
+          const availStackPipe = locations?.map((l) => ({
+            id: l.stackPipeId,
+            label: l.stackPipeId,
+            selected: false,
+            enabled: true,
+          }));
+          availLoc = [...availLoc, ...availStackPipe];
+        }
+        const locName = availLoc.map((l) => l.label);
+        availLoc = availLoc
+          .filter(({ label }, index) => !locName.includes(label, index + 1))
+          .filter(({ label }) => label !== null)
+          .sort((a, b) => a.label - b.label);
+        setLocationData([...availLoc]);
+      });
+    };
    
     const onFacilityChange = (e) => {
       const { value } = e.target;
       setSelectedFacility(value);
-      if (value === false) return;
+      if (!value) return;
 
-      if (selectedCheckResult && selectedCheckNumber && selectedCheckResult) {
-        const locationTypeCode = transformedData[selectedCheckType][
-          selectedCheckNumber
-        ]
-          .filter((r) => r.checkResult === selectedCheckResult)
-          .map((d) => d.locationTypeCode);
-
-        getMonitoringPlans(Number(value)).then(({ data }) => {
-          const locations = data.map((f) => f.locations).flat(1);
-          let availLoc = locations?.map((l) => ({
-            id: l.unitId,
-            label: l.unitId,
-            selected: false,
-            enabled: true,
-          }));
-          if (locationTypeCode.includes("LOC")) {
-            const availStackPipe = locations?.map((l) => ({
-              id: l.stackPipeId,
-              label: l.stackPipeId,
-              selected: false,
-              enabled: true,
-            }));
-            availLoc = [...availLoc, ...availStackPipe];
-          }
-          const locName = availLoc.map((l) => l.label);
-          availLoc = availLoc
-            .filter(({ label }, index) => !locName.includes(label, index + 1))
-            .filter(({ label }) => label !== null)
-            .sort((a, b) => a.label - b.label);
-          setLocationData([...availLoc]);
-        });
+      if (selectedCheckType && selectedCheckNumber && selectedCheckResult) {
+        getLocations(value, selectedCheckResult);
       }
     };
 
@@ -201,6 +204,15 @@ export const ErrorSuppressionFilters = () => {
         const checkResults = transformedData[selectedCheckType][value].map(d => d.checkResult);
         setCheckResultList(checkResults)
     }
+
+    const onCheckResultChange = (e) => {
+      const { value } = e.target;
+      setSelectedCheckResult(value);
+      if (value === false) return;
+      if (selectedCheckType && selectedCheckNumber && selectedFacility) {
+        getLocations(selectedFacility, value);
+      }
+    };
 
     const applyFilters = () => {
         let apiFormattedDateAfter;
@@ -317,7 +329,7 @@ export const ErrorSuppressionFilters = () => {
               epa-testid={"check-result"}
               data-testid={"check-result"}
               value={selectedCheckResult}
-              onChange={(e) => setSelectedCheckResult(e.target.value)}
+              onChange={onCheckResultChange}
               disabled={!selectedCheckType || !selectedCheckNumber}
             >
               <option>{defaultDropdownText}</option>
