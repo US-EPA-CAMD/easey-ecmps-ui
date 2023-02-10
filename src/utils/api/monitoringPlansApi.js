@@ -4,8 +4,6 @@ import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
 import { getFacilityById } from "./facilityApi";
 import download from "downloadjs";
-import { checkoutAPI } from "../../additional-functions/checkout";
-import { obtainCheckedOutLocations } from "../../additional-functions/useGetCheckedOutLocations";
 
 axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
@@ -23,7 +21,13 @@ export const getApiUrl = (path, workspaceOnly = false) => {
 
 export const getMonitoringPlanById = async (id) => {
   const url = getApiUrl(`/plans/export?planId=${id}`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 // *** obtain monitoring plans
@@ -40,47 +44,87 @@ export const getMonitoringPlans = async (orisCodes, monPlanIds = []) => {
   }
 
   const url = getApiUrl(`/configurations?${queryString}`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 // *** obtain monitoring methods
 export const getMonitoringMethods = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/methods`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getMonitoringMatsMethods = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/mats-methods`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getMonitoringSystems = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/systems`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getMonitoringSystemsFuelFlows = async (locationId, systemId) => {
   const url = getApiUrl(
     `/locations/${locationId}/systems/${systemId}/fuel-flows`
   );
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getMonitoringSystemsComponents = async (locId, systemId) => {
   const url = getApiUrl(`/locations/${locId}/systems/${systemId}/components`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getMonitoringComponents = async (locId) => {
   const url = getApiUrl(`/locations/${locId}/components`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getMonitoringAnalyzerRanges = async (locId, componentRecordId) => {
   const url = getApiUrl(
     `/locations/${locId}​/components/${componentRecordId}/analyzer-ranges`
   );
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const postCheckoutMonitoringPlanConfiguration = async (id) => {
@@ -227,7 +271,10 @@ export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
 export const getCheckedOutLocations = async () => {
   const url = getApiUrl(`/check-outs/plans`, true);
 
-  return axios({ url: url, method: "GET" })
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
     .then(handleResponse)
     .catch(handleError);
 
@@ -236,7 +283,12 @@ export const getCheckedOutLocations = async () => {
 
 export const getRefreshInfo = async (planId) => {
   const url = getApiUrl(`/plans/${planId}`, true);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveAnalyzerRanges = async (payload) => {
@@ -404,7 +456,12 @@ export const createSystemsComponents = async (payload, locId, sysId) => {
 
 export const getMonitoringSpans = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/spans`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveMonitoringSpans = async (payload) => {
@@ -478,12 +535,22 @@ export const createMonitoringLoads = async (payload, locationId) => {
 
 export const getMonitoringLoads = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/loads`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getMonitoringDefaults = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/defaults`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveMonitoringDefaults = async (payload, locID) => {
@@ -522,12 +589,22 @@ export const createMonitoringDefaults = async (payload, locID) => {
 
 export const getMonitoringFormulas = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/formulas`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getMonitoringRectangularDucts = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/duct-wafs`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveMonitoringDuct = async (payload) => {
@@ -570,7 +647,12 @@ export const getMonitoringPlansFuelDataRecords = async (selectedLocation) => {
   const url = getApiUrl(
     `/locations/${selectedLocation["id"]}/units/${selectedLocation["unitRecordId"]}/unit-fuels`
   );
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveMonitoringPlansFuelData = async (payload) => {
@@ -617,7 +699,12 @@ export const getMonitoringPlansUnitControlRecords = async (
   const url = getApiUrl(
     `/locations/${selectedLocation["id"]}/units/${selectedLocation["unitRecordId"]}/unit-controls`
   );
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveUnitControl = async (payload, urlParameters) => {
@@ -696,7 +783,12 @@ export const getUnitCapacity = async (selectedLocation) => {
   const url = getApiUrl(
     `/locations/${selectedLocation["id"]}/units/${selectedLocation["unitRecordId"]}/unit-capacities`
   );
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveUnitCapacity = async (payload, urlParameters) => {
@@ -737,7 +829,12 @@ export const getPCTQualifications = async (locationId, qualId) => {
   const url = getApiUrl(
     `/locations/${locationId}/qualifications/${qualId}/pct-qualifications`
   );
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const savePCTQualificationData = async (payload) => {
@@ -780,7 +877,12 @@ export const createPCTQualificationData = async (payload) => {
 
 export const getQualifications = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/qualifications`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveQualificationData = async (payload) => {
@@ -823,7 +925,12 @@ export const getLEEQualifications = async (locationId, qualId) => {
   const url = getApiUrl(
     `/locations/${locationId}/qualifications/${qualId}/lee-qualifications`
   );
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveLEEQualificationData = async (payload) => {
@@ -868,7 +975,12 @@ export const getLMEQualifications = async (locationId, qualId) => {
   const url = getApiUrl(
     `/locations/${locationId}/qualifications/${qualId}/lme-qualifications`
   );
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveLMEQualificationData = async (payload) => {
@@ -910,12 +1022,22 @@ export const createLMEQualificationData = async (payload) => {
 
 export const getLocationAttributes = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/attributes`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getRelationshipData = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/relationships`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveLocationAttribute = async (payload, locationId) => {
@@ -959,12 +1081,22 @@ export const getMonitoringPlansEvaluationReportData = async (
   const url = getApiUrl(
     `/reports?reportCode=MP_EVAL&facilityId=${facilityId}&monitorPlanId${monPlanId}`
   );
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getMonitoringPlanComments = async (monPlanId) => {
   const url = getApiUrl(`/plans/${monPlanId}/comments`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const importMP = async (payload) => {
@@ -984,7 +1116,12 @@ export const importMP = async (payload) => {
 
 export const getMPSchema = async () => {
   const url = `${config.services.content.uri}/ecmps/reporting-instructions/monitor-plan.schema.json`;
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const exportMonitoringPlanDownload = async (configID) => {
