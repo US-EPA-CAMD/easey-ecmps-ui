@@ -8,14 +8,15 @@ import { getSeverityCodes } from "../../../utils/api/mdmApi";
 import { defaultDropdownText } from "../ErrorSuppression";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import { getUniqueCheckTypeDescription } from "../ErrorSuppressionFilters/ErrorSuppressionFilters";
+import { formatDate, getQuarter } from "../../../utils/functions";
 
-export const AddErrorSupressionModal = ({ showModal, close }) => {
-
+export const AddErrorSupressionModal = ({ showModal, close, values }) => {
+    console.log(values)
     const {
         transformedData,
         facilityList,
         reasonCodeList } = useContext(ErrorSuppressionFiltersContext);
-
+    
     // Dropdowns
     const [checkTypeList, setCheckTypeList] = useState([]);
     const [checkNumberList, setCheckNumberList] = useState([]);
@@ -30,13 +31,13 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
     const [selectedReason, setSelectedReason] = useState();
     const [selectedFuelType, setSelectedFuelType] = useState();
     const [selectedSeverityCode, setSelectedSeverityCode] = useState();
+    const [selectedNotes, setSelectedNotes] = useState('');
 
     // Time Criteria
     const [selectedBeginDate, setSelectedBeginDate] = useState();
     const [selectedBeginHour, setSelectedBeginHour] = useState();
     const [selectedEndDate, setSelectedEndDate] = useState();
     const [selectedEndHour, setSelectedEndHour] = useState();
-    const [selectedNotes, setSelectedNotes] = useState();
     const [selectedIsHistorical, setSelectedIsHistorical] = useState();
     const [selectedBeginQuarter, setSelectedBeginQuarter] = useState();
     const [selectedEndQuarter, setSelectedEndQuarter] = useState();
@@ -52,6 +53,58 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
         const uniqueTypeCodeAndDesc = getUniqueCheckTypeDescription(transformedData);
         setCheckTypeList(uniqueTypeCodeAndDesc);
     }, [transformedData])
+
+    useEffect(()=>{
+        if( !values )
+            return;
+        
+        const {checkTypeCode, checkNumber, checkResultCode, orisCode, 
+                locations, reasonCode, severityCode, note, matchTimeTypeCode, 
+                matchTimeBeginValue, matchTimeEndValue, matchHistoricalIndicator} = values;
+
+        // The onchange functions load the dropdown values and set the values for selectedCheckType and selectedCheckNumber
+        onCheckTypeChange({target:{value:checkTypeCode}}); 
+        onCheckNumberChange({target:{value:checkNumber}}, checkTypeCode);        
+        setSelectedCheckResult(checkResultCode);
+        setSelectedFacility(orisCode);
+        setSelectedReason(reasonCode);
+        setSelectedSeverityCode(severityCode);
+        setSelectedNotes(note);
+
+        const splitLocationList = locations?.split(",");
+        if( splitLocationList ){
+            splitLocationList.forEach(locName =>{
+                const found = locationData.find(datum => datum.id === locName);
+                if( found) 
+                    found.selected =true 
+            })
+        }
+
+
+        // Match time values
+        switch(matchTimeTypeCode){
+            case("HISTIND"):
+                setSelectedIsHistorical(matchHistoricalIndicator)
+                break;
+            case("HOUR"):
+                setSelectedBeginDate(matchTimeBeginValue ? formatDate(matchTimeBeginValue, "/") : undefined);
+                setSelectedBeginHour(matchTimeBeginValue ? new Date(matchTimeBeginValue).getUTCHours() : undefined);
+                setSelectedEndDate(matchTimeEndValue ? formatDate(matchTimeEndValue, "/") : undefined);
+                setSelectedEndHour(matchTimeEndValue ? new Date(matchTimeEndValue).getUTCHours() : undefined);
+                break;
+            case("DATE"):
+                setSelectedBeginDate(matchTimeBeginValue ? formatDate(matchTimeBeginValue, "/") : undefined);
+                setSelectedEndDate(matchTimeEndValue ? formatDate(matchTimeEndValue, "/") : undefined);
+                break;
+            case("QUARTER"):
+                const beginYearQuarter = matchTimeBeginValue ? `${new Date(matchTimeBeginValue).getUTCFullYear()} Q${getQuarter(new Date(matchTimeBeginValue), true)}` : undefined;
+                setSelectedBeginQuarter(beginYearQuarter);
+                const endYearQuarter = matchTimeEndValue ? `${new Date(matchTimeEndValue).getUTCFullYear()} Q${getQuarter(new Date(matchTimeEndValue), true)}` : undefined;
+                setSelectedEndQuarter(endYearQuarter);
+                break;
+            default:
+        }
+    }, [values])
 
     // API Calls
     useEffect(() => {
@@ -74,7 +127,7 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
 
 
     const saveFunc = () => {
-
+        // make api call here later on to save and create new ES
         close();
     }
 
@@ -95,6 +148,8 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
     }
 
     const onCheckTypeChange = (e) => {
+        console.log("onCheckTypeChange")
+
         const { value } = e.target;
         setSelectedCheckType(value);
         setSelectedCheckNumber(false);
@@ -102,11 +157,11 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
 
         if (value === false)
             return;
-
-        setCheckNumberList(Object.keys(transformedData[value]))
+        const checkNumbers = Object.keys(transformedData[value]);
+        setCheckNumberList(checkNumbers)
     }
 
-    const onCheckNumberChange = (e) => {
+    const onCheckNumberChange = (e, selCheckType) => {
         const { value } = e.target;
         setSelectedCheckNumber(value);
         setSelectedCheckResult(false);
@@ -114,7 +169,8 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
         if (value === false)
             return;
 
-        setCheckResultList(transformedData[selectedCheckType][value].map(d => d.checkResult))
+        console.log(selectedCheckType)
+        setCheckResultList(transformedData[selCheckType][value].map(d => d.checkResult))
     }
 
 
@@ -294,7 +350,7 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
                                 aria-labelledby="add-begin-date"
                                 id="add-begin-date"
                                 name="add-begin-date"
-                                value={selectedBeginDate}
+                                defaultValue={values?.matchTimeBeginValue}
                             />
                         </Grid>
                         <Grid col={2}>
@@ -308,6 +364,7 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
                                 data-testid={"add-begin-hour"}
                                 value={selectedBeginHour}
                                 className="width-10"
+                                onChange={(e)=>setSelectedBeginHour(e.target.value)}
                             >
                                 {hoursInADay.map((h, i) =>
                                     <option key={i}>{h}</option>
@@ -326,7 +383,7 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
                                 aria-labelledby="add-end-date"
                                 id="add-end-date"
                                 name="add-end-date"
-                                value={selectedEndDate}
+                                defaultValue={values?.matchTimeEndValue}
                             />
                         </Grid>
                         <Grid col={3}>
@@ -340,6 +397,7 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
                                 data-testid={"add-end-hour"}
                                 value={selectedEndHour}
                                 className="width-10"
+                                onChange={(e)=>setSelectedEndHour(e.target.value)}
                             >
                                 {hoursInADay.map((h, i) =>
                                     <option key={i}>{h}</option>
@@ -359,7 +417,7 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
                                 aria-labelledby="add-begin-date-2"
                                 id="add-begin-date-2"
                                 name="add-begin-date-2"
-                                value={selectedBeginDate}
+                                defaultValue={values?.matchTimeBeginValue}
                             />
                         </Grid>
                         <Grid col={3} >
@@ -373,13 +431,22 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
                                 aria-labelledby="add-end-date-2"
                                 id="add-end-date-2"
                                 name="add-end-date-2"
-                                value={selectedEndDate}
+                                defaultValue={values?.matchTimeEndValue}
                             />
                         </Grid>
                     </Grid>
                     <Grid row gap={2}>
                         <Grid col={3}>
-                            <Checkbox id="add-is-historical" name="add-is-historical" label="Historical" value={selectedIsHistorical} />
+                            <Checkbox 
+                                id="add-is-historical" 
+                                name="add-is-historical" 
+                                label="Historical" 
+                                checked={selectedIsHistorical}
+                                value={selectedIsHistorical}
+                                onChange={() =>
+                                    setSelectedIsHistorical((previousVal) => !previousVal)
+                                }                    
+                            />
                         </Grid>
                     </Grid>
                     <Grid row gap={4}>
@@ -393,9 +460,10 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
                                 epa-testid={"add-begin-quarter"}
                                 data-testid={"add-begin-quarter"}
                                 value={selectedBeginQuarter}
+                                onChange={(e)=>setSelectedBeginQuarter(e.target.value)}
                             >
                                 {yearQuarters.map((yearquarter, i) =>
-                                    <option key={i}>{yearquarter}</option>
+                                    <option key={i} value={yearquarter}>{yearquarter}</option>
                                 )}
                             </Dropdown>
                         </Grid>
@@ -409,9 +477,10 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
                                 epa-testid={"add-end-quarter"}
                                 data-testid={"add-end-quarter"}
                                 value={selectedEndQuarter}
+                                onChange={(e)=>setSelectedEndQuarter(e.target.value)}
                             >
                                 {yearQuarters.map((yearquarter, i) =>
-                                    <option key={i}>{yearquarter}</option>
+                                    <option key={i} value={yearquarter}>{yearquarter}</option>
                                 )}
                             </Dropdown>
                         </Grid>
@@ -420,7 +489,7 @@ export const AddErrorSupressionModal = ({ showModal, close }) => {
                     <Grid row gap={2}>
                         <Grid col={10}>
                             <Label htmlFor="add-notes" id="add-notes-label">Notes</Label>
-                            <TextInput className="maxw-full" id="add-notes" name="add-notes" type="text" value={selectedNotes} />
+                            <TextInput className="maxw-full" id="add-notes" name="add-notes" type="text" value={selectedNotes} onChange={(e)=>{setSelectedNotes(e.target.value)}}/>
                         </Grid>
                     </Grid>
                 </GridContainer>

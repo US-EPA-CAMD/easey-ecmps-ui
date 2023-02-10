@@ -21,6 +21,8 @@ export const ErrorSuppressionDataContainer = () => {
         addDateBefore,
     } = useContext(ErrorSuppressionFiltersContext);
     const [showAddModal, setShowAddModal] = useState(false);
+    const [showCloneModal, setShowCloneModal] = useState(false);
+
     const [showDeactivateModal, setShowDeactivateModal] = useState(false);
     const [tableData, setTableData] = useState([]);
     const [selectedRows, setSelectedRows] = useState([]);
@@ -28,12 +30,14 @@ export const ErrorSuppressionDataContainer = () => {
     const getTableData = ()=>{
         if (!checkType || !checkNumber || !checkResult)
             return;
+        // const params = { checkType:"LINEAR", checkNumber:'12', checkResult:'A', facility, locations, active, reason, addDateAfter, addDateBefore, }
+        // const params = { checkType:"QUAL", checkNumber:'23', checkResult:'D', facility, locations, active, reason, addDateAfter, addDateBefore, }
+        // const params = { checkType:"HOURGEN", checkNumber:'7', checkResult:'C', facility, locations, active, reason, addDateAfter, addDateBefore, }
+        // const params = { checkType:"DAYCAL", checkNumber:'19', checkResult:'E', facility, locations, active, reason, addDateAfter, addDateBefore, }
         const params = { checkType, checkNumber, checkResult, facility, locations, active, reason, addDateAfter, addDateBefore, }
+
         console.log(params);
         getErrorSuppressionRecords(params).then(({ data }) => {
-            // getErrorSuppressionRecords('QUAL', '23', 'D').then(({ data }) => {
-            // getErrorSuppressionRecords('LINEAR', '12', 'A').then(({ data }) => {
-            // getErrorSuppressionRecords('DAYCAL', '19', 'E').then(({ data }) => {
             // getErrorSuppressionRecords('HOURGEN', '7', 'C').then(({ data }) => {
             data.forEach(d => d.selected = false)
             setTableData(data)
@@ -72,7 +76,7 @@ export const ErrorSuppressionDataContainer = () => {
         if (row.matchTimeTypeCode === null) {
             return ""
         }
-        if (row.matchTimeTypeCode === "HISTIND" || row.matchHistoricalIndicator) {
+        if (row.matchTimeTypeCode === "HISTIND") {
             return "Historical"
         }
 
@@ -87,22 +91,22 @@ export const ErrorSuppressionDataContainer = () => {
         if (row.matchTimeTypeCode === "HOUR") {
             if (row.matchTimeBeginValue) {
                 const d = new Date(row.matchTimeBeginValue);
-                beginTime = `${formatDate(row.matchTimeBeginValue, "/")}  ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+                beginTime = `${formatDate(row.matchTimeBeginValue, "/")}  ${d.getUTCHours()}:${d.getUTCMinutes()}:${d.getUTCSeconds()}`;
             }
             if (row.matchTimeEndValue) {
                 const d = new Date(row.matchTimeEndValue);
-                endTime = `${formatDate(row.matchTimeEndValue, "/")}  ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+                endTime = `${formatDate(row.matchTimeEndValue, "/")}  ${d.getUTCHours()}:${d.getUTCMinutes()}:${d.getUTCSeconds()}`;
             }
         }
 
         if (row.matchTimeTypeCode === "QUARTER") {
             if (row.matchTimeBeginValue) {
                 const d = new Date(row.matchTimeBeginValue);
-                beginTime = `${d.getFullYear()} Q${getQuarter(d)}`;
+                beginTime = `${d.getUTCFullYear()} Q${getQuarter(d, true)}`;
             }
             if (row.matchTimeEndValue) {
                 const d = new Date(row.matchTimeEndValue);
-                endTime = `${d.getFullYear()} Q${getQuarter(d)}`;
+                endTime = `${d.getUTCFullYear()} Q${getQuarter(d, true)}`;
             }
         }
 
@@ -115,7 +119,7 @@ export const ErrorSuppressionDataContainer = () => {
 
     const formatDateWithHoursMinutesSeconds = (dateString) => {
         const date = new Date(dateString);
-        return `${formatDate(dateString, "/")} ${date.getHours()}:${date.getMinutes()}:${date.getMinutes()}`
+        return `${formatDate(dateString, "/")} ${date.getUTCHours()}:${date.getUTCMinutes()}:${date.getUTCMinutes()}`
     }
 
     const columns = [
@@ -135,7 +139,8 @@ export const ErrorSuppressionDataContainer = () => {
 
     return (
         <div>
-            {showAddModal ? <AddErrorSupressionModal showAddModal={showAddModal} close={() => setShowAddModal(false)} /> : null}
+            {showAddModal ? <AddErrorSupressionModal showAddModal={showAddModal} values={{}} close={() => setShowAddModal(false)} /> : null}
+            {showCloneModal ? <AddErrorSupressionModal showAddModal={showCloneModal} values={selectedRows[0]} close={() => setShowCloneModal(false)} /> : null}
             {showDeactivateModal ? 
                 <DeactivateNotificationModal 
                     showDeactivateModal={showDeactivateModal} 
@@ -165,6 +170,7 @@ export const ErrorSuppressionDataContainer = () => {
                         <Button aria-label="Clone" 
                             data-testid="es-clone" 
                             disabled={selectedRows.length > 1}
+                            onClick={() => setShowCloneModal(true)}
                         >
                             Clone
                         </Button>
