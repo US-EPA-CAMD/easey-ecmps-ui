@@ -11,7 +11,7 @@ import {
 } from "@trussworks/react-uswds";
 import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
 import config from "../../config";
-import { triggerBulkEvaluation } from "../../utils/api/quartzApi";
+import { triggerBulkEvaluation } from "../../utils/api/camdServices";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import * as emApi from "../../utils/api/emissionsApi";
@@ -1145,7 +1145,9 @@ export const HeaderInfo = ({
                   type="button"
                   title="View Printout Report"
                   className={"hyperlink-btn cursor-pointer"}
-                  onClick={() => displayReport("MPP", orisCode, selectedConfig.id)}
+                  onClick={() =>
+                    displayReport("MPP", orisCode, selectedConfig.id)
+                  }
                 >
                   View Printout Report
                 </Button>
