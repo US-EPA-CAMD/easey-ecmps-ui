@@ -12,7 +12,10 @@ import { connect } from "react-redux";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
 import { convertSectionToStoreName } from "../../../additional-functions/data-table-section-and-store-names";
 
-import { addAriaLabelToDatatable, changeGridCellAttributeValue } from "../../../additional-functions/ensure-508";
+import {
+  addAriaLabelToDatatable,
+  changeGridCellAttributeValue,
+} from "../../../additional-functions/ensure-508";
 import {
   displayAppError,
   needEndDate,
@@ -36,7 +39,6 @@ import {
 export const DataTableAssert = ({
   mdmData,
   loadDropdownsData,
-  updateDropdowns,
   locationSelectValue,
   user,
   checkout,
@@ -44,11 +46,10 @@ export const DataTableAssert = ({
   settingInactiveCheckBox,
   revertedState,
   setRevertedState,
-  nonEditable = false,
-
   pagination,
   filter,
   controlInputs,
+  nonEditable = false,
   controlDatePickerInputs,
   radioNames,
   payload,
@@ -61,7 +62,7 @@ export const DataTableAssert = ({
   setUpdateRelatedTables,
   updateRelatedTables,
   currentTabIndex,
-  tabs
+  tabs,
 }) => {
   const [dataPulled, setDataPulled] = useState([]);
   const [show, setShow] = useState(showModal);
@@ -199,7 +200,7 @@ export const DataTableAssert = ({
 
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
-    if (mdmData && mdmData.length === 0) {
+    if (mdmData && Object.keys(mdmData).length === 0) {
       loadDropdownsData(dataTableName, dropdownArray);
     } else {
       setDropdownsLoaded(true);
@@ -241,7 +242,9 @@ export const DataTableAssert = ({
 
         setDisplayedRecords(
           assertSelector.getDataTableRecords(
-            !tabs[currentTabIndex].inactive[0] ? getActiveData(display) : display,
+            !tabs[currentTabIndex].inactive[0]
+              ? getActiveData(display)
+              : display,
             dataTableName
           )
         );
@@ -266,7 +269,7 @@ export const DataTableAssert = ({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataLoaded, dataPulled,  tabs[currentTabIndex].inactive[0], updateTable]);
+  }, [dataLoaded, dataPulled, tabs[currentTabIndex].inactive[0], updateTable]);
 
   const saveData = () => {
     const userInput = extractUserInput(
@@ -276,7 +279,10 @@ export const DataTableAssert = ({
     );
     if (
       (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate && dataTableName !== lAttr && dataTableName !== rDat)
+      (!userInput.endHour &&
+        userInput.endDate &&
+        dataTableName !== lAttr &&
+        dataTableName !== rDat)
     ) {
       displayAppError(needEndDate);
       setShow(false);
@@ -305,7 +311,10 @@ export const DataTableAssert = ({
     );
     if (
       (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate && dataTableName !== lAttr && dataTableName !== rDat)
+      (!userInput.endHour &&
+        userInput.endDate &&
+        dataTableName !== lAttr &&
+        dataTableName !== rDat)
     ) {
       displayAppError(needEndDate);
       setShow(false);
@@ -397,19 +406,59 @@ export const DataTableAssert = ({
     if (!dropdownArrayIsEmpty) {
       setPrefilteredMdmData(mdmData[prefilteredDataName]);
     }
-    
-    if (dataTableName === 'Unit Capacity' && create){
-      controlInputs.commercialOperationDate = ["Commercial Operation Date", "date", "", ""];
+
+    if (dataTableName === "Unit Capacity" && create) {
+      controlInputs.commercialOperationDate = [
+        "Commercial Operation Date",
+        "date",
+        "",
+        "",
+      ];
       controlInputs.operationDate = ["Operation Date", "date", "", ""];
-      controlInputs.boilerTurbineType = ["Boiler/Turbine Type", "input", "", ""];
-      controlInputs.boilerTurbineBeginDate = ["Boiler/Turbine Begin Date", "date", "", ""]
-      controlInputs.boilerTurbineEndDate = ["Boiler/Turbine End Date", "date", "", ""]
-    } else if (dataTableName === 'Unit Capacity' && !create) {
-      controlInputs.commercialOperationDate = ["Commercial Operation Date", "date", "", "locked"];
+      controlInputs.boilerTurbineType = [
+        "Boiler/Turbine Type",
+        "input",
+        "",
+        "",
+      ];
+      controlInputs.boilerTurbineBeginDate = [
+        "Boiler/Turbine Begin Date",
+        "date",
+        "",
+        "",
+      ];
+      controlInputs.boilerTurbineEndDate = [
+        "Boiler/Turbine End Date",
+        "date",
+        "",
+        "",
+      ];
+    } else if (dataTableName === "Unit Capacity" && !create) {
+      controlInputs.commercialOperationDate = [
+        "Commercial Operation Date",
+        "date",
+        "",
+        "locked",
+      ];
       controlInputs.operationDate = ["Operation Date", "date", "", "locked"];
-      controlInputs.boilerTurbineType = ["Boiler/Turbine Type", "input", "", "locked"];
-      controlInputs.boilerTurbineBeginDate = ["Boiler/Turbine Begin Date", "date", "", "locked"]
-      controlInputs.boilerTurbineEndDate = ["Boiler/Turbine End Date", "date", "", "locked"]
+      controlInputs.boilerTurbineType = [
+        "Boiler/Turbine Type",
+        "input",
+        "",
+        "locked",
+      ];
+      controlInputs.boilerTurbineBeginDate = [
+        "Boiler/Turbine Begin Date",
+        "date",
+        "",
+        "locked",
+      ];
+      controlInputs.boilerTurbineEndDate = [
+        "Boiler/Turbine End Date",
+        "date",
+        "",
+        "locked",
+      ];
     }
 
     const prefilteredTotalName = dropdownArray[0][dropdownArray[0].length - 1];
@@ -448,7 +497,7 @@ export const DataTableAssert = ({
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
   };
-  if(document){
+  if (document) {
     changeGridCellAttributeValue();
   }
   return (
@@ -462,6 +511,16 @@ export const DataTableAssert = ({
         id="testingBtn2"
         onClick={() => {
           saveData();
+          closeModalHandler();
+          openModal({
+            col1: "CO2",
+            col2: "H",
+            col3: "HD",
+            col4: "PCT",
+            col5: "09/20/2017 13",
+            col6: " ",
+            col7: "TWCORNEL5-88E25998894F4859B9D03C49E8CBD66D",
+          }, false, false);
         }}
       />
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -521,9 +580,7 @@ const mapStateToProps = (state, ownProps) => {
   const { dataTableName } = ownProps;
   return {
     mdmData: state.dropdowns[convertSectionToStoreName(dataTableName)],
-    tabs: state.openedFacilityTabs[
-      'monitoringPlans'
-     ],
+    tabs: state.openedFacilityTabs["monitoringPlans"],
   };
 };
 
