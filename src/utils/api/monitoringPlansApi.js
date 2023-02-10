@@ -137,7 +137,7 @@ export const postCheckoutMonitoringPlanConfiguration = async (id) => {
       })
     ).data;
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -151,7 +151,7 @@ export const revertOfficialRecord = async (id) => {
       })
     ).data;
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -171,7 +171,7 @@ export const createMethods = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -191,7 +191,7 @@ export const createMats = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -205,7 +205,7 @@ export const putLockTimerUpdateConfiguration = async (id) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -227,7 +227,7 @@ export const saveMonitoringMethods = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -249,7 +249,7 @@ export const saveMonitoringMats = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -263,7 +263,7 @@ export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
       })
     ).data;
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -277,8 +277,6 @@ export const getCheckedOutLocations = async () => {
   })
     .then(handleResponse)
     .catch(handleError);
-
-  //return axios.get(url).then(handleResponse).catch(handleError);
 };
 
 export const getRefreshInfo = async (planId) => {
@@ -310,7 +308,7 @@ export const saveAnalyzerRanges = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -332,7 +330,7 @@ export const createAnalyzerRanges = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -353,7 +351,7 @@ export const saveSystemsFuelFlows = async (payload, locId, sysId) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -372,7 +370,7 @@ export const createSystemsFuelFlows = async (payload, locId, sysId) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -391,7 +389,7 @@ export const saveSystems = async (payload, locId, sysId) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -410,7 +408,7 @@ export const createSystems = async (payload, locId, sysId) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -431,7 +429,7 @@ export const saveSystemsComponents = async (payload, locId, sysId, compId) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -450,7 +448,7 @@ export const createSystemsComponents = async (payload, locId, sysId) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -477,7 +475,7 @@ export const saveMonitoringSpans = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -496,7 +494,7 @@ export const createMonitoringSpans = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -511,7 +509,7 @@ export const saveMonitoringLoads = async (payload, locationId) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -529,7 +527,7 @@ export const createMonitoringLoads = async (payload, locationId) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -564,7 +562,7 @@ export const saveMonitoringDefaults = async (payload, locID) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -583,7 +581,7 @@ export const createMonitoringDefaults = async (payload, locID) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -620,7 +618,7 @@ export const saveMonitoringDuct = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -639,7 +637,7 @@ export const createMonitoringDuct = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -668,7 +666,7 @@ export const saveMonitoringPlansFuelData = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -689,7 +687,7 @@ export const createFuelData = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -720,7 +718,7 @@ export const saveUnitControl = async (payload, urlParameters) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -741,7 +739,7 @@ export const createUnitControl = async (payload, urlParameters) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -756,7 +754,7 @@ export const saveMonitoringFormulas = async (payload, locID) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -775,7 +773,7 @@ export const createMonitoringFormulas = async (payload, locID) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -804,7 +802,7 @@ export const saveUnitCapacity = async (payload, urlParameters) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -821,7 +819,7 @@ export const createUnitCapacity = async (payload, urlParameters) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -850,7 +848,7 @@ export const savePCTQualificationData = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -871,7 +869,7 @@ export const createPCTQualificationData = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -898,7 +896,7 @@ export const saveQualificationData = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -917,7 +915,7 @@ export const createQualificationData = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -946,7 +944,7 @@ export const saveLEEQualificationData = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -967,7 +965,7 @@ export const createLEEQualificationData = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -996,7 +994,7 @@ export const saveLMEQualificationData = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -1016,11 +1014,12 @@ export const createLMEQualificationData = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
 export const getLocationAttributes = async (locationId) => {
+  console.log("locationid", locationId);
   const url = getApiUrl(`/locations/${locationId}/attributes`);
   return secureAxios({
     method: "GET",
@@ -1051,7 +1050,7 @@ export const saveLocationAttribute = async (payload, locationId) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -1070,7 +1069,7 @@ export const createLocationAttribute = async (payload, locationSelectValue) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
