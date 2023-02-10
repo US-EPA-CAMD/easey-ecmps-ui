@@ -906,6 +906,7 @@ export const createLMEQualificationData = async (payload) => {
 };
 
 export const getLocationAttributes = async (locationId) => {
+  console.log('locationid',locationId)
   const url = getApiUrl(`/locations/${locationId}/attributes`);
   return axios.get(url).then(handleResponse).catch(handleError);
 };

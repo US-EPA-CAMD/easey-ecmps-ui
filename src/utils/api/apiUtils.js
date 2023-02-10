@@ -6,6 +6,8 @@ import config from "./../../config";
 export const successResponses = [200, 201];
 
 export async function handleResponse(response) {
+
+  console.log('response',response)
   if (successResponses.includes(response.status) && (response.data !== null && response.data !== undefined)) {
     return response;
   } else {
