@@ -748,7 +748,6 @@ const QAExpandableRowsRender = ({
     }
   };
   const executeOnClose = (data) => {
-    // setReturnedFocusToLast(false);
     setShow(false);
     setErrorMsgs([]);
     removeChangeEventListeners(".modalUserInput");
