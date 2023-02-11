@@ -28,13 +28,13 @@ export const ErrorSuppressionDataContainer = () => {
     const [selectedRows, setSelectedRows] = useState([]);
 
     const getTableData = ()=>{
-        if (!checkType || !checkNumber || !checkResult)
-            return;
-        // const params = { checkType:"LINEAR", checkNumber:'12', checkResult:'A', facility, locations, active, reason, addDateAfter, addDateBefore, }
+        // if (!checkType || !checkNumber || !checkResult)
+        //     return;
+        const params = { checkType:"LINEAR", checkNumber:'12', checkResult:'A', facility, locations, active, reason, addDateAfter, addDateBefore, }
         // const params = { checkType:"QUAL", checkNumber:'23', checkResult:'D', facility, locations, active, reason, addDateAfter, addDateBefore, }
         // const params = { checkType:"HOURGEN", checkNumber:'7', checkResult:'C', facility, locations, active, reason, addDateAfter, addDateBefore, }
         // const params = { checkType:"DAYCAL", checkNumber:'19', checkResult:'E', facility, locations, active, reason, addDateAfter, addDateBefore, }
-        const params = { checkType, checkNumber, checkResult, facility, locations, active, reason, addDateAfter, addDateBefore, }
+        // const params = { checkType, checkNumber, checkResult, facility, locations, active, reason, addDateAfter, addDateBefore, }
 
         console.log(params);
         getErrorSuppressionRecords(params).then(({ data }) => {
@@ -122,6 +122,11 @@ export const ErrorSuppressionDataContainer = () => {
         return `${formatDate(dateString, "/")} ${date.getUTCHours()}:${date.getUTCMinutes()}:${date.getUTCMinutes()}`
     }
 
+    const closeModal = () =>{
+        setShowAddModal(false);
+        setShowCloneModal(false);
+    }
+
     const columns = [
         { name: "Select", maxWidth: "100px", cell: (row, idx) => getCheckbox(row, idx) },
         { name: "Severity", maxWidth: "150px", selector: (row) => row.severityCode },
@@ -139,8 +144,8 @@ export const ErrorSuppressionDataContainer = () => {
 
     return (
         <div>
-            {showAddModal ? <AddErrorSupressionModal showAddModal={showAddModal} values={{}} close={() => setShowAddModal(false)} /> : null}
-            {showCloneModal ? <AddErrorSupressionModal showAddModal={showCloneModal} values={selectedRows[0]} close={() => setShowCloneModal(false)} /> : null}
+            {showAddModal || showCloneModal ? <AddErrorSupressionModal showAddModal={showAddModal || showCloneModal} values={showCloneModal ? selectedRows[0]:undefined} close={closeModal} /> : null}
+            {/* {showCloneModal ? <AddErrorSupressionModal showAddModal={showCloneModal} values={selectedRows[0]} close={() => setShowCloneModal(false)} /> : null} */}
             {showDeactivateModal ? 
                 <DeactivateNotificationModal 
                     showDeactivateModal={showDeactivateModal} 
@@ -169,8 +174,10 @@ export const ErrorSuppressionDataContainer = () => {
                     <div className="grid-col-2">
                         <Button aria-label="Clone" 
                             data-testid="es-clone" 
-                            disabled={selectedRows.length > 1}
-                            onClick={() => setShowCloneModal(true)}
+                            disabled={selectedRows.length !== 1}
+                            onClick={() => {
+                                setShowCloneModal(true);
+                            }}
                         >
                             Clone
                         </Button>

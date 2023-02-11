@@ -17,7 +17,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         transformedData,
         facilityList,
         reasonCodeList } = useContext(ErrorSuppressionFiltersContext);
-    
+
     // Dropdowns
     const [checkTypeList, setCheckTypeList] = useState([]);
     const [checkNumberList, setCheckNumberList] = useState([]);
@@ -50,22 +50,35 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
 
     const yearQuarters = useMemo(getReportingPeriods, [])
 
+    /*Time Criteria booleans */
+    const showDateHour = useMemo(() => !!(findCheckResultObject()?.timeTypeCode === 'HOUR'),
+        [selectedCheckType, selectedCheckNumber, selectedCheckResult, transformedData]);
+
+    const showDate = useMemo(() => !!(findCheckResultObject()?.timeTypeCode === 'DATE'),
+        [selectedCheckType, selectedCheckNumber, selectedCheckResult, transformedData]);
+
+    const showQuarter = useMemo(() => !!(findCheckResultObject()?.timeTypeCode === 'QUARTER'),
+        [selectedCheckType, selectedCheckNumber, selectedCheckResult, transformedData]);
+    
+    const showHistorical = useMemo(() => !!(findCheckResultObject()?.timeTypeCode === 'HISTIND'),
+        [selectedCheckType, selectedCheckNumber, selectedCheckResult, transformedData]);
+
     useEffect(() => {
         const uniqueTypeCodeAndDesc = getUniqueCheckTypeDescription(transformedData);
         setCheckTypeList(uniqueTypeCodeAndDesc);
     }, [transformedData])
 
-    useEffect(()=>{
-        if( !values )
+    useEffect(() => {
+        if (!values)
             return;
-        
-        const {checkTypeCode, checkNumber, checkResultCode, orisCode, 
-                locations, reasonCode, severityCode, note, matchTimeTypeCode, 
-                matchTimeBeginValue, matchTimeEndValue, matchHistoricalIndicator} = values;
+
+        const { checkTypeCode, checkNumber, checkResultCode, orisCode,
+            locations, reasonCode, severityCode, note, matchTimeTypeCode,
+            matchTimeBeginValue, matchTimeEndValue, matchHistoricalIndicator } = values;
 
         // The onchange functions load the dropdown values and set the values for selectedCheckType and selectedCheckNumber
-        onCheckTypeChange({target:{value:checkTypeCode}}); 
-        onCheckNumberChange({target:{value:checkNumber}}, checkTypeCode);        
+        onCheckTypeChange({ target: { value: checkTypeCode } });
+        onCheckNumberChange({ target: { value: checkNumber } }, checkTypeCode);
         setSelectedCheckResult(checkResultCode);
         setSelectedFacility(orisCode);
         setSelectedReason(reasonCode);
@@ -73,31 +86,31 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         setSelectedNotes(note);
 
         const splitLocationList = locations?.split(",");
-        if( splitLocationList ){
-            splitLocationList.forEach(locName =>{
+        if (splitLocationList) {
+            splitLocationList.forEach(locName => {
                 const found = locationData.find(datum => datum.id === locName);
-                if( found) 
-                    found.selected =true 
+                if (found)
+                    found.selected = true
             })
         }
 
 
         // Match time values
-        switch(matchTimeTypeCode){
-            case("HISTIND"):
+        switch (matchTimeTypeCode) {
+            case ("HISTIND"):
                 setSelectedIsHistorical(matchHistoricalIndicator)
                 break;
-            case("HOUR"):
+            case ("HOUR"):
                 setSelectedBeginDate(matchTimeBeginValue ? formatDate(matchTimeBeginValue, "/") : undefined);
                 setSelectedBeginHour(matchTimeBeginValue ? new Date(matchTimeBeginValue).getUTCHours() : undefined);
                 setSelectedEndDate(matchTimeEndValue ? formatDate(matchTimeEndValue, "/") : undefined);
                 setSelectedEndHour(matchTimeEndValue ? new Date(matchTimeEndValue).getUTCHours() : undefined);
                 break;
-            case("DATE"):
+            case ("DATE"):
                 setSelectedBeginDate(matchTimeBeginValue ? formatDate(matchTimeBeginValue, "/") : undefined);
                 setSelectedEndDate(matchTimeEndValue ? formatDate(matchTimeEndValue, "/") : undefined);
                 break;
-            case("QUARTER"):
+            case ("QUARTER"):
                 const beginYearQuarter = matchTimeBeginValue ? `${new Date(matchTimeBeginValue).getUTCFullYear()} Q${getQuarter(new Date(matchTimeBeginValue), true)}` : undefined;
                 setSelectedBeginQuarter(beginYearQuarter);
                 const endYearQuarter = matchTimeEndValue ? `${new Date(matchTimeEndValue).getUTCFullYear()} Q${getQuarter(new Date(matchTimeEndValue), true)}` : undefined;
@@ -112,7 +125,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
 
         getSeverityCodes().then(({ data }) => {
             setSeverityCodeList(data);
-        }).catch(error=>{
+        }).catch(error => {
             console.log("Error getting Severity Codes", error);
         });
     }, []);
@@ -137,6 +150,14 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         }
         else
             return;
+    }
+
+    function findCheckResultObject() {
+        if (!(selectedCheckType && selectedCheckNumber && selectedCheckResult))
+            return;
+        // the list of check catalog objects for the checkType and checkNumber selected
+        const checkCatalogList = transformedData[selectedCheckType][selectedCheckNumber];
+        return checkCatalogList.find(c => c.checkResult === selectedCheckResult);
     }
 
     const onCheckTypeChange = (e) => {
@@ -166,54 +187,56 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     }
 
     const onCheckResultChange = (e) => {
-      const { value } = e.target;
-      setSelectedCheckResult(value);
-      if (value === false) return;
-      if (selectedCheckType && selectedCheckNumber && selectedFacility) {
-        getLocations(selectedFacility, value);
-      }
+        const { value } = e.target;
+        setSelectedCheckResult(value);
+        if (value === false) return;
+        console.log("selectedFacility", selectedFacility)
+        if (selectedCheckType && selectedCheckNumber && selectedFacility) {
+            getLocations(selectedFacility, value);
+        }
     };
 
     const onFacilityChange = (e) => {
-      const { value } = e.target;
-      setSelectedFacility(value);
-      if (!value) return;
-
-      if (selectedCheckType && selectedCheckNumber && selectedCheckResult) {
-        getLocations(value, selectedCheckResult);
-      }
+        const { value } = e.target;
+        setSelectedFacility(value);
+        if (value === false) return;
+        console.log("selectedCheckResult", selectedCheckResult)
+        if (selectedCheckType && selectedCheckNumber && selectedCheckResult) {
+            getLocations(value, selectedCheckResult);
+        }
     };
 
     const getLocations = (facilityValue, checkResultValue) => {
-      const locationTypeCode = transformedData[selectedCheckType][
-        selectedCheckNumber
-      ]
-        .filter((r) => r.checkResult === checkResultValue)
-        .map((d) => d.locationTypeCode);
-      getMonitoringPlans(Number(facilityValue)).then(({ data }) => {
-        const locations = data.map((f) => f.locations).flat(1);
-        let availLoc = locations?.map((l) => ({
-          id: l.unitId,
-          label: l.unitId,
-          selected: false,
-          enabled: true,
-        }));
-        if (locationTypeCode.includes("LOC")) {
-          const availStackPipe = locations?.map((l) => ({
-            id: l.stackPipeId,
-            label: l.stackPipeId,
-            selected: false,
-            enabled: true,
-          }));
-          availLoc = [...availLoc, ...availStackPipe];
-        }
-        const locName = availLoc.map((l) => l.label);
-        availLoc = availLoc
-          .filter(({ label }, index) => !locName.includes(label, index + 1))
-          .filter(({ label }) => label !== null)
-          .sort((a, b) => a.label - b.label);
-        setLocationData([...availLoc]);
-      });
+        const locationTypeCode = transformedData[selectedCheckType][
+            selectedCheckNumber
+        ]
+            .filter((r) => r.checkResult === checkResultValue)
+            .map((d) => d.locationTypeCode);
+        getMonitoringPlans(Number(facilityValue)).then(({ data }) => {
+            const locations = data.map((f) => f.locations).flat(1);
+            let availLoc = locations?.map((l) => ({
+                id: l.unitId,
+                label: l.unitId,
+                selected: false,
+                enabled: true,
+            }));
+            if (locationTypeCode.includes("LOC")) {
+                const availStackPipe = locations?.map((l) => ({
+                    id: l.stackPipeId,
+                    label: l.stackPipeId,
+                    selected: false,
+                    enabled: true,
+                }));
+                availLoc = [...availLoc, ...availStackPipe];
+            }
+            const locName = availLoc.map((l) => l.label);
+            availLoc = availLoc
+                .filter(({ label }, index) => !locName.includes(label, index + 1))
+                .filter(({ label }) => label !== null)
+                .sort((a, b) => a.label - b.label);
+            setLocationData([...availLoc]);
+            console.log("setted location data")
+        });
     };
 
 
@@ -251,7 +274,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                 epa-testid={"add-check-number"}
                                 data-testid={"add-check-number"}
                                 value={selectedCheckNumber}
-                                onChange={onCheckNumberChange}
+                                onChange={(e) => onCheckNumberChange(e, selectedCheckType)}
                                 disabled={!selectedCheckType}
                             >
                                 <option value={false}>{defaultDropdownText}</option>
@@ -361,13 +384,13 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                 iconAlignRight={2}
                                 disabled={
                                     !(
-                                      selectedCheckType &&
-                                      selectedCheckNumber &&
-                                      selectedCheckResult &&
-                                      selectedFacility
+                                        selectedCheckType &&
+                                        selectedCheckNumber &&
+                                        selectedCheckResult &&
+                                        selectedFacility
                                     )
-                                  }
-                                  ></MultiSelectCombobox>
+                                }
+                            ></MultiSelectCombobox>
 
                         </Grid>
                     </Grid>
@@ -387,162 +410,175 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                             </Dropdown>
                         </Grid>
                     </Grid>
+                    {/* Only show the time criteria section if we determined a valid time type code */}
+                    { showDateHour || showDate || showQuarter || showHistorical ? 
                     <Grid row gap={2}>
                         <h3>Time Criteria</h3>
-                    </Grid>
-                    {/* These time criteria rows will be swapable later on */}
-                    <Grid row gap={2}>
-                        <Grid col={3} >
-                            <Label
-                                htmlFor="add-begin-date"
-                                id="add-begin-date"
-                            >
-                                Begin Date
-                            </Label>
-                            <DatePicker
-                                aria-labelledby="add-begin-date"
-                                id="add-begin-date"
-                                name="add-begin-date"
-                                defaultValue={values?.matchTimeBeginValue}
-                            />
-                        </Grid>
-                        <Grid col={2}>
-                            <Label test-id={"add-begin-hour"} htmlFor={"add-begin-hour"}>
-                                Begin Hour
-                            </Label>
-                            <Dropdown
-                                id={"add-begin-hour"}
-                                name={"add-begin-hour"}
-                                epa-testid={"add-begin-hour"}
-                                data-testid={"add-begin-hour"}
-                                value={selectedBeginHour}
-                                className="width-10"
-                                onChange={(e)=>setSelectedBeginHour(e.target.value)}
-                            >
-                                {hoursInADay.map((h, i) =>
-                                    <option key={i}>{h}</option>
-                                )}
-                            </Dropdown>
+                    </Grid> : null}
 
-                        </Grid>
-                        <Grid col={3} >
-                            <Label
-                                htmlFor="add-end-date"
-                                id="add-end-date"
-                            >
-                                End Date
-                            </Label>
-                            <DatePicker
-                                aria-labelledby="add-end-date"
-                                id="add-end-date"
-                                name="add-end-date"
-                                defaultValue={values?.matchTimeEndValue}
-                            />
-                        </Grid>
-                        <Grid col={3}>
-                            <Label test-id={"add-end-hour"} htmlFor={"add-end-hour"}>
-                                End Hour
-                            </Label>
-                            <Dropdown
-                                id={"add-end-hour"}
-                                name={"add-end-hour"}
-                                epa-testid={"add-end-hour"}
-                                data-testid={"add-end-hour"}
-                                value={selectedEndHour}
-                                className="width-10"
-                                onChange={(e)=>setSelectedEndHour(e.target.value)}
-                            >
-                                {hoursInADay.map((h, i) =>
-                                    <option key={i}>{h}</option>
-                                )}
-                            </Dropdown>
-                        </Grid>
-                    </Grid>
-                    <Grid row gap={2}>
-                        <Grid col={3} >
-                            <Label
-                                htmlFor="add-begin-date-2"
-                                id="add-begin-date-2"
-                            >
-                                Begin Date
-                            </Label>
-                            <DatePicker
-                                aria-labelledby="add-begin-date-2"
-                                id="add-begin-date-2"
-                                name="add-begin-date-2"
-                                defaultValue={values?.matchTimeBeginValue}
-                            />
-                        </Grid>
-                        <Grid col={3} >
-                            <Label
-                                htmlFor="add-end-date-2"
-                                id="add-end-date-2"
-                            >
-                                End Date
-                            </Label>
-                            <DatePicker
-                                aria-labelledby="add-end-date-2"
-                                id="add-end-date-2"
-                                name="add-end-date-2"
-                                defaultValue={values?.matchTimeEndValue}
-                            />
-                        </Grid>
-                    </Grid>
-                    <Grid row gap={2}>
-                        <Grid col={3}>
-                            <Checkbox 
-                                id="add-is-historical" 
-                                name="add-is-historical" 
-                                label="Historical" 
-                                checked={selectedIsHistorical}
-                                value={selectedIsHistorical}
-                                onChange={() =>
-                                    setSelectedIsHistorical((previousVal) => !previousVal)
-                                }                    
-                            />
-                        </Grid>
-                    </Grid>
-                    <Grid row gap={4}>
-                        <Grid col={3}>
-                            <Label test-id={"add-begin-quarter"} htmlFor={"add-begin-quarter"}>
-                                Begin Quarter
-                            </Label>
-                            <Dropdown
-                                id={"add-begin-quarter"}
-                                name={"add-begin-quarter"}
-                                epa-testid={"add-begin-quarter"}
-                                data-testid={"add-begin-quarter"}
-                                value={selectedBeginQuarter}
-                                onChange={(e)=>setSelectedBeginQuarter(e.target.value)}
-                            >
-                                {yearQuarters.map((yearquarter, i) =>
-                                    <option key={i} value={yearquarter}>{yearquarter}</option>
-                                )}
-                            </Dropdown>
-                        </Grid>
-                        <Grid col={3}>
-                            <Label test-id={"add-end-quarter"} htmlFor={"add-end-quarter"}>
-                                End Quarter
-                            </Label>
-                            <Dropdown
-                                id={"add-end-quarter"}
-                                name={"add-end-quarter"}
-                                epa-testid={"add-end-quarter"}
-                                data-testid={"add-end-quarter"}
-                                value={selectedEndQuarter}
-                                onChange={(e)=>setSelectedEndQuarter(e.target.value)}
-                            >
-                                {yearQuarters.map((yearquarter, i) =>
-                                    <option key={i} value={yearquarter}>{yearquarter}</option>
-                                )}
-                            </Dropdown>
-                        </Grid>
-                    </Grid>
+                    {/* HOUR */}
+                    {showDateHour ?
+                        <Grid row gap={2}>
+                            <Grid col={3} >
+                                <Label
+                                    htmlFor="add-begin-date"
+                                    id="add-begin-date"
+                                >
+                                    Begin Date
+                                </Label>
+                                <DatePicker
+                                    aria-labelledby="add-begin-date"
+                                    id="add-begin-date"
+                                    name="add-begin-date"
+                                    defaultValue={values?.matchTimeBeginValue}
+                                />
+                            </Grid>
+                            <Grid col={2}>
+                                <Label test-id={"add-begin-hour"} htmlFor={"add-begin-hour"}>
+                                    Begin Hour
+                                </Label>
+                                <Dropdown
+                                    id={"add-begin-hour"}
+                                    name={"add-begin-hour"}
+                                    epa-testid={"add-begin-hour"}
+                                    data-testid={"add-begin-hour"}
+                                    value={selectedBeginHour}
+                                    className="width-10"
+                                    onChange={(e) => setSelectedBeginHour(e.target.value)}
+                                >
+                                    {hoursInADay.map((h, i) =>
+                                        <option key={i}>{h}</option>
+                                    )}
+                                </Dropdown>
+
+                            </Grid>
+                            <Grid col={3} >
+                                <Label
+                                    htmlFor="add-end-date"
+                                    id="add-end-date"
+                                >
+                                    End Date
+                                </Label>
+                                <DatePicker
+                                    aria-labelledby="add-end-date"
+                                    id="add-end-date"
+                                    name="add-end-date"
+                                    defaultValue={values?.matchTimeEndValue}
+                                />
+                            </Grid>
+                            <Grid col={3}>
+                                <Label test-id={"add-end-hour"} htmlFor={"add-end-hour"}>
+                                    End Hour
+                                </Label>
+                                <Dropdown
+                                    id={"add-end-hour"}
+                                    name={"add-end-hour"}
+                                    epa-testid={"add-end-hour"}
+                                    data-testid={"add-end-hour"}
+                                    value={selectedEndHour}
+                                    className="width-10"
+                                    onChange={(e) => setSelectedEndHour(e.target.value)}
+                                >
+                                    {hoursInADay.map((h, i) =>
+                                        <option key={i}>{h}</option>
+                                    )}
+                                </Dropdown>
+                            </Grid>
+                        </Grid> : null}
+
+                    {/* DATE */}
+                    {showDate ?
+                        <Grid row gap={2}>
+                            <Grid col={3} >
+                                <Label
+                                    htmlFor="add-begin-date-2"
+                                    id="add-begin-date-2"
+                                >
+                                    Begin Date
+                                </Label>
+                                <DatePicker
+                                    aria-labelledby="add-begin-date-2"
+                                    id="add-begin-date-2"
+                                    name="add-begin-date-2"
+                                    defaultValue={values?.matchTimeBeginValue}
+                                />
+                            </Grid>
+                            <Grid col={3} >
+                                <Label
+                                    htmlFor="add-end-date-2"
+                                    id="add-end-date-2"
+                                >
+                                    End Date
+                                </Label>
+                                <DatePicker
+                                    aria-labelledby="add-end-date-2"
+                                    id="add-end-date-2"
+                                    name="add-end-date-2"
+                                    defaultValue={values?.matchTimeEndValue}
+                                />
+                            </Grid>
+                        </Grid> : null}
+
+                    {/* HISTIND */}
+                    {showHistorical ?
+                        <Grid row gap={2}>
+                            <Grid col={3}>
+                                <Checkbox
+                                    id="add-is-historical"
+                                    name="add-is-historical"
+                                    label="Historical"
+                                    checked={selectedIsHistorical}
+                                    value={selectedIsHistorical}
+                                    onChange={() =>
+                                        setSelectedIsHistorical((previousVal) => !previousVal)
+                                    }
+                                />
+                            </Grid>
+                        </Grid> : null}
+
+                    {/* QUARTER */}
+                    {showQuarter ?
+                        <Grid row gap={4}>
+                            <Grid col={3}>
+                                <Label test-id={"add-begin-quarter"} htmlFor={"add-begin-quarter"}>
+                                    Begin Quarter
+                                </Label>
+                                <Dropdown
+                                    id={"add-begin-quarter"}
+                                    name={"add-begin-quarter"}
+                                    epa-testid={"add-begin-quarter"}
+                                    data-testid={"add-begin-quarter"}
+                                    value={selectedBeginQuarter}
+                                    onChange={(e) => setSelectedBeginQuarter(e.target.value)}
+                                >
+                                    {yearQuarters.map((yearquarter, i) =>
+                                        <option key={i} value={yearquarter}>{yearquarter}</option>
+                                    )}
+                                </Dropdown>
+                            </Grid>
+                            <Grid col={3}>
+                                <Label test-id={"add-end-quarter"} htmlFor={"add-end-quarter"}>
+                                    End Quarter
+                                </Label>
+                                <Dropdown
+                                    id={"add-end-quarter"}
+                                    name={"add-end-quarter"}
+                                    epa-testid={"add-end-quarter"}
+                                    data-testid={"add-end-quarter"}
+                                    value={selectedEndQuarter}
+                                    onChange={(e) => setSelectedEndQuarter(e.target.value)}
+                                >
+                                    {yearQuarters.map((yearquarter, i) =>
+                                        <option key={i} value={yearquarter}>{yearquarter}</option>
+                                    )}
+                                </Dropdown>
+                            </Grid>
+                        </Grid> : null}
 
                     <Grid row gap={2}>
                         <Grid col={10}>
                             <Label htmlFor="add-notes" id="add-notes-label">Notes</Label>
-                            <TextInput className="maxw-full" id="add-notes" name="add-notes" type="text" value={selectedNotes} onChange={(e)=>{setSelectedNotes(e.target.value)}}/>
+                            <TextInput className="maxw-full" id="add-notes" name="add-notes" type="text" value={selectedNotes} onChange={(e) => { setSelectedNotes(e.target.value) }} />
                         </Grid>
                     </Grid>
                 </GridContainer>
