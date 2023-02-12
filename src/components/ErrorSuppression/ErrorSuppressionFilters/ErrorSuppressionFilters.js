@@ -372,7 +372,7 @@ export const ErrorSuppressionFilters = () => {
               <MultiSelectCombobox
                 items={locationData}
                 label="Location Name"
-                entity="locationName"
+                entity="es-locations-filter"
                 searchBy="contains"
                 value={selectedLocations}
                 onChangeUpdate={onChangeOfLocationMultiSelect}
