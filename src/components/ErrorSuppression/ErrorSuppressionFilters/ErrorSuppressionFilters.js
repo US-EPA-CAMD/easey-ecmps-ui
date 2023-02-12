@@ -77,7 +77,7 @@ export const ErrorSuppressionFilters = () => {
     const [selectedCheckResult, setSelectedCheckResult] = useState();
     const [selectedFacility, setSelectedFacility] = useState();
     const [selectedLocations, setSelectedLocations] = useState([]);
-    const [selectedIsActive, setSelectedIsActive] = useState(true);
+    const [selectedIsActive, setSelectedIsActive] = useState(false);
     const [selectedReason, setSelectedReason] = useState();
     const [selectedAddDateAfter, setSelectedAddDateAfter] = useState();
     const [selectedAddDateBefore, setSelectedAddDateBefore] = useState();

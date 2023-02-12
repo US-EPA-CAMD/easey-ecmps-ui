@@ -21,6 +21,9 @@ export const getErrorSuppressionRecords = ({
     addDateBefore,
 }) => {
     const pipeDelimitedLocations = locations && locations.length > 0 ? locations.join("|") : undefined;
+    // NOTE: This is temporary until we change the active/inactive checkbox into a dropdown
+    if(!active)
+        active=undefined;
     return axios.get(url, {
         params: {
             checkTypeCode:checkType, 

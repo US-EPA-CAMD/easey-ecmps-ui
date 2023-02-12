@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
 import { Button } from "@trussworks/react-uswds";
+import { Preloader } from "@us-epa-camd/easey-design-system";
 import { AddErrorSupressionModal } from "../AddErrorSuppressionModal/AddErrorSuppressionModal";
 import DataTable from "react-data-table-component";
 import { getErrorSuppressionRecords } from "../../../utils/api/errorSuppressionApi";
@@ -26,29 +27,33 @@ export const ErrorSuppressionDataContainer = () => {
     const [showDeactivateModal, setShowDeactivateModal] = useState(false);
     const [tableData, setTableData] = useState([]);
     const [selectedRows, setSelectedRows] = useState([]);
+    const [isTableLoading, setIsTableLoading] = useState(false)
 
-    const getTableData = ()=>{
-        // if (!checkType || !checkNumber || !checkResult)
-        //     return;
-        const params = { checkType:"LINEAR", checkNumber:'12', checkResult:'A', facility, locations, active, reason, addDateAfter, addDateBefore, }
+    const getTableData = () => {
+        if (!checkType || !checkNumber || !checkResult)
+            return;
+        // const params = { checkType:"LINEAR", checkNumber:'12', checkResult:'A', facility, locations, active, reason, addDateAfter, addDateBefore, }
         // const params = { checkType:"QUAL", checkNumber:'23', checkResult:'D', facility, locations, active, reason, addDateAfter, addDateBefore, }
         // const params = { checkType:"HOURGEN", checkNumber:'7', checkResult:'C', facility, locations, active, reason, addDateAfter, addDateBefore, }
-        // const params = { checkType:"DAYCAL", checkNumber:'19', checkResult:'E', facility, locations, active, reason, addDateAfter, addDateBefore, }
-        // const params = { checkType, checkNumber, checkResult, facility, locations, active, reason, addDateAfter, addDateBefore, }
-
+        // const params = { checkType: "DAYCAL", checkNumber: '19', checkResult: 'E', facility, locations, active, reason, addDateAfter, addDateBefore, }
+        const params = { checkType, checkNumber, checkResult, facility, locations, active, reason, addDateAfter, addDateBefore, }
+        setIsTableLoading(true);
         console.log(params);
         getErrorSuppressionRecords(params).then(({ data }) => {
             // getErrorSuppressionRecords('HOURGEN', '7', 'C').then(({ data }) => {
             data.forEach(d => d.selected = false)
             setTableData(data)
             setSelectedRows([]);
-            }).catch(err => {
+        }).catch(err => {
             console.log("error", err)
+        }).finally(() => {
+            console.log("was herer")
+            setIsTableLoading(false);
         })
     }
     useEffect(() => {
         getTableData()
-        return ()=>{
+        return () => {
             setTableData([])
         }
     }, [checkType, checkNumber, checkResult, facility, locations, active, reason, addDateAfter, addDateBefore]);
@@ -122,7 +127,7 @@ export const ErrorSuppressionDataContainer = () => {
         return `${formatDate(dateString, "/")} ${date.getUTCHours()}:${date.getUTCMinutes()}:${date.getUTCMinutes()}`
     }
 
-    const closeModal = () =>{
+    const closeModal = () => {
         setShowAddModal(false);
         setShowCloneModal(false);
     }
@@ -144,16 +149,16 @@ export const ErrorSuppressionDataContainer = () => {
 
     return (
         <div>
-            {showAddModal || showCloneModal ? <AddErrorSupressionModal showAddModal={showAddModal || showCloneModal} values={showCloneModal ? selectedRows[0]:undefined} close={closeModal} /> : null}
+            {showAddModal || showCloneModal ? <AddErrorSupressionModal showAddModal={showAddModal || showCloneModal} values={showCloneModal ? selectedRows[0] : undefined} close={closeModal} /> : null}
             {/* {showCloneModal ? <AddErrorSupressionModal showAddModal={showCloneModal} values={selectedRows[0]} close={() => setShowCloneModal(false)} /> : null} */}
-            {showDeactivateModal ? 
-                <DeactivateNotificationModal 
-                    showDeactivateModal={showDeactivateModal} 
+            {showDeactivateModal ?
+                <DeactivateNotificationModal
+                    showDeactivateModal={showDeactivateModal}
                     close={() => setShowDeactivateModal(false)}
-                    selectedRowIds={selectedRows.map(r=>r.id)}
+                    selectedRowIds={selectedRows.map(r => r.id)}
                     refreshTable={getTableData}
-                /> 
-            : null}
+                />
+                : null}
 
             <div className="padding-left-0 margin-left-0 padding-right-0">
                 <div className="grid-row row-width">
@@ -162,18 +167,18 @@ export const ErrorSuppressionDataContainer = () => {
 
                     </div>
                     <div className="grid-col-2">
-                        <Button 
+                        <Button
                             aria-label="Add"
                             data-testid="es-add"
-                            className="margin-left-1" 
+                            className="margin-left-1"
                             onClick={() => setShowAddModal(true)}
                         >
                             Add
                         </Button>
                     </div>
                     <div className="grid-col-2">
-                        <Button aria-label="Clone" 
-                            data-testid="es-clone" 
+                        <Button aria-label="Clone"
+                            data-testid="es-clone"
                             disabled={selectedRows.length !== 1}
                             onClick={() => {
                                 setShowCloneModal(true);
@@ -183,10 +188,10 @@ export const ErrorSuppressionDataContainer = () => {
                         </Button>
                     </div>
                     <div className="grid-col-2">
-                        <Button 
-                            aria-label="Deactivate" 
-                            data-testid="es-deactivate" 
-                            onClick={() =>setShowDeactivateModal(true)}
+                        <Button
+                            aria-label="Deactivate"
+                            data-testid="es-deactivate"
+                            onClick={() => setShowDeactivateModal(true)}
                             disabled={selectedRows.length === 0}
                         >
                             Deactivate
@@ -194,14 +199,18 @@ export const ErrorSuppressionDataContainer = () => {
                     </div>
                 </div>
                 <div className=" ">
-                    <DataTable
-                        noHeader={true}
-                        fixedHeader={true}
-                        fixedHeaderScrollHeight="50vh"
-                        columns={columns}
-                        data={tableData}
-                        className={`data-display-table react-transition fade-in`}
-                    />
+                    {isTableLoading ?
+                        <Preloader />
+                        :
+                        <DataTable
+                            noHeader={true}
+                            fixedHeader={true}
+                            fixedHeaderScrollHeight="50vh"
+                            columns={columns}
+                            data={tableData}
+                            className={`data-display-table react-transition fade-in`}
+                        />
+                    }
 
                 </div>
             </div>
