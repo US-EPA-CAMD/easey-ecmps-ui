@@ -13,6 +13,7 @@ import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
 
 export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     console.log(values)
+    // Values being used from context
     const {
         transformedData,
         facilityList,
@@ -23,7 +24,8 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     const [checkNumberList, setCheckNumberList] = useState([]);
     const [checkResultList, setCheckResultList] = useState([]);
     const [severityCodeList, setSeverityCodeList] = useState([]);
-
+    
+    // Selected form 
     const [selectedCheckType, setSelectedCheckType] = useState();
     const [selectedCheckNumber, setSelectedCheckNumber] = useState();
     const [selectedCheckResult, setSelectedCheckResult] = useState();
@@ -43,14 +45,14 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     const [selectedBeginQuarter, setSelectedBeginQuarter] = useState();
     const [selectedEndQuarter, setSelectedEndQuarter] = useState();
 
-
+    // Locations multiselect items
     const [locationData, setLocationData] = useState([]);
 
     const hoursInADay = [...Array(24).keys()]
 
     const yearQuarters = useMemo(getReportingPeriods, [])
 
-    /*Time Criteria booleans */
+    // Time Criteria booleans
     const showDateHour = useMemo(() => !!(findCheckResultObject()?.timeTypeCode === 'HOUR'),
         [selectedCheckType, selectedCheckNumber, selectedCheckResult, transformedData]);
 
@@ -68,6 +70,8 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         setCheckTypeList(uniqueTypeCodeAndDesc);
     }, [transformedData])
 
+    // When the clone button is clicked and values is set, this useEffect takes care of prepopulating
+    // all the form fields with the values of the row that was selected
     useEffect(() => {
         if (!values)
             return;
@@ -86,6 +90,8 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         setSelectedNotes(note);
 
         const splitLocationList = locations?.split(",");
+        console.log(splitLocationList)
+        getLocations(checkTypeCode, checkNumber);
         if (splitLocationList) {
             splitLocationList.forEach(locName => {
                 const found = locationData.find(datum => datum.id === locName);
@@ -93,7 +99,6 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                     found.selected = true
             })
         }
-
 
         // Match time values
         switch (matchTimeTypeCode) {
@@ -132,7 +137,8 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
 
 
     const saveFunc = () => {
-        // make api call here later on to save and create new ES
+        // Make api call here later on to save and create new ES
+        // Might move this to ErrorSuppressionDataContainer and pass in as prop
         close();
     }
 
@@ -152,6 +158,9 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
             return;
     }
 
+    // Assuming user has chosen a value for Check Type, Check Number, and Check Result, 
+    // this function finds and returns the checkCatalogResult object from transformedData.
+    // Returns undefined if nothing is found.
     function findCheckResultObject() {
         if (!(selectedCheckType && selectedCheckNumber && selectedCheckResult))
             return;
@@ -206,6 +215,8 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         }
     };
 
+    // Makes API call to get locations and then formats them to be in the way
+    // MultiSelectCombobox expects the items to look and calls setLocationData()
     const getLocations = (facilityValue, checkResultValue) => {
         const locationTypeCode = transformedData[selectedCheckType][
             selectedCheckNumber
