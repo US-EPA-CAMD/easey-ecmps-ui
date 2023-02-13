@@ -168,7 +168,9 @@ export const ErrorSuppressionFilters = () => {
     }
    
     const onFacilityChange = (e) => {
-      const { value } = e.target;
+      let { value } = e.target;
+      value = value === "false" ? false : value;
+
       setSelectedFacility(value);
       if (!value) return;
 
@@ -179,33 +181,47 @@ export const ErrorSuppressionFilters = () => {
     };
 
     const onCheckTypeChange = (e) => {
-        const { value } = e.target;
+        let { value } = e.target;
+        value = value === "false" ? false : value;
+
         setSelectedCheckType(value);
         setSelectedCheckNumber(false);
         setSelectedCheckResult(false);
-
-        if (value === false)
+        if (!value)
             return;
 
         const checkNumbers = Object.keys(transformedData[value]);
         setCheckNumberList(checkNumbers);
+        // reset location selections if there are any
+        locationData.forEach(d=>d.selected=false)
+
     }
 
     const onCheckNumberChange = (e) => {
-        const { value } = e.target;
+        let { value } = e.target;
+        value = value === "false" ? false : value;
+
         setSelectedCheckNumber(value);
         setSelectedCheckResult(false);
 
-        if (value === false)
+        if (!value)
             return;
 
         const checkResults = transformedData[selectedCheckType][value].map(d => d.checkResult);
-        setCheckResultList(checkResults)
+        setCheckResultList(checkResults);
+
+        // reset location selections if there are any
+        locationData.forEach(d=>d.selected=false)
+
     }
 
     const onCheckResultChange = (e) => {
-      const { value } = e.target;
+      let { value } = e.target;
+      value = value === "false" ? false : value;
+
       setSelectedCheckResult(value);
+      if( !value )
+        return
 
       if (selectedCheckType && selectedCheckNumber && value) {
         const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === value);
@@ -285,7 +301,7 @@ export const ErrorSuppressionFilters = () => {
               value={selectedCheckType}
               onChange={onCheckTypeChange}
             >
-              <option>{defaultDropdownText}</option>
+              <option value="false">{defaultDropdownText}</option>
               {checkTypeList.map((d) => (
                 <option
                   key={d.checkTypeCode}
@@ -309,7 +325,7 @@ export const ErrorSuppressionFilters = () => {
                 onChange={onCheckNumberChange}
                 disabled={!selectedCheckType}
               >
-                <option>{defaultDropdownText}</option>
+                <option value="false">{defaultDropdownText}</option>
                 {checkNumberList.map((d) => (
                   <option key={d} value={d} data-testid={d}>
                     {d}
@@ -333,7 +349,7 @@ export const ErrorSuppressionFilters = () => {
               onChange={onCheckResultChange}
               disabled={!selectedCheckType || !selectedCheckNumber}
             >
-              <option>{defaultDropdownText}</option>
+              <option value="false">{defaultDropdownText}</option>
               {checkResultList.map((d) => (
                 <option key={d} value={d} data-testid={d}>
                   {d}
@@ -358,7 +374,7 @@ export const ErrorSuppressionFilters = () => {
               value={selectedFacility}
               onChange={onFacilityChange}
             >
-              <option value={false}>{defaultDropdownText}</option>
+              <option value="false">{defaultDropdownText}</option>
               {facilityList.map((d) => (
                 <option
                   key={d.orisCode}
@@ -375,7 +391,6 @@ export const ErrorSuppressionFilters = () => {
                 label="Location Name"
                 entity="es-locations-filter"
                 searchBy="contains"
-                value={selectedLocations}
                 onChangeUpdate={onChangeOfLocationMultiSelect}
                 disabled={
                   !(
@@ -421,7 +436,7 @@ export const ErrorSuppressionFilters = () => {
               value={selectedReason}
               onChange={(e) => setSelectedReason(e.target.value)}
             >
-              <option>{defaultDropdownText}</option>
+              <option value="false">{defaultDropdownText}</option>
               {reasonCodeList.map((d) => (
                 <option
                   key={d.errorSuppressionReasonCode}

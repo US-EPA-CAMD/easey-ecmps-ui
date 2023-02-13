@@ -89,6 +89,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         setSelectedNotes(note);
 
         const checkResultObj = transformedData[checkTypeCode][checkNumber].find(r=>r.checkResult === checkResultCode);
+
         getLocations(orisCode, checkResultObj).then((availLoc)=>{
             setLocationData([...availLoc]);
             // split the locations coming from the table row
@@ -173,28 +174,39 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     }
 
     const onCheckTypeChange = (e) => {
-        const { value } = e.target;
+        let { value } = e.target;
+        value = value === "false" ? false : value;
+
         setSelectedCheckType(value);
         setSelectedCheckNumber(false);
         setSelectedCheckResult(false);
 
-        if (value === false)
+        if (!value)
             return;
+        
         const checkNumbers = Object.keys(transformedData[value]);
         setCheckNumberList(checkNumbers)
-    }
+        // reset location selections if there are any
+        locationData.forEach(d=>d.selected=false)
+    }   
 
     const onCheckNumberChange = (e, selCheckType) => {
-        const { value } = e.target;
+        let { value } = e.target;
+        value = value === "false" ? false : value;
+
         setSelectedCheckNumber(value);
         setSelectedCheckResult(false);
-        if (value === false)
+        if (!value)
             return;
         setCheckResultList(transformedData[selCheckType][value].map(d => d.checkResult))
+        // reset location selections if there are any
+        locationData.forEach(d=>d.selected=false)
+
     }
 
     const onCheckResultChange = (e) => {
-        const { value } = e.target;
+        let { value } = e.target;
+        value = value === "false" ? false : value;
         setSelectedCheckResult(value);
 
         if (selectedCheckType && selectedCheckNumber && value) {
@@ -208,9 +220,11 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     };
 
     const onFacilityChange = (e) => {
-        const { value } = e.target;
+        let { value } = e.target;
+        value = value === "false" ? false : value;
+
         setSelectedFacility(value);
-        if (value === false) return;
+        if (!value) return;
         if (selectedCheckType && selectedCheckNumber && selectedCheckResult) {
             const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === selectedCheckResult)
             getLocations(value, checkResultObj).then(availLoc=>{
@@ -358,7 +372,6 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                 label="Locations"
                                 entity="es-locations-add"
                                 searchBy="contains"
-                                value={selectedLocations}
                                 onChangeUpdate={onChangeOfLocationMultiSelect}
                                 iconAlignRight={2}
                                 disabled={
