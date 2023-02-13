@@ -38,7 +38,7 @@ export const ErrorSuppressionDataContainer = () => {
         // const params = { checkType: "DAYCAL", checkNumber: '19', checkResult: 'E', facility, locations, active, reason, addDateAfter, addDateBefore, }
         const params = { checkType, checkNumber, checkResult, facility, locations, active, reason, addDateAfter, addDateBefore, }
         setIsTableLoading(true);
-        console.log(params);
+
         getErrorSuppressionRecords(params).then(({ data }) => {
             // getErrorSuppressionRecords('HOURGEN', '7', 'C').then(({ data }) => {
             data.forEach(d => d.selected = false)
@@ -47,7 +47,6 @@ export const ErrorSuppressionDataContainer = () => {
         }).catch(err => {
             console.log("error", err)
         }).finally(() => {
-            console.log("was herer")
             setIsTableLoading(false);
         })
     }
@@ -150,7 +149,6 @@ export const ErrorSuppressionDataContainer = () => {
     return (
         <div>
             {showAddModal || showCloneModal ? <AddErrorSupressionModal showAddModal={showAddModal || showCloneModal} values={showCloneModal ? selectedRows[0] : undefined} close={closeModal} /> : null}
-            {/* {showCloneModal ? <AddErrorSupressionModal showAddModal={showCloneModal} values={selectedRows[0]} close={() => setShowCloneModal(false)} /> : null} */}
             {showDeactivateModal ?
                 <DeactivateNotificationModal
                     showDeactivateModal={showDeactivateModal}

@@ -52,16 +52,16 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     const yearQuarters = useMemo(getReportingPeriods, [])
 
     // Time Criteria booleans
-    const showDateHour = useMemo(() => !!(findCheckResultObject()?.timeTypeCode === 'HOUR'),
+    const showDateHour = useMemo(() => findCheckResultObject()?.timeTypeCode === 'HOUR',
         [selectedCheckType, selectedCheckNumber, selectedCheckResult, transformedData]);
 
-    const showDate = useMemo(() => !!(findCheckResultObject()?.timeTypeCode === 'DATE'),
+    const showDate = useMemo(() => findCheckResultObject()?.timeTypeCode === 'DATE',
         [selectedCheckType, selectedCheckNumber, selectedCheckResult, transformedData]);
 
-    const showQuarter = useMemo(() => !!(findCheckResultObject()?.timeTypeCode === 'QUARTER'),
+    const showQuarter = useMemo(() => findCheckResultObject()?.timeTypeCode === 'QUARTER',
         [selectedCheckType, selectedCheckNumber, selectedCheckResult, transformedData]);
     
-    const showHistorical = useMemo(() => !!(findCheckResultObject()?.timeTypeCode === 'HISTIND'),
+    const showHistorical = useMemo(() => findCheckResultObject()?.timeTypeCode === 'HISTIND',
         [selectedCheckType, selectedCheckNumber, selectedCheckResult, transformedData]);
 
     useEffect(() => {
@@ -543,8 +543,8 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                     value={selectedBeginQuarter}
                                     onChange={(e) => setSelectedBeginQuarter(e.target.value)}
                                 >
-                                    {yearQuarters.map((yearquarter, i) =>
-                                        <option key={i} value={yearquarter}>{yearquarter}</option>
+                                    {yearQuarters.map((yearquarter) =>
+                                        <option key={yearquarter} value={yearquarter}>{yearquarter}</option>
                                     )}
                                 </Dropdown>
                             </Grid>
@@ -560,8 +560,8 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                     value={selectedEndQuarter}
                                     onChange={(e) => setSelectedEndQuarter(e.target.value)}
                                 >
-                                    {yearQuarters.map((yearquarter, i) =>
-                                        <option key={i} value={yearquarter}>{yearquarter}</option>
+                                    {yearQuarters.map((yearquarter) =>
+                                        <option key={yearquarter} value={yearquarter}>{yearquarter}</option>
                                     )}
                                 </Dropdown>
                             </Grid>

@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, waitForElement} from "@testing-library/react";
+import { render, screen, waitForElement } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import { AddErrorSupressionModal } from "./AddErrorSuppressionModal";
 // import { ErrorSuppressionFiltersContextProvider } from "../context/error-suppression-context";
@@ -130,14 +130,14 @@ describe("AddErrorSupressionModal component", () => {
         }
 
 
-        it('should populate the form with proper values', async() => {
-            await act(async () => 
-            render(
-                <ErrorSuppressionFiltersContext.Provider value={contextMock}>
-                    <AddErrorSupressionModal values={tableRow} />
-                </ErrorSuppressionFiltersContext.Provider>
+        it('should populate the form with proper values', async () => {
+            await act(async () =>
+                render(
+                    <ErrorSuppressionFiltersContext.Provider value={contextMock}>
+                        <AddErrorSupressionModal values={tableRow} />
+                    </ErrorSuppressionFiltersContext.Provider>
+                )
             )
-        )
             expect(screen.queryByText("Linearity Check (LINEAR)")).toBeDefined();
             expect(screen.queryByText("12")).toBeDefined();
             expect(screen.queryByText("A")).toBeDefined();
@@ -147,8 +147,8 @@ describe("AddErrorSupressionModal component", () => {
             expect(screen.queryByText("Approved by Matt B.  See RT 8808.")).toBeDefined();
         })
 
-        it('should display the proper time criteria row for timeTimeCode=DATE', async()=>{
-            await act(async () => 
+        it('should display the proper time criteria row for timeTimeCode=DATE', async () => {
+            await act(async () =>
                 render(
                     <ErrorSuppressionFiltersContext.Provider value={contextMock}>
                         <AddErrorSupressionModal values={tableRow} />
@@ -162,13 +162,13 @@ describe("AddErrorSupressionModal component", () => {
 
         })
 
-        it('should display the proper time criteria row for timeTimeCode=HISTIND', async()=>{
-            const ctxVal = {...contextMock};
-            ctxVal["transformedData"]["LINEAR"]["12"][0].timeTypeCode="HISTIND";
-            const row={...tableRow};
-            row.matchTimeTypeCode="HISTIND";
-            row.matchHistoricalIndicator=true;
-            await act(async () => 
+        it('should display the proper time criteria row for timeTimeCode=HISTIND', async () => {
+            const ctxVal = { ...contextMock };
+            ctxVal["transformedData"]["LINEAR"]["12"][0].timeTypeCode = "HISTIND";
+            const row = { ...tableRow };
+            row.matchTimeTypeCode = "HISTIND";
+            row.matchHistoricalIndicator = true;
+            await act(async () =>
                 render(
                     <ErrorSuppressionFiltersContext.Provider value={ctxVal}>
                         <AddErrorSupressionModal values={row} />
@@ -181,14 +181,14 @@ describe("AddErrorSupressionModal component", () => {
             expect(screen.queryByTestId("time-type-code-quarter")).toBeNull();
         })
 
-        it('should display the proper time criteria row for timeTimeCode=QUARTER', async()=>{
-            const ctxVal = {...contextMock};
-            ctxVal["transformedData"]["LINEAR"]["12"][0].timeTypeCode="QUARTER";
+        it('should display the proper time criteria row for timeTimeCode=QUARTER', async () => {
+            const ctxVal = { ...contextMock };
+            ctxVal["transformedData"]["LINEAR"]["12"][0].timeTypeCode = "QUARTER";
             console.log(JSON.stringify(ctxVal))
-            const row={...tableRow};
-            row.matchTimeTypeCode="QUARTER";
-            row.matchHistoricalIndicator=true;
-            await act(async () => 
+            const row = { ...tableRow };
+            row.matchTimeTypeCode = "QUARTER";
+            row.matchHistoricalIndicator = true;
+            await act(async () =>
                 render(
                     <ErrorSuppressionFiltersContext.Provider value={ctxVal}>
                         <AddErrorSupressionModal values={row} />
@@ -201,14 +201,14 @@ describe("AddErrorSupressionModal component", () => {
             expect(screen.queryByTestId("time-type-code-historical")).toBeNull();
         })
 
-        it('should display the proper time criteria row for timeTimeCode=HOUR', async()=>{
-            const ctxVal = {...contextMock};
-            ctxVal["transformedData"]["LINEAR"]["12"][0].timeTypeCode="HOUR";
+        it('should display the proper time criteria row for timeTimeCode=HOUR', async () => {
+            const ctxVal = { ...contextMock };
+            ctxVal["transformedData"]["LINEAR"]["12"][0].timeTypeCode = "HOUR";
             console.log(JSON.stringify(ctxVal))
-            const row={...tableRow};
-            row.matchTimeTypeCode="HOUR";
-            row.matchHistoricalIndicator=true;
-            await act(async () => 
+            const row = { ...tableRow };
+            row.matchTimeTypeCode = "HOUR";
+            row.matchHistoricalIndicator = true;
+            await act(async () =>
                 render(
                     <ErrorSuppressionFiltersContext.Provider value={ctxVal}>
                         <AddErrorSupressionModal values={row} />
@@ -221,18 +221,26 @@ describe("AddErrorSupressionModal component", () => {
             expect(screen.queryByTestId("time-type-code-historical")).toBeNull();
         })
 
-        // it('should reset Check Number dropdown when Check Type dropown is reset', async()=>{
-        //     const checkTypeDD = await screen.findByTestId("add-check-type");
-        //     await act(async ()=>{
-        //         await userEvent.click(checkTypeDD);
-        //         await userEvent.click(screen.getByTestId("add-check-type-reset"));
-        //     })
+        it('should reset Check Number dropdown when Check Type dropown is reset', async () => {
+            await act(async () =>
+                render(
+                    <ErrorSuppressionFiltersContext.Provider value={contextMock}>
+                        <AddErrorSupressionModal values={tableRow} />
+                    </ErrorSuppressionFiltersContext.Provider>
+                )
+            )
 
-        //     //screen.debug();
-        //     const checkNumberDD = await screen.findByTestId('add-check-number');
-        //     expect(checkNumberDD).toHaveValue("false")
-        //     // expect(screen.queryByTestId('add-check-number').target.value).toBe("false");
-        // })
+            const checkTypeDD = await screen.findByTestId("add-check-type");
+            await act(async () => {
+                await userEvent.click(checkTypeDD);
+                await userEvent.click(screen.getByTestId("add-check-type-reset"));
+            })
+
+            //screen.debug();
+            const checkNumberDD = await screen.findByTestId('add-check-number');
+            expect(checkNumberDD).toHaveValue("false")
+            // expect(screen.queryByTestId('add-check-number').target.value).toBe("false");
+        })
 
     })
 
