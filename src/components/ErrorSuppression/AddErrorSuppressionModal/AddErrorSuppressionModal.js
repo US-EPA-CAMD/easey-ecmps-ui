@@ -410,7 +410,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
 
                     {/* HOUR */}
                     {showDateHour ?
-                        <Grid row gap={2}>
+                        <Grid row gap={2} data-testid={"time-type-code-hour"}>
                             <Grid col={3} >
                                 <Label
                                     htmlFor="add-begin-date"
@@ -480,7 +480,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
 
                     {/* DATE */}
                     {showDate ?
-                        <Grid row gap={2}>
+                        <Grid row gap={2} data-testid={"time-type-code-date"}>
                             <Grid col={3} >
                                 <Label
                                     htmlFor="add-begin-date-2"
@@ -513,7 +513,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
 
                     {/* HISTIND */}
                     {showHistorical ?
-                        <Grid row gap={2}>
+                        <Grid row gap={2} data-testid={"time-type-code-historical"}>
                             <Grid col={3}>
                                 <Checkbox
                                     id="add-is-historical"
@@ -530,7 +530,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
 
                     {/* QUARTER */}
                     {showQuarter ?
-                        <Grid row gap={4}>
+                        <Grid row gap={4} data-testid={"time-type-code-quarter"}>
                             <Grid col={3}>
                                 <Label test-id={"add-begin-quarter"} htmlFor={"add-begin-quarter"}>
                                     Begin Quarter

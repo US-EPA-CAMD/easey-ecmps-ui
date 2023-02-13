@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, } from "@testing-library/react";
+import { render, screen, waitForElement} from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import { AddErrorSupressionModal } from "./AddErrorSuppressionModal";
 // import { ErrorSuppressionFiltersContextProvider } from "../context/error-suppression-context";
@@ -95,8 +95,8 @@ describe("AddErrorSupressionModal component", () => {
             "matchDataTypeCode": "TESTNUM",
             "matchDataValue": "EPA-023-1024",
             "matchTimeTypeCode": "DATE",
-            "matchTimeBeginValue": null,
-            "matchTimeEndValue": null,
+            "matchTimeBeginValue": "2009-05-05T17:40:29.000Z",
+            "matchTimeEndValue": "2009-05-06T17:40:29.000Z",
             "matchHistoricalIndicator": null,
             "reasonCode": "APPROVE",
             "note": "Approved by Matt B.  See RT 8808.",
@@ -129,19 +129,15 @@ describe("AddErrorSupressionModal component", () => {
             "reasonCodeList": []
         }
 
-        beforeEach(async () => {
 
-            component = await act(async () => {
-                render(
-                    <ErrorSuppressionFiltersContext.Provider value={contextMock}>
-                        <AddErrorSupressionModal values={tableRow} />
-                    </ErrorSuppressionFiltersContext.Provider>
-                )
-            })
-        })
-
-        it('should populate the form with proper values', () => {
-
+        it('should populate the form with proper values', async() => {
+            await act(async () => 
+            render(
+                <ErrorSuppressionFiltersContext.Provider value={contextMock}>
+                    <AddErrorSupressionModal values={tableRow} />
+                </ErrorSuppressionFiltersContext.Provider>
+            )
+        )
             expect(screen.queryByText("Linearity Check (LINEAR)")).toBeDefined();
             expect(screen.queryByText("12")).toBeDefined();
             expect(screen.queryByText("A")).toBeDefined();
@@ -149,6 +145,80 @@ describe("AddErrorSupressionModal component", () => {
             expect(screen.queryByText("APPROVE")).toBeDefined();
             expect(screen.queryByText("Intermountain (6481)")).toBeDefined();
             expect(screen.queryByText("Approved by Matt B.  See RT 8808.")).toBeDefined();
+        })
+
+        it('should display the proper time criteria row for timeTimeCode=DATE', async()=>{
+            await act(async () => 
+                render(
+                    <ErrorSuppressionFiltersContext.Provider value={contextMock}>
+                        <AddErrorSupressionModal values={tableRow} />
+                    </ErrorSuppressionFiltersContext.Provider>
+                )
+            )
+            expect(screen.getByTestId("time-type-code-date")).toBeDefined();
+            expect(screen.queryByTestId("time-type-code-historical")).toBeNull();
+            expect(screen.queryByTestId("time-type-code-hour")).toBeNull();
+            expect(screen.queryByTestId("time-type-code-quarter")).toBeNull();
+
+        })
+
+        it('should display the proper time criteria row for timeTimeCode=HISTIND', async()=>{
+            const ctxVal = {...contextMock};
+            ctxVal["transformedData"]["LINEAR"]["12"][0].timeTypeCode="HISTIND";
+            const row={...tableRow};
+            row.matchTimeTypeCode="HISTIND";
+            row.matchHistoricalIndicator=true;
+            await act(async () => 
+                render(
+                    <ErrorSuppressionFiltersContext.Provider value={ctxVal}>
+                        <AddErrorSupressionModal values={row} />
+                    </ErrorSuppressionFiltersContext.Provider>
+                )
+            )
+            expect(screen.getByTestId("time-type-code-historical")).toBeDefined();
+            expect(screen.queryByTestId("time-type-code-date")).toBeNull();
+            expect(screen.queryByTestId("time-type-code-hour")).toBeNull();
+            expect(screen.queryByTestId("time-type-code-quarter")).toBeNull();
+        })
+
+        it('should display the proper time criteria row for timeTimeCode=QUARTER', async()=>{
+            const ctxVal = {...contextMock};
+            ctxVal["transformedData"]["LINEAR"]["12"][0].timeTypeCode="QUARTER";
+            console.log(JSON.stringify(ctxVal))
+            const row={...tableRow};
+            row.matchTimeTypeCode="QUARTER";
+            row.matchHistoricalIndicator=true;
+            await act(async () => 
+                render(
+                    <ErrorSuppressionFiltersContext.Provider value={ctxVal}>
+                        <AddErrorSupressionModal values={row} />
+                    </ErrorSuppressionFiltersContext.Provider>
+                )
+            )
+            expect(screen.getByTestId("time-type-code-quarter")).toBeDefined();
+            expect(screen.queryByTestId("time-type-code-date")).toBeNull();
+            expect(screen.queryByTestId("time-type-code-hour")).toBeNull();
+            expect(screen.queryByTestId("time-type-code-historical")).toBeNull();
+        })
+
+        it('should display the proper time criteria row for timeTimeCode=HOUR', async()=>{
+            const ctxVal = {...contextMock};
+            ctxVal["transformedData"]["LINEAR"]["12"][0].timeTypeCode="HOUR";
+            console.log(JSON.stringify(ctxVal))
+            const row={...tableRow};
+            row.matchTimeTypeCode="HOUR";
+            row.matchHistoricalIndicator=true;
+            await act(async () => 
+                render(
+                    <ErrorSuppressionFiltersContext.Provider value={ctxVal}>
+                        <AddErrorSupressionModal values={row} />
+                    </ErrorSuppressionFiltersContext.Provider>
+                )
+            )
+            expect(screen.getByTestId("time-type-code-hour")).toBeDefined();
+            expect(screen.queryByTestId("time-type-code-date")).toBeNull();
+            expect(screen.queryByTestId("time-type-code-quarter")).toBeNull();
+            expect(screen.queryByTestId("time-type-code-historical")).toBeNull();
         })
 
         // it('should reset Check Number dropdown when Check Type dropown is reset', async()=>{
