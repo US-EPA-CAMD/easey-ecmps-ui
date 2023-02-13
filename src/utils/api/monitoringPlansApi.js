@@ -4,8 +4,6 @@ import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
 import { getFacilityById } from "./facilityApi";
 import download from "downloadjs";
-import { checkoutAPI } from "../../additional-functions/checkout";
-import { obtainCheckedOutLocations } from "../../additional-functions/useGetCheckedOutLocations";
 
 axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
@@ -23,7 +21,13 @@ export const getApiUrl = (path, workspaceOnly = false) => {
 
 export const getMonitoringPlanById = async (id) => {
   const url = getApiUrl(`/plans/export?planId=${id}`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 // *** obtain monitoring plans
@@ -40,47 +44,87 @@ export const getMonitoringPlans = async (orisCodes, monPlanIds = []) => {
   }
 
   const url = getApiUrl(`/configurations?${queryString}`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 // *** obtain monitoring methods
 export const getMonitoringMethods = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/methods`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getMonitoringMatsMethods = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/mats-methods`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getMonitoringSystems = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/systems`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getMonitoringSystemsFuelFlows = async (locationId, systemId) => {
   const url = getApiUrl(
     `/locations/${locationId}/systems/${systemId}/fuel-flows`
   );
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getMonitoringSystemsComponents = async (locId, systemId) => {
   const url = getApiUrl(`/locations/${locId}/systems/${systemId}/components`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getMonitoringComponents = async (locId) => {
   const url = getApiUrl(`/locations/${locId}/components`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getMonitoringAnalyzerRanges = async (locId, componentRecordId) => {
   const url = getApiUrl(
     `/locations/${locId}​/components/${componentRecordId}/analyzer-ranges`
   );
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const postCheckoutMonitoringPlanConfiguration = async (id) => {
@@ -93,7 +137,7 @@ export const postCheckoutMonitoringPlanConfiguration = async (id) => {
       })
     ).data;
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -107,7 +151,7 @@ export const revertOfficialRecord = async (id) => {
       })
     ).data;
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -127,7 +171,7 @@ export const createMethods = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -147,7 +191,7 @@ export const createMats = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -161,7 +205,7 @@ export const putLockTimerUpdateConfiguration = async (id) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -183,7 +227,7 @@ export const saveMonitoringMethods = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -205,7 +249,7 @@ export const saveMonitoringMats = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -219,7 +263,7 @@ export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
       })
     ).data;
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -227,16 +271,22 @@ export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
 export const getCheckedOutLocations = async () => {
   const url = getApiUrl(`/check-outs/plans`, true);
 
-  return axios({ url: url, method: "GET" })
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
     .then(handleResponse)
     .catch(handleError);
-
-  //return axios.get(url).then(handleResponse).catch(handleError);
 };
 
 export const getRefreshInfo = async (planId) => {
   const url = getApiUrl(`/plans/${planId}`, true);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveAnalyzerRanges = async (payload) => {
@@ -258,7 +308,7 @@ export const saveAnalyzerRanges = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -280,7 +330,7 @@ export const createAnalyzerRanges = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -301,7 +351,7 @@ export const saveSystemsFuelFlows = async (payload, locId, sysId) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -320,7 +370,7 @@ export const createSystemsFuelFlows = async (payload, locId, sysId) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -339,7 +389,7 @@ export const saveSystems = async (payload, locId, sysId) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -358,7 +408,7 @@ export const createSystems = async (payload, locId, sysId) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -379,7 +429,7 @@ export const saveSystemsComponents = async (payload, locId, sysId, compId) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -398,13 +448,18 @@ export const createSystemsComponents = async (payload, locId, sysId) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
 export const getMonitoringSpans = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/spans`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveMonitoringSpans = async (payload) => {
@@ -420,7 +475,7 @@ export const saveMonitoringSpans = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -439,7 +494,7 @@ export const createMonitoringSpans = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -454,7 +509,7 @@ export const saveMonitoringLoads = async (payload, locationId) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -472,18 +527,28 @@ export const createMonitoringLoads = async (payload, locationId) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
 export const getMonitoringLoads = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/loads`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getMonitoringDefaults = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/defaults`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveMonitoringDefaults = async (payload, locID) => {
@@ -497,7 +562,7 @@ export const saveMonitoringDefaults = async (payload, locID) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -516,18 +581,28 @@ export const createMonitoringDefaults = async (payload, locID) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
 export const getMonitoringFormulas = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/formulas`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getMonitoringRectangularDucts = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/duct-wafs`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveMonitoringDuct = async (payload) => {
@@ -543,7 +618,7 @@ export const saveMonitoringDuct = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -562,7 +637,7 @@ export const createMonitoringDuct = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -570,7 +645,12 @@ export const getMonitoringPlansFuelDataRecords = async (selectedLocation) => {
   const url = getApiUrl(
     `/locations/${selectedLocation["id"]}/units/${selectedLocation["unitRecordId"]}/unit-fuels`
   );
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveMonitoringPlansFuelData = async (payload) => {
@@ -586,7 +666,7 @@ export const saveMonitoringPlansFuelData = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -607,7 +687,7 @@ export const createFuelData = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -617,7 +697,12 @@ export const getMonitoringPlansUnitControlRecords = async (
   const url = getApiUrl(
     `/locations/${selectedLocation["id"]}/units/${selectedLocation["unitRecordId"]}/unit-controls`
   );
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveUnitControl = async (payload, urlParameters) => {
@@ -633,7 +718,7 @@ export const saveUnitControl = async (payload, urlParameters) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -654,7 +739,7 @@ export const createUnitControl = async (payload, urlParameters) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -669,7 +754,7 @@ export const saveMonitoringFormulas = async (payload, locID) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -688,7 +773,7 @@ export const createMonitoringFormulas = async (payload, locID) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -696,7 +781,12 @@ export const getUnitCapacity = async (selectedLocation) => {
   const url = getApiUrl(
     `/locations/${selectedLocation["id"]}/units/${selectedLocation["unitRecordId"]}/unit-capacities`
   );
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveUnitCapacity = async (payload, urlParameters) => {
@@ -712,7 +802,7 @@ export const saveUnitCapacity = async (payload, urlParameters) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -729,7 +819,7 @@ export const createUnitCapacity = async (payload, urlParameters) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -737,7 +827,12 @@ export const getPCTQualifications = async (locationId, qualId) => {
   const url = getApiUrl(
     `/locations/${locationId}/qualifications/${qualId}/pct-qualifications`
   );
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const savePCTQualificationData = async (payload) => {
@@ -753,7 +848,7 @@ export const savePCTQualificationData = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -774,13 +869,18 @@ export const createPCTQualificationData = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
 export const getQualifications = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/qualifications`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveQualificationData = async (payload) => {
@@ -796,7 +896,7 @@ export const saveQualificationData = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -815,7 +915,7 @@ export const createQualificationData = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -823,7 +923,12 @@ export const getLEEQualifications = async (locationId, qualId) => {
   const url = getApiUrl(
     `/locations/${locationId}/qualifications/${qualId}/lee-qualifications`
   );
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveLEEQualificationData = async (payload) => {
@@ -839,7 +944,7 @@ export const saveLEEQualificationData = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -860,7 +965,7 @@ export const createLEEQualificationData = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -868,7 +973,12 @@ export const getLMEQualifications = async (locationId, qualId) => {
   const url = getApiUrl(
     `/locations/${locationId}/qualifications/${qualId}/lme-qualifications`
   );
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveLMEQualificationData = async (payload) => {
@@ -884,7 +994,7 @@ export const saveLMEQualificationData = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -904,18 +1014,29 @@ export const createLMEQualificationData = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
 export const getLocationAttributes = async (locationId) => {
+  console.log("locationid", locationId);
   const url = getApiUrl(`/locations/${locationId}/attributes`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getRelationshipData = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/relationships`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const saveLocationAttribute = async (payload, locationId) => {
@@ -929,7 +1050,7 @@ export const saveLocationAttribute = async (payload, locationId) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -948,7 +1069,7 @@ export const createLocationAttribute = async (payload, locationSelectValue) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -959,12 +1080,22 @@ export const getMonitoringPlansEvaluationReportData = async (
   const url = getApiUrl(
     `/reports?reportCode=MP_EVAL&facilityId=${facilityId}&monitorPlanId${monPlanId}`
   );
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getMonitoringPlanComments = async (monPlanId) => {
   const url = getApiUrl(`/plans/${monPlanId}/comments`);
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const importMP = async (payload) => {
@@ -984,7 +1115,12 @@ export const importMP = async (payload) => {
 
 export const getMPSchema = async () => {
   const url = `${config.services.content.uri}/ecmps/reporting-instructions/monitor-plan.schema.json`;
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const exportMonitoringPlanDownload = async (configID) => {

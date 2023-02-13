@@ -12,12 +12,18 @@ axios.defaults.headers.common = {
 
 export const secureAxios = async (options) => {
   try {
-    const token = await refreshToken();
+    if (sessionStorage.getItem("cdx_user")) {
+      const token = await refreshToken();
 
-    options.headers = {
-      authorization: `Bearer ${token}`,
-      "x-api-key": config.app.apiKey,
-    };
+      options.headers = {
+        authorization: `Bearer ${token}`,
+        "x-api-key": config.app.apiKey,
+      };
+    } else {
+      options.headers = {
+        "x-api-key": config.app.apiKey,
+      };
+    }
   } catch (e) {
     displayAppError(e);
   }

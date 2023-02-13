@@ -10,11 +10,9 @@ axios.defaults.headers.common = {
 //Endpoint that dynamically routes to workspace or non-workspace environments
 const fireApiGetRequest = async (path, workspaceOnly = false) => {
   let url = config.services.facilities.uri;
-  let isWorkspace = false;
 
   if (workspaceOnly || window.location.href.includes("/workspace")) {
     url = `${url}/workspace`;
-    isWorkspace = true;
   }
 
   const payload = {
@@ -22,11 +20,7 @@ const fireApiGetRequest = async (path, workspaceOnly = false) => {
     method: "GET",
   };
 
-  if (isWorkspace) {
-    return await secureAxios(payload).then(handleResponse).catch(handleError);
-  } else {
-    return await axios(payload).then(handleResponse).catch(handleError);
-  }
+  return await secureAxios(payload).then(handleResponse).catch(handleError);
 };
 
 export async function getAllFacilities() {
