@@ -89,9 +89,8 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         setSelectedNotes(note);
 
         const checkResultObj = transformedData[checkTypeCode][checkNumber].find(r=>r.checkResult === checkResultCode);
-        getLocations(checkTypeCode, checkResultObj).then((availLoc)=>{
+        getLocations(orisCode, checkResultObj).then((availLoc)=>{
             setLocationData([...availLoc]);
-
             // split the locations coming from the table row
             const splitLocationList = locations?.split(",");
             if (splitLocationList) {
@@ -174,8 +173,6 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     }
 
     const onCheckTypeChange = (e) => {
-        console.log("onCheckTypeChange")
-
         const { value } = e.target;
         setSelectedCheckType(value);
         setSelectedCheckNumber(false);
@@ -191,11 +188,8 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         const { value } = e.target;
         setSelectedCheckNumber(value);
         setSelectedCheckResult(false);
-
         if (value === false)
             return;
-
-        console.log(selectedCheckType)
         setCheckResultList(transformedData[selCheckType][value].map(d => d.checkResult))
     }
 
@@ -205,9 +199,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
 
         if (selectedCheckType && selectedCheckNumber && value) {
             const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === value)
-            console.log(selectedFacility)
             getLocations(selectedFacility, checkResultObj).then(availLoc=>{
-                console.log(availLoc)
                 setLocationData([...availLoc])
             }).catch(err=>{
                 console.log("error", err)
@@ -219,7 +211,6 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         const { value } = e.target;
         setSelectedFacility(value);
         if (value === false) return;
-        console.log("selectedCheckResult", selectedCheckResult)
         if (selectedCheckType && selectedCheckNumber && selectedCheckResult) {
             const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === selectedCheckResult)
             getLocations(value, checkResultObj).then(availLoc=>{
