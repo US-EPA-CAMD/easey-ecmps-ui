@@ -152,16 +152,13 @@ describe("AddErrorSupressionModal component", () => {
         })
 
         // it('should reset Check Number dropdown when Check Type dropown is reset', async()=>{
-        //     const checkTypeDD = screen.getByTestId("add-check-type");
-        //     // act(()=>{
-        //     // })
+        //     const checkTypeDD = await screen.findByTestId("add-check-type");
         //     await act(async ()=>{
-        //          userEvent.click(checkTypeDD);
-
-        //         userEvent.click(screen.getByTestId("add-check-type-reset"));
+        //         await userEvent.click(checkTypeDD);
+        //         await userEvent.click(screen.getByTestId("add-check-type-reset"));
         //     })
 
-        //     screen.debug();
+        //     //screen.debug();
         //     const checkNumberDD = await screen.findByTestId('add-check-number');
         //     expect(checkNumberDD).toHaveValue("false")
         //     // expect(screen.queryByTestId('add-check-number').target.value).toBe("false");

@@ -11,7 +11,7 @@ import { getUniqueCheckTypeDescription, getLocations } from "../ErrorSuppression
 import { formatDate, getQuarter } from "../../../utils/functions";
 
 export const AddErrorSupressionModal = ({ showModal, close, values }) => {
-    console.log(values)
+    //console.log(values)
     // Values being used from context
     const {
         transformedData,

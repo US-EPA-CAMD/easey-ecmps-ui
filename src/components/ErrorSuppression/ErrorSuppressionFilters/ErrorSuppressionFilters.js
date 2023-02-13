@@ -48,8 +48,8 @@ export const getUniqueCheckTypeDescription = (transformedData) => {
         });
 }
 
-    // Makes API call to get locations and then formats them to be in the way
-    // MultiSelectCombobox expects the items to look and calls setLocationData()
+// Makes API call to get locations and then formats them to be in the way
+// MultiSelectCombobox expects the items to look and calls setLocationData()
 export const getLocations = (facilityValue, checkResultObj) => {
       return getMonitoringPlans(Number(facilityValue)).then(({ data }) => {
           const locations = data.map((f) => f.locations).flat(1);
