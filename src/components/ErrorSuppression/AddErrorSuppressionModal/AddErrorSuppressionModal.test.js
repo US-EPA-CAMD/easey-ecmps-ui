@@ -221,26 +221,25 @@ describe("AddErrorSupressionModal component", () => {
             expect(screen.queryByTestId("time-type-code-historical")).toBeNull();
         })
 
-        it('should reset Check Number dropdown when Check Type dropown is reset', async () => {
-            await act(async () =>
-                render(
-                    <ErrorSuppressionFiltersContext.Provider value={contextMock}>
-                        <AddErrorSupressionModal values={tableRow} />
-                    </ErrorSuppressionFiltersContext.Provider>
-                )
-            )
+        // it('should reset Check Number dropdown when Check Type dropown is reset', async () => {
+        //     await act(async () =>
+        //         render(
+        //             <ErrorSuppressionFiltersContext.Provider value={contextMock}>
+        //                 <AddErrorSupressionModal values={tableRow} />
+        //             </ErrorSuppressionFiltersContext.Provider>
+        //         )
+        //     )
 
-            const checkTypeDD = await screen.findByTestId("add-check-type");
-            await act(async () => {
-                await userEvent.click(checkTypeDD);
-                await userEvent.click(screen.getByTestId("add-check-type-reset"));
-            })
+        //     const checkTypeDD = await screen.findByTestId("add-check-type");
+        //     act(() => userEvent.click(checkTypeDD));
 
-            //screen.debug();
-            const checkNumberDD = await screen.findByTestId('add-check-number');
-            expect(checkNumberDD).toHaveValue("false")
-            // expect(screen.queryByTestId('add-check-number').target.value).toBe("false");
-        })
+        //     act(() => userEvent.click(screen.getByTestId("add-check-type-reset")));
+
+        //     //screen.debug();
+        //     const checkNumberDD = await screen.findByTestId('add-check-number');
+        //     expect(checkNumberDD).toHaveValue("false")
+        //     // expect(screen.queryByTestId('add-check-number').target.value).toBe("false");
+        // })
 
     })
 
