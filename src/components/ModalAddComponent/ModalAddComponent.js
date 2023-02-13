@@ -62,7 +62,7 @@ const ModalAddComponent = ({
         };
       });
 
-      options.unshift({ code: "", name: "" });
+      options.unshift({ code: "", name: "--- Select a value ---" });
       setUnlinkedComponentsOptions(options);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,7 +70,6 @@ const ModalAddComponent = ({
 
   const selectingCompHandler = (val) => {
     selectionHandler(filteredComps.filter((x) => x.id === val));
-    console.log("val", val, filteredComps);
   };
 
   const hyphenatedCaption = caption

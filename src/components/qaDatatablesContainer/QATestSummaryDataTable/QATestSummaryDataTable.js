@@ -88,6 +88,7 @@ const QATestSummaryDataTable = ({
 
   const [allTestTypeCodes, setAllTestTypeCodes] = useState(null);
   const selectText = '-- Select a value --';
+  const miscellaneousTestTypes = ['DAHS','LEAK','OTHER','PEMSACC','DGFMCAL','MFMCAL','BCAL','QGA','TSCAL']
   //*****
   // pull these out and make components reuseable like monitoring plan
   const [dropdownArray, setDropdownArray] = useState([
@@ -258,8 +259,14 @@ const QATestSummaryDataTable = ({
     // Update all the "secondary dropdowns" (based on the "main" dropdown)
     const prefilteredDataName = dropdownArray[0][0];
     if (prefilteredMdmData) {
+      let currentTestTypeCode;
+      if(mainDropdownChange === '' || (selectedTestCode.testTypeCodes[0] !== 'DAHS' && miscellaneousTestTypes.includes(mainDropdownChange))){
+        currentTestTypeCode = selectedTestCode.testTypeCodes[0]
+      } else {
+        currentTestTypeCode = mainDropdownChange
+      }
       const result = prefilteredMdmData.filter(
-        (prefiltered) => prefiltered[prefilteredDataName] === selectedTestCode.testTypeCodes[0]
+        (prefiltered) => prefiltered[prefilteredDataName] === currentTestTypeCode
       );
 
       if (result.length > 0) {

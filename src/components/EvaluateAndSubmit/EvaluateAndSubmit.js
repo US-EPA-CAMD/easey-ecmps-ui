@@ -12,13 +12,15 @@ import { getEmissionsReviewSubmit } from "../../utils/api/emissionsApi";
 import DataTables from "./DataTables/DataTables";
 import SubmissionModal from "../SubmissionModal/SubmissionModal";
 import MockPermissions from "./MockPermissions";
-import { Button } from "@trussworks/react-uswds";
+import { Button, Alert } from "@trussworks/react-uswds";
 import { connect } from "react-redux";
-import { submitData } from "../../utils/api/camdServices";
+import {
+  submitData,
+  triggerBulkEvaluation,
+} from "../../utils/api/camdServices";
 import { handleError } from "../../utils/api/apiUtils";
 import LoadingModal from "../LoadingModal/LoadingModal";
 import FilterForm from "./FilterForm/FilterForm";
-import { triggerBulkEvaluation } from "../../utils/api/quartzApi";
 import { EvaluateRefresh } from "./EvaluateRefresh";
 import _ from "lodash";
 import {
@@ -418,6 +420,16 @@ export const EvaluateAndSubmit = ({
   return (
     <div className="react-transition fade-in padding-x-3">
       <div className="text-black flex-justify margin-top-1 grid-row">
+        {componentType === "Submission" && (
+          <div className="grid-row">
+            <Alert type="warning" heading="Warning" headingLevel="h4">
+              The submission process is still under construction. The final sign
+              and submit, with files being loaded to the database is not yet
+              integrated.
+            </Alert>
+          </div>
+        )}
+
         <h2 className="grid-col-9 page-header margin-top-2">{title}</h2>
         {finalSubmitStage && (
           <Button

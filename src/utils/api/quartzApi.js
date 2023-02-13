@@ -1,7 +1,6 @@
 import axios from "axios";
 import { handleResponse, handleError } from "./apiUtils";
 import config from "../../config";
-import { secureAxios } from "./easeyAuthApi";
 
 axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
@@ -20,20 +19,4 @@ export const sendNotificationEmail = async (payload) => {
     .catch((error) => {
       handleError(error);
     });
-};
-
-export const triggerBulkEvaluation = async (payload) => {
-  let url = `${config.services.quartz.uri}`;
-  url = `${url}/triggers/evaluations`;
-  try {
-    return handleResponse(
-      await secureAxios({
-        method: "POST",
-        url: url,
-        data: payload,
-      })
-    );
-  } catch (error) {
-    handleError(error);
-  }
 };

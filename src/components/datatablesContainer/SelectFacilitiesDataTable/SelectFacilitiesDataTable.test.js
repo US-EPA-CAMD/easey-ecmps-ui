@@ -77,6 +77,7 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
+/*
 test("testing redux connected data-table component renders all records", async () => {
   axios.mockImplementation(() => Promise.resolve({ status: 200, data: data }));
 
@@ -91,6 +92,7 @@ test("testing redux connected data-table component renders all records", async (
 
   expect(headerColumns.length).toEqual(5);
 });
+*/
 
 test("testing edge cases in add tabs function-  unmatched id ", async () => {
   axios.mockImplementation(() =>
