@@ -7,9 +7,8 @@ import { getReportingPeriods } from "../../HeaderInfo/HeaderInfo";
 import { getSeverityCodes } from "../../../utils/api/mdmApi";
 import { defaultDropdownText } from "../ErrorSuppression";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
-import { getUniqueCheckTypeDescription } from "../ErrorSuppressionFilters/ErrorSuppressionFilters";
+import { getUniqueCheckTypeDescription, getLocations } from "../ErrorSuppressionFilters/ErrorSuppressionFilters";
 import { formatDate, getQuarter } from "../../../utils/functions";
-import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
 
 export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     console.log(values)
@@ -30,7 +29,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     const [selectedCheckNumber, setSelectedCheckNumber] = useState();
     const [selectedCheckResult, setSelectedCheckResult] = useState();
     const [selectedFacility, setSelectedFacility] = useState();
-    const [selectedLocations, setSelectedLocations] = useState();
+    const [selectedLocations, setSelectedLocations] = useState([]);
     const [selectedReason, setSelectedReason] = useState();
     const [selectedFuelType, setSelectedFuelType] = useState();
     const [selectedSeverityCode, setSelectedSeverityCode] = useState();
@@ -89,16 +88,21 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         setSelectedSeverityCode(severityCode);
         setSelectedNotes(note);
 
-        const splitLocationList = locations?.split(",");
-        console.log(splitLocationList)
-        getLocations(checkTypeCode, checkNumber);
-        if (splitLocationList) {
-            splitLocationList.forEach(locName => {
-                const found = locationData.find(datum => datum.id === locName);
-                if (found)
-                    found.selected = true
-            })
-        }
+        const checkResultObj = transformedData[checkTypeCode][checkNumber].find(r=>r.checkResult === checkResultCode);
+        getLocations(checkTypeCode, checkResultObj).then((availLoc)=>{
+            setLocationData([...availLoc]);
+
+            // split the locations coming from the table row
+            const splitLocationList = locations?.split(",");
+            if (splitLocationList) {
+                splitLocationList.forEach(locName => {
+                    const found = availLoc.find(datum => datum.id === locName);
+                    if (found)
+                        found.selected = true
+                })
+            }
+    
+        });
 
         // Match time values
         switch (matchTimeTypeCode) {
@@ -198,10 +202,16 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     const onCheckResultChange = (e) => {
         const { value } = e.target;
         setSelectedCheckResult(value);
-        if (value === false) return;
-        console.log("selectedFacility", selectedFacility)
-        if (selectedCheckType && selectedCheckNumber && selectedFacility) {
-            getLocations(selectedFacility, value);
+
+        if (selectedCheckType && selectedCheckNumber && value) {
+            const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === value)
+            console.log(selectedFacility)
+            getLocations(selectedFacility, checkResultObj).then(availLoc=>{
+                console.log(availLoc)
+                setLocationData([...availLoc])
+            }).catch(err=>{
+                console.log("error", err)
+            });
         }
     };
 
@@ -211,45 +221,12 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         if (value === false) return;
         console.log("selectedCheckResult", selectedCheckResult)
         if (selectedCheckType && selectedCheckNumber && selectedCheckResult) {
-            getLocations(value, selectedCheckResult);
+            const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === selectedCheckResult)
+            getLocations(value, checkResultObj).then(availLoc=>{
+                setLocationData([...availLoc]);
+            });
         }
     };
-
-    // Makes API call to get locations and then formats them to be in the way
-    // MultiSelectCombobox expects the items to look and calls setLocationData()
-    const getLocations = (facilityValue, checkResultValue) => {
-        const locationTypeCode = transformedData[selectedCheckType][
-            selectedCheckNumber
-        ]
-            .filter((r) => r.checkResult === checkResultValue)
-            .map((d) => d.locationTypeCode);
-        getMonitoringPlans(Number(facilityValue)).then(({ data }) => {
-            const locations = data.map((f) => f.locations).flat(1);
-            let availLoc = locations?.map((l) => ({
-                id: l.unitId,
-                label: l.unitId,
-                selected: false,
-                enabled: true,
-            }));
-            if (locationTypeCode.includes("LOC")) {
-                const availStackPipe = locations?.map((l) => ({
-                    id: l.stackPipeId,
-                    label: l.stackPipeId,
-                    selected: false,
-                    enabled: true,
-                }));
-                availLoc = [...availLoc, ...availStackPipe];
-            }
-            const locName = availLoc.map((l) => l.label);
-            availLoc = availLoc
-                .filter(({ label }, index) => !locName.includes(label, index + 1))
-                .filter(({ label }) => label !== null)
-                .sort((a, b) => a.label - b.label);
-            setLocationData([...availLoc]);
-            console.log("setted location data")
-        });
-    };
-
 
     return (
         <div>

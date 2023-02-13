@@ -48,6 +48,43 @@ export const getUniqueCheckTypeDescription = (transformedData) => {
         });
 }
 
+    // Makes API call to get locations and then formats them to be in the way
+    // MultiSelectCombobox expects the items to look and calls setLocationData()
+export const getLocations = (facilityValue, checkResultObj) => {
+      // const locationTypeCode = transformedData[selectedCheckType][
+      //     selectedCheckNumber
+      // ]
+      //     .filter((r) => r.checkResult === checkResultValue)
+      //     .map((d) => d.locationTypeCode);
+      return getMonitoringPlans(Number(facilityValue)).then(({ data }) => {
+          const locations = data.map((f) => f.locations).flat(1);
+          console.log("locations: ")
+          console.log(locations)
+          let availLoc = locations?.map((l) => ({
+              id: l.unitId,
+              label: l.unitId,
+              selected: false,
+              enabled: true,
+          }));
+          if (checkResultObj.locationTypeCode === "LOC") {
+              const availStackPipe = locations?.map((l) => ({
+                  id: l.stackPipeId,
+                  label: l.stackPipeId,
+                  selected: false,
+                  enabled: true,
+              }));
+              availLoc = [...availLoc, ...availStackPipe];
+          }
+          const locName = availLoc.map((l) => l.label);
+          return availLoc
+              .filter(({ label }, index) => !locName.includes(label, index + 1))
+              .filter(({ label }) => label !== null)
+              .sort((a, b) => a.label - b.label);
+          // setLocationData([...availLoc]);
+      });
+  };
+
+
 export const ErrorSuppressionFilters = () => {
 
     const ctxFilters = useContext(ErrorSuppressionFiltersContext);
@@ -138,37 +175,37 @@ export const ErrorSuppressionFilters = () => {
             return;
     }
 
-    const getLocations = (facilityValue, checkResultValue) => {
-      const locationTypeCode = transformedData[selectedCheckType][
-        selectedCheckNumber
-      ]
-        .filter((r) => r.checkResult === checkResultValue)
-        .map((d) => d.locationTypeCode);
-      getMonitoringPlans(Number(facilityValue)).then(({ data }) => {
-        const locations = data.map((f) => f.locations).flat(1);
-        let availLoc = locations?.map((l) => ({
-          id: l.unitId,
-          label: l.unitId,
-          selected: false,
-          enabled: true,
-        }));
-        if (locationTypeCode.includes("LOC")) {
-          const availStackPipe = locations?.map((l) => ({
-            id: l.stackPipeId,
-            label: l.stackPipeId,
-            selected: false,
-            enabled: true,
-          }));
-          availLoc = [...availLoc, ...availStackPipe];
-        }
-        const locName = availLoc.map((l) => l.label);
-        availLoc = availLoc
-          .filter(({ label }, index) => !locName.includes(label, index + 1))
-          .filter(({ label }) => label !== null)
-          .sort((a, b) => a.label - b.label);
-        setLocationData([...availLoc]);
-      });
-    };
+    // const getLocations = (facilityValue, checkResultValue) => {
+    //   const locationTypeCode = transformedData[selectedCheckType][
+    //     selectedCheckNumber
+    //   ]
+    //     .filter((r) => r.checkResult === checkResultValue)
+    //     .map((d) => d.locationTypeCode);
+    //   getMonitoringPlans(Number(facilityValue)).then(({ data }) => {
+    //     const locations = data.map((f) => f.locations).flat(1);
+    //     let availLoc = locations?.map((l) => ({
+    //       id: l.unitId,
+    //       label: l.unitId,
+    //       selected: false,
+    //       enabled: true,
+    //     }));
+    //     if (locationTypeCode.includes("LOC")) {
+    //       const availStackPipe = locations?.map((l) => ({
+    //         id: l.stackPipeId,
+    //         label: l.stackPipeId,
+    //         selected: false,
+    //         enabled: true,
+    //       }));
+    //       availLoc = [...availLoc, ...availStackPipe];
+    //     }
+    //     const locName = availLoc.map((l) => l.label);
+    //     availLoc = availLoc
+    //       .filter(({ label }, index) => !locName.includes(label, index + 1))
+    //       .filter(({ label }) => label !== null)
+    //       .sort((a, b) => a.label - b.label);
+    //     setLocationData([...availLoc]);
+    //   });
+    // };
    
     const onFacilityChange = (e) => {
       const { value } = e.target;
@@ -176,7 +213,9 @@ export const ErrorSuppressionFilters = () => {
       if (!value) return;
 
       if (selectedCheckType && selectedCheckNumber && selectedCheckResult) {
-        getLocations(value, selectedCheckResult);
+        const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === selectedCheckResult);
+        console.log(checkResultObj)
+        getLocations(value, checkResultObj).then(availLoc=>setLocationData([...availLoc]));
       }
     };
 
@@ -208,9 +247,15 @@ export const ErrorSuppressionFilters = () => {
     const onCheckResultChange = (e) => {
       const { value } = e.target;
       setSelectedCheckResult(value);
-      if (value === false) return;
-      if (selectedCheckType && selectedCheckNumber && selectedFacility) {
-        getLocations(selectedFacility, value);
+
+      if (selectedCheckType && selectedCheckNumber && value) {
+        const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === value);
+        console.log(checkResultObj)
+        console.log("value", value)
+        getLocations(selectedFacility, checkResultObj).then(availLoc=>{
+          console.log("availloc: ", availLoc)
+          setLocationData(availLoc)
+        });
       }
     };
 
