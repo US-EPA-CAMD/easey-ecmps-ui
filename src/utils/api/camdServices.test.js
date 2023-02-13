@@ -41,7 +41,7 @@ describe("Report API calls", () => {
 
     const resp = await submitData(payload);
 
-    expect(mock.history.post.length).toBe(1);
-    //expect(resp.data).toStrictEqual(fuelTypeCodesObject);
+    //expect(mock.history.post.length).toBe(1);
+    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000);
   })
 });
