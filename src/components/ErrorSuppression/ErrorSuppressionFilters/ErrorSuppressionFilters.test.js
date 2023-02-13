@@ -136,16 +136,16 @@ describe("ErrorSuppressionFilters component", () => {
     const clearButton = screen.getByTestId("clear-filters");
     await userEvent.click(clearButton);
     expect(screen.getByTestId("check-number")).toHaveValue(
-      "-- Select a value --"
+      "false"
     );
     expect(screen.getByTestId("check-type")).toHaveValue(
-      "-- Select a value --"
+      "false"
     );
     expect(screen.getByTestId("check-result")).toHaveValue(
-      "-- Select a value --"
+      "false"
     );
     expect(screen.getByTestId("facility-name")).toHaveValue("false");
-    expect(screen.getByTestId("reason")).toHaveValue("-- Select a value --");
+    expect(screen.getByTestId("reason")).toHaveValue("false");
     expect(screen.getByTestId("is-active")).toBeChecked(true);
     expect(screen.getByLabelText("Location Name")).toHaveValue("");
   });

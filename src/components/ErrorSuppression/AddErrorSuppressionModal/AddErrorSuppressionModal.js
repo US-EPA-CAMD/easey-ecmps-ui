@@ -253,7 +253,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                 value={selectedCheckType}
                                 onChange={onCheckTypeChange}
                             >
-                                <option value={false}>{defaultDropdownText}</option>
+                                <option value={"false"} data-testid="add-check-type-reset">{defaultDropdownText}</option>
                                 {checkTypeList.map((d) => <option key={d.checkTypeCode} value={d.checkTypeCode} data-testid={d.checkTypeCode}>{`${d.checkTypeDescription} (${d.checkTypeCode})`}</option>)}
                             </Dropdown>
                         </Grid>
@@ -270,7 +270,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                 onChange={(e) => onCheckNumberChange(e, selectedCheckType)}
                                 disabled={!selectedCheckType}
                             >
-                                <option value={false}>{defaultDropdownText}</option>
+                                <option value={"false"} data-testid="add-check-number-reset">{defaultDropdownText}</option>
                                 {checkNumberList.map((d) => <option key={d} value={d} data-testid={d}>{d}</option>)}
                             </Dropdown>
                         </Grid>
@@ -289,7 +289,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                 onChange={onCheckResultChange}
                                 disabled={!selectedCheckType || !selectedCheckNumber}
                             >
-                                <option value={false}>{defaultDropdownText}</option>
+                                <option value={"false"} data-testid="add-check-result-reset">{defaultDropdownText}</option>
                                 {checkResultList.map((d) => <option key={d} value={d} data-testid={d}>{d}</option>)}
                             </Dropdown>
                         </Grid>
@@ -310,7 +310,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                 value={selectedSeverityCode}
                                 onChange={(e) => setSelectedSeverityCode(e.target.value)}
                             >
-                                <option value={false}>{defaultDropdownText}</option>
+                                <option value={"false"}>{defaultDropdownText}</option>
                                 {severityCodeList.map((d) => (
                                     <option
                                         key={d.severityCode}
@@ -334,7 +334,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                 value={selectedReason}
                                 onChange={(e) => setSelectedReason(e.target.value)}
                             >
-                                <option value={false}>{defaultDropdownText}</option>
+                                <option value={"false"}>{defaultDropdownText}</option>
                                 {reasonCodeList.map((d) => (
                                     <option
                                         key={d.errorSuppressionReasonCode}
@@ -362,7 +362,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                 value={selectedFacility}
                                 onChange={onFacilityChange}
                             >
-                                <option value={false}>{defaultDropdownText}</option>
+                                <option value={"false"}>{defaultDropdownText}</option>
                                 {facilityList.map((d) => <option key={d.orisCode} value={d.orisCode} data-testid={d.orisCode}>{`${d.facilityName} (${d.orisCode})`}</option>)}
                             </Dropdown>
                         </Grid>

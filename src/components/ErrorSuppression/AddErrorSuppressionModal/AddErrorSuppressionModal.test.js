@@ -8,6 +8,7 @@ import MockAdapter from "axios-mock-adapter";
 import config from "../../../config";
 import { useSuppressionFiltersStore } from "../context/error-suppression-context";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
+import userEvent from "@testing-library/user-event";
 
 describe("AddErrorSupressionModal component", () => {
     let component;
@@ -140,11 +141,6 @@ describe("AddErrorSupressionModal component", () => {
         })
 
         it('should populate the form with proper values', () => {
-            // render(
-            //     <ErrorSuppressionFiltersContext.Provider value={contextMock}>
-            //         <AddErrorSupressionModal values={tableRow} />
-            //     </ErrorSuppressionFiltersContext.Provider>
-            // )
 
             expect(screen.queryByText("Linearity Check (LINEAR)")).toBeDefined();
             expect(screen.queryByText("12")).toBeDefined();
@@ -155,53 +151,22 @@ describe("AddErrorSupressionModal component", () => {
             expect(screen.queryByText("Approved by Matt B.  See RT 8808.")).toBeDefined();
         })
 
-        it('should reset check number dropdown when dropown is reset and then ')
+        // it('should reset Check Number dropdown when Check Type dropown is reset', async()=>{
+        //     const checkTypeDD = screen.getByTestId("add-check-type");
+        //     // act(()=>{
+        //     // })
+        //     await act(async ()=>{
+        //          userEvent.click(checkTypeDD);
+
+        //         userEvent.click(screen.getByTestId("add-check-type-reset"));
+        //     })
+
+        //     screen.debug();
+        //     const checkNumberDD = await screen.findByTestId('add-check-number');
+        //     expect(checkNumberDD).toHaveValue("false")
+        //     // expect(screen.queryByTestId('add-check-number').target.value).toBe("false");
+        // })
 
     })
-
-    // describe("Add screen", () => {
-    //     beforeEach(async () => {
-    //         component = await act(async () => {
-    //             render(
-    //                 <ErrorSuppressionFiltersContextProvider>
-    //                     <AddErrorSupressionModal />
-    //                 </ErrorSuppressionFiltersContextProvider>
-    //             )
-    //         })
-    //     })
-
-    //     it('renders Check Type', () => {
-    //         expect(screen.getByLabelText("Check Type")).toBeDefined();
-    //     })
-
-    //     it('renders Check Number dropdown', () => {
-    //         expect(screen.getByLabelText("Check Number")).toBeDefined();
-    //     })
-
-    //     it('renders Check Result dropdown', () => {
-    //         expect(screen.getByLabelText("Check Result")).toBeDefined();
-    //     })
-
-    //     it('renders Type dropdown', () => {
-    //         expect(screen.getByLabelText("Type")).toBeDefined();
-    //     })
-
-    //     it('renders Reason dropdown', () => {
-    //         expect(screen.getByLabelText("Reason")).toBeDefined();
-    //     })
-
-    //     it('renders Facility Name dropdown', () => {
-    //         expect(screen.getByLabelText("Facility Name")).toBeDefined();
-    //     })
-
-    //     it('renders Locations multiselect', () => {
-    //         expect(screen.getByLabelText("Locations")).toBeDefined();
-    //     })
-
-    //     it('renders Notes text box', () => {
-    //         expect(screen.getByLabelText("Notes")).toBeDefined();
-    //     })
-    // })
-
 
 })
