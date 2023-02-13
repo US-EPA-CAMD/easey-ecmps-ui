@@ -48,6 +48,35 @@ export const getUniqueCheckTypeDescription = (transformedData) => {
         });
 }
 
+// Makes API call to get locations and then formats them to be in the way
+// MultiSelectCombobox expects the items to look and calls setLocationData()
+export const getLocations = (facilityValue, checkResultObj) => {
+      return getMonitoringPlans(Number(facilityValue)).then(({ data }) => {
+          const locations = data.map((f) => f.locations).flat(1);
+          let availLoc = locations?.map((l) => ({
+              id: l.unitId,
+              label: l.unitId,
+              selected: false,
+              enabled: true,
+          }));
+          if (checkResultObj.locationTypeCode === "LOC") {
+              const availStackPipe = locations?.map((l) => ({
+                  id: l.stackPipeId,
+                  label: l.stackPipeId,
+                  selected: false,
+                  enabled: true,
+              }));
+              availLoc = [...availLoc, ...availStackPipe];
+          }
+          const locName = availLoc.map((l) => l.label);
+          return availLoc
+              .filter(({ label }, index) => !locName.includes(label, index + 1))
+              .filter(({ label }) => label !== null)
+              .sort((a, b) => a.label - b.label);
+      });
+  };
+
+
 export const ErrorSuppressionFilters = () => {
 
     const ctxFilters = useContext(ErrorSuppressionFiltersContext);
@@ -77,7 +106,7 @@ export const ErrorSuppressionFilters = () => {
     const [selectedCheckResult, setSelectedCheckResult] = useState();
     const [selectedFacility, setSelectedFacility] = useState();
     const [selectedLocations, setSelectedLocations] = useState([]);
-    const [selectedIsActive, setSelectedIsActive] = useState(true);
+    const [selectedIsActive, setSelectedIsActive] = useState(false);
     const [selectedReason, setSelectedReason] = useState();
     const [selectedAddDateAfter, setSelectedAddDateAfter] = useState();
     const [selectedAddDateBefore, setSelectedAddDateBefore] = useState();
@@ -137,80 +166,68 @@ export const ErrorSuppressionFilters = () => {
         else
             return;
     }
-
-    const getLocations = (facilityValue, checkResultValue) => {
-      const locationTypeCode = transformedData[selectedCheckType][
-        selectedCheckNumber
-      ]
-        .filter((r) => r.checkResult === checkResultValue)
-        .map((d) => d.locationTypeCode);
-      getMonitoringPlans(Number(facilityValue)).then(({ data }) => {
-        const locations = data.map((f) => f.locations).flat(1);
-        let availLoc = locations?.map((l) => ({
-          id: l.unitId,
-          label: l.unitId,
-          selected: false,
-          enabled: true,
-        }));
-        if (locationTypeCode.includes("LOC")) {
-          const availStackPipe = locations?.map((l) => ({
-            id: l.stackPipeId,
-            label: l.stackPipeId,
-            selected: false,
-            enabled: true,
-          }));
-          availLoc = [...availLoc, ...availStackPipe];
-        }
-        const locName = availLoc.map((l) => l.label);
-        availLoc = availLoc
-          .filter(({ label }, index) => !locName.includes(label, index + 1))
-          .filter(({ label }) => label !== null)
-          .sort((a, b) => a.label - b.label);
-        setLocationData([...availLoc]);
-      });
-    };
    
     const onFacilityChange = (e) => {
-      const { value } = e.target;
+      let { value } = e.target;
+      value = value === "false" ? false : value;
+
       setSelectedFacility(value);
       if (!value) return;
 
       if (selectedCheckType && selectedCheckNumber && selectedCheckResult) {
-        getLocations(value, selectedCheckResult);
+        const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === selectedCheckResult);
+        getLocations(value, checkResultObj).then(availLoc=>setLocationData([...availLoc]));
       }
     };
 
     const onCheckTypeChange = (e) => {
-        const { value } = e.target;
+        let { value } = e.target;
+        value = value === "false" ? false : value;
+
         setSelectedCheckType(value);
         setSelectedCheckNumber(false);
         setSelectedCheckResult(false);
-
-        if (value === false)
+        if (!value)
             return;
 
         const checkNumbers = Object.keys(transformedData[value]);
         setCheckNumberList(checkNumbers);
+        // reset location selections if there are any
+        locationData.forEach(d=>d.selected=false)
+
     }
 
     const onCheckNumberChange = (e) => {
-        const { value } = e.target;
+        let { value } = e.target;
+        value = value === "false" ? false : value;
+
         setSelectedCheckNumber(value);
         setSelectedCheckResult(false);
 
-        if (value === false)
+        if (!value)
             return;
 
         const checkResults = transformedData[selectedCheckType][value].map(d => d.checkResult);
-        setCheckResultList(checkResults)
+        setCheckResultList(checkResults);
+
+        // reset location selections if there are any
+        locationData.forEach(d=>d.selected=false)
+
     }
 
     const onCheckResultChange = (e) => {
-      const { value } = e.target;
+      let { value } = e.target;
+      value = value === "false" ? false : value;
+
       setSelectedCheckResult(value);
-      if (value === false) return;
-      if (selectedCheckType && selectedCheckNumber && selectedFacility) {
-        getLocations(selectedFacility, value);
+      if( !value )
+        return
+
+      if (selectedCheckType && selectedCheckNumber && value) {
+        const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === value);
+        getLocations(selectedFacility, checkResultObj).then(availLoc=>{
+          setLocationData(availLoc)
+        });
       }
     };
 
@@ -284,7 +301,7 @@ export const ErrorSuppressionFilters = () => {
               value={selectedCheckType}
               onChange={onCheckTypeChange}
             >
-              <option>{defaultDropdownText}</option>
+              <option value="false">{defaultDropdownText}</option>
               {checkTypeList.map((d) => (
                 <option
                   key={d.checkTypeCode}
@@ -308,7 +325,7 @@ export const ErrorSuppressionFilters = () => {
                 onChange={onCheckNumberChange}
                 disabled={!selectedCheckType}
               >
-                <option>{defaultDropdownText}</option>
+                <option value="false">{defaultDropdownText}</option>
                 {checkNumberList.map((d) => (
                   <option key={d} value={d} data-testid={d}>
                     {d}
@@ -332,7 +349,7 @@ export const ErrorSuppressionFilters = () => {
               onChange={onCheckResultChange}
               disabled={!selectedCheckType || !selectedCheckNumber}
             >
-              <option>{defaultDropdownText}</option>
+              <option value="false">{defaultDropdownText}</option>
               {checkResultList.map((d) => (
                 <option key={d} value={d} data-testid={d}>
                   {d}
@@ -357,7 +374,7 @@ export const ErrorSuppressionFilters = () => {
               value={selectedFacility}
               onChange={onFacilityChange}
             >
-              <option value={false}>{defaultDropdownText}</option>
+              <option value="false">{defaultDropdownText}</option>
               {facilityList.map((d) => (
                 <option
                   key={d.orisCode}
@@ -372,9 +389,8 @@ export const ErrorSuppressionFilters = () => {
               <MultiSelectCombobox
                 items={locationData}
                 label="Location Name"
-                entity="locationName"
+                entity="es-locations-filter"
                 searchBy="contains"
-                value={selectedLocations}
                 onChangeUpdate={onChangeOfLocationMultiSelect}
                 disabled={
                   !(
@@ -420,7 +436,7 @@ export const ErrorSuppressionFilters = () => {
               value={selectedReason}
               onChange={(e) => setSelectedReason(e.target.value)}
             >
-              <option>{defaultDropdownText}</option>
+              <option value="false">{defaultDropdownText}</option>
               {reasonCodeList.map((d) => (
                 <option
                   key={d.errorSuppressionReasonCode}

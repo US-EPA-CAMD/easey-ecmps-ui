@@ -15,9 +15,20 @@ describe("ErrorSuppression API", function () {
     const url = `${config.services.camd.uri}/error-suppressions`;
     mock.onGet(url).reply(200, "Mocked");
 
-    const resp = await esApi.getErrorSuppressionRecords({checkTypeCode:"", checkNumber:"", checkResult:"", severityCode:"", orisCode:"", locationsList:[""], reasonCode:"", beginDateHrQtr:"", endDateHrQtr:""});
+    const resp = await esApi.getErrorSuppressionRecords({checkTypeCode:"", checkNumber:"", active: false, checkResult:"", severityCode:"", orisCode:"", locationsList:[""], reasonCode:"", beginDateHrQtr:"", endDateHrQtr:""});
 
     expect(resp.data).toEqual("Mocked");
   });
+
+  test("getErrorSuppressionRecords test", async () => {
+    const id = 123;
+    const url = `${config.services.camd.uri}/error-suppressions/${id}`;
+    mock.onPut(url).reply(200, "Mocked");
+
+    const resp = await esApi.deactivateErrorSuppression(id);
+
+    expect(resp.data).toEqual("Mocked");
+  });
+
 
 });
