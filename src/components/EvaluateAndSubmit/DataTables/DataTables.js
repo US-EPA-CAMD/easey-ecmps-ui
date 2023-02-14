@@ -122,6 +122,7 @@ const DataTables = ({
 
     const rowSubmissionAllowed =
       row.submissionAvailabilityCode === "REQUIRE" ||
+      row.submissionAvailabilityCode === "GRANTED" ||
       row.submissionAvailabilityCode === null ||
       row.submissionAvailabilityCode === undefined ||
       row.submissionAvailabilityCode === "";
@@ -157,19 +158,8 @@ const DataTables = ({
       return "Lock";
     } else if (
       //Can only submit records if not ERR eval code, submissionStatus is REQUIRE or blank, and they have permissions
-      ["EVAL"].includes(row.evalStatusCode) &&
-      (permissions.current[row.orisCode].includes(`DS${type}`) ||
-        permissions.current[row.orisCode].includes(`DP${type}`))
+      ["EVAL"].includes(row.evalStatusCode)
     ) {
-      if (
-        type === "EM" &&
-        row.windowStatus !== "REQUIRE" &&
-        row.windowStatus !== "GRANTED"
-      ) {
-        row.selected = false;
-        return "View";
-      }
-
       return "Checkbox"; //True checkbox
     } else {
       row.selected = false;
