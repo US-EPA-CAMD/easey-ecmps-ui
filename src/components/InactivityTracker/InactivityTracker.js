@@ -52,6 +52,9 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
       // display the countdown timer if not already initiated
       window.countdownInitiated = true;
       setShowInactiveModal(true);
+      if (timeInactive >= inactiveDuration) {
+        await logOut();
+      }
     }
 
     setTimeInactive(prevTimeInactive => prevTimeInactive + config.app.activityPollingFrequency)
