@@ -13,9 +13,9 @@ export const PropertyTableTemplate = ({
             {`Unit/Stack/Pipe ID: ${data["unitStack"]} - ${title}`}
           </div>
         ) : (
-          <div className="subheader-wrapper bg-epa-blue-base text-white text-normal padding-left-1 padding-y-2px">
+          <h2 className="subheader-wrapper bg-epa-blue-base text-white text-normal padding-left-1 padding-y-2px">
             {title}
-          </div>
+          </h2>
         )
       }
 
