@@ -1,32 +1,37 @@
-import axios from "axios";
 import { getAllFacilities, getFacilityById } from "./facilityApi";
 
-const facilities = [
-  { orisCode: 3, name: "Barry" },
-  { orisCode: 8, name: "Gorgas" },
-  { orisCode: 9, name: "Copper Station" },
-];
+jest.mock("./easeyAuthApi", () => ({
+  secureAxios: jest.fn().mockResolvedValue({
+    status: 200,
+    data: {
+      facilities: [
+        { orisCode: 3, name: "Barry" },
+        { orisCode: 8, name: "Gorgas" },
+        { orisCode: 9, name: "Copper Station" },
+      ],
+    },
+  }),
+}));
 
-jest.mock("axios");
+describe("testing facilities data fetching APIs", () => {
+  test("Should fetch list of facilities from FACT API", async () => {
+    const result = await getAllFacilities();
 
-test("Should fetch list of facilities from FACT API", async () => {
-  axios.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: { facilities: facilities } })
-  );
+    expect(result["data"].facilities).toEqual([
+      { orisCode: 3, name: "Barry" },
+      { orisCode: 8, name: "Gorgas" },
+      { orisCode: 9, name: "Copper Station" },
+    ]);
+  });
 
-  const result = await getAllFacilities();
+  test("Should get facility data from a specific facility ID", async () => {
+    const id = 1;
 
-  expect(result["data"].facilities).toEqual(facilities);
-});
-
-test("Should get facility data from a specific facility ID", async () => {
-  const facData = { data: { orisCode: 3, name: "Barry" } };
-  const id = 1;
-
-  axios.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: facData })
-  );
-
-  const result = await getFacilityById(id);
-  expect(result.data).toEqual(facData);
+    const result = await getFacilityById(id);
+    expect(result.data.facilities).toEqual([
+      { name: "Barry", orisCode: 3 },
+      { name: "Gorgas", orisCode: 8 },
+      { name: "Copper Station", orisCode: 9 },
+    ]);
+  });
 });

@@ -6,6 +6,7 @@ import config from "./../../config";
 export const successResponses = [200, 201];
 
 export async function handleResponse(response) {
+
   if (successResponses.includes(response.status) && (response.data !== null && response.data !== undefined)) {
     return response;
   } else {
@@ -55,6 +56,10 @@ export function handleError(error) {
   // *** display error only if encountered
   if (errorMessage !== "") {
     displayAppError(errorMessage);
+  }
+
+  if (error.response) {
+    return error.response?.data?.message;
   }
 }
 export function handleImportError(error) {

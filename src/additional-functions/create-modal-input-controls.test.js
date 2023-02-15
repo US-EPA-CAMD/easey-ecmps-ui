@@ -1,10 +1,14 @@
 import { modalViewData } from "./create-modal-input-controls";
 import * as mpApi from "../utils/api/monitoringPlansApi";
-import axios from "axios";
+
+jest.mock("../utils/api/easeyAuthApi", () => ({
+  secureAxios: jest.fn().mockResolvedValue({
+    status: 200,
+    data: [{ testInput: "", beginDate: "2/22/22T123" }],
+  }),
+}));
 
 // mock get function to return a fa
-jest.mock("axios");
-
 const controlInputs = {
   input: ["Input", "input", "", ""],
   lockedInput: ["Locked Input", "input", "", "locked"],
@@ -37,12 +41,6 @@ const boolOptions = [true, false];
 const extraControlInputs = false;
 describe("create all options for modal input controls", () => {
   test("create method modal input controls", async () => {
-    axios.get.mockImplementation(() =>
-      Promise.resolve({
-        status: 200,
-        data: [{ testInput: "", beginDate: "2/22/22T123" }],
-      })
-    );
     const response = await mpApi.getMonitoringMethods(locationSelectValue);
     const methods = response.data;
     const selectedData = methods[0];
@@ -50,7 +48,6 @@ describe("create all options for modal input controls", () => {
     for (const isCreate of boolOptions) {
       for (const isMats of boolOptions) {
         for (const hasStaticDropdown of boolOptions) {
-          
           const data = modalViewData(
             selectedData,
             controlInputs,
@@ -64,15 +61,14 @@ describe("create all options for modal input controls", () => {
             prefilteredTotalName,
             extraControlInputs,
             isMats
-          ); 
+          );
 
           // Check that the returned modal data match the control and date picker input arrays
           for (const arr of data) {
             if (!Array.isArray(arr[0])) {
-              let target =  controlInputs[arr[0]] || controlDatePickerInputs[arr[0]]
-              expect(
-                target
-              ).toEqual(target);
+              let target =
+                controlInputs[arr[0]] || controlDatePickerInputs[arr[0]];
+              expect(target).toEqual(target);
             }
           }
         }
@@ -103,7 +99,12 @@ describe("create all options for modal input controls", () => {
           staticDropdown: ["Static Dropdown", "independentDropdown", "", ""],
           mainDropdown: ["Main Dropdown", "mainDropdown", "", ""],
           dropdown: ["Dropdown", "dropdown", "", ""],
-          multiSelectDropdown: ["Multi Select Dropdown", "multiSelectDropdown", "", ""],
+          multiSelectDropdown: [
+            "Multi Select Dropdown",
+            "multiSelectDropdown",
+            "",
+            "",
+          ],
         },
         {},
         isCreate,

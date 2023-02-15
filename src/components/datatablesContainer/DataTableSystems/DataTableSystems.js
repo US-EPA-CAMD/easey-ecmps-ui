@@ -83,8 +83,10 @@ export const DataTableSystems = ({
 
   // modal add component selection
   const [selectedUnlinkedComponent, setSelectedUnlinkedComponent] = useState(
-  []
+    []
   );
+  const [errorMsgs, setErrorMsgs] = useState([])
+
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
     if (dataLoaded && dropdownsLoaded) {
@@ -125,7 +127,7 @@ export const DataTableSystems = ({
       setRevertedState(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, revertedState,checkout, updateSystemTable]);
+  }, [locationSelectValue, revertedState, checkout, updateSystemTable]);
 
   // load dropdowns data (called once)
   useEffect(() => {
@@ -216,6 +218,7 @@ export const DataTableSystems = ({
   };
 
   const executeOnClose = () => {
+    setErrorMsgs([]);
     resetFlags();
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
@@ -357,47 +360,54 @@ export const DataTableSystems = ({
     React.useState(false);
   const [addCompThirdLevelCreateTrigger, setAddCompThirdLevelCreateTrigger] =
     React.useState(false);
-  const saveSystems = () => {
+
+  const saveSystems = async () => {
     const userInput = extractUserInput(sysPayload, ".modalUserInput");
     if (
       (userInput.endHour && !userInput.endDate) ||
       (!userInput.endHour && userInput.endDate)
     ) {
-      displayAppError(needEndDate);
-      setShow(false);
-    } else {
-      mpApi
-        .saveSystems(userInput, locationSelectValue, selectedSystem.id)
-        .then((result) => {
-          setUpdateSystemTable(true);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      setErrorMsgs([needEndDate])
+      return;
+    }
+    try {
+      const resp = await mpApi.saveSystems(userInput, locationSelectValue, selectedSystem.id);
+      if (resp.status === 200) {
+        setUpdateSystemTable(true);
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      setErrorMsgs([JSON.stringify(error)])
     }
   };
-  const createSystems = () => {
+  const createSystems = async () => {
     const userInput = extractUserInput(sysPayload, ".modalUserInput");
     if (
       (userInput.endHour && !userInput.endDate) ||
       (!userInput.endHour && userInput.endDate)
     ) {
-      displayAppError(needEndDate);
-      setShow(false);
-    } else {
-      mpApi
-        .createSystems(userInput, locationSelectValue)
-        .then((result) => {
-          setSecondLevel(false);
-          setUpdateSystemTable(true);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      setErrorMsgs([needEndDate]);
+      return;
+    }
+    try {
+      const resp = await mpApi.createSystems(userInput, locationSelectValue);
+      if (resp.status === 201) {
+        setSecondLevel(false);
+        setUpdateSystemTable(true);
+        // setCreateNewSystem(false);
+        // setShow(false);
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      setErrorMsgs([JSON.stringify(error)])
     }
   };
 
-  const saveAnalyzerRanges = () => {
+  const saveAnalyzerRanges = async () => {
     const payload = {
       locId: selectedRangeInFirst.locationId,
       compId: selectedRangeInFirst.componentRecordId,
@@ -416,21 +426,23 @@ export const DataTableSystems = ({
       (userInput.endHour && !userInput.endDate) ||
       (!userInput.endHour && userInput.endDate)
     ) {
-      displayAppError(needEndDate);
-      setShow(false);
-    } else {
-      mpApi
-        .saveAnalyzerRanges(userInput)
-        .then((result) => {
-          setUpdateAnalyzerRangeTable(true);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      setErrorMsgs([needEndDate]);
+      return;
+    }
+    try {
+      const resp = await mpApi.saveAnalyzerRanges(userInput);
+      if (resp.status >= 200 && resp.status < 300) {
+        setUpdateAnalyzerRangeTable(true);
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      setErrorMsgs([JSON.stringify(error)])
     }
   };
 
-  const createAnalyzerRange = () => {
+  const createAnalyzerRange = async () => {
     const payload = {
       locId: selectedRangeInFirst.locationId,
       compId: selectedRangeInFirst.componentRecordId,
@@ -442,7 +454,6 @@ export const DataTableSystems = ({
       endDate: null,
       endHour: 0,
     };
-
     const userInput = extractUserInput(payload, ".modalUserInput", [
       "dualRangeIndicator",
     ]);
@@ -450,17 +461,19 @@ export const DataTableSystems = ({
       (userInput.endHour && !userInput.endDate) ||
       (!userInput.endHour && userInput.endDate)
     ) {
-      displayAppError(needEndDate);
-      setShow(false);
-    } else {
-      mpApi
-        .createAnalyzerRanges(userInput)
-        .then((result) => {
-          setUpdateAnalyzerRangeTable(true);
-        })
-        .catch((error) => {
-          console.log("error is", error);
-        });
+      setErrorMsgs([needEndDate])
+      return
+    }
+    try {
+      const resp = await mpApi.createAnalyzerRanges(userInput);
+      if (resp.status >= 200 && resp.status < 300) {
+        setUpdateAnalyzerRangeTable(true);
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      setErrorMsgs([JSON.stringify(error)])
     }
   };
 
@@ -476,51 +489,45 @@ export const DataTableSystems = ({
     endDate: null,
     endHour: 0,
   };
-  const saveFuelFlows = () => {
+  const saveFuelFlows = async () => {
     const userInput = extractUserInput(fuelFlowsPayload, ".modalUserInput");
     if (
       (userInput.endHour && !userInput.endDate) ||
       (!userInput.endHour && userInput.endDate)
     ) {
-      displayAppError(needEndDate);
-      setShow(false);
-    } else {
-      mpApi
-        .saveSystemsFuelFlows(
-          userInput,
-          selectedSystem.locationId,
-          selectedSystem.id
-        )
-        .then((result) => {
-          setUpdateFuelFlowTable(true);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      setErrorMsgs([needEndDate])
+    }
+    try {
+      const resp = await mpApi.saveSystemsFuelFlows(userInput, selectedSystem.locationId, selectedSystem.locationId);
+      if (resp.status >= 200 && resp.status < 300) {
+        setUpdateFuelFlowTable(true);
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      setErrorMsgs([JSON.stringify(error)])
     }
   };
 
-  const createFuelFlows = () => {
+  const createFuelFlows = async () => {
     const userInput = extractUserInput(fuelFlowsPayload, ".modalUserInput");
     if (
       (userInput.endHour && !userInput.endDate) ||
       (!userInput.endHour && userInput.endDate)
     ) {
-      displayAppError(needEndDate);
-      setShow(false);
-    } else {
-      mpApi
-        .createSystemsFuelFlows(
-          userInput,
-          selectedSystem.locationId,
-          selectedSystem.id
-        )
-        .then((result) => {
-          setUpdateFuelFlowTable(true);
-        })
-        .catch((error) => {
-          console.log("error is", error);
-        });
+      setErrorMsgs([needEndDate])
+    }
+    try {
+      const resp = await mpApi.createSystemsFuelFlows(userInput, selectedSystem.locationId, selectedSystem.id);
+      if (resp.status >= 200 && resp.status < 300) {
+        setUpdateFuelFlowTable(true);
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      setErrorMsgs([JSON.stringify(error)])
     }
   };
   // system components
@@ -539,31 +546,28 @@ export const DataTableSystems = ({
     endHour: 0,
     componentId: "string",
   };
-  const createComponent = () => {
+  const createComponent = async () => {
     const userInput = extractUserInput(componentPayload, ".modalUserInput");
     if (
       (userInput.endHour && !userInput.endDate) ||
       (!userInput.endHour && userInput.endDate)
     ) {
-      displayAppError(needEndDate);
-      setShow(false);
-    } else {
-      mpApi
-        .createSystemsComponents(
-          userInput,
-          selectedSystem.locationId,
-          selectedSystem.id
-        )
-        .then((result) => {
-          setupdateComponentTable(true);
-        })
-        .catch((error) => {
-          console.log("error is", error);
-        });
+      setErrorMsgs([needEndDate])
+    }
+    try {
+      const resp = await mpApi.createSystemsComponents(userInput, selectedSystem.locationId, selectedSystem.id);
+      if (resp.status >= 200 && resp.status < 300) {
+        setupdateComponentTable(true);
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      setErrorMsgs(JSON.stringify(error))
     }
   };
 
-  const saveComponent = () => {
+  const saveComponent = async () => {
     const userInput = extractUserInput(componentPayload, ".modalUserInput");
 
     userInput.componentId = selectedRangeInFirst.componentId;
@@ -576,22 +580,18 @@ export const DataTableSystems = ({
       (userInput.endHour && !userInput.endDate) ||
       (!userInput.endHour && userInput.endDate)
     ) {
-      displayAppError(needEndDate);
-      setShow(false);
-    } else {
-      mpApi
-        .saveSystemsComponents(
-          userInput,
-          selectedSystem.locationId,
-          selectedSystem.id,
-          selectedRangeInFirst.id
-        )
-        .then((result) => {
-          setupdateComponentTable(true);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      setErrorMsgs([needEndDate])
+    }
+    try {
+      const resp = await mpApi.saveSystemsComponents(userInput, selectedSystem.locationId, selectedSystem.id, selectedRangeInFirst.id);
+      if (resp.status >= 200 && resp.status < 300) {
+        setupdateComponentTable(true);
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      setErrorMsgs([JSON.stringify(error)])
     }
   };
 
@@ -644,6 +644,7 @@ export const DataTableSystems = ({
   useEffect(() => {
     assignFocusEventListeners();
   }, [inactive, data]);
+
   const [openFuelFlowsView, setOpenFuelFlowsView] = React.useState(false);
   return (
     <>
@@ -701,9 +702,10 @@ export const DataTableSystems = ({
             exitBTN="Create System"
             save={() => {
               createSystems();
-              setCreateNewSystem(false);
-              setShow(false);
+              // setCreateNewSystem(false);
+              // setShow(false);
             }}
+            errorMsgs={errorMsgs}
             children={
               <ModalDetails
                 modalData={selected}
@@ -716,14 +718,15 @@ export const DataTableSystems = ({
           />
         ) : (
           <Modal
+            errorMsgs={errorMsgs}
             secondLevel={secondLevel}
             show={show}
             extraBtn={
               secondLevel && !thirdLevel
                 ? secondLevelName === "Add Component"
                   ? () => {
-                      setAddCompThirdLevelCreateTrigger(true);
-                    }
+                    setAddCompThirdLevelCreateTrigger(true);
+                  }
                   : null
                 : null
             }
@@ -731,59 +734,59 @@ export const DataTableSystems = ({
             save={
               !secondLevel && !thirdLevel // first level at systems
                 ? () => {
-                    saveSystems();
-                    setShow(false);
-                  }
+                  saveSystems();
+                  setShow(false);
+                }
                 : secondLevel && !thirdLevel // second level at components or fuel flows
-                ? // at system fuel flows
+                  ? // at system fuel flows
                   secondLevelName === "Fuel Flow"
-                  ? createFuelFlowFlag
-                    ? () => {
+                    ? createFuelFlowFlag
+                      ? () => {
                         createFuelFlows();
                         backToFirstLevelLevelBTN(false);
                         setOpenFuelFlowsView(false);
                       }
-                    : () => {
+                      : () => {
                         saveFuelFlows();
                         backToFirstLevelLevelBTN(false);
                         setOpenFuelFlowsView(false);
                       }
-                  : secondLevelName === "Component" && !createNewComponentFlag
-                  ? // at system components
-                    // need to hide analyzer range table on create
+                    : secondLevelName === "Component" && !createNewComponentFlag
+                      ? // at system components
+                      // need to hide analyzer range table on create
+                      () => {
+                        saveComponent();
+                        backToFirstLevelLevelBTN(false);
+                      }
+                      : secondLevelName === "Component" && createNewComponentFlag
+                        ? // at system components
+                        () => {
+                          setCreateNewComponentFlag(false);
+                          setAddComponentFlag(false);
+                          backToFirstLevelLevelBTN(false);
+                          createComponent();
+                        }
+                        : // at add component level page
+                        secondLevelName === "Add Component"
+                          ? () => {
+                            setAddCompThirdLevelTrigger(true);
+                          }
+                          : () => { }
+                  : // at analyzer ranges in components at third level
+                  createAnalyzerRangesFlag
+                    ? // in creating a range
                     () => {
-                      saveComponent();
-                      backToFirstLevelLevelBTN(false);
+                      createAnalyzerRange();
+                      backToSecondLevelBTN(false);
+                      setCreateAnalyzerRangesFlag(false);
                     }
-                  : secondLevelName === "Component" && createNewComponentFlag
-                  ? // at system components
+                    : // in just editing a range
                     () => {
-                      setCreateNewComponentFlag(false);
-                      setAddComponentFlag(false);
-                      backToFirstLevelLevelBTN(false);
-                      createComponent();
-                    }
-                  : // at add component level page
-                  secondLevelName === "Add Component"
-                  ? () => {
-                      setAddCompThirdLevelTrigger(true);
-                    }
-                  : () => {}
-                : // at analyzer ranges in components at third level
-                createAnalyzerRangesFlag
-                ? // in creating a range
-                  () => {
-                    createAnalyzerRange();
-                    backToSecondLevelBTN(false);
-                    setCreateAnalyzerRangesFlag(false);
-                  }
-                : // in just editing a range
-                  () => {
-                    saveAnalyzerRanges();
+                      saveAnalyzerRanges();
 
-                    backToSecondLevelBTN(false);
-                    setBread(true, "Component"); // fixes systems component "save and close" not working after saving analyzer range edit
-                  }
+                      backToSecondLevelBTN(false);
+                      setBread(true, "Component"); // fixes systems component "save and close" not working after saving analyzer range edit
+                    }
             }
             close={closeModalHandler}
             showCancel={!(user && checkout)}
@@ -792,26 +795,24 @@ export const DataTableSystems = ({
               createAnalyzerRangesFlag
                 ? "Create Analyzer Range"
                 : createFuelFlowFlag
-                ? "Create Fuel Flow"
-                : // add componentmodal page
-                addComponentFlag && !createNewComponentFlag
-                ? "Continue"
-                : createNewComponentFlag &&
-                  addComponentFlag &&
-                  addExistingComponentFlag
-                ? "Add Existing Component"
-                : // /: // create a new comp page
-                createNewComponentFlag &&
-                  addComponentFlag &&
-                  !addExistingComponentFlag
-                ? "Create New Component"
-                : null
+                  ? "Create Fuel Flow"
+                  : // add componentmodal page
+                  addComponentFlag && !createNewComponentFlag
+                    ? "Continue"
+                    : createNewComponentFlag &&
+                      addComponentFlag &&
+                      addExistingComponentFlag
+                      ? "Add Existing Component"
+                      : // /: // create a new comp page
+                      createNewComponentFlag &&
+                        addComponentFlag &&
+                        !addExistingComponentFlag
+                        ? "Create New Component"
+                        : null
             }
-            disableExitBtn=  {selectedUnlinkedComponent.length === 0 ? true: false}
+            disableExitBtn={selectedUnlinkedComponent.length === 0 ? true : false}
             breadCrumbBar={currentBar}
             title={`System: ${selected[0]["value"]}`}
-            // exitBTN={createBTN}
-            // createBtnAPI={createBtnAPI}
             children={
               <div>
                 {secondLevel ? (
@@ -868,8 +869,8 @@ export const DataTableSystems = ({
                   setAddCompThirdLevelCreateTrigger={
                     setAddCompThirdLevelCreateTrigger
                   }
-                  setSelectedUnlinkedComponent = {setSelectedUnlinkedComponent}
-                  selectedUnlinkedComponent = {selectedUnlinkedComponent}
+                  setSelectedUnlinkedComponent={setSelectedUnlinkedComponent}
+                  selectedUnlinkedComponent={selectedUnlinkedComponent}
                   backToFirstLevelLevelBTN={backToFirstLevelLevelBTN}
                   setCurrentBar={setCurrentBar}
                   openFuelFlowsView={openFuelFlowsView}
@@ -889,7 +890,7 @@ const mapStateToProps = (state) => {
     mdmData: state.dropdowns[SYSTEMS_STORE_NAME],
     tabs: state.openedFacilityTabs[
       'monitoringPlans'
-     ],
+    ],
   };
 };
 

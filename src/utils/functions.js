@@ -262,6 +262,7 @@ export const getPreviouslyFullSubmitedQuarter = (dateString = null) => {
  * July 1st - September 30th = Third Quarter
  * October 1st - December 31st = Fourth Quarter
  */
-export const getQuarter = (date = new Date()) => {
-  return Math.floor(date.getMonth() / 3 + 1);
+export const getQuarter = (date = new Date(), inUtc = false) => {
+  
+  return inUtc ? Math.floor(date.getUTCMonth() / 3 + 1) : Math.floor(date.getMonth() / 3 + 1);
 }

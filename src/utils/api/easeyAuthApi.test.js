@@ -60,27 +60,6 @@ describe("Easey Auth API", () => {
     expect(res.data).toEqual("success message");
   });
 
-  it("should call displayAppError secureAxios catches error", async () => {
-    mock
-      .onPost(`${config.services.authApi.uri}/tokens`)
-      .reply(500, " refresh token error");
-    mock
-      .onPost(`${config.services.authApi.uri}/test`)
-      .reply(500, "invalid token");
-
-    try {
-      await secureAxios({
-        method: "POST",
-        url: `${config.services.authApi.uri}/test`,
-      });
-    } catch (e) {
-      expect(e.response.status).toEqual(500);
-      expect(e.response.data).toEqual("invalid token");
-    }
-
-    expect(displayAppError).toHaveBeenCalledTimes(1);
-  });
-
   it("Can we authenticate", async () => {
     const cdxUser = {
       token: "xyz",

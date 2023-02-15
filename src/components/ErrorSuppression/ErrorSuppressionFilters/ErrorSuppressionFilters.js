@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GridContainer, Grid, Label, Dropdown, Checkbox, DatePicker, ButtonGroup, Button } from "@trussworks/react-uswds";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
@@ -48,6 +48,35 @@ export const getUniqueCheckTypeDescription = (transformedData) => {
         });
 }
 
+// Makes API call to get locations and then formats them to be in the way
+// MultiSelectCombobox expects the items to look and calls setLocationData()
+export const getLocations = (facilityValue, checkResultObj) => {
+      return getMonitoringPlans(Number(facilityValue)).then(({ data }) => {
+          const locations = data.map((f) => f.locations).flat(1);
+          let availLoc = locations?.map((l) => ({
+              id: l.unitId,
+              label: l.unitId,
+              selected: false,
+              enabled: true,
+          }));
+          if (checkResultObj.locationTypeCode === "LOC") {
+              const availStackPipe = locations?.map((l) => ({
+                  id: l.stackPipeId,
+                  label: l.stackPipeId,
+                  selected: false,
+                  enabled: true,
+              }));
+              availLoc = [...availLoc, ...availStackPipe];
+          }
+          const locName = availLoc.map((l) => l.label);
+          return availLoc
+              .filter(({ label }, index) => !locName.includes(label, index + 1))
+              .filter(({ label }) => label !== null)
+              .sort((a, b) => a.label - b.label);
+      });
+  };
+
+
 export const ErrorSuppressionFilters = () => {
 
     const ctxFilters = useContext(ErrorSuppressionFiltersContext);
@@ -77,11 +106,15 @@ export const ErrorSuppressionFilters = () => {
     const [selectedCheckResult, setSelectedCheckResult] = useState();
     const [selectedFacility, setSelectedFacility] = useState();
     const [selectedLocations, setSelectedLocations] = useState([]);
-    const [selectedIsActive, setSelectedIsActive] = useState(true);
+    const [selectedIsActive, setSelectedIsActive] = useState(false);
     const [selectedReason, setSelectedReason] = useState();
     const [selectedAddDateAfter, setSelectedAddDateAfter] = useState();
     const [selectedAddDateBefore, setSelectedAddDateBefore] = useState();
     const [locationData, setLocationData] = useState([]);
+
+    const [dateAfterKey, setDateAfterKey] = useState(false);
+    const [dateBeforeKey, setDateBeforeKey] = useState(false);
+
 
     // API check result data transformed
     // const [transformedData, setTransformedData] = useState([])
@@ -135,68 +168,68 @@ export const ErrorSuppressionFilters = () => {
     }
    
     const onFacilityChange = (e) => {
-      const { value } = e.target;
+      let { value } = e.target;
+      value = value === "false" ? false : value;
+
       setSelectedFacility(value);
-      if (value === false) return;
+      if (!value) return;
 
-      if (selectedCheckResult && selectedCheckNumber && selectedCheckResult) {
-        const locationTypeCode = transformedData[selectedCheckType][
-          selectedCheckNumber
-        ]
-          .filter((r) => r.checkResult === selectedCheckResult)
-          .map((d) => d.locationTypeCode);
-
-        getMonitoringPlans(Number(value)).then(({ data }) => {
-          const locations = data.map((f) => f.locations).flat(1);
-          let availLoc = locations?.map((l) => ({
-            id: l.unitId,
-            label: l.unitId,
-            selected: false,
-            enabled: true,
-          }));
-          if (locationTypeCode.includes("LOC")) {
-            const availStackPipe = locations?.map((l) => ({
-              id: l.stackPipeId,
-              label: l.stackPipeId,
-              selected: false,
-              enabled: true,
-            }));
-            availLoc = [...availLoc, ...availStackPipe];
-          }
-          const locName = availLoc.map((l) => l.label);
-          availLoc = availLoc
-            .filter(({ label }, index) => !locName.includes(label, index + 1))
-            .filter(({ label }) => label !== null)
-            .sort((a, b) => a.label - b.label);
-          setLocationData([...availLoc]);
-        });
+      if (selectedCheckType && selectedCheckNumber && selectedCheckResult) {
+        const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === selectedCheckResult);
+        getLocations(value, checkResultObj).then(availLoc=>setLocationData([...availLoc]));
       }
     };
 
     const onCheckTypeChange = (e) => {
-        const { value } = e.target;
+        let { value } = e.target;
+        value = value === "false" ? false : value;
+
         setSelectedCheckType(value);
         setSelectedCheckNumber(false);
         setSelectedCheckResult(false);
-
-        if (value === false)
+        if (!value)
             return;
 
         const checkNumbers = Object.keys(transformedData[value]);
         setCheckNumberList(checkNumbers);
+        // reset location selections if there are any
+        locationData.forEach(d=>d.selected=false)
+
     }
 
     const onCheckNumberChange = (e) => {
-        const { value } = e.target;
+        let { value } = e.target;
+        value = value === "false" ? false : value;
+
         setSelectedCheckNumber(value);
         setSelectedCheckResult(false);
 
-        if (value === false)
+        if (!value)
             return;
 
         const checkResults = transformedData[selectedCheckType][value].map(d => d.checkResult);
-        setCheckResultList(checkResults)
+        setCheckResultList(checkResults);
+
+        // reset location selections if there are any
+        locationData.forEach(d=>d.selected=false)
+
     }
+
+    const onCheckResultChange = (e) => {
+      let { value } = e.target;
+      value = value === "false" ? false : value;
+
+      setSelectedCheckResult(value);
+      if( !value )
+        return
+
+      if (selectedCheckType && selectedCheckNumber && value) {
+        const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === value);
+        getLocations(selectedFacility, checkResultObj).then(availLoc=>{
+          setLocationData(availLoc)
+        });
+      }
+    };
 
     const applyFilters = () => {
         let apiFormattedDateAfter;
@@ -223,71 +256,112 @@ export const ErrorSuppressionFilters = () => {
         setAddDateBefore(selectedAddDateBefore)
     }
 
+    const clearFilters = () => {
+
+      setCheckNumberList([]);
+      setCheckResultList([]);
+      setSelectedCheckType("");
+      setSelectedCheckNumber("");
+      setSelectedCheckResult("");
+      setSelectedFacility("");
+      setSelectedLocations([]);
+      setLocationData([]);
+      setSelectedIsActive(true);
+      setSelectedReason("");
+      setCheckType(null);
+      setCheckNumber(null);
+      setCheckResult(null);
+      setFacility(null);
+      setLocations(null);
+      setActive(true);
+      setReason(null);
+      setAddDateBefore(null);
+      setSelectedAddDateAfter(null);
+      setSelectedAddDateBefore(null);
+      setDateAfterKey(k=>!k)
+      setDateBeforeKey(k=>!k)
+
+    };
+
     return (
-        <GridContainer className='padding-left-0 margin-left-0 padding-right-0'>
-            <Grid row>
-                <h3>Check Result</h3>
-            </Grid>
-            <Grid row>
-                <Grid col={4}>
-                    <Label test-id={"check-type-label"} htmlFor={"check-type"}>
-                        Check Type
-                    </Label>
-                    <Dropdown
-                        id={"check-type"}
-                        name={"check-type"}
-                        epa-testid={"check-type"}
-                        data-testid={"check-type"}
-                        value={selectedCheckType}
-                        onChange={onCheckTypeChange}
-                    >
-                        <option>{defaultDropdownText}</option>
-                        {checkTypeList.map((d) => <option key={d.checkTypeCode} value={d.checkTypeCode} data-testid={d.checkTypeCode}>{`${d.checkTypeDescription} (${d.checkTypeCode})`}</option>)}
-                    </Dropdown>
-                </Grid>
-                <Grid col={2}>
-                    <div className="margin-left-2">
-                        <Label test-id={"check-number-label"} htmlFor={"check-number"}>
-                            Check Number
-                        </Label>
-                        <Dropdown
-                            id={"check-number"}
-                            name={"check-number"}
-                            epa-testid={"check-number"}
-                            data-testid={"check-number"}
-                            value={selectedCheckNumber}
-                            onChange={onCheckNumberChange}
-                            disabled={!selectedCheckType}
-                        >
-                            <option>{defaultDropdownText}</option>
-                            {checkNumberList.map((d) => <option key={d} value={d} data-testid={d}>{d}</option>)}
-                        </Dropdown>
-                    </div>
-                </Grid>
-            </Grid>
-            <Grid row className="margin-top-2">
-                <Grid col={4}>
-                    <Label test-id={"check-result-label"} htmlFor={"check-result"}>
-                        Check Result
-                    </Label>
-                    <Dropdown
-                        id={"check-result"}
-                        name={"check-result"}
-                        epa-testid={"check-result"}
-                        data-testid={"check-result"}
-                        value={selectedCheckResult}
-                        onChange={(e) => setSelectedCheckResult(e.target.value)}
-                        disabled={!selectedCheckType || !selectedCheckNumber}
-                    >
-                        <option>{defaultDropdownText}</option>
-                        {checkResultList.map((d) => <option key={d} value={d} data-testid={d}>{d}</option>)}
-                    </Dropdown>
-                </Grid>
-            </Grid>
-            <Grid row className="margin-top-4">
-                <h3>Facility Location</h3>
-            </Grid>
-            <Grid row>
+      <GridContainer className="padding-left-0 margin-left-0 padding-right-0">
+        <Grid row>
+          <h3>Check Result</h3>
+        </Grid>
+        <Grid row>
+          <Grid col={4}>
+            <Label test-id={"check-type-label"} htmlFor={"check-type"}>
+              Check Type
+            </Label>
+            <Dropdown
+              id={"check-type"}
+              name={"check-type"}
+              epa-testid={"check-type"}
+              data-testid={"check-type"}
+              value={selectedCheckType}
+              onChange={onCheckTypeChange}
+            >
+              <option value="false">{defaultDropdownText}</option>
+              {checkTypeList.map((d) => (
+                <option
+                  key={d.checkTypeCode}
+                  value={d.checkTypeCode}
+                  data-testid={d.checkTypeCode}
+                >{`${d.checkTypeDescription} (${d.checkTypeCode})`}</option>
+              ))}
+            </Dropdown>
+          </Grid>
+          <Grid col={2}>
+            <div className="margin-left-2">
+              <Label test-id={"check-number-label"} htmlFor={"check-number"}>
+                Check Number
+              </Label>
+              <Dropdown
+                id={"check-number"}
+                name={"check-number"}
+                epa-testid={"check-number"}
+                data-testid={"check-number"}
+                value={selectedCheckNumber}
+                onChange={onCheckNumberChange}
+                disabled={!selectedCheckType}
+              >
+                <option value="false">{defaultDropdownText}</option>
+                {checkNumberList.map((d) => (
+                  <option key={d} value={d} data-testid={d}>
+                    {d}
+                  </option>
+                ))}
+              </Dropdown>
+            </div>
+          </Grid>
+        </Grid>
+        <Grid row className="margin-top-2">
+          <Grid col={4}>
+            <Label test-id={"check-result-label"} htmlFor={"check-result"}>
+              Check Result
+            </Label>
+            <Dropdown
+              id={"check-result"}
+              name={"check-result"}
+              epa-testid={"check-result"}
+              data-testid={"check-result"}
+              value={selectedCheckResult}
+              onChange={onCheckResultChange}
+              disabled={!selectedCheckType || !selectedCheckNumber}
+            >
+              <option value="false">{defaultDropdownText}</option>
+              {checkResultList.map((d) => (
+                <option key={d} value={d} data-testid={d}>
+                  {d}
+                </option>
+              ))}
+            </Dropdown>
+          </Grid>
+        </Grid>
+        <Grid row className="margin-top-4">
+          <h3>Facility Location</h3>
+        </Grid>
+        <Grid row>
           <Grid col={4}>
             <Label test-id={"facility-name-label"} htmlFor={"facility-name"}>
               Facility Name/ID
@@ -300,7 +374,7 @@ export const ErrorSuppressionFilters = () => {
               value={selectedFacility}
               onChange={onFacilityChange}
             >
-              <option value={false}>{defaultDropdownText}</option>
+              <option value="false">{defaultDropdownText}</option>
               {facilityList.map((d) => (
                 <option
                   key={d.orisCode}
@@ -315,9 +389,8 @@ export const ErrorSuppressionFilters = () => {
               <MultiSelectCombobox
                 items={locationData}
                 label="Location Name"
-                entity="locationName"
+                entity="es-locations-filter"
                 searchBy="contains"
-                value={selectedLocations}
                 onChangeUpdate={onChangeOfLocationMultiSelect}
                 disabled={
                   !(
@@ -331,97 +404,100 @@ export const ErrorSuppressionFilters = () => {
             </div>
           </Grid>
         </Grid>
-            <Grid row className="margin-top-4">
-                <Grid col={3}>
-                    <h3>Active, Reason & Add Date</h3>
-                </Grid>
-                <Grid col={3}>
-                    <Checkbox
-                        id="is-active"
-                        data-testid="is-active"
-                        name="is-active"
-                        label="Active"
-                        className="margin-top-2"
-                        checked={selectedIsActive}
-                        value={selectedIsActive}
-                        onChange={() => setSelectedIsActive(previousVal => !previousVal)}
-                    />
-                </Grid>
-            </Grid>
-            <Grid row>
-                <Grid col={4}>
-                    <Label test-id={"reason-label"} htmlFor={"reason"}>
-                        Reason
-                    </Label>
-                    <Dropdown
-                        id={"reason"}
-                        name={"reason"}
-                        epa-testid={"reason"}
-                        data-testid={"reason"}
-                        value={selectedReason}
-                        onChange={(e) => setSelectedReason(e.target.value)}
-                    >
-                        <option>{defaultDropdownText}</option>
-                        {reasonCodeList.map((d) => (
-                            <option
-                                key={d.errorSuppressionReasonCode}
-                                value={d.errorSuppressionReasonCode}
-                                data-testid={d.errorSuppressionReasonCode}
-                            >
-                                {d.errorSuppressionReasonCode}
-                            </option>))}
-                    </Dropdown>
-                </Grid>
-            </Grid>
-            <Grid row className="margin-top-2">
-                <Grid col={3}>
-                    <Label
-                        htmlFor="add-date-after"
-                        id="add-date-after-label"
-                    >
-                        Add Date After
-                    </Label>
-                    <DatePicker
-                        aria-labelledby="add-date-after-label"
-                        id="add-date-after"
-                        name="add-date-after"
-                        value={selectedAddDateAfter}
-                        onChange={(date) => setSelectedAddDateAfter(date)}
-                    />
-                </Grid>
-                <Grid col={3} >
-                    <div className="margin-left-4">
-                        <Label
-                            htmlFor="add-date-before"
-                            id="add-date-before-label"
-                        >
-                            Add Date Before
-                        </Label>
-                        <DatePicker
-                            aria-labelledby="add-date-before-label"
-                            id="add-date-before"
-                            name="add-date-before"
-                            value={selectedAddDateBefore}
-                            onChange={(date) => setSelectedAddDateBefore(date)}
-                        />
-                    </div>
-                </Grid>
-                <Grid col={4} >
-                    <ButtonGroup type="default" className="float-right margin-top-3">
-                        <Button type="button" className="usa-button usa-button--outline">
-                            Clear
-                        </Button>
-                        <Button
-                            type="button"
-                            data-testid={"apply-filters"}
-                            onClick={applyFilters}
-                        >
-                            Apply Filters
-                        </Button>
-                    </ButtonGroup>
-                </Grid>
-
-            </Grid>
-        </GridContainer>
+        <Grid row className="margin-top-4">
+          <Grid col={3}>
+            <h3>Active, Reason & Add Date</h3>
+          </Grid>
+          <Grid col={3}>
+            <Checkbox
+              id="is-active"
+              data-testid="is-active"
+              name="is-active"
+              label="Active"
+              className="margin-top-2"
+              checked={selectedIsActive}
+              value={selectedIsActive}
+              onChange={() =>
+                setSelectedIsActive((previousVal) => !previousVal)
+              }
+            />
+          </Grid>
+        </Grid>
+        <Grid row>
+          <Grid col={4}>
+            <Label test-id={"reason-label"} htmlFor={"reason"}>
+              Reason
+            </Label>
+            <Dropdown
+              id={"reason"}
+              name={"reason"}
+              epa-testid={"reason"}
+              data-testid={"reason"}
+              value={selectedReason}
+              onChange={(e) => setSelectedReason(e.target.value)}
+            >
+              <option value="false">{defaultDropdownText}</option>
+              {reasonCodeList.map((d) => (
+                <option
+                  key={d.errorSuppressionReasonCode}
+                  value={d.errorSuppressionReasonCode}
+                  data-testid={d.errorSuppressionReasonCode}
+                >
+                  {d.errorSuppressionReasonCode}
+                </option>
+              ))}
+            </Dropdown>
+          </Grid>
+        </Grid>
+        <Grid row className="margin-top-2">
+          <Grid col={3}>
+            <Label htmlFor="add-date-after" id="add-date-after-label">
+              Add Date After
+            </Label>
+            <DatePicker
+              key={`after-${dateAfterKey}`}
+              aria-labelledby="add-date-after-label"
+              id="add-date-after"
+              name="add-date-after"
+              value={selectedAddDateAfter}
+              onChange={(date) => setSelectedAddDateAfter(date)}
+            />
+          </Grid>
+          <Grid col={3}>
+            <div className="margin-left-4">
+              <Label htmlFor="add-date-before" id="add-date-before-label">
+                Add Date Before
+              </Label>
+              <DatePicker
+                key={`before-${dateBeforeKey}`}
+                aria-labelledby="add-date-before-label"
+                id="add-date-before"
+                name="add-date-before"
+                value={selectedAddDateBefore}
+                onChange={(date) => setSelectedAddDateBefore(date)}
+              />
+            </div>
+          </Grid>
+          <Grid col={4}>
+            <ButtonGroup type="default" className="float-right margin-top-3">
+              <Button
+                type="button"
+                data-testid={"clear-filters"}
+                className="usa-button usa-button--outline"
+                onClick={clearFilters}
+              >
+                Clear
+              </Button>
+              <Button
+                type="button"
+                data-testid={"apply-filters"}
+                onClick={applyFilters}
+              >
+                Apply Filters
+              </Button>
+            </ButtonGroup>
+          </Grid>
+        </Grid>
+      </GridContainer>
     );
 }

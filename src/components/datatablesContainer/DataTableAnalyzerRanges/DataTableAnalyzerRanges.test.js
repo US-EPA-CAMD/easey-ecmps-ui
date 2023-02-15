@@ -5,14 +5,13 @@ import {
   mapStateToProps,
   mapDispatchToProps,
 } from "./DataTableAnalyzerRanges";
-import * as mpApi from "../../../utils/api/monitoringPlansApi";
-const axios = require("axios");
 import { Provider } from "react-redux";
 import configureStore from "../../../store/configureStore.dev";
-const store = configureStore();
-jest.mock("axios");
 
-const ranges = [
+import * as mpApi from "../../../utils/api/monitoringPlansApi";
+const store = configureStore();
+
+const mockRanges = [
   {
     active: false,
     addDate: "2009-02-20",
@@ -29,6 +28,28 @@ const ranges = [
   },
 ];
 
+jest.mock("../../../utils/api/easeyAuthApi", () => ({
+  secureAxios: jest.fn().mockResolvedValue({
+    status: 200,
+    data: [
+      {
+        active: false,
+        addDate: "2009-02-20",
+        analyzerRangeCode: "H",
+        beginDate: "1993-10-01",
+        beginHour: "0",
+        componentRecordId: "CAMD-60A6D62FDAB14840BFCF67E049B4B4C5",
+        dualRangeIndicator: "0",
+        endDate: "2019-11-06",
+        endHour: "14",
+        id: "CAMD-A39804B8C17A4478970F7B2CCBF429B6",
+        updateDate: "2020-01-23",
+        userId: "bvick",
+      },
+    ],
+  }),
+}));
+
 //testing redux connected component to mimic props passed as argument
 const componentRenderer = (update, mdmData) => {
   let currentData = [];
@@ -43,7 +64,7 @@ const componentRenderer = (update, mdmData) => {
     user: { firstName: "test" },
     checkout: true,
 
-    selectedRanges: ranges[0],
+    selectedRanges: mockRanges[0],
     thirdLevel: false,
     updateAnalyzerRangeTable: update,
     setThirdLevel: jest.fn(),
@@ -65,11 +86,8 @@ const componentRenderer = (update, mdmData) => {
 };
 
 test("renders an analyzer range with mdm data", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: ranges })
-  );
   const title = await mpApi.getMonitoringAnalyzerRanges("5", "CAMD");
-  expect(title.data).toEqual(ranges);
+  expect(title.data).toEqual(mockRanges);
   let { container } = await waitForElement(() =>
     componentRenderer(false, { test: "" })
   );
@@ -79,11 +97,8 @@ test("renders an analyzer range with mdm data", async () => {
 });
 
 test("renders an analyzer range withOUT mdm data", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: ranges })
-  );
   const title = await mpApi.getMonitoringAnalyzerRanges("5", "CAMD");
-  expect(title.data).toEqual(ranges);
+  expect(title.data).toEqual(mockRanges);
   let { container } = await waitForElement(() =>
     componentRenderer(false, false)
   );
