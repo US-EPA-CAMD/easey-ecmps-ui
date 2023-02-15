@@ -59,7 +59,7 @@
     "@testing-library/react-hooks": "^8.0.0",
     "@testing-library/user-event": "^7.2.1",
     "@trussworks/react-uswds": "^2.4.1",
-    "@us-epa-camd/easey-design-system": "1.33.1",
+    "@us-epa-camd/easey-design-system": "1.33.2",
     "@welldone-software/why-did-you-render": "^7.0.1",
     "axios": "^0.21.1",
     "axios-mock-adapter": "^1.18.2",

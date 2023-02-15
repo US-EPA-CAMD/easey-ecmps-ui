@@ -46,19 +46,22 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
 
   const handleInterval = useCallback(async () => {
     const inactiveDuration = isFacilityCheckedOut() ? config.app.inactivityDuration : config.app.inactivityLogoutDuration
-
+  
     // checkInactivity
+    if (timeInactive >= inactiveDuration) {
+      await logOut();
+      return;
+    }
+  
     if (inactiveDuration - timeInactive <= config.app.countdownDuration && window.countdownInitiated === false) {
       // display the countdown timer if not already initiated
       window.countdownInitiated = true;
       setShowInactiveModal(true);
-      if (timeInactive >= inactiveDuration) {
-        await logOut();
-      }
     }
-
+  
     setTimeInactive(prevTimeInactive => prevTimeInactive + config.app.activityPollingFrequency)
   }, [isFacilityCheckedOut, timeInactive])
+  
 
   useInterval(handleInterval, config.app.activityPollingFrequency)
 

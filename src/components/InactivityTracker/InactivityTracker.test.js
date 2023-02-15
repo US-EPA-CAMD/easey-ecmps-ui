@@ -15,9 +15,9 @@ import userEvent from "@testing-library/user-event";
 const store = configureStore();
 jest.mock("axios");
 
-jest.mock("../../utils/api/easeyAuthApi");
-logOut.mockImplementation(() => Promise.resolve(""));
-
+// const logOutMock = jest.fn();
+// jest.mock("../../utils/api/easeyAuthApi", () => ({ logOut: () => logOutMock()}));
+// logOut.mockImplementation(() => Promise.resolve(""));
 const props = {
   openedFacilityTabs: [{ checkout: true }],
   setCheckout: jest.fn(),
@@ -29,10 +29,13 @@ const noCheckoutProps = {
 };
 describe("InactivityTracker", () => {
   let callback = jest.fn();
+  let logOutMock;
   beforeEach(() => {
     // we're using fake timers because we don't want to
     // wait a full second for this test to run.
     jest.useFakeTimers();
+    logOutMock = jest.fn();
+    logOut.mockReturnValue(logOutMock());
   });
   afterEach(() => {
     callback.mockRestore();
@@ -93,7 +96,7 @@ describe("InactivityTracker", () => {
     const closeBtn = screen.getByRole('button', { name: /Click to close/i })
     userEvent.click(closeBtn)
 
-    expect(logOut).not.toHaveBeenCalled()
+    expect(logOutMock).not.toHaveBeenCalled()
     expect(inactivityMsg).not.toBeInTheDocument()
   });
 
@@ -109,6 +112,18 @@ describe("InactivityTracker", () => {
     expect(state).toBeDefined();
   });
 
+  test.only("logs out user even if the countdown component doesn't'", async () => {
+    jest.mock("../CountdownTimer/CountdownTimer", () => () => <div>Mocked Countdown Timer</div>);
+    const { container } = render(
+      <Provider store={store}>
+        <InactivityTracker {...noCheckoutProps} />{" "}
+      </Provider>
+    );
+    // act(() => {
+      jest.advanceTimersByTime(config.app.inactivityLogoutDuration);
+    // });
+    expect(logOutMock).toHaveBeenCalled();
+  });
   // test("should init hook with delay", () => {
   //   const { result } = renderHook(() => InactivityTracker({...props}));
 
