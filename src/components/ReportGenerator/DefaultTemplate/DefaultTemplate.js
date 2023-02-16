@@ -14,9 +14,9 @@ export const DefaultTemplate = ({
 
   return (
     <div className="margin-bottom-3">
-      <div className="subheader-wrapper bg-epa-blue-base text-white text-normal padding-left-1 padding-y-2px">
+      <h2 className="subheader-wrapper bg-epa-blue-base text-white text-normal padding-left-1 padding-y-2px">
         {title}
-      </div>
+      </h2>
 
       <div className="width-auto margin-top-0">
         <DataTableRender
