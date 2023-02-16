@@ -1,12 +1,7 @@
-import axios from "axios";
 import config from "../../config";
 import { handleError, handleResponse, handleImportError } from "./apiUtils";
 import { secureAxios } from "./easeyAuthApi";
 import download from "downloadjs";
-
-axios.defaults.headers.common = {
-  "x-api-key": config.app.apiKey,
-};
 
 export const getEmissionsReviewSubmit = async (
   orisCodes,
@@ -22,7 +17,9 @@ export const getEmissionsReviewSubmit = async (
   queryString = queryString + `&quarters=${quarters.join("|")}`;
 
   let url = `${config.services.emissions.uri}/workspace/emissions?${queryString}`;
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({ url: url, method: "GET" })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const exportEmissionsData = async (
@@ -43,9 +40,10 @@ export const exportEmissionsData = async (
   });
 
   try {
-    const response = await axios.get(
-      `${url.toString()}?${searchParams.toString()}`
-    );
+    const response = await secureAxios({
+      url: `${url.toString()}?${searchParams.toString()}`,
+      method: "GET",
+    });
     return handleResponse(response);
   } catch (error) {
     handleError(error);
@@ -100,20 +98,20 @@ export const getEmissionViewData = async (
   try {
     let response;
     if (attachFile) {
-      response = await axios.get(
-        `${url.toString()}?${searchParams.toString()}`,
-        {
-          headers: {
-            Accept: "text/csv",
-          },
-          responseType: "blob",
-          timeout: Number(config.app.apiTimeout),
-        }
-      );
+      response = await secureAxios({
+        url: `${url.toString()}?${searchParams.toString()}`,
+        method: "GET",
+        headers: {
+          Accept: "text/csv",
+        },
+        responseType: "blob",
+        timeout: Number(config.app.apiTimeout),
+      });
     } else {
-      response = await axios.get(
-        `${url.toString()}?${searchParams.toString()}`
-      );
+      response = await secureAxios({
+        url: `${url.toString()}?${searchParams.toString()}`,
+        method: "GET",
+      });
     }
     return handleResponse(response);
   } catch (error) {
@@ -123,9 +121,10 @@ export const getEmissionViewData = async (
 
 export const getViews = async () => {
   try {
-    const response = await axios.get(
-      `${config.services.emissions.uri}/emissions/views`
-    );
+    const response = await secureAxios({
+      url: `${config.services.emissions.uri}/emissions/views`,
+      method: "GET",
+    });
     return handleResponse(response);
   } catch (error) {
     handleError(error);
@@ -135,7 +134,9 @@ export const getViews = async () => {
 
 export const getEmissionsSchema = async () => {
   const url = `${config.services.content.uri}/ecmps/reporting-instructions/emissions.schema.json`;
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({ url: url, method: "GET" })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const importEmissionsData = async (payload) => {
