@@ -39,6 +39,11 @@
       :hover:not(:focus) {
         color: $epa-black !important;
       }
+      :focus {
+        .MuiSvgIcon-root {
+          opacity: 1;
+        }
+      }
     }
     border: none !important;
   }
