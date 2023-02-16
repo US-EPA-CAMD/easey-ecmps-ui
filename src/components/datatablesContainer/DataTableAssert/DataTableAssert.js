@@ -23,7 +23,6 @@ import {
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
-  returnFocusToLast,
 } from "../../../additional-functions/manage-focus";
 import {
   getActiveData,

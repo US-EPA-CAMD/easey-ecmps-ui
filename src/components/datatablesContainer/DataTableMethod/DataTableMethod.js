@@ -19,7 +19,6 @@ import {
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
-  returnFocusToLast,
 } from "../../../additional-functions/manage-focus";
 
 import { extractUserInput } from "../../../additional-functions/extract-user-input";

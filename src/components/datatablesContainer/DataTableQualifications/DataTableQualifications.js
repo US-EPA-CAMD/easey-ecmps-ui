@@ -13,7 +13,6 @@ import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
-  returnFocusToLast,
 } from "../../../additional-functions/manage-focus";
 
 import { Preloader } from "@us-epa-camd/easey-design-system";
