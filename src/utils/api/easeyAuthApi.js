@@ -15,14 +15,29 @@ export const secureAxios = async (options) => {
     if (sessionStorage.getItem("cdx_user")) {
       const token = await refreshToken();
 
-      options.headers = {
-        authorization: `Bearer ${token}`,
-        "x-api-key": config.app.apiKey,
-      };
+      if (options["headers"]) {
+        options.headers = {
+          ...options.headers,
+          authorization: `Bearer ${token}`,
+          "x-api-key": config.app.apiKey,
+        };
+      } else {
+        options.headers = {
+          authorization: `Bearer ${token}`,
+          "x-api-key": config.app.apiKey,
+        };
+      }
     } else {
-      options.headers = {
-        "x-api-key": config.app.apiKey,
-      };
+      if (options["headers"]) {
+        options.headers = {
+          ...options.headers,
+          "x-api-key": config.app.apiKey,
+        };
+      } else {
+        options.headers = {
+          "x-api-key": config.app.apiKey,
+        };
+      }
     }
   } catch (e) {
     displayAppError(e);
