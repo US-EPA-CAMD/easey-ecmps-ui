@@ -106,7 +106,6 @@ export const DataTableAssert = ({
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
     if (dataLoaded && dropdownsLoaded) {
-      returnFocusToLast();
       assignFocusEventListeners();
     }
   }, [dataLoaded, dropdownsLoaded]);
@@ -116,7 +115,6 @@ export const DataTableAssert = ({
     if (!returnedFocusToLast) {
       setReturnedFocusToLast(true);
     } else {
-      returnFocusToLast();
       assignFocusEventListeners();
     }
   }, [returnedFocusToLast]);
