@@ -1,18 +1,111 @@
-export const getReportingPeriod = {
-  data: [
+export const mockReportingPeriod = [
+  {
+    id: 1,
+    calendarYear: 1993,
+    quarter: 1,
+    beginDate: "1993-01-01",
+    endDate: "1993-03-31",
+    periodDescription: "1993 QTR 1",
+    periodAbbreviation: "1993 Q1",
+    archiveInd: 0,
+    selected: false,
+  },
+];
+
+export const exportQAResponse = {
+  orisCode: 3776,
+  testSummaryData: [
     {
-      id: 1,
-      calendarYear: 1993,
+      id: "TWCORNEL5-5438209079BE4E7C83507AFC1D8DA532",
+      locationId: "5",
+      stackPipeId: "CS0AAN",
+      unitId: null,
+      testTypeCode: "F2LCHK",
+      monitoringSystemID: "AA4",
+      componentID: null,
+      spanScaleCode: null,
+      testNumber: "201904010000AA4",
+      testReasonCode: "QA",
+      testDescription: null,
+      testResultCode: "FEW168H",
+      calculatedTestResultCode: "FEW168H",
+      beginDate: null,
+      beginHour: null,
+      beginMinute: null,
+      endDate: null,
+      endHour: null,
+      endMinute: null,
+      gracePeriodIndicator: null,
+      calculatedGracePeriodIndicator: null,
+      year: 2019,
       quarter: 1,
-      beginDate: "1993-01-01",
-      endDate: "1993-03-31",
-      periodDescription: "1993 QTR 1",
-      periodAbbreviation: "1993 Q1",
-      archiveInd: 0,
-      selected: false,
-    },
+      testComment: null,
+      injectionProtocolCode: null,
+      calculatedSpanValue: null,
+      evalStatusCode: null,
+      userId: "bvick",
+      addDate: "4/24/2019, 5:27:06 PM",
+      updateDate: null,
+      reportPeriodId: 105,
+      calibrationInjectionData: [],
+      linearitySummaryData: [],
+    }
   ],
-};
+  certificationEventData: [
+    {
+      id: "string",
+      locationId: "string",
+      lastUpdated: "2023-02-17T20:37:37.814Z",
+      updatedStatusFlag: "string",
+      needsEvalFlag: "string",
+      checkSessionId: "string",
+      submissionId: 0,
+      submissionAvailabilityCode: "string",
+      pendingStatusCode: "string",
+      evalStatusCode: "string",
+      userId: "string",
+      addDate: "string",
+      updateDate: "string",
+      stackPipeId: "string",
+      unitId: "string",
+      monitoringSystemID: "string",
+      componentID: "string",
+      qaCertEventCode: "string",
+      qaCertEventDate: "2023-02-17T20:37:37.814Z",
+      qaCertEventHour: 0,
+      requiredTestCode: "string",
+      conditionalBeginDate: "2023-02-17T20:37:37.814Z",
+      conditionalBeginHour: 0,
+      completionTestDate: "2023-02-17T20:37:37.814Z",
+      completionTestHour: 0
+    }
+  ],
+  testExtensionExemptionData: [
+    {
+      stackPipeId: "string",
+      unitId: "string",
+      year: 0,
+      quarter: 0,
+      monitoringSystemID: "string",
+      componentID: "string",
+      spanScaleCode: "string",
+      id: "string",
+      locationId: "string",
+      reportPeriodId: 0,
+      checkSessionId: "string",
+      submissionId: "string",
+      submissionAvailabilityCode: "string",
+      pendingStatusCode: "string",
+      evalStatusCode: "string",
+      userId: "string",
+      addDate: "string",
+      updateDate: "string",
+      hoursUsed: 0,
+      fuelCode: "string",
+      extensionOrExemptionCode: "string"
+    }
+  ]
+}
 
 export const selectedConfig = {
   id: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
