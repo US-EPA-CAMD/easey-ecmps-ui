@@ -4,9 +4,9 @@ import DataTable from "react-data-table-component";
 import { ArrowDownwardSharp } from "@material-ui/icons";
 
 import { exportQA } from "../../../utils/api/qaCertificationsAPI";
-import { qaTestSummaryCols } from "../../../utils/constants/tableColumns";
 import { getUnitIdAndStackPipeIds } from "../../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
 import { assignAriaLabelsToDataTable } from "../../../additional-functions/ensure-508";
+import { getExportTableCols } from "../../../utils/selectors/QACert/assert-export";
 
 export const ExportTablesContainer = ({
   selectionData,
@@ -16,14 +16,18 @@ export const ExportTablesContainer = ({
   workspaceSection,
   orisCode,
   dataRef,
+  tableTitle,
+  dataKey,
 }) => {
   const { beginDate, endDate } = selectionData;
   const { locations } = selectedConfig;
-  const [qaTestSummaryData, setQATestSummaryData] = useState();
+  const [tableData, setTableData] = useState();
   const [loading, setLoading] = useState(false);
 
+  const divId = `export-${dataKey}`
+
   useEffect(() => {
-    const fetchQATestSummary = async () => {
+    const fetchTableData = async () => {
       setLoading(true);
       const { unitIds, stackPipeIds } = getUnitIdAndStackPipeIds(locations);
       try {
@@ -32,35 +36,34 @@ export const ExportTablesContainer = ({
           unitIds,
           stackPipeIds,
           beginDate,
-          endDate
+          endDate,
+          {
+            isOfficial: true,
+            isHistoricalImport: false,
+          }
         );
         if (response) {
-          setQATestSummaryData(response.data.testSummaryData);
+          // add dataKey so selectedRow can be differentiated when exported
+          const tableRows = response.data[dataKey].map(data => ({ ...data, dataKey }))
+          setTableData(tableRows);
           setLoading(false);
 
           const rowsAriaLabelData = []
-          response.data.testSummaryData.forEach(e => {
-            rowsAriaLabelData.push(e.testNumber)
-          });
-
-          assignAriaLabelsToDataTable('#exportTestSummaryData', rowsAriaLabelData)
+          response.data[dataKey].forEach(e => rowsAriaLabelData.push(e.id));
+          assignAriaLabelsToDataTable(`#${divId}`, rowsAriaLabelData)
         }
       } catch (err) {
         console.log(err);
       }
     };
-    fetchQATestSummary();
-  }, [beginDate, endDate, locations, orisCode]);
+    fetchTableData();
+  }, [beginDate, dataKey, divId, endDate, locations, orisCode]);
 
   const onSelectRowsHandler = ({
-    _allSelected,
-    _selectedCount,
     selectedRows,
   }) => {
     dataRef.current = selectedRows;
-    const selectedIds = {
-      testSummary: selectedRows.map((row) => row.id)
-    }
+    const selectedIds = selectedRows.map((row) => row.id)
     setExportState(
       selectedConfig.id,
       {
@@ -72,12 +75,12 @@ export const ExportTablesContainer = ({
   };
 
   const selectableRowSelectedHandler = (row) => {
-    return exportState?.selectedIds?.testSummary?.includes(row.id);
+    return exportState?.selectedIds?.includes(row.id);
   };
 
   const dataTable = (
-    <div className="margin-x-3 margin-y-4" id="exportTestSummaryData">
-      <h4 className="margin-y-1">Test Summary</h4>
+    <div className="margin-x-3 margin-y-4" id={divId}>
+      <h4 className="margin-y-1">{tableTitle}</h4>
       <DataTable
         className="data-display-table"
         responsive={true}
@@ -86,8 +89,8 @@ export const ExportTablesContainer = ({
         striped={false}
         highlightOnHover={true}
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
-        columns={qaTestSummaryCols}
-        data={qaTestSummaryData}
+        columns={getExportTableCols(tableTitle)}
+        data={tableData}
         selectableRows
         onSelectedRowsChange={onSelectRowsHandler}
         selectableRowSelected={selectableRowSelectedHandler}
