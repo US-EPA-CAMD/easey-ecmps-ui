@@ -1,12 +1,7 @@
-import axios from "axios";
 import { handleResponse, handleError } from "./apiUtils";
 import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
 import { formatReportUrl } from "../functions";
-
-axios.defaults.headers.common = {
-  "x-api-key": config.app.apiKey,
-};
 
 export async function getReport(
   reportCode,
@@ -25,16 +20,12 @@ export async function getReport(
     teeId
   )}`;
 
-  if (window.location.href.includes("workspace")) {
-    return secureAxios({
-      method: "GET",
-      url,
-    })
-      .then(handleResponse)
-      .catch(handleError);
-  }
-
-  return axios.get(url).then(handleResponse).catch(handleError);
+  return secureAxios({
+    method: "GET",
+    url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 }
 
 export async function submitData(payload) {
@@ -53,8 +44,6 @@ export async function submitData(payload) {
 export const triggerBulkEvaluation = async (payload) => {
   let url = `${config.services.camd.uri}`;
   url = `${url}/evaluate`;
-
-  console.log(url);
 
   try {
     return handleResponse(
