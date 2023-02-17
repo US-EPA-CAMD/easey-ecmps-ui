@@ -122,7 +122,7 @@ const QACertEventTestExmpDataTable = ({
         .then((res) => {
           if (res !== undefined && res.data.length > 0) {
             setQATestSummary(res.data);
-            executeOnClose(res.data);
+            // executeOnClose(res.data);
           } else {
             setQATestSummary([]);
           }

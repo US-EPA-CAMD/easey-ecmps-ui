@@ -137,7 +137,7 @@ const QATestSummaryDataTable = ({
             if (res !== undefined && res.data.length > 0) {
               finishedLoadingData(res.data);
               setQATestSummary(res.data);
-              executeOnClose(res.data);
+              // executeOnClose(res.data);
             } else {
               finishedLoadingData([]);
               setQATestSummary([]);
