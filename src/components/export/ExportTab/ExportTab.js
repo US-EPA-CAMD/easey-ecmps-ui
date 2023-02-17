@@ -107,16 +107,8 @@ export const ExportTab = ({
       const selectedRows = rowsData.current;
       const exportJson = {
         orisCode: orisCode,
+        ...selectedRows,
       };
-
-      // group selectedRows by dataKey: testSummary, qaCert, tee
-      for (const row of selectedRows) {
-        const dataKey = row.dataKey
-        exportJson[dataKey] = exportJson[dataKey] || [];
-        delete row.dataKey;
-        exportJson[dataKey].push(row)
-      }
-
       download(JSON.stringify(exportJson, null, "\t"), exportFileName);
     }
 
@@ -145,11 +137,21 @@ export const ExportTab = ({
       return dataType.name === em;
     }).checked;
 
-    const rowHasSelected = exportState?.selectedIds?.length > 0;
+    const rowsHasSelected = () => {
+      if (!exportState?.selectedIds) {
+        return false;
+      }
+      for (const listOfSelected of Object.values(exportState?.selectedIds)) {
+        if (listOfSelected.length > 0) {
+          return true;
+        }
+      }
+      return false;
+    }
 
     return (
       isExporting ||
-      (!isMonitoringPlanChecked && !isEmissionsChecked && !rowHasSelected)
+      (!isMonitoringPlanChecked && !isEmissionsChecked && !rowsHasSelected())
     );
   };
 
