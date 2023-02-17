@@ -46,6 +46,7 @@ export const ExportTab = ({
   const [reportingPeriod, setReportingPeriod] = useState(null);
   const [previewOptions, setPreviewOptions] = useState();
   const [loading, setLoading] = useState(false);
+
   const qaTestSummaryData = useRef();
 
   const dataTypeSelectionHanlder = (e) => {
@@ -206,15 +207,42 @@ export const ExportTab = ({
           </div>
         </div>
         {previewOptions && (
-          <ExportTablesContainer
-            selectionData={previewOptions}
-            selectedConfig={selectedConfig}
-            exportState={exportState}
-            setExportState={setExportState}
-            workspaceSection={workspaceSection}
-            orisCode={orisCode}
-            dataRef={qaTestSummaryData}
-          />
+          <>
+            <ExportTablesContainer
+              tableTitle={'Test Summary'}
+              dataKey={'testSummaryData'}
+              selectionData={previewOptions}
+              selectedConfig={selectedConfig}
+              exportState={exportState}
+              setExportState={setExportState}
+              workspaceSection={workspaceSection}
+              orisCode={orisCode}
+              dataRef={qaTestSummaryData}
+            />
+            <ExportTablesContainer
+              tableTitle={'QA Certification Events'}
+              dataKey={'certificationEventData'}
+              selectionData={previewOptions}
+              selectedConfig={selectedConfig}
+              exportState={exportState}
+              setExportState={setExportState}
+              workspaceSection={workspaceSection}
+              orisCode={orisCode}
+              dataRef={qaTestSummaryData}
+            />
+            <ExportTablesContainer
+              tableTitle={'Test Extension Exemptions'}
+              dataKey={'testExtensionExemptionData'}
+              selectionData={previewOptions}
+              selectedConfig={selectedConfig}
+              exportState={exportState}
+              setExportState={setExportState}
+              workspaceSection={workspaceSection}
+              orisCode={orisCode}
+              dataRef={qaTestSummaryData}
+            />
+          </>
+
         )}
         <div className="border-top-1px border-base-lighter padding-y-2">
           <Button
