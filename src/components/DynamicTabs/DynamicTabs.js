@@ -60,6 +60,12 @@ export const DynamicTabs = ({
     removeFacility(index, workspaceSection);
     setTabs([...tabs]);
 
+    setTimeout(() => {
+      document
+        .querySelectorAll(".tab-button")
+      [document.querySelectorAll(".tab-button").length - 1].focus();
+    });
+
     // },100)
   };
   return (
