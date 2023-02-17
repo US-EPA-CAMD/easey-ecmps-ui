@@ -156,7 +156,7 @@ export const ExportTab = ({
   const isPreviewDisabled = () => {
     const checkedDataTypes = dataTypes.filter(e => e.checked);
     // if only qa is checked
-    return !(checkedDataTypes[0].name === qa && checkedDataTypes.length === 1);
+    return !(checkedDataTypes.length === 1 && checkedDataTypes[0].name === qa);
   }
 
   return (
