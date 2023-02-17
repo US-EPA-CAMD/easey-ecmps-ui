@@ -145,6 +145,7 @@ export const QAImportHistoricalDataPreview = ({
           <div className="margin-x-3 margin-y-4" id="importTestSummaryData">
             <h4 className="margin-y-1">Test Summary</h4>
             <DataTable
+              className="data-display-table"
               responsive={true}
               fixedHeader={true}
               noHeader={true}
