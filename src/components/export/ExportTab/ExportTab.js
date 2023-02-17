@@ -143,16 +143,12 @@ export const ExportTab = ({
     );
   };
 
-  const isPreviewDisabled = ()=>{
-
-    const checkedDataTypes = dataTypes.filter(e=>e.checked);
-
+  const isPreviewDisabled = () => {
+    const checkedDataTypes = dataTypes.filter(e => e.checked);
     // if only qa is checked
-    if( checkedDataTypes.length === 1 && checkedDataTypes[0].name === qa){
-
+    if (checkedDataTypes.length === 1 && checkedDataTypes[0].name === qa) {
       return false;
     }
-    
     return true;
   }
 
