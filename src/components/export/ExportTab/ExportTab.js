@@ -47,7 +47,7 @@ export const ExportTab = ({
   const [previewOptions, setPreviewOptions] = useState();
   const [loading, setLoading] = useState(false);
 
-  const qaTestSummaryData = useRef();
+  const rowsData = useRef();
 
   const dataTypeSelectionHanlder = (e) => {
     const dataTypesCopy = [...dataTypes];
@@ -104,11 +104,19 @@ export const ExportTab = ({
     // export qa
     if (dataTypes.find((e) => e.name === qa).checked) {
       exportFileName = `QA & Certification | Export - ${facility}.json`;
-      const selectedRows = qaTestSummaryData.current;
+      const selectedRows = rowsData.current;
       const exportJson = {
         orisCode: orisCode,
-        testSummaryData: selectedRows,
       };
+
+      // group selectedRows by dataKey: testSummary, qaCert, tee
+      for (const row of selectedRows) {
+        const dataKey = row.dataKey
+        exportJson[dataKey] = exportJson[dataKey] || [];
+        delete row.dataKey;
+        exportJson[dataKey].push(row)
+      }
+
       download(JSON.stringify(exportJson, null, "\t"), exportFileName);
     }
 
@@ -136,7 +144,8 @@ export const ExportTab = ({
     const isEmissionsChecked = dataTypes.find((dataType) => {
       return dataType.name === em;
     }).checked;
-    const rowHasSelected = exportState?.selectedIds?.testSummary?.length > 0;
+
+    const rowHasSelected = exportState?.selectedIds?.length > 0;
 
     return (
       isExporting ||
@@ -147,10 +156,7 @@ export const ExportTab = ({
   const isPreviewDisabled = () => {
     const checkedDataTypes = dataTypes.filter(e => e.checked);
     // if only qa is checked
-    if (checkedDataTypes.length === 1 && checkedDataTypes[0].name === qa) {
-      return false;
-    }
-    return true;
+    return !(checkedDataTypes[0].name === qa && checkedDataTypes.length === 1);
   }
 
   return (
@@ -217,7 +223,7 @@ export const ExportTab = ({
               setExportState={setExportState}
               workspaceSection={workspaceSection}
               orisCode={orisCode}
-              dataRef={qaTestSummaryData}
+              dataRef={rowsData}
             />
             <ExportTablesContainer
               tableTitle={'QA Certification Events'}
@@ -228,7 +234,7 @@ export const ExportTab = ({
               setExportState={setExportState}
               workspaceSection={workspaceSection}
               orisCode={orisCode}
-              dataRef={qaTestSummaryData}
+              dataRef={rowsData}
             />
             <ExportTablesContainer
               tableTitle={'Test Extension Exemptions'}
@@ -239,7 +245,7 @@ export const ExportTab = ({
               setExportState={setExportState}
               workspaceSection={workspaceSection}
               orisCode={orisCode}
-              dataRef={qaTestSummaryData}
+              dataRef={rowsData}
             />
           </>
 
