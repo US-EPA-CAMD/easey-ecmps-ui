@@ -48,9 +48,10 @@ export const DynamicTabs = ({
     setTabs([...tabs]);
 
     setTimeout(() => {
-      document
-        .querySelectorAll(".tab-button")
-        [document.querySelectorAll(".tab-button").length - 1].focus();
+      const elems = document.querySelectorAll(".tab-button")
+      if (elems.length > 0) {
+        elems[elems.length - 1].focus();
+      }
     });
   };
 
@@ -61,9 +62,10 @@ export const DynamicTabs = ({
     setTabs([...tabs]);
 
     setTimeout(() => {
-      document
-        .querySelectorAll(".tab-button")
-      [document.querySelectorAll(".tab-button").length - 1].focus();
+      const elems = document.querySelectorAll(".tab-button")
+      if (elems.length > 0) {
+        elems[elems.length - 1].focus();
+      }
     });
 
     // },100)
@@ -143,7 +145,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(
         addFacilityTab(facility, convertSectionToStoreName(workspaceSection))
       ),
-      setActive: (facility, workspaceSection) =>
+    setActive: (facility, workspaceSection) =>
       dispatch(
         setActiveTab(facility, convertSectionToStoreName(workspaceSection))
       ),

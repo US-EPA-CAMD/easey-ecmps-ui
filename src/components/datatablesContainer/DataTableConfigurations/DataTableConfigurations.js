@@ -62,9 +62,10 @@ export const DataTableConfigurations = ({
           setCheckout(false, monitoringPlanId, workspaceSection);
 
           setTimeout(() => {
-            document
-              .querySelectorAll(".tab-button")
-            [document.querySelectorAll(".tab-button").length - 1].focus();
+            const elems = document.querySelectorAll(".tab-button")
+            if (elems.length > 0) {
+              elems[elems.length - 1].focus();
+            }
           });
         } catch (error) {
           // *** do nothing.  this is just in case someone tries to check in a facility
