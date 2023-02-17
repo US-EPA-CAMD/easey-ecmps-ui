@@ -62,8 +62,16 @@ export const ExportTablesContainer = ({
   const onSelectRowsHandler = ({
     selectedRows,
   }) => {
-    dataRef.current = selectedRows;
-    const selectedIds = selectedRows.map((row) => row.id)
+    // group selectedRows by dataKey: testSummary, qaCert, tee
+    dataRef.current = {
+      ...dataRef.current,
+      [dataKey]: selectedRows
+    }
+    const prevSelectedIds = exportState.selectedIds ?? {}
+    const selectedIds = {
+      ...prevSelectedIds,
+      [dataKey]: selectedRows.map(row => row.id)
+    }
     setExportState(
       selectedConfig.id,
       {
@@ -75,7 +83,9 @@ export const ExportTablesContainer = ({
   };
 
   const selectableRowSelectedHandler = (row) => {
-    return exportState?.selectedIds?.includes(row.id);
+    const allLists = Object.values(exportState?.selectedIds ?? [])
+    const allSelectedIds = [].concat(...allLists);
+    return allSelectedIds.includes(row.id);
   };
 
   const dataTable = (
