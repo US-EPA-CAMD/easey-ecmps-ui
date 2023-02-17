@@ -8,6 +8,7 @@ import { ErrorSuppressionFiltersContext } from "../context/error-suppression-con
 import "./ErrorSuppressionDataContainer.scss"
 import { formatDate, getQuarter } from "../../../utils/functions";
 import { DeactivateNotificationModal } from "../DeactivateNotificationModal/DeactivateNotificationModal";
+import { ArrowDownwardSharp } from "@material-ui/icons";
 
 export const ErrorSuppressionDataContainer = () => {
     const {
@@ -132,18 +133,18 @@ export const ErrorSuppressionDataContainer = () => {
     }
 
     const columns = [
-        { name: "Select", maxWidth: "100px", cell: (row, idx) => getCheckbox(row, idx) },
-        { name: "Severity", maxWidth: "150px", selector: (row) => row.severityCode },
-        { name: "Facility Name/ID", selector: (row) => row.orisCode },
-        { name: "Locations", selector: (row) => row.locations },
-        { name: "Match Data Criteria", selector: (row) => "" + row.matchDataTypeCode + (row.matchDataValue ? ":" + row.matchDataValue : "") },
-        { name: "Match Time Criteria", width: "300px", selector: (row) => formatMatchTimeCriteriaCell(row) },
-        { name: "Reason", maxWidth: "150px", selector: (row) => row.reasonCode },
-        { name: "Status", maxWidth: "150px", selector: (row) => row.active ? "Active" : "Inactive" },
-        { name: "Note", maxWidth: "1000px", selector: (row) => row.note },
-        { name: "User", selector: (row) => row.userId },
-        { name: "Add Date & Hour", selector: (row) => formatDateWithHoursMinutesSeconds(row.addDate) },
-        { name: "Update Date", selector: (row) => formatDateWithHoursMinutesSeconds(row.updateDate) },
+        { name: "Select", maxWidth: "100px", cell: (row, idx) => getCheckbox(row, idx), sortable:true }, 
+        { name: "Severity", maxWidth: "150px", selector: (row) => row.severityCode, sortable:true },
+        { name: "Facility Name/ID", selector: (row) => row.orisCode, sortable:true },
+        { name: "Locations", selector: (row) => row.locations, sortable:true },
+        { name: "Match Data Criteria", selector: (row) => "" + row.matchDataTypeCode + (row.matchDataValue ? ":" + row.matchDataValue : ""), sortable:true },
+        { name: "Match Time Criteria", width: "300px", selector: (row) => formatMatchTimeCriteriaCell(row), sortable:true },
+        { name: "Reason", maxWidth: "150px", selector: (row) => row.reasonCode, sortable:true },
+        { name: "Status", maxWidth: "150px", selector: (row) => row.active ? "Active" : "Inactive", sortable:true },
+        { name: "Note", maxWidth: "1000px", selector: (row) => row.note, sortable:true },
+        { name: "User", selector: (row) => row.userId, sortable:true },
+        { name: "Add Date & Hour", selector: (row) => formatDateWithHoursMinutesSeconds(row.addDate), sortable:true },
+        { name: "Update Date", selector: (row) => formatDateWithHoursMinutesSeconds(row.updateDate), sortable:true },
     ];
 
     return (
@@ -201,6 +202,7 @@ export const ErrorSuppressionDataContainer = () => {
                         <Preloader />
                         :
                         <DataTable
+                            sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
                             noHeader={true}
                             fixedHeader={true}
                             fixedHeaderScrollHeight="50vh"
@@ -209,7 +211,6 @@ export const ErrorSuppressionDataContainer = () => {
                             className={`data-display-table react-transition fade-in`}
                         />
                     }
-
                 </div>
             </div>
         </div>
