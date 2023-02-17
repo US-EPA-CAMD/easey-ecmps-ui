@@ -1,3 +1,19 @@
+export const getReportingPeriod = {
+  data: [
+    {
+      id: 1,
+      calendarYear: 1993,
+      quarter: 1,
+      beginDate: "1993-01-01",
+      endDate: "1993-03-31",
+      periodDescription: "1993 QTR 1",
+      periodAbbreviation: "1993 Q1",
+      archiveInd: 0,
+      selected: false,
+    },
+  ],
+}
+
 export const mockReportingPeriod = [
   {
     id: 1,
