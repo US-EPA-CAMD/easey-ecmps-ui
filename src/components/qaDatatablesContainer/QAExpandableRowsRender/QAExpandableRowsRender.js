@@ -74,7 +74,6 @@ const QAExpandableRowsRender = ({
         .getDataTableApis(dataTableName, locationId, id, extraIDs)
         .then((res) => {
           finishedLoadingData(res.data);
-          executeOnClose(res.data);
         })
         .catch((error) => console.log(error));
     }

@@ -340,7 +340,7 @@ export const returnsFocusDatatableExpandBTN = (datatableName, index, direction, 
         lastBTN.focus();
       }
     }
-  }, 500);
+  }, 1000);
 };
 
 // returns focus to View Button
