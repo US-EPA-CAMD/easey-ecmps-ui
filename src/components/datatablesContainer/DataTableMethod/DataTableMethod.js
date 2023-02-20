@@ -19,7 +19,6 @@ import {
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
-  returnFocusToLast,
 } from "../../../additional-functions/manage-focus";
 
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
@@ -82,7 +81,6 @@ export const DataTableMethod = ({
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
     if (dataLoaded && dropdownsLoaded) {
-      //returnFocusToLast();
       assignFocusEventListeners();
     }
   }, [dataLoaded, dropdownsLoaded]);
@@ -92,7 +90,6 @@ export const DataTableMethod = ({
     if (!returnedFocusToLast) {
       setReturnedFocusToLast(true);
     } else {
-      returnFocusToLast();
       assignFocusEventListeners();
     }
   }, [returnedFocusToLast]);
