@@ -60,6 +60,13 @@ export const DataTableConfigurations = ({
 
         try {
           setCheckout(false, monitoringPlanId, workspaceSection);
+
+          setTimeout(() => {
+            const elems = document.querySelectorAll(".tab-button")
+            if (elems.length > 0) {
+              elems[elems.length - 1].focus();
+            }
+          });
         } catch (error) {
           // *** do nothing.  this is just in case someone tries to check in a facility
           // *** that does not have an open tab
@@ -76,6 +83,12 @@ export const DataTableConfigurations = ({
           .postCheckoutMonitoringPlanConfiguration(config.col3, user.userId)
           .then((res) => {
             setSelectedConfig([data, selectedConfigData, checkout]);
+
+            try {
+              setCheckout(true, selectedConfigData.id, workspaceSection);
+            } catch {
+
+            }
           });
       } else {
         setSelectedConfig([data, selectedConfigData, checkout]);
@@ -95,8 +108,8 @@ export const DataTableConfigurations = ({
 
       setOpenAndCheckoutBTNFocus(
         ariaLabel.substring(0, 4) +
-          " and checkout" +
-          ariaLabel.substring(4, ariaLabel.length)
+        " and checkout" +
+        ariaLabel.substring(4, ariaLabel.length)
       );
     }
   };
