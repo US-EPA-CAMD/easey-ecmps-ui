@@ -69,7 +69,6 @@ export const QACertTestSummaryRender = ({
           isCheckedOut={checkoutState}
           updateTable={updateRelatedTables}
           setUpdateTable={setUpdateRelatedTables}
-          currentTab={currentTab}
         />
       }
     </div>
