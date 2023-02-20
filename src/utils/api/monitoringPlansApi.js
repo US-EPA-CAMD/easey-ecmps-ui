@@ -1,13 +1,8 @@
-import axios from "axios";
 import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
 import { getFacilityById } from "./facilityApi";
 import download from "downloadjs";
-
-axios.defaults.headers.common = {
-  "x-api-key": config.app.apiKey,
-};
 
 export const getApiUrl = (path, workspaceOnly = false) => {
   let url = config.services.monitorPlans.uri;
@@ -280,7 +275,7 @@ export const getCheckedOutLocations = async () => {
 };
 
 export const getRefreshInfo = async (planId) => {
-  const url = getApiUrl(`/plans/${planId}`, true);
+  const url = getApiUrl(`/plans/${planId}`);
   return secureAxios({
     method: "GET",
     url: url,
