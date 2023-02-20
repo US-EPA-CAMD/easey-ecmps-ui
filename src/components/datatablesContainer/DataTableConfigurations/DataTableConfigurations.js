@@ -84,17 +84,6 @@ export const DataTableConfigurations = ({
           .then((res) => {
             setSelectedConfig([data, selectedConfigData, checkout]);
 
-            const crypto = window.crypto || window.msCrypto;
-            const array = new Uint32Array(1);
-            const randomNumber = crypto.getRandomValues(array);
-
-            setMostRecentlyCheckedInMonitorPlanId(
-              `${selectedConfigData.id}${randomNumber}`
-            );
-            setMostRecentlyCheckedInMonitorPlanIdForTab(
-              `${selectedConfigData.id}${randomNumber}`
-            );
-
             try {
               setCheckout(true, selectedConfigData.id, workspaceSection);
             } catch {
