@@ -138,6 +138,7 @@ const QATestSummaryDataTable = ({
               finishedLoadingData(res.data);
               setQATestSummary(res.data);
               // executeOnClose(res.data);
+              setShow(false);
             } else {
               finishedLoadingData([]);
               setQATestSummary([]);
