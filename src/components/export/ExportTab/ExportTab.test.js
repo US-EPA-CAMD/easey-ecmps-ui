@@ -2,20 +2,26 @@ import React from "react";
 import ExportTab from "./ExportTab";
 import { render, screen } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
-import { getReportingPeriod, selectedConfig } from "./ExportTab.test.mocks";
+import { exportQAResponse, mockReportingPeriod, selectedConfig } from "./ExportTab.test.mocks";
 import userEvent from "@testing-library/user-event";
 import { fireEvent } from "@testing-library/react/dist/pure";
-import { before } from "lodash";
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
+import config from "../../../config";
+
+const mock = new MockAdapter(axios);
+
+const getReportingPeriodUrl = `${config.services.mdm.uri}/reporting-periods?export=true`;
+mock.onGet(getReportingPeriodUrl).reply(200, mockReportingPeriod);
+
+const exportQAUrl = `${config.services.qaCertification.uri}/export?facilityId=3&unitIds=1|2&stackPipeIds=CS0AAN&beginDate=1993-01-01&endDate=1993-03-31`;
+mock.onGet(exportQAUrl).reply(200, exportQAResponse)
 
 describe("ExportTab", function () {
   let emissionsApi;
-  let qaCertificationsApi;
   let monitoringPlansApi;
 
   beforeAll(async () => {
-    qaCertificationsApi = await import(
-      "../../../utils/api/qaCertificationsAPI"
-    );
     emissionsApi = await import("../../../utils/api/emissionsApi");
     monitoringPlansApi = await import(
       "../../../utils/api/monitoringPlansApi"
@@ -24,10 +30,6 @@ describe("ExportTab", function () {
 
   describe("Emissions Export", function () {
     it("should enable export button when the emissions checkbox is checked, and download when export is clicked", async function () {
-      jest.setTimeout(10000);
-      jest
-        .spyOn(qaCertificationsApi, "getReportingPeriod")
-        .mockResolvedValue(getReportingPeriod);
       jest
         .spyOn(emissionsApi, "exportEmissionsDataDownload")
         .mockResolvedValue({});
@@ -110,6 +112,18 @@ describe("ExportTab", function () {
         fireEvent.click(qaCheckboxElement)
         expect(previewButtonElement.disabled).toBe(false)
         jest.setTimeout(5000);
+      })
+
+      it("should preview data when preview button is clicked", async () => {
+        fireEvent.click(qaCheckboxElement)
+        expect(previewButtonElement.disabled).toBe(false)
+        fireEvent.click(previewButtonElement);
+        const testSummaryTitle = await screen.findByText(/Test Summary/i);
+        const qaCertTitle = screen.getByText(/QA Certification Events/i);
+        const testExtExeTitle = screen.getByText(/Test Extension Exemptions/i);
+        expect(testSummaryTitle).toBeInTheDocument();
+        expect(qaCertTitle).toBeInTheDocument();
+        expect(testExtExeTitle).toBeInTheDocument();
       })
     })
   });
