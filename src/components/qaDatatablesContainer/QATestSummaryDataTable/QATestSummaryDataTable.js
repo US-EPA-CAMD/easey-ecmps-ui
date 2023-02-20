@@ -227,10 +227,12 @@ const QATestSummaryDataTable = ({
             }
           });
         }
-        dropdowns[dropdownArray[0][i]].unshift({
-          code: '',
-          name: '-- Select a value --',
-        });
+        if(i !== 0){
+          dropdowns[dropdownArray[0][i]].unshift({
+            code: '',
+            name: '-- Select a value --',
+          });
+        }
       });
       setMdmData(dropdowns);
       setDropdownsLoaded(true);
