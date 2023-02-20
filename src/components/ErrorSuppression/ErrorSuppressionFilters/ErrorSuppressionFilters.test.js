@@ -8,6 +8,7 @@ import MockAdapter from "axios-mock-adapter";
 import config from "../../../config";
 import userEvent from "@testing-library/user-event";
 import { testtest } from "./ErrorSuppressionFilters";
+import { defaultDropdownText } from "../ErrorSuppression";
 
 const configurations = [
   {
@@ -150,9 +151,9 @@ describe("ErrorSuppressionFilters component", () => {
     expect(screen.getByTestId("check-result")).toHaveValue(
       "false"
     );
-    expect(screen.getByTestId("facility-name")).toHaveValue("false");
+    expect(screen.getByTestId("facility-name")).toHaveValue(defaultDropdownText);
     expect(screen.getByTestId("reason")).toHaveValue("false");
-    expect(screen.getByTestId("is-active")).toBeChecked(true);
+    expect(screen.getByTestId("is-active")).not.toBeChecked();
     expect(screen.getByLabelText("Location Name")).toHaveValue("");
   });
 });
