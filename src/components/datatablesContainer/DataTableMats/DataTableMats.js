@@ -34,6 +34,7 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
+import { ensure508 } from "../../../additional-functions/ensure-508";
 
 export const DataTableMats = ({
   mdmData,
@@ -68,6 +69,7 @@ export const DataTableMats = ({
   useEffect(() => {
     if (dataLoaded && dropdownsLoaded) {
       assignFocusEventListeners();
+      ensure508()
     }
   }, [dataLoaded, dropdownsLoaded]);
 
@@ -75,6 +77,7 @@ export const DataTableMats = ({
   useEffect(() => {
     if (!returnedFocusToLast) {
       setReturnedFocusToLast(true);
+      ensure508()
     } else {
       assignFocusEventListeners();
     }

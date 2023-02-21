@@ -15,6 +15,7 @@ import { convertSectionToStoreName } from "../../../additional-functions/data-ta
 import {
   addAriaLabelToDatatable,
   changeGridCellAttributeValue,
+  ensure508,
 } from "../../../additional-functions/ensure-508";
 import {
   displayAppError,
@@ -194,6 +195,7 @@ export const DataTableAssert = ({
     setRevertedState(false);
     setUpdateRelatedTables(false);
     addAriaLabelToDatatable();
+    ensure508()
   };
 
   useEffect(() => {
