@@ -38,7 +38,7 @@ const props = {
   facility: "Test (1, 2, 3)",
   selectedConfig: selectedConfig,
   orisCode: "testOrisCode",
-  sectionSelect: [4, "Methods"],
+  sectionSelect: [0, "Methods"],
   setSectionSelect: jest.fn(),
   setLocationSelect: jest.fn(),
   locationSelect: [0, "testLocName"],
@@ -54,9 +54,9 @@ const props = {
 
 const testTypeDropdownLabel = /Test Type Group/i
 const testTypeDropdownData = [
-  { testTypeGroupDescription: 'Test Type Group option 1' },
-  { testTypeGroupDescription: 'Test Type Group option 2' },
-  { testTypeGroupDescription: 'Test Type Group option 3' },
+  { name:"name1", testTypeGroupDescription: 'Test Type Group option 1' },
+  { name:"name2", testTypeGroupDescription: 'Test Type Group option 2' },
+  { name:"name3", testTypeGroupDescription: 'Test Type Group option 3' },
 ]
 
 // mocking JavaScript built-in window functions
@@ -76,7 +76,6 @@ beforeEach(() => {
 
 test("testing QACertTestSummaryHeaderInfo component", async () => {
   const { container } = await waitForElement(() => render(<QACertTestSummaryHeaderInfo {...props} />));
-
   expect(container).toBeDefined();
 });
 
