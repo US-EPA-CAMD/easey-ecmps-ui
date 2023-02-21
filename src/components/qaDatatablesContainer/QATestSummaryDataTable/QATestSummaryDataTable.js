@@ -137,7 +137,7 @@ const QATestSummaryDataTable = ({
             if (res !== undefined && res.data.length > 0) {
               finishedLoadingData(res.data);
               setQATestSummary(res.data);
-              executeOnClose(res.data);
+              setShow(false);
             } else {
               finishedLoadingData([]);
               setQATestSummary([]);
@@ -227,10 +227,12 @@ const QATestSummaryDataTable = ({
             }
           });
         }
-        dropdowns[dropdownArray[0][i]].unshift({
-          code: '',
-          name: '-- Select a value --',
-        });
+        if(i !== 0){
+          dropdowns[dropdownArray[0][i]].unshift({
+            code: '',
+            name: '-- Select a value --',
+          });
+        }
       });
       setMdmData(dropdowns);
       setDropdownsLoaded(true);

@@ -163,7 +163,8 @@ export const Tabs = ({
                   } tab`)}
                   onClick={() => {
                     addElementToLastFocusedArray(tabBtnSelector);
-                    settingActiveTab(i)}}
+                    settingActiveTab(i);
+                  }}
                   onKeyPress={(event) => {
                     if (event.key === "Enter") {
                       addElementToLastFocusedArray(tabBtnSelector);

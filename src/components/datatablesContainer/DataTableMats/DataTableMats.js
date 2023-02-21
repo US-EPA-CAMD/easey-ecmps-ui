@@ -6,7 +6,6 @@ import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
-  returnFocusToLast,
 } from "../../../additional-functions/manage-focus";
 import {
   displayAppError,
@@ -35,6 +34,7 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
+import { ensure508 } from "../../../additional-functions/ensure-508";
 
 export const DataTableMats = ({
   mdmData,
@@ -68,8 +68,8 @@ export const DataTableMats = ({
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
     if (dataLoaded && dropdownsLoaded) {
-      returnFocusToLast();
       assignFocusEventListeners();
+      ensure508()
     }
   }, [dataLoaded, dropdownsLoaded]);
 
@@ -77,8 +77,8 @@ export const DataTableMats = ({
   useEffect(() => {
     if (!returnedFocusToLast) {
       setReturnedFocusToLast(true);
+      ensure508()
     } else {
-      returnFocusToLast();
       assignFocusEventListeners();
     }
   }, [returnedFocusToLast]);
