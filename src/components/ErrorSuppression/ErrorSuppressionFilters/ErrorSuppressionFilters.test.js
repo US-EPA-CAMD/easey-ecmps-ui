@@ -156,6 +156,11 @@ describe("ErrorSuppressionFilters component", () => {
     expect(screen.getByTestId("is-active")).not.toBeChecked();
     expect(screen.getByLabelText("Location Name")).toHaveValue("");
   });
+
+  it("calls onFacilityChange() when default dropdown text is selected", () => {
+    userEvent.selectOptions(screen.getByLabelText("Facility Name/ID"), [defaultDropdownText]);
+    expect(screen.getByTestId("facility-name")).toHaveValue(defaultDropdownText);
+  })
 });
 
 describe("getLocations()", ()=>{
