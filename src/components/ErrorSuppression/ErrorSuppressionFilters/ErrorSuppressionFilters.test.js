@@ -158,9 +158,18 @@ describe("ErrorSuppressionFilters component", () => {
   });
 
   it("calls onFacilityChange() when default dropdown text is selected", () => {
-    userEvent.selectOptions(screen.getByLabelText("Facility Name/ID"), [defaultDropdownText]);
-    expect(screen.getByTestId("facility-name")).toHaveValue(defaultDropdownText);
-  })
+    userEvent.selectOptions(screen.getByLabelText("Facility Name/ID"), [
+      defaultDropdownText,
+    ]);
+    expect(screen.getByTestId("facility-name")).toHaveValue(
+      defaultDropdownText
+    );
+  });
+
+  it("calls onCheckResultChange() when default dropdown text is selected", () => {
+    userEvent.selectOptions(screen.getByLabelText("Check Result"), ["false"]);
+    expect(screen.getByTestId("check-result")).toHaveValue("false");
+  });
 });
 
 describe("getLocations()", ()=>{
