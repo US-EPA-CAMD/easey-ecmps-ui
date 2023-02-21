@@ -5,7 +5,7 @@ import { ArrowDownwardSharp } from "@material-ui/icons";
 
 import { exportQA } from "../../../utils/api/qaCertificationsAPI";
 import { getUnitIdAndStackPipeIds } from "../../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
-import { addScreenReaderLabelForCollapses, assignAriaLabelsToDataTable, cleanUp508, ensure508 } from "../../../additional-functions/ensure-508";
+import { addScreenReaderLabelForCollapses, assignAriaLabelsToDataTable, ensure508 } from "../../../additional-functions/ensure-508";
 import { getExportTableCols } from "../../../utils/selectors/QACert/assert-export";
 import { oneSecond } from "../../../config";
 
@@ -33,7 +33,6 @@ export const ExportTablesContainer = ({
     }, oneSecond);
 
     return () => {
-      cleanUp508()
       addScreenReaderLabelForCollapses();
 
     };
