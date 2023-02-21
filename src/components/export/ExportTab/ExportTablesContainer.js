@@ -5,8 +5,9 @@ import { ArrowDownwardSharp } from "@material-ui/icons";
 
 import { exportQA } from "../../../utils/api/qaCertificationsAPI";
 import { getUnitIdAndStackPipeIds } from "../../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
-import { assignAriaLabelsToDataTable } from "../../../additional-functions/ensure-508";
+import { addScreenReaderLabelForCollapses, assignAriaLabelsToDataTable, ensure508 } from "../../../additional-functions/ensure-508";
 import { getExportTableCols } from "../../../utils/selectors/QACert/assert-export";
+import { oneSecond } from "../../../config";
 
 export const ExportTablesContainer = ({
   selectionData,
@@ -25,6 +26,17 @@ export const ExportTablesContainer = ({
   const [loading, setLoading] = useState(false);
 
   const divId = `export-${dataKey}`
+
+  useEffect(() => {
+    setTimeout(() => {
+      ensure508();
+    }, oneSecond);
+
+    return () => {
+      addScreenReaderLabelForCollapses();
+
+    };
+  }, []);
 
   useEffect(() => {
     const fetchTableData = async () => {
