@@ -566,7 +566,7 @@ export const QACertTestSummaryHeaderInfo = ({
           exitBtn={"Ok"}
           complete={true}
           importedFileErrorMsgs={importedFileErrorMsgs}
-          successMsg={"QA Certification has been Successfully Imported."}
+          successMsg={`${selectedConfig.facilityName} Test Data has been Successfully Imported.`}
           setUpdateRelatedTables={setUpdateRelatedTables}
           children={
             <ImportModal
