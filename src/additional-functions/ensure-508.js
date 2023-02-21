@@ -9,9 +9,9 @@
  *       Outputs:
  *              none
  *****************************************************/
-export const ensure508 = (tableName) => {
+export const ensure508 = (tableName, sectionSelect=null) => {
   // *** add aria label to all data tables
-  addAriaLabelToDatatable(tableName);
+  addAriaLabelToDatatable(tableName, sectionSelect);
 
   // *** move filter that may be present in datatable out of aria-live region
   moveDataTableSearchOutOfAriaLive();
@@ -104,8 +104,24 @@ export const addScreenReaderLabelForCollapses = () => {
  *       Outputs:
  *              none
  *****************************************************/
-export const addAriaLabelToDatatable = (tableName) => {
-  if (tableName) {
+export const addAriaLabelToDatatable = (tableName, sectionSelect) => {
+const tableWrappers = document.getElementsByClassName("qa-table-wrapper");
+  if (tableWrappers.length>0) {//only for all QA & Certs section data tables
+    for (var i = 0; i < tableWrappers.length; i++) {
+      const tableWrapper = tableWrappers[i];
+      const tableName = tableWrapper.getAttribute("id").replaceAll("-", " ");
+      const dataTable = tableWrapper.querySelector('[role="table"]');
+      if(dataTable){
+        if(sectionSelect && tableName ==="Test Summary Data"){
+          dataTable.setAttribute("aria-label", `${tableName} for ${sectionSelect}`)
+        }else{
+          dataTable.setAttribute("aria-label", tableName);
+        }
+      }else{
+        dataTable.setAttribute("aria-label", "Data table");
+      }
+   }
+  }else if (tableName) {
     const tableWrapper = document.getElementById(tableName.replaceAll(" ", "-"));
     if (tableWrapper) {
       const dataTable = tableWrapper.querySelector('[role="table"]');
