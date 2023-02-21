@@ -33,7 +33,9 @@ export const ExportTablesContainer = ({
     }, oneSecond);
 
     return () => {
+      cleanUp508()
       addScreenReaderLabelForCollapses();
+
     };
   }, []);
 
