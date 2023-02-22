@@ -575,6 +575,7 @@ const QATestSummaryDataTable = ({
             controlInputs={obj['controlInputs']}
             controlDatePickerInputs={obj['controlDatePickerInputs']}
             dataTableName={obj['dataTableName']}
+            sectionSelect={sectionSelect}
             extraControls={obj['extraControls']}
             radioBtnPayload={obj['radioBtnPayload']}
             expandable
@@ -595,6 +596,7 @@ const QATestSummaryDataTable = ({
             controlInputs={rataObj['controlInputs']}
             controlDatePickerInputs={rataObj['controlDatePickerInputs']}
             dataTableName={rataObj['dataTableName']}
+            sectionSelect={sectionSelect}
             extraControls={rataObj['extraControls']}
             radioBtnPayload={rataObj['radioBtnPayload']}
             expandable
@@ -613,6 +615,7 @@ const QATestSummaryDataTable = ({
             controlInputs={appESum['controlInputs']}
             controlDatePickerInputs={appESum['controlDatePickerInputs']}
             dataTableName={appESum['dataTableName']}
+            sectionSelect={sectionSelect}
             extraControls={appESum['extraControls']}
             radioBtnPayload={appESum['radioBtnPayload']}
             expandable
@@ -633,6 +636,7 @@ const QATestSummaryDataTable = ({
             controlInputs={fflProps['controlInputs']}
             controlDatePickerInputs={fflProps['controlDatePickerInputs']}
             dataTableName={fflProps['dataTableName']}
+            sectionSelect={sectionSelect}
             extraControls={fflProps['extraControls']}
             radioBtnPayload={fflProps['radioBtnPayload']}
             expandable
@@ -652,6 +656,7 @@ const QATestSummaryDataTable = ({
             controlInputs={fflbProps['controlInputs']}
             controlDatePickerInputs={fflbProps['controlDatePickerInputs']}
             dataTableName={fflbProps['dataTableName']}
+            sectionSelect={sectionSelect}
             extraControls={fflbProps['extraControls']}
             radioBtnPayload={fflbProps['radioBtnPayload']}
             expandable
@@ -670,6 +675,7 @@ const QATestSummaryDataTable = ({
             columns={flcProps['columnNames']}
             controlInputs={flcProps['controlInputs']}
             dataTableName={flcProps['dataTableName']}
+            sectionSelect={sectionSelect}
             expandable
             {...props}
             extraIDs={null}
@@ -687,6 +693,7 @@ const QATestSummaryDataTable = ({
             controlInputs={onOffCalProps['controlInputs']}
             controlDatePickerInputs={onOffCalProps['controlDatePickerInputs']}
             dataTableName={onOffCalProps['dataTableName']}
+            sectionSelect={sectionSelect}
             expandable
             {...props}
             extraIDs={null}
@@ -705,6 +712,7 @@ const QATestSummaryDataTable = ({
             controlDatePickerInputs={cjProps['controlDatePickerInputs']}
             radioBtnPayload={cjProps['radioBtnPayload']}
             dataTableName={cjProps['dataTableName']}
+            sectionSelect={sectionSelect}
             extraControls={cjProps['extraControls']}
             extraIDs={null}
             user={user}
@@ -726,6 +734,7 @@ const QATestSummaryDataTable = ({
             }
             radioBtnPayload={fuelFlowmeterAccuracyDataProps['radioBtnPayload']}
             dataTableName={fuelFlowmeterAccuracyDataProps['dataTableName']}
+            sectionSelect={sectionSelect}
             extraControls={fuelFlowmeterAccuracyDataProps['extraControls']}
             extraIDs={null}
             user={user}
@@ -744,6 +753,7 @@ const QATestSummaryDataTable = ({
             controlDatePickerInputs={cycleTimeSum['controlDatePickerInputs']}
             radioBtnPayload={cycleTimeSum['radioBtnPayload']}
             dataTableName={cycleTimeSum['dataTableName']}
+            sectionSelect={sectionSelect}
             extraControls={cycleTimeSum['extraControls']}
             expandable
             {...props}
@@ -775,6 +785,7 @@ const QATestSummaryDataTable = ({
             dataTableName={
               transmitterTransducerAccuracyDataProps['dataTableName']
             }
+            sectionSelect={sectionSelect}
             extraControls={
               transmitterTransducerAccuracyDataProps['extraControls']
             }
@@ -799,6 +810,7 @@ const QATestSummaryDataTable = ({
             }
             radioBtnPayload={flowToLoadReferenceProps['radioBtnPayload']}
             dataTableName={flowToLoadReferenceProps['dataTableName']}
+            sectionSelect={sectionSelect}
             extraControls={flowToLoadReferenceProps['extraControls']}
             expandable
             {...props}
@@ -817,6 +829,7 @@ const QATestSummaryDataTable = ({
             columns={unitDefaultTestDataProps['columnNames']}
             controlInputs={unitDefaultTestDataProps['controlInputs']}
             dataTableName={unitDefaultTestDataProps['dataTableName']}
+            sectionSelect={sectionSelect}
             expandable
             {...props}
             extraIDs={null}
@@ -834,6 +847,7 @@ const QATestSummaryDataTable = ({
             columns={hgSummaryDataProps['columnNames']}
             controlInputs={hgSummaryDataProps['controlInputs']}
             dataTableName={hgSummaryDataProps['dataTableName']}
+            sectionSelect={sectionSelect}
             expandable
             {...props}
             extraIDs={null}
@@ -858,6 +872,7 @@ const QATestSummaryDataTable = ({
           onRemoveHandler={onRemoveHandler}
           isCheckedOut={isCheckedOut}
           dataTableName="Test Summary Data"
+          sectionSelect={sectionSelect}
           actionColumnName={
             user && isCheckedOut ? (
               <>
@@ -893,6 +908,7 @@ const QATestSummaryDataTable = ({
                 columnWidth={10}
                 data={[]}
                 isCheckedOut={isCheckedOut}
+                sectionSelect={sectionSelect}
                 actionColumnName={
                   <>
                     <span className="padding-right-2">Test Data</span>
