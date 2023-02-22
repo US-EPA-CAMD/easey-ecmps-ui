@@ -64,21 +64,23 @@ const App = () => {
   };
 
   const refreshCheckoutInterval = () => {
-    return setInterval(async () => {
-      const checkedOutLocationResult = (await getCheckedOutLocations()).data;
-      if (checkedOutLocationResult) {
-        dispatch({
-          type: types.SET_CHECKED_OUT_LOCATIONS,
-          checkedOutLocations: checkedOutLocationResult,
-        });
-      }
-    }, 10000);
+    if (user) {
+      return setInterval(async () => {
+        const checkedOutLocationResult = (await getCheckedOutLocations()).data;
+        if (checkedOutLocationResult) {
+          dispatch({
+            type: types.SET_CHECKED_OUT_LOCATIONS,
+            checkedOutLocations: checkedOutLocationResult,
+          });
+        }
+      }, 10000);
+    }
   };
 
   useEffect(() => {
     const interval = refreshCheckoutInterval();
-    return () => clearInterval(interval);
-  }, []);
+    return () => clearInterval(interval);// eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   useEffect(() => {
     prepDocument();
