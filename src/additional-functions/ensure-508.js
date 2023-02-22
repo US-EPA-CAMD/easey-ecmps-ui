@@ -9,15 +9,18 @@
  *       Outputs:
  *              none
  *****************************************************/
-export const ensure508 = (tableName) => {
+export const ensure508 = (tableName, sectionSelect=null) => {
   // *** add aria label to all data tables
-  addAriaLabelToDatatable(tableName);
+  addAriaLabelToDatatable(tableName, sectionSelect);
 
   // *** move filter that may be present in datatable out of aria-live region
   moveDataTableSearchOutOfAriaLive();
 
   // *** add aria sorted-by to data tables
   addInitialAriaSort();
+
+  // *** assign aria-label to header columns
+  assignAriaLabelsToDataTableColumns();
 
   // *** change auto-generated attribute value
   changeGridCellAttributeValue();
@@ -104,8 +107,24 @@ export const addScreenReaderLabelForCollapses = () => {
  *       Outputs:
  *              none
  *****************************************************/
-export const addAriaLabelToDatatable = (tableName) => {
-  if (tableName) {
+export const addAriaLabelToDatatable = (tableName, sectionSelect) => {
+const tableWrappers = document.getElementsByClassName("qa-table-wrapper");
+  if (tableWrappers.length>0) {//only for all QA & Certs section data tables
+    for (var i = 0; i < tableWrappers.length; i++) {
+      const tableWrapper = tableWrappers[i];
+      const tableName = tableWrapper.getAttribute("id").replaceAll("-", " ");
+      const dataTable = tableWrapper.querySelector('[role="table"]');
+      if(dataTable){
+        if(sectionSelect && tableName ==="Test Summary Data"){
+          dataTable.setAttribute("aria-label", `${tableName} for ${sectionSelect}`)
+        }else{
+          dataTable.setAttribute("aria-label", tableName);
+        }
+      }else{
+        dataTable.setAttribute("aria-label", "Data table");
+      }
+   }
+  }else if (tableName) {
     const tableWrapper = document.getElementById(tableName.replaceAll(" ", "-"));
     if (tableWrapper) {
       const dataTable = tableWrapper.querySelector('[role="table"]');
@@ -218,7 +237,7 @@ export const addInitialAriaSort = () => {
         } else {
           column
             .closest(`.rdt_TableCol_Sortable`)
-            .setAttribute("aria-sort", "none");
+            .removeAttribute("aria-sort");
         }
       }
     });
@@ -247,7 +266,7 @@ export const setAriaSort = (event) => {
     // *** make sure aria-sort attribute is set
     document.querySelectorAll(`.rdt_TableCol_Sortable`).forEach((column) => {
       if (column === currentColumn) {
-        if (currentColumn.ariaSort === "none") {
+        if (!currentColumn.ariaSort) {
           if (sortIcon && sortIcon.classList) {
             if (sortIcon.classList.contains("asc")) {
               currentColumn.ariaSort = "ascending";
@@ -263,7 +282,7 @@ export const setAriaSort = (event) => {
           }
         }
       } else {
-        column.ariaSort = "none";
+        column.removeAttribute("aria-sort");
       }
     });
   }
@@ -340,7 +359,7 @@ export const returnsFocusDatatableExpandBTN = (datatableName, index, direction, 
         lastBTN.focus();
       }
     }
-  }, 500);
+  }, 1000);
 };
 
 // returns focus to View Button
@@ -381,4 +400,13 @@ export const assignAriaLabelsToDataTable = (containerSelector, ariaLiveData) => 
       })
     })
   }
+}
+
+export const assignAriaLabelsToDataTableColumns = () => {
+    document.querySelectorAll(`.rdt_TableCol_Sortable`).forEach((column) => {
+      if (column.querySelectorAll(".__rdt_custom_sort_icon__").length > 0) {
+      let columnName = column?.innerText
+      column.setAttribute('aria-label', `Click to sort by ${columnName}`)
+      }
+    })
 }

@@ -28,7 +28,8 @@ export const QACertTestSummaryTab = ({
   activeTab,
   setSection,
   setLocation,
-  setCheckout
+  setCheckout,
+  checkedOutLocations
 }) => {
   const getCurrentTab = () =>{
     return tabs.find(tab => tab.selectedConfig.id === selectedConfig.id);
@@ -75,6 +76,7 @@ export const QACertTestSummaryTab = ({
           configID={selectedConfig.id}
           setCheckout={setCheckout}
           checkoutState={getCurrentTab().checkout}
+          currentTab={getCurrentTab()}
         />
       </div>
     </div>

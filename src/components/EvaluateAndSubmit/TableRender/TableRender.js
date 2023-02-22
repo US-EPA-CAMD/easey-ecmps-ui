@@ -163,6 +163,7 @@ const TableRender = forwardRef(
       <div>
         {state && state.length > 0 && (
           <DataTable
+            className="data-display-table"
             defaultSortField="orisCode"
             columns={mappings}
             data={state}
