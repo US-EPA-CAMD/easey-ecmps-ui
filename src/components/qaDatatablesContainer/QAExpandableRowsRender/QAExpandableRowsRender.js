@@ -954,6 +954,7 @@ const QAExpandableRowsRender = ({
       if (resp.status === 201) {
         setCreatedDataId(resp.data.id);
         setUpdateTable(true);
+        executeOnClose();
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
         setErrorMsgs(errorResp);
