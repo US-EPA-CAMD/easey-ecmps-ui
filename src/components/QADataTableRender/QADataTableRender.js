@@ -27,7 +27,8 @@ const QADataTableRender = ({
   evaluate,
   noDataComp,
   isCheckedOut,
-  dataTableName
+  dataTableName,
+  sectionSelect=null,
 }) => {
   const columns = [];
   columnNames.forEach((name, index) => {
@@ -55,13 +56,13 @@ const QADataTableRender = ({
       }
     });
     setTimeout(() => {
-      ensure508(dataTableName);
+      ensure508(dataTableName, sectionSelect? sectionSelect[1]: null);
     }, oneSecond);
 
     return () => {
       cleanUp508();
     };
-  }, []);
+  }, [sectionSelect]);
 
   const [totalExpand, setTotalExpand] = useState([]);
 
@@ -206,7 +207,7 @@ const QADataTableRender = ({
   }
 
   return (
-    <div aria-live="polite" className="padding-3" id={dataTableName.replaceAll(" ", "-")}>
+    <div aria-live="polite" className="padding-3 qa-table-wrapper" id={dataTableName.replaceAll(" ", "-")}>
       <DataTable
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
         className={`data-display-table react-transition fade-in`}
