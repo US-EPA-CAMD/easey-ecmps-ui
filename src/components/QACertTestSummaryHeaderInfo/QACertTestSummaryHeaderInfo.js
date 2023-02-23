@@ -84,6 +84,12 @@ export const QACertTestSummaryHeaderInfo = ({
 
   const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
 
+  useEffect(()=>{
+    if(testTypeGroupOptions.length >0 && testTypeGroupOptions[0]['name']!=="Loading..."){
+      setSectionSelect([sectionSelect[0], testTypeGroupOptions[sectionSelect[0]]['name']]);
+    }
+  },[testTypeGroupOptions]);
+
   useEffect(() => {
     const fetchTestTypeCodes = () => {
       getAllTestTypeCodes()
