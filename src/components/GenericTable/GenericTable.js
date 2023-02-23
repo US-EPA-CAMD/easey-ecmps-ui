@@ -110,7 +110,7 @@ const GenericTable = ({ title, data1, expandable, additionalTitle }) => {
 
   return (
     <div className="genericTable padding-top-5" id="genericTable">
-      {title ? <div className="text-bold font-mono-lg"> {title} </div> : ""}
+      {title ? <h2 className="text-bold font-mono-lg"> {title} </h2> : ""}
       {additionalTitle ? (
         <div className="padding-top-1 padding-bottom-1">
           {" "}
@@ -119,7 +119,7 @@ const GenericTable = ({ title, data1, expandable, additionalTitle }) => {
       ) : (
         ""
       )}
-      <table>
+      <table aria-label={`${additionalTitle}`}>
         <thead>
           <tr>{getHeader()}</tr>
         </thead>
