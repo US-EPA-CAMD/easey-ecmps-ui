@@ -39,7 +39,7 @@ import {
   qaHgInjectionDataProps,
   qaUnitDefaultTestRunDataProps,
 } from "../../../additional-functions/qa-dataTable-props";
-import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
+
 const QAExpandableRowsRender = ({
   user,
   controlInputs,
@@ -55,6 +55,7 @@ const QAExpandableRowsRender = ({
   data,
   isCheckedOut,
   mdmProps,
+  sectionSelect=null
 }) => {
   const { locationId, id } = data;
   const [mdmData, setMdmData] = useState(null);
@@ -74,7 +75,6 @@ const QAExpandableRowsRender = ({
         .getDataTableApis(dataTableName, locationId, id, extraIDs)
         .then((res) => {
           finishedLoadingData(res.data);
-          executeOnClose(res.data);
         })
         .catch((error) => console.log(error));
     }
@@ -118,6 +118,7 @@ const QAExpandableRowsRender = ({
             controlInputs={objGas["controlInputs"]}
             controlDatePickerInputs={objGas["controlDatePickerInputs"]}
             dataTableName={objGas["dataTableName"]}
+            sectionSelect={sectionSelect}
             extraControls={objGas["extraControls"]}
             data={data}
             user={user}
@@ -135,6 +136,7 @@ const QAExpandableRowsRender = ({
             controlInputs={objAirEms["controlInputs"]}
             controlDatePickerInputs={objAirEms["controlDatePickerInputs"]}
             dataTableName={objAirEms["dataTableName"]}
+            sectionSelect={sectionSelect}
             extraControls={objAirEms["extraControls"]}
             data={data}
             extraIDs={airEmissionsIds}
@@ -153,6 +155,7 @@ const QAExpandableRowsRender = ({
             controlInputs={objTestQa["controlInputs"]}
             controlDatePickerInputs={objTestQa["controlDatePickerInputs"]}
             dataTableName={objTestQa["dataTableName"]}
+            sectionSelect={sectionSelect}
             extraControls={objTestQa["extraControls"]}
             data={data}
             user={user}
@@ -171,6 +174,7 @@ const QAExpandableRowsRender = ({
             controlInputs={obj["controlInputs"]}
             controlDatePickerInputs={obj["controlDatePickerInputs"]}
             dataTableName={obj["dataTableName"]}
+            sectionSelect={sectionSelect}
             extraControls={obj["extraControls"]}
             extraIDs={idArr}
             user={user}
@@ -189,6 +193,7 @@ const QAExpandableRowsRender = ({
             controlInputs={rataSumObj["controlInputs"]}
             controlDatePickerInputs={rataSumObj["controlDatePickerInputs"]}
             dataTableName={rataSumObj["dataTableName"]}
+            sectionSelect={sectionSelect}
             extraControls={rataSumObj["extraControls"]}
             extraIDs={rataIdArray}
             expandable
@@ -208,6 +213,7 @@ const QAExpandableRowsRender = ({
             controlInputs={rataRunObj["controlInputs"]}
             controlDatePickerInputs={rataRunObj["controlDatePickerInputs"]}
             dataTableName={rataRunObj["dataTableName"]}
+            sectionSelect={sectionSelect}
             extraControls={rataRunObj["extraControls"]}
             extraIDs={rataRunIdArray}
             expandable
@@ -227,6 +233,7 @@ const QAExpandableRowsRender = ({
             controlInputs={flowObj["controlInputs"]}
             controlDatePickerInputs={flowObj["controlDatePickerInputs"]}
             dataTableName={flowObj["dataTableName"]}
+            sectionSelect={sectionSelect}
             extraControls={flowObj["extraControls"]}
             extraIDs={flowIdArray}
             expandable
@@ -245,6 +252,7 @@ const QAExpandableRowsRender = ({
             controlInputs={traverseObj["controlInputs"]}
             controlDatePickerInputs={traverseObj["controlDatePickerInputs"]}
             dataTableName={traverseObj["dataTableName"]}
+            sectionSelect={sectionSelect}
             extraControls={traverseObj["extraControls"]}
             extraIDs={traverseIdArray}
             user={user}
@@ -263,6 +271,7 @@ const QAExpandableRowsRender = ({
             controlInputs={propsObj["controlInputs"]}
             controlDatePickerInputs={propsObj["controlDatePickerInputs"]}
             dataTableName={propsObj["dataTableName"]}
+            sectionSelect={sectionSelect}
             extraControls={propsObj["extraControls"]}
             extraIDs={parentIds}
             expandable
@@ -283,6 +292,7 @@ const QAExpandableRowsRender = ({
             controlInputs={heatInputGasObj["controlInputs"]}
             controlDatePickerInputs={heatInputGasObj["controlDatePickerInputs"]}
             dataTableName={heatInputGasObj["dataTableName"]}
+            sectionSelect={sectionSelect}
             extraControls={heatInputGasObj["extraControls"]}
             extraIDs={heatInputIdArray}
             user={user}
@@ -302,6 +312,7 @@ const QAExpandableRowsRender = ({
             controlInputs={heatInputOilObj["controlInputs"]}
             controlDatePickerInputs={heatInputOilObj["controlDatePickerInputs"]}
             dataTableName={heatInputOilObj["dataTableName"]}
+            sectionSelect={sectionSelect}
             extraControls={heatInputOilObj["extraControls"]}
             extraIDs={heatInputOilIdArray}
             data={data}
@@ -323,6 +334,7 @@ const QAExpandableRowsRender = ({
             controlDatePickerInputs={cycleTimeInjec["controlDatePickerInputs"]}
             radioBtnPayload={cycleTimeInjec["radioBtnPayload"]}
             dataTableName={cycleTimeInjec["dataTableName"]}
+            sectionSelect={sectionSelect}
             extraControls={cycleTimeInjec["extraControls"]}
             extraIDs={cycleTimeInjectionIdArray}
             user={user}
@@ -343,6 +355,7 @@ const QAExpandableRowsRender = ({
               unitDefaultTestRunProps["controlDatePickerInputs"]
             }
             dataTableName={unitDefaultTestRunProps["dataTableName"]}
+            sectionSelect={sectionSelect}
             extraIDs={extraIds}
             user={user}
             isCheckedOut={isCheckedOut}
@@ -363,6 +376,7 @@ const QAExpandableRowsRender = ({
             }
             radioBtnPayload={hgInjectionProps["radioBtnPayload"]}
             dataTableName={hgInjectionProps["dataTableName"]}
+            sectionSelect={sectionSelect}
             extraControls={hgInjectionProps["extraControls"]}
             extraIDs={hgInjectionIdArr}
             user={user}
@@ -940,6 +954,7 @@ const QAExpandableRowsRender = ({
       if (resp.status === 201) {
         setCreatedDataId(resp.data.id);
         setUpdateTable(true);
+        executeOnClose();
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
         setErrorMsgs(errorResp);
@@ -1010,6 +1025,7 @@ const QAExpandableRowsRender = ({
           actionsBtn={"View"}
           isCheckedOut={isCheckedOut}
           dataTableName={dataTableName}
+          sectionSelect={sectionSelect}
           actionColumnName={
             user && isCheckedOut ? (
               <>
@@ -1040,6 +1056,7 @@ const QAExpandableRowsRender = ({
                   columnWidth={10}
                   data={[]}
                   isCheckedOut={isCheckedOut}
+                  sectionSelect={sectionSelect}
                   actionColumnName={
                     <>
                       <span className="padding-right-2">{dataTableName}</span>

@@ -752,7 +752,7 @@ export const qaFlowToLoadCheckProps = () => {
     controlInputs: {
       testBasisCode: ["Test Basis Code", "dropdown", "", ""],
       biasAdjustedIndicator: ["Bias Adjusted Indicator", "dropdown", "", ""],
-      averageAbsolutePercentDifference: [
+      avgAbsolutePercentDiff: [
         "Average Absolute Percent Difference",
         "input",
         "",
@@ -765,19 +765,19 @@ export const qaFlowToLoadCheckProps = () => {
         "",
         "",
       ],
-      numberOfHoursExcludedForRamping: [
+      numberOfHoursExcludedRamping: [
         "Number of Hours Excluded for Ramping",
         "input",
         "",
         "",
       ],
-      numberOfHoursExcludedForBypass: [
+      numberOfHoursExcludedBypass: [
         "Number of Hours Excluded for Bypass",
         "input",
         "",
         "",
       ],
-      numberOfHoursExcludedPreRata: [
+      numberOfHoursExcludedPreRATA: [
         "Number of Hours Excluded Pre RATA",
         "input",
         "",
@@ -789,7 +789,7 @@ export const qaFlowToLoadCheckProps = () => {
         "",
         "",
       ],
-      numberOfHoursExcludedForMainAndBypass: [
+      numberOfHoursExcMainBypass: [
         "Number of Hours Excluded for Main and Bypass",
         "input",
         "",

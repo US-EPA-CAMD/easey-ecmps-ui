@@ -169,10 +169,12 @@ export const ErrorSuppressionFilters = () => {
    
     const onFacilityChange = (e) => {
       let { value } = e.target;
-      value = value === "false" ? false : value;
-
       setSelectedFacility(value);
-      if (!value) return;
+      if (!value || value === defaultDropdownText) {
+        setSelectedLocations([]);
+        setLocationData([]);
+        return;
+      }
 
       if (selectedCheckType && selectedCheckNumber && selectedCheckResult) {
         const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === selectedCheckResult);
@@ -220,14 +222,17 @@ export const ErrorSuppressionFilters = () => {
       value = value === "false" ? false : value;
 
       setSelectedCheckResult(value);
-      if( !value )
-        return
+      if (!value) {
+        setSelectedLocations([]);
+        setLocationData([]);
+        return;
+      }
 
       if (selectedCheckType && selectedCheckNumber && value) {
         const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === value);
-        getLocations(selectedFacility, checkResultObj).then(availLoc=>{
-          setLocationData(availLoc)
-        });
+        getLocations(selectedFacility, checkResultObj).then((availLoc) =>
+          setLocationData([...availLoc])
+        );
       }
     };
 
@@ -266,7 +271,7 @@ export const ErrorSuppressionFilters = () => {
       setSelectedFacility("");
       setSelectedLocations([]);
       setLocationData([]);
-      setSelectedIsActive(true);
+      setSelectedIsActive(false);
       setSelectedReason("");
       setCheckType(null);
       setCheckNumber(null);
@@ -374,7 +379,7 @@ export const ErrorSuppressionFilters = () => {
               value={selectedFacility}
               onChange={onFacilityChange}
             >
-              <option value="false">{defaultDropdownText}</option>
+              <option>{defaultDropdownText}</option>
               {facilityList.map((d) => (
                 <option
                   key={d.orisCode}
@@ -397,7 +402,8 @@ export const ErrorSuppressionFilters = () => {
                     selectedCheckType &&
                     selectedCheckNumber &&
                     selectedCheckResult &&
-                    selectedFacility
+                    selectedFacility &&
+                    selectedFacility != defaultDropdownText
                   )
                 }
               ></MultiSelectCombobox>
