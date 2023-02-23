@@ -316,6 +316,15 @@ export const EvaluateAndSubmit = ({
         setSubmitting(false);
         if (componentType === "Submission") {
           window.location.reload(false);
+        } else {
+          for (const value of dataList) {
+            const { ref } = value;
+            for (const chunk of ref.current) {
+              chunk.selected = false;
+            }
+          }
+          monitorPlanIdToSelectedMap.current = new Map();
+          setNumFilesSelected(0);
         }
       })
       .catch((e) => {
