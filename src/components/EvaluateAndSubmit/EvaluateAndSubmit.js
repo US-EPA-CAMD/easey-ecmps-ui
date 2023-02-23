@@ -11,7 +11,6 @@ import {
 import { getEmissionsReviewSubmit } from "../../utils/api/emissionsApi";
 import DataTables from "./DataTables/DataTables";
 import SubmissionModal from "../SubmissionModal/SubmissionModal";
-import MockPermissions from "./MockPermissions";
 import { Button, Alert } from "@trussworks/react-uswds";
 import { connect } from "react-redux";
 import {
@@ -31,6 +30,7 @@ import {
   qaTeeColumns,
 } from "./ColumnMappings";
 import { checkoutAPI } from "../../additional-functions/checkout";
+import { formatPermissions } from "./utils/functions";
 
 export const EvaluateAndSubmit = ({
   checkedOutLocations,
@@ -43,7 +43,7 @@ export const EvaluateAndSubmit = ({
   const storedFilters = useRef(null);
 
   const evalClickedAtTime = useRef(0);
-
+  const [permissions, setPermissions] = useState([]);
   const [activityId, setActivityId] = useState("");
   const [excludeErrors, setExcludeErrors] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -147,17 +147,19 @@ export const EvaluateAndSubmit = ({
   };
 
   const idToPermissionsMap = useRef([]);
-
+  const userPermissions = user.permissions?.facilities;
   useEffect(() => {
     // Get permissions from user object here
-    const permissions = MockPermissions;
-    for (const p of permissions) {
-      idToPermissionsMap.current[p.id] = p.permissions;
+    if (userPermissions?.length > 0) {
+      formatPermissions(userPermissions, setPermissions);
+      for (const p of userPermissions) {
+        idToPermissionsMap.current[p.id] = p.permissions;
+      }
     }
 
     return () => {
       checkInAllCheckedOutLocations();
-    };
+    }; //eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -181,7 +183,7 @@ export const EvaluateAndSubmit = ({
         }
       }
       cat.setState(_.cloneDeep(cat.ref.current));
-    }
+    }//eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkedOutLocations, userId]);
 
   const filterClick = () => {
@@ -366,12 +368,11 @@ export const EvaluateAndSubmit = ({
       const { ref, setState, call, type } = value;
 
       let data;
-
       if (type !== "MP") {
         //Filter emissions by quarter as well
-        data = (await call(orisCodes, monPlanIds, submissionPeriods)).data;
+        data = (await call(orisCodes, monPlanIds, submissionPeriods)).data || [];
       } else {
-        data = (await call(orisCodes, monPlanIds)).data;
+        data = (await call(orisCodes, monPlanIds)).data || [];
       }
 
       // Extra formatting to make all data sets uniform
@@ -461,12 +462,12 @@ export const EvaluateAndSubmit = ({
         />
       )}
 
-      {!finalSubmitStage && (
+      {!finalSubmitStage && permissions.length > 0 && (
         <FilterForm
           showModal={setShowModal}
           queryCallback={applyFilter}
           setExcludeErrors={setExcludeErrors}
-          facilities={MockPermissions}
+          facilities={permissions}
           filesSelected={numFilesSelected}
           buttonText={buttonText}
           filterClick={filterClick}

@@ -13,6 +13,9 @@ jest.mock("../../utils/api/camdServices", () => ({
     then: jest.fn().mockReturnValue({ catch: jest.fn() }),
   }),
 }));
+jest.mock('../../utils/api/facilityApi', () => ({
+  getFacilityById: jest.fn().mockResolvedValue({data: {facilityName: 'facName'}}),
+}));
 
 jest.mock("react-redux", () => {
   return {
@@ -198,7 +201,9 @@ const store = configureStore();
 describe("Review and Submit component", () => {
   let query, user;
   beforeEach(async () => {
-    user = { userId: "mock", firstName: "mock", lastName: "mock" };
+    user = { userId: "mock", firstName: "mock", lastName: "mock", permissions: {
+      facilities: MockPermissions
+    } };
     await act(async () => {
       query = render(
         <EvaluateAndSubmit
