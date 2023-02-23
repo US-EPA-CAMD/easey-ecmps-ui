@@ -69,7 +69,7 @@ const App = () => {
     if (user) {
       return setInterval(async () => {
         const checkedOutLocationResult = (await getCheckedOutLocations()).data;
-        if (!isEqual(checkedOutLocationResult, checkedOutLocationsCache)) {
+        if (checkedOutLocationResult && !isEqual(checkedOutLocationResult, checkedOutLocationsCache)) {
           dispatch({
             type: types.SET_CHECKED_OUT_LOCATIONS,
             checkedOutLocations: checkedOutLocationResult,
