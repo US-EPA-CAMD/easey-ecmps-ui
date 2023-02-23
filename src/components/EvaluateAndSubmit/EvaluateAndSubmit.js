@@ -370,9 +370,9 @@ export const EvaluateAndSubmit = ({
       let data;
       if (type !== "MP") {
         //Filter emissions by quarter as well
-        data = (await call(orisCodes, monPlanIds, submissionPeriods)).data || [];
+        data = (await call(orisCodes, monPlanIds, submissionPeriods)).data;
       } else {
-        data = (await call(orisCodes, monPlanIds)).data || [];
+        data = (await call(orisCodes, monPlanIds)).data;
       }
 
       // Extra formatting to make all data sets uniform
