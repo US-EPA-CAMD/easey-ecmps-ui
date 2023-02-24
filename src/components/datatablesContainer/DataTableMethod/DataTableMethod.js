@@ -102,6 +102,20 @@ export const DataTableMethod = ({
   }, []);
 
   useEffect(() => {
+    const fetchMethods = async () => {
+      try {
+        const methods = await mpApi.getMonitoringMethods(locationSelectValue)
+        setMethods(methods.data)
+        setDataLoaded(true)
+        const matsMethods = await mpApi.getMonitoringMatsMethods(locationSelectValue)
+        setMatsMethods(matsMethods.data)
+        setUpdateTable(false)
+        setRevertedState(false)
+        setUpdateRelatedTables(false)
+      } catch (error) {
+        console.log('error fetching methods', error);
+      }
+    }
     if (
       updateTable ||
       methods.length <= 0 ||
@@ -109,16 +123,7 @@ export const DataTableMethod = ({
       revertedState ||
       updateRelatedTables
     ) {
-      mpApi.getMonitoringMethods(locationSelectValue).then((methodRes) => {
-        setMethods(methodRes.data);
-        setDataLoaded(true);
-        mpApi.getMonitoringMatsMethods(locationSelectValue).then((matRes) => {
-          setMatsMethods(matRes.data);
-          setUpdateTable(false);
-          setRevertedState(false);
-          setUpdateRelatedTables(false);
-        });
-      });
+      fetchMethods()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -206,8 +211,9 @@ export const DataTableMethod = ({
   }, [mainDropdownChange, selectedModalData]);
 
   const testing = () => {
-    openMethodModal(false, false, true);
-    saveMethods();
+    // openMethodModal(false, false, true);
+    // saveMethods();
+    console.log('testing clicked')
   };
 
   const testing2 = () => {
