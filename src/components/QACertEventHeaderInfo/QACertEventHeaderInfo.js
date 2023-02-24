@@ -60,7 +60,7 @@ export const QACertEventHeaderInfo = ({
   const [hasInvalidJsonError, setHasInvalidJsonError] = useState(false);
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
-  const [selectedHistoricalData, setSelectedHistoricalData] = useState([]);
+  const [selectedHistoricalData, setSelectedHistoricalData] = useState({});
   const [isCheckedOut, setIsCheckedOut] = useState(checkoutState);
   const [checkedOutConfigs, setCheckedOutConfigs] = useState([]);
   const [refresherInfo, setRefresherInfo] = useState(null);
@@ -263,7 +263,7 @@ export const QACertEventHeaderInfo = ({
   const importHistoricalData = () => {
     const payload = {
       orisCode: orisCode,
-      testSummaryData: selectedHistoricalData,
+      ...selectedHistoricalData,
     };
     importQABtn(payload);
     setShowImportDataPreview(false);

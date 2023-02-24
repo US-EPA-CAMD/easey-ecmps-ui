@@ -60,8 +60,7 @@ export const ExportTablesContainer = ({
           setTableData(tableRows);
           setLoading(false);
 
-          const rowsAriaLabelData = []
-          response.data[dataKey].forEach(e => rowsAriaLabelData.push(e.id));
+          const rowsAriaLabelData = response.data[dataKey].map(e => e.id)
           assignAriaLabelsToDataTable(`#${divId}`, rowsAriaLabelData)
         }
       } catch (err) {
