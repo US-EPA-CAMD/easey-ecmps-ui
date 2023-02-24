@@ -211,9 +211,8 @@ export const DataTableMethod = ({
   }, [mainDropdownChange, selectedModalData]);
 
   const testing = () => {
-    // openMethodModal(false, false, true);
-    // saveMethods();
-    console.log('testing clicked')
+    openMethodModal(false, false, true);
+    saveMethods();
   };
 
   const testing2 = () => {
