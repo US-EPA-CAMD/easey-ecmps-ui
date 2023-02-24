@@ -9,11 +9,12 @@ import {
 import userEvent from "@testing-library/user-event";
 import ModalAddComponent from "./ModalAddComponent";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
-const axios = require("axios");
 
-jest.mock("axios");
+jest.mock("../../utils/api/easeyAuthApi", () => ({
+  secureAxios: jest.fn().mockResolvedValue({ data: {}, status: 200 }),
+}));
 
-const comps = [{}];
+const comps = {};
 
 const componentRenderer = (back) => {
   const props = {
@@ -31,14 +32,8 @@ test("Here so test run", () => {
   expect(true);
 });
 
-/*
+
 test("renders the add modalcomponentpage", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: comps })
-  );
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: comps })
-  );
   const compData = await mpApi.getMonitoringComponents("5");
 
   const sysCompData = await mpApi.getMonitoringSystemsComponents(
@@ -58,4 +53,4 @@ test("renders the add modalcomponentpage with no backbtn", async () => {
 
   expect(container).toBeDefined();
 });
-*/
+
