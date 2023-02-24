@@ -26,13 +26,11 @@ const ModalAddComponent = ({
     if (comps.length < 1) {
       mpApi.getMonitoringComponents(locationId).then((res) => {
         setComps(res.data);
-        console.log("sys", res.data);
       });
       mpApi
         .getMonitoringSystemsComponents(locationId, systemId)
         .then((ress) => {
           setSysComps(ress.data);
-          console.log("syscomps", ress.data);
         });
     } else {
       main = comps;
@@ -41,8 +39,6 @@ const ModalAddComponent = ({
         sysComps.forEach((x) => {
           main = main.filter((y) => y.id !== x.componentRecordId);
         });
-        console.log("filtered out", main);
-        console.log("sysComps in else", sysComps);
         setFilteredComps(main);
       }
     }
