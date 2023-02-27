@@ -36,6 +36,7 @@ import * as modules from "../../utils/constants/moduleTitles";
 import * as types from "../../store/actions/actionTypes";
 import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
+import { isEqual } from "lodash";
 
 const cdx_user = sessionStorage.getItem("cdx_user");
 
@@ -63,15 +64,17 @@ const App = () => {
     });
   };
 
+  let checkedOutLocationsCache = [];
   const refreshCheckoutInterval = () => {
     if (user) {
       return setInterval(async () => {
         const checkedOutLocationResult = (await getCheckedOutLocations()).data;
-        if (checkedOutLocationResult) {
+        if (checkedOutLocationResult && !isEqual(checkedOutLocationResult, checkedOutLocationsCache)) {
           dispatch({
             type: types.SET_CHECKED_OUT_LOCATIONS,
             checkedOutLocations: checkedOutLocationResult,
           });
+          checkedOutLocationsCache = checkedOutLocationResult;
         }
       }, 10000);
     }
