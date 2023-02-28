@@ -69,7 +69,7 @@ export const QACertTestSummaryHeaderInfo = ({
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
-  const [selectedHistoricalData, setSelectedHistoricalData] = useState([]);
+  const [selectedHistoricalData, setSelectedHistoricalData] = useState({});
   const [isCheckedOut, setIsCheckedOut] = useState(checkoutState);
   const [checkedOutConfigs, setCheckedOutConfigs] = useState([]);
   const [refresherInfo, setRefresherInfo] = useState(null);
@@ -83,6 +83,12 @@ export const QACertTestSummaryHeaderInfo = ({
   ]);
 
   const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
+
+  useEffect(() => {
+    if (testTypeGroupOptions.length > 0 && testTypeGroupOptions[0]['name'] !== "Loading...") {
+      setSectionSelect([sectionSelect[0], testTypeGroupOptions[sectionSelect[0]]['name']]);
+    }
+  }, [testTypeGroupOptions]);
 
   useEffect(() => {
     const fetchTestTypeCodes = () => {
@@ -171,9 +177,9 @@ export const QACertTestSummaryHeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-        configs
-          .map((location) => location["monPlanId"])
-          .indexOf(selectedConfig.id)
+      configs
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -186,9 +192,9 @@ export const QACertTestSummaryHeaderInfo = ({
       setCheckedOutByUser(isCheckedOutByUser(checkedOutConfigs));
       const result =
         checkedOutConfigs[
-          checkedOutConfigs
-            .map((con) => con["monPlanId"])
-            .indexOf(selectedConfig.id)
+        checkedOutConfigs
+          .map((con) => con["monPlanId"])
+          .indexOf(selectedConfig.id)
         ];
       if (result) {
         setLockedFacility(true);
@@ -279,7 +285,7 @@ export const QACertTestSummaryHeaderInfo = ({
   const importHistoricalData = () => {
     const payload = {
       orisCode: orisCode,
-      testSummaryData: selectedHistoricalData,
+      ...selectedHistoricalData,
     };
     importQABtn(payload);
     setShowImportDataPreview(false);
@@ -307,9 +313,8 @@ export const QACertTestSummaryHeaderInfo = ({
       if (user) {
         // when config is checked out by someone
         if (isCheckedOut) {
-          return `Currently checked-out by: ${
-            currentConfig["checkedOutBy"]
-          } ${formatDate(currentConfig["checkedOutOn"])}`;
+          return `Currently checked-out by: ${currentConfig["checkedOutBy"]
+            } ${formatDate(currentConfig["checkedOutOn"])}`;
         }
         // when config is not checked out
         return `Last updated by: ${refresherInfo?.lastUpdatedBy} ${formatDate(
@@ -479,14 +484,13 @@ export const QACertTestSummaryHeaderInfo = ({
         </div>
       </div>
       <div
-        className={`usa-overlay ${
-          showImportModal ||
-          showSelectionTypeImportModal ||
-          showImportDataPreview ||
-          isLoading
+        className={`usa-overlay ${showImportModal ||
+            showSelectionTypeImportModal ||
+            showImportDataPreview ||
+            isLoading
             ? "is-visible"
             : ""
-        }`}
+          }`}
       />
       {/* // selects either historical data or file data */}
       {showSelectionTypeImportModal ? (
@@ -566,7 +570,7 @@ export const QACertTestSummaryHeaderInfo = ({
           exitBtn={"Ok"}
           complete={true}
           importedFileErrorMsgs={importedFileErrorMsgs}
-          successMsg={"QA Certification has been Successfully Imported."}
+          successMsg={`${selectedConfig.facilityName} Test Data has been Successfully Imported.`}
           setUpdateRelatedTables={setUpdateRelatedTables}
           children={
             <ImportModal
