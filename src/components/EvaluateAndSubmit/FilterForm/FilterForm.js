@@ -59,7 +59,7 @@ const FilterForm = ({
     setAvailableFacilities([...availFac]);
 
     fetchReportingPeriods();
-  }, []);
+  }, [facilities]);
 
   const applyFilters = () => {
     const selectedEntries = availableConfigurations.current.filter((item) => {
@@ -122,7 +122,7 @@ const FilterForm = ({
     }
     selectedOrisCodes.current = newState;
 
-    const configurationData = (await getMonitoringPlans(newState)).data;
+    const configurationData = newState.length? (await getMonitoringPlans(newState)).data : [];
 
     const configNamesToMonPlan = [];
     for (const cd of configurationData) {

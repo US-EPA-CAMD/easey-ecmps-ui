@@ -1,40 +1,25 @@
-import { getFacilityById } from "../../../utils/api/facilityApi";
-import { formatPermissions } from "./functions";
-
+import { getDropDownFacilities } from './functions';
+const data = [
+  {
+    facilityRecordId: 1,
+    facilityId: 3,
+    facilityName: 'Barry',
+    stateCode: 'AL',
+  },
+];
+const mockFacilityCall = jest.fn().mockResolvedValue({ data });
 jest.mock('../../../utils/api/facilityApi', () => ({
-  getFacilityById: jest.fn(),
+  getAllFacilities: () => mockFacilityCall(),
 }));
 
-describe('formatPermissions', () => {
-  let permissions, setPermissions;
-
-  beforeEach(() => {
-    permissions = [
-      { id: 1, facilityName: 'Facility 1' },
-      { id: 2, facilityName: 'Facility 2' },
-      { id: 3, facilityName: 'Facility 3' },
-    ];
-    setPermissions = jest.fn();
-  });
-
+describe('getDropDownFacilities', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('should format permissions correctly', async () => {
-    const facilityData = [
-      { data: { facilityName: 'Facility 1' } },
-      { data: { facilityName: 'Facility 2' } },
-      { data: { facilityName: 'Facility 3' } },
-    ];
-    getFacilityById.mockImplementation((id) => facilityData[id - 1]);
-    await formatPermissions(permissions, setPermissions);
-
-    expect(setPermissions).toHaveBeenCalledTimes(1);
-    expect(setPermissions).toHaveBeenCalledWith([
-      { id: 1, facilityName: 'Facility 1', active: true, name: 'Test' },
-      { id: 2, facilityName: 'Facility 2', active: true, name: 'Test' },
-      { id: 3, facilityName: 'Facility 3', active: true, name: 'Test' },
-    ]);
+  test('should format facilities correctly', async () => {
+    const facilities = await getDropDownFacilities();
+    expect(facilities[0].id).toEqual(data[0].facilityId);
+    expect(facilities[0].facilityName).toEqual(data[0].facilityName);
   });
 });
