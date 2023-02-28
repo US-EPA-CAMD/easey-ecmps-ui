@@ -66,7 +66,7 @@ export const QAImportHistoricalDataPreview = ({
           setPreviewData(true);
           setLoading(false);
 
-          const dataKeys = [TEST_SUMMARY_KEY, CERT_EVENT_KEY, TEST_EXT_EXE_KEY]
+          const dataKeys = showTestSummaryTable ? [TEST_SUMMARY_KEY] : [CERT_EVENT_KEY, TEST_EXT_EXE_KEY]
           for (const dataKey of dataKeys) {
             const rowsAriaLabelData = response.data[dataKey].map(e => e.id)
             const dataTableId = `#import-${dataKey}`
