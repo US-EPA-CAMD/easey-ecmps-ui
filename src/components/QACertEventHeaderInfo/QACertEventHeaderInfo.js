@@ -22,6 +22,7 @@ import { CreateOutlined, LockOpenSharp } from '@material-ui/icons';
 import * as mpApi from '../../utils/api/monitoringPlansApi';
 import { checkoutAPI } from '../../additional-functions/checkout';
 import { QA_CERT_EVENT_STORE_NAME } from '../../additional-functions/workspace-section-and-store-names';
+import QAImportModalSelect from '../QACertTestSummaryHeaderInfo/QAImportModalSelect/QAImportModalSelect';
 
 export const QACertEventHeaderInfo = ({
   facility,
@@ -486,6 +487,11 @@ export const QACertEventHeaderInfo = ({
             port={() => {
               openModalType(importTypeSelection);
             }}
+            children={
+              <QAImportModalSelect
+                setImportTypeSelection={setImportTypeSelection}
+              />
+            }
           />
         </div>
       ) : null}
@@ -580,6 +586,7 @@ export const QACertEventHeaderInfo = ({
               setFileName={setFileName}
               setDisablePortBtn={setDisablePortBtn}
               orisCode={orisCode}
+              showTestSummaryTable={false}
             />
           }
         />

@@ -36,6 +36,7 @@ export const QAImportHistoricalDataPreview = ({
   setFileName,
   setDisablePortBtn,
   orisCode,
+  showTestSummaryTable = true
 }) => {
   const [reportingPeriodObj, setReportingPeriodObj] = useState(null);
   const [tableData, setTableData] = useState(null);
@@ -65,7 +66,7 @@ export const QAImportHistoricalDataPreview = ({
           setPreviewData(true);
           setLoading(false);
 
-          const dataKeys = [TEST_SUMMARY_KEY, CERT_EVENT_KEY, TEST_EXT_EXE_KEY]
+          const dataKeys = showTestSummaryTable ? [TEST_SUMMARY_KEY] : [CERT_EVENT_KEY, TEST_EXT_EXE_KEY]
           for (const dataKey of dataKeys) {
             const rowsAriaLabelData = response.data[dataKey].map(e => e.id)
             const dataTableId = `#import-${dataKey}`
@@ -154,65 +155,69 @@ export const QAImportHistoricalDataPreview = ({
         tableData &&
         previewData && (
           <>
-            <div className="margin-x-3 margin-y-4" id={`import-${TEST_SUMMARY_KEY}`}>
-              <h4 className="margin-y-1">Test Summary</h4>
-              <DataTable
-                className="data-display-table"
-                responsive={true}
-                fixedHeader={true}
-                noHeader={true}
-                striped={false}
-                highlightOnHover={true}
-                sortIcon={
-                  <ArrowDownwardSharp className="margin-left-2 text-primary" />
-                }
-                columns={columns}
-                data={tableData.testSummaryData}
-                onSelectedRowsChange={(state) => handleHistoricalDataSelection(state, TEST_SUMMARY_KEY)}
-                style={{ overflowX: "visible", overflowY: "visible" }}
-                selectableRows
-              />
-            </div>
-
-            <div className="margin-x-3 margin-y-4" id={`import-${CERT_EVENT_KEY}`}>
-              <h4 className="margin-y-1">QA Certification Events</h4>
-              <DataTable
-                className="data-display-table"
-                responsive={true}
-                fixedHeader={true}
-                noHeader={true}
-                striped={false}
-                highlightOnHover={true}
-                sortIcon={
-                  <ArrowDownwardSharp className="margin-left-2 text-primary" />
-                }
-                columns={columns}
-                data={tableData.certificationEventData}
-                onSelectedRowsChange={(state) => handleHistoricalDataSelection(state, CERT_EVENT_KEY)}
-                style={{ overflowX: "visible", overflowY: "visible" }}
-                selectableRows
-              />
-            </div>
-
-            <div className="margin-x-3 margin-y-4" id={`import-${TEST_EXT_EXE_KEY}`}>
-              <h4 className="margin-y-1">Test Extension Exemptions</h4>
-              <DataTable
-                className="data-display-table"
-                responsive={true}
-                fixedHeader={true}
-                noHeader={true}
-                striped={false}
-                highlightOnHover={true}
-                sortIcon={
-                  <ArrowDownwardSharp className="margin-left-2 text-primary" />
-                }
-                columns={columns}
-                data={tableData.testExtensionExemptionData}
-                onSelectedRowsChange={(state) => handleHistoricalDataSelection(state, TEST_EXT_EXE_KEY)}
-                style={{ overflowX: "visible", overflowY: "visible" }}
-                selectableRows
-              />
-            </div>
+            {showTestSummaryTable &&
+              <div className="margin-x-3 margin-y-4" id={`import-${TEST_SUMMARY_KEY}`}>
+                <h4 className="margin-y-1">Test Summary</h4>
+                <DataTable
+                  className="data-display-table"
+                  responsive={true}
+                  fixedHeader={true}
+                  noHeader={true}
+                  striped={false}
+                  highlightOnHover={true}
+                  sortIcon={
+                    <ArrowDownwardSharp className="margin-left-2 text-primary" />
+                  }
+                  columns={columns}
+                  data={tableData.testSummaryData}
+                  onSelectedRowsChange={(state) => handleHistoricalDataSelection(state, TEST_SUMMARY_KEY)}
+                  style={{ overflowX: "visible", overflowY: "visible" }}
+                  selectableRows
+                />
+              </div>
+            }
+            {!showTestSummaryTable &&
+              <>
+                <div className="margin-x-3 margin-y-4" id={`import-${CERT_EVENT_KEY}`}>
+                  <h4 className="margin-y-1">QA Certification Events</h4>
+                  <DataTable
+                    className="data-display-table"
+                    responsive={true}
+                    fixedHeader={true}
+                    noHeader={true}
+                    striped={false}
+                    highlightOnHover={true}
+                    sortIcon={
+                      <ArrowDownwardSharp className="margin-left-2 text-primary" />
+                    }
+                    columns={columns}
+                    data={tableData.certificationEventData}
+                    onSelectedRowsChange={(state) => handleHistoricalDataSelection(state, CERT_EVENT_KEY)}
+                    style={{ overflowX: "visible", overflowY: "visible" }}
+                    selectableRows
+                  />
+                </div>
+                <div className="margin-x-3 margin-y-4" id={`import-${TEST_EXT_EXE_KEY}`}>
+                  <h4 className="margin-y-1">Test Extension Exemptions</h4>
+                  <DataTable
+                    className="data-display-table"
+                    responsive={true}
+                    fixedHeader={true}
+                    noHeader={true}
+                    striped={false}
+                    highlightOnHover={true}
+                    sortIcon={
+                      <ArrowDownwardSharp className="margin-left-2 text-primary" />
+                    }
+                    columns={columns}
+                    data={tableData.testExtensionExemptionData}
+                    onSelectedRowsChange={(state) => handleHistoricalDataSelection(state, TEST_EXT_EXE_KEY)}
+                    style={{ overflowX: "visible", overflowY: "visible" }}
+                    selectableRows
+                  />
+                </div>
+              </>
+            }
           </>
         )
       )}
