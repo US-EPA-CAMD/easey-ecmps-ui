@@ -1,4 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import {
+  ensure508,
+} from "../../../additional-functions/ensure-508";
 import { connect } from 'react-redux';
 import * as fs from '../../../utils/selectors/facilities';
 import MonitoringPlanTab from '../../MonitoringPlanTab/MonitoringPlanTab';
@@ -37,9 +40,9 @@ export const SelectFacilitiesDataTable = ({
     facilitiesApi.getAllFacilities().then((res) => {
       setDataLoaded(true);
       setFacilities(res.data);
-      let selectConfigButton = document.getElementById('select-config');
-      if (selectConfigButton) {
-        selectConfigButton.focus();
+      let focusControl = document.getElementsByTagName('body')[0];
+      if (focusControl) {
+        focusControl.focus();
       }
     });
 
