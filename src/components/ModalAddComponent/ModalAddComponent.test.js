@@ -15,7 +15,7 @@ const mock = new MockAdapter(axios);
 
 const idRegex = '[\\w\\-]+';
 
-const comps = [{}];
+const comps = {};
 
 const getMonitoringComponents = new RegExp(`${config.services.monitorPlans.uri}/locations/${idRegex}/components`)
 const getMonitoringSystemsComponentsUrl = new RegExp(`${config.services.monitorPlans.uri}/locations/${idRegex}/systems/${idRegex}/components`)

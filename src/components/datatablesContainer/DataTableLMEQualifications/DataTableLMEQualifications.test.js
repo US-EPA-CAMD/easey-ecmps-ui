@@ -11,6 +11,13 @@ jest.mock("axios");
 
 const selectedQualifications = [{}];
 
+jest.mock("../../../utils/api/easeyAuthApi", () => ({
+  secureAxios: jest.fn().mockResolvedValue({
+    status: 200,
+    data: [{}],
+  }),
+}));
+
 const locationSelectValue = 60;
 
 //testing redux connected component to mimic props passed as argument
@@ -47,11 +54,7 @@ const componentRenderer = (
   return render(<DataTableLMEQualifications {...props} />);
 };
 
-/*
 test("tests getMonitoringQualifications", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: selectedQualifications })
-  );
   const title = await mpApi.getQualifications(locationSelectValue);
   expect(title.data).toEqual(selectedQualifications);
 
@@ -67,9 +70,6 @@ test("tests getMonitoringQualifications", async () => {
 });
 
 test("tests getMonitoringQualifications WITHOUT mdmdata", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: selectedQualifications })
-  );
   const title = await mpApi.getQualifications(locationSelectValue);
   expect(title.data).toEqual(selectedQualifications);
 
@@ -78,7 +78,6 @@ test("tests getMonitoringQualifications WITHOUT mdmdata", async () => {
   );
   expect(container).toBeDefined();
 });
-*/
 
 test("mapStateToProps calls the appropriate state", async () => {
   // mock the 'dispatch' object
