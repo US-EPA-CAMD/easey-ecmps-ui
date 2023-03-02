@@ -36,7 +36,6 @@ export const SelectFacilitiesDataTable = ({
   ] = useState('');
   const history = useHistory();
 
-
   useEffect(() => {
     facilitiesApi.getAllFacilities().then((res) => {
       setDataLoaded(true);
@@ -241,7 +240,6 @@ export const SelectFacilitiesDataTable = ({
         }
         ariaLabel={'Select Configurations'}
         workspaceSection={workspaceSection}
-       // tabIndex={1}
       />
     </div>
   );
