@@ -1,7 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import {
-  ensure508,
-} from "../../../additional-functions/ensure-508";
 import { connect } from 'react-redux';
 import * as fs from '../../../utils/selectors/facilities';
 import MonitoringPlanTab from '../../MonitoringPlanTab/MonitoringPlanTab';
@@ -20,6 +17,8 @@ import {
 } from '../../../additional-functions/workspace-section-and-store-names';
 import Export from '../../export/Export/Export';
 import EmissionsTab from '../../EmissionsTab/EmissionsTab';
+import { useHistory } from "react-router-dom";
+import { resetTabOrder } from "../../../utils/functions";
 
 export const SelectFacilitiesDataTable = ({
   user,
@@ -35,15 +34,14 @@ export const SelectFacilitiesDataTable = ({
     mostRecentlyCheckedInMonitorPlanId,
     setMostRecentlyCheckedInMonitorPlanId,
   ] = useState('');
+  const history = useHistory();
+
 
   useEffect(() => {
     facilitiesApi.getAllFacilities().then((res) => {
       setDataLoaded(true);
       setFacilities(res.data);
-      let focusControl = document.getElementsByTagName('body')[0];
-      if (focusControl) {
-        focusControl.focus();
-      }
+      resetTabOrder(history);
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -243,6 +241,7 @@ export const SelectFacilitiesDataTable = ({
         }
         ariaLabel={'Select Configurations'}
         workspaceSection={workspaceSection}
+       // tabIndex={1}
       />
     </div>
   );

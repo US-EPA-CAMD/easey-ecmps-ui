@@ -40,7 +40,7 @@ const Layout = (props) => {
     <div id="layoutContainer">
       <div className="react-transition fade-in padding-bottom-5" id="layout">
         <div id="skipNav">
-          <Link className="skip-to-content-link" href={"#main"} id="content-link">
+          <Link className="skip-to-content-link" href={"#main"}>
             Skip to content
           </Link>
         </div>

@@ -9,7 +9,7 @@
 export const focusTrap = (selector, callback = () => {}) => {
   // *** identify focusable component elements
   const componentFocusableElements =
-    'body, button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
   // *** isolate component and its focusable content
   const component = document.querySelector(selector);
