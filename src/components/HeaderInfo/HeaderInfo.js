@@ -602,46 +602,6 @@ export const HeaderInfo = ({
     return "Needs Evaluation";
   };
 
-  const evalStatusContent = () => {
-    if (checkedOutByUser && evalStatusText(evalStatus) === "Needs Evaluation") {
-      return (
-        <Button
-          type="button"
-          outline={false}
-          onClick={evaluate}
-          className="height-6"
-        >
-          Evaluate
-        </Button>
-      );
-    }
-
-    const alertStyle = `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
-      evalStatus
-    )} margin-y-0`;
-
-    const evalStatusHyperlink = (
-      <div className={alertStyle}>
-        <button
-          className={"hyperlink-btn cursor-pointer"}
-          onClick={() => displayReport("MP_EVAL", orisCode, selectedConfig.id)}
-        >
-          {evalStatusText(evalStatus)}
-        </button>
-      </div>
-    );
-
-    if (showHyperLink(evalStatus)) {
-      return evalStatusHyperlink;
-    } else {
-      return <p className={alertStyle}>{evalStatusText(evalStatus)}</p>;
-    }
-  };
-
-  const showHyperLink = (status) => {
-    return status === "PASS" || status === "INFO" || status === "ERR";
-  };
-
   const showRevert = (status) => {
     return (
       checkedOutByUser &&
