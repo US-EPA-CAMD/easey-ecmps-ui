@@ -7,7 +7,10 @@ import userEvent from "@testing-library/user-event";
 jest.mock("react-markdown", () => (props) => {
   return <>{props.children}</>;
 });
-
+jest.mock("@us-epa-camd/easey-design-system", () => ({
+  ...jest.requireActual("@us-epa-camd/easey-design-system"),
+  Header: () => <></>,
+}));
 jest.mock("remark-gfm", () => () => {});
 
 jest.mock("../../utils/api/contentApi", () => {

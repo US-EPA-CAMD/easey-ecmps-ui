@@ -5,6 +5,10 @@ import Layout from "../Layout/Layout";
 import { render, fireEvent } from "@testing-library/react";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
 // cannot use link outside router
+jest.mock("@us-epa-camd/easey-design-system", () => ({
+  ...jest.requireActual("@us-epa-camd/easey-design-system"),
+  Header: () => <></>,
+}));
 test("renders accesory links ", () => {
   const { container } = render(
     <BrowserRouter>

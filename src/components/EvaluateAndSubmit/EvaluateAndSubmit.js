@@ -30,7 +30,7 @@ import {
   qaTeeColumns,
 } from "./ColumnMappings";
 import { checkoutAPI } from "../../additional-functions/checkout";
-import { formatPermissions } from "./utils/functions";
+import { getDropDownFacilities } from "./utils/functions";
 
 export const EvaluateAndSubmit = ({
   checkedOutLocations,
@@ -43,7 +43,7 @@ export const EvaluateAndSubmit = ({
   const storedFilters = useRef(null);
 
   const evalClickedAtTime = useRef(0);
-  const [permissions, setPermissions] = useState([]);
+  const [dropdownFacilities, setDropdownFacilities] = useState([]);
   const [activityId, setActivityId] = useState("");
   const [excludeErrors, setExcludeErrors] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -146,17 +146,17 @@ export const EvaluateAndSubmit = ({
     );
   };
 
-  const idToPermissionsMap = useRef([]);
-  const userPermissions = user.permissions?.facilities;
+  const idToPermissionsMap = useRef(new Map());
+  const userPermissions = user.permissions?.facilities || [];
+  const populateDropdown = async () => {
+    setDropdownFacilities(await getDropDownFacilities());
+  };
   useEffect(() => {
     // Get permissions from user object here
-    if (userPermissions?.length > 0) {
-      formatPermissions(userPermissions, setPermissions);
-      for (const p of userPermissions) {
-        idToPermissionsMap.current[p.id] = p.permissions;
-      }
+    populateDropdown();
+    for (const p of userPermissions) {
+      idToPermissionsMap.current.set(p.id, p.permissions);
     }
-
     return () => {
       checkInAllCheckedOutLocations();
     }; //eslint-disable-next-line
@@ -408,6 +408,9 @@ export const EvaluateAndSubmit = ({
         data = data.filter((mpd) => mpd.evalStatusCode !== "ERR");
       }
 
+      if (componentType === "Submission") {
+        data = data.filter(d => idToPermissionsMap.current.get(d.orisCode)?.includes("DS"+type))
+      }
       ref.current = data; //Set ref and state [ref drives logic, state drives ui updates]
       setState(data);
     }
@@ -462,12 +465,12 @@ export const EvaluateAndSubmit = ({
         />
       )}
 
-      {!finalSubmitStage && permissions.length > 0 && (
+      {!finalSubmitStage && (
         <FilterForm
           showModal={setShowModal}
           queryCallback={applyFilter}
           setExcludeErrors={setExcludeErrors}
-          facilities={permissions}
+          facilities={dropdownFacilities}
           filesSelected={numFilesSelected}
           buttonText={buttonText}
           filterClick={filterClick}
