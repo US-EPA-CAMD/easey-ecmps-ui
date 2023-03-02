@@ -1054,10 +1054,6 @@ export const HeaderInfo = ({
                   desktop={{ col: 8 }}
                 >
                   <div className="display-flex desktop:margin-top-1 desktop-lg:margin-top-0">
-                    <label className="text-bold width-card desktop:width-10 desktop-lg:width-10 widescreen:width-card widescreen:margin-right-neg-4 widescreen:margin-top-2">
-                      Evaluation Status:
-                    </label>
-                    {evalStatusContent()}
                     <label className="text-bold margin-right-1 desktop:width-10 desktop:margin-left-5 desktop-lg:width-10 widescreen:width-card widescreen:margin-right-neg-3 widescreen:margin-top-2">
                       Submission Status:{" "}
                     </label>
