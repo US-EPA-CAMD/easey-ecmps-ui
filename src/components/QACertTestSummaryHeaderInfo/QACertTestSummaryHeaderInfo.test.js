@@ -98,26 +98,22 @@ test('test type dropdown selection renders with options', async () => {
   expect(options).toHaveLength(1)
 })
 
-test('renders buttons for "Import Test Data", "Test Data Report", "Test History Report", and "Evaluate All"', async () => {
+test('renders buttons for "Import Test Data", "Test Data Report", "Test History Report"', async () => {
   // Arrange
   const {container } = await waitForElement(() => render(<QACertTestSummaryHeaderInfo {...props} />))
 
   const importTestDataBtn = container.querySelector("#importSelectionQAModal")
   const testDataReportBtn = container.querySelector("#showRevertModal")
   const testHistoryReportBtn = container.querySelector("#showRevertModal")
-  const evalAllBtn = container.querySelector("#showRevertModal")
 
   fireEvent.click(importTestDataBtn)
   fireEvent.click(testDataReportBtn)
   fireEvent.click(testHistoryReportBtn)
-  fireEvent.click(evalAllBtn)
-  
 
   // Assert
   expect(importTestDataBtn).toBeDefined()
   expect(testDataReportBtn).toBeDefined()
   expect(testHistoryReportBtn).toBeDefined()
-  expect(evalAllBtn).toBeDefined()
 })
 
 test('when import test data button is clicked then a modal is rendered', async () => {
