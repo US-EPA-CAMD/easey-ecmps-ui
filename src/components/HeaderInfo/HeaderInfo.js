@@ -603,19 +603,6 @@ export const HeaderInfo = ({
   };
 
   const evalStatusContent = () => {
-    if (checkedOutByUser && evalStatusText(evalStatus) === "Needs Evaluation") {
-      return (
-        <Button
-          type="button"
-          outline={false}
-          onClick={evaluate}
-          className="height-6"
-        >
-          Evaluate
-        </Button>
-      );
-    }
-
     const alertStyle = `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
       evalStatus
     )} margin-y-0`;

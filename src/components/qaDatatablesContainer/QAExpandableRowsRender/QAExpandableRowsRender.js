@@ -1043,7 +1043,6 @@ const QAExpandableRowsRender = ({
               dataTableName
             )
           }
-          evaluate={false}
           expandableRowComp={
             expandable ? nextExpandableRow(dataTableName) : false
           }
