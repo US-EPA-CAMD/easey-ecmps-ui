@@ -167,10 +167,13 @@ const QADataTableRender = ({
                           openHandler(normalizedRow, false, null, index);
                         }}
                         role="button"
+                        aria-label={getTableRowActionAriaLabel(dataTableName, row, 'Edit')}
                       >
                         {"Edit"}
                       </Button>
                       <RemoveButton
+                        row={row}
+                        dataTableName={dataTableName}
                         onConfirm={() => onRemoveHandler(normalizedRow)}
                       />
                       {expandableRowComp ? createExpandBTNS(index, row) : null}
@@ -231,12 +234,14 @@ const QADataTableRender = ({
 
 export default QADataTableRender;
 
-const RemoveButton = ({ onConfirm }) => {
+const RemoveButton = ({ onConfirm, row, dataTableName }) => {
   return (
     <ConfirmActionModal
       buttonText="Remove"
       description="Are you sure you want to remove the selected data?"
       onConfirm={onConfirm}
+      row={row}
+      dataTableName={dataTableName}
     />
   );
 };

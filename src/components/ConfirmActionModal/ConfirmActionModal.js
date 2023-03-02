@@ -1,5 +1,7 @@
-import { ButtonGroup, Modal, ModalFooter, ModalHeading, ModalToggleButton } from "@trussworks/react-uswds";
 import React, { useRef } from "react";
+import { getTableRowActionAriaLabel } from "../../utils/selectors/QACert/TestSummary";
+import { ButtonGroup, Modal, ModalFooter, ModalHeading, ModalToggleButton } from "@trussworks/react-uswds";
+
 
 const defaultHeading = 'Confirmation'
 const defaultDescription = 'Please confirm your action'
@@ -14,11 +16,17 @@ const ConfirmActionModal = ({
   cancelText = defaultCancelText,
   onConfirm,
   onCancel,
+  row,
+  dataTableName
 }) => {
   const modalRef = useRef()
   return (
     <>
-      <ModalToggleButton modalRef={modalRef} opener outline={true}>
+      <ModalToggleButton 
+        modalRef={modalRef} 
+        opener outline={true} 
+        aria-label={getTableRowActionAriaLabel(dataTableName, row, 'Remove')}
+      >
         {buttonText}
       </ModalToggleButton>
       <Modal
