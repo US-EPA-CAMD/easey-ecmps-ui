@@ -531,7 +531,6 @@ const QACertEventTestExmpDataTable = ({
           }
           actionsBtn={"View"}
           user={user}
-          evaluate={false}
           noDataComp={
             user && isCheckedOut ? (
               <QADataTableRender
