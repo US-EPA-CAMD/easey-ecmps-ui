@@ -24,7 +24,6 @@ const QADataTableRender = ({
   actionsBtn,
   expandableRowComp,
   onRemoveHandler,
-  evaluate,
   noDataComp,
   isCheckedOut,
   dataTableName,
@@ -142,7 +141,7 @@ const QADataTableRender = ({
       columns.unshift({
         name: actionColumnName,
         button: true,
-        width: user ? (evaluate ? "25%" : "20%") : `${columnWidth}%`,
+        width: user ? "20%" : `${columnWidth}%`,
         style: {
           justifyContent: "left",
           // width:'fit-content'
