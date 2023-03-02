@@ -41,7 +41,9 @@ export const SelectFacilitiesDataTable = ({
       setDataLoaded(true);
       setFacilities(res.data);
       resetTabOrder(history);
-    });
+    }).catch(error => {
+      console.error("Error getting facilities", error)}
+    )
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
