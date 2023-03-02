@@ -157,7 +157,6 @@ const QADataTableRender = ({
                 <div className="editViewExpandGroup ">
                   {data.length > 0 && (
                     <>
-                      {evaluate ? <Button>Evaluate</Button> : null}
                       <Button
                         type="button"
                         epa-testid="btnOpen"
