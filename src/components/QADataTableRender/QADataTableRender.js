@@ -24,7 +24,6 @@ const QADataTableRender = ({
   actionsBtn,
   expandableRowComp,
   onRemoveHandler,
-  evaluate,
   noDataComp,
   isCheckedOut,
   dataTableName,
@@ -142,7 +141,7 @@ const QADataTableRender = ({
       columns.unshift({
         name: actionColumnName,
         button: true,
-        width: user ? (evaluate ? "25%" : "20%") : `${columnWidth}%`,
+        width: user ? "20%" : `${columnWidth}%`,
         style: {
           justifyContent: "left",
           // width:'fit-content'
@@ -157,7 +156,6 @@ const QADataTableRender = ({
                 <div className="editViewExpandGroup ">
                   {data.length > 0 && (
                     <>
-                      {evaluate ? <Button>Evaluate</Button> : null}
                       <Button
                         type="button"
                         epa-testid="btnOpen"
@@ -167,10 +165,14 @@ const QADataTableRender = ({
                           openHandler(normalizedRow, false, null, index);
                         }}
                         role="button"
+                        aria-label={getTableRowActionAriaLabel(dataTableName, row, 'Edit')}
+                        data-testid="Edit"
                       >
                         {"Edit"}
                       </Button>
                       <RemoveButton
+                        row={row}
+                        dataTableName={dataTableName}
                         onConfirm={() => onRemoveHandler(normalizedRow)}
                       />
                       {expandableRowComp ? createExpandBTNS(index, row) : null}
@@ -231,12 +233,14 @@ const QADataTableRender = ({
 
 export default QADataTableRender;
 
-const RemoveButton = ({ onConfirm }) => {
+const RemoveButton = ({ onConfirm, row, dataTableName }) => {
   return (
     <ConfirmActionModal
       buttonText="Remove"
       description="Are you sure you want to remove the selected data?"
       onConfirm={onConfirm}
+      row={row}
+      dataTableName={dataTableName}
     />
   );
 };

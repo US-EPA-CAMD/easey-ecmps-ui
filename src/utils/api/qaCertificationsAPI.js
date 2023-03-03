@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
@@ -169,10 +171,7 @@ export const getQATestSummaryByCode = async (
 
 export const getQASchema = async () => {
   const url = `${config.services.content.uri}/ecmps/reporting-instructions/qa-certification.schema.json`;
-
-  return secureAxios({ url: url, method: "GET" })
-    .then(handleResponse)
-    .catch(handleError);
+  return axios.get(url).then(handleResponse).catch(handleError);
 };
 
 export const getReportingPeriod = async (isExport) => {

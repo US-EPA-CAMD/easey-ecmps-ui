@@ -337,27 +337,16 @@ export const QACertEventHeaderInfo = ({
               {facilityMainName}
             </h3>
           </div>
-          {user && isCheckedOut && (
-            <div>
-              <Button
-                // className="padding-x-5"
-                type="button"
-                outline={false}
-                onClick={() => openSelectionTypeImportModal()}
-                id="importSelectionQAModal"
-              >
-                {importTestTitle}
-              </Button>
-              <Button
-                // className="float-right text-right bottom-0 text-no-wrap"
-                type="button"
-                id="showRevertModal"
-                outline={false}
-              >
-                Evaluate
-              </Button>
-            </div>
-          )}
+          {(user && isCheckedOut) &&
+            <Button
+              type="button"
+              outline={false}
+              onClick={() => openSelectionTypeImportModal()}
+              id="importSelectionQAModal"
+            >
+              {importTestTitle}
+            </Button>
+          }
         </div>
 
         <p className="text-bold font-body-2xs">{createAuditMessage()}</p>

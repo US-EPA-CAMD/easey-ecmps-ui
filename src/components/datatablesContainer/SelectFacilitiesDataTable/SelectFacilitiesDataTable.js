@@ -17,6 +17,8 @@ import {
 } from '../../../additional-functions/workspace-section-and-store-names';
 import Export from '../../export/Export/Export';
 import EmissionsTab from '../../EmissionsTab/EmissionsTab';
+import { useHistory } from "react-router-dom";
+import { resetTabOrder } from "../../../utils/functions";
 
 export const SelectFacilitiesDataTable = ({
   user,
@@ -32,16 +34,16 @@ export const SelectFacilitiesDataTable = ({
     mostRecentlyCheckedInMonitorPlanId,
     setMostRecentlyCheckedInMonitorPlanId,
   ] = useState('');
+  const history = useHistory();
 
   useEffect(() => {
     facilitiesApi.getAllFacilities().then((res) => {
       setDataLoaded(true);
       setFacilities(res.data);
-      let selectConfigButton = document.getElementById('select-config');
-      if (selectConfigButton) {
-        selectConfigButton.focus();
-      }
-    });
+      resetTabOrder(history);
+    }).catch(error => {
+      console.error("Error getting facilities", error)}
+    )
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

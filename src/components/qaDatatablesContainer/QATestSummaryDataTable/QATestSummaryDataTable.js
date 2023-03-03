@@ -900,7 +900,6 @@ const QATestSummaryDataTable = ({
               locationSelectValue: locationSelectValue,
             }
           )}
-          evaluate={true}
           noDataComp={
             user && isCheckedOut ? (
               <QADataTableRender
