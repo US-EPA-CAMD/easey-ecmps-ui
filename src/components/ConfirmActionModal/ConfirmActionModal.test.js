@@ -10,15 +10,15 @@ const cancelText = 'Cancel'
 
 test('renders a button with text', () => {
 
-  render(<ConfirmActionModal buttonText={buttonText} />)
-  const button = screen.getByRole('button', { name: buttonText })
+  render(<ConfirmActionModal buttonText={buttonText} row={{col1:"col1",col4:"col4",col9:"col9"}} dataTableName="Test Summary Data"/>)
+  const button = screen.getByRole('button', { name: "Remove for col4" })
   expect(button).toBeInTheDocument();
 })
 
 test('when the confirm button is clicked then the onConfirm handler is called', () => {
   const onConfirm = jest.fn()
-  render(<ConfirmActionModal buttonText={buttonText} confirmText={confirmText} onConfirm={onConfirm} />)
-  const button = screen.getByRole('button', { name: buttonText })
+  render(<ConfirmActionModal buttonText={buttonText} confirmText={confirmText} onConfirm={onConfirm}  row={{col1:"col1",col4:"col4",col9:"col9"}} dataTableName="Test Summary Data"/>)
+  const button = screen.getByRole('button', { name: "Remove for col4" })
   userEvent.click(button)
   const confirm = screen.getByRole('button', { name: /yes/i })
   userEvent.click(confirm)
@@ -27,8 +27,8 @@ test('when the confirm button is clicked then the onConfirm handler is called', 
 
 test('when the cancel button is clicked then the onCancel handler is called', () => {
   const onCancel = jest.fn()
-  render(<ConfirmActionModal buttonText={buttonText} cancelText={cancelText} onCancel={onCancel} />)
-  const button = screen.getByRole('button', { name: buttonText })
+  render(<ConfirmActionModal buttonText={buttonText} cancelText={cancelText} onCancel={onCancel}  row={{col1:"col1",col4:"col4",col9:"col9"}} dataTableName="Test Summary Data" />)
+  const button = screen.getByRole('button', { name: "Remove for col4" })
   userEvent.click(button)
   const cancel = screen.getByRole('button', { name: cancelText })
   userEvent.click(cancel)
