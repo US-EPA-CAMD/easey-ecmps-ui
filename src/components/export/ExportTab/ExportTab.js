@@ -171,9 +171,9 @@ export const ExportTab = ({
               <span className="font-body-lg">{facilityMainName}</span>
             </h3>{" "}
           </div>
-          <div className=" grid-row text-bold font-body-xl display-block">
+          <h3 className=" grid-row text-bold font-body-xl display-block margin-y-0">
             {facilityAdditionalName}
-          </div>
+          </h3>
         </div>
         <div className="grid-row margin-y-3">
           <div className="grid-col-3">
