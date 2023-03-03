@@ -439,8 +439,8 @@ describe("DataTableAssert", () => {
     fireEvent.click(container.querySelector("#testingBtn2"));
     window.isDataChanged = false;
     fireEvent.click(container.querySelector("#testingBtn2"));
-    const val = 1;
-    expect(val === 1);
+    // const val = 1;
+    // expect(val === 1);
   });
 
   /*
