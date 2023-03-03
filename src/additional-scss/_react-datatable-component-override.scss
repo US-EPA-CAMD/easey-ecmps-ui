@@ -32,9 +32,6 @@
         border: solid 4px #2672de;
         color: $epa-black !important;
       }
-      :hover:not(:focus) {
-        color: $epa-black !important;
-      }
       :focus {
         .MuiSvgIcon-root {
           opacity: 1;
