@@ -1,10 +1,21 @@
 import React from "react";
 import { render, fireEvent, waitForElement } from "@testing-library/react";
 import { DataTableSystems } from "./DataTableSystems";
-import * as mpApi from "../../../utils/api/monitoringPlansApi";
+import {getMonitoringSystems} from "../../../utils/api/monitoringPlansApi";
 const axios = require("axios");
 const DataTableSystemsfunction = require("./DataTableSystems");
 jest.mock("axios");
+jest.mock('../../../utils/api/monitoringPlansApi', () => ({
+  getMonitoringSystems: jest.fn(),
+  saveSystems: jest.fn(),
+  createSystems: jest.fn(),
+  saveAnalyzerRanges: jest.fn(),
+  createAnalyzerRanges: jest.fn(),
+  saveSystemsFuelFlows: jest.fn(),
+  createSystemsFuelFlows: jest.fn(),
+  createSystemsComponents: jest.fn(),
+  saveSystemsComponents: jest.fn(),
+}));
 const systemsDataActiveOnly = [
   {
     id: "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D",
@@ -421,36 +432,34 @@ test("here to run tests", () => {
   expect(true);
 });
 
-/*
+
 test("tests a configuration with only active systems", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: systemsDataActiveOnly })
-  );
-  const title = await mpApi.getMonitoringSystems(6);
+  const mockGetMonitoringSystems = jest.fn().mockResolvedValue({data: systemsDataActiveOnly})
+  getMonitoringSystems.mockImplementation(() => mockGetMonitoringSystems())
+  const title = await getMonitoringSystems(6);
   expect(title.data).toEqual(systemsDataActiveOnly);
   let { container } = await waitForElement(() => componentRenderer(6));
   expect(container).toBeDefined();
 });
 test("tests a configuration with both inactive and active systems", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: systemData })
-  );
-  const title = await mpApi.getMonitoringSystems(5);
+  const mockGetMonitoringSystems = jest.fn().mockResolvedValue({data: systemData})
+  getMonitoringSystems.mockImplementation(() => mockGetMonitoringSystems())
+  const title = await getMonitoringSystems(5);
   expect(title.data).toEqual(systemData);
   let { container } = await waitForElement(() => componentRenderer(5));
   expect(container).toBeDefined();
 });
 
 test("tests a configuration with inactive only", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: systemsInactiveOnly })
-  );
-  const title = await mpApi.getMonitoringSystems(76);
+  const mockGetMonitoringSystems = jest.fn().mockResolvedValue({data: systemsInactiveOnly})
+  getMonitoringSystems.mockImplementation(() => mockGetMonitoringSystems())
+  const title = await getMonitoringSystems(76);
 
   expect(title.data).toEqual(systemsInactiveOnly);
-  let { container } = await waitForElement(() => componentRenderer(76));
-  // fireEvent.click(container.querySelector("#testingBtn"));
-  // fireEvent.click(container.querySelector("#testingBtn2"));
+  let { container, debug } = await waitForElement(() => componentRenderer(76));
+  fireEvent.click(container.querySelector("#testingBtn"));
+  fireEvent.click(container.querySelector("#testingBtn2"));
+  debug();
   expect(container).toBeDefined();
 });
 
@@ -485,4 +494,4 @@ test("tests a configuration with inactive only", async () => {
 
 // });
 
-*/
+
