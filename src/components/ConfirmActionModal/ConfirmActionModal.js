@@ -26,6 +26,7 @@ const ConfirmActionModal = ({
         modalRef={modalRef} 
         opener outline={true} 
         aria-label={getTableRowActionAriaLabel(dataTableName, row, 'Remove')}
+        data-testid="Remove"
       >
         {buttonText}
       </ModalToggleButton>

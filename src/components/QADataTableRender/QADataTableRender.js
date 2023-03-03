@@ -166,6 +166,7 @@ const QADataTableRender = ({
                         }}
                         role="button"
                         aria-label={getTableRowActionAriaLabel(dataTableName, row, 'Edit')}
+                        data-testid="Edit"
                       >
                         {"Edit"}
                       </Button>
