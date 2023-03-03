@@ -699,7 +699,11 @@ export const getTableRowActionAriaLabel = (dataTableName, row, action) => {
   let result;
   switch (dataTableName) {
     case 'Test Summary Data'://unique ID is test number, i.e. col4
+    case 'QA Certification Event'://unique ID is QA Cert Event Code, i.e. col4
       result = `${action} for ${row.col4}`;
+      break;
+    case 'Test Extension Exemption'://unique ID is Extension or Exemption Code, i.e. col9
+      result = `${action} for ${row.col9}`;
       break;
     default:
       result = `not implemented yet`;
