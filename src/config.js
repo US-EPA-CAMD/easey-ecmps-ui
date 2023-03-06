@@ -76,6 +76,12 @@ export const config = {
         "REACT_APP_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_TIMEOUT_MINUTES",
         15
       ) * oneMinute,
+
+    refreshLastActivityInterval:
+      getConfigValueNumber(
+        "REACT_APP_EASEY_ECMPS_UI_REFRESH_LAST_ACTIVITY_INTERVAL",
+        1
+      ) * oneMinute,
     cbsBaseUrl: getConfigValue(
       "REACT_APP_EASEY_ECMPS_UI_CBS_BASE_URL",
       "https://camd.epa.gov"
