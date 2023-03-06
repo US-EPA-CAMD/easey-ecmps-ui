@@ -10,6 +10,7 @@ export const getQAColsByTestCode = (testCode) => {
     'End Date',
     'End Hour',
     'End Minute',
+    'Eval Status'
   ]
   switch (testCode) {
     case 'APPESUM': // Appendix E Correlation Test Summary
@@ -22,6 +23,8 @@ export const getQAColsByTestCode = (testCode) => {
         'End Date',
         'End Hour',
         'End Minute',
+        
+    'Eval Status'
       ]
       break
     case 'CALINJ': // Calibration Injection
@@ -41,6 +44,8 @@ export const getQAColsByTestCode = (testCode) => {
         'End Date',
         'End Hour',
         'End Minute',
+        
+    'Eval Status'
       ]
       break
     case 'FLC': // Flow to Load Check
@@ -54,6 +59,8 @@ export const getQAColsByTestCode = (testCode) => {
         'Test Result Code',
         'Year',
         'Quarter',
+        
+    'Eval Status'
       ]
       break
     case 'FLR': // Flow to Load Reference
@@ -65,6 +72,8 @@ export const getQAColsByTestCode = (testCode) => {
         'End Date',
         'End Hour',
         'End Minute',
+        
+    'Eval Status'
       ]
       break
     case 'FFLB': // Fuel Flow to Load Baseline
@@ -75,6 +84,8 @@ export const getQAColsByTestCode = (testCode) => {
         'Test Number',
         'End Date',
         'End Hour',
+        
+    'Eval Status'
       ]
       break
     case 'OLOLCAL': // Online Offline Calibration
@@ -87,6 +98,8 @@ export const getQAColsByTestCode = (testCode) => {
         'Test Result Code',
         'End Date',
         'End Hour',
+        
+    'Eval Status'
       ]
       break
     case 'RELACC': // Relative Accuracy
@@ -100,6 +113,8 @@ export const getQAColsByTestCode = (testCode) => {
         'End Date',
         'End Hour',
         'End Minute',
+        
+    'Eval Status'
       ]
       break
     case 'LME': // Unit Default
@@ -111,6 +126,8 @@ export const getQAColsByTestCode = (testCode) => {
         'End Date',
         'End Hour',
         'End Minute',
+        
+    'Eval Status'
       ]
       break
     case 'MISC': // Miscellaneous
@@ -125,6 +142,8 @@ export const getQAColsByTestCode = (testCode) => {
         'End Date',
         'End Hour',
         'End Minute',
+        
+    'Eval Status'
       ]
       break
     default:

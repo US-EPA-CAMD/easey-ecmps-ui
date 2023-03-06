@@ -137,6 +137,7 @@ const QATestSummaryDataTable = ({
             if (res !== undefined && res.data.length > 0) {
               finishedLoadingData(res.data);
               setQATestSummary(res.data);
+              console.log('res.data',res.data)
               setShow(false);
             } else {
               finishedLoadingData([]);
@@ -325,7 +326,73 @@ const QATestSummaryDataTable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTestCode, dropdownsLoaded]);
 
+  
+  // chooses correctly styling for evaluation status label
+  const evalStatusStyle = (status) => {
+    switch (status) {
+      case "ERR":
+      case "EVAL":
+        return "usa-alert--warning";
+      case "INFO":
+      case "PASS":
+        return "usa-alert--success";
+      case "INQ":
+      case "WIP":
+        return "usa-alert--info";
+      default:
+        break;
+    }
+    return "";
+  };
+
+  // returns evaluation status (full text) from code
+  const evalStatusText = (status) => {
+    switch (status) {
+      case "ERR":
+        return "Critical Errors";
+      case "INFO":
+        return "Informational Message";
+      case "PASS":
+        return "Passed";
+      case "INQ":
+        return "In Queue";
+      case "WIP":
+        return "In Progress";
+      default:
+        break;
+    }
+    return "Needs Evaluation";
+  };
+
+  const evalStatusContent = (status) => {
+    const alertStyle = `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
+      status
+    )} margin-y-0`;
+
+    const evalStatusHyperlink = (
+      <div className={alertStyle}>
+        <button
+          className={"hyperlink-btn cursor-pointer"}
+          // onClick={() => displayReport("MP_EVAL", orisCode, selectedConfig.id)}
+        >
+          {evalStatusText(status)}
+        </button>
+      </div>
+    );
+
+    if (showHyperLink(status)) {
+      return evalStatusHyperlink;
+    } else {
+      return <p className={alertStyle}>{evalStatusText(status)}</p>;
+    }
+  };
+
+  const showHyperLink = (status) => {
+    return status === "PASS" || status === "INFO" || status === "ERR";
+  };
+
   const data = useMemo(() => {
+    
     return getTestSummary(qaTestSummary, columns);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
