@@ -1127,17 +1127,7 @@ export const HeaderInfo = ({
                   View Audit Report
                 </Button>
                 */}
-                <Button
-                  outline
-                  type="button"
-                  title="View Printout Report"
-                  className={"hyperlink-btn cursor-pointer"}
-                  onClick={() =>
-                    displayReport("MPP", orisCode, selectedConfig.id)
-                  }
-                >
-                  View Printout Report
-                </Button>
+
               </Grid>
             </GridContainer>
           )}
