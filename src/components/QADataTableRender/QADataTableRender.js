@@ -35,7 +35,6 @@ const QADataTableRender = ({
   dataTableName,
   sectionSelect = null,
 }) => {
-  console.log('data',data)
   const columns = [];
   columnNames.forEach((name, index) => {
     switch (name) {

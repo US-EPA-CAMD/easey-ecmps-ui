@@ -4,12 +4,12 @@ import React from "react";
 const evalStatusStyle = (status) => {
   switch (status) {
     case "ERR":
+      return "usa-alert--error";
     case "EVAL":
       return "usa-alert--warning";
     case "INFO":
     case "PASS":
       return "usa-alert--success";
-    case "INQ":
     case "WIP":
       return "usa-alert--info";
     default:
@@ -22,18 +22,18 @@ const evalStatusStyle = (status) => {
 const evalStatusText = (status) => {
   switch (status) {
     case "ERR":
-      return "Critical Errors";
+      return "Crt Errors";
     case "INFO":
       return "Informational Message";
     case "PASS":
       return "Passed";
-    case "INQ":
-      return "In Queue";
-    case "WIP":
-      return "In Progress";
+
+    case "EVAL":
+      return "Eval";
     default:
       break;
   }
+  console.log("status", status);
   return "Needs Evaluation";
 };
 
@@ -61,7 +61,7 @@ const evalStatusContent = (status) => {
 };
 
 const showHyperLink = (status) => {
-  return status === "PASS" || status === "INFO" || status === "ERR";
+  return status === "PASS" || status === "INFO" || status === "ERR" || status === "EVAL";
 };
 
 export const getTestSummary = (data, colTitles) => {
@@ -722,6 +722,7 @@ export const mapQaCertEventsDataToRows = (data) => {
       col9: el.conditionalBeginHour,
       col10: el.completionTestDate,
       col11: el.completionTestHour,
+      col12: evalStatusContent(el.evalStatusCode),
     };
     records.push(row);
   }
@@ -754,6 +755,7 @@ export const mapQaExtensionsExemptionsDataToRows = (data) => {
       col7: el.spanScaleCode,
       col8: el.fuelCode,
       col9: el.extensionOrExemptionCode,
+      col10: evalStatusContent(el.evalStatusCode),
     });
   });
 

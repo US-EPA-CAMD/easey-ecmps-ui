@@ -1,5 +1,3 @@
-import { Restaurant } from "@material-ui/icons";
-
 export const qaProtocalGasProps = (selectedRow) => {
   return {
     dataTableName: "Protocol Gas",
@@ -1445,6 +1443,8 @@ export const qaCertEventsProps = (selectedLocation) => {
       "Conditional Begin Hour",
       "Completion Test Date",
       "Completion Test Hour",
+
+      "Eval Status",
     ],
     controlInputs: {
       //locId:["Unit or Stack Pipe ID", "input", "", ""],
@@ -1495,7 +1495,7 @@ export const qaTestExemptionProps = (selectedLocation) => {
       id: null,
       unitId: null,
       monitoringSystemID: "string",
-      componentID: 'string',
+      componentID: "string",
       year: null,
       quarter: null,
       hoursUsed: null,
@@ -1525,6 +1525,7 @@ export const qaTestExemptionProps = (selectedLocation) => {
       "Span Scale Code",
       "Fuel Code",
       "Extension or Exemption Code",
+      "Eval Status",
     ],
     controlInputs: {
       monitoringSystemID: [
