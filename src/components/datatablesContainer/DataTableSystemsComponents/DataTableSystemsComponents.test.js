@@ -11,11 +11,15 @@ import {
   mapDispatchToProps,
   mapStateToProps,
 } from "./DataTableSystemsComponents";
-import * as mpApi from "../../../utils/api/monitoringPlansApi";
+import {getMonitoringSystems, getMonitoringSystemsComponents, getMonitoringSystemsFuelFlows} from "../../../utils/api/monitoringPlansApi";
 const axios = require("axios");
 
 jest.mock("axios");
-
+jest.mock('../../../utils/api/monitoringPlansApi', () => ({
+  getMonitoringSystems: jest.fn(),
+  getMonitoringSystemsComponents: jest.fn(),
+  getMonitoringSystemsFuelFlows: jest.fn(),
+}));
 const selectedSystem = [
   {
     active: true,
@@ -365,12 +369,18 @@ describe("DatatableSystemsComponents test suit", () => {
   //   fireEvent.click(addComponentBtn[0]);
   // });
 
-  /*
+  
   test("tests a getMonitoringSystemsComponents", async () => {
-    axios.get.mockImplementation(() =>
-      Promise.resolve({ status: 200, data: apiComp })
-    );
-    const title = await mpApi.getMonitoringSystemsComponents(
+      
+    const createMock = (data) => jest.fn().mockResolvedValue({data})
+    getMonitoringSystemsComponents.mockImplementation(createMock(apiComp))
+    getMonitoringSystems.mockImplementation(createMock(selectedSystem))
+    getMonitoringSystemsFuelFlows.mockImplementation(createMock(apiFuel))
+    
+    // axios.get.mockImplementation(() =>
+    //   Promise.resolve({ status: 200, data: apiComp })
+    // );
+    const title = await getMonitoringSystemsComponents(
       6,
       "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D"
     );
@@ -402,10 +412,14 @@ describe("DatatableSystemsComponents test suit", () => {
   });
 
   test("tests a getMonitoringSystemsFuelFlows", async () => {
-    axios.get.mockImplementation(() =>
-      Promise.resolve({ status: 200, data: apiFuel })
-    );
-    const title = await mpApi.getMonitoringSystemsFuelFlows(
+    const createMock = (data) => jest.fn().mockResolvedValue({data})
+    getMonitoringSystemsComponents.mockImplementation(createMock(apiComp))
+    getMonitoringSystems.mockImplementation(createMock(selectedSystem))
+    getMonitoringSystemsFuelFlows.mockImplementation(createMock(apiFuel))
+    // axios.get.mockImplementation(() =>
+    //   Promise.resolve({ status: 200, data: apiFuel })
+    // );
+    const title = await getMonitoringSystemsFuelFlows(
       6,
       "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D"
     );
@@ -423,10 +437,14 @@ describe("DatatableSystemsComponents test suit", () => {
   });
 
   test("tests opening the add modal page ", async () => {
-    axios.get.mockImplementation(() =>
-      Promise.resolve({ status: 200, data: apiFuel })
-    );
-    const title = await mpApi.getMonitoringSystemsFuelFlows(
+    // axios.get.mockImplementation(() =>
+    //   Promise.resolve({ status: 200, data: apiFuel })
+    // );
+    const createMock = (data) => jest.fn().mockResolvedValue({data})
+    getMonitoringSystemsComponents.mockImplementation(createMock(apiComp))
+    getMonitoringSystems.mockImplementation(createMock(selectedSystem))
+    getMonitoringSystemsFuelFlows.mockImplementation(createMock(apiFuel))
+    const title = await getMonitoringSystemsFuelFlows(
       6,
       "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D"
     );
@@ -454,5 +472,5 @@ describe("DatatableSystemsComponents test suit", () => {
     actionProps.loadDropdownsData();
   });
 
-  */
+
 });
