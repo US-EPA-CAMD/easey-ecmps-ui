@@ -70,6 +70,17 @@ export const refreshClientToken = async () => {
   }
 };
 
+export const refreshLastActivity = async () => {
+  try {
+    await secureAxios({
+      method: "POST",
+      url: `${config.services.authApi.uri}/authentication/update-last-activity`,
+    });
+  } catch (err) {
+    displayAppError(err);
+  }
+};
+
 export const authenticate = async (payload) => {
   return axios({
     method: "POST",

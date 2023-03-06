@@ -35,5 +35,6 @@ applications:
       REACT_APP_GOOGLE_ANALYTICS_ENABLED: ((googleAnalyticsEnabled))
       REACT_APP_GOOGLE_ANALYTICS_AUTHENTICATED_CONTAINER_ID: ((googleAnalyticsAuthenticatedContainerId))
       REACT_APP_GOOGLE_ANALYTICS_PUBLIC_CONTAINER_ID: ((googleAnalyticsPublicContainerId))
+      REACT_APP_EASEY_ECMPS_UI_REFRESH_LAST_ACTIVITY_INTERVAL: ((refreshLastActivityInterval))
     routes:
       - route: ((host))
