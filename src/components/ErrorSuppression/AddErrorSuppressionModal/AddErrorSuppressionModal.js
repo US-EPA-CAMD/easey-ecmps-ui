@@ -23,11 +23,12 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     const [checkNumberList, setCheckNumberList] = useState([]);
     const [checkResultList, setCheckResultList] = useState([]);
     const [severityCodeList, setSeverityCodeList] = useState([]);
-    
+
     // Selected form 
     const [selectedCheckType, setSelectedCheckType] = useState();
     const [selectedCheckNumber, setSelectedCheckNumber] = useState();
     const [selectedCheckResult, setSelectedCheckResult] = useState();
+    const [selectedCheckResultObj, setSelectedCheckResultObj] = useState();
     const [selectedFacility, setSelectedFacility] = useState();
     const [selectedLocations, setSelectedLocations] = useState([]);
     const [selectedReason, setSelectedReason] = useState();
@@ -52,17 +53,10 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     const yearQuarters = useMemo(getReportingPeriods, [])
 
     // Time Criteria booleans
-    const showDateHour = useMemo(() => findCheckResultObject()?.timeTypeCode === 'HOUR',
-        [selectedCheckType, selectedCheckNumber, selectedCheckResult, transformedData]);
-
-    const showDate = useMemo(() => findCheckResultObject()?.timeTypeCode === 'DATE',
-        [selectedCheckType, selectedCheckNumber, selectedCheckResult, transformedData]);
-
-    const showQuarter = useMemo(() => findCheckResultObject()?.timeTypeCode === 'QUARTER',
-        [selectedCheckType, selectedCheckNumber, selectedCheckResult, transformedData]);
-    
-    const showHistorical = useMemo(() => findCheckResultObject()?.timeTypeCode === 'HISTIND',
-        [selectedCheckType, selectedCheckNumber, selectedCheckResult, transformedData]);
+    const showDateHour = selectedCheckResultObj?.timeTypeCode === 'HOUR';
+    const showDate = selectedCheckResultObj?.timeTypeCode === 'DATE';
+    const showQuarter = selectedCheckResultObj?.timeTypeCode === 'QUARTER';
+    const showHistorical = selectedCheckResultObj?.timeTypeCode === 'HISTIND';
 
     useEffect(() => {
         const uniqueTypeCodeAndDesc = getUniqueCheckTypeDescription(transformedData);
@@ -88,9 +82,9 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         setSelectedSeverityCode(severityCode);
         setSelectedNotes(note);
 
-        const checkResultObj = transformedData[checkTypeCode][checkNumber].find(r=>r.checkResult === checkResultCode);
+        const checkResultObj = transformedData[checkTypeCode][checkNumber].find(r => r.checkResult === checkResultCode);
 
-        getLocations(orisCode, checkResultObj).then((availLoc)=>{
+        getLocations(orisCode, checkResultObj).then((availLoc) => {
             setLocationData([...availLoc]);
             // split the locations coming from the table row
             const splitLocationList = locations?.split(",");
@@ -101,7 +95,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                         found.selected = true
                 })
             }
-    
+
         });
 
         // Match time values
@@ -162,17 +156,6 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
             return;
     }
 
-    // Assuming user has chosen a value for Check Type, Check Number, and Check Result, 
-    // this function finds and returns the checkCatalogResult object from transformedData.
-    // Returns undefined if nothing is found.
-    function findCheckResultObject() {
-        if (!(selectedCheckType && selectedCheckNumber && selectedCheckResult))
-            return;
-        // the list of check catalog objects for the checkType and checkNumber selected
-        const checkCatalogList = transformedData[selectedCheckType][selectedCheckNumber];
-        return checkCatalogList.find(c => c.checkResult === selectedCheckResult);
-    }
-
     const onCheckTypeChange = (e) => {
         let { value } = e.target;
         value = value === "false" ? false : value;
@@ -183,12 +166,12 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
 
         if (!value)
             return;
-        
+
         const checkNumbers = Object.keys(transformedData[value]);
         setCheckNumberList(checkNumbers)
         // reset location selections if there are any
-        locationData.forEach(d=>d.selected=false)
-    }   
+        locationData.forEach(d => d.selected = false)
+    }
 
     const onCheckNumberChange = (e, selCheckType) => {
         let { value } = e.target;
@@ -200,7 +183,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
             return;
         setCheckResultList(transformedData[selCheckType][value].map(d => d.checkResult))
         // reset location selections if there are any
-        locationData.forEach(d=>d.selected=false)
+        locationData.forEach(d => d.selected = false)
 
     }
 
@@ -208,12 +191,17 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         let { value } = e.target;
         value = value === "false" ? false : value;
         setSelectedCheckResult(value);
+        const checkCatalogList = transformedData[selectedCheckType][selectedCheckNumber];
+        const checkCatalogResult = checkCatalogList.find(c => c.checkResult === value);
+
+        setSelectedCheckResultObj(checkCatalogResult);
+        console.log(checkCatalogResult)
 
         if (selectedCheckType && selectedCheckNumber && value) {
-            const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === value)
-            getLocations(selectedFacility, checkResultObj).then(availLoc=>{
+            const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r => r.checkResult === value)
+            getLocations(selectedFacility, checkResultObj).then(availLoc => {
                 setLocationData([...availLoc])
-            }).catch(err=>{
+            }).catch(err => {
                 console.log("error", err)
             });
         }
@@ -226,8 +214,8 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         setSelectedFacility(value);
         if (!value) return;
         if (selectedCheckType && selectedCheckNumber && selectedCheckResult) {
-            const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === selectedCheckResult)
-            getLocations(value, checkResultObj).then(availLoc=>{
+            const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r => r.checkResult === selectedCheckResult)
+            getLocations(value, checkResultObj).then(availLoc => {
                 setLocationData([...availLoc]);
             });
         }
@@ -386,27 +374,30 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
 
                         </Grid>
                     </Grid>
-                    <Grid row gap={2}>
-                        <Grid col={5}>
-                            <Label test-id={"add-fuel-type"} htmlFor={"add-fuel-type"}>
-                                Fuel Type
-                            </Label>
-                            <Dropdown
-                                id={"add-fuel-type"}
-                                name={"add-fuel-type"}
-                                epa-testid={"add-fuel-type"}
-                                data-testid={"add-fuel-type"}
-                                value={selectedFuelType}
-                            >
-                                <option>Coming Soon...</option>
-                            </Dropdown>
-                        </Grid>
-                    </Grid>
+                    {selectedCheckResultObj ?
+                        <Grid row gap={2}>
+                            <Grid col={5}>
+                                <Label test-id={"add-fuel-type"} htmlFor={"add-fuel-type"}>
+                                    {selectedCheckResultObj?.dataTypeLabel}
+                                </Label>
+                                <Dropdown
+                                    id={"add-fuel-type"}
+                                    name={"add-fuel-type"}
+                                    epa-testid={"add-fuel-type"}
+                                    data-testid={"add-fuel-type"}
+                                    value={selectedFuelType}
+                                >
+                                    <option>Coming Soon...</option>
+                                </Dropdown>
+                            </Grid>
+                        </Grid> : null
+                    }
+
                     {/* Only show the time criteria section if we determined a valid time type code */}
-                    { showDateHour || showDate || showQuarter || showHistorical ? 
-                    <Grid row gap={2}>
-                        <h3>Time Criteria</h3>
-                    </Grid> : null}
+                    {showDateHour || showDate || showQuarter || showHistorical ?
+                        <Grid row gap={2}>
+                            <h3>Time Criteria</h3>
+                        </Grid> : null}
 
                     {/* HOUR */}
                     {showDateHour ?
