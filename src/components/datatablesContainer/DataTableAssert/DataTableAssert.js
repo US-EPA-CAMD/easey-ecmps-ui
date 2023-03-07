@@ -360,6 +360,18 @@ export const DataTableAssert = ({
             });
             modalDetailData[6] = filteredOutSubDropdownOptions;
           }
+          
+          // Modal focus resets to close button on setState
+          if (modalDetailData[4] === "mainDropdown") {
+            // Overrides the firstComponentFocusableElement.focus() in focus-trap
+            setTimeout(() => {
+              document.getElementById(modalDetailData[1]).focus()
+            });
+            // Overrides the document.querySelector("#closeModalBtn").focus() in Modal
+            setTimeout(() => {
+              document.getElementById(modalDetailData[1]).focus()
+            }, 1000);
+          }
         }
       }
     }
