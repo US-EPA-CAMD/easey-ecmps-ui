@@ -155,12 +155,6 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
   // const gasLevelCode = ["Gas Level Code Code", "nonFilteredDropdown", "", ""]
   const testDescription = ["Test Description", "input", "", ""];
   const gracePeriodIndicator = ["Grace Period Indicator", "radio", "", ""];
-  const injectionProtocolCode = [
-    "Injection Protocol Code",
-    "nonFilteredDropdown",
-    "",
-    "",
-  ];
 
   // extra control inputs
   const testComment = ["Test Comment", "input", "", ""];
@@ -251,27 +245,6 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
         },
       };
       break;
-    case "FFACC": // Fuel Flowmeter Accuracy
-      modalDetails = {
-        controlInputs: {
-          unitId,
-          stackPipeId,
-          testTypeCode,
-          componentID,
-          testNumber,
-          testReasonCode,
-          testResultCode,
-        },
-        extraControlInputs: {
-          testComment,
-        },
-        controlDatePickerInputs: {
-          endDate,
-          endHour,
-          endMinute,
-        },
-      };
-      break;
     case "HGL3LS": // Hg Linearity and 3-Level Summary
     case "LINSUM": // Linearity Summary
       modalDetails = {
@@ -322,6 +295,7 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
         },
       };
       break;
+    case "FFACC": // Fuel Flowmeter Accuracy
     case "TTACC": // Transmitter Transducer Accuracy
       modalDetails = {
         controlInputs: {
