@@ -167,13 +167,11 @@ export const ExportTab = ({
       <div className="margin-x-3 grid-container">
         <div className="border-bottom-1px border-base-lighter padding-bottom-2">
           <div className="grid-row">
-            <h3 className="display-inline-block">
+            <h3>
               <span className="font-body-lg">{facilityMainName}</span>
+              <span className="text-bold font-body-xl display-block">{facilityAdditionalName}</span>
             </h3>{" "}
           </div>
-          <h3 className=" grid-row text-bold font-body-xl display-block margin-y-0">
-            {facilityAdditionalName}
-          </h3>
         </div>
         <div className="grid-row margin-y-3">
           <div className="grid-col-3">
