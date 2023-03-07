@@ -13,6 +13,9 @@ export const ensure508 = (tableName, sectionSelect=null) => {
   // *** add aria label to all data tables
   addAriaLabelToDatatable(tableName, sectionSelect);
 
+  // *** make data table an aria live region
+  addAriaLiveToDatatable();
+
   // *** move filter that may be present in datatable out of aria-live region
   moveDataTableSearchOutOfAriaLive();
 
@@ -97,6 +100,13 @@ export const addScreenReaderLabelForCollapses = () => {
       });
   });
 };
+
+export const addAriaLiveToDatatable = () =>{
+  document.querySelectorAll('[role="table"]').forEach(function (el){
+    el.setAttribute("aria-live", "polite");
+    });
+};
+
 /*****************************************************
  * addAriaLabelToDatatable:
  *
@@ -170,6 +180,7 @@ const tableWrappers = document.getElementsByClassName("qa-table-wrapper");
       element.setAttribute("aria-label", label);
     });
   }
+  
 };
 
 /*****************************************************
