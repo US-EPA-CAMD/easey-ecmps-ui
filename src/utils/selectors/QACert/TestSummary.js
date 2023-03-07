@@ -61,6 +61,7 @@ export const getTestSummary = (data, colTitles) => {
             break;
           case "Eval Status":
             colValue = evalStatusContent(curData.evalStatusCode);
+            break;
           default:
         }
         columnDef[colKey] = colValue;
