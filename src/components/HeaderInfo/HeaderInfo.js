@@ -160,7 +160,11 @@ export const HeaderInfo = ({
   const [showEvalReport, setShowEvalReport] = useState(false);
   const [showRevertModal, setShowRevertModal] = useState(false);
 
-  const closeRevertModal = () => setShowRevertModal(false);
+  const closeRevertModal = () => {
+    setShowRevertModal(false);
+    const revertBtn = document.querySelector("#showRevertModal");
+    revertBtn.focus();
+  }
   const closeEvalReportModal = () => setShowEvalReport(false);
 
   // const [checkoutState, setCheckoutState] = useState(checkout);
