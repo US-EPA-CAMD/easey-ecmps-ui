@@ -4,6 +4,7 @@ import MockPermissions from "./MockPermissions";
 import { EvaluateAndSubmit } from "./EvaluateAndSubmit";
 import configureStore from "../../store/configureStore.dev";
 import { Provider } from "react-redux";
+import { getContent } from "../../utils/api/contentApi";
 
 window.scrollTo = jest.fn();
 window.location.reload = jest.fn();
@@ -190,6 +191,11 @@ const mockUserPermissions = [
     permissions: [],
   },
 ]
+
+jest.mock('../../utils/api/contentApi', () => ({
+  getContent: jest.fn().mockResolvedValue({data: {title: 'Test Title', content: 'Test Content'}})
+}));
+
 jest.mock(
   "./FilterForm/FilterForm",
   () =>
@@ -282,7 +288,8 @@ describe("Review and Submit component", () => {
   });
 
   it("mock the final submission process", async () => {
-    const { getByText, getAllByText } = query;
+    //submit button is removed
+    const { getByText, getAllByText, queryAllByText } = query;
 
     await act(async () => {
       getAllByText("SUBMIT")[0].click();
@@ -292,10 +299,10 @@ describe("Review and Submit component", () => {
       getByText("SUBMIT MODAL").click();
     });
 
-    await act(async () => {
-      getAllByText("Submit")[0].click();
-    });
-    expect(getAllByText("Submit")[0]).toBeInTheDocument();
+    // await act(async () => {
+    //   getAllByText("Submit")[0].click();
+    // });
+    expect(queryAllByText("Submit").length).toBe(0);
   });
 
   it("mock an evaluation component instead of submission", async () => {
