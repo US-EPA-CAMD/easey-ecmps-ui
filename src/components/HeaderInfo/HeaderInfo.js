@@ -910,7 +910,7 @@ export const HeaderInfo = ({
         } `}
       />
 
-      {showRevertModal ? (
+      {showRevertModal &&
         <Modal
           show={showRevertModal}
           close={closeRevertModal}
@@ -925,8 +925,8 @@ export const HeaderInfo = ({
             </div>
           }
         />
-      ) : null}
-      {showEvalReport ? (
+      }
+      {showEvalReport &&
         <Modal
           title="Monitoring Plan Evaluation Report"
           width="80%"
@@ -937,7 +937,7 @@ export const HeaderInfo = ({
           showCancel={true}
           children={<ReportGenerator user={user} />}
         />
-      ) : null}
+      }
 
       {evalStatusLoaded && dataLoaded ? (
         <div>
@@ -1136,7 +1136,7 @@ export const HeaderInfo = ({
             </GridContainer>
           )}
 
-          {workspaceSection === QA_CERT_EVENT_STORE_NAME ? (
+          {workspaceSection === QA_CERT_EVENT_STORE_NAME &&
             <GridContainer className="padding-left-0 margin-left-0 maxw-desktop">
               <Grid row={true}>
                 <Grid col={2}>
@@ -1183,9 +1183,9 @@ export const HeaderInfo = ({
                 </Grid>
               </Grid>
             </GridContainer>
-          ) : null}
+          }
 
-          {workspaceSection === EMISSIONS_STORE_NAME ? (
+          {workspaceSection === EMISSIONS_STORE_NAME &&
             <GridContainer className="padding-left-0 margin-left-0 maxw-desktop">
               <Grid row={true}>
                 <Grid col={2}>
@@ -1282,13 +1282,13 @@ export const HeaderInfo = ({
                 </Grid>
               </Grid>
             </GridContainer>
-          ) : null}
+          }
         </div>
       ) : (
         <Preloader />
       )}
 
-      {showImportModal && !finishedLoading && !isLoading ? (
+      {(showImportModal && !finishedLoading && !isLoading) &&
         <div>
           <UploadModal
             show={showImportModal}
@@ -1320,7 +1320,7 @@ export const HeaderInfo = ({
             }
           />
         </div>
-      ) : null}
+      }
       {isReverting && (
         <UploadModal
           width={"30%"}
