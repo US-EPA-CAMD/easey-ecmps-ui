@@ -31,6 +31,8 @@ export const MonitoringPlanHome = ({
   callApiFlag,
   openedFacilityTabs,
   workspaceSection,
+  currentTabIndex,
+  setCurrentTabIndex,
 }) => {
   const [titleName, setTitleName] = useState(document.title);
   const [checkedOutLocations, setCheckedOutLocations] = useState([]);
@@ -301,6 +303,8 @@ export const MonitoringPlanHome = ({
           checkedOutLocations={checkedOutLocations}
           user={user}
           workspaceSection={workspaceSection}
+          setCurrentTabIndex={setCurrentTabIndex}
+          currentTabIndex={currentTabIndex}
         />
       </div>
     </div>

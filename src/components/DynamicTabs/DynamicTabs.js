@@ -23,6 +23,8 @@ export const DynamicTabs = ({
   setMostRecentlyCheckedInMonitorPlanId,
   mostRecentlyCheckedInMonitorPlanId,
   workspaceSection,
+  currentTabIndex,
+  setCurrentTabIndex,
 }) => {
   const [tabs, setTabs] = useState(tabsProps);
 
@@ -79,6 +81,8 @@ export const DynamicTabs = ({
           tabProps={tabs}
           user={user}
           workspaceSection={workspaceSection}
+          setCurrentTabIndex={setCurrentTabIndex}
+          currentTabIndex={currentTabIndex}
         >
           {tabs &&
             tabs.map((tab, i) => (
@@ -110,6 +114,8 @@ export const DynamicTabs = ({
             setMostRecentlyCheckedInMonitorPlanId
           }
           workspaceSection={workspaceSection}
+          setCurrentTabIndex={setCurrentTabIndex}
+          currentTabIndex={currentTabIndex}
         >
           {tabs &&
             tabs.map((tab, i) => (

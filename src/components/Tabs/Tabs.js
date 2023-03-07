@@ -21,17 +21,17 @@ export const Tabs = ({
   user,
   setCheckout,
   workspaceSection,
+  currentTabIndex,
+  setCurrentTabIndex,
 }) => {
-  const [activeTabIndex, setActiveTabIndex] = useState(children.length-1);
-
   const settingActiveTab = (index) => {
-    setActiveTabIndex(index);
+    setCurrentTabIndex(index);
   };
 
   const removeTab = (index) => {
     removeTabs(index);
-    if (activeTabIndex === children.length - 1) {
-      setActiveTabIndex(index - 1);
+    if (currentTabIndex === children.length - 1) {
+      setCurrentTabIndex(index - 1);
     }
   }
 
@@ -116,12 +116,12 @@ export const Tabs = ({
                 <>
                   <Button
                     type="button"
-                    outline={activeTabIndex !== i}
+                    outline={currentTabIndex !== i}
                     tabIndex="0"
                     id="select-config"
                     aria-label={`open ${el.props.title} tab`}
                     className={
-                      activeTabIndex === i
+                      currentTabIndex === i
                         ? "initial-tab-button active-tab-button"
                         : "initial-tab-button"
                     }
@@ -135,7 +135,7 @@ export const Tabs = ({
                   role="button"
                   id="tabBtn"
                   className={
-                    activeTabIndex === i
+                    currentTabIndex === i
                       ? "tab-button react-transition flip-in-y active-tab-button"
                       : "tab-button react-transition flip-in-y"
                   }
@@ -240,7 +240,7 @@ export const Tabs = ({
         </ul>
       </div>
       <div className="tabContent border-top-1px border-base-lighter margin-top-4 padding-top-4">
-        {children[activeTabIndex]}
+        {children[currentTabIndex]}
       </div>
     </div>
   );
