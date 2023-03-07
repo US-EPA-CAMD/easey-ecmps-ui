@@ -250,11 +250,7 @@ const QADataTableRender = ({
   }
 
   return (
-    <div
-      aria-live="polite"
-      className="padding-3 qa-table-wrapper"
-      id={dataTableName.replaceAll(" ", "-")}
-    >
+    <div className="padding-3 qa-table-wrapper" id={dataTableName.replaceAll(" ", "-")}>
       <DataTable
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
         className={`data-display-table react-transition fade-in`}

@@ -36,7 +36,7 @@ export const ExportTablesContainer = ({
       addScreenReaderLabelForCollapses();
 
     };
-  }, []);
+  }, [tableData]);
 
   useEffect(() => {
     const fetchTableData = async () => {
@@ -115,6 +115,7 @@ export const ExportTablesContainer = ({
         selectableRows
         onSelectedRowsChange={onSelectRowsHandler}
         selectableRowSelected={selectableRowSelectedHandler}
+        noDataComponent={<div aria-live="polite">There are no records to display</div>}
       />
     </div>
   );
