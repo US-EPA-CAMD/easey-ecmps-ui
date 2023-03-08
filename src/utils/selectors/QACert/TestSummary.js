@@ -1,3 +1,5 @@
+import { evalStatusContent } from "../../../additional-functions/evaluate-configs";
+
 export const getTestSummary = (data, colTitles) => {
   const records = [];
   if (!colTitles) {
@@ -16,8 +18,8 @@ export const getTestSummary = (data, colTitles) => {
           el.stackPipeId !== null
             ? el.stackPipeId
             : el.unitId !== null
-              ? el.unitId
-              : "",
+            ? el.unitId
+            : "",
         col3: el.componentId,
         col4: el.testNumber,
         col5: el.testReasonCode,
@@ -25,6 +27,7 @@ export const getTestSummary = (data, colTitles) => {
         col7: endDate,
         col8: endHour,
         col9: endMinute,
+        col10: evalStatusContent(el.evalStatusCode),
       });
     });
   }
@@ -55,6 +58,9 @@ export const getTestSummary = (data, colTitles) => {
             break;
           case "Unit or Stack Pipe ID":
             colValue = curData.unitId ?? curData.stackPipeId;
+            break;
+          case "Eval Status":
+            colValue = evalStatusContent(curData.evalStatusCode);
             break;
           default:
         }
@@ -95,6 +101,7 @@ const colTitleToDtoKeyMap = {
   Quarter: "quarter",
   "Injection Protocol Code": "injectionProtocolCode",
   "Test Comment": "testComment",
+  "Eval Status": "evalStatusCode",
 };
 
 const mapTestSummaryColTitleToDTOKey = (columnTitle) => {
@@ -348,7 +355,7 @@ export const mapFuelFlowToLoadBaselineToRows = (data) => {
     records.push(row);
   }
   return records;
-}
+};
 
 export const mapAppendixECorrTestRunsToRows = (data) => {
   const records = [];
@@ -383,11 +390,11 @@ export const mapAppendixECorrHeatInputGasToRows = (data) => {
     };
     records.push(row);
   }
-  return records
-}
+  return records;
+};
 
 export const mapAppendixECorrHeatInputOilToRows = (data) => {
-  const records = []
+  const records = [];
   for (const el of data) {
     const row = {
       id: el.id,
@@ -400,11 +407,11 @@ export const mapAppendixECorrHeatInputOilToRows = (data) => {
       col7: el.oilVolumeUnitsOfMeasureCode,
       col8: el.oilDensity,
       col9: el.oilDensityUnitsOfMeasureCode,
-    }
-    records.push(row)
+    };
+    records.push(row);
   }
-  return records
-}
+  return records;
+};
 
 export const mapFlowToLoadCheckToRows = (data) => {
   const records = [];
@@ -464,7 +471,11 @@ export const mapFuelFlowmeterAccuracyDataToRows = (data) => {
       col2: el.lowFuelAccuracy,
       col3: el.midFuelAccuracy,
       col4: el.highFuelAccuracy,
-      col5: el.reinstallationDate ? new Date(el.reinstallationDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) : el.reinstallationDate,
+      col5: el.reinstallationDate
+        ? new Date(el.reinstallationDate).toLocaleDateString("en-US", {
+            timeZone: "UTC",
+          })
+        : el.reinstallationDate,
       col6: el.reinstallationHour,
     };
     records.push(row);
@@ -507,10 +518,10 @@ export const mapOnOffCalToRows = (data) => {
       col11: el.offlineZeroCalibrationError,
       col12: el.offlineUpscaleCalibrationError,
       col13: el.upscaleGasLevelCode,
-      col14: el.onlineZeroAPSIndicator === 1 ? 'Yes' : 'No',
-      col15: el.onlineUpscaleAPSIndicator === 1 ? 'Yes' : 'No',
-      col16: el.offlineZeroAPSIndicator === 1 ? 'Yes' : 'No',
-      col17: el.offlineUpscaleAPSIndicator === 1 ? 'Yes' : 'No',
+      col14: el.onlineZeroAPSIndicator === 1 ? "Yes" : "No",
+      col15: el.onlineUpscaleAPSIndicator === 1 ? "Yes" : "No",
+      col16: el.offlineZeroAPSIndicator === 1 ? "Yes" : "No",
+      col17: el.offlineUpscaleAPSIndicator === 1 ? "Yes" : "No",
       col18: el.onlineZeroInjectionDate,
       col19: el.onlineUpscaleInjectionDate,
       col20: el.offlineZeroInjectionDate,
@@ -533,7 +544,7 @@ export const mapCycleTimeSummariesToRows = (data) => {
       testSumId: el.testSumId,
       col1: el.totalTime,
     };
-    records.push(row)
+    records.push(row);
   }
   return records;
 };
@@ -552,10 +563,10 @@ export const mapFlowToLoadReferenceToRows = (data) => {
       col7: el.referenceGrossHeatRate,
       col8: el.calculatedSeparateReferenceIndicator,
     };
-    records.push(row)
+    records.push(row);
   }
   return records;
-}
+};
 
 export const mapUnitDefaultTestDataToRows = (data) => {
   const records = [];
@@ -569,10 +580,10 @@ export const mapUnitDefaultTestDataToRows = (data) => {
       col5: el.numberOfUnitsInGroup,
       col6: el.numberOfTestsForGroup,
     };
-    records.push(row)
+    records.push(row);
   }
   return records;
-}
+};
 
 export const mapUnitDefaultTestRunDataToRows = (data) => {
   const records = [];
@@ -589,12 +600,12 @@ export const mapUnitDefaultTestRunDataToRows = (data) => {
       col8: el.endMinute,
       col9: el.responseTime,
       col10: el.referenceValue,
-      col11: el.runUsedIndicator
+      col11: el.runUsedIndicator,
     };
-    records.push(row)
+    records.push(row);
   }
   return records;
-}
+};
 
 export const mapHgSummaryDataToRows = (data) => {
   const records = [];
@@ -607,33 +618,37 @@ export const mapHgSummaryDataToRows = (data) => {
       col4: el.percentError,
       col5: el.apsIndicator === 1 ? "Yes" : "No",
     };
-    records.push(row)
+    records.push(row);
   }
   return records;
-}
+};
 
 export const mapHgInjectionDataToRows = (data) => {
   const records = [];
   for (const el of data) {
     const row = {
       id: el.id,
-      col1: el.injectionDate ? new Date(el.injectionDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) : el.injectionDate,
+      col1: el.injectionDate
+        ? new Date(el.injectionDate).toLocaleDateString("en-US", {
+            timeZone: "UTC",
+          })
+        : el.injectionDate,
       col2: el.injectionHour,
       col3: el.injectionMinute,
       col4: el.measuredValue,
       col5: el.referenceValue,
     };
-    records.push(row)
+    records.push(row);
   }
   return records;
-}
+};
 
 export const mapQaCertEventsDataToRows = (data) => {
   const records = [];
   for (const el of data) {
     const row = {
       id: el.id,
-      col1: el.unitId? el.unitId : el.stackPipeId,
+      col1: el.unitId ? el.unitId : el.stackPipeId,
       col2: el.componentID,
       col3: el.monitoringSystemID,
       col4: el.qaCertEventCode,
@@ -643,14 +658,15 @@ export const mapQaCertEventsDataToRows = (data) => {
       col8: el.conditionalBeginDate,
       col9: el.conditionalBeginHour,
       col10: el.completionTestDate,
-      col11: el.completionTestHour
+      col11: el.completionTestHour,
+      col12: evalStatusContent(el.evalStatusCode),
     };
-    records.push(row)
+    records.push(row);
   }
   return records;
-}
+};
 
-export const mapQaExtensionsExemptionsDataToRows  = (data) => {
+export const mapQaExtensionsExemptionsDataToRows = (data) => {
   const records = [];
 
   data.forEach((el) => {
@@ -670,25 +686,25 @@ export const mapQaExtensionsExemptionsDataToRows  = (data) => {
           : "",
       col2: el.year,
       col3: el.quarter,
-      col4: el.componentID, 
+      col4: el.componentID,
       col5: el.monitoringSystemID,
       col6: el.hoursUsed,
       col7: el.spanScaleCode,
       col8: el.fuelCode,
       col9: el.extensionOrExemptionCode,
+      col10: evalStatusContent(el.evalStatusCode),
     });
   });
 
   return records;
 };
 
-
 export const getListOfRadioControls = (controlInputs) => {
   const result = [];
   const keys = Object.keys(controlInputs);
-  keys.forEach(key => {
+  keys.forEach((key) => {
     if (controlInputs[key][1] === "radio") {
-      result.push(key)
+      result.push(key);
     }
   });
   return result;
@@ -698,11 +714,11 @@ export const getListOfRadioControls = (controlInputs) => {
 export const getTableRowActionAriaLabel = (dataTableName, row, action) => {
   let result;
   switch (dataTableName) {
-    case 'Test Summary Data'://unique ID is test number, i.e. col4
-    case 'QA Certification Event'://unique ID is QA Cert Event Code, i.e. col4
+    case "Test Summary Data": //unique ID is test number, i.e. col4
+    case "QA Certification Event": //unique ID is QA Cert Event Code, i.e. col4
       result = `${action} for ${row.col4}`;
       break;
-    case 'Test Extension Exemption'://unique ID is Extension or Exemption Code, i.e. col9
+    case "Test Extension Exemption": //unique ID is Extension or Exemption Code, i.e. col9
       result = `${action} for ${row.col9}`;
       break;
     default:
@@ -710,4 +726,4 @@ export const getTableRowActionAriaLabel = (dataTableName, row, action) => {
       break;
   }
   return result;
-}
+};

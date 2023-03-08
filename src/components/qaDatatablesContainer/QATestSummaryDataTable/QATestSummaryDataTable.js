@@ -298,7 +298,7 @@ const QATestSummaryDataTable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainDropdownChange, selectedModalData]);
 
-  const columns = getQAColsByTestCode(selectedTestCode.testTypeGroupCode);
+  const columns = getQAColsByTestCode(selectedTestCode.testTypeGroupCode,user);
   const { controlInputs, extraControlInputs, controlDatePickerInputs } =
     getQAModalDetailsByTestCode(
       selectedTestCode.testTypeGroupCode,
@@ -325,7 +325,9 @@ const QATestSummaryDataTable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTestCode, dropdownsLoaded]);
 
+
   const data = useMemo(() => {
+    
     return getTestSummary(qaTestSummary, columns);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
