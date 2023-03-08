@@ -44,7 +44,9 @@ export const SelectFacilitiesDataTable = ({
     }).catch(error => {
       console.error("Error getting facilities", error)}
     )
-
+    return () => {
+      setFacilities([]); // This worked for me
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -64,6 +66,9 @@ export const SelectFacilitiesDataTable = ({
     }
 
     setCheckedOutLocations(checkedOutLocationsList);
+    return () => {
+      setCheckedOutLocations([]); // This worked for me
+    };
   };
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
