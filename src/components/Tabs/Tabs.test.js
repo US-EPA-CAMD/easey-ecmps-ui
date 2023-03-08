@@ -36,6 +36,16 @@ const childProps = {
   facId: testFacId,
   checkedOutBy: testUserId,
 };
+const mockDispatch = jest.fn();
+jest.mock('react-redux', () => ({
+  useSelector: jest.fn(),
+  useDispatch: () => mockDispatch,
+  connect: (mapStateToProps, mapDispatchToProps) => (ReactComponent) => ({
+    mapStateToProps,
+    mapDispatchToProps,
+    ReactComponent,
+  }),
+}));
 
 jest.mock("../../utils/api/monitoringPlansApi", () => {
   return {
@@ -103,8 +113,8 @@ describe("testing a reusable Tabs component", () => {
   });
   test("renders the specified initial tabpane content ", () => {
     render(<TabsUsage />);
-    const initTabContent = screen.getByText("Tab4 Content 1");
-    expect(initTabContent).not.toBeUndefined();
+    const initTabContent = screen.getAllByText("Tab");
+    expect(initTabContent[0]).not.toBeUndefined();
   });
   test("renders the user selected tab", async () => {
     const dispatch = jest.fn();

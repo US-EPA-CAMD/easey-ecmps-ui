@@ -13,6 +13,10 @@ import { render, fireEvent, screen } from "@testing-library/react";
 
 jest.mock("../../store/actions/dynamicFacilityTab");
 import * as actions from "../../store/actions/dynamicFacilityTab";
+import configureStore from "../../store/configureStore.dev";
+import { Provider } from "react-redux";
+
+const store = configureStore();
 class Welcome extends React.Component {
   clickHandler = () => {
     const selectedConfig = {
@@ -95,14 +99,14 @@ describe("testing a reusable Dynamic Tabs component", () => {
   );
 
   test("renders the inital tab and its content", () => {
-    render(dynamicTabs);
+    render(<Provider store={store}>{dynamicTabs}</Provider>);
     const tabs = screen.getAllByRole("button");
     const initTabContent = screen.getByText("Hello, Addis");
     expect(tabs).toHaveLength(4);
     expect(initTabContent).not.toBeUndefined();
   });
   test("renders other tabs on a click event of Add Tab until there's enough space in container width. Also removes the opened tab when close icon is clicked", () => {
-    const { container } = render(dynamicTabs);
+    const { container } = render(<Provider store={store}>{dynamicTabs}</Provider>);
     //add faciliites tab
     fireEvent.click(screen.getByText("Add Tab"));
     let tabs = screen.getAllByRole("button");
