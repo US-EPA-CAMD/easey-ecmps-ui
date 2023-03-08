@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Button } from "@trussworks/react-uswds";
 import { ClearSharp, CreateSharp, LockSharp } from "@material-ui/icons";
 
 import "./Tabs.scss";
 import { setCheckoutState } from "../../store/actions/dynamicFacilityTab";
-import { connect } from "react-redux";
+import { setCurrentTabIndex } from "../../store/actions/currentTabIndex";
+import { connect, useDispatch } from "react-redux";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import {
   convertSectionToStoreName,
@@ -22,16 +23,21 @@ export const Tabs = ({
   setCheckout,
   workspaceSection,
   currentTabIndex,
-  setCurrentTabIndex,
 }) => {
+  const [activeTabIndex, setActiveTabIndex] = useState(currentTabIndex);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setCurrentTabIndex(activeTabIndex))
+  }, [activeTabIndex]);
+  
   const settingActiveTab = (index) => {
-    setCurrentTabIndex(index);
+    setActiveTabIndex(index);
   };
 
   const removeTab = (index) => {
     removeTabs(index);
-    if (currentTabIndex === children.length - 1) {
-      setCurrentTabIndex(index - 1);
+    if (activeTabIndex === children.length - 1) {
+      setActiveTabIndex(index - 1);
     }
   }
 
@@ -116,12 +122,12 @@ export const Tabs = ({
                 <>
                   <Button
                     type="button"
-                    outline={currentTabIndex !== i}
+                    outline={activeTabIndex !== i}
                     tabIndex="0"
                     id="select-config"
                     aria-label={`open ${el.props.title} tab`}
                     className={
-                      currentTabIndex === i
+                      activeTabIndex === i
                         ? "initial-tab-button active-tab-button"
                         : "initial-tab-button"
                     }
@@ -135,7 +141,7 @@ export const Tabs = ({
                   role="button"
                   id="tabBtn"
                   className={
-                    currentTabIndex === i
+                    activeTabIndex === i
                       ? "tab-button react-transition flip-in-y active-tab-button"
                       : "tab-button react-transition flip-in-y"
                   }
@@ -240,10 +246,16 @@ export const Tabs = ({
         </ul>
       </div>
       <div className="tabContent border-top-1px border-base-lighter margin-top-4 padding-top-4">
-        {children[currentTabIndex]}
+        {children[activeTabIndex]}
       </div>
     </div>
   );
+};
+
+const mapStateToProps = (state) => {
+  return {
+    currentTabIndex: state.currentTabIndex,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -259,5 +271,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(Tabs);
+export default connect(mapStateToProps, mapDispatchToProps)(Tabs);
+export { mapStateToProps };
 export { mapDispatchToProps };

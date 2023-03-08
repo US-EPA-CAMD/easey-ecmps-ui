@@ -44,7 +44,6 @@ const App = () => {
   const [user, setUser] = useState(false);
   const [expired, setExpired] = useState(false);
   const [resetTimer, setResetTimer] = useState(false);
-  const [currentTabIndex, setCurrentTabIndex] = useState(0);
   const dispatch = useDispatch();
 
   //useGetCheckedOutLocations();
@@ -204,8 +203,6 @@ const App = () => {
                 <MonitoringPlanHome
                   user={false}
                   workspaceSection={MONITORING_PLAN_STORE_NAME}
-                  setCurrentTabIndex={setCurrentTabIndex}
-                  currentTabIndex={currentTabIndex}
                 />
               )}
             />
@@ -221,8 +218,6 @@ const App = () => {
                   user={user}
                   workspaceSection={MONITORING_PLAN_STORE_NAME}
                   moduleName={modules.monitoring_plans_module}
-                  setCurrentTabIndex={setCurrentTabIndex}
-                  currentTabIndex={currentTabIndex}
                 />
               )}
             />
@@ -239,8 +234,6 @@ const App = () => {
                 <MonitoringPlanHome
                   user={false}
                   workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
-                  setCurrentTabIndex={setCurrentTabIndex}
-                  currentTabIndex={currentTabIndex}
                 />
               )}
             />
@@ -256,8 +249,6 @@ const App = () => {
                   user={user}
                   workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
                   moduleName={modules.qa_Certifications_Test_Summary_Module}
-                  setCurrentTabIndex={setCurrentTabIndex}
-                  currentTabIndex={currentTabIndex}
                 />
               )}
             />
@@ -274,8 +265,6 @@ const App = () => {
                 <MonitoringPlanHome
                   user={false}
                   workspaceSection={QA_CERT_EVENT_STORE_NAME}
-                  setCurrentTabIndex={setCurrentTabIndex}
-                  currentTabIndex={currentTabIndex}
                 />
               )}
             />
@@ -291,8 +280,6 @@ const App = () => {
                   user={user}
                   workspaceSection={QA_CERT_EVENT_STORE_NAME}
                   moduleName={modules.qa_Certifications_Event_Module}
-                  setCurrentTabIndex={setCurrentTabIndex}
-                  currentTabIndex={currentTabIndex}
                 />
               )}
             />
@@ -310,8 +297,6 @@ const App = () => {
                   <MonitoringPlanHome
                     user={false}
                     workspaceSection={EMISSIONS_STORE_NAME}
-                    setCurrentTabIndex={setCurrentTabIndex}
-                    currentTabIndex={currentTabIndex}
                   />
                 );
               }}
@@ -323,8 +308,6 @@ const App = () => {
                 <MonitoringPlanHome
                   user={user}
                   workspaceSection={EMISSIONS_STORE_NAME}
-                  setCurrentTabIndex={setCurrentTabIndex}
-                  currentTabIndex={currentTabIndex}
                 />
               )}
             />
@@ -341,8 +324,6 @@ const App = () => {
                 <MonitoringPlanHome
                   user={false}
                   workspaceSection={EXPORT_STORE_NAME}
-                  setCurrentTabIndex={setCurrentTabIndex}
-                  currentTabIndex={currentTabIndex}
                 />
               )}
             />
@@ -353,8 +334,6 @@ const App = () => {
                 <MonitoringPlanHome
                   user={user}
                   workspaceSection={EXPORT_STORE_NAME}
-                  setCurrentTabIndex={setCurrentTabIndex}
-                  currentTabIndex={currentTabIndex}
                 />
               )}
             />

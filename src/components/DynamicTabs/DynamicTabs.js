@@ -1,6 +1,6 @@
 import React, { useState, cloneElement } from "react";
 import { connect } from "react-redux";
-import { Tabs } from "../Tabs/Tabs";
+import Tabs from "../Tabs/Tabs";
 import TabPane from "../TabPane/TabPane";
 import {
   addFacilityTab,
@@ -23,8 +23,6 @@ export const DynamicTabs = ({
   setMostRecentlyCheckedInMonitorPlanId,
   mostRecentlyCheckedInMonitorPlanId,
   workspaceSection,
-  currentTabIndex,
-  setCurrentTabIndex,
 }) => {
   const [tabs, setTabs] = useState(tabsProps);
 
@@ -81,8 +79,6 @@ export const DynamicTabs = ({
           tabProps={tabs}
           user={user}
           workspaceSection={workspaceSection}
-          setCurrentTabIndex={setCurrentTabIndex}
-          currentTabIndex={currentTabIndex}
         >
           {tabs &&
             tabs.map((tab, i) => (
@@ -114,8 +110,6 @@ export const DynamicTabs = ({
             setMostRecentlyCheckedInMonitorPlanId
           }
           workspaceSection={workspaceSection}
-          setCurrentTabIndex={setCurrentTabIndex}
-          currentTabIndex={currentTabIndex}
         >
           {tabs &&
             tabs.map((tab, i) => (
