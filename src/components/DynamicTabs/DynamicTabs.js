@@ -6,6 +6,7 @@ import {
   addFacilityTab,
   removeFacilityTab,
   setActiveTab,
+  setCheckoutState,
 } from "../../store/actions/dynamicFacilityTab";
 
 import {
@@ -13,6 +14,7 @@ import {
   EXPORT_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import "./DynamicTabs.scss";
+import { setCurrentTabIndex } from "../../store/actions/currentTabIndex";
 
 export const DynamicTabs = ({
   tabsProps,
@@ -23,6 +25,9 @@ export const DynamicTabs = ({
   setMostRecentlyCheckedInMonitorPlanId,
   mostRecentlyCheckedInMonitorPlanId,
   workspaceSection,
+  setCurrentTabIndex,
+  currentTabIndex,
+  setCheckout,
 }) => {
   const [tabs, setTabs] = useState(tabsProps);
 
@@ -79,6 +84,9 @@ export const DynamicTabs = ({
           tabProps={tabs}
           user={user}
           workspaceSection={workspaceSection}
+          currentTabIndex={currentTabIndex}
+          setCheckout={setCheckout}
+          setCurrentTabIndex={setCurrentTabIndex}
         >
           {tabs &&
             tabs.map((tab, i) => (
@@ -110,6 +118,9 @@ export const DynamicTabs = ({
             setMostRecentlyCheckedInMonitorPlanId
           }
           workspaceSection={workspaceSection}
+          currentTabIndex={currentTabIndex}
+          setCheckout={setCheckout}
+          setCurrentTabIndex={setCurrentTabIndex}
         >
           {tabs &&
             tabs.map((tab, i) => (
@@ -135,6 +146,12 @@ export const DynamicTabs = ({
   );
 };
 
+const mapStateToProps = (state) => {
+  return {
+    currentTabIndex: state.currentTabIndex,
+  };
+};
+
 const mapDispatchToProps = (dispatch) => {
   return {
     removeFacility: (facility, workspaceSection) =>
@@ -149,8 +166,23 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(
         setActiveTab(facility, convertSectionToStoreName(workspaceSection))
       ),
+    setCheckout: (value, configID, workspaceSection) =>
+      dispatch(
+        setCheckoutState(
+          value,
+          configID,
+          convertSectionToStoreName(workspaceSection)
+        )
+      ),
+    setCurrentTabIndex: (value) => 
+      dispatch(
+        setCurrentTabIndex(
+          value
+        )
+      )
   };
 };
 
-export default connect(null, mapDispatchToProps)(DynamicTabs);
+export default connect(mapStateToProps, mapDispatchToProps)(DynamicTabs);
 export { mapDispatchToProps };
+export { mapStateToProps };

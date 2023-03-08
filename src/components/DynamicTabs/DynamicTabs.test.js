@@ -76,6 +76,9 @@ describe("testing a reusable Dynamic Tabs component", () => {
           component: <Welcome name="Addis" />,
         },
       ]}
+      setCurrentTabIndex={jest.fn()}
+      currentTabIndex={0}
+      setCheckout={jest.fn()}
     />
   );
 
@@ -95,6 +98,9 @@ describe("testing a reusable Dynamic Tabs component", () => {
           selectedConfig: selectedConfig,
         },
       ]}
+      setCurrentTabIndex={jest.fn()}
+      currentTabIndex={0}
+      setCheckout={jest.fn()}
     />
   );
 

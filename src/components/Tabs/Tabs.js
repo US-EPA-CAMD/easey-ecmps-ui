@@ -4,9 +4,6 @@ import { Button } from "@trussworks/react-uswds";
 import { ClearSharp, CreateSharp, LockSharp } from "@material-ui/icons";
 
 import "./Tabs.scss";
-import { setCheckoutState } from "../../store/actions/dynamicFacilityTab";
-import { setCurrentTabIndex } from "../../store/actions/currentTabIndex";
-import { connect, useDispatch } from "react-redux";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import {
   convertSectionToStoreName,
@@ -14,7 +11,7 @@ import {
   EXPORT_STORE_NAME
 } from "../../additional-functions/workspace-section-and-store-names";
 import { addElementToLastFocusedArray } from "../../additional-functions/manage-focus";
-export const Tabs = ({
+const Tabs = ({
   children,
   dynamic = false,
   removeTabs,
@@ -22,12 +19,12 @@ export const Tabs = ({
   user,
   setCheckout,
   workspaceSection,
+  setCurrentTabIndex,
   currentTabIndex,
 }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(currentTabIndex);
-  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(setCurrentTabIndex(activeTabIndex))
+    setCurrentTabIndex(activeTabIndex)
   }, [activeTabIndex]);
   
   const settingActiveTab = (index) => {
@@ -252,25 +249,4 @@ export const Tabs = ({
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    currentTabIndex: state.currentTabIndex,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setCheckout: (value, configID, workspaceSection) =>
-      dispatch(
-        setCheckoutState(
-          value,
-          configID,
-          convertSectionToStoreName(workspaceSection)
-        )
-      ),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Tabs);
-export { mapStateToProps };
-export { mapDispatchToProps };
+export default Tabs;
