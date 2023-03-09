@@ -54,14 +54,14 @@ export const getLocations = (facilityValue, checkResultObj) => {
       return getMonitoringPlans(Number(facilityValue)).then(({ data }) => {
           const locations = data.map((f) => f.locations).flat(1);
           let availLoc = locations?.map((l) => ({
-              id: l.unitId,
+              id: l.id,
               label: l.unitId,
               selected: false,
               enabled: true,
           }));
           if (checkResultObj.locationTypeCode === "LOC") {
               const availStackPipe = locations?.map((l) => ({
-                  id: l.stackPipeId,
+                  id: l.id,
                   label: l.stackPipeId,
                   selected: false,
                   enabled: true,
