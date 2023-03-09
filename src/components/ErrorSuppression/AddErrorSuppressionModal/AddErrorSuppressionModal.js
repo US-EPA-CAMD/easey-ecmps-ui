@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo, useContext } from "react";
 import { GridContainer, Grid, Dropdown, Label, DatePicker, TextInput, Checkbox } from "@trussworks/react-uswds";
-// import { Modal, ModalFooter, ModalHeading, Button, ButtonGroup, ModalToggleButton, ModalRef } from "@trussworks/react-uswds";
 import Modal from "../../Modal/Modal";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getReportingPeriods } from "../../HeaderInfo/HeaderInfo";
@@ -9,68 +8,10 @@ import { defaultDropdownText } from "../ErrorSuppression";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import { getUniqueCheckTypeDescription, getLocations } from "../ErrorSuppressionFilters/ErrorSuppressionFilters";
 import { formatDate, getQuarter } from "../../../utils/functions";
-import { getData as getMatchData } from "../../../utils/api/errorSuppressionApi";
-import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
-import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
+import { createMatchTypeDropdownLists } from "./esFunctions";
 
-// The mdm api returns a data that looks different for each Data Type Code.
-// The below function maps the correct description and code field for a 
-// Data Type Code
-const getMatchDataFieldNames = (dataTypeCode) => {
-    let descriptionField;
-    let codeField;
-
-    switch (dataTypeCode) {
-        case "CEPARAM":
-            descriptionField = "controlEquipParamDescription";
-            codeField = "controlEquipParamCode";
-            break;
-        case "COMPTYP":
-            descriptionField = "componentTypeDescription";
-            codeField = "componentTypeCode";
-            break;
-        case "FUELTYP":
-            descriptionField = "fuelTypeDescription";
-            codeField = "fuelTypeCode";
-            break;
-        case "PROGRAM":
-            descriptionField = "programDescription";
-            codeField = "programCode";
-            break;
-        case "QUALTYP":
-            descriptionField = "qualificationTypeDescription";
-            codeField = "qualificationTypeCode";
-            break;
-        case "SYSTYP":
-            descriptionField = "systemTypeDescription";
-            codeField = "systemTypeCode";
-            break;
-        case "TESTTYP":
-            descriptionField = "testTypeDescription";
-            codeField = "testTypeCode";
-            break;
-        case "MATSPAR":
-            descriptionField = "matsMethodParameterDescription";
-            codeField = "matsMethodParameterCode";
-            break;
-        case "PARAM":
-            descriptionField = "parameterDescription";
-            codeField = "parameterCode";
-            break;
-        case "MONPLAN":
-            descriptionField = "name";
-            codeField = "id";
-            break;
-        case "TESTNUM":
-            descriptionField = "testNumber";
-            codeField = "testNumber";
-            break;
-    }
-
-    return [codeField, descriptionField];
-}
 export const AddErrorSupressionModal = ({ showModal, close, values }) => {
-    //console.log(values)
+
     // Values being used from context
     const {
         transformedData,
@@ -158,13 +99,17 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
             }
 
             setLocationData(availLoc);
-            if( matchDataTypeCode === "TESTNUM"){
-                createMatchTypeDropdownLists(checkResultObj, orisCode, availLoc.map(l=>l.id))
+            if (matchDataTypeCode === "TESTNUM") {
+                createMatchTypeDropdownLists(checkResultObj, orisCode, availLoc.map(l => l.id)).then(universalMatchDataList => {
+                    setMatchDataList(universalMatchDataList)
+                })
             }
         });
 
-        if( matchDataTypeCode !== "TESTNUM"){
-            createMatchTypeDropdownLists(checkResultObj, orisCode)
+        if (matchDataTypeCode !== "TESTNUM") {
+            createMatchTypeDropdownLists(checkResultObj, orisCode).then(universalMatchDataList => {
+                setMatchDataList(universalMatchDataList)
+            })
         }
 
         // Match time values
@@ -208,96 +153,25 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         close();
     }
 
-    const createMatchTypeDropdownLists = (checkCatalogResult, orisCode, locations = []) => {
-        const { dataTypeCode, dataTypeUrl, checkTypeCode, checkNumber } = checkCatalogResult;
-
-        console.log(checkCatalogResult)
-        console.log(orisCode)
-        // sanity check
-        if (!checkCatalogResult || !dataTypeUrl || !dataTypeCode || !checkTypeCode || !checkNumber)
-            return;
-
-        const [codeField, descriptionField] = getMatchDataFieldNames(dataTypeCode);
-        // sanity check
-        if (!codeField || !descriptionField)
-            return;
-
-        const processPromiseData = (data) => {
-            console.log("match data")
-            console.log(data);
-            if (!data)
-                return;
-            // SPECIAL CASE - see ticket 4621
-            if (dataTypeCode === "PARAM") {
-                data = data.filter(d => d.checkTypeCode === checkTypeCode && d.checkNumber === checkNumber);
-            }
-
-            // The following creates a unique list of objects so something like [{label:1, value:1}, {label:1, value:1}] would become [{label:1, value:1}]
-            const objStrList = data.map(d => (
-                {
-                    label: d[descriptionField],
-                    value: d[codeField]
-                }
-            )).map( r=> JSON.stringify(r));
-            
-            const universalMatchDataList = Array.from(new Set(objStrList)).map( r=> JSON.parse(r))
-            setMatchDataList(universalMatchDataList);
-        }
-
-        // SPECIAL CASE - see ticket 4621
-        if (dataTypeCode === "MONPLAN") {
-
-            if (!orisCode)
-                return;
-
-            getMonitoringPlans([orisCode], [], true).then(({ data }) => {
-                processPromiseData(data)
-            })
-        }
-        // SPECIAL CASE - see ticket 4621
-        else if (dataTypeCode === "TESTNUM") {
-
-            if (locations.length === 0){
-                // removes all options from Match Data Dropdown
-                processPromiseData([])
-                return;
-            }
-
-            console.log("facility: ", orisCode)
-            console.log("locations: ", locations)
-            const promiseList = [];
-
-            locations.forEach(l => {
-                promiseList.push(getQATestSummary(l));
-            })
-
-            Promise.all(promiseList).then(responses=>{
-                const data = responses.map(({data})=>data).flat();
-                processPromiseData(data);
-            })
-        }
-        else {
-            const path = dataTypeUrl.split("/").slice(2).join();
-            getMatchData(path).then(({ data }) => {
-                processPromiseData(data)
-            })
-        }
-    }
-
     const onChangeOfLocationMultiSelect = (id, changeType) => {
         const uniqueLocations = [
             ...new Set([...selectedLocations, id]),
         ];
 
         if (changeType === "add") {
-            console.log("uniqueLocations")
-            console.log(uniqueLocations)
             createMatchTypeDropdownLists(selectedCheckResultObj, selectedFacility, uniqueLocations)
+                .then(universalMatchDataList => {
+                    setMatchDataList(universalMatchDataList)
+                })
             setSelectedLocations(uniqueLocations);
         }
         else if (changeType === "remove") {
             const selected = locationData.filter((l) => l.selected).map(l => l.id);
             createMatchTypeDropdownLists(selectedCheckResultObj, selectedFacility, selected)
+                .then(universalMatchDataList => {
+                    setMatchDataList(universalMatchDataList)
+                })
+
             setSelectedLocations(selected);
         }
         else
@@ -348,7 +222,9 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
 
         console.log("checkCatalogResult?.dataTypeUrl: " + checkCatalogResult?.dataTypeUrl)
 
-        createMatchTypeDropdownLists(checkCatalogResult);
+        createMatchTypeDropdownLists(checkCatalogResult).then(universalMatchDataList => {
+            setMatchDataList(universalMatchDataList)
+        });
 
         if (selectedCheckType && selectedCheckNumber && value) {
             const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r => r.checkResult === value)
@@ -368,7 +244,10 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         if (!value) return;
 
         if (selectedCheckType && selectedCheckNumber && selectedCheckResult) {
-            createMatchTypeDropdownLists(selectedCheckResultObj, value);
+            createMatchTypeDropdownLists(selectedCheckResultObj, value).then(universalMatchDataList => {
+                setMatchDataList(universalMatchDataList)
+            });
+
             const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r => r.checkResult === selectedCheckResult)
             getLocations(value, checkResultObj).then(availLoc => {
                 setLocationData([...availLoc]);
