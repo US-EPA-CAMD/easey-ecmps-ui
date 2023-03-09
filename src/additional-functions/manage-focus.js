@@ -92,7 +92,6 @@ export const returnFocusToCommentButton = () => {
   if (!_.isNil(window["lastFocusedArray"])) {
     const lastFocus = window["lastFocusedArray"]
         .filter(o => o.innerHTML === 'View Comments')[0];
-    alert(lastFocus?.innerHTML);
     if (lastFocus) {
       lastFocus.focus();
     }
