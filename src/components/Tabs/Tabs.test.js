@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabs, mapDispatchToProps } from "./Tabs";
+import Tabs from "./Tabs";
 import TabPane from "../TabPane/TabPane";
 import {
   render,
@@ -71,7 +71,10 @@ const TabsUsage = (bool) => (
     removeTabs={jest.fn()}
     checkedOutLocations={testCheckedOutLocations}
     user={{ firstName: testFirstName, userId: testUserId }}
+    setCheckout={jest.fn()}
     workspaceSection={MONITORING_PLAN_STORE_NAME}
+    setCurrentTabIndex={jest.fn()}
+    currentTabIndex={0}
   >
     <TabPane {...childProps}>Tab1 Content</TabPane>
     <TabPane title="Select configurations">Tab2 Content</TabPane>
@@ -103,15 +106,12 @@ describe("testing a reusable Tabs component", () => {
   });
   test("renders the specified initial tabpane content ", () => {
     render(<TabsUsage />);
-    const initTabContent = screen.getByText("Tab4 Content 1");
+    const initTabContent = screen.getByText("Tab1 Content");
     expect(initTabContent).not.toBeUndefined();
   });
   test("renders the user selected tab", async () => {
-    const dispatch = jest.fn();
-    const actionProps = mapDispatchToProps(dispatch);
 
     // verify the appropriate action was called
-    actionProps.setCheckout();
     const { container } = await waitForElement(() =>
       render(
         <Tabs
@@ -122,6 +122,8 @@ describe("testing a reusable Tabs component", () => {
           user={{ firstName: testFirstName }}
           setCheckout={jest.fn()}
           workspaceSection={MONITORING_PLAN_STORE_NAME}
+          setCurrentTabIndex={jest.fn()}
+          currentTabIndex={0}
         >
           <TabPane {...childProps}>Tab1 Content</TabPane>
           <TabPane title="Select configurations">Tab2 Content</TabPane>
