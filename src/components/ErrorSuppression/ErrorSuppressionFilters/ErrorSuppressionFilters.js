@@ -76,24 +76,6 @@ export const getLocations = (facilityValue, checkResultObj) => {
       });
   };
 
-  const getComboBox = (options, onChange) =>{
-    console.log("called")
-    console.log(options)
-    if( options.length === 0)
-      return <div>Loading...</div>
-    else return (
-      <ComboBox
-      id="facility-name"
-      name="facility-name"
-      epa-testid={"facility-name"}
-      data-testid={"facility-name"}
-      options={options}
-      onChange={onChange}
-    />
-
-    )
-  }
-
 export const ErrorSuppressionFilters = () => {
 
     const ctxFilters = useContext(ErrorSuppressionFiltersContext);
@@ -131,8 +113,6 @@ export const ErrorSuppressionFilters = () => {
 
     const [dateAfterKey, setDateAfterKey] = useState(false);
     const [dateBeforeKey, setDateBeforeKey] = useState(false);
-
-    let MyComboBox = ComboBox;
 
     // API check result data transformed
     // const [transformedData, setTransformedData] = useState([])
@@ -198,8 +178,7 @@ export const ErrorSuppressionFilters = () => {
     }
    
     const onFacilityChange = (value) => {
-      // let { value } = e.target;
-      console.log("value: ", value)
+
       setSelectedFacility(value);
       if (!value || value === defaultDropdownText) {
         setSelectedLocations([]);
