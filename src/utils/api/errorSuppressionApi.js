@@ -51,7 +51,7 @@ export const deactivateErrorSuppression = async (id) => {
 };
 
 // Just makes GET calls to the passed in url
-export const getData = async (path)=>{
+export const getMdmData = async (path)=>{
     
   if( !path )
     return;
