@@ -1,4 +1,4 @@
-import { getData as getMatchData } from "../../../utils/api/errorSuppressionApi";
+import { getMdmData as getMatchData } from "../../../utils/api/errorSuppressionApi";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
 import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
 
@@ -79,7 +79,7 @@ export const createMatchTypeDropdownLists = async (checkCatalogResult, orisCode,
     const processPromiseData = (data) => {
         if (!data)
             return [];
-        // SPECIAL CASE - see ticket 4621
+        // SPECIAL CASE - see case for PARAM in ticket 4621
         if (dataTypeCode === "PARAM") {
             data = data.filter(d => d.checkTypeCode === checkTypeCode && d.checkNumber === checkNumber);
         }
@@ -95,7 +95,7 @@ export const createMatchTypeDropdownLists = async (checkCatalogResult, orisCode,
         return Array.from(new Set(objStrList)).map(r => JSON.parse(r))
     }
 
-    // SPECIAL CASE - see ticket 4621
+    // SPECIAL CASE - see case for MONPLAN in ticket 4621
     if (dataTypeCode === "MONPLAN") {
 
         if (!orisCode)
@@ -103,13 +103,15 @@ export const createMatchTypeDropdownLists = async (checkCatalogResult, orisCode,
 
         try {
             const { data } = await getMonitoringPlans([orisCode], [], true)
+            console.log("data")
+            console.log(data)
             return processPromiseData(data)
         } catch (e) {
             console.error(e)
             return []
         }
     }
-    // SPECIAL CASE - see ticket 4621
+    // SPECIAL CASE - see case for TESTNUM in ticket 4621
     else if (dataTypeCode === "TESTNUM") {
 
         if (locations.length === 0) {
@@ -119,11 +121,13 @@ export const createMatchTypeDropdownLists = async (checkCatalogResult, orisCode,
         const promiseList = [];
 
         locations.forEach(l => {
-            promiseList.push(getQATestSummary(l));
+            promiseList.push(getQATestSummary(l, null, null, null, true));
         })
 
         try {
             const responses = await Promise.all(promiseList);
+            console.log("responses")
+            console.log(responses)
             const data = responses.map(({ data }) => data).flat();
             return processPromiseData(data)
         } catch (e) {
