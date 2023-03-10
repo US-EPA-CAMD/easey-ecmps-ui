@@ -30,5 +30,14 @@ describe("ErrorSuppression API", function () {
     expect(resp.data).toEqual("Mocked");
   });
 
+  test("getData test", async ()=>{
+    const url = `${config.services.mdm.uri}/system-type-codes`;
+    mock.onGet(url).reply(200, "Mocked");
 
+    let resp = await esApi.getMdmData("system-type-codes");
+    expect(resp.data).toEqual("Mocked");
+
+    resp = await esApi.getMdmData();
+    expect(resp).not.toBeDefined();
+  })
 });
