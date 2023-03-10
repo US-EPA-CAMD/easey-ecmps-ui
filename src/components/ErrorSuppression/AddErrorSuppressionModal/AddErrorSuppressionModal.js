@@ -220,8 +220,6 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         const checkCatalogResult = checkCatalogList.find(c => c.checkResult === value);
         setSelectedCheckResultObj(checkCatalogResult);
 
-        console.log("checkCatalogResult?.dataTypeUrl: " + checkCatalogResult?.dataTypeUrl)
-
         createMatchTypeDropdownLists(checkCatalogResult).then(universalMatchDataList => {
             setMatchDataList(universalMatchDataList)
         });

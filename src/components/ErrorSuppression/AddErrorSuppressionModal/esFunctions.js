@@ -64,8 +64,6 @@ export const getMatchDataFieldNames = (dataTypeCode) => {
 export const createMatchTypeDropdownLists = async (checkCatalogResult, orisCode, locations = []) => {
     const { dataTypeCode, dataTypeUrl, checkTypeCode, checkNumber } = checkCatalogResult;
 
-    console.log(checkCatalogResult)
-    console.log(orisCode)
     // sanity check
     if (!checkCatalogResult || !dataTypeUrl || !dataTypeCode || !checkTypeCode || !checkNumber) {
         return [];
@@ -103,8 +101,6 @@ export const createMatchTypeDropdownLists = async (checkCatalogResult, orisCode,
 
         try {
             const { data } = await getMonitoringPlans([orisCode], [], true)
-            console.log("data")
-            console.log(data)
             return processPromiseData(data)
         } catch (e) {
             console.error(e)
@@ -126,8 +122,6 @@ export const createMatchTypeDropdownLists = async (checkCatalogResult, orisCode,
 
         try {
             const responses = await Promise.all(promiseList);
-            console.log("responses")
-            console.log(responses)
             const data = responses.map(({ data }) => data).flat();
             return processPromiseData(data)
         } catch (e) {
