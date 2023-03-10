@@ -421,36 +421,7 @@ export const QACertEventHeaderInfo = ({
           </div>{' '}
           <div className="grid-col-3"></div>{' '}
         </div>
-        <div className="grid-row float-left">
-          <Button
-            className="float-right text-right bottom-0 text-no-wrap "
-            type="button"
-            id="showRevertModal"
-            outline={true}
-          >
-            {'Test Data Report'}
-          </Button>
-          <Button
-            className="float-right text-right bottom-0 text-no-wrap "
-            type="button"
-            id="showRevertModal"
-            outline={true}
-          >
-            {'Test History Report'}
-          </Button>
-          {user ? (
-            <Button
-              className="float-right text-right bottom-0 text-no-wrap "
-              type="button"
-              id="showRevertModal"
-              outline={true}
-            >
-              {'Evaluation Report'}
-            </Button>
-          ) : (
-            ''
-          )}
-        </div>
+
       </div>
       <div
         className={`usa-overlay ${

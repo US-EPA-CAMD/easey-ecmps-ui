@@ -51,12 +51,6 @@ export const getMonitoringPlans = async (orisCodes, monPlanIds = [], forWorkspac
 // *** obtain monitoring methods
 export const getMonitoringMethods = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/methods`);
-  console.log(await secureAxios({
-    method: "GET",
-    url: url,
-  })
-    .then(handleResponse)
-    .catch(handleError))
   return secureAxios({
     method: "GET",
     url: url,

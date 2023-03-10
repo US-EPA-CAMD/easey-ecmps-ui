@@ -31,12 +31,14 @@ import {
 } from "./ColumnMappings";
 import { checkoutAPI } from "../../additional-functions/checkout";
 import { getDropDownFacilities } from "./utils/functions";
+import useGetContent from "./utils/useGetContent";
 
 export const EvaluateAndSubmit = ({
   checkedOutLocations,
   user,
   componentType,
 }) => {
+  const {content: waitTimeData} = useGetContent("/ecmps/workspace/evaluate-submit/wait-time.json");
   const [title, setTitle] = useState("Submit");
   const [buttonText, setButtonText] = useState("Sign & Submit");
 
@@ -432,6 +434,7 @@ export const EvaluateAndSubmit = ({
 
   return (
     <div className="react-transition fade-in padding-x-3">
+      {waitTimeData && <Alert className="margin-y-2" type="info" heading={waitTimeData?.title} children={waitTimeData?.content} />}
       <div className="text-black flex-justify margin-top-1 grid-row">
         {componentType === "Submission" && (
           <div className="grid-row">
@@ -444,7 +447,7 @@ export const EvaluateAndSubmit = ({
         )}
 
         <h2 className="grid-col-9 page-header margin-top-2">{title}</h2>
-        {finalSubmitStage && (
+        {/* {finalSubmitStage && (
           <Button
             className="grid-col-3 flex-align-self-center maxw-mobile margin-0"
             size="big"
@@ -454,7 +457,7 @@ export const EvaluateAndSubmit = ({
           >
             Submit
           </Button>
-        )}
+        )} */}
       </div>
 
       {componentType !== "Submission" && (
@@ -514,7 +517,7 @@ export const EvaluateAndSubmit = ({
       )}
 
       <div className="text-black flex-justify-end margin-top-1 grid-row">
-        {finalSubmitStage && (
+        {/* {finalSubmitStage && (
           <Button
             className="grid-col-3 flex-align-self-center maxw-mobile margin-0"
             size="big"
@@ -524,7 +527,7 @@ export const EvaluateAndSubmit = ({
           >
             Submit
           </Button>
-        )}
+        )} */}
       </div>
     </div>
   );

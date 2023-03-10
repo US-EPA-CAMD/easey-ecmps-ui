@@ -90,8 +90,8 @@ export const returnFocusToLast = () => {
 
 export const returnFocusToCommentButton = () => {
   if (!_.isNil(window["lastFocusedArray"])) {
-    const lastFocus =
-      window["lastFocusedArray"][window["lastFocusedArray"].length - 1];
+    const lastFocus = window["lastFocusedArray"]
+        .filter(o => o.innerHTML === 'View Comments')[0];
     if (lastFocus) {
       lastFocus.focus();
     }

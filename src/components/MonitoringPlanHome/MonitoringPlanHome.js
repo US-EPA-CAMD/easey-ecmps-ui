@@ -69,6 +69,9 @@ export const MonitoringPlanHome = ({
       default:
         break;
     }
+    return () => {
+      setTitleName(''); // This worked for me
+    };
   }, [workspaceSection]);
 
   const obtainCheckedOutLocations = async () => {

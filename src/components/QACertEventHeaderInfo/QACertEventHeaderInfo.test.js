@@ -128,17 +128,11 @@ test('renders buttons for "Import Test Data", "Test Data Report", "Test History 
   );
 
   const importTestDataBtn = container.querySelector('#importSelectionQAModal');
-  const testDataReportBtn = container.querySelector('#showRevertModal');
-  const testHistoryReportBtn = container.querySelector('#showRevertModal');
 
   fireEvent.click(importTestDataBtn);
-  fireEvent.click(testDataReportBtn);
-  fireEvent.click(testHistoryReportBtn);
 
   // Assert
   expect(importTestDataBtn).toBeDefined();
-  expect(testDataReportBtn).toBeDefined();
-  expect(testHistoryReportBtn).toBeDefined();
 });
 
 test('when import test data button is clicked then a modal is rendered', async () => {

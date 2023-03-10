@@ -160,7 +160,11 @@ export const HeaderInfo = ({
   const [showEvalReport, setShowEvalReport] = useState(false);
   const [showRevertModal, setShowRevertModal] = useState(false);
 
-  const closeRevertModal = () => setShowRevertModal(false);
+  const closeRevertModal = () => {
+    setShowRevertModal(false);
+    const revertBtn = document.querySelector("#showRevertModal");
+    revertBtn.focus();
+  }
   const closeEvalReportModal = () => setShowEvalReport(false);
 
   // const [checkoutState, setCheckoutState] = useState(checkout);
@@ -906,7 +910,7 @@ export const HeaderInfo = ({
         } `}
       />
 
-      {showRevertModal ? (
+      {showRevertModal &&
         <Modal
           show={showRevertModal}
           close={closeRevertModal}
@@ -921,8 +925,8 @@ export const HeaderInfo = ({
             </div>
           }
         />
-      ) : null}
-      {showEvalReport ? (
+      }
+      {showEvalReport &&
         <Modal
           title="Monitoring Plan Evaluation Report"
           width="80%"
@@ -933,7 +937,7 @@ export const HeaderInfo = ({
           showCancel={true}
           children={<ReportGenerator user={user} />}
         />
-      ) : null}
+      }
 
       {evalStatusLoaded && dataLoaded ? (
         <div>
@@ -1040,7 +1044,7 @@ export const HeaderInfo = ({
                   desktopLg={{ col: 7 }}
                   desktop={{ col: 8 }}
                 >
-                  <div className="display-flex desktop:margin-top-1 desktop-lg:margin-top-0">
+                  <div className="display-flex desktop:margin-top-1 desktop-lg:margin-top-0" aria-live="polite">
                     <label className="text-bold width-card desktop:width-10 desktop-lg:width-10 widescreen:width-card widescreen:margin-right-neg-4 widescreen:margin-top-2">
                       Evaluation Status:
                     </label>
@@ -1127,22 +1131,12 @@ export const HeaderInfo = ({
                   View Audit Report
                 </Button>
                 */}
-                <Button
-                  outline
-                  type="button"
-                  title="View Printout Report"
-                  className={"hyperlink-btn cursor-pointer"}
-                  onClick={() =>
-                    displayReport("MPP", orisCode, selectedConfig.id)
-                  }
-                >
-                  View Printout Report
-                </Button>
+
               </Grid>
             </GridContainer>
           )}
 
-          {workspaceSection === QA_CERT_EVENT_STORE_NAME ? (
+          {workspaceSection === QA_CERT_EVENT_STORE_NAME &&
             <GridContainer className="padding-left-0 margin-left-0 maxw-desktop">
               <Grid row={true}>
                 <Grid col={2}>
@@ -1189,9 +1183,9 @@ export const HeaderInfo = ({
                 </Grid>
               </Grid>
             </GridContainer>
-          ) : null}
+          }
 
-          {workspaceSection === EMISSIONS_STORE_NAME ? (
+          {workspaceSection === EMISSIONS_STORE_NAME &&
             <GridContainer className="padding-left-0 margin-left-0 maxw-desktop">
               <Grid row={true}>
                 <Grid col={2}>
@@ -1288,13 +1282,13 @@ export const HeaderInfo = ({
                 </Grid>
               </Grid>
             </GridContainer>
-          ) : null}
+          }
         </div>
       ) : (
         <Preloader />
       )}
 
-      {showImportModal && !finishedLoading && !isLoading ? (
+      {(showImportModal && !finishedLoading && !isLoading) &&
         <div>
           <UploadModal
             show={showImportModal}
@@ -1326,7 +1320,7 @@ export const HeaderInfo = ({
             }
           />
         </div>
-      ) : null}
+      }
       {isReverting && (
         <UploadModal
           width={"30%"}

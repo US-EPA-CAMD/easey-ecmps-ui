@@ -323,5 +323,6 @@ export const storeForEmissionsModule = {
       systemComponents: [],
       analyzerRanges: [],
       matsMethods: []
-    }
+    },
+    currentTabIndex: 0
   }
