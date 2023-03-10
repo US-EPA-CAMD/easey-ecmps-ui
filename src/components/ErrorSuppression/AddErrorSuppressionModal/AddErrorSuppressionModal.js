@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useContext } from "react";
-import { GridContainer, Grid, Dropdown, Label, DatePicker, TextInput, Checkbox } from "@trussworks/react-uswds";
+import { GridContainer, Grid, Dropdown, Label, DatePicker, TextInput, Checkbox, ComboBox } from "@trussworks/react-uswds";
 import Modal from "../../Modal/Modal";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getReportingPeriods } from "../../HeaderInfo/HeaderInfo";
@@ -234,8 +234,8 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         }
     };
 
-    const onFacilityChange = (e) => {
-        let { value } = e.target;
+    const onFacilityChange = (value) => {
+
         value = value === "false" ? false : value;
 
         setSelectedFacility(value);
@@ -378,20 +378,19 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                     </Grid>
                     <Grid row gap={2}>
                         <Grid col={5}>
-                            <Label test-id={"add-facility-name-label"} htmlFor={"add-facility-name"}>
-                                Facility Name
-                            </Label>
-                            <Dropdown
-                                id={"add-facility-name"}
-                                name={"add-facility-name"}
-                                epa-testid={"add-facility-name"}
-                                data-testid={"add-facility-name"}
-                                value={selectedFacility}
-                                onChange={onFacilityChange}
-                            >
-                                <option value={"false"}>{defaultDropdownText}</option>
-                                {facilityList.map((d) => <option key={d.orisCode} value={d.orisCode} data-testid={d.orisCode}>{`${d.facilityName} (${d.orisCode})`}</option>)}
-                            </Dropdown>
+                            { facilityList.length > 0 ? (<div>
+                                <Label test-id={"add-facility-name-label"} htmlFor={"add-facility-name"}>
+                                    Facility Name
+                                </Label>
+                                <ComboBox
+                                    id="facility-name"
+                                    name="facility-name"
+                                    epa-testid={"facility-name"}
+                                    data-testid={"facility-name"}
+                                    options={facilityList}
+                                    onChange={onFacilityChange}
+                                />
+                            </div>) : null}
                         </Grid>
                         <Grid col={5}>
                             <MultiSelectCombobox
@@ -551,7 +550,9 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                             <Grid col={3}>
                                 <Checkbox
                                     id="add-is-historical"
-                                    name="add-is-historical"
+                                    name="a(checkResultObj);
+
+                                    dd-is-historical"
                                     label="Historical"
                                     checked={selectedIsHistorical}
                                     value={selectedIsHistorical}
