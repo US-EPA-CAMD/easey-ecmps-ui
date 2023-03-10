@@ -151,19 +151,19 @@ describe("ErrorSuppressionFilters component", () => {
     expect(screen.getByTestId("check-result")).toHaveValue(
       "false"
     );
-    expect(screen.getByTestId("facility-name")).toHaveValue(defaultDropdownText);
+
     expect(screen.getByTestId("reason")).toHaveValue("false");
     expect(screen.getByTestId("is-active")).not.toBeChecked();
     expect(screen.getByLabelText("Location Name")).toHaveValue("");
   });
 
-  it("calls onFacilityChange() when default dropdown text is selected", () => {
-    userEvent.selectOptions(screen.getByLabelText("Facility Name/ID"), [
-      defaultDropdownText,
-    ]);
-    expect(screen.getByTestId("facility-name")).toHaveValue(
-      defaultDropdownText
-    );
+  it("calls onFacilityChange() when default dropdown text is selected", async () => {
+    await act(async ()=>{
+      await userEvent.click(screen.getByTestId("combo-box-toggle"))
+      await userEvent.click(screen.getByTestId("combo-box-option-3"));
+    })
+    screen.debug(undefined, 600000)
+    expect(screen.getByTestId("combo-box-input")).toHaveValue("Barry (3)")
   });
 
   it("calls onCheckResultChange() when default dropdown text is selected", () => {
