@@ -402,23 +402,6 @@ export const ErrorSuppressionFilters = () => {
             <Label test-id={"facility-name-label"} htmlFor={"facility-name"}>
               Facility Name/ID
             </Label>
-            {/* <Dropdown
-              id={"facility-name"}
-              name={"facility-name"}
-              epa-testid={"facility-name"}
-              data-testid={"facility-name"}
-              value={selectedFacility}
-              onChange={onFacilityChange}
-            >
-              <option>{defaultDropdownText}</option>
-              {facilityList.map((d) => (
-                <option
-                  key={d.orisCode}
-                  value={d.orisCode}
-                  data-testid={d.orisCode}
-                >{`${d.facilityName} (${d.orisCode})`}</option>
-              ))}
-            </Dropdown> */}
             <ComboBox
               id="facility-name"
               name="facility-name"

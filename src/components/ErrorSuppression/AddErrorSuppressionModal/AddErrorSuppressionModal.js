@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo, useContext } from "react";
 import { GridContainer, Grid, Dropdown, Label, DatePicker, TextInput, Checkbox, ComboBox } from "@trussworks/react-uswds";
-// import { Modal, ModalFooter, ModalHeading, Button, ButtonGroup, ModalToggleButton, ModalRef } from "@trussworks/react-uswds";
 import Modal from "../../Modal/Modal";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getReportingPeriods } from "../../HeaderInfo/HeaderInfo";
@@ -383,17 +382,6 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                 <Label test-id={"add-facility-name-label"} htmlFor={"add-facility-name"}>
                                     Facility Name
                                 </Label>
-                                {/* <Dropdown
-                                    id={"add-facility-name"}
-                                    name={"add-facility-name"}
-                                    epa-testid={"add-facility-name"}
-                                    data-testid={"add-facility-name"}
-                                    value={selectedFacility}
-                                    onChange={onFacilityChange}
-                                >
-                                    <option value={"false"}>{defaultDropdownText}</option>
-                                    {facilityList.map((d) => <option key={d.orisCode} value={d.orisCode} data-testid={d.orisCode}>{`${d.facilityName} (${d.orisCode})`}</option>)}
-                                </Dropdown> */}
                                 <ComboBox
                                     id="facility-name"
                                     name="facility-name"

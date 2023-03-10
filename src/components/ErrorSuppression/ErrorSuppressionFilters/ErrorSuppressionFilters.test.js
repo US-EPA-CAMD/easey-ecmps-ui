@@ -162,7 +162,6 @@ describe("ErrorSuppressionFilters component", () => {
       await userEvent.click(screen.getByTestId("combo-box-toggle"))
       await userEvent.click(screen.getByTestId("combo-box-option-3"));
     })
-    screen.debug(undefined, 600000)
     expect(screen.getByTestId("combo-box-input")).toHaveValue("Barry (3)")
   });
 
