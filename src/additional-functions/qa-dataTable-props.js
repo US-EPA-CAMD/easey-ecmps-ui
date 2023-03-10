@@ -1443,8 +1443,6 @@ export const qaCertEventsProps = (selectedLocation) => {
       "Conditional Begin Hour",
       "Completion Test Date",
       "Completion Test Hour",
-
-      "Eval Status",
     ],
     controlInputs: {
       //locId:["Unit or Stack Pipe ID", "input", "", ""],
@@ -1525,7 +1523,6 @@ export const qaTestExemptionProps = (selectedLocation) => {
       "Span Scale Code",
       "Fuel Code",
       "Extension or Exemption Code",
-      "Eval Status",
     ],
     controlInputs: {
       monitoringSystemID: [
