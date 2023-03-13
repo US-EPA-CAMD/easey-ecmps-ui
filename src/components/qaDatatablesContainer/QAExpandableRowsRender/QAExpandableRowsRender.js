@@ -55,7 +55,7 @@ const QAExpandableRowsRender = ({
   data,
   isCheckedOut,
   mdmProps,
-  sectionSelect=null
+  sectionSelect = null,
 }) => {
   const { locationId, id } = data;
   const [mdmData, setMdmData] = useState(null);
@@ -716,6 +716,20 @@ const QAExpandableRowsRender = ({
                   name: d[mdmProps[i].responseProps["description"]],
                 };
               });
+              switch (name) {
+                case "Cycle Time Injection":
+                  dropdowns[dropdownArray[i]] = dropdowns[
+                    dropdownArray[i]
+                  ].filter((item) => item.code !== "LOW");
+
+                  dropdowns[dropdownArray[i]] = dropdowns[
+                    dropdownArray[i]
+                  ].filter((item) => item.code !== "MID");
+
+                  break;
+                default:
+                  break;
+              }
             });
             populateStaticDropdowns(name, dropdowns);
             for (const options of Object.values(dropdowns)) {
@@ -724,6 +738,7 @@ const QAExpandableRowsRender = ({
             setMdmData(dropdowns);
           })
           .catch((err) => console.error(err));
+
         break;
     }
   };
