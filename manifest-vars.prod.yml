@@ -9,3 +9,4 @@ googleAnalyticsPublicContainerId: "GTM-L8ZB"
 cdxBaseUrl: cdx.epa.gov
 enableManageDelegations: true
 cbsBaseUrl: camd.epa.gov
+enableSystemAdminstrationModule: true

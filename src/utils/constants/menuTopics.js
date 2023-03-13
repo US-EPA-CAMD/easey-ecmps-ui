@@ -206,7 +206,7 @@ export const getWorkspacePaths = () => {
     },
   ];
 
-  if (config.app.disableSystemAdminModule === "false") {
+  if (config.app.enableSystemAdminModule) {
     workSpace.push({
       name: 'System Administration',
       url: '/workspace/error-suppression',
@@ -245,7 +245,7 @@ export const getAppNavItems   = ()=>{
     },
   ];
 
-  if (config.app.disableSystemAdminModule === "false") {
+  if (config.app.enableSystemAdminModule) {
     appNavItems.push(
       {
         label: 'Error Suppression',

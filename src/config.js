@@ -109,8 +109,8 @@ export const config = {
     enableManageDelegations: getConfigValue(
       "REACT_APP_EASEY_ECMPS_UI_ENABLE_MANAGE_DELEGATIONS"
     ),
-    disableSystemAdminModule: getConfigValue(
-      "REACT_APP_EASEY_ECMPS_UI_DISABLE_SYSTEM_ADMINISTRATION_MODULE", "true"
+    enableSystemAdminModule: getConfigValueBoolean(
+      "REACT_APP_EASEY_ECMPS_UI_ENABLE_SYSTEM_ADMINISTRATION_MODULE", true
     ),
     clientId: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CLIENT_ID"),
     clientSecret: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CLIENT_SECRET"),
