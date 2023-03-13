@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, Header, NavDropDownButton } from "@trussworks/react-uswds";
-
 import "./SubHeader.scss";
-import { appNavItems } from "../../utils/constants/menuTopics";
-
+import { getAppNavItems } from "../../utils/constants/menuTopics";
 import { MenuSharp } from "@material-ui/icons";
+
+const appNavItems = getAppNavItems();
 
 export const LeftNavToSubHeader = () => {
   const [navDropdownOpen, setNavDropdownOpen] = useState([
