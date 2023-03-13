@@ -1,3 +1,5 @@
+import config from "../../config";
+
 export const environmentalTopics = [
   {
     link: 'https://www.epa.gov/environmental-topics',
@@ -171,74 +173,97 @@ export const globalView = [
 
 export const home = [{ name: 'Home', url: '/' }];
 
-export const workSpace = [
-  { name: 'Monitoring Plans', url: '/workspace/monitoring-plans' },
-  {
-    name: 'QA & Certifications',
-    url: '/workspace/qa',
-    children: [
-      {
-        name: 'Test Data',
-        url: '/workspace/qa-test',
-      },
-      {
-        name: 'Cert Events, Extensions & Exemptions',
-        url: '/workspace/qa-cert-event',
-      },
-    ],
-  },
-  {
-    name: 'Emissions',
-    url: '/workspace/emissions',
-  },
-  { name: 'Export', url: '/workspace/export' },
-  {
-    name: 'Evaluate',
-    url: '/workspace/evaluate',
-  },
-  {
-    name: 'Submit',
-    url: '/workspace/submit',
-  },
-  {
-    name: 'System Administration',
-    url: '/workspace/error-suppression',
-    children: [
-      {
-        name: 'Error Suppression',
-        url: '/workspace/error-suppression',
-      },
-    ],
-  },
-];
 
-export const appNavItems = [
-  {
-    label: 'Home',
-    items: [],
-  },
-  {
-    label: 'Monitoring Plans',
-    items: [],
-  },
-  {
-    label: 'QA & Certifications',
-    items: [],
-  },
-  {
-    label: 'Emissions',
-    items: [],
-  },
-  {
-    label: 'Error Suppression',
-    items: [],
-  },
-  {
-    label: 'Workspace',
-    items: [
-      { menu: 'DATA Overview', link: '/data' },
-      { menu: 'Custom Data Download', link: '/select-data-type' },
-      { menu: 'Bulk Data Files', link: '' },
-    ],
-  },
-];
+export const getWorkspacePaths = () => {
+  const workSpace = [
+    { name: 'Monitoring Plans', url: '/workspace/monitoring-plans' },
+    {
+      name: 'QA & Certifications',
+      url: '/workspace/qa',
+      children: [
+        {
+          name: 'Test Data',
+          url: '/workspace/qa-test',
+        },
+        {
+          name: 'Cert Events, Extensions & Exemptions',
+          url: '/workspace/qa-cert-event',
+        },
+      ],
+    },
+    {
+      name: 'Emissions',
+      url: '/workspace/emissions',
+    },
+    { name: 'Export', url: '/workspace/export' },
+    {
+      name: 'Evaluate',
+      url: '/workspace/evaluate',
+    },
+    {
+      name: 'Submit',
+      url: '/workspace/submit',
+    },
+  ];
+
+  if (config.app.enableSystemAdminModule) {
+    workSpace.push({
+      name: 'System Administration',
+      url: '/workspace/error-suppression',
+      children: [
+        {
+          name: 'Error Suppression',
+          url: '/workspace/error-suppression',
+        },
+      ],
+    },
+    )
+  }
+
+  return workSpace;
+}
+
+
+
+export const getAppNavItems   = ()=>{
+  const appNavItems = [
+    {
+      label: 'Home',
+      items: [],
+    },
+    {
+      label: 'Monitoring Plans',
+      items: [],
+    },
+    {
+      label: 'QA & Certifications',
+      items: [],
+    },
+    {
+      label: 'Emissions',
+      items: [],
+    },
+  ];
+
+  if (config.app.enableSystemAdminModule) {
+    appNavItems.push(
+      {
+        label: 'Error Suppression',
+        items: [],
+      }
+  
+    )
+  }
+  appNavItems.push(
+    {
+      label: 'Workspace',
+      items: [
+        { menu: 'DATA Overview', link: '/data' },
+        { menu: 'Custom Data Download', link: '/select-data-type' },
+        { menu: 'Bulk Data Files', link: '' },
+      ],
+    }
+  );
+  
+  return appNavItems;
+}
