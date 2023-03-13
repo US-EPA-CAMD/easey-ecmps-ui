@@ -26,8 +26,9 @@ export const getMonitoringPlanById = async (id) => {
 };
 
 // *** obtain monitoring plans
-export const getMonitoringPlans = async (orisCodes, monPlanIds = []) => {
+export const getMonitoringPlans = async (orisCodes, monPlanIds = [], forWorkspace=false) => {
   let queryString;
+
   if (typeof orisCodes == "number") {
     queryString = "orisCodes=" + orisCodes;
   } else {
@@ -38,7 +39,7 @@ export const getMonitoringPlans = async (orisCodes, monPlanIds = []) => {
     queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
   }
 
-  const url = getApiUrl(`/configurations?${queryString}`);
+  const url = getApiUrl(`/configurations?${queryString}`, forWorkspace);
   return secureAxios({
     method: "GET",
     url: url,

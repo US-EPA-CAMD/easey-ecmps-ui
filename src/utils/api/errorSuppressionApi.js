@@ -49,3 +49,23 @@ export const deactivateErrorSuppression = async (id) => {
     return handleError(error);
   }
 };
+
+// Just makes GET calls to the passed in url
+export const getMdmData = async (path)=>{
+    
+  if( !path )
+    return;
+  // uri and the path returns some shared
+
+  const url = `${config.services.mdm.uri}/${path}`;
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "GET",
+        url,
+      })
+    );
+  } catch (error) {
+    return handleError(error);
+  }
+}

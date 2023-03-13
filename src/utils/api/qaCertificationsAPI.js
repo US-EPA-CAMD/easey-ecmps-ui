@@ -42,11 +42,12 @@ export const getQATestSummary = async (
   locID,
   selectedTestCode,
   beginDate,
-  endDate
+  endDate,
+  forWorkspace = false,
 ) => {
   let url = `${config.services.qaCertification.uri}`;
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf("workspace") > -1) {
+  if (window.location.href.indexOf("workspace") > -1 || forWorkspace) {
     url = `${url}/workspace`;
   }
   // *** attach the rest of the url

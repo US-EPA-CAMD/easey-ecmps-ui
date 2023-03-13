@@ -1257,30 +1257,6 @@ export const HeaderInfo = ({
                 </Grid>
               </Grid>
               {/* ------------------------------------------------------------------------------- */}
-              <Grid row>
-                <Grid col={2}>
-                  <Button
-                    outline
-                    type="button"
-                    title="Summary Report"
-                    onClick={() => null}
-                    className={"hyperlink-btn cursor-pointer text-no-wrap"}
-                  >
-                    Summary Report
-                  </Button>
-                </Grid>
-                <Grid col={2}>
-                  <Button
-                    outline
-                    type="button"
-                    title="Data Report"
-                    className={"hyperlink-btn cursor-pointer margin-left-2"}
-                    onClick={() => null}
-                  >
-                    Data Report
-                  </Button>
-                </Grid>
-              </Grid>
             </GridContainer>
           }
         </div>
