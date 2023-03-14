@@ -45,7 +45,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     const [selectedIsHistorical, setSelectedIsHistorical] = useState();
     const [selectedBeginQuarter, setSelectedBeginQuarter] = useState();
     const [selectedEndQuarter, setSelectedEndQuarter] = useState();
-
+    
     // Locations multiselect items
     const [locationData, setLocationData] = useState([]);
 
@@ -58,11 +58,14 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     const showDate = selectedCheckResultObj?.timeTypeCode === 'DATE';
     const showQuarter = selectedCheckResultObj?.timeTypeCode === 'QUARTER';
     const showHistorical = selectedCheckResultObj?.timeTypeCode === 'HISTIND';
+    
+
 
     useEffect(() => {
         const uniqueTypeCodeAndDesc = getUniqueCheckTypeDescription(transformedData);
         setCheckTypeList(uniqueTypeCodeAndDesc);
-    }, [transformedData])
+    }, [transformedData]);
+
 
     // When the clone button is clicked and values is set, this useEffect takes care of prepopulating
     // all the form fields with the values of the row that was selected
@@ -412,8 +415,11 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
 
                         </Grid>
                     </Grid>
-                    {selectedCheckResultObj ?
-                        <Grid row gap={2}>
+                    {/* Dropdown is hidden if no check result is selected and in the case that check result's matchDataType is PARAM, it is not shown if there is no data for matchDataList.
+                        See ticket 4621 for the explanation of PARAM match type */}
+                    {!selectedCheckResultObj || (selectedCheckResultObj?.dataTypeCode === "PARAM" && matchDataList?.length === 0) ?
+                         null :
+                         <Grid row gap={2}>
                             <Grid col={5}>
                                 <Label test-id={"add-fuel-type"} htmlFor={"add-fuel-type"}>
                                     {selectedCheckResultObj.dataTypeLabel}
@@ -432,7 +438,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                     }
                                 </Dropdown>
                             </Grid>
-                        </Grid> : null
+                        </Grid>
                     }
 
                     {/* Only show the time criteria section if we determined a valid time type code */}
