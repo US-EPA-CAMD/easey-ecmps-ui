@@ -434,7 +434,7 @@ export const EvaluateAndSubmit = ({
 
   return (
     <div className="react-transition fade-in padding-x-3">
-      {waitTimeData && <Alert className="margin-y-2" type="info" heading={waitTimeData?.title} children={waitTimeData?.content} />}
+      {waitTimeData?.displayAlert && <Alert className="margin-y-2" type="info" heading={waitTimeData?.title} children={waitTimeData?.content} />}
       <div className="text-black flex-justify margin-top-1 grid-row">
         {componentType === "Submission" && (
           <div className="grid-row">

@@ -193,7 +193,7 @@ const mockUserPermissions = [
 ]
 
 jest.mock('../../utils/api/contentApi', () => ({
-  getContent: jest.fn().mockResolvedValue({data: {title: 'Test Title', content: 'Test Content'}})
+  getContent: jest.fn().mockResolvedValue({data: {title: 'Test Title', content: 'Test Content', displayAlert: true}})
 }));
 
 jest.mock(
