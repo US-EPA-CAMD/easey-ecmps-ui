@@ -36,6 +36,9 @@ div.row.column1 {
   color: #d10000;
   border-color: #d10000;
 }
+#appErrorMessageText {
+  white-space: pre-wrap;
+}
 .skip-to-content-link:focus {
   transform: translateY(0%);
 }
