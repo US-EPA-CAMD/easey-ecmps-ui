@@ -1,5 +1,6 @@
 export const extractUserInput = (payload, inputSelector, radios) => {
 
+  console.log('payload', payload)
   // *** construct payload
   const payloadInputs = document.querySelectorAll(inputSelector);
   const datepickerPayloads = document.querySelectorAll(
@@ -19,10 +20,11 @@ export const extractUserInput = (payload, inputSelector, radios) => {
       return;
     }
     const item = { name: "", value: "" };
-    item.name = document.getElementById(input.id).attributes[
-      "epadataname"
-    ].value;
-    item.value = document.getElementById(input.id).value;
+    item.name = input.getAttribute('epadataname');
+    item.value = input.value;
+    if (!item.value) {
+      item.value = input.getAttribute('value');
+    }
     payloadArray.push(item);
   });
 
