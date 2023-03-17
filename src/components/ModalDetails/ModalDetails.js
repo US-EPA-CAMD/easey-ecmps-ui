@@ -28,6 +28,7 @@ const ModalDetails = ({
   create,
   setMainDropdownChange,
   mainDropdownChange,
+  setDisableExitBtnStatus
 }) => {
   useEffect(() => {
     assignAriaLabelsToDatePickerButtons();
@@ -608,6 +609,11 @@ const ModalDetails = ({
                     ? "grid-row padding-top-2 margin-right-2"
                     : ""
                 }
+                onChange={(e) => {
+                  if (setDisableExitBtnStatus && e.target.value !== item) {
+                    setDisableExitBtnStatus(false)
+                  }
+                }}
               >
                 {item}
               </div>
