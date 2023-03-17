@@ -91,7 +91,6 @@ export const getReportingPeriods = (minYear = 2009) => {
     }
   }
 
-  console.log("reportingPeriods: " , reportingPeriods)
   return reportingPeriods;
 };
 
