@@ -82,15 +82,16 @@ export const getReportingPeriods = (minYear = 2009) => {
   const maxYear = new Date().getFullYear();
   const reportingPeriods = [];
 
-  const currentYearQuarter = maxYear + getQuarter();
+  const currentYearQuarter = parseInt(`${maxYear}${getQuarter()}`);
 
   for (let year = maxYear; year >= minYear; year--) {
     for (const quarter of quarters) {
-      if( year + quarter <= currentYearQuarter)
+      if( parseInt(`${year}${quarter}`) <= currentYearQuarter)
         reportingPeriods.push(`${year} Q${quarter}`);
     }
   }
 
+  console.log("reportingPeriods: " , reportingPeriods)
   return reportingPeriods;
 };
 
