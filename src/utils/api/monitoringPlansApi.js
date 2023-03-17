@@ -3,6 +3,7 @@ import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
 import { getFacilityById } from "./facilityApi";
 import download from "downloadjs";
+import axios from "axios";
 
 export const getApiUrl = (path, workspaceOnly = false) => {
   let url = config.services.monitorPlans.uri;
@@ -26,7 +27,11 @@ export const getMonitoringPlanById = async (id) => {
 };
 
 // *** obtain monitoring plans
-export const getMonitoringPlans = async (orisCodes, monPlanIds = [], forWorkspace=false) => {
+export const getMonitoringPlans = async (
+  orisCodes,
+  monPlanIds = [],
+  forWorkspace = false
+) => {
   let queryString;
 
   if (typeof orisCodes == "number") {
@@ -1111,7 +1116,7 @@ export const importMP = async (payload) => {
 
 export const getMPSchema = async () => {
   const url = `${config.services.content.uri}/ecmps/reporting-instructions/monitor-plan.schema.json`;
-  return secureAxios({
+  return axios({
     method: "GET",
     url: url,
   })
