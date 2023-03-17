@@ -7,9 +7,9 @@ export const getTestSummary = (data, colTitles) => {
       const endDate = el.endDate
         ? formatStringToDate(el.endDate.toString())
         : "";
-      const endHour = el.endHour ? el.endHour.toString() : "";
+      const endHour = el.endHour ? Number(el.endHour) : "";
 
-      const endMinute = el.endMinute ? el.endMinute.toString() : "";
+      const endMinute = el.endMinute ? Number(el.endMinute) : "";
       records.push({
         id: el.id,
         locationId: el.locationId,
@@ -51,10 +51,10 @@ export const getTestSummary = (data, colTitles) => {
               : "";
             break;
           case "End Hour":
-            colValue = curData?.endHour?.toString() ?? "";
+            colValue = curData.endHour ? Number(curData.endHour) : "";
             break;
           case "End Minute":
-            colValue = curData?.endMinute?.toString() ?? "";
+            colValue = curData.endMinute ? Number(curData.endMinute) : "";
             break;
           case "Unit or Stack Pipe ID":
             colValue = curData.unitId ?? curData.stackPipeId;
