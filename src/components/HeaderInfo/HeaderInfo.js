@@ -48,6 +48,7 @@ import {
   getUser,
   displayReport,
   getPreviouslyFullSubmitedQuarter,
+  getQuarter,
 } from "../../utils/functions";
 import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
 import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
@@ -63,8 +64,6 @@ import {
   displayAppError,
   hideAppError,
 } from "../../additional-functions/app-error";
-
-import { getQuarter } from "../../utils/functions";
 
 // Helper function that generates an array of years from this year until the year specified in min param
 export const generateArrayOfYears = (min) => {
