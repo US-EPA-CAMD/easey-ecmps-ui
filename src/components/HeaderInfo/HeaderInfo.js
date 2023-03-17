@@ -64,6 +64,8 @@ import {
   hideAppError,
 } from "../../additional-functions/app-error";
 
+import { getQuarter } from "../../utils/functions";
+
 // Helper function that generates an array of years from this year until the year specified in min param
 export const generateArrayOfYears = (min) => {
   let max = new Date().getFullYear();
@@ -80,9 +82,12 @@ export const getReportingPeriods = (minYear = 2009) => {
   const maxYear = new Date().getFullYear();
   const reportingPeriods = [];
 
+  const currentYearQuarter = maxYear + getQuarter();
+
   for (let year = maxYear; year >= minYear; year--) {
     for (const quarter of quarters) {
-      reportingPeriods.push(`${year} Q${quarter}`);
+      if( year + quarter <= currentYearQuarter)
+        reportingPeriods.push(`${year} Q${quarter}`);
     }
   }
 
