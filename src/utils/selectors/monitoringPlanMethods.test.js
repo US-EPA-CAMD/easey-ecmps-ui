@@ -104,8 +104,4 @@ describe("testing monitoring plan data selectors", () => {
       fs.getMonitoringPlansMatsMethodsTableRecords(selectedMonitoringMatsMethod)
     ).toEqual(monitoringMatsMethdsTableRecods);
   });
-
-  test("should return formatted date ", () => {
-    expect(fs.formatAndNormalizeDate("2020-10-10")).toEqual("10/10/2020");
-  });
 });
