@@ -10,7 +10,11 @@ const validateDate = (date, hourMins) =>{
 }
 const formatDateTime = (date, hour, mins) =>{
   if(date){
-    return `${validateDate(date, null)} ${validateDate(null, hour)}${validateDate(null, mins)? `:${validateDate(null, mins)}`:""}`;
+    if(mins){
+      return `${validateDate(date, null)} ${validateDate(null, hour)}:${validateDate(null, mins)}`;
+    }else{
+      return `${validateDate(date, null)} ${validateDate(null, hour)}`;
+    }
   }else{
     return ""
   }
