@@ -1,11 +1,11 @@
+import { formatDateString } from "../functions";
+
 export const getMonitoringPlansLEEQualifications = (totalData) => {
   const data = totalData;
   const records = [];
 
   data.forEach((el) => {
-    const testDate = el.qualificationTestDate
-      ? formatStringToDate(el.qualificationTestDate.toString())
-      : "";
+    const testDate = formatDateString(el.qualificationTestDate.toString())
     records.push({
       col1: testDate,
       col2: el.parameterCode ? el.parameterCode : "",
@@ -22,10 +22,4 @@ export const getMonitoringPlansLEEQualifications = (totalData) => {
     });
   });
   return records;
-};
-// year - month - day to  month / day/ year
-const formatStringToDate = (date) => {
-  const parts = date.split("-");
-
-  return `${parts[1]}/${parts[2]}/${parts[0]}`;
 };
