@@ -41,17 +41,17 @@ describe("testing unit controls data selectors", () => {
 
     rectDuctTableRecords = [
       {
-        col1: "01/01/2004",
+        col1: "2004/01/01",
         col2: "FT",
-        col3: "01/01/2004 0",
-        col4: "12/31/2008 23",
+        col3: "2004/01/01 0",
+        col4: "2008/12/31 23",
         col5: "CAMD-7B78524FB52042EC80564E58D67D7E99",
       },
       {
         col1: "",
         col2: null,
-        col3: " ",
-        col4: " ",
+        col3: "",
+        col4: "",
         col5: "CAMD-7B78524FB52042EC80564E58D67D7E91",
       },
     ];
