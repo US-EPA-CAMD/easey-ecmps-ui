@@ -103,7 +103,7 @@ describe("testing TestSummary data selectors", () => {
         col4: "412343",
         col5: "DIAG",
         col6: "ABORTED",
-        col7: " ",
+        col7: "",
         // col8: "",
         // col9: "",
         id: "3ee84634-7dc4-45c8-8eee-ca79e699893a",
