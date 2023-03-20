@@ -5,7 +5,7 @@ export const getMonitoringPlansLEEQualifications = (totalData) => {
   const records = [];
 
   data.forEach((el) => {
-    const testDate = formatDateString(el.qualificationTestDate.toString())
+    const testDate = formatDateString(el.qualificationTestDate)
     records.push({
       col1: testDate,
       col2: el.parameterCode ? el.parameterCode : "",

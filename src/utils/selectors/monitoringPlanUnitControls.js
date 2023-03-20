@@ -4,9 +4,9 @@ export const getMonitoringPlansUnitControlRecords = (data) => {
   const records = [];
 
   data.forEach((el) => {
-    const installDate = formatDateString(el.installDate.toString())
-    const optimizationDate = formatDateString(el.optimizationDate.toString())
-    const retireDate = formatDateString(el.retireDate.toString())
+    const installDate = formatDateString(el.installDate)
+    const optimizationDate = formatDateString(el.optimizationDate)
+    const retireDate = formatDateString(el.retireDate)
 
     const seasonalControlsIndicator =
       el["seasonalControlsIndicator"] === "1" ? "Yes" : "No";

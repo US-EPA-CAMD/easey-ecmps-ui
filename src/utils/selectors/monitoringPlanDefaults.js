@@ -5,9 +5,9 @@ export const getMonitoringPlansDefaultsTableRecords = (totalData) => {
   const records = [];
 
   data.forEach((el) => {
-    const beginDate = formatDateString(el.beginDate.toString());
+    const beginDate = formatDateString(el.beginDate);
     const beginHour = el.beginHour !== null ? el.beginHour.toString() : "";
-    const endDate = formatDateString(el.endDate.toString());
+    const endDate = formatDateString(el.endDate);
     const endHour = el.endHour !== null ? el.endHour.toString() : "";
     records.push({
       col1: el.parameterCode,
