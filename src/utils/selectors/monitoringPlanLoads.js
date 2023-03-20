@@ -1,16 +1,16 @@
+import { formatDateString } from "../functions";
+
 export const getMonitoringPlansLoadsTableRecords = (totalData) => {
   const data = totalData;
   const records = [];
 
   data.forEach((el) => {
-    const beginDate = el.beginDate
-      ? formatStringToDate(el.beginDate.toString())
-      : "";
+    const beginDate = formatDateString(el.beginDate);
     const beginHour = el.beginHour !== null ? el.beginHour.toString() : "";
-    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
+    const endDate = formatDateString(el.endDate);
     const endHour = el.endHour !== null ? el.endHour.toString() : "";
 
-    var secondNormalIndicator;
+    let secondNormalIndicator;
     if (el.secondNormalIndicator || el.secondNormalIndicator === 0) {
       if (el.secondNormalIndicator === 1) {
         secondNormalIndicator = "Yes";
@@ -21,7 +21,7 @@ export const getMonitoringPlansLoadsTableRecords = (totalData) => {
       secondNormalIndicator = "";
     }
 
-    var maximumLoadUnitsOfMeasureCode;
+    let maximumLoadUnitsOfMeasureCode;
     switch (el.maximumLoadUnitsOfMeasureCode) {
       case "select":
         maximumLoadUnitsOfMeasureCode = null;
@@ -30,7 +30,7 @@ export const getMonitoringPlansLoadsTableRecords = (totalData) => {
         maximumLoadUnitsOfMeasureCode = el.maximumLoadUnitsOfMeasureCode;
     }
 
-    var normalLevelCode;
+    let normalLevelCode;
     switch (el.normalLevelCode) {
       case "select":
         normalLevelCode = null;
@@ -39,7 +39,7 @@ export const getMonitoringPlansLoadsTableRecords = (totalData) => {
         normalLevelCode = el.normalLevelCode;
     }
 
-    var secondLevelCode;
+    let secondLevelCode;
     switch (el.secondLevelCode) {
       case "select":
         secondLevelCode = null;
@@ -48,9 +48,7 @@ export const getMonitoringPlansLoadsTableRecords = (totalData) => {
         secondLevelCode = el.secondLevelCode;
     }
 
-    const loadAnalysisDate = el.loadAnalysisDate
-      ? formatStringToDate(el.loadAnalysisDate.toString())
-      : "";
+    const loadAnalysisDate = formatDateString(el.loadAnalysisDate);
 
     records.push({
       col1: el.maximumLoadValue,
@@ -68,10 +66,4 @@ export const getMonitoringPlansLoadsTableRecords = (totalData) => {
   });
 
   return records;
-};
-// year - month - day to  month / day/ year
-const formatStringToDate = (date) => {
-  const parts = date.split("-");
-
-  return `${parts[1]}/${parts[2]}/${parts[0]}`;
 };
