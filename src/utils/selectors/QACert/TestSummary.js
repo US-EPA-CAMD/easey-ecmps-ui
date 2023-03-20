@@ -1,15 +1,25 @@
 import { evalStatusContent } from "../../../additional-functions/evaluate-configs";
 
+const validateDate = (date, hourMins) =>{
+  if(date){
+    return  formatStringToDate(date.toString())
+  }else if(hourMins){
+    return ("0" + hourMins).slice(-2);;
+  }
+  return "";
+}
+const formatDateTime = (date, hour, mins) =>{
+  if(date){
+    return `${validateDate(date, null)} ${validateDate(null, hour)}${validateDate(null, mins)? `:${validateDate(null, mins)}`:""}`;
+  }else{
+    return ""
+  }
+};
+
 export const getTestSummary = (data, colTitles) => {
   const records = [];
   if (!colTitles) {
     data.forEach((el) => {
-      const endDate = el.endDate
-        ? formatStringToDate(el.endDate.toString())
-        : "";
-      const endHour = el.endHour ? Number(el.endHour) : "";
-
-      const endMinute = el.endMinute ? Number(el.endMinute) : "";
       records.push({
         id: el.id,
         locationId: el.locationId,
@@ -24,10 +34,8 @@ export const getTestSummary = (data, colTitles) => {
         col4: el.testNumber,
         col5: el.testReasonCode,
         col6: el.testResultCode,
-        col7: endDate,
-        col8: endHour,
-        col9: endMinute,
-        col10: evalStatusContent(el.evalStatusCode),
+        col7: formatDateTime(el.endDate, el.endHour, el.endMinute),
+        col9: evalStatusContent(el.evalStatusCode),
       });
     });
   }
@@ -46,15 +54,7 @@ export const getTestSummary = (data, colTitles) => {
         // special cases
         switch (colTitle) {
           case "End Date":
-            colValue = curData.endDate
-              ? formatStringToDate(curData.endDate.toString())
-              : "";
-            break;
-          case "End Hour":
-            colValue = curData.endHour ? Number(curData.endHour) : "";
-            break;
-          case "End Minute":
-            colValue = curData.endMinute ? Number(curData.endMinute) : "";
+            colValue = formatDateTime(curData.endDate, curData.endHour, curData.endMinute);
             break;
           case "Unit or Stack Pipe ID":
             colValue = curData.unitId ?? curData.stackPipeId;
@@ -78,7 +78,7 @@ const formatStringToDate = (date) => {
 
   parts = date.split("-");
 
-  return `${parts[1]}/${parts[2]}/${parts[0]}`;
+  return `${parts[0]}/${parts[1]}/${parts[2]}`;
 };
 
 const colTitleToDtoKeyMap = {
