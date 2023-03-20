@@ -1235,10 +1235,10 @@ describe('Test cases for QAExpandableRowsRender', () => {
         "operatingLevelCode": "string",
         "averageGrossUnitLoad": 0,
         "averageReferenceMethodFlow": 0,
-        "referenceFlowToLoadRatio": 0,
+        "referenceFlowLoadRatio": 0,
         "averageHourlyHeatInputRate": 0,
         "referenceGrossHeatRate": 0,
-        "calculatedSeparateReferenceIndicator": 0
+        "calcSeparateReferenceIndicator": 0
       },
       {
         "id": "id2",
@@ -1254,10 +1254,10 @@ describe('Test cases for QAExpandableRowsRender', () => {
         "operatingLevelCode": "string",
         "averageGrossUnitLoad": 0,
         "averageReferenceMethodFlow": 0,
-        "referenceFlowToLoadRatio": 0,
+        "referenceFlowLoadRatio": 0,
         "averageHourlyHeatInputRate": 0,
         "referenceGrossHeatRate": 0,
-        "calculatedSeparateReferenceIndicator": 0
+        "calcSeparateReferenceIndicator": 0
       }
     ]
 
