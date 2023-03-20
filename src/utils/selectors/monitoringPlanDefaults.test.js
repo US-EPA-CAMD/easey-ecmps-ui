@@ -76,8 +76,8 @@ describe("testing monitoring plan data selectors", () => {
         col4: "NFS",
         col5: "A",
         col6: "DEF",
-        col7: "1995/01/01 0",
-        col8: "1995/01/01 0",
+        col7: "1995/01/01 00",
+        col8: "1995/01/01 00",
         col9: "TWCORNEL5-7C3E827D67CF418E84CC948BEB75B3A2",
       },
       {
