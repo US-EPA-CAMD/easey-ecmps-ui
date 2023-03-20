@@ -681,9 +681,9 @@ const QAExpandableRowsRender = ({
                   descriptionLabel = "opLevelDescription";
                   break;
                 case 2:
-                  codeLabel = "calculatedSeparateReferenceIndicatorCode";
+                  codeLabel = "calcSeparateReferenceIndicatorCode";
                   descriptionLabel =
-                    "calculatedSeparateReferenceIndicatorDescription";
+                    "calcSeparateReferenceIndicatorDescription";
                   break;
                 default:
                   break;

@@ -558,10 +558,10 @@ export const mapFlowToLoadReferenceToRows = (data) => {
       col2: el.operatingLevelCode,
       col3: el.averageGrossUnitLoad,
       col4: el.averageReferenceMethodFlow,
-      col5: el.referenceFlowToLoadRatio,
+      col5: el.referenceFlowLoadRatio,
       col6: el.averageHourlyHeatInputRate,
       col7: el.referenceGrossHeatRate,
-      col8: el.calculatedSeparateReferenceIndicator,
+      col8: el.calcSeparateReferenceIndicator,
     };
     records.push(row);
   }

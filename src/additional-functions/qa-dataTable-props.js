@@ -1220,7 +1220,7 @@ export const qaFlowToLoadReferenceProps = () => {
     dropdownArray: [
       "rataTestNumber",
       "operatingLevelCode",
-      "calculatedSeparateReferenceIndicator",
+      "calcSeparateReferenceIndicator",
     ],
     // mdmProps: [
     //   {
@@ -1251,7 +1251,7 @@ export const qaFlowToLoadReferenceProps = () => {
         "",
         "",
       ],
-      referenceFlowToLoadRatio: ["Reference Flow Load Ratio", "input", "", ""],
+      referenceFlowLoadRatio: ["Reference Flow Load Ratio", "input", "", ""],
       averageHourlyHeatInputRate: [
         "Average Hourly Heat Input Rate",
         "input",
@@ -1259,7 +1259,7 @@ export const qaFlowToLoadReferenceProps = () => {
         "",
       ],
       referenceGrossHeatRate: ["Reference Gross Heat Rate", "input", "", ""],
-      calculatedSeparateReferenceIndicator: [
+      calcSeparateReferenceIndicator: [
         "Calculated Separate Reference Indicator",
         "dropdown",
         "",
