@@ -1020,7 +1020,6 @@ export const createLMEQualificationData = async (payload) => {
 };
 
 export const getLocationAttributes = async (locationId) => {
-  console.log("locationid", locationId);
   const url = getApiUrl(`/locations/${locationId}/attributes`);
   return secureAxios({
     method: "GET",
