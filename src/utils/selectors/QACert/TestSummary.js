@@ -652,14 +652,11 @@ export const mapQaCertEventsDataToRows = (data) => {
       col2: el.componentID,
       col3: el.monitoringSystemID,
       col4: el.qaCertEventCode,
-      col5: el.qaCertEventDate,
-      col6: el.qaCertEventHour,
-      col7: el.requiredTestCode,
-      col8: el.conditionalBeginDate,
-      col9: el.conditionalBeginHour,
-      col10: el.completionTestDate,
-      col11: el.completionTestHour,
-      col12: evalStatusContent(el.evalStatusCode),
+      col5: formatDateTime(el.qaCertEventDate, el.qaCertEventHour),
+      col6: el.requiredTestCode,
+      col7: formatDateTime(el.conditionalBeginDate, el.conditionalBeginHour),
+      col8: formatDateTime(el.completionTestDate, el.completionTestHour),
+      col9: evalStatusContent(el.evalStatusCode),
     };
     records.push(row);
   }
