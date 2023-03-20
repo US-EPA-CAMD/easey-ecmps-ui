@@ -501,12 +501,12 @@ export const getAllAccuracySpecCodes = async () => {
 export const getAllCalculatedSeparateReferenceIndicatorCodes = async () => {
   const data = [
     {
-      calculatedSeparateReferenceIndicatorCode: '0',
-      calculatedSeparateReferenceIndicatorDescription: '0'
+      calcSeparateReferenceIndicatorCode: '0',
+      calcSeparateReferenceIndicatorDescription: '0'
     },
     {
-      calculatedSeparateReferenceIndicatorCode: '1',
-      calculatedSeparateReferenceIndicatorDescription: '1'
+      calcSeparateReferenceIndicatorCode: '1',
+      calcSeparateReferenceIndicatorDescription: '1'
     }
   ]
   return Promise.resolve({ status: 200, data })
