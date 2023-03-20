@@ -1,4 +1,4 @@
-import { formatDateString } from "../functions";
+import { formatDateString, formatHourString } from "../functions";
 
 export const getMonitoringPlansLoadsTableRecords = (totalData) => {
   const data = totalData;
@@ -6,9 +6,9 @@ export const getMonitoringPlansLoadsTableRecords = (totalData) => {
 
   data.forEach((el) => {
     const beginDate = formatDateString(el.beginDate);
-    const beginHour = el.beginHour !== null ? el.beginHour.toString() : "";
+    const beginHour = formatHourString(el.beginHour);
     const endDate = formatDateString(el.endDate);
-    const endHour = el.endHour !== null ? el.endHour.toString() : "";
+    const endHour = formatHourString(el.endHour);
 
     let secondNormalIndicator;
     if (el.secondNormalIndicator || el.secondNormalIndicator === 0) {

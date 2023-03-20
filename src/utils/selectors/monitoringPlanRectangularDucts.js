@@ -1,4 +1,4 @@
-import { formatDateString } from "../functions";
+import { formatDateString, formatHourString } from "../functions";
 
 export const getMonitoringPlansRectangularDuctsTableRecords = (totalData) => {
   const data = totalData;
@@ -6,10 +6,9 @@ export const getMonitoringPlansRectangularDuctsTableRecords = (totalData) => {
 
   data.forEach((el) => {
     const beginDate = formatDateString(el.wafBeginDate)
-    const beginHour =
-      el.wafBeginHour !== null ? el.wafBeginHour.toString() : "";
+    const beginHour =formatHourString(el.wafBeginHour);
     const endDate = formatDateString(el.wafEndDate)
-    const endHour = el.wafEndHour !== null ? el.wafEndHour.toString() : "";
+    const endHour = formatHourString(el.wafEndHour);
     const wafDeterminationDate = formatDateString(el.wafDeterminationDate)
     const wafMethodCode = el.wafMethodCode === "select" ? null : el.wafMethodCode;
 
