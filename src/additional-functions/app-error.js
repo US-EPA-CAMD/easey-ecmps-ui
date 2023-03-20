@@ -1,9 +1,10 @@
 export const needEndDate = "Must enter in both End Date and End Time";
 export const displayAppError = (error) => {
+  const formattedError = Array.isArray(error) ? error.join('\n') : error
   const appearAnimation = "flip-in-x-reverse";
 
   if (document.querySelector("#appErrorMessageText")) {
-    document.querySelector("#appErrorMessageText").innerHTML = error;
+    document.querySelector("#appErrorMessageText").innerHTML = formattedError;  
     document.querySelector("#appErrorMessage").classList.remove("display-none");
     document
       .querySelector("#appErrorMessage")

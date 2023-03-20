@@ -2,6 +2,7 @@ import config from "../../config";
 import { handleError, handleResponse, handleImportError } from "./apiUtils";
 import { secureAxios } from "./easeyAuthApi";
 import download from "downloadjs";
+import axios from "axios";
 
 export const getEmissionsReviewSubmit = async (
   orisCodes,
@@ -134,7 +135,7 @@ export const getViews = async () => {
 
 export const getEmissionsSchema = async () => {
   const url = `${config.services.content.uri}/ecmps/reporting-instructions/emissions.schema.json`;
-  return secureAxios({ url: url, method: "GET" })
+  return axios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
