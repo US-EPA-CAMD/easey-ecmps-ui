@@ -16,8 +16,8 @@ export const getMonitoringPlansDefaultsTableRecords = (totalData) => {
       col4: el.fuelCode,
       col5: el.operatingConditionCode,
       col6: el.defaultSourceCode,
-      col7: `${beginDate} ${beginHour}`,
-      col8: `${endDate} ${endHour}`,
+      col7: `${beginDate} ${beginHour}`.trim(),
+      col8: `${endDate} ${endHour}`.trim(),
       col9: el.id,
     });
   });

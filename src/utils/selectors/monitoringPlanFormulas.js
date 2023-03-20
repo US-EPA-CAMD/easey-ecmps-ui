@@ -14,8 +14,8 @@ export const getMonitoringPlansFormulasTableRecords = (totalData) => {
       col2: el.parameterCode,
       col3: el.formulaCode,
       col4: el.formulaText,
-      col5: `${beginDate} ${beginHour}`,
-      col6: `${endDate} ${endHour}`,
+      col5: `${beginDate} ${beginHour}`.trim(),
+      col6: `${endDate} ${endHour}`.trim(),
       col7: el.id,
     });
   });

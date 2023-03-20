@@ -59,8 +59,8 @@ export const getMonitoringPlansLoadsTableRecords = (totalData) => {
       col6: secondLevelCode,
       col7: secondNormalIndicator,
       col8: loadAnalysisDate,
-      col9: `${beginDate} ${beginHour}`,
-      col10: `${endDate} ${endHour}`,
+      col9: `${beginDate} ${beginHour}`.trim(),
+      col10: `${endDate} ${endHour}`.trim(),
       col11: el.id,
     });
   });
