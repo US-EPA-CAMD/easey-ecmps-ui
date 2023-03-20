@@ -7,8 +7,6 @@ export const getQAColsByTestCode = (testCode, user = false) => {
     "Test Reason Code",
     "Test Result Code",
     "End Date",
-    "End Hour",
-    "End Minute",
   ];
   switch (testCode) {
     case "APPESUM": // Appendix E Correlation Test Summary
@@ -19,8 +17,6 @@ export const getQAColsByTestCode = (testCode, user = false) => {
         "Test Number",
         "Test Reason Code",
         "End Date",
-        "End Hour",
-        "End Minute",
       ];
       break;
     case "CALINJ": // Calibration Injection
@@ -38,8 +34,6 @@ export const getQAColsByTestCode = (testCode, user = false) => {
         "Test Reason Code",
         "Test Result Code",
         "End Date",
-        "End Hour",
-        "End Minute",
       ];
       break;
     case "FLC": // Flow to Load Check
@@ -62,8 +56,6 @@ export const getQAColsByTestCode = (testCode, user = false) => {
         "Monitoring System ID",
         "Test Number",
         "End Date",
-        "End Hour",
-        "End Minute",
       ];
       break;
     case "FFLB": // Fuel Flow to Load Baseline
@@ -73,7 +65,6 @@ export const getQAColsByTestCode = (testCode, user = false) => {
         "Monitoring System ID",
         "Test Number",
         "End Date",
-        "End Hour",
       ];
       break;
     case "OLOLCAL": // Online Offline Calibration
@@ -85,7 +76,6 @@ export const getQAColsByTestCode = (testCode, user = false) => {
         "Test Reason Code",
         "Test Result Code",
         "End Date",
-        "End Hour",
       ];
       break;
     case "RELACC": // Relative Accuracy
@@ -97,8 +87,6 @@ export const getQAColsByTestCode = (testCode, user = false) => {
         "Test Reason Code",
         "Test Result Code",
         "End Date",
-        "End Hour",
-        "End Minute",
       ];
       break;
     case "LME": // Unit Default
@@ -108,8 +96,6 @@ export const getQAColsByTestCode = (testCode, user = false) => {
         "Test Number",
         "Test Reason Code",
         "End Date",
-        "End Hour",
-        "End Minute",
       ];
       break;
     case "MISC": // Miscellaneous
@@ -122,8 +108,6 @@ export const getQAColsByTestCode = (testCode, user = false) => {
         "Test Reason Code",
         "Test Result Code",
         "End Date",
-        "End Hour",
-        "End Minute",
       ];
       break;
     default:
