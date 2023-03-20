@@ -754,13 +754,11 @@ export const DataTableSystems = ({
                         createFuelFlows();
                         backToFirstLevelLevelBTN(false);
                         setOpenFuelFlowsView(false);
-                        setDisableExitBtn(false);
                       }
                       : () => {
                         saveFuelFlows();
                         backToFirstLevelLevelBTN(false);
                         setOpenFuelFlowsView(false);
-                        setDisableExitBtn(false);
                       }
                     : secondLevelName === "Component" && !createNewComponentFlag
                       ? // at system components
@@ -889,6 +887,7 @@ export const DataTableSystems = ({
                   setCurrentBar={setCurrentBar}
                   openFuelFlowsView={openFuelFlowsView}
                   setOpenFuelFlowsView={setOpenFuelFlowsView}
+                  setDisableExitBtn={setDisableExitBtn}
                 />
               </div>
             }
