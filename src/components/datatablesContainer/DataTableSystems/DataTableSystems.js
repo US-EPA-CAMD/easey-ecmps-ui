@@ -821,7 +821,7 @@ export const DataTableSystems = ({
                         ? "Create New Component"
                         : null
             }
-            disableExitBtn={disableExitBtn}
+            // disableExitBtn={disableExitBtn}
             breadCrumbBar={currentBar}
             title={`System: ${selected[0]["value"]}`}
             children={
