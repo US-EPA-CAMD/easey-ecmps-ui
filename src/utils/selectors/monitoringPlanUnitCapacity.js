@@ -6,10 +6,10 @@ export const getMonitoringPlansUnitCapacityRecords = (data) => {
     const beginDate = formatDateString(el.beginDate);
     const endDate = formatDateString(el.endDate);
 
-    const commercialOperationDateString = formatDateString(el.commercialOperationDate.toString())
-    const operationDateString = formatDateString(el.operationDate.toString())
-    const boilerTurbineBeginDateString = formatDateString(el.boilerTurbineBeginDate.toString())
-    const boilerTurbineEndDateString = formatDateString(el.boilerTurbineEndDate.toString())
+    const commercialOperationDateString = formatDateString(el.commercialOperationDate)
+    const operationDateString = formatDateString(el.operationDate)
+    const boilerTurbineBeginDateString = formatDateString(el.boilerTurbineBeginDate)
+    const boilerTurbineEndDateString = formatDateString(el.boilerTurbineEndDate)
 
     records.push({
       col1: commercialOperationDateString,
