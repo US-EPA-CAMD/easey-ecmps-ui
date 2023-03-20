@@ -74,6 +74,7 @@ export const DataTableSystemsComponents = ({
   selectedUnlinkedComponent ,
   openComponentViewTest = false,
   openAddComponentTest = false,
+  setDisableExitBtn
 }) => {
   const [monitoringSystemsFuelFlows, setMonitoringSystemsFuelFlows] =
     useState("");
@@ -440,6 +441,7 @@ export const DataTableSystemsComponents = ({
     setCreateFuelFlowFlag(create);
     setComponentView(false);
     setOpenFuelFlowsView(true);
+    setDisableExitBtn(false);
     if (monitoringSystemsFuelFlows.length > 0 && !create) {
       selectFuelFlows = monitoringSystemsFuelFlows.filter(
         (element) => element.id === row.col4
@@ -587,7 +589,10 @@ export const DataTableSystemsComponents = ({
             return fuelFlowDropdownsLoaded ? (
               <ModalDetails
                 modalData={selectedFuelFlows}
-                backBtn={setBread}
+                backBtn={() => {
+                  setBread()
+                  setDisableExitBtn(true)
+                }}
                 prefilteredMdmData={prefilteredMdmDataFuelFlows}
                 data={selectedFuelFlowsModalData}
                 cols={2}

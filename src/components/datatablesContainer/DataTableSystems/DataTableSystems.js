@@ -754,13 +754,11 @@ export const DataTableSystems = ({
                         createFuelFlows();
                         backToFirstLevelLevelBTN(false);
                         setOpenFuelFlowsView(false);
-                        setDisableExitBtn(false);
                       }
                       : () => {
                         saveFuelFlows();
                         backToFirstLevelLevelBTN(false);
                         setOpenFuelFlowsView(false);
-                        setDisableExitBtn(false);
                       }
                     : secondLevelName === "Component" && !createNewComponentFlag
                       ? // at system components
@@ -823,7 +821,7 @@ export const DataTableSystems = ({
                         ? "Create New Component"
                         : null
             }
-            disableExitBtn={disableExitBtn}
+            // disableExitBtn={disableExitBtn}
             breadCrumbBar={currentBar}
             title={`System: ${selected[0]["value"]}`}
             children={
@@ -889,6 +887,7 @@ export const DataTableSystems = ({
                   setCurrentBar={setCurrentBar}
                   openFuelFlowsView={openFuelFlowsView}
                   setOpenFuelFlowsView={setOpenFuelFlowsView}
+                  setDisableExitBtn={setDisableExitBtn}
                 />
               </div>
             }

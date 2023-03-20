@@ -1437,12 +1437,9 @@ export const qaCertEventsProps = (selectedLocation) => {
       "Monitoring System ID",
       "QA Cert Event Code",
       "QA Cert Event Date",
-      "QA Cert Event Hour",
       "Required Test Code",
       "Conditional Begin Date",
-      "Conditional Begin Hour",
       "Completion Test Date",
-      "Completion Test Hour",
     ],
     controlInputs: {
       //locId:["Unit or Stack Pipe ID", "input", "", ""],
