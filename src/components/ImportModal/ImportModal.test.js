@@ -863,7 +863,7 @@ const schema = {
             "null"
           ]
         },
-        "nmberOfTraversePoints": {
+        "numberOfTraversePoints": {
           "type": [
             "number",
             "null"
